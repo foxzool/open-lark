@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 分页响应基础结构,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PageResponse<T> {,
     /// 数据项列表
     pub items: Vec<T>,
@@ -12,7 +12,7 @@ pub struct PageResponse<T> {,
     pub has_more: Option<bool>,
 },
 /// 周期状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum SemesterStatus {,
 /// 未开始,
@@ -25,7 +25,7 @@ pub enum SemesterStatus {,
     Paused,
 },
 /// 周期信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Semester {
     /// 周期ID
     pub semester_id: String,
@@ -51,7 +51,7 @@ pub struct Semester {
     pub updated_at: Option<i64>,
 },
 /// 项目状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum ActivityStatus {,
 /// 未开始,
@@ -66,7 +66,7 @@ pub enum ActivityStatus {,
     Cancelled,
 },
 /// 项目类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum ActivityType {,
 /// 绩效评估,
@@ -81,7 +81,7 @@ pub enum ActivityType {,
     PeerReview,
 },
 /// 项目信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Activity {
     /// 项目ID
     pub activity_id: String,
@@ -113,7 +113,7 @@ pub struct Activity {
     pub updated_at: Option<i64>,
 },
 /// 补充信息类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum AdditionalInfoType {,
 /// 文本,
@@ -128,7 +128,7 @@ pub enum AdditionalInfoType {,
     MultiSelection,
 },
 /// 补充信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AdditionalInformation {
     /// 信息ID
     pub info_id: String,
@@ -150,7 +150,7 @@ pub struct AdditionalInformation {
     pub updated_at: Option<i64>,
 },
 /// 用户组信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserGroup {
     /// 用户组ID
     pub group_id: String,
@@ -170,7 +170,7 @@ pub struct UserGroup {
     pub updated_at: Option<i64>,
 },
 /// 被评估人信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Reviewee {
     /// 用户ID
     pub user_id: String,
@@ -195,7 +195,7 @@ pub struct Reviewee {
     pub review_status: Option<String>,
 },
 /// 评估模板类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum TemplateType {,
 /// 自评,
@@ -208,7 +208,7 @@ pub enum TemplateType {,
     SubordinateReview,
 },
 /// 评估模板,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReviewTemplate {
     /// 模板ID
     pub template_id: String,
@@ -232,7 +232,7 @@ pub struct ReviewTemplate {
     pub updated_at: Option<i64>,
 },
 /// 评估项类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum ReviewItemType {,
 /// 评分题,
@@ -247,7 +247,7 @@ pub enum ReviewItemType {,
     Tag,
 },
 /// 评估项,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReviewItem {
     /// 评估项ID
     pub item_id: String,
@@ -271,7 +271,7 @@ pub struct ReviewItem {
     pub options: Option<String>,
 },
 /// 标签填写题配置,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct TagQuestionConfig {
     /// 配置ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -281,7 +281,7 @@ pub struct TagQuestionConfig {
     pub tags: Option<Vec<String>>,
 },
 /// 指标类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum MetricType {,
 /// 数值型,
@@ -294,7 +294,7 @@ pub enum MetricType {,
     Boolean,
 },
 /// 指标,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Metric {
     /// 指标ID
     pub metric_id: String,
@@ -319,7 +319,7 @@ pub struct Metric {
     pub created_at: Option<i64>,
 },
 /// 指标模板,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MetricTemplate {
     /// 模板ID
     pub template_id: String,
@@ -337,7 +337,7 @@ pub struct MetricTemplate {
     pub created_at: Option<i64>,
 },
 /// 指标字段,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MetricField {
     /// 字段ID
     pub field_id: String,
@@ -355,7 +355,7 @@ pub struct MetricField {
     pub default_value: Option<String>,
 },
 /// 指标标签,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MetricTag {
     /// 标签ID
     pub tag_id: String,
@@ -372,7 +372,7 @@ pub struct MetricTag {
     pub created_at: Option<i64>,
 },
 /// 任务状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum TaskStatus {,
 /// 未开始,
@@ -387,7 +387,7 @@ pub enum TaskStatus {,
     Paused,
 },
 /// 周期任务,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct StageTask {
     /// 任务ID
     pub task_id: String,
@@ -420,7 +420,7 @@ pub struct StageTask {
     pub created_at: Option<i64>,
 },
 /// 指标详情数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MetricDetail {
     /// 数据ID
     pub detail_id: String,
@@ -446,7 +446,7 @@ pub struct MetricDetail {
     pub created_at: Option<i64>,
 },
 /// 绩效结果等级,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum PerformanceLevel {,
 /// 优秀,
@@ -461,7 +461,7 @@ pub enum PerformanceLevel {,
     Unsatisfactory,
 },
 /// 绩效结果,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PerformanceResult {
     /// 结果ID
     pub result_id: String,
@@ -497,7 +497,7 @@ pub struct PerformanceResult {
     pub updated_at: Option<i64>,
 },
 /// 绩效详情数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReviewDetail {
     /// 详情ID
     pub detail_id: String,
@@ -523,7 +523,7 @@ pub struct ReviewDetail {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

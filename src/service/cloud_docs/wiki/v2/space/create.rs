@@ -18,7 +18,7 @@ use crate::,
     impl_executable_builder_owned,
 };
 /// 创建知识空间请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct CreateSpaceRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -29,32 +29,32 @@ pub struct CreateSpaceRequest {
     description: Option<String>,
 }
 impl CreateSpaceRequest {
-    pub fn builder() -> CreateSpaceRequestBuilder {,
+    pub fn w+.*{
 CreateSpaceRequestBuilder::default(),
     },
-pub fn new(name: impl ToString) -> Self {,
+pub fn new(name: impl ToString) -> Self {
         Self {
             name: name.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct CreateSpaceRequestBuilder {
     request: CreateSpaceRequest,
 }
 impl CreateSpaceRequestBuilder {
     /// 知识空间名称
-    pub fn name(mut self, name: impl ToString) -> Self {,
+    pub fn name(mut self, name: impl ToString) -> Self {
 self.request.name = name.to_string();
         self,
 },
 /// 知识空间描述,
-    pub fn description(mut self, description: impl ToString) -> Self {,
+    pub fn description(mut self, description: impl ToString) -> Self {
 self.request.description = Some(description.to_string());
         self,
 },
-pub fn build(mut self) -> CreateSpaceRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -67,7 +67,7 @@ impl_executable_builder_owned!(,
     create,
 );
 /// 创建的知识空间信息
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct CreatedSpace {
     /// 知识空间id
     pub space_id: String,
@@ -82,7 +82,7 @@ pub struct CreatedSpace {
     pub visibility: Option<String>,
 },
 /// 创建知识空间响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct CreateSpaceResponse {
     /// 创建的知识空间信息
     pub space: CreatedSpace,
@@ -109,7 +109,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_create_space_request_builder() {,

@@ -19,7 +19,7 @@ pub struct TalentPoolService {
     pub config: Config,
 }
 /// 人才库信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TalentPool {
     /// 人才库ID
     pub id: String,
@@ -47,7 +47,7 @@ pub struct TalentPool {
     pub updated_time: Option<String>,
 }
 /// 人才库设置
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TalentPoolSettings {
     /// 自动匹配设置
     pub auto_match_enabled: Option<bool>,
@@ -59,7 +59,7 @@ pub struct TalentPoolSettings {
     pub custom_field_config: Option<serde_json::Value>,
 }
 /// 人才库创建请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct TalentPoolCreateRequest {
     /// 人才库名称
     pub name: I18nText,
@@ -77,7 +77,7 @@ pub struct TalentPoolCreateRequest {
     pub settings: Option<TalentPoolSettings>,
 }
 /// 人才库列表请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct TalentPoolListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -91,7 +91,7 @@ pub struct TalentPoolListRequest {
     pub owner_id: Option<String>,
 }
 /// 人才库中人才列表请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct TalentPoolTalentListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -105,7 +105,7 @@ pub struct TalentPoolTalentListRequest {
     pub education: Option<String>,
 }
 /// 人才库列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TalentPoolListResponse {
     /// 人才库列表
 #[serde(flatten)],
@@ -117,7 +117,7 @@ ResponseFormat::Data,
     }
 }
 /// 人才库详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TalentPoolDetailResponse {
     /// 人才库信息
     pub pool: TalentPool,
@@ -128,7 +128,7 @@ ResponseFormat::Data,
     }
 }
 /// 人才库操作响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TalentPoolOperationResponse {
     /// 操作结果
 #[serde(flatten)],
@@ -142,7 +142,7 @@ ResponseFormat::Data,
     }
 }
 /// 人才库中人才列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TalentPoolTalentListResponse {
     /// 人才列表
 #[serde(flatten)],

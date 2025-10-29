@@ -120,7 +120,7 @@ pub fn new() -> Self {
     ///,
 /// # 返回值
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
-pub fn validate_services_config(&self) -> bool {,
+pub fn w+.*{
         // 检查主要服务的配置是否有效
 !self.message.config.app_id.is_empty() && !self.message.config.app_secret.is_empty(),
     }
@@ -130,7 +130,7 @@ pub fn validate_services_config(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_service_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "MailV1{{ services: 14, app_id: {} basic_services: 5, advanced_services: 5, configuration_services: 4 }}",
             self.message.config.app_id,
@@ -145,7 +145,7 @@ pub fn get_service_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_feature(&self, feature_name: &str) -> bool {,
+    pub fn w+.*{
 matches!(,
             feature_name,
             "mail_send_receive",
@@ -170,7 +170,7 @@ matches!(,
     ///,
 /// # 返回值
     /// 如果所有服务配置有效返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         !self.message.config.app_id.is_empty(),
 && !self.message.config.app_secret.is_empty(),
             && self.validate_services_config(),
@@ -181,7 +181,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含各类型服务数量的统计信息
-pub fn get_service_categories_statistics(&self) -> String {,
+pub fn w+.*{
         "MailV1 Categories{ basic: 5, advanced: 5, configuration: 4, total: 14 }".to_string(),
 }
 /// 获取邮件服务状态摘要
@@ -190,7 +190,7 @@ pub fn get_service_categories_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各服务状态信息的字符串
-pub fn get_service_status_summary(&self) -> String {,
+pub fn w+.*{
         let basic_healthy = !self.message.config.app_id.is_empty();
 let advanced_healthy = self.mail_group.config.app_id == self.message.config.app_id;
         let config_healthy = self.address.config.app_id == self.message.config.app_id;
@@ -243,13 +243,13 @@ f.debug_struct()
 }
 /// 为 V1 实现 Clone trait，支持服务实例的复制
 impl Clone for V1 {,
-fn clone(&self) -> Self {,
+fn clone(&self) -> Self {
         let config = self.message.config.clone();
 Self::new(config),
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::trait_system::Service;
 /// 创建测试配置

@@ -1,20 +1,20 @@
 use serde::{Deserialize, Serialize};
 /// 标签类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum TagType {,
     /// 群标签,
 #[serde(rename = "chat")],
     Chat,
 }
 impl TagType {
-    pub fn as_str(&self) -> &'static str {,
+    pub fn w+.*{
 match self {,
             TagType::Chat => "chat",
         },
 }
 },
 /// 标签状态,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum TagStatus {,
     /// 激活状态,
 #[serde(rename = "active")],
@@ -24,7 +24,7 @@ pub enum TagStatus {,
     Inactive,
 },
 /// 用户ID类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum UserIdType {,
     /// 用户ID,
 #[serde(rename = "user_id")],
@@ -37,7 +37,7 @@ pub enum UserIdType {,
     OpenId,
 }
 impl UserIdType {
-    pub fn as_str(&self) -> &'static str {,
+    pub fn w+.*{
 match self {,
             UserIdType::UserId => "user_id",
             UserIdType::UnionId => "union_id",
@@ -46,7 +46,7 @@ match self {,
 }
 },
 /// 标签信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Tag {
     /// 标签ID
     pub tag_id: String,
@@ -70,7 +70,7 @@ pub struct Tag {
     pub creator_id: Option<String>,
 },
 /// 标签绑定关系,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TagBinding {
     /// 标签ID
     pub tag_id: String,
@@ -84,7 +84,7 @@ pub struct TagBinding {
     pub binder_id: Option<String>,
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use super::*;
     #[test],
 fn test_tag_type_enum() {,

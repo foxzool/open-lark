@@ -50,7 +50,7 @@ let api_req = ApiRequest {,
 }
 }
 // 请求响应模型
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SetAppBadgeRequest {
     pub badge: AppBadge,
 }

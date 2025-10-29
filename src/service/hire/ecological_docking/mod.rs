@@ -15,7 +15,7 @@ pub struct EcologicalDockingService {
 }
 impl EcologicalDockingService {
     pub fn new() -> Self {
-Self {,
+Self {
             background_check: BackgroundCheckService::new(config.clone()),
             exam: ExamService::new(config),
         }

@@ -22,7 +22,7 @@ pub struct ApplicationService {
     pub config: Config,
 }
 /// 投递阶段推进请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ApplicationAdvanceRequest {
     /// 投递ID
     pub application_id: String,
@@ -34,7 +34,7 @@ pub struct ApplicationAdvanceRequest {
     pub remark: Option<String>,
 }
 /// 投递评价请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ApplicationEvaluationRequest {
     /// 投递ID
     pub application_id: String,
@@ -48,7 +48,7 @@ pub struct ApplicationEvaluationRequest {
     pub evaluation_time: Option<String>,
 }
 /// 投递列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ApplicationListResponse {
     /// 投递列表
 #[serde(flatten)],
@@ -60,7 +60,7 @@ ResponseFormat::Data,
     }
 }
 /// 投递详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ApplicationDetailResponse {
     /// 投递信息
     pub application: Application,
@@ -71,7 +71,7 @@ ResponseFormat::Data,
     }
 }
 /// 投递操作响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ApplicationOperationResponse {
     /// 操作结果
 #[serde(flatten)],
@@ -85,7 +85,7 @@ ResponseFormat::Data,
     }
 }
 /// 面试列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct InterviewListResponse {
     /// 面试列表
 #[serde(flatten)],
@@ -97,7 +97,7 @@ ResponseFormat::Data,
     }
 }
 /// Offer详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OfferDetailResponse {
     /// Offer信息
     pub offer: Offer,
@@ -386,7 +386,7 @@ pub async fn reject_application(,
         remark: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ApplicationOperationResponse>> {,
-#[derive(Serialize)],
+#[derive(.*?)]
         struct RejectRequest {
             reason: String,
             remark: Option<String>,

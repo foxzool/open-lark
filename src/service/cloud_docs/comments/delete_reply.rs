@@ -19,7 +19,7 @@ use crate::,
     impl_executable_builder_owned,
 };
 /// 删除回复请求,
-#[derive(Debug, Serialize, Default, Clone)],
+#[derive(.*?)]
 pub struct DeleteReplyRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -40,7 +40,7 @@ pub struct DeleteReplyRequest {
     user_id_type: Option<String>,
 }
 impl DeleteReplyRequest {
-    pub fn builder() -> DeleteReplyRequestBuilder {,
+    pub fn w+.*{
 DeleteReplyRequestBuilder::default(),
     },
 pub fn new(,
@@ -48,8 +48,8 @@ pub fn new(,
         file_type: impl ToString,
         comment_id: impl ToString,
         reply_id: impl ToString,
-    ) -> Self {,
-Self {,
+    ) -> Self {
+Self {
             file_token: file_token.to_string(),
             file_type: file_type.to_string(),
             comment_id: comment_id.to_string(),
@@ -58,78 +58,78 @@ Self {,
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct DeleteReplyRequestBuilder {
     request: DeleteReplyRequest,
 }
 impl DeleteReplyRequestBuilder {
     /// 文档token
-    pub fn file_token(mut self, file_token: impl ToString) -> Self {,
+    pub fn file_token(mut self, file_token: impl ToString) -> Self {
 self.request.file_token = file_token.to_string();
         self,
 },
 /// 文档类型,
-    pub fn file_type(mut self, file_type: impl ToString) -> Self {,
+    pub fn file_type(mut self, file_type: impl ToString) -> Self {
 self.request.file_type = file_type.to_string();
         self,
 },
 /// 设置为文档类型,
-    pub fn with_doc_type(mut self) -> Self {,
+    pub fn with_doc_type(mut self) -> Self {
 self.request.file_type = "doc".to_string();
         self,
 },
 /// 设置为docx类型,
-    pub fn with_docx_type(mut self) -> Self {,
+    pub fn with_docx_type(mut self) -> Self {
 self.request.file_type = "docx".to_string();
         self,
 },
 /// 设置为电子表格类型,
-    pub fn with_sheet_type(mut self) -> Self {,
+    pub fn with_sheet_type(mut self) -> Self {
 self.request.file_type = "sheet".to_string();
         self,
 },
 /// 设置为多维表格类型,
-    pub fn with_bitable_type(mut self) -> Self {,
+    pub fn with_bitable_type(mut self) -> Self {
 self.request.file_type = "bitable".to_string();
         self,
 },
 /// 评论ID,
-    pub fn comment_id(mut self, comment_id: impl ToString) -> Self {,
+    pub fn comment_id(mut self, comment_id: impl ToString) -> Self {
 self.request.comment_id = comment_id.to_string();
         self,
 },
 /// 回复ID,
-    pub fn reply_id(mut self, reply_id: impl ToString) -> Self {,
+    pub fn reply_id(mut self, reply_id: impl ToString) -> Self {
 self.request.reply_id = reply_id.to_string();
         self,
 },
 /// 用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
 },
 /// 使用OpenID,
-    pub fn with_open_id(mut self) -> Self {,
+    pub fn with_open_id(mut self) -> Self {
 self.request.user_id_type = Some("open_id".to_string());
         self,
 },
 /// 使用UserID,
-    pub fn with_user_id(mut self) -> Self {,
+    pub fn with_user_id(mut self) -> Self {
 self.request.user_id_type = Some("user_id".to_string());
         self,
 },
 /// 使用UnionID,
-    pub fn with_union_id(mut self) -> Self {,
+    pub fn with_union_id(mut self) -> Self {
 self.request.user_id_type = Some("union_id".to_string());
         self,
 },
-pub fn build(mut self) -> DeleteReplyRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 删除的回复信息,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct DeletedReply {
     /// 回复ID
     pub reply_id: String,
@@ -149,7 +149,7 @@ impl_executable_builder_owned!(
     delete_reply,
 );
 /// 删除回复响应
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct DeleteReplyResponse {
     /// 删除的回复信息
     pub reply: DeletedReply,
@@ -192,20 +192,20 @@ Ok(api_resp),
 
 impl DeletedReply {
 /// 是否有删除时间,
-    pub fn has_delete_time(&self) -> bool {,
+    pub fn w+.*{
 self.delete_time.is_some(),
     },
 /// 是否有删除者信息,
-    pub fn has_deleter(&self) -> bool {,
+    pub fn w+.*{
 self.deleter_user_id.is_some(),
     },
 /// 获取删除时间的格式化字符串,
-    pub fn delete_time_formatted(&self) -> Option<String> {,
+    pub fn w+.*{
 self.delete_time,
             .map(|timestamp| format!("删除时间: {timestamp}")),
 },
 /// 获取删除摘要信息,
-    pub fn summary(&self) -> String {,
+    pub fn w+.*{
 let delete_info = if let Some(time) = self.delete_time {,
             format!("删除时间: {time}"),
 } else {,
@@ -224,28 +224,28 @@ format!(,
 }
 impl DeleteReplyResponse {
     /// 获取回复ID,
-pub fn reply_id(&self) -> &str {,
+pub fn w+.*{
         &self.reply.reply_id,
 },
 /// 获取评论ID,
-    pub fn comment_id(&self) -> &str {,
+    pub fn w+.*{
 &self.reply.comment_id,
     },
 /// 获取删除时间,
-    pub fn delete_time(&self) -> Option<i64> {,
+    pub fn w+.*{
 self.reply.delete_time,
     },
 /// 获取删除者用户ID,
-    pub fn deleter_user_id(&self) -> Option<&str> {,
+    pub fn w+.*{
 self.reply.deleter_user_id.as_deref(),
     },
 /// 是否成功删除,
-    pub fn is_deleted(&self) -> bool {,
+    pub fn w+.*{
 // 如果有回复信息返回，说明删除操作已执行,
         true,
 },
 /// 获取删除成功的摘要信息,
-    pub fn success_summary(&self) -> String {,
+    pub fn w+.*{
 format!(,
             "回复删除成功 - 回复ID: {}, 评论ID: {}",
             self.reply_id(),
@@ -253,13 +253,13 @@ format!(,
 ),
     },
 /// 获取详细的删除信息,
-    pub fn detailed_info(&self) -> String {,
+    pub fn w+.*{
 self.reply.summary(),
     },
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_delete_reply_request_builder() {,

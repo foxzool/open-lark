@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 分页响应基础结构,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PageResponse<T> {,
     /// 数据项列表
     pub items: Vec<T>,
@@ -12,7 +12,7 @@ pub struct PageResponse<T> {,
     pub has_more: Option<bool>,
 },
 /// 汇报规则,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReportRule {
     /// 规则ID
     pub rule_id: String,
@@ -50,7 +50,7 @@ pub struct ReportRule {
     pub updated_at: Option<i64>,
 },
 /// 汇报时间设置,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReportSchedule {
     /// 汇报时间,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -66,7 +66,7 @@ pub struct ReportSchedule {
     pub weekdays: Option<Vec<i32>>,
 },
 /// 汇报适用范围,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReportScope {
     /// 适用的部门ID列表,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -79,7 +79,7 @@ pub struct ReportScope {
     pub roles: Option<Vec<String>>,
 },
 /// 汇报模板,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReportTemplate {
     /// 模板ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -95,7 +95,7 @@ pub struct ReportTemplate {
     pub fields: Option<Vec<ReportField>>,
 },
 /// 汇报字段,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReportField {
     /// 字段ID
     pub field_id: String,
@@ -112,7 +112,7 @@ pub struct ReportField {
     pub description: Option<String>,
 },
 /// 规则看板,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RuleView {
     /// 看板ID
     pub view_id: String,
@@ -135,7 +135,7 @@ pub struct RuleView {
     pub created_at: Option<i64>,
 },
 /// 汇报任务,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReportTask {
     /// 任务ID
     pub task_id: String,
@@ -173,7 +173,7 @@ pub struct ReportTask {
     pub updated_at: Option<i64>,
 },
 /// 用户信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserInfo {
     /// 用户ID
     pub user_id: String,
@@ -189,7 +189,7 @@ pub struct UserInfo {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

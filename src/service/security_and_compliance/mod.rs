@@ -112,21 +112,21 @@ pub struct SecurityAndComplianceService {
 }
 impl SecurityAndComplianceService {
     pub fn new() -> Self {
-Self {,
+Self {
             openapi_log: OpenapiLogService::new(config.clone()),
             audit_log: AuditLogService::new(config),
         }
 }
 /// 使用共享配置创建服务（实验性）
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             openapi_log: OpenapiLogService::new(shared.as_ref().clone()),
             audit_log: AuditLogService::new(shared.as_ref().clone()),
         }
 }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 #[test],

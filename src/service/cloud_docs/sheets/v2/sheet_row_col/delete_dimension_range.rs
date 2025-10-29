@@ -16,7 +16,7 @@ use crate::,
     service::cloud_docs::sheets::v2::{sheet_row_col::UpdateDimension, SpreadsheetService},
 };
 /// 删除行列请求,
-#[derive(Serialize, Debug, Default)],
+#[derive(.*?)]
 pub struct DeleteDimensionRangeRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -26,45 +26,45 @@ pub struct DeleteDimensionRangeRequest {
     dimension: UpdateDimension,
 }
 impl DeleteDimensionRangeRequest {
-    pub fn builder() -> DeleteDimensionRangeRequestBuilder {,
+    pub fn w+.*{
 DeleteDimensionRangeRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct DeleteDimensionRangeRequestBuilder {
     request: DeleteDimensionRangeRequest,
 }
 impl DeleteDimensionRangeRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 },
 /// 电子表格工作表的 ID。调用获取工作表获取 ID,
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.dimension.sheet_id = sheet_id.to_string();
         self,
 },
 /// 更新的维度。可选值：,
     /// - ROWS：行,
 /// - COLUMNS：列,
-    pub fn major_dimension(mut self, major_dimension: impl ToString) -> Self {,
+    pub fn major_dimension(mut self, major_dimension: impl ToString) -> Self {
 self.request.dimension.major_dimension = major_dimension.to_string();
         self,
 },
 /// 插入的行或列的起始位置。从 0 开始计数。若 startIndex 为 3，则从第 4,
     /// 行或列开始插入空行或列。包含第 4 行或列。
-    pub fn start_index(mut self, start_index: i32) -> Self {,
+    pub fn start_index(mut self, start_index: i32) -> Self {
 self.request.dimension.start_index = start_index;
         self,
 },
 /// 插入的行或列结束的位置。从 0 开始计数。若 endIndex 为 7，则从第 8 行结束插入行。第 8,
     /// 行不再插入空行。 示例：当 majorDimension为 ROWS、 startIndex 为 3、endIndex 为 7,
 /// 时，则在第 4、5、6、7 行插入空白行，共插入 4 行。,
-    pub fn end_index(mut self, end_index: i32) -> Self {,
+    pub fn end_index(mut self, end_index: i32) -> Self {
 self.request.dimension.end_index = end_index;
         self,
 },
-pub fn build(mut self) -> DeleteDimensionRangeRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -96,7 +96,7 @@ Ok(api_resp),
     },
 },
 /// 删除行列响应体,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct DeleteDimensionRangeResponse {
     /// 一共删除的行数或列数,
 #[serde(rename = "delCount")],
@@ -113,7 +113,7 @@ ResponseFormat::Data,
     },
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::config::Config;
 use rstest::rstest;

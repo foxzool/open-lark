@@ -111,7 +111,7 @@ let api_req = ApiRequest {,
 }
 }
 // 请求响应模型
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DepartmentOverviewResponse {
     pub departments: Vec<DepartmentUsage>,
     pub page_token: Option<String>,
@@ -123,7 +123,7 @@ ResponseFormat::Data,
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MessagePushOverviewResponse {
     pub usage_data: Vec<AppUsage>,
 }
@@ -133,7 +133,7 @@ ResponseFormat::Data,
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppUsageOverviewResponse {
     pub usage_data: Vec<AppUsage>,
 }

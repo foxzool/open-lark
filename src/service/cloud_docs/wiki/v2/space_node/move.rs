@@ -11,7 +11,7 @@ use crate::core::{,
     SDKResult,
 };
 /// 移动知识空间节点请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct MoveSpaceNodeRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -29,60 +29,60 @@ pub struct MoveSpaceNodeRequest {
     target_prev_token: Option<String>,
 }
 impl MoveSpaceNodeRequest {
-    pub fn builder() -> MoveSpaceNodeRequestBuilder {,
+    pub fn w+.*{
 MoveSpaceNodeRequestBuilder::default(),
     }
 
-    pub fn new(space_id: impl ToString, node_token: impl ToString) -> Self {,
-Self {,
+    pub fn new(space_id: impl ToString, node_token: impl ToString) -> Self {
+Self {
             space_id: space_id.to_string(),
             node_token: node_token.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct MoveSpaceNodeRequestBuilder {
     request: MoveSpaceNodeRequest,
 }
 impl MoveSpaceNodeRequestBuilder {
     /// 知识空间id
-    pub fn space_id(mut self, space_id: impl ToString) -> Self {,
+    pub fn space_id(mut self, space_id: impl ToString) -> Self {
 self.request.space_id = space_id.to_string();
         self,
 },
 /// 要移动的节点token,
-    pub fn node_token(mut self, node_token: impl ToString) -> Self {,
+    pub fn node_token(mut self, node_token: impl ToString) -> Self {
 self.request.node_token = node_token.to_string();
         self,
 },
 /// 目标父节点token,
-    pub fn target_parent_token(mut self, target_parent_token: impl ToString) -> Self {,
+    pub fn target_parent_token(mut self, target_parent_token: impl ToString) -> Self {
 self.request.target_parent_token = Some(target_parent_token.to_string());
         self,
 },
 /// 移动到根目录,
-    pub fn move_to_root(mut self) -> Self {,
+    pub fn move_to_root(mut self) -> Self {
 self.request.target_parent_token = None;
         self,
 },
 /// 目标位置，移动到指定节点之后,
-    pub fn target_prev_token(mut self, target_prev_token: impl ToString) -> Self {,
+    pub fn target_prev_token(mut self, target_prev_token: impl ToString) -> Self {
 self.request.target_prev_token = Some(target_prev_token.to_string());
         self,
 },
 /// 追加到末尾,
-    pub fn append_to_end(mut self) -> Self {,
+    pub fn append_to_end(mut self) -> Self {
 self.request.target_prev_token = None;
         self,
 },
-pub fn build(mut self) -> MoveSpaceNodeRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 移动后的节点信息,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct MovedNode {
     /// 知识空间id
     pub space_id: String,
@@ -100,7 +100,7 @@ pub struct MovedNode {
     pub title: Option<String>,
 },
 /// 移动知识空间节点响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct MoveSpaceNodeResponse {
     /// 移动后的节点信息
     pub node: MovedNode,
@@ -132,7 +132,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_move_space_node_request_builder() {,

@@ -40,7 +40,7 @@ api_resp.into_result(),
     },
 },
 /// 合并单元格请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MergeCellsRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -54,14 +54,14 @@ pub struct MergeCellsRequest {
     merge_type: String,
 }
 impl MergeCellsRequest {
-    pub fn builder() -> MergeCellsRequestBuilder {,
+    pub fn w+.*{
 MergeCellsRequestBuilder::default(),
     },
 /// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM,
     /// 验证请求参数,
-pub fn validate(&self) -> SDKResult<()> {,
+pub fn w+.*{
         // 验证必需字段,
 if self.spreadsheet_token.is_empty() {,
             return Err(crate::core::error::LarkAPIError::illegal_param(
@@ -96,22 +96,22 @@ if !valid_merge_types.contains(&self.merge_type.as_str()) {,
 Ok(()),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct MergeCellsRequestBuilder {
     request: MergeCellsRequest,
 }
 impl MergeCellsRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 }
 
-    pub fn range(mut self, range: impl ToString) -> Self {,
+    pub fn range(mut self, range: impl ToString) -> Self {
 self.request.range = range.to_string();
         self,
 },
@@ -119,7 +119,7 @@ self.request.range = range.to_string();
     /// - MERGE_ALL: 合并所有单元格,
 /// - MERGE_COLUMNS: 按列合并,
     /// - MERGE_ROWS: 按行合并
-    pub fn merge_type(mut self, merge_type: impl ToString) -> Self {,
+    pub fn merge_type(mut self, merge_type: impl ToString) -> Self {
 self.request.merge_type = merge_type.to_string();
         self,
 },
@@ -128,13 +128,13 @@ self.request.merge_type = merge_type.to_string();
 /// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM,
-    pub fn build(self) -> MergeCellsRequest {,
+    pub fn w+.*{
 let mut request = self.request;
         request.api_request.body = serde_json::to_vec(&request).unwrap();
 request,
     },
 /// 验证请求参数,
-    pub fn validate(&self) -> SDKResult<()> {,
+    pub fn w+.*{
 // 验证必需字段,
         if self.request.spreadsheet_token.is_empty() {,
 return Err(crate::core::error::LarkAPIError::illegal_param(,
@@ -180,7 +180,7 @@ impl_executable_builder_owned!(
     merge_cells,
 );
 /// 合并单元格响应体最外层
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct MergeCellsResponseData {
     /// 合并后的范围
     pub merged_range: String,

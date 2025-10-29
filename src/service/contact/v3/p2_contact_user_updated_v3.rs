@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2ContactUserUpdatedV3 {
     pub schema: String,
     pub header: EventHeader,
@@ -28,12 +28,12 @@ impl<F> P2ContactUserUpdatedV3ProcessorImpl<F>,
 where
     F: Fn(P2ContactUserUpdatedV3) + 'static,
 {,
-pub(crate) fn new(f: F) -> Self {,
+pub(crate) fn new(f: F) -> Self {
         P2ContactUserUpdatedV3ProcessorImpl { f },
 }
 },
 /// 用户更新事件数据,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2ContactUserUpdatedV3Data {
     /// 事件对象
     pub object: ContactEventObject,
@@ -42,7 +42,7 @@ pub struct P2ContactUserUpdatedV3Data {
     pub old_object: Option<ContactEventObject>,
 },
 /// 通讯录事件对象,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ContactEventObject {
     /// 对象类型 (user)
     pub object_type: String,
@@ -50,7 +50,7 @@ pub struct ContactEventObject {
     pub user: ContactUser,
 },
 /// 通讯录用户信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ContactUser {
     /// 用户 ID
     pub user_id: String,
@@ -119,7 +119,7 @@ pub struct ContactUser {
     pub update_time: Option<String>,
 },
 /// 用户头像信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserAvatar {
     /// 72*72像素头像链接,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -135,7 +135,7 @@ pub struct UserAvatar {
     pub avatar_origin: Option<String>,
 },
 /// 用户状态,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserStatus {
     /// 是否冻结,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -151,7 +151,7 @@ pub struct UserStatus {
     pub is_exited: Option<bool>,
 },
 /// 用户自定义属性,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserCustomAttribute {
     /// 自定义字段类型,
 #[serde(skip_serializing_if = "Option::is_none")],

@@ -19,7 +19,7 @@ use crate::,
     impl_executable_builder_owned,
 };
 /// 批量删除协作者请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct BatchDeleteRoleMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -36,12 +36,12 @@ pub struct BatchDeleteRoleMemberRequest {
     member_ids: Vec<String>,
 }
 impl BatchDeleteRoleMemberRequest {
-    pub fn builder() -> BatchDeleteRoleMemberRequestBuilder {,
+    pub fn w+.*{
 BatchDeleteRoleMemberRequestBuilder::default(),
     }
 
-    pub fn new(app_token: impl ToString, role_id: impl ToString, member_ids: Vec<String>) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, role_id: impl ToString, member_ids: Vec<String>) -> Self {
+Self {
             app_token: app_token.to_string(),
             role_id: role_id.to_string(),
             member_ids,
@@ -49,37 +49,37 @@ Self {,
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct BatchDeleteRoleMemberRequestBuilder {
     request: BatchDeleteRoleMemberRequest,
 }
 impl BatchDeleteRoleMemberRequestBuilder {
     /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 自定义角色的id,
-    pub fn role_id(mut self, role_id: impl ToString) -> Self {,
+    pub fn role_id(mut self, role_id: impl ToString) -> Self {
 self.request.role_id = role_id.to_string();
         self,
 },
 /// 用户id类型,
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
 },
 /// 成员id列表,
-    pub fn member_ids(mut self, member_ids: Vec<String>) -> Self {,
+    pub fn member_ids(mut self, member_ids: Vec<String>) -> Self {
 self.request.member_ids = member_ids;
         self,
 },
 /// 添加单个成员id,
-    pub fn add_member_id(mut self, member_id: impl ToString) -> Self {,
+    pub fn add_member_id(mut self, member_id: impl ToString) -> Self {
 self.request.member_ids.push(member_id.to_string());
         self,
 },
-pub fn build(mut self) -> BatchDeleteRoleMemberRequest {,
+pub fn w+.*{
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
                 .api_request,
@@ -98,7 +98,7 @@ impl_executable_builder_owned!(,
     batch_delete,
 );
 /// 删除结果
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct DeleteResult {
     /// 成员ID
     pub member_id: String,
@@ -106,7 +106,7 @@ pub struct DeleteResult {
     pub deleted: bool,
 },
 /// 批量删除协作者响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct BatchDeleteRoleMemberResponse {
     /// 删除结果列表
     pub results: Vec<DeleteResult>,
@@ -135,7 +135,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_batch_delete_role_member_request_builder() {,

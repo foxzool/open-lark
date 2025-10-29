@@ -19,7 +19,7 @@ pub struct MinuteService {
     pub config: Config,
 }
 /// 获取妙记信息响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetMinuteResponse {
     /// 妙记信息
     pub minute: Minute,

@@ -22,7 +22,7 @@ pub struct ObjectService {
     pub config: Config,
 }
 /// OQL查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OqlQueryResponse {
     /// OQL查询结果
 #[serde(flatten)],
@@ -34,7 +34,7 @@ ResponseFormat::Data,
     }
 }
 /// 记录搜索响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RecordSearchResponse {
     /// 分页响应数据
 #[serde(flatten)],
@@ -46,7 +46,7 @@ ResponseFormat::Data,
     }
 }
 /// 记录查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RecordQueryResponse {
     /// 记录信息
 #[serde(flatten)],
@@ -58,7 +58,7 @@ ResponseFormat::Data,
     }
 }
 /// 记录创建响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RecordCreateResponse {
     /// 创建的记录ID
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -73,7 +73,7 @@ ResponseFormat::Data,
     }
 }
 /// 记录更新响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RecordUpdateResponse {
     /// 操作是否成功
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -88,7 +88,7 @@ ResponseFormat::Data,
     }
 }
 /// 记录删除响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RecordDeleteResponse {
     /// 操作是否成功
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -100,7 +100,7 @@ ResponseFormat::Data,
     }
 }
 /// 批量记录查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchRecordQueryResponse {
     /// 分页响应数据
 #[serde(flatten)],
@@ -112,7 +112,7 @@ ResponseFormat::Data,
     }
 }
 /// 批量记录操作响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchRecordResponse {
     /// 操作是否成功
 #[serde(skip_serializing_if = "Option::is_none")],

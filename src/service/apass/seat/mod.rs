@@ -21,7 +21,7 @@ pub struct SeatService {
     pub config: Config,
 }
 /// 席位分配查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SeatAssignmentListResponse {
     /// 分页响应数据
 #[serde(flatten)],
@@ -33,7 +33,7 @@ ResponseFormat::Data,
     }
 }
 /// 席位活跃查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SeatActivityListResponse {
     /// 分页响应数据
 #[serde(flatten)],

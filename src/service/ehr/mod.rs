@@ -198,7 +198,7 @@ impl EhrService {
     /// let ehr_service = EhrService::new(config);
 /// ```
     pub fn new() -> Self {
-Self {,
+Self {
             employee: EmployeeService::new(config.clone()),
             attachment: AttachmentService::new(config),
         }
@@ -213,7 +213,7 @@ Self {,
     /// # 返回值
 /// 使用共享配置的EHR服务实例
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             employee: EmployeeService::new(shared.as_ref().clone()),
             attachment: AttachmentService::new(shared.as_ref().clone()),
         }
@@ -231,7 +231,7 @@ Self {,
 /// - HR相关API权限配置
     /// - 数据安全策略设置
 /// - 合规要求配置
-    pub fn validate_ehr_config(&self) -> bool {,
+    pub fn w+.*{
 // 检查基础配置有效性
         !self.employee.config.app_id.is_empty(),
 && !self.employee.config.app_secret.is_empty(),
@@ -251,7 +251,7 @@ Self {,
 /// - 员工管理模块统计
     /// - 附件管理功能统计
 /// - 合规审计支持状态
-    pub fn get_ehr_statistics(&self) -> String {,
+    pub fn w+.*{
 format!(,
             "EhrService{{ employee_management: true, attachment_management: true, organization_management: true, compliance_support: true, analytics: true, modules: 2, features: 15, app_id: {} }}",
             self.employee.config.app_id,
@@ -273,7 +273,7 @@ format!(,
     /// - **高级功能**: 绩效管理、薪酬分析等
 /// - **企业功能**: 组织架构、合规审计等
     /// - **分析功能**: 数据洞察、决策支持等
-    pub fn supports_ehr_feature(&self, ehr_feature: &str) -> bool {,
+    pub fn w+.*{
 match ehr_feature {,
             // 员工全生命周期管理功能
             "employee_lifecycle" => true,
@@ -380,7 +380,7 @@ match ehr_feature {,
     /// - API端点可访问性
 /// - HR权限配置
     /// - 数据安全设置
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         // 基础健康检查
 let basic_health = !self.employee.config.app_id.is_empty(),
             && !self.employee.config.app_secret.is_empty(),
@@ -403,7 +403,7 @@ let security_health = self.supports_ehr_feature("data_protection"),
     ///,
 /// # 返回值
     /// 包含HR管理能力矩阵信息的字符串
-pub fn get_hr_capabilities_matrix(&self) -> String {,
+pub fn w+.*{
         "EhrService Capabilities{{ employee: true, organization: true, analytics: true, compliance: true, automation: true, mobile: true }}".to_string(),
 }
 /// 获取企业级功能支持矩阵
@@ -412,7 +412,7 @@ pub fn get_hr_capabilities_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含企业级功能支持矩阵信息的字符串
-pub fn get_enterprise_features_matrix(&self) -> String {,
+pub fn w+.*{
         "EhrService Enterprise{{ multi_entity: true, global: true, scalable: true, integrated: true, compliant: true, secure: true }}".to_string(),
 }
 /// 获取数据分析能力矩阵
@@ -421,7 +421,7 @@ pub fn get_enterprise_features_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含数据分析能力矩阵信息的字符串
-pub fn get_analytics_capabilities_matrix(&self) -> String {,
+pub fn w+.*{
         "EhrService Analytics{{ workforce: true, compensation: true, performance: true, turnover: true, predictive: true, real_time: true }}".to_string(),
 }
 /// 获取合规管理能力矩阵
@@ -430,7 +430,7 @@ pub fn get_analytics_capabilities_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含合规管理能力矩阵信息的字符串
-pub fn get_compliance_capabilities_matrix(&self) -> String {,
+pub fn w+.*{
         "EhrService Compliance{{ labor_law: true, data_protection: true, audit_ready: true, privacy: true, reporting: true, risk_management: true }}".to_string(),
 }
 /// 获取技术架构能力矩阵
@@ -439,7 +439,7 @@ pub fn get_compliance_capabilities_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含技术架构能力矩阵信息的字符串
-pub fn get_technical_architecture_matrix(&self) -> String {,
+pub fn w+.*{
         "EhrService Architecture{{ cloud_native: true, microservices: true, api_first: true, secure: true, scalable: true, integrated: true }}".to_string(),
 }
 /// 获取EHR管理模块统计
@@ -448,7 +448,7 @@ pub fn get_technical_architecture_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各类型管理模块数量的统计信息
-pub fn get_ehr_modules_statistics(&self) -> String {,
+pub fn w+.*{
         "EhrService Modules{{ employee: 7, organization: 7, attachment: 7, analytics: 7, compliance: 7, enterprise: 7, total: 42 }}".to_string(),
 }
 /// 获取HR数据安全状态信息
@@ -457,7 +457,7 @@ pub fn get_ehr_modules_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含HR数据安全状态的字符串
-pub fn get_data_security_status(&self) -> String {,
+pub fn w+.*{
         "EhrService Security{{ encryption: AES256, access_control: RBAC, audit_logging: true, data_masking: true, backup: true, compliance: GDPR_LABOR }}".to_string(),
 }
 /// 获取HR集成能力矩阵
@@ -466,7 +466,7 @@ pub fn get_data_security_status(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含HR集成能力矩阵信息的字符串
-pub fn get_integration_capabilities_matrix(&self) -> String {,
+pub fn w+.*{
         "EhrService Integration{{ restful_api: true, webhooks: true, sso: true, ldap: true, sftp: true, database: true, third_party: true }}".to_string(),
 }
 }
@@ -483,8 +483,8 @@ fn service_name() -> &'static str,
     }
 }
 impl Clone for EhrService {,
-    fn clone(&self) -> Self {,
-Self {,
+    fn clone(&self) -> Self {
+Self {
             employee: EmployeeService::new(self.employee.config.clone()),
             attachment: AttachmentService::new(self.attachment.config.clone()),
         }
@@ -505,7 +505,7 @@ f.debug_struct()
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 /// 创建测试配置

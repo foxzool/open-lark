@@ -112,14 +112,14 @@ pub struct TenantTagService {
 }
 impl TenantTagService {
     pub fn new() -> Self {
-Self {,
+Self {
             tag: TagService::new(config.clone()),
             tag_binding: TagBindingService::new(config),
         }
 }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 #[test],

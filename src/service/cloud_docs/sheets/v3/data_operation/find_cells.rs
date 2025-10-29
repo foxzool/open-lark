@@ -23,7 +23,7 @@ use crate::,
     },
 };
 
-#[derive(Serialize, Debug, Default)],
+#[derive(.*?)]
 pub struct FindCellsRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -43,14 +43,14 @@ pub struct FindCellsRequest {
     find: String,
 }
 impl FindCellsRequest {
-    pub fn builder() -> FindCellsRequestBuilder {,
+    pub fn w+.*{
 FindCellsRequestBuilder::default(),
     },
 /// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM,
     /// 验证请求参数,
-pub fn validate(&self) -> SDKResult<()> {,
+pub fn w+.*{
         // 验证必需字段,
 if self.spreadsheet_token.is_empty() {,
             return Err(crate::core::error::LarkAPIError::illegal_param(
@@ -99,47 +99,47 @@ return Err(crate::core::error::LarkAPIError::illegal_param(,
 Ok(()),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct FindCellsRequestBuilder {
     request: FindCellsRequest,
 }
 impl FindCellsRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 }
 
-    pub fn find(mut self, find: impl ToString) -> Self {,
+    pub fn find(mut self, find: impl ToString) -> Self {
 self.request.find = find.to_string();
         self,
 }
 
-    pub fn range(mut self, range: impl ToString) -> Self {,
+    pub fn range(mut self, range: impl ToString) -> Self {
 self.request.find_condition.range = range.to_string();
         self,
 }
 
-    pub fn match_case(mut self, match_case: bool) -> Self {,
+    pub fn match_case(mut self, match_case: bool) -> Self {
 self.request.find_condition.match_case = Some(match_case);
         self,
 }
 
-    pub fn match_entire_cell(mut self, match_entire_cell: bool) -> Self {,
+    pub fn match_entire_cell(mut self, match_entire_cell: bool) -> Self {
 self.request.find_condition.match_entire_cell = Some(match_entire_cell);
         self,
 }
 
-    pub fn search_by_regex(mut self, search_by_regex: bool) -> Self {,
+    pub fn search_by_regex(mut self, search_by_regex: bool) -> Self {
 self.request.find_condition.search_by_regex = Some(search_by_regex);
         self,
 }
 
-    pub fn include_formulas(mut self, include_formulas: bool) -> Self {,
+    pub fn include_formulas(mut self, include_formulas: bool) -> Self {
 self.request.find_condition.include_formulas = Some(include_formulas);
         self,
 },
@@ -148,13 +148,13 @@ self.request.find_condition.include_formulas = Some(include_formulas);
 /// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM,
-    pub fn build(self) -> FindCellsRequest {,
+    pub fn w+.*{
 let mut request = self.request;
         request.api_request.body = serde_json::to_vec(&request).unwrap();
 request,
     },
 /// 验证请求参数,
-    pub fn validate(&self) -> SDKResult<()> {,
+    pub fn w+.*{
 // 验证必需字段,
         if self.request.spreadsheet_token.is_empty() {,
 return Err(crate::core::error::LarkAPIError::illegal_param(,
@@ -212,7 +212,7 @@ impl_executable_builder_owned!(
     find_cells,
 );
 /// 查找单元格响应
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct FindCellsResponse {
     /// 符合条件的信息
     pub find_result: FindReplaceResult,

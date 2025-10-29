@@ -19,13 +19,13 @@ pub struct MailGroupManagerService {
     pub config: Config,
 }
 /// 批量创建邮件组管理员请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchCreateManagersRequest {
     /// 管理员列表
     pub managers: Vec<MailGroupMember>,
 }
 /// 批量创建邮件组管理员响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchCreateManagersResponse {
     /// 创建的管理员列表
     pub managers: Vec<MailGroupMember>,
@@ -36,13 +36,13 @@ ResponseFormat::Data,
     }
 }
 /// 批量删除邮件组管理员请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchDeleteManagersRequest {
     /// 管理员ID列表
     pub manager_ids: Vec<String>,
 }
 /// 批量获取邮件组管理员响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListManagersResponse {
     /// 管理员列表
     pub managers: Vec<MailGroupMember>,

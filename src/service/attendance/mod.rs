@@ -147,7 +147,7 @@ pub fn new() -> Self {
     ///,
 /// # 返回值
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
-pub fn validate_attendance_services_config(&self) -> bool {,
+pub fn w+.*{
         // 检查配置是否有效
 !self.v1.shift.config.app_id.is_empty(),
             && !self.v1.shift.config.app_secret.is_empty(),
@@ -168,7 +168,7 @@ pub fn validate_attendance_services_config(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_attendance_service_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "AttendanceService{{ services: 1, sub_services: 11, app_id: {} api_version: v1, attendance_management: true, shift_scheduling: true }}",
             self.v1.shift.config.app_id,
@@ -183,7 +183,7 @@ pub fn get_attendance_service_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_attendance_feature(&self, attendance_feature: &str) -> bool {,
+    pub fn w+.*{
 matches!(,
             attendance_feature,
             "attendance_tracking",
@@ -220,7 +220,7 @@ matches!(,
     ///,
 /// # 返回值
     /// 如果所有服务配置有效返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         !self.v1.shift.config.app_id.is_empty(),
 && !self.v1.shift.config.app_secret.is_empty(),
             && !self.v1.user_daily_shift.config.app_id.is_empty(),
@@ -241,7 +241,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含各类型服务数量的统计信息
-pub fn get_attendance_categories_statistics(&self) -> String {,
+pub fn w+.*{
         "AttendanceService Categories{ core: 2, user: 4, approval: 2, leave: 2, archive: 1, total: 11 }".to_string(),
 }
 /// 获取考勤服务状态摘要
@@ -250,7 +250,7 @@ pub fn get_attendance_categories_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各服务状态信息的字符串
-pub fn get_attendance_service_status_summary(&self) -> String {,
+pub fn w+.*{
         let config_healthy = !self.v1.shift.config.app_id.is_empty();
 let core_healthy = config_healthy;
         let user_healthy = config_healthy;
@@ -269,7 +269,7 @@ let archive_healthy = config_healthy;
     ///,
 /// # 返回值
     /// 包含考勤能力矩阵信息的字符串
-pub fn get_attendance_capabilities_matrix(&self) -> String {,
+pub fn w+.*{
         format!(
             "AttendanceService Capabilities{{ tracking: {} scheduling: {} approval: true, analytics: true, compliance: true }}",
             self.supports_attendance_feature("attendance_tracking"),
@@ -282,7 +282,7 @@ pub fn get_attendance_capabilities_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含打卡管理能力信息的字符串
-pub fn get_clock_in_capabilities(&self) -> String {,
+pub fn w+.*{
         "AttendanceService ClockIn{ punch_in: true, punch_out: true, location: true, time_tracking: true, mobile: true }".to_string(),
 }
 /// 获取班次管理能力矩阵
@@ -291,7 +291,7 @@ pub fn get_clock_in_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含班次管理能力信息的字符串
-pub fn get_shift_management_capabilities(&self) -> String {,
+pub fn w+.*{
         "AttendanceService Shift{ scheduling: true, rotation: true, flexible: true, auto_assign: true, optimization: true }".to_string(),
 }
 /// 获取假期管理能力矩阵
@@ -300,7 +300,7 @@ pub fn get_shift_management_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含假期管理能力信息的字符串
-pub fn get_leave_management_capabilities(&self) -> String {,
+pub fn w+.*{
         "AttendanceService Leave{ balance: true, application: true, approval: true, accrual: true, policy: true }".to_string(),
 }
 /// 获取审批流程能力矩阵
@@ -309,7 +309,7 @@ pub fn get_leave_management_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含审批流程能力信息的字符串
-pub fn get_approval_workflow_capabilities(&self) -> String {,
+pub fn w+.*{
         "AttendanceService Approval{ multi_level: true, automation: true, routing: true, tracking: true, notification: true }".to_string(),
 }
 /// 获取企业级能力矩阵
@@ -318,7 +318,7 @@ pub fn get_approval_workflow_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含企业级能力信息的字符串
-pub fn get_enterprise_attendance_capabilities(&self) -> String {,
+pub fn w+.*{
         "AttendanceService Enterprise{ compliance: true, audit: true, reporting: true, integration: true, analytics: true }".to_string(),
 }
 /// 获取考勤性能指标
@@ -327,7 +327,7 @@ pub fn get_enterprise_attendance_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含性能指标信息的字符串
-pub fn get_attendance_performance_metrics(&self) -> String {,
+pub fn w+.*{
         "AttendanceService Performance{ scalability: enterprise, reliability: 99.95%, latency: <100ms, concurrency: high, availability: 99.99% }".to_string(),
 }
 /// 获取考勤应用场景矩阵
@@ -336,13 +336,13 @@ pub fn get_attendance_performance_metrics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含应用场景信息的字符串
-pub fn get_attendance_use_cases_matrix(&self) -> String {,
+pub fn w+.*{
         "AttendanceService UseCases{ enterprise_management: true, remote_work: true, multi_shift: true, compliance_tracking: true, payroll_integration: true }".to_string(),
 }
 }
 impl Clone for AttendanceService {,
-    fn clone(&self) -> Self {,
-Self {,
+    fn clone(&self) -> Self {
+Self {
             v1: v1::V1::new(self.v1.shift.config.clone()),
         }
 }
@@ -369,7 +369,7 @@ fn service_version() -> &'static str {,
 }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 /// 创建测试配置

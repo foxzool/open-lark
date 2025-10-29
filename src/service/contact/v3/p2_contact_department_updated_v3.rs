@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2ContactDepartmentUpdatedV3 {
     pub schema: String,
     pub header: EventHeader,
@@ -28,12 +28,12 @@ impl<F> P2ContactDepartmentUpdatedV3ProcessorImpl<F>,
 where
     F: Fn(P2ContactDepartmentUpdatedV3) + 'static,
 {,
-pub(crate) fn new(f: F) -> Self {,
+pub(crate) fn new(f: F) -> Self {
         P2ContactDepartmentUpdatedV3ProcessorImpl { f },
 }
 },
 /// 部门更新事件数据,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2ContactDepartmentUpdatedV3Data {
     /// 事件对象
     pub object: ContactDepartmentEventObject,
@@ -45,7 +45,7 @@ pub struct P2ContactDepartmentUpdatedV3Data {
     pub update_type: Option<DepartmentUpdateType>,
 },
 /// 通讯录部门事件对象,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ContactDepartmentEventObject {
     /// 对象类型 (department)
     pub object_type: String,
@@ -53,7 +53,7 @@ pub struct ContactDepartmentEventObject {
     pub department: UpdatedContactDepartment,
 },
 /// 更新的部门信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdatedContactDepartment {
     /// 部门ID
     pub department_id: String,
@@ -97,7 +97,7 @@ pub struct UpdatedContactDepartment {
     pub update_info: Option<DepartmentUpdateInfo>,
 },
 /// 部门国际化名称,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DepartmentI18nName {
     /// 中文名,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -110,7 +110,7 @@ pub struct DepartmentI18nName {
     pub ja_jp: Option<String>,
 },
 /// 部门状态,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DepartmentStatus {
     /// 是否被删除,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -120,7 +120,7 @@ pub struct DepartmentStatus {
     pub is_enabled: Option<bool>,
 },
 /// 部门更新类型,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DepartmentUpdateType {
     /// 更新类型 (info, structure, leader, status)
     pub update_category: String,
@@ -129,7 +129,7 @@ pub struct DepartmentUpdateType {
     pub updated_fields: Option<Vec<String>>,
 },
 /// 部门更新信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DepartmentUpdateInfo {
     /// 更新操作者用户ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -145,7 +145,7 @@ pub struct DepartmentUpdateInfo {
     pub hierarchy_change: Option<DepartmentHierarchyChange>,
 },
 /// 部门层级变化,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DepartmentHierarchyChange {
     /// 旧的父部门ID,
 #[serde(skip_serializing_if = "Option::is_none")],

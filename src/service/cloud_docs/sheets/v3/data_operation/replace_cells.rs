@@ -21,7 +21,7 @@ use crate::,
     },
 };
 
-#[derive(Serialize, Debug, Default)],
+#[derive(.*?)]
 pub struct ReplaceCellsRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -43,60 +43,60 @@ pub struct ReplaceCellsRequest {
     replacement: String,
 }
 impl ReplaceCellsRequest {
-    pub fn builder() -> ReplaceCellsRequestBuilder {,
+    pub fn w+.*{
 ReplaceCellsRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct ReplaceCellsRequestBuilder {
     request: ReplaceCellsRequest,
 }
 impl ReplaceCellsRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 }
 
-    pub fn find(mut self, find: impl ToString) -> Self {,
+    pub fn find(mut self, find: impl ToString) -> Self {
 self.request.find = find.to_string();
         self,
 }
 
-    pub fn range(mut self, range: impl ToString) -> Self {,
+    pub fn range(mut self, range: impl ToString) -> Self {
 self.request.find_condition.range = range.to_string();
         self,
 }
 
-    pub fn match_case(mut self, match_case: bool) -> Self {,
+    pub fn match_case(mut self, match_case: bool) -> Self {
 self.request.find_condition.match_case = Some(match_case);
         self,
 }
 
-    pub fn match_entire_cell(mut self, match_entire_cell: bool) -> Self {,
+    pub fn match_entire_cell(mut self, match_entire_cell: bool) -> Self {
 self.request.find_condition.match_entire_cell = Some(match_entire_cell);
         self,
 }
 
-    pub fn search_by_regex(mut self, search_by_regex: bool) -> Self {,
+    pub fn search_by_regex(mut self, search_by_regex: bool) -> Self {
 self.request.find_condition.search_by_regex = Some(search_by_regex);
         self,
 }
 
-    pub fn include_formulas(mut self, include_formulas: bool) -> Self {,
+    pub fn include_formulas(mut self, include_formulas: bool) -> Self {
 self.request.find_condition.include_formulas = Some(include_formulas);
         self,
 }
 
-    pub fn replacement(mut self, replacement: impl ToString) -> Self {,
+    pub fn replacement(mut self, replacement: impl ToString) -> Self {
 self.request.replacement = replacement.to_string();
         self,
 },
-pub fn build(mut self) -> ReplaceCellsRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -110,7 +110,7 @@ impl_executable_builder_owned!(
     replace_cells,
 );
 /// 替换单元格响应
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct ReplaceCellsResponse {
     /// 符合查找条件并替换的单元格信息
     pub replace_result: FindReplaceResult,

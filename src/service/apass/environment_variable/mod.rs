@@ -21,7 +21,7 @@ pub struct EnvironmentVariableService {
     pub config: Config,
 }
 /// 环境变量查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EnvironmentVariableQueryResponse {
     /// 分页响应数据
 #[serde(flatten)],
@@ -33,7 +33,7 @@ ResponseFormat::Data,
     }
 }
 /// 环境变量获取响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EnvironmentVariableGetResponse {
     /// 环境变量详情
 #[serde(flatten)],

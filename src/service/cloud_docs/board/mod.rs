@@ -13,14 +13,14 @@ pub struct BoardService {
 }
 impl BoardService {
     pub fn new() -> Self {
-Self {,
+Self {
             whiteboard: v1::whiteboard::WhiteboardService::new(config.clone()),
             config,
         }
 }
 /// 使用共享配置（实验性）
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             whiteboard: v1::whiteboard::WhiteboardService::new(shared.as_ref().clone()),
             config: (*shared).clone(),
         }

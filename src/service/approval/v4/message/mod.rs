@@ -19,7 +19,7 @@ pub struct MessageService {
     pub config: Config,
 }
 /// 发送审批Bot消息请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SendBotMessageRequest {
     /// 消息接收人用户ID
     pub user_id: String,
@@ -32,7 +32,7 @@ pub struct SendBotMessageRequest {
     pub msg_type: Option<String>,
 }
 /// 发送审批Bot消息响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SendBotMessageResponse {
     /// 消息ID
     pub message_id: String,
@@ -43,7 +43,7 @@ ResponseFormat::Data,
     }
 }
 /// 更新审批Bot消息请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateBotMessageRequest {
     /// 更新后的消息内容
     pub content: serde_json::Value,

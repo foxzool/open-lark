@@ -444,7 +444,7 @@ fn service_version() -> &'static str {,
 }
 }
 /// 周期列表查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct SemesterListRequest {
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -454,7 +454,7 @@ pub struct SemesterListRequest {
     pub page_size: Option<i32>,
 }
 /// 周期列表查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SemesterListResponse {
     /// 周期列表
 #[serde(flatten)],
@@ -466,7 +466,7 @@ ResponseFormat::Data,
     }
 }
 /// 项目查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ActivityQueryRequest {
     /// 周期ID
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -479,7 +479,7 @@ pub struct ActivityQueryRequest {
     pub page_size: Option<i32>,
 }
 /// 项目查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ActivityQueryResponse {
     /// 项目列表
 #[serde(flatten)],
@@ -491,7 +491,7 @@ ResponseFormat::Data,
     }
 }
 /// 补充信息查询请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AdditionalInfoQueryRequest {
     /// 项目ID
     pub activity_id: String,
@@ -500,7 +500,7 @@ pub struct AdditionalInfoQueryRequest {
     pub user_ids: Option<Vec<String>>,
 }
 /// 补充信息查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AdditionalInfoQueryResponse {
     /// 补充信息列表
     pub additional_information: Vec<AdditionalInformation>,
@@ -511,7 +511,7 @@ ResponseFormat::Data,
     }
 }
 /// 补充信息导入请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AdditionalInfoImportRequest {
     /// 项目ID
     pub activity_id: String,
@@ -519,7 +519,7 @@ pub struct AdditionalInfoImportRequest {
     pub additional_information: Vec<AdditionalInformation>,
 }
 /// 补充信息导入响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AdditionalInfoImportResponse {
     /// 导入成功标识
     pub success: bool,
@@ -535,7 +535,7 @@ ResponseFormat::Data,
     }
 }
 /// 补充信息删除请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AdditionalInfoDeleteRequest {
     /// 项目ID
     pub activity_id: String,
@@ -543,7 +543,7 @@ pub struct AdditionalInfoDeleteRequest {
     pub info_ids: Vec<String>,
 }
 /// 补充信息删除响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AdditionalInfoDeleteResponse {
     /// 删除成功标识
     pub success: bool,
@@ -556,7 +556,7 @@ ResponseFormat::Data,
     }
 }
 /// 人员组成员更新请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserGroupWriteRequest {
     /// 人员组ID
     pub group_id: String,
@@ -567,7 +567,7 @@ pub struct UserGroupWriteRequest {
     pub operation: Option<String>,
 }
 /// 人员组成员更新响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserGroupWriteResponse {
     /// 更新成功标识
     pub success: bool,
@@ -580,7 +580,7 @@ ResponseFormat::Data,
     }
 }
 /// 被评估人查询请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RevieweeQueryRequest {
     /// 项目ID
     pub activity_id: String,
@@ -589,7 +589,7 @@ pub struct RevieweeQueryRequest {
     pub user_ids: Option<Vec<String>>,
 }
 /// 被评估人查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RevieweeQueryResponse {
     /// 被评估人列表
     pub reviewees: Vec<Reviewee>,
@@ -600,7 +600,7 @@ ResponseFormat::Data,
     }
 }
 /// 评估模板查询请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReviewTemplateQueryRequest {
     /// 项目ID
     pub activity_id: String,
@@ -609,7 +609,7 @@ pub struct ReviewTemplateQueryRequest {
     pub template_type: Option<String>,
 }
 /// 评估模板查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReviewTemplateQueryResponse {
     /// 评估模板列表
     pub review_templates: Vec<ReviewTemplate>,
@@ -620,13 +620,13 @@ ResponseFormat::Data,
     }
 }
 /// 评估项查询请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReviewItemQueryRequest {
     /// 模板ID
     pub template_id: String,
 }
 /// 评估项查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReviewItemQueryResponse {
     /// 评估项列表
     pub review_items: Vec<ReviewItem>,
@@ -637,13 +637,13 @@ ResponseFormat::Data,
     }
 }
 /// 标签题配置查询请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TagQuestionConfigQueryRequest {
     /// 评估项ID列表
     pub item_ids: Vec<String>,
 }
 /// 标签题配置查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TagQuestionConfigQueryResponse {
     /// 标签题配置列表
     pub tag_question_configs: Vec<TagQuestionConfig>,
@@ -654,7 +654,7 @@ ResponseFormat::Data,
     }
 }
 /// 指标查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct MetricQueryRequest {
     /// 项目ID
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -664,7 +664,7 @@ pub struct MetricQueryRequest {
     pub key_only: Option<bool>,
 }
 /// 指标查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MetricQueryResponse {
     /// 指标列表
     pub metrics: Vec<Metric>,
@@ -675,13 +675,13 @@ ResponseFormat::Data,
     }
 }
 /// 指标模板查询请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MetricTemplateQueryRequest {
     /// 项目ID
     pub activity_id: String,
 }
 /// 指标模板查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MetricTemplateQueryResponse {
     /// 指标模板列表
     pub metric_templates: Vec<MetricTemplate>,
@@ -692,13 +692,13 @@ ResponseFormat::Data,
     }
 }
 /// 指标字段查询请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MetricFieldQueryRequest {
     /// 指标ID
     pub metric_id: String,
 }
 /// 指标字段查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MetricFieldQueryResponse {
     /// 指标字段列表
     pub metric_fields: Vec<MetricField>,
@@ -709,7 +709,7 @@ ResponseFormat::Data,
     }
 }
 /// 指标标签列表查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct MetricTagListRequest {
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -719,7 +719,7 @@ pub struct MetricTagListRequest {
     pub page_size: Option<i32>,
 }
 /// 指标标签列表查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MetricTagListResponse {
     /// 指标标签列表
 #[serde(flatten)],

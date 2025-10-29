@@ -19,7 +19,7 @@ use crate::,
     impl_executable_builder_owned,
 };
 /// 复制知识空间节点请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct CopySpaceNodeRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -40,64 +40,64 @@ pub struct CopySpaceNodeRequest {
     title: Option<String>,
 }
 impl CopySpaceNodeRequest {
-    pub fn builder() -> CopySpaceNodeRequestBuilder {,
+    pub fn w+.*{
 CopySpaceNodeRequestBuilder::default(),
     }
 
-    pub fn new(space_id: impl ToString, node_token: impl ToString) -> Self {,
-Self {,
+    pub fn new(space_id: impl ToString, node_token: impl ToString) -> Self {
+Self {
             space_id: space_id.to_string(),
             node_token: node_token.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct CopySpaceNodeRequestBuilder {
     request: CopySpaceNodeRequest,
 }
 impl CopySpaceNodeRequestBuilder {
     /// 知识空间id
-    pub fn space_id(mut self, space_id: impl ToString) -> Self {,
+    pub fn space_id(mut self, space_id: impl ToString) -> Self {
 self.request.space_id = space_id.to_string();
         self,
 },
 /// 要复制的节点token,
-    pub fn node_token(mut self, node_token: impl ToString) -> Self {,
+    pub fn node_token(mut self, node_token: impl ToString) -> Self {
 self.request.node_token = node_token.to_string();
         self,
 },
 /// 目标父节点token,
-    pub fn target_parent_token(mut self, target_parent_token: impl ToString) -> Self {,
+    pub fn target_parent_token(mut self, target_parent_token: impl ToString) -> Self {
 self.request.target_parent_token = Some(target_parent_token.to_string());
         self,
 },
 /// 复制到根目录,
-    pub fn move_to_root(mut self) -> Self {,
+    pub fn move_to_root(mut self) -> Self {
 self.request.target_parent_token = None;
         self,
 },
 /// 目标知识空间id,
-    pub fn target_space_id(mut self, target_space_id: impl ToString) -> Self {,
+    pub fn target_space_id(mut self, target_space_id: impl ToString) -> Self {
 self.request.target_space_id = Some(target_space_id.to_string());
         self,
 },
 /// 复制到当前空间,
-    pub fn move_to_current_space(mut self) -> Self {,
+    pub fn move_to_current_space(mut self) -> Self {
 self.request.target_space_id = None;
         self,
 },
 /// 复制后的标题,
-    pub fn title(mut self, title: impl ToString) -> Self {,
+    pub fn title(mut self, title: impl ToString) -> Self {
 self.request.title = Some(title.to_string());
         self,
 },
 /// 使用原标题,
-    pub fn keep_original_title(mut self) -> Self {,
+    pub fn keep_original_title(mut self) -> Self {
 self.request.title = None;
         self,
 },
-pub fn build(mut self) -> CopySpaceNodeRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -110,7 +110,7 @@ impl_executable_builder_owned!(,
     copy,
 );
 /// 复制后的节点信息
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct CopiedNode {
     /// 知识空间id
     pub space_id: String,
@@ -128,7 +128,7 @@ pub struct CopiedNode {
     pub title: Option<String>,
 },
 /// 复制知识空间节点响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct CopySpaceNodeResponse {
     /// 复制后的节点信息
     pub node: CopiedNode,
@@ -160,7 +160,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_copy_space_node_request_builder() {,

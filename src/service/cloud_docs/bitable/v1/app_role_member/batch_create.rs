@@ -20,7 +20,7 @@ use crate::,
     service::bitable::v1::app_role_member::RoleMember,
 };
 /// 批量新增协作者请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct BatchCreateRoleMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -37,7 +37,7 @@ pub struct BatchCreateRoleMemberRequest {
     members: Vec<MemberInfo>,
 },
 /// 成员信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MemberInfo {
     /// 成员id
     pub member_id: String,
@@ -45,12 +45,12 @@ pub struct MemberInfo {
     pub member_type: String,
 }
 impl BatchCreateRoleMemberRequest {
-    pub fn builder() -> BatchCreateRoleMemberRequestBuilder {,
+    pub fn w+.*{
 BatchCreateRoleMemberRequestBuilder::default(),
     }
 
-    pub fn new(app_token: impl ToString, role_id: impl ToString, members: Vec<MemberInfo>) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, role_id: impl ToString, members: Vec<MemberInfo>) -> Self {
+Self {
             app_token: app_token.to_string(),
             role_id: role_id.to_string(),
             members,
@@ -58,40 +58,40 @@ Self {,
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct BatchCreateRoleMemberRequestBuilder {
     request: BatchCreateRoleMemberRequest,
 }
 impl BatchCreateRoleMemberRequestBuilder {
     /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 自定义角色的id,
-    pub fn role_id(mut self, role_id: impl ToString) -> Self {,
+    pub fn role_id(mut self, role_id: impl ToString) -> Self {
 self.request.role_id = role_id.to_string();
         self,
 },
 /// 用户id类型,
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
 },
 /// 成员列表,
-    pub fn members(mut self, members: Vec<MemberInfo>) -> Self {,
+    pub fn members(mut self, members: Vec<MemberInfo>) -> Self {
 self.request.members = members;
         self,
 },
 /// 添加单个成员,
-    pub fn add_member(mut self, member_id: impl ToString, member_type: impl ToString) -> Self {,
+    pub fn add_member(mut self, member_id: impl ToString, member_type: impl ToString) -> Self {
 self.request.members.push(MemberInfo {,
             member_id: member_id.to_string(),
             member_type: member_type.to_string(),
         });
 self,
     },
-pub fn build(mut self) -> BatchCreateRoleMemberRequest {,
+pub fn w+.*{
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
                 .api_request,
@@ -110,7 +110,7 @@ impl_executable_builder_owned!(,
     batch_create,
 );
 /// 批量新增协作者响应
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct BatchCreateRoleMemberResponse {
     /// 新增的协作者信息列表
     pub members: Vec<RoleMember>,
@@ -139,7 +139,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_batch_create_role_member_request_builder() {,

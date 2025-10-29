@@ -16,7 +16,7 @@ use crate::{,
 };
 use super::EmployeeService;
 /// 更新在职员工为待离职请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct ToBeResignedEmployeeRequest {
     pub api_req: ApiRequest,
     /// 员工ID
@@ -32,7 +32,7 @@ pub struct ToBeResignedEmployeeRequest {
 }
 impl ToBeResignedEmployeeRequest {
     /// 创建更新在职员工为待离职请求的构建器,
-pub fn builder(employee_id: impl ToString) -> ToBeResignedEmployeeRequestBuilder {,
+pub fn w+.*{
         ToBeResignedEmployeeRequestBuilder {,
 request: ToBeResignedEmployeeRequest {,
                 employee_id: employee_id.to_string()
@@ -48,27 +48,27 @@ pub struct ToBeResignedEmployeeRequestBuilder {
 }
 impl ToBeResignedEmployeeRequestBuilder {
     /// 设置离职时间（毫秒时间戳）
-    pub fn resign_time(mut self, resign_time: i64) -> Self {,
+    pub fn resign_time(mut self, resign_time: i64) -> Self {
 self.request.resign_time = Some(resign_time);
         self,
 },
 /// 设置离职原因,
-    pub fn resign_reason(mut self, resign_reason: impl ToString) -> Self {,
+    pub fn resign_reason(mut self, resign_reason: impl ToString) -> Self {
 self.request.resign_reason = Some(resign_reason.to_string());
         self,
 },
 /// 设置离职类型,
-    pub fn resign_type(mut self, resign_type: impl ToString) -> Self {,
+    pub fn resign_type(mut self, resign_type: impl ToString) -> Self {
 self.request.resign_type = Some(resign_type.to_string());
         self,
 },
 /// 设置用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
 },
 /// 构建请求,
-    pub fn build(mut self) -> ToBeResignedEmployeeRequest {,
+    pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
@@ -92,13 +92,13 @@ self.request.api_req.body = serde_json::to_vec(&body).unwrap_or_default();
 }
 },
 /// 更新在职员工为待离职响应数据,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct ToBeResignedEmployeeResponseData {
     /// 更新的员工信息
     pub employee: Employee,
 },
 /// 更新在职员工为待离职响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct ToBeResignedEmployeeResponse {
     /// 响应数据
     pub data: ToBeResignedEmployeeResponseData,

@@ -19,7 +19,7 @@ pub struct AgentService {
     pub config: Config,
 }
 /// 更新客服信息请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateAgentRequest {
     /// 客服状态
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -29,7 +29,7 @@ pub struct UpdateAgentRequest {
     pub agent_name: Option<String>,
 }
 /// 更新客服信息响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateAgentResponse {
     /// 更新后的客服信息
     pub agent: Agent,
@@ -40,7 +40,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取客服邮箱响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetAgentEmailResponse {
     /// 客服邮箱
     pub agent_email: String,

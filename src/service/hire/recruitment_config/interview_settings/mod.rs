@@ -19,7 +19,7 @@ pub struct InterviewSettingsService {
     pub config: Config,
 }
 /// 面试设置信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct InterviewSettings {
     /// 设置ID
     pub id: String,
@@ -47,22 +47,22 @@ pub struct InterviewSettings {
     pub updated_time: Option<String>,
 }
 /// 面试时长配置
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct InterviewDurationConfig {
     // TODO: Add fields
 }
 /// 面试官配置
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct InterviewerConfig {
     // TODO: Add fields
 }
 /// 评分配置
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct EvaluationConfig {
     // TODO: Add fields
 }
 /// 评分项目
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EvaluationItem {
     /// 项目ID
     pub id: String,
@@ -74,7 +74,7 @@ pub struct EvaluationItem {
     pub is_required: bool,
 }
 /// 评分范围
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ScoreRange {
     /// 最小分数
     pub min_score: f32,
@@ -84,12 +84,12 @@ pub struct ScoreRange {
     pub step: Option<f32>,
 }
 /// 通知配置
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct NotificationConfig {
     // TODO: Add fields
 }
 /// 面试设置创建请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct InterviewSettingsCreateRequest {
     /// 设置名称
     pub name: I18nText,
@@ -109,7 +109,7 @@ pub struct InterviewSettingsCreateRequest {
     pub is_default: Option<bool>,
 }
 /// 面试设置列表请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct InterviewSettingsListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -121,7 +121,7 @@ pub struct InterviewSettingsListRequest {
     pub status: Option<String>,
 }
 /// 面试设置列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct InterviewSettingsListResponse {
     /// 面试设置列表
 #[serde(flatten)],
@@ -133,7 +133,7 @@ ResponseFormat::Data,
     }
 }
 /// 面试设置详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct InterviewSettingsDetailResponse {
     /// 面试设置信息
     pub settings: InterviewSettings,
@@ -144,7 +144,7 @@ ResponseFormat::Data,
     }
 }
 /// 面试设置操作响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct InterviewSettingsOperationResponse {
     /// 操作结果
 #[serde(flatten)],

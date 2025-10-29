@@ -12,7 +12,7 @@ use crate::core::{,
     SDKResult,
 };
 /// 更新云文档权限设置请求 (v2),
-#[derive(Debug, Serialize, Default, Clone)],
+#[derive(.*?)]
 pub struct PatchPermissionPublicV2Request {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -51,12 +51,12 @@ pub struct PatchPermissionPublicV2Request {
     expire_time: Option<i64>,
 }
 impl PatchPermissionPublicV2Request {
-    pub fn builder() -> PatchPermissionPublicV2RequestBuilder {,
+    pub fn w+.*{
 PatchPermissionPublicV2RequestBuilder::default(),
     }
 
-    pub fn new(token: impl ToString, obj_type: impl ToString) -> Self {,
-Self {,
+    pub fn new(token: impl ToString, obj_type: impl ToString) -> Self {
+Self {
             token: token.to_string(),
             obj_type: obj_type.to_string()
             ..Default::default(),
@@ -79,182 +79,182 @@ Self {,
         Self::new(token, "wiki"),
 }
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct PatchPermissionPublicV2RequestBuilder {
     request: PatchPermissionPublicV2Request,
 }
 impl PatchPermissionPublicV2RequestBuilder {
     /// 文档token
-    pub fn token(mut self, token: impl ToString) -> Self {,
+    pub fn token(mut self, token: impl ToString) -> Self {
 self.request.token = token.to_string();
         self,
 },
 /// 文档类型,
-    pub fn obj_type(mut self, obj_type: impl ToString) -> Self {,
+    pub fn obj_type(mut self, obj_type: impl ToString) -> Self {
 self.request.obj_type = obj_type.to_string();
         self,
 },
 /// 设置为文档类型,
-    pub fn as_doc(mut self) -> Self {,
+    pub fn as_doc(mut self) -> Self {
 self.request.obj_type = "doc".to_string();
         self,
 },
 /// 设置为电子表格类型,
-    pub fn as_sheet(mut self) -> Self {,
+    pub fn as_sheet(mut self) -> Self {
 self.request.obj_type = "sheet".to_string();
         self,
 },
 /// 设置为多维表格类型,
-    pub fn as_bitable(mut self) -> Self {,
+    pub fn as_bitable(mut self) -> Self {
 self.request.obj_type = "bitable".to_string();
         self,
 },
 /// 设置为知识库类型,
-    pub fn as_wiki(mut self) -> Self {,
+    pub fn as_wiki(mut self) -> Self {
 self.request.obj_type = "wiki".to_string();
         self,
 },
 /// 设置链接分享设置,
-    pub fn link_share_setting(mut self, setting: impl ToString) -> Self {,
+    pub fn link_share_setting(mut self, setting: impl ToString) -> Self {
 self.request.link_share_setting = Some(setting.to_string());
         self,
 },
 /// 关闭分享,
-    pub fn close_sharing(mut self) -> Self {,
+    pub fn close_sharing(mut self) -> Self {
 self.request.link_share_setting = Some("closed".to_string());
         self,
 },
 /// 组织内可读,
-    pub fn tenant_readable(mut self) -> Self {,
+    pub fn tenant_readable(mut self) -> Self {
 self.request.link_share_setting = Some("tenant_readable".to_string());
         self,
 },
 /// 组织内可编辑,
-    pub fn tenant_editable(mut self) -> Self {,
+    pub fn tenant_editable(mut self) -> Self {
 self.request.link_share_setting = Some("tenant_editable".to_string());
         self,
 },
 /// 任何人可读,
-    pub fn anyone_readable(mut self) -> Self {,
+    pub fn anyone_readable(mut self) -> Self {
 self.request.link_share_setting = Some("anyone_readable".to_string());
         self,
 },
 /// 任何人可编辑,
-    pub fn anyone_editable(mut self) -> Self {,
+    pub fn anyone_editable(mut self) -> Self {
 self.request.link_share_setting = Some("anyone_editable".to_string());
         self,
 },
 /// 是否允许复制,
-    pub fn allow_copy(mut self, allow: bool) -> Self {,
+    pub fn allow_copy(mut self, allow: bool) -> Self {
 self.request.allow_copy = Some(allow);
         self,
 },
 /// 允许复制,
-    pub fn enable_copy(mut self) -> Self {,
+    pub fn enable_copy(mut self) -> Self {
 self.request.allow_copy = Some(true);
         self,
 },
 /// 禁止复制,
-    pub fn disable_copy(mut self) -> Self {,
+    pub fn disable_copy(mut self) -> Self {
 self.request.allow_copy = Some(false);
         self,
 },
 /// 是否允许评论,
-    pub fn allow_comment(mut self, allow: bool) -> Self {,
+    pub fn allow_comment(mut self, allow: bool) -> Self {
 self.request.allow_comment = Some(allow);
         self,
 },
 /// 允许评论,
-    pub fn enable_comment(mut self) -> Self {,
+    pub fn enable_comment(mut self) -> Self {
 self.request.allow_comment = Some(true);
         self,
 },
 /// 禁止评论,
-    pub fn disable_comment(mut self) -> Self {,
+    pub fn disable_comment(mut self) -> Self {
 self.request.allow_comment = Some(false);
         self,
 },
 /// 是否允许保存副本,
-    pub fn allow_save_copy(mut self, allow: bool) -> Self {,
+    pub fn allow_save_copy(mut self, allow: bool) -> Self {
 self.request.allow_save_copy = Some(allow);
         self,
 },
 /// 允许保存副本,
-    pub fn enable_save_copy(mut self) -> Self {,
+    pub fn enable_save_copy(mut self) -> Self {
 self.request.allow_save_copy = Some(true);
         self,
 },
 /// 禁止保存副本,
-    pub fn disable_save_copy(mut self) -> Self {,
+    pub fn disable_save_copy(mut self) -> Self {
 self.request.allow_save_copy = Some(false);
         self,
 },
 /// 水印设置,
-    pub fn watermark_setting(mut self, setting: impl ToString) -> Self {,
+    pub fn watermark_setting(mut self, setting: impl ToString) -> Self {
 self.request.watermark_setting = Some(setting.to_string());
         self,
 },
 /// 开启水印,
-    pub fn enable_watermark(mut self) -> Self {,
+    pub fn enable_watermark(mut self) -> Self {
 self.request.watermark_setting = Some("visible".to_string());
         self,
 },
 /// 关闭水印,
-    pub fn disable_watermark(mut self) -> Self {,
+    pub fn disable_watermark(mut self) -> Self {
 self.request.watermark_setting = Some("none".to_string());
         self,
 },
 /// 是否允许分享到组织外,
-    pub fn allow_share_partner_tenant(mut self, allow: bool) -> Self {,
+    pub fn allow_share_partner_tenant(mut self, allow: bool) -> Self {
 self.request.allow_share_partner_tenant = Some(allow);
         self,
 },
 /// 允许组织外分享,
-    pub fn enable_external_share(mut self) -> Self {,
+    pub fn enable_external_share(mut self) -> Self {
 self.request.allow_share_partner_tenant = Some(true);
         self,
 },
 /// 禁止组织外分享,
-    pub fn disable_external_share(mut self) -> Self {,
+    pub fn disable_external_share(mut self) -> Self {
 self.request.allow_share_partner_tenant = Some(false);
         self,
 },
 /// 访问权限设置,
-    pub fn access_setting(mut self, setting: impl ToString) -> Self {,
+    pub fn access_setting(mut self, setting: impl ToString) -> Self {
 self.request.access_setting = Some(setting.to_string());
         self,
 },
 /// 分享范围设置,
-    pub fn share_scope(mut self, scope: impl ToString) -> Self {,
+    pub fn share_scope(mut self, scope: impl ToString) -> Self {
 self.request.share_scope = Some(scope.to_string());
         self,
 },
 /// 设置过期时间 (Unix时间戳),
-    pub fn expire_time(mut self, timestamp: i64) -> Self {,
+    pub fn expire_time(mut self, timestamp: i64) -> Self {
 self.request.expire_time = Some(timestamp);
         self,
 },
 /// 设置过期时间 (从现在开始的秒数),
-    pub fn expire_after_seconds(mut self, seconds: i64) -> Self {,
+    pub fn expire_after_seconds(mut self, seconds: i64) -> Self {
 let expire_time = chrono::Utc::now().timestamp() + seconds;
         self.request.expire_time = Some(expire_time);
 self,
     },
 /// 设置过期时间 (从现在开始的小时数),
-    pub fn expire_after_hours(self, hours: i64) -> Self {,
+    pub fn expire_after_hours(self, hours: i64) -> Self {
 self.expire_after_seconds(hours * 3600),
     },
 /// 设置过期时间 (从现在开始的天数),
-    pub fn expire_after_days(self, days: i64) -> Self {,
+    pub fn expire_after_days(self, days: i64) -> Self {
 self.expire_after_seconds(days * 86400),
     },
 /// 移除过期时间 (永久有效),
-    pub fn never_expire(mut self) -> Self {,
+    pub fn never_expire(mut self) -> Self {
 self.request.expire_time = Some(0); // 0表示永久有效,
         self,
 },
 /// 设置为企业级安全模式,
-    pub fn enterprise_secure_mode(mut self) -> Self {,
+    pub fn enterprise_secure_mode(mut self) -> Self {
 self.request.link_share_setting = Some("tenant_readable".to_string());
         self.request.allow_copy = Some(false);
 self.request.allow_comment = Some(false);
@@ -264,7 +264,7 @@ self.request.watermark_setting = Some("visible".to_string());
 self,
     },
 /// 设置为协作模式,
-    pub fn collaboration_mode(mut self) -> Self {,
+    pub fn collaboration_mode(mut self) -> Self {
 self.request.link_share_setting = Some("tenant_editable".to_string());
         self.request.allow_copy = Some(true);
 self.request.allow_comment = Some(true);
@@ -274,7 +274,7 @@ self.request.watermark_setting = Some("none".to_string());
 self,
     },
 /// 设置为公开分享模式,
-    pub fn public_share_mode(mut self) -> Self {,
+    pub fn public_share_mode(mut self) -> Self {
 self.request.link_share_setting = Some("anyone_readable".to_string());
         self.request.allow_copy = Some(false);
 self.request.allow_comment = Some(true);
@@ -284,7 +284,7 @@ self.request.watermark_setting = Some("visible".to_string());
 self,
     },
 /// 设置为开放编辑模式,
-    pub fn open_edit_mode(mut self) -> Self {,
+    pub fn open_edit_mode(mut self) -> Self {
 self.request.link_share_setting = Some("anyone_editable".to_string());
         self.request.allow_copy = Some(true);
 self.request.allow_comment = Some(true);
@@ -293,7 +293,7 @@ self.request.watermark_setting = Some("none".to_string());
         self.request.allow_share_partner_tenant = Some(true);
 self,
     },
-pub fn build(mut self) -> PatchPermissionPublicV2Request {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -306,7 +306,7 @@ crate::impl_executable_builder_owned!(,
     patch_permission_public_v2,
 );
 /// 权限更新结果 (v2)
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct PermissionUpdateResultV2 {
     /// 链接分享设置
     pub link_share_setting: Option<String>,
@@ -330,7 +330,7 @@ pub struct PermissionUpdateResultV2 {
     pub update_time: Option<i64>,
 },
 /// 更新云文档权限设置响应 (v2),
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct PatchPermissionPublicV2Response {
     /// 更新后的权限设置
     pub permission_public: PermissionUpdateResultV2,
@@ -362,7 +362,7 @@ Ok(api_resp),
 
 impl PermissionUpdateResultV2 {
 /// 获取分享级别描述,
-    pub fn share_level_description(&self) -> Option<&'static str> {,
+    pub fn w+.*{
 self.link_share_setting,
             .as_ref()
 .map(|setting| match setting.as_str() {,
@@ -375,20 +375,20 @@ self.link_share_setting,
             }),
 },
 /// 是否有更新时间,
-    pub fn has_update_time(&self) -> bool {,
+    pub fn w+.*{
 self.update_time.is_some(),
     },
 /// 是否有过期时间,
-    pub fn has_expire_time(&self) -> bool {,
+    pub fn w+.*{
 self.expire_time.is_some(),
     },
 /// 获取更新时间格式化字符串,
-    pub fn update_time_formatted(&self) -> Option<String> {,
+    pub fn w+.*{
 self.update_time,
             .map(|timestamp| format!("更新时间: {timestamp}")),
 },
 /// 获取过期时间格式化字符串,
-    pub fn expire_time_formatted(&self) -> Option<String> {,
+    pub fn w+.*{
 self.expire_time.map(|timestamp| {,
             if timestamp == 0 {,
 "永久有效".to_string(),
@@ -400,7 +400,7 @@ let datetime =,
         }),
 },
 /// 获取权限变更摘要,
-    pub fn changes_summary(&self) -> Vec<String> {,
+    pub fn w+.*{
 let mut changes = Vec::new();
         if let Some(ref setting) = self.link_share_setting {,
 changes.push(format!(,
@@ -470,7 +470,7 @@ changes.push("过期设置: 永久有效".to_string());
 changes,
     },
 /// 计算安全级别,
-    pub fn security_level(&self) -> &'static str {,
+    pub fn w+.*{
 if let Some(ref setting) = self.link_share_setting {,
             match setting.as_str() {
                 "closed" => "最安全",
@@ -491,7 +491,7 @@ if !self.allow_share_partner_tenant.unwrap_or(true) {,
         },
 },
 /// 获取高级功能变更,
-    pub fn advanced_changes(&self) -> Vec<String> {,
+    pub fn w+.*{
 let mut changes = Vec::new();
         if self.access_setting.is_some() {,
 changes.push("访问权限配置已更新".to_string());
@@ -513,11 +513,11 @@ impl PatchPermissionPublicV2Response {
 /// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/update,
-    pub fn update_result(&self) -> &PermissionUpdateResultV2 {,
+    pub fn w+.*{
 &self.permission_public,
     },
 /// 是否更新成功,
-    pub fn is_updated(&self) -> bool {,
+    pub fn w+.*{
 // 如果有任何字段有值，说明更新成功,
         self.permission_public.link_share_setting.is_some(),
 || self.permission_public.allow_copy.is_some(),
@@ -530,7 +530,7 @@ impl PatchPermissionPublicV2Response {
             || self.permission_public.expire_time.is_some(),
 },
 /// 获取更新摘要,
-    pub fn update_summary(&self) -> String {,
+    pub fn w+.*{
 let changes = self.permission_public.changes_summary();
         if changes.is_empty() {,
 "权限设置无变更".to_string(),
@@ -539,7 +539,7 @@ let changes = self.permission_public.changes_summary();
 }
     },
 /// 获取安全性评估,
-    pub fn security_assessment(&self) -> String {,
+    pub fn w+.*{
 format!(,
             "安全级别: {} - {}",
             self.permission_public.security_level(),
@@ -572,7 +572,7 @@ if !self,
         },
 },
 /// 获取操作建议,
-    pub fn operation_recommendations(&self) -> Vec<String> {,
+    pub fn w+.*{
 let mut recommendations = Vec::new();
         if let Some(ref setting) = self.permission_public.link_share_setting {,
 if setting == "anyone_editable" || setting == "anyone_readable" {,
@@ -610,7 +610,7 @@ if recommendations.is_empty() {,
 recommendations,
     },
 /// 获取高级功能报告,
-    pub fn advanced_features_report(&self) -> String {,
+    pub fn w+.*{
 let changes = self.permission_public.advanced_changes();
         if changes.is_empty() {,
 "未更新高级功能".to_string(),
@@ -619,13 +619,13 @@ let changes = self.permission_public.advanced_changes();
 }
     },
 /// 获取过期状态报告,
-    pub fn expiration_report(&self) -> Option<String> {,
+    pub fn w+.*{
 self.permission_public.expire_time_formatted(),
     },
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_patch_permission_public_v2_request_builder() {,

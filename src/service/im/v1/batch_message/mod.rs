@@ -22,7 +22,7 @@ pub struct BatchMessageService {
     pub config: Config,
 }
 /// 批量发送消息请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchSendMessageRequest {
     /// 消息接收者ID列表
     pub receive_id_list: Vec<String>,
@@ -37,7 +37,7 @@ pub struct BatchSendMessageRequest {
 // 接入统一 Service 抽象（IM v1 - BatchMessageService）
 impl_full_service!(BatchMessageService, "im.batch_message", "v1");
 /// 批量发送消息响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchSendMessageResponse {
     /// 批量消息ID
     pub batch_message_id: String,
@@ -50,13 +50,13 @@ ResponseFormat::Data,
     }
 }
 /// 查询批量消息进度响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetBatchProgressResponse {
     /// 批量消息进度信息
     pub batch_message_progress: BatchMessageProgress,
 }
 /// 批量消息进度信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchMessageProgress {
     /// 批量消息ID
     pub batch_message_id: String,
@@ -77,7 +77,7 @@ ResponseFormat::Data,
     }
 }
 /// 查询批量消息推送和阅读人数响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetBatchReadUserResponse {
     /// 已读用户列表
     pub read_users: Vec<BatchReadUser>,
@@ -87,7 +87,7 @@ pub struct GetBatchReadUserResponse {
     pub page_token: Option<String>,
 }
 /// 批量消息已读用户信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchReadUser {
     /// 用户ID
     pub user_id: String,

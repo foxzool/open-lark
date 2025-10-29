@@ -15,7 +15,7 @@ use crate::,
     service::cloud_docs::sheets::v2::SpreadsheetService,
 };
 /// 拆分单元格请求,
-#[derive(Serialize, Debug, Default)],
+#[derive(.*?)]
 pub struct SplitCellsRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -25,31 +25,31 @@ pub struct SplitCellsRequest {
     range: String,
 }
 impl SplitCellsRequest {
-    pub fn builder() -> SplitCellsRequestBuilder {,
+    pub fn w+.*{
 SplitCellsRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct SplitCellsRequestBuilder {
     request: SplitCellsRequest,
 }
 impl SplitCellsRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 },
 /// 查询范围，包含 sheetId 与单元格范围两部分，目前支持四种索引方式，详见 在线表格开发指南,
-    pub fn range(mut self, range: impl ToString) -> Self {,
+    pub fn range(mut self, range: impl ToString) -> Self {
 self.request.range = range.to_string();
         self,
 },
-pub fn build(mut self) -> SplitCellsRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 }
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct SplitCellsResponse {
     /// spreadsheet 的 token,
 #[serde(rename = "spreadsheetToken")],
@@ -80,7 +80,7 @@ Ok(api_resp),
     },
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use crate::,
 {
     core::,

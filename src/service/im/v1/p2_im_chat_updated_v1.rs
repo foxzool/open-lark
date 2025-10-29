@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2ImChatUpdatedV1 {
     pub schema: String,
     pub header: EventHeader,
@@ -28,12 +28,12 @@ impl<F> P2ImChatUpdatedV1ProcessorImpl<F>,
 where
     F: Fn(P2ImChatUpdatedV1) + 'static,
 {,
-pub(crate) fn new(f: F) -> Self {,
+pub(crate) fn new(f: F) -> Self {
         P2ImChatUpdatedV1ProcessorImpl { f },
 }
 },
 /// 聊天更新事件数据,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2ImChatUpdatedV1Data {
     /// 聊天 ID
     pub chat_id: String,
@@ -50,7 +50,7 @@ pub struct P2ImChatUpdatedV1Data {
     pub update_time: String,
 },
 /// 事件操作者信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EventOperator {
     /// 操作者用户 ID
     pub operator_id: UserId,
@@ -59,7 +59,7 @@ pub struct EventOperator {
     pub operator_type: Option<String>,
 },
 /// 聊天更新信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ChatUpdateInfo {
     /// 聊天名称,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -81,7 +81,7 @@ pub struct ChatUpdateInfo {
     pub admin_ids: Option<Vec<UserId>>,
 },
 /// 聊天设置,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ChatSettings {
     /// 是否允许@所有人,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -103,7 +103,7 @@ pub struct ChatSettings {
     pub history_enabled: Option<bool>,
 },
 /// 用户 ID 信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserId {
     /// 用户的 union id,
 #[serde(skip_serializing_if = "Option::is_none")],

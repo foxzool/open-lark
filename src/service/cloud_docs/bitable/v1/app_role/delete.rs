@@ -19,7 +19,7 @@ use crate::,
     impl_executable_builder_owned,
 };
 /// 删除自定义角色请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct DeleteAppRoleRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -31,34 +31,34 @@ pub struct DeleteAppRoleRequest {
     role_id: String,
 }
 impl DeleteAppRoleRequest {
-    pub fn builder() -> DeleteAppRoleRequestBuilder {,
+    pub fn w+.*{
 DeleteAppRoleRequestBuilder::default(),
     }
 
-    pub fn new(app_token: impl ToString, role_id: impl ToString) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, role_id: impl ToString) -> Self {
+Self {
             app_token: app_token.to_string(),
             role_id: role_id.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct DeleteAppRoleRequestBuilder {
     request: DeleteAppRoleRequest,
 }
 impl DeleteAppRoleRequestBuilder {
     /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 自定义角色的id,
-    pub fn role_id(mut self, role_id: impl ToString) -> Self {,
+    pub fn role_id(mut self, role_id: impl ToString) -> Self {
 self.request.role_id = role_id.to_string();
         self,
 },
-pub fn build(self) -> DeleteAppRoleRequest {,
+pub fn w+.*{
         self.request,
 }
 }
@@ -70,7 +70,7 @@ impl_executable_builder_owned!(,
     delete,
 );
 /// 删除自定义角色响应
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct DeleteAppRoleResponse {
     /// 删除的角色ID
     pub role_id: String,
@@ -101,7 +101,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

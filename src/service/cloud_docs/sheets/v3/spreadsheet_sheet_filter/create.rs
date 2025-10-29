@@ -14,7 +14,7 @@ core::{,
     },
 };
 /// 在子表内创建筛选,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct CreateSheetFilterRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -30,41 +30,41 @@ pub struct CreateSheetFilterRequest {
     condition: SheetFilterCondition,
 }
 impl CreateSheetFilterRequest {
-    pub fn builder() -> CreateSheetFilterRequestBuilder {,
+    pub fn w+.*{
 CreateSheetFilterRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct CreateSheetFilterRequestBuilder {
     request: CreateSheetFilterRequest,
 }
 impl CreateSheetFilterRequestBuilder {
     /// 表格 token
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 },
 /// 子表 id,
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 },
 /// 筛选应用范围,
-    pub fn range(mut self, range: impl ToString) -> Self {,
+    pub fn range(mut self, range: impl ToString) -> Self {
 self.request.range = range.to_string();
         self,
 },
 /// 设置筛选条件的列,
-    pub fn col(mut self, col: impl ToString) -> Self {,
+    pub fn col(mut self, col: impl ToString) -> Self {
 self.request.col = col.to_string();
         self,
 },
 /// 筛选的条件,
-    pub fn condition(mut self, condition: SheetFilterCondition) -> Self {,
+    pub fn condition(mut self, condition: SheetFilterCondition) -> Self {
 self.request.condition = condition;
         self,
 },
-pub fn build(mut self) -> CreateSheetFilterRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },

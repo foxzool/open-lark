@@ -24,40 +24,40 @@ fn content(&self) -> String {,
 }
 }
 impl MessageText {
-    pub fn new(text: &str) -> Self {,
-Self {,
+    pub fn new(text: &str) -> Self {
+Self {
             text: text.to_string(),
         },
 }
 
-    pub fn add_text(mut self, text: &str) -> Self {,
+    pub fn add_text(mut self, text: &str) -> Self {
 self.text.push_str(text);
         self,
 }
 
-    pub fn text_line(mut self, text: &str) -> Self {,
+    pub fn text_line(mut self, text: &str) -> Self {
 self.text.push_str(text);
         self.text.push('\n');
 self,
     }
 
-    pub fn at_user(mut self, user_id: &str) -> Self {,
+    pub fn at_user(mut self, user_id: &str) -> Self {
 self.text,
             .push_str(&format!("<at user_id=\"{}\"></at>", user_id));
 self,
     }
 
-    pub fn at_all(mut self, name: &str) -> Self {,
+    pub fn at_all(mut self, name: &str) -> Self {
 self.text,
             .push_str(&format!("<at user_id=\"all\">{}</at>", name));
 self,
     },
-pub fn build(self) -> Self {,
+pub fn build(self) -> Self {
         self,
 }
 },
 /// 富文本参数,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MessagePost {
     /// 默认的语言,
 #[serde(skip)],
@@ -73,7 +73,7 @@ fn content(&self) -> String {,
 }
 }
 impl MessagePost {
-    pub fn new(lng: &str) -> Self {,
+    pub fn new(lng: &str) -> Self {
 let post = HashMap::new();
         Self {
             default_language: lng.to_string(),
@@ -81,7 +81,7 @@ let post = HashMap::new();
         },
 }
 
-    pub fn title(mut self, title: impl ToString) -> Self {,
+    pub fn title(mut self, title: impl ToString) -> Self {
 let post = self,
             .post,
 .entry(self.default_language.clone()),
@@ -93,7 +93,7 @@ post.title = title.to_string();
         self,
 },
 /// 追加富文本内容,
-    pub fn append_content(mut self, contents: Vec<MessagePostNode>) -> Self {,
+    pub fn append_content(mut self, contents: Vec<MessagePostNode>) -> Self {
 let post = self,
             .post,
 .entry(self.default_language.clone()),
@@ -106,7 +106,7 @@ post.content.push(contents);
 }
 }
 
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct MessagePostContent {
     /// 富文本消息的标题。
     pub title: String,
@@ -114,7 +114,7 @@ pub struct MessagePostContent {
     pub content: Vec<Vec<MessagePostNode>>,
 },
 /// 富文本消息内容,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(tag = "tag")],
 pub enum MessagePostNode {,
 /// 文本内容。,
@@ -132,7 +132,7 @@ pub enum MessagePostNode {,
     Emotion(EmotionNode),
 },
 /// 文本node,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TextNode {
     text: String,
     /// 表示是不是 unescape 解码，默认为 false ，不用可以不填。,
@@ -144,26 +144,26 @@ pub struct TextNode {
     style: Option<Vec<String>>,
 }
 impl TextNode {
-    pub fn new(text: &str) -> Self {,
-Self {,
+    pub fn new(text: &str) -> Self {
+Self {
             text: text.to_string(),
             un_escape: None,
             style: None,
         },
 }
 
-    pub fn un_escape(mut self, un_escape: bool) -> Self {,
+    pub fn un_escape(mut self, un_escape: bool) -> Self {
 self.un_escape = Some(un_escape);
         self,
 }
 
-    pub fn style(mut self, style: Vec<&str>) -> Self {,
+    pub fn style(mut self, style: Vec<&str>) -> Self {
 self.style = Some(style.iter().map(|s| s.to_string()).collect());
         self,
 }
 },
 /// a Node,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ANode {
     /// 文本内容
     text: String,
@@ -175,21 +175,21 @@ pub struct ANode {
     style: Option<Vec<String>>,
 }
 impl ANode {
-    pub fn new(text: &str, href: &str) -> Self {,
-Self {,
+    pub fn new(text: &str, href: &str) -> Self {
+Self {
             text: text.to_string(),
             href: href.to_string(),
             style: None,
         },
 }
 
-    pub fn style(mut self, style: Vec<&str>) -> Self {,
+    pub fn style(mut self, style: Vec<&str>) -> Self {
 self.style = Some(style.iter().map(|s| s.to_string()).collect());
         self,
 }
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AtNode {
     /// 用户的open_id，union_id 或 user_id，请参考如何获取 User ID、Open ID 和 Union ID？,
 /// 注意: @单个用户时，user_id字段必须是有效值；@所有人填"all"。,
@@ -200,33 +200,33 @@ pub struct AtNode {
     style: Option<Vec<String>>,
 }
 impl AtNode {
-    pub fn new(user_id: &str) -> Self {,
-Self {,
+    pub fn new(user_id: &str) -> Self {
+Self {
             user_id: user_id.to_string(),
             style: None,
         },
 }
 
-    pub fn style(mut self, style: Vec<&str>) -> Self {,
+    pub fn style(mut self, style: Vec<&str>) -> Self {
 self.style = Some(style.iter().map(|s| s.to_string()).collect());
         self,
 }
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ImgNode {
     /// 图片的唯一标识，可通过 上传图片 接口获取image_key。
     image_key: String,
 }
 impl ImgNode {
-    pub fn new(image_key: &str) -> Self {,
-Self {,
+    pub fn new(image_key: &str) -> Self {
+Self {
             image_key: image_key.to_string(),
         },
 }
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MediaNode {
     /// 视频文件的唯一标识，可通过 上传文件 接口获取file_key
     file_key: String,
@@ -235,15 +235,15 @@ pub struct MediaNode {
     image_key: Option<String>,
 }
 impl MediaNode {
-    pub fn new(file_key: &str, image_key: Option<&str>) -> Self {,
-Self {,
+    pub fn new(file_key: &str, image_key: Option<&str>) -> Self {
+Self {
             file_key: file_key.to_string(),
             image_key: image_key.map(|s| s.to_string()),
         },
 }
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EmotionNode {
     /// 表情包的类型，目前支持：static（静态表情）、dynamic（动态表情）
     emotion_type: String,
@@ -251,15 +251,15 @@ pub struct EmotionNode {
     emoji: String,
 }
 impl EmotionNode {
-    pub fn new(emotion_type: &str, emoji: &str) -> Self {,
-Self {,
+    pub fn new(emotion_type: &str, emoji: &str) -> Self {
+Self {
             emotion_type: emotion_type.to_string(),
             emoji: emoji.to_string(),
         },
 }
 },
 /// 图片消息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MessageImage {
     /// 图片的唯一标识，可通过 上传图片 接口获取image_key
     image_key: String,
@@ -279,26 +279,26 @@ fn content(&self) -> String {,
 }
 }
 impl MessageImage {
-    pub fn new(image_key: &str) -> Self {,
-Self {,
+    pub fn new(image_key: &str) -> Self {
+Self {
             image_key: image_key.to_string(),
             height: None,
             width: None,
         },
 }
 
-    pub fn height(mut self, height: i32) -> Self {,
+    pub fn height(mut self, height: i32) -> Self {
 self.height = Some(height);
         self,
 }
 
-    pub fn width(mut self, width: i32) -> Self {,
+    pub fn width(mut self, width: i32) -> Self {
 self.width = Some(width);
         self,
 }
 },
 /// 卡片模板消息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MessageCardTemplate {
     /// 卡片类型，目前支持：template（模板卡片）、text_only（纯文本卡片）、internal_contact（人员信息卡片）,
 #[serde(rename = "type")],
@@ -315,8 +315,8 @@ fn content(&self) -> String {,
 }
 }
 impl MessageCardTemplate {
-    pub fn new(card_type: &str, data: serde_json::Value) -> Self {,
-Self {,
+    pub fn new(card_type: &str, data: serde_json::Value) -> Self {
+Self {
             card_type: card_type.to_string(),
             data,
         },

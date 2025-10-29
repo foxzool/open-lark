@@ -135,7 +135,7 @@ pub fn new() -> Self {
 }
 /// 使用共享配置创建服务（实验性）
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             v1: v1::V1::new(shared.as_ref().clone()),
             v2: v2::V2::new(shared.as_ref().clone()),
         }
@@ -146,7 +146,7 @@ Self {,
     ///,
 /// # 返回值
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
-pub fn validate_search_services_config(&self) -> bool {,
+pub fn w+.*{
         // 检查配置是否有效
 !self.v1.config().app_id.is_empty(),
             && !self.v1.config().app_secret.is_empty(),
@@ -159,7 +159,7 @@ pub fn validate_search_services_config(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_search_service_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "SearchService{{ versions: 2, data_sources: unlimited, index_management: true, full_text_search: true, app_id: {} }}",
             self.v1.config().app_id,
@@ -174,7 +174,7 @@ pub fn get_search_service_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_search_feature(&self, search_feature: &str) -> bool {,
+    pub fn w+.*{
 match search_feature {,
             // 基础搜索功能
             "full_text_search" => true,
@@ -261,7 +261,7 @@ match search_feature {,
     ///,
 /// # 返回值
     /// 如果所有服务配置有效返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         !self.v1.config().app_id.is_empty(),
 && !self.v1.config().app_secret.is_empty(),
             && !self.v2.config().app_id.is_empty(),
@@ -274,7 +274,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含各类型服务数量的统计信息
-pub fn get_search_categories_statistics(&self) -> String {,
+pub fn w+.*{
         "SearchService Categories{ basic_search: 1, advanced_search: 1, data_management: unlimited, total: 2+ }".to_string(),
 }
 /// 获取搜索服务状态摘要
@@ -283,7 +283,7 @@ pub fn get_search_categories_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各服务状态信息的字符串
-pub fn get_search_service_status_summary(&self) -> String {,
+pub fn w+.*{
         let config_healthy = !self.v1.config().app_id.is_empty();
 let v1_healthy = config_healthy;
         let v2_healthy = config_healthy;
@@ -300,7 +300,7 @@ format!(,
     ///,
 /// # 返回值
     /// 包含搜索能力矩阵信息的字符串
-pub fn get_search_capabilities_matrix(&self) -> String {,
+pub fn w+.*{
         format!(
             "SearchService Capabilities{{ basic_search: {} advanced_search: {} data_management: true, analytics: true }}",
             self.supports_search_feature("full_text_search"),
@@ -313,7 +313,7 @@ pub fn get_search_capabilities_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含数据源管理能力信息的字符串
-pub fn get_data_source_management_capabilities(&self) -> String {,
+pub fn w+.*{
         "SearchService DataSource{ management: true, sync: true, classification: true, permissions: true, quality: true }".to_string(),
 }
 /// 获取索引管理能力矩阵
@@ -322,7 +322,7 @@ pub fn get_data_source_management_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含索引管理能力信息的字符串
-pub fn get_index_management_capabilities(&self) -> String {,
+pub fn w+.*{
         "SearchService Index{ automatic: true, real_time: true, optimization: true, maintenance: true, reindexing: true }".to_string(),
 }
 /// 获取搜索分析能力矩阵
@@ -331,7 +331,7 @@ pub fn get_index_management_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含搜索分析能力信息的字符串
-pub fn get_search_analytics_capabilities(&self) -> String {,
+pub fn w+.*{
         "SearchService Analytics{ performance: true, patterns: true, content: true, trends: true, effectiveness: true }".to_string(),
 }
 /// 获取企业级搜索能力矩阵
@@ -340,7 +340,7 @@ pub fn get_search_analytics_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含企业级搜索能力信息的字符串
-pub fn get_enterprise_search_capabilities(&self) -> String {,
+pub fn w+.*{
         "SearchService Enterprise{ multi_tenant: true, distributed: true, high_availability: true, scalable: true, secure: true }".to_string(),
 }
 /// 获取搜索性能指标
@@ -349,7 +349,7 @@ pub fn get_enterprise_search_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含性能指标信息的字符串
-pub fn get_search_performance_metrics(&self) -> String {,
+pub fn w+.*{
         "SearchService Performance{ response_time: <100ms, throughput: high, scalability: enterprise, reliability: 99.9%, concurrency: unlimited }".to_string(),
 }
 /// 获取搜索应用场景矩阵
@@ -358,7 +358,7 @@ pub fn get_search_performance_metrics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含应用场景信息的字符串
-pub fn get_search_use_cases_matrix(&self) -> String {,
+pub fn w+.*{
         "SearchService UseCases{ knowledge_base: true, document_management: true, content_discovery: true, data_analytics: true, cross_system: true }".to_string(),
 }
 /// 获取搜索API版本兼容性矩阵
@@ -367,7 +367,7 @@ pub fn get_search_use_cases_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含API版本兼容性信息的字符串
-pub fn get_api_compatibility_matrix(&self) -> String {,
+pub fn w+.*{
         "SearchService APICompatibility{ v1_supported: true, v2_supported: true, migration: true, backward_compatible: true }".to_string(),
 }
 /// 获取搜索安全能力矩阵
@@ -376,7 +376,7 @@ pub fn get_api_compatibility_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含搜索安全能力信息的字符串
-pub fn get_search_security_capabilities(&self) -> String {,
+pub fn w+.*{
         "SearchService Security{ authentication: true, authorization: true, encryption: true, audit_logging: true, compliance: true }".to_string(),
 }
 /// 获取搜索集成能力矩阵
@@ -385,7 +385,7 @@ pub fn get_search_security_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含搜索集成能力信息的字符串
-pub fn get_search_integration_capabilities(&self) -> String {,
+pub fn w+.*{
         "SearchService Integration{ third_party: true, api: true, webhooks: true, plugins: true, custom: true }".to_string(),
 }
 }
@@ -402,8 +402,8 @@ fn service_name() -> &'static str,
     }
 }
 impl Clone for SearchService {,
-    fn clone(&self) -> Self {,
-Self {,
+    fn clone(&self) -> Self {
+Self {
             v1: v1::V1::new(self.v1.config().clone()),
             v2: v2::V2::new(self.v2.config().clone()),
         }
@@ -421,7 +421,7 @@ f.debug_struct()
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 /// 创建测试配置

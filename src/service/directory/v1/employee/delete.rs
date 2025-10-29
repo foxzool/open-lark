@@ -16,7 +16,7 @@ use crate::{,
 };
 use super::EmployeeService;
 /// 离职员工请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct DeleteEmployeeRequest {
     pub api_req: ApiRequest,
     /// 员工ID
@@ -32,7 +32,7 @@ pub struct DeleteEmployeeRequest {
 }
 impl DeleteEmployeeRequest {
     /// 创建离职员工请求的构建器,
-pub fn builder(employee_id: impl ToString) -> DeleteEmployeeRequestBuilder {,
+pub fn w+.*{
         DeleteEmployeeRequestBuilder {,
 request: DeleteEmployeeRequest {,
                 employee_id: employee_id.to_string()
@@ -48,27 +48,27 @@ pub struct DeleteEmployeeRequestBuilder {
 }
 impl DeleteEmployeeRequestBuilder {
     /// 设置离职时间 (格式: YYYY-MM-DD)
-    pub fn leave_time(mut self, leave_time: impl ToString) -> Self {,
+    pub fn leave_time(mut self, leave_time: impl ToString) -> Self {
 self.request.leave_time = Some(leave_time.to_string());
         self,
 },
 /// 设置离职原因,
-    pub fn leave_reason(mut self, leave_reason: impl ToString) -> Self {,
+    pub fn leave_reason(mut self, leave_reason: impl ToString) -> Self {
 self.request.leave_reason = Some(leave_reason.to_string());
         self,
 },
 /// 设置用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
 },
 /// 设置部门ID类型,
-    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {,
+    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {
 self.request.department_id_type = Some(department_id_type);
         self,
 },
 /// 构建请求,
-    pub fn build(mut self) -> DeleteEmployeeRequest {,
+    pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
@@ -95,13 +95,13 @@ self.request.api_req.body = serde_json::to_vec(&body).unwrap_or_default();
 }
 },
 /// 离职员工响应数据,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct DeleteEmployeeResponseData {
     /// 员工信息
     pub employee: Employee,
 },
 /// 离职员工响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct DeleteEmployeeResponse {
     /// 响应数据
     pub data: DeleteEmployeeResponseData,

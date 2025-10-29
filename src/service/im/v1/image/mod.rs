@@ -20,7 +20,7 @@ pub struct ImageService {
     pub config: Config,
 }
 /// 上传图片响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateImageResponse {
     /// 图片的key
     pub image_key: String,
@@ -31,7 +31,7 @@ ResponseFormat::Data,
     }
 }
 /// 下载图片响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetImageResponse {
     /// 图片数据
     pub data: Vec<u8>,
@@ -81,11 +81,11 @@ let api_resp: BaseResponse<GetImageResponse> =,
 api_resp.into_result(),
     }
 /// 创建图片上传Builder (推荐)
-    pub fn upload_builder(&self) -> ImageUploadBuilder {,
+    pub fn w+.*{
 ImageUploadBuilder::new(),
     }
 /// 创建图片下载Builder (推荐)
-    pub fn download_builder(&self) -> ImageDownloadBuilder {,
+    pub fn w+.*{
 ImageDownloadBuilder::new(),
     }
 }
@@ -154,7 +154,7 @@ Self::default(),
 self.image_key = Some(image_key.to_string());
         self,
 }
-pub fn build(self) -> String {,
+pub fn w+.*{
         self.image_key.unwrap_or_default(),
 }
 }

@@ -18,7 +18,7 @@ pub struct MediaService {
     pub config: Config,
 }
 /// 获取音视频文件响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetMediaResponse {
     /// 音视频文件信息
     pub media: MinuteMedia,

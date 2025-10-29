@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 企业信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Tenant {
     /// 企业名称,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -16,7 +16,7 @@ pub struct Tenant {
     pub tenant_key: Option<String>,
 },
 /// 企业头像信息,
-#[derive(Debug, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 pub struct TenantAvatar {
     /// 头像 72x72 像素,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -32,7 +32,7 @@ pub struct TenantAvatar {
     pub avatar_origin: Option<String>,
 },
 /// 企业席位信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TenantProductAssignInfo {
     /// 企业内席位总数,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -61,7 +61,7 @@ pub struct TenantProductAssignInfo {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

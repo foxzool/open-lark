@@ -134,13 +134,13 @@ pub struct CardkitService {
 }
 impl CardkitService {
     pub fn new() -> Self {
-Self {,
+Self {
             v1: v1::V1::new(config),
         }
 }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 #[test],

@@ -19,7 +19,7 @@ pub struct MailGroupService {
     pub config: Config,
 }
 /// 创建邮件组请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateMailGroupRequest {
     /// 邮件组名称
     pub name: String,
@@ -33,7 +33,7 @@ pub struct CreateMailGroupRequest {
     pub allow_external_send: Option<bool>,
 }
 /// 创建邮件组响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateMailGroupResponse {
     /// 创建的邮件组
     pub mailgroup: MailGroup,
@@ -44,7 +44,7 @@ ResponseFormat::Data,
     }
 }
 /// 修改邮件组请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateMailGroupRequest {
     /// 邮件组名称
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -57,7 +57,7 @@ pub struct UpdateMailGroupRequest {
     pub allow_external_send: Option<bool>,
 }
 /// 修改邮件组响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateMailGroupResponse {
     /// 修改后的邮件组
     pub mailgroup: MailGroup,
@@ -68,7 +68,7 @@ ResponseFormat::Data,
     }
 }
 /// 查询指定邮件组响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetMailGroupResponse {
     /// 邮件组信息
     pub mailgroup: MailGroup,
@@ -79,7 +79,7 @@ ResponseFormat::Data,
     }
 }
 /// 批量获取邮件组响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListMailGroupsResponse {
     /// 邮件组列表
     pub mailgroups: Vec<MailGroup>,

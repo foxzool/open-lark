@@ -19,7 +19,7 @@ pub struct FolderService {
     pub config: Config,
 }
 /// 创建邮箱文件夹请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateFolderRequest {
     /// 文件夹名称
     pub folder_name: String,
@@ -28,7 +28,7 @@ pub struct CreateFolderRequest {
     pub parent_folder_id: Option<String>,
 }
 /// 创建邮箱文件夹响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateFolderResponse {
     /// 创建的文件夹信息
     pub folder: Folder,
@@ -39,7 +39,7 @@ ResponseFormat::Data,
     }
 }
 /// 修改邮箱文件夹请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateFolderRequest {
     /// 文件夹名称
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -49,7 +49,7 @@ pub struct UpdateFolderRequest {
     pub parent_folder_id: Option<String>,
 }
 /// 修改邮箱文件夹响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateFolderResponse {
     /// 修改后的文件夹信息
     pub folder: Folder,
@@ -60,7 +60,7 @@ ResponseFormat::Data,
     }
 }
 /// 列出邮箱文件夹响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListFoldersResponse {
     /// 文件夹列表
     pub folders: Vec<Folder>,

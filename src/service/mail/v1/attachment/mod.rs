@@ -19,7 +19,7 @@ pub struct AttachmentService {
     pub config: Config,
 }
 /// 获取附件下载链接响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetAttachmentDownloadUrlResponse {
     /// 下载链接
     pub download_url: String,

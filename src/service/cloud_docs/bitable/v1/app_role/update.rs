@@ -20,7 +20,7 @@ use crate::,
     service::bitable::v1::app_role::{AppRole, BlockRole, TableRole},
 };
 /// 更新自定义角色请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct UpdateAppRoleRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -41,49 +41,49 @@ pub struct UpdateAppRoleRequest {
     block_roles: Option<Vec<BlockRole>>,
 }
 impl UpdateAppRoleRequest {
-    pub fn builder() -> UpdateAppRoleRequestBuilder {,
+    pub fn w+.*{
 UpdateAppRoleRequestBuilder::default(),
     }
 
-    pub fn new(app_token: impl ToString, role_id: impl ToString) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, role_id: impl ToString) -> Self {
+Self {
             app_token: app_token.to_string(),
             role_id: role_id.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct UpdateAppRoleRequestBuilder {
     request: UpdateAppRoleRequest,
 }
 impl UpdateAppRoleRequestBuilder {
     /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 自定义角色的id,
-    pub fn role_id(mut self, role_id: impl ToString) -> Self {,
+    pub fn role_id(mut self, role_id: impl ToString) -> Self {
 self.request.role_id = role_id.to_string();
         self,
 },
 /// 角色名称,
-    pub fn role_name(mut self, role_name: impl ToString) -> Self {,
+    pub fn role_name(mut self, role_name: impl ToString) -> Self {
 self.request.role_name = Some(role_name.to_string());
         self,
 },
 /// 数据表权限,
-    pub fn table_roles(mut self, table_roles: Vec<TableRole>) -> Self {,
+    pub fn table_roles(mut self, table_roles: Vec<TableRole>) -> Self {
 self.request.table_roles = Some(table_roles);
         self,
 },
 /// 数据表默认权限,
-    pub fn block_roles(mut self, block_roles: Vec<BlockRole>) -> Self {,
+    pub fn block_roles(mut self, block_roles: Vec<BlockRole>) -> Self {
 self.request.block_roles = Some(block_roles);
         self,
 },
-pub fn build(mut self) -> UpdateAppRoleRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -96,7 +96,7 @@ impl_executable_builder_owned!(,
     update,
 );
 /// 更新自定义角色响应
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateAppRoleResponse {
     /// 更新后的自定义角色信息
     pub role: AppRole,
@@ -125,7 +125,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

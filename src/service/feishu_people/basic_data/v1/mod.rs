@@ -3,7 +3,7 @@
 // 包含基础数据管理的完整功能
 use crate::prelude::*;
 /// 基础数据管理v1版本服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct BasicDataV1Service {
     client: std::sync::Arc<LarkClient>,
 }

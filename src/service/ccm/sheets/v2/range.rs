@@ -3,7 +3,7 @@
 // 实现单元格范围的操作,
 use crate::prelude::*;
 /// 范围操作服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct RangeService {
     client: std::sync::Arc<LarkClient>,
 }

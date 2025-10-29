@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 员工信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Employee {
     /// 员工ID
     pub employee_id: Option<String>,
@@ -32,7 +32,7 @@ pub struct Employee {
     pub leader_id: Option<String>,
 },
 /// 员工状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum EmployeeStatus {,
 /// 在职,
@@ -43,7 +43,7 @@ pub enum EmployeeStatus {,
     ToBeResigned,
 },
 /// 部门信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Department {
     /// 部门ID
     pub department_id: Option<String>,
@@ -65,7 +65,7 @@ pub struct Department {
     pub order: Option<i32>,
 },
 /// 部门状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum DepartmentStatus {,
 /// 正常,
@@ -74,7 +74,7 @@ pub enum DepartmentStatus {,
     Deleted,
 },
 /// 用户ID类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum UserIdType {,
 /// Open ID,
@@ -94,7 +94,7 @@ match self {,
 }
 },
 /// 部门ID类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum DepartmentIdType {,
 /// Open Department ID,
@@ -111,7 +111,7 @@ match self {,
 }
 },
 /// 分页参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Pagination {
     /// 分页大小
     pub page_size: Option<i32>,
@@ -119,7 +119,7 @@ pub struct Pagination {
     pub page_token: Option<String>,
 },
 /// 搜索参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchQuery {
     /// 搜索关键词
     pub query: String,

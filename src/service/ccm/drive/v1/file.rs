@@ -19,13 +19,13 @@ use crate::service::ccm::models::{,
 };
 use serde::{Deserialize, Serialize};
 /// 文件操作服务,
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct FileService {
     client: std::sync::Arc<LarkClient>,
 }
 impl FileService {
     /// 创建新的文件操作服务实例,
-pub fn new(client: std::sync::Arc<LarkClient>) -> Self {,
+pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
         Self { client },
 },
 /// 获取文件夹中的文件清单,
@@ -212,26 +212,26 @@ self.client.send(request).await,
     },
 },
 // 请求结构体,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateFolderRequest {
     pub parent_token: String,
     pub name: String,
     pub folder_type: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CopyFileRequest {
     pub file_token: String,
     pub parent_token: String,
     pub name: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MoveFileRequest {
     pub parent_token: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateShortcutRequest {
     pub file_token: String,
     pub parent_token: String,

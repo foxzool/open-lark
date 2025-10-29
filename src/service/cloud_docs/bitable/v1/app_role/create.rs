@@ -35,7 +35,7 @@ Ok(api_resp),
     },
 },
 /// 新增自定义角色请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct CreateAppRoleRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -52,7 +52,7 @@ pub struct CreateAppRoleRequest {
     block_roles: Option<Vec<BlockRole>>,
 },
 /// 数据表权限,
-#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)],
+#[derive(.*?)]
 pub struct TableRole {
     /// 数据表 id
     pub table_id: String,
@@ -63,7 +63,7 @@ pub struct TableRole {
     rec_rule: Option<String>,
 },
 /// 数据表默认权限,
-#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)],
+#[derive(.*?)]
 pub struct BlockRole {
     /// 多维表格数据表的唯一标识符
     pub block_id: String,
@@ -71,44 +71,44 @@ pub struct BlockRole {
     pub role: String,
 }
 impl CreateAppRoleRequest {
-    pub fn builder() -> CreateAppRoleRequestBuilder {,
+    pub fn w+.*{
 CreateAppRoleRequestBuilder::default(),
     }
 
-    pub fn new(app_token: impl ToString, role_name: impl ToString) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, role_name: impl ToString) -> Self {
+Self {
             app_token: app_token.to_string(),
             role_name: role_name.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct CreateAppRoleRequestBuilder {
     request: CreateAppRoleRequest,
 }
 impl CreateAppRoleRequestBuilder {
     /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 角色名称,
-    pub fn role_name(mut self, role_name: impl ToString) -> Self {,
+    pub fn role_name(mut self, role_name: impl ToString) -> Self {
 self.request.role_name = role_name.to_string();
         self,
 },
 /// 数据表权限,
-    pub fn table_roles(mut self, table_roles: Vec<TableRole>) -> Self {,
+    pub fn table_roles(mut self, table_roles: Vec<TableRole>) -> Self {
 self.request.table_roles = Some(table_roles);
         self,
 },
 /// 数据表默认权限,
-    pub fn block_roles(mut self, block_roles: Vec<BlockRole>) -> Self {,
+    pub fn block_roles(mut self, block_roles: Vec<BlockRole>) -> Self {
 self.request.block_roles = Some(block_roles);
         self,
 },
-pub fn build(mut self) -> CreateAppRoleRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -121,7 +121,7 @@ impl_executable_builder_owned!(,
     create,
 );
 /// 自定义角色信息
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct AppRole {
     /// 自定义角色的id
     pub role_id: String,
@@ -133,7 +133,7 @@ pub struct AppRole {
     pub block_roles: Option<Vec<BlockRole>>,
 },
 /// 新增自定义角色响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct CreateAppRoleResponse {
     /// 新增的自定义角色信息
     pub role: AppRole,
@@ -145,7 +145,7 @@ ResponseFormat::Data,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_create_app_role_request_builder() {,

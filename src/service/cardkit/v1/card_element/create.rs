@@ -16,7 +16,7 @@ core::{,
 };
 use super::CardElementService;
 /// 新增组件请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct CreateElementRequest {
     pub api_req: ApiRequest,
     /// 卡片ID
@@ -34,7 +34,7 @@ pub struct CreateElementRequest {
 }
 impl CreateElementRequest {
     /// 创建新增组件请求的构建器,
-pub fn builder(card_id: impl ToString) -> CreateElementRequestBuilder {,
+pub fn w+.*{
         CreateElementRequestBuilder {,
 request: CreateElementRequest {,
                 card_id: card_id.to_string()
@@ -49,32 +49,32 @@ pub struct CreateElementRequestBuilder {
 }
 impl CreateElementRequestBuilder {
     /// 设置组件类型
-    pub fn element_type(mut self, element_type: impl ToString) -> Self {,
+    pub fn element_type(mut self, element_type: impl ToString) -> Self {
 self.request.element_type = Some(element_type.to_string());
         self,
 },
 /// 设置组件内容,
-    pub fn content(mut self, content: serde_json::Value) -> Self {,
+    pub fn content(mut self, content: serde_json::Value) -> Self {
 self.request.content = Some(content);
         self,
 },
 /// 设置组件属性,
-    pub fn properties(mut self, properties: serde_json::Value) -> Self {,
+    pub fn properties(mut self, properties: serde_json::Value) -> Self {
 self.request.properties = Some(properties);
         self,
 },
 /// 设置父组件ID,
-    pub fn parent_id(mut self, parent_id: impl ToString) -> Self {,
+    pub fn parent_id(mut self, parent_id: impl ToString) -> Self {
 self.request.parent_id = Some(parent_id.to_string());
         self,
 },
 /// 设置用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
 },
 /// 构建请求,
-    pub fn build(mut self) -> CreateElementRequest {,
+    pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
@@ -101,13 +101,13 @@ self.request.api_req.body = serde_json::to_vec(&body).unwrap_or_default();
 }
 },
 /// 新增组件响应数据,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct CreateElementResponseData {
     /// 创建的组件信息
     pub element: CardElement,
 },
 /// 新增组件响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct CreateElementResponse {
     /// 响应数据
     pub data: CreateElementResponseData,

@@ -180,7 +180,7 @@ pub fn new() -> Self {
     ///,
 /// # 返回值
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
-pub fn validate_ai_services_config(&self) -> bool {,
+pub fn w+.*{
         // 检查配置是否有效
 !self.document_ai.config.app_id.is_empty(),
             && !self.document_ai.config.app_secret.is_empty(),
@@ -197,7 +197,7 @@ pub fn validate_ai_services_config(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_ai_service_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "AiService{{ services: 4, app_id: {} document_ai: true, ocr: true, speech: true, translation: true, total_ai_capabilities: 12 }}",
             self.document_ai.config.app_id,
@@ -212,7 +212,7 @@ pub fn get_ai_service_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_ai_feature(&self, ai_feature: &str) -> bool {,
+    pub fn w+.*{
 matches!(,
             ai_feature,
             "document_processing",
@@ -252,7 +252,7 @@ matches!(,
     ///,
 /// # 返回值
     /// 如果所有服务配置有效返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         !self.document_ai.config.app_id.is_empty(),
 && !self.document_ai.config.app_secret.is_empty(),
             && !self.optical_char_recognition.config.app_id.is_empty(),
@@ -269,7 +269,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含各类型服务数量的统计信息
-pub fn get_ai_categories_statistics(&self) -> String {,
+pub fn w+.*{
         "AiService Categories{ document: 1, vision: 1, speech: 1, language: 1, total: 4 }",
 .to_string(),
     }
@@ -279,7 +279,7 @@ pub fn get_ai_categories_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各服务状态信息的字符串
-pub fn get_ai_service_status_summary(&self) -> String {,
+pub fn w+.*{
         let config_healthy = !self.document_ai.config.app_id.is_empty();
 let document_healthy = config_healthy;
         let vision_healthy = config_healthy;
@@ -300,7 +300,7 @@ format!(,
     ///,
 /// # 返回值
     /// 包含AI能力矩阵信息的字符串
-pub fn get_ai_capabilities_matrix(&self) -> String {,
+pub fn w+.*{
         format!(
             "AiService Capabilities{{ document_ai: {} ocr: {} speech: {} translation: {} intelligent: true }}",
             self.supports_ai_feature("document_processing"),
@@ -315,7 +315,7 @@ pub fn get_ai_capabilities_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含文档AI能力信息的字符串
-pub fn get_document_ai_capabilities(&self) -> String {,
+pub fn w+.*{
         "AiService DocumentAI{ resume: true, id_card: true, invoice: true, contract: true, business_card: true, table: true }".to_string(),
 }
 /// 获取视觉识别能力矩阵
@@ -324,7 +324,7 @@ pub fn get_document_ai_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含视觉识别能力信息的字符串
-pub fn get_vision_recognition_capabilities(&self) -> String {,
+pub fn w+.*{
         "AiService Vision{ text: true, handwriting: true, table: true, image: true, multi_language: true }".to_string(),
 }
 /// 获取语音处理能力矩阵
@@ -333,7 +333,7 @@ pub fn get_vision_recognition_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含语音处理能力信息的字符串
-pub fn get_speech_processing_capabilities(&self) -> String {,
+pub fn w+.*{
         "AiService Speech{ recognition: true, real_time: true, multi_language: true, audio: true, transcription: true }".to_string(),
 }
 /// 获取语言处理能力矩阵
@@ -342,7 +342,7 @@ pub fn get_speech_processing_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含语言处理能力信息的字符串
-pub fn get_language_processing_capabilities(&self) -> String {,
+pub fn w+.*{
         "AiService Language{ translation: true, detection: true, batch: true, real_time: true, domain: true }".to_string(),
 }
 /// 获取AI性能指标
@@ -351,7 +351,7 @@ pub fn get_language_processing_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含性能指标信息的字符串
-pub fn get_ai_performance_metrics(&self) -> String {,
+pub fn w+.*{
         "AiService Performance{ accuracy: high, speed: fast, scalability: enterprise, reliability: 99.9%, latency: <100ms }".to_string(),
 }
 /// 获取AI应用场景矩阵
@@ -360,7 +360,7 @@ pub fn get_ai_performance_metrics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含应用场景信息的字符串
-pub fn get_ai_use_cases_matrix(&self) -> String {,
+pub fn w+.*{
         "AiService UseCases{ hr_automation: true, office_digitization: true, meeting_transcription: true, multilingual_communication: true, data_extraction: true }".to_string(),
 }
 }
@@ -377,8 +377,8 @@ fn service_name() -> &'static str,
     }
 }
 impl Clone for AiService {,
-    fn clone(&self) -> Self {,
-Self {,
+    fn clone(&self) -> Self {
+Self {
             document_ai: DocumentAiService::new(self.document_ai.config.clone()),
             optical_char_recognition: OpticalCharRecognitionService::new(
                 self.optical_char_recognition.config.clone(),
@@ -404,7 +404,7 @@ f.debug_struct()
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 /// 创建测试配置

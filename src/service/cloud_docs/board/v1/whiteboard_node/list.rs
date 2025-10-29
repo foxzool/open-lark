@@ -18,7 +18,7 @@ use crate::,
     impl_executable_builder_owned,
 };
 /// 获取画板所有节点请求,
-#[derive(Debug, Serialize, Default, Clone)],
+#[derive(.*?)]
 pub struct ListWhiteboardNodesRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -33,23 +33,23 @@ pub struct ListWhiteboardNodesRequest {
     page_token: Option<String>,
 }
 impl ListWhiteboardNodesRequest {
-    pub fn builder() -> ListWhiteboardNodesRequestBuilder {,
+    pub fn w+.*{
 ListWhiteboardNodesRequestBuilder::default(),
     },
-pub fn new(whiteboard_token: impl ToString) -> Self {,
+pub fn new(whiteboard_token: impl ToString) -> Self {
         Self {
             whiteboard_token: whiteboard_token.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct ListWhiteboardNodesRequestBuilder {
     request: ListWhiteboardNodesRequest,
 }
 impl ListWhiteboardNodesRequestBuilder {
     /// 画板token
-    pub fn whiteboard_token(mut self, token: impl ToString) -> Self {,
+    pub fn whiteboard_token(mut self, token: impl ToString) -> Self {
 self.request.whiteboard_token = token.to_string();
         self,
 },
@@ -59,32 +59,32 @@ self.request.whiteboard_token = token.to_string();
 self,
     },
 /// 分页标记,
-    pub fn page_token(mut self, token: impl ToString) -> Self {,
+    pub fn page_token(mut self, token: impl ToString) -> Self {
 self.request.page_token = Some(token.to_string());
         self,
 },
 /// 设置小分页（20个节点）,
-    pub fn small_page(mut self) -> Self {,
+    pub fn small_page(mut self) -> Self {
 self.request.page_size = Some(20);
         self,
 },
 /// 设置中等分页（50个节点）,
-    pub fn medium_page(mut self) -> Self {,
+    pub fn medium_page(mut self) -> Self {
 self.request.page_size = Some(50);
         self,
 },
 /// 设置大分页（100个节点）,
-    pub fn large_page(mut self) -> Self {,
+    pub fn large_page(mut self) -> Self {
 self.request.page_size = Some(100);
         self,
 },
-pub fn build(mut self) -> ListWhiteboardNodesRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 画板节点类型,
-#[derive(Debug, Deserialize, Clone, PartialEq, Eq, Hash)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum NodeType {,
 /// 形状节点,
@@ -110,7 +110,7 @@ pub enum NodeType {,
     Unknown,
 },
 /// 画板节点样式,
-#[derive(Debug, Deserialize, Clone)],
+#[derive(.*?)]
 pub struct NodeStyle {
     /// 颜色
     pub color: Option<String>,
@@ -128,7 +128,7 @@ pub struct NodeStyle {
     pub stroke_style: Option<String>,
 },
 /// 画板节点位置,
-#[derive(Debug, Deserialize, Clone)],
+#[derive(.*?)]
 pub struct NodePosition {
     /// X坐标
     pub x: f64,
@@ -142,7 +142,7 @@ pub struct NodePosition {
     pub rotation: Option<f64>,
 },
 /// 画板节点内容,
-#[derive(Debug, Deserialize, Clone)],
+#[derive(.*?)]
 pub struct NodeContent {
     /// 文本内容
     pub text: Option<String>,
@@ -156,7 +156,7 @@ pub struct NodeContent {
     pub properties: Option<serde_json::Value>,
 },
 /// 画板节点,
-#[derive(Debug, Deserialize, Clone)],
+#[derive(.*?)]
 pub struct WhiteboardNode {
     /// 节点ID
     pub node_id: String,
@@ -184,7 +184,7 @@ pub struct WhiteboardNode {
     pub visible: Option<bool>,
 },
 /// 获取画板所有节点响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct ListWhiteboardNodesResponse {
     /// 节点列表
     pub items: Vec<WhiteboardNode>,
@@ -242,7 +242,7 @@ impl NodeType {
         matches!(self, NodeType::Shape | NodeType::Line | NodeType::Freehand),
 },
 /// 是否是内容类型节点,
-    pub fn is_content_type(&self) -> bool {,
+    pub fn w+.*{
 matches!(,
             self,
             NodeType::Text | NodeType::StickyNote | NodeType::Image | NodeType::Table,
@@ -253,7 +253,7 @@ matches!(,
         matches!(self, NodeType::Frame | NodeType::Group),
 },
 /// 获取类型描述,
-    pub fn description(&self) -> &'static str {,
+    pub fn w+.*{
 match self {,
             NodeType::Shape => "形状",
             NodeType::Text => "文本",
@@ -268,7 +268,7 @@ match self {,
         },
 },
 /// 获取类型分类,
-    pub fn category(&self) -> &'static str {,
+    pub fn w+.*{
 if self.is_drawing_type() {,
             "绘图元素",
 } else if self.is_content_type() {,
@@ -282,7 +282,7 @@ if self.is_drawing_type() {,
 }
 impl NodePosition {
     /// 计算节点面积,
-pub fn area(&self) -> f64 {,
+pub fn w+.*{
         self.width * self.height,
 },
 /// 计算节点中心点,
@@ -290,7 +290,7 @@ pub fn area(&self) -> f64 {,
         (self.x + self.width / 2.0, self.y + self.height / 2.0),
 },
 /// 检查是否与另一个节点重叠,
-    pub fn overlaps_with(&self, other: &NodePosition) -> bool {,
+    pub fn w+.*{
 self.x < other.x + other.width,
             && self.x + self.width > other.x,
 && self.y < other.y + other.height,
@@ -303,7 +303,7 @@ self.x < other.x + other.width,
 ((x2 - x1).powi(2) + (y2 - y1).powi(2)).sqrt(),
     },
 /// 获取节点边界描述,
-    pub fn bounds_description(&self) -> String {,
+    pub fn w+.*{
 format!(,
             "位置: ({:.1}, {:.1}), 大小: {:.1}×{:.1}",
             self.x, self.y, self.width, self.height,
@@ -312,19 +312,19 @@ format!(,
 }
 impl NodeStyle {
     /// 是否有颜色设置,
-pub fn has_color(&self) -> bool {,
+pub fn w+.*{
         self.color.is_some() || self.fill_color.is_some(),
 },
 /// 是否有字体设置,
-    pub fn has_font_settings(&self) -> bool {,
+    pub fn w+.*{
 self.font_size.is_some() || self.font_weight.is_some(),
     },
 /// 是否有线条设置,
-    pub fn has_stroke_settings(&self) -> bool {,
+    pub fn w+.*{
 self.stroke_width.is_some() || self.stroke_style.is_some(),
     },
 /// 获取样式摘要,
-    pub fn style_summary(&self) -> Vec<String> {,
+    pub fn w+.*{
 let mut summary = Vec::new();
         if let Some(ref color) = self.color {
             summary.push(format!("颜色: {color}"));
@@ -346,19 +346,19 @@ summary,
 }
 impl NodeContent {
     /// 是否有文本内容,
-pub fn has_text(&self) -> bool {,
+pub fn w+.*{
         self.text.as_ref().is_some_and(|t| !t.is_empty()),
 },
 /// 是否有图片内容,
-    pub fn has_image(&self) -> bool {,
+    pub fn w+.*{
 self.image_url.is_some(),
     },
 /// 是否有连接信息,
-    pub fn has_connections(&self) -> bool {,
+    pub fn w+.*{
 self.connections.as_ref().is_some_and(|c| !c.is_empty()),
     },
 /// 获取内容摘要,
-    pub fn content_summary(&self) -> String {,
+    pub fn w+.*{
 let mut parts = Vec::new();
         if let Some(ref text) = self.text {,
 let preview = if text.len() > 20 {,
@@ -391,23 +391,23 @@ if parts.is_empty() {,
 }
 impl WhiteboardNode {
     /// 是否有样式设置,
-pub fn has_style(&self) -> bool {,
+pub fn w+.*{
         self.style.is_some(),
 },
 /// 是否有内容,
-    pub fn has_content(&self) -> bool {,
+    pub fn w+.*{
 self.content.is_some(),
     },
 /// 是否被锁定,
-    pub fn is_locked(&self) -> bool {,
+    pub fn w+.*{
 self.locked.unwrap_or(false),
     },
 /// 是否可见,
-    pub fn is_visible(&self) -> bool {,
+    pub fn w+.*{
 self.visible.unwrap_or(true),
     },
 /// 获取创建时间格式化字符串,
-    pub fn create_time_formatted(&self) -> Option<String> {,
+    pub fn w+.*{
 self.create_time.map(|timestamp| {,
             let datetime =
                 chrono::DateTime::from_timestamp(timestamp, 0).unwrap_or_else(chrono::Utc::now);
@@ -415,7 +415,7 @@ datetime.format("%Y-%m-%d %H:%M:%S").to_string(),
         }),
 },
 /// 获取更新时间格式化字符串,
-    pub fn update_time_formatted(&self) -> Option<String> {,
+    pub fn w+.*{
 self.update_time.map(|timestamp| {,
             let datetime =
                 chrono::DateTime::from_timestamp(timestamp, 0).unwrap_or_else(chrono::Utc::now);
@@ -423,7 +423,7 @@ datetime.format("%Y-%m-%d %H:%M:%S").to_string(),
         }),
 },
 /// 获取节点摘要,
-    pub fn node_summary(&self) -> String {,
+    pub fn w+.*{
 let mut parts = Vec::new();
         parts.push(format!("类型: {}", self.node_type.description()));
 parts.push(self.position.bounds_description());
@@ -445,7 +445,7 @@ if !self.is_visible() {,
 parts.join(" | "),
     },
 /// 获取节点状态,
-    pub fn node_status(&self) -> Vec<String> {,
+    pub fn w+.*{
 let mut status = Vec::new();
         status.push(format!("ID: {}", self.node_id));
 status.push(format!(,
@@ -465,7 +465,7 @@ if let Some(z_index) = self.z_index {,
 status,
     },
 /// 计算节点复杂度（基于内容和样式）,
-    pub fn complexity_score(&self) -> u32 {,
+    pub fn w+.*{
 let mut score = 1; // 基础分数,
         // 根据节点类型加分,
 score += match self.node_type {,
@@ -508,15 +508,15 @@ score,
 }
 impl ListWhiteboardNodesResponse {
     /// 获取节点数量,
-pub fn node_count(&self) -> usize {,
+pub fn w+.*{
         self.items.len(),
 },
 /// 是否为空,
-    pub fn is_empty(&self) -> bool {,
+    pub fn w+.*{
 self.items.is_empty(),
     },
 /// 按类型统计节点,
-    pub fn count_by_type(&self) -> std::collections::HashMap<NodeType, usize> {,
+    pub fn w+.*{
 let mut counts = std::collections::HashMap::new();
         for node in &self.items {,
 *counts.entry(node.node_type.clone()).or_insert(0) += 1;
@@ -524,38 +524,38 @@ let mut counts = std::collections::HashMap::new();
 counts,
     },
 /// 获取指定类型的节点,
-    pub fn nodes_of_type(&self, node_type: &NodeType) -> Vec<&WhiteboardNode> {,
+    pub fn w+.*{
 self.items,
             .iter()
 .filter()
             .collect(),
 },
 /// 获取有内容的节点,
-    pub fn content_nodes(&self) -> Vec<&WhiteboardNode> {,
+    pub fn w+.*{
 self.items,
             .iter()
 .filter(|node| node.has_content()),
             .collect(),
 },
 /// 获取锁定的节点,
-    pub fn locked_nodes(&self) -> Vec<&WhiteboardNode> {,
+    pub fn w+.*{
 self.items.iter().filter(|node| node.is_locked()).collect(),
     },
 /// 获取隐藏的节点,
-    pub fn hidden_nodes(&self) -> Vec<&WhiteboardNode> {,
+    pub fn w+.*{
 self.items,
             .iter()
 .filter(|node| !node.is_visible()),
             .collect(),
 },
 /// 按复杂度排序节点,
-    pub fn nodes_by_complexity(&self) -> Vec<&WhiteboardNode> {,
+    pub fn w+.*{
 let mut nodes: Vec<&WhiteboardNode> = self.items.iter().collect();
         nodes.sort_by_key(|node| std::cmp::Reverse(node.complexity_score()));
 nodes,
     },
 /// 获取统计摘要,
-    pub fn statistics_summary(&self) -> String {,
+    pub fn w+.*{
 let total = self.node_count();
         let type_counts = self.count_by_type();
 let locked_count = self.locked_nodes().len();
@@ -581,7 +581,7 @@ if self.has_more {,
 summary.join(" | "),
     },
 /// 获取分页信息,
-    pub fn pagination_info(&self) -> String {,
+    pub fn w+.*{
 if self.has_more {,
             if let Some(ref token) = self.page_token {,
 format!(,
@@ -601,7 +601,7 @@ format!(,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_list_whiteboard_nodes_request_builder() {,

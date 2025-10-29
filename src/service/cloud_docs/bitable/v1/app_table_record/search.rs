@@ -18,7 +18,7 @@ use crate::,
     service::bitable::v1::Record,
 };
 /// 查询记录请求,
-#[derive(Debug, Serialize, Default, Clone)],
+#[derive(.*?)]
 pub struct SearchRecordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -49,7 +49,7 @@ pub struct SearchRecordRequest {
     automatic: Option<bool>,
 },
 /// 排序条件,
-#[derive(Debug, Serialize, Default, Clone)],
+#[derive(.*?)]
 pub struct SortCondition {
     /// 字段名称
     pub field_name: String,
@@ -58,7 +58,7 @@ pub struct SortCondition {
     pub desc: Option<bool>,
 },
 /// 筛选条件,
-#[derive(Debug, Serialize, Default, Clone)],
+#[derive(.*?)]
 pub struct FilterInfo {
     /// 条件逻辑连接词: "and" 或 "or"
     pub conjunction: String,
@@ -66,7 +66,7 @@ pub struct FilterInfo {
     pub conditions: Vec<FilterCondition>,
 },
 /// 单个筛选条件,
-#[derive(Debug, Serialize, Default, Clone)],
+#[derive(.*?)]
 pub struct FilterCondition {
     /// 筛选条件的左值，值为字段的名称
     pub field_name: String,
@@ -77,74 +77,74 @@ pub struct FilterCondition {
     pub value: Option<Vec<String>>,
 }
 impl SearchRecordRequest {
-    pub fn builder() -> SearchRecordRequestBuilder {,
+    pub fn w+.*{
 SearchRecordRequestBuilder::default(),
     }
 
-    pub fn new(app_token: impl ToString, table_id: impl ToString) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, table_id: impl ToString) -> Self {
+Self {
             app_token: app_token.to_string(),
             table_id: table_id.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct SearchRecordRequestBuilder {
     request: SearchRecordRequest,
 }
 impl SearchRecordRequestBuilder {
     /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 数据表的唯一标识符,
-    pub fn table_id(mut self, table_id: impl ToString) -> Self {,
+    pub fn table_id(mut self, table_id: impl ToString) -> Self {
 self.request.table_id = table_id.to_string();
         self,
 },
 /// 用户 ID 类型,
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
 },
 /// 分页标记,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
 },
 /// 分页大小,
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
 },
 /// 视图的唯一标识符,
-    pub fn view_id(mut self, view_id: impl ToString) -> Self {,
+    pub fn view_id(mut self, view_id: impl ToString) -> Self {
 self.request.view_id = Some(view_id.to_string());
         self,
 },
 /// 字段名称,
-    pub fn field_names(mut self, field_names: Vec<String>) -> Self {,
+    pub fn field_names(mut self, field_names: Vec<String>) -> Self {
 self.request.field_names = Some(field_names);
         self,
 },
 /// 排序条件,
-    pub fn sort(mut self, sort: Vec<SortCondition>) -> Self {,
+    pub fn sort(mut self, sort: Vec<SortCondition>) -> Self {
 self.request.sort = Some(sort);
         self,
 },
 /// 筛选条件,
-    pub fn filter(mut self, filter: FilterInfo) -> Self {,
+    pub fn filter(mut self, filter: FilterInfo) -> Self {
 self.request.filter = Some(filter);
         self,
 },
 /// 控制是否返回自动计算的字段,
-    pub fn automatic(mut self, automatic: bool) -> Self {,
+    pub fn automatic(mut self, automatic: bool) -> Self {
 self.request.automatic = Some(automatic);
         self,
 },
-pub fn build(mut self) -> SearchRecordRequest {,
+pub fn w+.*{
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
                 .api_request,
@@ -176,7 +176,7 @@ crate::impl_executable_builder_owned!(
     search,
 );
 /// 查询记录响应
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct SearchRecordResponse {
     /// 记录列表
     pub items: Vec<Record>,
@@ -211,15 +211,15 @@ Ok(api_resp),
 
 impl FilterInfo {
 /// 创建 AND 条件,
-    pub fn and(conditions: Vec<FilterCondition>) -> Self {,
-Self {,
+    pub fn and(conditions: Vec<FilterCondition>) -> Self {
+Self {
             conjunction: "and".to_string(),
             conditions,
         },
 },
 /// 创建 OR 条件,
-    pub fn or(conditions: Vec<FilterCondition>) -> Self {,
-Self {,
+    pub fn or(conditions: Vec<FilterCondition>) -> Self {
+Self {
             conjunction: "or".to_string(),
             conditions,
         },
@@ -227,64 +227,64 @@ Self {,
 }
 impl FilterCondition {
     /// 等于
-    pub fn equals(field_name: impl ToString, value: impl ToString) -> Self {,
-Self {,
+    pub fn equals(field_name: impl ToString, value: impl ToString) -> Self {
+Self {
             field_name: field_name.to_string(),
             operator: "is".to_string(),
             value: Some(vec![value.to_string()]),
         },
 },
 /// 不等于,
-    pub fn not_equals(field_name: impl ToString, value: impl ToString) -> Self {,
-Self {,
+    pub fn not_equals(field_name: impl ToString, value: impl ToString) -> Self {
+Self {
             field_name: field_name.to_string(),
             operator: "isNot".to_string(),
             value: Some(vec![value.to_string()]),
         },
 },
 /// 包含,
-    pub fn contains(field_name: impl ToString, value: impl ToString) -> Self {,
-Self {,
+    pub fn contains(field_name: impl ToString, value: impl ToString) -> Self {
+Self {
             field_name: field_name.to_string(),
             operator: "contains".to_string(),
             value: Some(vec![value.to_string()]),
         },
 },
 /// 不包含,
-    pub fn not_contains(field_name: impl ToString, value: impl ToString) -> Self {,
-Self {,
+    pub fn not_contains(field_name: impl ToString, value: impl ToString) -> Self {
+Self {
             field_name: field_name.to_string(),
             operator: "doesNotContain".to_string(),
             value: Some(vec![value.to_string()]),
         },
 },
 /// 为空,
-    pub fn is_empty(field_name: impl ToString) -> Self {,
-Self {,
+    pub fn is_empty(field_name: impl ToString) -> Self {
+Self {
             field_name: field_name.to_string(),
             operator: "isEmpty".to_string(),
             value: None,
         },
 },
 /// 不为空,
-    pub fn is_not_empty(field_name: impl ToString) -> Self {,
-Self {,
+    pub fn is_not_empty(field_name: impl ToString) -> Self {
+Self {
             field_name: field_name.to_string(),
             operator: "isNotEmpty".to_string(),
             value: None,
         },
 },
 /// 大于,
-    pub fn greater_than(field_name: impl ToString, value: impl ToString) -> Self {,
-Self {,
+    pub fn greater_than(field_name: impl ToString, value: impl ToString) -> Self {
+Self {
             field_name: field_name.to_string(),
             operator: "isGreater".to_string(),
             value: Some(vec![value.to_string()]),
         },
 },
 /// 小于,
-    pub fn less_than(field_name: impl ToString, value: impl ToString) -> Self {,
-Self {,
+    pub fn less_than(field_name: impl ToString, value: impl ToString) -> Self {
+Self {
             field_name: field_name.to_string(),
             operator: "isLess".to_string(),
             value: Some(vec![value.to_string()]),
@@ -293,7 +293,7 @@ Self {,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_search_record_request_builder() {,

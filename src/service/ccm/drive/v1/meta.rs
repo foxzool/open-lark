@@ -3,7 +3,7 @@
 // 提供文件元数据相关的功能,
 use crate::prelude::*;
 /// 元数据服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct MetaService {
     client: std::sync::Arc<LarkClient>,
 }

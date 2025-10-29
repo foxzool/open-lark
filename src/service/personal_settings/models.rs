@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 系统状态信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SystemStatus {
     /// 系统状态ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -31,7 +31,7 @@ pub struct SystemStatus {
     pub update_time: Option<String>,
 },
 /// 国际化内容,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct I18nContent {
     /// 中文内容,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -44,7 +44,7 @@ pub struct I18nContent {
     pub ja_jp: Option<String>,
 },
 /// 创建系统状态请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateSystemStatusRequest {
     /// 标题
     pub title: String,
@@ -62,7 +62,7 @@ pub struct CreateSystemStatusRequest {
     pub priority: Option<i32>,
 },
 /// 更新系统状态请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateSystemStatusRequest {
     /// 标题,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -81,13 +81,13 @@ pub struct UpdateSystemStatusRequest {
     pub priority: Option<i32>,
 },
 /// 批量操作系统状态请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchSystemStatusRequest {
     /// 系统状态ID列表
     pub system_status_ids: Vec<String>,
 },
 /// 系统状态列表查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListSystemStatusRequest {
     /// 页码，从1开始,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -98,7 +98,7 @@ pub struct ListSystemStatusRequest {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

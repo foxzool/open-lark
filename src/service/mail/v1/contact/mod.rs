@@ -19,7 +19,7 @@ pub struct ContactService {
     pub config: Config,
 }
 /// 创建邮箱联系人请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateContactRequest {
     /// 联系人姓名
     pub name: String,
@@ -30,7 +30,7 @@ pub struct CreateContactRequest {
     pub remark: Option<String>,
 }
 /// 创建邮箱联系人响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateContactResponse {
     /// 创建的联系人
     pub contact: Contact,
@@ -41,7 +41,7 @@ ResponseFormat::Data,
     }
 }
 /// 修改邮箱联系人请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateContactRequest {
     /// 联系人姓名
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -54,7 +54,7 @@ pub struct UpdateContactRequest {
     pub remark: Option<String>,
 }
 /// 修改邮箱联系人响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateContactResponse {
     /// 修改后的联系人
     pub contact: Contact,
@@ -65,7 +65,7 @@ ResponseFormat::Data,
     }
 }
 /// 列出邮箱联系人响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListContactsResponse {
     /// 联系人列表
     pub contacts: Vec<Contact>,

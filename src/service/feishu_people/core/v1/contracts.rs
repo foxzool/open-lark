@@ -3,7 +3,7 @@
 // 实现合同管理的功能,
 use crate::prelude::*;
 /// 合同管理服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct ContractsService {
     client: std::sync::Arc<LarkClient>,
 }

@@ -4,7 +4,7 @@ pub use query::*;
 mod get;
 mod query;
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct Sheet {
     /// 工作表 ID
     pub sheet_id: String,
@@ -29,7 +29,7 @@ pub struct Sheet {
     pub merges: Option<Vec<MergeRange>>,
 }
 /// 单元格属性，仅当 resource_type 为 sheet 即工作表类型为电子表格时返回
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct GridProperties {
     /// 冻结的行数量
     pub frozen_row_count: i32,
@@ -41,7 +41,7 @@ pub struct GridProperties {
     pub column_count: i32,
 }
 /// 合并单元格的相关信息
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct MergeRange {
     /// 起始行，从 0 开始计数
     pub start_row_index: i32,

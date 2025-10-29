@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use serde_repr::{Deserialize_repr, Serialize_repr};
 /// 消息类型枚举,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum MessageType {,
 /// 文本消息,
@@ -28,7 +28,7 @@ pub enum MessageType {,
     System,
 },
 /// 用户ID类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum UserIdType {
     UserId,
@@ -36,7 +36,7 @@ pub enum UserIdType {
     OpenId,
 }
 impl UserIdType {
-    pub fn as_str(&self) -> &'static str {,
+    pub fn w+.*{
 match self {,
             UserIdType::UserId => "user_id",
             UserIdType::UnionId => "union_id",
@@ -45,7 +45,7 @@ match self {,
 }
 },
 /// 接收ID类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum ReceiveIdType {
     OpenId,
@@ -55,7 +55,7 @@ pub enum ReceiveIdType {
     ChatId,
 }
 impl ReceiveIdType {
-    pub fn as_str(&self) -> &'static str {,
+    pub fn w+.*{
 match self {,
             ReceiveIdType::OpenId => "open_id",
             ReceiveIdType::UserId => "user_id",
@@ -66,7 +66,7 @@ match self {,
 }
 },
 /// 批量消息状态,
-#[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)],
+#[derive(.*?)]
 #[repr(u8)],
 pub enum BatchMessageStatus {,
 /// 处理中,
@@ -79,7 +79,7 @@ pub enum BatchMessageStatus {,
     Failed = 3,
 },
 /// 表情回复类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EmojiType {
     /// 表情类型,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -90,18 +90,18 @@ impl EmojiType {
         Self { emoji_type: None },
 }
 
-    pub fn with_emoji_type(mut self, emoji_type: impl Into<String>) -> Self {,
+    pub fn with_emoji_type(mut self, emoji_type: impl Into<String>) -> Self {
 self.emoji_type = Some(emoji_type.into());
         self,
 }
 }
 impl Default for EmojiType {,
-    fn default() -> Self {,
+    fn default() -> Self {
 Self::new(),
     },
 },
 /// 表情回复信息,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MessageReaction {
     /// 消息ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -120,7 +120,7 @@ pub struct MessageReaction {
     pub reaction_users: Option<Vec<ReactionUser>>,
 },
 /// 表情回复用户信息,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReactionUser {
     /// 用户ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -136,7 +136,7 @@ pub struct ReactionUser {
     pub reaction_time: Option<String>,
 },
 /// Pin消息信息,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Pin {
     /// Pin ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -158,7 +158,7 @@ pub struct Pin {
     pub create_time: Option<String>,
 },
 /// 批量消息信息,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchMessage {
     /// 批量消息ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -183,7 +183,7 @@ pub struct BatchMessage {
     pub progress: Option<f64>,
 },
 /// 图片信息,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ImageInfo {
     /// 图片key,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -202,7 +202,7 @@ pub struct ImageInfo {
     pub height: Option<i32>,
 },
 /// 文件信息,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FileInfo {
     /// 文件key,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -221,7 +221,7 @@ pub struct FileInfo {
     pub file_token: Option<String>,
 },
 /// 消息卡片信息,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MessageCard {
     /// 卡片ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -237,7 +237,7 @@ pub struct MessageCard {
     pub user_id_list: Option<Vec<String>>,
 },
 /// 加急类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum UrgentType {,
 /// 应用内加急,
@@ -248,7 +248,7 @@ pub enum UrgentType {,
     Phone,
 },
 /// 加急信息,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UrgentInfo {
     /// 加急类型,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -261,7 +261,7 @@ pub struct UrgentInfo {
     pub message: Option<String>,
 },
 /// URL预览信息,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UrlPreview {
     /// URL,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -280,7 +280,7 @@ pub struct UrlPreview {
     pub preview_type: Option<String>,
 },
 /// 分页信息,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PageInfo {
     /// 分页标记,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -290,7 +290,7 @@ pub struct PageInfo {
     pub has_more: Option<bool>,
 },
 /// 消息已读信息,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MessageReadInfo {
     /// 已读用户列表,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -303,7 +303,7 @@ pub struct MessageReadInfo {
     pub page_token: Option<String>,
 },
 /// 已读用户信息,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReadUser {
     /// 用户ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -317,7 +317,7 @@ pub struct ReadUser {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_message_type_serialization() {,
@@ -742,7 +742,7 @@ assert!(debug_string.contains("Success"));
     },
 },
 /// 消息结构体,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Message {
     /// 消息 ID,
 #[serde(skip_serializing_if = "Option::is_none")],

@@ -14,7 +14,7 @@ core::{,
 };
 use super::EmployeeService;
 /// 批量获取员工列表请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct FilterEmployeeRequest {
     pub api_req: ApiRequest,
     /// 分页大小，最大值 50
@@ -32,7 +32,7 @@ pub struct FilterEmployeeRequest {
 }
 impl FilterEmployeeRequest {
     /// 创建批量获取员工列表请求的构建器,
-pub fn builder() -> FilterEmployeeRequestBuilder {,
+pub fn w+.*{
         FilterEmployeeRequestBuilder::default(),
 }
 },
@@ -43,37 +43,37 @@ pub struct FilterEmployeeRequestBuilder {
 }
 impl FilterEmployeeRequestBuilder {
     /// 设置分页大小，最大值 50
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
 },
 /// 设置分页标记,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
 },
 /// 设置员工状态过滤,
-    pub fn status(mut self, status: EmployeeStatus) -> Self {,
+    pub fn status(mut self, status: EmployeeStatus) -> Self {
 self.request.status = Some(status);
         self,
 },
 /// 设置部门ID过滤,
-    pub fn department_ids(mut self, department_ids: Vec<String>) -> Self {,
+    pub fn department_ids(mut self, department_ids: Vec<String>) -> Self {
 self.request.department_ids = Some(department_ids);
         self,
 },
 /// 设置用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
 },
 /// 设置部门ID类型,
-    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {,
+    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {
 self.request.department_id_type = Some(department_id_type);
         self,
 },
 /// 构建请求,
-    pub fn build(mut self) -> FilterEmployeeRequest {,
+    pub fn w+.*{
 // 构建查询参数,
         if let Some(page_size) = self.request.page_size {,
 self.request,
@@ -116,7 +116,7 @@ self.request,
     },
 },
 /// 批量获取员工列表响应数据,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct FilterEmployeeResponseData {
     /// 是否还有更多项
     pub has_more: bool,
@@ -126,7 +126,7 @@ pub struct FilterEmployeeResponseData {
     pub employees: Vec<Employee>,
 },
 /// 批量获取员工列表响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct FilterEmployeeResponse {
     /// 响应数据
     pub data: FilterEmployeeResponseData,

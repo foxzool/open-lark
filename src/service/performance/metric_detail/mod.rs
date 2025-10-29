@@ -77,7 +77,7 @@ let api_req = ApiRequest {,
 }
 }
 /// 指标详情查询请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MetricDetailQueryRequest {
     /// 项目ID
     pub activity_id: String,
@@ -89,7 +89,7 @@ pub struct MetricDetailQueryRequest {
     pub metric_ids: Option<Vec<String>>,
 }
 /// 指标详情查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MetricDetailQueryResponse {
     /// 指标详情列表
     pub metric_details: Vec<MetricDetail>,
@@ -100,7 +100,7 @@ ResponseFormat::Data,
     }
 }
 /// 指标数据导入请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MetricDetailImportRequest {
     /// 项目ID
     pub activity_id: String,
@@ -108,7 +108,7 @@ pub struct MetricDetailImportRequest {
     pub metric_details: Vec<MetricDetail>,
 }
 /// 指标数据导入响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MetricDetailImportResponse {
     /// 导入成功标识
     pub success: bool,

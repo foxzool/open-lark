@@ -41,7 +41,7 @@ Ok(api_resp),
     },
 },
 /// 批量获取条件格式请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetConditionFormatsRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -54,36 +54,36 @@ pub struct GetConditionFormatsRequest {
     range: Option<String>,
 }
 impl GetConditionFormatsRequest {
-    pub fn builder() -> GetConditionFormatsRequestBuilder {,
+    pub fn w+.*{
 GetConditionFormatsRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct GetConditionFormatsRequestBuilder {
     request: GetConditionFormatsRequest,
 }
 impl GetConditionFormatsRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 }
 
-    pub fn range(mut self, range: impl ToString) -> Self {,
+    pub fn range(mut self, range: impl ToString) -> Self {
 self.request.range = Some(range.to_string());
         self,
 },
-pub fn build(mut self) -> GetConditionFormatsRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 批量获取条件格式响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct GetConditionFormatsResponseData {
     /// 条件格式列表
     pub items: Vec<ConditionFormatInfo>,

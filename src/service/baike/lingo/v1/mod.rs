@@ -3,7 +3,7 @@
 // 包含词典的完整功能
 use crate::core::config::Config;
 /// 词典v1版本服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct LingoV1Service {
     config: Config,
 }

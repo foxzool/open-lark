@@ -141,7 +141,7 @@ let api_req = ApiRequest {,
 }
 }
 /// 权限组创建或更新请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RuleCreateOrUpdateRequest {
     /// 权限组ID（更新时必须提供）
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -165,7 +165,7 @@ pub struct RuleCreateOrUpdateRequest {
     pub end_time: Option<i64>,
 }
 /// 权限组创建或更新响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RuleCreateOrUpdateResponse {
     /// 权限组信息
     pub rule_external: RuleExternal,
@@ -176,7 +176,7 @@ ResponseFormat::Data,
     }
 }
 /// 权限组详情查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RuleGetResponse {
     /// 权限组详细信息
     pub rule_external: RuleExternal,
@@ -187,7 +187,7 @@ ResponseFormat::Data,
     }
 }
 /// 权限组删除响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RuleDeleteResponse {
     /// 删除成功标识
     pub success: bool,
@@ -198,7 +198,7 @@ ResponseFormat::Data,
     }
 }
 /// 设备绑定权限组请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DeviceBindRequest {
     /// 设备ID
     pub device_id: String,
@@ -209,7 +209,7 @@ pub struct DeviceBindRequest {
     pub operation: Option<String>,
 }
 /// 设备绑定权限组响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DeviceBindResponse {
     /// 绑定成功标识
     pub success: bool,
@@ -224,7 +224,7 @@ ResponseFormat::Data,
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::{config::Config, constants::AppType};
 #[test],

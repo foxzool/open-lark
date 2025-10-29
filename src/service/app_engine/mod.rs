@@ -15,7 +15,7 @@ use crate::service::app_engine::audit_log::AuditLogService;
 use crate::service::app_engine::permissions::PermissionsService;
 /// 应用引擎平台服务
 #[cfg(feature = "app_engine")]
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct AppEngineService {
     /// 应用管理服务
     pub apps: AppsService,
@@ -30,7 +30,7 @@ pub struct AppEngineService {
 impl AppEngineService {
 /// 创建新的应用引擎平台服务实例
     pub fn new() -> Self {
-Self {,
+Self {
             apps: AppsService::new(client.clone()),
             seat_management: SeatManagementService::new(client.clone()),
             audit_log: AuditLogService::new(client.clone()),

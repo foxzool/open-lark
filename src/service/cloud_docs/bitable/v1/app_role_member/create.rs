@@ -37,7 +37,7 @@ Ok(api_resp),
     },
 },
 /// 新增协作者请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct CreateRoleMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -56,7 +56,7 @@ pub struct CreateRoleMemberRequest {
     member_type: String,
 }
 impl CreateRoleMemberRequest {
-    pub fn builder() -> CreateRoleMemberRequestBuilder {,
+    pub fn w+.*{
 CreateRoleMemberRequestBuilder::default(),
     },
 pub fn new(,
@@ -64,8 +64,8 @@ pub fn new(,
         role_id: impl ToString,
         member_id: impl ToString,
         member_type: impl ToString,
-    ) -> Self {,
-Self {,
+    ) -> Self {
+Self {
             app_token: app_token.to_string(),
             role_id: role_id.to_string(),
             member_id: member_id.to_string(),
@@ -74,37 +74,37 @@ Self {,
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct CreateRoleMemberRequestBuilder {
     request: CreateRoleMemberRequest,
 }
 impl CreateRoleMemberRequestBuilder {
     /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 自定义角色的id,
-    pub fn role_id(mut self, role_id: impl ToString) -> Self {,
+    pub fn role_id(mut self, role_id: impl ToString) -> Self {
 self.request.role_id = role_id.to_string();
         self,
 },
 /// 用户id类型,
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
 },
 /// 成员id,
-    pub fn member_id(mut self, member_id: impl ToString) -> Self {,
+    pub fn member_id(mut self, member_id: impl ToString) -> Self {
 self.request.member_id = member_id.to_string();
         self,
 },
 /// 成员类型,
-    pub fn member_type(mut self, member_type: impl ToString) -> Self {,
+    pub fn member_type(mut self, member_type: impl ToString) -> Self {
 self.request.member_type = member_type.to_string();
         self,
 },
-pub fn build(mut self) -> CreateRoleMemberRequest {,
+pub fn w+.*{
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
                 .api_request,
@@ -123,7 +123,7 @@ impl_executable_builder_owned!(,
     create,
 );
 /// 协作者信息
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct RoleMember {
     /// 成员id
     pub member_id: String,
@@ -133,7 +133,7 @@ pub struct RoleMember {
     pub member_name: Option<String>,
 },
 /// 新增协作者响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct CreateRoleMemberResponse {
     /// 新增的协作者信息
     pub member: RoleMember,
@@ -145,7 +145,7 @@ ResponseFormat::Data,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_create_role_member_request_builder() {,

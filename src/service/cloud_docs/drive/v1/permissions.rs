@@ -56,7 +56,7 @@ Ok(api_resp),
     },
 },
 /// 获取云文档权限设置,
-#[derive(Debug, Default)],
+#[derive(.*?)]
 pub struct GetPermissionRequest {
     api_request: ApiRequest,
     /// 文件的 token
@@ -79,17 +79,17 @@ pub struct GetPermissionRequest {
     r#type: String,
 }
 impl GetPermissionRequest {
-    pub fn builder() -> GetPermissionRequestBuilder {,
+    pub fn w+.*{
 GetPermissionRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct GetPermissionRequestBuilder {
     request: GetPermissionRequest,
 }
 impl GetPermissionRequestBuilder {
     /// 文件的 token
-    pub fn token(mut self, token: impl ToString) -> Self {,
+    pub fn token(mut self, token: impl ToString) -> Self {
 self.request.token = token.to_string();
         self,
 },
@@ -108,7 +108,7 @@ self.request.token = token.to_string();
 /// - mindnote：思维笔记,
     /// - minutes：妙记,
 /// - slides：幻灯片,
-    pub fn r#type(mut self, r#type: impl ToString) -> Self {,
+    pub fn r#type(mut self, r#type: impl ToString) -> Self {
 self.request.r#type = r#type.to_string();
         self.request,
 .api_request,
@@ -116,12 +116,12 @@ self.request.r#type = r#type.to_string();
             .insert("type", r#type.to_string());
 self,
     },
-pub fn build(self) -> GetPermissionRequest {,
+pub fn w+.*{
         self.request,
 }
 },
 /// 返回的文档公共设置,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct GetPermissionResponse {
     /// 返回的文档公共设置
     pub permission_public: PermissionPublic,
@@ -132,7 +132,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 /// 返回的文档公共设置,
 pub struct PermissionPublic {
 /// 允许内容被分享到组织外,
@@ -197,7 +197,7 @@ pub struct PermissionPublic {
     pub lock_switch: Option<bool>,
 }
 
-#[derive(Debug, Default, Serialize)],
+#[derive(.*?)]
 pub struct PatchPermissionRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -278,17 +278,17 @@ pub struct PatchPermissionRequest {
     copy_entity: Option<String>,
 }
 impl PatchPermissionRequest {
-    pub fn builder() -> PatchPermissionRequestBuilder {,
+    pub fn w+.*{
 PatchPermissionRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct PatchPermissionRequestBuilder {
     request: PatchPermissionRequest,
 }
 impl PatchPermissionRequestBuilder {
     /// 文件的 token
-    pub fn token(mut self, token: impl ToString) -> Self {,
+    pub fn token(mut self, token: impl ToString) -> Self {
 self.request.token = token.to_string();
         self,
 },
@@ -307,7 +307,7 @@ self.request.token = token.to_string();
 /// - mindnote：思维笔记,
     /// - minutes：妙记,
 /// - slides：幻灯片,
-    pub fn r#type(mut self, r#type: impl ToString) -> Self {,
+    pub fn r#type(mut self, r#type: impl ToString) -> Self {
 self.request,
             .api_request,
 .query_params,
@@ -324,7 +324,7 @@ self,
     /// - closed：关闭,
 /// - allow_share_partner_tenant：允许分享给关联组织（只有租户后台设置仅允许关联组织分享，,
     ///   才能设置为该值）
-    pub fn external_access_entity(mut self, external_access_entity: impl ToString) -> Self {,
+    pub fn external_access_entity(mut self, external_access_entity: impl ToString) -> Self {
 self.request.external_access_entity = Some(external_access_entity.to_string());
         self,
 },
@@ -337,7 +337,7 @@ self.request.external_access_entity = Some(external_access_entity.to_string());
 /// - anyone_can_view：拥有可阅读权限的用户,
     /// - anyone_can_edit：拥有可编辑权限的用户,
 /// - only_full_access：拥有可管理权限（包括我）的用户,
-    pub fn security_entity(mut self, security_entity: impl ToString) -> Self {,
+    pub fn security_entity(mut self, security_entity: impl ToString) -> Self {
 self.request.security_entity = Some(security_entity.to_string());
         self,
 },
@@ -349,7 +349,7 @@ self.request.security_entity = Some(security_entity.to_string());
     ///,
 /// - anyone_can_view：拥有可阅读权限的用户,
     /// - anyone_can_edit：拥有可编辑权限的用户
-    pub fn comment_entity(mut self, comment_entity: impl ToString) -> Self {,
+    pub fn comment_entity(mut self, comment_entity: impl ToString) -> Self {
 self.request.comment_entity = Some(comment_entity.to_string());
         self,
 },
@@ -361,7 +361,7 @@ self.request.comment_entity = Some(comment_entity.to_string());
     ///,
 /// - anyone：所有可阅读或编辑此文档的用户,
     /// - same_tenant：组织内所有可阅读或编辑此文档的用户
-    pub fn share_entity(mut self, share_entity: impl ToString) -> Self {,
+    pub fn share_entity(mut self, share_entity: impl ToString) -> Self {
 self.request.share_entity = Some(share_entity.to_string());
         self,
 },
@@ -374,7 +374,7 @@ self.request.share_entity = Some(share_entity.to_string());
 /// - collaborator_can_view：拥有可阅读权限的协作者,
     /// - collaborator_can_edit：拥有可编辑权限的协作者,
 /// - collaborator_full_access：拥有可管理权限（包括我）的协作者,
-    pub fn manage_collaborator_entity(mut self, manage_collaborator_entity: impl ToString) -> Self {,
+    pub fn manage_collaborator_entity(mut self, manage_collaborator_entity: impl ToString) -> Self {
 self.request.manage_collaborator_entity = Some(manage_collaborator_entity.to_string());
         self,
 },
@@ -392,7 +392,7 @@ self.request.manage_collaborator_entity = Some(manage_collaborator_entity.to_str
     /// anyone_readable：互联网上获得链接的任何人可阅读（仅external_access_entity=“open”时有效）,
 /// anyone_editable：互联网上获得链接的任何人可编辑（仅external_access_entity=“open”时有效）,
     /// closed：关闭链接分享
-    pub fn link_share_entity(mut self, link_share_entity: impl ToString) -> Self {,
+    pub fn link_share_entity(mut self, link_share_entity: impl ToString) -> Self {
 self.request.link_share_entity = Some(link_share_entity.to_string());
         self,
 },
@@ -403,11 +403,11 @@ self.request.link_share_entity = Some(link_share_entity.to_string());
 /// - anyone_can_view：拥有可阅读权限的用户,
     /// - anyone_can_edit：拥有可编辑权限的用户,
 /// - only_full_access：拥有可管理权限（包括我）的协作者,
-    pub fn copy_entity(mut self, copy_entity: impl ToString) -> Self {,
+    pub fn copy_entity(mut self, copy_entity: impl ToString) -> Self {
 self.request.copy_entity = Some(copy_entity.to_string());
         self,
 },
-pub fn build(mut self) -> PatchPermissionRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -427,7 +427,7 @@ impl_executable_builder_owned!(
     patch,
 );
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::api_resp::ResponseFormat;
 use rstest::rstest;

@@ -163,7 +163,7 @@ pub struct AccessRecordListRequest {
     pub end_time: Option<i64>,
 }
 /// 访问记录查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AccessRecordListResponse {
     /// 访问记录列表
 #[serde(flatten)],
@@ -175,7 +175,7 @@ ResponseFormat::Data,
     }
 }
 /// 访问记录人脸图片响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AccessRecordFaceImageResponse {
     /// 人脸识别图片信息
     pub face_image: FaceImage,

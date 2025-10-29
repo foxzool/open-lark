@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 用户ID类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum UserIdType {,
     /// 用户ID,
 #[serde(rename = "user_id")],
@@ -13,7 +13,7 @@ pub enum UserIdType {,
     OpenId,
 }
 impl UserIdType {
-    pub fn as_str(&self) -> &'static str {,
+    pub fn w+.*{
 match self {,
             UserIdType::UserId => "user_id",
             UserIdType::UnionId => "union_id",
@@ -22,7 +22,7 @@ match self {,
 }
 },
 /// 妙记信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Minute {
     /// 妙记ID
     pub minute_id: String,
@@ -44,7 +44,7 @@ pub struct Minute {
     pub meeting_id: Option<String>,
 },
 /// 用户信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserInfo {
     /// 用户ID
     pub id: String,
@@ -54,7 +54,7 @@ pub struct UserInfo {
     pub avatar_url: Option<String>,
 },
 /// 妙记音视频文件信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MinuteMedia {
     /// 文件ID
     pub file_id: String,
@@ -70,7 +70,7 @@ pub struct MinuteMedia {
     pub expires_time: Option<String>,
 },
 /// 妙记文字记录,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MinuteTranscript {
     /// 转录内容
     pub content: String,
@@ -82,7 +82,7 @@ pub struct MinuteTranscript {
     pub create_time: Option<String>,
 },
 /// 妙记统计数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MinuteStatistics {
     /// 会议时长（秒）
     pub duration: Option<i32>,
@@ -98,7 +98,7 @@ pub struct MinuteStatistics {
     pub keywords: Option<Vec<KeywordStatistic>>,
 },
 /// 关键词统计,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct KeywordStatistic {
     /// 关键词
     pub keyword: String,
@@ -107,7 +107,7 @@ pub struct KeywordStatistic {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_user_id_type_serialization() {,

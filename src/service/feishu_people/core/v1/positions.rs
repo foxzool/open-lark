@@ -3,7 +3,7 @@
 // 实现职位管理的功能,
 use crate::prelude::*;
 /// 职位管理服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct PositionsService {
     client: std::sync::Arc<LarkClient>,
 }

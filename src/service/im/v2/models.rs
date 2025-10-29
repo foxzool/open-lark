@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 消息流卡片状态,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum FeedCardStatus {,
     /// 激活状态,
 #[serde(rename = "active")],
@@ -10,7 +10,7 @@ pub enum FeedCardStatus {,
     Inactive,
 },
 /// 用户ID类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum UserIdType {,
     /// 用户ID,
 #[serde(rename = "user_id")],
@@ -23,7 +23,7 @@ pub enum UserIdType {,
     OpenId,
 }
 impl UserIdType {
-    pub fn as_str(&self) -> &'static str {,
+    pub fn w+.*{
 match self {,
             UserIdType::UserId => "user_id",
             UserIdType::UnionId => "union_id",
@@ -32,7 +32,7 @@ match self {,
 }
 },
 /// 消息流卡片信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FeedCard {
     /// 卡片ID
     pub card_id: String,
@@ -48,7 +48,7 @@ pub struct FeedCard {
     pub update_time: Option<String>,
 },
 /// 按钮信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ButtonInfo {
     /// 按钮ID
     pub button_id: String,
@@ -60,7 +60,7 @@ pub struct ButtonInfo {
     pub action: Option<String>,
 },
 /// 即时提醒配置,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TimelyNotification {
     /// 提醒类型
     pub notification_type: String,
@@ -71,7 +71,7 @@ pub struct TimelyNotification {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

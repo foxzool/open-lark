@@ -144,7 +144,7 @@ fn service_version() -> &'static str {,
 }
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use super::*;
     #[test],
 fn test_user_approval_service_creation() {,

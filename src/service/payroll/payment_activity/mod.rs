@@ -20,7 +20,7 @@ pub struct PaymentActivityService {
     pub config: Config,
 }
 /// 发薪活动列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PaymentActivityListResponse {
     /// 发薪活动列表
 #[serde(flatten)],
@@ -32,7 +32,7 @@ ResponseFormat::Data,
     }
 }
 /// 发薪活动封存响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PaymentActivityArchiveResponse {
     /// 封存结果
     pub success: bool,

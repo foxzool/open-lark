@@ -42,7 +42,7 @@ Ok(api_resp),
     },
 },
 /// 更新视图请求,
-#[derive(Debug, Default)],
+#[derive(.*?)]
 pub struct PatchViewRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token
@@ -57,12 +57,12 @@ pub struct PatchViewRequest {
     property: Option<serde_json::Value>,
 }
 impl PatchViewRequest {
-    pub fn builder() -> PatchViewRequestBuilder {,
+    pub fn w+.*{
 PatchViewRequestBuilder::default(),
     },
 /// 创建更新视图请求,
-    pub fn new(app_token: impl ToString, table_id: impl ToString, view_id: impl ToString) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, table_id: impl ToString, view_id: impl ToString) -> Self {
+Self {
             api_request: ApiRequest::default(),
             app_token: app_token.to_string(),
             table_id: table_id.to_string(),
@@ -72,37 +72,37 @@ Self {,
         },
 }
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct PatchViewRequestBuilder {
     request: PatchViewRequest,
 }
 impl PatchViewRequestBuilder {
     /// 多维表格的 app_token
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 数据表的 table_id,
-    pub fn table_id(mut self, table_id: impl ToString) -> Self {,
+    pub fn table_id(mut self, table_id: impl ToString) -> Self {
 self.request.table_id = table_id.to_string();
         self,
 },
 /// 视图的 view_id,
-    pub fn view_id(mut self, view_id: impl ToString) -> Self {,
+    pub fn view_id(mut self, view_id: impl ToString) -> Self {
 self.request.view_id = view_id.to_string();
         self,
 },
 /// 视图名称,
-    pub fn view_name(mut self, view_name: impl ToString) -> Self {,
+    pub fn view_name(mut self, view_name: impl ToString) -> Self {
 self.request.view_name = Some(view_name.to_string());
         self,
 },
 /// 视图的自定义属性,
-    pub fn property(mut self, property: serde_json::Value) -> Self {,
+    pub fn property(mut self, property: serde_json::Value) -> Self {
 self.request.property = Some(property);
         self,
 },
-pub fn build(self) -> PatchViewRequest {,
+pub fn w+.*{
         self.request,
 }
 }
@@ -121,7 +121,7 @@ struct PatchViewRequestBody {,
     property: Option<serde_json::Value>,
 }
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct PatchViewResponse {
     /// 视图名称
     pub view_name: String,
@@ -137,7 +137,7 @@ ResponseFormat::Data,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json::json;
     #[test],

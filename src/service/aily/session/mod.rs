@@ -21,7 +21,7 @@ pub struct SessionService {
     pub config: Config,
 }
 /// 会话创建响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SessionCreateResponse {
     /// 会话信息
 #[serde(flatten)],
@@ -33,7 +33,7 @@ ResponseFormat::Data,
     }
 }
 /// 会话更新响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SessionUpdateResponse {
     /// 会话信息
 #[serde(flatten)],
@@ -45,7 +45,7 @@ ResponseFormat::Data,
     }
 }
 /// 会话查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SessionGetResponse {
     /// 会话信息
 #[serde(flatten)],
@@ -57,7 +57,7 @@ ResponseFormat::Data,
     }
 }
 /// 会话删除响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SessionDeleteResponse {
     /// 删除成功标识
 #[serde(skip_serializing_if = "Option::is_none")],

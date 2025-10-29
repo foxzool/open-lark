@@ -15,7 +15,7 @@ pub struct V1 {
 }
 impl V1 {
     pub fn new() -> Self {
-Self {,
+Self {
             text_embedding: TextEmbeddingService::new(config.clone()),
             vector_similarity: VectorSimilarityService::new(config.clone()),
             vector_search: VectorSearchService::new(config),

@@ -19,7 +19,7 @@ pub struct CategoryService {
     pub config: Config,
 }
 /// 创建知识库分类请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateCategoryRequest {
     /// 分类名称
     pub name: String,
@@ -31,7 +31,7 @@ pub struct CreateCategoryRequest {
     pub parent_id: Option<String>,
 }
 /// 创建知识库分类响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateCategoryResponse {
     /// 创建的分类
     pub category: Category,
@@ -42,7 +42,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取知识库分类响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetCategoryResponse {
     /// 分类详情
     pub category: Category,
@@ -53,7 +53,7 @@ ResponseFormat::Data,
     }
 }
 /// 更新知识库分类请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateCategoryRequest {
     /// 分类名称
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -66,7 +66,7 @@ pub struct UpdateCategoryRequest {
     pub sort_order: Option<i32>,
 }
 /// 更新知识库分类响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateCategoryResponse {
     /// 更新后的分类
     pub category: Category,
@@ -77,7 +77,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取全部知识库分类响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListCategoriesResponse {
     /// 分类列表
     pub categories: Vec<Category>,

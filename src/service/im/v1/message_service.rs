@@ -4,14 +4,14 @@ use crate::core::config::Config;
 /// Provides core message functionality including creating, sending, and retrieving messages.
 /// Supports multiple message types: text, post, image, file, audio, media, sticker,
 /// interactive, share_chat, share_user.
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct MessageService {
     /// Service configuration
     pub config: Config,
 }
 impl MessageService {
     /// Create a new message service instance,
-pub fn new(config: Config) -> Self {,
+pub fn new(config: Config) -> Self {
         Self { config },
 }
 },
@@ -19,7 +19,7 @@ pub fn new(config: Config) -> Self {,
 pub use crate::service::im::v1::message::*;
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use crate::core::config::Config;
     fn create_test_config() -> Config {,

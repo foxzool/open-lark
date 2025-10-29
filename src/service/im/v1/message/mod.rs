@@ -26,7 +26,7 @@ use crate::impl_full_service;
 /// Service 抽象接入：通过 `impl_full_service!` 为该服务实现
 /// `Service`/`ServiceObservability`/`ServiceBuilder`/`ServiceHealthCheck`/`ConfigurableService`
 /// 等核心能力，统一服务行为与可观测性。
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct MessageService {
     /// Service configuration
     pub config: Config,
@@ -41,7 +41,7 @@ pub fn new() -> Self {
 impl_full_service!(MessageService, "im.message", "v1");
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use crate::core::config::Config;
     use crate::core::trait_system::Service;

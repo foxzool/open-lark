@@ -39,7 +39,7 @@ Ok(api_resp),
     },
 }
 
-#[derive(Serialize, Deserialize, Debug, Default)],
+#[derive(.*?)]
 pub struct GetSpreadsheetRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -62,11 +62,11 @@ pub struct GetSpreadsheetRequest {
     user_id_type: Option<String>,
 }
 impl GetSpreadsheetRequest {
-    pub fn builder() -> GetSpreadsheetRequestBuilder {,
+    pub fn w+.*{
 GetSpreadsheetRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct GetSpreadsheetRequestBuilder {
     request: GetSpreadsheetRequest,
 }
@@ -85,16 +85,16 @@ impl GetSpreadsheetRequestBuilder {
 /// - user_id：标识一个用户在某个租户内的身份。同一个用户在租户 A 和租户 B 内的 User ID,
     ///   是不同的。在同一个租户内，一个用户的 User ID 在所有应用（包括商店���用）中都保持一致。User,
 ///   ID 主要用于在不同的应用间打通用户数据。了解更多：如何获取 User ID？,
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
 },
 /// 表格的token,
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 },
-pub fn build(mut self) -> GetSpreadsheetRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -107,7 +107,7 @@ impl_executable_builder_owned!(
     BaseResponse<GetSpreadsheetResponseData>,
     get,
 );
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct GetSpreadsheetResponseData {
     pub spreadsheet: GetSpreadsheetResponse,
 }
@@ -117,7 +117,7 @@ ResponseFormat::Data,
     },
 }
 
-#[derive(Serialize, Deserialize, Debug)],
+#[derive(.*?)]
 pub struct GetSpreadsheetResponse {
     /// 电子表格标题
     pub title: String,

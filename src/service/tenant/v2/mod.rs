@@ -64,7 +64,7 @@ pub fn new() -> Self {
     /// # 返回值
 /// 使用共享配置的服务实例
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             tenant: tenant::TenantService::new_from_shared(shared_config.clone()),
             tenant_product_assign_info:,
 tenant_product_assign_info::TenantProductAssignInfoService::new_from_shared(,
@@ -78,7 +78,7 @@ tenant_product_assign_info::TenantProductAssignInfoService::new_from_shared(,
     ///,
 /// # 返回值
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
-pub fn validate_services_config(&self) -> bool {,
+pub fn w+.*{
         // 检查主要服务的配置是否有效
 !self.tenant.config().app_id.is_empty() && !self.tenant.config().app_secret.is_empty(),
     }
@@ -88,7 +88,7 @@ pub fn validate_services_config(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_service_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "TenantV2{{ services: 2, app_id: {} tenant_service: 1, seat_service: 1 }}",
             self.tenant.config().app_id,
@@ -103,7 +103,7 @@ pub fn get_service_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_feature(&self, feature_name: &str) -> bool {,
+    pub fn w+.*{
 matches!(,
             feature_name,
             "tenant_management",
@@ -120,7 +120,7 @@ matches!(,
     ///,
 /// # 返回值
     /// 如果所有服务配置有效返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         !self.tenant.config().app_id.is_empty(),
 && !self.tenant.config().app_secret.is_empty(),
             && self.validate_services_config(),
@@ -131,7 +131,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含各类型服务数量的统计信息
-pub fn get_service_categories_statistics(&self) -> String {,
+pub fn w+.*{
         "TenantV2 Categories{ tenant: 1, seat: 1, total: 2 }".to_string(),
 }
 }
@@ -146,7 +146,7 @@ f.debug_struct()
 }
 /// 为 V2 实现 Clone trait，支持服务实例的复制
 impl Clone for V2 {,
-fn clone(&self) -> Self {,
+fn clone(&self) -> Self {
         let config = self.tenant.config().clone();
 Self::new(config),
     }
@@ -164,7 +164,7 @@ fn service_version() -> &'static str {,
 }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::trait_system::Service;
 /// 创建测试配置

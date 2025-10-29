@@ -30,7 +30,7 @@ Ok(api_resp),
     },
 },
 /// 修改电子表格属性 请求体,
-#[derive(Default, Debug, Serialize)],
+#[derive(.*?)]
 pub struct PatchSpreadSheetRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -41,26 +41,26 @@ pub struct PatchSpreadSheetRequest {
     title: String,
 }
 impl PatchSpreadSheetRequest {
-    pub fn builder() -> PatchSpreadSheetRequestBuilder {,
+    pub fn w+.*{
 PatchSpreadSheetRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct PatchSpreadSheetRequestBuilder {
     request: PatchSpreadSheetRequest,
 }
 impl PatchSpreadSheetRequestBuilder {
     /// 表格标题
-    pub fn title(mut self, title: impl ToString) -> Self {,
+    pub fn title(mut self, title: impl ToString) -> Self {
 self.request.title = title.to_string();
         self,
 },
 /// 表格的token,
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 },
-pub fn build(mut self) -> PatchSpreadSheetRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },

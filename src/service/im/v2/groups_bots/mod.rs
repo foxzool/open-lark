@@ -20,7 +20,7 @@ pub struct GroupsBotsService {
     pub config: Config,
 }
 /// 机器人单聊即时提醒请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BotTimeSentiveRequest {
     /// 接收用户ID
     pub receive_id: String,
@@ -30,7 +30,7 @@ pub struct BotTimeSentiveRequest {
     pub msg_type: String,
 }
 /// 机器人单聊即时提醒响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BotTimeSentiveResponse {
     /// 消息ID
     pub message_id: String,
@@ -43,7 +43,7 @@ ResponseFormat::Data,
     }
 }
 /// 更新消息流卡片按钮请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateFeedCardButtonRequest {
     /// 按钮信息列表
     pub buttons: Vec<ButtonInfo>,
@@ -52,7 +52,7 @@ pub struct UpdateFeedCardButtonRequest {
     pub reason: Option<String>,
 }
 /// 更新消息流卡片按钮响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateFeedCardButtonResponse {
     /// 消息ID
     pub message_id: String,
@@ -67,7 +67,7 @@ ResponseFormat::Data,
     }
 }
 /// 即时提醒请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TimelyReminderRequest {
     /// 提醒消息内容
     pub content: Value,
@@ -78,7 +78,7 @@ pub struct TimelyReminderRequest {
     pub reminder_type: Option<String>,
 }
 /// 即时提醒响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TimelyReminderResponse {
     /// 提醒ID
     pub reminder_id: String,

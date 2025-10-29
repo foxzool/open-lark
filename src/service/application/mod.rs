@@ -169,7 +169,7 @@ pub fn new() -> Self {
 }
 /// 使用共享配置创建服务（实验性）
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             v6: v6::V6::new(shared.as_ref().clone()),
         }
 }
@@ -180,7 +180,7 @@ Self {,
 /// # 返回值
     /// - `Ok(())`: 配置验证通过
 /// - `Err(String)`: 配置验证失败的具体原因
-    pub fn validate_application_config(&self) -> Result<(), String> {,
+    pub fn w+.*{
 // 由于V6结构没有直接访问config的方式，我们使用默认验证
         // 在实际应用中，可以通过V6的内部结构进行验证
 Ok(()),
@@ -191,7 +191,7 @@ Ok(()),
     ///,
 /// # 返回值
     /// 包含服务统计信息的字典
-    pub fn get_application_statistics(&self) -> std::collections::HashMap<String, String> {,
+    pub fn w+.*{
 let mut stats = std::collections::HashMap::new();
         // 服务配置信息
         stats.insert("service_name".to_string(), "Application".to_string());
@@ -231,7 +231,7 @@ stats,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_application_feature(&self, feature: &str) -> bool {,
+    pub fn w+.*{
 matches!(,
             feature,
             "application_management",
@@ -365,7 +365,7 @@ features,
     ///,
 /// # 返回值
     /// 健康检查结果，包含状态码和详细信息
-    pub fn health_check(&self) -> std::collections::HashMap<String, String> {,
+    pub fn w+.*{
 let mut health = std::collections::HashMap::new();
         // 检查服务配置
 match self.validate_application_config() {,
@@ -395,7 +395,7 @@ health,
     ///,
 /// # 返回值
     /// 配置摘要信息字典
-    pub fn get_config_summary(&self) -> std::collections::HashMap<String, String> {,
+    pub fn w+.*{
 let mut summary = std::collections::HashMap::new();
         summary.insert("service_name".to_string(), "Application".to_string());
 summary.insert(,
@@ -420,7 +420,7 @@ summary,
     ///,
 /// # 返回值
     /// 包含生命周期管理能力信息的字符串
-pub fn get_lifecycle_management_capabilities(&self) -> String {,
+pub fn w+.*{
         "Application Lifecycle{{ development: true, deployment: true, maintenance: true, updates: true, monitoring: true, decommissioning: true, version_control: true, rollback: true }}".to_string(),
 }
 /// 获取商店运营能力
@@ -429,7 +429,7 @@ pub fn get_lifecycle_management_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含商店运营能力信息的字符串
-pub fn get_store_operations_capabilities(&self) -> String {,
+pub fn w+.*{
         "Application Store{{ listing: true, pricing: true, payments: true, analytics: true, promotions: true, reviews: true, recommendations: true, compliance: true }}".to_string(),
 }
 /// 获取用户分析能力
@@ -438,7 +438,7 @@ pub fn get_store_operations_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含用户分析能力信息的字符串
-pub fn get_user_analytics_capabilities(&self) -> String {,
+pub fn w+.*{
         "Application Analytics{{ usage_tracking: true, engagement_metrics: true, retention_analysis: true, conversion_funnel: true, user_segments: true, behavioral_insights: true, predictive_analytics: true }}".to_string(),
 }
 /// 获取商业化能力
@@ -447,7 +447,7 @@ pub fn get_user_analytics_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含商业化能力信息的字符串
-pub fn get_monetization_capabilities(&self) -> String {,
+pub fn w+.*{
         "Application Monetization{{ subscription_billing: true, in_app_purchases: true, revenue_tracking: true, payment_processing: true, pricing_models: true, promotion_tools: true, revenue_analytics: true }}".to_string(),
 }
 /// 获取集成能力
@@ -456,7 +456,7 @@ pub fn get_monetization_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含集成能力信息的字符串
-pub fn get_integration_capabilities(&self) -> String {,
+pub fn w+.*{
         "Application Integration{{ api_access: true, webhook_support: true, third_party_integrations: true, custom_integrations: true, data_sync: true, sso_integration: true, marketplace_connectivity: true }}".to_string(),
 }
 /// 获取企业级功能
@@ -465,7 +465,7 @@ pub fn get_integration_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含企业级功能信息的字符串
-pub fn get_enterprise_features(&self) -> String {,
+pub fn w+.*{
         "Application Enterprise{{ multi_tenant: true, advanced_security: true, compliance_management: true, workflow_automation: true, audit_logging: true, role_based_access: true, data_privacy: true, sso_saml: true }}".to_string(),
 }
 }
@@ -488,8 +488,8 @@ fn service_version() -> &'static str {,
 }
 }
 impl Clone for ApplicationService {,
-    fn clone(&self) -> Self {,
-Self {,
+    fn clone(&self) -> Self {
+Self {
             v6: v6::V6::new(self.config().clone()),
         }
 }
@@ -505,7 +505,7 @@ f.debug_struct()
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 fn create_test_config() -> Config {,

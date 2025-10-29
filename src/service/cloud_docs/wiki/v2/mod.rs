@@ -125,7 +125,7 @@ result.data.ok_or_else(|| {,
     ///,
 /// # 返回值
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
-pub fn validate_services_config(&self) -> bool {,
+pub fn w+.*{
         // 检查主要服务的配置是否有效
 !self.config.app_id.is_empty() && !self.config.app_secret.is_empty(),
     }
@@ -135,7 +135,7 @@ pub fn validate_services_config(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_service_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "WikiV2{{ services: 5, app_id: {} core_services: 4, task_service: 1, search_capability: true }}",
             self.config.app_id,
@@ -150,7 +150,7 @@ pub fn get_service_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_feature(&self, feature_name: &str) -> bool {,
+    pub fn w+.*{
 matches!(,
             feature_name,
             "space_management",
@@ -176,7 +176,7 @@ matches!(,
     ///,
 /// # 返回值
     /// 如果所有服务配置有效返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         !self.config.app_id.is_empty(),
 && !self.config.app_secret.is_empty(),
             && self.validate_services_config(),
@@ -187,7 +187,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含各类型服务数量的统计信息
-pub fn get_service_categories_statistics(&self) -> String {,
+pub fn w+.*{
         "WikiV2 Categories{ core: 4, task: 1, total: 5 }".to_string(),
 }
 /// 获取Wiki服务状态摘要
@@ -196,7 +196,7 @@ pub fn get_service_categories_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各服务状态信息的字符串
-pub fn get_service_status_summary(&self) -> String {,
+pub fn w+.*{
         let core_healthy = !self.config.app_id.is_empty();
 let space_healthy = core_healthy;
         let collaboration_healthy = core_healthy;
@@ -214,7 +214,7 @@ format!(,
     ///,
 /// # 返回值
     /// 包含支持的内容类型的向量
-pub fn get_supported_content_types(&self) -> Vec<&'static str> {,
+pub fn w+.*{
         vec![
             "document",
             "markdown",
@@ -242,7 +242,7 @@ pub fn get_supported_content_types(&self) -> Vec<&'static str> {,
     ///,
 /// # 返回值
     /// 包含协作功能信息的字符串
-pub fn get_collaboration_features_info(&self) -> String {,
+pub fn w+.*{
         format!(
             "WikiV2 Collaboration{{ real_time_editing: {} version_history: true, permission_levels: 5, commenting: true }}",
             self.supports_feature("collaborative_editing"),
@@ -275,13 +275,13 @@ f.debug_struct()
 }
 /// 为 V2 实现 Clone trait，支持服务实例的复制
 impl Clone for V2 {,
-fn clone(&self) -> Self {,
+fn clone(&self) -> Self {
         let config = self.config.clone();
 Self::new(config),
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::trait_system::Service;
 /// 创建测试配置

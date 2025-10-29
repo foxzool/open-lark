@@ -61,14 +61,14 @@ impl DriveService {
     /// # 参数
 /// - `config`: 客户端配置
     pub fn new() -> Self {
-Self {,
+Self {
             v1: V1::new(config.clone()),
             v2: V2::new(config.clone()),
         }
 }
 /// 使用共享配置创建服务（实验性）
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             v1: V1::new(shared.as_ref().clone()),
             v2: V2::new(shared.as_ref().clone()),
         }

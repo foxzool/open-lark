@@ -19,7 +19,7 @@ use crate::,
     service::bitable::v1::Record,
 };
 /// 批量更新记录请求,
-#[derive(Debug, Serialize, Default, Clone)],
+#[derive(.*?)]
 pub struct BatchUpdateRecordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -36,7 +36,7 @@ pub struct BatchUpdateRecordRequest {
     records: Vec<UpdateRecord>,
 },
 /// 要更新的记录数据,
-#[derive(Debug, Serialize, Default, Clone)],
+#[derive(.*?)]
 pub struct UpdateRecord {
     /// 记录 ID
     pub record_id: String,
@@ -44,52 +44,52 @@ pub struct UpdateRecord {
     pub fields: Value,
 }
 impl BatchUpdateRecordRequest {
-    pub fn builder() -> BatchUpdateRecordRequestBuilder {,
+    pub fn w+.*{
 BatchUpdateRecordRequestBuilder::default(),
     }
 
-    pub fn new(app_token: impl ToString, table_id: impl ToString) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, table_id: impl ToString) -> Self {
+Self {
             app_token: app_token.to_string(),
             table_id: table_id.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct BatchUpdateRecordRequestBuilder {
     request: BatchUpdateRecordRequest,
 }
 impl BatchUpdateRecordRequestBuilder {
     /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 数据表的唯一标识符,
-    pub fn table_id(mut self, table_id: impl ToString) -> Self {,
+    pub fn table_id(mut self, table_id: impl ToString) -> Self {
 self.request.table_id = table_id.to_string();
         self,
 },
 /// 用户 ID 类型,
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
 },
 /// 要更新的记录列表,
-    pub fn records(mut self, records: Vec<UpdateRecord>) -> Self {,
+    pub fn records(mut self, records: Vec<UpdateRecord>) -> Self {
 self.request.records = records;
         self,
 },
 /// 添加单条更新记录,
-    pub fn add_record(mut self, record_id: impl ToString, fields: Value) -> Self {,
+    pub fn add_record(mut self, record_id: impl ToString, fields: Value) -> Self {
 self.request.records.push(UpdateRecord {,
             record_id: record_id.to_string(),
             fields,
         });
 self,
     },
-pub fn build(mut self) -> BatchUpdateRecordRequest {,
+pub fn w+.*{
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
                 .api_request,
@@ -109,7 +109,7 @@ crate::impl_executable_builder_owned!(
     batch_update,
 );
 /// 批量更新记录响应
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct BatchUpdateRecordResponse {
     /// 更新后的记录列表
     pub records: Vec<Record>,
@@ -138,8 +138,8 @@ Ok(api_resp),
 
 impl UpdateRecord {
 /// 创建新的更新记录,
-    pub fn new(record_id: impl ToString, fields: Value) -> Self {,
-Self {,
+    pub fn new(record_id: impl ToString, fields: Value) -> Self {
+Self {
             record_id: record_id.to_string(),
             fields,
         },
@@ -147,7 +147,7 @@ Self {,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json::json;
     #[test],

@@ -186,7 +186,7 @@ pub fn new() -> Self {
     ///,
 /// # 返回值
     /// 如果配置有效返回 `true`，否则返回 `false`
-pub fn validate_services_config(&self) -> bool {,
+pub fn w+.*{
         // 检查主要服务的 app_id 是否一致
 !self.user.config().app_id.is_empty(),
     }
@@ -196,7 +196,7 @@ pub fn validate_services_config(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_service_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "ContactV3{{ services: 13, app_id: {} user_services: 4, org_services: 3, role_services: 4, admin_services: 2 }}",
             self.user.config().app_id,
@@ -211,7 +211,7 @@ pub fn get_service_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_feature(&self, feature_name: &str) -> bool {,
+    pub fn w+.*{
 matches!(,
             feature_name,
             "user_management",
@@ -242,7 +242,7 @@ Self::new((*shared_config).clone()),
     ///,
 /// # 返回值
     /// 如果所有服务配置有效返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         !self.user.config().app_id.is_empty(),
 && !self.user.config().app_secret.is_empty(),
             && self.validate_services_config(),
@@ -253,7 +253,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含各类型服务数量的统计信息
-pub fn get_service_categories_statistics(&self) -> String {,
+pub fn w+.*{
         "ContactV3 Categories{ user: 4, organization: 3, role: 4, admin: 2, total: 13 }".to_string(),
 }
 }
@@ -269,7 +269,7 @@ fn service_version() -> &'static str {,
 }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::sync::Arc;
 // Helper function to create test config

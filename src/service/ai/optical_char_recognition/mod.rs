@@ -19,7 +19,7 @@ pub struct OpticalCharRecognitionService {
     pub config: Config,
 }
 /// OCR文字识别响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OcrResponse {
     /// OCR识别结果
 #[serde(flatten)],

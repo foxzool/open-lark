@@ -21,7 +21,7 @@ pub struct MessageReactionService {
     pub config: Config,
 }
 /// 添加表情回复请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateReactionRequest {
     /// 表情类型
     pub emoji_type: String,
@@ -29,7 +29,7 @@ pub struct CreateReactionRequest {
 // 接入统一 Service 抽象（IM v1 - MessageReactionService）
 impl_full_service!(MessageReactionService, "im.message_reaction", "v1");
 /// 获取表情回复响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListReactionResponse {
     /// 表情回复列表
     pub reactions: Vec<MessageReaction>,

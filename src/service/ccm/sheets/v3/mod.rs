@@ -3,7 +3,7 @@
 // 包含电子表格的扩展功能
 use crate::prelude::*;
 /// 电子表格v3版本服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct SheetsV3Service {
     client: std::sync::Arc<LarkClient>,
 }

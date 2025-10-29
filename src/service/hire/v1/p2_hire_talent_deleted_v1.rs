@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 /// 人才删除事件数据,
 ///
 /// 当人才被删除时触发此事件，包含被删除人才的基本信息。
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TalentDeletedData {
     /// 人才ID
     pub talent_id: String,

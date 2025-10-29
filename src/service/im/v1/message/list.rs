@@ -14,16 +14,16 @@ use crate::{,
 };
 use super::MessageService;
 /// 列表消息请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct ListMessageRequest {
     pub api_req: ApiRequest,
 }
 impl ListMessageRequest {
-    pub fn builder() -> ListMessageRequestBuilder {,
+    pub fn w+.*{
 ListMessageRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct ListMessageRequestBuilder {
     request: ListMessageRequest,
 }
@@ -31,7 +31,7 @@ impl ListMessageRequestBuilder {
     /// 容器类型 ，目前可选值仅有"chat"，包含单聊（p2p）和群聊（group）,
 ///,
     /// 示例值：chat
-    pub fn container_id_type(mut self, container_id_type: impl ToString) -> Self {,
+    pub fn container_id_type(mut self, container_id_type: impl ToString) -> Self {
 self.request,
             .api_req,
 .query_params,
@@ -41,7 +41,7 @@ self,
 /// 容器的id，即chat的id,
     ///,
 /// 示例值：oc_234jsi43d3ssi993d43545f,
-    pub fn container_id(mut self, container_id: impl ToString) -> Self {,
+    pub fn container_id(mut self, container_id: impl ToString) -> Self {
 self.request,
             .api_req,
 .query_params,
@@ -51,7 +51,7 @@ self,
 /// 历史信息的起始时间（秒级时间戳）,
     ///,
 /// 示例值：1609296809,
-    pub fn start_time(mut self, start_time: i64) -> Self {,
+    pub fn start_time(mut self, start_time: i64) -> Self {
 self.request,
             .api_req,
 .query_params,
@@ -61,7 +61,7 @@ self,
 /// 历史信息的结束时间（秒级时间戳）,
     ///,
 /// 示例值：1608594809,
-    pub fn end_time(mut self, end_time: i64) -> Self {,
+    pub fn end_time(mut self, end_time: i64) -> Self {
 self.request,
             .api_req,
 .query_params,
@@ -71,7 +71,7 @@ self,
 /// 消息排序方式,
     ///,
 /// 示例值：ByCreateTimeAsc,
-    pub fn sort_type(mut self, sort_type: impl ToString) -> Self {,
+    pub fn sort_type(mut self, sort_type: impl ToString) -> Self {
 self.request,
             .api_req,
 .query_params,
@@ -80,7 +80,7 @@ self,
     },
 /// 分页标记，第一次请求不填，表示从头开始遍历；分页查询结果还有更多项时会同时返回新的,
     /// page_token，下次遍历可采用该 page_token 获取查询结果
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request,
             .api_req,
 .query_params,
@@ -94,7 +94,7 @@ self,
 /// # 验证规则,
     ///,
 /// 分页大小必须在 1-500 之间，推荐值为 50,
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 // 验证分页大小,
         match validation::validate_page_size(page_size as u32, "page_size") {
             ValidationResult::Valid => {},
@@ -112,7 +112,7 @@ self.request,
             .insert("page_size", page_size.to_string());
 self,
     },
-pub fn build(self) -> ListMessageRequest {,
+pub fn w+.*{
         // 验证分页标记（如果存在）,
 if let Some(page_token) = self.request.api_req.query_params.get("page_token") {,
             match validation::validate_page_token(page_token, "page_token") {
@@ -161,7 +161,7 @@ crate::impl_executable_builder_owned!(,
     list,
 );
 /// Response data for message listing
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListMessageRespData {
     /// 是否还有更多项
     pub has_more: bool,
@@ -223,7 +223,7 @@ api_resp.into_result(),
 }
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use super::*;
     use crate::{
         core::{config::Config, constants::AccessTokenType, req_option::RequestOption},

@@ -148,7 +148,7 @@ pub fn new() -> Self {
 }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 #[test],

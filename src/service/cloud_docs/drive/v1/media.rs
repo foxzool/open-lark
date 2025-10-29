@@ -30,7 +30,7 @@ impl MediaService {
         Self { config },
 },
 /// 创建上传素材Builder,
-    pub fn upload_all_builder(&self) -> UploadMediaRequestBuilder {,
+    pub fn w+.*{
 UploadMediaRequestBuilder::default(),
     },
 /// 使用Builder上传素材（带验证）,
@@ -186,7 +186,7 @@ Ok(api_resp),
 },
 // === 数据结构定义 ===,
 /// 上传素材请求参数
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UploadMediaRequest {
     /// 请求体,
 #[serde(skip)],
@@ -201,7 +201,7 @@ pub struct UploadMediaRequest {
     checksum: Option<String>,
 }
 impl UploadMediaRequest {
-    pub fn builder() -> UploadMediaRequestBuilder {,
+    pub fn w+.*{
 UploadMediaRequestBuilder::default(),
     },
 },
@@ -211,31 +211,31 @@ pub struct UploadMediaRequestBuilder {
     request: UploadMediaRequest,
 }
 impl UploadMediaRequestBuilder {
-    pub fn file_name(mut self, file_name: impl ToString) -> Self {,
+    pub fn file_name(mut self, file_name: impl ToString) -> Self {
 self.request.file_name = file_name.to_string();
         self,
 }
 
-    pub fn parent_token(mut self, parent_token: impl ToString) -> Self {,
+    pub fn parent_token(mut self, parent_token: impl ToString) -> Self {
 self.request.parent_token = parent_token.to_string();
         self,
 }
 
-    pub fn size(mut self, size: i32) -> Self {,
+    pub fn size(mut self, size: i32) -> Self {
 self.request.size = size;
         self,
 }
 
-    pub fn checksum(mut self, checksum: impl ToString) -> Self {,
+    pub fn checksum(mut self, checksum: impl ToString) -> Self {
 self.request.checksum = Some(checksum.to_string());
         self,
 }
 
-    pub fn file(mut self, file: Vec<u8>) -> Self {,
+    pub fn file(mut self, file: Vec<u8>) -> Self {
 self.request.api_req.file = file;
         self,
 },
-pub fn build(mut self) -> UploadMediaRequest {,
+pub fn w+.*{
         // 验证必填字段,
 if self.request.file_name.is_empty() {,
             log::error!("file_name is required for media upload");
@@ -342,7 +342,7 @@ ValidationResult::Valid,
 }
 },
 /// 上传素材响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UploadMediaRespData {
     /// 素材token
     pub file_token: String,
@@ -353,7 +353,7 @@ ResponseFormat::Data,
     },
 },
 /// 分片上传预上传请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UploadPrepareRequest {
     /// 文件名称
     pub file_name: String,
@@ -367,8 +367,8 @@ pub struct UploadPrepareRequest {
     pub checksum: Option<String>,
 }
 impl UploadPrepareRequest {
-    pub fn new(file_name: impl Into<String>, parent_token: impl Into<String>, size: i64) -> Self {,
-Self {,
+    pub fn new(file_name: impl Into<String>, parent_token: impl Into<String>, size: i64) -> Self {
+Self {
             file_name: file_name.into(),
             parent_token: parent_token.into(),
             size,
@@ -378,7 +378,7 @@ Self {,
 }
 },
 /// 分片上传预上传响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UploadPrepareRespData {
     /// 上传事务ID
     pub upload_id: String,
@@ -393,7 +393,7 @@ ResponseFormat::Data,
     },
 },
 /// 上传分片请求参数,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UploadPartRequest {
     /// 请求体,
 #[serde(skip)],
@@ -408,7 +408,7 @@ pub struct UploadPartRequest {
     checksum: Option<String>,
 }
 impl UploadPartRequest {
-    pub fn builder() -> UploadPartRequestBuilder {,
+    pub fn w+.*{
 UploadPartRequestBuilder::default(),
     },
 },
@@ -418,37 +418,37 @@ pub struct UploadPartRequestBuilder {
     request: UploadPartRequest,
 }
 impl UploadPartRequestBuilder {
-    pub fn upload_id(mut self, upload_id: impl ToString) -> Self {,
+    pub fn upload_id(mut self, upload_id: impl ToString) -> Self {
 self.request.upload_id = upload_id.to_string();
         self,
 }
 
-    pub fn seq(mut self, seq: i32) -> Self {,
+    pub fn seq(mut self, seq: i32) -> Self {
 self.request.seq = seq;
         self,
 }
 
-    pub fn size(mut self, size: i32) -> Self {,
+    pub fn size(mut self, size: i32) -> Self {
 self.request.size = size;
         self,
 }
 
-    pub fn checksum(mut self, checksum: impl ToString) -> Self {,
+    pub fn checksum(mut self, checksum: impl ToString) -> Self {
 self.request.checksum = Some(checksum.to_string());
         self,
 }
 
-    pub fn file_chunk(mut self, chunk: Vec<u8>) -> Self {,
+    pub fn file_chunk(mut self, chunk: Vec<u8>) -> Self {
 self.request.api_req.file = chunk;
         self,
 },
-pub fn build(mut self) -> UploadPartRequest {,
+pub fn w+.*{
         self.request.api_req.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 上传分片响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UploadPartRespData {
     /// 分片ETag
     pub etag: String,
@@ -459,7 +459,7 @@ ResponseFormat::Data,
     },
 },
 /// 完成上传请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UploadFinishRequest {
     /// 上传事务ID
     pub upload_id: String,
@@ -467,7 +467,7 @@ pub struct UploadFinishRequest {
     pub block_infos: Vec<BlockInfo>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 pub struct BlockInfo {
     /// 分片ETag
     pub etag: String,
@@ -475,15 +475,15 @@ pub struct BlockInfo {
     pub seq: i32,
 }
 impl UploadFinishRequest {
-    pub fn new(upload_id: impl Into<String>, block_infos: Vec<BlockInfo>) -> Self {,
-Self {,
+    pub fn new(upload_id: impl Into<String>, block_infos: Vec<BlockInfo>) -> Self {
+Self {
             upload_id: upload_id.into(),
             block_infos,
         },
 }
 },
 /// 完成上传响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UploadFinishRespData {
     /// 素材token
     pub file_token: String,
@@ -494,20 +494,20 @@ ResponseFormat::Data,
     },
 },
 /// 下载素材请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DownloadMediaRequest {
     /// 素材token
     pub file_token: String,
 }
 impl DownloadMediaRequest {
-    pub fn new(file_token: impl Into<String>) -> Self {,
-Self {,
+    pub fn new(file_token: impl Into<String>) -> Self {
+Self {
             file_token: file_token.into(),
         },
 }
 },
 /// 批量获取临时下载链接请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchGetTmpDownloadUrlRequest {
     /// 素材token列表
     pub file_tokens: Vec<String>,
@@ -518,13 +518,13 @@ impl BatchGetTmpDownloadUrlRequest {
 }
 },
 /// 批量获取临时下载链接响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchGetTmpDownloadUrlRespData {
     /// 临时下载链接信息
     pub tmp_download_urls: Vec<TmpDownloadUrl>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 pub struct TmpDownloadUrl {
     /// 素材token
     pub file_token: String,
@@ -552,7 +552,7 @@ impl_executable_builder_owned!(
     upload_part,
 );
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use rstest::*;
 fn mock_config() -> Config {,

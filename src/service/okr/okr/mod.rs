@@ -19,7 +19,7 @@ pub struct OkrContentService {
     pub config: Config,
 }
 /// 用户 OKR 列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserOkrListResponse {
     /// OKR 列表
 #[serde(flatten)],
@@ -31,7 +31,7 @@ ResponseFormat::Data,
     }
 }
 /// 批量 OKR 响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchOkrResponse {
     /// OKR 列表
     pub okrs: Vec<Okr>,
@@ -155,7 +155,7 @@ let api_req = ApiRequest {,
 }
 }
 /// 用户 OKR 列表查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct UserOkrListRequest {
     /// 用户ID筛选
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -174,7 +174,7 @@ pub struct UserOkrListRequest {
     pub page_size: Option<i32>,
 }
 /// 批量获取 OKR 请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchOkrRequest {
     /// OKR ID 列表
     pub okr_ids: Vec<String>,

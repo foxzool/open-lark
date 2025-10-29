@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 /// 建筑物信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Building {
     /// 建筑物ID
 #[serde(rename = "building_id")],
@@ -26,7 +26,7 @@ pub struct Building {
     pub building_status: BuildingStatus,
 }
 /// 建筑物状态
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum BuildingStatus {,
 /// 启用
@@ -35,7 +35,7 @@ pub enum BuildingStatus {,
     Disabled,
 }
 /// 楼层信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Floor {
     /// 楼层ID
 #[serde(rename = "floor_id")],
@@ -51,7 +51,7 @@ pub struct Floor {
     pub floor_plan_url: Option<String>,
 }
 /// 会议室信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MeetingRoom {
     /// 会议室ID
 #[serde(rename = "room_id")],
@@ -95,7 +95,7 @@ pub struct MeetingRoom {
     pub update_time: Option<String>,
 }
 /// 会议室状态
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum RoomStatus {,
 /// 可用
@@ -108,7 +108,7 @@ pub enum RoomStatus {,
     Deleted,
 }
 /// 会议室类型
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum RoomType {,
 /// 普通会议室
@@ -121,7 +121,7 @@ pub enum RoomType {,
     Lounge,
 }
 /// 设备信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Equipment {
     /// 设备ID
 #[serde(rename = "equipment_id")],
@@ -138,7 +138,7 @@ pub struct Equipment {
     pub description: Option<String>,
 }
 /// 设备类型
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum EquipmentType {,
 /// 投影仪
@@ -157,7 +157,7 @@ pub enum EquipmentType {,
     Network,
 }
 /// 设备状态
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum EquipmentStatus {,
 /// 正常
@@ -168,7 +168,7 @@ pub enum EquipmentStatus {,
     UnderMaintenance,
 }
 /// 预订规则
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BookingRules {
     /// 最短预订时长（分钟）
 #[serde(rename = "min_booking_duration_minutes")],
@@ -190,7 +190,7 @@ pub struct BookingRules {
     pub recurring_booking_rules: Option<RecurringBookingRules>,
 }
 /// 预订时间范围
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BookingTimeRange {
     /// 开始时间
 #[serde(rename = "start_time")],
@@ -200,7 +200,7 @@ pub struct BookingTimeRange {
     pub end_time: String,
 }
 /// 重复预订规则
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RecurringBookingRules {
     /// 是否允许重复预订
 #[serde(rename = "allow_recurring")],
@@ -213,7 +213,7 @@ pub struct RecurringBookingRules {
     pub recurrence_interval_type: RecurrenceIntervalType,
 }
 /// 重复间隔类型
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum RecurrenceIntervalType {,
 /// 每天
@@ -224,7 +224,7 @@ pub enum RecurrenceIntervalType {,
     Monthly,
 }
 /// 会议室忙闲信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FreeBusyInfo {
     /// 会议室ID
 #[serde(rename = "room_id")],
@@ -236,7 +236,7 @@ pub struct FreeBusyInfo {
     pub time_slots: Vec<TimeSlot>,
 }
 /// 时间段
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TimeSlot {
     /// 开始时间
 #[serde(rename = "start_time")],
@@ -254,7 +254,7 @@ pub struct TimeSlot {
     pub meeting_subject: Option<String>,
 }
 /// 时间段状态
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum TimeSlotStatus {,
 /// 可用
@@ -265,7 +265,7 @@ pub enum TimeSlotStatus {,
     Maintenance,
 }
 /// 预订人信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BookerInfo {
     /// 用户ID
 #[serde(rename = "user_id")],
@@ -278,7 +278,7 @@ pub struct BookerInfo {
     pub avatar: Option<String>,
 }
 /// 通用响应结构
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MeetingRoomResponse<T> {,
     /// 响应码
     pub code: i32,
@@ -288,7 +288,7 @@ pub struct MeetingRoomResponse<T> {,
     pub data: Option<T>,
 }
 /// 分页响应结构
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PaginatedMeetingRoomResponse<T> {,
     /// 响应码
     pub code: i32,
@@ -298,7 +298,7 @@ pub struct PaginatedMeetingRoomResponse<T> {,
     pub data: Option<PaginatedMeetingRoomData<T>>,
 }
 /// 分页数据
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PaginatedMeetingRoomData<T> {,
     /// 数据列表
     pub items: Option<Vec<T>>,

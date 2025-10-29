@@ -36,7 +36,7 @@ Ok(api_resp),
     },
 },
 /// 删除保护范围请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DeleteProtectRangeRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -46,31 +46,31 @@ pub struct DeleteProtectRangeRequest {
     protect_id: String,
 }
 impl DeleteProtectRangeRequest {
-    pub fn builder() -> DeleteProtectRangeRequestBuilder {,
+    pub fn w+.*{
 DeleteProtectRangeRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct DeleteProtectRangeRequestBuilder {
     request: DeleteProtectRangeRequest,
 }
 impl DeleteProtectRangeRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn protect_id(mut self, protect_id: impl ToString) -> Self {,
+    pub fn protect_id(mut self, protect_id: impl ToString) -> Self {
 self.request.protect_id = protect_id.to_string();
         self,
 },
-pub fn build(mut self) -> DeleteProtectRangeRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 删除保护范围响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct DeleteProtectRangeResponseData {
     /// 删除操作是否成功,
 #[serde(default)],

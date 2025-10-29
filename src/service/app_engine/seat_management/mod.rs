@@ -4,7 +4,7 @@
 use crate::prelude::*;
 use crate::service::app_engine::seat_management::v1::SeatManagementV1Service;
 /// 席位管理服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct SeatManagementService {
     /// v1版本API服务
     pub v1: SeatManagementV1Service,

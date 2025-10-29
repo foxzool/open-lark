@@ -13,7 +13,7 @@ use crate::prelude::*;
 use crate::service::ccm::wiki::v2::WikiV2Service;
 use crate::service::ccm::wiki::v1::WikiV1Service;
 /// 知识库服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct WikiService {
     /// v2版本API服务
     pub v2: WikiV2Service,

@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 分页响应基础结构,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PageResponse<T> {,
     /// 数据项列表
     pub items: Vec<T>,
@@ -12,7 +12,7 @@ pub struct PageResponse<T> {,
     pub has_more: Option<bool>,
 },
 /// 工作台访问数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct WorkplaceAccessData {
     /// 数据ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -46,7 +46,7 @@ pub struct WorkplaceAccessData {
     pub device_type: Option<String>,
 },
 /// 定制工作台访问数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CustomWorkplaceAccessData {
     /// 数据ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -71,7 +71,7 @@ pub struct CustomWorkplaceAccessData {
     pub action_type: Option<String>,
 },
 /// 定制工作台小组件访问数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CustomWorkplaceWidgetAccessData {
     /// 数据ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -99,7 +99,7 @@ pub struct CustomWorkplaceWidgetAccessData {
     pub click_count: Option<i32>,
 },
 /// 应用信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppInfo {
     /// 应用ID
     pub app_id: String,
@@ -126,7 +126,7 @@ pub struct AppInfo {
     pub updated_at: Option<i64>,
 },
 /// 用户常用应用,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FavouriteApp {
     /// 应用ID
     pub app_id: String,
@@ -144,7 +144,7 @@ pub struct FavouriteApp {
     pub last_used_at: Option<i64>,
 },
 /// 推荐应用,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RecommendedApp {
     /// 应用ID
     pub app_id: String,
@@ -165,7 +165,7 @@ pub struct RecommendedApp {
     pub rule_id: Option<String>,
 },
 /// 应用推荐规则,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppRecommendRule {
     /// 规则ID
     pub rule_id: String,
@@ -210,7 +210,7 @@ pub struct AppRecommendRule {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_page_response() {,

@@ -37,7 +37,7 @@ Ok(api_resp),
     },
 },
 /// 列出数据表请求,
-#[derive(Debug, Default)],
+#[derive(.*?)]
 pub struct ListTablesRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token
@@ -48,12 +48,12 @@ pub struct ListTablesRequest {
     page_size: Option<i32>,
 }
 impl ListTablesRequest {
-    pub fn builder() -> ListTablesRequestBuilder {,
+    pub fn w+.*{
 ListTablesRequestBuilder::default(),
     },
 /// 创建列出数据表请求,
-    pub fn new(app_token: impl ToString) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString) -> Self {
+Self {
             api_request: ApiRequest::default(),
             app_token: app_token.to_string(),
             page_token: None,
@@ -61,27 +61,27 @@ Self {,
         },
 }
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct ListTablesRequestBuilder {
     request: ListTablesRequest,
 }
 impl ListTablesRequestBuilder {
     /// 多维表格的 app_token
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 分页标记,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
 },
 /// 分页大小，最大值是 100,
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size.min(100));
         self,
 },
-pub fn build(self) -> ListTablesRequest {,
+pub fn w+.*{
         self.request,
 }
 },
@@ -93,7 +93,7 @@ crate::impl_executable_builder_owned!(
     BaseResponse<ListTablesResponse>,
     list,
 );
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct ListTablesResponse {
     /// 是否还有更多项
     pub has_more: bool,
@@ -105,7 +105,7 @@ pub struct ListTablesResponse {
     pub items: Vec<TableInfo>,
 }
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct TableInfo {
     /// 数据表的 table_id
     pub table_id: String,
@@ -121,7 +121,7 @@ ResponseFormat::Data,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_list_tables_request() {,

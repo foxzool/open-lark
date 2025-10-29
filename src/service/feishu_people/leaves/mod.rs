@@ -8,7 +8,7 @@
 use crate::prelude::*;
 use crate::service::feishu_people::leaves::v1::LeavesV1Service;
 /// 假期管理服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct LeavesService {
     /// v1版本API服务
     pub v1: LeavesV1Service,

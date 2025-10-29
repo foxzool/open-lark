@@ -20,7 +20,7 @@ pub struct V1 {
 }
 impl V1 {
     pub fn new() -> Self {
-Self {,
+Self {
             media: MediaService::new(config.clone()),
             minute: MinuteService::new(config.clone()),
             statistics: StatisticsService::new(config.clone()),

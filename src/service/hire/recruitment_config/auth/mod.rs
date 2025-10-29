@@ -19,7 +19,7 @@ pub struct AuthService {
     pub config: Config,
 }
 /// 角色详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RoleDetailResponse {
     /// 角色信息
     pub role: Role,
@@ -30,7 +30,7 @@ ResponseFormat::Data,
     }
 }
 /// 角色列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RoleListResponse {
     /// 角色列表
 #[serde(flatten)],
@@ -42,7 +42,7 @@ ResponseFormat::Data,
     }
 }
 /// 用户角色列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserRoleListResponse {
     /// 用户角色列表
 #[serde(flatten)],

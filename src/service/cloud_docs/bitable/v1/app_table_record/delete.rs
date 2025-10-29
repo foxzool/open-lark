@@ -11,7 +11,7 @@ use crate::core::{,
     SDKResult,
 };
 /// 删除记录请求,
-#[derive(Debug, Serialize, Default, Clone)],
+#[derive(.*?)]
 pub struct DeleteRecordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -26,15 +26,15 @@ pub struct DeleteRecordRequest {
     record_id: String,
 }
 impl DeleteRecordRequest {
-    pub fn builder() -> DeleteRecordRequestBuilder {,
+    pub fn w+.*{
 DeleteRecordRequestBuilder::default(),
     },
 pub fn new(,
         app_token: impl ToString,
         table_id: impl ToString,
         record_id: impl ToString,
-    ) -> Self {,
-Self {,
+    ) -> Self {
+Self {
             app_token: app_token.to_string(),
             table_id: table_id.to_string(),
             record_id: record_id.to_string()
@@ -42,27 +42,27 @@ Self {,
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct DeleteRecordRequestBuilder {
     request: DeleteRecordRequest,
 }
 impl DeleteRecordRequestBuilder {
     /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 数据表的唯一标识符,
-    pub fn table_id(mut self, table_id: impl ToString) -> Self {,
+    pub fn table_id(mut self, table_id: impl ToString) -> Self {
 self.request.table_id = table_id.to_string();
         self,
 },
 /// 记录的唯一标识符,
-    pub fn record_id(mut self, record_id: impl ToString) -> Self {,
+    pub fn record_id(mut self, record_id: impl ToString) -> Self {
 self.request.record_id = record_id.to_string();
         self,
 },
-pub fn build(self) -> DeleteRecordRequest {,
+pub fn w+.*{
         self.request,
 }
 },
@@ -75,7 +75,7 @@ crate::impl_executable_builder_owned!(
     delete,
 );
 /// 删除记录响应
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct DeleteRecordResponse {
     /// 是否删除成功
     pub deleted: bool,
@@ -107,7 +107,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_delete_record_request_builder() {,

@@ -13,7 +13,7 @@ use crate::service::baike::lingo::LingoService;
 use crate::service::baike::dictionary::DictionaryService;
 /// 企业词典功能服务
 #[cfg(feature = "baike")]
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct BaikeService {
     /// 词典服务
     pub lingo: LingoService,
@@ -24,7 +24,7 @@ pub struct BaikeService {
 impl BaikeService {
 /// 创建新的企业词典功能服务实例
     pub fn new() -> Self {
-Self {,
+Self {
             lingo: LingoService::new(config.clone()),
             dictionary: DictionaryService::new(config.clone()),
         }

@@ -133,7 +133,7 @@ pub fn new() -> Self {
 }
 /// 使用共享配置（实验性）
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             v4: V4::new(shared.as_ref().clone()),
         }
 }
@@ -143,7 +143,7 @@ Self {,
     ///,
 /// # 返回值
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
-pub fn validate_calendar_services_config(&self) -> bool {,
+pub fn w+.*{
         // 检查配置是否有效
 !self.v4.calendar.config.app_id.is_empty(),
             && !self.v4.calendar.config.app_secret.is_empty(),
@@ -163,7 +163,7 @@ pub fn validate_calendar_services_config(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_calendar_service_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "CalendarService{{ services: 1, sub_services: 10, app_id: {} api_version: v4, calendar_management: true, scheduling: true }}",
             self.v4.calendar.config.app_id,
@@ -178,7 +178,7 @@ pub fn get_calendar_service_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_calendar_feature(&self, calendar_feature: &str) -> bool {,
+    pub fn w+.*{
 matches!(,
             calendar_feature,
             "calendar_management",
@@ -216,7 +216,7 @@ matches!(,
     ///,
 /// # 返回值
     /// 如果所有服务配置有效返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         !self.v4.calendar.config.app_id.is_empty(),
 && !self.v4.calendar.config.app_secret.is_empty(),
             && !self.v4.calendar_acl.config.app_id.is_empty(),
@@ -236,7 +236,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含各类型服务数量的统计信息
-pub fn get_calendar_categories_statistics(&self) -> String {,
+pub fn w+.*{
         "CalendarService Categories{ core: 1, acl: 1, events: 1, meetings: 2, attendees: 1, settings: 1, integrations: 2, total: 10 }".to_string(),
 }
 /// 获取日历服务状态摘要
@@ -245,7 +245,7 @@ pub fn get_calendar_categories_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各服务状态信息的字符串
-pub fn get_calendar_service_status_summary(&self) -> String {,
+pub fn w+.*{
         let config_healthy = !self.v4.calendar.config.app_id.is_empty();
 let core_healthy = config_healthy;
         let acl_healthy = config_healthy;
@@ -266,7 +266,7 @@ let integrations_healthy = config_healthy;
     ///,
 /// # 返回值
     /// 包含日历能力矩阵信息的字符串
-pub fn get_calendar_capabilities_matrix(&self) -> String {,
+pub fn w+.*{
         format!(
             "CalendarService Capabilities{{ management: {} scheduling: {} collaboration: true, integration: true, enterprise: true }}",
             self.supports_calendar_feature("calendar_management"),
@@ -279,7 +279,7 @@ pub fn get_calendar_capabilities_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含日程管理能力信息的字符串
-pub fn get_scheduling_capabilities(&self) -> String {,
+pub fn w+.*{
         "CalendarService Scheduling{ events: true, recurring: true, reminders: true, conflicts: true, bulk: true }".to_string(),
 }
 /// 获取会议管理能力矩阵
@@ -288,7 +288,7 @@ pub fn get_scheduling_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含会议管理能力信息的字符串
-pub fn get_meeting_management_capabilities(&self) -> String {,
+pub fn w+.*{
         "CalendarService Meeting{ rooms: true, minutes: true, chat: true, attendees: true, resources: true }".to_string(),
 }
 /// 获取协作功能能力矩阵
@@ -297,7 +297,7 @@ pub fn get_meeting_management_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含协作功能能力信息的字符串
-pub fn get_collaboration_capabilities(&self) -> String {,
+pub fn w+.*{
         "CalendarService Collaboration{ sharing: true, permissions: true, notifications: true, sync: true, multi_user: true }".to_string(),
 }
 /// 获取集成能力矩阵
@@ -306,7 +306,7 @@ pub fn get_collaboration_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含集成能力信息的字符串
-pub fn get_integration_capabilities(&self) -> String {,
+pub fn w+.*{
         "CalendarService Integration{ exchange: true, caldav: true, apis: true, mobile: true, third_party: true }".to_string(),
 }
 /// 获取企业级能力矩阵
@@ -315,7 +315,7 @@ pub fn get_integration_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含企业级能力信息的字符串
-pub fn get_enterprise_capabilities(&self) -> String {,
+pub fn w+.*{
         "CalendarService Enterprise{ security: true, compliance: true, analytics: true, admin: true, custom_policies: true }".to_string(),
 }
 /// 获取日历性能指标
@@ -324,7 +324,7 @@ pub fn get_enterprise_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含性能指标信息的字符串
-pub fn get_calendar_performance_metrics(&self) -> String {,
+pub fn w+.*{
         "CalendarService Performance{ scalability: enterprise, reliability: 99.9%, latency: <50ms, concurrency: high, availability: 99.95% }".to_string(),
 }
 /// 获取日历应用场景矩阵
@@ -333,7 +333,7 @@ pub fn get_calendar_performance_metrics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含应用场景信息的字符串
-pub fn get_calendar_use_cases_matrix(&self) -> String {,
+pub fn w+.*{
         "CalendarService UseCases{ team_coordination: true, resource_booking: true, project_planning: true, executive_assistance: true, cross_department: true }".to_string(),
 }
 }
@@ -350,8 +350,8 @@ fn service_name() -> &'static str,
     }
 }
 impl Clone for CalendarService {,
-    fn clone(&self) -> Self {,
-Self {,
+    fn clone(&self) -> Self {
+Self {
             v4: V4::new(self.v4.calendar.config.clone()),
         }
 }
@@ -367,7 +367,7 @@ f.debug_struct()
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 /// 创建测试配置

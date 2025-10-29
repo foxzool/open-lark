@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 分页响应基础结构,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PageResponse<T> {,
     /// 数据项列表
     pub items: Vec<T>,
@@ -12,7 +12,7 @@ pub struct PageResponse<T> {,
     pub has_more: Option<bool>,
 },
 /// 用户类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum UserType {,
 /// 员工,
@@ -25,7 +25,7 @@ pub enum UserType {,
     Temporary,
 },
 /// 用户状态,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum UserStatus {,
 /// 活跃,
@@ -38,7 +38,7 @@ pub enum UserStatus {,
     Pending,
 },
 /// 门禁用户信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AcsUser {
     /// 用户ID
     pub user_id: String,
@@ -73,7 +73,7 @@ pub struct AcsUser {
     pub updated_at: Option<i64>,
 },
 /// 权限组状态,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum RuleStatus {,
 /// 活跃,
@@ -82,7 +82,7 @@ pub enum RuleStatus {,
     Disabled,
 },
 /// 权限组信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RuleExternal {
     /// 权限组ID
     pub rule_id: String,
@@ -114,7 +114,7 @@ pub struct RuleExternal {
     pub updated_at: Option<i64>,
 },
 /// 访客状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum VisitorStatus {,
 /// 活跃,
@@ -125,7 +125,7 @@ pub enum VisitorStatus {,
     CheckedOut,
 },
 /// 访客信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Visitor {
     /// 访客ID
     pub visitor_id: String,
@@ -160,7 +160,7 @@ pub struct Visitor {
     pub created_at: Option<i64>,
 },
 /// 设备类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum DeviceType {,
 /// 门禁设备,
@@ -173,7 +173,7 @@ pub enum DeviceType {,
     ElevatorController,
 },
 /// 设备状态,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum DeviceStatus {,
 /// 在线,
@@ -186,7 +186,7 @@ pub enum DeviceStatus {,
     Maintenance,
 },
 /// 门禁设备信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Device {
     /// 设备ID
     pub device_id: String,
@@ -218,7 +218,7 @@ pub struct Device {
     pub updated_at: Option<i64>,
 },
 /// 访问类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum AccessType {,
 /// 进入,
@@ -227,7 +227,7 @@ pub enum AccessType {,
     Exit,
 },
 /// 访问方式,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum AccessMethod {,
 /// 人脸识别,
@@ -242,7 +242,7 @@ pub enum AccessMethod {,
     Manual,
 },
 /// 访问结果,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum AccessResult {,
 /// 成功,
@@ -255,7 +255,7 @@ pub enum AccessResult {,
     Timeout,
 },
 /// 门禁访问记录,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AccessRecord {
     /// 记录ID
     pub record_id: String,
@@ -288,7 +288,7 @@ pub struct AccessRecord {
     pub created_at: Option<i64>,
 },
 /// 人脸图片信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FaceImage {
     /// 图片ID
     pub image_id: String,
@@ -307,7 +307,7 @@ pub struct FaceImage {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_page_response_serialization() {,

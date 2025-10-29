@@ -3,7 +3,7 @@ use serde_json::Value;
 use std::collections::HashMap;
 // ============ 员工花名册相关结构 ============,
 /// 批量获取员工花名册信息请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EmployeeListRequest {
     /// 分页大小，最大值100,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -32,7 +32,7 @@ pub struct EmployeeListRequest {
     pub fields: Option<Vec<String>>,
 },
 /// 员工信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Employee {
     /// 员工ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -105,7 +105,7 @@ pub struct Employee {
     pub custom_fields: Option<HashMap<String, Value>>,
 },
 /// 员工状态信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EmployeeStatus {
     /// 员工状态：active(在职)、inactive(离职)、trial(试用期)等,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -121,7 +121,7 @@ pub struct EmployeeStatus {
     pub resignation_reason: Option<String>,
 },
 /// 员工部门信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EmployeeDepartment {
     /// 部门ID（根据department_id_type返回对应类型）,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -137,7 +137,7 @@ pub struct EmployeeDepartment {
     pub department_path: Option<String>,
 },
 /// 员工职位信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EmployeeJob {
     /// 职位名称,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -162,7 +162,7 @@ pub struct EmployeeJob {
     pub work_location: Option<String>,
 },
 /// 员工入职信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EmployeeHire {
     /// 入职日期,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -181,7 +181,7 @@ pub struct EmployeeHire {
     pub contract_end_date: Option<String>,
 },
 /// 员工个人信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EmployeePersonal {
     /// 国籍,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -209,7 +209,7 @@ pub struct EmployeePersonal {
     pub highest_education: Option<String>,
 },
 /// 教育经历,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EmployeeEducation {
     /// 学校名称,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -228,7 +228,7 @@ pub struct EmployeeEducation {
     pub end_date: Option<String>,
 },
 /// 工作经历,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EmployeeWorkExperience {
     /// 公司名称,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -247,7 +247,7 @@ pub struct EmployeeWorkExperience {
     pub description: Option<String>,
 },
 /// 紧急联系人,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EmergencyContact {
     /// 姓名,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -263,7 +263,7 @@ pub struct EmergencyContact {
     pub address: Option<String>,
 },
 /// 银行卡信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BankAccount {
     /// 银行名称,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -279,7 +279,7 @@ pub struct BankAccount {
     pub account_type: Option<String>,
 },
 /// 社保信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SocialSecurity {
     /// 社保号,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -292,7 +292,7 @@ pub struct SocialSecurity {
     pub social_security_location: Option<String>,
 },
 /// 分页响应,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PageResponse<T> {,
     /// 是否还有更多数据,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -306,7 +306,7 @@ pub struct PageResponse<T> {,
 },
 // ============ 附件下载相关结构 ============,
 /// 下载人员附件请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EmployeeAttachmentRequest {
     /// 员工ID
     pub employee_id: String,
@@ -317,7 +317,7 @@ pub struct EmployeeAttachmentRequest {
     pub user_id_type: Option<String>,
 },
 /// 附件信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EmployeeAttachment {
     /// 附件ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -342,7 +342,7 @@ pub struct EmployeeAttachment {
     pub description: Option<String>,
 },
 /// 附件下载响应,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AttachmentDownloadResponse {
     /// 文件内容（base64编码）,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -359,7 +359,7 @@ pub struct AttachmentDownloadResponse {
 },
 // ============ 通用响应结构 ============,
 /// EHR响应包装器
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EhrResponse<T> {,
     /// 响应数据,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -373,7 +373,7 @@ pub struct EhrResponse<T> {,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

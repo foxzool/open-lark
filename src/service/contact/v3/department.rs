@@ -26,7 +26,7 @@ impl DepartmentService {
     ///,
 /// # 返回值,
     /// 配置对象的引用,
-pub fn config(&self) -> &Config {,
+pub fn w+.*{
         &self.config,
 },
 /// 创建部门,
@@ -231,7 +231,7 @@ Ok(resp.data.unwrap_or_default()),
 },
 // 请求/响应结构体定义,
 /// 创建部门请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateDepartmentRequest {
     /// 部门信息
     pub department: Department,
@@ -246,7 +246,7 @@ pub struct CreateDepartmentRequest {
     pub client_token: Option<String>,
 },
 /// 创建部门响应,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct CreateDepartmentResponse {
     /// 部门信息
     pub department: Department,
@@ -257,7 +257,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 /// 修改部门请求,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PatchDepartmentRequest {
     /// 部门信息
     pub department: Department,
@@ -269,7 +269,7 @@ pub struct PatchDepartmentRequest {
     pub department_id_type: Option<String>,
 },
 /// 修改部门响应,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct PatchDepartmentResponse {
     /// 部门信息
     pub department: Department,
@@ -280,7 +280,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 /// 更新部门请求,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateDepartmentRequest {
     /// 部门信息
     pub department: Department,
@@ -292,7 +292,7 @@ pub struct UpdateDepartmentRequest {
     pub department_id_type: Option<String>,
 },
 /// 更新部门响应,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct UpdateDepartmentResponse {
     /// 部门信息
     pub department: Department,
@@ -303,7 +303,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 /// 更新部门ID请求,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateDepartmentIdRequest {
     /// 新的部门ID
     pub new_department_id: String,
@@ -320,7 +320,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 /// 获取部门请求,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetDepartmentRequest {
     /// 用户 ID 类型,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -330,7 +330,7 @@ pub struct GetDepartmentRequest {
     pub department_id_type: Option<String>,
 },
 /// 获取部门响应,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct GetDepartmentResponse {
     /// 部门信息
     pub department: Department,
@@ -341,7 +341,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 /// 批量获取部门请求,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchGetDepartmentsRequest {
     /// 部门ID列表
     pub department_ids: Vec<String>,
@@ -353,7 +353,7 @@ pub struct BatchGetDepartmentsRequest {
     pub department_id_type: Option<String>,
 },
 /// 批量获取部门响应,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct BatchGetDepartmentsResponse {
     /// 部门列表
     pub items: Vec<Department>,
@@ -364,7 +364,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 /// 获取子部门列表请求,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetChildrenDepartmentsRequest {
     /// 父部门ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -386,7 +386,7 @@ pub struct GetChildrenDepartmentsRequest {
     pub page_token: Option<String>,
 },
 /// 获取子部门列表响应,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct GetChildrenDepartmentsResponse {
     /// 部门列表
     pub items: Vec<Department>,
@@ -403,7 +403,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 /// 获取父部门请求,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetParentDepartmentRequest {
     /// 部门ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -416,7 +416,7 @@ pub struct GetParentDepartmentRequest {
     pub department_id_type: Option<String>,
 },
 /// 获取父部门响应,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct GetParentDepartmentResponse {
     /// 部门列表
     pub items: Vec<Department>,
@@ -427,7 +427,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 /// 搜索部门请求,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchDepartmentsRequest {
     /// 搜索关键词
     pub query: String,
@@ -445,7 +445,7 @@ pub struct SearchDepartmentsRequest {
     pub department_id_type: Option<String>,
 },
 /// 搜索部门响应,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct SearchDepartmentsResponse {
     /// 部门列表
     pub items: Vec<Department>,
@@ -462,7 +462,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 /// 删除部门请求,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DeleteDepartmentRequest {
     /// 部门 ID 类型,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -477,7 +477,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::config::Config;
 use crate::service::contact::models::Department;

@@ -37,7 +37,7 @@ pub struct V1 {
 }
 impl V1 {
     pub fn new() -> Self {
-Self {,
+Self {
             agent: agent::AgentService::new(config.clone()),
             agent_schedule: agent_schedule::AgentScheduleService::new(config.clone()),
             agent_skill: agent_skill::AgentSkillService::new(config.clone()),
@@ -55,7 +55,7 @@ Self {,
 }
 /// 克隆V1服务实例（手动实现）
     pub fn clone_v1() -> Self {
-Self {,
+Self {
             agent: agent::AgentService::new(self.agent.config.clone()),
             agent_schedule: agent_schedule::AgentScheduleService::new(
                 self.agent_schedule.config.clone(),
@@ -80,7 +80,7 @@ Self {,
 }
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
     use crate::core::{config::Config, constants::AppType};
 fn create_test_config() -> Config {,

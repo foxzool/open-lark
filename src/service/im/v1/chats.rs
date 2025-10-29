@@ -12,8 +12,8 @@ impl ChatsService {
 }
 }
 impl Clone for ChatsService {,
-    fn clone(&self) -> Self {,
-Self {,
+    fn clone(&self) -> Self {
+Self {
             config: self.config.clone(),
         },
 }

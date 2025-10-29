@@ -23,7 +23,7 @@ pub struct GetCandidatesService {
 }
 impl GetCandidatesService {
     pub fn new() -> Self {
-Self {,
+Self {
             referral: ReferralService::new(config.clone()),
             website: WebsiteService::new(config.clone()),
             agency: AgencyService::new(config.clone()),

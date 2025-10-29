@@ -13,7 +13,7 @@ pub fn new() -> Self {
 }
 }
 impl Default for EventsService {,
-    fn default() -> Self {,
+    fn default() -> Self {
 Self::new(),
     }
 }
@@ -53,7 +53,7 @@ fn get_handler_name(&self) -> &str {,
 }
 }
 /// 事件类型枚举
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum MomentsEventType {,
     /// 帖子发布
     PostCreated,
@@ -71,7 +71,7 @@ pub enum MomentsEventType {,
     PostStatisticsUpdated,
 }
 /// 通用事件包装器
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(tag = "event_type")],
 pub enum MomentsEvent {,
 /// 帖子事件
@@ -138,7 +138,7 @@ self.handler.handle_post_statistics_updated(event);
 }
     }
 /// 获取处理器引用
-    pub fn get_handler(&self) -> &H {,
+    pub fn w+.*{
 &self.handler,
     }
 }

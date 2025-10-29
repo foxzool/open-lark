@@ -113,12 +113,12 @@ Ok(resp.data.unwrap_or_default()),
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateJobFamilyRequest {
     pub job_family: JobFamily,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct CreateJobFamilyResponse {
     pub job_family: JobFamily,
 }
@@ -128,12 +128,12 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateJobFamilyRequest {
     pub job_family: JobFamily,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct UpdateJobFamilyResponse {
     pub job_family: JobFamily,
 }
@@ -143,7 +143,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct GetJobFamilyResponse {
     pub job_family: JobFamily,
 }
@@ -153,7 +153,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListJobFamiliesRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
@@ -161,7 +161,7 @@ pub struct ListJobFamiliesRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ListJobFamiliesResponse {
     pub items: Vec<JobFamily>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -183,7 +183,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::config::Config;
 #[test],

@@ -20,7 +20,7 @@ pub struct ApplicationConfigService {
     pub config: Config,
 },
 /// 人才标签列表响应,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TalentTagListResponse {
     /// 标签列表,
 #[serde(flatten)],
@@ -32,7 +32,7 @@ ResponseFormat::Data,
     },
 },
 /// 信息登记表列表响应,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RegistrationFormListResponse {
     /// 登记表列表,
 #[serde(flatten)],
@@ -45,7 +45,7 @@ ResponseFormat::Data,
 }
 impl ApplicationConfigService {
     /// 创建候选人配置服务实例,
-pub fn new(config: Config) -> Self {,
+pub fn new(config: Config) -> Self {
         Self { config },
 },
 /// 获取人才标签信息列表,
@@ -132,7 +132,7 @@ if let Some(page_size) = request.page_size {,
 }
 },
 /// 人才标签查询请求,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct TalentTagListRequest {
     /// 标签类型筛选,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -145,7 +145,7 @@ pub struct TalentTagListRequest {
     pub page_size: Option<i32>,
 },
 /// 人才标签,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TalentTag {
     /// 标签ID
     pub tag_id: String,
@@ -166,7 +166,7 @@ pub struct TalentTag {
     pub create_time: Option<i64>,
 },
 /// 人才标签类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum TalentTagType {,
 /// 技能标签,
@@ -181,7 +181,7 @@ pub enum TalentTagType {,
     Custom,
 },
 /// 信息登记表查询请求,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct RegistrationFormListRequest {
     /// 登记表类型筛选,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -194,7 +194,7 @@ pub struct RegistrationFormListRequest {
     pub page_size: Option<i32>,
 },
 /// 信息登记表,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RegistrationForm {
     /// 登记表ID
     pub form_id: String,
@@ -212,7 +212,7 @@ pub struct RegistrationForm {
     pub is_active: Option<bool>,
 },
 /// 信息登记表类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum RegistrationFormType {,
 /// 候选人基本信息,
@@ -229,7 +229,7 @@ pub enum RegistrationFormType {,
     Custom,
 },
 /// 表单字段,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FormField {
     /// 字段ID
     pub field_id: String,
@@ -244,7 +244,7 @@ pub struct FormField {
     pub is_required: Option<bool>,
 },
 /// 表单字段类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum FormFieldType {,
 /// 文本输入,

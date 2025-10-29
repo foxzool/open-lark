@@ -38,7 +38,7 @@ Ok(api_resp),
     },
 },
 /// 批量更新条件格式请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateConditionFormatsRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -50,41 +50,41 @@ pub struct UpdateConditionFormatsRequest {
     condition_formats: Vec<UpdateConditionFormatRule>,
 }
 impl UpdateConditionFormatsRequest {
-    pub fn builder() -> UpdateConditionFormatsRequestBuilder {,
+    pub fn w+.*{
 UpdateConditionFormatsRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct UpdateConditionFormatsRequestBuilder {
     request: UpdateConditionFormatsRequest,
 }
 impl UpdateConditionFormatsRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 }
 
-    pub fn condition_formats(mut self, condition_formats: Vec<UpdateConditionFormatRule>) -> Self {,
+    pub fn condition_formats(mut self, condition_formats: Vec<UpdateConditionFormatRule>) -> Self {
 self.request.condition_formats = condition_formats;
         self,
 }
 
-    pub fn add_condition_format(mut self, condition_format: UpdateConditionFormatRule) -> Self {,
+    pub fn add_condition_format(mut self, condition_format: UpdateConditionFormatRule) -> Self {
 self.request.condition_formats.push(condition_format);
         self,
 },
-pub fn build(mut self) -> UpdateConditionFormatsRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 更新条件格式规则,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateConditionFormatRule {
     /// 条件格式 ID
     pub cf_id: String,
@@ -93,15 +93,15 @@ pub struct UpdateConditionFormatRule {
     pub rule: ConditionFormatRule,
 }
 impl UpdateConditionFormatRule {
-    pub fn new(cf_id: impl ToString, rule: ConditionFormatRule) -> Self {,
-Self {,
+    pub fn new(cf_id: impl ToString, rule: ConditionFormatRule) -> Self {
+Self {
             cf_id: cf_id.to_string(),
             rule,
         },
 }
 },
 /// 批量更新条件格式响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct UpdateConditionFormatsResponseData {
     /// 更新后的条件格式列表
     pub items: Vec<ConditionFormatInfo>,

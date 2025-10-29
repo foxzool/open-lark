@@ -20,7 +20,7 @@ pub struct DataReportService {
     pub config: Config,
 }
 /// 部门维度数据报表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DepartmentDataReportResponse {
     /// 分页响应数据
 #[serde(flatten)],
@@ -32,7 +32,7 @@ ResponseFormat::Data,
     }
 }
 /// 用户维度数据报表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserDataReportResponse {
     /// 分页响应数据
 #[serde(flatten)],

@@ -119,12 +119,12 @@ Ok(resp.data.unwrap_or_default()),
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateFunctionalRoleRequest {
     pub role_name: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct CreateFunctionalRoleResponse {
     pub role_id: String,
 }
@@ -134,7 +134,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateFunctionalRoleRequest {
     pub role_name: String,
 }
@@ -147,7 +147,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct GetFunctionalRoleResponse {
     pub role: FunctionalRole,
 }
@@ -157,7 +157,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListFunctionalRolesRequest {
     /// 分页大小,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -167,7 +167,7 @@ pub struct ListFunctionalRolesRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ListFunctionalRolesResponse {
     pub roles: Vec<FunctionalRole>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -181,7 +181,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct FunctionalRole {
     /// 角色ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -199,7 +199,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::config::Config;
 #[test],

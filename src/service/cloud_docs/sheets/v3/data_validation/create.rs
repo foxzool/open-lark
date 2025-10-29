@@ -37,7 +37,7 @@ Ok(api_resp),
     },
 },
 /// 设置下拉列表请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SetDataValidationRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -49,36 +49,36 @@ pub struct SetDataValidationRequest {
     data_validation: DataValidationRule,
 }
 impl SetDataValidationRequest {
-    pub fn builder() -> SetDataValidationRequestBuilder {,
+    pub fn w+.*{
 SetDataValidationRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct SetDataValidationRequestBuilder {
     request: SetDataValidationRequest,
 }
 impl SetDataValidationRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 }
 
-    pub fn data_validation(mut self, data_validation: DataValidationRule) -> Self {,
+    pub fn data_validation(mut self, data_validation: DataValidationRule) -> Self {
 self.request.data_validation = data_validation;
         self,
 },
-pub fn build(mut self) -> SetDataValidationRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 数据校验规则,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataValidationRule {
     /// 数据校验类型
     pub condition_type: String,
@@ -102,8 +102,8 @@ pub struct DataValidationRule {
 }
 impl DataValidationRule {
     /// 创建下拉列表校验
-    pub fn dropdown(range: impl ToString, options: Vec<String>) -> Self {,
-Self {,
+    pub fn dropdown(range: impl ToString, options: Vec<String>) -> Self {
+Self {
             condition_type: "dropdown".to_string(),
             range: range.to_string(),
             condition_values: Some(options),
@@ -114,8 +114,8 @@ Self {,
         },
 },
 /// 创建数字范围校验,
-    pub fn number_range(range: impl ToString, min: f64, max: f64) -> Self {,
-Self {,
+    pub fn number_range(range: impl ToString, min: f64, max: f64) -> Self {
+Self {
             condition_type: "number_between".to_string(),
             range: range.to_string(),
             condition_values: Some(vec![min.to_string(), max.to_string()]),
@@ -126,8 +126,8 @@ Self {,
         },
 },
 /// 创建文本长度校验,
-    pub fn text_length(range: impl ToString, min_length: u32, max_length: u32) -> Self {,
-Self {,
+    pub fn text_length(range: impl ToString, min_length: u32, max_length: u32) -> Self {
+Self {
             condition_type: "text_length".to_string(),
             range: range.to_string(),
             condition_values: Some(vec![min_length.to_string(), max_length.to_string()]),
@@ -138,23 +138,23 @@ Self {,
         },
 },
 /// 设置输入提示,
-    pub fn with_input_message(mut self, message: impl ToString) -> Self {,
+    pub fn with_input_message(mut self, message: impl ToString) -> Self {
 self.input_message = Some(message.to_string());
         self,
 },
 /// 设置错误提示,
-    pub fn with_error_message(mut self, message: impl ToString) -> Self {,
+    pub fn with_error_message(mut self, message: impl ToString) -> Self {
 self.error_message = Some(message.to_string());
         self,
 },
 /// 设置是否严格模式,
-    pub fn with_strict(mut self, strict: bool) -> Self {,
+    pub fn with_strict(mut self, strict: bool) -> Self {
 self.strict = strict;
         self,
 }
 },
 /// 设置下拉列表响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct SetDataValidationResponseData {
     /// 数据校验 ID
     pub data_validation_id: String,

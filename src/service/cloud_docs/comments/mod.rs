@@ -32,7 +32,7 @@ impl CommentsService {
 }
 /// 使用共享配置（实验性）
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             config: (*shared).clone(),
         }
 }

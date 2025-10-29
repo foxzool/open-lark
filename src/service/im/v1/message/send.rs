@@ -153,7 +153,7 @@ api_resp.into_result().map(|resp| resp.data),
     },
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use super::*;
     use crate::{
         core::{config::Config, constants::AccessTokenType, req_option::RequestOption},
@@ -162,7 +162,7 @@ use super::*;
 use reqwest::Method;
     use serde_json;
 // Mock Transport for testing,
-    #[derive(Debug)],
+    #[derive(.*?)]
 #[allow(dead_code)],
     struct MockTransport {
         should_fail: bool,
@@ -171,19 +171,19 @@ use reqwest::Method;
     },
 #[allow(dead_code)],
     impl MockTransport {
-fn new() -> Self {,
+fn new() -> Self {
             Self {
                 should_fail: false,
                 response_data: None,
                 captured_request: None,
             },
 },
-fn with_failure(mut self) -> Self {,
+fn with_failure(mut self) -> Self {
             self.should_fail = true;
 self,
         }
 
-        fn with_response(mut self, data: serde_json::Value) -> Self {,
+        fn with_response(mut self, data: serde_json::Value) -> Self {
 self.response_data = Some(data);
             self,
 },
@@ -192,7 +192,7 @@ fn get_captured_request(&self) -> Option<&ApiRequest> {,
 }
     }
 impl Default for MockTransport {,
-        fn default() -> Self {,
+        fn default() -> Self {
 Self::new(),
         },
 },

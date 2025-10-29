@@ -20,7 +20,7 @@ use crate::,
     service::bitable::v1::form::FormQuestion,
 };
 /// 更新表单问题请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct PatchFormQuestionRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -50,15 +50,15 @@ pub struct PatchFormQuestionRequest {
     setting: Option<serde_json::Value>,
 }
 impl PatchFormQuestionRequest {
-    pub fn builder() -> PatchFormQuestionRequestBuilder {,
+    pub fn w+.*{
 PatchFormQuestionRequestBuilder::default(),
     },
 pub fn new(,
         app_token: impl ToString,
         form_id: impl ToString,
         question_id: impl ToString,
-    ) -> Self {,
-Self {,
+    ) -> Self {
+Self {
             app_token: app_token.to_string(),
             form_id: form_id.to_string(),
             question_id: question_id.to_string()
@@ -66,52 +66,52 @@ Self {,
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct PatchFormQuestionRequestBuilder {
     request: PatchFormQuestionRequest,
 }
 impl PatchFormQuestionRequestBuilder {
     /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 表单ID,
-    pub fn form_id(mut self, form_id: impl ToString) -> Self {,
+    pub fn form_id(mut self, form_id: impl ToString) -> Self {
 self.request.form_id = form_id.to_string();
         self,
 },
 /// 问题ID,
-    pub fn question_id(mut self, question_id: impl ToString) -> Self {,
+    pub fn question_id(mut self, question_id: impl ToString) -> Self {
 self.request.question_id = question_id.to_string();
         self,
 },
 /// 问题标题,
-    pub fn title(mut self, title: impl ToString) -> Self {,
+    pub fn title(mut self, title: impl ToString) -> Self {
 self.request.title = Some(title.to_string());
         self,
 },
 /// 问题描述,
-    pub fn description(mut self, description: impl ToString) -> Self {,
+    pub fn description(mut self, description: impl ToString) -> Self {
 self.request.description = Some(description.to_string());
         self,
 },
 /// 是否必填,
-    pub fn required(mut self, required: bool) -> Self {,
+    pub fn required(mut self, required: bool) -> Self {
 self.request.required = Some(required);
         self,
 },
 /// 是否可见,
-    pub fn visible(mut self, visible: bool) -> Self {,
+    pub fn visible(mut self, visible: bool) -> Self {
 self.request.visible = Some(visible);
         self,
 },
 /// 问题设置,
-    pub fn setting(mut self, setting: serde_json::Value) -> Self {,
+    pub fn setting(mut self, setting: serde_json::Value) -> Self {
 self.request.setting = Some(setting);
         self,
 },
-pub fn build(mut self) -> PatchFormQuestionRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -124,7 +124,7 @@ impl_executable_builder_owned!(,
     patch,
 );
 /// 更新表单问题响应
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct PatchFormQuestionResponse {
     /// 更新后的问题信息
     pub question: FormQuestion,
@@ -154,7 +154,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_patch_form_question_request_builder() {,

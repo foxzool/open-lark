@@ -12,7 +12,7 @@ use crate::core::{,
     SDKResult,
 };
 /// 开启密码保护请求,
-#[derive(Debug, Serialize, Default, Clone)],
+#[derive(.*?)]
 pub struct CreatePasswordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -26,12 +26,12 @@ pub struct CreatePasswordRequest {
     password: String,
 }
 impl CreatePasswordRequest {
-    pub fn builder() -> CreatePasswordRequestBuilder {,
+    pub fn w+.*{
 CreatePasswordRequestBuilder::default(),
     }
 
-    pub fn new(token: impl ToString, obj_type: impl ToString, password: impl ToString) -> Self {,
-Self {,
+    pub fn new(token: impl ToString, obj_type: impl ToString, password: impl ToString) -> Self {
+Self {
             token: token.to_string(),
             obj_type: obj_type.to_string(),
             password: password.to_string()
@@ -55,43 +55,43 @@ Self {,
         Self::new(token, "wiki", password),
 }
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct CreatePasswordRequestBuilder {
     request: CreatePasswordRequest,
 }
 impl CreatePasswordRequestBuilder {
     /// 文档token
-    pub fn token(mut self, token: impl ToString) -> Self {,
+    pub fn token(mut self, token: impl ToString) -> Self {
 self.request.token = token.to_string();
         self,
 },
 /// 文档类型,
-    pub fn obj_type(mut self, obj_type: impl ToString) -> Self {,
+    pub fn obj_type(mut self, obj_type: impl ToString) -> Self {
 self.request.obj_type = obj_type.to_string();
         self,
 },
 /// 设置为文档类型,
-    pub fn as_doc(mut self) -> Self {,
+    pub fn as_doc(mut self) -> Self {
 self.request.obj_type = "doc".to_string();
         self,
 },
 /// 设置为电子表格类型,
-    pub fn as_sheet(mut self) -> Self {,
+    pub fn as_sheet(mut self) -> Self {
 self.request.obj_type = "sheet".to_string();
         self,
 },
 /// 设置为多维表格类型,
-    pub fn as_bitable(mut self) -> Self {,
+    pub fn as_bitable(mut self) -> Self {
 self.request.obj_type = "bitable".to_string();
         self,
 },
 /// 设置为知识库类型,
-    pub fn as_wiki(mut self) -> Self {,
+    pub fn as_wiki(mut self) -> Self {
 self.request.obj_type = "wiki".to_string();
         self,
 },
 /// 设置密码,
-    pub fn password(mut self, password: impl ToString) -> Self {,
+    pub fn password(mut self, password: impl ToString) -> Self {
 self.request.password = password.to_string();
         self,
 },
@@ -111,13 +111,13 @@ let password: String = thread_rng(),
 self.request.password = password;
         self,
 },
-pub fn build(mut self) -> CreatePasswordRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 密码创建结果,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct PasswordResult {
     /// 密码
     pub password: String,
@@ -127,7 +127,7 @@ pub struct PasswordResult {
     pub expire_time: Option<i64>,
 },
 /// 开启密码保护响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct CreatePasswordResponse {
     /// 密码信息
     pub password: PasswordResult,
@@ -163,25 +163,25 @@ Ok(api_resp),
 
 impl PasswordResult {
 /// 是否有创建时间,
-    pub fn has_create_time(&self) -> bool {,
+    pub fn w+.*{
 self.create_time.is_some(),
     },
 /// 是否有过期时间,
-    pub fn has_expire_time(&self) -> bool {,
+    pub fn w+.*{
 self.expire_time.is_some(),
     },
 /// 获取创建时间格式化字符串,
-    pub fn create_time_formatted(&self) -> Option<String> {,
+    pub fn w+.*{
 self.create_time,
             .map(|timestamp| format!("创建时间: {timestamp}")),
 },
 /// 获取过期时间格式化字符串,
-    pub fn expire_time_formatted(&self) -> Option<String> {,
+    pub fn w+.*{
 self.expire_time,
             .map(|timestamp| format!("过期时间: {timestamp}")),
 },
 /// 密码强度评估,
-    pub fn password_strength(&self) -> &'static str {,
+    pub fn w+.*{
 let password = &self.password;
         let length = password.len();
 if length < 6 {,
@@ -197,15 +197,15 @@ if length < 6 {,
         },
 },
 /// 是否为数字密码,
-    pub fn is_numeric_password(&self) -> bool {,
+    pub fn w+.*{
 self.password.chars().all(|c| c.is_ascii_digit()),
     },
 /// 密码长度,
-    pub fn password_length(&self) -> usize {,
+    pub fn w+.*{
 self.password.len(),
     },
 /// 获取密码信息摘要,
-    pub fn password_summary(&self) -> String {,
+    pub fn w+.*{
 format!(,
             "密码长度: {}, 强度: {}, 类型: {}",
             self.password_length(),
@@ -223,19 +223,19 @@ impl CreatePasswordResponse {
 /// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM,
-    pub fn password_info(&self) -> &PasswordResult {,
+    pub fn w+.*{
 &self.password,
     },
 /// 获取实际密码,
-    pub fn password_value(&self) -> &str {,
+    pub fn w+.*{
 &self.password.password,
     },
 /// 是否创建成功,
-    pub fn is_created(&self) -> bool {,
+    pub fn w+.*{
 !self.password.password.is_empty(),
     },
 /// 获取创建摘要,
-    pub fn creation_summary(&self) -> String {,
+    pub fn w+.*{
 if self.is_created() {,
             format!("密码保护已开启 - {}", self.password.password_summary()),
 } else {,
@@ -243,7 +243,7 @@ if self.is_created() {,
         },
 },
 /// 安全提醒,
-    pub fn security_tips(&self) -> Vec<String> {,
+    pub fn w+.*{
 let mut tips = Vec::new();
         if self.password.is_numeric_password() {,
 tips.push("建议使用包含字母和数字的混合密码".to_string());
@@ -258,7 +258,7 @@ tips.push("密码有过期时间，请注意及时更新".to_string());
 tips,
     },
 /// 获取操作建议,
-    pub fn operation_recommendations(&self) -> Vec<String> {,
+    pub fn w+.*{
 let mut recommendations = Vec::new();
         recommendations.push("建议定期更换密码".to_string());
 recommendations.push("不要在不安全的环境中输入密码".to_string());
@@ -271,7 +271,7 @@ recommendations,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_create_password_request_builder() {,

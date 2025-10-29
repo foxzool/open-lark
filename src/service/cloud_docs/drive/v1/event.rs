@@ -100,7 +100,7 @@ Ok(api_resp),
     },
 },
 /// 订阅云文档事件请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct SubscribeFileEventsRequest {
     /// 文件token
     pub file_token: String,
@@ -110,15 +110,15 @@ pub struct SubscribeFileEventsRequest {
     pub event_types: Vec<String>,
 }
 impl SubscribeFileEventsRequest {
-    pub fn builder() -> SubscribeFileEventsRequestBuilder {,
+    pub fn w+.*{
 SubscribeFileEventsRequestBuilder::default(),
     },
 pub fn new(,
         file_token: impl Into<String>,
         file_type: impl Into<String>,
         event_types: Vec<String>,
-    ) -> Self {,
-Self {,
+    ) -> Self {
+Self {
             file_token: file_token.into(),
             file_type: file_type.into(),
             event_types,
@@ -131,26 +131,26 @@ pub struct SubscribeFileEventsRequestBuilder {
     request: SubscribeFileEventsRequest,
 }
 impl SubscribeFileEventsRequestBuilder {
-    pub fn file_token(mut self, file_token: impl Into<String>) -> Self {,
+    pub fn file_token(mut self, file_token: impl Into<String>) -> Self {
 self.request.file_token = file_token.into();
         self,
 }
 
-    pub fn file_type(mut self, file_type: impl Into<String>) -> Self {,
+    pub fn file_type(mut self, file_type: impl Into<String>) -> Self {
 self.request.file_type = file_type.into();
         self,
 }
 
-    pub fn event_types(mut self, event_types: Vec<String>) -> Self {,
+    pub fn event_types(mut self, event_types: Vec<String>) -> Self {
 self.request.event_types = event_types;
         self,
 }
 
-    pub fn add_event_type(mut self, event_type: impl Into<String>) -> Self {,
+    pub fn add_event_type(mut self, event_type: impl Into<String>) -> Self {
 self.request.event_types.push(event_type.into());
         self,
 },
-pub fn build(self) -> SubscribeFileEventsRequest {,
+pub fn w+.*{
         self.request,
 }
 }
@@ -162,7 +162,7 @@ impl_executable_builder_owned!(,
     subscribe_file_events,
 );
 /// 订阅云文档事件响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SubscribeFileEventsRespData {
     /// 订阅ID
     pub subscription_id: String,
@@ -175,7 +175,7 @@ ResponseFormat::Data,
     },
 },
 /// 查询云文档事件订阅状态请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct GetFileSubscriptionRequest {
     /// 文件token
     pub file_token: String,
@@ -183,12 +183,12 @@ pub struct GetFileSubscriptionRequest {
     pub subscription_id: String,
 }
 impl GetFileSubscriptionRequest {
-    pub fn builder() -> GetFileSubscriptionRequestBuilder {,
+    pub fn w+.*{
 GetFileSubscriptionRequestBuilder::default(),
     }
 
-    pub fn new(file_token: impl Into<String>, subscription_id: impl Into<String>) -> Self {,
-Self {,
+    pub fn new(file_token: impl Into<String>, subscription_id: impl Into<String>) -> Self {
+Self {
             file_token: file_token.into(),
             subscription_id: subscription_id.into(),
         },
@@ -200,16 +200,16 @@ pub struct GetFileSubscriptionRequestBuilder {
     request: GetFileSubscriptionRequest,
 }
 impl GetFileSubscriptionRequestBuilder {
-    pub fn file_token(mut self, file_token: impl Into<String>) -> Self {,
+    pub fn file_token(mut self, file_token: impl Into<String>) -> Self {
 self.request.file_token = file_token.into();
         self,
 }
 
-    pub fn subscription_id(mut self, subscription_id: impl Into<String>) -> Self {,
+    pub fn subscription_id(mut self, subscription_id: impl Into<String>) -> Self {
 self.request.subscription_id = subscription_id.into();
         self,
 },
-pub fn build(self) -> GetFileSubscriptionRequest {,
+pub fn w+.*{
         self.request,
 }
 }
@@ -221,13 +221,13 @@ impl_executable_builder_owned!(,
     get_file_subscription,
 );
 /// 查询云文档事件订阅状态响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetFileSubscriptionRespData {
     /// 订阅信息
     pub subscription: FileSubscription,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FileSubscription {
     /// 订阅ID
     pub subscription_id: String,
@@ -246,7 +246,7 @@ ResponseFormat::Data,
     },
 },
 /// 取消云文档事件订阅请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct UnsubscribeFileEventsRequest {
     /// 文件token
     pub file_token: String,
@@ -254,12 +254,12 @@ pub struct UnsubscribeFileEventsRequest {
     pub subscription_id: String,
 }
 impl UnsubscribeFileEventsRequest {
-    pub fn builder() -> UnsubscribeFileEventsRequestBuilder {,
+    pub fn w+.*{
 UnsubscribeFileEventsRequestBuilder::default(),
     }
 
-    pub fn new(file_token: impl Into<String>, subscription_id: impl Into<String>) -> Self {,
-Self {,
+    pub fn new(file_token: impl Into<String>, subscription_id: impl Into<String>) -> Self {
+Self {
             file_token: file_token.into(),
             subscription_id: subscription_id.into(),
         },
@@ -271,16 +271,16 @@ pub struct UnsubscribeFileEventsRequestBuilder {
     request: UnsubscribeFileEventsRequest,
 }
 impl UnsubscribeFileEventsRequestBuilder {
-    pub fn file_token(mut self, file_token: impl Into<String>) -> Self {,
+    pub fn file_token(mut self, file_token: impl Into<String>) -> Self {
 self.request.file_token = file_token.into();
         self,
 }
 
-    pub fn subscription_id(mut self, subscription_id: impl Into<String>) -> Self {,
+    pub fn subscription_id(mut self, subscription_id: impl Into<String>) -> Self {
 self.request.subscription_id = subscription_id.into();
         self,
 },
-pub fn build(self) -> UnsubscribeFileEventsRequest {,
+pub fn w+.*{
         self.request,
 }
 }
@@ -292,7 +292,7 @@ impl_executable_builder_owned!(,
     unsubscribe_file_events,
 );
 /// 取消云文档事件订阅响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UnsubscribeFileEventsRespData {
     /// 操作结果
     pub result: bool,

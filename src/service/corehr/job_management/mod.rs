@@ -21,7 +21,7 @@ pub struct JobManagementService {
     pub config: Config,
 }
 /// 创建序列响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobFamilyCreateResponse {
     /// 序列信息
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -33,7 +33,7 @@ ResponseFormat::Data,
     }
 }
 /// 批量查询序列响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobFamilyListResponse {
     /// 序列信息列表
 #[serde(flatten)],
@@ -45,7 +45,7 @@ ResponseFormat::Data,
     }
 }
 /// 创建职级响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobLevelCreateResponse {
     /// 职级信息
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -57,7 +57,7 @@ ResponseFormat::Data,
     }
 }
 /// 批量查询职级响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobLevelListResponse {
     /// 职级信息列表
 #[serde(flatten)],
@@ -69,7 +69,7 @@ ResponseFormat::Data,
     }
 }
 /// 创建职等响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobGradeCreateResponse {
     /// 职等信息
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -81,7 +81,7 @@ ResponseFormat::Data,
     }
 }
 /// 查询职等响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobGradeQueryResponse {
     /// 职等信息列表
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -93,7 +93,7 @@ ResponseFormat::Data,
     }
 }
 /// 创建职务响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobCreateResponse {
     /// 职务信息
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -105,7 +105,7 @@ ResponseFormat::Data,
     }
 }
 /// 批量查询职务响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobListResponse {
     /// 职务信息列表
 #[serde(flatten)],

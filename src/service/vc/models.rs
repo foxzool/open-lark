@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 用户ID类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum UserIdType {,
     /// 用户ID,
 #[serde(rename = "user_id")],
@@ -13,7 +13,7 @@ pub enum UserIdType {,
     OpenId,
 }
 impl UserIdType {
-    pub fn as_str(&self) -> &'static str {,
+    pub fn w+.*{
 match self {,
             UserIdType::UserId => "user_id",
             UserIdType::UnionId => "union_id",
@@ -22,7 +22,7 @@ match self {,
 }
 },
 /// 会议室ID类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum RoomIdType {,
     /// 会议室ID,
 #[serde(rename = "room_id")],
@@ -32,7 +32,7 @@ pub enum RoomIdType {,
     OmmRoomId,
 }
 impl RoomIdType {
-    pub fn as_str(&self) -> &'static str {,
+    pub fn w+.*{
 match self {,
             RoomIdType::RoomId => "room_id",
             RoomIdType::OmmRoomId => "omm_room_id",
@@ -40,7 +40,7 @@ match self {,
 }
 },
 /// 会议状态,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum MeetingStatus {,
     /// 未开始,
 #[serde(rename = "not_started")],
@@ -56,7 +56,7 @@ pub enum MeetingStatus {,
     Cancelled,
 },
 /// 会议类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum MeetingType {,
     /// 即时会议,
 #[serde(rename = "instant")],
@@ -69,7 +69,7 @@ pub enum MeetingType {,
     Recurring,
 },
 /// 预约会议信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Reserve {
     /// 预约ID
     pub id: String,
@@ -93,7 +93,7 @@ pub struct Reserve {
     pub create_time: Option<String>,
 },
 /// 会议信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Meeting {
     /// 会议ID
     pub id: String,
@@ -117,7 +117,7 @@ pub struct Meeting {
     pub create_time: Option<String>,
 },
 /// 用户信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserInfo {
     /// 用户ID
     pub id: String,
@@ -127,7 +127,7 @@ pub struct UserInfo {
     pub avatar_url: Option<String>,
 },
 /// 会议室信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Room {
     /// 会议室ID
     pub room_id: String,
@@ -145,7 +145,7 @@ pub struct Room {
     pub create_time: Option<String>,
 },
 /// 录制信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Recording {
     /// 录制ID
     pub recording_id: String,
@@ -166,7 +166,7 @@ pub struct Recording {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_vc_user_id_type_serialization() {

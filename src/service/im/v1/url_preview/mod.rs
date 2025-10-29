@@ -13,12 +13,12 @@ use crate::core::{
 };
 use crate::impl_full_service;
 /// URL预览服务
-#[derive(Debug)],
+#[derive(.*?)]
 pub struct UrlPreviewService {
     pub config: Config,
 }
 /// 批量更新URL预览请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchUpdateUrlPreviewRequest {
     /// URL预览列表
     pub previews: Vec<UrlPreviewInfo>,
@@ -26,7 +26,7 @@ pub struct BatchUpdateUrlPreviewRequest {
 // 接入统一 Service 抽象（IM v1 - UrlPreviewService）
 impl_full_service!(UrlPreviewService, "im.url_preview", "v1");
 /// URL预览信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UrlPreviewInfo {
     /// URL
     pub url: String,

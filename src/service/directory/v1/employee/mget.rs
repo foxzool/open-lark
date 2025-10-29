@@ -15,7 +15,7 @@ use crate::{,
 };
 use super::EmployeeService;
 /// 批量获取员工信息请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct MgetEmployeeRequest {
     pub api_req: ApiRequest,
     /// 员工ID列表
@@ -27,7 +27,7 @@ pub struct MgetEmployeeRequest {
 }
 impl MgetEmployeeRequest {
     /// 创建批量获取员工信息请求的构建器,
-pub fn builder(employee_ids: Vec<String>) -> MgetEmployeeRequestBuilder {,
+pub fn w+.*{
         MgetEmployeeRequestBuilder {,
 request: MgetEmployeeRequest {,
                 employee_ids,
@@ -43,17 +43,17 @@ pub struct MgetEmployeeRequestBuilder {
 }
 impl MgetEmployeeRequestBuilder {
     /// 设置用户ID类型
-    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
 },
 /// 设置部门ID类型,
-    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {,
+    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {
 self.request.department_id_type = Some(department_id_type);
         self,
 },
 /// 构建请求,
-    pub fn build(mut self) -> MgetEmployeeRequest {,
+    pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
@@ -76,13 +76,13 @@ self.request.api_req.body = serde_json::to_vec(&body).unwrap_or_default();
 }
 },
 /// 批量获取员工信息响应数据,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct MgetEmployeeResponseData {
     /// 员工信息列表
     pub employees: Vec<Employee>,
 },
 /// 批量获取员工信息响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct MgetEmployeeResponse {
     /// 响应数据
     pub data: MgetEmployeeResponseData,

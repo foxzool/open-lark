@@ -25,7 +25,7 @@ pub struct V6 {
 }
 impl V6 {
     pub fn new() -> Self {
-Self {,
+Self {
             application: application::ApplicationService::new(config.clone()),
             scope: scope::ScopeService::new(config.clone()),
             admin: admin::AdminService::new(config.clone()),

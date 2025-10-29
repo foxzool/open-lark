@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 // ============ 通用结构 ============,
 /// 多语言文本,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct I18nText {
     /// 中文,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -12,7 +12,7 @@ pub struct I18nText {
     pub en_us: Option<String>,
 },
 /// 分页响应,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PageResponse<T> {,
     /// 是否还有更多数据,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -25,7 +25,7 @@ pub struct PageResponse<T> {,
     pub items: Option<Vec<T>>,
 },
 /// 自定义字段,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CustomField {
     /// 字段ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -36,7 +36,7 @@ pub struct CustomField {
 },
 // ============ 基础数据相关结构 ============,
 /// 查询枚举信息请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EnumSearchRequest {
     /// 枚举类型
     pub enum_type: String,
@@ -48,7 +48,7 @@ pub struct EnumSearchRequest {
     pub page_token: Option<String>,
 },
 /// 枚举信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EnumInfo {
     /// 枚举值,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -64,7 +64,7 @@ pub struct EnumInfo {
     pub enum_status: Option<i32>,
 },
 /// 查询国家/地区信息请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct CountryRegionSearchRequest {
     /// 分页大小,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -74,7 +74,7 @@ pub struct CountryRegionSearchRequest {
     pub page_token: Option<String>,
 },
 /// 国家/地区信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CountryRegion {
     /// 国家/地区ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -93,7 +93,7 @@ pub struct CountryRegion {
     pub time_zone: Option<String>,
 },
 /// 查询国籍信息请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct NationalitySearchRequest {
     /// 分页大小,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -103,7 +103,7 @@ pub struct NationalitySearchRequest {
     pub page_token: Option<String>,
 },
 /// 国籍信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Nationality {
     /// 国籍ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -117,7 +117,7 @@ pub struct Nationality {
 },
 // ============ 员工信息相关结构 ============,
 /// 批量查询员工信息请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct EmployeeBatchGetRequest {
     /// 员工ID列表
     pub employee_ids: Vec<String>,
@@ -135,7 +135,7 @@ pub struct EmployeeBatchGetRequest {
     pub fields: Option<Vec<String>>,
 },
 /// 搜索员工信息请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct EmployeeSearchRequest {
     /// 分页大小,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -166,7 +166,7 @@ pub struct EmployeeSearchRequest {
     pub employee_number: Option<String>,
 },
 /// 员工基本信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Employee {
     /// 员工ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -194,7 +194,7 @@ pub struct Employee {
     pub custom_fields: Option<Vec<CustomField>>,
 },
 /// 个人信息,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct Person {
     /// 个人信息ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -246,7 +246,7 @@ pub struct Person {
     pub hukou_location: Option<String>,
 },
 /// 身份证件信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct NationalId {
     /// 国家证件类型ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -265,7 +265,7 @@ pub struct NationalId {
     pub issued_location: Option<String>,
 },
 /// 地址信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Address {
     /// 国家/地区ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -293,7 +293,7 @@ pub struct Address {
     pub address_type: Option<String>,
 },
 /// 雇佣信息,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct Employment {
     /// 雇佣ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -333,7 +333,7 @@ pub struct Employment {
     pub probation_status: Option<String>,
 },
 /// 任职信息,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct JobData {
     /// 任职记录ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -386,7 +386,7 @@ pub struct JobData {
 },
 // ============ 组织管理相关结构 ============,
 /// 创建部门请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DepartmentCreateRequest {
     /// 部门名称
     pub name: I18nText,
@@ -410,7 +410,7 @@ pub struct DepartmentCreateRequest {
     pub custom_fields: Option<Vec<CustomField>>,
 },
 /// 部门信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Department {
     /// 部门ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -447,7 +447,7 @@ pub struct Department {
     pub custom_fields: Option<Vec<CustomField>>,
 },
 /// 创建公司请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CompanyCreateRequest {
     /// 公司名称
     pub name: I18nText,
@@ -471,7 +471,7 @@ pub struct CompanyCreateRequest {
     pub custom_fields: Option<Vec<CustomField>>,
 },
 /// 公司信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Company {
     /// 公司ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -506,7 +506,7 @@ pub struct Company {
 },
 // ============ 通用响应结构 ============,
 /// CoreHR响应包装器
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CoreHRResponse<T> {,
     /// 响应数据,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -520,7 +520,7 @@ pub struct CoreHRResponse<T> {,
 },
 // ============ ID转换相关结构 ============,
 /// ID转换请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct IdConvertRequest {
     /// 源ID类型
     pub source_id_type: String,
@@ -530,7 +530,7 @@ pub struct IdConvertRequest {
     pub ids: Vec<String>,
 },
 /// ID转换结果,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct IdConvertResult {
     /// 源ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -541,7 +541,7 @@ pub struct IdConvertResult {
 },
 // ============ 岗职务管理相关结构 ============,
 /// 创建序列请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobFamilyCreateRequest {
     /// 序列名称
     pub name: I18nText,
@@ -556,7 +556,7 @@ pub struct JobFamilyCreateRequest {
     pub custom_fields: Option<Vec<CustomField>>,
 },
 /// 序列信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobFamily {
     /// 序列ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -581,7 +581,7 @@ pub struct JobFamily {
     pub custom_fields: Option<Vec<CustomField>>,
 },
 /// 创建职级请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobLevelCreateRequest {
     /// 职级名称
     pub name: I18nText,
@@ -602,7 +602,7 @@ pub struct JobLevelCreateRequest {
     pub custom_fields: Option<Vec<CustomField>>,
 },
 /// 职级信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobLevel {
     /// 职级ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -633,7 +633,7 @@ pub struct JobLevel {
     pub custom_fields: Option<Vec<CustomField>>,
 },
 /// 创建职等请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobGradeCreateRequest {
     /// 职等名称
     pub name: I18nText,
@@ -654,7 +654,7 @@ pub struct JobGradeCreateRequest {
     pub custom_fields: Option<Vec<CustomField>>,
 },
 /// 职等信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobGrade {
     /// 职等ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -685,7 +685,7 @@ pub struct JobGrade {
     pub custom_fields: Option<Vec<CustomField>>,
 },
 /// 创建职务请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobCreateRequest {
     /// 职务名称
     pub name: I18nText,
@@ -706,7 +706,7 @@ pub struct JobCreateRequest {
     pub custom_fields: Option<Vec<CustomField>>,
 },
 /// 职务信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Job {
     /// 职务ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -738,7 +738,7 @@ pub struct Job {
 },
 // ============ 入职/离职/异动相关结构 ============,
 /// 待入职信息创建请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PreHireCreateRequest {
     /// 员工基本信息
     pub person: Person,
@@ -758,7 +758,7 @@ pub struct PreHireCreateRequest {
     pub custom_fields: Option<Vec<CustomField>>,
 },
 /// 待入职信息搜索请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct PreHireSearchRequest {
     /// 分页大小,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -783,7 +783,7 @@ pub struct PreHireSearchRequest {
     pub department_ids: Option<Vec<String>>,
 },
 /// 待入职信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PreHire {
     /// 待入职ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -814,7 +814,7 @@ pub struct PreHire {
     pub custom_fields: Option<Vec<CustomField>>,
 },
 /// 异动发起请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobChangeCreateRequest {
     /// 员工ID
     pub employee_id: String,
@@ -835,7 +835,7 @@ pub struct JobChangeCreateRequest {
     pub custom_fields: Option<Vec<CustomField>>,
 },
 /// 异动搜索请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct JobChangeSearchRequest {
     /// 分页大小,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -863,7 +863,7 @@ pub struct JobChangeSearchRequest {
     pub job_change_type_ids: Option<Vec<String>>,
 },
 /// 异动信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobChange {
     /// 异动ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -897,7 +897,7 @@ pub struct JobChange {
     pub custom_fields: Option<Vec<CustomField>>,
 },
 /// 离职发起请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OffboardingCreateRequest {
     /// 员工ID
     pub employee_id: String,
@@ -916,7 +916,7 @@ pub struct OffboardingCreateRequest {
     pub custom_fields: Option<Vec<CustomField>>,
 },
 /// 离职搜索请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct OffboardingSearchRequest {
     /// 分页大小,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -944,7 +944,7 @@ pub struct OffboardingSearchRequest {
     pub offboarding_reason_ids: Option<Vec<String>>,
 },
 /// 离职信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Offboarding {
     /// 离职ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -973,7 +973,7 @@ pub struct Offboarding {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

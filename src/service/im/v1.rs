@@ -47,8 +47,8 @@ pub struct V1 {
     pub url_preview: UrlPreviewService,
 }
 impl V1 {
-    pub fn new(config: Config) -> Self {,
-Self {,
+    pub fn new(config: Config) -> Self {
+Self {
             // 现有服务,
 chats: ChatsService {,
                 config: config.clone(),

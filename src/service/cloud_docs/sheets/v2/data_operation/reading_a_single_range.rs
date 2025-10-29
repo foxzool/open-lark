@@ -16,7 +16,7 @@ use crate::,
     service::cloud_docs::sheets::v2::{data_operation::ValueRangeResponse, SpreadsheetService},
 };
 /// 读取单个范围请求,
-#[derive(Debug, Default)],
+#[derive(.*?)]
 pub struct ReadingSingleRangeRequest {
     api_request: ApiRequest,
     /// spreadsheet 的 token
@@ -50,22 +50,22 @@ pub struct ReadingSingleRangeRequest {
     user_id_type: Option<String>,
 }
 impl ReadingSingleRangeRequest {
-    pub fn builder() -> ReadingSingleRangeRequestBuilder {,
+    pub fn w+.*{
 ReadingSingleRangeRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct ReadingSingleRangeRequestBuilder {
     request: ReadingSingleRangeRequest,
 }
 impl ReadingSingleRangeRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 },
 /// 查询范围，包含 sheetId 与单元格范围两部分，详见在线表格开发指南。若查询范围中使用形如,
     /// `<sheetId>!<开始单元格>:<结束列>`的范围时，仅支持获取100列数据
-    pub fn range(mut self, range: impl ToString) -> Self {,
+    pub fn range(mut self, range: impl ToString) -> Self {
 self.request.range = range.to_string();
         self,
 },
@@ -76,7 +76,7 @@ self.request.range = range.to_string();
 /// - valueRenderOption=FormattedValue：计算并格式化单元格,
     /// - valueRenderOption=Formula：单元格中含有公式时，返回公式本身,
 /// - valueRenderOption=UnformattedValue：计算但不对单元格进行格式化,
-    pub fn value_render_option(mut self, value_render_option: impl ToString) -> Self {,
+    pub fn value_render_option(mut self, value_render_option: impl ToString) -> Self {
 self.request.value_render_option = Some(value_render_option.to_string());
         self.request,
 .api_request,
@@ -92,7 +92,7 @@ self,
     ///   表示 12 点占 24 小时的二分之一，即 12/24=0.5。,
 /// - dateTimeRenderOption=FormattedString：计算并对时间、日期类型数据进行格式化，,
     ///   但不会对数字进行格式化。将返回格式化后的字符串。详见电子表格常见问题
-    pub fn date_time_render_option(mut self, date_time_render_option: impl ToString) -> Self {,
+    pub fn date_time_render_option(mut self, date_time_render_option: impl ToString) -> Self {
 self.request.date_time_render_option = Some(date_time_render_option.to_string());
         self.request,
 .api_request,
@@ -106,7 +106,7 @@ self,
     /// - open_id：用户在应用内的身份。 同一个 user_id 在不同应用中的 open_id 不同，其值统一以 ou_,
 ///   为前缀，如ou_c99c5f35d542efc7ee492afe11af19ef。,
     /// - union_id：用户在同一应用服务商提供的多个应用间的统一身份。
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self.request,
 .api_request,
@@ -114,12 +114,12 @@ self.request.user_id_type = Some(user_id_type.to_string());
             .insert("user_id_type", user_id_type.to_string());
 self,
     },
-pub fn build(self) -> ReadingSingleRangeRequest {,
+pub fn w+.*{
         self.request,
 }
 },
 /// 读取数据响应体,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 #[allow(dead_code)],
 pub struct ReadingSingleRangeResponse {
 /// sheet 的版本号,
@@ -164,7 +164,7 @@ Ok(api_resp),
     },
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::config::Config;
 use serde_json::json;

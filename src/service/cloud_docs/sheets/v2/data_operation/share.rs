@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
-#[derive(Serialize, Debug, Default)],
+#[derive(.*?)]
 pub(crate) struct ValueRangeRequest {,
     /// 插入范围，包含 sheetId 与单元格范围两部分，目前支持四种索引方式，详见,
 /// 在线表格开发指南，range所表示的范围需要大于等于values占用的范围。,
@@ -10,7 +10,7 @@ pub(crate) struct ValueRangeRequest {,
     pub(crate) values: Value,
 }
 
-#[derive(Deserialize, Debug, Default)],
+#[derive(.*?)]
 #[allow(dead_code)],
 pub struct ValueRangeResponse {
 /// 插入维度,
@@ -25,7 +25,7 @@ pub struct ValueRangeResponse {
     pub revision: i32,
 },
 /// 更新数据响应体,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 #[allow(dead_code)],
 pub struct UpdateSheetDataResponse {
 /// spreadsheet 的 token,
@@ -45,7 +45,7 @@ ResponseFormat::Data,
     },
 },
 /// 追加数据的范围、行列数等,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 #[allow(dead_code)],
 pub struct SheetDataUpdates {
 /// spreadsheet 的 token,
@@ -72,7 +72,7 @@ ResponseFormat::Data,
     },
 },
 /// 值与范围,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 #[allow(dead_code)],
 pub struct ReadRangeValueRange {
 /// 插入维度,
@@ -86,7 +86,7 @@ pub struct ReadRangeValueRange {
     pub values: Value,
 }
 
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct CellStyle {
     /// 字体相关样式
     pub(crate) font: StyleFont,
@@ -118,70 +118,70 @@ pub struct CellStyle {
     pub(crate) clean: bool,
 }
 impl CellStyle {
-    pub fn builder() -> CellStyleBuilder {,
+    pub fn w+.*{
 CellStyleBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct CellStyleBuilder {
     request: CellStyle,
 }
 impl CellStyleBuilder {
-    pub fn font(mut self, font: StyleFont) -> Self {,
+    pub fn font(mut self, font: StyleFont) -> Self {
 self.request.font = font;
         self,
 }
 
-    pub fn text_decoration(mut self, text_decoration: i32) -> Self {,
+    pub fn text_decoration(mut self, text_decoration: i32) -> Self {
 self.request.text_decoration = Some(text_decoration);
         self,
 }
 
-    pub fn formatter(mut self, formatter: impl ToString) -> Self {,
+    pub fn formatter(mut self, formatter: impl ToString) -> Self {
 self.request.formatter = Some(formatter.to_string());
         self,
 }
 
-    pub fn h_align(mut self, h_align: i32) -> Self {,
+    pub fn h_align(mut self, h_align: i32) -> Self {
 self.request.h_align = Some(h_align);
         self,
 }
 
-    pub fn v_align(mut self, v_align: i32) -> Self {,
+    pub fn v_align(mut self, v_align: i32) -> Self {
 self.request.v_align = Some(v_align);
         self,
 }
 
-    pub fn fore_color(mut self, fore_color: impl ToString) -> Self {,
+    pub fn fore_color(mut self, fore_color: impl ToString) -> Self {
 self.request.fore_color = Some(fore_color.to_string());
         self,
 }
 
-    pub fn back_color(mut self, back_color: impl ToString) -> Self {,
+    pub fn back_color(mut self, back_color: impl ToString) -> Self {
 self.request.back_color = Some(back_color.to_string());
         self,
 }
 
-    pub fn border_type(mut self, border_type: impl ToString) -> Self {,
+    pub fn border_type(mut self, border_type: impl ToString) -> Self {
 self.request.border_type = Some(border_type.to_string());
         self,
 }
 
-    pub fn border_color(mut self, border_color: impl ToString) -> Self {,
+    pub fn border_color(mut self, border_color: impl ToString) -> Self {
 self.request.border_color = Some(border_color.to_string());
         self,
 }
 
-    pub fn clean(mut self, clean: bool) -> Self {,
+    pub fn clean(mut self, clean: bool) -> Self {
 self.request.clean = clean;
         self,
 },
-pub fn build(self) -> CellStyle {,
+pub fn w+.*{
         self.request,
 }
 },
 /// 字体相关样式,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct StyleFont {
     /// 是否加粗
     bold: Option<bool>,
@@ -194,35 +194,35 @@ pub struct StyleFont {
     clean: Option<bool>,
 }
 impl StyleFont {
-    pub fn builder() -> StyleFontBuilder {,
+    pub fn w+.*{
 StyleFontBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct StyleFontBuilder {
     font: StyleFont,
 }
 impl StyleFontBuilder {
-    pub fn bold(mut self, bold: bool) -> Self {,
+    pub fn bold(mut self, bold: bool) -> Self {
 self.font.bold = Some(bold);
         self,
 }
 
-    pub fn italic(mut self, italic: bool) -> Self {,
+    pub fn italic(mut self, italic: bool) -> Self {
 self.font.italic = Some(italic);
         self,
 }
 
-    pub fn font_size(mut self, font_size: impl ToString) -> Self {,
+    pub fn font_size(mut self, font_size: impl ToString) -> Self {
 self.font.font_size = Some(font_size.to_string());
         self,
 }
 
-    pub fn clean(mut self, clean: bool) -> Self {,
+    pub fn clean(mut self, clean: bool) -> Self {
 self.font.clean = Some(clean);
         self,
 },
-pub fn build(self) -> StyleFont {,
+pub fn w+.*{
         self.font,
 }
 }

@@ -7,7 +7,7 @@ use crate::service::ccm::sheets::v2::worksheet::WorksheetService;
 use crate::service::ccm::sheets::v2::range::RangeService;
 use crate::service::ccm::sheets::v2::style::StyleService;
 /// 电子表格v2版本服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct SheetsV2Service {
     client: std::sync::Arc<LarkClient>,
     /// 表格操作服务

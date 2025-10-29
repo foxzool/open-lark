@@ -20,7 +20,7 @@ pub struct AuditLogService {
     pub config: Config,
 }
 /// 审计日志列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AuditLogListResponse {
     /// 分页响应数据
 #[serde(flatten)],
@@ -32,7 +32,7 @@ ResponseFormat::Data,
     }
 }
 /// 审计日志详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AuditLogGetResponse {
     /// 审计日志详情
 #[serde(flatten)],
@@ -44,7 +44,7 @@ ResponseFormat::Data,
     }
 }
 /// 数据变更日志列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataChangeLogListResponse {
     /// 分页响应数据
 #[serde(flatten)],
@@ -56,7 +56,7 @@ ResponseFormat::Data,
     }
 }
 /// 数据变更日志详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataChangeLogDetailResponse {
     /// 数据变更日志详情
 #[serde(flatten)],
@@ -68,7 +68,7 @@ ResponseFormat::Data,
     }
 }
 /// 审计事件列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AuditEventListResponse {
     /// 事件列表
 #[serde(skip_serializing_if = "Option::is_none")],

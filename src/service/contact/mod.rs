@@ -111,7 +111,7 @@ pub fn new() -> Self {
 }
 /// 使用共享配置创建服务（实验性）
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             v3: v3::V3::new(shared.as_ref().clone()),
         }
 }
@@ -121,7 +121,7 @@ Self {,
     ///,
 /// # 返回值
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
-pub fn validate_contact_services_config(&self) -> bool {,
+pub fn w+.*{
         // 检查配置是否有效
 !self.v3.user.config().app_id.is_empty(),
             && !self.v3.user.config().app_secret.is_empty(),
@@ -134,7 +134,7 @@ pub fn validate_contact_services_config(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_contact_service_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "ContactService{{ modules: 4, core_services: 2, user_management: true, department_management: true, app_id: {} }}",
             self.v3.user.config().app_id,
@@ -149,7 +149,7 @@ pub fn get_contact_service_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_contact_feature(&self, contact_feature: &str) -> bool {,
+    pub fn w+.*{
 matches!(,
             contact_feature,
             // 用户管理功能
@@ -189,7 +189,7 @@ matches!(,
     ///,
 /// # 返回值
     /// 如果所有服务配置有效返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         !self.v3.user.config().app_id.is_empty(),
 && !self.v3.user.config().app_secret.is_empty(),
             && !self.v3.department.config().app_id.is_empty(),
@@ -202,7 +202,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含各类型服务数量的统计信息
-pub fn get_contact_categories_statistics(&self) -> String {,
+pub fn w+.*{
         "ContactService Categories{ user_management: 6, department_management: 5, organization: 4, permissions: 4, total: 19 }".to_string(),
 }
 /// 获取通讯录服务状态摘要
@@ -211,7 +211,7 @@ pub fn get_contact_categories_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各服务状态信息的字符串
-pub fn get_contact_service_status_summary(&self) -> String {,
+pub fn w+.*{
         let config_healthy = !self.v3.user.config().app_id.is_empty();
 let user_management_healthy = config_healthy;
         let department_management_healthy = config_healthy;
@@ -229,7 +229,7 @@ format!(,
     ///,
 /// # 返回值
     /// 包含用户管理能力信息的字符串
-pub fn get_user_management_capabilities(&self) -> String {,
+pub fn w+.*{
         "ContactService UserManagement{ crud: true, profile: true, status: true, authentication: true, batch: true, import_export: true }".to_string(),
 }
 /// 获取部门管理能力矩阵
@@ -238,7 +238,7 @@ pub fn get_user_management_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含部门管理能力信息的字符串
-pub fn get_department_management_capabilities(&self) -> String {,
+pub fn w+.*{
         "ContactService DepartmentManagement{ crud: true, hierarchy: true, members: true, leaders: true, restructuring: true, batch: true }".to_string(),
 }
 /// 获取组织架构能力矩阵
@@ -247,7 +247,7 @@ pub fn get_department_management_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含组织架构管理能力信息的字符串
-pub fn get_organization_structure_capabilities(&self) -> String {,
+pub fn w+.*{
         "ContactService Organization{ chart: true, hierarchy: true, planning: true, optimization: true, analysis: true, change_management: true }".to_string(),
 }
 /// 获取权限管理能力矩阵
@@ -256,7 +256,7 @@ pub fn get_organization_structure_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含权限管理能力信息的字符串
-pub fn get_permission_management_capabilities(&self) -> String {,
+pub fn w+.*{
         "ContactService Permission{ roles: true, access_control: true, security: true, fine_grained: true, audit: true, policies: true }".to_string(),
 }
 /// 获取数据同步能力矩阵
@@ -265,7 +265,7 @@ pub fn get_permission_management_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含数据同步能力信息的字符串
-pub fn get_data_synchronization_capabilities(&self) -> String {,
+pub fn w+.*{
         "ContactService Sync{ real_time: true, batch: true, incremental: true, validation: true, monitoring: true, conflict_resolution: true }".to_string(),
 }
 /// 获取HR集成能力矩阵
@@ -274,7 +274,7 @@ pub fn get_data_synchronization_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含HR集成能力信息的字符串
-pub fn get_hr_integration_capabilities(&self) -> String {,
+pub fn w+.*{
         "ContactService HRIntegration{ hris: true, payroll: true, performance: true, recruitment: true, onboarding: true, offboarding: true }".to_string(),
 }
 /// 获取企业级能力矩阵
@@ -283,7 +283,7 @@ pub fn get_hr_integration_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含企业级能力信息的字符串
-pub fn get_enterprise_contact_capabilities(&self) -> String {,
+pub fn w+.*{
         "ContactService Enterprise{ multi_tenant: true, scalable: true, available: true, secure: true, compliant: true, private: true }".to_string(),
 }
 /// 获取通讯录性能指标
@@ -292,7 +292,7 @@ pub fn get_enterprise_contact_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含性能指标信息的字符串
-pub fn get_contact_performance_metrics(&self) -> String {,
+pub fn w+.*{
         "ContactService Performance{ query_latency: <50ms, batch_throughput: high, sync_latency: <100ms, scalability: enterprise, availability: 99.95% }".to_string(),
 }
 /// 获取通讯录应用场景矩阵
@@ -301,7 +301,7 @@ pub fn get_contact_performance_metrics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含应用场景信息的字符串
-pub fn get_contact_use_cases_matrix(&self) -> String {,
+pub fn w+.*{
         "ContactService UseCases{ hr_management: true, org_structure: true, access_control: true, data_sync: true, compliance: true }".to_string(),
 }
 }
@@ -318,8 +318,8 @@ fn service_name() -> &'static str,
     }
 }
 impl Clone for ContactService {,
-    fn clone(&self) -> Self {,
-Self {,
+    fn clone(&self) -> Self {
+Self {
             v3: v3::V3::new(self.v3.user.config().clone()),
         }
 }
@@ -338,7 +338,7 @@ f.debug_struct()
 }
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use crate::core::config::Config;
     use std::time::Duration;

@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 /// 用户会话信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserSession {
     /// 用户ID
 #[serde(rename = "user_id")],
@@ -36,7 +36,7 @@ pub struct UserSession {
     pub session_status: SessionStatus,
 }
 /// 部门信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DepartmentInfo {
     /// 部门ID
 #[serde(rename = "department_id")],
@@ -49,7 +49,7 @@ pub struct DepartmentInfo {
     pub department_path: Option<String>,
 }
 /// 设备信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DeviceInfo {
     /// 设备类型
 #[serde(rename = "device_type")],
@@ -65,7 +65,7 @@ pub struct DeviceInfo {
     pub browser: Option<String>,
 }
 /// 会话状态
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum SessionStatus {,
 /// 活跃
@@ -76,7 +76,7 @@ pub enum SessionStatus {,
     LoggedOut,
 }
 /// 批量会话查询请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchQueryRequest {
     /// 用户ID列表
 #[serde(rename = "user_ids")],
@@ -86,7 +86,7 @@ pub struct BatchQueryRequest {
     pub user_id_type: String,
 }
 /// 批量会话查询响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchQueryResponse {
     /// 用户会话列表
 #[serde(rename = "user_sessions")],
@@ -96,7 +96,7 @@ pub struct BatchQueryResponse {
     pub failed_user_ids: Vec<String>,
 }
 /// 退出登录请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct LogoutRequest {
     /// 用户ID列表
 #[serde(rename = "user_ids")],
@@ -106,7 +106,7 @@ pub struct LogoutRequest {
     pub user_id_type: String,
 }
 /// 退出登录响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct LogoutResponse {
     /// 成功退出的用户数量
 #[serde(rename = "success_count")],
@@ -119,7 +119,7 @@ pub struct LogoutResponse {
     pub failed_user_ids: Vec<String>,
 }
 /// 通用响应结构
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PassportResponse<T> {,
     /// 响应码
     pub code: i32,

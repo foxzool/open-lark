@@ -143,7 +143,7 @@ pub fn new() -> Self {
 }
 /// 使用共享配置创建服务（实验性）
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             v2: v2::V2::new_from_shared(shared),
         }
 }
@@ -153,7 +153,7 @@ Self {,
     ///,
 /// # 返回值
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
-pub fn validate_tenant_services_config(&self) -> bool {,
+pub fn w+.*{
         // 直接检查配置一致性
 let app_id = &self.v2.tenant.config.app_id;
         let app_secret = &self.v2.tenant.config.app_secret;
@@ -168,7 +168,7 @@ let app_id = &self.v2.tenant.config.app_id;
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_tenant_service_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "TenantService{{ services: 1, sub_services: {} app_id: {} api_version: v2, enterprise_management: true, product_configuration: true, admin_management: true }}",
             self.v2.get_service_statistics().split(',').count(),
@@ -184,7 +184,7 @@ pub fn get_tenant_service_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_tenant_feature(&self, tenant_feature: &str) -> bool {,
+    pub fn w+.*{
 match tenant_feature {,
             // 企业管理功能
             "enterprise_info_management" => true,
@@ -268,7 +268,7 @@ match tenant_feature {,
     ///,
 /// # 返回值
     /// 如果所有服务配置有效返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         // 直接检查配置有效性，不依赖v2服务的health_check
 !self.v2.tenant.config.app_id.is_empty(),
             && !self.v2.tenant.config.app_secret.is_empty(),
@@ -280,7 +280,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含各类型服务数量的统计信息
-pub fn get_tenant_categories_statistics(&self) -> String {,
+pub fn w+.*{
         "TenantService Categories{ enterprise: 5, product: 5, admin: 4, multi_tenant: 3, security: 4, monitoring: 4, integration: 4, advanced: 4, total: 33 }".to_string(),
 }
 /// 获取企业信息服务状态摘要
@@ -289,7 +289,7 @@ pub fn get_tenant_categories_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各服务状态信息的字符串
-pub fn get_tenant_service_status_summary(&self) -> String {,
+pub fn w+.*{
         let v2_healthy = self.v2.health_check();
 let enterprise_healthy = v2_healthy;
         let product_healthy = v2_healthy;
@@ -306,7 +306,7 @@ let admin_healthy = v2_healthy;
     ///,
 /// # 返回值
     /// 包含企业管理能力信息的字符串
-pub fn get_enterprise_management_capabilities(&self) -> String {,
+pub fn w+.*{
         "TenantService Enterprise{ info_management: true, profile_config: true, settings_management: true, branding_customization: true, localization_support: true, compliance_management: true }".to_string(),
 }
 /// 获取产品配置能力矩阵
@@ -315,7 +315,7 @@ pub fn get_enterprise_management_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含产品配置能力信息的字符串
-pub fn get_product_configuration_capabilities(&self) -> String {,
+pub fn w+.*{
         "TenantService Product{ assignment: true, license_management: true, feature_config: true, entitlement_tracking: true, subscription_mgmt: true, billing_integration: true, usage_analytics: true, quota_management: true }".to_string(),
 }
 /// 获取管理员管理能力矩阵
@@ -324,7 +324,7 @@ pub fn get_product_configuration_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含管理员管理能力信息的字符串
-pub fn get_admin_management_capabilities(&self) -> String {,
+pub fn w+.*{
         "TenantService Admin{ management: true, role_assignment: true, permission_control: true, audit_logging: true, security_policy: true, access_control: true, workflow_automation: true, delegation_support: true }".to_string(),
 }
 /// 获取多租户能力矩阵
@@ -333,7 +333,7 @@ pub fn get_admin_management_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含多租户能力信息的字符串
-pub fn get_multi_tenant_capabilities(&self) -> String {,
+pub fn w+.*{
         "TenantService MultiTenant{ support: true, isolation: true, resource_sharing: true, cross_tenant_access: true, hierarchy_management: true, sub_tenant_mgmt: true, federation_support: true }".to_string(),
 }
 /// 获取安全合规能力矩阵
@@ -342,7 +342,7 @@ pub fn get_multi_tenant_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含安全合规能力信息的字符串
-pub fn get_security_compliance_capabilities(&self) -> String {,
+pub fn w+.*{
         "TenantService Security{ compliance: true, audit_logging: true, data_protection: true, privacy_controls: true, risk_assessment: true, compliance_reporting: true, security_monitoring: true }".to_string(),
 }
 /// 获取监控分析能力矩阵
@@ -351,7 +351,7 @@ pub fn get_security_compliance_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含监控分析能力信息的字符串
-pub fn get_monitoring_analytics_capabilities(&self) -> String {,
+pub fn w+.*{
         "TenantService Monitoring{ usage_analytics: true, performance_monitoring: true, health_monitoring: true, alert_management: true, reporting_dashboard: true, metrics_collection: true, trend_analysis: true }".to_string(),
 }
 /// 获取集成能力矩阵
@@ -360,7 +360,7 @@ pub fn get_monitoring_analytics_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含集成能力信息的字符串
-pub fn get_integration_capabilities(&self) -> String {,
+pub fn w+.*{
         "TenantService Integration{ api_integration: true, webhook_support: true, third_party_sync: true, sso_integration: true, directory_sync: true, custom_connectors: true, data_exchange: true }".to_string(),
 }
 /// 获取高级功能能力矩阵
@@ -369,7 +369,7 @@ pub fn get_integration_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含高级功能能力信息的字符串
-pub fn get_advanced_capabilities(&self) -> String {,
+pub fn w+.*{
         "TenantService Advanced{ custom_workflows: true, automation_rules: true, bulk_operations: true, data_export_import: true, advanced_config: true, business_rules: true, custom_fields: true }".to_string(),
 }
 /// 获取企业信息服务性能指标
@@ -378,7 +378,7 @@ pub fn get_advanced_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含性能指标信息的字符串
-pub fn get_tenant_performance_metrics(&self) -> String {,
+pub fn w+.*{
         "TenantService Performance{ scalability: enterprise, reliability: 99.9%, latency: <300ms, concurrency: high, availability: 99.95%, data_consistency: strong }".to_string(),
 }
 /// 获取企业信息服务应用场景矩阵
@@ -387,7 +387,7 @@ pub fn get_tenant_performance_metrics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含应用场景信息的字符串
-pub fn get_tenant_use_cases_matrix(&self) -> String {,
+pub fn w+.*{
         "TenantService UseCases{ enterprise_management: true, product_configuration: true, admin_management: true, multi_tenant_ops: true, security_compliance: true, monitoring_analytics: true, integration: true, advanced_features: true }".to_string(),
 }
 }
@@ -408,7 +408,7 @@ impl Service for TenantService {,
 }
 /// 实现Clone trait，支持服务实例的克隆
 impl Clone for TenantService {,
-fn clone(&self) -> Self {,
+fn clone(&self) -> Self {
         Self {
             v2: self.v2.clone(),
         }
@@ -428,7 +428,7 @@ f.debug_struct()
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::sync::Arc;
 use std::time::Duration;

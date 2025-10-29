@@ -11,7 +11,7 @@ use crate::{,
     },
 };
 /// 向单个范围写入数据 请求体,
-#[derive(Serialize, Debug, Default)],
+#[derive(.*?)]
 pub struct WriteDataToSingleRangeRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -21,30 +21,30 @@ pub struct WriteDataToSingleRangeRequest {
     value_range_request: ValueRangeRequest,
 }
 impl WriteDataToSingleRangeRequest {
-    pub fn builder() -> WriteDataToSingleRangeBuilder {,
+    pub fn w+.*{
 WriteDataToSingleRangeBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct WriteDataToSingleRangeBuilder {
     request: WriteDataToSingleRangeRequest,
 }
 impl WriteDataToSingleRangeBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn range(mut self, range: impl ToString) -> Self {,
+    pub fn range(mut self, range: impl ToString) -> Self {
 self.request.value_range_request.range = range.to_string();
         self,
 }
 
-    pub fn values(mut self, values: serde_json::Value) -> Self {,
+    pub fn values(mut self, values: serde_json::Value) -> Self {
 self.request.value_range_request.values = values;
         self,
 },
-pub fn build(mut self) -> WriteDataToSingleRangeRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -78,7 +78,7 @@ Ok(api_resp),
     },
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use serde_json::json;
     use crate::{
         core::{config::Config, constants::AppType},

@@ -39,7 +39,7 @@ Ok(api_resp),
     },
 },
 /// 更新浮动图片请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateFloatImageRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -53,35 +53,35 @@ pub struct UpdateFloatImageRequest {
     float_image: FloatImageData,
 }
 impl UpdateFloatImageRequest {
-    pub fn builder() -> UpdateFloatImageRequestBuilder {,
+    pub fn w+.*{
 UpdateFloatImageRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct UpdateFloatImageRequestBuilder {
     request: UpdateFloatImageRequest,
 }
 impl UpdateFloatImageRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 }
 
-    pub fn float_image_id(mut self, float_image_id: impl ToString) -> Self {,
+    pub fn float_image_id(mut self, float_image_id: impl ToString) -> Self {
 self.request.float_image_id = float_image_id.to_string();
         self,
 }
 
-    pub fn float_image(mut self, float_image: FloatImageData) -> Self {,
+    pub fn float_image(mut self, float_image: FloatImageData) -> Self {
 self.request.float_image = float_image;
         self,
 },
-pub fn build(mut self) -> UpdateFloatImageRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -94,7 +94,7 @@ impl_executable_builder_owned!(,
     update_float_image,
 );
 /// 更新浮动图片响应体最外层
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct UpdateFloatImageResponseData {
     /// 浮动图片 ID
     pub float_image_id: String,

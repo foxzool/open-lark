@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 分页响应基础结构,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PageResponse<T> {,
     /// 数据项列表
     pub items: Vec<T>,
@@ -12,7 +12,7 @@ pub struct PageResponse<T> {,
     pub has_more: Option<bool>,
 },
 /// OKR 周期状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum PeriodStatus {,
 /// 草稿状态,
@@ -25,7 +25,7 @@ pub enum PeriodStatus {,
     Paused,
 },
 /// OKR 状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum OkrStatus {,
 /// 正常,
@@ -36,7 +36,7 @@ pub enum OkrStatus {,
     Draft,
 },
 /// 进展记录类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum ProgressRecordType {,
 /// 简单更新,
@@ -47,7 +47,7 @@ pub enum ProgressRecordType {,
     Image,
 },
 /// Key Result 类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum KeyResultType {,
 /// 数值型,
@@ -58,7 +58,7 @@ pub enum KeyResultType {,
     Milestone,
 },
 /// 多语言文本,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct I18nText {
     /// 中文文本,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -71,7 +71,7 @@ pub struct I18nText {
     pub ja_jp: Option<String>,
 },
 /// 用户信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct User {
     /// 用户ID
     pub user_id: String,
@@ -83,7 +83,7 @@ pub struct User {
     pub avatar: Option<String>,
 },
 /// OKR 周期,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Period {
     /// 周期ID
     pub period_id: String,
@@ -107,7 +107,7 @@ pub struct Period {
     pub modify_time: Option<i64>,
 },
 /// OKR 周期规则,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PeriodRule {
     /// 规则ID
     pub rule_id: String,
@@ -121,7 +121,7 @@ pub struct PeriodRule {
     pub config: Option<serde_json::Value>,
 },
 /// Key Result,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct KeyResult {
     /// Key Result ID
     pub kr_id: String,
@@ -145,7 +145,7 @@ pub struct KeyResult {
     pub completed: Option<bool>,
 },
 /// Objective,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Objective {
     /// Objective ID
     pub objective_id: String,
@@ -160,7 +160,7 @@ pub struct Objective {
     pub key_results: Option<Vec<KeyResult>>,
 },
 /// OKR,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Okr {
     /// OKR ID
     pub okr_id: String,
@@ -182,7 +182,7 @@ pub struct Okr {
     pub modify_time: Option<i64>,
 },
 /// 进展记录附件,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ProgressAttachment {
     /// 附件ID
     pub attachment_id: String,
@@ -200,7 +200,7 @@ pub struct ProgressAttachment {
     pub size: Option<i64>,
 },
 /// 进展记录,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ProgressRecord {
     /// 进展记录ID
     pub progress_id: String,
@@ -229,7 +229,7 @@ pub struct ProgressRecord {
     pub modify_time: Option<i64>,
 },
 /// OKR 复盘信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Review {
     /// 复盘ID
     pub review_id: String,
@@ -252,7 +252,7 @@ pub struct Review {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_period_status_enum() {,

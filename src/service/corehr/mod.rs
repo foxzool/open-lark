@@ -234,7 +234,7 @@ pub struct CoreHRService {
 }
 impl CoreHRService {
     pub fn new() -> Self {
-Self {,
+Self {
             basic_info: BasicInfoService::new(config.clone()),
             employee: EmployeeService::new(config.clone()),
             organization: OrganizationService::new(config.clone()),
@@ -244,7 +244,7 @@ Self {,
 }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 #[test],

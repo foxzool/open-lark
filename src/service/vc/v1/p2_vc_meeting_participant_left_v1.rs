@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2VcMeetingParticipantLeftV1 {
     pub schema: String,
     pub header: EventHeader,
@@ -28,12 +28,12 @@ impl<F> P2VcMeetingParticipantLeftV1ProcessorImpl<F>,
 where
     F: Fn(P2VcMeetingParticipantLeftV1) + 'static,
 {,
-pub(crate) fn new(f: F) -> Self {,
+pub(crate) fn new(f: F) -> Self {
         P2VcMeetingParticipantLeftV1ProcessorImpl { f },
 }
 },
 /// 视频会议参与者离开事件数据,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2VcMeetingParticipantLeftV1Data {
     /// 事件对象
     pub object: VcParticipantEventObject,
@@ -42,7 +42,7 @@ pub struct P2VcMeetingParticipantLeftV1Data {
     pub meeting_status: Option<String>,
 },
 /// 视频会议参与者事件对象,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct VcParticipantEventObject {
     /// 对象类型 (meeting_participant)
     pub object_type: String,
@@ -52,7 +52,7 @@ pub struct VcParticipantEventObject {
     pub meeting: MeetingBasicInfo,
 },
 /// 离开会议的参与者信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct LeftMeetingParticipant {
     /// 用户ID
     pub user_id: String,
@@ -84,7 +84,7 @@ pub struct LeftMeetingParticipant {
     pub final_status: Option<ParticipantStatus>,
 },
 /// 会议基本信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MeetingBasicInfo {
     /// 会议ID
     pub meeting_id: String,
@@ -102,7 +102,7 @@ pub struct MeetingBasicInfo {
     pub start_time: Option<String>,
 },
 /// 离开原因,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct LeaveReason {
     /// 离开类型 (voluntary, kicked_out, network_issue, system_error, device_issue)
     pub leave_type: String,
@@ -120,7 +120,7 @@ pub struct LeaveReason {
     pub error_code: Option<String>,
 },
 /// 参与者会话统计信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ParticipantSessionStats {
     /// 总发言时长（秒）,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -151,7 +151,7 @@ pub struct ParticipantSessionStats {
     pub interaction_count: Option<i32>,
 },
 /// 设备信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DeviceInfo {
     /// 设备类型,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -170,7 +170,7 @@ pub struct DeviceInfo {
     pub performance_metrics: Option<DevicePerformanceMetrics>,
 },
 /// 设备性能指标,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DevicePerformanceMetrics {
     /// CPU使用率峰值（%）,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -189,7 +189,7 @@ pub struct DevicePerformanceMetrics {
     pub audio_quality_score: Option<f64>,
 },
 /// 参与者状态,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ParticipantStatus {
     /// 最终音频状态,
 #[serde(skip_serializing_if = "Option::is_none")],

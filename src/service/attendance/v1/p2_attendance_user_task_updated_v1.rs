@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 /// 考勤打卡流水事件 (user.attendance_records_event),
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2AttendanceUserTaskUpdatedV1 {
     pub schema: String,
     pub header: EventHeader,
@@ -28,12 +28,12 @@ impl<F> P2AttendanceUserTaskUpdatedV1ProcessorImpl<F>,
 where
     F: Fn(P2AttendanceUserTaskUpdatedV1) + 'static,
 {,
-pub(crate) fn new(f: F) -> Self {,
+pub(crate) fn new(f: F) -> Self {
         P2AttendanceUserTaskUpdatedV1ProcessorImpl { f },
 }
 },
 /// 考勤打卡流水事件数据,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2AttendanceUserTaskUpdatedV1Data {
     /// 用户信息
     pub user_id: AttendanceUserId,
@@ -43,7 +43,7 @@ pub struct P2AttendanceUserTaskUpdatedV1Data {
     pub tenant_key: String,
 },
 /// 考勤事件中的用户信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AttendanceUserId {
     /// 用户的 union id
     pub union_id: String,
@@ -55,7 +55,7 @@ pub struct AttendanceUserId {
     pub employee_id: Option<String>,
 },
 /// 考勤打卡任务信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AttendanceTask {
     /// 任务ID
     pub task_id: String,
@@ -91,7 +91,7 @@ pub struct AttendanceTask {
     pub update_time: String,
 },
 /// 打卡位置信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AttendanceLocation {
     /// 纬度
     pub latitude: f64,

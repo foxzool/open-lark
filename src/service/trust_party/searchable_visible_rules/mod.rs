@@ -20,7 +20,7 @@ use crate::,
     service::trust_party::models::{PageResponse, RuleConfig, SearchableVisibleRule}
 };
 /// 可搜可见规则管理服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct SearchableVisibleRulesService {
     pub config: Config,
 }
@@ -155,7 +155,7 @@ let mut api_req = ApiRequest::default();
 }
 }
 /// 规则创建请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RuleCreateRequest {
     /// 规则名称
     pub name: String,
@@ -173,7 +173,7 @@ pub struct RuleCreateRequest {
     pub config: Option<RuleConfig>,
 }
 /// 规则创建响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RuleCreateResponse {
     /// 创建的规则信息
     pub rule: SearchableVisibleRule,
@@ -184,7 +184,7 @@ ResponseFormat::Data,
     }
 }
 /// 规则更新请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RuleUpdateRequest {
     /// 规则名称
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -203,7 +203,7 @@ pub struct RuleUpdateRequest {
     pub config: Option<RuleConfig>,
 }
 /// 规则更新响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RuleUpdateResponse {
     /// 更新后的规则信息
     pub rule: SearchableVisibleRule,
@@ -214,7 +214,7 @@ ResponseFormat::Data,
     }
 }
 /// 规则列表查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct RuleListRequest {
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -233,7 +233,7 @@ pub struct RuleListRequest {
     pub status: Option<String>,
 }
 /// 规则列表查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RuleListResponse {
     /// 规则列表
 #[serde(flatten)],
@@ -245,7 +245,7 @@ ResponseFormat::Data,
     }
 }
 /// 规则删除响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RuleDeleteResponse {
     /// 删除成功标识
     pub success: bool,

@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 /// 词条信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Entity {
     /// 词条ID
 #[serde(rename = "entity_id")],
@@ -45,7 +45,7 @@ pub struct Entity {
     pub related_entities: Option<Vec<Entity>>,
 }
 /// 词条状态
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum EntityStatus {,
 /// 草稿
@@ -60,7 +60,7 @@ pub enum EntityStatus {,
     Offline,
 }
 /// 词条类型
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum EntityType {,
 /// 普通词条
@@ -73,7 +73,7 @@ pub enum EntityType {,
     Technical,
 }
 /// 分类信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Category {
     /// 分类ID
 #[serde(rename = "category_id")],
@@ -89,7 +89,7 @@ pub struct Category {
     pub description: Option<String>,
 }
 /// 创建者信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreatorInfo {
     /// 用户ID
 #[serde(rename = "user_id")],
@@ -102,7 +102,7 @@ pub struct CreatorInfo {
     pub avatar: Option<String>,
 }
 /// 审核状态
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum AuditStatus {,
 /// 待审核
@@ -113,7 +113,7 @@ pub enum AuditStatus {,
     Rejected,
 }
 /// 草稿信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Draft {
     /// 草稿ID
 #[serde(rename = "draft_id")],
@@ -141,7 +141,7 @@ pub struct Draft {
     pub entity_id: Option<String>,
 }
 /// 草稿类型
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum DraftType {,
 /// 新建词条
@@ -150,7 +150,7 @@ pub enum DraftType {,
     EditEntity,
 }
 /// 搜索结果
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchResult {
     /// 词条信息
     pub entity: Entity,
@@ -165,7 +165,7 @@ pub struct SearchResult {
     pub match_positions: Option<Vec<MatchPosition>>,
 }
 /// 匹配位置
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MatchPosition {
     /// 匹配开始位置
 #[serde(rename = "start_position")],
@@ -178,7 +178,7 @@ pub struct MatchPosition {
     pub match_type: MatchType,
 }
 /// 匹配类型
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum MatchType {,
 /// 精确匹配
@@ -191,7 +191,7 @@ pub enum MatchType {,
     Suffix,
 }
 /// 高亮信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct HighlightInfo {
     /// 高亮文本
 #[serde(rename = "highlighted_text")],
@@ -204,7 +204,7 @@ pub struct HighlightInfo {
     pub highlight_positions: Vec<HighlightPosition>,
 }
 /// 高亮位置
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct HighlightPosition {
     /// 开始位置
 #[serde(rename = "start")],
@@ -217,7 +217,7 @@ pub struct HighlightPosition {
     pub highlight_style: Option<String>,
 }
 /// 统计信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DictionaryStats {
     /// 总词条数
 #[serde(rename = "total_entities")],
@@ -239,7 +239,7 @@ pub struct DictionaryStats {
     pub contributor_count: i32,
 }
 /// 通用响应结构
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BaikeResponse<T> {,
     /// 响应码
     pub code: i32,
@@ -249,7 +249,7 @@ pub struct BaikeResponse<T> {,
     pub data: Option<T>,
 }
 /// 分页响应结构
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PaginatedBaikeResponse<T> {,
     /// 响应码
     pub code: i32,
@@ -259,7 +259,7 @@ pub struct PaginatedBaikeResponse<T> {,
     pub data: Option<PaginatedBaikeData<T>>,
 }
 /// 分页数据
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PaginatedBaikeData<T> {,
     /// 数据列表
     pub items: Option<Vec<T>>,

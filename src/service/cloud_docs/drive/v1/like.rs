@@ -58,7 +58,7 @@ Ok(api_resp),
     },
 },
 /// 获取云文档的点赞者列表请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ListFileLikesRequest {
     /// 文件token
     pub file_token: String,
@@ -68,10 +68,10 @@ pub struct ListFileLikesRequest {
     pub page_size: Option<i32>,
 }
 impl ListFileLikesRequest {
-    pub fn builder() -> ListFileLikesRequestBuilder {,
+    pub fn w+.*{
 ListFileLikesRequestBuilder::default(),
     },
-pub fn new(file_token: impl Into<String>) -> Self {,
+pub fn new(file_token: impl Into<String>) -> Self {
         Self {
             file_token: file_token.into(),
             page_token: None,
@@ -79,12 +79,12 @@ pub fn new(file_token: impl Into<String>) -> Self {,
         },
 }
 
-    pub fn with_page_token(mut self, page_token: impl Into<String>) -> Self {,
+    pub fn with_page_token(mut self, page_token: impl Into<String>) -> Self {
 self.page_token = Some(page_token.into());
         self,
 }
 
-    pub fn with_page_size(mut self, page_size: i32) -> Self {,
+    pub fn with_page_size(mut self, page_size: i32) -> Self {
 self.page_size = Some(page_size);
         self,
 }
@@ -95,21 +95,21 @@ pub struct ListFileLikesRequestBuilder {
     request: ListFileLikesRequest,
 }
 impl ListFileLikesRequestBuilder {
-    pub fn file_token(mut self, file_token: impl Into<String>) -> Self {,
+    pub fn file_token(mut self, file_token: impl Into<String>) -> Self {
 self.request.file_token = file_token.into();
         self,
 }
 
-    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {,
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
 self.request.page_token = Some(page_token.into());
         self,
 }
 
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
 },
-pub fn build(self) -> ListFileLikesRequest {,
+pub fn w+.*{
         self.request,
 }
 }
@@ -121,7 +121,7 @@ impl_executable_builder_owned!(,
     list_file_likes,
 );
 /// 获取云文档的点赞者列表响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListFileLikesRespData {
     /// 是否还有更多数据
     pub has_more: bool,
@@ -131,7 +131,7 @@ pub struct ListFileLikesRespData {
     pub items: Vec<FileLikeRecord>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FileLikeRecord {
     /// 点赞者ID
     pub user_id: String,

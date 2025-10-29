@@ -19,7 +19,7 @@ use crate::,
     impl_executable_builder_owned,
 };
 /// 添加知识空间成员请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct CreateSpaceMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -34,7 +34,7 @@ pub struct CreateSpaceMemberRequest {
     role: String,
 }
 impl CreateSpaceMemberRequest {
-    pub fn builder() -> CreateSpaceMemberRequestBuilder {,
+    pub fn w+.*{
 CreateSpaceMemberRequestBuilder::default(),
     },
 pub fn new(,
@@ -42,8 +42,8 @@ pub fn new(,
         member_type: impl ToString,
         member_id: impl ToString,
         role: impl ToString,
-    ) -> Self {,
-Self {,
+    ) -> Self {
+Self {
             space_id: space_id.to_string(),
             member_type: member_type.to_string(),
             member_id: member_id.to_string(),
@@ -52,47 +52,47 @@ Self {,
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct CreateSpaceMemberRequestBuilder {
     request: CreateSpaceMemberRequest,
 }
 impl CreateSpaceMemberRequestBuilder {
     /// 知识空间id
-    pub fn space_id(mut self, space_id: impl ToString) -> Self {,
+    pub fn space_id(mut self, space_id: impl ToString) -> Self {
 self.request.space_id = space_id.to_string();
         self,
 },
 /// 成员类型：user,
-    pub fn member_type(mut self, member_type: impl ToString) -> Self {,
+    pub fn member_type(mut self, member_type: impl ToString) -> Self {
 self.request.member_type = member_type.to_string();
         self,
 },
 /// 成员id，根据member_type决定,
-    pub fn member_id(mut self, member_id: impl ToString) -> Self {,
+    pub fn member_id(mut self, member_id: impl ToString) -> Self {
 self.request.member_id = member_id.to_string();
         self,
 },
 /// 成员权限角色：admin(管理员)、edit_member(协作者)、view_member(阅读者),
-    pub fn role(mut self, role: impl ToString) -> Self {,
+    pub fn role(mut self, role: impl ToString) -> Self {
 self.request.role = role.to_string();
         self,
 },
 /// 设置为管理员,
-    pub fn as_admin(mut self) -> Self {,
+    pub fn as_admin(mut self) -> Self {
 self.request.role = "admin".to_string();
         self,
 },
 /// 设置为协作者,
-    pub fn as_editor(mut self) -> Self {,
+    pub fn as_editor(mut self) -> Self {
 self.request.role = "edit_member".to_string();
         self,
 },
 /// 设置为阅读者,
-    pub fn as_viewer(mut self) -> Self {,
+    pub fn as_viewer(mut self) -> Self {
 self.request.role = "view_member".to_string();
         self,
 },
-pub fn build(mut self) -> CreateSpaceMemberRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -105,7 +105,7 @@ impl_executable_builder_owned!(,
     create,
 );
 /// 添加的成员信息
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct CreatedMember {
     /// 成员类型：user
     pub member_type: String,
@@ -115,7 +115,7 @@ pub struct CreatedMember {
     pub role: String,
 },
 /// 添加知识空间成员响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct CreateSpaceMemberResponse {
     /// 添加的成员信息
     pub member: CreatedMember,
@@ -146,7 +146,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_create_space_member_request_builder() {,

@@ -10,7 +10,7 @@
 use crate::prelude::*;
 use crate::service::feishu_people::core::v1::CoreV1Service;
 /// 核心人事管理服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct CoreService {
     /// v1版本API服务
     pub v1: CoreV1Service,

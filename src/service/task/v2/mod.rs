@@ -41,7 +41,7 @@ pub struct TaskV2Service {
 }
 impl TaskV2Service {
     pub fn new() -> Self {
-Self {,
+Self {
             task: TaskService::new(config.clone()),
             task_subtask: TaskSubtaskService::new(config.clone()),
             tasklist: TasklistService::new(config.clone()),
@@ -57,7 +57,7 @@ Self {,
 }
 /// 使用共享配置创建服务（实验性）
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             task: TaskService::new(shared.as_ref().clone()),
             task_subtask: TaskSubtaskService::new(shared.as_ref().clone()),
             tasklist: TasklistService::new(shared.as_ref().clone()),
@@ -74,7 +74,7 @@ Self {,
 }
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 fn create_test_config() -> Config {,
         Config::default(),

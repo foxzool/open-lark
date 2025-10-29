@@ -39,7 +39,7 @@ api_resp.into_result(),
     },
 },
 /// 批量设置单元格样式请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchSetCellStyleRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -51,26 +51,26 @@ pub struct BatchSetCellStyleRequest {
     data: Vec<RangeStyleData>,
 }
 impl BatchSetCellStyleRequest {
-    pub fn builder() -> BatchSetCellStyleRequestBuilder {,
+    pub fn w+.*{
 BatchSetCellStyleRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct BatchSetCellStyleRequestBuilder {
     request: BatchSetCellStyleRequest,
 }
 impl BatchSetCellStyleRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 }
 
-    pub fn add_range_style(mut self, range: impl ToString, style: CellStyle) -> Self {,
+    pub fn add_range_style(mut self, range: impl ToString, style: CellStyle) -> Self {
 self.request.data.push(RangeStyleData {,
             range: range.to_string(),
             style,
@@ -78,11 +78,11 @@ self.request.data.push(RangeStyleData {,
 self,
     }
 
-    pub fn range_styles(mut self, data: Vec<RangeStyleData>) -> Self {,
+    pub fn range_styles(mut self, data: Vec<RangeStyleData>) -> Self {
 self.request.data = data;
         self,
 },
-pub fn build(mut self) -> BatchSetCellStyleRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -96,7 +96,7 @@ impl_executable_builder_owned!(
     batch_set_cell_style,
 );
 /// 范围样式数据
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RangeStyleData {
     /// 单元格范围
     pub range: String,
@@ -104,7 +104,7 @@ pub struct RangeStyleData {
     pub style: CellStyle,
 },
 /// 批量设置单元格样式响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct BatchSetCellStyleResponseData {
     /// 更新的单元格总数
     pub updated_cells: i32,

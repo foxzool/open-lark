@@ -24,7 +24,7 @@ pub struct BadgeGrantService {
 // Service 抽象接入：Admin BadgeGrantService
 impl_full_service!(BadgeGrantService, "admin.badge_grant", "v1");
 /// 勋章授予名单创建响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeGrantCreateResponse {
     /// 创建的授予名单信息
 #[serde(flatten)],
@@ -36,7 +36,7 @@ ResponseFormat::Data,
     }
 }
 /// 勋章授予名单删除响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeGrantDeleteResponse {
     /// 删除结果
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -51,7 +51,7 @@ ResponseFormat::Data,
     }
 }
 /// 勋章授予名单更新响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeGrantUpdateResponse {
     /// 更新的授予名单信息
 #[serde(flatten)],
@@ -63,7 +63,7 @@ ResponseFormat::Data,
     }
 }
 /// 勋章授予名单列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeGrantListResponse {
     /// 分页响应数据
 #[serde(flatten)],
@@ -75,7 +75,7 @@ ResponseFormat::Data,
     }
 }
 /// 勋章授予名单详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeGrantGetResponse {
     /// 授予名单详细信息
 #[serde(flatten)],

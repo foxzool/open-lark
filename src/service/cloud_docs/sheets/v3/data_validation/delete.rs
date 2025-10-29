@@ -37,7 +37,7 @@ Ok(api_resp),
     },
 },
 /// 删除下拉列表设置请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DeleteDataValidationRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -49,36 +49,36 @@ pub struct DeleteDataValidationRequest {
     data_validation_id: String,
 }
 impl DeleteDataValidationRequest {
-    pub fn builder() -> DeleteDataValidationRequestBuilder {,
+    pub fn w+.*{
 DeleteDataValidationRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct DeleteDataValidationRequestBuilder {
     request: DeleteDataValidationRequest,
 }
 impl DeleteDataValidationRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 }
 
-    pub fn data_validation_id(mut self, data_validation_id: impl ToString) -> Self {,
+    pub fn data_validation_id(mut self, data_validation_id: impl ToString) -> Self {
 self.request.data_validation_id = data_validation_id.to_string();
         self,
 },
-pub fn build(mut self) -> DeleteDataValidationRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 删除下拉列表设置响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct DeleteDataValidationResponseData {
     /// 删除操作是否成功,
 #[serde(default)],

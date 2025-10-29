@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
 /// 附件,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Attachment {
     /// 文件ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -24,7 +24,7 @@ pub struct Attachment {
     pub uploaded_at: Option<String>,
 },
 /// 分页响应,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PageResponse<T> {,
     /// 是否还有更多项目,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -38,7 +38,7 @@ pub struct PageResponse<T> {,
 },
 // ============ 会话相关结构 ============,
 /// 会话创建请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SessionCreateRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -50,7 +50,7 @@ pub struct SessionCreateRequest {
     pub tool_set: Option<ToolSet>,
 },
 /// 会话更新请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SessionUpdateRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -64,7 +64,7 @@ pub struct SessionUpdateRequest {
     pub tool_set: Option<ToolSet>,
 },
 /// 会话查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SessionGetRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -72,7 +72,7 @@ pub struct SessionGetRequest {
     pub session_id: String,
 },
 /// 会话删除请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SessionDeleteRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -80,7 +80,7 @@ pub struct SessionDeleteRequest {
     pub session_id: String,
 },
 /// 会话信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Session {
     /// 会话ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -99,14 +99,14 @@ pub struct Session {
     pub tool_set: Option<ToolSet>,
 },
 /// 工具配置,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ToolSet {
     /// 工具列表,
 #[serde(skip_serializing_if = "Option::is_none")],
     pub tools: Option<Vec<Tool>>,
 },
 /// 工具信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Tool {
     /// 工具类型,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -117,7 +117,7 @@ pub struct Tool {
 },
 // ============ 消息相关结构 ============,
 /// 消息发送请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MessageCreateRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -133,7 +133,7 @@ pub struct MessageCreateRequest {
     pub metadata: Option<HashMap<String, Value>>,
 },
 /// 消息查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MessageGetRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -143,7 +143,7 @@ pub struct MessageGetRequest {
     pub message_id: String,
 },
 /// 消息列表查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MessageListRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -160,7 +160,7 @@ pub struct MessageListRequest {
     pub order: Option<String>,
 },
 /// 消息信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Message {
     /// 消息ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -186,7 +186,7 @@ pub struct Message {
 },
 // ============ 运行相关结构 ============,
 /// 运行创建请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RunCreateRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -206,7 +206,7 @@ pub struct RunCreateRequest {
     pub tool_set: Option<ToolSet>,
 },
 /// 运行查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RunGetRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -216,7 +216,7 @@ pub struct RunGetRequest {
     pub run_id: String,
 },
 /// 运行列表查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RunListRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -233,7 +233,7 @@ pub struct RunListRequest {
     pub order: Option<String>,
 },
 /// 运行取消请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RunCancelRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -243,7 +243,7 @@ pub struct RunCancelRequest {
     pub run_id: String,
 },
 /// 运行信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Run {
     /// 运行ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -283,7 +283,7 @@ pub struct Run {
     pub last_error: Option<RunError>,
 },
 /// 运行错误信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RunError {
     /// 错误代码,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -294,7 +294,7 @@ pub struct RunError {
 },
 // ============ 技能相关结构 ============,
 /// 技能调用请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SkillStartRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -308,7 +308,7 @@ pub struct SkillStartRequest {
     pub session_id: Option<String>,
 },
 /// 技能信息查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SkillGetRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -316,7 +316,7 @@ pub struct SkillGetRequest {
     pub skill_id: String,
 },
 /// 技能列表查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SkillListRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -328,7 +328,7 @@ pub struct SkillListRequest {
     pub page_token: Option<String>,
 },
 /// 技能信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Skill {
     /// 技能ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -359,7 +359,7 @@ pub struct Skill {
     pub updated_at: Option<String>,
 },
 /// 技能执行结果,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SkillExecution {
     /// 执行ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -388,7 +388,7 @@ pub struct SkillExecution {
 },
 // ============ 知识问答相关结构 ============,
 /// 数据知识问答请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataKnowledgeAskRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -405,7 +405,7 @@ pub struct DataKnowledgeAskRequest {
     pub retrieval_config: Option<RetrievalConfig>,
 },
 /// 对话消息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ChatMessage {
     /// 消息角色
     pub role: String,
@@ -413,12 +413,12 @@ pub struct ChatMessage {
     pub content: String,
 },
 /// 检索配置,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct RetrievalConfig {
     // TODO: Add fields,
 },
 /// 数据知识问答结果,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataKnowledgeAnswer {
     /// 回答内容,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -431,7 +431,7 @@ pub struct DataKnowledgeAnswer {
     pub confidence_score: Option<f64>,
 },
 /// 知识引用,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct KnowledgeReference {
     /// 文档ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -448,7 +448,7 @@ pub struct KnowledgeReference {
 },
 // ============ 数据知识管理相关结构 ============,
 /// 文件上传请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataKnowledgeFileUploadRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -462,7 +462,7 @@ pub struct DataKnowledgeFileUploadRequest {
     pub file_type: Option<String>,
 },
 /// 数据知识创建请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataKnowledgeCreateRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -481,7 +481,7 @@ pub struct DataKnowledgeCreateRequest {
     pub metadata: Option<HashMap<String, Value>>,
 },
 /// 数据知识查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataKnowledgeGetRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -489,7 +489,7 @@ pub struct DataKnowledgeGetRequest {
     pub knowledge_id: String,
 },
 /// 数据知识删除请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataKnowledgeDeleteRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -497,7 +497,7 @@ pub struct DataKnowledgeDeleteRequest {
     pub knowledge_id: String,
 },
 /// 数据知识列表查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataKnowledgeListRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -515,7 +515,7 @@ pub struct DataKnowledgeListRequest {
     pub keyword: Option<String>,
 },
 /// 数据知识分类列表查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataKnowledgeCategoryListRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -527,7 +527,7 @@ pub struct DataKnowledgeCategoryListRequest {
     pub page_token: Option<String>,
 },
 /// 数据知识信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataKnowledge {
     /// 数据知识ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -561,7 +561,7 @@ pub struct DataKnowledge {
     pub metadata: Option<HashMap<String, Value>>,
 },
 /// 数据知识分类,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataKnowledgeCategory {
     /// 分类ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -586,7 +586,7 @@ pub struct DataKnowledgeCategory {
     pub updated_at: Option<String>,
 },
 /// 文件上传结果,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FileUploadResult {
     /// 文件token,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -603,7 +603,7 @@ pub struct FileUploadResult {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

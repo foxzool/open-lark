@@ -18,7 +18,7 @@ use crate::,
     service::bitable::v1::app_table_field::AppTableField,
 };
 /// 列出字段请求,
-#[derive(Debug, Serialize, Default, Clone)],
+#[derive(.*?)]
 pub struct ListFieldRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -42,54 +42,54 @@ pub struct ListFieldRequest {
     page_size: Option<i32>,
 }
 impl ListFieldRequest {
-    pub fn builder() -> ListFieldRequestBuilder {,
+    pub fn w+.*{
 ListFieldRequestBuilder::default(),
     }
 
-    pub fn new(app_token: impl ToString, table_id: impl ToString) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, table_id: impl ToString) -> Self {
+Self {
             app_token: app_token.to_string(),
             table_id: table_id.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct ListFieldRequestBuilder {
     request: ListFieldRequest,
 }
 impl ListFieldRequestBuilder {
     /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 数据表的唯一标识符,
-    pub fn table_id(mut self, table_id: impl ToString) -> Self {,
+    pub fn table_id(mut self, table_id: impl ToString) -> Self {
 self.request.table_id = table_id.to_string();
         self,
 },
 /// 视图 ID,
-    pub fn view_id(mut self, view_id: impl ToString) -> Self {,
+    pub fn view_id(mut self, view_id: impl ToString) -> Self {
 self.request.view_id = Some(view_id.to_string());
         self,
 },
 /// 控制字段描述（多行文本格式）数据的返回格式,
-    pub fn text_field_as_array(mut self, text_field_as_array: bool) -> Self {,
+    pub fn text_field_as_array(mut self, text_field_as_array: bool) -> Self {
 self.request.text_field_as_array = Some(text_field_as_array);
         self,
 },
 /// 分页标记,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
 },
 /// 分页大小,
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
 },
-pub fn build(mut self) -> ListFieldRequest {,
+pub fn w+.*{
         if let Some(view_id) = &self.request.view_id {,
 self.request,
                 .api_request,
@@ -126,7 +126,7 @@ crate::impl_executable_builder_owned!(
     list,
 );
 /// 列出字段响应
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct ListFieldResponse {
     /// 是否还有更多项
     pub has_more: bool,
@@ -161,7 +161,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_list_field_request_builder() {,

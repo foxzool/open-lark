@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 /// 文件类型枚举
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum FileType {,
 /// 文件
@@ -24,7 +24,7 @@ pub enum FileType {,
     Unknown,
 }
 /// 文件元数据
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FileMetadata {
     /// 文件token
     pub file_token: String,
@@ -51,7 +51,7 @@ pub struct FileMetadata {
     pub permissions: Option<FilePermissions>,
 }
 /// 用户信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserInfo {
     /// 用户ID
     pub user_id: String,
@@ -62,7 +62,7 @@ pub struct UserInfo {
     pub name: Option<String>,
 }
 /// 文件权限
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FilePermissions {
     /// 是否可查看
     pub view: bool,
@@ -76,7 +76,7 @@ pub struct FilePermissions {
     pub download: bool,
 }
 /// 云空间统计信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DriveStatistics {
     /// 总文件数
     pub total_files: i64,
@@ -92,7 +92,7 @@ pub struct DriveStatistics {
     pub other_count: i64,
 }
 /// 通用响应结构
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CcmResponse<T> {,
     /// 响应码
     pub code: i32,
@@ -102,7 +102,7 @@ pub struct CcmResponse<T> {,
     pub data: Option<T>,
 }
 /// 分页响应结构
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PaginatedResponse<T> {,
     /// 响应码
     pub code: i32,
@@ -112,7 +112,7 @@ pub struct PaginatedResponse<T> {,
     pub data: Option<PaginatedData<T>>,
 }
 /// 分页数据
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PaginatedData<T> {,
     /// 数据列表
     pub items: Option<Vec<T>>,
@@ -122,7 +122,7 @@ pub struct PaginatedData<T> {,
     pub has_more: bool,
 }
 /// 异步任务状态
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum TaskStatus {,
 /// 进行中
@@ -135,7 +135,7 @@ pub enum TaskStatus {,
     Cancelled,
 }
 /// 异步任务信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AsyncTask {
     /// 任务ID
     pub task_id: String,
@@ -151,7 +151,7 @@ pub struct AsyncTask {
     pub finish_time: Option<String>,
 }
 /// 搜索条件
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchCondition {
     /// 搜索关键词
     pub query: String,
@@ -170,7 +170,7 @@ pub struct SearchCondition {
     pub page_token: Option<String>,
 }
 /// 时间范围
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TimeRange {
     /// 开始时间
     pub start_time: Option<String>,
@@ -178,7 +178,7 @@ pub struct TimeRange {
     pub end_time: Option<String>,
 }
 /// 文档块类型
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum BlockType {,
 /// 文本块
@@ -203,7 +203,7 @@ pub enum BlockType {,
     Unknown,
 }
 /// 文档块信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DocumentBlock {
     /// 块ID
 #[serde(rename = "block_id")],
@@ -221,7 +221,7 @@ pub struct DocumentBlock {
     pub modify_time: Option<String>,
 }
 /// 评论信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Comment {
     /// 评论ID
 #[serde(rename = "comment_id")],
@@ -238,7 +238,7 @@ pub struct Comment {
     pub resolved: Option<bool>,
 }
 /// 评论回复
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CommentReply {
     /// 回复ID
 #[serde(rename = "reply_id")],

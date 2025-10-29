@@ -6,7 +6,7 @@ use crate::service::ccm::docx::v1::document::DocumentService;
 use crate::service::ccm::docx::v1::block::BlockService;
 use crate::service::ccm::docx::v1::comment::CommentService;
 /// 文档v1版本服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct DocxV1Service {
     client: std::sync::Arc<LarkClient>,
     /// 文档操作服务

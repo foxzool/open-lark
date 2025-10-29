@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 用户ID类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum UserIdType {,
     #[serde(rename = "open_id")]
     OpenId,
@@ -10,7 +10,7 @@ pub enum UserIdType {,
     UnionId,
 }
 impl UserIdType {
-    pub fn as_str(&self) -> &str {,
+    pub fn w+.*{
 match self {,
             UserIdType::OpenId => "open_id",
             UserIdType::UserId => "user_id",
@@ -19,7 +19,7 @@ match self {,
 }
 },
 /// 客服信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Agent {
     /// 客服ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -38,7 +38,7 @@ pub struct Agent {
     pub status: Option<AgentStatus>,
 },
 /// 客服状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum AgentStatus {,
     /// 在线,
 #[serde(rename = "online")],
@@ -54,7 +54,7 @@ pub enum AgentStatus {,
     Away,
 },
 /// 客服工作日程,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AgentSchedule {
     /// 日程ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -73,7 +73,7 @@ pub struct AgentSchedule {
     pub repeat_type: Option<RepeatType>,
 },
 /// 重复模式,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum RepeatType {,
     /// 不重复,
 #[serde(rename = "none")],
@@ -89,7 +89,7 @@ pub enum RepeatType {,
     Monthly,
 },
 /// 客服技能,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AgentSkill {
     /// 技能ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -105,7 +105,7 @@ pub struct AgentSkill {
     pub level: Option<i32>,
 },
 /// 工单信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Ticket {
     /// 工单ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -136,7 +136,7 @@ pub struct Ticket {
     pub updated_at: Option<String>,
 },
 /// 工单状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum TicketStatus {,
     /// 待处理,
 #[serde(rename = "pending")],
@@ -152,7 +152,7 @@ pub enum TicketStatus {,
     Closed,
 },
 /// 工单优先级,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum TicketPriority {,
     /// 低,
 #[serde(rename = "low")],
@@ -168,7 +168,7 @@ pub enum TicketPriority {,
     Urgent,
 },
 /// 工单消息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TicketMessage {
     /// 消息ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -190,7 +190,7 @@ pub struct TicketMessage {
     pub created_at: Option<String>,
 },
 /// 消息类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum MessageType {,
     /// 文本,
 #[serde(rename = "text")],
@@ -206,7 +206,7 @@ pub enum MessageType {,
     Card,
 },
 /// 知识库条目,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Faq {
     /// FAQ ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -234,7 +234,7 @@ pub struct Faq {
     pub updated_at: Option<String>,
 },
 /// FAQ状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum FaqStatus {,
     /// 草稿,
 #[serde(rename = "draft")],
@@ -247,7 +247,7 @@ pub enum FaqStatus {,
     Archived,
 },
 /// 知识库分类,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Category {
     /// 分类ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -266,7 +266,7 @@ pub struct Category {
     pub sort_order: Option<i32>,
 },
 /// 推送信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Notification {
     /// 推送ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -291,7 +291,7 @@ pub struct Notification {
     pub scheduled_at: Option<String>,
 },
 /// 推送状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum NotificationStatus {,
     /// 草稿,
 #[serde(rename = "draft")],
@@ -310,7 +310,7 @@ pub enum NotificationStatus {,
     Cancelled,
 },
 /// 自定义字段,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CustomizedField {
     /// 字段ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -332,7 +332,7 @@ pub struct CustomizedField {
     pub options: Option<Vec<String>>,
 },
 /// 字段类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum FieldType {,
     /// 文本,
 #[serde(rename = "text")],
@@ -355,7 +355,7 @@ pub enum FieldType {,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

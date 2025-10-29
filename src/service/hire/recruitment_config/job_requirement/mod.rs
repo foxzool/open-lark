@@ -21,7 +21,7 @@ pub struct JobRequirementService {
     pub config: Config,
 }
 /// 招聘需求列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobRequirementListResponse {
     /// 招聘需求列表
 #[serde(flatten)],
@@ -33,7 +33,7 @@ ResponseFormat::Data,
     }
 }
 /// 招聘需求详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobRequirementDetailResponse {
     /// 招聘需求信息
     pub requirement: JobRequirement,
@@ -44,7 +44,7 @@ ResponseFormat::Data,
     }
 }
 /// 招聘需求操作响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobRequirementOperationResponse {
     /// 操作结果
 #[serde(flatten)],
@@ -58,7 +58,7 @@ ResponseFormat::Data,
     }
 }
 /// 招聘需求列表请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct JobRequirementListRequest {
     /// 分页大小
     pub page_size: Option<u32>,

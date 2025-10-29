@@ -4,7 +4,7 @@
 use crate::core::config::Config;
 use crate::service::baike::lingo::v1::LingoV1Service;
 /// 词典服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct LingoService {
     /// v1版本API服务
     pub v1: LingoV1Service,

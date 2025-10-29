@@ -166,7 +166,7 @@ impl PerformanceService {
     /// let performance_service = PerformanceService::new(config);
 /// ```
     pub fn new() -> Self {
-Self {,
+Self {
             review_config: ReviewConfigService::new(config.clone()),
             stage_task: StageTaskService::new(config.clone()),
             metric_detail: MetricDetailService::new(config.clone()),
@@ -186,7 +186,7 @@ Self {,
 /// - 绩效管理API权限配置
     /// - 评估模板和指标配置
 /// - 数据安全策略设置
-    pub fn validate_performance_config(&self) -> bool {,
+    pub fn w+.*{
 // 检查基础配置有效性
         !self.review_config.config.app_id.is_empty(),
 && !self.review_config.config.app_secret.is_empty(),
@@ -210,7 +210,7 @@ Self {,
 /// - 目标管理模块统计
     /// - 评估系统功能统计
 /// - 数据分析支持状态
-    pub fn get_performance_statistics(&self) -> String {,
+    pub fn w+.*{
 format!(,
             "PerformanceService{{ goal_management: true, performance_assessment: true, data_analytics: true, talent_development: true, incentive_management: true, modules: 4, features: 20, app_id: {} }}",
             self.review_config.config.app_id,
@@ -232,7 +232,7 @@ format!(,
     /// - **评估系统**: 360度评估、定制模板等
 /// - **数据分析**: 绩效分析、趋势预测等
     /// - **企业功能**: 多语言、移动端、API集成等
-    pub fn supports_performance_feature(&self, performance_feature: &str) -> bool {,
+    pub fn w+.*{
 match performance_feature {,
             // 目标管理体系功能
             "goal_management" => true,
@@ -348,7 +348,7 @@ match performance_feature {,
     /// - API端点可访问性
 /// - 绩效管理权限配置
     /// - 评估模板可用性
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         // 基础健康检查
 let basic_health = !self.review_config.config.app_id.is_empty(),
             && !self.review_config.config.app_secret.is_empty(),
@@ -375,7 +375,7 @@ let security_health = self.supports_performance_feature("data_security"),
     ///,
 /// # 返回值
     /// 包含绩效管理能力矩阵信息的字符串
-pub fn get_performance_capabilities_matrix(&self) -> String {,
+pub fn w+.*{
         "PerformanceService Capabilities{ goal: true, assessment: true, analytics: true, development: true, incentive: true, mobile: true }".to_string(),
 }
 /// 获取企业级功能支持矩阵
@@ -384,7 +384,7 @@ pub fn get_performance_capabilities_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含企业级功能支持矩阵信息的字符串
-pub fn get_enterprise_features_matrix(&self) -> String {,
+pub fn w+.*{
         "PerformanceService Enterprise{ multi_entity: true, global: true, scalable: true, integrated: true, compliant: true, secure: true }".to_string(),
 }
 /// 获取分析能力矩阵
@@ -393,7 +393,7 @@ pub fn get_enterprise_features_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含分析能力矩阵信息的字符串
-pub fn get_analytics_capabilities_matrix(&self) -> String {,
+pub fn w+.*{
         "PerformanceService Analytics{ performance: true, predictive: true, comparative: true, talent: true, trend: true, anomaly: true }".to_string(),
 }
 /// 获取评估系统能力矩阵
@@ -402,7 +402,7 @@ pub fn get_analytics_capabilities_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含评估系统能力矩阵信息的字符串
-pub fn get_assessment_systems_matrix(&self) -> String {,
+pub fn w+.*{
         "PerformanceService Assessment{ degree_360: true, custom_templates: true, workflows: true, calibration: true, continuous: true, automated: true }".to_string(),
 }
 /// 获取技术架构能力矩阵
@@ -411,7 +411,7 @@ pub fn get_assessment_systems_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含技术架构能力矩阵信息的字符串
-pub fn get_technical_architecture_matrix(&self) -> String {,
+pub fn w+.*{
         "PerformanceService Architecture{ cloud_native: true, microservices: true, api_first: true, secure: true, scalable: true, ai_enabled: true }".to_string(),
 }
 /// 获取绩效管理模块统计
@@ -420,7 +420,7 @@ pub fn get_technical_architecture_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各类型管理模块数量的统计信息
-pub fn get_performance_modules_statistics(&self) -> String {,
+pub fn w+.*{
         "PerformanceService Modules{ goal: 7, assessment: 7, analytics: 7, development: 7, configuration: 7, enterprise: 7, total: 42 }".to_string(),
 }
 /// 获取绩效数据安全状态信息
@@ -429,7 +429,7 @@ pub fn get_performance_modules_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含绩效数据安全状态的字符串
-pub fn get_data_security_status(&self) -> String {,
+pub fn w+.*{
         "PerformanceService Security{ encryption: AES256, access_control: RBAC, audit_logging: true, data_masking: true, privacy: GDPR_COMPLIANT, backup: true }".to_string(),
 }
 /// 获取绩效管理集成能力矩阵
@@ -438,7 +438,7 @@ pub fn get_data_security_status(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含绩效管理集成能力矩阵信息的字符串
-pub fn get_integration_capabilities_matrix(&self) -> String {,
+pub fn w+.*{
         "PerformanceService Integration{ restful_api: true, webhooks: true, sso: true, hr_systems: true, bi_tools: true, collaboration: true, learning_platforms: true }".to_string(),
 }
 /// 获取目标管理能力矩阵
@@ -447,7 +447,7 @@ pub fn get_integration_capabilities_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含目标管理能力矩阵信息的字符串
-pub fn get_goal_management_matrix(&self) -> String {,
+pub fn w+.*{
         "PerformanceService Goals{ okr: true, kpi: true, alignment: true, cascading: true, tracking: true, monitoring: true, reporting: true }".to_string(),
 }
 /// 获取人才发展能力矩阵
@@ -456,7 +456,7 @@ pub fn get_goal_management_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含人才发展能力矩阵信息的字符串
-pub fn get_talent_development_matrix(&self) -> String {,
+pub fn w+.*{
         "PerformanceService Development{ planning: true, training: true, coaching: true, succession: true, career_pathing: true, skill_gap: true, mentorship: true }".to_string(),
 }
 }
@@ -473,8 +473,8 @@ fn service_name() -> &'static str,
     }
 }
 impl Clone for PerformanceService {,
-    fn clone(&self) -> Self {,
-Self {,
+    fn clone(&self) -> Self {
+Self {
             review_config: ReviewConfigService::new(self.review_config.config.clone()),
             stage_task: StageTaskService::new(self.stage_task.config.clone()),
             metric_detail: MetricDetailService::new(self.metric_detail.config.clone()),
@@ -497,7 +497,7 @@ f.debug_struct()
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 /// 创建测试配置

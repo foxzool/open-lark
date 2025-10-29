@@ -20,7 +20,7 @@ pub struct TasklistActivitySubscriptionService {
     pub config: Config,
 }
 /// 创建动态订阅请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateActivitySubscriptionRequest {
     /// 订阅名称
     pub name: String,
@@ -32,7 +32,7 @@ pub struct CreateActivitySubscriptionRequest {
     pub include_completed: Option<bool>,
 }
 /// 创建动态订阅响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateActivitySubscriptionResponse {
     /// 创建的订阅
     pub subscription: ActivitySubscription,
@@ -43,7 +43,7 @@ ResponseFormat::Data,
     }
 }
 /// 更新动态订阅请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateActivitySubscriptionRequest {
     /// 订阅名称
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -56,7 +56,7 @@ pub struct UpdateActivitySubscriptionRequest {
     pub include_completed: Option<bool>,
 }
 /// 更新动态订阅响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateActivitySubscriptionResponse {
     /// 更新后的订阅
     pub subscription: ActivitySubscription,
@@ -67,7 +67,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取动态订阅响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetActivitySubscriptionResponse {
     /// 订阅详情
     pub subscription: ActivitySubscription,
@@ -78,7 +78,7 @@ ResponseFormat::Data,
     }
 }
 /// 动态订阅列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListActivitySubscriptionsResponse {
     /// 订阅列表
     pub items: Vec<ActivitySubscription>,

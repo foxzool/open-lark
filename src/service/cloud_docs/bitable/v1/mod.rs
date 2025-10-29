@@ -42,7 +42,7 @@ pub struct V1 {
 }
 impl V1 {
     pub fn new() -> Self {
-Self {,
+Self {
             app: app::AppService::new(config.clone()),
             app_table: app_table::AppTableService::new(config.clone()),
             app_table_view: app_table_view::AppTableViewService::new(config.clone()),

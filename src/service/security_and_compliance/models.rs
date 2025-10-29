@@ -1,7 +1,7 @@
 use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 /// OpenAPI 审计日志请求参数,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OpenapiLogListRequest {
     /// 页码
     pub page_token: Option<String>,
@@ -19,7 +19,7 @@ pub struct OpenapiLogListRequest {
     pub response_codes: Option<String>,
 },
 /// OpenAPI 审计日志项,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OpenapiLogItem {
     /// 日志时间（Unix 时间戳，精确到毫秒）
     pub timestamp: i64,
@@ -47,7 +47,7 @@ pub struct OpenapiLogItem {
     pub user_agent: Option<String>,
 },
 /// OpenAPI 审计日志响应,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OpenapiLogListResponse {
     /// 是否还有更多页面
     pub has_more: bool,
@@ -57,7 +57,7 @@ pub struct OpenapiLogListResponse {
     pub items: Vec<OpenapiLogItem>,
 },
 /// 行为审计日志请求参数,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AuditLogGetRequest {
     /// 获取数据类型，固定值 "all"
     pub data_type: String,
@@ -77,7 +77,7 @@ pub struct AuditLogGetRequest {
     pub object_ids: Option<Vec<String>>,
 },
 /// 行为审计日志项,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AuditLogItem {
     /// 日志 ID
     pub log_id: String,
@@ -103,7 +103,7 @@ pub struct AuditLogItem {
     pub extend_info: Option<serde_json::Value>,
 },
 /// 行为审计日志响应,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AuditLogGetResponse {
     /// 总数量
     pub total: i32,
@@ -116,7 +116,7 @@ pub struct AuditLogGetResponse {
 },
 // 默认实现,
 impl Default for OpenapiLogListRequest {,
-fn default() -> Self {,
+fn default() -> Self {
         Self {
             page_token: None,
             page_size: Some(100),
@@ -129,8 +129,8 @@ fn default() -> Self {,
 }
 }
 impl Default for AuditLogGetRequest {,
-    fn default() -> Self {,
-Self {,
+    fn default() -> Self {
+Self {
             data_type: "all".to_string(),
             start_time: 0,
             end_time: 0,
@@ -155,7 +155,7 @@ ResponseFormat::Data,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

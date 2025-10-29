@@ -19,7 +19,7 @@ pub struct TicketMessageService {
     pub config: Config,
 }
 /// 发送工单消息请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateTicketMessageRequest {
     /// 消息内容
     pub content: String,
@@ -28,7 +28,7 @@ pub struct CreateTicketMessageRequest {
     pub message_type: Option<String>,
 }
 /// 发送工单消息响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateTicketMessageResponse {
     /// 创建的消息
     pub message: TicketMessage,
@@ -39,7 +39,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取工单消息详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListTicketMessagesResponse {
     /// 消息列表
     pub messages: Vec<TicketMessage>,
@@ -56,7 +56,7 @@ ResponseFormat::Data,
     }
 }
 /// 向群内发送消息请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateGroupMessageRequest {
     /// 消息内容
     pub content: String,
@@ -65,7 +65,7 @@ pub struct CreateGroupMessageRequest {
     pub message_type: Option<String>,
 }
 /// 向群内发送消息响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateGroupMessageResponse {
     /// 创建的消息
     pub message: TicketMessage,

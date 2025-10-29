@@ -18,7 +18,7 @@ pub struct DataItemService {
     pub config: Config,
 }
 /// 创建数据项响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateDataItemResponse {
     /// 数据项信息
     pub data_item: DataItem,
@@ -29,7 +29,7 @@ ResponseFormat::Data,
     }
 }
 /// 批量创建数据项响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchCreateDataItemResponse {
     /// 成功创建的数据项列表
     pub success_items: Vec<DataItem>,
@@ -43,7 +43,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取数据项响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetDataItemResponse {
     /// 数据项信息
     pub data_item: DataItem,

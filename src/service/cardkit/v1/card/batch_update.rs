@@ -16,7 +16,7 @@ core::{,
 };
 use super::CardService;
 /// 批量更新卡片实体请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct BatchUpdateCardRequest {
     pub api_req: ApiRequest,
     /// 卡片ID
@@ -28,7 +28,7 @@ pub struct BatchUpdateCardRequest {
 }
 impl BatchUpdateCardRequest {
     /// 创建批量更新卡片请求的构建器,
-pub fn builder(card_id: impl ToString) -> BatchUpdateCardRequestBuilder {,
+pub fn w+.*{
         BatchUpdateCardRequestBuilder {,
 request: BatchUpdateCardRequest {,
                 card_id: card_id.to_string()
@@ -43,22 +43,22 @@ pub struct BatchUpdateCardRequestBuilder {
 }
 impl BatchUpdateCardRequestBuilder {
     /// 添加更新操作
-    pub fn add_operation(mut self, operation: BatchUpdateOperation) -> Self {,
+    pub fn add_operation(mut self, operation: BatchUpdateOperation) -> Self {
 self.request.operations.push(operation);
         self,
 },
 /// 添加多个更新操作,
-    pub fn add_operations(mut self, operations: Vec<BatchUpdateOperation>) -> Self {,
+    pub fn add_operations(mut self, operations: Vec<BatchUpdateOperation>) -> Self {
 self.request.operations.extend(operations);
         self,
 },
 /// 设置用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
 },
 /// 构建请求,
-    pub fn build(mut self) -> BatchUpdateCardRequest {,
+    pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
@@ -75,13 +75,13 @@ self.request.api_req.body = serde_json::to_vec(&body).unwrap_or_default();
 }
 },
 /// 批量更新卡片实体响应数据,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct BatchUpdateCardResponseData {
     /// 更新后的卡片信息
     pub card: Card,
 },
 /// 批量更新卡片实体响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct BatchUpdateCardResponse {
     /// 响应数据
     pub data: BatchUpdateCardResponseData,

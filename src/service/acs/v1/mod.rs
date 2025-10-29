@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 /// 用户信息变更事件 (p2_acs_user_updated_v1)
 ///
 /// 当门禁用户信息发生变更时触发此事件
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2AcsUserUpdatedV1 {
     /// 事件ID
     pub event_id: String,
@@ -19,7 +19,7 @@ pub struct P2AcsUserUpdatedV1 {
     pub event: AcsUserUpdatedEvent,
 }
 /// 用户信息变更事件数据
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AcsUserUpdatedEvent {
     /// 变更类型 (created updated, deleted)
     pub change_type: String,
@@ -33,7 +33,7 @@ pub struct AcsUserUpdatedEvent {
 /// 新增门禁访问记录事件 (p2_acs_access_record_created_v1)
 ///
 /// 当产生新的门禁访问记录时触发此事件
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2AcsAccessRecordCreatedV1 {
     /// 事件ID
     pub event_id: String,
@@ -45,7 +45,7 @@ pub struct P2AcsAccessRecordCreatedV1 {
     pub event: AccessRecordCreatedEvent,
 }
 /// 门禁访问记录创建事件数据
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AccessRecordCreatedEvent {
     /// 新增的访问记录
     pub access_record: AccessRecord,
@@ -83,7 +83,7 @@ write!(,
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use crate::service::acs::models::{
         AccessMethod, AccessResult, AccessType, UserStatus, UserType,

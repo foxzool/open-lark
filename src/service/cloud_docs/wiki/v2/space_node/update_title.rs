@@ -11,7 +11,7 @@ use crate::core::{,
     SDKResult,
 };
 /// 更新知识空间节点标题请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct UpdateSpaceNodeTitleRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -25,12 +25,12 @@ pub struct UpdateSpaceNodeTitleRequest {
     title: String,
 }
 impl UpdateSpaceNodeTitleRequest {
-    pub fn builder() -> UpdateSpaceNodeTitleRequestBuilder {,
+    pub fn w+.*{
 UpdateSpaceNodeTitleRequestBuilder::default(),
     }
 
-    pub fn new(space_id: impl ToString, node_token: impl ToString, title: impl ToString) -> Self {,
-Self {,
+    pub fn new(space_id: impl ToString, node_token: impl ToString, title: impl ToString) -> Self {
+Self {
             space_id: space_id.to_string(),
             node_token: node_token.to_string(),
             title: title.to_string()
@@ -38,33 +38,33 @@ Self {,
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct UpdateSpaceNodeTitleRequestBuilder {
     request: UpdateSpaceNodeTitleRequest,
 }
 impl UpdateSpaceNodeTitleRequestBuilder {
     /// 知识空间id
-    pub fn space_id(mut self, space_id: impl ToString) -> Self {,
+    pub fn space_id(mut self, space_id: impl ToString) -> Self {
 self.request.space_id = space_id.to_string();
         self,
 },
 /// 节点token,
-    pub fn node_token(mut self, node_token: impl ToString) -> Self {,
+    pub fn node_token(mut self, node_token: impl ToString) -> Self {
 self.request.node_token = node_token.to_string();
         self,
 },
 /// 文档标题,
-    pub fn title(mut self, title: impl ToString) -> Self {,
+    pub fn title(mut self, title: impl ToString) -> Self {
 self.request.title = title.to_string();
         self,
 },
-pub fn build(mut self) -> UpdateSpaceNodeTitleRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 更新后的节点信息,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct UpdatedNode {
     /// 知识空间id
     pub space_id: String,
@@ -82,7 +82,7 @@ pub struct UpdatedNode {
     pub title: Option<String>,
 },
 /// 更新知识空间节点标题响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateSpaceNodeTitleResponse {
     /// 更新后的节点信息
     pub node: UpdatedNode,
@@ -117,7 +117,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_update_space_node_title_request_builder() {,

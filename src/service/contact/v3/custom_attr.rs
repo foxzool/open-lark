@@ -34,7 +34,7 @@ Ok(resp.data.unwrap_or_default()),
     },
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListCustomAttrsRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
@@ -42,7 +42,7 @@ pub struct ListCustomAttrsRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ListCustomAttrsResponse {
     pub items: Vec<CustomAttr>,
     #[serde(skip_serializing_if = "Option::is_none")]

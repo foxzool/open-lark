@@ -158,7 +158,7 @@ pub fn new() -> Self {
 /// # 返回值
     /// - `Ok(())`: 配置验证通过
 /// - `Err(String)`: 配置验证失败的具体原因
-    pub fn validate_elearning_config(&self) -> Result<(), String> {,
+    pub fn w+.*{
 // 检查课程注册服务配置
         if self.course_registration.config.app_id.is_empty() {,
 return Err("课程注册服务配置中缺少应用ID".to_string());
@@ -174,7 +174,7 @@ Ok(()),
     ///,
 /// # 返回值
     /// 包含服务统计信息的字典
-    pub fn get_elearning_statistics(&self) -> std::collections::HashMap<String, String> {,
+    pub fn w+.*{
 let mut stats = std::collections::HashMap::new();
         // 服务配置信息
         stats.insert("service_name".to_string(), "ELearning".to_string());
@@ -214,7 +214,7 @@ stats,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_elearning_feature(&self, feature: &str) -> bool {,
+    pub fn w+.*{
 matches!(,
             feature,
             "course_management",
@@ -300,7 +300,7 @@ features,
     ///,
 /// # 返回值
     /// 健康检查结果，包含状态码和详细信息
-    pub fn health_check(&self) -> std::collections::HashMap<String, String> {,
+    pub fn w+.*{
 let mut health = std::collections::HashMap::new();
         // 检查服务配置
 match self.validate_elearning_config() {,
@@ -327,7 +327,7 @@ health,
     ///,
 /// # 返回值
     /// 配置摘要信息字典
-    pub fn get_config_summary(&self) -> std::collections::HashMap<String, String> {,
+    pub fn w+.*{
 let mut summary = std::collections::HashMap::new();
         summary.insert("service_name".to_string(), "ELearning".to_string());
 summary.insert(,
@@ -367,8 +367,8 @@ fn service_version() -> &'static str {,
 }
 }
 impl Clone for ELearningService {,
-    fn clone(&self) -> Self {,
-Self {,
+    fn clone(&self) -> Self {
+Self {
             course_registration: CourseRegistrationService::new(
                 self.course_registration.config.clone(),
             ),
@@ -386,7 +386,7 @@ f.debug_struct()
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 fn create_test_config() -> Config {,

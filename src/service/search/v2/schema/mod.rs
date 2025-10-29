@@ -18,7 +18,7 @@ pub struct SchemaService {
     pub config: Config,
 }
 /// 创建数据范式响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateSchemaResponse {
     /// 数据范式信息
     pub schema: Schema,
@@ -29,7 +29,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取数据范式响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetSchemaResponse {
     /// 数据范式信息
     pub schema: Schema,
@@ -40,7 +40,7 @@ ResponseFormat::Data,
     }
 }
 /// 更新数据范式响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateSchemaResponse {
     /// 数据范式信息
     pub schema: Schema,

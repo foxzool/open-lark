@@ -39,35 +39,35 @@ Ok(api_resp),
     },
 },
 /// 获取多维表格元数据请求,
-#[derive(Debug, Default)],
+#[derive(.*?)]
 pub struct GetAppRequest {
     api_request: ApiRequest,
     /// 多维表格的唯一标识符
     app_token: String,
 }
 impl GetAppRequest {
-    pub fn builder() -> GetAppRequestBuilder {,
+    pub fn w+.*{
 GetAppRequestBuilder::default(),
     },
 /// 创建获取多维表格元数据请求,
-    pub fn new(app_token: impl ToString) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString) -> Self {
+Self {
             api_request: ApiRequest::default(),
             app_token: app_token.to_string(),
         },
 }
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct GetAppRequestBuilder {
     request: GetAppRequest,
 }
 impl GetAppRequestBuilder {
     /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
-pub fn build(self) -> GetAppRequest {,
+pub fn w+.*{
         self.request,
 }
 }
@@ -78,13 +78,13 @@ impl_executable_builder_owned!(,
     BaseResponse<GetAppResponse>,
     get,
 );
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct GetAppResponse {
     /// 多维表格的 app 信息
     pub app: GetAppResponseData,
 }
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct GetAppResponseData {
     /// 多维表格的 app_token
     pub app_token: String,
@@ -108,7 +108,7 @@ ResponseFormat::Data,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

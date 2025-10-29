@@ -25,7 +25,7 @@ pub struct PasswordService {
 // Service 抽象接入：Admin PasswordService
 impl_full_service!(PasswordService, "admin.password", "v1");
 /// 重置用户企业邮箱密码响应结构
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PasswordResetApiResponse {
     /// 重置密码结果
 #[serde(flatten)],

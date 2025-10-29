@@ -3,7 +3,7 @@
 // 提供文档操作的功能
 use crate::prelude::*;
 /// 文档操作服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct DocumentsService {
     client: std::sync::Arc<LarkClient>,
 }

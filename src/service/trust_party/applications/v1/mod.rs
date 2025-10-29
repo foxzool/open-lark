@@ -3,7 +3,7 @@
 // 包含应用管理的完整功能
 use crate::prelude::*;
 /// 应用管理v1版本服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct ApplicationsV1Service {
     client: std::sync::Arc<crate::client::LarkClient>,
 }

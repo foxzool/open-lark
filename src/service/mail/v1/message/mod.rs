@@ -19,7 +19,7 @@ pub struct MessageService {
     pub config: Config,
 }
 /// 发送邮件请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SendMessageRequest {
     /// 收件人
     pub to: Vec<MailAddress>,
@@ -38,7 +38,7 @@ pub struct SendMessageRequest {
     pub attachment_ids: Option<Vec<String>>,
 }
 /// 发送邮件响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SendMessageResponse {
     /// 邮件ID
     pub message_id: String,
@@ -49,7 +49,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取邮件详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetMessageResponse {
     /// 邮件详情
     pub message: Message,
@@ -60,7 +60,7 @@ ResponseFormat::Data,
     }
 }
 /// 列出邮件响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListMessagesResponse {
     /// 邮件列表
     pub messages: Vec<Message>,
@@ -77,7 +77,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取邮件卡片的邮件列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetMessagesByCardResponse {
     /// 邮件列表
     pub messages: Vec<Message>,

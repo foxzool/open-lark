@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 /// 分页响应通用结构
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PageResponse<T> {,
     /// 数据列表
     pub items: Vec<T>,
@@ -11,7 +11,7 @@ pub struct PageResponse<T> {,
     pub page_token: Option<String>,
 },
 /// I18n 多语言文本,
-#[derive(Debug, Serialize, Deserialize, Clone, Default)],
+#[derive(.*?)]
 pub struct I18nText {
     /// 中文
     pub zh_cn: Option<String>,
@@ -21,7 +21,7 @@ pub struct I18nText {
     pub ja_jp: Option<String>,
 },
 /// 发薪明细列表请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct PaymentDetailListRequest {
     /// 发薪活动ID
     pub payment_activity_id: String,
@@ -37,7 +37,7 @@ pub struct PaymentDetailListRequest {
     pub department_id_type: Option<String>,
 },
 /// 发薪明细批量查询请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct PaymentDetailQueryRequest {
     /// 发薪活动ID
     pub payment_activity_id: String,
@@ -49,7 +49,7 @@ pub struct PaymentDetailQueryRequest {
     pub fields: Option<Vec<String>>,
 },
 /// 发薪明细信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PaymentDetail {
     /// 员工ID
     pub employee_id: String,
@@ -79,7 +79,7 @@ pub struct PaymentDetail {
     pub remark: Option<String>,
 },
 /// 发薪项目,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PaymentItem {
     /// 算薪项ID
     pub acct_item_id: String,
@@ -97,7 +97,7 @@ pub struct PaymentItem {
     pub remark: Option<String>,
 },
 /// 发薪活动列表请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct PaymentActivityListRequest {
     /// 分页大小，最大值100
     pub page_size: Option<u32>,
@@ -113,7 +113,7 @@ pub struct PaymentActivityListRequest {
     pub period_end: Option<String>,
 },
 /// 发薪活动封存请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct PaymentActivityArchiveRequest {
     /// 发薪活动ID
     pub payment_activity_id: String,
@@ -121,7 +121,7 @@ pub struct PaymentActivityArchiveRequest {
     pub archive_reason: Option<String>,
 },
 /// 发薪活动信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PaymentActivity {
     /// 发薪活动ID
     pub payment_activity_id: String,
@@ -157,7 +157,7 @@ pub struct PaymentActivity {
     pub remark: Option<String>,
 },
 /// 外部数据源记录保存请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct DatasourceRecordSaveRequest {
     /// 数据源ID
     pub datasource_id: String,
@@ -171,7 +171,7 @@ pub struct DatasourceRecordSaveRequest {
     pub payment_period: String,
 },
 /// 外部数据源记录查询请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct DatasourceRecordQueryRequest {
     /// 数据源ID
     pub datasource_id: String,
@@ -187,7 +187,7 @@ pub struct DatasourceRecordQueryRequest {
     pub page_token: Option<String>,
 },
 /// 外部数据源记录,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DatasourceRecord {
     /// 记录ID
     pub record_id: Option<String>,
@@ -203,7 +203,7 @@ pub struct DatasourceRecord {
     pub updated_time: Option<String>,
 },
 /// 外部数据源配置列表请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct DatasourceListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -213,7 +213,7 @@ pub struct DatasourceListRequest {
     pub status: Option<String>,
 },
 /// 外部数据源配置,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Datasource {
     /// 数据源ID
     pub datasource_id: String,
@@ -233,7 +233,7 @@ pub struct Datasource {
     pub description: Option<I18nText>,
 },
 /// 数据源字段配置,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct DatasourceFieldConfig {
     /// 字段ID
     pub field_id: String,
@@ -243,7 +243,7 @@ pub struct DatasourceFieldConfig {
     pub field_type: String,
 },
 /// 算薪项列表请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct AcctItemListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -257,7 +257,7 @@ pub struct AcctItemListRequest {
     pub status: Option<String>,
 },
 /// 算薪项信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AcctItem {
     /// 算薪项ID
     pub acct_item_id: String,
@@ -287,7 +287,7 @@ pub struct AcctItem {
     pub description: Option<I18nText>,
 },
 /// 成本分摊报表列表请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct CostAllocationReportListRequest {
     /// 开始日期
     pub start_date: String,
@@ -305,7 +305,7 @@ pub struct CostAllocationReportListRequest {
     pub report_type: Option<String>,
 },
 /// 成本分摊报表数据,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CostAllocationReport {
     /// 报表ID
     pub report_id: String,
@@ -333,7 +333,7 @@ pub struct CostAllocationReport {
     pub generated_time: Option<String>,
 },
 /// 分摊明细,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AllocationDetail {
     /// 算薪项ID
     pub acct_item_id: String,
@@ -347,7 +347,7 @@ pub struct AllocationDetail {
     pub employee_count: u32,
 },
 /// 成本分摊方案列表请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct CostAllocationPlanListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -359,7 +359,7 @@ pub struct CostAllocationPlanListRequest {
     pub plan_type: Option<String>,
 },
 /// 成本分摊方案,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CostAllocationPlan {
     /// 方案ID
     pub plan_id: String,
@@ -385,7 +385,7 @@ pub struct CostAllocationPlan {
     pub description: Option<I18nText>,
 },
 /// 分摊规则,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AllocationRule {
     /// 规则ID
     pub rule_id: String,
@@ -403,7 +403,7 @@ pub struct AllocationRule {
     pub conditions: Option<Vec<RuleCondition>>,
 },
 /// 规则条件,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RuleCondition {
     /// 条件字段
     pub field: String,
@@ -413,7 +413,7 @@ pub struct RuleCondition {
     pub value: serde_json::Value,
 },
 /// 薪资组列表请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct PaygroupListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -423,7 +423,7 @@ pub struct PaygroupListRequest {
     pub status: Option<String>,
 },
 /// 薪资组基本信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Paygroup {
     /// 薪资组ID
     pub paygroup_id: String,
@@ -447,7 +447,7 @@ pub struct Paygroup {
     pub description: Option<I18nText>,
 },
 /// 发薪日设置,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PaymentDaySetting {
     /// 发薪日类型
     pub payment_day_type: String,
@@ -460,7 +460,7 @@ pub struct PaymentDaySetting {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

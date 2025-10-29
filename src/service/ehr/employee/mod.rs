@@ -16,7 +16,7 @@ pub struct EmployeeService {
     pub config: Config,
 }
 /// 批量获取员工花名册信息响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EmployeeListResponse {
     /// 员工列表
 #[serde(flatten)],

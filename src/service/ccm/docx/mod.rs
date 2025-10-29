@@ -13,7 +13,7 @@ use crate::prelude::*;
 use crate::service::ccm::docx::v1::DocxV1Service;
 use crate::service::ccm::docx::documents::DocumentsService;
 /// 文档服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct DocxService {
     /// v1版本API服务
     pub v1: DocxV1Service,

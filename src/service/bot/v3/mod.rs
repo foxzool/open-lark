@@ -7,7 +7,7 @@ pub struct V3 {
 }
 impl V3 {
     pub fn new() -> Self {
-Self {,
+Self {
             info: info::InfoService::new(config),
         }
 }

@@ -40,7 +40,7 @@ Ok(api_resp),
     },
 },
 /// 批量删除数据表请求,
-#[derive(Debug, Default)],
+#[derive(.*?)]
 pub struct BatchDeleteTablesRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token
@@ -49,39 +49,39 @@ pub struct BatchDeleteTablesRequest {
     table_ids: Vec<String>,
 }
 impl BatchDeleteTablesRequest {
-    pub fn builder() -> BatchDeleteTablesRequestBuilder {,
+    pub fn w+.*{
 BatchDeleteTablesRequestBuilder::default(),
     },
 /// 创建批量删除数据表请求,
-    pub fn new(app_token: impl ToString, table_ids: Vec<String>) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, table_ids: Vec<String>) -> Self {
+Self {
             api_request: ApiRequest::default(),
             app_token: app_token.to_string(),
             table_ids,
         },
 }
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct BatchDeleteTablesRequestBuilder {
     request: BatchDeleteTablesRequest,
 }
 impl BatchDeleteTablesRequestBuilder {
     /// 多维表格的 app_token
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 要删除的数据表 ID 列表,
-    pub fn table_ids(mut self, table_ids: Vec<String>) -> Self {,
+    pub fn table_ids(mut self, table_ids: Vec<String>) -> Self {
 self.request.table_ids = table_ids;
         self,
 },
 /// 添加单个数据表 ID,
-    pub fn add_table_id(mut self, table_id: impl ToString) -> Self {,
+    pub fn add_table_id(mut self, table_id: impl ToString) -> Self {
 self.request.table_ids.push(table_id.to_string());
         self,
 },
-pub fn build(self) -> BatchDeleteTablesRequest {,
+pub fn w+.*{
         self.request,
 }
 }
@@ -97,7 +97,7 @@ struct BatchDeleteTablesRequestBody {
     table_ids: Vec<String>,
 }
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct BatchDeleteTablesResponse {
     /// 删除结果列表
     pub deleted: bool,
@@ -109,7 +109,7 @@ ResponseFormat::Data,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json::json;
     #[test],

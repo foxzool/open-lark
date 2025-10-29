@@ -22,7 +22,7 @@ pub struct TenantService {
     pub(crate) config_arc: Arc<Config>,
 }
 /// 获取企业信息响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetTenantResponse {
     /// 企业信息
     pub tenant: Tenant,
@@ -39,7 +39,7 @@ let config_arc = Arc::new(config.clone());
 }
 /// 使用共享配置创建服务实例（实验性）
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             config: (*shared).clone(),
             config_arc: shared,
         }
@@ -83,7 +83,7 @@ fn service_version() -> &'static str {,
 }
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 fn create_test_config() -> Config {,
         Config::builder()

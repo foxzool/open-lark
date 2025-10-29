@@ -18,7 +18,7 @@ use crate::,
     },
 };
 
-#[derive(Serialize, Deserialize, Debug, Default)],
+#[derive(.*?)]
 pub struct OperateSheetsRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -28,7 +28,7 @@ pub struct OperateSheetsRequest {
     requests: Vec<OperateSheetsRequestElem>,
 }
 
-#[derive(Serialize, Deserialize, Debug)],
+#[derive(.*?)]
 /// 表格操作请求元素类型,
 ///
 /// 定义对表格进行操作的不同请求类型,
@@ -62,7 +62,7 @@ pub enum OperateSheetsRequestElem {,
     },
 },
 /// 工作表属性,
-#[derive(Serialize, Deserialize, Debug, Default)],
+#[derive(.*?)]
 pub struct AddSheetProperty {
     /// 新增工作表的标题
     pub title: String,
@@ -70,34 +70,34 @@ pub struct AddSheetProperty {
     pub index: Option<i32>,
 },
 /// 需要复制的工作表资源,
-#[derive(Serialize, Deserialize, Debug, Default)],
+#[derive(.*?)]
 pub struct CopySheetSource {
     /// 源工作表的 ID。调用获取工作表获取 ID,
 #[serde(rename = "sheetId")],
     sheet_id: String,
 },
 /// 新工作表的属性,
-#[derive(Serialize, Deserialize, Debug, Default)],
+#[derive(.*?)]
 pub struct CopySheetDestination {
     /// 新工作表名称。不填默认为“源工作表名称”+“(副本_源工作表的 index 值)”，如 “Sheet1(副本_0)”。
     title: Option<String>,
 }
 impl OperateSheetsRequest {
-    pub fn builder() -> OperateSheetsRequestBuilder {,
+    pub fn w+.*{
 OperateSheetsRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct OperateSheetsRequestBuilder {
     request: OperateSheetsRequest,
 }
 impl OperateSheetsRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 },
 /// 增加工作表。,
-    pub fn add_sheet(mut self, title: impl ToString, index: Option<i32>) -> Self {,
+    pub fn add_sheet(mut self, title: impl ToString, index: Option<i32>) -> Self {
 self.request,
             .requests,
 .push(OperateSheetsRequestElem::AddSheet {,
@@ -109,7 +109,7 @@ self.request,
 self,
     },
 /// 复制工作表。复制的新工作表位于源工作表索引位置之后。,
-    pub fn copy_sheet(mut self, source: impl ToString, destination: Option<String>) -> Self {,
+    pub fn copy_sheet(mut self, source: impl ToString, destination: Option<String>) -> Self {
 self.request,
             .requests,
 .push(OperateSheetsRequestElem::CopySheet {,
@@ -121,7 +121,7 @@ self.request,
 self,
     },
 /// 删除工作表。,
-    pub fn delete_sheet(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn delete_sheet(mut self, sheet_id: impl ToString) -> Self {
 self.request,
             .requests,
 .push(OperateSheetsRequestElem::DeleteSheet {,
@@ -129,7 +129,7 @@ self.request,
             });
 self,
     },
-pub fn build(mut self) -> OperateSheetsRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -162,7 +162,7 @@ Ok(api_resp),
     },
 }
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct OperateSheetResponse {
     pub replies: Vec<OperateSheetReply>,
 }
@@ -172,7 +172,7 @@ ResponseFormat::Data,
     },
 }
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 /// 表格操作响应类型,
 ///
 /// 定义表格操作请求的响应结果类型,
@@ -197,7 +197,7 @@ pub enum OperateSheetReply {,
     },
 }
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 /// 工作表的属性,
 pub struct SheetResponse {
 /// 工作表的 sheetId,
@@ -209,7 +209,7 @@ pub struct SheetResponse {
     pub index: Option<i32>,
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::config::Config;
 use rstest::rstest;

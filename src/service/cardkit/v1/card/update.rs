@@ -16,7 +16,7 @@ core::{,
 };
 use super::CardService;
 /// 全量更新卡片实体请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct UpdateCardRequest {
     pub api_req: ApiRequest,
     /// 卡片ID
@@ -32,7 +32,7 @@ pub struct UpdateCardRequest {
 }
 impl UpdateCardRequest {
     /// 创建全量更新卡片请求的构建器,
-pub fn builder(card_id: impl ToString) -> UpdateCardRequestBuilder {,
+pub fn w+.*{
         UpdateCardRequestBuilder {,
 request: UpdateCardRequest {,
                 card_id: card_id.to_string()
@@ -47,27 +47,27 @@ pub struct UpdateCardRequestBuilder {
 }
 impl UpdateCardRequestBuilder {
     /// 设置卡片标题
-    pub fn title(mut self, title: impl ToString) -> Self {,
+    pub fn title(mut self, title: impl ToString) -> Self {
 self.request.title = Some(title.to_string());
         self,
 },
 /// 设置卡片描述,
-    pub fn description(mut self, description: impl ToString) -> Self {,
+    pub fn description(mut self, description: impl ToString) -> Self {
 self.request.description = Some(description.to_string());
         self,
 },
 /// 设置卡片JSON内容,
-    pub fn card_json(mut self, card_json: serde_json::Value) -> Self {,
+    pub fn card_json(mut self, card_json: serde_json::Value) -> Self {
 self.request.card_json = Some(card_json);
         self,
 },
 /// 设置用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
 },
 /// 构建请求,
-    pub fn build(mut self) -> UpdateCardRequest {,
+    pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
@@ -91,13 +91,13 @@ self.request.api_req.body = serde_json::to_vec(&body).unwrap_or_default();
 }
 },
 /// 全量更新卡片实体响应数据,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateCardResponseData {
     /// 更新后的卡片信息
     pub card: Card,
 },
 /// 全量更新卡片实体响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateCardResponse {
     /// 响应数据
     pub data: UpdateCardResponseData,

@@ -21,7 +21,7 @@ pub struct TicketService {
     pub config: Config,
 }
 /// 创建服务台对话请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct StartServiceRequest {
     /// 用户开放平台ID
     pub open_id: String,
@@ -32,7 +32,7 @@ pub struct StartServiceRequest {
     pub description: Option<String>,
 }
 /// 创建服务台对话响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct StartServiceResponse {
     /// 聊天群ID
     pub chat_id: String,
@@ -46,7 +46,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取工单详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetTicketResponse {
     /// 工单信息
     pub ticket: Ticket,
@@ -57,7 +57,7 @@ ResponseFormat::Data,
     }
 }
 /// 更新工单请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateTicketRequest {
     /// 工单状态
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -70,7 +70,7 @@ pub struct UpdateTicketRequest {
     pub comment: Option<String>,
 }
 /// 更新工单响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateTicketResponse {
     /// 更新后的工单信息
     pub ticket: Ticket,
@@ -81,7 +81,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取全部工单响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListTicketsResponse {
     /// 工单列表
     pub tickets: Vec<Ticket>,
@@ -256,7 +256,7 @@ fn service_version() -> &'static str {,
 }
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use crate::core::config::Config;
     use serde_json;

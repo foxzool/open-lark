@@ -3,7 +3,7 @@
 // 提供文档权限相关的功能
 use crate::prelude::*;
 /// 文档权限管理服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct PermissionService {
     client: std::sync::Arc<LarkClient>,
 }

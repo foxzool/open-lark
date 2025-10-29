@@ -14,7 +14,7 @@ use crate::service::meeting_room::rooms::RoomsService;
 use crate::service::meeting_room::schedules::SchedulesService;
 /// 会议室管理服务
 #[cfg(feature = "meeting_room")]
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct MeetingRoomService {
     /// 建筑物管理服务
     pub buildings: BuildingsService,
@@ -27,7 +27,7 @@ pub struct MeetingRoomService {
 impl MeetingRoomService {
 /// 创建新的会议室管理服务实例
     pub fn new() -> Self {
-Self {,
+Self {
             buildings: BuildingsService::new(config.clone()),
             rooms: RoomsService::new(config.clone()),
             schedules: SchedulesService::new(config.clone()),

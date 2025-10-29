@@ -38,7 +38,7 @@ Ok(api_resp),
     },
 },
 /// 新增视图请求,
-#[derive(Debug, Default)],
+#[derive(.*?)]
 pub struct CreateViewRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token
@@ -49,12 +49,12 @@ pub struct CreateViewRequest {
     view: ViewData,
 }
 impl CreateViewRequest {
-    pub fn builder() -> CreateViewRequestBuilder {,
+    pub fn w+.*{
 CreateViewRequestBuilder::default(),
     },
 /// 创建新增视图请求,
-    pub fn new(app_token: impl ToString, table_id: impl ToString, view: ViewData) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, table_id: impl ToString, view: ViewData) -> Self {
+Self {
             api_request: ApiRequest::default(),
             app_token: app_token.to_string(),
             table_id: table_id.to_string(),
@@ -62,27 +62,27 @@ Self {,
         },
 }
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct CreateViewRequestBuilder {
     request: CreateViewRequest,
 }
 impl CreateViewRequestBuilder {
     /// 多维表格的 app_token
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 数据表的 table_id,
-    pub fn table_id(mut self, table_id: impl ToString) -> Self {,
+    pub fn table_id(mut self, table_id: impl ToString) -> Self {
 self.request.table_id = table_id.to_string();
         self,
 },
 /// 视图信息,
-    pub fn view(mut self, view: ViewData) -> Self {,
+    pub fn view(mut self, view: ViewData) -> Self {
 self.request.view = view;
         self,
 },
-pub fn build(self) -> CreateViewRequest {,
+pub fn w+.*{
         self.request,
 }
 }
@@ -94,7 +94,7 @@ impl_executable_builder_owned!(,
     create,
 );
 /// 视图数据
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ViewData {
     /// 视图名称
     pub view_name: String,
@@ -107,7 +107,7 @@ pub struct ViewData {
 }
 impl ViewData {
     /// 创建视图数据,
-pub fn new(view_name: impl ToString) -> Self {,
+pub fn new(view_name: impl ToString) -> Self {
         Self {
             view_name: view_name.to_string(),
             view_type: None,
@@ -115,54 +115,54 @@ pub fn new(view_name: impl ToString) -> Self {,
         },
 },
 /// 创建表格视图,
-    pub fn grid_view(view_name: impl ToString) -> Self {,
-Self {,
+    pub fn grid_view(view_name: impl ToString) -> Self {
+Self {
             view_name: view_name.to_string(),
             view_type: Some("grid".to_string()),
             property: None,
         },
 },
 /// 创建看板视图,
-    pub fn kanban_view(view_name: impl ToString) -> Self {,
-Self {,
+    pub fn kanban_view(view_name: impl ToString) -> Self {
+Self {
             view_name: view_name.to_string(),
             view_type: Some("kanban".to_string()),
             property: None,
         },
 },
 /// 创建画册视图,
-    pub fn gallery_view(view_name: impl ToString) -> Self {,
-Self {,
+    pub fn gallery_view(view_name: impl ToString) -> Self {
+Self {
             view_name: view_name.to_string(),
             view_type: Some("gallery".to_string()),
             property: None,
         },
 },
 /// 创建甘特视图,
-    pub fn gantt_view(view_name: impl ToString) -> Self {,
-Self {,
+    pub fn gantt_view(view_name: impl ToString) -> Self {
+Self {
             view_name: view_name.to_string(),
             view_type: Some("gantt".to_string()),
             property: None,
         },
 },
 /// 设置视图类型,
-    pub fn with_view_type(mut self, view_type: impl ToString) -> Self {,
+    pub fn with_view_type(mut self, view_type: impl ToString) -> Self {
 self.view_type = Some(view_type.to_string());
         self,
 },
 /// 设置视图属性,
-    pub fn with_property(mut self, property: serde_json::Value) -> Self {,
+    pub fn with_property(mut self, property: serde_json::Value) -> Self {
 self.property = Some(property);
         self,
 }
 },
-#[derive(Serialize)],
+#[derive(.*?)]
 struct CreateViewRequestBody {
     view: ViewData,
 }
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct CreateViewResponse {
     /// 视图 ID
     pub view_id: String,
@@ -174,7 +174,7 @@ ResponseFormat::Data,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json::json;
     #[test],

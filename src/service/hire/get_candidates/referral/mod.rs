@@ -22,7 +22,7 @@ pub struct ReferralService {
     pub config: Config,
 }
 /// 内推记录信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReferralRecord {
     /// 内推记录ID
     pub id: String,
@@ -54,7 +54,7 @@ pub struct ReferralRecord {
     pub updated_time: Option<String>,
 }
 /// 内推创建请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ReferralCreateRequest {
     /// 内推人ID
     pub referrer_id: String,
@@ -68,7 +68,7 @@ pub struct ReferralCreateRequest {
     pub source: Option<String>,
 }
 /// 内推列表请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ReferralListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -88,7 +88,7 @@ pub struct ReferralListRequest {
     pub referral_end_time: Option<String>,
 }
 /// 内推奖励设置
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReferralRewardSettings {
     /// 设置ID
     pub id: String,
@@ -110,7 +110,7 @@ pub struct ReferralRewardSettings {
     pub updated_time: Option<String>,
 }
 /// 内推奖励设置创建请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ReferralRewardSettingsCreateRequest {
     /// 职位类型
     pub job_type: String,
@@ -126,7 +126,7 @@ pub struct ReferralRewardSettingsCreateRequest {
     pub enabled: Option<bool>,
 }
 /// 内推记录列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReferralListResponse {
     /// 内推记录列表
 #[serde(flatten)],
@@ -138,7 +138,7 @@ ResponseFormat::Data,
     }
 }
 /// 内推记录详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReferralDetailResponse {
     /// 内推记录信息
     pub referral: ReferralRecord,
@@ -149,7 +149,7 @@ ResponseFormat::Data,
     }
 }
 /// 内推操作响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReferralOperationResponse {
     /// 操作结果
 #[serde(flatten)],
@@ -163,7 +163,7 @@ ResponseFormat::Data,
     }
 }
 /// 内推账户详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReferralAccountDetailResponse {
     /// 内推账户信息
     pub account: ReferralAccount,
@@ -174,7 +174,7 @@ ResponseFormat::Data,
     }
 }
 /// 内推奖励设置列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReferralRewardSettingsListResponse {
     /// 奖励设置列表
 #[serde(flatten)],
@@ -506,7 +506,7 @@ pub async fn grant_referral_reward(,
         remark: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralOperationResponse>> {,
-#[derive(Serialize)],
+#[derive(.*?)]
         struct GrantRewardRequest {
             reward_amount: String,
             remark: Option<String>,

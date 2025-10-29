@@ -6,7 +6,7 @@ pub use crate::service::contact::v3::{
     job_title::*, scope::*, unit::*, user::*, work_city::*,
 };
 /// 用户信息,
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct User {
     /// 用户ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -91,7 +91,7 @@ pub struct User {
     pub work_city: Option<String>,
 },
 /// 头像信息,
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Avatar {
     /// 头像URL,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -107,7 +107,7 @@ pub struct Avatar {
     pub avatar_origin: Option<String>,
 },
 /// 用户状态,
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserStatus {
     /// 是否冻结,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -126,7 +126,7 @@ pub struct UserStatus {
     pub is_unjoin: Option<bool>,
 },
 /// 用户自定义字段,
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserCustomAttr {
     /// 字段类型,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -139,7 +139,7 @@ pub struct UserCustomAttr {
     pub value: Option<serde_json::Value>,
 },
 /// 部门信息,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Department {
     /// 部门名称,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -176,7 +176,7 @@ pub struct Department {
     pub create_group_chat: Option<bool>,
 },
 /// 国际化名称,
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct I18nName {
     /// 中文名,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -189,14 +189,14 @@ pub struct I18nName {
     pub ja_jp: Option<String>,
 },
 /// 部门状态,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DepartmentStatus {
     /// 是否被删除,
 #[serde(skip_serializing_if = "Option::is_none")],
     pub is_deleted: Option<bool>,
 },
 /// 用户组信息,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Group {
     /// 用户组ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -218,7 +218,7 @@ pub struct Group {
     pub r#type: Option<i32>,
 },
 /// 用户组成员,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GroupMember {
     /// 成员ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -231,7 +231,7 @@ pub struct GroupMember {
     pub member_id_type: Option<String>,
 },
 /// 用户组成员信息,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GroupMemberInfo {
     /// 成员ID
     pub member_id: String,
@@ -243,7 +243,7 @@ pub struct GroupMemberInfo {
     pub member_id_type: Option<String>,
 },
 /// 用户组成员操作结果,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GroupMemberResult {
     /// 成员ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -256,7 +256,7 @@ pub struct GroupMemberResult {
     pub msg: Option<String>,
 },
 /// 自定义字段,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CustomAttr {
     /// 字段ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -278,7 +278,7 @@ pub struct CustomAttr {
     pub options: Option<serde_json::Value>,
 },
 /// 人员类型枚举,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EmployeeTypeEnum {
     /// 枚举ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -300,7 +300,7 @@ pub struct EmployeeTypeEnum {
     pub i18n_content: Option<Vec<I18nContent>>,
 },
 /// 国际化内容,
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct I18nContent {
     /// 语言代码,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -310,7 +310,7 @@ pub struct I18nContent {
     pub value: Option<String>,
 },
 /// 单位信息,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Unit {
     /// 单位ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -323,7 +323,7 @@ pub struct Unit {
     pub unit_type: Option<String>,
 },
 /// 角色成员信息,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RoleMemberInfo {
     /// 成员ID
     pub user_id: String,
@@ -335,7 +335,7 @@ pub struct RoleMemberInfo {
     pub scope_ids: Option<Vec<String>>,
 },
 /// 角色成员,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RoleMember {
     /// 成员ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -348,7 +348,7 @@ pub struct RoleMember {
     pub scope_ids: Option<Vec<String>>,
 },
 /// 角色成员管理范围,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RoleMemberScope {
     /// 成员ID
     pub user_id: String,
@@ -360,7 +360,7 @@ pub struct RoleMemberScope {
     pub scope_ids: Option<Vec<String>>,
 },
 /// 角色成员操作结果,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RoleMemberResult {
     /// 成员ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -373,7 +373,7 @@ pub struct RoleMemberResult {
     pub msg: Option<String>,
 },
 /// 职级信息,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobLevel {
     /// 职级ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -392,7 +392,7 @@ pub struct JobLevel {
     pub rank: Option<i32>,
 },
 /// 序列信息,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobFamily {
     /// 序列ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -408,7 +408,7 @@ pub struct JobFamily {
     pub status: Option<bool>,
 },
 /// 职务信息,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobTitle {
     /// 职务ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -421,7 +421,7 @@ pub struct JobTitle {
     pub status: Option<bool>,
 },
 /// 工作城市信息,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct WorkCity {
     /// 工作城市ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -435,7 +435,7 @@ pub struct WorkCity {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

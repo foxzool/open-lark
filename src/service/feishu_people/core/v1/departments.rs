@@ -3,7 +3,7 @@
 // 实现部门管理的功能,
 use crate::prelude::*;
 /// 部门管理服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct DepartmentsService {
     client: std::sync::Arc<LarkClient>,
 }

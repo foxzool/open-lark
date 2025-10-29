@@ -5,7 +5,7 @@ pub mod models;
 use app_feed_card::AppFeedCardService;
 use groups_bots::GroupsBotsService;
 /// IM v2服务
-#[derive(Debug)],
+#[derive(.*?)]
 pub struct V2 {
 /// 应用消息流卡片服务
     pub app_feed_card: AppFeedCardService,
@@ -14,7 +14,7 @@ pub struct V2 {
 }
 impl V2 {
     pub fn new() -> Self {
-Self {,
+Self {
             app_feed_card: AppFeedCardService::new(config.clone()),
             groups_bots: GroupsBotsService::new(config),
         }

@@ -39,18 +39,22 @@
 //!
 //! // let result = client.im.v1.message.create(request None).await?;
 //! ```,
+#[cfg(feature = "im")]
 use crate::{
     core::config::Config,
     service::im::{v1::V1, v2::V2}
 };
 /// IM API v1版本
+#[cfg(feature = "im")]
 pub mod v1;
 /// IM API v2版本
+#[cfg(feature = "im")]
 pub mod v2;
 /// 即时消息服务
 ///
 /// 聚合所有IM相关的API版本，提供统一的访问接口。
 /// 通过不同版本的子服务访问具体的API功能。
+#[cfg(feature = "im")]
 #[derive(Debug)]
 pub struct ImService {
 /// IM API v1版本服务
@@ -58,61 +62,64 @@ pub struct ImService {
     /// IM API v2版本服务
     pub v2: V2,
 }
+#[cfg(feature = "im")]
 impl ImService {
     /// 创建新的IM服务实例
 ///,
     /// # 参数
 /// - `config`: 客户端配置
     pub fn new() -> Self {
-Self {,
+Self {
             v1: V1::new(config.clone()),
             v2: V2::new(config),
         }
 }
 /// 使用共享配置（实验性）
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             v1: V1::new(shared.as_ref().clone()),
             v2: V2::new(shared.as_ref().clone()),
         }
 }
 }
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)],
-mod tests {,
+#[allow(unused_variables, unused_unsafe)]
+mod tests {
     use super::*;
 use crate::core::config::Config;
-    fn create_test_config() -> Config {,
-Config::default(),
+    fn create_test_config() -> Config {
+        Config::default()
     }
-#[test],
-    fn test_im_service_creation() {,
-let config = create_test_config();
+
+    #[test]
+    fn test_im_service_creation() {
+        let config = create_test_config();
         let im_service = ImService::new(config);
-// Verify service structure
+        // Verify service structure
     }
-#[test],
-    fn test_im_service_with_custom_config() {,
-let config = Config::builder()
-            .app_id()
-.app_secret()
-            .req_timeout(std::time::Duration::from_millis(12000)),
-.base_url()
+
+    #[test]
+    fn test_im_service_with_custom_config() {
+        let config = Config::builder()
+            .app_id("test")
+            .app_secret("test")
+            .req_timeout(std::time::Duration::from_millis(12000))
+.base_url("https://open.feishu.cn")
             .build();
-let im_service = ImService::new(config);
+        let im_service = ImService::new(config);
         // Verify service creation with custom config
 }
-#[test],
-    fn test_im_service_api_versions_independence() {,
-let config = create_test_config();
+#[test]
+    fn test_im_service_api_versions_independence() {
+        let config = create_test_config();
         let im_service = ImService::new(config);
 // Test that API versions are independent
         let v1_ptr = std::ptr::addr_of!(im_service.v1) as *const _;
 let v2_ptr = std::ptr::addr_of!(im_service.v2) as *const _;
         assert_ne!(v1_ptr, v2_ptr, "API versions should be independent");
 }
-#[test],
-    fn test_im_service_with_various_configurations() {,
+#[test]
+    fn test_im_service_with_various_configurations() {
 let test_configs = vec![,
             Config::builder()
 .app_id()
@@ -136,13 +143,14 @@ let test_configs = vec![,
 .enable_token_cache()
                 .build(),
         ];
-for config in test_configs {,
+for config in test_configs {
             let im_service = ImService::new(config);
-// Each configuration should create valid services
+            // Each configuration should create valid services
         }
-}
-#[test],
-    fn test_im_service_multiple_instances() {,
+    }
+
+    #[test]
+    fn test_im_service_multiple_instances() {
 let config1 = create_test_config();
         let config2 = Config::builder()
 .app_id()

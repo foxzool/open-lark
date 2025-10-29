@@ -16,7 +16,7 @@ core::{,
 };
 use super::DepartmentService;
 /// 搜索部门请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct SearchDepartmentRequest {
     pub api_req: ApiRequest,
     /// 搜索关键词
@@ -32,7 +32,7 @@ pub struct SearchDepartmentRequest {
 }
 impl SearchDepartmentRequest {
     /// 创建搜索部门请求的构建器,
-pub fn builder(query: impl ToString) -> SearchDepartmentRequestBuilder {,
+pub fn w+.*{
         SearchDepartmentRequestBuilder::new(query),
 }
 },
@@ -43,8 +43,8 @@ pub struct SearchDepartmentRequestBuilder {
 }
 impl SearchDepartmentRequestBuilder {
     /// 创建新的构建器,
-pub fn new(query: impl ToString) -> Self {,
-        Self {,
+pub fn new(query: impl ToString) -> Self {
+        Self {
 request: SearchDepartmentRequest {,
                 query: query.to_string()
                 ..Default::default(),
@@ -52,27 +52,27 @@ request: SearchDepartmentRequest {,
         },
 },
 /// 设置分页大小,
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
 },
 /// 设置分页标记,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
 },
 /// 设置用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
 },
 /// 设置部门ID类型,
-    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {,
+    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {
 self.request.department_id_type = Some(department_id_type);
         self,
 },
 /// 构建请求,
-    pub fn build(mut self) -> SearchDepartmentRequest {,
+    pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
@@ -101,7 +101,7 @@ self.request.api_req.body = serde_json::to_vec(&body).unwrap_or_default();
 }
 },
 /// 搜索部门响应数据,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct SearchDepartmentResponseData {
     /// 部门信息列表
     pub departments: Vec<Department>,
@@ -111,7 +111,7 @@ pub struct SearchDepartmentResponseData {
     pub has_more: Option<bool>,
 },
 /// 搜索部门响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct SearchDepartmentResponse {
     /// 响应数据
     pub data: SearchDepartmentResponseData,

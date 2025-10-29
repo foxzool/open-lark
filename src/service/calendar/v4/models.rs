@@ -4,7 +4,7 @@ use crate::core::{,
 };
 use serde::{Deserialize, Serialize};
 /// 日历信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Calendar {
     /// 日历ID
     pub calendar_id: Option<String>,
@@ -32,13 +32,13 @@ pub struct Calendar {
     pub is_third_party: Option<bool>,
 },
 /// 日历权限,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CalendarPermission {
     /// 是否可编辑
     pub access_role: Option<CalendarAccessRole>,
 },
 /// 日历访问角色,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum CalendarAccessRole {,
 /// 未知,
@@ -55,7 +55,7 @@ pub enum CalendarAccessRole {,
     Owner,
 },
 /// 日历类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum CalendarType {,
 /// 未知,
@@ -72,7 +72,7 @@ pub enum CalendarType {,
     Exchange,
 },
 /// 日历摘要信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CalendarSummaryInfo {
     /// 日历颜色
     pub color: Option<i32>,
@@ -80,7 +80,7 @@ pub struct CalendarSummaryInfo {
     pub summary: Option<String>,
 },
 /// 日历角色,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum CalendarRole {,
 /// 未知,
@@ -97,7 +97,7 @@ pub enum CalendarRole {,
     Owner,
 },
 /// 日程信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CalendarEvent {
     /// 日程ID
     pub event_id: Option<String>,
@@ -139,7 +139,7 @@ pub struct CalendarEvent {
     pub update_time: Option<String>,
 },
 /// 时间信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TimeInfo {
     /// 时间戳
     pub timestamp: Option<String>,
@@ -149,13 +149,13 @@ pub struct TimeInfo {
     pub timezone: Option<String>,
 },
 /// 提醒设置,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Reminder {
     /// 提醒分钟数
     pub minutes: Option<i32>,
 },
 /// 日程参与人,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EventAttendee {
     /// 参与人类型
     pub r#type: Option<AttendeeType>,
@@ -183,7 +183,7 @@ pub struct EventAttendee {
     pub resource_customization: Option<Vec<ResourceCustomization>>,
 },
 /// 参与人类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum AttendeeType {,
 /// 用户,
@@ -196,7 +196,7 @@ pub enum AttendeeType {,
     ThirdParty,
 },
 /// RSVP状态,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum RsvpStatus {,
 /// 需要回复,
@@ -209,7 +209,7 @@ pub enum RsvpStatus {,
     Tentative,
 },
 /// 会议室信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MeetingRoom {
     /// 会议室ID
     pub room_id: Option<String>,
@@ -217,7 +217,7 @@ pub struct MeetingRoom {
     pub display_name: Option<String>,
 },
 /// 位置信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Location {
     /// 位置名称
     pub name: Option<String>,
@@ -229,7 +229,7 @@ pub struct Location {
     pub longitude: Option<f64>,
 },
 /// 日程状态,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum EventStatus {,
 /// 暂定,
@@ -240,7 +240,7 @@ pub enum EventStatus {,
     Cancelled,
 },
 /// 日程创建人,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EventCreator {
     /// 创建人ID
     pub user_id: Option<String>,
@@ -248,7 +248,7 @@ pub struct EventCreator {
     pub display_name: Option<String>,
 },
 /// 日程组织者,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EventOrganizer {
     /// 组织者ID
     pub user_id: Option<String>,
@@ -256,7 +256,7 @@ pub struct EventOrganizer {
     pub display_name: Option<String>,
 },
 /// 资源自定义字段,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ResourceCustomization {
     /// 索引ID
     pub index_id: Option<String>,
@@ -266,7 +266,7 @@ pub struct ResourceCustomization {
     pub options: Option<Vec<ResourceCustomizationOption>>,
 },
 /// 资源自定义选项,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ResourceCustomizationOption {
     /// 选项键
     pub option_key: Option<String>,
@@ -274,7 +274,7 @@ pub struct ResourceCustomizationOption {
     pub others_option: Option<String>,
 },
 /// 日历访问控制,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CalendarAcl {
     /// ACL ID
     pub acl_id: Option<String>,
@@ -284,7 +284,7 @@ pub struct CalendarAcl {
     pub scope: Option<AclScope>,
 },
 /// ACL作用域,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AclScope {
     /// 作用域类型
     pub r#type: Option<AclScopeType>,
@@ -292,7 +292,7 @@ pub struct AclScope {
     pub user_id: Option<String>,
 },
 /// ACL作用域类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum AclScopeType {,
 /// 用户,
@@ -307,12 +307,12 @@ ResponseFormat::Data,
     },
 },
 /// 基础请求结构,
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct BaseCalendarRequest {
     pub api_req: ApiRequest,
 },
 /// 用户ID类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum UserIdType {,
 /// Open ID,
@@ -333,7 +333,7 @@ match self {,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_calendar_access_role_serialization() {,

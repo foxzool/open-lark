@@ -19,7 +19,7 @@ pub struct AgencyService {
     pub config: Config,
 }
 /// 猎头机构信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Agency {
     /// 猎头机构ID
     pub id: String,
@@ -57,7 +57,7 @@ pub struct Agency {
     pub updated_time: Option<String>,
 }
 /// 猎头推荐记录
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AgencyRecommendation {
     /// 推荐记录ID
     pub id: String,
@@ -87,7 +87,7 @@ pub struct AgencyRecommendation {
     pub updated_time: Option<String>,
 }
 /// 猎头费用信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AgencyFeeInfo {
     /// 费用类型
     pub fee_type: String,
@@ -103,7 +103,7 @@ pub struct AgencyFeeInfo {
     pub invoice_requirements: Option<String>,
 }
 /// 猎头顾问信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AgencyConsultant {
     /// 顾问ID
     pub id: String,
@@ -129,7 +129,7 @@ pub struct AgencyConsultant {
     pub updated_time: Option<String>,
 }
 /// 猎头机构创建请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct AgencyCreateRequest {
     /// 机构名称
     pub name: String,
@@ -159,7 +159,7 @@ pub struct AgencyCreateRequest {
     pub cooperation_end_time: Option<String>,
 }
 /// 猎头推荐创建请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct AgencyRecommendationCreateRequest {
     /// 猎头机构ID
     pub agency_id: String,
@@ -175,7 +175,7 @@ pub struct AgencyRecommendationCreateRequest {
     pub fee_info: Option<AgencyFeeInfo>,
 }
 /// 猎头顾问创建请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct AgencyConsultantCreateRequest {
     /// 猎头机构ID
     pub agency_id: String,
@@ -193,7 +193,7 @@ pub struct AgencyConsultantCreateRequest {
     pub experience_years: Option<u32>,
 }
 /// 猎头机构列表请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct AgencyListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -209,7 +209,7 @@ pub struct AgencyListRequest {
     pub service_area: Option<String>,
 }
 /// 猎头推荐列表请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct AgencyRecommendationListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -227,7 +227,7 @@ pub struct AgencyRecommendationListRequest {
     pub recommendation_end_time: Option<String>,
 }
 /// 猎头机构列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AgencyListResponse {
     /// 猎头机构列表
 #[serde(flatten)],
@@ -239,7 +239,7 @@ ResponseFormat::Data,
     }
 }
 /// 猎头推荐列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AgencyRecommendationListResponse {
     /// 猎头推荐列表
 #[serde(flatten)],
@@ -251,7 +251,7 @@ ResponseFormat::Data,
     }
 }
 /// 猎头顾问列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AgencyConsultantListResponse {
     /// 猎头顾问列表
 #[serde(flatten)],
@@ -263,7 +263,7 @@ ResponseFormat::Data,
     }
 }
 /// 猎头操作响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AgencyOperationResponse {
     /// 操作结果
 #[serde(flatten)],
@@ -667,7 +667,7 @@ pub async fn confirm_recommendation(,
         remark: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<AgencyOperationResponse>> {,
-#[derive(Serialize)],
+#[derive(.*?)]
         struct ConfirmRequest {
             remark: Option<String>,
         }
@@ -720,7 +720,7 @@ pub async fn reject_recommendation(,
         feedback: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<AgencyOperationResponse>> {,
-#[derive(Serialize)],
+#[derive(.*?)]
         struct RejectRequest {
             reason: String,
             feedback: Option<String>,

@@ -21,7 +21,7 @@ pub struct TasklistService {
     pub config: Config,
 }
 /// 创建清单请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateTasklistRequest {
     /// 清单名称
     pub name: String,
@@ -30,7 +30,7 @@ pub struct CreateTasklistRequest {
     pub members: Option<Vec<TaskMember>>,
 }
 /// 创建清单响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateTasklistResponse {
     /// 创建的清单
     pub tasklist: Tasklist,
@@ -41,14 +41,14 @@ ResponseFormat::Data,
     }
 }
 /// 更新清单请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateTasklistRequest {
     /// 清单名称
 #[serde(skip_serializing_if = "Option::is_none")],
     pub name: Option<String>,
 }
 /// 更新清单响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateTasklistResponse {
     /// 更新后的清单
     pub tasklist: Tasklist,
@@ -59,7 +59,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取清单响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetTasklistResponse {
     /// 清单详情
     pub tasklist: Tasklist,
@@ -70,7 +70,7 @@ ResponseFormat::Data,
     }
 }
 /// 清单列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListTasklistsResponse {
     /// 清单列表
     pub items: Vec<Tasklist>,
@@ -87,13 +87,13 @@ ResponseFormat::Data,
     }
 }
 /// 添加清单成员请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AddTasklistMembersRequest {
     /// 成员列表
     pub members: Vec<TaskMember>,
 }
 /// 添加清单成员响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AddTasklistMembersResponse {
     /// 成员列表
     pub members: Vec<TaskMember>,
@@ -104,13 +104,13 @@ ResponseFormat::Data,
     }
 }
 /// 移除清单成员请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RemoveTasklistMembersRequest {
     /// 成员ID列表
     pub members: Vec<String>,
 }
 /// 移除清单成员响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RemoveTasklistMembersResponse {
     /// 成员列表
     pub members: Vec<TaskMember>,
@@ -121,7 +121,7 @@ ResponseFormat::Data,
     }
 }
 /// 清单任务列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TasklistTasksResponse {
     /// 任务列表
     pub items: Vec<Task>,

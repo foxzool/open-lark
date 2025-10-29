@@ -18,7 +18,7 @@ service::cloud_docs::sheets::v2::{,
     },
 };
 
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct BatchSetCellStyleRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -28,40 +28,40 @@ pub struct BatchSetCellStyleRequest {
     data: Vec<AppendStyle>,
 }
 
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 struct AppendStyle {,
     ranges: String,
     style: CellStyle,
 }
 impl BatchSetCellStyleRequest {
-    pub fn builder() -> BatchSetCellStyleRequestBuilder {,
+    pub fn w+.*{
 BatchSetCellStyleRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct BatchSetCellStyleRequestBuilder {
     request: BatchSetCellStyleRequest,
 }
 impl BatchSetCellStyleRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn add_style(mut self, ranges: impl ToString, style: CellStyle) -> Self {,
+    pub fn add_style(mut self, ranges: impl ToString, style: CellStyle) -> Self {
 self.request.data.push(AppendStyle {,
             ranges: ranges.to_string(),
             style,
         });
 self,
     },
-pub fn build(mut self) -> BatchSetCellStyleRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 }
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct BatchSetCellStyleResponse {
     #[serde(rename = "spreadsheetToken")]
     pub spreed_sheet_token: String,
@@ -103,7 +103,7 @@ Ok(api_resp),
     },
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use crate::,
 {
     core::,

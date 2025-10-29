@@ -20,7 +20,7 @@ pub struct ProgressRecordService {
     pub config: Config,
 }
 /// 进展记录创建响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ProgressRecordCreateResponse {
     /// 创建的进展记录
     pub progress_record: ProgressRecord,
@@ -31,7 +31,7 @@ ResponseFormat::Data,
     }
 }
 /// 进展记录删除响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ProgressRecordDeleteResponse {
     /// 删除结果
     pub success: bool,
@@ -42,7 +42,7 @@ ResponseFormat::Data,
     }
 }
 /// 进展记录更新响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ProgressRecordUpdateResponse {
     /// 更新后的进展记录
     pub progress_record: ProgressRecord,
@@ -53,7 +53,7 @@ ResponseFormat::Data,
     }
 }
 /// 进展记录详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ProgressRecordGetResponse {
     /// 进展记录详情
     pub progress_record: ProgressRecord,
@@ -64,7 +64,7 @@ ResponseFormat::Data,
     }
 }
 /// 图片上传响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ImageUploadResponse {
     /// 上传的图片信息
     pub attachment: ProgressAttachment,
@@ -267,7 +267,7 @@ fn service_version() -> &'static str {,
 }
 }
 /// 进展记录创建请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ProgressRecordCreateRequest {
     /// OKR ID
     pub okr_id: String,
@@ -284,7 +284,7 @@ pub struct ProgressRecordCreateRequest {
     pub attachment_ids: Option<Vec<String>>,
 }
 /// 进展记录更新请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ProgressRecordUpdateRequest {
     /// 进展内容
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -297,7 +297,7 @@ pub struct ProgressRecordUpdateRequest {
     pub attachment_ids: Option<Vec<String>>,
 }
 /// 图片上传请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ImageUploadRequest {
     /// 图片文件名
     pub file_name: String,

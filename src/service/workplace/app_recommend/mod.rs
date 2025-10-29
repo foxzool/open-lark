@@ -166,7 +166,7 @@ api_resp.into_result(),
     }
 }
 /// 常用应用查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct FavouriteAppsRequest {
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -179,7 +179,7 @@ pub struct FavouriteAppsRequest {
     pub user_id: Option<String>,
 }
 /// 常用应用查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FavouriteAppsResponse {
     /// 常用应用列表
 #[serde(flatten)],
@@ -191,7 +191,7 @@ ResponseFormat::Data,
     }
 }
 /// 推荐应用查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct RecommendedAppsRequest {
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -208,7 +208,7 @@ pub struct RecommendedAppsRequest {
 }
 impl RecommendedAppsRequest {
     /// 创建Builder实例
-pub fn builder() -> RecommendedAppsRequestBuilder {,
+pub fn w+.*{
         RecommendedAppsRequestBuilder::default(),
 }
 }
@@ -245,12 +245,12 @@ self.inner.department_id = Some(department_id.into());
         self,
 }
 /// 构建请求对象
-    pub fn build(self) -> RecommendedAppsRequest {,
+    pub fn w+.*{
 self.inner,
     }
 }
 /// 推荐应用查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RecommendedAppsResponse {
     /// 推荐应用列表
 #[serde(flatten)],
@@ -262,7 +262,7 @@ ResponseFormat::Data,
     }
 }
 /// 推荐规则列表查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct RecommendRulesListRequest {
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -279,7 +279,7 @@ pub struct RecommendRulesListRequest {
 }
 impl RecommendRulesListRequest {
     /// 创建Builder实例
-pub fn builder() -> RecommendRulesListRequestBuilder {,
+pub fn w+.*{
         RecommendRulesListRequestBuilder::default(),
 }
 }
@@ -316,12 +316,12 @@ self.inner.status = Some(status.into());
         self,
 }
 /// 构建请求对象
-    pub fn build(self) -> RecommendRulesListRequest {,
+    pub fn w+.*{
 self.inner,
     }
 }
 /// 推荐规则列表查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RecommendRulesListResponse {
     /// 推荐规则列表
 #[serde(flatten)],

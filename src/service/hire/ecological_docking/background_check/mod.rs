@@ -19,7 +19,7 @@ pub struct BackgroundCheckService {
     pub config: Config,
 }
 /// 背调包信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BackgroundCheckPackage {
     /// 背调包ID
     pub id: String,
@@ -45,7 +45,7 @@ pub struct BackgroundCheckPackage {
     pub updated_time: Option<String>,
 }
 /// 背调项目
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BackgroundCheckItem {
     /// 项目ID
     pub id: String,
@@ -61,7 +61,7 @@ pub struct BackgroundCheckItem {
     pub duration_days: u32,
 }
 /// 背调订单信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BackgroundCheckOrder {
     /// 订单ID
     pub id: String,
@@ -95,7 +95,7 @@ pub struct BackgroundCheckOrder {
     pub updated_time: Option<String>,
 }
 /// 背调项目结果
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BackgroundCheckItemResult {
     /// 项目ID
     pub item_id: String,
@@ -109,7 +109,7 @@ pub struct BackgroundCheckItemResult {
     pub completion_time: Option<String>,
 }
 /// 背调供应商信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BackgroundCheckVendor {
     /// 供应商ID
     pub id: String,
@@ -131,7 +131,7 @@ pub struct BackgroundCheckVendor {
     pub updated_time: Option<String>,
 }
 /// 背调订单创建请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct BackgroundCheckOrderCreateRequest {
     /// 投递ID
     pub application_id: String,
@@ -145,7 +145,7 @@ pub struct BackgroundCheckOrderCreateRequest {
     pub remark: Option<String>,
 }
 /// 背调候选人信息
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct BackgroundCheckCandidateInfo {
     /// 候选人姓名
     pub name: String,
@@ -161,7 +161,7 @@ pub struct BackgroundCheckCandidateInfo {
     pub education_experience: Vec<EducationExperience>,
 }
 /// 工作经历
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct WorkExperience {
     /// 公司名称
     pub company_name: String,
@@ -177,7 +177,7 @@ pub struct WorkExperience {
     pub leave_reason: Option<String>,
 }
 /// 教育经历
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct EducationExperience {
     /// 学校名称
     pub school_name: String,
@@ -191,7 +191,7 @@ pub struct EducationExperience {
     pub end_date: String,
 }
 /// 背调包列表请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct BackgroundCheckPackageListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -203,7 +203,7 @@ pub struct BackgroundCheckPackageListRequest {
     pub enabled: Option<bool>,
 }
 /// 背调订单列表请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct BackgroundCheckOrderListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -219,7 +219,7 @@ pub struct BackgroundCheckOrderListRequest {
     pub created_end_time: Option<String>,
 }
 /// 背调包列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BackgroundCheckPackageListResponse {
     /// 背调包列表
 #[serde(flatten)],
@@ -231,7 +231,7 @@ ResponseFormat::Data,
     }
 }
 /// 背调订单列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BackgroundCheckOrderListResponse {
     /// 背调订单列表
 #[serde(flatten)],
@@ -243,7 +243,7 @@ ResponseFormat::Data,
     }
 }
 /// 背调订单详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BackgroundCheckOrderDetailResponse {
     /// 背调订单信息
     pub order: BackgroundCheckOrder,
@@ -254,7 +254,7 @@ ResponseFormat::Data,
     }
 }
 /// 背调操作响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BackgroundCheckOperationResponse {
     /// 操作结果
 #[serde(flatten)],
@@ -582,7 +582,7 @@ if let Some(created_end_time) = request.created_end_time {,
         reason: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BackgroundCheckOperationResponse>> {,
-#[derive(Serialize)],
+#[derive(.*?)]
         struct CancelOrderRequest {
             reason: String,
         }
@@ -670,7 +670,7 @@ let api_req = ApiRequest {,
         orders: Vec<BackgroundCheckOrderCreateRequest>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BackgroundCheckOperationResponse>> {,
-#[derive(Serialize)],
+#[derive(.*?)]
         struct BatchCreateRequest {
             orders: Vec<BackgroundCheckOrderCreateRequest>,
         }

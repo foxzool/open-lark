@@ -19,7 +19,7 @@ pub struct ReviewService {
     pub config: Config,
 }
 /// 复盘查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReviewQueryResponse {
     /// 复盘列表
 #[serde(flatten)],
@@ -123,7 +123,7 @@ if let Some(page_size) = request.page_size {,
 }
 }
 /// 复盘查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ReviewQueryRequest {
     /// 周期ID筛选
 #[serde(skip_serializing_if = "Option::is_none")],

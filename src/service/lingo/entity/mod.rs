@@ -268,7 +268,7 @@ let api_req = ApiRequest {,
 }
 }
 /// 词条创建请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EntityCreateRequest {
     /// 主名称
     pub main_keys: Vec<String>,
@@ -291,7 +291,7 @@ pub struct EntityCreateRequest {
     pub repo_id: Option<String>,
 }
 /// 词条创建响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EntityCreateResponse {
     /// 创建的词条信息
     pub entity: Entity,
@@ -302,7 +302,7 @@ ResponseFormat::Data,
     }
 }
 /// 词条更新请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EntityUpdateRequest {
     /// 主名称
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -324,7 +324,7 @@ pub struct EntityUpdateRequest {
     pub related_meta: Option<RelatedMeta>,
 }
 /// 词条更新响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EntityUpdateResponse {
     /// 更新后的词条信息
     pub entity: Entity,
@@ -335,7 +335,7 @@ ResponseFormat::Data,
     }
 }
 /// 词条删除响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EntityDeleteResponse {
     /// 删除成功标识
     pub success: bool,
@@ -346,7 +346,7 @@ ResponseFormat::Data,
     }
 }
 /// 词条详情查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EntityGetResponse {
     /// 词条详细信息
     pub entity: Entity,
@@ -357,7 +357,7 @@ ResponseFormat::Data,
     }
 }
 /// 词条列表查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct EntityListRequest {
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -376,7 +376,7 @@ pub struct EntityListRequest {
     pub creator: Option<String>,
 }
 /// 词条列表查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EntityListResponse {
     /// 词条列表
 #[serde(flatten)],
@@ -388,7 +388,7 @@ ResponseFormat::Data,
     }
 }
 /// 词条精准搜索请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EntityMatchRequest {
     /// 搜索词
     pub word: String,
@@ -397,7 +397,7 @@ pub struct EntityMatchRequest {
     pub repo_id: Option<String>,
 }
 /// 词条精准搜索响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EntityMatchResponse {
     /// 匹配结果列表
     pub results: Vec<EntityMatchResult>,
@@ -408,7 +408,7 @@ ResponseFormat::Data,
     }
 }
 /// 词条模糊搜索请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct EntitySearchRequest {
     /// 搜索关键词
     pub query: String,
@@ -429,7 +429,7 @@ pub struct EntitySearchRequest {
     pub page_size: Option<i32>,
 }
 /// 词条模糊搜索响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EntitySearchResponse {
     /// 搜索结果列表
 #[serde(flatten)],
@@ -441,7 +441,7 @@ ResponseFormat::Data,
     }
 }
 /// 词条高亮请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EntityHighlightRequest {
     /// 要高亮的文本
     pub text: String,
@@ -450,7 +450,7 @@ pub struct EntityHighlightRequest {
     pub repo_id: Option<String>,
 }
 /// 词条高亮响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EntityHighlightResponse {
     /// 高亮结果
     pub result: HighlightResult,

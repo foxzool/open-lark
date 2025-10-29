@@ -12,16 +12,16 @@ validation::{,
 };
 use super::MessageService;
 /// 请求体
-#[derive(Debug, Clone, Default)],
+#[derive(.*?)]
 pub struct CreateMessageRequest {
     pub api_req: ApiRequest,
 }
 impl CreateMessageRequest {
-    pub fn builder() -> CreateMessageRequestBuilder {,
+    pub fn w+.*{
 CreateMessageRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct CreateMessageRequestBuilder {
     request: CreateMessageRequest,
 }
@@ -30,7 +30,7 @@ impl CreateMessageRequestBuilder {
 ///,
     /// # 参数,
 /// - `receive_id`: 消息接收者的ID,
-    pub fn receive_id(mut self, receive_id: impl ToString) -> Self {,
+    pub fn receive_id(mut self, receive_id: impl ToString) -> Self {
 self.request,
             .api_req,
 .query_params,
@@ -41,7 +41,7 @@ self,
     ///,
 /// # 参数,
     /// - `msg_type`: 消息类型
-    pub fn msg_type(mut self, msg_type: impl ToString) -> Self {,
+    pub fn msg_type(mut self, msg_type: impl ToString) -> Self {
 self.request,
             .api_req,
 .query_params,
@@ -52,7 +52,7 @@ self,
     ///,
 /// # 参数,
     /// - `content`: 消息内容
-    pub fn content(mut self, content: impl ToString) -> Self {,
+    pub fn content(mut self, content: impl ToString) -> Self {
 self.request,
             .api_req,
 .query_params,
@@ -68,7 +68,7 @@ self,
 ///   - `"union_id"`: Union ID,
     ///   - `"email"`: 邮箱地址,
 ///   - `"chat_id"`: 群聊ID,
-    pub fn receive_id_type(mut self, receive_id_type: impl ToString) -> Self {,
+    pub fn receive_id_type(mut self, receive_id_type: impl ToString) -> Self {
 self.request,
             .api_req,
 .query_params,
@@ -79,7 +79,7 @@ self,
     ///,
 /// # 参数,
     /// - `body`: 包含接收者ID、消息类型和内容的请求体
-    pub fn request_body(mut self, body: CreateMessageRequestBody) -> Self {,
+    pub fn request_body(mut self, body: CreateMessageRequestBody) -> Self {
 match serde_json::to_vec(&body) {,
             Ok(bytes) => {,
 self.request.api_req.body = bytes;
@@ -94,7 +94,7 @@ self.request.api_req.body = Vec::new();
 self,
     },
 /// 构建最终的请求对象,
-    pub fn build(self) -> CreateMessageRequest {,
+    pub fn w+.*{
 self.request,
     },
 },
@@ -107,7 +107,7 @@ crate::impl_executable_builder_owned!(
     create,
 );
 /// 发送消息 请求体
-#[derive(Debug, Default, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateMessageRequestBody {
     /// 消息接收者的ID，ID类型应与查询参数receive_id_type 对应；,
 /// 推荐使用 OpenID，获取方式可参考文档如何获取 Open ID？,
@@ -139,11 +139,11 @@ pub struct CreateMessageRequestBody {
     pub uuid: Option<String>,
 }
 impl CreateMessageRequestBody {
-    pub fn builder() -> CreateMessageRequestBodyBuilder {,
+    pub fn w+.*{
 CreateMessageRequestBodyBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct CreateMessageRequestBodyBuilder {
     request: CreateMessageRequestBody,
 }
@@ -152,7 +152,7 @@ impl CreateMessageRequestBodyBuilder {
 /// 推荐使用 OpenID，获取方式可参考文档如何获取 Open ID？,
     ///,
 /// 示例值："ou_7d8a6e6df7621556ce0d21922b676706ccs",
-    pub fn receive_id(mut self, receive_id: impl ToString) -> Self {,
+    pub fn receive_id(mut self, receive_id: impl ToString) -> Self {
 self.request.receive_id = receive_id.to_string();
         self,
 },
@@ -160,7 +160,7 @@ self.request.receive_id = receive_id.to_string();
     /// share_user等，类型定义请参考发送消息内容,
 ///,
     /// 示例值："text"
-    pub fn msg_type(mut self, msg_type: impl ToString) -> Self {,
+    pub fn msg_type(mut self, msg_type: impl ToString) -> Self {
 self.request.msg_type = msg_type.to_string();
         self,
 },
@@ -172,7 +172,7 @@ self.request.msg_type = msg_type.to_string();
     /// 文本消息请求体最大不能超过150KB,
 /// 卡片及富文本消息请求体最大不能超过30KB,
     /// 示例值："{\"text\":\"test content\"}"
-    pub fn content(mut self, content: impl ToString) -> Self {,
+    pub fn content(mut self, content: impl ToString) -> Self {
 self.request.content = content.to_string();
         self,
 },
@@ -184,14 +184,14 @@ self.request.content = content.to_string();
     /// 数据校验规则：,
 ///,
     /// 最大长度：50 字符
-    pub fn uuid(mut self, uuid: impl ToString) -> Self {,
+    pub fn uuid(mut self, uuid: impl ToString) -> Self {
 let uuid_str = uuid.to_string();
         // 使用验证工具函数
         let validated_uuid = validate_string_length(uuid_str, uuid_limits::MAX_LENGTH, "UUID");
 self.request.uuid = Some(validated_uuid);
         self,
 },
-pub fn build(self) -> CreateMessageRequestBody {,
+pub fn w+.*{
         // 验证必填字段
         validate_required(&self.request.receive_id, "receive_id");
         validate_required(&self.request.msg_type, "msg_type");
@@ -220,16 +220,16 @@ self.request,
     },
 },
 /// 更新消息请求,
-#[derive(Debug, Clone, Default)],
+#[derive(.*?)]
 pub struct UpdateMessageRequest {
     pub api_req: ApiRequest,
 }
 impl UpdateMessageRequest {
-    pub fn builder() -> UpdateMessageRequestBuilder {,
+    pub fn w+.*{
 UpdateMessageRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct UpdateMessageRequestBuilder {
     request: UpdateMessageRequest,
 }
@@ -238,21 +238,21 @@ impl UpdateMessageRequestBuilder {
 ///,
     /// # 参数,
 /// - `content`: 消息内容,
-    pub fn content(mut self, content: impl ToString) -> Self {,
+    pub fn content(mut self, content: impl ToString) -> Self {
 self.request,
             .api_req,
 .query_params,
             .insert("content", content.to_string());
 self,
     },
-pub fn build(self) -> UpdateMessageRequest {,
+pub fn w+.*{
         self.request,
 }
 },
 /// 便捷方法：使用消息内容类型构建发送消息请求,
 impl CreateMessageRequest {
 /// 使用SendMessageTrait类型创建消息请求,
-    pub fn with_msg<T: SendMessageTrait>(receive_id: &str, msg: T, receive_id_type: &str) -> Self {,
+    pub fn with_msg<T: SendMessageTrait>(receive_id: &str, msg: T, receive_id_type: &str) -> Self {
 let mut api_req = ApiRequest::default();
         api_req,
 .query_params,
@@ -274,8 +274,8 @@ pub struct MockMessage {
 },
 #[cfg(test)],
 impl MockMessage {
-    pub fn new(msg_type: impl ToString, content: impl ToString) -> Self {,
-Self {,
+    pub fn new(msg_type: impl ToString, content: impl ToString) -> Self {
+Self {
             msg_type_value: msg_type.to_string(),
             content_value: content.to_string(),
         },
@@ -291,7 +291,7 @@ fn content(&self) -> String {,
 }
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use super::*;
     // Test CreateMessageRequestBuilder,
 #[test],

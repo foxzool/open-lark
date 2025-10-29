@@ -15,7 +15,7 @@ use crate::,
     service::cloud_docs::sheets::v2::SpreadsheetService,
 };
 /// 写入图片,
-#[derive(Serialize, Debug, Default)],
+#[derive(.*?)]
 pub struct WriteImageRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -31,41 +31,41 @@ pub struct WriteImageRequest {
     name: String,
 }
 impl WriteImageRequest {
-    pub fn builder() -> WriteImageRequestBuilder {,
+    pub fn w+.*{
 WriteImageRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct WriteImageRequestBuilder {
     request: WriteImageRequest,
 }
 impl WriteImageRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn range(mut self, range: impl ToString) -> Self {,
+    pub fn range(mut self, range: impl ToString) -> Self {
 self.request.range = range.to_string();
         self,
 }
 
-    pub fn image(mut self, image: Vec<u8>) -> Self {,
+    pub fn image(mut self, image: Vec<u8>) -> Self {
 self.request.image = image;
         self,
 }
 
-    pub fn name(mut self, name: impl ToString) -> Self {,
+    pub fn name(mut self, name: impl ToString) -> Self {
 self.request.name = name.to_string();
         self,
 },
-pub fn build(mut self) -> WriteImageRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 写入图片响应体,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct WriteImageResponse {
     /// spreadsheet 的 token,
 #[serde(rename = "spreadsheetToken")],
@@ -101,7 +101,7 @@ Ok(api_resp),
     },
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use crate::,
 {
     core::,

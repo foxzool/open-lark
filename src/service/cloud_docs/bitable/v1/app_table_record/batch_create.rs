@@ -18,7 +18,7 @@ use crate::,
     service::bitable::v1::Record,
 };
 /// 批量新增记录请求,
-#[derive(Debug, Serialize, Default, Clone)],
+#[derive(.*?)]
 pub struct BatchCreateRecordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -38,54 +38,54 @@ pub struct BatchCreateRecordRequest {
     records: Vec<Record>,
 }
 impl BatchCreateRecordRequest {
-    pub fn builder() -> BatchCreateRecordRequestBuilder {,
+    pub fn w+.*{
 BatchCreateRecordRequestBuilder::default(),
     }
 
-    pub fn new(app_token: impl ToString, table_id: impl ToString) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, table_id: impl ToString) -> Self {
+Self {
             app_token: app_token.to_string(),
             table_id: table_id.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct BatchCreateRecordRequestBuilder {
     request: BatchCreateRecordRequest,
 }
 impl BatchCreateRecordRequestBuilder {
     /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 数据表的唯一标识符,
-    pub fn table_id(mut self, table_id: impl ToString) -> Self {,
+    pub fn table_id(mut self, table_id: impl ToString) -> Self {
 self.request.table_id = table_id.to_string();
         self,
 },
 /// 用户 ID 类型,
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
 },
 /// 客户端请求唯一标识,
-    pub fn client_token(mut self, client_token: impl ToString) -> Self {,
+    pub fn client_token(mut self, client_token: impl ToString) -> Self {
 self.request.client_token = Some(client_token.to_string());
         self,
 },
 /// 要新增的记录列表,
-    pub fn records(mut self, records: Vec<Record>) -> Self {,
+    pub fn records(mut self, records: Vec<Record>) -> Self {
 self.request.records = records;
         self,
 },
 /// 添加单条记录,
-    pub fn add_record(mut self, record: Record) -> Self {,
+    pub fn add_record(mut self, record: Record) -> Self {
 self.request.records.push(record);
         self,
 },
-pub fn build(mut self) -> BatchCreateRecordRequest {,
+pub fn w+.*{
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
                 .api_request,
@@ -111,7 +111,7 @@ crate::impl_executable_builder_owned!(
     batch_create,
 );
 /// 批量新增记录响应
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct BatchCreateRecordResponse {
     /// 新增的记录列表
     pub records: Vec<Record>,
@@ -140,7 +140,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json::json;
     use std::collections::HashMap;

@@ -18,7 +18,7 @@ pub struct StatisticsService {
     pub config: Config,
 }
 /// 获取统计数据响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetStatisticsResponse {
     /// 统计数据信息
     pub statistics: MinuteStatistics,

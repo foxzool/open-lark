@@ -9,7 +9,7 @@
 use crate::prelude::*;
 use crate::service::feishu_people::basic_data::v1::BasicDataV1Service;
 /// 基础数据管理服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct BasicDataService {
     /// v1版本API服务
     pub v1: BasicDataV1Service,

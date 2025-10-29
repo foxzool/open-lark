@@ -21,7 +21,7 @@ pub struct V1 {
     pub config: Config,
 }
 /// 获取认证信息响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetVerificationResponse {
     /// 认证信息
     pub verification: VerificationInfo,
@@ -64,7 +64,7 @@ let api_req = ApiRequest {,
 }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use crate::{
     core::{,

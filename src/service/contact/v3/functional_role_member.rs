@@ -148,7 +148,7 @@ let resp =,
 }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateRoleMemberRequest {
     /// 成员信息
     pub member: RoleMemberInfo,
@@ -158,7 +158,7 @@ pub struct CreateRoleMemberRequest {
     pub department_id_type: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct CreateRoleMemberResponse {
     pub member_id: String,
 }
@@ -168,7 +168,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchCreateRoleMembersRequest {
     pub members: Vec<RoleMemberInfo>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -177,7 +177,7 @@ pub struct BatchCreateRoleMembersRequest {
     pub department_id_type: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct BatchCreateRoleMembersResponse {
     pub results: Vec<RoleMemberResult>,
 }
@@ -187,7 +187,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SetRoleMemberScopesRequest {
     pub members: Vec<RoleMemberScope>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -204,7 +204,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetRoleMemberRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id_type: Option<String>,
@@ -212,7 +212,7 @@ pub struct GetRoleMemberRequest {
     pub department_id_type: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct GetRoleMemberResponse {
     pub member: RoleMember,
 }
@@ -222,7 +222,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListRoleMembersRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
@@ -234,7 +234,7 @@ pub struct ListRoleMembersRequest {
     pub department_id_type: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ListRoleMembersResponse {
     pub members: Vec<RoleMember>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -248,14 +248,14 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchDeleteRoleMembersRequest {
     pub member_ids: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id_type: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct BatchDeleteRoleMembersResponse {
     pub results: Vec<RoleMemberResult>,
 }
@@ -265,7 +265,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 // 公共数据结构,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct RoleMemberInfo {
     /// 成员ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -278,7 +278,7 @@ pub struct RoleMemberInfo {
     pub scope: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct RoleMember {
     /// 成员ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -294,7 +294,7 @@ pub struct RoleMember {
     pub scopes: Option<Vec<String>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct RoleMemberDetail {
     /// 成员名称,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -304,7 +304,7 @@ pub struct RoleMemberDetail {
     pub email: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RoleMemberScope {
     /// 成员ID
     pub member_id: String,
@@ -312,7 +312,7 @@ pub struct RoleMemberScope {
     pub scopes: Vec<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RoleMemberResult {
     /// 成员ID
     pub member_id: String,

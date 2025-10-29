@@ -7,13 +7,13 @@ pub struct WikiService {
 }
 impl WikiService {
     pub fn new() -> Self {
-Self {,
+Self {
             v2: V2::new(config.clone()),
         }
 }
 /// 使用共享配置创建服务（实验性）
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             v2: V2::new(shared.as_ref().clone()),
         }
 }

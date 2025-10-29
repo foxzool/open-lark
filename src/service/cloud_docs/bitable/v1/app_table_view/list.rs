@@ -39,7 +39,7 @@ Ok(api_resp),
     },
 },
 /// 列出视图请求,
-#[derive(Debug, Default, Clone)],
+#[derive(.*?)]
 pub struct ListViewsRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token
@@ -52,12 +52,12 @@ pub struct ListViewsRequest {
     page_size: Option<i32>,
 }
 impl ListViewsRequest {
-    pub fn builder() -> ListViewsRequestBuilder {,
+    pub fn w+.*{
 ListViewsRequestBuilder::default(),
     },
 /// 创建列出视图请求,
-    pub fn new(app_token: impl ToString, table_id: impl ToString) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, table_id: impl ToString) -> Self {
+Self {
             api_request: ApiRequest::default(),
             app_token: app_token.to_string(),
             table_id: table_id.to_string(),
@@ -66,32 +66,32 @@ Self {,
         },
 }
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct ListViewsRequestBuilder {
     request: ListViewsRequest,
 }
 impl ListViewsRequestBuilder {
     /// 多维表格的 app_token
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 数据表的 table_id,
-    pub fn table_id(mut self, table_id: impl ToString) -> Self {,
+    pub fn table_id(mut self, table_id: impl ToString) -> Self {
 self.request.table_id = table_id.to_string();
         self,
 },
 /// 分页标记,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
 },
 /// 分页大小，最大值是 100,
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size.min(100));
         self,
 },
-pub fn build(self) -> ListViewsRequest {,
+pub fn w+.*{
         self.request,
 }
 },
@@ -103,7 +103,7 @@ crate::impl_executable_builder_owned!(
     BaseResponse<ListViewsResponse>,
     list,
 );
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct ListViewsResponse {
     /// 是否还有更多项
     pub has_more: bool,
@@ -115,7 +115,7 @@ pub struct ListViewsResponse {
     pub items: Vec<ViewInfo>,
 }
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct ViewInfo {
     /// 视图 ID
     pub view_id: String,
@@ -134,7 +134,7 @@ ResponseFormat::Data,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_list_views_request() {,

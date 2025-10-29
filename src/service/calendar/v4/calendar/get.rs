@@ -15,7 +15,7 @@ use crate::{,
 };
 use super::CalendarManagementService;
 /// 查询日历信息请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct GetCalendarRequest {
     pub api_req: ApiRequest,
     /// 日历ID
@@ -25,7 +25,7 @@ pub struct GetCalendarRequest {
 }
 impl GetCalendarRequest {
     /// 创建查询日历请求的构建器,
-pub fn builder(calendar_id: impl ToString) -> GetCalendarRequestBuilder {,
+pub fn w+.*{
         GetCalendarRequestBuilder {,
 request: GetCalendarRequest {,
                 calendar_id: calendar_id.to_string()
@@ -40,12 +40,12 @@ pub struct GetCalendarRequestBuilder {
 }
 impl GetCalendarRequestBuilder {
     /// 设置用户ID类型
-    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
 },
 /// 构建请求,
-    pub fn build(mut self) -> GetCalendarRequest {,
+    pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
@@ -57,13 +57,13 @@ self.request,
     },
 },
 /// 查询日历信息响应数据,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct GetCalendarResponseData {
     /// 日历信息
     pub calendar: Calendar,
 },
 /// 查询日历信息响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct GetCalendarResponse {
     /// 响应数据
     pub data: GetCalendarResponseData,

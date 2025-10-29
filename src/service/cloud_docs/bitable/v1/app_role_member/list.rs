@@ -38,7 +38,7 @@ Ok(api_resp),
     },
 },
 /// 列出协作者请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct ListRoleMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -59,49 +59,49 @@ pub struct ListRoleMemberRequest {
     page_size: Option<i32>,
 }
 impl ListRoleMemberRequest {
-    pub fn builder() -> ListRoleMemberRequestBuilder {,
+    pub fn w+.*{
 ListRoleMemberRequestBuilder::default(),
     }
 
-    pub fn new(app_token: impl ToString, role_id: impl ToString) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, role_id: impl ToString) -> Self {
+Self {
             app_token: app_token.to_string(),
             role_id: role_id.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct ListRoleMemberRequestBuilder {
     request: ListRoleMemberRequest,
 }
 impl ListRoleMemberRequestBuilder {
     /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 自定义角色的id,
-    pub fn role_id(mut self, role_id: impl ToString) -> Self {,
+    pub fn role_id(mut self, role_id: impl ToString) -> Self {
 self.request.role_id = role_id.to_string();
         self,
 },
 /// 用户id类型,
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
 },
 /// 分页标记,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
 },
 /// 分页大小,
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
 },
-pub fn build(mut self) -> ListRoleMemberRequest {,
+pub fn w+.*{
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
                 .api_request,
@@ -131,7 +131,7 @@ impl_executable_builder_owned!(,
     list,
 );
 /// 列出协作者响应
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct ListRoleMemberResponse {
     /// 是否还有更多项
     pub has_more: bool,
@@ -149,7 +149,7 @@ ResponseFormat::Data,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_list_role_member_request_builder() {,

@@ -30,7 +30,7 @@ pub struct RoomService {
     pub config: Config,
 }
 /// 创建会议室请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateRoomRequest {
     /// 会议室名称
     pub name: String,
@@ -45,7 +45,7 @@ pub struct CreateRoomRequest {
     pub location: Option<String>,
 }
 /// 创建会议室响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateRoomResponse {
     /// 会议室信息
     pub room: Room,
@@ -56,7 +56,7 @@ ResponseFormat::Data,
     }
 }
 /// 更新会议室请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateRoomRequest {
     /// 会议室名称
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -72,7 +72,7 @@ pub struct UpdateRoomRequest {
     pub location: Option<String>,
 }
 /// 更新会议室响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateRoomResponse {
     /// 会议室信息
     pub room: Room,
@@ -83,7 +83,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取会议室响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetRoomResponse {
     /// 会议室信息
     pub room: Room,
@@ -94,7 +94,7 @@ ResponseFormat::Data,
     }
 }
 /// 会议室列表响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListRoomsResponse {
     /// 会议室列表
     pub rooms: Vec<Room>,
@@ -109,7 +109,7 @@ ResponseFormat::Data,
     }
 }
 /// 搜索会议室响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchRoomsResponse {
     /// 会议室列表
     pub rooms: Vec<Room>,
@@ -124,7 +124,7 @@ ResponseFormat::Data,
     }
 }
 /// 搜索会议室参数
-#[derive(Debug, Default)],
+#[derive(.*?)]
 pub struct SearchRoomsParams {
     pub keyword: Option<String>,
     pub room_ids: Option<Vec<String>>,

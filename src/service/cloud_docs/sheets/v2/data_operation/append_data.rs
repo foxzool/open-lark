@@ -12,7 +12,7 @@ core::{,
     },
 };
 /// 追加数据请求,
-#[derive(Serialize, Debug, Default)],
+#[derive(.*?)]
 pub struct AppendDataRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -27,31 +27,31 @@ pub struct AppendDataRequest {
     value_range: ValueRangeRequest,
 }
 impl AppendDataRequest {
-    pub fn builder() -> AppendDataRequestBuilder {,
+    pub fn w+.*{
 AppendDataRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct AppendDataRequestBuilder {
     request: AppendDataRequest,
 }
 impl AppendDataRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 },
 /// 插入范围，包含 sheetId 与单元格范围两部分，目前支持四种索引方式，详见,
     /// 在线表格开发指南，range所表示的范围需要大于等于values占用的范围。
-    pub fn range(mut self, range: impl ToString) -> Self {,
+    pub fn range(mut self, range: impl ToString) -> Self {
 self.request.value_range.range = range.to_string();
         self,
 },
 /// 需要写入的值，如要写入公式、超链接、email、@人等，可详看附录sheet 支持写入数据类型,
-    pub fn values(mut self, values: Value) -> Self {,
+    pub fn values(mut self, values: Value) -> Self {
 self.request.value_range.values = values;
         self,
 },
-pub fn build(mut self) -> AppendDataRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -85,7 +85,7 @@ Ok(api_resp),
     },
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::config::Config;
     use serde_json::{json, Value};

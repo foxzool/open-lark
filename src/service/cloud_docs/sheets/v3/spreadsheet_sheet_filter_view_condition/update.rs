@@ -39,7 +39,7 @@ Ok(api_resp),
     },
 },
 /// 更新筛选条件请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateFilterViewConditionRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -55,46 +55,46 @@ pub struct UpdateFilterViewConditionRequest {
     condition: FilterCondition,
 }
 impl UpdateFilterViewConditionRequest {
-    pub fn builder() -> UpdateFilterViewConditionRequestBuilder {,
+    pub fn w+.*{
 UpdateFilterViewConditionRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct UpdateFilterViewConditionRequestBuilder {
     request: UpdateFilterViewConditionRequest,
 }
 impl UpdateFilterViewConditionRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 }
 
-    pub fn filter_view_id(mut self, filter_view_id: impl ToString) -> Self {,
+    pub fn filter_view_id(mut self, filter_view_id: impl ToString) -> Self {
 self.request.filter_view_id = filter_view_id.to_string();
         self,
 }
 
-    pub fn condition_id(mut self, condition_id: impl ToString) -> Self {,
+    pub fn condition_id(mut self, condition_id: impl ToString) -> Self {
 self.request.condition_id = condition_id.to_string();
         self,
 }
 
-    pub fn condition(mut self, condition: FilterCondition) -> Self {,
+    pub fn condition(mut self, condition: FilterCondition) -> Self {
 self.request.condition = condition;
         self,
 },
-pub fn build(mut self) -> UpdateFilterViewConditionRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 更新筛选条件响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct UpdateFilterViewConditionResponseData {
     /// 筛选条件 ID
     pub condition_id: String,

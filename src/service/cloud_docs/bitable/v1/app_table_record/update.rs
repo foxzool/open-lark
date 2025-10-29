@@ -19,7 +19,7 @@ use crate::,
     service::bitable::v1::Record,
 };
 /// 更新记录请求,
-#[derive(Debug, Serialize, Default, Clone)],
+#[derive(.*?)]
 pub struct UpdateRecordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -39,15 +39,15 @@ pub struct UpdateRecordRequest {
     fields: Value,
 }
 impl UpdateRecordRequest {
-    pub fn builder() -> UpdateRecordRequestBuilder {,
+    pub fn w+.*{
 UpdateRecordRequestBuilder::default(),
     },
 pub fn new(,
         app_token: impl ToString,
         table_id: impl ToString,
         record_id: impl ToString,
-    ) -> Self {,
-Self {,
+    ) -> Self {
+Self {
             app_token: app_token.to_string(),
             table_id: table_id.to_string(),
             record_id: record_id.to_string(),
@@ -56,44 +56,44 @@ Self {,
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct UpdateRecordRequestBuilder {
     request: UpdateRecordRequest,
 }
 impl UpdateRecordRequestBuilder {
     /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 数据表的唯一标识符,
-    pub fn table_id(mut self, table_id: impl ToString) -> Self {,
+    pub fn table_id(mut self, table_id: impl ToString) -> Self {
 self.request.table_id = table_id.to_string();
         self,
 },
 /// 记录的唯一标识符,
-    pub fn record_id(mut self, record_id: impl ToString) -> Self {,
+    pub fn record_id(mut self, record_id: impl ToString) -> Self {
 self.request.record_id = record_id.to_string();
         self,
 },
 /// 用户 ID 类型,
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
 },
 /// 记录字段数据,
-    pub fn fields(mut self, fields: Value) -> Self {,
+    pub fn fields(mut self, fields: Value) -> Self {
 self.request.fields = fields;
         self,
 },
 /// 添加单个字段,
-    pub fn add_field(mut self, field_name: impl ToString, value: Value) -> Self {,
+    pub fn add_field(mut self, field_name: impl ToString, value: Value) -> Self {
 if let Value::Object(ref mut map) = self.request.fields {,
             map.insert(field_name.to_string(), value);
 },
 self,
     },
-pub fn build(mut self) -> UpdateRecordRequest {,
+pub fn w+.*{
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
                 .api_request,
@@ -113,7 +113,7 @@ crate::impl_executable_builder_owned!(
     update,
 );
 /// 更新记录响应
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateRecordResponse {
     /// 更新后的记录
     pub record: Record,
@@ -143,7 +143,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json::json;
     #[test],

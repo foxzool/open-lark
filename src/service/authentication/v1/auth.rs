@@ -169,7 +169,7 @@ resp.into_result(),
     },
 },
 /// 登录用户信息,
-#[derive(Debug, Deserialize, Serialize)],
+#[derive(.*?)]
 pub struct UserInfo {
     /// 用户姓名
     pub name: String,
@@ -218,7 +218,7 @@ fn service_version() -> &'static str {,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
     use crate::core::{config::Config, constants::AppType};
 use std::sync::Arc;
@@ -1015,7 +1015,7 @@ assert_eq!(,
 },
 // ===== 新增的令牌管理API请求和响应结构体 =====,
 /// 商店应用获取App Access Token请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetAppAccessTokenRequest {
     /// 应用ID
     pub app_id: String,
@@ -1026,7 +1026,7 @@ pub struct GetAppAccessTokenRequest {
     pub app_type: Option<String>,
 },
 /// 自建应用获取App Access Token请求,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetAppAccessTokenInternalRequest {
     /// 应用ID
     pub app_id: String,
@@ -1034,7 +1034,7 @@ pub struct GetAppAccessTokenInternalRequest {
     pub app_secret: String,
 },
 /// 商店应用获取Tenant Access Token请求,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetTenantAccessTokenRequest {
     /// 应用ID
     pub app_id: String,
@@ -1045,7 +1045,7 @@ pub struct GetTenantAccessTokenRequest {
     pub tenant_key: Option<String>,
 },
 /// 自建应用获取Tenant Access Token请求,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetTenantAccessTokenInternalRequest {
     /// 应用ID
     pub app_id: String,
@@ -1056,7 +1056,7 @@ pub struct GetTenantAccessTokenInternalRequest {
     pub tenant_key: Option<String>,
 },
 /// 重新获取App Ticket请求,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ResendAppTicketRequest {
     /// 应用ID
     pub app_id: String,
@@ -1067,7 +1067,7 @@ pub struct ResendAppTicketRequest {
     pub callback_address: Option<String>,
 },
 /// App Access Token响应,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct AppAccessTokenResponse {
     /// 应用访问令牌
     pub app_access_token: String,
@@ -1084,7 +1084,7 @@ pub struct AppAccessTokenResponse {
     pub refresh_expires_in: Option<i64>,
 },
 /// Tenant Access Token响应,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct TenantAccessTokenResponse {
     /// 租户访问令牌
     pub tenant_access_token: String,
@@ -1101,7 +1101,7 @@ pub struct TenantAccessTokenResponse {
     pub refresh_expires_in: Option<i64>,
 },
 /// 重新获取App Ticket响应,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ResendAppTicketResponse {
     /// App ticket，用于接收事件推送,
 #[serde(skip_serializing_if = "Option::is_none")],

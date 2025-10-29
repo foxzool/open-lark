@@ -115,7 +115,7 @@ impl SpreadsheetService {
     /// # 参数
 /// - `config`: 客户端配置
     pub fn new() -> Self {
-Self {,
+Self {
             config: config.clone(),
         }
 }
@@ -150,7 +150,7 @@ impl SpreadsheetSheetService {
     /// # 参数
 /// - `config`: 客户端配置
     pub fn new() -> Self {
-Self {,
+Self {
             config: config.clone(),
         }
 }
@@ -191,7 +191,7 @@ impl SpreadsheetSheetFilterService {
     /// # 参数
 /// - `config`: 客户端配置
     pub fn new() -> Self {
-Self {,
+Self {
             config: config.clone(),
         }
 }
@@ -234,7 +234,7 @@ impl SpreadsheetSheetFilterViewService {
     /// # 参数
 /// - `config`: 客户端配置
     pub fn new() -> Self {
-Self {,
+Self {
             config: config.clone(),
         }
 }
@@ -288,7 +288,7 @@ impl DataOperationService {
     /// # 参数
 /// - `config`: 客户端配置
     pub fn new() -> Self {
-Self {,
+Self {
             config: config.clone(),
         }
 }
@@ -337,13 +337,13 @@ impl SheetRowColService {
     /// # 参数
 /// - `config`: 客户端配置
     pub fn new() -> Self {
-Self {,
+Self {
             config: config.clone(),
         }
 }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::{config::Config, constants::AppType};
 use std::sync::Arc;

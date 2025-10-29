@@ -21,7 +21,7 @@ pub struct BuzzMessagesService {
     pub config: Config,
 }
 /// 发送应用内加急请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UrgentAppRequest {
     /// 用户ID列表
     pub user_id_list: Vec<String>,
@@ -29,19 +29,19 @@ pub struct UrgentAppRequest {
 // 接入统一 Service 抽象（IM v1 - BuzzMessagesService）
 impl_full_service!(BuzzMessagesService, "im.buzz_messages", "v1");
 /// 发送短信加急请求  
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UrgentSmsRequest {
     /// 用户ID列表
     pub user_id_list: Vec<String>,
 }
 /// 发送电话加急请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UrgentPhoneRequest {
     /// 用户ID列表
     pub user_id_list: Vec<String>,
 }
 /// 消息加急响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UrgentResponse {
     /// 无效的用户ID列表
     pub invalid_user_id_list: Vec<String>,

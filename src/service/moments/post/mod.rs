@@ -17,7 +17,7 @@ pub struct PostService {
     pub config: Config,
 }
 /// 查询帖子信息响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PostGetResponse {
     /// 帖子详细信息
 #[serde(flatten)],

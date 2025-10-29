@@ -193,7 +193,7 @@ Ok(api_resp),
 },
 // === 数据结构定义 ===,
 /// 创建块请求参数
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct CreateBlockRequest {
     /// 父块ID，如果创建在文档根级，传document_id
     pub parent_id: String,
@@ -203,19 +203,19 @@ pub struct CreateBlockRequest {
     pub blocks: Vec<BlockData>,
 }
 impl CreateBlockRequest {
-    pub fn builder() -> CreateBlockRequestBuilder {,
+    pub fn w+.*{
 CreateBlockRequestBuilder::default(),
     }
 
-    pub fn new(parent_id: impl Into<String>, blocks: Vec<BlockData>) -> Self {,
-Self {,
+    pub fn new(parent_id: impl Into<String>, blocks: Vec<BlockData>) -> Self {
+Self {
             parent_id: parent_id.into(),
             index: None,
             blocks,
         },
 }
 
-    pub fn with_index(mut self, index: i32) -> Self {,
+    pub fn with_index(mut self, index: i32) -> Self {
 self.index = Some(index);
         self,
 }
@@ -227,27 +227,27 @@ pub struct CreateBlockRequestBuilder {
     document_id: String,
 }
 impl CreateBlockRequestBuilder {
-    pub fn document_id(mut self, document_id: impl Into<String>) -> Self {,
+    pub fn document_id(mut self, document_id: impl Into<String>) -> Self {
 self.document_id = document_id.into();
         self,
 }
 
-    pub fn parent_id(mut self, parent_id: impl Into<String>) -> Self {,
+    pub fn parent_id(mut self, parent_id: impl Into<String>) -> Self {
 self.request.parent_id = parent_id.into();
         self,
 }
 
-    pub fn index(mut self, index: i32) -> Self {,
+    pub fn index(mut self, index: i32) -> Self {
 self.request.index = Some(index);
         self,
 }
 
-    pub fn blocks(mut self, blocks: Vec<BlockData>) -> Self {,
+    pub fn blocks(mut self, blocks: Vec<BlockData>) -> Self {
 self.request.blocks = blocks;
         self,
 }
 
-    pub fn add_block(mut self, block: BlockData) -> Self {,
+    pub fn add_block(mut self, block: BlockData) -> Self {
 self.request.blocks.push(block);
         self,
 }
@@ -257,7 +257,7 @@ self.request.blocks.push(block);
 }
 },
 /// 块数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BlockData {
     /// 块类型
     pub block_type: i32,
@@ -265,7 +265,7 @@ pub struct BlockData {
     pub block: Value,
 },
 /// 创建块响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateBlockRespData {
     /// 创建的块列表
     pub blocks: Vec<BlockInfo>,
@@ -278,7 +278,7 @@ ResponseFormat::Data,
     },
 },
 /// 块信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BlockInfo {
     /// 块ID
     pub block_id: String,
@@ -292,7 +292,7 @@ pub struct BlockInfo {
     pub index: i32,
 },
 /// 获取块响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetBlockRespData {
     /// 块信息
     pub block: DetailedBlock,
@@ -303,7 +303,7 @@ ResponseFormat::Data,
     },
 },
 /// 详细块信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DetailedBlock {
     /// 块ID
     pub block_id: String,
@@ -319,7 +319,7 @@ pub struct DetailedBlock {
     pub block: Value,
 },
 /// 更新块请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PatchBlockRequest {
     /// 要更新的块内容
     pub block: Value,
@@ -330,7 +330,7 @@ impl PatchBlockRequest {
 }
 },
 /// 更新块响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PatchBlockRespData {
     /// 更新后的块信息
     pub block: DetailedBlock,
@@ -343,13 +343,13 @@ ResponseFormat::Data,
     },
 },
 /// 批量更新块请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct BatchUpdateBlockRequest {
     /// 要更新的块列表
     pub requests: Vec<UpdateBlockItem>,
 },
 /// 更新块项,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateBlockItem {
     /// 块ID
     pub block_id: String,
@@ -357,10 +357,10 @@ pub struct UpdateBlockItem {
     pub block: Value,
 }
 impl BatchUpdateBlockRequest {
-    pub fn builder() -> BatchUpdateBlockRequestBuilder {,
+    pub fn w+.*{
 BatchUpdateBlockRequestBuilder::default(),
     },
-pub fn new(requests: Vec<UpdateBlockItem>) -> Self {,
+pub fn new(requests: Vec<UpdateBlockItem>) -> Self {
         Self { requests },
 }
 },
@@ -371,17 +371,17 @@ pub struct BatchUpdateBlockRequestBuilder {
     document_id: String,
 }
 impl BatchUpdateBlockRequestBuilder {
-    pub fn document_id(mut self, document_id: impl Into<String>) -> Self {,
+    pub fn document_id(mut self, document_id: impl Into<String>) -> Self {
 self.document_id = document_id.into();
         self,
 }
 
-    pub fn requests(mut self, requests: Vec<UpdateBlockItem>) -> Self {,
+    pub fn requests(mut self, requests: Vec<UpdateBlockItem>) -> Self {
 self.request.requests = requests;
         self,
 }
 
-    pub fn add_request(mut self, block_id: impl Into<String>, block: Value) -> Self {,
+    pub fn add_request(mut self, block_id: impl Into<String>, block: Value) -> Self {
 self.request.requests.push(UpdateBlockItem {,
             block_id: block_id.into(),
             block,
@@ -394,7 +394,7 @@ self,
 }
 },
 /// 批量更新块响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchUpdateBlockRespData {
     /// 更新的块列表
     pub blocks: Vec<DetailedBlock>,
@@ -407,16 +407,16 @@ ResponseFormat::Data,
     },
 },
 /// 批量删除块请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct BatchDeleteBlockRequest {
     /// 要删除的块ID列表
     pub block_ids: Vec<String>,
 }
 impl BatchDeleteBlockRequest {
-    pub fn builder() -> BatchDeleteBlockRequestBuilder {,
+    pub fn w+.*{
 BatchDeleteBlockRequestBuilder::default(),
     },
-pub fn new(block_ids: Vec<String>) -> Self {,
+pub fn new(block_ids: Vec<String>) -> Self {
         Self { block_ids },
 }
 },
@@ -427,17 +427,17 @@ pub struct BatchDeleteBlockRequestBuilder {
     document_id: String,
 }
 impl BatchDeleteBlockRequestBuilder {
-    pub fn document_id(mut self, document_id: impl Into<String>) -> Self {,
+    pub fn document_id(mut self, document_id: impl Into<String>) -> Self {
 self.document_id = document_id.into();
         self,
 }
 
-    pub fn block_ids(mut self, block_ids: Vec<String>) -> Self {,
+    pub fn block_ids(mut self, block_ids: Vec<String>) -> Self {
 self.request.block_ids = block_ids;
         self,
 }
 
-    pub fn add_block_id(mut self, block_id: impl Into<String>) -> Self {,
+    pub fn add_block_id(mut self, block_id: impl Into<String>) -> Self {
 self.request.block_ids.push(block_id.into());
         self,
 }
@@ -447,7 +447,7 @@ self.request.block_ids.push(block_id.into());
 }
 },
 /// 批量删除块响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchDeleteBlockRespData {
     /// 文档版本ID
     pub document_revision_id: i64,
@@ -458,7 +458,7 @@ ResponseFormat::Data,
     },
 },
 /// 获取子块请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListChildrenRequest {
     /// 分页大小
     pub page_size: Option<i32>,
@@ -466,30 +466,30 @@ pub struct ListChildrenRequest {
     pub page_token: Option<String>,
 }
 impl ListChildrenRequest {
-    pub fn new() -> Self {,
-Self {,
+    pub fn new() -> Self {
+Self {
             page_size: None,
             page_token: None,
         },
 }
 
-    pub fn with_page_size(mut self, page_size: i32) -> Self {,
+    pub fn with_page_size(mut self, page_size: i32) -> Self {
 self.page_size = Some(page_size);
         self,
 }
 
-    pub fn with_page_token(mut self, page_token: impl Into<String>) -> Self {,
+    pub fn with_page_token(mut self, page_token: impl Into<String>) -> Self {
 self.page_token = Some(page_token.into());
         self,
 }
 }
 impl Default for ListChildrenRequest {,
-    fn default() -> Self {,
+    fn default() -> Self {
 Self::new(),
     },
 },
 /// 获取子块响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListChildrenRespData {
     /// 子块列表
     pub items: Vec<DetailedBlock>,

@@ -20,7 +20,7 @@ pub struct ReferralAccountService {
     pub config: Config,
 }
 /// 内推账户余额信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReferralAccountBalance {
     /// 用户ID
     pub user_id: String,
@@ -36,7 +36,7 @@ pub struct ReferralAccountBalance {
     pub last_updated: Option<String>,
 }
 /// 内推收入记录
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReferralIncomeRecord {
     /// 记录ID
     pub id: String,
@@ -60,7 +60,7 @@ pub struct ReferralIncomeRecord {
     pub created_time: Option<String>,
 }
 /// 提现记录
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct WithdrawalRecord {
     /// 提现记录ID
     pub id: String,
@@ -96,7 +96,7 @@ pub struct WithdrawalRecord {
     pub updated_time: Option<String>,
 }
 /// 提现账户信息
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct WithdrawalAccountInfo {
     /// 账户类型
     pub account_type: String,
@@ -110,7 +110,7 @@ pub struct WithdrawalAccountInfo {
     pub bank_branch: Option<String>,
 }
 /// 内推账户创建请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ReferralAccountCreateRequest {
     /// 用户ID
     pub user_id: String,
@@ -130,7 +130,7 @@ pub struct ReferralAccountCreateRequest {
     pub email: Option<String>,
 }
 /// 提现申请请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct WithdrawalApplicationRequest {
     /// 用户ID
     pub user_id: String,
@@ -144,7 +144,7 @@ pub struct WithdrawalApplicationRequest {
     pub remark: Option<String>,
 }
 /// 内推账户列表请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ReferralAccountListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -156,7 +156,7 @@ pub struct ReferralAccountListRequest {
     pub user_id: Option<String>,
 }
 /// 收入记录列表请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct IncomeRecordListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -172,7 +172,7 @@ pub struct IncomeRecordListRequest {
     pub end_time: Option<String>,
 }
 /// 提现记录列表请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct WithdrawalRecordListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -188,7 +188,7 @@ pub struct WithdrawalRecordListRequest {
     pub end_time: Option<String>,
 }
 /// 内推账户列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReferralAccountListResponse {
     /// 内推账户列表
 #[serde(flatten)],
@@ -200,7 +200,7 @@ ResponseFormat::Data,
     }
 }
 /// 账户余额响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReferralAccountBalanceResponse {
     /// 账户余额信息
     pub balance: ReferralAccountBalance,
@@ -211,7 +211,7 @@ ResponseFormat::Data,
     }
 }
 /// 收入记录列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct IncomeRecordListResponse {
     /// 收入记录列表
 #[serde(flatten)],
@@ -223,7 +223,7 @@ ResponseFormat::Data,
     }
 }
 /// 提现记录列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct WithdrawalRecordListResponse {
     /// 提现记录列表
 #[serde(flatten)],
@@ -235,7 +235,7 @@ ResponseFormat::Data,
     }
 }
 /// 内推账户操作响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReferralAccountOperationResponse {
     /// 操作结果
 #[serde(flatten)],
@@ -699,7 +699,7 @@ pub async fn approve_withdrawal(,
         remark: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralAccountOperationResponse>> {,
-#[derive(Serialize)],
+#[derive(.*?)]
         struct ApprovalRequest {
             approved: bool,
             remark: Option<String>,
@@ -780,7 +780,7 @@ let api_req = ApiRequest {,
         reason: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralAccountOperationResponse>> {,
-#[derive(Serialize)],
+#[derive(.*?)]
         struct DisableRequest {
             reason: String,
         }

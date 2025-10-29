@@ -20,7 +20,7 @@ pub struct CustomFieldOptionService {
     pub config: Config,
 }
 /// 创建自定义字段选项请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateCustomFieldOptionRequest {
     /// 选项名称
     pub name: String,
@@ -29,7 +29,7 @@ pub struct CreateCustomFieldOptionRequest {
     pub color_index: Option<i32>,
 }
 /// 创建自定义字段选项响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateCustomFieldOptionResponse {
     /// 创建的选项
     pub option: CustomFieldOption,
@@ -40,7 +40,7 @@ ResponseFormat::Data,
     }
 }
 /// 更新自定义字段选项请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateCustomFieldOptionRequest {
     /// 选项名称
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -50,7 +50,7 @@ pub struct UpdateCustomFieldOptionRequest {
     pub color_index: Option<i32>,
 }
 /// 更新自定义字段选项响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateCustomFieldOptionResponse {
     /// 更新后的选项
     pub option: CustomFieldOption,

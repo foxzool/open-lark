@@ -101,7 +101,7 @@ let api_req = ApiRequest {,
 }
 }
 // 请求响应模型
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CheckUserAccessResponse {
     pub has_access: bool,
     pub order: Option<Order>,
@@ -112,7 +112,7 @@ ResponseFormat::Data,
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListTenantPaidPlansResponse {
     pub pricing_plans: Vec<PricingPlan>,
     pub page_token: Option<String>,
@@ -124,7 +124,7 @@ ResponseFormat::Data,
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetOrderInfoResponse {
     pub order: Order,
 }

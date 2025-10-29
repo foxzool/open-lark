@@ -68,7 +68,7 @@ use crate::core::config::Config;
 use crate::service::base::bitable::BitableService;
 /// 基础服务
 #[cfg(feature = "base")]
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct BaseService {
     /// 多维表格服务
     pub bitable: BitableService,
@@ -77,7 +77,7 @@ pub struct BaseService {
 impl BaseService {
 /// 创建新的基础服务实例
     pub fn new() -> Self {
-Self {,
+Self {
             bitable: BitableService::new(config.clone()),
         }
 }
@@ -85,7 +85,7 @@ Self {,
 #[cfg(not(feature = "base"))],
 pub struct BaseService;
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     #[test],
 fn test_base_service_creation() {,

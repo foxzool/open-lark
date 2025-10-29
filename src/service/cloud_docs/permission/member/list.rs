@@ -12,7 +12,7 @@ use crate::core::{,
 };
 use super::batch_create::Permission;
 /// 获取协作者列表请求
-#[derive(Debug, Serialize, Default, Clone)],
+#[derive(.*?)]
 pub struct ListPermissionMembersRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -30,64 +30,64 @@ pub struct ListPermissionMembersRequest {
     page_token: Option<String>,
 }
 impl ListPermissionMembersRequest {
-    pub fn builder() -> ListPermissionMembersRequestBuilder {,
+    pub fn w+.*{
 ListPermissionMembersRequestBuilder::default(),
     }
 
-    pub fn new(token: impl ToString, obj_type: impl ToString) -> Self {,
-Self {,
+    pub fn new(token: impl ToString, obj_type: impl ToString) -> Self {
+Self {
             token: token.to_string(),
             obj_type: obj_type.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct ListPermissionMembersRequestBuilder {
     request: ListPermissionMembersRequest,
 }
 impl ListPermissionMembersRequestBuilder {
     /// 文档token
-    pub fn token(mut self, token: impl ToString) -> Self {,
+    pub fn token(mut self, token: impl ToString) -> Self {
 self.request.token = token.to_string();
         self,
 },
 /// 文档类型,
-    pub fn obj_type(mut self, obj_type: impl ToString) -> Self {,
+    pub fn obj_type(mut self, obj_type: impl ToString) -> Self {
 self.request.obj_type = obj_type.to_string();
         self,
 },
 /// 设置为文档类型,
-    pub fn as_doc(mut self) -> Self {,
+    pub fn as_doc(mut self) -> Self {
 self.request.obj_type = "doc".to_string();
         self,
 },
 /// 设置为电子表格类型,
-    pub fn as_sheet(mut self) -> Self {,
+    pub fn as_sheet(mut self) -> Self {
 self.request.obj_type = "sheet".to_string();
         self,
 },
 /// 设置为多维表格类型,
-    pub fn as_bitable(mut self) -> Self {,
+    pub fn as_bitable(mut self) -> Self {
 self.request.obj_type = "bitable".to_string();
         self,
 },
 /// 设置为知识库类型,
-    pub fn as_wiki(mut self) -> Self {,
+    pub fn as_wiki(mut self) -> Self {
 self.request.obj_type = "wiki".to_string();
         self,
 },
 /// 分页大小,
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
 },
 /// 分页标记,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
 },
-pub fn build(mut self) -> ListPermissionMembersRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -100,7 +100,7 @@ crate::impl_executable_builder_owned!(,
     list_members,
 );
 /// 协作者信息
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct PermissionMember {
     /// 协作者ID类型
     pub member_type: String,
@@ -120,7 +120,7 @@ pub struct PermissionMember {
     pub inherit_info: Option<String>,
 },
 /// 获取协作者列表响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct ListPermissionMembersResponse {
     /// 协作者列表
     pub members: Vec<PermissionMember>,
@@ -167,38 +167,38 @@ Ok(api_resp),
 
 impl PermissionMember {
 /// 获取显示名称,
-    pub fn display_name(&self) -> String {,
+    pub fn w+.*{
 self.name,
             .as_ref()
 .cloned()
             .unwrap_or_else(|| self.member_id.clone()),
 },
 /// 是否是用户,
-    pub fn is_user(&self) -> bool {,
+    pub fn w+.*{
 self.member_type == "user",
     },
 /// 是否是群组,
-    pub fn is_chat(&self) -> bool {,
+    pub fn w+.*{
 self.member_type == "chat",
     },
 /// 是否是部门,
-    pub fn is_department(&self) -> bool {,
+    pub fn w+.*{
 self.member_type == "department",
     },
 /// 是否有编辑权限,
-    pub fn can_edit(&self) -> bool {,
+    pub fn w+.*{
 self.perm.can_edit(),
     },
 /// 是否是所有者,
-    pub fn is_owner(&self) -> bool {,
+    pub fn w+.*{
 self.perm.is_owner(),
     },
 /// 是否继承权限,
-    pub fn has_inherited_permission(&self) -> bool {,
+    pub fn w+.*{
 self.is_inherited.unwrap_or(false),
     },
 /// 获取权限描述,
-    pub fn permission_description(&self) -> String {,
+    pub fn w+.*{
 let mut desc = self.perm.description().to_string();
         if self.has_inherited_permission() {,
 desc.push_str(" (继承)");
@@ -209,7 +209,7 @@ desc.push_str(" (继承)");
 desc,
     },
 /// 获取成员类型描述,
-    pub fn member_type_description(&self) -> String {,
+    pub fn w+.*{
 self.type_str,
             .as_ref()
 .cloned()
@@ -221,7 +221,7 @@ self.type_str,
             }),
 },
 /// 获取成员摘要信息,
-    pub fn summary(&self) -> String {,
+    pub fn w+.*{
 format!(,
             "{} ({}) - {} - {}",
             self.display_name(),
@@ -233,43 +233,43 @@ format!(,
 }
 impl ListPermissionMembersResponse {
     /// 获取成员数量,
-pub fn count(&self) -> usize {,
+pub fn w+.*{
         self.members.len(),
 },
 /// 是否为空,
-    pub fn is_empty(&self) -> bool {,
+    pub fn w+.*{
 self.members.is_empty(),
     },
 /// 获取所有者,
-    pub fn owners(&self) -> Vec<&PermissionMember> {,
+    pub fn w+.*{
 self.members,
             .iter()
 .filter(|member| member.is_owner()),
             .collect(),
 },
 /// 获取编辑者,
-    pub fn editors(&self) -> Vec<&PermissionMember> {,
+    pub fn w+.*{
 self.members,
             .iter()
             .filter(|member| matches!(member.perm, Permission::Edit)),
 .collect(),
     },
 /// 获取评论者,
-    pub fn commenters(&self) -> Vec<&PermissionMember> {,
+    pub fn w+.*{
 self.members,
             .iter()
             .filter(|member| matches!(member.perm, Permission::Comment)),
 .collect(),
     },
 /// 获取阅读者,
-    pub fn viewers(&self) -> Vec<&PermissionMember> {,
+    pub fn w+.*{
 self.members,
             .iter()
             .filter(|member| matches!(member.perm, Permission::View)),
 .collect(),
     },
 /// 按权限类型分组,
-    pub fn group_by_permission(&self) -> std::collections::HashMap<String, Vec<&PermissionMember>> {,
+    pub fn w+.*{
 let mut groups = std::collections::HashMap::new();
         for member in &self.members {,
 let perm_key = member.perm.description().to_string();
@@ -291,21 +291,21 @@ groups,
 groups,
     },
 /// 获取继承权限的成员,
-    pub fn inherited_members(&self) -> Vec<&PermissionMember> {,
+    pub fn w+.*{
 self.members,
             .iter()
 .filter(|member| member.has_inherited_permission()),
             .collect(),
 },
 /// 获取直接权限的成员,
-    pub fn direct_members(&self) -> Vec<&PermissionMember> {,
+    pub fn w+.*{
 self.members,
             .iter()
 .filter(|member| !member.has_inherited_permission()),
             .collect(),
 },
 /// 权限统计摘要,
-    pub fn permission_summary(&self) -> String {,
+    pub fn w+.*{
 let owners = self.owners().len();
         let editors = self.editors().len();
 let commenters = self.commenters().len();
@@ -322,7 +322,7 @@ format!(,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_list_permission_members_request_builder() {,

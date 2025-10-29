@@ -4,14 +4,14 @@ use crate::{,
     service::im::v1::p2_im_message_receive_v1::UserId,
 };
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2ImMessageReadV1 {
     pub schema: String,
     pub header: EventHeader,
     pub event: P2ImMessageMessageReadV1Data,
 },
 /// 消息已读事件数据,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2ImMessageMessageReadV1Data {
     /// 消息阅读者信息
     pub reader: EventReader,
@@ -19,7 +19,7 @@ pub struct P2ImMessageMessageReadV1Data {
     pub message_id_list: Vec<String>,
 },
 /// 消息阅读者信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EventReader {
     /// 阅读时间戳（毫秒）
     pub read_time: String,
@@ -38,7 +38,7 @@ impl<F> P2ImMessageReadV1ProcessorImpl<F>,
 where
     F: Fn(P2ImMessageReadV1) + 'static,
 {,
-pub fn new(f: F) -> Self {,
+pub fn new(f: F) -> Self {
         P2ImMessageReadV1ProcessorImpl { f },
 }
 }
@@ -54,7 +54,7 @@ Ok(()),
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use crate::event::context::EventHeader;
     use crate::service::im::v1::p2_im_message_receive_v1::UserId;

@@ -79,7 +79,7 @@ let api_req = ApiRequest {,
 }
 }
 /// 访客添加请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct VisitorCreateRequest {
     /// 访客姓名
     pub name: String,
@@ -106,7 +106,7 @@ pub struct VisitorCreateRequest {
     pub device_ids: Option<Vec<String>>,
 }
 /// 访客添加响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct VisitorCreateResponse {
     /// 添加的访客信息
     pub visitor: Visitor,
@@ -117,7 +117,7 @@ ResponseFormat::Data,
     }
 }
 /// 访客删除响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct VisitorDeleteResponse {
     /// 删除成功标识
     pub success: bool,
@@ -129,7 +129,7 @@ ResponseFormat::Data,
 }
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use crate::core::config::Config;
     use crate::core::constants::AppType;

@@ -16,7 +16,7 @@ core::{,
 };
 use super::CalendarManagementService;
 /// 创建共享日历请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct CreateCalendarRequest {
     pub api_req: ApiRequest,
     /// 日历标题
@@ -32,7 +32,7 @@ pub struct CreateCalendarRequest {
 }
 impl CreateCalendarRequest {
     /// 创建创建日历请求的构建器,
-pub fn builder() -> CreateCalendarRequestBuilder {,
+pub fn w+.*{
         CreateCalendarRequestBuilder::default(),
 }
 },
@@ -43,32 +43,32 @@ pub struct CreateCalendarRequestBuilder {
 }
 impl CreateCalendarRequestBuilder {
     /// 设置日历标题
-    pub fn summary(mut self, summary: impl ToString) -> Self {,
+    pub fn summary(mut self, summary: impl ToString) -> Self {
 self.request.summary = Some(summary.to_string());
         self,
 },
 /// 设置日历描述,
-    pub fn description(mut self, description: impl ToString) -> Self {,
+    pub fn description(mut self, description: impl ToString) -> Self {
 self.request.description = Some(description.to_string());
         self,
 },
 /// 设置日历权限,
-    pub fn permissions(mut self, permissions: impl ToString) -> Self {,
+    pub fn permissions(mut self, permissions: impl ToString) -> Self {
 self.request.permissions = Some(permissions.to_string());
         self,
 },
 /// 设置日历颜色,
-    pub fn color(mut self, color: i32) -> Self {,
+    pub fn color(mut self, color: i32) -> Self {
 self.request.color = Some(color);
         self,
 },
 /// 设置用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
 },
 /// 构建请求,
-    pub fn build(mut self) -> CreateCalendarRequest {,
+    pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
@@ -95,13 +95,13 @@ self.request.api_req.body = serde_json::to_vec(&body).unwrap_or_default();
 }
 },
 /// 创建共享日历响应数据,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct CreateCalendarResponseData {
     /// 创建的日历信息
     pub calendar: Calendar,
 },
 /// 创建共享日历响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct CreateCalendarResponse {
     /// 响应数据
     pub data: CreateCalendarResponseData,

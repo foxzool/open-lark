@@ -16,7 +16,7 @@ core::{,
 };
 use super::CardService;
 /// 更新卡片配置请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct UpdateCardSettingsRequest {
     pub api_req: ApiRequest,
     /// 卡片ID
@@ -32,7 +32,7 @@ pub struct UpdateCardSettingsRequest {
 }
 impl UpdateCardSettingsRequest {
     /// 创建更新卡片配置请求的构建器,
-pub fn builder(card_id: impl ToString) -> UpdateCardSettingsRequestBuilder {,
+pub fn w+.*{
         UpdateCardSettingsRequestBuilder {,
 request: UpdateCardSettingsRequest {,
                 card_id: card_id.to_string()
@@ -47,27 +47,27 @@ pub struct UpdateCardSettingsRequestBuilder {
 }
 impl UpdateCardSettingsRequestBuilder {
     /// 设置是否启用交互
-    pub fn enable_interaction(mut self, enable_interaction: bool) -> Self {,
+    pub fn enable_interaction(mut self, enable_interaction: bool) -> Self {
 self.request.enable_interaction = Some(enable_interaction);
         self,
 },
 /// 设置卡片主题,
-    pub fn theme(mut self, theme: impl ToString) -> Self {,
+    pub fn theme(mut self, theme: impl ToString) -> Self {
 self.request.theme = Some(theme.to_string());
         self,
 },
 /// 设置自定义配置,
-    pub fn custom_config(mut self, custom_config: serde_json::Value) -> Self {,
+    pub fn custom_config(mut self, custom_config: serde_json::Value) -> Self {
 self.request.custom_config = Some(custom_config);
         self,
 },
 /// 设置用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
 },
 /// 构建请求,
-    pub fn build(mut self) -> UpdateCardSettingsRequest {,
+    pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
@@ -91,13 +91,13 @@ self.request.api_req.body = serde_json::to_vec(&body).unwrap_or_default();
 }
 },
 /// 更新卡片配置响应数据,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateCardSettingsResponseData {
     /// 卡片配置信息
     pub settings: CardSettings,
 },
 /// 更新卡片配置响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateCardSettingsResponse {
     /// 响应数据
     pub data: UpdateCardSettingsResponseData,

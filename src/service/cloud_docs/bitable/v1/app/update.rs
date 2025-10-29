@@ -43,7 +43,7 @@ Ok(api_resp),
     },
 },
 /// 更新多维表格元数据请求,
-#[derive(Debug, Default)],
+#[derive(.*?)]
 pub struct UpdateAppRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token
@@ -54,12 +54,12 @@ pub struct UpdateAppRequest {
     is_advanced: Option<bool>,
 }
 impl UpdateAppRequest {
-    pub fn builder() -> UpdateAppRequestBuilder {,
+    pub fn w+.*{
 UpdateAppRequestBuilder::default(),
     },
 /// 创建更新多维表格元数据请求,
-    pub fn new(app_token: impl ToString) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString) -> Self {
+Self {
             api_request: ApiRequest::default(),
             app_token: app_token.to_string(),
             name: None,
@@ -67,27 +67,27 @@ Self {,
         },
 }
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct UpdateAppRequestBuilder {
     request: UpdateAppRequest,
 }
 impl UpdateAppRequestBuilder {
     /// 多维表格的 app_token
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 多维表格的名字,
-    pub fn name(mut self, name: impl ToString) -> Self {,
+    pub fn name(mut self, name: impl ToString) -> Self {
 self.request.name = Some(name.to_string());
         self,
 },
 /// 多维表格是否开启高级权限,
-    pub fn is_advanced(mut self, is_advanced: bool) -> Self {,
+    pub fn is_advanced(mut self, is_advanced: bool) -> Self {
 self.request.is_advanced = Some(is_advanced);
         self,
 },
-pub fn build(self) -> UpdateAppRequest {,
+pub fn w+.*{
         self.request,
 }
 }
@@ -106,13 +106,13 @@ struct UpdateAppRequestBody {,
     is_advanced: Option<bool>,
 }
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct UpdateAppResponse {
     /// 多维表格的 app 信息
     pub app: UpdateAppResponseData,
 }
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct UpdateAppResponseData {
     /// 多维表格的 app_token
     pub app_token: String,
@@ -130,7 +130,7 @@ ResponseFormat::Data,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json::json;
     #[test],

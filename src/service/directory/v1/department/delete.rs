@@ -16,7 +16,7 @@ use crate::{,
 };
 use super::DepartmentService;
 /// 删除部门请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct DeleteDepartmentRequest {
     pub api_req: ApiRequest,
     /// 部门ID
@@ -26,7 +26,7 @@ pub struct DeleteDepartmentRequest {
 }
 impl DeleteDepartmentRequest {
     /// 创建删除部门请求的构建器,
-pub fn builder(department_id: impl ToString) -> DeleteDepartmentRequestBuilder {,
+pub fn w+.*{
         DeleteDepartmentRequestBuilder::new(department_id),
 }
 },
@@ -37,8 +37,8 @@ pub struct DeleteDepartmentRequestBuilder {
 }
 impl DeleteDepartmentRequestBuilder {
     /// 创建新的构建器,
-pub fn new(department_id: impl ToString) -> Self {,
-        Self {,
+pub fn new(department_id: impl ToString) -> Self {
+        Self {
 request: DeleteDepartmentRequest {,
                 department_id: department_id.to_string()
                 ..Default::default(),
@@ -46,12 +46,12 @@ request: DeleteDepartmentRequest {,
         },
 },
 /// 设置部门ID类型,
-    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {,
+    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {
 self.request.department_id_type = Some(department_id_type);
         self,
 },
 /// 构建请求,
-    pub fn build(mut self) -> DeleteDepartmentRequest {,
+    pub fn w+.*{
 // 构建查询参数,
         if let Some(department_id_type) = &self.request.department_id_type {,
 self.request,
@@ -63,7 +63,7 @@ self.request,
     },
 },
 /// 删除部门响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct DeleteDepartmentResponse {
     /// 是否删除成功
     pub deleted: Option<bool>,

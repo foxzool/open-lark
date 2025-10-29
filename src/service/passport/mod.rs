@@ -10,7 +10,7 @@ use crate::prelude::*;
 use crate::service::passport::sessions::SessionsService;
 /// 登录管理服务
 #[cfg(feature = "passport")]
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct PassportService {
     /// 会话管理服务
     pub sessions: SessionsService,
@@ -19,7 +19,7 @@ pub struct PassportService {
 impl PassportService {
 /// 创建新的登录管理服务实例
     pub fn new() -> Self {
-Self {,
+Self {
             sessions: SessionsService::new(client.clone()),
         }
 }

@@ -22,7 +22,7 @@ pub struct DocumentAiService {
     pub config: Config,
 }
 /// 简历解析响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ResumeParseResponse {
     /// 简历信息
 #[serde(flatten)],
@@ -34,7 +34,7 @@ ResponseFormat::Data,
     }
 }
 /// 身份证识别响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct IdCardRecognizeResponse {
     /// 身份证信息
 #[serde(flatten)],
@@ -46,7 +46,7 @@ ResponseFormat::Data,
     }
 }
 /// 驾驶证识别响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DrivingLicenseRecognizeResponse {
     /// 驾驶证信息
 #[serde(flatten)],
@@ -58,7 +58,7 @@ ResponseFormat::Data,
     }
 }
 /// 银行卡识别响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BankCardRecognizeResponse {
     /// 银行卡信息
 #[serde(flatten)],
@@ -70,7 +70,7 @@ ResponseFormat::Data,
     }
 }
 /// 营业执照识别响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BusinessLicenseRecognizeResponse {
     /// 营业执照信息
 #[serde(flatten)],
@@ -82,7 +82,7 @@ ResponseFormat::Data,
     }
 }
 /// 增值税发票识别响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct VatInvoiceRecognizeResponse {
     /// 增值税发票信息
 #[serde(flatten)],
@@ -94,7 +94,7 @@ ResponseFormat::Data,
     }
 }
 /// 合同字段提取响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ContractFieldExtractionResponse {
     /// 合同信息
 #[serde(flatten)],
@@ -106,7 +106,7 @@ ResponseFormat::Data,
     }
 }
 /// 名片识别响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BusinessCardRecognizeResponse {
     /// 名片信息
 #[serde(flatten)],
@@ -118,7 +118,7 @@ ResponseFormat::Data,
     }
 }
 /// 通用证件识别响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GenericDocumentResponse {
     /// 识别结果
     pub data: serde_json::Value,

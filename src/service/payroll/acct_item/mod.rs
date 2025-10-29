@@ -17,7 +17,7 @@ pub struct AcctItemService {
     pub config: Config,
 }
 /// 算薪项列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AcctItemListResponse {
     /// 算薪项列表
 #[serde(flatten)],

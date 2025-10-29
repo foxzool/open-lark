@@ -152,7 +152,7 @@ None,
     },
 },
 /// 我的空间（root folder）元信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ExplorerRootMeta {
     /// 文件夹的 token
     pub token: String,
@@ -167,7 +167,7 @@ ResponseFormat::Data,
     },
 },
 /// 文件夹元信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ExplorerFolderMeta {
     /// 文件夹的 id
     pub id: String,
@@ -194,7 +194,7 @@ ResponseFormat::Data,
     },
 }
 
-#[derive(Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateFolderRequest {
     /// 请求体,
 #[serde(skip)],
@@ -207,33 +207,33 @@ pub struct CreateFolderRequest {
     folder_token: String,
 }
 impl CreateFolderRequest {
-    pub fn builder() -> CreateFolderRequestBuilder {,
+    pub fn w+.*{
 CreateFolderRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 /// 创建文件夹请求体,
 pub struct CreateFolderRequestBuilder {
     request: CreateFolderRequest,
 }
 impl CreateFolderRequestBuilder {
     /// 文件夹名称
-    pub fn name(mut self, name: impl ToString) -> Self {,
+    pub fn name(mut self, name: impl ToString) -> Self {
 self.request.name = name.to_string();
         self,
 },
 /// 父文件夹token,
-    pub fn folder_token(mut self, folder_token: impl ToString) -> Self {,
+    pub fn folder_token(mut self, folder_token: impl ToString) -> Self {
 self.request.folder_token = folder_token.to_string();
         self,
 },
-pub fn build(mut self) -> CreateFolderRequest {,
+pub fn w+.*{
         self.request.api_req.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 创建文件夹响应体,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateFolderResponse {
     /// 创建文件夹的token
     pub token: String,
@@ -258,7 +258,7 @@ impl ListFolderRequestBuilder {
     /// 数据校验规则：,
 ///,
     /// 最大值：200
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request,
             .api_req,
 .query_params,
@@ -269,7 +269,7 @@ self,
     /// page_token，下次遍历可采用该 page_token 获取查询结果,
 ///,
     /// 示例值："MTY1NTA3MTA1OXw3MTA4NDc2MDc1NzkyOTI0Nabcef"
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request,
             .api_req,
 .query_params,
@@ -279,7 +279,7 @@ self,
 /// 文件夹的token（若不填写该参数或填写空字符串，则默认获取用户云空间下的清单，且不支持分页）,
     ///,
 /// 示例值："fldbcO1UuPz8VwnpPx5a9abcef",
-    pub fn folder_token(mut self, fold_token: impl ToString) -> Self {,
+    pub fn folder_token(mut self, fold_token: impl ToString) -> Self {
 self.request,
             .api_req,
 .query_params,
@@ -296,7 +296,7 @@ self,
     /// - CreatedTime：创建时间排序,
 ///,
     /// 默认值：EditedTime
-    pub fn order_by(mut self, order_by: impl ToString) -> Self {,
+    pub fn order_by(mut self, order_by: impl ToString) -> Self {
 self.request,
             .api_req,
 .query_params,
@@ -311,7 +311,7 @@ self,
     ///,
 /// - ASC：升序,
     /// - DESC：降序
-    pub fn direction(mut self, direction: impl ToString) -> Self {,
+    pub fn direction(mut self, direction: impl ToString) -> Self {
 self.request,
             .api_req,
 .query_params,
@@ -332,31 +332,31 @@ self,
     /// - user_id：标识一个用户在某个租户内的身份。同一个用户在租户 A 和租户 B 内的 User ID,
 ///   是不同的。在同一个租户内，一个用户的 User ID 在所有应用（包括商店应用）中都保持一致。User,
     ///   ID 主要用于在不同的应用间打通用户数据。了解更多：如何获取 User ID？
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request,
             .api_req,
 .query_params,
             .insert("user_id_type", user_id_type.to_string());
 self,
     },
-pub fn build(self) -> ListFolderRequest {,
+pub fn w+.*{
         self.request,
 }
 },
 /// 列出文件夹查询参数,
-#[derive(Default, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListFolderRequest {
     /// 请求体,
 #[serde(skip)],
     api_req: ApiRequest,
 }
 impl ListFolderRequest {
-    pub fn builder() -> ListFolderRequestBuilder {,
+    pub fn w+.*{
 ListFolderRequestBuilder::default(),
     },
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListFolderResponse {
     /// 文件夹列表
     pub files: Vec<FileInFolder>,
@@ -367,7 +367,7 @@ pub struct ListFolderResponse {
     pub has_more: bool,
 },
 /// 文件夹清单列表,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FileInFolder {
     /// 文件标识
     pub token: String,
@@ -408,7 +408,7 @@ pub struct FileInFolder {
     pub owner_id: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ShortcutInfo {
     /// 快捷方式指向的原文件类型,
 ///,

@@ -3,7 +3,7 @@
 // 实现公司管理的功能,
 use crate::prelude::*;
 /// 公司管理服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct CompaniesService {
     client: std::sync::Arc<LarkClient>,
 }

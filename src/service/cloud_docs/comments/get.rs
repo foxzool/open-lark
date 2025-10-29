@@ -19,7 +19,7 @@ use crate::,
 };
 use super::list::Comment;
 /// 获取全文评论请求
-#[derive(Debug, Serialize, Default, Clone)],
+#[derive(.*?)]
 pub struct GetCommentRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -37,15 +37,15 @@ pub struct GetCommentRequest {
     user_id_type: Option<String>,
 }
 impl GetCommentRequest {
-    pub fn builder() -> GetCommentRequestBuilder {,
+    pub fn w+.*{
 GetCommentRequestBuilder::default(),
     },
 pub fn new(,
         file_token: impl ToString,
         file_type: impl ToString,
         comment_id: impl ToString,
-    ) -> Self {,
-Self {,
+    ) -> Self {
+Self {
             file_token: file_token.to_string(),
             file_type: file_type.to_string(),
             comment_id: comment_id.to_string()
@@ -53,67 +53,67 @@ Self {,
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct GetCommentRequestBuilder {
     request: GetCommentRequest,
 }
 impl GetCommentRequestBuilder {
     /// 文档token
-    pub fn file_token(mut self, file_token: impl ToString) -> Self {,
+    pub fn file_token(mut self, file_token: impl ToString) -> Self {
 self.request.file_token = file_token.to_string();
         self,
 },
 /// 文档类型,
-    pub fn file_type(mut self, file_type: impl ToString) -> Self {,
+    pub fn file_type(mut self, file_type: impl ToString) -> Self {
 self.request.file_type = file_type.to_string();
         self,
 },
 /// 设置为文档类型,
-    pub fn with_doc_type(mut self) -> Self {,
+    pub fn with_doc_type(mut self) -> Self {
 self.request.file_type = "doc".to_string();
         self,
 },
 /// 设置为docx类型,
-    pub fn with_docx_type(mut self) -> Self {,
+    pub fn with_docx_type(mut self) -> Self {
 self.request.file_type = "docx".to_string();
         self,
 },
 /// 设置为电子表格类型,
-    pub fn with_sheet_type(mut self) -> Self {,
+    pub fn with_sheet_type(mut self) -> Self {
 self.request.file_type = "sheet".to_string();
         self,
 },
 /// 设置为多维表格类型,
-    pub fn with_bitable_type(mut self) -> Self {,
+    pub fn with_bitable_type(mut self) -> Self {
 self.request.file_type = "bitable".to_string();
         self,
 },
 /// 评论ID,
-    pub fn comment_id(mut self, comment_id: impl ToString) -> Self {,
+    pub fn comment_id(mut self, comment_id: impl ToString) -> Self {
 self.request.comment_id = comment_id.to_string();
         self,
 },
 /// 用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
 },
 /// 使用OpenID,
-    pub fn with_open_id(mut self) -> Self {,
+    pub fn with_open_id(mut self) -> Self {
 self.request.user_id_type = Some("open_id".to_string());
         self,
 },
 /// 使用UserID,
-    pub fn with_user_id(mut self) -> Self {,
+    pub fn with_user_id(mut self) -> Self {
 self.request.user_id_type = Some("user_id".to_string());
         self,
 },
 /// 使用UnionID,
-    pub fn with_union_id(mut self) -> Self {,
+    pub fn with_union_id(mut self) -> Self {
 self.request.user_id_type = Some("union_id".to_string());
         self,
 },
-pub fn build(mut self) -> GetCommentRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -127,7 +127,7 @@ impl_executable_builder_owned!(
     get,
 );
 /// 获取全文评论响应
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct GetCommentResponse {
     /// 评论信息
     pub comment: Comment,
@@ -167,55 +167,55 @@ Ok(api_resp),
 
 impl GetCommentResponse {
 /// 获取评论ID,
-    pub fn comment_id(&self) -> &str {,
+    pub fn w+.*{
 &self.comment.comment_id,
     },
 /// 获取用户ID,
-    pub fn user_id(&self) -> &str {,
+    pub fn w+.*{
 &self.comment.user_id,
     },
 /// 是否已解决,
-    pub fn is_solved(&self) -> bool {,
+    pub fn w+.*{
 self.comment.is_solved,
     },
 /// 是否为全文评论,
-    pub fn is_whole_comment(&self) -> bool {,
+    pub fn w+.*{
 self.comment.is_whole.unwrap_or(false),
     },
 /// 是否有回复,
-    pub fn has_replies(&self) -> bool {,
+    pub fn w+.*{
 self.comment.has_replies(),
     },
 /// 获取回复数量,
-    pub fn reply_count(&self) -> usize {,
+    pub fn w+.*{
 self.comment.reply_count(),
     },
 /// 获取评论的文本内容,
-    pub fn get_text_content(&self) -> String {,
+    pub fn w+.*{
 self.comment.get_text_content(),
     },
 /// 获取创建时间,
-    pub fn create_time(&self) -> i64 {,
+    pub fn w+.*{
 self.comment.create_time,
     },
 /// 获取更新时间,
-    pub fn update_time(&self) -> i64 {,
+    pub fn w+.*{
 self.comment.update_time,
     },
 /// 获取解决时间,
-    pub fn solved_time(&self) -> Option<i64> {,
+    pub fn w+.*{
 self.comment.solved_time,
     },
 /// 获取解决者用户ID,
-    pub fn solver_user_id(&self) -> Option<&str> {,
+    pub fn w+.*{
 self.comment.solver_user_id.as_deref(),
     },
 /// 获取引用内容,
-    pub fn quote(&self) -> Option<&str> {,
+    pub fn w+.*{
 self.comment.quote.as_deref(),
     },
 /// 获取详细信息摘要,
-    pub fn summary(&self) -> String {,
+    pub fn w+.*{
 format!(,
             "评论ID: {}, 用户: {}, 状态: {}, 回复数: {}, 创建时间: {}",
             self.comment_id(),
@@ -232,7 +232,7 @@ format!(,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_get_comment_request_builder() {,

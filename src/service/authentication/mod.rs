@@ -131,7 +131,7 @@ pub fn new() -> Self {
 }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::config::Config;
 use std::time::Duration;

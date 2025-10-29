@@ -19,7 +19,7 @@ pub struct PeriodRuleService {
     pub config: Config,
 }
 /// 周期规则列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PeriodRuleListResponse {
     /// 规则列表
 #[serde(flatten)],
@@ -107,7 +107,7 @@ if let Some(page_size) = request.page_size {,
 }
 }
 /// 周期规则查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct PeriodRuleListRequest {
     /// 周期ID筛选
 #[serde(skip_serializing_if = "Option::is_none")],

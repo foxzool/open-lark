@@ -111,12 +111,12 @@ Ok(resp.data.unwrap_or_default()),
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateJobLevelRequest {
     pub job_level: JobLevel,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct CreateJobLevelResponse {
     pub job_level: JobLevel,
 }
@@ -126,12 +126,12 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateJobLevelRequest {
     pub job_level: JobLevel,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct UpdateJobLevelResponse {
     pub job_level: JobLevel,
 }
@@ -141,7 +141,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct GetJobLevelResponse {
     pub job_level: JobLevel,
 }
@@ -151,7 +151,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListJobLevelsRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
@@ -159,7 +159,7 @@ pub struct ListJobLevelsRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ListJobLevelsResponse {
     pub items: Vec<JobLevel>,
     #[serde(skip_serializing_if = "Option::is_none")]

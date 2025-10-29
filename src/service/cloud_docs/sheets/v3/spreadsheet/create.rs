@@ -39,7 +39,7 @@ Ok(api_resp),
     },
 },
 /// 创建表格 请求体,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateSpreedSheetRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -55,11 +55,11 @@ pub struct CreateSpreedSheetRequest {
     folder_token: Option<String>,
 }
 impl CreateSpreedSheetRequest {
-    pub fn builder() -> CreateSpreedSheetRequestBuilder {,
+    pub fn w+.*{
 CreateSpreedSheetRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct CreateSpreedSheetRequestBuilder {
     request: CreateSpreedSheetRequest,
 }
@@ -71,16 +71,16 @@ impl CreateSpreedSheetRequestBuilder {
     /// 数据校验规则：,
 ///,
     /// 长度范围：0 字符 ～ 255 字符
-    pub fn title(mut self, title: impl ToString) -> Self {,
+    pub fn title(mut self, title: impl ToString) -> Self {
 self.request.title = Some(title.to_string());
         self,
 },
 /// 文件夹token,
-    pub fn folder_token(mut self, folder_token: impl ToString) -> Self {,
+    pub fn folder_token(mut self, folder_token: impl ToString) -> Self {
 self.request.folder_token = Some(folder_token.to_string());
         self,
 },
-pub fn build(mut self) -> CreateSpreedSheetRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -94,7 +94,7 @@ impl_executable_builder_owned!(
     create,
 );
 /// 创建表格 响应体最外层
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct CreateSpreedSheetResponseData {
     pub spreadsheet: CreateSpreedSheetResponse,
 }
@@ -104,7 +104,7 @@ ResponseFormat::Data,
     },
 },
 /// 创建表格 响应体,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct CreateSpreedSheetResponse {
     /// 表格标题
     pub title: String,

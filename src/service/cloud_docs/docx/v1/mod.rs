@@ -7,7 +7,7 @@ pub struct V1 {
 }
 impl V1 {
     pub fn new() -> Self {
-Self {,
+Self {
             document: document::DocumentService::new(config.clone()),
             document_block: document_block::DocumentBlockService::new(config),
         }

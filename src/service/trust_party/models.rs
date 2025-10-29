@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 分页响应基础结构,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PageResponse<T> {,
     /// 数据项列表
     pub items: Vec<T>,
@@ -12,7 +12,7 @@ pub struct PageResponse<T> {,
     pub has_more: Option<bool>,
 },
 /// 关联组织信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CollaborationOrganization {
     /// 关联组织ID
     pub org_id: String,
@@ -38,7 +38,7 @@ pub struct CollaborationOrganization {
     pub description: Option<String>,
 },
 /// 关联组织部门信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CollaborationDepartment {
     /// 部门ID
     pub department_id: String,
@@ -64,7 +64,7 @@ pub struct CollaborationDepartment {
     pub updated_at: Option<i64>,
 },
 /// 关联组织成员信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CollaborationUser {
     /// 用户ID
     pub user_id: String,
@@ -99,7 +99,7 @@ pub struct CollaborationUser {
     pub updated_at: Option<i64>,
 },
 /// 组织架构信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OrganizationStructure {
     /// 部门列表,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -109,7 +109,7 @@ pub struct OrganizationStructure {
     pub users: Option<Vec<CollaborationUser>>,
 },
 /// 共享成员范围信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SharedMemberScope {
     /// 共享范围类型,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -125,7 +125,7 @@ pub struct SharedMemberScope {
     pub description: Option<String>,
 },
 /// 可搜可见规则,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchableVisibleRule {
     /// 规则ID
     pub rule_id: String,
@@ -157,7 +157,7 @@ pub struct SearchableVisibleRule {
     pub updated_at: Option<i64>,
 },
 /// 规则配置,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct RuleConfig {
     /// 可见性（如 public/restricted/private）,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -173,7 +173,7 @@ pub struct RuleConfig {
     pub exceptions: Option<Vec<String>>,
 },
 /// 规则适用范围,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RuleScope {
     /// 适用的部门ID列表,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -187,7 +187,7 @@ pub struct RuleScope {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

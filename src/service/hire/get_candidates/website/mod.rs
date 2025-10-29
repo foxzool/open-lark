@@ -19,7 +19,7 @@ pub struct WebsiteService {
     pub config: Config,
 }
 /// 官网职位信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct WebsiteJob {
     /// 职位ID
     pub id: String,
@@ -53,7 +53,7 @@ pub struct WebsiteJob {
     pub updated_time: Option<String>,
 }
 /// 官网投递信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct WebsiteApplication {
     /// 投递ID
     pub id: String,
@@ -85,7 +85,7 @@ pub struct WebsiteApplication {
     pub updated_time: Option<String>,
 }
 /// 官网配置信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct WebsiteConfiguration {
     /// 配置ID
     pub id: String,
@@ -111,12 +111,12 @@ pub struct WebsiteConfiguration {
     pub updated_time: Option<String>,
 }
 /// SEO配置
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct SeoConfig {
     // TODO: Add fields
 }
 /// 官网职位发布请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct WebsiteJobPublishRequest {
     /// 职位ID
     pub job_id: String,
@@ -130,7 +130,7 @@ pub struct WebsiteJobPublishRequest {
     pub tags: Vec<String>,
 }
 /// 官网投递列表请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct WebsiteApplicationListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -150,7 +150,7 @@ pub struct WebsiteApplicationListRequest {
     pub apply_end_time: Option<String>,
 }
 /// 官网配置更新请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct WebsiteConfigurationUpdateRequest {
     /// 网站名称
     pub site_name: Option<I18nText>,
@@ -170,7 +170,7 @@ pub struct WebsiteConfigurationUpdateRequest {
     pub enabled: Option<bool>,
 }
 /// 官网职位列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct WebsiteJobListResponse {
     /// 官网职位列表
 #[serde(flatten)],
@@ -182,7 +182,7 @@ ResponseFormat::Data,
     }
 }
 /// 官网投递列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct WebsiteApplicationListResponse {
     /// 官网投递列表
 #[serde(flatten)],
@@ -194,7 +194,7 @@ ResponseFormat::Data,
     }
 }
 /// 官网配置响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct WebsiteConfigurationResponse {
     /// 官网配置信息
     pub configuration: WebsiteConfiguration,
@@ -205,7 +205,7 @@ ResponseFormat::Data,
     }
 }
 /// 官网操作响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct WebsiteOperationResponse {
     /// 操作结果
 #[serde(flatten)],

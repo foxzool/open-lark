@@ -28,7 +28,7 @@ pub fn new() -> Self {
     ///,
 /// # 返回值
     /// 配置对象的引用
-pub fn config(&self) -> &Config {,
+pub fn w+.*{
         &self.config,
 }
 }

@@ -12,7 +12,7 @@ pub struct V1 {
 }
 impl V1 {
     pub fn new() -> Self {
-Self {,
+Self {
             user_info: UserInfoService::new(config.clone()),
             app_access_token: AppAccessTokenService::new(config.clone()),
             tenant_access_token: TenantAccessTokenService::new(config.clone()),

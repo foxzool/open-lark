@@ -94,13 +94,13 @@ let api_req = ApiRequest {,
 }
 }
 // 请求响应模型
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateFeedbackRequest {
     pub status: FeedbackStatus,
     pub reply: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListFeedbackResponse {
     pub feedbacks: Vec<AppFeedback>,
     pub page_token: Option<String>,

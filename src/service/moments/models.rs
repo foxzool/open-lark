@@ -3,7 +3,7 @@ use serde_json::Value;
 use std::collections::HashMap;
 // ============ 帖子相关结构 ============,
 /// 查询帖子信息请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PostGetRequest {
     /// 帖子ID
     pub post_id: String,
@@ -12,7 +12,7 @@ pub struct PostGetRequest {
     pub user_id_type: Option<String>,
 },
 /// 帖子信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Post {
     /// 帖子ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -55,7 +55,7 @@ pub struct Post {
     pub extra: Option<HashMap<String, Value>>,
 },
 /// 帖子媒体附件,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PostMedia {
     /// 媒体类型（image、video、file等）,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -77,7 +77,7 @@ pub struct PostMedia {
     pub file_name: Option<String>,
 },
 /// 帖子可见性设置,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PostVisibility {
     /// 可见性类型（public、department、custom等）,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -90,7 +90,7 @@ pub struct PostVisibility {
     pub visible_department_ids: Option<Vec<String>>,
 },
 /// 帖子统计数据,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PostStatistics {
     /// 评论数,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -110,7 +110,7 @@ pub struct PostStatistics {
 },
 // ============ 评论相关结构 ============,
 /// 评论信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Comment {
     /// 评论ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -148,7 +148,7 @@ pub struct Comment {
 },
 // ============ 表情互动相关结构 ============,
 /// 表情互动信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Reaction {
     /// 互动ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -177,7 +177,7 @@ pub struct Reaction {
 },
 // ============ 事件相关结构 ============,
 /// 帖子事件数据
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PostEvent {
     /// 事件类型（created、deleted等）,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -193,7 +193,7 @@ pub struct PostEvent {
     pub operator_id: Option<String>,
 },
 /// 评论事件数据,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CommentEvent {
     /// 事件类型（created、deleted等）,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -209,7 +209,7 @@ pub struct CommentEvent {
     pub operator_id: Option<String>,
 },
 /// 表情互动事件数据,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReactionEvent {
     /// 事件类型（created、deleted等）,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -225,7 +225,7 @@ pub struct ReactionEvent {
     pub operator_id: Option<String>,
 },
 /// 帖子统计数据事件,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PostStatisticsEvent {
     /// 事件类型（updated等）,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -244,7 +244,7 @@ pub struct PostStatisticsEvent {
     pub event_time: Option<String>,
 },
 /// 统计数据变更详情,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct StatisticsChanges {
     /// 评论数变更,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -264,7 +264,7 @@ pub struct StatisticsChanges {
 },
 // ============ 内容格式转换相关结构 ============,
 /// 内容格式转换请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ContentFormatRequest {
     /// 原始内容
     pub content: String,
@@ -274,7 +274,7 @@ pub struct ContentFormatRequest {
     pub to_format: String,
 },
 /// 内容格式转换响应,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ContentFormatResponse {
     /// 转换后的内容,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -285,7 +285,7 @@ pub struct ContentFormatResponse {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_post_get_request() {,

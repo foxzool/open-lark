@@ -7,22 +7,22 @@ core::{,
     service::admin::models::PasswordResetRequest,
 };
 /// 密码重置请求构建器,
-#[derive(Debug, Clone, Default)],
+#[derive(.*?)]
 pub struct PasswordResetRequestBuilder {
     request: PasswordResetRequest,
 }
 impl PasswordResetRequestBuilder {
     /// 创建新的密码重置请求构建器,
-pub fn new() -> Self {,
+pub fn new() -> Self {
         Self::default(),
 },
 /// 设置用户ID,
-    pub fn user_id(mut self, user_id: impl ToString) -> Self {,
+    pub fn user_id(mut self, user_id: impl ToString) -> Self {
 self.request.user_id = user_id.to_string();
         self,
 },
 /// 设置新密码,
-    pub fn password(mut self, password: impl ToString) -> Self {,
+    pub fn password(mut self, password: impl ToString) -> Self {
 self.request.password = password.to_string();
         self,
 },
@@ -30,7 +30,7 @@ self.request.password = password.to_string();
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM,
     /// 构建密码重置请求,
-pub fn build(self) -> SDKResult<PasswordResetRequest> {,
+pub fn w+.*{
         // 验证必填字段,
 if self.request.user_id.is_empty() {,
             return Err(LarkAPIError::illegal_param(
@@ -78,7 +78,7 @@ return ValidationResult::Invalid("user_id is required".to_string());
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_password_reset_request_builder_valid() {,

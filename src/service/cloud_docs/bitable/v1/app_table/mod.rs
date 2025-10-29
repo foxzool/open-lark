@@ -22,7 +22,7 @@ impl AppTableService {
 }
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use crate::core::config::Config;
     fn create_test_config() -> Config {,

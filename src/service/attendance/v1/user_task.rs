@@ -213,7 +213,7 @@ fn service_version() -> &'static str {,
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
 #[allow(clippy::field_reassign_with_default)],
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::config::Config;
 use crate::service::attendance::v1::models::UserTaskCreate;

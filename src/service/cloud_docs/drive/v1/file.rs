@@ -353,7 +353,7 @@ api_resp.into_result(),
 },
 // === 请求和响应数据结构 ===,
 /// 获取文件元数据请求参数
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetFileMetaRequest {
     /// 文件token列表
     pub request_docs: Vec<RequestDoc>,
@@ -361,7 +361,7 @@ pub struct GetFileMetaRequest {
     pub with_url: Option<bool>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RequestDoc {
     /// 文件token
     pub doc_token: String,
@@ -369,8 +369,8 @@ pub struct RequestDoc {
     pub doc_type: String,
 }
 impl GetFileMetaRequest {
-    pub fn new(docs: Vec<(String, String)>) -> Self {,
-Self {,
+    pub fn new(docs: Vec<(String, String)>) -> Self {
+Self {
             request_docs: docs,
 .into_iter()
                 .map(|(token, doc_type)| RequestDoc {
@@ -383,13 +383,13 @@ Self {,
 }
 },
 /// 获取文件元数据响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 pub struct GetFileMetaRespData {
     /// 文件元数据列表
     pub metas: Vec<FileMeta>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 pub struct FileMeta {
     /// 文件token
     pub doc_token: String,
@@ -412,20 +412,20 @@ ResponseFormat::Data,
     },
 },
 /// 获取文件统计信息请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetFileStatisticsRequest {
     /// 文件token
     pub file_token: String,
 }
 impl GetFileStatisticsRequest {
-    pub fn new(file_token: impl Into<String>) -> Self {,
-Self {,
+    pub fn new(file_token: impl Into<String>) -> Self {
+Self {
             file_token: file_token.into(),
         },
 }
 },
 /// 获取文件统计信息响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 pub struct GetFileStatisticsRespData {
     /// 文件浏览次数
     pub uv: i64,
@@ -442,7 +442,7 @@ ResponseFormat::Data,
     },
 },
 /// 获取文件访问记录请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListFileViewRecordsRequest {
     /// 文件token
     pub file_token: String,
@@ -452,26 +452,26 @@ pub struct ListFileViewRecordsRequest {
     pub page_size: Option<i32>,
 }
 impl ListFileViewRecordsRequest {
-    pub fn new(file_token: impl Into<String>) -> Self {,
-Self {,
+    pub fn new(file_token: impl Into<String>) -> Self {
+Self {
             file_token: file_token.into(),
             page_token: None,
             page_size: None,
         },
 }
 
-    pub fn with_page_token(mut self, page_token: impl Into<String>) -> Self {,
+    pub fn with_page_token(mut self, page_token: impl Into<String>) -> Self {
 self.page_token = Some(page_token.into());
         self,
 }
 
-    pub fn with_page_size(mut self, page_size: i32) -> Self {,
+    pub fn with_page_size(mut self, page_size: i32) -> Self {
 self.page_size = Some(page_size);
         self,
 }
 },
 /// 获取文件访问记录响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 pub struct ListFileViewRecordsRespData {
     /// 是否还有更多数据
     pub has_more: bool,
@@ -481,7 +481,7 @@ pub struct ListFileViewRecordsRespData {
     pub items: Vec<FileViewRecord>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 pub struct FileViewRecord {
     /// 访问者ID
     pub viewer_id: String,
@@ -498,7 +498,7 @@ ResponseFormat::Data,
     },
 },
 /// 新建文件请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateFileRequest {
     /// 文件名称
     pub title: String,
@@ -513,8 +513,8 @@ impl CreateFileRequest {
         title: impl Into<String>,
         file_type: impl Into<String>,
         parent_token: impl Into<String>,
-    ) -> Self {,
-Self {,
+    ) -> Self {
+Self {
             title: title.into(),
             file_type: file_type.into(),
             parent_token: parent_token.into(),
@@ -522,7 +522,7 @@ Self {,
 }
 },
 /// 新建文件响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 pub struct CreateFileRespData {
     /// 新建文件的token
     pub token: String,
@@ -535,7 +535,7 @@ ResponseFormat::Data,
     },
 },
 /// 复制文件请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CopyFileRequest {
     /// 文件token
     pub file_token: String,
@@ -552,8 +552,8 @@ impl CopyFileRequest {
         file_token: impl Into<String>,
         name: impl Into<String>,
         parent_token: impl Into<String>,
-    ) -> Self {,
-Self {,
+    ) -> Self {
+Self {
             file_token: file_token.into(),
             name: name.into(),
             copy_type: "copy".to_string(),
@@ -562,7 +562,7 @@ Self {,
 }
 },
 /// 复制文件响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CopyFileRespData {
     /// 复制后文件的token
     pub token: String,
@@ -575,20 +575,20 @@ ResponseFormat::Data,
     },
 },
 /// 删除文件请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DeleteFileRequest {
     /// 文件token
     pub file_token: String,
 }
 impl DeleteFileRequest {
-    pub fn new(file_token: impl Into<String>) -> Self {,
-Self {,
+    pub fn new(file_token: impl Into<String>) -> Self {
+Self {
             file_token: file_token.into(),
         },
 }
 },
 /// 删除文件响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DeleteFileRespData {
     /// 异步任务ID
     pub task_id: Option<String>,
@@ -599,7 +599,7 @@ ResponseFormat::Data,
     },
 },
 /// 创建文件快捷方式请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateFileShortcutRequest {
     /// 原文件token
     pub refer_entity: ReferEntity,
@@ -609,7 +609,7 @@ pub struct CreateFileShortcutRequest {
     pub parent_token: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReferEntity {
     /// 原文件类型,
 #[serde(rename = "type")],
@@ -623,8 +623,8 @@ impl CreateFileShortcutRequest {
         file_token: impl Into<String>,
         name: impl Into<String>,
         parent_token: impl Into<String>,
-    ) -> Self {,
-Self {,
+    ) -> Self {
+Self {
             refer_entity: ReferEntity {
                 entity_type: file_type.into(),
                 token: file_token.into(),
@@ -635,7 +635,7 @@ Self {,
 }
 },
 /// 创建文件快捷方式响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateFileShortcutRespData {
     /// 快捷方式token
     pub token: String,
@@ -648,7 +648,7 @@ ResponseFormat::Data,
     },
 },
 /// 搜索文件请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchFilesRequest {
     /// 搜索关键词
     pub search_key: String,
@@ -660,8 +660,8 @@ pub struct SearchFilesRequest {
     pub owner_ids: Option<Vec<String>>,
 }
 impl SearchFilesRequest {
-    pub fn new(search_key: impl Into<String>) -> Self {,
-Self {,
+    pub fn new(search_key: impl Into<String>) -> Self {
+Self {
             search_key: search_key.into(),
             count: None,
             offset: None,
@@ -669,29 +669,29 @@ Self {,
         },
 }
 
-    pub fn with_count(mut self, count: i32) -> Self {,
+    pub fn with_count(mut self, count: i32) -> Self {
 self.count = Some(count);
         self,
 }
 
-    pub fn with_offset(mut self, offset: i32) -> Self {,
+    pub fn with_offset(mut self, offset: i32) -> Self {
 self.offset = Some(offset);
         self,
 }
 
-    pub fn with_owner_ids(mut self, owner_ids: Vec<String>) -> Self {,
+    pub fn with_owner_ids(mut self, owner_ids: Vec<String>) -> Self {
 self.owner_ids = Some(owner_ids);
         self,
 }
 },
 /// 搜索文件响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchFilesRespData {
     /// 搜索结果文件列表
     pub files: Vec<SearchFileItem>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchFileItem {
     /// 文件token
     pub token: String,
@@ -711,7 +711,7 @@ ResponseFormat::Data,
     },
 },
 /// 分片上传文件-预上传请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FileUploadPrepareRequest {
     /// 文件名称
     pub file_name: String,
@@ -725,8 +725,8 @@ pub struct FileUploadPrepareRequest {
     pub checksum: Option<String>,
 }
 impl FileUploadPrepareRequest {
-    pub fn new(file_name: impl Into<String>, parent_token: impl Into<String>, size: i64) -> Self {,
-Self {,
+    pub fn new(file_name: impl Into<String>, parent_token: impl Into<String>, size: i64) -> Self {
+Self {
             file_name: file_name.into(),
             parent_token: parent_token.into(),
             size,
@@ -735,18 +735,18 @@ Self {,
         },
 }
 
-    pub fn with_block_size(mut self, block_size: i32) -> Self {,
+    pub fn with_block_size(mut self, block_size: i32) -> Self {
 self.block_size = Some(block_size);
         self,
 }
 
-    pub fn with_checksum(mut self, checksum: impl Into<String>) -> Self {,
+    pub fn with_checksum(mut self, checksum: impl Into<String>) -> Self {
 self.checksum = Some(checksum.into());
         self,
 }
 },
 /// 分片上传文件-预上传响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FileUploadPrepareRespData {
     /// 上传事务ID
     pub upload_id: String,
@@ -761,7 +761,7 @@ ResponseFormat::Data,
     },
 },
 /// 分片上传文件-上传分片请求参数,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FileUploadPartRequest {
     /// 请求体,
 #[serde(skip)],
@@ -776,7 +776,7 @@ pub struct FileUploadPartRequest {
     checksum: Option<String>,
 }
 impl FileUploadPartRequest {
-    pub fn builder() -> FileUploadPartRequestBuilder {,
+    pub fn w+.*{
 FileUploadPartRequestBuilder::default(),
     },
 },
@@ -786,31 +786,31 @@ pub struct FileUploadPartRequestBuilder {
     request: FileUploadPartRequest,
 }
 impl FileUploadPartRequestBuilder {
-    pub fn upload_id(mut self, upload_id: impl Into<String>) -> Self {,
+    pub fn upload_id(mut self, upload_id: impl Into<String>) -> Self {
 self.request.upload_id = upload_id.into();
         self,
 }
 
-    pub fn seq(mut self, seq: i32) -> Self {,
+    pub fn seq(mut self, seq: i32) -> Self {
 self.request.seq = seq;
         self,
 }
 
-    pub fn size(mut self, size: i32) -> Self {,
+    pub fn size(mut self, size: i32) -> Self {
 self.request.size = size;
         self,
 }
 
-    pub fn checksum(mut self, checksum: impl Into<String>) -> Self {,
+    pub fn checksum(mut self, checksum: impl Into<String>) -> Self {
 self.request.checksum = Some(checksum.into());
         self,
 }
 
-    pub fn file_chunk(mut self, chunk: Vec<u8>) -> Self {,
+    pub fn file_chunk(mut self, chunk: Vec<u8>) -> Self {
 self.request.api_req.file = chunk;
         self,
 },
-pub fn build(mut self) -> FileUploadPartRequest {,
+pub fn w+.*{
         match serde_json::to_vec(&self.request) {,
 Ok(bytes) => {,
                 self.request.api_req.body = bytes;
@@ -831,7 +831,7 @@ impl_executable_builder_owned!(,
     upload_part,
 );
 /// 分片上传文件-上传分片响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FileUploadPartRespData {
     /// 分片ETag
     pub etag: String,
@@ -842,7 +842,7 @@ ResponseFormat::Data,
     },
 },
 /// 分片上传文件-完成上传请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FileUploadFinishRequest {
     /// 上传事务ID
     pub upload_id: String,
@@ -850,7 +850,7 @@ pub struct FileUploadFinishRequest {
     pub block_infos: Vec<FileBlockInfo>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FileBlockInfo {
     /// 分片ETag
     pub etag: String,
@@ -858,15 +858,15 @@ pub struct FileBlockInfo {
     pub seq: i32,
 }
 impl FileUploadFinishRequest {
-    pub fn new(upload_id: impl Into<String>, block_infos: Vec<FileBlockInfo>) -> Self {,
-Self {,
+    pub fn new(upload_id: impl Into<String>, block_infos: Vec<FileBlockInfo>) -> Self {
+Self {
             upload_id: upload_id.into(),
             block_infos,
         },
 }
 },
 /// 分片上传文件-完成上传响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FileUploadFinishRespData {
     /// 文件token
     pub file_token: String,
@@ -877,7 +877,7 @@ ResponseFormat::Data,
     },
 },
 /// 创建导入任务请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateImportTaskRequest {
     /// 导入文件的token
     pub file_extension: String,
@@ -901,8 +901,8 @@ impl CreateImportTaskRequest {
         parent_token: impl Into<String>,
         file_name: impl Into<String>,
         parent_type: impl Into<String>,
-    ) -> Self {,
-Self {,
+    ) -> Self {
+Self {
             file_extension: file_extension.into(),
             file_token: file_token.into(),
             import_type: import_type.into(),
@@ -913,7 +913,7 @@ Self {,
 }
 },
 /// 创建导入任务响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateImportTaskRespData {
     /// 导入任务ID
     pub ticket: String,
@@ -924,26 +924,26 @@ ResponseFormat::Data,
     },
 },
 /// 查询导入任务结果请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetImportTaskRequest {
     /// 导入任务ID
     pub ticket: String,
 }
 impl GetImportTaskRequest {
-    pub fn new(ticket: impl Into<String>) -> Self {,
-Self {,
+    pub fn new(ticket: impl Into<String>) -> Self {
+Self {
             ticket: ticket.into(),
         },
 }
 },
 /// 查询导入任务结果响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetImportTaskRespData {
     /// 任务结果
     pub result: ImportTaskResult,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ImportTaskResult {
     /// 任务类型,
 #[serde(rename = "type")],
@@ -976,7 +976,7 @@ fn service_version() -> &'static str {,
 }
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::api_resp::ResponseFormat;
 use rstest::rstest;

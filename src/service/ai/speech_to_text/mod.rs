@@ -19,7 +19,7 @@ pub struct SpeechToTextService {
     pub config: Config,
 }
 /// 语音文件识别响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FileRecognizeResponse {
     /// 语音识别结果
 #[serde(flatten)],
@@ -31,7 +31,7 @@ ResponseFormat::Data,
     }
 }
 /// 流式语音识别响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct StreamRecognizeResponse {
     /// 语音识别结果
 #[serde(flatten)],

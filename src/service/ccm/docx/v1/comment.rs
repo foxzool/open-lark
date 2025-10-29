@@ -3,7 +3,7 @@
 // 实现文档评论的操作,
 use crate::prelude::*;
 /// 评论操作服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct CommentService {
     client: std::sync::Arc<LarkClient>,
 }

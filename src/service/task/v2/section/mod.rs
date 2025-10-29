@@ -20,7 +20,7 @@ pub struct SectionService {
     pub config: Config,
 }
 /// 创建自定义分组请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateSectionRequest {
     /// 分组名称
     pub name: String,
@@ -28,7 +28,7 @@ pub struct CreateSectionRequest {
     pub tasklist_guid: String,
 }
 /// 创建自定义分组响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateSectionResponse {
     /// 创建的分组
     pub section: Section,
@@ -39,13 +39,13 @@ ResponseFormat::Data,
     }
 }
 /// 更新自定义分组请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateSectionRequest {
     /// 分组名称
     pub name: String,
 }
 /// 更新自定义分组响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateSectionResponse {
     /// 更新后的分组
     pub section: Section,
@@ -56,7 +56,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取自定义分组响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetSectionResponse {
     /// 分组详情
     pub section: Section,
@@ -67,7 +67,7 @@ ResponseFormat::Data,
     }
 }
 /// 自定义分组列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListSectionsResponse {
     /// 分组列表
     pub items: Vec<Section>,
@@ -84,7 +84,7 @@ ResponseFormat::Data,
     }
 }
 /// 自定义分组任务列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SectionTasksResponse {
     /// 任务列表
     pub items: Vec<Task>,

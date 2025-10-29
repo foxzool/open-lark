@@ -74,7 +74,7 @@ if let Some(location) = request.location {,
 }
 }
 /// 设备列表查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct DeviceListRequest {
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -93,7 +93,7 @@ pub struct DeviceListRequest {
     pub location: Option<String>,
 }
 /// 设备列表查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DeviceListResponse {
     /// 设备列表
 #[serde(flatten)],
@@ -105,7 +105,7 @@ ResponseFormat::Data,
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::{config::Config, constants::AppType};
 #[test],

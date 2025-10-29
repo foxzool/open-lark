@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
 /// 分页响应,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PageResponse<T> {,
     /// 是否还有更多项目,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -16,7 +16,7 @@ pub struct PageResponse<T> {,
 },
 // ============ 登录密码管理相关结构 ============,
 /// 重置用户企业邮箱密码请求
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PasswordResetRequest {
     /// 用户ID，ID类型与查询参数中的user_id_type对应
     pub user_id: String,
@@ -24,7 +24,7 @@ pub struct PasswordResetRequest {
     pub password: String,
 },
 /// 重置用户企业邮箱密码响应,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PasswordResetResponse {
     /// 重置结果,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -35,7 +35,7 @@ pub struct PasswordResetResponse {
 },
 // ============ 数据报表管理相关结构 ============,
 /// 部门维度数据报表查询请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DepartmentDataReportRequest {
     /// 开始日期，格式为YYYY-MM-DD
     pub start_date: String,
@@ -55,7 +55,7 @@ pub struct DepartmentDataReportRequest {
     pub page_token: Option<String>,
 },
 /// 用户维度数据报表查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserDataReportRequest {
     /// 开始日期，格式为YYYY-MM-DD
     pub start_date: String,
@@ -81,7 +81,7 @@ pub struct UserDataReportRequest {
     pub page_token: Option<String>,
 },
 /// 数据报表信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataReport {
     /// 日期,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -113,7 +113,7 @@ pub struct DataReport {
 },
 // ============ 企业勋章相关结构 ============,
 /// 勋章创建请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeCreateRequest {
     /// 勋章名称
     pub name: String,
@@ -140,7 +140,7 @@ pub struct BadgeCreateRequest {
     pub i18n_detail_description: Option<HashMap<String, String>>,
 },
 /// 勋章更新请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeUpdateRequest {
     /// 勋章ID
     pub badge_id: String,
@@ -170,7 +170,7 @@ pub struct BadgeUpdateRequest {
     pub i18n_detail_description: Option<HashMap<String, String>>,
 },
 /// 勋章图片上传请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeImageUploadRequest {
     /// 图片文件内容（base64编码或文件流）
     pub image: String,
@@ -179,7 +179,7 @@ pub struct BadgeImageUploadRequest {
     pub file_name: Option<String>,
 },
 /// 勋章列表查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeListRequest {
     /// 分页大小,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -192,13 +192,13 @@ pub struct BadgeListRequest {
     pub name: Option<String>,
 },
 /// 勋章查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeGetRequest {
     /// 勋章ID
     pub badge_id: String,
 },
 /// 勋章信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Badge {
     /// 勋章ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -241,7 +241,7 @@ pub struct Badge {
     pub i18n_detail_description: Option<HashMap<String, String>>,
 },
 /// 图片上传结果,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeImageUploadResult {
     /// 图片key,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -252,7 +252,7 @@ pub struct BadgeImageUploadResult {
 },
 // ============ 勋章授予名单相关结构 ============,
 /// 勋章授予名单创建请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeGrantCreateRequest {
     /// 勋章ID
     pub badge_id: String,
@@ -274,7 +274,7 @@ pub struct BadgeGrantCreateRequest {
     pub time_zone: Option<String>,
 },
 /// 勋章授予名单更新请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeGrantUpdateRequest {
     /// 授予名单ID
     pub grant_id: String,
@@ -298,13 +298,13 @@ pub struct BadgeGrantUpdateRequest {
     pub time_zone: Option<String>,
 },
 /// 勋章授予名单删除请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeGrantDeleteRequest {
     /// 授予名单ID
     pub grant_id: String,
 },
 /// 勋章授予名单列表查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeGrantListRequest {
     /// 勋章ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -320,13 +320,13 @@ pub struct BadgeGrantListRequest {
     pub name: Option<String>,
 },
 /// 勋章授予名单查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeGrantGetRequest {
     /// 授予名单ID
     pub grant_id: String,
 },
 /// 勋章授予用户信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeGrantUser {
     /// 用户ID
     pub user_id: String,
@@ -341,7 +341,7 @@ pub struct BadgeGrantUser {
     pub grant_time: Option<String>,
 },
 /// 勋章授予名单信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeGrant {
     /// 授予名单ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -379,7 +379,7 @@ pub struct BadgeGrant {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

@@ -180,7 +180,7 @@ Ok(api_resp),
     },
 },
 /// 获取我的空间（root folder）元数据响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetRootFolderMetaRespData {
     /// 用户空间的根目录 token
     pub token: String,
@@ -193,7 +193,7 @@ ResponseFormat::Data,
     },
 },
 /// 获取文件夹中的文件清单请求参数,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListFilesRequest {
     /// 文件夹的token
     pub folder_token: String,
@@ -207,52 +207,52 @@ pub struct ListFilesRequest {
     pub direction: Option<String>,
 }
 impl ListFilesRequest {
-    pub fn new(folder_token: impl Into<String>) -> Self {,
-Self {,
+    pub fn new(folder_token: impl Into<String>) -> Self {
+Self {
             folder_token: folder_token.into()
             ..Default::default(),
 }
     },
-pub fn builder() -> ListFilesRequestBuilder {,
+pub fn w+.*{
         ListFilesRequestBuilder::default(),
 }
 },
 /// 获取文件夹中的文件清单请求构建器,
-#[derive(Debug, Clone, Default)],
+#[derive(.*?)]
 pub struct ListFilesRequestBuilder {
     request: ListFilesRequest,
 }
 impl ListFilesRequestBuilder {
-    pub fn folder_token(mut self, folder_token: impl Into<String>) -> Self {,
+    pub fn folder_token(mut self, folder_token: impl Into<String>) -> Self {
 self.request.folder_token = folder_token.into();
         self,
 }
 
-    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {,
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
 self.request.page_token = Some(page_token.into());
         self,
 }
 
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
 }
 
-    pub fn order_by(mut self, order_by: impl Into<String>) -> Self {,
+    pub fn order_by(mut self, order_by: impl Into<String>) -> Self {
 self.request.order_by = Some(order_by.into());
         self,
 }
 
-    pub fn direction(mut self, direction: impl Into<String>) -> Self {,
+    pub fn direction(mut self, direction: impl Into<String>) -> Self {
 self.request.direction = Some(direction.into());
         self,
 },
-pub fn build(self) -> ListFilesRequest {,
+pub fn w+.*{
         self.request,
 }
 },
 /// 获取文件夹中的文件清单响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListFilesRespData {
     /// 是否还有更多项
     pub has_more: bool,
@@ -267,7 +267,7 @@ ResponseFormat::Data,
     },
 },
 /// 驱动文件信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DriveFile {
     /// 文件的token
     pub token: String,
@@ -294,20 +294,20 @@ pub struct DriveFile {
     pub owner_id: Option<String>,
 },
 /// 获取文件夹元数据请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetFolderMetaRequest {
     /// 文件夹的token
     pub folder_token: String,
 }
 impl GetFolderMetaRequest {
-    pub fn new(folder_token: impl Into<String>) -> Self {,
-Self {,
+    pub fn new(folder_token: impl Into<String>) -> Self {
+Self {
             folder_token: folder_token.into(),
         },
 }
 },
 /// 获取文件夹元数据响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetFolderMetaRespData {
     /// 文件夹token
     pub token: String,
@@ -336,7 +336,7 @@ ResponseFormat::Data,
     },
 },
 /// 新建文件夹请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateFolderRequest {
     /// 文件夹名称
     pub name: String,
@@ -344,15 +344,15 @@ pub struct CreateFolderRequest {
     pub parent_token: String,
 }
 impl CreateFolderRequest {
-    pub fn new(name: impl Into<String>, parent_token: impl Into<String>) -> Self {,
-Self {,
+    pub fn new(name: impl Into<String>, parent_token: impl Into<String>) -> Self {
+Self {
             name: name.into(),
             parent_token: parent_token.into(),
         },
 }
 },
 /// 新建文件夹响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateFolderRespData {
     /// 新创建文件夹的token
     pub token: String,
@@ -365,7 +365,7 @@ ResponseFormat::Data,
     },
 },
 /// 移动或删除文件夹请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MoveOrDeleteFolderRequest {
     /// 文件夹token
     pub folder_token: String,
@@ -377,16 +377,16 @@ pub struct MoveOrDeleteFolderRequest {
 }
 impl MoveOrDeleteFolderRequest {
     /// 创建移动文件夹的请求
-    pub fn move_folder(folder_token: impl Into<String>, parent_token: impl Into<String>) -> Self {,
-Self {,
+    pub fn move_folder(folder_token: impl Into<String>, parent_token: impl Into<String>) -> Self {
+Self {
             folder_token: folder_token.into(),
             operation_type: "move".to_string(),
             parent_token: Some(parent_token.into()),
         },
 },
 /// 创建删除文件夹的请求,
-    pub fn delete_folder(folder_token: impl Into<String>) -> Self {,
-Self {,
+    pub fn delete_folder(folder_token: impl Into<String>) -> Self {
+Self {
             folder_token: folder_token.into(),
             operation_type: "delete".to_string(),
             parent_token: None,
@@ -394,7 +394,7 @@ Self {,
 }
 },
 /// 移动或删除文件夹响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MoveOrDeleteFolderRespData {
     /// 异步任务ID，可以通过该ID查询任务执行状态
     pub task_id: Option<String>,
@@ -405,20 +405,20 @@ ResponseFormat::Data,
     },
 },
 /// 查询异步任务状态请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CheckAsyncTaskRequest {
     /// 任务ID
     pub task_id: String,
 }
 impl CheckAsyncTaskRequest {
-    pub fn new(task_id: impl Into<String>) -> Self {,
-Self {,
+    pub fn new(task_id: impl Into<String>) -> Self {
+Self {
             task_id: task_id.into(),
         },
 }
 },
 /// 查询异步任务状态响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CheckAsyncTaskRespData {
     /// 任务状态，PENDING: 等待中，SUCCESS: 成功，FAILURE: 失败
     pub status: String,
@@ -439,7 +439,7 @@ impl_executable_builder_owned!(
     list_files,
 );
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use rstest::*;
 fn mock_config() -> Config {,

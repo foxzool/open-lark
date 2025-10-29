@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 用户ID类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum UserIdType {,
     #[serde(rename = "open_id")]
     OpenId,
@@ -10,7 +10,7 @@ pub enum UserIdType {,
     UnionId,
 }
 impl UserIdType {
-    pub fn as_str(&self) -> &str {,
+    pub fn w+.*{
 match self {,
             UserIdType::OpenId => "open_id",
             UserIdType::UserId => "user_id",
@@ -19,7 +19,7 @@ match self {,
 }
 },
 /// 部门ID类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum DepartmentIdType {,
     #[serde(rename = "open_department_id")]
     OpenDepartmentId,
@@ -27,7 +27,7 @@ pub enum DepartmentIdType {,
     DepartmentId,
 }
 impl DepartmentIdType {
-    pub fn as_str(&self) -> &str {,
+    pub fn w+.*{
 match self {,
             DepartmentIdType::OpenDepartmentId => "open_department_id",
             DepartmentIdType::DepartmentId => "department_id",
@@ -35,7 +35,7 @@ match self {,
 }
 },
 /// 应用信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Application {
     /// 应用ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -63,7 +63,7 @@ pub struct Application {
     pub update_time: Option<String>,
 },
 /// 应用类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum AppType {,
     /// 自建应用,
 #[serde(rename = "self_built")],
@@ -73,7 +73,7 @@ pub enum AppType {,
     Marketplace,
 },
 /// 应用状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum AppStatus {,
     /// 开发中,
 #[serde(rename = "developing")],
@@ -89,7 +89,7 @@ pub enum AppStatus {,
     Disabled,
 },
 /// 应用版本信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppVersion {
     /// 版本ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -114,7 +114,7 @@ pub struct AppVersion {
     pub status: Option<VersionStatus>,
 },
 /// 版本状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum VersionStatus {,
     /// 开发中,
 #[serde(rename = "developing")],
@@ -130,7 +130,7 @@ pub enum VersionStatus {,
     Rejected,
 },
 /// 应用协作者,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppCollaborator {
     /// 协作者ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -143,7 +143,7 @@ pub struct AppCollaborator {
     pub permissions: Option<Vec<String>>,
 },
 /// 协作者类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum CollaboratorType {,
     /// 用户,
 #[serde(rename = "user")],
@@ -153,7 +153,7 @@ pub enum CollaboratorType {,
     Group,
 },
 /// 权限范围,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PermissionScope {
     /// 权限,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -166,7 +166,7 @@ pub struct PermissionScope {
     pub status: Option<AuthStatus>,
 },
 /// 授权状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum AuthStatus {,
     /// 已授权,
 #[serde(rename = "granted")],
@@ -182,7 +182,7 @@ pub enum AuthStatus {,
     Rejected,
 },
 /// 应用管理员,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppAdmin {
     /// 用户ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -192,7 +192,7 @@ pub struct AppAdmin {
     pub permissions: Option<Vec<AdminPermission>>,
 },
 /// 管理员权限,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum AdminPermission {,
     /// 应用管理,
 #[serde(rename = "app_management")],
@@ -205,7 +205,7 @@ pub enum AdminPermission {,
     PermissionManagement,
 },
 /// 应用可用范围,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppAvailability {
     /// 是否对所有人可用,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -218,7 +218,7 @@ pub struct AppAvailability {
     pub invisible_list: Option<VisibilityList>,
 },
 /// 可见性列表,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct VisibilityList {
     /// 用户列表,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -231,7 +231,7 @@ pub struct VisibilityList {
     pub group_list: Option<Vec<String>>,
 },
 /// 应用使用统计,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppUsage {
     /// 日期,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -247,7 +247,7 @@ pub struct AppUsage {
     pub message_push_count: Option<i64>,
 },
 /// 部门使用统计,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DepartmentUsage {
     /// 部门ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -263,7 +263,7 @@ pub struct DepartmentUsage {
     pub total_users: Option<i64>,
 },
 /// 应用反馈,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppFeedback {
     /// 反馈ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -288,7 +288,7 @@ pub struct AppFeedback {
     pub status: Option<FeedbackStatus>,
 },
 /// 反馈类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum FeedbackType {,
     /// 问题反馈,
 #[serde(rename = "bug")],
@@ -301,7 +301,7 @@ pub enum FeedbackType {,
     Other,
 },
 /// 反馈状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum FeedbackStatus {,
     /// 待处理,
 #[serde(rename = "pending")],
@@ -317,7 +317,7 @@ pub enum FeedbackStatus {,
     Closed,
 },
 /// 应用红点设置,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppBadge {
     /// 红点类型,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -327,7 +327,7 @@ pub struct AppBadge {
     pub content: Option<String>,
 },
 /// 红点类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum BadgeType {,
     /// 数字红点,
 #[serde(rename = "number")],
@@ -340,7 +340,7 @@ pub enum BadgeType {,
     Clear,
 },
 /// 付费订单信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Order {
     /// 订单ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -362,7 +362,7 @@ pub struct Order {
     pub expire_time: Option<String>,
 },
 /// 订单状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum OrderStatus {,
     /// 待支付,
 #[serde(rename = "pending")],
@@ -378,7 +378,7 @@ pub enum OrderStatus {,
     Expired,
 },
 /// 付费方案,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PricingPlan {
     /// 方案ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -397,7 +397,7 @@ pub struct PricingPlan {
     pub billing_cycle: Option<BillingCycle>,
 },
 /// 计费周期,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum BillingCycle {,
     /// 月付,
 #[serde(rename = "monthly")],
@@ -410,7 +410,7 @@ pub enum BillingCycle {,
     Once,
 },
 /// 应用审核状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AuditStatus {
     /// 审核状态,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -423,7 +423,7 @@ pub struct AuditStatus {
     pub audit_time: Option<String>,
 },
 /// 审核结果,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum AuditResult {,
     /// 待审核,
 #[serde(rename = "pending")],
@@ -436,7 +436,7 @@ pub enum AuditResult {,
     Rejected,
 },
 /// 通讯录权限范围,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ContactsRange {
     /// 权限范围类型,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -449,7 +449,7 @@ pub struct ContactsRange {
     pub user_list: Option<Vec<String>>,
 },
 /// 通讯录权限范围类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum ContactsRangeType {,
     /// 全员,
 #[serde(rename = "all")],
@@ -463,7 +463,7 @@ pub enum ContactsRangeType {,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

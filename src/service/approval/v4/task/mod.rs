@@ -20,7 +20,7 @@ pub struct TaskService {
     pub config: Config,
 }
 /// 同意审批任务请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ApproveTaskRequest {
     /// 审批意见
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -30,7 +30,7 @@ pub struct ApproveTaskRequest {
     pub form: Option<serde_json::Value>,
 }
 /// 拒绝审批任务请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RejectTaskRequest {
     /// 拒绝原因
     pub comment: String,
@@ -39,7 +39,7 @@ pub struct RejectTaskRequest {
     pub form: Option<serde_json::Value>,
 }
 /// 转交审批任务请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TransferTaskRequest {
     /// 转交给的用户ID
     pub transfer_user_id: String,
@@ -48,7 +48,7 @@ pub struct TransferTaskRequest {
     pub comment: Option<String>,
 }
 /// 退回审批任务请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RollbackTaskRequest {
     /// 退回到的节点ID
     pub node_id: String,
@@ -57,7 +57,7 @@ pub struct RollbackTaskRequest {
     pub comment: Option<String>,
 }
 /// 审批任务加签请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AddSignTaskRequest {
     /// 加签类型
     pub add_sign_type: String,
@@ -68,7 +68,7 @@ pub struct AddSignTaskRequest {
     pub comment: Option<String>,
 }
 /// 重新提交审批任务请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ResubmitTaskRequest {
     /// 表单数据
 #[serde(skip_serializing_if = "Option::is_none")],

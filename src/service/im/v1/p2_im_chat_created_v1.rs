@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2ImChatCreatedV1 {
     pub schema: String,
     pub header: EventHeader,
@@ -28,12 +28,12 @@ impl<F> P2ImChatCreatedV1ProcessorImpl<F>,
 where
     F: Fn(P2ImChatCreatedV1) + 'static,
 {,
-pub(crate) fn new(f: F) -> Self {,
+pub(crate) fn new(f: F) -> Self {
         P2ImChatCreatedV1ProcessorImpl { f },
 }
 },
 /// 聊天创建事件数据,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2ImChatCreatedV1Data {
     /// 聊天 ID
     pub chat_id: String,
@@ -60,7 +60,7 @@ pub struct P2ImChatCreatedV1Data {
     pub create_time: String,
 },
 /// 事件中的用户信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EventUser {
     /// 用户 ID
     pub user_id: UserId,
@@ -72,7 +72,7 @@ pub struct EventUser {
     pub user_type: Option<String>,
 },
 /// 聊天设置,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ChatSettings {
     /// 是否允许@所有人,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -88,7 +88,7 @@ pub struct ChatSettings {
     pub share_allowed: Option<bool>,
 },
 /// 聊天成员,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ChatMember {
     /// 成员用户 ID
     pub user_id: UserId,
@@ -103,7 +103,7 @@ pub struct ChatMember {
     pub join_time: Option<String>,
 },
 /// 用户 ID 信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserId {
     /// 用户的 union id,
 #[serde(skip_serializing_if = "Option::is_none")],

@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 席位分配查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SeatAssignmentListRequest {
     /// 分页大小,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -10,7 +10,7 @@ pub struct SeatAssignmentListRequest {
     pub page_token: Option<String>,
 },
 /// 席位分配信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SeatAssignment {
     /// 用户ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -29,7 +29,7 @@ pub struct SeatAssignment {
     pub status: Option<String>,
 },
 /// 席位活跃查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SeatActivityListRequest {
     /// 分页大小,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -45,7 +45,7 @@ pub struct SeatActivityListRequest {
     pub end_time: Option<String>,
 },
 /// 席位活跃信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SeatActivity {
     /// 用户ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -61,7 +61,7 @@ pub struct SeatActivity {
     pub activity_level: Option<String>,
 },
 /// 审计日志列表查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AuditLogListRequest {
     /// 应用ID
     pub app_id: String,
@@ -82,7 +82,7 @@ pub struct AuditLogListRequest {
     pub operation_type: Option<String>,
 },
 /// 审计日志信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AuditLog {
     /// 日志ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -110,7 +110,7 @@ pub struct AuditLog {
     pub details: Option<serde_json::Value>,
 },
 /// 数据变更日志列表查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataChangeLogListRequest {
     /// 应用ID
     pub app_id: String,
@@ -125,7 +125,7 @@ pub struct DataChangeLogListRequest {
     pub object_api_name: Option<String>,
 },
 /// 数据变更日志信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataChangeLog {
     /// 日志ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -153,7 +153,7 @@ pub struct DataChangeLog {
     pub after_data: Option<serde_json::Value>,
 },
 /// 角色成员授权操作请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RoleMemberAuthorizationRequest {
     /// 应用ID
     pub app_id: String,
@@ -163,7 +163,7 @@ pub struct RoleMemberAuthorizationRequest {
     pub user_ids: Vec<String>,
 },
 /// 角色成员信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RoleMember {
     /// 用户ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -179,7 +179,7 @@ pub struct RoleMember {
     pub authorized_time: Option<String>,
 },
 /// 记录权限用户授权操作请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RecordPermissionMemberAuthorizationRequest {
     /// 应用ID
     pub app_id: String,
@@ -192,7 +192,7 @@ pub struct RecordPermissionMemberAuthorizationRequest {
     pub record_ids: Option<Vec<String>>,
 },
 /// OQL查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OqlQueryRequest {
     /// 应用ID
     pub app_id: String,
@@ -203,7 +203,7 @@ pub struct OqlQueryRequest {
     pub parameters: Option<serde_json::Value>,
 },
 /// OQL查询结果,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OqlQueryResult {
     /// 查询结果,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -213,7 +213,7 @@ pub struct OqlQueryResult {
     pub total_count: Option<i32>,
 },
 /// 记录搜索请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RecordSearchRequest {
     /// 应用ID
     pub app_id: String,
@@ -229,7 +229,7 @@ pub struct RecordSearchRequest {
     pub page_token: Option<String>,
 },
 /// 记录查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RecordQueryRequest {
     /// 应用ID
     pub app_id: String,
@@ -242,7 +242,7 @@ pub struct RecordQueryRequest {
     pub fields: Option<Vec<String>>,
 },
 /// 记录创建请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RecordCreateRequest {
     /// 应用ID
     pub app_id: String,
@@ -252,7 +252,7 @@ pub struct RecordCreateRequest {
     pub data: serde_json::Value,
 },
 /// 记录更新请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RecordUpdateRequest {
     /// 应用ID
     pub app_id: String,
@@ -264,7 +264,7 @@ pub struct RecordUpdateRequest {
     pub data: serde_json::Value,
 },
 /// 记录删除请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RecordDeleteRequest {
     /// 应用ID
     pub app_id: String,
@@ -274,7 +274,7 @@ pub struct RecordDeleteRequest {
     pub record_id: String,
 },
 /// 批量记录操作请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchRecordRequest {
     /// 应用ID
     pub app_id: String,
@@ -284,7 +284,7 @@ pub struct BatchRecordRequest {
     pub records: Vec<serde_json::Value>,
 },
 /// 批量记录查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchRecordQueryRequest {
     /// 应用ID
     pub app_id: String,
@@ -304,7 +304,7 @@ pub struct BatchRecordQueryRequest {
     pub page_token: Option<String>,
 },
 /// 记录信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Record {
     /// 记录ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -320,7 +320,7 @@ pub struct Record {
     pub updated_time: Option<String>,
 },
 /// 函数执行请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FunctionInvokeRequest {
     /// 应用ID
     pub app_id: String,
@@ -331,7 +331,7 @@ pub struct FunctionInvokeRequest {
     pub parameters: Option<serde_json::Value>,
 },
 /// 函数执行结果,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FunctionInvokeResult {
     /// 执行结果,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -344,7 +344,7 @@ pub struct FunctionInvokeResult {
     pub error: Option<String>,
 },
 /// 环境变量查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EnvironmentVariableQueryRequest {
     /// 应用ID
     pub app_id: String,
@@ -356,7 +356,7 @@ pub struct EnvironmentVariableQueryRequest {
     pub page_token: Option<String>,
 },
 /// 环境变量获取请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EnvironmentVariableGetRequest {
     /// 应用ID
     pub app_id: String,
@@ -364,7 +364,7 @@ pub struct EnvironmentVariableGetRequest {
     pub variable_name: String,
 },
 /// 环境变量信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EnvironmentVariable {
     /// 变量名称,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -383,7 +383,7 @@ pub struct EnvironmentVariable {
     pub updated_time: Option<String>,
 },
 /// 流程执行请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FlowExecuteRequest {
     /// 应用ID
     pub app_id: String,
@@ -394,7 +394,7 @@ pub struct FlowExecuteRequest {
     pub parameters: Option<serde_json::Value>,
 },
 /// 流程执行结果,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FlowExecuteResult {
     /// 流程实例ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -407,7 +407,7 @@ pub struct FlowExecuteResult {
     pub result: Option<serde_json::Value>,
 },
 /// 人工任务查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserTaskQueryRequest {
     /// 应用ID
     pub app_id: String,
@@ -422,7 +422,7 @@ pub struct UserTaskQueryRequest {
     pub page_token: Option<String>,
 },
 /// 人工任务操作请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserTaskActionRequest {
     /// 应用ID
     pub app_id: String,
@@ -436,7 +436,7 @@ pub struct UserTaskActionRequest {
     pub data: Option<serde_json::Value>,
 },
 /// 人工任务转交请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserTaskTransferRequest {
     /// 应用ID
     pub app_id: String,
@@ -449,7 +449,7 @@ pub struct UserTaskTransferRequest {
     pub comment: Option<String>,
 },
 /// 人工任务加签请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserTaskAddAssigneeRequest {
     /// 应用ID
     pub app_id: String,
@@ -462,7 +462,7 @@ pub struct UserTaskAddAssigneeRequest {
     pub comment: Option<String>,
 },
 /// 人工任务抄送请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserTaskCcRequest {
     /// 应用ID
     pub app_id: String,
@@ -475,7 +475,7 @@ pub struct UserTaskCcRequest {
     pub comment: Option<String>,
 },
 /// 人工任务退回请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserTaskRollbackRequest {
     /// 应用ID
     pub app_id: String,
@@ -488,7 +488,7 @@ pub struct UserTaskRollbackRequest {
     pub comment: Option<String>,
 },
 /// 人工任务群聊请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserTaskChatGroupRequest {
     /// 应用ID
     pub app_id: String,
@@ -499,7 +499,7 @@ pub struct UserTaskChatGroupRequest {
     pub group_name: Option<String>,
 },
 /// 人工任务信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserTask {
     /// 任务ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -527,7 +527,7 @@ pub struct UserTask {
     pub data: Option<serde_json::Value>,
 },
 /// 退回位置信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RollbackPoint {
     /// 节点ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -540,7 +540,7 @@ pub struct RollbackPoint {
     pub node_type: Option<String>,
 },
 /// 通用分页响应,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PageResponse<T> {,
     /// 数据列表,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -556,7 +556,7 @@ pub struct PageResponse<T> {,
     pub total_count: Option<i32>,
 },
 /// 用户权限查询请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserPermissionQueryRequest {
     /// 用户ID
     pub user_id: String,
@@ -571,7 +571,7 @@ pub struct UserPermissionQueryRequest {
     pub permission_type: Option<String>,
 },
 /// 用户权限信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserPermission {
     /// 用户ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -599,7 +599,7 @@ pub struct UserPermission {
     pub expires_at: Option<String>,
 },
 /// 访问令牌创建请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AccessTokenCreateRequest {
     /// 应用ID
     pub app_id: String,
@@ -616,7 +616,7 @@ pub struct AccessTokenCreateRequest {
     pub description: Option<String>,
 },
 /// 访问令牌信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AccessToken {
     /// 令牌ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -635,7 +635,7 @@ pub struct AccessToken {
     pub scope: Option<Vec<String>>,
 },
 /// 应用授权请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppAuthorizationRequest {
     /// 应用ID
     pub app_id: String,
@@ -649,7 +649,7 @@ pub struct AppAuthorizationRequest {
     pub redirect_uri: Option<String>,
 },
 /// 应用授权信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppAuthorization {
     /// 授权码,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -666,7 +666,7 @@ pub struct AppAuthorization {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

@@ -18,7 +18,7 @@ pub struct LocationService {
     pub config: Config,
 }
 /// 地址列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct LocationListResponse {
     /// 地址列表
 #[serde(flatten)],

@@ -129,7 +129,7 @@ pub fn new() -> Self {
 }
 /// 使用共享配置创建服务（实验性）
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             v3: v3::V3::new(shared.as_ref().clone()),
         }
 }
@@ -139,7 +139,7 @@ Self {,
     ///,
 /// # 返回值
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
-pub fn validate_bot_services_config(&self) -> bool {,
+pub fn w+.*{
         // 检查配置是否有效
 !self.v3.info.config.app_id.is_empty() && !self.v3.info.config.app_secret.is_empty(),
     }
@@ -149,7 +149,7 @@ pub fn validate_bot_services_config(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_bot_service_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "BotService{{ services: 1, sub_services: 4, app_id: {} api_version: v3, bot_management: true, message_handling: true }}",
             self.v3.info.config.app_id,
@@ -164,7 +164,7 @@ pub fn get_bot_service_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_bot_feature(&self, bot_feature: &str) -> bool {,
+    pub fn w+.*{
 match bot_feature {,
             // 机器人基础管理功能
             "bot_info_management" => true,
@@ -238,7 +238,7 @@ match bot_feature {,
     ///,
 /// # 返回值
     /// 如果所有服务配置有效返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         !self.v3.info.config.app_id.is_empty(),
 && !self.v3.info.config.app_secret.is_empty(),
             && self.validate_bot_services_config(),
@@ -249,7 +249,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含各类型服务数量的统计信息
-pub fn get_bot_categories_statistics(&self) -> String {,
+pub fn w+.*{
         "BotService Categories{ management: 1, messaging: 1, events: 1, api: 1, total: 4 }",
 .to_string(),
     }
@@ -259,7 +259,7 @@ pub fn get_bot_categories_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各服务状态信息的字符串
-pub fn get_bot_service_status_summary(&self) -> String {,
+pub fn w+.*{
         let config_healthy = !self.v3.info.config.app_id.is_empty();
 let management_healthy = config_healthy;
         let messaging_healthy = config_healthy;
@@ -277,7 +277,7 @@ format!(,
     ///,
 /// # 返回值
     /// 包含机器人能力矩阵信息的字符串
-pub fn get_bot_capabilities_matrix(&self) -> String {,
+pub fn w+.*{
         format!(
             "BotService Capabilities{{ management: {} messaging: {} events: {} api: {} intelligence: true }}",
             self.supports_bot_feature("bot_info_management"),
@@ -292,7 +292,7 @@ pub fn get_bot_capabilities_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含机器人管理能力信息的字符串
-pub fn get_bot_management_capabilities(&self) -> String {,
+pub fn w+.*{
         "BotService Management{ info: true, configuration: true, status: true, permissions: true, statistics: true }".to_string(),
 }
 /// 获取消息处理能力矩阵
@@ -301,7 +301,7 @@ pub fn get_bot_management_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含消息处理能力信息的字符串
-pub fn get_messaging_capabilities(&self) -> String {,
+pub fn w+.*{
         "BotService Messaging{ receive: true, send: true, rich_text: true, multimedia: true, interactive: true }".to_string(),
 }
 /// 获取事件处理能力矩阵
@@ -310,7 +310,7 @@ pub fn get_messaging_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含事件处理能力信息的字符串
-pub fn get_event_processing_capabilities(&self) -> String {,
+pub fn w+.*{
         "BotService Events{ listening: true, callback: true, async: true, monitoring: true, webhook: true }".to_string(),
 }
 /// 获取集成能力矩阵
@@ -319,7 +319,7 @@ pub fn get_event_processing_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含集成能力信息的字符串
-pub fn get_integration_capabilities(&self) -> String {,
+pub fn w+.*{
         "BotService Integration{ api_calls: true, external: true, webhooks: true, workflows: true, third_party: true }".to_string(),
 }
 /// 获取智能交互能力矩阵
@@ -328,7 +328,7 @@ pub fn get_integration_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含智能交互能力信息的字符串
-pub fn get_intelligent_interaction_capabilities(&self) -> String {,
+pub fn w+.*{
         "BotService Intelligence{ dialogue: true, nlp: true, context: true, learning: true, intent: true }".to_string(),
 }
 /// 获取企业级能力矩阵
@@ -337,7 +337,7 @@ pub fn get_intelligent_interaction_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含企业级能力信息的字符串
-pub fn get_enterprise_capabilities(&self) -> String {,
+pub fn w+.*{
         "BotService Enterprise{ multi_tenant: true, security: true, compliance: true, audit: true, scalability: true }".to_string(),
 }
 /// 获取机器人性能指标
@@ -346,7 +346,7 @@ pub fn get_enterprise_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含性能指标信息的字符串
-pub fn get_bot_performance_metrics(&self) -> String {,
+pub fn w+.*{
         "BotService Performance{ response_time: <100ms, throughput: high, reliability: 99.9%, concurrency: enterprise, availability: 99.95% }".to_string(),
 }
 /// 获取机器人应用场景矩阵
@@ -355,7 +355,7 @@ pub fn get_bot_performance_metrics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含应用场景信息的字符串
-pub fn get_bot_use_cases_matrix(&self) -> String {,
+pub fn w+.*{
         "BotService UseCases{ enterprise_assistant: true, workflow_automation: true, customer_service: true, data_analytics: true, notification_system: true }".to_string(),
 }
 /// 获取机器人开发者工具能力矩阵
@@ -364,7 +364,7 @@ pub fn get_bot_use_cases_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含开发者工具能力信息的字符串
-pub fn get_developer_tools_capabilities(&self) -> String {,
+pub fn w+.*{
         "BotService DeveloperTools{ debugging: true, testing: true, documentation: true, code_generation: true, monitoring: true }".to_string(),
 }
 /// 获取机器人安全能力矩阵
@@ -373,7 +373,7 @@ pub fn get_developer_tools_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含安全能力信息的字符串
-pub fn get_security_capabilities(&self) -> String {,
+pub fn w+.*{
         "BotService Security{ authentication: true, authorization: true, encryption: true, audit_logging: true, compliance: true }".to_string(),
 }
 /// 获取机器人扩展能力矩阵
@@ -382,7 +382,7 @@ pub fn get_security_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含扩展能力信息的字符串
-pub fn get_extensibility_capabilities(&self) -> String {,
+pub fn w+.*{
         "BotService Extensibility{ plugins: true, custom_handlers: true, webhooks: true, apis: true, integrations: true }".to_string(),
 }
 }
@@ -399,8 +399,8 @@ fn service_name() -> &'static str,
     }
 }
 impl Clone for BotService {,
-    fn clone(&self) -> Self {,
-Self {,
+    fn clone(&self) -> Self {
+Self {
             v3: v3::V3::new(self.v3.info.config.clone()),
         }
 }
@@ -416,7 +416,7 @@ f.debug_struct()
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 /// 创建测试配置

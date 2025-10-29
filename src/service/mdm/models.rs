@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 分页响应基础结构,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PageResponse<T> {,
     /// 数据项列表
     pub items: Vec<T>,
@@ -12,7 +12,7 @@ pub struct PageResponse<T> {,
     pub has_more: Option<bool>,
 },
 /// 国家/地区信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CountryRegion {
     /// 主数据编码
     pub master_data_code: String,
@@ -47,7 +47,7 @@ pub struct CountryRegion {
     pub description: Option<String>,
 },
 /// 用户数据维度关系,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserAuthDataRelation {
     /// 关系ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -88,7 +88,7 @@ pub struct UserAuthDataRelation {
     pub updated_at: Option<i64>,
 },
 /// 数据维度信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataDimension {
     /// 数据维度ID
     pub data_dimension_id: String,
@@ -115,7 +115,7 @@ pub struct DataDimension {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

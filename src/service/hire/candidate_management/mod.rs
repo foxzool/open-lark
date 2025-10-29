@@ -27,7 +27,7 @@ pub struct CandidateManagementService {
 }
 impl CandidateManagementService {
     pub fn new() -> Self {
-Self {,
+Self {
             talent_pool: TalentPoolService::new(config.clone()),
             talent: TalentService::new(config.clone()),
             application: ApplicationService::new(config.clone()),

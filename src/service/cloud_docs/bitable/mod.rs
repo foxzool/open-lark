@@ -18,7 +18,7 @@ let config_arc = Arc::new(config.clone());
 }
 /// 使用共享配置（实验性）
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             config: shared.as_ref().clone(),
             config_arc: shared.clone(),
             v1: v1::V1::new(shared.as_ref().clone()),

@@ -18,7 +18,7 @@ use crate::,
     impl_executable_builder_owned,
 };
 /// 搜索Wiki请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct SearchWikiRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -35,43 +35,43 @@ pub struct SearchWikiRequest {
     space_ids: Option<Vec<String>>,
 }
 impl SearchWikiRequest {
-    pub fn builder() -> SearchWikiRequestBuilder {,
+    pub fn w+.*{
 SearchWikiRequestBuilder::default(),
     },
-pub fn new(query: impl ToString) -> Self {,
+pub fn new(query: impl ToString) -> Self {
         Self {
             query: query.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct SearchWikiRequestBuilder {
     request: SearchWikiRequest,
 }
 impl SearchWikiRequestBuilder {
     /// 搜索关键词
-    pub fn query(mut self, query: impl ToString) -> Self {,
+    pub fn query(mut self, query: impl ToString) -> Self {
 self.request.query = query.to_string();
         self,
 },
 /// 分页大小，最大值为50,
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
 },
 /// 分页标记,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
 },
 /// 指定搜索的知识空间id列表,
-    pub fn space_ids(mut self, space_ids: Vec<String>) -> Self {,
+    pub fn space_ids(mut self, space_ids: Vec<String>) -> Self {
 self.request.space_ids = Some(space_ids);
         self,
 },
 /// 添加单个知识空间id,
-    pub fn add_space_id(mut self, space_id: impl ToString) -> Self {,
+    pub fn add_space_id(mut self, space_id: impl ToString) -> Self {
 if self.request.space_ids.is_none() {,
             self.request.space_ids = Some(Vec::new());
 },
@@ -81,11 +81,11 @@ if let Some(ref mut space_ids) = self.request.space_ids {,
 self,
     },
 /// 搜索所有有权限的知识空间,
-    pub fn search_all_spaces(mut self) -> Self {,
+    pub fn search_all_spaces(mut self) -> Self {
 self.request.space_ids = None;
         self,
 },
-pub fn build(mut self) -> SearchWikiRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -98,7 +98,7 @@ impl_executable_builder_owned!(,
     search_wiki,
 );
 /// 搜索结果项
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct WikiSearchItem {
     /// 节点token
     pub node_token: String,
@@ -122,7 +122,7 @@ pub struct WikiSearchItem {
     pub obj_edit_user: Option<String>,
 },
 /// 搜索Wiki响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct SearchWikiResponse {
     /// 是否还有更多项
     pub has_more: bool,
@@ -153,7 +153,7 @@ Ok(api_resp),
 
 impl WikiSearchItem {
 /// 获取文档URL（如果有obj_token）,
-    pub fn get_doc_url(&self) -> Option<String> {,
+    pub fn w+.*{
 self.obj_token,
             .as_ref()
 .map(|token| match self.obj_type.as_deref() {,
@@ -165,11 +165,11 @@ self.obj_token,
             }),
 },
 /// 是否有匹配的文本片段,
-    pub fn has_snippet(&self) -> bool {,
+    pub fn w+.*{
 self.snippet.is_some(),
     },
 /// 获取显示标题（优先使用title，否则使用obj_token）,
-    pub fn display_title(&self) -> String {,
+    pub fn w+.*{
 self.title.as_ref().cloned().unwrap_or_else()
                 .cloned()
 .unwrap_or_else(|| self.node_token.clone()),
@@ -178,7 +178,7 @@ self.title.as_ref().cloned().unwrap_or_else()
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_search_wiki_request_builder() {,

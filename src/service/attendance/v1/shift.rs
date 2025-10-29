@@ -218,11 +218,11 @@ Ok(api_resp),
     },
 }
 impl CreateShiftRequest {
-    pub fn builder() -> CreateShiftRequestBuilder {,
+    pub fn w+.*{
 CreateShiftRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct CreateShiftRequestBuilder {
     employee_type: Option<String>,
     shift_name: Option<String>,
@@ -242,86 +242,86 @@ pub struct CreateShiftRequestBuilder {
     face_punch_cfg: Option<super::models::FacePunchConfig>,
 }
 impl CreateShiftRequestBuilder {
-    pub fn employee_type<T: Into<String>>(mut self, employee_type: T) -> Self {,
+    pub fn employee_type<T: Into<String>>(mut self, employee_type: T) -> Self {
 self.employee_type = Some(employee_type.into());
         self,
 }
 
-    pub fn shift_name<T: Into<String>>(mut self, shift_name: T) -> Self {,
+    pub fn shift_name<T: Into<String>>(mut self, shift_name: T) -> Self {
 self.shift_name = Some(shift_name.into());
         self,
 }
 
-    pub fn punch_times(mut self, punch_times: i32) -> Self {,
+    pub fn punch_times(mut self, punch_times: i32) -> Self {
 self.punch_times = Some(punch_times);
         self,
 }
 
-    pub fn is_flexible(mut self, is_flexible: bool) -> Self {,
+    pub fn is_flexible(mut self, is_flexible: bool) -> Self {
 self.is_flexible = Some(is_flexible);
         self,
 }
 
-    pub fn flexible_minutes(mut self, flexible_minutes: i32) -> Self {,
+    pub fn flexible_minutes(mut self, flexible_minutes: i32) -> Self {
 self.flexible_minutes = Some(flexible_minutes);
         self,
 }
 
-    pub fn flexible_rule(mut self, flexible_rule: Vec<super::models::FlexibleRule>) -> Self {,
+    pub fn flexible_rule(mut self, flexible_rule: Vec<super::models::FlexibleRule>) -> Self {
 self.flexible_rule = Some(flexible_rule);
         self,
 }
 
-    pub fn no_need_off(mut self, no_need_off: bool) -> Self {,
+    pub fn no_need_off(mut self, no_need_off: bool) -> Self {
 self.no_need_off = Some(no_need_off);
         self,
 }
 
-    pub fn punch_time_rule(mut self, punch_time_rule: Vec<super::models::PunchTimeRule>) -> Self {,
+    pub fn punch_time_rule(mut self, punch_time_rule: Vec<super::models::PunchTimeRule>) -> Self {
 self.punch_time_rule = Some(punch_time_rule);
         self,
 }
 
-    pub fn late_minutes_as_late(mut self, late_minutes_as_late: i32) -> Self {,
+    pub fn late_minutes_as_late(mut self, late_minutes_as_late: i32) -> Self {
 self.late_minutes_as_late = Some(late_minutes_as_late);
         self,
 }
 
-    pub fn late_minutes_as_lack(mut self, late_minutes_as_lack: i32) -> Self {,
+    pub fn late_minutes_as_lack(mut self, late_minutes_as_lack: i32) -> Self {
 self.late_minutes_as_lack = Some(late_minutes_as_lack);
         self,
 }
 
-    pub fn early_minutes_as_early(mut self, early_minutes_as_early: i32) -> Self {,
+    pub fn early_minutes_as_early(mut self, early_minutes_as_early: i32) -> Self {
 self.early_minutes_as_early = Some(early_minutes_as_early);
         self,
 }
 
-    pub fn early_minutes_as_lack(mut self, early_minutes_as_lack: i32) -> Self {,
+    pub fn early_minutes_as_lack(mut self, early_minutes_as_lack: i32) -> Self {
 self.early_minutes_as_lack = Some(early_minutes_as_lack);
         self,
 }
 
-    pub fn allow_outside_apply(mut self, allow_outside_apply: bool) -> Self {,
+    pub fn allow_outside_apply(mut self, allow_outside_apply: bool) -> Self {
 self.allow_outside_apply = Some(allow_outside_apply);
         self,
 }
 
-    pub fn outside_apply_limit(mut self, outside_apply_limit: i32) -> Self {,
+    pub fn outside_apply_limit(mut self, outside_apply_limit: i32) -> Self {
 self.outside_apply_limit = Some(outside_apply_limit);
         self,
 }
 
-    pub fn allow_face_punch(mut self, allow_face_punch: bool) -> Self {,
+    pub fn allow_face_punch(mut self, allow_face_punch: bool) -> Self {
 self.allow_face_punch = Some(allow_face_punch);
         self,
 }
 
-    pub fn face_punch_cfg(mut self, face_punch_cfg: super::models::FacePunchConfig) -> Self {,
+    pub fn face_punch_cfg(mut self, face_punch_cfg: super::models::FacePunchConfig) -> Self {
 self.face_punch_cfg = Some(face_punch_cfg);
         self,
 },
-pub fn build(self) -> CreateShiftRequest {,
+pub fn w+.*{
         CreateShiftRequest {
             api_req: ApiRequest::default(),
             employee_type: self.employee_type.expect("employee_type is required"),
@@ -352,7 +352,7 @@ impl_executable_builder_owned!(
     create,
 );
 impl DeleteShiftRequest {
-pub fn new<T: Into<String>>(shift_id: T) -> Self {,
+pub fn new<T: Into<String>>(shift_id: T) -> Self {
         Self {
             api_req: ApiRequest::default(),
             shift_id: shift_id.into(),
@@ -360,16 +360,16 @@ pub fn new<T: Into<String>>(shift_id: T) -> Self {,
 }
 }
 impl GetShiftRequest {
-    pub fn new<T: Into<String>>(shift_id: T) -> Self {,
-Self {,
+    pub fn new<T: Into<String>>(shift_id: T) -> Self {
+Self {
             api_req: ApiRequest::default(),
             shift_id: shift_id.into(),
         },
 }
 }
 impl QueryShiftRequest {
-    pub fn new<T: Into<String>>(employee_type: T, shift_name: T) -> Self {,
-Self {,
+    pub fn new<T: Into<String>>(employee_type: T, shift_name: T) -> Self {
+Self {
             api_req: ApiRequest::default(),
             employee_type: employee_type.into(),
             shift_name: shift_name.into(),
@@ -377,20 +377,20 @@ Self {,
 }
 }
 impl ListShiftRequest {
-    pub fn new() -> Self {,
-Self {,
+    pub fn new() -> Self {
+Self {
             api_req: ApiRequest::default(),
             page_size: None,
             page_token: None,
         },
 }
 
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.page_size = Some(page_size);
         self,
 }
 
-    pub fn page_token<T: Into<String>>(mut self, page_token: T) -> Self {,
+    pub fn page_token<T: Into<String>>(mut self, page_token: T) -> Self {
 self.page_token = Some(page_token.into());
         self,
 }
@@ -407,7 +407,7 @@ fn service_version() -> &'static str {,
 }
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::config::Config;
 #[test],

@@ -151,7 +151,7 @@ Ok(api_resp),
 },
 // === 数据结构定义 ===,
 /// 创建文档请求参数
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct CreateDocumentRequest {
     /// 文档标题
     pub title: String,
@@ -161,10 +161,10 @@ pub struct CreateDocumentRequest {
     pub folder_token: Option<String>,
 }
 impl CreateDocumentRequest {
-    pub fn builder() -> CreateDocumentRequestBuilder {,
+    pub fn w+.*{
 CreateDocumentRequestBuilder::default(),
     },
-pub fn new(title: impl Into<String>) -> Self {,
+pub fn new(title: impl Into<String>) -> Self {
         Self {
             title: title.into(),
             content: None,
@@ -172,12 +172,12 @@ pub fn new(title: impl Into<String>) -> Self {,
         },
 }
 
-    pub fn with_content(mut self, content: impl Into<String>) -> Self {,
+    pub fn with_content(mut self, content: impl Into<String>) -> Self {
 self.content = Some(content.into());
         self,
 }
 
-    pub fn with_folder_token(mut self, folder_token: impl Into<String>) -> Self {,
+    pub fn with_folder_token(mut self, folder_token: impl Into<String>) -> Self {
 self.folder_token = Some(folder_token.into());
         self,
 }
@@ -188,21 +188,21 @@ pub struct CreateDocumentRequestBuilder {
     request: CreateDocumentRequest,
 }
 impl CreateDocumentRequestBuilder {
-    pub fn title(mut self, title: impl Into<String>) -> Self {,
+    pub fn title(mut self, title: impl Into<String>) -> Self {
 self.request.title = title.into();
         self,
 }
 
-    pub fn content(mut self, content: impl Into<String>) -> Self {,
+    pub fn content(mut self, content: impl Into<String>) -> Self {
 self.request.content = Some(content.into());
         self,
 }
 
-    pub fn folder_token(mut self, folder_token: impl Into<String>) -> Self {,
+    pub fn folder_token(mut self, folder_token: impl Into<String>) -> Self {
 self.request.folder_token = Some(folder_token.into());
         self,
 },
-pub fn build(self) -> CreateDocumentRequest {,
+pub fn w+.*{
         self.request,
 }
 }
@@ -214,7 +214,7 @@ impl_executable_builder_owned!(,
     create,
 );
 /// 创建文档响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateDocumentRespData {
     /// 文档ID
     pub document_id: String,
@@ -229,7 +229,7 @@ ResponseFormat::Data,
     },
 },
 /// 获取文档信息响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetDocumentRespData {
     /// 文档信息
     pub document: DocumentInfo,
@@ -240,7 +240,7 @@ ResponseFormat::Data,
     },
 },
 /// 文档信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DocumentInfo {
     /// 文档ID
     pub document_id: String,
@@ -258,7 +258,7 @@ pub struct DocumentInfo {
     pub last_editor_id: String,
 },
 /// 获取纯文本内容响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetRawContentRespData {
     /// 纯文本内容
     pub content: String,
@@ -269,7 +269,7 @@ ResponseFormat::Data,
     },
 },
 /// 获取文档所有块请求参数,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ListDocumentBlocksRequest {
     /// 文档ID
     pub document_id: String,
@@ -279,10 +279,10 @@ pub struct ListDocumentBlocksRequest {
     pub page_token: Option<String>,
 }
 impl ListDocumentBlocksRequest {
-    pub fn builder() -> ListDocumentBlocksRequestBuilder {,
+    pub fn w+.*{
 ListDocumentBlocksRequestBuilder::default(),
     },
-pub fn new(document_id: impl Into<String>) -> Self {,
+pub fn new(document_id: impl Into<String>) -> Self {
         Self {
             document_id: document_id.into(),
             page_size: None,
@@ -290,12 +290,12 @@ pub fn new(document_id: impl Into<String>) -> Self {,
         },
 }
 
-    pub fn with_page_size(mut self, page_size: i32) -> Self {,
+    pub fn with_page_size(mut self, page_size: i32) -> Self {
 self.page_size = Some(page_size);
         self,
 }
 
-    pub fn with_page_token(mut self, page_token: impl Into<String>) -> Self {,
+    pub fn with_page_token(mut self, page_token: impl Into<String>) -> Self {
 self.page_token = Some(page_token.into());
         self,
 }
@@ -306,21 +306,21 @@ pub struct ListDocumentBlocksRequestBuilder {
     request: ListDocumentBlocksRequest,
 }
 impl ListDocumentBlocksRequestBuilder {
-    pub fn document_id(mut self, document_id: impl Into<String>) -> Self {,
+    pub fn document_id(mut self, document_id: impl Into<String>) -> Self {
 self.request.document_id = document_id.into();
         self,
 }
 
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
 }
 
-    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {,
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
 self.request.page_token = Some(page_token.into());
         self,
 },
-pub fn build(self) -> ListDocumentBlocksRequest {,
+pub fn w+.*{
         self.request,
 }
 }
@@ -332,7 +332,7 @@ impl_executable_builder_owned!(,
     list_blocks,
 );
 /// 获取文档所有块响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListDocumentBlocksRespData {
     /// 块列表
     pub items: Vec<Block>,
@@ -347,7 +347,7 @@ ResponseFormat::Data,
     },
 },
 /// 块信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Block {
     /// 块ID
     pub block_id: String,
@@ -361,7 +361,7 @@ pub struct Block {
     pub index: i32,
 },
 /// 转换为文档块响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ConvertToDocxRespData {
     /// 新文档ID
     pub document_id: String,

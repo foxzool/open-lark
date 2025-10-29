@@ -38,7 +38,7 @@ Ok(api_resp),
     },
 },
 /// 更新数据表请求,
-#[derive(Debug, Default)],
+#[derive(.*?)]
 pub struct PatchTableRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token
@@ -49,12 +49,12 @@ pub struct PatchTableRequest {
     name: Option<String>,
 }
 impl PatchTableRequest {
-    pub fn builder() -> PatchTableRequestBuilder {,
+    pub fn w+.*{
 PatchTableRequestBuilder::default(),
     },
 /// 创建更新数据表请求,
-    pub fn new(app_token: impl ToString, table_id: impl ToString) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, table_id: impl ToString) -> Self {
+Self {
             api_request: ApiRequest::default(),
             app_token: app_token.to_string(),
             table_id: table_id.to_string(),
@@ -62,27 +62,27 @@ Self {,
         },
 }
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct PatchTableRequestBuilder {
     request: PatchTableRequest,
 }
 impl PatchTableRequestBuilder {
     /// 多维表格的 app_token
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 数据表的 table_id,
-    pub fn table_id(mut self, table_id: impl ToString) -> Self {,
+    pub fn table_id(mut self, table_id: impl ToString) -> Self {
 self.request.table_id = table_id.to_string();
         self,
 },
 /// 数据表的新名称,
-    pub fn name(mut self, name: impl ToString) -> Self {,
+    pub fn name(mut self, name: impl ToString) -> Self {
 self.request.name = Some(name.to_string());
         self,
 },
-pub fn build(self) -> PatchTableRequest {,
+pub fn w+.*{
         self.request,
 }
 }
@@ -99,7 +99,7 @@ struct PatchTableRequestBody {,
     name: Option<String>,
 }
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct PatchTableResponse {
     /// 数据表的名称
     pub name: String,
@@ -111,7 +111,7 @@ ResponseFormat::Data,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json::json;
     #[test],

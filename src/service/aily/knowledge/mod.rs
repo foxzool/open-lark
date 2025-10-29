@@ -23,7 +23,7 @@ pub struct KnowledgeService {
     pub config: Config,
 }
 /// 知识问答响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataKnowledgeAskResponse {
     /// 问答结果
 #[serde(flatten)],
@@ -35,7 +35,7 @@ ResponseFormat::Data,
     }
 }
 /// 文件上传响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataKnowledgeFileUploadResponse {
     /// 文件上传结果
 #[serde(flatten)],
@@ -47,7 +47,7 @@ ResponseFormat::Data,
     }
 }
 /// 数据知识创建响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataKnowledgeCreateResponse {
     /// 数据知识信息
 #[serde(flatten)],
@@ -59,7 +59,7 @@ ResponseFormat::Data,
     }
 }
 /// 数据知识查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataKnowledgeGetResponse {
     /// 数据知识信息
 #[serde(flatten)],
@@ -71,7 +71,7 @@ ResponseFormat::Data,
     }
 }
 /// 数据知识删除响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataKnowledgeDeleteResponse {
     /// 删除成功标识
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -83,7 +83,7 @@ ResponseFormat::Data,
     }
 }
 /// 数据知识列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataKnowledgeListResponse {
     /// 分页响应数据
 #[serde(flatten)],
@@ -95,7 +95,7 @@ ResponseFormat::Data,
     }
 }
 /// 数据知识分类列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataKnowledgeCategoryListResponse {
     /// 分页响应数据
 #[serde(flatten)],

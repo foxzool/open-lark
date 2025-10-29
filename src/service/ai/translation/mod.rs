@@ -45,7 +45,7 @@ pub struct TranslationService {
     pub config: Config,
 }
 /// 语种检测响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DetectResponse {
     /// 语种检测结果
 #[serde(flatten)],
@@ -57,7 +57,7 @@ ResponseFormat::Data,
     }
 }
 /// 文本翻译响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TranslateResponse {
     /// 翻译结果
 #[serde(flatten)],
@@ -126,7 +126,7 @@ impl TranslationService {
 ///,
     /// # 返回值
 /// 如果配置有效返回 `true`，否则返回 `false`
-    pub fn validate_config(&self) -> bool {,
+    pub fn w+.*{
 !self.config.app_id.is_empty() && !self.config.app_secret.is_empty(),
     }
 /// 获取翻译服务统计信息
@@ -135,7 +135,7 @@ impl TranslationService {
     ///,
 /// # 返回值
     /// 包含服务名称、版本和配置信息的字符串
-pub fn get_service_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "AITranslation{{ service: translation, version: v1, app_id: {} supported_languages: 100+, features: 2 }}",
             self.config.app_id,
@@ -150,7 +150,7 @@ pub fn get_service_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_feature(&self, feature_name: &str) -> bool {,
+    pub fn w+.*{
 matches!(,
             feature_name,
             "language_detection",
@@ -169,7 +169,7 @@ matches!(,
     ///,
 /// # 返回值
     /// 如果服务健康返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         self.validate_config(),
 && self.supports_feature("language_detection"),
             && self.supports_feature("text_translation"),
@@ -180,7 +180,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 支持的语言代码列表
-pub fn get_supported_languages(&self) -> Vec<&'static str> {,
+pub fn w+.*{
         vec![
             "zh", "zh-CN", "zh-TW", "en", "ja", "ko", "fr", "de", "es", "pt", "ru", "ar", "hi",
             "th", "vi", "id", "ms", "tl", "ne", "si", "ta", "te", "ml", "kn", "gu", "pa", "mr",
@@ -198,7 +198,7 @@ pub fn get_supported_languages(&self) -> Vec<&'static str> {,
     ///,
 /// # 返回值
     /// 如果支持该语言对翻译返回 `true`，否则返回 `false`
-    pub fn supports_language_pair(&self, source_lang: &str, target_lang: &str) -> bool {,
+    pub fn w+.*{
 let supported = self.get_supported_languages();
         supported.contains(&source_lang),
 && supported.contains(&target_lang),
@@ -228,14 +228,14 @@ f.debug_struct()
 }
 /// 为 TranslationService 实现 Clone trait
 impl Clone for TranslationService {,
-fn clone(&self) -> Self {,
+fn clone(&self) -> Self {
         Self {
             config: self.config.clone(),
         }
 }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     /// 创建测试配置
 fn create_test_config() -> Config {,

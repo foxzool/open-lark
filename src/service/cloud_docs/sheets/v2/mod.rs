@@ -162,7 +162,7 @@ let config_arc = Arc::new(config.clone());
 }
 impl SpreadsheetSheetService {
     /// 获取共享配置的引用计数指针（试点接口）
-pub fn config_shared(&self) -> Arc<Config> {,
+pub fn w+.*{
         self.config_arc.clone(),
 }
 }

@@ -13,7 +13,7 @@ use crate::prelude::*;
 use crate::service::ccm::sheets::v2::SheetsV2Service;
 use crate::service::ccm::sheets::v3::SheetsV3Service;
 /// 电子表格服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct SheetsService {
     /// v2版本API服务
     pub v2: SheetsV2Service,

@@ -12,7 +12,7 @@ use crate::core::{,
     SDKResult,
 };
 /// 关闭密码保护请求,
-#[derive(Debug, Serialize, Default, Clone)],
+#[derive(.*?)]
 pub struct DeletePasswordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -24,12 +24,12 @@ pub struct DeletePasswordRequest {
     obj_type: String,
 }
 impl DeletePasswordRequest {
-    pub fn builder() -> DeletePasswordRequestBuilder {,
+    pub fn w+.*{
 DeletePasswordRequestBuilder::default(),
     }
 
-    pub fn new(token: impl ToString, obj_type: impl ToString) -> Self {,
-Self {,
+    pub fn new(token: impl ToString, obj_type: impl ToString) -> Self {
+Self {
             token: token.to_string(),
             obj_type: obj_type.to_string()
             ..Default::default(),
@@ -52,48 +52,48 @@ Self {,
         Self::new(token, "wiki"),
 }
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct DeletePasswordRequestBuilder {
     request: DeletePasswordRequest,
 }
 impl DeletePasswordRequestBuilder {
     /// 文档token
-    pub fn token(mut self, token: impl ToString) -> Self {,
+    pub fn token(mut self, token: impl ToString) -> Self {
 self.request.token = token.to_string();
         self,
 },
 /// 文档类型,
-    pub fn obj_type(mut self, obj_type: impl ToString) -> Self {,
+    pub fn obj_type(mut self, obj_type: impl ToString) -> Self {
 self.request.obj_type = obj_type.to_string();
         self,
 },
 /// 设置为文档类型,
-    pub fn as_doc(mut self) -> Self {,
+    pub fn as_doc(mut self) -> Self {
 self.request.obj_type = "doc".to_string();
         self,
 },
 /// 设置为电子表格类型,
-    pub fn as_sheet(mut self) -> Self {,
+    pub fn as_sheet(mut self) -> Self {
 self.request.obj_type = "sheet".to_string();
         self,
 },
 /// 设置为多维表格类型,
-    pub fn as_bitable(mut self) -> Self {,
+    pub fn as_bitable(mut self) -> Self {
 self.request.obj_type = "bitable".to_string();
         self,
 },
 /// 设置为知识库类型,
-    pub fn as_wiki(mut self) -> Self {,
+    pub fn as_wiki(mut self) -> Self {
 self.request.obj_type = "wiki".to_string();
         self,
 },
-pub fn build(mut self) -> DeletePasswordRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 密码删除结果,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct PasswordDeletionResult {
     /// 删除时间
     pub delete_time: Option<i64>,
@@ -105,7 +105,7 @@ pub struct PasswordDeletionResult {
     pub operation_id: Option<String>,
 },
 /// 关闭密码保护响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct DeletePasswordResponse {
     /// 密码删除信息
     pub password_deletion: PasswordDeletionResult,
@@ -141,28 +141,28 @@ Ok(api_resp),
 
 impl PasswordDeletionResult {
 /// 是否有删除时间,
-    pub fn has_delete_time(&self) -> bool {,
+    pub fn w+.*{
 self.delete_time.is_some(),
     },
 /// 是否有操作ID,
-    pub fn has_operation_id(&self) -> bool {,
+    pub fn w+.*{
 self.operation_id.is_some(),
     },
 /// 是否有密码提示,
-    pub fn has_password_hint(&self) -> bool {,
+    pub fn w+.*{
 self.previous_password_hint.is_some(),
     },
 /// 获取删除时间格式化字符串,
-    pub fn delete_time_formatted(&self) -> Option<String> {,
+    pub fn w+.*{
 self.delete_time,
             .map(|timestamp| format!("删除时间: {timestamp}")),
 },
 /// 是否删除成功,
-    pub fn is_successfully_removed(&self) -> bool {,
+    pub fn w+.*{
 self.password_removed,
     },
 /// 获取删除状态描述,
-    pub fn deletion_status(&self) -> &'static str {,
+    pub fn w+.*{
 if self.password_removed {,
             "密码保护已关闭",
 } else {,
@@ -170,7 +170,7 @@ if self.password_removed {,
         },
 },
 /// 获取删除操作摘要,
-    pub fn deletion_summary(&self) -> String {,
+    pub fn w+.*{
 let mut info = Vec::new();
         info.push(self.deletion_status().to_string());
 if let Some(ref hint) = self.previous_password_hint {,
@@ -183,7 +183,7 @@ if let Some(ref op_id) = self.operation_id {,
         info.join(", "),
 },
 /// 获取安全影响评估,
-    pub fn security_impact(&self) -> &'static str {,
+    pub fn w+.*{
 if self.password_removed {,
             "文档安全级别降低，任何有链接的人都可以访问",
 } else {,
@@ -191,7 +191,7 @@ if self.password_removed {,
         },
 },
 /// 删除原因建议,
-    pub fn deletion_reasons(&self) -> Vec<String> {,
+    pub fn w+.*{
 if self.password_removed {,
             vec![
                 "不再需要密码保护".to_string(),
@@ -213,15 +213,15 @@ impl DeletePasswordResponse {
 /// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM,
-    pub fn deletion_info(&self) -> &PasswordDeletionResult {,
+    pub fn w+.*{
 &self.password_deletion,
     },
 /// 是否删除成功,
-    pub fn is_deleted(&self) -> bool {,
+    pub fn w+.*{
 self.password_deletion.password_removed,
     },
 /// 获取删除摘要,
-    pub fn deletion_summary(&self) -> String {,
+    pub fn w+.*{
 self.password_deletion.deletion_summary(),
     },
 /// 安全性评估,
@@ -229,7 +229,7 @@ self.password_deletion.deletion_summary(),
         format!("安全影响: {}", self.password_deletion.security_impact()),
 },
 /// 后续操作建议,
-    pub fn follow_up_recommendations(&self) -> Vec<String> {,
+    pub fn w+.*{
 let mut recommendations = Vec::new();
         if self.is_deleted() {,
 recommendations.push("考虑其他安全措施，如限制分享范围".to_string());
@@ -244,7 +244,7 @@ recommendations.push("联系管理员协助处理".to_string());
 recommendations,
     },
 /// 安全警告,
-    pub fn security_warnings(&self) -> Vec<String> {,
+    pub fn w+.*{
 let mut warnings = Vec::new();
         if self.is_deleted() {,
 warnings.push("⚠️ 密码保护已关闭，文档安全性降低".to_string());
@@ -254,7 +254,7 @@ warnings.push("⚠️ 建议评估是否需要其他安全措施".to_string());
 warnings,
     },
 /// 获取操作记录,
-    pub fn operation_log(&self) -> String {,
+    pub fn w+.*{
 let mut log_parts = Vec::new();
         log_parts.push("操作: 关闭密码保护".to_string());
 log_parts.push(format!(,
@@ -273,7 +273,7 @@ if let Some(ref op_id) = self.password_deletion.operation_id {,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_delete_password_request_builder() {,

@@ -3,7 +3,7 @@
 // 提供文档导出任务相关的功能
 use crate::prelude::*;
 /// 导出任务服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct ExportTasksService {
     client: std::sync::Arc<LarkClient>,
 }

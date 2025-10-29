@@ -18,7 +18,7 @@ pub struct InfoService {
     pub config: Config,
 }
 /// 获取机器人信息响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetBotInfoResponse {
     /// 机器人信息
     pub bot: Bot,

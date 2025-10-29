@@ -19,7 +19,7 @@ pub struct FileService {
     pub config: Config,
 }
 /// 上传文件响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UploadFileResponse {
     /// 文件信息
     pub file: ApprovalFile,

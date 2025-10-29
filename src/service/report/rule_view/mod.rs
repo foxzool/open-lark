@@ -52,7 +52,7 @@ let api_req = ApiRequest {,
 }
 }
 /// 规则看板移除响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RuleViewRemoveResponse {
     /// 移除是否成功
     pub success: bool,

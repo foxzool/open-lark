@@ -4,7 +4,7 @@
 use crate::prelude::*;
 use crate::service::app_engine::apps::v1::AppsV1Service;
 /// 应用管理服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct AppsService {
     /// v1版本API服务
     pub v1: AppsV1Service,

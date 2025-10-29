@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2DriveFileCreatedV1 {
     pub schema: String,
     pub header: EventHeader,
@@ -28,18 +28,18 @@ impl<F> P2DriveFileCreatedV1ProcessorImpl<F>,
 where
     F: Fn(P2DriveFileCreatedV1) + 'static,
 {,
-pub(crate) fn new(f: F) -> Self {,
+pub(crate) fn new(f: F) -> Self {
         P2DriveFileCreatedV1ProcessorImpl { f },
 }
 },
 /// 云文档文件创建事件数据,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2DriveFileCreatedV1Data {
     /// 事件对象
     pub object: DriveFileEventObject,
 },
 /// 云文档文件事件对象,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DriveFileEventObject {
     /// 对象类型 (file)
     pub object_type: String,
@@ -47,7 +47,7 @@ pub struct DriveFileEventObject {
     pub file: DriveFile,
 },
 /// 云文档文件信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DriveFile {
     /// 文件token
     pub file_token: String,
@@ -93,7 +93,7 @@ pub struct DriveFile {
     pub shortcut_target_token: Option<String>,
 },
 /// 文件状态,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DriveFileStatus {
     /// 是否被删除,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -103,7 +103,7 @@ pub struct DriveFileStatus {
     pub is_in_trash: Option<bool>,
 },
 /// 文件权限信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DriveFilePermissions {
     /// 是否可编辑,
 #[serde(skip_serializing_if = "Option::is_none")],

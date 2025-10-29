@@ -19,7 +19,7 @@ pub struct InstanceService {
     pub config: Config,
 }
 /// 创建审批实例请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateInstanceRequest {
     /// 审批定义编码
     pub approval_code: String,
@@ -37,7 +37,7 @@ pub struct CreateInstanceRequest {
     pub uuid: Option<String>,
 }
 /// 创建审批实例响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateInstanceResponse {
     /// 审批实例编码
     pub instance_code: String,
@@ -48,7 +48,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取审批实例响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetInstanceResponse {
     /// 审批实例信息
     pub instance: ApprovalInstance,
@@ -59,7 +59,7 @@ ResponseFormat::Data,
     }
 }
 /// 审批实例列表响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListInstanceResponse {
     /// 审批实例ID列表
     pub instance_code_list: Vec<String>,
@@ -74,7 +74,7 @@ ResponseFormat::Data,
     }
 }
 /// 抄送审批实例请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CcInstanceRequest {
     /// 抄送用户ID列表
     pub user_id_list: Vec<String>,
@@ -83,7 +83,7 @@ pub struct CcInstanceRequest {
     pub cc_message: Option<String>,
 }
 /// 预览审批流程请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PreviewInstanceRequest {
     /// 审批定义编码
     pub approval_code: String,
@@ -98,13 +98,13 @@ pub struct PreviewInstanceRequest {
     pub form: Option<serde_json::Value>,
 }
 /// 预览审批流程响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PreviewInstanceResponse {
     /// 预览流程信息
     pub preview_nodes: Vec<PreviewNode>,
 }
 /// 预览节点
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PreviewNode {
     /// 节点ID
     pub node_id: String,
@@ -121,7 +121,7 @@ ResponseFormat::Data,
     }
 }
 /// 实例列表查询参数
-#[derive(Debug, Default)],
+#[derive(.*?)]
 pub struct ListInstanceParams {
     pub page_size: Option<i32>,
     pub page_token: Option<String>,

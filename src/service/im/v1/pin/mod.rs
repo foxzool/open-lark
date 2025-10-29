@@ -21,7 +21,7 @@ pub struct PinService {
     pub config: Config,
 }
 /// Pin信息响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreatePinResponse {
     /// Pin信息
     pub pin: PinInfo,
@@ -29,7 +29,7 @@ pub struct CreatePinResponse {
 // 接入统一 Service 抽象（IM v1 - PinService）
 impl_full_service!(PinService, "im.pin", "v1");
 /// Pin信息
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PinInfo {
     /// Pin ID
     pub pin_id: String,
@@ -48,7 +48,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取Pin消息列表响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListPinResponse {
     /// Pin消息列表
     pub pins: Vec<Pin>,

@@ -19,7 +19,7 @@ pub struct EventService {
     pub config: Config,
 }
 /// 订阅事件请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SubscribeEventRequest {
     /// 事件类型
     pub event_type: String,
@@ -27,7 +27,7 @@ pub struct SubscribeEventRequest {
     pub callback_url: String,
 }
 /// 订阅事件响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SubscribeEventResponse {
     /// 订阅状态
     pub subscription: SubscriptionStatus,
@@ -38,7 +38,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取订阅状态响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetSubscriptionResponse {
     /// 订阅状态
     pub subscription: SubscriptionStatus,

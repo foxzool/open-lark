@@ -171,7 +171,7 @@ pub fn new() -> Self {
 }
 /// 使用共享配置创建服务（实验性）
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             v1: v1::V1::new(shared.as_ref().clone()),
         }
 }
@@ -181,7 +181,7 @@ Self {,
     ///,
 /// # 返回值
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
-pub fn validate_directory_services_config(&self) -> bool {,
+pub fn w+.*{
         // 检查配置是否有效
 !self.v1.employee.config.app_id.is_empty(),
             && !self.v1.employee.config.app_secret.is_empty(),
@@ -194,7 +194,7 @@ pub fn validate_directory_services_config(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_directory_service_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "DirectoryService{{ services: 1, sub_services: 2, app_id: {} api_version: v1, employee_management: true, department_management: true }}",
             self.v1.employee.config.app_id,
@@ -209,7 +209,7 @@ pub fn get_directory_service_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_directory_feature(&self, directory_feature: &str) -> bool {,
+    pub fn w+.*{
 matches!(,
             directory_feature,
             "employee_management",
@@ -258,7 +258,7 @@ matches!(,
     ///,
 /// # 返回值
     /// 如果所有服务配置有效返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         !self.v1.employee.config.app_id.is_empty(),
 && !self.v1.employee.config.app_secret.is_empty(),
             && !self.v1.department.config.app_id.is_empty(),
@@ -271,7 +271,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含各类型服务数量的统计信息
-pub fn get_directory_categories_statistics(&self) -> String {,
+pub fn w+.*{
         "DirectoryService Categories{ employee: 3, department: 2, organization: 3, integration: 2, total: 10 }".to_string(),
 }
 /// 获取组织架构服务状态摘要
@@ -280,7 +280,7 @@ pub fn get_directory_categories_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各服务状态信息的字符串
-pub fn get_directory_service_status_summary(&self) -> String {,
+pub fn w+.*{
         let config_healthy = !self.v1.employee.config.app_id.is_empty();
 let employee_healthy = config_healthy;
         let department_healthy = config_healthy;
@@ -298,7 +298,7 @@ format!(,
     ///,
 /// # 返回值
     /// 包含组织架构能力矩阵信息的字符串
-pub fn get_directory_capabilities_matrix(&self) -> String {,
+pub fn w+.*{
         format!(
             "DirectoryService Capabilities{{ employee: {} department: {} organization: {} integration: true, analytics: true }}",
             self.supports_directory_feature("employee_management"),
@@ -312,7 +312,7 @@ pub fn get_directory_capabilities_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含员工管理能力信息的字符串
-pub fn get_employee_management_capabilities(&self) -> String {,
+pub fn w+.*{
         "DirectoryService Employee{ create: true, update: true, delete: true, search: true, bulk: true, lifecycle: true, analytics: true }".to_string(),
 }
 /// 获取部门管理能力矩阵
@@ -321,7 +321,7 @@ pub fn get_employee_management_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含部门管理能力信息的字符串
-pub fn get_department_management_capabilities(&self) -> String {,
+pub fn w+.*{
         "DirectoryService Department{ hierarchy: true, structure: true, permissions: true, reporting: true, analytics: true }".to_string(),
 }
 /// 获取组织架构管理能力矩阵
@@ -330,7 +330,7 @@ pub fn get_department_management_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含组织架构管理能力信息的字符串
-pub fn get_organization_structure_capabilities(&self) -> String {,
+pub fn w+.*{
         "DirectoryService Organization{ tree_view: true, visualization: true, change_management: true, compliance: true, planning: true }".to_string(),
 }
 /// 获取数据同步能力矩阵
@@ -339,7 +339,7 @@ pub fn get_organization_structure_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含数据同步能力信息的字符串
-pub fn get_data_synchronization_capabilities(&self) -> String {,
+pub fn w+.*{
         "DirectoryService Sync{ real_time: true, scheduled: true, validation: true, audit: true, recovery: true, consistency: true }".to_string(),
 }
 /// 获取HR集成能力矩阵
@@ -348,7 +348,7 @@ pub fn get_data_synchronization_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含HR集成能力信息的字符串
-pub fn get_hr_integration_capabilities(&self) -> String {,
+pub fn w+.*{
         "DirectoryService HRFIntegration{ hris: true, performance: true, payroll: true, recruitment: true, onboarding: true, offboarding: true }".to_string(),
 }
 /// 获取企业级能力矩阵
@@ -357,7 +357,7 @@ pub fn get_hr_integration_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含企业级能力信息的字符串
-pub fn get_enterprise_directory_capabilities(&self) -> String {,
+pub fn w+.*{
         "DirectoryService Enterprise{ compliance: true, audit: true, security: true, scalability: true, customization: true }".to_string(),
 }
 /// 获取组织架构性能指标
@@ -366,7 +366,7 @@ pub fn get_enterprise_directory_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含性能指标信息的字符串
-pub fn get_directory_performance_metrics(&self) -> String {,
+pub fn w+.*{
         "DirectoryService Performance{ scalability: enterprise, reliability: 99.9%, latency: <200ms, concurrency: high, availability: 99.95% }".to_string(),
 }
 /// 获取组织架构应用场景矩阵
@@ -375,7 +375,7 @@ pub fn get_directory_performance_metrics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含应用场景信息的字符串
-pub fn get_directory_use_cases_matrix(&self) -> String {,
+pub fn w+.*{
         "DirectoryService UseCases{ enterprise_structure: true, hr_management: true, compliance_tracking: true, data_integrity: true, change_management: true }".to_string(),
 }
 /// 获取员工统计信息
@@ -384,7 +384,7 @@ pub fn get_directory_use_cases_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含员工统计信息的字符串
-pub fn get_employee_statistics(&self) -> String {,
+pub fn w+.*{
         "DirectoryService EmployeeStats{ total_employees: auto, active_employees: auto, departments_count: auto, new_hires_monthly: auto, turnover_rate: auto }".to_string(),
 }
 /// 获取部门统计信息
@@ -393,7 +393,7 @@ pub fn get_employee_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含部门统计信息的字符串
-pub fn get_department_statistics(&self) -> String {,
+pub fn w+.*{
         "DirectoryService DepartmentStats{ total_departments: auto, avg_team_size: auto, hierarchy_depth: auto, sub_departments: auto, manager_ratio: auto }".to_string(),
 }
 /// 获取组织架构变更统计
@@ -402,7 +402,7 @@ pub fn get_department_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含变更统计信息的字符串
-pub fn get_organization_change_statistics(&self) -> String {,
+pub fn w+.*{
         "DirectoryService ChangeStats{ structural_changes: auto, employee_movements: auto, department_reorgs: auto, leadership_changes: auto, compliance_impacts: auto }".to_string(),
 }
 /// 获取HR集成状态信息
@@ -411,7 +411,7 @@ pub fn get_organization_change_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含HR集成状态的字符串
-pub fn get_hr_integration_status(&self) -> String {,
+pub fn w+.*{
         "DirectoryService HRIntegration{ hris_connected: true, last_sync: auto, sync_status: active, error_count: 0, data_quality: excellent }".to_string(),
 }
 /// 获取数据同步状态
@@ -420,7 +420,7 @@ pub fn get_hr_integration_status(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含数据同步状态的字符串
-pub fn get_data_sync_status(&self) -> String {,
+pub fn w+.*{
         "DirectoryService DataSync{ last_sync: auto, sync_health: excellent, pending_changes: 0, conflict_count: 0, sync_latency: <5min }".to_string(),
 }
 /// 获取合规性监控状态
@@ -429,7 +429,7 @@ pub fn get_data_sync_status(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含合规性状态的字符串
-pub fn get_compliance_monitoring_status(&self) -> String {,
+pub fn w+.*{
         "DirectoryService Compliance{ gdpr_compliant: true, audit_ready: true, last_audit: auto, policy_violations: 0, risk_level: low }".to_string(),
 }
 /// 获取权限管理状态
@@ -438,7 +438,7 @@ pub fn get_compliance_monitoring_status(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含权限管理状态的字符串
-pub fn get_permission_management_status(&self) -> String {,
+pub fn w+.*{
         "DirectoryService Permissions{ role_based: true, access_control: fine_grained, privileged_users: monitored, permission_audits: enabled, security_policies: enforced }".to_string(),
 }
 /// 获取组织架构容量信息
@@ -447,7 +447,7 @@ pub fn get_permission_management_status(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含容量信息的字符串
-pub fn get_organization_capacity_info(&self) -> String {,
+pub fn w+.*{
         "DirectoryService Capacity{ max_employees: enterprise, max_departments: enterprise, storage_usage: optimal, api_quota: sufficient, performance: excellent }".to_string(),
 }
 /// 获取分析数据概览
@@ -456,7 +456,7 @@ pub fn get_organization_capacity_info(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含分析数据的字符串
-pub fn get_analytics_overview(&self) -> String {,
+pub fn w+.*{
         "DirectoryService Analytics{ growth_rate: auto, efficiency_metrics: auto, engagement_scores: auto, turnover_predictions: auto, org_health: excellent }".to_string(),
 }
 /// 获取工作流程集成状态
@@ -465,7 +465,7 @@ pub fn get_analytics_overview(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含工作流程状态的字符串
-pub fn get_workflow_integration_status(&self) -> String {,
+pub fn w+.*{
         "DirectoryService Workflows{ onboarding: automated, offboarding: automated, transfers: streamlined, approvals: integrated, notifications: real_time }".to_string(),
 }
 /// 获取移动端管理支持状态
@@ -474,7 +474,7 @@ pub fn get_workflow_integration_status(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含移动端支持状态的字符串
-pub fn get_mobile_management_status(&self) -> String {,
+pub fn w+.*{
         "DirectoryService Mobile{ native_apps: true, push_notifications: true, offline_access: limited, security: enterprise_grade, user_experience: optimized }".to_string(),
 }
 /// 获取API访问统计
@@ -483,7 +483,7 @@ pub fn get_mobile_management_status(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含API访问统计的字符串
-pub fn get_api_access_statistics(&self) -> String {,
+pub fn w+.*{
         "DirectoryService APIAccess{ daily_requests: auto, success_rate: 99.9%, avg_response_time: <100ms, rate_limit_utilization: normal, error_rate: 0.1% }".to_string(),
 }
 /// 获取Webhook支持状态
@@ -492,7 +492,7 @@ pub fn get_api_access_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含Webhook状态的字符串
-pub fn get_webhook_support_status(&self) -> String {,
+pub fn w+.*{
         "DirectoryService Webhooks{ event_subscriptions: true, delivery_reliability: 99.95%, retry_logic: exponential_backoff, authentication: secure, latency: <1s }".to_string(),
 }
 }
@@ -508,8 +508,8 @@ fn service_name() -> &'static str,
     }
 }
 impl Clone for DirectoryService {,
-    fn clone(&self) -> Self {,
-Self {,
+    fn clone(&self) -> Self {
+Self {
             v1: v1::V1::new(self.v1.employee.config.clone()),
         }
 }
@@ -525,7 +525,7 @@ f.debug_struct()
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 /// 创建测试配置

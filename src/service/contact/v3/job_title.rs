@@ -54,7 +54,7 @@ Ok(resp.data.unwrap_or_default()),
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct GetJobTitleResponse {
     pub job_title: JobTitle,
 }
@@ -64,7 +64,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListJobTitlesRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
@@ -72,7 +72,7 @@ pub struct ListJobTitlesRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ListJobTitlesResponse {
     pub items: Vec<JobTitle>,
     #[serde(skip_serializing_if = "Option::is_none")]

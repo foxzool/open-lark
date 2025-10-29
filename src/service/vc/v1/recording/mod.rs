@@ -30,14 +30,14 @@ pub struct RecordingService {
     pub config: Config,
 }
 /// 开始录制请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct StartRecordingRequest {
     /// 录制标题
 #[serde(skip_serializing_if = "Option::is_none")],
     pub title: Option<String>,
 }
 /// 开始录制响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct StartRecordingResponse {
     /// 录制信息
     pub recording: Recording,
@@ -48,7 +48,7 @@ ResponseFormat::Data,
     }
 }
 /// 停止录制响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct StopRecordingResponse {
     /// 录制信息
     pub recording: Recording,
@@ -59,7 +59,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取录制详情响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetRecordingResponse {
     /// 录制信息
     pub recording: Recording,
@@ -70,7 +70,7 @@ ResponseFormat::Data,
     }
 }
 /// 设置录制权限请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SetRecordingPermissionRequest {
     /// 权限类型
     pub permission_type: String,

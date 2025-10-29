@@ -71,7 +71,7 @@ pub fn new() -> Self {
 }
 /// 使用共享配置创建服务（实验性）
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             rule: RuleService::new(shared.as_ref().clone()),
             rule_view: RuleViewService::new(shared.as_ref().clone()),
             task: TaskService::new(shared.as_ref().clone()),
@@ -79,7 +79,7 @@ Self {,
 }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 #[test],

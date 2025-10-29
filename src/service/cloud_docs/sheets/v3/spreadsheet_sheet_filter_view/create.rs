@@ -37,7 +37,7 @@ Ok(api_resp),
     },
 },
 /// 创建筛选视图请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateFilterViewRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -51,41 +51,41 @@ pub struct CreateFilterViewRequest {
     range: String,
 }
 impl CreateFilterViewRequest {
-    pub fn builder() -> CreateFilterViewRequestBuilder {,
+    pub fn w+.*{
 CreateFilterViewRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct CreateFilterViewRequestBuilder {
     request: CreateFilterViewRequest,
 }
 impl CreateFilterViewRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 }
 
-    pub fn filter_view_name(mut self, filter_view_name: impl ToString) -> Self {,
+    pub fn filter_view_name(mut self, filter_view_name: impl ToString) -> Self {
 self.request.filter_view_name = filter_view_name.to_string();
         self,
 }
 
-    pub fn range(mut self, range: impl ToString) -> Self {,
+    pub fn range(mut self, range: impl ToString) -> Self {
 self.request.range = range.to_string();
         self,
 },
-pub fn build(mut self) -> CreateFilterViewRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 创建筛选视图响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct CreateFilterViewResponseData {
     /// 筛选视图 ID
     pub filter_view_id: String,

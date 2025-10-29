@@ -23,7 +23,7 @@ use crate::,
     }
 };
 /// 关联组织管理服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct CollaborationOrganizationService {
     pub config: Config,
 }
@@ -255,7 +255,7 @@ if let Some(status) = request.status {,
 }
 }
 /// 组织列表查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct OrganizationListRequest {
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -265,7 +265,7 @@ pub struct OrganizationListRequest {
     pub page_size: Option<i32>,
 }
 /// 组织列表查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OrganizationListResponse {
     /// 关联组织列表
 #[serde(flatten)],
@@ -277,7 +277,7 @@ ResponseFormat::Data,
     }
 }
 /// 组织架构查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OrganizationStructureResponse {
     /// 组织架构信息
     pub organization_structure: OrganizationStructure,
@@ -288,7 +288,7 @@ ResponseFormat::Data,
     }
 }
 /// 组织详情查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OrganizationGetResponse {
     /// 关联组织详情
     pub organization: CollaborationOrganization,
@@ -299,7 +299,7 @@ ResponseFormat::Data,
     }
 }
 /// 组织成员详情查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OrganizationUserGetResponse {
     /// 成员详情
     pub user: CollaborationUser,
@@ -310,7 +310,7 @@ ResponseFormat::Data,
     }
 }
 /// 组织部门详情查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OrganizationDepartmentGetResponse {
     /// 部门详情
     pub department: CollaborationDepartment,
@@ -321,7 +321,7 @@ ResponseFormat::Data,
     }
 }
 /// 共享成员范围列表查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct SharedMemberScopeListRequest {
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -331,7 +331,7 @@ pub struct SharedMemberScopeListRequest {
     pub page_size: Option<i32>,
 }
 /// 共享成员范围列表查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SharedMemberScopeListResponse {
     /// 共享成员范围列表
 #[serde(flatten)],
@@ -343,7 +343,7 @@ ResponseFormat::Data,
     }
 }
 /// 管理员组织列表查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct AdminOrganizationListRequest {
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -356,7 +356,7 @@ pub struct AdminOrganizationListRequest {
     pub status: Option<String>,
 }
 /// 管理员组织列表查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AdminOrganizationListResponse {
     /// 关联组织列表
 #[serde(flatten)],

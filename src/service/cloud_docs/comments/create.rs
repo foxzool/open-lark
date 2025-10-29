@@ -20,7 +20,7 @@ use crate::,
 
 use super::list::{ContentElement, ReplyContent, TextRun};
 /// 添加全文评论请求,
-#[derive(Debug, Serialize, Default, Clone)],
+#[derive(.*?)]
 pub struct CreateCommentRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -37,12 +37,12 @@ pub struct CreateCommentRequest {
     user_id_type: Option<String>,
 }
 impl CreateCommentRequest {
-    pub fn builder() -> CreateCommentRequestBuilder {,
+    pub fn w+.*{
 CreateCommentRequestBuilder::default(),
     }
 
-    pub fn new(file_token: impl ToString, file_type: impl ToString, content: ReplyContent) -> Self {,
-Self {,
+    pub fn new(file_token: impl ToString, file_type: impl ToString, content: ReplyContent) -> Self {
+Self {
             file_token: file_token.to_string(),
             file_type: file_type.to_string(),
             content,
@@ -54,7 +54,7 @@ Self {,
         file_token: impl ToString,
         file_type: impl ToString,
         text: impl ToString,
-    ) -> Self {,
+    ) -> Self {
 let content = ReplyContent {,
             elements: vec![ContentElement {
                 element_type: "text_run".to_string(),
@@ -68,48 +68,48 @@ let content = ReplyContent {,
         Self::new(file_token, file_type, content),
 }
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct CreateCommentRequestBuilder {
     request: CreateCommentRequest,
 }
 impl CreateCommentRequestBuilder {
     /// 文档token
-    pub fn file_token(mut self, file_token: impl ToString) -> Self {,
+    pub fn file_token(mut self, file_token: impl ToString) -> Self {
 self.request.file_token = file_token.to_string();
         self,
 },
 /// 文档类型,
-    pub fn file_type(mut self, file_type: impl ToString) -> Self {,
+    pub fn file_type(mut self, file_type: impl ToString) -> Self {
 self.request.file_type = file_type.to_string();
         self,
 },
 /// 设置为文档类型,
-    pub fn with_doc_type(mut self) -> Self {,
+    pub fn with_doc_type(mut self) -> Self {
 self.request.file_type = "doc".to_string();
         self,
 },
 /// 设置为docx类型,
-    pub fn with_docx_type(mut self) -> Self {,
+    pub fn with_docx_type(mut self) -> Self {
 self.request.file_type = "docx".to_string();
         self,
 },
 /// 设置为电子表格类型,
-    pub fn with_sheet_type(mut self) -> Self {,
+    pub fn with_sheet_type(mut self) -> Self {
 self.request.file_type = "sheet".to_string();
         self,
 },
 /// 设置为多维表格类型,
-    pub fn with_bitable_type(mut self) -> Self {,
+    pub fn with_bitable_type(mut self) -> Self {
 self.request.file_type = "bitable".to_string();
         self,
 },
 /// 回复内容,
-    pub fn content(mut self, content: ReplyContent) -> Self {,
+    pub fn content(mut self, content: ReplyContent) -> Self {
 self.request.content = content;
         self,
 },
 /// 添加文本内容,
-    pub fn text(mut self, text: impl ToString) -> Self {,
+    pub fn text(mut self, text: impl ToString) -> Self {
 let element = ContentElement {,
             element_type: "text_run".to_string(),
             text_run: Some(TextRun {
@@ -121,7 +121,7 @@ self.request.content.elements.push(element);
         self,
 },
 /// 添加带样式的文本内容,
-    pub fn styled_text(mut self, text: impl ToString, style: serde_json::Value) -> Self {,
+    pub fn styled_text(mut self, text: impl ToString, style: serde_json::Value) -> Self {
 let element = ContentElement {,
             element_type: "text_run".to_string(),
             text_run: Some(TextRun {
@@ -133,46 +133,46 @@ self.request.content.elements.push(element);
         self,
 },
 /// 添加粗体文本,
-    pub fn bold_text(self, text: impl ToString) -> Self {,
+    pub fn bold_text(self, text: impl ToString) -> Self {
 let style = serde_json::json!({,
             "bold": true,
 });
         self.styled_text(text, style),
 },
 /// 添加斜体文本,
-    pub fn italic_text(self, text: impl ToString) -> Self {,
+    pub fn italic_text(self, text: impl ToString) -> Self {
 let style = serde_json::json!({,
             "italic": true,
 });
         self.styled_text(text, style),
 },
 /// 用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
 },
 /// 使用OpenID,
-    pub fn with_open_id(mut self) -> Self {,
+    pub fn with_open_id(mut self) -> Self {
 self.request.user_id_type = Some("open_id".to_string());
         self,
 },
 /// 使用UserID,
-    pub fn with_user_id(mut self) -> Self {,
+    pub fn with_user_id(mut self) -> Self {
 self.request.user_id_type = Some("user_id".to_string());
         self,
 },
 /// 使用UnionID,
-    pub fn with_union_id(mut self) -> Self {,
+    pub fn with_union_id(mut self) -> Self {
 self.request.user_id_type = Some("union_id".to_string());
         self,
 },
-pub fn build(mut self) -> CreateCommentRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 创建的评论信息,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct CreatedComment {
     /// 评论ID
     pub comment_id: String,
@@ -196,7 +196,7 @@ impl_executable_builder_owned!(
     create,
 );
 /// 添加全文评论响应
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct CreateCommentResponse {
     /// 创建的评论信息
     pub comment: CreatedComment,
@@ -238,7 +238,7 @@ Ok(api_resp),
 
 impl CreatedComment {
 /// 是否为全文评论,
-    pub fn is_whole_comment(&self) -> bool {,
+    pub fn w+.*{
 self.is_whole.unwrap_or(false),
     },
 /// 获取创建时间的格式化字符串,
@@ -246,7 +246,7 @@ self.is_whole.unwrap_or(false),
         format!("创建时间: {}", self.create_time),
 },
 /// 是否已解决,
-    pub fn is_solved(&self) -> bool {,
+    pub fn w+.*{
 self.is_solved,
     },
 },
@@ -255,13 +255,13 @@ pub struct ContentBuilder {
     elements: Vec<ContentElement>,
 }
 impl ContentBuilder {
-    pub fn new() -> Self {,
-Self {,
+    pub fn new() -> Self {
+Self {
             elements: Vec::new(),
         },
 },
 /// 添加普通文本,
-    pub fn add_text(mut self, text: impl ToString) -> Self {,
+    pub fn add_text(mut self, text: impl ToString) -> Self {
 self.elements.push(ContentElement {,
             element_type: "text_run".to_string(),
             text_run: Some(TextRun {
@@ -272,7 +272,7 @@ self.elements.push(ContentElement {,
 self,
     },
 /// 添加带样式的文本,
-    pub fn add_styled_text(mut self, text: impl ToString, style: serde_json::Value) -> Self {,
+    pub fn add_styled_text(mut self, text: impl ToString, style: serde_json::Value) -> Self {
 self.elements.push(ContentElement {,
             element_type: "text_run".to_string(),
             text_run: Some(TextRun {
@@ -298,20 +298,20 @@ self,
         self.add_styled_text(text, style),
 },
 /// 构建回复内容,
-    pub fn build(self) -> ReplyContent {,
+    pub fn w+.*{
 ReplyContent {,
             elements: self.elements,
         },
 }
 }
 impl Default for ContentBuilder {,
-    fn default() -> Self {,
+    fn default() -> Self {
 Self::new(),
     },
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_create_comment_request_builder() {,

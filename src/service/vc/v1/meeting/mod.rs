@@ -31,19 +31,19 @@ pub struct MeetingService {
     pub config: Config,
 }
 /// 邀请参会人请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct InviteMeetingRequest {
     /// 邀请的用户ID列表
     pub invitees: Vec<String>,
 }
 /// 邀请参会人响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct InviteMeetingResponse {
     /// 邀请结果
     pub invite_results: Vec<InviteResult>,
 }
 /// 邀请结果
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct InviteResult {
     /// 用户ID
     pub user_id: String,
@@ -58,19 +58,19 @@ ResponseFormat::Data,
     }
 }
 /// 移除参会人请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct KickoutMeetingRequest {
     /// 要移除的用户ID列表
     pub kickout_users: Vec<String>,
 }
 /// 移除参会人响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct KickoutMeetingResponse {
     /// 移除结果
     pub kickout_results: Vec<KickoutResult>,
 }
 /// 移除结果
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct KickoutResult {
     /// 用户ID
     pub user_id: String,
@@ -85,13 +85,13 @@ ResponseFormat::Data,
     }
 }
 /// 设置主持人请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SetHostRequest {
     /// 新主持人用户ID
     pub host_user_id: String,
 }
 /// 获取会议详情响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetMeetingResponse {
     /// 会议信息
     pub meeting: Meeting,
@@ -102,7 +102,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取会议列表响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListMeetingsByNoResponse {
     /// 会议列表
     pub meetings: Vec<Meeting>,
@@ -117,7 +117,7 @@ ResponseFormat::Data,
     }
 }
 /// 会议列表查询参数
-#[derive(Debug, Default)],
+#[derive(.*?)]
 pub struct ListMeetingsByNoParams {
     pub page_size: Option<i32>,
     pub page_token: Option<String>,
@@ -293,7 +293,7 @@ fn service_version() -> &'static str {,
 }
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
     use crate::service::vc::models::{Meeting, MeetingStatus, UserInfo};
 fn create_test_config() -> Config {,

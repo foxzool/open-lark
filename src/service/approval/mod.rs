@@ -153,7 +153,7 @@ pub fn new() -> Self {
     ///,
 /// # 返回值
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
-pub fn validate_approval_services_config(&self) -> bool {,
+pub fn w+.*{
         // 检查配置是否有效 - 这里简化为检查基础配置
 !self.v4.approval.config.app_id.is_empty() && !self.v4.approval.config.app_secret.is_empty(),
     }
@@ -163,7 +163,7 @@ pub fn validate_approval_services_config(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_approval_service_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "ApprovalService{{ services: 1, sub_services: 10, app_id: {} api_version: v4, workflow_engine: true, external_integration: true }}",
             self.v4.approval.config.app_id,
@@ -178,7 +178,7 @@ pub fn get_approval_service_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_approval_feature(&self, approval_feature: &str) -> bool {,
+    pub fn w+.*{
 matches!(,
             approval_feature,
             "approval_workflow",
@@ -216,7 +216,7 @@ matches!(,
     ///,
 /// # 返回值
     /// 如果所有服务配置有效返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         !self.v4.approval.config.app_id.is_empty(),
 && !self.v4.approval.config.app_secret.is_empty(),
             && self.validate_approval_services_config(),
@@ -227,7 +227,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含各类型服务数量的统计信息
-pub fn get_approval_categories_statistics(&self) -> String {,
+pub fn w+.*{
         "ApprovalService Categories{ core: 3, external: 3, communication: 2, search: 1, integration: 1, total: 10 }".to_string(),
 }
 /// 获取审批服务状态摘要
@@ -236,7 +236,7 @@ pub fn get_approval_categories_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各服务状态信息的字符串
-pub fn get_approval_service_status_summary(&self) -> String {,
+pub fn w+.*{
         let config_healthy = !self.v4.approval.config.app_id.is_empty();
 let core_healthy = config_healthy;
         let external_healthy = config_healthy;
@@ -255,7 +255,7 @@ let integration_healthy = config_healthy;
     ///,
 /// # 返回值
     /// 包含审批能力矩阵信息的字符串
-pub fn get_approval_capabilities_matrix(&self) -> String {,
+pub fn w+.*{
         format!(
             "ApprovalService Capabilities{{ workflow: {} instance: true, task: true, integration: true, analytics: true }}",
             self.supports_approval_feature("approval_workflow"),
@@ -267,7 +267,7 @@ pub fn get_approval_capabilities_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含工作流引擎能力信息的字符串
-pub fn get_workflow_engine_capabilities(&self) -> String {,
+pub fn w+.*{
         "ApprovalService WorkflowEngine{ multi_level: true, conditional: true, parallel: true, timeout: true, escalation: true }".to_string(),
 }
 /// 获取实例管理能力矩阵
@@ -276,7 +276,7 @@ pub fn get_workflow_engine_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含实例管理能力信息的字符串
-pub fn get_instance_management_capabilities(&self) -> String {,
+pub fn w+.*{
         "ApprovalService InstanceManagement{ creation: true, tracking: true, modification: true, delegation: true, audit: true }".to_string(),
 }
 /// 获取任务处理能力矩阵
@@ -285,7 +285,7 @@ pub fn get_instance_management_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含任务处理能力信息的字符串
-pub fn get_task_processing_capabilities(&self) -> String {,
+pub fn w+.*{
         "ApprovalService TaskProcessing{ assignment: true, approval: true, rejection: true, forwarding: true, batch: true }".to_string(),
 }
 /// 获取外部集成能力矩阵
@@ -294,7 +294,7 @@ pub fn get_task_processing_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含外部集成能力信息的字符串
-pub fn get_external_integration_capabilities(&self) -> String {,
+pub fn w+.*{
         "ApprovalService ExternalIntegration{ sync: true, api: true, webhook: true, data_mapping: true, monitoring: true }".to_string(),
 }
 /// 获取企业级能力矩阵
@@ -303,7 +303,7 @@ pub fn get_external_integration_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含企业级能力信息的字符串
-pub fn get_enterprise_approval_capabilities(&self) -> String {,
+pub fn w+.*{
         "ApprovalService Enterprise{ security: true, compliance: true, audit: true, reporting: true, analytics: true }".to_string(),
 }
 /// 获取审批性能指标
@@ -312,7 +312,7 @@ pub fn get_enterprise_approval_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含性能指标信息的字符串
-pub fn get_approval_performance_metrics(&self) -> String {,
+pub fn w+.*{
         "ApprovalService Performance{ scalability: enterprise, reliability: 99.99%, latency: <200ms, concurrency: high, availability: 99.995% }".to_string(),
 }
 /// 获取审批应用场景矩阵
@@ -321,7 +321,7 @@ pub fn get_approval_performance_metrics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含应用场景信息的字符串
-pub fn get_approval_use_cases_matrix(&self) -> String {,
+pub fn w+.*{
         "ApprovalService UseCases{ finance_approval: true, hr_approval: true, procurement_approval: true, project_approval: true, compliance_approval: true }".to_string(),
 }
 }
@@ -338,8 +338,8 @@ fn service_name() -> &'static str,
     }
 }
 impl Clone for ApprovalService {,
-    fn clone(&self) -> Self {,
-Self {,
+    fn clone(&self) -> Self {
+Self {
             v4: V4::new(self.v4.approval.config.clone()),
         }
 }
@@ -355,7 +355,7 @@ f.debug_struct()
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 /// 创建测试配置

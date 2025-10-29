@@ -8,7 +8,7 @@ use crate::service::feishu_people::core::v1::positions::PositionsService;
 use crate::service::feishu_people::core::v1::contracts::ContractsService;
 use crate::service::feishu_people::core::v1::companies::CompaniesService;
 /// 核心人事管理v1版本服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct CoreV1Service {
     client: std::sync::Arc<LarkClient>,
     /// 人员管理服务

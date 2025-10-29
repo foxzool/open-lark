@@ -20,7 +20,7 @@ pub struct AttachmentService {
     pub config: Config,
 }
 /// 上传附件请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UploadAttachmentRequest {
     /// 文件名
     pub name: String,
@@ -32,7 +32,7 @@ pub struct UploadAttachmentRequest {
     pub parent_id: String,
 }
 /// 上传附件响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UploadAttachmentResponse {
     /// 附件
     pub attachment: Attachment,
@@ -43,7 +43,7 @@ ResponseFormat::Data,
     }
 }
 /// 附件列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListAttachmentsResponse {
     /// 附件列表
     pub items: Vec<Attachment>,
@@ -60,7 +60,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取附件响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetAttachmentResponse {
     /// 附件详情
     pub attachment: Attachment,
@@ -180,7 +180,7 @@ let api_req = ApiRequest {,
 }
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 fn create_test_config() -> Config {,
         Config::default(),

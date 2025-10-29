@@ -256,7 +256,7 @@ fn service_version() -> &'static str {,
 }
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use super::*;
     use crate::service::attendance::v1::models::{
         ExceptDateRule, MemberRule, ShiftRule, WorkDayRule,

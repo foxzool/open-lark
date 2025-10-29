@@ -18,7 +18,7 @@ use crate::,
     impl_executable_builder_owned,
 };
 /// 获取云文档所有评论请求,
-#[derive(Debug, Serialize, Default, Clone)],
+#[derive(.*?)]
 pub struct ListCommentsRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -45,104 +45,104 @@ pub struct ListCommentsRequest {
     user_id_type: Option<String>,
 }
 impl ListCommentsRequest {
-    pub fn builder() -> ListCommentsRequestBuilder {,
+    pub fn w+.*{
 ListCommentsRequestBuilder::default(),
     }
 
-    pub fn new(file_token: impl ToString, file_type: impl ToString) -> Self {,
-Self {,
+    pub fn new(file_token: impl ToString, file_type: impl ToString) -> Self {
+Self {
             file_token: file_token.to_string(),
             file_type: file_type.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct ListCommentsRequestBuilder {
     request: ListCommentsRequest,
 }
 impl ListCommentsRequestBuilder {
     /// 文档token
-    pub fn file_token(mut self, file_token: impl ToString) -> Self {,
+    pub fn file_token(mut self, file_token: impl ToString) -> Self {
 self.request.file_token = file_token.to_string();
         self,
 },
 /// 文档类型,
-    pub fn file_type(mut self, file_type: impl ToString) -> Self {,
+    pub fn file_type(mut self, file_type: impl ToString) -> Self {
 self.request.file_type = file_type.to_string();
         self,
 },
 /// 设置为文档类型,
-    pub fn with_doc_type(mut self) -> Self {,
+    pub fn with_doc_type(mut self) -> Self {
 self.request.file_type = "doc".to_string();
         self,
 },
 /// 设置为docx类型,
-    pub fn with_docx_type(mut self) -> Self {,
+    pub fn with_docx_type(mut self) -> Self {
 self.request.file_type = "docx".to_string();
         self,
 },
 /// 设置为电子表格类型,
-    pub fn with_sheet_type(mut self) -> Self {,
+    pub fn with_sheet_type(mut self) -> Self {
 self.request.file_type = "sheet".to_string();
         self,
 },
 /// 设置为多维表格类型,
-    pub fn with_bitable_type(mut self) -> Self {,
+    pub fn with_bitable_type(mut self) -> Self {
 self.request.file_type = "bitable".to_string();
         self,
 },
 /// 是否是全文评论,
-    pub fn set_whole(mut self, is_whole: bool) -> Self {,
+    pub fn set_whole(mut self, is_whole: bool) -> Self {
 self.request.is_whole = Some(is_whole);
         self,
 },
 /// 只获取全文评论,
-    pub fn whole_comments_only(mut self) -> Self {,
+    pub fn whole_comments_only(mut self) -> Self {
 self.request.is_whole = Some(true);
         self,
 },
 /// 获取所有类型评论,
-    pub fn all_comment_types(mut self) -> Self {,
+    pub fn all_comment_types(mut self) -> Self {
 self.request.is_whole = None;
         self,
 },
 /// 是否获取已解决的评论,
-    pub fn set_solved(mut self, is_solved: bool) -> Self {,
+    pub fn set_solved(mut self, is_solved: bool) -> Self {
 self.request.is_solved = Some(is_solved);
         self,
 },
 /// 只获取已解决的评论,
-    pub fn solved_comments_only(mut self) -> Self {,
+    pub fn solved_comments_only(mut self) -> Self {
 self.request.is_solved = Some(true);
         self,
 },
 /// 只获取未解决的评论,
-    pub fn unsolved_comments_only(mut self) -> Self {,
+    pub fn unsolved_comments_only(mut self) -> Self {
 self.request.is_solved = Some(false);
         self,
 },
 /// 获取所有评论（无论是否解决）,
-    pub fn all_comments(mut self) -> Self {,
+    pub fn all_comments(mut self) -> Self {
 self.request.is_solved = None;
         self,
 },
 /// 分页大小,
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
 },
 /// 分页标记,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
 },
 /// 用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
 },
-pub fn build(mut self) -> ListCommentsRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -156,7 +156,7 @@ impl_executable_builder_owned!(
     list,
 );
 /// 评论信息
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct Comment {
     /// 评论ID
     pub comment_id: String,
@@ -184,7 +184,7 @@ pub struct Comment {
     pub quote: Option<String>,
 },
 /// 回复信息,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct Reply {
     /// 回复ID
     pub reply_id: String,
@@ -200,13 +200,13 @@ pub struct Reply {
     pub extra: Option<serde_json::Value>,
 },
 /// 回复内容,
-#[derive(Debug, Serialize, Deserialize, Default, Clone)],
+#[derive(.*?)]
 pub struct ReplyContent {
     /// 元素列表
     pub elements: Vec<ContentElement>,
 },
 /// 内容元素,
-#[derive(Debug, Serialize, Deserialize, Clone)],
+#[derive(.*?)]
 pub struct ContentElement {
     /// 元素类型,
 #[serde(rename = "type")],
@@ -215,7 +215,7 @@ pub struct ContentElement {
     pub text_run: Option<TextRun>,
 },
 /// 文本内容,
-#[derive(Debug, Serialize, Deserialize, Clone)],
+#[derive(.*?)]
 pub struct TextRun {
     /// 文本内容
     pub text: String,
@@ -223,7 +223,7 @@ pub struct TextRun {
     pub style: Option<serde_json::Value>,
 },
 /// 获取云文档所有评论响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct ListCommentsResponse {
     /// 评论列表
     pub items: Vec<Comment>,
@@ -278,7 +278,7 @@ Ok(api_resp),
 
 impl Comment {
 /// 获取评论的文本内容,
-    pub fn get_text_content(&self) -> String {,
+    pub fn w+.*{
 if let Some(replies) = &self.reply_list {,
             replies,
 .iter()
@@ -290,7 +290,7 @@ String::new(),
         },
 },
 /// 是否有回复,
-    pub fn has_replies(&self) -> bool {,
+    pub fn w+.*{
 self.reply_list,
             .as_ref()
 .is_some_and(|replies| !replies.is_empty()),
@@ -302,7 +302,7 @@ self.reply_list,
 }
 impl Reply {
     /// 获取回复的文本内容,
-pub fn get_text_content(&self) -> String {,
+pub fn w+.*{
         self.content,
 .elements,
             .iter()
@@ -315,7 +315,7 @@ pub fn get_text_content(&self) -> String {,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_list_comments_request_builder() {,

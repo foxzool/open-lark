@@ -24,7 +24,7 @@ pub struct TagService {
     pub config: Config,
 }
 /// 创建标签请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateTagRequest {
     /// 标签名称
     pub name: String,
@@ -35,7 +35,7 @@ pub struct CreateTagRequest {
     pub tag_type: TagType,
 }
 /// 创建标签响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateTagResponse {
     /// 标签信息
     pub tag: Tag,
@@ -46,7 +46,7 @@ ResponseFormat::Data,
     }
 }
 /// 修改标签请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PatchTagRequest {
     /// 标签名称
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -59,7 +59,7 @@ pub struct PatchTagRequest {
     pub status: Option<TagStatus>,
 }
 /// 修改标签响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PatchTagResponse {
     /// 更新后的标签信息
     pub tag: Tag,
@@ -70,7 +70,7 @@ ResponseFormat::Data,
     }
 }
 /// 查询标签响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListTagResponse {
     /// 标签列表
     pub tags: Vec<Tag>,
@@ -167,7 +167,7 @@ let api_req = ApiRequest {,
 }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::api_resp::ResponseFormat;
 use std::time::Duration;

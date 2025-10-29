@@ -1,12 +1,12 @@
 use serde::{Deserialize, Serialize};
 /// 通用文件识别请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FileRecognizeRequest {
     /// 文件token或base64编码
     pub file: String,
 },
 /// 通用识别响应,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RecognizeResponse<T> {,
     /// 识别结果
     pub data: T,
@@ -15,7 +15,7 @@ pub struct RecognizeResponse<T> {,
     pub confidence: Option<f64>,
 },
 /// 简历信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ResumeInfo {
     /// 姓名,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -43,7 +43,7 @@ pub struct ResumeInfo {
     pub skills: Option<Vec<String>>,
 },
 /// 教育经历,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EducationInfo {
     /// 学校名称,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -62,7 +62,7 @@ pub struct EducationInfo {
     pub end_time: Option<String>,
 },
 /// 工作经历,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct WorkExperienceInfo {
     /// 公司名称,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -81,7 +81,7 @@ pub struct WorkExperienceInfo {
     pub description: Option<String>,
 },
 /// 身份证信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct IdCardInfo {
     /// 姓名,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -109,7 +109,7 @@ pub struct IdCardInfo {
     pub valid_period: Option<String>,
 },
 /// 驾驶证信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DrivingLicenseInfo {
     /// 姓名,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -137,7 +137,7 @@ pub struct DrivingLicenseInfo {
     pub valid_period: Option<String>,
 },
 /// 银行卡信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BankCardInfo {
     /// 银行名称,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -153,7 +153,7 @@ pub struct BankCardInfo {
     pub valid_period: Option<String>,
 },
 /// 营业执照信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BusinessLicenseInfo {
     /// 统一社会信用代码,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -184,7 +184,7 @@ pub struct BusinessLicenseInfo {
     pub address: Option<String>,
 },
 /// 增值税发票信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct VatInvoiceInfo {
     /// 发票代码,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -218,7 +218,7 @@ pub struct VatInvoiceInfo {
     pub total_amount_with_tax: Option<String>,
 },
 /// 合同字段信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ContractInfo {
     /// 合同标题,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -246,7 +246,7 @@ pub struct ContractInfo {
     pub other_fields: Option<serde_json::Value>,
 },
 /// 名片信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BusinessCardInfo {
     /// 姓名,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -274,7 +274,7 @@ pub struct BusinessCardInfo {
     pub address: Option<String>,
 },
 /// OCR文字识别结果,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OcrResult {
     /// 识别的文本内容
     pub text: String,
@@ -283,7 +283,7 @@ pub struct OcrResult {
     pub text_detection: Option<Vec<TextDetection>>,
 },
 /// 文本位置信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TextDetection {
     /// 文本内容
     pub text: String,
@@ -295,7 +295,7 @@ pub struct TextDetection {
     pub confidence: Option<f64>,
 },
 /// 边界框,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BoundingBox {
     /// 左上角x坐标
     pub x: i32,
@@ -307,7 +307,7 @@ pub struct BoundingBox {
     pub height: i32,
 },
 /// 语音识别请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SpeechRecognizeRequest {
     /// 音频文件
     pub speech: SpeechFile,
@@ -322,7 +322,7 @@ pub struct SpeechRecognizeRequest {
     pub language: Option<String>,
 },
 /// 语音文件,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SpeechFile {
     /// 文件token,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -332,7 +332,7 @@ pub struct SpeechFile {
     pub content: Option<String>,
 },
 /// 语音识别结果,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SpeechRecognizeResult {
     /// 识别的文本
     pub recognition_text: String,
@@ -341,7 +341,7 @@ pub struct SpeechRecognizeResult {
     pub confidence: Option<f64>,
 },
 /// 流式语音识别请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct StreamSpeechRequest {
     /// 音频数据流
     pub stream: String,
@@ -356,13 +356,13 @@ pub struct StreamSpeechRequest {
     pub language: Option<String>,
 },
 /// 文本语种检测请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct LanguageDetectRequest {
     /// 要检测的文本
     pub text: String,
 },
 /// 语种检测结果,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct LanguageDetectResult {
     /// 检测到的语种
     pub language: String,
@@ -371,7 +371,7 @@ pub struct LanguageDetectResult {
     pub confidence: Option<f64>,
 },
 /// 文本翻译请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TranslateRequest {
     /// 源语言,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -382,7 +382,7 @@ pub struct TranslateRequest {
     pub text: String,
 },
 /// 翻译结果,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TranslateResult {
     /// 翻译后的文本
     pub translated_text: String,
@@ -392,7 +392,7 @@ pub struct TranslateResult {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_file_recognize_request_serialization() {,

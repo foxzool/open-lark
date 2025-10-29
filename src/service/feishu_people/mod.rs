@@ -17,7 +17,7 @@ use crate::service::feishu_people::authorizations::AuthorizationsService;
 use crate::service::feishu_people::basic_data::BasicDataService;
 /// 飞书人员管理服务
 #[cfg(feature = "feishu_people")]
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct FeishuPeopleService {
     /// 核心人事管理服务
     pub core: CoreService,
@@ -32,7 +32,7 @@ pub struct FeishuPeopleService {
 impl FeishuPeopleService {
 /// 创建新的人员管理服务实例
     pub fn new() -> Self {
-Self {,
+Self {
             core: CoreService::new(client.clone()),
             leaves: LeavesService::new(client.clone()),
             authorizations: AuthorizationsService::new(client.clone()),

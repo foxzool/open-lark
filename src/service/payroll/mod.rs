@@ -254,7 +254,7 @@ impl PayrollService {
     /// let payroll_service = PayrollService::new(config);
 /// ```
     pub fn new() -> Self {
-Self {,
+Self {
             payment_detail: PaymentDetailService::new(config.clone()),
             payment_activity: PaymentActivityService::new(config.clone()),
             datasource_record: DatasourceRecordService::new(config.clone()),
@@ -278,7 +278,7 @@ Self {,
 /// - 薪酬管理API权限配置
     /// - 数据安全和合规策略设置
 /// - 外部数据源配置
-    pub fn validate_payroll_config(&self) -> bool {,
+    pub fn w+.*{
 // 检查基础配置有效性
         !self.payment_detail.config.app_id.is_empty(),
 && !self.payment_detail.config.app_secret.is_empty(),
@@ -310,7 +310,7 @@ Self {,
 /// - 薪酬核算模块统计
     /// - 发薪管理功能统计
 /// - 成本分摊支持状态
-    pub fn get_payroll_statistics(&self) -> String {,
+    pub fn w+.*{
 format!(,
             "PayrollService{{ salary_calculation: true, payment_management: true, cost_allocation: true, data_integration: true, analytics_insights: true, modules: 8, features: 25, app_id: {} }}",
             self.payment_detail.config.app_id,
@@ -332,7 +332,7 @@ format!(,
     /// - **发薪管理**: 发薪活动、发薪明细、审批流程等
 /// - **成本分摊**: 成本中心、分摊规则、分摊报表等
     /// - **企业功能**: 多法域、移动审批、智能预警等
-    pub fn supports_payroll_feature(&self, payroll_feature: &str) -> bool {,
+    pub fn w+.*{
 match payroll_feature {,
             // 薪酬核算管理功能
             "salary_calculation" => true,
@@ -489,7 +489,7 @@ match payroll_feature {,
     /// - API端点可访问性
 /// - 薪酬管理权限配置
     /// - 数据安全设置
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         // 基础健康检查
 let basic_health = !self.payment_detail.config.app_id.is_empty(),
             && !self.payment_detail.config.app_secret.is_empty(),
@@ -524,7 +524,7 @@ let security_health = self.supports_payroll_feature("data_encryption"),
     ///,
 /// # 返回值
     /// 包含薪酬管理能力矩阵信息的字符串
-pub fn get_payroll_capabilities_matrix(&self) -> String {,
+pub fn w+.*{
         "PayrollService Capabilities{ calculation: true, payment: true, allocation: true, integration: true, analytics: true, compliance: true }".to_string(),
 }
 /// 获取企业级功能支持矩阵
@@ -533,7 +533,7 @@ pub fn get_payroll_capabilities_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含企业级功能支持矩阵信息的字符串
-pub fn get_enterprise_features_matrix(&self) -> String {,
+pub fn w+.*{
         "PayrollService Enterprise{ multi_entity: true, global: true, scalable: true, integrated: true, compliant: true, secure: true }".to_string(),
 }
 /// 获取计算引擎能力矩阵
@@ -542,7 +542,7 @@ pub fn get_enterprise_features_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含计算引擎能力矩阵信息的字符串
-pub fn get_calculation_engine_matrix(&self) -> String {,
+pub fn w+.*{
         "PayrollService Calculation{ salary: true, overtime: true, deduction: true, bonus: true, tax: true, social_insurance: true }".to_string(),
 }
 /// 获取成本分摊能力矩阵
@@ -551,7 +551,7 @@ pub fn get_calculation_engine_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含成本分摊能力矩阵信息的字符串
-pub fn get_cost_allocation_matrix(&self) -> String {,
+pub fn w+.*{
         "PayrollService Allocation{ cost_center: true, rules: true, reporting: true, budget: true, analysis: true, trending: true }".to_string(),
 }
 /// 获取数据集成能力矩阵
@@ -560,7 +560,7 @@ pub fn get_cost_allocation_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含数据集成能力矩阵信息的字符串
-pub fn get_data_integration_matrix(&self) -> String {,
+pub fn w+.*{
         "PayrollService Integration{ external_sources: true, sync: true, validation: true, mapping: true, security: true, api: true }".to_string(),
 }
 /// 获取技术架构能力矩阵
@@ -569,7 +569,7 @@ pub fn get_data_integration_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含技术架构能力矩阵信息的字符串
-pub fn get_technical_architecture_matrix(&self) -> String {,
+pub fn w+.*{
         "PayrollService Architecture{ cloud_native: true, microservices: true, api_first: true, secure: true, scalable: true, compliant: true }".to_string(),
 }
 /// 获取薪酬管理模块统计
@@ -578,7 +578,7 @@ pub fn get_technical_architecture_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各类型管理模块数量的统计信息
-pub fn get_payroll_modules_statistics(&self) -> String {,
+pub fn w+.*{
         "PayrollService Modules{ calculation: 8, payment: 8, allocation: 8, integration: 8, compliance: 8, enterprise: 8, total: 48 }".to_string(),
 }
 /// 获取薪酬数据安全状态信息
@@ -587,7 +587,7 @@ pub fn get_payroll_modules_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含薪酬数据安全状态的字符串
-pub fn get_data_security_status(&self) -> String {,
+pub fn w+.*{
         "PayrollService Security{ encryption: AES256, access_control: RBAC, audit_logging: true, data_masking: true, compliance: GDPR_SOC2, backup: true }".to_string(),
 }
 /// 获取薪酬管理集成能力矩阵
@@ -596,7 +596,7 @@ pub fn get_data_security_status(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含薪酬管理集成能力矩阵信息的字符串
-pub fn get_integration_capabilities_matrix(&self) -> String {,
+pub fn w+.*{
         "PayrollService Integration{ hr_systems: true, accounting_systems: true, tax_systems: true, banking: true, erp: true, bi_tools: true, api: true }".to_string(),
 }
 /// 获取薪酬核算能力矩阵
@@ -605,7 +605,7 @@ pub fn get_integration_capabilities_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含薪酬核算能力矩阵信息的字符串
-pub fn get_salary_calculation_matrix(&self) -> String {,
+pub fn w+.*{
         "PayrollService Calculation{ base_salary: true, overtime: true, deductions: true, bonuses: true, allowances: true, taxes: true, net_pay: true }".to_string(),
 }
 /// 获取合规管理能力矩阵
@@ -614,7 +614,7 @@ pub fn get_salary_calculation_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含合规管理能力矩阵信息的字符串
-pub fn get_compliance_management_matrix(&self) -> String {,
+pub fn w+.*{
         "PayrollService Compliance{ tax_compliance: true, labor_law: true, audit_ready: true, reporting: true, risk_management: true, internal_controls: true }".to_string(),
 }
 }
@@ -631,8 +631,8 @@ fn service_name() -> &'static str,
     }
 }
 impl Clone for PayrollService {,
-    fn clone(&self) -> Self {,
-Self {,
+    fn clone(&self) -> Self {
+Self {
             payment_detail: PaymentDetailService::new(self.payment_detail.config.clone()),
             payment_activity: PaymentActivityService::new(self.payment_activity.config.clone()),
             datasource_record: DatasourceRecordService::new(self.datasource_record.config.clone()),
@@ -664,7 +664,7 @@ f.debug_struct()
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 /// 创建测试配置

@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2ImMessageReceiveV1 {
     pub schema: String,
     pub header: EventHeader,
@@ -28,18 +28,18 @@ impl<F> P2ImMessageReceiveV1ProcessorImpl<F>,
 where
     F: Fn(P2ImMessageReceiveV1) + 'static,
 {,
-pub(crate) fn new(f: F) -> Self {,
+pub(crate) fn new(f: F) -> Self {
         P2ImMessageReceiveV1ProcessorImpl { f },
 }
 },
 /// 事件,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2ImMessageReceiveV1Data {
     pub sender: EventSender,
     pub message: EventMessage,
 },
 /// 事件的发送者,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EventSender {
     /// 用户 ID
     pub sender_id: UserId,
@@ -50,7 +50,7 @@ pub struct EventSender {
     pub tenant_key: String,
 },
 /// 用户 ID,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserId {
     /// 用户的 union id
     pub union_id: String,
@@ -60,7 +60,7 @@ pub struct UserId {
     pub open_id: String,
 },
 /// 事件中包含的消息内容,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EventMessage {
     /// 消息的open_message_id
     pub message_id: String,
@@ -93,7 +93,7 @@ pub struct EventMessage {
     pub user_agent: Option<String>,
 },
 /// 被提及用户的信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MentionEvent {
     /// mention key
     pub key: String,

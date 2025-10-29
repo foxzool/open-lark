@@ -19,7 +19,7 @@ pub struct DatasourceRecordService {
     pub config: Config,
 }
 /// 外部数据源记录保存响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DatasourceRecordSaveResponse {
     /// 保存结果
     pub success: bool,
@@ -36,7 +36,7 @@ ResponseFormat::Data,
     }
 }
 /// 失败记录信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FailedRecord {
     /// 员工ID
     pub employee_id: String,
@@ -46,7 +46,7 @@ pub struct FailedRecord {
     pub error_code: Option<String>,
 }
 /// 外部数据源记录查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DatasourceRecordQueryResponse {
     /// 数据源记录列表
 #[serde(flatten)],

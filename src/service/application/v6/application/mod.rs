@@ -281,17 +281,17 @@ fn service_version() -> &'static str {,
 }
 }
 // 请求响应模型
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TransferOwnerRequest {
     pub owner_id: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateCollaboratorsRequest {
     pub collaborators: Vec<AppCollaborator>,
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetCollaboratorsResponse {
     pub collaborators: Vec<AppCollaborator>,
 }
@@ -301,7 +301,7 @@ ResponseFormat::Data,
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetApplicationResponse {
     pub application: Application,
 }
@@ -311,7 +311,7 @@ ResponseFormat::Data,
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetAppVersionResponse {
     pub version: AppVersion,
 }
@@ -321,7 +321,7 @@ ResponseFormat::Data,
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListAppVersionsResponse {
     pub versions: Vec<AppVersion>,
     pub page_token: Option<String>,
@@ -333,7 +333,7 @@ ResponseFormat::Data,
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ContactsRangeSuggestResponse {
     pub contacts_range: ContactsRange,
 }
@@ -343,7 +343,7 @@ ResponseFormat::Data,
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UnderauditListResponse {
     pub applications: Vec<Application>,
     pub page_token: Option<String>,
@@ -355,13 +355,13 @@ ResponseFormat::Data,
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateAuditStatusRequest {
     pub status: AuditResult,
     pub comment: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateGroupRequest {
     pub group_id: String,
 }

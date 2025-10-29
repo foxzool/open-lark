@@ -78,7 +78,7 @@ let api_req = ApiRequest {,
 }
 }
 /// 绩效结果查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ResultQueryRequest {
     /// 周期ID
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -94,7 +94,7 @@ pub struct ResultQueryRequest {
     pub result_opened_only: Option<bool>,
 }
 /// 绩效结果查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ResultQueryResponse {
     /// 绩效结果列表
     pub performance_results: Vec<PerformanceResult>,
@@ -105,7 +105,7 @@ ResponseFormat::Data,
     }
 }
 /// 绩效详情查询请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DetailQueryRequest {
     /// 项目ID
     pub activity_id: String,
@@ -120,7 +120,7 @@ pub struct DetailQueryRequest {
     pub item_ids: Option<Vec<String>>,
 }
 /// 绩效详情查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DetailQueryResponse {
     /// 绩效详情列表
     pub review_details: Vec<ReviewDetail>,

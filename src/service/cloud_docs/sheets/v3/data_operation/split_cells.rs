@@ -38,7 +38,7 @@ api_resp.into_result(),
     },
 },
 /// 拆分单元格请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SplitCellsRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -50,36 +50,36 @@ pub struct SplitCellsRequest {
     range: String,
 }
 impl SplitCellsRequest {
-    pub fn builder() -> SplitCellsRequestBuilder {,
+    pub fn w+.*{
 SplitCellsRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct SplitCellsRequestBuilder {
     request: SplitCellsRequest,
 }
 impl SplitCellsRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 }
 
-    pub fn range(mut self, range: impl ToString) -> Self {,
+    pub fn range(mut self, range: impl ToString) -> Self {
 self.request.range = range.to_string();
         self,
 },
-pub fn build(mut self) -> SplitCellsRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 拆分单元格响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct SplitCellsResponseData {
     /// 拆分后的范围
     pub unmerged_range: String,

@@ -38,7 +38,7 @@ api_resp.into_result(),
     },
 },
 /// 写入图片请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct WriteImagesRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -49,41 +49,41 @@ pub struct WriteImagesRequest {
     value_range: ImageValueRange,
 }
 impl WriteImagesRequest {
-    pub fn builder() -> WriteImagesRequestBuilder {,
+    pub fn w+.*{
 WriteImagesRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct WriteImagesRequestBuilder {
     request: WriteImagesRequest,
 }
 impl WriteImagesRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn range(mut self, range: impl ToString) -> Self {,
+    pub fn range(mut self, range: impl ToString) -> Self {
 self.request.value_range.range = range.to_string();
         self,
 }
 
-    pub fn add_image(mut self, image_data: ImageData) -> Self {,
+    pub fn add_image(mut self, image_data: ImageData) -> Self {
 self.request.value_range.values.push(vec![image_data]);
         self,
 }
 
-    pub fn images(mut self, images: Vec<Vec<ImageData>>) -> Self {,
+    pub fn images(mut self, images: Vec<Vec<ImageData>>) -> Self {
 self.request.value_range.values = images;
         self,
 },
-pub fn build(mut self) -> WriteImagesRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 图片值范围,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ImageValueRange {
     /// 范围
     pub range: String,
@@ -91,7 +91,7 @@ pub struct ImageValueRange {
     pub values: Vec<Vec<ImageData>>,
 },
 /// 图片数据,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ImageData {
     /// 图片类型，固定值为 "image",
 #[serde(rename = "type")],
@@ -104,8 +104,8 @@ pub struct ImageData {
     pub height: Option<i32>,
 }
 impl ImageData {
-    pub fn new(image_token: impl ToString) -> Self {,
-Self {,
+    pub fn new(image_token: impl ToString) -> Self {
+Self {
             data_type: "image".to_string(),
             image_token: image_token.to_string(),
             width: None,
@@ -113,14 +113,14 @@ Self {,
         },
 }
 
-    pub fn with_size(mut self, width: i32, height: i32) -> Self {,
+    pub fn with_size(mut self, width: i32, height: i32) -> Self {
 self.width = Some(width);
         self.height = Some(height);
 self,
     },
 },
 /// 写入图片响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct WriteImagesResponseData {
     /// 表格的 token,
 #[serde(rename = "spreadsheetToken")],
@@ -146,7 +146,7 @@ impl_executable_builder_owned!(,
     write_images,
 );
 /// 更新信息
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct WriteImageUpdatesInfo {
     /// 受更新影响的表格范围,
 #[serde(rename = "updatedRange")],

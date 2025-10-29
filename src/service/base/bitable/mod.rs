@@ -12,7 +12,7 @@ use crate::core::{,
 use open_lark_core::core::api_req::ApiRequest;
 use crate::service::base::models::*;
 /// 多维表格服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct BitableService {
     config: Config,
 }

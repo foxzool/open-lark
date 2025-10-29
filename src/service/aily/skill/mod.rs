@@ -20,7 +20,7 @@ pub struct SkillService {
     pub config: Config,
 }
 /// 技能调用响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SkillStartResponse {
     /// 技能执行信息
 #[serde(flatten)],
@@ -32,7 +32,7 @@ ResponseFormat::Data,
     }
 }
 /// 技能信息查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SkillGetResponse {
     /// 技能信息
 #[serde(flatten)],
@@ -44,7 +44,7 @@ ResponseFormat::Data,
     }
 }
 /// 技能列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SkillListResponse {
     /// 分页响应数据
 #[serde(flatten)],

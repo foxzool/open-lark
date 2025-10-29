@@ -120,7 +120,7 @@ let resp =,
 }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AddGroupMemberRequest {
     pub member_id: String,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -137,12 +137,12 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchAddGroupMembersRequest {
     pub members: Vec<GroupMemberInfo>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct BatchAddGroupMembersResponse {
     pub results: Vec<GroupMemberResult>,
 }
@@ -152,7 +152,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListGroupMembersRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member_id_type: Option<String>,
@@ -164,7 +164,7 @@ pub struct ListGroupMembersRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ListGroupMembersResponse {
     pub memberlist: Vec<GroupMember>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -178,7 +178,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RemoveGroupMemberRequest {
     pub member_id: String,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -195,12 +195,12 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchRemoveGroupMembersRequest {
     pub members: Vec<GroupMemberInfo>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct BatchRemoveGroupMembersResponse {
     pub results: Vec<GroupMemberResult>,
 }
@@ -210,7 +210,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::config::Config;
 #[test],

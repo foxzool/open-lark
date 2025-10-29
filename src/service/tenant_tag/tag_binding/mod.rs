@@ -23,7 +23,7 @@ pub struct TagBindingService {
     pub config: Config,
 }
 /// 查询绑定关系请求参数
-#[derive(Debug, Default)],
+#[derive(.*?)]
 pub struct GetTagBindingRequest {
     /// 实体ID
     pub entity_id: String,
@@ -39,7 +39,7 @@ pub struct GetTagBindingRequest {
     pub user_id_type: Option<UserIdType>,
 }
 /// 查询实体与标签的绑定关系响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetTagBindingResponse {
     /// 绑定关系列表
     pub bindings: Vec<TagBinding>,
@@ -54,7 +54,7 @@ ResponseFormat::Data,
     }
 }
 /// 绑定标签到群请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateTagBindingRequest {
     /// 标签ID列表
     pub tag_ids: Vec<String>,
@@ -62,7 +62,7 @@ pub struct CreateTagBindingRequest {
     pub chat_id: String,
 }
 /// 绑定标签到群响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateTagBindingResponse {
     /// 成功绑定的标签ID列表
     pub success_tag_ids: Vec<String>,
@@ -75,7 +75,7 @@ ResponseFormat::Data,
     }
 }
 /// 解绑标签与群请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateTagBindingRequest {
     /// 要解绑的标签ID列表
     pub tag_ids: Vec<String>,
@@ -83,7 +83,7 @@ pub struct UpdateTagBindingRequest {
     pub chat_id: String,
 }
 /// 解绑标签与群响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateTagBindingResponse {
     /// 成功解绑的标签ID列表
     pub success_tag_ids: Vec<String>,

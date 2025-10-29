@@ -20,7 +20,7 @@ pub struct EmployeeService {
     pub config: Config,
 }
 /// 批量查询员工信息响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EmployeeBatchGetResponse {
     /// 员工信息列表
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -32,7 +32,7 @@ ResponseFormat::Data,
     }
 }
 /// 搜索员工信息响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EmployeeSearchResponse {
     /// 员工信息列表
 #[serde(flatten)],

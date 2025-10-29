@@ -20,7 +20,7 @@ pub struct RunService {
     pub config: Config,
 }
 /// 运行创建响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RunCreateResponse {
     /// 运行信息
 #[serde(flatten)],
@@ -32,7 +32,7 @@ ResponseFormat::Data,
     }
 }
 /// 运行查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RunGetResponse {
     /// 运行信息
 #[serde(flatten)],
@@ -44,7 +44,7 @@ ResponseFormat::Data,
     }
 }
 /// 运行列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RunListResponse {
     /// 分页响应数据
 #[serde(flatten)],
@@ -56,7 +56,7 @@ ResponseFormat::Data,
     }
 }
 /// 运行取消响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RunCancelResponse {
     /// 运行信息
 #[serde(flatten)],

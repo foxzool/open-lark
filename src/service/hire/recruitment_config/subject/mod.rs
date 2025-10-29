@@ -19,7 +19,7 @@ pub struct SubjectService {
     pub config: Config,
 }
 /// 项目信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Subject {
     /// 项目ID
     pub id: String,
@@ -47,7 +47,7 @@ pub struct Subject {
     pub updated_time: Option<String>,
 }
 /// 项目设置
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SubjectSettings {
     /// 是否启用候选人可见性
     pub candidate_visibility: Option<bool>,
@@ -59,7 +59,7 @@ pub struct SubjectSettings {
     pub notification_settings: Option<serde_json::Value>,
 }
 /// 项目创建请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct SubjectCreateRequest {
     /// 项目名称
     pub name: I18nText,
@@ -79,7 +79,7 @@ pub struct SubjectCreateRequest {
     pub settings: Option<SubjectSettings>,
 }
 /// 项目列表请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct SubjectListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -93,7 +93,7 @@ pub struct SubjectListRequest {
     pub owner_id: Option<String>,
 }
 /// 项目列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SubjectListResponse {
     /// 项目列表
 #[serde(flatten)],
@@ -105,7 +105,7 @@ ResponseFormat::Data,
     }
 }
 /// 项目详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SubjectDetailResponse {
     /// 项目信息
     pub subject: Subject,
@@ -116,7 +116,7 @@ ResponseFormat::Data,
     }
 }
 /// 项目操作响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SubjectOperationResponse {
     /// 操作结果
 #[serde(flatten)],

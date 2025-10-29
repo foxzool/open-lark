@@ -19,7 +19,7 @@ pub struct AgentSkillService {
     pub config: Config,
 }
 /// 创建客服技能请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateAgentSkillRequest {
     /// 技能名称
     pub skill_name: String,
@@ -28,7 +28,7 @@ pub struct CreateAgentSkillRequest {
     pub description: Option<String>,
 }
 /// 创建客服技能响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateAgentSkillResponse {
     /// 创建的技能
     pub skill: AgentSkill,
@@ -39,7 +39,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取客服技能响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetAgentSkillResponse {
     /// 技能信息
     pub skill: AgentSkill,
@@ -50,7 +50,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取全部客服技能响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListAgentSkillsResponse {
     /// 技能列表
     pub skills: Vec<AgentSkill>,

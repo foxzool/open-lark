@@ -20,7 +20,7 @@ pub struct PermissionService {
     pub config: Config,
 }
 /// 操作成功响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OperationSuccessResponse {
     /// 操作是否成功
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -35,7 +35,7 @@ ResponseFormat::Data,
     }
 }
 /// 角色成员信息响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RoleMemberGetResponse {
     /// 角色成员信息
 #[serde(flatten)],

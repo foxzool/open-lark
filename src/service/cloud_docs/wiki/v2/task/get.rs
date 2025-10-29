@@ -19,7 +19,7 @@ use crate::,
     impl_executable_builder_owned,
 };
 /// 获取任务结果请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct GetTaskRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -28,27 +28,27 @@ pub struct GetTaskRequest {
     task_id: String,
 }
 impl GetTaskRequest {
-    pub fn builder() -> GetTaskRequestBuilder {,
+    pub fn w+.*{
 GetTaskRequestBuilder::default(),
     },
-pub fn new(task_id: impl ToString) -> Self {,
+pub fn new(task_id: impl ToString) -> Self {
         Self {
             task_id: task_id.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct GetTaskRequestBuilder {
     request: GetTaskRequest,
 }
 impl GetTaskRequestBuilder {
     /// 任务id
-    pub fn task_id(mut self, task_id: impl ToString) -> Self {,
+    pub fn task_id(mut self, task_id: impl ToString) -> Self {
 self.request.task_id = task_id.to_string();
         self,
 },
-pub fn build(mut self) -> GetTaskRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -61,7 +61,7 @@ impl_executable_builder_owned!(,
     get,
 );
 /// 任务状态
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum TaskStatus {,
 /// 进行中,
@@ -72,7 +72,7 @@ pub enum TaskStatus {,
     Failed,
 },
 /// 移动结果,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct MoveResult {
     /// 原始文档token
     pub obj_token: String,
@@ -84,7 +84,7 @@ pub struct MoveResult {
     pub obj_type: Option<String>,
 },
 /// 任务详细信息,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct TaskDetail {
     /// 任务id
     pub task_id: String,
@@ -106,7 +106,7 @@ pub struct TaskDetail {
     pub finish_time: Option<String>,
 },
 /// 获取任务结果响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct GetTaskResponse {
     /// 任务详细信息
     pub task: TaskDetail,
@@ -155,7 +155,7 @@ impl TaskStatus {
 }
 impl TaskDetail {
     /// 获取进度百分比,
-pub fn progress_percentage(&self) -> Option<f32> {,
+pub fn w+.*{
         if let (Some(processed), Some(total)) = (self.processed_count, self.total_count) {,
 if total > 0 {,
                 return Some((processed as f32 / total as f32) * 100.0);
@@ -164,11 +164,11 @@ if total > 0 {,
 None,
     },
 /// 是否有错误,
-    pub fn has_error(&self) -> bool {,
+    pub fn w+.*{
 self.error_message.is_some(),
     },
 /// 获取成功移动的文档数量,
-    pub fn success_count(&self) -> usize {,
+    pub fn w+.*{
 self.move_results,
             .as_ref()
             .map_or(0, |results| results.len()),
@@ -176,7 +176,7 @@ self.move_results,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_get_task_request_builder() {,

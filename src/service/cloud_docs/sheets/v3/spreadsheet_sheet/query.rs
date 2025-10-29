@@ -16,7 +16,7 @@ use crate::,
     service::sheets::v3::{spreadsheet_sheet::Sheet, SpreadsheetSheetService},
 };
 /// 获取工作表请求,
-#[derive(Serialize, Deserialize, Debug, Default)],
+#[derive(.*?)]
 pub struct QuerySpreadsheetSheetRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -45,27 +45,27 @@ Ok(api_resp),
     },
 }
 impl QuerySpreadsheetSheetRequest {
-    pub fn builder() -> QuerySpreadsheetSheetRequestBuilder {,
+    pub fn w+.*{
 QuerySpreadsheetSheetRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct QuerySpreadsheetSheetRequestBuilder {
     request: QuerySpreadsheetSheetRequest,
 }
 impl QuerySpreadsheetSheetRequestBuilder {
     /// 表格的token
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 },
-pub fn build(mut self) -> QuerySpreadsheetSheetRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 }
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct QuerySpreadsheetSheetResponse {
     pub sheets: Vec<Sheet>,
 }

@@ -28,7 +28,7 @@ pub struct TalentService {
     pub config: Config,
 }
 /// 人才列表请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct TalentListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -52,7 +52,7 @@ pub struct TalentListRequest {
     pub created_end_time: Option<String>,
 }
 /// 人才列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TalentListResponse {
     /// 人才列表
 #[serde(flatten)],
@@ -64,7 +64,7 @@ ResponseFormat::Data,
     }
 }
 /// 人才详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TalentDetailResponse {
     /// 人才信息
     pub talent: Talent,
@@ -75,7 +75,7 @@ ResponseFormat::Data,
     }
 }
 /// 人才操作响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TalentOperationResponse {
     /// 操作结果
 #[serde(flatten)],
@@ -89,7 +89,7 @@ ResponseFormat::Data,
     }
 }
 /// 人才投递历史响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TalentApplicationHistoryResponse {
     /// 投递历史列表
 #[serde(flatten)],
@@ -527,7 +527,7 @@ if let Some(page_token) = page_token {,
         talents: Vec<TalentCreateRequest>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentOperationResponse>> {,
-#[derive(Serialize)],
+#[derive(.*?)]
         struct BatchImportRequest {
             talents: Vec<TalentCreateRequest>,
         }
@@ -673,7 +673,7 @@ let talents = builder_results?;
 ///,
     /// let request = builder.build()?;
 /// ```
-    pub fn create_talent_builder(&self) -> TalentCreateRequestBuilder {,
+    pub fn w+.*{
 TalentCreateRequestBuilder::default(),
     }
 /// 创建人才列表请求构建器
@@ -695,7 +695,7 @@ TalentCreateRequestBuilder::default(),
 ///,
     /// let request = builder.build();
 /// ```
-    pub fn list_talents_builder(&self) -> TalentListRequestBuilder {,
+    pub fn w+.*{
 TalentListRequestBuilder::default(),
     }
 /// 获取人才列表（使用构建器模式）

@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 /// 分页响应通用结构
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PageResponse<T> {,
     /// 数据列表
     pub items: Vec<T>,
@@ -11,7 +11,7 @@ pub struct PageResponse<T> {,
     pub page_token: Option<String>,
 },
 /// I18n 多语言文本,
-#[derive(Debug, Serialize, Deserialize, Clone, Default)],
+#[derive(.*?)]
 pub struct I18nText {
     /// 中文
     pub zh_cn: Option<String>,
@@ -21,7 +21,7 @@ pub struct I18nText {
     pub ja_jp: Option<String>,
 },
 /// 用户ID对象,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserId {
     /// 用户ID
     pub id: String,
@@ -29,7 +29,7 @@ pub struct UserId {
     pub id_type: String,
 },
 /// 部门ID对象,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DepartmentId {
     /// 部门ID
     pub id: String,
@@ -37,7 +37,7 @@ pub struct DepartmentId {
     pub id_type: String,
 },
 /// 附件信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Attachment {
     /// 附件ID
     pub id: String,
@@ -51,7 +51,7 @@ pub struct Attachment {
     pub created_time: Option<String>,
 },
 /// 地址信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Location {
     /// 地址ID
     pub id: String,
@@ -67,7 +67,7 @@ pub struct Location {
     pub active_status: bool,
 },
 /// 地址查询请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct LocationQueryRequest {
     /// 地址类型
     pub location_type: Option<String>,
@@ -79,7 +79,7 @@ pub struct LocationQueryRequest {
     pub page_token: Option<String>,
 },
 /// 角色信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Role {
     /// 角色ID
     pub id: String,
@@ -95,7 +95,7 @@ pub struct Role {
     pub updated_time: Option<String>,
 },
 /// 角色列表请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct RoleListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -103,7 +103,7 @@ pub struct RoleListRequest {
     pub page_token: Option<String>,
 },
 /// 用户角色信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserRole {
     /// 用户ID
     pub user_id: String,
@@ -113,7 +113,7 @@ pub struct UserRole {
     pub roles: Option<Vec<Role>>,
 },
 /// 职位基本信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Job {
     /// 职位ID
     pub id: String,
@@ -147,7 +147,7 @@ pub struct Job {
     pub custom_fields: Option<HashMap<String, serde_json::Value>>,
 },
 /// 职位创建请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct JobCreateRequest {
     /// 职位名称
     pub title: String,
@@ -173,7 +173,7 @@ pub struct JobCreateRequest {
     pub custom_fields: Option<HashMap<String, serde_json::Value>>,
 },
 /// 职位更新请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct JobUpdateRequest {
     /// 职位ID
     pub job_id: String,
@@ -201,7 +201,7 @@ pub struct JobUpdateRequest {
     pub custom_fields: Option<HashMap<String, serde_json::Value>>,
 },
 /// 职位列表请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct JobListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -219,7 +219,7 @@ pub struct JobListRequest {
     pub created_end_time: Option<String>,
 },
 /// 招聘需求信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobRequirement {
     /// 需求ID
     pub id: String,
@@ -243,7 +243,7 @@ pub struct JobRequirement {
     pub updated_time: Option<String>,
 },
 /// 招聘需求创建请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct JobRequirementCreateRequest {
     /// 需求名称
     pub name: String,
@@ -257,7 +257,7 @@ pub struct JobRequirementCreateRequest {
     pub expected_entry_time: Option<String>,
 },
 /// 人才基本信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Talent {
     /// 人才ID
     pub id: String,
@@ -293,7 +293,7 @@ pub struct Talent {
     pub custom_fields: Option<HashMap<String, serde_json::Value>>,
 },
 /// 人才创建请求,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct TalentCreateRequest {
     /// 姓名
     pub name: String,
@@ -323,7 +323,7 @@ pub struct TalentCreateRequest {
     pub custom_fields: Option<HashMap<String, serde_json::Value>>,
 },
 /// 投递信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Application {
     /// 投递ID
     pub id: String,
@@ -349,7 +349,7 @@ pub struct Application {
     pub updated_time: Option<String>,
 },
 /// 投递创建请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ApplicationCreateRequest {
     /// 人才ID
     pub talent_id: String,
@@ -363,7 +363,7 @@ pub struct ApplicationCreateRequest {
     pub apply_time: Option<String>,
 },
 /// 投递列表请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ApplicationListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -383,7 +383,7 @@ pub struct ApplicationListRequest {
     pub created_end_time: Option<String>,
 },
 /// 面试信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Interview {
     /// 面试ID
     pub id: String,
@@ -413,7 +413,7 @@ pub struct Interview {
     pub updated_time: Option<String>,
 },
 /// Offer信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Offer {
     /// Offer ID
     pub id: String,
@@ -443,7 +443,7 @@ pub struct Offer {
     pub custom_fields: Option<HashMap<String, serde_json::Value>>,
 },
 /// Offer创建请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct OfferCreateRequest {
     /// 投递ID
     pub application_id: String,
@@ -465,7 +465,7 @@ pub struct OfferCreateRequest {
     pub custom_fields: Option<HashMap<String, serde_json::Value>>,
 },
 /// 内推账户信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReferralAccount {
     /// 账户ID
     pub id: String,
@@ -485,7 +485,7 @@ pub struct ReferralAccount {
     pub updated_time: Option<String>,
 },
 /// 内推账户注册请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ReferralAccountCreateRequest {
     /// 用户ID
     pub user_id: String,
@@ -497,7 +497,7 @@ pub struct ReferralAccountCreateRequest {
     pub bank_name: Option<String>,
 },
 /// 附件创建请求,
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct AttachmentCreateRequest {
     /// 文件名
     pub name: String,
@@ -507,7 +507,7 @@ pub struct AttachmentCreateRequest {
     pub file_type: Option<String>,
 },
 /// 通用响应结构,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CommonResponse {
     /// 操作是否成功
     pub success: bool,
@@ -518,7 +518,7 @@ pub struct CommonResponse {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

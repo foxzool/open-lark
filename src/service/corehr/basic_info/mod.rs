@@ -21,7 +21,7 @@ pub struct BasicInfoService {
     pub config: Config,
 }
 /// 查询枚举信息响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EnumSearchResponse {
     /// 枚举信息列表
 #[serde(flatten)],
@@ -33,7 +33,7 @@ ResponseFormat::Data,
     }
 }
 /// 查询国家/地区信息响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CountryRegionSearchResponse {
     /// 国家/地区信息列表
 #[serde(flatten)],
@@ -45,7 +45,7 @@ ResponseFormat::Data,
     }
 }
 /// 查询国籍信息响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct NationalitySearchResponse {
     /// 国籍信息列表
 #[serde(flatten)],
@@ -57,7 +57,7 @@ ResponseFormat::Data,
     }
 }
 /// ID转换响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct IdConvertResponse {
     /// 转换结果列表
 #[serde(skip_serializing_if = "Option::is_none")],

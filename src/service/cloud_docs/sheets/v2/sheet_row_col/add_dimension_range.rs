@@ -15,7 +15,7 @@ use crate::,
     service::cloud_docs::sheets::v2::SpreadsheetService,
 };
 /// 增加行列请求,
-#[derive(Serialize, Debug, Default)],
+#[derive(.*?)]
 pub struct AddDimensionRangeRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -25,7 +25,7 @@ pub struct AddDimensionRangeRequest {
     dimension: Dimension,
 }
 
-#[derive(Serialize, Debug, Default)],
+#[derive(.*?)]
 struct Dimension {,
     /// 电子表格工作表的 ID。调用获取工作表获取 ID,
 #[serde(rename = "sheetId")],
@@ -39,38 +39,38 @@ struct Dimension {,
     length: i32,
 }
 impl AddDimensionRangeRequest {
-    pub fn builder() -> AddDimensionRangeRequestBuilder {,
+    pub fn w+.*{
 AddDimensionRangeRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct AddDimensionRangeRequestBuilder {
     request: AddDimensionRangeRequest,
 }
 impl AddDimensionRangeRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 },
 /// 电子表格工作表的 ID。调用获取工作表获取 ID,
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.dimension.sheet_id = sheet_id.to_string();
         self,
 },
 /// 更新的维度。可选值：,
     /// - ROWS：行,
 /// - COLUMNS：列,
-    pub fn major_dimension(mut self, major_dimension: impl ToString) -> Self {,
+    pub fn major_dimension(mut self, major_dimension: impl ToString) -> Self {
 self.request.dimension.major_dimension = major_dimension.to_string();
         self,
 }
 
     /// 要增加的行数或列数。取值范围为 (0,5000]
-    pub fn length(mut self, length: i32) -> Self {,
+    pub fn length(mut self, length: i32) -> Self {
 self.request.dimension.length = length;
         self,
 },
-pub fn build(mut self) -> AddDimensionRangeRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -95,7 +95,7 @@ Ok(api_resp),
     },
 },
 /// 增加行列响应体,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct DimensionRangeResponse {
     #[serde(rename = "addCount")]
     pub add_count: i32,
@@ -108,7 +108,7 @@ ResponseFormat::Data,
     },
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::config::Config;
 use rstest::rstest;

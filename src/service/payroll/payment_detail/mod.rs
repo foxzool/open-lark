@@ -19,7 +19,7 @@ pub struct PaymentDetailService {
     pub config: Config,
 }
 /// 发薪明细列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PaymentDetailListResponse {
     /// 发薪明细列表
 #[serde(flatten)],
@@ -31,7 +31,7 @@ ResponseFormat::Data,
     }
 }
 /// 发薪明细批量查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PaymentDetailQueryResponse {
     /// 发薪明细列表
     pub payment_details: Vec<PaymentDetail>,

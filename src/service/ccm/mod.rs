@@ -16,7 +16,7 @@ use crate::service::ccm::docx::DocxService;
 use crate::service::ccm::wiki::WikiService;
 /// 云文档管理服务
 #[cfg(feature = "ccm")]
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct CcmService {
     /// 云空间文件管理服务
     pub drive: DriveService,
@@ -31,7 +31,7 @@ pub struct CcmService {
 impl CcmService {
 /// 创建新的云文档管理服务实例
     pub fn new() -> Self {
-Self {,
+Self {
             drive: DriveService::new(client.clone()),
             sheets: SheetsService::new(client.clone()),
             docx: DocxService::new(client.clone()),

@@ -186,7 +186,7 @@ let api_req = ApiRequest {,
 }
 }
 /// 用户信息修改请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct UserPatchRequest {
     /// 用户姓名
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -208,7 +208,7 @@ pub struct UserPatchRequest {
     pub email: Option<String>,
 }
 /// 用户信息修改响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserPatchResponse {
     /// 修改后的用户信息
     pub user: AcsUser,
@@ -219,7 +219,7 @@ ResponseFormat::Data,
     }
 }
 /// 用户详情查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserGetResponse {
     /// 用户详细信息
     pub user: AcsUser,
@@ -230,7 +230,7 @@ ResponseFormat::Data,
     }
 }
 /// 用户列表查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct UserListRequest {
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -249,7 +249,7 @@ pub struct UserListRequest {
     pub department: Option<String>,
 }
 /// 用户列表查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserListResponse {
     /// 用户列表
 #[serde(flatten)],
@@ -261,7 +261,7 @@ ResponseFormat::Data,
     }
 }
 /// 人脸图片上传请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FaceImageUploadRequest {
     /// 图片内容 (base64编码)
     pub image_content: String,
@@ -270,7 +270,7 @@ pub struct FaceImageUploadRequest {
     pub image_format: Option<String>,
 }
 /// 人脸图片上传响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FaceImageUploadResponse {
     /// 上传成功标识
     pub success: bool,
@@ -284,7 +284,7 @@ ResponseFormat::Data,
     }
 }
 /// 人脸图片下载响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FaceImageDownloadResponse {
     /// 人脸图片信息
     pub face_image: FaceImage,
@@ -295,7 +295,7 @@ ResponseFormat::Data,
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::{config::Config, constants::AppType};
 #[test],

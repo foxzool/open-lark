@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 /// 应用基本信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppInfo {
     /// 应用ID
 #[serde(rename = "app_id")],
@@ -29,7 +29,7 @@ pub struct AppInfo {
     pub namespace: Option<String>,
 }
 /// 应用状态
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum AppStatus {,
 /// 开发中
@@ -42,7 +42,7 @@ pub enum AppStatus {,
     Disabled,
 }
 /// 席位分配信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SeatAssignment {
     /// 席位ID
 #[serde(rename = "seat_id")],
@@ -67,7 +67,7 @@ pub struct SeatAssignment {
     pub seat_status: SeatStatus,
 }
 /// 席位类型
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum SeatType {,
 /// 开发者席位
@@ -78,7 +78,7 @@ pub enum SeatType {,
     Admin,
 }
 /// 席位状态
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum SeatStatus {,
 /// 活跃
@@ -89,7 +89,7 @@ pub enum SeatStatus {,
     Disabled,
 }
 /// 席位活跃信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SeatActivity {
     /// 席位ID
 #[serde(rename = "seat_id")],
@@ -108,7 +108,7 @@ pub struct SeatActivity {
     pub period: String,
 }
 /// 活跃度指标
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ActivityMetrics {
     /// 登录次数
 #[serde(rename = "login_count")],
@@ -121,7 +121,7 @@ pub struct ActivityMetrics {
     pub active_duration_minutes: i32,
 }
 /// 审计日志
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AuditLog {
     /// 日志ID
 #[serde(rename = "log_id")],
@@ -148,7 +148,7 @@ pub struct AuditLog {
     pub ip_address: Option<String>,
 }
 /// 操作人信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OperatorInfo {
     /// 用户ID
 #[serde(rename = "user_id")],
@@ -161,7 +161,7 @@ pub struct OperatorInfo {
     pub user_type: Option<String>,
 }
 /// 操作对象
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TargetObject {
     /// 对象类型
 #[serde(rename = "object_type")],
@@ -174,7 +174,7 @@ pub struct TargetObject {
     pub object_name: Option<String>,
 }
 /// 操作结果
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum OperationResult {,
 /// 成功
@@ -185,7 +185,7 @@ pub enum OperationResult {,
     PartialSuccess,
 }
 /// 数据变更日志
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataChangeLog {
     /// 变更日志ID
 #[serde(rename = "change_id")],
@@ -207,7 +207,7 @@ pub struct DataChangeLog {
     pub change_details: Vec<ChangeDetail>,
 }
 /// 变更类型
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum ChangeType {,
 /// 创建
@@ -218,7 +218,7 @@ pub enum ChangeType {,
     Delete,
 }
 /// 目标记录
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TargetRecord {
     /// 记录类型
 #[serde(rename = "record_type")],
@@ -231,7 +231,7 @@ pub struct TargetRecord {
     pub record_name: Option<String>,
 }
 /// 变更详情
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ChangeDetail {
     /// 字段名
 #[serde(rename = "field_name")],
@@ -247,7 +247,7 @@ pub struct ChangeDetail {
     pub change_type: String,
 }
 /// 权限信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PermissionInfo {
     /// 权限ID
 #[serde(rename = "permission_id")],
@@ -267,7 +267,7 @@ pub struct PermissionInfo {
     pub action_type: String,
 }
 /// 权限类型
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum PermissionType {,
 /// 角色权限
@@ -278,7 +278,7 @@ pub enum PermissionType {,
     System,
 }
 /// 通用响应结构
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppEngineResponse<T> {,
     /// 响应码
     pub code: i32,
@@ -288,7 +288,7 @@ pub struct AppEngineResponse<T> {,
     pub data: Option<T>,
 }
 /// 分页响应结构
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PaginatedAppEngineResponse<T> {,
     /// 响应码
     pub code: i32,
@@ -298,7 +298,7 @@ pub struct PaginatedAppEngineResponse<T> {,
     pub data: Option<PaginatedAppEngineData<T>>,
 }
 /// 分页数据
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PaginatedAppEngineData<T> {,
     /// 数据列表
     pub items: Option<Vec<T>>,

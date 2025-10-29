@@ -69,13 +69,13 @@ let api_req = ApiRequest {,
 }
 }
 // 请求响应模型
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ApplyScopeRequest {
     pub scopes: Vec<String>,
     pub reason: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListScopeResponse {
     pub scopes: Vec<PermissionScope>,
 }

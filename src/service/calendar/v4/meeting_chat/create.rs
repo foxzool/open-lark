@@ -16,13 +16,13 @@ use crate::core::{
 use serde::{Deserialize, Serialize};
 use super::MeetingChatService;
 /// 创建会议群请求 (未实现)
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct CreateMeetingChatRequest {
     pub api_req: ApiRequest,
     // TODO: 添加具体的请求字段,
 },
 /// 创建会议群响应 (未实现),
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateMeetingChatResponse {
     // TODO: 添加具体的响应字段,
 }

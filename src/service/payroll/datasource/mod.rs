@@ -18,7 +18,7 @@ pub struct DatasourceService {
     pub config: Config,
 }
 /// 外部数据源配置列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DatasourceListResponse {
     /// 外部数据源列表
 #[serde(flatten)],

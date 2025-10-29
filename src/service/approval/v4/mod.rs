@@ -141,7 +141,7 @@ pub fn new() -> Self {
     ///,
 /// # 返回值
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
-pub fn validate_services_config(&self) -> bool {,
+pub fn w+.*{
         // 检查原生审批服务配置
 if self.approval.config.app_id.is_empty() {,
             return false;
@@ -167,7 +167,7 @@ services.iter().all(|&app_id| app_id == reference_app_id),
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_service_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "ApprovalV4{{ services: 10, app_id: {} external_services: 3, internal_services: 7 }}",
             self.approval.config.app_id,
@@ -182,7 +182,7 @@ pub fn get_service_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_feature(&self, feature_name: &str) -> bool {,
+    pub fn w+.*{
 matches!(,
             feature_name,
             "external_approval",
@@ -207,7 +207,7 @@ fn service_version() -> &'static str {,
 }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::sync::Arc;
 // Helper function to create test config

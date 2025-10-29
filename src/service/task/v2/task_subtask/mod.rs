@@ -20,7 +20,7 @@ pub struct TaskSubtaskService {
     pub config: Config,
 }
 /// 创建子任务请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateSubtaskRequest {
     /// 子任务标题
     pub summary: String,
@@ -29,7 +29,7 @@ pub struct CreateSubtaskRequest {
     pub description: Option<String>,
 }
 /// 创建子任务响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateSubtaskResponse {
     /// 创建的子任务
     pub task: Task,
@@ -40,7 +40,7 @@ ResponseFormat::Data,
     }
 }
 /// 子任务列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListSubtasksResponse {
     /// 子任务列表
     pub items: Vec<Task>,

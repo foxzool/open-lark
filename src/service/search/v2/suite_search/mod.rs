@@ -17,7 +17,7 @@ pub struct SuiteSearchService {
     pub config: Config,
 }
 /// 搜索消息响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchMessageResponse {
     /// 搜索结果
 #[serde(flatten)],
@@ -29,7 +29,7 @@ ResponseFormat::Data,
     }
 }
 /// 搜索应用响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchAppResponse {
     /// 搜索结果
 #[serde(flatten)],

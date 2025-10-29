@@ -19,7 +19,7 @@ use crate::,
 };
 use super::list::Reply;
 /// 获取回复信息请求
-#[derive(Debug, Serialize, Default, Clone)],
+#[derive(.*?)]
 pub struct ListRepliesRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -43,15 +43,15 @@ pub struct ListRepliesRequest {
     user_id_type: Option<String>,
 }
 impl ListRepliesRequest {
-    pub fn builder() -> ListRepliesRequestBuilder {,
+    pub fn w+.*{
 ListRepliesRequestBuilder::default(),
     },
 pub fn new(,
         file_token: impl ToString,
         file_type: impl ToString,
         comment_id: impl ToString,
-    ) -> Self {,
-Self {,
+    ) -> Self {
+Self {
             file_token: file_token.to_string(),
             file_type: file_type.to_string(),
             comment_id: comment_id.to_string()
@@ -59,77 +59,77 @@ Self {,
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct ListRepliesRequestBuilder {
     request: ListRepliesRequest,
 }
 impl ListRepliesRequestBuilder {
     /// 文档token
-    pub fn file_token(mut self, file_token: impl ToString) -> Self {,
+    pub fn file_token(mut self, file_token: impl ToString) -> Self {
 self.request.file_token = file_token.to_string();
         self,
 },
 /// 文档类型,
-    pub fn file_type(mut self, file_type: impl ToString) -> Self {,
+    pub fn file_type(mut self, file_type: impl ToString) -> Self {
 self.request.file_type = file_type.to_string();
         self,
 },
 /// 设置为文档类型,
-    pub fn with_doc_type(mut self) -> Self {,
+    pub fn with_doc_type(mut self) -> Self {
 self.request.file_type = "doc".to_string();
         self,
 },
 /// 设置为docx类型,
-    pub fn with_docx_type(mut self) -> Self {,
+    pub fn with_docx_type(mut self) -> Self {
 self.request.file_type = "docx".to_string();
         self,
 },
 /// 设置为电子表格类型,
-    pub fn with_sheet_type(mut self) -> Self {,
+    pub fn with_sheet_type(mut self) -> Self {
 self.request.file_type = "sheet".to_string();
         self,
 },
 /// 设置为多维表格类型,
-    pub fn with_bitable_type(mut self) -> Self {,
+    pub fn with_bitable_type(mut self) -> Self {
 self.request.file_type = "bitable".to_string();
         self,
 },
 /// 评论ID,
-    pub fn comment_id(mut self, comment_id: impl ToString) -> Self {,
+    pub fn comment_id(mut self, comment_id: impl ToString) -> Self {
 self.request.comment_id = comment_id.to_string();
         self,
 },
 /// 分页大小,
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
 },
 /// 分页标记,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
 },
 /// 用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
 },
 /// 使用OpenID,
-    pub fn with_open_id(mut self) -> Self {,
+    pub fn with_open_id(mut self) -> Self {
 self.request.user_id_type = Some("open_id".to_string());
         self,
 },
 /// 使用UserID,
-    pub fn with_user_id(mut self) -> Self {,
+    pub fn with_user_id(mut self) -> Self {
 self.request.user_id_type = Some("user_id".to_string());
         self,
 },
 /// 使用UnionID,
-    pub fn with_union_id(mut self) -> Self {,
+    pub fn with_union_id(mut self) -> Self {
 self.request.user_id_type = Some("union_id".to_string());
         self,
 },
-pub fn build(mut self) -> ListRepliesRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -143,7 +143,7 @@ impl_executable_builder_owned!(
     list_replies,
 );
 /// 获取回复信息响应
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct ListRepliesResponse {
     /// 回复列表
     pub items: Vec<Reply>,
@@ -194,49 +194,49 @@ Ok(api_resp),
 
 impl ListRepliesResponse {
 /// 获取回复数量,
-    pub fn count(&self) -> usize {,
+    pub fn w+.*{
 self.items.len(),
     },
 /// 是否为空,
-    pub fn is_empty(&self) -> bool {,
+    pub fn w+.*{
 self.items.is_empty(),
     },
 /// 根据用户ID筛选回复,
-    pub fn replies_by_user(&self, user_id: &str) -> Vec<&Reply> {,
+    pub fn w+.*{
 self.items,
             .iter()
 .filter()
             .collect(),
 },
 /// 获取最新的回复,
-    pub fn latest_reply(&self) -> Option<&Reply> {,
+    pub fn w+.*{
 self.items.iter().max_by_key(|reply| reply.create_time),
     },
 /// 获取最早的回复,
-    pub fn earliest_reply(&self) -> Option<&Reply> {,
+    pub fn w+.*{
 self.items.iter().min_by_key(|reply| reply.create_time),
     },
 /// 按创建时间排序的回复列表,
-    pub fn sorted_by_time(&self) -> Vec<&Reply> {,
+    pub fn w+.*{
 let mut replies: Vec<&Reply> = self.items.iter().collect();
         replies.sort_by_key(|reply| reply.create_time);
 replies,
     },
 /// 按创建时间倒序排序的回复列表,
-    pub fn sorted_by_time_desc(&self) -> Vec<&Reply> {,
+    pub fn w+.*{
 let mut replies: Vec<&Reply> = self.items.iter().collect();
         replies.sort_by_key(|reply| std::cmp::Reverse(reply.create_time));
 replies,
     },
 /// 获取所有回复的文本内容,
-    pub fn get_all_text_content(&self) -> Vec<String> {,
+    pub fn w+.*{
 self.items,
             .iter()
 .map(|reply| reply.get_text_content()),
             .collect(),
 },
 /// 获取回复摘要信息,
-    pub fn summary(&self) -> String {,
+    pub fn w+.*{
 format!(,
             "回复总数: {}, 是否有更多: {}, 最新回复时间: {}",
             self.count(),
@@ -249,7 +249,7 @@ format!(,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_list_replies_request_builder() {,

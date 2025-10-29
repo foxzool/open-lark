@@ -3,7 +3,7 @@
 // 提供会话管理相关的功能
 use crate::prelude::*;
 /// 会话管理服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct SessionsService {
     client: std::sync::Arc<crate::client::LarkClient>,
 }

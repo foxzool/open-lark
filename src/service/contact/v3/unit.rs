@@ -178,12 +178,12 @@ Ok(resp.data.unwrap_or_default()),
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateUnitRequest {
     pub unit: Unit,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct CreateUnitResponse {
     pub unit: Unit,
 }
@@ -193,12 +193,12 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PatchUnitRequest {
     pub unit: Unit,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct PatchUnitResponse {
     pub unit: Unit,
 }
@@ -208,7 +208,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BindDepartmentRequest {
     pub department_id: String,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -223,7 +223,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UnbindDepartmentRequest {
     pub department_id: String,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -238,7 +238,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListUnitDepartmentsRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
@@ -248,7 +248,7 @@ pub struct ListUnitDepartmentsRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ListUnitDepartmentsResponse {
     pub department_list: Vec<Department>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -262,7 +262,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct GetUnitResponse {
     pub unit: Unit,
 }
@@ -272,7 +272,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListUnitsRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
@@ -280,7 +280,7 @@ pub struct ListUnitsRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ListUnitsResponse {
     pub items: Vec<Unit>,
     #[serde(skip_serializing_if = "Option::is_none")]

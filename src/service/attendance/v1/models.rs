@@ -4,7 +4,7 @@ use crate::core::{
 use serde::{Deserialize, Serialize};
 use open_lark_core::core::api_req::ApiRequest;
 /// 班次信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Shift {
     /// 班次 ID
     pub shift_id: String,
@@ -44,7 +44,7 @@ pub struct Shift {
     pub update_time: Option<String>,
 },
 /// 弹性打卡规则,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FlexibleRule {
     /// 弹性打卡时间，单位：分钟
     pub flexible_early_minutes: i32,
@@ -52,7 +52,7 @@ pub struct FlexibleRule {
     pub flexible_late_minutes: i32,
 },
 /// 打卡时间规则,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PunchTimeRule {
     /// 上班时间，格式：HH:mm
     pub on_time: String,
@@ -72,12 +72,12 @@ pub struct PunchTimeRule {
     pub early_minutes_as_lack: Option<i32>,
 },
 /// 人脸识别打卡配置,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct FacePunchConfig {
     // TODO: Add fields,
 },
 /// 创建班次请求,
-#[derive(Default, Debug)],
+#[derive(.*?)]
 pub struct CreateShiftRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型，作为查询参数。如果没有后台管理权限，可使用通过手机号或邮箱获取用户 ID,
@@ -121,7 +121,7 @@ pub struct CreateShiftRequest {
     pub face_punch_cfg: Option<FacePunchConfig>,
 },
 /// 创建班次响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateShiftRespData {
     /// 班次信息
     pub shift: Shift,
@@ -137,7 +137,7 @@ ResponseFormat::Data,
     },
 },
 /// 删除班次请求,
-#[derive(Default, Debug)],
+#[derive(.*?)]
 pub struct DeleteShiftRequest {
     pub api_req: ApiRequest,
     /// 班次 ID
@@ -160,7 +160,7 @@ pub struct QueryShiftRequest {
     pub shift_name: String,
 },
 /// 查询班次响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct QueryShiftRespData {
     /// 班次列表
     pub shift_list: Vec<Shift>,
@@ -180,7 +180,7 @@ pub struct ListShiftRequest {
     pub page_token: Option<String>,
 },
 /// 班次列表响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ShiftListData {
     /// 班次列表
     pub shift_list: Vec<Shift>,
@@ -203,7 +203,7 @@ ResponseFormat::Data,
     },
 },
 /// 用户排班信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserDailyShift {
     /// 用户 ID
     pub user_id: String,
@@ -225,7 +225,7 @@ pub struct BatchCreateUserDailyShiftRequest {
     pub user_daily_shifts: Vec<UserDailyShift>,
 },
 /// 批量操作响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchCreateUserDailyShiftRespData {
     /// 失败的用户排班信息
     pub failed_user_daily_shifts: Option<Vec<UserDailyShift>>,
@@ -253,7 +253,7 @@ pub struct QueryUserDailyShiftRequest {
     pub check_date_to: String,
 },
 /// 查询排班表响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct QueryUserDailyShiftRespData {
     /// 用户排班信息列表
     pub user_daily_shift_list: Vec<UserDailyShiftData>,
@@ -264,7 +264,7 @@ ResponseFormat::Data,
     },
 },
 /// 用户排班详细信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserDailyShiftData {
     /// 用户 ID
     pub user_id: String,
@@ -291,7 +291,7 @@ pub struct BatchCreateTempUserDailyShiftRequest {
     pub user_daily_shifts: Vec<UserDailyShift>,
 },
 /// 创建或修改临时排班响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchCreateTempUserDailyShiftRespData {
     /// 失败的用户排班信息
     pub failed_user_daily_shifts: Option<Vec<UserDailyShift>>,
@@ -306,7 +306,7 @@ ResponseFormat::Data,
     },
 },
 /// 考勤组信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Group {
     /// 考勤组 ID
     pub group_id: String,
@@ -338,7 +338,7 @@ pub struct Group {
     pub update_time: Option<String>,
 },
 /// 例外日期规则,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ExceptDateRule {
     /// 例外日期，格式：YYYY-MM-DD
     pub date: String,
@@ -348,7 +348,7 @@ pub struct ExceptDateRule {
     pub shift_id: Option<String>,
 },
 /// 工作日规则,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct WorkDayRule {
     /// 星期几：1-7，1代表周一
     pub week_day: i32,
@@ -356,7 +356,7 @@ pub struct WorkDayRule {
     pub shift_id: String,
 },
 /// 班次规则,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ShiftRule {
     /// 班次 ID
     pub shift_id: String,
@@ -364,7 +364,7 @@ pub struct ShiftRule {
     pub shift_name: Option<String>,
 },
 /// 成员规则,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MemberRule {
     /// 成员类型：1-部门 2-用户
     pub member_type: i32,
@@ -372,7 +372,7 @@ pub struct MemberRule {
     pub member_ids: Vec<String>,
 },
 /// 考勤组成员信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GroupUser {
     /// 用户 ID
     pub user_id: String,
@@ -401,7 +401,7 @@ pub struct ListGroupUserRequest {
     pub page_token: Option<String>,
 },
 /// 查询考勤组成员响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListGroupUserRespData {
     /// 成员列表
     pub user_list: Vec<GroupUser>,
@@ -416,7 +416,7 @@ ResponseFormat::Data,
     },
 },
 /// 创建或修改考勤组请求,
-#[derive(Default, Debug)],
+#[derive(.*?)]
 pub struct CreateGroupRequest {
     pub api_req: ApiRequest,
     /// 员工 ID 类型
@@ -447,7 +447,7 @@ pub struct CreateGroupRequest {
     pub member_rule: Option<MemberRule>,
 },
 /// 创建考勤组响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateGroupRespData {
     /// 考勤组信息
     pub group: Group,
@@ -487,7 +487,7 @@ pub struct SearchGroupRequest {
     pub group_name: String,
 },
 /// 查询考勤组响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchGroupRespData {
     /// 考勤组列表
     pub group_list: Vec<Group>,
@@ -511,7 +511,7 @@ pub struct ListGroupRequest {
     pub page_token: Option<String>,
 },
 /// 考勤组列表响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListGroupRespData {
     /// 考勤组列表
     pub group_list: Vec<Group>,
@@ -531,7 +531,7 @@ ResponseFormat::Data,
     },
 },
 /// 用户人脸识别设置信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserSetting {
     /// 用户 ID
     pub user_id: String,
@@ -549,7 +549,7 @@ pub struct UserSetting {
     pub update_time: Option<String>,
 },
 /// 修改用户人脸识别信息请求,
-#[derive(Default, Debug)],
+#[derive(.*?)]
 pub struct ModifyUserSettingRequest {
     pub api_req: ApiRequest,
     /// 员工 ID 类型
@@ -566,7 +566,7 @@ pub struct ModifyUserSettingRequest {
     pub face_downgrade: Option<bool>,
 },
 /// 修改用户人脸识别信息响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ModifyUserSettingRespData {
     /// 用户设置信息
     pub user_setting: UserSetting,
@@ -586,7 +586,7 @@ pub struct QueryUserSettingRequest {
     pub user_ids: Vec<String>,
 },
 /// 批量查询用户人脸识别信息响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct QueryUserSettingRespData {
     /// 用户设置信息列表
     pub user_setting_list: Vec<UserSetting>,
@@ -610,7 +610,7 @@ pub struct UploadUserPhotoRequest {
     pub photo_name: String,
 },
 /// 上传用户人脸识别照片响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UploadUserPhotoRespData {
     /// 人脸识别照片文件 key
     pub face_key: String,
@@ -632,7 +632,7 @@ pub struct DownloadUserPhotoRequest {
     pub face_key: String,
 },
 /// 下载用户人脸识别照片响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DownloadUserPhotoRespData {
     /// 照片的二进制数据
     pub photo_data: Vec<u8>,
@@ -649,7 +649,7 @@ ResponseFormat::Data,
 },
 // ==================== 考勤统计相关数据结构 ====================,
 /// 更新统计设置请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct UpdateUserStatsDataRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -658,12 +658,12 @@ pub struct UpdateUserStatsDataRequest {
     pub stats_setting: StatsSettings,
 }
 impl UpdateUserStatsDataRequest {
-    pub fn build(self) -> Self {,
+    pub fn build(self) -> Self {
 self,
     },
 },
 /// 统计设置,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct StatsSettings {
     /// 统计范围 1：自定义范围, 2：全部
     pub stats_scope: i32,
@@ -677,26 +677,26 @@ pub struct StatsSettings {
     pub need_fields: Vec<String>,
 },
 /// 更新统计设置响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateUserStatsDataRespData {
     /// 更新是否成功
     pub success: bool,
 },
 /// 查询统计设置请求,
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct QueryStatsSettingsRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型  
     pub employee_type: String,
 },
 /// 查询统计设置响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct QueryStatsSettingsRespData {
     /// 统计设置
     pub stats_setting: StatsSettings,
 },
 /// 查询统计表头请求,
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct QueryStatsFieldsRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -705,7 +705,7 @@ pub struct QueryStatsFieldsRequest {
     pub locale: Option<String>,
 },
 /// 统计字段信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct StatsField {
     /// 字段标识
     pub field_key: String,
@@ -721,13 +721,13 @@ pub struct StatsField {
     pub field_type: i32,
 },
 /// 查询统计表头响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct QueryStatsFieldsRespData {
     /// 统计字段列表
     pub fields: Vec<StatsField>,
 },
 /// 查询统计数据请求,
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct QueryUserStatsDataRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -744,7 +744,7 @@ pub struct QueryUserStatsDataRequest {
     pub locale: Option<String>,
 },
 /// 用户统计数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserStatsData {
     /// 用户ID
     pub user_id: String,
@@ -754,7 +754,7 @@ pub struct UserStatsData {
     pub datas: std::collections::HashMap<String, serde_json::Value>,
 },
 /// 查询统计数据响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct QueryUserStatsDataRespData {
     /// 用户统计数据列表
     pub datas: Vec<UserStatsData>,
@@ -782,7 +782,7 @@ ResponseFormat::Data,
 },
 // ==================== 假勤审批相关数据结构 ====================,
 /// 获取审批数据请求
-#[derive(Default, Debug)],
+#[derive(.*?)]
 pub struct QueryUserApprovalRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -801,7 +801,7 @@ pub struct QueryUserApprovalRequest {
     pub page_token: Option<String>,
 },
 /// 审批数据项,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserApproval {
     /// 审批ID
     pub approval_id: String,
@@ -829,7 +829,7 @@ pub struct UserApproval {
     pub approved_at: Option<String>,
 },
 /// 获取审批数据响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct QueryUserApprovalRespData {
     /// 审批数据列表
     pub approvals: Vec<UserApproval>,
@@ -852,7 +852,7 @@ pub struct CreateUserApprovalRequest {
     pub approval_note: Option<String>,
 },
 /// 写入审批结果响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateUserApprovalRespData {
     /// 处理是否成功
     pub success: bool,
@@ -873,7 +873,7 @@ pub struct ProcessUserApprovalRequest {
     pub message: Option<String>,
 },
 /// 通知审批状态更新响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ProcessUserApprovalRespData {
     /// 通知是否成功
     pub success: bool,
@@ -898,7 +898,7 @@ ResponseFormat::Data,
 },
 // ==================== 考勤补卡相关数据结构 ====================,
 /// 通知补卡审批发起请求
-#[derive(Default, Clone, Debug)],
+#[derive(.*?)]
 pub struct CreateUserTaskRemedyRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -907,7 +907,7 @@ pub struct CreateUserTaskRemedyRequest {
     pub remedy_application: UserTaskRemedyApplication,
 },
 /// 补卡申请信息,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct UserTaskRemedyApplication {
     /// 用户ID
     pub user_id: String,
@@ -923,7 +923,7 @@ pub struct UserTaskRemedyApplication {
     pub comment: Option<String>,
 },
 /// 通知补卡审批发起响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateUserTaskRemedyRespData {
     /// 补卡申请ID
     pub remedy_id: String,
@@ -931,7 +931,7 @@ pub struct CreateUserTaskRemedyRespData {
     pub success: bool,
 },
 /// 获取可补卡时间请求,
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct QueryUserAllowedRemedysRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -944,7 +944,7 @@ pub struct QueryUserAllowedRemedysRequest {
     pub date_to: Option<String>,
 },
 /// 可补卡时间数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserAllowedRemedy {
     /// 日期，格式：yyyy-MM-dd
     pub date: String,
@@ -956,7 +956,7 @@ pub struct UserAllowedRemedy {
     pub remedy_periods: Vec<RemedyPeriod>,
 },
 /// 补卡时间段,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RemedyPeriod {
     /// 补卡类型，1：上班补卡，2：下班补卡
     pub remedy_type: i32,
@@ -974,13 +974,13 @@ pub struct RemedyPeriod {
     pub block_reason: Option<String>,
 },
 /// 获取可补卡时间响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct QueryUserAllowedRemedysRespData {
     /// 可补卡时间列表
     pub allowed_remedys: Vec<UserAllowedRemedy>,
 },
 /// 获取补卡记录请求,
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct QueryUserTaskRemedyRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -999,7 +999,7 @@ pub struct QueryUserTaskRemedyRequest {
     pub page_token: Option<String>,
 },
 /// 补卡记录数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserTaskRemedy {
     /// 补卡记录ID
     pub remedy_id: String,
@@ -1029,7 +1029,7 @@ pub struct UserTaskRemedy {
     pub approve_comment: Option<String>,
 },
 /// 获取补卡记录响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct QueryUserTaskRemedyRespData {
     /// 补卡记录列表
     pub remedys: Vec<UserTaskRemedy>,
@@ -1056,7 +1056,7 @@ ResponseFormat::Data,
 },
 // ==================== 打卡信息管理相关数据结构 ====================,
 /// 导入打卡流水请求,
-#[derive(Default)],
+#[derive(.*?)]
 pub struct BatchCreateUserTaskRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1065,7 +1065,7 @@ pub struct BatchCreateUserTaskRequest {
     pub user_tasks: Vec<UserTaskCreate>,
 },
 /// 打卡记录创建信息,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct UserTaskCreate {
     /// 用户ID
     pub user_id: String,
@@ -1091,7 +1091,7 @@ pub struct UserTaskCreate {
     pub comment: Option<String>,
 },
 /// 打卡位置信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserTaskLocation {
     /// 纬度
     pub latitude: f64,
@@ -1101,7 +1101,7 @@ pub struct UserTaskLocation {
     pub address: Option<String>,
 },
 /// 导入打卡流水响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchCreateUserTaskRespData {
     /// 导入成功的记录数
     pub success_count: i32,
@@ -1111,7 +1111,7 @@ pub struct BatchCreateUserTaskRespData {
     pub failed_records: Option<Vec<UserTaskCreateFailure>>,
 },
 /// 打卡记录创建失败信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserTaskCreateFailure {
     /// 用户ID
     pub user_id: String,
@@ -1132,7 +1132,7 @@ pub struct GetUserTaskRequest {
     pub check_date: String,
 },
 /// 打卡流水信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserTask {
     /// 打卡记录ID
     pub task_id: String,
@@ -1168,7 +1168,7 @@ pub struct UserTask {
     pub update_time: String,
 },
 /// 查询打卡流水响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetUserTaskRespData {
     /// 打卡流水列表
     pub user_tasks: Vec<UserTask>,
@@ -1193,7 +1193,7 @@ pub struct QueryUserTaskRequest {
     pub page_token: Option<String>,
 },
 /// 批量查询打卡流水响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct QueryUserTaskRespData {
     /// 打卡流水列表
     pub user_tasks: Vec<UserTask>,
@@ -1212,7 +1212,7 @@ pub struct BatchDelUserTaskRequest {
     pub task_ids: Vec<String>,
 },
 /// 删除打卡流水响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchDelUserTaskRespData {
     /// 删除成功的记录数
     pub success_count: i32,
@@ -1222,7 +1222,7 @@ pub struct BatchDelUserTaskRespData {
     pub failed_records: Option<Vec<UserTaskDeleteFailure>>,
 },
 /// 打卡记录删除失败信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserTaskDeleteFailure {
     /// 打卡记录ID
     pub task_id: String,
@@ -1249,7 +1249,7 @@ pub struct QueryUserTaskResultRequest {
     pub page_token: Option<String>,
 },
 /// 打卡结果信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserTaskResult {
     /// 用户ID
     pub user_id: String,
@@ -1271,7 +1271,7 @@ pub struct UserTaskResult {
     pub exceptions: Option<Vec<String>>,
 },
 /// 查询打卡结果响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct QueryUserTaskResultRespData {
     /// 打卡结果列表
     pub user_task_results: Vec<UserTaskResult>,
@@ -1308,7 +1308,7 @@ ResponseFormat::Data,
 },
 // ==================== 归档报表相关数据结构 ====================,
 /// 查询归档报表表头请求
-#[derive(Debug, Default, Clone)],
+#[derive(.*?)]
 pub struct QueryArchiveStatsFieldsRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1317,7 +1317,7 @@ pub struct QueryArchiveStatsFieldsRequest {
     pub archive_rule_id: String,
 },
 /// 归档报表字段信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ArchiveStatsField {
     /// 字段ID
     pub field_id: String,
@@ -1335,7 +1335,7 @@ pub struct ArchiveStatsField {
     pub field_options: Option<Vec<ArchiveFieldOption>>,
 },
 /// 归档报表字段选项,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ArchiveFieldOption {
     /// 选项值
     pub value: String,
@@ -1343,7 +1343,7 @@ pub struct ArchiveFieldOption {
     pub label: String,
 },
 /// 查询归档报表表头响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct QueryArchiveStatsFieldsRespData {
     /// 报表字段列表
     pub fields: Vec<ArchiveStatsField>,
@@ -1353,7 +1353,7 @@ pub struct QueryArchiveStatsFieldsRespData {
     pub archive_rule_name: String,
 },
 /// 写入归档报表结果请求,
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct UploadArchiveReportRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1364,7 +1364,7 @@ pub struct UploadArchiveReportRequest {
     pub report_data: Vec<ArchiveReportRecord>,
 },
 /// 归档报表记录,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ArchiveReportRecord {
     /// 记录ID（用于更新或删除）
     pub record_id: Option<String>,
@@ -1376,7 +1376,7 @@ pub struct ArchiveReportRecord {
     pub field_data: std::collections::HashMap<String, String>,
 },
 /// 写入归档报表结果响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UploadArchiveReportRespData {
     /// 上传成功的记录数
     pub success_count: i32,
@@ -1386,7 +1386,7 @@ pub struct UploadArchiveReportRespData {
     pub failed_records: Option<Vec<ArchiveReportFailure>>,
 },
 /// 归档报表上传失败信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ArchiveReportFailure {
     /// 用户ID
     pub user_id: String,
@@ -1398,7 +1398,7 @@ pub struct ArchiveReportFailure {
     pub error_code: Option<String>,
 },
 /// 删除归档报表行数据请求,
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct DelArchiveReportRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1409,7 +1409,7 @@ pub struct DelArchiveReportRequest {
     pub record_ids: Vec<String>,
 },
 /// 删除归档报表行数据响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DelArchiveReportRespData {
     /// 删除成功的记录数
     pub success_count: i32,
@@ -1419,7 +1419,7 @@ pub struct DelArchiveReportRespData {
     pub failed_records: Option<Vec<ArchiveReportDeleteFailure>>,
 },
 /// 归档报表删除失败信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ArchiveReportDeleteFailure {
     /// 记录ID
     pub record_id: String,
@@ -1429,7 +1429,7 @@ pub struct ArchiveReportDeleteFailure {
     pub error_code: Option<String>,
 },
 /// 查询所有归档规则请求,
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct ListArchiveRulesRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1440,7 +1440,7 @@ pub struct ListArchiveRulesRequest {
     pub page_token: Option<String>,
 },
 /// 归档规则信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ArchiveRule {
     /// 归档规则ID
     pub archive_rule_id: String,
@@ -1460,7 +1460,7 @@ pub struct ArchiveRule {
     pub field_count: i32,
 },
 /// 查询所有归档规则响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListArchiveRulesRespData {
     /// 归档规则列表
     pub archive_rules: Vec<ArchiveRule>,
@@ -1492,7 +1492,7 @@ ResponseFormat::Data,
 },
 // ==================== 休假相关数据结构 ====================,
 /// 通过过期时间获取发放记录请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct GetLeaveEmployExpireRecordRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1507,7 +1507,7 @@ pub struct GetLeaveEmployExpireRecordRequest {
     pub page_token: Option<String>,
 },
 /// 休假发放记录信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct LeaveEmployExpireRecord {
     /// 记录ID
     pub record_id: String,
@@ -1537,7 +1537,7 @@ pub struct LeaveEmployExpireRecord {
     pub update_time: i64,
 },
 /// 通过过期时间获取发放记录响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetLeaveEmployExpireRecordRespData {
     /// 发放记录列表
     pub records: Vec<LeaveEmployExpireRecord>,
@@ -1549,7 +1549,7 @@ pub struct GetLeaveEmployExpireRecordRespData {
     pub total_count: i32,
 },
 /// 修改发放记录请求,
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct PatchLeaveAccrualRecordRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1560,7 +1560,7 @@ pub struct PatchLeaveAccrualRecordRequest {
     pub leave_accrual_record: LeaveAccrualRecordPatch,
 },
 /// 发放记录修改信息,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct LeaveAccrualRecordPatch {
     /// 员工ID
     pub employee_id: Option<String>,
@@ -1582,13 +1582,13 @@ pub struct LeaveAccrualRecordPatch {
     pub granted_description: Option<String>,
 },
 /// 修改发放记录响应数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PatchLeaveAccrualRecordRespData {
     /// 修改后的发放记录信息
     pub leave_accrual_record: LeaveAccrualRecord,
 },
 /// 完整的发放记录信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct LeaveAccrualRecord {
     /// 记录ID
     pub record_id: String,
@@ -1638,68 +1638,68 @@ ResponseFormat::Data,
 },
 // Build method implementations for trait support,
 impl QueryStatsSettingsRequest {
-pub fn build(self) -> Self {,
+pub fn build(self) -> Self {
         self,
 }
 }
 impl QueryStatsFieldsRequest {
-    pub fn build(self) -> Self {,
+    pub fn build(self) -> Self {
 self,
     },
 }
 impl QueryUserStatsDataRequest {
-    pub fn build(self) -> Self {,
+    pub fn build(self) -> Self {
 self,
     },
 }
 impl CreateUserTaskRemedyRequest {
-    pub fn build(self) -> Self {,
+    pub fn build(self) -> Self {
 self,
     },
 }
 impl QueryUserAllowedRemedysRequest {
-    pub fn build(self) -> Self {,
+    pub fn build(self) -> Self {
 self,
     },
 }
 impl QueryUserTaskRemedyRequest {
-    pub fn build(self) -> Self {,
+    pub fn build(self) -> Self {
 self,
     },
 }
 impl QueryArchiveStatsFieldsRequest {
-    pub fn build(self) -> Self {,
+    pub fn build(self) -> Self {
 self,
     },
 }
 impl UploadArchiveReportRequest {
-    pub fn build(self) -> Self {,
+    pub fn build(self) -> Self {
 self,
     },
 }
 impl DelArchiveReportRequest {
-    pub fn build(self) -> Self {,
+    pub fn build(self) -> Self {
 self,
     },
 }
 impl ListArchiveRulesRequest {
-    pub fn build(self) -> Self {,
+    pub fn build(self) -> Self {
 self,
     },
 }
 impl GetLeaveEmployExpireRecordRequest {
-    pub fn build(self) -> Self {,
+    pub fn build(self) -> Self {
 self,
     },
 }
 impl PatchLeaveAccrualRecordRequest {
-    pub fn build(self) -> Self {,
+    pub fn build(self) -> Self {
 self,
     },
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

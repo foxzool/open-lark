@@ -19,7 +19,7 @@ pub struct AttachmentService {
     pub config: Config,
 }
 /// 附件信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Attachment {
     /// 附件ID
     pub id: String,
@@ -55,7 +55,7 @@ pub struct Attachment {
     pub updated_time: Option<String>,
 }
 /// 附件上传请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct AttachmentUploadRequest {
     /// 附件名称
     pub name: String,
@@ -73,7 +73,7 @@ pub struct AttachmentUploadRequest {
     pub expiration_time: Option<String>,
 }
 /// 附件上传信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AttachmentUploadInfo {
     /// 上传URL
     pub upload_url: String,
@@ -87,7 +87,7 @@ pub struct AttachmentUploadInfo {
     pub expires_at: String,
 }
 /// 附件更新请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct AttachmentUpdateRequest {
     /// 附件名称
     pub name: Option<String>,
@@ -99,7 +99,7 @@ pub struct AttachmentUpdateRequest {
     pub expiration_time: Option<String>,
 }
 /// 附件列表请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct AttachmentListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -119,7 +119,7 @@ pub struct AttachmentListRequest {
     pub created_end_time: Option<String>,
 }
 /// 批量下载请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct BatchDownloadRequest {
     /// 附件ID列表
     pub attachment_ids: Vec<String>,
@@ -127,7 +127,7 @@ pub struct BatchDownloadRequest {
     pub archive_name: Option<String>,
 }
 /// 附件列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AttachmentListResponse {
     /// 附件列表
 #[serde(flatten)],
@@ -139,7 +139,7 @@ ResponseFormat::Data,
     }
 }
 /// 附件详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AttachmentDetailResponse {
     /// 附件信息
     pub attachment: Attachment,
@@ -150,7 +150,7 @@ ResponseFormat::Data,
     }
 }
 /// 附件上传响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AttachmentUploadResponse {
     /// 上传信息
     pub upload_info: AttachmentUploadInfo,
@@ -161,7 +161,7 @@ ResponseFormat::Data,
     }
 }
 /// 批量下载响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchDownloadResponse {
     /// 下载链接
     pub download_url: String,
@@ -174,7 +174,7 @@ ResponseFormat::Data,
     }
 }
 /// 附件操作响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AttachmentOperationResponse {
     /// 操作结果
 #[serde(flatten)],
@@ -626,7 +626,7 @@ let api_req = ApiRequest {,
         attachment_ids: Vec<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<AttachmentOperationResponse>> {,
-#[derive(Serialize)],
+#[derive(.*?)]
         struct BatchDeleteRequest {
             attachment_ids: Vec<String>,
         }

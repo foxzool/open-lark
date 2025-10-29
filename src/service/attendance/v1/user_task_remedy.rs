@@ -162,7 +162,7 @@ impl_executable_builder_owned!(
     query,
 );
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use crate::service::attendance::v1::models::UserTaskRemedyApplication;
 #[test],

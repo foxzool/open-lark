@@ -108,13 +108,13 @@ fn service_version() -> &'static str {,
 }
 }
 /// 国家/地区批量查询请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CountryRegionGetRequest {
     /// 主数据编码列表
     pub master_data_codes: Vec<String>,
 }
 /// 国家/地区批量查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CountryRegionGetResponse {
     /// 国家/地区信息列表
     pub country_regions: Vec<CountryRegion>,
@@ -125,7 +125,7 @@ ResponseFormat::Data,
     }
 }
 /// 国家/地区分页查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct CountryRegionListRequest {
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -144,7 +144,7 @@ pub struct CountryRegionListRequest {
     pub name: Option<String>,
 }
 /// 国家/地区分页查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CountryRegionListResponse {
     /// 国家/地区信息列表
 #[serde(flatten)],

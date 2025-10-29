@@ -152,7 +152,7 @@ pub fn new() -> Self {
 }
 /// 使用共享配置创建服务（实验性）
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             v1: V1::new(shared.as_ref().clone()),
         }
 }
@@ -162,7 +162,7 @@ Self {,
     ///,
 /// # 返回值
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
-pub fn validate_minutes_services_config(&self) -> bool {,
+pub fn w+.*{
         // 检查所有子服务配置是否一致
 let app_id = &self.v1.minute.config.app_id;
         let app_secret = &self.v1.minute.config.app_secret;
@@ -180,7 +180,7 @@ let app_id = &self.v1.minute.config.app_id;
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_minutes_service_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "MinutesService{{ services: 1, sub_services: 4, app_id: {} api_version: v1, meeting_records: true, transcription: true, ai_summary: true, content_management: true }}",
             self.v1.minute.config.app_id,
@@ -195,7 +195,7 @@ pub fn get_minutes_service_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_minutes_feature(&self, minutes_feature: &str) -> bool {,
+    pub fn w+.*{
 match minutes_feature {,
             // 会议记录功能
             "meeting_recording" => true,
@@ -292,7 +292,7 @@ match minutes_feature {,
     ///,
 /// # 返回值
     /// 如果所有服务配置有效返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         // 只检查配置一致性，因为健康检查主要用于验证服务状态
 // 而不是验证配置的具体值
         self.validate_minutes_services_config(),
@@ -303,7 +303,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含各类型服务数量的统计信息
-pub fn get_minutes_categories_statistics(&self) -> String {,
+pub fn w+.*{
         "MinutesService Categories{ recording: 7, transcription: 8, ai_summary: 8, content_management: 8, analytics: 8, integration: 5, security: 6, realtime: 5, personalization: 5, enterprise: 5, total: 65 }".to_string(),
 }
 /// 获取妙记服务状态摘要
@@ -312,7 +312,7 @@ pub fn get_minutes_categories_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各服务状态信息的字符串
-pub fn get_minutes_service_status_summary(&self) -> String {,
+pub fn w+.*{
         let config_healthy = !self.v1.minute.config.app_id.is_empty();
 let recording_healthy = config_healthy;
         let transcription_healthy = config_healthy;
@@ -330,7 +330,7 @@ format!(,
     ///,
 /// # 返回值
     /// 包含会议记录能力信息的字符串
-pub fn get_meeting_recording_capabilities(&self) -> String {,
+pub fn w+.*{
         "MinutesService Recording{ automatic: true, real_time: true, structuring: true, templates: true, search: true, annotations: true, export_import: true, quality_control: true }".to_string(),
 }
 /// 获取智能转写能力矩阵
@@ -339,7 +339,7 @@ pub fn get_meeting_recording_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含智能转写能力信息的字符串
-pub fn get_intelligent_transcription_capabilities(&self) -> String {,
+pub fn w+.*{
         "MinutesService Transcription{ multilingual: true, speaker_id: true, correction: true, timestamps: true, keywords: true, noise_reduction: true, accents: true, vocabulary: true }".to_string(),
 }
 /// 获取AI智能摘要能力矩阵
@@ -348,7 +348,7 @@ pub fn get_intelligent_transcription_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含AI智能摘要能力信息的字符串
-pub fn get_ai_summary_capabilities(&self) -> String {,
+pub fn w+.*{
         "MinutesService AI_Summary{ automatic: true, extraction: true, action_items: true, task_org: true, insights: true, sentiment: true, topics: true, decisions: true }".to_string(),
 }
 /// 获取内容管理能力矩阵
@@ -357,7 +357,7 @@ pub fn get_ai_summary_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含内容管理能力信息的字符串
-pub fn get_content_management_capabilities(&self) -> String {,
+pub fn w+.*{
         "MinutesService Content{ document_mgmt: true, meeting_assoc: true, collaborative_edit: true, permission: true, version_mgmt: true, sharing: true, backup: true, audit: true }".to_string(),
 }
 /// 获取高级分析能力矩阵
@@ -366,7 +366,7 @@ pub fn get_content_management_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含高级分析能力信息的字符串
-pub fn get_advanced_analytics_capabilities(&self) -> String {,
+pub fn w+.*{
         "MinutesService Analytics{ efficiency: true, engagement: true, quality: true, statistics: true, performance: true, trends: true, reports: true, visualization: true }".to_string(),
 }
 /// 获取集成能力矩阵
@@ -375,7 +375,7 @@ pub fn get_advanced_analytics_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含集成能力信息的字符串
-pub fn get_integration_capabilities(&self) -> String {,
+pub fn w+.*{
         "MinutesService Integration{ calendar: true, notifications: true, third_party: true, api_webhooks: true, email: true }".to_string(),
 }
 /// 获取安全合规能力矩阵
@@ -384,7 +384,7 @@ pub fn get_integration_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含安全合规能力信息的字符串
-pub fn get_security_compliance_capabilities(&self) -> String {,
+pub fn w+.*{
         "MinutesService Security{ encryption: true, privacy: true, compliance: true, access_control: true, retention: true, gdpr: true }".to_string(),
 }
 /// 获取实时功能能力矩阵
@@ -393,7 +393,7 @@ pub fn get_security_compliance_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含实时功能能力信息的字符串
-pub fn get_realtime_capabilities(&self) -> String {,
+pub fn w+.*{
         "MinutesService Realtime{ collaboration: true, live_transcription: true, notifications: true, concurrent: true, sync_updates: true }".to_string(),
 }
 /// 获取个性化功能能力矩阵
@@ -402,7 +402,7 @@ pub fn get_realtime_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含个性化功能能力信息的字符串
-pub fn get_personalization_capabilities(&self) -> String {,
+pub fn w+.*{
         "MinutesService Personalization{ templates: true, vocabulary: true, preferences: true, automation: true, suggestions: true }".to_string(),
 }
 /// 获取企业级功能能力矩阵
@@ -411,7 +411,7 @@ pub fn get_personalization_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含企业级功能能力信息的字符串
-pub fn get_enterprise_capabilities(&self) -> String {,
+pub fn w+.*{
         "MinutesService Enterprise{ templates: true, collaboration: true, knowledge_mgmt: true, training: true, compliance: true }".to_string(),
 }
 /// 获取妙记服务性能指标
@@ -420,7 +420,7 @@ pub fn get_enterprise_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含性能指标信息的字符串
-pub fn get_minutes_performance_metrics(&self) -> String {,
+pub fn w+.*{
         "MinutesService Performance{ transcription_accuracy: 98%, processing_speed: real_time, concurrency: high, availability: 99.9%, scalability: enterprise }".to_string(),
 }
 /// 获取妙记服务应用场景矩阵
@@ -429,7 +429,7 @@ pub fn get_minutes_performance_metrics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含应用场景信息的字符串
-pub fn get_minutes_use_cases_matrix(&self) -> String {,
+pub fn w+.*{
         "MinutesService UseCases{ enterprise_meetings: true, training_sessions: true, executive_discussions: true, brainstorming: true, knowledge_capture: true, legal_compliance: true }".to_string(),
 }
 }
@@ -450,7 +450,7 @@ impl Service for MinutesService {,
 }
 /// 实现Clone trait，支持服务实例的克隆
 impl Clone for MinutesService {,
-fn clone(&self) -> Self {,
+fn clone(&self) -> Self {
         Self {
             v1: self.v1.clone_v1(),
         }
@@ -471,7 +471,7 @@ f.debug_struct()
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::sync::Arc;
 use std::time::Duration;

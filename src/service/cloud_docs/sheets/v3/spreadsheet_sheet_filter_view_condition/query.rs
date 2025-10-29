@@ -38,7 +38,7 @@ Ok(api_resp),
     },
 },
 /// 查询筛选条件请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct QueryFilterViewConditionsRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -50,36 +50,36 @@ pub struct QueryFilterViewConditionsRequest {
     filter_view_id: String,
 }
 impl QueryFilterViewConditionsRequest {
-    pub fn builder() -> QueryFilterViewConditionsRequestBuilder {,
+    pub fn w+.*{
 QueryFilterViewConditionsRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct QueryFilterViewConditionsRequestBuilder {
     request: QueryFilterViewConditionsRequest,
 }
 impl QueryFilterViewConditionsRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 }
 
-    pub fn filter_view_id(mut self, filter_view_id: impl ToString) -> Self {,
+    pub fn filter_view_id(mut self, filter_view_id: impl ToString) -> Self {
 self.request.filter_view_id = filter_view_id.to_string();
         self,
 },
-pub fn build(mut self) -> QueryFilterViewConditionsRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 筛选条件信息,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct FilterConditionInfo {
     /// 筛选条件 ID
     pub condition_id: String,
@@ -87,7 +87,7 @@ pub struct FilterConditionInfo {
     pub condition: FilterCondition,
 },
 /// 查询筛选条件响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct QueryFilterViewConditionsResponseData {
     /// 筛选条件列表
     pub items: Vec<FilterConditionInfo>,

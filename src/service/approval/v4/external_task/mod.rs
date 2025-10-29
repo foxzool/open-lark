@@ -19,7 +19,7 @@ pub struct ExternalTaskService {
     pub config: Config,
 }
 /// 获取三方审批任务状态响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListExternalTaskResponse {
     /// 任务列表
     pub tasks: Vec<ApprovalTask>,
@@ -34,7 +34,7 @@ ResponseFormat::Data,
     }
 }
 /// 外部任务查询参数
-#[derive(Debug, Default)],
+#[derive(.*?)]
 pub struct ListExternalTaskParams {
     pub page_size: Option<i32>,
     pub page_token: Option<String>,

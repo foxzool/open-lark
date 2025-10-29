@@ -19,7 +19,7 @@ pub struct TenantProductAssignInfoService {
     pub config: Config,
 }
 /// 获取企业席位信息响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetTenantProductAssignInfoResponse {
     /// 企业席位信息
     pub tenant_product_assign_info: TenantProductAssignInfo,
@@ -35,7 +35,7 @@ impl TenantProductAssignInfoService {
 }
 /// 使用共享配置创建服务实例（实验性）
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             config: (*shared).clone(),
         }
 }

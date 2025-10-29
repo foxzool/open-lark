@@ -11,7 +11,7 @@ use crate::core::{,
     SDKResult,
 };
 /// 删除知识空间成员请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct DeleteSpaceMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -26,39 +26,39 @@ pub struct DeleteSpaceMemberRequest {
     member_type: Option<String>,
 }
 impl DeleteSpaceMemberRequest {
-    pub fn builder() -> DeleteSpaceMemberRequestBuilder {,
+    pub fn w+.*{
 DeleteSpaceMemberRequestBuilder::default(),
     }
 
-    pub fn new(space_id: impl ToString, member_id: impl ToString) -> Self {,
-Self {,
+    pub fn new(space_id: impl ToString, member_id: impl ToString) -> Self {
+Self {
             space_id: space_id.to_string(),
             member_id: member_id.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct DeleteSpaceMemberRequestBuilder {
     request: DeleteSpaceMemberRequest,
 }
 impl DeleteSpaceMemberRequestBuilder {
     /// 知识空间id
-    pub fn space_id(mut self, space_id: impl ToString) -> Self {,
+    pub fn space_id(mut self, space_id: impl ToString) -> Self {
 self.request.space_id = space_id.to_string();
         self,
 },
 /// 成员id,
-    pub fn member_id(mut self, member_id: impl ToString) -> Self {,
+    pub fn member_id(mut self, member_id: impl ToString) -> Self {
 self.request.member_id = member_id.to_string();
         self,
 },
 /// 成员类型：user,
-    pub fn member_type(mut self, member_type: impl ToString) -> Self {,
+    pub fn member_type(mut self, member_type: impl ToString) -> Self {
 self.request.member_type = Some(member_type.to_string());
         self,
 },
-pub fn build(mut self) -> DeleteSpaceMemberRequest {,
+pub fn w+.*{
         if let Some(member_type) = &self.request.member_type {,
 self.request,
                 .api_request,
@@ -69,7 +69,7 @@ self.request,
     },
 },
 /// 删除知识空间成员响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct DeleteSpaceMemberResponse {
     /// 删除的成员id
     pub member_id: String,
@@ -106,7 +106,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_delete_space_member_request_builder() {,

@@ -16,7 +16,7 @@ use crate::{
     service::lingo::models::{Draft, OuterInfo, RelatedMeta}
 };
 /// 草稿管理服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct DraftService {
     pub config: Config,
 }
@@ -86,7 +86,7 @@ let api_req = ApiRequest {,
 }
 }
 /// 草稿创建请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DraftCreateRequest {
     /// 词条ID（如果是更新现有词条的草稿）
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -109,7 +109,7 @@ pub struct DraftCreateRequest {
     pub related_meta: Option<RelatedMeta>,
 }
 /// 草稿创建响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DraftCreateResponse {
     /// 创建的草稿信息
     pub draft: Draft,
@@ -120,7 +120,7 @@ ResponseFormat::Data,
     }
 }
 /// 草稿更新请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DraftUpdateRequest {
     /// 主名称
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -142,7 +142,7 @@ pub struct DraftUpdateRequest {
     pub related_meta: Option<RelatedMeta>,
 }
 /// 草稿更新响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DraftUpdateResponse {
     /// 更新后的草稿信息
     pub draft: Draft,

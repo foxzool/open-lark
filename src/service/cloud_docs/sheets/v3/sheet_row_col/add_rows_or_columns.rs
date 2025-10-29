@@ -36,7 +36,7 @@ Ok(api_resp),
     },
 },
 /// 增加行列请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AddRowsOrColumnsRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -50,43 +50,43 @@ pub struct AddRowsOrColumnsRequest {
     length: i32,
 }
 impl AddRowsOrColumnsRequest {
-    pub fn builder() -> AddRowsOrColumnsRequestBuilder {,
+    pub fn w+.*{
 AddRowsOrColumnsRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct AddRowsOrColumnsRequestBuilder {
     request: AddRowsOrColumnsRequest,
 }
 impl AddRowsOrColumnsRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 },
 /// 设置维度类型,
     /// - ROWS: 行,
 /// - COLUMNS: 列,
-    pub fn dimension(mut self, dimension: impl ToString) -> Self {,
+    pub fn dimension(mut self, dimension: impl ToString) -> Self {
 self.request.dimension = dimension.to_string();
         self,
 },
 /// 设置增加的长度,
-    pub fn length(mut self, length: i32) -> Self {,
+    pub fn length(mut self, length: i32) -> Self {
 self.request.length = length;
         self,
 },
-pub fn build(mut self) -> AddRowsOrColumnsRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 增加行列响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct AddRowsOrColumnsResponseData {
     /// 增加行列后的信息
     pub add_range: AddRangeInfo,
@@ -97,7 +97,7 @@ ResponseFormat::Data,
     },
 },
 /// 增加范围信息,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct AddRangeInfo {
     /// 增加的维度
     pub dimension: String,

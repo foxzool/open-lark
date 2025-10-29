@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 用户ID类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum UserIdType {,
     /// 用户ID,
 #[serde(rename = "user_id")],
@@ -13,7 +13,7 @@ pub enum UserIdType {,
     OpenId,
 }
 impl UserIdType {
-    pub fn as_str(&self) -> &'static str {,
+    pub fn w+.*{
 match self {,
             UserIdType::UserId => "user_id",
             UserIdType::UnionId => "union_id",
@@ -22,7 +22,7 @@ match self {,
 }
 },
 /// 部门ID类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum DepartmentIdType {,
     /// 部门ID,
 #[serde(rename = "department_id")],
@@ -32,7 +32,7 @@ pub enum DepartmentIdType {,
     OpenDepartmentId,
 }
 impl DepartmentIdType {
-    pub fn as_str(&self) -> &'static str {,
+    pub fn w+.*{
 match self {,
             DepartmentIdType::DepartmentId => "department_id",
             DepartmentIdType::OpenDepartmentId => "open_department_id",
@@ -40,7 +40,7 @@ match self {,
 }
 },
 /// 审批状态,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum ApprovalStatus {,
     /// 审批中,
 #[serde(rename = "PENDING")],
@@ -59,7 +59,7 @@ pub enum ApprovalStatus {,
     Deleted,
 },
 /// 任务状态,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum TaskStatus {,
     /// 待处理,
 #[serde(rename = "PENDING")],
@@ -78,7 +78,7 @@ pub enum TaskStatus {,
     Done,
 },
 /// 审批定义,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Approval {
     /// 审批定义编码
     pub approval_code: String,
@@ -100,7 +100,7 @@ pub struct Approval {
     pub process: Option<ApprovalProcess>,
 },
 /// 审批实例,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ApprovalInstance {
     /// 审批实例编码
     pub instance_code: String,
@@ -124,7 +124,7 @@ pub struct ApprovalInstance {
     pub cc_users: Option<Vec<UserInfo>>,
 },
 /// 审批任务,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ApprovalTask {
     /// 任务ID
     pub task_id: String,
@@ -148,7 +148,7 @@ pub struct ApprovalTask {
     pub task_links: Option<Vec<TaskLink>>,
 },
 /// 用户信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserInfo {
     /// 用户ID
     pub user_id: String,
@@ -160,7 +160,7 @@ pub struct UserInfo {
     pub email: Option<String>,
 },
 /// 表单字段,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FormField {
     /// 字段ID
     pub id: String,
@@ -174,7 +174,7 @@ pub struct FormField {
     pub properties: Option<serde_json::Value>,
 },
 /// 表单数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FormData {
     /// 字段ID
     pub id: String,
@@ -184,13 +184,13 @@ pub struct FormData {
     pub value: Option<serde_json::Value>,
 },
 /// 审批流程,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ApprovalProcess {
     /// 流程节点
     pub nodes: Vec<ProcessNode>,
 },
 /// 流程节点,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ProcessNode {
     /// 节点ID
     pub node_id: String,
@@ -202,7 +202,7 @@ pub struct ProcessNode {
     pub approvers: Option<Vec<UserInfo>>,
 },
 /// 审批节点,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ApprovalNode {
     /// 节点ID
     pub node_id: String,
@@ -220,7 +220,7 @@ pub struct ApprovalNode {
     pub comment: Option<String>,
 },
 /// 任务链接,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TaskLink {
     /// 链接平台
     pub platform: String,
@@ -228,7 +228,7 @@ pub struct TaskLink {
     pub link: String,
 },
 /// 审批文件,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ApprovalFile {
     /// 文件ID
     pub file_id: String,
@@ -242,7 +242,7 @@ pub struct ApprovalFile {
     pub upload_time: Option<String>,
 },
 /// 审批评论,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ApprovalComment {
     /// 评论ID
     pub comment_id: String,
@@ -258,7 +258,7 @@ pub struct ApprovalComment {
     pub attachments: Option<Vec<CommentAttachment>>,
 },
 /// 评论附件,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CommentAttachment {
     /// 附件ID
     pub attachment_id: String,
@@ -271,7 +271,7 @@ pub struct CommentAttachment {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_user_id_type_serialization() {,

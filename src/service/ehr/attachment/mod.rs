@@ -16,7 +16,7 @@ pub struct AttachmentService {
     pub config: Config,
 }
 /// 下载人员附件响应包装器
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EmployeeAttachmentDownloadResponse {
     /// 附件下载信息
 #[serde(flatten)],

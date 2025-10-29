@@ -3,7 +3,7 @@
 // 包含云空间文件管理的扩展功能
 use crate::prelude::*;
 /// 云空间文件管理v2版本服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct DriveV2Service {
     client: std::sync::Arc<LarkClient>,
 }

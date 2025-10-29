@@ -4,7 +4,7 @@
 use crate::core::config::Config;
 use crate::service::meeting_room::schedules::default::SchedulesDefaultService;
 /// 会议室日程管理服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct SchedulesService {
     /// default版本API服务
     pub default: SchedulesDefaultService,

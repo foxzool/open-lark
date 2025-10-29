@@ -36,7 +36,7 @@ Ok(api_resp),
     },
 },
 /// 批量删除条件格式请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DeleteConditionFormatsRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -48,41 +48,41 @@ pub struct DeleteConditionFormatsRequest {
     cf_ids: Vec<String>,
 }
 impl DeleteConditionFormatsRequest {
-    pub fn builder() -> DeleteConditionFormatsRequestBuilder {,
+    pub fn w+.*{
 DeleteConditionFormatsRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct DeleteConditionFormatsRequestBuilder {
     request: DeleteConditionFormatsRequest,
 }
 impl DeleteConditionFormatsRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 }
 
-    pub fn cf_ids(mut self, cf_ids: Vec<String>) -> Self {,
+    pub fn cf_ids(mut self, cf_ids: Vec<String>) -> Self {
 self.request.cf_ids = cf_ids;
         self,
 }
 
-    pub fn add_cf_id(mut self, cf_id: impl ToString) -> Self {,
+    pub fn add_cf_id(mut self, cf_id: impl ToString) -> Self {
 self.request.cf_ids.push(cf_id.to_string());
         self,
 },
-pub fn build(mut self) -> DeleteConditionFormatsRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 删除结果,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct DeleteResult {
     /// 条件格式 ID
     pub cf_id: String,
@@ -94,7 +94,7 @@ pub struct DeleteResult {
     pub error_message: Option<String>,
 },
 /// 批量删除条件格式响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct DeleteConditionFormatsResponseData {
     /// 删除结果列表
     pub items: Vec<DeleteResult>,

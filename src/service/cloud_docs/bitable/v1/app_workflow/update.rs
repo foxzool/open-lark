@@ -18,7 +18,7 @@ use crate::,
     impl_executable_builder_config,
 };
 /// 更新自动化流程状态请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct UpdateWorkflowRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -32,12 +32,12 @@ pub struct UpdateWorkflowRequest {
     is_enabled: bool,
 }
 impl UpdateWorkflowRequest {
-    pub fn builder() -> UpdateWorkflowRequestBuilder {,
+    pub fn w+.*{
 UpdateWorkflowRequestBuilder::default(),
     }
 
-    pub fn new(app_token: impl ToString, workflow_id: impl ToString, is_enabled: bool) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, workflow_id: impl ToString, is_enabled: bool) -> Self {
+Self {
             app_token: app_token.to_string(),
             workflow_id: workflow_id.to_string(),
             is_enabled,
@@ -45,37 +45,37 @@ Self {,
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct UpdateWorkflowRequestBuilder {
     request: UpdateWorkflowRequest,
 }
 impl UpdateWorkflowRequestBuilder {
     /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 自动化流程ID,
-    pub fn workflow_id(mut self, workflow_id: impl ToString) -> Self {,
+    pub fn workflow_id(mut self, workflow_id: impl ToString) -> Self {
 self.request.workflow_id = workflow_id.to_string();
         self,
 },
 /// 自动化流程状态：true-启用，false-停用,
-    pub fn set_enabled(mut self, is_enabled: bool) -> Self {,
+    pub fn set_enabled(mut self, is_enabled: bool) -> Self {
 self.request.is_enabled = is_enabled;
         self,
 },
 /// 启用自动化流程,
-    pub fn enable(mut self) -> Self {,
+    pub fn enable(mut self) -> Self {
 self.request.is_enabled = true;
         self,
 },
 /// 停用自动化流程,
-    pub fn disable(mut self) -> Self {,
+    pub fn disable(mut self) -> Self {
 self.request.is_enabled = false;
         self,
 },
-pub fn build(mut self) -> UpdateWorkflowRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -87,7 +87,7 @@ impl_executable_builder_config!(,
     update_workflow,
 );
 /// 更新自动化流程状态响应
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateWorkflowResponse {
     /// 自动化流程ID
     pub workflow_id: String,
@@ -120,7 +120,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_update_workflow_request_builder() {,

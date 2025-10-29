@@ -11,7 +11,7 @@ use crate::{,
     },
 };
 
-#[derive(Serialize, Debug, Default)],
+#[derive(.*?)]
 pub struct UpdateSheetPropertiesRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -32,7 +32,7 @@ pub struct UpdateSheetPropertiesRequest {
     requests: Vec<OperateSheetsRequestElem>,
 },
 /// 工作表属性,
-#[derive(Serialize, Deserialize, Default, Debug)],
+#[derive(.*?)]
 pub struct UpdateSheetProperty {
     /// 要更新的工作表的 ID。调用获取工作表获取 ID,
 #[serde(rename = "sheetId")],
@@ -56,7 +56,7 @@ pub struct UpdateSheetProperty {
     pub protect: Option<UpdateSheetPropertyProtect>,
 },
 /// 是否要保护该工作表,
-#[derive(Serialize, Deserialize, Debug)],
+#[derive(.*?)]
 pub struct UpdateSheetPropertyProtect {
     /// 是否要保护该工作表。可选值：,
 ///,
@@ -72,26 +72,26 @@ pub struct UpdateSheetPropertyProtect {
     pub user_ids: Option<Vec<String>>,
 }
 impl UpdateSheetPropertiesRequest {
-    pub fn builder() -> UpdateSheetPropertiesRequestBuilder {,
+    pub fn w+.*{
 UpdateSheetPropertiesRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct UpdateSheetPropertiesRequestBuilder {
     request: UpdateSheetPropertiesRequest,
 }
 impl UpdateSheetPropertiesRequestBuilder {
-    pub fn user_id_type(mut self, user_id_type: Option<String>) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: Option<String>) -> Self {
 self.request.user_id_type = user_id_type;
         self,
 }
 
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn add_request(mut self, update_property: UpdateSheetProperty) -> Self {,
+    pub fn add_request(mut self, update_property: UpdateSheetProperty) -> Self {
 self.request,
             .requests,
 .push(OperateSheetsRequestElem::UpdateSheet {,
@@ -99,7 +99,7 @@ self.request,
             });
 self,
     },
-pub fn build(mut self) -> UpdateSheetPropertiesRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -130,7 +130,7 @@ Ok(api_resp),
     },
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::{api_resp::BaseResponse, config::Config};
 use rstest::*;

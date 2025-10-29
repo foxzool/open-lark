@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2ContactUserDeletedV3 {
     pub schema: String,
     pub header: EventHeader,
@@ -28,12 +28,12 @@ impl<F> P2ContactUserDeletedV3ProcessorImpl<F>,
 where
     F: Fn(P2ContactUserDeletedV3) + 'static,
 {,
-pub(crate) fn new(f: F) -> Self {,
+pub(crate) fn new(f: F) -> Self {
         P2ContactUserDeletedV3ProcessorImpl { f },
 }
 },
 /// 用户删除事件数据,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2ContactUserDeletedV3Data {
     /// 事件对象
     pub object: ContactEventObject,
@@ -42,7 +42,7 @@ pub struct P2ContactUserDeletedV3Data {
     pub old_object: Option<ContactEventObject>,
 },
 /// 通讯录事件对象,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ContactEventObject {
     /// 对象类型 (user)
     pub object_type: String,
@@ -50,7 +50,7 @@ pub struct ContactEventObject {
     pub user: DeletedContactUser,
 },
 /// 被删除的用户信息（简化版本）,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DeletedContactUser {
     /// 用户 ID
     pub user_id: String,

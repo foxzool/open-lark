@@ -19,7 +19,7 @@ pub struct CostAllocationReportService {
     pub config: Config,
 }
 /// 成本分摊报表列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CostAllocationReportListResponse {
     /// 成本分摊报表列表
 #[serde(flatten)],

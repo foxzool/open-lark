@@ -19,7 +19,7 @@ pub struct ExternalApprovalService {
     pub config: Config,
 }
 /// 创建三方审批定义请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateExternalApprovalRequest {
     /// 审批名称
     pub approval_name: String,
@@ -36,7 +36,7 @@ pub struct CreateExternalApprovalRequest {
     pub config: Option<serde_json::Value>,
 }
 /// 创建三方审批定义响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateExternalApprovalResponse {
     /// 三方审批定义编码
     pub approval_code: String,
@@ -47,7 +47,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取三方审批定义响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetExternalApprovalResponse {
     /// 审批名称
     pub approval_name: String,

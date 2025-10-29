@@ -4,7 +4,7 @@
 use crate::prelude::*;
 use crate::service::app_engine::permissions::v1::PermissionsV1Service;
 /// 权限管理服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct PermissionsService {
     /// v1版本API服务
     pub v1: PermissionsV1Service,

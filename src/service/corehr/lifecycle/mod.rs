@@ -22,7 +22,7 @@ pub struct LifecycleService {
     pub config: Config,
 }
 /// 创建待入职响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PreHireCreateResponse {
     /// 待入职信息
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -34,7 +34,7 @@ ResponseFormat::Data,
     }
 }
 /// 搜索待入职响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PreHireSearchResponse {
     /// 待入职信息列表
 #[serde(flatten)],
@@ -46,7 +46,7 @@ ResponseFormat::Data,
     }
 }
 /// 发起异动响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobChangeCreateResponse {
     /// 异动信息
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -58,7 +58,7 @@ ResponseFormat::Data,
     }
 }
 /// 搜索异动响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobChangeSearchResponse {
     /// 异动信息列表
 #[serde(flatten)],
@@ -70,7 +70,7 @@ ResponseFormat::Data,
     }
 }
 /// 发起离职响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OffboardingCreateResponse {
     /// 离职信息
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -82,7 +82,7 @@ ResponseFormat::Data,
     }
 }
 /// 搜索离职响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OffboardingSearchResponse {
     /// 离职信息列表
 #[serde(flatten)],

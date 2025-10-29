@@ -4,7 +4,7 @@
 use crate::prelude::*;
 use crate::service::app_engine::audit_log::v1::AuditLogV1Service;
 /// 审计日志服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct AuditLogService {
     /// v1版本API服务
     pub v1: AuditLogV1Service,

@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 /// 考勤用户任务状态变更事件 (user.task_status_change_event),
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2AttendanceUserTaskStatusChangeV1 {
     pub schema: String,
     pub header: EventHeader,
@@ -28,12 +28,12 @@ impl<F> P2AttendanceUserTaskStatusChangeV1ProcessorImpl<F>,
 where
     F: Fn(P2AttendanceUserTaskStatusChangeV1) + 'static,
 {,
-pub(crate) fn new(f: F) -> Self {,
+pub(crate) fn new(f: F) -> Self {
         P2AttendanceUserTaskStatusChangeV1ProcessorImpl { f },
 }
 },
 /// 考勤用户任务状态变更事件数据,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2AttendanceUserTaskStatusChangeV1Data {
     /// 用户信息
     pub user_id: AttendanceUserId,
@@ -43,7 +43,7 @@ pub struct P2AttendanceUserTaskStatusChangeV1Data {
     pub tenant_key: String,
 },
 /// 考勤事件中的用户信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AttendanceUserId {
     /// 用户的 union id
     pub union_id: String,
@@ -55,7 +55,7 @@ pub struct AttendanceUserId {
     pub employee_id: Option<String>,
 },
 /// 考勤任务状态变更信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AttendanceTaskStatusChange {
     /// 任务ID
     pub task_id: String,
@@ -89,7 +89,7 @@ pub struct AttendanceTaskStatusChange {
     pub check_records: Option<Vec<AttendanceCheckRecord>>,
 },
 /// 打卡记录信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AttendanceCheckRecord {
     /// 打卡记录ID
     pub record_id: String,
@@ -109,7 +109,7 @@ pub struct AttendanceCheckRecord {
     pub comment: Option<String>,
 },
 /// 打卡位置信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AttendanceLocation {
     /// 纬度
     pub latitude: f64,

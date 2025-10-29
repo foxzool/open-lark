@@ -15,7 +15,7 @@ use crate::{,
 };
 use super::EmployeeService;
 /// 搜索员工请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct SearchEmployeeRequest {
     pub api_req: ApiRequest,
     /// 搜索查询词
@@ -33,7 +33,7 @@ pub struct SearchEmployeeRequest {
 }
 impl SearchEmployeeRequest {
     /// 创建搜索员工请求的构建器,
-pub fn builder(query: impl ToString) -> SearchEmployeeRequestBuilder {,
+pub fn w+.*{
         SearchEmployeeRequestBuilder {,
 request: SearchEmployeeRequest {,
                 query: query.to_string()
@@ -49,32 +49,32 @@ pub struct SearchEmployeeRequestBuilder {
 }
 impl SearchEmployeeRequestBuilder {
     /// 设置搜索范围限制在指定部门
-    pub fn department_id(mut self, department_id: impl ToString) -> Self {,
+    pub fn department_id(mut self, department_id: impl ToString) -> Self {
 self.request.department_id = Some(department_id.to_string());
         self,
 },
 /// 设置页码,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
 },
 /// 设置页面大小,
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
 },
 /// 设置用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
 },
 /// 设置部门ID类型,
-    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {,
+    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {
 self.request.department_id_type = Some(department_id_type);
         self,
 },
 /// 构建请求,
-    pub fn build(mut self) -> SearchEmployeeRequest {,
+    pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
@@ -112,7 +112,7 @@ self.request.api_req.body = serde_json::to_vec(&body).unwrap_or_default();
 }
 },
 /// 搜索员工响应数据,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct SearchEmployeeResponseData {
     /// 员工信息列表
     pub employees: Vec<Employee>,
@@ -122,7 +122,7 @@ pub struct SearchEmployeeResponseData {
     pub has_more: bool,
 },
 /// 搜索员工响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct SearchEmployeeResponse {
     /// 响应数据
     pub data: SearchEmployeeResponseData,

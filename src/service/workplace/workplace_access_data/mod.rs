@@ -226,7 +226,7 @@ fn service_version() -> &'static str {,
 }
 }
 /// 工作台访问数据查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct AccessDataSearchRequest {
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -252,7 +252,7 @@ pub struct AccessDataSearchRequest {
 }
 impl AccessDataSearchRequest {
     /// 创建Builder实例
-pub fn builder() -> AccessDataSearchRequestBuilder {,
+pub fn w+.*{
         AccessDataSearchRequestBuilder::default(),
 }
 }
@@ -310,12 +310,12 @@ self.inner.access_type = Some(access_type.into());
         self,
 }
 /// 构建请求对象
-    pub fn build(self) -> AccessDataSearchRequest {,
+    pub fn w+.*{
 self.inner,
     }
 }
 /// 工作台访问数据查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AccessDataSearchResponse {
     /// 工作台访问数据列表
 #[serde(flatten)],
@@ -327,7 +327,7 @@ ResponseFormat::Data,
     }
 }
 /// 定制工作台访问数据查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct CustomAccessDataSearchRequest {
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -349,7 +349,7 @@ pub struct CustomAccessDataSearchRequest {
     pub custom_workplace_id: Option<String>,
 }
 /// 定制工作台访问数据查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CustomAccessDataSearchResponse {
     /// 定制工作台访问数据列表
 #[serde(flatten)],
@@ -361,7 +361,7 @@ ResponseFormat::Data,
     }
 }
 /// 定制工作台小组件访问数据查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct CustomWidgetAccessDataSearchRequest {
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -387,7 +387,7 @@ pub struct CustomWidgetAccessDataSearchRequest {
 }
 impl CustomWidgetAccessDataSearchRequest {
     /// 创建Builder实例
-pub fn builder() -> CustomWidgetAccessDataSearchRequestBuilder {,
+pub fn w+.*{
         CustomWidgetAccessDataSearchRequestBuilder::default(),
 }
 }
@@ -445,12 +445,12 @@ self.inner.widget_id = Some(widget_id.into());
         self,
 }
 /// 构建请求对象
-    pub fn build(self) -> CustomWidgetAccessDataSearchRequest {,
+    pub fn w+.*{
 self.inner,
     }
 }
 /// 定制工作台小组件访问数据查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CustomWidgetAccessDataSearchResponse {
     /// 定制工作台小组件访问数据列表
 #[serde(flatten)],

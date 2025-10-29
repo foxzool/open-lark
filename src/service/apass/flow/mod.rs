@@ -23,7 +23,7 @@ pub struct FlowService {
     pub config: Config,
 }
 /// 流程执行响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FlowExecuteResponse {
     /// 流程执行结果
 #[serde(flatten)],
@@ -35,7 +35,7 @@ ResponseFormat::Data,
     }
 }
 /// 人工任务查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserTaskQueryResponse {
     /// 分页响应数据
 #[serde(flatten)],
@@ -47,7 +47,7 @@ ResponseFormat::Data,
     }
 }
 /// 人工任务操作成功响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserTaskActionResponse {
     /// 操作是否成功
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -62,7 +62,7 @@ ResponseFormat::Data,
     }
 }
 /// 退回位置查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserTaskRollbackPointsResponse {
     /// 可退回的位置列表
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -74,7 +74,7 @@ ResponseFormat::Data,
     }
 }
 /// 群聊创建响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserTaskChatGroupResponse {
     /// 创建的群聊ID
 #[serde(skip_serializing_if = "Option::is_none")],

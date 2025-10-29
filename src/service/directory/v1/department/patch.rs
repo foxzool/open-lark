@@ -17,7 +17,7 @@ core::{,
 };
 use super::DepartmentService;
 /// 更新部门请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct PatchDepartmentRequest {
     pub api_req: ApiRequest,
     /// 部门ID
@@ -39,7 +39,7 @@ pub struct PatchDepartmentRequest {
 }
 impl PatchDepartmentRequest {
     /// 创建更新部门请求的构建器,
-pub fn builder(department_id: impl ToString) -> PatchDepartmentRequestBuilder {,
+pub fn w+.*{
         PatchDepartmentRequestBuilder::new(department_id),
 }
 },
@@ -50,8 +50,8 @@ pub struct PatchDepartmentRequestBuilder {
 }
 impl PatchDepartmentRequestBuilder {
     /// 创建新的构建器,
-pub fn new(department_id: impl ToString) -> Self {,
-        Self {,
+pub fn new(department_id: impl ToString) -> Self {
+        Self {
 request: PatchDepartmentRequest {,
                 department_id: department_id.to_string()
                 ..Default::default(),
@@ -59,42 +59,42 @@ request: PatchDepartmentRequest {,
         },
 },
 /// 设置部门名称,
-    pub fn name(mut self, name: impl ToString) -> Self {,
+    pub fn name(mut self, name: impl ToString) -> Self {
 self.request.name = Some(name.to_string());
         self,
 },
 /// 设置英文名称,
-    pub fn en_name(mut self, en_name: impl ToString) -> Self {,
+    pub fn en_name(mut self, en_name: impl ToString) -> Self {
 self.request.en_name = Some(en_name.to_string());
         self,
 },
 /// 设置父部门ID,
-    pub fn parent_department_id(mut self, parent_department_id: impl ToString) -> Self {,
+    pub fn parent_department_id(mut self, parent_department_id: impl ToString) -> Self {
 self.request.parent_department_id = Some(parent_department_id.to_string());
         self,
 },
 /// 设置部门主管ID,
-    pub fn leader_id(mut self, leader_id: impl ToString) -> Self {,
+    pub fn leader_id(mut self, leader_id: impl ToString) -> Self {
 self.request.leader_id = Some(leader_id.to_string());
         self,
 },
 /// 设置部门顺序,
-    pub fn order(mut self, order: i32) -> Self {,
+    pub fn order(mut self, order: i32) -> Self {
 self.request.order = Some(order);
         self,
 },
 /// 设置用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
 },
 /// 设置部门ID类型,
-    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {,
+    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {
 self.request.department_id_type = Some(department_id_type);
         self,
 },
 /// 构建请求,
-    pub fn build(mut self) -> PatchDepartmentRequest {,
+    pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
@@ -130,13 +130,13 @@ self.request.api_req.body = serde_json::to_vec(&body).unwrap_or_default();
 }
 },
 /// 更新部门响应数据,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct PatchDepartmentResponseData {
     /// 更新后的部门信息
     pub department: Department,
 },
 /// 更新部门响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct PatchDepartmentResponse {
     /// 响应数据
     pub data: PatchDepartmentResponseData,

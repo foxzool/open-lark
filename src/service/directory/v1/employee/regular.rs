@@ -16,7 +16,7 @@ use crate::{,
 };
 use super::EmployeeService;
 /// 更新待离职成员为在职请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct RegularEmployeeRequest {
     pub api_req: ApiRequest,
     /// 员工ID
@@ -26,7 +26,7 @@ pub struct RegularEmployeeRequest {
 }
 impl RegularEmployeeRequest {
     /// 创建更新待离职成员为在职请求的构建器,
-pub fn builder(employee_id: impl ToString) -> RegularEmployeeRequestBuilder {,
+pub fn w+.*{
         RegularEmployeeRequestBuilder {,
 request: RegularEmployeeRequest {,
                 employee_id: employee_id.to_string()
@@ -42,12 +42,12 @@ pub struct RegularEmployeeRequestBuilder {
 }
 impl RegularEmployeeRequestBuilder {
     /// 设置用户ID类型
-    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
 },
 /// 构建请求,
-    pub fn build(mut self) -> RegularEmployeeRequest {,
+    pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
@@ -62,13 +62,13 @@ self.request.api_req.body = serde_json::to_vec(&body).unwrap_or_default();
 }
 },
 /// 更新待离职成员为在职响应数据,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct RegularEmployeeResponseData {
     /// 更新的员工信息
     pub employee: Employee,
 },
 /// 更新待离职成员为在职响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct RegularEmployeeResponse {
     /// 响应数据
     pub data: RegularEmployeeResponseData,

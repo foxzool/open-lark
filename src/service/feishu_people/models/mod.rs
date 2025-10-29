@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 /// 人员基本信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PersonInfo {
     /// 人员ID
 #[serde(rename = "person_id")],
@@ -46,7 +46,7 @@ pub struct PersonInfo {
     pub update_time: Option<String>,
 }
 /// 性别枚举
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum Gender {,
 /// 男性
@@ -57,7 +57,7 @@ pub enum Gender {,
     Unknown,
 }
 /// 雇佣状态枚举
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum EmploymentStatus {,
 /// 在职
@@ -70,7 +70,7 @@ pub enum EmploymentStatus {,
     OnLeave,
 }
 /// 部门信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DepartmentInfo {
     /// 部门ID
 #[serde(rename = "department_id")],
@@ -88,7 +88,7 @@ pub struct DepartmentInfo {
     pub is_primary: Option<bool>,
 }
 /// 职位信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PositionInfo {
     /// 职位ID
 #[serde(rename = "position_id")],
@@ -111,7 +111,7 @@ pub struct PositionInfo {
     pub is_primary: Option<bool>,
 }
 /// 人员类型信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EmployeeTypeInfo {
     /// 人员类型ID
 #[serde(rename = "employee_type_id")],
@@ -122,7 +122,7 @@ pub struct EmployeeTypeInfo {
     pub description: Option<String>,
 }
 /// 职务序列信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobFamilyInfo {
     /// 职务序列ID
 #[serde(rename = "job_family_id")],
@@ -133,7 +133,7 @@ pub struct JobFamilyInfo {
     pub description: Option<String>,
 }
 /// 职务级别信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobLevelInfo {
     /// 职务级别ID
 #[serde(rename = "job_level_id")],
@@ -146,7 +146,7 @@ pub struct JobLevelInfo {
     pub description: Option<String>,
 }
 /// 合同信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ContractInfo {
     /// 合同ID
 #[serde(rename = "contract_id")],
@@ -177,7 +177,7 @@ pub struct ContractInfo {
     pub salary_standard: Option<SalaryStandardInfo>,
 }
 /// 合同状态
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum ContractStatus {,
 /// 有效
@@ -190,7 +190,7 @@ pub enum ContractStatus {,
     Pending,
 }
 /// 薪资标准信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SalaryStandardInfo {
     /// 薪资标准ID
 #[serde(rename = "salary_standard_id")],
@@ -202,7 +202,7 @@ pub struct SalaryStandardInfo {
     pub name: Option<String>,
 }
 /// 假期类型
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct LeaveType {
     /// 假期类型ID
 #[serde(rename = "leave_type_id")],
@@ -219,7 +219,7 @@ pub struct LeaveType {
     pub is_paid: Option<bool>,
 }
 /// 假期余额
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct LeaveBalance {
     /// 人员ID
 #[serde(rename = "person_id")],
@@ -244,7 +244,7 @@ pub struct LeaveBalance {
     pub valid_to: Option<String>,
 }
 /// 休假申请
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct LeaveApplication {
     /// 申请ID
 #[serde(rename = "application_id")],
@@ -281,7 +281,7 @@ pub struct LeaveApplication {
     pub update_time: String,
 }
 /// 休假申请状态
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum LeaveApplicationStatus {,
 /// 待审批
@@ -296,7 +296,7 @@ pub enum LeaveApplicationStatus {,
     Completed,
 }
 /// 用户授权信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserAuthorization {
     /// 用户ID
 #[serde(rename = "user_id")],
@@ -312,7 +312,7 @@ pub struct UserAuthorization {
     pub authorization_scope: Option<AuthorizationScope>,
 }
 /// 角色信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RoleInfo {
     /// 角色ID
 #[serde(rename = "role_id")],
@@ -329,7 +329,7 @@ pub struct RoleInfo {
     pub enabled: Option<bool>,
 }
 /// 权限信息
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PermissionInfo {
     /// 权限ID
 #[serde(rename = "permission_id")],
@@ -343,7 +343,7 @@ pub struct PermissionInfo {
     pub permission_type: Option<String>,
 }
 /// 授权范围
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AuthorizationScope {
     /// 部门范围
     pub departments: Option<Vec<String>>,
@@ -354,7 +354,7 @@ pub struct AuthorizationScope {
     pub data_scope: Option<String>,
 }
 /// 通用响应结构
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FeishuPeopleResponse<T> {,
     /// 响应码
     pub code: i32,
@@ -364,7 +364,7 @@ pub struct FeishuPeopleResponse<T> {,
     pub data: Option<T>,
 }
 /// 分页响应结构
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PaginatedFeishuPeopleResponse<T> {,
     /// 响应码
     pub code: i32,
@@ -374,7 +374,7 @@ pub struct PaginatedFeishuPeopleResponse<T> {,
     pub data: Option<PaginatedFeishuPeopleData<T>>,
 }
 /// 分页数据
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PaginatedFeishuPeopleData<T> {,
     /// 数据列表
     pub items: Option<Vec<T>>,

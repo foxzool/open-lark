@@ -40,7 +40,7 @@ api_resp.into_result(),
     },
 },
 /// 向多个范围写入数据请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct WriteDataToMultipleRangesRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -51,14 +51,14 @@ pub struct WriteDataToMultipleRangesRequest {
     value_ranges: Vec<MultiRangeValueData>,
 }
 impl WriteDataToMultipleRangesRequest {
-    pub fn builder() -> WriteDataToMultipleRangesRequestBuilder {,
+    pub fn w+.*{
 WriteDataToMultipleRangesRequestBuilder::default(),
     },
 /// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM,
     /// 验证请求参数,
-pub fn validate(&self) -> SDKResult<()> {,
+pub fn w+.*{
         // 验证必需字段,
 if self.spreadsheet_token.is_empty() {,
             return Err(crate::core::error::LarkAPIError::illegal_param(
@@ -125,12 +125,12 @@ if !range_data.values.is_empty() && range_data.values[0].len() > 10000 {,
 Ok(()),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct WriteDataToMultipleRangesRequestBuilder {
     request: WriteDataToMultipleRangesRequest,
 }
 impl WriteDataToMultipleRangesRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 },
@@ -138,7 +138,7 @@ pub fn add_range_data(,
         mut self,
         range: impl ToString,
         values: Vec<Vec<serde_json::Value>>,
-    ) -> Self {,
+    ) -> Self {
 self.request.value_ranges.push(MultiRangeValueData {,
             range: range.to_string(),
             values,
@@ -146,18 +146,18 @@ self.request.value_ranges.push(MultiRangeValueData {,
 self,
     }
 
-    pub fn value_ranges(mut self, value_ranges: Vec<MultiRangeValueData>) -> Self {,
+    pub fn value_ranges(mut self, value_ranges: Vec<MultiRangeValueData>) -> Self {
 self.request.value_ranges = value_ranges;
         self,
 },
-pub fn build(self) -> WriteDataToMultipleRangesRequest {,
+pub fn w+.*{
         let mut request = self.request;
 request.api_request.body = serde_json::to_vec(&request).unwrap();
         request,
 }
 },
 /// 多范围值数据,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MultiRangeValueData {
     /// 范围
     pub range: String,
@@ -165,15 +165,15 @@ pub struct MultiRangeValueData {
     pub values: Vec<Vec<serde_json::Value>>,
 }
 impl MultiRangeValueData {
-    pub fn new(range: impl ToString, values: Vec<Vec<serde_json::Value>>) -> Self {,
-Self {,
+    pub fn new(range: impl ToString, values: Vec<Vec<serde_json::Value>>) -> Self {
+Self {
             range: range.to_string(),
             values,
         },
 }
 },
 /// 向多个范围写入数据响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct WriteDataToMultipleRangesResponseData {
     /// 表格的 token,
 #[serde(rename = "spreadsheetToken")],
@@ -205,7 +205,7 @@ impl_executable_builder_owned!(,
     write_data_to_multiple_ranges,
 );
 /// 范围更新响应
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct RangeUpdateResponse {
     /// 更新的范围,
 #[serde(rename = "updatedRange")],

@@ -15,7 +15,7 @@ use crate::{,
 };
 use super::EmployeeService;
 /// 创建员工请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct CreateEmployeeRequest {
     pub api_req: ApiRequest,
     /// 员工工号
@@ -47,7 +47,7 @@ pub struct CreateEmployeeRequest {
 }
 impl CreateEmployeeRequest {
     /// 创建创建员工请求的构建器,
-pub fn builder() -> CreateEmployeeRequestBuilder {,
+pub fn w+.*{
         CreateEmployeeRequestBuilder::default(),
 }
 },
@@ -58,72 +58,72 @@ pub struct CreateEmployeeRequestBuilder {
 }
 impl CreateEmployeeRequestBuilder {
     /// 设置员工工号
-    pub fn employee_no(mut self, employee_no: impl ToString) -> Self {,
+    pub fn employee_no(mut self, employee_no: impl ToString) -> Self {
 self.request.employee_no = Some(employee_no.to_string());
         self,
 },
 /// 设置姓名,
-    pub fn name(mut self, name: impl ToString) -> Self {,
+    pub fn name(mut self, name: impl ToString) -> Self {
 self.request.name = Some(name.to_string());
         self,
 },
 /// 设置英文名,
-    pub fn en_name(mut self, en_name: impl ToString) -> Self {,
+    pub fn en_name(mut self, en_name: impl ToString) -> Self {
 self.request.en_name = Some(en_name.to_string());
         self,
 },
 /// 设置邮箱,
-    pub fn email(mut self, email: impl ToString) -> Self {,
+    pub fn email(mut self, email: impl ToString) -> Self {
 self.request.email = Some(email.to_string());
         self,
 },
 /// 设置手机号,
-    pub fn mobile(mut self, mobile: impl ToString) -> Self {,
+    pub fn mobile(mut self, mobile: impl ToString) -> Self {
 self.request.mobile = Some(mobile.to_string());
         self,
 },
 /// 设置部门ID列表,
-    pub fn department_ids(mut self, department_ids: Vec<String>) -> Self {,
+    pub fn department_ids(mut self, department_ids: Vec<String>) -> Self {
 self.request.department_ids = Some(department_ids);
         self,
 },
 /// 设置工作地点,
-    pub fn work_location(mut self, work_location: impl ToString) -> Self {,
+    pub fn work_location(mut self, work_location: impl ToString) -> Self {
 self.request.work_location = Some(work_location.to_string());
         self,
 },
 /// 设置职级,
-    pub fn job_level(mut self, job_level: impl ToString) -> Self {,
+    pub fn job_level(mut self, job_level: impl ToString) -> Self {
 self.request.job_level = Some(job_level.to_string());
         self,
 },
 /// 设置职位,
-    pub fn job_title(mut self, job_title: impl ToString) -> Self {,
+    pub fn job_title(mut self, job_title: impl ToString) -> Self {
 self.request.job_title = Some(job_title.to_string());
         self,
 },
 /// 设置上级ID,
-    pub fn leader_id(mut self, leader_id: impl ToString) -> Self {,
+    pub fn leader_id(mut self, leader_id: impl ToString) -> Self {
 self.request.leader_id = Some(leader_id.to_string());
         self,
 },
 /// 设置入职时间,
-    pub fn join_time(mut self, join_time: impl ToString) -> Self {,
+    pub fn join_time(mut self, join_time: impl ToString) -> Self {
 self.request.join_time = Some(join_time.to_string());
         self,
 },
 /// 设置用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
 },
 /// 设置部门ID类型,
-    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {,
+    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {
 self.request.department_id_type = Some(department_id_type);
         self,
 },
 /// 构建请求,
-    pub fn build(mut self) -> CreateEmployeeRequest {,
+    pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
@@ -177,13 +177,13 @@ self.request.api_req.body = serde_json::to_vec(&body).unwrap_or_default();
 }
 },
 /// 创建员工响应数据,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct CreateEmployeeResponseData {
     /// 创建的员工信息
     pub employee: Employee,
 },
 /// 创建员工响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct CreateEmployeeResponse {
     /// 响应数据
     pub data: CreateEmployeeResponseData,

@@ -37,7 +37,7 @@ Ok(api_resp),
     },
 },
 /// 创建浮动图片请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateFloatImageRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -49,30 +49,30 @@ pub struct CreateFloatImageRequest {
     float_image: FloatImageData,
 }
 impl CreateFloatImageRequest {
-    pub fn builder() -> CreateFloatImageRequestBuilder {,
+    pub fn w+.*{
 CreateFloatImageRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct CreateFloatImageRequestBuilder {
     request: CreateFloatImageRequest,
 }
 impl CreateFloatImageRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 }
 
-    pub fn float_image(mut self, float_image: FloatImageData) -> Self {,
+    pub fn float_image(mut self, float_image: FloatImageData) -> Self {
 self.request.float_image = float_image;
         self,
 },
-pub fn build(mut self) -> CreateFloatImageRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -85,7 +85,7 @@ impl_executable_builder_owned!(,
     create_float_image,
 );
 /// 浮动图片数据
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FloatImageData {
     /// 图片token
     pub image_token: String,
@@ -101,7 +101,7 @@ pub struct FloatImageData {
     pub name: Option<String>,
 },
 /// 图片位置,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ImagePosition {
     /// 起始列索引（从0开始）
     pub start_col_index: i32,
@@ -115,7 +115,7 @@ pub struct ImagePosition {
     pub offset_y: f64,
 },
 /// 图片大小,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ImageSize {
     /// 图片宽度（像素）
     pub width: f64,
@@ -124,8 +124,8 @@ pub struct ImageSize {
 }
 impl FloatImageData {
     /// 创建浮动图片
-    pub fn new(image_token: impl ToString, position: ImagePosition, size: ImageSize) -> Self {,
-Self {,
+    pub fn new(image_token: impl ToString, position: ImagePosition, size: ImageSize) -> Self {
+Self {
             image_token: image_token.to_string(),
             position,
             size,
@@ -134,15 +134,15 @@ Self {,
         },
 },
 /// 设置图片名称,
-    pub fn with_name(mut self, name: impl ToString) -> Self {,
+    pub fn with_name(mut self, name: impl ToString) -> Self {
 self.name = Some(name.to_string());
         self,
 }
 }
 impl ImagePosition {
     /// 创建图片位置
-    pub fn new(col_index: i32, row_index: i32) -> Self {,
-Self {,
+    pub fn new(col_index: i32, row_index: i32) -> Self {
+Self {
             start_col_index: col_index,
             start_row_index: row_index,
             offset_x: 0.0,
@@ -150,7 +150,7 @@ Self {,
         },
 },
 /// 设置偏移量,
-    pub fn with_offset(mut self, offset_x: f64, offset_y: f64) -> Self {,
+    pub fn with_offset(mut self, offset_x: f64, offset_y: f64) -> Self {
 self.offset_x = offset_x;
         self.offset_y = offset_y;
 self,
@@ -162,15 +162,15 @@ impl ImageSize {
         Self { width, height },
 },
 /// 创建正方形图片大小,
-    pub fn square(size: f64) -> Self {,
-Self {,
+    pub fn square(size: f64) -> Self {
+Self {
             width: size,
             height: size,
         },
 }
 },
 /// 创建浮动图片响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct CreateFloatImageResponseData {
     /// 浮动图片 ID
     pub float_image_id: String,

@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 卡片实体,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Card {
     /// 卡片ID
     pub card_id: Option<String>,
@@ -18,7 +18,7 @@ pub struct Card {
     pub update_time: Option<String>,
 },
 /// 卡片状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum CardStatus {,
 /// 草稿,
@@ -29,7 +29,7 @@ pub enum CardStatus {,
     Deleted,
 },
 /// 卡片组件,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CardElement {
     /// 组件ID
     pub element_id: Option<String>,
@@ -47,7 +47,7 @@ pub struct CardElement {
     pub update_time: Option<String>,
 },
 /// 用户ID类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum UserIdType {,
 /// Open ID,
@@ -67,7 +67,7 @@ match self {,
 }
 },
 /// 卡片配置,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CardSettings {
     /// 是否启用交互
     pub enable_interaction: Option<bool>,
@@ -77,7 +77,7 @@ pub struct CardSettings {
     pub custom_config: Option<serde_json::Value>,
 },
 /// 批量更新操作,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchUpdateOperation {
     /// 操作类型
     pub operation: String,

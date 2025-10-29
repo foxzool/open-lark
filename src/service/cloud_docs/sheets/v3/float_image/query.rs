@@ -38,7 +38,7 @@ Ok(api_resp),
     },
 },
 /// 查询浮动图片请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct QueryFloatImagesRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -48,25 +48,25 @@ pub struct QueryFloatImagesRequest {
     sheet_id: String,
 }
 impl QueryFloatImagesRequest {
-    pub fn builder() -> QueryFloatImagesRequestBuilder {,
+    pub fn w+.*{
 QueryFloatImagesRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct QueryFloatImagesRequestBuilder {
     request: QueryFloatImagesRequest,
 }
 impl QueryFloatImagesRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 },
-pub fn build(mut self) -> QueryFloatImagesRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -79,7 +79,7 @@ impl_executable_builder_owned!(,
     query_float_images,
 );
 /// 查询浮动图片响应体最外层
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct QueryFloatImagesResponseData {
     /// 浮动图片列表
     pub items: Vec<FloatImageInfo>,

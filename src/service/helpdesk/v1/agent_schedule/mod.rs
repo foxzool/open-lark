@@ -19,7 +19,7 @@ pub struct AgentScheduleService {
     pub config: Config,
 }
 /// 创建客服工作日程请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateAgentScheduleRequest {
     /// 开始时间
     pub start_time: String,
@@ -30,7 +30,7 @@ pub struct CreateAgentScheduleRequest {
     pub repeat_type: Option<String>,
 }
 /// 创建客服工作日程响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateAgentScheduleResponse {
     /// 创建的工作日程
     pub schedule: AgentSchedule,
@@ -41,7 +41,7 @@ ResponseFormat::Data,
     }
 }
 /// 更新客服工作日程请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateAgentScheduleRequest {
     /// 开始时间
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -54,7 +54,7 @@ pub struct UpdateAgentScheduleRequest {
     pub repeat_type: Option<String>,
 }
 /// 更新客服工作日程响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateAgentScheduleResponse {
     /// 更新后的工作日程
     pub schedule: AgentSchedule,
@@ -65,7 +65,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取客服工作日程响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetAgentScheduleResponse {
     /// 工作日程
     pub schedule: AgentSchedule,
@@ -76,7 +76,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取全部客服工作日程响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListAgentSchedulesResponse {
     /// 工作日程列表
     pub schedules: Vec<AgentSchedule>,

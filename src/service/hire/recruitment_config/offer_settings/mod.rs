@@ -19,7 +19,7 @@ pub struct OfferSettingsService {
     pub config: Config,
 }
 /// Offer设置信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OfferSettings {
     /// 设置ID
     pub id: String,
@@ -49,12 +49,12 @@ pub struct OfferSettings {
     pub updated_time: Option<String>,
 }
 /// 薪资配置
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct SalaryConfig {
     // TODO: Add fields
 }
 /// 薪资组成项
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SalaryComponent {
     /// 组成项ID
     pub id: String,
@@ -70,12 +70,12 @@ pub struct SalaryComponent {
     pub max_value: Option<f64>,
 }
 /// 审批配置
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ApprovalConfig {
     // TODO: Add fields
 }
 /// 审批规则
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ApprovalRule {
     /// 规则ID
     pub id: String,
@@ -87,22 +87,22 @@ pub struct ApprovalRule {
     pub approvers: Vec<UserId>,
 }
 /// 有效期配置
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ValidityConfig {
     // TODO: Add fields
 }
 /// 签约配置
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ContractConfig {
     // TODO: Add fields
 }
 /// 通知配置
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct NotificationConfig {
     // TODO: Add fields
 }
 /// Offer设置创建请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct OfferSettingsCreateRequest {
     /// 设置名称
     pub name: I18nText,
@@ -124,7 +124,7 @@ pub struct OfferSettingsCreateRequest {
     pub is_default: Option<bool>,
 }
 /// Offer设置列表请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct OfferSettingsListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -136,7 +136,7 @@ pub struct OfferSettingsListRequest {
     pub status: Option<String>,
 }
 /// Offer设置列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OfferSettingsListResponse {
     /// Offer设置列表
 #[serde(flatten)],
@@ -148,7 +148,7 @@ ResponseFormat::Data,
     }
 }
 /// Offer设置详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OfferSettingsDetailResponse {
     /// Offer设置信息
     pub settings: OfferSettings,
@@ -159,7 +159,7 @@ ResponseFormat::Data,
     }
 }
 /// Offer设置操作响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OfferSettingsOperationResponse {
     /// 操作结果
 #[serde(flatten)],

@@ -20,7 +20,7 @@ pub struct CommentService {
     pub config: Config,
 }
 /// 创建评论请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateCommentRequest {
     /// 评论内容
     pub content: String,
@@ -29,7 +29,7 @@ pub struct CreateCommentRequest {
     pub parent_id: Option<String>,
 }
 /// 创建评论响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateCommentResponse {
     /// 创建的评论
     pub comment: Comment,
@@ -40,13 +40,13 @@ ResponseFormat::Data,
     }
 }
 /// 更新评论请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateCommentRequest {
     /// 评论内容
     pub content: String,
 }
 /// 更新评论响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateCommentResponse {
     /// 更新后的评论
     pub comment: Comment,
@@ -57,7 +57,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取评论响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetCommentResponse {
     /// 评论详情
     pub comment: Comment,
@@ -68,7 +68,7 @@ ResponseFormat::Data,
     }
 }
 /// 评论列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListCommentsResponse {
     /// 评论列表
     pub items: Vec<Comment>,
@@ -233,7 +233,7 @@ let api_req = ApiRequest {,
 }
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 fn create_test_config() -> Config {,
         Config::default(),

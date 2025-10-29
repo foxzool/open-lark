@@ -19,12 +19,12 @@ pub struct ExternalSystemService {
     pub config: Config,
 }
 /// 外部系统配置
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ExternalSystemConfig {
     // TODO: Add fields
 }
 /// 外部系统同步记录
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ExternalSystemSyncRecord {
     /// 同步记录ID
     pub id: String,
@@ -48,7 +48,7 @@ pub struct ExternalSystemSyncRecord {
     pub created_time: Option<String>,
 }
 /// 同步统计信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SyncStatistics {
     /// 总处理数量
     pub total_count: u32,
@@ -64,7 +64,7 @@ pub struct SyncStatistics {
     pub updated_count: u32,
 }
 /// 外部候选人数据
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ExternalCandidate {
     /// 外部候选人ID
     pub external_id: String,
@@ -98,7 +98,7 @@ pub struct ExternalCandidate {
     pub updated_time: Option<String>,
 }
 /// 外部系统配置创建请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ExternalSystemConfigCreateRequest {
     /// 系统名称
     pub system_name: String,
@@ -120,7 +120,7 @@ pub struct ExternalSystemConfigCreateRequest {
     pub enabled: Option<bool>,
 }
 /// 同步任务创建请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct SyncTaskCreateRequest {
     /// 外部系统配置ID
     pub system_config_id: String,
@@ -130,7 +130,7 @@ pub struct SyncTaskCreateRequest {
     pub sync_params: Option<serde_json::Value>,
 }
 /// 外部候选人导入请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ExternalCandidateImportRequest {
     /// 外部系统配置ID
     pub system_config_id: String,
@@ -138,7 +138,7 @@ pub struct ExternalCandidateImportRequest {
     pub candidates: Vec<ExternalCandidateData>,
 }
 /// 外部候选人数据
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ExternalCandidateData {
     /// 外部候选人ID
     pub external_id: String,
@@ -160,7 +160,7 @@ pub struct ExternalCandidateData {
     pub external_data: Option<serde_json::Value>,
 }
 /// 外部系统配置列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ExternalSystemConfigListResponse {
     /// 外部系统配置列表
 #[serde(flatten)],
@@ -172,7 +172,7 @@ ResponseFormat::Data,
     }
 }
 /// 外部系统同步记录列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ExternalSystemSyncRecordListResponse {
     /// 同步记录列表
 #[serde(flatten)],
@@ -184,7 +184,7 @@ ResponseFormat::Data,
     }
 }
 /// 外部候选人列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ExternalCandidateListResponse {
     /// 外部候选人列表
 #[serde(flatten)],
@@ -196,7 +196,7 @@ ResponseFormat::Data,
     }
 }
 /// 外部系统操作响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ExternalSystemOperationResponse {
     /// 操作结果
 #[serde(flatten)],

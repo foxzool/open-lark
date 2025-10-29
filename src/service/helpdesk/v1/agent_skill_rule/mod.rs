@@ -19,7 +19,7 @@ pub struct AgentSkillRuleService {
     pub config: Config,
 }
 /// 客服技能及运算符响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OperatorOptionsResponse {
     /// 技能列表
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -34,7 +34,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取客服技能列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListAgentSkillRulesResponse {
     /// 技能列表
     pub skills: Vec<AgentSkill>,

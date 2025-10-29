@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 分页响应基础结构,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PageResponse<T> {,
     /// 数据项列表
     pub items: Vec<T>,
@@ -12,7 +12,7 @@ pub struct PageResponse<T> {,
     pub has_more: Option<bool>,
 },
 /// 课程学习进度记录,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CourseRegistration {
     /// 学习进度记录ID
     pub registration_id: String,
@@ -64,7 +64,7 @@ pub struct CourseRegistration {
     pub updated_at: Option<i64>,
 },
 /// 课程信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CourseInfo {
     /// 课程ID
     pub course_id: String,
@@ -100,7 +100,7 @@ pub struct CourseInfo {
     pub status: Option<String>,
 },
 /// 用户信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserInfo {
     /// 用户ID
     pub user_id: String,
@@ -121,7 +121,7 @@ pub struct UserInfo {
     pub position: Option<String>,
 },
 /// 学习记录,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct LearningRecord {
     /// 记录ID
     pub record_id: String,
@@ -151,7 +151,7 @@ pub struct LearningRecord {
     pub attempt_count: Option<i32>,
 },
 /// 学习统计数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct LearningStatistics {
     /// 总课程数,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -176,7 +176,7 @@ pub struct LearningStatistics {
     pub pass_rate: Option<f64>,
 },
 /// 学习进度事件数据,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CourseRegistrationEvent {
     /// 事件类型
     pub event_type: String,
@@ -193,7 +193,7 @@ pub struct CourseRegistrationEvent {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

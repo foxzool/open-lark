@@ -20,7 +20,7 @@ pub struct OrganizationService {
     pub config: Config,
 }
 /// 创建部门响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DepartmentCreateResponse {
     /// 部门信息
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -32,7 +32,7 @@ ResponseFormat::Data,
     }
 }
 /// 批量查询部门响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DepartmentBatchGetResponse {
     /// 部门信息列表
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -44,7 +44,7 @@ ResponseFormat::Data,
     }
 }
 /// 部门架构树响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DepartmentTreeResponse {
     /// 部门树结构
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -56,7 +56,7 @@ ResponseFormat::Data,
     }
 }
 /// 创建公司响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CompanyCreateResponse {
     /// 公司信息
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -68,7 +68,7 @@ ResponseFormat::Data,
     }
 }
 /// 批量查询公司响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CompanyListResponse {
     /// 公司信息列表
 #[serde(flatten)],

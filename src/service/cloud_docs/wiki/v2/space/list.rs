@@ -11,7 +11,7 @@ use crate::core::{,
     SDKResult,
 };
 /// 获取知识空间列表请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct ListSpaceRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -23,29 +23,29 @@ pub struct ListSpaceRequest {
     page_token: Option<String>,
 }
 impl ListSpaceRequest {
-    pub fn builder() -> ListSpaceRequestBuilder {,
+    pub fn w+.*{
 ListSpaceRequestBuilder::default(),
     },
-pub fn new() -> Self {,
+pub fn new() -> Self {
         Self::default(),
 }
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct ListSpaceRequestBuilder {
     request: ListSpaceRequest,
 }
 impl ListSpaceRequestBuilder {
     /// 页大小
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
 },
 /// 页标记,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
 },
-pub fn build(mut self) -> ListSpaceRequest {,
+pub fn w+.*{
         if let Some(page_size) = self.request.page_size {,
 self.request,
                 .api_request,
@@ -62,7 +62,7 @@ self.request,
     },
 },
 /// 知识空间信息,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct Space {
     /// 知识空间id
     pub space_id: String,
@@ -77,7 +77,7 @@ pub struct Space {
     pub visibility: Option<String>,
 },
 /// 获取知识空间列表响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct ListSpaceResponse {
     /// 知识空间列表
     pub items: Vec<Space>,
@@ -109,7 +109,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_list_space_request_builder() {,

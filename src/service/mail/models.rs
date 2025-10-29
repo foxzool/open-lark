@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 用户ID类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum UserIdType {,
     #[serde(rename = "open_id")]
     OpenId,
@@ -10,7 +10,7 @@ pub enum UserIdType {,
     UnionId,
 }
 impl UserIdType {
-    pub fn as_str(&self) -> &str {,
+    pub fn w+.*{
 match self {,
             UserIdType::OpenId => "open_id",
             UserIdType::UserId => "user_id",
@@ -19,7 +19,7 @@ match self {,
 }
 },
 /// 邮箱文件夹,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Folder {
     /// 文件夹ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -38,7 +38,7 @@ pub struct Folder {
     pub folder_path: Option<String>,
 },
 /// 文件夹类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum FolderType {,
     /// 系统文件夹,
 #[serde(rename = "system")],
@@ -48,7 +48,7 @@ pub enum FolderType {,
     Custom,
 },
 /// 邮件信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Message {
     /// 邮件ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -85,7 +85,7 @@ pub struct Message {
     pub attachments: Option<Vec<Attachment>>,
 },
 /// 邮件地址,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MailAddress {
     /// 邮箱地址,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -95,7 +95,7 @@ pub struct MailAddress {
     pub name: Option<String>,
 },
 /// 邮件内容,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MailBody {
     /// 文本内容,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -105,7 +105,7 @@ pub struct MailBody {
     pub html: Option<String>,
 },
 /// 邮件状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum MessageStatus {,
     /// 草稿,
 #[serde(rename = "draft")],
@@ -121,7 +121,7 @@ pub enum MessageStatus {,
     Deleted,
 },
 /// 邮件附件,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Attachment {
     /// 附件ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -140,7 +140,7 @@ pub struct Attachment {
     pub download_url: Option<String>,
 },
 /// 收信规则,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Rule {
     /// 规则ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -162,7 +162,7 @@ pub struct Rule {
     pub priority: Option<i32>,
 },
 /// 规则条件,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RuleCondition {
     /// 字段,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -175,7 +175,7 @@ pub struct RuleCondition {
     pub value: Option<String>,
 },
 /// 规则动作,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RuleAction {
     /// 动作类型,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -194,7 +194,7 @@ pub struct RuleAction {
     pub parameters: Option<serde_json::Value>,
 },
 /// 邮箱联系人,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Contact {
     /// 联系人ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -210,7 +210,7 @@ pub struct Contact {
     pub remark: Option<String>,
 },
 /// 邮件组,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MailGroup {
     /// 邮件组ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -232,7 +232,7 @@ pub struct MailGroup {
     pub permission: Option<MailGroupPermission>,
 },
 /// 邮件组权限,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MailGroupPermission {
     /// 加入权限,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -242,7 +242,7 @@ pub struct MailGroupPermission {
     pub send_permission: Option<SendPermission>,
 },
 /// 加入权限,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum JoinPermission {,
     /// 所有人,
 #[serde(rename = "all")],
@@ -255,7 +255,7 @@ pub enum JoinPermission {,
     InviteOnly,
 },
 /// 发送权限,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum SendPermission {,
     /// 所有人,
 #[serde(rename = "all")],
@@ -268,7 +268,7 @@ pub enum SendPermission {,
     AdminOnly,
 },
 /// 邮件组成员,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MailGroupMember {
     /// 用户ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -281,7 +281,7 @@ pub struct MailGroupMember {
     pub member_type: Option<MemberType>,
 },
 /// 成员类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum MemberType {,
     /// 普通成员,
 #[serde(rename = "member")],
@@ -291,14 +291,14 @@ pub enum MemberType {,
     Admin,
 },
 /// 邮件组别名,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MailGroupAlias {
     /// 别名,
 #[serde(skip_serializing_if = "Option::is_none")],
     pub alias: Option<String>,
 },
 /// 公共邮箱,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PublicMailbox {
     /// 公共邮箱ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -317,7 +317,7 @@ pub struct PublicMailbox {
     pub status: Option<PublicMailboxStatus>,
 },
 /// 公共邮箱状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum PublicMailboxStatus {,
     /// 正常,
 #[serde(rename = "active")],
@@ -330,7 +330,7 @@ pub enum PublicMailboxStatus {,
     InRecycleBin,
 },
 /// 公共邮箱成员,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PublicMailboxMember {
     /// 用户ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -343,7 +343,7 @@ pub struct PublicMailboxMember {
     pub permission_type: Option<PublicMailboxPermissionType>,
 },
 /// 公共邮箱权限类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum PublicMailboxPermissionType {,
     /// 管理员,
 #[serde(rename = "admin")],
@@ -353,7 +353,7 @@ pub enum PublicMailboxPermissionType {,
     Member,
 },
 /// 用户邮箱别名,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserMailboxAlias {
     /// 别名ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -366,7 +366,7 @@ pub struct UserMailboxAlias {
     pub is_primary: Option<bool>,
 },
 /// 邮箱地址状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AddressStatus {
     /// 邮箱地址,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -379,7 +379,7 @@ pub struct AddressStatus {
     pub mailbox_type: Option<MailboxType>,
 },
 /// 邮箱状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum EmailStatus {,
     /// 存在,
 #[serde(rename = "exists")],
@@ -392,7 +392,7 @@ pub enum EmailStatus {,
     Deleted,
 },
 /// 邮箱类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum MailboxType {,
     /// 用户邮箱,
 #[serde(rename = "user")],
@@ -405,7 +405,7 @@ pub enum MailboxType {,
     Public,
 },
 /// 事件订阅状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SubscriptionStatus {
     /// 是否已订阅,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -415,7 +415,7 @@ pub struct SubscriptionStatus {
     pub subscribe_time: Option<i64>,
 },
 /// 邮箱订阅信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MailboxSubscription {
     /// 订阅ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -453,7 +453,7 @@ pub struct MailboxSubscription {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

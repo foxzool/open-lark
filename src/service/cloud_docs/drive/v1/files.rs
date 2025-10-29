@@ -26,7 +26,7 @@ pub struct FilesService {
     config: Config,
 },
 /// 上传文件 请求体,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UploadAllRequest {
     /// 请求体,
 #[serde(skip)],
@@ -51,7 +51,7 @@ pub struct UploadAllRequest {
     checksum: Option<String>,
 }
 impl UploadAllRequest {
-    pub fn builder() -> UploadAllRequestBuilder {,
+    pub fn w+.*{
 UploadAllRequestBuilder::default(),
     },
 },
@@ -62,36 +62,36 @@ pub struct UploadAllRequestBuilder {
 }
 impl UploadAllRequestBuilder {
     /// 文件名
-    pub fn file_name(mut self, file_name: impl ToString) -> Self {,
+    pub fn file_name(mut self, file_name: impl ToString) -> Self {
 self.request.file_name = file_name.to_string();
         self,
 },
 /// 上传点类型。,
-    pub fn parent_type(mut self, parent_type: impl ToString) -> Self {,
+    pub fn parent_type(mut self, parent_type: impl ToString) -> Self {
 self.request.parent_type = parent_type.to_string();
         self,
 },
 /// 文件夹token,
-    pub fn parent_node(mut self, parent_node: impl ToString) -> Self {,
+    pub fn parent_node(mut self, parent_node: impl ToString) -> Self {
 self.request.parent_node = parent_node.to_string();
         self,
 },
 /// 文件大小（以字节为单位）,
-    pub fn size(mut self, size: i32) -> Self {,
+    pub fn size(mut self, size: i32) -> Self {
 self.request.size = size;
         self,
 },
 /// 文件adler32校验和(可选),
-    pub fn checksum(mut self, checksum: impl ToString) -> Self {,
+    pub fn checksum(mut self, checksum: impl ToString) -> Self {
 self.request.checksum = Some(checksum.to_string());
         self,
 },
 /// 文件二进制内容。,
-    pub fn file(mut self, file: Vec<u8>) -> Self {,
+    pub fn file(mut self, file: Vec<u8>) -> Self {
 self.request.api_req.file = file;
         self,
 },
-pub fn build(mut self) -> UploadAllRequest {,
+pub fn w+.*{
         // 验证必填字段,
 if self.request.file_name.is_empty() {,
             log::error!("file_name is required for upload");
@@ -224,7 +224,7 @@ impl FilesService {
     /// # API文档,
 ///,
     /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme,
-pub fn upload_all_builder(&self) -> UploadAllRequestBuilder {,
+pub fn w+.*{
         UploadAllRequestBuilder::default(),
 },
 /// 创建下载文件Builder,
@@ -235,7 +235,7 @@ pub fn upload_all_builder(&self) -> UploadAllRequestBuilder {,
     /// # API文档,
 ///,
     /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme,
-pub fn download_builder(&self) -> DownloadRequestBuilder {,
+pub fn w+.*{
         DownloadRequestBuilder::default(),
 },
 /// 使用Builder上传文件（带验证）,
@@ -300,7 +300,7 @@ api_resp.into_result(),
     },
 },
 /// 上传文件响应体,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UploadAllResponse {
     /// 新创建文件的 token
     pub file_token: String,
@@ -311,7 +311,7 @@ ResponseFormat::Data,
     },
 },
 /// 下载文件 请求体,
-#[derive(Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DownloadRequest {
     /// 请求体,
 #[serde(skip)],
@@ -325,16 +325,16 @@ pub struct DownloadRequestBuilder {
     req: DownloadRequest,
 }
 impl DownloadRequestBuilder {
-    pub fn file_token(mut self, file_token: impl ToString) -> Self {,
+    pub fn file_token(mut self, file_token: impl ToString) -> Self {
 self.req.file_token = file_token.to_string();
         self,
 },
-pub fn build(self) -> DownloadRequest {,
+pub fn w+.*{
         self.req,
 }
 }
 impl DownloadRequest {
-    pub fn builder() -> DownloadRequestBuilder {,
+    pub fn w+.*{
 DownloadRequestBuilder::default(),
     },
 },

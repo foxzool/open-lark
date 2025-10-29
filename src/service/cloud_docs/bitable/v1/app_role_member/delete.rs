@@ -19,7 +19,7 @@ use crate::,
     impl_executable_builder_owned,
 };
 /// 删除协作者请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct DeleteRoleMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -37,12 +37,12 @@ pub struct DeleteRoleMemberRequest {
     user_id_type: Option<String>,
 }
 impl DeleteRoleMemberRequest {
-    pub fn builder() -> DeleteRoleMemberRequestBuilder {,
+    pub fn w+.*{
 DeleteRoleMemberRequestBuilder::default(),
     }
 
-    pub fn new(app_token: impl ToString, role_id: impl ToString, member_id: impl ToString) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, role_id: impl ToString, member_id: impl ToString) -> Self {
+Self {
             app_token: app_token.to_string(),
             role_id: role_id.to_string(),
             member_id: member_id.to_string()
@@ -50,32 +50,32 @@ Self {,
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct DeleteRoleMemberRequestBuilder {
     request: DeleteRoleMemberRequest,
 }
 impl DeleteRoleMemberRequestBuilder {
     /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 自定义角色的id,
-    pub fn role_id(mut self, role_id: impl ToString) -> Self {,
+    pub fn role_id(mut self, role_id: impl ToString) -> Self {
 self.request.role_id = role_id.to_string();
         self,
 },
 /// 成员id,
-    pub fn member_id(mut self, member_id: impl ToString) -> Self {,
+    pub fn member_id(mut self, member_id: impl ToString) -> Self {
 self.request.member_id = member_id.to_string();
         self,
 },
 /// 用户id类型,
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
 },
-pub fn build(mut self) -> DeleteRoleMemberRequest {,
+pub fn w+.*{
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
                 .api_request,
@@ -93,7 +93,7 @@ impl_executable_builder_owned!(,
     delete,
 );
 /// 删除协作者响应
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct DeleteRoleMemberResponse {
     /// 删除的成员ID
     pub member_id: String,
@@ -125,7 +125,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_delete_role_member_request_builder() {,

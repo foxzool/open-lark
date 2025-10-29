@@ -22,8 +22,8 @@ pub struct V1 {
     pub permissions: permissions::PermissionsService,
 }
 impl V1 {
-    pub fn new(config: Config) -> Self {,
-Self {,
+    pub fn new(config: Config) -> Self {
+Self {
             event: event::EventService::new(config.clone()),
             file: file::FileService::new(config.clone()),
             file_version: file_version::FileVersionService::new(config.clone()),

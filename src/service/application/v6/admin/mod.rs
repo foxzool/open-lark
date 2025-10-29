@@ -369,7 +369,7 @@ let api_req = ApiRequest {,
 }
 }
 // 请求响应模型
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListInstalledAppsResponse {
     pub apps: Vec<Application>,
     pub page_token: Option<String>,
@@ -381,7 +381,7 @@ ResponseFormat::Data,
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetUserAvailableAppsResponse {
     pub apps: Vec<Application>,
     pub page_token: Option<String>,
@@ -393,7 +393,7 @@ ResponseFormat::Data,
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ContactsRangeConfigurationResponse {
     pub contacts_range: ContactsRange,
 }
@@ -403,12 +403,12 @@ ResponseFormat::Data,
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateContactsRangeConfigurationRequest {
     pub contacts_range: ContactsRange,
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetAppAvailabilityResponse {
     pub availability: AppAvailability,
 }
@@ -418,13 +418,13 @@ ResponseFormat::Data,
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CheckWhiteBlackListRequest {
     pub user_list: Option<Vec<String>>,
     pub department_list: Option<Vec<String>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CheckWhiteBlackListResponse {
     pub is_in_list: bool,
 }
@@ -434,17 +434,17 @@ ResponseFormat::Data,
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateAppAvailabilityRequest {
     pub availability: AppAvailability,
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EnableDisableAppRequest {
     pub enable: bool,
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListAppAdminsResponse {
     pub admins: Vec<AppAdmin>,
     pub page_token: Option<String>,
@@ -456,7 +456,7 @@ ResponseFormat::Data,
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetAppAdminPermissionsResponse {
     pub permissions: Vec<AdminPermission>,
 }
@@ -466,7 +466,7 @@ ResponseFormat::Data,
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct VerifyAppAdminResponse {
     pub is_admin: bool,
 }

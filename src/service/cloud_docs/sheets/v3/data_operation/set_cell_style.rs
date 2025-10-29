@@ -38,7 +38,7 @@ api_resp.into_result(),
     },
 },
 /// 设置单元格样式请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SetCellStyleRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -52,35 +52,35 @@ pub struct SetCellStyleRequest {
     style: CellStyle,
 }
 impl SetCellStyleRequest {
-    pub fn builder() -> SetCellStyleRequestBuilder {,
+    pub fn w+.*{
 SetCellStyleRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct SetCellStyleRequestBuilder {
     request: SetCellStyleRequest,
 }
 impl SetCellStyleRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 }
 
-    pub fn ranges(mut self, ranges: Vec<String>) -> Self {,
+    pub fn ranges(mut self, ranges: Vec<String>) -> Self {
 self.request.ranges = ranges;
         self,
 }
 
-    pub fn style(mut self, style: CellStyle) -> Self {,
+    pub fn style(mut self, style: CellStyle) -> Self {
 self.request.style = style;
         self,
 },
-pub fn build(mut self) -> SetCellStyleRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -94,7 +94,7 @@ impl_executable_builder_owned!(
     set_cell_style,
 );
 /// 单元格样式
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CellStyle {
     /// 字体
     pub font: Option<FontStyle>,
@@ -114,7 +114,7 @@ pub struct CellStyle {
     pub clean: Option<i32>,
 },
 /// 字体样式,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FontStyle {
     /// 加粗
     pub bold: Option<bool>,
@@ -126,7 +126,7 @@ pub struct FontStyle {
     pub name: Option<String>,
 },
 /// 边框样式,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BorderStyle {
     /// 边框类型
     pub border_type: Option<String>,
@@ -134,7 +134,7 @@ pub struct BorderStyle {
     pub color: Option<String>,
 },
 /// 设置单元格样式响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct SetCellStyleResponseData {
     /// 更新的单元格数量
     pub updated_cells: i32,

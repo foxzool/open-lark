@@ -19,7 +19,7 @@ pub struct OfferService {
     pub config: Config,
 }
 /// Offer信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Offer {
     /// Offer ID
     pub id: String,
@@ -63,7 +63,7 @@ pub struct Offer {
     pub updated_time: Option<String>,
 }
 /// 薪资包信息
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct SalaryPackage {
     /// 基本薪资
     pub base_salary: String,
@@ -79,7 +79,7 @@ pub struct SalaryPackage {
     pub benefits: Vec<String>,
 }
 /// 入职信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Onboarding {
     /// 入职记录ID
     pub id: String,
@@ -113,7 +113,7 @@ pub struct Onboarding {
     pub updated_time: Option<String>,
 }
 /// 入职进度项
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OnboardingProgress {
     /// 进度项ID
     pub id: String,
@@ -131,7 +131,7 @@ pub struct OnboardingProgress {
     pub remark: Option<String>,
 }
 /// Offer创建请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct OfferCreateRequest {
     /// 投递ID
     pub application_id: String,
@@ -151,7 +151,7 @@ pub struct OfferCreateRequest {
     pub remark: Option<String>,
 }
 /// Offer更新请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct OfferUpdateRequest {
     /// 薪资包信息
     pub salary_package: Option<SalaryPackage>,
@@ -167,7 +167,7 @@ pub struct OfferUpdateRequest {
     pub remark: Option<String>,
 }
 /// 入职创建请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct OnboardingCreateRequest {
     /// Offer ID
     pub offer_id: String,
@@ -189,7 +189,7 @@ pub struct OnboardingCreateRequest {
     pub remark: Option<String>,
 }
 /// Offer列表请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct OfferListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -209,7 +209,7 @@ pub struct OfferListRequest {
     pub created_end_time: Option<String>,
 }
 /// Offer列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OfferListResponse {
     /// Offer列表
 #[serde(flatten)],
@@ -221,7 +221,7 @@ ResponseFormat::Data,
     }
 }
 /// Offer详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OfferDetailResponse {
     /// Offer信息
     pub offer: Offer,
@@ -232,7 +232,7 @@ ResponseFormat::Data,
     }
 }
 /// 入职列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OnboardingListResponse {
     /// 入职记录列表
 #[serde(flatten)],
@@ -244,7 +244,7 @@ ResponseFormat::Data,
     }
 }
 /// Offer操作响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OfferOperationResponse {
     /// 操作结果
 #[serde(flatten)],
@@ -554,7 +554,7 @@ pub async fn send_offer(,
         message: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OfferOperationResponse>> {,
-#[derive(Serialize)],
+#[derive(.*?)]
         struct SendOfferRequest {
             send_method: String,
             message: Option<String>,
@@ -598,7 +598,7 @@ let api_req = ApiRequest {,
         reason: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OfferOperationResponse>> {,
-#[derive(Serialize)],
+#[derive(.*?)]
         struct WithdrawRequest {
             reason: String,
         }
@@ -751,7 +751,7 @@ pub async fn update_onboarding_progress(,
         remark: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OfferOperationResponse>> {,
-#[derive(Serialize)],
+#[derive(.*?)]
         struct UpdateProgressRequest {
             completed: bool,
             remark: Option<String>,

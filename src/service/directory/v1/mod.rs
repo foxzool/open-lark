@@ -104,7 +104,7 @@ pub fn new() -> Self {
     ///,
 /// # 返回值
     /// 如果配置有效返回 `true`，否则返回 `false`
-pub fn validate_config(&self) -> bool {,
+pub fn w+.*{
         // 检查员工服务配置
 if self.employee.config.app_id.is_empty() {,
             return false;
@@ -122,7 +122,7 @@ return false;
     ///,
 /// # 返回值
     /// 包含服务名称和配置信息的字符串
-pub fn get_service_stats(&self) -> String {,
+pub fn w+.*{
         format!(
             "DirectoryV1{{ employee: {} department: {} app_id: {} }}",
             employee::EmployeeService::service_name(),
@@ -132,7 +132,7 @@ pub fn get_service_stats(&self) -> String {,
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::config::Config;
 use std::sync::Arc;

@@ -44,7 +44,7 @@ Ok(api_resp),
     },
 },
 /// 创建多维表格请求,
-#[derive(Debug, Default)],
+#[derive(.*?)]
 pub struct CreateAppRequest {
     api_request: ApiRequest,
     /// 多维表格 App 名字
@@ -55,31 +55,31 @@ pub struct CreateAppRequest {
     time_zone: Option<String>,
 }
 impl CreateAppRequest {
-    pub fn builder() -> CreateAppRequestBuilder {,
+    pub fn w+.*{
 CreateAppRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct CreateAppRequestBuilder {
     request: CreateAppRequest,
 }
 impl CreateAppRequestBuilder {
     /// 多维表格 App 名字
-    pub fn name(mut self, name: impl ToString) -> Self {,
+    pub fn name(mut self, name: impl ToString) -> Self {
 self.request.name = name.to_string();
         self,
 },
 /// 多维表格所在文件夹的 token,
-    pub fn folder_token(mut self, folder_token: impl ToString) -> Self {,
+    pub fn folder_token(mut self, folder_token: impl ToString) -> Self {
 self.request.folder_token = Some(folder_token.to_string());
         self,
 },
 /// 时区,
-    pub fn time_zone(mut self, time_zone: impl ToString) -> Self {,
+    pub fn time_zone(mut self, time_zone: impl ToString) -> Self {
 self.request.time_zone = Some(time_zone.to_string());
         self,
 },
-pub fn build(self) -> CreateAppRequest {,
+pub fn w+.*{
         self.request,
 }
 }
@@ -99,13 +99,13 @@ struct CreateAppRequestBody {
     time_zone: Option<String>,
 }
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct CreateAppResponse {
     /// 多维表格的 app 信息
     pub app: CreateAppResponseData,
 }
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct CreateAppResponseData {
     /// 多维表格的 app_token
     pub app_token: String,
@@ -123,7 +123,7 @@ ResponseFormat::Data,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json::json;
     #[test],

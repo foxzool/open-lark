@@ -160,7 +160,7 @@ pub fn new() -> Self {
     ///,
 /// # 返回值
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
-pub fn verify_services_integrity(&self) -> bool {,
+pub fn w+.*{
         // 检查配置是否有效
 !self.v1.config.app_id.is_empty() && !self.v1.config.app_secret.is_empty(),
     }
@@ -170,7 +170,7 @@ pub fn verify_services_integrity(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_auth_service_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "VerificationService{{ api_versions: 1, app_id: {} security_level: enterprise, auth_methods: multi_factor }}",
             self.v1.config.app_id,
@@ -185,7 +185,7 @@ pub fn get_auth_service_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_auth_feature(&self, auth_feature: &str) -> bool {,
+    pub fn w+.*{
 matches!(,
             auth_feature,
             "user_verification",
@@ -211,7 +211,7 @@ matches!(,
     ///,
 /// # 返回值
     /// 如果所有服务配置有效返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         !self.v1.config.app_id.is_empty(),
 && !self.v1.config.app_secret.is_empty(),
             && self.verify_services_integrity(),
@@ -222,7 +222,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含各安全级别服务数量的统计信息
-pub fn get_security_level_statistics(&self) -> String {,
+pub fn w+.*{
         "VerificationService Security{ enterprise: 1, standard: 0, basic: 0, total: 1 }".to_string(),
 }
 /// 获取认证服务状态摘要
@@ -231,7 +231,7 @@ pub fn get_security_level_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各服务状态信息的字符串
-pub fn get_auth_service_status_summary(&self) -> String {,
+pub fn w+.*{
         let config_healthy = !self.v1.config.app_id.is_empty();
 let auth_healthy = config_healthy;
         let security_healthy = config_healthy;
@@ -247,7 +247,7 @@ format!(,
     ///,
 /// # 返回值
     /// 包含企业认证能力矩阵信息的字符串
-pub fn get_enterprise_auth_capabilities(&self) -> String {,
+pub fn w+.*{
         format!(
             "VerificationService Enterprise{{ verification: {} authorization: {} security: {} compliance: {} monitoring: true }}",
             self.supports_auth_feature("user_verification"),
@@ -262,7 +262,7 @@ pub fn get_enterprise_auth_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含认证方法支持信息的字符串
-pub fn get_authentication_methods_matrix(&self) -> String {,
+pub fn w+.*{
         "VerificationService Methods{ password: true, token: true, mfa: true, oauth: true, sso: true, biometric: true }".to_string(),
 }
 /// 获取合规性支持矩阵
@@ -271,7 +271,7 @@ pub fn get_authentication_methods_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含合规性支持信息的字符串
-pub fn get_compliance_support_matrix(&self) -> String {,
+pub fn w+.*{
         "VerificationService Compliance{ gdpr: true, hipaa: true, sox: true, iso27001: true, audit_trail: true }".to_string(),
 }
 }
@@ -287,7 +287,7 @@ fn service_name() -> &'static str,
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::config::Config;
 /// 创建测试配置

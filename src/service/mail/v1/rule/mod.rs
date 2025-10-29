@@ -19,7 +19,7 @@ pub struct RuleService {
     pub config: Config,
 }
 /// 创建收信规则请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateRuleRequest {
     /// 规则名称
     pub rule_name: String,
@@ -32,7 +32,7 @@ pub struct CreateRuleRequest {
     pub actions: Vec<serde_json::Value>,
 }
 /// 创建收信规则响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateRuleResponse {
     /// 创建的规则
     pub rule: Rule,
@@ -43,7 +43,7 @@ ResponseFormat::Data,
     }
 }
 /// 更新收信规则请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateRuleRequest {
     /// 规则名称
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -59,7 +59,7 @@ pub struct UpdateRuleRequest {
     pub actions: Option<Vec<serde_json::Value>>,
 }
 /// 更新收信规则响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateRuleResponse {
     /// 更新后的规则
     pub rule: Rule,
@@ -70,7 +70,7 @@ ResponseFormat::Data,
     }
 }
 /// 列出收信规则响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListRulesResponse {
     /// 规则列表
     pub rules: Vec<Rule>,
@@ -87,7 +87,7 @@ ResponseFormat::Data,
     }
 }
 /// 排序收信规则请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReorderRulesRequest {
     /// 规则ID列表（按优先级排序）
     pub rule_ids: Vec<String>,

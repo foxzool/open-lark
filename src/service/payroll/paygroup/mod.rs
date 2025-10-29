@@ -18,7 +18,7 @@ pub struct PaygroupService {
     pub config: Config,
 }
 /// 薪资组列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PaygroupListResponse {
     /// 薪资组列表
 #[serde(flatten)],

@@ -38,7 +38,7 @@ Ok(api_resp),
     },
 },
 /// 更新下拉列表设置请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateDataValidationRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -52,41 +52,41 @@ pub struct UpdateDataValidationRequest {
     data_validation: DataValidationRule,
 }
 impl UpdateDataValidationRequest {
-    pub fn builder() -> UpdateDataValidationRequestBuilder {,
+    pub fn w+.*{
 UpdateDataValidationRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct UpdateDataValidationRequestBuilder {
     request: UpdateDataValidationRequest,
 }
 impl UpdateDataValidationRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 }
 
-    pub fn data_validation_id(mut self, data_validation_id: impl ToString) -> Self {,
+    pub fn data_validation_id(mut self, data_validation_id: impl ToString) -> Self {
 self.request.data_validation_id = data_validation_id.to_string();
         self,
 }
 
-    pub fn data_validation(mut self, data_validation: DataValidationRule) -> Self {,
+    pub fn data_validation(mut self, data_validation: DataValidationRule) -> Self {
 self.request.data_validation = data_validation;
         self,
 },
-pub fn build(mut self) -> UpdateDataValidationRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 更新下拉列表设置响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct UpdateDataValidationResponseData {
     /// 数据校验 ID
     pub data_validation_id: String,

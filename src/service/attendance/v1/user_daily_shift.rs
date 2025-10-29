@@ -116,7 +116,7 @@ fn service_version() -> &'static str {,
 }
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::config::Config;
 #[test],

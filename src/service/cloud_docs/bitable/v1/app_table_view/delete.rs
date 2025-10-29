@@ -47,7 +47,7 @@ Ok(api_resp),
 }
 
 /// 删除视图请求
-#[derive(Debug, Default)],
+#[derive(.*?)]
 pub struct DeleteViewRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token
@@ -58,12 +58,12 @@ pub struct DeleteViewRequest {
     view_id: String,
 }
 impl DeleteViewRequest {
-    pub fn builder() -> DeleteViewRequestBuilder {,
+    pub fn w+.*{
 DeleteViewRequestBuilder::default(),
     },
 /// 创建删除视图请求,
-    pub fn new(app_token: impl ToString, table_id: impl ToString, view_id: impl ToString) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, table_id: impl ToString, view_id: impl ToString) -> Self {
+Self {
             api_request: ApiRequest::default(),
             app_token: app_token.to_string(),
             table_id: table_id.to_string(),
@@ -71,27 +71,27 @@ Self {,
         },
 }
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct DeleteViewRequestBuilder {
     request: DeleteViewRequest,
 }
 impl DeleteViewRequestBuilder {
     /// 多维表格的 app_token
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 数据表的 table_id,
-    pub fn table_id(mut self, table_id: impl ToString) -> Self {,
+    pub fn table_id(mut self, table_id: impl ToString) -> Self {
 self.request.table_id = table_id.to_string();
         self,
 },
 /// 视图的 view_id,
-    pub fn view_id(mut self, view_id: impl ToString) -> Self {,
+    pub fn view_id(mut self, view_id: impl ToString) -> Self {
 self.request.view_id = view_id.to_string();
         self,
 },
-pub fn build(self) -> DeleteViewRequest {,
+pub fn w+.*{
         self.request,
 }
 }
@@ -101,7 +101,7 @@ impl_executable_builder_config!(,
     BaseResponse<DeleteViewResponse>,
     delete_view,
 );
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct DeleteViewResponse {
     /// 删除结果
     pub deleted: bool,
@@ -113,7 +113,7 @@ ResponseFormat::Data,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_delete_view_request() {,

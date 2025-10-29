@@ -252,7 +252,7 @@ if let Some(end_time) = request.end_time {,
 }
 }
 /// 课程学习进度创建请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CourseRegistrationCreateRequest {
     /// 课程ID
     pub course_id: String,
@@ -269,7 +269,7 @@ pub struct CourseRegistrationCreateRequest {
     pub notes: Option<String>,
 }
 /// 课程学习进度创建响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CourseRegistrationCreateResponse {
     /// 创建的学习进度记录
     pub registration: CourseRegistration,
@@ -280,7 +280,7 @@ ResponseFormat::Data,
     }
 }
 /// 课程学习进度查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct CourseRegistrationListRequest {
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -308,7 +308,7 @@ pub struct CourseRegistrationListRequest {
     pub end_time: Option<i64>,
 }
 /// 课程学习进度查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CourseRegistrationListResponse {
     /// 学习进度记录列表
 #[serde(flatten)],
@@ -320,7 +320,7 @@ ResponseFormat::Data,
     }
 }
 /// 课程学习进度详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CourseRegistrationGetResponse {
     /// 学习进度记录详情
     pub registration: CourseRegistration,
@@ -331,7 +331,7 @@ ResponseFormat::Data,
     }
 }
 /// 课程学习进度更新请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct CourseRegistrationUpdateRequest {
     /// 学习状态
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -356,7 +356,7 @@ pub struct CourseRegistrationUpdateRequest {
     pub notes: Option<String>,
 }
 /// 课程学习进度更新响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CourseRegistrationUpdateResponse {
     /// 更新后的学习进度记录
     pub registration: CourseRegistration,
@@ -367,7 +367,7 @@ ResponseFormat::Data,
     }
 }
 /// 课程学习进度删除响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CourseRegistrationDeleteResponse {
     /// 删除是否成功
     pub success: bool,
@@ -384,7 +384,7 @@ ResponseFormat::Data,
     }
 }
 /// 学习统计查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct CourseRegistrationStatisticsRequest {
     /// 用户ID（获取指定用户的统计数据）
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -403,7 +403,7 @@ pub struct CourseRegistrationStatisticsRequest {
     pub end_time: Option<i64>,
 }
 /// 学习统计查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CourseRegistrationStatisticsResponse {
     /// 学习统计数据
     pub statistics: LearningStatistics,

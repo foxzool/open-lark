@@ -19,7 +19,7 @@ pub struct JobProcessService {
     pub config: Config,
 }
 /// 招聘阶段信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobProcessStage {
     /// 阶段ID
     pub id: String,
@@ -39,12 +39,12 @@ pub struct JobProcessStage {
     pub updated_time: Option<String>,
 }
 /// 阶段配置信息
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct StageConfig {
     // TODO: Add fields
 }
 /// 通知设置
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct NotificationSettings {
     /// 是否启用通知
     pub enabled: bool,
@@ -54,7 +54,7 @@ pub struct NotificationSettings {
     pub template_id: Option<String>,
 }
 /// 招聘流程信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobProcess {
     /// 流程ID
     pub id: String,
@@ -80,7 +80,7 @@ pub struct JobProcess {
     pub updated_time: Option<String>,
 }
 /// 招聘流程创建请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct JobProcessCreateRequest {
     /// 流程名称
     pub name: I18nText,
@@ -96,7 +96,7 @@ pub struct JobProcessCreateRequest {
     pub applicable_job_types: Vec<String>,
 }
 /// 招聘流程阶段创建请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct JobProcessStageCreateRequest {
     /// 阶段名称
     pub name: I18nText,
@@ -110,7 +110,7 @@ pub struct JobProcessStageCreateRequest {
     pub config: Option<StageConfig>,
 }
 /// 招聘流程列表请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct JobProcessListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -122,7 +122,7 @@ pub struct JobProcessListRequest {
     pub status: Option<String>,
 }
 /// 招聘流程列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobProcessListResponse {
     /// 招聘流程列表
 #[serde(flatten)],
@@ -134,7 +134,7 @@ ResponseFormat::Data,
     }
 }
 /// 招聘流程详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobProcessDetailResponse {
     /// 招聘流程信息
     pub process: JobProcess,
@@ -145,7 +145,7 @@ ResponseFormat::Data,
     }
 }
 /// 招聘流程操作响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobProcessOperationResponse {
     /// 操作结果
 #[serde(flatten)],

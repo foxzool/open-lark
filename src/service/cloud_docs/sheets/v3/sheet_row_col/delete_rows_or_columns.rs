@@ -38,7 +38,7 @@ Ok(api_resp),
     },
 },
 /// 删除行列请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DeleteRowsOrColumnsRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -50,21 +50,21 @@ pub struct DeleteRowsOrColumnsRequest {
     dimension_range: DimensionRange,
 }
 impl DeleteRowsOrColumnsRequest {
-    pub fn builder() -> DeleteRowsOrColumnsRequestBuilder {,
+    pub fn w+.*{
 DeleteRowsOrColumnsRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct DeleteRowsOrColumnsRequestBuilder {
     request: DeleteRowsOrColumnsRequest,
 }
 impl DeleteRowsOrColumnsRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 },
@@ -73,7 +73,7 @@ pub fn dimension_range(,
         dimension: impl ToString,
         start_index: i32,
         end_index: i32,
-    ) -> Self {,
+    ) -> Self {
 self.request.dimension_range = DimensionRange {,
             dimension: dimension.to_string(),
             start_index,
@@ -81,13 +81,13 @@ self.request.dimension_range = DimensionRange {,
         };
 self,
     },
-pub fn build(mut self) -> DeleteRowsOrColumnsRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 删除行列响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct DeleteRowsOrColumnsResponseData {
     /// 删除行列后的信息
     pub delete_range: DeleteRangeInfo,
@@ -98,7 +98,7 @@ ResponseFormat::Data,
     },
 },
 /// 删除范围信息,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct DeleteRangeInfo {
     /// 删除的维度
     pub dimension: String,

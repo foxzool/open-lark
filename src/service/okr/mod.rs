@@ -210,7 +210,7 @@ pub struct OkrService {
 }
 impl OkrService {
     pub fn new() -> Self {
-Self {,
+Self {
             period: PeriodService::new(config.clone()),
             period_rule: PeriodRuleService::new(config.clone()),
             okr: OkrContentService::new(config.clone()),
@@ -220,7 +220,7 @@ Self {,
 }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 #[test],

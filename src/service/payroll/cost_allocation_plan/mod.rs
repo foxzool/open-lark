@@ -17,7 +17,7 @@ pub struct CostAllocationPlanService {
     pub config: Config,
 }
 /// 成本分摊方案列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CostAllocationPlanListResponse {
     /// 成本分摊方案列表
 #[serde(flatten)],

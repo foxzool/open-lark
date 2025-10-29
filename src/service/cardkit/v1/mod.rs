@@ -12,7 +12,7 @@ pub struct V1 {
 }
 impl V1 {
     pub fn new() -> Self {
-Self {,
+Self {
             card: card::CardService::new(config.clone()),
             card_element: card_element::CardElementService::new(config),
         }

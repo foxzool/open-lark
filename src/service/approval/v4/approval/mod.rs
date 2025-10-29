@@ -19,7 +19,7 @@ pub struct ApprovalService {
     pub config: Config,
 }
 /// 创建审批定义请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateApprovalRequest {
     /// 审批定义名称
     pub approval_name: String,
@@ -37,7 +37,7 @@ pub struct CreateApprovalRequest {
     pub settings: Option<serde_json::Value>,
 }
 /// 创建审批定义响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateApprovalResponse {
     /// 审批定义编码
     pub approval_code: String,
@@ -48,7 +48,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取审批定义响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetApprovalResponse {
     /// 审批定义信息
     pub approval: Approval,

@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 用户ID类型,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum UserIdType {,
     #[serde(rename = "open_id")]
     OpenId,
@@ -10,7 +10,7 @@ pub enum UserIdType {,
     UnionId,
 }
 impl UserIdType {
-    pub fn as_str(&self) -> &str {,
+    pub fn w+.*{
 match self {,
             UserIdType::OpenId => "open_id",
             UserIdType::UserId => "user_id",
@@ -19,7 +19,7 @@ match self {,
 }
 },
 /// 任务实体,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Task {
     /// 任务GUID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -68,7 +68,7 @@ pub struct Task {
     pub url: Option<String>,
 },
 /// 任务截止时间,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TaskDue {
     /// 截止时间戳,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -78,7 +78,7 @@ pub struct TaskDue {
     pub is_all_day: Option<bool>,
 },
 /// 任务开始时间,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TaskStart {
     /// 开始时间戳,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -88,7 +88,7 @@ pub struct TaskStart {
     pub is_all_day: Option<bool>,
 },
 /// 任务成员,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TaskMember {
     /// 成员ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -101,7 +101,7 @@ pub struct TaskMember {
     pub role: Option<String>,
 },
 /// 任务自定义完成配置,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TaskCustomComplete {
     /// 完成模式,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -111,14 +111,14 @@ pub struct TaskCustomComplete {
     pub complete_setting: Option<TaskCompleteSetting>,
 },
 /// 任务完成设置,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TaskCompleteSetting {
     /// 子任务完成数量,
 #[serde(skip_serializing_if = "Option::is_none")],
     pub subtask_count: Option<i32>,
 },
 /// 任务列表,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Tasklist {
     /// 清单GUID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -146,7 +146,7 @@ pub struct Tasklist {
     pub updated_at: Option<String>,
 },
 /// 评论,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct Comment {
     /// 评论ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -171,7 +171,7 @@ pub struct Comment {
     pub updated_at: Option<String>,
 },
 /// 附件,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct Attachment {
     /// 附件GUID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -196,7 +196,7 @@ pub struct Attachment {
     pub uploaded_at: Option<String>,
 },
 /// 自定义分组,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Section {
     /// 分组GUID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -215,7 +215,7 @@ pub struct Section {
     pub updated_at: Option<String>,
 },
 /// 自定义字段,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CustomField {
     /// 字段GUID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -237,14 +237,14 @@ pub struct CustomField {
     pub updated_at: Option<String>,
 },
 /// 自定义字段设置,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CustomFieldSetting {
     /// 选项列表,
 #[serde(skip_serializing_if = "Option::is_none")],
     pub options: Option<Vec<CustomFieldOption>>,
 },
 /// 自定义字段选项,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CustomFieldOption {
     /// 选项GUID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -263,7 +263,7 @@ pub struct CustomFieldOption {
     pub updated_at: Option<String>,
 },
 /// 提醒时间,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Reminder {
     /// 提醒ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -273,7 +273,7 @@ pub struct Reminder {
     pub relative_fire_minute: Option<i32>,
 },
 /// 依赖关系,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Dependency {
     /// 依赖类型,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -283,7 +283,7 @@ pub struct Dependency {
     pub task_guid: Option<String>,
 },
 /// 清单活动订阅,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ActivitySubscription {
     /// 订阅GUID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -306,7 +306,7 @@ pub struct ActivitySubscription {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

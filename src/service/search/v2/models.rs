@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 搜索消息请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchMessageRequest {
     /// 搜索关键字
     pub query: String,
@@ -12,7 +12,7 @@ pub struct SearchMessageRequest {
     pub page_token: Option<String>,
 },
 /// 搜索应用请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchAppRequest {
     /// 搜索关键字
     pub query: String,
@@ -24,7 +24,7 @@ pub struct SearchAppRequest {
     pub page_token: Option<String>,
 },
 /// 搜索结果项,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchResultItem {
     /// 结果ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -46,7 +46,7 @@ pub struct SearchResultItem {
     pub update_time: Option<String>,
 },
 /// 搜索响应,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchResponse {
     /// 搜索结果列表
     pub items: Vec<SearchResultItem>,
@@ -58,7 +58,7 @@ pub struct SearchResponse {
     pub page_token: Option<String>,
 },
 /// 数据源信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataSource {
     /// 数据源ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -80,7 +80,7 @@ pub struct DataSource {
     pub update_time: Option<String>,
 },
 /// 创建数据源请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateDataSourceRequest {
     /// 数据源名称
     pub name: String,
@@ -92,7 +92,7 @@ pub struct CreateDataSourceRequest {
     pub config: Option<serde_json::Value>,
 },
 /// 更新数据源请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateDataSourceRequest {
     /// 数据源名称,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -105,7 +105,7 @@ pub struct UpdateDataSourceRequest {
     pub config: Option<serde_json::Value>,
 },
 /// 数据源列表请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListDataSourceRequest {
     /// 分页大小，默认20，最大100,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -115,7 +115,7 @@ pub struct ListDataSourceRequest {
     pub page_token: Option<String>,
 },
 /// 数据源列表响应,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListDataSourceResponse {
     /// 数据源列表
     pub items: Vec<DataSource>,
@@ -127,7 +127,7 @@ pub struct ListDataSourceResponse {
     pub page_token: Option<String>,
 },
 /// 数据项,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DataItem {
     /// 数据项ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -152,7 +152,7 @@ pub struct DataItem {
     pub update_time: Option<String>,
 },
 /// 创建数据项请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateDataItemRequest {
     /// 数据项ID
     pub id: String,
@@ -170,13 +170,13 @@ pub struct CreateDataItemRequest {
     pub properties: Option<serde_json::Value>,
 },
 /// 批量创建数据项请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchCreateDataItemRequest {
     /// 数据项列表
     pub items: Vec<CreateDataItemRequest>,
 },
 /// 数据范式,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Schema {
     /// 范式ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -198,7 +198,7 @@ pub struct Schema {
     pub update_time: Option<String>,
 },
 /// 创建数据范式请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateSchemaRequest {
     /// 范式名称
     pub name: String,
@@ -209,7 +209,7 @@ pub struct CreateSchemaRequest {
     pub definition: serde_json::Value,
 },
 /// 更新数据范式请求,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateSchemaRequest {
     /// 范式名称,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -223,7 +223,7 @@ pub struct UpdateSchemaRequest {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_search_message_request() {,

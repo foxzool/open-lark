@@ -20,7 +20,7 @@ pub struct MessageService {
     pub config: Config,
 }
 /// 消息创建响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MessageCreateResponse {
     /// 消息信息
 #[serde(flatten)],
@@ -32,7 +32,7 @@ ResponseFormat::Data,
     }
 }
 /// 消息查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MessageGetResponse {
     /// 消息信息
 #[serde(flatten)],
@@ -44,7 +44,7 @@ ResponseFormat::Data,
     }
 }
 /// 消息列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MessageListResponse {
     /// 分页响应数据
 #[serde(flatten)],

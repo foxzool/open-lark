@@ -90,7 +90,7 @@ fn service_version() -> &'static str {,
 }
 }
 /// 用户数据维度绑定请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserDataRelationBindRequest {
     /// 用户ID
     pub user_id: String,
@@ -113,7 +113,7 @@ pub struct UserDataRelationBindRequest {
     pub remark: Option<String>,
 }
 /// 用户数据维度绑定响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserDataRelationBindResponse {
     /// 绑定关系信息
     pub relation: UserAuthDataRelation,
@@ -129,7 +129,7 @@ ResponseFormat::Data,
     }
 }
 /// 用户数据维度解绑请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserDataRelationUnbindRequest {
     /// 用户ID
     pub user_id: String,
@@ -140,7 +140,7 @@ pub struct UserDataRelationUnbindRequest {
     pub unbind_reason: Option<String>,
 }
 /// 用户数据维度解绑响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserDataRelationUnbindResponse {
     /// 操作是否成功
     pub success: bool,

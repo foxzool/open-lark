@@ -19,7 +19,7 @@ pub struct NotificationService {
     pub config: Config,
 }
 /// 创建推送请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateNotificationRequest {
     /// 标题
     pub title: String,
@@ -33,7 +33,7 @@ pub struct CreateNotificationRequest {
     pub scheduled_at: Option<String>,
 }
 /// 创建推送响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateNotificationResponse {
     /// 创建的推送
     pub notification: Notification,
@@ -44,7 +44,7 @@ ResponseFormat::Data,
     }
 }
 /// 更新推送请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateNotificationRequest {
     /// 标题
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -60,7 +60,7 @@ pub struct UpdateNotificationRequest {
     pub scheduled_at: Option<String>,
 }
 /// 更新推送响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateNotificationResponse {
     /// 更新后的推送
     pub notification: Notification,
@@ -71,7 +71,7 @@ ResponseFormat::Data,
     }
 }
 /// 查询推送响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetNotificationResponse {
     /// 推送详情
     pub notification: Notification,
@@ -82,7 +82,7 @@ ResponseFormat::Data,
     }
 }
 /// 预览推送响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PreviewNotificationResponse {
     /// 预览内容
     pub preview: String,

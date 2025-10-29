@@ -11,7 +11,7 @@ use crate::core::{,
     SDKResult,
 };
 /// 移动云空间文档至知识空间请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct MoveDocsToWikiRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -24,68 +24,68 @@ pub struct MoveDocsToWikiRequest {
     parent_node_token: Option<String>,
 }
 impl MoveDocsToWikiRequest {
-    pub fn builder() -> MoveDocsToWikiRequestBuilder {,
+    pub fn w+.*{
 MoveDocsToWikiRequestBuilder::default(),
     }
 
-    pub fn new(space_id: impl ToString, obj_tokens: Vec<String>) -> Self {,
-Self {,
+    pub fn new(space_id: impl ToString, obj_tokens: Vec<String>) -> Self {
+Self {
             space_id: space_id.to_string(),
             obj_tokens,
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct MoveDocsToWikiRequestBuilder {
     request: MoveDocsToWikiRequest,
 }
 impl MoveDocsToWikiRequestBuilder {
     /// 知识空间id
-    pub fn space_id(mut self, space_id: impl ToString) -> Self {,
+    pub fn space_id(mut self, space_id: impl ToString) -> Self {
 self.request.space_id = space_id.to_string();
         self,
 },
 /// 移动的云空间文档token列表,
-    pub fn obj_tokens(mut self, obj_tokens: Vec<String>) -> Self {,
+    pub fn obj_tokens(mut self, obj_tokens: Vec<String>) -> Self {
 self.request.obj_tokens = obj_tokens;
         self,
 },
 /// 添加单个文档token,
-    pub fn add_obj_token(mut self, obj_token: impl ToString) -> Self {,
+    pub fn add_obj_token(mut self, obj_token: impl ToString) -> Self {
 self.request.obj_tokens.push(obj_token.to_string());
         self,
 },
 /// 批量添加文档tokens,
-    pub fn add_obj_tokens(mut self, tokens: Vec<impl ToString>) -> Self {,
+    pub fn add_obj_tokens(mut self, tokens: Vec<impl ToString>) -> Self {
 for token in tokens {,
             self.request.obj_tokens.push(token.to_string());
 },
 self,
     },
 /// 目标父节点token,
-    pub fn parent_node_token(mut self, parent_node_token: impl ToString) -> Self {,
+    pub fn parent_node_token(mut self, parent_node_token: impl ToString) -> Self {
 self.request.parent_node_token = Some(parent_node_token.to_string());
         self,
 },
 /// 移动到根节点,
-    pub fn move_to_root(mut self) -> Self {,
+    pub fn move_to_root(mut self) -> Self {
 self.request.parent_node_token = None;
         self,
 },
-pub fn build(mut self) -> MoveDocsToWikiRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 移动任务信息,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct MoveTask {
     /// 任务id
     pub task_id: String,
 },
 /// 移动云空间文档至知识空间响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct MoveDocsToWikiResponse {
     /// 任务信息
     pub task: MoveTask,
@@ -112,7 +112,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_move_docs_to_wiki_request_builder() {,

@@ -15,7 +15,7 @@ use crate::,
     service::cloud_docs::sheets::v2::SpreadsheetService,
 };
 /// 合并单元格请求,
-#[derive(Serialize, Debug, Default)],
+#[derive(.*?)]
 pub struct MergeCellsRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -29,37 +29,37 @@ pub struct MergeCellsRequest {
     merge_type: String,
 }
 impl MergeCellsRequest {
-    pub fn builder() -> MergeCellsRequestBuilder {,
+    pub fn w+.*{
 MergeCellsRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct MergeCellsRequestBuilder {
     request: MergeCellsRequest,
 }
 impl MergeCellsRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 },
 /// 查询范围，包含 sheetId 与单元格范围两部分，目前支持四种索引方式，详见 在线表格开发指南,
-    pub fn range(mut self, range: impl ToString) -> Self {,
+    pub fn range(mut self, range: impl ToString) -> Self {
 self.request.range = range.to_string();
         self,
 },
 /// 可选三个类型，"MERGE_ALL" 将所选区域直接合并、"MERGE_ROWS",
     /// 将所选区域按行合并、"MERGE_COLUMNS" 将所选区域按列合并响应
-    pub fn merge_type(mut self, merge_type: impl ToString) -> Self {,
+    pub fn merge_type(mut self, merge_type: impl ToString) -> Self {
 self.request.merge_type = merge_type.to_string();
         self,
 },
-pub fn build(mut self) -> MergeCellsRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 }
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct MergeCellsResponse {
     /// spreadsheet 的 token,
 #[serde(rename = "spreadsheetToken")],
@@ -90,7 +90,7 @@ Ok(api_resp),
     },
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use crate::,
 {
     core::,

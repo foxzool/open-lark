@@ -176,7 +176,7 @@ pub fn new() -> Self {
     ///,
 /// # 返回值
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
-pub fn validate_services_config(&self) -> bool {,
+pub fn w+.*{
         // 检查配置是否有效
 !self.recruitment_config.config().app_id.is_empty(),
             && !self.recruitment_config.config().app_secret.is_empty(),
@@ -187,7 +187,7 @@ pub fn validate_services_config(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_service_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "HireService{{ services: 6, app_id: {} core_modules: 4, integration_modules: 2, attachment_enabled: true }}",
             self.recruitment_config.config().app_id,
@@ -202,7 +202,7 @@ pub fn get_service_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_feature(&self, feature_name: &str) -> bool {,
+    pub fn w+.*{
 matches!(,
             feature_name,
             "job_management",
@@ -228,7 +228,7 @@ matches!(,
     ///,
 /// # 返回值
     /// 如果所有服务配置有效返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         !self.recruitment_config.config().app_id.is_empty(),
 && !self.recruitment_config.config().app_secret.is_empty(),
             && self.validate_services_config(),
@@ -239,7 +239,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含各类型服务数量的统计信息
-pub fn get_service_categories_statistics(&self) -> String {,
+pub fn w+.*{
         "HireService Categories{ core: 3, sourcing: 1, integration: 1, utility: 1, total: 6 }",
 .to_string(),
     }
@@ -249,7 +249,7 @@ pub fn get_service_categories_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各服务状态信息的字符串
-pub fn get_service_status_summary(&self) -> String {,
+pub fn w+.*{
         let config_healthy = !self.recruitment_config.config().app_id.is_empty();
 let core_healthy = config_healthy;
         let integration_healthy = config_healthy;
@@ -266,7 +266,7 @@ let attachment_healthy = config_healthy;
     ///,
 /// # 返回值
     /// 包含功能矩阵信息的字符串
-pub fn get_recruitment_pipeline_features(&self) -> String {,
+pub fn w+.*{
         format!(
             "HireService Pipeline{{ stages: 5, automations: {} integrations: {} analytics: true, multi_language: true }}",
             self.supports_feature("interview_scheduling"),
@@ -286,7 +286,7 @@ fn service_version() -> &'static str {,
 }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::config::Config;
 /// 创建测试配置

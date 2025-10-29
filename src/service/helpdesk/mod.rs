@@ -158,7 +158,7 @@ pub fn new() -> Self {
 }
 /// 使用共享配置创建服务（实验性）
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             v1: v1::V1::new(shared.as_ref().clone()),
         }
 }
@@ -168,7 +168,7 @@ Self {,
     ///,
 /// # 返回值
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
-pub fn validate_helpdesk_services_config(&self) -> bool {,
+pub fn w+.*{
         // 检查所有11个子服务配置是否一致
 let configs = [,
             &self.v1.agent.config,
@@ -200,7 +200,7 @@ false,
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_helpdesk_service_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "HelpdeskService{{ services: 1, sub_services: 11, app_id: {} api_version: v1, ticket_management: true, customer_service: true, knowledge_base: true, automation: true }}",
             self.v1.ticket.config.app_id,
@@ -215,7 +215,7 @@ pub fn get_helpdesk_service_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_helpdesk_feature(&self, helpdesk_feature: &str) -> bool {,
+    pub fn w+.*{
 match helpdesk_feature {,
             // 工单管理功能
             "ticket_creation" => true,
@@ -345,7 +345,7 @@ match helpdesk_feature {,
     ///,
 /// # 返回值
     /// 如果所有服务配置有效返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         self.validate_helpdesk_services_config(),
 }
 /// 获取服务台服务分类统计
@@ -354,7 +354,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含各类型服务数量的统计信息
-pub fn get_helpdesk_categories_statistics(&self) -> String {,
+pub fn w+.*{
         "HelpdeskService Categories{{ ticket: 15, customer_service: 12, knowledge_base: 12, automation: 12, analytics: 10, integration: 10, security: 10, personalization: 10, enterprise: 10, total: 91 }}".to_string(),
 }
 /// 获取服务台服务状态摘要
@@ -363,7 +363,7 @@ pub fn get_helpdesk_categories_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各服务状态信息的字符串
-pub fn get_helpdesk_service_status_summary(&self) -> String {,
+pub fn w+.*{
         let config_healthy = !self.v1.ticket.config.app_id.is_empty();
 let ticket_healthy = config_healthy;
         let customer_service_healthy = config_healthy;
@@ -381,7 +381,7 @@ format!(,
     ///,
 /// # 返回值
     /// 包含工单管理能力信息的字符串
-pub fn get_ticket_management_capabilities(&self) -> String {,
+pub fn w+.*{
         "HelpdeskService Ticket{{ creation: true, assignment: true, tracking: true, prioritization: true, sla_management: true, status_control: true, escalation: true, resolution: true, analytics: true }}".to_string(),
 }
 /// 获取客户服务能力矩阵
@@ -390,7 +390,7 @@ pub fn get_ticket_management_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含客户服务能力信息的字符串
-pub fn get_customer_service_capabilities(&self) -> String {,
+pub fn w+.*{
         "HelpdeskService Customer{{ management: true, communication: true, multi_channel: true, agent_management: true, scheduling: true, performance: true, satisfaction: true, quality: true }}".to_string(),
 }
 /// 获取知识库管理能力矩阵
@@ -399,7 +399,7 @@ pub fn get_customer_service_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含知识库管理能力信息的字符串
-pub fn get_knowledge_base_capabilities(&self) -> String {,
+pub fn w+.*{
         "HelpdeskService Knowledge{{ creation: true, management: true, search: true, categorization: true, tagging: true, sharing: true, analytics: true, approval: true }}".to_string(),
 }
 /// 获取自动化流程能力矩阵
@@ -408,7 +408,7 @@ pub fn get_knowledge_base_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含自动化流程能力信息的字符串
-pub fn get_automation_capabilities(&self) -> String {,
+pub fn w+.*{
         "HelpdeskService Automation{{ rules: true, assignment: true, responses: true, triggers: true, escalation: true, monitoring: true, notifications: true, workflows: true }}".to_string(),
 }
 /// 获取高级分析能力矩阵
@@ -417,7 +417,7 @@ pub fn get_automation_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含高级分析能力信息的字符串
-pub fn get_advanced_analytics_capabilities(&self) -> String {,
+pub fn w+.*{
         "HelpdeskService Analytics{{ service: true, performance: true, customer: true, trends: true, monitoring: true, dashboards: true, visualization: true, predictive: true }}".to_string(),
 }
 /// 获取集成能力矩阵
@@ -426,7 +426,7 @@ pub fn get_advanced_analytics_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含集成能力信息的字符串
-pub fn get_integration_capabilities(&self) -> String {,
+pub fn w+.*{
         "HelpdeskService Integration{{ api: true, third_party: true, webhook: true, email: true, chat: true, phone: true, social: true, crm: true }}".to_string(),
 }
 /// 获取安全合规能力矩阵
@@ -435,7 +435,7 @@ pub fn get_integration_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含安全合规能力信息的字符串
-pub fn get_security_compliance_capabilities(&self) -> String {,
+pub fn w+.*{
         "HelpdeskService Security{{ encryption: true, access_control: true, audit_logging: true, compliance: true, privacy: true, permissions: true, gdpr: true, monitoring: true }}".to_string(),
 }
 /// 获取个性化功能能力矩阵
@@ -444,7 +444,7 @@ pub fn get_security_compliance_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含个性化功能能力信息的字符串
-pub fn get_personalization_capabilities(&self) -> String {,
+pub fn w+.*{
         "HelpdeskService Personalization{{ custom_fields: true, workflows: true, dashboards: true, preferences: true, notifications: true, branding: true, templates: true, reports: true }}".to_string(),
 }
 /// 获取企业级功能能力矩阵
@@ -453,7 +453,7 @@ pub fn get_personalization_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含企业级功能能力信息的字符串
-pub fn get_enterprise_capabilities(&self) -> String {,
+pub fn w+.*{
         "HelpdeskService Enterprise{{ multi_tenant: true, scalability: true, availability: true, reporting: true, global: true, compliance: true, security: true, recovery: true }}".to_string(),
 }
 /// 获取服务台服务性能指标
@@ -462,7 +462,7 @@ pub fn get_enterprise_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含性能指标信息的字符串
-pub fn get_helpdesk_performance_metrics(&self) -> String {,
+pub fn w+.*{
         "HelpdeskService Performance{{ response_time: <2min, resolution_rate: 95%, availability: 99.9%, concurrency: high, scalability: enterprise }}".to_string(),
 }
 /// 获取服务台服务应用场景矩阵
@@ -471,7 +471,7 @@ pub fn get_helpdesk_performance_metrics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含应用场景信息的字符串
-pub fn get_helpdesk_use_cases_matrix(&self) -> String {,
+pub fn w+.*{
         "HelpdeskService UseCases{{ enterprise_support: true, it_service_desk: true, technical_support: true, customer_service: true, complaint_handling: true, knowledge_management: true }}".to_string(),
 }
 }
@@ -492,7 +492,7 @@ impl Service for HelpdeskService {,
 }
 /// 实现Clone trait，支持服务实例的克隆
 impl Clone for HelpdeskService {,
-fn clone(&self) -> Self {,
+fn clone(&self) -> Self {
         Self {
             v1: self.v1.clone_v1(),
         }
@@ -513,7 +513,7 @@ f.debug_struct()
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::sync::Arc;
 use std::time::Duration;

@@ -3,7 +3,7 @@
 // 实现单元格样式设置的操作,
 use crate::prelude::*;
 /// 样式操作服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct StyleService {
     client: std::sync::Arc<LarkClient>,
 }

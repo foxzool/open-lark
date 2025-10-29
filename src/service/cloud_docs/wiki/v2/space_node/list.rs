@@ -19,7 +19,7 @@ use crate::,
     impl_executable_builder_owned,
 };
 /// 获取知识空间子节点列表请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct ListSpaceNodeRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -37,47 +37,47 @@ pub struct ListSpaceNodeRequest {
     parent_node_token: Option<String>,
 }
 impl ListSpaceNodeRequest {
-    pub fn builder() -> ListSpaceNodeRequestBuilder {,
+    pub fn w+.*{
 ListSpaceNodeRequestBuilder::default(),
     },
-pub fn new(space_id: impl ToString) -> Self {,
+pub fn new(space_id: impl ToString) -> Self {
         Self {
             space_id: space_id.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct ListSpaceNodeRequestBuilder {
     request: ListSpaceNodeRequest,
 }
 impl ListSpaceNodeRequestBuilder {
     /// 知识空间id
-    pub fn space_id(mut self, space_id: impl ToString) -> Self {,
+    pub fn space_id(mut self, space_id: impl ToString) -> Self {
 self.request.space_id = space_id.to_string();
         self,
 },
 /// 分页大小，最大值为50,
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
 },
 /// 分页标记,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
 },
 /// 父节点token，获取其子节点,
-    pub fn parent_node_token(mut self, parent_node_token: impl ToString) -> Self {,
+    pub fn parent_node_token(mut self, parent_node_token: impl ToString) -> Self {
 self.request.parent_node_token = Some(parent_node_token.to_string());
         self,
 },
 /// 获取根节点列表,
-    pub fn root_nodes(mut self) -> Self {,
+    pub fn root_nodes(mut self) -> Self {
 self.request.parent_node_token = None;
         self,
 },
-pub fn build(mut self) -> ListSpaceNodeRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -90,7 +90,7 @@ impl_executable_builder_owned!(,
     list,
 );
 /// 知识空间节点信息
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct NodeItem {
     /// 知识空间id
     pub space_id: String,
@@ -118,7 +118,7 @@ pub struct NodeItem {
     pub has_child: Option<bool>,
 },
 /// 获取知识空间子节点列表响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct ListSpaceNodeResponse {
     /// 是否还有更多项
     pub has_more: bool,
@@ -168,7 +168,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_list_space_node_request_builder() {,

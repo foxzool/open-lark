@@ -25,7 +25,7 @@ pub struct V1 {
 }
 impl V1 {
     pub fn new() -> Self {
-Self {,
+Self {
             reserve: ReserveService::new(config.clone()),
             meeting: MeetingService::new(config.clone()),
             recording: RecordingService::new(config.clone()),

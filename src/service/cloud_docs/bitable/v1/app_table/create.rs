@@ -38,7 +38,7 @@ Ok(api_resp),
     },
 },
 /// 新增数据表请求,
-#[derive(Debug, Default)],
+#[derive(.*?)]
 pub struct CreateTableRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token
@@ -47,34 +47,34 @@ pub struct CreateTableRequest {
     table: TableData,
 }
 impl CreateTableRequest {
-    pub fn builder() -> CreateTableRequestBuilder {,
+    pub fn w+.*{
 CreateTableRequestBuilder::default(),
     },
 /// 创建新增数据表请求,
-    pub fn new(app_token: impl ToString, table: TableData) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, table: TableData) -> Self {
+Self {
             api_request: ApiRequest::default(),
             app_token: app_token.to_string(),
             table,
         },
 }
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct CreateTableRequestBuilder {
     request: CreateTableRequest,
 }
 impl CreateTableRequestBuilder {
     /// 多维表格的 app_token
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 数据表信息,
-    pub fn table(mut self, table: TableData) -> Self {,
+    pub fn table(mut self, table: TableData) -> Self {
 self.request.table = table;
         self,
 },
-pub fn build(self) -> CreateTableRequest {,
+pub fn w+.*{
         self.request,
 }
 }
@@ -86,7 +86,7 @@ impl_executable_builder_owned!(,
     create,
 );
 /// 数据表数据
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TableData {
     /// 数据表名称
     pub name: String,
@@ -99,7 +99,7 @@ pub struct TableData {
 }
 impl TableData {
     /// 创建数据表数据,
-pub fn new(name: impl ToString) -> Self {,
+pub fn new(name: impl ToString) -> Self {
         Self {
             name: name.to_string(),
             default_view_name: None,
@@ -107,18 +107,18 @@ pub fn new(name: impl ToString) -> Self {,
         },
 },
 /// 设置默认视图名称,
-    pub fn with_default_view_name(mut self, view_name: impl ToString) -> Self {,
+    pub fn with_default_view_name(mut self, view_name: impl ToString) -> Self {
 self.default_view_name = Some(view_name.to_string());
         self,
 },
 /// 设置初始字段,
-    pub fn with_fields(mut self, fields: Vec<TableField>) -> Self {,
+    pub fn with_fields(mut self, fields: Vec<TableField>) -> Self {
 self.fields = Some(fields);
         self,
 }
 },
 /// 字段信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TableField {
     /// 字段名称
     pub field_name: String,
@@ -131,7 +131,7 @@ pub struct TableField {
 }
 impl TableField {
     /// 创建文本字段,
-pub fn text(name: impl ToString) -> Self {,
+pub fn text(name: impl ToString) -> Self {
         Self {
             field_name: name.to_string(),
             field_type: 1, // 多行文本
@@ -139,15 +139,15 @@ pub fn text(name: impl ToString) -> Self {,
         },
 },
 /// 创建数字字段,
-    pub fn number(name: impl ToString) -> Self {,
-Self {,
+    pub fn number(name: impl ToString) -> Self {
+Self {
             field_name: name.to_string(),
             field_type: 2, // 数字
             property: None,
         },
 },
 /// 创建单选字段,
-    pub fn single_select(name: impl ToString, options: Vec<String>) -> Self {,
+    pub fn single_select(name: impl ToString, options: Vec<String>) -> Self {
 let options_value: Vec<serde_json::Value> = options,
             .into_iter()
             .map(|opt| serde_json::json!({"name": opt})),
@@ -159,7 +159,7 @@ let options_value: Vec<serde_json::Value> = options,
         },
 },
 /// 创建多选字段,
-    pub fn multi_select(name: impl ToString, options: Vec<String>) -> Self {,
+    pub fn multi_select(name: impl ToString, options: Vec<String>) -> Self {
 let options_value: Vec<serde_json::Value> = options,
             .into_iter()
             .map(|opt| serde_json::json!({"name": opt})),
@@ -171,20 +171,20 @@ let options_value: Vec<serde_json::Value> = options,
         },
 },
 /// 创建日期字段,
-    pub fn date(name: impl ToString) -> Self {,
-Self {,
+    pub fn date(name: impl ToString) -> Self {
+Self {
             field_name: name.to_string(),
             field_type: 5, // 日期
             property: None,
         },
 }
 },
-#[derive(Serialize)],
+#[derive(.*?)]
 struct CreateTableRequestBody {
     table: TableData,
 }
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct CreateTableResponse {
     /// 数据表信息
     pub table_id: String,
@@ -200,7 +200,7 @@ ResponseFormat::Data,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_create_table_request() {,

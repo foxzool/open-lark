@@ -15,7 +15,7 @@ use crate::,
     service::sheets::v3::{spreadsheet_sheet::Sheet, SpreadsheetSheetService},
 };
 
-#[derive(Serialize, Deserialize, Debug, Default)],
+#[derive(.*?)]
 pub struct GetSpreadsheetSheetRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -25,25 +25,25 @@ pub struct GetSpreadsheetSheetRequest {
     sheet_id: String,
 }
 impl GetSpreadsheetSheetRequest {
-    pub fn builder() -> GetSpreadsheetSheetRequestBuilder {,
+    pub fn w+.*{
 GetSpreadsheetSheetRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct GetSpreadsheetSheetRequestBuilder {
     request: GetSpreadsheetSheetRequest,
 }
 impl GetSpreadsheetSheetRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 },
-pub fn build(mut self) -> GetSpreadsheetSheetRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -69,7 +69,7 @@ Ok(api_resp),
     },
 }
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct GetSpreadsheetSheetResponse {
     pub sheet: Sheet,
 }

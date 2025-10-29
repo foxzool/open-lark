@@ -37,7 +37,7 @@ Ok(api_resp),
     },
 },
 /// 更新筛选视图请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PatchFilterViewRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -53,46 +53,46 @@ pub struct PatchFilterViewRequest {
     range: Option<String>,
 }
 impl PatchFilterViewRequest {
-    pub fn builder() -> PatchFilterViewRequestBuilder {,
+    pub fn w+.*{
 PatchFilterViewRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct PatchFilterViewRequestBuilder {
     request: PatchFilterViewRequest,
 }
 impl PatchFilterViewRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 }
 
-    pub fn filter_view_id(mut self, filter_view_id: impl ToString) -> Self {,
+    pub fn filter_view_id(mut self, filter_view_id: impl ToString) -> Self {
 self.request.filter_view_id = filter_view_id.to_string();
         self,
 }
 
-    pub fn filter_view_name(mut self, filter_view_name: impl ToString) -> Self {,
+    pub fn filter_view_name(mut self, filter_view_name: impl ToString) -> Self {
 self.request.filter_view_name = Some(filter_view_name.to_string());
         self,
 }
 
-    pub fn range(mut self, range: impl ToString) -> Self {,
+    pub fn range(mut self, range: impl ToString) -> Self {
 self.request.range = Some(range.to_string());
         self,
 },
-pub fn build(mut self) -> PatchFilterViewRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 更新筛选视图响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct PatchFilterViewResponseData {
     /// 筛选视图 ID
     pub filter_view_id: String,

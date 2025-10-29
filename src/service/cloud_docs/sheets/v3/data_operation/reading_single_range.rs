@@ -44,7 +44,7 @@ api_resp.into_result(),
     },
 },
 /// 读取单个范围请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReadingSingleRangeRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -60,14 +60,14 @@ pub struct ReadingSingleRangeRequest {
     user_id_type: Option<String>,
 }
 impl ReadingSingleRangeRequest {
-    pub fn builder() -> ReadingSingleRangeRequestBuilder {,
+    pub fn w+.*{
 ReadingSingleRangeRequestBuilder::default(),
     },
 /// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM,
     /// 验证请求参数,
-pub fn validate(&self) -> SDKResult<()> {,
+pub fn w+.*{
         // 验证必需字段,
 if self.spreadsheet_token.is_empty() {,
             return Err(crate::core::error::LarkAPIError::illegal_param(
@@ -107,22 +107,22 @@ return Err(crate::core::error::LarkAPIError::illegal_param(format!(,
 Ok(()),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct ReadingSingleRangeRequestBuilder {
     request: ReadingSingleRangeRequest,
 }
 impl ReadingSingleRangeRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn range(mut self, range: impl ToString) -> Self {,
+    pub fn range(mut self, range: impl ToString) -> Self {
 self.request.range = range.to_string();
         self,
 }
 
-    pub fn value_render_option(mut self, value_render_option: impl ToString) -> Self {,
+    pub fn value_render_option(mut self, value_render_option: impl ToString) -> Self {
 let value = value_render_option.to_string();
         self.request.value_render_option = Some(value.clone());
 self.request,
@@ -132,7 +132,7 @@ self.request,
 self,
     }
 
-    pub fn date_time_render_option(mut self, date_time_render_option: impl ToString) -> Self {,
+    pub fn date_time_render_option(mut self, date_time_render_option: impl ToString) -> Self {
 let value = date_time_render_option.to_string();
         self.request.date_time_render_option = Some(value.clone());
 self.request,
@@ -142,7 +142,7 @@ self.request,
 self,
     }
 
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 let value = user_id_type.to_string();
         self.request.user_id_type = Some(value.clone());
 self.request,
@@ -151,7 +151,7 @@ self.request,
             .insert("user_id_type", value);
 self,
     },
-pub fn build(self) -> ReadingSingleRangeRequest {,
+pub fn w+.*{
         self.request,
 }
 },
@@ -164,7 +164,7 @@ impl_executable_builder_owned!(
     reading_single_range,
 );
 /// 读取单个范围响应体最外层
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct ReadingSingleRangeResponseData {
     /// 值与范围,
 #[serde(rename = "valueRange")],
@@ -176,7 +176,7 @@ ResponseFormat::Data,
     },
 },
 /// 值与范围,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct ValueRange {
     /// 查询范围，包含 sheetId 与单元格范围两部分
     pub range: String,

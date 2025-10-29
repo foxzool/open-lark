@@ -37,7 +37,7 @@ Ok(api_resp),
     },
 },
 /// 更新行列请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateRowsOrColumnsRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -51,21 +51,21 @@ pub struct UpdateRowsOrColumnsRequest {
     dimension_properties: DimensionProperties,
 }
 impl UpdateRowsOrColumnsRequest {
-    pub fn builder() -> UpdateRowsOrColumnsRequestBuilder {,
+    pub fn w+.*{
 UpdateRowsOrColumnsRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct UpdateRowsOrColumnsRequestBuilder {
     request: UpdateRowsOrColumnsRequest,
 }
 impl UpdateRowsOrColumnsRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 },
@@ -74,7 +74,7 @@ pub fn dimension_range(,
         dimension: impl ToString,
         start_index: i32,
         end_index: i32,
-    ) -> Self {,
+    ) -> Self {
 self.request.dimension_range = DimensionRange {,
             dimension: dimension.to_string(),
             start_index,
@@ -83,20 +83,20 @@ self.request.dimension_range = DimensionRange {,
 self,
     }
 
-    pub fn dimension_properties(mut self, visible: Option<bool>, pixel_size: Option<i32>) -> Self {,
+    pub fn dimension_properties(mut self, visible: Option<bool>, pixel_size: Option<i32>) -> Self {
 self.request.dimension_properties = DimensionProperties {,
             visible,
             pixel_size,
         };
 self,
     },
-pub fn build(mut self) -> UpdateRowsOrColumnsRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 维度属性,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DimensionProperties {
     /// 是否可见
     pub visible: Option<bool>,
@@ -104,7 +104,7 @@ pub struct DimensionProperties {
     pub pixel_size: Option<i32>,
 },
 /// 更新行列响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct UpdateRowsOrColumnsResponseData {
     /// 更新行列后的信息
     pub update_range: UpdateRangeInfo,
@@ -115,7 +115,7 @@ ResponseFormat::Data,
     },
 },
 /// 更新范围信息,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct UpdateRangeInfo {
     /// 更新的维度
     pub dimension: String,

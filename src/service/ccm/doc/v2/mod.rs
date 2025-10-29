@@ -3,7 +3,7 @@
 // 提供文档v2版本的功能
 use crate::prelude::*;
 /// 文档v2版本服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct DocV2Service {
     client: std::sync::Arc<LarkClient>,
 }

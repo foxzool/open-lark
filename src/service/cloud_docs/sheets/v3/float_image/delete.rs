@@ -38,7 +38,7 @@ Ok(api_resp),
     },
 },
 /// 删除浮动图片请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DeleteFloatImageRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -50,30 +50,30 @@ pub struct DeleteFloatImageRequest {
     float_image_id: String,
 }
 impl DeleteFloatImageRequest {
-    pub fn builder() -> DeleteFloatImageRequestBuilder {,
+    pub fn w+.*{
 DeleteFloatImageRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct DeleteFloatImageRequestBuilder {
     request: DeleteFloatImageRequest,
 }
 impl DeleteFloatImageRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 }
 
-    pub fn float_image_id(mut self, float_image_id: impl ToString) -> Self {,
+    pub fn float_image_id(mut self, float_image_id: impl ToString) -> Self {
 self.request.float_image_id = float_image_id.to_string();
         self,
 },
-pub fn build(mut self) -> DeleteFloatImageRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -86,7 +86,7 @@ impl_executable_builder_owned!(,
     delete_float_image,
 );
 /// 删除浮动图片响应体最外层
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct DeleteFloatImageResponseData {
     /// 删除操作是否成功,
 #[serde(default)],

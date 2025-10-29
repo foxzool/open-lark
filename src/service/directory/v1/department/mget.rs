@@ -16,7 +16,7 @@ core::{,
 };
 use super::DepartmentService;
 /// 批量获取部门信息请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct MgetDepartmentRequest {
     pub api_req: ApiRequest,
     /// 部门ID列表
@@ -28,7 +28,7 @@ pub struct MgetDepartmentRequest {
 }
 impl MgetDepartmentRequest {
     /// 创建批量获取部门信息请求的构建器,
-pub fn builder() -> MgetDepartmentRequestBuilder {,
+pub fn w+.*{
         MgetDepartmentRequestBuilder::default(),
 }
 },
@@ -39,27 +39,27 @@ pub struct MgetDepartmentRequestBuilder {
 }
 impl MgetDepartmentRequestBuilder {
     /// 设置部门ID列表
-    pub fn department_ids(mut self, department_ids: Vec<String>) -> Self {,
+    pub fn department_ids(mut self, department_ids: Vec<String>) -> Self {
 self.request.department_ids = department_ids;
         self,
 },
 /// 添加部门ID,
-    pub fn add_department_id(mut self, department_id: impl ToString) -> Self {,
+    pub fn add_department_id(mut self, department_id: impl ToString) -> Self {
 self.request.department_ids.push(department_id.to_string());
         self,
 },
 /// 设置用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
 },
 /// 设置部门ID类型,
-    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {,
+    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {
 self.request.department_id_type = Some(department_id_type);
         self,
 },
 /// 构建请求,
-    pub fn build(mut self) -> MgetDepartmentRequest {,
+    pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
@@ -82,13 +82,13 @@ self.request.api_req.body = serde_json::to_vec(&body).unwrap_or_default();
 }
 },
 /// 批量获取部门信息响应数据,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct MgetDepartmentResponseData {
     /// 部门信息列表
     pub departments: Vec<Department>,
 },
 /// 批量获取部门信息响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct MgetDepartmentResponse {
     /// 响应数据
     pub data: MgetDepartmentResponseData,

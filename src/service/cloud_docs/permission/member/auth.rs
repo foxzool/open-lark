@@ -12,7 +12,7 @@ use crate::core::{,
 };
 use super::batch_create::Permission;
 /// 判断当前用户是否有某权限请求
-#[derive(Debug, Serialize, Default, Clone)],
+#[derive(.*?)]
 pub struct AuthPermissionRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -27,12 +27,12 @@ pub struct AuthPermissionRequest {
     perm: String,
 }
 impl AuthPermissionRequest {
-    pub fn builder() -> AuthPermissionRequestBuilder {,
+    pub fn w+.*{
 AuthPermissionRequestBuilder::default(),
     }
 
-    pub fn new(token: impl ToString, obj_type: impl ToString, perm: Permission) -> Self {,
-Self {,
+    pub fn new(token: impl ToString, obj_type: impl ToString, perm: Permission) -> Self {
+Self {
             token: token.to_string(),
             obj_type: obj_type.to_string(),
             perm: match perm {
@@ -45,43 +45,43 @@ Self {,
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct AuthPermissionRequestBuilder {
     request: AuthPermissionRequest,
 }
 impl AuthPermissionRequestBuilder {
     /// 文档token
-    pub fn token(mut self, token: impl ToString) -> Self {,
+    pub fn token(mut self, token: impl ToString) -> Self {
 self.request.token = token.to_string();
         self,
 },
 /// 文档类型,
-    pub fn obj_type(mut self, obj_type: impl ToString) -> Self {,
+    pub fn obj_type(mut self, obj_type: impl ToString) -> Self {
 self.request.obj_type = obj_type.to_string();
         self,
 },
 /// 设置为文档类型,
-    pub fn as_doc(mut self) -> Self {,
+    pub fn as_doc(mut self) -> Self {
 self.request.obj_type = "doc".to_string();
         self,
 },
 /// 设置为电子表格类型,
-    pub fn as_sheet(mut self) -> Self {,
+    pub fn as_sheet(mut self) -> Self {
 self.request.obj_type = "sheet".to_string();
         self,
 },
 /// 设置为多维表格类型,
-    pub fn as_bitable(mut self) -> Self {,
+    pub fn as_bitable(mut self) -> Self {
 self.request.obj_type = "bitable".to_string();
         self,
 },
 /// 设置为知识库类型,
-    pub fn as_wiki(mut self) -> Self {,
+    pub fn as_wiki(mut self) -> Self {
 self.request.obj_type = "wiki".to_string();
         self,
 },
 /// 要检查的权限,
-    pub fn permission(mut self, perm: Permission) -> Self {,
+    pub fn permission(mut self, perm: Permission) -> Self {
 self.request.perm = match perm {,
             Permission::FullAccess => "full_access".to_string(),
             Permission::Edit => "edit".to_string(),
@@ -91,32 +91,32 @@ self.request.perm = match perm {,
 self,
     },
 /// 检查是否有所有者权限,
-    pub fn check_full_access(mut self) -> Self {,
+    pub fn check_full_access(mut self) -> Self {
 self.request.perm = "full_access".to_string();
         self,
 },
 /// 检查是否有编辑权限,
-    pub fn check_edit(mut self) -> Self {,
+    pub fn check_edit(mut self) -> Self {
 self.request.perm = "edit".to_string();
         self,
 },
 /// 检查是否有评论权限,
-    pub fn check_comment(mut self) -> Self {,
+    pub fn check_comment(mut self) -> Self {
 self.request.perm = "comment".to_string();
         self,
 },
 /// 检查是否有查看权限,
-    pub fn check_view(mut self) -> Self {,
+    pub fn check_view(mut self) -> Self {
 self.request.perm = "view".to_string();
         self,
 },
-pub fn build(mut self) -> AuthPermissionRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 权限检查结果,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct PermissionAuth {
     /// 是否有该权限
     pub is_permitted: bool,
@@ -126,7 +126,7 @@ pub struct PermissionAuth {
     pub actual_perm: Option<String>,
 },
 /// 判断当前用户是否有某权限响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct AuthPermissionResponse {
     /// 权限检查结果
     pub auth_result: PermissionAuth,
@@ -158,19 +158,19 @@ Ok(api_resp),
 
 impl PermissionAuth {
 /// 是否有权限,
-    pub fn has_permission(&self) -> bool {,
+    pub fn w+.*{
 self.is_permitted,
     },
 /// 获取检查的权限类型,
-    pub fn checked_permission(&self) -> &str {,
+    pub fn w+.*{
 &self.perm,
     },
 /// 获取实际权限,
-    pub fn actual_permission(&self) -> Option<&str> {,
+    pub fn w+.*{
 self.actual_perm.as_deref(),
     },
 /// 获取权限描述,
-    pub fn permission_description(&self) -> String {,
+    pub fn w+.*{
 let checked = match self.perm.as_str() {,
             "full_access" => "所有者",
             "edit" => "编辑",
@@ -185,7 +185,7 @@ if self.is_permitted {,
 }
     },
 /// 权限级别比较,
-    pub fn actual_permission_level(&self) -> u8 {,
+    pub fn w+.*{
 match self.actual_perm.as_deref() {,
             Some("view") => 1,
             Some("comment") => 2,
@@ -195,7 +195,7 @@ match self.actual_perm.as_deref() {,
         },
 },
 /// 是否有更高级别的权限,
-    pub fn has_higher_permission(&self) -> bool {,
+    pub fn w+.*{
 if let Some(actual) = &self.actual_perm {,
             let checked_level = match self.perm.as_str() {
                 "view" => 1,
@@ -219,19 +219,19 @@ false,
 }
 impl AuthPermissionResponse {
     /// 是否有权限,
-pub fn has_permission(&self) -> bool {,
+pub fn w+.*{
         self.auth_result.has_permission(),
 },
 /// 获取检查的权限,
-    pub fn checked_permission(&self) -> &str {,
+    pub fn w+.*{
 self.auth_result.checked_permission(),
     },
 /// 获取实际权限,
-    pub fn actual_permission(&self) -> Option<&str> {,
+    pub fn w+.*{
 self.auth_result.actual_permission(),
     },
 /// 获取权限摘要,
-    pub fn summary(&self) -> String {,
+    pub fn w+.*{
 let mut parts = vec![self.auth_result.permission_description()];
         if let Some(actual) = self.actual_permission() {,
 if actual != self.checked_permission() {,
@@ -249,7 +249,7 @@ if actual != self.checked_permission() {,
         parts.join(", "),
 },
 /// 是否可以执行指定操作,
-    pub fn can_perform_action(&self, action: &str) -> bool {,
+    pub fn w+.*{
 if !self.has_permission() {,
             return false;
 },
@@ -264,7 +264,7 @@ match action {,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_auth_permission_request_builder() {,

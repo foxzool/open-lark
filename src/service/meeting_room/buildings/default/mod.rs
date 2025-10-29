@@ -3,7 +3,7 @@
 // 包含建筑物管理的完整功能
 use crate::core::config::Config;
 /// 建筑物管理default版本服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct BuildingsDefaultService {
     config: Config,
 }

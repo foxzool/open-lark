@@ -28,7 +28,7 @@ use crate::{,
 ///     .build(),
 ///     .unwrap();
 /// ```,
-#[derive(Debug, Clone, Default)],
+#[derive(.*?)]
 pub struct TalentCreateRequestBuilder {
     request: TalentCreateRequest,
 }
@@ -37,7 +37,7 @@ impl TalentCreateRequestBuilder {
 ///,
     /// # 参数,
 /// - `name`: 人才姓名，长度必须在2-100字符之间,
-    pub fn with_name(mut self, name: &str) -> Self {,
+    pub fn with_name(mut self, name: &str) -> Self {
 self.request.name = name.to_string();
         self,
 },
@@ -45,7 +45,7 @@ self.request.name = name.to_string();
     ///,
 /// # 参数,
     /// - `email`: 邮箱地址，格式必须正确
-    pub fn with_email(mut self, email: &str) -> Self {,
+    pub fn with_email(mut self, email: &str) -> Self {
 self.request.email = Some(email.to_string());
         self,
 },
@@ -53,7 +53,7 @@ self.request.email = Some(email.to_string());
     ///,
 /// # 参数,
     /// - `phone`: 电话号码，支持各种格式
-    pub fn with_phone(mut self, phone: &str) -> Self {,
+    pub fn with_phone(mut self, phone: &str) -> Self {
 self.request.phone = Some(phone.to_string());
         self,
 },
@@ -61,7 +61,7 @@ self.request.phone = Some(phone.to_string());
     ///,
 /// # 参数,
     /// - `gender`: 性别，如 "male", "female", "other"
-    pub fn with_gender(mut self, gender: &str) -> Self {,
+    pub fn with_gender(mut self, gender: &str) -> Self {
 self.request.gender = Some(gender.to_string());
         self,
 },
@@ -69,7 +69,7 @@ self.request.gender = Some(gender.to_string());
     ///,
 /// # 参数,
     /// - `birthday`: 生日，格式建议为 YYYY-MM-DD
-    pub fn with_birthday(mut self, birthday: &str) -> Self {,
+    pub fn with_birthday(mut self, birthday: &str) -> Self {
 self.request.birthday = Some(birthday.to_string());
         self,
 },
@@ -77,7 +77,7 @@ self.request.birthday = Some(birthday.to_string());
     ///,
 /// # 参数,
     /// - `years`: 工作年限，0-50年
-    pub fn with_work_experience(mut self, years: u32) -> Self {,
+    pub fn with_work_experience(mut self, years: u32) -> Self {
 self.request.work_experience = Some(years);
         self,
 },
@@ -85,7 +85,7 @@ self.request.work_experience = Some(years);
     ///,
 /// # 参数,
     /// - `education`: 学历，如 "高中", "专科", "本科", "硕士", "博士"
-    pub fn with_education(mut self, education: &str) -> Self {,
+    pub fn with_education(mut self, education: &str) -> Self {
 self.request.education = Some(education.to_string());
         self,
 },
@@ -93,7 +93,7 @@ self.request.education = Some(education.to_string());
     ///,
 /// # 参数,
     /// - `company`: 当前所在公司
-    pub fn with_current_company(mut self, company: &str) -> Self {,
+    pub fn with_current_company(mut self, company: &str) -> Self {
 self.request.current_company = Some(company.to_string());
         self,
 },
@@ -101,7 +101,7 @@ self.request.current_company = Some(company.to_string());
     ///,
 /// # 参数,
     /// - `position`: 当前职位名称
-    pub fn with_current_position(mut self, position: &str) -> Self {,
+    pub fn with_current_position(mut self, position: &str) -> Self {
 self.request.current_position = Some(position.to_string());
         self,
 },
@@ -109,7 +109,7 @@ self.request.current_position = Some(position.to_string());
     ///,
 /// # 参数,
     /// - `salary`: 期望薪资，如 "10-15K", "20K以上"
-    pub fn with_expected_salary(mut self, salary: &str) -> Self {,
+    pub fn with_expected_salary(mut self, salary: &str) -> Self {
 self.request.expected_salary = Some(salary.to_string());
         self,
 },
@@ -117,7 +117,7 @@ self.request.expected_salary = Some(salary.to_string());
     ///,
 /// # 参数,
     /// - `attachment_id`: 简历附件ID
-    pub fn add_resume_attachment(mut self, attachment_id: &str) -> Self {,
+    pub fn add_resume_attachment(mut self, attachment_id: &str) -> Self {
 self.request,
             .resume_attachment_ids,
 .push(attachment_id.to_string());
@@ -127,7 +127,7 @@ self.request,
     ///,
 /// # 参数,
     /// - `attachment_ids`: 简历附件ID列表
-    pub fn with_resume_attachments(mut self, mut attachment_ids: Vec<String>) -> Self {,
+    pub fn with_resume_attachments(mut self, mut attachment_ids: Vec<String>) -> Self {
 self.request,
             .resume_attachment_ids,
 .append(&mut attachment_ids);
@@ -137,7 +137,7 @@ self.request,
     ///,
 /// # 参数,
     /// - `tag`: 标签内容
-    pub fn add_tag(mut self, tag: &str) -> Self {,
+    pub fn add_tag(mut self, tag: &str) -> Self {
 self.request.tags.push(tag.to_string());
         self,
 },
@@ -145,7 +145,7 @@ self.request.tags.push(tag.to_string());
     ///,
 /// # 参数,
     /// - `tags`: 标签列表
-    pub fn with_tags(mut self, mut tags: Vec<String>) -> Self {,
+    pub fn with_tags(mut self, mut tags: Vec<String>) -> Self {
 self.request.tags.append(&mut tags);
         self,
 },
@@ -154,7 +154,7 @@ self.request.tags.append(&mut tags);
 /// # 参数,
     /// - `key`: 字段名,
 /// - `value`: 字段值,
-    pub fn add_custom_field(mut self, key: &str, value: serde_json::Value) -> Self {,
+    pub fn add_custom_field(mut self, key: &str, value: serde_json::Value) -> Self {
 self.request,
             .custom_fields,
 .get_or_insert_with()
@@ -165,7 +165,7 @@ self,
     ///,
 /// # 参数,
     /// - `fields`: 自定义字段哈希表
-    pub fn with_custom_fields(mut self, fields: HashMap<String, serde_json::Value>) -> Self {,
+    pub fn with_custom_fields(mut self, fields: HashMap<String, serde_json::Value>) -> Self {
 self.request.custom_fields = Some(fields);
         self,
 },
@@ -188,7 +188,7 @@ self.request.custom_fields = Some(fields);
 /// - 标签：每个标签1-50字符，最多20个,
     /// - 简历附件：每个附件ID1-100字符,
 /// - 自定义字段：键名1-100字符,
-    pub fn build(self) -> SDKResult<TalentCreateRequest> {,
+    pub fn w+.*{
 // 1. 验证必填字段,
         if self.request.name.is_empty() {,
 return Err(LarkAPIError::illegal_param(,
@@ -402,74 +402,74 @@ ValidationResult::Valid,
 /// 人才列表请求构建器,
 ///
 /// 提供链式调用来构建人才列表查询请求，支持各种筛选条件。
-#[derive(Debug, Clone, Default)],
+#[derive(.*?)]
 pub struct TalentListRequestBuilder {
     request: crate::service::hire::candidate_management::talent::TalentListRequest,
 }
 impl TalentListRequestBuilder {
     /// 设置分页大小
-    pub fn with_page_size(mut self, page_size: u32) -> Self {,
+    pub fn with_page_size(mut self, page_size: u32) -> Self {
 self.request.page_size = Some(page_size);
         self,
 },
 /// 设置分页标记,
-    pub fn with_page_token(mut self, page_token: &str) -> Self {,
+    pub fn with_page_token(mut self, page_token: &str) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
 },
 /// 设置姓名关键词,
-    pub fn with_name_keyword(mut self, name_keyword: &str) -> Self {,
+    pub fn with_name_keyword(mut self, name_keyword: &str) -> Self {
 self.request.name_keyword = Some(name_keyword.to_string());
         self,
 },
 /// 设置邮箱关键词,
-    pub fn with_email_keyword(mut self, email_keyword: &str) -> Self {,
+    pub fn with_email_keyword(mut self, email_keyword: &str) -> Self {
 self.request.email_keyword = Some(email_keyword.to_string());
         self,
 },
 /// 设置电话关键词,
-    pub fn with_phone_keyword(mut self, phone_keyword: &str) -> Self {,
+    pub fn with_phone_keyword(mut self, phone_keyword: &str) -> Self {
 self.request.phone_keyword = Some(phone_keyword.to_string());
         self,
 },
 /// 设置工作年限筛选,
-    pub fn with_work_experience(mut self, work_experience: u32) -> Self {,
+    pub fn with_work_experience(mut self, work_experience: u32) -> Self {
 self.request.work_experience = Some(work_experience);
         self,
 },
 /// 设置学历筛选,
-    pub fn with_education(mut self, education: &str) -> Self {,
+    pub fn with_education(mut self, education: &str) -> Self {
 self.request.education = Some(education.to_string());
         self,
 },
 /// 添加标签筛选,
-    pub fn add_tag(mut self, tag: &str) -> Self {,
+    pub fn add_tag(mut self, tag: &str) -> Self {
 self.request.tags.push(tag.to_string());
         self,
 },
 /// 设置标签列表筛选,
-    pub fn with_tags(mut self, mut tags: Vec<String>) -> Self {,
+    pub fn with_tags(mut self, mut tags: Vec<String>) -> Self {
 self.request.tags.append(&mut tags);
         self,
 },
 /// 设置创建时间开始,
-    pub fn with_created_start_time(mut self, start_time: &str) -> Self {,
+    pub fn with_created_start_time(mut self, start_time: &str) -> Self {
 self.request.created_start_time = Some(start_time.to_string());
         self,
 },
 /// 设置创建时间结束,
-    pub fn with_created_end_time(mut self, end_time: &str) -> Self {,
+    pub fn with_created_end_time(mut self, end_time: &str) -> Self {
 self.request.created_end_time = Some(end_time.to_string());
         self,
 },
 /// 构建人才列表请求,
-    pub fn build(self) -> crate::service::hire::candidate_management::talent::TalentListRequest {,
+    pub fn w+.*{
 self.request,
     },
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_talent_create_builder_valid() {,

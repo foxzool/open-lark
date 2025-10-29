@@ -7,7 +7,7 @@ use crate::service::ccm::drive::v1::meta::MetaService;
 use crate::service::ccm::drive::v1::statistics::StatisticsService;
 use crate::service::ccm::drive::v1::view_record::ViewRecordService;
 /// 云空间文件管理v1版本服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct DriveV1Service {
     client: std::sync::Arc<LarkClient>,
     /// 文件操作服务

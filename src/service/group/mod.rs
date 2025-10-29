@@ -168,7 +168,7 @@ pub fn new() -> Self {
     ///,
 /// # 返回值
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
-pub fn validate_services_config(&self) -> bool {,
+pub fn w+.*{
         // 检查配置是否有效
 !self.v1.config().app_id.is_empty() && !self.v1.config().app_secret.is_empty(),
     }
@@ -178,7 +178,7 @@ pub fn validate_services_config(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_service_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "GroupService{{ services: 5, app_id: {} core_modules: 2, content_modules: 2, menu_module: 1 }}",
             self.v1.config().app_id,
@@ -193,7 +193,7 @@ pub fn get_service_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_feature(&self, feature_name: &str) -> bool {,
+    pub fn w+.*{
 matches!(,
             feature_name,
             "group_management",
@@ -219,7 +219,7 @@ matches!(,
     ///,
 /// # 返回值
     /// 如果所有服务配置有效返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         !self.v1.config().app_id.is_empty(),
 && !self.v1.config().app_secret.is_empty(),
             && self.validate_services_config(),
@@ -230,7 +230,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含各类型服务数量的统计信息
-pub fn get_service_categories_statistics(&self) -> String {,
+pub fn w+.*{
         "GroupService Categories{ core: 2, content: 2, navigation: 1, total: 5 }".to_string(),
 }
 /// 获取群组服务状态摘要
@@ -239,7 +239,7 @@ pub fn get_service_categories_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各服务状态信息的字符串
-pub fn get_service_status_summary(&self) -> String {,
+pub fn w+.*{
         let config_healthy = !self.v1.config().app_id.is_empty();
 let core_healthy = config_healthy;
         let content_healthy = config_healthy;
@@ -258,7 +258,7 @@ let navigation_healthy = config_healthy;
     ///,
 /// # 返回值
     /// 包含协作功能矩阵信息的字符串
-pub fn get_collaboration_features(&self) -> String {,
+pub fn w+.*{
         format!(
             "GroupService Collaboration{{ real_time: {} permissions: {} announcements: {} tabs: {} menus: {} analytics: true }}",
             self.supports_feature("real_time_collaboration"),
@@ -270,7 +270,7 @@ pub fn get_collaboration_features(&self) -> String {,
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::config::Config;
 /// 创建测试配置

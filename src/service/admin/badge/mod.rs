@@ -25,7 +25,7 @@ pub struct BadgeService {
 // Service 抽象接入：Admin BadgeService
 impl_full_service!(BadgeService, "admin.badge", "v1");
 /// 勋章创建响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeCreateResponse {
     /// 创建的勋章信息
 #[serde(flatten)],
@@ -37,7 +37,7 @@ ResponseFormat::Data,
     }
 }
 /// 勋章更新响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeUpdateResponse {
     /// 更新的勋章信息
 #[serde(flatten)],
@@ -49,7 +49,7 @@ ResponseFormat::Data,
     }
 }
 /// 勋章图片上传响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeImageUploadResponse {
     /// 图片上传结果
 #[serde(flatten)],
@@ -61,7 +61,7 @@ ResponseFormat::Data,
     }
 }
 /// 勋章列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeListResponse {
     /// 分页响应数据
 #[serde(flatten)],
@@ -73,7 +73,7 @@ ResponseFormat::Data,
     }
 }
 /// 勋章详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BadgeGetResponse {
     /// 勋章详细信息
 #[serde(flatten)],

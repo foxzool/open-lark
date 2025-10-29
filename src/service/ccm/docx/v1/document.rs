@@ -3,7 +3,7 @@
 // 实现文档级别的操作,
 use crate::prelude::*;
 /// 文档操作服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct DocumentService {
     client: std::sync::Arc<LarkClient>,
 }

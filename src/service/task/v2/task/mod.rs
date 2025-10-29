@@ -21,7 +21,7 @@ pub struct TaskService {
     pub config: Config,
 }
 /// 创建任务请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateTaskRequest {
     /// 任务标题
     pub summary: String,
@@ -51,7 +51,7 @@ pub struct CreateTaskRequest {
     pub source: Option<i32>,
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TaskDue {
     /// 截止时间戳(毫秒)
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -61,7 +61,7 @@ pub struct TaskDue {
     pub is_all_day: Option<bool>,
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TaskStart {
     /// 开始时间戳(毫秒)
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -71,7 +71,7 @@ pub struct TaskStart {
     pub is_all_day: Option<bool>,
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TaskCustomComplete {
     /// 完成模式
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -81,14 +81,14 @@ pub struct TaskCustomComplete {
     pub complete_setting: Option<TaskCompleteSetting>,
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TaskCompleteSetting {
     /// 子任务完成数量
 #[serde(skip_serializing_if = "Option::is_none")],
     pub subtask_count: Option<i32>,
 }
 /// 创建任务响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateTaskResponse {
     /// 创建的任务
     pub task: Task,
@@ -99,7 +99,7 @@ ResponseFormat::Data,
     }
 }
 /// 更新任务请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateTaskRequest {
     /// 任务标题
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -124,7 +124,7 @@ pub struct UpdateTaskRequest {
     pub custom_complete: Option<TaskCustomComplete>,
 }
 /// 更新任务响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateTaskResponse {
     /// 更新后的任务
     pub task: Task,
@@ -135,7 +135,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取任务响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetTaskResponse {
     /// 任务详情
     pub task: Task,
@@ -146,7 +146,7 @@ ResponseFormat::Data,
     }
 }
 /// 任务列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListTasksResponse {
     /// 任务列表
     pub items: Vec<Task>,
@@ -163,7 +163,7 @@ ResponseFormat::Data,
     }
 }
 /// 任务加入清单请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AddTaskTasklistRequest {
     /// 清单GUID
     pub tasklist_guid: String,
@@ -172,7 +172,7 @@ pub struct AddTaskTasklistRequest {
     pub section_guid: Option<String>,
 }
 /// 任务加入清单响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AddTaskTasklistResponse {
     /// 加入的清单
     pub tasklist: Tasklist,
@@ -183,13 +183,13 @@ ResponseFormat::Data,
     }
 }
 /// 添加任务成员请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AddTaskMembersRequest {
     /// 成员列表
     pub members: Vec<TaskMember>,
 }
 /// 添加任务成员响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AddTaskMembersResponse {
     /// 成员列表
     pub members: Vec<TaskMember>,
@@ -200,13 +200,13 @@ ResponseFormat::Data,
     }
 }
 /// 移除任务成员请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RemoveTaskMembersRequest {
     /// 成员ID列表
     pub members: Vec<String>,
 }
 /// 移除任务成员响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RemoveTaskMembersResponse {
     /// 成员列表
     pub members: Vec<TaskMember>,
@@ -217,13 +217,13 @@ ResponseFormat::Data,
     }
 }
 /// 添加任务提醒请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AddTaskRemindersRequest {
     /// 提醒列表
     pub reminders: Vec<Reminder>,
 }
 /// 添加任务提醒响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AddTaskRemindersResponse {
     /// 提醒列表
     pub reminders: Vec<Reminder>,
@@ -234,13 +234,13 @@ ResponseFormat::Data,
     }
 }
 /// 移除任务提醒请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RemoveTaskRemindersRequest {
     /// 提醒ID列表
     pub reminder_ids: Vec<String>,
 }
 /// 移除任务提醒响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RemoveTaskRemindersResponse {
     /// 提醒列表
     pub reminders: Vec<Reminder>,
@@ -251,13 +251,13 @@ ResponseFormat::Data,
     }
 }
 /// 添加任务依赖请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AddTaskDependenciesRequest {
     /// 依赖列表
     pub dependencies: Vec<Dependency>,
 }
 /// 添加任务依赖响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AddTaskDependenciesResponse {
     /// 依赖列表
     pub dependencies: Vec<Dependency>,
@@ -268,13 +268,13 @@ ResponseFormat::Data,
     }
 }
 /// 移除任务依赖请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RemoveTaskDependenciesRequest {
     /// 依赖类型和任务GUID的组合列表
     pub dependencies: Vec<DependencyKey>,
 }
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DependencyKey {
     /// 依赖类型
     pub type_: String,
@@ -282,7 +282,7 @@ pub struct DependencyKey {
     pub task_guid: String,
 }
 /// 移除任务依赖响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RemoveTaskDependenciesResponse {
     /// 依赖列表
     pub dependencies: Vec<Dependency>,

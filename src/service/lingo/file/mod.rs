@@ -82,7 +82,7 @@ let api_req = ApiRequest {,
 }
 }
 /// 文件上传请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FileUploadRequest {
     /// 文件名
     pub file_name: String,
@@ -93,7 +93,7 @@ pub struct FileUploadRequest {
     pub file_type: Option<String>,
 }
 /// 文件上传响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FileUploadResponse {
     /// 上传的文件信息
     pub file: FileInfo,
@@ -104,7 +104,7 @@ ResponseFormat::Data,
     }
 }
 /// 文件下载响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FileDownloadResponse {
     /// 文件内容（二进制数据）
     pub content: Vec<u8>,

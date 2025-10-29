@@ -16,7 +16,7 @@ use crate::,
     service::cloud_docs::sheets::v2::{data_operation::ValueRangeRequest, SpreadsheetService},
 };
 /// 向多个范围写入数据请求,
-#[derive(Serialize, Debug, Default)],
+#[derive(.*?)]
 pub struct WriteDataToMultiRangesRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -26,34 +26,34 @@ pub struct WriteDataToMultiRangesRequest {
     value_ranges: Vec<ValueRangeRequest>,
 }
 impl WriteDataToMultiRangesRequest {
-    pub fn builder() -> WriteDataToMultiRangesBuilder {,
+    pub fn w+.*{
 WriteDataToMultiRangesBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct WriteDataToMultiRangesBuilder {
     request: WriteDataToMultiRangesRequest,
 }
 impl WriteDataToMultiRangesBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn add_value_range(mut self, range: impl ToString, values: serde_json::Value) -> Self {,
+    pub fn add_value_range(mut self, range: impl ToString, values: serde_json::Value) -> Self {
 self.request.value_ranges.push(ValueRangeRequest {,
             range: range.to_string(),
             values,
         });
 self,
     },
-pub fn build(mut self) -> WriteDataToMultiRangesRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 向多个范围写入数据响应体,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct WriteDataToMultiRangesResponse {
     /// spreadsheet 的 token,
 #[serde(rename = "spreadsheetToken")],
@@ -64,7 +64,7 @@ pub struct WriteDataToMultiRangesResponse {
     pub responses: Vec<DataResponse>,
 },
 /// 追加数据的范围、行列数等,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 #[allow(dead_code)],
 pub struct DataResponse {
 /// spreadsheet 的 token,
@@ -113,7 +113,7 @@ Ok(api_resp),
     },
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use serde_json::json;
     use crate::,
 {,

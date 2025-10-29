@@ -16,7 +16,7 @@ use crate::{
     service::lingo::models::{Classification, PageResponse}
 };
 /// 分类管理服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct ClassificationService {
     pub config: Config,
 }
@@ -68,7 +68,7 @@ if let Some(repo_id) = request.repo_id {,
     }
 }
 /// 分类列表查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ClassificationListRequest {
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -81,7 +81,7 @@ pub struct ClassificationListRequest {
     pub repo_id: Option<String>,
 }
 /// 分类列表查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ClassificationListResponse {
     /// 分类列表
 #[serde(flatten)],

@@ -36,7 +36,7 @@ Ok(api_resp),
     },
 },
 /// 查询筛选视图请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct QueryFilterViewRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -46,31 +46,31 @@ pub struct QueryFilterViewRequest {
     sheet_id: String,
 }
 impl QueryFilterViewRequest {
-    pub fn builder() -> QueryFilterViewRequestBuilder {,
+    pub fn w+.*{
 QueryFilterViewRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct QueryFilterViewRequestBuilder {
     request: QueryFilterViewRequest,
 }
 impl QueryFilterViewRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 },
-pub fn build(mut self) -> QueryFilterViewRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 查询筛选视图响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct QueryFilterViewResponseData {
     /// 筛选视图列表
     pub items: Vec<FilterViewInfo>,
@@ -81,7 +81,7 @@ ResponseFormat::Data,
     },
 },
 /// 筛选视图信息,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct FilterViewInfo {
     /// 筛选视图 ID
     pub filter_view_id: String,

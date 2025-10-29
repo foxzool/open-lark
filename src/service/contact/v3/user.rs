@@ -317,7 +317,7 @@ resp.into_result(),
 /// 创建用户 - Builder模式 (推荐),
     ///,
 /// 提供更现代化的Builder接口，支持链式调用和统一的执行模式,
-    pub fn create_user_builder(&self) -> CreateUserBuilder {,
+    pub fn w+.*{
 CreateUserBuilder::new(),
     },
 },
@@ -329,25 +329,25 @@ pub struct CreateUserBuilder {
     department_id_type: Option<String>,
 }
 impl CreateUserBuilder {
-    pub fn new() -> Self {,
+    pub fn new() -> Self {
 Self::default(),
     },
 /// 设置用户信息,
-    pub fn user(mut self, user: User) -> Self {,
+    pub fn user(mut self, user: User) -> Self {
 self.user = Some(user);
         self,
 },
 /// 设置用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.user_id_type = Some(user_id_type.to_string());
         self,
 },
 /// 设置部门ID类型,
-    pub fn department_id_type(mut self, department_id_type: impl ToString) -> Self {,
+    pub fn department_id_type(mut self, department_id_type: impl ToString) -> Self {
 self.department_id_type = Some(department_id_type.to_string());
         self,
 },
-pub fn build(self) -> CreateUserRequest {,
+pub fn w+.*{
         CreateUserRequest {
             user: self.user.unwrap_or_default(),
             user_id_type: self.user_id_type,
@@ -377,7 +377,7 @@ service.create(&req).await,
 },
 // 请求/响应结构体定义,
 /// 创建用户请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateUserRequest {
     /// 用户信息
     pub user: User,
@@ -389,7 +389,7 @@ pub struct CreateUserRequest {
     pub department_id_type: Option<String>,
 },
 /// 创建用户响应,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct CreateUserResponse {
     /// 用户信息
     pub user: User,
@@ -400,7 +400,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 /// 修改用户请求,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PatchUserRequest {
     /// 用户信息
     pub user: User,
@@ -412,7 +412,7 @@ pub struct PatchUserRequest {
     pub department_id_type: Option<String>,
 },
 /// 修改用户响应,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct PatchUserResponse {
     /// 用户信息
     pub user: User,
@@ -423,7 +423,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 /// 更新用户ID请求,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateUserIdRequest {
     /// 新的用户ID
     pub new_user_id: String,
@@ -440,7 +440,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 /// 获取用户请求,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetUserRequest {
     /// 用户 ID 类型,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -450,7 +450,7 @@ pub struct GetUserRequest {
     pub department_id_type: Option<String>,
 },
 /// 获取用户响应,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct GetUserResponse {
     /// 用户信息
     pub user: User,
@@ -461,7 +461,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 /// 批量获取用户请求,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchGetUsersRequest {
     /// 用户ID列表
     pub user_ids: Vec<String>,
@@ -473,7 +473,7 @@ pub struct BatchGetUsersRequest {
     pub department_id_type: Option<String>,
 },
 /// 批量获取用户响应,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct BatchGetUsersResponse {
     /// 用户列表
     pub items: Vec<User>,
@@ -484,7 +484,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 /// 按部门查找用户请求,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FindUsersByDepartmentRequest {
     /// 部门ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -503,7 +503,7 @@ pub struct FindUsersByDepartmentRequest {
     pub page_token: Option<String>,
 },
 /// 按部门查找用户响应,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct FindUsersByDepartmentResponse {
     /// 用户列表
     pub items: Vec<User>,
@@ -520,7 +520,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 /// 批量获取用户ID请求,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BatchGetUserIdRequest {
     /// 邮箱列表,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -533,7 +533,7 @@ pub struct BatchGetUserIdRequest {
     pub include_resigned: Option<bool>,
 },
 /// 批量获取用户ID响应,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct BatchGetUserIdResponse {
     /// 用户列表
     pub user_list: Vec<UserIdInfo>,
@@ -544,7 +544,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 /// 用户ID信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserIdInfo {
     /// 用户ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -557,7 +557,7 @@ pub struct UserIdInfo {
     pub mobile: Option<String>,
 },
 /// 搜索用户请求,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchUsersRequest {
     /// 搜索关键词
     pub query: String,
@@ -575,7 +575,7 @@ pub struct SearchUsersRequest {
     pub department_id_type: Option<String>,
 },
 /// 搜索用户响应,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct SearchUsersResponse {
     /// 用户列表
     pub items: Vec<User>,
@@ -592,7 +592,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 /// 删除用户请求,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DeleteUserRequest {
     /// 用户 ID 类型,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -610,7 +610,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 /// 恢复用户请求,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ResurrectUserRequest {
     /// 用户 ID 类型,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -620,7 +620,7 @@ pub struct ResurrectUserRequest {
     pub department_id_type: Option<String>,
 },
 /// 恢复用户响应,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ResurrectUserResponse {
     /// 用户信息
     pub user: User,
@@ -631,7 +631,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 /// 获取用户列表请求,
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListUsersRequest {
     /// 分页大小,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -647,7 +647,7 @@ pub struct ListUsersRequest {
     pub department_id_type: Option<String>,
 },
 /// 获取用户列表响应,
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ListUsersResponse {
     /// 用户列表
     pub items: Vec<User>,
@@ -665,7 +665,7 @@ crate::core::api_resp::ResponseFormat::Data,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use crate::{,
         core::api_resp::ResponseFormat, core::config::Config, service::contact::models::User,

@@ -41,7 +41,7 @@ Ok(api_resp),
     },
 },
 /// 批量新增数据表请求,
-#[derive(Debug, Default)],
+#[derive(.*?)]
 pub struct BatchCreateTablesRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token
@@ -50,39 +50,39 @@ pub struct BatchCreateTablesRequest {
     tables: Vec<TableData>,
 }
 impl BatchCreateTablesRequest {
-    pub fn builder() -> BatchCreateTablesRequestBuilder {,
+    pub fn w+.*{
 BatchCreateTablesRequestBuilder::default(),
     },
 /// 创建批量新增数据表请求,
-    pub fn new(app_token: impl ToString, tables: Vec<TableData>) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, tables: Vec<TableData>) -> Self {
+Self {
             api_request: ApiRequest::default(),
             app_token: app_token.to_string(),
             tables,
         },
 }
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct BatchCreateTablesRequestBuilder {
     request: BatchCreateTablesRequest,
 }
 impl BatchCreateTablesRequestBuilder {
     /// 多维表格的 app_token
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 数据表信息列表,
-    pub fn tables(mut self, tables: Vec<TableData>) -> Self {,
+    pub fn tables(mut self, tables: Vec<TableData>) -> Self {
 self.request.tables = tables;
         self,
 },
 /// 添加单个数据表,
-    pub fn add_table(mut self, table: TableData) -> Self {,
+    pub fn add_table(mut self, table: TableData) -> Self {
 self.request.tables.push(table);
         self,
 },
-pub fn build(self) -> BatchCreateTablesRequest {,
+pub fn w+.*{
         self.request,
 }
 }
@@ -98,7 +98,7 @@ struct BatchCreateTablesRequestBody {
     tables: Vec<TableData>,
 }
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct BatchCreateTablesResponse {
     /// 数据表信息列表
     pub table_ids: Vec<String>,
@@ -110,7 +110,7 @@ ResponseFormat::Data,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use crate::service::bitable::v1::app_table::TableField;
     #[test],

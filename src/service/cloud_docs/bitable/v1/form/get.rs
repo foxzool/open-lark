@@ -18,7 +18,7 @@ use crate::,
     impl_executable_builder_config,
 };
 /// 获取表单元数据请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct GetFormRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -30,34 +30,34 @@ pub struct GetFormRequest {
     form_id: String,
 }
 impl GetFormRequest {
-    pub fn builder() -> GetFormRequestBuilder {,
+    pub fn w+.*{
 GetFormRequestBuilder::default(),
     }
 
-    pub fn new(app_token: impl ToString, form_id: impl ToString) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, form_id: impl ToString) -> Self {
+Self {
             app_token: app_token.to_string(),
             form_id: form_id.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct GetFormRequestBuilder {
     request: GetFormRequest,
 }
 impl GetFormRequestBuilder {
     /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 表单ID,
-    pub fn form_id(mut self, form_id: impl ToString) -> Self {,
+    pub fn form_id(mut self, form_id: impl ToString) -> Self {
 self.request.form_id = form_id.to_string();
         self,
 },
-pub fn build(self) -> GetFormRequest {,
+pub fn w+.*{
         self.request,
 }
 }
@@ -68,7 +68,7 @@ impl_executable_builder_config!(,
     get_form,
 );
 /// 表单信息
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct Form {
     /// 表单ID
     pub form_id: String,
@@ -92,7 +92,7 @@ pub struct Form {
     pub status: String,
 },
 /// 获取表单元数据响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct GetFormResponse {
     /// 表单信息
     pub form: Form,
@@ -121,7 +121,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_get_form_request_builder() {,

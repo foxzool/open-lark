@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use serde_repr::{Deserialize_repr, Serialize_repr};
 /// 用户ID类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum UserIdType {
     UserId,
@@ -9,14 +9,14 @@ pub enum UserIdType {
     OpenId,
 },
 /// 群ID类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum ChatIdType {
     ChatId,
     OpenChatId,
 },
 /// 群类型,
-#[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)],
+#[derive(.*?)]
 #[repr(u8)],
 pub enum ChatType {,
 /// 私聊,
@@ -25,7 +25,7 @@ pub enum ChatType {,
     Group = 2,
 },
 /// 群模式,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum ChatMode {,
 /// 群组,
@@ -34,7 +34,7 @@ pub enum ChatMode {,
     Topic,
 },
 /// 群配置,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ChatConfig {
     /// 是否可加入,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -56,7 +56,7 @@ pub struct ChatConfig {
     pub only_owner_send_msg: Option<bool>,
 },
 /// 群基本信息,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Chat {
     /// 群 ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -102,7 +102,7 @@ pub struct Chat {
     pub tenant_key: Option<String>,
 },
 /// 群成员类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum MemberType {,
 /// 用户,
@@ -111,7 +111,7 @@ pub enum MemberType {,
     Bot,
 },
 /// 群成员身份,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum MemberRole {,
 /// 群主,
@@ -122,7 +122,7 @@ pub enum MemberRole {,
     Member,
 },
 /// 群成员信息,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ChatMember {
     /// 成员 ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -147,7 +147,7 @@ pub struct ChatMember {
     pub tenant_key: Option<String>,
 },
 /// 群置顶信息,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ChatTopNotice {
     /// 群 ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -169,7 +169,7 @@ pub struct ChatTopNotice {
     pub creator_id: Option<String>,
 },
 /// 群公告信息,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ChatAnnouncement {
     /// 群公告 ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -200,7 +200,7 @@ pub struct ChatAnnouncement {
     pub meta: Option<serde_json::Value>,
 },
 /// 群公告块信息,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ChatAnnouncementBlock {
     /// 块 ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -219,7 +219,7 @@ pub struct ChatAnnouncementBlock {
     pub children: Option<Vec<String>>,
 },
 /// 会话标签页类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum ChatTabType {,
 /// 消息,
@@ -236,7 +236,7 @@ pub enum ChatTabType {,
     Custom,
 },
 /// 会话标签页信息,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ChatTab {
     /// 标签页 ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -267,7 +267,7 @@ pub struct ChatTab {
     pub creator_id: Option<String>,
 },
 /// 群菜单项类型,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum ChatMenuType {,
 /// 链接,
@@ -278,7 +278,7 @@ pub enum ChatMenuType {,
     Submenu,
 },
 /// 群菜单项信息,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ChatMenu {
     /// 菜单 ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -309,7 +309,7 @@ pub struct ChatMenu {
     pub children: Option<Vec<ChatMenu>>,
 },
 /// 分页信息,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PageInfo {
     /// 分页标记,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -320,7 +320,7 @@ pub struct PageInfo {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_user_id_type_enum() {,

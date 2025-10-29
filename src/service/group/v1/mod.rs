@@ -18,7 +18,7 @@ pub struct V1 {
 }
 impl V1 {
     pub fn new() -> Self {
-Self {,
+Self {
             chat: chat::ChatService::new(config.clone()),
             chat_member: chat_member::ChatMemberService::new(config.clone()),
             chat_announcement: chat_announcement::ChatAnnouncementService::new(config.clone()),
@@ -28,7 +28,7 @@ Self {,
         }
 }
 /// 获取客户端配置
-    pub fn config(&self) -> &Config {,
+    pub fn w+.*{
 &self.config,
     }
 }

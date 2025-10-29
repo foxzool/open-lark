@@ -11,7 +11,7 @@ use crate::core::{,
     SDKResult,
 };
 /// 列出表单问题请求,
-#[derive(Debug, Serialize, Default, Clone)],
+#[derive(.*?)]
 pub struct ListFormQuestionRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -29,44 +29,44 @@ pub struct ListFormQuestionRequest {
     page_size: Option<i32>,
 }
 impl ListFormQuestionRequest {
-    pub fn builder() -> ListFormQuestionRequestBuilder {,
+    pub fn w+.*{
 ListFormQuestionRequestBuilder::default(),
     }
 
-    pub fn new(app_token: impl ToString, form_id: impl ToString) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, form_id: impl ToString) -> Self {
+Self {
             app_token: app_token.to_string(),
             form_id: form_id.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct ListFormQuestionRequestBuilder {
     request: ListFormQuestionRequest,
 }
 impl ListFormQuestionRequestBuilder {
     /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 表单ID,
-    pub fn form_id(mut self, form_id: impl ToString) -> Self {,
+    pub fn form_id(mut self, form_id: impl ToString) -> Self {
 self.request.form_id = form_id.to_string();
         self,
 },
 /// 分页标记,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
 },
 /// 分页大小,
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
 },
-pub fn build(mut self) -> ListFormQuestionRequest {,
+pub fn w+.*{
         if let Some(page_token) = &self.request.page_token {,
 self.request,
                 .api_request,
@@ -91,7 +91,7 @@ crate::impl_executable_builder_owned!(
     list,
 );
 /// 表单问题信息
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct FormQuestion {
     /// 问题ID
     pub question_id: String,
@@ -111,7 +111,7 @@ pub struct FormQuestion {
     pub setting: Option<serde_json::Value>,
 },
 /// 列出表单问题响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct ListFormQuestionResponse {
     /// 是否还有更多项
     pub has_more: bool,
@@ -146,7 +146,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_list_form_question_request_builder() {,

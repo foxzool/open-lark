@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 认证信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct VerificationInfo {
     /// 应用ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -31,7 +31,7 @@ pub struct VerificationInfo {
     pub tenant_info: Option<TenantInfo>,
 },
 /// 租户信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TenantInfo {
     /// 租户key,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -41,7 +41,7 @@ pub struct TenantInfo {
     pub tenant_name: Option<String>,
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use super::*;
     #[test],
 fn test_verification_info_creation() {,

@@ -13,7 +13,7 @@ use crate::service::ccm::drive::v1::DriveV1Service;
 use crate::service::ccm::drive::v2::DriveV2Service;
 use crate::service::ccm::drive::explorer::DriveExplorerService;
 /// 云空间文件管理服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct DriveService {
     /// v1版本API服务
     pub v1: DriveV1Service,

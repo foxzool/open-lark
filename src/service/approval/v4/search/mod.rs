@@ -19,7 +19,7 @@ pub struct SearchService {
     pub config: Config,
 }
 /// 查询实例列表响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchInstancesResponse {
     /// 实例列表
     pub instances: Vec<ApprovalInstance>,
@@ -34,7 +34,7 @@ ResponseFormat::Data,
     }
 }
 /// 查询任务列表响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchTasksResponse {
     /// 任务列表
     pub tasks: Vec<ApprovalTask>,
@@ -49,7 +49,7 @@ ResponseFormat::Data,
     }
 }
 /// 查询抄送列表响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchCcResponse {
     /// 抄送列表
     pub cc_list: Vec<serde_json::Value>,
@@ -64,13 +64,13 @@ ResponseFormat::Data,
     }
 }
 /// 查询审批ID响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchApprovalIdResponse {
     /// 审批定义列表
     pub approval_list: Vec<SearchApprovalItem>,
 }
 /// 审批项
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchApprovalItem {
     /// 审批编码
     pub approval_code: String,
@@ -83,7 +83,7 @@ ResponseFormat::Data,
     }
 }
 /// 实例查询参数
-#[derive(Debug, Default)],
+#[derive(.*?)]
 pub struct SearchInstanceParams {
     pub page_size: Option<i32>,
     pub page_token: Option<String>,
@@ -95,7 +95,7 @@ pub struct SearchInstanceParams {
     pub user_id_type: Option<UserIdType>,
 }
 /// 任务查询参数
-#[derive(Debug, Default)],
+#[derive(.*?)]
 pub struct SearchTaskParams {
     pub page_size: Option<i32>,
     pub page_token: Option<String>,
@@ -108,7 +108,7 @@ pub struct SearchTaskParams {
     pub user_id_type: Option<UserIdType>,
 }
 /// 抄送查询参数
-#[derive(Debug, Default)],
+#[derive(.*?)]
 pub struct SearchCcParams {
     pub page_size: Option<i32>,
     pub page_token: Option<String>,

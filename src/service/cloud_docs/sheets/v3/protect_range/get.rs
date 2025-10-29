@@ -41,7 +41,7 @@ Ok(api_resp),
     },
 },
 /// 获取保护范围请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetProtectRangesRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -52,31 +52,31 @@ pub struct GetProtectRangesRequest {
     sheet_id: Option<String>,
 }
 impl GetProtectRangesRequest {
-    pub fn builder() -> GetProtectRangesRequestBuilder {,
+    pub fn w+.*{
 GetProtectRangesRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct GetProtectRangesRequestBuilder {
     request: GetProtectRangesRequest,
 }
 impl GetProtectRangesRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = Some(sheet_id.to_string());
         self,
 },
-pub fn build(mut self) -> GetProtectRangesRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 保护范围信息,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct ProtectRangeInfo {
     /// 保护范围 ID
     pub protect_id: String,
@@ -85,7 +85,7 @@ pub struct ProtectRangeInfo {
     pub protect_range: ProtectRangeData,
 },
 /// 获取保护范围响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct GetProtectRangesResponseData {
     /// 保护范围列表
     pub items: Vec<ProtectRangeInfo>,

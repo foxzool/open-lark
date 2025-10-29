@@ -18,7 +18,7 @@ pub struct TranscriptService {
     pub config: Config,
 }
 /// 获取文字记录响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetTranscriptResponse {
     /// 文字记录信息
     pub transcript: MinuteTranscript,

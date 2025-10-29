@@ -58,7 +58,7 @@ use crate::{
 /// 关联组织服务
 ///
 /// 提供完整的关联组织管理功能，包括组织管理和可搜可见规则管理
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct TrustPartyService {
     /// 关联组织管理服务
     pub collaboration_organization: CollaborationOrganizationService,
@@ -75,7 +75,7 @@ pub fn new() -> Self {
 }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 #[test],

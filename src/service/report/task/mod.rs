@@ -81,7 +81,7 @@ if let Some(end_time) = request.end_time {,
 }
 }
 /// 任务查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct TaskQueryRequest {
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -109,7 +109,7 @@ pub struct TaskQueryRequest {
     pub end_time: Option<i64>,
 }
 /// 任务查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TaskQueryResponse {
     /// 任务列表
 #[serde(flatten)],

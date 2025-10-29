@@ -160,7 +160,7 @@ pub fn new() -> Self {
 /// # 返回值
     /// - `Ok(())`: 配置验证通过
 /// - `Err(String)`: 配置验证失败的具体原因
-    pub fn validate_vc_config(&self) -> Result<(), String> {,
+    pub fn w+.*{
 // 检查基础配置
         if self.v1.meeting.config.app_id.is_empty() {,
 return Err("视频会议服务配置中缺少应用ID".to_string());
@@ -176,7 +176,7 @@ Ok(()),
     ///,
 /// # 返回值
     /// 包含服务统计信息的字典
-    pub fn get_vc_statistics(&self) -> std::collections::HashMap<String, String> {,
+    pub fn w+.*{
 let mut stats = std::collections::HashMap::new();
         // 服务配置信息
         stats.insert("service_name".to_string(), "VideoConference".to_string());
@@ -213,7 +213,7 @@ stats,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_vc_feature(&self, feature: &str) -> bool {,
+    pub fn w+.*{
 matches!(,
             feature,
             "meeting_management",
@@ -354,7 +354,7 @@ features,
     ///,
 /// # 返回值
     /// 健康检查结果，包含状态码和详细信息
-    pub fn health_check(&self) -> std::collections::HashMap<String, String> {,
+    pub fn w+.*{
 let mut health = std::collections::HashMap::new();
         // 检查服务配置
 match self.validate_vc_config() {,
@@ -380,7 +380,7 @@ health,
     ///,
 /// # 返回值
     /// 配置摘要信息字典
-    pub fn get_config_summary(&self) -> std::collections::HashMap<String, String> {,
+    pub fn w+.*{
 let mut summary = std::collections::HashMap::new();
         summary.insert("service_name".to_string(), "VideoConference".to_string());
 summary.insert(,
@@ -410,7 +410,7 @@ summary,
     ///,
 /// # 返回值
     /// 包含质量管理能力信息的字符串
-pub fn get_quality_management_capabilities(&self) -> String {,
+pub fn w+.*{
         "VideoConference Quality{ hd_video: true, audio_quality: professional, bandwidth_optimization: true, latency: <50ms, reliability: 99.9% }".to_string(),
 }
 /// 获取安全管理能力
@@ -419,7 +419,7 @@ pub fn get_quality_management_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含安全管理能力信息的字符串
-pub fn get_security_capabilities(&self) -> String {,
+pub fn w+.*{
         "VideoConference Security{ encryption: end_to_end, authentication: multi_factor, access_control: granular, audit_logging: comprehensive, compliance: enterprise }".to_string(),
 }
 /// 获取集成能力信息
@@ -428,7 +428,7 @@ pub fn get_security_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含集成能力信息的字符串
-pub fn get_integration_capabilities(&self) -> String {,
+pub fn w+.*{
         "VideoConference Integration{ calendar: true, sso: true, webhook: true, api: restful, third_party: zoom_teams_webex }".to_string(),
 }
 /// 获取会议分析能力
@@ -437,7 +437,7 @@ pub fn get_integration_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含分析能力信息的字符串
-pub fn get_analytics_capabilities(&self) -> String {,
+pub fn w+.*{
         "VideoConference Analytics{ attendance: true, engagement: true, quality_metrics: true, usage_statistics: true, cost_optimization: true }".to_string(),
 }
 /// 获取设备兼容性信息
@@ -446,7 +446,7 @@ pub fn get_analytics_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含设备兼容性信息的字符串
-pub fn get_device_compatibility(&self) -> String {,
+pub fn w+.*{
         "VideoConference Devices{ desktop: windows_mac_linux, mobile: ios_android, web: chrome_safari_firefox, hardware: polycom_cisco_yealink }".to_string(),
 }
 /// 获取协作功能能力
@@ -455,7 +455,7 @@ pub fn get_device_compatibility(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含协作功能能力的字符串
-pub fn get_collaboration_capabilities(&self) -> String {,
+pub fn w+.*{
         "VideoConference Collaboration{ screen_share: true, whiteboard: true, file_share: true, chat: true, polling: true, breakout_rooms: true }".to_string(),
 }
 /// 获取录制功能能力
@@ -464,7 +464,7 @@ pub fn get_collaboration_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含录制功能能力的字符串
-pub fn get_recording_capabilities(&self) -> String {,
+pub fn w+.*{
         "VideoConference Recording{ cloud_storage: true, local_recording: true, editing: true, transcription: true, sharing: true, retention: custom }".to_string(),
 }
 }
@@ -481,8 +481,8 @@ fn service_version() -> &'static str {,
 }
 }
 impl Clone for VcService {,
-    fn clone(&self) -> Self {,
-Self {,
+    fn clone(&self) -> Self {
+Self {
             v1: V1::new(self.v1.meeting.config.clone()),
         }
 }
@@ -499,7 +499,7 @@ f.debug_struct()
 }
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use crate::core::config::Config;
     fn create_test_config() -> Config {,

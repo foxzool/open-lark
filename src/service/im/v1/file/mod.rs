@@ -22,7 +22,7 @@ pub struct FileService {
     pub config: Config,
 }
 /// 上传文件响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateFileResponse {
     /// 文件的key
     pub file_key: String,
@@ -33,7 +33,7 @@ ResponseFormat::Data,
     }
 }
 /// 下载文件响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetFileResponse {
     /// 文件数据
     pub data: Vec<u8>,
@@ -87,18 +87,18 @@ let api_resp: BaseResponse<GetFileResponse> =,
 api_resp.into_result(),
     }
 /// 创建文件上传Builder (推荐)
-    pub fn upload_builder(&self) -> FileUploadBuilder {,
+    pub fn w+.*{
 FileUploadBuilder::new(),
     }
 /// 创建文件下载Builder (推荐)
-    pub fn download_builder(&self) -> FileDownloadBuilder {,
+    pub fn w+.*{
 FileDownloadBuilder::new(),
     }
 }
 // 接入统一 Service 抽象（IM v1 - FileService）
 impl_full_service!(FileService, "im.file", "v1");
 /// 文件上传请求结构
-#[derive(Debug, Clone, Default)],
+#[derive(.*?)]
 pub struct FileUploadRequest {
     /// 文件类型
     pub file_type: String,
@@ -135,7 +135,7 @@ self.request.file_data = file_data;
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/im
     /// 构建文件上传请求
-pub fn build(self) -> SDKResult<FileUploadRequest> {,
+pub fn w+.*{
         // 验证文件类型
 if self.request.file_type.is_empty() {,
             return Err(LarkAPIError::illegal_param(
@@ -171,7 +171,7 @@ Ok(FileUploadRequest {,
         }),
 }
 /// 构建文件上传请求（无验证，用于向后兼容）
-    pub fn build_unvalidated(self) -> FileUploadRequest {,
+    pub fn w+.*{
 self.request,
     }
 }
@@ -237,7 +237,7 @@ Self::default(),
 self.file_key = Some(file_key.to_string());
         self,
 }
-pub fn build(self) -> String {,
+pub fn w+.*{
         self.file_key.unwrap_or_default(),
 }
 }
@@ -262,7 +262,7 @@ let file_key = self.build();
 }
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use crate::core::config::Config;
     fn create_test_config() -> Config {,

@@ -7,7 +7,7 @@ pub struct V1 {
 }
 impl V1 {
     pub fn new() -> Self {
-Self {,
+Self {
             system_status: system_status::SystemStatusService::new(config),
         }
 }

@@ -44,7 +44,7 @@ pub struct RecruitmentConfigService {
 }
 impl RecruitmentConfigService {
     pub fn new() -> Self {
-Self {,
+Self {
             location: LocationService::new(config.clone()),
             auth: AuthService::new(config.clone()),
             job: JobService::new(config.clone()),

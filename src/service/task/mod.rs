@@ -165,7 +165,7 @@ pub fn new() -> Self {
     ///,
 /// # 返回值
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
-pub fn validate_task_management_config(&self) -> bool {,
+pub fn w+.*{
         // 通过检查v2服务配置来验证一致性
 // 由于没有直接访问配置的方式，我们假设配置是有效的
         true,
@@ -176,7 +176,7 @@ pub fn validate_task_management_config(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_task_management_statistics(&self) -> String {,
+pub fn w+.*{
         "TaskService{ api_versions: 1, service_modules: 10, task_features: comprehensive, collaboration: full }".to_string(),
 }
 /// 检查服务是否支持特定任务功能
@@ -188,7 +188,7 @@ pub fn get_task_management_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_task_feature(&self, task_feature: &str) -> bool {,
+    pub fn w+.*{
 matches!(,
             task_feature,
             "task_management",
@@ -220,7 +220,7 @@ matches!(,
     ///,
 /// # 返回值
     /// 如果所有服务配置有效返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         self.validate_task_management_config(),
 }
 /// 获取任务管理服务分类统计
@@ -229,7 +229,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含各类型服务数量的统计信息
-pub fn get_task_service_categories_statistics(&self) -> String {,
+pub fn w+.*{
         "TaskService Categories{ core: 2, collaboration: 2, customization: 3, management: 3, total: 10 }".to_string(),
 }
 /// 获取任务管理服务状态摘要
@@ -238,7 +238,7 @@ pub fn get_task_service_categories_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各服务状态信息的字符串
-pub fn get_task_service_status_summary(&self) -> String {,
+pub fn w+.*{
         let config_healthy = self.validate_task_management_config();
 let core_healthy = config_healthy;
         let collaboration_healthy = config_healthy;
@@ -256,7 +256,7 @@ format!(,
     ///,
 /// # 返回值
     /// 包含企业任务管理能力矩阵信息的字符串
-pub fn get_enterprise_task_management_capabilities(&self) -> String {,
+pub fn w+.*{
         format!(
             "TaskService Enterprise{{ task_management: {} collaboration: {} customization: {} analytics: {} automation: true }}",
             self.supports_task_feature("task_management"),
@@ -271,7 +271,7 @@ pub fn get_enterprise_task_management_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含任务功能支持信息的字符串
-pub fn get_task_features_matrix(&self) -> String {,
+pub fn w+.*{
         "TaskService Features{ create: true, update: true, delete: true, assign: true, comment: true, attach: true, prioritize: true, schedule: true, track: true, collaborate: true }".to_string(),
 }
 /// 获取项目管理支持矩阵
@@ -280,7 +280,7 @@ pub fn get_task_features_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含项目管理支持信息的字符串
-pub fn get_project_management_support_matrix(&self) -> String {,
+pub fn w+.*{
         "TaskService ProjectManagement{ milestones: true, gantt_charts: true, kanban_boards: true, agile_workflows: true, resource_allocation: true, progress_tracking: true }".to_string(),
 }
 /// 获取协作功能支持矩阵
@@ -289,7 +289,7 @@ pub fn get_project_management_support_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含协作功能支持信息的字符串
-pub fn get_collaboration_features_matrix(&self) -> String {,
+pub fn w+.*{
         "TaskService Collaboration{ real_time_updates: true, mentions: true, file_sharing: true, comments: true, activity_feeds: true, notifications: true, team_workspaces: true }".to_string(),
 }
 /// 获取自定义功能支持矩阵
@@ -298,7 +298,7 @@ pub fn get_collaboration_features_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含自定义功能支持信息的字符串
-pub fn get_customization_features_matrix(&self) -> String {,
+pub fn w+.*{
         "TaskService Customization{ custom_fields: true, custom_sections: true, field_options: true, templates: true, workflows: true, integrations: true }".to_string(),
 }
 }
@@ -321,7 +321,7 @@ fn service_name() -> &'static str,
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::config::Config;
 /// 创建测试配置

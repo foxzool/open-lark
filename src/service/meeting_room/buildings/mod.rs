@@ -4,7 +4,7 @@
 use crate::core::config::Config;
 use crate::service::meeting_room::buildings::default::BuildingsDefaultService;
 /// 建筑物管理服务
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct BuildingsService {
     /// default版本API服务
     pub default: BuildingsDefaultService,

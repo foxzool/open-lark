@@ -15,7 +15,7 @@ use crate::{,
 };
 use super::CalendarManagementService;
 /// 获取日历列表请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct ListCalendarRequest {
     pub api_req: ApiRequest,
     /// 用户ID类型
@@ -29,7 +29,7 @@ pub struct ListCalendarRequest {
 }
 impl ListCalendarRequest {
     /// 创建获取日历列表请求的构建器,
-pub fn builder() -> ListCalendarRequestBuilder {,
+pub fn w+.*{
         ListCalendarRequestBuilder::default(),
 }
 },
@@ -40,27 +40,27 @@ pub struct ListCalendarRequestBuilder {
 }
 impl ListCalendarRequestBuilder {
     /// 设置用户ID类型
-    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
 },
 /// 设置分页大小，最大值 50,
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
 },
 /// 设置分页标记,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
 },
 /// 设置是否同步日历的权限信息,
-    pub fn sync_events(mut self, sync_events: bool) -> Self {,
+    pub fn sync_events(mut self, sync_events: bool) -> Self {
 self.request.sync_events = Some(sync_events);
         self,
 },
 /// 构建请求,
-    pub fn build(mut self) -> ListCalendarRequest {,
+    pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
@@ -90,7 +90,7 @@ self.request,
     },
 },
 /// 获取日历列表响应数据,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct ListCalendarResponseData {
     /// 是否还有更多项
     pub has_more: bool,
@@ -100,7 +100,7 @@ pub struct ListCalendarResponseData {
     pub calendars: Vec<Calendar>,
 },
 /// 获取日历列表响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct ListCalendarResponse {
     /// 响应数据
     pub data: ListCalendarResponseData,

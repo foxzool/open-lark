@@ -22,7 +22,7 @@ pub struct DataSourceService {
     pub config: Config,
 }
 /// 创建数据源响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateDataSourceResponse {
     /// 数据源信息
     pub data_source: DataSource,
@@ -33,7 +33,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取数据源响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetDataSourceResponse {
     /// 数据源信息
     pub data_source: DataSource,
@@ -44,7 +44,7 @@ ResponseFormat::Data,
     }
 }
 /// 更新数据源响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateDataSourceResponse {
     /// 数据源信息
     pub data_source: DataSource,

@@ -69,7 +69,7 @@ let api_req = ApiRequest {,
 }
 }
 /// 用户任务查询请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TaskFindByUserListRequest {
     /// 用户ID列表
     pub user_ids: Vec<String>,
@@ -84,7 +84,7 @@ pub struct TaskFindByUserListRequest {
     pub status: Option<String>,
 }
 /// 用户任务查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TaskFindByUserListResponse {
     /// 任务列表
     pub tasks: Vec<StageTask>,
@@ -95,7 +95,7 @@ ResponseFormat::Data,
     }
 }
 /// 任务分页查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct TaskFindByPageRequest {
     /// 周期ID
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -114,7 +114,7 @@ pub struct TaskFindByPageRequest {
     pub page_size: Option<i32>,
 }
 /// 任务分页查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct TaskFindByPageResponse {
     /// 分页任务列表
 #[serde(flatten)],

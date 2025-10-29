@@ -38,7 +38,7 @@ Ok(api_resp),
     },
 },
 /// 获取视图请求,
-#[derive(Debug, Default)],
+#[derive(.*?)]
 pub struct GetViewRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token
@@ -49,12 +49,12 @@ pub struct GetViewRequest {
     view_id: String,
 }
 impl GetViewRequest {
-    pub fn builder() -> GetViewRequestBuilder {,
+    pub fn w+.*{
 GetViewRequestBuilder::default(),
     },
 /// 创建获取视图请求,
-    pub fn new(app_token: impl ToString, table_id: impl ToString, view_id: impl ToString) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, table_id: impl ToString, view_id: impl ToString) -> Self {
+Self {
             api_request: ApiRequest::default(),
             app_token: app_token.to_string(),
             table_id: table_id.to_string(),
@@ -62,27 +62,27 @@ Self {,
         },
 }
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct GetViewRequestBuilder {
     request: GetViewRequest,
 }
 impl GetViewRequestBuilder {
     /// 多维表格的 app_token
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 数据表的 table_id,
-    pub fn table_id(mut self, table_id: impl ToString) -> Self {,
+    pub fn table_id(mut self, table_id: impl ToString) -> Self {
 self.request.table_id = table_id.to_string();
         self,
 },
 /// 视图的 view_id,
-    pub fn view_id(mut self, view_id: impl ToString) -> Self {,
+    pub fn view_id(mut self, view_id: impl ToString) -> Self {
 self.request.view_id = view_id.to_string();
         self,
 },
-pub fn build(self) -> GetViewRequest {,
+pub fn w+.*{
         self.request,
 }
 }
@@ -93,13 +93,13 @@ impl_executable_builder_owned!(,
     BaseResponse<GetViewResponse>,
     get,
 );
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct GetViewResponse {
     /// 视图信息
     pub view: ViewDetailInfo,
 }
 
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct ViewDetailInfo {
     /// 视图 ID
     pub view_id: String,
@@ -118,7 +118,7 @@ ResponseFormat::Data,
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_get_view_request() {,

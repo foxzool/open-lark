@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 分页响应基础结构,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PageResponse<T> {,
     /// 数据项列表
     pub items: Vec<T>,
@@ -12,7 +12,7 @@ pub struct PageResponse<T> {,
     pub has_more: Option<bool>,
 },
 /// 草稿状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 #[serde(rename_all = "snake_case")],
 pub enum DraftStatus {,
 /// 草稿中,
@@ -23,7 +23,7 @@ pub enum DraftStatus {,
     Rejected,
 },
 /// 草稿信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Draft {
     /// 草稿ID
     pub draft_id: String,
@@ -63,7 +63,7 @@ pub struct Draft {
     pub updated_at: Option<i64>,
 },
 /// 词条信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Entity {
     /// 词条ID
     pub id: String,
@@ -100,7 +100,7 @@ pub struct Entity {
     pub updated_at: Option<i64>,
 },
 /// 外链信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OuterInfo {
     /// 链接提供方
     pub provider: String,
@@ -108,7 +108,7 @@ pub struct OuterInfo {
     pub outer_url: String,
 },
 /// 相关词条信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RelatedMeta {
     /// 相关用户列表,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -136,7 +136,7 @@ pub struct RelatedMeta {
     pub images: Option<Vec<String>>,
 },
 /// 统计信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Statistics {
     /// 点赞数,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -146,7 +146,7 @@ pub struct Statistics {
     pub dislike_count: Option<i32>,
 },
 /// 分类信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Classification {
     /// 分类ID
     pub id: String,
@@ -163,7 +163,7 @@ pub struct Classification {
     pub updated_at: Option<i64>,
 },
 /// 词库信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Repo {
     /// 词库ID
     pub id: String,
@@ -186,7 +186,7 @@ pub struct Repo {
     pub updated_at: Option<i64>,
 },
 /// 词条搜索结果,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EntitySearchResult {
     /// 词条信息
     pub entity: Entity,
@@ -198,7 +198,7 @@ pub struct EntitySearchResult {
     pub score: Option<f64>,
 },
 /// 词条匹配结果,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EntityMatchResult {
     /// 词条信息
     pub entity: Entity,
@@ -209,7 +209,7 @@ pub struct EntityMatchResult {
     pub match_type: Option<String>,
 },
 /// 高亮范围,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct HighlightRange {
     /// 开始位置
     pub start: i32,
@@ -219,7 +219,7 @@ pub struct HighlightRange {
     pub entity_id: String,
 },
 /// 高亮结果,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct HighlightResult {
     /// 原始文本
     pub text: String,
@@ -227,7 +227,7 @@ pub struct HighlightResult {
     pub ranges: Vec<HighlightRange>,
 },
 /// 文件信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FileInfo {
     /// 文件ID
     pub file_token: String,
@@ -246,7 +246,7 @@ pub struct FileInfo {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

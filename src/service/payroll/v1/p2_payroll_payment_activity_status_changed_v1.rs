@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventContext, dispatcher::EventHandler};
 /// 发薪活动状态变更事件数据,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PaymentActivityStatusChangedData {
     /// 发薪活动ID
     pub payment_activity_id: String,
@@ -22,7 +22,7 @@ pub struct PaymentActivityStatusChangedData {
     pub payment_period: Option<String>,
 },
 /// 操作人信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OperatorInfo {
     /// 用户ID
     pub user_id: String,
@@ -32,7 +32,7 @@ pub struct OperatorInfo {
     pub user_type: Option<String>,
 },
 /// 发薪活动状态变更事件,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2PayrollPaymentActivityStatusChangedV1 {
     /// 事件通用信息,
 #[serde(flatten)],
@@ -51,7 +51,7 @@ impl<F> P2PayrollPaymentActivityStatusChangedV1ProcessorImpl<F>,
 where
     F: Fn(P2PayrollPaymentActivityStatusChangedV1) -> anyhow::Result<()> + Send + Sync,
 {,
-pub fn new(f: F) -> Self {,
+pub fn new(f: F) -> Self {
         Self { f },
 }
 }

@@ -16,7 +16,7 @@ use crate::{,
 };
 use super::EmployeeService;
 /// 恢复离职员工请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct ResurrectEmployeeRequest {
     pub api_req: ApiRequest,
     /// 员工ID
@@ -38,7 +38,7 @@ pub struct ResurrectEmployeeRequest {
 }
 impl ResurrectEmployeeRequest {
     /// 创建恢复离职员工请求的构建器,
-pub fn builder(employee_id: impl ToString) -> ResurrectEmployeeRequestBuilder {,
+pub fn w+.*{
         ResurrectEmployeeRequestBuilder {,
 request: ResurrectEmployeeRequest {,
                 employee_id: employee_id.to_string()
@@ -54,42 +54,42 @@ pub struct ResurrectEmployeeRequestBuilder {
 }
 impl ResurrectEmployeeRequestBuilder {
     /// 设置上级ID
-    pub fn leader_id(mut self, leader_id: impl ToString) -> Self {,
+    pub fn leader_id(mut self, leader_id: impl ToString) -> Self {
 self.request.leader_id = Some(leader_id.to_string());
         self,
 },
 /// 设置部门ID列表,
-    pub fn department_ids(mut self, department_ids: Vec<String>) -> Self {,
+    pub fn department_ids(mut self, department_ids: Vec<String>) -> Self {
 self.request.department_ids = Some(department_ids);
         self,
 },
 /// 设置工作地点,
-    pub fn work_location(mut self, work_location: impl ToString) -> Self {,
+    pub fn work_location(mut self, work_location: impl ToString) -> Self {
 self.request.work_location = Some(work_location.to_string());
         self,
 },
 /// 设置职级,
-    pub fn job_level(mut self, job_level: impl ToString) -> Self {,
+    pub fn job_level(mut self, job_level: impl ToString) -> Self {
 self.request.job_level = Some(job_level.to_string());
         self,
 },
 /// 设置职位,
-    pub fn job_title(mut self, job_title: impl ToString) -> Self {,
+    pub fn job_title(mut self, job_title: impl ToString) -> Self {
 self.request.job_title = Some(job_title.to_string());
         self,
 },
 /// 设置用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
 },
 /// 设置部门ID类型,
-    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {,
+    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {
 self.request.department_id_type = Some(department_id_type);
         self,
 },
 /// 构建请求,
-    pub fn build(mut self) -> ResurrectEmployeeRequest {,
+    pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
@@ -125,13 +125,13 @@ self.request.api_req.body = serde_json::to_vec(&body).unwrap_or_default();
 }
 },
 /// 恢复离职员工响应数据,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct ResurrectEmployeeResponseData {
     /// 恢复的员工信息
     pub employee: Employee,
 },
 /// 恢复离职员工响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct ResurrectEmployeeResponse {
     /// 响应数据
     pub data: ResurrectEmployeeResponseData,

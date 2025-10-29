@@ -20,7 +20,7 @@ pub struct CustomFieldService {
     pub config: Config,
 }
 /// 创建自定义字段请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateCustomFieldRequest {
     /// 字段名称
     pub name: String,
@@ -33,7 +33,7 @@ pub struct CreateCustomFieldRequest {
     pub resource_id: String,
 }
 /// 创建自定义字段响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateCustomFieldResponse {
     /// 创建的自定义字段
     pub custom_field: CustomField,
@@ -44,13 +44,13 @@ ResponseFormat::Data,
     }
 }
 /// 更新自定义字段请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateCustomFieldRequest {
     /// 字段名称
     pub name: String,
 }
 /// 更新自定义字段响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateCustomFieldResponse {
     /// 更新后的自定义字段
     pub custom_field: CustomField,
@@ -61,7 +61,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取自定义字段响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetCustomFieldResponse {
     /// 自定义字段详情
     pub custom_field: CustomField,
@@ -72,7 +72,7 @@ ResponseFormat::Data,
     }
 }
 /// 自定义字段列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListCustomFieldsResponse {
     /// 自定义字段列表
     pub items: Vec<CustomField>,
@@ -89,7 +89,7 @@ ResponseFormat::Data,
     }
 }
 /// 添加自定义字段到资源请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AddCustomFieldRequest {
     /// 资源类型
     pub resource_type: String,
@@ -97,7 +97,7 @@ pub struct AddCustomFieldRequest {
     pub resource_id: String,
 }
 /// 移除自定义字段请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RemoveCustomFieldRequest {
     /// 资源类型
     pub resource_type: String,

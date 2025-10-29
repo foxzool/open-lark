@@ -10,13 +10,13 @@ use crate::core::{APIResult, LarkClient, RequestBuilder};
 use crate::service::ccm::models::CcmResponse;
 use serde::{Deserialize, Serialize};
 /// 表格操作服务,
-#[derive(Debug, Clone)],
+#[derive(.*?)]
 pub struct SpreadsheetService {
     client: std::sync::Arc<LarkClient>,
 }
 impl SpreadsheetService {
     /// 创建新的表格操作服务实例,
-pub fn new(client: std::sync::Arc<LarkClient>) -> Self {,
+pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
         Self { client },
 },
 /// 获取表格元数据,
@@ -131,7 +131,7 @@ self.client.send(request).await,
 },
 // 数据结构,
 /// 表格元数据
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SpreadsheetMetadata {
     /// 表格token,
 #[serde(rename = "spreadsheet_token")],
@@ -150,7 +150,7 @@ pub struct SpreadsheetMetadata {
     pub deleted: bool,
 },
 /// 创建者信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreatorInfo {
     /// 用户ID,
 #[serde(rename = "user_id")],
@@ -162,13 +162,13 @@ pub struct CreatorInfo {
     pub name: Option<String>,
 },
 /// 工作表列表响应,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SheetListResponse {
     /// 工作表列表
     pub sheets: Vec<SheetInfo>,
 },
 /// 工作表信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SheetInfo {
     /// 工作表ID,
 #[serde(rename = "sheet_id")],
@@ -188,12 +188,12 @@ pub struct SheetInfo {
     pub deleted: bool,
 },
 // 请求结构体,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateSpreadsheetRequest {
     pub title: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateSpreadsheetRequest {
     pub title: String,
     #[serde(rename = "folder_token")]

@@ -11,7 +11,7 @@ use crate::core::{,
     SDKResult,
 };
 /// 获取知识空间成员列表请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct ListSpaceMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -26,37 +26,37 @@ pub struct ListSpaceMemberRequest {
     page_token: Option<String>,
 }
 impl ListSpaceMemberRequest {
-    pub fn builder() -> ListSpaceMemberRequestBuilder {,
+    pub fn w+.*{
 ListSpaceMemberRequestBuilder::default(),
     },
-pub fn new(space_id: impl ToString) -> Self {,
+pub fn new(space_id: impl ToString) -> Self {
         Self {
             space_id: space_id.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct ListSpaceMemberRequestBuilder {
     request: ListSpaceMemberRequest,
 }
 impl ListSpaceMemberRequestBuilder {
     /// 知识空间id
-    pub fn space_id(mut self, space_id: impl ToString) -> Self {,
+    pub fn space_id(mut self, space_id: impl ToString) -> Self {
 self.request.space_id = space_id.to_string();
         self,
 },
 /// 页大小,
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
 },
 /// 页标记,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
 },
-pub fn build(mut self) -> ListSpaceMemberRequest {,
+pub fn w+.*{
         if let Some(page_size) = self.request.page_size {,
 self.request,
                 .api_request,
@@ -73,7 +73,7 @@ self.request,
     },
 },
 /// 知识空间成员信息,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct SpaceMember {
     /// 成员类型：user
     pub member_type: String,
@@ -85,7 +85,7 @@ pub struct SpaceMember {
     pub r#type: Option<String>,
 },
 /// 获取知识空间成员列表响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct ListSpaceMemberResponse {
     /// 成员列表
     pub items: Vec<SpaceMember>,
@@ -121,7 +121,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_list_space_member_request_builder() {,

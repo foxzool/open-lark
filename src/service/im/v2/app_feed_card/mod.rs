@@ -16,7 +16,7 @@ pub struct AppFeedCardService {
     pub config: Config,
 }
 /// 创建应用消息流卡片请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateAppFeedCardRequest {
     /// 卡片内容
     pub card_content: Value,
@@ -30,7 +30,7 @@ pub struct CreateAppFeedCardRequest {
     pub description: Option<String>,
 }
 /// 创建应用消息流卡片响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateAppFeedCardResponse {
     /// 卡片ID
     pub card_id: String,
@@ -43,7 +43,7 @@ ResponseFormat::Data,
     }
 }
 /// 更新应用消息流卡片请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateAppFeedCardRequest {
     /// 卡片内容
     pub card_content: Value,
@@ -55,7 +55,7 @@ pub struct UpdateAppFeedCardRequest {
     pub description: Option<String>,
 }
 /// 更新应用消息流卡片响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateAppFeedCardResponse {
     /// 卡片ID
     pub card_id: String,

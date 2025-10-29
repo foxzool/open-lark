@@ -20,7 +20,7 @@ pub struct SystemStatusService {
     pub config: Config,
 }
 /// 创建系统状态响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateSystemStatusResponse {
     /// 系统状态信息
     pub system_status: SystemStatus,
@@ -31,7 +31,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取系统状态列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListSystemStatusResponse {
     /// 系统状态列表
     pub items: Vec<SystemStatus>,

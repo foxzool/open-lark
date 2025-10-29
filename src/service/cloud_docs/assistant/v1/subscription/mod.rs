@@ -12,7 +12,7 @@ pub mod create;
 pub mod get;
 pub mod patch;
 /// 订阅服务
-#[derive(Debug)],
+#[derive(.*?)]
 pub struct SubscriptionService {
     config: Config,
 }

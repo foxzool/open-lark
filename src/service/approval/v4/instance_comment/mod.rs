@@ -19,7 +19,7 @@ pub struct InstanceCommentService {
     pub config: Config,
 }
 /// 创建评论请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateCommentRequest {
     /// 评论内容
     pub content: String,
@@ -28,7 +28,7 @@ pub struct CreateCommentRequest {
     pub attachments: Option<Vec<serde_json::Value>>,
 }
 /// 创建评论响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateCommentResponse {
     /// 评论ID
     pub comment_id: String,
@@ -39,7 +39,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取评论列表响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListCommentsResponse {
     /// 评论列表
     pub comments: Vec<ApprovalComment>,

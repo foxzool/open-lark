@@ -41,7 +41,7 @@ api_resp.into_result(),
     },
 },
 /// 读取多个范围请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ReadingMultipleRangesRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -59,14 +59,14 @@ pub struct ReadingMultipleRangesRequest {
     user_id_type: Option<String>,
 }
 impl ReadingMultipleRangesRequest {
-    pub fn builder() -> ReadingMultipleRangesRequestBuilder {,
+    pub fn w+.*{
 ReadingMultipleRangesRequestBuilder::default(),
     },
 /// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM,
     /// 验证请求参数,
-pub fn validate(&self) -> SDKResult<()> {,
+pub fn w+.*{
         // 验证必需字段,
 if self.spreadsheet_token.is_empty() {,
             return Err(crate::core::error::LarkAPIError::illegal_param(
@@ -114,22 +114,22 @@ return Err(crate::core::error::LarkAPIError::illegal_param(format!(,
 Ok(()),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct ReadingMultipleRangesRequestBuilder {
     request: ReadingMultipleRangesRequest,
 }
 impl ReadingMultipleRangesRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn ranges(mut self, ranges: Vec<String>) -> Self {,
+    pub fn ranges(mut self, ranges: Vec<String>) -> Self {
 self.request.ranges = ranges;
         self,
 }
 
-    pub fn value_render_option(mut self, value_render_option: impl ToString) -> Self {,
+    pub fn value_render_option(mut self, value_render_option: impl ToString) -> Self {
 let value = value_render_option.to_string();
         self.request.value_render_option = Some(value.clone());
 self.request,
@@ -139,7 +139,7 @@ self.request,
 self,
     }
 
-    pub fn date_time_render_option(mut self, date_time_render_option: impl ToString) -> Self {,
+    pub fn date_time_render_option(mut self, date_time_render_option: impl ToString) -> Self {
 let value = date_time_render_option.to_string();
         self.request.date_time_render_option = Some(value.clone());
 self.request,
@@ -149,7 +149,7 @@ self.request,
 self,
     }
 
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 let value = user_id_type.to_string();
         self.request.user_id_type = Some(value.clone());
 self.request,
@@ -158,7 +158,7 @@ self.request,
             .insert("user_id_type", value);
 self,
     },
-pub fn build(self) -> ReadingMultipleRangesRequest {,
+pub fn w+.*{
         let mut request = self.request;
 request.api_request.body = serde_json::to_vec(&request).unwrap();
         request,
@@ -173,7 +173,7 @@ impl_executable_builder_owned!(
     reading_multiple_ranges,
 );
 /// 读取多个范围响应体最外层
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct ReadingMultipleRangesResponseData {
     /// 值与范围列表,
 #[serde(rename = "valueRanges")],

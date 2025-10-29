@@ -60,7 +60,7 @@ if let Some(page_size) = request.page_size {,
 }
 }
 /// 词库列表查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct RepoListRequest {
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -70,7 +70,7 @@ pub struct RepoListRequest {
     pub page_size: Option<i32>,
 }
 /// 词库列表查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RepoListResponse {
     /// 词库列表
 #[serde(flatten)],

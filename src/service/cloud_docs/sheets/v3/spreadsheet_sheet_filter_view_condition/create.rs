@@ -37,7 +37,7 @@ Ok(api_resp),
     },
 },
 /// 创建筛选条件请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateFilterViewConditionRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -51,41 +51,41 @@ pub struct CreateFilterViewConditionRequest {
     condition: FilterCondition,
 }
 impl CreateFilterViewConditionRequest {
-    pub fn builder() -> CreateFilterViewConditionRequestBuilder {,
+    pub fn w+.*{
 CreateFilterViewConditionRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct CreateFilterViewConditionRequestBuilder {
     request: CreateFilterViewConditionRequest,
 }
 impl CreateFilterViewConditionRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 }
 
-    pub fn filter_view_id(mut self, filter_view_id: impl ToString) -> Self {,
+    pub fn filter_view_id(mut self, filter_view_id: impl ToString) -> Self {
 self.request.filter_view_id = filter_view_id.to_string();
         self,
 }
 
-    pub fn condition(mut self, condition: FilterCondition) -> Self {,
+    pub fn condition(mut self, condition: FilterCondition) -> Self {
 self.request.condition = condition;
         self,
 },
-pub fn build(mut self) -> CreateFilterViewConditionRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 筛选条件,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FilterCondition {
     /// 筛选的列
     pub col_name: String,
@@ -99,8 +99,8 @@ impl FilterCondition {
         col_name: impl ToString,
         filter_type: impl ToString,
         compare_values: Vec<String>,
-    ) -> Self {,
-Self {,
+    ) -> Self {
+Self {
             col_name: col_name.to_string(),
             filter_type: filter_type.to_string(),
             compare_values,
@@ -128,7 +128,7 @@ Self {,
 }
 },
 /// 创建筛选条件响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct CreateFilterViewConditionResponseData {
     /// 筛选条件 ID
     pub condition_id: String,

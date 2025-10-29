@@ -15,7 +15,7 @@ use crate::{,
 };
 use super::DepartmentService;
 /// 批量获取部门列表请求
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct FilterDepartmentRequest {
     pub api_req: ApiRequest,
     /// 分页大小，最大值为50
@@ -33,7 +33,7 @@ pub struct FilterDepartmentRequest {
 }
 impl FilterDepartmentRequest {
     /// 创建批量获取部门列表请求的构建器,
-pub fn builder() -> FilterDepartmentRequestBuilder {,
+pub fn w+.*{
         FilterDepartmentRequestBuilder::default(),
 }
 },
@@ -44,37 +44,37 @@ pub struct FilterDepartmentRequestBuilder {
 }
 impl FilterDepartmentRequestBuilder {
     /// 设置分页大小
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
 },
 /// 设置分页标记,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
 },
 /// 设置父部门ID,
-    pub fn parent_department_id(mut self, parent_department_id: impl ToString) -> Self {,
+    pub fn parent_department_id(mut self, parent_department_id: impl ToString) -> Self {
 self.request.parent_department_id = Some(parent_department_id.to_string());
         self,
 },
 /// 设置是否获取已删除部门,
-    pub fn fetch_deleted(mut self, fetch_deleted: bool) -> Self {,
+    pub fn fetch_deleted(mut self, fetch_deleted: bool) -> Self {
 self.request.fetch_deleted = Some(fetch_deleted);
         self,
 },
 /// 设置用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
 },
 /// 设置部门ID类型,
-    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {,
+    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {
 self.request.department_id_type = Some(department_id_type);
         self,
 },
 /// 构建请求,
-    pub fn build(mut self) -> FilterDepartmentRequest {,
+    pub fn w+.*{
 // 构建查询参数,
         if let Some(page_size) = self.request.page_size {,
 self.request,
@@ -116,7 +116,7 @@ self.request,
     },
 },
 /// 批量获取部门列表响应数据,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct FilterDepartmentResponseData {
     /// 部门信息列表
     pub departments: Vec<Department>,
@@ -126,7 +126,7 @@ pub struct FilterDepartmentResponseData {
     pub has_more: Option<bool>,
 },
 /// 批量获取部门列表响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct FilterDepartmentResponse {
     /// 响应数据
     pub data: FilterDepartmentResponseData,

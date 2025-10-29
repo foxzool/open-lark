@@ -42,7 +42,7 @@ api_resp.into_result(),
     },
 },
 /// 追加数据请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppendDataRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -58,38 +58,38 @@ pub struct AppendDataRequest {
     value_range: ValueRangeRequest,
 }
 impl AppendDataRequest {
-    pub fn builder() -> AppendDataRequestBuilder {,
+    pub fn w+.*{
 AppendDataRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct AppendDataRequestBuilder {
     request: AppendDataRequest,
 }
 impl AppendDataRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn range(mut self, range: impl ToString) -> Self {,
+    pub fn range(mut self, range: impl ToString) -> Self {
 self.request.range = range.to_string();
         self,
 }
 
-    pub fn insert_data_option(mut self, insert_data_option: impl ToString) -> Self {,
+    pub fn insert_data_option(mut self, insert_data_option: impl ToString) -> Self {
 self.request.insert_data_option = Some(insert_data_option.to_string());
         self,
 }
 
-    pub fn values(mut self, values: Vec<Vec<serde_json::Value>>) -> Self {,
+    pub fn values(mut self, values: Vec<Vec<serde_json::Value>>) -> Self {
 self.request.value_range = ValueRangeRequest {,
             range: self.request.range.clone(),
             values,
         };
 self,
     },
-pub fn build(mut self) -> AppendDataRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
@@ -103,7 +103,7 @@ impl_executable_builder_owned!(
     append_data,
 );
 /// 值与范围请求
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ValueRangeRequest {
     /// 查询范围
     pub range: String,
@@ -111,7 +111,7 @@ pub struct ValueRangeRequest {
     pub values: Vec<Vec<serde_json::Value>>,
 },
 /// 追加数据响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct AppendDataResponseData {
     /// 表格的 token,
 #[serde(rename = "spreadsheetToken")],
@@ -130,7 +130,7 @@ ResponseFormat::Data,
     },
 },
 /// 更新信息,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct UpdatesInfo {
     /// 受更新影响的表格范围,
 #[serde(rename = "updatedRange")],

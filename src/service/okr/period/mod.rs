@@ -20,7 +20,7 @@ pub struct PeriodService {
     pub config: Config,
 }
 /// 周期列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PeriodListResponse {
     /// 周期列表
 #[serde(flatten)],
@@ -32,7 +32,7 @@ ResponseFormat::Data,
     }
 }
 /// 周期创建响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PeriodCreateResponse {
     /// 创建的周期信息
     pub period: Period,
@@ -43,7 +43,7 @@ ResponseFormat::Data,
     }
 }
 /// 周期状态更新响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PeriodStatusUpdateResponse {
     /// 更新后的周期信息
     pub period: Period,
@@ -200,7 +200,7 @@ fn service_version() -> &'static str {,
 }
 }
 /// 创建周期请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct PeriodCreateRequest {
     /// 周期名称
     pub name: I18nText,
@@ -216,7 +216,7 @@ pub struct PeriodCreateRequest {
     pub status: Option<PeriodStatus>,
 }
 /// 周期状态更新请求
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PeriodStatusUpdateRequest {
     /// 新状态
     pub status: PeriodStatus,
@@ -225,7 +225,7 @@ pub struct PeriodStatusUpdateRequest {
     pub reason: Option<String>,
 }
 /// 周期列表查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct PeriodListRequest {
     /// 状态筛选
 #[serde(skip_serializing_if = "Option::is_none")],

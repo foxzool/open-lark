@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 机器人信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Bot {
     /// 机器人名称,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -19,7 +19,7 @@ pub struct Bot {
     pub open_id: Option<String>,
 },
 /// 应用状态,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub enum AppStatus {,
     /// 未知状态,
 #[serde(rename = "unknown")],
@@ -32,7 +32,7 @@ pub enum AppStatus {,
     Disabled,
 },
 /// 机器人自定义菜单事件内容,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct BotMenuEvent {
     /// 事件ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -54,7 +54,7 @@ pub struct BotMenuEvent {
     pub event: Option<MenuEventDetail>,
 },
 /// 事件操作者信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EventOperator {
     /// 操作者ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -64,7 +64,7 @@ pub struct EventOperator {
     pub operator_type: Option<String>,
 },
 /// 操作者ID信息,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct OperatorId {
     /// Open ID,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -77,7 +77,7 @@ pub struct OperatorId {
     pub user_id: Option<String>,
 },
 /// 菜单事件详情,
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MenuEventDetail {
     /// 菜单事件key,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -91,7 +91,7 @@ pub struct MenuEventDetail {
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 use serde_json;
     #[test],

@@ -19,7 +19,7 @@ pub struct FaqService {
     pub config: Config,
 }
 /// 创建知识库请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateFaqRequest {
     /// 标题
     pub title: String,
@@ -33,7 +33,7 @@ pub struct CreateFaqRequest {
     pub tags: Option<Vec<String>>,
 }
 /// 创建知识库响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateFaqResponse {
     /// 创建的知识库
     pub faq: Faq,
@@ -44,7 +44,7 @@ ResponseFormat::Data,
     }
 }
 /// 修改知识库请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateFaqRequest {
     /// 标题
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -63,7 +63,7 @@ pub struct UpdateFaqRequest {
     pub status: Option<String>,
 }
 /// 修改知识库响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateFaqResponse {
     /// 更新后的知识库
     pub faq: Faq,
@@ -74,7 +74,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取知识库详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetFaqResponse {
     /// 知识库详情
     pub faq: Faq,
@@ -85,7 +85,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取全部知识库详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListFaqsResponse {
     /// 知识库列表
     pub faqs: Vec<Faq>,
@@ -102,7 +102,7 @@ ResponseFormat::Data,
     }
 }
 /// 搜索知识库响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchFaqsResponse {
     /// 搜索结果
     pub faqs: Vec<Faq>,

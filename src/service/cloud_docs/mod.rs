@@ -179,7 +179,7 @@ pub struct CloudDocsService {
 }
 impl CloudDocsService {
     pub fn new() -> Self {
-Self {,
+Self {
             drive: DriveService::new(config.clone()),
             wiki: WikiService::new(config.clone()),
             docx: DocxService::new(config.clone()),
@@ -193,7 +193,7 @@ Self {,
 }
 /// 使用共享配置创建聚合服务（实验性）
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             drive: DriveService::new_from_shared(shared.clone()),
             wiki: WikiService::new_from_shared(shared.clone()),
             docx: DocxService::new_from_shared(shared.clone()),
@@ -207,7 +207,7 @@ Self {,
 }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 #[test],

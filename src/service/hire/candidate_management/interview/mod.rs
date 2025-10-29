@@ -19,7 +19,7 @@ pub struct InterviewService {
     pub config: Config,
 }
 /// 面试记录信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Interview {
     /// 面试ID
     pub id: String,
@@ -57,7 +57,7 @@ pub struct Interview {
     pub updated_time: Option<String>,
 }
 /// 面试评估信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct InterviewEvaluation {
     /// 评估ID
     pub id: String,
@@ -79,7 +79,7 @@ pub struct InterviewEvaluation {
     pub updated_time: Option<String>,
 }
 /// 面试安排信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct InterviewArrangement {
     /// 安排ID
     pub id: String,
@@ -107,7 +107,7 @@ pub struct InterviewArrangement {
     pub updated_time: Option<String>,
 }
 /// 面试创建请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct InterviewCreateRequest {
     /// 投递ID
     pub application_id: String,
@@ -127,7 +127,7 @@ pub struct InterviewCreateRequest {
     pub remark: Option<String>,
 }
 /// 面试安排请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct InterviewArrangementRequest {
     /// 投递ID
     pub application_id: String,
@@ -145,7 +145,7 @@ pub struct InterviewArrangementRequest {
     pub remark: Option<String>,
 }
 /// 面试评估请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct InterviewEvaluationRequest {
     /// 面试ID
     pub interview_id: String,
@@ -159,7 +159,7 @@ pub struct InterviewEvaluationRequest {
     pub result: Option<String>,
 }
 /// 评估维度
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct EvaluationDimension {
     /// 评估维度
     pub dimension: String,
@@ -169,7 +169,7 @@ pub struct EvaluationDimension {
     pub comment: Option<String>,
 }
 /// 面试列表请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct InterviewListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -187,7 +187,7 @@ pub struct InterviewListRequest {
     pub start_time_to: Option<String>,
 }
 /// 面试列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct InterviewListResponse {
     /// 面试记录列表
 #[serde(flatten)],
@@ -199,7 +199,7 @@ ResponseFormat::Data,
     }
 }
 /// 面试详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct InterviewDetailResponse {
     /// 面试记录信息
     pub interview: Interview,
@@ -210,7 +210,7 @@ ResponseFormat::Data,
     }
 }
 /// 面试评估列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct InterviewEvaluationListResponse {
     /// 面试评估列表
 #[serde(flatten)],
@@ -222,7 +222,7 @@ ResponseFormat::Data,
     }
 }
 /// 面试操作响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct InterviewOperationResponse {
     /// 操作结果
 #[serde(flatten)],
@@ -627,7 +627,7 @@ pub async fn cancel_interview(,
         reason: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<InterviewOperationResponse>> {,
-#[derive(Serialize)],
+#[derive(.*?)]
         struct CancelRequest {
             reason: String,
         }
@@ -681,7 +681,7 @@ pub async fn reschedule_interview(,
         new_interviewers: Option<Vec<String>>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<InterviewOperationResponse>> {,
-#[derive(Serialize)],
+#[derive(.*?)]
         struct RescheduleRequest {
             new_time: String,
             new_interviewers: Option<Vec<String>>,

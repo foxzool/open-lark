@@ -19,7 +19,7 @@ pub struct TicketCustomizedFieldService {
     pub config: Config,
 }
 /// 创建工单自定义字段请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateTicketCustomizedFieldRequest {
     /// 字段名称
     pub field_name: String,
@@ -36,7 +36,7 @@ pub struct CreateTicketCustomizedFieldRequest {
     pub options: Option<Vec<String>>,
 }
 /// 创建工单自定义字段响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateTicketCustomizedFieldResponse {
     /// 创建的自定义字段
     pub field: CustomizedField,
@@ -47,7 +47,7 @@ ResponseFormat::Data,
     }
 }
 /// 更新工单自定义字段请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateTicketCustomizedFieldRequest {
     /// 字段名称
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -63,7 +63,7 @@ pub struct UpdateTicketCustomizedFieldRequest {
     pub options: Option<Vec<String>>,
 }
 /// 更新工单自定义字段响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateTicketCustomizedFieldResponse {
     /// 更新后的自定义字段
     pub field: CustomizedField,
@@ -74,7 +74,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取工单自定义字段响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetTicketCustomizedFieldResponse {
     /// 自定义字段
     pub field: CustomizedField,
@@ -85,7 +85,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取全部工单自定义字段响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListTicketCustomizedFieldsResponse {
     /// 自定义字段列表
     pub fields: Vec<CustomizedField>,

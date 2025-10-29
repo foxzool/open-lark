@@ -10,7 +10,7 @@ pub struct V1 {
 }
 impl V1 {
     pub fn new() -> Self {
-Self {,
+Self {
             subscription: SubscriptionService::new(config.clone()),
             config,
         }

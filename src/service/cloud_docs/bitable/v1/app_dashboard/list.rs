@@ -18,7 +18,7 @@ use crate::,
     service::bitable::v1::app_dashboard::Dashboard,
 };
 /// 列出仪表盘请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct ListDashboardRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -33,37 +33,37 @@ pub struct ListDashboardRequest {
     page_size: Option<i32>,
 }
 impl ListDashboardRequest {
-    pub fn builder() -> ListDashboardRequestBuilder {,
+    pub fn w+.*{
 ListDashboardRequestBuilder::default(),
     },
-pub fn new(app_token: impl ToString) -> Self {,
+pub fn new(app_token: impl ToString) -> Self {
         Self {
             app_token: app_token.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct ListDashboardRequestBuilder {
     request: ListDashboardRequest,
 }
 impl ListDashboardRequestBuilder {
     /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 分页标记,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
 },
 /// 分页大小,
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
 },
-pub fn build(mut self) -> ListDashboardRequest {,
+pub fn w+.*{
         if let Some(page_token) = &self.request.page_token {,
 self.request,
                 .api_request,
@@ -88,7 +88,7 @@ crate::impl_executable_builder_owned!(
     list,
 );
 /// 列出仪表盘响应
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct ListDashboardResponse {
     /// 是否还有更多项
     pub has_more: bool,
@@ -139,7 +139,7 @@ let service = DashboardService::new(config);
 },
 #[cfg(test)],
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_list_dashboard_request_builder() {,

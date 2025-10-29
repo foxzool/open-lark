@@ -19,7 +19,7 @@ pub struct ExternalInstanceService {
     pub config: Config,
 }
 /// 同步三方审批实例请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateExternalInstanceRequest {
     /// 三方审批定义编码
     pub approval_code: String,
@@ -44,7 +44,7 @@ pub struct CreateExternalInstanceRequest {
     pub process_details: Option<Vec<serde_json::Value>>,
 }
 /// 同步三方审批实例响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateExternalInstanceResponse {
     /// 审批实例编码
     pub instance_code: String,
@@ -55,7 +55,7 @@ ResponseFormat::Data,
     }
 }
 /// 校验三方审批实例请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CheckExternalInstanceRequest {
     /// 审批实例状态
     pub status: String,

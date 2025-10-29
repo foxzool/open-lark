@@ -22,7 +22,7 @@ use crate::,
     },
 };
 /// 更新字段请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct UpdateFieldRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -55,12 +55,12 @@ pub struct UpdateFieldRequest {
     ui_type: Option<UiType>,
 }
 impl UpdateFieldRequest {
-    pub fn builder() -> UpdateFieldRequestBuilder {,
+    pub fn w+.*{
 UpdateFieldRequestBuilder::default(),
     }
 
-    pub fn new(app_token: impl ToString, table_id: impl ToString, field_id: impl ToString) -> Self {,
-Self {,
+    pub fn new(app_token: impl ToString, table_id: impl ToString, field_id: impl ToString) -> Self {
+Self {
             app_token: app_token.to_string(),
             table_id: table_id.to_string(),
             field_id: field_id.to_string()
@@ -68,57 +68,57 @@ Self {,
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct UpdateFieldRequestBuilder {
     request: UpdateFieldRequest,
 }
 impl UpdateFieldRequestBuilder {
     /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {,
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
 },
 /// 数据表的唯一标识符,
-    pub fn table_id(mut self, table_id: impl ToString) -> Self {,
+    pub fn table_id(mut self, table_id: impl ToString) -> Self {
 self.request.table_id = table_id.to_string();
         self,
 },
 /// 字段的唯一标识符,
-    pub fn field_id(mut self, field_id: impl ToString) -> Self {,
+    pub fn field_id(mut self, field_id: impl ToString) -> Self {
 self.request.field_id = field_id.to_string();
         self,
 },
 /// 用户 ID 类型,
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {,
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
 },
 /// 字段名称,
-    pub fn field_name(mut self, field_name: impl ToString) -> Self {,
+    pub fn field_name(mut self, field_name: impl ToString) -> Self {
 self.request.field_name = Some(field_name.to_string());
         self,
 },
 /// 字段类型,
-    pub fn field_type(mut self, field_type: FieldType) -> Self {,
+    pub fn field_type(mut self, field_type: FieldType) -> Self {
 self.request.r#type = Some(field_type);
         self,
 },
 /// 字段属性,
-    pub fn property(mut self, property: AppTableFieldProperty) -> Self {,
+    pub fn property(mut self, property: AppTableFieldProperty) -> Self {
 self.request.property = Some(property);
         self,
 },
 /// 字段描述,
-    pub fn description(mut self, description: AppTableFieldDescription) -> Self {,
+    pub fn description(mut self, description: AppTableFieldDescription) -> Self {
 self.request.description = Some(description);
         self,
 },
 /// 字段在界面上的展示类型,
-    pub fn ui_type(mut self, ui_type: UiType) -> Self {,
+    pub fn ui_type(mut self, ui_type: UiType) -> Self {
 self.request.ui_type = Some(ui_type);
         self,
 },
-pub fn build(mut self) -> UpdateFieldRequest {,
+pub fn w+.*{
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
                 .api_request,
@@ -137,7 +137,7 @@ impl_executable_builder_owned!(,
     update,
 );
 /// 更新字段响应
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateFieldResponse {
     /// 更新后的字段信息
     pub field: AppTableField,
@@ -167,7 +167,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_update_field_request_builder() {,

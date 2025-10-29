@@ -175,7 +175,7 @@ pub fn new() -> Self {
     ///,
 /// # 返回值
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
-pub fn validate_admin_config(&self) -> bool {,
+pub fn w+.*{
         // 检查配置是否有效
 !self.password.config.app_id.is_empty(),
             && !self.password.config.app_secret.is_empty(),
@@ -192,7 +192,7 @@ pub fn validate_admin_config(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_admin_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "AdminService{{ services: 4, app_id: {} security_modules: 1, data_modules: 1, badge_modules: 2, total_operations: 8 }}",
             self.password.config.app_id,
@@ -207,7 +207,7 @@ pub fn get_admin_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_admin_feature(&self, admin_feature: &str) -> bool {,
+    pub fn w+.*{
 matches!(,
             admin_feature,
             "password_management",
@@ -243,7 +243,7 @@ matches!(,
     ///,
 /// # 返回值
     /// 如果所有服务配置有效返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         !self.password.config.app_id.is_empty(),
 && !self.password.config.app_secret.is_empty(),
             && !self.data_report.config.app_id.is_empty(),
@@ -260,7 +260,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含各类型服务数量的统计信息
-pub fn get_admin_categories_statistics(&self) -> String {,
+pub fn w+.*{
         "AdminService Categories{ security: 1, data: 1, badge: 2, total: 4 }".to_string(),
 }
 /// 获取管理后台服务状态摘要
@@ -269,7 +269,7 @@ pub fn get_admin_categories_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各服务状态信息的字符串
-pub fn get_admin_service_status_summary(&self) -> String {,
+pub fn w+.*{
         let config_healthy = !self.password.config.app_id.is_empty();
 let security_healthy = config_healthy;
         let data_healthy = config_healthy;
@@ -288,7 +288,7 @@ let badge_healthy = config_healthy;
     ///,
 /// # 返回值
     /// 包含管理功能矩阵信息的字符串
-pub fn get_admin_management_features(&self) -> String {,
+pub fn w+.*{
         format!(
             "AdminService Management{{ security: {} data: {} badges: {} operations: {} automation: true }}",
             self.supports_admin_feature("password_management"),
@@ -303,7 +303,7 @@ pub fn get_admin_management_features(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含安全管理能力信息的字符串
-pub fn get_security_management_matrix(&self) -> String {,
+pub fn w+.*{
         "AdminService Security{ password: true, policy: true, audit: true, access_control: true, monitoring: true }".to_string(),
 }
 /// 获取数据管理能力矩阵
@@ -312,7 +312,7 @@ pub fn get_security_management_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含数据管理能力信息的字符串
-pub fn get_data_management_matrix(&self) -> String {,
+pub fn w+.*{
         "AdminService Data{ reports: true, analytics: true, export: true, visualization: true, real_time: true }".to_string(),
 }
 /// 获取勋章管理能力矩阵
@@ -321,7 +321,7 @@ pub fn get_data_management_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含勋章管理能力信息的字符串
-pub fn get_badge_management_matrix(&self) -> String {,
+pub fn w+.*{
         "AdminService Badge{ design: true, creation: true, grant: true, tracking: true, analytics: true }".to_string(),
 }
 }
@@ -338,8 +338,8 @@ fn service_name() -> &'static str,
     }
 }
 impl Clone for AdminService {,
-    fn clone(&self) -> Self {,
-Self {,
+    fn clone(&self) -> Self {
+Self {
             password: PasswordService::new(self.password.config.clone()),
             data_report: DataReportService::new(self.data_report.config.clone()),
             badge: BadgeService::new(self.badge.config.clone()),
@@ -360,7 +360,7 @@ f.debug_struct()
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 /// 创建测试配置

@@ -170,7 +170,7 @@ pub struct ApassService {
 }
 impl ApassService {
     pub fn new() -> Self {
-Self {,
+Self {
             seat: SeatService::new(config.clone()),
             audit_log: AuditLogService::new(config.clone()),
             permission: PermissionService::new(config.clone()),
@@ -182,7 +182,7 @@ Self {,
 }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 #[test],

@@ -37,7 +37,7 @@ Ok(api_resp),
     },
 },
 /// 插入行列请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct InsertRowsOrColumnsRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -51,21 +51,21 @@ pub struct InsertRowsOrColumnsRequest {
     inherit_style: Option<String>,
 }
 impl InsertRowsOrColumnsRequest {
-    pub fn builder() -> InsertRowsOrColumnsRequestBuilder {,
+    pub fn w+.*{
 InsertRowsOrColumnsRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct InsertRowsOrColumnsRequestBuilder {
     request: InsertRowsOrColumnsRequest,
 }
 impl InsertRowsOrColumnsRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 },
@@ -74,7 +74,7 @@ pub fn dimension_range(,
         dimension: impl ToString,
         start_index: i32,
         end_index: i32,
-    ) -> Self {,
+    ) -> Self {
 self.request.dimension_range = DimensionRange {,
             dimension: dimension.to_string(),
             start_index,
@@ -85,17 +85,17 @@ self,
 /// 设置是否继承样式,
     /// - BEFORE: 继承前一行/列的样式,
 /// - AFTER: 继承后一行/列的样式,
-    pub fn inherit_style(mut self, inherit_style: impl ToString) -> Self {,
+    pub fn inherit_style(mut self, inherit_style: impl ToString) -> Self {
 self.request.inherit_style = Some(inherit_style.to_string());
         self,
 },
-pub fn build(mut self) -> InsertRowsOrColumnsRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 维度范围,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DimensionRange {
     /// 维度类型：ROWS（行）或 COLUMNS（列）
     pub dimension: String,
@@ -105,7 +105,7 @@ pub struct DimensionRange {
     pub end_index: i32,
 },
 /// 插入行列响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct InsertRowsOrColumnsResponseData {
     /// 插入行列后的信息
     pub insert_range: InsertRangeInfo,
@@ -116,7 +116,7 @@ ResponseFormat::Data,
     },
 },
 /// 插入范围信息,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct InsertRangeInfo {
     /// 插入的维度
     pub dimension: String,

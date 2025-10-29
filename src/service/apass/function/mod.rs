@@ -18,7 +18,7 @@ pub struct FunctionService {
     pub config: Config,
 }
 /// 函数执行响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FunctionInvokeResponse {
     /// 函数执行结果
 #[serde(flatten)],

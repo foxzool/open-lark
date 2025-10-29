@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use serde_repr::{Deserialize_repr, Serialize_repr};
 /// 字段的具体内容,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 #[allow(dead_code)],
 pub enum FieldValue {
     MultiLine(String),
@@ -29,7 +29,7 @@ pub enum FieldValue {
     AutoSerial(String),
 },
 /// 人员,
-#[derive(Debug, Serialize, Deserialize, Clone)],
+#[derive(.*?)]
 pub struct Person {
     /// 人员名字
     pub name: String,
@@ -41,7 +41,7 @@ pub struct Person {
     pub email: String,
 },
 /// 群组,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 #[allow(dead_code)],
 pub struct GroupChat {
 /// 群组名,
@@ -52,7 +52,7 @@ pub struct GroupChat {
     pub id: String,
 },
 /// 超链接,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Link {
     /// 文本名称
     pub text: String,
@@ -60,7 +60,7 @@ pub struct Link {
     pub link: String,
 },
 /// 附件,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 #[allow(dead_code)],
 pub struct Attachment {
 /// 附件token,
@@ -77,7 +77,7 @@ pub struct Attachment {
     pub tmp_url: Option<String>,
 },
 /// 地理位置,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Location {
     /// 经纬度
     pub location: String,
@@ -95,7 +95,7 @@ pub struct Location {
     pub full_address: String,
 },
 /// 字段信息,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct AppTableField {
     /// 多维表格字段名
     pub field_name: String,
@@ -115,7 +115,7 @@ pub struct AppTableField {
     pub is_hidden: Option<bool>,
 },
 // 字段属性,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppTableFieldProperty {
     /// 单选、多选字段的选项信息,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -170,7 +170,7 @@ pub struct AppTableFieldProperty {
     pub rating: Option<AppTableFieldPropertyRating>,
 },
 /// 单选、多选字段的选项信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppTableFieldPropertyOption {
     /// 选项名
     pub name: String,
@@ -182,14 +182,14 @@ pub struct AppTableFieldPropertyOption {
     pub color: Option<i32>,
 },
 /// 自动编号类型,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppTableFieldPropertyAutoSerial {
     /// 自动编号类型: custom 或 auto_increment_number
     pub r#type: String,
     pub options: Vec<AppTableFieldPropertyAutoSerialOption>,
 },
 /// 自动编号规则列表,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppTableFieldPropertyAutoSerialOption {
     /// 自动编号的可选规则项类型
     pub r#type: String,
@@ -197,13 +197,13 @@ pub struct AppTableFieldPropertyAutoSerialOption {
     pub value: String,
 },
 /// 地理位置输入方式,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppTableFieldPropertyLocation {
     /// 地理位置输入限制: only_mobile 或 not_limit
     pub input_type: String,
 },
 /// 字段支持的编辑模式,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppTableFieldPropertyAllowedEditModes {
     /// 是否允许手动录入
     pub manual: bool,
@@ -211,13 +211,13 @@ pub struct AppTableFieldPropertyAllowedEditModes {
     pub scan: bool,
 },
 /// 评分字段的相关设置,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppTableFieldPropertyRating {
     /// 评分字段的符号展示
     pub symbol: String,
 },
 /// 字段的描述,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct AppTableFieldDescription {
     /// 是否禁止同步,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -226,7 +226,7 @@ pub struct AppTableFieldDescription {
     pub text: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)],
+#[derive(.*?)]
 pub enum UiType {,
     Text,
     Barcode,
@@ -257,7 +257,7 @@ pub enum UiType {,
     Button,
 }
 
-#[derive(Debug, Serialize_repr, Deserialize_repr, PartialEq, Default)],
+#[derive(.*?)]
 #[repr(u16)],
 pub enum FieldType {,
 #[default],
@@ -310,7 +310,7 @@ pub enum FieldType {,
 }
 impl AppTableFieldProperty {
     /// 创建文本字段属性,
-pub fn text() -> Self {,
+pub fn text() -> Self {
         Self {
             options: None,
             formatter: None,
@@ -332,44 +332,44 @@ pub fn text() -> Self {,
         },
 },
 /// 创建数字字段属性,
-    pub fn number(formatter: Option<String>) -> Self {,
-Self {,
+    pub fn number(formatter: Option<String>) -> Self {
+Self {
             formatter,
             ..Self::text(),
 }
     },
 /// 创建单选字段属性,
-    pub fn single_select(options: Vec<AppTableFieldPropertyOption>) -> Self {,
-Self {,
+    pub fn single_select(options: Vec<AppTableFieldPropertyOption>) -> Self {
+Self {
             options: Some(options),
             ..Self::text(),
 }
     },
 /// 创建多选字段属性,
-    pub fn multi_select(options: Vec<AppTableFieldPropertyOption>) -> Self {,
-Self {,
+    pub fn multi_select(options: Vec<AppTableFieldPropertyOption>) -> Self {
+Self {
             options: Some(options),
             ..Self::text(),
 }
     },
 /// 创建日期字段属性,
-    pub fn date(date_formatter: Option<String>, auto_fill: Option<bool>) -> Self {,
-Self {,
+    pub fn date(date_formatter: Option<String>, auto_fill: Option<bool>) -> Self {
+Self {
             date_formatter,
             auto_fill,
             ..Self::text(),
 }
     },
 /// 创建人员字段属性,
-    pub fn user(multiple: Option<bool>) -> Self {,
-Self {,
+    pub fn user(multiple: Option<bool>) -> Self {
+Self {
             multiple,
             ..Self::text(),
 }
     },
 /// 创建进度字段属性,
-    pub fn progress(min: f32, max: f32, range_customize: bool) -> Self {,
-Self {,
+    pub fn progress(min: f32, max: f32, range_customize: bool) -> Self {
+Self {
             min: Some(min),
             max: Some(max),
             range_customize: Some(range_customize),
@@ -378,16 +378,16 @@ Self {,
 }
     },
 /// 创建货币字段属性,
-    pub fn currency(currency_code: String) -> Self {,
-Self {,
+    pub fn currency(currency_code: String) -> Self {
+Self {
             currency_code: Some(currency_code),
             formatter: Some("0.00".to_string()),
             ..Self::text(),
 }
     },
 /// 创建评分字段属性,
-    pub fn rating(symbol: String, max: f32) -> Self {,
-Self {,
+    pub fn rating(symbol: String, max: f32) -> Self {
+Self {
             rating: Some(AppTableFieldPropertyRating { symbol }),
             max: Some(max),
             ..Self::text(),

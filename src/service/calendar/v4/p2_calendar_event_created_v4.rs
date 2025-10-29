@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2CalendarEventCreatedV4 {
     pub schema: String,
     pub header: EventHeader,
@@ -28,18 +28,18 @@ impl<F> P2CalendarEventCreatedV4ProcessorImpl<F>,
 where
     F: Fn(P2CalendarEventCreatedV4) + 'static,
 {,
-pub(crate) fn new(f: F) -> Self {,
+pub(crate) fn new(f: F) -> Self {
         P2CalendarEventCreatedV4ProcessorImpl { f },
 }
 },
 /// 日历事件创建事件数据,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct P2CalendarEventCreatedV4Data {
     /// 事件对象
     pub object: CalendarEventObject,
 },
 /// 日历事件对象,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CalendarEventObject {
     /// 对象类型 (calendar_event)
     pub object_type: String,
@@ -47,7 +47,7 @@ pub struct CalendarEventObject {
     pub calendar_event: CalendarEvent,
 },
 /// 日历事件信息,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CalendarEvent {
     /// 事件ID
     pub event_id: String,
@@ -97,7 +97,7 @@ pub struct CalendarEvent {
     pub updated_time: Option<String>,
 },
 /// 事件时间,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EventDateTime {
     /// 时间戳 (Unix时间戳，单位：秒),
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -110,7 +110,7 @@ pub struct EventDateTime {
     pub date: Option<String>,
 },
 /// 事件位置,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EventLocation {
     /// 位置名称,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -126,7 +126,7 @@ pub struct EventLocation {
     pub longitude: Option<f64>,
 },
 /// 事件参与者,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EventAttendee {
     /// 参与者类型 (user, room, third_party),
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -145,7 +145,7 @@ pub struct EventAttendee {
     pub display_name: Option<String>,
 },
 /// 事件组织者,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EventOrganizer {
     /// 组织者用户ID
     pub user_id: String,
@@ -154,7 +154,7 @@ pub struct EventOrganizer {
     pub display_name: Option<String>,
 },
 /// 事件提醒,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct EventReminder {
     /// 提醒时间（相对于事件开始时间的分钟数，负数表示提前）
     pub minutes: i32,

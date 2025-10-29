@@ -11,7 +11,7 @@ use crate::core::{,
     SDKResult,
 };
 /// 获取知识空间信息请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct GetSpaceRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -20,32 +20,32 @@ pub struct GetSpaceRequest {
     space_id: String,
 }
 impl GetSpaceRequest {
-    pub fn builder() -> GetSpaceRequestBuilder {,
+    pub fn w+.*{
 GetSpaceRequestBuilder::default(),
     },
-pub fn new(space_id: impl ToString) -> Self {,
+pub fn new(space_id: impl ToString) -> Self {
         Self {
             space_id: space_id.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct GetSpaceRequestBuilder {
     request: GetSpaceRequest,
 }
 impl GetSpaceRequestBuilder {
     /// 知识空间id
-    pub fn space_id(mut self, space_id: impl ToString) -> Self {,
+    pub fn space_id(mut self, space_id: impl ToString) -> Self {
 self.request.space_id = space_id.to_string();
         self,
 },
-pub fn build(self) -> GetSpaceRequest {,
+pub fn w+.*{
         self.request,
 }
 },
 /// 知识空间详细信息,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct SpaceInfo {
     /// 知识空间id
     pub space_id: String,
@@ -64,7 +64,7 @@ pub struct SpaceInfo {
     pub update_time: Option<i64>,
 },
 /// 获取知识空间信息响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct GetSpaceResponse {
     /// 知识空间信息
     pub space: SpaceInfo,
@@ -95,7 +95,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_get_space_request_builder() {,

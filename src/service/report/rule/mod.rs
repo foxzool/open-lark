@@ -81,7 +81,7 @@ if let Some(end_time) = request.end_time {,
 }
 }
 /// 规则查询请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct RuleQueryRequest {
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -109,7 +109,7 @@ pub struct RuleQueryRequest {
     pub end_time: Option<i64>,
 }
 /// 规则查询响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct RuleQueryResponse {
     /// 规则列表
 #[serde(flatten)],

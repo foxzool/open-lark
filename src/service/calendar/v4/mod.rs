@@ -143,7 +143,7 @@ pub fn new() -> Self {
     ///,
 /// # 返回值
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
-pub fn validate_services_config(&self) -> bool {,
+pub fn w+.*{
         // 检查主要服务的配置是否有效
 !self.calendar.config.app_id.is_empty() && !self.calendar_event.config.app_id.is_empty(),
     }
@@ -153,7 +153,7 @@ pub fn validate_services_config(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_service_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "CalendarV4{{ services: 10, app_id: {} core_services: 4, collaboration_services: 3, integration_services: 3 }}",
             self.calendar.config.app_id,
@@ -168,7 +168,7 @@ pub fn get_service_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_feature(&self, feature_name: &str) -> bool {,
+    pub fn w+.*{
 matches!(,
             feature_name,
             "event_scheduling",
@@ -196,7 +196,7 @@ matches!(,
     ///,
 /// # 返回值
     /// 如果所有服务配置有效返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         !self.calendar.config.app_id.is_empty(),
 && !self.calendar_event.config.app_id.is_empty(),
             && self.validate_services_config(),
@@ -207,7 +207,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含各类型服务数量的统计信息
-pub fn get_service_categories_statistics(&self) -> String {,
+pub fn w+.*{
         "CalendarV4 Categories{ core: 4, collaboration: 3, integration: 3, total: 10 }".to_string(),
 }
 /// 获取日历服务状态摘要
@@ -216,7 +216,7 @@ pub fn get_service_categories_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各服务状态信息的字符串
-pub fn get_service_status_summary(&self) -> String {,
+pub fn w+.*{
         let core_healthy = !self.calendar.config.app_id.is_empty();
 let collaboration_healthy = self.meeting_chat.config.app_id == self.calendar.config.app_id;
         let integration_healthy =,
@@ -235,7 +235,7 @@ self.exchange_binding.config.app_id == self.calendar.config.app_id;
     ///,
 /// # 返回值
     /// 包含支持的事件类型的向量
-pub fn get_supported_event_types(&self) -> Vec<&'static str> {,
+pub fn w+.*{
         vec![
             "meeting",
             "appointment",
@@ -263,7 +263,7 @@ pub fn get_supported_event_types(&self) -> Vec<&'static str> {,
     ///,
 /// # 返回值
     /// 包含时区支持信息的字符串
-pub fn get_timezone_support_info(&self) -> String {,
+pub fn w+.*{
         format!(
             "CalendarV4 Timezone{{ supported: {} automatic_detection: true, common_zones: 50 }}",
             self.supports_feature("timezone_support"),
@@ -301,13 +301,13 @@ f.debug_struct()
 }
 /// 为 V4 实现 Clone trait，支持服务实例的复制
 impl Clone for V4 {,
-fn clone(&self) -> Self {,
+fn clone(&self) -> Self {
         let config = self.calendar.config.clone();
 Self::new(config),
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use crate::core::trait_system::Service;
 /// 创建测试配置

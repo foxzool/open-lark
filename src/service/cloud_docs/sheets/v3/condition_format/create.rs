@@ -37,7 +37,7 @@ Ok(api_resp),
     },
 },
 /// 批量创建条件格式请求,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateConditionFormatsRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -49,41 +49,41 @@ pub struct CreateConditionFormatsRequest {
     condition_formats: Vec<ConditionFormatRule>,
 }
 impl CreateConditionFormatsRequest {
-    pub fn builder() -> CreateConditionFormatsRequestBuilder {,
+    pub fn w+.*{
 CreateConditionFormatsRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct CreateConditionFormatsRequestBuilder {
     request: CreateConditionFormatsRequest,
 }
 impl CreateConditionFormatsRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
 }
 
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
 }
 
-    pub fn condition_formats(mut self, condition_formats: Vec<ConditionFormatRule>) -> Self {,
+    pub fn condition_formats(mut self, condition_formats: Vec<ConditionFormatRule>) -> Self {
 self.request.condition_formats = condition_formats;
         self,
 }
 
-    pub fn add_condition_format(mut self, condition_format: ConditionFormatRule) -> Self {,
+    pub fn add_condition_format(mut self, condition_format: ConditionFormatRule) -> Self {
 self.request.condition_formats.push(condition_format);
         self,
 },
-pub fn build(mut self) -> CreateConditionFormatsRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 条件格式规则,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ConditionFormatRule {
     /// 应用范围
     pub range: String,
@@ -99,7 +99,7 @@ pub struct ConditionFormatRule {
     pub cf_id: Option<String>,
 },
 /// 格式样式,
-#[derive(Default, Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct FormatStyle {
     /// 背景颜色,
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -127,8 +127,8 @@ pub fn number_comparison(,
         comparison_type: impl ToString,
         value: f64,
         format: FormatStyle,
-    ) -> Self {,
-Self {,
+    ) -> Self {
+Self {
             range: range.to_string(),
             condition_type: comparison_type.to_string(),
             condition_values: Some(vec![value.to_string()]),
@@ -149,8 +149,8 @@ Self {,
         Self::number_comparison(range, "NUMBER_EQ", value, format),
 },
 /// 创建文本包含条件格式,
-    pub fn text_contains(range: impl ToString, text: impl ToString, format: FormatStyle) -> Self {,
-Self {,
+    pub fn text_contains(range: impl ToString, text: impl ToString, format: FormatStyle) -> Self {
+Self {
             range: range.to_string(),
             condition_type: "TEXT_CONTAINS".to_string(),
             condition_values: Some(vec![text.to_string()]),
@@ -159,8 +159,8 @@ Self {,
         },
 },
 /// 创建重复值条件格式,
-    pub fn duplicate_values(range: impl ToString, format: FormatStyle) -> Self {,
-Self {,
+    pub fn duplicate_values(range: impl ToString, format: FormatStyle) -> Self {
+Self {
             range: range.to_string(),
             condition_type: "DUPLICATE".to_string(),
             condition_values: None,
@@ -169,8 +169,8 @@ Self {,
         },
 },
 /// 创建空值条件格式,
-    pub fn blank_values(range: impl ToString, format: FormatStyle) -> Self {,
-Self {,
+    pub fn blank_values(range: impl ToString, format: FormatStyle) -> Self {
+Self {
             range: range.to_string(),
             condition_type: "BLANK".to_string(),
             condition_values: None,
@@ -181,7 +181,7 @@ Self {,
 }
 impl FormatStyle {
     /// 创建背景颜色格式,
-pub fn background_color(color: impl ToString) -> Self {,
+pub fn background_color(color: impl ToString) -> Self {
         Self {
             background_color: Some(color.to_string()),
             text_color: None,
@@ -192,8 +192,8 @@ pub fn background_color(color: impl ToString) -> Self {,
         },
 },
 /// 创建文字颜色格式,
-    pub fn text_color(color: impl ToString) -> Self {,
-Self {,
+    pub fn text_color(color: impl ToString) -> Self {
+Self {
             background_color: None,
             text_color: Some(color.to_string()),
             bold: None,
@@ -203,8 +203,8 @@ Self {,
         },
 },
 /// 创建字体样式格式,
-    pub fn font_style(bold: bool, italic: bool, underline: bool) -> Self {,
-Self {,
+    pub fn font_style(bold: bool, italic: bool, underline: bool) -> Self {
+Self {
             background_color: None,
             text_color: None,
             bold: Some(bold),
@@ -214,38 +214,38 @@ Self {,
         },
 },
 /// 设置背景颜色,
-    pub fn with_background_color(mut self, color: impl ToString) -> Self {,
+    pub fn with_background_color(mut self, color: impl ToString) -> Self {
 self.background_color = Some(color.to_string());
         self,
 },
 /// 设置文字颜色,
-    pub fn with_text_color(mut self, color: impl ToString) -> Self {,
+    pub fn with_text_color(mut self, color: impl ToString) -> Self {
 self.text_color = Some(color.to_string());
         self,
 },
 /// 设置加粗,
-    pub fn with_bold(mut self, bold: bool) -> Self {,
+    pub fn with_bold(mut self, bold: bool) -> Self {
 self.bold = Some(bold);
         self,
 },
 /// 设置斜体,
-    pub fn with_italic(mut self, italic: bool) -> Self {,
+    pub fn with_italic(mut self, italic: bool) -> Self {
 self.italic = Some(italic);
         self,
 },
 /// 设置下划线,
-    pub fn with_underline(mut self, underline: bool) -> Self {,
+    pub fn with_underline(mut self, underline: bool) -> Self {
 self.underline = Some(underline);
         self,
 },
 /// 设置删除线,
-    pub fn with_strikethrough(mut self, strikethrough: bool) -> Self {,
+    pub fn with_strikethrough(mut self, strikethrough: bool) -> Self {
 self.strikethrough = Some(strikethrough);
         self,
 }
 },
 /// 条件格式信息,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct ConditionFormatInfo {
     /// 条件格式 ID
     pub cf_id: String,
@@ -254,7 +254,7 @@ pub struct ConditionFormatInfo {
     pub condition_format: ConditionFormatRule,
 },
 /// 批量创建条件格式响应体最外层,
-#[derive(Deserialize, Debug)],
+#[derive(.*?)]
 pub struct CreateConditionFormatsResponseData {
     /// 创建的条件格式列表
     pub items: Vec<ConditionFormatInfo>,

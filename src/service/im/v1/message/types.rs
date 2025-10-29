@@ -33,7 +33,7 @@ pub trait SendMessageTrait {,
     fn content(&self) -> String;
 },
 /// Response data for message creation,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateMessageResp {
     pub data: Message,
 }
@@ -54,7 +54,7 @@ crate::core::api_resp::ResponseFormat::Data,
 /// - `body`: 消息具体内容,
 /// - `chat_id`: 所属会话ID,
 /// - `create_time`/`update_time`: 创建和更新时间戳,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Message {
     /// 消息id
     pub message_id: String,
@@ -90,7 +90,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 },
 /// 发送者，可以是用户或应用,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Sender {
     /// 该字段标识发送者的id
     id: String,
@@ -113,7 +113,7 @@ pub struct Sender {
     tenant_key: String,
 },
 /// 消息内容,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct MessageBody {
     /// 消息内容，json结构序列化后的字符串。不同msg_type对应不同内容。,
 ///,
@@ -122,7 +122,7 @@ pub struct MessageBody {
     pub content: String,
 },
 /// 被@的用户或机器人的id列表,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct Mention {
     /// 被@的用户或机器人的序号。例如，第3个被@到的成员，值为"@_user_3"
     pub key: String,
@@ -139,7 +139,7 @@ pub struct Mention {
     pub upper_message_id: String,
 },
 /// Response data for message listing,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListMessageRespData {
     /// 是否还有更多项
     pub has_more: bool,
@@ -164,8 +164,8 @@ impl<'a> ListMessageIterator<'a> {,
     pub fn new(
         service: &'a MessageService,
         request: crate::service::im::v1::message::list::ListMessageRequest,
-    ) -> Self {,
-Self {,
+    ) -> Self {
+Self {
             service,
             request,
             page_token: None,
@@ -188,18 +188,18 @@ f.debug_struct()
     },
 },
 #[cfg(test)],
-mod tests {,
+mod tests {
 use super::*;
     use serde_json;
 // 测试用的 SendMessageTrait 实现,
-    #[derive(Debug, Clone)],
+    #[derive(.*?)]
 struct TestMessage {,
         msg_type_value: String,
         content_value: String,
     }
 impl TestMessage {
-        fn new(msg_type: impl ToString, content: impl ToString) -> Self {,
-Self {,
+        fn new(msg_type: impl ToString, content: impl ToString) -> Self {
+Self {
                 msg_type_value: msg_type.to_string(),
                 content_value: content.to_string(),
             },

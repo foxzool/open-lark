@@ -156,7 +156,7 @@ pub fn new() -> Self {
 }
 /// 使用共享配置创建服务（实验性）
     pub fn new_from_shared() -> Self {
-Self {,
+Self {
             v1: v1::V1::new(shared.as_ref().clone()),
         }
 }
@@ -166,7 +166,7 @@ Self {,
     ///,
 /// # 返回值
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
-pub fn validate_mail_services_config(&self) -> bool {,
+pub fn w+.*{
         self.v1.validate_services_config(),
 }
 /// 获取邮件服务的整体统计信息
@@ -175,7 +175,7 @@ pub fn validate_mail_services_config(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
-pub fn get_mail_service_statistics(&self) -> String {,
+pub fn w+.*{
         format!(
             "MailService{{ versions: 1, total_services: 14, core_services: 5, advanced_services: 5, config_services: 4, app_id: {} }}",
             self.v1.config().app_id,
@@ -190,7 +190,7 @@ pub fn get_mail_service_statistics(&self) -> String {,
 ///,
     /// # 返回值
 /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_mail_feature(&self, mail_feature: &str) -> bool {,
+    pub fn w+.*{
 match mail_feature {,
             // 基础邮件功能
             "mail_send_receive" => true,
@@ -372,7 +372,7 @@ match mail_feature {,
     ///,
 /// # 返回值
     /// 如果所有服务配置有效返回 `true`，否则返回 `false`
-pub fn health_check(&self) -> bool {,
+pub fn w+.*{
         self.v1.health_check(),
 }
 /// 获取邮件服务分类统计
@@ -381,7 +381,7 @@ pub fn health_check(&self) -> bool {,
     ///,
 /// # 返回值
     /// 包含各类型服务数量的统计信息
-pub fn get_mail_categories_statistics(&self) -> String {,
+pub fn w+.*{
         "MailService Categories{ basic: 10, advanced: 10, enterprise: 8, integration: 8, security: 8, total: 44 }".to_string(),
 }
 /// 获取邮件服务状态摘要
@@ -390,7 +390,7 @@ pub fn get_mail_categories_statistics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含各服务状态信息的字符串
-pub fn get_mail_service_status_summary(&self) -> String {,
+pub fn w+.*{
         let config_healthy = !self.v1.config().app_id.is_empty();
 let v1_healthy = config_healthy;
         let services_healthy = self.v1.validate_services_config();
@@ -408,7 +408,7 @@ format!(,
     ///,
 /// # 返回值
     /// 包含邮件功能能力矩阵信息的字符串
-pub fn get_mail_capabilities_matrix(&self) -> String {,
+pub fn w+.*{
         format!(
             "MailService Capabilities{{ basic_mail: {} advanced_features: {} enterprise_features: {} integration: {} }}",
             self.supports_mail_feature("mail_send_receive"),
@@ -423,7 +423,7 @@ pub fn get_mail_capabilities_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含邮件管理能力信息的字符串
-pub fn get_mail_management_capabilities(&self) -> String {,
+pub fn w+.*{
         "MailService Management{ send_receive: true, folders: true, attachments: true, rules: true, contacts: true }".to_string(),
 }
 /// 获取邮件组管理能力矩阵
@@ -432,7 +432,7 @@ pub fn get_mail_management_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含邮件组管理能力信息的字符串
-pub fn get_mail_group_management_capabilities(&self) -> String {,
+pub fn w+.*{
         "MailService GroupManagement{ creation: true, members: true, permissions: true, statistics: true, policies: true }".to_string(),
 }
 /// 获取公共邮箱能力矩阵
@@ -441,7 +441,7 @@ pub fn get_mail_group_management_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含公共邮箱能力信息的字符串
-pub fn get_public_mailbox_capabilities(&self) -> String {,
+pub fn w+.*{
         "MailService PublicMailbox{ creation: true, members: true, aliases: true, workflows: true, automation: true }".to_string(),
 }
 /// 获取邮件安全能力矩阵
@@ -450,7 +450,7 @@ pub fn get_public_mailbox_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含邮件安全能力信息的字符串
-pub fn get_mail_security_capabilities(&self) -> String {,
+pub fn w+.*{
         "MailService Security{ encryption: true, spam_filtering: true, virus_scanning: true, phishing_detection: true, compliance: true }".to_string(),
 }
 /// 获取邮件企业级能力矩阵
@@ -459,7 +459,7 @@ pub fn get_mail_security_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含邮件企业级能力信息的字符串
-pub fn get_enterprise_mail_capabilities(&self) -> String {,
+pub fn w+.*{
         "MailService Enterprise{ compliance: true, legal_hold: true, e_discovery: true, retention: true, monitoring: true }".to_string(),
 }
 /// 获取邮件协作能力矩阵
@@ -468,7 +468,7 @@ pub fn get_enterprise_mail_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含邮件协作能力信息的字符串
-pub fn get_mail_collaboration_capabilities(&self) -> String {,
+pub fn w+.*{
         "MailService Collaboration{ shared_mailboxes: true, collaborative_drafts: true, workflows: true, approvals: true, integration: true }".to_string(),
 }
 /// 获取邮件自动化能力矩阵
@@ -477,7 +477,7 @@ pub fn get_mail_collaboration_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含邮件自动化能力信息的字符串
-pub fn get_mail_automation_capabilities(&self) -> String {,
+pub fn w+.*{
         "MailService Automation{ auto_responders: true, scheduled_sending: true, templates: true, workflows: true, ai_assistance: true }".to_string(),
 }
 /// 获取邮件集成能力矩阵
@@ -486,7 +486,7 @@ pub fn get_mail_automation_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含邮件集成能力信息的字符串
-pub fn get_mail_integration_capabilities(&self) -> String {,
+pub fn w+.*{
         "MailService Integration{ calendar: true, contacts: true, documents: true, workflows: true, third_party: true }".to_string(),
 }
 /// 获取邮件性能指标
@@ -495,7 +495,7 @@ pub fn get_mail_integration_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含性能指标信息的字符串
-pub fn get_mail_performance_metrics(&self) -> String {,
+pub fn w+.*{
         "MailService Performance{ delivery_time: <5s, attachment_size: 25MB, throughput: high, reliability: 99.9%, concurrency: enterprise }".to_string(),
 }
 /// 获取邮件应用场景矩阵
@@ -504,7 +504,7 @@ pub fn get_mail_performance_metrics(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含应用场景信息的字符串
-pub fn get_mail_use_cases_matrix(&self) -> String {,
+pub fn w+.*{
         "MailService UseCases{ enterprise_communication: true, team_collaboration: true, customer_support: true, marketing: true, automation: true }".to_string(),
 }
 /// 获取邮件API能力矩阵
@@ -513,7 +513,7 @@ pub fn get_mail_use_cases_matrix(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含邮件API能力信息的字符串
-pub fn get_mail_api_capabilities(&self) -> String {,
+pub fn w+.*{
         "MailService API{ restful: true, webhooks: true, batch_operations: true, rate_limiting: true, monitoring: true }".to_string(),
 }
 /// 获取邮件合规能力矩阵
@@ -522,7 +522,7 @@ pub fn get_mail_api_capabilities(&self) -> String {,
     ///,
 /// # 返回值
     /// 包含邮件合规能力信息的字符串
-pub fn get_mail_compliance_capabilities(&self) -> String {,
+pub fn w+.*{
         "MailService Compliance{ gdpr: true, sox: true, hipaa: true, data_retention: true, audit_logging: true }".to_string(),
 }
 }
@@ -539,8 +539,8 @@ fn service_name() -> &'static str,
     }
 }
 impl Clone for MailService {,
-    fn clone(&self) -> Self {,
-Self {,
+    fn clone(&self) -> Self {
+Self {
             v1: self.v1.clone(),
         }
 }
@@ -557,7 +557,7 @@ f.debug_struct()
     }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 /// 创建测试配置

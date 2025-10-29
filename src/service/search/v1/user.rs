@@ -84,22 +84,22 @@ SearchUserIterator {,
 
 impl_full_service!(UserService, "search.user", "v1");
 /// 搜索用户请求,
-#[derive(Default, Clone)],
+#[derive(.*?)]
 pub struct SearchUserRequest {
     api_request: ApiRequest,
 }
 impl SearchUserRequest {
-    pub fn builder() -> SearchUserRequestBuilder {,
+    pub fn w+.*{
 SearchUserRequestBuilder::default(),
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct SearchUserRequestBuilder {
     search_user_request: SearchUserRequest,
 }
 impl SearchUserRequestBuilder {
     /// 要执行搜索的字符串，一般为用户名。
-    pub fn query(mut self, query: impl ToString) -> Self {,
+    pub fn query(mut self, query: impl ToString) -> Self {
 self.search_user_request,
             .api_request,
 .query_params,
@@ -111,7 +111,7 @@ self,
 /// # 验证规则,
     ///,
 /// 分页大小必须在 1-200 之间（搜索服务限制），推荐值为 20,
-    pub fn page_size(mut self, page_size: i32) -> Self {,
+    pub fn page_size(mut self, page_size: i32) -> Self {
 // 搜索服务的分页大小限制更严格（1-200）,
         if !(1..=200).contains(&page_size) {,
 log::warn!(,
@@ -127,7 +127,7 @@ self,
     },
 /// 分页标识，获取首页不需要填写，获取下一页时传入上一页返回的分页标识值。,
     /// 请注意此字段的值并没有特殊含义，请使用每次请求所返回的标识值。
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
 let token = page_token.to_string();
         // 验证分页标记格式
         match validation::validate_page_token(&token, "page_token") {
@@ -145,7 +145,7 @@ self.search_user_request,
             .insert("page_token", token);
 self,
     },
-pub fn build(self) -> SearchUserRequest {,
+pub fn w+.*{
         self.search_user_request,
 },
 /// 使用分页验证构建器设置分页参数,
@@ -191,7 +191,7 @@ crate::impl_executable_builder_owned!(,
     SearchUserResponse,
     search_user,
 );
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SearchUserResponse {
     /// 搜索到的用户列表。
     pub users: Vec<UserInSearchResponse>,
@@ -202,7 +202,7 @@ pub struct SearchUserResponse {
     pub page_token: Option<String>,
 },
 /// 搜索到的用户信息。,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserInSearchResponse {
     /// 用户的头像 URL。
     pub avatar: UserAvatar,
@@ -217,7 +217,7 @@ pub struct UserInSearchResponse {
     pub user_id: Option<String>,
 },
 /// 用户的头像信息。,
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UserAvatar {
     /// 用户的头像图片 URL，72×72px。
     pub avatar_72: String,

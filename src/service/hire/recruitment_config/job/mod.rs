@@ -21,7 +21,7 @@ pub struct JobService {
     pub config: Config,
 }
 /// 职位列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobListResponse {
     /// 职位列表
 #[serde(flatten)],
@@ -33,7 +33,7 @@ ResponseFormat::Data,
     }
 }
 /// 职位详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobDetailResponse {
     /// 职位信息
     pub job: Job,
@@ -44,7 +44,7 @@ ResponseFormat::Data,
     }
 }
 /// 职位操作响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct JobOperationResponse {
     /// 操作结果
 #[serde(flatten)],

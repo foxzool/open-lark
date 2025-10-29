@@ -11,7 +11,7 @@ use crate::core::{,
     SDKResult,
 };
 /// 更新知识空间设置请求,
-#[derive(Debug, Serialize, Default)],
+#[derive(.*?)]
 pub struct UpdateSpaceSettingRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -26,63 +26,63 @@ pub struct UpdateSpaceSettingRequest {
     copy_enabled: Option<bool>,
 }
 impl UpdateSpaceSettingRequest {
-    pub fn builder() -> UpdateSpaceSettingRequestBuilder {,
+    pub fn w+.*{
 UpdateSpaceSettingRequestBuilder::default(),
     },
-pub fn new(space_id: impl ToString) -> Self {,
+pub fn new(space_id: impl ToString) -> Self {
         Self {
             space_id: space_id.to_string()
             ..Default::default(),
 }
     },
 },
-#[derive(Default)],
+#[derive(.*?)]
 pub struct UpdateSpaceSettingRequestBuilder {
     request: UpdateSpaceSettingRequest,
 }
 impl UpdateSpaceSettingRequestBuilder {
     /// 知识空间id
-    pub fn space_id(mut self, space_id: impl ToString) -> Self {,
+    pub fn space_id(mut self, space_id: impl ToString) -> Self {
 self.request.space_id = space_id.to_string();
         self,
 },
 /// 是否开启评论,
-    pub fn comment_enabled(mut self, enabled: bool) -> Self {,
+    pub fn comment_enabled(mut self, enabled: bool) -> Self {
 self.request.comment_enabled = Some(enabled);
         self,
 },
 /// 开启评论,
-    pub fn enable_comment(mut self) -> Self {,
+    pub fn enable_comment(mut self) -> Self {
 self.request.comment_enabled = Some(true);
         self,
 },
 /// 关闭评论,
-    pub fn disable_comment(mut self) -> Self {,
+    pub fn disable_comment(mut self) -> Self {
 self.request.comment_enabled = Some(false);
         self,
 },
 /// 是否开启复制,
-    pub fn copy_enabled(mut self, enabled: bool) -> Self {,
+    pub fn copy_enabled(mut self, enabled: bool) -> Self {
 self.request.copy_enabled = Some(enabled);
         self,
 },
 /// 开启复制,
-    pub fn enable_copy(mut self) -> Self {,
+    pub fn enable_copy(mut self) -> Self {
 self.request.copy_enabled = Some(true);
         self,
 },
 /// 关闭复制,
-    pub fn disable_copy(mut self) -> Self {,
+    pub fn disable_copy(mut self) -> Self {
 self.request.copy_enabled = Some(false);
         self,
 },
-pub fn build(mut self) -> UpdateSpaceSettingRequest {,
+pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
     },
 },
 /// 知识空间设置,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct SpaceSetting {
     /// 知识空间id
     pub space_id: String,
@@ -92,7 +92,7 @@ pub struct SpaceSetting {
     pub copy_enabled: Option<bool>,
 },
 /// 更新知识空间设置响应,
-#[derive(Debug, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateSpaceSettingResponse {
     /// 更新后的空间设置
     pub setting: SpaceSetting,
@@ -123,7 +123,7 @@ Ok(api_resp),
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
 #[test],
     fn test_update_space_setting_request_builder() {,

@@ -30,7 +30,7 @@ pub struct ReserveService {
     pub config: Config,
 }
 /// 预约会议请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ApplyReserveRequest {
     /// 会议主题
     pub topic: String,
@@ -51,7 +51,7 @@ pub struct ApplyReserveRequest {
     pub room_id: Option<String>,
 }
 /// 预约会议响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ApplyReserveResponse {
     /// 预约信息
     pub reserve: Reserve,
@@ -62,7 +62,7 @@ ResponseFormat::Data,
     }
 }
 /// 更新预约请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateReserveRequest {
     /// 会议主题
 #[serde(skip_serializing_if = "Option::is_none")],
@@ -81,7 +81,7 @@ pub struct UpdateReserveRequest {
     pub password: Option<String>,
 }
 /// 更新预约响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateReserveResponse {
     /// 预约信息
     pub reserve: Reserve,
@@ -92,7 +92,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取预约响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetReserveResponse {
     /// 预约信息
     pub reserve: Reserve,
@@ -103,7 +103,7 @@ ResponseFormat::Data,
     }
 }
 /// 获取活跃会议响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct GetActiveMeetingResponse {
     /// 会议信息
     pub meeting: Meeting,
@@ -231,7 +231,7 @@ let api_req = ApiRequest {,
 }
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)],
-mod tests {,
+mod tests {
     use super::*;
     use crate::service::vc::models::{Meeting, MeetingStatus, Reserve, UserInfo};
 fn create_test_config() -> Config {,

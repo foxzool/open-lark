@@ -12,12 +12,12 @@ use crate::core::{
 };
 use crate::impl_full_service;
 /// 消息卡片服务
-#[derive(Debug)],
+#[derive(.*?)]
 pub struct MessageCardService {
     pub config: Config,
 }
 /// 更新消息卡片请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct PatchMessageCardRequest {
     /// 卡片内容
     pub card: Value,
@@ -28,7 +28,7 @@ pub struct PatchMessageCardRequest {
 // 接入统一 Service 抽象（IM v1 - MessageCardService）
 impl_full_service!(MessageCardService, "im.message_card", "v1");
 /// 延时更新消息卡片请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct DelayUpdateMessageCardRequest {
     /// 延时时间(秒)
     pub delay: i32,
@@ -39,7 +39,7 @@ pub struct DelayUpdateMessageCardRequest {
     pub token: Option<String>,
 }
 /// 发送仅特定人可见的消息卡片请求
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SendVisibleMessageCardRequest {
     /// 可见用户ID列表
     pub open_ids: Vec<String>,
@@ -47,7 +47,7 @@ pub struct SendVisibleMessageCardRequest {
     pub card: Value,
 }
 /// 发送仅特定人可见的消息卡片响应
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct SendVisibleMessageCardResponse {
     /// 消息ID
     pub message_id: String,

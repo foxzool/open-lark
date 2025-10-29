@@ -141,7 +141,7 @@ pub struct AilyService {
 }
 impl AilyService {
     pub fn new() -> Self {
-Self {,
+Self {
             session: SessionService::new(config.clone()),
             message: MessageService::new(config.clone()),
             run: RunService::new(config.clone()),
@@ -151,7 +151,7 @@ Self {,
 }
 }
 #[cfg(test)]
-mod tests {,
+mod tests {
 use super::*;
     use std::time::Duration;
 #[test],

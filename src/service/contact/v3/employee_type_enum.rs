@@ -91,12 +91,12 @@ Ok(resp.data.unwrap_or_default()),
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct CreateEmployeeTypeRequest {
     pub employee_type_enum: EmployeeTypeEnum,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct CreateEmployeeTypeResponse {
     pub employee_type_enum: EmployeeTypeEnum,
 }
@@ -106,12 +106,12 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct UpdateEmployeeTypeRequest {
     pub employee_type_enum: EmployeeTypeEnum,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct UpdateEmployeeTypeResponse {
     pub employee_type_enum: EmployeeTypeEnum,
 }
@@ -121,7 +121,7 @@ crate::core::api_resp::ResponseFormat::Data,
     },
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ListEmployeeTypesRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
@@ -129,7 +129,7 @@ pub struct ListEmployeeTypesRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ListEmployeeTypesResponse {
     pub items: Vec<EmployeeTypeEnum>,
     #[serde(skip_serializing_if = "Option::is_none")]

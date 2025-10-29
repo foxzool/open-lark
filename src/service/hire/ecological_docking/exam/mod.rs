@@ -19,7 +19,7 @@ pub struct ExamService {
     pub config: Config,
 }
 /// 笔试试卷信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ExamPaper {
     /// 试卷ID
     pub id: String,
@@ -53,7 +53,7 @@ pub struct ExamPaper {
     pub updated_time: Option<String>,
 }
 /// 笔试记录信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ExamRecord {
     /// 笔试记录ID
     pub id: String,
@@ -87,7 +87,7 @@ pub struct ExamRecord {
     pub updated_time: Option<String>,
 }
 /// 答题详情
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ExamAnswerDetail {
     /// 题目ID
     pub question_id: String,
@@ -105,7 +105,7 @@ pub struct ExamAnswerDetail {
     pub answer_time: Option<String>,
 }
 /// 监考记录
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ExamProctoringRecord {
     /// 记录ID
     pub id: String,
@@ -119,7 +119,7 @@ pub struct ExamProctoringRecord {
     pub risk_level: Option<String>,
 }
 /// 笔试题目信息
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ExamQuestion {
     /// 题目ID
     pub id: String,
@@ -141,7 +141,7 @@ pub struct ExamQuestion {
     pub explanation: Option<I18nText>,
 }
 /// 考试选项
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ExamOption {
     /// 选项标识
     pub key: String,
@@ -149,7 +149,7 @@ pub struct ExamOption {
     pub content: I18nText,
 }
 /// 笔试安排请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ExamArrangementRequest {
     /// 投递ID
     pub application_id: String,
@@ -169,7 +169,7 @@ pub struct ExamArrangementRequest {
     pub remark: Option<String>,
 }
 /// 笔试提交请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ExamSubmissionRequest {
     /// 笔试记录ID
     pub exam_record_id: String,
@@ -179,7 +179,7 @@ pub struct ExamSubmissionRequest {
     pub submit_time: String,
 }
 /// 答案提交
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ExamAnswerSubmission {
     /// 题目ID
     pub question_id: String,
@@ -187,7 +187,7 @@ pub struct ExamAnswerSubmission {
     pub answer: String,
 }
 /// 笔试试卷列表请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ExamPaperListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -203,7 +203,7 @@ pub struct ExamPaperListRequest {
     pub enabled: Option<bool>,
 }
 /// 笔试记录列表请求
-#[derive(Debug, Serialize, Deserialize, Default)],
+#[derive(.*?)]
 pub struct ExamRecordListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -221,7 +221,7 @@ pub struct ExamRecordListRequest {
     pub start_time_to: Option<String>,
 }
 /// 笔试试卷列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ExamPaperListResponse {
     /// 试卷列表
 #[serde(flatten)],
@@ -233,7 +233,7 @@ ResponseFormat::Data,
     }
 }
 /// 笔试记录列表响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ExamRecordListResponse {
     /// 笔试记录列表
 #[serde(flatten)],
@@ -245,7 +245,7 @@ ResponseFormat::Data,
     }
 }
 /// 笔试记录详情响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ExamRecordDetailResponse {
     /// 笔试记录信息
     pub record: ExamRecord,
@@ -256,7 +256,7 @@ ResponseFormat::Data,
     }
 }
 /// 笔试操作响应
-#[derive(Debug, Serialize, Deserialize)],
+#[derive(.*?)]
 pub struct ExamOperationResponse {
     /// 操作结果
 #[serde(flatten)],
@@ -629,7 +629,7 @@ let api_req = ApiRequest {,
         reason: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExamOperationResponse>> {,
-#[derive(Serialize)],
+#[derive(.*?)]
         struct CancelExamRequest {
             reason: String,
         }
@@ -683,7 +683,7 @@ pub async fn reschedule_exam(,
         new_end_time: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExamOperationResponse>> {,
-#[derive(Serialize)],
+#[derive(.*?)]
         struct RescheduleExamRequest {
             new_start_time: String,
             new_end_time: String,
