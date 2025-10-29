@@ -35,6 +35,22 @@
 //! # Ok::<(), Box<dyn std::error::Error>>(())
 //! ```
 
+/// 事件处理器trait
+///
+/// 所有事件处理器都需要实现此trait，用于处理接收到的事件数据
+pub trait EventHandler: Send + Sync {
+    /// 处理事件数据
+    ///
+    /// # 参数
+    ///
+    /// * `payload` - 事件的原始字节数据
+    ///
+    /// # 返回值
+    ///
+    /// 返回处理结果的Ok(())或错误信息
+    fn handle(&self, payload: &[u8]) -> anyhow::Result<()>;
+}
+
 /// 事件上下文相关
 pub mod context;
 /// 事件分发器

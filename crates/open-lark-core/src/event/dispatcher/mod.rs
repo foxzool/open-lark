@@ -1,4 +1,4 @@
-use crate::event::context::EventContext;
+use crate::event::{context::EventContext, EventHandler};
 
 // TODO: Re-enable attendance event handlers once service imports are fixed
 /*
@@ -160,10 +160,6 @@ impl EventDispatcherHandler {
         let handler_name = format!("{}.{}", context.schema.unwrap(), context.type_.unwrap());
         self.emit(&handler_name, &payload)
     }
-}
-
-pub trait EventHandler: Send + Sync {
-    fn handle(&self, payload: &[u8]) -> anyhow::Result<()>;
 }
 
 pub struct EventDispatcherHandlerBuilder {
