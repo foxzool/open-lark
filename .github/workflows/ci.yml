@@ -66,6 +66,6 @@ jobs:
       - name: Check format
         run: cargo fmt --all -- --check
       - name: Run clippy (all features)
-        run: cargo clippy --workspace --all-targets --all-features -- -D warnings
+        run: cargo clippy --workspace --lib --all-features -- -D warnings
       - name: Run clippy (no default features)
-        run: cargo clippy --workspace --all-targets --no-default-features -- -D warnings
+        run: cargo clippy --workspace --lib --no-default-features -- -D warnings

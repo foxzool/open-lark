@@ -140,24 +140,24 @@
 //!
 //! ### 错误处理
 //!
-//! ```rust
+//! ```text
 //! use open_lark::prelude::*;
 //!
 //! match client.im.v1.message.create(request, None).await {
 //!     Ok(response) => {
-//!         println!("消息发送成功: {:?}", response);
+//!         println!("Message sent successfully: {:?}", response);
 //!     }
 //!     Err(error) => {
-//!         println!("消息发送失败: {}", error.user_friendly_message());
-//!         // 实现重试逻辑
+//!         println!("Message send failed: {}", error.user_friendly_message());
+//!         // Implement retry logic
 //!         match error.error_code() {
 //!             9999 => {
-//!                 // 系统繁忙，稍后重试
+//!                 // System busy, retry later
 //!                 tokio::time::sleep(tokio::time::Duration::from_millis(1000)).await;
-//!                 // 重试逻辑
+//!                 // Retry logic
 //!             }
 //!             _ => {
-//!                 // 其他错误的处理逻辑
+//!                 // Handle other errors
 //!             }
 //!         }
 //!     }

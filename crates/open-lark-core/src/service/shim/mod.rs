@@ -82,6 +82,9 @@ use std::sync::Arc;
 
 // Include additional services
 pub mod additional_services;
+#[cfg(any(feature = "acs", feature = "admin", feature = "ai", feature = "aily",
+           feature = "apass", feature = "application", feature = "approval",
+           feature = "payroll", feature = "cloud-docs"))]
 pub use additional_services::*;
 
 /// Contact Service Shim
