@@ -1,22 +1,18 @@
 //! IM API v1版本
 
-use serde::{Deserialize, Serialize};
-use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
-
 /// 简单的占位符模块，用于解决导入问题
+#[derive(Debug, Clone)]
 pub struct MessageService;
 
 pub mod message {
-    use serde::{Deserialize, Serialize};
-    use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
 
-    #[derive(Debug, Deserialize, Serialize)]
+    #[derive(Debug)]
     pub struct CreateMessageRequest;
 
-    #[derive(Debug, Deserialize, Serialize)]
+    #[derive(Debug)]
     pub struct CreateMessageRequestBody;
 
-    #[derive(Debug, Deserialize, Serialize)]
+    #[derive(Debug)]
     pub struct MessageCardTemplate;
 
     pub trait SendMessageTrait {
