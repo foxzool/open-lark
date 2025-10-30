@@ -693,6 +693,10 @@ name = "attendance_demo"
 path = "examples/api/attendance_demo.rs"
 required-features = ["attendance"]
 
+[[example]]
+name = "performance_benchmark"
+path = "examples/performance/performance_benchmark.rs"
+
 # ===========================================
 # Benchmarks
 # ===========================================
