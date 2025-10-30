@@ -48,7 +48,7 @@ let api_req = ApiRequest {,
                 api_path: EndpointBuilder::replace_param(LINGO_DRAFT_UPDATE, "{draft_id}", &draft_id),
                 supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
                 body: serde_json::to_vec(&request)?,
-                ..Default::default(),
+                ..Default::default()
 };
             Transport::request(api_req, &self.config, option).await,
 }).await,

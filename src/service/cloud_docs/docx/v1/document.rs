@@ -60,7 +60,7 @@ let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: DOCX_V1_DOCUMENT_GET.replace("{}", &document_id.into()),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
-            ..Default::default(),
+            ..Default::default()
 };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -81,7 +81,7 @@ Ok(api_resp),
 let mut api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: DOCX_V1_DOCUMENT_RAW_CONTENT.replace("{}", &document_id.into()),
-            ..Default::default(),
+            ..Default::default()
 };
 api_req
             .set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
@@ -133,7 +133,7 @@ Ok(api_resp),
 let mut api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: DOCX_V1_DOCUMENT_CONVERT.replace("{}", &document_id.into()),
-            ..Default::default(),
+            ..Default::default()
 };
 api_req
             .set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);

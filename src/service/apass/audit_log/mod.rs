@@ -95,7 +95,7 @@ let mut api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_size) = request.page_size {,
@@ -136,7 +136,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 查询数据变更日志列表
@@ -161,7 +161,7 @@ let mut api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_size) = request.page_size {,
@@ -198,7 +198,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 审计事件列表
@@ -223,7 +223,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 }}

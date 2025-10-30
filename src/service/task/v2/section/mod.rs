@@ -97,7 +97,7 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取自定义分组详情
@@ -119,7 +119,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 更新自定义分组
@@ -143,7 +143,7 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 删除自定义分组
@@ -165,7 +165,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取自定义分组列表
@@ -190,7 +190,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::TASK_V2_SECTIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取自定义分组任务列表
@@ -240,7 +240,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 }}

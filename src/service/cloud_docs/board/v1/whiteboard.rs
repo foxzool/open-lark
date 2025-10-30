@@ -32,7 +32,7 @@ let mut api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: BOARD_V1_WHITEBOARD_THUMBNAIL.replace("{}", &request.whiteboard_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数,
         if let Some(format) = request.format {

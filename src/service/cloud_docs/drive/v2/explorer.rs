@@ -52,7 +52,7 @@ let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: DRIVE_EXPLORER_V2_FOLDER_META.replace("{folder_token}", folder_token),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-            ..Default::default(),
+            ..Default::default()
 };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

@@ -41,7 +41,7 @@ let api_req = ApiRequest {,
             api_path: PERFORMANCE_V1_REVIEW_DATA_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取绩效详情数据
@@ -66,7 +66,7 @@ let api_req = ApiRequest {,
             api_path: PERFORMANCE_V1_REVIEW_DATA_DETAILS_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 绩效结果查询请求

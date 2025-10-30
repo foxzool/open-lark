@@ -36,7 +36,7 @@ let api_req = ApiRequest {,
             api_path: PERFORMANCE_V1_STAGE_TASK_FIND_BY_USER_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取周期任务（全部用户）
@@ -57,7 +57,7 @@ let api_req = ApiRequest {,
             api_path: PERFORMANCE_V1_STAGE_TASK_FIND_BY_PAGE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 用户任务查询请求

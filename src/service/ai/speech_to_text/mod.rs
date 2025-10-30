@@ -61,7 +61,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::SPEECH_TO_TEXT_V1_FILE_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 识别流式语音
@@ -82,7 +82,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::SPEECH_TO_TEXT_V1_STREAM_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 impl Service for SpeechToTextService {,

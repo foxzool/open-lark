@@ -43,7 +43,7 @@ let api_req = ApiRequest {,
             api_path: crate::core::endpoints::application::APPLICATION_V6_ADMIN_APPS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取用户可用的应用
@@ -74,7 +74,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取应用通讯录权限范围配置
@@ -102,7 +102,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 更新应用通讯录权限范围配置
@@ -132,7 +132,7 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取应用在企业内的可用范围
@@ -160,7 +160,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 查询用户或部门是否在应用的可用或禁用名单
@@ -190,7 +190,7 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 更新应用可用范围
@@ -220,7 +220,7 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 启停用应用
@@ -239,7 +239,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 查询应用管理员列表
@@ -267,7 +267,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取应用管理员管理范围
@@ -295,7 +295,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 校验应用管理员
@@ -317,7 +317,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 // 请求响应模型

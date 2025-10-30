@@ -91,7 +91,7 @@ let api_req = ApiRequest {,
             api_path: crate::core::endpoints::search::SEARCH_V2_DATA_SOURCES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 删除数据源
@@ -115,7 +115,7 @@ let api_req = ApiRequest {,
                 data_source_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 修改数据源
@@ -142,7 +142,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取数据源
@@ -166,7 +166,7 @@ let api_req = ApiRequest {,
                 data_source_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 批量获取数据源
@@ -186,7 +186,7 @@ let mut api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: crate::core::endpoints::search::SEARCH_V2_DATA_SOURCES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-            ..Default::default(),
+            ..Default::default()
 };
 // 如果有查询参数，添加到URL中
         if let Some(req) = request {,

@@ -481,7 +481,7 @@ let user = User::default();
 let user = User {,
             user_id: Some("minimal_user".to_string()),
             name: Some("最小用户".to_string()),
-            ..Default::default(),
+            ..Default::default()
 };
 let serialized = serde_json::to_string(&user).unwrap();
         assert!(!serialized.contains("email"));

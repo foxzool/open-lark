@@ -253,7 +253,7 @@ let mut api_req = ApiRequest {,
             api_path: HIRE_V1_BACKGROUND_CHECK_PACKAGES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_size) = request.page_size {,
@@ -341,7 +341,7 @@ let api_req = ApiRequest {,
             api_path: HIRE_V1_BACKGROUND_CHECK_ORDERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取背调订单详情
@@ -387,7 +387,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取背调订单列表
@@ -445,7 +445,7 @@ let mut api_req = ApiRequest {,
             api_path: HIRE_V1_BACKGROUND_CHECK_ORDERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_size) = request.page_size {,
@@ -507,7 +507,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取背调报告
@@ -540,7 +540,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 批量创建背调订单
@@ -585,7 +585,7 @@ let api_req = ApiRequest {,
             api_path: HIRE_V1_BACKGROUND_CHECK_ORDERS_BATCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 }}

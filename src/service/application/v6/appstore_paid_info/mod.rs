@@ -44,7 +44,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 查询租户购买的付费方案
@@ -69,7 +69,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 查询订单详情
@@ -86,7 +86,7 @@ let api_req = ApiRequest {,
                 &[("app_id", app_id), ("order_id", order_id)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 // 请求响应模型

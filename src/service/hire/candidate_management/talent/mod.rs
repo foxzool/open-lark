@@ -168,7 +168,7 @@ let api_req = ApiRequest {,
             api_path: HIRE_V1_TALENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取人才详情
@@ -217,7 +217,7 @@ let api_req = ApiRequest {,
             api_path: EndpointBuilder::replace_param(HIRE_V1_TALENT_GET, "talent_id", talent_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取人才列表
@@ -284,7 +284,7 @@ let mut api_req = ApiRequest {,
             api_path: HIRE_V1_TALENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_size) = request.page_size {,
@@ -360,7 +360,7 @@ let api_req = ApiRequest {,
             api_path: EndpointBuilder::replace_param(HIRE_V1_TALENT_GET, "talent_id", talent_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 删除人才档案
@@ -393,7 +393,7 @@ let api_req = ApiRequest {,
             api_path: EndpointBuilder::replace_param(HIRE_V1_TALENT_GET, "talent_id", talent_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取人才投递历史
@@ -451,7 +451,7 @@ let mut api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_size) = page_size {,
@@ -507,7 +507,7 @@ let api_req = ApiRequest {,
             api_path: HIRE_V1_TALENTS_BATCH_IMPORT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 创建人才档案（使用构建器模式）

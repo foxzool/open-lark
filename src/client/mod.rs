@@ -115,6 +115,11 @@ impl LarkClient {
             search: SearchService::new(config),
         }
     }
+
+    /// 创建客户端构建器
+    pub fn builder(app_id: impl Into<String>, app_secret: impl Into<String>) -> LarkClientBuilder {
+        LarkClientBuilder::new(app_id, app_secret)
+    }
 }
 
 /// 飞书客户端构建器

@@ -141,7 +141,7 @@ let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: DRIVE_V1_MEDIAS_DOWNLOAD.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
-            ..Default::default(),
+            ..Default::default()
 };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

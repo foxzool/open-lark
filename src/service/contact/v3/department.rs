@@ -38,7 +38,7 @@ let api_req = ApiRequest {,
             api_path: crate::core::endpoints::contact::CONTACT_V3_DEPARTMENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<CreateDepartmentResponse>::request(api_req, &self.config, None).await?;
@@ -61,7 +61,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<PatchDepartmentResponse>::request(api_req, &self.config, None).await?;
@@ -84,7 +84,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<UpdateDepartmentResponse>::request(api_req, &self.config, None).await?;
@@ -107,7 +107,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<UpdateDepartmentIdResponse>::request(api_req, &self.config, None).await?;
@@ -131,7 +131,7 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
-            ..Default::default(),
+            ..Default::default()
 };
         let resp = Transport::<GetDepartmentResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
@@ -146,7 +146,7 @@ let api_req = ApiRequest {,
             api_path: crate::core::endpoints::contact::CONTACT_V3_DEPARTMENTS_BATCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<BatchGetDepartmentsResponse>::request(api_req, &self.config, None).await?;
@@ -163,7 +163,7 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<GetChildrenDepartmentsResponse>::request(api_req, &self.config, None),
@@ -180,7 +180,7 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<GetParentDepartmentResponse>::request(api_req, &self.config, None).await?;
@@ -196,7 +196,7 @@ let api_req = ApiRequest {,
             api_path: crate::core::endpoints::contact::CONTACT_V3_DEPARTMENTS_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<SearchDepartmentsResponse>::request(api_req, &self.config, None).await?;
@@ -218,7 +218,7 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<DeleteDepartmentResponse>::request(api_req, &self.config, None).await?;
@@ -488,7 +488,7 @@ let service = DepartmentService::new(config.clone());
 let department = Department {,
             department_id: Some("dept_123".to_string()),
             name: Some("Engineering".to_string()),
-            ..Default::default(),
+            ..Default::default()
 };
 let request = CreateDepartmentRequest {,
             department,
@@ -508,7 +508,7 @@ assert_eq!(,
     fn test_create_department_request_with_none_values() {
 let department = Department {,
             name: Some("HR".to_string()),
-            ..Default::default(),
+            ..Default::default()
 };
 let request = CreateDepartmentRequest {,
             department,
@@ -526,7 +526,7 @@ let request = CreateDepartmentRequest {,
 let department = Department {,
             department_id: Some("dept_456".to_string()),
             name: Some("Marketing".to_string()),
-            ..Default::default(),
+            ..Default::default()
 };
 let request = PatchDepartmentRequest {,
             department,
@@ -549,7 +549,7 @@ assert_eq!(,
 let department = Department {,
             department_id: Some("dept_789".to_string()),
             name: Some("Sales".to_string()),
-            ..Default::default(),
+            ..Default::default()
 };
 let request = UpdateDepartmentRequest {,
             department,
@@ -771,7 +771,7 @@ let _response = DeleteDepartmentResponse::default();
     fn test_request_structs_debug_trait() {
 let department = Department {,
             name: Some("Debug Test Dept".to_string()),
-            ..Default::default(),
+            ..Default::default()
 };
 let create_request = CreateDepartmentRequest {,
             department: department.clone(),

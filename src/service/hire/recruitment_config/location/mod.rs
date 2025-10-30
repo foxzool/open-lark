@@ -62,7 +62,7 @@ let mut api_req = ApiRequest {,
             api_path: HIRE_V1_LOCATIONS_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(location_type) = request.location_type {
@@ -99,7 +99,7 @@ let api_req = ApiRequest {,
             api_path: HIRE_V1_LOCATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 }

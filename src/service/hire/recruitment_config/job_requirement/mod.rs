@@ -106,7 +106,7 @@ let api_req = ApiRequest {,
             api_path: HIRE_V1_JOB_REQUIREMENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取招聘需求详情
@@ -152,7 +152,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取招聘需求列表
@@ -206,7 +206,7 @@ let mut api_req = ApiRequest {,
             api_path: HIRE_V1_JOB_REQUIREMENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_size) = request.page_size {,
@@ -262,7 +262,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 删除招聘需求
@@ -295,7 +295,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 }

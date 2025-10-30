@@ -77,7 +77,7 @@ let api_req = ApiRequest {,
             api_path: EndpointBuilder::replace_param(HIRE_V1_ROLE_GET, "role_id", role_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取角色列表
@@ -112,7 +112,7 @@ let mut api_req = ApiRequest {,
             api_path: HIRE_V1_ROLES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_size) = request.page_size {,
@@ -148,7 +148,7 @@ let api_req = ApiRequest {,
             api_path: EndpointBuilder::replace_param(HIRE_V1_USER_ROLES, "user_id", user_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 }

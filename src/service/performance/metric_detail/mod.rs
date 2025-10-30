@@ -40,7 +40,7 @@ let api_req = ApiRequest {,
             api_path: PERFORMANCE_V1_METRIC_DETAIL_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 录入被评估人关键指标数据
@@ -65,7 +65,7 @@ let api_req = ApiRequest {,
             api_path: PERFORMANCE_V1_METRIC_DETAIL_IMPORT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 指标详情查询请求

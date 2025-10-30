@@ -133,7 +133,7 @@ let api_req = ApiRequest {,
                 "oql": request.oql,
                 "parameters": request.parameters,
 }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 搜索记录
@@ -162,7 +162,7 @@ let mut api_req = ApiRequest {,
             body: serde_json::to_vec(&serde_json::json!({,
 "keyword": request.keyword,
             }))?,
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_size) = request.page_size {,
@@ -197,7 +197,7 @@ let mut api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加字段查询参数
         if let Some(fields) = request.fields {
@@ -228,7 +228,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request.data)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 删除记录
@@ -256,7 +256,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 新建记录
@@ -283,7 +283,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request.data)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 批量编辑记录
@@ -312,7 +312,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&serde_json::json!({,
 "records": request.records,
             }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 查询记录列表
@@ -342,7 +342,7 @@ let mut api_req = ApiRequest {,
                 "filter": request.filter,
                 "sort": request.sort,
 }))?,
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_size) = request.page_size {,
@@ -378,7 +378,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&serde_json::json!({,
 "records": request.records,
             }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 批量新建记录
@@ -407,7 +407,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&serde_json::json!({,
 "records": request.records,
             }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 }}

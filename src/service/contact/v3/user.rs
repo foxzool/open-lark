@@ -648,7 +648,7 @@ User {,
                 value: Some(serde_json::Value::String("test_value".to_string()))}]),
             enterprise_email: Some("test@company.com".to_string()),
             job_title: Some("Engineer".to_string()),
-            ..Default::default(),
+            ..Default::default()
     }
 #[test]
     fn test_user_service_new() {

@@ -21,7 +21,7 @@ let api_req = ApiRequest {,
             api_path: crate::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<CreateFunctionalRoleResponse>::request(api_req, &self.config, None).await?;
@@ -42,7 +42,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<UpdateFunctionalRoleResponse>::request(api_req, &self.config, None).await?;
@@ -62,7 +62,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<GetFunctionalRoleResponse>::request(api_req, &self.config, None).await?;
@@ -78,7 +78,7 @@ let mut api_req = ApiRequest {,
             api_path: crate::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数,
         if let Some(page_size) = req.page_size {,
@@ -107,7 +107,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<DeleteFunctionalRoleResponse>::request(api_req, &self.config, None).await?;

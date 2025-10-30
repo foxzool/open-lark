@@ -98,7 +98,7 @@ let mut api_req = ApiRequest {,
             api_path: OKR_V1_OKRS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(user_id) = request.user_id {
@@ -136,7 +136,7 @@ let api_req = ApiRequest {,
             api_path: OKR_V1_OKRS_BATCH_GET.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 用户 OKR 列表查询请求

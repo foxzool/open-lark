@@ -35,7 +35,7 @@ let api_req = ApiRequest {,
             api_path: SECURITY_AND_COMPLIANCE_V1_AUDIT_DATAS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 impl Service for AuditLogService {,

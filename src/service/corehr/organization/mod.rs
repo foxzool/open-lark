@@ -124,7 +124,7 @@ let api_req = ApiRequest {,
             api_path: COREHR_DEPARTMENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
@@ -164,7 +164,7 @@ let api_req = ApiRequest {,
 "department_ids": department_ids,
             }))
             .unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
@@ -207,7 +207,7 @@ let mut api_req = ApiRequest {,
             api_path: COREHR_DEPARTMENTS_TREE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(date) = effective_date {
@@ -262,7 +262,7 @@ let api_req = ApiRequest {,
             api_path: COREHR_COMPANIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
@@ -308,7 +308,7 @@ let mut api_req = ApiRequest {,
             api_path: COREHR_COMPANIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(size) = page_size {

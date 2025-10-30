@@ -871,7 +871,7 @@ let json = serde_json::to_string(&minimal_i18n).unwrap();
 assert!(json.contains("en_us"));
         let minimal_request = PaymentDetailListRequest {
             payment_activity_id: "minimal".to_string()
-            ..Default::default(),
+            ..Default::default()
 };
 let json = serde_json::to_string(&minimal_request).unwrap();
         assert!(json.contains("minimal"));

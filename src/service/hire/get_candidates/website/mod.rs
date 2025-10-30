@@ -225,7 +225,7 @@ let mut api_req = ApiRequest {,
             api_path: HIRE_V1_WEBSITE_JOBS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_size) = page_size {,
@@ -291,7 +291,7 @@ let api_req = ApiRequest {,
             api_path: HIRE_V1_WEBSITE_JOBS_PUBLISH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 从官网下架职位
@@ -324,7 +324,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取官网投递列表
@@ -385,7 +385,7 @@ let mut api_req = ApiRequest {,
             api_path: HIRE_V1_WEBSITE_APPLICATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_size) = request.page_size {,
@@ -452,7 +452,7 @@ let api_req = ApiRequest {,
             api_path: HIRE_V1_WEBSITE_CONFIGURATION.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 更新官网配置
@@ -517,7 +517,7 @@ let api_req = ApiRequest {,
             api_path: HIRE_V1_WEBSITE_CONFIGURATION.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 将官网投递转换为内部投递
@@ -550,7 +550,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取官网职位统计数据
@@ -591,7 +591,7 @@ let mut api_req = ApiRequest {,
             api_path: HIRE_V1_WEBSITE_STATISTICS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(job_id) = job_id {

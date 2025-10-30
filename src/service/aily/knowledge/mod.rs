@@ -122,7 +122,7 @@ let api_req = ApiRequest {,
                 "chat_history": request.chat_history,
                 "retrieval_config": request.retrieval_config,
 }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 上传文件用于数据知识管理
@@ -148,7 +148,7 @@ let api_req = ApiRequest {,
                 "file_name": request.file_name,
                 "file_type": request.file_type,
 }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 创建数据知识
@@ -176,7 +176,7 @@ let api_req = ApiRequest {,
                 "tags": request.tags,
                 "metadata": request.metadata,
 }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取数据知识
@@ -201,7 +201,7 @@ let mut api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         api_req.query_params.insert("app_id", request.app_id);
@@ -228,7 +228,7 @@ let mut api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         api_req.query_params.insert("app_id", request.app_id);
@@ -251,7 +251,7 @@ let mut api_req = ApiRequest {,
             api_path: Endpoints::AILY_V1_DATA_KNOWLEDGE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         api_req.query_params.insert("app_id", request.app_id);
@@ -284,7 +284,7 @@ let mut api_req = ApiRequest {,
             api_path: Endpoints::AILY_V1_DATA_KNOWLEDGE_CATEGORIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         api_req.query_params.insert("app_id", request.app_id);

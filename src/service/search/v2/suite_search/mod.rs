@@ -61,7 +61,7 @@ let mut api_req = ApiRequest {,
             api_path: crate::core::endpoints::search::SEARCH_V2_MESSAGE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_size) = request.page_size {,
@@ -96,7 +96,7 @@ let mut api_req = ApiRequest {,
             api_path: crate::core::endpoints::search::SEARCH_V2_APP.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_size) = request.page_size {,

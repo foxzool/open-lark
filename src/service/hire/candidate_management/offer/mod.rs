@@ -315,7 +315,7 @@ let api_req = ApiRequest {,
             api_path: HIRE_V1_OFFERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取Offer详情
@@ -357,7 +357,7 @@ let api_req = ApiRequest {,
             api_path: EndpointBuilder::replace_param(HIRE_V1_OFFER_GET, "offer_id", offer_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取Offer列表
@@ -417,7 +417,7 @@ let mut api_req = ApiRequest {,
             api_path: HIRE_V1_OFFERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_size) = request.page_size {,
@@ -488,7 +488,7 @@ let api_req = ApiRequest {,
             api_path: EndpointBuilder::replace_param(HIRE_V1_OFFER_GET, "offer_id", offer_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 发送Offer
@@ -537,7 +537,7 @@ let api_req = ApiRequest {,
             api_path: EndpointBuilder::replace_param(HIRE_V1_OFFER_SEND, "offer_id", offer_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 撤回Offer
@@ -576,7 +576,7 @@ let api_req = ApiRequest {,
             api_path: EndpointBuilder::replace_param(HIRE_V1_OFFER_WITHDRAW, "offer_id", offer_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 创建入职记录
@@ -618,7 +618,7 @@ let api_req = ApiRequest {,
             api_path: HIRE_V1_ONBOARDINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取入职记录列表
@@ -658,7 +658,7 @@ let mut api_req = ApiRequest {,
             api_path: HIRE_V1_ONBOARDINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_size) = page_size {,
@@ -725,7 +725,7 @@ let path = EndpointBuilder::replace_param(,
                 EndpointBuilder::replace_param(&path, "progress_id", progress_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 }}

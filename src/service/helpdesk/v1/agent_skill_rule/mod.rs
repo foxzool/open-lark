@@ -67,7 +67,7 @@ let api_req = ApiRequest {,
             api_path: HELPDESK_V1_AGENT_SKILL_RULES_OPERATOR_OPTIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取客服技能列表
@@ -104,7 +104,7 @@ let api_req = ApiRequest {,
             api_path: HELPDESK_V1_AGENT_SKILL_RULES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 }

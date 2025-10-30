@@ -85,7 +85,7 @@ let api_req = ApiRequest {,
                 "metadata": request.metadata,
                 "tool_set": request.tool_set,
 }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 更新会话
@@ -114,7 +114,7 @@ let api_req = ApiRequest {,
                 "metadata": request.metadata,
                 "tool_set": request.tool_set,
 }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取会话
@@ -139,7 +139,7 @@ let mut api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         api_req.query_params.insert("app_id", request.app_id);
@@ -166,7 +166,7 @@ let mut api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         api_req.query_params.insert("app_id", request.app_id);

@@ -42,7 +42,7 @@ let api_req = ApiRequest {,
             api_path: MDM_V1_USER_AUTH_DATA_RELATIONS_BIND.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 用户数据维度解绑
@@ -67,7 +67,7 @@ let api_req = ApiRequest {,
             api_path: MDM_V1_USER_AUTH_DATA_RELATIONS_UNBIND.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 impl Service for UserAuthDataRelationService {,

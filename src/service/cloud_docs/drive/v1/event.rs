@@ -61,7 +61,7 @@ let mut api_req = ApiRequest {,
             api_path: DRIVE_V1_FILE_SUBSCRIPTIONS
                 .replace("{}", &request.file_token)
                 .replace()
-            ..Default::default(),
+            ..Default::default()
 };
 api_req
             .set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
@@ -86,7 +86,7 @@ let mut api_req = ApiRequest {,
             api_path: DRIVE_V1_FILE_SUBSCRIPTIONS
                 .replace("{}", &request.file_token)
                 .replace()
-            ..Default::default(),
+            ..Default::default()
 };
 api_req
             .set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);

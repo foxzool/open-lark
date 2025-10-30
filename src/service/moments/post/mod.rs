@@ -51,7 +51,7 @@ let mut api_req = ApiRequest {,
             api_path: format!("/open-apis/moments/v1/posts/{}", request.post_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(user_id_type) = request.user_id_type {

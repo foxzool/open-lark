@@ -23,7 +23,7 @@ let api_req = ApiRequest {,
             api_path: crate::core::endpoints::contact::CONTACT_V3_EMPLOYEE_TYPE_ENUMS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<CreateEmployeeTypeResponse>::request(api_req, &self.config, None).await?;
@@ -44,7 +44,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<UpdateEmployeeTypeResponse>::request(api_req, &self.config, None).await?;
@@ -61,7 +61,7 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<ListEmployeeTypesResponse>::request(api_req, &self.config, None).await?;
@@ -81,7 +81,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<DeleteEmployeeTypeResponse>::request(api_req, &self.config, None).await?;

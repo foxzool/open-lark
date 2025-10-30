@@ -102,7 +102,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&serde_json::json!({,
 "parameters": request.parameters,
             }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 查询人工任务
@@ -127,7 +127,7 @@ let mut api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(status) = request.status {
@@ -163,7 +163,7 @@ let api_req = ApiRequest {,
                 "comment": request.comment,
                 "data": request.data,
 }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 拒绝人工任务
@@ -190,7 +190,7 @@ let api_req = ApiRequest {,
                 "comment": request.comment,
                 "data": request.data,
 }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 转交人工任务
@@ -217,7 +217,7 @@ let api_req = ApiRequest {,
                 "target_user_id": request.target_user_id,
                 "comment": request.comment,
 }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 人工任务加签
@@ -244,7 +244,7 @@ let api_req = ApiRequest {,
                 "assignee_user_ids": request.assignee_user_ids,
                 "comment": request.comment,
 }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 抄送人工任务
@@ -271,7 +271,7 @@ let api_req = ApiRequest {,
                 "cc_user_ids": request.cc_user_ids,
                 "comment": request.comment,
 }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 催办人工任务
@@ -297,7 +297,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&serde_json::json!({,
 "comment": request.comment,
             }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 撤销人工任务
@@ -323,7 +323,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&serde_json::json!({,
 "comment": request.comment,
             }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 查询人工任务可退回的位置
@@ -349,7 +349,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 退回人工任务
@@ -376,7 +376,7 @@ let api_req = ApiRequest {,
                 "target_node_id": request.target_node_id,
                 "comment": request.comment,
 }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 基于人工任务发起群聊
@@ -402,7 +402,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&serde_json::json!({,
 "group_name": request.group_name,
             }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 }}

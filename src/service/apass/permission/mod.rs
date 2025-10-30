@@ -61,7 +61,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&serde_json::json!({,
 "user_ids": request.user_ids,
             }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 批量创建角色成员授权
@@ -90,7 +90,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&serde_json::json!({,
 "user_ids": request.user_ids,
             }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 查询角色成员信息
@@ -122,7 +122,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 批量删除记录权限用户授权
@@ -155,7 +155,7 @@ let api_req = ApiRequest {,
                 "user_ids": request.user_ids,
                 "record_ids": request.record_ids,
 }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 批量创建记录权限用户授权
@@ -188,7 +188,7 @@ let api_req = ApiRequest {,
                 "user_ids": request.user_ids,
                 "record_ids": request.record_ids,
 }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 }

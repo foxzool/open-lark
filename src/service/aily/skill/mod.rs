@@ -76,7 +76,7 @@ let api_req = ApiRequest {,
                 "input": request.input,
                 "session_id": request.session_id,
 }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取技能信息
@@ -101,7 +101,7 @@ let mut api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         api_req.query_params.insert("app_id", request.app_id);
@@ -124,7 +124,7 @@ let mut api_req = ApiRequest {,
             api_path: Endpoints::AILY_V1_SKILLS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         api_req.query_params.insert("app_id", request.app_id);

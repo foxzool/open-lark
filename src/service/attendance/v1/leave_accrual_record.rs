@@ -120,7 +120,7 @@ assert!(empty_patch.granted_type.is_none());
 let partial_patch = LeaveAccrualRecordPatch {,
             granted_amount: Some(16.0),
             granted_reason: Some("Updated allocation".to_string()),
-            ..Default::default(),
+            ..Default::default()
 };
 assert!(partial_patch.employee_id.is_none());
         assert!(partial_patch.leave_type_id.is_none());
@@ -181,7 +181,7 @@ let amounts = vec![,
 for amount in amounts {,
             let patch = LeaveAccrualRecordPatch {
                 granted_amount: amount,
-                ..Default::default(),
+                ..Default::default()
 };
 
             assert_eq!(patch.granted_amount, amount);
@@ -199,13 +199,13 @@ let timestamps = vec![,
 for timestamp in timestamps.clone() {,
             let patch = LeaveAccrualRecordPatch {
                 expire_time: timestamp,
-                ..Default::default(),
+                ..Default::default()
 };
             assert_eq!(patch.expire_time, timestamp);
 for timestamp in timestamps {,
             let patch = LeaveAccrualRecordPatch {
                 granted_time: timestamp,
-                ..Default::default(),
+                ..Default::default()
 };
             assert_eq!(patch.granted_time, timestamp);
     }
@@ -222,7 +222,7 @@ let validity_types = vec![,
 for validity_type in validity_types {,
             let patch = LeaveAccrualRecordPatch {
                 validity_type,
-                ..Default::default(),
+                ..Default::default()
 };
 
             assert_eq!(patch.validity_type, validity_type);
@@ -241,7 +241,7 @@ let granted_types = vec![,
 for granted_type in granted_types {,
             let patch = LeaveAccrualRecordPatch {
                 granted_type,
-                ..Default::default(),
+                ..Default::default()
 };
 
             assert_eq!(patch.granted_type, granted_type);
@@ -262,7 +262,7 @@ let reasons = vec![,
 for reason in reasons {,
             let patch = LeaveAccrualRecordPatch {
                 granted_reason: reason.clone()
-                ..Default::default(),
+                ..Default::default()
 };
 
             assert_eq!(patch.granted_reason, reason);
@@ -282,7 +282,7 @@ let employee_ids = vec![,
 for employee_id in employee_ids {,
             let patch = LeaveAccrualRecordPatch {
                 employee_id: employee_id.clone()
-                ..Default::default(),
+                ..Default::default()
 };
 
             assert_eq!(patch.employee_id, employee_id);
@@ -303,7 +303,7 @@ let leave_type_ids = vec![,
 for leave_type_id in leave_type_ids {,
             let patch = LeaveAccrualRecordPatch {
                 leave_type_id: leave_type_id.clone()
-                ..Default::default(),
+                ..Default::default()
 };
 
             assert_eq!(patch.leave_type_id, leave_type_id);
@@ -335,7 +335,7 @@ let cloned_patch = original_patch.clone();
 let patch = LeaveAccrualRecordPatch {,
             employee_id: Some("emp001".to_string()),
             granted_amount: Some(8.0),
-            ..Default::default(),
+            ..Default::default()
 };
 
         let debug_str = format!("{:?}", patch);
@@ -414,7 +414,7 @@ assert!(json_str.contains("null") || !json_str.contains("leave_type_id"));
                 leave_accrual_record: LeaveAccrualRecordPatch {
                     employee_id: Some(format!("emp_{}", i)),
                     granted_amount: Some(8.0 + i as f64),
-                    ..Default::default(),
+                    ..Default::default()
             }),
 .collect();
         assert_eq!(requests.len(), 100);

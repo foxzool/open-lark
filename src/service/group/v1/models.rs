@@ -426,7 +426,7 @@ assert!(json.contains("\"only_owner_send_msg\":false"));
     fn test_chat_config_minimal() {
 let config = ChatConfig {,
             searchable: Some(true),
-            ..Default::default(),
+            ..Default::default()
 };
 let json = serde_json::to_string(&config).unwrap();
         assert!(json.contains("\"searchable\":true"));

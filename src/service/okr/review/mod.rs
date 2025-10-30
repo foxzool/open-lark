@@ -82,7 +82,7 @@ let mut api_req = ApiRequest {,
             api_path: OKR_V1_REVIEWS_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(period_id) = request.period_id {

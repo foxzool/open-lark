@@ -62,7 +62,19 @@ pub const ASSISTANT_V1_CONVERSATIONS: &str = "/open-apis/ai/v1/conversations";
 pub struct EndpointHelper;
 
 impl EndpointHelper {
-    
+    /// 替换URL路径参数
+    pub fn replace_path_params(url: &str, params: &[(&str, &str)]) -> String {
+        let mut result = url.to_string();
+        for (key, value) in params {
+            result = result.replace(&format!("{{{}}}", key), value);
+        }
+        result
+    }
+
+    /// 检查URL是否包含未解析的参数
+    pub fn has_unresolved_params(url: &str) -> bool {
+        url.contains('{') && url.contains('}')
+    }
 }
 
 #[cfg(test)]
@@ -71,7 +83,8 @@ mod tests {
 
     #[test]
     fn test_replace_path_params() {
-        let result = EndpointHelper::replace_path_params(WIKI_V2_SPACE_NODES, &[("space_id", "space123")]);
+        let result =
+            EndpointHelper::replace_path_params(WIKI_V2_SPACE_NODES, &[("space_id", "space123")]);
         assert_eq!(result, "/open-apis/wiki/v2/spaces/space123/nodes");
     }
 

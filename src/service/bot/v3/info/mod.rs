@@ -51,7 +51,7 @@ let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: "/open-apis/bot/v3/info".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 impl Service for InfoService {,

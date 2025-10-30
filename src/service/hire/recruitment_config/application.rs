@@ -67,7 +67,7 @@ let mut api_req = ApiRequest {,
             api_path: HIRE_V1_TALENT_TAGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数,
         if let Some(tag_type) = request.tag_type {,
@@ -104,7 +104,7 @@ let mut api_req = ApiRequest {,
             api_path: HIRE_V1_REGISTRATION_FORMS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数,
         if let Some(form_type) = request.form_type {,

@@ -87,7 +87,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 批量为数据项创建索引
@@ -118,7 +118,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 删除数据项
@@ -146,7 +146,7 @@ let api_req = ApiRequest {,
                 ],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 查询指定数据项
@@ -174,7 +174,7 @@ let api_req = ApiRequest {,
                 ],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 }

@@ -1,8 +1,8 @@
 //! Im服务模块 - 简化实现
 
-use serde::{Deserialize, Serialize};
-use crate::core::config::Config;
 use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
+use crate::core::config::Config;
+use serde::{Deserialize, Serialize};
 
 // 声明v1模块
 pub mod v1;

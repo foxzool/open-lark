@@ -42,7 +42,7 @@ let api_req = ApiRequest {,
             api_path: MDM_V1_COUNTRY_REGIONS_BATCH_GET.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 分页批量查询国家/地区
@@ -67,7 +67,7 @@ let mut api_req = ApiRequest {,
             api_path: MDM_V1_COUNTRY_REGIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_token) = request.page_token {

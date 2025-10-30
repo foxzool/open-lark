@@ -152,7 +152,7 @@ let api_req = ApiRequest {,
             api_path: COREHR_JOB_FAMILIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
@@ -191,7 +191,7 @@ let mut api_req = ApiRequest {,
             api_path: COREHR_JOB_FAMILIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(size) = page_size {
@@ -248,7 +248,7 @@ let api_req = ApiRequest {,
             api_path: COREHR_JOB_LEVELS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
@@ -287,7 +287,7 @@ let mut api_req = ApiRequest {,
             api_path: COREHR_JOB_LEVELS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(size) = page_size {
@@ -344,7 +344,7 @@ let api_req = ApiRequest {,
             api_path: COREHR_JOB_GRADES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
@@ -383,7 +383,7 @@ let mut api_req = ApiRequest {,
             api_path: COREHR_JOB_GRADES_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(family_id) = job_family_id {
@@ -438,7 +438,7 @@ let api_req = ApiRequest {,
             api_path: COREHR_JOBS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
@@ -477,7 +477,7 @@ let mut api_req = ApiRequest {,
             api_path: COREHR_JOBS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(size) = page_size {

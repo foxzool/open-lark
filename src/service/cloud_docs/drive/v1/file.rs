@@ -55,7 +55,7 @@ let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: DRIVE_V1_FILE_STATISTICS.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
-            ..Default::default(),
+            ..Default::default()
 };
 let api_resp: BaseResponse<GetFileStatisticsRespData> =,
             Transport::request(api_req, &self.config, option).await?;
@@ -73,7 +73,7 @@ let mut api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: DRIVE_V1_FILE_VIEW_RECORDS.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数,
         if let Some(page_token) = request.page_token {
@@ -122,7 +122,7 @@ let api_req = ApiRequest {,
             api_path: DRIVE_V1_FILE_COPY.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             body: serde_json::to_vec(&body)?,
-            ..Default::default(),
+            ..Default::default()
 };
 let api_resp: BaseResponse<CopyFileRespData> =,
             Transport::request(api_req, &self.config, option).await?;
@@ -140,7 +140,7 @@ let api_req = ApiRequest {,
             http_method: Method::DELETE,
             api_path: DRIVE_V1_FILE_GET.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
-            ..Default::default(),
+            ..Default::default()
 };
 let api_resp: BaseResponse<DeleteFileRespData> =,
             Transport::request(api_req, &self.config, option).await?;
@@ -327,7 +327,7 @@ let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: DRIVE_V1_IMPORT_TASK_GET.replace("{}", &request.ticket),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
-            ..Default::default(),
+            ..Default::default()
 };
 let api_resp: BaseResponse<GetImportTaskRespData> =,
             Transport::request(api_req, &self.config, option).await?;

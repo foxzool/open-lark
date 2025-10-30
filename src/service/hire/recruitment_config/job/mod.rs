@@ -109,7 +109,7 @@ let api_req = ApiRequest {,
             api_path: HIRE_V1_JOB_COMBINED_CREATE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 更新职位
@@ -159,7 +159,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取职位详情
@@ -203,7 +203,7 @@ let api_req = ApiRequest {,
             api_path: EndpointBuilder::replace_param(HIRE_V1_JOB_GET_DETAIL, "job_id", job_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取职位列表
@@ -262,7 +262,7 @@ let mut api_req = ApiRequest {,
             api_path: HIRE_V1_JOBS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_size) = request.page_size {,
@@ -312,7 +312,7 @@ let api_req = ApiRequest {,
             api_path: EndpointBuilder::replace_param(HIRE_V1_JOB_CLOSE, "job_id", job_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 重启职位
@@ -341,7 +341,7 @@ let api_req = ApiRequest {,
             api_path: EndpointBuilder::replace_param(HIRE_V1_JOB_OPEN, "job_id", job_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 }}

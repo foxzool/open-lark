@@ -67,7 +67,7 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<ListGroupMembersResponse>::request(api_req, &self.config, None).await?;
@@ -88,7 +88,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<RemoveGroupMemberResponse>::request(api_req, &self.config, None).await?;
@@ -109,7 +109,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<BatchRemoveGroupMembersResponse>::request(api_req, &self.config, None),

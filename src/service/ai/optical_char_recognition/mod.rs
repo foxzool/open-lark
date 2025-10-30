@@ -49,7 +49,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 impl Service for OpticalCharRecognitionService {,

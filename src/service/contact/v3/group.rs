@@ -24,7 +24,7 @@ let api_req = ApiRequest {,
             api_path: crate::core::endpoints::contact::CONTACT_V3_GROUPS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 
         let resp = Transport::<CreateGroupResponse>::request(api_req, &self.config, None).await?;
@@ -45,7 +45,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 
         let resp = Transport::<PatchGroupResponse>::request(api_req, &self.config, None).await?;
@@ -67,7 +67,7 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
-            ..Default::default(),
+            ..Default::default()
 };
 
         let resp = Transport::<GetGroupResponse>::request(api_req, &self.config, None).await?;
@@ -84,7 +84,7 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
-            ..Default::default(),
+            ..Default::default()
 };
 
         let resp = Transport::<ListGroupsResponse>::request(api_req, &self.config, None).await?;
@@ -101,7 +101,7 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
-            ..Default::default(),
+            ..Default::default()
 };
         let resp = Transport::<GetUserGroupsResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
@@ -120,7 +120,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
-            ..Default::default(),
+            ..Default::default()
 };
 
         let resp = Transport::<DeleteGroupResponse>::request(api_req, &self.config, None).await?;
@@ -149,7 +149,7 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
             query_params,
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<GetGroupDetailResponse>::request(api_req, &self.config, None).await?;

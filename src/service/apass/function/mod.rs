@@ -50,7 +50,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&serde_json::json!({,
 "parameters": request.parameters,
             }))?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 }

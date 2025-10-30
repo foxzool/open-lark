@@ -139,7 +139,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::DOCUMENT_AI_RESUME_PARSE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 识别文件中的身份证
@@ -160,7 +160,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::DOCUMENT_AI_ID_CARD_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 识别文件中的驾驶证
@@ -181,7 +181,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::DOCUMENT_AI_DRIVING_LICENSE_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 识别文件中的银行卡
@@ -202,7 +202,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::DOCUMENT_AI_BANK_CARD_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 识别文件中的营业执照
@@ -223,7 +223,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::DOCUMENT_AI_BUSINESS_LICENSE_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 识别文件中的增值税发票
@@ -244,7 +244,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::DOCUMENT_AI_VAT_INVOICE_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 提取文件中的合同字段
@@ -265,7 +265,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::DOCUMENT_AI_CONTRACT_FIELD_EXTRACTION.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 识别文件中的名片
@@ -286,7 +286,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::DOCUMENT_AI_BUSINESS_CARD_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 识别文件中的机动车发票
@@ -307,7 +307,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::DOCUMENT_AI_VEHICLE_INVOICE_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 识别文件中的健康证
@@ -328,7 +328,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::DOCUMENT_AI_HEALTH_CERTIFICATE_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 识别文件中的港澳居民来往内地通行证
@@ -349,7 +349,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::DOCUMENT_AI_HKM_MAINLAND_TRAVEL_PERMIT_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 识别文件中的台湾居民来往大陆通行证
@@ -370,7 +370,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::DOCUMENT_AI_TW_MAINLAND_TRAVEL_PERMIT_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 识别文件中的中国护照
@@ -391,7 +391,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::DOCUMENT_AI_CHINESE_PASSPORT_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 识别文件中的行驶证
@@ -412,7 +412,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::DOCUMENT_AI_VEHICLE_LICENSE_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 识别文件中的火车票
@@ -433,7 +433,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::DOCUMENT_AI_TRAIN_INVOICE_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 识别文件中的出租车发票
@@ -454,7 +454,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::DOCUMENT_AI_TAXI_INVOICE_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 识别文件中的食品生产许可证
@@ -475,7 +475,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::DOCUMENT_AI_FOOD_PRODUCE_LICENSE_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 识别文件中的食品经营许可证
@@ -496,7 +496,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::DOCUMENT_AI_FOOD_MANAGE_LICENSE_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 impl Service for DocumentAiService {,

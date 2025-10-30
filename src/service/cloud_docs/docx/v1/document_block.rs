@@ -36,7 +36,7 @@ let api_req = ApiRequest {,
             api_path: DOCX_V1_DOCUMENT_BLOCKS.replace("{}", &document_id.into()),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -61,7 +61,7 @@ let api_req = ApiRequest {,
                 .replace("{document_id}", &document_id.into())
                 .replace("{block_id}", &block_id.into()),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
-            ..Default::default(),
+            ..Default::default()
 };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -88,7 +88,7 @@ let api_req = ApiRequest {,
                 .replace("{block_id}", &block_id.into()),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -111,7 +111,7 @@ let mut api_req = ApiRequest {,
             http_method: Method::PATCH,
             api_path: DOCX_V1_DOCUMENT_BLOCKS_BATCH_UPDATE
                 .replace("{document_id}", &document_id.into()),
-            ..Default::default(),
+            ..Default::default()
 };
 api_req
             .set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);

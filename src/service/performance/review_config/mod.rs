@@ -43,7 +43,7 @@ let mut api_req = ApiRequest {,
             api_path: PERFORMANCE_SEMESTER_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_token) = request.page_token {
@@ -75,7 +75,7 @@ let mut api_req = ApiRequest {,
             api_path: PERFORMANCE_ACTIVITIES_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(semester_id) = request.semester_id {
@@ -109,7 +109,7 @@ let api_req = ApiRequest {,
             api_path: PERFORMANCE_ADDITIONAL_INFO_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 批量导入补充信息
@@ -134,7 +134,7 @@ let api_req = ApiRequest {,
             api_path: PERFORMANCE_ADDITIONAL_INFO_IMPORT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 批量删除补充信息
@@ -159,7 +159,7 @@ let api_req = ApiRequest {,
             api_path: PERFORMANCE_ADDITIONAL_INFO_DELETE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 更新人员组成员
@@ -184,7 +184,7 @@ let api_req = ApiRequest {,
             api_path: PERFORMANCE_USER_GROUP_WRITE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取被评估人信息
@@ -209,7 +209,7 @@ let api_req = ApiRequest {,
             api_path: PERFORMANCE_REVIEWEES_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取评估模板配置
@@ -234,7 +234,7 @@ let api_req = ApiRequest {,
             api_path: PERFORMANCE_REVIEW_TEMPLATES_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取评估项列表
@@ -259,7 +259,7 @@ let api_req = ApiRequest {,
             api_path: PERFORMANCE_REVIEW_ITEMS_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取标签填写题配置
@@ -284,7 +284,7 @@ let api_req = ApiRequest {,
             api_path: PERFORMANCE_TAG_QUESTIONS_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取指标列表
@@ -309,7 +309,7 @@ let api_req = ApiRequest {,
             api_path: PERFORMANCE_METRICS_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取指标模板列表
@@ -334,7 +334,7 @@ let api_req = ApiRequest {,
             api_path: PERFORMANCE_METRIC_TEMPLATES_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取指标字段列表
@@ -359,7 +359,7 @@ let api_req = ApiRequest {,
             api_path: PERFORMANCE_METRIC_FIELDS_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取指标标签列表
@@ -384,7 +384,7 @@ let mut api_req = ApiRequest {,
             api_path: PERFORMANCE_METRIC_TAGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_token) = request.page_token {

@@ -105,7 +105,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::OKR_V1_PERIODS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 修改 OKR 周期状态
@@ -136,7 +136,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取 OKR 周期列表
@@ -161,7 +161,7 @@ let mut api_req = ApiRequest {,
             api_path: Endpoints::OKR_V1_PERIODS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(status) = request.status {

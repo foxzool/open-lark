@@ -35,7 +35,7 @@ let mut api_req = ApiRequest {,
             api_path: SECURITY_AND_COMPLIANCE_V1_OPENAPI_LOGS_LIST_DATA.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_token) = request.page_token {

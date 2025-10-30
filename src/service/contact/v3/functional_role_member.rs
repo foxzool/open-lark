@@ -25,7 +25,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<CreateRoleMemberResponse>::request(api_req, &self.config, None).await?;
@@ -46,7 +46,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<BatchCreateRoleMembersResponse>::request(api_req, &self.config, None),
@@ -67,7 +67,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<SetRoleMemberScopesResponse>::request(api_req, &self.config, None).await?;
@@ -92,7 +92,7 @@ let path = EndpointBuilder::replace_param(,
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
-            ..Default::default(),
+            ..Default::default()
 };
 
         let resp = Transport::<GetRoleMemberResponse>::request(api_req, &self.config, None).await?;
@@ -114,7 +114,7 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<ListRoleMembersResponse>::request(api_req, &self.config, None).await?;
@@ -135,7 +135,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<BatchDeleteRoleMembersResponse>::request(api_req, &self.config, None),

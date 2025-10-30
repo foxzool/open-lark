@@ -61,7 +61,7 @@ if let Some(page_token) = &req.page_token {,
                     params.insert("page_token", page_token.clone());
 params,
             }
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<GetScopeAuthorityResponse>::request(api_req, &self.config, None).await?;

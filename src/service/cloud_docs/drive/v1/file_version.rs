@@ -38,7 +38,7 @@ let mut api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: DRIVE_V1_FILE_VERSIONS.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
-            ..Default::default(),
+            ..Default::default()
 };
 let body = serde_json::json!({,
             "name": request.name,
@@ -64,7 +64,7 @@ let mut api_req = ApiRequest {,
             api_path: DRIVE_V1_FILE_VERSION_GET
                 .replace("{}", &request.file_token)
                 .replace()
-            ..Default::default(),
+            ..Default::default()
 };
 api_req
             .set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
@@ -89,7 +89,7 @@ let mut api_req = ApiRequest {,
             api_path: DRIVE_V1_FILE_VERSION_GET
                 .replace("{}", &request.file_token)
                 .replace()
-            ..Default::default(),
+            ..Default::default()
 };
 api_req
             .set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
@@ -113,7 +113,7 @@ let mut api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: DRIVE_V1_FILE_VERSIONS.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数,
         if let Some(page_token) = request.page_token {

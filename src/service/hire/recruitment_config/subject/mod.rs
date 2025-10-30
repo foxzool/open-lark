@@ -187,7 +187,7 @@ let api_req = ApiRequest {,
             api_path: HIRE_V1_SUBJECTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取项目详情
@@ -230,7 +230,7 @@ let api_req = ApiRequest {,
             api_path: EndpointBuilder::replace_param(HIRE_V1_SUBJECT_GET, "subject_id", subject_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取项目列表
@@ -286,7 +286,7 @@ let mut api_req = ApiRequest {,
             api_path: HIRE_V1_SUBJECTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_size) = request.page_size {,
@@ -343,7 +343,7 @@ let api_req = ApiRequest {,
             api_path: EndpointBuilder::replace_param(HIRE_V1_SUBJECT_GET, "subject_id", subject_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 删除项目
@@ -372,7 +372,7 @@ let api_req = ApiRequest {,
             api_path: EndpointBuilder::replace_param(HIRE_V1_SUBJECT_GET, "subject_id", subject_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 启用项目
@@ -405,7 +405,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 禁用项目
@@ -438,7 +438,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 }}

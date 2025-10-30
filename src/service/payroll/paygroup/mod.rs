@@ -78,7 +78,7 @@ let mut api_req = ApiRequest {,
             api_path: PAYROLL_V1_PAYGROUPS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_size) = request.page_size {,

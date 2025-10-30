@@ -91,7 +91,7 @@ let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: DRIVE_V1_FOLDER_GET.replace("{}", &request.folder_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
-            ..Default::default(),
+            ..Default::default()
 };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -135,7 +135,7 @@ let mut api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: DRIVE_V1_FOLDER_MOVE.replace("{}", &request.folder_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
-            ..Default::default(),
+            ..Default::default()
 };
 // 构建请求体，只包含需要的字段,
         let body = serde_json::json!({
@@ -161,7 +161,7 @@ let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: DRIVE_V1_TASK_GET.replace("{}", &request.task_id),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
-            ..Default::default(),
+            ..Default::default()
 };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

@@ -57,7 +57,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&metadata)
                 .map_err(|e| LarkAPIError::DeserializeError(e.to_string()))?,
             file: file_content,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 impl Service for FileService {,

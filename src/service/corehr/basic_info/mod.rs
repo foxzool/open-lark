@@ -104,7 +104,7 @@ let api_req = ApiRequest {,
             api_path: COREHR_BASIC_INFO_ENUM_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
@@ -147,7 +147,7 @@ let api_req = ApiRequest {,
             api_path: COREHR_BASIC_INFO_LOCATION_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
@@ -189,7 +189,7 @@ let api_req = ApiRequest {,
             api_path: COREHR_BASIC_INFO_NATIONALITY_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
@@ -232,7 +232,7 @@ let api_req = ApiRequest {,
             api_path: COREHR_COMMON_DATA_ID_CONVERT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,

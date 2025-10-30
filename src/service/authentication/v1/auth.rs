@@ -34,7 +34,7 @@ impl UserInfoService {
 let api_req = ApiRequest {,
             api_path: AUTHEN_V1_USER_INFO.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-            ..Default::default(),
+            ..Default::default()
 };
 let option = RequestOption::builder(),
             .user_access_token()
@@ -59,7 +59,7 @@ let api_req = ApiRequest {,
             api_path: AUTH_V3_APP_ACCESS_TOKEN.to_string(),
             supported_access_token_types: vec![]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<AppAccessTokenResponse>::request(api_req, &self.config, None).await?;
@@ -81,7 +81,7 @@ let api_req = ApiRequest {,
             api_path: AUTH_V3_APP_ACCESS_TOKEN_INTERNAL.to_string(),
             supported_access_token_types: vec![]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<AppAccessTokenResponse>::request(api_req, &self.config, None).await?;
@@ -106,7 +106,7 @@ let api_req = ApiRequest {,
             api_path: AUTH_V3_TENANT_ACCESS_TOKEN.to_string(),
             supported_access_token_types: vec![]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<TenantAccessTokenResponse>::request(api_req, &self.config, None).await?;
@@ -128,7 +128,7 @@ let api_req = ApiRequest {,
             api_path: AUTH_V3_TENANT_ACCESS_TOKEN_INTERNAL.to_string(),
             supported_access_token_types: vec![]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<TenantAccessTokenResponse>::request(api_req, &self.config, None).await?;
@@ -150,7 +150,7 @@ let api_req = ApiRequest {,
             api_path: AUTH_V3_APP_TICKET_RESEND.to_string(),
             supported_access_token_types: vec![]
             body: serde_json::to_vec(req)?,
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<ResendAppTicketResponse>::request(api_req, &self.config, None).await?;

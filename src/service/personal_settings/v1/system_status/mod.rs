@@ -72,7 +72,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUSES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 删除系统状态
@@ -96,7 +96,7 @@ let api_req = ApiRequest {,
                 system_status_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 修改系统状态
@@ -123,7 +123,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取系统状态列表
@@ -144,7 +144,7 @@ let api_path = Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUSES.to_string();
             http_method: Method::GET,
             api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(req) = request {,
@@ -173,7 +173,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUS_BATCH_OPEN.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 批量关闭系统状态
@@ -194,7 +194,7 @@ let api_req = ApiRequest {,
             api_path: Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUS_BATCH_CLOSE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 }

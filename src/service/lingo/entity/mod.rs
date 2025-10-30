@@ -45,7 +45,7 @@ let api_req = ApiRequest {,
             api_path: LINGO_ENTITY_CREATE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 更新免审词条
@@ -72,7 +72,7 @@ let api_req = ApiRequest {,
             api_path: EndpointBuilder::replace_param(LINGO_ENTITY_UPDATE, "{entity_id}", entity_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 删除免审词条
@@ -97,7 +97,7 @@ let api_req = ApiRequest {,
             api_path: EndpointBuilder::replace_param(LINGO_ENTITY_UPDATE, "{entity_id}", entity_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取词条详情
@@ -122,7 +122,7 @@ let api_req = ApiRequest {,
             api_path: EndpointBuilder::replace_param(LINGO_ENTITY_GET, "{entity_id}", entity_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取词条列表
@@ -147,7 +147,7 @@ let mut api_req = ApiRequest {,
             api_path: LINGO_ENTITY_CREATE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_token) = request.page_token {
@@ -187,7 +187,7 @@ let api_req = ApiRequest {,
             api_path: LINGO_ENTITY_MATCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 模糊搜索词条
@@ -212,7 +212,7 @@ let api_req = ApiRequest {,
             api_path: LINGO_ENTITY_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 词条高亮
@@ -237,7 +237,7 @@ let api_req = ApiRequest {,
             api_path: LINGO_ENTITY_HIGHLIGHT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 词条创建请求

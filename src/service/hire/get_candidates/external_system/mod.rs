@@ -225,7 +225,7 @@ let api_req = ApiRequest {,
             api_path: HIRE_V1_EXTERNAL_SYSTEMS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取外部系统配置列表
@@ -279,7 +279,7 @@ let mut api_req = ApiRequest {,
             api_path: HIRE_V1_EXTERNAL_SYSTEMS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_size) = page_size {,
@@ -333,7 +333,7 @@ let api_req = ApiRequest {,
             api_path: HIRE_V1_EXTERNAL_SYSTEMS_SYNC_TASKS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取同步记录列表
@@ -391,7 +391,7 @@ let mut api_req = ApiRequest {,
             api_path: HIRE_V1_EXTERNAL_SYSTEMS_SYNC_RECORDS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(system_config_id) = system_config_id {,
@@ -459,7 +459,7 @@ let api_req = ApiRequest {,
             api_path: HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES_IMPORT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 获取外部候选人列表
@@ -516,7 +516,7 @@ let mut api_req = ApiRequest {,
             api_path: HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(system_config_id) = system_config_id {,
@@ -567,7 +567,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 /// 测试外部系统连接
@@ -603,7 +603,7 @@ let api_req = ApiRequest {,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
         Transport::request(api_req, &self.config, option).await,
 }}

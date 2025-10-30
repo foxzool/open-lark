@@ -24,7 +24,7 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
-            ..Default::default(),
+            ..Default::default()
 };
 let resp =,
             Transport::<ListCustomAttrsResponse>::request(api_req, &self.config, None).await?;

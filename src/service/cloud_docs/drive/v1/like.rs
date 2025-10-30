@@ -38,7 +38,7 @@ let mut api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: DRIVE_V1_FILE_LIKE_RECORDS.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数,
         if let Some(page_token) = request.page_token {

@@ -94,7 +94,7 @@ let mut api_req = ApiRequest {,
             api_path: "/open-apis/ehr/v1/employees".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
-            ..Default::default(),
+            ..Default::default()
 };
 // 添加查询参数
         if let Some(page_size) = request.page_size {,
