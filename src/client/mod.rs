@@ -42,6 +42,8 @@ use crate::service::im::ImService;
 use crate::service::search::SearchService;
 #[cfg(feature = "task")]
 use crate::service::task::TaskService;
+#[cfg(feature = "okr")]
+use crate::service::okr::OkrService;
 #[cfg(feature = "board")]
 use open_lark_extensions::board::BoardService;
 #[cfg(feature = "event")]
@@ -103,6 +105,8 @@ pub struct LarkClient {
     pub compensation_management: CompensationManagementService,
     #[cfg(feature = "task")]
     pub task: TaskService,
+    #[cfg(feature = "okr")]
+    pub okr: OkrService,
 }
 
 impl LarkClient {
@@ -154,7 +158,9 @@ impl LarkClient {
             #[cfg(feature = "compensation-management")]
             compensation_management: CompensationManagementService::new(config),
             #[cfg(feature = "task")]
-            task: TaskService::new(config),
+            task: TaskService::new(config.clone()),
+            #[cfg(feature = "okr")]
+            okr: OkrService::new(config),
         }
     }
 
