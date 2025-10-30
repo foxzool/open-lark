@@ -1,7 +1,6 @@
 /// 飞书开放API接口端点常量管理
 ///
 /// 此模块集中管理所有API路径，提供统一的入口便于维护和更新
-
 // 认证相关
 pub const AUTH_APP_ACCESS_TOKEN: &str = "/open-apis/auth/v3/app_access_token";
 pub const AUTH_TENANT_ACCESS_TOKEN: &str = "/open-apis/auth/v3/tenant_access_token";

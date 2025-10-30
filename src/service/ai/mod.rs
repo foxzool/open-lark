@@ -11,13 +11,17 @@ pub struct SimpleService {
 }
 
 impl SimpleService {
+    /// 创建新的简单服务实例
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
 }
 
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub struct SimpleResponse;
 
 impl ApiResponseTrait for SimpleResponse {
-    
+    fn format(&self) -> ResponseFormat {
         ResponseFormat::Data
     }
 }

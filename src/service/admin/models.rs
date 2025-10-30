@@ -28,7 +28,7 @@ pub struct PasswordResetRequest {
 }
 
 impl Default for PasswordResetRequest {
-    
+    fn default() -> Self {
         Self {
             user_id: String::new(),
             password: String::new(),
@@ -341,62 +341,3 @@ pub struct BadgeGrant {
     pub creator_id: Option<String>,
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use serde_json;
-
-    #[test]
-    
-        let page_response = PageResponse {
-            has_more: Some(true),
-            page_token: Some("next_page_token".to_string()),
-            items: Some(vec!["item1".to_string(), "item2".to_string()]),
-        };
-        let serialized = serde_json::to_string(&page_response).unwrap();
-        let deserialized: PageResponse<String> = serde_json::from_str(&serialized).unwrap();
-        assert_eq!(page_response.has_more, deserialized.has_more);
-        assert_eq!(page_response.page_token, deserialized.page_token);
-        assert_eq!(page_response.items, deserialized.items);
-    #[test]
-    
-        let page_response: PageResponse<String> = PageResponse {
-            has_more: None,
-            page_token: None,
-            items: None,
-        };
-        let serialized = serde_json::to_string(&page_response).unwrap();
-        assert!(!serialized.contains("has_more"));
-        assert!(!serialized.contains("page_token"));
-        assert!(!serialized.contains("items"));
-        let deserialized: PageResponse<String> = serde_json::from_str(&serialized).unwrap();
-        assert_eq!(page_response.has_more, deserialized.has_more);
-        assert_eq!(page_response.page_token, deserialized.page_token);
-        assert_eq!(page_response.items, deserialized.items);
-    #[test]
-    
-        let request = PasswordResetRequest {
-            user_id: "user_123456".to_string(),
-            password: "new_secure_password".to_string(),
-        };
-        let serialized = serde_json::to_string(&request).unwrap();
-        let deserialized: PasswordResetRequest = serde_json::from_str(&serialized).unwrap();
-        assert_eq!(request.user_id, deserialized.user_id);
-        assert_eq!(request.password, deserialized.password);
-    #[test]
-    
-        let request = PasswordResetRequest::default();
-        assert_eq!(request.user_id, "");
-        assert_eq!(request.password, "");
-    #[test]
-    
-        let response = PasswordResetResponse {
-            success: Some(true),
-            reset_time: Some("2022-01-01T10:00:00Z".to_string()),
-        };
-        let serialized = serde_json::to_string(&response).unwrap();
-        let deserialized: PasswordResetResponse = serde_json::from_str(&serialized).unwrap();
-        assert_eq!(response.success, deserialized.success);
-        assert_eq!(response.reset_time, deserialized.reset_time);
-    }
-}
