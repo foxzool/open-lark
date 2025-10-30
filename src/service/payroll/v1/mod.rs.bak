@@ -1,2 +1,0 @@
-pub mod p2_payroll_payment_activity_approved_v1;
-pub mod p2_payroll_payment_activity_status_changed_v1;
