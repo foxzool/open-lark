@@ -10,6 +10,8 @@ use crate::core::{
 use crate::service::acs::AcsService;
 #[cfg(feature = "admin")]
 use crate::service::admin::AdminService;
+#[cfg(feature = "auth")]
+use crate::service::auth::AuthService;
 #[cfg(feature = "ai")]
 use crate::service::ai::AiService;
 #[cfg(feature = "aily")]
@@ -51,6 +53,8 @@ pub struct LarkClient {
     pub acs: AcsService,
     #[cfg(feature = "admin")]
     pub admin: AdminService,
+    #[cfg(feature = "auth")]
+    pub auth: AuthService,
     #[cfg(feature = "ai")]
     pub ai: AiService,
     #[cfg(feature = "aily")]
@@ -89,6 +93,8 @@ impl LarkClient {
             acs: AcsService::new(config.clone()),
             #[cfg(feature = "admin")]
             admin: AdminService::new(config.clone()),
+            #[cfg(feature = "auth")]
+            auth: AuthService::new(config.clone()),
             #[cfg(feature = "ai")]
             ai: AiService::new(config.clone()),
             #[cfg(feature = "aily")]

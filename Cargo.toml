@@ -129,6 +129,7 @@ authentication = ["communication"]
 search = ["communication"]
 acs = ["open-lark-extensions"]
 admin = ["enterprise"]
+auth = ["enterprise"]
 ai = ["ai-platform"]
 aily = ["ai-platform"]
 app_engine = ["enterprise"]
@@ -289,6 +290,11 @@ required-features = ["websocket", "im", "contact", "cloud-docs", "calendar", "vc
 name = "acs_example"
 path = "examples/api/acs_example.rs"
 required-features = ["acs"]
+
+[[example]]
+name = "auth_example"
+path = "examples/api/auth_example.rs"
+required-features = ["auth"]
 
 [[example]]
 name = "apass_example"

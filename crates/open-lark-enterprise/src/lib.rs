@@ -2,7 +2,10 @@
 //!
 //! This crate provides open-lark-enterprise functionality for the OpenLark SDK.
 
-#![deny(missing_docs)]
+#![allow(missing_docs)]
+
+/// Enterprise services module
+pub mod auth;
 
 /// Re-exports from open-lark-core for convenience.
 pub mod prelude {

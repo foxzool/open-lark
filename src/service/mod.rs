@@ -90,6 +90,8 @@
 pub mod acs;
 #[cfg(feature = "admin")]
 pub mod admin;
+#[cfg(feature = "auth")]
+pub mod auth;
 #[cfg(feature = "ai")]
 pub mod ai;
 #[cfg(feature = "aily")]
@@ -192,6 +194,8 @@ pub use cloud_docs::ClouddocsService;
 pub use acs::AcsService;
 #[cfg(feature = "admin")]
 pub use admin::AdminService;
+#[cfg(feature = "auth")]
+pub use auth::AuthService;
 #[cfg(feature = "ai")]
 pub use ai::AiService;
 #[cfg(feature = "aily")]
