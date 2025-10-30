@@ -52,6 +52,8 @@ use open_lark_extensions::event::EventService;
 use open_lark_hr_suite::compensation_management::CompensationManagementService;
 #[cfg(feature = "feishu_people")]
 use crate::service::feishu_people::FeishuPeopleService;
+#[cfg(feature = "performance")]
+use crate::service::performance::PerformanceService;
 
 /// 飞书开放平台SDK主客户端
 ///
@@ -111,6 +113,8 @@ pub struct LarkClient {
     pub okr: OkrService,
     #[cfg(feature = "feishu_people")]
     pub feishu_people: FeishuPeopleService,
+    #[cfg(feature = "performance")]
+    pub performance: PerformanceService,
 }
 
 impl LarkClient {
@@ -167,6 +171,8 @@ impl LarkClient {
             okr: OkrService::new(config),
             #[cfg(feature = "feishu_people")]
             feishu_people: FeishuPeopleService::new(config.clone()),
+            #[cfg(feature = "performance")]
+            performance: PerformanceService::new(config.clone()),
         }
     }
 

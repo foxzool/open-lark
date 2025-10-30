@@ -1,8 +1,59 @@
+//! Performance V1服务 - 企业绩效管理v1版本API
+//!
+//! 提供全面的绩效管理功能：
+//! - 绩效周期管理
+//! - 绩效活动管理
+//! - 绩效结果管理
+//! - 评估模板和项目管理
+//! - 统计分析功能
+
+use crate::core::config::Config;
+use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
-/// 绩效结果开通事件
+
+// 声明子模块
+pub mod cycles;
+pub mod activities;
+pub mod results;
+pub mod templates;
+pub mod reviews;
+
+// 重新导出服务类型
+pub use cycles::CyclesService;
+pub use activities::ActivitiesService;
+pub use results::ResultsService;
+pub use templates::TemplatesService;
+pub use reviews::ReviewsService;
+
+/// Performance V1服务
 #[derive(Debug, Clone)]
-pub struct P2PerformanceResultOpenedV1 {
+pub struct PerformanceV1Service {
+    pub config: Config,
+    pub cycles: CyclesService,
+    pub activities: ActivitiesService,
+    pub results: ResultsService,
+    pub templates: TemplatesService,
+    pub reviews: ReviewsService,
 }
+
+impl PerformanceV1Service {
+    pub fn new(config: Config) -> Self {
+        Self {
+            config: config.clone(),
+            cycles: CyclesService::new(config.clone()),
+            activities: ActivitiesService::new(config.clone()),
+            results: ResultsService::new(config.clone()),
+            templates: TemplatesService::new(config.clone()),
+            reviews: ReviewsService::new(config),
+        }
+    }
+}
+
+// ==================== 事件模型 ====================
+
+/// 绩效结果开通事件
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct P2PerformanceResultOpenedV1 {
     /// 事件ID
     pub event_id: String,
     /// 事件类型
@@ -11,10 +62,11 @@ pub struct P2PerformanceResultOpenedV1 {
     pub created_time: String,
     /// 事件内容
     pub event: PerformanceResultOpenedEvent,
-/// 绩效结果开通事件内容
-#[derive(Debug, Clone)]
-pub struct PerformanceResultOpenedEvent {
 }
+
+/// 绩效结果开通事件内容
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PerformanceResultOpenedEvent {
     /// 周期ID
     pub semester_id: String,
     /// 项目ID
@@ -23,10 +75,11 @@ pub struct PerformanceResultOpenedEvent {
     pub reviewee_ids: Vec<String>,
     /// 开通时间戳
     pub opened_at: i64,
-/// 绩效详情变更事件
-#[derive(Debug, Clone)]
-pub struct P2PerformanceDetailChangedV1 {
 }
+
+/// 绩效详情变更事件
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct P2PerformanceDetailChangedV1 {
     /// 事件ID
     pub event_id: String,
     /// 事件类型
@@ -35,8 +88,10 @@ pub struct P2PerformanceDetailChangedV1 {
     pub created_time: String,
     /// 事件内容
     pub event: PerformanceDetailChangedEvent,
+}
+
 /// 绩效详情变更事件内容
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PerformanceDetailChangedEvent {
     /// 项目ID
     pub activity_id: String,
