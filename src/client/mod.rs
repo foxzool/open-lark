@@ -8,20 +8,16 @@ use crate::core::{
 // 条件导入服务
 #[cfg(feature = "acs")]
 use crate::service::acs::AcsService;
-#[cfg(feature = "board")]
-use open_lark_extensions::board::BoardService;
-#[cfg(feature = "event")]
-use open_lark_extensions::event::EventService;
 #[cfg(feature = "admin")]
 use crate::service::admin::AdminService;
-#[cfg(feature = "auth")]
-use crate::service::auth::AuthService;
 #[cfg(feature = "ai")]
 use crate::service::ai::AiService;
 #[cfg(feature = "aily")]
 use crate::service::aily::AilyService;
 #[cfg(feature = "app_engine")]
 use crate::service::app_engine::AppengineService;
+#[cfg(feature = "auth")]
+use crate::service::auth::AuthService;
 #[cfg(feature = "authentication")]
 use crate::service::authentication::AuthenticationService;
 #[cfg(feature = "bot")]
@@ -40,6 +36,10 @@ use crate::service::group::GroupService;
 use crate::service::im::ImService;
 #[cfg(feature = "search")]
 use crate::service::search::SearchService;
+#[cfg(feature = "board")]
+use open_lark_extensions::board::BoardService;
+#[cfg(feature = "event")]
+use open_lark_extensions::event::EventService;
 #[cfg(feature = "compensation-management")]
 use open_lark_hr_suite::compensation_management::CompensationManagementService;
 

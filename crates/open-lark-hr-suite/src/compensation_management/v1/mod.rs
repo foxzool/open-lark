@@ -11,8 +11,8 @@
 //! - 循环支付管理 (2个API)
 //! - 其他薪酬相关 (4个API)
 
-use open_lark_core::prelude::*;
 use open_lark_core::core::config::Config;
+use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 /// 薪酬管理服务 v1版本
@@ -29,7 +29,10 @@ impl CompensationManagementServiceV1 {
     // ==================== 薪酬档案管理 ====================
 
     /// 创建薪酬档案
-    pub async fn create_salary_archive(&self, _request: &CreateSalaryArchiveRequest) -> SDKResult<SalaryArchiveResponse> {
+    pub async fn create_salary_archive(
+        &self,
+        _request: &CreateSalaryArchiveRequest,
+    ) -> SDKResult<SalaryArchiveResponse> {
         Ok(SalaryArchiveResponse {
             code: 0,
             msg: "success".to_string(),
@@ -43,7 +46,10 @@ impl CompensationManagementServiceV1 {
     }
 
     /// 查询薪酬档案
-    pub async fn query_salary_archives(&self, _request: &QuerySalaryArchivesRequest) -> SDKResult<SalaryArchivesResponse> {
+    pub async fn query_salary_archives(
+        &self,
+        _request: &QuerySalaryArchivesRequest,
+    ) -> SDKResult<SalaryArchivesResponse> {
         Ok(SalaryArchivesResponse {
             code: 0,
             msg: "success".to_string(),
@@ -58,7 +64,10 @@ impl CompensationManagementServiceV1 {
     // ==================== 薪酬项目管理 ====================
 
     /// 创建薪酬项目
-    pub async fn create_compensation_item(&self, _request: &CreateCompensationItemRequest) -> SDKResult<CompensationItemResponse> {
+    pub async fn create_compensation_item(
+        &self,
+        _request: &CreateCompensationItemRequest,
+    ) -> SDKResult<CompensationItemResponse> {
         Ok(CompensationItemResponse {
             code: 0,
             msg: "success".to_string(),
@@ -74,7 +83,10 @@ impl CompensationManagementServiceV1 {
     }
 
     /// 获取薪酬项目列表
-    pub async fn list_compensation_items(&self, _request: &ListCompensationItemsRequest) -> SDKResult<CompensationItemsResponse> {
+    pub async fn list_compensation_items(
+        &self,
+        _request: &ListCompensationItemsRequest,
+    ) -> SDKResult<CompensationItemsResponse> {
         Ok(CompensationItemsResponse {
             code: 0,
             msg: "success".to_string(),
@@ -89,7 +101,10 @@ impl CompensationManagementServiceV1 {
     // ==================== 薪酬指标管理 ====================
 
     /// 创建薪酬指标
-    pub async fn create_compensation_indicator(&self, _request: &CreateCompensationIndicatorRequest) -> SDKResult<CompensationIndicatorResponse> {
+    pub async fn create_compensation_indicator(
+        &self,
+        _request: &CreateCompensationIndicatorRequest,
+    ) -> SDKResult<CompensationIndicatorResponse> {
         Ok(CompensationIndicatorResponse {
             code: 0,
             msg: "success".to_string(),
@@ -104,7 +119,10 @@ impl CompensationManagementServiceV1 {
     }
 
     /// 获取薪酬指标列表
-    pub async fn list_compensation_indicators(&self, _request: &ListCompensationIndicatorsRequest) -> SDKResult<CompensationIndicatorsResponse> {
+    pub async fn list_compensation_indicators(
+        &self,
+        _request: &ListCompensationIndicatorsRequest,
+    ) -> SDKResult<CompensationIndicatorsResponse> {
         Ok(CompensationIndicatorsResponse {
             code: 0,
             msg: "success".to_string(),
@@ -119,7 +137,10 @@ impl CompensationManagementServiceV1 {
     // ==================== 薪酬计划管理 ====================
 
     /// 创建薪酬计划
-    pub async fn create_compensation_plan(&self, _request: &CreateCompensationPlanRequest) -> SDKResult<CompensationPlanResponse> {
+    pub async fn create_compensation_plan(
+        &self,
+        _request: &CreateCompensationPlanRequest,
+    ) -> SDKResult<CompensationPlanResponse> {
         Ok(CompensationPlanResponse {
             code: 0,
             msg: "success".to_string(),
@@ -137,7 +158,10 @@ impl CompensationManagementServiceV1 {
     // ==================== 变更原因管理 ====================
 
     /// 创建变更原因
-    pub async fn create_change_reason(&self, _request: &CreateChangeReasonRequest) -> SDKResult<ChangeReasonResponse> {
+    pub async fn create_change_reason(
+        &self,
+        _request: &CreateChangeReasonRequest,
+    ) -> SDKResult<ChangeReasonResponse> {
         Ok(ChangeReasonResponse {
             code: 0,
             msg: "success".to_string(),
@@ -151,7 +175,10 @@ impl CompensationManagementServiceV1 {
     }
 
     /// 获取变更原因列表
-    pub async fn list_change_reasons(&self, _request: &ListChangeReasonsRequest) -> SDKResult<ChangeReasonsResponse> {
+    pub async fn list_change_reasons(
+        &self,
+        _request: &ListChangeReasonsRequest,
+    ) -> SDKResult<ChangeReasonsResponse> {
         Ok(ChangeReasonsResponse {
             code: 0,
             msg: "success".to_string(),
@@ -166,7 +193,10 @@ impl CompensationManagementServiceV1 {
     // ==================== 社保管理 ====================
 
     /// 创建社保方案
-    pub async fn create_social_insurance_plan(&self, _request: &CreateSocialInsurancePlanRequest) -> SDKResult<SocialInsurancePlanResponse> {
+    pub async fn create_social_insurance_plan(
+        &self,
+        _request: &CreateSocialInsurancePlanRequest,
+    ) -> SDKResult<SocialInsurancePlanResponse> {
         Ok(SocialInsurancePlanResponse {
             code: 0,
             msg: "success".to_string(),
@@ -182,7 +212,10 @@ impl CompensationManagementServiceV1 {
     }
 
     /// 获取社保方案列表
-    pub async fn list_social_insurance_plans(&self, _request: &ListSocialInsurancePlansRequest) -> SDKResult<SocialInsurancePlansResponse> {
+    pub async fn list_social_insurance_plans(
+        &self,
+        _request: &ListSocialInsurancePlansRequest,
+    ) -> SDKResult<SocialInsurancePlansResponse> {
         Ok(SocialInsurancePlansResponse {
             code: 0,
             msg: "success".to_string(),
@@ -195,7 +228,10 @@ impl CompensationManagementServiceV1 {
     }
 
     /// 创建社保项目
-    pub async fn create_social_insurance_item(&self, _request: &CreateSocialInsuranceItemRequest) -> SDKResult<SocialInsuranceItemResponse> {
+    pub async fn create_social_insurance_item(
+        &self,
+        _request: &CreateSocialInsuranceItemRequest,
+    ) -> SDKResult<SocialInsuranceItemResponse> {
         Ok(SocialInsuranceItemResponse {
             code: 0,
             msg: "success".to_string(),
@@ -211,7 +247,10 @@ impl CompensationManagementServiceV1 {
     // ==================== 一次性支付管理 ====================
 
     /// 创建一次性支付
-    pub async fn create_lump_sum_payment(&self, _request: &CreateLumpSumPaymentRequest) -> SDKResult<LumpSumPaymentResponse> {
+    pub async fn create_lump_sum_payment(
+        &self,
+        _request: &CreateLumpSumPaymentRequest,
+    ) -> SDKResult<LumpSumPaymentResponse> {
         Ok(LumpSumPaymentResponse {
             code: 0,
             msg: "success".to_string(),
@@ -227,7 +266,10 @@ impl CompensationManagementServiceV1 {
     }
 
     /// 获取一次性支付详情
-    pub async fn get_lump_sum_payment(&self, _request: &GetLumpSumPaymentRequest) -> SDKResult<LumpSumPaymentResponse> {
+    pub async fn get_lump_sum_payment(
+        &self,
+        _request: &GetLumpSumPaymentRequest,
+    ) -> SDKResult<LumpSumPaymentResponse> {
         Ok(LumpSumPaymentResponse {
             code: 0,
             msg: "success".to_string(),
@@ -243,7 +285,10 @@ impl CompensationManagementServiceV1 {
     }
 
     /// 查询一次性支付列表
-    pub async fn query_lump_sum_payments(&self, _request: &QueryLumpSumPaymentsRequest) -> SDKResult<LumpSumPaymentsResponse> {
+    pub async fn query_lump_sum_payments(
+        &self,
+        _request: &QueryLumpSumPaymentsRequest,
+    ) -> SDKResult<LumpSumPaymentsResponse> {
         Ok(LumpSumPaymentsResponse {
             code: 0,
             msg: "success".to_string(),
@@ -258,7 +303,10 @@ impl CompensationManagementServiceV1 {
     // ==================== 循环支付管理 ====================
 
     /// 创建循环支付
-    pub async fn create_recurring_payment(&self, _request: &CreateRecurringPaymentRequest) -> SDKResult<RecurringPaymentResponse> {
+    pub async fn create_recurring_payment(
+        &self,
+        _request: &CreateRecurringPaymentRequest,
+    ) -> SDKResult<RecurringPaymentResponse> {
         Ok(RecurringPaymentResponse {
             code: 0,
             msg: "success".to_string(),
@@ -276,7 +324,10 @@ impl CompensationManagementServiceV1 {
     }
 
     /// 查询循环支付列表
-    pub async fn query_recurring_payments(&self, _request: &QueryRecurringPaymentsRequest) -> SDKResult<RecurringPaymentsResponse> {
+    pub async fn query_recurring_payments(
+        &self,
+        _request: &QueryRecurringPaymentsRequest,
+    ) -> SDKResult<RecurringPaymentsResponse> {
         Ok(RecurringPaymentsResponse {
             code: 0,
             msg: "success".to_string(),
@@ -291,18 +342,22 @@ impl CompensationManagementServiceV1 {
     // ==================== 其他薪酬相关 ====================
 
     /// 获取薪酬项目类别
-    pub async fn get_compensation_item_categories(&self, _request: &GetCompensationItemCategoriesRequest) -> SDKResult<CompensationItemCategoriesResponse> {
+    pub async fn get_compensation_item_categories(
+        &self,
+        _request: &GetCompensationItemCategoriesRequest,
+    ) -> SDKResult<CompensationItemCategoriesResponse> {
         Ok(CompensationItemCategoriesResponse {
             code: 0,
             msg: "success".to_string(),
-            data: Some(CompensationItemCategoriesData {
-                categories: vec![],
-            }),
+            data: Some(CompensationItemCategoriesData { categories: vec![] }),
         })
     }
 
     /// 批量创建薪酬档案
-    pub async fn batch_create_salary_archives(&self, _request: &BatchCreateSalaryArchivesRequest) -> SDKResult<BatchCreateSalaryArchivesResponse> {
+    pub async fn batch_create_salary_archives(
+        &self,
+        _request: &BatchCreateSalaryArchivesRequest,
+    ) -> SDKResult<BatchCreateSalaryArchivesResponse> {
         Ok(BatchCreateSalaryArchivesResponse {
             code: 0,
             msg: "success".to_string(),
@@ -315,7 +370,10 @@ impl CompensationManagementServiceV1 {
     }
 
     /// 更新薪酬档案
-    pub async fn update_salary_archive(&self, _request: &UpdateSalaryArchiveRequest) -> SDKResult<SalaryArchiveResponse> {
+    pub async fn update_salary_archive(
+        &self,
+        _request: &UpdateSalaryArchiveRequest,
+    ) -> SDKResult<SalaryArchiveResponse> {
         Ok(SalaryArchiveResponse {
             code: 0,
             msg: "success".to_string(),
@@ -329,7 +387,10 @@ impl CompensationManagementServiceV1 {
     }
 
     /// 删除薪酬档案
-    pub async fn delete_salary_archive(&self, _request: &DeleteSalaryArchiveRequest) -> SDKResult<DeleteSalaryArchiveResponse> {
+    pub async fn delete_salary_archive(
+        &self,
+        _request: &DeleteSalaryArchiveRequest,
+    ) -> SDKResult<DeleteSalaryArchiveResponse> {
         Ok(DeleteSalaryArchiveResponse {
             code: 0,
             msg: "success".to_string(),

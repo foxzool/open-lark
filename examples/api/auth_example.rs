@@ -29,7 +29,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         app_secret: "test_app_secret".to_string(),
     };
 
-    match client.auth.v3.tenant_access_token_internal(&token_request).await {
+    match client
+        .auth
+        .v3
+        .tenant_access_token_internal(&token_request)
+        .await
+    {
         Ok(response) => {
             println!("✅ 租户访问令牌获取成功");
             if let Some(data) = response.data {
@@ -51,7 +56,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         app_secret: "test_app_secret".to_string(),
     };
 
-    match client.auth.v3.app_access_token_internal(&app_token_request).await {
+    match client
+        .auth
+        .v3
+        .app_access_token_internal(&app_token_request)
+        .await
+    {
         Ok(response) => {
             println!("✅ 应用访问令牌获取成功");
             if let Some(data) = response.data {
@@ -93,10 +103,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Ok(response) => {
             println!("✅ OIDC访问令牌获取成功");
             if let Some(data) = response.data {
-                println!("   访问令牌: {}...", &data.access_token[..std::cmp::min(20, data.access_token.len())]);
+                println!(
+                    "   访问令牌: {}...",
+                    &data.access_token[..std::cmp::min(20, data.access_token.len())]
+                );
                 println!("   令牌类型: {}", data.token_type);
                 println!("   有效期: {} 秒", data.expires_in);
-                println!("   刷新令牌: {}...", &data.refresh_token[..std::cmp::min(20, data.refresh_token.len())]);
+                println!(
+                    "   刷新令牌: {}...",
+                    &data.refresh_token[..std::cmp::min(20, data.refresh_token.len())]
+                );
             }
         }
         Err(e) => {
@@ -111,11 +127,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         refresh_token: "test_refresh_token".to_string(),
     };
 
-    match client.auth.v1.oidc_refresh_access_token(&refresh_request).await {
+    match client
+        .auth
+        .v1
+        .oidc_refresh_access_token(&refresh_request)
+        .await
+    {
         Ok(response) => {
             println!("✅ OIDC访问令牌刷新成功");
             if let Some(data) = response.data {
-                println!("   新访问令牌: {}...", &data.access_token[..std::cmp::min(20, data.access_token.len())]);
+                println!(
+                    "   新访问令牌: {}...",
+                    &data.access_token[..std::cmp::min(20, data.access_token.len())]
+                );
                 println!("   令牌类型: {}", data.token_type);
                 println!("   有效期: {} 秒", data.expires_in);
             }
@@ -139,7 +163,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Ok(response) => {
             println!("✅ 登录预授权码获取成功");
             if let Some(data) = response.data {
-                println!("   授权码: {}...", &data.auth_code[..std::cmp::min(20, data.auth_code.len())]);
+                println!(
+                    "   授权码: {}...",
+                    &data.auth_code[..std::cmp::min(20, data.auth_code.len())]
+                );
                 println!("   有效期: {} 秒", data.expires_in);
             }
         }

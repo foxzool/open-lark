@@ -37,9 +37,9 @@
 //! # }
 //! ```
 
-use open_lark_core::prelude::*;
-use open_lark_core::core::config::Config;
 use open_lark_core::core::api_resp::{ApiResponseTrait, ResponseFormat};
+use open_lark_core::core::config::Config;
+use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 // 声明版本模块

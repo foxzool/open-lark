@@ -8,10 +8,8 @@
 
 use open_lark::prelude::*;
 use open_lark_extensions::prelude::{
-    GetWhiteboardThemeRequest, WhiteboardThemeResponse,
-    DownloadWhiteboardAsImageRequest, WhiteboardImageResponse,
-    CreateWhiteboardNodeRequest, WhiteboardNodeResponse,
-    ListWhiteboardNodesRequest, WhiteboardNodesResponse
+    CreateWhiteboardNodeRequest, DownloadWhiteboardAsImageRequest, GetWhiteboardThemeRequest,
+    ListWhiteboardNodesRequest,
 };
 
 #[tokio::main]
@@ -58,7 +56,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         quality: Some("high".to_string()),
     };
 
-    match client.board.v1.download_whiteboard_as_image(&image_request).await {
+    match client
+        .board
+        .v1
+        .download_whiteboard_as_image(&image_request)
+        .await
+    {
         Ok(response) => {
             println!("✅ 画板缩略图获取成功");
             if let Some(data) = response.data {
@@ -125,7 +128,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("   是否有更多: {}", data.has_more);
 
                 for node in &data.nodes {
-                    println!("   - {}: {} ({})", node.node_id, node.content, node.node_type);
+                    println!(
+                        "   - {}: {} ({})",
+                        node.node_id, node.content, node.node_type
+                    );
                 }
             }
         }

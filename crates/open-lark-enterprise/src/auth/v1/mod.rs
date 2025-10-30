@@ -2,8 +2,8 @@
 //!
 //! 提供用户级别的认证功能，包括用户信息获取、OIDC标准协议支持等。
 
-use open_lark_core::prelude::*;
 use open_lark_core::core::config::Config;
+use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 /// Auth服务 v1版本
@@ -32,7 +32,10 @@ impl AuthServiceV1 {
     }
 
     /// 获取OIDC用户访问令牌
-    pub async fn oidc_access_token(&self, _request: &OidcAccessTokenRequest) -> SDKResult<OidcAccessTokenResponse> {
+    pub async fn oidc_access_token(
+        &self,
+        _request: &OidcAccessTokenRequest,
+    ) -> SDKResult<OidcAccessTokenResponse> {
         // 模拟实现
         Ok(OidcAccessTokenResponse {
             code: 0,
@@ -47,7 +50,10 @@ impl AuthServiceV1 {
     }
 
     /// 刷新OIDC用户访问令牌
-    pub async fn oidc_refresh_access_token(&self, _request: &OidcRefreshAccessTokenRequest) -> SDKResult<OidcAccessTokenResponse> {
+    pub async fn oidc_refresh_access_token(
+        &self,
+        _request: &OidcRefreshAccessTokenRequest,
+    ) -> SDKResult<OidcAccessTokenResponse> {
         // 模拟实现
         Ok(OidcAccessTokenResponse {
             code: 0,
@@ -62,7 +68,10 @@ impl AuthServiceV1 {
     }
 
     /// 获取登录预授权码
-    pub async fn get_auth_code(&self, _request: &GetAuthCodeRequest) -> SDKResult<GetAuthCodeResponse> {
+    pub async fn get_auth_code(
+        &self,
+        _request: &GetAuthCodeRequest,
+    ) -> SDKResult<GetAuthCodeResponse> {
         // 模拟实现
         Ok(GetAuthCodeResponse {
             code: 0,
@@ -75,7 +84,10 @@ impl AuthServiceV1 {
     }
 
     /// 获取用户访问令牌（v1版本）
-    pub async fn access_token(&self, _request: &AccessTokenRequest) -> SDKResult<AccessTokenResponse> {
+    pub async fn access_token(
+        &self,
+        _request: &AccessTokenRequest,
+    ) -> SDKResult<AccessTokenResponse> {
         // 模拟实现
         Ok(AccessTokenResponse {
             code: 0,
@@ -90,7 +102,10 @@ impl AuthServiceV1 {
     }
 
     /// 刷新用户访问令牌（v1版本）
-    pub async fn refresh_access_token(&self, _request: &RefreshAccessTokenRequest) -> SDKResult<AccessTokenResponse> {
+    pub async fn refresh_access_token(
+        &self,
+        _request: &RefreshAccessTokenRequest,
+    ) -> SDKResult<AccessTokenResponse> {
         // 模拟实现
         Ok(AccessTokenResponse {
             code: 0,

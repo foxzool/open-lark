@@ -5,8 +5,8 @@
 //! - 画板缩略图获取 (1个API)
 //! - 节点管理 (2个API)
 
-use open_lark_core::prelude::*;
 use open_lark_core::core::config::Config;
+use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 /// 画板服务 v1版本
@@ -23,7 +23,10 @@ impl BoardServiceV1 {
     // ==================== 画板管理 ====================
 
     /// 获取画板主题
-    pub async fn get_whiteboard_theme(&self, _request: &GetWhiteboardThemeRequest) -> SDKResult<WhiteboardThemeResponse> {
+    pub async fn get_whiteboard_theme(
+        &self,
+        _request: &GetWhiteboardThemeRequest,
+    ) -> SDKResult<WhiteboardThemeResponse> {
         // 模拟实现
         Ok(WhiteboardThemeResponse {
             code: 0,
@@ -40,7 +43,10 @@ impl BoardServiceV1 {
     }
 
     /// 获取画板缩略图片
-    pub async fn download_whiteboard_as_image(&self, _request: &DownloadWhiteboardAsImageRequest) -> SDKResult<WhiteboardImageResponse> {
+    pub async fn download_whiteboard_as_image(
+        &self,
+        _request: &DownloadWhiteboardAsImageRequest,
+    ) -> SDKResult<WhiteboardImageResponse> {
         // 模拟实现
         Ok(WhiteboardImageResponse {
             code: 0,
@@ -59,7 +65,10 @@ impl BoardServiceV1 {
     // ==================== 节点管理 ====================
 
     /// 创建节点
-    pub async fn create_whiteboard_node(&self, _request: &CreateWhiteboardNodeRequest) -> SDKResult<WhiteboardNodeResponse> {
+    pub async fn create_whiteboard_node(
+        &self,
+        _request: &CreateWhiteboardNodeRequest,
+    ) -> SDKResult<WhiteboardNodeResponse> {
         // 模拟实现
         Ok(WhiteboardNodeResponse {
             code: 0,
@@ -80,7 +89,10 @@ impl BoardServiceV1 {
     }
 
     /// 获取所有节点
-    pub async fn list_whiteboard_nodes(&self, _request: &ListWhiteboardNodesRequest) -> SDKResult<WhiteboardNodesResponse> {
+    pub async fn list_whiteboard_nodes(
+        &self,
+        _request: &ListWhiteboardNodesRequest,
+    ) -> SDKResult<WhiteboardNodesResponse> {
         // 模拟实现
         Ok(WhiteboardNodesResponse {
             code: 0,

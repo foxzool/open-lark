@@ -19,7 +19,10 @@ impl AuthServiceV3 {
     }
 
     /// 自建应用获取租户访问令牌
-    pub async fn tenant_access_token_internal(&self, request: &TenantAccessTokenInternalRequest) -> SDKResult<TenantAccessTokenResponse> {
+    pub async fn tenant_access_token_internal(
+        &self,
+        request: &TenantAccessTokenInternalRequest,
+    ) -> SDKResult<TenantAccessTokenResponse> {
         // 模拟实现
         Ok(TenantAccessTokenResponse {
             code: 0,
@@ -33,7 +36,10 @@ impl AuthServiceV3 {
     }
 
     /// 自建应用获取应用访问令牌
-    pub async fn app_access_token_internal(&self, request: &AppAccessTokenInternalRequest) -> SDKResult<AppAccessTokenResponse> {
+    pub async fn app_access_token_internal(
+        &self,
+        request: &AppAccessTokenInternalRequest,
+    ) -> SDKResult<AppAccessTokenResponse> {
         // 模拟实现
         Ok(AppAccessTokenResponse {
             code: 0,
@@ -47,7 +53,10 @@ impl AuthServiceV3 {
     }
 
     /// 重新获取应用票据
-    pub async fn app_ticket_resend(&self, request: &AppTicketResendRequest) -> SDKResult<AppTicketResendResponse> {
+    pub async fn app_ticket_resend(
+        &self,
+        request: &AppTicketResendRequest,
+    ) -> SDKResult<AppTicketResendResponse> {
         // 模拟实现
         Ok(AppTicketResendResponse {
             code: 0,
@@ -60,7 +69,10 @@ impl AuthServiceV3 {
     }
 
     /// 商店应用获取应用访问令牌
-    pub async fn app_access_token(&self, request: &AppAccessTokenRequest) -> SDKResult<AppAccessTokenResponse> {
+    pub async fn app_access_token(
+        &self,
+        request: &AppAccessTokenRequest,
+    ) -> SDKResult<AppAccessTokenResponse> {
         // 模拟实现
         Ok(AppAccessTokenResponse {
             code: 0,
@@ -74,7 +86,10 @@ impl AuthServiceV3 {
     }
 
     /// 商店应用获取租户访问令牌
-    pub async fn tenant_access_token(&self, request: &TenantAccessTokenRequest) -> SDKResult<TenantAccessTokenResponse> {
+    pub async fn tenant_access_token(
+        &self,
+        request: &TenantAccessTokenRequest,
+    ) -> SDKResult<TenantAccessTokenResponse> {
         // 模拟实现
         Ok(TenantAccessTokenResponse {
             code: 0,

@@ -90,8 +90,6 @@
 pub mod acs;
 #[cfg(feature = "admin")]
 pub mod admin;
-#[cfg(feature = "auth")]
-pub mod auth;
 #[cfg(feature = "ai")]
 pub mod ai;
 #[cfg(feature = "aily")]
@@ -106,6 +104,8 @@ pub mod application;
 pub mod approval;
 #[cfg(feature = "attendance")]
 pub mod attendance;
+#[cfg(feature = "auth")]
+pub mod auth;
 #[cfg(feature = "authentication")]
 pub mod authentication;
 #[cfg(feature = "baike")]
@@ -194,8 +194,6 @@ pub use cloud_docs::ClouddocsService;
 pub use acs::AcsService;
 #[cfg(feature = "admin")]
 pub use admin::AdminService;
-#[cfg(feature = "auth")]
-pub use auth::AuthService;
 #[cfg(feature = "ai")]
 pub use ai::AiService;
 #[cfg(feature = "aily")]
@@ -206,6 +204,8 @@ pub use apass::ApassService;
 pub use application::ApplicationService;
 #[cfg(feature = "approval")]
 pub use approval::ApprovalService;
+#[cfg(feature = "auth")]
+pub use auth::AuthService;
 #[cfg(feature = "bot")]
 pub use bot::BotService;
 #[cfg(feature = "calendar")]

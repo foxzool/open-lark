@@ -4,9 +4,7 @@
 //! - 获取事件出口IP地址
 
 use open_lark::prelude::*;
-use open_lark_extensions::event::v1::{
-    GetOutboundIpRequest, OutboundIpResponse
-};
+use open_lark_extensions::event::v1::GetOutboundIpRequest;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

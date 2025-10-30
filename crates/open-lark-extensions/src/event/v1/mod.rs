@@ -3,8 +3,8 @@
 //! 实现所有事件相关的API接口，共1个：
 //! - 事件出口IP地址获取 (1个API)
 
-use open_lark_core::prelude::*;
 use open_lark_core::core::config::Config;
+use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 /// 事件服务 v1版本
@@ -21,7 +21,10 @@ impl EventServiceV1 {
     // ==================== 事件管理 ====================
 
     /// 获取事件出口IP地址
-    pub async fn get_outbound_ip(&self, _request: &GetOutboundIpRequest) -> SDKResult<OutboundIpResponse> {
+    pub async fn get_outbound_ip(
+        &self,
+        _request: &GetOutboundIpRequest,
+    ) -> SDKResult<OutboundIpResponse> {
         // 模拟实现
         Ok(OutboundIpResponse {
             code: 0,

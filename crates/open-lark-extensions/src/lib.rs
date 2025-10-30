@@ -10,6 +10,13 @@ pub mod event;
 /// Re-exports from open-lark-core for convenience.
 pub mod prelude {
     pub use open_lark_core::*;
-    pub use crate::board::*;
-    pub use crate::event::*;
+    // Board module exports
+    pub use crate::board::BoardService;
+    pub use crate::board::v1::{
+        CreateWhiteboardNodeRequest, DownloadWhiteboardAsImageRequest, GetWhiteboardThemeRequest,
+        ListWhiteboardNodesRequest,
+    };
+    // Event module exports
+    pub use crate::event::EventService;
+    pub use crate::event::v1::GetOutboundIpRequest;
 }
