@@ -119,7 +119,8 @@ mod tests {
         let req_builder = create_test_request_builder();
         let config = create_test_config();
         let option = RequestOption {
-            user_access_token: "user_token_123".to_string() , ..Default::default()
+            user_access_token: "user_token_123".to_string(),
+            ..Default::default()
         };
 
         let result =
@@ -133,7 +134,8 @@ mod tests {
         let req_builder = create_test_request_builder();
         let config = create_test_config();
         let option = RequestOption {
-            app_access_token: "app_token_123".to_string() , ..Default::default()
+            app_access_token: "app_token_123".to_string(),
+            ..Default::default()
         };
 
         let result = AuthHandler::apply_app_auth(req_builder, &config, &option).await;
@@ -160,7 +162,8 @@ mod tests {
         let req_builder = create_test_request_builder();
         let config = create_test_config();
         let option = RequestOption {
-            tenant_access_token: "tenant_token_123".to_string() , ..Default::default()
+            tenant_access_token: "tenant_token_123".to_string(),
+            ..Default::default()
         };
 
         let result = AuthHandler::apply_tenant_auth(req_builder, &config, &option).await;
@@ -186,7 +189,8 @@ mod tests {
     fn test_apply_user_auth() {
         let req_builder = create_test_request_builder();
         let option = RequestOption {
-            user_access_token: "user_token_456".to_string() , ..Default::default()
+            user_access_token: "user_token_456".to_string(),
+            ..Default::default()
         };
 
         let result = AuthHandler::apply_user_auth(req_builder, &option);
@@ -228,19 +232,22 @@ mod tests {
             (
                 AccessTokenType::User,
                 RequestOption {
-                    user_access_token: "user_token".to_string() , ..Default::default()
+                    user_access_token: "user_token".to_string(),
+                    ..Default::default()
                 },
             ),
             (
                 AccessTokenType::App,
                 RequestOption {
-                    app_access_token: "app_token".to_string() , ..Default::default()
+                    app_access_token: "app_token".to_string(),
+                    ..Default::default()
                 },
             ),
             (
                 AccessTokenType::Tenant,
                 RequestOption {
-                    tenant_access_token: "tenant_token".to_string() , ..Default::default()
+                    tenant_access_token: "tenant_token".to_string(),
+                    ..Default::default()
                 },
             ),
         ];

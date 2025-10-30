@@ -76,7 +76,8 @@ mod tests {
 
     fn create_test_request_option() -> RequestOption {
         let mut option = RequestOption {
-            request_id: "test-request-123".to_string() , ..Default::default()
+            request_id: "test-request-123".to_string(),
+            ..Default::default()
         };
         option
             .header
