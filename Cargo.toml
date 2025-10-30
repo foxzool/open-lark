@@ -276,6 +276,14 @@ path = "tools/enhanced_api_checker.rs"
 name = "api_compatibility_tester"
 path = "tools/api_compatibility_tester.rs"
 
+[[bin]]
+name = "service_template_generator"
+path = "tools/service_template_generator.rs"
+
+[[bin]]
+name = "simple_template_generator"
+path = "tools/simple_template_generator.rs"
+
 # ===========================================
 # Examples
 # ===========================================
