@@ -25,7 +25,7 @@ jobs:
           include-pre-releases: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run cargo test (workspace, all features)
-        run: cargo test --workspace --all-features --no-fail-fast
+        run: cargo test --lib --workspace --all-features --no-fail-fast
 
   doc:
     runs-on: ubuntu-latest
