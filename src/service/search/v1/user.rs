@@ -14,13 +14,11 @@ use crate::core::{
 };
 use crate::impl_full_service;
 pub struct UserService {
-    config: Config,
-}
+    config: Config}
 impl UserService {
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 搜索用户,
+}/// 搜索用户,
     ///,
 /// # API文档,
     ///,
@@ -36,8 +34,7 @@ api_req.set_api_path(crate::core::endpoints::search::SEARCH_V1_USER.to_string())
         api_req.set_supported_access_token_types(vec![AccessTokenType::User]);
 let api_resp: BaseResponse<SearchUserResponse> =,
             Transport::request(api_req, &self.config, option).await?;
-api_resp.into_result(),
-    }
+api_resp.into_result()}
 /// 搜索用户 (返回BaseResponse供迭代器使用),
     async fn search_user_with_base_response(
         &self,
@@ -49,8 +46,7 @@ let mut api_req = search_user_request.api_request;
 api_req.set_api_path(crate::core::endpoints::search::SEARCH_V1_USER.to_string());
         api_req.set_supported_access_token_types(vec![AccessTokenType::User]);
 
-        Transport::request(api_req, &self.config, option).await,
-}
+        Transport::request(api_req, &self.config, option).await}
 pub fn search_user_iter(,
         &self,
         search_user_request: SearchUserRequest,
@@ -60,9 +56,7 @@ SearchUserIterator {,
             user_service: self,
             request: search_user_request,
             option,
-            has_more: true,
-        }
-}
+            has_more: true}
 /// 使用分页验证搜索用户,
     ///,
 /// 提供一个更安全的方式来搜索用户，自动验证分页参数,
@@ -78,66 +72,24 @@ SearchUserIterator {,
 .query()
             .with_pagination(page_size, page_token)?;
 
-        self.search_user(builder.build(), option).await,
-}
-}
+        self.search_user(builder.build(), option).await}
 
 impl_full_service!(UserService, "search.user", "v1");
 /// 搜索用户请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SearchUserRequest {
-    api_request: ApiRequest,
-}
+    api_request: ApiRequest}
 impl SearchUserRequest {
-    pub fn w+.*{
-SearchUserRequestBuilder::default(),
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct SearchUserRequestBuilder {
-    search_user_request: SearchUserRequest,
-}
+    search_user_request: SearchUserRequest}
 impl SearchUserRequestBuilder {
-    /// 要执行搜索的字符串，一般为用户名。
-    pub fn query(mut self, query: impl ToString) -> Self {
-self.search_user_request,
-            .api_request,
-.query_params
-            .insert("query", query.to_string());
-self,
-    }
-/// 分页大小，最小为 1，最大为 200，默认为 20。,
-    ///,
-/// # 验证规则,
-    ///,
-/// 分页大小必须在 1-200 之间（搜索服务限制），推荐值为 20,
-    pub fn page_size(mut self, page_size: i32) -> Self {
-// 搜索服务的分页大小限制更严格（1-200）,
-        if !(1..=200).contains(&page_size) {,
-log::warn!(,
-                "Page size {} is out of valid range (1-200) for search service",
-                page_size,
-);
-        }
-self.search_user_request,
-            .api_request,
-.query_params
-            .insert("page_size", page_size.to_string());
-self,
-    }
-/// 分页标识，获取首页不需要填写，获取下一页时传入上一页返回的分页标识值。,
-    /// 请注意此字段的值并没有特殊含义，请使用每次请求所返回的标识值。
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {
-let token = page_token.to_string();
-        // 验证分页标记格式
-        match validation::validate_page_token(&token, "page_token") {
-            ValidationResult::Valid => {}
-ValidationResult::Warning(msg) => {,
-                log::warn!("Page token validation warning: {}", msg);
-}
-ValidationResult::Invalid(msg) => {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}ValidationResult::Invalid(msg) => {,
                 log::error!("Invalid page token: {}", msg);
-}
         }
 self.search_user_request,
             .api_request,
@@ -146,8 +98,7 @@ self.search_user_request,
 self,
     }
 pub fn w+.*{
-        self.search_user_request,
-}
+        self.search_user_request}
 /// 使用分页验证构建器设置分页参数,
     ///,
 /// 这个方法提供了一个更安全的分页参数设置方式，会自动验证参数的有效性,
@@ -171,7 +122,6 @@ pagination_builder = pagination_builder.with_page_size(size);
         }
 if let Some(token) = page_token {,
             pagination_builder = pagination_builder.with_page_token(token);
-}
 // 构建分页参数,
         let params = pagination_builder.build()?;
 // 应用到请求中,
@@ -180,10 +130,8 @@ self.search_user_request,
                 .api_request,
 .query_params
                 .insert(key, value);
-}
 Ok(self),
     }
-}
 crate::impl_executable_builder_owned!(,
     SearchUserRequestBuilder,
     UserService,
@@ -191,7 +139,7 @@ crate::impl_executable_builder_owned!(,
     SearchUserResponse,
     search_user,
 );
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SearchUserResponse {
     /// 搜索到的用户列表。
     pub users: Vec<UserInSearchResponse>,
@@ -199,10 +147,9 @@ pub struct SearchUserResponse {
     pub has_more: bool,
     /// 分页标识，存在下一页的时候返回。下次请求带上此标识可以获取下一页的用户。,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
+    pub page_token: Option<String>}
 /// 搜索到的用户信息。,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UserInSearchResponse {
     /// 用户的头像 URL。
     pub avatar: UserAvatar,
@@ -214,10 +161,9 @@ pub struct UserInSearchResponse {
     pub open_id: String,
     /// 用户的 open_id。,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub user_id: Option<String>,
-}
+    pub user_id: Option<String>}
 /// 用户的头像信息。,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UserAvatar {
     /// 用户的头像图片 URL，72×72px。
     pub avatar_72: String,
@@ -227,18 +173,17 @@ pub struct UserAvatar {
     pub avatar_640: String,
     /// 用户的头像图片 URL，原始大小。
     pub avatar_origin: String,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 pub struct SearchUserIterator<'a> {,
     user_service: &'a UserService,
     request: SearchUserRequest,
     option: Option<RequestOption>,
-    has_more: bool,
-}
+    has_more: bool}
 /// # API文档,
 ///
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/search,
@@ -246,7 +191,6 @@ impl SearchUserIterator<'_> {,
     pub async fn next(&mut self) -> Option<Vec<UserInSearchResponse>> {,
 if !self.has_more {,
             return None;
-}
 match self,
             .user_service
             .search_user_with_base_response(self.request.clone(), self.option.clone()),
@@ -261,24 +205,16 @@ if let Some(token) = data.page_token {,
 .api_request,
                                 .query_params
                                 .insert("page_token", token);
-Some(data.users),
-                        } else {,
+Some(data.users)} else {,
 // has_more is true but no page_token. Stop iterating to avoid panic.,
                             self.has_more = false;
-Some(data.users),
-                        }
+Some(data.users)}
 } else if data.users.is_empty() {,
-None,
-                    } else {,
-Some(data.users),
-                    }
-}
+None} else {,
+Some(data.users)}
                 None => None,
             }
             Err(e) => {
                 error!("Error: {e:?}");
 None,
-            }
-}
-    }
 }

@@ -10,12 +10,10 @@ use serde::{Deserialize, Serialize};
 /// 职级管理服务,
 pub struct JobLevelService {
     config: Config,
-}
 impl JobLevelService {
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 创建职级,
+}/// 创建职级,
     pub async fn create(
         &self,
         req: &CreateJobLevelRequest,
@@ -109,74 +107,71 @@ let resp =,
             Transport::<DeleteJobLevelResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateJobLevelRequest {
     pub job_level: JobLevel,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateJobLevelResponse {
     pub job_level: JobLevel,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateJobLevelRequest {
     pub job_level: JobLevel,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateJobLevelResponse {
     pub job_level: JobLevel,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetJobLevelResponse {
     pub job_level: JobLevel,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListJobLevelsRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListJobLevelsResponse {
     pub items: Vec<JobLevel>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DeleteJobLevelResponse {}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}

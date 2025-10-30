@@ -6,24 +6,21 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         req_option,
         standard_response::StandardResponse,
-        validation::{self, ValidationResult,
-};
+        validation::{self, ValidationResult};
         SDKResult,
     }
     impl_executable_builder_owned,
     service::sheets::v3::{
         data_operation::{FindCondition, FindReplaceResult}
         SpreadsheetSheetService,
-    }
 };
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct FindCellsRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -40,33 +37,18 @@ pub struct FindCellsRequest {
 ///,
     /// - 普通查找示例: "hello",
 /// - 正则查找示例: "[A-Z]\w+"",
-    find: String,
-}
+    find: String}
 impl FindCellsRequest {
-    pub fn w+.*{
-FindCellsRequestBuilder::default(),
-    }
-/// # API文档,
-    ///,
-/// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM,
-    /// 验证请求参数,
-pub fn w+.*{
-        // 验证必需字段,
-if self.spreadsheet_token.is_empty() {,
-            return Err(crate::core::error::LarkAPIError::illegal_param(
-                "spreadsheet_token cannot be empty".to_string(),
-            ));
-}
-if self.sheet_id.is_empty() {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}if self.sheet_id.is_empty() {,
             return Err(crate::core::error::LarkAPIError::illegal_param(
                 "sheet_id cannot be empty".to_string(),
             ));
-}
 if self.find.is_empty() {,
             return Err(crate::core::error::LarkAPIError::illegal_param(
                 "find cannot be empty".to_string(),
             ));
-}
 // 验证查找条件,
         if let ValidationResult::Invalid(msg) = validation::validate_find_options(
             &self.find_condition.match_case,
@@ -89,88 +71,27 @@ if let ValidationResult::Invalid(msg) =,
                     self.find_condition.range, msg,
 )));
             }
-}
 // 验证查找字符串长度,
         if self.find.len() > 1000 {,
 return Err(crate::core::error::LarkAPIError::illegal_param(,
                 "find string too long. Maximum 1000 characters allowed".to_string(),
             ));
-}
 Ok(()),
     }
-}
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct FindCellsRequestBuilder {
-    request: FindCellsRequest,
-}
+    request: FindCellsRequest}
 impl FindCellsRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
-self.request.spreadsheet_token = spreadsheet_token.to_string();
-        self,
-}
-
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
-self.request.sheet_id = sheet_id.to_string();
-        self,
-}
-
-    pub fn find(mut self, find: impl ToString) -> Self {
-self.request.find = find.to_string();
-        self,
-}
-
-    pub fn range(mut self, range: impl ToString) -> Self {
-self.request.find_condition.range = range.to_string();
-        self,
-}
-
-    pub fn match_case(mut self, match_case: bool) -> Self {
-self.request.find_condition.match_case = Some(match_case);
-        self,
-}
-
-    pub fn match_entire_cell(mut self, match_entire_cell: bool) -> Self {
-self.request.find_condition.match_entire_cell = Some(match_entire_cell);
-        self,
-}
-
-    pub fn search_by_regex(mut self, search_by_regex: bool) -> Self {
-self.request.find_condition.search_by_regex = Some(search_by_regex);
-        self,
-}
-
-    pub fn include_formulas(mut self, include_formulas: bool) -> Self {
-self.request.find_condition.include_formulas = Some(include_formulas);
-        self,
-}
-/// 构建查找单元格请求,
-    ///,
-/// # API文档,
-    ///,
-/// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM,
-    pub fn w+.*{
-let mut request = self.request;
-        request.api_request.body = serde_json::to_vec(&request).unwrap();
-request,
-    }
-/// 验证请求参数,
-    pub fn w+.*{
-// 验证必需字段,
-        if self.request.spreadsheet_token.is_empty() {,
-return Err(crate::core::error::LarkAPIError::illegal_param(,
-                "spreadsheet_token cannot be empty".to_string(),
-            ));
-}
-if self.request.sheet_id.is_empty() {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}if self.request.sheet_id.is_empty() {,
             return Err(crate::core::error::LarkAPIError::illegal_param(
                 "sheet_id cannot be empty".to_string(),
             ));
-}
 if self.request.find.is_empty() {,
             return Err(crate::core::error::LarkAPIError::illegal_param(
                 "find cannot be empty".to_string(),
             ));
-}
 // 验证查找条件,
         if let ValidationResult::Invalid(msg) = validation::validate_find_options(
             &self.request.find_condition.match_case,
@@ -193,16 +114,13 @@ if let ValidationResult::Invalid(msg) =,
                     self.request.find_condition.range, msg,
 )));
             }
-}
 // 验证查找字符串长度,
         if self.request.find.len() > 1000 {,
 return Err(crate::core::error::LarkAPIError::illegal_param(,
                 "find string too long. Maximum 1000 characters allowed".to_string(),
             ));
-}
 Ok(()),
     }
-}
 // Trait implementation,
 impl_executable_builder_owned!(
     FindCellsRequestBuilder,
@@ -212,32 +130,17 @@ impl_executable_builder_owned!(
     find_cells,
 );
 /// 查找单元格响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct FindCellsResponse {
     /// 符合条件的信息
     pub find_result: FindReplaceResult,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 impl SpreadsheetSheetService {
-    /// 查找单元格,
-pub async fn find_cells(,
-        &self,
-        request: FindCellsRequest,
-        option: Option<req_option::RequestOption>,
-    ) -> SDKResult<FindCellsResponse> {,
-let mut api_req = request.api_request;
-        api_req.api_path = SHEETS_V3_SPREADSHEET_SHEET_FIND
-            .replace("{}", &request.spreadsheet_token)
-            .replace("{}", &request.sheet_id);
-api_req.set_http_method(reqwest::Method::POST);
-        api_req
-            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::App]);
-let api_resp: BaseResponse<FindCellsResponse> =,
-            crate::core::http::Transport::request(api_req, &self.config, option).await?;
-api_resp.into_result(),
-    }
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }

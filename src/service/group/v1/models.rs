@@ -1,40 +1,36 @@
 use serde::{Deserialize, Serialize};
 use serde_repr::{Deserialize_repr, Serialize_repr};
 /// 用户ID类型,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
 pub enum UserIdType {
     UserId,
     UnionId,
     OpenId,
-}
 /// 群ID类型,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
 pub enum ChatIdType {
     ChatId,
     OpenChatId,
-}
 /// 群类型,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[repr(u8)]
-pub enum ChatType {,
+pub enum ChatType {
 /// 私聊,
     P2p = 1,
     /// 群聊
     Group = 2,
-}
 /// 群模式,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum ChatMode {,
+pub enum ChatMode {
 /// 群组,
     Group,
     /// 话题
     Topic,
-}
 /// 群配置,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ChatConfig {
     /// 是否可加入,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -54,9 +50,8 @@ pub struct ChatConfig {
     /// 仅群主可发言,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub only_owner_send_msg: Option<bool>,
-}
 /// 群基本信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Chat {
     /// 群 ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -100,29 +95,26 @@ pub struct Chat {
     /// 租户 key,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub tenant_key: Option<String>,
-}
 /// 群成员类型,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum MemberType {,
+pub enum MemberType {
 /// 用户,
     User,
     /// 机器人
     Bot,
-}
 /// 群成员身份,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum MemberRole {,
+pub enum MemberRole {
 /// 群主,
     Owner,
     /// 群管理员
     Admin,
     /// 群成员
     Member,
-}
 /// 群成员信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ChatMember {
     /// 成员 ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -145,9 +137,8 @@ pub struct ChatMember {
     /// 租户 key,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub tenant_key: Option<String>,
-}
 /// 群置顶信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ChatTopNotice {
     /// 群 ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -167,9 +158,8 @@ pub struct ChatTopNotice {
     /// 创建者 ID,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub creator_id: Option<String>,
-}
 /// 群公告信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ChatAnnouncement {
     /// 群公告 ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -198,9 +188,8 @@ pub struct ChatAnnouncement {
     /// 元数据,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub meta: Option<serde_json::Value>,
-}
 /// 群公告块信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ChatAnnouncementBlock {
     /// 块 ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -217,11 +206,10 @@ pub struct ChatAnnouncementBlock {
     /// 子块列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub children: Option<Vec<String>>,
-}
 /// 会话标签页类型,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum ChatTabType {,
+pub enum ChatTabType {
 /// 消息,
     Message,
     /// 文档
@@ -234,9 +222,8 @@ pub enum ChatTabType {,
     Bot,
     /// 自定义
     Custom,
-}
 /// 会话标签页信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ChatTab {
     /// 标签页 ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -265,20 +252,18 @@ pub struct ChatTab {
     /// 创建者 ID,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub creator_id: Option<String>,
-}
 /// 群菜单项类型,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum ChatMenuType {,
+pub enum ChatMenuType {
 /// 链接,
     Link,
     /// 回调
     Callback,
     /// 子菜单
     Submenu,
-}
 /// 群菜单项信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ChatMenu {
     /// 菜单 ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -307,9 +292,8 @@ pub struct ChatMenu {
     /// 子菜单列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub children: Option<Vec<ChatMenu>>,
-}
 /// 分页信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PageInfo {
     /// 分页标记,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -317,13 +301,12 @@ pub struct PageInfo {
     /// 是否还有更多页,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]
-    fn test_user_id_type_enum() {,
+    fn test_user_id_type_enum() {
 assert_eq!(,
             serde_json::to_string(&UserIdType::UserId).unwrap(),
             "\"user_id\"",
@@ -338,7 +321,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_chat_id_type_enum() {,
+    fn test_chat_id_type_enum() {
 assert_eq!(,
             serde_json::to_string(&ChatIdType::ChatId).unwrap(),
             "\"chat_id\"",
@@ -352,9 +335,8 @@ assert_eq!(,
     ,
         assert_eq!(serde_json::to_string(&ChatType::P2p).unwrap(), "1");
         assert_eq!(serde_json::to_string(&ChatType::Group).unwrap(), "2");
-}
 #[test]
-    fn test_chat_mode_enum() {,
+    fn test_chat_mode_enum() {
 assert_eq!(,
             serde_json::to_string(&ChatMode::Group).unwrap(),
             "\"group\"",
@@ -365,15 +347,14 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_member_type_enum() {,
+    fn test_member_type_enum() {
 assert_eq!(,
             serde_json::to_string(&MemberType::User).unwrap(),
             "\"user\"",
 );
         assert_eq!(serde_json::to_string(&MemberType::Bot).unwrap(), "\"bot\"");
-}
 #[test]
-    fn test_member_role_enum() {,
+    fn test_member_role_enum() {
 assert_eq!(,
             serde_json::to_string(&MemberRole::Owner).unwrap(),
             "\"owner\"",
@@ -388,7 +369,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_chat_tab_type_enum() {,
+    fn test_chat_tab_type_enum() {
 assert_eq!(,
             serde_json::to_string(&ChatTabType::Message).unwrap(),
             "\"message\"",
@@ -409,7 +390,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_chat_menu_type_enum() {,
+    fn test_chat_menu_type_enum() {
 assert_eq!(,
             serde_json::to_string(&ChatMenuType::Link).unwrap(),
             "\"link\"",
@@ -424,7 +405,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_chat_config_full() {,
+    fn test_chat_config_full() {
 let config = ChatConfig {,
             joinable: Some(true),
             searchable: Some(false),
@@ -442,7 +423,7 @@ assert!(json.contains("\"only_owner_edit\":false"));
 assert!(json.contains("\"only_owner_send_msg\":false"));
     }
 #[test]
-    fn test_chat_config_minimal() {,
+    fn test_chat_config_minimal() {
 let config = ChatConfig {,
             searchable: Some(true),
             ..Default::default(),
@@ -451,9 +432,8 @@ let json = serde_json::to_string(&config).unwrap();
         assert!(json.contains("\"searchable\":true"));
 assert!(!json.contains("joinable"));
         assert!(!json.contains("share_allowed"));
-}
 #[test]
-    fn test_chat_full() {,
+    fn test_chat_full() {
 let chat_config = ChatConfig::default();
         let chat = Chat {
             chat_id: Some("oc_123456".to_string()),
@@ -480,7 +460,7 @@ assert!(json.contains("ou_owner123"));
 assert!(json.contains("tenant123"));
     }
 #[test]
-    fn test_chat_member_full() {,
+    fn test_chat_member_full() {
 let member = ChatMember {,
             member_id: Some("ou_member123".to_string()),
             member_type: Some(MemberType::User),
@@ -499,7 +479,7 @@ assert!(json.contains("张三"));
 assert!(json.contains("2024-01-01T00:00:00Z"));
     }
 #[test]
-    fn test_chat_member_bot() {,
+    fn test_chat_member_bot() {
 let bot_member = ChatMember {,
             member_id: Some("cli_bot123".to_string()),
             member_type: Some(MemberType::Bot),
@@ -516,7 +496,7 @@ assert!(json.contains("\"bot\""));
 assert!(!json.contains("avatar"));
     }
 #[test]
-    fn test_chat_top_notice() {,
+    fn test_chat_top_notice() {
 let notice = ChatTopNotice {,
             chat_id: Some("oc_123456".to_string()),
             notice_id: Some("notice123".to_string()),
@@ -532,7 +512,7 @@ assert!(json.contains("notice123"));
 assert!(json.contains("ou_creator123"));
     }
 #[test]
-    fn test_chat_announcement() {,
+    fn test_chat_announcement() {
 let meta = serde_json::json!({,
             "priority": "high",
             "category": "general",
@@ -554,9 +534,8 @@ assert!(json.contains("群公告标题"));
         assert!(json.contains("这是一条重要的群公告内容"));
 assert!(json.contains("\"revision\":1"));
         assert!(json.contains("priority"));
-}
 #[test]
-    fn test_chat_announcement_block() {,
+    fn test_chat_announcement_block() {
 let content = serde_json::json!({,
             "text": "文本内容",
             "format": "rich_text",
@@ -577,7 +556,7 @@ assert!(json.contains("文本内容"));
 assert!(json.contains("child2"));
     }
 #[test]
-    fn test_chat_tab() {,
+    fn test_chat_tab() {
 let tab = ChatTab {,
             tab_id: Some("tab123".to_string()),
             name: Some("会议纪要".to_string()),
@@ -595,10 +574,11 @@ assert!(json.contains("会议纪要"));
         assert!(json.contains("\"meeting\""));
 assert!(json.contains("https://meeting.example.com"));
         assert!(json.contains("\"sort_order\":1"));
-}
 #[test]
-    fn test_chat_menu_simple() {,
-let menu = ChatMenu {,
+    fn test_chat_menu_simple() {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}let menu = ChatMenu {,
             menu_id: Some("menu123".to_string()),
             parent_id: None,
             name: Some("快捷操作".to_string()),
@@ -617,9 +597,8 @@ assert!(json.contains("https://example.com"));
         assert!(json.contains("\"visible\":true"));
 assert!(!json.contains("parent_id"));
         assert!(!json.contains("children"));
-}
 #[test]
-    fn test_chat_menu_with_submenu() {,
+    fn test_chat_menu_with_submenu() {
 let child_menu = ChatMenu {,
             menu_id: Some("child_menu123".to_string()),
             parent_id: Some("menu123".to_string()),
@@ -651,7 +630,7 @@ assert!(json.contains("child_menu123"));
 assert!(json.contains("\"callback\""));
     }
 #[test]
-    fn test_page_info() {,
+    fn test_page_info() {
 let page_info = PageInfo {,
             page_token: Some("token123".to_string()),
             has_more: Some(true),
@@ -661,7 +640,7 @@ let json = serde_json::to_string(&page_info).unwrap();
 assert!(json.contains("\"has_more\":true"));
     }
 #[test]
-    fn test_page_info_minimal() {,
+    fn test_page_info_minimal() {
 let page_info = PageInfo {,
             page_token: None,
             has_more: Some(false),
@@ -671,7 +650,7 @@ let json = serde_json::to_string(&page_info).unwrap();
 assert!(!json.contains("page_token"));
     }
 #[test]
-    fn test_minimal_structs() {,
+    fn test_minimal_structs() {
 let minimal_chat = Chat {,
             chat_id: Some("oc_minimal".to_string()),
             name: None,
@@ -694,4 +673,3 @@ assert!(!json.contains("name"));
         assert!(!json.contains("description"));
 assert!(!json.contains("config"));
     }
-}

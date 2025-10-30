@@ -1,7 +1,7 @@
 use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 /// OpenAPI 审计日志请求参数,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct OpenapiLogListRequest {
     /// 页码
     pub page_token: Option<String>,
@@ -16,10 +16,9 @@ pub struct OpenapiLogListRequest {
     /// OpenAPI 接口名列表，多个用逗号分隔
     pub apis: Option<String>,
     /// 返回码列表，多个用逗号分隔
-    pub response_codes: Option<String>,
-}
+    pub response_codes: Option<String>}
 /// OpenAPI 审计日志项,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct OpenapiLogItem {
     /// 日志时间（Unix 时间戳，精确到毫秒）
     pub timestamp: i64,
@@ -44,20 +43,18 @@ pub struct OpenapiLogItem {
     /// IP 地址
     pub ip: Option<String>,
     /// 用户代理
-    pub user_agent: Option<String>,
-}
+    pub user_agent: Option<String>}
 /// OpenAPI 审计日志响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct OpenapiLogListResponse {
     /// 是否还有更多页面
     pub has_more: bool,
     /// 下一页的页面令牌
     pub page_token: Option<String>,
     /// 日志项列表
-    pub items: Vec<OpenapiLogItem>,
-}
+    pub items: Vec<OpenapiLogItem>}
 /// 行为审计日志请求参数,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AuditLogGetRequest {
     /// 获取数据类型，固定值 "all"
     pub data_type: String,
@@ -74,10 +71,9 @@ pub struct AuditLogGetRequest {
     /// 操作人 ID 列表
     pub operator_ids: Option<Vec<String>>,
     /// 被操作对象 ID 列表
-    pub object_ids: Option<Vec<String>>,
-}
+    pub object_ids: Option<Vec<String>>}
 /// 行为审计日志项,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AuditLogItem {
     /// 日志 ID
     pub log_id: String,
@@ -100,10 +96,9 @@ pub struct AuditLogItem {
     /// 设备信息
     pub device_info: Option<String>,
     /// 扩展信息
-    pub extend_info: Option<serde_json::Value>,
-}
+    pub extend_info: Option<serde_json::Value>}
 /// 行为审计日志响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AuditLogGetResponse {
     /// 总数量
     pub total: i32,
@@ -112,8 +107,7 @@ pub struct AuditLogGetResponse {
     /// 页面大小
     pub page_size: i32,
     /// 日志项列表
-    pub items: Vec<AuditLogItem>,
-}
+    pub items: Vec<AuditLogItem>}
 // 默认实现,
 impl Default for OpenapiLogListRequest {,
 fn default() -> Self {
@@ -124,10 +118,7 @@ fn default() -> Self {
             end_time: None,
             app_ids: None,
             apis: None,
-            response_codes: None,
-        }
-}
-}
+            response_codes: None}
 impl Default for AuditLogGetRequest {,
     fn default() -> Self {
 Self {
@@ -138,28 +129,26 @@ Self {
             page_size: Some(100),
             audit_types: None,
             operator_ids: None,
-            object_ids: None,
-        }
-}
-}
+            object_ids: None}
 // ApiResponseTrait 实现,
 impl ApiResponseTrait for.* {
-fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}fn data_format() -> ResponseFormat {,
         ResponseFormat::Data
-}
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json;
     #[test]
-fn test_openapi_log_list_request() {,
+fn test_openapi_log_list_request() {
         let request = OpenapiLogListRequest {
             page_token: Some("token_123".to_string()),
             page_size: Some(50),
@@ -167,8 +156,7 @@ fn test_openapi_log_list_request() {,
             end_time: Some(1641081600000),
             app_ids: Some("app1,app2,app3".to_string()),
             apis: Some("/open-apis/user/v1/list,/open-apis/message/v4/send".to_string()),
-            response_codes: Some("200,400,500".to_string()),
-        };
+            response_codes: Some("200,400,500".to_string())};
 let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("token_123"));
 assert!(json.contains("\"page_size\":50"));
@@ -176,9 +164,8 @@ assert!(json.contains("\"page_size\":50"));
         assert!(json.contains("app1,app2,app3"));
         assert!(json.contains("/open-apis/user/v1/list"));
         assert!(json.contains("200,400,500"));
-}
 #[test]
-    fn test_openapi_log_item() {,
+    fn test_openapi_log_item() {
 let log_item = OpenapiLogItem {,
             timestamp: 1640995200000,
             app_id: "cli_a1b2c3d4e5f6g7h8".to_string(),
@@ -191,8 +178,7 @@ let log_item = OpenapiLogItem {,
             user_id: Some("ou_1234567890abcdef".to_string()),
             tenant_key: Some("0123456789abcdef".to_string()),
             ip: Some("192.168.1.100".to_string()),
-            user_agent: Some("OpenLarkSDK/1.0.0".to_string()),
-        };
+            user_agent: Some("OpenLarkSDK/1.0.0".to_string())};
 let json = serde_json::to_string(&log_item).unwrap();
         assert!(json.contains("1640995200000"));
 assert!(json.contains("cli_a1b2c3d4e5f6g7h8"));
@@ -205,9 +191,8 @@ assert!(json.contains("\"response_time\":125"));
         assert!(json.contains("ou_1234567890abcdef"));
 assert!(json.contains("192.168.1.100"));
         assert!(json.contains("OpenLarkSDK/1.0.0"));
-}
 #[test]
-    fn test_openapi_log_list_response() {,
+    fn test_openapi_log_list_response() {
 let log_item = OpenapiLogItem {,
             timestamp: 1640995200000,
             app_id: "cli_test".to_string(),
@@ -220,8 +205,7 @@ let log_item = OpenapiLogItem {,
             user_id: Some("ou_test_user".to_string()),
             tenant_key: Some("tenant_test".to_string()),
             ip: Some("10.0.0.1".to_string()),
-            user_agent: Some("Browser/Chrome".to_string()),
-        };
+            user_agent: Some("Browser/Chrome".to_string())};
 let response = OpenapiLogListResponse {,
             has_more: true,
             page_token: Some("next_page_token".to_string()),
@@ -233,9 +217,8 @@ assert!(json.contains("next_page_token"));
         assert!(json.contains("cli_test"));
 assert!(json.contains("/open-apis/contact/v3/users"));
         assert!(json.contains("GET"));
-}
 #[test]
-    fn test_audit_log_get_request() {,
+    fn test_audit_log_get_request() {
 let request = AuditLogGetRequest {,
             data_type: "all".to_string(),
             start_time: 1640995200000,
@@ -248,8 +231,7 @@ let request = AuditLogGetRequest {,
                 "admin_operation".to_string(),
             ]),
             operator_ids: Some(vec!["user_admin".to_string(), "user_manager".to_string()]),
-            object_ids: Some(vec!["file_001".to_string(), "folder_002".to_string()]),
-        };
+            object_ids: Some(vec!["file_001".to_string(), "folder_002".to_string()])};
 let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("\"data_type\":\"all\""));
 assert!(json.contains("1640995200000"));
@@ -263,7 +245,7 @@ assert!(json.contains("admin_operation"));
 assert!(json.contains("file_001"));
     }
 #[test]
-    fn test_audit_log_item() {,
+    fn test_audit_log_item() {
 let extend_info = serde_json::json!({,
             "old_value": "admin",
             "new_value": "user",
@@ -280,8 +262,7 @@ let log_item = AuditLogItem {,
             operation_detail: "将用户角色从管理员降级为普通用户".to_string(),
             ip: Some("172.16.0.100".to_string()),
             device_info: Some("Windows 10, Chrome 96.0.4664.110".to_string()),
-            extend_info: Some(extend_info),
-        };
+            extend_info: Some(extend_info)};
 let json = serde_json::to_string(&log_item).unwrap();
         assert!(json.contains("audit_log_123456"));
 assert!(json.contains("1640995200000"));
@@ -296,9 +277,8 @@ assert!(json.contains("Windows 10"));
         assert!(json.contains("old_value"));
 assert!(json.contains("new_value"));
         assert!(json.contains("affected_fields"));
-}
 #[test]
-    fn test_audit_log_get_response() {,
+    fn test_audit_log_get_response() {
 let log_item1 = AuditLogItem {,
             log_id: "log_001".to_string(),
             timestamp: 1640995200000,
@@ -310,8 +290,7 @@ let log_item1 = AuditLogItem {,
             operation_detail: "用户登录系统".to_string(),
             ip: Some("192.168.1.50".to_string()),
             device_info: Some("macOS, Safari 15.1".to_string()),
-            extend_info: None,
-        };
+            extend_info: None};
 let log_item2 = AuditLogItem {,
             log_id: "log_002".to_string(),
             timestamp: 1640995260000,
@@ -348,8 +327,10 @@ assert!(json.contains("file_important.pdf"));
 assert!(json.contains("confidential"));
     }
 #[test]
-    fn test_default_implementations() {,
-let default_openapi_request = OpenapiLogListRequest::default();
+    fn test_default_implementations() {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}let default_openapi_request = OpenapiLogListRequest::default();
         assert_eq!(default_openapi_request.page_token, None);
         assert_eq!(default_openapi_request.page_size, Some(100));
         assert_eq!(default_openapi_request.start_time, None);
@@ -366,14 +347,12 @@ let default_audit_request = AuditLogGetRequest::default();
         assert_eq!(default_audit_request.audit_types, None);
         assert_eq!(default_audit_request.operator_ids, None);
         assert_eq!(default_audit_request.object_ids, None);
-}
 #[test]
     ,
         assert_eq!(OpenapiLogListResponse::data_format(), ResponseFormat::Data);
         assert_eq!(AuditLogGetResponse::data_format(), ResponseFormat::Data);
-}
 #[test]
-    fn test_minimal_structs() {,
+    fn test_minimal_structs() {
 let minimal_openapi_request = OpenapiLogListRequest {,
             page_token: None,
             page_size: None,
@@ -381,8 +360,7 @@ let minimal_openapi_request = OpenapiLogListRequest {,
             end_time: None,
             app_ids: None,
             apis: None,
-            response_codes: None,
-        };
+            response_codes: None};
 let json = serde_json::to_string(&minimal_openapi_request).unwrap();
         // Since the struct doesn't have skip_serializing_if, None values appear as null,
 assert!(json.contains("\"page_token\":null"));
@@ -396,8 +374,7 @@ let partial_request = OpenapiLogListRequest {,
             end_time: None,
             app_ids: None,
             apis: None,
-            response_codes: None,
-        };
+            response_codes: None};
 let json = serde_json::to_string(&partial_request).unwrap();
         assert!(json.contains("test_token"));
 assert!(json.contains("\"page_size\":null"));
@@ -413,8 +390,7 @@ assert!(json.contains("\"page_size\":null"));
             user_id: None,
             tenant_key: None,
             ip: None,
-            user_agent: None,
-        };
+            user_agent: None};
 let json = serde_json::to_string(&minimal_openapi_item).unwrap();
         assert!(json.contains("minimal_app"));
 assert!(json.contains("\"user_id\":null"));
@@ -430,8 +406,7 @@ let minimal_audit_item = AuditLogItem {,
             operation_detail: "Test operation".to_string(),
             ip: None,
             device_info: None,
-            extend_info: None,
-        };
+            extend_info: None};
 let json = serde_json::to_string(&minimal_audit_item).unwrap();
         assert!(json.contains("minimal_log"));
 assert!(json.contains("Test operation"));
@@ -439,15 +414,14 @@ assert!(json.contains("Test operation"));
 assert!(json.contains("\"ip\":null"));
     }
 #[test]
-    fn test_complex_security_scenario() {,
+    fn test_complex_security_scenario() {
 // Simulate a complex security audit scenario,
         let security_incident_extend_info = serde_json::json!({
             "incident_type": "unauthorized_access",
             "severity": "high",
             "affected_resources": ["user_database", "config_files"]
             "remediation_actions": ["password_reset", "access_revoked", "logs_preserved"]
-            "investigation_status": "ongoing",
-});
+            "investigation_status": "ongoing"});
 let security_log = AuditLogItem {,
             log_id: "sec_incident_20240101_001".to_string(),
             timestamp: 1704067200000,
@@ -459,8 +433,7 @@ let security_log = AuditLogItem {,
             operation_detail: "检测到未授权访问尝试，已自动触发安全响应流程".to_string(),
             ip: Some("203.0.113.42".to_string()),
             device_info: Some("Unknown Device, Tor Browser".to_string()),
-            extend_info: Some(security_incident_extend_info),
-        };
+            extend_info: Some(security_incident_extend_info)};
 let openapi_abuse_log = OpenapiLogItem {,
             timestamp: 1704067200000,
             app_id: "cli_suspicious_app".to_string(),
@@ -473,8 +446,7 @@ let openapi_abuse_log = OpenapiLogItem {,
             user_id: Some("ou_suspicious_user".to_string()),
             tenant_key: Some("tenant_target".to_string()),
             ip: Some("203.0.113.42".to_string()),
-            user_agent: Some("CustomScript/1.0 (Automated)".to_string()),
-        };
+            user_agent: Some("CustomScript/1.0 (Automated)".to_string())};
 let security_response = AuditLogGetResponse {,
             total: 1,
             page: 1,
@@ -504,5 +476,3 @@ assert!(openapi_json.contains("\"response_code\":429"));
         assert!(openapi_json.contains("\"response_time\":5000"));
 assert!(openapi_json.contains("CustomScript/1.0"));
         assert!(openapi_json.contains("203.0.113.42"));
-}
-}

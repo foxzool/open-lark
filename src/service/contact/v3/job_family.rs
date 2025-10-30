@@ -12,12 +12,10 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug)]
 pub struct JobFamilyService {
     config: Config,
-}
 impl JobFamilyService {
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 创建序列,
+}/// 创建序列,
     pub async fn create(
         &self,
         req: &CreateJobFamilyRequest,
@@ -111,98 +109,93 @@ let resp =,
             Transport::<DeleteJobFamilyResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateJobFamilyRequest {
     pub job_family: JobFamily,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateJobFamilyResponse {
     pub job_family: JobFamily,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateJobFamilyRequest {
     pub job_family: JobFamily,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateJobFamilyResponse {
     pub job_family: JobFamily,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetJobFamilyResponse {
     pub job_family: JobFamily,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListJobFamiliesRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListJobFamiliesResponse {
     pub items: Vec<JobFamily>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DeleteJobFamilyResponse {}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 #[cfg(test)]
 mod tests {
 use super::*;
     use crate::core::config::Config;
 #[test]
-    fn test_job_family_service_creation() {,
+    fn test_job_family_service_creation() {
 let config = Config::default();
         let service = JobFamilyService::new(config);
         assert!(!format!("{:?}", service).is_empty());
-}
 #[test]
-    fn test_job_family_service_creation_with_custom_config() {,
+    fn test_job_family_service_creation_with_custom_config() {
 let config = Config::builder()
             .app_id()
 .app_secret()
             .build();
 let service = JobFamilyService::new(config);
         assert!(!format!("{:?}", service).is_empty());
-}
 #[test]
-    fn test_create_job_family_request_construction() {,
+    fn test_create_job_family_request_construction() {
 let job_family = JobFamily {,
             job_family_id: Some("family_123".to_string()),
             name: Some(vec![I18nContent {
@@ -221,9 +214,8 @@ assert_eq!(,
             Some("family_123".to_string()),
 );
         assert!(request.job_family.name.is_some());
-}
 #[test]
-    fn test_create_job_family_request_with_minimal_data() {,
+    fn test_create_job_family_request_with_minimal_data() {
 let job_family = JobFamily {,
             job_family_id: None,
             name: Some(vec![I18nContent {
@@ -236,9 +228,8 @@ let job_family = JobFamily {,
         let request = CreateJobFamilyRequest { job_family };
 assert!(request.job_family.name.is_some());
         assert_eq!(request.job_family.description, None);
-}
 #[test]
-    fn test_create_job_family_request_with_empty_values() {,
+    fn test_create_job_family_request_with_empty_values() {
 let job_family = JobFamily {,
             job_family_id: Some("".to_string()),
             name: Some(vec![I18nContent {
@@ -256,7 +247,7 @@ let job_family = JobFamily {,
 assert!(request.job_family.name.is_some());
     }
 #[test]
-    fn test_create_job_family_request_with_long_values() {,
+    fn test_create_job_family_request_with_long_values() {
 let long_name = "a".repeat(1000);
         let long_desc = "b".repeat(2000);
 let job_family = JobFamily {,
@@ -274,22 +265,20 @@ let job_family = JobFamily {,
         let request = CreateJobFamilyRequest { job_family };
 assert!(request.job_family.name.is_some());
         assert!(request.job_family.description.is_some());
-}
 #[test]
-    fn test_create_job_family_response_default() {,
+    fn test_create_job_family_response_default() {
 let response = CreateJobFamilyResponse::default();
         assert_eq!(response.job_family.job_family_id, None);
         assert_eq!(response.job_family.name, None);
-}
 #[test]
-    fn test_create_job_family_response_data_format() {,
+    fn test_create_job_family_response_data_format() {
 assert_eq!(,
             CreateJobFamilyResponse::data_format(),
             crate::core::api_resp::ResponseFormat::Data
 );
     }
 #[test]
-    fn test_update_job_family_request_construction() {,
+    fn test_update_job_family_request_construction() {
 let job_family = JobFamily {,
             job_family_id: Some("family_456".to_string()),
             name: Some(vec![I18nContent {
@@ -308,9 +297,8 @@ assert_eq!(,
             Some("family_456".to_string()),
 );
         assert!(request.job_family.name.is_some());
-}
 #[test]
-    fn test_update_job_family_request_with_none_values() {,
+    fn test_update_job_family_request_with_none_values() {
 let job_family = JobFamily {,
             job_family_id: None,
             name: None,
@@ -320,99 +308,88 @@ let job_family = JobFamily {,
         let request = UpdateJobFamilyRequest { job_family };
         assert_eq!(request.job_family.job_family_id, None);
         assert_eq!(request.job_family.name, None);
-}
 #[test]
-    fn test_update_job_family_response_default() {,
+    fn test_update_job_family_response_default() {
 let response = UpdateJobFamilyResponse::default();
         assert_eq!(response.job_family.job_family_id, None);
         assert_eq!(response.job_family.name, None);
-}
 #[test]
-    fn test_update_job_family_response_data_format() {,
+    fn test_update_job_family_response_data_format() {
 assert_eq!(,
             UpdateJobFamilyResponse::data_format(),
             crate::core::api_resp::ResponseFormat::Data
 );
     }
 #[test]
-    fn test_get_job_family_response_default() {,
+    fn test_get_job_family_response_default() {
 let response = GetJobFamilyResponse::default();
         assert_eq!(response.job_family.job_family_id, None);
         assert_eq!(response.job_family.name, None);
-}
 #[test]
-    fn test_get_job_family_response_data_format() {,
+    fn test_get_job_family_response_data_format() {
 assert_eq!(,
             GetJobFamilyResponse::data_format(),
             crate::core::api_resp::ResponseFormat::Data
 );
     }
 #[test]
-    fn test_list_job_families_request_default() {,
+    fn test_list_job_families_request_default() {
 let request = ListJobFamiliesRequest::default();
         assert_eq!(request.page_size, None);
         assert_eq!(request.page_token, None);
-}
 #[test]
-    fn test_list_job_families_request_with_pagination() {,
+    fn test_list_job_families_request_with_pagination() {
 let request = ListJobFamiliesRequest {,
             page_size: Some(20),
             page_token: Some("token_abc".to_string()),
         };
         assert_eq!(request.page_size, Some(20));
         assert_eq!(request.page_token, Some("token_abc".to_string()));
-}
 #[test]
-    fn test_list_job_families_request_with_large_page_size() {,
+    fn test_list_job_families_request_with_large_page_size() {
 let request = ListJobFamiliesRequest {,
             page_size: Some(10000),
             page_token: Some("large_token".to_string()),
         };
         assert_eq!(request.page_size, Some(10000));
         assert_eq!(request.page_token, Some("large_token".to_string()));
-}
 #[test]
-    fn test_list_job_families_request_with_zero_page_size() {,
+    fn test_list_job_families_request_with_zero_page_size() {
 let request = ListJobFamiliesRequest {,
             page_size: Some(0),
             page_token: None,
         };
         assert_eq!(request.page_size, Some(0));
-}
 #[test]
-    fn test_list_job_families_request_with_negative_page_size() {,
+    fn test_list_job_families_request_with_negative_page_size() {
 let request = ListJobFamiliesRequest {,
             page_size: Some(-1),
             page_token: None,
         };
         assert_eq!(request.page_size, Some(-1));
-}
 #[test]
-    fn test_list_job_families_request_with_empty_token() {,
+    fn test_list_job_families_request_with_empty_token() {
 let request = ListJobFamiliesRequest {,
             page_size: Some(50),
             page_token: Some("".to_string()),
         };
         assert_eq!(request.page_token, Some("".to_string()));
-}
 #[test]
-    fn test_list_job_families_request_with_long_token() {,
+    fn test_list_job_families_request_with_long_token() {
 let long_token = "x".repeat(3000);
         let request = ListJobFamiliesRequest {
             page_size: Some(100),
             page_token: Some(long_token.clone()),
         };
         assert_eq!(request.page_token, Some(long_token));
-}
 #[test]
-    fn test_list_job_families_response_default() {,
+    fn test_list_job_families_response_default() {
 let response = ListJobFamiliesResponse::default();
         assert_eq!(response.items.len(), 0);
         assert_eq!(response.has_more, None);
         assert_eq!(response.page_token, None);
-}
 #[test]
-    fn test_list_job_families_response_with_items() {,
+    fn test_list_job_families_response_with_items() {
 let items = vec![,
             JobFamily {
                 job_family_id: Some("family_1".to_string()),
@@ -447,9 +424,8 @@ let response = ListJobFamiliesResponse {,
         assert_eq!(response.items.len(), 2);
         assert_eq!(response.has_more, Some(true));
         assert_eq!(response.page_token, Some("next_page".to_string()));
-}
 #[test]
-    fn test_list_job_families_response_with_large_list() {,
+    fn test_list_job_families_response_with_large_list() {
 let mut items = Vec::new();
         for i in 0..500 {,
 items.push(JobFamily {,
@@ -464,7 +440,6 @@ items.push(JobFamily {,
                 }]),
                 status: Some(true),
             });
-}
 let response = ListJobFamiliesResponse {,
             items,
             has_more: Some(false),
@@ -472,37 +447,34 @@ let response = ListJobFamiliesResponse {,
         };
         assert_eq!(response.items.len(), 500);
         assert_eq!(response.has_more, Some(false));
-}
 #[test]
-    fn test_list_job_families_response_data_format() {,
+    fn test_list_job_families_response_data_format() {
 assert_eq!(,
             ListJobFamiliesResponse::data_format(),
             crate::core::api_resp::ResponseFormat::Data
 );
     }
 #[test]
-    fn test_delete_job_family_response_default() {,
+    fn test_delete_job_family_response_default() {
 let response = DeleteJobFamilyResponse::default();
         assert!(!format!("{:?}", response).is_empty());
-}
 #[test]
-    fn test_delete_job_family_response_data_format() {,
+    fn test_delete_job_family_response_data_format() {
 assert_eq!(,
             DeleteJobFamilyResponse::data_format(),
             crate::core::api_resp::ResponseFormat::Data
 );
     }
 #[test]
-    fn test_config_independence() {,
+    fn test_config_independence() {
 let config1 = Config::default();
         let config2 = Config::default();
 let service1 = JobFamilyService::new(config1);
         let service2 = JobFamilyService::new(config2);
         assert!(!format!("{:?}", service1).is_empty());
         assert!(!format!("{:?}", service2).is_empty());
-}
 #[test]
-    fn test_all_structs_debug_trait() {,
+    fn test_all_structs_debug_trait() {
 let job_family = JobFamily {,
             job_family_id: Some("test".to_string()),
             name: Some(vec![I18nContent {
@@ -539,5 +511,3 @@ let delete_response = DeleteJobFamilyResponse::default();
         assert!(!format!("{:?}", get_response).is_empty());
         assert!(!format!("{:?}", list_response).is_empty());
         assert!(!format!("{:?}", delete_response).is_empty());
-}
-}

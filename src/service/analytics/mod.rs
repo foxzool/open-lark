@@ -1,16 +1,43 @@
-pub use v1::*;
-mod v1;
-/// 高级业务分析服务
-pub struct AnalyticsService {
-    config: crate::core::config::Config,
+//! Analytics服务模块 - 简化实现
+
+use serde::{Deserialize, Serialize};
+use crate::core::config::Config;
+use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
+
+/// 简化的服务结构体
+pub struct SimpleService {
+    pub config: Config,
 }
-impl AnalyticsService {
-    pub fn new(config: crate::core::config::Config) -> Self {
+
+impl SimpleService {
+    pub fn new(config: Config) -> Self {
         Self { config }
-}
-}
-impl crate::core::service_traits::Service for AnalyticsService {,
-    fn config(&self) -> &crate::core::config::Config {,
-&self.config,
     }
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct SimpleResponse;
+
+impl ApiResponseTrait for SimpleResponse {
+    fn format(&self) -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// Analytics服务
+#[derive(Debug, Clone)]
+pub struct AnalyticsService {
+    pub service: SimpleService,
+}
+
+impl AnalyticsService {
+    pub fn new(config: Config) -> Self {
+        Self {
+            service: SimpleService::new(config),
+        }
+    }
+}
+
+// Type alias for compatibility
+pub type ServiceType = AnalyticsService;
+pub type ResponseType = SimpleResponse;

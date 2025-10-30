@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 /// Offer状态变更事件数据,
 ///
 /// 当Offer状态发生变更时触发此事件，包含状态变更的详细信息。
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct OfferStatusChangedData {
     /// Offer ID
     pub offer_id: String,
@@ -29,9 +29,9 @@ pub struct OfferStatusChangedData {
     pub offer_info: Option<OfferInfo>,
 }
 /// Offer状态枚举,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum OfferStatus {,
+pub enum OfferStatus {
 /// 草稿,
     Draft,
     /// 待审批
@@ -52,7 +52,7 @@ pub enum OfferStatus {,
     Expired,
 }
 /// Offer基本信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct OfferInfo {
     /// Offer标题,
 #[serde(skip_serializing_if = "Option::is_none")]

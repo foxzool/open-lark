@@ -4,18 +4,17 @@ use crate::{
         api_req::api_resp::BaseResponse, config::Config, constants::AccessTokenType,
         endpoints::security_and_compliance::*, http::Transport, req_option::RequestOption,
         trait_system::Service, SDKResult,
-    }
     service::security_and_compliance::models::{AuditLogGetRequest, AuditLogGetResponse}
 };
 /// 行为审计日志服务
 pub struct AuditLogService {
-    pub config: Config,
 }
+
 impl AuditLogService {
+    
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 获取行为审计日志数据
+}/// 获取行为审计日志数据
     ///,
 /// 用于获取企业的用户行为审计记录，包括登录、操作文档、修改设置等行为
     ///,
@@ -38,18 +37,13 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
 impl Service for AuditLogService {,
     fn config(&self) -> &Config {,
 &self.config,
-    }
-fn service_name() -> &'static str {,
+    fn service_name() -> &'static str {,
         "audit_log",
-}
 fn service_version() -> &'static str {,
         "v1",
 }
-}
+}}}}}}

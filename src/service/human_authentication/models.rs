@@ -1,8 +1,8 @@
 use serde::{Deserialize, Serialize};
 /// 证件类型,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum IdType {,
+pub enum IdType {
 /// 身份证,
     IdCard,
     /// 护照
@@ -15,9 +15,9 @@ pub enum IdType {,
     Other,
 }
 /// 图片类型,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "lowercase")]
-pub enum ImageType {,
+pub enum ImageType {
 /// JPEG 格式,
     Jpeg,
     /// PNG 格式
@@ -26,9 +26,9 @@ pub enum ImageType {,
     Bmp,
 }
 /// 认证状态,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum AuthenticationStatus {,
+pub enum AuthenticationStatus {
 /// 等待中 - 已创建身份记录但未开始认证,
     Pending,
     /// 处理中 - 正在进行人脸识别处理
@@ -41,7 +41,7 @@ pub enum AuthenticationStatus {,
     Timeout,
 }
 /// 裁剪参数,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CropParameters {
     /// 裁剪起始 X 坐标
     pub x: i32,
@@ -53,7 +53,7 @@ pub struct CropParameters {
     pub height: i32,
 }
 /// 人脸区域信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct FaceRegion {
     /// 人脸左上角 X 坐标
     pub x: i32,
@@ -67,7 +67,7 @@ pub struct FaceRegion {
     pub confidence: f64,
 }
 /// 身份认证记录,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Identity {
     /// 身份记录ID
     pub identity_id: String,
@@ -85,7 +85,7 @@ pub struct Identity {
     pub updated_at: Option<i64>,
 }
 /// 人脸图片信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct FaceImage {
     /// 图片ID
     pub image_id: String,
@@ -106,7 +106,7 @@ pub struct FaceImage {
     pub height: Option<i32>,
 }
 /// 认证结果详情,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AuthenticationResult {
     /// 身份记录ID
     pub identity_id: String,
@@ -132,7 +132,7 @@ pub struct AuthenticationResult {
     pub processed_images: Option<Vec<String>>,
 }
 /// 认证统计信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AuthenticationStats {
     /// 总认证次数
     pub total_count: i64,

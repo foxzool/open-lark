@@ -6,8 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -23,7 +22,7 @@ use super::{,
     SubscriptionService,
 };
 /// 更新订阅状态请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PatchSubscriptionRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -41,85 +40,34 @@ pub struct PatchSubscriptionRequest {
     pub config: Option<SubscriptionConfig>,
     /// 扩展信息,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub extra: Option<serde_json::Value>,
-}
+    pub extra: Option<serde_json::Value>}
 impl PatchSubscriptionRequest {
-    pub fn w+.*{
-PatchSubscriptionRequestBuilder::default(),
-    }
-
-    pub fn new(file_token: impl ToString, file_type: FileType) -> Self {
-Self {
-            file_token: file_token.to_string(),
-            file_type: file_type.to_string()
-            ..Default::default(),
-}
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct PatchSubscriptionRequestBuilder {
     request: PatchSubscriptionRequest,
-    changes: Vec<String>,
-}
+    changes: Vec<String>}
 impl PatchSubscriptionRequestBuilder {
-    /// 文档token
-    pub fn file_token(mut self, token: impl ToString) -> Self {
-self.request.file_token = token.to_string();
-        self,
-}
-/// 文档类型,
-    pub fn file_type(mut self, file_type: FileType) -> Self {
-self.request.file_type = file_type.to_string();
-        self,
-}
-/// 设置为多维表格,
-    pub fn as_bitable(mut self) -> Self {
-self.request.file_type = FileType::Bitable.to_string();
-        self,
-}
-/// 设置为文档,
-    pub fn as_doc(mut self) -> Self {
-self.request.file_type = FileType::Doc.to_string();
-        self,
-}
-/// 设置为表格,
-    pub fn as_sheet(mut self) -> Self {
-self.request.file_type = FileType::Sheet.to_string();
-        self,
-}
-/// 设置为Wiki,
-    pub fn as_wiki(mut self) -> Self {
-self.request.file_type = FileType::Wiki.to_string();
-        self,
-}
-/// 设置订阅状态,
-    pub fn status(mut self, status: SubscriptionStatus) -> Self {
-        self.changes.push(format!("状态: {}", status.description()));
-self.request.status = Some(status);
-        self,
-}
-/// 激活订阅,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 激活订阅,
     pub fn activate(self) -> Self {
-self.status(SubscriptionStatus::Subscribed),
-    }
+self.status(SubscriptionStatus::Subscribed)}
 /// 暂停订阅,
     pub fn pause(self) -> Self {
-self.status(SubscriptionStatus::Paused),
-    }
+self.status(SubscriptionStatus::Paused)}
 /// 取消订阅,
     pub fn cancel(self) -> Self {
-self.status(SubscriptionStatus::Cancelled),
-    }
+self.status(SubscriptionStatus::Cancelled)}
 /// 恢复订阅（从暂停状态）,
     pub fn resume(self) -> Self {
-self.status(SubscriptionStatus::Subscribed),
-    }
+self.status(SubscriptionStatus::Subscribed)}
 /// 设置订阅配置,
     pub fn config(mut self, config: SubscriptionConfig) -> Self {
 self.changes.push("配置已更新".to_string());
         self.request.config = Some(config);
-self,
-    }
+self}
 /// 启用/禁用实时通知,
     pub fn notification(mut self, enable: bool) -> Self {
 let mut config = self.request.config.unwrap_or_default();
@@ -141,22 +89,17 @@ self.changes,
                 .push(format!("通知频率: 每{:.0}分钟", hours * 60.0));
 } else {
             self.changes.push(format!("通知频率: 每{hours:.1}小时"));
-}
 self.request.config = Some(config);
         self,
-}
 /// 设置快速通知（每5分钟）,
     pub fn quick_notification(self) -> Self {
-self.notification_interval(300),
-    }
+self.notification_interval(300)}
 /// 设置标准通知（每小时）,
     pub fn standard_notification(self) -> Self {
-self.notification_interval(3600),
-    }
+self.notification_interval(3600)}
 /// 设置慢速通知（每6小时）,
     pub fn slow_notification(self) -> Self {
-self.notification_interval(21600),
-    }
+self.notification_interval(21600)}
 /// 设置订阅优先级,
     pub fn priority(mut self, priority: SubscriptionPriority) -> Self {
 let mut config = self.request.config.unwrap_or_default();
@@ -165,19 +108,15 @@ self.changes,
             .push(format!("优先级: {}", priority.description()));
 self.request.config = Some(config);
         self,
-}
 /// 设置为高优先级,
     pub fn high_priority(self) -> Self {
-self.priority(SubscriptionPriority::High),
-    }
+self.priority(SubscriptionPriority::High)}
 /// 设置为低优先级,
     pub fn low_priority(self) -> Self {
-self.priority(SubscriptionPriority::Low),
-    }
+self.priority(SubscriptionPriority::Low)}
 /// 设置为紧急优先级,
     pub fn urgent_priority(self) -> Self {
-self.priority(SubscriptionPriority::Urgent),
-    }
+self.priority(SubscriptionPriority::Urgent)}
 /// 启用/禁用自动续费,
     pub fn auto_renew(mut self, enable: bool) -> Self {
 let mut config = self.request.config.unwrap_or_default();
@@ -191,26 +130,28 @@ self,
     }
 /// 添加标签,
     pub fn add_tag(mut self, tag: impl ToString) -> Self {
-let tag_str = tag.to_string();
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}let tag_str = tag.to_string();
         let mut config = self.request.config.unwrap_or_default();
 let mut tags = config.tags.unwrap_or_default();
         if !tags.contains(&tag_str) {,
 tags.push(tag_str.clone());
             self.changes.push(format!("添加标签: {tag_str}"));
-}
 config.tags = Some(tags);
         self.request.config = Some(config);
 self,
     }
 /// 移除标签,
     pub fn remove_tag(mut self, tag: impl ToString) -> Self {
-let tag_str = tag.to_string();
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}let tag_str = tag.to_string();
         let mut config = self.request.config.unwrap_or_default();
 let mut tags = config.tags.unwrap_or_default();
         if let Some(pos) = tags.iter().position(|t| t == &tag_str) {,
 tags.remove(pos);
             self.changes.push(format!("移除标签: {tag_str}"));
-}
 config.tags = Some(tags);
         self.request.config = Some(config);
 self,
@@ -221,51 +162,41 @@ let mut config = self.request.config.unwrap_or_default();
         config.tags = Some(vec![]);
 self.changes.push("清空所有标签".to_string());
         self.request.config = Some(config);
-self,
-    }
+self}
 /// 设置扩展信息,
     pub fn extra(mut self, extra: serde_json::Value) -> Self {
 self.request.extra = Some(extra);
         self.changes.push("扩展信息已更新".to_string());
-self,
-    }
+self}
 /// 批量暂停订阅（安全模式）,
     pub fn safe_pause(self) -> Self {
-self.pause().notification(false).add_tag("paused_by_system"),
-    }
+self.pause().notification(false).add_tag("paused_by_system")}
 /// 批量激活订阅（快速模式）,
     pub fn quick_activate(self) -> Self {
 self.activate()
             .notification()
 .quick_notification()
             .high_priority()
-.remove_tag("paused_by_system"),
-    }
+.remove_tag("paused_by_system")}
 /// 批量激活订阅（节能模式）,
     pub fn eco_activate(self) -> Self {
 self.activate()
             .notification()
 .slow_notification()
             .low_priority()
-.auto_renew(false),
-    }
+.auto_renew(false)}
 /// 获取更改摘要,
     pub fn w+.*{
-self.changes.clone(),
-    }
+self.changes.clone()}
 /// 获取更改摘要字符串,
     pub fn w+.*{
 if self.changes.is_empty() {,
-            "无更改".to_string(),
-} else {
-            self.changes.join(", "),
-}
+            "无更改".to_string()} else {
+            self.changes.join(", ")}
     }
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-self.request,
-    }
-}
+self.request}
 impl_executable_builder_owned!(,
     PatchSubscriptionRequestBuilder,
     SubscriptionService,
@@ -274,7 +205,7 @@ impl_executable_builder_owned!(,
     patch,
 );
 /// 更新订阅状态响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PatchSubscriptionResponse {
     /// 订阅详情
     pub subscription: SubscriptionDetail,
@@ -287,13 +218,13 @@ pub struct PatchSubscriptionResponse {
     /// 订阅ID
     pub subscription_id: Option<String>,
     /// 更新的字段
-    pub updated_fields: Option<Vec<String>>,
-}
+    pub updated_fields: Option<Vec<String>>}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 更新订阅状态,
 pub async fn patch_subscription(
     request: PatchSubscriptionRequest,
@@ -310,56 +241,26 @@ api_req.api_path = ASSISTANT_V1_FILE_SUBSCRIPTION,
 
     let api_resp = Transport::request(api_req, config, option).await?;
 Ok(api_resp),
-}
 
 impl PatchSubscriptionRequest {
-/// 是否有状态更改,
-    pub fn w+.*{
-self.status.is_some(),
-    }
-/// 是否有配置更改,
-    pub fn w+.*{
-self.config.is_some(),
-    }
-/// 是否有任何更改,
-    pub fn w+.*{
-self.has_status_change() || self.has_config_change() || self.extra.is_some(),
-    }
-/// 获取请求摘要,
-    pub fn summary(&self) -> String {
-        let mut parts = vec![format!("文档: {} ({})", self.file_token, self.file_type)];
-if let Some(ref status) = self.status {,
-            parts.push(format!("状态: {}", status.description()));
-}
-if let Some(ref config) = self.config {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}if let Some(ref config) = self.config {,
             parts.push(format!("配置: {}", config.summary()));
-}
 parts.join(" | "),
     }
-}
 impl PatchSubscriptionResponse {
-    /// 获取文档类型枚举,
-pub fn w+.*{
-        match self.file_type.as_str() {
-            "bitable" => FileType::Bitable,
-            "doc" => FileType::Doc,
-            "sheet" => FileType::Sheet,
-            "wiki" => FileType::Wiki,
-            _ => FileType::Doc,
-        }
-}
-/// 获取更新时间格式化字符串,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 获取更新时间格式化字符串,
     pub fn w+.*{
 self.update_time.map(|timestamp| {,
             let datetime =
                 chrono::DateTime::from_timestamp(timestamp, 0).unwrap_or_else(chrono::Utc::now);
-datetime.format("%Y-%m-%d %H:%M:%S").to_string(),
-        }),
-}
+datetime.format("%Y-%m-%d %H:%M:%S").to_string()}),
 /// 获取更新字段列表,
     pub fn w+.*{
-self.updated_fields.clone().unwrap_or_default(),
-    }
+self.updated_fields.clone().unwrap_or_default()}
 /// 获取完整信息摘要,
     pub fn w+.*{
 let mut parts = vec![,
@@ -372,27 +273,22 @@ let mut parts = vec![,
         ];
 if let Some(ref subscription_id) = self.subscription_id {,
             parts.push(format!("订阅ID: {subscription_id}"));
-}
 if let Some(update_time) = self.update_time_formatted() {,
             parts.push(format!("更新时间: {update_time}"));
-}
 let updated_fields = self.get_updated_fields();
         if !updated_fields.is_empty() {
             parts.push(format!("更新字段: {}", updated_fields.join(", ")));
-}
 parts.join(" | "),
     }
 /// 是否更新成功,
     pub fn w+.*{
-!self.get_updated_fields().is_empty() || self.update_time.is_some(),
-    }
-}
+!self.get_updated_fields().is_empty() || self.update_time.is_some()}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]
-    fn test_patch_subscription_request_builder() {,
+    fn test_patch_subscription_request_builder() {
 let builder = PatchSubscriptionRequest::builder(),
             .file_token()
 .as_doc()
@@ -409,9 +305,8 @@ let request = builder.build();
         assert_eq!(request.file_token, "doccnxxxxxx");
 assert!(request.has_status_change());
         assert!(request.has_config_change());
-}
 #[test]
-    fn test_patch_subscription_quick_modes() {,
+    fn test_patch_subscription_quick_modes() {
 let request = PatchSubscriptionRequest::builder(),
             .file_token()
 .as_doc()
@@ -423,9 +318,8 @@ assert!(request.has_config_change());
 assert!(config.has_notification());
         assert_eq!(config.get_notification_interval(), 300);
         assert_eq!(config.get_priority().value(), 3);
-}
 #[test]
-    fn test_patch_subscription_eco_mode() {,
+    fn test_patch_subscription_eco_mode() {
 let request = PatchSubscriptionRequest::builder(),
             .file_token()
 .as_doc()
@@ -438,7 +332,7 @@ assert!(config.has_notification());
 assert!(!config.has_auto_renew());
     }
 #[test]
-    fn test_patch_subscription_tag_management() {,
+    fn test_patch_subscription_tag_management() {
 let request = PatchSubscriptionRequest::builder(),
             .file_token()
 .as_doc()
@@ -451,4 +345,3 @@ let tags = config.get_tags();
         assert!(tags.contains(&"important".to_string()));
 assert!(tags.contains(&"urgent".to_string()));
     }
-}

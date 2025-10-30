@@ -7,8 +7,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -19,7 +18,7 @@ use crate::,
     impl_executable_builder_owned,
 };
 /// 批量删除协作者请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BatchDeleteRoleMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -33,63 +32,18 @@ pub struct BatchDeleteRoleMemberRequest {
 #[serde(skip)]
     user_id_type: Option<String>,
     /// 成员id列表
-    member_ids: Vec<String>,
-}
+    member_ids: Vec<String>}
 impl BatchDeleteRoleMemberRequest {
-    pub fn w+.*{
-BatchDeleteRoleMemberRequestBuilder::default(),
-    }
-
-    pub fn new(app_token: impl ToString, role_id: impl ToString, member_ids: Vec<String>) -> Self {
-Self {
-            app_token: app_token.to_string(),
-            role_id: role_id.to_string(),
-            member_ids,
-            ..Default::default(),
-}
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct BatchDeleteRoleMemberRequestBuilder {
-    request: BatchDeleteRoleMemberRequest,
-}
+    request: BatchDeleteRoleMemberRequest}
 impl BatchDeleteRoleMemberRequestBuilder {
-    /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {
-self.request.app_token = app_token.to_string();
-        self,
-}
-/// 自定义角色的id,
-    pub fn role_id(mut self, role_id: impl ToString) -> Self {
-self.request.role_id = role_id.to_string();
-        self,
-}
-/// 用户id类型,
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
-self.request.user_id_type = Some(user_id_type.to_string());
-        self,
-}
-/// 成员id列表,
-    pub fn member_ids(mut self, member_ids: Vec<String>) -> Self {
-self.request.member_ids = member_ids;
-        self,
-}
-/// 添加单个成员id,
-    pub fn add_member_id(mut self, member_id: impl ToString) -> Self {
-self.request.member_ids.push(member_id.to_string());
-        self,
-}
-pub fn w+.*{
-        if let Some(user_id_type) = &self.request.user_id_type {,
-self.request,
-                .api_request,
-.query_params
-                .insert("user_id_type", user_id_type.clone());
-}
-self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request,
-}
-}
 impl_executable_builder_owned!(,
     BatchDeleteRoleMemberRequestBuilder,
     AppRoleMemberService,
@@ -98,24 +52,23 @@ impl_executable_builder_owned!(,
     batch_delete,
 );
 /// 删除结果
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DeleteResult {
     /// 成员ID
     pub member_id: String,
     /// 是否删除成功
     pub deleted: bool,
-}
 /// 批量删除协作者响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BatchDeleteRoleMemberResponse {
     /// 删除结果列表
-    pub results: Vec<DeleteResult>,
-}
+    pub results: Vec<DeleteResult>}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 批量删除协作者,
 pub async fn batch_delete_role_members(
     request: BatchDeleteRoleMemberRequest,
@@ -131,14 +84,13 @@ api_req.api_path = BITABLE_V1_ROLE_MEMBERS_BATCH_DELETE,
 
     let api_resp = Transport::request(api_req, config, option).await?;
 Ok(api_resp),
-}
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]
-    fn test_batch_delete_role_member_request_builder() {,
+    fn test_batch_delete_role_member_request_builder() {
 let request = BatchDeleteRoleMemberRequest::builder(),
             .app_token()
 .role_id()
@@ -150,5 +102,3 @@ let request = BatchDeleteRoleMemberRequest::builder(),
         assert_eq!(request.role_id, "rolxxxxxx");
         assert_eq!(request.member_ids.len(), 2);
         assert_eq!(request.user_id_type, Some("open_id".to_string()));
-}
-}

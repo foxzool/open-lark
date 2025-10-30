@@ -3,96 +3,80 @@ use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::apass::models::{
         FlowExecuteRequest, FlowExecuteResult, PageResponse, RollbackPoint, UserTask,
         UserTaskActionRequest, UserTaskAddAssigneeRequest, UserTaskCcRequest,
         UserTaskChatGroupRequest, UserTaskQueryRequest, UserTaskRollbackRequest,
         UserTaskTransferRequest,
-    }
 };
 /// 流程管理服务
 pub struct FlowService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 流程执行响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct FlowExecuteResponse {
+}
     /// 流程执行结果
 #[serde(flatten)]
     pub execute_result: FlowExecuteResult,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 人工任务查询响应
-#[derive(.*?)]
-pub struct UserTaskQueryResponse {
-    /// 分页响应数据
-#[serde(flatten)]
-    pub page_response: PageResponse<UserTask>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 人工任务操作成功响应
-#[derive(.*?)]
-pub struct UserTaskActionResponse {
-    /// 操作是否成功
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub success: Option<bool>,
-    /// 操作消息
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub message: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 退回位置查询响应
-#[derive(.*?)]
-pub struct UserTaskRollbackPointsResponse {
-    /// 可退回的位置列表
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub rollback_points: Option<Vec<RollbackPoint>>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 群聊创建响应
-#[derive(.*?)]
-pub struct UserTaskChatGroupResponse {
-    /// 创建的群聊ID
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub chat_id: Option<String>,
-    /// 操作是否成功
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub success: Option<bool>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl FlowService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 人工任务查询响应
+#[derive(Debug, Clone)]
+pub struct UserTaskQueryResponse {
 }
-/// 发起流程
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 人工任务操作成功响应
+#[derive(Debug, Clone)]
+}
+pub struct UserTaskActionResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 退回位置查询响应
+#[derive(Debug, Clone)]
+}
+pub struct UserTaskRollbackPointsResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 群聊创建响应
+#[derive(Debug, Clone)]
+}
+pub struct UserTaskChatGroupResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl FlowService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 发起流程
     ///,
 /// 该接口用于发起一个新的流程实例。
     ///,
@@ -120,9 +104,7 @@ let api_req = ApiRequest {,
             }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询人工任务
     ///,
 /// 该接口用于查询人工任务列表。
@@ -150,18 +132,13 @@ let mut api_req = ApiRequest {,
 // 添加查询参数
         if let Some(status) = request.status {
             api_req.query_params.insert("status", status);
-}
 if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 同意人工任务
     ///,
 /// 该接口用于同意指定的人工任务。
@@ -188,9 +165,7 @@ let api_req = ApiRequest {,
 }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 拒绝人工任务
     ///,
 /// 该接口用于拒绝指定的人工任务。
@@ -217,9 +192,7 @@ let api_req = ApiRequest {,
 }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 转交人工任务
     ///,
 /// 该接口用于转交指定的人工任务给其他用户。
@@ -246,9 +219,7 @@ let api_req = ApiRequest {,
 }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 人工任务加签
     ///,
 /// 该接口用于为人工任务加签处理人。
@@ -275,9 +246,7 @@ let api_req = ApiRequest {,
 }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 抄送人工任务
     ///,
 /// 该接口用于抄送人工任务给其他用户。
@@ -304,9 +273,7 @@ let api_req = ApiRequest {,
 }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 催办人工任务
     ///,
 /// 该接口用于催办指定的人工任务。
@@ -332,9 +299,7 @@ let api_req = ApiRequest {,
             }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 撤销人工任务
     ///,
 /// 该接口用于撤销指定的人工任务。
@@ -360,9 +325,7 @@ let api_req = ApiRequest {,
             }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询人工任务可退回的位置
     ///,
 /// 该接口用于查询指定人工任务可退回的位置列表。
@@ -388,9 +351,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 退回人工任务
     ///,
 /// 该接口用于退回指定的人工任务到指定节点。
@@ -417,9 +378,7 @@ let api_req = ApiRequest {,
 }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 基于人工任务发起群聊
     ///,
 /// 该接口用于基于人工任务创建群聊。
@@ -445,7 +404,6 @@ let api_req = ApiRequest {,
             }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

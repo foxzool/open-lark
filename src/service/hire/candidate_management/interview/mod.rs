@@ -2,25 +2,23 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::hire::models::{CommonResponse, I18nText, PageResponse, UserId}
 };
 /// 面试服务
 pub struct InterviewService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 面试记录信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Interview {
+}
     /// 面试ID
     pub id: String,
     /// 投递ID
@@ -55,10 +53,10 @@ pub struct Interview {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 面试评估信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct InterviewEvaluation {
+}
     /// 评估ID
     pub id: String,
     /// 面试ID
@@ -77,10 +75,10 @@ pub struct InterviewEvaluation {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 面试安排信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct InterviewArrangement {
+}
     /// 安排ID
     pub id: String,
     /// 投递ID
@@ -105,10 +103,10 @@ pub struct InterviewArrangement {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 面试创建请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct InterviewCreateRequest {
+}
     /// 投递ID
     pub application_id: String,
     /// 面试轮次ID
@@ -125,10 +123,10 @@ pub struct InterviewCreateRequest {
     pub interviewers: Vec<String>,
     /// 面试备注
     pub remark: Option<String>,
-}
 /// 面试安排请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct InterviewArrangementRequest {
+}
     /// 投递ID
     pub application_id: String,
     /// 面试轮次ID
@@ -143,10 +141,10 @@ pub struct InterviewArrangementRequest {
     pub interviewers: Vec<String>,
     /// 安排备注
     pub remark: Option<String>,
-}
 /// 面试评估请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct InterviewEvaluationRequest {
+}
     /// 面试ID
     pub interview_id: String,
     /// 评估维度列表
@@ -157,89 +155,52 @@ pub struct InterviewEvaluationRequest {
     pub overall_score: Option<f32>,
     /// 面试结果
     pub result: Option<String>,
-}
 /// 评估维度
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EvaluationDimension {
-    /// 评估维度
-    pub dimension: String,
-    /// 评估分数
-    pub score: f32,
-    /// 评估评语
-    pub comment: Option<String>,
 }
-/// 面试列表请求
-#[derive(.*?)]
-pub struct InterviewListRequest {
-    /// 分页大小
-    pub page_size: Option<u32>,
-    /// 分页标记
-    pub page_token: Option<String>,
-    /// 投递ID
-    pub application_id: Option<String>,
-    /// 面试官ID
-    pub interviewer_id: Option<String>,
-    /// 面试状态
-    pub status: Option<String>,
-    /// 开始时间筛选
-    pub start_time_from: Option<String>,
-    /// 结束时间筛选
-    pub start_time_to: Option<String>,
-}
-/// 面试列表响应
-#[derive(.*?)]
-pub struct InterviewListResponse {
-    /// 面试记录列表
-#[serde(flatten)]
-    pub interviews: PageResponse<Interview>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 面试详情响应
-#[derive(.*?)]
-pub struct InterviewDetailResponse {
-    /// 面试记录信息
-    pub interview: Interview,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 面试评估列表响应
-#[derive(.*?)]
-pub struct InterviewEvaluationListResponse {
-    /// 面试评估列表
-#[serde(flatten)]
-    pub evaluations: PageResponse<InterviewEvaluation>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 面试操作响应
-#[derive(.*?)]
-pub struct InterviewOperationResponse {
-    /// 操作结果
-#[serde(flatten)]
-    pub result: CommonResponse,
-    /// 相关ID
-    pub id: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl InterviewService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 面试详情响应
+#[derive(Debug, Clone)]
 }
-/// 创建面试记录
+pub struct InterviewDetailResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 面试评估列表响应
+#[derive(Debug, Clone)]
+}
+pub struct InterviewEvaluationListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 面试操作响应
+#[derive(Debug, Clone)]
+}
+pub struct InterviewOperationResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl InterviewService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建面试记录
     ///,
 /// 该接口用于创建新的面试记录，安排候选人参加指定
     /// 轮次的面试。创建成功后可以设置面试官、时间地点等信息。
@@ -299,9 +260,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取面试记录详情
     ///,
 /// 该接口用于获取指定面试记录的详细信息，包括
@@ -331,8 +290,7 @@ let api_req = ApiRequest {,
     ///     println!("面试状态: {}" data.interview.status);
     ///     println!("面试评分: {:?}" data.interview.score);
     ///     println!("面试反馈: {:?}" data.interview.feedback);
-    /// }
-/// ```
+    /// /// ```
     pub async fn get_interview_detail(
         &self,
         interview_id: &str,
@@ -349,9 +307,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取面试记录列表
     ///,
 /// 该接口用于获取企业的面试记录列表，支持按投递、
@@ -398,8 +354,7 @@ let api_req = ApiRequest {,
 ///     for interview in &data.interviews.items {
     ///         println!("面试: {} 状态: {}" interview.id, interview.status);
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_interviews(
         &self,
         request: InterviewListRequest,
@@ -417,34 +372,25 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(application_id) = request.application_id {,
             api_req
 .query_params
                 .insert("application_id", application_id);
-}
 if let Some(interviewer_id) = request.interviewer_id {,
             api_req
 .query_params
                 .insert("interviewer_id", interviewer_id);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert("status", status);
-}
 if let Some(start_time_from) = request.start_time_from {,
             api_req
 .query_params
                 .insert("start_time_from", start_time_from);
-}
 if let Some(start_time_to) = request.start_time_to {,
             api_req.query_params.insert("start_time_to", start_time_to);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 安排面试
     ///,
 /// 该接口用于为候选人安排面试时间和面试官，
@@ -489,9 +435,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 提交面试评估
     ///,
 /// 该接口用于面试官提交面试评估，包括各维度
@@ -542,9 +486,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取面试评估列表
     ///,
 /// 该接口用于获取指定面试的评估记录列表，
@@ -591,13 +533,9 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 取消面试
     ///,
 /// 该接口用于取消已安排的面试，设置取消原因
@@ -627,11 +565,10 @@ pub async fn cancel_interview(,
         reason: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<InterviewOperationResponse>> {,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
         struct CancelRequest {
             reason: String,
-        }
-let request = CancelRequest {,
+        let request = CancelRequest {,
             reason: reason.to_string(),
         };
 let api_req = ApiRequest {,
@@ -645,9 +582,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 重新安排面试
     ///,
 /// 该接口用于重新安排面试时间或面试官，
@@ -681,12 +616,11 @@ pub async fn reschedule_interview(,
         new_interviewers: Option<Vec<String>>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<InterviewOperationResponse>> {,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
         struct RescheduleRequest {
             new_time: String,
             new_interviewers: Option<Vec<String>>,
-        }
-let request = RescheduleRequest {,
+        let request = RescheduleRequest {,
             new_time: new_time.to_string(),
             new_interviewers,
         };
@@ -701,7 +635,6 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

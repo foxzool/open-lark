@@ -11,12 +11,10 @@ use serde::{Deserialize, Serialize};
 /// 用户组管理服务,
 pub struct GroupService {
     config: Config,
-}
 impl GroupService {
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 创建用户组,
+}/// 创建用户组,
     pub async fn create(
         &self,
         req: &CreateGroupRequest,
@@ -137,13 +135,10 @@ Ok(resp.data.unwrap_or_default()),
 let mut query_params = std::collections::HashMap::new();
         if let Some(user_id_type) = &req.user_id_type {
             query_params.insert("user_id_type", user_id_type.clone());
-}
 if let Some(department_id_type) = &req.department_id_type {,
             query_params.insert("department_id_type", department_id_type.clone());
-}
 if let Some(include_members) = req.include_members {,
             query_params.insert("include_members", include_members.to_string());
-}
 let api_req = ApiRequest {,
             http_method: reqwest::Method::GET,
             api_path: EndpointBuilder::replace_param(
@@ -160,68 +155,61 @@ let resp =,
             Transport::<GetGroupDetailResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
     }
-}
 impl Service for GroupService {,
     fn config(&self) -> &Config {,
 &self.config,
     }
 fn service_name() -> &'static str {,
         "group",
-}
 fn service_version() -> &'static str {,
         "v3",
-}
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateGroupRequest {
     pub group: Group,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateGroupResponse {
     pub group: Group,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PatchGroupRequest {
     pub group: Group,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PatchGroupResponse {
     pub group: Group,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetGroupRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id_type: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetGroupResponse {
     pub group: Group,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListGroupsRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
@@ -231,23 +219,22 @@ pub struct ListGroupsRequest {
     pub user_id_type: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListGroupsResponse {
     pub groups: Vec<Group>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetUserGroupsRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member_id: Option<String>,
@@ -257,31 +244,31 @@ pub struct GetUserGroupsRequest {
     pub page_size: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetUserGroupsResponse {
     pub group_list: Vec<Group>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DeleteGroupResponse {}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 /// 获取用户组详细信息请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetGroupDetailRequest {
     /// 用户 ID 类型,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -292,20 +279,19 @@ pub struct GetGroupDetailRequest {
     /// 是否包含成员信息,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub include_members: Option<bool>,
-}
 /// 获取用户组详细信息响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetGroupDetailResponse {
     /// 用户组信息
     pub group: GroupDetail,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 /// 用户组详细信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GroupDetail {
     /// 用户组ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -331,4 +317,3 @@ pub struct GroupDetail {
     /// 成员数量,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub member_count: Option<i32>,
-}

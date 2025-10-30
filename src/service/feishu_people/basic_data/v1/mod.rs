@@ -3,12 +3,12 @@
 // 包含基础数据管理的完整功能
 use crate::prelude::*;
 /// 基础数据管理v1版本服务
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BasicDataV1Service {
     client: std::sync::Arc<LarkClient>,
 }
 impl BasicDataV1Service {
-    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
-        Self { client }
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }
 }

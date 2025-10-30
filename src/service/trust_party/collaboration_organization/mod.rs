@@ -7,7 +7,6 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-}
     config::Config,
         constants::AccessTokenType,
         endpoints::{EndpointBuilder, Endpoints,
@@ -16,23 +15,20 @@ use crate::,
         query_params::QueryParams,
         req_option::RequestOption,
         SDKResult,
-    }
     service::trust_party::models::{
         CollaborationDepartment, CollaborationOrganization, CollaborationUser,
         OrganizationStructure, PageResponse, SharedMemberScope,
-    }
 };
 /// 关联组织管理服务
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CollaborationOrganizationService {
+}
     pub config: Config,
-}
 impl CollaborationOrganizationService {
-    /// 创建关联组织管理服务实例
-pub fn new() -> Self {
+    
+    pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 获取可见关联组织的列表
+}/// 获取可见关联组织的列表
     ///,
 /// 获取当前用户可见的关联组织列表，支持分页查询。
     ///,
@@ -57,15 +53,11 @@ let mut api_req = ApiRequest::default();
 api_req
                 .query_params
                 .insert(QueryParams::PAGE_TOKEN, page_token);
-}
 if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert(QueryParams::PAGE_SIZE, page_size.to_string());
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取关联组织的部门和成员信息
     ///,
 /// 获取指定关联组织的组织架构信息，包括部门和成员。
@@ -90,9 +82,7 @@ let mut api_req = ApiRequest::default();
             org_id,
         ));
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取关联组织详情
     ///,
 /// 获取指定关联组织的详细信息。
@@ -117,9 +107,7 @@ let mut api_req = ApiRequest::default();
             org_id,
         ));
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取关联组织成员详情
     ///,
 /// 获取指定关联组织中指定成员的详细信息。
@@ -145,9 +133,7 @@ let mut api_req = ApiRequest::default();
             &[("org_id", org_id), ("user_id", user_id)]
         ));
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取关联组织部门详情
     ///,
 /// 获取指定关联组织中指定部门的详细信息。
@@ -173,9 +159,7 @@ let mut api_req = ApiRequest::default();
             &[("org_id", org_id), ("department_id", department_id)]
         ));
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取关联组织双方共享成员范围
     ///,
 /// 获取与指定关联组织之间的共享成员范围信息。
@@ -207,15 +191,11 @@ let mut api_req = ApiRequest::default();
 api_req
                 .query_params
                 .insert(QueryParams::PAGE_TOKEN, page_token);
-}
 if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert(QueryParams::PAGE_SIZE, page_size.to_string());
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 管理员获取所有关联组织列表
     ///,
 /// 管理员权限获取所有关联组织的列表，包括不可见的组织。
@@ -241,129 +221,83 @@ let mut api_req = ApiRequest::default();
 api_req
                 .query_params
                 .insert(QueryParams::PAGE_TOKEN, page_token);
-}
 if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert(QueryParams::PAGE_SIZE, page_size.to_string());
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert(QueryParams::STATUS, status);
+        Transport::request(api_req, &self.config, option).await,
+/// 组织列表查询请求
+#[derive(Debug, Clone)]
+pub struct OrganizationListRequest {
 }
 
-        Transport::request(api_req, &self.config, option).await,
-}
-}
-/// 组织列表查询请求
-#[derive(.*?)]
-pub struct OrganizationListRequest {
-    /// 页码标记
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-    /// 每页数量
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_size: Option<i32>,
-}
-/// 组织列表查询响应
-#[derive(.*?)]
-pub struct OrganizationListResponse {
-    /// 关联组织列表
-#[serde(flatten)]
-    pub organizations: PageResponse<CollaborationOrganization>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
-    }
+    /// 组织架构查询响应
+#[derive(Debug, Clone)]
 }
-/// 组织架构查询响应
-#[derive(.*?)]
 pub struct OrganizationStructureResponse {
-    /// 组织架构信息
-    pub organization_structure: OrganizationStructure,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
-    }
+    /// 组织详情查询响应
+#[derive(Debug, Clone)]
 }
-/// 组织详情查询响应
-#[derive(.*?)]
 pub struct OrganizationGetResponse {
-    /// 关联组织详情
-    pub organization: CollaborationOrganization,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
-    }
+    /// 组织成员详情查询响应
+#[derive(Debug, Clone)]
 }
-/// 组织成员详情查询响应
-#[derive(.*?)]
 pub struct OrganizationUserGetResponse {
-    /// 成员详情
-    pub user: CollaborationUser,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
-    }
+    /// 组织部门详情查询响应
+#[derive(Debug, Clone)]
 }
-/// 组织部门详情查询响应
-#[derive(.*?)]
 pub struct OrganizationDepartmentGetResponse {
-    /// 部门详情
-    pub department: CollaborationDepartment,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
-    }
+    /// 共享成员范围列表查询请求
+#[derive(Debug, Clone)]
 }
-/// 共享成员范围列表查询请求
-#[derive(.*?)]
 pub struct SharedMemberScopeListRequest {
-    /// 页码标记
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-    /// 每页数量
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_size: Option<i32>,
-}
-/// 共享成员范围列表查询响应
-#[derive(.*?)]
-pub struct SharedMemberScopeListResponse {
-    /// 共享成员范围列表
-#[serde(flatten)]
-    pub shared_scopes: PageResponse<SharedMemberScope>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
-    }
+    /// 管理员组织列表查询请求
+#[derive(Debug, Clone)]
 }
-/// 管理员组织列表查询请求
-#[derive(.*?)]
 pub struct AdminOrganizationListRequest {
-    /// 页码标记
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-    /// 每页数量
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_size: Option<i32>,
-    /// 组织状态筛选
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
-}
-/// 管理员组织列表查询响应
-#[derive(.*?)]
-pub struct AdminOrganizationListResponse {
-    /// 关联组织列表
-#[serde(flatten)]
-    pub organizations: PageResponse<CollaborationOrganization>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

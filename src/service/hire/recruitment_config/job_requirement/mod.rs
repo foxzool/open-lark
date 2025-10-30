@@ -2,78 +2,63 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::hire::models::{
         CommonResponse, JobRequirement, JobRequirementCreateRequest, PageResponse,
-    }
 };
 /// 招聘需求服务
 pub struct JobRequirementService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 招聘需求列表响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct JobRequirementListResponse {
+}
     /// 招聘需求列表
 #[serde(flatten)]
     pub requirements: PageResponse<JobRequirement>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 招聘需求详情响应
-#[derive(.*?)]
-pub struct JobRequirementDetailResponse {
-    /// 招聘需求信息
-    pub requirement: JobRequirement,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 招聘需求操作响应
-#[derive(.*?)]
-pub struct JobRequirementOperationResponse {
-    /// 操作结果
-#[serde(flatten)]
-    pub result: CommonResponse,
-    /// 需求ID
-    pub requirement_id: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 招聘需求列表请求
-#[derive(.*?)]
-pub struct JobRequirementListRequest {
-    /// 分页大小
-    pub page_size: Option<u32>,
-    /// 分页标记
-    pub page_token: Option<String>,
-    /// 职位ID
-    pub job_id: Option<String>,
-    /// 需求状态
-    pub status: Option<String>,
-}
-impl JobRequirementService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 招聘需求详情响应
+#[derive(Debug, Clone)]
+pub struct JobRequirementDetailResponse {
 }
-/// 创建招聘需求
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 招聘需求操作响应
+#[derive(Debug, Clone)]
+}
+pub struct JobRequirementOperationResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 招聘需求列表请求
+#[derive(Debug, Clone)]
+}
+pub struct JobRequirementListRequest {
+
+impl JobRequirementService {
+    
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 创建招聘需求
     ///,
 /// 该接口用于为指定职位创建招聘需求，设置招聘人数、
     /// 期望入职时间等具体要求。创建成功后可用于跟踪
@@ -123,9 +108,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取招聘需求详情
     ///,
 /// 该接口用于获取指定招聘需求的详细信息，包括需求
@@ -154,8 +137,7 @@ let api_req = ApiRequest {,
     ///     println!("需求名称: {}" data.requirement.name);
     ///     println!("需求人数: {}" data.requirement.headcount);
     ///     println!("关联职位: {}" data.requirement.job_id);
-    /// }
-/// ```
+    /// /// ```
     pub async fn get_requirement_detail(
         &self,
         requirement_id: &str,
@@ -172,9 +154,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取招聘需求列表
     ///,
 /// 该接口用于获取企业的招聘需求列表，支持按职位、
@@ -215,8 +195,7 @@ let api_req = ApiRequest {,
 ///     for requirement in &data.requirements.items {
     ///         println!("需求: {} (人数: {})" requirement.name, requirement.headcount);
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_requirements(
         &self,
         request: JobRequirementListRequest,
@@ -234,19 +213,13 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(job_id) = request.job_id {,
             api_req.query_params.insert("job_id", job_id);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert("status", status);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 更新招聘需求
     ///,
 /// 该接口用于更新现有招聘需求的信息，支持修改需求
@@ -291,9 +264,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除招聘需求
     ///,
 /// 该接口用于删除指定的招聘需求。删除后的需求
@@ -326,7 +297,6 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}}}}}}}}}}}

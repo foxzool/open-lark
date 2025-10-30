@@ -3,26 +3,22 @@ use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, LINGO_FILE_DOWNLOAD, LINGO_FILE_UPLOAD}
-        http::Transport,
+        endpoints::{EndpointBuilder, LINGO_FILE_DOWNLOAD, LINGO_FILE_UPLOADhttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::lingo::models::FileInfo,
 };
 /// 图片管理服务
 pub struct FileService {
-    pub config: Config,
 }
+
 impl FileService {
-    /// 创建图片管理服务实例
-pub fn new() -> Self {
+    
+    pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 上传图片
+}/// 上传图片
     ///,
 /// 上传图片资源，用于词条中的图片引用。
     ///,
@@ -46,9 +42,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 下载图片
     ///,
 /// 通过文件 token 下载图片资源。
@@ -77,46 +71,26 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
 /// 文件上传请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct FileUploadRequest {
-    /// 文件名
-    pub file_name: String,
-    /// 文件内容（base64编码）
-    pub file_content: String,
-    /// 文件类型
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub file_type: Option<String>,
 }
-/// 文件上传响应
-#[derive(.*?)]
-pub struct FileUploadResponse {
-    /// 上传的文件信息
-    pub file: FileInfo,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
-    }
+    /// 文件下载响应
+#[derive(Debug, Clone)]
 }
-/// 文件下载响应
-#[derive(.*?)]
 pub struct FileDownloadResponse {
-    /// 文件内容（二进制数据）
-    pub content: Vec<u8>,
-    /// 文件类型
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub content_type: Option<String>,
-    /// 文件大小
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub content_length: Option<i64>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
+}}}}}}}}}}}

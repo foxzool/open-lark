@@ -4,39 +4,28 @@ use std::collections::HashMap;
 use open_lark_core::core::api_req::ApiRequest;
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::mail::models::UserIdType,
 };
 /// 邮件附件服务
 pub struct AttachmentService {
-    pub config: Config,
 }
-/// 获取附件下载链接响应
-#[derive(.*?)]
-pub struct GetAttachmentDownloadUrlResponse {
-    /// 下载链接
-    pub download_url: String,
-    /// 链接过期时间
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub expires_at: Option<i64>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl AttachmentService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl AttachmentService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 获取附件下载链接
+}/// 获取附件下载链接
     ///,
 /// 该接口用于获取邮件附件的下载链接。
     ///,
@@ -64,7 +53,6 @@ impl AttachmentService {
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(,
@@ -84,7 +72,6 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}

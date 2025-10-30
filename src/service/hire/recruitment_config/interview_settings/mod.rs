@@ -2,25 +2,23 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::hire::models::{CommonResponse, I18nText, PageResponse}
 };
 /// 面试设置服务
 pub struct InterviewSettingsService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 面试设置信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct InterviewSettings {
+}
     /// 设置ID
     pub id: String,
     /// 设置名称
@@ -45,123 +43,52 @@ pub struct InterviewSettings {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 面试时长配置
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct InterviewDurationConfig {
-    // TODO: Add fields
 }
+    // TODO: Add fields
 /// 面试官配置
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct InterviewerConfig {
-    // TODO: Add fields
 }
+    // TODO: Add fields
 /// 评分配置
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EvaluationConfig {
-    // TODO: Add fields
 }
-/// 评分项目
-#[derive(.*?)]
-pub struct EvaluationItem {
-    /// 项目ID
-    pub id: String,
-    /// 项目名称
-    pub name: I18nText,
-    /// 项目权重
-    pub weight: Option<f32>,
-    /// 是否必填
-    pub is_required: bool,
-}
-/// 评分范围
-#[derive(.*?)]
-pub struct ScoreRange {
-    /// 最小分数
-    pub min_score: f32,
-    /// 最大分数
-    pub max_score: f32,
-    /// 分数步长
-    pub step: Option<f32>,
-}
-/// 通知配置
-#[derive(.*?)]
-pub struct NotificationConfig {
-    // TODO: Add fields
-}
-/// 面试设置创建请求
-#[derive(.*?)]
-pub struct InterviewSettingsCreateRequest {
-    /// 设置名称
-    pub name: I18nText,
-    /// 设置描述
-    pub description: Option<I18nText>,
-    /// 面试类型
-    pub interview_type: String,
-    /// 面试时长配置
-    pub duration_config: InterviewDurationConfig,
-    /// 面试官配置
-    pub interviewer_config: InterviewerConfig,
-    /// 评分配置
-    pub evaluation_config: Option<EvaluationConfig>,
-    /// 通知配置
-    pub notification_config: Option<NotificationConfig>,
-    /// 是否默认设置
-    pub is_default: Option<bool>,
-}
-/// 面试设置列表请求
-#[derive(.*?)]
-pub struct InterviewSettingsListRequest {
-    /// 分页大小
-    pub page_size: Option<u32>,
-    /// 分页标记
-    pub page_token: Option<String>,
-    /// 面试类型
-    pub interview_type: Option<String>,
-    /// 状态
-    pub status: Option<String>,
-}
-/// 面试设置列表响应
-#[derive(.*?)]
-pub struct InterviewSettingsListResponse {
-    /// 面试设置列表
-#[serde(flatten)]
-    pub settings: PageResponse<InterviewSettings>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 面试设置详情响应
-#[derive(.*?)]
-pub struct InterviewSettingsDetailResponse {
-    /// 面试设置信息
-    pub settings: InterviewSettings,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 面试设置操作响应
-#[derive(.*?)]
-pub struct InterviewSettingsOperationResponse {
-    /// 操作结果
-#[serde(flatten)]
-    pub result: CommonResponse,
-    /// 设置ID
-    pub settings_id: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl InterviewSettingsService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 面试设置详情响应
+#[derive(Debug, Clone)]
 }
-/// 创建面试设置
+pub struct InterviewSettingsDetailResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 面试设置操作响应
+#[derive(Debug, Clone)]
+}
+pub struct InterviewSettingsOperationResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl InterviewSettingsService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建面试设置
     ///,
 /// 该接口用于创建新的面试设置模板，定义面试的
     /// 时长、面试官要求、评分标准、通知方式等配置。
@@ -221,9 +148,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取面试设置详情
     ///,
 /// 该接口用于获取指定面试设置的详细信息，包括
@@ -254,8 +179,7 @@ let api_req = ApiRequest {,
     ///     println!("设置名称: {:?}" data.settings.name.zh_cn);
     ///     println!("面试类型: {}" data.settings.interview_type);
     ///     println!("默认时长: {}分钟" data.settings.duration_config.default_duration);
-    /// }
-/// ```
+    /// /// ```
     pub async fn get_settings_detail(
         &self,
         settings_id: &str,
@@ -272,9 +196,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取面试设置列表
     ///,
 /// 该接口用于获取企业的面试设置列表，支持按类型、
@@ -315,8 +237,7 @@ let api_req = ApiRequest {,
 ///     for settings in &data.settings.items {
     ///         println!("设置: {:?} (类型: {})" settings.name.zh_cn, settings.interview_type);
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_settings(
         &self,
         request: InterviewSettingsListRequest,
@@ -334,21 +255,15 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(interview_type) = request.interview_type {,
             api_req
 .query_params
                 .insert("interview_type", interview_type);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert("status", status);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 更新面试设置
     ///,
 /// 该接口用于更新现有面试设置的配置，支持修改
@@ -400,9 +315,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除面试设置
     ///,
 /// 该接口用于删除指定的面试设置。删除后的设置
@@ -435,7 +348,6 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}

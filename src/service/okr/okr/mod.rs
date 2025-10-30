@@ -3,50 +3,47 @@ use serde::{Deserialize, Serialize};
 use open_lark_core::core::api_req::ApiRequest;
 use crate::{
     core::{,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::okr::*,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::okr::models::{Okr, OkrStatus, PageResponse}
 };
 /// OKR 内容管理服务
 #[derive(Debug)]
 pub struct OkrContentService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 用户 OKR 列表响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UserOkrListResponse {
+}
     /// OKR 列表
 #[serde(flatten)]
     pub okrs: PageResponse<Okr>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 批量 OKR 响应
-#[derive(.*?)]
-pub struct BatchOkrResponse {
-    /// OKR 列表
-    pub okrs: Vec<Okr>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl OkrContentService {
-    /// 创建 OKR 内容管理服务实例
-pub fn new() -> Self {
+    pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 批量 OKR 响应
+#[derive(Debug, Clone)]
 }
-/// 获取用户的 OKR 列表
+pub struct BatchOkrResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl OkrContentService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 获取用户的 OKR 列表
     ///,
 /// 查询指定用户在指定周期的 OKR 列表，包括 Objective 和 Key Result 信息。
     ///,
@@ -88,11 +85,9 @@ pub fn new() -> Self {
     ///                 }
     ///             }
     ///         }
-    ///     }
-///,
+    ///     ///,
     ///     Ok(())
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_user_okrs(
         &self,
         request: UserOkrListRequest,
@@ -108,24 +103,17 @@ let mut api_req = ApiRequest {,
 // 添加查询参数
         if let Some(user_id) = request.user_id {
             api_req.query_params.insert("user_id", user_id);
-}
 if let Some(period_id) = request.period_id {,
             api_req.query_params.insert("period_id", period_id);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert("status", format!("{status:?}"));
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert("page_size", page_size.to_string());
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量获取 OKR
     ///,
 /// 根据提供的 OKR ID 列表批量获取 OKR 详细信息。
@@ -150,12 +138,9 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
 /// 用户 OKR 列表查询请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UserOkrListRequest {
     /// 用户ID筛选
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -172,9 +157,8 @@ pub struct UserOkrListRequest {
     /// 每页数量
 #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
-}
 /// 批量获取 OKR 请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BatchOkrRequest {
     /// OKR ID 列表
     pub okr_ids: Vec<String>,
@@ -182,3 +166,4 @@ pub struct BatchOkrRequest {
 #[serde(skip_serializing_if = "Option::is_none")]
     pub include_details: Option<bool>,
 }
+}}}}}}}}}}}}}}}}}}

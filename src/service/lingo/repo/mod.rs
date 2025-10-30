@@ -3,26 +3,23 @@ use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::LINGO_REPO_LIST,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::lingo::models::{PageResponse, Repo}
 };
 /// 词库管理服务
 pub struct RepoService {
-    pub config: Config,
 }
+
 impl RepoService {
-    /// 创建词库管理服务实例
-pub fn new() -> Self {
+    
+    pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 获取词库列表
+}/// 获取词库列表
     ///,
 /// 获取当前用户可访问的词库列表，支持分页查询。
     ///,
@@ -49,35 +46,20 @@ let mut api_req = ApiRequest {,
 // 添加查询参数
         if let Some(page_token) = request.page_token {
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert("page_size", page_size.to_string());
+        Transport::request(api_req, &self.config, option).await,
+/// 词库列表查询请求
+#[derive(Debug, Clone)]
+pub struct RepoListRequest {
 }
 
-        Transport::request(api_req, &self.config, option).await,
-}
-}
-/// 词库列表查询请求
-#[derive(.*?)]
-pub struct RepoListRequest {
-    /// 页码标记
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-    /// 每页数量
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_size: Option<i32>,
-}
-/// 词库列表查询响应
-#[derive(.*?)]
-pub struct RepoListResponse {
-    /// 词库列表
-#[serde(flatten)]
-    pub repos: PageResponse<Repo>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
+}}}}}}}}

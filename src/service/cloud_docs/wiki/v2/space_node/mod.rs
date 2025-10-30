@@ -1,5 +1,4 @@
 use crate::core::{config::Config, req_option::RequestOption, SDKResult};
-
 pub use copy::{copy_space_node, CopiedNode, CopySpaceNodeRequest, CopySpaceNodeResponse};
 pub use create::{create_space_node, CreateSpaceNodeRequest, CreateSpaceNodeResponse, CreatedNode};
 pub use get::{get_space_node, GetSpaceNodeRequest, GetSpaceNodeResponse, SpaceNode};
@@ -16,13 +15,13 @@ mod r#move;
 mod update_title;
 /// 知识空间节点服务
 pub struct SpaceNodeService {
-    config: Config,
 }
+
 impl SpaceNodeService {
+}
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 创建知识空间节点
+}/// 创建知识空间节点
     ///,
 /// 在知识空间中创建新的节点，可以是文档、文件夹或其他类型的内容节点。
     /// 支持设置节点标题、父节点、节点类型等属性。
@@ -41,7 +40,6 @@ result.data.ok_or_else(|| {,
                 "Response data is missing".to_string(),
             ),
 }),
-}
 /// 获取知识空间节点
     ///,
 /// 获取指定知识空间节点的详细信息，包括节点标题、类型、创建时间、
@@ -61,7 +59,6 @@ result.data.ok_or_else(|| {,
                 "Response data is missing".to_string(),
             ),
 }),
-}
 /// 获取知识空间子节点列表
     ///,
 /// 获取指定知识空间节点的直接子节点列表，包括子节点的标题、类型、
@@ -81,7 +78,6 @@ result.data.ok_or_else(|| {,
                 "Response data is missing".to_string(),
             ),
 }),
-}
 /// 移动知识空间节点
     ///,
 /// 将知识空间节点移动到新的父节点下，可以重新组织知识库的层级结构。
@@ -101,7 +97,6 @@ result.data.ok_or_else(|| {,
                 "Response data is missing".to_string(),
             ),
 }),
-}
 /// 更新知识空间节点标题
     ///,
 /// 更新知识空间节点的标题，支持修改文档或文件夹的名称。
@@ -121,7 +116,6 @@ result.data.ok_or_else(|| {,
                 "Response data is missing".to_string(),
             ),
 }),
-}
 /// 复制知识空间节点
     ///,
 /// 复制知识空间节点到指定的目标位置，包括节点内容和子节点。
@@ -142,4 +136,4 @@ result.data.ok_or_else(|| {,
             ),
 }),
 }
-}
+}}}}}

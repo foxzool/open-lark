@@ -10,12 +10,10 @@ use serde::{Deserialize, Serialize};
 /// 工作城市服务,
 pub struct WorkCityService {
     config: Config,
-}
 impl WorkCityService {
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// # API文档,
+}/// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/get,
     /// 获取单个工作城市信息
@@ -52,36 +50,34 @@ let resp =,
             Transport::<ListWorkCitiesResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetWorkCityResponse {
     pub work_city: WorkCity,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListWorkCitiesRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListWorkCitiesResponse {
     pub items: Vec<WorkCity>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}

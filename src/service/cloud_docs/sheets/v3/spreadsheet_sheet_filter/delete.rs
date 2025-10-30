@@ -9,52 +9,21 @@ use open_lark_core::core::api_req::ApiRequest;    core::{,
     service::sheets::v3::SpreadsheetSheetFilterService,
 };
 /// 删除筛选,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DeleteSheetFilterRequest {
     api_request: ApiRequest,
     spreadsheet_token: String,
-    sheet_id: String,
-}
+    sheet_id: String}
 impl DeleteSheetFilterRequest {
-    pub fn w+.*{
-DeleteSheetFilterRequestBuilder::default(),
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct DeleteSheetFilterRequestBuilder {
-    request: DeleteSheetFilterRequest,
-}
+    request: DeleteSheetFilterRequest}
 impl DeleteSheetFilterRequestBuilder {
-    /// 表格 token
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
-self.request.spreadsheet_token = spreadsheet_token.to_string();
-        self,
-}
-/// 子表 id,
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
-self.request.sheet_id = sheet_id.to_string();
-        self,
-}
-pub fn w+.*{
-        self.request,
-}
-}
-impl SpreadsheetSheetFilterService {
-    /// 删除筛选,
-pub async fn delete(,
-        &self,
-        request: DeleteSheetFilterRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<EmptyResponse>> {,
-let mut api_req = request.api_request;
-        api_req.api_path = SHEETS_V3_SPREADSHEET_FILTER
-            .replace("{}", &request.spreadsheet_token)
-            .replace("{}", &request.sheet_id);
-api_req.set_http_method(reqwest::Method::DELETE);
-        api_req
-            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::App]);
-
-        let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
-Ok(api_resp),
-    }
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}impl SpreadsheetSheetFilterService {
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }

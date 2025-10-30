@@ -6,8 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -18,7 +17,7 @@ use crate::,
     impl_executable_builder_config,
 };
 /// 获取表单元数据请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetFormRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -27,48 +26,24 @@ pub struct GetFormRequest {
     app_token: String,
     /// 表单ID,
 #[serde(skip)]
-    form_id: String,
-}
+    form_id: String}
 impl GetFormRequest {
-    pub fn w+.*{
-GetFormRequestBuilder::default(),
-    }
-
-    pub fn new(app_token: impl ToString, form_id: impl ToString) -> Self {
-Self {
-            app_token: app_token.to_string(),
-            form_id: form_id.to_string()
-            ..Default::default(),
-}
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct GetFormRequestBuilder {
-    request: GetFormRequest,
-}
+    request: GetFormRequest}
 impl GetFormRequestBuilder {
-    /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {
-self.request.app_token = app_token.to_string();
-        self,
-}
-/// 表单ID,
-    pub fn form_id(mut self, form_id: impl ToString) -> Self {
-self.request.form_id = form_id.to_string();
-        self,
-}
-pub fn w+.*{
-        self.request,
-}
-}
-impl_executable_builder_config!(,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}impl_executable_builder_config!(,
     GetFormRequestBuilder,
     GetFormRequest,
     BaseResponse<GetFormResponse>,
     get_form,
 );
 /// 表单信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Form {
     /// 表单ID
     pub form_id: String,
@@ -90,18 +65,17 @@ pub struct Form {
     pub need_login: bool,
     /// 状态：启用/禁用
     pub status: String,
-}
 /// 获取表单元数据响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetFormResponse {
     /// 表单信息
     pub form: Form,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 获取表单元数据,
 pub async fn get_form(
     request: GetFormRequest,
@@ -117,14 +91,13 @@ api_req.api_path = BITABLE_V1_FORM_GET,
 
     let api_resp = Transport::request(api_req, config, option).await?;
 Ok(api_resp),
-}
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]
-    fn test_get_form_request_builder() {,
+    fn test_get_form_request_builder() {
 let request = GetFormRequest::builder(),
             .app_token()
 .form_id()
@@ -132,5 +105,3 @@ let request = GetFormRequest::builder(),
 
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
         assert_eq!(request.form_id, "vewxxxxxx");
-}
-}

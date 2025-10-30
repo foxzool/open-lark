@@ -4,25 +4,23 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use crate::{
     core::{,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::application::models::*,
 };
 /// 应用商店信息服务
 pub struct AppstorePaidInfoService {
-    config: Config,
 }
+    config: Config,
 impl AppstorePaidInfoService {
+    
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 查询用户是否在应用开通范围
+}/// 查询用户是否在应用开通范围
     pub async fn check_user_access(
         &self,
         app_id: &str,
@@ -34,7 +32,6 @@ impl AppstorePaidInfoService {
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
@@ -50,7 +47,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询租户购买的付费方案
     pub async fn list_tenant_paid_plans(
         &self,
@@ -62,10 +58,8 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(page_size) = page_size {
             query_params.insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token);
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
@@ -77,9 +71,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询订单详情
     pub async fn get_order_info(
         &self,
@@ -96,40 +88,34 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
 // 请求响应模型
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CheckUserAccessResponse {
-    pub has_access: bool,
-    pub order: Option<Order>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
 
-#[derive(.*?)]
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    #[derive(Debug, Clone)]
+}
 pub struct ListTenantPaidPlansResponse {
-    pub pricing_plans: Vec<PricingPlan>,
-    pub page_token: Option<String>,
-    pub has_more: bool,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
 
-#[derive(.*?)]
-pub struct GetOrderInfoResponse {
-    pub order: Order,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    #[derive(Debug, Clone)]
+}
+pub struct GetOrderInfoResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
+}}}}}}}}}}}}}}}}}

@@ -4,73 +4,62 @@ use open_lark_core::core::api_req::ApiRequest;
 use std::collections::HashMap;
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{helpdesk::*, EndpointBuilder}
-        http::Transport,
+        endpoints::{helpdesk::*, EndpointBuilderhttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::helpdesk::models::{AgentSkill, UserIdType}
 };
 /// 客服技能服务
 pub struct AgentSkillService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 创建客服技能请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateAgentSkillRequest {
+}
     /// 技能名称
     pub skill_name: String,
     /// 技能描述
 #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-}
 /// 创建客服技能响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateAgentSkillResponse {
-    /// 创建的技能
-    pub skill: AgentSkill,
 }
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 获取客服技能响应
-#[derive(.*?)]
-pub struct GetAgentSkillResponse {
-    /// 技能信息
-    pub skill: AgentSkill,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 获取全部客服技能响应
-#[derive(.*?)]
-pub struct ListAgentSkillsResponse {
-    /// 技能列表
-    pub skills: Vec<AgentSkill>,
-    /// 是否还有更多数据
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub has_more: Option<bool>,
-    /// 下一页标记
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl AgentSkillService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 获取客服技能响应
+#[derive(Debug, Clone)]
 }
-/// 创建客服技能
+pub struct GetAgentSkillResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 获取全部客服技能响应
+#[derive(Debug, Clone)]
+}
+pub struct ListAgentSkillsResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl AgentSkillService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建客服技能
     pub async fn create(
         &self,
         request: CreateAgentSkillRequest,
@@ -80,7 +69,6 @@ impl AgentSkillService {
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: HELPDESK_V1_AGENT_SKILL_CREATE.to_string(),
@@ -90,7 +78,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除客服技能
     pub async fn delete(
         &self,
@@ -101,7 +88,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
@@ -113,9 +99,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询指定客服技能
     pub async fn get(
         &self,
@@ -126,7 +110,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
@@ -138,9 +121,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询全部客服技能
     pub async fn list(
         &self,
@@ -152,13 +133,10 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token.to_string());
-}
 if let Some(page_size) = page_size {,
             query_params.insert("page_size", page_size.to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: HELPDESK_V1_AGENT_SKILLS.to_string(),
@@ -166,7 +144,6 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}}}}}}}}}}

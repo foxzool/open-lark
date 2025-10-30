@@ -13,8 +13,7 @@ pub struct PageResponse<T> {
     pub page_token: Option<String>,
     /// 数据项目列表
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<T>>,
-}
+    pub items: Option<Vec<T>>}
 
 // ============ 登录密码管理相关结构 ============
 
@@ -25,15 +24,12 @@ pub struct PasswordResetRequest {
     pub user_id: String,
     /// 新密码
     pub password: String,
-}
 
 impl Default for PasswordResetRequest {
     fn default() -> Self {
         Self {
             user_id: String::new(),
-            password: String::new(),
-        }
-    }
+            password: String::new()}
 }
 
 /// 重置用户企业邮箱密码响应
@@ -44,8 +40,7 @@ pub struct PasswordResetResponse {
     pub success: Option<bool>,
     /// 操作时间
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reset_time: Option<String>,
-}
+    pub reset_time: Option<String>}
 
 // ============ 数据报表管理相关结构 ============
 
@@ -67,8 +62,7 @@ pub struct DepartmentDataReportRequest {
     pub page_size: Option<i32>,
     /// 分页标记
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
+    pub page_token: Option<String>}
 
 /// 用户维度数据报表查询请求
 #[derive(Debug, Deserialize, Serialize)]
@@ -94,8 +88,7 @@ pub struct UserDataReportRequest {
     pub page_size: Option<i32>,
     /// 分页标记
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
+    pub page_token: Option<String>}
 
 /// 数据报表信息
 #[derive(Debug, Deserialize, Serialize)]
@@ -126,8 +119,7 @@ pub struct DataReport {
     pub meeting_duration: Option<i32>,
     /// 其他统计数据
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub additional_metrics: Option<HashMap<String, Value>>,
-}
+    pub additional_metrics: Option<HashMap<String, Value>>}
 
 // ============ 企业勋章相关结构 ============
 
@@ -156,8 +148,7 @@ pub struct BadgeCreateRequest {
     pub i18n_description: Option<HashMap<String, String>>,
     /// 国际化详情描述
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub i18n_detail_description: Option<HashMap<String, String>>,
-}
+    pub i18n_detail_description: Option<HashMap<String, String>>}
 
 /// 勋章更新请求
 #[derive(Debug, Deserialize, Serialize)]
@@ -187,8 +178,7 @@ pub struct BadgeUpdateRequest {
     pub i18n_description: Option<HashMap<String, String>>,
     /// 国际化详情描述
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub i18n_detail_description: Option<HashMap<String, String>>,
-}
+    pub i18n_detail_description: Option<HashMap<String, String>>}
 
 /// 勋章图片上传请求
 #[derive(Debug, Deserialize, Serialize)]
@@ -197,8 +187,7 @@ pub struct BadgeImageUploadRequest {
     pub image: String,
     /// 图片文件名
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_name: Option<String>,
-}
+    pub file_name: Option<String>}
 
 /// 勋章列表查询请求
 #[derive(Debug, Deserialize, Serialize)]
@@ -211,15 +200,13 @@ pub struct BadgeListRequest {
     pub page_token: Option<String>,
     /// 勋章名称（模糊搜索）
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-}
+    pub name: Option<String>}
 
 /// 勋章查询请求
 #[derive(Debug, Deserialize, Serialize)]
 pub struct BadgeGetRequest {
     /// 勋章ID
     pub badge_id: String,
-}
 
 /// 勋章信息
 #[derive(Debug, Deserialize, Serialize)]
@@ -253,8 +240,7 @@ pub struct Badge {
     pub i18n_description: Option<HashMap<String, String>>,
     /// 国际化详情描述
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub i18n_detail_description: Option<HashMap<String, String>>,
-}
+    pub i18n_detail_description: Option<HashMap<String, String>>}
 
 /// 图片上传结果
 #[derive(Debug, Deserialize, Serialize)]
@@ -264,8 +250,7 @@ pub struct BadgeImageUploadResult {
     pub image_key: Option<String>,
     /// 图片URL
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_url: Option<String>,
-}
+    pub image_url: Option<String>}
 
 // ============ 勋章授予名单相关结构 ============
 
@@ -290,8 +275,7 @@ pub struct BadgeGrantCreateRequest {
     pub expiry_time: Option<String>,
     /// 授予时间展示类型
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub time_zone: Option<String>,
-}
+    pub time_zone: Option<String>}
 
 /// 勋章授予用户信息
 #[derive(Debug, Deserialize, Serialize)]
@@ -306,8 +290,7 @@ pub struct BadgeGrantUser {
     pub reason: Option<String>,
     /// 授予时间
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub grant_time: Option<String>,
-}
+    pub grant_time: Option<String>}
 
 /// 勋章授予名单信息
 #[derive(Debug, Deserialize, Serialize)]
@@ -338,6 +321,5 @@ pub struct BadgeGrant {
     pub time_zone: Option<String>,
     /// 创建者ID
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub creator_id: Option<String>,
-}
+    pub creator_id: Option<String>}
 

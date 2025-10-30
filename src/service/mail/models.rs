@@ -1,25 +1,18 @@
 use serde::{Deserialize, Serialize};
 /// 用户ID类型,
-#[derive(.*?)]
-pub enum UserIdType {,
+#[derive(Debug, Clone)]
+pub enum UserIdType {
     #[serde(rename = "open_id")]
     OpenId,
     #[serde(rename = "user_id")]
     UserId,
     #[serde(rename = "union_id")]
     UnionId,
-}
 impl UserIdType {
-    pub fn w+.*{
-match self {,
-            UserIdType::OpenId => "open_id",
-            UserIdType::UserId => "user_id",
-            UserIdType::UnionId => "union_id",
-        }
-}
-}
-/// 邮箱文件夹,
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 邮箱文件夹,
+#[derive(Debug, Clone)]
 pub struct Folder {
     /// 文件夹ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -36,19 +29,17 @@ pub struct Folder {
     /// 文件夹路径,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub folder_path: Option<String>,
-}
 /// 文件夹类型,
-#[derive(.*?)]
-pub enum FolderType {,
+#[derive(Debug, Clone)]
+pub enum FolderType {
     /// 系统文件夹,
 #[serde(rename = "system")]
     System,
     /// 自定义文件夹,
 #[serde(rename = "custom")]
     Custom,
-}
 /// 邮件信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Message {
     /// 邮件ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -83,9 +74,8 @@ pub struct Message {
     /// 附件列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub attachments: Option<Vec<Attachment>>,
-}
 /// 邮件地址,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct MailAddress {
     /// 邮箱地址,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -93,9 +83,8 @@ pub struct MailAddress {
     /// 显示名称,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-}
 /// 邮件内容,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct MailBody {
     /// 文本内容,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -103,10 +92,9 @@ pub struct MailBody {
     /// HTML内容,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub html: Option<String>,
-}
 /// 邮件状态,
-#[derive(.*?)]
-pub enum MessageStatus {,
+#[derive(Debug, Clone)]
+pub enum MessageStatus {
     /// 草稿,
 #[serde(rename = "draft")]
     Draft,
@@ -119,9 +107,8 @@ pub enum MessageStatus {,
     /// 已删除,
 #[serde(rename = "deleted")]
     Deleted,
-}
 /// 邮件附件,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Attachment {
     /// 附件ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -138,9 +125,8 @@ pub struct Attachment {
     /// 下载URL,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub download_url: Option<String>,
-}
 /// 收信规则,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Rule {
     /// 规则ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -160,9 +146,8 @@ pub struct Rule {
     /// 优先级,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i32>,
-}
 /// 规则条件,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RuleCondition {
     /// 字段,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -173,9 +158,8 @@ pub struct RuleCondition {
     /// 值,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
-}
 /// 规则动作,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RuleAction {
     /// 动作类型,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -192,9 +176,8 @@ pub struct RuleAction {
     /// 参数,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<serde_json::Value>,
-}
 /// 邮箱联系人,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Contact {
     /// 联系人ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -208,9 +191,8 @@ pub struct Contact {
     /// 备注,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub remark: Option<String>,
-}
 /// 邮件组,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct MailGroup {
     /// 邮件组ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -230,9 +212,8 @@ pub struct MailGroup {
     /// 权限设置,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub permission: Option<MailGroupPermission>,
-}
 /// 邮件组权限,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct MailGroupPermission {
     /// 加入权限,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -240,10 +221,9 @@ pub struct MailGroupPermission {
     /// 发送权限,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub send_permission: Option<SendPermission>,
-}
 /// 加入权限,
-#[derive(.*?)]
-pub enum JoinPermission {,
+#[derive(Debug, Clone)]
+pub enum JoinPermission {
     /// 所有人,
 #[serde(rename = "all")]
     All,
@@ -253,10 +233,9 @@ pub enum JoinPermission {,
     /// 邀请制,
 #[serde(rename = "invite_only")]
     InviteOnly,
-}
 /// 发送权限,
-#[derive(.*?)]
-pub enum SendPermission {,
+#[derive(Debug, Clone)]
+pub enum SendPermission {
     /// 所有人,
 #[serde(rename = "all")]
     All,
@@ -266,9 +245,8 @@ pub enum SendPermission {,
     /// 仅管理员,
 #[serde(rename = "admin_only")]
     AdminOnly,
-}
 /// 邮件组成员,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct MailGroupMember {
     /// 用户ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -279,26 +257,23 @@ pub struct MailGroupMember {
     /// 成员类型,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub member_type: Option<MemberType>,
-}
 /// 成员类型,
-#[derive(.*?)]
-pub enum MemberType {,
+#[derive(Debug, Clone)]
+pub enum MemberType {
     /// 普通成员,
 #[serde(rename = "member")]
     Member,
     /// 管理员,
 #[serde(rename = "admin")]
     Admin,
-}
 /// 邮件组别名,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct MailGroupAlias {
     /// 别名,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub alias: Option<String>,
-}
 /// 公共邮箱,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PublicMailbox {
     /// 公共邮箱ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -315,10 +290,9 @@ pub struct PublicMailbox {
     /// 状态,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<PublicMailboxStatus>,
-}
 /// 公共邮箱状态,
-#[derive(.*?)]
-pub enum PublicMailboxStatus {,
+#[derive(Debug, Clone)]
+pub enum PublicMailboxStatus {
     /// 正常,
 #[serde(rename = "active")]
     Active,
@@ -328,9 +302,8 @@ pub enum PublicMailboxStatus {,
     /// 在回收站,
 #[serde(rename = "in_recycle_bin")]
     InRecycleBin,
-}
 /// 公共邮箱成员,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PublicMailboxMember {
     /// 用户ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -341,19 +314,17 @@ pub struct PublicMailboxMember {
     /// 权限类型,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub permission_type: Option<PublicMailboxPermissionType>,
-}
 /// 公共邮箱权限类型,
-#[derive(.*?)]
-pub enum PublicMailboxPermissionType {,
+#[derive(Debug, Clone)]
+pub enum PublicMailboxPermissionType {
     /// 管理员,
 #[serde(rename = "admin")]
     Admin,
     /// 成员,
 #[serde(rename = "member")]
     Member,
-}
 /// 用户邮箱别名,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UserMailboxAlias {
     /// 别名ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -364,9 +335,8 @@ pub struct UserMailboxAlias {
     /// 是否为主邮箱,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub is_primary: Option<bool>,
-}
 /// 邮箱地址状态,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AddressStatus {
     /// 邮箱地址,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -377,10 +347,9 @@ pub struct AddressStatus {
     /// 邮箱类型,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub mailbox_type: Option<MailboxType>,
-}
 /// 邮箱状态,
-#[derive(.*?)]
-pub enum EmailStatus {,
+#[derive(Debug, Clone)]
+pub enum EmailStatus {
     /// 存在,
 #[serde(rename = "exists")]
     Exists,
@@ -390,10 +359,9 @@ pub enum EmailStatus {,
     /// 已删除,
 #[serde(rename = "deleted")]
     Deleted,
-}
 /// 邮箱类型,
-#[derive(.*?)]
-pub enum MailboxType {,
+#[derive(Debug, Clone)]
+pub enum MailboxType {
     /// 用户邮箱,
 #[serde(rename = "user")]
     User,
@@ -403,9 +371,8 @@ pub enum MailboxType {,
     /// 公共邮箱,
 #[serde(rename = "public")]
     Public,
-}
 /// 事件订阅状态,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SubscriptionStatus {
     /// 是否已订阅,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -413,9 +380,8 @@ pub struct SubscriptionStatus {
     /// 订阅时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub subscribe_time: Option<i64>,
-}
 /// 邮箱订阅信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct MailboxSubscription {
     /// 订阅ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -450,20 +416,18 @@ pub struct MailboxSubscription {
     /// 更新时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json;
     #[test]
-fn test_user_id_type_as_str() {,
+fn test_user_id_type_as_str() {
         assert_eq!(UserIdType::OpenId.as_str(), "open_id");
         assert_eq!(UserIdType::UserId.as_str(), "user_id");
         assert_eq!(UserIdType::UnionId.as_str(), "union_id");
-}
 #[test]
-    fn test_user_id_type_serialization() {,
+    fn test_user_id_type_serialization() {
 let open_id = UserIdType::OpenId;
         let json = serde_json::to_string(&open_id).unwrap();
         assert_eq!(json, "\"open_id\"");
@@ -473,18 +437,16 @@ let user_id = UserIdType::UserId;
 let union_id = UserIdType::UnionId;
         let json = serde_json::to_string(&union_id).unwrap();
         assert_eq!(json, "\"union_id\"");
-}
 #[test]
-    fn test_folder_type_serialization() {,
+    fn test_folder_type_serialization() {
 let system = FolderType::System;
         let json = serde_json::to_string(&system).unwrap();
         assert_eq!(json, "\"system\"");
 let custom = FolderType::Custom;
         let json = serde_json::to_string(&custom).unwrap();
         assert_eq!(json, "\"custom\"");
-}
 #[test]
-    fn test_folder_complete() {,
+    fn test_folder_complete() {
 let folder = Folder {,
             folder_id: Some("folder123".to_string()),
             folder_name: Some("Inbox".to_string()),
@@ -496,9 +458,8 @@ let json = serde_json::to_string(&folder).unwrap();
         assert!(json.contains("folder123"));
 assert!(json.contains("Inbox"));
         assert!(json.contains("system"));
-}
 #[test]
-    fn test_folder_optional_fields() {,
+    fn test_folder_optional_fields() {
 let folder = Folder {,
             folder_id: Some("folder456".to_string()),
             folder_name: None,
@@ -510,9 +471,8 @@ let json = serde_json::to_string(&folder).unwrap();
         assert!(json.contains("folder456"));
 assert!(!json.contains("folder_name"));
         assert!(!json.contains("parent_folder_id"));
-}
 #[test]
-    fn test_mail_address_complete() {,
+    fn test_mail_address_complete() {
 let address = MailAddress {,
             name: Some("John Doe".to_string()),
             email: Some("john.doe@example.com".to_string()),
@@ -522,7 +482,7 @@ let json = serde_json::to_string(&address).unwrap();
 assert!(json.contains("john.doe@example.com"));
     }
 #[test]
-    fn test_mail_body_types() {,
+    fn test_mail_body_types() {
 let html_body = MailBody {,
             text: None,
             html: Some("<p>HTML content</p>".to_string()),
@@ -539,7 +499,7 @@ let json = serde_json::to_string(&text_body).unwrap();
 assert!(json.contains("Plain text content"));
     }
 #[test]
-    fn test_message_status_serialization() {,
+    fn test_message_status_serialization() {
 let draft = MessageStatus::Draft;
         let json = serde_json::to_string(&draft).unwrap();
         assert_eq!(json, "\"draft\"");
@@ -552,9 +512,8 @@ let deleted = MessageStatus::Deleted;
 let received = MessageStatus::Received;
         let json = serde_json::to_string(&received).unwrap();
         assert_eq!(json, "\"received\"");
-}
 #[test]
-    fn test_message_with_recipients() {,
+    fn test_message_with_recipients() {
 let message = Message {,
             message_id: Some("msg123".to_string()),
             subject: Some("Test Subject".to_string()),
@@ -590,7 +549,7 @@ assert!(json.contains("Test Subject"));
 assert!(json.contains("recipient1@example.com"));
     }
 #[test]
-    fn test_attachment_with_size() {,
+    fn test_attachment_with_size() {
 let attachment = Attachment {,
             attachment_id: Some("att789".to_string()),
             name: Some("document.pdf".to_string()),
@@ -605,7 +564,7 @@ assert!(json.contains("document.pdf"));
 assert!(json.contains("1024000"));
     }
 #[test]
-    fn test_attachment_inline() {,
+    fn test_attachment_inline() {
 let attachment = Attachment {,
             attachment_id: Some("att456".to_string()),
             name: Some("image.png".to_string()),
@@ -620,7 +579,7 @@ assert!(json.contains("image.png"));
 assert!(!json.contains("download_url"));
     }
 #[test]
-    fn test_rule_with_conditions() {,
+    fn test_rule_with_conditions() {
 let rule = Rule {,
             rule_id: Some("rule123".to_string()),
             rule_name: Some("Important Emails".to_string()),
@@ -653,7 +612,7 @@ assert!(json.contains("Important Emails"));
 assert!(json.contains("move_to_folder"));
     }
 #[test]
-    fn test_rule_action_forward() {,
+    fn test_rule_action_forward() {
 let action = RuleAction {,
             action_type: Some("forward".to_string()),
             target_folder_id: None,
@@ -665,9 +624,8 @@ let json = serde_json::to_string(&action).unwrap();
         assert!(json.contains("forward"));
 assert!(json.contains("assistant@company.com"));
         assert!(!json.contains("target_folder_id"));
-}
 #[test]
-    fn test_mailbox_subscription() {,
+    fn test_mailbox_subscription() {
 let subscription = MailboxSubscription {,
             subscription_id: Some("sub789".to_string()),
             mailbox_id: Some("mailbox123".to_string()),
@@ -691,7 +649,7 @@ assert!(json.contains("mailbox123"));
 assert!(json.contains("message_received"));
     }
 #[test]
-    fn test_mailbox_subscription_unsubscribed() {,
+    fn test_mailbox_subscription_unsubscribed() {
 let subscription = MailboxSubscription {,
             subscription_id: Some("sub456".to_string()),
             mailbox_id: Some("mailbox456".to_string()),
@@ -711,4 +669,3 @@ assert!(json.contains("false"));
         assert!(!json.contains("webhook_url"));
 assert!(!json.contains("subscribe_time"));
     }
-}

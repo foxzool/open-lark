@@ -2,37 +2,29 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::payroll::*,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::payroll::models::{CostAllocationPlan, CostAllocationPlanListRequest, PageResponse}
 };
 /// 成本分摊方案服务
 pub struct CostAllocationPlanService {
-    pub config: Config,
 }
-/// 成本分摊方案列表响应
-#[derive(.*?)]
-pub struct CostAllocationPlanListResponse {
-    /// 成本分摊方案列表
-#[serde(flatten)]
-    pub plans: PageResponse<CostAllocationPlan>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl CostAllocationPlanService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl CostAllocationPlanService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 批量查询成本分摊方案
+}/// 批量查询成本分摊方案
     ///,
 /// 该接口用于查询企业配置的成本分摊方案列表，包括方案的
     /// 基本信息、分摊规则、生效时间等详细配置。成本分摊方案
@@ -89,17 +81,12 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert("status", status);
-}
 if let Some(plan_type) = request.plan_type {,
             api_req.query_params.insert("plan_type", plan_type);
-}
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}

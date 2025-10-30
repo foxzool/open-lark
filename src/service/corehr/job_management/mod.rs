@@ -3,124 +3,112 @@ use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::corehr::*,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::corehr::models::{
         Job, JobCreateRequest, JobFamily, JobFamilyCreateRequest, JobGrade, JobGradeCreateRequest,
         JobLevel, JobLevelCreateRequest, PageResponse,
-    }
 };
 /// 岗职务管理服务
 pub struct JobManagementService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 创建序列响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct JobFamilyCreateResponse {
+}
     /// 序列信息
 #[serde(skip_serializing_if = "Option::is_none")]
     pub job_family: Option<JobFamily>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 批量查询序列响应
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 批量查询序列响应
+#[derive(Debug, Clone)]
 pub struct JobFamilyListResponse {
+}
     /// 序列信息列表
 #[serde(flatten)]
     pub job_families: PageResponse<JobFamily>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 创建职级响应
-#[derive(.*?)]
-pub struct JobLevelCreateResponse {
-    /// 职级信息
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub job_level: Option<JobLevel>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 批量查询职级响应
-#[derive(.*?)]
-pub struct JobLevelListResponse {
-    /// 职级信息列表
-#[serde(flatten)]
-    pub job_levels: PageResponse<JobLevel>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 创建职等响应
-#[derive(.*?)]
-pub struct JobGradeCreateResponse {
-    /// 职等信息
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub job_grade: Option<JobGrade>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 查询职等响应
-#[derive(.*?)]
-pub struct JobGradeQueryResponse {
-    /// 职等信息列表
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<JobGrade>>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 创建职务响应
-#[derive(.*?)]
-pub struct JobCreateResponse {
-    /// 职务信息
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub job: Option<Job>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 批量查询职务响应
-#[derive(.*?)]
-pub struct JobListResponse {
-    /// 职务信息列表
-#[serde(flatten)]
-    pub jobs: PageResponse<Job>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl JobManagementService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 创建职级响应
+#[derive(Debug, Clone)]
+pub struct JobLevelCreateResponse {
 }
-/// 创建序列
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 批量查询职级响应
+#[derive(Debug, Clone)]
+}
+pub struct JobLevelListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 创建职等响应
+#[derive(Debug, Clone)]
+}
+pub struct JobGradeCreateResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 查询职等响应
+#[derive(Debug, Clone)]
+}
+pub struct JobGradeQueryResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 创建职务响应
+#[derive(Debug, Clone)]
+}
+pub struct JobCreateResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 批量查询职务响应
+#[derive(Debug, Clone)]
+}
+pub struct JobListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl JobManagementService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建序列
     ///,
 /// 该接口用于创建新的序列信息，序列是对相同或相似岗位的分类，
     /// 帮助企业更好地管理和规划职业发展路径。
@@ -168,7 +156,6 @@ let api_req = ApiRequest {,
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量查询序列
     ///,
 /// 该接口用于分页查询序列信息列表，支持获取所有序列的
@@ -209,13 +196,9 @@ let mut api_req = ApiRequest {,
 // 添加查询参数
         if let Some(size) = page_size {
             api_req.query_params.insert("page_size", size.to_string());
-}
 if let Some(token) = page_token {,
             api_req.query_params.insert("page_token", token);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 创建职级
     ///,
 /// 该接口用于创建新的职级信息，职级用于定义员工在组织中的
@@ -269,7 +252,6 @@ let api_req = ApiRequest {,
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量查询职级
     ///,
 /// 该接口用于分页查询职级信息列表，支持获取所有职级的
@@ -310,13 +292,9 @@ let mut api_req = ApiRequest {,
 // 添加查询参数
         if let Some(size) = page_size {
             api_req.query_params.insert("page_size", size.to_string());
-}
 if let Some(token) = page_token {,
             api_req.query_params.insert("page_token", token);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 创建职等
     ///,
 /// 该接口用于创建新的职等信息，职等是对同一职级下不同
@@ -370,7 +348,6 @@ let api_req = ApiRequest {,
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询职等
     ///,
 /// 该接口用于查询职等信息，支持按多种条件筛选职等。
@@ -411,10 +388,7 @@ let mut api_req = ApiRequest {,
 // 添加查询参数
         if let Some(family_id) = job_family_id {
             api_req.query_params.insert("job_family_id", family_id);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 创建职务
     ///,
 /// 该接口用于创建新的职务信息，职务是具体的工作岗位，
@@ -468,7 +442,6 @@ let api_req = ApiRequest {,
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量查询职务
     ///,
 /// 该接口用于分页查询职务信息列表，支持获取所有职务的
@@ -509,11 +482,8 @@ let mut api_req = ApiRequest {,
 // 添加查询参数
         if let Some(size) = page_size {
             api_req.query_params.insert("page_size", size.to_string());
-}
 if let Some(token) = page_token {,
             api_req.query_params.insert("page_token", token);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

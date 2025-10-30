@@ -2,18 +2,16 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2ContactDepartmentCreatedV3 {
     pub schema: String,
     pub header: EventHeader,
     pub event: P2ContactDepartmentCreatedV3Data,
-}
 pub(crate) struct P2ContactDepartmentCreatedV3ProcessorImpl<F>,
 where
     F: Fn(P2ContactDepartmentCreatedV3) + 'static,
 {
     f: F,
-}
 impl<F> EventHandler for P2ContactDepartmentCreatedV3ProcessorImpl<F>,
 where
     F: Fn(P2ContactDepartmentCreatedV3) + 'static + Sync + Send,
@@ -23,31 +21,26 @@ let event: P2ContactDepartmentCreatedV3 = serde_json::from_slice(payload)?;
         (self.f)(event);
 Ok(()),
     }
-}
 impl<F> P2ContactDepartmentCreatedV3ProcessorImpl<F>,
 where
     F: Fn(P2ContactDepartmentCreatedV3) + 'static,
 {,
 pub(crate) fn new(f: F) -> Self {
         P2ContactDepartmentCreatedV3ProcessorImpl { f }
-}
-}
 /// 部门创建事件数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2ContactDepartmentCreatedV3Data {
     /// 事件对象
     pub object: ContactDepartmentEventObject,
-}
 /// 通讯录部门事件对象,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ContactDepartmentEventObject {
     /// 对象类型 (department)
     pub object_type: String,
     /// 部门信息
     pub department: ContactDepartment,
-}
 /// 通讯录部门信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ContactDepartment {
     /// 部门ID
     pub department_id: String,
@@ -86,9 +79,8 @@ pub struct ContactDepartment {
     /// 更新时间 (Unix时间戳，单位：秒),
 #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
-}
 /// 部门国际化名称,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DepartmentI18nName {
     /// 中文名,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -99,11 +91,9 @@ pub struct DepartmentI18nName {
     /// 日文名,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub ja_jp: Option<String>,
-}
 /// 部门状态,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DepartmentStatus {
     /// 是否被删除,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub is_deleted: Option<bool>,
-}

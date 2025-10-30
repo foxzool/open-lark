@@ -4,23 +4,21 @@ use open_lark_core::core::api_req::ApiRequest;
 use std::collections::HashMap;
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, BinaryResponse, EmptyResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, BinaryResponse, EmptyResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{helpdesk::*, EndpointBuilder}
-        http::Transport,
+        endpoints::{helpdesk::*, EndpointBuilderhttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::helpdesk::models::{Faq, UserIdType}
 };
 /// 知识库管理服务
 pub struct FaqService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 创建知识库请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateFaqRequest {
+}
     /// 标题
     pub title: String,
     /// 内容
@@ -31,98 +29,64 @@ pub struct CreateFaqRequest {
     /// 标签
 #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<String>>,
-}
 /// 创建知识库响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateFaqResponse {
+}
     /// 创建的知识库
     pub faq: Faq,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 修改知识库请求
-#[derive(.*?)]
-pub struct UpdateFaqRequest {
-    /// 标题
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub title: Option<String>,
-    /// 内容
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub content: Option<String>,
-    /// 分类ID
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub category_id: Option<String>,
-    /// 标签
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub tags: Option<Vec<String>>,
-    /// 状态
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
-}
-/// 修改知识库响应
-#[derive(.*?)]
-pub struct UpdateFaqResponse {
-    /// 更新后的知识库
-    pub faq: Faq,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 获取知识库详情响应
-#[derive(.*?)]
-pub struct GetFaqResponse {
-    /// 知识库详情
-    pub faq: Faq,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 获取全部知识库详情响应
-#[derive(.*?)]
-pub struct ListFaqsResponse {
-    /// 知识库列表
-    pub faqs: Vec<Faq>,
-    /// 是否还有更多数据
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub has_more: Option<bool>,
-    /// 下一页标记
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 搜索知识库响应
-#[derive(.*?)]
-pub struct SearchFaqsResponse {
-    /// 搜索结果
-    pub faqs: Vec<Faq>,
-    /// 是否还有更多数据
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub has_more: Option<bool>,
-    /// 下一页标记
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl FaqService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 修改知识库请求
+#[derive(Debug, Clone)]
+pub struct UpdateFaqRequest {
 }
-/// 创建知识库
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 获取知识库详情响应
+#[derive(Debug, Clone)]
+}
+pub struct GetFaqResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 获取全部知识库详情响应
+#[derive(Debug, Clone)]
+}
+pub struct ListFaqsResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 搜索知识库响应
+#[derive(Debug, Clone)]
+}
+pub struct SearchFaqsResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl FaqService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建知识库
     ///,
 /// 该接口用于创建知识库条目。
     ///,
@@ -146,7 +110,6 @@ impl FaqService {
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: HELPDESK_V1_FAQ_CREATE.to_string(),
@@ -155,9 +118,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除知识库
     ///,
 /// 该接口用于删除指定的知识库条目。
@@ -182,7 +143,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(HELPDESK_V1_FAQ_DELETE, "faq_id", faq_id),
@@ -190,9 +150,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 修改知识库
     ///,
 /// 该接口用于修改指定的知识库条目。
@@ -219,7 +177,6 @@ pub async fn patch(,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(HELPDESK_V1_FAQ_UPDATE, "faq_id", faq_id),
@@ -228,9 +185,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取指定知识库详情
     ///,
 /// 该接口用于获取指定知识库的详细信息。
@@ -255,7 +210,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(HELPDESK_V1_FAQ_GET, "faq_id", faq_id),
@@ -263,9 +217,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取全部知识库详情
     ///,
 /// 该接口用于获取全部知识库条目列表。
@@ -295,19 +247,14 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 if let Some(category_id) = category_id {,
             query_params.insert("category_id", category_id.to_string());
-}
 if let Some(status) = status {,
             query_params.insert("status", status.to_string());
-}
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token.to_string());
-}
 if let Some(page_size) = page_size {,
             query_params.insert("page_size", page_size.to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: HELPDESK_V1_FAQS.to_string(),
@@ -316,7 +263,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取知识库图像
     ///,
 /// 该接口用于获取知识库中的图像文件。
@@ -343,7 +289,6 @@ pub async fn faq_image(,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
@@ -355,9 +300,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 搜索知识库
     ///,
 /// 该接口用于搜索知识库条目。
@@ -388,16 +331,12 @@ let mut query_params = HashMap::new();
         query_params.insert("query", query.to_string());
 if let Some(user_id_type) = user_id_type {,
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 if let Some(category_id) = category_id {,
             query_params.insert("category_id", category_id.to_string());
-}
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token.to_string());
-}
 if let Some(page_size) = page_size {,
             query_params.insert("page_size", page_size.to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: HELPDESK_V1_FAQS_SEARCH.to_string(),
@@ -405,7 +344,6 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

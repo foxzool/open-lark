@@ -6,8 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -18,28 +17,10 @@ use crate::,
 };
 use super::query::FilterConditionInfo;
 impl SpreadsheetSheetFilterViewService {
-/// 获取筛选条件,
-    pub async fn get_condition(
-        &self,
-        request: GetFilterViewConditionRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<GetFilterViewConditionResponseData>> {,
-let mut api_req = request.api_request;
-        api_req.set_http_method(Method::GET);
-api_req.api_path = SHEETS_V3_SPREADSHEET_FILTER_VIEW_CONDITION_GET,
-            .replace("{}", &request.spreadsheet_token)
-            .replace("{}", &request.sheet_id)
-            .replace("{}", &request.filter_view_id)
-            .replace("{}", &request.condition_id);
-api_req
-            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-Ok(api_resp),
-    }
-}
-/// 获取筛选条件请求,
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 获取筛选条件请求,
+#[derive(Debug, Clone)]
 pub struct GetFilterViewConditionRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -50,51 +31,25 @@ pub struct GetFilterViewConditionRequest {
     /// 筛选视图 ID
     filter_view_id: String,
     /// 筛选条件 ID
-    condition_id: String,
-}
+    condition_id: String}
 impl GetFilterViewConditionRequest {
-    pub fn w+.*{
-GetFilterViewConditionRequestBuilder::default(),
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct GetFilterViewConditionRequestBuilder {
-    request: GetFilterViewConditionRequest,
-}
+    request: GetFilterViewConditionRequest}
 impl GetFilterViewConditionRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
-self.request.spreadsheet_token = spreadsheet_token.to_string();
-        self,
-}
-
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
-self.request.sheet_id = sheet_id.to_string();
-        self,
-}
-
-    pub fn filter_view_id(mut self, filter_view_id: impl ToString) -> Self {
-self.request.filter_view_id = filter_view_id.to_string();
-        self,
-}
-
-    pub fn condition_id(mut self, condition_id: impl ToString) -> Self {
-self.request.condition_id = condition_id.to_string();
-        self,
-}
-pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-self.request,
-    }
-}
-/// 获取筛选条件响应体最外层,
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 获取筛选条件响应体最外层,
+#[derive(Debug, Clone)]
 pub struct GetFilterViewConditionResponseData {
     /// 筛选条件信息,
 #[serde(flatten)]
     pub condition_info: FilterConditionInfo,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}

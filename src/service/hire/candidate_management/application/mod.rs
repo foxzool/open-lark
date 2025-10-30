@@ -3,27 +3,25 @@ use serde::{Deserialize, Serialize};
 use open_lark_core::core::api_req::ApiRequest;
 use crate::{
     core::{,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::hire::models::{
         Application, ApplicationCreateRequest, ApplicationListRequest, CommonResponse, Interview,
         Offer, OfferCreateRequest, PageResponse,
-    }
 };
 /// 投递服务
 pub struct ApplicationService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 投递阶段推进请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ApplicationAdvanceRequest {
+}
     /// 投递ID
     pub application_id: String,
     /// 目标阶段ID
@@ -32,10 +30,10 @@ pub struct ApplicationAdvanceRequest {
     pub reason: Option<String>,
     /// 备注
     pub remark: Option<String>,
-}
 /// 投递评价请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ApplicationEvaluationRequest {
+}
     /// 投递ID
     pub application_id: String,
     /// 评价内容
@@ -46,72 +44,67 @@ pub struct ApplicationEvaluationRequest {
     pub evaluator_id: String,
     /// 评价时间
     pub evaluation_time: Option<String>,
-}
 /// 投递列表响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ApplicationListResponse {
+}
     /// 投递列表
 #[serde(flatten)]
     pub applications: PageResponse<Application>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 投递详情响应
-#[derive(.*?)]
-pub struct ApplicationDetailResponse {
-    /// 投递信息
-    pub application: Application,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 投递操作响应
-#[derive(.*?)]
-pub struct ApplicationOperationResponse {
-    /// 操作结果
-#[serde(flatten)]
-    pub result: CommonResponse,
-    /// 投递ID
-    pub application_id: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 面试列表响应
-#[derive(.*?)]
-pub struct InterviewListResponse {
-    /// 面试列表
-#[serde(flatten)]
-    pub interviews: PageResponse<Interview>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// Offer详情响应
-#[derive(.*?)]
-pub struct OfferDetailResponse {
-    /// Offer信息
-    pub offer: Offer,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl ApplicationService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 投递详情响应
+#[derive(Debug, Clone)]
+pub struct ApplicationDetailResponse {
 }
-/// 创建投递
+    /// 投递信息
+    pub application: Application,
+impl ApiResponseTrait for.* {
+}
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 投递操作响应
+#[derive(Debug, Clone)]
+pub struct ApplicationOperationResponse {
+}
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 面试列表响应
+#[derive(Debug, Clone)]
+}
+pub struct InterviewListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// Offer详情响应
+#[derive(Debug, Clone)]
+}
+pub struct OfferDetailResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl ApplicationService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建投递
     ///,
 /// 该接口用于创建新的投递记录，将人才与职位关联，
     /// 并设置投递的初始阶段和相关信息。创建成功后
@@ -161,9 +154,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取投递详情
     ///,
 /// 该接口用于获取指定投递的详细信息，包括投递
@@ -194,8 +185,7 @@ let api_req = ApiRequest {,
     ///     println!("投递状态: {}" data.application.status);
     ///     println!("当前阶段: {}" data.application.stage_id);
     ///     println!("投递渠道: {:?}" data.application.source);
-    /// }
-/// ```
+    /// /// ```
     pub async fn get_application_detail(
         &self,
         application_id: &str,
@@ -212,9 +202,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取投递列表
     ///,
 /// 该接口用于获取企业的投递列表，支持按职位、状态、
@@ -262,8 +250,7 @@ let api_req = ApiRequest {,
 ///     for application in &data.applications.items {
     ///         println!("投递: {} 状态: {}" application.id, application.status);
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_applications(
         &self,
         request: ApplicationListRequest,
@@ -281,35 +268,25 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(job_id) = request.job_id {,
             api_req.query_params.insert("job_id", job_id);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert("status", status);
-}
 if let Some(stage_id) = request.stage_id {,
             api_req.query_params.insert("stage_id", stage_id);
-}
 if let Some(source) = request.source {,
             api_req.query_params.insert("source", source);
-}
 if let Some(created_start_time) = request.created_start_time {,
             api_req
 .query_params
                 .insert("created_start_time", created_start_time);
-}
 if let Some(created_end_time) = request.created_end_time {,
             api_req
 .query_params
                 .insert("created_end_time", created_end_time);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 推进投递到下一阶段
     ///,
 /// 该接口用于将投递推进到指定的下一个阶段，
@@ -350,9 +327,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 淘汰投递
     ///,
 /// 该接口用于淘汰指定的投递，设置淘汰原因
@@ -386,12 +361,11 @@ pub async fn reject_application(,
         remark: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ApplicationOperationResponse>> {,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
         struct RejectRequest {
             reason: String,
             remark: Option<String>,
-        }
-let request = RejectRequest {,
+        let request = RejectRequest {,
             reason: reason.to_string(),
             remark,
         };
@@ -406,9 +380,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取投递的面试列表
     ///,
 /// 该接口用于获取指定投递的面试记录列表，
@@ -443,8 +415,7 @@ let api_req = ApiRequest {,
 ///     for interview in &data.interviews.items {
     ///         println!("面试轮次: {} 状态: {}" interview.round, interview.status);
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn get_application_interviews(
         &self,
         application_id: &str,
@@ -468,13 +439,9 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 创建Offer
     ///,
 /// 该接口用于为通过面试的投递创建Offer，
@@ -515,9 +482,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取投递的Offer信息
     ///,
 /// 该接口用于获取指定投递的Offer详细信息，
@@ -546,8 +511,7 @@ let api_req = ApiRequest {,
     ///     println!("Offer状态: {}" data.offer.status);
     ///     println!("基本薪资: {:?}" data.offer.basic_salary);
     ///     println!("入职时间: {:?}" data.offer.onboard_date);
-    /// }
-/// ```
+    /// /// ```
     pub async fn get_application_offer(
         &self,
         application_id: &str,
@@ -564,9 +528,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 添加投递评价
     ///,
 /// 该接口用于为投递添加评价信息，包括评价内容、
@@ -608,7 +570,6 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

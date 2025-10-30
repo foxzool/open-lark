@@ -2,18 +2,16 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2CalendarEventCreatedV4 {
     pub schema: String,
     pub header: EventHeader,
     pub event: P2CalendarEventCreatedV4Data,
-}
 pub(crate) struct P2CalendarEventCreatedV4ProcessorImpl<F>,
 where
     F: Fn(P2CalendarEventCreatedV4) + 'static,
 {
     f: F,
-}
 impl<F> EventHandler for P2CalendarEventCreatedV4ProcessorImpl<F>,
 where
     F: Fn(P2CalendarEventCreatedV4) + 'static + Sync + Send,
@@ -23,31 +21,26 @@ let event: P2CalendarEventCreatedV4 = serde_json::from_slice(payload)?;
         (self.f)(event);
 Ok(()),
     }
-}
 impl<F> P2CalendarEventCreatedV4ProcessorImpl<F>,
 where
     F: Fn(P2CalendarEventCreatedV4) + 'static,
 {,
 pub(crate) fn new(f: F) -> Self {
         P2CalendarEventCreatedV4ProcessorImpl { f }
-}
-}
 /// 日历事件创建事件数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2CalendarEventCreatedV4Data {
     /// 事件对象
     pub object: CalendarEventObject,
-}
 /// 日历事件对象,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CalendarEventObject {
     /// 对象类型 (calendar_event)
     pub object_type: String,
     /// 日历事件信息
     pub calendar_event: CalendarEvent,
-}
 /// 日历事件信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CalendarEvent {
     /// 事件ID
     pub event_id: String,
@@ -95,9 +88,8 @@ pub struct CalendarEvent {
     /// 更新时间 (Unix时间戳，单位：秒),
 #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_time: Option<String>,
-}
 /// 事件时间,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EventDateTime {
     /// 时间戳 (Unix时间戳，单位：秒),
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -108,9 +100,8 @@ pub struct EventDateTime {
     /// 日期（全天事件使用，格式：YYYY-MM-DD）,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub date: Option<String>,
-}
 /// 事件位置,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EventLocation {
     /// 位置名称,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -124,9 +115,8 @@ pub struct EventLocation {
     /// 经度,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub longitude: Option<f64>,
-}
 /// 事件参与者,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EventAttendee {
     /// 参与者类型 (user, room, third_party),
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -143,22 +133,19 @@ pub struct EventAttendee {
     /// 参与者显示名称,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-}
 /// 事件组织者,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EventOrganizer {
     /// 组织者用户ID
     pub user_id: String,
     /// 组织者显示名称,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-}
 /// 事件提醒,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EventReminder {
     /// 提醒时间（相对于事件开始时间的分钟数，负数表示提前）
     pub minutes: i32,
     /// 提醒方式 (popup, email),
 #[serde(skip_serializing_if = "Option::is_none")]
     pub method: Option<String>,
-}

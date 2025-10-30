@@ -2,37 +2,29 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::payroll::*,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::payroll::models::{AcctItem, AcctItemListRequest, PageResponse}
 };
 /// 算薪项服务
 pub struct AcctItemService {
-    pub config: Config,
 }
-/// 算薪项列表响应
-#[derive(.*?)]
-pub struct AcctItemListResponse {
-    /// 算薪项列表
-#[serde(flatten)]
-    pub acct_items: PageResponse<AcctItem>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl AcctItemService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl AcctItemService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 批量查询算薪项
+}/// 批量查询算薪项
     ///,
 /// 该接口用于批量查询企业配置的算薪项信息，包括算薪项的
     /// 基本配置、计算方式、税收和社保相关设置等。算薪项是
@@ -90,20 +82,14 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(item_type) = request.item_type {,
             api_req.query_params.insert("item_type", item_type);
-}
 if let Some(paygroup_id) = request.paygroup_id {,
             api_req.query_params.insert("paygroup_id", paygroup_id);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert("status", status);
-}
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}

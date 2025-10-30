@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 卡片实体,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Card {
     /// 卡片ID
     pub card_id: Option<String>,
@@ -16,20 +16,18 @@ pub struct Card {
     pub create_time: Option<String>,
     /// 更新时间
     pub update_time: Option<String>,
-}
 /// 卡片状态,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum CardStatus {,
+pub enum CardStatus {
 /// 草稿,
     Draft,
     /// 已发布
     Published,
     /// 已删除
     Deleted,
-}
 /// 卡片组件,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CardElement {
     /// 组件ID
     pub element_id: Option<String>,
@@ -45,18 +43,16 @@ pub struct CardElement {
     pub create_time: Option<String>,
     /// 更新时间
     pub update_time: Option<String>,
-}
 /// 用户ID类型,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum UserIdType {,
+pub enum UserIdType {
 /// Open ID,
     OpenId,
     /// Union ID
     UnionId,
     /// User ID
     UserId,
-}
 impl std::fmt::Display for UserIdType {,
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {,
 match self {,
@@ -64,10 +60,8 @@ match self {,
             UserIdType::UnionId => write!(f, "union_id"),
             UserIdType::UserId => write!(f, "user_id"),
         }
-}
-}
 /// 卡片配置,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CardSettings {
     /// 是否启用交互
     pub enable_interaction: Option<bool>,
@@ -75,9 +69,8 @@ pub struct CardSettings {
     pub theme: Option<String>,
     /// 自定义配置
     pub custom_config: Option<serde_json::Value>,
-}
 /// 批量更新操作,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BatchUpdateOperation {
     /// 操作类型
     pub operation: String,
@@ -85,4 +78,3 @@ pub struct BatchUpdateOperation {
     pub path: String,
     /// 操作值
     pub value: Option<serde_json::Value>,
-}

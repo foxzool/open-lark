@@ -2,39 +2,30 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::payroll::*,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::payroll::models::{
         CostAllocationReport, CostAllocationReportListRequest, PageResponse,
-    }
 };
 /// 成本分摊报表服务
 pub struct CostAllocationReportService {
-    pub config: Config,
 }
-/// 成本分摊报表列表响应
-#[derive(.*?)]
-pub struct CostAllocationReportListResponse {
-    /// 成本分摊报表列表
-#[serde(flatten)]
-    pub reports: PageResponse<CostAllocationReport>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl CostAllocationReportService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl CostAllocationReportService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 查询成本分摊报表汇总数据
+}/// 查询成本分摊报表汇总数据
     ///,
 /// 该接口用于查询指定时间范围内的成本分摊报表汇总数据，
     /// 支持按成本中心、部门等维度筛选。成本分摊报表用于
@@ -94,28 +85,21 @@ let mut api_req = ApiRequest {,
         api_req
 .query_params
             .insert("start_date", request.start_date);
-
         api_req.query_params.insert("end_date", request.end_date);
 if let Some(cost_center_id) = request.cost_center_id {,
             api_req
 .query_params
                 .insert("cost_center_id", cost_center_id);
-}
 if let Some(department_id) = request.department_id {,
             api_req.query_params.insert("department_id", department_id);
-}
 if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(report_type) = request.report_type {,
             api_req.query_params.insert("report_type", report_type);
-}
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}

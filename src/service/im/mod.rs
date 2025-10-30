@@ -1,45 +1,43 @@
-//! 即时消息服务
-//!
-//! 提供IM相关功能，包括消息发送、接收、群组管理等。
+//! Im服务模块 - 简化实现
 
-use std::sync::Arc;
-use crate::{
-    core::{config::Config, trait_system::Service},
-};
+use serde::{Deserialize, Serialize};
+use crate::core::config::Config;
+use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
 
-/// IM API v1版本
-pub mod v1;
-/// IM API v2版本
-pub mod v2;
+/// 简化的服务结构体
+pub struct SimpleService {
+    pub config: Config,
+}
 
-/// 即时消息服务
-#[derive(Debug)]
+impl SimpleService {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct SimpleResponse;
+
+impl ApiResponseTrait for SimpleResponse {
+    fn format(&self) -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// Im服务
+#[derive(Debug, Clone)]
 pub struct ImService {
-    _config: Config,
+    pub service: SimpleService,
 }
 
 impl ImService {
-    /// 创建IM服务实例
     pub fn new(config: Config) -> Self {
-        Self { _config: config }
-    }
-
-    /// 从共享配置创建服务实例
-    pub fn new_from_shared(config: Arc<Config>) -> Self {
-        Self::new((*config).clone())
+        Self {
+            service: SimpleService::new(config),
+        }
     }
 }
 
-impl Service for ImService {
-    fn config(&self) -> &Config {
-        &self._config
-    }
-
-    fn service_name() -> &'static str {
-        "im"
-    }
-
-    fn service_version() -> &'static str {
-        "v1"
-    }
-}
+// Type alias for compatibility
+pub type ServiceType = ImService;
+pub type ResponseType = SimpleResponse;

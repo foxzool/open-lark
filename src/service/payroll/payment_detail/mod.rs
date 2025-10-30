@@ -2,50 +2,39 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::payroll::models::{
         PageResponse, PaymentDetail, PaymentDetailListRequest, PaymentDetailQueryRequest,
-    }
 };
 /// 发薪明细服务
 pub struct PaymentDetailService {
-    pub config: Config,
 }
-/// 发薪明细列表响应
-#[derive(.*?)]
-pub struct PaymentDetailListResponse {
-    /// 发薪明细列表
-#[serde(flatten)]
-    pub details: PageResponse<PaymentDetail>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 发薪明细批量查询响应
-#[derive(.*?)]
-pub struct PaymentDetailQueryResponse {
-    /// 发薪明细列表
-    pub payment_details: Vec<PaymentDetail>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl PaymentDetailService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 发薪明细批量查询响应
+#[derive(Debug, Clone)]
 }
-/// 查询发薪活动明细列表
+pub struct PaymentDetailQueryResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl PaymentDetailService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 查询发薪活动明细列表
     ///,
 /// 该接口用于查询指定发薪活动的明细列表，支持按员工ID筛选、
     /// 分页查询等功能。可以获取员工的发薪项目详情、金额信息、
@@ -108,24 +97,17 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(employee_id) = request.employee_id {,
             api_req.query_params.insert("employee_id", employee_id);
-}
 if let Some(user_id_type) = request.user_id_type {,
             api_req.query_params.insert("user_id_type", user_id_type);
-}
 if let Some(department_id_type) = request.department_id_type {,
             api_req
 .query_params
                 .insert("department_id_type", department_id_type);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量查询发薪明细
     ///,
 /// 该接口用于批量查询指定员工的发薪明细信息，支持指定查询字段、
@@ -190,8 +172,6 @@ let mut api_req = ApiRequest {,
 // 添加查询参数
         if let Some(user_id_type) = request.user_id_type {
             api_req.query_params.insert("user_id_type", user_id_type);
-}
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}}}}}}

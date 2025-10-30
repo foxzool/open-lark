@@ -2,25 +2,23 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::hire::models::{CommonResponse, I18nText, PageResponse}
 };
 /// Offer服务
 pub struct OfferService {
-    pub config: Config,
 }
+    pub config: Config,
 /// Offer信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Offer {
+}
     /// Offer ID
     pub id: String,
     /// 投递ID
@@ -61,10 +59,10 @@ pub struct Offer {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 薪资包信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SalaryPackage {
+}
     /// 基本薪资
     pub base_salary: String,
     /// 薪资币种
@@ -77,10 +75,10 @@ pub struct SalaryPackage {
     pub stock_options: Option<String>,
     /// 其他福利
     pub benefits: Vec<String>,
-}
 /// 入职信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Onboarding {
+}
     /// 入职记录ID
     pub id: String,
     /// Offer ID
@@ -111,10 +109,10 @@ pub struct Onboarding {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 入职进度项
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct OnboardingProgress {
+}
     /// 进度项ID
     pub id: String,
     /// 进度项名称
@@ -129,10 +127,10 @@ pub struct OnboardingProgress {
     pub actual_completion_date: Option<String>,
     /// 备注
     pub remark: Option<String>,
-}
 /// Offer创建请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct OfferCreateRequest {
+}
     /// 投递ID
     pub application_id: String,
     /// Offer类型
@@ -149,10 +147,10 @@ pub struct OfferCreateRequest {
     pub expiration_date: Option<String>,
     /// 备注信息
     pub remark: Option<String>,
-}
 /// Offer更新请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct OfferUpdateRequest {
+}
     /// 薪资包信息
     pub salary_package: Option<SalaryPackage>,
     /// 工作地点
@@ -165,10 +163,10 @@ pub struct OfferUpdateRequest {
     pub expiration_date: Option<String>,
     /// 备注信息
     pub remark: Option<String>,
-}
 /// 入职创建请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct OnboardingCreateRequest {
+}
     /// Offer ID
     pub offer_id: String,
     /// 实际入职时间
@@ -187,10 +185,10 @@ pub struct OnboardingCreateRequest {
     pub training_plan: Option<String>,
     /// 备注信息
     pub remark: Option<String>,
-}
 /// Offer列表请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct OfferListRequest {
+}
     /// 分页大小
     pub page_size: Option<u32>,
     /// 分页标记
@@ -207,61 +205,52 @@ pub struct OfferListRequest {
     pub created_start_time: Option<String>,
     /// 创建时间结束
     pub created_end_time: Option<String>,
-}
 /// Offer列表响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct OfferListResponse {
-    /// Offer列表
-#[serde(flatten)]
-    pub offers: PageResponse<Offer>,
 }
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// Offer详情响应
-#[derive(.*?)]
-pub struct OfferDetailResponse {
-    /// Offer信息
-    pub offer: Offer,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 入职列表响应
-#[derive(.*?)]
-pub struct OnboardingListResponse {
-    /// 入职记录列表
-#[serde(flatten)]
-    pub onboardings: PageResponse<Onboarding>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// Offer操作响应
-#[derive(.*?)]
-pub struct OfferOperationResponse {
-    /// 操作结果
-#[serde(flatten)]
-    pub result: CommonResponse,
-    /// 相关ID
-    pub id: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl OfferService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// Offer详情响应
+#[derive(Debug, Clone)]
 }
-/// 创建Offer
+pub struct OfferDetailResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 入职列表响应
+#[derive(Debug, Clone)]
+}
+pub struct OnboardingListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// Offer操作响应
+#[derive(Debug, Clone)]
+}
+pub struct OfferOperationResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl OfferService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建Offer
     ///,
 /// 该接口用于为候选人创建Offer，包括薪资包、
     /// 工作地点、入职时间等信息。创建成功后可以
@@ -303,8 +292,7 @@ impl OfferService {
     ///         bonus: Some("50000".to_string())
     ///         stock_options: Some("10000".to_string())
     ///         benefits: vec!["五险一金".to_string() "年度体检".to_string()]
-    ///     }
-    ///     work_location: Some(I18nText {
+    ///     ///     work_location: Some(I18nText {
     ///         zh_cn: Some("北京市朝阳区".to_string())
     ///         en_us: Some("Chaoyang District Beijing".to_string()),
     ///         ja_jp: None
@@ -329,9 +317,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取Offer详情
     ///,
 /// 该接口用于获取指定Offer的详细信息，包括
@@ -360,8 +346,7 @@ let api_req = ApiRequest {,
     ///     println!("Offer状态: {}" data.offer.status);
     ///     println!("审批状态: {:?}" data.offer.approval_status);
     ///     println!("候选人回复: {:?}" data.offer.reply_status);
-    /// }
-/// ```
+    /// /// ```
     pub async fn get_offer_detail(
         &self,
         offer_id: &str,
@@ -374,9 +359,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取Offer列表
     ///,
 /// 该接口用于获取企业的Offer列表，支持按候选人、
@@ -423,8 +406,7 @@ let api_req = ApiRequest {,
 ///     for offer in &data.offers.items {
     ///         println!("Offer: {} 状态: {}" offer.id, offer.status);
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_offers(
         &self,
         request: OfferListRequest,
@@ -442,37 +424,27 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(talent_id) = request.talent_id {,
             api_req.query_params.insert("talent_id", talent_id);
-}
 if let Some(job_id) = request.job_id {,
             api_req.query_params.insert("job_id", job_id);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert("status", status);
-}
 if let Some(approval_status) = request.approval_status {,
             api_req
 .query_params
                 .insert("approval_status", approval_status);
-}
 if let Some(created_start_time) = request.created_start_time {,
             api_req
 .query_params
                 .insert("created_start_time", created_start_time);
-}
 if let Some(created_end_time) = request.created_end_time {,
             api_req
 .query_params
                 .insert("created_end_time", created_end_time);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 更新Offer
     ///,
 /// 该接口用于更新Offer信息，包括薪资包、
@@ -518,9 +490,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 发送Offer
     ///,
 /// 该接口用于将审批通过的Offer发送给候选人，
@@ -554,12 +524,11 @@ pub async fn send_offer(,
         message: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OfferOperationResponse>> {,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
         struct SendOfferRequest {
             send_method: String,
             message: Option<String>,
-        }
-let request = SendOfferRequest {,
+        let request = SendOfferRequest {,
             send_method: send_method.to_string(),
             message,
         };
@@ -570,9 +539,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 撤回Offer
     ///,
 /// 该接口用于撤回已发送的Offer，设置撤回原因
@@ -598,11 +565,10 @@ let api_req = ApiRequest {,
         reason: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OfferOperationResponse>> {,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
         struct WithdrawRequest {
             reason: String,
-        }
-let request = WithdrawRequest {,
+        let request = WithdrawRequest {,
             reason: reason.to_string(),
         };
 let api_req = ApiRequest {,
@@ -612,9 +578,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 创建入职记录
     ///,
 /// 该接口用于为接受Offer的候选人创建入职记录，
@@ -657,7 +621,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取入职记录列表
     ///,
 /// 该接口用于获取企业的入职记录列表，支持按
@@ -702,18 +665,13 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(status) = status {,
             api_req.query_params.insert("status", status);
-}
 if let Some(department) = department {,
             api_req.query_params.insert("department", department);
-}
         Transport::request(api_req, &self.config, option).await,
-}
 /// 更新入职进度
     ///,
 /// 该接口用于更新入职进度项的完成状态，
@@ -751,12 +709,10 @@ pub async fn update_onboarding_progress(,
         remark: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OfferOperationResponse>> {,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
         struct UpdateProgressRequest {
             completed: bool,
             remark: Option<String>,
-        }
-
         let request = UpdateProgressRequest { completed, remark };
 let api_req = ApiRequest {,
             http_method: Method::POST,
@@ -767,12 +723,10 @@ let path = EndpointBuilder::replace_param(,
                     onboarding_id,
                 );
                 EndpointBuilder::replace_param(&path, "progress_id", progress_id),
-}
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

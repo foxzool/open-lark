@@ -1,40 +1,19 @@
 use serde::{Deserialize, Serialize};
 /// 筛选条件,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SheetFilterCondition {
     /// 筛选类型
     pub filter_type: String,
     /// 比较类型
     pub compare_type: Option<String>,
     /// 筛选参数
-    pub expected: Vec<String>,
-}
+    pub expected: Vec<String>}
 impl SheetFilterCondition {
-    pub fn w+.*{
-SheetFilterConditionBuilder::default(),
-    }
+    
 }
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SheetFilterConditionBuilder {
-    condition: SheetFilterCondition,
-}
+    condition: SheetFilterCondition}
 impl SheetFilterConditionBuilder {
-    /// 筛选类型
-    pub fn filter_type(mut self, filter_type: impl ToString) -> Self {
-self.condition.filter_type = filter_type.to_string();
-        self,
-}
-/// 比较类型,
-    pub fn compare_type(mut self, compare_type: impl ToString) -> Self {
-self.condition.compare_type = Some(compare_type.to_string());
-        self,
-}
-/// 筛选参数,
-    pub fn expected(mut self, expected: Vec<String>) -> Self {
-self.condition.expected = expected;
-        self,
-}
-pub fn w+.*{
-        self.condition,
-}
+    
 }

@@ -13,23 +13,17 @@ use crate::prelude::*;
 use crate::service::ccm::sheets::v2::SheetsV2Service;
 use crate::service::ccm::sheets::v3::SheetsV3Service;
 /// 电子表格服务
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SheetsService {
-    /// v2版本API服务
-    pub v2: SheetsV2Service,
-    /// v3版本API服务
-    pub v3: SheetsV3Service,
 }
+
 impl SheetsService {
-    /// 创建新的电子表格服务实例
-pub fn new() -> Self {
-        Self {
-            v2: SheetsV2Service::new(client.clone()),
-            v3: SheetsV3Service::new(client.clone()),
-        }
 }
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }
 /// v2版本API
 pub mod v2;
 /// v3版本API
 pub mod v3;
+}

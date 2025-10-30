@@ -3,37 +3,28 @@ use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::apass::models::{FunctionInvokeRequest, FunctionInvokeResult}
 };
 /// 函数执行服务
 pub struct FunctionService {
-    pub config: Config,
 }
-/// 函数执行响应
-#[derive(.*?)]
-pub struct FunctionInvokeResponse {
-    /// 函数执行结果
-#[serde(flatten)]
-    pub invoke_result: FunctionInvokeResult,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl FunctionService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl FunctionService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 执行函数
+}/// 执行函数
     ///,
 /// 该接口用于执行低代码平台中的自定义函数。
     ///,
@@ -61,7 +52,6 @@ let api_req = ApiRequest {,
             }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}

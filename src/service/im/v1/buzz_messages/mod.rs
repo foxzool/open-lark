@@ -4,58 +4,44 @@ use std::collections::HashMap;
 use crate::impl_full_service;
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
         ApiRequest, SDKResult,
-    }
     service::im::v1::models::UserIdType,
 };
 /// 消息加急服务
 #[derive(Debug)]
 pub struct BuzzMessagesService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 发送应用内加急请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UrgentAppRequest {
+}
     /// 用户ID列表
     pub user_id_list: Vec<String>,
-}
 // 接入统一 Service 抽象（IM v1 - BuzzMessagesService）
 impl_full_service!(BuzzMessagesService, "im.buzz_messages", "v1");
 /// 发送短信加急请求  
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UrgentSmsRequest {
-    /// 用户ID列表
-    pub user_id_list: Vec<String>,
 }
-/// 发送电话加急请求
-#[derive(.*?)]
-pub struct UrgentPhoneRequest {
-    /// 用户ID列表
-    pub user_id_list: Vec<String>,
-}
-/// 消息加急响应
-#[derive(.*?)]
-pub struct UrgentResponse {
-    /// 无效的用户ID列表
-    pub invalid_user_id_list: Vec<String>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl BuzzMessagesService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl BuzzMessagesService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 发送应用内加急
+}/// 发送应用内加急
     pub async fn urgent_app(
         &self,
         message_id: &str,
@@ -76,8 +62,7 @@ api_req.set_body(serde_json::to_vec(&request)?);
         let api_resp: BaseResponse<UrgentResponse> =
             Transport::request(api_req, &self.config, option).await?;
 api_resp.into_result(),
-    }
-/// 发送短信加急
+    /// 发送短信加急
     pub async fn urgent_sms(
         &self,
         message_id: &str,
@@ -98,8 +83,7 @@ api_req.set_body(serde_json::to_vec(&request)?);
         let api_resp: BaseResponse<UrgentResponse> =
             Transport::request(api_req, &self.config, option).await?;
 api_resp.into_result(),
-    }
-/// 发送电话加急
+    /// 发送电话加急
     pub async fn urgent_phone(
         &self,
         message_id: &str,
@@ -121,4 +105,4 @@ api_req.set_body(serde_json::to_vec(&request)?);
             Transport::request(api_req, &self.config, option).await?;
 api_resp.into_result(),
     }
-}
+}}}}}}}

@@ -3,12 +3,11 @@
 // 提供文件统计相关的功能,
 use crate::prelude::*;
 /// 统计服务
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct StatisticsService {
     client: std::sync::Arc<LarkClient>,
 }
 impl StatisticsService {
-    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
-        Self { client }
-}
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }

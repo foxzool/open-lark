@@ -1,9 +1,8 @@
 // feishu_people模块的数据模型定义
-
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 /// 人员基本信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PersonInfo {
     /// 人员ID
 #[serde(rename = "person_id")]
@@ -44,22 +43,20 @@ pub struct PersonInfo {
     /// 更新时间
 #[serde(rename = "update_time")]
     pub update_time: Option<String>,
-}
 /// 性别枚举
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum Gender {,
+pub enum Gender {
 /// 男性
     Male,
     /// 女性
     Female,
     /// 未知
     Unknown,
-}
 /// 雇佣状态枚举
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum EmploymentStatus {,
+pub enum EmploymentStatus {
 /// 在职
     Active,
     /// 已离职
@@ -68,9 +65,8 @@ pub enum EmploymentStatus {,
     Pending,
     /// 休假中
     OnLeave,
-}
 /// 部门信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DepartmentInfo {
     /// 部门ID
 #[serde(rename = "department_id")]
@@ -86,9 +82,8 @@ pub struct DepartmentInfo {
     /// 是否为主部门
 #[serde(rename = "is_primary")]
     pub is_primary: Option<bool>,
-}
 /// 职位信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PositionInfo {
     /// 职位ID
 #[serde(rename = "position_id")]
@@ -109,9 +104,8 @@ pub struct PositionInfo {
     /// 是否为主职位
 #[serde(rename = "is_primary")]
     pub is_primary: Option<bool>,
-}
 /// 人员类型信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EmployeeTypeInfo {
     /// 人员类型ID
 #[serde(rename = "employee_type_id")]
@@ -120,9 +114,8 @@ pub struct EmployeeTypeInfo {
     pub name: String,
     /// 人员类型描述
     pub description: Option<String>,
-}
 /// 职务序列信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct JobFamilyInfo {
     /// 职务序列ID
 #[serde(rename = "job_family_id")]
@@ -131,9 +124,8 @@ pub struct JobFamilyInfo {
     pub name: String,
     /// 职务序列描述
     pub description: Option<String>,
-}
 /// 职务级别信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct JobLevelInfo {
     /// 职务级别ID
 #[serde(rename = "job_level_id")]
@@ -144,9 +136,8 @@ pub struct JobLevelInfo {
     pub code: Option<String>,
     /// 职务级别描述
     pub description: Option<String>,
-}
 /// 合同信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ContractInfo {
     /// 合同ID
 #[serde(rename = "contract_id")]
@@ -175,11 +166,10 @@ pub struct ContractInfo {
     /// 薪资标准
 #[serde(rename = "salary_standard")]
     pub salary_standard: Option<SalaryStandardInfo>,
-}
 /// 合同状态
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum ContractStatus {,
+pub enum ContractStatus {
 /// 有效
     Active,
     /// 已过期
@@ -188,9 +178,8 @@ pub enum ContractStatus {,
     Terminated,
     /// 待生效
     Pending,
-}
 /// 薪资标准信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SalaryStandardInfo {
     /// 薪资标准ID
 #[serde(rename = "salary_standard_id")]
@@ -200,9 +189,8 @@ pub struct SalaryStandardInfo {
     pub base_salary: Option<f64>,
     /// 薪资标准名称
     pub name: Option<String>,
-}
 /// 假期类型
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct LeaveType {
     /// 假期类型ID
 #[serde(rename = "leave_type_id")]
@@ -217,9 +205,8 @@ pub struct LeaveType {
     /// 是否可带薪
 #[serde(rename = "is_paid")]
     pub is_paid: Option<bool>,
-}
 /// 假期余额
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct LeaveBalance {
     /// 人员ID
 #[serde(rename = "person_id")]
@@ -242,9 +229,8 @@ pub struct LeaveBalance {
     /// 有效期结束时间
 #[serde(rename = "valid_to")]
     pub valid_to: Option<String>,
-}
 /// 休假申请
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct LeaveApplication {
     /// 申请ID
 #[serde(rename = "application_id")]
@@ -279,11 +265,10 @@ pub struct LeaveApplication {
     /// 更新时间
 #[serde(rename = "update_time")]
     pub update_time: String,
-}
 /// 休假申请状态
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum LeaveApplicationStatus {,
+pub enum LeaveApplicationStatus {
 /// 待审批
     Pending,
     /// 已批准
@@ -294,9 +279,8 @@ pub enum LeaveApplicationStatus {,
     Withdrawn,
     /// 已完成
     Completed,
-}
 /// 用户授权信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UserAuthorization {
     /// 用户ID
 #[serde(rename = "user_id")]
@@ -310,9 +294,8 @@ pub struct UserAuthorization {
     /// 授权范围
 #[serde(rename = "authorization_scope")]
     pub authorization_scope: Option<AuthorizationScope>,
-}
 /// 角色信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RoleInfo {
     /// 角色ID
 #[serde(rename = "role_id")]
@@ -327,9 +310,8 @@ pub struct RoleInfo {
     /// 是否启用
 #[serde(rename = "enabled")]
     pub enabled: Option<bool>,
-}
 /// 权限信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PermissionInfo {
     /// 权限ID
 #[serde(rename = "permission_id")]
@@ -341,9 +323,8 @@ pub struct PermissionInfo {
     /// 权限类型
 #[serde(rename = "permission_type")]
     pub permission_type: Option<String>,
-}
 /// 授权范围
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AuthorizationScope {
     /// 部门范围
     pub departments: Option<Vec<String>>,
@@ -352,9 +333,8 @@ pub struct AuthorizationScope {
     /// 数据权限范围
 #[serde(rename = "data_scope")]
     pub data_scope: Option<String>,
-}
 /// 通用响应结构
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct FeishuPeopleResponse<T> {,
     /// 响应码
     pub code: i32,
@@ -362,9 +342,8 @@ pub struct FeishuPeopleResponse<T> {,
     pub msg: String,
     /// 响应数据
     pub data: Option<T>,
-}
 /// 分页响应结构
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PaginatedFeishuPeopleResponse<T> {,
     /// 响应码
     pub code: i32,
@@ -372,9 +351,8 @@ pub struct PaginatedFeishuPeopleResponse<T> {,
     pub msg: String,
     /// 响应数据
     pub data: Option<PaginatedFeishuPeopleData<T>>,
-}
 /// 分页数据
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PaginatedFeishuPeopleData<T> {,
     /// 数据列表
     pub items: Option<Vec<T>>,
@@ -384,4 +362,5 @@ pub struct PaginatedFeishuPeopleData<T> {,
     pub has_more: bool,
     /// 总数
     pub total: Option<i32>,
-}
+}}
+}}}}}}}}}}}}}}}}}}}}

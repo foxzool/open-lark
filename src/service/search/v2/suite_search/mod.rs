@@ -2,49 +2,43 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::search::v2::models::{SearchAppRequest, SearchMessageRequest, SearchResponse}
 };
 /// 套件搜索服务
 pub struct SuiteSearchService {
+}
     pub config: Config,
-}
 /// 搜索消息响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SearchMessageResponse {
-    /// 搜索结果
-#[serde(flatten)]
-    pub search_result: SearchResponse,
 }
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 搜索应用响应
-#[derive(.*?)]
-pub struct SearchAppResponse {
-    /// 搜索结果
-#[serde(flatten)]
-    pub search_result: SearchResponse,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl SuiteSearchService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 搜索应用响应
+#[derive(Debug, Clone)]
 }
-/// 搜索消息
+pub struct SearchAppResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl SuiteSearchService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 搜索消息
     ///,
 /// 该接口用于搜索飞书平台内的消息内容。
     ///,
@@ -74,15 +68,11 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = &request.page_token {,
             api_req
 .query_params
                 .insert("page_token", page_token.clone());
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 搜索应用
     ///,
 /// 该接口用于搜索飞书平台内的应用。
@@ -113,13 +103,10 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = &request.page_token {,
             api_req
 .query_params
                 .insert("page_token", page_token.clone());
-}
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}}

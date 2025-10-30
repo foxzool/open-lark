@@ -2,9 +2,7 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
         endpoints::EndpointBuilder,
@@ -12,10 +10,8 @@ use crate::{
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::hire::models::{
         Application, CommonResponse, PageResponse, Talent, TalentCreateRequest,
-    }
 };
 mod builders;
 // Re-export builders for easier access
@@ -25,11 +21,12 @@ pub use builders::{TalentCreateRequestBuilder, TalentListRequestBuilder};
 mod tests;
 /// 人才服务
 pub struct TalentService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 人才列表请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct TalentListRequest {
+}
     /// 分页大小
     pub page_size: Option<u32>,
     /// 分页标记
@@ -50,61 +47,62 @@ pub struct TalentListRequest {
     pub created_start_time: Option<String>,
     /// 创建时间结束
     pub created_end_time: Option<String>,
-}
 /// 人才列表响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct TalentListResponse {
+}
     /// 人才列表
 #[serde(flatten)]
     pub talents: PageResponse<Talent>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 人才详情响应
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 人才详情响应
+#[derive(Debug, Clone)]
 pub struct TalentDetailResponse {
+}
     /// 人才信息
     pub talent: Talent,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 人才操作响应
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 人才操作响应
+#[derive(Debug, Clone)]
 pub struct TalentOperationResponse {
+}
     /// 操作结果
 #[serde(flatten)]
     pub result: CommonResponse,
     /// 人才ID
     pub talent_id: Option<String>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 人才投递历史响应
-#[derive(.*?)]
-pub struct TalentApplicationHistoryResponse {
-    /// 投递历史列表
-#[serde(flatten)]
-    pub applications: PageResponse<Application>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl TalentService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 人才投递历史响应
+#[derive(Debug, Clone)]
+pub struct TalentApplicationHistoryResponse {
 }
-/// 创建人才档案
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl TalentService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建人才档案
     ///,
 /// 该接口用于创建新的人才档案，录入人才的基本信息、
     /// 工作经历、教育背景、技能标签等详细数据。
@@ -172,9 +170,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取人才详情
     ///,
 /// 该接口用于获取指定人才的详细信息，包括人才
@@ -210,8 +206,7 @@ let api_req = ApiRequest {,
     ///     println!("人才姓名: {}" data.talent.name);
     ///     println!("工作年限: {}年" data.talent.work_experience.unwrap_or(0));
     ///     println!("当前公司: {:?}" data.talent.current_company);
-    /// }
-/// ```
+    /// /// ```
     pub async fn get_talent_detail(
         &self,
         talent_id: &str,
@@ -224,9 +219,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取人才列表
     ///,
 /// 该接口用于获取企业的人才列表，支持按姓名、邮箱、
@@ -280,8 +273,7 @@ let api_req = ApiRequest {,
 ///     for talent in &data.talents.items {
     ///         println!("人才: {} ({})" talent.name, talent.current_position.as_deref().unwrap_or("未知"));
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_talents(
         &self,
         request: TalentListRequest,
@@ -299,43 +291,31 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(name_keyword) = request.name_keyword {,
             api_req.query_params.insert("name_keyword", name_keyword);
-}
 if let Some(email_keyword) = request.email_keyword {,
             api_req.query_params.insert("email_keyword", email_keyword);
-}
 if let Some(phone_keyword) = request.phone_keyword {,
             api_req.query_params.insert("phone_keyword", phone_keyword);
-}
 if let Some(work_experience) = request.work_experience {,
             api_req
 .query_params
                 .insert("work_experience", work_experience.to_string());
-}
 if let Some(education) = request.education {,
             api_req.query_params.insert("education", education);
-}
 if !request.tags.is_empty() {,
             api_req.query_params.insert("tags", request.tags.join(","));
-}
 if let Some(created_start_time) = request.created_start_time {,
             api_req
 .query_params
                 .insert("created_start_time", created_start_time);
-}
 if let Some(created_end_time) = request.created_end_time {,
             api_req
 .query_params
                 .insert("created_end_time", created_end_time);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 更新人才档案
     ///,
 /// 该接口用于更新现有人才档案的信息，支持修改
@@ -382,9 +362,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除人才档案
     ///,
 /// 该接口用于删除指定的人才档案。删除后的人才
@@ -417,9 +395,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取人才投递历史
     ///,
 /// 该接口用于获取指定人才的投递历史记录，
@@ -458,8 +434,7 @@ let api_req = ApiRequest {,
 ///     for application in &data.applications.items {
     ///         println!("职位: {} 状态: {}" application.job_id, application.status);
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn get_talent_application_history(
         &self,
         talent_id: &str,
@@ -483,13 +458,9 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量导入人才
     ///,
 /// 该接口用于批量导入人才档案，支持一次性
@@ -517,8 +488,7 @@ if let Some(page_token) = page_token {,
     ///         email: Some("wangwu@example.com".to_string())
     ///         tags: vec!["Go".to_string()]
     ///         ..Default::default()
-    ///     }
-    /// ];
+    ///     /// ];
 ///,
     /// let response = client.hire.candidate_management.talent.batch_import_talents(talents None).await?;
 /// ```
@@ -527,11 +497,10 @@ if let Some(page_token) = page_token {,
         talents: Vec<TalentCreateRequest>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentOperationResponse>> {,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
         struct BatchImportRequest {
             talents: Vec<TalentCreateRequest>,
         }
-
         let request = BatchImportRequest { talents };
 let api_req = ApiRequest {,
             http_method: Method::POST,
@@ -540,9 +509,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 创建人才档案（使用构建器模式）
     ///,
 /// 该接口使用构建器模式创建新的人才档案，提供链式调用和内置验证功能。
@@ -579,7 +546,6 @@ let api_req = ApiRequest {,
     ) -> SDKResult<BaseResponse<TalentOperationResponse>> {,
 let request = builder_result?;
         self.create_talent(request, option).await,
-}
 /// 更新人才档案（使用构建器模式）
     ///,
 /// 该接口使用构建器模式更新现有人才档案的信息，
@@ -615,7 +581,6 @@ pub async fn update_talent_with_builder(,
     ) -> SDKResult<BaseResponse<TalentOperationResponse>> {,
 let request = builder_result?;
         self.update_talent(talent_id, request, option).await,
-}
 /// 批量导入人才（使用构建器模式）
     ///,
 /// 该接口使用构建器模式批量导入人才档案，支持一次性
@@ -651,7 +616,6 @@ pub async fn batch_import_talents_with_builder(,
     ) -> SDKResult<BaseResponse<TalentOperationResponse>> {,
 let talents = builder_results?;
         self.batch_import_talents(talents, option).await,
-}
 /// 创建人才档案构建器
     ///,
 /// 返回一个人才创建请求的构建器，支持链式调用设置各种属性。
@@ -675,8 +639,7 @@ let talents = builder_results?;
 /// ```
     pub fn w+.*{
 TalentCreateRequestBuilder::default(),
-    }
-/// 创建人才列表请求构建器
+    /// 创建人才列表请求构建器
     ///,
 /// 返回一个人才列表查询请求的构建器，支持链式调用设置筛选条件。
     ///,
@@ -697,8 +660,7 @@ TalentCreateRequestBuilder::default(),
 /// ```
     pub fn w+.*{
 TalentListRequestBuilder::default(),
-    }
-/// 获取人才列表（使用构建器模式）
+    /// 获取人才列表（使用构建器模式）
     ///,
 /// 该接口使用构建器模式获取企业的人才列表，支持按姓名、邮箱、
     /// 电话、工作年限、学历、标签等条件筛选。
@@ -732,7 +694,6 @@ TalentListRequestBuilder::default(),
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentListResponse>> {
         self.list_talents(request, option).await,
-}
 /// 批量创建人才档案（使用构建器模式）
     ///,
 /// 该接口使用构建器模式批量创建人才档案，每个请求都会经过验证。
@@ -774,10 +735,8 @@ match builder_result {,
                 Ok(request) => match self.create_talent(request, option.clone()).await {
                     Ok(response) => results.push(Ok(response)),
                     Err(e) => results.push(Err(e)),
-                }
                 Err(e) => results.push(Err(e)),
-            }
-}
-results,
+            results,
     }
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

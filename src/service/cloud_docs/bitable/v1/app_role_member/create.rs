@@ -6,8 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -18,26 +17,10 @@ use crate::,
 };
 use super::AppRoleMemberService;
 impl AppRoleMemberService {
-/// 新增协作者,
-    pub async fn create(
-        &self,
-        request: CreateRoleMemberRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<CreateRoleMemberResponse>> {,
-let mut api_req = request.api_request;
-        api_req.set_http_method(Method::POST);
-api_req.api_path = BITABLE_V1_ROLE_MEMBERS,
-            .replace("{app_token}", &request.app_token)
-            .replace("{role_id}", &request.role_id);
-api_req
-            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-Ok(api_resp),
-    }
-}
-/// 新增协作者请求,
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 新增协作者请求,
+#[derive(Debug, Clone)]
 pub struct CreateRoleMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -53,68 +36,18 @@ pub struct CreateRoleMemberRequest {
     /// 成员id
     member_id: String,
     /// 成员类型: user, chat, department, open_department_id
-    member_type: String,
-}
+    member_type: String}
 impl CreateRoleMemberRequest {
-    pub fn w+.*{
-CreateRoleMemberRequestBuilder::default(),
-    }
-pub fn new(,
-        app_token: impl ToString,
-        role_id: impl ToString,
-        member_id: impl ToString,
-        member_type: impl ToString,
-    ) -> Self {
-Self {
-            app_token: app_token.to_string(),
-            role_id: role_id.to_string(),
-            member_id: member_id.to_string(),
-            member_type: member_type.to_string()
-            ..Default::default(),
-}
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct CreateRoleMemberRequestBuilder {
-    request: CreateRoleMemberRequest,
-}
+    request: CreateRoleMemberRequest}
 impl CreateRoleMemberRequestBuilder {
-    /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {
-self.request.app_token = app_token.to_string();
-        self,
-}
-/// 自定义角色的id,
-    pub fn role_id(mut self, role_id: impl ToString) -> Self {
-self.request.role_id = role_id.to_string();
-        self,
-}
-/// 用户id类型,
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
-self.request.user_id_type = Some(user_id_type.to_string());
-        self,
-}
-/// 成员id,
-    pub fn member_id(mut self, member_id: impl ToString) -> Self {
-self.request.member_id = member_id.to_string();
-        self,
-}
-/// 成员类型,
-    pub fn member_type(mut self, member_type: impl ToString) -> Self {
-self.request.member_type = member_type.to_string();
-        self,
-}
-pub fn w+.*{
-        if let Some(user_id_type) = &self.request.user_id_type {,
-self.request,
-                .api_request,
-.query_params
-                .insert("user_id_type", user_id_type.clone());
-}
-self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request,
-}
-}
 impl_executable_builder_owned!(,
     CreateRoleMemberRequestBuilder,
     AppRoleMemberService,
@@ -123,32 +56,31 @@ impl_executable_builder_owned!(,
     create,
 );
 /// 协作者信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RoleMember {
     /// 成员id
     pub member_id: String,
     /// 成员类型
     pub member_type: String,
     /// 成员名称
-    pub member_name: Option<String>,
-}
+    pub member_name: Option<String>}
 /// 新增协作者响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateRoleMemberResponse {
     /// 新增的协作者信息
     pub member: RoleMember,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]
-    fn test_create_role_member_request_builder() {,
+    fn test_create_role_member_request_builder() {
 let request = CreateRoleMemberRequest::builder(),
             .app_token()
 .role_id()
@@ -161,5 +93,3 @@ let request = CreateRoleMemberRequest::builder(),
         assert_eq!(request.member_id, "ou_xxxxxx");
         assert_eq!(request.member_type, "user");
         assert_eq!(request.user_id_type, Some("open_id".to_string()));
-}
-}

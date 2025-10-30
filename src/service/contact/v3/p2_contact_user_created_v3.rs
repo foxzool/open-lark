@@ -2,18 +2,16 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2ContactUserCreatedV3 {
     pub schema: String,
     pub header: EventHeader,
     pub event: P2ContactUserCreatedV3Data,
-}
 pub(crate) struct P2ContactUserCreatedV3ProcessorImpl<F>,
 where
     F: Fn(P2ContactUserCreatedV3) + 'static,
 {
     f: F,
-}
 impl<F> EventHandler for P2ContactUserCreatedV3ProcessorImpl<F>,
 where
     F: Fn(P2ContactUserCreatedV3) + 'static + Sync + Send,
@@ -23,31 +21,26 @@ let event: P2ContactUserCreatedV3 = serde_json::from_slice(payload)?;
         (self.f)(event);
 Ok(()),
     }
-}
 impl<F> P2ContactUserCreatedV3ProcessorImpl<F>,
 where
     F: Fn(P2ContactUserCreatedV3) + 'static,
 {,
 pub(crate) fn new(f: F) -> Self {
         P2ContactUserCreatedV3ProcessorImpl { f }
-}
-}
 /// 用户创建事件数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2ContactUserCreatedV3Data {
     /// 事件对象
     pub object: ContactEventObject,
-}
 /// 通讯录事件对象,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ContactEventObject {
     /// 对象类型 (user)
     pub object_type: String,
     /// 用户信息
     pub user: ContactUser,
-}
 /// 通讯录用户信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ContactUser {
     /// 用户 ID
     pub user_id: String,
@@ -105,9 +98,8 @@ pub struct ContactUser {
     /// 更新时间 (Unix时间戳，单位：秒),
 #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
-}
 /// 用户头像信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UserAvatar {
     /// 72*72像素头像链接,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -121,9 +113,8 @@ pub struct UserAvatar {
     /// 原始头像链接,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub avatar_origin: Option<String>,
-}
 /// 用户状态,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UserStatus {
     /// 是否冻结,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -137,4 +128,3 @@ pub struct UserStatus {
     /// 是否主动退出，主动退出的用户不会再加入到相同的租户内,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub is_exited: Option<bool>,
-}

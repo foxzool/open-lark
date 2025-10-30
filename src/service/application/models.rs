@@ -1,41 +1,28 @@
 use serde::{Deserialize, Serialize};
 /// 用户ID类型,
-#[derive(.*?)]
-pub enum UserIdType {,
+#[derive(Debug, Clone)]
+pub enum UserIdType {
     #[serde(rename = "open_id")]
     OpenId,
     #[serde(rename = "user_id")]
     UserId,
     #[serde(rename = "union_id")]
     UnionId,
-}
 impl UserIdType {
-    pub fn w+.*{
-match self {,
-            UserIdType::OpenId => "open_id",
-            UserIdType::UserId => "user_id",
-            UserIdType::UnionId => "union_id",
-        }
-}
-}
-/// 部门ID类型,
-#[derive(.*?)]
-pub enum DepartmentIdType {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 部门ID类型,
+#[derive(Debug, Clone)]
+pub enum DepartmentIdType {
     #[serde(rename = "open_department_id")]
     OpenDepartmentId,
     #[serde(rename = "department_id")]
     DepartmentId,
-}
 impl DepartmentIdType {
-    pub fn w+.*{
-match self {,
-            DepartmentIdType::OpenDepartmentId => "open_department_id",
-            DepartmentIdType::DepartmentId => "department_id",
-        }
-}
-}
-/// 应用信息,
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 应用信息,
+#[derive(Debug, Clone)]
 pub struct Application {
     /// 应用ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -61,20 +48,18 @@ pub struct Application {
     /// 更新时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
-}
 /// 应用类型,
-#[derive(.*?)]
-pub enum AppType {,
+#[derive(Debug, Clone)]
+pub enum AppType {
     /// 自建应用,
 #[serde(rename = "self_built")]
     SelfBuilt,
     /// 应用商店应用,
 #[serde(rename = "marketplace")]
     Marketplace,
-}
 /// 应用状态,
-#[derive(.*?)]
-pub enum AppStatus {,
+#[derive(Debug, Clone)]
+pub enum AppStatus {
     /// 开发中,
 #[serde(rename = "developing")]
     Developing,
@@ -87,9 +72,8 @@ pub enum AppStatus {,
     /// 已停用,
 #[serde(rename = "disabled")]
     Disabled,
-}
 /// 应用版本信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AppVersion {
     /// 版本ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -112,10 +96,9 @@ pub struct AppVersion {
     /// 版本状态,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<VersionStatus>,
-}
 /// 版本状态,
-#[derive(.*?)]
-pub enum VersionStatus {,
+#[derive(Debug, Clone)]
+pub enum VersionStatus {
     /// 开发中,
 #[serde(rename = "developing")]
     Developing,
@@ -128,9 +111,8 @@ pub enum VersionStatus {,
     /// 审核拒绝,
 #[serde(rename = "rejected")]
     Rejected,
-}
 /// 应用协作者,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AppCollaborator {
     /// 协作者ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -141,19 +123,17 @@ pub struct AppCollaborator {
     /// 权限,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub permissions: Option<Vec<String>>,
-}
 /// 协作者类型,
-#[derive(.*?)]
-pub enum CollaboratorType {,
+#[derive(Debug, Clone)]
+pub enum CollaboratorType {
     /// 用户,
 #[serde(rename = "user")]
     User,
     /// 群组,
 #[serde(rename = "group")]
     Group,
-}
 /// 权限范围,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PermissionScope {
     /// 权限,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -164,10 +144,9 @@ pub struct PermissionScope {
     /// 授权状态,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<AuthStatus>,
-}
 /// 授权状态,
-#[derive(.*?)]
-pub enum AuthStatus {,
+#[derive(Debug, Clone)]
+pub enum AuthStatus {
     /// 已授权,
 #[serde(rename = "granted")]
     Granted,
@@ -180,9 +159,8 @@ pub enum AuthStatus {,
     /// 已拒绝,
 #[serde(rename = "rejected")]
     Rejected,
-}
 /// 应用管理员,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AppAdmin {
     /// 用户ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -190,10 +168,9 @@ pub struct AppAdmin {
     /// 管理权限,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub permissions: Option<Vec<AdminPermission>>,
-}
 /// 管理员权限,
-#[derive(.*?)]
-pub enum AdminPermission {,
+#[derive(Debug, Clone)]
+pub enum AdminPermission {
     /// 应用管理,
 #[serde(rename = "app_management")]
     AppManagement,
@@ -203,9 +180,8 @@ pub enum AdminPermission {,
     /// 权限管理,
 #[serde(rename = "permission_management")]
     PermissionManagement,
-}
 /// 应用可用范围,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AppAvailability {
     /// 是否对所有人可用,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -216,9 +192,8 @@ pub struct AppAvailability {
     /// 黑名单用户,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub invisible_list: Option<VisibilityList>,
-}
 /// 可见性列表,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct VisibilityList {
     /// 用户列表,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -229,9 +204,8 @@ pub struct VisibilityList {
     /// 用户组列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub group_list: Option<Vec<String>>,
-}
 /// 应用使用统计,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AppUsage {
     /// 日期,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -245,9 +219,8 @@ pub struct AppUsage {
     /// 消息推送数,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub message_push_count: Option<i64>,
-}
 /// 部门使用统计,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DepartmentUsage {
     /// 部门ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -261,9 +234,8 @@ pub struct DepartmentUsage {
     /// 总用户数,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub total_users: Option<i64>,
-}
 /// 应用反馈,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AppFeedback {
     /// 反馈ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -286,10 +258,9 @@ pub struct AppFeedback {
     /// 状态,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<FeedbackStatus>,
-}
 /// 反馈类型,
-#[derive(.*?)]
-pub enum FeedbackType {,
+#[derive(Debug, Clone)]
+pub enum FeedbackType {
     /// 问题反馈,
 #[serde(rename = "bug")]
     Bug,
@@ -299,10 +270,9 @@ pub enum FeedbackType {,
     /// 其他,
 #[serde(rename = "other")]
     Other,
-}
 /// 反馈状态,
-#[derive(.*?)]
-pub enum FeedbackStatus {,
+#[derive(Debug, Clone)]
+pub enum FeedbackStatus {
     /// 待处理,
 #[serde(rename = "pending")]
     Pending,
@@ -315,9 +285,8 @@ pub enum FeedbackStatus {,
     /// 已关闭,
 #[serde(rename = "closed")]
     Closed,
-}
 /// 应用红点设置,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AppBadge {
     /// 红点类型,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -325,10 +294,9 @@ pub struct AppBadge {
     /// 红点内容,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
-}
 /// 红点类型,
-#[derive(.*?)]
-pub enum BadgeType {,
+#[derive(Debug, Clone)]
+pub enum BadgeType {
     /// 数字红点,
 #[serde(rename = "number")]
     Number,
@@ -338,9 +306,8 @@ pub enum BadgeType {,
     /// 清除红点,
 #[serde(rename = "clear")]
     Clear,
-}
 /// 付费订单信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Order {
     /// 订单ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -360,10 +327,9 @@ pub struct Order {
     /// 到期时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub expire_time: Option<String>,
-}
 /// 订单状态,
-#[derive(.*?)]
-pub enum OrderStatus {,
+#[derive(Debug, Clone)]
+pub enum OrderStatus {
     /// 待支付,
 #[serde(rename = "pending")]
     Pending,
@@ -376,9 +342,8 @@ pub enum OrderStatus {,
     /// 已过期,
 #[serde(rename = "expired")]
     Expired,
-}
 /// 付费方案,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PricingPlan {
     /// 方案ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -395,10 +360,9 @@ pub struct PricingPlan {
     /// 计费周期,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub billing_cycle: Option<BillingCycle>,
-}
 /// 计费周期,
-#[derive(.*?)]
-pub enum BillingCycle {,
+#[derive(Debug, Clone)]
+pub enum BillingCycle {
     /// 月付,
 #[serde(rename = "monthly")]
     Monthly,
@@ -408,9 +372,8 @@ pub enum BillingCycle {,
     /// 一次性,
 #[serde(rename = "once")]
     Once,
-}
 /// 应用审核状态,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AuditStatus {
     /// 审核状态,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -421,10 +384,9 @@ pub struct AuditStatus {
     /// 审核时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub audit_time: Option<String>,
-}
 /// 审核结果,
-#[derive(.*?)]
-pub enum AuditResult {,
+#[derive(Debug, Clone)]
+pub enum AuditResult {
     /// 待审核,
 #[serde(rename = "pending")]
     Pending,
@@ -434,9 +396,8 @@ pub enum AuditResult {,
     /// 审核拒绝,
 #[serde(rename = "rejected")]
     Rejected,
-}
 /// 通讯录权限范围,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ContactsRange {
     /// 权限范围类型,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -447,10 +408,9 @@ pub struct ContactsRange {
     /// 用户列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub user_list: Option<Vec<String>>,
-}
 /// 通讯录权限范围类型,
-#[derive(.*?)]
-pub enum ContactsRangeType {,
+#[derive(Debug, Clone)]
+pub enum ContactsRangeType {
     /// 全员,
 #[serde(rename = "all")]
     All,
@@ -460,14 +420,13 @@ pub enum ContactsRangeType {,
     /// 当前应用管理范围,
 #[serde(rename = "admin_range")]
     AdminRange,
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json;
     #[test]
-fn test_user_id_type_enum() {,
+fn test_user_id_type_enum() {
         assert_eq!(
             serde_json::to_string(&UserIdType::OpenId).unwrap(),
             "\"open_id\"",
@@ -486,9 +445,8 @@ fn test_user_id_type_enum() {,
         assert_eq!(UserIdType::OpenId.as_str(), "open_id");
         assert_eq!(UserIdType::UserId.as_str(), "user_id");
         assert_eq!(UserIdType::UnionId.as_str(), "union_id");
-}
 #[test]
-    fn test_department_id_type_enum() {,
+    fn test_department_id_type_enum() {
 assert_eq!(,
             serde_json::to_string(&DepartmentIdType::OpenDepartmentId).unwrap(),
             "\"open_department_id\"",
@@ -499,15 +457,14 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_department_id_type_as_str() {,
+    fn test_department_id_type_as_str() {
 assert_eq!(,
             DepartmentIdType::OpenDepartmentId.as_str(),
             "open_department_id",
 );
         assert_eq!(DepartmentIdType::DepartmentId.as_str(), "department_id");
-}
 #[test]
-    fn test_application_full() {,
+    fn test_application_full() {
 let app = Application {,
             app_id: Some("app123".to_string()),
             app_name: Some("测试应用".to_string()),
@@ -525,7 +482,7 @@ assert!(json.contains("测试应用"));
 assert!(json.contains("published"));
     }
 #[test]
-    fn test_app_type_enum() {,
+    fn test_app_type_enum() {
 assert_eq!(,
             serde_json::to_string(&AppType::SelfBuilt).unwrap(),
             "\"self_built\"",
@@ -536,7 +493,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_app_status_enum() {,
+    fn test_app_status_enum() {
 assert_eq!(,
             serde_json::to_string(&AppStatus::Developing).unwrap(),
             "\"developing\"",
@@ -555,7 +512,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_app_version() {,
+    fn test_app_version() {
 let version = AppVersion {,
             version_id: Some("v123".to_string()),
             version: Some("1.2.0".to_string()),
@@ -572,7 +529,7 @@ assert!(json.contains("1.2.0"));
 assert!(json.contains("published"));
     }
 #[test]
-    fn test_version_status_enum() {,
+    fn test_version_status_enum() {
 assert_eq!(,
             serde_json::to_string(&VersionStatus::Developing).unwrap(),
             "\"developing\"",
@@ -591,7 +548,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_app_collaborator() {,
+    fn test_app_collaborator() {
 let collaborator = AppCollaborator {,
             collaborator_id: Some("user123".to_string()),
             collaborator_type: Some(CollaboratorType::User),
@@ -601,9 +558,8 @@ let json = serde_json::to_string(&collaborator).unwrap();
         assert!(json.contains("user123"));
 assert!(json.contains("user"));
         assert!(json.contains("read"));
-}
 #[test]
-    fn test_collaborator_type_enum() {,
+    fn test_collaborator_type_enum() {
 assert_eq!(,
             serde_json::to_string(&CollaboratorType::User).unwrap(),
             "\"user\"",
@@ -614,7 +570,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_permission_scope() {,
+    fn test_permission_scope() {
 let scope = PermissionScope {,
             permission: Some("contacts:read".to_string()),
             granted: Some(true),
@@ -624,9 +580,8 @@ let json = serde_json::to_string(&scope).unwrap();
         assert!(json.contains("contacts:read"));
 assert!(json.contains("true"));
         assert!(json.contains("granted"));
-}
 #[test]
-    fn test_auth_status_enum() {,
+    fn test_auth_status_enum() {
 assert_eq!(,
             serde_json::to_string(&AuthStatus::Granted).unwrap(),
             "\"granted\"",
@@ -645,7 +600,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_app_admin() {,
+    fn test_app_admin() {
 let admin = AppAdmin {,
             user_id: Some("admin123".to_string()),
             permissions: Some(vec![
@@ -657,9 +612,8 @@ let json = serde_json::to_string(&admin).unwrap();
         assert!(json.contains("admin123"));
 assert!(json.contains("app_management"));
         assert!(json.contains("user_management"));
-}
 #[test]
-    fn test_admin_permission_enum() {,
+    fn test_admin_permission_enum() {
 assert_eq!(,
             serde_json::to_string(&AdminPermission::AppManagement).unwrap(),
             "\"app_management\"",
@@ -674,7 +628,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_app_availability() {,
+    fn test_app_availability() {
 let availability = AppAvailability {,
             is_visible_to_all: Some(false),
             visible_list: Some(VisibilityList {
@@ -688,9 +642,8 @@ let json = serde_json::to_string(&availability).unwrap();
         assert!(json.contains("false"));
 assert!(json.contains("user1"));
         assert!(json.contains("dept1"));
-}
 #[test]
-    fn test_visibility_list() {,
+    fn test_visibility_list() {
 let list = VisibilityList {,
             user_list: Some(vec!["user123".to_string()]),
             department_list: Some(vec!["tech".to_string(), "product".to_string()]),
@@ -700,9 +653,8 @@ let json = serde_json::to_string(&list).unwrap();
         assert!(json.contains("user123"));
 assert!(json.contains("tech"));
         assert!(json.contains("product"));
-}
 #[test]
-    fn test_app_usage() {,
+    fn test_app_usage() {
 let usage = AppUsage {,
             date: Some("2024-01-01".to_string()),
             active_users: Some(150),
@@ -716,7 +668,7 @@ assert!(json.contains("150"));
 assert!(json.contains("500"));
     }
 #[test]
-    fn test_department_usage() {,
+    fn test_department_usage() {
 let usage = DepartmentUsage {,
             department_id: Some("dept123".to_string()),
             department_name: Some("技术部".to_string()),
@@ -730,7 +682,7 @@ assert!(json.contains("技术部"));
 assert!(json.contains("30"));
     }
 #[test]
-    fn test_app_feedback() {,
+    fn test_app_feedback() {
 let feedback = AppFeedback {,
             feedback_id: Some("fb123".to_string()),
             user_id: Some("user456".to_string()),
@@ -747,7 +699,7 @@ assert!(json.contains("bug"));
 assert!(json.contains("processing"));
     }
 #[test]
-    fn test_feedback_type_enum() {,
+    fn test_feedback_type_enum() {
 assert_eq!(,
             serde_json::to_string(&FeedbackType::Bug).unwrap(),
             "\"bug\"",
@@ -762,7 +714,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_feedback_status_enum() {,
+    fn test_feedback_status_enum() {
 assert_eq!(,
             serde_json::to_string(&FeedbackStatus::Pending).unwrap(),
             "\"pending\"",
@@ -781,7 +733,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_app_badge() {,
+    fn test_app_badge() {
 let badge = AppBadge {,
             badge_type: Some(BadgeType::Number),
             content: Some("5".to_string()),
@@ -791,7 +743,7 @@ let json = serde_json::to_string(&badge).unwrap();
 assert!(json.contains("5"));
     }
 #[test]
-    fn test_badge_type_enum() {,
+    fn test_badge_type_enum() {
 assert_eq!(,
             serde_json::to_string(&BadgeType::Number).unwrap(),
             "\"number\"",
@@ -803,7 +755,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_order() {,
+    fn test_order() {
 let order = Order {,
             order_id: Some("order123".to_string()),
             status: Some(OrderStatus::Paid),
@@ -819,7 +771,7 @@ assert!(json.contains("paid"));
 assert!(json.contains("10"));
     }
 #[test]
-    fn test_order_status_enum() {,
+    fn test_order_status_enum() {
 assert_eq!(,
             serde_json::to_string(&OrderStatus::Pending).unwrap(),
             "\"pending\"",
@@ -838,7 +790,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_pricing_plan() {,
+    fn test_pricing_plan() {
 let plan = PricingPlan {,
             pricing_plan_id: Some("plan123".to_string()),
             plan_name: Some("专业版".to_string()),
@@ -853,7 +805,7 @@ assert!(json.contains("专业版"));
 assert!(json.contains("monthly"));
     }
 #[test]
-    fn test_billing_cycle_enum() {,
+    fn test_billing_cycle_enum() {
 assert_eq!(,
             serde_json::to_string(&BillingCycle::Monthly).unwrap(),
             "\"monthly\"",
@@ -868,7 +820,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_audit_status() {,
+    fn test_audit_status() {
 let status = AuditStatus {,
             status: Some(AuditResult::Approved),
             comment: Some("应用符合规范".to_string()),
@@ -879,7 +831,7 @@ let json = serde_json::to_string(&status).unwrap();
 assert!(json.contains("应用符合规范"));
     }
 #[test]
-    fn test_audit_result_enum() {,
+    fn test_audit_result_enum() {
 assert_eq!(,
             serde_json::to_string(&AuditResult::Pending).unwrap(),
             "\"pending\"",
@@ -894,7 +846,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_contacts_range() {,
+    fn test_contacts_range() {
 let range = ContactsRange {,
             range_type: Some(ContactsRangeType::Some),
             department_list: Some(vec!["dept1".to_string(), "dept2".to_string()]),
@@ -904,9 +856,8 @@ let json = serde_json::to_string(&range).unwrap();
         assert!(json.contains("some"));
 assert!(json.contains("dept1"));
         assert!(json.contains("user1"));
-}
 #[test]
-    fn test_contacts_range_type_enum() {,
+    fn test_contacts_range_type_enum() {
 assert_eq!(,
             serde_json::to_string(&ContactsRangeType::All).unwrap(),
             "\"all\"",
@@ -921,7 +872,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_minimal_structs() {,
+    fn test_minimal_structs() {
 let minimal_app = Application {,
             app_id: Some("minimal".to_string()),
             app_name: Some("最小应用".to_string()),
@@ -936,5 +887,3 @@ let json = serde_json::to_string(&minimal_app).unwrap();
         assert!(json.contains("minimal"));
 assert!(json.contains("最小应用"));
         assert!(!json.contains("description"));
-}
-}

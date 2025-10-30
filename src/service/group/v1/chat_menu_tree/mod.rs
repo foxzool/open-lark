@@ -9,10 +9,11 @@ use crate::core::config::Config;
 ///
 /// 提供群菜单的创建、删除、修改、排序、获取等功能
 pub struct ChatMenuTreeService {
-    pub config: Config,
+pub config: Config,
 }
 impl ChatMenuTreeService {
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self { config 
+}
 }
 }

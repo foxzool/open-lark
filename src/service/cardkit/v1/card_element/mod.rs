@@ -10,10 +10,11 @@ pub use create::*;
 ///,
 /// 提供卡片组件的创建、更新、删除等管理功能
 pub struct CardElementService {
-    pub config: Config,
+pub config: Config,
 }
 impl CardElementService {
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self { config 
+}
 }
 }

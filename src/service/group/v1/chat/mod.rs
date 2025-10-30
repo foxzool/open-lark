@@ -15,7 +15,6 @@
 //! - `link`: 获取群分享链接,
 //!,
 //! 🚧 **待实现** - 以上功能模块尚未实现，敬请期待。
-
 use crate::core::{config::Config, trait_system::Service};
 // 规划中的功能模块（待实现）
 // pub mod create;
@@ -31,21 +30,19 @@ use crate::core::{config::Config, trait_system::Service};
 ///
 /// 提供群的创建、删除、更新、查询等管理功能
 pub struct ChatService {
-    pub config: Config,
 }
+
 impl ChatService {
+    
     pub fn new(config: Config) -> Self {
         Self { config }
-}
 }
 impl Service for ChatService {,
     fn config(&self) -> &Config {,
 &self.config,
-    }
-fn service_name() -> &'static str {,
+    fn service_name() -> &'static str {,
         "chat",
-}
 fn service_version() -> &'static str {,
         "v1",
 }
-}
+}}}}

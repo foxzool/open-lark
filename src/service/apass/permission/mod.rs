@@ -3,54 +3,39 @@ use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::apass::models::{
         RecordPermissionMemberAuthorizationRequest, RoleMember, RoleMemberAuthorizationRequest,
-    }
 };
 /// 权限管理服务
 pub struct PermissionService {
-    pub config: Config,
 }
-/// 操作成功响应
-#[derive(.*?)]
-pub struct OperationSuccessResponse {
-    /// 操作是否成功
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub success: Option<bool>,
-    /// 操作消息
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub message: Option<String>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 角色成员信息响应
-#[derive(.*?)]
-pub struct RoleMemberGetResponse {
-    /// 角色成员信息
-#[serde(flatten)]
-    pub role_member: RoleMember,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl PermissionService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 角色成员信息响应
+#[derive(Debug, Clone)]
 }
-/// 批量删除角色成员授权
+pub struct RoleMemberGetResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl PermissionService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 批量删除角色成员授权
     ///,
 /// 该接口用于批量删除角色成员的授权。
     ///,
@@ -78,9 +63,7 @@ let api_req = ApiRequest {,
             }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量创建角色成员授权
     ///,
 /// 该接口用于批量创建角色成员的授权。
@@ -109,9 +92,7 @@ let api_req = ApiRequest {,
             }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询角色成员信息
     ///,
 /// 该接口用于查询指定角色的成员信息。
@@ -143,9 +124,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量删除记录权限用户授权
     ///,
 /// 该接口用于批量删除记录权限用户的授权。
@@ -178,9 +157,7 @@ let api_req = ApiRequest {,
 }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量创建记录权限用户授权
     ///,
 /// 该接口用于批量创建记录权限用户的授权。
@@ -213,7 +190,6 @@ let api_req = ApiRequest {,
 }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}}}

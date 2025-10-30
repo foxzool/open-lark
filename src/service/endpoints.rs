@@ -62,29 +62,7 @@ pub const ASSISTANT_V1_CONVERSATIONS: &str = "/open-apis/ai/v1/conversations";
 pub struct EndpointHelper;
 
 impl EndpointHelper {
-    /// 替换路径中的参数占位符
-    ///
-    /// # Example
-    /// ```rust,ignore
-    /// let path = EndpointHelper::replace_path_params(
-    ///     WIKI_V2_SPACE_NODES,
-    ///     &[("space_id", "space123")]
-    /// );
-    /// assert_eq!(path, "/open-apis/wiki/v2/spaces/space123/nodes");
-    /// ```
-    pub fn replace_path_params(path: &str, params: &[(&str, &str)]) -> String {
-        let mut result = path.to_string();
-        for (key, value) in params {
-            let placeholder = format!("{{{key}}}");
-            result = result.replace(&placeholder, value);
-        }
-        result
-    }
-
-    /// 检查路径是否包含未替换的参数
-    pub fn has_unresolved_params(path: &str) -> bool {
-        path.contains('{') && path.contains('}')
-    }
+    
 }
 
 #[cfg(test)]

@@ -3,36 +3,28 @@ use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize
 use std::collections::HashMap;
 use crate::{
     core::{,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::minutes::models::{MinuteTranscript, UserIdType}
 };
 /// 文字记录服务
 pub struct TranscriptService {
-    pub config: Config,
 }
-/// 获取文字记录响应
-#[derive(.*?)]
-pub struct GetTranscriptResponse {
-    /// 文字记录信息
-    pub transcript: MinuteTranscript,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl TranscriptService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl TranscriptService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 导出妙记文字记录
+}/// 导出妙记文字记录
     pub async fn get(
         &self,
         minute_token: &str,
@@ -42,7 +34,6 @@ impl TranscriptService {
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
@@ -54,7 +45,6 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}

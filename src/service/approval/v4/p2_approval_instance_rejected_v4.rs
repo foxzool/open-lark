@@ -2,18 +2,16 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2ApprovalInstanceRejectedV4 {
     pub schema: String,
     pub header: EventHeader,
     pub event: P2ApprovalInstanceRejectedV4Data,
-}
 pub(crate) struct P2ApprovalInstanceRejectedV4ProcessorImpl<F>,
 where
     F: Fn(P2ApprovalInstanceRejectedV4) + 'static,
 {
     f: F,
-}
 impl<F> EventHandler for P2ApprovalInstanceRejectedV4ProcessorImpl<F>,
 where
     F: Fn(P2ApprovalInstanceRejectedV4) + 'static + Sync + Send,
@@ -23,17 +21,14 @@ let event: P2ApprovalInstanceRejectedV4 = serde_json::from_slice(payload)?;
         (self.f)(event);
 Ok(()),
     }
-}
 impl<F> P2ApprovalInstanceRejectedV4ProcessorImpl<F>,
 where
     F: Fn(P2ApprovalInstanceRejectedV4) + 'static,
 {,
 pub(crate) fn new(f: F) -> Self {
         P2ApprovalInstanceRejectedV4ProcessorImpl { f }
-}
-}
 /// 审批实例拒绝事件数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2ApprovalInstanceRejectedV4Data {
     /// 事件对象
     pub object: ApprovalInstanceEventObject,
@@ -43,17 +38,15 @@ pub struct P2ApprovalInstanceRejectedV4Data {
     /// 拒绝信息,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub rejection_info: Option<RejectionInfo>,
-}
 /// 审批实例事件对象,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ApprovalInstanceEventObject {
     /// 对象类型 (approval_instance)
     pub object_type: String,
     /// 审批实例信息
     pub instance: RejectedApprovalInstance,
-}
 /// 被拒绝的审批实例信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RejectedApprovalInstance {
     /// 审批实例ID
     pub instance_id: String,
@@ -93,9 +86,8 @@ pub struct RejectedApprovalInstance {
     /// 审批实例链接,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_url: Option<String>,
-}
 /// 审批用户信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ApprovalUser {
     /// 用户ID
     pub user_id: String,
@@ -111,16 +103,14 @@ pub struct ApprovalUser {
     /// 部门ID列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub department_ids: Option<Vec<String>>,
-}
 /// 审批表单信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ApprovalForm {
     /// 表单字段列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub form_fields: Option<Vec<ApprovalFormField>>,
-}
 /// 审批表单字段,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ApprovalFormField {
     /// 字段ID
     pub field_id: String,
@@ -132,9 +122,8 @@ pub struct ApprovalFormField {
     /// 字段值,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub field_value: Option<String>,
-}
 /// 审批流程信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ApprovalProcess {
     /// 审批流程节点列表,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -142,9 +131,8 @@ pub struct ApprovalProcess {
     /// 拒绝节点ID,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub rejected_node_id: Option<String>,
-}
 /// 审批流程节点,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ApprovalNode {
     /// 节点ID
     pub node_id: String,
@@ -165,9 +153,8 @@ pub struct ApprovalNode {
     /// 审批意见,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
-}
 /// 拒绝信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RejectionInfo {
     /// 拒绝原因类型 (user_reject, system_reject, timeout_reject)
     pub reject_type: String,
@@ -180,9 +167,8 @@ pub struct RejectionInfo {
     /// 拒绝时间 (Unix时间戳，单位：秒),
 #[serde(skip_serializing_if = "Option::is_none")]
     pub reject_time: Option<String>,
-}
 /// 拒绝详情,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RejectionDetails {
     /// 拒绝节点ID
     pub rejected_node_id: String,
@@ -198,4 +184,3 @@ pub struct RejectionDetails {
     /// 建议修改内容,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub suggested_changes: Option<Vec<String>>,
-}

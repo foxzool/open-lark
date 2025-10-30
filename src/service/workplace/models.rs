@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 分页响应基础结构,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PageResponse<T> {,
     /// 数据项列表
     pub items: Vec<T>,
@@ -10,9 +10,8 @@ pub struct PageResponse<T> {,
     /// 是否还有更多数据,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
-}
 /// 工作台访问数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct WorkplaceAccessData {
     /// 数据ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -44,9 +43,8 @@ pub struct WorkplaceAccessData {
     /// 设备类型,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub device_type: Option<String>,
-}
 /// 定制工作台访问数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CustomWorkplaceAccessData {
     /// 数据ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -69,9 +67,8 @@ pub struct CustomWorkplaceAccessData {
     /// 操作类型,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub action_type: Option<String>,
-}
 /// 定制工作台小组件访问数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CustomWorkplaceWidgetAccessData {
     /// 数据ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -97,9 +94,8 @@ pub struct CustomWorkplaceWidgetAccessData {
     /// 点击次数,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub click_count: Option<i32>,
-}
 /// 应用信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AppInfo {
     /// 应用ID
     pub app_id: String,
@@ -124,9 +120,8 @@ pub struct AppInfo {
     /// 更新时间戳,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-}
 /// 用户常用应用,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct FavouriteApp {
     /// 应用ID
     pub app_id: String,
@@ -142,9 +137,8 @@ pub struct FavouriteApp {
     /// 最后使用时间戳,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub last_used_at: Option<i64>,
-}
 /// 推荐应用,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RecommendedApp {
     /// 应用ID
     pub app_id: String,
@@ -163,9 +157,8 @@ pub struct RecommendedApp {
     /// 推荐规则ID,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_id: Option<String>,
-}
 /// 应用推荐规则,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AppRecommendRule {
     /// 规则ID
     pub rule_id: String,
@@ -207,13 +200,12 @@ pub struct AppRecommendRule {
     /// 更新时间戳,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]
-    fn test_page_response() {,
+    fn test_page_response() {
 let access_data = WorkplaceAccessData {,
             data_id: Some("access_1".to_string()),
             user_id: Some("ou_user123".to_string()),
@@ -238,7 +230,7 @@ assert!(json.contains("ou_user123"));
 assert!(json.contains("\"has_more\":true"));
     }
 #[test]
-    fn test_workplace_access_data() {,
+    fn test_workplace_access_data() {
 let access_data = WorkplaceAccessData {,
             data_id: Some("workplace_access_123".to_string()),
             user_id: Some("ou_user456".to_string()),
@@ -264,7 +256,7 @@ assert!(json.contains("app_productivity"));
 assert!(json.contains("android"));
     }
 #[test]
-    fn test_workplace_access_data_minimal() {,
+    fn test_workplace_access_data_minimal() {
 let access_data = WorkplaceAccessData {,
             data_id: Some("minimal_access".to_string()),
             user_id: None,
@@ -284,7 +276,7 @@ assert!(!json.contains("user_id"));
 assert!(!json.contains("app_id"));
     }
 #[test]
-    fn test_custom_workplace_access_data() {,
+    fn test_custom_workplace_access_data() {
 let custom_access = CustomWorkplaceAccessData {,
             data_id: Some("custom_access_789".to_string()),
             user_id: Some("ou_customuser".to_string()),
@@ -302,9 +294,8 @@ assert!(json.contains("1704153600000"));
         assert!(json.contains("\"access_count\":3"));
 assert!(json.contains("\"duration\":1800"));
         assert!(json.contains("customize"));
-}
 #[test]
-    fn test_custom_workplace_widget_access_data() {,
+    fn test_custom_workplace_widget_access_data() {
 let widget_access = CustomWorkplaceWidgetAccessData {,
             data_id: Some("widget_access_456".to_string()),
             user_id: Some("ou_widgetuser".to_string()),
@@ -326,7 +317,7 @@ assert!(json.contains("1704240000000"));
 assert!(json.contains("\"click_count\":25"));
     }
 #[test]
-    fn test_app_info() {,
+    fn test_app_info() {
 let app_info = AppInfo {,
             app_id: "app_productivity_suite".to_string(),
             app_name: Some("生产力套件".to_string()),
@@ -348,7 +339,7 @@ assert!(json.contains("active"));
 assert!(json.contains("1704067200000"));
     }
 #[test]
-    fn test_favourite_app() {,
+    fn test_favourite_app() {
 let app_info = AppInfo {,
             app_id: "app_fav_123".to_string(),
             app_name: Some("常用应用".to_string()),
@@ -374,9 +365,8 @@ assert!(json.contains("utility"));
         assert!(json.contains("1704067200000"));
 assert!(json.contains("\"usage_frequency\":50"));
         assert!(json.contains("1704326400000"));
-}
 #[test]
-    fn test_recommended_app() {,
+    fn test_recommended_app() {
 let app_info = AppInfo {,
             app_id: "app_recommended_456".to_string(),
             app_name: Some("推荐应用".to_string()),
@@ -406,7 +396,7 @@ assert!(json.contains("8.5"));
 assert!(json.contains("rule_001"));
     }
 #[test]
-    fn test_app_recommend_rule() {,
+    fn test_app_recommend_rule() {
 let rule = AppRecommendRule {,
             rule_id: "rule_smart_recommend".to_string(),
             rule_name: "智能推荐规则".to_string(),
@@ -445,9 +435,8 @@ assert!(json.contains("1704067200000"));
         assert!(json.contains("1735689600000"));
 assert!(json.contains("ou_admin"));
         assert!(json.contains("1703980800000"));
-}
 #[test]
-    fn test_app_recommend_rule_minimal() {,
+    fn test_app_recommend_rule_minimal() {
 let rule = AppRecommendRule {,
             rule_id: "minimal_rule".to_string(),
             rule_name: "最小规则".to_string(),
@@ -470,9 +459,8 @@ assert!(json.contains("最小规则"));
         assert!(!json.contains("rule_description"));
 assert!(!json.contains("app_ids"));
         assert!(!json.contains("priority"));
-}
 #[test]
-    fn test_nested_structures() {,
+    fn test_nested_structures() {
 let app_info = AppInfo {,
             app_id: "nested_app".to_string(),
             app_name: Some("嵌套测试应用".to_string()),
@@ -499,7 +487,7 @@ assert!(json.contains("\"usage_frequency\":20"));
 assert!(!json.contains("updated_at"));
     }
 #[test]
-    fn test_minimal_structs() {,
+    fn test_minimal_structs() {
 let minimal_custom_access = CustomWorkplaceAccessData {,
             data_id: Some("minimal_custom".to_string()),
             user_id: None,
@@ -527,5 +515,3 @@ let widget_json = serde_json::to_string(&minimal_widget_access).unwrap();
         assert!(widget_json.contains("minimal_widget"));
 assert!(!widget_json.contains("widget_id"));
         assert!(!widget_json.contains("click_count"));
-}
-}

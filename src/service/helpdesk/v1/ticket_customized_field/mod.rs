@@ -4,23 +4,21 @@ use open_lark_core::core::api_req::ApiRequest;
 use std::collections::HashMap;
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{helpdesk::*, EndpointBuilder}
-        http::Transport,
+        endpoints::{helpdesk::*, EndpointBuilderhttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::helpdesk::models::{CustomizedField, UserIdType}
 };
 /// 工单自定义字段服务
 pub struct TicketCustomizedFieldService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 创建工单自定义字段请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateTicketCustomizedFieldRequest {
+}
     /// 字段名称
     pub field_name: String,
     /// 字段类型
@@ -34,78 +32,53 @@ pub struct CreateTicketCustomizedFieldRequest {
     /// 选项列表
 #[serde(skip_serializing_if = "Option::is_none")]
     pub options: Option<Vec<String>>,
-}
 /// 创建工单自定义字段响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateTicketCustomizedFieldResponse {
+}
     /// 创建的自定义字段
     pub field: CustomizedField,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 更新工单自定义字段请求
-#[derive(.*?)]
-pub struct UpdateTicketCustomizedFieldRequest {
-    /// 字段名称
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub field_name: Option<String>,
-    /// 是否必填
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub required: Option<bool>,
-    /// 默认值
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub default_value: Option<String>,
-    /// 选项列表
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub options: Option<Vec<String>>,
-}
-/// 更新工单自定义字段响应
-#[derive(.*?)]
-pub struct UpdateTicketCustomizedFieldResponse {
-    /// 更新后的自定义字段
-    pub field: CustomizedField,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 获取工单自定义字段响应
-#[derive(.*?)]
-pub struct GetTicketCustomizedFieldResponse {
-    /// 自定义字段
-    pub field: CustomizedField,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 获取全部工单自定义字段响应
-#[derive(.*?)]
-pub struct ListTicketCustomizedFieldsResponse {
-    /// 自定义字段列表
-    pub fields: Vec<CustomizedField>,
-    /// 是否还有更多数据
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub has_more: Option<bool>,
-    /// 下一页标记
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl TicketCustomizedFieldService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 更新工单自定义字段请求
+#[derive(Debug, Clone)]
 }
-/// 创建工单自定义字段
+pub struct UpdateTicketCustomizedFieldRequest {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 获取工单自定义字段响应
+#[derive(Debug, Clone)]
+}
+pub struct GetTicketCustomizedFieldResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 获取全部工单自定义字段响应
+#[derive(Debug, Clone)]
+}
+pub struct ListTicketCustomizedFieldsResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl TicketCustomizedFieldService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建工单自定义字段
     ///,
 /// 该接口用于创建工单自定义字段。
     ///,
@@ -129,7 +102,6 @@ impl TicketCustomizedFieldService {
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: HELPDESK_V1_TICKET_CUSTOMIZED_FIELDS.to_string(),
@@ -138,9 +110,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除工单自定义字段
     ///,
 /// 该接口用于删除指定的工单自定义字段。
@@ -165,7 +135,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
@@ -177,9 +146,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 更新工单自定义字段
     ///,
 /// 该接口用于更新指定的工单自定义字段。
@@ -206,7 +173,6 @@ pub async fn update(,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
@@ -219,9 +185,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取指定工单自定义字段
     ///,
 /// 该接口用于获取指定的工单自定义字段详情。
@@ -246,7 +210,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
@@ -258,9 +221,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取全部工单自定义字段
     ///,
 /// 该接口用于获取全部工单自定义字段列表。
@@ -286,13 +247,10 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token.to_string());
-}
 if let Some(page_size) = page_size {,
             query_params.insert("page_size", page_size.to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: HELPDESK_V1_TICKET_CUSTOMIZED_FIELDS.to_string(),
@@ -300,7 +258,6 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}

@@ -2,70 +2,64 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::search::v2::models::{BatchCreateDataItemRequest, CreateDataItemRequest, DataItem}
 };
 /// 数据项服务
 pub struct DataItemService {
+}
     pub config: Config,
-}
 /// 创建数据项响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateDataItemResponse {
+}
     /// 数据项信息
     pub data_item: DataItem,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 批量创建数据项响应
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 批量创建数据项响应
+#[derive(Debug, Clone)]
 pub struct BatchCreateDataItemResponse {
-    /// 成功创建的数据项列表
-    pub success_items: Vec<DataItem>,
-    /// 失败的数据项信息
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub failed_items: Option<Vec<serde_json::Value>>,
 }
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
-    }
+    /// 获取数据项响应
+#[derive(Debug, Clone)]
 }
-/// 获取数据项响应
-#[derive(.*?)]
 pub struct GetDataItemResponse {
-    /// 数据项信息
-    pub data_item: DataItem,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
-    }
-}
-/// 空响应（用于删除等操作）
+    /// 空响应（用于删除等操作）
 #[derive(Debug, Serialize, Deserialize)]
 pub struct EmptyDataItemResponse {}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl DataItemService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl DataItemService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 为指定数据项创建索引
+}/// 为指定数据项创建索引
     ///,
 /// 该接口用于为指定的数据项创建搜索索引。
     ///,
@@ -95,9 +89,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量为数据项创建索引
     ///,
 /// 该接口用于批量为数据项创建搜索索引。
@@ -128,9 +120,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除数据项
     ///,
 /// 该接口用于删除指定的数据项及其索引。
@@ -159,7 +149,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询指定数据项
     ///,
 /// 该接口用于查询指定数据项的详细信息。
@@ -187,7 +176,6 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}}}}}

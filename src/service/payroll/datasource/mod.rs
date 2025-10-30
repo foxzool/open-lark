@@ -2,38 +2,35 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::payroll::*,
         http::Transport,
         req_option::RequestOption,
         trait_system::Service,
         SDKResult,
-    }
     service::payroll::models::{Datasource, DatasourceListRequest, PageResponse}
 };
 /// 外部数据源服务
 pub struct DatasourceService {
+}
     pub config: Config,
-}
 /// 外部数据源配置列表响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DatasourceListResponse {
-    /// 外部数据源列表
-#[serde(flatten)]
-    pub datasources: PageResponse<Datasource>,
 }
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl DatasourceService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl DatasourceService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 获取外部数据源配置信息
+}/// 获取外部数据源配置信息
     ///,
 /// 该接口用于获取企业配置的外部数据源列表，包括数据源的
     /// 基本信息、字段配置、状态等详细信息。外部数据源用于
@@ -86,25 +83,17 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert("status", status);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
 impl Service for DatasourceService {,
     fn config(&self) -> &Config {,
 &self.config,
-    }
-fn service_name() -> &'static str {,
+    fn service_name() -> &'static str {,
         "datasource",
-}
 fn service_version() -> &'static str {,
         "v1",
 }
-}
+}}}}}}}}}}}}

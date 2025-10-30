@@ -2,36 +2,33 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::ehr::models::{AttachmentDownloadResponse, EmployeeAttachmentRequest}
 };
 /// 人员附件服务
 pub struct AttachmentService {
+}
     pub config: Config,
-}
 /// 下载人员附件响应包装器
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EmployeeAttachmentDownloadResponse {
-    /// 附件下载信息
-#[serde(flatten)]
-    pub attachment: AttachmentDownloadResponse,
 }
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl AttachmentService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl AttachmentService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 下载人员的附件
+}/// 下载人员的附件
     ///,
 /// 该接口用于下载指定员工的附件文件，如身份证扫描件、学历证明、
     /// 合同文件等。支持多种文件格式，返回base64编码的文件内容。
@@ -70,8 +67,7 @@ impl AttachmentService {
     ///         let file_bytes = base64::decode(file_content)?;
 ///         // 保存或处理文件
     ///     }
-    /// }
-/// ```
+    /// /// ```
     ///,
 /// # 安全注意事项
     ///,
@@ -97,8 +93,6 @@ let mut api_req = ApiRequest {,
 // 添加查询参数
         if let Some(user_id_type) = request.user_id_type {
             api_req.query_params.insert("user_id_type", user_id_type);
-}
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}

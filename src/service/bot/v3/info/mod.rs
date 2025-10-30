@@ -3,36 +3,34 @@ use serde::{Deserialize, Serialize};
 use open_lark_core::core::api_req::ApiRequest;
 use crate::{
     core::{,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
         trait_system::Service,
         SDKResult,
-    }
     service::bot::models::Bot,
 };
 /// 机器人信息服务
 pub struct InfoService {
+}
     pub config: Config,
-}
 /// 获取机器人信息响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetBotInfoResponse {
-    /// 机器人信息
-    pub bot: Bot,
 }
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl InfoService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl InfoService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 获取机器人信息
+}/// 获取机器人信息
     ///,
 /// 该接口用于获取机器人的基本信息，包括机器人名称、头像、IP白名单等信息。
     ///,
@@ -55,18 +53,13 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
 impl Service for InfoService {,
     fn config(&self) -> &Config {,
 &self.config,
-    }
-fn service_name() -> &'static str {,
+    fn service_name() -> &'static str {,
         "bot_info",
-}
 fn service_version() -> &'static str {,
         "v3",
 }
-}
+}}}}}}}}}

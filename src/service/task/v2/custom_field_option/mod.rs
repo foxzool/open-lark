@@ -4,67 +4,44 @@ use open_lark_core::core::api_req::ApiRequest;
 use std::collections::HashMap;
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::task::models::{CustomFieldOption, UserIdType}
 };
 /// 自定义字段选项服务
 #[derive(Debug)]
 pub struct CustomFieldOptionService {
+}
     pub config: Config,
-}
 /// 创建自定义字段选项请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateCustomFieldOptionRequest {
-    /// 选项名称
-    pub name: String,
-    /// 颜色索引
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub color_index: Option<i32>,
 }
-/// 创建自定义字段选项响应
-#[derive(.*?)]
-pub struct CreateCustomFieldOptionResponse {
-    /// 创建的选项
-    pub option: CustomFieldOption,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 更新自定义字段选项请求
-#[derive(.*?)]
-pub struct UpdateCustomFieldOptionRequest {
-    /// 选项名称
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-    /// 颜色索引
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub color_index: Option<i32>,
-}
-/// 更新自定义字段选项响应
-#[derive(.*?)]
-pub struct UpdateCustomFieldOptionResponse {
-    /// 更新后的选项
-    pub option: CustomFieldOption,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl CustomFieldOptionService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 更新自定义字段选项请求
+#[derive(Debug, Clone)]
 }
-/// 创建自定义字段选项
+pub struct UpdateCustomFieldOptionRequest {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl CustomFieldOptionService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建自定义字段选项
     pub async fn create(
         &self,
         custom_field_guid: &str,
@@ -75,7 +52,6 @@ impl CustomFieldOptionService {
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
@@ -89,7 +65,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 更新自定义字段选项
     pub async fn patch(
         &self,
@@ -102,7 +77,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let temp_path = EndpointBuilder::replace_param(,
             Endpoints::TASK_V2_CUSTOM_FIELD_OPTION_GET,
             "custom_field_guid",
@@ -116,7 +90,6 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}

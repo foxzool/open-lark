@@ -1,10 +1,9 @@
 // app_engine模块的数据模型定义
-
 use serde::{Deserialize, Serialize};
-
 /// 应用基本信息
 #[derive(Debug, Deserialize, Serialize)]
 pub struct AppInfo {
+}
     /// 应用ID
     #[serde(rename = "app_id")]
     pub app_id: String,
@@ -28,8 +27,6 @@ pub struct AppInfo {
     pub version: Option<String>,
     /// 命名空间
     pub namespace: Option<String>,
-}
-
 /// 应用状态
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
@@ -42,11 +39,10 @@ pub enum AppStatus {
     Offline,
     /// 已禁用
     Disabled,
-}
-
 /// 席位分配信息
 #[derive(Debug, Deserialize, Serialize)]
 pub struct SeatAssignment {
+}
     /// 席位ID
     #[serde(rename = "seat_id")]
     pub seat_id: String,
@@ -68,8 +64,6 @@ pub struct SeatAssignment {
     /// 席位状态
     #[serde(rename = "seat_status")]
     pub seat_status: SeatStatus,
-}
-
 /// 席位类型
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
@@ -80,8 +74,6 @@ pub enum SeatType {
     User,
     /// 管理员席位
     Admin,
-}
-
 /// 席位状态
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
@@ -92,11 +84,10 @@ pub enum SeatStatus {
     Expired,
     /// 已禁用
     Disabled,
-}
-
 /// 席位活跃信息
 #[derive(Debug, Deserialize, Serialize)]
 pub struct SeatActivity {
+}
     /// 席位ID
     #[serde(rename = "seat_id")]
     pub seat_id: String,
@@ -112,11 +103,10 @@ pub struct SeatActivity {
     /// 统计周期
     #[serde(rename = "period")]
     pub period: String,
-}
-
 /// 活跃度指标
 #[derive(Debug, Deserialize, Serialize)]
 pub struct ActivityMetrics {
+}
     /// 登录次数
     #[serde(rename = "login_count")]
     pub login_count: i32,
@@ -126,11 +116,10 @@ pub struct ActivityMetrics {
     /// 活跃时长（分钟）
     #[serde(rename = "active_duration_minutes")]
     pub active_duration_minutes: i32,
-}
-
 /// 审计日志
 #[derive(Debug, Deserialize, Serialize)]
 pub struct AuditLog {
+}
     /// 日志ID
     #[serde(rename = "log_id")]
     pub log_id: String,
@@ -154,11 +143,10 @@ pub struct AuditLog {
     /// IP地址
     #[serde(rename = "ip_address")]
     pub ip_address: Option<String>,
-}
-
 /// 操作人信息
 #[derive(Debug, Deserialize, Serialize)]
 pub struct OperatorInfo {
+}
     /// 用户ID
     #[serde(rename = "user_id")]
     pub user_id: String,
@@ -168,11 +156,10 @@ pub struct OperatorInfo {
     /// 用户类型
     #[serde(rename = "user_type")]
     pub user_type: Option<String>,
-}
-
 /// 操作对象
 #[derive(Debug, Deserialize, Serialize)]
 pub struct TargetObject {
+}
     /// 对象类型
     #[serde(rename = "object_type")]
     pub object_type: String,
@@ -182,8 +169,6 @@ pub struct TargetObject {
     /// 对象名称
     #[serde(rename = "object_name")]
     pub object_name: Option<String>,
-}
-
 /// 操作结果
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
@@ -194,11 +179,10 @@ pub enum OperationResult {
     Failed,
     /// 部分成功
     PartialSuccess,
-}
-
 /// 数据变更日志
 #[derive(Debug, Deserialize, Serialize)]
 pub struct DataChangeLog {
+}
     /// 变更日志ID
     #[serde(rename = "change_id")]
     pub change_id: String,
@@ -217,8 +201,6 @@ pub struct DataChangeLog {
     /// 变更详情
     #[serde(rename = "change_details")]
     pub change_details: Vec<ChangeDetail>,
-}
-
 /// 变更类型
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
@@ -229,11 +211,10 @@ pub enum ChangeType {
     Update,
     /// 删除
     Delete,
-}
-
 /// 目标记录
 #[derive(Debug, Deserialize, Serialize)]
 pub struct TargetRecord {
+}
     /// 记录类型
     #[serde(rename = "record_type")]
     pub record_type: String,
@@ -243,11 +224,10 @@ pub struct TargetRecord {
     /// 记录名称
     #[serde(rename = "record_name")]
     pub record_name: Option<String>,
-}
-
 /// 变更详情
 #[derive(Debug, Deserialize, Serialize)]
 pub struct ChangeDetail {
+}
     /// 字段名
     #[serde(rename = "field_name")]
     pub field_name: String,
@@ -260,11 +240,10 @@ pub struct ChangeDetail {
     /// 变更类型
     #[serde(rename = "change_type")]
     pub change_type: String,
-}
-
 /// 权限信息
 #[derive(Debug, Deserialize, Serialize)]
 pub struct PermissionInfo {
+}
     /// 权限ID
     #[serde(rename = "permission_id")]
     pub permission_id: String,
@@ -281,8 +260,6 @@ pub struct PermissionInfo {
     /// 操作类型
     #[serde(rename = "action_type")]
     pub action_type: String,
-}
-
 /// 权限类型
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
@@ -293,30 +270,26 @@ pub enum PermissionType {
     Record,
     /// 系统权限
     System,
-}
-
 /// 通用响应结构
 #[derive(Debug, Deserialize, Serialize)]
 pub struct AppEngineResponse<T> {
+}
     /// 响应码
     pub code: i32,
     /// 响应消息
     pub msg: String,
     /// 响应数据
     pub data: Option<T>,
-}
-
 /// 分页响应结构
 #[derive(Debug, Deserialize, Serialize)]
 pub struct PaginatedAppEngineResponse<T> {
+}
     /// 响应码
     pub code: i32,
     /// 响应消息
     pub msg: String,
     /// 响应数据
     pub data: Option<PaginatedAppEngineData<T>>,
-}
-
 /// 分页数据
 #[derive(Debug, Deserialize, Serialize)]
 pub struct PaginatedAppEngineData<T> {
@@ -329,3 +302,4 @@ pub struct PaginatedAppEngineData<T> {
     /// 总数
     pub total: Option<i32>,
 }
+}}}}}}

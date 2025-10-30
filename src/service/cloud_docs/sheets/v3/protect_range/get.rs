@@ -6,8 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -18,30 +17,14 @@ use crate::,
 };
 use super::create::ProtectRangeData;
 impl SpreadsheetService {
-/// 获取保护范围,
-    pub async fn get_protect_ranges(
-        &self,
-        request: GetProtectRangesRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<GetProtectRangesResponseData>> {,
-let mut api_req = request.api_request;
-        api_req.set_http_method(Method::GET);
-api_req.set_api_path(,
-            SHEETS_V3_SPREADSHEET_PROTECT_RANGE.replace("{}", &request.spreadsheet_token),
-        );
-api_req
-            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-// 添加查询参数,
-        if let Some(sheet_id) = &request.sheet_id {
-            api_req.query_params.insert("sheet_id", sheet_id.clone());
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }
-
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
     }
-}
 /// 获取保护范围请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetProtectRangesRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -49,43 +32,26 @@ pub struct GetProtectRangesRequest {
     spreadsheet_token: String,
     /// 可选：sheet 的 id，如果不提供则返回所有工作表的保护范围,
 #[serde(skip_serializing_if = "Option::is_none")]
-    sheet_id: Option<String>,
-}
+    sheet_id: Option<String>}
 impl GetProtectRangesRequest {
-    pub fn w+.*{
-GetProtectRangesRequestBuilder::default(),
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct GetProtectRangesRequestBuilder {
-    request: GetProtectRangesRequest,
-}
+    request: GetProtectRangesRequest}
 impl GetProtectRangesRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
-self.request.spreadsheet_token = spreadsheet_token.to_string();
-        self,
-}
-
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
-self.request.sheet_id = Some(sheet_id.to_string());
-        self,
-}
-pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-self.request,
-    }
-}
-/// 保护范围信息,
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 保护范围信息,
+#[derive(Debug, Clone)]
 pub struct ProtectRangeInfo {
     /// 保护范围 ID
     pub protect_id: String,
     /// 保护范围详细信息,
 #[serde(flatten)]
     pub protect_range: ProtectRangeData,
-}
 /// 获取保护范围响应体最外层,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetProtectRangesResponseData {
     /// 保护范围列表
     pub items: Vec<ProtectRangeInfo>,
@@ -94,20 +60,20 @@ pub struct GetProtectRangesResponseData {
     pub has_more: bool,
     /// 下次请求的页面标记,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
+    pub page_token: Option<String>}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod test {,
     use super::*;
 use serde_json::json;
     #[test]
-fn test_get_protect_ranges_response() {,
+fn test_get_protect_ranges_response() {
         let json = json!({,
 "items": [,
                 {
@@ -116,16 +82,14 @@ fn test_get_protect_ranges_response() {,
                     "sheet_id": "Sheet1",
                     "start_index": 1,
                     "end_index": 10,
-                    "lock_info": "user1@example.com",
-}
+                    "lock_info": "user1@example.com"}
                 {
                     "protect_id": "protect_002",
                     "dimension": "COLUMNS",
                     "sheet_id": "Sheet1",
                     "start_index": 1,
                     "end_index": 5,
-                    "lock_info": "user2@example.com",
-}
+                    "lock_info": "user2@example.com"}
             ],
             "has_more": false,
 });
@@ -135,4 +99,3 @@ let response: GetProtectRangesResponseData = serde_json::from_value(json).unwrap
         assert_eq!(response.items[1].protect_range.dimension, "COLUMNS");
 assert!(!response.has_more);
     }
-}

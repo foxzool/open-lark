@@ -2,38 +2,35 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::payroll::*,
         http::Transport,
         req_option::RequestOption,
         trait_system::Service,
         SDKResult,
-    }
     service::payroll::models::{PageResponse, Paygroup, PaygroupListRequest}
 };
 /// 薪资组服务
 pub struct PaygroupService {
+}
     pub config: Config,
-}
 /// 薪资组列表响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PaygroupListResponse {
-    /// 薪资组列表
-#[serde(flatten)]
-    pub paygroups: PageResponse<Paygroup>,
 }
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl PaygroupService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl PaygroupService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 获取薪资组基本信息
+}/// 获取薪资组基本信息
     ///,
 /// 该接口用于获取企业配置的薪资组列表，包括薪资组的
     /// 基本信息、发薪周期设置、发薪日配置等。薪资组是
@@ -88,25 +85,17 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert("status", status);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
 impl Service for PaygroupService {,
     fn config(&self) -> &Config {,
 &self.config,
-    }
-fn service_name() -> &'static str {,
+    fn service_name() -> &'static str {,
         "paygroup",
-}
 fn service_version() -> &'static str {,
         "v1",
 }
-}
+}}}}}}}}}}}}

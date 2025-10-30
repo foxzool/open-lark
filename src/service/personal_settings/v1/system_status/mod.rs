@@ -2,64 +2,55 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::personal_settings::models::{
         BatchSystemStatusRequest, CreateSystemStatusRequest, ListSystemStatusRequest, SystemStatus,
         UpdateSystemStatusRequest,
-    }
 };
 /// 系统状态服务
 pub struct SystemStatusService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 创建系统状态响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateSystemStatusResponse {
+}
     /// 系统状态信息
     pub system_status: SystemStatus,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 获取系统状态列表响应
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 获取系统状态列表响应
+#[derive(Debug, Clone)]
 pub struct ListSystemStatusResponse {
-    /// 系统状态列表
-    pub items: Vec<SystemStatus>,
-    /// 是否还有更多数据
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub has_more: Option<bool>,
-    /// 分页token
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
 }
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
-    }
-}
-/// 空响应（用于删除、修改、批量操作等）
+    /// 空响应（用于删除、修改、批量操作等）
 #[derive(Debug, Serialize, Deserialize)]
 pub struct EmptySystemStatusResponse {}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl SystemStatusService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl SystemStatusService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 创建系统状态
+}/// 创建系统状态
     ///,
 /// 该接口用于创建系统状态，设置用户的个人状态显示。
     ///,
@@ -83,9 +74,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除系统状态
     ///,
 /// 该接口用于删除指定的系统状态。
@@ -109,9 +98,7 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 修改系统状态
     ///,
 /// 该接口用于修改指定的系统状态信息。
@@ -138,9 +125,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取系统状态列表
     ///,
 /// 该接口用于获取应用创建的所有系统状态列表。
@@ -165,16 +150,11 @@ let api_path = Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUSES.to_string();
         if let Some(req) = request {,
 if let Some(page) = req.page {,
                 api_req.query_params.insert("page", page.to_string());
-}
 if let Some(page_size) = req.page_size {,
                 api_req
 .query_params
                     .insert("page_size", page_size.to_string());
-}
-        }
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量开启系统状态
     ///,
 /// 该接口用于批量开启指定的系统状态。
@@ -195,9 +175,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量关闭系统状态
     ///,
 /// 该接口用于批量关闭指定的系统状态。
@@ -218,7 +196,6 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}}}}}}}}}

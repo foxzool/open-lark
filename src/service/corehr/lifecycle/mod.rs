@@ -3,101 +3,90 @@ use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::corehr::*,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::corehr::models::{
         JobChange, JobChangeCreateRequest, JobChangeSearchRequest, Offboarding,
         OffboardingCreateRequest, OffboardingSearchRequest, PageResponse, PreHire,
         PreHireCreateRequest, PreHireSearchRequest,
-    }
 };
 /// 员工生命周期管理服务（入职/离职/异动）
 pub struct LifecycleService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 创建待入职响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PreHireCreateResponse {
+}
     /// 待入职信息
 #[serde(skip_serializing_if = "Option::is_none")]
     pub pre_hire: Option<PreHire>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 搜索待入职响应
-#[derive(.*?)]
-pub struct PreHireSearchResponse {
-    /// 待入职信息列表
-#[serde(flatten)]
-    pub pre_hires: PageResponse<PreHire>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 发起异动响应
-#[derive(.*?)]
-pub struct JobChangeCreateResponse {
-    /// 异动信息
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub job_change: Option<JobChange>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 搜索异动响应
-#[derive(.*?)]
-pub struct JobChangeSearchResponse {
-    /// 异动信息列表
-#[serde(flatten)]
-    pub job_changes: PageResponse<JobChange>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 发起离职响应
-#[derive(.*?)]
-pub struct OffboardingCreateResponse {
-    /// 离职信息
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub offboarding: Option<Offboarding>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 搜索离职响应
-#[derive(.*?)]
-pub struct OffboardingSearchResponse {
-    /// 离职信息列表
-#[serde(flatten)]
-    pub offboardings: PageResponse<Offboarding>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl LifecycleService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 搜索待入职响应
+#[derive(Debug, Clone)]
+pub struct PreHireSearchResponse {
 }
-/// 直接创建待入职
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 发起异动响应
+#[derive(Debug, Clone)]
+}
+pub struct JobChangeCreateResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 搜索异动响应
+#[derive(Debug, Clone)]
+}
+pub struct JobChangeSearchResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 发起离职响应
+#[derive(Debug, Clone)]
+}
+pub struct OffboardingCreateResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 搜索离职响应
+#[derive(Debug, Clone)]
+}
+pub struct OffboardingSearchResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl LifecycleService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 直接创建待入职
     ///,
 /// 该接口用于直接创建待入职人员信息，适用于已确定招聘的候选人
     /// 创建入职流程，包含完整的个人信息和任职安排。
@@ -158,7 +147,6 @@ let api_req = ApiRequest {,
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
-}
 /// 搜索待入职信息
     ///,
 /// 该接口用于根据多种条件搜索待入职人员信息，支持按入职状态、
@@ -207,7 +195,6 @@ let api_req = ApiRequest {,
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
-}
 /// 发起员工异动
     ///,
 /// 该接口用于发起员工异动流程，包括调岗、调薪、晋升等各种
@@ -261,7 +248,6 @@ let api_req = ApiRequest {,
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
-}
 /// 搜索员工异动信息
     ///,
 /// 该接口用于根据多种条件搜索员工异动信息，支持按异动状态、
@@ -311,7 +297,6 @@ let api_req = ApiRequest {,
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
-}
 /// 操作员工离职
     ///,
 /// 该接口用于发起员工离职流程，包括主动离职、辞退等各种
@@ -359,7 +344,6 @@ let api_req = ApiRequest {,
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
-}
 /// 搜索离职信息
     ///,
 /// 该接口用于根据多种条件搜索员工离职信息，支持按离职状态、
@@ -410,4 +394,4 @@ let api_req = ApiRequest {,
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}}}}}}}}}}}}}}

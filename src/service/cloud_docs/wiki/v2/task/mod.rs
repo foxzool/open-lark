@@ -1,5 +1,4 @@
 use crate::core::{config::Config, req_option::RequestOption, SDKResult};
-
 pub use get::{get_task, GetTaskRequest, GetTaskResponse, MoveResult, TaskDetail, TaskStatus};
 pub use move_docs_to_wiki::{,
     move_docs_to_wiki, MoveDocsToWikiRequest, MoveDocsToWikiResponse, MoveTask,
@@ -8,13 +7,13 @@ mod get;
 mod move_docs_to_wiki;
 /// 云文档任务服务
 pub struct TaskService {
-    config: Config,
 }
+
 impl TaskService {
+}
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 移动云空间文档至知识空间
+}/// 移动云空间文档至知识空间
     pub async fn move_docs_to_wiki(
         &self,
         request: MoveDocsToWikiRequest,
@@ -26,7 +25,6 @@ result.data.ok_or_else(|| {,
                 "Response data is missing".to_string(),
             ),
 }),
-}
 /// 获取任务结果
     pub async fn get(
         &self,

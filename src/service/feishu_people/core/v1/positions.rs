@@ -3,12 +3,11 @@
 // 实现职位管理的功能,
 use crate::prelude::*;
 /// 职位管理服务
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PositionsService {
     client: std::sync::Arc<LarkClient>,
 }
 impl PositionsService {
-    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
-        Self { client }
-}
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }

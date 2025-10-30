@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 分页响应基础结构,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PageResponse<T> {,
     /// 数据项列表
     pub items: Vec<T>,
@@ -10,9 +10,8 @@ pub struct PageResponse<T> {,
     /// 是否还有更多数据,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
-}
 /// 课程学习进度记录,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CourseRegistration {
     /// 学习进度记录ID
     pub registration_id: String,
@@ -62,9 +61,8 @@ pub struct CourseRegistration {
     /// 更新时间戳,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-}
 /// 课程信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CourseInfo {
     /// 课程ID
     pub course_id: String,
@@ -98,9 +96,8 @@ pub struct CourseInfo {
     /// 课程状态,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-}
 /// 用户信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UserInfo {
     /// 用户ID
     pub user_id: String,
@@ -119,9 +116,8 @@ pub struct UserInfo {
     /// 用户职位,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
-}
 /// 学习记录,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct LearningRecord {
     /// 记录ID
     pub record_id: String,
@@ -149,9 +145,8 @@ pub struct LearningRecord {
     /// 学习次数,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub attempt_count: Option<i32>,
-}
 /// 学习统计数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct LearningStatistics {
     /// 总课程数,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -174,9 +169,8 @@ pub struct LearningStatistics {
     /// 通过率,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub pass_rate: Option<f64>,
-}
 /// 学习进度事件数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CourseRegistrationEvent {
     /// 事件类型
     pub event_type: String,
@@ -190,14 +184,13 @@ pub struct CourseRegistrationEvent {
     /// 事件来源,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<String>,
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json;
     #[test]
-fn test_page_response_serialization() {,
+fn test_page_response_serialization() {
         let page_response: PageResponse<CourseInfo> = PageResponse {,
 items: vec![CourseInfo {,
                 course_id: "course_123".to_string(),
@@ -231,7 +224,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_page_response_with_none_values() {,
+    fn test_page_response_with_none_values() {
 let page_response: PageResponse<String> = PageResponse {,
             items: vec!["item1".to_string(), "item2".to_string()]
             page_token: None,
@@ -244,9 +237,8 @@ assert!(!serialized.contains("has_more"));
         assert_eq!(page_response.items, deserialized.items);
         assert_eq!(page_response.page_token, deserialized.page_token);
         assert_eq!(page_response.has_more, deserialized.has_more);
-}
 #[test]
-    fn test_course_registration_serialization() {,
+    fn test_course_registration_serialization() {
 let registration = CourseRegistration {,
             registration_id: "reg_123".to_string(),
             course_id: "course_456".to_string(),
@@ -310,7 +302,6 @@ let serialized = serde_json::to_string(&registration).unwrap();
 {,
             assert_eq!(orig_course.course_id, deser_course.course_id);
             assert_eq!(orig_course.course_name, deser_course.course_name);
-}
 
         if let (Some(orig_user), Some(deser_user)) =
             (&registration.user_info, &deserialized.user_info),
@@ -318,10 +309,9 @@ let serialized = serde_json::to_string(&registration).unwrap();
             assert_eq!(orig_user.user_id, deser_user.user_id);
             assert_eq!(orig_user.name, deser_user.name);
             assert_eq!(orig_user.email, deser_user.email);
-}
     }
 #[test]
-    fn test_course_info_serialization() {,
+    fn test_course_info_serialization() {
 let course = CourseInfo {,
             course_id: "course_advanced_react".to_string(),
             course_name: Some("React高级开发".to_string()),
@@ -354,9 +344,8 @@ let serialized = serde_json::to_string(&course).unwrap();
         assert_eq!(course.cover_url, deserialized.cover_url);
         assert_eq!(course.creator, deserialized.creator);
         assert_eq!(course.status, deserialized.status);
-}
 #[test]
-    fn test_course_info_minimal_data() {,
+    fn test_course_info_minimal_data() {
 let course = CourseInfo {,
             course_id: "minimal_course".to_string(),
             course_name: None,
@@ -379,7 +368,7 @@ assert!(deserialized.course_name.is_none());
 assert!(deserialized.tags.is_none());
     }
 #[test]
-    fn test_user_info_serialization() {,
+    fn test_user_info_serialization() {
 let user = UserInfo {,
             user_id: "employee_12345".to_string(),
             name: Some("李四".to_string()),
@@ -397,9 +386,8 @@ let serialized = serde_json::to_string(&user).unwrap();
         assert_eq!(user.avatar_url, deserialized.avatar_url);
         assert_eq!(user.department, deserialized.department);
         assert_eq!(user.position, deserialized.position);
-}
 #[test]
-    fn test_learning_record_serialization() {,
+    fn test_learning_record_serialization() {
 let record = LearningRecord {,
             record_id: "lr_98765".to_string(),
             chapter_id: Some("chapter_advanced_hooks".to_string()),
@@ -423,9 +411,8 @@ let serialized = serde_json::to_string(&record).unwrap();
         assert_eq!(record.start_time, deserialized.start_time);
         assert_eq!(record.end_time, deserialized.end_time);
         assert_eq!(record.attempt_count, deserialized.attempt_count);
-}
 #[test]
-    fn test_learning_statistics_serialization() {,
+    fn test_learning_statistics_serialization() {
 let stats = LearningStatistics {,
             total_courses: Some(50),
             completed_courses: Some(32),
@@ -445,9 +432,8 @@ let serialized = serde_json::to_string(&stats).unwrap();
         assert_eq!(stats.average_progress, deserialized.average_progress);
         assert_eq!(stats.average_score, deserialized.average_score);
         assert_eq!(stats.pass_rate, deserialized.pass_rate);
-}
 #[test]
-    fn test_learning_statistics_with_none_values() {,
+    fn test_learning_statistics_with_none_values() {
 let stats = LearningStatistics {,
             total_courses: Some(10),
             completed_courses: None,
@@ -465,9 +451,8 @@ let deserialized: LearningStatistics = serde_json::from_str(&serialized).unwrap(
         assert_eq!(stats.total_courses, deserialized.total_courses);
 assert!(deserialized.completed_courses.is_none());
         assert!(deserialized.average_progress.is_none());
-}
 #[test]
-    fn test_course_registration_event_serialization() {,
+    fn test_course_registration_event_serialization() {
 let event = CourseRegistrationEvent {,
             event_type: "registration_updated".to_string(),
             registration: CourseRegistration {
@@ -533,10 +518,9 @@ assert_eq!(,
             assert_eq!(orig_old.status, deser_old.status);
             assert_eq!(orig_old.progress, deser_old.progress);
             assert_eq!(orig_old.passed, deser_old.passed);
-}
     }
 #[test]
-    fn test_course_registration_event_without_old_registration() {,
+    fn test_course_registration_event_without_old_registration() {
 let event = CourseRegistrationEvent {,
             event_type: "registration_created".to_string(),
             registration: CourseRegistration {
@@ -574,9 +558,8 @@ assert_eq!(,
         assert_eq!(event.timestamp, deserialized.timestamp);
 assert!(deserialized.old_registration.is_none());
         assert!(deserialized.source.is_none());
-}
 #[test]
-    fn test_complex_course_registration_with_multiple_records() {,
+    fn test_complex_course_registration_with_multiple_records() {
 let complex_registration = CourseRegistration {,
             registration_id: "complex_reg_001".to_string(),
             course_id: "full_stack_bootcamp".to_string(),
@@ -682,7 +665,6 @@ assert_eq!(,
             assert_eq!(orig_records[2].chapter_name, deser_records[2].chapter_name);
             assert_eq!(orig_records[2].progress, deser_records[2].progress);
             assert_eq!(orig_records[2].start_time, deser_records[2].start_time);
-}
 // Test course info,
         if let (Some(orig_course), Some(deser_course)) =
             (&complex_registration.course_info, &deserialized.course_info),
@@ -692,11 +674,9 @@ assert_eq!(,
                 assert_eq!(orig_tags.len(), 5);
                 assert_eq!(orig_tags[0] "fullstack");
                 assert_eq!(orig_tags, deser_tags);
-}
         }
-}
 #[test]
-    fn test_debug_trait_for_models() {,
+    fn test_debug_trait_for_models() {
 let course = CourseInfo {,
             course_id: "debug_test".to_string(),
             course_name: Some("Debug Test Course".to_string()),
@@ -716,4 +696,3 @@ assert!(debug_string.contains("CourseInfo"));
         assert!(debug_string.contains("debug_test"));
 assert!(debug_string.contains("Debug Test Course"));
     }
-}

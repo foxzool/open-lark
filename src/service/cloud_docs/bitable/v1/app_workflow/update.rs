@@ -6,8 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -18,7 +17,7 @@ use crate::,
     impl_executable_builder_config,
 };
 /// 更新自动化流程状态请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateWorkflowRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -29,65 +28,24 @@ pub struct UpdateWorkflowRequest {
 #[serde(skip)]
     workflow_id: String,
     /// 自动化流程状态：true-启用，false-停用
-    is_enabled: bool,
-}
+    is_enabled: bool}
 impl UpdateWorkflowRequest {
-    pub fn w+.*{
-UpdateWorkflowRequestBuilder::default(),
-    }
-
-    pub fn new(app_token: impl ToString, workflow_id: impl ToString, is_enabled: bool) -> Self {
-Self {
-            app_token: app_token.to_string(),
-            workflow_id: workflow_id.to_string(),
-            is_enabled,
-            ..Default::default(),
-}
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct UpdateWorkflowRequestBuilder {
-    request: UpdateWorkflowRequest,
-}
+    request: UpdateWorkflowRequest}
 impl UpdateWorkflowRequestBuilder {
-    /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {
-self.request.app_token = app_token.to_string();
-        self,
-}
-/// 自动化流程ID,
-    pub fn workflow_id(mut self, workflow_id: impl ToString) -> Self {
-self.request.workflow_id = workflow_id.to_string();
-        self,
-}
-/// 自动化流程状态：true-启用，false-停用,
-    pub fn set_enabled(mut self, is_enabled: bool) -> Self {
-self.request.is_enabled = is_enabled;
-        self,
-}
-/// 启用自动化流程,
-    pub fn enable(mut self) -> Self {
-self.request.is_enabled = true;
-        self,
-}
-/// 停用自动化流程,
-    pub fn disable(mut self) -> Self {
-self.request.is_enabled = false;
-        self,
-}
-pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-self.request,
-    }
-}
-impl_executable_builder_config!(,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}impl_executable_builder_config!(,
     UpdateWorkflowRequestBuilder,
     UpdateWorkflowRequest,
     BaseResponse<UpdateWorkflowResponse>,
     update_workflow,
 );
 /// 更新自动化流程状态响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateWorkflowResponse {
     /// 自动化流程ID
     pub workflow_id: String,
@@ -95,12 +53,12 @@ pub struct UpdateWorkflowResponse {
     pub is_enabled: i32,
     /// 更新时间戳（秒）
     pub updated_time: i64,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 更新自动化流程状态,
 pub async fn update_workflow(
     request: UpdateWorkflowRequest,
@@ -116,14 +74,13 @@ api_req.api_path = BITABLE_V1_WORKFLOW_UPDATE,
 
     let api_resp = Transport::request(api_req, config, option).await?;
 Ok(api_resp),
-}
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]
-    fn test_update_workflow_request_builder() {,
+    fn test_update_workflow_request_builder() {
 let request = UpdateWorkflowRequest::builder(),
             .app_token()
 .workflow_id()
@@ -134,12 +91,10 @@ let request = UpdateWorkflowRequest::builder(),
 assert!(request.is_enabled);
     }
 #[test]
-    fn test_update_workflow_request_disable() {,
+    fn test_update_workflow_request_disable() {
 let request = UpdateWorkflowRequest::builder(),
             .app_token()
 .workflow_id()
             .disable()
 .build();
         assert!(!request.is_enabled);
-}
-}

@@ -2,9 +2,7 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
         endpoints::EndpointBuilder,
@@ -12,16 +10,16 @@ use crate::{
         query_params::QueryParams,
         req_option::RequestOption,
         SDKResult,
-    }
     service::hire::models::{CommonResponse, PageResponse, ReferralAccount}
 };
 /// 内推账户服务
 pub struct ReferralAccountService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 内推账户余额信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ReferralAccountBalance {
+}
     /// 用户ID
     pub user_id: String,
     /// 可用余额
@@ -34,10 +32,10 @@ pub struct ReferralAccountBalance {
     pub currency: String,
     /// 最后更新时间
     pub last_updated: Option<String>,
-}
 /// 内推收入记录
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ReferralIncomeRecord {
+}
     /// 记录ID
     pub id: String,
     /// 用户ID
@@ -58,10 +56,10 @@ pub struct ReferralIncomeRecord {
     pub status: String,
     /// 创建时间
     pub created_time: Option<String>,
-}
 /// 提现记录
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct WithdrawalRecord {
+}
     /// 提现记录ID
     pub id: String,
     /// 用户ID
@@ -94,10 +92,10 @@ pub struct WithdrawalRecord {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 提现账户信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct WithdrawalAccountInfo {
+}
     /// 账户类型
     pub account_type: String,
     /// 账户号码
@@ -108,10 +106,10 @@ pub struct WithdrawalAccountInfo {
     pub bank_name: Option<String>,
     /// 开户行
     pub bank_branch: Option<String>,
-}
 /// 内推账户创建请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ReferralAccountCreateRequest {
+}
     /// 用户ID
     pub user_id: String,
     /// 真实姓名
@@ -128,10 +126,10 @@ pub struct ReferralAccountCreateRequest {
     pub phone: Option<String>,
     /// 邮箱
     pub email: Option<String>,
-}
 /// 提现申请请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct WithdrawalApplicationRequest {
+}
     /// 用户ID
     pub user_id: String,
     /// 提现金额
@@ -142,10 +140,10 @@ pub struct WithdrawalApplicationRequest {
     pub account_info: WithdrawalAccountInfo,
     /// 申请备注
     pub remark: Option<String>,
-}
 /// 内推账户列表请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ReferralAccountListRequest {
+}
     /// 分页大小
     pub page_size: Option<u32>,
     /// 分页标记
@@ -154,10 +152,10 @@ pub struct ReferralAccountListRequest {
     pub status: Option<String>,
     /// 用户ID
     pub user_id: Option<String>,
-}
 /// 收入记录列表请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct IncomeRecordListRequest {
+}
     /// 分页大小
     pub page_size: Option<u32>,
     /// 分页标记
@@ -170,10 +168,10 @@ pub struct IncomeRecordListRequest {
     pub start_time: Option<String>,
     /// 结束时间
     pub end_time: Option<String>,
-}
 /// 提现记录列表请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct WithdrawalRecordListRequest {
+}
     /// 分页大小
     pub page_size: Option<u32>,
     /// 分页标记
@@ -186,73 +184,62 @@ pub struct WithdrawalRecordListRequest {
     pub start_time: Option<String>,
     /// 结束时间
     pub end_time: Option<String>,
-}
 /// 内推账户列表响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ReferralAccountListResponse {
-    /// 内推账户列表
-#[serde(flatten)]
-    pub accounts: PageResponse<ReferralAccount>,
 }
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 账户余额响应
-#[derive(.*?)]
-pub struct ReferralAccountBalanceResponse {
-    /// 账户余额信息
-    pub balance: ReferralAccountBalance,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 收入记录列表响应
-#[derive(.*?)]
-pub struct IncomeRecordListResponse {
-    /// 收入记录列表
-#[serde(flatten)]
-    pub records: PageResponse<ReferralIncomeRecord>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 提现记录列表响应
-#[derive(.*?)]
-pub struct WithdrawalRecordListResponse {
-    /// 提现记录列表
-#[serde(flatten)]
-    pub records: PageResponse<WithdrawalRecord>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 内推账户操作响应
-#[derive(.*?)]
-pub struct ReferralAccountOperationResponse {
-    /// 操作结果
-#[serde(flatten)]
-    pub result: CommonResponse,
-    /// 相关ID
-    pub id: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl ReferralAccountService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 账户余额响应
+#[derive(Debug, Clone)]
 }
-/// 创建内推账户
+pub struct ReferralAccountBalanceResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 收入记录列表响应
+#[derive(Debug, Clone)]
+}
+pub struct IncomeRecordListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 提现记录列表响应
+#[derive(Debug, Clone)]
+}
+pub struct WithdrawalRecordListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 内推账户操作响应
+#[derive(Debug, Clone)]
+}
+pub struct ReferralAccountOperationResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl ReferralAccountService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建内推账户
     ///,
 /// 该接口用于为用户创建内推账户，设置银行卡信息
     /// 和身份验证信息，用于后续的奖励发放和提现操作。
@@ -307,9 +294,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取内推账户列表
     ///,
 /// 该接口用于获取企业的内推账户列表，支持按状态、
@@ -350,8 +335,7 @@ let api_req = ApiRequest {,
 ///     for account in &data.accounts.items {
     ///         println!("账户: {} 状态: {}" account.user_id, account.status);
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_accounts(
         &self,
         request: ReferralAccountListRequest,
@@ -369,21 +353,15 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert(QueryParams::PAGE_SIZE, page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req
 .query_params
                 .insert(QueryParams::PAGE_TOKEN, page_token);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert(QueryParams::STATUS, status);
-}
 if let Some(user_id) = request.user_id {,
             api_req.query_params.insert(QueryParams::USER_ID, user_id);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取账户余额
     ///,
 /// 该接口用于获取指定用户的内推账户余额信息，
@@ -411,8 +389,7 @@ if let Some(user_id) = request.user_id {,
     ///     println!("可用余额: {}" data.balance.available_balance);
     ///     println!("冻结余额: {}" data.balance.frozen_balance);
     ///     println!("总余额: {}" data.balance.total_balance);
-    /// }
-/// ```
+    /// /// ```
     pub async fn get_balance(
         &self,
         user_id: &str,
@@ -429,9 +406,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取收入记录列表
     ///,
 /// 该接口用于获取用户的内推收入记录列表，支持按
@@ -476,8 +451,7 @@ let api_req = ApiRequest {,
 ///     for record in &data.records.items {
     ///         println!("收入: {} 金额: {}" record.id, record.amount);
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_income_records(
         &self,
         request: IncomeRecordListRequest,
@@ -495,31 +469,23 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert(QueryParams::PAGE_SIZE, page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req
 .query_params
                 .insert(QueryParams::PAGE_TOKEN, page_token);
-}
 if let Some(user_id) = request.user_id {,
             api_req.query_params.insert(QueryParams::USER_ID, user_id);
-}
 if let Some(income_type) = request.income_type {,
             api_req
 .query_params
                 .insert(QueryParams::INCOME_TYPE, income_type);
-}
 if let Some(start_time) = request.start_time {,
             api_req
 .query_params
                 .insert(QueryParams::START_TIME, start_time);
-}
 if let Some(end_time) = request.end_time {,
             api_req.query_params.insert(QueryParams::END_TIME, end_time);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 申请提现
     ///,
 /// 该接口用于用户申请提现，设置提现金额、
@@ -577,9 +543,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取提现记录列表
     ///,
 /// 该接口用于获取用户的提现记录列表，支持按
@@ -624,8 +588,7 @@ let api_req = ApiRequest {,
 ///     for record in &data.records.items {
     ///         println!("提现: {} 金额: {}" record.id, record.amount);
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_withdrawal_records(
         &self,
         request: WithdrawalRecordListRequest,
@@ -643,29 +606,21 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert(QueryParams::PAGE_SIZE, page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req
 .query_params
                 .insert(QueryParams::PAGE_TOKEN, page_token);
-}
 if let Some(user_id) = request.user_id {,
             api_req.query_params.insert(QueryParams::USER_ID, user_id);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert(QueryParams::STATUS, status);
-}
 if let Some(start_time) = request.start_time {,
             api_req
 .query_params
                 .insert(QueryParams::START_TIME, start_time);
-}
 if let Some(end_time) = request.end_time {,
             api_req.query_params.insert(QueryParams::END_TIME, end_time);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 审批提现申请
     ///,
 /// 该接口用于审批提现申请，设置审批结果
@@ -699,12 +654,10 @@ pub async fn approve_withdrawal(,
         remark: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralAccountOperationResponse>> {,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
         struct ApprovalRequest {
             approved: bool,
             remark: Option<String>,
-        }
-
         let request = ApprovalRequest { approved, remark };
 let api_req = ApiRequest {,
             http_method: Method::POST,
@@ -717,9 +670,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 启用内推账户
     ///,
 /// 该接口用于启用被停用的内推账户，
@@ -752,9 +703,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 停用内推账户
     ///,
 /// 该接口用于停用内推账户，暂停账户的
@@ -780,11 +729,10 @@ let api_req = ApiRequest {,
         reason: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralAccountOperationResponse>> {,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
         struct DisableRequest {
             reason: String,
-        }
-let request = DisableRequest {,
+        let request = DisableRequest {,
             reason: reason.to_string(),
         };
 let api_req = ApiRequest {,
@@ -798,9 +746,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取内推统计数据
     ///,
 /// 该接口用于获取内推相关的统计数据，包括
@@ -842,11 +788,8 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert(QueryParams::START_DATE, start_date);
-}
 if let Some(end_date) = end_date {,
             api_req.query_params.insert(QueryParams::END_DATE, end_date);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

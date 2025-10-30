@@ -2,18 +2,16 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2VcMeetingStartedV1 {
     pub schema: String,
     pub header: EventHeader,
     pub event: P2VcMeetingStartedV1Data,
-}
 pub(crate) struct P2VcMeetingStartedV1ProcessorImpl<F>,
 where
     F: Fn(P2VcMeetingStartedV1) + 'static,
 {
     f: F,
-}
 impl<F> EventHandler for P2VcMeetingStartedV1ProcessorImpl<F>,
 where
     F: Fn(P2VcMeetingStartedV1) + 'static + Sync + Send,
@@ -23,31 +21,26 @@ let event: P2VcMeetingStartedV1 = serde_json::from_slice(payload)?;
         (self.f)(event);
 Ok(()),
     }
-}
 impl<F> P2VcMeetingStartedV1ProcessorImpl<F>,
 where
     F: Fn(P2VcMeetingStartedV1) + 'static,
 {,
 pub(crate) fn new(f: F) -> Self {
         P2VcMeetingStartedV1ProcessorImpl { f }
-}
-}
 /// 视频会议开始事件数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2VcMeetingStartedV1Data {
     /// 事件对象
     pub object: VcMeetingEventObject,
-}
 /// 视频会议事件对象,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct VcMeetingEventObject {
     /// 对象类型 (meeting)
     pub object_type: String,
     /// 会议信息
     pub meeting: VcMeeting,
-}
 /// 视频会议信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct VcMeeting {
     /// 会议ID
     pub meeting_id: String,
@@ -85,9 +78,8 @@ pub struct VcMeeting {
     /// 创建时间 (Unix时间戳，单位：秒),
 #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<String>,
-}
 /// 会议参与者,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct MeetingParticipant {
     /// 用户ID
     pub user_id: String,
@@ -109,9 +101,8 @@ pub struct MeetingParticipant {
     /// 设备信息,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub device_type: Option<String>,
-}
 /// 会议设置,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct MeetingSettings {
     /// 是否需要密码,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -134,9 +125,8 @@ pub struct MeetingSettings {
     /// 视频设置,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub video_settings: Option<VideoSettings>,
-}
 /// 音频设置,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AudioSettings {
     /// 参与者加入时是否静音,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -144,9 +134,8 @@ pub struct AudioSettings {
     /// 是否允许参与者取消静音,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub allow_unmute: Option<bool>,
-}
 /// 视频设置,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct VideoSettings {
     /// 参与者加入时是否关闭视频,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -154,9 +143,8 @@ pub struct VideoSettings {
     /// 视频质量,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub video_quality: Option<String>,
-}
 /// 会议室信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct MeetingRoom {
     /// 会议室ID
     pub room_id: String,
@@ -169,9 +157,8 @@ pub struct MeetingRoom {
     /// 会议室容量,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub capacity: Option<i32>,
-}
 /// 录制信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct MeetingRecording {
     /// 是否正在录制
     pub is_recording: bool,
@@ -184,4 +171,3 @@ pub struct MeetingRecording {
     /// 录制质量,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub recording_quality: Option<String>,
-}

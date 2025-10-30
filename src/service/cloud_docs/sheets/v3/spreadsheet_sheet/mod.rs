@@ -3,9 +3,9 @@ pub use get::*;
 pub use query::*;
 mod get;
 mod query;
-
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Sheet {
+}
     /// 工作表 ID
     pub sheet_id: String,
     /// 工作表标题
@@ -27,10 +27,10 @@ pub struct Sheet {
     pub resource_type: String,
     /// 合并单元格的相关信息。没有合并单元格则不返回
     pub merges: Option<Vec<MergeRange>>,
-}
 /// 单元格属性，仅当 resource_type 为 sheet 即工作表类型为电子表格时返回
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GridProperties {
+}
     /// 冻结的行数量
     pub frozen_row_count: i32,
     /// 冻结的列数量
@@ -39,9 +39,8 @@ pub struct GridProperties {
     pub row_count: i32,
     /// 工作表的列数量
     pub column_count: i32,
-}
 /// 合并单元格的相关信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct MergeRange {
     /// 起始行，从 0 开始计数
     pub start_row_index: i32,

@@ -4,82 +4,62 @@ use open_lark_core::core::api_req::ApiRequest;
 use std::collections::HashMap;
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{helpdesk::*, EndpointBuilder}
-        http::Transport,
+        endpoints::{helpdesk::*, EndpointBuilderhttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::helpdesk::models::{TicketMessage, UserIdType}
 };
 /// 工单消息服务
 pub struct TicketMessageService {
+}
     pub config: Config,
-}
 /// 发送工单消息请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateTicketMessageRequest {
+}
     /// 消息内容
     pub content: String,
     /// 消息类型
 #[serde(skip_serializing_if = "Option::is_none")]
     pub message_type: Option<String>,
-}
 /// 发送工单消息响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateTicketMessageResponse {
-    /// 创建的消息
-    pub message: TicketMessage,
 }
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 获取工单消息详情响应
-#[derive(.*?)]
-pub struct ListTicketMessagesResponse {
-    /// 消息列表
-    pub messages: Vec<TicketMessage>,
-    /// 是否还有更多数据
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub has_more: Option<bool>,
-    /// 下一页标记
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 向群内发送消息请求
-#[derive(.*?)]
-pub struct CreateGroupMessageRequest {
-    /// 消息内容
-    pub content: String,
-    /// 消息类型
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub message_type: Option<String>,
-}
-/// 向群内发送消息响应
-#[derive(.*?)]
-pub struct CreateGroupMessageResponse {
-    /// 创建的消息
-    pub message: TicketMessage,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl TicketMessageService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 获取工单消息详情响应
+#[derive(Debug, Clone)]
 }
-/// 发送工单消息
+pub struct ListTicketMessagesResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 向群内发送消息请求
+#[derive(Debug, Clone)]
+}
+pub struct CreateGroupMessageRequest {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl TicketMessageService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 发送工单消息
     ///,
 /// 该接口用于向指定工单发送消息。
     ///,
@@ -105,7 +85,6 @@ pub async fn create(,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
@@ -118,9 +97,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取工单消息详情
     ///,
 /// 该接口用于获取指定工单的消息列表。
@@ -149,13 +126,10 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token.to_string());
-}
 if let Some(page_size) = page_size {,
             query_params.insert("page_size", page_size.to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
@@ -167,9 +141,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 服务台机器人向工单绑定的群内发送消息
     ///,
 /// 该接口用于服务台机器人向工单绑定的群内发送消息。
@@ -197,7 +169,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
@@ -210,7 +181,6 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}}}}}}}}

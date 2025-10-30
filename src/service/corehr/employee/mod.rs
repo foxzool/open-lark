@@ -3,51 +3,40 @@ use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::corehr::*,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::corehr::models::{
         Employee, EmployeeBatchGetRequest, EmployeeSearchRequest, PageResponse,
-    }
 };
 /// 员工信息服务
 pub struct EmployeeService {
-    pub config: Config,
 }
-/// 批量查询员工信息响应
-#[derive(.*?)]
-pub struct EmployeeBatchGetResponse {
-    /// 员工信息列表
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<Employee>>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 搜索员工信息响应
-#[derive(.*?)]
-pub struct EmployeeSearchResponse {
-    /// 员工信息列表
-#[serde(flatten)]
-    pub employees: PageResponse<Employee>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl EmployeeService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 搜索员工信息响应
+#[derive(Debug, Clone)]
 }
-/// 批量查询员工信息
+pub struct EmployeeSearchResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl EmployeeService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 批量查询员工信息
     ///,
 /// 该接口用于通过员工ID列表批量获取员工的详细信息，包括个人信息、
     /// 雇佣信息、任职信息等完整的员工档案数据。
@@ -104,7 +93,6 @@ let api_req = ApiRequest {,
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
-}
 /// 搜索员工信息
     ///,
 /// 该接口用于根据多种条件搜索员工信息，支持按员工状态、部门、
@@ -166,4 +154,4 @@ let api_req = ApiRequest {,
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}

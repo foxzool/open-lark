@@ -3,52 +3,40 @@ use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::apass::models::{
         EnvironmentVariable, EnvironmentVariableGetRequest, EnvironmentVariableQueryRequest,
         PageResponse,
-    }
 };
 /// 环境变量服务
 pub struct EnvironmentVariableService {
-    pub config: Config,
 }
-/// 环境变量查询响应
-#[derive(.*?)]
-pub struct EnvironmentVariableQueryResponse {
-    /// 分页响应数据
-#[serde(flatten)]
-    pub page_response: PageResponse<EnvironmentVariable>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 环境变量获取响应
-#[derive(.*?)]
-pub struct EnvironmentVariableGetResponse {
-    /// 环境变量详情
-#[serde(flatten)]
-    pub environment_variable: EnvironmentVariable,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl EnvironmentVariableService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 环境变量获取响应
+#[derive(Debug, Clone)]
 }
-/// 查询环境变量列表
+pub struct EnvironmentVariableGetResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl EnvironmentVariableService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 查询环境变量列表
     ///,
 /// 该接口用于查询应用的环境变量列表。
     ///,
@@ -77,13 +65,9 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询环境变量详情
     ///,
 /// 该接口用于查询指定环境变量的详情信息。
@@ -110,7 +94,6 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}}

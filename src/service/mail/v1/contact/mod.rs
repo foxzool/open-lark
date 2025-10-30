@@ -4,23 +4,21 @@ use std::collections::HashMap;
 use open_lark_core::core::api_req::ApiRequest;
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::mail::models::{Contact, UserIdType}
 };
 /// 邮箱联系人服务
 pub struct ContactService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 创建邮箱联系人请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateContactRequest {
+}
     /// 联系人姓名
     pub name: String,
     /// 邮箱地址
@@ -28,64 +26,42 @@ pub struct CreateContactRequest {
     /// 备注
 #[serde(skip_serializing_if = "Option::is_none")]
     pub remark: Option<String>,
-}
 /// 创建邮箱联系人响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateContactResponse {
-    /// 创建的联系人
-    pub contact: Contact,
 }
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 修改邮箱联系人请求
-#[derive(.*?)]
-pub struct UpdateContactRequest {
-    /// 联系人姓名
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-    /// 邮箱地址
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub email: Option<String>,
-    /// 备注
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub remark: Option<String>,
-}
-/// 修改邮箱联系人响应
-#[derive(.*?)]
-pub struct UpdateContactResponse {
-    /// 修改后的联系人
-    pub contact: Contact,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 列出邮箱联系人响应
-#[derive(.*?)]
-pub struct ListContactsResponse {
-    /// 联系人列表
-    pub contacts: Vec<Contact>,
-    /// 是否还有更多数据
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub has_more: Option<bool>,
-    /// 下一页标识
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl ContactService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 修改邮箱联系人请求
+#[derive(Debug, Clone)]
 }
-/// 创建邮箱联系人
+pub struct UpdateContactRequest {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 列出邮箱联系人响应
+#[derive(Debug, Clone)]
+}
+pub struct ListContactsResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl ContactService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建邮箱联系人
     pub async fn create(
         &self,
         user_mailbox_id: &str,
@@ -96,7 +72,6 @@ impl ContactService {
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
@@ -110,7 +85,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除邮箱联系人
     pub async fn delete(
         &self,
@@ -122,7 +96,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(,
@@ -138,9 +111,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 修改邮箱联系人信息
     pub async fn patch(
         &self,
@@ -153,7 +124,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(,
@@ -170,9 +140,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 列出邮箱联系人
     pub async fn list(
         &self,
@@ -185,13 +153,10 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(page_size) = page_size {
             query_params.insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token);
-}
 if let Some(user_id_type) = user_id_type {,
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
@@ -203,7 +168,6 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}

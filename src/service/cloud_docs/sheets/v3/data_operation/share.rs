@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub(crate) struct FindCondition {,
     /// 查找范围，参考 名词解释 Range
     pub(crate) range: String,
@@ -25,9 +25,8 @@ pub(crate) struct FindCondition {,
     /// - true：表示仅搜索单元格公式,
 /// - false：表示仅搜索单元格内容,
     pub(crate) include_formulas: Option<bool>,
-}
 /// 符合条件的信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct FindReplaceResult {
     /// 符合查找条件的单元格数组，不包含公式
     pub matched_cells: Vec<String>,
@@ -35,4 +34,3 @@ pub struct FindReplaceResult {
     pub matched_formula_cells: Vec<String>,
     /// 符合查找条件的总行数
     pub rows_count: i32,
-}

@@ -17,18 +17,15 @@ use serde::{Deserialize, Serialize};
 /// - 搜索部门,
 pub struct DepartmentService {
     config: Config,
-}
 impl DepartmentService {
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 获取客户端配置,
+}/// 获取客户端配置,
     ///,
 /// # 返回值,
     /// 配置对象的引用,
 pub fn w+.*{
         &self.config,
-}
 /// 创建部门,
     ///,
 /// 该接口用于创建新的部门。,
@@ -172,7 +169,6 @@ let resp =,
             Transport::<GetChildrenDepartmentsResponse>::request(api_req, &self.config, None),
 .await?;
         Ok(resp.data.unwrap_or_default()),
-}
 /// 获取父部门信息,
     pub async fn parent(
         &self,
@@ -228,10 +224,9 @@ let resp =,
             Transport::<DeleteDepartmentResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
     }
-}
 // 请求/响应结构体定义,
 /// 创建部门请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateDepartmentRequest {
     /// 部门信息
     pub department: Department,
@@ -244,20 +239,19 @@ pub struct CreateDepartmentRequest {
     /// 客户端令牌,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-}
 /// 创建部门响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateDepartmentResponse {
     /// 部门信息
     pub department: Department,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 /// 修改部门请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PatchDepartmentRequest {
     /// 部门信息
     pub department: Department,
@@ -267,20 +261,19 @@ pub struct PatchDepartmentRequest {
     /// 部门 ID 类型,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-}
 /// 修改部门响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PatchDepartmentResponse {
     /// 部门信息
     pub department: Department,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 /// 更新部门请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateDepartmentRequest {
     /// 部门信息
     pub department: Department,
@@ -290,37 +283,36 @@ pub struct UpdateDepartmentRequest {
     /// 部门 ID 类型,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-}
 /// 更新部门响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateDepartmentResponse {
     /// 部门信息
     pub department: Department,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 /// 更新部门ID请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateDepartmentIdRequest {
     /// 新的部门ID
     pub new_department_id: String,
     /// 部门 ID 类型,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-}
 /// 更新部门ID响应,
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct UpdateDepartmentIdResponse {}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 /// 获取部门请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetDepartmentRequest {
     /// 用户 ID 类型,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -328,20 +320,19 @@ pub struct GetDepartmentRequest {
     /// 部门 ID 类型,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-}
 /// 获取部门响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetDepartmentResponse {
     /// 部门信息
     pub department: Department,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 /// 批量获取部门请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BatchGetDepartmentsRequest {
     /// 部门ID列表
     pub department_ids: Vec<String>,
@@ -351,20 +342,19 @@ pub struct BatchGetDepartmentsRequest {
     /// 部门 ID 类型,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-}
 /// 批量获取部门响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BatchGetDepartmentsResponse {
     /// 部门列表
     pub items: Vec<Department>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 /// 获取子部门列表请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetChildrenDepartmentsRequest {
     /// 父部门ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -384,9 +374,8 @@ pub struct GetChildrenDepartmentsRequest {
     /// 分页标记,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 /// 获取子部门列表响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetChildrenDepartmentsResponse {
     /// 部门列表
     pub items: Vec<Department>,
@@ -396,14 +385,14 @@ pub struct GetChildrenDepartmentsResponse {
     /// 分页标记,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 /// 获取父部门请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetParentDepartmentRequest {
     /// 部门ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -414,20 +403,19 @@ pub struct GetParentDepartmentRequest {
     /// 部门 ID 类型,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-}
 /// 获取父部门响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetParentDepartmentResponse {
     /// 部门列表
     pub items: Vec<Department>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 /// 搜索部门请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SearchDepartmentsRequest {
     /// 搜索关键词
     pub query: String,
@@ -443,9 +431,8 @@ pub struct SearchDepartmentsRequest {
     /// 部门 ID 类型,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-}
 /// 搜索部门响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SearchDepartmentsResponse {
     /// 部门列表
     pub items: Vec<Department>,
@@ -455,41 +442,40 @@ pub struct SearchDepartmentsResponse {
     /// 分页标记,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 /// 删除部门请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DeleteDepartmentRequest {
     /// 部门 ID 类型,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-}
 /// 删除部门响应,
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DeleteDepartmentResponse {}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 #[cfg(test)]
 mod tests {
 use super::*;
     use crate::core::config::Config;
 use crate::service::contact::models::Department;
     #[test]
-fn test_department_service_creation() {,
+fn test_department_service_creation() {
         let config = Config::default();
 let service = DepartmentService::new(config.clone());
         assert_eq!(service.config.app_id, config.app_id);
         assert_eq!(service.config.app_secret, config.app_secret);
-}
 #[test]
-    fn test_department_service_with_custom_config() {,
+    fn test_department_service_with_custom_config() {
 let config = Config::builder()
             .app_id()
 .app_secret()
@@ -497,9 +483,8 @@ let config = Config::builder()
 let service = DepartmentService::new(config.clone());
         assert_eq!(service.config.app_id, "dept_test_app");
         assert_eq!(service.config.app_secret, "dept_test_secret");
-}
 #[test]
-    fn test_create_department_request_construction() {,
+    fn test_create_department_request_construction() {
 let department = Department {,
             department_id: Some("dept_123".to_string()),
             name: Some("Engineering".to_string()),
@@ -519,9 +504,8 @@ assert_eq!(,
         assert_eq!(request.user_id_type, Some("user_id".to_string()));
         assert_eq!(request.department_id_type, Some("open_id".to_string()));
         assert_eq!(request.client_token, Some("token_123".to_string()));
-}
 #[test]
-    fn test_create_department_request_with_none_values() {,
+    fn test_create_department_request_with_none_values() {
 let department = Department {,
             name: Some("HR".to_string()),
             ..Default::default(),
@@ -537,9 +521,8 @@ let request = CreateDepartmentRequest {,
         assert_eq!(request.user_id_type, None);
         assert_eq!(request.department_id_type, None);
         assert_eq!(request.client_token, None);
-}
 #[test]
-    fn test_patch_department_request_construction() {,
+    fn test_patch_department_request_construction() {
 let department = Department {,
             department_id: Some("dept_456".to_string()),
             name: Some("Marketing".to_string()),
@@ -562,7 +545,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_update_department_request_construction() {,
+    fn test_update_department_request_construction() {
 let department = Department {,
             department_id: Some("dept_789".to_string()),
             name: Some("Sales".to_string()),
@@ -580,9 +563,8 @@ assert_eq!(,
         assert_eq!(request.department.name, Some("Sales".to_string()));
         assert_eq!(request.user_id_type, Some("open_id".to_string()));
         assert_eq!(request.department_id_type, Some("open_id".to_string()));
-}
 #[test]
-    fn test_update_department_id_request_construction() {,
+    fn test_update_department_id_request_construction() {
 let request = UpdateDepartmentIdRequest {,
             new_department_id: "new_dept_id_123".to_string(),
             department_id_type: Some("open_id".to_string()),
@@ -590,9 +572,8 @@ let request = UpdateDepartmentIdRequest {,
 
         assert_eq!(request.new_department_id, "new_dept_id_123");
         assert_eq!(request.department_id_type, Some("open_id".to_string()));
-}
 #[test]
-    fn test_update_department_id_request_with_none_type() {,
+    fn test_update_department_id_request_with_none_type() {
 let request = UpdateDepartmentIdRequest {,
             new_department_id: "new_dept_id_456".to_string(),
             department_id_type: None,
@@ -600,9 +581,8 @@ let request = UpdateDepartmentIdRequest {,
 
         assert_eq!(request.new_department_id, "new_dept_id_456");
         assert_eq!(request.department_id_type, None);
-}
 #[test]
-    fn test_get_department_request_construction() {,
+    fn test_get_department_request_construction() {
 let request = GetDepartmentRequest {,
             user_id_type: Some("user_id".to_string()),
             department_id_type: Some("open_id".to_string()),
@@ -610,15 +590,13 @@ let request = GetDepartmentRequest {,
 
         assert_eq!(request.user_id_type, Some("user_id".to_string()));
         assert_eq!(request.department_id_type, Some("open_id".to_string()));
-}
 #[test]
-    fn test_get_department_request_default() {,
+    fn test_get_department_request_default() {
 let request = GetDepartmentRequest::default();
         assert_eq!(request.user_id_type, None);
         assert_eq!(request.department_id_type, None);
-}
 #[test]
-    fn test_batch_get_departments_request_construction() {,
+    fn test_batch_get_departments_request_construction() {
 let request = BatchGetDepartmentsRequest {,
             department_ids: vec![
                 "dept_1".to_string(),
@@ -639,7 +617,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_batch_get_departments_request_with_empty_list() {,
+    fn test_batch_get_departments_request_with_empty_list() {
 let request = BatchGetDepartmentsRequest {,
             department_ids: vec![]
             user_id_type: None,
@@ -648,9 +626,8 @@ let request = BatchGetDepartmentsRequest {,
 assert!(request.department_ids.is_empty());
         assert_eq!(request.user_id_type, None);
         assert_eq!(request.department_id_type, None);
-}
 #[test]
-    fn test_get_children_departments_request_construction() {,
+    fn test_get_children_departments_request_construction() {
 let request = GetChildrenDepartmentsRequest {,
             parent_department_id: Some("parent_dept_123".to_string()),
             user_id_type: Some("user_id".to_string()),
@@ -668,9 +645,8 @@ assert_eq!(,
         assert_eq!(request.fetch_child, Some(true));
         assert_eq!(request.page_size, Some(50));
         assert_eq!(request.page_token, Some("page_token_123".to_string()));
-}
 #[test]
-    fn test_get_children_departments_request_default() {,
+    fn test_get_children_departments_request_default() {
 let request = GetChildrenDepartmentsRequest::default();
         assert_eq!(request.parent_department_id, None);
         assert_eq!(request.user_id_type, None);
@@ -678,9 +654,8 @@ let request = GetChildrenDepartmentsRequest::default();
         assert_eq!(request.fetch_child, None);
         assert_eq!(request.page_size, None);
         assert_eq!(request.page_token, None);
-}
 #[test]
-    fn test_get_parent_department_request_construction() {,
+    fn test_get_parent_department_request_construction() {
 let request = GetParentDepartmentRequest {,
             department_id: Some("dept_456".to_string()),
             user_id_type: Some("union_id".to_string()),
@@ -695,14 +670,13 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_get_parent_department_request_default() {,
+    fn test_get_parent_department_request_default() {
 let request = GetParentDepartmentRequest::default();
         assert_eq!(request.department_id, None);
         assert_eq!(request.user_id_type, None);
         assert_eq!(request.department_id_type, None);
-}
 #[test]
-    fn test_search_departments_request_construction() {,
+    fn test_search_departments_request_construction() {
 let request = SearchDepartmentsRequest {,
             query: "Engineering".to_string(),
             page_size: Some(20),
@@ -716,9 +690,8 @@ let request = SearchDepartmentsRequest {,
         assert_eq!(request.page_token, Some("search_token_123".to_string()));
         assert_eq!(request.user_id_type, Some("open_id".to_string()));
         assert_eq!(request.department_id_type, Some("open_id".to_string()));
-}
 #[test]
-    fn test_search_departments_request_with_minimal_data() {,
+    fn test_search_departments_request_with_minimal_data() {
 let request = SearchDepartmentsRequest {,
             query: "HR".to_string(),
             page_size: None,
@@ -732,9 +705,8 @@ let request = SearchDepartmentsRequest {,
         assert_eq!(request.page_token, None);
         assert_eq!(request.user_id_type, None);
         assert_eq!(request.department_id_type, None);
-}
 #[test]
-    fn test_delete_department_request_construction() {,
+    fn test_delete_department_request_construction() {
 let request = DeleteDepartmentRequest {,
             department_id_type: Some("department_id".to_string()),
         };
@@ -744,70 +716,59 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_delete_department_request_default() {,
+    fn test_delete_department_request_default() {
 let request = DeleteDepartmentRequest::default();
         assert_eq!(request.department_id_type, None);
-}
 #[test]
-    fn test_create_department_response_default() {,
+    fn test_create_department_response_default() {
 let response = CreateDepartmentResponse::default();
         assert_eq!(response.department.name, None);
         assert_eq!(response.department.department_id, None);
-}
 #[test]
-    fn test_patch_department_response_default() {,
+    fn test_patch_department_response_default() {
 let response = PatchDepartmentResponse::default();
         assert_eq!(response.department.name, None);
         assert_eq!(response.department.department_id, None);
-}
 #[test]
-    fn test_update_department_response_default() {,
+    fn test_update_department_response_default() {
 let response = UpdateDepartmentResponse::default();
         assert_eq!(response.department.name, None);
         assert_eq!(response.department.department_id, None);
-}
 #[test]
-    fn test_update_department_id_response_default() {,
+    fn test_update_department_id_response_default() {
 let _response = UpdateDepartmentIdResponse::default();
         // UpdateDepartmentIdResponse is an empty struct, just test it can be created,
-}
 #[test]
-    fn test_get_department_response_default() {,
+    fn test_get_department_response_default() {
 let response = GetDepartmentResponse::default();
         assert_eq!(response.department.name, None);
         assert_eq!(response.department.department_id, None);
-}
 #[test]
-    fn test_batch_get_departments_response_default() {,
+    fn test_batch_get_departments_response_default() {
 let response = BatchGetDepartmentsResponse::default();
         assert!(response.items.is_empty());
-}
 #[test]
-    fn test_get_children_departments_response_default() {,
+    fn test_get_children_departments_response_default() {
 let response = GetChildrenDepartmentsResponse::default();
         assert!(response.items.is_empty());
         assert_eq!(response.has_more, None);
         assert_eq!(response.page_token, None);
-}
 #[test]
-    fn test_get_parent_department_response_default() {,
+    fn test_get_parent_department_response_default() {
 let response = GetParentDepartmentResponse::default();
         assert!(response.items.is_empty());
-}
 #[test]
-    fn test_search_departments_response_default() {,
+    fn test_search_departments_response_default() {
 let response = SearchDepartmentsResponse::default();
         assert!(response.items.is_empty());
         assert_eq!(response.has_more, None);
         assert_eq!(response.page_token, None);
-}
 #[test]
-    fn test_delete_department_response_default() {,
+    fn test_delete_department_response_default() {
 let _response = DeleteDepartmentResponse::default();
         // DeleteDepartmentResponse is an empty struct, just test it can be created,
-}
 #[test]
-    fn test_request_structs_debug_trait() {,
+    fn test_request_structs_debug_trait() {
 let department = Department {,
             name: Some("Debug Test Dept".to_string()),
             ..Default::default(),
@@ -822,9 +783,8 @@ let create_request = CreateDepartmentRequest {,
         let debug_str = format!("{:?}", create_request);
 assert!(debug_str.contains("CreateDepartmentRequest"));
         assert!(debug_str.contains("Debug Test Dept"));
-}
 #[test]
-    fn test_search_departments_request_edge_cases() {,
+    fn test_search_departments_request_edge_cases() {
 // Test with very long query string,
         let long_query = "a".repeat(1000);
 let request_long = SearchDepartmentsRequest {,
@@ -857,9 +817,8 @@ let request_long = SearchDepartmentsRequest {,
         };
 
         assert_eq!(request_empty.query, "");
-}
 #[test]
-    fn test_batch_get_departments_request_edge_cases() {,
+    fn test_batch_get_departments_request_edge_cases() {
 // Test with very large department ID list,
         let large_list: Vec<String> = (0..1000).map(|i| format!("dept_{}", i)).collect();
 let request_large = BatchGetDepartmentsRequest {,
@@ -879,9 +838,8 @@ let request_large = BatchGetDepartmentsRequest {,
 
         assert_eq!(request_single.department_ids.len(), 1);
         assert_eq!(request_single.department_ids[0] "single_dept");
-}
 #[test]
-    fn test_get_children_departments_request_edge_cases() {,
+    fn test_get_children_departments_request_edge_cases() {
 // Test with very large page size,
         let request_large_page = GetChildrenDepartmentsRequest {
             parent_department_id: Some("parent_123".to_string()),
@@ -906,9 +864,8 @@ let request_large = BatchGetDepartmentsRequest {,
 
         assert_eq!(request_no_fetch.fetch_child, Some(false));
         assert_eq!(request_no_fetch.parent_department_id, None);
-}
 #[test]
-    fn test_department_service_config_independence() {,
+    fn test_department_service_config_independence() {
 let config1 = Config::builder().app_id("dept_app_1").build();
         let config2 = Config::builder().app_id("dept_app_2").build();
 let service1 = DepartmentService::new(config1);
@@ -917,10 +874,11 @@ let service1 = DepartmentService::new(config1);
         assert_eq!(service1.config.app_id, "dept_app_1");
         assert_eq!(service2.config.app_id, "dept_app_2");
         assert_ne!(service1.config.app_id, service2.config.app_id);
-}
 #[test]
-    fn test_api_response_trait_implementations() {,
-// Test that all response types implement ApiResponseTrait correctly,
+    fn test_api_response_trait_implementations() {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}// Test that all response types implement ApiResponseTrait correctly,
         assert_eq!(
             CreateDepartmentResponse::data_format(),
             crate::core::api_resp::ResponseFormat::Data
@@ -962,4 +920,3 @@ let service1 = DepartmentService::new(config1);
             crate::core::api_resp::ResponseFormat::Data
 );
     }
-}

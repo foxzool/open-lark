@@ -11,7 +11,7 @@ use crate::core::{,
     SDKResult,
 };
 /// 更新知识空间节点标题请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateSpaceNodeTitleRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -22,49 +22,18 @@ pub struct UpdateSpaceNodeTitleRequest {
 #[serde(skip)]
     node_token: String,
     /// 文档标题
-    title: String,
-}
+    title: String}
 impl UpdateSpaceNodeTitleRequest {
-    pub fn w+.*{
-UpdateSpaceNodeTitleRequestBuilder::default(),
-    }
-
-    pub fn new(space_id: impl ToString, node_token: impl ToString, title: impl ToString) -> Self {
-Self {
-            space_id: space_id.to_string(),
-            node_token: node_token.to_string(),
-            title: title.to_string()
-            ..Default::default(),
-}
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct UpdateSpaceNodeTitleRequestBuilder {
-    request: UpdateSpaceNodeTitleRequest,
-}
+    request: UpdateSpaceNodeTitleRequest}
 impl UpdateSpaceNodeTitleRequestBuilder {
-    /// 知识空间id
-    pub fn space_id(mut self, space_id: impl ToString) -> Self {
-self.request.space_id = space_id.to_string();
-        self,
-}
-/// 节点token,
-    pub fn node_token(mut self, node_token: impl ToString) -> Self {
-self.request.node_token = node_token.to_string();
-        self,
-}
-/// 文档标题,
-    pub fn title(mut self, title: impl ToString) -> Self {
-self.request.title = title.to_string();
-        self,
-}
-pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-self.request,
-    }
-}
-/// 更新后的节点信息,
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 更新后的节点信息,
+#[derive(Debug, Clone)]
 pub struct UpdatedNode {
     /// 知识空间id
     pub space_id: String,
@@ -79,19 +48,18 @@ pub struct UpdatedNode {
     /// 原始文档token
     pub obj_token: Option<String>,
     /// 文档标题
-    pub title: Option<String>,
-}
+    pub title: Option<String>}
 /// 更新知识空间节点标题响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateSpaceNodeTitleResponse {
     /// 更新后的节点信息
     pub node: UpdatedNode,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 更新知识空间节点标题,
 pub async fn update_space_node_title(
     request: UpdateSpaceNodeTitleRequest,
@@ -107,20 +75,18 @@ api_req.api_path = {,
             &request.space_id,
         );
         path = EndpointBuilder::replace_param(&path, "node_token", &request.node_token);
-path,
-    };
+path};
     api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
     let api_resp = Transport::request(api_req, config, option).await?;
 Ok(api_resp),
-}
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]
-    fn test_update_space_node_title_request_builder() {,
+    fn test_update_space_node_title_request_builder() {
 let request = UpdateSpaceNodeTitleRequest::builder(),
             .space_id()
 .node_token()
@@ -129,5 +95,3 @@ let request = UpdateSpaceNodeTitleRequest::builder(),
         assert_eq!(request.space_id, "spcxxxxxx");
         assert_eq!(request.node_token, "wikcnxxxxxx");
         assert_eq!(request.title, "新的文档标题");
-}
-}

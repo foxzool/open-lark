@@ -2,38 +2,29 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::hire::models::{Location, LocationQueryRequest, PageResponse}
 };
 /// 地址服务
 pub struct LocationService {
-    pub config: Config,
 }
-/// 地址列表响应
-#[derive(.*?)]
-pub struct LocationListResponse {
-    /// 地址列表
-#[serde(flatten)]
-    pub locations: PageResponse<Location>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl LocationService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl LocationService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 查询地点列表
+}/// 查询地点列表
     ///,
 /// 该接口用于查询系统中的地点列表信息，支持按地址类型、
     /// 父级地址等条件筛选，用于职位发布时选择工作地点。
@@ -76,21 +67,15 @@ let mut api_req = ApiRequest {,
 // 添加查询参数
         if let Some(location_type) = request.location_type {
             api_req.query_params.insert("location_type", location_type);
-}
 if let Some(parent_id) = request.parent_id {,
             api_req.query_params.insert("parent_id", parent_id);
-}
 if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取地址列表
     ///,
 /// 该接口用于获取系统支持的地址列表，包括国家、
@@ -116,7 +101,6 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}

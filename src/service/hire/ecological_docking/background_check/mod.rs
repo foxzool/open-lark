@@ -2,25 +2,23 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::hire::models::{CommonResponse, PageResponse}
 };
 /// 背调服务
 pub struct BackgroundCheckService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 背调包信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BackgroundCheckPackage {
+}
     /// 背调包ID
     pub id: String,
     /// 背调包名称
@@ -43,10 +41,10 @@ pub struct BackgroundCheckPackage {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 背调项目
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BackgroundCheckItem {
+}
     /// 项目ID
     pub id: String,
     /// 项目名称
@@ -59,10 +57,10 @@ pub struct BackgroundCheckItem {
     pub required: bool,
     /// 执行时长（天）
     pub duration_days: u32,
-}
 /// 背调订单信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BackgroundCheckOrder {
+}
     /// 订单ID
     pub id: String,
     /// 投递ID
@@ -93,10 +91,10 @@ pub struct BackgroundCheckOrder {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 背调项目结果
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BackgroundCheckItemResult {
+}
     /// 项目ID
     pub item_id: String,
     /// 项目名称
@@ -107,10 +105,10 @@ pub struct BackgroundCheckItemResult {
     pub details: Option<String>,
     /// 完成时间
     pub completion_time: Option<String>,
-}
 /// 背调供应商信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BackgroundCheckVendor {
+}
     /// 供应商ID
     pub id: String,
     /// 供应商名称
@@ -129,10 +127,10 @@ pub struct BackgroundCheckVendor {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 背调订单创建请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BackgroundCheckOrderCreateRequest {
+}
     /// 投递ID
     pub application_id: String,
     /// 背调包ID
@@ -143,10 +141,10 @@ pub struct BackgroundCheckOrderCreateRequest {
     pub urgency: Option<String>,
     /// 备注信息
     pub remark: Option<String>,
-}
 /// 背调候选人信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BackgroundCheckCandidateInfo {
+}
     /// 候选人姓名
     pub name: String,
     /// 身份证号
@@ -159,119 +157,52 @@ pub struct BackgroundCheckCandidateInfo {
     pub work_experience: Vec<WorkExperience>,
     /// 教育经历
     pub education_experience: Vec<EducationExperience>,
-}
 /// 工作经历
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct WorkExperience {
-    /// 公司名称
-    pub company_name: String,
-    /// 职位
-    pub position: String,
-    /// 开始时间
-    pub start_date: String,
-    /// 结束时间
-    pub end_date: Option<String>,
-    /// 薪资
-    pub salary: Option<String>,
-    /// 离职原因
-    pub leave_reason: Option<String>,
 }
-/// 教育经历
-#[derive(.*?)]
-pub struct EducationExperience {
-    /// 学校名称
-    pub school_name: String,
-    /// 专业
-    pub major: String,
-    /// 学历
-    pub degree: String,
-    /// 开始时间
-    pub start_date: String,
-    /// 结束时间
-    pub end_date: String,
-}
-/// 背调包列表请求
-#[derive(.*?)]
-pub struct BackgroundCheckPackageListRequest {
-    /// 分页大小
-    pub page_size: Option<u32>,
-    /// 分页标记
-    pub page_token: Option<String>,
-    /// 供应商筛选
-    pub vendor: Option<String>,
-    /// 启用状态筛选
-    pub enabled: Option<bool>,
-}
-/// 背调订单列表请求
-#[derive(.*?)]
-pub struct BackgroundCheckOrderListRequest {
-    /// 分页大小
-    pub page_size: Option<u32>,
-    /// 分页标记
-    pub page_token: Option<String>,
-    /// 候选人ID
-    pub talent_id: Option<String>,
-    /// 订单状态
-    pub status: Option<String>,
-    /// 创建时间开始
-    pub created_start_time: Option<String>,
-    /// 创建时间结束
-    pub created_end_time: Option<String>,
-}
-/// 背调包列表响应
-#[derive(.*?)]
-pub struct BackgroundCheckPackageListResponse {
-    /// 背调包列表
-#[serde(flatten)]
-    pub packages: PageResponse<BackgroundCheckPackage>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 背调订单列表响应
-#[derive(.*?)]
-pub struct BackgroundCheckOrderListResponse {
-    /// 背调订单列表
-#[serde(flatten)]
-    pub orders: PageResponse<BackgroundCheckOrder>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 背调订单详情响应
-#[derive(.*?)]
-pub struct BackgroundCheckOrderDetailResponse {
-    /// 背调订单信息
-    pub order: BackgroundCheckOrder,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 背调操作响应
-#[derive(.*?)]
-pub struct BackgroundCheckOperationResponse {
-    /// 操作结果
-#[serde(flatten)]
-    pub result: CommonResponse,
-    /// 相关ID
-    pub id: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl BackgroundCheckService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 背调订单列表响应
+#[derive(Debug, Clone)]
 }
-/// 获取背调包列表
+pub struct BackgroundCheckOrderListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 背调订单详情响应
+#[derive(Debug, Clone)]
+}
+pub struct BackgroundCheckOrderDetailResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 背调操作响应
+#[derive(Debug, Clone)]
+}
+pub struct BackgroundCheckOperationResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl BackgroundCheckService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 获取背调包列表
     ///,
 /// 该接口用于获取可用的背调包列表，包括不同供应商
     /// 提供的背调服务包，支持按供应商、启用状态等条件筛选。
@@ -311,8 +242,7 @@ impl BackgroundCheckService {
 ///     for package in &data.packages.items {
     ///         println!("背调包: {} 价格: {:?}" package.name, package.price);
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_packages(
         &self,
         request: BackgroundCheckPackageListRequest,
@@ -330,19 +260,13 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(vendor) = request.vendor {,
             api_req.query_params.insert("vendor", vendor);
-}
 if let Some(enabled) = request.enabled {,
             api_req.query_params.insert("enabled", enabled.to_string());
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 创建背调订单
     ///,
 /// 该接口用于为候选人创建背调订单，选择背调包
@@ -419,9 +343,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取背调订单详情
     ///,
 /// 该接口用于获取指定背调订单的详细信息，包括
@@ -450,8 +372,7 @@ let api_req = ApiRequest {,
     ///     println!("订单状态: {}" data.order.status);
     ///     println!("背调结果: {:?}" data.order.result);
     ///     println!("报告链接: {:?}" data.order.report_url);
-    /// }
-/// ```
+    /// /// ```
     pub async fn get_order_detail(
         &self,
         order_id: &str,
@@ -468,9 +389,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取背调订单列表
     ///,
 /// 该接口用于获取企业的背调订单列表，支持按候选人、
@@ -515,8 +434,7 @@ let api_req = ApiRequest {,
 ///     for order in &data.orders.items {
     ///         println!("订单: {} 状态: {}" order.id, order.status);
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_orders(
         &self,
         request: BackgroundCheckOrderListRequest,
@@ -534,29 +452,21 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(talent_id) = request.talent_id {,
             api_req.query_params.insert("talent_id", talent_id);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert("status", status);
-}
 if let Some(created_start_time) = request.created_start_time {,
             api_req
 .query_params
                 .insert("created_start_time", created_start_time);
-}
 if let Some(created_end_time) = request.created_end_time {,
             api_req
 .query_params
                 .insert("created_end_time", created_end_time);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 取消背调订单
     ///,
 /// 该接口用于取消尚未完成的背调订单，
@@ -582,11 +492,10 @@ if let Some(created_end_time) = request.created_end_time {,
         reason: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BackgroundCheckOperationResponse>> {,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
         struct CancelOrderRequest {
             reason: String,
-        }
-let request = CancelOrderRequest {,
+        let request = CancelOrderRequest {,
             reason: reason.to_string(),
         };
 let api_req = ApiRequest {,
@@ -601,7 +510,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取背调报告
     ///,
 /// 该接口用于下载已完成的背调报告，
@@ -634,9 +542,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量创建背调订单
     ///,
 /// 该接口用于批量为多个候选人创建背调订单，
@@ -660,8 +566,7 @@ let api_req = ApiRequest {,
     ///         application_id: "app_002".to_string()
     ///         package_id: "pkg_789".to_string()
     ///         // ... 其他参数
-    ///     }
-    /// ];
+    ///     /// ];
 ///,
     /// let response = client.hire.ecological_docking.background_check.batch_create_orders(orders None).await?;
 /// ```
@@ -670,11 +575,10 @@ let api_req = ApiRequest {,
         orders: Vec<BackgroundCheckOrderCreateRequest>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BackgroundCheckOperationResponse>> {,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
         struct BatchCreateRequest {
             orders: Vec<BackgroundCheckOrderCreateRequest>,
         }
-
         let request = BatchCreateRequest { orders };
 let api_req = ApiRequest {,
             http_method: Method::POST,
@@ -683,7 +587,6 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

@@ -2,30 +2,28 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::hire::models::{CommonResponse, PageResponse}
 };
 /// 外部系统服务
 pub struct ExternalSystemService {
+}
     pub config: Config,
-}
 /// 外部系统配置
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ExternalSystemConfig {
-    // TODO: Add fields
 }
+    // TODO: Add fields
 /// 外部系统同步记录
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ExternalSystemSyncRecord {
+}
     /// 同步记录ID
     pub id: String,
     /// 外部系统配置ID
@@ -46,10 +44,10 @@ pub struct ExternalSystemSyncRecord {
     pub sync_logs: Vec<String>,
     /// 创建时间
     pub created_time: Option<String>,
-}
 /// 同步统计信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SyncStatistics {
+}
     /// 总处理数量
     pub total_count: u32,
     /// 成功数量
@@ -62,10 +60,10 @@ pub struct SyncStatistics {
     pub created_count: u32,
     /// 更新数量
     pub updated_count: u32,
-}
 /// 外部候选人数据
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ExternalCandidate {
+}
     /// 外部候选人ID
     pub external_id: String,
     /// 外部系统配置ID
@@ -96,10 +94,10 @@ pub struct ExternalCandidate {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 外部系统配置创建请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ExternalSystemConfigCreateRequest {
+}
     /// 系统名称
     pub system_name: String,
     /// 系统类型
@@ -118,104 +116,52 @@ pub struct ExternalSystemConfigCreateRequest {
     pub sync_frequency: Option<String>,
     /// 是否启用
     pub enabled: Option<bool>,
-}
 /// 同步任务创建请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SyncTaskCreateRequest {
-    /// 外部系统配置ID
-    pub system_config_id: String,
-    /// 同步类型
-    pub sync_type: String,
-    /// 同步参数
-    pub sync_params: Option<serde_json::Value>,
 }
-/// 外部候选人导入请求
-#[derive(.*?)]
-pub struct ExternalCandidateImportRequest {
-    /// 外部系统配置ID
-    pub system_config_id: String,
-    /// 外部候选人数据列表
-    pub candidates: Vec<ExternalCandidateData>,
-}
-/// 外部候选人数据
-#[derive(.*?)]
-pub struct ExternalCandidateData {
-    /// 外部候选人ID
-    pub external_id: String,
-    /// 候选人姓名
-    pub name: String,
-    /// 候选人邮箱
-    pub email: Option<String>,
-    /// 候选人电话
-    pub phone: Option<String>,
-    /// 简历数据
-    pub resume_data: Option<serde_json::Value>,
-    /// 技能标签
-    pub skills: Vec<String>,
-    /// 工作经验
-    pub work_experience: Option<u32>,
-    /// 教育背景
-    pub education: Option<String>,
-    /// 外部数据
-    pub external_data: Option<serde_json::Value>,
-}
-/// 外部系统配置列表响应
-#[derive(.*?)]
-pub struct ExternalSystemConfigListResponse {
-    /// 外部系统配置列表
-#[serde(flatten)]
-    pub configs: PageResponse<ExternalSystemConfig>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 外部系统同步记录列表响应
-#[derive(.*?)]
-pub struct ExternalSystemSyncRecordListResponse {
-    /// 同步记录列表
-#[serde(flatten)]
-    pub records: PageResponse<ExternalSystemSyncRecord>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 外部候选人列表响应
-#[derive(.*?)]
-pub struct ExternalCandidateListResponse {
-    /// 外部候选人列表
-#[serde(flatten)]
-    pub candidates: PageResponse<ExternalCandidate>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 外部系统操作响应
-#[derive(.*?)]
-pub struct ExternalSystemOperationResponse {
-    /// 操作结果
-#[serde(flatten)]
-    pub result: CommonResponse,
-    /// 相关ID
-    pub id: Option<String>,
-    /// 统计信息
-    pub statistics: Option<SyncStatistics>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl ExternalSystemService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 外部系统同步记录列表响应
+#[derive(Debug, Clone)]
 }
-/// 创建外部系统配置
+pub struct ExternalSystemSyncRecordListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 外部候选人列表响应
+#[derive(Debug, Clone)]
+}
+pub struct ExternalCandidateListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 外部系统操作响应
+#[derive(Debug, Clone)]
+}
+pub struct ExternalSystemOperationResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl ExternalSystemService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建外部系统配置
     ///,
 /// 该接口用于创建外部系统对接配置，设置系统基本信息、
     /// 接口地址、认证方式、数据映射等配置。创建成功后
@@ -281,9 +227,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取外部系统配置列表
     ///,
 /// 该接口用于获取已配置的外部系统列表，支持按系统类型、
@@ -321,8 +265,7 @@ let api_req = ApiRequest {,
 ///     for config in &data.configs.items {
     ///         println!("系统: {} ({})" config.system_name, if config.enabled { "启用" } else { "禁用" });
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_system_configs(
         &self,
         page_size: Option<u32>,
@@ -343,19 +286,13 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(system_type) = system_type {,
             api_req.query_params.insert("system_type", system_type);
-}
 if let Some(enabled) = enabled {,
             api_req.query_params.insert("enabled", enabled.to_string());
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 创建同步任务
     ///,
 /// 该接口用于创建外部系统数据同步任务，支持手动
@@ -398,9 +335,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取同步记录列表
     ///,
 /// 该接口用于获取外部系统的同步记录列表，包括同步状态、
@@ -441,8 +376,7 @@ let api_req = ApiRequest {,
     ///             println!("同步: {} 成功: {}/{}" record.id, stats.success_count, stats.total_count);
     ///         }
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_sync_records(
         &self,
         system_config_id: Option<String>,
@@ -464,24 +398,17 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("system_config_id", system_config_id);
-}
 if let Some(sync_type) = sync_type {,
             api_req.query_params.insert("sync_type", sync_type);
-}
 if let Some(status) = status {,
             api_req.query_params.insert("status", status);
-}
 if let Some(page_size) = page_size {,
             api_req
 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 导入外部候选人
     ///,
 /// 该接口用于批量导入外部系统的候选人数据，
@@ -534,9 +461,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取外部候选人列表
     ///,
 /// 该接口用于获取从外部系统同步的候选人列表，支持按
@@ -576,8 +501,7 @@ let api_req = ApiRequest {,
 ///     for candidate in &data.candidates.items {
     ///         println!("候选人: {} ({}年经验)" candidate.name, candidate.work_experience.unwrap_or(0));
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_external_candidates(
         &self,
         system_config_id: Option<String>,
@@ -599,24 +523,17 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("system_config_id", system_config_id);
-}
 if let Some(sync_status) = sync_status {,
             api_req.query_params.insert("sync_status", sync_status);
-}
 if let Some(skills) = skills {,
             api_req.query_params.insert("skills", skills);
-}
 if let Some(page_size) = page_size {,
             api_req
 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 将外部候选人转换为内部人才
     ///,
 /// 该接口用于将外部系统的候选人数据转换为内部
@@ -652,9 +569,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 测试外部系统连接
     ///,
 /// 该接口用于测试外部系统的连接和认证配置，
@@ -690,7 +605,6 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

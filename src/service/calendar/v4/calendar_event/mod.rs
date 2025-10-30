@@ -15,12 +15,12 @@ pub mod unsubscription;
 ///
 /// 提供日程的创建、删除、查询、更新、搜索等功能
 pub struct CalendarEventService {
-    pub config: Config,
 }
+pub config: Config,
 // Service 抽象接入：Calendar v4 CalendarEventService
 impl_full_service!(CalendarEventService, "calendar.event", "v4");
 impl CalendarEventService {
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self { config 
 }
-}
+}}

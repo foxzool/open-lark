@@ -2,16 +2,14 @@ use serde::{Deserialize, Serialize};
 use crate::{,
     core::{
         api_req::api_resp::BaseResponse, constants::AccessTokenType,
-        endpoints::cloud_docs::*, req_option::RequestOption, SDKResult,
-    }
+        endpoints::cloud_docs::*, req_option::RequestOption, SDKResult}
     impl_executable_builder_owned,
     service::cloud_docs::sheets::v2::{
         spreadsheet_sheet::{OperateSheetResponse, OperateSheetsRequestElem}
         SpreadsheetSheetService,
-    }
 };
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateSheetPropertiesRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -29,10 +27,9 @@ pub struct UpdateSheetPropertiesRequest {
     #[serde(skip)]
     spreadsheet_token: String,
     /// 更新工作表属性的请求
-    requests: Vec<OperateSheetsRequestElem>,
-}
+    requests: Vec<OperateSheetsRequestElem>}
 /// 工作表属性,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateSheetProperty {
     /// 要更新的工作表的 ID。调用获取工作表获取 ID,
 #[serde(rename = "sheetId")]
@@ -53,10 +50,9 @@ pub struct UpdateSheetProperty {
     pub frozen_row_count: Option<i32>,
     /// 是否要保护该工作表,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub protect: Option<UpdateSheetPropertyProtect>,
-}
+    pub protect: Option<UpdateSheetPropertyProtect>}
 /// 是否要保护该工作表,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateSheetPropertyProtect {
     /// 是否要保护该工作表。可选值：,
 ///,
@@ -69,42 +65,17 @@ pub struct UpdateSheetPropertyProtect {
     /// 除了本人与所有者外，添加其他人员的 ID，为其它人员添加保护范围的编辑权限。ID 类型由查询参数,
 /// user_id_type 决定。user_id_type 不为空时，该字段生效。,
     #[serde(rename = "userIDs", skip_serializing_if = "Option::is_none")]
-    pub user_ids: Option<Vec<String>>,
-}
+    pub user_ids: Option<Vec<String>>}
 impl UpdateSheetPropertiesRequest {
-    pub fn w+.*{
-UpdateSheetPropertiesRequestBuilder::default(),
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct UpdateSheetPropertiesRequestBuilder {
-    request: UpdateSheetPropertiesRequest,
-}
+    request: UpdateSheetPropertiesRequest}
 impl UpdateSheetPropertiesRequestBuilder {
-    pub fn user_id_type(mut self, user_id_type: Option<String>) -> Self {
-self.request.user_id_type = user_id_type;
-        self,
-}
-
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
-self.request.spreadsheet_token = spreadsheet_token.to_string();
-        self,
-}
-
-    pub fn add_request(mut self, update_property: UpdateSheetProperty) -> Self {
-self.request,
-            .requests,
-.push(OperateSheetsRequestElem::UpdateSheet {,
-                properties: update_property,
-            });
-self,
-    }
-pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-self.request,
-    }
-}
-impl_executable_builder_owned!(,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}impl_executable_builder_owned!(,
     UpdateSheetPropertiesRequestBuilder,
     SpreadsheetSheetService,
     UpdateSheetPropertiesRequest,
@@ -112,24 +83,9 @@ impl_executable_builder_owned!(,
     update_sheet_properties,
 );
 impl SpreadsheetSheetService {
-pub async fn update_sheet_properties(,
-        &self,
-        request: UpdateSheetPropertiesRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<OperateSheetResponse>> {,
-let mut api_req = request.api_request;
-        api_req.set_api_path(
-            SHEETS_V2_SPREADSHEET_SHEETS_BATCH_UPDATE.replace("{}", &request.spreadsheet_token),
-        );
-api_req.set_http_method(reqwest::Method::POST);
-        api_req
-            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::App]);
-let api_resp =,
-            crate::core::http::Transport::request(api_req, &self.config_arc, option).await?;
-Ok(api_resp),
-    }
-}
-#[cfg(test)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[cfg(test)]
 mod tests {
 use super::*;
     use crate::core::{api_resp::BaseResponse, config::Config};
@@ -138,11 +94,10 @@ use rstest::*;
 Config::builder()
             .app_id()
 .app_secret()
-            .build(),
-}
+            .build()}
 // Test UpdateSheetProperty struct,
     #[test]
-fn test_update_sheet_property_default() {,
+fn test_update_sheet_property_default() {
         let property = UpdateSheetProperty::default();
         assert_eq!(property.sheet_id, "");
         assert_eq!(property.title, "");
@@ -153,7 +108,7 @@ assert!(property.frozen_col_count.is_none());
 assert!(property.protect.is_none());
     }
 #[test]
-    fn test_update_sheet_property_creation() {,
+    fn test_update_sheet_property_creation() {
 let property = UpdateSheetProperty {,
             sheet_id: "sheet123".to_string(),
             title: "Test Sheet".to_string(),
@@ -161,8 +116,7 @@ let property = UpdateSheetProperty {,
             hidden: Some(false),
             frozen_col_count: Some(2),
             frozen_row_count: Some(1),
-            protect: None,
-        };
+            protect: None};
 
         assert_eq!(property.sheet_id, "sheet123");
         assert_eq!(property.title, "Test Sheet");
@@ -173,12 +127,11 @@ let property = UpdateSheetProperty {,
 assert!(property.protect.is_none());
     }
 #[test]
-    fn test_update_sheet_property_with_protect() {,
+    fn test_update_sheet_property_with_protect() {
 let protect = UpdateSheetPropertyProtect {,
             lock: true,
             lock_info: Some("Protected by system".to_string()),
-            user_ids: Some(vec!["user1".to_string(), "user2".to_string()]),
-        };
+            user_ids: Some(vec!["user1".to_string(), "user2".to_string()])};
 let property = UpdateSheetProperty {,
             sheet_id: "sheet456".to_string(),
             title: "Protected Sheet".to_string(),
@@ -186,8 +139,7 @@ let property = UpdateSheetProperty {,
             hidden: Some(true),
             frozen_col_count: Some(0),
             frozen_row_count: Some(0),
-            protect: Some(protect),
-        };
+            protect: Some(protect)};
 
         assert_eq!(property.sheet_id, "sheet456");
         assert_eq!(property.title, "Protected Sheet");
@@ -204,7 +156,7 @@ assert!(protect_ref.lock);
 );
     }
 #[test]
-    fn test_update_sheet_property_serialization() {,
+    fn test_update_sheet_property_serialization() {
 let property = UpdateSheetProperty {,
             sheet_id: "sheet789".to_string(),
             title: "Serialization Test".to_string(),
@@ -212,8 +164,7 @@ let property = UpdateSheetProperty {,
             hidden: Some(false),
             frozen_col_count: None,
             frozen_row_count: None,
-            protect: None,
-        };
+            protect: None};
 let json = serde_json::to_string(&property).unwrap();
         assert!(json.contains("\"sheetId\":\"sheet789\""));
 assert!(json.contains("\"title\":\"Serialization Test\""));
@@ -225,15 +176,14 @@ assert!(!json.contains("frozenColCount"));
 assert!(!json.contains("protect"));
     }
 #[test]
-    fn test_update_sheet_property_deserialization() {,
+    fn test_update_sheet_property_deserialization() {
 let json = r#"{,
             "sheetId": "deserial123",
             "title": "Deserialized Sheet",
             "index": 3,
             "hidden": true,
             "frozenColCount": 5,
-            "frozenRowCount": 2,
-}"#;
+            "frozenRowCount": 2}"#;
 let property: UpdateSheetProperty = serde_json::from_str(json).unwrap();
         assert_eq!(property.sheet_id, "deserial123");
         assert_eq!(property.title, "Deserialized Sheet");
@@ -244,7 +194,7 @@ let property: UpdateSheetProperty = serde_json::from_str(json).unwrap();
 assert!(property.protect.is_none());
     }
 #[test]
-    fn test_update_sheet_property_debug() {,
+    fn test_update_sheet_property_debug() {
 let property = UpdateSheetProperty {,
             sheet_id: "debug_sheet".to_string(),
             title: "Debug Test".to_string(),
@@ -252,8 +202,7 @@ let property = UpdateSheetProperty {,
             hidden: Some(false),
             frozen_col_count: Some(1),
             frozen_row_count: Some(1),
-            protect: None,
-        };
+            protect: None};
 
         let debug_str = format!("{:?}", property);
 assert!(debug_str.contains("UpdateSheetProperty"));
@@ -262,46 +211,40 @@ assert!(debug_str.contains("Debug Test"));
     }
 // Test UpdateSheetPropertyProtect struct,
     #[test]
-fn test_update_sheet_property_protect_creation() {,
+fn test_update_sheet_property_protect_creation() {
         let protect = UpdateSheetPropertyProtect {
             lock: true,
             lock_info: Some("Protected sheet".to_string()),
-            user_ids: Some(vec!["user123".to_string()]),
-        };
+            user_ids: Some(vec!["user123".to_string()])};
 assert!(protect.lock);
         assert_eq!(protect.lock_info, Some("Protected sheet".to_string()));
         assert_eq!(protect.user_ids, Some(vec!["user123".to_string()]));
-}
 #[test]
-    fn test_update_sheet_property_protect_unlock() {,
+    fn test_update_sheet_property_protect_unlock() {
 let protect = UpdateSheetPropertyProtect {,
             lock: false,
             lock_info: None,
-            user_ids: None,
-        };
+            user_ids: None};
 assert!(!protect.lock);
         assert!(protect.lock_info.is_none());
 assert!(protect.user_ids.is_none());
     }
 #[test]
-    fn test_update_sheet_property_protect_serialization() {,
+    fn test_update_sheet_property_protect_serialization() {
 let protect = UpdateSheetPropertyProtect {,
             lock: true,
             lock_info: Some("Test protection".to_string()),
-            user_ids: Some(vec!["user1".to_string(), "user2".to_string()]),
-        };
+            user_ids: Some(vec!["user1".to_string(), "user2".to_string()])};
 let json = serde_json::to_string(&protect).unwrap();
         assert!(json.contains("\"lock\":true"));
 assert!(json.contains("\"lockInfo\":\"Test protection\""));
         assert!(json.contains("\"userIDs\":[\"user1\",\"user2\"]"));
-}
 #[test]
-    fn test_update_sheet_property_protect_serialization_none_fields() {,
+    fn test_update_sheet_property_protect_serialization_none_fields() {
 let protect = UpdateSheetPropertyProtect {,
             lock: false,
             lock_info: None,
-            user_ids: None,
-        };
+            user_ids: None};
 let json = serde_json::to_string(&protect).unwrap();
         assert!(json.contains("\"lock\":false"));
 // Optional None fields should not appear in JSON,
@@ -309,7 +252,7 @@ let json = serde_json::to_string(&protect).unwrap();
 assert!(!json.contains("userIDs"));
     }
 #[test]
-    fn test_update_sheet_property_protect_deserialization() {,
+    fn test_update_sheet_property_protect_deserialization() {
 let json = r#"{,
             "lock": true,
             "lockInfo": "Deserialized protection",
@@ -329,48 +272,44 @@ assert_eq!(,
                 "user_c".to_string(),
 ]),
         );
-}
 #[test]
-    fn test_update_sheet_property_protect_debug() {,
+    fn test_update_sheet_property_protect_debug() {
 let protect = UpdateSheetPropertyProtect {,
             lock: true,
             lock_info: Some("Debug protection".to_string()),
-            user_ids: Some(vec!["debug_user".to_string()]),
-        };
+            user_ids: Some(vec!["debug_user".to_string()])};
 
         let debug_str = format!("{:?}", protect);
 assert!(debug_str.contains("UpdateSheetPropertyProtect"));
         assert!(debug_str.contains("lock: true"));
 assert!(debug_str.contains("Debug protection"));
         assert!(debug_str.contains("debug_user"));
-}
 // Test UpdateSheetPropertiesRequest struct,
     #[test]
-fn test_update_sheet_properties_request_default() {,
+fn test_update_sheet_properties_request_default() {
         let request = UpdateSheetPropertiesRequest::default();
 assert!(request.user_id_type.is_none());
         assert_eq!(request.spreadsheet_token, "");
 assert!(request.requests.is_empty());
     }
 #[test]
-    fn test_update_sheet_properties_request_debug() {,
+    fn test_update_sheet_properties_request_debug() {
 let request = UpdateSheetPropertiesRequest::default();
         let debug_str = format!("{:?}", request);
 assert!(debug_str.contains("UpdateSheetPropertiesRequest"));
         assert!(debug_str.contains("user_id_type"));
 assert!(debug_str.contains("spreadsheet_token"));
         assert!(debug_str.contains("requests"));
-}
 // Test UpdateSheetPropertiesRequestBuilder,
     #[test]
-fn test_update_sheet_properties_request_builder_creation() {,
+fn test_update_sheet_properties_request_builder_creation() {
         let builder = UpdateSheetPropertiesRequest::builder();
 assert!(builder.request.user_id_type.is_none());
         assert_eq!(builder.request.spreadsheet_token, "");
 assert!(builder.request.requests.is_empty());
     }
 #[test]
-    fn test_update_sheet_properties_request_builder_with_user_id_type() {,
+    fn test_update_sheet_properties_request_builder_with_user_id_type() {
 let request = UpdateSheetPropertiesRequest::builder(),
             .user_id_type(Some("open_id".to_string())),
 .spreadsheet_token()
@@ -381,16 +320,15 @@ let request = UpdateSheetPropertiesRequest::builder(),
 assert!(request.requests.is_empty());
     }
 #[test]
-    fn test_update_sheet_properties_request_builder_with_spreadsheet_token() {,
+    fn test_update_sheet_properties_request_builder_with_spreadsheet_token() {
 let request = UpdateSheetPropertiesRequest::builder(),
             .spreadsheet_token()
 .build();
         assert_eq!(request.spreadsheet_token, "spreadsheet_token_123");
 assert!(request.user_id_type.is_none());
         assert!(request.requests.is_empty());
-}
 #[test]
-    fn test_update_sheet_properties_request_builder_add_request() {,
+    fn test_update_sheet_properties_request_builder_add_request() {
 let property = UpdateSheetProperty {,
             sheet_id: "sheet123".to_string(),
             title: "New Title".to_string(),
@@ -398,8 +336,7 @@ let property = UpdateSheetProperty {,
             hidden: Some(false),
             frozen_col_count: None,
             frozen_row_count: None,
-            protect: None,
-        };
+            protect: None};
 let request = UpdateSheetPropertiesRequest::builder(),
             .spreadsheet_token()
 .add_request()
@@ -414,12 +351,10 @@ let request = UpdateSheetPropertiesRequest::builder(),
                 assert_eq!(properties.title, "New Title");
                 assert_eq!(properties.index, Some(0));
                 assert_eq!(properties.hidden, Some(false));
-}
             _ => panic!("Expected UpdateSheet variant"),
         }
-}
 #[test]
-    fn test_update_sheet_properties_request_builder_multiple_requests() {,
+    fn test_update_sheet_properties_request_builder_multiple_requests() {
 let property1 = UpdateSheetProperty {,
             sheet_id: "sheet1".to_string(),
             title: "Sheet One".to_string(),
@@ -427,8 +362,7 @@ let property1 = UpdateSheetProperty {,
             hidden: Some(false),
             frozen_col_count: None,
             frozen_row_count: None,
-            protect: None,
-        };
+            protect: None};
 let property2 = UpdateSheetProperty {,
             sheet_id: "sheet2".to_string(),
             title: "Sheet Two".to_string(),
@@ -436,8 +370,7 @@ let property2 = UpdateSheetProperty {,
             hidden: Some(true),
             frozen_col_count: Some(2),
             frozen_row_count: Some(1),
-            protect: None,
-        };
+            protect: None};
 let request = UpdateSheetPropertiesRequest::builder(),
             .spreadsheet_token()
 .add_request()
@@ -452,7 +385,6 @@ let request = UpdateSheetPropertiesRequest::builder(),
                 assert_eq!(properties.title, "Sheet One");
                 assert_eq!(properties.index, Some(0));
                 assert_eq!(properties.hidden, Some(false));
-}
             _ => panic!("Expected UpdateSheet variant for first request"),
         }
 // Check second request,
@@ -464,12 +396,10 @@ let request = UpdateSheetPropertiesRequest::builder(),
                 assert_eq!(properties.hidden, Some(true));
                 assert_eq!(properties.frozen_col_count, Some(2));
                 assert_eq!(properties.frozen_row_count, Some(1));
-}
             _ => panic!("Expected UpdateSheet variant for second request"),
         }
-}
 #[test]
-    fn test_update_sheet_properties_request_builder_chaining() {,
+    fn test_update_sheet_properties_request_builder_chaining() {
 let property = UpdateSheetProperty {,
             sheet_id: "chain_sheet".to_string(),
             title: "Chained Sheet".to_string(),
@@ -477,8 +407,7 @@ let property = UpdateSheetProperty {,
             hidden: Some(false),
             frozen_col_count: Some(3),
             frozen_row_count: Some(2),
-            protect: None,
-        };
+            protect: None};
 let request = UpdateSheetPropertiesRequest::builder(),
             .user_id_type(Some("union_id".to_string())),
 .spreadsheet_token()
@@ -487,9 +416,8 @@ let request = UpdateSheetPropertiesRequest::builder(),
         assert_eq!(request.user_id_type, Some("union_id".to_string()));
         assert_eq!(request.spreadsheet_token, "chain_token");
         assert_eq!(request.requests.len(), 1);
-}
 #[test]
-    fn test_update_sheet_properties_request_serialization() {,
+    fn test_update_sheet_properties_request_serialization() {
 let property = UpdateSheetProperty {,
             sheet_id: "serialize_sheet".to_string(),
             title: "Serialize Test".to_string(),
@@ -497,8 +425,7 @@ let property = UpdateSheetProperty {,
             hidden: Some(false),
             frozen_col_count: None,
             frozen_row_count: None,
-            protect: None,
-        };
+            protect: None};
 let request = UpdateSheetPropertiesRequest::builder(),
             .spreadsheet_token()
 .add_request()
@@ -520,7 +447,7 @@ assert!(!properties["hidden"].as_bool().unwrap());
     }
 // Test edge cases,
     #[test]
-fn test_update_sheet_property_with_unicode() {,
+fn test_update_sheet_property_with_unicode() {
         let property = UpdateSheetProperty {
             sheet_id: "unicode_sheet".to_string(),
             title: "测试工作表 🧪".to_string(),
@@ -528,16 +455,14 @@ fn test_update_sheet_property_with_unicode() {,
             hidden: Some(false),
             frozen_col_count: None,
             frozen_row_count: None,
-            protect: None,
-        };
+            protect: None};
 let json = serde_json::to_string(&property).unwrap();
         assert!(json.contains("测试工作表 🧪"));
 // Test round-trip,
         let parsed: UpdateSheetProperty = serde_json::from_str(&json).unwrap();
         assert_eq!(parsed.title, "测试工作表 🧪");
-}
 #[test]
-    fn test_update_sheet_property_with_extreme_values() {,
+    fn test_update_sheet_property_with_extreme_values() {
 let property = UpdateSheetProperty {,
             sheet_id: "extreme_sheet".to_string(),
             title: "Extreme Test".to_string(),
@@ -545,16 +470,14 @@ let property = UpdateSheetProperty {,
             hidden: Some(true),
             frozen_col_count: Some(i32::MAX),
             frozen_row_count: Some(i32::MIN),
-            protect: None,
-        };
+            protect: None};
 let json = serde_json::to_string(&property).unwrap();
         let parsed: UpdateSheetProperty = serde_json::from_str(&json).unwrap();
         assert_eq!(parsed.index, Some(i32::MAX));
         assert_eq!(parsed.frozen_col_count, Some(i32::MAX));
         assert_eq!(parsed.frozen_row_count, Some(i32::MIN));
-}
 #[test]
-    fn test_update_sheet_property_with_empty_strings() {,
+    fn test_update_sheet_property_with_empty_strings() {
 let property = UpdateSheetProperty {,
             sheet_id: "".to_string(),
             title: "".to_string(),
@@ -562,8 +485,7 @@ let property = UpdateSheetProperty {,
             hidden: Some(false),
             frozen_col_count: Some(0),
             frozen_row_count: Some(0),
-            protect: None,
-        };
+            protect: None};
 let json = serde_json::to_string(&property).unwrap();
         let parsed: UpdateSheetProperty = serde_json::from_str(&json).unwrap();
         assert_eq!(parsed.sheet_id, "");
@@ -571,9 +493,8 @@ let json = serde_json::to_string(&property).unwrap();
         assert_eq!(parsed.index, Some(0));
         assert_eq!(parsed.frozen_col_count, Some(0));
         assert_eq!(parsed.frozen_row_count, Some(0));
-}
 #[test]
-    fn test_update_sheet_property_protect_with_multiple_users() {,
+    fn test_update_sheet_property_protect_with_multiple_users() {
 let user_ids = vec![,
             "user1".to_string(),
             "user2".to_string(),
@@ -584,23 +505,19 @@ let user_ids = vec![,
 let protect = UpdateSheetPropertyProtect {,
             lock: true,
             lock_info: Some("Multi-user protection".to_string()),
-            user_ids: Some(user_ids.clone()),
-        };
+            user_ids: Some(user_ids.clone())};
 let json = serde_json::to_string(&protect).unwrap();
         let parsed: UpdateSheetPropertyProtect = serde_json::from_str(&json).unwrap();
         assert_eq!(parsed.user_ids, Some(user_ids));
-}
 #[test]
-    fn test_update_sheet_property_protect_with_empty_user_list() {,
+    fn test_update_sheet_property_protect_with_empty_user_list() {
 let protect = UpdateSheetPropertyProtect {,
             lock: true,
             lock_info: Some("Empty user list".to_string()),
-            user_ids: Some(vec![]),
-        };
+            user_ids: Some(vec![])};
 let json = serde_json::to_string(&protect).unwrap();
         let parsed: UpdateSheetPropertyProtect = serde_json::from_str(&json).unwrap();
         assert_eq!(parsed.user_ids, Some(vec![]));
-}
 #[rstest]
     #[case("open_id", "Open ID type")]
     #[case("union_id", "Union ID type")]
@@ -616,7 +533,6 @@ let request = UpdateSheetPropertiesRequest::builder(),
 
         assert_eq!(request.user_id_type, Some(user_id_type.to_string()));
         println!("Test passed for: {}", description);
-}
 #[rstest]
     #[case(Some(0), "First position")]
     #[case(Some(1), "Second position")]
@@ -633,14 +549,12 @@ let property = UpdateSheetProperty {,
             hidden: Some(false),
             frozen_col_count: None,
             frozen_row_count: None,
-            protect: None,
-        };
+            protect: None};
 
         assert_eq!(property.index, index);
         println!("Test passed for: {}", description);
-}
 #[test]
-    fn test_update_sheet_properties_request_memory_efficiency() {,
+    fn test_update_sheet_properties_request_memory_efficiency() {
 let mut builder =,
             UpdateSheetPropertiesRequest::builder().spreadsheet_token("memory_test_token");
 // Add 100 sheet property updates,
@@ -659,17 +573,15 @@ builder = builder.add_request(property);
 let request = builder.build();
         assert_eq!(request.requests.len(), 100);
         assert_eq!(request.spreadsheet_token, "memory_test_token");
-}
 // Test SpreadsheetSheetService integration,
     #[test]
-fn test_spreadsheet_sheet_service_creation() {,
+fn test_spreadsheet_sheet_service_creation() {
         let config = create_test_config();
 let _service = SpreadsheetSheetService::new(config);
         // Just verify the service can be created without panicking,
-// Test passes if we reach this point without panicking,
-    }
+// Test passes if we reach this point without panicking}
 #[test]
-    fn test_update_sheet_properties_response_format() {,
+    fn test_update_sheet_properties_response_format() {
 // Test that we can parse the expected response format,
         let json_response = r#"{
             "code": 0,
@@ -682,12 +594,9 @@ let _service = SpreadsheetSheetService::new(config);
                                 "sheetId": "updated_sheet",
                                 "title": "Updated Title",
                                 "index": 0,
-                                "hidden": false,
-}
+                                "hidden": false}
                         }
-}
 ],
-            }
 }"#;
 let response: BaseResponse<OperateSheetResponse> =,
             serde_json::from_str(json_response).unwrap();
@@ -696,15 +605,13 @@ let response: BaseResponse<OperateSheetResponse> =,
 assert!(response.data.is_some());
         let data = response.data.unwrap();
         assert_eq!(data.replies.len(), 1);
-}
 #[test]
     ,
         // Test a complex scenario with protection, freezing, and positioning,
 let protect = UpdateSheetPropertyProtect {,
             lock: true,
             lock_info: Some("Sensitive data protection".to_string()),
-            user_ids: Some(vec!["admin1".to_string(), "admin2".to_string()]),
-        };
+            user_ids: Some(vec!["admin1".to_string(), "admin2".to_string()])};
 let property1 = UpdateSheetProperty {,
             sheet_id: "sheet_complex_1".to_string(),
             title: "Financial Data".to_string(),
@@ -712,8 +619,7 @@ let property1 = UpdateSheetProperty {,
             hidden: Some(false),
             frozen_col_count: Some(3),
             frozen_row_count: Some(1),
-            protect: Some(protect),
-        };
+            protect: Some(protect)};
 let property2 = UpdateSheetProperty {,
             sheet_id: "sheet_complex_2".to_string(),
             title: "Backup Sheet".to_string(),
@@ -721,8 +627,7 @@ let property2 = UpdateSheetProperty {,
             hidden: Some(true),
             frozen_col_count: None,
             frozen_row_count: None,
-            protect: None,
-        };
+            protect: None};
 let request = UpdateSheetPropertiesRequest::builder(),
             .user_id_type(Some("union_id".to_string())),
 .spreadsheet_token()
@@ -738,5 +643,3 @@ let request = UpdateSheetPropertiesRequest::builder(),
 let body_str = String::from_utf8(request.api_request.body).unwrap();
         let parsed: serde_json::Value = serde_json::from_str(&body_str).unwrap();
         assert_eq!(parsed["requests"].as_array().unwrap().len(), 2);
-}
-}

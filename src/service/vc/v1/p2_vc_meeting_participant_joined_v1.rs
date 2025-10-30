@@ -2,18 +2,16 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2VcMeetingParticipantJoinedV1 {
     pub schema: String,
     pub header: EventHeader,
     pub event: P2VcMeetingParticipantJoinedV1Data,
-}
 pub(crate) struct P2VcMeetingParticipantJoinedV1ProcessorImpl<F>,
 where
     F: Fn(P2VcMeetingParticipantJoinedV1) + 'static,
 {
     f: F,
-}
 impl<F> EventHandler for P2VcMeetingParticipantJoinedV1ProcessorImpl<F>,
 where
     F: Fn(P2VcMeetingParticipantJoinedV1) + 'static + Sync + Send,
@@ -23,26 +21,22 @@ let event: P2VcMeetingParticipantJoinedV1 = serde_json::from_slice(payload)?;
         (self.f)(event);
 Ok(()),
     }
-}
 impl<F> P2VcMeetingParticipantJoinedV1ProcessorImpl<F>,
 where
     F: Fn(P2VcMeetingParticipantJoinedV1) + 'static,
 {,
 pub(crate) fn new(f: F) -> Self {
         P2VcMeetingParticipantJoinedV1ProcessorImpl { f }
-}
-}
 /// 视频会议参与者加入事件数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2VcMeetingParticipantJoinedV1Data {
     /// 事件对象
     pub object: VcParticipantEventObject,
     /// 会议当前状态,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub meeting_status: Option<String>,
-}
 /// 视频会议参与者事件对象,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct VcParticipantEventObject {
     /// 对象类型 (meeting_participant)
     pub object_type: String,
@@ -50,9 +44,8 @@ pub struct VcParticipantEventObject {
     pub participant: JoinedMeetingParticipant,
     /// 会议基本信息
     pub meeting: MeetingBasicInfo,
-}
 /// 加入会议的参与者信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct JoinedMeetingParticipant {
     /// 用户ID
     pub user_id: String,
@@ -91,9 +84,8 @@ pub struct JoinedMeetingParticipant {
     /// 参与者权限,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub permissions: Option<ParticipantPermissions>,
-}
 /// 会议基本信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct MeetingBasicInfo {
     /// 会议ID
     pub meeting_id: String,
@@ -112,9 +104,8 @@ pub struct MeetingBasicInfo {
     /// 会议开始时间 (Unix时间戳，单位：秒),
 #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<String>,
-}
 /// 设备信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DeviceInfo {
     /// 设备类型 (web, desktop, mobile, room_system, phone),
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -131,9 +122,8 @@ pub struct DeviceInfo {
     /// 设备名称,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub device_name: Option<String>,
-}
 /// 网络信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct NetworkInfo {
     /// IP地址,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -150,9 +140,8 @@ pub struct NetworkInfo {
     /// 地理位置信息,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<GeographicLocation>,
-}
 /// 地理位置信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GeographicLocation {
     /// 国家,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -166,9 +155,8 @@ pub struct GeographicLocation {
     /// 时区,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub timezone: Option<String>,
-}
 /// 参与者状态,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ParticipantStatus {
     /// 音频状态 (muted, unmuted, unavailable),
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -185,9 +173,8 @@ pub struct ParticipantStatus {
     /// 在线状态 (online, away, busy),
 #[serde(skip_serializing_if = "Option::is_none")]
     pub presence_status: Option<String>,
-}
 /// 邀请信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct InvitationInfo {
     /// 邀请人ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -201,9 +188,8 @@ pub struct InvitationInfo {
     /// 是否通过等候室加入,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub joined_via_waiting_room: Option<bool>,
-}
 /// 参与者权限,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ParticipantPermissions {
     /// 是否可以开启/关闭麦克风,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -229,4 +215,3 @@ pub struct ParticipantPermissions {
     /// 是否可以查看参与者列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub can_view_participant_list: Option<bool>,
-}

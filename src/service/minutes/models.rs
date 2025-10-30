@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 /// 用户ID类型,
-#[derive(.*?)]
-pub enum UserIdType {,
+#[derive(Debug, Clone)]
+pub enum UserIdType {
     /// 用户ID,
 #[serde(rename = "user_id")]
     UserId,
@@ -11,18 +11,11 @@ pub enum UserIdType {,
     /// open_id,
 #[serde(rename = "open_id")]
     OpenId,
-}
 impl UserIdType {
-    pub fn w+.*{
-match self {,
-            UserIdType::UserId => "user_id",
-            UserIdType::UnionId => "union_id",
-            UserIdType::OpenId => "open_id",
-        }
-}
-}
-/// 妙记信息,
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 妙记信息,
+#[derive(Debug, Clone)]
 pub struct Minute {
     /// 妙记ID
     pub minute_id: String,
@@ -42,9 +35,8 @@ pub struct Minute {
     pub meeting_url: Option<String>,
     /// 会议ID
     pub meeting_id: Option<String>,
-}
 /// 用户信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UserInfo {
     /// 用户ID
     pub id: String,
@@ -52,9 +44,8 @@ pub struct UserInfo {
     pub name: Option<String>,
     /// 用户头像
     pub avatar_url: Option<String>,
-}
 /// 妙记音视频文件信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct MinuteMedia {
     /// 文件ID
     pub file_id: String,
@@ -68,9 +59,8 @@ pub struct MinuteMedia {
     pub download_url: Option<String>,
     /// 有效期
     pub expires_time: Option<String>,
-}
 /// 妙记文字记录,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct MinuteTranscript {
     /// 转录内容
     pub content: String,
@@ -80,9 +70,8 @@ pub struct MinuteTranscript {
     pub format: Option<String>,
     /// 创建时间
     pub create_time: Option<String>,
-}
 /// 妙记统计数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct MinuteStatistics {
     /// 会议时长（秒）
     pub duration: Option<i32>,
@@ -96,21 +85,19 @@ pub struct MinuteStatistics {
     pub mute_duration: Option<i32>,
     /// 关键词统计
     pub keywords: Option<Vec<KeywordStatistic>>,
-}
 /// 关键词统计,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct KeywordStatistic {
     /// 关键词
     pub keyword: String,
     /// 出现次数
     pub count: i32,
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]
-    fn test_user_id_type_serialization() {,
+    fn test_user_id_type_serialization() {
 let user_id = UserIdType::UserId;
         let serialized = serde_json::to_string(&user_id).unwrap();
         assert_eq!(serialized, "\"user_id\"");
@@ -120,24 +107,21 @@ let union_id = UserIdType::UnionId;
 let open_id = UserIdType::OpenId;
         let serialized = serde_json::to_string(&open_id).unwrap();
         assert_eq!(serialized, "\"open_id\"");
-}
 #[test]
-    fn test_user_id_type_deserialization() {,
+    fn test_user_id_type_deserialization() {
 let user_id: UserIdType = serde_json::from_str("\"user_id\"").unwrap();
         assert_eq!(user_id, UserIdType::UserId);
 let union_id: UserIdType = serde_json::from_str("\"union_id\"").unwrap();
         assert_eq!(union_id, UserIdType::UnionId);
 let open_id: UserIdType = serde_json::from_str("\"open_id\"").unwrap();
         assert_eq!(open_id, UserIdType::OpenId);
-}
 #[test]
     ,
         assert_eq!(UserIdType::UserId.as_str(), "user_id");
         assert_eq!(UserIdType::UnionId.as_str(), "union_id");
         assert_eq!(UserIdType::OpenId.as_str(), "open_id");
-}
 #[test]
-    fn test_minute_serialization() {,
+    fn test_minute_serialization() {
 let minute = Minute {,
             minute_id: "minute_123".to_string(),
             title: Some("项目讨论会议".to_string()),
@@ -165,9 +149,8 @@ assert_eq!(,
         assert!(deserialized.creator.is_some());
         assert_eq!(deserialized.creator.as_ref().unwrap().id, "creator_001");
         assert_eq!(deserialized.status, Some("completed".to_string()));
-}
 #[test]
-    fn test_minute_with_none_values() {,
+    fn test_minute_with_none_values() {
 let minute = Minute {,
             minute_id: "minute_minimal".to_string(),
             title: None,
@@ -187,9 +170,8 @@ assert!(deserialized.title.is_none());
         assert!(deserialized.create_time.is_none());
 assert!(deserialized.creator.is_none());
         assert!(deserialized.status.is_none());
-}
 #[test]
-    fn test_user_info_serialization() {,
+    fn test_user_info_serialization() {
 let user = UserInfo {,
             id: "user_456".to_string(),
             name: Some("李四".to_string()),
@@ -206,7 +188,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_user_info_minimal() {,
+    fn test_user_info_minimal() {
 let user = UserInfo {,
             id: "user_minimal".to_string(),
             name: None,
@@ -218,9 +200,8 @@ let serialized = serde_json::to_string(&user).unwrap();
         assert_eq!(deserialized.id, "user_minimal");
 assert!(deserialized.name.is_none());
         assert!(deserialized.avatar_url.is_none());
-}
 #[test]
-    fn test_minute_media_serialization() {,
+    fn test_minute_media_serialization() {
 let media = MinuteMedia {,
             file_id: "file_789".to_string(),
             filename: Some("meeting_recording.mp4".to_string()),
@@ -245,7 +226,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_minute_media_audio_file() {,
+    fn test_minute_media_audio_file() {
 let audio = MinuteMedia {,
             file_id: "audio_001".to_string(),
             filename: Some("meeting_audio.wav".to_string()),
@@ -261,7 +242,7 @@ let serialized = serde_json::to_string(&audio).unwrap();
 assert!(deserialized.file_size.unwrap() > 0);
     }
 #[test]
-    fn test_minute_transcript_serialization() {,
+    fn test_minute_transcript_serialization() {
 let transcript = MinuteTranscript {,
             content: "会议讨论了项目进度，决定下周进行代码审查。".to_string(),
             language: Some("zh-CN".to_string()),
@@ -276,9 +257,8 @@ assert_eq!(,
 );
         assert_eq!(deserialized.language, Some("zh-CN".to_string()));
         assert_eq!(deserialized.format, Some("text/plain".to_string()));
-}
 #[test]
-    fn test_minute_transcript_english() {,
+    fn test_minute_transcript_english() {
 let transcript = MinuteTranscript {,
             content: "The meeting discussed project milestones and deadlines.".to_string(),
             language: Some("en-US".to_string()),
@@ -292,7 +272,7 @@ let serialized = serde_json::to_string(&transcript).unwrap();
 assert!(deserialized.content.contains("project"));
     }
 #[test]
-    fn test_keyword_statistic_serialization() {,
+    fn test_keyword_statistic_serialization() {
 let keyword = KeywordStatistic {,
             keyword: "项目进度".to_string(),
             count: 15,
@@ -302,9 +282,8 @@ let serialized = serde_json::to_string(&keyword).unwrap();
 
         assert_eq!(deserialized.keyword, "项目进度");
         assert_eq!(deserialized.count, 15);
-}
 #[test]
-    fn test_minute_statistics_complete() {,
+    fn test_minute_statistics_complete() {
 let statistics = MinuteStatistics {,
             duration: Some(3600), // 1 hour
             participant_count: Some(8),
@@ -338,9 +317,8 @@ let keywords = deserialized.keywords.unwrap();
         assert_eq!(keywords[0].count, 25);
         assert_eq!(keywords[2].keyword, "代码审查");
         assert_eq!(keywords[2].count, 8);
-}
 #[test]
-    fn test_minute_statistics_minimal() {,
+    fn test_minute_statistics_minimal() {
 let statistics = MinuteStatistics {,
             duration: None,
             participant_count: None,
@@ -356,7 +334,7 @@ assert!(deserialized.duration.is_none());
 assert!(deserialized.keywords.is_none());
     }
 #[test]
-    fn test_minute_statistics_empty_keywords() {,
+    fn test_minute_statistics_empty_keywords() {
 let statistics = MinuteStatistics {,
             duration: Some(1800), // 30 minutes
             participant_count: Some(3),
@@ -371,9 +349,8 @@ let serialized = serde_json::to_string(&statistics).unwrap();
         assert_eq!(deserialized.duration, Some(1800));
 let keywords = deserialized.keywords.unwrap();
         assert_eq!(keywords.len(), 0);
-}
 #[test]
-    fn test_complex_minute_with_full_data() {,
+    fn test_complex_minute_with_full_data() {
 let complex_minute = Minute {,
             minute_id: "complex_minute_001".to_string(),
             title: Some("季度总结会议 - Q1 2024".to_string()),
@@ -402,4 +379,3 @@ let start = deserialized.start_time.unwrap();
         let end = deserialized.end_time.unwrap();
 assert!(start < end); // Start time should be before end time,
     }
-}

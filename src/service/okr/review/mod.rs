@@ -3,39 +3,35 @@ use serde::{Deserialize, Serialize};
 use open_lark_core::core::api_req::ApiRequest;
 use crate::{
     core::{,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::okr::*,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::okr::models::{PageResponse, Review}
 };
 /// OKR 复盘管理服务
 #[derive(Debug)]
 pub struct ReviewService {
+}
     pub config: Config,
-}
 /// 复盘查询响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ReviewQueryResponse {
-    /// 复盘列表
-#[serde(flatten)]
-    pub reviews: PageResponse<Review>,
 }
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 impl ReviewService {
-    /// 创建 OKR 复盘管理服务实例
-pub fn new() -> Self {
-        Self { config }
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 查询复盘信息
+}/// 查询复盘信息
     ///,
 /// 查询指定条件下的 OKR 复盘信息，支持按周期、用户等维度筛选。
     ///,
@@ -73,11 +69,9 @@ pub fn new() -> Self {
     ///                 println!("复盘内容: {}" content);
     ///             }
     ///         }
-    ///     }
-///,
+    ///     ///,
     ///     Ok(())
-    /// }
-/// ```
+    /// /// ```
     pub async fn query_reviews(
         &self,
         request: ReviewQueryRequest,
@@ -93,37 +87,27 @@ let mut api_req = ApiRequest {,
 // 添加查询参数
         if let Some(period_id) = request.period_id {
             api_req.query_params.insert("period_id", period_id);
-}
 if let Some(user_id) = request.user_id {,
             api_req.query_params.insert("user_id", user_id);
-}
 if let Some(okr_id) = request.okr_id {,
             api_req.query_params.insert("okr_id", okr_id);
-}
 if let Some(min_score) = request.min_score {,
             api_req
 .query_params
                 .insert("min_score", min_score.to_string());
-}
 if let Some(max_score) = request.max_score {,
             api_req
 .query_params
                 .insert("max_score", max_score.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert("page_size", page_size.to_string());
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
 /// 复盘查询请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ReviewQueryRequest {
     /// 周期ID筛选
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -147,3 +131,4 @@ pub struct ReviewQueryRequest {
 #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
 }
+}}}}}}}}}}}}}}}

@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 认证信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct VerificationInfo {
     /// 应用ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -29,9 +29,8 @@ pub struct VerificationInfo {
     /// 租户信息,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub tenant_info: Option<TenantInfo>,
-}
 /// 租户信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct TenantInfo {
     /// 租户key,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -39,12 +38,11 @@ pub struct TenantInfo {
     /// 租户名称,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub tenant_name: Option<String>,
-}
 #[cfg(test)]
 mod tests {
 use super::*;
     #[test]
-fn test_verification_info_creation() {,
+fn test_verification_info_creation() {
         let verification_info = VerificationInfo {
             app_id: Some("cli_test_app".to_string()),
             app_name: Some("Test CLI Application".to_string()),
@@ -73,7 +71,7 @@ assert_eq!(,
 assert!(verification_info.tenant_info.is_some());
     }
 #[test]
-    fn test_verification_info_serialization() {,
+    fn test_verification_info_serialization() {
 let verification_info = VerificationInfo {,
             app_id: Some("app_123".to_string()),
             app_name: Some("Lark App".to_string()),
@@ -108,9 +106,8 @@ assert_eq!(,
 );
         assert_eq!(deserialized.expire_time, None);
         assert_eq!(deserialized.scopes.as_ref().unwrap().len(), 3);
-}
 #[test]
-    fn test_verification_info_with_none_values() {,
+    fn test_verification_info_with_none_values() {
 let verification_info = VerificationInfo {,
             app_id: Some("minimal_app".to_string()),
             app_name: None,
@@ -131,7 +128,7 @@ assert!(!json.contains("verification_status"));
 assert!(!json.contains("tenant_info"));
     }
 #[test]
-    fn test_verification_info_debug() {,
+    fn test_verification_info_debug() {
 let verification_info = VerificationInfo {,
             app_id: Some("debug_test".to_string()),
             app_name: Some("Debug Test App".to_string()),
@@ -152,9 +149,8 @@ assert!(debug_output.contains("VerificationInfo"));
         assert!(debug_output.contains("debug_test"));
 assert!(debug_output.contains("Debug Test App"));
         assert!(debug_output.contains("in_progress"));
-}
 #[test]
-    fn test_tenant_info_creation() {,
+    fn test_tenant_info_creation() {
 let tenant_info = TenantInfo {,
             tenant_key: Some("tenant_456".to_string()),
             tenant_name: Some("Sample Tenant".to_string()),
@@ -162,9 +158,8 @@ let tenant_info = TenantInfo {,
 
         assert_eq!(tenant_info.tenant_key, Some("tenant_456".to_string()));
         assert_eq!(tenant_info.tenant_name, Some("Sample Tenant".to_string()));
-}
 #[test]
-    fn test_tenant_info_serialization() {,
+    fn test_tenant_info_serialization() {
 let tenant_info = TenantInfo {,
             tenant_key: Some("serialization_test".to_string()),
             tenant_name: Some("Serialization Test Org".to_string()),
@@ -183,7 +178,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_tenant_info_with_none_values() {,
+    fn test_tenant_info_with_none_values() {
 let tenant_info = TenantInfo {,
             tenant_key: None,
             tenant_name: None,
@@ -193,9 +188,8 @@ let json = serde_json::to_string(&tenant_info).unwrap();
 let deserialized: TenantInfo = serde_json::from_str(&json).unwrap();
         assert_eq!(deserialized.tenant_key, None);
         assert_eq!(deserialized.tenant_name, None);
-}
 #[test]
-    fn test_tenant_info_partial_data() {,
+    fn test_tenant_info_partial_data() {
 let tenant_info_key_only = TenantInfo {,
             tenant_key: Some("key_only".to_string()),
             tenant_name: None,
@@ -212,7 +206,7 @@ let json2 = serde_json::to_string(&tenant_info_name_only).unwrap();
 assert!(!json2.contains("tenant_key"));
     }
 #[test]
-    fn test_tenant_info_debug() {,
+    fn test_tenant_info_debug() {
 let tenant_info = TenantInfo {,
             tenant_key: Some("debug_key".to_string()),
             tenant_name: Some("Debug Tenant".to_string()),
@@ -224,7 +218,7 @@ assert!(debug_output.contains("TenantInfo"));
 assert!(debug_output.contains("Debug Tenant"));
     }
 #[test]
-    fn test_verification_info_scopes_edge_cases() {,
+    fn test_verification_info_scopes_edge_cases() {
 let empty_scopes = VerificationInfo {,
             app_id: Some("empty_scopes_test".to_string()),
             app_name: Some("Empty Scopes Test".to_string()),
@@ -252,9 +246,8 @@ let single_scope = VerificationInfo {,
 let json2 = serde_json::to_string(&single_scope).unwrap();
         assert!(json2.contains("single:scope"));
         assert_eq!(single_scope.scopes.as_ref().unwrap().len(), 1);
-}
 #[test]
-    fn test_verification_info_timestamp_handling() {,
+    fn test_verification_info_timestamp_handling() {
 let info_with_timestamps = VerificationInfo {,
             app_id: Some("timestamp_test".to_string()),
             app_name: Some("Timestamp Test".to_string()),
@@ -286,4 +279,3 @@ let verification_time: u64 = info_with_timestamps,
         let expire_time: u64 = info_with_timestamps.expire_time.unwrap().parse().unwrap();
 assert!(expire_time > verification_time);
     }
-}

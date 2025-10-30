@@ -6,8 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -18,7 +17,7 @@ use crate::,
     service::bitable::v1::form::Form,
 };
 /// 更新表单元数据请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PatchFormMetaRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -51,92 +50,27 @@ pub struct PatchFormMetaRequest {
     need_login: Option<bool>,
     /// 状态：启用/禁用,
 #[serde(skip_serializing_if = "Option::is_none")]
-    status: Option<String>,
-}
+    status: Option<String>}
 impl PatchFormMetaRequest {
-    pub fn w+.*{
-PatchFormMetaRequestBuilder::default(),
-    }
-
-    pub fn new(app_token: impl ToString, form_id: impl ToString) -> Self {
-Self {
-            app_token: app_token.to_string(),
-            form_id: form_id.to_string()
-            ..Default::default(),
-}
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct PatchFormMetaRequestBuilder {
-    request: PatchFormMetaRequest,
-}
+    request: PatchFormMetaRequest}
 impl PatchFormMetaRequestBuilder {
-    /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {
-self.request.app_token = app_token.to_string();
-        self,
-}
-/// 表单ID,
-    pub fn form_id(mut self, form_id: impl ToString) -> Self {
-self.request.form_id = form_id.to_string();
-        self,
-}
-/// 表单名称,
-    pub fn name(mut self, name: impl ToString) -> Self {
-self.request.name = Some(name.to_string());
-        self,
-}
-/// 表单描述,
-    pub fn description(mut self, description: impl ToString) -> Self {
-self.request.description = Some(description.to_string());
-        self,
-}
-/// 是否允许重复提交,
-    pub fn allow_resubmit(mut self, allow_resubmit: bool) -> Self {
-self.request.allow_resubmit = Some(allow_resubmit);
-        self,
-}
-/// 是否显示提交按钮,
-    pub fn show_submit_button(mut self, show_submit_button: bool) -> Self {
-self.request.show_submit_button = Some(show_submit_button);
-        self,
-}
-/// 提交按钮文本,
-    pub fn submit_button_text(mut self, submit_button_text: impl ToString) -> Self {
-self.request.submit_button_text = Some(submit_button_text.to_string());
-        self,
-}
-/// 是否分享表单,
-    pub fn shared(mut self, shared: bool) -> Self {
-self.request.shared = Some(shared);
-        self,
-}
-/// 是否需要登录,
-    pub fn need_login(mut self, need_login: bool) -> Self {
-self.request.need_login = Some(need_login);
-        self,
-}
-/// 状态：启用/禁用,
-    pub fn status(mut self, status: impl ToString) -> Self {
-self.request.status = Some(status.to_string());
-        self,
-}
-pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-self.request,
-    }
-}
-/// 更新表单元数据响应,
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 更新表单元数据响应,
+#[derive(Debug, Clone)]
 pub struct PatchFormMetaResponse {
     /// 更新后的表单信息
     pub form: Form,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 更新表单元数据,
 pub async fn patch_form_meta(
     request: PatchFormMetaRequest,
@@ -152,14 +86,13 @@ api_req.api_path = BITABLE_V1_FORM_PATCH,
 
     let api_resp = Transport::request(api_req, config, option).await?;
 Ok(api_resp),
-}
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]
-    fn test_patch_form_meta_request_builder() {,
+    fn test_patch_form_meta_request_builder() {
 let request = PatchFormMetaRequest::builder(),
             .app_token()
 .form_id()
@@ -175,5 +108,3 @@ let request = PatchFormMetaRequest::builder(),
         assert_eq!(request.description, Some("更新后的表单描述".to_string()));
         assert_eq!(request.allow_resubmit, Some(true));
         assert_eq!(request.shared, Some(true));
-}
-}

@@ -9,7 +9,6 @@ use crate::,
         EmptyResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-}
     config::Config,
         constants::AccessTokenType,
         endpoints::{,
@@ -18,70 +17,55 @@ vc::{,
                 VC_RECORDING_STOP,
 };
             EndpointBuilder,
-        }
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::vc::models::{Recording, UserIdType}
 };
 /// 录制服务
 pub struct RecordingService {
+}
     pub config: Config,
-}
 /// 开始录制请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct StartRecordingRequest {
-    /// 录制标题
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub title: Option<String>,
 }
-/// 开始录制响应
-#[derive(.*?)]
-pub struct StartRecordingResponse {
-    /// 录制信息
-    pub recording: Recording,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 停止录制响应
-#[derive(.*?)]
-pub struct StopRecordingResponse {
-    /// 录制信息
-    pub recording: Recording,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 获取录制详情响应
-#[derive(.*?)]
-pub struct GetRecordingResponse {
-    /// 录制信息
-    pub recording: Recording,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 设置录制权限请求
-#[derive(.*?)]
-pub struct SetRecordingPermissionRequest {
-    /// 权限类型
-    pub permission_type: String,
-    /// 权限对象
-    pub permission_objects: Vec<String>,
-}
-impl RecordingService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 停止录制响应
+#[derive(Debug, Clone)]
 }
-/// 开始录制
+pub struct StopRecordingResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 获取录制详情响应
+#[derive(Debug, Clone)]
+}
+pub struct GetRecordingResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 设置录制权限请求
+#[derive(Debug, Clone)]
+}
+pub struct SetRecordingPermissionRequest {
+
+impl RecordingService {
+    
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 开始录制
     pub async fn start(
         &self,
         meeting_id: &str,
@@ -92,7 +76,6 @@ impl RecordingService {
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
@@ -106,7 +89,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 停止录制
     pub async fn stop(
         &self,
@@ -117,7 +99,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(VC_RECORDING_STOP, "{meeting_id}", meeting_id),
@@ -125,9 +106,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取录制文件
     pub async fn get(
         &self,
@@ -138,7 +117,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(VC_RECORDING_GET, "{meeting_id}", meeting_id),
@@ -146,9 +124,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 设置录制文件权限
     pub async fn set_permission(
         &self,
@@ -160,7 +136,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
@@ -173,7 +148,6 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}}}}}}}}}

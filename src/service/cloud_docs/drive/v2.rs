@@ -6,12 +6,7 @@ pub mod explorer;
 pub struct V2 {
     pub explorer: ExplorerService,
     pub permission: PermissionsService,
-}
 impl V2 {
     pub fn new(config: Config) -> Self {
-Self {
-            explorer: ExplorerService::new(config.clone()),
-            permission: PermissionsService::new(config),
-        }
-}
+        Self { config }
 }

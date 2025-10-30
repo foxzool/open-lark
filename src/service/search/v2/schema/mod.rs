@@ -2,67 +2,63 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::search::v2::models::{CreateSchemaRequest, Schema, UpdateSchemaRequest}
 };
 /// 数据范式服务
 pub struct SchemaService {
+}
     pub config: Config,
-}
 /// 创建数据范式响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateSchemaResponse {
+}
     /// 数据范式信息
     pub schema: Schema,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 获取数据范式响应
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 获取数据范式响应
+#[derive(Debug, Clone)]
 pub struct GetSchemaResponse {
-    /// 数据范式信息
-    pub schema: Schema,
 }
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
-    }
+    /// 更新数据范式响应
+#[derive(Debug, Clone)]
 }
-/// 更新数据范式响应
-#[derive(.*?)]
 pub struct UpdateSchemaResponse {
-    /// 数据范式信息
-    pub schema: Schema,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
-    }
-}
-/// 空响应（用于删除等操作）
+    /// 空响应（用于删除等操作）
 #[derive(Debug, Serialize, Deserialize)]
 pub struct EmptySchemaResponse {}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl SchemaService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl SchemaService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 创建数据范式
+}/// 创建数据范式
     ///,
 /// 该接口用于创建搜索连接器的数据范式。
     ///,
@@ -92,9 +88,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除数据范式
     ///,
 /// 该接口用于删除指定的数据范式。
@@ -119,9 +113,7 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 修改数据范式
     ///,
 /// 该接口用于修改指定数据范式的信息。
@@ -150,7 +142,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取数据范式
     ///,
 /// 该接口用于获取指定数据范式的详细信息。
@@ -175,7 +166,6 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}}}}}}

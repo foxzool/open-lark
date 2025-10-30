@@ -13,24 +13,21 @@ use crate::service::ccm::drive::v1::DriveV1Service;
 use crate::service::ccm::drive::v2::DriveV2Service;
 use crate::service::ccm::drive::explorer::DriveExplorerService;
 /// 云空间文件管理服务
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DriveService {
     /// v1版本API服务
     pub v1: DriveV1Service,
     /// v2版本API服务
     pub v2: DriveV2Service,
     /// 资源浏览器服务
-    pub explorer: DriveExplorerService,
+pub explorer: DriveExplorerService,
 }
 impl DriveService {
-    /// 创建新的云空间文件管理服务实例
-pub fn new() -> Self {
+pub fn new(config: Config) -> Self {
         Self {
-            v1: DriveV1Service::new(client.clone()),
-            v2: DriveV2Service::new(client.clone()),
-            explorer: DriveExplorerService::new(client.clone()),
-        }
-}
+            v1: DriveV1Service::new(config.clone()),
+            v2: DriveV2Service::new(config.clone()),
+            explorer: DriveExplorerService::new(config),
 }
 /// v1版本API
 pub mod v1;
@@ -38,3 +35,5 @@ pub mod v1;
 pub mod v2;
 /// 资源浏览器API
 pub mod explorer;
+}
+}

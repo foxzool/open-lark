@@ -2,66 +2,39 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::payroll::models::{
         DatasourceRecord, DatasourceRecordQueryRequest, DatasourceRecordSaveRequest, PageResponse,
-    }
 };
 /// 外部数据源记录服务
 pub struct DatasourceRecordService {
-    pub config: Config,
 }
-/// 外部数据源记录保存响应
-#[derive(.*?)]
-pub struct DatasourceRecordSaveResponse {
-    /// 保存结果
-    pub success: bool,
-    /// 保存的记录数量
-    pub record_count: Option<u32>,
-    /// 失败的记录
-    pub failed_records: Option<Vec<FailedRecord>>,
-    /// 处理消息
-    pub message: Option<String>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 失败记录信息
-#[derive(.*?)]
-pub struct FailedRecord {
-    /// 员工ID
-    pub employee_id: String,
-    /// 失败原因
-    pub error_message: String,
-    /// 错误代码
-    pub error_code: Option<String>,
-}
-/// 外部数据源记录查询响应
-#[derive(.*?)]
-pub struct DatasourceRecordQueryResponse {
-    /// 数据源记录列表
-#[serde(flatten)]
-    pub records: PageResponse<DatasourceRecord>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl DatasourceRecordService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 失败记录信息
+#[derive(Debug, Clone)]
 }
-/// 创建/更新外部算薪数据
+pub struct FailedRecord {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl DatasourceRecordService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建/更新外部算薪数据
     ///,
 /// 该接口用于向飞书发薪系统创建或更新外部算薪数据记录。
     /// 支持批量操作，可以同时处理多个员工的算薪数据。
@@ -133,10 +106,7 @@ let mut api_req = ApiRequest {,
 // 添加查询参数
         if let Some(user_id_type) = request.user_id_type {
             api_req.query_params.insert("user_id_type", user_id_type);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量查询外部算薪数据记录
     ///,
 /// 该接口用于批量查询指定数据源和员工的外部算薪数据记录。
@@ -201,16 +171,12 @@ let mut api_req = ApiRequest {,
 // 添加查询参数
         if let Some(user_id_type) = request.user_id_type {
             api_req.query_params.insert("user_id_type", user_id_type);
-}
 if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}}}}

@@ -2,18 +2,16 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2ApprovalInstanceApprovedV4 {
     pub schema: String,
     pub header: EventHeader,
     pub event: P2ApprovalInstanceApprovedV4Data,
-}
 pub(crate) struct P2ApprovalInstanceApprovedV4ProcessorImpl<F>,
 where
     F: Fn(P2ApprovalInstanceApprovedV4) + 'static,
 {
     f: F,
-}
 impl<F> EventHandler for P2ApprovalInstanceApprovedV4ProcessorImpl<F>,
 where
     F: Fn(P2ApprovalInstanceApprovedV4) + 'static + Sync + Send,
@@ -23,34 +21,29 @@ let event: P2ApprovalInstanceApprovedV4 = serde_json::from_slice(payload)?;
         (self.f)(event);
 Ok(()),
     }
-}
 impl<F> P2ApprovalInstanceApprovedV4ProcessorImpl<F>,
 where
     F: Fn(P2ApprovalInstanceApprovedV4) + 'static,
 {,
 pub(crate) fn new(f: F) -> Self {
         P2ApprovalInstanceApprovedV4ProcessorImpl { f }
-}
-}
 /// 审批实例通过事件数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2ApprovalInstanceApprovedV4Data {
     /// 事件对象
     pub object: ApprovalInstanceEventObject,
     /// 审批前状态,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub old_status: Option<String>,
-}
 /// 审批实例事件对象,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ApprovalInstanceEventObject {
     /// 对象类型 (approval_instance)
     pub object_type: String,
     /// 审批实例信息
     pub instance: ApprovedApprovalInstance,
-}
 /// 已通过的审批实例信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ApprovedApprovalInstance {
     /// 审批实例ID
     pub instance_id: String,
@@ -93,9 +86,8 @@ pub struct ApprovedApprovalInstance {
     /// 审批总耗时（秒）,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub total_duration: Option<i64>,
-}
 /// 审批用户信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ApprovalUser {
     /// 用户ID
     pub user_id: String,
@@ -111,16 +103,14 @@ pub struct ApprovalUser {
     /// 部门ID列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub department_ids: Option<Vec<String>>,
-}
 /// 审批表单信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ApprovalForm {
     /// 表单字段列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub form_fields: Option<Vec<ApprovalFormField>>,
-}
 /// 审批表单字段,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ApprovalFormField {
     /// 字段ID
     pub field_id: String,
@@ -135,9 +125,8 @@ pub struct ApprovalFormField {
     /// 是否必填,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub required: Option<bool>,
-}
 /// 审批流程信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ApprovalProcess {
     /// 审批流程节点列表,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -148,9 +137,8 @@ pub struct ApprovalProcess {
     /// 审批路径,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub approval_path: Option<Vec<String>>,
-}
 /// 审批流程节点,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ApprovalNode {
     /// 节点ID
     pub node_id: String,
@@ -174,9 +162,8 @@ pub struct ApprovalNode {
     /// 节点处理耗时（秒）,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub duration: Option<i64>,
-}
 /// 审批结果信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ApprovalResult {
     /// 最终审批结果 (approved)
     pub final_result: String,
@@ -189,9 +176,8 @@ pub struct ApprovalResult {
     /// 通过率,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub approval_rate: Option<f64>,
-}
 /// 节点审批结果,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct NodeResult {
     /// 节点ID
     pub node_id: String,
@@ -206,4 +192,3 @@ pub struct NodeResult {
     /// 审批时间 (Unix时间戳，单位：秒),
 #[serde(skip_serializing_if = "Option::is_none")]
     pub approve_time: Option<String>,
-}

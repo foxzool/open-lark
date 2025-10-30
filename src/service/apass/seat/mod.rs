@@ -3,52 +3,41 @@ use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::apass::models::{
         PageResponse, SeatActivity, SeatActivityListRequest, SeatAssignment,
         SeatAssignmentListRequest,
-    }
 };
 /// 席位管理服务
 pub struct SeatService {
-    pub config: Config,
 }
-/// 席位分配查询响应
-#[derive(.*?)]
-pub struct SeatAssignmentListResponse {
-    /// 分页响应数据
-#[serde(flatten)]
-    pub page_response: PageResponse<SeatAssignment>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 席位活跃查询响应
-#[derive(.*?)]
-pub struct SeatActivityListResponse {
-    /// 分页响应数据
-#[serde(flatten)]
-    pub page_response: PageResponse<SeatActivity>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl SeatService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 席位活跃查询响应
+#[derive(Debug, Clone)]
 }
-/// 查询席位分配详情
+pub struct SeatActivityListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl SeatService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 查询席位分配详情
     ///,
 /// 该接口用于查询低代码平台的席位分配详情信息。
     ///,
@@ -73,13 +62,9 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询席位活跃详情
     ///,
 /// 该接口用于查询低代码平台的席位活跃详情信息。
@@ -105,17 +90,12 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(start_time) = request.start_time {,
             api_req.query_params.insert("start_time", start_time);
-}
 if let Some(end_time) = request.end_time {,
             api_req.query_params.insert("end_time", end_time);
-}
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}}}}}

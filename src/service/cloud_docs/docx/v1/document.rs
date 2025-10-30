@@ -6,8 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -19,13 +18,11 @@ use crate::,
 };
 /// 文档服务,
 pub struct DocumentService {
-    config: Config,
-}
+    config: Config}
 impl DocumentService {
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 创建文档,
+}/// 创建文档,
     ///,
 /// 该接口用于创建一个新的文档。,
     ///,
@@ -42,8 +39,7 @@ let api_req = ApiRequest {,
             api_path: DOCX_V1_DOCUMENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             body: serde_json::to_vec(&request)?,
-            ..Default::default(),
-};
+            ..Default::default()};
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
@@ -108,8 +104,7 @@ Ok(api_resp),
 let mut api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: DOCX_V1_DOCUMENT_BLOCKS.replace()
-            ..Default::default(),
-};
+            ..Default::default()};
 api_req
             .set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
 // 添加查询参数,
@@ -117,10 +112,8 @@ api_req
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
@@ -148,65 +141,39 @@ api_req
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
     }
-}
 // === 数据结构定义 ===,
 /// 创建文档请求参数
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateDocumentRequest {
     /// 文档标题
     pub title: String,
     /// 文档内容，JSON格式的块内容
     pub content: Option<String>,
     /// 文件夹token
-    pub folder_token: Option<String>,
-}
+    pub folder_token: Option<String>}
 impl CreateDocumentRequest {
-    pub fn w+.*{
-CreateDocumentRequestBuilder::default(),
-    }
-pub fn new(title: impl Into<String>) -> Self {
-        Self {
-            title: title.into(),
-            content: None,
-            folder_token: None,
-        }
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }
-
     pub fn with_content(mut self, content: impl Into<String>) -> Self {
-self.content = Some(content.into());
-        self,
-}
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}self.content = Some(content.into());
+        self}
 
     pub fn with_folder_token(mut self, folder_token: impl Into<String>) -> Self {
-self.folder_token = Some(folder_token.into());
-        self,
-}
-}
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}self.folder_token = Some(folder_token.into());
+        self}
 /// 创建文档请求构建器,
 #[derive(Default)]
 pub struct CreateDocumentRequestBuilder {
-    request: CreateDocumentRequest,
-}
+    request: CreateDocumentRequest}
 impl CreateDocumentRequestBuilder {
-    pub fn title(mut self, title: impl Into<String>) -> Self {
-self.request.title = title.into();
-        self,
-}
-
-    pub fn content(mut self, content: impl Into<String>) -> Self {
-self.request.content = Some(content.into());
-        self,
-}
-
-    pub fn folder_token(mut self, folder_token: impl Into<String>) -> Self {
-self.request.folder_token = Some(folder_token.into());
-        self,
-}
-pub fn w+.*{
-        self.request,
-}
-}
-impl_executable_builder_owned!(,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}impl_executable_builder_owned!(,
     CreateDocumentRequestBuilder,
     DocumentService,
     CreateDocumentRequest,
@@ -214,7 +181,7 @@ impl_executable_builder_owned!(,
     create,
 );
 /// 创建文档响应数据
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateDocumentRespData {
     /// 文档ID
     pub document_id: String,
@@ -222,25 +189,25 @@ pub struct CreateDocumentRespData {
     pub document_revision_id: i64,
     /// 文档标题
     pub title: String,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 获取文档信息响应数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetDocumentRespData {
     /// 文档信息
     pub document: DocumentInfo,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 文档信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DocumentInfo {
     /// 文档ID
     pub document_id: String,
@@ -256,75 +223,47 @@ pub struct DocumentInfo {
     pub creator_id: String,
     /// 最后编辑者ID
     pub last_editor_id: String,
-}
 /// 获取纯文本内容响应数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetRawContentRespData {
     /// 纯文本内容
     pub content: String,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 获取文档所有块请求参数,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListDocumentBlocksRequest {
     /// 文档ID
     pub document_id: String,
     /// 分页大小
     pub page_size: Option<i32>,
     /// 分页标记
-    pub page_token: Option<String>,
-}
+    pub page_token: Option<String>}
 impl ListDocumentBlocksRequest {
-    pub fn w+.*{
-ListDocumentBlocksRequestBuilder::default(),
-    }
-pub fn new(document_id: impl Into<String>) -> Self {
-        Self {
-            document_id: document_id.into(),
-            page_size: None,
-            page_token: None,
-        }
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }
-
     pub fn with_page_size(mut self, page_size: i32) -> Self {
 self.page_size = Some(page_size);
-        self,
-}
+        self}
 
     pub fn with_page_token(mut self, page_token: impl Into<String>) -> Self {
-self.page_token = Some(page_token.into());
-        self,
-}
-}
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}self.page_token = Some(page_token.into());
+        self}
 /// 获取文档所有块请求构建器,
 #[derive(Default)]
 pub struct ListDocumentBlocksRequestBuilder {
-    request: ListDocumentBlocksRequest,
-}
+    request: ListDocumentBlocksRequest}
 impl ListDocumentBlocksRequestBuilder {
-    pub fn document_id(mut self, document_id: impl Into<String>) -> Self {
-self.request.document_id = document_id.into();
-        self,
-}
-
-    pub fn page_size(mut self, page_size: i32) -> Self {
-self.request.page_size = Some(page_size);
-        self,
-}
-
-    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
-self.request.page_token = Some(page_token.into());
-        self,
-}
-pub fn w+.*{
-        self.request,
-}
-}
-impl_executable_builder_owned!(,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}impl_executable_builder_owned!(,
     ListDocumentBlocksRequestBuilder,
     DocumentService,
     ListDocumentBlocksRequest,
@@ -332,22 +271,22 @@ impl_executable_builder_owned!(,
     list_blocks,
 );
 /// 获取文档所有块响应数据
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListDocumentBlocksRespData {
     /// 块列表
     pub items: Vec<Block>,
     /// 是否还有更多数据
     pub has_more: bool,
     /// 下一页标记
-    pub page_token: Option<String>,
-}
+    pub page_token: Option<String>}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 块信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Block {
     /// 块ID
     pub block_id: String,
@@ -359,17 +298,16 @@ pub struct Block {
     pub block_type: i32,
     /// 块索引
     pub index: i32,
-}
 /// 转换为文档块响应数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ConvertToDocxRespData {
     /// 新文档ID
     pub document_id: String,
     /// 文档版本ID
     pub document_revision_id: i64,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}

@@ -1,6 +1,6 @@
 use serde::Serialize;
 /// 需要插入行列的维度信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub(crate) struct UpdateDimension {,
     /// 电子表格工作表的 ID。调用获取工作表获取 ID,
 #[serde(rename = "sheetId")]
@@ -19,4 +19,3 @@ pub(crate) struct UpdateDimension {,
     /// 时，则在第 4、5、6、7 行插入空白行，共插入 4 行。,
 #[serde(rename = "endIndex")]
     pub(crate) end_index: i32,
-}

@@ -2,25 +2,23 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::hire::models::{CommonResponse, I18nText, PageResponse}
 };
 /// 官网服务
 pub struct WebsiteService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 官网职位信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct WebsiteJob {
+}
     /// 职位ID
     pub id: String,
     /// 职位名称
@@ -51,10 +49,10 @@ pub struct WebsiteJob {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 官网投递信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct WebsiteApplication {
+}
     /// 投递ID
     pub id: String,
     /// 职位ID
@@ -83,10 +81,10 @@ pub struct WebsiteApplication {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 官网配置信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct WebsiteConfiguration {
+}
     /// 配置ID
     pub id: String,
     /// 网站名称
@@ -109,15 +107,15 @@ pub struct WebsiteConfiguration {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// SEO配置
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SeoConfig {
-    // TODO: Add fields
 }
+    // TODO: Add fields
 /// 官网职位发布请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct WebsiteJobPublishRequest {
+}
     /// 职位ID
     pub job_id: String,
     /// 是否发布
@@ -128,101 +126,52 @@ pub struct WebsiteJobPublishRequest {
     pub deadline: Option<String>,
     /// 职位标签
     pub tags: Vec<String>,
-}
 /// 官网投递列表请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct WebsiteApplicationListRequest {
-    /// 分页大小
-    pub page_size: Option<u32>,
-    /// 分页标记
-    pub page_token: Option<String>,
-    /// 职位ID
-    pub job_id: Option<String>,
-    /// 投递状态
-    pub status: Option<String>,
-    /// 候选人姓名关键词
-    pub candidate_name: Option<String>,
-    /// 候选人邮箱关键词
-    pub candidate_email: Option<String>,
-    /// 投递时间开始
-    pub apply_start_time: Option<String>,
-    /// 投递时间结束
-    pub apply_end_time: Option<String>,
 }
-/// 官网配置更新请求
-#[derive(.*?)]
-pub struct WebsiteConfigurationUpdateRequest {
-    /// 网站名称
-    pub site_name: Option<I18nText>,
-    /// 网站描述
-    pub site_description: Option<I18nText>,
-    /// 网站Logo URL
-    pub logo_url: Option<String>,
-    /// 联系邮箱
-    pub contact_email: Option<String>,
-    /// 联系电话
-    pub contact_phone: Option<String>,
-    /// 网站主题配置
-    pub theme_config: Option<serde_json::Value>,
-    /// SEO配置
-    pub seo_config: Option<SeoConfig>,
-    /// 是否启用
-    pub enabled: Option<bool>,
-}
-/// 官网职位列表响应
-#[derive(.*?)]
-pub struct WebsiteJobListResponse {
-    /// 官网职位列表
-#[serde(flatten)]
-    pub jobs: PageResponse<WebsiteJob>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 官网投递列表响应
-#[derive(.*?)]
-pub struct WebsiteApplicationListResponse {
-    /// 官网投递列表
-#[serde(flatten)]
-    pub applications: PageResponse<WebsiteApplication>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 官网配置响应
-#[derive(.*?)]
-pub struct WebsiteConfigurationResponse {
-    /// 官网配置信息
-    pub configuration: WebsiteConfiguration,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 官网操作响应
-#[derive(.*?)]
-pub struct WebsiteOperationResponse {
-    /// 操作结果
-#[serde(flatten)]
-    pub result: CommonResponse,
-    /// 相关ID
-    pub id: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl WebsiteService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 官网投递列表响应
+#[derive(Debug, Clone)]
 }
-/// 获取官网职位列表
+pub struct WebsiteApplicationListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 官网配置响应
+#[derive(Debug, Clone)]
+}
+pub struct WebsiteConfigurationResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 官网操作响应
+#[derive(Debug, Clone)]
+}
+pub struct WebsiteOperationResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl WebsiteService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 获取官网职位列表
     ///,
 /// 该接口用于获取已发布到官网的职位列表，支持按
     /// 状态、类型、地点等条件筛选。返回的列表包含
@@ -261,8 +210,7 @@ impl WebsiteService {
 ///     for job in &data.jobs.items {
     ///         println!("职位: {} (投递{}次)" job.title, job.apply_count);
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_website_jobs(
         &self,
         page_size: Option<u32>,
@@ -284,24 +232,17 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(publish_status) = publish_status {,
             api_req
 .query_params
                 .insert("publish_status", publish_status);
-}
 if let Some(job_type) = job_type {,
             api_req.query_params.insert("job_type", job_type);
-}
 if let Some(location) = location {,
             api_req.query_params.insert("location", location);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 发布职位到官网
     ///,
 /// 该接口用于将内部职位发布到官网，设置发布时间、
@@ -352,9 +293,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 从官网下架职位
     ///,
 /// 该接口用于将已发布的职位从官网下架，
@@ -387,9 +326,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取官网投递列表
     ///,
 /// 该接口用于获取通过官网提交的投递列表，支持按
@@ -437,8 +374,7 @@ let api_req = ApiRequest {,
 ///     for application in &data.applications.items {
     ///         println!("投递: {} ({})" application.candidate_name, application.candidate_email);
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_website_applications(
         &self,
         request: WebsiteApplicationListRequest,
@@ -456,39 +392,29 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(job_id) = request.job_id {,
             api_req.query_params.insert("job_id", job_id);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert("status", status);
-}
 if let Some(candidate_name) = request.candidate_name {,
             api_req
 .query_params
                 .insert("candidate_name", candidate_name);
-}
 if let Some(candidate_email) = request.candidate_email {,
             api_req
 .query_params
                 .insert("candidate_email", candidate_email);
-}
 if let Some(apply_start_time) = request.apply_start_time {,
             api_req
 .query_params
                 .insert("apply_start_time", apply_start_time);
-}
 if let Some(apply_end_time) = request.apply_end_time {,
             api_req
 .query_params
                 .insert("apply_end_time", apply_end_time);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取官网配置
     ///,
 /// 该接口用于获取官网的配置信息，包括网站
@@ -516,8 +442,7 @@ if let Some(apply_end_time) = request.apply_end_time {,
     ///     println!("网站名称: {:?}" data.configuration.site_name.zh_cn);
     ///     println!("启用状态: {}" data.configuration.enabled);
     ///     println!("联系邮箱: {:?}" data.configuration.contact_email);
-    /// }
-/// ```
+    /// /// ```
     pub async fn get_website_configuration(
         &self,
         option: Option<RequestOption>,
@@ -529,9 +454,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 更新官网配置
     ///,
 /// 该接口用于更新官网的配置信息，支持修改网站
@@ -596,9 +519,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 将官网投递转换为内部投递
     ///,
 /// 该接口用于将通过官网提交的投递转换为内部
@@ -631,9 +552,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取官网职位统计数据
     ///,
 /// 该接口用于获取官网职位的统计数据，包括
@@ -677,14 +596,10 @@ let mut api_req = ApiRequest {,
 // 添加查询参数
         if let Some(job_id) = job_id {
             api_req.query_params.insert("job_id", job_id);
-}
 if let Some(start_date) = start_date {,
             api_req.query_params.insert("start_date", start_date);
-}
 if let Some(end_date) = end_date {,
             api_req.query_params.insert("end_date", end_date);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

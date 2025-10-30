@@ -9,10 +9,11 @@ pub mod unsubscription;
 ///
 /// 提供日历访问控制的管理功能
 pub struct CalendarAclService {
-    pub config: Config,
+pub config: Config,
 }
 impl CalendarAclService {
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self { config 
+}
 }
 }

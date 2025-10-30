@@ -2,25 +2,23 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::hire::models::{CommonResponse, I18nText, PageResponse, Talent, UserId}
 };
 /// 人才库服务
 pub struct TalentPoolService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 人才库信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct TalentPool {
+}
     /// 人才库ID
     pub id: String,
     /// 人才库名称
@@ -45,10 +43,10 @@ pub struct TalentPool {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 人才库设置
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct TalentPoolSettings {
+}
     /// 自动匹配设置
     pub auto_match_enabled: Option<bool>,
     /// 人才可见性设置
@@ -57,10 +55,10 @@ pub struct TalentPoolSettings {
     pub tag_config: Option<serde_json::Value>,
     /// 自定义字段配置
     pub custom_field_config: Option<serde_json::Value>,
-}
 /// 人才库创建请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct TalentPoolCreateRequest {
+}
     /// 人才库名称
     pub name: I18nText,
     /// 人才库描述
@@ -75,10 +73,10 @@ pub struct TalentPoolCreateRequest {
     pub manager_ids: Vec<String>,
     /// 人才库设置
     pub settings: Option<TalentPoolSettings>,
-}
 /// 人才库列表请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct TalentPoolListRequest {
+}
     /// 分页大小
     pub page_size: Option<u32>,
     /// 分页标记
@@ -89,10 +87,10 @@ pub struct TalentPoolListRequest {
     pub status: Option<String>,
     /// 拥有者ID
     pub owner_id: Option<String>,
-}
 /// 人才库中人才列表请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct TalentPoolTalentListRequest {
+}
     /// 分页大小
     pub page_size: Option<u32>,
     /// 分页标记
@@ -103,61 +101,52 @@ pub struct TalentPoolTalentListRequest {
     pub work_experience: Option<u32>,
     /// 学历筛选
     pub education: Option<String>,
-}
 /// 人才库列表响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct TalentPoolListResponse {
-    /// 人才库列表
-#[serde(flatten)]
-    pub pools: PageResponse<TalentPool>,
 }
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 人才库详情响应
-#[derive(.*?)]
-pub struct TalentPoolDetailResponse {
-    /// 人才库信息
-    pub pool: TalentPool,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 人才库操作响应
-#[derive(.*?)]
-pub struct TalentPoolOperationResponse {
-    /// 操作结果
-#[serde(flatten)]
-    pub result: CommonResponse,
-    /// 人才库ID
-    pub pool_id: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 人才库中人才列表响应
-#[derive(.*?)]
-pub struct TalentPoolTalentListResponse {
-    /// 人才列表
-#[serde(flatten)]
-    pub talents: PageResponse<Talent>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl TalentPoolService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 人才库详情响应
+#[derive(Debug, Clone)]
 }
-/// 创建人才库
+pub struct TalentPoolDetailResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 人才库操作响应
+#[derive(Debug, Clone)]
+}
+pub struct TalentPoolOperationResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 人才库中人才列表响应
+#[derive(Debug, Clone)]
+}
+pub struct TalentPoolTalentListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl TalentPoolService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建人才库
     ///,
 /// 该接口用于创建新的人才库，设置人才库的基本信息、
     /// 访问权限、管理员等配置。创建的人才库可用于
@@ -220,9 +209,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取人才库详情
     ///,
 /// 该接口用于获取指定人才库的详细信息，包括人才库
@@ -252,8 +239,7 @@ let api_req = ApiRequest {,
     ///     println!("人才库名称: {:?}" data.pool.name.zh_cn);
     ///     println!("人才库类型: {}" data.pool.pool_type);
     ///     println!("人才数量: {}" data.pool.talent_count);
-    /// }
-/// ```
+    /// /// ```
     pub async fn get_pool_detail(
         &self,
         pool_id: &str,
@@ -266,9 +252,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取人才库列表
     ///,
 /// 该接口用于获取企业的人才库列表，支持按类型、
@@ -311,8 +295,7 @@ let api_req = ApiRequest {,
 ///     for pool in &data.pools.items {
     ///         println!("人才库: {:?} ({}人)" pool.name.zh_cn, pool.talent_count);
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_pools(
         &self,
         request: TalentPoolListRequest,
@@ -330,22 +313,15 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(pool_type) = request.pool_type {,
             api_req.query_params.insert("pool_type", pool_type);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert("status", status);
-}
 if let Some(owner_id) = request.owner_id {,
             api_req.query_params.insert("owner_id", owner_id);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取人才库中的人才列表
     ///,
 /// 该接口用于获取指定人才库中的人才列表，支持按
@@ -390,8 +366,7 @@ if let Some(owner_id) = request.owner_id {,
 ///     for talent in &data.talents.items {
     ///         println!("人才: {} ({}年经验)" talent.name, talent.work_experience.unwrap_or(0));
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_pool_talents(
         &self,
         pool_id: &str,
@@ -414,24 +389,17 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if !request.tags.is_empty() {,
             api_req.query_params.insert("tags", request.tags.join(","));
-}
 if let Some(work_experience) = request.work_experience {,
             api_req
 .query_params
                 .insert("work_experience", work_experience.to_string());
-}
 if let Some(education) = request.education {,
             api_req.query_params.insert("education", education);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 向人才库添加人才
     ///,
 /// 该接口用于将指定的人才添加到人才库中，
@@ -467,9 +435,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 从人才库移除人才
     ///,
 /// 该接口用于将指定的人才从人才库中移除，
@@ -505,9 +471,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 更新人才库
     ///,
 /// 该接口用于更新现有人才库的信息，支持修改人才库
@@ -552,9 +516,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除人才库
     ///,
 /// 该接口用于删除指定的人才库。删除后的人才库
@@ -583,7 +545,6 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

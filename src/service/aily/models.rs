@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
 /// 附件,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Attachment {
     /// 文件ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -22,9 +22,8 @@ pub struct Attachment {
     /// 上传时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub uploaded_at: Option<String>,
-}
 /// 分页响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PageResponse<T> {,
     /// 是否还有更多项目,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -35,10 +34,9 @@ pub struct PageResponse<T> {,
     /// 数据项目列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<T>>,
-}
 // ============ 会话相关结构 ============,
 /// 会话创建请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SessionCreateRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -48,9 +46,8 @@ pub struct SessionCreateRequest {
     /// 工具配置,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub tool_set: Option<ToolSet>,
-}
 /// 会话更新请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SessionUpdateRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -62,25 +59,22 @@ pub struct SessionUpdateRequest {
     /// 工具配置,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub tool_set: Option<ToolSet>,
-}
 /// 会话查询请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SessionGetRequest {
     /// 智能伙伴ID
     pub app_id: String,
     /// 会话ID
     pub session_id: String,
-}
 /// 会话删除请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SessionDeleteRequest {
     /// 智能伙伴ID
     pub app_id: String,
     /// 会话ID
     pub session_id: String,
-}
 /// 会话信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Session {
     /// 会话ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -97,16 +91,14 @@ pub struct Session {
     /// 工具配置,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub tool_set: Option<ToolSet>,
-}
 /// 工具配置,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ToolSet {
     /// 工具列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub tools: Option<Vec<Tool>>,
-}
 /// 工具信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Tool {
     /// 工具类型,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -114,10 +106,9 @@ pub struct Tool {
     /// 工具配置,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub config: Option<Value>,
-}
 // ============ 消息相关结构 ============,
 /// 消息发送请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct MessageCreateRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -131,9 +122,8 @@ pub struct MessageCreateRequest {
     /// 消息元数据,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<String, Value>>,
-}
 /// 消息查询请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct MessageGetRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -141,9 +131,8 @@ pub struct MessageGetRequest {
     pub session_id: String,
     /// 消息ID
     pub message_id: String,
-}
 /// 消息列表查询请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct MessageListRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -158,9 +147,8 @@ pub struct MessageListRequest {
     /// 排序方式,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub order: Option<String>,
-}
 /// 消息信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Message {
     /// 消息ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -183,10 +171,9 @@ pub struct Message {
     /// 消息元数据,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<String, Value>>,
-}
 // ============ 运行相关结构 ============,
 /// 运行创建请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RunCreateRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -204,9 +191,8 @@ pub struct RunCreateRequest {
     /// 工具配置,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub tool_set: Option<ToolSet>,
-}
 /// 运行查询请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RunGetRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -214,9 +200,8 @@ pub struct RunGetRequest {
     pub session_id: String,
     /// 运行ID
     pub run_id: String,
-}
 /// 运行列表查询请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RunListRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -231,9 +216,8 @@ pub struct RunListRequest {
     /// 排序方式,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub order: Option<String>,
-}
 /// 运行取消请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RunCancelRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -241,9 +225,8 @@ pub struct RunCancelRequest {
     pub session_id: String,
     /// 运行ID
     pub run_id: String,
-}
 /// 运行信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Run {
     /// 运行ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -281,9 +264,8 @@ pub struct Run {
     /// 错误信息,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub last_error: Option<RunError>,
-}
 /// 运行错误信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RunError {
     /// 错误代码,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -291,10 +273,9 @@ pub struct RunError {
     /// 错误消息,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-}
 // ============ 技能相关结构 ============,
 /// 技能调用请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SkillStartRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -306,17 +287,15 @@ pub struct SkillStartRequest {
     /// 会话ID,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub session_id: Option<String>,
-}
 /// 技能信息查询请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SkillGetRequest {
     /// 智能伙伴ID
     pub app_id: String,
     /// 技能ID
     pub skill_id: String,
-}
 /// 技能列表查询请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SkillListRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -326,9 +305,8 @@ pub struct SkillListRequest {
     /// 分页标记,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 /// 技能信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Skill {
     /// 技能ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -357,9 +335,8 @@ pub struct Skill {
     /// 更新时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<String>,
-}
 /// 技能执行结果,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SkillExecution {
     /// 执行ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -385,10 +362,9 @@ pub struct SkillExecution {
     /// 完成时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub completed_at: Option<String>,
-}
 // ============ 知识问答相关结构 ============,
 /// 数据知识问答请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DataKnowledgeAskRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -403,22 +379,19 @@ pub struct DataKnowledgeAskRequest {
     /// 检索配置,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub retrieval_config: Option<RetrievalConfig>,
-}
 /// 对话消息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ChatMessage {
     /// 消息角色
     pub role: String,
     /// 消息内容
     pub content: String,
-}
 /// 检索配置,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RetrievalConfig {
     // TODO: Add fields,
-}
 /// 数据知识问答结果,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DataKnowledgeAnswer {
     /// 回答内容,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -429,9 +402,8 @@ pub struct DataKnowledgeAnswer {
     /// 相关性评分,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub confidence_score: Option<f64>,
-}
 /// 知识引用,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct KnowledgeReference {
     /// 文档ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -445,10 +417,9 @@ pub struct KnowledgeReference {
     /// 相关性评分,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub relevance_score: Option<f64>,
-}
 // ============ 数据知识管理相关结构 ============,
 /// 文件上传请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DataKnowledgeFileUploadRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -460,9 +431,8 @@ pub struct DataKnowledgeFileUploadRequest {
     /// 文件类型,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub file_type: Option<String>,
-}
 /// 数据知识创建请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DataKnowledgeCreateRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -479,25 +449,22 @@ pub struct DataKnowledgeCreateRequest {
     /// 元数据,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<String, Value>>,
-}
 /// 数据知识查询请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DataKnowledgeGetRequest {
     /// 智能伙伴ID
     pub app_id: String,
     /// 数据知识ID
     pub knowledge_id: String,
-}
 /// 数据知识删除请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DataKnowledgeDeleteRequest {
     /// 智能伙伴ID
     pub app_id: String,
     /// 数据知识ID
     pub knowledge_id: String,
-}
 /// 数据知识列表查询请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DataKnowledgeListRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -513,9 +480,8 @@ pub struct DataKnowledgeListRequest {
     /// 搜索关键词,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub keyword: Option<String>,
-}
 /// 数据知识分类列表查询请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DataKnowledgeCategoryListRequest {
     /// 智能伙伴ID
     pub app_id: String,
@@ -525,9 +491,8 @@ pub struct DataKnowledgeCategoryListRequest {
     /// 分页标记,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 /// 数据知识信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DataKnowledge {
     /// 数据知识ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -559,9 +524,8 @@ pub struct DataKnowledge {
     /// 元数据,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<String, Value>>,
-}
 /// 数据知识分类,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DataKnowledgeCategory {
     /// 分类ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -584,9 +548,8 @@ pub struct DataKnowledgeCategory {
     /// 更新时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<String>,
-}
 /// 文件上传结果,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct FileUploadResult {
     /// 文件token,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -600,14 +563,13 @@ pub struct FileUploadResult {
     /// 上传时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub uploaded_at: Option<String>,
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json;
     #[test]
-fn test_page_response_serialization() {,
+fn test_page_response_serialization() {
         let response = PageResponse {
             has_more: Some(true),
             page_token: Some("next_token".to_string()),
@@ -617,9 +579,8 @@ let json = serde_json::to_string(&response).unwrap();
         assert!(json.contains("true"));
 assert!(json.contains("next_token"));
         assert!(json.contains("item1"));
-}
 #[test]
-    fn test_page_response_empty() {,
+    fn test_page_response_empty() {
 let response: PageResponse<String> = PageResponse {,
             has_more: Some(false),
             page_token: None,
@@ -630,7 +591,7 @@ let json = serde_json::to_string(&response).unwrap();
 assert!(!json.contains("page_token"));
     }
 #[test]
-    fn test_session_create_request() {,
+    fn test_session_create_request() {
 let mut metadata = HashMap::new();
         metadata.insert("user_id".to_string(), serde_json::json!("user123"));
 let request = SessionCreateRequest {,
@@ -650,9 +611,8 @@ let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("app456"));
 assert!(json.contains("user123"));
         assert!(json.contains("get_weather"));
-}
 #[test]
-    fn test_session_update_request() {,
+    fn test_session_update_request() {
 let request = SessionUpdateRequest {,
             app_id: "app789".to_string(),
             session_id: "session123".to_string(),
@@ -663,9 +623,8 @@ let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("app789"));
 assert!(json.contains("session123"));
         assert!(!json.contains("tool_set"));
-}
 #[test]
-    fn test_session_get_request() {,
+    fn test_session_get_request() {
 let request = SessionGetRequest {,
             app_id: "app001".to_string(),
             session_id: "session456".to_string(),
@@ -675,7 +634,7 @@ let json = serde_json::to_string(&request).unwrap();
 assert!(json.contains("session456"));
     }
 #[test]
-    fn test_session_complete() {,
+    fn test_session_complete() {
 let session = Session {,
             session_id: Some("sess789".to_string()),
             app_id: Some("app123".to_string()),
@@ -693,9 +652,8 @@ let json = serde_json::to_string(&session).unwrap();
         assert!(json.contains("sess789"));
 assert!(json.contains("app123"));
         assert!(json.contains("conversation"));
-}
 #[test]
-    fn test_tool_set_with_function() {,
+    fn test_tool_set_with_function() {
 let tool_set = ToolSet {,
             tools: Some(vec![Tool {
                 tool_type: Some("function".to_string()),
@@ -706,8 +664,6 @@ let tool_set = ToolSet {,
                         "type": "object",
                         "properties": {
                             "expression": {"type": "string"}
-}
-                    }
 })),
             }]),
         };
@@ -715,9 +671,8 @@ let json = serde_json::to_string(&tool_set).unwrap();
         assert!(json.contains("function"));
 assert!(json.contains("calculate"));
         assert!(json.contains("parameters"));
-}
 #[test]
-    fn test_message_create_request() {,
+    fn test_message_create_request() {
 let request = MessageCreateRequest {,
             app_id: "app555".to_string(),
             session_id: "session888".to_string(),
@@ -735,9 +690,8 @@ assert!(json.contains("session888"));
         assert!(json.contains("Hello, assistant!"));
 assert!(json.contains("high"));
         assert!(json.contains("text"));
-}
 #[test]
-    fn test_message_list_request() {,
+    fn test_message_list_request() {
 let request = MessageListRequest {,
             app_id: "app777".to_string(),
             session_id: "session999".to_string(),
@@ -751,9 +705,8 @@ assert!(json.contains("session999"));
         assert!(json.contains("50"));
 assert!(json.contains("desc"));
         assert!(json.contains("page_token_123"));
-}
 #[test]
-    fn test_message_with_assistant_role() {,
+    fn test_message_with_assistant_role() {
 let message = Message {,
             message_id: Some("msg456".to_string()),
             session_id: Some("session123".to_string()),
@@ -774,7 +727,7 @@ assert!(json.contains("assistant"));
 assert!(json.contains("0.95"));
     }
 #[test]
-    fn test_run_create_request() {,
+    fn test_run_create_request() {
 let request = RunCreateRequest {,
             app_id: "app666".to_string(),
             session_id: "session444".to_string(),
@@ -795,7 +748,7 @@ assert!(json.contains("session444"));
 assert!(json.contains("code_interpreter"));
     }
 #[test]
-    fn test_run_list_request() {,
+    fn test_run_list_request() {
 let request = RunListRequest {,
             app_id: "app888".to_string(),
             session_id: "session777".to_string(),
@@ -809,9 +762,8 @@ assert!(json.contains("session777"));
         assert!(json.contains("20"));
 assert!(json.contains("asc"));
         assert!(json.contains("run123"));
-}
 #[test]
-    fn test_run_in_progress() {,
+    fn test_run_in_progress() {
 let run = Run {,
             run_id: Some("run789".to_string()),
             session_id: Some("session456".to_string()),
@@ -838,7 +790,7 @@ assert!(json.contains("in_progress"));
 assert!(!json.contains("completed_at"));
     }
 #[test]
-    fn test_run_failed() {,
+    fn test_run_failed() {
 let run = Run {,
             run_id: Some("run999".to_string()),
             session_id: Some("session111".to_string()),
@@ -862,9 +814,8 @@ assert!(json.contains("failed"));
         assert!(json.contains("TIMEOUT"));
 assert!(json.contains("Processing timeout"));
         assert!(json.contains("failed_at"));
-}
 #[test]
-    fn test_attachment_complete() {,
+    fn test_attachment_complete() {
 let attachment = Attachment {,
             file_id: Some("file789".to_string()),
             file_name: Some("presentation.pptx".to_string()),
@@ -879,9 +830,8 @@ assert!(json.contains("presentation.pptx"));
         assert!(json.contains("files.example.com"));
 assert!(json.contains("2048000"));
         assert!(json.contains("vnd.ms-powerpoint"));
-}
 #[test]
-    fn test_attachment_minimal() {,
+    fn test_attachment_minimal() {
 let attachment = Attachment {,
             file_id: Some("file456".to_string()),
             file_name: Some("note.txt".to_string()),
@@ -896,5 +846,3 @@ assert!(json.contains("note.txt"));
         assert!(json.contains("text/plain"));
 assert!(!json.contains("file_url"));
         assert!(!json.contains("uploaded_at"));
-}
-}

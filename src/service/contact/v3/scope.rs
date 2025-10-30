@@ -1,8 +1,7 @@
 use open_lark_core::core::api_req::ApiRequest;
 use crate::core::{,
     api_resp::ApiResponseTrait, config::Config, constants::AccessTokenType,
-    http::Transport, trait_system::Service,
-};
+    http::Transport, trait_system::Service};
 use serde::{Deserialize, Serialize};
 /// 权限范围服务,
 ///
@@ -10,13 +9,11 @@ use serde::{Deserialize, Serialize};
 /// - 获取通讯录授权范围,
 /// - 权限范围变更事件处理,
 pub struct ScopeService {
-    config: Config,
-}
+    config: Config}
 impl ScopeService {
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 获取通讯录授权范围,
+}/// 获取通讯录授权范围,
     ///,
 /// 获取应用在通讯录中的授权范围，包括可访问的部门、用户和用户组列表。,
     /// 用于了解当前应用能够访问的通讯录资源范围。,
@@ -31,8 +28,7 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
-            ..Default::default(),
-};
+            ..Default::default()};
 
         let resp = Transport::<GetScopeResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
@@ -57,16 +53,12 @@ let api_req = ApiRequest {,
 let mut params = std::collections::HashMap::new();
                 if let Some(user_id_type) = &req.user_id_type {
                     params.insert("user_id_type", user_id_type.clone());
-}
 if let Some(department_id_type) = &req.department_id_type {,
                     params.insert("department_id_type", department_id_type.clone());
-}
 if let Some(page_size) = req.page_size {,
                     params.insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = &req.page_token {,
                     params.insert("page_token", page_token.clone());
-}
 params,
             }
             ..Default::default(),
@@ -92,26 +84,20 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&req).unwrap_or_default(),
             query_params: std::collections::HashMap::new(),
-            ..Default::default(),
-};
+            ..Default::default()};
 let resp =,
             Transport::<UpdateScopeAuthorityResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
     }
-}
 impl Service for ScopeService {,
     fn config(&self) -> &Config {,
-&self.config,
-    }
+&self.config}
 fn service_name() -> &'static str {,
-        "scope",
-}
+        "scope"}
 fn service_version() -> &'static str {,
-        "v3",
-}
-}
+        "v3"}
 /// 获取权限范围请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetScopeRequest {
     /// 用户 ID 类型,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -124,10 +110,9 @@ pub struct GetScopeRequest {
     pub page_size: Option<i32>,
     /// 分页标记,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
+    pub page_token: Option<String>}
 /// 获取权限范围响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetScopeResponse {
     /// 权限范围列表
     pub scopes: Vec<Scope>,
@@ -136,15 +121,15 @@ pub struct GetScopeResponse {
     pub has_more: Option<bool>,
     /// 分页标记,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
+    pub page_token: Option<String>}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 /// 权限范围,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Scope {
     /// 部门列表,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -154,40 +139,36 @@ pub struct Scope {
     pub users: Option<Vec<ScopeUser>>,
     /// 用户组列表,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub groups: Option<Vec<ScopeGroup>>,
-}
+    pub groups: Option<Vec<ScopeGroup>>}
 /// 权限范围内的部门,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ScopeDepartment {
     /// 部门ID,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id: Option<String>,
     /// 部门名称,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-}
+    pub name: Option<String>}
 /// 权限范围内的用户,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ScopeUser {
     /// 用户ID,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
     /// 用户名称,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-}
+    pub name: Option<String>}
 /// 权限范围内的用户组,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ScopeGroup {
     /// 用户组ID,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub group_id: Option<String>,
     /// 用户组名称,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-}
+    pub name: Option<String>}
 /// 获取权限范围详情请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetScopeAuthorityRequest {
     /// 用户 ID 类型,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -200,16 +181,14 @@ pub struct GetScopeAuthorityRequest {
     pub page_size: Option<i32>,
     /// 分页标记,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
+    pub page_token: Option<String>}
 /// 获取权限范围详情响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetScopeAuthorityResponse {
     /// 权限范围详情
     pub scope_authority: ScopeAuthority,
-}
 /// 权限范围详情,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ScopeAuthority {
     /// 应用ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -228,10 +207,9 @@ pub struct ScopeAuthority {
     pub create_time: Option<String>,
     /// 更新时间,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub update_time: Option<String>,
-}
+    pub update_time: Option<String>}
 /// 权限范围详情,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ScopeDetails {
     /// 部门权限范围,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -241,10 +219,9 @@ pub struct ScopeDetails {
     pub user_scope: Option<UserScope>,
     /// 用户组权限范围,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub group_scope: Option<GroupScope>,
-}
+    pub group_scope: Option<GroupScope>}
 /// 部门权限范围,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DepartmentScope {
     /// 是否包含所有部门,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -254,10 +231,9 @@ pub struct DepartmentScope {
     pub department_ids: Option<Vec<String>>,
     /// 可访问的部门路径列表,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub department_id_paths: Option<Vec<String>>,
-}
+    pub department_id_paths: Option<Vec<String>>}
 /// 用户权限范围,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UserScope {
     /// 是否包含所有用户,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -267,10 +243,9 @@ pub struct UserScope {
     pub user_ids: Option<Vec<String>>,
     /// 排除的用户列表,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub excluded_user_ids: Option<Vec<String>>,
-}
+    pub excluded_user_ids: Option<Vec<String>>}
 /// 用户组权限范围,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GroupScope {
     /// 是否包含所有用户组,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -280,119 +255,44 @@ pub struct GroupScope {
     pub group_ids: Option<Vec<String>>,
     /// 排除的用户组列表,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub excluded_group_ids: Option<Vec<String>>,
-}
+    pub excluded_group_ids: Option<Vec<String>>}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 /// 更新权限范围请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateScopeAuthorityRequest {
     /// 权限范围详情
-    pub scope_details: Option<ScopeDetails>,
-}
+    pub scope_details: Option<ScopeDetails>}
 /// 更新权限范围响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateScopeAuthorityResponse {
     /// 更新结果
-    pub result: Option<String>,
-}
+    pub result: Option<String>}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 impl GetScopeAuthorityRequest {
-    /// 创建获取权限范围详情的请求,
-pub fn w+.*{
-        GetScopeAuthorityRequestBuilder::default(),
-}
-}
-/// 获取权限范围详情的构建器,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 获取权限范围详情的构建器,
 #[derive(Default)]
 pub struct GetScopeAuthorityRequestBuilder {
-    request: GetScopeAuthorityRequest,
-}
+    request: GetScopeAuthorityRequest}
 impl GetScopeAuthorityRequestBuilder {
-    /// 设置用户 ID 类型
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
-self.request.user_id_type = Some(user_id_type.to_string());
-        self,
-}
-/// 设置部门 ID 类型,
-    pub fn department_id_type(mut self, department_id_type: impl ToString) -> Self {
-self.request.department_id_type = Some(department_id_type.to_string());
-        self,
-}
-/// 设置分页大小,
-    pub fn page_size(mut self, page_size: i32) -> Self {
-self.request.page_size = Some(page_size);
-        self,
-}
-/// 设置分页标记,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {
-self.request.page_token = Some(page_token.to_string());
-        self,
-}
-/// 构建请求,
-    pub fn w+.*{
-self.request,
-    }
-/// 执行获取权限范围详情,
-    pub async fn execute(
-        self,
-        service: &ScopeService,
-    ) -> crate::core::SDKResult<GetScopeAuthorityResponse> {,
-service.get_authority(&self.build()).await,
-    }
-}
-/// 更新权限范围的构建器,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 更新权限范围的构建器,
 #[derive(Default)]
 pub struct UpdateScopeAuthorityRequestBuilder {
-    request: UpdateScopeAuthorityRequest,
-}
+    request: UpdateScopeAuthorityRequest}
 impl UpdateScopeAuthorityRequestBuilder {
-    /// 创建更新权限范围的请求,
-pub fn new() -> Self {
-        Self::default(),
-}
-/// 设置权限范围详情,
-    pub fn scope_details(mut self, scope_details: ScopeDetails) -> Self {
-self.request.scope_details = Some(scope_details);
-        self,
-}
-/// 设置部门权限范围,
-    pub fn department_scope(mut self, department_scope: DepartmentScope) -> Self {
-let mut scope_details = self.request.scope_details.unwrap_or_default();
-        scope_details.department_scope = Some(department_scope);
-self.request.scope_details = Some(scope_details);
-        self,
-}
-/// 设置用户权限范围,
-    pub fn user_scope(mut self, user_scope: UserScope) -> Self {
-let mut scope_details = self.request.scope_details.unwrap_or_default();
-        scope_details.user_scope = Some(user_scope);
-self.request.scope_details = Some(scope_details);
-        self,
-}
-/// 设置用户组权限范围,
-    pub fn group_scope(mut self, group_scope: GroupScope) -> Self {
-let mut scope_details = self.request.scope_details.unwrap_or_default();
-        scope_details.group_scope = Some(group_scope);
-self.request.scope_details = Some(scope_details);
-        self,
-}
-/// 构建请求,
-    pub fn w+.*{
-self.request,
-    }
-/// 执行更新权限范围,
-    pub async fn execute(
-        self,
-        service: &ScopeService,
-    ) -> crate::core::SDKResult<UpdateScopeAuthorityResponse> {,
-service.update_authority(&self.build()).await,
-    }
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }

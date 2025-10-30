@@ -1,7 +1,8 @@
 use serde::{Deserialize, Serialize};
 /// 绩效结果开通事件
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2PerformanceResultOpenedV1 {
+}
     /// 事件ID
     pub event_id: String,
     /// 事件类型
@@ -10,10 +11,10 @@ pub struct P2PerformanceResultOpenedV1 {
     pub created_time: String,
     /// 事件内容
     pub event: PerformanceResultOpenedEvent,
-}
 /// 绩效结果开通事件内容
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PerformanceResultOpenedEvent {
+}
     /// 周期ID
     pub semester_id: String,
     /// 项目ID
@@ -22,10 +23,10 @@ pub struct PerformanceResultOpenedEvent {
     pub reviewee_ids: Vec<String>,
     /// 开通时间戳
     pub opened_at: i64,
-}
 /// 绩效详情变更事件
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2PerformanceDetailChangedV1 {
+}
     /// 事件ID
     pub event_id: String,
     /// 事件类型
@@ -34,9 +35,8 @@ pub struct P2PerformanceDetailChangedV1 {
     pub created_time: String,
     /// 事件内容
     pub event: PerformanceDetailChangedEvent,
-}
 /// 绩效详情变更事件内容
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PerformanceDetailChangedEvent {
     /// 项目ID
     pub activity_id: String,

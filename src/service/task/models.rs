@@ -1,25 +1,18 @@
 use serde::{Deserialize, Serialize};
 /// 用户ID类型,
-#[derive(.*?)]
-pub enum UserIdType {,
+#[derive(Debug, Clone)]
+pub enum UserIdType {
     #[serde(rename = "open_id")]
     OpenId,
     #[serde(rename = "user_id")]
     UserId,
     #[serde(rename = "union_id")]
     UnionId,
-}
 impl UserIdType {
-    pub fn w+.*{
-match self {,
-            UserIdType::OpenId => "open_id",
-            UserIdType::UserId => "user_id",
-            UserIdType::UnionId => "union_id",
-        }
-}
-}
-/// 任务实体,
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 任务实体,
+#[derive(Debug, Clone)]
 pub struct Task {
     /// 任务GUID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -66,9 +59,8 @@ pub struct Task {
     /// URL链接,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
-}
 /// 任务截止时间,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct TaskDue {
     /// 截止时间戳,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -76,9 +68,8 @@ pub struct TaskDue {
     /// 是否为全天任务,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub is_all_day: Option<bool>,
-}
 /// 任务开始时间,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct TaskStart {
     /// 开始时间戳,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -86,9 +77,8 @@ pub struct TaskStart {
     /// 是否为全天任务,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub is_all_day: Option<bool>,
-}
 /// 任务成员,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct TaskMember {
     /// 成员ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -99,9 +89,8 @@ pub struct TaskMember {
     /// 角色,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
-}
 /// 任务自定义完成配置,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct TaskCustomComplete {
     /// 完成模式,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -109,16 +98,14 @@ pub struct TaskCustomComplete {
     /// 完成设置,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub complete_setting: Option<TaskCompleteSetting>,
-}
 /// 任务完成设置,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct TaskCompleteSetting {
     /// 子任务完成数量,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub subtask_count: Option<i32>,
-}
 /// 任务列表,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Tasklist {
     /// 清单GUID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -144,9 +131,8 @@ pub struct Tasklist {
     /// 更新时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<String>,
-}
 /// 评论,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Comment {
     /// 评论ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -169,9 +155,8 @@ pub struct Comment {
     /// 更新时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<String>,
-}
 /// 附件,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Attachment {
     /// 附件GUID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -194,9 +179,8 @@ pub struct Attachment {
     /// 上传时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub uploaded_at: Option<String>,
-}
 /// 自定义分组,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Section {
     /// 分组GUID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -213,9 +197,8 @@ pub struct Section {
     /// 更新时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<String>,
-}
 /// 自定义字段,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CustomField {
     /// 字段GUID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -235,16 +218,14 @@ pub struct CustomField {
     /// 更新时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<String>,
-}
 /// 自定义字段设置,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CustomFieldSetting {
     /// 选项列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub options: Option<Vec<CustomFieldOption>>,
-}
 /// 自定义字段选项,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CustomFieldOption {
     /// 选项GUID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -261,9 +242,8 @@ pub struct CustomFieldOption {
     /// 更新时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<String>,
-}
 /// 提醒时间,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Reminder {
     /// 提醒ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -271,9 +251,8 @@ pub struct Reminder {
     /// 相对触发时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub relative_fire_minute: Option<i32>,
-}
 /// 依赖关系,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Dependency {
     /// 依赖类型,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -281,9 +260,8 @@ pub struct Dependency {
     /// 依赖任务GUID,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub task_guid: Option<String>,
-}
 /// 清单活动订阅,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ActivitySubscription {
     /// 订阅GUID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -303,20 +281,18 @@ pub struct ActivitySubscription {
     /// 更新时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<String>,
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json;
     #[test]
-fn test_user_id_type_as_str() {,
+fn test_user_id_type_as_str() {
         assert_eq!(UserIdType::OpenId.as_str(), "open_id");
         assert_eq!(UserIdType::UserId.as_str(), "user_id");
         assert_eq!(UserIdType::UnionId.as_str(), "union_id");
-}
 #[test]
-    fn test_user_id_type_serialization() {,
+    fn test_user_id_type_serialization() {
 let open_id = UserIdType::OpenId;
         let serialized = serde_json::to_string(&open_id).unwrap();
         assert_eq!(serialized, "\"open_id\"");
@@ -326,18 +302,16 @@ let user_id = UserIdType::UserId;
 let union_id = UserIdType::UnionId;
         let serialized = serde_json::to_string(&union_id).unwrap();
         assert_eq!(serialized, "\"union_id\"");
-}
 #[test]
-    fn test_user_id_type_deserialization() {,
+    fn test_user_id_type_deserialization() {
 let deserialized: UserIdType = serde_json::from_str("\"open_id\"").unwrap();
         assert!(matches!(deserialized, UserIdType::OpenId));
 let deserialized: UserIdType = serde_json::from_str("\"user_id\"").unwrap();
         assert!(matches!(deserialized, UserIdType::UserId));
 let deserialized: UserIdType = serde_json::from_str("\"union_id\"").unwrap();
         assert!(matches!(deserialized, UserIdType::UnionId));
-}
 #[test]
-    fn test_task_serialization() {,
+    fn test_task_serialization() {
 let task = Task {,
             guid: Some("task123".to_string()),
             summary: Some("Test Task".to_string()),
@@ -372,9 +346,8 @@ let serialized = serde_json::to_string(&task).unwrap();
         assert_eq!(task.summary, deserialized.summary);
         assert_eq!(task.description, deserialized.description);
         assert_eq!(task.status, deserialized.status);
-}
 #[test]
-    fn test_task_due_serialization() {,
+    fn test_task_due_serialization() {
 let due = TaskDue {,
             timestamp: Some("2023-12-31T23:59:59Z".to_string()),
             is_all_day: Some(true),
@@ -384,9 +357,8 @@ let serialized = serde_json::to_string(&due).unwrap();
 
         assert_eq!(due.timestamp, deserialized.timestamp);
         assert_eq!(due.is_all_day, deserialized.is_all_day);
-}
 #[test]
-    fn test_task_member_serialization() {,
+    fn test_task_member_serialization() {
 let member = TaskMember {,
             id: Some("user123".to_string()),
             type_: Some("user".to_string()),
@@ -398,9 +370,8 @@ let serialized = serde_json::to_string(&member).unwrap();
         assert_eq!(member.id, deserialized.id);
         assert_eq!(member.type_, deserialized.type_);
         assert_eq!(member.role, deserialized.role);
-}
 #[test]
-    fn test_activity_subscription_serialization() {,
+    fn test_activity_subscription_serialization() {
 let subscription = ActivitySubscription {,
             guid: Some("sub123".to_string()),
             name: Some("Task Updates".to_string()),
@@ -424,7 +395,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_models_with_none_values() {,
+    fn test_models_with_none_values() {
 let task = Task {,
             guid: None,
             summary: None,
@@ -448,9 +419,8 @@ let serialized = serde_json::to_string(&task).unwrap();
         let deserialized: Task = serde_json::from_str("{}").unwrap();
         assert_eq!(deserialized.guid, None);
         assert_eq!(deserialized.summary, None);
-}
 #[test]
-    fn test_debug_trait_for_models() {,
+    fn test_debug_trait_for_models() {
 let task = Task {,
             guid: Some("task123".to_string()),
             summary: Some("Test".to_string()),
@@ -472,9 +442,8 @@ let task = Task {,
         let debug_output = format!("{:?}", task);
 assert!(debug_output.contains("Task"));
         assert!(debug_output.contains("task123"));
-}
 #[test]
-    fn test_clone_trait_for_models() {,
+    fn test_clone_trait_for_models() {
 let original_member = TaskMember {,
             id: Some("user123".to_string()),
             type_: Some("user".to_string()),
@@ -484,5 +453,3 @@ let cloned_member = original_member.clone();
         assert_eq!(original_member.id, cloned_member.id);
         assert_eq!(original_member.type_, cloned_member.type_);
         assert_eq!(original_member.role, cloned_member.role);
-}
-}

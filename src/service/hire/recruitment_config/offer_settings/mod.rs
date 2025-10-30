@@ -2,25 +2,23 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::hire::models::{CommonResponse, I18nText, PageResponse, UserId}
 };
 /// Offer设置服务
 pub struct OfferSettingsService {
-    pub config: Config,
 }
+    pub config: Config,
 /// Offer设置信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct OfferSettings {
+}
     /// 设置ID
     pub id: String,
     /// 设置名称
@@ -47,15 +45,15 @@ pub struct OfferSettings {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 薪资配置
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SalaryConfig {
-    // TODO: Add fields
 }
+    // TODO: Add fields
 /// 薪资组成项
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SalaryComponent {
+}
     /// 组成项ID
     pub id: String,
     /// 组成项名称
@@ -68,115 +66,42 @@ pub struct SalaryComponent {
     pub min_value: Option<f64>,
     /// 最大值
     pub max_value: Option<f64>,
-}
 /// 审批配置
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ApprovalConfig {
-    // TODO: Add fields
 }
-/// 审批规则
-#[derive(.*?)]
-pub struct ApprovalRule {
-    /// 规则ID
-    pub id: String,
-    /// 规则名称
-    pub name: String,
-    /// 条件表达式
-    pub condition: String,
-    /// 审批人
-    pub approvers: Vec<UserId>,
-}
-/// 有效期配置
-#[derive(.*?)]
-pub struct ValidityConfig {
-    // TODO: Add fields
-}
-/// 签约配置
-#[derive(.*?)]
-pub struct ContractConfig {
-    // TODO: Add fields
-}
-/// 通知配置
-#[derive(.*?)]
-pub struct NotificationConfig {
-    // TODO: Add fields
-}
-/// Offer设置创建请求
-#[derive(.*?)]
-pub struct OfferSettingsCreateRequest {
-    /// 设置名称
-    pub name: I18nText,
-    /// 设置描述
-    pub description: Option<I18nText>,
-    /// 适用职位类型
-    pub applicable_job_types: Vec<String>,
-    /// 薪资配置
-    pub salary_config: SalaryConfig,
-    /// 审批配置
-    pub approval_config: ApprovalConfig,
-    /// 有效期配置
-    pub validity_config: ValidityConfig,
-    /// 签约配置
-    pub contract_config: Option<ContractConfig>,
-    /// 通知配置
-    pub notification_config: Option<NotificationConfig>,
-    /// 是否默认设置
-    pub is_default: Option<bool>,
-}
-/// Offer设置列表请求
-#[derive(.*?)]
-pub struct OfferSettingsListRequest {
-    /// 分页大小
-    pub page_size: Option<u32>,
-    /// 分页标记
-    pub page_token: Option<String>,
-    /// 适用职位类型
-    pub job_type: Option<String>,
-    /// 状态
-    pub status: Option<String>,
-}
-/// Offer设置列表响应
-#[derive(.*?)]
-pub struct OfferSettingsListResponse {
-    /// Offer设置列表
-#[serde(flatten)]
-    pub settings: PageResponse<OfferSettings>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// Offer设置详情响应
-#[derive(.*?)]
-pub struct OfferSettingsDetailResponse {
-    /// Offer设置信息
-    pub settings: OfferSettings,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// Offer设置操作响应
-#[derive(.*?)]
-pub struct OfferSettingsOperationResponse {
-    /// 操作结果
-#[serde(flatten)]
-    pub result: CommonResponse,
-    /// 设置ID
-    pub settings_id: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl OfferSettingsService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// Offer设置详情响应
+#[derive(Debug, Clone)]
 }
-/// 创建Offer设置
+pub struct OfferSettingsDetailResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// Offer设置操作响应
+#[derive(Debug, Clone)]
+}
+pub struct OfferSettingsOperationResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl OfferSettingsService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建Offer设置
     ///,
 /// 该接口用于创建新的Offer设置模板，定义Offer的
     /// 薪资结构、审批流程、有效期、签约方式等配置。
@@ -238,9 +163,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取Offer设置详情
     ///,
 /// 该接口用于获取指定Offer设置的详细信息，包括
@@ -272,8 +195,7 @@ let api_req = ApiRequest {,
     ///     println!("设置名称: {:?}" data.settings.name.zh_cn);
     ///     println!("默认币种: {}" data.settings.salary_config.default_currency);
     ///     println!("默认有效期: {}天" data.settings.validity_config.default_validity_days);
-    /// }
-/// ```
+    /// /// ```
     pub async fn get_settings_detail(
         &self,
         settings_id: &str,
@@ -290,9 +212,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取Offer设置列表
     ///,
 /// 该接口用于获取企业的Offer设置列表，支持按职位类型、
@@ -333,8 +253,7 @@ let api_req = ApiRequest {,
 ///     for settings in &data.settings.items {
     ///         println!("设置: {:?} (币种: {})" settings.name.zh_cn, settings.salary_config.default_currency);
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_settings(
         &self,
         request: OfferSettingsListRequest,
@@ -352,19 +271,13 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(job_type) = request.job_type {,
             api_req.query_params.insert("job_type", job_type);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert("status", status);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 更新Offer设置
     ///,
 /// 该接口用于更新现有Offer设置的配置，支持修改
@@ -415,9 +328,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除Offer设置
     ///,
 /// 该接口用于删除指定的Offer设置。删除后的设置
@@ -450,7 +361,6 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}}}}}}}}}}

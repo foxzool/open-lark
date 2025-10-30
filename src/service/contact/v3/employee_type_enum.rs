@@ -10,12 +10,10 @@ use serde::{Deserialize, Serialize};
 /// 人员类型服务,
 pub struct EmployeeTypeEnumService {
     config: Config,
-}
 impl EmployeeTypeEnumService {
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 新增人员类型,
+}/// 新增人员类型,
     pub async fn create(
         &self,
         req: &CreateEmployeeTypeRequest,
@@ -89,64 +87,61 @@ let resp =,
             Transport::<DeleteEmployeeTypeResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateEmployeeTypeRequest {
     pub employee_type_enum: EmployeeTypeEnum,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateEmployeeTypeResponse {
     pub employee_type_enum: EmployeeTypeEnum,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateEmployeeTypeRequest {
     pub employee_type_enum: EmployeeTypeEnum,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateEmployeeTypeResponse {
     pub employee_type_enum: EmployeeTypeEnum,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListEmployeeTypesRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListEmployeeTypesResponse {
     pub items: Vec<EmployeeTypeEnum>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DeleteEmployeeTypeResponse {}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}

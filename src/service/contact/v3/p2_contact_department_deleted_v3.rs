@@ -2,18 +2,16 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2ContactDepartmentDeletedV3 {
     pub schema: String,
     pub header: EventHeader,
     pub event: P2ContactDepartmentDeletedV3Data,
-}
 pub(crate) struct P2ContactDepartmentDeletedV3ProcessorImpl<F>,
 where
     F: Fn(P2ContactDepartmentDeletedV3) + 'static,
 {
     f: F,
-}
 impl<F> EventHandler for P2ContactDepartmentDeletedV3ProcessorImpl<F>,
 where
     F: Fn(P2ContactDepartmentDeletedV3) + 'static + Sync + Send,
@@ -23,34 +21,29 @@ let event: P2ContactDepartmentDeletedV3 = serde_json::from_slice(payload)?;
         (self.f)(event);
 Ok(()),
     }
-}
 impl<F> P2ContactDepartmentDeletedV3ProcessorImpl<F>,
 where
     F: Fn(P2ContactDepartmentDeletedV3) + 'static,
 {,
 pub(crate) fn new(f: F) -> Self {
         P2ContactDepartmentDeletedV3ProcessorImpl { f }
-}
-}
 /// 部门删除事件数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2ContactDepartmentDeletedV3Data {
     /// 事件对象
     pub object: ContactDepartmentEventObject,
     /// 删除前的部门信息,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub old_object: Option<ContactDepartmentEventObject>,
-}
 /// 通讯录部门事件对象,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ContactDepartmentEventObject {
     /// 对象类型 (department)
     pub object_type: String,
     /// 部门信息
     pub department: DeletedContactDepartment,
-}
 /// 被删除的部门信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DeletedContactDepartment {
     /// 部门ID
     pub department_id: String,
@@ -86,9 +79,8 @@ pub struct DeletedContactDepartment {
     /// 删除方式 (manual, auto, merge),
 #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_type: Option<String>,
-}
 /// 部门国际化名称,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DepartmentI18nName {
     /// 中文名,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -99,4 +91,3 @@ pub struct DepartmentI18nName {
     /// 日文名,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub ja_jp: Option<String>,
-}

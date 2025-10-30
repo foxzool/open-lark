@@ -3,24 +3,23 @@ use serde::{Deserialize, Serialize};
 use open_lark_core::core::api_req::ApiRequest;
 use crate::{
     core::{,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::hire::models::{CommonResponse, PageResponse}
 };
 /// 附件服务
 pub struct AttachmentService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 附件信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Attachment {
+}
     /// 附件ID
     pub id: String,
     /// 附件名称
@@ -53,10 +52,10 @@ pub struct Attachment {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 附件上传请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AttachmentUploadRequest {
+}
     /// 附件名称
     pub name: String,
     /// 附件类型
@@ -71,10 +70,10 @@ pub struct AttachmentUploadRequest {
     pub is_public: Option<bool>,
     /// 过期时间
     pub expiration_time: Option<String>,
-}
 /// 附件上传信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AttachmentUploadInfo {
+}
     /// 上传URL
     pub upload_url: String,
     /// 上传方法
@@ -85,10 +84,10 @@ pub struct AttachmentUploadInfo {
     pub attachment_id: String,
     /// 过期时间
     pub expires_at: String,
-}
 /// 附件更新请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AttachmentUpdateRequest {
+}
     /// 附件名称
     pub name: Option<String>,
     /// 附件描述
@@ -97,10 +96,10 @@ pub struct AttachmentUpdateRequest {
     pub is_public: Option<bool>,
     /// 过期时间
     pub expiration_time: Option<String>,
-}
 /// 附件列表请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AttachmentListRequest {
+}
     /// 分页大小
     pub page_size: Option<u32>,
     /// 分页标记
@@ -117,81 +116,72 @@ pub struct AttachmentListRequest {
     pub created_start_time: Option<String>,
     /// 创建时间结束
     pub created_end_time: Option<String>,
-}
 /// 批量下载请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BatchDownloadRequest {
+}
     /// 附件ID列表
     pub attachment_ids: Vec<String>,
     /// 压缩包名称
     pub archive_name: Option<String>,
-}
 /// 附件列表响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AttachmentListResponse {
+}
     /// 附件列表
 #[serde(flatten)]
     pub attachments: PageResponse<Attachment>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 附件详情响应
-#[derive(.*?)]
-pub struct AttachmentDetailResponse {
-    /// 附件信息
-    pub attachment: Attachment,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 附件上传响应
-#[derive(.*?)]
-pub struct AttachmentUploadResponse {
-    /// 上传信息
-    pub upload_info: AttachmentUploadInfo,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 批量下载响应
-#[derive(.*?)]
-pub struct BatchDownloadResponse {
-    /// 下载链接
-    pub download_url: String,
-    /// 过期时间
-    pub expires_at: String,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 附件操作响应
-#[derive(.*?)]
-pub struct AttachmentOperationResponse {
-    /// 操作结果
-#[serde(flatten)]
-    pub result: CommonResponse,
-    /// 相关ID
-    pub id: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl AttachmentService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 附件详情响应
+#[derive(Debug, Clone)]
 }
-/// 创建附件上传任务
+pub struct AttachmentDetailResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 附件上传响应
+#[derive(Debug, Clone)]
+}
+pub struct AttachmentUploadResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 批量下载响应
+#[derive(Debug, Clone)]
+}
+pub struct BatchDownloadResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 附件操作响应
+#[derive(Debug, Clone)]
+}
+pub struct AttachmentOperationResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl AttachmentService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建附件上传任务
     ///,
 /// 该接口用于创建附件上传任务，获取上传URL和相关
     /// 上传信息。客户端可以使用返回的信息直接上传文件。
@@ -235,8 +225,7 @@ impl AttachmentService {
     /// if let Some(data) = &response.data {
     ///     println!("上传URL: {}" data.upload_info.upload_url);
     ///     println!("附件ID: {}" data.upload_info.attachment_id);
-    /// }
-/// ```
+    /// /// ```
     pub async fn create_upload_task(
         &self,
         request: AttachmentUploadRequest,
@@ -249,9 +238,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取附件详情
     ///,
 /// 该接口用于获取指定附件的详细信息，包括附件
@@ -280,8 +267,7 @@ let api_req = ApiRequest {,
     ///     println!("附件名称: {}" data.attachment.name);
     ///     println!("文件大小: {} 字节" data.attachment.file_size);
     ///     println!("下载链接: {:?}" data.attachment.download_url);
-    /// }
-/// ```
+    /// /// ```
     pub async fn get_attachment_detail(
         &self,
         attachment_id: &str,
@@ -298,9 +284,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取附件列表
     ///,
 /// 该接口用于获取附件列表，支持按关联对象、
@@ -347,8 +331,7 @@ let api_req = ApiRequest {,
 ///     for attachment in &data.attachments.items {
     ///         println!("附件: {} ({})" attachment.name, attachment.file_type);
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_attachments(
         &self,
         request: AttachmentListRequest,
@@ -366,37 +349,27 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(object_type) = request.object_type {,
             api_req.query_params.insert("object_type", object_type);
-}
 if let Some(object_id) = request.object_id {,
             api_req.query_params.insert("object_id", object_id);
-}
 if let Some(attachment_type) = request.attachment_type {,
             api_req
 .query_params
                 .insert("attachment_type", attachment_type);
-}
 if let Some(uploader_id) = request.uploader_id {,
             api_req.query_params.insert("uploader_id", uploader_id);
-}
 if let Some(created_start_time) = request.created_start_time {,
             api_req
 .query_params
                 .insert("created_start_time", created_start_time);
-}
 if let Some(created_end_time) = request.created_end_time {,
             api_req
 .query_params
                 .insert("created_end_time", created_end_time);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 更新附件信息
     ///,
 /// 该接口用于更新附件的基本信息，包括名称、
@@ -440,9 +413,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除附件
     ///,
 /// 该接口用于删除指定的附件文件，删除后
@@ -476,7 +447,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取附件下载链接
     ///,
 /// 该接口用于获取附件的临时下载链接，
@@ -509,9 +479,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取附件预览链接
     ///,
 /// 该接口用于获取附件的预览链接，支持在线
@@ -544,9 +512,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量下载附件
     ///,
 /// 该接口用于批量下载多个附件，系统会将
@@ -583,8 +549,7 @@ let api_req = ApiRequest {,
     /// if let Some(data) = &response.data {
     ///     println!("下载链接: {}" data.download_url);
     ///     println!("过期时间: {}" data.expires_at);
-    /// }
-/// ```
+    /// /// ```
     pub async fn batch_download(
         &self,
         request: BatchDownloadRequest,
@@ -597,9 +562,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量删除附件
     ///,
 /// 该接口用于批量删除多个附件，
@@ -626,11 +589,10 @@ let api_req = ApiRequest {,
         attachment_ids: Vec<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<AttachmentOperationResponse>> {,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
         struct BatchDeleteRequest {
             attachment_ids: Vec<String>,
         }
-
         let request = BatchDeleteRequest { attachment_ids };
 let api_req = ApiRequest {,
             http_method: Method::POST,
@@ -639,9 +601,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取附件统计信息
     ///,
 /// 该接口用于获取附件相关的统计数据，包括
@@ -685,14 +645,10 @@ let mut api_req = ApiRequest {,
 // 添加查询参数
         if let Some(object_type) = object_type {
             api_req.query_params.insert("object_type", object_type);
-}
 if let Some(start_date) = start_date {,
             api_req.query_params.insert("start_date", start_date);
-}
 if let Some(end_date) = end_date {,
             api_req.query_params.insert("end_date", end_date);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

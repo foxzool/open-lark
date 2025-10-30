@@ -3,156 +3,15 @@ use open_lark_core::core::api_req::ApiRequest;
 use crate::{,
 core::{,
         api_resp::BaseResponse, constants::AccessTokenType, endpoints::EndpointBuilder,
-        http::Transport, req_option::RequestOption, standard_response::StandardResponse, SDKResult,
-    }
+        http::Transport, req_option::RequestOption, standard_response::StandardResponse, SDKResult}
     service::im::v1::message::{CreateMessageResp, Message}
 };
 // MessageService is defined in the parent module (mod.rs),
 use crate::service::im::v1::message::MessageService;
 impl MessageService {
-    /// 发送消息,
-///,
-    /// 给指定用户或者会话发送消息，支持文本、富文本、可交互的消息卡片、群名片、个人名片、图片、,
-/// 视频、音频、文件、表情包。,
-    ///,
-/// # API文档,
-    ///,
-/// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/create,
-    ///,
-/// # 示例,
-    ///
-    /// ```rust,no_run
-    /// use open_lark::prelude::*;
-///,
-    /// #[tokio::main]
-    /// async fn main() -> Result<(), Box<dyn std::error::Error>> {,
-///     let client = LarkClient::builder(),
-    ///         .app_id("your_app_id"),
-///         .app_secret("your_app_secret"),
-    ///         .build()?;
-///,
-    ///     // 发送文本消息,
-///     let message = client.im.v1.message.create_message_builder(),
-    ///         .receive_id("user_open_id"),
-///         .receive_id_type("open_id"),
-    ///         .content(r#"{"text":"Hello World"}"#),
-///         .msg_type("text"),
-    ///         .execute(&client.im.v1.message),
-///         .await?;
-    ///
-    ///     println!("发送成功，消息ID: {}", message.message_id);
-///     Ok(()),
-    /// }
-/// ```,
-    pub async fn create(
-        &self,
-        create_message_request: crate::service::im::v1::message::builders::CreateMessageRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<Message> {,
-let mut api_req = create_message_request.api_req;
-        api_req.set_http_method(Method::POST);
-api_req.set_api_path(crate::core::endpoints::im::IM_V1_SEND_MESSAGE.to_string());
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-let api_resp: BaseResponse<CreateMessageResp> =,
-            Transport::request(api_req, &self.config, option).await?;
-api_resp.into_result().map(|resp| resp.data),
-    }
-/// 撤回消息,
-    ///,
-/// 撤回已经发送成功的消息。支持撤回应用自身发送的消息、应用管理员撤回群成员的消息、,
-    /// 撤回指定用户在指定会话的消息等不同场景。,
-///,
-    /// # API文档,
-///,
-    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/create,
-///,
-    /// # 示例,
-///,
-    /// ```rust,no_run
-    /// use open_lark::prelude::*;
-///,
-    /// #[tokio::main]
-    /// async fn main() -> Result<(), Box<dyn std::error::Error>> {,
-///     let client = LarkClient::builder(),
-    ///         .app_id("your_app_id"),
-///         .app_secret("your_app_secret"),
-    /// # API文档,
-///,
-    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/im/delete,
-///         .build()?;
-    ///,
-///     // 撤回消息,
-    ///     client.im.v1.message.delete("om_1234567890", None).await?;
-///,
-    ///     println!("消息撤回成功");
-///     Ok(()),
-    /// }
-/// ```,
-    pub async fn delete(&self, message_id: &str, option: Option<RequestOption>) -> SDKResult<()> {,
-let mut api_req = ApiRequest::default();
-        api_req.set_http_method(Method::DELETE);
-api_req.set_api_path(EndpointBuilder::replace_param(,
-            crate::core::endpoints::im::IM_V1_DELETE_MESSAGE,
-            "message_id",
-            message_id,
-        ));
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-let api_resp: BaseResponse<serde_json::Value> =,
-            Transport::request(api_req, &self.config, option).await?;
-api_resp.into_result().map(|_| ()),
-    }
-/// 更新消息,
-    ///,
-/// 更新已发送的消息。仅支持更新应用自身发送的文本消息、图片消息和文件消息。,
-    ///,
-/// # API文档,
-    ///,
-/// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/create,
-    pub async fn update(
-        &self,
-        message_id: &str,
-        update_message_request: crate::service::im::v1::message::builders::UpdateMessageRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<Message> {,
-let mut api_req = update_message_request.api_req;
-        api_req.set_http_method(Method::PATCH);
-api_req.set_api_path(EndpointBuilder::replace_param(,
-            crate::core::endpoints::im::IM_V1_UPDATE_MESSAGE,
-            "message_id",
-            message_id,
-        ));
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-let api_resp: BaseResponse<CreateMessageResp> =,
-            Transport::request(api_req, &self.config, option).await?;
-api_resp.into_result().map(|resp| resp.data),
-    }
-/// 回复消息,
-    ///,
-/// 在指定消息下进行回复。支持回复文本、图片、文件等类型的消息。,
-    ///,
-/// # API文档,
-    ///,
-/// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/create,
-    pub async fn reply(
-        &self,
-        message_id: &str,
-        reply_message_request: crate::service::im::v1::message::builders::CreateMessageRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<Message> {,
-let mut api_req = reply_message_request.api_req;
-        api_req.set_http_method(Method::POST);
-api_req.set_api_path(EndpointBuilder::replace_param(,
-            crate::core::endpoints::im::IM_V1_REPLY_MESSAGE,
-            "message_id",
-            message_id,
-        ));
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-let api_resp: BaseResponse<CreateMessageResp> =,
-            Transport::request(api_req, &self.config, option).await?;
-api_resp.into_result().map(|resp| resp.data),
-    }
-}
-#[cfg(test)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[cfg(test)]
 mod tests {
 use super::*;
     use crate::{
@@ -162,45 +21,38 @@ use super::*;
 use reqwest::Method;
     use serde_json;
 // Mock Transport for testing,
-    #[derive(.*?)]
+    #[derive(Debug, Clone)]
 #[allow(dead_code)]
     struct MockTransport {
         should_fail: bool,
         response_data: Option<serde_json::Value>,
-        captured_request: Option<ApiRequest>,
-    }
+        captured_request: Option<ApiRequest>}
 #[allow(dead_code)]
     impl MockTransport {
-fn new() -> Self {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}fn new() -> Self {
             Self {
                 should_fail: false,
                 response_data: None,
-                captured_request: None,
-            }
-}
+                captured_request: None}
 fn with_failure(mut self) -> Self {
             self.should_fail = true;
-self,
-        }
+self}
 
         fn with_response(mut self, data: serde_json::Value) -> Self {
 self.response_data = Some(data);
-            self,
-}
+            self}
 fn get_captured_request(&self) -> Option<&ApiRequest> {,
-            self.captured_request.as_ref(),
-}
+            self.captured_request.as_ref()}
     }
 impl Default for MockTransport {,
         fn default() -> Self {
-Self::new(),
-        }
-}
+Self::new()}
 // Helper function to create test message service,
     fn create_test_message_service() -> MessageService {,
 let config = Config::default();
         MessageService { config }
-}
 // Helper function to create test create message request,
     fn create_test_create_message_request() -> CreateMessageRequest {,
 let mut api_req = ApiRequest::default();
@@ -212,7 +64,6 @@ let mut api_req = ApiRequest::default();
 });
 api_req.body = body_json.to_string().into_bytes();
         CreateMessageRequest { api_req }
-}
 // Helper function to create test update message request,
     fn create_test_update_message_request(,
 ) -> crate::service::im::v1::message::builders::UpdateMessageRequest {,
@@ -222,9 +73,8 @@ let body_json = serde_json::json!({,
 });
 api_req.body = body_json.to_string().into_bytes();
         crate::service::im::v1::message::builders::UpdateMessageRequest { api_req }
-}
 #[tokio::test]
-    async fn test_create_message_request_preparation() {,
+    async fn test_create_message_request_preparation() {
 let _service = create_test_message_service();
         let request = create_test_create_message_request();
 // Extract the API request from the CreateMessageRequest,
@@ -239,7 +89,7 @@ assert!(body_json.is_object());
 assert!(body_json.get("content").is_some());
     }
 #[test]
-    fn test_delete_message_endpoint_construction() {,
+    fn test_delete_message_endpoint_construction() {
 let message_id = "test_msg_123";
         let expected_path =
             crate::core::endpoints::im::IM_V1_DELETE_MESSAGE.replace("{message_id}", message_id);
@@ -250,9 +100,8 @@ let constructed_path = crate::core::endpoints::EndpointBuilder::replace_param(,
         );
 
         assert_eq!(expected_path, constructed_path);
-}
 #[test]
-    fn test_delete_message_request_structure() {,
+    fn test_delete_message_request_structure() {
 let message_id = "test_msg_456";
         let mut api_req = ApiRequest::default();
 api_req.set_http_method(Method::DELETE);
@@ -272,9 +121,8 @@ assert!(api_req
         assert!(api_req
 .get_supported_access_token_types()
             .contains(&AccessTokenType::User));
-}
 #[test]
-    fn test_update_message_endpoint_construction() {,
+    fn test_update_message_endpoint_construction() {
 let message_id = "update_msg_123";
         let expected_path =
             crate::core::endpoints::im::IM_V1_UPDATE_MESSAGE.replace("{message_id}", message_id);
@@ -285,9 +133,8 @@ let constructed_path = crate::core::endpoints::EndpointBuilder::replace_param(,
         );
 
         assert_eq!(expected_path, constructed_path);
-}
 #[test]
-    fn test_reply_message_endpoint_construction() {,
+    fn test_reply_message_endpoint_construction() {
 let message_id = "reply_msg_123";
         let expected_path =
             crate::core::endpoints::im::IM_V1_REPLY_MESSAGE.replace("{message_id}", message_id);
@@ -298,9 +145,8 @@ let constructed_path = crate::core::endpoints::EndpointBuilder::replace_param(,
         );
 
         assert_eq!(expected_path, constructed_path);
-}
 #[test]
-    fn test_message_request_endpoint_validations() {,
+    fn test_message_request_endpoint_validations() {
 // Test create message endpoint,
         assert_eq!(
             crate::core::endpoints::im::IM_V1_SEND_MESSAGE,
@@ -326,9 +172,8 @@ assert!(reply_endpoint.starts_with("/open-apis/"));
         assert_eq!(expected_types.len(), 2);
 assert!(expected_types.contains(&AccessTokenType::Tenant));
         assert!(expected_types.contains(&AccessTokenType::User));
-}
 #[test]
-    fn test_http_methods_configuration() {,
+    fn test_http_methods_configuration() {
 // Create message should use POST,
         assert_eq!(Method::POST, Method::POST);
 // Delete message should use DELETE,
@@ -337,9 +182,8 @@ assert!(expected_types.contains(&AccessTokenType::Tenant));
         assert_eq!(Method::PATCH, Method::PATCH);
 // Reply message should use POST,
         assert_eq!(Method::POST, Method::POST);
-}
 #[test]
-    fn test_message_id_validation() {,
+    fn test_message_id_validation() {
 let valid_message_ids = [,
             "msg_1234567890",
             "om_abcdef123456",
@@ -356,7 +200,6 @@ let path = crate::core::endpoints::EndpointBuilder::replace_param(,
             );
 assert!(path.contains(message_id));
             assert!(!path.contains("{message_id}"));
-}
     }
 #[test]
     ,
@@ -369,9 +212,8 @@ for message_id in special_ids {,
             );
 assert!(path.contains(message_id));
         }
-}
 #[test]
-    fn test_request_body_structure() {,
+    fn test_request_body_structure() {
 let create_request = create_test_create_message_request();
         let body = &create_request.api_req.body;
 // Parse the body as JSON to verify structure,
@@ -386,9 +228,8 @@ let update_body = &update_request.api_req.body;
         let update_body_json: serde_json::Value = serde_json::from_slice(update_body).unwrap();
 assert!(update_body_json.is_object());
         assert!(update_body_json.get("content").is_some());
-}
 #[test]
-    fn test_request_option_handling() {,
+    fn test_request_option_handling() {
 // Test RequestOption can be passed (type checking),
         let option: Option<RequestOption> = None;
 assert!(option.is_none());
@@ -396,15 +237,14 @@ assert!(option.is_none());
 assert!(option.is_some());
     }
 #[test]
-    fn test_service_config_dependency() {,
+    fn test_service_config_dependency() {
 let service = create_test_message_service();
         // Verify service has config,
 let config_ref = &service.config;
         assert!(config_ref.app_id.is_empty()); // Default config should have empty app_id,
-assert!(config_ref.app_secret.is_empty()); // Default config should have empty app_secret,
-    }
+assert!(config_ref.app_secret.is_empty()); // Default config should have empty app_secret}
 #[test]
-    fn test_async_function_signatures() {,
+    fn test_async_function_signatures() {
 // Verify that all service methods are async,
         // This is a compile-time test - if the methods weren't async, compilation would fail
 
@@ -415,30 +255,25 @@ assert!(config_ref.app_secret.is_empty()); // Default config should have empty a
 // _check_send_is_async(future); // This confirms the method returns a Future,
     }
 #[test]
-    fn test_error_types() {,
+    fn test_error_types() {
 use crate::core::SDKResult;
         // All methods should return SDKResult,
 fn _check_create_result() -> SDKResult<crate::service::im::v1::message::Message> {,
-            unimplemented!("Mock implementation"),
-}
+            unimplemented!("Mock implementation")}
 fn _check_delete_result() -> SDKResult<()> {,
-            unimplemented!("Mock implementation"),
-}
+            unimplemented!("Mock implementation")}
 fn _check_update_result() -> SDKResult<crate::service::im::v1::message::Message> {,
-            unimplemented!("Mock implementation"),
-}
+            unimplemented!("Mock implementation")}
 fn _check_reply_result() -> SDKResult<crate::service::im::v1::message::Message> {,
-            unimplemented!("Mock implementation"),
-}
+            unimplemented!("Mock implementation")}
 
         // If these compile, the return types are correct,
 let _ = _check_create_result;
         let _ = _check_delete_result;
 let _ = _check_update_result;
         let _ = _check_reply_result;
-}
 #[test]
-    fn test_endpoint_constants_exist() {,
+    fn test_endpoint_constants_exist() {
 // Verify all required endpoint constants exist,
         let _create_endpoint = crate::core::endpoints::im::IM_V1_SEND_MESSAGE;
 let _delete_endpoint = crate::core::endpoints::im::IM_V1_DELETE_MESSAGE;
@@ -449,9 +284,8 @@ assert!(!_create_endpoint.is_empty());
         assert!(!_delete_endpoint.is_empty());
 assert!(!_update_endpoint.is_empty());
         assert!(!_reply_endpoint.is_empty());
-}
 #[test]
-    fn test_message_types_import() {,
+    fn test_message_types_import() {
 // Verify we can import required types,
         use crate::service::im::v1::message::{CreateMessageResp, Message, MessageService};
 
@@ -461,7 +295,7 @@ let _message: Option<Message> = None;
 let _service: Option<MessageService> = None;
     }
 #[test]
-    fn test_builder_patterns_integration() {,
+    fn test_builder_patterns_integration() {
 // Test integration with builder patterns,
         let create_request = create_test_create_message_request();
 let update_request = create_test_update_message_request();
@@ -472,9 +306,8 @@ let update_body: serde_json::Value =,
             serde_json::from_slice(&update_request.api_req.body).unwrap();
 assert!(create_body.is_object());
         assert!(update_body.is_object());
-}
 #[test]
-    fn test_concurrent_message_operations() {,
+    fn test_concurrent_message_operations() {
 use std::sync::Arc;
         // Test that service can be shared for concurrent operations,
 let service = Arc::new(create_test_message_service());
@@ -482,9 +315,8 @@ let service = Arc::new(create_test_message_service());
 // Verify both references point to the same service,
         assert_eq!(service.config.app_id, service_clone.config.app_id);
         assert_eq!(service.config.app_secret, service_clone.config.app_secret);
-}
 #[test]
-    fn test_message_operation_consistency() {,
+    fn test_message_operation_consistency() {
 // Test that all message operations follow consistent patterns,
         // All operations should:,
 // 1. Take the service as &self,
@@ -497,10 +329,9 @@ let service = Arc::new(create_test_message_service());
         // Just verify the service can be created and has the expected methods,
 assert!(!service.config.app_id.is_empty() || service.config.app_id.is_empty());
         // Basic verification,
-// This is mainly a compile-time verification test,
-    }
+// This is mainly a compile-time verification test}
 #[test]
-    fn test_error_handling_patterns() {,
+    fn test_error_handling_patterns() {
 // Test that error handling is consistent across operations,
         use crate::core::error::LarkAPIError;
 // All operations should return SDKResult which can contain LarkAPIError,
@@ -513,9 +344,8 @@ assert!(lark_error.to_string().contains("Test error"));
             }
             Ok(_) => panic!("Expected error"),
         }
-}
 #[test]
-    fn test_response_type_validation() {,
+    fn test_response_type_validation() {
 use serde_json;
         // Test that response types are properly structured,
 let response_json = serde_json::json!({,
@@ -533,12 +363,9 @@ let response_json = serde_json::json!({,
                     "id": "test_user_789",
                     "id_type": "open_id",
                     "sender_type": "user",
-                    "tenant_key": "test_tenant",
-}
+                    "tenant_key": "test_tenant"}
                 "body": {
                     "content": "{\"text\":\"Hello World\"}",
-}
-            }
 });
 // Verify response structure is correct,
         assert!(response_json.get("data").is_some());
@@ -547,7 +374,7 @@ let data = response_json.get("data").unwrap();
 assert!(data.get("msg_type").is_some());
     }
 #[test]
-    fn test_unicode_support() {,
+    fn test_unicode_support() {
 // Test that message operations handle Unicode correctly,
         let unicode_message = "测试消息 🎉 Hello World";
 // Verify Unicode strings can be handled in JSON,
@@ -558,9 +385,8 @@ let content_str = json_data.get("content").unwrap().as_str().unwrap();
         assert!(content_str.contains("测试消息"));
 assert!(content_str.contains("🎉"));
         assert!(content_str.contains("Hello World"));
-}
 #[test]
-    fn test_large_message_content() {,
+    fn test_large_message_content() {
 // Test handling of large message content,
         let large_content = "A".repeat(10000);
 let json_data = serde_json::json!({,
@@ -574,9 +400,8 @@ let actual_length = content_str.len();
         assert_eq!(actual_length, large_content.len() + wrapper_length);
 assert!(actual_length > 10000); // Verify it's actually large,
         assert_eq!(wrapper_length, 11); // {"text":""} = 11 characters,
-}
 #[test]
-    fn test_complex_json_content() {,
+    fn test_complex_json_content() {
 // Test complex JSON structures in message content,
         let complex_content = serde_json::json!({
             "type": "interactive",
@@ -585,22 +410,18 @@ assert!(actual_length > 10000); // Verify it's actually large,
                     "type": "button",
                     "text": {
                         "type": "plain_text",
-                        "content": "Click me",
-}
+                        "content": "Click me"}
                     "action": {
                         "type": "url",
-                        "url": "https://example.com",
-}
+                        "url": "https://example.com"}
                 }
 ],
         });
 let json_data = serde_json::json!({,
-            "content": complex_content.to_string(),
-});
+            "content": complex_content.to_string()});
 // Verify complex JSON can be serialized/deserialized,
         let content_str = json_data.get("content").unwrap().as_str().unwrap();
 let parsed: serde_json::Value = serde_json::from_str(content_str).unwrap();
         assert_eq!(parsed["type"] "interactive");
 assert!(parsed["elements"].is_array());
     }
-}

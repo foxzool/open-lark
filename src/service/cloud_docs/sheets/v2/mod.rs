@@ -48,26 +48,12 @@ pub mod spreadsheet_sheet;
 /// - 对API稳定性要求高的场景
 /// - 轻量级集成需求
 pub struct V2 {
-/// 电子表格服务 - 提供表格级别的基础操作
-    pub spreadsheet: SpreadsheetService,
-    /// 工作表服务 - 管理工作表的基础功能
-    pub spreadsheet_sheet: SpreadsheetSheetService,
 }
+
 impl V2 {
-    /// 创建新的V2版本服务实例
-///,
-    /// # 参数
-/// - `config`: 客户端配置，包含认证信息和API设置
-    ///,
-/// # 返回值
-    /// 配置完成的V2服务实例，包含基础的服务模块
-pub fn new() -> Self {
-        Self {
-            spreadsheet: SpreadsheetService::new(config.clone()),
-            spreadsheet_sheet: SpreadsheetSheetService::new(config),
-        }
-}
-}
+    
+    pub fn new(config: Config) -> Self {
+        Self { config }
 /// 电子表格服务（V2版本）
 ///
 /// 提供电子表格的基础管理功能，包括表格的创建、获取和基本属性设置。
@@ -98,17 +84,11 @@ pub fn new() -> Self {
 ///,
 /// V2版本更加简洁，适合基础需求；V3版本功能更强大，适合复杂场景。
 /// 建议根据实际需求选择合适的版本。
+    config: Config}
 pub struct SpreadsheetService {
-    config: Config,
-}
 impl SpreadsheetService {
-    /// 创建新的电子表格服务实例
-///,
-    /// # 参数
-/// - `config`: 客户端配置
     pub fn new(config: Config) -> Self {
-        Self { config }
-}
+        Self { config 
 }
 /// 工作表服务（V2版本）
 ///
@@ -143,27 +123,19 @@ impl SpreadsheetService {
 /// - 使用有意义的工作表名称
 /// - 避免频繁的工作表操作
 /// - 及时清理不需要的工作表
-pub struct SpreadsheetSheetService {
 // 向后兼容：保留原始 Config 字段，便于现有测试/示例访问
     #[allow(dead_code)] // Backward compatibility field for tests/examples
     config: Config,
-    // 试点：共享配置引用，后续逐步替换内部使用以降低 clone
-    config_arc: Arc<Config>,
+}    // 试点：共享配置引用，后续逐步替换内部使用以降低 clone
+pub struct SpreadsheetSheetService {
+    config_arc: Arc<Config>}
+impl SpreadsheetSheetService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
 impl SpreadsheetSheetService {
-    /// 创建新的工作表服务实例
-///,
-    /// # 参数
-/// - `config`: 客户端配置
-    pub fn new() -> Self {
-let config_arc = Arc::new(config.clone());
-        Self { config, config_arc }
-}
-}
-impl SpreadsheetSheetService {
-    /// 获取共享配置的引用计数指针（试点接口）
-pub fn w+.*{
-        self.config_arc.clone(),
-}
+    
 }
 use std::sync::Arc;
+}
+}}}}

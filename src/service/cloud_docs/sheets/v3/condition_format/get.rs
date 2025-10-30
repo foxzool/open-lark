@@ -6,8 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -18,30 +17,14 @@ use crate::,
 };
 use super::create::ConditionFormatInfo;
 impl SpreadsheetSheetService {
-/// 批量获取条件格式,
-    pub async fn get_condition_formats(
-        &self,
-        request: GetConditionFormatsRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<GetConditionFormatsResponseData>> {,
-let mut api_req = request.api_request;
-        api_req.set_http_method(Method::GET);
-api_req.api_path = SHEETS_V3_SPREADSHEET_CONDITION_FORMAT,
-            .replace("{}", &request.spreadsheet_token)
-            .replace("{}", &request.sheet_id);
-api_req
-            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-// 添加查询参数,
-        if let Some(range) = &request.range {
-            api_req.query_params.insert("range", range.clone());
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }
-
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
     }
-}
 /// 批量获取条件格式请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetConditionFormatsRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -51,39 +34,18 @@ pub struct GetConditionFormatsRequest {
     sheet_id: String,
     /// 可选：查询范围，如果不提供则返回整个工作表的条件格式,
 #[serde(skip_serializing_if = "Option::is_none")]
-    range: Option<String>,
-}
+    range: Option<String>}
 impl GetConditionFormatsRequest {
-    pub fn w+.*{
-GetConditionFormatsRequestBuilder::default(),
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct GetConditionFormatsRequestBuilder {
-    request: GetConditionFormatsRequest,
-}
+    request: GetConditionFormatsRequest}
 impl GetConditionFormatsRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
-self.request.spreadsheet_token = spreadsheet_token.to_string();
-        self,
-}
-
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
-self.request.sheet_id = sheet_id.to_string();
-        self,
-}
-
-    pub fn range(mut self, range: impl ToString) -> Self {
-self.request.range = Some(range.to_string());
-        self,
-}
-pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-self.request,
-    }
-}
-/// 批量获取条件格式响应体最外层,
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 批量获取条件格式响应体最外层,
+#[derive(Debug, Clone)]
 pub struct GetConditionFormatsResponseData {
     /// 条件格式列表
     pub items: Vec<ConditionFormatInfo>,
@@ -92,20 +54,20 @@ pub struct GetConditionFormatsResponseData {
     pub has_more: bool,
     /// 下次请求的页面标记,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
+    pub page_token: Option<String>}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod test {,
     use super::*;
 use serde_json::json;
     #[test]
-fn test_get_condition_formats_response() {,
+fn test_get_condition_formats_response() {
         let json = json!({,
 "items": [,
                 {
@@ -116,8 +78,7 @@ fn test_get_condition_formats_response() {,
                     "format": {
                         "background_color": "#FF0000",
                         "text_color": "#FFFFFF",
-                        "bold": true,
-}
+                        "bold": true}
                 }
                 {
                     "cf_id": "cf_002",
@@ -126,8 +87,7 @@ fn test_get_condition_formats_response() {,
                     "condition_values": ["重要"]
                     "format": {
                         "background_color": "#FFFF00",
-                        "text_color": "#000000",
-}
+                        "text_color": "#000000"}
                 }
             ],
             "has_more": false,
@@ -140,5 +100,3 @@ assert_eq!(,
             "TEXT_CONTAINS",
 );
         assert!(!response.has_more);
-}
-}

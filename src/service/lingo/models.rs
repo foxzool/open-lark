@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 分页响应基础结构,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PageResponse<T> {,
     /// 数据项列表
     pub items: Vec<T>,
@@ -10,20 +10,18 @@ pub struct PageResponse<T> {,
     /// 是否还有更多数据,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
-}
 /// 草稿状态,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum DraftStatus {,
+pub enum DraftStatus {
 /// 草稿中,
     Draft,
     /// 已发布
     Published,
     /// 已拒绝
     Rejected,
-}
 /// 草稿信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Draft {
     /// 草稿ID
     pub draft_id: String,
@@ -61,9 +59,8 @@ pub struct Draft {
     /// 更新时间戳,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-}
 /// 词条信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Entity {
     /// 词条ID
     pub id: String,
@@ -98,17 +95,15 @@ pub struct Entity {
     /// 更新时间戳,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-}
 /// 外链信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct OuterInfo {
     /// 链接提供方
     pub provider: String,
     /// 外部链接
     pub outer_url: String,
-}
 /// 相关词条信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RelatedMeta {
     /// 相关用户列表,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -134,9 +129,8 @@ pub struct RelatedMeta {
     /// 图片列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub images: Option<Vec<String>>,
-}
 /// 统计信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Statistics {
     /// 点赞数,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -144,9 +138,8 @@ pub struct Statistics {
     /// 不喜欢数,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub dislike_count: Option<i32>,
-}
 /// 分类信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Classification {
     /// 分类ID
     pub id: String,
@@ -161,9 +154,8 @@ pub struct Classification {
     /// 更新时间戳,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-}
 /// 词库信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Repo {
     /// 词库ID
     pub id: String,
@@ -184,9 +176,8 @@ pub struct Repo {
     /// 更新时间戳,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-}
 /// 词条搜索结果,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EntitySearchResult {
     /// 词条信息
     pub entity: Entity,
@@ -196,9 +187,8 @@ pub struct EntitySearchResult {
     /// 匹配分数,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub score: Option<f64>,
-}
 /// 词条匹配结果,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EntityMatchResult {
     /// 词条信息
     pub entity: Entity,
@@ -207,9 +197,8 @@ pub struct EntityMatchResult {
     /// 匹配类型,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub match_type: Option<String>,
-}
 /// 高亮范围,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct HighlightRange {
     /// 开始位置
     pub start: i32,
@@ -217,17 +206,15 @@ pub struct HighlightRange {
     pub end: i32,
     /// 词条ID
     pub entity_id: String,
-}
 /// 高亮结果,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct HighlightResult {
     /// 原始文本
     pub text: String,
     /// 高亮范围列表
     pub ranges: Vec<HighlightRange>,
-}
 /// 文件信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct FileInfo {
     /// 文件ID
     pub file_token: String,
@@ -243,14 +230,13 @@ pub struct FileInfo {
     /// 上传时间戳,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub uploaded_at: Option<i64>,
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json;
     #[test]
-fn test_page_response_serialization() {,
+fn test_page_response_serialization() {
         let page_response = PageResponse {
             items: vec!["item1".to_string(), "item2".to_string()]
             page_token: Some("next_page_token".to_string()),
@@ -261,9 +247,8 @@ let serialized = serde_json::to_string(&page_response).unwrap();
         assert_eq!(page_response.items, deserialized.items);
         assert_eq!(page_response.page_token, deserialized.page_token);
         assert_eq!(page_response.has_more, deserialized.has_more);
-}
 #[test]
-    fn test_page_response_with_none_values() {,
+    fn test_page_response_with_none_values() {
 let page_response: PageResponse<String> = PageResponse {,
             items: vec![]
             page_token: None,
@@ -276,9 +261,8 @@ assert!(!serialized.contains("has_more"));
         assert_eq!(page_response.items, deserialized.items);
         assert_eq!(page_response.page_token, deserialized.page_token);
         assert_eq!(page_response.has_more, deserialized.has_more);
-}
 #[test]
-    fn test_draft_status_serialization() {,
+    fn test_draft_status_serialization() {
 let draft_status = DraftStatus::Draft;
         let serialized = serde_json::to_string(&draft_status).unwrap();
         assert_eq!(serialized, "\"draft\"");
@@ -290,9 +274,8 @@ let published_status = DraftStatus::Published;
 let rejected_status = DraftStatus::Rejected;
         let serialized = serde_json::to_string(&rejected_status).unwrap();
         assert_eq!(serialized, "\"rejected\"");
-}
 #[test]
-    fn test_draft_serialization() {,
+    fn test_draft_serialization() {
 let draft = Draft {,
             draft_id: "draft_123".to_string(),
             entity_id: Some("entity_456".to_string()),
@@ -329,9 +312,8 @@ let serialized = serde_json::to_string(&draft).unwrap();
         assert_eq!(draft.entity_id, deserialized.entity_id);
         assert_eq!(draft.main_keys, deserialized.main_keys);
         assert_eq!(draft.description, deserialized.description);
-}
 #[test]
-    fn test_draft_with_none_values() {,
+    fn test_draft_with_none_values() {
 let draft = Draft {,
             draft_id: "draft_123".to_string(),
             entity_id: None,
@@ -354,9 +336,8 @@ assert!(!serialized.contains("aliases"));
 let deserialized: Draft = serde_json::from_str(&serialized).unwrap();
         assert_eq!(draft.draft_id, deserialized.draft_id);
         assert_eq!(draft.entity_id, deserialized.entity_id);
-}
 #[test]
-    fn test_entity_serialization() {,
+    fn test_entity_serialization() {
 let entity = Entity {,
             id: "entity_123".to_string(),
             main_keys: vec!["主键1".to_string(), "主键2".to_string()]
@@ -392,9 +373,8 @@ let serialized = serde_json::to_string(&entity).unwrap();
         assert_eq!(entity.main_keys, deserialized.main_keys);
         assert_eq!(entity.description, deserialized.description);
         assert_eq!(entity.repo_id, deserialized.repo_id);
-}
 #[test]
-    fn test_outer_info_serialization() {,
+    fn test_outer_info_serialization() {
 let outer_info = OuterInfo {,
             provider: "external_wiki".to_string(),
             outer_url: "https://external.wiki.com/term/123".to_string(),
@@ -403,9 +383,8 @@ let serialized = serde_json::to_string(&outer_info).unwrap();
         let deserialized: OuterInfo = serde_json::from_str(&serialized).unwrap();
         assert_eq!(outer_info.provider, deserialized.provider);
         assert_eq!(outer_info.outer_url, deserialized.outer_url);
-}
 #[test]
-    fn test_related_meta_serialization() {,
+    fn test_related_meta_serialization() {
 let related_meta = RelatedMeta {,
             users: Some(vec!["user1".to_string(), "user2".to_string()]),
             chats: Some(vec!["chat1".to_string()]),
@@ -422,9 +401,8 @@ let serialized = serde_json::to_string(&related_meta).unwrap();
         assert_eq!(related_meta.chats, deserialized.chats);
         assert_eq!(related_meta.docs, deserialized.docs);
         assert_eq!(related_meta.links, deserialized.links);
-}
 #[test]
-    fn test_related_meta_with_none_values() {,
+    fn test_related_meta_with_none_values() {
 let related_meta = RelatedMeta {,
             users: Some(vec!["user1".to_string()]),
             chats: None,
@@ -442,9 +420,8 @@ assert!(!serialized.contains("docs"));
 let deserialized: RelatedMeta = serde_json::from_str(&serialized).unwrap();
         assert_eq!(related_meta.users, deserialized.users);
         assert_eq!(related_meta.chats, deserialized.chats);
-}
 #[test]
-    fn test_statistics_serialization() {,
+    fn test_statistics_serialization() {
 let statistics = Statistics {,
             like_count: Some(42),
             dislike_count: Some(7),
@@ -453,9 +430,8 @@ let serialized = serde_json::to_string(&statistics).unwrap();
         let deserialized: Statistics = serde_json::from_str(&serialized).unwrap();
         assert_eq!(statistics.like_count, deserialized.like_count);
         assert_eq!(statistics.dislike_count, deserialized.dislike_count);
-}
 #[test]
-    fn test_statistics_with_none_values() {,
+    fn test_statistics_with_none_values() {
 let statistics = Statistics {,
             like_count: None,
             dislike_count: None,
@@ -466,9 +442,8 @@ assert!(!serialized.contains("dislike_count"));
         let deserialized: Statistics = serde_json::from_str(&serialized).unwrap();
         assert_eq!(statistics.like_count, deserialized.like_count);
         assert_eq!(statistics.dislike_count, deserialized.dislike_count);
-}
 #[test]
-    fn test_classification_serialization() {,
+    fn test_classification_serialization() {
 let classification = Classification {,
             id: "class_123".to_string(),
             name: "技术分类".to_string(),
@@ -482,9 +457,8 @@ let serialized = serde_json::to_string(&classification).unwrap();
         assert_eq!(classification.name, deserialized.name);
         assert_eq!(classification.father_id, deserialized.father_id);
         assert_eq!(classification.created_at, deserialized.created_at);
-}
 #[test]
-    fn test_classification_root_category() {,
+    fn test_classification_root_category() {
 let classification = Classification {,
             id: "root_class".to_string(),
             name: "根分类".to_string(),
@@ -498,9 +472,8 @@ assert!(!serialized.contains("updated_at"));
         let deserialized: Classification = serde_json::from_str(&serialized).unwrap();
         assert_eq!(classification.father_id, deserialized.father_id);
         assert_eq!(classification.updated_at, deserialized.updated_at);
-}
 #[test]
-    fn test_repo_serialization() {,
+    fn test_repo_serialization() {
 let repo = Repo {,
             id: "repo_123".to_string(),
             name: "技术词库".to_string(),
@@ -516,9 +489,8 @@ let serialized = serde_json::to_string(&repo).unwrap();
         assert_eq!(repo.name, deserialized.name);
         assert_eq!(repo.description, deserialized.description);
         assert_eq!(repo.repo_type, deserialized.repo_type);
-}
 #[test]
-    fn test_repo_minimal_data() {,
+    fn test_repo_minimal_data() {
 let repo = Repo {,
             id: "repo_minimal".to_string(),
             name: "简单词库".to_string(),
@@ -535,9 +507,8 @@ assert!(!serialized.contains("repo_type"));
 let deserialized: Repo = serde_json::from_str(&serialized).unwrap();
         assert_eq!(repo.id, deserialized.id);
         assert_eq!(repo.name, deserialized.name);
-}
 #[test]
-    fn test_entity_search_result_serialization() {,
+    fn test_entity_search_result_serialization() {
 let entity = Entity {,
             id: "entity_search_123".to_string(),
             main_keys: vec!["搜索词条".to_string()]
@@ -562,9 +533,8 @@ let serialized = serde_json::to_string(&search_result).unwrap();
         assert_eq!(search_result.entity.id, deserialized.entity.id);
         assert_eq!(search_result.matched_keys, deserialized.matched_keys);
         assert_eq!(search_result.score, deserialized.score);
-}
 #[test]
-    fn test_entity_match_result_serialization() {,
+    fn test_entity_match_result_serialization() {
 let entity = Entity {,
             id: "entity_match_456".to_string(),
             main_keys: vec!["匹配词条".to_string()]
@@ -589,9 +559,8 @@ let serialized = serde_json::to_string(&match_result).unwrap();
         assert_eq!(match_result.entity.id, deserialized.entity.id);
         assert_eq!(match_result.matched_word, deserialized.matched_word);
         assert_eq!(match_result.match_type, deserialized.match_type);
-}
 #[test]
-    fn test_highlight_range_serialization() {,
+    fn test_highlight_range_serialization() {
 let highlight_range = HighlightRange {,
             start: 10,
             end: 20,
@@ -602,9 +571,8 @@ let serialized = serde_json::to_string(&highlight_range).unwrap();
         assert_eq!(highlight_range.start, deserialized.start);
         assert_eq!(highlight_range.end, deserialized.end);
         assert_eq!(highlight_range.entity_id, deserialized.entity_id);
-}
 #[test]
-    fn test_highlight_result_serialization() {,
+    fn test_highlight_result_serialization() {
 let highlight_result = HighlightResult {,
             text: "这是一段包含高亮词条的文本内容".to_string(),
             ranges: vec![,
@@ -634,7 +602,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_file_info_serialization() {,
+    fn test_file_info_serialization() {
 let file_info = FileInfo {,
             file_token: "file_token_123".to_string(),
             file_name: Some("词条文档.pdf".to_string()),
@@ -649,9 +617,8 @@ let serialized = serde_json::to_string(&file_info).unwrap();
         assert_eq!(file_info.file_size, deserialized.file_size);
         assert_eq!(file_info.file_type, deserialized.file_type);
         assert_eq!(file_info.uploaded_at, deserialized.uploaded_at);
-}
 #[test]
-    fn test_file_info_minimal_data() {,
+    fn test_file_info_minimal_data() {
 let file_info = FileInfo {,
             file_token: "minimal_file_token".to_string(),
             file_name: None,
@@ -667,5 +634,3 @@ assert!(!serialized.contains("uploaded_at"));
         let deserialized: FileInfo = serde_json::from_str(&serialized).unwrap();
         assert_eq!(file_info.file_token, deserialized.file_token);
         assert_eq!(file_info.file_name, deserialized.file_name);
-}
-}

@@ -2,18 +2,16 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2ImChatCreatedV1 {
     pub schema: String,
     pub header: EventHeader,
     pub event: P2ImChatCreatedV1Data,
-}
 pub(crate) struct P2ImChatCreatedV1ProcessorImpl<F>,
 where
     F: Fn(P2ImChatCreatedV1) + 'static,
 {
     f: F,
-}
 impl<F> EventHandler for P2ImChatCreatedV1ProcessorImpl<F>,
 where
     F: Fn(P2ImChatCreatedV1) + 'static + Sync + Send,
@@ -23,17 +21,14 @@ let message: P2ImChatCreatedV1 = serde_json::from_slice(payload)?;
         (self.f)(message);
 Ok(()),
     }
-}
 impl<F> P2ImChatCreatedV1ProcessorImpl<F>,
 where
     F: Fn(P2ImChatCreatedV1) + 'static,
 {,
 pub(crate) fn new(f: F) -> Self {
         P2ImChatCreatedV1ProcessorImpl { f }
-}
-}
 /// 聊天创建事件数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2ImChatCreatedV1Data {
     /// 聊天 ID
     pub chat_id: String,
@@ -58,9 +53,8 @@ pub struct P2ImChatCreatedV1Data {
     pub members: Option<Vec<ChatMember>>,
     /// 创建时间 (Unix时间戳，单位：秒)
     pub create_time: String,
-}
 /// 事件中的用户信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EventUser {
     /// 用户 ID
     pub user_id: UserId,
@@ -70,9 +64,8 @@ pub struct EventUser {
     /// 用户类型 (user, bot, app),
 #[serde(skip_serializing_if = "Option::is_none")]
     pub user_type: Option<String>,
-}
 /// 聊天设置,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ChatSettings {
     /// 是否允许@所有人,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -86,9 +79,8 @@ pub struct ChatSettings {
     /// 允许分享群,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub share_allowed: Option<bool>,
-}
 /// 聊天成员,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ChatMember {
     /// 成员用户 ID
     pub user_id: UserId,
@@ -101,9 +93,8 @@ pub struct ChatMember {
     /// 加入时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub join_time: Option<String>,
-}
 /// 用户 ID 信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UserId {
     /// 用户的 union id,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -113,4 +104,3 @@ pub struct UserId {
     pub user_id: Option<String>,
     /// 用户的 open id
     pub open_id: String,
-}

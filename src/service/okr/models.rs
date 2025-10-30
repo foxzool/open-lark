@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 分页响应基础结构,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PageResponse<T> {,
     /// 数据项列表
     pub items: Vec<T>,
@@ -10,11 +10,10 @@ pub struct PageResponse<T> {,
     /// 是否还有更多数据,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
-}
 /// OKR 周期状态,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum PeriodStatus {,
+pub enum PeriodStatus {
 /// 草稿状态,
     Draft,
     /// 进行中
@@ -23,42 +22,38 @@ pub enum PeriodStatus {,
     Ended,
     /// 已暂停
     Paused,
-}
 /// OKR 状态,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum OkrStatus {,
+pub enum OkrStatus {
 /// 正常,
     Normal,
     /// 已删除
     Deleted,
     /// 草稿
     Draft,
-}
 /// 进展记录类型,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum ProgressRecordType {,
+pub enum ProgressRecordType {
 /// 简单更新,
     Simple,
     /// 详细更新
     Detail,
     /// 图片更新
     Image,
-}
 /// Key Result 类型,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum KeyResultType {,
+pub enum KeyResultType {
 /// 数值型,
     Numeric,
     /// 百分比型
     Percentage,
     /// 里程碑型
     Milestone,
-}
 /// 多语言文本,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct I18nText {
     /// 中文文本,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -69,9 +64,8 @@ pub struct I18nText {
     /// 日文文本,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub ja_jp: Option<String>,
-}
 /// 用户信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct User {
     /// 用户ID
     pub user_id: String,
@@ -81,9 +75,8 @@ pub struct User {
     /// 用户头像,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub avatar: Option<String>,
-}
 /// OKR 周期,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Period {
     /// 周期ID
     pub period_id: String,
@@ -105,9 +98,8 @@ pub struct Period {
     /// 更新时间（毫秒时间戳）,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub modify_time: Option<i64>,
-}
 /// OKR 周期规则,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PeriodRule {
     /// 规则ID
     pub rule_id: String,
@@ -119,9 +111,8 @@ pub struct PeriodRule {
     /// 规则配置,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub config: Option<serde_json::Value>,
-}
 /// Key Result,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct KeyResult {
     /// Key Result ID
     pub kr_id: String,
@@ -143,9 +134,8 @@ pub struct KeyResult {
     /// 完成状态,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub completed: Option<bool>,
-}
 /// Objective,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Objective {
     /// Objective ID
     pub objective_id: String,
@@ -158,9 +148,8 @@ pub struct Objective {
     /// Key Results 列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub key_results: Option<Vec<KeyResult>>,
-}
 /// OKR,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Okr {
     /// OKR ID
     pub okr_id: String,
@@ -180,9 +169,8 @@ pub struct Okr {
     /// 更新时间（毫秒时间戳）,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub modify_time: Option<i64>,
-}
 /// 进展记录附件,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ProgressAttachment {
     /// 附件ID
     pub attachment_id: String,
@@ -198,9 +186,8 @@ pub struct ProgressAttachment {
     /// 文件大小,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub size: Option<i64>,
-}
 /// 进展记录,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ProgressRecord {
     /// 进展记录ID
     pub progress_id: String,
@@ -227,9 +214,8 @@ pub struct ProgressRecord {
     /// 更新时间（毫秒时间戳）,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub modify_time: Option<i64>,
-}
 /// OKR 复盘信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Review {
     /// 复盘ID
     pub review_id: String,
@@ -249,13 +235,12 @@ pub struct Review {
     /// 创建时间（毫秒时间戳）,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<i64>,
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]
-    fn test_period_status_enum() {,
+    fn test_period_status_enum() {
 assert_eq!(,
             serde_json::to_string(&PeriodStatus::Draft).unwrap(),
             "\"draft\"",
@@ -274,7 +259,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_okr_status_enum() {,
+    fn test_okr_status_enum() {
 assert_eq!(,
             serde_json::to_string(&OkrStatus::Normal).unwrap(),
             "\"normal\"",
@@ -289,7 +274,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_progress_record_type_enum() {,
+    fn test_progress_record_type_enum() {
 assert_eq!(,
             serde_json::to_string(&ProgressRecordType::Simple).unwrap(),
             "\"simple\"",
@@ -304,7 +289,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_key_result_type_enum() {,
+    fn test_key_result_type_enum() {
 assert_eq!(,
             serde_json::to_string(&KeyResultType::Numeric).unwrap(),
             "\"numeric\"",
@@ -319,7 +304,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_i18n_text() {,
+    fn test_i18n_text() {
 let text = I18nText {,
             zh_cn: Some("中文内容".to_string()),
             en_us: Some("English content".to_string()),
@@ -329,9 +314,8 @@ let json = serde_json::to_string(&text).unwrap();
         assert!(json.contains("中文内容"));
 assert!(json.contains("English content"));
         assert!(json.contains("日本語の内容"));
-}
 #[test]
-    fn test_i18n_text_minimal() {,
+    fn test_i18n_text_minimal() {
 let text = I18nText {,
             zh_cn: Some("仅中文".to_string()),
             en_us: None,
@@ -341,9 +325,8 @@ let json = serde_json::to_string(&text).unwrap();
         assert!(json.contains("仅中文"));
 assert!(!json.contains("en_us"));
         assert!(!json.contains("ja_jp"));
-}
 #[test]
-    fn test_user() {,
+    fn test_user() {
 let name = I18nText {,
             zh_cn: Some("张三".to_string()),
             en_us: Some("Zhang San".to_string()),
@@ -361,7 +344,7 @@ assert!(json.contains("张三"));
 assert!(json.contains("https://example.com/avatar.jpg"));
     }
 #[test]
-    fn test_user_minimal() {,
+    fn test_user_minimal() {
 let user = User {,
             user_id: "ou_minimal".to_string(),
             name: None,
@@ -371,9 +354,8 @@ let json = serde_json::to_string(&user).unwrap();
         assert!(json.contains("ou_minimal"));
 assert!(!json.contains("name"));
         assert!(!json.contains("avatar"));
-}
 #[test]
-    fn test_period() {,
+    fn test_period() {
 let name = I18nText {,
             zh_cn: Some("2024年第一季度".to_string()),
             en_us: Some("Q1 2024".to_string()),
@@ -397,7 +379,7 @@ assert!(json.contains("\"active\""));
 assert!(json.contains("1711900800000"));
     }
 #[test]
-    fn test_period_rule() {,
+    fn test_period_rule() {
 let config = serde_json::json!({,
             "auto_close": true,
             "reminder_days": 7,
@@ -415,7 +397,7 @@ assert!(json.contains("period123"));
 assert!(json.contains("\"reminder_days\":7"));
     }
 #[test]
-    fn test_key_result() {,
+    fn test_key_result() {
 let content = I18nText {,
             zh_cn: Some("提升用户活跃度到80%".to_string()),
             en_us: Some("Increase user activity to 80%".to_string()),
@@ -441,7 +423,7 @@ assert!(json.contains("80.0"));
 assert!(json.contains("false"));
     }
 #[test]
-    fn test_key_result_milestone() {,
+    fn test_key_result_milestone() {
 let content = I18nText {,
             zh_cn: Some("完成产品MVP开发".to_string()),
             en_us: Some("Complete MVP development".to_string()),
@@ -465,7 +447,7 @@ assert!(json.contains("75.0"));
 assert!(!json.contains("target_value"));
     }
 #[test]
-    fn test_objective() {,
+    fn test_objective() {
 let obj_content = I18nText {,
             zh_cn: Some("提升产品核心指标".to_string()),
             en_us: Some("Improve core product metrics".to_string()),
@@ -502,7 +484,7 @@ assert!(json.contains("\"numeric\""));
 assert!(json.contains("100000.0"));
     }
 #[test]
-    fn test_okr() {,
+    fn test_okr() {
 let obj_content = I18nText {,
             zh_cn: Some("团队效率提升".to_string()),
             en_us: Some("Team efficiency improvement".to_string()),
@@ -531,9 +513,8 @@ assert!(json.contains("\"normal\""));
         assert!(json.contains("obj456"));
 assert!(json.contains("团队效率提升"));
         assert!(json.contains("1704067200000"));
-}
 #[test]
-    fn test_progress_attachment() {,
+    fn test_progress_attachment() {
 let attachment = ProgressAttachment {,
             attachment_id: "att123".to_string(),
             name: Some("进度截图.png".to_string()),
@@ -547,9 +528,8 @@ assert!(json.contains("进度截图.png"));
         assert!(json.contains("https://example.com/progress.png"));
 assert!(json.contains("image/png"));
         assert!(json.contains("1024000"));
-}
 #[test]
-    fn test_progress_record() {,
+    fn test_progress_record() {
 let creator_name = I18nText {,
             zh_cn: Some("李四".to_string()),
             en_us: Some("Li Si".to_string()),
@@ -588,9 +568,8 @@ assert!(json.contains("att456"));
         assert!(json.contains("数据报表.xlsx"));
 assert!(json.contains("ou_creator123"));
         assert!(json.contains("李四"));
-}
 #[test]
-    fn test_review() {,
+    fn test_review() {
 let reviewer_name = I18nText {,
             zh_cn: Some("王五".to_string()),
             en_us: Some("Wang Wu".to_string()),
@@ -623,7 +602,7 @@ assert!(json.contains("ou_reviewer123"));
 assert!(json.contains("1711900800000"));
     }
 #[test]
-    fn test_page_response() {,
+    fn test_page_response() {
 let kr = KeyResult {,
             kr_id: "kr999".to_string(),
             content: None,
@@ -644,9 +623,8 @@ assert!(json.contains("50.0"));
         assert!(json.contains("100.0"));
 assert!(json.contains("next_page_token"));
         assert!(json.contains("\"has_more\":true"));
-}
 #[test]
-    fn test_minimal_structs() {,
+    fn test_minimal_structs() {
 let minimal_period = Period {,
             period_id: "minimal_period".to_string(),
             name: None,
@@ -676,5 +654,3 @@ assert!(okr_json.contains("minimal_user"));
         assert!(okr_json.contains("minimal_period"));
 assert!(!okr_json.contains("status"));
         assert!(!okr_json.contains("objectives"));
-}
-}

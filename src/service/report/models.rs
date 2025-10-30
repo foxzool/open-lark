@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 分页响应基础结构,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PageResponse<T> {,
     /// 数据项列表
     pub items: Vec<T>,
@@ -10,9 +10,8 @@ pub struct PageResponse<T> {,
     /// 是否还有更多数据,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
-}
 /// 汇报规则,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ReportRule {
     /// 规则ID
     pub rule_id: String,
@@ -48,9 +47,8 @@ pub struct ReportRule {
     /// 更新时间戳,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-}
 /// 汇报时间设置,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ReportSchedule {
     /// 汇报时间,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -64,9 +62,8 @@ pub struct ReportSchedule {
     /// 工作日设置,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub weekdays: Option<Vec<i32>>,
-}
 /// 汇报适用范围,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ReportScope {
     /// 适用的部门ID列表,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -77,9 +74,8 @@ pub struct ReportScope {
     /// 适用的角色列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub roles: Option<Vec<String>>,
-}
 /// 汇报模板,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ReportTemplate {
     /// 模板ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -93,9 +89,8 @@ pub struct ReportTemplate {
     /// 字段列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub fields: Option<Vec<ReportField>>,
-}
 /// 汇报字段,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ReportField {
     /// 字段ID
     pub field_id: String,
@@ -110,9 +105,8 @@ pub struct ReportField {
     /// 字段描述,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-}
 /// 规则看板,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RuleView {
     /// 看板ID
     pub view_id: String,
@@ -133,9 +127,8 @@ pub struct RuleView {
     /// 创建时间戳,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
-}
 /// 汇报任务,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ReportTask {
     /// 任务ID
     pub task_id: String,
@@ -171,9 +164,8 @@ pub struct ReportTask {
     /// 更新时间戳,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-}
 /// 用户信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UserInfo {
     /// 用户ID
     pub user_id: String,
@@ -186,14 +178,13 @@ pub struct UserInfo {
     /// 用户头像URL,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub avatar_url: Option<String>,
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json;
     #[test]
-fn test_page_response() {,
+fn test_page_response() {
         let response = PageResponse {
             items: vec!["item1".to_string(), "item2".to_string()]
             page_token: Some("next_page_123".to_string()),
@@ -206,7 +197,7 @@ assert!(json.contains("item2"));
 assert!(json.contains("true"));
     }
 #[test]
-    fn test_report_rule() {,
+    fn test_report_rule() {
 let rule = ReportRule {,
             rule_id: "rule_001".to_string(),
             name: "日报规则".to_string(),
@@ -250,7 +241,7 @@ assert!(json.contains("18:00"));
 assert!(json.contains("dept_001"));
     }
 #[test]
-    fn test_report_schedule() {,
+    fn test_report_schedule() {
 let schedule = ReportSchedule {,
             report_time: Some("09:00".to_string()),
             reminder_time: Some("08:30".to_string()),
@@ -262,9 +253,8 @@ let json = serde_json::to_string(&schedule).unwrap();
 assert!(json.contains("08:30"));
         assert!(json.contains("UTC"));
         assert!(json.contains("[1,2,3,4,5,6,7]"));
-}
 #[test]
-    fn test_report_scope() {,
+    fn test_report_scope() {
 let scope = ReportScope {,
             department_ids: Some(vec!["engineering".to_string(), "marketing".to_string()]),
             user_ids: Some(vec!["alice".to_string(), "bob".to_string()]),
@@ -277,7 +267,7 @@ assert!(json.contains("marketing"));
 assert!(json.contains("developer"));
     }
 #[test]
-    fn test_report_template() {,
+    fn test_report_template() {
 let template = ReportTemplate {,
             template_id: Some("template_daily".to_string()),
             template_name: Some("Daily Report Template".to_string()),
@@ -305,9 +295,8 @@ assert!(json.contains("Daily Report Template"));
         assert!(json.contains("progress"));
 assert!(json.contains("challenges"));
         assert!(json.contains("textarea"));
-}
 #[test]
-    fn test_report_field() {,
+    fn test_report_field() {
 let field = ReportField {,
             field_id: "accomplishments".to_string(),
             field_name: "Accomplishments".to_string(),
@@ -322,7 +311,7 @@ assert!(json.contains("Accomplishments"));
 assert!(json.contains("List your accomplishments"));
     }
 #[test]
-    fn test_rule_view() {,
+    fn test_rule_view() {
 let view = RuleView {,
             view_id: "view_dashboard_001".to_string(),
             rule_id: "rule_weekly".to_string(),
@@ -338,9 +327,8 @@ assert!(json.contains("rule_weekly"));
         assert!(json.contains("Weekly Report Dashboard"));
 assert!(json.contains("dashboard"));
         assert!(json.contains("grid"));
-}
 #[test]
-    fn test_report_task() {,
+    fn test_report_task() {
 let user_info = UserInfo {,
             user_id: "user_123".to_string(),
             name: Some("John Doe".to_string()),
@@ -369,9 +357,8 @@ assert!(json.contains("pending"));
         assert!(json.contains("John Doe"));
 assert!(json.contains("john.doe@company.com"));
         assert!(json.contains("API integration"));
-}
 #[test]
-    fn test_user_info() {,
+    fn test_user_info() {
 let user = UserInfo {,
             user_id: "user_456".to_string(),
             name: Some("Alice Smith".to_string()),
@@ -385,7 +372,7 @@ assert!(json.contains("Alice Smith"));
 assert!(json.contains("avatars/alice.png"));
     }
 #[test]
-    fn test_minimal_structs() {,
+    fn test_minimal_structs() {
 let minimal_rule = ReportRule {,
             rule_id: "minimal_rule".to_string(),
             name: "Minimal Rule".to_string(),
@@ -415,9 +402,8 @@ let json = serde_json::to_string(&minimal_user).unwrap();
         assert!(json.contains("user_minimal"));
 assert!(!json.contains("name"));
         assert!(!json.contains("email"));
-}
 #[test]
-    fn test_nested_structures() {,
+    fn test_nested_structures() {
 let page_response = PageResponse {,
             items: vec![,
 ReportRule {,
@@ -461,7 +447,7 @@ assert!(json.contains("weekly"));
 assert!(json.contains("false"));
     }
 #[test]
-    fn test_complex_report_workflow() {,
+    fn test_complex_report_workflow() {
 let schedule = ReportSchedule {,
             report_time: Some("17:00".to_string()),
             reminder_time: Some("16:30".to_string()),
@@ -516,5 +502,3 @@ assert!(json.contains("engineering"));
         assert!(json.contains("code_commits"));
 assert!(json.contains("bugs_fixed"));
         assert!(json.contains("engineering_manager"));
-}
-}

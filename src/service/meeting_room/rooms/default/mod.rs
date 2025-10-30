@@ -3,7 +3,7 @@
 // 包含会议室管理的完整功能
 use crate::core::config::Config;
 /// 会议室管理default版本服务
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RoomsDefaultService {
     config: Config,
 }

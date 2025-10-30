@@ -2,25 +2,23 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::hire::models::{CommonResponse, PageResponse, Talent}
 };
 /// 猎头服务
 pub struct AgencyService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 猎头机构信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Agency {
+}
     /// 猎头机构ID
     pub id: String,
     /// 机构名称
@@ -55,10 +53,10 @@ pub struct Agency {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 猎头推荐记录
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AgencyRecommendation {
+}
     /// 推荐记录ID
     pub id: String,
     /// 猎头机构ID
@@ -85,10 +83,10 @@ pub struct AgencyRecommendation {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 猎头费用信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AgencyFeeInfo {
+}
     /// 费用类型
     pub fee_type: String,
     /// 费用金额
@@ -101,10 +99,10 @@ pub struct AgencyFeeInfo {
     pub payment_terms: Option<String>,
     /// 发票要求
     pub invoice_requirements: Option<String>,
-}
 /// 猎头顾问信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AgencyConsultant {
+}
     /// 顾问ID
     pub id: String,
     /// 猎头机构ID
@@ -127,160 +125,52 @@ pub struct AgencyConsultant {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 猎头机构创建请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AgencyCreateRequest {
-    /// 机构名称
-    pub name: String,
-    /// 机构描述
-    pub description: Option<String>,
-    /// 联系人姓名
-    pub contact_name: String,
-    /// 联系邮箱
-    pub contact_email: String,
-    /// 联系电话
-    pub contact_phone: Option<String>,
-    /// 机构地址
-    pub address: Option<String>,
-    /// 机构网站
-    pub website: Option<String>,
-    /// 合作模式
-    pub cooperation_mode: String,
-    /// 费率信息
-    pub fee_rate: Option<String>,
-    /// 专业领域
-    pub specialties: Vec<String>,
-    /// 服务区域
-    pub service_areas: Vec<String>,
-    /// 合作开始时间
-    pub cooperation_start_time: Option<String>,
-    /// 合作结束时间
-    pub cooperation_end_time: Option<String>,
 }
-/// 猎头推荐创建请求
-#[derive(.*?)]
-pub struct AgencyRecommendationCreateRequest {
-    /// 猎头机构ID
-    pub agency_id: String,
-    /// 猎头顾问ID
-    pub consultant_id: Option<String>,
-    /// 人才ID
-    pub talent_id: String,
-    /// 职位ID
-    pub job_id: String,
-    /// 推荐理由
-    pub recommendation_reason: Option<String>,
-    /// 费用信息
-    pub fee_info: Option<AgencyFeeInfo>,
-}
-/// 猎头顾问创建请求
-#[derive(.*?)]
-pub struct AgencyConsultantCreateRequest {
-    /// 猎头机构ID
-    pub agency_id: String,
-    /// 顾问姓名
-    pub name: String,
-    /// 顾问邮箱
-    pub email: String,
-    /// 顾问电话
-    pub phone: Option<String>,
-    /// 职位
-    pub position: Option<String>,
-    /// 专业领域
-    pub specialties: Vec<String>,
-    /// 工作年限
-    pub experience_years: Option<u32>,
-}
-/// 猎头机构列表请求
-#[derive(.*?)]
-pub struct AgencyListRequest {
-    /// 分页大小
-    pub page_size: Option<u32>,
-    /// 分页标记
-    pub page_token: Option<String>,
-    /// 机构状态
-    pub status: Option<String>,
-    /// 合作模式
-    pub cooperation_mode: Option<String>,
-    /// 专业领域
-    pub specialty: Option<String>,
-    /// 服务区域
-    pub service_area: Option<String>,
-}
-/// 猎头推荐列表请求
-#[derive(.*?)]
-pub struct AgencyRecommendationListRequest {
-    /// 分页大小
-    pub page_size: Option<u32>,
-    /// 分页标记
-    pub page_token: Option<String>,
-    /// 猎头机构ID
-    pub agency_id: Option<String>,
-    /// 职位ID
-    pub job_id: Option<String>,
-    /// 推荐状态
-    pub status: Option<String>,
-    /// 推荐时间开始
-    pub recommendation_start_time: Option<String>,
-    /// 推荐时间结束
-    pub recommendation_end_time: Option<String>,
-}
-/// 猎头机构列表响应
-#[derive(.*?)]
-pub struct AgencyListResponse {
-    /// 猎头机构列表
-#[serde(flatten)]
-    pub agencies: PageResponse<Agency>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 猎头推荐列表响应
-#[derive(.*?)]
-pub struct AgencyRecommendationListResponse {
-    /// 猎头推荐列表
-#[serde(flatten)]
-    pub recommendations: PageResponse<AgencyRecommendation>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 猎头顾问列表响应
-#[derive(.*?)]
-pub struct AgencyConsultantListResponse {
-    /// 猎头顾问列表
-#[serde(flatten)]
-    pub consultants: PageResponse<AgencyConsultant>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 猎头操作响应
-#[derive(.*?)]
-pub struct AgencyOperationResponse {
-    /// 操作结果
-#[serde(flatten)]
-    pub result: CommonResponse,
-    /// 相关ID
-    pub id: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl AgencyService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 猎头推荐列表响应
+#[derive(Debug, Clone)]
 }
-/// 创建猎头机构
+pub struct AgencyRecommendationListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 猎头顾问列表响应
+#[derive(Debug, Clone)]
+}
+pub struct AgencyConsultantListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 猎头操作响应
+#[derive(Debug, Clone)]
+}
+pub struct AgencyOperationResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl AgencyService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建猎头机构
     ///,
 /// 该接口用于创建新的猎头机构档案，记录机构基本信息、
     /// 联系方式、合作模式、专业领域等详细信息。创建成功后
@@ -343,9 +233,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取猎头机构列表
     ///,
 /// 该接口用于获取企业合作的猎头机构列表，支持按状态、
@@ -390,8 +278,7 @@ let api_req = ApiRequest {,
 ///     for agency in &data.agencies.items {
     ///         println!("机构: {} ({})" agency.name, agency.contact_name);
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_agencies(
         &self,
         request: AgencyListRequest,
@@ -409,27 +296,19 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert("status", status);
-}
 if let Some(cooperation_mode) = request.cooperation_mode {,
             api_req
 .query_params
                 .insert("cooperation_mode", cooperation_mode);
-}
 if let Some(specialty) = request.specialty {,
             api_req.query_params.insert("specialty", specialty);
-}
 if let Some(service_area) = request.service_area {,
             api_req.query_params.insert("service_area", service_area);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 创建猎头推荐
     ///,
 /// 该接口用于创建猎头推荐记录，记录猎头机构推荐的
@@ -475,9 +354,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取猎头推荐列表
     ///,
 /// 该接口用于获取猎头推荐记录列表，支持按机构、
@@ -522,32 +399,23 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(agency_id) = request.agency_id {,
             api_req.query_params.insert("agency_id", agency_id);
-}
 if let Some(job_id) = request.job_id {,
             api_req.query_params.insert("job_id", job_id);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert("status", status);
-}
 if let Some(recommendation_start_time) = request.recommendation_start_time {,
             api_req
 .query_params
                 .insert("recommendation_start_time", recommendation_start_time);
-}
 if let Some(recommendation_end_time) = request.recommendation_end_time {,
             api_req
 .query_params
                 .insert("recommendation_end_time", recommendation_end_time);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 添加猎头顾问
     ///,
 /// 该接口用于为猎头机构添加顾问信息，记录顾问
@@ -587,9 +455,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取猎头顾问列表
     ///,
 /// 该接口用于获取指定猎头机构的顾问列表，
@@ -631,13 +497,9 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 确认猎头推荐
     ///,
 /// 该接口用于确认接受猎头推荐，将推荐转换为
@@ -667,11 +529,10 @@ pub async fn confirm_recommendation(,
         remark: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<AgencyOperationResponse>> {,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
         struct ConfirmRequest {
             remark: Option<String>,
         }
-
         let request = ConfirmRequest { remark };
 let api_req = ApiRequest {,
             http_method: Method::POST,
@@ -684,9 +545,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 拒绝猎头推荐
     ///,
 /// 该接口用于拒绝猎头推荐，设置拒绝原因
@@ -720,12 +579,11 @@ pub async fn reject_recommendation(,
         feedback: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<AgencyOperationResponse>> {,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
         struct RejectRequest {
             reason: String,
             feedback: Option<String>,
-        }
-let request = RejectRequest {,
+        let request = RejectRequest {,
             reason: reason.to_string(),
             feedback,
         };
@@ -740,7 +598,6 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

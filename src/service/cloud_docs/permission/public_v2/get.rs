@@ -12,7 +12,7 @@ use crate::core::{,
     SDKResult,
 };
 /// 获取云文档权限设置请求 (v2),
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetPermissionPublicV2Request {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -21,78 +21,17 @@ pub struct GetPermissionPublicV2Request {
     token: String,
     /// 文档类型,
 #[serde(skip)]
-    obj_type: String,
-}
+    obj_type: String}
 impl GetPermissionPublicV2Request {
-    pub fn w+.*{
-GetPermissionPublicV2RequestBuilder::default(),
-    }
-
-    pub fn new(token: impl ToString, obj_type: impl ToString) -> Self {
-Self {
-            token: token.to_string(),
-            obj_type: obj_type.to_string()
-            ..Default::default(),
-}
-    }
-/// 获取文档权限设置,
-    pub fn for_doc(token: impl ToString) -> Self {
-        Self::new(token, "doc"),
-}
-/// 获取电子表格权限设置,
-    pub fn for_sheet(token: impl ToString) -> Self {
-        Self::new(token, "sheet"),
-}
-/// 获取多维表格权限设置,
-    pub fn for_bitable(token: impl ToString) -> Self {
-        Self::new(token, "bitable"),
-}
-/// 获取知识库权限设置,
-    pub fn for_wiki(token: impl ToString) -> Self {
-        Self::new(token, "wiki"),
-}
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct GetPermissionPublicV2RequestBuilder {
-    request: GetPermissionPublicV2Request,
-}
+    request: GetPermissionPublicV2Request}
 impl GetPermissionPublicV2RequestBuilder {
-    /// 文档token
-    pub fn token(mut self, token: impl ToString) -> Self {
-self.request.token = token.to_string();
-        self,
-}
-/// 文档类型,
-    pub fn obj_type(mut self, obj_type: impl ToString) -> Self {
-self.request.obj_type = obj_type.to_string();
-        self,
-}
-/// 设置为文档类型,
-    pub fn as_doc(mut self) -> Self {
-self.request.obj_type = "doc".to_string();
-        self,
-}
-/// 设置为电子表格类型,
-    pub fn as_sheet(mut self) -> Self {
-self.request.obj_type = "sheet".to_string();
-        self,
-}
-/// 设置为多维表格类型,
-    pub fn as_bitable(mut self) -> Self {
-self.request.obj_type = "bitable".to_string();
-        self,
-}
-/// 设置为知识库类型,
-    pub fn as_wiki(mut self) -> Self {
-self.request.obj_type = "wiki".to_string();
-        self,
-}
-pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-self.request,
-    }
-}
-crate::impl_executable_builder_owned!(,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}crate::impl_executable_builder_owned!(,
     GetPermissionPublicV2RequestBuilder,
     crate::service::cloud_docs::permission::PermissionService,
     GetPermissionPublicV2Request,
@@ -100,7 +39,7 @@ crate::impl_executable_builder_owned!(,
     get_permission_public_v2,
 );
 /// 公开访问设置 (v2)
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PublicSettingsV2 {
     /// 链接分享设置
     pub link_share_setting: String,
@@ -125,19 +64,18 @@ pub struct PublicSettingsV2 {
     /// 分享范围设置
     pub share_scope: Option<String>,
     /// 到期时间
-    pub expire_time: Option<i64>,
-}
+    pub expire_time: Option<i64>}
 /// 获取云文档权限设置响应 (v2),
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetPermissionPublicV2Response {
     /// 公开访问设置
     pub permission_public: PublicSettingsV2,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 获取云文档权限设置 (v2),
 pub async fn get_permission_public_v2(
     request: GetPermissionPublicV2Request,
@@ -159,55 +97,12 @@ api_req.set_api_path(EndpointBuilder::replace_param(,
     api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
     let api_resp = Transport::request(api_req, config, option).await?;
-Ok(api_resp),
-}
+Ok(api_resp)}
 
 impl PublicSettingsV2 {
-/// 是否开启了链接分享,
-    pub fn w+.*{
-self.link_share_setting == "tenant_readable",
-            || self.link_share_setting == "tenant_editable",
-|| self.link_share_setting == "anyone_readable",
-            || self.link_share_setting == "anyone_editable",
-}
-/// 是否允许组织内访问,
-    pub fn w+.*{
-self.link_share_setting == "tenant_readable" || self.link_share_setting == "tenant_editable",
-    }
-/// 是否允许任何人访问,
-    pub fn w+.*{
-self.link_share_setting == "anyone_readable" || self.link_share_setting == "anyone_editable",
-    }
-/// 是否允许编辑,
-    pub fn w+.*{
-self.link_share_setting == "tenant_editable" || self.link_share_setting == "anyone_editable",
-    }
-/// 是否仅可读,
-    pub fn w+.*{
-self.link_share_setting == "tenant_readable" || self.link_share_setting == "anyone_readable",
-    }
-/// 是否开启密码保护,
-    pub fn w+.*{
-self.password_switch,
-    }
-/// 是否允许分享到组织外,
-    pub fn w+.*{
-self.allow_share_partner_tenant.unwrap_or(false),
-    }
-/// 是否有过期时间,
-    pub fn w+.*{
-self.expire_time.is_some(),
-    }
-/// 是否已过期,
-    pub fn w+.*{
-if let Some(expire_time) = self.expire_time {,
-            let now = chrono::Utc::now().timestamp();
-now > expire_time,
-        } else {,
-false,
-        }
-}
-/// 获取分享级别描述,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 获取分享级别描述,
     pub fn w+.*{
 match self.link_share_setting.as_str() {,
             "closed" => "关闭分享",
@@ -215,9 +110,7 @@ match self.link_share_setting.as_str() {,
             "tenant_editable" => "组织内可编辑",
             "anyone_readable" => "任何人可读",
             "anyone_editable" => "任何人可编辑",
-            _ => "未知设置",
-        }
-}
+            _ => "未知设置"}
 /// 获取权限摘要,
     pub fn w+.*{
 let mut features = Vec::new();
@@ -226,119 +119,64 @@ features.push("允许复制");
         }
 if self.allow_comment {,
             features.push("允许评论");
-}
 if self.allow_save_copy {,
             features.push("允许保存副本");
-}
 if self.password_switch {,
             features.push("密码保护");
-}
 if self.allows_external_share() {,
             features.push("组织外分享");
-}
 if features.is_empty() {,
-            "基础权限".to_string(),
-} else {
-            features.join(", "),
-}
+            "基础权限".to_string()} else {
+            features.join(", ")}
     }
 /// 获取安全级别,
     pub fn w+.*{
 if self.link_share_setting == "closed" {,
-            "最安全",
-} else if self.password_switch {,
-"较安全",
-        } else if self.is_tenant_accessible() && !self.allows_external_share() {,
-"中等安全",
-        } else if self.is_anyone_accessible() || self.allows_external_share() {,
-"较低安全",
-        } else {,
-"未知",
-        }
-}
+            "最安全"} else if self.password_switch {,
+"较安全"} else if self.is_tenant_accessible() && !self.allows_external_share() {,
+"中等安全"} else if self.is_anyone_accessible() || self.allows_external_share() {,
+"较低安全"} else {,
+"未知"}
 /// 获取分享范围描述,
     pub fn w+.*{
-self.share_scope.as_deref(),
-    }
+self.share_scope.as_deref()}
 /// 获取过期时间格式化字符串,
     pub fn w+.*{
 self.expire_time.map(|timestamp| {,
             let datetime =
                 chrono::DateTime::from_timestamp(timestamp, 0).unwrap_or_else(chrono::Utc::now);
-datetime.format("%Y-%m-%d %H:%M:%S").to_string(),
-        }),
-}
+datetime.format("%Y-%m-%d %H:%M:%S").to_string()}),
 /// 获取剩余有效时间（秒）,
     pub fn w+.*{
 if let Some(expire_time) = self.expire_time {,
             let now = chrono::Utc::now().timestamp();
 if expire_time > now {,
-                Some(expire_time - now),
+                Some(expire_time - now)} else {,
+Some(0) // 已过期}
 } else {,
-Some(0) // 已过期,
-            }
-} else {,
-None // 永久有效,
-        }
-}
+None // 永久有效}
 /// 获取高级功能状态,
     pub fn w+.*{
 let mut features = Vec::new();
         if let Some(access_setting) = &self.access_setting {
             features.push(format!("访问设置: {access_setting}"));
-}
 if let Some(watermark) = &self.watermark_setting {,
             features.push(format!("水印: {watermark}"));
-}
 if self.comment_entity.is_some() {,
             features.push("自定义评论权限".to_string());
-}
 if self.external_access_entity.is_some() {,
             features.push("外部访问配置".to_string());
-}
 features,
     }
-}
 impl GetPermissionPublicV2Response {
-    /// 获取公开设置,
-pub fn w+.*{
-        &self.permission_public,
-}
-/// 是否允许外部访问,
-    pub fn w+.*{
-self.permission_public.is_link_share_enabled(),
-    }
-/// 获取设置摘要,
-    pub fn w+.*{
-format!(,
-            "{} - {} (安全级别: {})",
-            self.permission_public.share_level_description(),
-            self.permission_public.permissions_summary(),
-            self.permission_public.security_level(),
-),
-    }
-/// 是否有高级配置,
-    pub fn w+.*{
-self.permission_public.external_access_entity.is_some(),
-            || self.permission_public.comment_entity.is_some(),
-|| self.permission_public.share_scope.is_some(),
-    }
-/// 安全性建议,
-    pub fn w+.*{
-let mut recommendations = Vec::new();
-        if !self.permission_public.password_switch && self.permission_public.is_anyone_accessible(),
-{,
-            recommendations.push("建议开启密码保护以提高安全性".to_string());
-}
-if self.permission_public.allow_copy && self.permission_public.is_anyone_accessible() {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}if self.permission_public.allow_copy && self.permission_public.is_anyone_accessible() {,
             recommendations.push("建议限制复制权限以防止内容泄露".to_string());
-}
 if self.permission_public.is_editable() && self.permission_public.is_anyone_accessible() {,
             recommendations.push("建议将编辑权限限制在组织内".to_string());
-}
 if self.permission_public.allows_external_share() {,
             recommendations.push("开启了组织外分享，请确保内容安全".to_string());
-}
 if self.permission_public.is_expired() {,
             recommendations.push("文档分享已过期，需要重新设置".to_string());
 } else if let Some(remaining) = self.permission_public.remaining_valid_time() {,
@@ -346,20 +184,16 @@ if remaining < 86400 {,
                 // 少于24小时,
 recommendations.push("文档分享即将过期，请注意及时续期".to_string());
             }
-}
 if recommendations.is_empty() {,
             recommendations.push("当前权限设置合理".to_string());
-}
 recommendations,
     }
 /// 获取高级功能报告,
     pub fn w+.*{
 let features = self.permission_public.advanced_features_status();
         if features.is_empty() {,
-"未启用高级功能".to_string(),
-        } else {
+"未启用高级功能".to_string()} else {
             format!("高级功能: {}", features.join(", ")),
-}
     }
 /// 过期状态检查,
     pub fn w+.*{
@@ -373,21 +207,16 @@ if days > 0 {,
                     format!("剩余: {days}天{hours}小时 (过期时间: {expire_time})"),
 } else {
                     format!("剩余: {hours}小时 (过期时间: {expire_time})"),
-}
             } else {
                 format!("过期时间: {expire_time}"),
-}
         } else {,
-"永久有效".to_string(),
-        }
-}
-}
+"永久有效".to_string()}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]
-    fn test_get_permission_public_v2_request_builder() {,
+    fn test_get_permission_public_v2_request_builder() {
 let request = GetPermissionPublicV2Request::builder(),
             .token()
 .as_doc()
@@ -395,9 +224,8 @@ let request = GetPermissionPublicV2Request::builder(),
 
         assert_eq!(request.token, "doccnxxxxxx");
         assert_eq!(request.obj_type, "doc");
-}
 #[test]
-    fn test_convenience_methods() {,
+    fn test_convenience_methods() {
 let request = GetPermissionPublicV2Request::for_doc("doccnxxxxxx");
         assert_eq!(request.obj_type, "doc");
 let request = GetPermissionPublicV2Request::for_sheet("shtcnxxxxxx");
@@ -406,9 +234,8 @@ let request = GetPermissionPublicV2Request::for_bitable("bblcnxxxxxx");
         assert_eq!(request.obj_type, "bitable");
 let request = GetPermissionPublicV2Request::for_wiki("wikicnxxxxxx");
         assert_eq!(request.obj_type, "wiki");
-}
 #[test]
-    fn test_public_settings_v2_methods() {,
+    fn test_public_settings_v2_methods() {
 let settings = PublicSettingsV2 {,
             link_share_setting: "tenant_editable".to_string(),
             password_switch: true,
@@ -439,9 +266,8 @@ let features = settings.advanced_features_status();
         assert!(!features.is_empty());
 assert!(features.iter().any(|f| f.contains("访问设置")));
         assert!(features.iter().any(|f| f.contains("水印")));
-}
 #[test]
-    fn test_expiration_logic() {,
+    fn test_expiration_logic() {
 let expired_settings = PublicSettingsV2 {,
             link_share_setting: "anyone_readable".to_string(),
             password_switch: false,
@@ -454,8 +280,7 @@ let expired_settings = PublicSettingsV2 {,
             external_access_entity: None,
             comment_entity: None,
             share_scope: None,
-            expire_time: Some(chrono::Utc::now().timestamp() - 3600), // 1小时前过期,
-};
+            expire_time: Some(chrono::Utc::now().timestamp() - 3600), // 1小时前过期};
 assert!(expired_settings.is_expired());
         assert_eq!(expired_settings.remaining_valid_time(), Some(0));
 let permanent_settings = PublicSettingsV2 {,
@@ -470,9 +295,6 @@ let permanent_settings = PublicSettingsV2 {,
             external_access_entity: None,
             comment_entity: None,
             share_scope: None,
-            expire_time: None,
-        };
+            expire_time: None};
 assert!(!permanent_settings.is_expired());
         assert_eq!(permanent_settings.remaining_valid_time(), None);
-}
-}

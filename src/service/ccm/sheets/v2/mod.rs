@@ -7,28 +7,14 @@ use crate::service::ccm::sheets::v2::worksheet::WorksheetService;
 use crate::service::ccm::sheets::v2::range::RangeService;
 use crate::service::ccm::sheets::v2::style::StyleService;
 /// 电子表格v2版本服务
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SheetsV2Service {
-    client: std::sync::Arc<LarkClient>,
-    /// 表格操作服务
-    pub spreadsheet: SpreadsheetService,
-    /// 工作表操作服务
-    pub worksheet: WorksheetService,
-    /// 范围操作服务
-    pub range: RangeService,
-    /// 样式操作服务
-    pub style: StyleService,
 }
+
 impl SheetsV2Service {
-    /// 创建新的v2版本服务实例
-pub fn new() -> Self {
-        Self {
-            spreadsheet: SpreadsheetService::new(client.clone()),
-            worksheet: WorksheetService::new(client.clone()),
-            range: RangeService::new(client.clone()),
-            style: StyleService::new(client.clone()),
-        }
 }
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }
 /// 表格操作服务
 pub mod spreadsheet;
@@ -38,3 +24,4 @@ pub mod worksheet;
 pub mod range;
 /// 样式操作服务
 pub mod style;
+}

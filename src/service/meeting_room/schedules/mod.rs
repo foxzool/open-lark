@@ -4,18 +4,17 @@
 use crate::core::config::Config;
 use crate::service::meeting_room::schedules::default::SchedulesDefaultService;
 /// 会议室日程管理服务
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SchedulesService {
     /// default版本API服务
-    pub default: SchedulesDefaultService,
+pub default: SchedulesDefaultService,
 }
 impl SchedulesService {
-    /// 创建新的会议室日程管理服务实例
-pub fn new() -> Self {
+pub fn new(config: Config) -> Self {
         Self {
-            default: SchedulesDefaultService::new(config.clone()),
-        }
-}
+            default: SchedulesDefaultService::new(config),
 }
 /// default版本API
 pub mod default;
+}
+}

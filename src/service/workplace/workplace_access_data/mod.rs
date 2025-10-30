@@ -6,9 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
-    config::Config,
+        api_resp::{ApiResponseTraitconfig::Config,
         constants::AccessTokenType,
         endpoints::workplace::*,
         http::Transport,
@@ -20,19 +18,17 @@ use crate::,
 };
 service::workplace::models::{,
         CustomWorkplaceAccessData, CustomWorkplaceWidgetAccessData, PageResponse,
-        WorkplaceAccessData,
-    }
+        WorkplaceAccessData}
 };
 /// 工作台访问数据服务
 pub struct WorkplaceAccessDataService {
+}
     pub config: Config,
-}
 impl WorkplaceAccessDataService {
-    /// 创建工作台访问数据服务实例
-pub fn new() -> Self {
+    
+    pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 获取工作台访问数据
+}/// 获取工作台访问数据
     ///,
 /// 获取工作台的访问数据统计信息，支持按时间范围、用户、部门等维度查询。
     ///,
@@ -54,47 +50,38 @@ let mut api_req = ApiRequest {,
             api_path: WORKPLACE_ACCESS_DATA_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
-};
+            ..Default::default()};
 // 添加查询参数
         if let Some(page_token) = request.page_token {,
 api_req
                 .query_params
                 .insert(QueryParams::PAGE_TOKEN, page_token);
-}
 if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert(QueryParams::PAGE_SIZE, page_size.to_string());
-}
 if let Some(start_time) = request.start_time {,
             api_req
 .query_params
                 .insert(QueryParams::START_TIME, start_time.to_string());
-}
 if let Some(end_time) = request.end_time {,
             api_req
 .query_params
                 .insert(QueryParams::END_TIME, end_time.to_string());
-}
 if let Some(user_id) = request.user_id {,
             api_req.query_params.insert(QueryParams::USER_ID, user_id);
-}
 if let Some(department_id) = request.department_id {,
             api_req
 .query_params
                 .insert(QueryParams::DEPARTMENT_ID, department_id);
-}
 if let Some(access_type) = request.access_type {,
             api_req
 .query_params
                 .insert(QueryParams::ACCESS_TYPE, access_type);
-}
 let api_resp: BaseResponse<AccessDataSearchResponse> =,
             Transport::request(api_req, &self.config, option).await?;
 api_resp.into_result(),
-    }
-/// 获取定制工作台访问数据
+    /// 获取定制工作台访问数据
     ///,
 /// 获取定制工作台的访问数据统计信息。
     ///,
@@ -116,42 +103,34 @@ let mut api_req = ApiRequest {,
             api_path: WORKPLACE_CUSTOM_ACCESS_DATA_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
-};
+            ..Default::default()};
 // 添加查询参数
         if let Some(page_token) = request.page_token {,
 api_req
                 .query_params
                 .insert(QueryParams::PAGE_TOKEN, page_token);
-}
 if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert(QueryParams::PAGE_SIZE, page_size.to_string());
-}
 if let Some(start_time) = request.start_time {,
             api_req
 .query_params
                 .insert(QueryParams::START_TIME, start_time.to_string());
-}
 if let Some(end_time) = request.end_time {,
             api_req
 .query_params
                 .insert(QueryParams::END_TIME, end_time.to_string());
-}
 if let Some(user_id) = request.user_id {,
             api_req.query_params.insert(QueryParams::USER_ID, user_id);
-}
 if let Some(custom_workplace_id) = request.custom_workplace_id {,
             api_req
 .query_params
                 .insert(QueryParams::CUSTOM_WORKPLACE_ID, custom_workplace_id);
-}
 let api_resp: BaseResponse<CustomAccessDataSearchResponse> =,
             Transport::request(api_req, &self.config, option).await?;
 api_resp.into_result(),
-    }
-/// 获取定制工作台小组件访问数据
+    /// 获取定制工作台小组件访问数据
     ///,
 /// 获取定制工作台小组件的访问数据统计信息。
     ///,
@@ -173,61 +152,43 @@ let mut api_req = ApiRequest {,
             api_path: WORKPLACE_WIDGET_ACCESS_DATA_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
-};
+            ..Default::default()};
 // 添加查询参数
         if let Some(page_token) = request.page_token {,
 api_req
                 .query_params
                 .insert(QueryParams::PAGE_TOKEN, page_token);
-}
 if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert(QueryParams::PAGE_SIZE, page_size.to_string());
-}
 if let Some(start_time) = request.start_time {,
             api_req
 .query_params
                 .insert(QueryParams::START_TIME, start_time.to_string());
-}
 if let Some(end_time) = request.end_time {,
             api_req
 .query_params
                 .insert(QueryParams::END_TIME, end_time.to_string());
-}
 if let Some(user_id) = request.user_id {,
             api_req.query_params.insert(QueryParams::USER_ID, user_id);
-}
 if let Some(custom_workplace_id) = request.custom_workplace_id {,
             api_req
 .query_params
                 .insert(QueryParams::CUSTOM_WORKPLACE_ID, custom_workplace_id);
-}
 if let Some(widget_id) = request.widget_id {,
             api_req
 .query_params
                 .insert(QueryParams::WIDGET_ID, widget_id);
-}
 let api_resp: BaseResponse<CustomWidgetAccessDataSearchResponse> =,
             Transport::request(api_req, &self.config, option).await?;
 api_resp.into_result(),
-    }
-}
-impl Service for WorkplaceAccessDataService {,
+    impl Service for WorkplaceAccessDataService {,
     fn config(&self) -> &Config {,
-&self.config,
-    }
-fn service_name() -> &'static str {,
-        "workplace_access_data",
-}
-fn service_version() -> &'static str {,
-        "v1",
-}
-}
-/// 工作台访问数据查询请求
-#[derive(.*?)]
-pub struct AccessDataSearchRequest {
+&self.configfn service_name() -> &'static str {,
+        "workplace_access_data"fn service_version() -> &'static str {,
+        "v1"/// 工作台访问数据查询请求
+#[derive(Debug, Clone)]
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -248,87 +209,33 @@ pub struct AccessDataSearchRequest {
     pub department_id: Option<String>,
     /// 访问类型筛选
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub access_type: Option<String>,
-}
+}    pub access_type: Option<String>}
+pub struct AccessDataSearchRequest {
 impl AccessDataSearchRequest {
-    /// 创建Builder实例
-pub fn w+.*{
-        AccessDataSearchRequestBuilder::default(),
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-}
-/// 工作台访问数据查询请求Builder
+}/// 工作台访问数据查询请求Builder
 #[derive(Default)]
 pub struct AccessDataSearchRequestBuilder {
-    inner: AccessDataSearchRequest,
-}
+    inner: AccessDataSearchRequest}
 impl AccessDataSearchRequestBuilder {
-    /// 设置页面令牌
-    pub fn page_token() -> Self {
-self.inner.page_token = Some(token.into());
-        self,
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 设置页面大小
-    pub fn page_size() -> Self {
-self.inner.page_size = Some(size);
-        self,
-}
-/// 设置开始时间戳
-    pub fn start_time() -> Self {
-self.inner.start_time = Some(timestamp);
-        self,
-}
-/// 设置结束时间戳  
-    pub fn end_time() -> Self {
-self.inner.end_time = Some(timestamp);
-        self,
-}
-/// 设置时间范围（复合方法）
-    pub fn time_range() -> Self {
-self.inner.start_time = Some(start_time);
-        self.inner.end_time = Some(end_time);
-self,
-    }
-/// 设置分页参数（复合方法）
-    pub fn pagination() -> Self {
-self.inner.page_token = page_token;
-        self.inner.page_size = page_size;
-self,
-    }
-/// 设置用户ID筛选
-    pub fn user_filter() -> Self {
-self.inner.user_id = Some(user_id.into());
-        self,
-}
-/// 设置部门ID筛选
-    pub fn department_filter() -> Self {
-self.inner.department_id = Some(department_id.into());
-        self,
-}
-/// 设置访问类型筛选
-    pub fn access_type_filter() -> Self {
-self.inner.access_type = Some(access_type.into());
-        self,
-}
-/// 构建请求对象
-    pub fn w+.*{
-self.inner,
-    }
-}
-/// 工作台访问数据查询响应
-#[derive(.*?)]
+}/// 工作台访问数据查询响应
+#[derive(Debug, Clone)]
 pub struct AccessDataSearchResponse {
     /// 工作台访问数据列表
 #[serde(flatten)]
-    pub access_data: PageResponse<WorkplaceAccessData>,
-}
+}    pub access_data: PageResponse<WorkplaceAccessData>}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
-    }
-}
-/// 定制工作台访问数据查询请求
-#[derive(.*?)]
-pub struct CustomAccessDataSearchRequest {
+    /// 定制工作台访问数据查询请求
+#[derive(Debug, Clone)]
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -346,23 +253,20 @@ pub struct CustomAccessDataSearchRequest {
     pub user_id: Option<String>,
     /// 定制工作台ID筛选
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub custom_workplace_id: Option<String>,
-}
-/// 定制工作台访问数据查询响应
-#[derive(.*?)]
+}    pub custom_workplace_id: Option<String>/// 定制工作台访问数据查询响应
+pub struct CustomAccessDataSearchRequest {
+#[derive(Debug, Clone)]
 pub struct CustomAccessDataSearchResponse {
     /// 定制工作台访问数据列表
 #[serde(flatten)]
-    pub access_data: PageResponse<CustomWorkplaceAccessData>,
-}
+}    pub access_data: PageResponse<CustomWorkplaceAccessData>}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
-    }
-}
-/// 定制工作台小组件访问数据查询请求
-#[derive(.*?)]
-pub struct CustomWidgetAccessDataSearchRequest {
+    /// 定制工作台小组件访问数据查询请求
+#[derive(Debug, Clone)]
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -383,81 +287,31 @@ pub struct CustomWidgetAccessDataSearchRequest {
     pub custom_workplace_id: Option<String>,
     /// 小组件ID筛选
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub widget_id: Option<String>,
-}
+}    pub widget_id: Option<String>}
+pub struct CustomWidgetAccessDataSearchRequest {
 impl CustomWidgetAccessDataSearchRequest {
-    /// 创建Builder实例
-pub fn w+.*{
-        CustomWidgetAccessDataSearchRequestBuilder::default(),
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-}
-/// 定制工作台小组件访问数据查询请求Builder
+}/// 定制工作台小组件访问数据查询请求Builder
 #[derive(Default)]
 pub struct CustomWidgetAccessDataSearchRequestBuilder {
-    inner: CustomWidgetAccessDataSearchRequest,
-}
+    inner: CustomWidgetAccessDataSearchRequest}
 impl CustomWidgetAccessDataSearchRequestBuilder {
-    /// 设置页面令牌
-    pub fn page_token() -> Self {
-self.inner.page_token = Some(token.into());
-        self,
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 设置页面大小
-    pub fn page_size() -> Self {
-self.inner.page_size = Some(size);
-        self,
-}
-/// 设置开始时间戳
-    pub fn start_time() -> Self {
-self.inner.start_time = Some(timestamp);
-        self,
-}
-/// 设置结束时间戳  
-    pub fn end_time() -> Self {
-self.inner.end_time = Some(timestamp);
-        self,
-}
-/// 设置时间范围（复合方法）
-    pub fn time_range() -> Self {
-self.inner.start_time = Some(start_time);
-        self.inner.end_time = Some(end_time);
-self,
-    }
-/// 设置分页参数（复合方法）
-    pub fn pagination() -> Self {
-self.inner.page_token = page_token;
-        self.inner.page_size = page_size;
-self,
-    }
-/// 设置用户ID筛选
-    pub fn user_filter() -> Self {
-self.inner.user_id = Some(user_id.into());
-        self,
-}
-/// 设置定制工作台ID筛选
-    pub fn custom_workplace_filter() -> Self {
-self.inner.custom_workplace_id = Some(custom_workplace_id.into());
-        self,
-}
-/// 设置小组件ID筛选
-    pub fn widget_filter() -> Self {
-self.inner.widget_id = Some(widget_id.into());
-        self,
-}
-/// 构建请求对象
-    pub fn w+.*{
-self.inner,
-    }
-}
-/// 定制工作台小组件访问数据查询响应
-#[derive(.*?)]
+}/// 定制工作台小组件访问数据查询响应
+#[derive(Debug, Clone)]
 pub struct CustomWidgetAccessDataSearchResponse {
     /// 定制工作台小组件访问数据列表
 #[serde(flatten)]
-    pub access_data: PageResponse<CustomWorkplaceWidgetAccessData>,
-}
+}    pub access_data: PageResponse<CustomWorkplaceWidgetAccessData>}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

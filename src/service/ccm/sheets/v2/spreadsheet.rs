@@ -10,16 +10,13 @@ use crate::core::{APIResult, LarkClient, RequestBuilder};
 use crate::service::ccm::models::CcmResponse;
 use serde::{Deserialize, Serialize};
 /// 表格操作服务,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SpreadsheetService {
     client: std::sync::Arc<LarkClient>,
-}
 impl SpreadsheetService {
-    /// 创建新的表格操作服务实例,
-pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
-        Self { client }
-}
-/// 获取表格元数据,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 获取表格元数据,
     ///,
 /// 根据 spreadsheetToken 获取表格元数据。,
     ///,
@@ -83,7 +80,6 @@ let request = RequestBuilder::put(&format!(,
         .query_param()
 .body_json(request_body);
         self.client.send(request).await,
-}
 /// 创建表格,
     ///,
 /// 在指定目录下创建表格。,
@@ -128,10 +124,9 @@ let request = RequestBuilder::delete("/open-apis/sheets/v2/spreadsheets"),
             .query_param("spreadsheetToken", spreadsheet_token);
 self.client.send(request).await,
     }
-}
 // 数据结构,
 /// 表格元数据
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SpreadsheetMetadata {
     /// 表格token,
 #[serde(rename = "spreadsheet_token")]
@@ -148,9 +143,8 @@ pub struct SpreadsheetMetadata {
     pub url: String,
     /// 是否已删除
     pub deleted: bool,
-}
 /// 创建者信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreatorInfo {
     /// 用户ID,
 #[serde(rename = "user_id")]
@@ -160,15 +154,13 @@ pub struct CreatorInfo {
     pub user_id_type: String,
     /// 用户名
     pub name: Option<String>,
-}
 /// 工作表列表响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SheetListResponse {
     /// 工作表列表
     pub sheets: Vec<SheetInfo>,
-}
 /// 工作表信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SheetInfo {
     /// 工作表ID,
 #[serde(rename = "sheet_id")]
@@ -186,18 +178,15 @@ pub struct SheetInfo {
     pub column_count: i32,
     /// 是否已删除
     pub deleted: bool,
-}
 // 请求结构体,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateSpreadsheetRequest {
     pub title: String,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateSpreadsheetRequest {
     pub title: String,
     #[serde(rename = "folder_token")]
     pub folder_token: String,
     #[serde(rename = "folder_type")]
     pub folder_type: String,
-}

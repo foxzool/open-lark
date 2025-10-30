@@ -4,25 +4,23 @@ use open_lark_core::core::api_req::ApiRequest;
 use std::collections::HashMap;
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         trait_system::Service,
         SDKResult,
-    }
     service::task::models::{Dependency, Reminder, Task, TaskMember, Tasklist, UserIdType}
 };
 /// 任务服务
 #[derive(Debug)]
 pub struct TaskService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 创建任务请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateTaskRequest {
+}
     /// 任务标题
     pub summary: String,
     /// 任务描述
@@ -49,58 +47,55 @@ pub struct CreateTaskRequest {
     /// 任务来源
 #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<i32>,
-}
-
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct TaskDue {
+}
     /// 截止时间戳(毫秒)
 #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp: Option<String>,
     /// 是否为全天任务
 #[serde(skip_serializing_if = "Option::is_none")]
     pub is_all_day: Option<bool>,
-}
-
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct TaskStart {
+}
     /// 开始时间戳(毫秒)
 #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp: Option<String>,
     /// 是否为全天任务
 #[serde(skip_serializing_if = "Option::is_none")]
     pub is_all_day: Option<bool>,
-}
-
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct TaskCustomComplete {
+}
     /// 完成模式
 #[serde(skip_serializing_if = "Option::is_none")]
     pub mode: Option<String>,
     /// 完成设置
 #[serde(skip_serializing_if = "Option::is_none")]
     pub complete_setting: Option<TaskCompleteSetting>,
-}
-
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct TaskCompleteSetting {
+}
     /// 子任务完成数量
 #[serde(skip_serializing_if = "Option::is_none")]
     pub subtask_count: Option<i32>,
-}
 /// 创建任务响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateTaskResponse {
+}
     /// 创建的任务
     pub task: Task,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 更新任务请求
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 更新任务请求
+#[derive(Debug, Clone)]
 pub struct UpdateTaskRequest {
+}
     /// 任务标题
 #[serde(skip_serializing_if = "Option::is_none")]
     pub summary: Option<String>,
@@ -122,181 +117,113 @@ pub struct UpdateTaskRequest {
     /// 自定义完成配置
 #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_complete: Option<TaskCustomComplete>,
-}
 /// 更新任务响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateTaskResponse {
+}
     /// 更新后的任务
     pub task: Task,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 获取任务响应
-#[derive(.*?)]
-pub struct GetTaskResponse {
-    /// 任务详情
-    pub task: Task,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 任务列表响应
-#[derive(.*?)]
-pub struct ListTasksResponse {
-    /// 任务列表
-    pub items: Vec<Task>,
-    /// 下一页标记
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-    /// 是否还有更多数据
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub has_more: Option<bool>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 任务加入清单请求
-#[derive(.*?)]
-pub struct AddTaskTasklistRequest {
-    /// 清单GUID
-    pub tasklist_guid: String,
-    /// 自定义分组GUID
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub section_guid: Option<String>,
-}
-/// 任务加入清单响应
-#[derive(.*?)]
-pub struct AddTaskTasklistResponse {
-    /// 加入的清单
-    pub tasklist: Tasklist,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 添加任务成员请求
-#[derive(.*?)]
-pub struct AddTaskMembersRequest {
-    /// 成员列表
-    pub members: Vec<TaskMember>,
-}
-/// 添加任务成员响应
-#[derive(.*?)]
-pub struct AddTaskMembersResponse {
-    /// 成员列表
-    pub members: Vec<TaskMember>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 移除任务成员请求
-#[derive(.*?)]
-pub struct RemoveTaskMembersRequest {
-    /// 成员ID列表
-    pub members: Vec<String>,
-}
-/// 移除任务成员响应
-#[derive(.*?)]
-pub struct RemoveTaskMembersResponse {
-    /// 成员列表
-    pub members: Vec<TaskMember>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 添加任务提醒请求
-#[derive(.*?)]
-pub struct AddTaskRemindersRequest {
-    /// 提醒列表
-    pub reminders: Vec<Reminder>,
-}
-/// 添加任务提醒响应
-#[derive(.*?)]
-pub struct AddTaskRemindersResponse {
-    /// 提醒列表
-    pub reminders: Vec<Reminder>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 移除任务提醒请求
-#[derive(.*?)]
-pub struct RemoveTaskRemindersRequest {
-    /// 提醒ID列表
-    pub reminder_ids: Vec<String>,
-}
-/// 移除任务提醒响应
-#[derive(.*?)]
-pub struct RemoveTaskRemindersResponse {
-    /// 提醒列表
-    pub reminders: Vec<Reminder>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 添加任务依赖请求
-#[derive(.*?)]
-pub struct AddTaskDependenciesRequest {
-    /// 依赖列表
-    pub dependencies: Vec<Dependency>,
-}
-/// 添加任务依赖响应
-#[derive(.*?)]
-pub struct AddTaskDependenciesResponse {
-    /// 依赖列表
-    pub dependencies: Vec<Dependency>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 移除任务依赖请求
-#[derive(.*?)]
-pub struct RemoveTaskDependenciesRequest {
-    /// 依赖类型和任务GUID的组合列表
-    pub dependencies: Vec<DependencyKey>,
-}
-
-#[derive(.*?)]
-pub struct DependencyKey {
-    /// 依赖类型
-    pub type_: String,
-    /// 依赖任务GUID
-    pub task_guid: String,
-}
-/// 移除任务依赖响应
-#[derive(.*?)]
-pub struct RemoveTaskDependenciesResponse {
-    /// 依赖列表
-    pub dependencies: Vec<Dependency>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl TaskService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 获取任务响应
+#[derive(Debug, Clone)]
 }
-/// 创建任务
+pub struct GetTaskResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 任务列表响应
+#[derive(Debug, Clone)]
+}
+pub struct ListTasksResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 任务加入清单请求
+#[derive(Debug, Clone)]
+}
+pub struct AddTaskTasklistRequest {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 添加任务成员请求
+#[derive(Debug, Clone)]
+}
+pub struct AddTaskMembersRequest {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 移除任务成员请求
+#[derive(Debug, Clone)]
+}
+pub struct RemoveTaskMembersRequest {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 添加任务提醒请求
+#[derive(Debug, Clone)]
+}
+pub struct AddTaskRemindersRequest {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 移除任务提醒请求
+#[derive(Debug, Clone)]
+}
+pub struct RemoveTaskRemindersRequest {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 添加任务依赖请求
+#[derive(Debug, Clone)]
+}
+pub struct AddTaskDependenciesRequest {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 移除任务依赖请求
+#[derive(Debug, Clone)]
+}
+pub struct RemoveTaskDependenciesRequest {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl TaskService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建任务
     pub async fn create(
         &self,
         request: CreateTaskRequest,
@@ -306,7 +233,6 @@ impl TaskService {
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let mut api_req = ApiRequest {,
                         http_method: Method::POST,
             api_path: Endpoints::TASK_V2_TASKS.to_string(),
@@ -315,9 +241,7 @@ let mut api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 更新任务
     pub async fn patch(
         &self,
@@ -329,7 +253,6 @@ let mut api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let mut api_req = ApiRequest {,
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
@@ -342,7 +265,6 @@ let mut api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取任务详情
     pub async fn get(
         &self,
@@ -353,7 +275,6 @@ let mut api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let mut api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
@@ -365,9 +286,7 @@ let mut api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除任务
     pub async fn delete(
         &self,
@@ -378,7 +297,6 @@ let mut api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let mut api_req = ApiRequest {,
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
@@ -391,7 +309,6 @@ let mut api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 列取任务列表
     #[allow(clippy::too_many_arguments)]
 pub async fn list(,
@@ -411,34 +328,24 @@ pub async fn list(,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 if let Some(page_size) = page_size {,
             query_params.insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token.to_string());
-}
 if let Some(completed) = completed {,
             query_params.insert("completed", completed.to_string());
-}
 if let Some(created_from) = created_from {,
             query_params.insert("created_from", created_from.to_string());
-}
 if let Some(created_to) = created_to {,
             query_params.insert("created_to", created_to.to_string());
-}
 if let Some(updated_from) = updated_from {,
             query_params.insert("updated_from", updated_from.to_string());
-}
 if let Some(updated_to) = updated_to {,
             query_params.insert("updated_to", updated_to.to_string());
-}
 if let Some(due_from) = due_from {,
             query_params.insert("due_from", due_from.to_string());
-}
 if let Some(due_to) = due_to {,
             query_params.insert("due_to", due_to.to_string());
-}
 let mut api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: Endpoints::TASK_V2_TASKS.to_string(),
@@ -447,9 +354,7 @@ let mut api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 添加任务成员
     pub async fn add_members(
         &self,
@@ -461,7 +366,6 @@ let mut api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let mut api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
@@ -474,7 +378,6 @@ let mut api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 移除任务成员
     pub async fn remove_members(
         &self,
@@ -486,7 +389,6 @@ let mut api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let mut api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
@@ -499,7 +401,6 @@ let mut api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 添加任务提醒
     pub async fn add_reminders(
         &self,
@@ -511,7 +412,6 @@ let mut api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let mut api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
@@ -524,7 +424,6 @@ let mut api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 任务加入清单
     pub async fn add_tasklist(
         &self,
@@ -536,7 +435,6 @@ let mut api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let mut api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
@@ -549,7 +447,6 @@ let mut api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 移除任务提醒
     pub async fn remove_reminders(
         &self,
@@ -561,7 +458,6 @@ let mut api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let mut api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
@@ -574,7 +470,6 @@ let mut api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 添加任务依赖
     pub async fn add_dependencies(
         &self,
@@ -586,7 +481,6 @@ let mut api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let mut api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
@@ -599,7 +493,6 @@ let mut api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 移除任务依赖
     pub async fn remove_dependencies(
         &self,
@@ -611,7 +504,6 @@ let mut api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let mut api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
@@ -624,16 +516,12 @@ let mut api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
-}
 impl Service for TaskService {,
     fn config(&self) -> &Config {,
 &self.config,
-    }
-fn service_name() -> &'static str {,
+    fn service_name() -> &'static str {,
         "task",
-}
 fn service_version() -> &'static str {,
         "v2",
-}
-}
+}}}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

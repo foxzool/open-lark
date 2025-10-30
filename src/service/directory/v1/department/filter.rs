@@ -15,7 +15,7 @@ use crate::{,
 };
 use super::DepartmentService;
 /// 批量获取部门列表请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct FilterDepartmentRequest {
     pub api_req: ApiRequest,
     /// 分页大小，最大值为50
@@ -29,155 +29,68 @@ pub struct FilterDepartmentRequest {
     /// 用户ID类型
     pub user_id_type: Option<UserIdType>,
     /// 部门ID类型
-    pub department_id_type: Option<DepartmentIdType>,
-}
+    pub department_id_type: Option<DepartmentIdType>}
 impl FilterDepartmentRequest {
-    /// 创建批量获取部门列表请求的构建器,
-pub fn w+.*{
-        FilterDepartmentRequestBuilder::default(),
-}
-}
-/// 批量获取部门列表请求构建器,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 批量获取部门列表请求构建器,
 #[derive(Default)]
 pub struct FilterDepartmentRequestBuilder {
-    request: FilterDepartmentRequest,
-}
+    request: FilterDepartmentRequest}
 impl FilterDepartmentRequestBuilder {
-    /// 设置分页大小
-    pub fn page_size(mut self, page_size: i32) -> Self {
-self.request.page_size = Some(page_size);
-        self,
-}
-/// 设置分页标记,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {
-self.request.page_token = Some(page_token.to_string());
-        self,
-}
-/// 设置父部门ID,
-    pub fn parent_department_id(mut self, parent_department_id: impl ToString) -> Self {
-self.request.parent_department_id = Some(parent_department_id.to_string());
-        self,
-}
-/// 设置是否获取已删除部门,
-    pub fn fetch_deleted(mut self, fetch_deleted: bool) -> Self {
-self.request.fetch_deleted = Some(fetch_deleted);
-        self,
-}
-/// 设置用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
-self.request.user_id_type = Some(user_id_type);
-        self,
-}
-/// 设置部门ID类型,
-    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {
-self.request.department_id_type = Some(department_id_type);
-        self,
-}
-/// 构建请求,
-    pub fn w+.*{
-// 构建查询参数,
-        if let Some(page_size) = self.request.page_size {,
-self.request,
-                .api_req
-.query_params
-                .insert("page_size", page_size.to_string());
-}
-if let Some(ref page_token) = self.request.page_token {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}if let Some(ref page_token) = self.request.page_token {,
             self.request,
 .api_req
                 .query_params
                 .insert("page_token", page_token.clone());
-}
 if let Some(ref parent_department_id) = self.request.parent_department_id {,
             self.request,
 .api_req
                 .query_params
                 .insert("parent_department_id", parent_department_id.clone());
-}
 if let Some(fetch_deleted) = self.request.fetch_deleted {,
             self.request,
 .api_req
                 .query_params
                 .insert("fetch_deleted", fetch_deleted.to_string());
-}
 if let Some(user_id_type) = &self.request.user_id_type {,
             self.request,
 .api_req
                 .query_params
                 .insert("user_id_type", user_id_type.to_string());
-}
 if let Some(department_id_type) = &self.request.department_id_type {,
             self.request,
 .api_req
                 .query_params
                 .insert("department_id_type", department_id_type.to_string());
-}
 self.request,
     }
-}
 /// 批量获取部门列表响应数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct FilterDepartmentResponseData {
     /// 部门信息列表
     pub departments: Vec<Department>,
     /// 下一页分页标记
     pub page_token: Option<String>,
     /// 是否还有更多数据
-    pub has_more: Option<bool>,
-}
+    pub has_more: Option<bool>}
 /// 批量获取部门列表响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct FilterDepartmentResponse {
     /// 响应数据
     pub data: FilterDepartmentResponseData,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 impl DepartmentService {
-    /// 批量获取部门列表,
-///,
-    /// 获取部门列表，支持分页和过滤条件。身份验证方式为应用身份验证,
-///,
-    /// # 参数,
-/// - `request`: 批量获取部门列表请求,
-    /// - `option`: 请求选项,
-///,
-    /// # 返回,
-/// 部门列表和分页信息,
-    ///,
-/// # 示例,
-    /// ```rust,ignore
-    /// let response = client.directory.v1.department.filter(,
-///     FilterDepartmentRequest::builder(),
-    ///         .page_size(20),
-///         .parent_department_id("root_department_id"),
-    ///         .department_id_type(DepartmentIdType::DepartmentId)
-    ///         .build(),
-    ///     None,
-/// ).await?;
-    /// ```,
-///,
-    /// # API文档,
-///,
-    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/department/filter>,
-pub async fn filter(,
-        &self,
-        request: FilterDepartmentRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<FilterDepartmentResponse>> {,
-let mut api_req = request.api_req;
-        api_req.set_http_method(Method::GET);
-api_req.set_api_path(DIRECTORY_V1_DEPARTMENTS_FILTER.to_string());
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
-
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-Ok(api_resp),
-    }
-}
-// 应用ExecutableBuilder宏,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}// 应用ExecutableBuilder宏,
 impl_executable_builder_owned!(
     FilterDepartmentRequestBuilder,
     DepartmentService,

@@ -4,25 +4,23 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use crate::{
     core::{,
-        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::application::models::*,
 };
 /// 应用权限管理服务
 pub struct ScopeService {
-    config: Config,
 }
+
 impl ScopeService {
+    
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 向管理员申请授权
+}/// 向管理员申请授权
     pub async fn apply(
         &self,
         app_id: &str,
@@ -41,7 +39,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询租户授权状态
     pub async fn list(
         &self,
@@ -52,7 +49,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(lang) = lang {
             query_params.insert("lang", lang);
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
@@ -64,23 +60,16 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
 // 请求响应模型
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ApplyScopeRequest {
-    pub scopes: Vec<String>,
-    pub reason: Option<String>,
 }
 
-#[derive(.*?)]
-pub struct ListScopeResponse {
-    pub scopes: Vec<PermissionScope>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
+}}}}}}}}

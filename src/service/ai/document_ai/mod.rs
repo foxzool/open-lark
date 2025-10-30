@@ -3,139 +3,125 @@ use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         trait_system::Service,
         SDKResult,
-    }
     service::ai::models::{
         BankCardInfo, BusinessCardInfo, BusinessLicenseInfo, ContractInfo, DrivingLicenseInfo,
         FileRecognizeRequest, IdCardInfo, RecognizeResponse, ResumeInfo, VatInvoiceInfo,
-    }
 };
 /// 智能文档处理服务
 pub struct DocumentAiService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 简历解析响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ResumeParseResponse {
+}
     /// 简历信息
 #[serde(flatten)]
     pub resume: RecognizeResponse<ResumeInfo>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 身份证识别响应
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 身份证识别响应
+#[derive(Debug, Clone)]
 pub struct IdCardRecognizeResponse {
+}
     /// 身份证信息
 #[serde(flatten)]
     pub id_card: RecognizeResponse<IdCardInfo>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 驾驶证识别响应
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 驾驶证识别响应
+#[derive(Debug, Clone)]
 pub struct DrivingLicenseRecognizeResponse {
+}
     /// 驾驶证信息
 #[serde(flatten)]
     pub driving_license: RecognizeResponse<DrivingLicenseInfo>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 银行卡识别响应
-#[derive(.*?)]
-pub struct BankCardRecognizeResponse {
-    /// 银行卡信息
-#[serde(flatten)]
-    pub bank_card: RecognizeResponse<BankCardInfo>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 营业执照识别响应
-#[derive(.*?)]
-pub struct BusinessLicenseRecognizeResponse {
-    /// 营业执照信息
-#[serde(flatten)]
-    pub business_license: RecognizeResponse<BusinessLicenseInfo>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 增值税发票识别响应
-#[derive(.*?)]
-pub struct VatInvoiceRecognizeResponse {
-    /// 增值税发票信息
-#[serde(flatten)]
-    pub vat_invoice: RecognizeResponse<VatInvoiceInfo>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 合同字段提取响应
-#[derive(.*?)]
-pub struct ContractFieldExtractionResponse {
-    /// 合同信息
-#[serde(flatten)]
-    pub contract: RecognizeResponse<ContractInfo>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 名片识别响应
-#[derive(.*?)]
-pub struct BusinessCardRecognizeResponse {
-    /// 名片信息
-#[serde(flatten)]
-    pub business_card: RecognizeResponse<BusinessCardInfo>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 通用证件识别响应
-#[derive(.*?)]
-pub struct GenericDocumentResponse {
-    /// 识别结果
-    pub data: serde_json::Value,
-    /// 置信度
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub confidence: Option<f64>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl DocumentAiService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 银行卡识别响应
+#[derive(Debug, Clone)]
 }
-/// 识别文件中的简历信息
+pub struct BankCardRecognizeResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 营业执照识别响应
+#[derive(Debug, Clone)]
+}
+pub struct BusinessLicenseRecognizeResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 增值税发票识别响应
+#[derive(Debug, Clone)]
+}
+pub struct VatInvoiceRecognizeResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 合同字段提取响应
+#[derive(Debug, Clone)]
+}
+pub struct ContractFieldExtractionResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 名片识别响应
+#[derive(Debug, Clone)]
+}
+pub struct BusinessCardRecognizeResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 通用证件识别响应
+#[derive(Debug, Clone)]
+}
+pub struct GenericDocumentResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl DocumentAiService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 识别文件中的简历信息
     ///,
 /// 该接口用于解析简历文件，提取关键信息如姓名、联系方式、教育经历、工作经历等。
     ///,
@@ -155,9 +141,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 识别文件中的身份证
     ///,
 /// 该接口用于识别身份证图片，提取身份证上的关键信息。
@@ -178,9 +162,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 识别文件中的驾驶证
     ///,
 /// 该接口用于识别驾驶证图片，提取驾驶证上的关键信息。
@@ -202,7 +184,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 识别文件中的银行卡
     ///,
 /// 该接口用于识别银行卡图片，提取银行卡上的关键信息。
@@ -223,9 +204,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 识别文件中的营业执照
     ///,
 /// 该接口用于识别营业执照图片，提取营业执照上的关键信息。
@@ -246,9 +225,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 识别文件中的增值税发票
     ///,
 /// 该接口用于识别增值税发票图片，提取发票上的关键信息。
@@ -269,9 +246,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 提取文件中的合同字段
     ///,
 /// 该接口用于识别合同文档，提取合同中的关键字段信息。
@@ -292,9 +267,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 识别文件中的名片
     ///,
 /// 该接口用于识别名片图片，提取名片上的关键信息。
@@ -316,7 +289,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 识别文件中的机动车发票
     ///,
 /// 该接口用于识别机动车发票图片。
@@ -337,9 +309,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 识别文件中的健康证
     ///,
 /// 该接口用于识别健康证图片。
@@ -360,9 +330,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 识别文件中的港澳居民来往内地通行证
     ///,
 /// 该接口用于识别港澳居民来往内地通行证图片。
@@ -383,9 +351,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 识别文件中的台湾居民来往大陆通行证
     ///,
 /// 该接口用于识别台湾居民来往大陆通行证图片。
@@ -406,9 +372,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 识别文件中的中国护照
     ///,
 /// 该接口用于识别中国护照图片。
@@ -430,7 +394,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 识别文件中的行驶证
     ///,
 /// 该接口用于识别行驶证图片。
@@ -451,9 +414,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 识别文件中的火车票
     ///,
 /// 该接口用于识别火车票图片。
@@ -474,9 +435,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 识别文件中的出租车发票
     ///,
 /// 该接口用于识别出租车发票图片。
@@ -497,9 +456,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 识别文件中的食品生产许可证
     ///,
 /// 该接口用于识别食品生产许可证图片。
@@ -520,9 +477,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 识别文件中的食品经营许可证
     ///,
 /// 该接口用于识别食品经营许可证图片。
@@ -543,18 +498,13 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
 impl Service for DocumentAiService {,
     fn config(&self) -> &Config {,
 &self.config,
-    }
-fn service_name() -> &'static str {,
+    fn service_name() -> &'static str {,
         "document_ai",
-}
 fn service_version() -> &'static str {,
         "v1",
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

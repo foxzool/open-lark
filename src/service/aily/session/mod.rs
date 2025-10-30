@@ -3,76 +3,67 @@ use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::aily::models::{
         Session, SessionCreateRequest, SessionDeleteRequest, SessionGetRequest,
         SessionUpdateRequest,
-    }
 };
 /// 会话管理服务
 pub struct SessionService {
+}
     pub config: Config,
-}
 /// 会话创建响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SessionCreateResponse {
+}
     /// 会话信息
 #[serde(flatten)]
     pub session: Session,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 会话更新响应
-#[derive(.*?)]
-pub struct SessionUpdateResponse {
-    /// 会话信息
-#[serde(flatten)]
-    pub session: Session,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 会话查询响应
-#[derive(.*?)]
-pub struct SessionGetResponse {
-    /// 会话信息
-#[serde(flatten)]
-    pub session: Session,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 会话删除响应
-#[derive(.*?)]
-pub struct SessionDeleteResponse {
-    /// 删除成功标识
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub success: Option<bool>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl SessionService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 会话更新响应
+#[derive(Debug, Clone)]
 }
-/// 创建会话
+pub struct SessionUpdateResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 会话查询响应
+#[derive(Debug, Clone)]
+}
+pub struct SessionGetResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 会话删除响应
+#[derive(Debug, Clone)]
+}
+pub struct SessionDeleteResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl SessionService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建会话
     ///,
 /// 该接口用于创建一个新的智能伙伴会话。
     ///,
@@ -96,9 +87,7 @@ let api_req = ApiRequest {,
 }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 更新会话
     ///,
 /// 该接口用于更新指定的智能伙伴会话。
@@ -127,9 +116,7 @@ let api_req = ApiRequest {,
 }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取会话
     ///,
 /// 该接口用于获取指定的智能伙伴会话信息。
@@ -157,7 +144,6 @@ let mut api_req = ApiRequest {,
 // 添加查询参数
         api_req.query_params.insert("app_id", request.app_id);
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除会话
     ///,
 /// 该接口用于删除指定的智能伙伴会话。
@@ -184,7 +170,6 @@ let mut api_req = ApiRequest {,
 };
 // 添加查询参数
         api_req.query_params.insert("app_id", request.app_id);
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}}}}}}}}

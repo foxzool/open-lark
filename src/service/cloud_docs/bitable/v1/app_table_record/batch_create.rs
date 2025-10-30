@@ -6,8 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -18,7 +17,7 @@ use crate::,
     service::bitable::v1::Record,
 };
 /// 批量新增记录请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BatchCreateRecordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -35,73 +34,23 @@ pub struct BatchCreateRecordRequest {
 #[serde(skip)]
     client_token: Option<String>,
     /// 要新增的记录列表
-    records: Vec<Record>,
-}
+    records: Vec<Record>}
 impl BatchCreateRecordRequest {
-    pub fn w+.*{
-BatchCreateRecordRequestBuilder::default(),
-    }
-
-    pub fn new(app_token: impl ToString, table_id: impl ToString) -> Self {
-Self {
-            app_token: app_token.to_string(),
-            table_id: table_id.to_string()
-            ..Default::default(),
-}
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct BatchCreateRecordRequestBuilder {
-    request: BatchCreateRecordRequest,
-}
+    request: BatchCreateRecordRequest}
 impl BatchCreateRecordRequestBuilder {
-    /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {
-self.request.app_token = app_token.to_string();
-        self,
-}
-/// 数据表的唯一标识符,
-    pub fn table_id(mut self, table_id: impl ToString) -> Self {
-self.request.table_id = table_id.to_string();
-        self,
-}
-/// 用户 ID 类型,
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
-self.request.user_id_type = Some(user_id_type.to_string());
-        self,
-}
-/// 客户端请求唯一标识,
-    pub fn client_token(mut self, client_token: impl ToString) -> Self {
-self.request.client_token = Some(client_token.to_string());
-        self,
-}
-/// 要新增的记录列表,
-    pub fn records(mut self, records: Vec<Record>) -> Self {
-self.request.records = records;
-        self,
-}
-/// 添加单条记录,
-    pub fn add_record(mut self, record: Record) -> Self {
-self.request.records.push(record);
-        self,
-}
-pub fn w+.*{
-        if let Some(user_id_type) = &self.request.user_id_type {,
-self.request,
-                .api_request,
-.query_params
-                .insert("user_id_type", user_id_type.clone());
-}
-if let Some(client_token) = &self.request.client_token {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}if let Some(client_token) = &self.request.client_token {,
             self.request,
 .api_request,
                 .query_params
                 .insert("client_token", client_token.clone());
-}
 self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request,
-}
-}
 // 应用ExecutableBuilder trait到BatchCreateRecordRequestBuilder,
 crate::impl_executable_builder_owned!(
     BatchCreateRecordRequestBuilder,
@@ -111,16 +60,16 @@ crate::impl_executable_builder_owned!(
     batch_create,
 );
 /// 批量新增记录响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BatchCreateRecordResponse {
     /// 新增的记录列表
-    pub records: Vec<Record>,
-}
+    pub records: Vec<Record>}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 批量新增记录,
 pub async fn batch_create_record(
     request: BatchCreateRecordRequest,
@@ -136,7 +85,6 @@ api_req.api_path = BITABLE_V1_RECORDS_BATCH_CREATE,
 
     let api_resp = Transport::request(api_req, config, option).await?;
 Ok(api_resp),
-}
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
@@ -145,7 +93,7 @@ mod tests {
 use serde_json::json;
     use std::collections::HashMap;
 #[test]
-    fn test_batch_create_record_request_builder() {,
+    fn test_batch_create_record_request_builder() {
 let record1 = Record {,
             record_id: None,
             fields: HashMap::from([
@@ -155,8 +103,7 @@ let record1 = Record {,
             created_by: None,
             created_time: None,
             last_modified_by: None,
-            last_modified_time: None,
-        };
+            last_modified_time: None};
 let record2 = Record {,
             record_id: None,
             fields: HashMap::from([
@@ -166,8 +113,7 @@ let record2 = Record {,
             created_by: None,
             created_time: None,
             last_modified_by: None,
-            last_modified_time: None,
-        };
+            last_modified_time: None};
 let request = BatchCreateRecordRequest::builder(),
             .app_token()
 .table_id()
@@ -178,5 +124,3 @@ let request = BatchCreateRecordRequest::builder(),
         assert_eq!(request.table_id, "tblsRc9GRRXKqhvW");
         assert_eq!(request.user_id_type, Some("open_id".to_string()));
         assert_eq!(request.records.len(), 2);
-}
-}

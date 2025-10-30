@@ -12,15 +12,15 @@ pub mod create;
 pub mod get;
 pub mod patch;
 /// 订阅服务
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SubscriptionService {
-    config: Config,
 }
+    config: Config,
 impl SubscriptionService {
+    
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 获取订阅状态
+}/// 获取订阅状态
     pub async fn get(
         &self,
         request: GetSubscriptionRequest,
@@ -32,7 +32,6 @@ result.data.ok_or_else(|| {,
                 "Response data is missing".to_string(),
             ),
 }),
-}
 /// 创建订阅
     pub async fn create(
         &self,
@@ -45,7 +44,6 @@ result.data.ok_or_else(|| {,
                 "Response data is missing".to_string(),
             ),
 }),
-}
 /// 更新订阅状态
     pub async fn patch(
         &self,
@@ -58,7 +56,6 @@ result.data.ok_or_else(|| {,
                 "Response data is missing".to_string(),
             ),
 }),
-}
 /// 快速订阅文档（基础配置）
     pub async fn quick_subscribe_doc(
         &self,
@@ -71,7 +68,6 @@ let request = CreateSubscriptionRequest::builder(),
             .basic_subscription()
 .build();
         self.create(request, option).await,
-}
 /// 快速订阅多维表格（高级配置）
     pub async fn quick_subscribe_bitable(
         &self,
@@ -84,7 +80,6 @@ let request = CreateSubscriptionRequest::builder(),
             .premium_subscription()
 .build();
         self.create(request, option).await,
-}
 /// 快速订阅表格（基础配置）
     pub async fn quick_subscribe_sheet(
         &self,
@@ -97,7 +92,6 @@ let request = CreateSubscriptionRequest::builder(),
             .basic_subscription()
 .build();
         self.create(request, option).await,
-}
 /// 快速订阅Wiki（基础配置）
     pub async fn quick_subscribe_wiki(
         &self,
@@ -110,7 +104,6 @@ let request = CreateSubscriptionRequest::builder(),
             .basic_subscription()
 .build();
         self.create(request, option).await,
-}
 /// 激活订阅
     pub async fn activate(
         &self,
@@ -124,7 +117,6 @@ let request = PatchSubscriptionRequest::builder(),
             .activate()
 .build();
         self.patch(request, option).await,
-}
 /// 暂停订阅
     pub async fn pause(
         &self,
@@ -138,7 +130,6 @@ let request = PatchSubscriptionRequest::builder(),
             .pause()
 .build();
         self.patch(request, option).await,
-}
 /// 取消订阅
     pub async fn cancel(
         &self,
@@ -152,7 +143,6 @@ let request = PatchSubscriptionRequest::builder(),
             .cancel()
 .build();
         self.patch(request, option).await,
-}
 /// 快速激活订阅（高频模式）
     pub async fn quick_activate(
         &self,
@@ -166,7 +156,6 @@ let request = PatchSubscriptionRequest::builder(),
             .quick_activate()
 .build();
         self.patch(request, option).await,
-}
 /// 节能模式激活订阅（低频模式）
     pub async fn eco_activate(
         &self,
@@ -180,7 +169,6 @@ let request = PatchSubscriptionRequest::builder(),
             .eco_activate()
 .build();
         self.patch(request, option).await,
-}
 /// 安全暂停订阅（附加系统标签）
     pub async fn safe_pause(
         &self,
@@ -194,7 +182,6 @@ let request = PatchSubscriptionRequest::builder(),
             .safe_pause()
 .build();
         self.patch(request, option).await,
-}
 /// 检查订阅状态并返回是否已订阅
     pub async fn is_subscribed(
         &self,
@@ -206,11 +193,9 @@ let request = GetSubscriptionRequest::builder(),
             .file_token()
 .file_type()
             .build();
-
         let response = self.get(request, option).await?;
 Ok(response.subscription.is_subscribed()),
-    }
-/// 批量管理订阅 - 订阅多个文档
+    /// 批量管理订阅 - 订阅多个文档
     pub async fn batch_subscribe(
         &self,
         files: Vec<(String, FileType)>,
@@ -225,9 +210,9 @@ let request = CreateSubscriptionRequest::builder(),
 .build();
             let result = self.create(request, option.clone()).await;
 results.push(result);
-        }
-results,
+        results,
     }
-}
 #[cfg(test)]
 mod tests;
+}
+}}}}}}}}}}}}}}}

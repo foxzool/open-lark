@@ -1,30 +1,20 @@
 //! Admin子模块 - 简化实现
-
 use serde::{Deserialize, Serialize};
 use crate::core::config::Config;
 use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
-
 /// 简化的服务结构体
 pub struct SimpleService {
-    pub config: Config,
+pub config: Config,
 }
-
 impl SimpleService {
-    /// 创建新的简单服务实例
-    pub fn new(config: Config) -> Self {
-        Self { config }
-    }
 }
-
-#[derive(Debug, Deserialize, Serialize)]
+    #[derive(Debug, Deserialize, Serialize)]
 pub struct SimpleResponse;
-
 impl ApiResponseTrait for SimpleResponse {
     fn format(&self) -> ResponseFormat {
         ResponseFormat::Data
-    }
 }
-
 // Type alias for compatibility
 pub type ServiceType = SimpleService;
 pub type ResponseType = SimpleResponse;
+}

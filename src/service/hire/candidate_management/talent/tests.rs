@@ -6,7 +6,7 @@ use crate::service::hire::candidate_management::talent::{,
         TalentCreateRequestBuilder, TalentListRequestBuilder,
     };
 #[test]
-    fn test_talent_create_builder_valid_input() {,
+    fn test_talent_create_builder_valid_input() {
 let request = TalentCreateRequestBuilder::default(),
             .with_name()
 .with_email()
@@ -29,9 +29,8 @@ let request = TalentCreateRequestBuilder::default(),
         assert_eq!(request.current_position, Some("高级工程师".to_string()));
         assert_eq!(request.expected_salary, Some("20-25K".to_string()));
         assert_eq!(request.tags, vec!["java".to_string(), "spring".to_string()]);
-}
 #[test]
-    fn test_talent_create_builder_missing_name() {,
+    fn test_talent_create_builder_missing_name() {
 let result = TalentCreateRequestBuilder::default(),
             .with_email()
 .build();
@@ -42,9 +41,8 @@ assert!(msg.contains("name is required"));
             }
             _ => panic!("Expected IllegalParamError"),
         }
-}
 #[test]
-    fn test_talent_create_builder_invalid_name_too_short() {,
+    fn test_talent_create_builder_invalid_name_too_short() {
 let result = TalentCreateRequestBuilder::default(),
             .with_name()
 .build();
@@ -53,12 +51,10 @@ match result.unwrap_err() {,
             crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
 assert!(msg.contains("Invalid name"));
                 assert!(msg.contains("must be at least"));
-}
             _ => panic!("Expected IllegalParamError"),
         }
-}
 #[test]
-    fn test_talent_create_builder_invalid_name_too_long() {,
+    fn test_talent_create_builder_invalid_name_too_long() {
 let long_name = "张".repeat(101); // 101 characters,
         let result = TalentCreateRequestBuilder::default(),
 .with_name()
@@ -71,9 +67,8 @@ assert!(msg.contains("must not exceed"));
             }
             _ => panic!("Expected IllegalParamError"),
         }
-}
 #[test]
-    fn test_talent_create_builder_invalid_name_special_chars() {,
+    fn test_talent_create_builder_invalid_name_special_chars() {
 let result = TalentCreateRequestBuilder::default(),
             .with_name()
 .build();
@@ -82,12 +77,10 @@ match result.unwrap_err() {,
             crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
 assert!(msg.contains("Invalid name"));
                 assert!(msg.contains("invalid characters"));
-}
             _ => panic!("Expected IllegalParamError"),
         }
-}
 #[test]
-    fn test_talent_create_builder_invalid_email() {,
+    fn test_talent_create_builder_invalid_email() {
 let result = TalentCreateRequestBuilder::default(),
             .with_name()
 .with_email()
@@ -96,12 +89,10 @@ assert!(result.is_err());
         match result.unwrap_err() {,
 crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
                 assert!(msg.contains("Invalid email"));
-}
             _ => panic!("Expected IllegalParamError"),
         }
-}
 #[test]
-    fn test_talent_create_builder_invalid_phone() {,
+    fn test_talent_create_builder_invalid_phone() {
 let result = TalentCreateRequestBuilder::default(),
             .with_name()
 .with_phone("123") // Too short,
@@ -114,9 +105,8 @@ assert!(msg.contains("must be at least"));
             }
             _ => panic!("Expected IllegalParamError"),
         }
-}
 #[test]
-    fn test_talent_create_builder_invalid_work_experience() {,
+    fn test_talent_create_builder_invalid_work_experience() {
 let result = TalentCreateRequestBuilder::default(),
             .with_name()
 .with_work_experience(60) // Exceeds maximum,
@@ -129,9 +119,8 @@ assert!(msg.contains("must not exceed"));
             }
             _ => panic!("Expected IllegalParamError"),
         }
-}
 #[test]
-    fn test_talent_create_builder_invalid_birthday_format() {,
+    fn test_talent_create_builder_invalid_birthday_format() {
 let result = TalentCreateRequestBuilder::default(),
             .with_name()
 .with_birthday("2023-13-32") // Invalid date,
@@ -144,9 +133,8 @@ assert!(msg.contains("YYYY-MM-DD"));
             }
             _ => panic!("Expected IllegalParamError"),
         }
-}
 #[test]
-    fn test_talent_create_builder_invalid_expected_salary() {,
+    fn test_talent_create_builder_invalid_expected_salary() {
 let result = TalentCreateRequestBuilder::default(),
             .with_name()
 .with_expected_salary("1000K") // Unreasonably high,
@@ -155,12 +143,10 @@ assert!(result.is_err());
         match result.unwrap_err() {,
 crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
                 assert!(msg.contains("Invalid expected salary"));
-}
             _ => panic!("Expected IllegalParamError"),
         }
-}
 #[test]
-    fn test_talent_create_builder_invalid_tag_too_long() {,
+    fn test_talent_create_builder_invalid_tag_too_long() {
 let long_tag = "a".repeat(51); // 51 characters,
         let result = TalentCreateRequestBuilder::default(),
 .with_name()
@@ -171,29 +157,24 @@ match result.unwrap_err() {,
             crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
 assert!(msg.contains("Invalid tag at index 0"));
                 assert!(msg.contains("must not exceed"));
-}
             _ => panic!("Expected IllegalParamError"),
         }
-}
 #[test]
-    fn test_talent_create_builder_too_many_tags() {,
+    fn test_talent_create_builder_too_many_tags() {
 let mut builder = TalentCreateRequestBuilder::default().with_name("张三");
         // Add 21 tags (exceeds maximum of 20),
 for i in 0..21 {,
             builder = builder.add_tag(&format!("tag{}", i));
-}
 let result = builder.build();
         assert!(result.is_err());
 match result.unwrap_err() {,
             crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
 assert!(msg.contains("Invalid tags"));
                 assert!(msg.contains("maximum number"));
-}
             _ => panic!("Expected IllegalParamError"),
         }
-}
 #[test]
-    fn test_talent_create_builder_invalid_resume_attachment() {,
+    fn test_talent_create_builder_invalid_resume_attachment() {
 let result = TalentCreateRequestBuilder::default(),
             .with_name()
 .add_resume_attachment("") // Empty attachment ID,
@@ -206,9 +187,8 @@ assert!(msg.contains("cannot be empty"));
             }
             _ => panic!("Expected IllegalParamError"),
         }
-}
 #[test]
-    fn test_talent_create_builder_invalid_custom_field_key() {,
+    fn test_talent_create_builder_invalid_custom_field_key() {
 let mut custom_fields = std::collections::HashMap::new();
         custom_fields.insert(
             "".to_string(),
@@ -226,9 +206,8 @@ assert!(msg.contains("key cannot be empty"));
             }
             _ => panic!("Expected IllegalParamError"),
         }
-}
 #[test]
-    fn test_talent_create_builder_name_sanitization() {,
+    fn test_talent_create_builder_name_sanitization() {
 let request = TalentCreateRequestBuilder::default(),
             .with_name()
 .with_tags(vec!["  Java  ".to_string()]),
@@ -238,9 +217,8 @@ let request = TalentCreateRequestBuilder::default(),
         assert_eq!(request.name, "张三");
 // Tags should be trimmed and lowercased,
         assert_eq!(request.tags, vec!["java".to_string()]);
-}
 #[test]
-    fn test_talent_list_builder() {,
+    fn test_talent_list_builder() {
 let request = TalentListRequestBuilder::default(),
             .with_page_size()
 .with_name_keyword()
@@ -256,9 +234,8 @@ let request = TalentListRequestBuilder::default(),
         assert_eq!(request.tags, vec!["Java".to_string()]);
         assert_eq!(request.created_start_time, Some("2023-01-01".to_string()));
         assert_eq!(request.created_end_time, Some("2023-12-31".to_string()));
-}
 #[test]
-    fn test_talent_create_builder_with_custom_fields() {,
+    fn test_talent_create_builder_with_custom_fields() {
 let mut custom_fields = std::collections::HashMap::new();
         custom_fields.insert(
             "source".to_string(),
@@ -285,7 +262,7 @@ let fields = request.custom_fields.as_ref().unwrap();
 );
     }
 #[test]
-    fn test_talent_create_builder_with_resume_attachments() {,
+    fn test_talent_create_builder_with_resume_attachments() {
 let request = TalentCreateRequestBuilder::default(),
             .with_name()
 .add_resume_attachment()
@@ -302,9 +279,8 @@ assert_eq!(,
                 "attachment_4",
 ],
         );
-}
 #[test]
-    fn test_talent_create_builder_with_tags() {,
+    fn test_talent_create_builder_with_tags() {
 let request = TalentCreateRequestBuilder::default(),
             .with_name()
 .add_tag()
@@ -314,10 +290,11 @@ let request = TalentCreateRequestBuilder::default(),
             .expect("Should build valid talent request");
 
         assert_eq!(request.tags, vec!["rust", "go", "python", "javascript"]);
-}
 #[test]
-    fn test_validation_trait_implementation() {,
-let builder = TalentCreateRequestBuilder::default(),
+    fn test_validation_trait_implementation() {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}let builder = TalentCreateRequestBuilder::default(),
             .with_name()
 .with_email("test@example.com");
         // Test ValidateBuilder trait implementation,
@@ -332,12 +309,10 @@ let result = builder.validate();
         match result {,
 crate::core::validation::ValidationResult::Invalid(msg) => {,
                 assert!(msg.contains("name is required"));
-}
             _ => panic!("Expected invalid validation result"),
         }
-}
 #[test]
-    fn test_edge_cases() {,
+    fn test_edge_cases() {
 // Test with minimum valid work experience,
         let request = TalentCreateRequestBuilder::default(),
 .with_name()
@@ -363,7 +338,7 @@ let name = "张".repeat(100); // 100 characters,
 assert!(request.is_ok());
     }
 #[test]
-    fn test_partial_updates() {,
+    fn test_partial_updates() {
 // Test that optional fields can be omitted,
         let request = TalentCreateRequestBuilder::default(),
 .with_name()
@@ -374,5 +349,3 @@ assert!(request.is_ok());
         assert_eq!(request.phone, None);
         assert_eq!(request.work_experience, None);
         assert_eq!(request.tags, Vec::<String>::new());
-}
-}

@@ -9,11 +9,10 @@ core::{,
         SDKResult,
     }
     service::sheets::v3::{
-        spreadsheet_sheet_filter::SheetFilterCondition, SpreadsheetSheetFilterService,
-    }
+        spreadsheet_sheet_filter::SheetFilterCondition, SpreadsheetSheetFilterService}
 };
 /// 更新子表筛选范围中的列筛选条件,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateSheetFilterRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -24,59 +23,17 @@ pub struct UpdateSheetFilterRequest {
     /// 设置筛选条件的列
     col: String,
     /// 筛选的条件
-    condition: SheetFilterCondition,
-}
+    condition: SheetFilterCondition}
 impl UpdateSheetFilterRequest {
-    pub fn w+.*{
-UpdateSheetFilterRequestBuilder::default(),
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct UpdateSheetFilterRequestBuilder {
-    request: UpdateSheetFilterRequest,
-}
+    request: UpdateSheetFilterRequest}
 impl UpdateSheetFilterRequestBuilder {
-    /// 表格 token
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
-self.request.spreadsheet_token = spreadsheet_token.to_string();
-        self,
-}
-/// 子表 id,
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
-self.request.sheet_id = sheet_id.to_string();
-        self,
-}
-/// 设置筛选条件的列,
-    pub fn col(mut self, col: impl ToString) -> Self {
-self.request.col = col.to_string();
-        self,
-}
-/// 筛选的条件,
-    pub fn condition(mut self, condition: SheetFilterCondition) -> Self {
-self.request.condition = condition;
-        self,
-}
-pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-self.request,
-    }
-}
-impl SpreadsheetSheetFilterService {
-    /// 更新筛选,
-pub async fn update(,
-        &self,
-        request: UpdateSheetFilterRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<EmptyResponse>> {,
-let mut api_req = request.api_request;
-        api_req.api_path = SHEETS_V3_SPREADSHEET_FILTER
-            .replace("{}", &request.spreadsheet_token)
-            .replace("{}", &request.sheet_id);
-api_req.set_http_method(reqwest::Method::PUT);
-        api_req
-            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::App]);
-
-        let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
-Ok(api_resp),
-    }
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}impl SpreadsheetSheetFilterService {
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }

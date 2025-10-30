@@ -4,25 +4,23 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use crate::{
     core::{,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::application::models::*,
 };
 /// 应用使用情况服务
 pub struct AppUsageService {
-    config: Config,
 }
+    config: Config,
 impl AppUsageService {
+    
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 获取多部门应用使用概览
+}/// 获取多部门应用使用概览
     pub async fn department_overview(
         &self,
         app_id: &str,
@@ -39,13 +37,10 @@ if let Some(department_id_type) = department_id_type {,
                 "department_id_type",
                 department_id_type.as_str().to_string(),
             );
-}
 if let Some(page_size) = page_size {,
             query_params.insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token);
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
@@ -58,7 +53,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取消息推送概览
     pub async fn message_push_overview(
         &self,
@@ -81,9 +75,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取应用使用概览
     pub async fn overview(
         &self,
@@ -106,39 +98,34 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
 // 请求响应模型
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DepartmentOverviewResponse {
-    pub departments: Vec<DepartmentUsage>,
-    pub page_token: Option<String>,
-    pub has_more: bool,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
 
-#[derive(.*?)]
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    #[derive(Debug, Clone)]
+}
 pub struct MessagePushOverviewResponse {
-    pub usage_data: Vec<AppUsage>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
 
-#[derive(.*?)]
-pub struct AppUsageOverviewResponse {
-    pub usage_data: Vec<AppUsage>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    #[derive(Debug, Clone)]
+}
+pub struct AppUsageOverviewResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
+}}}}}}}}}}}}}}}}}

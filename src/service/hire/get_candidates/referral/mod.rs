@@ -2,28 +2,25 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::hire::models::{
         Application, CommonResponse, PageResponse, ReferralAccount, ReferralAccountCreateRequest,
         Talent, UserId,
-    }
 };
 /// 内推服务
 pub struct ReferralService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 内推记录信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ReferralRecord {
+}
     /// 内推记录ID
     pub id: String,
     /// 内推人ID
@@ -52,10 +49,10 @@ pub struct ReferralRecord {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 内推创建请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ReferralCreateRequest {
+}
     /// 内推人ID
     pub referrer_id: String,
     /// 被内推人才ID
@@ -66,10 +63,10 @@ pub struct ReferralCreateRequest {
     pub remark: Option<String>,
     /// 内推渠道
     pub source: Option<String>,
-}
 /// 内推列表请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ReferralListRequest {
+}
     /// 分页大小
     pub page_size: Option<u32>,
     /// 分页标记
@@ -86,10 +83,10 @@ pub struct ReferralListRequest {
     pub referral_start_time: Option<String>,
     /// 内推时间结束
     pub referral_end_time: Option<String>,
-}
 /// 内推奖励设置
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ReferralRewardSettings {
+}
     /// 设置ID
     pub id: String,
     /// 职位类型
@@ -108,10 +105,10 @@ pub struct ReferralRewardSettings {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 内推奖励设置创建请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ReferralRewardSettingsCreateRequest {
+}
     /// 职位类型
     pub job_type: String,
     /// 奖励金额
@@ -124,72 +121,65 @@ pub struct ReferralRewardSettingsCreateRequest {
     pub reward_timing: String,
     /// 是否启用
     pub enabled: Option<bool>,
-}
 /// 内推记录列表响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ReferralListResponse {
+}
     /// 内推记录列表
 #[serde(flatten)]
     pub referrals: PageResponse<ReferralRecord>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 内推记录详情响应
-#[derive(.*?)]
-pub struct ReferralDetailResponse {
-    /// 内推记录信息
-    pub referral: ReferralRecord,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 内推操作响应
-#[derive(.*?)]
-pub struct ReferralOperationResponse {
-    /// 操作结果
-#[serde(flatten)]
-    pub result: CommonResponse,
-    /// 内推记录ID
-    pub referral_id: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 内推账户详情响应
-#[derive(.*?)]
-pub struct ReferralAccountDetailResponse {
-    /// 内推账户信息
-    pub account: ReferralAccount,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 内推奖励设置列表响应
-#[derive(.*?)]
-pub struct ReferralRewardSettingsListResponse {
-    /// 奖励设置列表
-#[serde(flatten)]
-    pub settings: PageResponse<ReferralRewardSettings>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl ReferralService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 内推记录详情响应
+#[derive(Debug, Clone)]
+pub struct ReferralDetailResponse {
 }
-/// 创建内推记录
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 内推操作响应
+#[derive(Debug, Clone)]
+}
+pub struct ReferralOperationResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 内推账户详情响应
+#[derive(Debug, Clone)]
+}
+pub struct ReferralAccountDetailResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 内推奖励设置列表响应
+#[derive(Debug, Clone)]
+}
+pub struct ReferralRewardSettingsListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl ReferralService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建内推记录
     ///,
 /// 该接口用于创建新的内推记录，记录内推人、被内推人才、
     /// 内推职位等信息。创建成功后将自动生成对应的投递记录。
@@ -238,9 +228,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取内推记录详情
     ///,
 /// 该接口用于获取指定内推记录的详细信息，包括内推
@@ -270,8 +258,7 @@ let api_req = ApiRequest {,
     ///     println!("内推状态: {}" data.referral.status);
     ///     println!("奖励金额: {:?}" data.referral.reward_amount);
     ///     println!("奖励状态: {:?}" data.referral.reward_status);
-    /// }
-/// ```
+    /// /// ```
     pub async fn get_referral_detail(
         &self,
         referral_id: &str,
@@ -288,9 +275,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取内推记录列表
     ///,
 /// 该接口用于获取企业的内推记录列表，支持按内推人、
@@ -337,8 +322,7 @@ let api_req = ApiRequest {,
 ///     for referral in &data.referrals.items {
     ///         println!("内推: {} 状态: {}" referral.id, referral.status);
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_referrals(
         &self,
         request: ReferralListRequest,
@@ -356,35 +340,25 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(referrer_id) = request.referrer_id {,
             api_req.query_params.insert("referrer_id", referrer_id);
-}
 if let Some(job_id) = request.job_id {,
             api_req.query_params.insert("job_id", job_id);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert("status", status);
-}
 if let Some(reward_status) = request.reward_status {,
             api_req.query_params.insert("reward_status", reward_status);
-}
 if let Some(referral_start_time) = request.referral_start_time {,
             api_req
 .query_params
                 .insert("referral_start_time", referral_start_time);
-}
 if let Some(referral_end_time) = request.referral_end_time {,
             api_req
 .query_params
                 .insert("referral_end_time", referral_end_time);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 注册内推账户
     ///,
 /// 该接口用于为用户注册内推账户，设置银行卡信息
@@ -421,9 +395,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取内推账户信息
     ///,
 /// 该接口用于获取指定用户的内推账户信息，包括
@@ -452,8 +424,7 @@ let api_req = ApiRequest {,
     ///     println!("账户状态: {}" data.account.status);
     ///     println!("账户余额: {}" data.account.balance);
     ///     println!("总收入: {}" data.account.total_income);
-    /// }
-/// ```
+    /// /// ```
     pub async fn get_referral_account(
         &self,
         user_id: &str,
@@ -470,9 +441,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 发放内推奖励
     ///,
 /// 该接口用于为符合条件的内推记录发放奖励，
@@ -506,12 +475,11 @@ pub async fn grant_referral_reward(,
         remark: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralOperationResponse>> {,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
         struct GrantRewardRequest {
             reward_amount: String,
             remark: Option<String>,
-        }
-let request = GrantRewardRequest {,
+        let request = GrantRewardRequest {,
             reward_amount: reward_amount.to_string(),
             remark,
         };
@@ -526,9 +494,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 创建内推奖励设置
     ///,
 /// 该接口用于创建内推奖励设置，定义不同职位类型
@@ -567,9 +533,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取内推奖励设置列表
     ///,
 /// 该接口用于获取企业的内推奖励设置列表，
@@ -597,8 +561,7 @@ let api_req = ApiRequest {,
 ///     for setting in &data.settings.items {
     ///         println!("职位类型: {} 奖励: {}" setting.job_type, setting.reward_amount);
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_reward_settings(
         &self,
         page_size: Option<u32>,
@@ -617,11 +580,8 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

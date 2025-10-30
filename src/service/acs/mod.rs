@@ -1,45 +1,43 @@
-//! 访问控制服务
-//!
-//! 提供企业级访问控制、设备管理、访客管理等功能。
-//!
-//! # 功能模块
-//!
-//! - **设备管理**: 设备注册、状态监控、远程控制
-//! - **访客管理**: 访客登记、权限管理、访问记录
-//! - **访问记录**: 出入记录查询、人脸识别、统计分析
+//! Acs服务模块 - 简化实现
 
-use crate::{
-    core::{config::Config, trait_system::Service}
-};
+use serde::{Deserialize, Serialize};
+use crate::core::config::Config;
+use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
 
-/// 访问控制服务
+/// 简化的服务结构体
+pub struct SimpleService {
+    pub config: Config,
+}
+
+impl SimpleService {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct SimpleResponse;
+
+impl ApiResponseTrait for SimpleResponse {
+    fn format(&self) -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// Acs服务
+#[derive(Debug, Clone)]
 pub struct AcsService {
-    _config: Config,
+    pub service: SimpleService,
 }
 
 impl AcsService {
-    /// 创建访问控制服务实例
     pub fn new(config: Config) -> Self {
-        Self { _config: config }
+        Self {
+            service: SimpleService::new(config),
+        }
     }
 }
 
-impl Service for AcsService {
-    fn config(&self) -> &Config {
-        &self._config
-    }
-
-    fn service_name() -> &'static str
-    where
-        Self: Sized,
-    {
-        "acs"
-    }
-
-    fn version() -> &'static str
-    where
-        Self: Sized,
-    {
-        "v1"
-    }
-}
+// Type alias for compatibility
+pub type ServiceType = AcsService;
+pub type ResponseType = SimpleResponse;

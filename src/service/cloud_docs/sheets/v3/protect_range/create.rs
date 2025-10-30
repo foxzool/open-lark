@@ -6,8 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -18,59 +17,27 @@ use crate::,
     service::sheets::v3::SpreadsheetService,
 };
 impl SpreadsheetService {
-    /// 增加保护范围,
-pub async fn add_protect_range(,
-        &self,
-        request: AddProtectRangeRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<AddProtectRangeResponseData>> {,
-let mut api_req = request.api_request;
-        api_req.set_http_method(Method::POST);
-api_req.set_api_path(,
-            SHEETS_V3_SPREADSHEET_PROTECT_RANGE.replace("{}", &request.spreadsheet_token),
-        );
-api_req
-            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-Ok(api_resp),
-    }
-}
-/// 增加保护范围请求,
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 增加保护范围请求,
+#[derive(Debug, Clone)]
 pub struct AddProtectRangeRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// spreadsheet 的 token
     spreadsheet_token: String,
     /// 保护范围设置
-    protect_range: ProtectRangeData,
-}
+    protect_range: ProtectRangeData}
 impl AddProtectRangeRequest {
-    pub fn w+.*{
-AddProtectRangeRequestBuilder::default(),
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct AddProtectRangeRequestBuilder {
-    request: AddProtectRangeRequest,
-}
+    request: AddProtectRangeRequest}
 impl AddProtectRangeRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
-self.request.spreadsheet_token = spreadsheet_token.to_string();
-        self,
-}
-
-    pub fn protect_range(mut self, protect_range: ProtectRangeData) -> Self {
-self.request.protect_range = protect_range;
-        self,
-}
-pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-self.request,
-    }
-}
-impl_executable_builder_owned!(,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}impl_executable_builder_owned!(,
     AddProtectRangeRequestBuilder,
     SpreadsheetService,
     AddProtectRangeRequest,
@@ -78,7 +45,7 @@ impl_executable_builder_owned!(,
     add_protect_range,
 );
 /// 保护范围数据
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ProtectRangeData {
     /// 保护范围的维度
     pub dimension: String,
@@ -93,72 +60,55 @@ pub struct ProtectRangeData {
     pub protect_id: Option<String>,
     /// 锁定用户,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub lock_info: Option<String>,
-}
+    pub lock_info: Option<String>}
 impl ProtectRangeData {
-    pub fn new(
-        dimension: impl ToString,
-        sheet_id: impl ToString,
-        start_index: i32,
-        end_index: i32,
-    ) -> Self {
-Self {
-            dimension: dimension.to_string(),
-            sheet_id: sheet_id.to_string(),
-            start_index,
-            end_index,
-            protect_id: None,
-            lock_info: None,
-        }
-}
-/// 创建行保护范围,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 创建行保护范围,
     pub fn row_range(sheet_id: impl ToString, start_row: i32, end_row: i32) -> Self {
-        Self::new("ROWS", sheet_id, start_row, end_row),
-}
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}        Self::new("ROWS", sheet_id, start_row, end_row)}
 /// 创建列保护范围,
     pub fn column_range(sheet_id: impl ToString, start_col: i32, end_col: i32) -> Self {
-        Self::new("COLUMNS", sheet_id, start_col, end_col),
-}
-}
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}        Self::new("COLUMNS", sheet_id, start_col, end_col)}
 /// 增加保护范围响应体最外层,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AddProtectRangeResponseData {
     /// 保护范围 ID
     pub protect_id: String,
     /// 保护范围信息,
 #[serde(flatten)]
     pub protect_range: ProtectRangeData,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod test {,
     use super::*;
 use serde_json::json;
     #[test]
-fn test_protect_range_data_creation() {,
+fn test_protect_range_data_creation() {
         let protect_range = ProtectRangeData::row_range("Sheet1", 1, 10);
         assert_eq!(protect_range.dimension, "ROWS");
         assert_eq!(protect_range.sheet_id, "Sheet1");
         assert_eq!(protect_range.start_index, 1);
         assert_eq!(protect_range.end_index, 10);
-}
 #[test]
-    fn test_add_protect_range_response() {,
+    fn test_add_protect_range_response() {
 let json = json!({,
             "protect_id": "protect_001",
             "dimension": "COLUMNS",
             "sheet_id": "Sheet1",
             "start_index": 1,
             "end_index": 5,
-            "lock_info": "user@example.com",
-});
+            "lock_info": "user@example.com"});
 let response: AddProtectRangeResponseData = serde_json::from_value(json).unwrap();
         assert_eq!(response.protect_id, "protect_001");
         assert_eq!(response.protect_range.dimension, "COLUMNS");
-}
-}

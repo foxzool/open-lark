@@ -4,23 +4,21 @@ use std::collections::HashMap;
 use open_lark_core::core::api_req::ApiRequest;
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::mail::models::{MailGroup, UserIdType}
 };
 /// 邮件组管理服务
 pub struct MailGroupService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 创建邮件组请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateMailGroupRequest {
+}
     /// 邮件组名称
     pub name: String,
     /// 邮件组邮箱
@@ -31,75 +29,53 @@ pub struct CreateMailGroupRequest {
     /// 是否允许外部发送
 #[serde(skip_serializing_if = "Option::is_none")]
     pub allow_external_send: Option<bool>,
-}
 /// 创建邮件组响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateMailGroupResponse {
+}
     /// 创建的邮件组
     pub mailgroup: MailGroup,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 修改邮件组请求
-#[derive(.*?)]
-pub struct UpdateMailGroupRequest {
-    /// 邮件组名称
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-    /// 描述
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    /// 是否允许外部发送
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub allow_external_send: Option<bool>,
-}
-/// 修改邮件组响应
-#[derive(.*?)]
-pub struct UpdateMailGroupResponse {
-    /// 修改后的邮件组
-    pub mailgroup: MailGroup,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 查询指定邮件组响应
-#[derive(.*?)]
-pub struct GetMailGroupResponse {
-    /// 邮件组信息
-    pub mailgroup: MailGroup,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 批量获取邮件组响应
-#[derive(.*?)]
-pub struct ListMailGroupsResponse {
-    /// 邮件组列表
-    pub mailgroups: Vec<MailGroup>,
-    /// 是否还有更多数据
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub has_more: Option<bool>,
-    /// 下一页标识
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl MailGroupService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 修改邮件组请求
+#[derive(Debug, Clone)]
 }
-/// 创建邮件组
+pub struct UpdateMailGroupRequest {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 查询指定邮件组响应
+#[derive(Debug, Clone)]
+}
+pub struct GetMailGroupResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 批量获取邮件组响应
+#[derive(Debug, Clone)]
+}
+pub struct ListMailGroupsResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl MailGroupService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建邮件组
     pub async fn create(
         &self,
         request: CreateMailGroupRequest,
@@ -109,7 +85,6 @@ impl MailGroupService {
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: Endpoints::MAIL_V1_MAILGROUPS.to_string(),
@@ -119,7 +94,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除邮件组
     pub async fn delete(
         &self,
@@ -130,7 +104,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
@@ -142,9 +115,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 修改邮件组部分信息
     pub async fn patch(
         &self,
@@ -156,7 +127,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
@@ -169,9 +139,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 修改邮件组全部信息
     pub async fn update(
         &self,
@@ -183,7 +151,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::PUT,
             api_path: EndpointBuilder::replace_param(
@@ -196,9 +163,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询指定邮件组
     pub async fn get(
         &self,
@@ -209,7 +174,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
@@ -221,9 +185,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量获取邮件组
     pub async fn list(
         &self,
@@ -235,13 +197,10 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(page_size) = page_size {
             query_params.insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token);
-}
 if let Some(user_id_type) = user_id_type {,
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: Endpoints::MAIL_V1_MAILGROUPS.to_string(),
@@ -249,7 +208,6 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}

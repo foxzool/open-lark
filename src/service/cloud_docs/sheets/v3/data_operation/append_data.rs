@@ -6,8 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -19,30 +18,10 @@ use crate::,
     service::sheets::v3::DataOperationService,
 };
 impl DataOperationService {
-    /// 追加数据,
-///,
-    /// # API文档,
-///,
-    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-value/append,
-pub async fn append_data(,
-        &self,
-        request: AppendDataRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<AppendDataResponseData> {,
-let mut api_req = request.api_request;
-        api_req.set_http_method(Method::POST);
-api_req.api_path = SHEETS_V3_SPREADSHEET_VALUES_APPEND,
-            .replace("{}", &request.spreadsheet_token)
-            .replace("{}", &request.range);
-api_req
-            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-let api_resp: BaseResponse<AppendDataResponseData> =,
-            Transport::request(api_req, &self.config, option).await?;
-api_resp.into_result(),
-    }
-}
-/// 追加数据请求,
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 追加数据请求,
+#[derive(Debug, Clone)]
 pub struct AppendDataRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -55,46 +34,17 @@ pub struct AppendDataRequest {
     insert_data_option: Option<String>,
     /// 数据值,
 #[serde(rename = "valueRange")]
-    value_range: ValueRangeRequest,
-}
+    value_range: ValueRangeRequest}
 impl AppendDataRequest {
-    pub fn w+.*{
-AppendDataRequestBuilder::default(),
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct AppendDataRequestBuilder {
-    request: AppendDataRequest,
-}
+    request: AppendDataRequest}
 impl AppendDataRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
-self.request.spreadsheet_token = spreadsheet_token.to_string();
-        self,
-}
-
-    pub fn range(mut self, range: impl ToString) -> Self {
-self.request.range = range.to_string();
-        self,
-}
-
-    pub fn insert_data_option(mut self, insert_data_option: impl ToString) -> Self {
-self.request.insert_data_option = Some(insert_data_option.to_string());
-        self,
-}
-
-    pub fn values(mut self, values: Vec<Vec<serde_json::Value>>) -> Self {
-self.request.value_range = ValueRangeRequest {,
-            range: self.request.range.clone(),
-            values,
-        };
-self,
-    }
-pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-self.request,
-    }
-}
-// Trait implementation,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}// Trait implementation,
 impl_executable_builder_owned!(
     AppendDataRequestBuilder,
     DataOperationService,
@@ -103,15 +53,14 @@ impl_executable_builder_owned!(
     append_data,
 );
 /// 值与范围请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ValueRangeRequest {
     /// 查询范围
     pub range: String,
     /// 范围内的值
-    pub values: Vec<Vec<serde_json::Value>>,
-}
+    pub values: Vec<Vec<serde_json::Value>>}
 /// 追加数据响应体最外层,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AppendDataResponseData {
     /// 表格的 token,
 #[serde(rename = "spreadsheetToken")]
@@ -123,14 +72,14 @@ pub struct AppendDataResponseData {
     pub revision: i32,
     /// 更新的行数
     pub updates: UpdatesInfo,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 更新信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdatesInfo {
     /// 受更新影响的表格范围,
 #[serde(rename = "updatedRange")]
@@ -144,14 +93,13 @@ pub struct UpdatesInfo {
     /// 更新的单元格数,
 #[serde(rename = "updatedCells")]
     pub updated_cells: i32,
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod test {,
     use serde_json::json;
 use super::AppendDataResponseData;
     #[test]
-fn test_append_data_response() {,
+fn test_append_data_response() {
         let json = json!({
             "spreadsheetToken": "shtcnmBA*****yGehy8",
             "tableRange": "Sheet1!A1:B2",
@@ -160,11 +108,8 @@ fn test_append_data_response() {,
                 "updatedRange": "Sheet1!A3:B3",
                 "updatedRows": 1,
                 "updatedColumns": 2,
-                "updatedCells": 2,
-}
+                "updatedCells": 2}
         });
 let response: AppendDataResponseData = serde_json::from_value(json).unwrap();
         assert_eq!(response.spreadsheet_token, "shtcnmBA*****yGehy8");
         assert_eq!(response.updates.updated_rows, 1);
-}
-}

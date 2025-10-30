@@ -2,26 +2,23 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::report::*,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::report::models::{PageResponse, ReportRule}
 };
 /// 规则管理服务
 pub struct RuleService {
-    pub config: Config,
 }
+
 impl RuleService {
-    /// 创建规则管理服务实例
-pub fn new() -> Self {
+    
+    pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 查询规则
+}/// 查询规则
     ///,
 /// 查询汇报规则列表，支持分页和条件筛选。
     ///,
@@ -48,75 +45,36 @@ let mut api_req = ApiRequest {,
 // 添加查询参数
         if let Some(page_token) = request.page_token {
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(rule_type) = request.rule_type {,
             api_req.query_params.insert("rule_type", rule_type);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert("status", status);
-}
 if let Some(creator) = request.creator {,
             api_req.query_params.insert("creator", creator);
-}
 if let Some(name) = request.name {,
             api_req.query_params.insert("name", name);
-}
 if let Some(start_time) = request.start_time {,
             api_req
 .query_params
                 .insert("start_time", start_time.to_string());
-}
 if let Some(end_time) = request.end_time {,
             api_req
 .query_params
                 .insert("end_time", end_time.to_string());
+        Transport::request(api_req, &self.config, option).await,
+/// 规则查询请求
+#[derive(Debug, Clone)]
+pub struct RuleQueryRequest {
 }
 
-        Transport::request(api_req, &self.config, option).await,
-}
-}
-/// 规则查询请求
-#[derive(.*?)]
-pub struct RuleQueryRequest {
-    /// 页码标记
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-    /// 每页数量
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_size: Option<i32>,
-    /// 规则类型筛选
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub rule_type: Option<String>,
-    /// 状态筛选
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
-    /// 创建者筛选
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub creator: Option<String>,
-    /// 规则名称筛选（支持模糊匹配）
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-    /// 开始时间戳筛选
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub start_time: Option<i64>,
-    /// 结束时间戳筛选
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub end_time: Option<i64>,
-}
-/// 规则查询响应
-#[derive(.*?)]
-pub struct RuleQueryResponse {
-    /// 规则列表
-#[serde(flatten)]
-    pub rules: PageResponse<ReportRule>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
+}}}}}}}}}}}}}}

@@ -2,26 +2,23 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::performance::*,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::performance::models::{PageResponse, StageTask}
 };
 /// 评估任务管理服务
 pub struct StageTaskService {
-    pub config: Config,
 }
+
 impl StageTaskService {
-    /// 创建评估任务管理服务实例
-pub fn new() -> Self {
+    
+    pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 获取周期任务（指定用户）
+}/// 获取周期任务（指定用户）
     ///,
 /// 根据用户列表获取其周期任务信息，支持按周期ID、项目ID、任务状态等条件筛选。
     /// 用于批量查询指定用户的评估任务，便于任务管理和进度跟踪。
@@ -41,9 +38,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取周期任务（全部用户）
     ///,
 /// 分页获取全部用户的周期任务信息，支持按周期ID、项目ID、任务状态等条件筛选。
@@ -64,64 +59,26 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
 /// 用户任务查询请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct TaskFindByUserListRequest {
-    /// 用户ID列表
-    pub user_ids: Vec<String>,
-    /// 周期ID
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub semester_id: Option<String>,
-    /// 项目ID
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub activity_id: Option<String>,
-    /// 任务状态
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
 }
-/// 用户任务查询响应
-#[derive(.*?)]
-pub struct TaskFindByUserListResponse {
-    /// 任务列表
-    pub tasks: Vec<StageTask>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
-    }
+    /// 任务分页查询请求
+#[derive(Debug, Clone)]
 }
-/// 任务分页查询请求
-#[derive(.*?)]
 pub struct TaskFindByPageRequest {
-    /// 周期ID
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub semester_id: Option<String>,
-    /// 项目ID
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub activity_id: Option<String>,
-    /// 任务状态
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
-    /// 页码标记
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-    /// 每页数量
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_size: Option<i32>,
-}
-/// 任务分页查询响应
-#[derive(.*?)]
-pub struct TaskFindByPageResponse {
-    /// 分页任务列表
-#[serde(flatten)]
-    pub tasks: PageResponse<StageTask>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
+}}}}}}}}}}

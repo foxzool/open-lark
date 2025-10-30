@@ -6,8 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -18,13 +17,11 @@ use crate::,
     impl_executable_builder_owned,
 };
 pub struct PermissionsService {
-    config: Config,
-}
+    config: Config}
 impl PermissionsService {
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 获取云文档权限设置,
+}/// 获取云文档权限设置,
     pub async fn get(
         &self,
         request: GetPermissionRequest,
@@ -54,9 +51,8 @@ api_req
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
     }
-}
 /// 获取云文档权限设置,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetPermissionRequest {
     api_request: ApiRequest,
     /// 文件的 token
@@ -76,63 +72,29 @@ pub struct GetPermissionRequest {
     /// - mindnote：思维笔记,
 /// - minutes：妙记,
     /// - slides：幻灯片
-    r#type: String,
-}
+    r#type: String}
 impl GetPermissionRequest {
-    pub fn w+.*{
-GetPermissionRequestBuilder::default(),
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct GetPermissionRequestBuilder {
-    request: GetPermissionRequest,
-}
+    request: GetPermissionRequest}
 impl GetPermissionRequestBuilder {
-    /// 文件的 token
-    pub fn token(mut self, token: impl ToString) -> Self {
-self.request.token = token.to_string();
-        self,
-}
-/// 文件类型，需要与文件的 token 相匹配,
-    ///,
-/// 示例值："doc",
-    ///,
-/// 可选值有：,
-    ///,
-/// - doc：旧版文档,
-    /// - sheet：电子表格,
-/// - file：云空间文件,
-    /// - wiki：知识库节点,
-/// - bitable：多维表格,
-    /// - docx：新版文档,
-/// - mindnote：思维笔记,
-    /// - minutes：妙记,
-/// - slides：幻灯片,
-    pub fn r#type(mut self, r#type: impl ToString) -> Self {
-self.request.r#type = r#type.to_string();
-        self.request,
-.api_request,
-            .query_params
-            .insert("type", r#type.to_string());
-self,
-    }
-pub fn w+.*{
-        self.request,
-}
-}
-/// 返回的文档公共设置,
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 返回的文档公共设置,
+#[derive(Debug, Clone)]
 pub struct GetPermissionResponse {
     /// 返回的文档公共设置
     pub permission_public: PermissionPublic,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 /// 返回的文档公共设置,
 pub struct PermissionPublic {
 /// 允许内容被分享到组织外,
@@ -194,10 +156,9 @@ pub struct PermissionPublic {
     /// - only_full_access：拥有可管理权限（包括我）的协作者
     pub copy_entity: Option<String>,
     /// 节点是否已加锁，加锁之后不再继承父级页面的权限
-    pub lock_switch: Option<bool>,
-}
+    pub lock_switch: Option<bool>}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PatchPermissionRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -275,144 +236,17 @@ pub struct PatchPermissionRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     link_share_entity: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    copy_entity: Option<String>,
-}
+    copy_entity: Option<String>}
 impl PatchPermissionRequest {
-    pub fn w+.*{
-PatchPermissionRequestBuilder::default(),
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct PatchPermissionRequestBuilder {
-    request: PatchPermissionRequest,
-}
+    request: PatchPermissionRequest}
 impl PatchPermissionRequestBuilder {
-    /// 文件的 token
-    pub fn token(mut self, token: impl ToString) -> Self {
-self.request.token = token.to_string();
-        self,
-}
-/// 文件类型，需要与文件的 token 相匹配,
-    ///,
-/// 示例值："doc",
-    ///,
-/// 可选值有：,
-    ///,
-/// - doc：旧版文档,
-    /// - sheet：电子表格,
-/// - file：云空间文件,
-    /// - wiki：知识库节点,
-/// - bitable：多维表格,
-    /// - docx：新版文档,
-/// - mindnote：思维笔记,
-    /// - minutes：妙记,
-/// - slides：幻灯片,
-    pub fn r#type(mut self, r#type: impl ToString) -> Self {
-self.request,
-            .api_request,
-.query_params
-            .insert("type", r#type.to_string());
-self,
-    }
-/// 允许内容被分享到组织外,
-    ///,
-/// 示例值："open",
-    ///,
-/// 可选值有：,
-    ///,
-/// - open：打开,
-    /// - closed：关闭,
-/// - allow_share_partner_tenant：允许分享给关联组织（只有租户后台设置仅允许关联组织分享，,
-    ///   才能设置为该值）
-    pub fn external_access_entity(mut self, external_access_entity: impl ToString) -> Self {
-self.request.external_access_entity = Some(external_access_entity.to_string());
-        self,
-}
-/// 谁可以创建副本、打印、下载,
-    ///,
-/// 示例值："anyone_can_view",
-    ///,
-/// 可选值有：,
-    ///,
-/// - anyone_can_view：拥有可阅读权限的用户,
-    /// - anyone_can_edit：拥有可编辑权限的用户,
-/// - only_full_access：拥有可管理权限（包括我）的用户,
-    pub fn security_entity(mut self, security_entity: impl ToString) -> Self {
-self.request.security_entity = Some(security_entity.to_string());
-        self,
-}
-/// 谁可以评论,
-    ///,
-/// 示例值："anyone_can_view",
-    ///,
-/// 可选值有：,
-    ///,
-/// - anyone_can_view：拥有可阅读权限的用户,
-    /// - anyone_can_edit：拥有可编辑权限的用户
-    pub fn comment_entity(mut self, comment_entity: impl ToString) -> Self {
-self.request.comment_entity = Some(comment_entity.to_string());
-        self,
-}
-/// 谁可以添加和管理协作者-组织维度,
-    ///,
-/// 示例值："anyone",
-    ///,
-/// 可选值有：,
-    ///,
-/// - anyone：所有可阅读或编辑此文档的用户,
-    /// - same_tenant：组织内所有可阅读或编辑此文档的用户
-    pub fn share_entity(mut self, share_entity: impl ToString) -> Self {
-self.request.share_entity = Some(share_entity.to_string());
-        self,
-}
-/// 谁可以添加和管理协作者-协作者维度,
-    ///,
-/// 示例值："collaborator_can_view",
-    ///,
-/// 可选值有：,
-    ///,
-/// - collaborator_can_view：拥有可阅读权限的协作者,
-    /// - collaborator_can_edit：拥有可编辑权限的协作者,
-/// - collaborator_full_access：拥有可管理权限（包括我）的协作者,
-    pub fn manage_collaborator_entity(mut self, manage_collaborator_entity: impl ToString) -> Self {
-self.request.manage_collaborator_entity = Some(manage_collaborator_entity.to_string());
-        self,
-}
-/// 链接分享设置,
-    ///,
-/// 示例值："tenant_readable",
-    ///,
-/// 可选值有：,
-    ///,
-/// tenant_readable：组织内获得链接的人可阅读,
-    /// tenant_editable：组织内获得链接的人可编辑,
-/// partner_tenant_readable：关联组织的人可阅读（只有租户后台设置仅允许关联组织分享，,
-    /// 才能设置为该值） partner_tenant_editable：,
-/// 关联组织的人可编辑（只有租户后台设置仅允许关联组织分享，才能设置为该值）,
-    /// anyone_readable：互联网上获得链接的任何人可阅读（仅external_access_entity=“open”时有效）,
-/// anyone_editable：互联网上获得链接的任何人可编辑（仅external_access_entity=“open”时有效）,
-    /// closed：关闭链接分享
-    pub fn link_share_entity(mut self, link_share_entity: impl ToString) -> Self {
-self.request.link_share_entity = Some(link_share_entity.to_string());
-        self,
-}
-/// 谁可以复制内容,
-    ///,
-/// 可选值有：,
-    ///,
-/// - anyone_can_view：拥有可阅读权限的用户,
-    /// - anyone_can_edit：拥有可编辑权限的用户,
-/// - only_full_access：拥有可管理权限（包括我）的协作者,
-    pub fn copy_entity(mut self, copy_entity: impl ToString) -> Self {
-self.request.copy_entity = Some(copy_entity.to_string());
-        self,
-}
-pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-self.request,
-    }
-}
-impl_executable_builder_owned!(,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}impl_executable_builder_owned!(,
     GetPermissionRequestBuilder,
     PermissionsService,
     GetPermissionRequest,
@@ -436,8 +270,7 @@ fn create_test_config() -> Config {,
         Config::builder()
 .app_id()
             .app_secret()
-.build(),
-    }
+.build()}
 fn create_test_permission_public() -> PermissionPublic {,
         PermissionPublic {
             external_access_entity: Some("open".to_string()),
@@ -447,12 +280,10 @@ fn create_test_permission_public() -> PermissionPublic {,
             manage_collaborator_entity: Some("collaborator_can_view".to_string()),
             link_share_entity: Some("tenant_readable".to_string()),
             copy_entity: Some("anyone_can_view".to_string()),
-            lock_switch: Some(false),
-        }
-}
+            lock_switch: Some(false)}
 // === Service Tests ===,
     #[test]
-fn test_permissions_service_new() {,
+fn test_permissions_service_new() {
         let config = create_test_config();
 let service = PermissionsService::new(config);
         // Service should be created successfully,
@@ -460,7 +291,7 @@ assert!(std::ptr::addr_of!(service).is_aligned());
     }
 // === GetPermissionRequest Tests ===,
     #[test]
-fn test_get_permission_request_builder_basic() {,
+fn test_get_permission_request_builder_basic() {
         let request = GetPermissionRequest::builder(),
 .token()
             .r#type("doc"),
@@ -469,7 +300,6 @@ fn test_get_permission_request_builder_basic() {,
         assert_eq!(request.r#type, "doc");
 assert!(request.api_request.query_params.contains_key("type"));
         assert_eq!(request.api_request.query_params.get("type").unwrap(), "doc");
-}
 #[rstest]
     #[case("doc", "旧版文档")]
     #[case("sheet", "电子表格")]
@@ -496,7 +326,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_get_permission_request_builder_method_chaining() {,
+    fn test_get_permission_request_builder_method_chaining() {
 let request = GetPermissionRequest::builder(),
             .token()
 .r#type("sheet"),
@@ -504,16 +334,15 @@ let request = GetPermissionRequest::builder(),
 
         assert_eq!(request.token, "chain_token");
         assert_eq!(request.r#type, "sheet");
-}
 #[test]
-    fn test_get_permission_request_default() {,
+    fn test_get_permission_request_default() {
 let request = GetPermissionRequest::default();
         assert_eq!(request.token, "");
         assert_eq!(request.r#type, "");
 assert!(request.api_request.query_params.is_empty());
     }
 #[test]
-    fn test_get_permission_request_builder_overwrite() {,
+    fn test_get_permission_request_builder_overwrite() {
 let request = GetPermissionRequest::builder(),
             .token()
 .r#type("doc"),
@@ -530,7 +359,7 @@ assert_eq!(,
     }
 // === PatchPermissionRequest Tests ===,
     #[test]
-fn test_patch_permission_request_builder_basic() {,
+fn test_patch_permission_request_builder_basic() {
         let request = PatchPermissionRequest::builder(),
 .token()
             .r#type("docx"),
@@ -546,7 +375,7 @@ assert!(request.api_request.query_params.contains_key("type"));
 );
     }
 #[test]
-    fn test_patch_permission_request_all_entities() {,
+    fn test_patch_permission_request_all_entities() {
 let request = PatchPermissionRequest::builder(),
             .token()
 .r#type("doc"),
@@ -572,7 +401,6 @@ assert_eq!(,
             Some("tenant_editable".to_string()),
 );
         assert_eq!(request.copy_entity, Some("only_full_access".to_string()));
-}
 #[rstest]
     #[case("open", "打开")]
     #[case("closed", "关闭")]
@@ -584,7 +412,6 @@ let request = PatchPermissionRequest::builder(),
             .build();
 
         assert_eq!(request.external_access_entity, Some(value.to_string()));
-}
 #[rstest]
     #[case("anyone_can_view", "拥有可阅读权限的用户")]
     #[case("anyone_can_edit", "拥有可编辑权限的用户")]
@@ -596,7 +423,6 @@ let request = PatchPermissionRequest::builder(),
             .build();
 
         assert_eq!(request.security_entity, Some(value.to_string()));
-}
 #[rstest]
     #[case("anyone_can_view", "拥有可阅读权限的用户")]
     #[case("anyone_can_edit", "拥有可编辑权限的用户")]
@@ -607,7 +433,6 @@ let request = PatchPermissionRequest::builder(),
             .build();
 
         assert_eq!(request.comment_entity, Some(value.to_string()));
-}
 #[rstest]
     #[case("anyone", "所有可阅读或编辑此文档的用户")]
     #[case("same_tenant", "组织内所有可阅读或编辑此文档的用户")]
@@ -618,7 +443,6 @@ let request = PatchPermissionRequest::builder(),
             .build();
 
         assert_eq!(request.share_entity, Some(value.to_string()));
-}
 #[rstest]
     #[case("collaborator_can_view", "拥有可阅读权限的协作者")]
     #[case("collaborator_can_edit", "拥有可编辑权限的协作者")]
@@ -633,7 +457,6 @@ let request = PatchPermissionRequest::builder(),
             .build();
 
         assert_eq!(request.manage_collaborator_entity, Some(value.to_string()));
-}
 #[rstest]
     #[case("tenant_readable", "组织内获得链接的人可阅读")]
     #[case("tenant_editable", "组织内获得链接的人可编辑")]
@@ -649,9 +472,8 @@ let request = PatchPermissionRequest::builder(),
             .build();
 
         assert_eq!(request.link_share_entity, Some(value.to_string()));
-}
 #[test]
-    fn test_patch_permission_request_default() {,
+    fn test_patch_permission_request_default() {
 let request = PatchPermissionRequest::default();
         assert_eq!(request.token, "");
         assert_eq!(request.external_access_entity, None);
@@ -661,9 +483,8 @@ let request = PatchPermissionRequest::default();
         assert_eq!(request.manage_collaborator_entity, None);
         assert_eq!(request.link_share_entity, None);
         assert_eq!(request.copy_entity, None);
-}
 #[test]
-    fn test_patch_permission_request_partial_update() {,
+    fn test_patch_permission_request_partial_update() {
 let request = PatchPermissionRequest::builder(),
             .token()
 .external_access_entity()
@@ -682,15 +503,13 @@ assert_eq!(,
         assert_eq!(request.manage_collaborator_entity, None);
         assert_eq!(request.link_share_entity, None);
         assert_eq!(request.copy_entity, None);
-}
 // === Response Structure Tests ===,
     #[test]
-fn test_get_permission_response_api_trait() {,
+fn test_get_permission_response_api_trait() {
         let format = GetPermissionResponse::data_format();
         assert_eq!(format, ResponseFormat::Data);
-}
 #[test]
-    fn test_permission_public_creation() {,
+    fn test_permission_public_creation() {
 let permission = create_test_permission_public();
         assert_eq!(permission.external_access_entity, Some("open".to_string()));
 assert_eq!(,
@@ -712,9 +531,8 @@ assert_eq!(,
 );
         assert_eq!(permission.copy_entity, Some("anyone_can_view".to_string()));
         assert_eq!(permission.lock_switch, Some(false));
-}
 #[test]
-    fn test_permission_public_optional_fields() {,
+    fn test_permission_public_optional_fields() {
 let permission = PermissionPublic {,
             external_access_entity: None,
             security_entity: None,
@@ -723,8 +541,7 @@ let permission = PermissionPublic {,
             manage_collaborator_entity: None,
             link_share_entity: None,
             copy_entity: None,
-            lock_switch: None,
-        };
+            lock_switch: None};
 
         assert_eq!(permission.external_access_entity, None);
         assert_eq!(permission.security_entity, None);
@@ -734,9 +551,8 @@ let permission = PermissionPublic {,
         assert_eq!(permission.link_share_entity, None);
         assert_eq!(permission.copy_entity, None);
         assert_eq!(permission.lock_switch, None);
-}
 #[test]
-    fn test_get_permission_response_creation() {,
+    fn test_get_permission_response_creation() {
 let permission_public = create_test_permission_public();
         let response = GetPermissionResponse { permission_public };
 assert_eq!(,
@@ -744,10 +560,9 @@ assert_eq!(,
             Some("open".to_string()),
 );
         assert_eq!(response.permission_public.lock_switch, Some(false));
-}
 // === Serialization Tests ===,
     #[test]
-fn test_patch_permission_request_serialization() {,
+fn test_patch_permission_request_serialization() {
         let request = PatchPermissionRequest::builder(),
 .token()
             .external_access_entity()
@@ -760,7 +575,7 @@ assert!(json.contains("\"security_entity\":\"anyone_can_view\""));
 assert!(!json.contains("ser_token"));
     }
 #[test]
-    fn test_patch_permission_request_serialization_skip_none() {,
+    fn test_patch_permission_request_serialization_skip_none() {
 let request = PatchPermissionRequest::builder(),
             .token()
 .external_access_entity("closed"),
@@ -771,9 +586,8 @@ assert!(json.contains("\"external_access_entity\":\"closed\""));
         assert!(!json.contains("security_entity"));
 assert!(!json.contains("comment_entity"));
         assert!(!json.contains("share_entity"));
-}
 #[test]
-    fn test_get_permission_response_deserialization() {,
+    fn test_get_permission_response_deserialization() {
 let json = r#"{,
             "permission_public": {
                 "external_access_entity": "open",
@@ -783,8 +597,7 @@ let json = r#"{,
                 "manage_collaborator_entity": "collaborator_can_view",
                 "link_share_entity": "tenant_readable",
                 "copy_entity": "only_full_access",
-                "lock_switch": true,
-}
+                "lock_switch": true}
         }"#;
 let response: GetPermissionResponse = serde_json::from_str(json).unwrap();
         assert_eq!(
@@ -816,13 +629,11 @@ let response: GetPermissionResponse = serde_json::from_str(json).unwrap();
             Some("only_full_access".to_string()),
 );
         assert_eq!(response.permission_public.lock_switch, Some(true));
-}
 #[test]
-    fn test_permission_public_deserialization_partial() {,
+    fn test_permission_public_deserialization_partial() {
 let json = r#"{,
             "external_access_entity": "closed",
-            "lock_switch": false,
-}"#;
+            "lock_switch": false}"#;
 let permission: PermissionPublic = serde_json::from_str(json).unwrap();
         assert_eq!(
             permission.external_access_entity,
@@ -832,10 +643,9 @@ let permission: PermissionPublic = serde_json::from_str(json).unwrap();
         assert_eq!(permission.security_entity, None);
         assert_eq!(permission.comment_entity, None);
         assert_eq!(permission.share_entity, None);
-}
 // === Edge Case Tests ===,
     #[test]
-fn test_get_permission_request_unicode_token() {,
+fn test_get_permission_request_unicode_token() {
         let unicode_token = "测试令牌_🔑_token";
 let request = GetPermissionRequest::builder(),
             .token()
@@ -843,9 +653,8 @@ let request = GetPermissionRequest::builder(),
             .build();
 
         assert_eq!(request.token, unicode_token);
-}
 #[test]
-    fn test_patch_permission_request_unicode_values() {,
+    fn test_patch_permission_request_unicode_values() {
 let request = PatchPermissionRequest::builder(),
             .token()
 .external_access_entity()
@@ -853,16 +662,14 @@ let request = PatchPermissionRequest::builder(),
 .build();
         assert_eq!(request.external_access_entity, Some("测试值".to_string()));
         assert_eq!(request.security_entity, Some("权限值".to_string()));
-}
 #[test]
-    fn test_get_permission_request_empty_values() {,
+    fn test_get_permission_request_empty_values() {
 let request = GetPermissionRequest::builder().token("").r#type("").build();
         assert_eq!(request.token, "");
         assert_eq!(request.r#type, "");
         assert_eq!(request.api_request.query_params.get("type").unwrap(), "");
-}
 #[test]
-    fn test_patch_permission_request_empty_values() {,
+    fn test_patch_permission_request_empty_values() {
 let request = PatchPermissionRequest::builder(),
             .token()
 .external_access_entity()
@@ -871,29 +678,28 @@ let request = PatchPermissionRequest::builder(),
         assert_eq!(request.token, "");
         assert_eq!(request.external_access_entity, Some("".to_string()));
         assert_eq!(request.security_entity, Some("".to_string()));
-}
 #[test]
-    fn test_long_token_handling() {,
+    fn test_long_token_handling() {
 let long_token = "a".repeat(1000);
         let request = GetPermissionRequest::builder(),
 .token()
             .r#type("doc"),
 .build();
         assert_eq!(request.token, long_token);
-}
 #[test]
-    fn test_special_characters_in_token() {,
+    fn test_special_characters_in_token() {
 let special_token = "token-with_special.chars@123#";
         let request = PatchPermissionRequest::builder(),
 .token()
             .external_access_entity()
 .build();
         assert_eq!(request.token, special_token);
-}
 // === Debug Tests ===,
     #[test]
-fn test_debug_implementations() {,
-        let get_request = GetPermissionRequest::builder(),
+fn test_debug_implementations() {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}        let get_request = GetPermissionRequest::builder(),
 .token()
             .r#type("doc"),
 .build();
@@ -903,17 +709,15 @@ fn test_debug_implementations() {,
 .build();
         let permission = create_test_permission_public();
 let response = GetPermissionResponse {,
-            permission_public: permission,
-        };
+            permission_public: permission};
 // Should not panic,
         let _debug_get = format!("{:?}", get_request);
         let _debug_patch = format!("{:?}", patch_request);
         let _debug_response = format!("{:?}", response);
         let _debug_permission = format!("{:?}", response.permission_public);
-}
 // === Builder Pattern Tests ===,
     #[test]
-fn test_get_permission_builder_reuse() {,
+fn test_get_permission_builder_reuse() {
         let builder = GetPermissionRequest::builder(),
 .token()
             .r#type("sheet");
@@ -922,9 +726,8 @@ fn test_get_permission_builder_reuse() {,
 
         assert_eq!(request1.token, "reuse_test");
         assert_eq!(request1.r#type, "sheet");
-}
 #[test]
-    fn test_patch_permission_builder_complex_chaining() {,
+    fn test_patch_permission_builder_complex_chaining() {
 let request = PatchPermissionRequest::builder(),
             .token()
 .r#type("bitable"),
@@ -959,7 +762,7 @@ assert_eq!(,
     }
 // === Request Body Tests ===,
     #[test]
-fn test_patch_permission_request_body_generation() {,
+fn test_patch_permission_request_body_generation() {
         let request = PatchPermissionRequest::builder(),
 .token()
             .external_access_entity()
@@ -974,5 +777,3 @@ let parsed: serde_json::Value = serde_json::from_str(&body_str).unwrap();
         assert_eq!(parsed["security_entity"] "only_full_access");
 // Token should not be in body (serde skip),
         assert!(parsed.get("token").is_none());
-}
-}

@@ -10,10 +10,8 @@ pub struct SpaceService {
     config: Config,
 }
 impl SpaceService {
-    pub fn new(config: Config) -> Self {
-        Self { config }
 }
-/// 获取知识空间列表
+    /// 获取知识空间列表
     ///,
 /// 获取用户有权访问的知识空间列表，包括空间的基本信息、权限状态等。
     /// 支持分页查询和过滤条件，方便用户快速找到目标空间。
@@ -27,7 +25,6 @@ pub async fn list(,
         option: Option<crate::core::req_option::RequestOption>,
     ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListSpaceResponse>> {
         list_spaces(request, &self.config, option).await,
-}
 /// 获取知识空间信息
     ///,
 /// 获取指定知识空间的详细信息，包括空间名称、描述、创建者、成员数量等。
@@ -42,7 +39,6 @@ pub async fn get(,
         option: Option<crate::core::req_option::RequestOption>,
     ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<GetSpaceResponse>> {
         get_space(request, &self.config, option).await,
-}
 /// 创建知识空间
     ///,
 /// 创建新的知识空间，用于组织和管理相关的知识库文档。可以设置空间名称、描述、
@@ -58,4 +54,5 @@ pub async fn create(,
     ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateSpaceResponse>> {
         create_space(request, &self.config, option).await,
 }
-}
+
+}}

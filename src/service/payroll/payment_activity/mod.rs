@@ -2,55 +2,45 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         trait_system::Service,
         SDKResult,
-    }
     service::payroll::models::{
         PageResponse, PaymentActivity, PaymentActivityArchiveRequest, PaymentActivityListRequest,
-    }
 };
 /// 发薪活动服务
 pub struct PaymentActivityService {
+}
     pub config: Config,
-}
 /// 发薪活动列表响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PaymentActivityListResponse {
-    /// 发薪活动列表
-#[serde(flatten)]
-    pub activities: PageResponse<PaymentActivity>,
 }
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 发薪活动封存响应
-#[derive(.*?)]
-pub struct PaymentActivityArchiveResponse {
-    /// 封存结果
-    pub success: bool,
-    /// 封存时间
-    pub archived_time: Option<String>,
-    /// 消息
-    pub message: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl PaymentActivityService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 发薪活动封存响应
+#[derive(Debug, Clone)]
 }
-/// 查询发薪活动列表
+pub struct PaymentActivityArchiveResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl PaymentActivityService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 查询发薪活动列表
     ///,
 /// 该接口用于查询企业的发薪活动列表，支持按状态、薪资组、
     /// 发薪周期等条件筛选。可以获取发薪活动的基本信息、
@@ -113,25 +103,17 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert("status", status);
-}
 if let Some(paygroup_id) = request.paygroup_id {,
             api_req.query_params.insert("paygroup_id", paygroup_id);
-}
 if let Some(period_start) = request.period_start {,
             api_req.query_params.insert("period_start", period_start);
-}
 if let Some(period_end) = request.period_end {,
             api_req.query_params.insert("period_end", period_end);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 封存发薪活动
     ///,
 /// 该接口用于封存指定的发薪活动，封存后的活动将不能再进行
@@ -191,18 +173,13 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
 impl Service for PaymentActivityService {,
     fn config(&self) -> &Config {,
 &self.config,
-    }
-fn service_name() -> &'static str {,
+    fn service_name() -> &'static str {,
         "payment_activity",
-}
 fn service_version() -> &'static str {,
         "v1",
 }
-}
+}}}}}}}}}}}}}}}}}}}}}

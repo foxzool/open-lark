@@ -12,13 +12,11 @@ use crate::core::{,
 };
 /// 画板服务,
 pub struct WhiteboardService {
-    config: Config,
-}
+    config: Config}
 impl WhiteboardService {
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 获取画板缩略图片,
+}/// 获取画板缩略图片,
     ///,
 /// 该接口用于获取画板的缩略图片。,
     ///,
@@ -39,20 +37,16 @@ let mut api_req = ApiRequest {,
 // 添加查询参数,
         if let Some(format) = request.format {
             api_req.query_params.insert("format", format);
-}
 if let Some(width) = request.width {,
             api_req.query_params.insert("width", width.to_string());
-}
 if let Some(height) = request.height {,
             api_req.query_params.insert("height", height.to_string());
-}
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
     }
-}
 /// 获取画板缩略图请求参数,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetWhiteboardThumbnailRequest {
     /// 画板token
     pub whiteboard_token: String,
@@ -61,36 +55,26 @@ pub struct GetWhiteboardThumbnailRequest {
     /// 图片宽度
     pub width: Option<i32>,
     /// 图片高度
-    pub height: Option<i32>,
-}
+    pub height: Option<i32>}
 impl GetWhiteboardThumbnailRequest {
-    pub fn new(whiteboard_token: impl Into<String>) -> Self {
-Self {
-            whiteboard_token: whiteboard_token.into(),
-            format: None,
-            width: None,
-            height: None,
-        }
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }
-
     pub fn with_format(mut self, format: impl Into<String>) -> Self {
-self.format = Some(format.into());
-        self,
-}
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}self.format = Some(format.into());
+        self}
 
     pub fn with_width(mut self, width: i32) -> Self {
 self.width = Some(width);
-        self,
-}
+        self}
 
     pub fn with_height(mut self, height: i32) -> Self {
 self.height = Some(height);
-        self,
-}
+        self}
 
     pub fn with_size(mut self, width: i32, height: i32) -> Self {
 self.width = Some(width);
         self.height = Some(height);
-self,
-    }
-}
+self}

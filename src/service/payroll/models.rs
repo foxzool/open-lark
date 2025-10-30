@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 /// 分页响应通用结构
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PageResponse<T> {,
     /// 数据列表
     pub items: Vec<T>,
@@ -9,9 +9,8 @@ pub struct PageResponse<T> {,
     pub has_more: bool,
     /// 下一页的分页标记
     pub page_token: Option<String>,
-}
 /// I18n 多语言文本,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct I18nText {
     /// 中文
     pub zh_cn: Option<String>,
@@ -19,9 +18,8 @@ pub struct I18nText {
     pub en_us: Option<String>,
     /// 日文
     pub ja_jp: Option<String>,
-}
 /// 发薪明细列表请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PaymentDetailListRequest {
     /// 发薪活动ID
     pub payment_activity_id: String,
@@ -35,9 +33,8 @@ pub struct PaymentDetailListRequest {
     pub user_id_type: Option<String>,
     /// 部门ID类型
     pub department_id_type: Option<String>,
-}
 /// 发薪明细批量查询请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PaymentDetailQueryRequest {
     /// 发薪活动ID
     pub payment_activity_id: String,
@@ -47,9 +44,8 @@ pub struct PaymentDetailQueryRequest {
     pub user_id_type: Option<String>,
     /// 查询字段列表
     pub fields: Option<Vec<String>>,
-}
 /// 发薪明细信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PaymentDetail {
     /// 员工ID
     pub employee_id: String,
@@ -77,9 +73,8 @@ pub struct PaymentDetail {
     pub payment_time: Option<String>,
     /// 备注
     pub remark: Option<String>,
-}
 /// 发薪项目,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PaymentItem {
     /// 算薪项ID
     pub acct_item_id: String,
@@ -95,9 +90,8 @@ pub struct PaymentItem {
     pub formula: Option<String>,
     /// 备注
     pub remark: Option<String>,
-}
 /// 发薪活动列表请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PaymentActivityListRequest {
     /// 分页大小，最大值100
     pub page_size: Option<u32>,
@@ -111,17 +105,15 @@ pub struct PaymentActivityListRequest {
     pub period_start: Option<String>,
     /// 发薪周期结束时间
     pub period_end: Option<String>,
-}
 /// 发薪活动封存请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PaymentActivityArchiveRequest {
     /// 发薪活动ID
     pub payment_activity_id: String,
     /// 封存原因
     pub archive_reason: Option<String>,
-}
 /// 发薪活动信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PaymentActivity {
     /// 发薪活动ID
     pub payment_activity_id: String,
@@ -155,9 +147,8 @@ pub struct PaymentActivity {
     pub creator_id: Option<String>,
     /// 备注
     pub remark: Option<String>,
-}
 /// 外部数据源记录保存请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DatasourceRecordSaveRequest {
     /// 数据源ID
     pub datasource_id: String,
@@ -169,9 +160,8 @@ pub struct DatasourceRecordSaveRequest {
     pub records: Vec<DatasourceRecord>,
     /// 发薪周期
     pub payment_period: String,
-}
 /// 外部数据源记录查询请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DatasourceRecordQueryRequest {
     /// 数据源ID
     pub datasource_id: String,
@@ -185,9 +175,8 @@ pub struct DatasourceRecordQueryRequest {
     pub page_size: Option<u32>,
     /// 分页标记
     pub page_token: Option<String>,
-}
 /// 外部数据源记录,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DatasourceRecord {
     /// 记录ID
     pub record_id: Option<String>,
@@ -201,9 +190,8 @@ pub struct DatasourceRecord {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 外部数据源配置列表请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DatasourceListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -211,9 +199,8 @@ pub struct DatasourceListRequest {
     pub page_token: Option<String>,
     /// 数据源状态
     pub status: Option<String>,
-}
 /// 外部数据源配置,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Datasource {
     /// 数据源ID
     pub datasource_id: String,
@@ -231,9 +218,8 @@ pub struct Datasource {
     pub updated_time: Option<String>,
     /// 描述
     pub description: Option<I18nText>,
-}
 /// 数据源字段配置,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DatasourceFieldConfig {
     /// 字段ID
     pub field_id: String,
@@ -241,9 +227,8 @@ pub struct DatasourceFieldConfig {
     pub field_name: I18nText,
     /// 字段类型
     pub field_type: String,
-}
 /// 算薪项列表请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AcctItemListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -255,9 +240,8 @@ pub struct AcctItemListRequest {
     pub paygroup_id: Option<String>,
     /// 状态筛选
     pub status: Option<String>,
-}
 /// 算薪项信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AcctItem {
     /// 算薪项ID
     pub acct_item_id: String,
@@ -285,9 +269,8 @@ pub struct AcctItem {
     pub updated_time: Option<String>,
     /// 描述
     pub description: Option<I18nText>,
-}
 /// 成本分摊报表列表请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CostAllocationReportListRequest {
     /// 开始日期
     pub start_date: String,
@@ -303,9 +286,8 @@ pub struct CostAllocationReportListRequest {
     pub page_token: Option<String>,
     /// 报表类型
     pub report_type: Option<String>,
-}
 /// 成本分摊报表数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CostAllocationReport {
     /// 报表ID
     pub report_id: String,
@@ -331,9 +313,8 @@ pub struct CostAllocationReport {
     pub period_end: String,
     /// 生成时间
     pub generated_time: Option<String>,
-}
 /// 分摊明细,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AllocationDetail {
     /// 算薪项ID
     pub acct_item_id: String,
@@ -345,9 +326,8 @@ pub struct AllocationDetail {
     pub allocation_ratio: Option<f64>,
     /// 员工数量
     pub employee_count: u32,
-}
 /// 成本分摊方案列表请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CostAllocationPlanListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -357,9 +337,8 @@ pub struct CostAllocationPlanListRequest {
     pub status: Option<String>,
     /// 方案类型筛选
     pub plan_type: Option<String>,
-}
 /// 成本分摊方案,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CostAllocationPlan {
     /// 方案ID
     pub plan_id: String,
@@ -383,9 +362,8 @@ pub struct CostAllocationPlan {
     pub creator_id: Option<String>,
     /// 描述
     pub description: Option<I18nText>,
-}
 /// 分摊规则,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AllocationRule {
     /// 规则ID
     pub rule_id: String,
@@ -401,9 +379,8 @@ pub struct AllocationRule {
     pub target_cost_center_name: Option<I18nText>,
     /// 规则条件
     pub conditions: Option<Vec<RuleCondition>>,
-}
 /// 规则条件,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RuleCondition {
     /// 条件字段
     pub field: String,
@@ -411,9 +388,8 @@ pub struct RuleCondition {
     pub operator: String,
     /// 条件值
     pub value: serde_json::Value,
-}
 /// 薪资组列表请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PaygroupListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -421,9 +397,8 @@ pub struct PaygroupListRequest {
     pub page_token: Option<String>,
     /// 薪资组状态筛选
     pub status: Option<String>,
-}
 /// 薪资组基本信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Paygroup {
     /// 薪资组ID
     pub paygroup_id: String,
@@ -445,9 +420,8 @@ pub struct Paygroup {
     pub updated_time: Option<String>,
     /// 描述
     pub description: Option<I18nText>,
-}
 /// 发薪日设置,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PaymentDaySetting {
     /// 发薪日类型
     pub payment_day_type: String,
@@ -457,14 +431,13 @@ pub struct PaymentDaySetting {
     pub holiday_adjustment: bool,
     /// 顺延规则
     pub adjustment_rule: Option<String>,
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json;
     #[test]
-fn test_page_response_serialization() {,
+fn test_page_response_serialization() {
         let page = PageResponse {
             items: vec!["item1".to_string(), "item2".to_string()]
             has_more: true,
@@ -474,9 +447,8 @@ let json = serde_json::to_string(&page).unwrap();
         assert!(json.contains("item1"));
 assert!(json.contains("true"));
         assert!(json.contains("token123"));
-}
 #[test]
-    fn test_i18n_text_serialization() {,
+    fn test_i18n_text_serialization() {
 let i18n = I18nText {,
             zh_cn: Some("中文".to_string()),
             en_us: Some("English".to_string()),
@@ -486,16 +458,14 @@ let json = serde_json::to_string(&i18n).unwrap();
         assert!(json.contains("中文"));
 assert!(json.contains("English"));
         assert!(json.contains("日本語"));
-}
 #[test]
-    fn test_i18n_text_default() {,
+    fn test_i18n_text_default() {
 let i18n = I18nText::default();
         assert_eq!(i18n.zh_cn, None);
         assert_eq!(i18n.en_us, None);
         assert_eq!(i18n.ja_jp, None);
-}
 #[test]
-    fn test_payment_detail_list_request() {,
+    fn test_payment_detail_list_request() {
 let request = PaymentDetailListRequest {,
             payment_activity_id: "activity123".to_string(),
             page_size: Some(50),
@@ -508,9 +478,8 @@ let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("activity123"));
 assert!(json.contains("50"));
         assert!(json.contains("emp789"));
-}
 #[test]
-    fn test_payment_detail_query_request() {,
+    fn test_payment_detail_query_request() {
 let request = PaymentDetailQueryRequest {,
             payment_activity_id: "activity456".to_string(),
             employee_ids: vec!["emp1".to_string(), "emp2".to_string()]
@@ -521,9 +490,8 @@ let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("activity456"));
 assert!(json.contains("emp1"));
         assert!(json.contains("salary"));
-}
 #[test]
-    fn test_payment_item() {,
+    fn test_payment_item() {
 let item = PaymentItem {,
             acct_item_id: "item123".to_string(),
             acct_item_name: Some(I18nText {
@@ -544,7 +512,7 @@ assert!(json.contains("基本工资"));
 assert!(json.contains("CNY"));
     }
 #[test]
-    fn test_payment_detail() {,
+    fn test_payment_detail() {
 let detail = PaymentDetail {,
             employee_id: "emp123".to_string(),
             employee_name: Some(I18nText {
@@ -578,9 +546,8 @@ assert!(json.contains("张三"));
         assert!(json.contains("E001"));
 assert!(json.contains("8000.00"));
         assert!(json.contains("paid"));
-}
 #[test]
-    fn test_payment_activity_list_request() {,
+    fn test_payment_activity_list_request() {
 let request = PaymentActivityListRequest {,
             page_size: Some(20),
             page_token: Some("token789".to_string()),
@@ -596,7 +563,7 @@ assert!(json.contains("active"));
 assert!(json.contains("2024-01-01"));
     }
 #[test]
-    fn test_payment_activity() {,
+    fn test_payment_activity() {
 let activity = PaymentActivity {,
             payment_activity_id: "pa123".to_string(),
             activity_name: I18nText {
@@ -629,9 +596,8 @@ assert!(json.contains("1月份工资发放"));
         assert!(json.contains("completed"));
 assert!(json.contains("50"));
         assert!(json.contains("400000.00"));
-}
 #[test]
-    fn test_datasource_record_save_request() {,
+    fn test_datasource_record_save_request() {
 let request = DatasourceRecordSaveRequest {,
             datasource_id: "ds123".to_string(),
             employee_id: "emp456".to_string(),
@@ -643,9 +609,8 @@ let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("ds123"));
 assert!(json.contains("emp456"));
         assert!(json.contains("2024-01"));
-}
 #[test]
-    fn test_datasource_record() {,
+    fn test_datasource_record() {
 let mut field_values = HashMap::new();
         field_values.insert(
             "overtime_hours".to_string(),
@@ -670,7 +635,7 @@ assert!(json.contains("emp789"));
 assert!(json.contains("2024-01"));
     }
 #[test]
-    fn test_datasource() {,
+    fn test_datasource() {
 let datasource = Datasource {,
             datasource_id: "ds456".to_string(),
             datasource_name: I18nText {
@@ -696,13 +661,13 @@ assert!(json.contains("考勤数据源"));
 assert!(json.contains("active"));
     }
 #[test]
-    fn test_datasource_field_config() {,
+    fn test_datasource_field_config() {
 let field_config = DatasourceFieldConfig::default();
         let _json = serde_json::to_string(&field_config).unwrap();
 // Test should succeed without panicking,
     }
 #[test]
-    fn test_acct_item() {,
+    fn test_acct_item() {
 let item = AcctItem {,
             acct_item_id: "ai123".to_string(),
             item_name: I18nText {
@@ -732,9 +697,8 @@ assert!(json.contains("绩效奖金"));
         assert!(json.contains("bonus"));
 assert!(json.contains("true"));
         assert!(json.contains("false"));
-}
 #[test]
-    fn test_cost_allocation_report() {,
+    fn test_cost_allocation_report() {
 let report = CostAllocationReport {,
             report_id: "report123".to_string(),
             cost_center_id: "cc123".to_string(),
@@ -763,9 +727,8 @@ assert!(json.contains("研发成本中心"));
         assert!(json.contains("25"));
 assert!(json.contains("200000.00"));
         assert!(json.contains("CNY"));
-}
 #[test]
-    fn test_allocation_detail() {,
+    fn test_allocation_detail() {
 let detail = AllocationDetail {,
             acct_item_id: "ai456".to_string(),
             acct_item_name: Some(I18nText {
@@ -783,9 +746,8 @@ assert!(json.contains("基本工资"));
         assert!(json.contains("150000.00"));
 assert!(json.contains("0.75"));
         assert!(json.contains("20"));
-}
 #[test]
-    fn test_cost_allocation_plan() {,
+    fn test_cost_allocation_plan() {
 let plan = CostAllocationPlan {,
             plan_id: "plan123".to_string(),
             plan_name: I18nText {
@@ -814,7 +776,7 @@ assert!(json.contains("技术部成本分摊方案"));
 assert!(json.contains("active"));
     }
 #[test]
-    fn test_allocation_rule() {,
+    fn test_allocation_rule() {
 let rule = AllocationRule {,
             rule_id: "rule123".to_string(),
             rule_name: I18nText {
@@ -838,9 +800,8 @@ assert!(json.contains("按人数分摊"));
         assert!(json.contains("headcount"));
 assert!(json.contains("0.8"));
         assert!(json.contains("cc456"));
-}
 #[test]
-    fn test_rule_condition() {,
+    fn test_rule_condition() {
 let condition = RuleCondition {,
             field: "department_id".to_string(),
             operator: "equals".to_string(),
@@ -850,9 +811,8 @@ let json = serde_json::to_string(&condition).unwrap();
         assert!(json.contains("department_id"));
 assert!(json.contains("equals"));
         assert!(json.contains("dept123"));
-}
 #[test]
-    fn test_paygroup() {,
+    fn test_paygroup() {
 let paygroup = Paygroup {,
             paygroup_id: "pg123".to_string(),
             paygroup_name: I18nText {
@@ -885,7 +845,7 @@ assert!(json.contains("技术组薪资组"));
 assert!(json.contains("30"));
     }
 #[test]
-    fn test_payment_day_setting() {,
+    fn test_payment_day_setting() {
 let setting = PaymentDaySetting {,
             payment_day_type: "last_day".to_string(),
             payment_day: Some(31),
@@ -899,7 +859,7 @@ assert!(json.contains("31"));
 assert!(json.contains("no_adjustment"));
     }
 #[test]
-    fn test_minimal_structs() {,
+    fn test_minimal_structs() {
 let minimal_i18n = I18nText {,
             zh_cn: Some("中文".to_string()),
             en_us: None,
@@ -915,5 +875,3 @@ assert!(json.contains("en_us"));
 };
 let json = serde_json::to_string(&minimal_request).unwrap();
         assert!(json.contains("minimal"));
-}
-}

@@ -6,8 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         req_option, SDKResult,
@@ -16,44 +15,25 @@ use crate::,
     service::cloud_docs::sheets::v2::{data_operation::ValueRangeRequest, SpreadsheetService}
 };
 /// 向多个范围写入数据请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct WriteDataToMultiRangesRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     #[serde(skip)]
     spreadsheet_token: String,
     #[serde(rename = "valueRanges")]
-    value_ranges: Vec<ValueRangeRequest>,
-}
+    value_ranges: Vec<ValueRangeRequest>}
 impl WriteDataToMultiRangesRequest {
-    pub fn w+.*{
-WriteDataToMultiRangesBuilder::default(),
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct WriteDataToMultiRangesBuilder {
-    request: WriteDataToMultiRangesRequest,
-}
+    request: WriteDataToMultiRangesRequest}
 impl WriteDataToMultiRangesBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
-self.request.spreadsheet_token = spreadsheet_token.to_string();
-        self,
-}
-
-    pub fn add_value_range(mut self, range: impl ToString, values: serde_json::Value) -> Self {
-self.request.value_ranges.push(ValueRangeRequest {,
-            range: range.to_string(),
-            values,
-        });
-self,
-    }
-pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-self.request,
-    }
-}
-/// 向多个范围写入数据响应体,
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 向多个范围写入数据响应体,
+#[derive(Debug, Clone)]
 pub struct WriteDataToMultiRangesResponse {
     /// spreadsheet 的 token,
 #[serde(rename = "spreadsheetToken")]
@@ -61,10 +41,9 @@ pub struct WriteDataToMultiRangesResponse {
     /// sheet 的版本号
     pub revision: i32,
     /// 响应
-    pub responses: Vec<DataResponse>,
-}
+    pub responses: Vec<DataResponse>}
 /// 追加数据的范围、行列数等,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[allow(dead_code)]
 pub struct DataResponse {
 /// spreadsheet 的 token,
@@ -79,12 +58,12 @@ pub struct DataResponse {
     /// 写入的单元格总数,
 #[serde(rename = "updatedCells")]
     pub updated_cells: i32,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 // 使用宏实现ExecutableBuilder trait,
 impl_executable_builder_owned!(
     WriteDataToMultiRangesBuilder,
@@ -94,25 +73,9 @@ impl_executable_builder_owned!(
     write_data_multi_ranges,
 );
 impl SpreadsheetService {
-/// 向多个范围写入数据,
-    pub async fn write_data_multi_ranges(
-        &self,
-        request: WriteDataToMultiRangesRequest,
-        option: Option<req_option::RequestOption>,
-    ) -> SDKResult<BaseResponse<WriteDataToMultiRangesResponse>> {,
-let mut api_req = request.api_request;
-        api_req.set_api_path(
-            SHEETS_V2_SPREADSHEET_VALUES_BATCH_UPDATE.replace("{}", &request.spreadsheet_token),
-        );
-api_req.set_http_method(reqwest::Method::POST);
-        api_req
-            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::App]);
-
-        let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
-Ok(api_resp),
-    }
-}
-#[cfg(test)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[cfg(test)]
 mod tests {
 use serde_json::json;
     use crate::,
@@ -123,15 +86,12 @@ use serde_json::json;
         ResponseFormat,
         api_resp::{ApiResponseTrait,
         config::Config,
-        constants::AppType,
-}
+        constants::AppType}
     service::cloud_docs::sheets::v2::{,
 data_operation::{,
-                DataResponse, WriteDataToMultiRangesRequest, WriteDataToMultiRangesResponse,
-};
+                DataResponse, WriteDataToMultiRangesRequest, WriteDataToMultiRangesResponse};
             SpreadsheetService,
-        }
-    };
+};
 fn create_service() -> SpreadsheetService {,
         let config = Config::builder()
 .app_id()
@@ -139,15 +99,13 @@ fn create_service() -> SpreadsheetService {,
 .app_type()
             .build();
         SpreadsheetService { config }
-}
 #[test]
-    fn test_write_data_to_multi_ranges_builder_default() {,
+    fn test_write_data_to_multi_ranges_builder_default() {
 let request = WriteDataToMultiRangesRequest::builder().build();
         assert_eq!(request.spreadsheet_token, "");
         assert_eq!(request.value_ranges.len(), 0);
-}
 #[test]
-    fn test_write_data_to_multi_ranges_builder_basic() {,
+    fn test_write_data_to_multi_ranges_builder_basic() {
 let request = WriteDataToMultiRangesRequest::builder(),
             .spreadsheet_token("test_token")
             .add_value_range("Sheet1!A1:B2", json!([["Name", "Age"] ["Alice", 25]])),
@@ -161,7 +119,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_write_data_to_multi_ranges_multiple_ranges() {,
+    fn test_write_data_to_multi_ranges_multiple_ranges() {
 let request = WriteDataToMultiRangesRequest::builder(),
             .spreadsheet_token("multi_test_token")
             .add_value_range("Sheet1!A1:B2", json!([["Name", "Age"] ["Alice", 25]])),
@@ -191,7 +149,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_write_data_to_multi_ranges_chaining() {,
+    fn test_write_data_to_multi_ranges_chaining() {
 let request = WriteDataToMultiRangesRequest::builder(),
             .spreadsheet_token("chain_test")
             .add_value_range("A1:A3", json!(["Item1", "Item2", "Item3"]))
@@ -212,12 +170,10 @@ if let serde_json::Value::Array(values) = &request.value_ranges[1].values {,
             assert_eq!(values[0] 100);
             assert_eq!(values[1] 200);
             assert_eq!(values[2] 300);
-}
 if let serde_json::Value::Array(values) = &request.value_ranges[2].values {,
             assert_eq!(values[0] true);
             assert_eq!(values[1] false);
             assert_eq!(values[2] true);
-}
     }
 #[test]
     ,
@@ -235,9 +191,8 @@ let request = WriteDataToMultiRangesRequest::builder(),
         assert_eq!(request.value_ranges[1].range, "城市表!A1:B3");
         assert_eq!(request.value_ranges[0].values, unicode_data1);
         assert_eq!(request.value_ranges[1].values, unicode_data2);
-}
 #[test]
-    fn test_write_data_to_multi_ranges_with_formulas() {,
+    fn test_write_data_to_multi_ranges_with_formulas() {
 let formula_data = json!([,
             ["Item", "Quantity", "Price", "Total"]
             ["Apples", 10, 1.5, "=B2*C2"]
@@ -253,9 +208,8 @@ let request = WriteDataToMultiRangesRequest::builder(),
         assert_eq!(request.value_ranges.len(), 2);
         assert_eq!(request.value_ranges[0].values, formula_data);
         assert_eq!(request.value_ranges[1].values, summary_data);
-}
 #[test]
-    fn test_write_data_to_multi_ranges_mixed_data_types() {,
+    fn test_write_data_to_multi_ranges_mixed_data_types() {
 let mixed_data = json!([,
             ["Name", "Age", "Active", "Salary"]
             ["John", 30, true, 50000.50]
@@ -276,9 +230,8 @@ let mixed_data = json!([,
         assert_eq!(request.value_ranges.len(), 2);
         assert_eq!(request.value_ranges[0].values, mixed_data);
         assert_eq!(request.value_ranges[1].values, metadata);
-}
 #[test]
-    fn test_write_data_to_multi_ranges_empty_ranges() {,
+    fn test_write_data_to_multi_ranges_empty_ranges() {
 let request = WriteDataToMultiRangesRequest::builder(),
             .spreadsheet_token("empty_test")
             .add_value_range("Sheet1!A1:A1", json!([]))
@@ -288,9 +241,8 @@ let request = WriteDataToMultiRangesRequest::builder(),
         assert_eq!(request.value_ranges.len(), 2);
         assert_eq!(request.value_ranges[0].values, json!([]));
         assert_eq!(request.value_ranges[1].values, json!(null));
-}
 #[test]
-    fn test_write_data_to_multi_ranges_single_cells() {,
+    fn test_write_data_to_multi_ranges_single_cells() {
 let request = WriteDataToMultiRangesRequest::builder(),
             .spreadsheet_token("single_cells_test")
             .add_value_range("Sheet1!A1", json!("Hello"))
@@ -304,19 +256,16 @@ let request = WriteDataToMultiRangesRequest::builder(),
         assert_eq!(request.value_ranges[1].values, json!(42));
         assert_eq!(request.value_ranges[2].values, json!(true));
         assert_eq!(request.value_ranges[3].values, json!(3.14286));
-}
 #[test]
-    fn test_write_data_to_multi_ranges_large_dataset() {,
+    fn test_write_data_to_multi_ranges_large_dataset() {
 let mut request_builder =,
             WriteDataToMultiRangesRequest::builder().spreadsheet_token("large_multi_test");
 for i in 0..10 {,
             let mut range_data = Vec::new();
 for j in 0..10 {,
                 range_data.push(json!([format!("Item{}-{}", i, j), i * 10 + j, j % 2 == 0]));
-}
 request_builder = request_builder,
                 .add_value_range(format!("Sheet{}!A1:C10", i + 1), json!(range_data));
-}
 let request = request_builder.build();
         assert_eq!(request.spreadsheet_token, "large_multi_test");
         assert_eq!(request.value_ranges.len(), 10);
@@ -330,11 +279,8 @@ if let serde_json::Value::Array(first_row) = &rows[0] {,
                     assert_eq!(first_row[1] i * 10);
                     assert_eq!(first_row[2] true);
 }
-            }
-}
-    }
 #[test]
-    fn test_write_data_to_multi_ranges_special_characters() {,
+    fn test_write_data_to_multi_ranges_special_characters() {
 let special_data1 = json!([,
             ["Email", "URL"]
             ["test@example.com", "https://example.com"]
@@ -354,7 +300,6 @@ let special_data1 = json!([,
         assert_eq!(request.value_ranges.len(), 2);
         assert_eq!(request.value_ranges[0].values, special_data1);
         assert_eq!(request.value_ranges[1].values, special_data2);
-}
 #[test]
     ,
         let numeric_data1 = json!([["Integer", "Float"] [42, 3.14286] [-100, -0.001]]);
@@ -372,9 +317,8 @@ let numeric_data2 = json!([,
         assert_eq!(request.value_ranges.len(), 2);
         assert_eq!(request.value_ranges[0].values, numeric_data1);
         assert_eq!(request.value_ranges[1].values, numeric_data2);
-}
 #[test]
-    fn test_write_data_to_multi_ranges_serialization() {,
+    fn test_write_data_to_multi_ranges_serialization() {
 let request = WriteDataToMultiRangesRequest::builder(),
             .spreadsheet_token()
 .add_value_range(,
@@ -391,9 +335,8 @@ assert!(serialized.is_ok());
         assert_eq!(json_value["valueRanges"][1]["range"] "Sheet2!A1:B1");
         assert_eq!(json_value["valueRanges"][0]["values"][0][0] "Key1");
         assert_eq!(json_value["valueRanges"][1]["values"][0][0] "Header1");
-}
 #[test]
-    fn test_write_data_to_multi_ranges_complex_sheet_references() {,
+    fn test_write_data_to_multi_ranges_complex_sheet_references() {
 let request = WriteDataToMultiRangesRequest::builder(),
             .spreadsheet_token("complex_ref_test")
             .add_value_range("'Sheet With Spaces'!A1:B2", json!([["Col1", "Col2"]]))
@@ -403,9 +346,8 @@ let request = WriteDataToMultiRangesRequest::builder(),
         assert_eq!(request.value_ranges.len(), 2);
         assert_eq!(request.value_ranges[0].range, "'Sheet With Spaces'!A1:B2");
         assert_eq!(request.value_ranges[1].range, "'Another Sheet'!C3:D4");
-}
 #[test]
-    fn test_write_data_to_multi_ranges_hyperlinks() {,
+    fn test_write_data_to_multi_ranges_hyperlinks() {
 let hyperlinks1 = json!([,
             ["Link Name", "URL"]
             ["Google", "https://www.google.com"]
@@ -425,9 +367,8 @@ let hyperlinks1 = json!([,
         assert_eq!(request.value_ranges.len(), 2);
         assert_eq!(request.value_ranges[0].values, hyperlinks1);
         assert_eq!(request.value_ranges[1].values, hyperlinks2);
-}
 #[test]
-    fn test_write_data_to_multi_ranges_dates_and_times() {,
+    fn test_write_data_to_multi_ranges_dates_and_times() {
 let datetime_data1 = json!([,
             ["Date", "Time"]
             ["2024-01-15", "14:30:00"]
@@ -447,9 +388,8 @@ let datetime_data1 = json!([,
         assert_eq!(request.value_ranges.len(), 2);
         assert_eq!(request.value_ranges[0].values, datetime_data1);
         assert_eq!(request.value_ranges[1].values, datetime_data2);
-}
 #[test]
-    fn test_write_data_to_multi_ranges_response_deserialization() {,
+    fn test_write_data_to_multi_ranges_response_deserialization() {
 let response_json = json!({,
             "spreadsheetToken": "test_token_123",
             "revision": 456,
@@ -458,14 +398,12 @@ let response_json = json!({,
                     "spreadsheetToken": "test_token_123",
                     "updatedRows": 3,
                     "updatedColumns": 2,
-                    "updatedCells": 6,
-}
+                    "updatedCells": 6}
                 {
                     "spreadsheetToken": "test_token_123",
                     "updatedRows": 2,
                     "updatedColumns": 3,
-                    "updatedCells": 6,
-}
+                    "updatedCells": 6}
 ],
         });
 let response: WriteDataToMultiRangesResponse =,
@@ -483,16 +421,14 @@ let response: WriteDataToMultiRangesResponse =,
         assert_eq!(response.responses[1].updated_rows, 2);
         assert_eq!(response.responses[1].updated_columns, 3);
         assert_eq!(response.responses[1].updated_cells, 6);
-}
 #[test]
-    fn test_write_data_to_multi_ranges_service_creation() {,
+    fn test_write_data_to_multi_ranges_service_creation() {
 let service = create_service();
         assert_eq!(service.config.app_id, "test_app_id");
         assert_eq!(service.config.app_secret, "test_app_secret");
         assert!(matches!(service.config.app_type, AppType::SelfBuild));
-}
 #[test]
-    fn test_write_data_to_multi_ranges_boolean_values() {,
+    fn test_write_data_to_multi_ranges_boolean_values() {
 let boolean_data1 = json!([,
             ["Question", "Answer"]
             ["Is active?", true]
@@ -508,7 +444,6 @@ let request = WriteDataToMultiRangesRequest::builder(),
         assert_eq!(request.value_ranges.len(), 2);
         assert_eq!(request.value_ranges[0].values, boolean_data1);
         assert_eq!(request.value_ranges[1].values, boolean_data2);
-}
 #[test]
     ,
         let null_data1 = json!([["Name", "Optional"] ["Alice", null] ["Bob", "Value"]]);
@@ -526,9 +461,8 @@ let null_data2 = json!([,
         assert_eq!(request.value_ranges.len(), 2);
         assert_eq!(request.value_ranges[0].values, null_data1);
         assert_eq!(request.value_ranges[1].values, null_data2);
-}
 #[test]
-    fn test_write_data_to_multi_ranges_very_long_token() {,
+    fn test_write_data_to_multi_ranges_very_long_token() {
 let very_long_token = "a".repeat(1000);
         let request = WriteDataToMultiRangesRequest::builder(),
 .spreadsheet_token()
@@ -539,19 +473,15 @@ let very_long_token = "a".repeat(1000);
         assert_eq!(request.value_ranges.len(), 2);
         assert_eq!(request.value_ranges[0].values, json!("test1"));
         assert_eq!(request.value_ranges[1].values, json!("test2"));
-}
 #[test]
-    fn test_data_response_struct() {,
+    fn test_data_response_struct() {
 let data_response = DataResponse {,
             spreed_sheet_token: "test_token".to_string(),
             updated_rows: 5,
             updated_columns: 3,
-            updated_cells: 15,
-        };
+            updated_cells: 15};
 
         assert_eq!(data_response.spreed_sheet_token, "test_token");
         assert_eq!(data_response.updated_rows, 5);
         assert_eq!(data_response.updated_columns, 3);
         assert_eq!(data_response.updated_cells, 15);
-}
-}

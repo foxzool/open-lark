@@ -2,18 +2,16 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2ContactUserDeletedV3 {
     pub schema: String,
     pub header: EventHeader,
     pub event: P2ContactUserDeletedV3Data,
-}
 pub(crate) struct P2ContactUserDeletedV3ProcessorImpl<F>,
 where
     F: Fn(P2ContactUserDeletedV3) + 'static,
 {
     f: F,
-}
 impl<F> EventHandler for P2ContactUserDeletedV3ProcessorImpl<F>,
 where
     F: Fn(P2ContactUserDeletedV3) + 'static + Sync + Send,
@@ -23,34 +21,29 @@ let event: P2ContactUserDeletedV3 = serde_json::from_slice(payload)?;
         (self.f)(event);
 Ok(()),
     }
-}
 impl<F> P2ContactUserDeletedV3ProcessorImpl<F>,
 where
     F: Fn(P2ContactUserDeletedV3) + 'static,
 {,
 pub(crate) fn new(f: F) -> Self {
         P2ContactUserDeletedV3ProcessorImpl { f }
-}
-}
 /// 用户删除事件数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2ContactUserDeletedV3Data {
     /// 事件对象
     pub object: ContactEventObject,
     /// 删除操作的相关信息,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub old_object: Option<ContactEventObject>,
-}
 /// 通讯录事件对象,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ContactEventObject {
     /// 对象类型 (user)
     pub object_type: String,
     /// 用户信息
     pub user: DeletedContactUser,
-}
 /// 被删除的用户信息（简化版本）,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DeletedContactUser {
     /// 用户 ID
     pub user_id: String,
@@ -75,4 +68,3 @@ pub struct DeletedContactUser {
     /// 删除原因,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_reason: Option<String>,
-}

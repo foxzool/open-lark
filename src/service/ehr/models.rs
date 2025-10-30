@@ -3,7 +3,7 @@ use serde_json::Value;
 use std::collections::HashMap;
 // ============ 员工花名册相关结构 ============,
 /// 批量获取员工花名册信息请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EmployeeListRequest {
     /// 分页大小，最大值100,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -30,9 +30,8 @@ pub struct EmployeeListRequest {
     /// 查询的字段列表，不传则返回所有字段,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub fields: Option<Vec<String>>,
-}
 /// 员工信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Employee {
     /// 员工ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -103,9 +102,8 @@ pub struct Employee {
     /// 自定义字段,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_fields: Option<HashMap<String, Value>>,
-}
 /// 员工状态信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EmployeeStatus {
     /// 员工状态：active(在职)、inactive(离职)、trial(试用期)等,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -119,9 +117,8 @@ pub struct EmployeeStatus {
     /// 离职原因,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub resignation_reason: Option<String>,
-}
 /// 员工部门信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EmployeeDepartment {
     /// 部门ID（根据department_id_type返回对应类型）,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -135,9 +132,8 @@ pub struct EmployeeDepartment {
     /// 部门路径,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub department_path: Option<String>,
-}
 /// 员工职位信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EmployeeJob {
     /// 职位名称,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -160,9 +156,8 @@ pub struct EmployeeJob {
     /// 工作地点,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub work_location: Option<String>,
-}
 /// 员工入职信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EmployeeHire {
     /// 入职日期,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -179,9 +174,8 @@ pub struct EmployeeHire {
     /// 合同结束日期,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub contract_end_date: Option<String>,
-}
 /// 员工个人信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EmployeePersonal {
     /// 国籍,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -207,9 +201,8 @@ pub struct EmployeePersonal {
     /// 最高学历,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub highest_education: Option<String>,
-}
 /// 教育经历,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EmployeeEducation {
     /// 学校名称,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -226,9 +219,8 @@ pub struct EmployeeEducation {
     /// 结束时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub end_date: Option<String>,
-}
 /// 工作经历,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EmployeeWorkExperience {
     /// 公司名称,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -245,9 +237,8 @@ pub struct EmployeeWorkExperience {
     /// 工作描述,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-}
 /// 紧急联系人,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EmergencyContact {
     /// 姓名,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -261,9 +252,8 @@ pub struct EmergencyContact {
     /// 地址,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub address: Option<String>,
-}
 /// 银行卡信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BankAccount {
     /// 银行名称,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -277,9 +267,8 @@ pub struct BankAccount {
     /// 账户类型,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub account_type: Option<String>,
-}
 /// 社保信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SocialSecurity {
     /// 社保号,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -290,9 +279,8 @@ pub struct SocialSecurity {
     /// 社保缴纳地,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub social_security_location: Option<String>,
-}
 /// 分页响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PageResponse<T> {,
     /// 是否还有更多数据,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -303,10 +291,9 @@ pub struct PageResponse<T> {,
     /// 数据列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<T>>,
-}
 // ============ 附件下载相关结构 ============,
 /// 下载人员附件请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EmployeeAttachmentRequest {
     /// 员工ID
     pub employee_id: String,
@@ -315,9 +302,8 @@ pub struct EmployeeAttachmentRequest {
     /// 用户ID类型,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id_type: Option<String>,
-}
 /// 附件信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EmployeeAttachment {
     /// 附件ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -340,9 +326,8 @@ pub struct EmployeeAttachment {
     /// 附件描述,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-}
 /// 附件下载响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AttachmentDownloadResponse {
     /// 文件内容（base64编码）,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -356,10 +341,9 @@ pub struct AttachmentDownloadResponse {
     /// 文件大小,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub file_size: Option<i64>,
-}
 // ============ 通用响应结构 ============,
 /// EHR响应包装器
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EhrResponse<T> {,
     /// 响应数据,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -370,14 +354,13 @@ pub struct EhrResponse<T> {,
     /// 错误消息,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub msg: Option<String>,
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json;
     #[test]
-fn test_employee_list_request_default() {,
+fn test_employee_list_request_default() {
         let request = EmployeeListRequest {
             page_size: Some(50),
             page_token: None,
@@ -395,7 +378,7 @@ assert!(json.contains("active"));
 assert!(json.contains("employee_id"));
     }
 #[test]
-    fn test_employee_list_request_minimal() {,
+    fn test_employee_list_request_minimal() {
 let request = EmployeeListRequest {,
             page_size: None,
             page_token: None,
@@ -408,9 +391,8 @@ let request = EmployeeListRequest {,
         };
 let json = serde_json::to_string(&request).unwrap();
         assert_eq!(json, "{}");
-}
 #[test]
-    fn test_employee_complete() {,
+    fn test_employee_complete() {
 let employee = Employee {,
             employee_id: Some("emp123".to_string()),
             user_id: Some("usr456".to_string()),
@@ -460,9 +442,8 @@ assert!(json.contains("张三"));
         assert!(json.contains("zhangsan@company.com"));
 assert!(json.contains("active"));
         assert!(json.contains("技术部"));
-}
 #[test]
-    fn test_employee_status_active() {,
+    fn test_employee_status_active() {
 let status = EmployeeStatus {,
             status: Some("active".to_string()),
             effective_date: Some("2023-01-01".to_string()),
@@ -473,9 +454,8 @@ let json = serde_json::to_string(&status).unwrap();
         assert!(json.contains("active"));
 assert!(json.contains("2023-01-01"));
         assert!(!json.contains("resignation_date"));
-}
 #[test]
-    fn test_employee_status_resigned() {,
+    fn test_employee_status_resigned() {
 let status = EmployeeStatus {,
             status: Some("inactive".to_string()),
             effective_date: Some("2023-01-01".to_string()),
@@ -486,9 +466,8 @@ let json = serde_json::to_string(&status).unwrap();
         assert!(json.contains("inactive"));
 assert!(json.contains("2024-01-01"));
         assert!(json.contains("career_change"));
-}
 #[test]
-    fn test_employee_department_hierarchy() {,
+    fn test_employee_department_hierarchy() {
 let department = EmployeeDepartment {,
             department_id: Some("tech001".to_string()),
             department_name: Some("前端开发组".to_string()),
@@ -502,7 +481,7 @@ assert!(json.contains("前端开发组"));
 assert!(json.contains("frontend"));
     }
 #[test]
-    fn test_employee_job_complete() {,
+    fn test_employee_job_complete() {
 let job = EmployeeJob {,
             job_title: Some("高级软件工程师".to_string()),
             job_level: Some("L4".to_string()),
@@ -519,7 +498,7 @@ assert!(json.contains("L4"));
 assert!(json.contains("上海"));
     }
 #[test]
-    fn test_employee_hire_info() {,
+    fn test_employee_hire_info() {
 let hire = EmployeeHire {,
             hire_date: Some("2023-01-15".to_string()),
             probation_end_date: Some("2023-04-15".to_string()),
@@ -531,9 +510,8 @@ let json = serde_json::to_string(&hire).unwrap();
         assert!(json.contains("2023-01-15"));
 assert!(json.contains("2023-04-15"));
         assert!(json.contains("permanent"));
-}
 #[test]
-    fn test_employee_personal_info() {,
+    fn test_employee_personal_info() {
 let personal = EmployeePersonal {,
             nationality: Some("中国".to_string()),
             ethnicity: Some("汉".to_string()),
@@ -551,7 +529,7 @@ assert!(json.contains("married"));
 assert!(json.contains("清华大学"));
     }
 #[test]
-    fn test_employee_education() {,
+    fn test_employee_education() {
 let education = EmployeeEducation {,
             school_name: Some("清华大学".to_string()),
             major: Some("计算机科学与技术".to_string()),
@@ -566,7 +544,7 @@ assert!(json.contains("清华大学"));
 assert!(json.contains("2008-09-01"));
     }
 #[test]
-    fn test_employee_work_experience() {,
+    fn test_employee_work_experience() {
 let experience = EmployeeWorkExperience {,
             company_name: Some("阿里巴巴".to_string()),
             position: Some("软件工程师".to_string()),
@@ -578,9 +556,8 @@ let json = serde_json::to_string(&experience).unwrap();
         assert!(json.contains("阿里巴巴"));
 assert!(json.contains("软件工程师"));
         assert!(json.contains("负责电商平台后端开发"));
-}
 #[test]
-    fn test_emergency_contact() {,
+    fn test_emergency_contact() {
 let contact = EmergencyContact {,
             name: Some("李四".to_string()),
             relationship: Some("spouse".to_string()),
@@ -640,7 +617,7 @@ assert!(json.contains("员工一"));
 assert!(json.contains("success"));
     }
 #[test]
-    fn test_ehr_response_error() {,
+    fn test_ehr_response_error() {
 let response: EhrResponse<Employee> = EhrResponse {,
             data: None,
             code: Some(400),
@@ -650,5 +627,3 @@ let json = serde_json::to_string(&response).unwrap();
         assert!(json.contains("400"));
 assert!(json.contains("Invalid request"));
         assert!(!json.contains("data"));
-}
-}

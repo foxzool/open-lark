@@ -4,23 +4,21 @@ use open_lark_core::core::api_req::ApiRequest;
 use std::collections::HashMap;
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::mail::models::{Rule, UserIdType}
 };
 /// 收信规则服务
 pub struct RuleService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 创建收信规则请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateRuleRequest {
+}
     /// 规则名称
     pub rule_name: String,
     /// 是否启用
@@ -30,73 +28,46 @@ pub struct CreateRuleRequest {
     pub conditions: Vec<serde_json::Value>,
     /// 动作列表
     pub actions: Vec<serde_json::Value>,
-}
 /// 创建收信规则响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateRuleResponse {
-    /// 创建的规则
-    pub rule: Rule,
 }
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 更新收信规则请求
-#[derive(.*?)]
-pub struct UpdateRuleRequest {
-    /// 规则名称
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub rule_name: Option<String>,
-    /// 是否启用
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub enabled: Option<bool>,
-    /// 条件列表
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub conditions: Option<Vec<serde_json::Value>>,
-    /// 动作列表
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub actions: Option<Vec<serde_json::Value>>,
-}
-/// 更新收信规则响应
-#[derive(.*?)]
-pub struct UpdateRuleResponse {
-    /// 更新后的规则
-    pub rule: Rule,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 列出收信规则响应
-#[derive(.*?)]
-pub struct ListRulesResponse {
-    /// 规则列表
-    pub rules: Vec<Rule>,
-    /// 是否还有更多数据
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub has_more: Option<bool>,
-    /// 下一页标识
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 排序收信规则请求
-#[derive(.*?)]
-pub struct ReorderRulesRequest {
-    /// 规则ID列表（按优先级排序）
-    pub rule_ids: Vec<String>,
-}
-impl RuleService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 更新收信规则请求
+#[derive(Debug, Clone)]
 }
-/// 创建收信规则
+pub struct UpdateRuleRequest {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 列出收信规则响应
+#[derive(Debug, Clone)]
+}
+pub struct ListRulesResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 排序收信规则请求
+#[derive(Debug, Clone)]
+}
+pub struct ReorderRulesRequest {
+
+impl RuleService {
+    
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 创建收信规则
     pub async fn create(
         &self,
         user_mailbox_id: &str,
@@ -107,7 +78,6 @@ impl RuleService {
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
@@ -121,7 +91,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除收信规则
     pub async fn delete(
         &self,
@@ -133,7 +102,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(,
@@ -149,9 +117,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 更新收信规则
     pub async fn update(
         &self,
@@ -164,7 +130,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::PUT,
             api_path: EndpointBuilder::replace_param(,
@@ -181,9 +146,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 列出收信规则
     pub async fn list(
         &self,
@@ -196,13 +159,10 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(page_size) = page_size {
             query_params.insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token);
-}
 if let Some(user_id_type) = user_id_type {,
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
@@ -214,9 +174,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 对收信规则进行排序
     pub async fn reorder(
         &self,
@@ -228,7 +186,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
@@ -241,7 +198,6 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}}}}}}}}}}}}}

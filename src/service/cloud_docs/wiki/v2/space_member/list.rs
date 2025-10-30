@@ -11,7 +11,7 @@ use crate::core::{,
     SDKResult,
 };
 /// 获取知识空间成员列表请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListSpaceMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -23,57 +23,25 @@ pub struct ListSpaceMemberRequest {
     page_size: Option<i32>,
     /// 页标记，第一次请求不填，表示从头开始遍历,
 #[serde(skip)]
-    page_token: Option<String>,
-}
+    page_token: Option<String>}
 impl ListSpaceMemberRequest {
-    pub fn w+.*{
-ListSpaceMemberRequestBuilder::default(),
-    }
-pub fn new(space_id: impl ToString) -> Self {
-        Self {
-            space_id: space_id.to_string()
-            ..Default::default(),
-}
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct ListSpaceMemberRequestBuilder {
-    request: ListSpaceMemberRequest,
-}
+    request: ListSpaceMemberRequest}
 impl ListSpaceMemberRequestBuilder {
-    /// 知识空间id
-    pub fn space_id(mut self, space_id: impl ToString) -> Self {
-self.request.space_id = space_id.to_string();
-        self,
-}
-/// 页大小,
-    pub fn page_size(mut self, page_size: i32) -> Self {
-self.request.page_size = Some(page_size);
-        self,
-}
-/// 页标记,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {
-self.request.page_token = Some(page_token.to_string());
-        self,
-}
-pub fn w+.*{
-        if let Some(page_size) = self.request.page_size {,
-self.request,
-                .api_request,
-.query_params
-                .insert("page_size", page_size.to_string());
-}
-if let Some(page_token) = &self.request.page_token {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}if let Some(page_token) = &self.request.page_token {,
             self.request,
 .api_request,
                 .query_params
                 .insert("page_token", page_token.clone());
-}
 self.request,
     }
-}
 /// 知识空间成员信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SpaceMember {
     /// 成员类型：user
     pub member_type: String,
@@ -82,10 +50,9 @@ pub struct SpaceMember {
     /// 成员权限角色：admin(管理员)、edit_member(协作者)、view_member(阅读者)
     pub role: String,
     /// 成员类型：user
-    pub r#type: Option<String>,
-}
+    pub r#type: Option<String>}
 /// 获取知识空间成员列表响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListSpaceMemberResponse {
     /// 成员列表
     pub items: Vec<SpaceMember>,
@@ -94,12 +61,12 @@ pub struct ListSpaceMemberResponse {
     pub page_token: Option<String>,
     /// 是否还有更多项
     pub has_more: bool,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 获取知识空间成员列表,
 pub async fn list_space_members(
     request: ListSpaceMemberRequest,
@@ -116,15 +83,14 @@ api_req.set_api_path(EndpointBuilder::replace_param(,
     api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
     let api_resp = Transport::request(api_req, config, option).await?;
-Ok(api_resp),
-}
+Ok(api_resp)}
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]
-    fn test_list_space_member_request_builder() {,
+    fn test_list_space_member_request_builder() {
 let request = ListSpaceMemberRequest::builder(),
             .space_id()
 .page_size()
@@ -133,5 +99,3 @@ let request = ListSpaceMemberRequest::builder(),
         assert_eq!(request.space_id, "spcxxxxxx");
         assert_eq!(request.page_size, Some(20));
         assert_eq!(request.page_token, Some("page_token_123".to_string()));
-}
-}

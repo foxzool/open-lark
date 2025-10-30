@@ -19,45 +19,17 @@ use super::models::{,
 /// 考勤组服务,
 pub struct GroupService {
     pub config: Config,
-}
 impl GroupService {
-    /// 查询考勤组下所有成员,
-///,
-    /// 该接口用于查询考勤组下所有成员的信息，支持分页查询。,
-///,
-    /// # API文档,
-///,
-    /// https://open.feishu.cn/document/attendance-v1/group/list_user,
-pub async fn list_user(,
-        &self,
-        request: ListGroupUserRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ListGroupUserRespData>> {,
-let mut api_req = request.api_req;
-        api_req.set_http_method(Method::GET);
-api_req.set_api_path(EndpointBuilder::replace_param(,
-            ATTENDANCE_V1_GROUP_USERS,
-            "group_id",
-            &request.group_id,
-        ));
-api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
-        // 添加查询参数,
-api_req
-            .query_params
-            .insert("employee_type", request.employee_type.clone());
-if let Some(dept_type) = &request.dept_type {,
-            api_req.query_params.insert("dept_type", dept_type.clone());
-}
-if let Some(page_size) = &request.page_size {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}if let Some(page_size) = &request.page_size {,
             api_req
 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = &request.page_token {,
             api_req
 .query_params
                 .insert("page_token", page_token.clone());
-}
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
@@ -84,41 +56,30 @@ api_req.set_api_path(ATTENDANCE_V1_GROUPS.to_string());
             .insert("employee_type", request.employee_type.clone());
 if let Some(dept_type) = &request.dept_type {,
             api_req.query_params.insert("dept_type", dept_type.clone());
-}
 // 构建请求体,
         let mut body = json!({,
 "group_name": request.group_name.clone(),
         });
 if let Some(time_zone) = &request.time_zone {,
             body["time_zone"] = json!(time_zone.clone());
-}
 if let Some(bind_dept_ids) = &request.bind_dept_ids {,
             body["bind_dept_ids"] = json!(bind_dept_ids.clone());
-}
 if let Some(except_date_rule) = &request.except_date_rule {,
             body["except_date_rule"] = json!(except_date_rule.clone());
-}
 if let Some(attendance_type) = &request.attendance_type {,
             body["attendance_type"] = json!(attendance_type.clone());
-}
 if let Some(punch_type) = &request.punch_type {,
             body["punch_type"] = json!(punch_type.clone());
-}
 if let Some(allow_late_minutes) = &request.allow_late_minutes {,
             body["allow_late_minutes"] = json!(allow_late_minutes.clone());
-}
 if let Some(allow_early_leave_minutes) = &request.allow_early_leave_minutes {,
             body["allow_early_leave_minutes"] = json!(allow_early_leave_minutes.clone());
-}
 if let Some(work_day_rule) = &request.work_day_rule {,
             body["work_day_rule"] = json!(work_day_rule.clone());
-}
 if let Some(shift_rule) = &request.shift_rule {,
             body["shift_rule"] = json!(shift_rule.clone());
-}
 if let Some(member_rule) = &request.member_rule {,
             body["member_rule"] = json!(member_rule.clone());
-}
 api_req.body = serde_json::to_vec(&body)?;
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
@@ -172,7 +133,6 @@ api_req
             .insert("employee_type", request.employee_type);
 if let Some(dept_type) = request.dept_type {,
             api_req.query_params.insert("dept_type", dept_type);
-}
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
@@ -199,7 +159,6 @@ api_req.set_api_path(ATTENDANCE_V1_GROUPS_SEARCH.to_string());
             .insert("employee_type", request.employee_type);
 if let Some(dept_type) = request.dept_type {,
             api_req.query_params.insert("dept_type", dept_type);
-}
 // 构建请求体,
         let body = json!({,
 "group_name": request.group_name,
@@ -230,31 +189,24 @@ api_req.set_api_path(ATTENDANCE_V1_GROUPS.to_string());
             .insert("employee_type", request.employee_type);
 if let Some(dept_type) = request.dept_type {,
             api_req.query_params.insert("dept_type", dept_type);
-}
 if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
     }
-}
 impl Service for GroupService {,
     fn config(&self) -> &Config {,
 &self.config,
     }
 fn service_name() -> &'static str {,
         "attendance_group",
-}
 fn service_version() -> &'static str {,
         "v1",
-}
-}
 #[cfg(test)]
 mod tests {
 use super::*;
@@ -262,7 +214,7 @@ use super::*;
         ExceptDateRule, MemberRule, ShiftRule, WorkDayRule,
     };
 #[test]
-    fn test_group_service_creation() {,
+    fn test_group_service_creation() {
 let config = Config::default();
         let service = GroupService {
             config: config.clone(),
@@ -270,9 +222,8 @@ let config = Config::default();
 
         assert_eq!(service.config.app_id, config.app_id);
         assert_eq!(service.config.app_secret, config.app_secret);
-}
 #[test]
-    fn test_group_service_with_custom_config() {,
+    fn test_group_service_with_custom_config() {
 let config = Config::builder()
             .app_id()
 .app_secret()
@@ -283,9 +234,8 @@ let service = GroupService {,
 
         assert_eq!(service.config.app_id, "group_test_app");
         assert_eq!(service.config.app_secret, "group_test_secret");
-}
 #[test]
-    fn test_list_group_user_request_construction() {,
+    fn test_list_group_user_request_construction() {
 let request = ListGroupUserRequest {,
             api_req: ApiRequest::default(),
             group_id: "group_123".to_string(),
@@ -300,9 +250,8 @@ let request = ListGroupUserRequest {,
         assert_eq!(request.dept_type, Some("dept_id".to_string()));
         assert_eq!(request.page_size, Some(50));
         assert_eq!(request.page_token, Some("user_page_token".to_string()));
-}
 #[test]
-    fn test_list_group_user_request_with_none_values() {,
+    fn test_list_group_user_request_with_none_values() {
 let request = ListGroupUserRequest {,
             api_req: ApiRequest::default(),
             group_id: "group_456".to_string(),
@@ -317,9 +266,8 @@ let request = ListGroupUserRequest {,
         assert_eq!(request.dept_type, None);
         assert_eq!(request.page_size, None);
         assert_eq!(request.page_token, None);
-}
 #[test]
-    fn test_create_group_request_construction() {,
+    fn test_create_group_request_construction() {
 let request = CreateGroupRequest {,
             api_req: ApiRequest::default(),
             employee_type: "1".to_string(),
@@ -368,7 +316,7 @@ assert!(request.work_day_rule.is_some());
 assert!(request.member_rule.is_some());
     }
 #[test]
-    fn test_create_group_request_with_minimal_data() {,
+    fn test_create_group_request_with_minimal_data() {
 let request = CreateGroupRequest {,
             api_req: ApiRequest::default(),
             employee_type: "2".to_string(),
@@ -401,16 +349,15 @@ assert!(request.work_day_rule.is_none());
 assert!(request.member_rule.is_none());
     }
 #[test]
-    fn test_delete_group_request_construction() {,
+    fn test_delete_group_request_construction() {
 let request = DeleteGroupRequest {,
             api_req: ApiRequest::default(),
             group_id: "group_to_delete".to_string(),
         };
 
         assert_eq!(request.group_id, "group_to_delete");
-}
 #[test]
-    fn test_get_group_request_construction() {,
+    fn test_get_group_request_construction() {
 let request = GetGroupRequest {,
             api_req: ApiRequest::default(),
             group_id: "group_to_get".to_string(),
@@ -421,9 +368,8 @@ let request = GetGroupRequest {,
         assert_eq!(request.group_id, "group_to_get");
         assert_eq!(request.employee_type, "1");
         assert_eq!(request.dept_type, Some("open_id".to_string()));
-}
 #[test]
-    fn test_get_group_request_without_dept_type() {,
+    fn test_get_group_request_without_dept_type() {
 let request = GetGroupRequest {,
             api_req: ApiRequest::default(),
             group_id: "group_no_dept".to_string(),
@@ -434,9 +380,8 @@ let request = GetGroupRequest {,
         assert_eq!(request.group_id, "group_no_dept");
         assert_eq!(request.employee_type, "2");
         assert_eq!(request.dept_type, None);
-}
 #[test]
-    fn test_search_group_request_construction() {,
+    fn test_search_group_request_construction() {
 let request = SearchGroupRequest {,
             api_req: ApiRequest::default(),
             employee_type: "1".to_string(),
@@ -447,9 +392,8 @@ let request = SearchGroupRequest {,
         assert_eq!(request.employee_type, "1");
         assert_eq!(request.dept_type, Some("department_id".to_string()));
         assert_eq!(request.group_name, "研发组");
-}
 #[test]
-    fn test_search_group_request_without_dept_type() {,
+    fn test_search_group_request_without_dept_type() {
 let request = SearchGroupRequest {,
             api_req: ApiRequest::default(),
             employee_type: "2".to_string(),
@@ -460,9 +404,8 @@ let request = SearchGroupRequest {,
         assert_eq!(request.employee_type, "2");
         assert_eq!(request.dept_type, None);
         assert_eq!(request.group_name, "销售组");
-}
 #[test]
-    fn test_list_group_request_construction() {,
+    fn test_list_group_request_construction() {
 let request = ListGroupRequest {,
             api_req: ApiRequest::default(),
             employee_type: "1".to_string(),
@@ -475,9 +418,8 @@ let request = ListGroupRequest {,
         assert_eq!(request.dept_type, Some("union_id".to_string()));
         assert_eq!(request.page_size, Some(100));
         assert_eq!(request.page_token, Some("list_page_token".to_string()));
-}
 #[test]
-    fn test_list_group_request_with_minimal_data() {,
+    fn test_list_group_request_with_minimal_data() {
 let request = ListGroupRequest {,
             api_req: ApiRequest::default(),
             employee_type: "2".to_string(),
@@ -490,9 +432,8 @@ let request = ListGroupRequest {,
         assert_eq!(request.dept_type, None);
         assert_eq!(request.page_size, None);
         assert_eq!(request.page_token, None);
-}
 #[test]
-    fn test_group_service_config_independence() {,
+    fn test_group_service_config_independence() {
 let config1 = Config::builder().app_id("group_app_1").build();
         let config2 = Config::builder().app_id("group_app_2").build();
 
@@ -502,9 +443,8 @@ let config1 = Config::builder().app_id("group_app_1").build();
         assert_eq!(service1.config.app_id, "group_app_1");
         assert_eq!(service2.config.app_id, "group_app_2");
         assert_ne!(service1.config.app_id, service2.config.app_id);
-}
 #[test]
-    fn test_request_structs_debug_trait() {,
+    fn test_request_structs_debug_trait() {
 let create_request = CreateGroupRequest {,
             api_req: ApiRequest::default(),
             employee_type: "1".to_string(),
@@ -528,7 +468,7 @@ assert!(debug_str.contains("CreateGroupRequest"));
 assert!(debug_str.contains("debug_dept"));
     }
 #[test]
-    fn test_create_group_request_edge_cases() {,
+    fn test_create_group_request_edge_cases() {
 // Test with very long group name,
         let long_name = "长考勤组名称".repeat(50);
 let request_long_name = CreateGroupRequest {,
@@ -595,9 +535,8 @@ let request_extreme_late = CreateGroupRequest {,
 
         assert_eq!(request_extreme_late.allow_late_minutes, Some(99999));
         assert_eq!(request_extreme_late.allow_early_leave_minutes, Some(99999));
-}
 #[test]
-    fn test_list_group_user_request_edge_cases() {,
+    fn test_list_group_user_request_edge_cases() {
 // Test with very long group ID,
         let long_group_id = "group_".repeat(100);
 let request_long_id = ListGroupUserRequest {,
@@ -632,9 +571,8 @@ let request_long_id = ListGroupUserRequest {,
         };
 
         assert_eq!(request_zero_page.page_size, Some(0));
-}
 #[test]
-    fn test_search_group_request_edge_cases() {,
+    fn test_search_group_request_edge_cases() {
 // Test with empty group name,
         let request_empty_name = SearchGroupRequest {
             api_req: ApiRequest::default(),
@@ -654,9 +592,8 @@ let request_long_search = SearchGroupRequest {,
         };
 
         assert_eq!(request_long_search.group_name, long_search_name);
-}
 #[test]
-    fn test_all_request_structs_with_different_employee_types() {,
+    fn test_all_request_structs_with_different_employee_types() {
 // Test all request types with different employee types,
         let list_user_request = ListGroupUserRequest {
             api_req: ApiRequest::default(),
@@ -707,9 +644,8 @@ let list_request = ListGroupRequest {,
         assert_eq!(get_request.employee_type, "union_id");
         assert_eq!(search_request.employee_type, "user_id");
         assert_eq!(list_request.employee_type, "department_id");
-}
 #[test]
-    fn test_create_group_request_with_empty_bind_dept_ids() {,
+    fn test_create_group_request_with_empty_bind_dept_ids() {
 let request = CreateGroupRequest {,
             api_req: ApiRequest::default(),
             employee_type: "1".to_string(),
@@ -728,9 +664,8 @@ let request = CreateGroupRequest {,
         };
 assert!(request.bind_dept_ids.as_ref().unwrap().is_empty());
         assert_eq!(request.group_name, "Empty Depts Group");
-}
 #[test]
-    fn test_create_group_request_with_negative_values() {,
+    fn test_create_group_request_with_negative_values() {
 let request = CreateGroupRequest {,
             api_req: ApiRequest::default(),
             employee_type: "1".to_string(),
@@ -752,5 +687,3 @@ let request = CreateGroupRequest {,
         assert_eq!(request.punch_type, Some(-1));
         assert_eq!(request.allow_late_minutes, Some(-10));
         assert_eq!(request.allow_early_leave_minutes, Some(-5));
-}
-}

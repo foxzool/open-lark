@@ -3,36 +3,28 @@ use serde::{Deserialize, Serialize};
 use open_lark_core::core::api_req::ApiRequest;
 use crate::{
     core::{,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::moments::models::{Post, PostGetRequest}
 };
 /// 帖子管理服务
 pub struct PostService {
-    pub config: Config,
 }
-/// 查询帖子信息响应
-#[derive(.*?)]
-pub struct PostGetResponse {
-    /// 帖子详细信息
-#[serde(flatten)]
-    pub post: Post,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl PostService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl PostService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 查询帖子信息
+}/// 查询帖子信息
     ///,
 /// 该接口用于查询指定帖子的详细信息，包括帖子内容、作者信息、
     /// 统计数据等。支持获取帖子的媒体附件、可见性设置等完整信息。
@@ -64,8 +56,6 @@ let mut api_req = ApiRequest {,
 // 添加查询参数
         if let Some(user_id_type) = request.user_id_type {
             api_req.query_params.insert("user_id_type", user_id_type);
-}
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}

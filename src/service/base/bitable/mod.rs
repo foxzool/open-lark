@@ -12,21 +12,20 @@ use crate::core::{,
 use open_lark_core::core::api_req::ApiRequest;
 use crate::service::base::models::*;
 /// 多维表格服务
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BitableService {
-    config: Config,
 }
+
 impl BitableService {
+}
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 创建多维表格
+}/// 创建多维表格
     pub async fn create_app(&self, request: CreateAppRequest) -> SDKResult<BitableApp> {,
 let mut api_req = ApiRequest::default();
         api_req.set_api_path("/open-apis/bitable/v1/apps".to_string());
 api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         api_req.set_body(serde_json::to_vec(&request)?);
-
         let response: BaseResponse<BitableApp> = Transport::request(api_req, &self.config, None).await?;
 response.into_result(),
     }
@@ -36,7 +35,6 @@ let mut api_req = ApiRequest::default();
         api_req.set_api_path(format!("/open-apis/bitable/v1/apps/{}/copy", app_token));
 api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         api_req.set_body(serde_json::to_vec(&request)?);
-
         let response: BaseResponse<BitableApp> = Transport::request(api_req, &self.config, None).await?;
 response.into_result(),
     }
@@ -64,7 +62,6 @@ let mut api_req = ApiRequest::default();
         api_req.set_api_path(format!("/open-apis/bitable/v1/apps/{}/tables", app_token));
 api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         api_req.set_body(serde_json::to_vec(&request)?);
-
         let response: BaseResponse<BitableTable> = Transport::request(api_req, &self.config, None).await?;
 response.into_result(),
     }
@@ -82,7 +79,6 @@ let mut api_req = ApiRequest::default();
         api_req.set_api_path(format!("/open-apis/bitable/v1/apps/{}/tables/{}/records", app_token, table_id));
 api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         api_req.set_body(serde_json::to_vec(&request)?);
-
         let response: BaseResponse<BitableRecord> = Transport::request(api_req, &self.config, None).await?;
 response.into_result(),
     }
@@ -92,7 +88,6 @@ let mut api_req = ApiRequest::default();
         api_req.set_api_path(format!("/open-apis/bitable/v1/apps/{}/tables/{}/records/search", app_token, table_id));
 api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         api_req.set_body(serde_json::to_vec(&request)?);
-
         let response: BaseResponse<PaginatedData<BitableRecord>> = Transport::request(api_req, &self.config, None).await?;
 response.into_result(),
     }
@@ -112,7 +107,6 @@ let mut api_req = ApiRequest::default();
         api_req.set_api_path(format!("/open-apis/bitable/v1/apps/{}/tables/{}", app_token, table_id));
 api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         api_req.http_method = reqwest::Method::DELETE;
-
         let response: BaseResponse<()> = Transport::request(api_req, &self.config, None).await?;
 response.into_result(),
     }
@@ -122,8 +116,6 @@ let mut api_req = ApiRequest::default();
         api_req.set_api_path(format!("/open-apis/bitable/v1/apps/{}/tables/{}/records/{}", app_token, table_id, record_id));
 api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         api_req.http_method = reqwest::Method::DELETE;
-
         let response: BaseResponse<()> = Transport::request(api_req, &self.config, None).await?;
 response.into_result(),
     }
-}

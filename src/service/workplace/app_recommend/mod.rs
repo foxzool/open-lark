@@ -6,9 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
-    config::Config,
+        api_resp::{ApiResponseTraitconfig::Config,
         constants::AccessTokenType,
         endpoints::workplace::*,
         http::Transport,
@@ -21,14 +19,13 @@ use crate::,
 };
 /// 应用推荐服务
 pub struct AppRecommendService {
+}
     pub config: Config,
-}
 impl AppRecommendService {
-    /// 创建应用推荐服务实例
-pub fn new() -> Self {
+    
+    pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 获取用户自定义常用的应用
+}/// 获取用户自定义常用的应用
     ///,
 /// 获取当前用户自定义设置的常用应用列表。
     ///,
@@ -50,27 +47,22 @@ let mut api_req = ApiRequest {,
             api_path: WORKPLACE_APP_RECOMMEND_FAVOURITE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
-};
+            ..Default::default()};
 // 添加查询参数
         if let Some(page_token) = request.page_token {,
 api_req
                 .query_params
                 .insert(QueryParams::PAGE_TOKEN, page_token);
-}
 if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert(QueryParams::PAGE_SIZE, page_size.to_string());
-}
 if let Some(user_id) = request.user_id {,
             api_req.query_params.insert(QueryParams::USER_ID, user_id);
-}
 let api_resp: BaseResponse<FavouriteAppsResponse> =,
             Transport::request(api_req, &self.config, option).await?;
 api_resp.into_result(),
-    }
-/// 获取管理员推荐的应用
+    /// 获取管理员推荐的应用
     ///,
 /// 获取管理员设置的推荐应用列表。
     ///,
@@ -92,32 +84,26 @@ let mut api_req = ApiRequest {,
             api_path: WORKPLACE_APP_RECOMMEND_RECOMMEND.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
-};
+            ..Default::default()};
 // 添加查询参数
         if let Some(page_token) = request.page_token {,
 api_req
                 .query_params
                 .insert(QueryParams::PAGE_TOKEN, page_token);
-}
 if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert(QueryParams::PAGE_SIZE, page_size.to_string());
-}
 if let Some(user_id) = request.user_id {,
             api_req.query_params.insert(QueryParams::USER_ID, user_id);
-}
 if let Some(department_id) = request.department_id {,
             api_req
 .query_params
                 .insert(QueryParams::DEPARTMENT_ID, department_id);
-}
 let api_resp: BaseResponse<RecommendedAppsResponse> =,
             Transport::request(api_req, &self.config, option).await?;
 api_resp.into_result(),
-    }
-/// 获取当前设置的推荐规则列表
+    /// 获取当前设置的推荐规则列表
     ///,
 /// 获取当前系统中配置的应用推荐规则列表。
     ///,
@@ -139,34 +125,27 @@ let mut api_req = ApiRequest {,
             api_path: WORKPLACE_APP_RECOMMEND_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
-            ..Default::default(),
-};
+            ..Default::default()};
 // 添加查询参数
         if let Some(page_token) = request.page_token {,
 api_req
                 .query_params
                 .insert(QueryParams::PAGE_TOKEN, page_token);
-}
 if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert(QueryParams::PAGE_SIZE, page_size.to_string());
-}
 if let Some(rule_type) = request.rule_type {,
             api_req
 .query_params
                 .insert(QueryParams::RULE_TYPE, rule_type);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert(QueryParams::STATUS, status);
-}
 let api_resp: BaseResponse<RecommendRulesListResponse> =,
             Transport::request(api_req, &self.config, option).await?;
 api_resp.into_result(),
-    }
-}
-/// 常用应用查询请求
-#[derive(.*?)]
+    /// 常用应用查询请求
+#[derive(Debug, Clone)]
 pub struct FavouriteAppsRequest {
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -176,23 +155,19 @@ pub struct FavouriteAppsRequest {
     pub page_size: Option<i32>,
     /// 用户ID筛选
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub user_id: Option<String>,
-}
-/// 常用应用查询响应
-#[derive(.*?)]
+}    pub user_id: Option<String>/// 常用应用查询响应
+#[derive(Debug, Clone)]
 pub struct FavouriteAppsResponse {
     /// 常用应用列表
 #[serde(flatten)]
-    pub favourite_apps: PageResponse<FavouriteApp>,
-}
+}    pub favourite_apps: PageResponse<FavouriteApp>}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
-    }
-}
-/// 推荐应用查询请求
-#[derive(.*?)]
-pub struct RecommendedAppsRequest {
+    /// 推荐应用查询请求
+#[derive(Debug, Clone)]
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -204,66 +179,33 @@ pub struct RecommendedAppsRequest {
     pub user_id: Option<String>,
     /// 部门ID筛选
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub department_id: Option<String>,
-}
+}    pub department_id: Option<String>}
+pub struct RecommendedAppsRequest {
 impl RecommendedAppsRequest {
-    /// 创建Builder实例
-pub fn w+.*{
-        RecommendedAppsRequestBuilder::default(),
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-}
-/// 推荐应用查询请求Builder
+}/// 推荐应用查询请求Builder
 #[derive(Default)]
 pub struct RecommendedAppsRequestBuilder {
-    inner: RecommendedAppsRequest,
-}
+    inner: RecommendedAppsRequest}
 impl RecommendedAppsRequestBuilder {
-    /// 设置页面令牌
-    pub fn page_token() -> Self {
-self.inner.page_token = Some(token.into());
-        self,
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 设置页面大小
-    pub fn page_size() -> Self {
-self.inner.page_size = Some(size);
-        self,
-}
-/// 设置分页参数（复合方法）
-    pub fn pagination() -> Self {
-self.inner.page_token = page_token;
-        self.inner.page_size = page_size;
-self,
-    }
-/// 设置用户ID筛选
-    pub fn user_filter() -> Self {
-self.inner.user_id = Some(user_id.into());
-        self,
-}
-/// 设置部门ID筛选
-    pub fn department_filter() -> Self {
-self.inner.department_id = Some(department_id.into());
-        self,
-}
-/// 构建请求对象
-    pub fn w+.*{
-self.inner,
-    }
-}
-/// 推荐应用查询响应
-#[derive(.*?)]
+}/// 推荐应用查询响应
+#[derive(Debug, Clone)]
 pub struct RecommendedAppsResponse {
     /// 推荐应用列表
 #[serde(flatten)]
-    pub recommended_apps: PageResponse<RecommendedApp>,
-}
+}    pub recommended_apps: PageResponse<RecommendedApp>}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
-    }
-}
-/// 推荐规则列表查询请求
-#[derive(.*?)]
-pub struct RecommendRulesListRequest {
+    /// 推荐规则列表查询请求
+#[derive(Debug, Clone)]
     /// 页码标记
 #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -275,60 +217,31 @@ pub struct RecommendRulesListRequest {
     pub rule_type: Option<String>,
     /// 规则状态筛选
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
-}
+}    pub status: Option<String>}
+pub struct RecommendRulesListRequest {
 impl RecommendRulesListRequest {
-    /// 创建Builder实例
-pub fn w+.*{
-        RecommendRulesListRequestBuilder::default(),
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-}
-/// 推荐规则列表查询请求Builder
+}/// 推荐规则列表查询请求Builder
 #[derive(Default)]
 pub struct RecommendRulesListRequestBuilder {
-    inner: RecommendRulesListRequest,
-}
+    inner: RecommendRulesListRequest}
 impl RecommendRulesListRequestBuilder {
-    /// 设置页面令牌
-    pub fn page_token() -> Self {
-self.inner.page_token = Some(token.into());
-        self,
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 设置页面大小
-    pub fn page_size() -> Self {
-self.inner.page_size = Some(size);
-        self,
-}
-/// 设置分页参数（复合方法）
-    pub fn pagination() -> Self {
-self.inner.page_token = page_token;
-        self.inner.page_size = page_size;
-self,
-    }
-/// 设置规则类型筛选
-    pub fn rule_type_filter() -> Self {
-self.inner.rule_type = Some(rule_type.into());
-        self,
-}
-/// 设置规则状态筛选
-    pub fn status_filter() -> Self {
-self.inner.status = Some(status.into());
-        self,
-}
-/// 构建请求对象
-    pub fn w+.*{
-self.inner,
-    }
-}
-/// 推荐规则列表查询响应
-#[derive(.*?)]
+}/// 推荐规则列表查询响应
+#[derive(Debug, Clone)]
 pub struct RecommendRulesListResponse {
     /// 推荐规则列表
 #[serde(flatten)]
-    pub recommend_rules: PageResponse<AppRecommendRule>,
-}
+}    pub recommend_rules: PageResponse<AppRecommendRule>}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}

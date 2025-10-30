@@ -12,10 +12,11 @@ pub use update::*;
 ///,
 /// 提供卡片的创建、更新、配置等管理功能
 pub struct CardService {
-    pub config: Config,
+pub config: Config,
 }
 impl CardService {
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self { config 
+}
 }
 }

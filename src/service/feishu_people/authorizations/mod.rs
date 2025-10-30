@@ -7,18 +7,15 @@
 use crate::prelude::*;
 use crate::service::feishu_people::authorizations::v1::AuthorizationsV1Service;
 /// 权限管理服务
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AuthorizationsService {
-    /// v1版本API服务
-    pub v1: AuthorizationsV1Service,
 }
+
 impl AuthorizationsService {
-    /// 创建新的权限管理服务实例
-pub fn new() -> Self {
-        Self {
-            v1: AuthorizationsV1Service::new(client.clone()),
-        }
 }
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }
 /// v1版本API
 pub mod v1;
+}

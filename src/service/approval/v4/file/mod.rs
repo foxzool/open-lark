@@ -3,37 +3,35 @@ use serde::{Deserialize, Serialize};
 use open_lark_core::core::api_req::ApiRequest;
 use crate::{
     core::{,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::approval::*,
         http::Transport,
         req_option::RequestOption,
         trait_system::Service,
         SDKResult,
-    }
     service::approval::models::ApprovalFile,
 };
 /// 审批文件服务
 pub struct FileService {
+}
     pub config: Config,
-}
 /// 上传文件响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UploadFileResponse {
-    /// 文件信息
-    pub file: ApprovalFile,
 }
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl FileService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl FileService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 上传文件
+}/// 上传文件
     ///,
 /// 上传文件到审批系统，支持各种文件格式，为审批流程提供附件支持。
     /// 上传的文件可以在审批单中引用，提供审批依据和材料支撑。
@@ -61,18 +59,13 @@ let api_req = ApiRequest {,
             file: file_content,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
 impl Service for FileService {,
     fn config(&self) -> &Config {,
 &self.config,
-    }
-fn service_name() -> &'static str {,
+    fn service_name() -> &'static str {,
         "approval_file",
-}
 fn service_version() -> &'static str {,
         "v4",
 }
-}
+}}}}}}}}}

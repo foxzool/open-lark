@@ -7,8 +7,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -20,7 +19,7 @@ use crate::,
     service::bitable::v1::app_role_member::RoleMember,
 };
 /// 批量新增协作者请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BatchCreateRoleMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -34,74 +33,25 @@ pub struct BatchCreateRoleMemberRequest {
 #[serde(skip)]
     user_id_type: Option<String>,
     /// 成员列表
-    members: Vec<MemberInfo>,
-}
+    members: Vec<MemberInfo>}
 /// 成员信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct MemberInfo {
     /// 成员id
     pub member_id: String,
     /// 成员类型: user, chat, department, open_department_id
     pub member_type: String,
-}
 impl BatchCreateRoleMemberRequest {
-    pub fn w+.*{
-BatchCreateRoleMemberRequestBuilder::default(),
-    }
-
-    pub fn new(app_token: impl ToString, role_id: impl ToString, members: Vec<MemberInfo>) -> Self {
-Self {
-            app_token: app_token.to_string(),
-            role_id: role_id.to_string(),
-            members,
-            ..Default::default(),
-}
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct BatchCreateRoleMemberRequestBuilder {
-    request: BatchCreateRoleMemberRequest,
-}
+    request: BatchCreateRoleMemberRequest}
 impl BatchCreateRoleMemberRequestBuilder {
-    /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {
-self.request.app_token = app_token.to_string();
-        self,
-}
-/// 自定义角色的id,
-    pub fn role_id(mut self, role_id: impl ToString) -> Self {
-self.request.role_id = role_id.to_string();
-        self,
-}
-/// 用户id类型,
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
-self.request.user_id_type = Some(user_id_type.to_string());
-        self,
-}
-/// 成员列表,
-    pub fn members(mut self, members: Vec<MemberInfo>) -> Self {
-self.request.members = members;
-        self,
-}
-/// 添加单个成员,
-    pub fn add_member(mut self, member_id: impl ToString, member_type: impl ToString) -> Self {
-self.request.members.push(MemberInfo {,
-            member_id: member_id.to_string(),
-            member_type: member_type.to_string(),
-        });
-self,
-    }
-pub fn w+.*{
-        if let Some(user_id_type) = &self.request.user_id_type {,
-self.request,
-                .api_request,
-.query_params
-                .insert("user_id_type", user_id_type.clone());
-}
-self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request,
-}
-}
 impl_executable_builder_owned!(,
     BatchCreateRoleMemberRequestBuilder,
     AppRoleMemberService,
@@ -110,16 +60,16 @@ impl_executable_builder_owned!(,
     batch_create,
 );
 /// 批量新增协作者响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BatchCreateRoleMemberResponse {
     /// 新增的协作者信息列表
-    pub members: Vec<RoleMember>,
-}
+    pub members: Vec<RoleMember>}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 批量新增协作者,
 pub async fn batch_create_role_members(
     request: BatchCreateRoleMemberRequest,
@@ -135,14 +85,13 @@ api_req.api_path = BITABLE_V1_ROLE_MEMBERS_BATCH_CREATE,
 
     let api_resp = Transport::request(api_req, config, option).await?;
 Ok(api_resp),
-}
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]
-    fn test_batch_create_role_member_request_builder() {,
+    fn test_batch_create_role_member_request_builder() {
 let request = BatchCreateRoleMemberRequest::builder(),
             .app_token()
 .role_id()
@@ -155,5 +104,3 @@ let request = BatchCreateRoleMemberRequest::builder(),
         assert_eq!(request.role_id, "rolxxxxxx");
         assert_eq!(request.members.len(), 2);
         assert_eq!(request.user_id_type, Some("open_id".to_string()));
-}
-}

@@ -3,50 +3,47 @@ use serde::{Deserialize, Serialize};
 use open_lark_core::core::api_req::ApiRequest;
 use crate::{
     core::{,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         trait_system::Service,
         SDKResult,
-    }
     service::ai::models::{SpeechRecognizeRequest, SpeechRecognizeResult, StreamSpeechRequest}
 };
 /// 语音识别服务
 pub struct SpeechToTextService {
+}
     pub config: Config,
-}
 /// 语音文件识别响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct FileRecognizeResponse {
+}
     /// 语音识别结果
 #[serde(flatten)]
     pub speech_result: SpeechRecognizeResult,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 流式语音识别响应
-#[derive(.*?)]
-pub struct StreamRecognizeResponse {
-    /// 语音识别结果
-#[serde(flatten)]
-    pub speech_result: SpeechRecognizeResult,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl SpeechToTextService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 流式语音识别响应
+#[derive(Debug, Clone)]
 }
-/// 识别语音文件
+pub struct StreamRecognizeResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl SpeechToTextService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 识别语音文件
     ///,
 /// 该接口用于识别语音文件中的语音内容，将语音转换为文本。
     ///,
@@ -66,9 +63,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 识别流式语音
     ///,
 /// 该接口用于识别流式语音数据，支持实时语音识别。
@@ -89,18 +84,13 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
 impl Service for SpeechToTextService {,
     fn config(&self) -> &Config {,
 &self.config,
-    }
-fn service_name() -> &'static str {,
+    fn service_name() -> &'static str {,
         "speech_to_text",
-}
 fn service_version() -> &'static str {,
         "v1",
 }
-}
+}}}}}}}}}}}}}

@@ -3,12 +3,12 @@
 // 包含审计日志的完整功能
 use crate::prelude::*;
 /// 审计日志v1版本服务
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AuditLogV1Service {
     client: std::sync::Arc<crate::client::LarkClient>,
 }
 impl AuditLogV1Service {
-    pub fn new(client: std::sync::Arc<crate::client::LarkClient>) -> Self {
-        Self { client }
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }
 }

@@ -3,76 +3,68 @@ use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::corehr::*,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::corehr::models::{
         CountryRegion, CountryRegionSearchRequest, EnumInfo, EnumSearchRequest, IdConvertRequest,
         IdConvertResult, Nationality, NationalitySearchRequest, PageResponse,
-    }
 };
 /// 基础数据服务
 pub struct BasicInfoService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 查询枚举信息响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EnumSearchResponse {
+}
     /// 枚举信息列表
 #[serde(flatten)]
     pub enums: PageResponse<EnumInfo>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 查询国家/地区信息响应
-#[derive(.*?)]
-pub struct CountryRegionSearchResponse {
-    /// 国家/地区信息列表
-#[serde(flatten)]
-    pub country_regions: PageResponse<CountryRegion>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 查询国籍信息响应
-#[derive(.*?)]
-pub struct NationalitySearchResponse {
-    /// 国籍信息列表
-#[serde(flatten)]
-    pub nationalities: PageResponse<Nationality>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// ID转换响应
-#[derive(.*?)]
-pub struct IdConvertResponse {
-    /// 转换结果列表
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<IdConvertResult>>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl BasicInfoService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 查询国家/地区信息响应
+#[derive(Debug, Clone)]
 }
-/// 查询枚举信息
+pub struct CountryRegionSearchResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 查询国籍信息响应
+#[derive(Debug, Clone)]
+}
+pub struct NationalitySearchResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// ID转换响应
+#[derive(Debug, Clone)]
+}
+pub struct IdConvertResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl BasicInfoService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 查询枚举信息
     ///,
 /// 该接口用于查询系统中的枚举信息，支持按枚举类型查询。
     /// 枚举信息包括性别、婚姻状况、员工状态等系统预定义的选项值。
@@ -116,7 +108,6 @@ let api_req = ApiRequest {,
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询国家/地区信息
     ///,
 /// 该接口用于查询系统中的国家/地区基础信息，包括国家代码、
@@ -160,7 +151,6 @@ let api_req = ApiRequest {,
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询国籍信息
     ///,
 /// 该接口用于查询系统中的国籍基础信息，包括国籍代码、
@@ -203,7 +193,6 @@ let api_req = ApiRequest {,
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
-}
 /// ID转换
     ///,
 /// 该接口用于在不同ID类型之间进行转换，例如将person_id转换为
@@ -248,4 +237,4 @@ let api_req = ApiRequest {,
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}}}}}}}

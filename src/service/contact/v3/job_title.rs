@@ -10,12 +10,10 @@ use serde::{Deserialize, Serialize};
 /// 职务服务,
 pub struct JobTitleService {
     config: Config,
-}
 impl JobTitleService {
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// # API文档,
+}/// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/get,
     /// 获取单个职务信息
@@ -52,36 +50,34 @@ let api_req = ApiRequest {,
         let resp = Transport::<ListJobTitlesResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetJobTitleResponse {
     pub job_title: JobTitle,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListJobTitlesRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListJobTitlesResponse {
     pub items: Vec<JobTitle>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}

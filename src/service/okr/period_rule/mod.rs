@@ -3,39 +3,35 @@ use serde::{Deserialize, Serialize};
 use open_lark_core::core::api_req::ApiRequest;
 use crate::{
     core::{,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::okr::*,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::okr::models::{PageResponse, PeriodRule}
 };
 /// 周期规则管理服务
 #[derive(Debug)]
 pub struct PeriodRuleService {
+}
     pub config: Config,
-}
 /// 周期规则列表响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PeriodRuleListResponse {
-    /// 规则列表
-#[serde(flatten)]
-    pub rules: PageResponse<PeriodRule>,
 }
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 impl PeriodRuleService {
-    /// 创建周期规则管理服务实例
-pub fn new() -> Self {
-        Self { config }
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 获取 OKR 周期规则
+}/// 获取 OKR 周期规则
     ///,
 /// 查询指定周期的规则配置信息，包括评分规则、权限设置等。
     ///,
@@ -70,11 +66,9 @@ pub fn new() -> Self {
     ///         for rule in data.rules.items {
     ///             println!("规则ID: {} 类型: {:?}", rule.rule_id, rule.rule_type);
     ///         }
-    ///     }
-///,
+    ///     ///,
     ///     Ok(())
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_period_rules(
         &self,
         request: PeriodRuleListRequest,
@@ -90,24 +84,17 @@ let mut api_req = ApiRequest {,
 // 添加查询参数
         if let Some(period_id) = request.period_id {
             api_req.query_params.insert("period_id", period_id);
-}
 if let Some(rule_type) = request.rule_type {,
             api_req.query_params.insert("rule_type", rule_type);
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert("page_size", page_size.to_string());
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
 /// 周期规则查询请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PeriodRuleListRequest {
     /// 周期ID筛选
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -122,3 +109,4 @@ pub struct PeriodRuleListRequest {
 #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
 }
+}}}}}}}}}}}}

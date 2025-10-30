@@ -6,8 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         req_option, SDKResult,
@@ -15,71 +14,39 @@ use crate::,
     service::cloud_docs::sheets::v2::SpreadsheetService,
 };
 /// 拆分单元格请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SplitCellsRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     #[serde(skip)]
     spreadsheet_token: String,
     /// 查询范围，包含 sheetId 与单元格范围两部分，目前支持四种索引方式，详见 在线表格开发指南
-    range: String,
-}
+    range: String}
 impl SplitCellsRequest {
-    pub fn w+.*{
-SplitCellsRequestBuilder::default(),
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct SplitCellsRequestBuilder {
-    request: SplitCellsRequest,
-}
+    request: SplitCellsRequest}
 impl SplitCellsRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
-self.request.spreadsheet_token = spreadsheet_token.to_string();
-        self,
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }
-/// 查询范围，包含 sheetId 与单元格范围两部分，目前支持四种索引方式，详见 在线表格开发指南,
-    pub fn range(mut self, range: impl ToString) -> Self {
-self.request.range = range.to_string();
-        self,
-}
-pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-self.request,
-    }
-}
-
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SplitCellsResponse {
     /// spreadsheet 的 token,
 #[serde(rename = "spreadsheetToken")]
     pub spread_sheet_token: String,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 impl SpreadsheetService {
-    /// 拆分单元格,
-pub async fn split_cells(,
-        &self,
-        request: SplitCellsRequest,
-        option: Option<req_option::RequestOption>,
-    ) -> SDKResult<BaseResponse<SplitCellsResponse>> {,
-let mut api_req = request.api_request;
-        api_req.set_api_path(
-            SHEETS_V2_SPREADSHEET_UNMERGE_CELLS.replace("{}", &request.spreadsheet_token),
-        );
-api_req.set_http_method(reqwest::Method::POST);
-        api_req
-            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::App]);
-
-        let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
-Ok(api_resp),
-    }
-}
-#[cfg(test)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[cfg(test)]
 mod tests {
 use crate::,
 {
@@ -89,14 +56,11 @@ use crate::,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
         config::Config,
-        constants::AppType,
-}
+        constants::AppType}
     service::cloud_docs::sheets::v2::{
-            data_operation::{SplitCellsRequest, SplitCellsResponse,
-};
+            data_operation::{SplitCellsRequest, SplitCellsResponse};
             SpreadsheetService,
-        }
-    };
+};
 fn create_service() -> SpreadsheetService {,
         let config = Config::builder()
 .app_id()
@@ -104,15 +68,13 @@ fn create_service() -> SpreadsheetService {,
 .app_type()
             .build();
         SpreadsheetService { config }
-}
 #[test]
-    fn test_split_cells_builder_default() {,
+    fn test_split_cells_builder_default() {
 let request = SplitCellsRequest::builder().build();
         assert_eq!(request.spreadsheet_token, "");
         assert_eq!(request.range, "");
-}
 #[test]
-    fn test_split_cells_builder_basic() {,
+    fn test_split_cells_builder_basic() {
 let request = SplitCellsRequest::builder(),
             .spreadsheet_token()
 .range()
@@ -120,9 +82,8 @@ let request = SplitCellsRequest::builder(),
 
         assert_eq!(request.spreadsheet_token, "test_token");
         assert_eq!(request.range, "Sheet1!A1:B2");
-}
 #[test]
-    fn test_split_cells_builder_all_options() {,
+    fn test_split_cells_builder_all_options() {
 let request = SplitCellsRequest::builder(),
             .spreadsheet_token()
 .range()
@@ -130,9 +91,8 @@ let request = SplitCellsRequest::builder(),
 
         assert_eq!(request.spreadsheet_token, "spreadsheet_abc123");
         assert_eq!(request.range, "Data!C3:F6");
-}
 #[test]
-    fn test_split_cells_builder_chaining() {,
+    fn test_split_cells_builder_chaining() {
 let request = SplitCellsRequest::builder(),
             .spreadsheet_token()
 .range()
@@ -140,9 +100,8 @@ let request = SplitCellsRequest::builder(),
 
         assert_eq!(request.spreadsheet_token, "chain_test");
         assert_eq!(request.range, "Summary!A1:D1");
-}
 #[test]
-    fn test_split_cells_single_merged_cell() {,
+    fn test_split_cells_single_merged_cell() {
 let request = SplitCellsRequest::builder(),
             .spreadsheet_token()
 .range()
@@ -150,9 +109,8 @@ let request = SplitCellsRequest::builder(),
 
         assert_eq!(request.spreadsheet_token, "single_cell_test");
         assert_eq!(request.range, "Sheet1!A1:A1");
-}
 #[test]
-    fn test_split_cells_large_merged_range() {,
+    fn test_split_cells_large_merged_range() {
 let request = SplitCellsRequest::builder(),
             .spreadsheet_token()
 .range()
@@ -160,9 +118,8 @@ let request = SplitCellsRequest::builder(),
 
         assert_eq!(request.spreadsheet_token, "large_range_test");
         assert_eq!(request.range, "Data!A1:Z100");
-}
 #[test]
-    fn test_split_cells_row_range() {,
+    fn test_split_cells_row_range() {
 let request = SplitCellsRequest::builder(),
             .spreadsheet_token()
 .range()
@@ -170,9 +127,8 @@ let request = SplitCellsRequest::builder(),
 
         assert_eq!(request.spreadsheet_token, "row_range_test");
         assert_eq!(request.range, "Sheet1!A1:Z1");
-}
 #[test]
-    fn test_split_cells_column_range() {,
+    fn test_split_cells_column_range() {
 let request = SplitCellsRequest::builder(),
             .spreadsheet_token()
 .range()
@@ -180,9 +136,8 @@ let request = SplitCellsRequest::builder(),
 
         assert_eq!(request.spreadsheet_token, "column_range_test");
         assert_eq!(request.range, "Sheet1!A1:A50");
-}
 #[test]
-    fn test_split_cells_with_unicode_ranges() {,
+    fn test_split_cells_with_unicode_ranges() {
 let request = SplitCellsRequest::builder(),
             .spreadsheet_token()
 .range()
@@ -190,9 +145,8 @@ let request = SplitCellsRequest::builder(),
 
         assert_eq!(request.spreadsheet_token, "unicode_test");
         assert_eq!(request.range, "数据表!A1:D4");
-}
 #[test]
-    fn test_split_cells_with_special_characters() {,
+    fn test_split_cells_with_special_characters() {
 let request = SplitCellsRequest::builder(),
             .spreadsheet_token()
 .range()
@@ -200,9 +154,8 @@ let request = SplitCellsRequest::builder(),
 
         assert_eq!(request.spreadsheet_token, "special_chars_test");
         assert_eq!(request.range, "'Sheet With Spaces'!A1:B5");
-}
 #[test]
-    fn test_split_cells_different_sheets() {,
+    fn test_split_cells_different_sheets() {
 let sheets_and_ranges = [,
             ("Sheet1", "A1:B2"),
             ("Summary", "C1:F1"),
@@ -218,10 +171,9 @@ let request = SplitCellsRequest::builder(),
                 .build();
 
             assert_eq!(request.range, full_range);
-}
     }
 #[test]
-    fn test_split_cells_serialization() {,
+    fn test_split_cells_serialization() {
 let request = SplitCellsRequest::builder(),
             .spreadsheet_token()
 .range()
@@ -230,17 +182,14 @@ let serialized = serde_json::to_string(&request);
         assert!(serialized.is_ok());
 let json_value: serde_json::Value = serde_json::from_str(&serialized.unwrap()).unwrap();
         assert_eq!(json_value["range"] "Sheet1!A1:C3");
-}
 #[test]
-    fn test_split_cells_response_deserialization() {,
+    fn test_split_cells_response_deserialization() {
 let response_json = serde_json::json!({,
-            "spreadsheetToken": "test_token_123",
-});
+            "spreadsheetToken": "test_token_123"});
 let response: SplitCellsResponse = serde_json::from_value(response_json).unwrap();
         assert_eq!(response.spread_sheet_token, "test_token_123");
-}
 #[test]
-    fn test_split_cells_complex_range_references() {,
+    fn test_split_cells_complex_range_references() {
 let complex_ranges = vec![,
             "Sheet1!A1:D5",
             "'Data Sheet'!B2:F10",
@@ -254,17 +203,15 @@ for range in complex_ranges {,
                 .range()
 .build();
             assert_eq!(request.range, range);
-}
     }
 #[test]
-    fn test_split_cells_service_creation() {,
+    fn test_split_cells_service_creation() {
 let service = create_service();
         assert_eq!(service.config.app_id, "test_app_id");
         assert_eq!(service.config.app_secret, "test_app_secret");
         assert!(matches!(service.config.app_type, AppType::SelfBuild));
-}
 #[test]
-    fn test_split_cells_builder_overwrites() {,
+    fn test_split_cells_builder_overwrites() {
 let request = SplitCellsRequest::builder(),
             .spreadsheet_token()
 .spreadsheet_token("final_token") // Should overwrite,
@@ -274,9 +221,8 @@ let request = SplitCellsRequest::builder(),
 
         assert_eq!(request.spreadsheet_token, "final_token");
         assert_eq!(request.range, "Sheet2!C3:D4");
-}
 #[test]
-    fn test_split_cells_very_long_token() {,
+    fn test_split_cells_very_long_token() {
 let very_long_token = "a".repeat(1000);
         let request = SplitCellsRequest::builder(),
 .spreadsheet_token()
@@ -284,19 +230,16 @@ let very_long_token = "a".repeat(1000);
 .build();
         assert_eq!(request.spreadsheet_token, very_long_token);
         assert_eq!(request.range, "Sheet1!A1:B2");
-}
 #[test]
-    fn test_split_cells_response_struct_debug() {,
+    fn test_split_cells_response_struct_debug() {
 let response = SplitCellsResponse {,
-            spread_sheet_token: "debug_test".to_string(),
-        };
+            spread_sheet_token: "debug_test".to_string()};
 
         let debug_str = format!("{:?}", response);
 assert!(debug_str.contains("debug_test"));
         assert!(debug_str.contains("SplitCellsResponse"));
-}
 #[test]
-    fn test_split_cells_request_struct_debug() {,
+    fn test_split_cells_request_struct_debug() {
 let request = SplitCellsRequest::builder(),
             .spreadsheet_token()
 .range()
@@ -305,9 +248,8 @@ let request = SplitCellsRequest::builder(),
         let debug_str = format!("{:?}", request);
 assert!(debug_str.contains("debug_token"));
         assert!(debug_str.contains("Sheet1!A1:B2"));
-}
 #[test]
-    fn test_split_cells_empty_strings() {,
+    fn test_split_cells_empty_strings() {
 let request = SplitCellsRequest::builder(),
             .spreadsheet_token()
 .range()
@@ -315,9 +257,8 @@ let request = SplitCellsRequest::builder(),
 
         assert_eq!(request.spreadsheet_token, "");
         assert_eq!(request.range, "");
-}
 #[test]
-    fn test_split_cells_multiple_merged_areas() {,
+    fn test_split_cells_multiple_merged_areas() {
 let merged_areas = vec![,
             "Sheet1!A1:B2",  // 2x2 merged area
             "Sheet1!D1:G1",  // Row merge
@@ -331,10 +272,9 @@ let request = SplitCellsRequest::builder(),
                 .build();
 
             assert_eq!(request.range, range);
-}
     }
 #[test]
-    fn test_split_cells_large_spreadsheet_ranges() {,
+    fn test_split_cells_large_spreadsheet_ranges() {
 let large_ranges = vec![,
             "Sheet1!A1:ZZ1000", // Very large range
             "Data!A1:IV65536",  // Excel-style large range
@@ -347,10 +287,9 @@ let request = SplitCellsRequest::builder(),
                 .build();
 
             assert_eq!(request.range, range);
-}
     }
 #[test]
-    fn test_split_cells_various_sheet_names() {,
+    fn test_split_cells_various_sheet_names() {
 let sheet_names_with_ranges = vec![,
             ("普通工作表", "A1:B2"),
             ("Sheet_123", "C1:D5"),
@@ -371,10 +310,9 @@ let request = SplitCellsRequest::builder(),
                 .build();
 
             assert_eq!(request.range, full_range);
-}
     }
 #[test]
-    fn test_split_cells_edge_case_ranges() {,
+    fn test_split_cells_edge_case_ranges() {
 let edge_cases = vec![,
             "Sheet1!A1:A1",     // Single cell
             "Sheet1!A1:B1",     // Two cells horizontal
@@ -388,6 +326,4 @@ let request = SplitCellsRequest::builder(),
                 .build();
 
             assert_eq!(request.range, range);
-}
     }
-}

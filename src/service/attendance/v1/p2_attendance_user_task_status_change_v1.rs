@@ -2,18 +2,16 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 /// 考勤用户任务状态变更事件 (user.task_status_change_event),
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2AttendanceUserTaskStatusChangeV1 {
     pub schema: String,
     pub header: EventHeader,
     pub event: P2AttendanceUserTaskStatusChangeV1Data,
-}
 pub(crate) struct P2AttendanceUserTaskStatusChangeV1ProcessorImpl<F>,
 where
     F: Fn(P2AttendanceUserTaskStatusChangeV1) + 'static,
 {
     f: F,
-}
 impl<F> EventHandler for P2AttendanceUserTaskStatusChangeV1ProcessorImpl<F>,
 where
     F: Fn(P2AttendanceUserTaskStatusChangeV1) + 'static + Sync + Send,
@@ -23,17 +21,14 @@ let event: P2AttendanceUserTaskStatusChangeV1 = serde_json::from_slice(payload)?
         (self.f)(event);
 Ok(()),
     }
-}
 impl<F> P2AttendanceUserTaskStatusChangeV1ProcessorImpl<F>,
 where
     F: Fn(P2AttendanceUserTaskStatusChangeV1) + 'static,
 {,
 pub(crate) fn new(f: F) -> Self {
         P2AttendanceUserTaskStatusChangeV1ProcessorImpl { f }
-}
-}
 /// 考勤用户任务状态变更事件数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2AttendanceUserTaskStatusChangeV1Data {
     /// 用户信息
     pub user_id: AttendanceUserId,
@@ -41,9 +36,8 @@ pub struct P2AttendanceUserTaskStatusChangeV1Data {
     pub task_status_change: AttendanceTaskStatusChange,
     /// 租户key
     pub tenant_key: String,
-}
 /// 考勤事件中的用户信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AttendanceUserId {
     /// 用户的 union id
     pub union_id: String,
@@ -53,9 +47,8 @@ pub struct AttendanceUserId {
     pub open_id: String,
     /// 用户的 employee id
     pub employee_id: Option<String>,
-}
 /// 考勤任务状态变更信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AttendanceTaskStatusChange {
     /// 任务ID
     pub task_id: String,
@@ -87,9 +80,8 @@ pub struct AttendanceTaskStatusChange {
     pub change_comment: Option<String>,
     /// 相关的打卡记录
     pub check_records: Option<Vec<AttendanceCheckRecord>>,
-}
 /// 打卡记录信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AttendanceCheckRecord {
     /// 打卡记录ID
     pub record_id: String,
@@ -107,9 +99,8 @@ pub struct AttendanceCheckRecord {
     pub is_remedy: bool,
     /// 打卡备注
     pub comment: Option<String>,
-}
 /// 打卡位置信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AttendanceLocation {
     /// 纬度
     pub latitude: f64,
@@ -117,14 +108,13 @@ pub struct AttendanceLocation {
     pub longitude: f64,
     /// 位置名称
     pub address: Option<String>,
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod test {,
     use serde_json::json;
 use crate::event::context::EventContext;
     #[test]
-fn test_decode_attendance_status_change_event() {,
+fn test_decode_attendance_status_change_event() {
         let event_data = json!({
             "schema": "2.0",
             "header": {
@@ -134,14 +124,12 @@ fn test_decode_attendance_status_change_event() {,
                 "event_type": "attendance.user_task.status_change_v1",
                 "tenant_key": "tenant_key",
                 "app_id": "app_id",
-}
             "event": {,
 "user_id": {,
                     "open_id": "ou_b434284f852b1531071855b16d19f40b",
                     "union_id": "on_526dbf7b9ef1fda341aecb79a2481662",
                     "user_id": "aa5cf9d7",
                     "employee_id": "emp_001",
-}
                 "task_status_change": {
                     "task_id": "task_123456",
                     "user_id": "aa5cf9d7",
@@ -167,18 +155,13 @@ fn test_decode_attendance_status_change_event() {,
                                 "latitude": 39.908822,
                                 "longitude": 116.397128,
                                 "address": "北京市朝阳区",
-}
                             "is_field": false,
                             "is_remedy": true,
                             "comment": "补卡",
-}
 ],
                 }
                 "tenant_key": "133195a24e8f575d",
-}
         });
 let event_context: EventContext = serde_json::from_value(event_data).unwrap();
         // println!("{:#?}", event_context);
         assert_eq!(event_context.schema, Some("2.0".to_string()));
-}
-}

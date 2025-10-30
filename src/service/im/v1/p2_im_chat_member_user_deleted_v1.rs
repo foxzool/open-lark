@@ -2,18 +2,16 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2ImChatMemberUserDeletedV1 {
     pub schema: String,
     pub header: EventHeader,
     pub event: P2ImChatMemberUserDeletedV1Data,
-}
 pub(crate) struct P2ImChatMemberUserDeletedV1ProcessorImpl<F>,
 where
     F: Fn(P2ImChatMemberUserDeletedV1) + 'static,
 {
     f: F,
-}
 impl<F> EventHandler for P2ImChatMemberUserDeletedV1ProcessorImpl<F>,
 where
     F: Fn(P2ImChatMemberUserDeletedV1) + 'static + Sync + Send,
@@ -23,17 +21,14 @@ let message: P2ImChatMemberUserDeletedV1 = serde_json::from_slice(payload)?;
         (self.f)(message);
 Ok(()),
     }
-}
 impl<F> P2ImChatMemberUserDeletedV1ProcessorImpl<F>,
 where
     F: Fn(P2ImChatMemberUserDeletedV1) + 'static,
 {,
 pub(crate) fn new(f: F) -> Self {
         P2ImChatMemberUserDeletedV1ProcessorImpl { f }
-}
-}
 /// 用户移出聊天事件数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2ImChatMemberUserDeletedV1Data {
     /// 聊天 ID
     pub chat_id: String,
@@ -48,18 +43,16 @@ pub struct P2ImChatMemberUserDeletedV1Data {
     /// 移除原因,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub reason: Option<DeleteReason>,
-}
 /// 事件操作者信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EventOperator {
     /// 操作者用户 ID
     pub operator_id: UserId,
     /// 操作者类型 (user, bot, app, system),
 #[serde(skip_serializing_if = "Option::is_none")]
     pub operator_type: Option<String>,
-}
 /// 被移除的用户信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DeletedUser {
     /// 用户 ID
     pub user_id: UserId,
@@ -75,18 +68,16 @@ pub struct DeletedUser {
     /// 加入时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub join_time: Option<String>,
-}
 /// 移除原因,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DeleteReason {
     /// 原因类型 (kicked, left, disbanded, expired)
     pub reason_type: String,
     /// 详细描述,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-}
 /// 用户 ID 信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UserId {
     /// 用户的 union id,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -96,4 +87,3 @@ pub struct UserId {
     pub user_id: Option<String>,
     /// 用户的 open id
     pub open_id: String,
-}

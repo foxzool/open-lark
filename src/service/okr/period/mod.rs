@@ -3,62 +3,58 @@ use serde::{Deserialize, Serialize};
 use open_lark_core::core::api_req::ApiRequest;
 use crate::{
     core::{,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         trait_system::Service,
         SDKResult,
-    }
     service::okr::models::{I18nText, PageResponse, Period, PeriodStatus}
 };
 /// OKR 周期管理服务
 #[derive(Debug)]
 pub struct PeriodService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 周期列表响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PeriodListResponse {
+}
     /// 周期列表
 #[serde(flatten)]
     pub periods: PageResponse<Period>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 周期创建响应
-#[derive(.*?)]
-pub struct PeriodCreateResponse {
-    /// 创建的周期信息
-    pub period: Period,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 周期状态更新响应
-#[derive(.*?)]
-pub struct PeriodStatusUpdateResponse {
-    /// 更新后的周期信息
-    pub period: Period,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl PeriodService {
-    /// 创建 OKR 周期管理服务实例
-pub fn new() -> Self {
+    pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 周期创建响应
+#[derive(Debug, Clone)]
+pub struct PeriodCreateResponse {
 }
-/// 创建 OKR 周期
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 周期状态更新响应
+#[derive(Debug, Clone)]
+}
+pub struct PeriodStatusUpdateResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl PeriodService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建 OKR 周期
     ///,
 /// 创建新的 OKR 周期，设置周期的基本信息如名称、时间范围等。
     ///,
@@ -98,8 +94,7 @@ pub fn new() -> Self {
     ///     println!("创建的周期ID: {}" response.data.unwrap().period.period_id);
 ///,
     ///     Ok(())
-    /// }
-/// ```
+    /// /// ```
     pub async fn create_period(
         &self,
         request: PeriodCreateRequest,
@@ -112,9 +107,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 修改 OKR 周期状态
     ///,
 /// 修改指定周期的状态，如将草稿状态的周期激活，或结束正在进行的周期。
@@ -145,9 +138,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取 OKR 周期列表
     ///,
 /// 查询系统中的 OKR 周期列表，支持按状态筛选和分页查询。
@@ -175,33 +166,22 @@ let mut api_req = ApiRequest {,
 // 添加查询参数
         if let Some(status) = request.status {
             api_req.query_params.insert("status", format!("{status:?}"));
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert("page_size", page_size.to_string());
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
 impl Service for PeriodService {,
     fn config(&self) -> &Config {,
 &self.config,
-    }
-fn service_name() -> &'static str {,
+    fn service_name() -> &'static str {,
         "period",
-}
 fn service_version() -> &'static str {,
         "v1",
-}
-}
 /// 创建周期请求
-#[derive(.*?)]
-pub struct PeriodCreateRequest {
+#[derive(Debug, Clone)]
     /// 周期名称
     pub name: I18nText,
     /// 开始时间（毫秒时间戳）
@@ -214,19 +194,15 @@ pub struct PeriodCreateRequest {
     /// 初始状态
 #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<PeriodStatus>,
-}
 /// 周期状态更新请求
-#[derive(.*?)]
-pub struct PeriodStatusUpdateRequest {
+#[derive(Debug, Clone)]
     /// 新状态
     pub status: PeriodStatus,
     /// 更新原因
 #[serde(skip_serializing_if = "Option::is_none")]
     pub reason: Option<String>,
-}
 /// 周期列表查询请求
-#[derive(.*?)]
-pub struct PeriodListRequest {
+#[derive(Debug, Clone)]
     /// 状态筛选
 #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<PeriodStatus>,
@@ -237,3 +213,8 @@ pub struct PeriodListRequest {
 #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
 }
+pub struct PeriodCreateRequest {
+pub struct PeriodStatusUpdateRequest {
+pub struct PeriodListRequest {
+}}
+}}}}}}}}}}}}}}}}}}}}}}

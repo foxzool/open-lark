@@ -10,12 +10,10 @@ use serde::{Deserialize, Serialize};
 /// 单位管理服务,
 pub struct UnitService {
     config: Config,
-}
 impl UnitService {
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 创建单位,
+}/// 创建单位,
     pub async fn create(
         &self,
         req: &CreateUnitRequest,
@@ -176,69 +174,66 @@ let api_req = ApiRequest {,
         let resp = Transport::<DeleteUnitResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateUnitRequest {
     pub unit: Unit,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateUnitResponse {
     pub unit: Unit,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PatchUnitRequest {
     pub unit: Unit,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PatchUnitResponse {
     pub unit: Unit,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BindDepartmentRequest {
     pub department_id: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BindDepartmentResponse {}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UnbindDepartmentRequest {
     pub department_id: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct UnbindDepartmentResponse {}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListUnitDepartmentsRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
@@ -246,58 +241,57 @@ pub struct ListUnitDepartmentsRequest {
     pub page_size: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListUnitDepartmentsResponse {
     pub department_list: Vec<Department>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetUnitResponse {
     pub unit: Unit,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListUnitsRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListUnitsResponse {
     pub items: Vec<Unit>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DeleteUnitResponse {}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}

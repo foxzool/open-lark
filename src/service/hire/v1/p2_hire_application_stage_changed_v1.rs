@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 /// 投递阶段变更事件数据,
 ///
 /// 当候选人投递状态发生变更时触发此事件，包含投递的阶段转移信息。
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ApplicationStageChangedData {
     /// 投递ID
     pub application_id: String,

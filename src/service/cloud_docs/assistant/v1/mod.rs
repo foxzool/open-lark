@@ -5,14 +5,9 @@ pub mod subscription;
 pub struct V1 {
 /// 订阅管理
     pub subscription: SubscriptionService,
-    #[allow(dead_code)]
-    config: Config,
-}
+}    #[allow(dead_code)]
+    config: Config}
 impl V1 {
-    pub fn new() -> Self {
-Self {
-            subscription: SubscriptionService::new(config.clone()),
-            config,
-        }
-}
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }

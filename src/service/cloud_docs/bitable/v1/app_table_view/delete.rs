@@ -6,8 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -19,16 +18,9 @@ use crate::,
 };
 use super::AppTableViewService;
 impl AppTableViewService {
-/// 删除视图,
-    pub async fn delete(
-        &self,
-        request: DeleteViewRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<DeleteViewResponse>> {
-        delete_view(request, &self.config, option).await,
-}
-}
-/// 删除视图,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 删除视图,
 pub async fn delete_view(
     request: DeleteViewRequest,
     config: &Config,
@@ -44,10 +36,9 @@ api_req.api_path = BITABLE_V1_VIEW_DELETE,
 
     let api_resp = Transport::request(api_req, config, option).await?;
 Ok(api_resp),
-}
 
 /// 删除视图请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DeleteViewRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token
@@ -55,68 +46,38 @@ pub struct DeleteViewRequest {
     /// 数据表的 table_id
     table_id: String,
     /// 视图的 view_id
-    view_id: String,
-}
+    view_id: String}
 impl DeleteViewRequest {
-    pub fn w+.*{
-DeleteViewRequestBuilder::default(),
-    }
-/// 创建删除视图请求,
-    pub fn new(app_token: impl ToString, table_id: impl ToString, view_id: impl ToString) -> Self {
-Self {
-            api_request: ApiRequest::default(),
-            app_token: app_token.to_string(),
-            table_id: table_id.to_string(),
-            view_id: view_id.to_string(),
-        }
-}
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct DeleteViewRequestBuilder {
-    request: DeleteViewRequest,
-}
+    request: DeleteViewRequest}
 impl DeleteViewRequestBuilder {
-    /// 多维表格的 app_token
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {
-self.request.app_token = app_token.to_string();
-        self,
-}
-/// 数据表的 table_id,
-    pub fn table_id(mut self, table_id: impl ToString) -> Self {
-self.request.table_id = table_id.to_string();
-        self,
-}
-/// 视图的 view_id,
-    pub fn view_id(mut self, view_id: impl ToString) -> Self {
-self.request.view_id = view_id.to_string();
-        self,
-}
-pub fn w+.*{
-        self.request,
-}
-}
-impl_executable_builder_config!(,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}impl_executable_builder_config!(,
     DeleteViewRequestBuilder,
     DeleteViewRequest,
     BaseResponse<DeleteViewResponse>,
     delete_view,
 );
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DeleteViewResponse {
     /// 删除结果
     pub deleted: bool,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]
-    fn test_delete_view_request() {,
+    fn test_delete_view_request() {
 let request = DeleteViewRequest::builder(),
             .app_token()
 .table_id()
@@ -125,14 +86,11 @@ let request = DeleteViewRequest::builder(),
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
         assert_eq!(request.table_id, "tblsRc9GRRXKqhvW");
         assert_eq!(request.view_id, "vewTpR1urY");
-}
 #[test]
-    fn test_delete_view_request_new() {,
+    fn test_delete_view_request_new() {
 let request =,
             DeleteViewRequest::new("bascnmBA*****yGehy8", "tblsRc9GRRXKqhvW", "vewTpR1urY");
 
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
         assert_eq!(request.table_id, "tblsRc9GRRXKqhvW");
         assert_eq!(request.view_id, "vewTpR1urY");
-}
-}

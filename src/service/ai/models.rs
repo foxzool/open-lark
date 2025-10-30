@@ -4,7 +4,6 @@ use serde::{Deserialize, Serialize};
 pub struct FileRecognizeRequest {
     /// 文件token或base64编码
     pub file: String,
-}
 /// 通用识别响应,
 #[derive(Debug, Deserialize, Serialize)]
 pub struct pub struct RecognizeResponse<T> {, {
@@ -13,7 +12,6 @@ pub struct pub struct RecognizeResponse<T> {, {
     /// 识别置信度,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub confidence: Option<f64>,
-}
 /// 简历信息,
 #[derive(Debug, Deserialize, Serialize)]
 pub struct ResumeInfo {
@@ -41,7 +39,6 @@ pub struct ResumeInfo {
     /// 技能,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub skills: Option<Vec<String>>,
-}
 /// 教育经历,
 #[derive(Debug, Deserialize, Serialize)]
 pub struct EducationInfo {
@@ -60,7 +57,6 @@ pub struct EducationInfo {
     /// 结束时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<String>,
-}
 /// 工作经历,
 #[derive(Debug, Deserialize, Serialize)]
 pub struct WorkExperienceInfo {
@@ -79,7 +75,6 @@ pub struct WorkExperienceInfo {
     /// 工作描述,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-}
 /// 身份证信息,
 #[derive(Debug, Deserialize, Serialize)]
 pub struct IdCardInfo {
@@ -107,7 +102,6 @@ pub struct IdCardInfo {
     /// 有效期,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub valid_period: Option<String>,
-}
 /// 驾驶证信息,
 #[derive(Debug, Deserialize, Serialize)]
 pub struct DrivingLicenseInfo {
@@ -135,7 +129,6 @@ pub struct DrivingLicenseInfo {
     /// 有效期,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub valid_period: Option<String>,
-}
 /// 银行卡信息,
 #[derive(Debug, Deserialize, Serialize)]
 pub struct BankCardInfo {
@@ -151,7 +144,6 @@ pub struct BankCardInfo {
     /// 有效期,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub valid_period: Option<String>,
-}
 /// 营业执照信息,
 #[derive(Debug, Deserialize, Serialize)]
 pub struct BusinessLicenseInfo {
@@ -182,7 +174,6 @@ pub struct BusinessLicenseInfo {
     /// 住所,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub address: Option<String>,
-}
 /// 增值税发票信息,
 #[derive(Debug, Deserialize, Serialize)]
 pub struct VatInvoiceInfo {
@@ -216,7 +207,6 @@ pub struct VatInvoiceInfo {
     /// 价税合计,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub total_amount_with_tax: Option<String>,
-}
 /// 合同字段信息,
 #[derive(Debug, Deserialize, Serialize)]
 pub struct ContractInfo {
@@ -244,7 +234,6 @@ pub struct ContractInfo {
     /// 其他字段,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub other_fields: Option<serde_json::Value>,
-}
 /// 名片信息,
 #[derive(Debug, Deserialize, Serialize)]
 pub struct BusinessCardInfo {
@@ -272,7 +261,6 @@ pub struct BusinessCardInfo {
     /// 地址,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub address: Option<String>,
-}
 /// OCR文字识别结果,
 #[derive(Debug, Deserialize, Serialize)]
 pub struct OcrResult {
@@ -281,7 +269,6 @@ pub struct OcrResult {
     /// 文本位置信息,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub text_detection: Option<Vec<TextDetection>>,
-}
 /// 文本位置信息,
 #[derive(Debug, Deserialize, Serialize)]
 pub struct TextDetection {
@@ -293,7 +280,6 @@ pub struct TextDetection {
     /// 置信度,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub confidence: Option<f64>,
-}
 /// 边界框,
 #[derive(Debug, Deserialize, Serialize)]
 pub struct BoundingBox {
@@ -305,7 +291,6 @@ pub struct BoundingBox {
     pub width: i32,
     /// 高度
     pub height: i32,
-}
 /// 语音识别请求,
 #[derive(Debug, Deserialize, Serialize)]
 pub struct SpeechRecognizeRequest {
@@ -320,7 +305,6 @@ pub struct SpeechRecognizeRequest {
     /// 语言,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub language: Option<String>,
-}
 /// 语音文件,
 #[derive(Debug, Deserialize, Serialize)]
 pub struct SpeechFile {
@@ -330,7 +314,6 @@ pub struct SpeechFile {
     /// base64编码的音频数据,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
-}
 /// 语音识别结果,
 #[derive(Debug, Deserialize, Serialize)]
 pub struct SpeechRecognizeResult {
@@ -339,7 +322,6 @@ pub struct SpeechRecognizeResult {
     /// 置信度,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub confidence: Option<f64>,
-}
 /// 流式语音识别请求,
 #[derive(Debug, Deserialize, Serialize)]
 pub struct StreamSpeechRequest {
@@ -354,13 +336,11 @@ pub struct StreamSpeechRequest {
     /// 语言,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub language: Option<String>,
-}
 /// 文本语种检测请求,
 #[derive(Debug, Deserialize, Serialize)]
 pub struct LanguageDetectRequest {
     /// 要检测的文本
     pub text: String,
-}
 /// 语种检测结果,
 #[derive(Debug, Deserialize, Serialize)]
 pub struct LanguageDetectResult {
@@ -369,7 +349,6 @@ pub struct LanguageDetectResult {
     /// 置信度,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub confidence: Option<f64>,
-}
 /// 文本翻译请求,
 #[derive(Debug, Deserialize, Serialize)]
 pub struct TranslateRequest {
@@ -380,7 +359,6 @@ pub struct TranslateRequest {
     pub target_language: String,
     /// 要翻译的文本
     pub text: String,
-}
 /// 翻译结果,
 #[derive(Debug, Deserialize, Serialize)]
 pub struct TranslateResult {
@@ -389,7 +367,6 @@ pub struct TranslateResult {
     /// 检测到的源语言,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub detected_language: Option<String>,
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
@@ -403,7 +380,6 @@ let serialized = serde_json::to_string(&request).unwrap();
         let deserialized: FileRecognizeRequest = serde_json::from_str(&serialized).unwrap();
 
         assert_eq!(request.file, deserialized.file);
-}
 #[test]
     
 let response = RecognizeResponse {
@@ -415,7 +391,6 @@ let serialized = serde_json::to_string(&response).unwrap();
 
         assert_eq!(response.data, deserialized.data);
         assert_eq!(response.confidence, deserialized.confidence);
-}
 #[test]
     
 let resume = ResumeInfo {
@@ -480,7 +455,6 @@ let serialized = serde_json::to_string(&education).unwrap();
         assert_eq!(education.degree, deserialized.degree);
         assert_eq!(education.start_time, deserialized.start_time);
         assert_eq!(education.end_time, deserialized.end_time);
-}
 #[test]
     
 let work = WorkExperienceInfo {
@@ -498,7 +472,6 @@ let serialized = serde_json::to_string(&work).unwrap();
         assert_eq!(work.start_time, deserialized.start_time);
         assert_eq!(work.end_time, deserialized.end_time);
         assert_eq!(work.description, deserialized.description);
-}
 #[test]
     
 let id_card = IdCardInfo {
@@ -522,7 +495,6 @@ let serialized = serde_json::to_string(&id_card).unwrap();
         assert_eq!(id_card.address, deserialized.address);
         assert_eq!(id_card.authority, deserialized.authority);
         assert_eq!(id_card.valid_period, deserialized.valid_period);
-}
 #[test]
     
 let card = BusinessCardInfo {
@@ -545,7 +517,6 @@ let serialized = serde_json::to_string(&card).unwrap();
         assert_eq!(card.mobile, deserialized.mobile);
         assert_eq!(card.email, deserialized.email);
         assert_eq!(card.website, deserialized.website);
-}
 #[test]
     
 let ocr_result = OcrResult {
@@ -583,7 +554,6 @@ assert_eq!(
             deserialized.recognition_text,
 );
         assert_eq!(speech_result.confidence, deserialized.confidence);
-}
 #[test]
     
 let translate_result = TranslateResult {
@@ -621,7 +591,6 @@ assert!(deserialized.email.is_none());
         assert!(deserialized.education.is_none());
 assert!(deserialized.work_experience.is_none());
         assert!(deserialized.skills.is_none());
-}
 #[test]
     
 let request = FileRecognizeRequest {
@@ -631,7 +600,6 @@ let request = FileRecognizeRequest {
         let debug_string = format!("{:?}", request);
 assert!(debug_string.contains("FileRecognizeRequest"));
         assert!(debug_string.contains("test_file"));
-}
 #[test]
     
 let license = DrivingLicenseInfo {
@@ -655,7 +623,6 @@ let serialized = serde_json::to_string(&license).unwrap();
         assert_eq!(license.license_number, deserialized.license_number);
         assert_eq!(license.vehicle_type, deserialized.vehicle_type);
         assert_eq!(license.valid_period, deserialized.valid_period);
-}
 #[test]
     
 let bank_card = BankCardInfo {
@@ -671,7 +638,6 @@ let serialized = serde_json::to_string(&bank_card).unwrap();
         assert_eq!(bank_card.card_number, deserialized.card_number);
         assert_eq!(bank_card.card_type, deserialized.card_type);
         assert_eq!(bank_card.valid_period, deserialized.valid_period);
-}
 #[test]
     
 let license = BusinessLicenseInfo {
@@ -697,7 +663,6 @@ let serialized = serde_json::to_string(&license).unwrap();
         assert_eq!(license.business_term, deserialized.business_term);
         assert_eq!(license.business_scope, deserialized.business_scope);
         assert_eq!(license.address, deserialized.address);
-}
 #[test]
     
 let invoice = VatInvoiceInfo {
@@ -761,7 +726,6 @@ let serialized = serde_json::to_string(&contract).unwrap();
         assert_eq!(contract.effective_date, deserialized.effective_date);
         assert_eq!(contract.end_date, deserialized.end_date);
         assert_eq!(contract.other_fields, deserialized.other_fields);
-}
 #[test]
     
 let detection = TextDetection {
@@ -786,7 +750,6 @@ let serialized = serde_json::to_string(&detection).unwrap();
             assert_eq!(orig_box.y, deser_box.y);
             assert_eq!(orig_box.width, deser_box.width);
             assert_eq!(orig_box.height, deser_box.height);
-}
     }
 #[test]
     
@@ -807,7 +770,6 @@ let serialized = serde_json::to_string(&request).unwrap();
         assert_eq!(request.language, deserialized.language);
         assert_eq!(request.speech.file_token, deserialized.speech.file_token);
         assert_eq!(request.speech.content, deserialized.speech.content);
-}
 #[test]
     
 let speech_file = SpeechFile {
@@ -821,7 +783,6 @@ let serialized = serde_json::to_string(&speech_file).unwrap();
         assert_eq!(speech_file.content, deserialized.content);
 assert!(!serialized.contains("file_token"));
         assert!(serialized.contains("content"));
-}
 #[test]
     
 let request = StreamSpeechRequest {
@@ -837,7 +798,6 @@ let serialized = serde_json::to_string(&request).unwrap();
         assert_eq!(request.format, deserialized.format);
         assert_eq!(request.sample_rate, deserialized.sample_rate);
         assert_eq!(request.language, deserialized.language);
-}
 #[test]
     
 let request = LanguageDetectRequest {
@@ -854,7 +814,6 @@ let serialized = serde_json::to_string(&result).unwrap();
         let deserialized: LanguageDetectResult = serde_json::from_str(&serialized).unwrap();
         assert_eq!(result.language, deserialized.language);
         assert_eq!(result.confidence, deserialized.confidence);
-}
 #[test]
     
 let request = TranslateRequest {
@@ -868,7 +827,6 @@ let serialized = serde_json::to_string(&request).unwrap();
         assert_eq!(request.source_language, deserialized.source_language);
         assert_eq!(request.target_language, deserialized.target_language);
         assert_eq!(request.text, deserialized.text);
-}
 #[test]
     
 let request = TranslateRequest {
@@ -882,7 +840,6 @@ let deserialized: TranslateRequest = serde_json::from_str(&serialized).unwrap();
         assert_eq!(request.source_language, deserialized.source_language);
         assert_eq!(request.target_language, deserialized.target_language);
         assert_eq!(request.text, deserialized.text);
-}
 #[test]
     
 let id_card = IdCardInfo {
@@ -941,7 +898,6 @@ let deserialized: RecognizeResponse<ResumeInfo> =,
             serde_json::from_str(&serialized).unwrap();
         assert_eq!(response.confidence, deserialized.confidence);
         assert_eq!(response.data.name, deserialized.data.name);
-}
 #[test]
     
 let complex_resume = ResumeInfo {
@@ -1034,4 +990,3 @@ assert_eq!(
             deserialized.skills.as_ref().unwrap()[0]
 );
     }
-}

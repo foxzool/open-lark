@@ -6,8 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         req_option, SDKResult,
@@ -15,7 +14,7 @@ use crate::,
     service::cloud_docs::sheets::v2::SpreadsheetService,
 };
 /// 写入图片,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct WriteImageRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -28,44 +27,18 @@ pub struct WriteImageRequest {
     /// "BPG", "HEIC" 等图片格式
     image: Vec<u8>,
     /// 写入的图片名字
-    name: String,
-}
+    name: String}
 impl WriteImageRequest {
-    pub fn w+.*{
-WriteImageRequestBuilder::default(),
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct WriteImageRequestBuilder {
-    request: WriteImageRequest,
-}
+    request: WriteImageRequest}
 impl WriteImageRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
-self.request.spreadsheet_token = spreadsheet_token.to_string();
-        self,
-}
-
-    pub fn range(mut self, range: impl ToString) -> Self {
-self.request.range = range.to_string();
-        self,
-}
-
-    pub fn image(mut self, image: Vec<u8>) -> Self {
-self.request.image = image;
-        self,
-}
-
-    pub fn name(mut self, name: impl ToString) -> Self {
-self.request.name = name.to_string();
-        self,
-}
-pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-self.request,
-    }
-}
-/// 写入图片响应体,
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 写入图片响应体,
+#[derive(Debug, Clone)]
 pub struct WriteImageResponse {
     /// spreadsheet 的 token,
 #[serde(rename = "spreadsheetToken")]
@@ -75,32 +48,16 @@ pub struct WriteImageResponse {
     /// 写入图片的range,
 #[serde(rename = "updateRange")]
     pub update_range: String,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 impl SpreadsheetService {
-    /// 该接口用于根据 spreadsheetToken 和 range 向单个格子写入图片。,
-pub async fn write_image(,
-        &self,
-        request: WriteImageRequest,
-        option: Option<req_option::RequestOption>,
-    ) -> SDKResult<BaseResponse<WriteImageResponse>> {,
-let mut api_req = request.api_request;
-        api_req.set_api_path(
-            SHEETS_V2_SPREADSHEET_VALUES_IMAGE.replace("{}", &request.spreadsheet_token),
-        );
-api_req.set_http_method(reqwest::Method::POST);
-        api_req
-            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::App]);
-
-        let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
-Ok(api_resp),
-    }
-}
-#[cfg(test)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[cfg(test)]
 mod tests {
 use crate::,
 {
@@ -110,14 +67,11 @@ use crate::,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
         config::Config,
-        constants::AppType,
-}
+        constants::AppType}
     service::cloud_docs::sheets::v2::{
-            data_operation::{WriteImageRequest, WriteImageResponse,
-};
+            data_operation::{WriteImageRequest, WriteImageResponse};
             SpreadsheetService,
-        }
-    };
+};
 fn create_service() -> SpreadsheetService {,
         let config = Config::builder()
 .app_id()
@@ -125,7 +79,6 @@ fn create_service() -> SpreadsheetService {,
 .app_type()
             .build();
         SpreadsheetService { config }
-}
 fn create_test_image_data() -> Vec<u8> {,
         // Simple 1x1 PNG image (smallest valid PNG),
 vec![,
@@ -145,22 +98,19 @@ vec![,
             0x00, 0x00, 0x00, 0x00, // IEND chunk length
             0x49, 0x45, 0x4E, 0x44, // IEND chunk type
             0xAE, 0x42, 0x60, 0x82, // IEND CRC,
-],
-    }
+]}
 fn create_jpeg_header() -> Vec<u8> {,
         // JPEG file signature
         vec![0xFF, 0xD8, 0xFF, 0xE0, 0x00, 0x10, 0x4A, 0x46, 0x49, 0x46]
-}
 #[test]
-    fn test_write_image_builder_default() {,
+    fn test_write_image_builder_default() {
 let request = WriteImageRequest::builder().build();
         assert_eq!(request.spreadsheet_token, "");
         assert_eq!(request.range, "");
         assert_eq!(request.image, Vec::<u8>::new());
         assert_eq!(request.name, "");
-}
 #[test]
-    fn test_write_image_builder_basic() {,
+    fn test_write_image_builder_basic() {
 let image_data = create_test_image_data();
         let request = WriteImageRequest::builder(),
 .spreadsheet_token()
@@ -172,9 +122,8 @@ let image_data = create_test_image_data();
         assert_eq!(request.range, "Sheet1!A1:A1");
         assert_eq!(request.image, image_data);
         assert_eq!(request.name, "test_image.png");
-}
 #[test]
-    fn test_write_image_builder_all_options() {,
+    fn test_write_image_builder_all_options() {
 let image_data = create_test_image_data();
         let request = WriteImageRequest::builder(),
 .spreadsheet_token()
@@ -186,9 +135,8 @@ let image_data = create_test_image_data();
         assert_eq!(request.range, "Photos!B2:B2");
         assert_eq!(request.image, image_data);
         assert_eq!(request.name, "company_logo.png");
-}
 #[test]
-    fn test_write_image_builder_chaining() {,
+    fn test_write_image_builder_chaining() {
 let image_data = create_test_image_data();
         let request = WriteImageRequest::builder(),
 .spreadsheet_token()
@@ -200,9 +148,8 @@ let image_data = create_test_image_data();
         assert_eq!(request.range, "Gallery!C3:C3");
         assert_eq!(request.image, image_data);
         assert_eq!(request.name, "chained_image.png");
-}
 #[test]
-    fn test_write_image_with_different_formats() {,
+    fn test_write_image_with_different_formats() {
 let png_data = create_test_image_data();
         let jpeg_data = create_jpeg_header();
 let png_request = WriteImageRequest::builder(),
@@ -222,9 +169,8 @@ let jpeg_request = WriteImageRequest::builder(),
         assert_eq!(jpeg_request.image, jpeg_data);
         assert_eq!(png_request.name, "image.png");
         assert_eq!(jpeg_request.name, "image.jpg");
-}
 #[test]
-    fn test_write_image_with_unicode_names() {,
+    fn test_write_image_with_unicode_names() {
 let image_data = create_test_image_data();
         let request = WriteImageRequest::builder(),
 .spreadsheet_token()
@@ -236,9 +182,8 @@ let image_data = create_test_image_data();
         assert_eq!(request.range, "图片!A1:A1");
         assert_eq!(request.image, image_data);
         assert_eq!(request.name, "公司标志.png");
-}
 #[test]
-    fn test_write_image_with_special_characters() {,
+    fn test_write_image_with_special_characters() {
 let image_data = create_test_image_data();
         let request = WriteImageRequest::builder(),
 .spreadsheet_token()
@@ -250,9 +195,8 @@ let image_data = create_test_image_data();
         assert_eq!(request.range, "'Sheet With Spaces'!A1:A1");
         assert_eq!(request.image, image_data);
         assert_eq!(request.name, "image@2x!#$%^&*().png");
-}
 #[test]
-    fn test_write_image_empty_image() {,
+    fn test_write_image_empty_image() {
 let request = WriteImageRequest::builder(),
             .spreadsheet_token()
 .range()
@@ -264,9 +208,8 @@ let request = WriteImageRequest::builder(),
         assert_eq!(request.range, "Sheet1!A1:A1");
         assert_eq!(request.image, Vec::<u8>::new());
         assert_eq!(request.name, "empty.png");
-}
 #[test]
-    fn test_write_image_large_data() {,
+    fn test_write_image_large_data() {
 let large_image_data = vec![0u8; 1024 * 1024]; // 1MB of data,
         let request = WriteImageRequest::builder(),
 .spreadsheet_token()
@@ -278,9 +221,8 @@ let large_image_data = vec![0u8; 1024 * 1024]; // 1MB of data,
         assert_eq!(request.range, "BigImages!A1:A1");
         assert_eq!(request.image.len(), 1024 * 1024);
         assert_eq!(request.name, "large_image.png");
-}
 #[test]
-    fn test_write_image_different_ranges() {,
+    fn test_write_image_different_ranges() {
 let image_data = create_test_image_data();
         let ranges = [
             "Sheet1!A1:A1",
@@ -298,10 +240,9 @@ let request = WriteImageRequest::builder(),
 .build();
             assert_eq!(request.range, *range);
             assert_eq!(request.name, format!("image_{}.png", i));
-}
     }
 #[test]
-    fn test_write_image_serialization() {,
+    fn test_write_image_serialization() {
 let image_data = create_test_image_data();
         let request = WriteImageRequest::builder(),
 .spreadsheet_token()
@@ -316,21 +257,18 @@ assert!(serialized.is_ok());
         assert_eq!(json_value["name"] "test_image.png");
 // Note: image data is binary and serialized as array of numbers,
         assert!(json_value["image"].is_array());
-}
 #[test]
-    fn test_write_image_response_deserialization() {,
+    fn test_write_image_response_deserialization() {
 let response_json = serde_json::json!({,
             "spreadsheetToken": "test_token_123",
             "revision": 456,
-            "updateRange": "Sheet1!A1:A1",
-});
+            "updateRange": "Sheet1!A1:A1"});
 let response: WriteImageResponse = serde_json::from_value(response_json).unwrap();
         assert_eq!(response.spread_sheet_token, "test_token_123");
         assert_eq!(response.revision, 456);
         assert_eq!(response.update_range, "Sheet1!A1:A1");
-}
 #[test]
-    fn test_write_image_various_extensions() {,
+    fn test_write_image_various_extensions() {
 let image_data = create_test_image_data();
         let extensions = vec!["png", "jpg", "jpeg", "gif", "bmp", "tiff", "heic", "webp"];
 for ext in extensions {,
@@ -342,10 +280,9 @@ for ext in extensions {,
 .build();
             assert_eq!(request.name, format!("test_image.{}", ext));
             assert_eq!(request.image, image_data);
-}
     }
 #[test]
-    fn test_write_image_long_filename() {,
+    fn test_write_image_long_filename() {
 let image_data = create_test_image_data();
         let long_name = "a".repeat(255) + ".png";
 let request = WriteImageRequest::builder(),
@@ -357,7 +294,6 @@ let request = WriteImageRequest::builder(),
 
         assert_eq!(request.name, long_name);
         assert_eq!(request.image, image_data);
-}
 #[test]
     ,
         let original_data = vec![0x89, 0x50, 0x4E, 0x47, 0xFF, 0x00, 0xAA, 0xBB];
@@ -372,17 +308,15 @@ let request = WriteImageRequest::builder(),
 // Verify each byte is preserved,
         for (i, &byte) in original_data.iter().enumerate() {
             assert_eq!(request.image[i] byte);
-}
     }
 #[test]
-    fn test_write_image_service_creation() {,
+    fn test_write_image_service_creation() {
 let service = create_service();
         assert_eq!(service.config.app_id, "test_app_id");
         assert_eq!(service.config.app_secret, "test_app_secret");
         assert!(matches!(service.config.app_type, AppType::SelfBuild));
-}
 #[test]
-    fn test_write_image_complex_range_references() {,
+    fn test_write_image_complex_range_references() {
 let image_data = create_test_image_data();
         let complex_ranges = vec![
             "Sheet1!A1:A1",
@@ -398,10 +332,9 @@ for range in complex_ranges {,
                 .name()
 .build();
             assert_eq!(request.range, range);
-}
     }
 #[test]
-    fn test_write_image_different_image_sizes() {,
+    fn test_write_image_different_image_sizes() {
 let spreadsheet_token = "size_test";
         // Test different image sizes
         let sizes = vec![1, 10, 100, 1000, 10000];
@@ -415,10 +348,9 @@ let request = WriteImageRequest::builder(),
 .build();
             assert_eq!(request.image.len(), size);
             assert_eq!(request.name, format!("image_{}bytes.png", size));
-}
     }
 #[test]
-    fn test_write_image_metadata_only() {,
+    fn test_write_image_metadata_only() {
 // Test building request with metadata but no image data yet,
         let request = WriteImageRequest::builder(),
 .spreadsheet_token()
@@ -430,9 +362,8 @@ let request = WriteImageRequest::builder(),
         assert_eq!(request.range, "Sheet1!A1:A1");
         assert_eq!(request.name, "placeholder.png");
         assert_eq!(request.image, Vec::<u8>::new());
-}
 #[test]
-    fn test_write_image_very_long_token() {,
+    fn test_write_image_very_long_token() {
 let very_long_token = "a".repeat(1000);
         let image_data = create_test_image_data();
 let request = WriteImageRequest::builder(),
@@ -444,14 +375,12 @@ let request = WriteImageRequest::builder(),
 
         assert_eq!(request.spreadsheet_token, very_long_token);
         assert_eq!(request.image, image_data);
-}
 #[test]
-    fn test_write_image_response_struct_debug() {,
+    fn test_write_image_response_struct_debug() {
 let response = WriteImageResponse {,
             spread_sheet_token: "debug_test".to_string(),
             revision: 123,
-            update_range: "Sheet1!A1:A1".to_string(),
-        };
+            update_range: "Sheet1!A1:A1".to_string()};
 
         let debug_str = format!("{:?}", response);
 assert!(debug_str.contains("debug_test"));
@@ -477,5 +406,3 @@ let request = WriteImageRequest::builder(),
         assert_eq!(request.range, "Sheet2!B2:B2");
         assert_eq!(request.image, image_data2);
         assert_eq!(request.name, "final.png");
-}
-}

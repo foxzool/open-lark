@@ -12,7 +12,7 @@ use crate::core::{,
     SDKResult,
 };
 /// 关闭密码保护请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DeletePasswordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -21,79 +21,18 @@ pub struct DeletePasswordRequest {
     token: String,
     /// 文档类型,
 #[serde(skip)]
-    obj_type: String,
-}
+    obj_type: String}
 impl DeletePasswordRequest {
-    pub fn w+.*{
-DeletePasswordRequestBuilder::default(),
-    }
-
-    pub fn new(token: impl ToString, obj_type: impl ToString) -> Self {
-Self {
-            token: token.to_string(),
-            obj_type: obj_type.to_string()
-            ..Default::default(),
-}
-    }
-/// 关闭文档密码保护,
-    pub fn for_doc(token: impl ToString) -> Self {
-        Self::new(token, "doc"),
-}
-/// 关闭电子表格密码保护,
-    pub fn for_sheet(token: impl ToString) -> Self {
-        Self::new(token, "sheet"),
-}
-/// 关闭多维表格密码保护,
-    pub fn for_bitable(token: impl ToString) -> Self {
-        Self::new(token, "bitable"),
-}
-/// 关闭知识库密码保护,
-    pub fn for_wiki(token: impl ToString) -> Self {
-        Self::new(token, "wiki"),
-}
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct DeletePasswordRequestBuilder {
-    request: DeletePasswordRequest,
-}
+    request: DeletePasswordRequest}
 impl DeletePasswordRequestBuilder {
-    /// 文档token
-    pub fn token(mut self, token: impl ToString) -> Self {
-self.request.token = token.to_string();
-        self,
-}
-/// 文档类型,
-    pub fn obj_type(mut self, obj_type: impl ToString) -> Self {
-self.request.obj_type = obj_type.to_string();
-        self,
-}
-/// 设置为文档类型,
-    pub fn as_doc(mut self) -> Self {
-self.request.obj_type = "doc".to_string();
-        self,
-}
-/// 设置为电子表格类型,
-    pub fn as_sheet(mut self) -> Self {
-self.request.obj_type = "sheet".to_string();
-        self,
-}
-/// 设置为多维表格类型,
-    pub fn as_bitable(mut self) -> Self {
-self.request.obj_type = "bitable".to_string();
-        self,
-}
-/// 设置为知识库类型,
-    pub fn as_wiki(mut self) -> Self {
-self.request.obj_type = "wiki".to_string();
-        self,
-}
-pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-self.request,
-    }
-}
-/// 密码删除结果,
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 密码删除结果,
+#[derive(Debug, Clone)]
 pub struct PasswordDeletionResult {
     /// 删除时间
     pub delete_time: Option<i64>,
@@ -102,19 +41,18 @@ pub struct PasswordDeletionResult {
     /// 删除前的密码提示（脱敏）
     pub previous_password_hint: Option<String>,
     /// 删除操作ID
-    pub operation_id: Option<String>,
-}
+    pub operation_id: Option<String>}
 /// 关闭密码保护响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DeletePasswordResponse {
     /// 密码删除信息
     pub password_deletion: PasswordDeletionResult,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 关闭密码保护,
 pub async fn delete_password(
     request: DeletePasswordRequest,
@@ -136,60 +74,34 @@ api_req.set_api_path(EndpointBuilder::replace_param(,
     api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
     let api_resp = Transport::request(api_req, config, option).await?;
-Ok(api_resp),
-}
+Ok(api_resp)}
 
 impl PasswordDeletionResult {
-/// 是否有删除时间,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 是否删除成功,
     pub fn w+.*{
-self.delete_time.is_some(),
-    }
-/// 是否有操作ID,
-    pub fn w+.*{
-self.operation_id.is_some(),
-    }
-/// 是否有密码提示,
-    pub fn w+.*{
-self.previous_password_hint.is_some(),
-    }
-/// 获取删除时间格式化字符串,
-    pub fn w+.*{
-self.delete_time,
-            .map(|timestamp| format!("删除时间: {timestamp}")),
-}
-/// 是否删除成功,
-    pub fn w+.*{
-self.password_removed,
-    }
+self.password_removed}
 /// 获取删除状态描述,
     pub fn w+.*{
 if self.password_removed {,
-            "密码保护已关闭",
-} else {,
-"密码保护关闭失败",
-        }
-}
+            "密码保护已关闭"} else {,
+"密码保护关闭失败"}
 /// 获取删除操作摘要,
     pub fn w+.*{
 let mut info = Vec::new();
         info.push(self.deletion_status().to_string());
 if let Some(ref hint) = self.previous_password_hint {,
             info.push(format!("原密码: {hint}"));
-}
 if let Some(ref op_id) = self.operation_id {,
             info.push(format!("操作ID: {op_id}"));
-}
 
         info.join(", "),
-}
 /// 获取安全影响评估,
     pub fn w+.*{
 if self.password_removed {,
-            "文档安全级别降低，任何有链接的人都可以访问",
-} else {,
-"密码保护仍然有效",
-        }
-}
+            "文档安全级别降低，任何有链接的人都可以访问"} else {,
+"密码保护仍然有效"}
 /// 删除原因建议,
     pub fn w+.*{
 if self.password_removed {,
@@ -198,37 +110,17 @@ if self.password_removed {,
                 "密码管理复杂度降低".to_string(),
                 "提高访问便利性".to_string(),
                 "转为其他安全措施".to_string(),
-            ],
-} else {,
+            ]} else {,
 vec![,
                 "删除操作失败".to_string(),
                 "权限不足".to_string(),
                 "系统错误".to_string(),
-            ],
-}
+            ]}
     }
-}
 impl DeletePasswordResponse {
-    /// 获取密码删除信息,
-/// # API文档,
-    ///,
-/// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM,
-    pub fn w+.*{
-&self.password_deletion,
-    }
-/// 是否删除成功,
-    pub fn w+.*{
-self.password_deletion.password_removed,
-    }
-/// 获取删除摘要,
-    pub fn w+.*{
-self.password_deletion.deletion_summary(),
-    }
-/// 安全性评估,
-    pub fn security_assessment(&self) -> String {
-        format!("安全影响: {}", self.password_deletion.security_impact()),
-}
-/// 后续操作建议,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 后续操作建议,
     pub fn w+.*{
 let mut recommendations = Vec::new();
         if self.is_deleted() {,
@@ -266,17 +158,14 @@ log_parts.push(time);
         }
 if let Some(ref op_id) = self.password_deletion.operation_id {,
             log_parts.push(format!("操作ID: {op_id}"));
-}
 
         log_parts.join(", "),
-}
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]
-    fn test_delete_password_request_builder() {,
+    fn test_delete_password_request_builder() {
 let request = DeletePasswordRequest::builder(),
             .token()
 .as_doc()
@@ -284,9 +173,8 @@ let request = DeletePasswordRequest::builder(),
 
         assert_eq!(request.token, "doccnxxxxxx");
         assert_eq!(request.obj_type, "doc");
-}
 #[test]
-    fn test_convenience_methods() {,
+    fn test_convenience_methods() {
 let request = DeletePasswordRequest::for_doc("doccnxxxxxx");
         assert_eq!(request.obj_type, "doc");
         assert_eq!(request.token, "doccnxxxxxx");
@@ -299,15 +187,13 @@ let request = DeletePasswordRequest::for_bitable("bblcnxxxxxx");
 let request = DeletePasswordRequest::for_wiki("wikicnxxxxxx");
         assert_eq!(request.obj_type, "wiki");
         assert_eq!(request.token, "wikicnxxxxxx");
-}
 #[test]
-    fn test_password_deletion_result_methods() {,
+    fn test_password_deletion_result_methods() {
 let result = PasswordDeletionResult {,
             delete_time: Some(1234567890),
             password_removed: true,
             previous_password_hint: Some("pass****".to_string()),
-            operation_id: Some("op123456".to_string()),
-        };
+            operation_id: Some("op123456".to_string())};
 assert!(result.has_delete_time());
         assert!(result.has_operation_id());
 assert!(result.has_password_hint());
@@ -321,21 +207,18 @@ assert_eq!(,
             delete_time: None,
             password_removed: false,
             previous_password_hint: None,
-            operation_id: None,
-        };
+            operation_id: None};
 assert!(!failed_result.is_successfully_removed());
         assert_eq!(failed_result.deletion_status(), "密码保护关闭失败");
         assert_eq!(failed_result.security_impact(), "密码保护仍然有效");
-}
 #[test]
-    fn test_delete_password_response_methods() {,
+    fn test_delete_password_response_methods() {
 let response = DeletePasswordResponse {,
             password_deletion: PasswordDeletionResult {
                 delete_time: Some(1234567890),
                 password_removed: true,
                 previous_password_hint: Some("old****".to_string()),
-                operation_id: Some("op789".to_string()),
-            }
+                operation_id: Some("op789".to_string())}
         };
 assert!(response.is_deleted());
         let warnings = response.security_warnings();
@@ -343,5 +226,3 @@ assert!(!warnings.is_empty());
         assert!(warnings.iter().any(|w| w.contains("密码保护已关闭")));
 let recommendations = response.follow_up_recommendations();
         assert!(recommendations.iter().any(|r| r.contains("其他安全措施")));
-}
-}

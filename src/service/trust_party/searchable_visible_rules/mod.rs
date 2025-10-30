@@ -7,7 +7,6 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-}
     config::Config,
         constants::AccessTokenType,
         endpoints::{EndpointBuilder, Endpoints,
@@ -20,16 +19,15 @@ use crate::,
     service::trust_party::models::{PageResponse, RuleConfig, SearchableVisibleRule}
 };
 /// 可搜可见规则管理服务
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SearchableVisibleRulesService {
-    pub config: Config,
 }
+
 impl SearchableVisibleRulesService {
-    /// 创建可搜可见规则管理服务实例
-pub fn new() -> Self {
-        Self { config }
 }
-/// 新增可搜可见规则
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 新增可搜可见规则
     ///,
 /// 创建新的可搜可见规则，用于控制用户在关联组织中的可见性和搜索权限。
     ///,
@@ -51,7 +49,6 @@ let mut api_req = ApiRequest::default();
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 api_req.set_body(serde_json::to_vec(&request)?);
         Transport::request(api_req, &self.config, option).await,
-}
 /// 更新可搜可见规则
     ///,
 /// 更新指定的可搜可见规则配置。
@@ -80,7 +77,6 @@ let mut api_req = ApiRequest::default();
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 api_req.set_body(serde_json::to_vec(&request)?);
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询可搜可见规则
     ///,
 /// 查询可搜可见规则列表，支持分页和条件筛选。
@@ -106,26 +102,19 @@ let mut api_req = ApiRequest::default();
 api_req
                 .query_params
                 .insert(QueryParams::PAGE_TOKEN, page_token);
-}
 if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert(QueryParams::PAGE_SIZE, page_size.to_string());
-}
 if let Some(org_id) = request.org_id {,
             api_req.query_params.insert(QueryParams::ORG_ID, org_id);
-}
 if let Some(rule_type) = request.rule_type {,
             api_req
 .query_params
                 .insert(QueryParams::RULE_TYPE, rule_type);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert(QueryParams::STATUS, status);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除可搜可见规则
     ///,
 /// 删除指定的可搜可见规则。
@@ -150,108 +139,49 @@ let mut api_req = ApiRequest::default();
             rule_id,
         ));
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
 /// 规则创建请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RuleCreateRequest {
-    /// 规则名称
-    pub name: String,
-    /// 规则描述
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    /// 规则类型
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub rule_type: Option<String>,
-    /// 适用的组织ID
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub org_id: Option<String>,
-    /// 规则配置
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub config: Option<RuleConfig>,
 }
-/// 规则创建响应
-#[derive(.*?)]
-pub struct RuleCreateResponse {
-    /// 创建的规则信息
-    pub rule: SearchableVisibleRule,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 规则更新请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RuleUpdateRequest {
-    /// 规则名称
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-    /// 规则描述
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    /// 规则类型
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub rule_type: Option<String>,
-    /// 规则状态
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
-    /// 规则配置
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub config: Option<RuleConfig>,
 }
-/// 规则更新响应
-#[derive(.*?)]
-pub struct RuleUpdateResponse {
-    /// 更新后的规则信息
-    pub rule: SearchableVisibleRule,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 规则列表查询请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RuleListRequest {
-    /// 页码标记
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-    /// 每页数量
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_size: Option<i32>,
-    /// 组织ID筛选
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub org_id: Option<String>,
-    /// 规则类型筛选
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub rule_type: Option<String>,
-    /// 状态筛选
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
 }
-/// 规则列表查询响应
-#[derive(.*?)]
-pub struct RuleListResponse {
-    /// 规则列表
-#[serde(flatten)]
-    pub rules: PageResponse<SearchableVisibleRule>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 规则删除响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RuleDeleteResponse {
-    /// 删除成功标识
-    pub success: bool,
 }
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
+}}}}}}}}}}}}}}

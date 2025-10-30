@@ -2,76 +2,74 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         trait_system::Service,
         SDKResult,
-    }
     service::search::v2::models::{
         CreateDataSourceRequest, DataSource, ListDataSourceRequest, ListDataSourceResponse,
         UpdateDataSourceRequest,
-    }
 };
 /// 数据源服务
 pub struct DataSourceService {
+}
     pub config: Config,
-}
 /// 创建数据源响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateDataSourceResponse {
+}
     /// 数据源信息
     pub data_source: DataSource,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 获取数据源响应
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 获取数据源响应
+#[derive(Debug, Clone)]
 pub struct GetDataSourceResponse {
+}
     /// 数据源信息
     pub data_source: DataSource,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
-    }
+    /// 更新数据源响应
+#[derive(Debug, Clone)]
 }
-/// 更新数据源响应
-#[derive(.*?)]
 pub struct UpdateDataSourceResponse {
-    /// 数据源信息
-    pub data_source: DataSource,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
-    }
-}
-/// 空响应（用于删除等操作）
+    /// 空响应（用于删除等操作）
 #[derive(Debug, Serialize, Deserialize)]
 pub struct EmptyDataSourceResponse {}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl DataSourceService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl DataSourceService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 创建数据源
+}/// 创建数据源
     ///,
 /// 该接口用于创建搜索连接器的数据源。
     ///,
@@ -95,9 +93,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除数据源
     ///,
 /// 该接口用于删除指定的数据源。
@@ -121,9 +117,7 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 修改数据源
     ///,
 /// 该接口用于修改指定数据源的信息。
@@ -151,7 +145,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取数据源
     ///,
 /// 该接口用于获取指定数据源的详细信息。
@@ -175,9 +168,7 @@ let api_req = ApiRequest {,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量获取数据源
     ///,
 /// 该接口用于批量获取数据源列表。
@@ -203,22 +194,16 @@ if let Some(page_size) = req.page_size {,
                 api_req
 .query_params
                     .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = req.page_token {,
                 api_req.query_params.insert("page_token", page_token);
-}
         };
         Transport::request(api_req, &self.config, option).await,
-}
-}
 impl Service for DataSourceService {,
     fn config(&self) -> &Config {,
 &self.config,
-    }
-fn service_name() -> &'static str {,
+    fn service_name() -> &'static str {,
         "data_source",
-}
 fn service_version() -> &'static str {,
         "v2",
 }
-}
+}}}}}}}}}}}}}}}}}}}}}}}}}}

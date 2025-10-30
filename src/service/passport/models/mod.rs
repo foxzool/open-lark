@@ -1,8 +1,7 @@
 // passport模块的数据模型定义
-
 use serde::{Deserialize, Serialize};
 /// 用户会话信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UserSession {
     /// 用户ID
 #[serde(rename = "user_id")]
@@ -34,9 +33,8 @@ pub struct UserSession {
     /// 会话状态
 #[serde(rename = "session_status")]
     pub session_status: SessionStatus,
-}
 /// 部门信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DepartmentInfo {
     /// 部门ID
 #[serde(rename = "department_id")]
@@ -47,9 +45,8 @@ pub struct DepartmentInfo {
     /// 部门路径
 #[serde(rename = "department_path")]
     pub department_path: Option<String>,
-}
 /// 设备信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DeviceInfo {
     /// 设备类型
 #[serde(rename = "device_type")]
@@ -63,20 +60,18 @@ pub struct DeviceInfo {
     /// 浏览器信息
 #[serde(rename = "browser")]
     pub browser: Option<String>,
-}
 /// 会话状态
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum SessionStatus {,
+pub enum SessionStatus {
 /// 活跃
     Active,
     /// 已过期
     Expired,
     /// 已登出
     LoggedOut,
-}
 /// 批量会话查询请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BatchQueryRequest {
     /// 用户ID列表
 #[serde(rename = "user_ids")]
@@ -84,9 +79,8 @@ pub struct BatchQueryRequest {
     /// 用户ID类型
 #[serde(rename = "user_id_type")]
     pub user_id_type: String,
-}
 /// 批量会话查询响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BatchQueryResponse {
     /// 用户会话列表
 #[serde(rename = "user_sessions")]
@@ -94,9 +88,8 @@ pub struct BatchQueryResponse {
     /// 失败的用户ID列表
 #[serde(rename = "failed_user_ids")]
     pub failed_user_ids: Vec<String>,
-}
 /// 退出登录请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct LogoutRequest {
     /// 用户ID列表
 #[serde(rename = "user_ids")]
@@ -104,9 +97,8 @@ pub struct LogoutRequest {
     /// 用户ID类型
 #[serde(rename = "user_id_type")]
     pub user_id_type: String,
-}
 /// 退出登录响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct LogoutResponse {
     /// 成功退出的用户数量
 #[serde(rename = "success_count")]
@@ -117,9 +109,8 @@ pub struct LogoutResponse {
     /// 失败的用户ID列表
 #[serde(rename = "failed_user_ids")]
     pub failed_user_ids: Vec<String>,
-}
 /// 通用响应结构
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PassportResponse<T> {,
     /// 响应码
     pub code: i32,
@@ -128,3 +119,4 @@ pub struct PassportResponse<T> {,
     /// 响应数据
     pub data: Option<T>,
 }
+}}}}}}}}

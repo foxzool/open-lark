@@ -50,27 +50,13 @@ pub mod v2;
 /// 聚合所有Drive相关的API版本，提供统一的文件操作接口。
 /// 通过不同版本的子服务访问具体的API功能。
 pub struct DriveService {
-/// Drive API v1版本服务
-    pub v1: V1,
-    /// Drive API v2版本服务
-    pub v2: V2,
 }
+
 impl DriveService {
-    /// 创建新的Drive服务实例
-///,
-    /// # 参数
-/// - `config`: 客户端配置
-    pub fn new() -> Self {
-Self {
-            v1: V1::new(config.clone()),
-            v2: V2::new(config.clone()),
-        }
 }
 /// 使用共享配置创建服务（实验性）
     pub fn new_from_shared() -> Self {
 Self {
             v1: V1::new(shared.as_ref().clone()),
-            v2: V2::new(shared.as_ref().clone()),
-        }
-}
+            v2: V2::new(shared.as_ref().clone())}
 }

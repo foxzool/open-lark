@@ -6,8 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -18,7 +17,7 @@ use crate::,
     impl_executable_builder_owned,
 };
 /// 创建知识空间请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateSpaceRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -26,40 +25,17 @@ pub struct CreateSpaceRequest {
     name: String,
     /// 知识空间描述,
 #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
-}
+    description: Option<String>}
 impl CreateSpaceRequest {
-    pub fn w+.*{
-CreateSpaceRequestBuilder::default(),
-    }
-pub fn new(name: impl ToString) -> Self {
-        Self {
-            name: name.to_string()
-            ..Default::default(),
-}
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct CreateSpaceRequestBuilder {
-    request: CreateSpaceRequest,
-}
+    request: CreateSpaceRequest}
 impl CreateSpaceRequestBuilder {
-    /// 知识空间名称
-    pub fn name(mut self, name: impl ToString) -> Self {
-self.request.name = name.to_string();
-        self,
-}
-/// 知识空间描述,
-    pub fn description(mut self, description: impl ToString) -> Self {
-self.request.description = Some(description.to_string());
-        self,
-}
-pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-self.request,
-    }
-}
-impl_executable_builder_owned!(,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}impl_executable_builder_owned!(,
     CreateSpaceRequestBuilder,
     crate::service::cloud_docs::wiki::v2::space::SpaceService,
     CreateSpaceRequest,
@@ -67,7 +43,7 @@ impl_executable_builder_owned!(,
     create,
 );
 /// 创建的知识空间信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreatedSpace {
     /// 知识空间id
     pub space_id: String,
@@ -79,19 +55,18 @@ pub struct CreatedSpace {
     /// 知识空间类型
     pub space_type: Option<String>,
     /// 知识空间可见性
-    pub visibility: Option<String>,
-}
+    pub visibility: Option<String>}
 /// 创建知识空间响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateSpaceResponse {
     /// 创建的知识空间信息
     pub space: CreatedSpace,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 创建知识空间,
 pub async fn create_space(
     request: CreateSpaceRequest,
@@ -104,15 +79,14 @@ api_req.set_api_path(WIKI_V2_SPACES.to_string());
     api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
     let api_resp = Transport::request(api_req, config, option).await?;
-Ok(api_resp),
-}
+Ok(api_resp)}
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]
-    fn test_create_space_request_builder() {,
+    fn test_create_space_request_builder() {
 let request = CreateSpaceRequest::builder(),
             .name()
 .description()
@@ -124,4 +98,3 @@ assert_eq!(,
             Some("这是一个测试知识空间".to_string()),
 );
     }
-}

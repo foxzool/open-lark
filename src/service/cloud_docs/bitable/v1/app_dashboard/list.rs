@@ -6,8 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -18,7 +17,7 @@ use crate::,
     service::bitable::v1::app_dashboard::Dashboard,
 };
 /// 列出仪表盘请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListDashboardRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -30,55 +29,23 @@ pub struct ListDashboardRequest {
     page_token: Option<String>,
     /// 分页大小,
 #[serde(skip)]
-    page_size: Option<i32>,
-}
+    page_size: Option<i32>}
 impl ListDashboardRequest {
-    pub fn w+.*{
-ListDashboardRequestBuilder::default(),
-    }
-pub fn new(app_token: impl ToString) -> Self {
-        Self {
-            app_token: app_token.to_string()
-            ..Default::default(),
-}
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct ListDashboardRequestBuilder {
-    request: ListDashboardRequest,
-}
+    request: ListDashboardRequest}
 impl ListDashboardRequestBuilder {
-    /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {
-self.request.app_token = app_token.to_string();
-        self,
-}
-/// 分页标记,
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {
-self.request.page_token = Some(page_token.to_string());
-        self,
-}
-/// 分页大小,
-    pub fn page_size(mut self, page_size: i32) -> Self {
-self.request.page_size = Some(page_size);
-        self,
-}
-pub fn w+.*{
-        if let Some(page_token) = &self.request.page_token {,
-self.request,
-                .api_request,
-.query_params
-                .insert("page_token", page_token.clone());
-}
-if let Some(page_size) = &self.request.page_size {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}if let Some(page_size) = &self.request.page_size {,
             self.request,
 .api_request,
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 self.request,
     }
-}
 // 应用ExecutableBuilder trait到ListDashboardRequestBuilder,
 crate::impl_executable_builder_owned!(
     ListDashboardRequestBuilder,
@@ -88,7 +55,7 @@ crate::impl_executable_builder_owned!(
     list,
 );
 /// 列出仪表盘响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListDashboardResponse {
     /// 是否还有更多项
     pub has_more: bool,
@@ -97,22 +64,20 @@ pub struct ListDashboardResponse {
     /// 总数
     pub total: i32,
     /// 仪表盘信息列表
-    pub items: Vec<Dashboard>,
-}
+    pub items: Vec<Dashboard>}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 仪表盘服务,
 pub struct DashboardService {
     pub config: Config,
-}
 impl DashboardService {
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 列出仪表盘,
+}/// 列出仪表盘,
     pub async fn list(
         &self,
         request: ListDashboardRequest,
@@ -127,7 +92,6 @@ api_req
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
     }
-}
 /// 列出仪表盘 (向后兼容的函数),
 pub async fn list_dashboard(
     request: ListDashboardRequest,
@@ -135,14 +99,13 @@ pub async fn list_dashboard(
     option: Option<RequestOption>,
 ) -> SDKResult<BaseResponse<ListDashboardResponse>> {,
 let service = DashboardService::new(config);
-    service.list(request, option).await,
-}
+    service.list(request, option).await}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]
-    fn test_list_dashboard_request_builder() {,
+    fn test_list_dashboard_request_builder() {
 let request = ListDashboardRequest::builder(),
             .app_token()
 .page_size()
@@ -150,5 +113,3 @@ let request = ListDashboardRequest::builder(),
 
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
         assert_eq!(request.page_size, Some(20));
-}
-}

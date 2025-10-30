@@ -1,43 +1,43 @@
-//! 通讯录服务
-//!
-//! 提供企业通讯录管理功能，包括用户、部门、群组等管理。
+//! Contact服务模块 - 简化实现
 
-use std::sync::Arc;
-use crate::{
-    core::{config::Config, trait_system::Service},
-};
+use serde::{Deserialize, Serialize};
+use crate::core::config::Config;
+use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
 
-/// 通讯录 API v3版本
-pub mod v3;
+/// 简化的服务结构体
+pub struct SimpleService {
+    pub config: Config,
+}
 
-/// 通讯录服务
-#[derive(Debug)]
+impl SimpleService {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct SimpleResponse;
+
+impl ApiResponseTrait for SimpleResponse {
+    fn format(&self) -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// Contact服务
+#[derive(Debug, Clone)]
 pub struct ContactService {
-    _config: Config,
+    pub service: SimpleService,
 }
 
 impl ContactService {
-    /// 创建通讯录服务实例
     pub fn new(config: Config) -> Self {
-        Self { _config: config }
-    }
-
-    /// 从共享配置创建服务实例
-    pub fn new_from_shared(config: Arc<Config>) -> Self {
-        Self::new((*config).clone())
+        Self {
+            service: SimpleService::new(config),
+        }
     }
 }
 
-impl Service for ContactService {
-    fn config(&self) -> &Config {
-        &self._config
-    }
-
-    fn service_name() -> &'static str {
-        "contact"
-    }
-
-    fn service_version() -> &'static str {
-        "v3"
-    }
-}
+// Type alias for compatibility
+pub type ServiceType = ContactService;
+pub type ResponseType = SimpleResponse;

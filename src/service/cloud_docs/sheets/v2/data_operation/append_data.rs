@@ -3,16 +3,14 @@ use serde_json::Value;
 use crate::{,
 core::{,
         api_req::api_resp::BaseResponse, constants::AccessTokenType,
-        endpoints::cloud_docs::*, req_option::RequestOption, SDKResult,
-    }
+        endpoints::cloud_docs::*, req_option::RequestOption, SDKResult}
     impl_executable_builder_owned,
     service::cloud_docs::sheets::v2::{
         data_operation::{UpdateSheetDataResponse, ValueRangeRequest}
         SpreadsheetSheetService,
-    }
 };
 /// 追加数据请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AppendDataRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -24,39 +22,17 @@ pub struct AppendDataRequest {
     insert_data_option: String,
     /// 值与范围,
 #[serde(rename = "valueRange")]
-    value_range: ValueRangeRequest,
-}
+    value_range: ValueRangeRequest}
 impl AppendDataRequest {
-    pub fn w+.*{
-AppendDataRequestBuilder::default(),
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct AppendDataRequestBuilder {
-    request: AppendDataRequest,
-}
+    request: AppendDataRequest}
 impl AppendDataRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
-self.request.spreadsheet_token = spreadsheet_token.to_string();
-        self,
-}
-/// 插入范围，包含 sheetId 与单元格范围两部分，目前支持四种索引方式，详见,
-    /// 在线表格开发指南，range所表示的范围需要大于等于values占用的范围。
-    pub fn range(mut self, range: impl ToString) -> Self {
-self.request.value_range.range = range.to_string();
-        self,
-}
-/// 需要写入的值，如要写入公式、超链接、email、@人等，可详看附录sheet 支持写入数据类型,
-    pub fn values(mut self, values: Value) -> Self {
-self.request.value_range.values = values;
-        self,
-}
-pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-self.request,
-    }
-}
-pub type AppendDataResponse = UpdateSheetDataResponse;
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}pub type AppendDataResponse = UpdateSheetDataResponse;
 // 使用宏实现ExecutableBuilder trait,
 impl_executable_builder_owned!(,
     AppendDataRequestBuilder,
@@ -66,25 +42,9 @@ impl_executable_builder_owned!(,
     append_data,
 );
 impl SpreadsheetSheetService {
-/// 追加数据,
-    pub async fn append_data(
-        &self,
-        request: AppendDataRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<AppendDataResponse>> {,
-let mut api_req = request.api_request;
-        api_req.set_api_path(
-            SHEETS_V2_SPREADSHEET_VALUES_APPEND.replace("{}", &request.spreadsheet_token),
-        );
-api_req.set_http_method(reqwest::Method::POST);
-        api_req
-            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::App]);
-let api_resp =,
-            crate::core::http::Transport::request(api_req, &self.config_arc, option).await?;
-Ok(api_resp),
-    }
-}
-#[cfg(test)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[cfg(test)]
 mod tests {
 use super::*;
     use crate::core::config::Config;
@@ -93,13 +53,11 @@ fn create_test_config() -> Config {,
         Config::builder()
 .app_id()
             .app_secret()
-.build(),
-    }
+.build()}
 fn create_test_service() -> SpreadsheetSheetService {,
-        SpreadsheetSheetService::new(create_test_config()),
-}
+        SpreadsheetSheetService::new(create_test_config())}
 #[test]
-    fn test_append_data_request_builder_creation() {,
+    fn test_append_data_request_builder_creation() {
 let builder = AppendDataRequest::builder();
         let request = builder.build();
 
@@ -107,21 +65,18 @@ let builder = AppendDataRequest::builder();
         assert_eq!(request.value_range.range, "");
         assert_eq!(request.value_range.values, Value::Null);
         assert_eq!(request.insert_data_option, "");
-}
 #[test]
-    fn test_append_data_request_builder_with_spreadsheet_token() {,
+    fn test_append_data_request_builder_with_spreadsheet_token() {
 let request = AppendDataRequest::builder(),
             .spreadsheet_token()
 .build();
         assert_eq!(request.spreadsheet_token, "test_token_123");
-}
 #[test]
-    fn test_append_data_request_builder_with_range() {,
+    fn test_append_data_request_builder_with_range() {
 let request = AppendDataRequest::builder().range("Sheet1!A1:C10").build();
         assert_eq!(request.value_range.range, "Sheet1!A1:C10");
-}
 #[test]
-    fn test_append_data_request_builder_with_values() {,
+    fn test_append_data_request_builder_with_values() {
 let test_values = json!([,
             ["Name", "Age", "City"]
             ["John", 25, "NYC"]
@@ -132,7 +87,6 @@ let test_values = json!([,
             .build();
 
         assert_eq!(request.value_range.values, test_values);
-}
 #[test]
     ,
         let test_values = json!([["A", "B"] ["1", "2"]]);
@@ -144,24 +98,21 @@ let request = AppendDataRequest::builder(),
         assert_eq!(request.spreadsheet_token, "my_sheet_token");
         assert_eq!(request.value_range.range, "Sheet1!A1:B2");
         assert_eq!(request.value_range.values, test_values);
-}
 #[test]
-    fn test_append_data_request_default() {,
+    fn test_append_data_request_default() {
 let request = AppendDataRequest::default();
         assert_eq!(request.spreadsheet_token, "");
         assert_eq!(request.value_range.range, "");
         assert_eq!(request.value_range.values, Value::Null);
         assert_eq!(request.insert_data_option, "");
-}
 #[test]
-    fn test_append_data_request_builder_default() {,
+    fn test_append_data_request_builder_default() {
 let builder = AppendDataRequestBuilder::default();
         let request = builder.build();
 
         assert_eq!(request.spreadsheet_token, "");
         assert_eq!(request.value_range.range, "");
         assert_eq!(request.value_range.values, Value::Null);
-}
 #[test]
     ,
         let test_values = json!([["Header1", "Header2"] ["Value1", "Value2"]]);
@@ -178,16 +129,15 @@ let json_str = serialized.unwrap();
 assert!(json_str.contains("valueRange"));
     }
 #[test]
-    fn test_append_data_request_debug() {,
+    fn test_append_data_request_debug() {
 let request = AppendDataRequest::builder(),
             .spreadsheet_token()
 .build();
         let debug_str = format!("{:?}", request);
 assert!(debug_str.contains("AppendDataRequest"));
         assert!(debug_str.contains("debug_token"));
-}
 #[test]
-    fn test_append_data_request_with_empty_strings() {,
+    fn test_append_data_request_with_empty_strings() {
 let request = AppendDataRequest::builder(),
             .spreadsheet_token()
 .range()
@@ -196,9 +146,8 @@ let request = AppendDataRequest::builder(),
         assert_eq!(request.spreadsheet_token, "");
         assert_eq!(request.value_range.range, "");
         assert_eq!(request.value_range.values, Value::Null);
-}
 #[test]
-    fn test_append_data_request_with_special_characters() {,
+    fn test_append_data_request_with_special_characters() {
 let request = AppendDataRequest::builder(),
             .spreadsheet_token()
 .range()
@@ -206,9 +155,8 @@ let request = AppendDataRequest::builder(),
 
         assert_eq!(request.spreadsheet_token, "token_with_特殊字符_🎯");
         assert_eq!(request.value_range.range, "Sheet名称!A1:Z100");
-}
 #[test]
-    fn test_append_data_request_with_unicode_values() {,
+    fn test_append_data_request_with_unicode_values() {
 let test_values = json!([,
             ["姓名", "年龄", "城市"]
             ["张三", 25, "北京"]
@@ -220,9 +168,8 @@ let test_values = json!([,
             .build();
 
         assert_eq!(request.value_range.values, test_values);
-}
 #[test]
-    fn test_append_data_request_with_complex_json() {,
+    fn test_append_data_request_with_complex_json() {
 let complex_values = json!([,
             [{"text": "Complex"} {"formula": "=A1+B1"} {"link": "https://example.com"}]
             [123.45, true, null]
@@ -233,9 +180,8 @@ let complex_values = json!([,
             .build();
 
         assert_eq!(request.value_range.values, complex_values);
-}
 #[test]
-    fn test_append_data_request_with_large_data() {,
+    fn test_append_data_request_with_large_data() {
 let large_values = json!((0..1000),
             .map(|i| vec![
                 format!("Name_{}", i),
@@ -250,9 +196,8 @@ let request = AppendDataRequest::builder(),
 .build();
         assert_eq!(request.value_range.values, large_values);
         assert_eq!(request.spreadsheet_token, "large_data_token");
-}
 #[test]
-    fn test_append_data_request_with_different_range_formats() {,
+    fn test_append_data_request_with_different_range_formats() {
 let ranges = vec![,
             "Sheet1!A1:B2",
             "工作表1!C:D",
@@ -264,10 +209,9 @@ for range in ranges {,
             let request = AppendDataRequest::builder().range(range).build();
 
             assert_eq!(request.value_range.range, range);
-}
     }
 #[test]
-    fn test_append_data_request_with_different_value_types() {,
+    fn test_append_data_request_with_different_value_types() {
 let different_types = vec![,
             json!("string"),
             json!(42),
@@ -281,7 +225,6 @@ for value in different_types {,
             let request = AppendDataRequest::builder().values(value.clone()).build();
 
             assert_eq!(request.value_range.values, value);
-}
     }
 #[test]
     ,
@@ -298,9 +241,8 @@ let body_str = String::from_utf8(request.api_request.body).unwrap();
         let parsed: Value = serde_json::from_str(&body_str).unwrap();
 assert!(parsed.get("valueRange").is_some());
         assert!(parsed.get("insertDataOption").is_some());
-}
 #[test]
-    fn test_append_data_request_builder_multiple_calls() {,
+    fn test_append_data_request_builder_multiple_calls() {
 let mut builder = AppendDataRequest::builder();
         // Test that multiple calls override previous values,
 builder = builder.spreadsheet_token("first_token");
@@ -310,15 +252,13 @@ builder = builder.range("first_range");
 let request = builder.build();
         assert_eq!(request.spreadsheet_token, "second_token");
         assert_eq!(request.value_range.range, "second_range");
-}
 #[test]
-    fn test_spreadsheet_sheet_service_creation() {,
+    fn test_spreadsheet_sheet_service_creation() {
 let service = create_test_service();
         // Verify the service can be created without panic
         assert_eq!(service.config.app_id, "test_app_id");
-}
 #[test]
-    fn test_append_data_response_type_alias() {,
+    fn test_append_data_response_type_alias() {
 // Verify that AppendDataResponse is properly aliased,
         let _response: AppendDataResponse = UpdateSheetDataResponse {
             spreed_sheet_token: "test".to_string(),
@@ -330,12 +270,10 @@ let service = create_test_service();
                 updated_rows: 2,
                 updated_columns: 2,
                 updated_cells: 4,
-                revision: Some(1),
-            }
+                revision: Some(1)}
         };
-}
 #[test]
-    fn test_append_data_request_edge_cases() {,
+    fn test_append_data_request_edge_cases() {
 // Test with very long token,
         let long_token = "a".repeat(10000);
 let request = AppendDataRequest::builder(),
@@ -354,28 +292,24 @@ let request = AppendDataRequest::builder(),
             .values(nested_array.clone()),
 .build();
         assert_eq!(request.value_range.values, nested_array);
-}
 #[test]
-    fn test_value_range_request_default() {,
+    fn test_value_range_request_default() {
 let value_range = ValueRangeRequest::default();
         assert_eq!(value_range.range, "");
         assert_eq!(value_range.values, Value::Null);
-}
 #[test]
-    fn test_value_range_request_serialization() {,
+    fn test_value_range_request_serialization() {
 let value_range = ValueRangeRequest {,
             range: "A1:B2".to_string(),
-            values: json!([["1", "2"]]),
-        };
+            values: json!([["1", "2"]])};
 let serialized = serde_json::to_string(&value_range);
         assert!(serialized.is_ok());
 let json_str = serialized.unwrap();
         assert!(json_str.contains("range"));
 assert!(json_str.contains("values"));
         assert!(json_str.contains("A1:B2"));
-}
 #[test]
-    fn test_append_data_request_memory_efficiency() {,
+    fn test_append_data_request_memory_efficiency() {
 // Test creating many requests doesn't consume excessive memory,
         let requests: Vec<AppendDataRequest> = (0..100),
 .map(|i| {,
@@ -391,6 +325,4 @@ assert!(json_str.contains("values"));
         for (i, request) in requests.iter().enumerate() {
             assert_eq!(request.spreadsheet_token, format!("token_{}", i));
             assert_eq!(request.value_range.range, format!("Sheet{}!A:B", i));
-}
     }
-}

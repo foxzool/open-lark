@@ -4,23 +4,21 @@ use open_lark_core::core::api_req::ApiRequest;
 use std::collections::HashMap;
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{helpdesk::*, EndpointBuilder}
-        http::Transport,
+        endpoints::{helpdesk::*, EndpointBuilderhttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::helpdesk::models::{Notification, UserIdType}
 };
 /// 推送中心服务
 pub struct NotificationService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 创建推送请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateNotificationRequest {
+}
     /// 标题
     pub title: String,
     /// 内容
@@ -31,72 +29,53 @@ pub struct CreateNotificationRequest {
     /// 计划发送时间
 #[serde(skip_serializing_if = "Option::is_none")]
     pub scheduled_at: Option<String>,
-}
 /// 创建推送响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateNotificationResponse {
+}
     /// 创建的推送
     pub notification: Notification,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 更新推送请求
-#[derive(.*?)]
-pub struct UpdateNotificationRequest {
-    /// 标题
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub title: Option<String>,
-    /// 内容
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub content: Option<String>,
-    /// 目标用户
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub target_users: Option<Vec<String>>,
-    /// 计划发送时间
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub scheduled_at: Option<String>,
-}
-/// 更新推送响应
-#[derive(.*?)]
-pub struct UpdateNotificationResponse {
-    /// 更新后的推送
-    pub notification: Notification,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 查询推送响应
-#[derive(.*?)]
-pub struct GetNotificationResponse {
-    /// 推送详情
-    pub notification: Notification,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 预览推送响应
-#[derive(.*?)]
-pub struct PreviewNotificationResponse {
-    /// 预览内容
-    pub preview: String,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl NotificationService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 更新推送请求
+#[derive(Debug, Clone)]
 }
-/// 创建推送
+pub struct UpdateNotificationRequest {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 查询推送响应
+#[derive(Debug, Clone)]
+}
+pub struct GetNotificationResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 预览推送响应
+#[derive(Debug, Clone)]
+}
+pub struct PreviewNotificationResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl NotificationService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建推送
     pub async fn create(
         &self,
         request: CreateNotificationRequest,
@@ -106,7 +85,6 @@ impl NotificationService {
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: HELPDESK_V1_NOTIFICATIONS.to_string(),
@@ -116,7 +94,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 更新推送
     pub async fn patch(
         &self,
@@ -128,7 +105,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
@@ -141,9 +117,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询推送
     pub async fn get(
         &self,
@@ -154,7 +128,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
@@ -166,9 +139,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 预览推送
     pub async fn preview(
         &self,
@@ -179,7 +150,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
@@ -191,9 +161,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 提交审核
     pub async fn submit_approve(
         &self,
@@ -204,7 +172,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
@@ -216,9 +183,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 取消审核
     pub async fn cancel_approve(
         &self,
@@ -229,7 +194,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
@@ -241,9 +205,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 执行推送
     pub async fn execute_send(
         &self,
@@ -254,7 +216,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
@@ -266,9 +227,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 取消推送
     pub async fn cancel_send(
         &self,
@@ -279,7 +238,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
@@ -291,7 +249,6 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

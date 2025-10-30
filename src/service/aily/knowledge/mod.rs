@@ -3,114 +3,102 @@ use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::aily::models::{
         DataKnowledge, DataKnowledgeAnswer, DataKnowledgeAskRequest, DataKnowledgeCategory,
         DataKnowledgeCategoryListRequest, DataKnowledgeCreateRequest, DataKnowledgeDeleteRequest,
         DataKnowledgeFileUploadRequest, DataKnowledgeGetRequest, DataKnowledgeListRequest,
         FileUploadResult, PageResponse,
-    }
 };
 /// 知识问答服务
 pub struct KnowledgeService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 知识问答响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DataKnowledgeAskResponse {
+}
     /// 问答结果
 #[serde(flatten)]
     pub answer: DataKnowledgeAnswer,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 文件上传响应
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 文件上传响应
+#[derive(Debug, Clone)]
 pub struct DataKnowledgeFileUploadResponse {
+}
     /// 文件上传结果
 #[serde(flatten)]
     pub upload_result: FileUploadResult,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 数据知识创建响应
-#[derive(.*?)]
-pub struct DataKnowledgeCreateResponse {
-    /// 数据知识信息
-#[serde(flatten)]
-    pub knowledge: DataKnowledge,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 数据知识查询响应
-#[derive(.*?)]
-pub struct DataKnowledgeGetResponse {
-    /// 数据知识信息
-#[serde(flatten)]
-    pub knowledge: DataKnowledge,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 数据知识删除响应
-#[derive(.*?)]
-pub struct DataKnowledgeDeleteResponse {
-    /// 删除成功标识
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub success: Option<bool>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 数据知识列表响应
-#[derive(.*?)]
-pub struct DataKnowledgeListResponse {
-    /// 分页响应数据
-#[serde(flatten)]
-    pub page_response: PageResponse<DataKnowledge>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 数据知识分类列表响应
-#[derive(.*?)]
-pub struct DataKnowledgeCategoryListResponse {
-    /// 分页响应数据
-#[serde(flatten)]
-    pub page_response: PageResponse<DataKnowledgeCategory>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl KnowledgeService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 数据知识创建响应
+#[derive(Debug, Clone)]
 }
-/// 执行数据知识问答
+pub struct DataKnowledgeCreateResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 数据知识查询响应
+#[derive(Debug, Clone)]
+}
+pub struct DataKnowledgeGetResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 数据知识删除响应
+#[derive(Debug, Clone)]
+}
+pub struct DataKnowledgeDeleteResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 数据知识列表响应
+#[derive(Debug, Clone)]
+}
+pub struct DataKnowledgeListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 数据知识分类列表响应
+#[derive(Debug, Clone)]
+}
+pub struct DataKnowledgeCategoryListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl KnowledgeService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 执行数据知识问答
     ///,
 /// 该接口用于基于数据知识库进行智能问答。
     ///,
@@ -136,9 +124,7 @@ let api_req = ApiRequest {,
 }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 上传文件用于数据知识管理
     ///,
 /// 该接口用于上传文件以创建数据知识。
@@ -164,9 +150,7 @@ let api_req = ApiRequest {,
 }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 创建数据知识
     ///,
 /// 该接口用于创建新的数据知识条目。
@@ -195,7 +179,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取数据知识
     ///,
 /// 该接口用于获取指定的数据知识详情。
@@ -222,9 +205,7 @@ let mut api_req = ApiRequest {,
 };
 // 添加查询参数
         api_req.query_params.insert("app_id", request.app_id);
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除数据知识
     ///,
 /// 该接口用于删除指定的数据知识。
@@ -251,9 +232,7 @@ let mut api_req = ApiRequest {,
 };
 // 添加查询参数
         api_req.query_params.insert("app_id", request.app_id);
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询数据知识列表
     ///,
 /// 该接口用于查询数据知识列表。
@@ -280,19 +259,13 @@ if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(category_id) = request.category_id {,
             api_req.query_params.insert("category_id", category_id);
-}
 if let Some(keyword) = request.keyword {,
             api_req.query_params.insert("keyword", keyword);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取数据知识分类列表
     ///,
 /// 该接口用于获取数据知识的分类列表。
@@ -319,11 +292,8 @@ if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

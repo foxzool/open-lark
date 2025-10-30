@@ -2,66 +2,59 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::hire::models::{
         CommonResponse, Job, JobCreateRequest, JobListRequest, JobUpdateRequest, PageResponse,
-    }
 };
 /// 职位服务
 pub struct JobService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 职位列表响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct JobListResponse {
+}
     /// 职位列表
 #[serde(flatten)]
     pub jobs: PageResponse<Job>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 职位详情响应
-#[derive(.*?)]
-pub struct JobDetailResponse {
-    /// 职位信息
-    pub job: Job,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 职位操作响应
-#[derive(.*?)]
-pub struct JobOperationResponse {
-    /// 操作结果
-#[serde(flatten)]
-    pub result: CommonResponse,
-    /// 职位ID
-    pub job_id: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl JobService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 职位详情响应
+#[derive(Debug, Clone)]
+pub struct JobDetailResponse {
 }
-/// 新建职位
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 职位操作响应
+#[derive(Debug, Clone)]
+}
+pub struct JobOperationResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl JobService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 新建职位
     ///,
 /// 该接口用于创建新的招聘职位，支持设置职位基本信息、
     /// 工作地点、招聘人员、面试官等详细配置。创建成功后
@@ -118,9 +111,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 更新职位
     ///,
 /// 该接口用于更新现有职位的基本信息，支持修改职位名称、
@@ -170,9 +161,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取职位详情
     ///,
 /// 该接口用于获取指定职位的详细信息，包括职位基本信息、
@@ -203,8 +192,7 @@ let api_req = ApiRequest {,
     ///     println!("职位名称: {}" data.job.title);
     ///     println!("职位状态: {}" data.job.status);
     ///     println!("工作地点数: {}" data.job.locations.len());
-    /// }
-/// ```
+    /// /// ```
     pub async fn get_job_detail(
         &self,
         job_id: &str,
@@ -217,9 +205,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取职位列表
     ///,
 /// 该接口用于获取企业的职位列表，支持按状态、部门、
@@ -265,8 +251,7 @@ let api_req = ApiRequest {,
 ///     for job in &data.jobs.items {
     ///         println!("职位: {} ({})" job.title, job.status);
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_jobs(
         &self,
         request: JobListRequest,
@@ -284,32 +269,23 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert("status", status);
-}
 if let Some(department_id) = request.department_id {,
             api_req.query_params.insert("department_id", department_id);
-}
 if let Some(job_type) = request.job_type {,
             api_req.query_params.insert("job_type", job_type);
-}
 if let Some(created_start_time) = request.created_start_time {,
             api_req
 .query_params
                 .insert("created_start_time", created_start_time);
-}
 if let Some(created_end_time) = request.created_end_time {,
             api_req
 .query_params
                 .insert("created_end_time", created_end_time);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 关闭职位
     ///,
 /// 该接口用于关闭指定的招聘职位。关闭后的职位将停止
@@ -339,7 +315,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 重启职位
     ///,
 /// 该接口用于重新开启已关闭的招聘职位。重启后的职位
@@ -368,7 +343,6 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}

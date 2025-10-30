@@ -2,62 +2,56 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::hire::models::{PageResponse, Role, RoleListRequest, UserRole}
 };
 /// 权限服务
 pub struct AuthService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 角色详情响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RoleDetailResponse {
+}
     /// 角色信息
     pub role: Role,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 角色列表响应
-#[derive(.*?)]
-pub struct RoleListResponse {
-    /// 角色列表
-#[serde(flatten)]
-    pub roles: PageResponse<Role>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 用户角色列表响应
-#[derive(.*?)]
-pub struct UserRoleListResponse {
-    /// 用户角色列表
-#[serde(flatten)]
-    pub user_roles: PageResponse<UserRole>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl AuthService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 角色列表响应
+#[derive(Debug, Clone)]
 }
-/// 获取角色详情
+pub struct RoleListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 用户角色列表响应
+#[derive(Debug, Clone)]
+}
+pub struct UserRoleListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl AuthService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 获取角色详情
     ///,
 /// 该接口用于获取指定角色的详细信息，包括角色名称、
     /// 描述、权限列表等完整数据。
@@ -85,9 +79,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取角色列表
     ///,
 /// 该接口用于获取系统中的角色列表，包括角色基本信息
@@ -127,13 +119,9 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取用户角色列表
     ///,
 /// 该接口用于获取用户的角色分配情况，可以查看
@@ -162,7 +150,6 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}}}}

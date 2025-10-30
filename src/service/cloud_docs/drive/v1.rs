@@ -19,19 +19,8 @@ pub struct V1 {
     pub folder: folder::FolderService,
     pub like: like::LikeService,
     pub media: media::MediaService,
-    pub permissions: permissions::PermissionsService,
-}
+    pub permissions: permissions::PermissionsService}
 impl V1 {
     pub fn new(config: Config) -> Self {
-Self {
-            event: event::EventService::new(config.clone()),
-            file: file::FileService::new(config.clone()),
-            file_version: file_version::FileVersionService::new(config.clone()),
-            files: files::FilesService::new(config.clone()),
-            folder: folder::FolderService::new(config.clone()),
-            like: like::LikeService::new(config.clone()),
-            media: media::MediaService::new(config.clone()),
-            permissions: permissions::PermissionsService::new(config),
-        }
-}
+        Self { config }
 }

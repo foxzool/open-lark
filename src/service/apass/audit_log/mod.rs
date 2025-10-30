@@ -3,87 +3,77 @@ use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::apass::models::{
         AuditLog, AuditLogListRequest, DataChangeLog, DataChangeLogListRequest, PageResponse,
-    }
 };
 /// 审计日志服务
 pub struct AuditLogService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 审计日志列表响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AuditLogListResponse {
+}
     /// 分页响应数据
 #[serde(flatten)]
     pub page_response: PageResponse<AuditLog>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 审计日志详情响应
-#[derive(.*?)]
-pub struct AuditLogGetResponse {
-    /// 审计日志详情
-#[serde(flatten)]
-    pub audit_log: AuditLog,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 数据变更日志列表响应
-#[derive(.*?)]
-pub struct DataChangeLogListResponse {
-    /// 分页响应数据
-#[serde(flatten)]
-    pub page_response: PageResponse<DataChangeLog>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 数据变更日志详情响应
-#[derive(.*?)]
-pub struct DataChangeLogDetailResponse {
-    /// 数据变更日志详情
-#[serde(flatten)]
-    pub data_change_log: DataChangeLog,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 审计事件列表响应
-#[derive(.*?)]
-pub struct AuditEventListResponse {
-    /// 事件列表
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub events: Option<Vec<serde_json::Value>>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl AuditLogService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 审计日志详情响应
+#[derive(Debug, Clone)]
+pub struct AuditLogGetResponse {
 }
-/// 查询审计日志列表
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 数据变更日志列表响应
+#[derive(Debug, Clone)]
+}
+pub struct DataChangeLogListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 数据变更日志详情响应
+#[derive(Debug, Clone)]
+}
+pub struct DataChangeLogDetailResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 审计事件列表响应
+#[derive(Debug, Clone)]
+}
+pub struct AuditEventListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl AuditLogService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 查询审计日志列表
     ///,
 /// 该接口用于查询应用的审计日志列表。
     ///,
@@ -112,24 +102,17 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(start_time) = request.start_time {,
             api_req.query_params.insert("start_time", start_time);
-}
 if let Some(end_time) = request.end_time {,
             api_req.query_params.insert("end_time", end_time);
-}
 if let Some(operation_type) = request.operation_type {,
             api_req
 .query_params
                 .insert("operation_type", operation_type);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询审计日志详情
     ///,
 /// 该接口用于查询指定审计日志的详情信息。
@@ -155,9 +138,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询数据变更日志列表
     ///,
 /// 该接口用于查询应用的数据变更日志列表。
@@ -187,18 +168,13 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(object_api_name) = request.object_api_name {,
             api_req
 .query_params
                 .insert("object_api_name", object_api_name);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询数据变更日志详情
     ///,
 /// 该接口用于查询指定数据变更日志的详情信息。
@@ -224,9 +200,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 审计事件列表
     ///,
 /// 该接口用于查询应用支持的审计事件列表。
@@ -251,7 +225,6 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

@@ -3,12 +3,11 @@
 // 实现文档块的操作,
 use crate::prelude::*;
 /// 块操作服务
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BlockService {
     client: std::sync::Arc<LarkClient>,
 }
 impl BlockService {
-    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
-        Self { client }
-}
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }

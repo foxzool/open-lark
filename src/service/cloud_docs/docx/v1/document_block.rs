@@ -14,13 +14,11 @@ use crate::core::{
 };
 /// 文档块服务,
 pub struct DocumentBlockService {
-    config: Config,
-}
+    config: Config}
 impl DocumentBlockService {
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 创建块,
+}/// 创建块,
     ///,
 /// 该接口用于在文档中创建一个新的块。,
     ///,
@@ -141,8 +139,7 @@ let mut api_req = ApiRequest {,
                 "document_id",
                 &document_id.into(),
             ),
-            ..Default::default(),
-};
+            ..Default::default()};
 api_req
             .set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
 api_req.body = serde_json::to_vec(&request)?;
@@ -175,110 +172,65 @@ let mut api_req = ApiRequest {,
                 ],
             ),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
-            ..Default::default(),
-};
+            ..Default::default()};
 // 添加查询参数,
         if let Some(page_size) = request.page_size {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
     }
-}
 // === 数据结构定义 ===,
 /// 创建块请求参数
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateBlockRequest {
     /// 父块ID，如果创建在文档根级，传document_id
     pub parent_id: String,
     /// 块索引位置
     pub index: Option<i32>,
     /// 块数据列表
-    pub blocks: Vec<BlockData>,
-}
+    pub blocks: Vec<BlockData>}
 impl CreateBlockRequest {
-    pub fn w+.*{
-CreateBlockRequestBuilder::default(),
-    }
-
-    pub fn new(parent_id: impl Into<String>, blocks: Vec<BlockData>) -> Self {
-Self {
-            parent_id: parent_id.into(),
-            index: None,
-            blocks,
-        }
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }
-
     pub fn with_index(mut self, index: i32) -> Self {
 self.index = Some(index);
-        self,
-}
-}
+        self}
 /// 创建块请求构建器,
 #[derive(Default)]
 pub struct CreateBlockRequestBuilder {
     request: CreateBlockRequest,
-    document_id: String,
-}
+    document_id: String}
 impl CreateBlockRequestBuilder {
-    pub fn document_id(mut self, document_id: impl Into<String>) -> Self {
-self.document_id = document_id.into();
-        self,
-}
-
-    pub fn parent_id(mut self, parent_id: impl Into<String>) -> Self {
-self.request.parent_id = parent_id.into();
-        self,
-}
-
-    pub fn index(mut self, index: i32) -> Self {
-self.request.index = Some(index);
-        self,
-}
-
-    pub fn blocks(mut self, blocks: Vec<BlockData>) -> Self {
-self.request.blocks = blocks;
-        self,
-}
-
-    pub fn add_block(mut self, block: BlockData) -> Self {
-self.request.blocks.push(block);
-        self,
-}
-
-    pub fn build(self) -> (String, CreateBlockRequest) {
-        (self.document_id, self.request),
-}
-}
-/// 块数据,
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 块数据,
+#[derive(Debug, Clone)]
 pub struct BlockData {
     /// 块类型
     pub block_type: i32,
     /// 块内容（根据不同类型有不同结构）
     pub block: Value,
-}
 /// 创建块响应数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateBlockRespData {
     /// 创建的块列表
     pub blocks: Vec<BlockInfo>,
     /// 文档版本ID
     pub document_revision_id: i64,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 块信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BlockInfo {
     /// 块ID
     pub block_id: String,
@@ -290,20 +242,19 @@ pub struct BlockInfo {
     pub block_type: i32,
     /// 块索引
     pub index: i32,
-}
 /// 获取块响应数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetBlockRespData {
     /// 块信息
     pub block: DetailedBlock,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 详细块信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DetailedBlock {
     /// 块ID
     pub block_id: String,
@@ -317,192 +268,128 @@ pub struct DetailedBlock {
     pub index: i32,
     /// 块内容
     pub block: Value,
-}
 /// 更新块请求参数,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PatchBlockRequest {
     /// 要更新的块内容
     pub block: Value,
-}
 impl PatchBlockRequest {
-    pub fn new(block: Value) -> Self {
-        Self { block }
-}
-}
-/// 更新块响应数据,
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 更新块响应数据,
+#[derive(Debug, Clone)]
 pub struct PatchBlockRespData {
     /// 更新后的块信息
     pub block: DetailedBlock,
     /// 文档版本ID
     pub document_revision_id: i64,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 批量更新块请求参数,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BatchUpdateBlockRequest {
     /// 要更新的块列表
-    pub requests: Vec<UpdateBlockItem>,
-}
+    pub requests: Vec<UpdateBlockItem>}
 /// 更新块项,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateBlockItem {
     /// 块ID
     pub block_id: String,
     /// 要更新的块内容
     pub block: Value,
-}
 impl BatchUpdateBlockRequest {
-    pub fn w+.*{
-BatchUpdateBlockRequestBuilder::default(),
-    }
-pub fn new(requests: Vec<UpdateBlockItem>) -> Self {
-        Self { requests }
-}
-}
-/// 批量更新块请求构建器,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 批量更新块请求构建器,
 #[derive(Default)]
 pub struct BatchUpdateBlockRequestBuilder {
     request: BatchUpdateBlockRequest,
-    document_id: String,
-}
+    document_id: String}
 impl BatchUpdateBlockRequestBuilder {
-    pub fn document_id(mut self, document_id: impl Into<String>) -> Self {
-self.document_id = document_id.into();
-        self,
-}
-
-    pub fn requests(mut self, requests: Vec<UpdateBlockItem>) -> Self {
-self.request.requests = requests;
-        self,
-}
-
-    pub fn add_request(mut self, block_id: impl Into<String>, block: Value) -> Self {
-self.request.requests.push(UpdateBlockItem {,
-            block_id: block_id.into(),
-            block,
-        });
-self,
-    }
-
-    pub fn build(self) -> (String, BatchUpdateBlockRequest) {
-        (self.document_id, self.request),
-}
-}
-/// 批量更新块响应数据,
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 批量更新块响应数据,
+#[derive(Debug, Clone)]
 pub struct BatchUpdateBlockRespData {
     /// 更新的块列表
     pub blocks: Vec<DetailedBlock>,
     /// 文档版本ID
     pub document_revision_id: i64,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 批量删除块请求参数,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BatchDeleteBlockRequest {
     /// 要删除的块ID列表
-    pub block_ids: Vec<String>,
-}
+    pub block_ids: Vec<String>}
 impl BatchDeleteBlockRequest {
-    pub fn w+.*{
-BatchDeleteBlockRequestBuilder::default(),
-    }
-pub fn new(block_ids: Vec<String>) -> Self {
-        Self { block_ids }
-}
-}
-/// 批量删除块请求构建器,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 批量删除块请求构建器,
 #[derive(Default)]
 pub struct BatchDeleteBlockRequestBuilder {
     request: BatchDeleteBlockRequest,
-    document_id: String,
-}
+    document_id: String}
 impl BatchDeleteBlockRequestBuilder {
-    pub fn document_id(mut self, document_id: impl Into<String>) -> Self {
-self.document_id = document_id.into();
-        self,
-}
-
-    pub fn block_ids(mut self, block_ids: Vec<String>) -> Self {
-self.request.block_ids = block_ids;
-        self,
-}
-
-    pub fn add_block_id(mut self, block_id: impl Into<String>) -> Self {
-self.request.block_ids.push(block_id.into());
-        self,
-}
-
-    pub fn build(self) -> (String, BatchDeleteBlockRequest) {
-        (self.document_id, self.request),
-}
-}
-/// 批量删除块响应数据,
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 批量删除块响应数据,
+#[derive(Debug, Clone)]
 pub struct BatchDeleteBlockRespData {
     /// 文档版本ID
     pub document_revision_id: i64,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 获取子块请求参数,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListChildrenRequest {
     /// 分页大小
     pub page_size: Option<i32>,
     /// 分页标记
-    pub page_token: Option<String>,
-}
+    pub page_token: Option<String>}
 impl ListChildrenRequest {
-    pub fn new() -> Self {
-Self {
-            page_size: None,
-            page_token: None,
-        }
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }
-
     pub fn with_page_size(mut self, page_size: i32) -> Self {
 self.page_size = Some(page_size);
-        self,
-}
+        self}
 
     pub fn with_page_token(mut self, page_token: impl Into<String>) -> Self {
-self.page_token = Some(page_token.into());
-        self,
-}
-}
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}self.page_token = Some(page_token.into());
+        self}
 impl Default for ListChildrenRequest {,
     fn default() -> Self {
-Self::new(),
-    }
-}
+Self::new()}
 /// 获取子块响应数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListChildrenRespData {
     /// 子块列表
     pub items: Vec<DetailedBlock>,
     /// 是否还有更多数据
     pub has_more: bool,
     /// 下一页标记
-    pub page_token: Option<String>,
-}
+    pub page_token: Option<String>}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 // === Builder execute方法实现 ===,
 // 为需要路径参数的Builder提供统一的execute方法,
 macro_rules! impl_execute_with_path {,
@@ -515,19 +402,15 @@ pub async fn execute(,
                 option: Option<RequestOption>,
             ) -> SDKResult<$response> {
                 let (document_id, request) = self.build();
-                service.$method(document_id, request, option).await,
-}
+                service.$method(document_id, request, option).await}
 /// 执行请求（带选项）,
             pub async fn execute_with_options(
                 self,
                 service: &DocumentBlockService,
                 option: RequestOption,
             ) -> SDKResult<$response> {
-                self.execute(service, Some(option)).await,
-}
-        }
+                self.execute(service, Some(option)).await}
 };
-}
 impl_execute_with_path!(,
     CreateBlockRequestBuilder,
     BaseResponse<CreateBlockRespData>,
@@ -546,12 +429,8 @@ impl_execute_with_path!(
 // === Service trait 实现 ===,
 impl Service for DocumentBlockService {,
     fn config(&self) -> &Config {,
-&self.config,
-    }
+&self.config}
 fn service_name() -> &'static str {,
-        "document_block",
-}
+        "document_block"}
 fn service_version() -> &'static str {,
-        "v1",
-}
-}
+        "v1"}

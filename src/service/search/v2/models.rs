@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 搜索消息请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SearchMessageRequest {
     /// 搜索关键字
     pub query: String,
@@ -10,9 +10,8 @@ pub struct SearchMessageRequest {
     /// 分页token,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 /// 搜索应用请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SearchAppRequest {
     /// 搜索关键字
     pub query: String,
@@ -22,9 +21,8 @@ pub struct SearchAppRequest {
     /// 分页token,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 /// 搜索结果项,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SearchResultItem {
     /// 结果ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -44,9 +42,8 @@ pub struct SearchResultItem {
     /// 更新时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
-}
 /// 搜索响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SearchResponse {
     /// 搜索结果列表
     pub items: Vec<SearchResultItem>,
@@ -56,9 +53,8 @@ pub struct SearchResponse {
     /// 分页token,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 /// 数据源信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DataSource {
     /// 数据源ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -78,9 +74,8 @@ pub struct DataSource {
     /// 更新时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
-}
 /// 创建数据源请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateDataSourceRequest {
     /// 数据源名称
     pub name: String,
@@ -90,9 +85,8 @@ pub struct CreateDataSourceRequest {
     /// 数据源配置,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub config: Option<serde_json::Value>,
-}
 /// 更新数据源请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateDataSourceRequest {
     /// 数据源名称,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -103,9 +97,8 @@ pub struct UpdateDataSourceRequest {
     /// 数据源配置,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub config: Option<serde_json::Value>,
-}
 /// 数据源列表请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListDataSourceRequest {
     /// 分页大小，默认20，最大100,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -113,9 +106,8 @@ pub struct ListDataSourceRequest {
     /// 分页token,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 /// 数据源列表响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListDataSourceResponse {
     /// 数据源列表
     pub items: Vec<DataSource>,
@@ -125,9 +117,8 @@ pub struct ListDataSourceResponse {
     /// 分页token,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 /// 数据项,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DataItem {
     /// 数据项ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -150,9 +141,8 @@ pub struct DataItem {
     /// 更新时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
-}
 /// 创建数据项请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateDataItemRequest {
     /// 数据项ID
     pub id: String,
@@ -168,15 +158,13 @@ pub struct CreateDataItemRequest {
     /// 数据项属性,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub properties: Option<serde_json::Value>,
-}
 /// 批量创建数据项请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BatchCreateDataItemRequest {
     /// 数据项列表
     pub items: Vec<CreateDataItemRequest>,
-}
 /// 数据范式,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Schema {
     /// 范式ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -196,9 +184,8 @@ pub struct Schema {
     /// 更新时间,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
-}
 /// 创建数据范式请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateSchemaRequest {
     /// 范式名称
     pub name: String,
@@ -207,9 +194,8 @@ pub struct CreateSchemaRequest {
     pub description: Option<String>,
     /// 范式定义
     pub definition: serde_json::Value,
-}
 /// 更新数据范式请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateSchemaRequest {
     /// 范式名称,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -220,13 +206,12 @@ pub struct UpdateSchemaRequest {
     /// 范式定义,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub definition: Option<serde_json::Value>,
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]
-    fn test_search_message_request() {,
+    fn test_search_message_request() {
 let request = SearchMessageRequest {,
             query: "技术文档".to_string(),
             page_size: Some(50),
@@ -236,9 +221,8 @@ let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("技术文档"));
 assert!(json.contains("\"page_size\":50"));
         assert!(json.contains("next_page_123"));
-}
 #[test]
-    fn test_search_message_request_minimal() {,
+    fn test_search_message_request_minimal() {
 let request = SearchMessageRequest {,
             query: "简单搜索".to_string(),
             page_size: None,
@@ -248,9 +232,8 @@ let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("简单搜索"));
 assert!(!json.contains("page_size"));
         assert!(!json.contains("page_token"));
-}
 #[test]
-    fn test_search_app_request() {,
+    fn test_search_app_request() {
 let request = SearchAppRequest {,
             query: "项目管理".to_string(),
             page_size: Some(20),
@@ -260,9 +243,8 @@ let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("项目管理"));
 assert!(json.contains("\"page_size\":20"));
         assert!(json.contains("app_token_456"));
-}
 #[test]
-    fn test_search_result_item() {,
+    fn test_search_result_item() {
 let item = SearchResultItem {,
             id: Some("result_123".to_string()),
             title: Some("技术文档：API接口说明".to_string()),
@@ -280,7 +262,7 @@ assert!(json.contains("https://docs.example.com/api"));
 assert!(json.contains("2024-01-01T15:30:00Z"));
     }
 #[test]
-    fn test_search_result_item_minimal() {,
+    fn test_search_result_item_minimal() {
 let item = SearchResultItem {,
             id: Some("minimal_result".to_string()),
             title: None,
@@ -296,7 +278,7 @@ assert!(!json.contains("title"));
 assert!(!json.contains("url"));
     }
 #[test]
-    fn test_search_response() {,
+    fn test_search_response() {
 let item1 = SearchResultItem {,
             id: Some("item_1".to_string()),
             title: Some("第一个结果".to_string()),
@@ -327,7 +309,7 @@ assert!(json.contains("第二个结果"));
 assert!(json.contains("next_token_789"));
     }
 #[test]
-    fn test_data_source() {,
+    fn test_data_source() {
 let data_source = DataSource {,
             id: Some("datasource_123".to_string()),
             name: Some("技术文档库".to_string()),
@@ -345,7 +327,7 @@ assert!(json.contains("\"active\""));
 assert!(json.contains("2024-01-02T10:00:00Z"));
     }
 #[test]
-    fn test_create_data_source_request() {,
+    fn test_create_data_source_request() {
 let config = serde_json::json!({,
             "connector_type": "api",
             "endpoint": "https://api.example.com",
@@ -365,7 +347,7 @@ assert!(json.contains("api"));
 assert!(json.contains("bearer"));
     }
 #[test]
-    fn test_update_data_source_request() {,
+    fn test_update_data_source_request() {
 let config = serde_json::json!({,
             "refresh_interval": 3600,
             "enabled": true,
@@ -382,7 +364,7 @@ assert!(json.contains("更新后的描述"));
 assert!(json.contains("\"enabled\":true"));
     }
 #[test]
-    fn test_list_data_source_request() {,
+    fn test_list_data_source_request() {
 let request = ListDataSourceRequest {,
             page_size: Some(30),
             page_token: Some("list_token_abc".to_string()),
@@ -392,7 +374,7 @@ let json = serde_json::to_string(&request).unwrap();
 assert!(json.contains("list_token_abc"));
     }
 #[test]
-    fn test_list_data_source_response() {,
+    fn test_list_data_source_response() {
 let ds1 = DataSource {,
             id: Some("ds_1".to_string()),
             name: Some("数据源1".to_string()),
@@ -423,7 +405,7 @@ assert!(json.contains("数据源2"));
 assert!(json.contains("end_token"));
     }
 #[test]
-    fn test_data_item() {,
+    fn test_data_item() {
 let properties = serde_json::json!({,
             "category": "documentation",
             "tags": ["api", "reference"]
@@ -449,7 +431,7 @@ assert!(json.contains("api"));
 assert!(json.contains("high"));
     }
 #[test]
-    fn test_create_data_item_request() {,
+    fn test_create_data_item_request() {
 let properties = serde_json::json!({,
             "author": "技术团队",
             "version": "1.0",
@@ -470,9 +452,8 @@ assert!(json.contains("https://example.com/new-item"));
         assert!(json.contains("技术团队"));
 assert!(json.contains("1.0"));
         assert!(json.contains("zh-CN"));
-}
 #[test]
-    fn test_batch_create_data_item_request() {,
+    fn test_batch_create_data_item_request() {
 let item1 = CreateDataItemRequest {,
             id: "batch_item_1".to_string(),
             title: Some("批量项目1".to_string()),
@@ -499,14 +480,13 @@ assert!(json.contains("批量项目2"));
 assert!(json.contains("第二个批量创建的项目"));
     }
 #[test]
-    fn test_schema() {,
+    fn test_schema() {
 let definition = serde_json::json!({,
             "type": "object",
             "properties": {
                 "title": {"type": "string", "required": true}
                 "content": {"type": "string"}
                 "tags": {"type": "array", "items": {"type": "string"}}
-}
         });
 let schema = Schema {,
             id: Some("schema_123".to_string()),
@@ -525,14 +505,13 @@ assert!(json.contains("\"type\":\"object\""));
 assert!(json.contains("2024-01-01T12:00:00Z"));
     }
 #[test]
-    fn test_create_schema_request() {,
+    fn test_create_schema_request() {
 let definition = serde_json::json!({,
             "type": "object",
             "properties": {
                 "name": {"type": "string"}
                 "description": {"type": "string"}
                 "category": {"type": "string", "enum": ["doc", "data", "media"]}
-}
             "required": ["name"]
 });
 let request = CreateSchemaRequest {,
@@ -546,14 +525,12 @@ assert!(json.contains("这是一个新建的数据范式"));
         assert!(json.contains("\"type\":\"object\""));
         assert!(json.contains("\"enum\":[\"doc\",\"data\",\"media\"]"));
         assert!(json.contains("\"required\":[\"name\"]"));
-}
 #[test]
-    fn test_update_schema_request() {,
+    fn test_update_schema_request() {
 let definition = serde_json::json!({,
             "type": "object",
             "properties": {
                 "updated_field": {"type": "string"}
-}
         });
 let request = UpdateSchemaRequest {,
             name: Some("更新的范式名称".to_string()),
@@ -564,9 +541,8 @@ let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("更新的范式名称"));
 assert!(json.contains("更新的范式描述"));
         assert!(json.contains("updated_field"));
-}
 #[test]
-    fn test_minimal_structs() {,
+    fn test_minimal_structs() {
 let minimal_data_source = DataSource {,
             id: Some("minimal_ds".to_string()),
             name: None,
@@ -591,5 +567,3 @@ let schema_json = serde_json::to_string(&minimal_schema).unwrap();
         assert!(schema_json.contains("minimal_schema"));
 assert!(!schema_json.contains("name"));
         assert!(!schema_json.contains("definition"));
-}
-}

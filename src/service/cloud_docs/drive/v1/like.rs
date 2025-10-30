@@ -6,8 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -19,13 +18,11 @@ use crate::,
 };
 /// 点赞服务,
 pub struct LikeService {
-    config: Config,
-}
+    config: Config}
 impl LikeService {
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 获取云文档的点赞者列表,
+}/// 获取云文档的点赞者列表,
     ///,
 /// 该接口用于获取云文档的点赞者列表。,
     ///,
@@ -46,74 +43,44 @@ let mut api_req = ApiRequest {,
 // 添加查询参数,
         if let Some(page_token) = request.page_token {
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert("page_size", page_size.to_string());
-}
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
     }
-}
 /// 获取云文档的点赞者列表请求参数,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListFileLikesRequest {
     /// 文件token
     pub file_token: String,
     /// 分页token
     pub page_token: Option<String>,
     /// 分页大小
-    pub page_size: Option<i32>,
-}
+    pub page_size: Option<i32>}
 impl ListFileLikesRequest {
-    pub fn w+.*{
-ListFileLikesRequestBuilder::default(),
-    }
-pub fn new(file_token: impl Into<String>) -> Self {
-        Self {
-            file_token: file_token.into(),
-            page_token: None,
-            page_size: None,
-        }
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }
-
     pub fn with_page_token(mut self, page_token: impl Into<String>) -> Self {
-self.page_token = Some(page_token.into());
-        self,
-}
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}self.page_token = Some(page_token.into());
+        self}
 
     pub fn with_page_size(mut self, page_size: i32) -> Self {
 self.page_size = Some(page_size);
-        self,
-}
-}
+        self}
 /// 获取云文档的点赞者列表请求构建器,
 #[derive(Default)]
 pub struct ListFileLikesRequestBuilder {
-    request: ListFileLikesRequest,
-}
+    request: ListFileLikesRequest}
 impl ListFileLikesRequestBuilder {
-    pub fn file_token(mut self, file_token: impl Into<String>) -> Self {
-self.request.file_token = file_token.into();
-        self,
-}
-
-    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
-self.request.page_token = Some(page_token.into());
-        self,
-}
-
-    pub fn page_size(mut self, page_size: i32) -> Self {
-self.request.page_size = Some(page_size);
-        self,
-}
-pub fn w+.*{
-        self.request,
-}
-}
-impl_executable_builder_owned!(,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}impl_executable_builder_owned!(,
     ListFileLikesRequestBuilder,
     LikeService,
     ListFileLikesRequest,
@@ -121,17 +88,16 @@ impl_executable_builder_owned!(,
     list_file_likes,
 );
 /// 获取云文档的点赞者列表响应数据
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListFileLikesRespData {
     /// 是否还有更多数据
     pub has_more: bool,
     /// 下一页token
     pub page_token: Option<String>,
     /// 点赞记录列表
-    pub items: Vec<FileLikeRecord>,
-}
+    pub items: Vec<FileLikeRecord>}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct FileLikeRecord {
     /// 点赞者ID
     pub user_id: String,
@@ -140,10 +106,10 @@ pub struct FileLikeRecord {
     /// 点赞时间（时间戳，单位：秒）
     pub like_time: String,
     /// 点赞者头像
-    pub avatar_url: Option<String>,
-}
+    pub avatar_url: Option<String>}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}

@@ -11,10 +11,11 @@ use crate::core::config::Config;
 ///
 /// 提供群公告和公告块的管理功能
 pub struct ChatAnnouncementService {
-    pub config: Config,
+pub config: Config,
 }
 impl ChatAnnouncementService {
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self { config 
+}
 }
 }

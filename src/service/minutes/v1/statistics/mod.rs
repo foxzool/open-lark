@@ -3,36 +3,28 @@ use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize
 use std::collections::HashMap;
 use crate::{
     core::{,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::minutes::models::{MinuteStatistics, UserIdType}
 };
 /// 统计数据服务
 pub struct StatisticsService {
-    pub config: Config,
 }
-/// 获取统计数据响应
-#[derive(.*?)]
-pub struct GetStatisticsResponse {
-    /// 统计数据信息
-    pub statistics: MinuteStatistics,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl StatisticsService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl StatisticsService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
 }
-/// 获取妙记统计数据
+}/// 获取妙记统计数据
     pub async fn get(
         &self,
         minute_token: &str,
@@ -42,7 +34,6 @@ impl StatisticsService {
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
@@ -54,7 +45,6 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}

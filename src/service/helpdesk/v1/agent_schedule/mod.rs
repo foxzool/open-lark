@@ -4,23 +4,21 @@ use open_lark_core::core::api_req::ApiRequest;
 use std::collections::HashMap;
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{helpdesk::*, EndpointBuilder}
-        http::Transport,
+        endpoints::{helpdesk::*, EndpointBuilderhttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::helpdesk::models::{AgentSchedule, UserIdType}
 };
 /// 客服工作日程服务
 pub struct AgentScheduleService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 创建客服工作日程请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateAgentScheduleRequest {
+}
     /// 开始时间
     pub start_time: String,
     /// 结束时间
@@ -28,75 +26,53 @@ pub struct CreateAgentScheduleRequest {
     /// 重复模式
 #[serde(skip_serializing_if = "Option::is_none")]
     pub repeat_type: Option<String>,
-}
 /// 创建客服工作日程响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateAgentScheduleResponse {
+}
     /// 创建的工作日程
     pub schedule: AgentSchedule,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 更新客服工作日程请求
-#[derive(.*?)]
-pub struct UpdateAgentScheduleRequest {
-    /// 开始时间
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub start_time: Option<String>,
-    /// 结束时间
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub end_time: Option<String>,
-    /// 重复模式
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub repeat_type: Option<String>,
-}
-/// 更新客服工作日程响应
-#[derive(.*?)]
-pub struct UpdateAgentScheduleResponse {
-    /// 更新后的工作日程
-    pub schedule: AgentSchedule,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 获取客服工作日程响应
-#[derive(.*?)]
-pub struct GetAgentScheduleResponse {
-    /// 工作日程
-    pub schedule: AgentSchedule,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 获取全部客服工作日程响应
-#[derive(.*?)]
-pub struct ListAgentSchedulesResponse {
-    /// 工作日程列表
-    pub schedules: Vec<AgentSchedule>,
-    /// 是否还有更多数据
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub has_more: Option<bool>,
-    /// 下一页标记
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl AgentScheduleService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 更新客服工作日程请求
+#[derive(Debug, Clone)]
 }
-/// 创建客服工作日程
+pub struct UpdateAgentScheduleRequest {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 获取客服工作日程响应
+#[derive(Debug, Clone)]
+}
+pub struct GetAgentScheduleResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 获取全部客服工作日程响应
+#[derive(Debug, Clone)]
+}
+pub struct ListAgentSchedulesResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl AgentScheduleService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建客服工作日程
     pub async fn create(
         &self,
         agent_id: &str,
@@ -107,7 +83,6 @@ impl AgentScheduleService {
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
@@ -121,7 +96,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除客服工作日程
     pub async fn delete(
         &self,
@@ -133,7 +107,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(,
@@ -149,9 +122,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 更新客服工作日程
     pub async fn patch(
         &self,
@@ -164,7 +135,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(,
@@ -181,9 +151,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询指定客服工作日程
     pub async fn get(
         &self,
@@ -195,7 +163,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(,
@@ -211,9 +178,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询全部客服工作日程
     pub async fn list(
         &self,
@@ -226,13 +191,10 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token.to_string());
-}
 if let Some(page_size) = page_size {,
             query_params.insert("page_size", page_size.to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
@@ -244,7 +206,6 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}

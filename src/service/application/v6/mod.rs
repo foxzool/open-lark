@@ -21,20 +21,8 @@ pub struct V6 {
     /// 应用反馈
     pub application_feedback: application_feedback::ApplicationFeedbackService,
     /// 应用红点
-    pub app_badge: app_badge::AppBadgeService,
-}
+}    pub app_badge: app_badge::AppBadgeService}
 impl V6 {
-    pub fn new() -> Self {
-Self {
-            application: application::ApplicationService::new(config.clone()),
-            scope: scope::ScopeService::new(config.clone()),
-            admin: admin::AdminService::new(config.clone()),
-            appstore_paid_info: appstore_paid_info::AppstorePaidInfoService::new(config.clone()),
-            app_usage: app_usage::AppUsageService::new(config.clone()),
-            application_feedback: application_feedback::ApplicationFeedbackService::new(
-                config.clone(),
-            ),
-            app_badge: app_badge::AppBadgeService::new(config),
-        }
-}
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }

@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 /// 分页响应基础结构,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PageResponse<T> {,
     /// 数据项列表
     pub items: Vec<T>,
@@ -10,11 +10,10 @@ pub struct PageResponse<T> {,
     /// 是否还有更多数据,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
-}
 /// 用户类型,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum UserType {,
+pub enum UserType {
 /// 员工,
     Employee,
     /// 访客
@@ -23,11 +22,10 @@ pub enum UserType {,
     Contractor,
     /// 临时人员
     Temporary,
-}
 /// 用户状态,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum UserStatus {,
+pub enum UserStatus {
 /// 活跃,
     Active,
     /// 禁用
@@ -36,9 +34,8 @@ pub enum UserStatus {,
     Expired,
     /// 待审核
     Pending,
-}
 /// 门禁用户信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AcsUser {
     /// 用户ID
     pub user_id: String,
@@ -71,18 +68,16 @@ pub struct AcsUser {
     /// 更新时间戳,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-}
 /// 权限组状态,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum RuleStatus {,
+pub enum RuleStatus {
 /// 活跃,
     Active,
     /// 禁用
     Disabled,
-}
 /// 权限组信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RuleExternal {
     /// 权限组ID
     pub rule_id: String,
@@ -112,20 +107,18 @@ pub struct RuleExternal {
     /// 更新时间戳,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-}
 /// 访客状态,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum VisitorStatus {,
+pub enum VisitorStatus {
 /// 活跃,
     Active,
     /// 过期
     Expired,
     /// 已签出
     CheckedOut,
-}
 /// 访客信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Visitor {
     /// 访客ID
     pub visitor_id: String,
@@ -158,11 +151,10 @@ pub struct Visitor {
     /// 创建时间戳,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
-}
 /// 设备类型,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum DeviceType {,
+pub enum DeviceType {
 /// 门禁设备,
     AccessControl,
     /// 人脸识别设备
@@ -171,11 +163,10 @@ pub enum DeviceType {,
     Turnstile,
     /// 电梯控制器
     ElevatorController,
-}
 /// 设备状态,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum DeviceStatus {,
+pub enum DeviceStatus {
 /// 在线,
     Online,
     /// 离线
@@ -184,9 +175,8 @@ pub enum DeviceStatus {,
     Error,
     /// 维护中
     Maintenance,
-}
 /// 门禁设备信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Device {
     /// 设备ID
     pub device_id: String,
@@ -216,20 +206,18 @@ pub struct Device {
     /// 更新时间戳,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-}
 /// 访问类型,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum AccessType {,
+pub enum AccessType {
 /// 进入,
     Entry,
     /// 离开
     Exit,
-}
 /// 访问方式,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum AccessMethod {,
+pub enum AccessMethod {
 /// 人脸识别,
     FaceRecognition,
     /// 刷卡
@@ -240,11 +228,10 @@ pub enum AccessMethod {,
     Fingerprint,
     /// 手动开门
     Manual,
-}
 /// 访问结果,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
-pub enum AccessResult {,
+pub enum AccessResult {
 /// 成功,
     Success,
     /// 失败
@@ -253,9 +240,8 @@ pub enum AccessResult {,
     Denied,
     /// 超时
     Timeout,
-}
 /// 门禁访问记录,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AccessRecord {
     /// 记录ID
     pub record_id: String,
@@ -286,9 +272,8 @@ pub struct AccessRecord {
     /// 创建时间戳,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
-}
 /// 人脸图片信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct FaceImage {
     /// 图片ID
     pub image_id: String,
@@ -304,13 +289,12 @@ pub struct FaceImage {
     /// 上传时间戳,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub uploaded_at: Option<i64>,
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]
-    fn test_page_response_serialization() {,
+    fn test_page_response_serialization() {
 let page_response = PageResponse {,
             items: vec!["item1".to_string(), "item2".to_string()]
             page_token: Some("next_page".to_string()),
@@ -322,9 +306,8 @@ let serialized = serde_json::to_string(&page_response).unwrap();
         assert_eq!(page_response.items.len(), deserialized.items.len());
         assert_eq!(page_response.page_token, deserialized.page_token);
         assert_eq!(page_response.has_more, deserialized.has_more);
-}
 #[test]
-    fn test_user_type_serialization() {,
+    fn test_user_type_serialization() {
 let types = vec![,
             UserType::Employee,
             UserType::Visitor,
@@ -340,11 +323,9 @@ let deserialized: UserType = serde_json::from_str(&serialized).unwrap();
                 (UserType::Contractor, UserType::Contractor) => {}
                 (UserType::Temporary, UserType::Temporary) => {}
                 _ => panic!("Serialization/deserialization failed"),
-            }
 }
-    }
 #[test]
-    fn test_user_status_serialization() {,
+    fn test_user_status_serialization() {
 let statuses = vec![,
             UserStatus::Active,
             UserStatus::Disabled,
@@ -360,11 +341,9 @@ let deserialized: UserStatus = serde_json::from_str(&serialized).unwrap();
                 (UserStatus::Expired, UserStatus::Expired) => {}
                 (UserStatus::Pending, UserStatus::Pending) => {}
                 _ => panic!("Serialization/deserialization failed"),
-            }
 }
-    }
 #[test]
-    fn test_acs_user_serialization() {,
+    fn test_acs_user_serialization() {
 let user = AcsUser {,
             user_id: "user_123".to_string(),
             employee_id: Some("emp_456".to_string()),
@@ -387,9 +366,8 @@ let serialized = serde_json::to_string(&user).unwrap();
         assert_eq!(user.email, deserialized.email);
         assert_eq!(user.phone, deserialized.phone);
         assert_eq!(user.department, deserialized.department);
-}
 #[test]
-    fn test_rule_external_serialization() {,
+    fn test_rule_external_serialization() {
 let rule = RuleExternal {,
             rule_id: "rule_123".to_string(),
             name: "技术部门禁".to_string(),
@@ -410,9 +388,8 @@ let serialized = serde_json::to_string(&rule).unwrap();
         assert_eq!(rule.description, deserialized.description);
         assert_eq!(rule.device_ids, deserialized.device_ids);
         assert_eq!(rule.user_ids, deserialized.user_ids);
-}
 #[test]
-    fn test_visitor_serialization() {,
+    fn test_visitor_serialization() {
 let visitor = Visitor {,
             visitor_id: "visitor_123".to_string(),
             name: "李四".to_string(),
@@ -435,9 +412,8 @@ let serialized = serde_json::to_string(&visitor).unwrap();
         assert_eq!(visitor.company, deserialized.company);
         assert_eq!(visitor.purpose, deserialized.purpose);
         assert_eq!(visitor.host_user_id, deserialized.host_user_id);
-}
 #[test]
-    fn test_device_serialization() {,
+    fn test_device_serialization() {
 let device = Device {,
             device_id: "device_123".to_string(),
             name: "前台门禁".to_string(),
@@ -459,9 +435,8 @@ let serialized = serde_json::to_string(&device).unwrap();
         assert_eq!(device.description, deserialized.description);
         assert_eq!(device.ip_address, deserialized.ip_address);
         assert_eq!(device.mac_address, deserialized.mac_address);
-}
 #[test]
-    fn test_access_record_serialization() {,
+    fn test_access_record_serialization() {
 let record = AccessRecord {,
             record_id: "record_123".to_string(),
             user_id: Some("user_456".to_string()),
@@ -484,9 +459,8 @@ let serialized = serde_json::to_string(&record).unwrap();
         assert_eq!(record.device_id, deserialized.device_id);
         assert_eq!(record.device_name, deserialized.device_name);
         assert_eq!(record.access_time, deserialized.access_time);
-}
 #[test]
-    fn test_face_image_serialization() {,
+    fn test_face_image_serialization() {
 let face_image = FaceImage {,
             image_id: "img_123".to_string(),
             image_content: Some("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==".to_string()),
@@ -502,9 +476,8 @@ let serialized = serde_json::to_string(&face_image).unwrap();
         assert_eq!(face_image.image_format, deserialized.image_format);
         assert_eq!(face_image.file_size, deserialized.file_size);
         assert_eq!(face_image.uploaded_at, deserialized.uploaded_at);
-}
 #[test]
-    fn test_enum_serialization_formats() {,
+    fn test_enum_serialization_formats() {
 // Test AccessType,
         assert_eq!(
             serde_json::to_string(&AccessType::Entry).unwrap(),
@@ -534,7 +507,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_models_with_none_values() {,
+    fn test_models_with_none_values() {
 let user = AcsUser {,
             user_id: "user_123".to_string(),
             employee_id: None,
@@ -557,7 +530,7 @@ assert!(deserialized.employee_id.is_none());
 assert!(deserialized.email.is_none());
     }
 #[test]
-    fn test_debug_trait_for_models() {,
+    fn test_debug_trait_for_models() {
 let user = AcsUser {,
             user_id: "test".to_string(),
             employee_id: None,
@@ -575,9 +548,8 @@ let user = AcsUser {,
         let debug_string = format!("{:?}", user);
 assert!(debug_string.contains("AcsUser"));
         assert!(debug_string.contains("test"));
-}
 #[test]
-    fn test_clone_trait_for_models() {,
+    fn test_clone_trait_for_models() {
 let original_user = AcsUser {,
             user_id: "test".to_string(),
             employee_id: Some("emp123".to_string()),
@@ -595,5 +567,3 @@ let cloned_user = original_user.clone();
         assert_eq!(original_user.user_id, cloned_user.user_id);
         assert_eq!(original_user.employee_id, cloned_user.employee_id);
         assert_eq!(original_user.name, cloned_user.name);
-}
-}

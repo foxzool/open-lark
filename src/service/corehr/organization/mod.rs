@@ -3,87 +3,78 @@ use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::corehr::*,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::corehr::models::{
         Company, CompanyCreateRequest, Department, DepartmentCreateRequest, PageResponse,
-    }
 };
 /// 组织管理服务
 pub struct OrganizationService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 创建部门响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DepartmentCreateResponse {
+}
     /// 部门信息
 #[serde(skip_serializing_if = "Option::is_none")]
     pub department: Option<Department>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 批量查询部门响应
-#[derive(.*?)]
-pub struct DepartmentBatchGetResponse {
-    /// 部门信息列表
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<Department>>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 部门架构树响应
-#[derive(.*?)]
-pub struct DepartmentTreeResponse {
-    /// 部门树结构
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<Department>>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 创建公司响应
-#[derive(.*?)]
-pub struct CompanyCreateResponse {
-    /// 公司信息
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub company: Option<Company>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 批量查询公司响应
-#[derive(.*?)]
-pub struct CompanyListResponse {
-    /// 公司信息列表
-#[serde(flatten)]
-    pub companies: PageResponse<Company>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl OrganizationService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 批量查询部门响应
+#[derive(Debug, Clone)]
+pub struct DepartmentBatchGetResponse {
 }
-/// 创建部门
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 部门架构树响应
+#[derive(Debug, Clone)]
+}
+pub struct DepartmentTreeResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 创建公司响应
+#[derive(Debug, Clone)]
+}
+pub struct CompanyCreateResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 批量查询公司响应
+#[derive(Debug, Clone)]
+}
+pub struct CompanyListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl OrganizationService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建部门
     ///,
 /// 该接口用于创建新的部门，支持设置部门名称、上级部门、
     /// 部门负责人等信息，并支持自定义字段。
@@ -137,7 +128,6 @@ let api_req = ApiRequest {,
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量查询部门
     ///,
 /// 该接口用于通过部门ID列表批量获取部门信息，支持获取
@@ -178,7 +168,6 @@ let api_req = ApiRequest {,
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询部门架构树
     ///,
 /// 该接口用于查询指定生效日期的部门架构树，返回完整的
@@ -223,10 +212,7 @@ let mut api_req = ApiRequest {,
 // 添加查询参数
         if let Some(date) = effective_date {
             api_req.query_params.insert("effective_date", date);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 创建公司
     ///,
 /// 该接口用于创建新的公司信息，支持设置公司名称、类型、
@@ -253,8 +239,7 @@ let mut api_req = ApiRequest {,
 ///     name: I18nText {
     ///         zh_cn: Some("北京科技有限公司".to_string())
     ///         en_us: Some("Beijing Technology Co. Ltd.".to_string()),
-    ///     }
-    ///     company_type: Some("subsidiary".to_string())
+    ///     ///     company_type: Some("subsidiary".to_string())
     ///     legal_name: Some(I18nText {
     ///         zh_cn: Some("北京科技有限公司".to_string())
     ///         en_us: Some("Beijing Technology Co. Ltd.".to_string()),
@@ -281,7 +266,6 @@ let api_req = ApiRequest {,
 };
 // Content-Type 由 Transport 层自动设置
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量查询公司
     ///,
 /// 该接口用于分页查询公司信息列表，支持获取所有公司的
@@ -329,11 +313,8 @@ let mut api_req = ApiRequest {,
 // 添加查询参数
         if let Some(size) = page_size {
             api_req.query_params.insert("page_size", size.to_string());
-}
 if let Some(token) = page_token {,
             api_req.query_params.insert("page_token", token);
-}
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}}}}}}}}}}}}}}

@@ -6,8 +6,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -19,7 +18,7 @@ use crate::,
 };
 use super::list::Comment;
 /// 获取全文评论请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetCommentRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -34,91 +33,17 @@ pub struct GetCommentRequest {
     comment_id: String,
     /// 用户ID类型,
 #[serde(skip_serializing_if = "Option::is_none")]
-    user_id_type: Option<String>,
-}
+    user_id_type: Option<String>}
 impl GetCommentRequest {
-    pub fn w+.*{
-GetCommentRequestBuilder::default(),
-    }
-pub fn new(,
-        file_token: impl ToString,
-        file_type: impl ToString,
-        comment_id: impl ToString,
-    ) -> Self {
-Self {
-            file_token: file_token.to_string(),
-            file_type: file_type.to_string(),
-            comment_id: comment_id.to_string()
-            ..Default::default(),
-}
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct GetCommentRequestBuilder {
-    request: GetCommentRequest,
-}
+    request: GetCommentRequest}
 impl GetCommentRequestBuilder {
-    /// 文档token
-    pub fn file_token(mut self, file_token: impl ToString) -> Self {
-self.request.file_token = file_token.to_string();
-        self,
-}
-/// 文档类型,
-    pub fn file_type(mut self, file_type: impl ToString) -> Self {
-self.request.file_type = file_type.to_string();
-        self,
-}
-/// 设置为文档类型,
-    pub fn with_doc_type(mut self) -> Self {
-self.request.file_type = "doc".to_string();
-        self,
-}
-/// 设置为docx类型,
-    pub fn with_docx_type(mut self) -> Self {
-self.request.file_type = "docx".to_string();
-        self,
-}
-/// 设置为电子表格类型,
-    pub fn with_sheet_type(mut self) -> Self {
-self.request.file_type = "sheet".to_string();
-        self,
-}
-/// 设置为多维表格类型,
-    pub fn with_bitable_type(mut self) -> Self {
-self.request.file_type = "bitable".to_string();
-        self,
-}
-/// 评论ID,
-    pub fn comment_id(mut self, comment_id: impl ToString) -> Self {
-self.request.comment_id = comment_id.to_string();
-        self,
-}
-/// 用户ID类型,
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
-self.request.user_id_type = Some(user_id_type.to_string());
-        self,
-}
-/// 使用OpenID,
-    pub fn with_open_id(mut self) -> Self {
-self.request.user_id_type = Some("open_id".to_string());
-        self,
-}
-/// 使用UserID,
-    pub fn with_user_id(mut self) -> Self {
-self.request.user_id_type = Some("user_id".to_string());
-        self,
-}
-/// 使用UnionID,
-    pub fn with_union_id(mut self) -> Self {
-self.request.user_id_type = Some("union_id".to_string());
-        self,
-}
-pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-self.request,
-    }
-}
-// 应用ExecutableBuilder trait到GetCommentRequestBuilder,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}// 应用ExecutableBuilder trait到GetCommentRequestBuilder,
 impl_executable_builder_owned!(
     GetCommentRequestBuilder,
     super::CommentsService,
@@ -127,16 +52,16 @@ impl_executable_builder_owned!(
     get,
 );
 /// 获取全文评论响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetCommentResponse {
     /// 评论信息
     pub comment: Comment,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 获取全文评论,
 pub async fn get_comment(
     request: GetCommentRequest,
@@ -163,79 +88,16 @@ if let Some(user_id_type) = request.user_id_type {,
 
     let api_resp = Transport::request(api_req, config, option).await?;
 Ok(api_resp),
-}
 
 impl GetCommentResponse {
-/// 获取评论ID,
-    pub fn w+.*{
-&self.comment.comment_id,
-    }
-/// 获取用户ID,
-    pub fn w+.*{
-&self.comment.user_id,
-    }
-/// 是否已解决,
-    pub fn w+.*{
-self.comment.is_solved,
-    }
-/// 是否为全文评论,
-    pub fn w+.*{
-self.comment.is_whole.unwrap_or(false),
-    }
-/// 是否有回复,
-    pub fn w+.*{
-self.comment.has_replies(),
-    }
-/// 获取回复数量,
-    pub fn w+.*{
-self.comment.reply_count(),
-    }
-/// 获取评论的文本内容,
-    pub fn w+.*{
-self.comment.get_text_content(),
-    }
-/// 获取创建时间,
-    pub fn w+.*{
-self.comment.create_time,
-    }
-/// 获取更新时间,
-    pub fn w+.*{
-self.comment.update_time,
-    }
-/// 获取解决时间,
-    pub fn w+.*{
-self.comment.solved_time,
-    }
-/// 获取解决者用户ID,
-    pub fn w+.*{
-self.comment.solver_user_id.as_deref(),
-    }
-/// 获取引用内容,
-    pub fn w+.*{
-self.comment.quote.as_deref(),
-    }
-/// 获取详细信息摘要,
-    pub fn w+.*{
-format!(,
-            "评论ID: {} 用户: {} 状态: {} 回复数: {} 创建时间: {}",
-            self.comment_id(),
-            self.user_id(),
-            if self.is_solved() {,
-"已解决",
-            } else {,
-"未解决",
-            }
-            self.reply_count(),
-            self.create_time(),
-),
-    }
-}
-#[cfg(test)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]
-    fn test_get_comment_request_builder() {,
+    fn test_get_comment_request_builder() {
 let request = GetCommentRequest::builder(),
             .file_token()
 .with_doc_type()
@@ -247,12 +109,9 @@ let request = GetCommentRequest::builder(),
         assert_eq!(request.file_type, "doc");
         assert_eq!(request.comment_id, "comment123");
         assert_eq!(request.user_id_type, Some("open_id".to_string()));
-}
 #[test]
     ,
         let request = GetCommentRequest::new("doccnxxxxxx", "doc", "comment123");
         assert_eq!(request.file_token, "doccnxxxxxx");
         assert_eq!(request.file_type, "doc");
         assert_eq!(request.comment_id, "comment123");
-}
-}

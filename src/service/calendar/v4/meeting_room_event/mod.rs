@@ -4,10 +4,11 @@ pub mod query_availability;
 pub mod reply;
 /// 会议室日程服务
 pub struct MeetingRoomEventService {
-    pub config: Config,
+pub config: Config,
 }
 impl MeetingRoomEventService {
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self { config 
+}
 }
 }

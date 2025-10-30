@@ -3,63 +3,54 @@ use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::aily::models::{
         PageResponse, Skill, SkillExecution, SkillGetRequest, SkillListRequest, SkillStartRequest,
-    }
 };
 /// 技能管理服务
 pub struct SkillService {
+}
     pub config: Config,
-}
 /// 技能调用响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SkillStartResponse {
-    /// 技能执行信息
-#[serde(flatten)]
-    pub execution: SkillExecution,
 }
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 技能信息查询响应
-#[derive(.*?)]
-pub struct SkillGetResponse {
-    /// 技能信息
-#[serde(flatten)]
-    pub skill: Skill,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 技能列表响应
-#[derive(.*?)]
-pub struct SkillListResponse {
-    /// 分页响应数据
-#[serde(flatten)]
-    pub page_response: PageResponse<Skill>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl SkillService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 技能信息查询响应
+#[derive(Debug, Clone)]
 }
-/// 调用技能
+pub struct SkillGetResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 技能列表响应
+#[derive(Debug, Clone)]
+}
+pub struct SkillListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl SkillService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 调用技能
     ///,
 /// 该接口用于调用指定的智能伙伴技能。
     ///,
@@ -87,9 +78,7 @@ let api_req = ApiRequest {,
 }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取技能信息
     ///,
 /// 该接口用于获取指定的技能详细信息。
@@ -116,9 +105,7 @@ let mut api_req = ApiRequest {,
 };
 // 添加查询参数
         api_req.query_params.insert("app_id", request.app_id);
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询技能列表
     ///,
 /// 该接口用于查询智能伙伴的技能列表。
@@ -145,11 +132,8 @@ if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}}}}}}

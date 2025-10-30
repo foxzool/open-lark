@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use serde_repr::{Deserialize_repr, Serialize_repr};
 /// 字段的具体内容,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[allow(dead_code)]
 pub enum FieldValue {
     MultiLine(String),
@@ -26,10 +26,9 @@ pub enum FieldValue {
     CreatedBy(Person),
     ModifiedBy(Person),
     PhoneNumber(String),
-    AutoSerial(String),
-}
+    AutoSerial(String)}
 /// 人员,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Person {
     /// 人员名字
     pub name: String,
@@ -39,9 +38,8 @@ pub struct Person {
     pub en_name: String,
     /// 邮箱
     pub email: String,
-}
 /// 群组,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[allow(dead_code)]
 pub struct GroupChat {
 /// 群组名,
@@ -50,17 +48,15 @@ pub struct GroupChat {
     pub avatar_url: String,
     /// 群组id
     pub id: String,
-}
 /// 超链接,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Link {
     /// 文本名称
     pub text: String,
     /// 超链接
     pub link: String,
-}
 /// 附件,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[allow(dead_code)]
 pub struct Attachment {
 /// 附件token,
@@ -74,10 +70,9 @@ pub struct Attachment {
     /// 附件url
     pub url: String,
     /// 生成附件临时下载链接的url，需access token鉴权
-    pub tmp_url: Option<String>,
-}
+    pub tmp_url: Option<String>}
 /// 地理位置,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Location {
     /// 经纬度
     pub location: String,
@@ -93,9 +88,8 @@ pub struct Location {
     pub name: String,
     /// 完整地址
     pub full_address: String,
-}
 /// 字段信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AppTableField {
     /// 多维表格字段名
     pub field_name: String,
@@ -112,10 +106,9 @@ pub struct AppTableField {
     /// 字段在界面上的展示类型
     pub ui_type: UiType,
     /// 是否是隐藏字段
-    pub is_hidden: Option<bool>,
-}
+    pub is_hidden: Option<bool>}
 // 字段属性,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AppTableFieldProperty {
     /// 单选、多选字段的选项信息,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -167,10 +160,9 @@ pub struct AppTableFieldProperty {
     pub currency_code: Option<String>,
     /// 评分字段的相关设置,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub rating: Option<AppTableFieldPropertyRating>,
-}
+    pub rating: Option<AppTableFieldPropertyRating>}
 /// 单选、多选字段的选项信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AppTableFieldPropertyOption {
     /// 选项名
     pub name: String,
@@ -179,55 +171,48 @@ pub struct AppTableFieldPropertyOption {
     pub id: Option<String>,
     /// 选项颜色,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub color: Option<i32>,
-}
+    pub color: Option<i32>}
 /// 自动编号类型,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AppTableFieldPropertyAutoSerial {
     /// 自动编号类型: custom 或 auto_increment_number
     pub r#type: String,
-    pub options: Vec<AppTableFieldPropertyAutoSerialOption>,
-}
+    pub options: Vec<AppTableFieldPropertyAutoSerialOption>}
 /// 自动编号规则列表,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AppTableFieldPropertyAutoSerialOption {
     /// 自动编号的可选规则项类型
     pub r#type: String,
     /// 与自动编号的可选规则项类型相对应的取值
     pub value: String,
-}
 /// 地理位置输入方式,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AppTableFieldPropertyLocation {
     /// 地理位置输入限制: only_mobile 或 not_limit
     pub input_type: String,
-}
 /// 字段支持的编辑模式,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AppTableFieldPropertyAllowedEditModes {
     /// 是否允许手动录入
     pub manual: bool,
     /// 是否允许移动端录入
     pub scan: bool,
-}
 /// 评分字段的相关设置,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AppTableFieldPropertyRating {
     /// 评分字段的符号展示
     pub symbol: String,
-}
 /// 字段的描述,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AppTableFieldDescription {
     /// 是否禁止同步,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub disable_sync: Option<bool>,
     /// 字段描述内容
     pub text: String,
-}
 
-#[derive(.*?)]
-pub enum UiType {,
+#[derive(Debug, Clone)]
+pub enum UiType {
     Text,
     Barcode,
     Number,
@@ -254,12 +239,11 @@ pub enum UiType {,
     AutoNumber,
     Stage,
     Lookup,
-    Button,
-}
+    Button}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 #[repr(u16)]
-pub enum FieldType {,
+pub enum FieldType {
 #[default]
     /// 多行文本
     Text = 1,
@@ -306,66 +290,40 @@ pub enum FieldType {,
     /// 自动编号
     AutoSerial = 1005,
     /// 按钮
-    Button = 3001,
-}
+    Button = 3001}
 impl AppTableFieldProperty {
-    /// 创建文本字段属性,
-pub fn text() -> Self {
-        Self {
-            options: None,
-            formatter: None,
-            date_formatter: None,
-            auto_fill: None,
-            multiple: None,
-            table_id: None,
-            table_name: None,
-            back_field_name: None,
-            auto_serial: None,
-            location: None,
-            formula_expression: None,
-            allowed_edit_modes: None,
-            min: None,
-            max: None,
-            range_customize: None,
-            currency_code: None,
-            rating: None,
-        }
+    
 }
 /// 创建数字字段属性,
     pub fn number(formatter: Option<String>) -> Self {
 Self {
             formatter,
-            ..Self::text(),
-}
+            ..Self::text()}
     }
 /// 创建单选字段属性,
     pub fn single_select(options: Vec<AppTableFieldPropertyOption>) -> Self {
 Self {
             options: Some(options),
-            ..Self::text(),
-}
+            ..Self::text()}
     }
 /// 创建多选字段属性,
     pub fn multi_select(options: Vec<AppTableFieldPropertyOption>) -> Self {
 Self {
             options: Some(options),
-            ..Self::text(),
-}
+            ..Self::text()}
     }
 /// 创建日期字段属性,
     pub fn date(date_formatter: Option<String>, auto_fill: Option<bool>) -> Self {
 Self {
             date_formatter,
             auto_fill,
-            ..Self::text(),
-}
+            ..Self::text()}
     }
 /// 创建人员字段属性,
     pub fn user(multiple: Option<bool>) -> Self {
 Self {
             multiple,
-            ..Self::text(),
-}
+            ..Self::text()}
     }
 /// 创建进度字段属性,
     pub fn progress(min: f32, max: f32, range_customize: bool) -> Self {
@@ -374,16 +332,14 @@ Self {
             max: Some(max),
             range_customize: Some(range_customize),
             formatter: Some("0".to_string()),
-            ..Self::text(),
-}
+            ..Self::text()}
     }
 /// 创建货币字段属性,
     pub fn currency(currency_code: String) -> Self {
 Self {
             currency_code: Some(currency_code),
             formatter: Some("0.00".to_string()),
-            ..Self::text(),
-}
+            ..Self::text()}
     }
 /// 创建评分字段属性,
     pub fn rating(symbol: String, max: f32) -> Self {
@@ -392,5 +348,4 @@ Self {
             max: Some(max),
             ..Self::text(),
 }
-    }
 }

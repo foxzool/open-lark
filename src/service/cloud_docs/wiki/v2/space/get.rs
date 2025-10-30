@@ -11,41 +11,24 @@ use crate::core::{,
     SDKResult,
 };
 /// 获取知识空间信息请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetSpaceRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 知识空间id,
 #[serde(skip)]
-    space_id: String,
-}
+    space_id: String}
 impl GetSpaceRequest {
-    pub fn w+.*{
-GetSpaceRequestBuilder::default(),
-    }
-pub fn new(space_id: impl ToString) -> Self {
-        Self {
-            space_id: space_id.to_string()
-            ..Default::default(),
-}
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct GetSpaceRequestBuilder {
-    request: GetSpaceRequest,
-}
+    request: GetSpaceRequest}
 impl GetSpaceRequestBuilder {
-    /// 知识空间id
-    pub fn space_id(mut self, space_id: impl ToString) -> Self {
-self.request.space_id = space_id.to_string();
-        self,
-}
-pub fn w+.*{
-        self.request,
-}
-}
-/// 知识空间详细信息,
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 知识空间详细信息,
+#[derive(Debug, Clone)]
 pub struct SpaceInfo {
     /// 知识空间id
     pub space_id: String,
@@ -61,19 +44,18 @@ pub struct SpaceInfo {
     /// 创建时间戳（秒）
     pub create_time: Option<i64>,
     /// 更新时间戳（秒）
-    pub update_time: Option<i64>,
-}
+    pub update_time: Option<i64>}
 /// 获取知识空间信息响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetSpaceResponse {
     /// 知识空间信息
     pub space: SpaceInfo,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 获取知识空间信息,
 pub async fn get_space(
     request: GetSpaceRequest,
@@ -90,16 +72,13 @@ api_req.set_api_path(EndpointBuilder::replace_param(,
     api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
     let api_resp = Transport::request(api_req, config, option).await?;
-Ok(api_resp),
-}
+Ok(api_resp)}
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]
-    fn test_get_space_request_builder() {,
+    fn test_get_space_request_builder() {
 let request = GetSpaceRequest::builder().space_id("spcxxxxxx").build();
         assert_eq!(request.space_id, "spcxxxxxx");
-}
-}

@@ -1,10 +1,9 @@
 // baike模块的数据模型定义
-
 use serde::{Deserialize, Serialize};
-
 /// 词条信息
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Entity {
+}
     /// 词条ID
     #[serde(rename = "entity_id")]
     pub entity_id: String,
@@ -44,8 +43,6 @@ pub struct Entity {
     /// 关联词条
     #[serde(rename = "related_entities")]
     pub related_entities: Option<Vec<Entity>>,
-}
-
 /// 词条状态
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
@@ -58,8 +55,6 @@ pub enum EntityStatus {
     Offline,
     /// 已删除
     Deleted,
-}
-
 /// 词条类型
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
@@ -74,11 +69,10 @@ pub enum EntityType {
     Product,
     /// 事件词条
     Event,
-}
-
 /// 分类信息
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Category {
+}
     /// 分类ID
     #[serde(rename = "category_id")]
     pub category_id: String,
@@ -91,11 +85,10 @@ pub struct Category {
     pub parent_id: Option<String>,
     /// 分类层级
     pub level: i32,
-}
-
 /// 创建者信息
 #[derive(Debug, Deserialize, Serialize)]
 pub struct CreatorInfo {
+}
     /// 用户ID
     #[serde(rename = "user_id")]
     pub user_id: String,
@@ -105,8 +98,6 @@ pub struct CreatorInfo {
     /// 用户类型
     #[serde(rename = "user_type")]
     pub user_type: Option<String>,
-}
-
 /// 审核状态
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
@@ -117,11 +108,10 @@ pub enum AuditStatus {
     Approved,
     /// 审核拒绝
     Rejected,
-}
-
 /// 草稿信息
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Draft {
+}
     /// 草稿ID
     #[serde(rename = "draft_id")]
     pub draft_id: String,
@@ -138,8 +128,6 @@ pub struct Draft {
     /// 创建时间
     #[serde(rename = "create_time")]
     pub create_time: String,
-}
-
 /// 草稿类型
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
@@ -150,11 +138,10 @@ pub enum DraftType {
     Update,
     /// 删除
     Delete,
-}
-
 /// 搜索匹配结果
 #[derive(Debug, Deserialize, Serialize)]
 pub struct SearchResult {
+}
     /// 词条信息
     pub entity: Entity,
     /// 匹配类型
@@ -162,8 +149,6 @@ pub struct SearchResult {
     pub match_type: MatchType,
     /// 匹配分数
     pub score: f32,
-}
-
 /// 匹配类型
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
@@ -176,30 +161,26 @@ pub enum MatchType {
     Prefix,
     /// 后缀匹配
     Suffix,
-}
-
 /// 通用响应结构
 #[derive(Debug, Deserialize, Serialize)]
 pub struct BaikeResponse<T> {
+}
     /// 响应码
     pub code: i32,
     /// 响应消息
     pub msg: String,
     /// 响应数据
     pub data: Option<T>,
-}
-
 /// 分页响应结构
 #[derive(Debug, Deserialize, Serialize)]
 pub struct PaginatedBaikeResponse<T> {
+}
     /// 响应码
     pub code: i32,
     /// 响应消息
     pub msg: String,
     /// 响应数据
     pub data: Option<PaginatedBaikeData<T>>,
-}
-
 /// 分页数据
 #[derive(Debug, Deserialize, Serialize)]
 pub struct PaginatedBaikeData<T> {
@@ -212,3 +193,4 @@ pub struct PaginatedBaikeData<T> {
     /// 总数
     pub total: Option<i32>,
 }
+}}}}}

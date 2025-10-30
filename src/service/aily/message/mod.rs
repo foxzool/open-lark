@@ -3,63 +3,54 @@ use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::aily::models::{
         Message, MessageCreateRequest, MessageGetRequest, MessageListRequest, PageResponse,
-    }
 };
 /// 消息管理服务
 pub struct MessageService {
+}
     pub config: Config,
-}
 /// 消息创建响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct MessageCreateResponse {
-    /// 消息信息
-#[serde(flatten)]
-    pub message: Message,
 }
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 消息查询响应
-#[derive(.*?)]
-pub struct MessageGetResponse {
-    /// 消息信息
-#[serde(flatten)]
-    pub message: Message,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 消息列表响应
-#[derive(.*?)]
-pub struct MessageListResponse {
-    /// 分页响应数据
-#[serde(flatten)]
-    pub page_response: PageResponse<Message>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl MessageService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 消息查询响应
+#[derive(Debug, Clone)]
 }
-/// 发送智能伙伴消息
+pub struct MessageGetResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 消息列表响应
+#[derive(Debug, Clone)]
+}
+pub struct MessageListResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl MessageService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 发送智能伙伴消息
     ///,
 /// 该接口用于向指定的智能伙伴会话发送消息。
     ///,
@@ -88,9 +79,7 @@ let api_req = ApiRequest {,
 }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取智能伙伴消息
     ///,
 /// 该接口用于获取指定的智能伙伴消息详情。
@@ -119,9 +108,7 @@ let mut api_req = ApiRequest {,
 };
 // 添加查询参数
         api_req.query_params.insert("app_id", request.app_id);
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 列出智能伙伴消息
     ///,
 /// 该接口用于获取指定会话的消息列表。
@@ -152,14 +139,10 @@ if let Some(page_size) = request.page_size {,
             api_req
 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(order) = request.order {,
             api_req.query_params.insert("order", order);
-}
-
         Transport::request(api_req, &self.config, option).await,
 }
-}
+}}}}}}}}}}}}}}}}}}

@@ -13,23 +13,17 @@ use crate::prelude::*;
 use crate::service::ccm::wiki::v2::WikiV2Service;
 use crate::service::ccm::wiki::v1::WikiV1Service;
 /// 知识库服务
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct WikiService {
-    /// v2版本API服务
-    pub v2: WikiV2Service,
-    /// v1版本API服务
-    pub v1: WikiV1Service,
 }
+
 impl WikiService {
-    /// 创建新的知识库服务实例
-pub fn new() -> Self {
-        Self {
-            v2: WikiV2Service::new(client.clone()),
-            v1: WikiV1Service::new(client.clone()),
-        }
 }
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }
 /// v2版本API
 pub mod v2;
 /// v1版本API
 pub mod v1;
+}

@@ -8,13 +8,8 @@ pub struct V1 {
 /// 卡片管理
     pub card: card::CardService,
     /// 组件管理  
-    pub card_element: card_element::CardElementService,
-}
+}    pub card_element: card_element::CardElementService}
 impl V1 {
-    pub fn new() -> Self {
-Self {
-            card: card::CardService::new(config.clone()),
-            card_element: card_element::CardElementService::new(config),
-        }
-}
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }

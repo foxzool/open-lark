@@ -2,18 +2,16 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2VcMeetingParticipantLeftV1 {
     pub schema: String,
     pub header: EventHeader,
     pub event: P2VcMeetingParticipantLeftV1Data,
-}
 pub(crate) struct P2VcMeetingParticipantLeftV1ProcessorImpl<F>,
 where
     F: Fn(P2VcMeetingParticipantLeftV1) + 'static,
 {
     f: F,
-}
 impl<F> EventHandler for P2VcMeetingParticipantLeftV1ProcessorImpl<F>,
 where
     F: Fn(P2VcMeetingParticipantLeftV1) + 'static + Sync + Send,
@@ -23,26 +21,22 @@ let event: P2VcMeetingParticipantLeftV1 = serde_json::from_slice(payload)?;
         (self.f)(event);
 Ok(()),
     }
-}
 impl<F> P2VcMeetingParticipantLeftV1ProcessorImpl<F>,
 where
     F: Fn(P2VcMeetingParticipantLeftV1) + 'static,
 {,
 pub(crate) fn new(f: F) -> Self {
         P2VcMeetingParticipantLeftV1ProcessorImpl { f }
-}
-}
 /// 视频会议参与者离开事件数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2VcMeetingParticipantLeftV1Data {
     /// 事件对象
     pub object: VcParticipantEventObject,
     /// 会议当前状态,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub meeting_status: Option<String>,
-}
 /// 视频会议参与者事件对象,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct VcParticipantEventObject {
     /// 对象类型 (meeting_participant)
     pub object_type: String,
@@ -50,9 +44,8 @@ pub struct VcParticipantEventObject {
     pub participant: LeftMeetingParticipant,
     /// 会议基本信息
     pub meeting: MeetingBasicInfo,
-}
 /// 离开会议的参与者信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct LeftMeetingParticipant {
     /// 用户ID
     pub user_id: String,
@@ -82,9 +75,8 @@ pub struct LeftMeetingParticipant {
     /// 最终状态,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub final_status: Option<ParticipantStatus>,
-}
 /// 会议基本信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct MeetingBasicInfo {
     /// 会议ID
     pub meeting_id: String,
@@ -100,9 +92,8 @@ pub struct MeetingBasicInfo {
     /// 会议开始时间 (Unix时间戳，单位：秒),
 #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<String>,
-}
 /// 离开原因,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct LeaveReason {
     /// 离开类型 (voluntary, kicked_out, network_issue, system_error, device_issue)
     pub leave_type: String,
@@ -118,9 +109,8 @@ pub struct LeaveReason {
     /// 错误代码（如果是系统错误）,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-}
 /// 参与者会话统计信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ParticipantSessionStats {
     /// 总发言时长（秒）,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -149,9 +139,8 @@ pub struct ParticipantSessionStats {
     /// 参与互动次数（点赞、鼓掌等）,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub interaction_count: Option<i32>,
-}
 /// 设备信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DeviceInfo {
     /// 设备类型,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -168,9 +157,8 @@ pub struct DeviceInfo {
     /// 设备性能指标,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub performance_metrics: Option<DevicePerformanceMetrics>,
-}
 /// 设备性能指标,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DevicePerformanceMetrics {
     /// CPU使用率峰值（%）,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -187,9 +175,8 @@ pub struct DevicePerformanceMetrics {
     /// 音频质量评分（1-5）,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_quality_score: Option<f64>,
-}
 /// 参与者状态,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ParticipantStatus {
     /// 最终音频状态,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -206,4 +193,3 @@ pub struct ParticipantStatus {
     /// 连接状态,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_status: Option<String>,
-}

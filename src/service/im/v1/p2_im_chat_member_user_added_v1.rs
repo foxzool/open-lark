@@ -2,18 +2,16 @@ use serde::{Deserialize, Serialize};
 
 use crate::event::{context::EventHeader, dispatcher::EventHandler};
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2ImChatMemberUserAddedV1 {
     pub schema: String,
     pub header: EventHeader,
     pub event: P2ImChatMemberUserAddedV1Data,
-}
 pub(crate) struct P2ImChatMemberUserAddedV1ProcessorImpl<F>,
 where
     F: Fn(P2ImChatMemberUserAddedV1) + 'static,
 {
     f: F,
-}
 impl<F> EventHandler for P2ImChatMemberUserAddedV1ProcessorImpl<F>,
 where
     F: Fn(P2ImChatMemberUserAddedV1) + 'static + Sync + Send,
@@ -23,17 +21,14 @@ let message: P2ImChatMemberUserAddedV1 = serde_json::from_slice(payload)?;
         (self.f)(message);
 Ok(()),
     }
-}
 impl<F> P2ImChatMemberUserAddedV1ProcessorImpl<F>,
 where
     F: Fn(P2ImChatMemberUserAddedV1) + 'static,
 {,
 pub(crate) fn new(f: F) -> Self {
         P2ImChatMemberUserAddedV1ProcessorImpl { f }
-}
-}
 /// 用户加入聊天事件数据,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct P2ImChatMemberUserAddedV1Data {
     /// 聊天 ID
     pub chat_id: String,
@@ -45,18 +40,16 @@ pub struct P2ImChatMemberUserAddedV1Data {
     pub users: Vec<AddedUser>,
     /// 添加时间 (Unix时间戳，单位：秒)
     pub add_time: String,
-}
 /// 事件操作者信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EventOperator {
     /// 操作者用户 ID
     pub operator_id: UserId,
     /// 操作者类型 (user, bot, app),
 #[serde(skip_serializing_if = "Option::is_none")]
     pub operator_type: Option<String>,
-}
 /// 被添加的用户信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct AddedUser {
     /// 用户 ID
     pub user_id: UserId,
@@ -69,9 +62,8 @@ pub struct AddedUser {
     /// 成员角色 (member, admin),
 #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
-}
 /// 用户 ID 信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UserId {
     /// 用户的 union id,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -81,4 +73,3 @@ pub struct UserId {
     pub user_id: Option<String>,
     /// 用户的 open id
     pub open_id: String,
-}

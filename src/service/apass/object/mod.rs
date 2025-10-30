@@ -3,137 +3,112 @@ use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::apass::models::{
         BatchRecordQueryRequest, BatchRecordRequest, OqlQueryRequest, OqlQueryResult, PageResponse,
         Record, RecordCreateRequest, RecordDeleteRequest, RecordQueryRequest, RecordSearchRequest,
         RecordUpdateRequest,
-    }
 };
 /// 对象操作服务
 pub struct ObjectService {
-    pub config: Config,
 }
+    pub config: Config,
 /// OQL查询响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct OqlQueryResponse {
+}
     /// OQL查询结果
 #[serde(flatten)]
     pub query_result: OqlQueryResult,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
-/// 记录搜索响应
-#[derive(.*?)]
-pub struct RecordSearchResponse {
-    /// 分页响应数据
-#[serde(flatten)]
-    pub page_response: PageResponse<Record>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 记录查询响应
-#[derive(.*?)]
-pub struct RecordQueryResponse {
-    /// 记录信息
-#[serde(flatten)]
-    pub record: Record,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 记录创建响应
-#[derive(.*?)]
-pub struct RecordCreateResponse {
-    /// 创建的记录ID
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub record_id: Option<String>,
-    /// 操作是否成功
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub success: Option<bool>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 记录更新响应
-#[derive(.*?)]
-pub struct RecordUpdateResponse {
-    /// 操作是否成功
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub success: Option<bool>,
-    /// 更新的记录信息
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub record: Option<Record>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 记录删除响应
-#[derive(.*?)]
-pub struct RecordDeleteResponse {
-    /// 操作是否成功
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub success: Option<bool>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 批量记录查询响应
-#[derive(.*?)]
-pub struct BatchRecordQueryResponse {
-    /// 分页响应数据
-#[serde(flatten)]
-    pub page_response: PageResponse<Record>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 批量记录操作响应
-#[derive(.*?)]
-pub struct BatchRecordResponse {
-    /// 操作是否成功
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub success: Option<bool>,
-    /// 成功的记录ID列表
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub success_record_ids: Option<Vec<String>>,
-    /// 失败的记录信息
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub failed_records: Option<Vec<serde_json::Value>>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl ObjectService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 记录搜索响应
+#[derive(Debug, Clone)]
+pub struct RecordSearchResponse {
 }
-/// 执行OQL查询
+    /// 分页响应数据
+#[serde(flatten)]
+    pub page_response: PageResponse<Record>,
+impl ApiResponseTrait for.* {
+}
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 记录查询响应
+#[derive(Debug, Clone)]
+pub struct RecordQueryResponse {
+}
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 记录创建响应
+#[derive(Debug, Clone)]
+}
+pub struct RecordCreateResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 记录更新响应
+#[derive(Debug, Clone)]
+}
+pub struct RecordUpdateResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 记录删除响应
+#[derive(Debug, Clone)]
+}
+pub struct RecordDeleteResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 批量记录查询响应
+#[derive(Debug, Clone)]
+}
+pub struct BatchRecordQueryResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 批量记录操作响应
+#[derive(Debug, Clone)]
+}
+pub struct BatchRecordResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl ObjectService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 执行OQL查询
     ///,
 /// 该接口用于执行OQL（Object Query Language）查询。
     ///,
@@ -160,9 +135,7 @@ let api_req = ApiRequest {,
 }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 搜索记录
     ///,
 /// 该接口用于在指定对象中搜索记录。
@@ -196,13 +169,9 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取记录详情
     ///,
 /// 该接口用于获取指定记录的详情信息。
@@ -233,10 +202,7 @@ let mut api_req = ApiRequest {,
 // 添加字段查询参数
         if let Some(fields) = request.fields {
             api_req.query_params.insert("fields", fields.join(","));
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 编辑记录
     ///,
 /// 该接口用于编辑指定的记录。
@@ -264,9 +230,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request.data)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除记录
     ///,
 /// 该接口用于删除指定的记录。
@@ -294,9 +258,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 新建记录
     ///,
 /// 该接口用于创建新的记录。
@@ -323,9 +285,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request.data)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量编辑记录
     ///,
 /// 该接口用于批量编辑记录。
@@ -354,9 +314,7 @@ let api_req = ApiRequest {,
             }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询记录列表
     ///,
 /// 该接口用于查询记录列表。
@@ -391,13 +349,9 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量删除记录
     ///,
 /// 该接口用于批量删除记录。
@@ -426,9 +380,7 @@ let api_req = ApiRequest {,
             }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 批量新建记录
     ///,
 /// 该接口用于批量新建记录。
@@ -457,7 +409,6 @@ let api_req = ApiRequest {,
             }))?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

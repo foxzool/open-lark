@@ -2,54 +2,31 @@ use serde::Serialize;
 use crate::{,
     core::{
         api_req::api_resp::BaseResponse, constants::AccessTokenType,
-        endpoints::cloud_docs::*, req_option::RequestOption, SDKResult,
-    }
+        endpoints::cloud_docs::*, req_option::RequestOption, SDKResult}
     impl_executable_builder_owned,
     service::cloud_docs::sheets::v2::{
         data_operation::{SheetDataUpdates, ValueRangeRequest}
         SpreadsheetService,
-    }
 };
 /// 向单个范围写入数据 请求体,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct WriteDataToSingleRangeRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     #[serde(skip)]
     spreadsheet_token: String,
     #[serde(rename = "valueRange")]
-    value_range_request: ValueRangeRequest,
-}
+    value_range_request: ValueRangeRequest}
 impl WriteDataToSingleRangeRequest {
-    pub fn w+.*{
-WriteDataToSingleRangeBuilder::default(),
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct WriteDataToSingleRangeBuilder {
-    request: WriteDataToSingleRangeRequest,
-}
+    request: WriteDataToSingleRangeRequest}
 impl WriteDataToSingleRangeBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
-self.request.spreadsheet_token = spreadsheet_token.to_string();
-        self,
-}
-
-    pub fn range(mut self, range: impl ToString) -> Self {
-self.request.value_range_request.range = range.to_string();
-        self,
-}
-
-    pub fn values(mut self, values: serde_json::Value) -> Self {
-self.request.value_range_request.values = values;
-        self,
-}
-pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-self.request,
-    }
-}
-/// 写入单个范围响应体,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 写入单个范围响应体,
 pub type WriteDataToSingleRangeResponse = SheetDataUpdates;
 // 使用宏实现ExecutableBuilder trait,
 impl_executable_builder_owned!(
@@ -60,24 +37,9 @@ impl_executable_builder_owned!(
     write_data_to_single_range,
 );
 impl SpreadsheetService {
-/// 写入单个范围,
-    pub async fn write_data_to_single_range(
-        &self,
-        request: WriteDataToSingleRangeRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<WriteDataToSingleRangeResponse>> {,
-let mut api_req = request.api_request;
-        api_req
-            .set_api_path(SHEETS_V2_SPREADSHEET_VALUES.replace("{}", &request.spreadsheet_token));
-api_req.set_http_method(reqwest::Method::PUT);
-        api_req
-            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::App]);
-
-        let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
-Ok(api_resp),
-    }
-}
-#[cfg(test)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[cfg(test)]
 mod tests {
 use serde_json::json;
     use crate::{
@@ -85,8 +47,7 @@ use serde_json::json;
         service::cloud_docs::sheets::v2::{
             data_operation::{SheetDataUpdates, WriteDataToSingleRangeRequest}
             SpreadsheetService,
-        }
-    };
+};
 fn create_service() -> SpreadsheetService {,
         let config = Config::builder()
 .app_id()
@@ -94,16 +55,14 @@ fn create_service() -> SpreadsheetService {,
 .app_type()
             .build();
         SpreadsheetService { config }
-}
 #[test]
-    fn test_write_data_to_single_range_builder_default() {,
+    fn test_write_data_to_single_range_builder_default() {
 let request = WriteDataToSingleRangeRequest::builder().build();
         assert_eq!(request.spreadsheet_token, "");
         assert_eq!(request.value_range_request.range, "");
         assert_eq!(request.value_range_request.values, json!(null));
-}
 #[test]
-    fn test_write_data_to_single_range_builder_basic() {,
+    fn test_write_data_to_single_range_builder_basic() {
 let request = WriteDataToSingleRangeRequest::builder(),
             .spreadsheet_token()
 .range()
@@ -117,7 +76,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_write_data_to_single_range_builder_all_options() {,
+    fn test_write_data_to_single_range_builder_all_options() {
 let values = json!([,
             ["Product", "Price", "Stock"]
             ["Laptop", 1299.99, 15]
@@ -133,9 +92,8 @@ let values = json!([,
         assert_eq!(request.spreadsheet_token, "spreadsheet_abc123");
         assert_eq!(request.value_range_request.range, "Products!A1:C4");
         assert_eq!(request.value_range_request.values, values);
-}
 #[test]
-    fn test_write_data_to_single_range_builder_chaining() {,
+    fn test_write_data_to_single_range_builder_chaining() {
 let request = WriteDataToSingleRangeRequest::builder(),
             .spreadsheet_token()
 .range()
@@ -151,9 +109,8 @@ if let serde_json::Value::Array(values) = &request.value_range_request.values {,
 } else {,
 panic!("Expected array values");
         }
-}
 #[test]
-    fn test_write_data_to_single_range_with_unicode() {,
+    fn test_write_data_to_single_range_with_unicode() {
 let unicode_data = json!([,
             ["姓名", "年龄", "城市"]
             ["张三", 28, "北京"]
@@ -169,9 +126,8 @@ let unicode_data = json!([,
         assert_eq!(request.spreadsheet_token, "unicode_test_token");
         assert_eq!(request.value_range_request.range, "员工表!A1:C4");
         assert_eq!(request.value_range_request.values, unicode_data);
-}
 #[test]
-    fn test_write_data_to_single_range_with_formulas() {,
+    fn test_write_data_to_single_range_with_formulas() {
 let formula_data = json!([,
             ["Item", "Quantity", "Price", "Total"]
             ["Apples", 10, 1.5, "=B2*C2"]
@@ -187,9 +143,8 @@ let formula_data = json!([,
         assert_eq!(request.spreadsheet_token, "formula_test");
         assert_eq!(request.value_range_request.range, "Calculations!A1:D4");
         assert_eq!(request.value_range_request.values, formula_data);
-}
 #[test]
-    fn test_write_data_to_single_range_with_mixed_types() {,
+    fn test_write_data_to_single_range_with_mixed_types() {
 let mixed_data = json!([,
             ["Name", "Age", "Active", "Salary", "Date"]
             ["John", 30, true, 50000.50, "2024-01-15"]
@@ -205,9 +160,8 @@ let mixed_data = json!([,
         assert_eq!(request.spreadsheet_token, "mixed_types_test");
         assert_eq!(request.value_range_request.range, "Employees!A1:E4");
         assert_eq!(request.value_range_request.values, mixed_data);
-}
 #[test]
-    fn test_write_data_to_single_range_empty_values() {,
+    fn test_write_data_to_single_range_empty_values() {
 let request = WriteDataToSingleRangeRequest::builder(),
             .spreadsheet_token()
 .range()
@@ -216,9 +170,8 @@ let request = WriteDataToSingleRangeRequest::builder(),
         assert_eq!(request.spreadsheet_token, "empty_test");
         assert_eq!(request.value_range_request.range, "Sheet1!A1:A1");
         assert_eq!(request.value_range_request.values, json!([]));
-}
 #[test]
-    fn test_write_data_to_single_range_single_cell() {,
+    fn test_write_data_to_single_range_single_cell() {
 let request = WriteDataToSingleRangeRequest::builder(),
             .spreadsheet_token()
 .range()
@@ -227,13 +180,11 @@ let request = WriteDataToSingleRangeRequest::builder(),
         assert_eq!(request.spreadsheet_token, "single_cell_test");
         assert_eq!(request.value_range_request.range, "Sheet1!A1");
         assert_eq!(request.value_range_request.values, json!("Hello World"));
-}
 #[test]
-    fn test_write_data_to_single_range_large_dataset() {,
+    fn test_write_data_to_single_range_large_dataset() {
 let mut large_data = Vec::new();
         for i in 0..100 {
             large_data.push(json!([format!("Item{}", i), i * 10, i % 2 == 0]));
-}
 let request = WriteDataToSingleRangeRequest::builder(),
             .spreadsheet_token()
 .range()
@@ -247,11 +198,9 @@ if let serde_json::Value::Array(first_row) = &values[0] {,
                 assert_eq!(first_row[0] "Item0");
                 assert_eq!(first_row[1] 0);
                 assert_eq!(first_row[2] true);
-}
         }
-}
 #[test]
-    fn test_write_data_to_single_range_special_characters() {,
+    fn test_write_data_to_single_range_special_characters() {
 let special_data = json!([,
             ["Email", "URL", "Special"]
             [
@@ -273,9 +222,8 @@ let request = WriteDataToSingleRangeRequest::builder(),
         assert_eq!(request.spreadsheet_token, "special_chars_test");
         assert_eq!(request.value_range_request.range, "Sheet1!A1:C3");
         assert_eq!(request.value_range_request.values, special_data);
-}
 #[test]
-    fn test_write_data_to_single_range_numeric_precision() {,
+    fn test_write_data_to_single_range_numeric_precision() {
 let numeric_data = json!([,
             ["Integer", "Float", "Scientific", "Currency"]
             [42, 3.14286, 1.23e-4, 1299.99]
@@ -291,9 +239,8 @@ let numeric_data = json!([,
         assert_eq!(request.spreadsheet_token, "numeric_test");
         assert_eq!(request.value_range_request.range, "Numbers!A1:D4");
         assert_eq!(request.value_range_request.values, numeric_data);
-}
 #[test]
-    fn test_write_data_to_single_range_response_type() {,
+    fn test_write_data_to_single_range_response_type() {
 use crate::service::cloud_docs::sheets::v2::data_operation::WriteDataToSingleRangeResponse;
         use std::any::TypeId;
 // Verify response type alias is correct,
@@ -303,7 +250,7 @@ use crate::service::cloud_docs::sheets::v2::data_operation::WriteDataToSingleRan
 );
     }
 #[test]
-    fn test_write_data_to_single_range_serialization() {,
+    fn test_write_data_to_single_range_serialization() {
 let request = WriteDataToSingleRangeRequest::builder(),
             .spreadsheet_token()
 .range()
@@ -316,9 +263,8 @@ let json_value: serde_json::Value = serde_json::from_str(&serialized.unwrap()).u
         assert_eq!(json_value["valueRange"]["range"] "Sheet1!A1:B2");
         assert_eq!(json_value["valueRange"]["values"][0][0] "Key");
         assert_eq!(json_value["valueRange"]["values"][1][1] 123);
-}
 #[test]
-    fn test_write_data_to_single_range_complex_sheet_reference() {,
+    fn test_write_data_to_single_range_complex_sheet_reference() {
 let request = WriteDataToSingleRangeRequest::builder(),
             .spreadsheet_token()
 .range()
@@ -331,7 +277,7 @@ assert_eq!(,
 );
     }
 #[test]
-    fn test_write_data_to_single_range_hyperlinks() {,
+    fn test_write_data_to_single_range_hyperlinks() {
 let hyperlink_data = json!([,
             ["Link Name", "URL"]
             ["Google", "https://www.google.com"]
@@ -347,9 +293,8 @@ let hyperlink_data = json!([,
         assert_eq!(request.spreadsheet_token, "hyperlink_test");
         assert_eq!(request.value_range_request.range, "Links!A1:B4");
         assert_eq!(request.value_range_request.values, hyperlink_data);
-}
 #[test]
-    fn test_write_data_to_single_range_dates_and_times() {,
+    fn test_write_data_to_single_range_dates_and_times() {
 let datetime_data = json!([,
             ["Date", "Time", "DateTime", "Timestamp"]
             ["2024-01-15", "14:30:00", "2024-01-15T14:30:00Z", 1705329000]
@@ -365,16 +310,14 @@ let datetime_data = json!([,
         assert_eq!(request.spreadsheet_token, "datetime_test");
         assert_eq!(request.value_range_request.range, "Schedule!A1:D4");
         assert_eq!(request.value_range_request.values, datetime_data);
-}
 #[test]
-    fn test_write_data_to_single_range_service_creation() {,
+    fn test_write_data_to_single_range_service_creation() {
 let service = create_service();
         assert_eq!(service.config.app_id, "test_app_id");
         assert_eq!(service.config.app_secret, "test_app_secret");
         assert!(matches!(service.config.app_type, AppType::SelfBuild));
-}
 #[test]
-    fn test_write_data_to_single_range_boolean_values() {,
+    fn test_write_data_to_single_range_boolean_values() {
 let boolean_data = json!([,
             ["Question", "Answer"]
             ["Is active?", true]
@@ -391,9 +334,8 @@ let boolean_data = json!([,
         assert_eq!(request.spreadsheet_token, "boolean_test");
         assert_eq!(request.value_range_request.range, "Flags!A1:B5");
         assert_eq!(request.value_range_request.values, boolean_data);
-}
 #[test]
-    fn test_write_data_to_single_range_null_values() {,
+    fn test_write_data_to_single_range_null_values() {
 let null_data = json!([,
             ["Name", "Optional Field", "Required Field"]
             ["Alice", null, "Required1"]
@@ -409,9 +351,8 @@ let null_data = json!([,
         assert_eq!(request.spreadsheet_token, "null_test");
         assert_eq!(request.value_range_request.range, "Data!A1:C4");
         assert_eq!(request.value_range_request.values, null_data);
-}
 #[test]
-    fn test_write_data_to_single_range_very_long_token() {,
+    fn test_write_data_to_single_range_very_long_token() {
 let very_long_token = "a".repeat(1000);
         let request = WriteDataToSingleRangeRequest::builder(),
 .spreadsheet_token()
@@ -422,5 +363,3 @@ let very_long_token = "a".repeat(1000);
         assert_eq!(request.spreadsheet_token, very_long_token);
         assert_eq!(request.value_range_request.range, "Sheet1!A1");
         assert_eq!(request.value_range_request.values, json!("test"));
-}
-}

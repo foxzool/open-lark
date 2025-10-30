@@ -7,12 +7,10 @@ use serde::{Deserialize, Serialize};
 /// 角色成员服务,
 pub struct FunctionalRoleMemberService {
     config: Config,
-}
 impl FunctionalRoleMemberService {
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 添加角色成员,
+}/// 添加角色成员,
     pub async fn create(
         &self,
         role_id: &str,
@@ -54,7 +52,6 @@ let resp =,
             Transport::<BatchCreateRoleMembersResponse>::request(api_req, &self.config, None),
 .await?;
         Ok(resp.data.unwrap_or_default()),
-}
 /// 批量设置角色成员管理范围,
     pub async fn scopes(
         &self,
@@ -92,7 +89,6 @@ let path = EndpointBuilder::replace_param(,
                     role_id,
                 );
                 EndpointBuilder::replace_param(&path, "member_id", member_id),
-}
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
@@ -145,10 +141,8 @@ let resp =,
             Transport::<BatchDeleteRoleMembersResponse>::request(api_req, &self.config, None),
 .await?;
         Ok(resp.data.unwrap_or_default()),
-}
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateRoleMemberRequest {
     /// 成员信息
     pub member: RoleMemberInfo,
@@ -156,73 +150,70 @@ pub struct CreateRoleMemberRequest {
     pub user_id_type: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateRoleMemberResponse {
     pub member_id: String,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BatchCreateRoleMembersRequest {
     pub members: Vec<RoleMemberInfo>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id_type: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BatchCreateRoleMembersResponse {
     pub results: Vec<RoleMemberResult>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct SetRoleMemberScopesRequest {
     pub members: Vec<RoleMemberScope>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id_type: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct SetRoleMemberScopesResponse {}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetRoleMemberRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id_type: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct GetRoleMemberResponse {
     pub member: RoleMember,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListRoleMembersRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
@@ -232,40 +223,38 @@ pub struct ListRoleMembersRequest {
     pub user_id_type: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListRoleMembersResponse {
     pub members: Vec<RoleMember>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BatchDeleteRoleMembersRequest {
     pub member_ids: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id_type: Option<String>,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct BatchDeleteRoleMembersResponse {
     pub results: Vec<RoleMemberResult>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}
 // 公共数据结构,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RoleMemberInfo {
     /// 成员ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -276,9 +265,8 @@ pub struct RoleMemberInfo {
     /// 管理范围,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub scope: Option<String>,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RoleMember {
     /// 成员ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -292,9 +280,8 @@ pub struct RoleMember {
     /// 管理范围,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub scopes: Option<Vec<String>>,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RoleMemberDetail {
     /// 成员名称,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -302,17 +289,15 @@ pub struct RoleMemberDetail {
     /// 成员邮箱,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RoleMemberScope {
     /// 成员ID
     pub member_id: String,
     /// 管理范围列表
     pub scopes: Vec<String>,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct RoleMemberResult {
     /// 成员ID
     pub member_id: String,
@@ -321,4 +306,3 @@ pub struct RoleMemberResult {
     /// 错误信息,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
-}

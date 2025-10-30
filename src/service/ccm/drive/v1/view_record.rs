@@ -3,12 +3,11 @@
 // 提供文件访问记录相关的功能,
 use crate::prelude::*;
 /// 访问记录服务
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ViewRecordService {
     client: std::sync::Arc<LarkClient>,
 }
 impl ViewRecordService {
-    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
-        Self { client }
-}
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }

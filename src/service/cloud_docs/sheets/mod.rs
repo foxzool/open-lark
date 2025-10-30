@@ -66,40 +66,23 @@ pub struct SheetsService {
     /// Sheets API v2版本服务
     pub v2: v2::V2,
     /// Sheets API v3版本服务（推荐）
-    pub v3: v3::V3,
-}
+}    pub v3: v3::V3}
 impl SheetsService {
-    /// 创建新的Sheets服务实例
-///,
-    /// # 参数
-/// - `config`: 客户端配置
-    pub fn new() -> Self {
-let config_arc = Arc::new(config.clone());
-        Self {
-            config: config.clone(),
-            config_arc: config_arc.clone(),
-            v2: v2::V2::new(config.clone()),
-            v3: v3::V3::new(config.clone()),
-        }
-}
-/// 使用共享配置（实验性）
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 使用共享配置（实验性）
     pub fn new_from_shared() -> Self {
 Self {
             config: shared.as_ref().clone(),
             config_arc: shared.clone(),
             v2: v2::V2::new(shared.as_ref().clone()),
-            v3: v3::V3::new(shared.as_ref().clone()),
-        }
-}
-}
+            v3: v3::V3::new(shared.as_ref().clone())}
 impl Service for SheetsService {,
     fn config(&self) -> &Config {,
-&self.config,
-    }
+&self.config}
 fn service_name() -> &'static str {,
-        "sheets",
-}
+        "sheets"}
 fn service_version() -> &'static str {,
-        "v3",
+        "v3"}
 }
 }

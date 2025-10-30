@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 // ============ 通用结构 ============,
 /// 多语言文本,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct I18nText {
     /// 中文,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -10,9 +10,8 @@ pub struct I18nText {
     /// 英文,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub en_us: Option<String>,
-}
 /// 分页响应,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PageResponse<T> {,
     /// 是否还有更多数据,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -23,9 +22,8 @@ pub struct PageResponse<T> {,
     /// 数据列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<T>>,
-}
 /// 自定义字段,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CustomField {
     /// 字段ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -33,10 +31,9 @@ pub struct CustomField {
     /// 字段值,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<Value>,
-}
 // ============ 基础数据相关结构 ============,
 /// 查询枚举信息请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EnumSearchRequest {
     /// 枚举类型
     pub enum_type: String,
@@ -46,9 +43,8 @@ pub struct EnumSearchRequest {
     /// 分页标记,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 /// 枚举信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EnumInfo {
     /// 枚举值,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -62,9 +58,8 @@ pub struct EnumInfo {
     /// 是否启用,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub enum_status: Option<i32>,
-}
 /// 查询国家/地区信息请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CountryRegionSearchRequest {
     /// 分页大小,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -72,9 +67,8 @@ pub struct CountryRegionSearchRequest {
     /// 分页标记,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 /// 国家/地区信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CountryRegion {
     /// 国家/地区ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -91,9 +85,8 @@ pub struct CountryRegion {
     /// 时区,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub time_zone: Option<String>,
-}
 /// 查询国籍信息请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct NationalitySearchRequest {
     /// 分页大小,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -101,9 +94,8 @@ pub struct NationalitySearchRequest {
     /// 分页标记,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 /// 国籍信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Nationality {
     /// 国籍ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -114,10 +106,9 @@ pub struct Nationality {
     /// 国籍代码,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
-}
 // ============ 员工信息相关结构 ============,
 /// 批量查询员工信息请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EmployeeBatchGetRequest {
     /// 员工ID列表
     pub employee_ids: Vec<String>,
@@ -133,9 +124,8 @@ pub struct EmployeeBatchGetRequest {
     /// 查询字段列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub fields: Option<Vec<String>>,
-}
 /// 搜索员工信息请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct EmployeeSearchRequest {
     /// 分页大小,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -164,9 +154,8 @@ pub struct EmployeeSearchRequest {
     /// 工号,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub employee_number: Option<String>,
-}
 /// 员工基本信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Employee {
     /// 员工ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -192,9 +181,8 @@ pub struct Employee {
     /// 自定义字段,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_fields: Option<Vec<CustomField>>,
-}
 /// 个人信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Person {
     /// 个人信息ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -244,9 +232,8 @@ pub struct Person {
     /// 户口所在地,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub hukou_location: Option<String>,
-}
 /// 身份证件信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct NationalId {
     /// 国家证件类型ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -263,9 +250,8 @@ pub struct NationalId {
     /// 证件签发地,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub issued_location: Option<String>,
-}
 /// 地址信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Address {
     /// 国家/地区ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -291,9 +277,8 @@ pub struct Address {
     /// 地址类型,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub address_type: Option<String>,
-}
 /// 雇佣信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Employment {
     /// 雇佣ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -331,9 +316,8 @@ pub struct Employment {
     /// 试用期状态,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub probation_status: Option<String>,
-}
 /// 任职信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct JobData {
     /// 任职记录ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -383,10 +367,9 @@ pub struct JobData {
     /// 任职原因,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub assignment_start_reason: Option<String>,
-}
 // ============ 组织管理相关结构 ============,
 /// 创建部门请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct DepartmentCreateRequest {
     /// 部门名称
     pub name: I18nText,
@@ -408,9 +391,8 @@ pub struct DepartmentCreateRequest {
     /// 自定义字段,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_fields: Option<Vec<CustomField>>,
-}
 /// 部门信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Department {
     /// 部门ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -445,9 +427,8 @@ pub struct Department {
     /// 自定义字段,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_fields: Option<Vec<CustomField>>,
-}
 /// 创建公司请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CompanyCreateRequest {
     /// 公司名称
     pub name: I18nText,
@@ -469,9 +450,8 @@ pub struct CompanyCreateRequest {
     /// 自定义字段,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_fields: Option<Vec<CustomField>>,
-}
 /// 公司信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Company {
     /// 公司ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -503,10 +483,9 @@ pub struct Company {
     /// 自定义字段,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_fields: Option<Vec<CustomField>>,
-}
 // ============ 通用响应结构 ============,
 /// CoreHR响应包装器
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CoreHRResponse<T> {,
     /// 响应数据,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -517,10 +496,9 @@ pub struct CoreHRResponse<T> {,
     /// 错误消息,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub msg: Option<String>,
-}
 // ============ ID转换相关结构 ============,
 /// ID转换请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct IdConvertRequest {
     /// 源ID类型
     pub source_id_type: String,
@@ -528,9 +506,8 @@ pub struct IdConvertRequest {
     pub target_id_type: String,
     /// ID列表
     pub ids: Vec<String>,
-}
 /// ID转换结果,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct IdConvertResult {
     /// 源ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -538,10 +515,9 @@ pub struct IdConvertResult {
     /// 目标ID,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub target_id: Option<String>,
-}
 // ============ 岗职务管理相关结构 ============,
 /// 创建序列请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct JobFamilyCreateRequest {
     /// 序列名称
     pub name: I18nText,
@@ -554,9 +530,8 @@ pub struct JobFamilyCreateRequest {
     /// 自定义字段,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_fields: Option<Vec<CustomField>>,
-}
 /// 序列信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct JobFamily {
     /// 序列ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -579,9 +554,8 @@ pub struct JobFamily {
     /// 自定义字段,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_fields: Option<Vec<CustomField>>,
-}
 /// 创建职级请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct JobLevelCreateRequest {
     /// 职级名称
     pub name: I18nText,
@@ -600,9 +574,8 @@ pub struct JobLevelCreateRequest {
     /// 自定义字段,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_fields: Option<Vec<CustomField>>,
-}
 /// 职级信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct JobLevel {
     /// 职级ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -631,9 +604,8 @@ pub struct JobLevel {
     /// 自定义字段,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_fields: Option<Vec<CustomField>>,
-}
 /// 创建职等请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct JobGradeCreateRequest {
     /// 职等名称
     pub name: I18nText,
@@ -652,9 +624,8 @@ pub struct JobGradeCreateRequest {
     /// 自定义字段,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_fields: Option<Vec<CustomField>>,
-}
 /// 职等信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct JobGrade {
     /// 职等ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -683,9 +654,8 @@ pub struct JobGrade {
     /// 自定义字段,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_fields: Option<Vec<CustomField>>,
-}
 /// 创建职务请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct JobCreateRequest {
     /// 职务名称
     pub name: I18nText,
@@ -704,9 +674,8 @@ pub struct JobCreateRequest {
     /// 自定义字段,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_fields: Option<Vec<CustomField>>,
-}
 /// 职务信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Job {
     /// 职务ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -735,10 +704,9 @@ pub struct Job {
     /// 自定义字段,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_fields: Option<Vec<CustomField>>,
-}
 // ============ 入职/离职/异动相关结构 ============,
 /// 待入职信息创建请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PreHireCreateRequest {
     /// 员工基本信息
     pub person: Person,
@@ -756,9 +724,8 @@ pub struct PreHireCreateRequest {
     /// 自定义字段,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_fields: Option<Vec<CustomField>>,
-}
 /// 待入职信息搜索请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PreHireSearchRequest {
     /// 分页大小,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -781,9 +748,8 @@ pub struct PreHireSearchRequest {
     /// 部门ID列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub department_ids: Option<Vec<String>>,
-}
 /// 待入职信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct PreHire {
     /// 待入职ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -812,9 +778,8 @@ pub struct PreHire {
     /// 自定义字段,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_fields: Option<Vec<CustomField>>,
-}
 /// 异动发起请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct JobChangeCreateRequest {
     /// 员工ID
     pub employee_id: String,
@@ -833,9 +798,8 @@ pub struct JobChangeCreateRequest {
     /// 自定义字段,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_fields: Option<Vec<CustomField>>,
-}
 /// 异动搜索请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct JobChangeSearchRequest {
     /// 分页大小,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -861,9 +825,8 @@ pub struct JobChangeSearchRequest {
     /// 异动类型ID列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub job_change_type_ids: Option<Vec<String>>,
-}
 /// 异动信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct JobChange {
     /// 异动ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -895,9 +858,8 @@ pub struct JobChange {
     /// 自定义字段,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_fields: Option<Vec<CustomField>>,
-}
 /// 离职发起请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct OffboardingCreateRequest {
     /// 员工ID
     pub employee_id: String,
@@ -914,9 +876,8 @@ pub struct OffboardingCreateRequest {
     /// 自定义字段,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_fields: Option<Vec<CustomField>>,
-}
 /// 离职搜索请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct OffboardingSearchRequest {
     /// 分页大小,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -942,9 +903,8 @@ pub struct OffboardingSearchRequest {
     /// 离职原因ID列表,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub offboarding_reason_ids: Option<Vec<String>>,
-}
 /// 离职信息,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct Offboarding {
     /// 离职ID,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -970,14 +930,13 @@ pub struct Offboarding {
     /// 自定义字段,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_fields: Option<Vec<CustomField>>,
-}
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json;
     #[test]
-fn test_i18n_text_serialization() {,
+fn test_i18n_text_serialization() {
         let text = I18nText {
             zh_cn: Some("中文".to_string()),
             en_us: Some("English".to_string()),
@@ -986,9 +945,8 @@ let json = serde_json::to_string(&text).unwrap();
         assert!(json.contains("zh_cn"));
 assert!(json.contains("en_us"));
         let _deserialized: I18nText = serde_json::from_str(&json).unwrap();
-}
 #[test]
-    fn test_i18n_text_empty() {,
+    fn test_i18n_text_empty() {
 let text = I18nText {,
             zh_cn: None,
             en_us: None,
@@ -997,9 +955,8 @@ let json = serde_json::to_string(&text).unwrap();
         assert_eq!(json, "{}");
 
         let _deserialized: I18nText = serde_json::from_str("{}").unwrap();
-}
 #[test]
-    fn test_page_response_serialization() {,
+    fn test_page_response_serialization() {
 let response: PageResponse<String> = PageResponse {,
             has_more: Some(true),
             page_token: Some("token_123".to_string()),
@@ -1012,7 +969,7 @@ assert!(json.contains("page_token"));
 let _deserialized: PageResponse<String> = serde_json::from_str(&json).unwrap();
     }
 #[test]
-    fn test_page_response_empty() {,
+    fn test_page_response_empty() {
 let response: PageResponse<String> = PageResponse {,
             has_more: None,
             page_token: None,
@@ -1022,9 +979,8 @@ let json = serde_json::to_string(&response).unwrap();
         assert_eq!(json, "{}");
 
         let _deserialized: PageResponse<String> = serde_json::from_str("{}").unwrap();
-}
 #[test]
-    fn test_custom_field_complete() {,
+    fn test_custom_field_complete() {
 let field = CustomField {,
             field_name: Some("employee_level".to_string()),
             value: Some(serde_json::json!({"level": "senior", "years": 5})),
@@ -1034,9 +990,8 @@ let json = serde_json::to_string(&field).unwrap();
 assert!(json.contains("level"));
         let deserialized: CustomField = serde_json::from_str(&json).unwrap();
         assert_eq!(deserialized.field_name, Some("employee_level".to_string()));
-}
 #[test]
-    fn test_employee_basic_info() {,
+    fn test_employee_basic_info() {
 let employee = Employee {,
             employee_id: Some("emp_001".to_string()),
             user_id: Some("user_001".to_string()),
@@ -1054,7 +1009,7 @@ assert!(json.contains("E001"));
 let _deserialized: Employee = serde_json::from_str(&json).unwrap();
     }
 #[test]
-    fn test_person_complete_profile() {,
+    fn test_person_complete_profile() {
 let person = Person {,
             person_id: Some("person_001".to_string()),
             name: Some(I18nText {
@@ -1089,7 +1044,7 @@ assert!(json.contains("张三"));
 let _deserialized: Person = serde_json::from_str(&json).unwrap();
     }
 #[test]
-    fn test_department_creation() {,
+    fn test_department_creation() {
 let department = Department {,
             department_id: Some("dept_001".to_string()),
             name: Some(I18nText {
@@ -1116,7 +1071,7 @@ assert!(json.contains("TECH"));
 let _deserialized: Department = serde_json::from_str(&json).unwrap();
     }
 #[test]
-    fn test_employment_details() {,
+    fn test_employment_details() {
 let employment = Employment {,
             employment_id: Some("employment_001".to_string()),
             employment_type: Some("full_time".to_string()),
@@ -1138,7 +1093,7 @@ assert!(json.contains("full_time"));
 let _deserialized: Employment = serde_json::from_str(&json).unwrap();
     }
 #[test]
-    fn test_job_data_comprehensive() {,
+    fn test_job_data_comprehensive() {
 let job = JobData {,
             job_data_id: Some("job_data_001".to_string()),
             version_id: Some("v1".to_string()),
@@ -1164,7 +1119,7 @@ assert!(json.contains("level_p6"));
 let _deserialized: JobData = serde_json::from_str(&json).unwrap();
     }
 #[test]
-    fn test_national_id_validation() {,
+    fn test_national_id_validation() {
 let national_id = NationalId {,
             national_id_type_id: Some("passport".to_string()),
             national_id_number: Some("G12345678".to_string()),
@@ -1176,9 +1131,8 @@ let json = serde_json::to_string(&national_id).unwrap();
         assert!(json.contains("passport"));
 assert!(json.contains("G12345678"));
         let _deserialized: NationalId = serde_json::from_str(&json).unwrap();
-}
 #[test]
-    fn test_address_complete() {,
+    fn test_address_complete() {
 let address = Address {,
             country_region_id: Some("CHN".to_string()),
             region_id: Some("beijing".to_string()),
@@ -1196,7 +1150,7 @@ assert!(json.contains("100000"));
 let _deserialized: Address = serde_json::from_str(&json).unwrap();
     }
 #[test]
-    fn test_country_region_info() {,
+    fn test_country_region_info() {
 let country = CountryRegion {,
             country_region_id: Some("CHN".to_string()),
             name: Some(I18nText {
@@ -1216,9 +1170,8 @@ assert!(json.contains("中华人民共和国"));
         assert!(json.contains("\"CN\""));
 assert!(json.contains("Asia/Shanghai"));
         let _deserialized: CountryRegion = serde_json::from_str(&json).unwrap();
-}
 #[test]
-    fn test_nationality_info() {,
+    fn test_nationality_info() {
 let nationality = Nationality {,
             nationality_id: Some("CHN".to_string()),
             name: Some(I18nText {
@@ -1234,7 +1187,7 @@ assert!(json.contains("Chinese"));
 let _deserialized: Nationality = serde_json::from_str(&json).unwrap();
     }
 #[test]
-    fn test_enum_info_structure() {,
+    fn test_enum_info_structure() {
 let enum_info = EnumInfo {,
             enum_value: Some("employment_type".to_string()),
             content: Some(I18nText {
@@ -1248,9 +1201,8 @@ let json = serde_json::to_string(&enum_info).unwrap();
         assert!(json.contains("雇佣类型"));
 assert!(json.contains("Employment Type"));
         let _deserialized: EnumInfo = serde_json::from_str(&json).unwrap();
-}
 #[test]
-    fn test_page_response_generic_type() {,
+    fn test_page_response_generic_type() {
 let employee_response: PageResponse<Employee> = PageResponse {,
             has_more: Some(false),
             page_token: None,
@@ -1271,4 +1223,3 @@ assert!(json.contains("user_test"));
         assert!(json.contains("E999"));
 let _deserialized: PageResponse<Employee> = serde_json::from_str(&json).unwrap();
     }
-}

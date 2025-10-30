@@ -4,24 +4,22 @@ use open_lark_core::core::api_req::ApiRequest;
 use std::collections::HashMap;
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints}
-        http::Transport,
+        endpoints::{EndpointBuilder, Endpointshttp::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::task::models::{CustomField, UserIdType}
 };
 /// 自定义字段服务
 #[derive(Debug)]
 pub struct CustomFieldService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 创建自定义字段请求
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateCustomFieldRequest {
+}
     /// 字段名称
     pub name: String,
     /// 字段类型
@@ -31,84 +29,57 @@ pub struct CreateCustomFieldRequest {
     pub resource_type: String,
     /// 资源ID
     pub resource_id: String,
-}
 /// 创建自定义字段响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct CreateCustomFieldResponse {
+}
     /// 创建的自定义字段
     pub custom_field: CustomField,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 更新自定义字段请求
-#[derive(.*?)]
-pub struct UpdateCustomFieldRequest {
-    /// 字段名称
-    pub name: String,
-}
-/// 更新自定义字段响应
-#[derive(.*?)]
-pub struct UpdateCustomFieldResponse {
-    /// 更新后的自定义字段
-    pub custom_field: CustomField,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 获取自定义字段响应
-#[derive(.*?)]
-pub struct GetCustomFieldResponse {
-    /// 自定义字段详情
-    pub custom_field: CustomField,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 自定义字段列表响应
-#[derive(.*?)]
-pub struct ListCustomFieldsResponse {
-    /// 自定义字段列表
-    pub items: Vec<CustomField>,
-    /// 下一页标记
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-    /// 是否还有更多数据
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub has_more: Option<bool>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 添加自定义字段到资源请求
-#[derive(.*?)]
-pub struct AddCustomFieldRequest {
-    /// 资源类型
-    pub resource_type: String,
-    /// 资源ID
-    pub resource_id: String,
-}
-/// 移除自定义字段请求
-#[derive(.*?)]
-pub struct RemoveCustomFieldRequest {
-    /// 资源类型
-    pub resource_type: String,
-    /// 资源ID
-    pub resource_id: String,
-}
-impl CustomFieldService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 更新自定义字段请求
+#[derive(Debug, Clone)]
 }
-/// 创建自定义字段
+pub struct UpdateCustomFieldRequest {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 获取自定义字段响应
+#[derive(Debug, Clone)]
+}
+pub struct GetCustomFieldResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 自定义字段列表响应
+#[derive(Debug, Clone)]
+}
+pub struct ListCustomFieldsResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 添加自定义字段到资源请求
+#[derive(Debug, Clone)]
+}
+pub struct AddCustomFieldRequest {
+
+impl CustomFieldService {
+    
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}/// 创建自定义字段
     pub async fn create(
         &self,
         request: CreateCustomFieldRequest,
@@ -118,7 +89,6 @@ impl CustomFieldService {
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: Endpoints::TASK_V2_CUSTOM_FIELDS.to_string(),
@@ -128,7 +98,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取自定义字段
     pub async fn get(
         &self,
@@ -139,7 +108,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
@@ -151,9 +119,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 更新自定义字段
     pub async fn patch(
         &self,
@@ -165,7 +131,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
@@ -178,9 +143,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 列取自定义字段
     pub async fn list(
         &self,
@@ -194,19 +157,14 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 if let Some(resource_type) = resource_type {,
             query_params.insert("resource_type", resource_type.to_string());
-}
 if let Some(resource_id) = resource_id {,
             query_params.insert("resource_id", resource_id.to_string());
-}
 if let Some(page_size) = page_size {,
             query_params.insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token.to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: Endpoints::TASK_V2_CUSTOM_FIELDS.to_string(),
@@ -214,9 +172,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 将自定义字段加入资源
     pub async fn add(
         &self,
@@ -228,7 +184,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
@@ -241,9 +196,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 将自定义字段移出资源
     pub async fn remove(
         &self,
@@ -255,7 +208,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
@@ -268,7 +220,6 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

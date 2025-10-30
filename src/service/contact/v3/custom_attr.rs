@@ -10,12 +10,10 @@ use serde::{Deserialize, Serialize};
 /// 自定义用户字段服务,
 pub struct CustomAttrService {
     config: Config,
-}
 impl CustomAttrService {
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 获取企业自定义用户字段,
+}/// 获取企业自定义用户字段,
     pub async fn list(
         &self,
         _req: &ListCustomAttrsRequest,
@@ -32,26 +30,24 @@ let resp =,
             Transport::<ListCustomAttrsResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
     }
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListCustomAttrsRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListCustomAttrsResponse {
     pub items: Vec<CustomAttr>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
 crate::core::api_resp::ResponseFormat::Data
     }
-}

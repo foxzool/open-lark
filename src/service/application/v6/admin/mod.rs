@@ -4,25 +4,23 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use crate::{
     core::{,
-        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::application::models::*,
 };
 /// 应用管理服务
 pub struct AdminService {
-    config: Config,
 }
+    config: Config,
 impl AdminService {
+    
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-/// 获取企业安装的应用
+}/// 获取企业安装的应用
     pub async fn list_installed_apps(
         &self,
         user_id_type: Option<UserIdType>,
@@ -34,16 +32,12 @@ impl AdminService {
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 if let Some(lang) = lang {,
             query_params.insert("lang", lang);
-}
 if let Some(page_size) = page_size {,
             query_params.insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token);
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: crate::core::endpoints::application::APPLICATION_V6_ADMIN_APPS.to_string(),
@@ -52,7 +46,6 @@ let api_req = ApiRequest {,
             ..Default::default(),
 };
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取用户可用的应用
     pub async fn get_user_available_apps(
         &self,
@@ -66,16 +59,12 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 if let Some(lang) = lang {,
             query_params.insert("lang", lang);
-}
 if let Some(page_size) = page_size {,
             query_params.insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token);
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
@@ -87,9 +76,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取应用通讯录权限范围配置
     pub async fn contacts_range_configuration(
         &self,
@@ -104,10 +91,8 @@ query_params.insert(,
                 "department_id_type",
                 department_id_type.as_str().to_string(),
             );
-}
 if let Some(user_id_type) = user_id_type {,
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
@@ -119,9 +104,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 更新应用通讯录权限范围配置
     pub async fn update_contacts_range_configuration(
         &self,
@@ -137,10 +120,8 @@ query_params.insert(,
                 "department_id_type",
                 department_id_type.as_str().to_string(),
             );
-}
 if let Some(user_id_type) = user_id_type {,
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
@@ -153,9 +134,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取应用在企业内的可用范围
     pub async fn get_app_availability(
         &self,
@@ -167,13 +146,11 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 if let Some(department_id_type) = department_id_type {,
             query_params.insert(
                 "department_id_type",
                 department_id_type.as_str().to_string(),
             );
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
@@ -185,9 +162,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询用户或部门是否在应用的可用或禁用名单
     pub async fn check_white_black_list(
         &self,
@@ -200,13 +175,11 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 if let Some(department_id_type) = department_id_type {,
             query_params.insert(
                 "department_id_type",
                 department_id_type.as_str().to_string(),
             );
-}
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
@@ -219,9 +192,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 更新应用可用范围
     pub async fn update_app_availability(
         &self,
@@ -234,13 +205,11 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 if let Some(department_id_type) = department_id_type {,
             query_params.insert(
                 "department_id_type",
                 department_id_type.as_str().to_string(),
             );
-}
 let api_req = ApiRequest {,
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
@@ -253,9 +222,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 启停用应用
     pub async fn enable_disable_app(
         &self,
@@ -274,9 +241,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 查询应用管理员列表
     pub async fn list_app_admins(
         &self,
@@ -289,13 +254,10 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 if let Some(page_size) = page_size {,
             query_params.insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token);
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
@@ -307,9 +269,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取应用管理员管理范围
     pub async fn get_app_admin_permissions(
         &self,
@@ -322,13 +282,11 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 if let Some(department_id_type) = department_id_type {,
             query_params.insert(
                 "department_id_type",
                 department_id_type.as_str().to_string(),
             );
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
@@ -339,9 +297,7 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 校验应用管理员
     pub async fn verify_app_admin(
         &self,
@@ -353,7 +309,6 @@ let api_req = ApiRequest {,
 let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
-}
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
@@ -364,114 +319,80 @@ let api_req = ApiRequest {,
             query_params,
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
 // 请求响应模型
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct ListInstalledAppsResponse {
-    pub apps: Vec<Application>,
-    pub page_token: Option<String>,
-    pub has_more: bool,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
 }
 
-#[derive(.*?)]
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    #[derive(Debug, Clone)]
+}
 pub struct GetUserAvailableAppsResponse {
-    pub apps: Vec<Application>,
-    pub page_token: Option<String>,
-    pub has_more: bool,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
 
-#[derive(.*?)]
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    #[derive(Debug, Clone)]
+}
 pub struct ContactsRangeConfigurationResponse {
-    pub contacts_range: ContactsRange,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
 
-#[derive(.*?)]
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    #[derive(Debug, Clone)]
+}
 pub struct UpdateContactsRangeConfigurationRequest {
-    pub contacts_range: ContactsRange,
-}
 
-#[derive(.*?)]
-pub struct GetAppAvailabilityResponse {
-    pub availability: AppAvailability,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
-    }
+    #[derive(Debug, Clone)]
 }
-
-#[derive(.*?)]
 pub struct CheckWhiteBlackListRequest {
-    pub user_list: Option<Vec<String>>,
-    pub department_list: Option<Vec<String>>,
-}
 
-#[derive(.*?)]
-pub struct CheckWhiteBlackListResponse {
-    pub is_in_list: bool,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
-    }
+    #[derive(Debug, Clone)]
 }
-
-#[derive(.*?)]
 pub struct UpdateAppAvailabilityRequest {
-    pub availability: AppAvailability,
-}
 
-#[derive(.*?)]
-pub struct EnableDisableAppRequest {
-    pub enable: bool,
-}
-
-#[derive(.*?)]
-pub struct ListAppAdminsResponse {
-    pub admins: Vec<AppAdmin>,
-    pub page_token: Option<String>,
-    pub has_more: bool,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
-    }
+    #[derive(Debug, Clone)]
 }
-
-#[derive(.*?)]
 pub struct GetAppAdminPermissionsResponse {
-    pub permissions: Vec<AdminPermission>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
 
-#[derive(.*?)]
-pub struct VerifyAppAdminResponse {
-    pub is_admin: bool,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    #[derive(Debug, Clone)]
+}
+pub struct VerifyAppAdminResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
+}}}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

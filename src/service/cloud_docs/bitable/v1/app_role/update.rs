@@ -7,8 +7,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait,
-}
+        api_resp::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -20,7 +19,7 @@ use crate::,
     service::bitable::v1::app_role::{AppRole, BlockRole, TableRole}
 };
 /// 更新自定义角色请求,
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateAppRoleRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -38,57 +37,17 @@ pub struct UpdateAppRoleRequest {
     table_roles: Option<Vec<TableRole>>,
     /// 数据表默认权限,
 #[serde(skip_serializing_if = "Option::is_none")]
-    block_roles: Option<Vec<BlockRole>>,
-}
+    block_roles: Option<Vec<BlockRole>>}
 impl UpdateAppRoleRequest {
-    pub fn w+.*{
-UpdateAppRoleRequestBuilder::default(),
-    }
-
-    pub fn new(app_token: impl ToString, role_id: impl ToString) -> Self {
-Self {
-            app_token: app_token.to_string(),
-            role_id: role_id.to_string()
-            ..Default::default(),
-}
-    }
-}
-#[derive(.*?)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct UpdateAppRoleRequestBuilder {
-    request: UpdateAppRoleRequest,
-}
+    request: UpdateAppRoleRequest}
 impl UpdateAppRoleRequestBuilder {
-    /// 多维表格的唯一标识符
-    pub fn app_token(mut self, app_token: impl ToString) -> Self {
-self.request.app_token = app_token.to_string();
-        self,
-}
-/// 自定义角色的id,
-    pub fn role_id(mut self, role_id: impl ToString) -> Self {
-self.request.role_id = role_id.to_string();
-        self,
-}
-/// 角色名称,
-    pub fn role_name(mut self, role_name: impl ToString) -> Self {
-self.request.role_name = Some(role_name.to_string());
-        self,
-}
-/// 数据表权限,
-    pub fn table_roles(mut self, table_roles: Vec<TableRole>) -> Self {
-self.request.table_roles = Some(table_roles);
-        self,
-}
-/// 数据表默认权限,
-    pub fn block_roles(mut self, block_roles: Vec<BlockRole>) -> Self {
-self.request.block_roles = Some(block_roles);
-        self,
-}
-pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-self.request,
-    }
-}
-impl_executable_builder_owned!(,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}impl_executable_builder_owned!(,
     UpdateAppRoleRequestBuilder,
     AppRoleService,
     UpdateAppRoleRequest,
@@ -96,16 +55,16 @@ impl_executable_builder_owned!(,
     update,
 );
 /// 更新自定义角色响应
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct UpdateAppRoleResponse {
     /// 更新后的自定义角色信息
     pub role: AppRole,
-}
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
 ResponseFormat::Data
     }
-}
 /// 更新自定义角色,
 pub async fn update_app_role(
     request: UpdateAppRoleRequest,
@@ -121,7 +80,6 @@ api_req.api_path = BITABLE_V1_ROLE_UPDATE,
 
     let api_resp = Transport::request(api_req, config, option).await?;
 Ok(api_resp),
-}
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
@@ -129,7 +87,7 @@ mod tests {
     use super::*;
 use serde_json;
     #[test]
-fn test_update_app_role_request_builder() {,
+fn test_update_app_role_request_builder() {
         let request = UpdateAppRoleRequest::builder(),
 .app_token()
             .role_id()
@@ -139,7 +97,6 @@ fn test_update_app_role_request_builder() {,
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
         assert_eq!(request.role_id, "rolxxxxxx");
         assert_eq!(request.role_name, Some("更新后的角色名称".to_string()));
-}
 #[test]
     ,
         let request = UpdateAppRoleRequest::new("bascnmBA*****yGehy8", "rolxxxxxx");
@@ -149,18 +106,16 @@ fn test_update_app_role_request_builder() {,
         assert_eq!(request.role_name, None);
 assert!(request.table_roles.is_none());
         assert!(request.block_roles.is_none());
-}
 #[test]
-    fn test_update_app_role_request_default() {,
+    fn test_update_app_role_request_default() {
 let request = UpdateAppRoleRequest::default();
         assert_eq!(request.app_token, "");
         assert_eq!(request.role_id, "");
         assert_eq!(request.role_name, None);
 assert!(request.table_roles.is_none());
         assert!(request.block_roles.is_none());
-}
 #[test]
-    fn test_update_app_role_request_builder_default() {,
+    fn test_update_app_role_request_builder_default() {
 let builder = UpdateAppRoleRequestBuilder::default();
         let request = builder.build();
 
@@ -169,9 +124,8 @@ let builder = UpdateAppRoleRequestBuilder::default();
         assert_eq!(request.role_name, None);
 assert!(request.table_roles.is_none());
         assert!(request.block_roles.is_none());
-}
 #[test]
-    fn test_update_app_role_request_builder_chaining() {,
+    fn test_update_app_role_request_builder_chaining() {
 let request = UpdateAppRoleRequest::builder(),
             .app_token()
 .role_id()
@@ -184,7 +138,6 @@ let request = UpdateAppRoleRequest::builder(),
         assert_eq!(request.app_token, "app2");
         assert_eq!(request.role_id, "role2");
         assert_eq!(request.role_name, Some("name2".to_string()));
-}
 #[test]
     ,
         let request = UpdateAppRoleRequest::new("test_app", "test_role");
@@ -202,9 +155,8 @@ assert!(!serialized.contains("app_token"));
         assert!(!serialized.contains("role_id"));
 assert!(!serialized.contains("api_request"));
         assert_eq!(serialized, "{}");
-}
 #[test]
-    fn test_update_app_role_request_with_role_name() {,
+    fn test_update_app_role_request_with_role_name() {
 let request = UpdateAppRoleRequest::builder(),
             .app_token()
 .role_id()
@@ -215,9 +167,8 @@ let request = UpdateAppRoleRequest::builder(),
         assert_eq!(request.role_name, Some("新角色名称".to_string()));
 assert!(request.table_roles.is_none());
         assert!(request.block_roles.is_none());
-}
 #[test]
-    fn test_update_app_role_request_with_table_roles() {,
+    fn test_update_app_role_request_with_table_roles() {
 let table_roles = vec![]; // Empty vector for now since we need the actual TableRole definition,
         let request = UpdateAppRoleRequest::builder(),
 .app_token()
@@ -230,9 +181,8 @@ let table_roles = vec![]; // Empty vector for now since we need the actual Table
         assert_eq!(request.role_name, None);
 assert!(request.table_roles.is_some());
         assert!(request.block_roles.is_none());
-}
 #[test]
-    fn test_update_app_role_request_with_block_roles() {,
+    fn test_update_app_role_request_with_block_roles() {
 let block_roles = vec![]; // Empty vector for now since we need the actual BlockRole definition,
         let request = UpdateAppRoleRequest::builder(),
 .app_token()
@@ -245,9 +195,8 @@ let block_roles = vec![]; // Empty vector for now since we need the actual Block
         assert_eq!(request.role_name, None);
 assert!(request.table_roles.is_none());
         assert!(request.block_roles.is_some());
-}
 #[test]
-    fn test_update_app_role_request_with_all_fields() {,
+    fn test_update_app_role_request_with_all_fields() {
 let table_roles = vec![];
         let block_roles = vec![];
 let request = UpdateAppRoleRequest::builder(),
@@ -262,7 +211,6 @@ let request = UpdateAppRoleRequest::builder(),
         assert_eq!(request.role_name, Some("完整角色".to_string()));
 assert!(request.table_roles.is_some());
         assert!(request.block_roles.is_some());
-}
 #[test]
     ,
         let request = UpdateAppRoleRequest::new("", "");
@@ -270,16 +218,14 @@ assert!(request.table_roles.is_some());
         assert_eq!(request.app_token, "");
         assert_eq!(request.role_id, "");
         assert_eq!(request.role_name, None);
-}
 #[test]
     ,
         let request = UpdateAppRoleRequest::new("应用令牌_123", "角色_456");
 
         assert_eq!(request.app_token, "应用令牌_123");
         assert_eq!(request.role_id, "角色_456");
-}
 #[test]
-    fn test_update_app_role_request_with_string_types() {,
+    fn test_update_app_role_request_with_string_types() {
 let owned_app_token = String::from("owned_app");
         let owned_role_id = String::from("owned_role");
         let request1 = UpdateAppRoleRequest::new(owned_app_token, owned_role_id);
@@ -294,9 +240,8 @@ let request2 = UpdateAppRoleRequest::builder(),
         assert_eq!(request2.app_token, "builder_app");
         assert_eq!(request2.role_id, "builder_role");
         assert_eq!(request2.role_name, Some("builder_name".to_string()));
-}
 #[test]
-    fn test_update_app_role_request_with_long_values() {,
+    fn test_update_app_role_request_with_long_values() {
 let long_token = "a".repeat(1000);
         let long_role = "b".repeat(500);
 let long_name = "c".repeat(200);
@@ -309,9 +254,8 @@ let long_name = "c".repeat(200);
         assert_eq!(request.app_token, long_token);
         assert_eq!(request.role_id, long_role);
         assert_eq!(request.role_name, Some(long_name));
-}
 #[test]
-    fn test_update_app_role_request_with_special_characters() {,
+    fn test_update_app_role_request_with_special_characters() {
 let special_app = "app-token_123.test";
         let special_role = "role@domain#test";
 let special_name = "角色名称!@#$%^&*()";
@@ -324,9 +268,8 @@ let special_name = "角色名称!@#$%^&*()";
         assert_eq!(request.app_token, special_app);
         assert_eq!(request.role_id, special_role);
         assert_eq!(request.role_name, Some(special_name.to_string()));
-}
 #[test]
-    fn test_update_app_role_request_builder_partial() {,
+    fn test_update_app_role_request_builder_partial() {
 let request1 = UpdateAppRoleRequest::builder(),
             .app_token()
 .build();
@@ -345,9 +288,8 @@ assert!(request2.role_name.is_none());
         assert_eq!(request3.app_token, "");
         assert_eq!(request3.role_id, "");
         assert_eq!(request3.role_name, Some("only_name".to_string()));
-}
 #[test]
-    fn test_update_app_role_request_serialization_with_role_name() {,
+    fn test_update_app_role_request_serialization_with_role_name() {
 let request = UpdateAppRoleRequest::builder(),
             .app_token()
 .role_id()
@@ -363,7 +305,7 @@ assert!(!serialized.contains("app_token"));
 assert!(!serialized.contains("api_request"));
     }
 #[test]
-    fn test_update_app_role_request_serialization_with_optional_fields() {,
+    fn test_update_app_role_request_serialization_with_optional_fields() {
 let table_roles = vec![];
         let block_roles = vec![];
 let request = UpdateAppRoleRequest::builder(),
@@ -381,10 +323,9 @@ assert!(serialized.contains("table_roles"));
 assert!(serialized.contains("测试角色"));
     }
 #[test]
-    fn test_update_app_role_response_data_format() {,
+    fn test_update_app_role_response_data_format() {
 let format = UpdateAppRoleResponse::data_format();
         assert!(matches!(format, ResponseFormat::Data));
-}
 #[test]
     ,
         let request = UpdateAppRoleRequest::new("test", "test");
@@ -393,13 +334,13 @@ let size = std::mem::size_of_val(&request);
 assert!(size < 1024);
     }
 #[test]
-    fn test_update_app_role_request_builder_method_returns() {,
+    fn test_update_app_role_request_builder_method_returns() {
 let builder = UpdateAppRoleRequest::builder().app_token("测试链式");
         // 确保builder方法返回正确的类型,
 let _chained = builder.role_id("role").role_name("name");
     }
 #[test]
-    fn test_update_app_role_request_build_with_body() {,
+    fn test_update_app_role_request_build_with_body() {
 let request = UpdateAppRoleRequest::builder(),
             .app_token()
 .role_id()
@@ -408,4 +349,3 @@ let request = UpdateAppRoleRequest::builder(),
         // build() method should set the body in api_request,
 assert!(!request.api_request.body.is_empty());
     }
-}

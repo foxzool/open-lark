@@ -17,84 +17,10 @@ use super::models::{,
 /// 用户统计数据服务,
 pub struct UserStatsDataService {
     pub config: Config,
-}
 impl UserStatsDataService {
-    /// 更新统计设置,
-///,
-    /// 该接口用于更新考勤统计的设置，包括统计范围、日期、用户和字段等。,
-///,
-    /// # API文档,
-///,
-    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_stats_data/query,
-pub async fn update(,
-        &self,
-        request: UpdateUserStatsDataRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<UpdateUserStatsDataRespData>> {,
-let mut api_req = request.api_req;
-        api_req.set_http_method(Method::POST);
-api_req.set_api_path(ATTENDANCE_V1_USER_STATS_DATAS_UPDATE.to_string());
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
-// 添加查询参数,
-        api_req
-.query_params
-            .insert("employee_type", request.employee_type);
-// 构建请求体,
-        let body = json!({,
-"stats_setting": request.stats_setting,
-        });
-api_req.body = serde_json::to_vec(&body)?;
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-Ok(api_resp),
-    }
-/// 查询统计设置,
-    ///,
-/// 该接口用于查询当前考勤统计的设置信息。,
-    ///,
-/// # API文档,
-    ///,
-/// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/query,
-    pub async fn query_settings(
-        &self,
-        request: QueryStatsSettingsRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<QueryStatsSettingsRespData>> {,
-let mut api_req = request.api_req;
-        api_req.set_http_method(Method::GET);
-api_req.set_api_path(ATTENDANCE_V1_USER_STATS_DATAS_QUERY.to_string());
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
-// 添加查询参数,
-        api_req
-.query_params
-            .insert("employee_type", request.employee_type);
-
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-Ok(api_resp),
-    }
-/// 查询统计表头,
-    ///,
-/// 该接口用于查询考勤统计的可用字段信息，包括字段名称、类型等。,
-    ///,
-/// # API文档,
-    ///,
-/// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_stats_data/query,
-    pub async fn query_fields(
-        &self,
-        request: QueryStatsFieldsRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<QueryStatsFieldsRespData>> {,
-let mut api_req = request.api_req;
-        api_req.set_http_method(Method::GET);
-api_req.set_api_path(ATTENDANCE_V1_USER_STATS_DATAS_QUERY_FIELDS.to_string());
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
-// 添加查询参数,
-        api_req
-.query_params
-            .insert("employee_type", request.employee_type);
-if let Some(locale) = request.locale {,
-            api_req.query_params.insert("locale", locale);
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }
-
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
     }
@@ -120,7 +46,6 @@ api_req.set_api_path(ATTENDANCE_V1_USER_STATS_DATAS_QUERY_DATA.to_string());
             .insert("employee_type", request.employee_type);
 if let Some(locale) = request.locale {,
             api_req.query_params.insert("locale", locale);
-}
 // 构建请求体,
         let body = json!({
             "start_date": request.start_date,
@@ -132,18 +57,14 @@ api_req.body = serde_json::to_vec(&body)?;
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
     }
-}
 impl Service for UserStatsDataService {,
     fn config(&self) -> &Config {,
 &self.config,
     }
 fn service_name() -> &'static str {,
         "user_stats_data",
-}
 fn service_version() -> &'static str {,
         "v1",
-}
-}
 // Builder implementations,
 impl_executable_builder_owned!(
     UpdateUserStatsDataRequest,
@@ -189,7 +110,6 @@ fn create_test_service() -> UserStatsDataService {,
         UserStatsDataService {
             config: create_test_config(),
         }
-}
 fn create_test_stats_settings() -> StatsSettings {,
         StatsSettings {
             stats_scope: 1,
@@ -198,16 +118,14 @@ fn create_test_stats_settings() -> StatsSettings {,
             user_ids: vec!["user001".to_string(), "user002".to_string()]
             need_fields: vec!["field1".to_string(), "field2".to_string()]
         }
-}
 #[test]
-    fn test_service_creation() {,
+    fn test_service_creation() {
 let service = create_test_service();
         assert_eq!(service.config.app_id, "test_app_id");
         assert_eq!(service.config.app_secret, "test_app_secret");
         assert_eq!(service.config.base_url, "https://test.api.com");
-}
 #[test]
-    fn test_update_user_stats_data_request() {,
+    fn test_update_user_stats_data_request() {
 let request = UpdateUserStatsDataRequest {,
             api_req: ApiRequest::default(),
             employee_type: "employee_id".to_string(),
@@ -220,18 +138,16 @@ let request = UpdateUserStatsDataRequest {,
         assert_eq!(request.stats_setting.end_date, "2023-12-31");
         assert_eq!(request.stats_setting.user_ids.len(), 2);
         assert_eq!(request.stats_setting.need_fields.len(), 2);
-}
 #[test]
-    fn test_query_stats_settings_request() {,
+    fn test_query_stats_settings_request() {
 let request = QueryStatsSettingsRequest {,
             api_req: ApiRequest::default(),
             employee_type: "employee_no".to_string(),
         };
 
         assert_eq!(request.employee_type, "employee_no");
-}
 #[test]
-    fn test_query_stats_fields_request() {,
+    fn test_query_stats_fields_request() {
 let request = QueryStatsFieldsRequest {,
             api_req: ApiRequest::default(),
             employee_type: "open_id".to_string(),
@@ -240,9 +156,8 @@ let request = QueryStatsFieldsRequest {,
 
         assert_eq!(request.employee_type, "open_id");
         assert_eq!(request.locale, Some("zh-CN".to_string()));
-}
 #[test]
-    fn test_query_stats_fields_request_without_locale() {,
+    fn test_query_stats_fields_request_without_locale() {
 let request = QueryStatsFieldsRequest {,
             api_req: ApiRequest::default(),
             employee_type: "union_id".to_string(),
@@ -253,7 +168,7 @@ let request = QueryStatsFieldsRequest {,
 assert!(request.locale.is_none());
     }
 #[test]
-    fn test_query_user_stats_data_request() {,
+    fn test_query_user_stats_data_request() {
 let request = QueryUserStatsDataRequest {,
             api_req: ApiRequest::default(),
             employee_type: "employee_id".to_string(),
@@ -274,9 +189,8 @@ let request = QueryUserStatsDataRequest {,
         assert_eq!(request.user_ids.len(), 3);
         assert_eq!(request.need_fields.len(), 2);
         assert_eq!(request.locale, Some("en-US".to_string()));
-}
 #[test]
-    fn test_stats_settings_variations() {,
+    fn test_stats_settings_variations() {
 // Test different scope values,
         let settings1 = StatsSettings {
             stats_scope: 1, // 自定义范围
@@ -295,7 +209,6 @@ let settings2 = StatsSettings {,
 
         assert_eq!(settings1.stats_scope, 1);
         assert_eq!(settings2.stats_scope, 2);
-}
 #[test]
     ,
         let employee_types = vec!["employee_id", "employee_no", "open_id", "union_id"];
@@ -305,10 +218,9 @@ for emp_type in employee_types {,
                 employee_type: emp_type.to_string(),
             };
             assert_eq!(request.employee_type, emp_type);
-}
     }
 #[test]
-    fn test_different_locales() {,
+    fn test_different_locales() {
 let locales = vec![,
             Some("zh-CN".to_string()),
             Some("en-US".to_string()),
@@ -324,10 +236,9 @@ for locale in locales {,
                 locale: locale.clone(),
             };
             assert_eq!(request.locale, locale);
-}
     }
 #[test]
-    fn test_date_format_variations() {,
+    fn test_date_format_variations() {
 let dates = vec![,
             ("2023-01-01", "2023-01-31"), // January
             ("2023-02-01", "2023-02-28"), // February
@@ -347,10 +258,9 @@ let settings = StatsSettings {,
 
             assert_eq!(settings.start_date, start_date);
             assert_eq!(settings.end_date, end_date);
-}
     }
 #[test]
-    fn test_user_ids_variations() {,
+    fn test_user_ids_variations() {
 let user_id_lists = vec![,
             vec![]                                         // Empty list
             vec!["single_user".to_string()]                // Single user
@@ -379,10 +289,9 @@ let settings = StatsSettings {,
             };
 
             assert_eq!(settings.user_ids, user_ids);
-}
     }
 #[test]
-    fn test_need_fields_variations() {,
+    fn test_need_fields_variations() {
 let field_lists = vec![,
             vec![]                                                        // Empty list
             vec!["attendance_days".to_string()]                           // Single field
@@ -410,10 +319,9 @@ let settings = StatsSettings {,
             };
 
             assert_eq!(settings.need_fields, need_fields);
-}
     }
 #[test]
-    fn test_stats_scope_edge_cases() {,
+    fn test_stats_scope_edge_cases() {
 let scopes = vec![,
             0,   // Edge case: invalid scope
             1,   // 自定义范围
@@ -431,10 +339,9 @@ let settings = StatsSettings {,
             };
 
             assert_eq!(settings.stats_scope, scope);
-}
     }
 #[test]
-    fn test_stats_settings_clone() {,
+    fn test_stats_settings_clone() {
 let original_settings = create_test_stats_settings();
         let cloned_settings = original_settings.clone();
 
@@ -443,9 +350,8 @@ let original_settings = create_test_stats_settings();
         assert_eq!(original_settings.end_date, cloned_settings.end_date);
         assert_eq!(original_settings.user_ids, cloned_settings.user_ids);
         assert_eq!(original_settings.need_fields, cloned_settings.need_fields);
-}
 #[test]
-    fn test_stats_settings_debug() {,
+    fn test_stats_settings_debug() {
 let settings = create_test_stats_settings();
         let debug_str = format!("{:?}", settings);
 assert!(debug_str.contains("StatsSettings"));
@@ -455,7 +361,7 @@ assert!(debug_str.contains("2023-12-31"));
 assert!(debug_str.contains("field1"));
     }
 #[test]
-    fn test_request_default_trait() {,
+    fn test_request_default_trait() {
 let query_fields_request = QueryStatsFieldsRequest::default();
         assert!(query_fields_request.employee_type.is_empty());
 assert!(query_fields_request.locale.is_none());
@@ -470,9 +376,8 @@ assert!(query_data_request.end_date.is_empty());
         assert!(query_data_request.user_ids.is_empty());
 assert!(query_data_request.need_fields.is_empty());
         assert!(query_data_request.locale.is_none());
-}
 #[test]
-    fn test_request_build_methods() {,
+    fn test_request_build_methods() {
 let update_request = UpdateUserStatsDataRequest {,
             api_req: ApiRequest::default(),
             employee_type: "employee_id".to_string(),
@@ -494,9 +399,8 @@ let query_fields_request = QueryStatsFieldsRequest {,
 let built_query_fields = query_fields_request.build();
         assert_eq!(built_query_fields.employee_type, "open_id");
         assert_eq!(built_query_fields.locale, Some("zh-CN".to_string()));
-}
 #[test]
-    fn test_json_serialization() {,
+    fn test_json_serialization() {
 let settings = create_test_stats_settings();
         // Test serialization,
 let json_result = serde_json::to_string(&settings);
@@ -515,9 +419,8 @@ assert!(deserialized_result.is_ok());
         assert_eq!(deserialized_settings.end_date, settings.end_date);
         assert_eq!(deserialized_settings.user_ids, settings.user_ids);
         assert_eq!(deserialized_settings.need_fields, settings.need_fields);
-}
 #[test]
-    fn test_empty_collections_serialization() {,
+    fn test_empty_collections_serialization() {
 let settings = StatsSettings {,
             stats_scope: 2,
             start_date: "2023-01-01".to_string(),
@@ -547,9 +450,8 @@ let settings = StatsSettings {,
         assert_eq!(settings.need_fields.len(), 100);
         assert_eq!(settings.user_ids, large_user_ids);
         assert_eq!(settings.need_fields, large_need_fields);
-}
 #[test]
-    fn test_special_date_formats() {,
+    fn test_special_date_formats() {
 let date_pairs = vec![,
             ("", ""),                         // Empty dates
             ("2023-01-01", ""),               // Empty end date
@@ -569,10 +471,9 @@ let settings = StatsSettings {,
 
             assert_eq!(settings.start_date, start_date);
             assert_eq!(settings.end_date, end_date);
-}
     }
 #[test]
-    fn test_memory_efficiency() {,
+    fn test_memory_efficiency() {
 // Create multiple request instances to test memory usage,
         let requests: Vec<UpdateUserStatsDataRequest> = (0..100),
 .map(|i| UpdateUserStatsDataRequest {,
@@ -584,8 +485,7 @@ let settings = StatsSettings {,
                     end_date: format!("2023-{:02}-28", (i % 12) + 1),
                     user_ids: vec![format!("user_{:03}", i)]
                     need_fields: vec![format!("field_{:03}", i)]
-                }
-            }),
+}),
 .collect();
         assert_eq!(requests.len(), 100);
 
@@ -598,5 +498,3 @@ assert_eq!(,
                 format!("field_{:03}", i),
 );
         }
-}
-}

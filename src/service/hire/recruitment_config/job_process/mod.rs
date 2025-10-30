@@ -2,25 +2,23 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}
-        config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    }
     service::hire::models::{CommonResponse, I18nText, PageResponse, UserId}
 };
 /// 招聘流程服务
 pub struct JobProcessService {
-    pub config: Config,
 }
+    pub config: Config,
 /// 招聘阶段信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct JobProcessStage {
+}
     /// 阶段ID
     pub id: String,
     /// 阶段名称
@@ -37,132 +35,57 @@ pub struct JobProcessStage {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-}
 /// 阶段配置信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct StageConfig {
-    // TODO: Add fields
 }
+    // TODO: Add fields
 /// 通知设置
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct NotificationSettings {
+}
     /// 是否启用通知
     pub enabled: bool,
     /// 通知接收人列表
     pub recipients: Vec<UserId>,
     /// 通知模板ID
     pub template_id: Option<String>,
-}
 /// 招聘流程信息
-#[derive(.*?)]
+#[derive(Debug, Clone)]
 pub struct JobProcess {
-    /// 流程ID
-    pub id: String,
-    /// 流程名称
-    pub name: I18nText,
-    /// 流程描述
-    pub description: Option<I18nText>,
-    /// 流程类型
-    pub process_type: String,
-    /// 是否默认流程
-    pub is_default: bool,
-    /// 流程状态
-    pub status: String,
-    /// 阶段列表
-    pub stages: Vec<JobProcessStage>,
-    /// 适用职位类型
-    pub applicable_job_types: Vec<String>,
-    /// 创建人
-    pub creator: Option<UserId>,
-    /// 创建时间
-    pub created_time: Option<String>,
-    /// 更新时间
-    pub updated_time: Option<String>,
 }
-/// 招聘流程创建请求
-#[derive(.*?)]
-pub struct JobProcessCreateRequest {
-    /// 流程名称
-    pub name: I18nText,
-    /// 流程描述
-    pub description: Option<I18nText>,
-    /// 流程类型
-    pub process_type: String,
-    /// 是否默认流程
-    pub is_default: Option<bool>,
-    /// 阶段配置列表
-    pub stages: Vec<JobProcessStageCreateRequest>,
-    /// 适用职位类型
-    pub applicable_job_types: Vec<String>,
-}
-/// 招聘流程阶段创建请求
-#[derive(.*?)]
-pub struct JobProcessStageCreateRequest {
-    /// 阶段名称
-    pub name: I18nText,
-    /// 阶段类型
-    pub stage_type: String,
-    /// 阶段顺序
-    pub order: u32,
-    /// 是否必需阶段
-    pub is_required: Option<bool>,
-    /// 阶段配置
-    pub config: Option<StageConfig>,
-}
-/// 招聘流程列表请求
-#[derive(.*?)]
-pub struct JobProcessListRequest {
-    /// 分页大小
-    pub page_size: Option<u32>,
-    /// 分页标记
-    pub page_token: Option<String>,
-    /// 流程类型
-    pub process_type: Option<String>,
-    /// 流程状态
-    pub status: Option<String>,
-}
-/// 招聘流程列表响应
-#[derive(.*?)]
-pub struct JobProcessListResponse {
-    /// 招聘流程列表
-#[serde(flatten)]
-    pub processes: PageResponse<JobProcess>,
-}
+
 impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 招聘流程详情响应
-#[derive(.*?)]
-pub struct JobProcessDetailResponse {
-    /// 招聘流程信息
-    pub process: JobProcess,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-/// 招聘流程操作响应
-#[derive(.*?)]
-pub struct JobProcessOperationResponse {
-    /// 操作结果
-#[serde(flatten)]
-    pub result: CommonResponse,
-    /// 流程ID
-    pub process_id: Option<String>,
-}
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-}
-impl JobProcessService {
     pub fn new(config: Config) -> Self {
         Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 招聘流程详情响应
+#[derive(Debug, Clone)]
 }
-/// 创建招聘流程
+pub struct JobProcessDetailResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    /// 招聘流程操作响应
+#[derive(Debug, Clone)]
+}
+pub struct JobProcessOperationResponse {
+
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
+    }
+impl JobProcessService {
+    pub fn new(config: Config) -> Self {
+        Self { config 
+}
+}/// 创建招聘流程
     ///,
 /// 该接口用于创建新的招聘流程模板，定义招聘的各个
     /// 阶段、流程配置和适用范围。创建的流程可应用于
@@ -232,9 +155,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取招聘流程详情
     ///,
 /// 该接口用于获取指定招聘流程的详细信息，包括流程
@@ -263,8 +184,7 @@ let api_req = ApiRequest {,
     ///     println!("流程名称: {:?}" data.process.name.zh_cn);
     ///     println!("流程类型: {}" data.process.process_type);
     ///     println!("阶段数量: {}" data.process.stages.len());
-    /// }
-/// ```
+    /// /// ```
     pub async fn get_process_detail(
         &self,
         process_id: &str,
@@ -281,9 +201,7 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 获取招聘流程列表
     ///,
 /// 该接口用于获取企业的招聘流程列表，支持按类型、
@@ -324,8 +242,7 @@ let api_req = ApiRequest {,
 ///     for process in &data.processes.items {
     ///         println!("流程: {:?} (类型: {})" process.name.zh_cn, process.process_type);
     ///     }
-    /// }
-/// ```
+    /// /// ```
     pub async fn list_processes(
         &self,
         request: JobProcessListRequest,
@@ -343,19 +260,13 @@ let mut api_req = ApiRequest {,
 api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
-}
 if let Some(process_type) = request.process_type {,
             api_req.query_params.insert("process_type", process_type);
-}
 if let Some(status) = request.status {,
             api_req.query_params.insert("status", status);
-}
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 更新招聘流程
     ///,
 /// 该接口用于更新现有招聘流程的配置，支持修改流程
@@ -405,9 +316,7 @@ let api_req = ApiRequest {,
             body: serde_json::to_vec(&request).unwrap_or_default()
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
 /// 删除招聘流程
     ///,
 /// 该接口用于删除指定的招聘流程。删除后的流程
@@ -440,7 +349,6 @@ let api_req = ApiRequest {,
             body: vec![]
             ..Default::default(),
 };
-
         Transport::request(api_req, &self.config, option).await,
-}
-}
+}}
+}}}}}}}}}}}}}}}}}}}}
