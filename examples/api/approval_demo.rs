@@ -7,9 +7,9 @@
 
 use open_lark::prelude::*;
 use open_lark::service::approval::v4::{
-    CreateInstanceRequest, QueryInstanceRequest, GetInstanceRequest,
-    ProcessTaskRequest, TaskAction, QueryTaskRequest, GetTaskRequest,
-    ApprovalStatus, TaskStatus,
+    CreateInstanceRequest, CreateApprovalRequest, ApprovalBaseResponse,
+    ApprovalInstance, CreateInstanceResponse, CreateApprovalResponse,
+    ProcessTaskResponse,
 };
 
 #[tokio::main]
@@ -58,7 +58,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 演示获取审批实例详情
     println!("\n📋 获取审批实例详情");
-    match client.approval.v4.instance.get("inst_001").await {
+    match client.approval.v4.instance.get("inst_001", Some("open_id")).await {
         Ok(response) => {
             println!("✅ 审批实例详情获取成功");
             if let Some(data) = response.data {
@@ -79,7 +79,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 演示同意审批任务
     println!("\n📋 同意审批任务");
-    match client.approval.v4.task.approve("task_001", Some("同意请假申请".to_string())).await {
+    match client.approval.v4.task.approve("task_001", Some("同意请假申请".to_string()), Some("open_id")).await {
         Ok(response) => {
             println!("✅ 审批任务同意成功");
             if let Some(data) = response.data {
@@ -95,19 +95,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 演示创建审批定义
     println!("\n📋 创建审批定义");
-    match client.approval.v4.approval.create(
-        "报销审批".to_string(),
-        Some("员工费用报销审批流程".to_string())
-    ).await {
+    let create_approval_request = CreateApprovalRequest {
+        approval_name: "报销审批".to_string(),
+        description: Some("员工费用报销审批流程".to_string()),
+        form: None,
+        process: None,
+        permissions: None,
+    };
+
+    match client.approval.v4.approval.create(&create_approval_request).await {
         Ok(response) => {
             println!("✅ 审批定义创建成功");
             if let Some(data) = response.data {
                 println!("   审批编码: {}", data.approval_code);
                 println!("   审批名称: {}", data.approval_name);
-                println!("   描述: {:?}", data.description);
-                println!("   状态: {:?}", data.status);
-                println!("   创建者: {:?}", data.creator.as_ref().and_then(|c| c.name.as_ref()));
-                println!("   创建时间: {:?}", data.create_time);
             }
         }
         Err(e) => {
