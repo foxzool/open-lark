@@ -225,6 +225,284 @@ impl CalendarServiceV4 {
             }),
         })
     }
+
+    // ==================== 忙闲时间查询 ====================
+
+    /// 查询用户忙闲时间
+    pub async fn get_user_free_busy(&self, _request: &GetUserFreeBusyRequest) -> SDKResult<UserFreeBusyResponse> {
+        // 模拟实现
+        Ok(UserFreeBusyResponse {
+            code: 0,
+            msg: "success".to_string(),
+            data: Some(UserFreeBusyData {
+                user_id: _request.user_id.clone(),
+                time_ranges: vec![
+                    FreeBusyTimeRange {
+                        start_time: TimeInfo {
+                            timestamp: Some("1640995200".to_string()),
+                            date: None,
+                            timezone: Some("Asia/Shanghai".to_string()),
+                        },
+                        end_time: TimeInfo {
+                            timestamp: Some("1640998800".to_string()),
+                            date: None,
+                            timezone: Some("Asia/Shanghai".to_string()),
+                        },
+                        status: FreeBusyStatus::Busy,
+                    },
+                    FreeBusyTimeRange {
+                        start_time: TimeInfo {
+                            timestamp: Some("1641081600".to_string()),
+                            date: None,
+                            timezone: Some("Asia/Shanghai".to_string()),
+                        },
+                        end_time: TimeInfo {
+                            timestamp: Some("1641085200".to_string()),
+                            date: None,
+                            timezone: Some("Asia/Shanghai".to_string()),
+                        },
+                        status: FreeBusyStatus::Free,
+                    },
+                ],
+            }),
+        })
+    }
+
+    /// 批量查询用户忙闲时间
+    pub async fn get_users_free_busy(&self, _request: &GetUsersFreeBusyRequest) -> SDKResult<UsersFreeBusyResponse> {
+        // 模拟实现
+        let mut users_data = Vec::new();
+        for user_id in &_request.user_ids {
+            users_data.push(UserFreeBusyData {
+                user_id: user_id.clone(),
+                time_ranges: vec![
+                    FreeBusyTimeRange {
+                        start_time: TimeInfo {
+                            timestamp: Some("1640995200".to_string()),
+                            date: None,
+                            timezone: Some("Asia/Shanghai".to_string()),
+                        },
+                        end_time: TimeInfo {
+                            timestamp: Some("1640998800".to_string()),
+                            date: None,
+                            timezone: Some("Asia/Shanghai".to_string()),
+                        },
+                        status: FreeBusyStatus::Busy,
+                    },
+                ],
+            });
+        }
+
+        Ok(UsersFreeBusyResponse {
+            code: 0,
+            msg: "success".to_string(),
+            data: Some(UsersFreeBusyData {
+                users: users_data,
+            }),
+        })
+    }
+
+    // ==================== 参与人管理 ====================
+
+    /// 获取日程参与人
+    pub async fn get_event_attendees(&self, _request: &GetEventAttendeesRequest) -> SDKResult<EventAttendeesResponse> {
+        // 模拟实现
+        Ok(EventAttendeesResponse {
+            code: 0,
+            msg: "success".to_string(),
+            data: Some(EventAttendeesData {
+                attendees: vec![
+                    EventAttendee {
+                        r#type: Some(AttendeeType::User),
+                        attendee_id: Some("user_001".to_string()),
+                        rsvp_status: Some(RsvpStatus::Accept),
+                        is_optional: Some(false),
+                        is_organizer: Some(true),
+                        is_external: Some(false),
+                        display_name: Some("张三".to_string()),
+                        chat_id: Some("chat_001".to_string()),
+                        room_id: None,
+                        third_party_email: None,
+                        operate_id: None,
+                        resource_customization: None,
+                    },
+                    EventAttendee {
+                        r#type: Some(AttendeeType::User),
+                        attendee_id: Some("user_002".to_string()),
+                        rsvp_status: Some(RsvpStatus::NeedsAction),
+                        is_optional: Some(false),
+                        is_organizer: Some(false),
+                        is_external: Some(false),
+                        display_name: Some("李四".to_string()),
+                        chat_id: Some("chat_002".to_string()),
+                        room_id: None,
+                        third_party_email: None,
+                        operate_id: None,
+                        resource_customization: None,
+                    },
+                ],
+                total: 2,
+            }),
+        })
+    }
+
+    /// 添加日程参与人
+    pub async fn add_event_attendees(&self, _request: &AddEventAttendeesRequest) -> SDKResult<EventAttendeesResponse> {
+        // 模拟实现
+        let mut attendees = Vec::new();
+        for attendee_id in &_request.attendee_ids {
+            attendees.push(EventAttendee {
+                r#type: Some(AttendeeType::User),
+                attendee_id: Some(attendee_id.clone()),
+                rsvp_status: Some(RsvpStatus::NeedsAction),
+                is_optional: Some(false),
+                is_organizer: Some(false),
+                is_external: Some(false),
+                display_name: Some(format!("用户_{}", attendee_id)),
+                chat_id: Some(format!("chat_{}", attendee_id)),
+                room_id: None,
+                third_party_email: None,
+                operate_id: None,
+                resource_customization: None,
+            });
+        }
+
+        Ok(EventAttendeesResponse {
+            code: 0,
+            msg: "success".to_string(),
+            data: Some(EventAttendeesData {
+                attendees,
+                total: _request.attendee_ids.len() as i32,
+            }),
+        })
+    }
+
+    /// 删除日程参与人
+    pub async fn remove_event_attendees(&self, _request: &RemoveEventAttendeesRequest) -> SDKResult<EventAttendeesResponse> {
+        // 模拟实现
+        Ok(EventAttendeesResponse {
+            code: 0,
+            msg: "success".to_string(),
+            data: Some(EventAttendeesData {
+                attendees: vec![],
+                total: 0,
+            }),
+        })
+    }
+
+    // ==================== 会议室管理 ====================
+
+    /// 获取会议室列表
+    pub async fn list_meeting_rooms(&self, _request: &ListMeetingRoomsRequest) -> SDKResult<MeetingRoomsResponse> {
+        // 模拟实现
+        Ok(MeetingRoomsResponse {
+            code: 0,
+            msg: "success".to_string(),
+            data: Some(MeetingRoomsData {
+                rooms: vec![
+                    MeetingRoom {
+                        room_id: Some("room_001".to_string()),
+                        display_name: Some("会议室A".to_string()),
+                        name: Some("会议室A".to_string()),
+                        capacity: Some(10),
+                        floor: Some("3F".to_string()),
+                        building: Some("北京办公室".to_string()),
+                        equipment: Some(vec!["投影仪".to_string(), "白板".to_string()]),
+                        status: Some(MeetingRoomStatus::Available),
+                    },
+                    MeetingRoom {
+                        room_id: Some("room_002".to_string()),
+                        display_name: Some("会议室B".to_string()),
+                        name: Some("会议室B".to_string()),
+                        capacity: Some(6),
+                        floor: Some("5F".to_string()),
+                        building: Some("北京办公室".to_string()),
+                        equipment: Some(vec!["电视".to_string()]),
+                        status: Some(MeetingRoomStatus::Occupied),
+                    },
+                ],
+                total: 2,
+            }),
+        })
+    }
+
+    /// 预订会议室
+    pub async fn book_meeting_room(&self, _request: &BookMeetingRoomRequest) -> SDKResult<BookMeetingRoomResponse> {
+        // 模拟实现
+        Ok(BookMeetingRoomResponse {
+            code: 0,
+            msg: "success".to_string(),
+            data: Some(BookMeetingRoomData {
+                booking_id: Some("booking_12345".to_string()),
+                room_id: Some(_request.room_id.clone()),
+                start_time: _request.start_time.clone(),
+                end_time: _request.end_time.clone(),
+                booker: Some(EventCreator {
+                    user_id: Some("user_001".to_string()),
+                    display_name: Some("张三".to_string()),
+                }),
+                status: Some(BookingStatus::Confirmed),
+                create_time: Some("2024-01-01T00:00:00Z".to_string()),
+            }),
+        })
+    }
+
+    // ==================== 日历订阅与共享 ====================
+
+    /// 订阅日历
+    pub async fn subscribe_calendar(&self, _request: &SubscribeCalendarRequest) -> SDKResult<SubscribeCalendarResponse> {
+        // 模拟实现
+        Ok(SubscribeCalendarResponse {
+            code: 0,
+            msg: "success".to_string(),
+            data: Some(SubscribeCalendarData {
+                subscription_id: Some("sub_12345".to_string()),
+                calendar_id: Some(_request.calendar_id.clone()),
+                subscriber_id: Some("user_001".to_string()),
+                status: Some(SubscriptionStatus::Active),
+                role: Some(CalendarRole::Reader),
+                create_time: Some("2024-01-01T00:00:00Z".to_string()),
+                update_time: Some("2024-01-01T00:00:00Z".to_string()),
+            }),
+        })
+    }
+
+    /// 取消订阅日历
+    pub async fn unsubscribe_calendar(&self, _request: &UnsubscribeCalendarRequest) -> SDKResult<UnsubscribeCalendarResponse> {
+        // 模拟实现
+        Ok(UnsubscribeCalendarResponse {
+            code: 0,
+            msg: "success".to_string(),
+            data: Some(UnsubscribeCalendarData {
+                subscription_id: Some("sub_12345".to_string()),
+                calendar_id: Some(_request.calendar_id.clone()),
+                unsubscribed: Some(true),
+            }),
+        })
+    }
+
+    /// 获取日历订阅列表
+    pub async fn list_calendar_subscriptions(&self, _request: &ListCalendarSubscriptionsRequest) -> SDKResult<CalendarSubscriptionsResponse> {
+        // 模拟实现
+        Ok(CalendarSubscriptionsResponse {
+            code: 0,
+            msg: "success".to_string(),
+            data: Some(CalendarSubscriptionsData {
+                subscriptions: vec![
+                    SubscribeCalendarData {
+                        subscription_id: Some("sub_001".to_string()),
+                        calendar_id: Some("cal_shared_001".to_string()),
+                        subscriber_id: Some("user_001".to_string()),
+                        status: Some(SubscriptionStatus::Active),
+                        role: Some(CalendarRole::Reader),
+                        create_time: Some("2024-01-01T00:00:00Z".to_string()),
+                        update_time: Some("2024-01-01T00:00:00Z".to_string()),
+                    },
+                ],
+                total: 1,
+            }),
+        })
+    }
 }
 
 // 导入models模块

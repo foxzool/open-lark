@@ -13,7 +13,7 @@ members = [
 ]
 
 [workspace.package]
-version = "0.15.0"
+version = "0.15.0-dev"
 edition = "2021"
 authors = ["ZoOL <zhooul@gmail.com>"]
 license = "Apache-2.0"
@@ -23,14 +23,14 @@ documentation = "https://docs.rs/open-lark"
 
 [workspace.dependencies]
 # Internal dependencies (shared version management)
-open-lark-core = { path = "crates/open-lark-core", version = "0.15.0" }
-open-lark-communication = { path = "crates/open-lark-communication", version = "0.15.0" }
-open-lark-collaboration = { path = "crates/open-lark-collaboration", version = "0.15.0" }
-open-lark-hr-suite = { path = "crates/open-lark-hr-suite", version = "0.15.0" }
-open-lark-ai-platform = { path = "crates/open-lark-ai-platform", version = "0.15.0" }
-open-lark-enterprise = { path = "crates/open-lark-enterprise", version = "0.15.0" }
-open-lark-integrations = { path = "crates/open-lark-integrations", version = "0.15.0" }
-open-lark-extensions = { path = "crates/open-lark-extensions", version = "0.15.0" }
+open-lark-core = { path = "crates/open-lark-core", version = "0.15.0-dev" }
+open-lark-communication = { path = "crates/open-lark-communication", version = "0.15.0-dev" }
+open-lark-collaboration = { path = "crates/open-lark-collaboration", version = "0.15.0-dev" }
+open-lark-hr-suite = { path = "crates/open-lark-hr-suite", version = "0.15.0-dev" }
+open-lark-ai-platform = { path = "crates/open-lark-ai-platform", version = "0.15.0-dev" }
+open-lark-enterprise = { path = "crates/open-lark-enterprise", version = "0.15.0-dev" }
+open-lark-integrations = { path = "crates/open-lark-integrations", version = "0.15.0-dev" }
+open-lark-extensions = { path = "crates/open-lark-extensions", version = "0.15.0-dev" }
 lark-websocket-protobuf = { path = "crates/protobuf", version = "0.1.1" }
 
 # External dependencies (shared version management)
@@ -406,6 +406,11 @@ required-features = ["cloud-docs"]
 [[example]]
 name = "calendar_demo"
 path = "examples/api/calendar_demo.rs"
+required-features = ["calendar"]
+
+[[example]]
+name = "calendar_comprehensive_example"
+path = "examples/api/calendar_comprehensive_example.rs"
 required-features = ["calendar"]
 
 [[example]]
