@@ -230,6 +230,8 @@ impl CompaniesService {
                         leader_user_id: Some("user_001".to_string()),
                         leader_name: Some("张总".to_string()),
                         employee_count: 50,
+                        level: Some(1),
+                        created_at: Some("2023-01-01T00:00:00Z".to_string()),
                         sub_departments: vec![
                             DepartmentNode {
                                 department_id: "dept_001".to_string(),
@@ -238,6 +240,8 @@ impl CompaniesService {
                                 leader_user_id: Some("user_002".to_string()),
                                 leader_name: Some("李经理".to_string()),
                                 employee_count: 30,
+                                level: Some(2),
+                                created_at: Some("2023-01-01T00:00:00Z".to_string()),
                                 sub_departments: vec![],
                             },
                         ],
@@ -249,6 +253,8 @@ impl CompaniesService {
                         leader_user_id: Some("user_003".to_string()),
                         leader_name: Some("王总".to_string()),
                         employee_count: 15,
+                        level: Some(1),
+                        created_at: Some("2023-01-01T00:00:00Z".to_string()),
                         sub_departments: vec![],
                     },
                 ],
@@ -340,7 +346,7 @@ pub struct CompanySearchData {
 }
 
 /// 公司搜索结果
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct CompanySearchResult {
     /// 公司ID
     pub company_id: String,

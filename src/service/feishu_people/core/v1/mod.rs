@@ -3,7 +3,20 @@
 //! 包含核心人事管理的完整功能，这是主要使用的版本
 
 use crate::core::config::Config;
-use open_lark_core::prelude::*;
+
+// 声明子模块
+pub mod persons;
+pub mod departments;
+pub mod positions;
+pub mod contracts;
+pub mod companies;
+
+// 重新导出服务类型
+pub use persons::PersonsService;
+pub use departments::DepartmentsService;
+pub use positions::PositionsService;
+pub use contracts::ContractsService;
+pub use companies::CompaniesService;
 
 /// 核心人事管理v1版本服务
 #[derive(Debug, Clone)]
@@ -28,14 +41,3 @@ impl CoreV1Service {
         }
     }
 }
-
-/// 人员管理服务
-pub mod persons;
-/// 部门管理服务
-pub mod departments;
-/// 职位管理服务
-pub mod positions;
-/// 合同管理服务
-pub mod contracts;
-/// 公司管理服务
-pub mod companies;

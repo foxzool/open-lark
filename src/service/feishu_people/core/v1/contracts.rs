@@ -328,7 +328,7 @@ pub struct ContractSearchData {
 }
 
 /// 合同搜索结果
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ContractSearchResult {
     /// 合同ID
     pub contract_id: String,

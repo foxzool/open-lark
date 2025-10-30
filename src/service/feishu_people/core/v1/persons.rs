@@ -187,7 +187,7 @@ impl PersonsService {
                 avatar_72: Some("https://example.com/avatar_72.jpg".to_string()),
                 avatar_240: Some("https://example.com/avatar_240.jpg".to_string()),
                 avatar_360: Some("https://example.com/avatar_360.jpg".to_string()),
-                avatar_640: Some("https://example.com/avatar_640.jpg"),
+                avatar_640: Some("https://example.com/avatar_640.jpg".to_string()),
                 avatar_1024: Some("https://example.com/avatar_1024.jpg".to_string()),
             }),
         })
@@ -278,7 +278,7 @@ pub struct PersonSearchData {
 }
 
 /// 人员搜索结果
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct PersonSearchResult {
     /// 用户ID
     pub user_id: String,

@@ -389,7 +389,7 @@ pub struct PositionSearchData {
 }
 
 /// 职位搜索结果
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct PositionSearchResult {
     /// 职位ID
     pub position_id: String,

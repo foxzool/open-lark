@@ -354,7 +354,7 @@ pub struct DepartmentSearchData {
 }
 
 /// 部门搜索结果
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DepartmentSearchResult {
     /// 部门ID
     pub department_id: String,
