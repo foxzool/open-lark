@@ -186,9 +186,7 @@ pub mod workplace;
 pub mod cloud_docs;
 // 向后兼容的 re-export - 使用条件编译
 #[cfg(feature = "cloud-docs")]
-pub use cloud_docs::docx as docs; // docs -> docx 兼容
-#[cfg(feature = "cloud-docs")]
-pub use cloud_docs::{assistant, bitable, board, comments, drive, permission, sheets, wiki};
+pub use cloud_docs::ClouddocsService;
 // 核心服务 re-export - 使用条件编译
 #[cfg(feature = "acs")]
 pub use acs::AcsService;
@@ -266,9 +264,3 @@ pub use vc::VcService;
 pub use verification::VerificationService;
 #[cfg(feature = "workplace")]
 pub use workplace::WorkplaceService;
-// 服务类型 re-export - 使用条件编译
-#[cfg(feature = "cloud-docs")]
-pub use cloud_docs::{
-    AssistantService, BitableService, BoardService, CloudDocsService, CommentsService,
-    DocxService as DocsService, DriveService, PermissionService, SheetsService, WikiService,
-};

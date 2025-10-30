@@ -5,6 +5,7 @@ use crate::core::config::Config;
 use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
 
 /// 简化的服务结构体
+#[derive(Debug, Clone)]
 pub struct SimpleService {
     pub config: Config,
 }
@@ -19,7 +20,7 @@ impl SimpleService {
 pub struct SimpleResponse;
 
 impl ApiResponseTrait for SimpleResponse {
-    fn format(&self) -> ResponseFormat {
+    fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
