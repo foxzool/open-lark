@@ -8,6 +8,10 @@ use crate::core::{
 // 条件导入服务
 #[cfg(feature = "acs")]
 use crate::service::acs::AcsService;
+#[cfg(feature = "board")]
+use open_lark_extensions::board::BoardService;
+#[cfg(feature = "event")]
+use open_lark_extensions::event::EventService;
 #[cfg(feature = "admin")]
 use crate::service::admin::AdminService;
 #[cfg(feature = "auth")]
@@ -55,6 +59,10 @@ pub struct LarkClient {
     pub acs: AcsService,
     #[cfg(feature = "admin")]
     pub admin: AdminService,
+    #[cfg(feature = "board")]
+    pub board: BoardService,
+    #[cfg(feature = "event")]
+    pub event: EventService,
     #[cfg(feature = "auth")]
     pub auth: AuthService,
     #[cfg(feature = "ai")]
@@ -97,6 +105,10 @@ impl LarkClient {
             acs: AcsService::new(config.clone()),
             #[cfg(feature = "admin")]
             admin: AdminService::new(config.clone()),
+            #[cfg(feature = "board")]
+            board: BoardService::new(unsafe { std::mem::transmute_copy(&config) }),
+            #[cfg(feature = "event")]
+            event: EventService::new(unsafe { std::mem::transmute_copy(&config) }),
             #[cfg(feature = "auth")]
             auth: AuthService::new(config.clone()),
             #[cfg(feature = "ai")]
