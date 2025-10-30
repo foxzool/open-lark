@@ -82,7 +82,7 @@ use std::sync::Arc;
 
 // Include additional services
 pub mod additional_services;
-// pub use additional_services::*; // Temporarily commented to avoid unused import warning
+pub use additional_services::*;
 
 /// Contact Service Shim
 ///
