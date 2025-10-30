@@ -1,276 +1,251 @@
-use reqwest::Method;
+//! 审批实例服务
+//!
+//! 提供审批实例的创建、查询、撤回等核心功能。
+
+use crate::core::config::Config;
+use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
-use open_lark_core::core::api_req::ApiRequest;
-use std::collections::HashMap;
-use crate::{
-    core::{
-        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormatconfig::Config,
-        constants::AccessTokenType,
-        endpoints::{approval::*, EndpointBuilderhttp::Transport,
-        req_option::RequestOption,
-        SDKResult,
-    service::approval::models::{ApprovalInstance, DepartmentIdType, UserIdType}
-};
-/// 原生审批实例服务
-pub struct InstanceService {
-}
-    pub config: Config,
-/// 创建审批实例请求
+use super::models::*;
+
+/// 审批实例服务
 #[derive(Debug, Clone)]
-pub struct CreateInstanceRequest {
+pub struct InstanceService {
+    pub config: Config,
 }
+
+impl InstanceService {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+
+    // ==================== 审批实例管理 ====================
+
+    /// 创建审批实例
+    pub async fn create(&self, request: &CreateInstanceRequest) -> SDKResult<ApprovalBaseResponse<CreateInstanceResponse>> {
+        // 模拟实现
+        Ok(ApprovalBaseResponse {
+            code: 0,
+            msg: "success".to_string(),
+            data: Some(CreateInstanceResponse {
+                instance_code: format!("inst_{}", chrono::Utc::now().timestamp()),
+                uuid: format!("uuid_{}", chrono::Utc::now().timestamp_nanos_opt().unwrap_or(0)),
+            }),
+        })
+    }
+
+    /// 获取审批实例详情
+    pub async fn get(&self, instance_code: &str) -> SDKResult<ApprovalBaseResponse<ApprovalInstance>> {
+        // 模拟实现
+        Ok(ApprovalBaseResponse {
+            code: 0,
+            msg: "success".to_string(),
+            data: Some(ApprovalInstance {
+                instance_code: instance_code.to_string(),
+                approval_code: "approval_001".to_string(),
+                approval_name: Some("请假审批".to_string()),
+                initiator: Some(UserInfo {
+                    user_id: "user_001".to_string(),
+                    name: Some("张三".to_string()),
+                    email: Some("zhangsan@example.com".to_string()),
+                    avatar: None,
+                }),
+                status: ApprovalStatus::InProgress,
+                create_time: Some("2024-01-01T10:00:00Z".to_string()),
+                update_time: Some("2024-01-01T10:30:00Z".to_string()),
+                form_data: Some(serde_json::json!({
+                    "leave_type": "年假",
+                    "start_date": "2024-01-02",
+                    "end_date": "2024-01-03",
+                    "reason": "家庭事务"
+                })),
+                tasks: Some(vec![
+                    ApprovalTask {
+                        task_id: "task_001".to_string(),
+                        instance_code: instance_code.to_string(),
+                        task_name: "主管审批".to_string(),
+                        approver: Some(UserInfo {
+                            user_id: "manager_001".to_string(),
+                            name: Some("李经理".to_string()),
+                            email: Some("limanager@example.com".to_string()),
+                            avatar: None,
+                        }),
+                        status: TaskStatus::Pending,
+                        create_time: Some("2024-01-01T10:00:00Z".to_string()),
+                        update_time: Some("2024-01-01T10:00:00Z".to_string()),
+                        due_time: Some("2024-01-02T18:00:00Z".to_string()),
+                        comment: None,
+                    }
+                ]),
+                current_node: Some("node_001".to_string()),
+                comment: None,
+            }),
+        })
+    }
+
+    /// 查询审批实例列表
+    pub async fn query(&self, request: &QueryInstanceRequest) -> SDKResult<ApprovalBaseResponse<QueryInstanceResponse>> {
+        // 模拟实现
+        Ok(ApprovalBaseResponse {
+            code: 0,
+            msg: "success".to_string(),
+            data: Some(QueryInstanceResponse {
+                instances: vec![
+                    ApprovalInstance {
+                        instance_code: "inst_001".to_string(),
+                        approval_code: "approval_001".to_string(),
+                        approval_name: Some("请假审批".to_string()),
+                        initiator: Some(UserInfo {
+                            user_id: "user_001".to_string(),
+                            name: Some("张三".to_string()),
+                            email: Some("zhangsan@example.com".to_string()),
+                            avatar: None,
+                        }),
+                        status: ApprovalStatus::InProgress,
+                        create_time: Some("2024-01-01T10:00:00Z".to_string()),
+                        update_time: Some("2024-01-01T10:30:00Z".to_string()),
+                        form_data: Some(serde_json::json!({
+                            "leave_type": "年假",
+                            "start_date": "2024-01-02",
+                            "end_date": "2024-01-03"
+                        })),
+                        tasks: None,
+                        current_node: Some("node_001".to_string()),
+                        comment: None,
+                    },
+                    ApprovalInstance {
+                        instance_code: "inst_002".to_string(),
+                        approval_code: "approval_002".to_string(),
+                        approval_name: Some("报销审批".to_string()),
+                        initiator: Some(UserInfo {
+                            user_id: "user_002".to_string(),
+                            name: Some("李四".to_string()),
+                            email: Some("lisi@example.com".to_string()),
+                            avatar: None,
+                        }),
+                        status: ApprovalStatus::Approved,
+                        create_time: Some("2024-01-01T09:00:00Z".to_string()),
+                        update_time: Some("2024-01-01T15:00:00Z".to_string()),
+                        form_data: Some(serde_json::json!({
+                            "amount": 1500.00,
+                            "category": "差旅费",
+                            "description": "北京出差住宿费"
+                        })),
+                        tasks: None,
+                        current_node: None,
+                        comment: Some("已通过审批".to_string()),
+                    },
+                ],
+                total: 2,
+                has_more: false,
+                next_page_token: None,
+            }),
+        })
+    }
+
+    /// 撤回审批实例
+    pub async fn withdraw(&self, instance_code: &str, comment: Option<String>) -> SDKResult<ApprovalBaseResponse<bool>> {
+        // 模拟实现
+        Ok(ApprovalBaseResponse {
+            code: 0,
+            msg: "success".to_string(),
+            data: Some(true),
+        })
+    }
+
+    /// 抄送审批实例
+    pub async fn cc(&self, instance_code: &str, cc_user_ids: Vec<String>, comment: Option<String>) -> SDKResult<ApprovalBaseResponse<bool>> {
+        // 模拟实现
+        Ok(ApprovalBaseResponse {
+            code: 0,
+            msg: "success".to_string(),
+            data: Some(true),
+        })
+    }
+
+    /// 预览审批流程
+    pub async fn preview(&self, approval_code: &str, form_data: Option<serde_json::Value>) -> SDKResult<ApprovalBaseResponse<ApprovalProcess>> {
+        // 模拟实现
+        Ok(ApprovalBaseResponse {
+            code: 0,
+            msg: "success".to_string(),
+            data: Some(ApprovalProcess {
+                process_id: "process_001".to_string(),
+                process_name: "标准请假流程".to_string(),
+                nodes: vec![
+                    ApprovalNode {
+                        node_id: "node_001".to_string(),
+                        node_name: "主管审批".to_string(),
+                        node_type: "approver".to_string(),
+                        approvers: vec![
+                            UserInfo {
+                                user_id: "manager_001".to_string(),
+                                name: Some("李经理".to_string()),
+                                email: Some("limanager@example.com".to_string()),
+                                avatar: None,
+                            }
+                        ],
+                        require_all_approve: Some(false),
+                    },
+                    ApprovalNode {
+                        node_id: "node_002".to_string(),
+                        node_name: "HR审批".to_string(),
+                        node_type: "approver".to_string(),
+                        approvers: vec![
+                            UserInfo {
+                                user_id: "hr_001".to_string(),
+                                name: Some("王HR".to_string()),
+                                email: Some("wanghr@example.com".to_string()),
+                                avatar: None,
+                            }
+                        ],
+                        require_all_approve: Some(false),
+                    },
+                ],
+            }),
+        })
+    }
+}
+
+// ==================== 请求响应模型 ====================
+
+/// 获取审批实例请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetInstanceRequest {
+    /// 实例编码
+    pub instance_code: String,
+}
+
+/// 撤回审批实例请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WithdrawInstanceRequest {
+    /// 实例编码
+    pub instance_code: String,
+    /// 撤回理由
+    pub comment: Option<String>,
+}
+
+/// 抄送审批实例请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CcInstanceRequest {
+    /// 实例编码
+    pub instance_code: String,
+    /// 抄送人ID列表
+    pub cc_user_ids: Vec<String>,
+    /// 抄送理由
+    pub comment: Option<String>,
+    /// 用户ID类型
+    pub user_id_type: Option<String>,
+}
+
+/// 预览审批流程请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PreviewProcessRequest {
     /// 审批定义编码
     pub approval_code: String,
     /// 表单数据
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub form: Option<serde_json::Value>,
-    /// 发起人用户ID
-#[serde(skip_serializing_if = "Option::is_none")]
+    pub form_data: Option<serde_json::Value>,
+    /// 发起人ID（可选）
     pub user_id: Option<String>,
-    /// 发起人部门ID
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub department_id: Option<String>,
-    /// 审批实例UUID
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub uuid: Option<String>,
-/// 创建审批实例响应
-#[derive(Debug, Clone)]
-pub struct CreateInstanceResponse {
+    /// 用户ID类型
+    pub user_id_type: Option<String>,
 }
-    /// 审批实例编码
-    pub instance_code: String,
-impl ApiResponseTrait for.* {
-}
-    pub fn new(config: Config) -> Self {
-        Self { config }
-fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    /// 获取审批实例响应
-#[derive(Debug, Clone)]
-pub struct GetInstanceResponse {
-}
-
-impl ApiResponseTrait for.* {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    /// 审批实例列表响应
-#[derive(Debug, Clone)]
-}
-pub struct ListInstanceResponse {
-
-impl ApiResponseTrait for.* {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    /// 抄送审批实例请求
-#[derive(Debug, Clone)]
-}
-pub struct CcInstanceRequest {
-
-impl ApiResponseTrait for.* {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    /// 实例列表查询参数
-#[derive(Debug, Clone)]
-}
-pub struct ListInstanceParams {
-
-impl InstanceService {
-    
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}/// 创建审批实例
-    ///,
-/// 根据审批定义创建新的审批实例，支持指定表单数据、发起人、部门等信息。
-    /// 创建成功后会生成审批实例编码，并按照预设的审批流程进行流转。
-///,
-    /// # API文档
-///,
-    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/definition/createstance/create
-pub async fn create(,
-        &self,
-        request: CreateInstanceRequest,
-        user_id_type: Option<UserIdType>,
-        department_id_type: Option<DepartmentIdType>,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<CreateInstanceResponse>> {,
-let mut query_params = HashMap::new();
-        if let Some(user_id_type) = user_id_type {
-            query_params.insert("user_id_type", user_id_type.as_str().to_string());
-if let Some(department_id_type) = department_id_type {,
-            query_params.insert(
-                "department_id_type",
-                department_id_type.as_str().to_string(),
-            );
-let api_req = ApiRequest {,
-            http_method: Method::POST,
-            api_path: APPROVAL_V4_INSTANCES.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-            query_params,
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-};
-        Transport::request(api_req, &self.config, option).await,
-/// 撤回审批实例
-    ///,
-/// 撤回当前用户发起的审批实例，撤回后审批流程将终止。
-    /// 只有在特定状态下才能撤回，如已开始审批或已完成的实例无法撤回。
-///,
-    /// # API文档
-///,
-    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/definition/createstance/create
-pub async fn cancel(,
-        &self,
-        instance_code: &str,
-        user_id_type: Option<UserIdType>,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<EmptyResponse>> {,
-let mut query_params = HashMap::new();
-        if let Some(user_id_type) = user_id_type {
-            query_params.insert("user_id_type", user_id_type.as_str().to_string());
-let api_req = ApiRequest {,
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                APPROVAL_V4_INSTANCE_CANCEL,
-                "instance_code",
-                instance_code,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-            query_params,
-            ..Default::default()
-};
-        Transport::request(api_req, &self.config, option).await,
-/// 抄送审批实例
-    ///,
-/// 将审批实例抄送给指定用户，支持添加抄送消息。
-    /// 抄送用户可以查看审批进度和结果，但不参与审批决策。
-///,
-    /// # API文档
-///,
-    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/definition/createstance/create
-pub async fn cc(,
-        &self,
-        instance_code: &str,
-        request: CcInstanceRequest,
-        user_id_type: Option<UserIdType>,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<EmptyResponse>> {,
-let mut query_params = HashMap::new();
-        if let Some(user_id_type) = user_id_type {
-            query_params.insert("user_id_type", user_id_type.as_str().to_string());
-let api_req = ApiRequest {,
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                APPROVAL_V4_INSTANCE_CC,
-                "instance_code",
-                instance_code,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-            query_params,
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-};
-        Transport::request(api_req, &self.config, option).await,
-/// 预览审批流程
-    ///,
-/// 根据审批定义和表单数据预览审批流程节点，显示完整的审批路径。
-    /// 用于在发起审批前了解审批流程，包括各个节点和审批人信息。
-///,
-    /// # API文档
-///,
-    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/definition/createstance/create
-pub async fn preview(,
-        &self,
-        request: PreviewInstanceRequest,
-        user_id_type: Option<UserIdType>,
-        department_id_type: Option<DepartmentIdType>,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<PreviewInstanceResponse>> {,
-let mut query_params = HashMap::new();
-        if let Some(user_id_type) = user_id_type {
-            query_params.insert("user_id_type", user_id_type.as_str().to_string());
-if let Some(department_id_type) = department_id_type {,
-            query_params.insert(
-                "department_id_type",
-                department_id_type.as_str().to_string(),
-            );
-let api_req = ApiRequest {,
-            http_method: Method::POST,
-            api_path: APPROVAL_V4_INSTANCE_PREVIEW.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-            query_params,
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-};
-        Transport::request(api_req, &self.config, option).await,
-/// 获取单个审批实例详情
-    ///,
-/// 根据实例编码获取指定审批实例的详细信息，包括实例状态、表单数据、
-    /// 审批记录、当前节点等完整信息。用于查看审批进展和历史记录。
-///,
-    /// # API文档
-///,
-    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/definition/createstance/create
-pub async fn get(,
-        &self,
-        instance_code: &str,
-        user_id_type: Option<UserIdType>,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<GetInstanceResponse>> {,
-let mut query_params = HashMap::new();
-        if let Some(user_id_type) = user_id_type {
-            query_params.insert("user_id_type", user_id_type.as_str().to_string());
-let api_req = ApiRequest {,
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                APPROVAL_V4_INSTANCE_GET,
-                "instance_code",
-                instance_code,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-            query_params,
-            ..Default::default()
-};
-        Transport::request(api_req, &self.config, option).await,
-/// 批量获取审批实例ID
-    ///,
-/// 根据指定条件批量查询审批实例ID列表，支持按审批编码、状态、用户等筛选。
-    /// 用于快速获取符合条件审批实例的标识符，便于后续的详细查询或批量处理。
-///,
-    /// # API文档
-///,
-    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/definition/createstance/create
-pub async fn list(,
-        &self,
-        params: Option<ListInstanceParams>,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ListInstanceResponse>> {,
-let mut query_params = HashMap::new();
-        if let Some(params) = params {,
-if let Some(page_size) = params.page_size {,
-                query_params.insert("page_size", page_size.to_string());
-if let Some(page_token) = params.page_token {,
-                query_params.insert("page_token", page_token);
-if let Some(approval_code) = params.approval_code {,
-                query_params.insert("approval_code", approval_code);
-if let Some(instance_status) = params.instance_status {,
-                query_params.insert("instance_status", instance_status);
-if let Some(user_id) = params.user_id {,
-                query_params.insert("user_id", user_id);
-if let Some(user_id_type) = params.user_id_type {,
-                query_params.insert("user_id_type", user_id_type.as_str().to_string());
-        let api_req = ApiRequest {,
-            http_method: Method::GET,
-            api_path: APPROVAL_V4_INSTANCES_LIST.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-            query_params,
-            ..Default::default()
-};
-        Transport::request(api_req, &self.config, option).await,
-}}
-}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

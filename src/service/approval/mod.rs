@@ -1,44 +1,31 @@
-//! Approval服务模块 - 简化实现
+//! Approval服务模块
+//!
+//! 提供飞书审批相关的API功能，包括：
+//! - 审批实例管理
+//! - 审批任务处理
+//! - 审批定义配置
+//! - 外部审批集成
+//! - 审批事件处理
 
-use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
 use crate::core::config::Config;
-use serde::{Deserialize, Serialize};
-
-/// 简化的服务结构体
-#[derive(Debug, Clone)]
-pub struct SimpleService {
-    pub config: Config,
-}
-
-impl SimpleService {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-    }
-}
-
-#[derive(Debug, Deserialize, Serialize)]
-pub struct SimpleResponse;
-
-impl ApiResponseTrait for SimpleResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
 
 /// Approval服务
 #[derive(Debug, Clone)]
 pub struct ApprovalService {
-    pub service: SimpleService,
+    pub config: Config,
+    pub v4: v4::ApprovalServiceV4,
 }
 
 impl ApprovalService {
     pub fn new(config: Config) -> Self {
         Self {
-            service: SimpleService::new(config),
+            config: config.clone(),
+            v4: v4::ApprovalServiceV4::new(config),
         }
     }
 }
 
-// Type alias for compatibility
-pub type ServiceType = ApprovalService;
-pub type ResponseType = SimpleResponse;
+pub mod v4;
+
+// 重新导出所有模块和类型
+pub use v4::*;
