@@ -11,12 +11,12 @@ pub mod event;
 pub mod prelude {
     pub use open_lark_core::*;
     // Board module exports
-    pub use crate::board::BoardService;
     pub use crate::board::v1::{
         CreateWhiteboardNodeRequest, DownloadWhiteboardAsImageRequest, GetWhiteboardThemeRequest,
         ListWhiteboardNodesRequest,
     };
+    pub use crate::board::BoardService;
     // Event module exports
-    pub use crate::event::EventService;
     pub use crate::event::v1::GetOutboundIpRequest;
+    pub use crate::event::EventService;
 }
