@@ -12,15 +12,19 @@ use crate::core::config::Config;
 pub struct TaskService {
     pub config: Config,
     pub v1: v1::TaskServiceV1,
+    pub v2: v2::TaskServiceV2,
 }
 
 impl TaskService {
     pub fn new(config: Config) -> Self {
         Self {
             config: config.clone(),
-            v1: v1::TaskServiceV1::new(config),
+            v1: v1::TaskServiceV1::new(config.clone()),
+            v2: v2::TaskServiceV2::new(config),
         }
     }
 }
 
+pub mod models;
 pub mod v1;
+pub mod v2;
