@@ -16,6 +16,8 @@ use crate::service::ai::AiService;
 use crate::service::aily::AilyService;
 #[cfg(feature = "app_engine")]
 use crate::service::app_engine::AppengineService;
+#[cfg(feature = "attendance")]
+use crate::service::attendance::AttendanceService;
 #[cfg(feature = "auth")]
 use crate::service::auth::AuthService;
 #[cfg(feature = "authentication")]
@@ -73,6 +75,8 @@ pub struct LarkClient {
     pub aily: AilyService,
     #[cfg(feature = "app_engine")]
     pub app_engine: AppengineService,
+    #[cfg(feature = "attendance")]
+    pub attendance: AttendanceService,
     #[cfg(feature = "authentication")]
     pub auth: AuthenticationService,
     #[cfg(feature = "bot")]
@@ -121,6 +125,8 @@ impl LarkClient {
             aily: AilyService::new(config.clone()),
             #[cfg(feature = "app_engine")]
             app_engine: AppengineService::new(config.clone()),
+            #[cfg(feature = "attendance")]
+            attendance: AttendanceService::new(config.clone()),
             #[cfg(feature = "authentication")]
             auth: AuthenticationService::new(config.clone()),
             #[cfg(feature = "bot")]

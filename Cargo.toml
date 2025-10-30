@@ -680,6 +680,11 @@ name = "im_file_image_builder_pattern"
 path = "examples/api/im_file_image_builder_pattern.rs"
 required-features = ["im"]
 
+[[example]]
+name = "attendance_demo"
+path = "examples/api/attendance_demo.rs"
+required-features = ["attendance"]
+
 # ===========================================
 # Benchmarks
 # ===========================================

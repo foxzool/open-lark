@@ -1,44 +1,28 @@
-//! Attendance服务模块 - 简化实现
+//! Attendance服务模块
+//!
+//! 提供飞书考勤相关的API功能，包括：
+//! - 班次管理
+//! - 考勤任务查询
+//! - 考勤统计数据
+//! - 请假管理
+//! - 考勤审批
 
-use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
 use crate::core::config::Config;
-use serde::{Deserialize, Serialize};
-
-/// 简化的服务结构体
-#[derive(Debug, Clone)]
-pub struct SimpleService {
-    pub config: Config,
-}
-
-impl SimpleService {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-    }
-}
-
-#[derive(Debug, Deserialize, Serialize)]
-pub struct SimpleResponse;
-
-impl ApiResponseTrait for SimpleResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
 
 /// Attendance服务
 #[derive(Debug, Clone)]
 pub struct AttendanceService {
-    pub service: SimpleService,
+    pub config: Config,
+    pub v1: v1::AttendanceServiceV1,
 }
 
 impl AttendanceService {
     pub fn new(config: Config) -> Self {
         Self {
-            service: SimpleService::new(config),
+            config: config.clone(),
+            v1: v1::AttendanceServiceV1::new(config),
         }
     }
 }
 
-// Type alias for compatibility
-pub type ServiceType = AttendanceService;
-pub type ResponseType = SimpleResponse;
+pub mod v1;
