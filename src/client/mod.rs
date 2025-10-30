@@ -36,6 +36,8 @@ use crate::service::group::GroupService;
 use crate::service::im::ImService;
 #[cfg(feature = "search")]
 use crate::service::search::SearchService;
+#[cfg(feature = "compensation-management")]
+use open_lark_hr_suite::compensation_management::CompensationManagementService;
 
 /// 飞书开放平台SDK主客户端
 ///
@@ -79,6 +81,8 @@ pub struct LarkClient {
     pub im: ImService,
     #[cfg(feature = "search")]
     pub search: SearchService,
+    #[cfg(feature = "compensation-management")]
+    pub compensation_management: CompensationManagementService,
 }
 
 impl LarkClient {
@@ -118,7 +122,9 @@ impl LarkClient {
             #[cfg(feature = "im")]
             im: ImService::new(config.clone()),
             #[cfg(feature = "search")]
-            search: SearchService::new(config),
+            search: SearchService::new(config.clone()),
+            #[cfg(feature = "compensation-management")]
+            compensation_management: CompensationManagementService::new(config),
         }
     }
 
