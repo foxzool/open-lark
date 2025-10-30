@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
 /// 多维表格应用信息
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct BitableApp {
     /// 应用访问令牌
 #[serde(rename = "app_token")]
@@ -31,7 +31,7 @@ pub struct BitableApp {
     pub is_archived: bool,
 }
 /// 创建多维表格请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct CreateAppRequest {
     /// 应用名称
 #[serde(rename = "name")]
@@ -44,7 +44,7 @@ pub struct CreateAppRequest {
     pub icon: Option<String>,
 }
 /// 复制多维表格请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct CopyAppRequest {
     /// 复制后的应用名称
 #[serde(rename = "name")]
@@ -57,7 +57,7 @@ pub struct CopyAppRequest {
     pub with_data: Option<bool>,
 }
 /// 更新多维表格请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct UpdateAppRequest {
     /// 应用名称
 #[serde(rename = "name")]
@@ -70,7 +70,7 @@ pub struct UpdateAppRequest {
     pub is_archived: Option<bool>,
 }
 /// 数据表信息
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct BitableTable {
     /// 数据表ID
 #[serde(rename = "table_id")]
@@ -95,14 +95,14 @@ pub struct BitableTable {
     pub record_count: i32,
 }
 /// 创建数据表请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct CreateTableRequest {
     /// 数据表名称
 #[serde(rename = "table")]
     pub table: TableInfo,
 }
 /// 数据表信息
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct TableInfo {
     /// 数据表名称
 #[serde(rename = "name")]
@@ -115,21 +115,21 @@ pub struct TableInfo {
     pub fields: Option<Vec<FieldInfo>>,
 }
 /// 批量创建数据表请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct BatchCreateTablesRequest {
     /// 数据表列表
 #[serde(rename = "tables")]
     pub tables: Vec<TableInfo>,
 }
 /// 更新数据表请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct UpdateTableRequest {
     /// 数据表名称
 #[serde(rename = "name")]
     pub name: Option<String>,
 }
 /// 视图信息
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct BitableView {
     /// 视图ID
 #[serde(rename = "view_id")]
@@ -148,7 +148,7 @@ pub struct BitableView {
     pub update_time: String,
 }
 /// 创建视图请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct CreateViewRequest {
     /// 视图名称
 #[serde(rename = "name")]
@@ -158,14 +158,14 @@ pub struct CreateViewRequest {
     pub view_type: String,
 }
 /// 更新视图请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct UpdateViewRequest {
     /// 视图名称
 #[serde(rename = "name")]
     pub name: Option<String>,
 }
 /// 记录信息
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct BitableRecord {
     /// 记录ID
 #[serde(rename = "record_id")]
@@ -181,21 +181,21 @@ pub struct BitableRecord {
     pub update_time: String,
 }
 /// 创建记录请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct CreateRecordRequest {
     /// 记录字段
 #[serde(rename = "fields")]
     pub fields: serde_json::Value,
 }
 /// 更新记录请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct UpdateRecordRequest {
     /// 记录字段
 #[serde(rename = "fields")]
     pub fields: serde_json::Value,
 }
 /// 查询记录请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct SearchRecordsRequest {
     /// 分页信息
 #[serde(rename = "page_size")]
@@ -214,7 +214,7 @@ pub struct SearchRecordsRequest {
     pub field_names: Option<Vec<String>>,
 }
 /// 排序信息
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct SortInfo {
     /// 字段名
 #[serde(rename = "field_name")]
@@ -224,7 +224,7 @@ pub struct SortInfo {
     pub desc: Option<bool>,
 }
 /// 过滤条件
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct FilterInfo {
     /// 过滤条件组
 #[serde(rename = "conjunction")]
@@ -234,7 +234,7 @@ pub struct FilterInfo {
     pub conditions: Vec<FilterCondition>,
 }
 /// 过滤条件
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct FilterCondition {
     /// 字段名
 #[serde(rename = "field_name")]
@@ -247,14 +247,14 @@ pub struct FilterCondition {
     pub value: serde_json::Value,
 }
 /// 批量操作记录请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct BatchRecordsRequest {
     /// 记录列表
 #[serde(rename = "records")]
     pub records: Vec<RecordData>,
 }
 /// 记录数据
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct RecordData {
     /// 记录ID（更新时需要）
 #[serde(rename = "record_id")]
@@ -264,7 +264,7 @@ pub struct RecordData {
     pub fields: serde_json::Value,
 }
 /// 批量获取记录请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct BatchGetRecordsRequest {
     /// 记录ID列表
 #[serde(rename = "record_ids")]
@@ -274,7 +274,7 @@ pub struct BatchGetRecordsRequest {
     pub field_names: Option<Vec<String>>,
 }
 /// 字段信息
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct FieldInfo {
     /// 字段名称
 #[serde(rename = "name")]
@@ -290,7 +290,7 @@ pub struct FieldInfo {
     pub is_required: Option<bool>,
 }
 /// 创建字段请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct CreateFieldRequest {
     /// 字段名称
 #[serde(rename = "field_name")]
@@ -303,7 +303,7 @@ pub struct CreateFieldRequest {
     pub property: Option<serde_json::Value>,
 }
 /// 更新字段请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct UpdateFieldRequest {
     /// 字段名称
 #[serde(rename = "field_name")]
@@ -313,7 +313,7 @@ pub struct UpdateFieldRequest {
     pub property: Option<serde_json::Value>,
 }
 /// 仪表盘信息
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct BitableDashboard {
     /// 仪表盘ID
 #[serde(rename = "dashboard_id")]
@@ -329,14 +329,14 @@ pub struct BitableDashboard {
     pub update_time: String,
 }
 /// 复制仪表盘请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct CopyDashboardRequest {
     /// 仪表盘名称
 #[serde(rename = "name")]
     pub name: Option<String>,
 }
 /// 表单信息
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct BitableForm {
     /// 表单ID
 #[serde(rename = "form_id")]
@@ -355,7 +355,7 @@ pub struct BitableForm {
     pub questions: Vec<FormQuestion>,
 }
 /// 表单问题
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct FormQuestion {
     /// 问题ID
 #[serde(rename = "question_id")]
@@ -374,7 +374,7 @@ pub struct FormQuestion {
     pub required: bool,
 }
 /// 更新表单请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct UpdateFormRequest {
     /// 表单名称
 #[serde(rename = "name")]
@@ -384,7 +384,7 @@ pub struct UpdateFormRequest {
     pub questions: Option<Vec<FormQuestion>>,
 }
 /// 更新表单问题请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct UpdateFormQuestionRequest {
     /// 问题名称
 #[serde(rename = "name")]
@@ -397,7 +397,7 @@ pub struct UpdateFormQuestionRequest {
     pub required: Option<bool>,
 }
 /// 角色信息
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct BitableRole {
     /// 角色ID
 #[serde(rename = "role_id")]
@@ -419,7 +419,7 @@ pub struct BitableRole {
     pub update_time: String,
 }
 /// 创建角色请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct CreateRoleRequest {
     /// 角色名称
 #[serde(rename = "name")]
@@ -432,7 +432,7 @@ pub struct CreateRoleRequest {
     pub permissions: Option<Vec<String>>,
 }
 /// 更新角色请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct UpdateRoleRequest {
     /// 角色名称
 #[serde(rename = "name")]
@@ -445,7 +445,7 @@ pub struct UpdateRoleRequest {
     pub permissions: Option<Vec<String>>,
 }
 /// 角色成员信息
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct RoleMember {
     /// 成员ID
 #[serde(rename = "member_id")]
@@ -461,7 +461,7 @@ pub struct RoleMember {
     pub add_time: String,
 }
 /// 添加角色成员请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct AddRoleMemberRequest {
     /// 成员ID列表
 #[serde(rename = "member_ids")]
@@ -471,14 +471,14 @@ pub struct AddRoleMemberRequest {
     pub member_type: String,
 }
 /// 批量添加角色成员请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct BatchAddRoleMembersRequest {
     /// 成员列表
 #[serde(rename = "members")]
     pub members: Vec<RoleMemberInfo>,
 }
 /// 角色成员信息
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct RoleMemberInfo {
     /// 成员ID
 #[serde(rename = "member_id")]
@@ -488,7 +488,7 @@ pub struct RoleMemberInfo {
     pub member_type: String,
 }
 /// 自动化流程信息
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct BitableWorkflow {
     /// 流程ID
 #[serde(rename = "workflow_id")]
@@ -507,15 +507,15 @@ pub struct BitableWorkflow {
     pub update_time: String,
 }
 /// 更新自动化流程请求
-#[derive(.*?)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct UpdateWorkflowRequest {
     /// 流程状态
 #[serde(rename = "status")]
     pub status: String,
 }
 /// 通用响应结构
-#[derive(.*?)]
-pub struct BaseResponse<T> {,
+#[derive(Debug, Deserialize, Serialize)]
+pub struct pub struct BaseResponse<T> {, {
     /// 响应码
     pub code: i32,
     /// 响应消息
@@ -524,8 +524,8 @@ pub struct BaseResponse<T> {,
     pub data: Option<T>,
 }
 /// 分页响应结构
-#[derive(.*?)]
-pub struct PaginatedResponse<T> {,
+#[derive(Debug, Deserialize, Serialize)]
+pub struct pub struct PaginatedResponse<T> {, {
     /// 响应码
     pub code: i32,
     /// 响应消息
@@ -534,8 +534,8 @@ pub struct PaginatedResponse<T> {,
     pub data: Option<PaginatedData<T>>,
 }
 /// 分页数据
-#[derive(.*?)]
-pub struct PaginatedData<T> {,
+#[derive(Debug, Deserialize, Serialize)]
+pub struct pub struct PaginatedData<T> {, {
     /// 数据项
     pub items: Option<Vec<T>>,
     /// 分页令牌
@@ -544,75 +544,75 @@ pub struct PaginatedData<T> {,
     pub has_more: Option<bool>,
 }
 // 为主要模型实现ApiResponseTrait
-impl ApiResponseTrait for.* {
-fn data_format() -> ResponseFormat {,
+impl ApiResponseTrait for SimpleResponse {
+
         ResponseFormat::Data
 }
 }
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+impl ApiResponseTrait for SimpleResponse {
+    
 ResponseFormat::Data
     }
 }
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+impl ApiResponseTrait for SimpleResponse {
+    
 ResponseFormat::Data
     }
 }
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+impl ApiResponseTrait for SimpleResponse {
+    
 ResponseFormat::Data
     }
 }
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+impl ApiResponseTrait for SimpleResponse {
+    
 ResponseFormat::Data
     }
 }
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+impl ApiResponseTrait for SimpleResponse {
+    
 ResponseFormat::Data
     }
 }
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+impl ApiResponseTrait for SimpleResponse {
+    
 ResponseFormat::Data
     }
 }
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+impl ApiResponseTrait for SimpleResponse {
+    
 ResponseFormat::Data
     }
 }
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+impl ApiResponseTrait for SimpleResponse {
+    
 ResponseFormat::Data
     }
 }
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+impl ApiResponseTrait for SimpleResponse {
+    
 ResponseFormat::Data
     }
 }
-impl ApiResponseTrait for.* {
-    fn data_format() -> ResponseFormat {,
+impl ApiResponseTrait for SimpleResponse {
+    
 ResponseFormat::Data
     }
 }
 // 为集合类型实现
-impl<T: ApiResponseTrait> ApiResponseTrait for Vec<T> {,
-fn data_format() -> ResponseFormat {,
+impl<T: ApiResponseTrait> ApiResponseTrait for Vec<T> {
+
         ResponseFormat::Data
 }
 }
-impl<T: ApiResponseTrait> ApiResponseTrait for PaginatedData<T> {,
-    fn data_format() -> ResponseFormat {,
+impl<T: ApiResponseTrait> ApiResponseTrait for PaginatedData<T> {
+    
 ResponseFormat::Data
     }
 }
 // 为空类型实现
-impl ApiResponseTrait for.* {
-fn data_format() -> ResponseFormat {,
+impl ApiResponseTrait for SimpleResponse {
+
         ResponseFormat::Data
 }
 }

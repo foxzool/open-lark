@@ -29,11 +29,17 @@ impl Service for AcsService {
         &self._config
     }
 
-    fn service_name() -> &'static str {
+    fn service_name() -> &'static str
+    where
+        Self: Sized,
+    {
         "acs"
     }
 
-    fn service_version() -> &'static str {
+    fn version() -> &'static str
+    where
+        Self: Sized,
+    {
         "v1"
     }
 }
