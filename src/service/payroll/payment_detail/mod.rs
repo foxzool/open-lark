@@ -1,177 +1,313 @@
 use reqwest::Method;
-use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
+use open_lark_core::core::api_req::ApiRequest;
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpointshttp::Transport,
+        endpoints::{EndpointBuilder, Endpoints},
+        http::Transport,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
+    },
     service::payroll::models::{
         PageResponse, PaymentDetail, PaymentDetailListRequest, PaymentDetailQueryRequest,
+    },
 };
+
 /// 发薪明细服务
 pub struct PaymentDetailService {
+    pub config: Config,
 }
 
-impl ApiResponseTrait for.* {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    /// 发薪明细批量查询响应
+/// 发薪明细列表响应
 #[derive(Debug, Clone)]
+pub struct PaymentDetailListResponse {
+    /// 发薪明细列表
+    pub items: Vec<PaymentDetail>,
+    /// 分页信息
+    pub page: PageResponse<PaymentDetail>,
 }
-pub struct PaymentDetailQueryResponse {
 
-impl ApiResponseTrait for.* {
+/// 发薪明细响应
+#[derive(Debug, Clone)]
+pub struct PaymentDetailResponse {
+    /// 发薪明细信息
+    pub data: PaymentDetail,
+}
+
+impl Service for PaymentDetailService {
+    fn get_config(&self) -> &Config {
+        &self.config
+    }
+}
+
+impl PaymentDetailService {
+    /// 创建发薪明细服务实例
     pub fn new(config: Config) -> Self {
         Self { config }
-fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
     }
-impl PaymentDetailService {
-    pub fn new(config: Config) -> Self {
-        Self { config 
-}
-}/// 查询发薪活动明细列表
-    ///,
-/// 该接口用于查询指定发薪活动的明细列表，支持按员工ID筛选、
-    /// 分页查询等功能。可以获取员工的发薪项目详情、金额信息、
-/// 发薪状态等完整的发薪明细数据。
-    ///,
-/// # 参数
-    ///,
-/// - `request`: 发薪明细列表查询请求参数，包括：
-    ///   - `payment_activity_id`: 发薪活动ID（必填）
-///   - `page_size`: 分页大小，最大值100
-    ///   - `page_token`: 分页标记
-///   - `employee_id`: 员工ID筛选
-    ///   - `user_id_type`: 用户ID类型
-///   - `department_id_type`: 部门ID类型
-    /// - `option`: 可选的请求配置
-///,
-    /// # 返回值
-///,
-    /// 返回分页的发薪明细列表，包括：
-/// - 员工基本信息（姓名、工号、部门、职位等）
-    /// - 发薪项目详情（算薪项、金额、货币类型等）
-/// - 发薪状态和时间信息
-    /// - 总发薪金额和备注信息
-/// - 分页信息（是否有更多数据、下一页标记）
-    ///,
-/// # 示例
-    ///,
-/// ```ignore
-    /// use open_lark::service::payroll::models::PaymentDetailListRequest;
-///,
-    /// let request = PaymentDetailListRequest {
-    ///     payment_activity_id: "activity_123456".to_string()
-    ///     page_size: Some(50)
-    ///     page_token: None
-    ///     employee_id: Some("emp_789".to_string())
-    ///     user_id_type: Some("open_id".to_string())
-    ///     department_id_type: Some("open_department_id".to_string())
-    /// };
-///,
-    /// let response = client.payroll.payment_detail.list_details(request None).await?;
-/// ```
-    pub async fn list_details(
-        &self,
-        request: PaymentDetailListRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<PaymentDetailListResponse>> {,
-let mut api_req = ApiRequest {,
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                Endpoints::PAYROLL_V1_PAYMENT_DETAILS,
-                "payment_activity_id",
-                &request.payment_activity_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant]
-            body: vec![]
-            ..Default::default()
-};
-// 添加查询参数
-        if let Some(page_size) = request.page_size {,
-api_req
-                .query_params
-                .insert("page_size", page_size.to_string());
-if let Some(page_token) = request.page_token {,
-            api_req.query_params.insert("page_token", page_token);
-if let Some(employee_id) = request.employee_id {,
-            api_req.query_params.insert("employee_id", employee_id);
-if let Some(user_id_type) = request.user_id_type {,
-            api_req.query_params.insert("user_id_type", user_id_type);
-if let Some(department_id_type) = request.department_id_type {,
-            api_req
-.query_params
-                .insert("department_id_type", department_id_type);
-        Transport::request(api_req, &self.config, option).await,
-/// 批量查询发薪明细
-    ///,
-/// 该接口用于批量查询指定员工的发薪明细信息，支持指定查询字段、
-    /// 批量获取多个员工的发薪数据。适用于批量数据导出和报表生成场景。
-///,
+
+    /// 查询发薪明细列表
+    ///
+    /// # API文档
+    ///
+    /// 根据发薪活动ID查询员工的发薪明细列表，支持分页和筛选功能。
+    ///
     /// # 参数
-///,
-    /// - `request`: 发薪明细批量查询请求参数，包括：
-///   - `payment_activity_id`: 发薪活动ID（必填）
-    ///   - `employee_ids`: 员工ID列表（必填）
-///   - `user_id_type`: 用户ID类型
-    ///   - `fields`: 查询的字段列表
-/// - `option`: 可选的请求配置
-    ///,
-/// # 返回值
-    ///,
-/// 返回批量查询的发薪明细列表，包括：
-    /// - 指定员工的完整发薪明细信息
-/// - 根据fields参数返回指定字段数据
-    /// - 发薪项目详情和金额统计
-/// - 发薪状态和处理时间
-    ///,
-/// # 示例
-    ///,
-/// ```ignore
-    /// use open_lark::service::payroll::models::PaymentDetailQueryRequest;
-///,
-    /// let request = PaymentDetailQueryRequest {
-    ///     payment_activity_id: "activity_123456".to_string()
-    ///     employee_ids: vec![
-    ///         "emp_001".to_string()
-    ///         "emp_002".to_string()
-    ///         "emp_003".to_string()
-    ///     ]
-    ///     user_id_type: Some("open_id".to_string())
-    ///     fields: Some(vec![
-    ///         "employee_name".to_string()
-    ///         "payment_items".to_string()
-    ///         "total_amount".to_string()
-    ///         "payment_status".to_string()
-    ///     ])
+    ///
+    /// * `request` - 查询请求参数
+    ///
+    /// # 返回值
+    ///
+    /// 返回发薪明细列表和分页信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::payroll::payment_detail::*;
+    ///
+    /// let request = PaymentDetailListRequest {
+    ///     payment_activity_id: "pa_123456".to_string(),
+    ///     page_size: Some(50),
+    ///     page_token: None,
+    ///     employee_id: Some("emp_789".to_string()),
+    ///     user_id_type: Some("open_id".to_string()),
+    ///     department_id_type: Some("open_department_id".to_string()),
     /// };
-///,
-    /// let response = client.payroll.payment_detail.query_details(request None).await?;
-/// ```
-    pub async fn query_details(
+    ///
+    /// let response = service.list_payment_details(&request).await?;
+    /// println!("找到 {} 条发薪明细", response.page.items.len());
+    /// ```
+    pub async fn list_payment_details(
         &self,
-        request: PaymentDetailQueryRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<PaymentDetailQueryResponse>> {,
-let mut api_req = ApiRequest {,
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                Endpoints::PAYROLL_V1_PAYMENT_DETAILS_QUERY,
-                "payment_activity_id",
-                &request.payment_activity_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant]
-            body: serde_json::to_vec(&request).unwrap_or_default()
-            ..Default::default()
-};
-// 添加查询参数
-        if let Some(user_id_type) = request.user_id_type {
-            api_req.query_params.insert("user_id_type", user_id_type);
-        Transport::request(api_req, &self.config, option).await,
+        request: &PaymentDetailListRequest,
+    ) -> SDKResult<BaseResponse<PaymentDetailListResponse>> {
+        let mut query_params = std::collections::HashMap::new();
+        query_params.insert("payment_activity_id".to_string(), request.payment_activity_id.clone());
+
+        if let Some(page_size) = &request.page_size {
+            query_params.insert("page_size".to_string(), page_size.to_string());
+        }
+        if let Some(page_token) = &request.page_token {
+            query_params.insert("page_token".to_string(), page_token.clone());
+        }
+        if let Some(employee_id) = &request.employee_id {
+            query_params.insert("employee_id".to_string(), employee_id.clone());
+        }
+        if let Some(user_id_type) = &request.user_id_type {
+            query_params.insert("user_id_type".to_string(), user_id_type.clone());
+        }
+        if let Some(department_id_type) = &request.department_id_type {
+            query_params.insert("department_id_type".to_string(), department_id_type.clone());
+        }
+
+        let api_req = ApiRequest {
+            method: Method::GET,
+            url: self.config.build_url("/open-apis/payroll/v4/payment_details"),
+            query_params,
+            path_params: std::collections::HashMap::new(),
+            headers: std::collections::HashMap::new(),
+            body: None,
+            access_token_type: AccessTokenType::Tenant,
+        };
+
+        let response = Transport::request(api_req, &self.config).await?;
+        Ok(response.into())
+    }
+
+    /// 批量查询发薪明细
+    ///
+    /// # API文档
+    ///
+    /// 根据员工ID列表批量查询发薪明细，适用于需要查询多个员工薪资的场景。
+    ///
+    /// # 参数
+    ///
+    /// * `request` - 批量查询请求参数
+    ///
+    /// # 返回值
+    ///
+    /// 返回指定员工的发薪明细列表
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::payroll::payment_detail::*;
+    ///
+    /// let request = PaymentDetailQueryRequest {
+    ///     payment_activity_id: "pa_123456".to_string(),
+    ///     employee_ids: vec!["emp_001".to_string(), "emp_002".to_string()],
+    ///     user_id_type: Some("open_id".to_string()),
+    ///     fields: Some(vec!["salary".to_string(), "bonus".to_string()]),
+    /// };
+    ///
+    /// let response = service.query_payment_details(&request).await?;
+    /// println!("查询到 {} 条明细", response.data.items.len());
+    /// ```
+    pub async fn query_payment_details(
+        &self,
+        request: &PaymentDetailQueryRequest,
+    ) -> SDKResult<BaseResponse<PaymentDetailListResponse>> {
+        let mut query_params = std::collections::HashMap::new();
+        query_params.insert("payment_activity_id".to_string(), request.payment_activity_id.clone());
+        query_params.insert("employee_ids".to_string(), request.employee_ids.join(","));
+
+        if let Some(user_id_type) = &request.user_id_type {
+            query_params.insert("user_id_type".to_string(), user_id_type.clone());
+        }
+        if let Some(fields) = &request.fields {
+            query_params.insert("fields".to_string(), fields.join(","));
+        }
+
+        let api_req = ApiRequest {
+            method: Method::GET,
+            url: self.config.build_url("/open-apis/payroll/v4/payment_details/query"),
+            query_params,
+            path_params: std::collections::HashMap::new(),
+            headers: std::collections::HashMap::new(),
+            body: None,
+            access_token_type: AccessTokenType::Tenant,
+        };
+
+        let response = Transport::request(api_req, &self.config).await?;
+        Ok(response.into())
+    }
+
+    /// 获取发薪明细详情
+    ///
+    /// # API文档
+    ///
+    /// 根据发薪活动ID和员工ID获取详细的发薪明细信息。
+    ///
+    /// # 参数
+    ///
+    /// * `payment_activity_id` - 发薪活动ID
+    /// * `employee_id` - 员工ID
+    /// * `user_id_type` - 用户ID类型（可选）
+    ///
+    /// # 返回值
+    ///
+    /// 返回员工的详细发薪明细信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::payroll::payment_detail::*;
+    ///
+    /// let response = service.get_payment_detail("pa_123456", "emp_001", Some("open_id")).await?;
+    /// println!("员工姓名: {:?}", response.data.employee_name);
+    /// println!("总金额: {}", response.data.total_amount.as_ref().unwrap_or(&"0".to_string()));
+    /// ```
+    pub async fn get_payment_detail(
+        &self,
+        payment_activity_id: &str,
+        employee_id: &str,
+        user_id_type: Option<&str>,
+    ) -> SDKResult<BaseResponse<PaymentDetailResponse>> {
+        let mut query_params = std::collections::HashMap::new();
+        query_params.insert("payment_activity_id".to_string(), payment_activity_id.to_string());
+        query_params.insert("employee_id".to_string(), employee_id.to_string());
+
+        if let Some(user_id) = user_id_type {
+            query_params.insert("user_id_type".to_string(), user_id.to_string());
+        }
+
+        let api_req = ApiRequest {
+            method: Method::GET,
+            url: self.config.build_url("/open-apis/payroll/v4/payment_details/detail"),
+            query_params,
+            path_params: std::collections::HashMap::new(),
+            headers: std::collections::HashMap::new(),
+            body: None,
+            access_token_type: AccessTokenType::Tenant,
+        };
+
+        let response = Transport::request(api_req, &self.config).await?;
+        Ok(response.into())
+    }
+
+    /// 导出发薪明细
+    ///
+    /// # API文档
+    ///
+    /// 将发薪明细导出为Excel文件，支持自定义字段和格式。
+    ///
+    /// # 参数
+    ///
+    /// * `payment_activity_id` - 发薪活动ID
+    /// * `employee_ids` - 员工ID列表（可选，不指定则导出全部）
+    /// * `fields` - 导出字段列表（可选）
+    /// * `format` - 导出格式（可选，默认为xlsx）
+    ///
+    /// # 返回值
+    ///
+    /// 返回导出文件的下载链接
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::payroll::payment_detail::*;
+    ///
+    /// let response = service.export_payment_details(
+    ///     "pa_123456",
+    ///     Some(&vec!["emp_001".to_string(), "emp_002".to_string()]),
+    ///     Some(&vec!["employee_name".to_string(), "total_amount".to_string()]),
+    ///     Some("xlsx")
+    /// ).await?;
+    ///
+    /// println!("导出链接: {}", response.data.download_url);
+    /// ```
+    pub async fn export_payment_details(
+        &self,
+        payment_activity_id: &str,
+        employee_ids: Option<&Vec<String>>,
+        fields: Option<&Vec<String>>,
+        format: Option<&str>,
+    ) -> SDKResult<BaseResponse<ExportResponse>> {
+        let mut query_params = std::collections::HashMap::new();
+        query_params.insert("payment_activity_id".to_string(), payment_activity_id.to_string());
+
+        if let Some(employees) = employee_ids {
+            query_params.insert("employee_ids".to_string(), employees.join(","));
+        }
+        if let Some(field_list) = fields {
+            query_params.insert("fields".to_string(), field_list.join(","));
+        }
+        if let Some(fmt) = format {
+            query_params.insert("format".to_string(), fmt.to_string());
+        }
+
+        let api_req = ApiRequest {
+            method: Method::POST,
+            url: self.config.build_url("/open-apis/payroll/v4/payment_details/export"),
+            query_params,
+            path_params: std::collections::HashMap::new(),
+            headers: std::collections::HashMap::new(),
+            body: Some(serde_json::Value::Object(serde_json::Map::new())),
+            access_token_type: AccessTokenType::Tenant,
+        };
+
+        let response = Transport::request(api_req, &self.config).await?;
+        Ok(response.into())
+    }
 }
-}}}}}}}}}}}}}}}}}
+
+/// 导出响应
+#[derive(Debug, Clone)]
+pub struct ExportResponse {
+    /// 下载链接
+    pub download_url: String,
+    /// 文件名
+    pub filename: String,
+    /// 文件大小（字节）
+    pub file_size: u64,
+    /// 过期时间
+    pub expire_time: String,
+}
