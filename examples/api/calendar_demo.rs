@@ -9,8 +9,8 @@
 use open_lark::prelude::*;
 use open_lark::service::calendar::v4::{
     CreateCalendarEventRequest, DeleteCalendarEventRequest, GetCalendarEventRequest,
-    ListCalendarEventsRequest, UpdateCalendarEventRequest, GetPrimaryCalendarRequest,
-    ListCalendarsRequest, TimeInfo, Location, Reminder,
+    GetPrimaryCalendarRequest, ListCalendarEventsRequest, ListCalendarsRequest, Location, Reminder,
+    TimeInfo, UpdateCalendarEventRequest,
 };
 
 #[tokio::main]
@@ -54,15 +54,27 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         reminders: Some(vec![Reminder { minutes: Some(15) }]),
     };
 
-    match client.calendar.v4.create_calendar_event(&create_request).await {
+    match client
+        .calendar
+        .v4
+        .create_calendar_event(&create_request)
+        .await
+    {
         Ok(response) => {
             println!("✅ 日程创建成功");
             if let Some(data) = response.data {
                 println!("   日程ID: {}", data.event_id.unwrap_or_default());
                 println!("   日程标题: {}", data.summary.unwrap_or_default());
-                println!("   日程状态: {:?}", data.status.unwrap_or(open_lark::service::calendar::v4::EventStatus::Confirmed));
+                println!(
+                    "   日程状态: {:?}",
+                    data.status
+                        .unwrap_or(open_lark::service::calendar::v4::EventStatus::Confirmed)
+                );
                 if let Some(start_time) = data.start_time {
-                    println!("   开始时间: {:?}", start_time.timestamp.unwrap_or_default());
+                    println!(
+                        "   开始时间: {:?}",
+                        start_time.timestamp.unwrap_or_default()
+                    );
                 }
                 if let Some(end_time) = data.end_time {
                     println!("   结束时间: {:?}", end_time.timestamp.unwrap_or_default());
@@ -118,10 +130,26 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("   是否有更多: {}", data.has_more);
 
                 for (i, event) in data.events.iter().enumerate() {
-                    println!("\n   {}. {}", i + 1, event.summary.as_ref().unwrap_or(&"未命名日程".to_string()));
-                    println!("      状态: {:?}", event.status.as_ref().unwrap_or(&open_lark::service::calendar::v4::EventStatus::Confirmed));
+                    println!(
+                        "\n   {}. {}",
+                        i + 1,
+                        event.summary.as_ref().unwrap_or(&"未命名日程".to_string())
+                    );
+                    println!(
+                        "      状态: {:?}",
+                        event
+                            .status
+                            .as_ref()
+                            .unwrap_or(&open_lark::service::calendar::v4::EventStatus::Confirmed)
+                    );
                     if let Some(start_time) = &event.start_time {
-                        println!("      开始时间: {:?}", start_time.timestamp.as_ref().unwrap_or(&"未设置".to_string()));
+                        println!(
+                            "      开始时间: {:?}",
+                            start_time
+                                .timestamp
+                                .as_ref()
+                                .unwrap_or(&"未设置".to_string())
+                        );
                     }
                     if let Some(description) = &event.description {
                         println!("      描述: {}", description);
@@ -159,7 +187,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }),
     };
 
-    match client.calendar.v4.update_calendar_event(&update_request).await {
+    match client
+        .calendar
+        .v4
+        .update_calendar_event(&update_request)
+        .await
+    {
         Ok(response) => {
             println!("✅ 日程更新成功");
             if let Some(data) = response.data {
@@ -182,15 +215,28 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         user_id_type: Some("open_id".to_string()),
     };
 
-    match client.calendar.v4.get_primary_calendar(&primary_request).await {
+    match client
+        .calendar
+        .v4
+        .get_primary_calendar(&primary_request)
+        .await
+    {
         Ok(response) => {
             println!("✅ 主日历获取成功");
             if let Some(data) = response.data {
                 println!("   日历ID: {}", data.calendar_id.unwrap_or_default());
                 println!("   日历标题: {}", data.summary.unwrap_or_default());
-                println!("   日历类型: {:?}", data.r#type.unwrap_or(open_lark::service::calendar::v4::CalendarType::Primary));
+                println!(
+                    "   日历类型: {:?}",
+                    data.r#type
+                        .unwrap_or(open_lark::service::calendar::v4::CalendarType::Primary)
+                );
                 println!("   是否主日历: {}", data.is_primary.unwrap_or(false));
-                println!("   角色权限: {:?}", data.role.unwrap_or(open_lark::service::calendar::v4::CalendarRole::Owner));
+                println!(
+                    "   角色权限: {:?}",
+                    data.role
+                        .unwrap_or(open_lark::service::calendar::v4::CalendarRole::Owner)
+                );
             }
         }
         Err(e) => {
@@ -205,7 +251,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         page_token: None,
     };
 
-    match client.calendar.v4.list_calendars(&calendar_list_request).await {
+    match client
+        .calendar
+        .v4
+        .list_calendars(&calendar_list_request)
+        .await
+    {
         Ok(response) => {
             println!("✅ 日历列表获取成功");
             if let Some(data) = response.data {
@@ -214,9 +265,28 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("   是否有更多: {}", data.has_more);
 
                 for (i, calendar) in data.calendars.iter().enumerate() {
-                    println!("\n   {}. {}", i + 1, calendar.summary.as_ref().unwrap_or(&"未命名日历".to_string()));
-                    println!("      类型: {:?}", calendar.r#type.as_ref().unwrap_or(&open_lark::service::calendar::v4::CalendarType::Unknown));
-                    println!("      角色: {:?}", calendar.role.as_ref().unwrap_or(&open_lark::service::calendar::v4::CalendarRole::None));
+                    println!(
+                        "\n   {}. {}",
+                        i + 1,
+                        calendar
+                            .summary
+                            .as_ref()
+                            .unwrap_or(&"未命名日历".to_string())
+                    );
+                    println!(
+                        "      类型: {:?}",
+                        calendar
+                            .r#type
+                            .as_ref()
+                            .unwrap_or(&open_lark::service::calendar::v4::CalendarType::Unknown)
+                    );
+                    println!(
+                        "      角色: {:?}",
+                        calendar
+                            .role
+                            .as_ref()
+                            .unwrap_or(&open_lark::service::calendar::v4::CalendarRole::None)
+                    );
                     if let Some(description) = &calendar.description {
                         println!("      描述: {}", description);
                     }
@@ -234,7 +304,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         event_id: "event_12345".to_string(),
     };
 
-    match client.calendar.v4.delete_calendar_event(&delete_request).await {
+    match client
+        .calendar
+        .v4
+        .delete_calendar_event(&delete_request)
+        .await
+    {
         Ok(response) => {
             println!("✅ 日程删除成功");
             if let Some(data) = response.data {

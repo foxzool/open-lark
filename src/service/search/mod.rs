@@ -1,10 +1,16 @@
-//! Search服务模块 - 简化实现
+//! 搜索服务模块
+//!
+//! 提供企业级的搜索功能，支持多种数据源的搜索和高级查询。
+//! 包含用户搜索、文档搜索等多种搜索场景的完整实现。
 
 use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
 use crate::core::config::Config;
 use serde::{Deserialize, Serialize};
 
-/// 简化的服务结构体
+// 导入V1版本API
+pub mod v1;
+
+/// 简化的服务结构体（保持向后兼容）
 #[derive(Debug, Clone)]
 pub struct SimpleService {
     pub config: Config,
@@ -29,12 +35,17 @@ impl ApiResponseTrait for SimpleResponse {
 #[derive(Debug, Clone)]
 pub struct SearchService {
     pub service: SimpleService,
+    /// V1版本搜索服务
+    #[cfg(feature = "search")]
+    pub v1: v1::SearchV1Service,
 }
 
 impl SearchService {
     pub fn new(config: Config) -> Self {
         Self {
-            service: SimpleService::new(config),
+            service: SimpleService::new(config.clone()),
+            #[cfg(feature = "search")]
+            v1: v1::SearchV1Service::new(config),
         }
     }
 }

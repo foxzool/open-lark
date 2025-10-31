@@ -396,6 +396,11 @@ path = "examples/core/search_user.rs"
 required-features = ["search"]
 
 [[example]]
+name = "search_v1_user_demo"
+path = "examples/api/search_v1_user_demo.rs"
+required-features = ["search"]
+
+[[example]]
 name = "core_refresh_token"
 path = "examples/core/refresh_token.rs"
 required-features = ["authentication"]

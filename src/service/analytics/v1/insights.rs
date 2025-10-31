@@ -570,7 +570,9 @@ pub struct ConfidenceInterval {
     /// 下界
     pub lower_bound: f64,
     /// 上界
-    pub upper_bound:    pub confidence_level: f64,
+    pub upper_bound: f64,
+    /// 置信水平
+    pub confidence_level: f64,
 }
 
 /// 预测数据点

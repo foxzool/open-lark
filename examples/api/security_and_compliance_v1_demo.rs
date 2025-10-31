@@ -8,8 +8,8 @@
 //! - 完整的审计追踪和日志管理
 //! - 安全策略配置和自动化执行
 
-use open_lark::prelude::*;
 use open_lark::core::config::Config;
+use open_lark::prelude::*;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -61,7 +61,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 /// 展示安全场景
-async fn display_security_scenarios(_client: &LarkClient) -> Result<(), Box<dyn std::error::Error>> {
+async fn display_security_scenarios(
+    _client: &LarkClient,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("   🔍 威胁检测:");
     println!("      - 实时监控异常登录尝试");
     println!("      - 检测恶意软件和钓鱼攻击");
@@ -90,7 +92,9 @@ async fn display_security_scenarios(_client: &LarkClient) -> Result<(), Box<dyn 
 }
 
 /// 展示合规管理能力
-async fn display_compliance_capabilities(_client: &LarkClient) -> Result<(), Box<dyn std::error::Error>> {
+async fn display_compliance_capabilities(
+    _client: &LarkClient,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("   🌍 国际合规标准:");
     let standards = vec![
         "GDPR - 通用数据保护条例",

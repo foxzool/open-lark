@@ -43,34 +43,30 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             timezone: Some("Asia/Shanghai".to_string()),
         },
         is_all_day: Some(false),
-        attendees: Some(vec![
-            EventAttendee {
-                r#type: Some(AttendeeType::User),
-                attendee_id: Some("user_001".to_string()),
-                rsvp_status: Some(RsvpStatus::NeedsAction),
-                is_optional: Some(false),
-                is_organizer: Some(true),
-                is_external: Some(false),
-                display_name: Some("张三".to_string()),
-                chat_id: Some("chat_001".to_string()),
-                room_id: None,
-                third_party_email: None,
-                operate_id: None,
-                resource_customization: None,
-            },
-        ]),
-        meeting_rooms: Some(vec![
-            MeetingRoom {
-                room_id: Some("room_001".to_string()),
-                display_name: Some("会议室A".to_string()),
-                name: Some("会议室A".to_string()),
-                capacity: Some(10),
-                floor: Some("3F".to_string()),
-                building: Some("北京办公室".to_string()),
-                equipment: Some(vec!["投影仪".to_string(), "白板".to_string()]),
-                status: Some(MeetingRoomStatus::Available),
-            },
-        ]),
+        attendees: Some(vec![EventAttendee {
+            r#type: Some(AttendeeType::User),
+            attendee_id: Some("user_001".to_string()),
+            rsvp_status: Some(RsvpStatus::NeedsAction),
+            is_optional: Some(false),
+            is_organizer: Some(true),
+            is_external: Some(false),
+            display_name: Some("张三".to_string()),
+            chat_id: Some("chat_001".to_string()),
+            room_id: None,
+            third_party_email: None,
+            operate_id: None,
+            resource_customization: None,
+        }]),
+        meeting_rooms: Some(vec![MeetingRoom {
+            room_id: Some("room_001".to_string()),
+            display_name: Some("会议室A".to_string()),
+            name: Some("会议室A".to_string()),
+            capacity: Some(10),
+            floor: Some("3F".to_string()),
+            building: Some("北京办公室".to_string()),
+            equipment: Some(vec!["投影仪".to_string(), "白板".to_string()]),
+            status: Some(MeetingRoomStatus::Available),
+        }]),
         location: Some(Location {
             name: Some("北京办公室".to_string()),
             address: Some("北京市朝阳区xxx街道".to_string()),
@@ -80,13 +76,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         ..Default::default()
     };
 
-    match client.calendar.v4.create_calendar_event(&create_request).await {
+    match client
+        .calendar
+        .v4
+        .create_calendar_event(&create_request)
+        .await
+    {
         Ok(response) => {
             println!("✅ 日程创建成功");
             if let Some(event) = response.data {
                 println!("   日程ID: {}", event.event_id.unwrap_or_default());
                 println!("   主题: {}", event.summary.unwrap_or_default());
-                println!("   状态: {:?}", event.status.unwrap_or(EventStatus::Confirmed));
+                println!(
+                    "   状态: {:?}",
+                    event.status.unwrap_or(EventStatus::Confirmed)
+                );
             }
         }
         Err(e) => {
@@ -125,14 +129,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         timezone: Some("Asia/Shanghai".to_string()),
     };
 
-    match client.calendar.v4.get_user_free_busy(&user_freebusy_request).await {
+    match client
+        .calendar
+        .v4
+        .get_user_free_busy(&user_freebusy_request)
+        .await
+    {
         Ok(response) => {
             println!("✅ 用户忙闲查询成功");
             if let Some(data) = response.data {
                 println!("   用户ID: {}", data.user_id);
                 println!("   忙闲时间段数量: {}", data.time_ranges.len());
                 for (i, range) in data.time_ranges.iter().enumerate() {
-                    println!("   段{}: {:?} - {:?}", i + 1, range.start_time.timestamp, range.end_time.timestamp);
+                    println!(
+                        "   段{}: {:?} - {:?}",
+                        i + 1,
+                        range.start_time.timestamp,
+                        range.end_time.timestamp
+                    );
                     println!("     状态: {:?}", range.status);
                 }
             }
@@ -144,19 +158,32 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 多用户忙闲查询
     let users_freebusy_request = GetUsersFreeBusyRequest {
-        user_ids: vec!["user_001".to_string(), "user_002".to_string(), "user_003".to_string()],
+        user_ids: vec![
+            "user_001".to_string(),
+            "user_002".to_string(),
+            "user_003".to_string(),
+        ],
         start_time: "2024-01-15T00:00:00+08:00".to_string(),
         end_time: "2024-01-16T00:00:00+08:00".to_string(),
         timezone: Some("Asia/Shanghai".to_string()),
     };
 
-    match client.calendar.v4.get_users_free_busy(&users_freebusy_request).await {
+    match client
+        .calendar
+        .v4
+        .get_users_free_busy(&users_freebusy_request)
+        .await
+    {
         Ok(response) => {
             println!("✅ 多用户忙闲查询成功");
             if let Some(data) = response.data {
                 println!("   查询用户数量: {}", data.users.len());
                 for user in &data.users {
-                    println!("   用户 {}: {} 个忙忙时间段", user.user_id, user.time_ranges.len());
+                    println!(
+                        "   用户 {}: {} 个忙忙时间段",
+                        user.user_id,
+                        user.time_ranges.len()
+                    );
                 }
             }
         }
@@ -175,14 +202,23 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         calendar_id: Some("cal_001".to_string()),
     };
 
-    match client.calendar.v4.get_event_attendees(&get_attendees_request).await {
+    match client
+        .calendar
+        .v4
+        .get_event_attendees(&get_attendees_request)
+        .await
+    {
         Ok(response) => {
             println!("✅ 获取日程参与人成功");
             if let Some(data) = response.data {
                 println!("   参与人数: {}", data.total);
                 for attendee in &data.attendees {
-                    println!("   - {}: {:?}",
-                        attendee.display_name.as_ref().unwrap_or(&"未知".to_string()),
+                    println!(
+                        "   - {}: {:?}",
+                        attendee
+                            .display_name
+                            .as_ref()
+                            .unwrap_or(&"未知".to_string()),
                         attendee.rsvp_status
                     );
                 }
@@ -200,7 +236,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         send_notifications: Some(true),
     };
 
-    match client.calendar.v4.add_event_attendees(&add_attendees_request).await {
+    match client
+        .calendar
+        .v4
+        .add_event_attendees(&add_attendees_request)
+        .await
+    {
         Ok(response) => {
             println!("✅ 添加日程参与人成功");
             if let Some(data) = response.data {
@@ -223,13 +264,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         page_token: None,
     };
 
-    match client.calendar.v4.list_meeting_rooms(&list_rooms_request).await {
+    match client
+        .calendar
+        .v4
+        .list_meeting_rooms(&list_rooms_request)
+        .await
+    {
         Ok(response) => {
             println!("✅ 获取会议室列表成功");
             if let Some(data) = response.data {
                 println!("   会议室数量: {}", data.total);
                 for room in &data.rooms {
-                    println!("   - {}: {} (容量: {}人, 楼层: {})",
+                    println!(
+                        "   - {}: {} (容量: {}人, 楼层: {})",
                         room.display_name.as_ref().unwrap_or(&"未命名".to_string()),
                         room.room_id.as_ref().unwrap_or(&"未知".to_string()),
                         room.capacity.unwrap_or(0),
@@ -260,13 +307,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         description: Some("讨论项目进展".to_string()),
     };
 
-    match client.calendar.v4.book_meeting_room(&book_room_request).await {
+    match client
+        .calendar
+        .v4
+        .book_meeting_room(&book_room_request)
+        .await
+    {
         Ok(response) => {
             println!("✅ 会议室预订成功");
             if let Some(data) = response.data {
                 println!("   预订ID: {}", data.booking_id.unwrap_or_default());
                 println!("   会议室ID: {}", data.room_id.unwrap_or_default());
-                println!("   状态: {:?}", data.status.unwrap_or(BookingStatus::Confirmed));
+                println!(
+                    "   状态: {:?}",
+                    data.status.unwrap_or(BookingStatus::Confirmed)
+                );
             }
         }
         Err(e) => {
@@ -285,14 +340,25 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         role: Some(CalendarRole::Reader),
     };
 
-    match client.calendar.v4.subscribe_calendar(&subscribe_request).await {
+    match client
+        .calendar
+        .v4
+        .subscribe_calendar(&subscribe_request)
+        .await
+    {
         Ok(response) => {
             println!("✅ 日历订阅成功");
             if let Some(data) = response.data {
                 println!("   订阅ID: {}", data.subscription_id.unwrap_or_default());
                 println!("   日历ID: {}", data.calendar_id.unwrap_or_default());
-                println!("   权限角色: {:?}", data.role.unwrap_or(CalendarRole::Reader));
-                println!("   状态: {:?}", data.status.unwrap_or(SubscriptionStatus::Active));
+                println!(
+                    "   权限角色: {:?}",
+                    data.role.unwrap_or(CalendarRole::Reader)
+                );
+                println!(
+                    "   状态: {:?}",
+                    data.status.unwrap_or(SubscriptionStatus::Active)
+                );
             }
         }
         Err(e) => {
@@ -307,13 +373,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         page_token: None,
     };
 
-    match client.calendar.v4.list_calendar_subscriptions(&list_subscriptions_request).await {
+    match client
+        .calendar
+        .v4
+        .list_calendar_subscriptions(&list_subscriptions_request)
+        .await
+    {
         Ok(response) => {
             println!("✅ 获取日历订阅列表成功");
             if let Some(data) = response.data {
                 println!("   订阅数量: {}", data.total);
                 for sub in &data.subscriptions {
-                    println!("   - 日历ID: {}, 权限: {:?}, 状态: {:?}",
+                    println!(
+                        "   - 日历ID: {}, 权限: {:?}, 状态: {:?}",
                         sub.calendar_id.as_ref().unwrap_or(&"未知".to_string()),
                         sub.role,
                         sub.status
@@ -332,7 +404,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         subscription_id: Some("sub_12345".to_string()),
     };
 
-    match client.calendar.v4.unsubscribe_calendar(&unsubscribe_request).await {
+    match client
+        .calendar
+        .v4
+        .unsubscribe_calendar(&unsubscribe_request)
+        .await
+    {
         Ok(response) => {
             println!("✅ 取消日历订阅成功");
             if let Some(data) = response.data {

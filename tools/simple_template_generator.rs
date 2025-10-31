@@ -64,13 +64,25 @@ fn main() {
     println!("\n2. 在 src/client/mod.rs 中添加客户端集成：");
     println!("   // 添加条件导入");
     println!("   #[cfg(feature = \"{}\")]", feature_flag);
-    println!("   use crate::service::{}::{}Service;", service_name, to_pascal_case(service_name));
+    println!(
+        "   use crate::service::{}::{}Service;",
+        service_name,
+        to_pascal_case(service_name)
+    );
     println!("\n   // 在 LarkClient 结构体中添加字段");
     println!("   #[cfg(feature = \"{}\")]", feature_flag);
-    println!("   pub {}: {}Service,", service_name, to_pascal_case(service_name));
+    println!(
+        "   pub {}: {}Service,",
+        service_name,
+        to_pascal_case(service_name)
+    );
     println!("\n   // 在构造函数中添加初始化");
     println!("   #[cfg(feature = \"{}\")]", feature_flag);
-    println!("   {}: {}Service::new(config.clone()),", service_name, to_pascal_case(service_name));
+    println!(
+        "   {}: {}Service::new(config.clone()),",
+        service_name,
+        to_pascal_case(service_name)
+    );
     println!("\n3. 在 Cargo.toml 的 [[example]] 部分添加：");
     println!("   [[example]]");
     println!("   name = \"{}_demo\"", feature_flag);
@@ -78,7 +90,10 @@ fn main() {
     println!("   required-features = [\"{}\"]", feature_flag);
     println!("\n4. 运行测试：");
     println!("   cargo check --features {}", feature_flag);
-    println!("   cargo run --example {}_demo --features {}", feature_flag, feature_flag);
+    println!(
+        "   cargo run --example {}_demo --features {}",
+        feature_flag, feature_flag
+    );
 }
 
 fn to_pascal_case(s: &str) -> String {
@@ -106,14 +121,14 @@ use crate::core::config::Config;
 #[derive(Debug, Clone)]
 pub struct {}Service {{
     pub config: Config,
-    pub {}::{}Service{}{},
+    pub {}_service: {}::{}Service{},
 }}
 
 impl {}Service {{
     pub fn new(config: Config) -> Self {{
         Self {{
-            config: config.clone(),
-            {}: {}::{}Service{}::new(config),
+            config,
+            {}_service: {}::{}Service::new(config),
         }}
     }}
 }}
@@ -129,6 +144,9 @@ pub mod {};
         version,
         pascal_name,
         version,
+        pascal_name,
+        version,
+        pascal_name,
         version
     )
 }
@@ -146,11 +164,11 @@ use serde::{{Deserialize, Serialize}};
 
 /// {}服务 {}版本
 #[derive(Debug, Clone)]
-pub struct {}Service{} {{
+pub struct {}Service {{
     pub config: Config,
 }}
 
-impl {}Service{} {{
+impl {}Service {{
     pub fn new(config: Config) -> Self {{
         Self {{ config }}
     }}
@@ -391,7 +409,8 @@ impl Default for ListRequest {
         }
     }
 }
-"#.to_string()
+"#
+    .to_string()
 }
 
 fn generate_example(service_name: &str, version: &str, feature_flag: &str) -> String {
@@ -521,6 +540,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {{
         version,
         service_name,
         version,
-        pascal_name
+        pascal_name,
+        service_name
     )
 }

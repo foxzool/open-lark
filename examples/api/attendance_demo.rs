@@ -7,8 +7,8 @@
 
 use open_lark::prelude::*;
 use open_lark::service::attendance::v1::{
-    GetUserTaskRequest, QueryUserTasksRequest, GetShiftRequest, ListShiftsRequest,
-    GetUserStatsRequest,
+    GetShiftRequest, GetUserStatsRequest, GetUserTaskRequest, ListShiftsRequest,
+    QueryUserTasksRequest,
 };
 
 #[tokio::main]
@@ -41,9 +41,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("   用户ID: {}", data.user_id);
                 println!("   打卡日期: {}", data.check_date);
                 println!("   班次名称: {}", data.shift_name);
-                println!("   上班时间: {:?}", data.check_in_time.clone().unwrap_or_else(|| "未打卡".to_string()));
-                println!("   下班时间: {:?}", data.check_out_time.clone().unwrap_or_else(|| "未打卡".to_string()));
-                println!("   工作时长: {}", data.work_hours.clone().unwrap_or_else(|| "0".to_string()));
+                println!(
+                    "   上班时间: {:?}",
+                    data.check_in_time
+                        .clone()
+                        .unwrap_or_else(|| "未打卡".to_string())
+                );
+                println!(
+                    "   下班时间: {:?}",
+                    data.check_out_time
+                        .clone()
+                        .unwrap_or_else(|| "未打卡".to_string())
+                );
+                println!(
+                    "   工作时长: {}",
+                    data.work_hours.clone().unwrap_or_else(|| "0".to_string())
+                );
                 println!("   考勤状态: {:?}", data.status);
                 if let Some(location) = data.location {
                     println!("   打卡位置: {}", location);
@@ -67,7 +80,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         user_id_type: Some("open_id".to_string()),
     };
 
-    match client.attendance.v1.query_user_tasks(&query_tasks_request).await {
+    match client
+        .attendance
+        .v1
+        .query_user_tasks(&query_tasks_request)
+        .await
+    {
         Ok(response) => {
             println!("✅ 用户打卡任务列表查询成功");
             if let Some(data) = response.data {
@@ -78,8 +96,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 for (i, task) in data.tasks.iter().enumerate() {
                     println!("\n   {}. {}", i + 1, task.shift_name);
                     println!("      日期: {}", task.check_date);
-                    println!("      上班: {:?}", task.check_in_time.clone().unwrap_or_else(|| "未打卡".to_string()));
-                    println!("      下班: {:?}", task.check_out_time.clone().unwrap_or_else(|| "未打卡".to_string()));
+                    println!(
+                        "      上班: {:?}",
+                        task.check_in_time
+                            .clone()
+                            .unwrap_or_else(|| "未打卡".to_string())
+                    );
+                    println!(
+                        "      下班: {:?}",
+                        task.check_out_time
+                            .clone()
+                            .unwrap_or_else(|| "未打卡".to_string())
+                    );
                     println!("      状态: {:?}", task.status);
                     if let Some(work_hours) = &task.work_hours {
                         println!("      工时: {} 小时", work_hours);
@@ -176,7 +204,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         user_id_type: Some("open_id".to_string()),
     };
 
-    match client.attendance.v1.get_user_stats(&get_stats_request).await {
+    match client
+        .attendance
+        .v1
+        .get_user_stats(&get_stats_request)
+        .await
+    {
         Ok(response) => {
             println!("✅ 用户考勤统计获取成功");
             if let Some(data) = response.data {

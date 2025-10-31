@@ -32,6 +32,7 @@ pub const DRIVE_V2_FILES: &str = "/open-apis/drive/v2/files";
 // 搜索相关 - V1
 pub const SEARCH_V1_DATA_SOURCES: &str = "/open-apis/search/v1/data_sources";
 pub const SEARCH_V1_SCHEMA: &str = "/open-apis/search/v1/schema";
+pub const SEARCH_V1_USER: &str = "/open-apis/search/v1/user";
 
 // 电子表格相关 - V2
 pub const SHEETS_V2_SPREADSHEETS: &str = "/open-apis/sheets/v2/spreadsheets";
@@ -57,6 +58,13 @@ pub const BOARD_V1_WHITEBOARDS: &str = "/open-apis/board/v1/whiteboards";
 
 // 云文档助手相关 - V1
 pub const ASSISTANT_V1_CONVERSATIONS: &str = "/open-apis/ai/v1/conversations";
+
+// 审批相关 - V4
+pub const APPROVAL_V4_INSTANCES_SEARCH: &str = "/open-apis/approval/v4/instances/search";
+pub const APPROVAL_V4_TASKS_SEARCH: &str = "/open-apis/approval/v4/tasks/search";
+pub const APPROVAL_V4_INSTANCES_SEARCH_CC: &str = "/open-apis/approval/v4/instances/search_cc";
+pub const APPROVAL_V4_APPROVALS_SEARCH: &str = "/open-apis/approval/v4/approvals/search";
+pub const APPROVAL_V4_TASKS_QUERY: &str = "/open-apis/approval/v4/tasks/query";
 
 /// API路径辅助函数
 pub struct EndpointHelper;

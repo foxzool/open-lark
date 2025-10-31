@@ -1,113 +1,155 @@
 use serde::{Deserialize, Serialize};
-/// 用户ID类型,
-#[derive(Debug, Clone)]
+
+/// 用户ID类型
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum UserIdType {
-    /// 用户ID,
-#[serde(rename = "user_id")]
+    /// 用户ID
+    #[serde(rename = "user_id")]
     UserId,
-    /// union_id,
-#[serde(rename = "union_id")]
+    /// union_id
+    #[serde(rename = "union_id")]
     UnionId,
-    /// open_id,
-#[serde(rename = "open_id")]
+    /// open_id
+    #[serde(rename = "open_id")]
     OpenId,
+}
+
 impl UserIdType {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}/// 部门ID类型,
-#[derive(Debug, Clone)]
+    /// 获取用户ID类型的字符串表示
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            UserIdType::UserId => "user_id",
+            UserIdType::UnionId => "union_id",
+            UserIdType::OpenId => "open_id",
+        }
+    }
+}
+
+/// 部门ID类型
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum DepartmentIdType {
-    /// 部门ID,
-#[serde(rename = "department_id")]
+    /// 部门ID
+    #[serde(rename = "department_id")]
     DepartmentId,
-    /// open_department_id,
-#[serde(rename = "open_department_id")]
+    /// open_department_id
+    #[serde(rename = "open_department_id")]
     OpenDepartmentId,
+}
+
 impl DepartmentIdType {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}/// 审批状态,
-#[derive(Debug, Clone)]
+    /// 获取部门ID类型的字符串表示
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            DepartmentIdType::DepartmentId => "department_id",
+            DepartmentIdType::OpenDepartmentId => "open_department_id",
+        }
+    }
+}
+
+/// 审批状态
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ApprovalStatus {
-    /// 审批中,
-#[serde(rename = "PENDING")]
+    /// 审批中
+    #[serde(rename = "PENDING")]
     Pending,
-    /// 通过,
-#[serde(rename = "APPROVED")]
+    /// 通过
+    #[serde(rename = "APPROVED")]
     Approved,
-    /// 拒绝,
-#[serde(rename = "REJECTED")]
+    /// 拒绝
+    #[serde(rename = "REJECTED")]
     Rejected,
-    /// 撤回,
-#[serde(rename = "CANCELED")]
+    /// 撤回
+    #[serde(rename = "CANCELED")]
     Canceled,
-    /// 已删除,
-#[serde(rename = "DELETED")]
+    /// 已删除
+    #[serde(rename = "DELETED")]
     Deleted,
-/// 任务状态,
-#[derive(Debug, Clone)]
+}
+
+/// 任务状态
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum TaskStatus {
-    /// 待处理,
-#[serde(rename = "PENDING")]
+    /// 待处理
+    #[serde(rename = "PENDING")]
     Pending,
-    /// 已通过,
-#[serde(rename = "APPROVED")]
+    /// 已通过
+    #[serde(rename = "APPROVED")]
     Approved,
-    /// 已拒绝,
-#[serde(rename = "REJECTED")]
+    /// 已拒绝
+    #[serde(rename = "REJECTED")]
     Rejected,
-    /// 已转交,
-#[serde(rename = "TRANSFERRED")]
+    /// 已转交
+    #[serde(rename = "TRANSFERRED")]
     Transferred,
-    /// 已完成,
-#[serde(rename = "DONE")]
+    /// 已完成
+    #[serde(rename = "DONE")]
     Done,
-/// 审批定义,
-#[derive(Debug, Clone)]
+}
+
+/// 审批定义
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Approval {
     /// 审批定义编码
     pub approval_code: String,
     /// 审批定义名称
     pub approval_name: String,
     /// 审批定义描述
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 审批定义状态
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
     /// 创建者
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creator: Option<UserInfo>,
     /// 创建时间
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<String>,
     /// 更新时间
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
     /// 表单字段
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub form: Option<Vec<FormField>>,
     /// 审批流程
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub process: Option<ApprovalProcess>,
-/// 审批实例,
-#[derive(Debug, Clone)]
+}
+
+/// 审批实例
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ApprovalInstance {
     /// 审批实例编码
     pub instance_code: String,
     /// 审批定义编码
     pub approval_code: String,
     /// 审批定义名称
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approval_name: Option<String>,
     /// 发起人
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub initiator: Option<UserInfo>,
     /// 审批状态
     pub status: ApprovalStatus,
     /// 创建时间
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<String>,
     /// 更新时间
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
     /// 表单数据
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub form: Option<Vec<FormData>>,
     /// 审批流程
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub timeline: Option<Vec<ApprovalNode>>,
     /// 抄送人
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cc_users: Option<Vec<UserInfo>>,
-/// 审批任务,
-#[derive(Debug, Clone)]
+}
+
+/// 审批任务
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ApprovalTask {
     /// 任务ID
     pub task_id: String,
@@ -116,32 +158,45 @@ pub struct ApprovalTask {
     /// 审批定义编码
     pub approval_code: String,
     /// 审批定义名称
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approval_name: Option<String>,
     /// 发起人
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub initiator: Option<UserInfo>,
     /// 审批人
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approver: Option<UserInfo>,
     /// 任务状态
     pub status: TaskStatus,
     /// 创建时间
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<String>,
     /// 更新时间
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
     /// 任务链接
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_links: Option<Vec<TaskLink>>,
-/// 用户信息,
-#[derive(Debug, Clone)]
+}
+
+/// 用户信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UserInfo {
     /// 用户ID
     pub user_id: String,
     /// 用户名称
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// 用户头像
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub avatar: Option<String>,
     /// 用户邮箱
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
-/// 表单字段,
-#[derive(Debug, Clone)]
+}
+
+/// 表单字段
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FormField {
     /// 字段ID
     pub id: String,
@@ -150,88 +205,122 @@ pub struct FormField {
     /// 字段类型
     pub field_type: String,
     /// 是否必填
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub required: Option<bool>,
     /// 字段属性
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub properties: Option<serde_json::Value>,
-/// 表单数据,
-#[derive(Debug, Clone)]
+}
+
+/// 表单数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FormData {
     /// 字段ID
     pub id: String,
     /// 字段名称
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// 字段值
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<serde_json::Value>,
-/// 审批流程,
-#[derive(Debug, Clone)]
+}
+
+/// 审批流程
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ApprovalProcess {
     /// 流程节点
     pub nodes: Vec<ProcessNode>,
-/// 流程节点,
-#[derive(Debug, Clone)]
+}
+
+/// 流程节点
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ProcessNode {
     /// 节点ID
     pub node_id: String,
     /// 节点名称
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub node_name: Option<String>,
     /// 节点类型
     pub node_type: String,
     /// 审批人
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approvers: Option<Vec<UserInfo>>,
-/// 审批节点,
-#[derive(Debug, Clone)]
+}
+
+/// 审批节点
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ApprovalNode {
     /// 节点ID
     pub node_id: String,
     /// 节点名称
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub node_name: Option<String>,
     /// 节点类型
     pub node_type: String,
     /// 审批人
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approver: Option<UserInfo>,
     /// 审批状态
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
     /// 审批时间
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approve_time: Option<String>,
     /// 审批意见
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
-/// 任务链接,
-#[derive(Debug, Clone)]
+}
+
+/// 任务链接
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TaskLink {
     /// 链接平台
     pub platform: String,
     /// 链接地址
     pub link: String,
-/// 审批文件,
-#[derive(Debug, Clone)]
+}
+
+/// 审批文件
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ApprovalFile {
     /// 文件ID
     pub file_id: String,
     /// 文件名
     pub filename: String,
     /// 文件大小
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub file_size: Option<i64>,
     /// 文件类型
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub file_type: Option<String>,
     /// 上传时间
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub upload_time: Option<String>,
-/// 审批评论,
-#[derive(Debug, Clone)]
+}
+
+/// 审批评论
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ApprovalComment {
     /// 评论ID
     pub comment_id: String,
     /// 评论内容
     pub content: String,
     /// 评论者
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub commenter: Option<UserInfo>,
     /// 创建时间
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<String>,
     /// 更新时间
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
     /// 附件
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attachments: Option<Vec<CommentAttachment>>,
-/// 评论附件,
-#[derive(Debug, Clone)]
+}
+
+/// 评论附件
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CommentAttachment {
     /// 附件ID
     pub attachment_id: String,
@@ -240,55 +329,69 @@ pub struct CommentAttachment {
     /// 附件类型
     pub attachment_type: String,
     /// 附件链接
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub link: Option<String>,
+}
+
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test]
+
+    #[test]
     fn test_user_id_type_serialization() {
-let user_id_type = UserIdType::UserId;
+        let user_id_type = UserIdType::UserId;
         let serialized = serde_json::to_string(&user_id_type).unwrap();
         assert_eq!(serialized, "\"user_id\"");
-let deserialized: UserIdType = serde_json::from_str(&serialized).unwrap();
+        let deserialized: UserIdType = serde_json::from_str(&serialized).unwrap();
         assert_eq!(user_id_type, deserialized);
-#[test]
-    ,
+    }
+
+    #[test]
+    fn test_user_id_type_as_str() {
         assert_eq!(UserIdType::UserId.as_str(), "user_id");
         assert_eq!(UserIdType::UnionId.as_str(), "union_id");
         assert_eq!(UserIdType::OpenId.as_str(), "open_id");
-#[test]
+    }
+
+    #[test]
     fn test_department_id_type_serialization() {
-let dept_id_type = DepartmentIdType::DepartmentId;
+        let dept_id_type = DepartmentIdType::DepartmentId;
         let serialized = serde_json::to_string(&dept_id_type).unwrap();
         assert_eq!(serialized, "\"department_id\"");
-let deserialized: DepartmentIdType = serde_json::from_str(&serialized).unwrap();
+        let deserialized: DepartmentIdType = serde_json::from_str(&serialized).unwrap();
         assert_eq!(dept_id_type, deserialized);
-#[test]
-    ,
-        assert_eq!(DepartmentIdType::DepartmentId.as_str(), "department_id");
-assert_eq!(,
-            DepartmentIdType::OpenDepartmentId.as_str(),
-            "open_department_id",
-);
     }
-#[test]
+
+    #[test]
+    fn test_department_id_type_as_str() {
+        assert_eq!(DepartmentIdType::DepartmentId.as_str(), "department_id");
+        assert_eq!(
+            DepartmentIdType::OpenDepartmentId.as_str(),
+            "open_department_id"
+        );
+    }
+
+    #[test]
     fn test_approval_status_serialization() {
-let status = ApprovalStatus::Pending;
+        let status = ApprovalStatus::Pending;
         let serialized = serde_json::to_string(&status).unwrap();
         assert_eq!(serialized, "\"PENDING\"");
-let deserialized: ApprovalStatus = serde_json::from_str(&serialized).unwrap();
+        let deserialized: ApprovalStatus = serde_json::from_str(&serialized).unwrap();
         assert_eq!(status, deserialized);
-#[test]
+    }
+
+    #[test]
     fn test_task_status_serialization() {
-let status = TaskStatus::Approved;
+        let status = TaskStatus::Approved;
         let serialized = serde_json::to_string(&status).unwrap();
         assert_eq!(serialized, "\"APPROVED\"");
-let deserialized: TaskStatus = serde_json::from_str(&serialized).unwrap();
+        let deserialized: TaskStatus = serde_json::from_str(&serialized).unwrap();
         assert_eq!(status, deserialized);
-#[test]
+    }
+
+    #[test]
     fn test_approval_serialization() {
-let approval = Approval {,
+        let approval = Approval {
             approval_code: "LEAVE_001".to_string(),
             approval_name: "请假申请".to_string(),
             description: Some("员工请假审批流程".to_string()),
@@ -308,8 +411,8 @@ let approval = Approval {,
                 required: Some(true),
                 properties: Some(serde_json::json!({"options": ["年假", "病假"]})),
             }]),
-            process: Some(ApprovalProcess {,
-nodes: vec![ProcessNode {,
+            process: Some(ApprovalProcess {
+                nodes: vec![ProcessNode {
                     node_id: "node_001".to_string(),
                     node_name: Some("部门经理审批".to_string()),
                     node_type: "approval".to_string(),
@@ -322,24 +425,25 @@ nodes: vec![ProcessNode {,
                 }],
             }),
         };
-let serialized = serde_json::to_string(&approval).unwrap();
+        let serialized = serde_json::to_string(&approval).unwrap();
         let deserialized: Approval = serde_json::from_str(&serialized).unwrap();
 
         assert_eq!(approval.approval_code, deserialized.approval_code);
         assert_eq!(approval.approval_name, deserialized.approval_name);
         assert_eq!(approval.description, deserialized.description);
-assert_eq!(,
+        assert_eq!(
             approval.creator.as_ref().unwrap().user_id,
             deserialized.creator.as_ref().unwrap().user_id,
-);
+        );
         assert_eq!(
             approval.form.as_ref().unwrap().len(),
             deserialized.form.as_ref().unwrap().len(),
-);
+        );
     }
-#[test]
+
+    #[test]
     fn test_approval_instance_serialization() {
-let instance = ApprovalInstance {,
+        let instance = ApprovalInstance {
             instance_code: "INST_001".to_string(),
             approval_code: "LEAVE_001".to_string(),
             approval_name: Some("请假申请".to_string()),
@@ -378,24 +482,25 @@ let instance = ApprovalInstance {,
                 email: Some("hr@example.com".to_string()),
             }]),
         };
-let serialized = serde_json::to_string(&instance).unwrap();
+        let serialized = serde_json::to_string(&instance).unwrap();
         let deserialized: ApprovalInstance = serde_json::from_str(&serialized).unwrap();
 
         assert_eq!(instance.instance_code, deserialized.instance_code);
         assert_eq!(instance.approval_code, deserialized.approval_code);
         assert_eq!(instance.status, deserialized.status);
-assert_eq!(,
+        assert_eq!(
             instance.initiator.as_ref().unwrap().user_id,
             deserialized.initiator.as_ref().unwrap().user_id,
-);
+        );
         assert_eq!(
             instance.timeline.as_ref().unwrap().len(),
             deserialized.timeline.as_ref().unwrap().len(),
-);
+        );
     }
-#[test]
+
+    #[test]
     fn test_approval_task_serialization() {
-let task = ApprovalTask {,
+        let task = ApprovalTask {
             task_id: "TASK_001".to_string(),
             instance_code: "INST_001".to_string(),
             approval_code: "LEAVE_001".to_string(),
@@ -420,84 +525,93 @@ let task = ApprovalTask {,
                 link: "https://approval.example.com/task/TASK_001".to_string(),
             }]),
         };
-let serialized = serde_json::to_string(&task).unwrap();
+        let serialized = serde_json::to_string(&task).unwrap();
         let deserialized: ApprovalTask = serde_json::from_str(&serialized).unwrap();
 
         assert_eq!(task.task_id, deserialized.task_id);
         assert_eq!(task.instance_code, deserialized.instance_code);
         assert_eq!(task.status, deserialized.status);
-assert_eq!(,
+        assert_eq!(
             task.approver.as_ref().unwrap().user_id,
             deserialized.approver.as_ref().unwrap().user_id,
-);
+        );
         assert_eq!(
             task.task_links.as_ref().unwrap().len(),
             deserialized.task_links.as_ref().unwrap().len(),
-);
+        );
     }
-#[test]
+
+    #[test]
     fn test_user_info_serialization() {
-let user = UserInfo {,
+        let user = UserInfo {
             user_id: "user_123".to_string(),
             name: Some("测试用户".to_string()),
             avatar: Some("https://example.com/avatar.jpg".to_string()),
             email: Some("test@example.com".to_string()),
         };
-let serialized = serde_json::to_string(&user).unwrap();
+        let serialized = serde_json::to_string(&user).unwrap();
         let deserialized: UserInfo = serde_json::from_str(&serialized).unwrap();
 
         assert_eq!(user.user_id, deserialized.user_id);
         assert_eq!(user.name, deserialized.name);
         assert_eq!(user.avatar, deserialized.avatar);
         assert_eq!(user.email, deserialized.email);
-#[test]
+    }
+
+    #[test]
     fn test_form_field_serialization() {
-let field = FormField {,
+        let field = FormField {
             id: "field_001".to_string(),
             name: "员工姓名".to_string(),
             field_type: "text".to_string(),
             required: Some(true),
             properties: Some(serde_json::json!({"max_length": 50})),
         };
-let serialized = serde_json::to_string(&field).unwrap();
+        let serialized = serde_json::to_string(&field).unwrap();
         let deserialized: FormField = serde_json::from_str(&serialized).unwrap();
 
         assert_eq!(field.id, deserialized.id);
         assert_eq!(field.name, deserialized.name);
         assert_eq!(field.field_type, deserialized.field_type);
         assert_eq!(field.required, deserialized.required);
-#[test]
+    }
+
+    #[test]
     fn test_form_data_serialization() {
-let data = FormData {,
+        let data = FormData {
             id: "field_001".to_string(),
             name: Some("员工姓名".to_string()),
             value: Some(serde_json::json!("张三")),
         };
-let serialized = serde_json::to_string(&data).unwrap();
+        let serialized = serde_json::to_string(&data).unwrap();
         let deserialized: FormData = serde_json::from_str(&serialized).unwrap();
 
         assert_eq!(data.id, deserialized.id);
         assert_eq!(data.name, deserialized.name);
         assert_eq!(data.value, deserialized.value);
-#[test]
+    }
+
+    #[test]
     fn test_approval_file_serialization() {
-let file = ApprovalFile {,
+        let file = ApprovalFile {
             file_id: "FILE_001".to_string(),
             filename: "请假申请.pdf".to_string(),
             file_size: Some(1024000),
             file_type: Some("application/pdf".to_string()),
             upload_time: Some("2024-01-01T10:00:00Z".to_string()),
         };
-let serialized = serde_json::to_string(&file).unwrap();
+        let serialized = serde_json::to_string(&file).unwrap();
         let deserialized: ApprovalFile = serde_json::from_str(&serialized).unwrap();
 
         assert_eq!(file.file_id, deserialized.file_id);
         assert_eq!(file.filename, deserialized.filename);
         assert_eq!(file.file_size, deserialized.file_size);
         assert_eq!(file.file_type, deserialized.file_type);
-#[test]
+    }
+
+    #[test]
     fn test_approval_comment_serialization() {
-let comment = ApprovalComment {,
+        let comment = ApprovalComment {
             comment_id: "COMMENT_001".to_string(),
             content: "请尽快审批，谢谢！".to_string(),
             commenter: Some(UserInfo {
@@ -515,56 +629,61 @@ let comment = ApprovalComment {,
                 link: Some("https://example.com/attach/001.jpg".to_string()),
             }]),
         };
-let serialized = serde_json::to_string(&comment).unwrap();
+        let serialized = serde_json::to_string(&comment).unwrap();
         let deserialized: ApprovalComment = serde_json::from_str(&serialized).unwrap();
 
         assert_eq!(comment.comment_id, deserialized.comment_id);
         assert_eq!(comment.content, deserialized.content);
-assert_eq!(,
+        assert_eq!(
             comment.commenter.as_ref().unwrap().user_id,
             deserialized.commenter.as_ref().unwrap().user_id,
-);
+        );
         assert_eq!(
             comment.attachments.as_ref().unwrap().len(),
             deserialized.attachments.as_ref().unwrap().len(),
-);
+        );
     }
-#[test]
+
+    #[test]
     fn test_comment_attachment_serialization() {
-let attachment = CommentAttachment {,
+        let attachment = CommentAttachment {
             attachment_id: "ATTACH_001".to_string(),
             name: "附件文件.doc".to_string(),
             attachment_type: "document".to_string(),
             link: Some("https://example.com/files/attach_001.doc".to_string()),
         };
-let serialized = serde_json::to_string(&attachment).unwrap();
+        let serialized = serde_json::to_string(&attachment).unwrap();
         let deserialized: CommentAttachment = serde_json::from_str(&serialized).unwrap();
 
         assert_eq!(attachment.attachment_id, deserialized.attachment_id);
         assert_eq!(attachment.name, deserialized.name);
         assert_eq!(attachment.attachment_type, deserialized.attachment_type);
         assert_eq!(attachment.link, deserialized.link);
-#[test]
+    }
+
+    #[test]
     fn test_models_with_none_values() {
-let user = UserInfo {,
+        let user = UserInfo {
             user_id: "user_123".to_string(),
             name: None,
             avatar: None,
             email: None,
         };
-let serialized = serde_json::to_string(&user).unwrap();
+        let serialized = serde_json::to_string(&user).unwrap();
         let deserialized: UserInfo = serde_json::from_str(&serialized).unwrap();
 
         assert_eq!(user.user_id, deserialized.user_id);
-assert!(deserialized.name.is_none());
+        assert!(deserialized.name.is_none());
         assert!(deserialized.avatar.is_none());
-assert!(deserialized.email.is_none());
+        assert!(deserialized.email.is_none());
     }
-#[test]
+
+    #[test]
     fn test_debug_trait_for_models() {
-let status = ApprovalStatus::Approved;
+        let status = ApprovalStatus::Approved;
         let debug_string = format!("{:?}", status);
-assert!(debug_string.contains("Approved"));
+        assert!(debug_string.contains("Approved"));
+
         let user = UserInfo {
             user_id: "test_user".to_string(),
             name: Some("测试".to_string()),
@@ -572,41 +691,49 @@ assert!(debug_string.contains("Approved"));
             email: None,
         };
         let debug_string = format!("{:?}", user);
-assert!(debug_string.contains("UserInfo"));
+        assert!(debug_string.contains("UserInfo"));
         assert!(debug_string.contains("test_user"));
-#[test]
+    }
+
+    #[test]
     fn test_all_approval_statuses() {
-let statuses = vec![,
+        let statuses = vec![
             ApprovalStatus::Pending,
             ApprovalStatus::Approved,
             ApprovalStatus::Rejected,
             ApprovalStatus::Canceled,
             ApprovalStatus::Deleted,
         ];
-for status in statuses {,
+
+        for status in statuses {
             let serialized = serde_json::to_string(&status).unwrap();
-let deserialized: ApprovalStatus = serde_json::from_str(&serialized).unwrap();
+            let deserialized: ApprovalStatus = serde_json::from_str(&serialized).unwrap();
             assert_eq!(status, deserialized);
+        }
     }
-#[test]
+
+    #[test]
     fn test_all_task_statuses() {
-let statuses = vec![,
+        let statuses = vec![
             TaskStatus::Pending,
             TaskStatus::Approved,
             TaskStatus::Rejected,
             TaskStatus::Transferred,
             TaskStatus::Done,
         ];
-for status in statuses {,
+
+        for status in statuses {
             let serialized = serde_json::to_string(&status).unwrap();
-let deserialized: TaskStatus = serde_json::from_str(&serialized).unwrap();
+            let deserialized: TaskStatus = serde_json::from_str(&serialized).unwrap();
             assert_eq!(status, deserialized);
+        }
     }
-#[test]
+
+    #[test]
     fn test_complex_approval_process() {
-let process = ApprovalProcess {,
-            nodes: vec![,
-ProcessNode {,
+        let process = ApprovalProcess {
+            nodes: vec![
+                ProcessNode {
                     node_id: "node_001".to_string(),
                     node_name: Some("部门经理审批".to_string()),
                     node_type: "approval".to_string(),
@@ -616,7 +743,7 @@ ProcessNode {,
                         avatar: None,
                         email: Some("manager@example.com".to_string()),
                     }]),
-                }
+                },
                 ProcessNode {
                     node_id: "node_002".to_string(),
                     node_name: Some("HR审批".to_string()),
@@ -630,9 +757,11 @@ ProcessNode {,
                 }
             ],
         };
-let serialized = serde_json::to_string(&process).unwrap();
+        let serialized = serde_json::to_string(&process).unwrap();
         let deserialized: ApprovalProcess = serde_json::from_str(&serialized).unwrap();
 
         assert_eq!(process.nodes.len(), deserialized.nodes.len());
         assert_eq!(process.nodes[0].node_id, deserialized.nodes[0].node_id);
         assert_eq!(process.nodes[1].node_id, deserialized.nodes[1].node_id);
+    }
+}

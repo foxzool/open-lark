@@ -26,7 +26,10 @@ impl ServiceConfig {
         let args: Vec<String> = env::args().collect();
 
         if args.len() != 4 {
-            return Err("用法: service_template_generator <service_name> <version> <feature_flag>".to_string());
+            return Err(
+                "用法: service_template_generator <service_name> <version> <feature_flag>"
+                    .to_string(),
+            );
         }
 
         let name = args[1].clone();
@@ -71,14 +74,14 @@ use crate::core::config::Config;
 #[derive(Debug, Clone)]
 pub struct {}Service {{
     pub config: Config,
-    pub {}::{}Service{}{},
+    pub {}_service: {}::{}Service{},
 }}
 
 impl {}Service {{
     pub fn new(config: Config) -> Self {{
         Self {{
-            config: config.clone(),
-            {}: {}::{}Service{}::new(config),
+            config,
+            {}_service: {}::{}Service::new(config),
         }}
     }}
 }}
@@ -89,12 +92,14 @@ pub mod {};
         config.description,
         config.pascal_name,
         config.pascal_name,
+        config.name,
+        config.name,
         config.version,
         config.pascal_name,
+        config.name,
+        config.name,
         config.version,
-        config.pascal_name,
-        config.version,
-        config.version
+        config.name
     )
 }
 
@@ -111,11 +116,11 @@ use serde::{{Deserialize, Serialize}};
 
 /// {}服务 {}版本
 #[derive(Debug, Clone)]
-pub struct {}Service{} {{
+pub struct {}Service {{
     pub config: Config,
 }}
 
-impl {}Service{} {{
+impl {}Service {{
     pub fn new(config: Config) -> Self {{
         Self {{ config }}
     }}
@@ -359,8 +364,7 @@ impl Default for ListRequest {{
     }}
 }}
 "#,
-        config.pascal_name,
-        config.description
+        config.pascal_name, config.description
     )
 }
 
@@ -491,6 +495,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {{
         config.version,
         config.name,
         config.version,
+        config.pascal_name,
+        config.name,
         config.pascal_name
     )
 }
@@ -551,8 +557,7 @@ fn create_directory_structure(config: &ServiceConfig) -> Result<(), String> {
     let version_path = format!("{}/{}", base_path, config.version);
 
     // 创建目录
-    fs::create_dir_all(&base_path)
-        .map_err(|e| format!("创建目录 {} 失败: {}", base_path, e))?;
+    fs::create_dir_all(&base_path).map_err(|e| format!("创建目录 {} 失败: {}", base_path, e))?;
     fs::create_dir_all(&version_path)
         .map_err(|e| format!("创建目录 {} 失败: {}", version_path, e))?;
 
@@ -565,8 +570,7 @@ fn create_directory_structure(config: &ServiceConfig) -> Result<(), String> {
 
 /// 写入文件
 fn write_file(path: &str, content: &str) -> Result<(), String> {
-    fs::write(path, content)
-        .map_err(|e| format!("写入文件 {} 失败: {}", path, e))?;
+    fs::write(path, content).map_err(|e| format!("写入文件 {} 失败: {}", path, e))?;
     println!("✅ 文件创建成功: {}", path);
     Ok(())
 }
@@ -604,8 +608,14 @@ fn generate_service_template(config: &ServiceConfig) -> Result<(), String> {
     println!("{}", generate_cargo_config(config));
     println!("3. 在 src/client/mod.rs 中添加客户端集成：");
     println!("{}", generate_client_integration(config));
-    println!("4. 运行测试：cargo check --features {}", config.feature_flag);
-    println!("5. 运行示例：cargo run --example {}_demo --features {}", config.feature_flag, config.feature_flag);
+    println!(
+        "4. 运行测试：cargo check --features {}",
+        config.feature_flag
+    );
+    println!(
+        "5. 运行示例：cargo run --example {}_demo --features {}",
+        config.feature_flag, config.feature_flag
+    );
 
     Ok(())
 }

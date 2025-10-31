@@ -493,6 +493,7 @@ impl ReportService {
                                             TableCell { value: 438 },
                                             TableCell { value: "97.3%" },
                                         ],
+                                    },
                                     TableRow {
                                         cells: vec![
                                             TableCell { value: "市场营销部".to_string() },
@@ -501,7 +502,8 @@ impl ReportService {
                                             TableCell { value: "93.3%" },
                                         ],
                                     },
-                            },
+                                ],
+                            }
                         ],
                     }),
                 },
@@ -1905,6 +1907,7 @@ impl Default for ReportPreviewData {
             preview_sections: vec![],
         }
     }
+}
 
 impl Default for ReportConfig {
     fn default() -> Self {

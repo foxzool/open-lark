@@ -2,9 +2,9 @@
 //!
 //! 演示 open-lark SDK 的性能测试和监控功能
 
-use std::time::{Duration, Instant};
-use tracing::{info};
 use serde::Serialize;
+use std::time::{Duration, Instant};
+use tracing::info;
 
 /// 基准测试配置
 #[derive(Debug, Clone)]
@@ -68,7 +68,8 @@ impl BenchmarkResult {
 
         // 计算吞吐量
         if self.total_duration_ms > 0 {
-            self.throughput_rps = self.total_requests as f64 / (self.total_duration_ms as f64 / 1000.0);
+            self.throughput_rps =
+                self.total_requests as f64 / (self.total_duration_ms as f64 / 1000.0);
         }
     }
 
@@ -276,15 +277,20 @@ impl PerformanceBenchmark {
         println!();
 
         for result in results {
-            println!("{}: 吞吐量 {:.2} RPS, 平均响应时间 {:.2}ms",
-                     result.test_name,
-                     result.throughput_rps,
-                     result.average_response_time_ms);
+            println!(
+                "{}: 吞吐量 {:.2} RPS, 平均响应时间 {:.2}ms",
+                result.test_name, result.throughput_rps, result.average_response_time_ms
+            );
         }
 
         // 计算平均值
-        let avg_throughput = results.iter().map(|r| r.throughput_rps).sum::<f64>() / results.len() as f64;
-        let avg_response_time = results.iter().map(|r| r.average_response_time_ms).sum::<f64>() / results.len() as f64;
+        let avg_throughput =
+            results.iter().map(|r| r.throughput_rps).sum::<f64>() / results.len() as f64;
+        let avg_response_time = results
+            .iter()
+            .map(|r| r.average_response_time_ms)
+            .sum::<f64>()
+            / results.len() as f64;
 
         println!("\n平均性能指标:");
         println!("  平均吞吐量: {:.2} RPS", avg_throughput);
