@@ -15,8 +15,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     env_logger::init();
 
     // 创建客户端
-    let client = LarkClient::builder("your_app_id", "your_app_secret")
-        .build();
+    let client = LarkClient::builder("your_app_id", "your_app_secret").build();
 
     println!("🔍 搜索用户服务 V1 演示");
     println!("================================");
@@ -41,7 +40,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("\n2️⃣ Builder模式API");
     println!("---------------");
 
-    let builder_response = client.search.v1.user
+    let builder_response = client
+        .search
+        .v1
+        .user
         .search_user_builder()
         .query("技术部")
         .page_size(20)

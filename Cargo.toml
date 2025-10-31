@@ -381,6 +381,11 @@ path = "examples/core/create_sheet.rs"
 required-features = ["cloud-docs"]
 
 [[example]]
+name = "sheets_v3_basic_example"
+path = "examples/api/sheets_v3_basic_example.rs"
+required-features = ["cloud-docs"]
+
+[[example]]
 name = "core_query_attendance"
 path = "examples/core/query_attendance.rs"
 required-features = ["attendance"]

@@ -7,13 +7,11 @@ pub struct SheetFilterCondition {
     /// 比较类型
     pub compare_type: Option<String>,
     /// 筛选参数
-    pub expected: Vec<String>}
-impl SheetFilterCondition {
-    
+    pub expected: Vec<String>,
 }
+impl SheetFilterCondition {}
 #[derive(Debug, Clone)]
 pub struct SheetFilterConditionBuilder {
-    condition: SheetFilterCondition}
-impl SheetFilterConditionBuilder {
-    
+    condition: SheetFilterCondition,
 }
+impl SheetFilterConditionBuilder {}

@@ -2,14 +2,14 @@
 //!
 //! 提供类型安全的构建器模式，用于构建API请求
 
-use serde::{Deserialize, Serialize};
 use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 use super::models::*;
 use super::requests::{
-    CreateDocumentRequest, UpdateDocumentRequest, ListDocumentsRequest,
-    CreateCommentRequest, AddCollaboratorRequest
+    AddCollaboratorRequest, CreateCommentRequest, CreateDocumentRequest, ListDocumentsRequest,
+    UpdateDocumentRequest,
 };
 
 // ==================== 文档请求构建器 ====================
