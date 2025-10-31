@@ -56,6 +56,8 @@ use open_lark_hr_suite::compensation_management::CompensationManagementService;
 use crate::service::feishu_people::FeishuPeopleService;
 #[cfg(feature = "performance")]
 use crate::service::performance::PerformanceService;
+#[cfg(feature = "security_and_compliance")]
+use crate::service::security_and_compliance::SecurityAndComplianceService;
 
 /// 飞书开放平台SDK主客户端
 ///
@@ -119,6 +121,8 @@ pub struct LarkClient {
     pub feishu_people: FeishuPeopleService,
     #[cfg(feature = "performance")]
     pub performance: PerformanceService,
+    #[cfg(feature = "security_and_compliance")]
+    pub security_and_compliance: SecurityAndComplianceService,
 }
 
 impl LarkClient {
@@ -179,6 +183,8 @@ impl LarkClient {
             feishu_people: FeishuPeopleService::new(config.clone()),
             #[cfg(feature = "performance")]
             performance: PerformanceService::new(config.clone()),
+            #[cfg(feature = "security_and_compliance")]
+            security_and_compliance: SecurityAndComplianceService::new(config.clone()),
         }
     }
 

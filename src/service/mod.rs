@@ -171,6 +171,8 @@ pub mod report;
 pub mod search;
 #[cfg(feature = "security-and-compliance")]
 pub mod security_and_compliance;
+#[cfg(feature = "security_and_compliance")]
+pub mod security_and_compliance;
 #[cfg(feature = "task")]
 pub mod task;
 #[cfg(feature = "tenant")]

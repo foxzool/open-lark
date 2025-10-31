@@ -167,6 +167,7 @@ performance = ["hr-suite"]
 personal-settings = ["open-lark-extensions"]
 report = ["open-lark-extensions"]
 security-and-compliance = ["enterprise"]
+security_and_compliance = ["enterprise"]
 task = ["collaboration"]
 tenant = ["enterprise"]
 tenant-tag = ["enterprise"]
@@ -658,6 +659,11 @@ required-features = ["security-and-compliance"]
 name = "security_and_compliance_audit_log"
 path = "examples/api/security_and_compliance_audit_log.rs"
 required-features = ["security-and-compliance"]
+
+[[example]]
+name = "security_and_compliance_v1_demo"
+path = "examples/api/security_and_compliance_v1_demo.rs"
+required-features = ["security_and_compliance"]
 
 [[example]]
 name = "contact_v3_role_management"
