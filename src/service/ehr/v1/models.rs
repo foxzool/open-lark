@@ -473,6 +473,218 @@ pub enum EvaluationStatus {
     Reviewed,
 }
 
+// ==================== 请假管理 ====================
+
+/// 请假状态
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum LeaveStatus {
+    /// 草稿
+    Draft,
+    /// 审批中
+    PendingApproval,
+    /// 已批准
+    Approved,
+    /// 已拒绝
+    Rejected,
+    /// 已撤销
+    Cancelled,
+    /// 进行中
+    InProgress,
+    /// 已完成
+    Completed,
+}
+
+/// 请假类型
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum LeaveType {
+    /// 年假
+    Annual,
+    /// 病假
+    Sick,
+    /// 事假
+    Personal,
+    /// 婚假
+    Marriage,
+    /// 产假
+    Maternity,
+    /// 陪产假
+    Paternity,
+    /// 丧假
+    Bereavement,
+    /// 调休
+    Compensatory,
+    /// 产检假
+    Prenatal,
+    /// 哺乳假
+    Lactation,
+    /// 其他
+    Other,
+}
+
+/// 请假记录
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct LeaveRecord {
+    /// 请假记录ID
+    pub leave_id: String,
+    /// 员工ID
+    pub employee_id: String,
+    /// 请假类型
+    pub leave_type: LeaveType,
+    /// 请假开始时间
+    pub start_time: String,
+    /// 请假结束时间
+    pub end_time: String,
+    /// 请假天数
+    pub leave_days: f64,
+    /// 请假小时数
+    pub leave_hours: Option<f64>,
+    /// 请假原因
+    pub reason: String,
+    /// 请假状态
+    pub status: LeaveStatus,
+    /// 申请人ID
+    pub applicant_id: String,
+    /// 审批人ID
+    pub approver_id: Option<String>,
+    /// 审批时间
+    pub approval_time: Option<String>,
+    /// 审批意见
+    pub approval_comment: Option<String>,
+    /// 附件
+    pub attachments: Option<Vec<String>>,
+    /// 备注
+    pub remarks: Option<String>,
+    /// 创建时间
+    pub create_time: Option<String>,
+    /// 更新时间
+    pub update_time: Option<String>,
+}
+
+/// 请假余额
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct LeaveBalance {
+    /// 余额ID
+    pub balance_id: String,
+    /// 员工ID
+    pub employee_id: String,
+    /// 请假类型
+    pub leave_type: LeaveType,
+    /// 总额度
+    pub total_days: f64,
+    /// 已使用天数
+    pub used_days: f64,
+    /// 剩余天数
+    pub remaining_days: f64,
+    /// 年份
+    pub year: i32,
+    /// 有效期至
+    pub expiry_date: Option<String>,
+    /// 更新时间
+    pub update_time: Option<String>,
+}
+
+/// 请假规则配置
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct LeaveRule {
+    /// 规则ID
+    pub rule_id: String,
+    /// 请假类型
+    pub leave_type: LeaveType,
+    /// 规则名称
+    pub name: String,
+    /// 规则描述
+    pub description: Option<String>,
+    /// 是否需要审批
+    pub requires_approval: bool,
+    /// 最小请假时长（小时）
+    pub min_duration_hours: Option<f64>,
+    /// 最大请假天数
+    pub max_leave_days: Option<f64>,
+    /// 是否支持部分请假
+    pub allow_partial_days: bool,
+    /// 需要附件
+    pub requires_attachment: bool,
+    /// 提前申请天数
+    pub advance_notice_days: Option<i32>,
+    /// 适用部门ID列表
+    pub applicable_departments: Option<Vec<String>>,
+    /// 状态
+    pub status: String,
+    /// 创建时间
+    pub create_time: Option<String>,
+    /// 更新时间
+    pub update_time: Option<String>,
+}
+
+/// 请假统计
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct LeaveStatistics {
+    /// 统计ID
+    pub statistics_id: String,
+    /// 员工ID
+    pub employee_id: String,
+    /// 年份
+    pub year: i32,
+    /// 月份（可选）
+    pub month: Option<i32>,
+    /// 请假类型统计
+    pub leave_type_stats: Option<Vec<LeaveTypeStat>>,
+    /// 总请假天数
+    pub total_leave_days: f64,
+    /// 总请假次数
+    pub total_leave_count: i32,
+    /// 请假天数占比
+    pub leave_percentage: Option<f64>,
+    /// 更新时间
+    pub update_time: Option<String>,
+}
+
+/// 请假类型统计
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct LeaveTypeStat {
+    /// 请假类型
+    pub leave_type: LeaveType,
+    /// 请假天数
+    pub leave_days: f64,
+    /// 请假次数
+    pub leave_count: i32,
+    /// 占比
+    pub percentage: Option<f64>,
+}
+
+/// 请假审批记录
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct LeaveApproval {
+    /// 审批ID
+    pub approval_id: String,
+    /// 请假记录ID
+    pub leave_id: String,
+    /// 审批人ID
+    pub approver_id: String,
+    /// 审批结果
+    pub decision: LeaveApprovalDecision,
+    /// 审批意见
+    pub comment: Option<String>,
+    /// 审批时间
+    pub approval_time: String,
+    /// 审批层级
+    pub approval_level: i32,
+}
+
+/// 审批决定
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum LeaveApprovalDecision {
+    /// 批准
+    Approve,
+    /// 拒绝
+    Reject,
+    /// 转交
+    Forward,
+}
+
 // ==================== 请求响应模型 ====================
 
 /// 创建员工请求
@@ -535,6 +747,172 @@ pub struct QueryEmployeeRequest {
     pub page_token: Option<String>,
 }
 
+/// 请假申请请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateLeaveRequest {
+    /// 员工ID
+    pub employee_id: String,
+    /// 请假类型
+    pub leave_type: LeaveType,
+    /// 请假开始时间
+    pub start_time: String,
+    /// 请假结束时间
+    pub end_time: String,
+    /// 请假原因
+    pub reason: String,
+    /// 附件
+    pub attachments: Option<Vec<String>>,
+    /// 备注
+    pub remarks: Option<String>,
+    /// 审批人ID（可选，系统自动分配时使用）
+    pub approver_id: Option<String>,
+}
+
+/// 更新请假记录请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UpdateLeaveRequest {
+    /// 请假记录ID
+    pub leave_id: String,
+    /// 更新字段
+    pub update_fields: LeaveUpdateFields,
+}
+
+/// 请假更新字段
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct LeaveUpdateFields {
+    /// 请假原因
+    pub reason: Option<String>,
+    /// 附件
+    pub attachments: Option<Vec<String>>,
+    /// 备注
+    pub remarks: Option<String>,
+    /// 请假状态（仅限草稿状态下的撤销）
+    pub status: Option<LeaveStatus>,
+}
+
+/// 查询请假记录请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct QueryLeaveRecordsRequest {
+    /// 员工ID筛选
+    pub employee_id: Option<String>,
+    /// 请假类型筛选
+    pub leave_type: Option<LeaveType>,
+    /// 请假状态筛选
+    pub status: Option<LeaveStatus>,
+    /// 开始日期筛选
+    pub start_date: Option<String>,
+    /// 结束日期筛选
+    pub end_date: Option<String>,
+    /// 申请人ID筛选
+    pub applicant_id: Option<String>,
+    /// 审批人ID筛选
+    pub approver_id: Option<String>,
+    /// 部门ID筛选
+    pub department_id: Option<String>,
+    /// 分页大小
+    pub page_size: Option<i32>,
+    /// 页面标记
+    pub page_token: Option<String>,
+}
+
+/// 请假审批请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ApproveLeaveRequest {
+    /// 请假记录ID
+    pub leave_id: String,
+    /// 审批决定
+    pub decision: LeaveApprovalDecision,
+    /// 审批意见
+    pub comment: Option<String>,
+    /// 转交给下一个审批人（当decision为Forward时使用）
+    pub forward_to_user_id: Option<String>,
+}
+
+/// 查询请假余额请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct QueryLeaveBalanceRequest {
+    /// 员工ID
+    pub employee_id: String,
+    /// 请假类型筛选
+    pub leave_type: Option<LeaveType>,
+    /// 年份
+    pub year: Option<i32>,
+}
+
+/// 获取请假统计请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetLeaveStatisticsRequest {
+    /// 员工ID（可选，不提供则获取全部员工统计）
+    pub employee_id: Option<String>,
+    /// 部门ID筛选
+    pub department_id: Option<String>,
+    /// 年份
+    pub year: i32,
+    /// 月份（可选）
+    pub month: Option<i32>,
+    /// 请假类型筛选
+    pub leave_type: Option<LeaveType>,
+}
+
+/// 创建请假规则请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateLeaveRuleRequest {
+    /// 请假类型
+    pub leave_type: LeaveType,
+    /// 规则名称
+    pub name: String,
+    /// 规则描述
+    pub description: Option<String>,
+    /// 是否需要审批
+    pub requires_approval: bool,
+    /// 最小请假时长（小时）
+    pub min_duration_hours: Option<f64>,
+    /// 最大请假天数
+    pub max_leave_days: Option<f64>,
+    /// 是否支持部分请假
+    pub allow_partial_days: bool,
+    /// 需要附件
+    pub requires_attachment: bool,
+    /// 提前申请天数
+    pub advance_notice_days: Option<i32>,
+    /// 适用部门ID列表
+    pub applicable_departments: Option<Vec<String>>,
+}
+
+/// 更新请假规则请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UpdateLeaveRuleRequest {
+    /// 规则ID
+    pub rule_id: String,
+    /// 更新字段
+    pub update_fields: LeaveRuleUpdateFields,
+}
+
+/// 请假规则更新字段
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct LeaveRuleUpdateFields {
+    /// 规则名称
+    pub name: Option<String>,
+    /// 规则描述
+    pub description: Option<String>,
+    /// 是否需要审批
+    pub requires_approval: Option<bool>,
+    /// 最小请假时长（小时）
+    pub min_duration_hours: Option<f64>,
+    /// 最大请假天数
+    pub max_leave_days: Option<f64>,
+    /// 是否支持部分请假
+    pub allow_partial_days: Option<bool>,
+    /// 需要附件
+    pub requires_attachment: Option<bool>,
+    /// 提前申请天数
+    pub advance_notice_days: Option<i32>,
+    /// 适用部门ID列表
+    pub applicable_departments: Option<Vec<String>>,
+    /// 状态
+    pub status: Option<String>,
+}
+
 /// 分页响应基础结构
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PageResponse<T> {
@@ -583,6 +961,30 @@ pub type AttendanceListResponse = BaseResponse<PageResponse<AttendanceRecord>>;
 /// 绩效评估列表响应
 pub type PerformanceListResponse = BaseResponse<PageResponse<PerformanceEvaluation>>;
 
+/// 请假记录列表响应
+pub type LeaveRecordListResponse = BaseResponse<PageResponse<LeaveRecord>>;
+
+/// 请假记录响应
+pub type LeaveRecordResponse = BaseResponse<LeaveRecord>;
+
+/// 请假余额列表响应
+pub type LeaveBalanceListResponse = BaseResponse<PageResponse<LeaveBalance>>;
+
+/// 请假余额响应
+pub type LeaveBalanceResponse = BaseResponse<LeaveBalance>;
+
+/// 请假规则列表响应
+pub type LeaveRuleListResponse = BaseResponse<PageResponse<LeaveRule>>;
+
+/// 请假规则响应
+pub type LeaveRuleResponse = BaseResponse<LeaveRule>;
+
+/// 请假统计响应
+pub type LeaveStatisticsResponse = BaseResponse<LeaveStatistics>;
+
+/// 请假审批响应
+pub type LeaveApprovalResponse = BaseResponse<LeaveApproval>;
+
 /// 空响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct EmptyResponse {
@@ -630,6 +1032,24 @@ impl Default for AttendanceStatus {
 impl Default for EvaluationStatus {
     fn default() -> Self {
         EvaluationStatus::Draft
+    }
+}
+
+impl Default for LeaveStatus {
+    fn default() -> Self {
+        LeaveStatus::Draft
+    }
+}
+
+impl Default for LeaveType {
+    fn default() -> Self {
+        LeaveType::Personal
+    }
+}
+
+impl Default for LeaveApprovalDecision {
+    fn default() -> Self {
+        LeaveApprovalDecision::Approve
     }
 }
 
@@ -747,6 +1167,319 @@ impl Default for EmptyResponse {
         Self {
             code: 0,
             msg: String::new(),
+        }
+    }
+}
+
+impl Default for CreateLeaveRequest {
+    fn default() -> Self {
+        Self {
+            employee_id: String::new(),
+            leave_type: LeaveType::Personal,
+            start_time: String::new(),
+            end_time: String::new(),
+            reason: String::new(),
+            attachments: None,
+            remarks: None,
+            approver_id: None,
+        }
+    }
+}
+
+impl Default for UpdateLeaveRequest {
+    fn default() -> Self {
+        Self {
+            leave_id: String::new(),
+            update_fields: LeaveUpdateFields::default(),
+        }
+    }
+}
+
+impl Default for LeaveUpdateFields {
+    fn default() -> Self {
+        Self {
+            reason: None,
+            attachments: None,
+            remarks: None,
+            status: None,
+        }
+    }
+}
+
+impl Default for QueryLeaveRecordsRequest {
+    fn default() -> Self {
+        Self {
+            employee_id: None,
+            leave_type: None,
+            status: None,
+            start_date: None,
+            end_date: None,
+            applicant_id: None,
+            approver_id: None,
+            department_id: None,
+            page_size: None,
+            page_token: None,
+        }
+    }
+}
+
+impl Default for ApproveLeaveRequest {
+    fn default() -> Self {
+        Self {
+            leave_id: String::new(),
+            decision: LeaveApprovalDecision::Approve,
+            comment: None,
+            forward_to_user_id: None,
+        }
+    }
+}
+
+impl Default for QueryLeaveBalanceRequest {
+    fn default() -> Self {
+        Self {
+            employee_id: String::new(),
+            leave_type: None,
+            year: None,
+        }
+    }
+}
+
+impl Default for GetLeaveStatisticsRequest {
+    fn default() -> Self {
+        Self {
+            employee_id: None,
+            department_id: None,
+            year: chrono::Utc::now().year(),
+            month: None,
+            leave_type: None,
+        }
+    }
+}
+
+impl Default for CreateLeaveRuleRequest {
+    fn default() -> Self {
+        Self {
+            leave_type: LeaveType::Personal,
+            name: String::new(),
+            description: None,
+            requires_approval: true,
+            min_duration_hours: None,
+            max_leave_days: None,
+            allow_partial_days: false,
+            requires_attachment: false,
+            advance_notice_days: None,
+            applicable_departments: None,
+        }
+    }
+}
+
+impl Default for UpdateLeaveRuleRequest {
+    fn default() -> Self {
+        Self {
+            rule_id: String::new(),
+            update_fields: LeaveRuleUpdateFields::default(),
+        }
+    }
+}
+
+impl Default for LeaveRuleUpdateFields {
+    fn default() -> Self {
+        Self {
+            name: None,
+            description: None,
+            requires_approval: None,
+            min_duration_hours: None,
+            max_leave_days: None,
+            allow_partial_days: None,
+            requires_attachment: None,
+            advance_notice_days: None,
+            applicable_departments: None,
+            status: None,
+        }
+    }
+}
+
+impl Default for PageResponse<LeaveRecord> {
+    fn default() -> Self {
+        Self {
+            items: Vec::new(),
+            page_token: None,
+            has_more: Some(false),
+            total: Some(0),
+        }
+    }
+}
+
+impl Default for PageResponse<LeaveBalance> {
+    fn default() -> Self {
+        Self {
+            items: Vec::new(),
+            page_token: None,
+            has_more: Some(false),
+            total: Some(0),
+        }
+    }
+}
+
+impl Default for PageResponse<LeaveRule> {
+    fn default() -> Self {
+        Self {
+            items: Vec::new(),
+            page_token: None,
+            has_more: Some(false),
+            total: Some(0),
+        }
+    }
+}
+
+impl Default for LeaveRecord {
+    fn default() -> Self {
+        Self {
+            leave_id: String::new(),
+            employee_id: String::new(),
+            leave_type: LeaveType::Personal,
+            start_time: String::new(),
+            end_time: String::new(),
+            leave_days: 0.0,
+            leave_hours: None,
+            reason: String::new(),
+            status: LeaveStatus::Draft,
+            applicant_id: String::new(),
+            approver_id: None,
+            approval_time: None,
+            approval_comment: None,
+            attachments: None,
+            remarks: None,
+            create_time: None,
+            update_time: None,
+        }
+    }
+}
+
+impl Default for LeaveBalance {
+    fn default() -> Self {
+        Self {
+            balance_id: String::new(),
+            employee_id: String::new(),
+            leave_type: LeaveType::Personal,
+            total_days: 0.0,
+            used_days: 0.0,
+            remaining_days: 0.0,
+            year: chrono::Utc::now().year(),
+            expiry_date: None,
+            update_time: None,
+        }
+    }
+}
+
+impl Default for LeaveRule {
+    fn default() -> Self {
+        Self {
+            rule_id: String::new(),
+            leave_type: LeaveType::Personal,
+            name: String::new(),
+            description: None,
+            requires_approval: true,
+            min_duration_hours: None,
+            max_leave_days: None,
+            allow_partial_days: false,
+            requires_attachment: false,
+            advance_notice_days: None,
+            applicable_departments: None,
+            status: "active".to_string(),
+            create_time: None,
+            update_time: None,
+        }
+    }
+}
+
+impl Default for LeaveStatistics {
+    fn default() -> Self {
+        Self {
+            statistics_id: String::new(),
+            employee_id: String::new(),
+            year: chrono::Utc::now().year(),
+            month: None,
+            leave_type_stats: None,
+            total_leave_days: 0.0,
+            total_leave_count: 0,
+            leave_percentage: None,
+            update_time: None,
+        }
+    }
+}
+
+impl Default for LeaveTypeStat {
+    fn default() -> Self {
+        Self {
+            leave_type: LeaveType::Personal,
+            leave_days: 0.0,
+            leave_count: 0,
+            percentage: None,
+        }
+    }
+}
+
+impl Default for LeaveApproval {
+    fn default() -> Self {
+        Self {
+            approval_id: String::new(),
+            leave_id: String::new(),
+            approver_id: String::new(),
+            decision: LeaveApprovalDecision::Approve,
+            comment: None,
+            approval_time: String::new(),
+            approval_level: 1,
+        }
+    }
+}
+
+impl Default for BaseResponse<LeaveRecord> {
+    fn default() -> Self {
+        Self {
+            code: 0,
+            msg: String::new(),
+            data: None,
+        }
+    }
+}
+
+impl Default for BaseResponse<LeaveBalance> {
+    fn default() -> Self {
+        Self {
+            code: 0,
+            msg: String::new(),
+            data: None,
+        }
+    }
+}
+
+impl Default for BaseResponse<LeaveRule> {
+    fn default() -> Self {
+        Self {
+            code: 0,
+            msg: String::new(),
+            data: None,
+        }
+    }
+}
+
+impl Default for BaseResponse<LeaveStatistics> {
+    fn default() -> Self {
+        Self {
+            code: 0,
+            msg: String::new(),
+            data: None,
+        }
+    }
+}
+
+impl Default for BaseResponse<LeaveApproval> {
+    fn default() -> Self {
+        Self {
+            code: 0,
+            msg: String::new(),
+            data: None,
         }
     }
 }

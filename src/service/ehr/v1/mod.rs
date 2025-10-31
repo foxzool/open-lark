@@ -14,6 +14,7 @@ use open_lark_core::prelude::*;
 // 导入modules模块
 pub mod models;
 pub mod attendance;
+pub mod leave;
 
 // 重新导出models中的核心类型（排除AttendanceRecord和AttendanceStatus，避免冲突）
 pub use models::{
@@ -21,9 +22,16 @@ pub use models::{
     Employee, EmergencyContact, BankAccount, SocialInsurance, Department,
     Position, SalaryRange, EmployeePosition, Salary, Allowance, Deduction,
     SalaryAdjustment, PerformanceEvaluation, PerformanceDimension, EvaluationStatus,
+    LeaveStatus, LeaveType, LeaveRecord, LeaveBalance, LeaveRule, LeaveStatistics,
+    LeaveTypeStat, LeaveApproval, LeaveApprovalDecision,
     CreateEmployeeRequest, UpdateEmployeeRequest, QueryEmployeeRequest, EmployeeUpdateFields,
+    CreateLeaveRequest, UpdateLeaveRequest, LeaveUpdateFields, QueryLeaveRecordsRequest,
+    ApproveLeaveRequest, QueryLeaveBalanceRequest, GetLeaveStatisticsRequest,
+    CreateLeaveRuleRequest, UpdateLeaveRuleRequest, LeaveRuleUpdateFields,
     PageResponse, BaseResponse, EmployeeListResponse, EmployeeResponse, DepartmentListResponse,
     PositionListResponse, SalaryListResponse, PerformanceListResponse, EmptyResponse,
+    LeaveRecordListResponse, LeaveRecordResponse, LeaveBalanceListResponse, LeaveBalanceResponse,
+    LeaveRuleListResponse, LeaveRuleResponse, LeaveStatisticsResponse, LeaveApprovalResponse,
 };
 
 // 重新导出attendance中的类型
@@ -59,20 +67,36 @@ pub use attendance::{
     AttendanceStatus, CheckinType, StatisticsType, ExceptionAction, ReportType, ReportFormat,
 };
 
+// 重新导出leave中的类型
+pub use leave::{
+    // 服务
+    LeaveService,
+
+    // Builder类型
+    CreateLeaveBuilder, QueryLeaveRecordsBuilder, UpdateLeaveBuilder, ApproveLeaveBuilder,
+    QueryLeaveBalanceBuilder, GetLeaveStatisticsBuilder, CreateLeaveRuleBuilder,
+    UpdateLeaveRuleBuilder, DeleteLeaveRuleBuilder, CancelLeaveBuilder,
+    AdjustLeaveBalanceBuilder, GetPendingApprovalsBuilder, GetLeaveRulesBuilder,
+};
+
 /// EHR服务 v1版本
 #[derive(Debug, Clone)]
 pub struct EhrServiceV1 {
     pub config: Config,
     /// 考勤管理服务
     pub attendance: AttendanceService,
+    /// 请假管理服务
+    pub leave: LeaveService,
 }
 
 impl EhrServiceV1 {
     pub fn new(config: Config) -> Self {
-        let config_clone = config.clone();
+        let config_clone1 = config.clone();
+        let config_clone2 = config.clone();
         Self {
             config,
-            attendance: AttendanceService::new(config_clone),
+            attendance: AttendanceService::new(config_clone1),
+            leave: LeaveService::new(config_clone2),
         }
     }
 
