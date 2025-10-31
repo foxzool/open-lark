@@ -1,348 +1,1682 @@
 //! Departments v1 - 部门管理API
 //!
-//! 实现部门管理的核心功能：
-//! - 部门信息的增删改查
-//! - 部门层级结构管理
-//! - 部门人员管理
-//! - 部门搜索和筛选
-//! - 部门权限管理
+//! 提供完整的部门生命周期管理功能，包括：
+//! - 部门信息的增删改查操作
+//! - 部门层级结构管理和维护
+//! - 部门人员配置和组织关系
+//! - 部门搜索和高级筛选功能
+//! - 部门统计分析和报表
+//! - 部门权限和配置管理
+//!
+//! # 示例
+//!
+//! ```rust,no_run
+//! use open_lark::prelude::*;
+//! use open_lark::service::feishu_people::core::v1::departments::*;
+//!
+//! #[tokio::main]
+//! async fn main() -> Result<(), Box<dyn std::error::Error>> {
+//!     let client = LarkClient::builder()
+//!         .app_id("your_app_id")
+//!         .app_secret("your_app_secret")
+//!         .build()?;
+//!
+//!     // 获取部门详情
+//!     let response = client.feishu_people.core.v1.departments
+//!         .get_department_builder("dept_001")
+//!         .user_id_type("open_id")
+//!         .execute(&client.feishu_people.core.v1.departments)
+//!         .await?;
+//!
+//!     println!("部门名称: {}", response.data.department.name);
+//!
+//!     // 创建新部门
+//!     let department_data = DepartmentCreateData {
+//!         name: "研发部".to_string(),
+//!         en_name: Some("R&D Department".to_string()),
+//!         parent_department_id: Some("dept_root".to_string()),
+//!         description: Some("负责产品研发和技术创新".to_string()),
+//!         ..Default::default()
+//!     };
+//!
+//!     let create_response = client.feishu_people.core.v1.departments
+//!         .create_department_builder()
+//!         .department_data(department_data)
+//!         .user_id_type("open_id")
+//!         .execute(&client.feishu_people.core.v1.departments)
+//!         .await?;
+//!
+//!     println!("部门创建成功，ID: {}", create_response.data.department_id);
+//!
+//!     // 搜索部门
+//!     let search_response = client.feishu_people.core.v1.departments
+//!         .search_departments_builder()
+//!         .query("研发")
+//!         .page_size(20)
+//!         .user_id_type("open_id")
+//!         .execute(&client.feishu_people.core.v1.departments)
+//!         .await?;
+//!
+//!     println!("搜索到 {} 个部门", search_response.data.items.len());
+//!
+//!     Ok(())
+//! }
+//! ```
 
-use crate::core::config::Config;
-use open_lark_core::prelude::*;
+use crate::core::{
+    api_resp::{ApiResponseTrait, BaseResponse},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
+};
+use async_trait::async_trait;
+use open_lark_core::core::{api_req::ApiRequest, trait_system::ExecutableBuilder};
 use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
 
 /// 部门管理服务
+///
+/// 提供完整的部门生命周期管理功能，包括部门的创建、更新、删除、查询等操作。
+/// 支持企业级的部门管理需求，包括层级结构、批量操作、高级搜索和统计分析功能。
+///
+/// # 核心功能
+///
+/// - **部门CRUD操作**: 创建、查询、更新、删除部门信息
+/// - **层级结构管理**: 部门树形结构和父子关系维护
+/// - **批量处理**: 支持批量获取和操作部门数据
+/// - **高级搜索**: 基于多种条件的部门搜索和筛选
+/// - **统计分析**: 部门人员、结构等统计信息
+/// - **人员管理**: 部门人员配置和关系维护
+///
+/// # 使用示例
+///
+/// ```rust
+/// use open_lark::prelude::*;
+/// use open_lark::service::feishu_people::core::v1::departments::DepartmentsService;
+///
+/// let config = Config::new("app_id", "app_secret");
+/// let service = DepartmentsService::new(config);
+/// ```
 #[derive(Debug, Clone)]
 pub struct DepartmentsService {
-    config: Config,
+    pub config: Config,
 }
 
 impl DepartmentsService {
+    /// 创建部门服务实例
+    ///
+    /// # 参数
+    /// - `config`: SDK配置信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::feishu_people::core::v1::departments::DepartmentsService;
+    ///
+    /// let config = Config::new("app_id", "app_secret");
+    /// let service = DepartmentsService::new(config);
+    /// ```
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
     /// 获取部门详情
-    pub async fn get(&self, department_id: &str, user_id_type: &str) -> SDKResult<DepartmentResponse> {
-        // 模拟实现
-        Ok(DepartmentResponse {
-            code: 0,
-            msg: "success".to_string(),
-            data: Some(Department {
-                department_id: department_id.to_string(),
-                name: "技术部".to_string(),
-                en_name: Some("Technology Department".to_string()),
-                parent_department_id: Some("dept_root".to_string()),
-                leader_user_id: Some("user_001".to_string()),
-                status: Some("active".to_string()),
-                member_count: Some(25),
-                description: Some("负责产品研发和技术创新".to_string()),
-                department_path: Some(vec!["dept_root".to_string(), "dept_001".to_string()]),
-                tags: Some(vec!["技术".to_string(), "研发".to_string()]),
-                created_at: Some("2023-01-01T00:00:00Z".to_string()),
-                updated_at: Some("2024-01-01T00:00:00Z".to_string()),
-                ..Default::default()
-            }),
-        })
+    ///
+    /// 根据部门ID获取部门的详细信息，包括基本信息、人员配置、层级结构等。
+    /// 支持使用不同的用户ID类型进行查询，返回完整的部门配置信息。
+    ///
+    /// # API文档
+    ///
+    /// 根据部门ID获取部门的详细信息。
+    /// 返回部门的基本信息、人员配置、层级结构、扩展属性等完整资料。
+    ///
+    /// # 参数
+    ///
+    /// * `department_id` - 部门ID
+    /// * `request` - 获取部门的请求参数，包含ID类型配置
+    ///
+    /// # 返回值
+    ///
+    /// 返回部门的详细信息，包含人员、层级、扩展属性等完整数据
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::feishu_people::core::v1::departments::*;
+    ///
+    /// let request = GetDepartmentRequest {
+    ///     user_id_type: Some("open_id".to_string()),
+    /// };
+    ///
+    /// let response = client.feishu_people.core.v1.departments
+    ///     .get("dept_001", &request).await?;
+    /// println!("部门名称: {}", response.data.department.name);
+    /// ```
+    pub async fn get(
+        &self,
+        department_id: &str,
+        request: &GetDepartmentRequest,
+    ) -> SDKResult<BaseResponse<GetDepartmentResponse>> {
+        // 构建查询参数
+        let mut query_params = std::collections::HashMap::new();
+        if let Some(user_id_type) = &request.user_id_type {
+            query_params.insert("user_id_type", user_id_type.clone());
+        }
+
+        // 构建API请求
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path: format!(
+                "/open-apis/feishu_people/core/v1/departments/{}",
+                department_id
+            ),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: Vec::new(),
+            query_params,
+            ..Default::default()
+        };
+
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 批量获取部门信息
-    pub async fn batch_get(&self, department_ids: &[String], user_id_type: &str) -> SDKResult<DepartmentListResponse> {
-        // 模拟实现
-        let departments = department_ids.iter().enumerate().map(|(i, dept_id)| Department {
-            department_id: dept_id.clone(),
-            name: format!("部门{}", i + 1),
-            en_name: Some(format!("Department {}", i + 1)),
-            parent_department_id: if i > 0 { Some(department_ids[i-1].clone()) } else { None },
-            leader_user_id: Some(format!("user_{:03}", (i % 5) + 1)),
-            status: Some("active".to_string()),
-            member_count: Some(((i + 1) * 10) as i32),
-            description: Some(format!("{}的职能描述", format!("部门{}", i + 1))),
-            department_path: Some(vec![dept_id.clone()]),
+    ///
+    /// 根据部门ID列表批量获取多个部门的详细信息。
+    /// 适用于需要同时查询多个部门信息的场景，提高查询效率。
+    ///
+    /// # API文档
+    ///
+    /// 根据部门ID列表批量获取部门信息。
+    /// 最多支持50个部门ID的批量查询，返回部门的完整信息。
+    ///
+    /// # 参数
+    ///
+    /// * `request` - 批量获取部门的请求参数，包含部门ID列表和配置
+    ///
+    /// # 返回值
+    ///
+    /// 返回批量部门的详细信息列表和分页信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::feishu_people::core::v1::departments::*;
+    ///
+    /// let request = BatchGetDepartmentsRequest {
+    ///     department_ids: vec!["dept_001".to_string(), "dept_002".to_string()],
+    ///     user_id_type: Some("open_id".to_string()),
+    /// };
+    ///
+    /// let response = client.feishu_people.core.v1.departments
+    ///     .batch_get(&request).await?;
+    /// println!("获取到 {} 个部门", response.data.items.len());
+    /// ```
+    pub async fn batch_get(
+        &self,
+        request: &BatchGetDepartmentsRequest,
+    ) -> SDKResult<BaseResponse<BatchGetDepartmentsResponse>> {
+        // 构建API请求
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
+            api_path: "/open-apis/feishu_people/core/v1/departments/batch_get".to_string(),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: serde_json::to_vec(request)?,
             ..Default::default()
-        }).collect();
+        };
 
-        Ok(DepartmentListResponse {
-            code: 0,
-            msg: "success".to_string(),
-            data: Some(PageResponse {
-                items: departments,
-                page_token: None,
-                has_more: Some(false),
-                total: Some(department_ids.len() as i32),
-            }),
-        })
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 获取子部门列表
-    pub async fn get_sub_departments(&self, department_id: &str, page_size: i32, page_token: Option<&str>) -> SDKResult<DepartmentListResponse> {
-        // 模拟实现
-        let departments = vec![
-            Department {
-                department_id: format!("{}_sub_1", department_id),
-                name: "前端开发组".to_string(),
-                en_name: Some("Frontend Development Team".to_string()),
-                parent_department_id: Some(department_id.to_string()),
-                leader_user_id: Some("user_002".to_string()),
-                status: Some("active".to_string()),
-                member_count: Some(8),
-                description: Some("负责前端产品开发".to_string()),
-                department_path: Some(vec![department_id.to_string(), format!("{}_sub_1", department_id)]),
-                ..Default::default()
-            },
-            Department {
-                department_id: format!("{}_sub_2", department_id),
-                name: "后端开发组".to_string(),
-                en_name: Some("Backend Development Team".to_string()),
-                parent_department_id: Some(department_id.to_string()),
-                leader_user_id: Some("user_003".to_string()),
-                status: Some("active".to_string()),
-                member_count: Some(12),
-                description: Some("负责后端服务开发".to_string()),
-                department_path: Some(vec![department_id.to_string(), format!("{}_sub_2", department_id)]),
-                ..Default::default()
-            },
-        ];
+    ///
+    /// 获取指定部门的下级部门列表，支持分页查询。
+    /// 可以用于了解部门的组织架构和下级配置情况。
+    ///
+    /// # API文档
+    ///
+    /// 根据部门ID获取该部门的直接下级部门列表。
+    /// 支持分页查询，返回部门的直接子部门信息。
+    ///
+    /// # 参数
+    ///
+    /// * `request` - 获取子部门列表的请求参数
+    ///
+    /// # 返回值
+    ///
+    /// 返回子部门列表和分页信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::feishu_people::core::v1::departments::*;
+    ///
+    /// let request = GetSubDepartmentsRequest {
+    ///     department_id: "dept_root".to_string(),
+    ///     page_size: Some(20),
+    ///     page_token: None,
+    ///     user_id_type: Some("open_id".to_string()),
+    /// };
+    ///
+    /// let response = client.feishu_people.core.v1.departments
+    ///     .get_sub_departments(&request).await?;
+    /// println!("子部门数量: {}", response.data.items.len());
+    /// ```
+    pub async fn get_sub_departments(
+        &self,
+        request: &GetSubDepartmentsRequest,
+    ) -> SDKResult<BaseResponse<GetSubDepartmentsResponse>> {
+        // 构建查询参数
+        let mut query_params = std::collections::HashMap::new();
+        query_params.insert("department_id", request.department_id.clone());
+        if let Some(page_size) = request.page_size {
+            query_params.insert("page_size", page_size.to_string());
+        }
+        if let Some(page_token) = &request.page_token {
+            query_params.insert("page_token", page_token.clone());
+        }
+        if let Some(user_id_type) = &request.user_id_type {
+            query_params.insert("user_id_type", user_id_type.clone());
+        }
 
-        Ok(DepartmentListResponse {
-            code: 0,
-            msg: "success".to_string(),
-            data: Some(PageResponse {
-                items: departments,
-                page_token: page_token.map(|s| s.to_string()),
-                has_more: Some(false),
-                total: Some(2),
-            }),
-        })
+        // 构建API请求
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path: "/open-apis/feishu_people/core/v1/departments/sub_departments".to_string(),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: Vec::new(),
+            query_params,
+            ..Default::default()
+        };
+
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 获取根部门列表
-    pub async fn get_root_departments(&self, page_size: i32, page_token: Option<&str>) -> SDKResult<DepartmentListResponse> {
-        // 模拟实现
-        let departments = vec![
-            Department {
-                department_id: "dept_root_001".to_string(),
-                name: "技术中心".to_string(),
-                en_name: Some("Technology Center".to_string()),
-                parent_department_id: None,
-                leader_user_id: Some("user_001".to_string()),
-                status: Some("active".to_string()),
-                member_count: Some(50),
-                description: Some("负责公司技术创新和研发".to_string()),
-                department_path: Some(vec!["dept_root_001".to_string()]),
-                ..Default::default()
-            },
-            Department {
-                department_id: "dept_root_002".to_string(),
-                name: "人力资源中心".to_string(),
-                en_name: Some("Human Resources Center".to_string()),
-                parent_department_id: None,
-                leader_user_id: Some("user_004".to_string()),
-                status: Some("active".to_string()),
-                member_count: Some(15),
-                description: Some("负责人力资源管理".to_string()),
-                department_path: Some(vec!["dept_root_002".to_string()]),
-                ..Default::default()
-            },
-        ];
+    ///
+    /// 获取组织架构中的根部门列表，即顶级部门。
+    /// 可以用于了解组织的顶层结构和主要业务单元。
+    ///
+    /// # API文档
+    ///
+    /// 获取组织中的根部门（顶级部门）列表。
+    /// 支持分页查询，返回组织架构的最高层级部门。
+    ///
+    /// # 参数
+    ///
+    /// * `request` - 获取根部门列表的请求参数
+    ///
+    /// # 返回值
+    ///
+    /// 返回根部门列表和分页信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::feishu_people::core::v1::departments::*;
+    ///
+    /// let request = GetRootDepartmentsRequest {
+    ///     page_size: Some(20),
+    ///     page_token: None,
+    ///     user_id_type: Some("open_id".to_string()),
+    /// };
+    ///
+    /// let response = client.feishu_people.core.v1.departments
+    ///     .get_root_departments(&request).await?;
+    /// println!("根部门数量: {}", response.data.items.len());
+    /// ```
+    pub async fn get_root_departments(
+        &self,
+        request: &GetRootDepartmentsRequest,
+    ) -> SDKResult<BaseResponse<GetRootDepartmentsResponse>> {
+        // 构建查询参数
+        let mut query_params = std::collections::HashMap::new();
+        if let Some(page_size) = request.page_size {
+            query_params.insert("page_size", page_size.to_string());
+        }
+        if let Some(page_token) = &request.page_token {
+            query_params.insert("page_token", page_token.clone());
+        }
+        if let Some(user_id_type) = &request.user_id_type {
+            query_params.insert("user_id_type", user_id_type.clone());
+        }
 
-        Ok(DepartmentListResponse {
-            code: 0,
-            msg: "success".to_string(),
-            data: Some(PageResponse {
-                items: departments,
-                page_token: page_token.map(|s| s.to_string()),
-                has_more: Some(false),
-                total: Some(2),
-            }),
-        })
+        // 构建API请求
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path: "/open-apis/feishu_people/core/v1/departments/root_departments".to_string(),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: Vec::new(),
+            query_params,
+            ..Default::default()
+        };
+
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 搜索部门
-    pub async fn search(&self, query: &str, page_size: i32, page_token: Option<&str>) -> SDKResult<DepartmentSearchResponse> {
-        // 模拟实现
-        let departments = vec![
-            DepartmentSearchResult {
-                department_id: "dept_001".to_string(),
-                name: "技术开发部".to_string(),
-                en_name: Some("Technology Development Department".to_string()),
-                parent_department_name: Some("技术中心".to_string()),
-                leader_name: Some("张三".to_string()),
-                member_count: 25,
-                match_score: 0.95,
-                ..Default::default()
-            },
-        ];
+    ///
+    /// 根据关键词搜索部门，支持按部门名称、描述、标签等字段进行搜索。
+    /// 返回匹配的部门列表，支持分页查询和相关性排序。
+    ///
+    /// # API文档
+    ///
+    /// 根据关键词搜索部门信息。
+    /// 支持按部门名称、英文名称、描述、标签等多种字段进行模糊搜索。
+    ///
+    /// # 参数
+    ///
+    /// * `request` - 搜索部门的请求参数，包含搜索关键词和过滤条件
+    ///
+    /// # 返回值
+    ///
+    /// 返回搜索结果和分页信息，包含匹配度评分
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::feishu_people::core::v1::departments::*;
+    ///
+    /// let request = SearchDepartmentsRequest {
+    ///     query: "研发".to_string(),
+    ///     page_size: Some(20),
+    ///     page_token: None,
+    ///     user_id_type: Some("open_id".to_string()),
+    /// };
+    ///
+    /// let response = client.feishu_people.core.v1.departments
+    ///     .search(&request).await?;
+    /// println!("搜索到 {} 个部门", response.data.items.len());
+    /// ```
+    pub async fn search(
+        &self,
+        request: &SearchDepartmentsRequest,
+    ) -> SDKResult<BaseResponse<SearchDepartmentsResponse>> {
+        // 构建API请求
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
+            api_path: "/open-apis/feishu_people/core/v1/departments/search".to_string(),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: serde_json::to_vec(request)?,
+            ..Default::default()
+        };
 
-        Ok(DepartmentSearchResponse {
-            code: 0,
-            msg: "success".to_string(),
-            data: Some(DepartmentSearchData {
-                items: departments,
-                page_token: page_token.map(|s| s.to_string()),
-                has_more: Some(false),
-                total: Some(1),
-            }),
-        })
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 创建部门
-    pub async fn create(&self, create_data: &DepartmentCreateData) -> SDKResult<DepartmentResponse> {
-        // 模拟实现
-        let department_id = format!("dept_{}", chrono::Utc::now().timestamp());
-        Ok(DepartmentResponse {
-            code: 0,
-            msg: "部门创建成功".to_string(),
-            data: Some(Department {
-                department_id: department_id.clone(),
-                name: create_data.name.clone(),
-                en_name: create_data.en_name.clone(),
-                parent_department_id: create_data.parent_department_id.clone(),
-                leader_user_id: create_data.leader_user_id.clone(),
-                status: Some("active".to_string()),
-                member_count: Some(0),
-                description: create_data.description.clone(),
-                department_path: create_data.parent_department_id.as_ref()
-                    .map(|parent_id| vec![parent_id.clone(), department_id.clone()]),
-                tags: create_data.tags.clone(),
-                created_at: Some(chrono::Utc::now().to_rfc3339()),
-                updated_at: Some(chrono::Utc::now().to_rfc3339()),
-                ..Default::default()
-            }),
-        })
+    ///
+    /// 创建新的部门，设置部门的基本信息、层级关系、负责人等。
+    /// 创建成功后，部门将可用于组织架构管理和人员配置。
+    ///
+    /// # API文档
+    ///
+    /// 创建新的部门信息，系统会自动分配部门ID。
+    /// 支持设置部门的名称、层级、负责人、描述等完整信息。
+    ///
+    /// # 参数
+    ///
+    /// * `request` - 创建部门的请求参数，包含部门信息和配置
+    ///
+    /// # 返回值
+    ///
+    /// 返回创建成功的部门信息，包含系统分配的部门ID
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::feishu_people::core::v1::departments::*;
+    ///
+    /// let department_data = DepartmentCreateData {
+    ///     name: "研发部".to_string(),
+    ///     en_name: Some("R&D Department".to_string()),
+    ///     parent_department_id: Some("dept_root".to_string()),
+    ///     leader_user_id: Some("user_001".to_string()),
+    ///     description: Some("负责产品研发和技术创新".to_string()),
+    ///     ..Default::default()
+    /// };
+    ///
+    /// let request = CreateDepartmentRequest {
+    ///     department_data,
+    ///     user_id_type: Some("open_id".to_string()),
+    /// };
+    ///
+    /// let response = client.feishu_people.core.v1.departments
+    ///     .create(&request).await?;
+    /// println!("部门创建成功，ID: {}", response.data.department_id);
+    /// ```
+    pub async fn create(
+        &self,
+        request: &CreateDepartmentRequest,
+    ) -> SDKResult<BaseResponse<CreateDepartmentResponse>> {
+        // 构建API请求
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
+            api_path: "/open-apis/feishu_people/core/v1/departments".to_string(),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: serde_json::to_vec(request)?,
+            ..Default::default()
+        };
+
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 更新部门信息
-    pub async fn update(&self, department_id: &str, update_data: &DepartmentUpdateData) -> SDKResult<DepartmentResponse> {
-        // 模拟实现
-        Ok(DepartmentResponse {
-            code: 0,
-            msg: "部门信息更新成功".to_string(),
-            data: Some(Department {
-                department_id: department_id.to_string(),
-                name: update_data.name.clone().unwrap_or_default(),
-                en_name: update_data.en_name.clone(),
-                parent_department_id: update_data.parent_department_id.clone(),
-                leader_user_id: update_data.leader_user_id.clone(),
-                status: update_data.status.clone(),
-                description: update_data.description.clone(),
-                tags: update_data.tags.clone(),
-                updated_at: Some(chrono::Utc::now().to_rfc3339()),
-                ..Default::default()
-            }),
-        })
+    ///
+    /// 更新部门的信息，支持修改部门的基本属性、层级关系等。
+    /// 只更新传入的字段，未传入的字段保持不变。
+    ///
+    /// # API文档
+    ///
+    /// 修改部门的部分信息，只更新提供的字段。
+    /// 支持修改部门的名称、描述、负责人、状态等信息。
+    ///
+    /// # 参数
+    ///
+    /// * `department_id` - 部门ID
+    /// * `request` - 修改部门的请求参数
+    ///
+    /// # 返回值
+    ///
+    /// 返回修改后的部门信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::feishu_people::core::v1::departments::*;
+    ///
+    /// let update_data = DepartmentUpdateData {
+    ///     name: Some("研发部(更新)".to_string()),
+    ///     description: Some("负责产品研发、技术创新和架构设计".to_string()),
+    ///     ..Default::default()
+    /// };
+    ///
+    /// let request = UpdateDepartmentRequest {
+    ///     department_data: update_data,
+    ///     user_id_type: Some("open_id".to_string()),
+    /// };
+    ///
+    /// let response = client.feishu_people.core.v1.departments
+    ///     .update("dept_001", &request).await?;
+    /// println!("部门信息更新成功");
+    /// ```
+    pub async fn update(
+        &self,
+        department_id: &str,
+        request: &UpdateDepartmentRequest,
+    ) -> SDKResult<BaseResponse<UpdateDepartmentResponse>> {
+        // 构建API请求
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::PUT,
+            api_path: format!(
+                "/open-apis/feishu_people/core/v1/departments/{}",
+                department_id
+            ),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: serde_json::to_vec(request)?,
+            ..Default::default()
+        };
+
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 删除部门
-    pub async fn delete(&self, department_id: &str) -> SDKResult<EmptyResponse> {
-        // 模拟实现
-        Ok(EmptyResponse {
-            code: 0,
-            msg: "部门删除成功".to_string(),
-        })
+    ///
+    /// 删除指定的部门，删除后部门将不再可用。
+    /// 删除操作不可逆，请谨慎使用。建议先停用部门再删除。
+    ///
+    /// # API文档
+    ///
+    /// 删除部门信息，操作不可逆。
+    /// 删除前请确保部门下没有子部门和人员，相关数据将被清理。
+    ///
+    /// # 参数
+    ///
+    /// * `department_id` - 要删除的部门ID
+    /// * `request` - 删除部门的请求参数
+    ///
+    /// # 返回值
+    ///
+    /// 返回删除操作的结果
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::feishu_people::core::v1::departments::*;
+    ///
+    /// let request = DeleteDepartmentRequest {
+    ///     user_id_type: Some("open_id".to_string()),
+    /// };
+    ///
+    /// let response = client.feishu_people.core.v1.departments
+    ///     .delete("dept_001", &request).await?;
+    /// println!("部门删除成功");
+    /// ```
+    pub async fn delete(
+        &self,
+        department_id: &str,
+        request: &DeleteDepartmentRequest,
+    ) -> SDKResult<BaseResponse<DeleteDepartmentResponse>> {
+        // 构建查询参数
+        let mut query_params = std::collections::HashMap::new();
+        if let Some(user_id_type) = &request.user_id_type {
+            query_params.insert("user_id_type", user_id_type.clone());
+        }
+
+        // 构建API请求
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::DELETE,
+            api_path: format!(
+                "/open-apis/feishu_people/core/v1/departments/{}",
+                department_id
+            ),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: Vec::new(),
+            query_params,
+            ..Default::default()
+        };
+
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
-    /// 获取部门人员
-    pub async fn get_members(&self, department_id: &str, page_size: i32, page_token: Option<&str>) -> SDKResult<PersonListResponse> {
-        // 模拟实现
-        let persons = vec![
-            Person {
-                user_id: "user_001".to_string(),
-                name: "张三".to_string(),
-                en_name: Some("Zhang San".to_string()),
-                email: Some("zhangsan@example.com".to_string()),
-                mobile: Some("13800138000".to_string()),
-                employee_type: Some("full_time".to_string()),
-                status: Some("active".to_string()),
-                department_ids: Some(vec![department_id.to_string()]),
-                position: Some("技术总监".to_string()),
-                ..Default::default()
-            },
-            Person {
-                user_id: "user_002".to_string(),
-                name: "李四".to_string(),
-                en_name: Some("Li Si".to_string()),
-                email: Some("lisi@example.com".to_string()),
-                mobile: Some("13800138001".to_string()),
-                employee_type: Some("full_time".to_string()),
-                status: Some("active".to_string()),
-                department_ids: Some(vec![department_id.to_string()]),
-                position: Some("高级工程师".to_string()),
-                ..Default::default()
-            },
-        ];
+    /// 获取部门人员列表
+    ///
+    /// 获取指定部门的人员列表，包括当前和历史的人员配置情况。
+    /// 支持分页查询，用于了解部门的人员配置和组织关系。
+    ///
+    /// # API文档
+    ///
+    /// 获取部门的人员配置列表，支持分页查询。
+    /// 返回部门的人员信息、职位、状态等详细数据。
+    ///
+    /// # 参数
+    ///
+    /// * `request` - 获取部门人员列表的请求参数
+    ///
+    /// # 返回值
+    ///
+    /// 返回部门人员列表和分页信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::feishu_people::core::v1::departments::*;
+    ///
+    /// let request = GetDepartmentMembersRequest {
+    ///     department_id: "dept_001".to_string(),
+    ///     page_size: Some(20),
+    ///     page_token: None,
+    ///     user_id_type: Some("open_id".to_string()),
+    /// };
+    ///
+    /// let response = client.feishu_people.core.v1.departments
+    ///     .get_members(&request).await?;
+    /// println!("部门人员数量: {}", response.data.items.len());
+    /// ```
+    pub async fn get_members(
+        &self,
+        request: &GetDepartmentMembersRequest,
+    ) -> SDKResult<BaseResponse<GetDepartmentMembersResponse>> {
+        // 构建查询参数
+        let mut query_params = std::collections::HashMap::new();
+        query_params.insert("department_id", request.department_id.clone());
+        if let Some(page_size) = request.page_size {
+            query_params.insert("page_size", page_size.to_string());
+        }
+        if let Some(page_token) = &request.page_token {
+            query_params.insert("page_token", page_token.clone());
+        }
+        if let Some(user_id_type) = &request.user_id_type {
+            query_params.insert("user_id_type", user_id_type.clone());
+        }
 
-        Ok(PersonListResponse {
-            code: 0,
-            msg: "success".to_string(),
-            data: Some(PageResponse {
-                items: persons,
-                page_token: page_token.map(|s| s.to_string()),
-                has_more: Some(false),
-                total: Some(2),
-            }),
-        })
+        // 构建API请求
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path: "/open-apis/feishu_people/core/v1/departments/members".to_string(),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: Vec::new(),
+            query_params,
+            ..Default::default()
+        };
+
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 获取部门统计信息
-    pub async fn get_statistics(&self, department_id: &str) -> SDKResult<DepartmentStatisticsResponse> {
-        // 模拟实现
-        Ok(DepartmentStatisticsResponse {
-            code: 0,
-            msg: "success".to_string(),
-            data: Some(DepartmentStatistics {
+    ///
+    /// 获取部门的统计分析数据，包括人员统计、层级统计、变动统计等。
+    /// 支持按时间范围过滤，用于组织架构分析和人力资源规划。
+    ///
+    /// # API文档
+    ///
+    /// 获取部门统计信息，支持按时间范围过滤。
+    /// 返回部门的人员配置、层级结构、变动情况等统计数据。
+    ///
+    /// # 参数
+    ///
+    /// * `request` - 获取部门统计信息的请求参数
+    ///
+    /// # 返回值
+    ///
+    /// 返回部门的详细统计信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::feishu_people::core::v1::departments::*;
+    ///
+    /// let request = GetDepartmentStatisticsRequest {
+    ///     department_id: "dept_001".to_string(),
+    /// };
+    ///
+    /// let response = client.feishu_people.core.v1.departments
+    ///     .get_statistics(&request).await?;
+    /// println!("总成员数: {}", response.data.statistics.total_members);
+    /// println!("活跃率: {:.2}%", response.data.statistics.active_rate * 100.0);
+    /// ```
+    pub async fn get_statistics(
+        &self,
+        request: &GetDepartmentStatisticsRequest,
+    ) -> SDKResult<BaseResponse<GetDepartmentStatisticsResponse>> {
+        // 构建查询参数
+        let mut query_params = std::collections::HashMap::new();
+        query_params.insert("department_id", request.department_id.clone());
+
+        // 构建API请求
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path: "/open-apis/feishu_people/core/v1/departments/statistics".to_string(),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: Vec::new(),
+            query_params,
+            ..Default::default()
+        };
+
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
+    }
+
+    // ==================== Builder模式实现 ====================
+
+    /// 获取部门详情构建器
+    ///
+    /// 提供流式API来构建获取部门详情的请求参数。
+    /// 支持链式调用，方便配置查询参数。
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::feishu_people::core::v1::departments::*;
+    ///
+    /// let builder = client.feishu_people.core.v1.departments
+    ///     .get_department_builder("dept_001")
+    ///     .user_id_type("open_id");
+    ///
+    /// let response = builder.execute(&client.feishu_people.core.v1.departments).await?;
+    /// ```
+    pub fn get_department_builder(&self, department_id: &str) -> GetDepartmentBuilder {
+        GetDepartmentBuilder::new(department_id)
+    }
+
+    /// 批量获取部门构建器
+    ///
+    /// 提供流式API来构建批量获取部门的请求参数。
+    /// 支持链式调用，方便配置批量查询参数。
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::feishu_people::core::v1::departments::*;
+    ///
+    /// let builder = client.feishu_people.core.v1.departments
+    ///     .batch_get_departments_builder()
+    ///     .department_ids(vec!["dept_001".to_string(), "dept_002".to_string()])
+    ///     .user_id_type("open_id");
+    ///
+    /// let response = builder.execute(&client.feishu_people.core.v1.departments).await?;
+    /// ```
+    pub fn batch_get_departments_builder(&self) -> BatchGetDepartmentsBuilder {
+        BatchGetDepartmentsBuilder::new()
+    }
+
+    /// 获取子部门列表构建器
+    ///
+    /// 提供流式API来构建获取子部门列表的请求参数。
+    /// 支持链式调用，方便配置分页和过滤参数。
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::feishu_people::core::v1::departments::*;
+    ///
+    /// let builder = client.feishu_people.core.v1.departments
+    ///     .get_sub_departments_builder("dept_root")
+    ///     .page_size(20)
+    ///     .user_id_type("open_id");
+    ///
+    /// let response = builder.execute(&client.feishu_people.core.v1.departments).await?;
+    /// ```
+    pub fn get_sub_departments_builder(&self, department_id: &str) -> GetSubDepartmentsBuilder {
+        GetSubDepartmentsBuilder::new(department_id)
+    }
+
+    /// 获取根部门列表构建器
+    ///
+    /// 提供流式API来构建获取根部门列表的请求参数。
+    /// 支持链式调用，方便配置分页参数。
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::feishu_people::core::v1::departments::*;
+    ///
+    /// let builder = client.feishu_people.core.v1.departments
+    ///     .get_root_departments_builder()
+    ///     .page_size(20)
+    ///     .user_id_type("open_id");
+    ///
+    /// let response = builder.execute(&client.feishu_people.core.v1.departments).await?;
+    /// ```
+    pub fn get_root_departments_builder(&self) -> GetRootDepartmentsBuilder {
+        GetRootDepartmentsBuilder::new()
+    }
+
+    /// 搜索部门构建器
+    ///
+    /// 提供流式API来构建搜索部门的请求参数。
+    /// 支持链式调用，方便配置搜索条件和分页参数。
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::feishu_people::core::v1::departments::*;
+    ///
+    /// let builder = client.feishu_people.core.v1.departments
+    ///     .search_departments_builder()
+    ///     .query("研发".to_string())
+    ///     .page_size(20)
+    ///     .user_id_type("open_id");
+    ///
+    /// let response = builder.execute(&client.feishu_people.core.v1.departments).await?;
+    /// ```
+    pub fn search_departments_builder(&self) -> SearchDepartmentsBuilder {
+        SearchDepartmentsBuilder::new()
+    }
+
+    /// 创建部门构建器
+    ///
+    /// 提供流式API来构建创建部门的请求参数。
+    /// 支持链式调用，方便构建复杂的部门创建请求。
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::feishu_people::core::v1::departments::*;
+    ///
+    /// let department_data = DepartmentCreateData {
+    ///     name: "研发部".to_string(),
+    ///     parent_department_id: Some("dept_root".to_string()),
+    ///     ..Default::default()
+    /// };
+    ///
+    /// let builder = client.feishu_people.core.v1.departments
+    ///     .create_department_builder()
+    ///     .department_data(department_data)
+    ///     .user_id_type("open_id");
+    ///
+    /// let response = builder.execute(&client.feishu_people.core.v1.departments).await?;
+    /// ```
+    pub fn create_department_builder(&self) -> CreateDepartmentBuilder {
+        CreateDepartmentBuilder::new()
+    }
+
+    /// 更新部门构建器
+    ///
+    /// 提供流式API来构建更新部门的请求参数。
+    /// 支持链式调用，方便构建部门更新请求。
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::feishu_people::core::v1::departments::*;
+    ///
+    /// let update_data = DepartmentUpdateData {
+    ///     name: Some("研发部(更新)".to_string()),
+    ///     description: Some("新的描述".to_string()),
+    ///     ..Default::default()
+    /// };
+    ///
+    /// let builder = client.feishu_people.core.v1.departments
+    ///     .update_department_builder("dept_001")
+    ///     .department_data(update_data)
+    ///     .user_id_type("open_id");
+    ///
+    /// let response = builder.execute(&client.feishu_people.core.v1.departments).await?;
+    /// ```
+    pub fn update_department_builder(&self, department_id: &str) -> UpdateDepartmentBuilder {
+        UpdateDepartmentBuilder::new(department_id)
+    }
+
+    /// 删除部门构建器
+    ///
+    /// 提供流式API来构建删除部门的请求参数。
+    /// 支持链式调用，方便配置删除参数。
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::feishu_people::core::v1::departments::*;
+    ///
+    /// let builder = client.feishu_people.core.v1.departments
+    ///     .delete_department_builder("dept_001")
+    ///     .user_id_type("open_id");
+    ///
+    /// let response = builder.execute(&client.feishu_people.core.v1.departments).await?;
+    /// ```
+    pub fn delete_department_builder(&self, department_id: &str) -> DeleteDepartmentBuilder {
+        DeleteDepartmentBuilder::new(department_id)
+    }
+
+    /// 获取部门人员列表构建器
+    ///
+    /// 提供流式API来构建获取部门人员列表的请求参数。
+    /// 支持链式调用，方便配置分页和查询参数。
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::feishu_people::core::v1::departments::*;
+    ///
+    /// let builder = client.feishu_people.core.v1.departments
+    ///     .get_department_members_builder("dept_001")
+    ///     .page_size(20)
+    ///     .user_id_type("open_id");
+    ///
+    /// let response = builder.execute(&client.feishu_people.core.v1.departments).await?;
+    /// ```
+    pub fn get_department_members_builder(
+        &self,
+        department_id: &str,
+    ) -> GetDepartmentMembersBuilder {
+        GetDepartmentMembersBuilder::new(department_id)
+    }
+
+    /// 获取部门统计信息构建器
+    ///
+    /// 提供流式API来构建获取部门统计信息的请求参数。
+    /// 支持链式调用，方便配置过滤参数。
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::feishu_people::core::v1::departments::*;
+    ///
+    /// let builder = client.feishu_people.core.v1.departments
+    ///     .get_department_statistics_builder("dept_001");
+    ///
+    /// let response = builder.execute(&client.feishu_people.core.v1.departments).await?;
+    /// ```
+    pub fn get_department_statistics_builder(
+        &self,
+        department_id: &str,
+    ) -> GetDepartmentStatisticsBuilder {
+        GetDepartmentStatisticsBuilder::new(department_id)
+    }
+}
+
+// ==================== Builder结构体实现 ====================
+
+/// 获取部门详情构建器
+#[derive(Debug, Clone)]
+pub struct GetDepartmentBuilder {
+    department_id: String,
+    request: GetDepartmentRequest,
+}
+
+impl GetDepartmentBuilder {
+    /// 创建新的Builder实例
+    pub fn new(department_id: &str) -> Self {
+        Self {
+            department_id: department_id.to_string(),
+            request: GetDepartmentRequest::default(),
+        }
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: &str) -> Self {
+        self.request.user_id_type = Some(user_id_type.to_string());
+        self
+    }
+
+    /// 构建最终的请求对象
+    pub fn build(self) -> (String, GetDepartmentRequest) {
+        (self.department_id, self.request)
+    }
+}
+
+impl Default for GetDepartmentBuilder {
+    fn default() -> Self {
+        Self::new("")
+    }
+}
+
+// 应用ExecutableBuilder trait - 使用自定义实现
+#[async_trait::async_trait]
+impl
+    open_lark_core::core::trait_system::ExecutableBuilder<
+        DepartmentsService,
+        (String, GetDepartmentRequest),
+        BaseResponse<GetDepartmentResponse>,
+    > for GetDepartmentBuilder
+{
+    async fn execute(
+        &self,
+        service: &DepartmentsService,
+        _option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<GetDepartmentResponse>> {
+        service.get_with_tuple(self.clone().build()).await
+    }
+}
+
+/// 批量获取部门构建器
+#[derive(Debug, Clone)]
+pub struct BatchGetDepartmentsBuilder {
+    request: BatchGetDepartmentsRequest,
+}
+
+impl BatchGetDepartmentsBuilder {
+    /// 创建新的Builder实例
+    pub fn new() -> Self {
+        Self {
+            request: BatchGetDepartmentsRequest::default(),
+        }
+    }
+
+    /// 设置部门ID列表
+    pub fn department_ids(mut self, department_ids: Vec<String>) -> Self {
+        self.request.department_ids = department_ids;
+        self
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: &str) -> Self {
+        self.request.user_id_type = Some(user_id_type.to_string());
+        self
+    }
+
+    /// 构建最终的请求对象
+    pub fn build(self) -> BatchGetDepartmentsRequest {
+        self.request
+    }
+}
+
+impl Default for BatchGetDepartmentsBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+// 应用ExecutableBuilder trait - 标准实现
+crate::impl_executable_builder!(
+    BatchGetDepartmentsBuilder,
+    DepartmentsService,
+    BatchGetDepartmentsRequest,
+    BaseResponse<BatchGetDepartmentsResponse>,
+    batch_get
+);
+
+/// 获取子部门列表构建器
+#[derive(Debug, Clone)]
+pub struct GetSubDepartmentsBuilder {
+    request: GetSubDepartmentsRequest,
+}
+
+impl GetSubDepartmentsBuilder {
+    /// 创建新的Builder实例
+    pub fn new(department_id: &str) -> Self {
+        Self {
+            request: GetSubDepartmentsRequest {
                 department_id: department_id.to_string(),
-                total_members: 25,
-                active_members: 23,
-                inactive_members: 2,
-                sub_departments_count: 3,
-                recent_joins: 2,
-                recent_leaves: 1,
-                ..Default::default()
-            }),
-        })
+                page_size: None,
+                page_token: None,
+                user_id_type: None,
+            },
+        }
+    }
+
+    /// 设置分页大小
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.request.page_size = Some(page_size);
+        self
+    }
+
+    /// 设置分页标记
+    pub fn page_token(mut self, page_token: &str) -> Self {
+        self.request.page_token = Some(page_token.to_string());
+        self
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: &str) -> Self {
+        self.request.user_id_type = Some(user_id_type.to_string());
+        self
+    }
+
+    /// 构建最终的请求对象
+    pub fn build(self) -> GetSubDepartmentsRequest {
+        self.request
+    }
+}
+
+impl Default for GetSubDepartmentsBuilder {
+    fn default() -> Self {
+        Self::new("")
+    }
+}
+
+// 应用ExecutableBuilder trait
+crate::impl_executable_builder!(
+    GetSubDepartmentsBuilder,
+    DepartmentsService,
+    GetSubDepartmentsRequest,
+    BaseResponse<GetSubDepartmentsResponse>,
+    get_sub_departments
+);
+
+/// 获取根部门列表构建器
+#[derive(Debug, Clone)]
+pub struct GetRootDepartmentsBuilder {
+    request: GetRootDepartmentsRequest,
+}
+
+impl GetRootDepartmentsBuilder {
+    /// 创建新的Builder实例
+    pub fn new() -> Self {
+        Self {
+            request: GetRootDepartmentsRequest::default(),
+        }
+    }
+
+    /// 设置分页大小
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.request.page_size = Some(page_size);
+        self
+    }
+
+    /// 设置分页标记
+    pub fn page_token(mut self, page_token: &str) -> Self {
+        self.request.page_token = Some(page_token.to_string());
+        self
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: &str) -> Self {
+        self.request.user_id_type = Some(user_id_type.to_string());
+        self
+    }
+
+    /// 构建最终的请求对象
+    pub fn build(self) -> GetRootDepartmentsRequest {
+        self.request
+    }
+}
+
+impl Default for GetRootDepartmentsBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+// 应用ExecutableBuilder trait
+crate::impl_executable_builder!(
+    GetRootDepartmentsBuilder,
+    DepartmentsService,
+    GetRootDepartmentsRequest,
+    BaseResponse<GetRootDepartmentsResponse>,
+    get_root_departments
+);
+
+/// 搜索部门构建器
+#[derive(Debug, Clone)]
+pub struct SearchDepartmentsBuilder {
+    request: SearchDepartmentsRequest,
+}
+
+impl SearchDepartmentsBuilder {
+    /// 创建新的Builder实例
+    pub fn new() -> Self {
+        Self {
+            request: SearchDepartmentsRequest::default(),
+        }
+    }
+
+    /// 设置搜索关键词
+    pub fn query(mut self, query: String) -> Self {
+        self.request.query = query;
+        self
+    }
+
+    /// 设置分页大小
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.request.page_size = Some(page_size);
+        self
+    }
+
+    /// 设置分页标记
+    pub fn page_token(mut self, page_token: &str) -> Self {
+        self.request.page_token = Some(page_token.to_string());
+        self
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: &str) -> Self {
+        self.request.user_id_type = Some(user_id_type.to_string());
+        self
+    }
+
+    /// 构建最终的请求对象
+    pub fn build(self) -> SearchDepartmentsRequest {
+        self.request
+    }
+}
+
+impl Default for SearchDepartmentsBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+// 应用ExecutableBuilder trait
+crate::impl_executable_builder!(
+    SearchDepartmentsBuilder,
+    DepartmentsService,
+    SearchDepartmentsRequest,
+    BaseResponse<SearchDepartmentsResponse>,
+    search
+);
+
+/// 创建部门构建器
+#[derive(Debug, Clone)]
+pub struct CreateDepartmentBuilder {
+    request: CreateDepartmentRequest,
+}
+
+impl CreateDepartmentBuilder {
+    /// 创建新的Builder实例
+    pub fn new() -> Self {
+        Self {
+            request: CreateDepartmentRequest::default(),
+        }
+    }
+
+    /// 设置部门数据
+    pub fn department_data(mut self, department_data: DepartmentCreateData) -> Self {
+        self.request.department_data = department_data;
+        self
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: &str) -> Self {
+        self.request.user_id_type = Some(user_id_type.to_string());
+        self
+    }
+
+    /// 构建最终的请求对象
+    pub fn build(self) -> CreateDepartmentRequest {
+        self.request
+    }
+}
+
+impl Default for CreateDepartmentBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+// 应用ExecutableBuilder trait
+crate::impl_executable_builder!(
+    CreateDepartmentBuilder,
+    DepartmentsService,
+    CreateDepartmentRequest,
+    BaseResponse<CreateDepartmentResponse>,
+    create
+);
+
+/// 更新部门构建器
+#[derive(Debug, Clone)]
+pub struct UpdateDepartmentBuilder {
+    department_id: String,
+    request: UpdateDepartmentRequest,
+}
+
+impl UpdateDepartmentBuilder {
+    /// 创建新的Builder实例
+    pub fn new(department_id: &str) -> Self {
+        Self {
+            department_id: department_id.to_string(),
+            request: UpdateDepartmentRequest::default(),
+        }
+    }
+
+    /// 设置部门数据
+    pub fn department_data(mut self, department_data: DepartmentUpdateData) -> Self {
+        self.request.department_data = department_data;
+        self
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: &str) -> Self {
+        self.request.user_id_type = Some(user_id_type.to_string());
+        self
+    }
+
+    /// 构建最终的请求对象
+    pub fn build(self) -> (String, UpdateDepartmentRequest) {
+        (self.department_id, self.request)
+    }
+}
+
+impl Default for UpdateDepartmentBuilder {
+    fn default() -> Self {
+        Self::new("")
+    }
+}
+
+// 应用ExecutableBuilder trait - 使用自定义实现
+#[async_trait::async_trait]
+impl
+    open_lark_core::core::trait_system::ExecutableBuilder<
+        DepartmentsService,
+        (String, UpdateDepartmentRequest),
+        BaseResponse<UpdateDepartmentResponse>,
+    > for UpdateDepartmentBuilder
+{
+    async fn execute(
+        &self,
+        service: &DepartmentsService,
+        _option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<UpdateDepartmentResponse>> {
+        service.update_with_tuple(self.clone().build()).await
+    }
+}
+
+/// 删除部门构建器
+#[derive(Debug, Clone)]
+pub struct DeleteDepartmentBuilder {
+    department_id: String,
+    request: DeleteDepartmentRequest,
+}
+
+impl DeleteDepartmentBuilder {
+    /// 创建新的Builder实例
+    pub fn new(department_id: &str) -> Self {
+        Self {
+            department_id: department_id.to_string(),
+            request: DeleteDepartmentRequest::default(),
+        }
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: &str) -> Self {
+        self.request.user_id_type = Some(user_id_type.to_string());
+        self
+    }
+
+    /// 构建最终的请求对象
+    pub fn build(self) -> (String, DeleteDepartmentRequest) {
+        (self.department_id, self.request)
+    }
+}
+
+impl Default for DeleteDepartmentBuilder {
+    fn default() -> Self {
+        Self::new("")
+    }
+}
+
+// 应用ExecutableBuilder trait - 使用自定义实现
+#[async_trait::async_trait]
+impl
+    open_lark_core::core::trait_system::ExecutableBuilder<
+        DepartmentsService,
+        (String, DeleteDepartmentRequest),
+        BaseResponse<DeleteDepartmentResponse>,
+    > for DeleteDepartmentBuilder
+{
+    async fn execute(
+        &self,
+        service: &DepartmentsService,
+        _option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<DeleteDepartmentResponse>> {
+        service.delete_with_tuple(self.clone().build()).await
+    }
+}
+
+/// 获取部门人员列表构建器
+#[derive(Debug, Clone)]
+pub struct GetDepartmentMembersBuilder {
+    request: GetDepartmentMembersRequest,
+}
+
+impl GetDepartmentMembersBuilder {
+    /// 创建新的Builder实例
+    pub fn new(department_id: &str) -> Self {
+        Self {
+            request: GetDepartmentMembersRequest {
+                department_id: department_id.to_string(),
+                page_size: None,
+                page_token: None,
+                user_id_type: None,
+            },
+        }
+    }
+
+    /// 设置分页大小
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.request.page_size = Some(page_size);
+        self
+    }
+
+    /// 设置分页标记
+    pub fn page_token(mut self, page_token: &str) -> Self {
+        self.request.page_token = Some(page_token.to_string());
+        self
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: &str) -> Self {
+        self.request.user_id_type = Some(user_id_type.to_string());
+        self
+    }
+
+    /// 构建最终的请求对象
+    pub fn build(self) -> GetDepartmentMembersRequest {
+        self.request
+    }
+}
+
+impl Default for GetDepartmentMembersBuilder {
+    fn default() -> Self {
+        Self::new("")
+    }
+}
+
+// 应用ExecutableBuilder trait
+crate::impl_executable_builder!(
+    GetDepartmentMembersBuilder,
+    DepartmentsService,
+    GetDepartmentMembersRequest,
+    BaseResponse<GetDepartmentMembersResponse>,
+    get_members
+);
+
+/// 获取部门统计信息构建器
+#[derive(Debug, Clone)]
+pub struct GetDepartmentStatisticsBuilder {
+    request: GetDepartmentStatisticsRequest,
+}
+
+impl GetDepartmentStatisticsBuilder {
+    /// 创建新的Builder实例
+    pub fn new(department_id: &str) -> Self {
+        Self {
+            request: GetDepartmentStatisticsRequest {
+                department_id: department_id.to_string(),
+            },
+        }
+    }
+
+    /// 构建最终的请求对象
+    pub fn build(self) -> GetDepartmentStatisticsRequest {
+        self.request
+    }
+}
+
+impl Default for GetDepartmentStatisticsBuilder {
+    fn default() -> Self {
+        Self::new("")
+    }
+}
+
+// 应用ExecutableBuilder trait
+crate::impl_executable_builder!(
+    GetDepartmentStatisticsBuilder,
+    DepartmentsService,
+    GetDepartmentStatisticsRequest,
+    BaseResponse<GetDepartmentStatisticsResponse>,
+    get_statistics
+);
+
+// 为DepartmentsService实现辅助方法，处理Builder的参数
+impl DepartmentsService {
+    async fn get_with_tuple(
+        &self,
+        params: (String, GetDepartmentRequest),
+    ) -> SDKResult<BaseResponse<GetDepartmentResponse>> {
+        self.get(&params.0, &params.1).await
+    }
+
+    async fn update_with_tuple(
+        &self,
+        params: (String, UpdateDepartmentRequest),
+    ) -> SDKResult<BaseResponse<UpdateDepartmentResponse>> {
+        self.update(&params.0, &params.1).await
+    }
+
+    async fn delete_with_tuple(
+        &self,
+        params: (String, DeleteDepartmentRequest),
+    ) -> SDKResult<BaseResponse<DeleteDepartmentResponse>> {
+        self.delete(&params.0, &params.1).await
     }
 }
 
 // ==================== 数据模型 ====================
 
-/// 部门响应
+/// 获取部门请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DepartmentResponse {
-    /// 状态码
-    pub code: i32,
-    /// 消息
-    pub msg: String,
-    /// 部门数据
-    pub data: Option<Department>,
+pub struct GetDepartmentRequest {
+    /// 用户ID类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id_type: Option<String>,
 }
 
-/// 部门列表响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DepartmentListResponse {
-    /// 状态码
-    pub code: i32,
-    /// 消息
-    pub msg: String,
-    /// 部门列表数据
-    pub data: Option<PageResponse<Department>>,
+impl Default for GetDepartmentRequest {
+    fn default() -> Self {
+        Self { user_id_type: None }
+    }
 }
 
-/// 部门搜索响应
+/// 获取部门响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DepartmentSearchResponse {
-    /// 状态码
-    pub code: i32,
-    /// 消息
-    pub msg: String,
-    /// 搜索结果数据
-    pub data: Option<DepartmentSearchData>,
+pub struct GetDepartmentResponse {
+    /// 部门信息
+    pub department: Department,
 }
 
-/// 部门搜索数据
+impl ApiResponseTrait for GetDepartmentResponse {
+    fn data_format() -> crate::core::api_resp::ResponseFormat {
+        crate::core::api_resp::ResponseFormat::Data
+    }
+}
+
+/// 批量获取部门请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DepartmentSearchData {
+pub struct BatchGetDepartmentsRequest {
+    /// 部门ID列表
+    pub department_ids: Vec<String>,
+    /// 用户ID类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id_type: Option<String>,
+}
+
+impl Default for BatchGetDepartmentsRequest {
+    fn default() -> Self {
+        Self {
+            department_ids: vec![],
+            user_id_type: None,
+        }
+    }
+}
+
+/// 批量获取部门响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BatchGetDepartmentsResponse {
+    /// 部门列表
+    pub items: Vec<Department>,
+    /// 是否还有更多数据
+    pub has_more: Option<bool>,
+    /// 分页标记
+    pub page_token: Option<String>,
+    /// 总数
+    pub total: Option<i32>,
+}
+
+impl ApiResponseTrait for BatchGetDepartmentsResponse {
+    fn data_format() -> crate::core::api_resp::ResponseFormat {
+        crate::core::api_resp::ResponseFormat::Data
+    }
+}
+
+/// 获取子部门列表请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetSubDepartmentsRequest {
+    /// 部门ID
+    pub department_id: String,
+    /// 分页大小
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i32>,
+    /// 分页标记
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// 用户ID类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id_type: Option<String>,
+}
+
+/// 获取子部门列表响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetSubDepartmentsResponse {
+    /// 子部门列表
+    pub items: Vec<Department>,
+    /// 是否还有更多数据
+    pub has_more: Option<bool>,
+    /// 分页标记
+    pub page_token: Option<String>,
+    /// 总数
+    pub total: Option<i32>,
+}
+
+impl ApiResponseTrait for GetSubDepartmentsResponse {
+    fn data_format() -> crate::core::api_resp::ResponseFormat {
+        crate::core::api_resp::ResponseFormat::Data
+    }
+}
+
+/// 获取根部门列表请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetRootDepartmentsRequest {
+    /// 分页大小
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i32>,
+    /// 分页标记
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// 用户ID类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id_type: Option<String>,
+}
+
+impl Default for GetRootDepartmentsRequest {
+    fn default() -> Self {
+        Self {
+            page_size: None,
+            page_token: None,
+            user_id_type: None,
+        }
+    }
+}
+
+/// 获取根部门列表响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetRootDepartmentsResponse {
+    /// 根部门列表
+    pub items: Vec<Department>,
+    /// 是否还有更多数据
+    pub has_more: Option<bool>,
+    /// 分页标记
+    pub page_token: Option<String>,
+    /// 总数
+    pub total: Option<i32>,
+}
+
+impl ApiResponseTrait for GetRootDepartmentsResponse {
+    fn data_format() -> crate::core::api_resp::ResponseFormat {
+        crate::core::api_resp::ResponseFormat::Data
+    }
+}
+
+/// 搜索部门请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SearchDepartmentsRequest {
+    /// 搜索关键词
+    pub query: String,
+    /// 分页大小
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i32>,
+    /// 分页标记
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// 用户ID类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id_type: Option<String>,
+}
+
+impl Default for SearchDepartmentsRequest {
+    fn default() -> Self {
+        Self {
+            query: String::new(),
+            page_size: None,
+            page_token: None,
+            user_id_type: None,
+        }
+    }
+}
+
+/// 搜索部门响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SearchDepartmentsResponse {
     /// 搜索结果项
     pub items: Vec<DepartmentSearchResult>,
     /// 分页标记
@@ -351,6 +1685,127 @@ pub struct DepartmentSearchData {
     pub has_more: Option<bool>,
     /// 总数
     pub total: Option<i32>,
+}
+
+/// 创建部门请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateDepartmentRequest {
+    /// 部门数据
+    pub department_data: DepartmentCreateData,
+    /// 用户ID类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id_type: Option<String>,
+}
+
+impl Default for CreateDepartmentRequest {
+    fn default() -> Self {
+        Self {
+            department_data: DepartmentCreateData::default(),
+            user_id_type: None,
+        }
+    }
+}
+
+/// 创建部门响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateDepartmentResponse {
+    /// 部门ID
+    pub department_id: String,
+    /// 部门信息
+    pub department: Department,
+}
+
+/// 更新部门请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UpdateDepartmentRequest {
+    /// 部门数据
+    pub department_data: DepartmentUpdateData,
+    /// 用户ID类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id_type: Option<String>,
+}
+
+impl Default for UpdateDepartmentRequest {
+    fn default() -> Self {
+        Self {
+            department_data: DepartmentUpdateData::default(),
+            user_id_type: None,
+        }
+    }
+}
+
+/// 更新部门响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UpdateDepartmentResponse {
+    /// 部门信息
+    pub department: Department,
+}
+
+/// 删除部门请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DeleteDepartmentRequest {
+    /// 用户ID类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id_type: Option<String>,
+}
+
+impl Default for DeleteDepartmentRequest {
+    fn default() -> Self {
+        Self { user_id_type: None }
+    }
+}
+
+/// 删除部门响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct DeleteDepartmentResponse {}
+
+/// 获取部门人员列表请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetDepartmentMembersRequest {
+    /// 部门ID
+    pub department_id: String,
+    /// 分页大小
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i32>,
+    /// 分页标记
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// 用户ID类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id_type: Option<String>,
+}
+
+/// 获取部门人员列表响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetDepartmentMembersResponse {
+    /// 人员列表
+    pub items: Vec<Person>,
+    /// 是否还有更多数据
+    pub has_more: Option<bool>,
+    /// 分页标记
+    pub page_token: Option<String>,
+    /// 总数
+    pub total: Option<i32>,
+}
+
+impl ApiResponseTrait for GetDepartmentMembersResponse {
+    fn data_format() -> crate::core::api_resp::ResponseFormat {
+        crate::core::api_resp::ResponseFormat::Data
+    }
+}
+
+/// 获取部门统计信息请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetDepartmentStatisticsRequest {
+    /// 部门ID
+    pub department_id: String,
+}
+
+/// 获取部门统计信息响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetDepartmentStatisticsResponse {
+    /// 统计信息
+    pub statistics: DepartmentStatistics,
 }
 
 /// 部门搜索结果
@@ -372,17 +1827,6 @@ pub struct DepartmentSearchResult {
     pub match_score: f64,
 }
 
-/// 部门统计响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DepartmentStatisticsResponse {
-    /// 状态码
-    pub code: i32,
-    /// 消息
-    pub msg: String,
-    /// 统计数据
-    pub data: Option<DepartmentStatistics>,
-}
-
 /// 部门统计信息
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DepartmentStatistics {
@@ -400,8 +1844,8 @@ pub struct DepartmentStatistics {
     pub recent_joins: i32,
     /// 近期离职人数
     pub recent_leaves: i32,
-    /// 平均工作年限
-    pub avg_tenure_years: Option<f64>,
+    /// 活跃率
+    pub active_rate: f64,
     /// 性别分布
     pub gender_distribution: Option<serde_json::Value>,
     /// 年龄分布
@@ -509,49 +1953,63 @@ pub struct DepartmentUpdateData {
     pub extended_attributes: Option<serde_json::Value>,
 }
 
-/// 人员信息（重新导出）
-pub use super::persons::{Person, PersonListResponse, PageResponse};
+/// 人员信息
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct Person {
+    /// 用户ID
+    pub user_id: String,
+    /// 姓名
+    pub name: String,
+    /// 英文名
+    pub en_name: Option<String>,
+    /// 邮箱
+    pub email: Option<String>,
+    /// 手机号
+    pub mobile: Option<String>,
+    /// 员工类型
+    pub employee_type: Option<String>,
+    /// 状态
+    pub status: Option<String>,
+    /// 职位
+    pub position: Option<String>,
+    /// 部门
+    pub department: Option<String>,
+    /// 部门ID列表
+    pub department_ids: Option<Vec<String>>,
+    /// 入职时间
+    pub hire_time: Option<String>,
+    /// 扩展属性
+    pub extended_attributes: Option<serde_json::Value>,
+}
 
-/// 空响应（重新导出）
-pub use super::persons::EmptyResponse;
+// ==================== ApiResponseTrait实现 ====================
 
-// 实现Default trait
-impl Default for DepartmentResponse {
-    fn default() -> Self {
-        Self {
-            code: 0,
-            msg: String::new(),
-            data: None,
-        }
+impl ApiResponseTrait for SearchDepartmentsResponse {
+    fn data_format() -> crate::core::api_resp::ResponseFormat {
+        crate::core::api_resp::ResponseFormat::Data
     }
 }
 
-impl Default for DepartmentListResponse {
-    fn default() -> Self {
-        Self {
-            code: 0,
-            msg: String::new(),
-            data: None,
-        }
+impl ApiResponseTrait for CreateDepartmentResponse {
+    fn data_format() -> crate::core::api_resp::ResponseFormat {
+        crate::core::api_resp::ResponseFormat::Data
     }
 }
 
-impl Default for DepartmentSearchResponse {
-    fn default() -> Self {
-        Self {
-            code: 0,
-            msg: String::new(),
-            data: None,
-        }
+impl ApiResponseTrait for UpdateDepartmentResponse {
+    fn data_format() -> crate::core::api_resp::ResponseFormat {
+        crate::core::api_resp::ResponseFormat::Data
     }
 }
 
-impl Default for DepartmentStatisticsResponse {
-    fn default() -> Self {
-        Self {
-            code: 0,
-            msg: String::new(),
-            data: None,
-        }
+impl ApiResponseTrait for DeleteDepartmentResponse {
+    fn data_format() -> crate::core::api_resp::ResponseFormat {
+        crate::core::api_resp::ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for GetDepartmentStatisticsResponse {
+    fn data_format() -> crate::core::api_resp::ResponseFormat {
+        crate::core::api_resp::ResponseFormat::Data
     }
 }
