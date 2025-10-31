@@ -1,10 +1,41 @@
-//! Analytics服务模块 - 简化实现
+//! Analytics数据分析服务
+//!
+//! 提供企业级数据分析的完整功能：
+//! - 数据概览和统计分析
+//! - 用户行为分析和洞察
+//! - 应用使用统计和趋势分析
+//! - 自定义报表和数据可视化
+//! - 智能业务洞察和预测分析
+//! - 实时监控和智能告警
 
-use serde::{Deserialize, Serialize};
 use crate::core::config::Config;
-use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
+use open_lark_core::prelude::*;
+use serde::{Deserialize, Serialize};
 
-/// 简化的服务结构体
+// 导入V1版本的服务
+pub mod v1;
+pub use v1::*;
+
+/// Analytics服务主入口
+#[derive(Debug, Clone)]
+pub struct AnalyticsService {
+    pub config: Config,
+    pub v1: AnalyticsServiceV1,
+}
+
+impl AnalyticsService {
+    pub fn new(config: Config) -> Self {
+        Self {
+            config: config.clone(),
+            v1: AnalyticsServiceV1::new(config),
+        }
+    }
+}
+
+// 兼容性类型别名
+pub type ServiceType = AnalyticsService;
+
+// 保持向后兼容的简化实现
 #[derive(Debug, Clone)]
 pub struct SimpleService {
     pub config: Config,
@@ -25,20 +56,5 @@ impl ApiResponseTrait for SimpleResponse {
     }
 }
 
-/// Analytics服务
-#[derive(Debug, Clone)]
-pub struct AnalyticsService {
-    pub service: SimpleService,
-}
-
-impl AnalyticsService {
-    pub fn new(config: Config) -> Self {
-        Self {
-            service: SimpleService::new(config),
-        }
-    }
-}
-
 // Type alias for compatibility
-pub type ServiceType = AnalyticsService;
 pub type ResponseType = SimpleResponse;

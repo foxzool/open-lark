@@ -94,6 +94,8 @@ pub mod admin;
 pub mod ai;
 #[cfg(feature = "aily")]
 pub mod aily;
+#[cfg(feature = "analytics")]
+pub mod analytics;
 #[cfg(feature = "apass")]
 pub mod apass;
 #[cfg(feature = "app_engine")]
