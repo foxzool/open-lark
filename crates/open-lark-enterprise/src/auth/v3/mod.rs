@@ -4,7 +4,6 @@
 
 use open_lark_core::core::config::Config;
 use open_lark_core::prelude::*;
-use serde::{Deserialize, Serialize};
 
 /// Auth服务 v3版本
 #[derive(Debug, Clone)]
