@@ -11,21 +11,69 @@
 use crate::core::config::Config;
 use open_lark_core::prelude::*;
 
-// 导入models模块
+// 导入modules模块
 pub mod models;
+pub mod attendance;
 
-// 重新导出所有模块和类型
-pub use models::*;
+// 重新导出models中的核心类型（排除AttendanceRecord和AttendanceStatus，避免冲突）
+pub use models::{
+    Gender, MaritalStatus, EmployeeStatus, EmploymentType, EducationLevel,
+    Employee, EmergencyContact, BankAccount, SocialInsurance, Department,
+    Position, SalaryRange, EmployeePosition, Salary, Allowance, Deduction,
+    SalaryAdjustment, PerformanceEvaluation, PerformanceDimension, EvaluationStatus,
+    CreateEmployeeRequest, UpdateEmployeeRequest, QueryEmployeeRequest, EmployeeUpdateFields,
+    PageResponse, BaseResponse, EmployeeListResponse, EmployeeResponse, DepartmentListResponse,
+    PositionListResponse, SalaryListResponse, PerformanceListResponse, EmptyResponse,
+};
+
+// 重新导出attendance中的类型
+pub use attendance::{
+    // 服务
+    AttendanceService,
+
+    // API请求响应类型
+    GetAttendanceRecordsRequest, GetAttendanceRecordsResponse,
+    BatchGetAttendanceRecordsRequest, BatchGetAttendanceRecordsResponse,
+    CreateCheckinRecordRequest, CreateCheckinRecordResponse,
+    UpdateCheckinRecordRequest, UpdateCheckinRecordResponse,
+    DeleteCheckinRecordResponse,
+    GetAttendanceStatisticsRequest, GetAttendanceStatisticsResponse,
+    GetAttendanceExceptionsRequest, GetAttendanceExceptionsResponse,
+    ProcessAttendanceExceptionRequest, ProcessAttendanceExceptionResponse,
+    GetAttendanceReportRequest, GetAttendanceReportResponse,
+    AttendanceListResponse,
+
+    // Builder类型
+    GetAttendanceRecordsBuilder, BatchGetAttendanceRecordsBuilder,
+    CreateCheckinRecordBuilder, UpdateCheckinRecordBuilder, DeleteCheckinRecordBuilder,
+    GetAttendanceStatisticsBuilder, GetAttendanceExceptionsBuilder,
+    ProcessAttendanceExceptionBuilder, GetAttendanceReportBuilder,
+
+    // 数据结构体
+    AttendanceRecord, CheckinRecord, CheckinLocation,
+    CheckinRecordCreateData, CheckinRecordUpdateData, EmployeeAttendanceSummary,
+    AttendanceStatistics, ExceptionSummary, LateSummary, EarlyLeaveSummary, AbsentSummary,
+    AttendanceException, AttendanceExceptionProcessData,
+
+    // 枚举类型
+    AttendanceStatus, CheckinType, StatisticsType, ExceptionAction, ReportType, ReportFormat,
+};
 
 /// EHR服务 v1版本
 #[derive(Debug, Clone)]
 pub struct EhrServiceV1 {
     pub config: Config,
+    /// 考勤管理服务
+    pub attendance: AttendanceService,
 }
 
 impl EhrServiceV1 {
     pub fn new(config: Config) -> Self {
-        Self { config }
+        let config_clone = config.clone();
+        Self {
+            config,
+            attendance: AttendanceService::new(config_clone),
+        }
     }
 
     // ==================== 员工管理 ====================
