@@ -860,18 +860,19 @@ assert!(json.contains("no_adjustment"));
     }
 #[test]
     fn test_minimal_structs() {
-let minimal_i18n = I18nText {,
+        let minimal_i18n = I18nText {
             zh_cn: Some("中文".to_string()),
             en_us: None,
             ja_jp: None,
         };
-let json = serde_json::to_string(&minimal_i18n).unwrap();
+        let json = serde_json::to_string(&minimal_i18n).unwrap();
         assert!(json.contains("中文"));
         // Note: serde includes null fields by default, so en_us will appear as null,
-assert!(json.contains("en_us"));
+        assert!(json.contains("en_us"));
         let minimal_request = PaymentDetailListRequest {
-            payment_activity_id: "minimal".to_string()
+            payment_activity_id: "minimal".to_string(),
             ..Default::default()
-};
-let json = serde_json::to_string(&minimal_request).unwrap();
+        };
+        let json = serde_json::to_string(&minimal_request).unwrap();
         assert!(json.contains("minimal"));
+    }

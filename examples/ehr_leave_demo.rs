@@ -19,7 +19,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // ==================== 创建请假申请 ====================
     println!("\n1. 创建年假申请");
 
-    let leave_response = client.ehr.v1.leave
+    let leave_response = client
+        .ehr
+        .v1
+        .leave
         .create_leave_builder()
         .employee_id("emp_001")
         .leave_type(LeaveType::Annual)
@@ -41,7 +44,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // ==================== 查询请假记录 ====================
     println!("\n2. 查询员工请假记录");
 
-    let records_response = client.ehr.v1.leave
+    let records_response = client
+        .ehr
+        .v1
+        .leave
         .query_leave_records_builder()
         .employee_id("emp_001")
         .status(LeaveStatus::Approved)
@@ -53,7 +59,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("✅ 找到 {} 条请假记录", records_response.data.items.len());
     for (i, record) in records_response.data.items.iter().enumerate() {
-        println!("   {}. {} - {}天 ({})",
+        println!(
+            "   {}. {} - {}天 ({})",
             i + 1,
             format_leave_type(&record.leave_type),
             record.leave_days,
@@ -64,7 +71,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // ==================== 查询请假余额 ====================
     println!("\n3. 查询年假余额");
 
-    let balance_response = client.ehr.v1.leave
+    let balance_response = client
+        .ehr
+        .v1
+        .leave
         .query_leave_balance_builder("emp_001")
         .leave_type(LeaveType::Annual)
         .year(2024)
@@ -81,7 +91,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // ==================== 请假审批（管理员视角） ====================
     println!("\n4. 请假审批演示");
 
-    let approval_response = client.ehr.v1.leave
+    let approval_response = client
+        .ehr
+        .v1
+        .leave
         .approve_leave_builder(&leave_id)
         .decision(LeaveApprovalDecision::Approve)
         .comment("同意请假，请注意安全并安排好工作交接")
@@ -96,7 +109,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // ==================== 获取请假统计 ====================
     println!("\n5. 获取员工请假统计");
 
-    let stats_response = client.ehr.v1.leave
+    let stats_response = client
+        .ehr
+        .v1
+        .leave
         .get_leave_statistics_builder()
         .employee_id("emp_001")
         .year(2024)
@@ -110,7 +126,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     if let Some(type_stats) = &stats_response.data.leave_type_stats {
         println!("   按类型统计:");
         for stat in type_stats {
-            println!("     {}: {}天 ({}次)",
+            println!(
+                "     {}: {}天 ({}次)",
                 format_leave_type(&stat.leave_type),
                 stat.leave_days,
                 stat.leave_count
@@ -121,7 +138,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // ==================== 创建请假规则 ====================
     println!("\n6. 创建请假规则（管理员功能）");
 
-    let rule_response = client.ehr.v1.leave
+    let rule_response = client
+        .ehr
+        .v1
+        .leave
         .create_leave_rule_builder()
         .leave_type(LeaveType::Annual)
         .name("标准年假规则")
@@ -139,12 +159,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("   规则ID: {}", rule_response.data.rule_id);
     println!("   规则名称: {}", rule_response.data.name);
     println!("   需要审批: {}", rule_response.data.requires_approval);
-    println!("   最大请假天数: {}", rule_response.data.max_leave_days.unwrap_or(0.0));
+    println!(
+        "   最大请假天数: {}",
+        rule_response.data.max_leave_days.unwrap_or(0.0)
+    );
 
     // ==================== 获取待审批列表 ====================
     println!("\n7. 获取待审批列表");
 
-    let pending_response = client.ehr.v1.leave
+    let pending_response = client
+        .ehr
+        .v1
+        .leave
         .get_pending_approvals_builder()
         .page_size(10)
         .execute(&client.ehr.v1.leave)
@@ -152,7 +178,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("✅ 找到 {} 个待审批申请", pending_response.data.items.len());
     for (i, record) in pending_response.data.items.iter().enumerate() {
-        println!("   {}. {} - {} ({})",
+        println!(
+            "   {}. {} - {} ({})",
             i + 1,
             record.employee_id,
             format_leave_type(&record.leave_type),
@@ -163,7 +190,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // ==================== 调整请假余额 ====================
     println!("\n8. 调整员工请假余额（HR功能）");
 
-    let adjust_response = client.ehr.v1.leave
+    let adjust_response = client
+        .ehr
+        .v1
+        .leave
         .adjust_leave_balance_builder("emp_001")
         .leave_type(LeaveType::Annual)
         .year(2024)
@@ -178,7 +208,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // ==================== 获取请假规则列表 ====================
     println!("\n9. 获取请假规则列表");
 
-    let rules_response = client.ehr.v1.leave
+    let rules_response = client
+        .ehr
+        .v1
+        .leave
         .get_leave_rules_builder()
         .leave_type(LeaveType::Annual)
         .page_size(20)
@@ -187,7 +220,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("✅ 找到 {} 条年假规则", rules_response.data.items.len());
     for (i, rule) in rules_response.data.items.iter().enumerate() {
-        println!("   {}. {} - 需要: {}, 最大: {}天",
+        println!(
+            "   {}. {} - 需要: {}, 最大: {}天",
             i + 1,
             rule.name,
             if rule.requires_approval { "是" } else { "否" },
