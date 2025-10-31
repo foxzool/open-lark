@@ -171,10 +171,7 @@ impl CompaniesService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!(
-                "/open-apis/feishu_people/core/v1/companies/{}",
-                company_id
-            ),
+            api_path: format!("/open-apis/feishu_people/core/v1/companies/{}", company_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params,
@@ -395,10 +392,7 @@ impl CompaniesService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::PUT,
-            api_path: format!(
-                "/open-apis/feishu_people/core/v1/companies/{}",
-                company_id
-            ),
+            api_path: format!("/open-apis/feishu_people/core/v1/companies/{}", company_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
             ..Default::default()
@@ -455,10 +449,7 @@ impl CompaniesService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
-            api_path: format!(
-                "/open-apis/feishu_people/core/v1/companies/{}",
-                company_id
-            ),
+            api_path: format!("/open-apis/feishu_people/core/v1/companies/{}", company_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params,
@@ -572,7 +563,8 @@ impl CompaniesService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: "/open-apis/feishu_people/core/v1/companies/organization_structure".to_string(),
+            api_path: "/open-apis/feishu_people/core/v1/companies/organization_structure"
+                .to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params,
@@ -831,7 +823,10 @@ impl CompaniesService {
     ///
     /// let response = builder.execute(&client.feishu_people.core.v1.companies).await?;
     /// ```
-    pub fn get_organization_structure_builder(&self, company_id: &str) -> GetOrganizationStructureBuilder {
+    pub fn get_organization_structure_builder(
+        &self,
+        company_id: &str,
+    ) -> GetOrganizationStructureBuilder {
         GetOrganizationStructureBuilder::new(company_id)
     }
 

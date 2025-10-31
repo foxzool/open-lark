@@ -24,7 +24,10 @@ impl CalendarServiceV4 {
     // ==================== 日程管理 ====================
 
     /// 创建日程
-    pub async fn create_calendar_event(&self, _request: &CreateCalendarEventRequest) -> SDKResult<CalendarEventResponse> {
+    pub async fn create_calendar_event(
+        &self,
+        _request: &CreateCalendarEventRequest,
+    ) -> SDKResult<CalendarEventResponse> {
         // 模拟实现
         Ok(CalendarEventResponse {
             code: 0,
@@ -45,7 +48,10 @@ impl CalendarServiceV4 {
     }
 
     /// 获取日程
-    pub async fn get_calendar_event(&self, _request: &GetCalendarEventRequest) -> SDKResult<CalendarEventResponse> {
+    pub async fn get_calendar_event(
+        &self,
+        _request: &GetCalendarEventRequest,
+    ) -> SDKResult<CalendarEventResponse> {
         // 模拟实现
         Ok(CalendarEventResponse {
             code: 0,
@@ -74,7 +80,10 @@ impl CalendarServiceV4 {
     }
 
     /// 更新日程
-    pub async fn update_calendar_event(&self, _request: &UpdateCalendarEventRequest) -> SDKResult<CalendarEventResponse> {
+    pub async fn update_calendar_event(
+        &self,
+        _request: &UpdateCalendarEventRequest,
+    ) -> SDKResult<CalendarEventResponse> {
         // 模拟实现
         Ok(CalendarEventResponse {
             code: 0,
@@ -94,7 +103,10 @@ impl CalendarServiceV4 {
     }
 
     /// 删除日程
-    pub async fn delete_calendar_event(&self, _request: &DeleteCalendarEventRequest) -> SDKResult<DeleteCalendarEventResponse> {
+    pub async fn delete_calendar_event(
+        &self,
+        _request: &DeleteCalendarEventRequest,
+    ) -> SDKResult<DeleteCalendarEventResponse> {
         // 模拟实现
         Ok(DeleteCalendarEventResponse {
             code: 0,
@@ -107,7 +119,10 @@ impl CalendarServiceV4 {
     }
 
     /// 获取日程列表
-    pub async fn list_calendar_events(&self, _request: &ListCalendarEventsRequest) -> SDKResult<CalendarEventListResponse> {
+    pub async fn list_calendar_events(
+        &self,
+        _request: &ListCalendarEventsRequest,
+    ) -> SDKResult<CalendarEventListResponse> {
         // 模拟实现
         Ok(CalendarEventListResponse {
             code: 0,
@@ -164,7 +179,10 @@ impl CalendarServiceV4 {
     // ==================== 日历管理 ====================
 
     /// 获取主日历
-    pub async fn get_primary_calendar(&self, _request: &GetPrimaryCalendarRequest) -> SDKResult<CalendarResponse> {
+    pub async fn get_primary_calendar(
+        &self,
+        _request: &GetPrimaryCalendarRequest,
+    ) -> SDKResult<CalendarResponse> {
         // 模拟实现
         Ok(CalendarResponse {
             code: 0,
@@ -186,7 +204,10 @@ impl CalendarServiceV4 {
     }
 
     /// 获取日历列表
-    pub async fn list_calendars(&self, _request: &ListCalendarsRequest) -> SDKResult<CalendarListResponse> {
+    pub async fn list_calendars(
+        &self,
+        _request: &ListCalendarsRequest,
+    ) -> SDKResult<CalendarListResponse> {
         // 模拟实现
         Ok(CalendarListResponse {
             code: 0,
@@ -229,7 +250,10 @@ impl CalendarServiceV4 {
     // ==================== 忙闲时间查询 ====================
 
     /// 查询用户忙闲时间
-    pub async fn get_user_free_busy(&self, _request: &GetUserFreeBusyRequest) -> SDKResult<UserFreeBusyResponse> {
+    pub async fn get_user_free_busy(
+        &self,
+        _request: &GetUserFreeBusyRequest,
+    ) -> SDKResult<UserFreeBusyResponse> {
         // 模拟实现
         Ok(UserFreeBusyResponse {
             code: 0,
@@ -269,43 +293,45 @@ impl CalendarServiceV4 {
     }
 
     /// 批量查询用户忙闲时间
-    pub async fn get_users_free_busy(&self, _request: &GetUsersFreeBusyRequest) -> SDKResult<UsersFreeBusyResponse> {
+    pub async fn get_users_free_busy(
+        &self,
+        _request: &GetUsersFreeBusyRequest,
+    ) -> SDKResult<UsersFreeBusyResponse> {
         // 模拟实现
         let mut users_data = Vec::new();
         for user_id in &_request.user_ids {
             users_data.push(UserFreeBusyData {
                 user_id: user_id.clone(),
-                time_ranges: vec![
-                    FreeBusyTimeRange {
-                        start_time: TimeInfo {
-                            timestamp: Some("1640995200".to_string()),
-                            date: None,
-                            timezone: Some("Asia/Shanghai".to_string()),
-                        },
-                        end_time: TimeInfo {
-                            timestamp: Some("1640998800".to_string()),
-                            date: None,
-                            timezone: Some("Asia/Shanghai".to_string()),
-                        },
-                        status: FreeBusyStatus::Busy,
+                time_ranges: vec![FreeBusyTimeRange {
+                    start_time: TimeInfo {
+                        timestamp: Some("1640995200".to_string()),
+                        date: None,
+                        timezone: Some("Asia/Shanghai".to_string()),
                     },
-                ],
+                    end_time: TimeInfo {
+                        timestamp: Some("1640998800".to_string()),
+                        date: None,
+                        timezone: Some("Asia/Shanghai".to_string()),
+                    },
+                    status: FreeBusyStatus::Busy,
+                }],
             });
         }
 
         Ok(UsersFreeBusyResponse {
             code: 0,
             msg: "success".to_string(),
-            data: Some(UsersFreeBusyData {
-                users: users_data,
-            }),
+            data: Some(UsersFreeBusyData { users: users_data }),
         })
     }
 
     // ==================== 参与人管理 ====================
 
     /// 获取日程参与人
-    pub async fn get_event_attendees(&self, _request: &GetEventAttendeesRequest) -> SDKResult<EventAttendeesResponse> {
+    pub async fn get_event_attendees(
+        &self,
+        _request: &GetEventAttendeesRequest,
+    ) -> SDKResult<EventAttendeesResponse> {
         // 模拟实现
         Ok(EventAttendeesResponse {
             code: 0,
@@ -347,7 +373,10 @@ impl CalendarServiceV4 {
     }
 
     /// 添加日程参与人
-    pub async fn add_event_attendees(&self, _request: &AddEventAttendeesRequest) -> SDKResult<EventAttendeesResponse> {
+    pub async fn add_event_attendees(
+        &self,
+        _request: &AddEventAttendeesRequest,
+    ) -> SDKResult<EventAttendeesResponse> {
         // 模拟实现
         let mut attendees = Vec::new();
         for attendee_id in &_request.attendee_ids {
@@ -378,7 +407,10 @@ impl CalendarServiceV4 {
     }
 
     /// 删除日程参与人
-    pub async fn remove_event_attendees(&self, _request: &RemoveEventAttendeesRequest) -> SDKResult<EventAttendeesResponse> {
+    pub async fn remove_event_attendees(
+        &self,
+        _request: &RemoveEventAttendeesRequest,
+    ) -> SDKResult<EventAttendeesResponse> {
         // 模拟实现
         Ok(EventAttendeesResponse {
             code: 0,
@@ -393,7 +425,10 @@ impl CalendarServiceV4 {
     // ==================== 会议室管理 ====================
 
     /// 获取会议室列表
-    pub async fn list_meeting_rooms(&self, _request: &ListMeetingRoomsRequest) -> SDKResult<MeetingRoomsResponse> {
+    pub async fn list_meeting_rooms(
+        &self,
+        _request: &ListMeetingRoomsRequest,
+    ) -> SDKResult<MeetingRoomsResponse> {
         // 模拟实现
         Ok(MeetingRoomsResponse {
             code: 0,
@@ -427,7 +462,10 @@ impl CalendarServiceV4 {
     }
 
     /// 预订会议室
-    pub async fn book_meeting_room(&self, _request: &BookMeetingRoomRequest) -> SDKResult<BookMeetingRoomResponse> {
+    pub async fn book_meeting_room(
+        &self,
+        _request: &BookMeetingRoomRequest,
+    ) -> SDKResult<BookMeetingRoomResponse> {
         // 模拟实现
         Ok(BookMeetingRoomResponse {
             code: 0,
@@ -450,7 +488,10 @@ impl CalendarServiceV4 {
     // ==================== 日历订阅与共享 ====================
 
     /// 订阅日历
-    pub async fn subscribe_calendar(&self, _request: &SubscribeCalendarRequest) -> SDKResult<SubscribeCalendarResponse> {
+    pub async fn subscribe_calendar(
+        &self,
+        _request: &SubscribeCalendarRequest,
+    ) -> SDKResult<SubscribeCalendarResponse> {
         // 模拟实现
         Ok(SubscribeCalendarResponse {
             code: 0,
@@ -468,7 +509,10 @@ impl CalendarServiceV4 {
     }
 
     /// 取消订阅日历
-    pub async fn unsubscribe_calendar(&self, _request: &UnsubscribeCalendarRequest) -> SDKResult<UnsubscribeCalendarResponse> {
+    pub async fn unsubscribe_calendar(
+        &self,
+        _request: &UnsubscribeCalendarRequest,
+    ) -> SDKResult<UnsubscribeCalendarResponse> {
         // 模拟实现
         Ok(UnsubscribeCalendarResponse {
             code: 0,
@@ -482,23 +526,24 @@ impl CalendarServiceV4 {
     }
 
     /// 获取日历订阅列表
-    pub async fn list_calendar_subscriptions(&self, _request: &ListCalendarSubscriptionsRequest) -> SDKResult<CalendarSubscriptionsResponse> {
+    pub async fn list_calendar_subscriptions(
+        &self,
+        _request: &ListCalendarSubscriptionsRequest,
+    ) -> SDKResult<CalendarSubscriptionsResponse> {
         // 模拟实现
         Ok(CalendarSubscriptionsResponse {
             code: 0,
             msg: "success".to_string(),
             data: Some(CalendarSubscriptionsData {
-                subscriptions: vec![
-                    SubscribeCalendarData {
-                        subscription_id: Some("sub_001".to_string()),
-                        calendar_id: Some("cal_shared_001".to_string()),
-                        subscriber_id: Some("user_001".to_string()),
-                        status: Some(SubscriptionStatus::Active),
-                        role: Some(CalendarRole::Reader),
-                        create_time: Some("2024-01-01T00:00:00Z".to_string()),
-                        update_time: Some("2024-01-01T00:00:00Z".to_string()),
-                    },
-                ],
+                subscriptions: vec![SubscribeCalendarData {
+                    subscription_id: Some("sub_001".to_string()),
+                    calendar_id: Some("cal_shared_001".to_string()),
+                    subscriber_id: Some("user_001".to_string()),
+                    status: Some(SubscriptionStatus::Active),
+                    role: Some(CalendarRole::Reader),
+                    create_time: Some("2024-01-01T00:00:00Z".to_string()),
+                    update_time: Some("2024-01-01T00:00:00Z".to_string()),
+                }],
                 total: 1,
             }),
         })
@@ -722,9 +767,7 @@ impl Default for Location {
 // 为CalendarPermission实现Default
 impl Default for CalendarPermission {
     fn default() -> Self {
-        Self {
-            access_role: None,
-        }
+        Self { access_role: None }
     }
 }
 

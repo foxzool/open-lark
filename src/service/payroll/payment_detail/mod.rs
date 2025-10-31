@@ -1,6 +1,3 @@
-use reqwest::Method;
-use serde::{Deserialize, Serialize};
-use open_lark_core::core::api_req::ApiRequest;
 use crate::{
     core::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
@@ -16,6 +13,9 @@ use crate::{
         PageResponse, PaymentDetail, PaymentDetailListRequest, PaymentDetailQueryRequest,
     },
 };
+use open_lark_core::core::api_req::ApiRequest;
+use reqwest::Method;
+use serde::{Deserialize, Serialize};
 
 /// 发薪明细服务
 pub struct PaymentDetailService {
@@ -87,7 +87,10 @@ impl PaymentDetailService {
         request: &PaymentDetailListRequest,
     ) -> SDKResult<BaseResponse<PaymentDetailListResponse>> {
         let mut query_params = std::collections::HashMap::new();
-        query_params.insert("payment_activity_id".to_string(), request.payment_activity_id.clone());
+        query_params.insert(
+            "payment_activity_id".to_string(),
+            request.payment_activity_id.clone(),
+        );
 
         if let Some(page_size) = &request.page_size {
             query_params.insert("page_size".to_string(), page_size.to_string());
@@ -107,7 +110,9 @@ impl PaymentDetailService {
 
         let api_req = ApiRequest {
             method: Method::GET,
-            url: self.config.build_url("/open-apis/payroll/v4/payment_details"),
+            url: self
+                .config
+                .build_url("/open-apis/payroll/v4/payment_details"),
             query_params,
             path_params: std::collections::HashMap::new(),
             headers: std::collections::HashMap::new(),
@@ -154,7 +159,10 @@ impl PaymentDetailService {
         request: &PaymentDetailQueryRequest,
     ) -> SDKResult<BaseResponse<PaymentDetailListResponse>> {
         let mut query_params = std::collections::HashMap::new();
-        query_params.insert("payment_activity_id".to_string(), request.payment_activity_id.clone());
+        query_params.insert(
+            "payment_activity_id".to_string(),
+            request.payment_activity_id.clone(),
+        );
         query_params.insert("employee_ids".to_string(), request.employee_ids.join(","));
 
         if let Some(user_id_type) = &request.user_id_type {
@@ -166,7 +174,9 @@ impl PaymentDetailService {
 
         let api_req = ApiRequest {
             method: Method::GET,
-            url: self.config.build_url("/open-apis/payroll/v4/payment_details/query"),
+            url: self
+                .config
+                .build_url("/open-apis/payroll/v4/payment_details/query"),
             query_params,
             path_params: std::collections::HashMap::new(),
             headers: std::collections::HashMap::new(),
@@ -211,7 +221,10 @@ impl PaymentDetailService {
         user_id_type: Option<&str>,
     ) -> SDKResult<BaseResponse<PaymentDetailResponse>> {
         let mut query_params = std::collections::HashMap::new();
-        query_params.insert("payment_activity_id".to_string(), payment_activity_id.to_string());
+        query_params.insert(
+            "payment_activity_id".to_string(),
+            payment_activity_id.to_string(),
+        );
         query_params.insert("employee_id".to_string(), employee_id.to_string());
 
         if let Some(user_id) = user_id_type {
@@ -220,7 +233,9 @@ impl PaymentDetailService {
 
         let api_req = ApiRequest {
             method: Method::GET,
-            url: self.config.build_url("/open-apis/payroll/v4/payment_details/detail"),
+            url: self
+                .config
+                .build_url("/open-apis/payroll/v4/payment_details/detail"),
             query_params,
             path_params: std::collections::HashMap::new(),
             headers: std::collections::HashMap::new(),
@@ -272,7 +287,10 @@ impl PaymentDetailService {
         format: Option<&str>,
     ) -> SDKResult<BaseResponse<ExportResponse>> {
         let mut query_params = std::collections::HashMap::new();
-        query_params.insert("payment_activity_id".to_string(), payment_activity_id.to_string());
+        query_params.insert(
+            "payment_activity_id".to_string(),
+            payment_activity_id.to_string(),
+        );
 
         if let Some(employees) = employee_ids {
             query_params.insert("employee_ids".to_string(), employees.join(","));
@@ -286,7 +304,9 @@ impl PaymentDetailService {
 
         let api_req = ApiRequest {
             method: Method::POST,
-            url: self.config.build_url("/open-apis/payroll/v4/payment_details/export"),
+            url: self
+                .config
+                .build_url("/open-apis/payroll/v4/payment_details/export"),
             query_params,
             path_params: std::collections::HashMap::new(),
             headers: std::collections::HashMap::new(),

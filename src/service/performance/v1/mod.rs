@@ -12,18 +12,18 @@ use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 // 声明子模块
-pub mod cycles;
 pub mod activities;
+pub mod cycles;
 pub mod results;
-pub mod templates;
 pub mod reviews;
+pub mod templates;
 
 // 重新导出服务类型
-pub use cycles::CyclesService;
 pub use activities::ActivitiesService;
+pub use cycles::CyclesService;
 pub use results::ResultsService;
-pub use templates::TemplatesService;
 pub use reviews::ReviewsService;
+pub use templates::TemplatesService;
 
 /// Performance V1服务
 #[derive(Debug, Clone)]

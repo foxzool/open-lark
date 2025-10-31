@@ -6,13 +6,13 @@
 //! - 活动参与者管理
 //! - 活动进度跟踪
 
+use crate::core::api_resp::EmptyResponse;
 use crate::core::config::Config;
 use crate::service::performance::models;
 use crate::service::performance::PageResponse;
-use crate::core::api_resp::EmptyResponse;
+use chrono::{DateTime, Utc};
 use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
 
 /// 绩效活动管理服务
 #[derive(Debug, Clone)]
@@ -26,7 +26,10 @@ impl ActivitiesService {
     }
 
     /// 获取绩效活动详情
-    pub async fn get(&self, activity_id: &str) -> SDKResult<crate::service::performance::models::ActivityResponse> {
+    pub async fn get(
+        &self,
+        activity_id: &str,
+    ) -> SDKResult<crate::service::performance::models::ActivityResponse> {
         // 模拟实现
         Ok(crate::service::performance::models::ActivityResponse {
             code: 0,
@@ -47,7 +50,12 @@ impl ActivitiesService {
     }
 
     /// 获取绩效活动列表
-    pub async fn list(&self, semester_id: Option<&str>, page_size: i32, page_token: Option<&str>) -> SDKResult<crate::service::performance::models::ActivityListResponse> {
+    pub async fn list(
+        &self,
+        semester_id: Option<&str>,
+        page_size: i32,
+        page_token: Option<&str>,
+    ) -> SDKResult<crate::service::performance::models::ActivityListResponse> {
         // 模拟实现
         let activities = vec![
             crate::service::performance::models::Activity {
@@ -66,7 +74,9 @@ impl ActivitiesService {
                 activity_id: "act_002".to_string(),
                 name: "上级评估".to_string(),
                 description: Some("直属上级评估员工表现".to_string()),
-                activity_type: Some(crate::service::performance::models::ActivityType::ManagerReview),
+                activity_type: Some(
+                    crate::service::performance::models::ActivityType::ManagerReview,
+                ),
                 status: Some(crate::service::performance::models::ActivityStatus::NotStarted),
                 semester_id: Some("sem_2024".to_string()),
                 start_time: Some(1706662800000),
@@ -90,7 +100,10 @@ impl ActivitiesService {
 
         // 如果指定了周期ID，过滤对应的活动
         let filtered_activities = if let Some(sid) = semester_id {
-            activities.into_iter().filter(|a| a.semester_id.as_ref().map(|s| s.as_str()) == Some(sid)).collect()
+            activities
+                .into_iter()
+                .filter(|a| a.semester_id.as_ref().map(|s| s.as_str()) == Some(sid))
+                .collect()
         } else {
             activities
         };
@@ -108,7 +121,10 @@ impl ActivitiesService {
     }
 
     /// 创建绩效活动
-    pub async fn create(&self, request: &CreateActivityRequest) -> SDKResult<crate::service::performance::models::ActivityResponse> {
+    pub async fn create(
+        &self,
+        request: &CreateActivityRequest,
+    ) -> SDKResult<crate::service::performance::models::ActivityResponse> {
         // 模拟实现
         let activity_id = format!("act_{}", chrono::Utc::now().timestamp());
         Ok(crate::service::performance::models::ActivityResponse {
@@ -130,7 +146,11 @@ impl ActivitiesService {
     }
 
     /// 更新绩效活动
-    pub async fn update(&self, activity_id: &str, request: &UpdateActivityRequest) -> SDKResult<crate::service::performance::models::ActivityResponse> {
+    pub async fn update(
+        &self,
+        activity_id: &str,
+        request: &UpdateActivityRequest,
+    ) -> SDKResult<crate::service::performance::models::ActivityResponse> {
         // 模拟实现
         Ok(crate::service::performance::models::ActivityResponse {
             code: 0,
@@ -157,7 +177,10 @@ impl ActivitiesService {
     }
 
     /// 启动绩效活动
-    pub async fn start(&self, activity_id: &str) -> SDKResult<crate::service::performance::models::ActivityResponse> {
+    pub async fn start(
+        &self,
+        activity_id: &str,
+    ) -> SDKResult<crate::service::performance::models::ActivityResponse> {
         // 模拟实现
         Ok(crate::service::performance::models::ActivityResponse {
             code: 0,
@@ -178,7 +201,10 @@ impl ActivitiesService {
     }
 
     /// 暂停绩效活动
-    pub async fn pause(&self, activity_id: &str) -> SDKResult<crate::service::performance::models::ActivityResponse> {
+    pub async fn pause(
+        &self,
+        activity_id: &str,
+    ) -> SDKResult<crate::service::performance::models::ActivityResponse> {
         // 模拟实现
         Ok(crate::service::performance::models::ActivityResponse {
             code: 0,
@@ -199,7 +225,10 @@ impl ActivitiesService {
     }
 
     /// 结束绩效活动
-    pub async fn finish(&self, activity_id: &str) -> SDKResult<crate::service::performance::models::ActivityResponse> {
+    pub async fn finish(
+        &self,
+        activity_id: &str,
+    ) -> SDKResult<crate::service::performance::models::ActivityResponse> {
         // 模拟实现
         Ok(crate::service::performance::models::ActivityResponse {
             code: 0,
@@ -220,7 +249,10 @@ impl ActivitiesService {
     }
 
     /// 取消绩效活动
-    pub async fn cancel(&self, activity_id: &str) -> SDKResult<crate::service::performance::models::ActivityResponse> {
+    pub async fn cancel(
+        &self,
+        activity_id: &str,
+    ) -> SDKResult<crate::service::performance::models::ActivityResponse> {
         // 模拟实现
         Ok(crate::service::performance::models::ActivityResponse {
             code: 0,
@@ -241,7 +273,12 @@ impl ActivitiesService {
     }
 
     /// 获取活动参与者列表
-    pub async fn get_participants(&self, activity_id: &str, page_size: i32, page_token: Option<&str>) -> SDKResult<RevieweeListResponse> {
+    pub async fn get_participants(
+        &self,
+        activity_id: &str,
+        page_size: i32,
+        page_token: Option<&str>,
+    ) -> SDKResult<RevieweeListResponse> {
         // 模拟实现
         let participants = vec![
             crate::service::performance::models::Reviewee {
@@ -279,13 +316,21 @@ impl ActivitiesService {
     }
 
     /// 添加活动参与者
-    pub async fn add_participants(&self, activity_id: &str, user_ids: &[String]) -> SDKResult<EmptyResponse> {
+    pub async fn add_participants(
+        &self,
+        activity_id: &str,
+        user_ids: &[String],
+    ) -> SDKResult<EmptyResponse> {
         // 模拟实现
         Ok(EmptyResponse {})
     }
 
     /// 移除活动参与者
-    pub async fn remove_participants(&self, activity_id: &str, user_ids: &[String]) -> SDKResult<EmptyResponse> {
+    pub async fn remove_participants(
+        &self,
+        activity_id: &str,
+        user_ids: &[String],
+    ) -> SDKResult<EmptyResponse> {
         // 模拟实现
         Ok(EmptyResponse {})
     }

@@ -70,14 +70,14 @@
 //! }
 //! ```
 
-use open_lark_core::core::api_req::ApiRequest;
 use crate::core::{
-    api_resp::{BaseResponse, ApiResponseTrait},
+    api_resp::{ApiResponseTrait, BaseResponse},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
     SDKResult,
 };
+use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 
 /// 考勤管理服务

@@ -224,10 +224,10 @@ pub use corehr::CorehrService;
 pub use directory::DirectoryService;
 #[cfg(feature = "ehr")]
 pub use ehr::EhrService;
-#[cfg(feature = "feishu_people")]
-pub use feishu_people::FeishuPeopleService;
 #[cfg(feature = "elearning")]
 pub use elearning::ElearningService;
+#[cfg(feature = "feishu_people")]
+pub use feishu_people::FeishuPeopleService;
 #[cfg(feature = "group")]
 pub use group::GroupService;
 #[cfg(feature = "helpdesk")]

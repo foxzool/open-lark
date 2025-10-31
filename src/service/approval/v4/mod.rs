@@ -32,13 +32,13 @@ impl ApprovalServiceV4 {
 }
 
 // 导入所有子模块
-pub mod instance;
-pub mod task;
 pub mod approval;
+pub mod instance;
 pub mod models;
+pub mod task;
 
 // 重新导出所有模块和类型
-pub use instance::*;
-pub use task::*;
 pub use approval::*;
+pub use instance::*;
 pub use models::*;
+pub use task::*;

@@ -24,62 +24,60 @@ impl InsightsService {
 
     /// 获取智能业务洞察
     /// 自动分析数据并生成有价值的业务洞察
-    pub async fn get_intelligent_insights(&self, request: &GetIntelligentInsightsRequest) -> SDKResult<GetIntelligentInsightsResponse> {
+    pub async fn get_intelligent_insights(
+        &self,
+        request: &GetIntelligentInsightsRequest,
+    ) -> SDKResult<GetIntelligentInsightsResponse> {
         // 模拟智能分析计算
         let insights = vec![
             BusinessInsight {
                 insight_id: "insight_001".to_string(),
                 title: "生产力提升机会".to_string(),
-                description: "数据分析显示，周二和周三的生产力比平均水平低23%，建议在这两天安排重要会议".to_string(),
+                description:
+                    "数据分析显示，周二和周三的生产力比平均水平低23%，建议在这两天安排重要会议"
+                        .to_string(),
                 category: InsightCategory::Productivity,
                 impact_level: ImpactLevel::High,
                 confidence_score: 0.92,
-                data_evidence: vec![
-                    DataEvidence {
-                        metric_name: "工作效率指数".to_string(),
-                        current_value: 77.3,
-                        benchmark_value: 95.6,
-                        change_percentage: -19.2,
-                    }
-                ],
-                recommended_actions: vec![
-                    RecommendedAction {
-                        action_id: "action_001".to_string(),
-                        title: "优化会议安排".to_string(),
-                        description: "将重要会议重新安排到高生产力时段".to_string(),
-                        expected_impact: "生产力预计提升15-20%".to_string(),
-                        implementation_difficulty: DifficultyLevel::Low,
-                        time_required: "1-2周".to_string(),
-                    }
-                ],
+                data_evidence: vec![DataEvidence {
+                    metric_name: "工作效率指数".to_string(),
+                    current_value: 77.3,
+                    benchmark_value: 95.6,
+                    change_percentage: -19.2,
+                }],
+                recommended_actions: vec![RecommendedAction {
+                    action_id: "action_001".to_string(),
+                    title: "优化会议安排".to_string(),
+                    description: "将重要会议重新安排到高生产力时段".to_string(),
+                    expected_impact: "生产力预计提升15-20%".to_string(),
+                    implementation_difficulty: DifficultyLevel::Low,
+                    time_required: "1-2周".to_string(),
+                }],
                 created_time: chrono::Utc::now().timestamp(),
                 expires_at: chrono::Utc::now().timestamp() + 86400 * 7,
             },
             BusinessInsight {
                 insight_id: "insight_002".to_string(),
                 title: "用户流失预警".to_string(),
-                description: "检测到15名核心用户活跃度显著下降，流失风险较高，建议立即采取挽留措施".to_string(),
+                description: "检测到15名核心用户活跃度显著下降，流失风险较高，建议立即采取挽留措施"
+                    .to_string(),
                 category: InsightCategory::UserRetention,
                 impact_level: ImpactLevel::Critical,
                 confidence_score: 0.88,
-                data_evidence: vec![
-                    DataEvidence {
-                        metric_name: "用户活跃度".to_string(),
-                        current_value: 45.2,
-                        benchmark_value: 78.9,
-                        change_percentage: -42.7,
-                    }
-                ],
-                recommended_actions: vec![
-                    RecommendedAction {
-                        action_id: "action_002".to_string(),
-                        title: "用户回访计划".to_string(),
-                        description: "主动联系下降用户，了解使用障碍并提供支持".to_string(),
-                        expected_impact: "预计挽回60-80%流失用户".to_string(),
-                        implementation_difficulty: DifficultyLevel::Medium,
-                        time_required: "2-3周".to_string(),
-                    }
-                ],
+                data_evidence: vec![DataEvidence {
+                    metric_name: "用户活跃度".to_string(),
+                    current_value: 45.2,
+                    benchmark_value: 78.9,
+                    change_percentage: -42.7,
+                }],
+                recommended_actions: vec![RecommendedAction {
+                    action_id: "action_002".to_string(),
+                    title: "用户回访计划".to_string(),
+                    description: "主动联系下降用户，了解使用障碍并提供支持".to_string(),
+                    expected_impact: "预计挽回60-80%流失用户".to_string(),
+                    implementation_difficulty: DifficultyLevel::Medium,
+                    time_required: "2-3周".to_string(),
+                }],
                 created_time: chrono::Utc::now().timestamp(),
                 expires_at: chrono::Utc::now().timestamp() + 86400 * 3,
             },
@@ -101,7 +99,10 @@ impl InsightsService {
 
     /// 获取预测分析结果
     /// 基于历史数据预测未来趋势和指标
-    pub async fn get_predictive_analysis(&self, request: &GetPredictiveAnalysisRequest) -> SDKResult<GetPredictiveAnalysisResponse> {
+    pub async fn get_predictive_analysis(
+        &self,
+        request: &GetPredictiveAnalysisRequest,
+    ) -> SDKResult<GetPredictiveAnalysisResponse> {
         let current_time = chrono::Utc::now().timestamp();
 
         let predictions = vec![
@@ -125,16 +126,18 @@ impl InsightsService {
                     "用户留存率改善".to_string(),
                     "季节性增长因素".to_string(),
                 ],
-                forecast_data: (0..30).map(|i| {
-                    ForecastDataPoint {
+                forecast_data: (0..30)
+                    .map(|i| ForecastDataPoint {
                         timestamp: current_time + i * 86400,
-                        predicted_value: 12500.0 + (i as f64 * 45.0) + (i as f64 * 2.5 * (i as f64 / 30.0).sin()),
+                        predicted_value: 12500.0
+                            + (i as f64 * 45.0)
+                            + (i as f64 * 2.5 * (i as f64 / 30.0).sin()),
                         confidence_range: ConfidenceRange {
                             lower: 12500.0 + (i as f64 * 35.0),
                             upper: 12500.0 + (i as f64 * 55.0),
                         },
-                    }
-                }).collect(),
+                    })
+                    .collect(),
                 created_at: current_time,
                 valid_until: current_time + 86400 * 30,
             },
@@ -158,16 +161,17 @@ impl InsightsService {
                     "培训效果显现".to_string(),
                     "功能完善度提升".to_string(),
                 ],
-                forecast_data: (0..60).step_by(7).map(|i| {
-                    ForecastDataPoint {
+                forecast_data: (0..60)
+                    .step_by(7)
+                    .map(|i| ForecastDataPoint {
                         timestamp: current_time + i * 86400,
                         predicted_value: 0.68 + (i as f64 * 0.0012),
                         confidence_range: ConfidenceRange {
                             lower: 0.68 + (i as f64 * 0.0008),
                             upper: 0.68 + (i as f64 * 0.0016),
                         },
-                    }
-                }).collect(),
+                    })
+                    .collect(),
                 created_at: current_time,
                 valid_until: current_time + 86400 * 60,
             },
@@ -188,12 +192,16 @@ impl InsightsService {
 
     /// 异常检测结果
     /// 智能检测数据中的异常模式和潜在问题
-    pub async fn detect_anomalies(&self, request: &DetectAnomaliesRequest) -> SDKResult<DetectAnomaliesResponse> {
+    pub async fn detect_anomalies(
+        &self,
+        request: &DetectAnomaliesRequest,
+    ) -> SDKResult<DetectAnomaliesResponse> {
         let anomalies = vec![
             Anomaly {
                 anomaly_id: "anomaly_001".to_string(),
                 title: "异常流量波动".to_string(),
-                description: "检测到今日凌晨2-4点出现异常高的API请求量，比平时同期增长380%".to_string(),
+                description: "检测到今日凌晨2-4点出现异常高的API请求量，比平时同期增长380%"
+                    .to_string(),
                 severity: AnomalySeverity::High,
                 category: AnomalyCategory::Traffic,
                 detected_at: chrono::Utc::now().timestamp() - 7200,
@@ -266,66 +274,73 @@ impl InsightsService {
 
     /// 获取智能决策建议
     /// 基于数据分析提供具体的决策建议和行动方案
-    pub async fn get_decision_recommendations(&self, request: &GetDecisionRecommendationsRequest) -> SDKResult<GetDecisionRecommendationsResponse> {
-        let recommendations = vec![
-            DecisionRecommendation {
-                recommendation_id: "rec_001".to_string(),
-                title: "优化培训计划".to_string(),
-                business_objective: "提升员工数字技能水平".to_string(),
-                current_situation: "数据显示45%的员工对高级功能使用不熟练".to_string(),
-                recommended_action: "实施分层次培训计划，重点关注高级功能培训".to_string(),
-                expected_outcomes: vec![
-                    "工作效率提升20-25%".to_string(),
-                    "功能采用率提升35%".to_string(),
-                    "用户满意度提升15%".to_string(),
-                ],
-                implementation_plan: ImplementationPlan {
-                    phases: vec![
-                        Phase {
-                            phase_name: "需求调研".to_string(),
-                            duration_days: 7,
-                            deliverables: vec!["培训需求分析报告".to_string()],
-                            required_resources: vec!["HR部门配合".to_string(), "调研工具".to_string()],
-                        },
-                        Phase {
-                            phase_name: "培训开发".to_string(),
-                            duration_days: 14,
-                            deliverables: vec!["分层培训教材".to_string(), "在线培训视频".to_string()],
-                            required_resources: vec!["培训专家".to_string(), "视频制作工具".to_string()],
-                        },
-                        Phase {
-                            phase_name: "试点实施".to_string(),
-                            duration_days: 21,
-                            deliverables: vec!["试点培训完成".to_string(), "效果评估报告".to_string()],
-                            required_resources: vec!["试点部门参与".to_string(), "培训讲师".to_string()],
-                        },
-                    ],
-                    total_duration_days: 42,
-                    estimated_cost: 125000.0,
-                    risk_assessment: RiskAssessment {
-                        risk_level: RiskLevel::Low,
-                        main_risks: vec![
-                            "员工参与度不高".to_string(),
-                            "培训内容与实际需求不符".to_string(),
-                        ],
-                        mitigation_strategies: vec![
-                            "设置激励机制".to_string(),
-                            "持续收集反馈调整内容".to_string(),
+    pub async fn get_decision_recommendations(
+        &self,
+        request: &GetDecisionRecommendationsRequest,
+    ) -> SDKResult<GetDecisionRecommendationsResponse> {
+        let recommendations = vec![DecisionRecommendation {
+            recommendation_id: "rec_001".to_string(),
+            title: "优化培训计划".to_string(),
+            business_objective: "提升员工数字技能水平".to_string(),
+            current_situation: "数据显示45%的员工对高级功能使用不熟练".to_string(),
+            recommended_action: "实施分层次培训计划，重点关注高级功能培训".to_string(),
+            expected_outcomes: vec![
+                "工作效率提升20-25%".to_string(),
+                "功能采用率提升35%".to_string(),
+                "用户满意度提升15%".to_string(),
+            ],
+            implementation_plan: ImplementationPlan {
+                phases: vec![
+                    Phase {
+                        phase_name: "需求调研".to_string(),
+                        duration_days: 7,
+                        deliverables: vec!["培训需求分析报告".to_string()],
+                        required_resources: vec!["HR部门配合".to_string(), "调研工具".to_string()],
+                    },
+                    Phase {
+                        phase_name: "培训开发".to_string(),
+                        duration_days: 14,
+                        deliverables: vec!["分层培训教材".to_string(), "在线培训视频".to_string()],
+                        required_resources: vec![
+                            "培训专家".to_string(),
+                            "视频制作工具".to_string(),
                         ],
                     },
+                    Phase {
+                        phase_name: "试点实施".to_string(),
+                        duration_days: 21,
+                        deliverables: vec!["试点培训完成".to_string(), "效果评估报告".to_string()],
+                        required_resources: vec![
+                            "试点部门参与".to_string(),
+                            "培训讲师".to_string(),
+                        ],
+                    },
+                ],
+                total_duration_days: 42,
+                estimated_cost: 125000.0,
+                risk_assessment: RiskAssessment {
+                    risk_level: RiskLevel::Low,
+                    main_risks: vec![
+                        "员工参与度不高".to_string(),
+                        "培训内容与实际需求不符".to_string(),
+                    ],
+                    mitigation_strategies: vec![
+                        "设置激励机制".to_string(),
+                        "持续收集反馈调整内容".to_string(),
+                    ],
                 },
-                roi_analysis: ROIAnalysis {
-                    investment_amount: 125000.0,
-                    expected_annual_return: 350000.0,
-                    roi_percentage: 180.0,
-                    payback_period_months: 4.3,
-                    confidence_score: 0.85,
-                },
-                priority_score: 0.91,
-                estimated_effort: "中等".to_string(),
-                success_probability: 0.87,
             },
-        ];
+            roi_analysis: ROIAnalysis {
+                investment_amount: 125000.0,
+                expected_annual_return: 350000.0,
+                roi_percentage: 180.0,
+                payback_period_months: 4.3,
+                confidence_score: 0.85,
+            },
+            priority_score: 0.91,
+            estimated_effort: "中等".to_string(),
+            success_probability: 0.87,
+        }];
 
         Ok(GetDecisionRecommendationsResponse {
             recommendations,

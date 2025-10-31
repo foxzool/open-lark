@@ -8,25 +8,19 @@
 //! - 权限审计和监控
 //! - 身份验证集成
 
-use open_lark_core::core::{api_req::ApiRequest, trait_system::ExecutableBuilder};
 use crate::core::{
-    api_resp::BaseResponse,
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult
+    api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
+    req_option::RequestOption, SDKResult,
 };
 use async_trait::async_trait;
+use open_lark_core::core::{api_req::ApiRequest, trait_system::ExecutableBuilder};
 use serde::{Deserialize, Serialize};
 
 // 导入核心类型
 use super::types::*;
 
 // 导入共享数据结构
-use super::{
-    AccessCondition, TimeRange, PolicyStatus
-};
+use super::{AccessCondition, PolicyStatus, TimeRange};
 
 /// 访问控制服务
 #[derive(Debug, Clone)]
@@ -100,7 +94,8 @@ impl AccessControlService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: "/open-apis/security_and_compliance/v1/access_control/get_permissions".to_string(),
+            api_path: "/open-apis/security_and_compliance/v1/access_control/get_permissions"
+                .to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
             ..Default::default()
@@ -112,11 +107,15 @@ impl AccessControlService {
 
     /// 创建访问策略
     /// 创建或更新访问控制策略
-    pub async fn create_access_policy(&self, request: &CreateAccessPolicyRequest) -> SDKResult<BaseResponse<CreateAccessPolicyResponse>> {
+    pub async fn create_access_policy(
+        &self,
+        request: &CreateAccessPolicyRequest,
+    ) -> SDKResult<BaseResponse<CreateAccessPolicyResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: "/open-apis/security_and_compliance/v1/access_control/create_policy".to_string(),
+            api_path: "/open-apis/security_and_compliance/v1/access_control/create_policy"
+                .to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
             ..Default::default()
@@ -127,7 +126,10 @@ impl AccessControlService {
     }
 
     // 模拟实现，用于演示和测试
-    pub async fn create_access_policy_mock(&self, request: &CreateAccessPolicyRequest) -> SDKResult<CreateAccessPolicyResponse> {
+    pub async fn create_access_policy_mock(
+        &self,
+        request: &CreateAccessPolicyRequest,
+    ) -> SDKResult<CreateAccessPolicyResponse> {
         let current_time = chrono::Utc::now().timestamp();
         let policy_id = format!("policy_{}", current_time);
 
@@ -140,20 +142,23 @@ impl AccessControlService {
             validation_result: PolicyValidation {
                 is_valid: true,
                 validation_errors: vec![],
-                recommendations: vec![
-                    "建议定期审查和更新策略".to_string(),
-                ],
+                recommendations: vec!["建议定期审查和更新策略".to_string()],
             },
         })
     }
 
     /// 获取用户权限总结
     /// 获取用户在系统中的权限概览
-    pub async fn get_user_permission_summary(&self, request: &GetUserPermissionSummaryRequest) -> SDKResult<BaseResponse<GetUserPermissionSummaryResponse>> {
+    pub async fn get_user_permission_summary(
+        &self,
+        request: &GetUserPermissionSummaryRequest,
+    ) -> SDKResult<BaseResponse<GetUserPermissionSummaryResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: "/open-apis/security_and_compliance/v1/access_control/get_user_permission_summary".to_string(),
+            api_path:
+                "/open-apis/security_and_compliance/v1/access_control/get_user_permission_summary"
+                    .to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
             ..Default::default()
@@ -164,7 +169,10 @@ impl AccessControlService {
     }
 
     // 模拟实现，用于演示和测试
-    pub async fn get_user_permission_summary_mock(&self, request: &GetUserPermissionSummaryRequest) -> SDKResult<GetUserPermissionSummaryResponse> {
+    pub async fn get_user_permission_summary_mock(
+        &self,
+        request: &GetUserPermissionSummaryRequest,
+    ) -> SDKResult<GetUserPermissionSummaryResponse> {
         let current_time = chrono::Utc::now().timestamp();
 
         Ok(GetUserPermissionSummaryResponse {
@@ -191,17 +199,15 @@ impl AccessControlService {
                     access_level: PermissionLevel::Read,
                 },
             ],
-            recent_access_activities: vec![
-                AccessActivity {
-                    activity_id: "act_001".to_string(),
-                    action: "访问文件".to_string(),
-                    resource_type: "文件".to_string(),
-                    resource_name: "销售数据报告.xlsx".to_string(),
-                    timestamp: current_time - 3600,
-                    result: "成功".to_string(),
-                    ip_address: "192.168.1.100".to_string(),
-                },
-            ],
+            recent_access_activities: vec![AccessActivity {
+                activity_id: "act_001".to_string(),
+                action: "访问文件".to_string(),
+                resource_type: "文件".to_string(),
+                resource_name: "销售数据报告.xlsx".to_string(),
+                timestamp: current_time - 3600,
+                result: "成功".to_string(),
+                ip_address: "192.168.1.100".to_string(),
+            }],
             permission_summary: PermissionSummary {
                 total_resources: 125,
                 accessible_resources: 89,

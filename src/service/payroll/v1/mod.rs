@@ -39,21 +39,21 @@ impl PayrollServiceV1 {
 }
 
 // 导入所有子模块
-pub mod calculation;
-pub mod payment;
-pub mod paygroup;
 pub mod acct_item;
-pub mod report;
+pub mod calculation;
 pub mod datasource;
+pub mod paygroup;
+pub mod payment;
+pub mod report;
 
 // 保留原有的事件处理模块
 pub mod p2_payroll_payment_activity_approved_v1;
 pub mod p2_payroll_payment_activity_status_changed_v1;
 
 // 重新导出所有模块和类型
-pub use calculation::*;
-pub use payment::*;
-pub use paygroup::*;
 pub use acct_item::*;
-pub use report::*;
+pub use calculation::*;
 pub use datasource::*;
+pub use paygroup::*;
+pub use payment::*;
+pub use report::*;

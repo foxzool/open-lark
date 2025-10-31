@@ -56,11 +56,10 @@ impl V1 {
 
 // 重新导出所有服务类型
 pub use auth::{
-    AppAccessTokenResponse, AppAccessTokenService, GetAppAccessTokenBuilder,
+    AppAccessTokenResponse, AppAccessTokenService, AppTicketService, GetAppAccessTokenBuilder,
     GetAppAccessTokenInternalBuilder, GetAppAccessTokenInternalRequest, GetAppAccessTokenRequest,
     GetTenantAccessTokenBuilder, GetTenantAccessTokenInternalBuilder,
     GetTenantAccessTokenInternalRequest, GetTenantAccessTokenRequest, GetUserInfoBuilder,
     ResendAppTicketBuilder, ResendAppTicketRequest, ResendAppTicketResponse,
     TenantAccessTokenResponse, TenantAccessTokenService, UserInfo, UserInfoService,
-    AppTicketService,
 };

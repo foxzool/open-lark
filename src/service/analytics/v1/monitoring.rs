@@ -25,7 +25,10 @@ impl MonitoringService {
 
     /// 获取实时监控数据
     /// 获取系统和业务的实时性能指标
-    pub async fn get_real_time_monitoring(&self, request: &GetRealTimeMonitoringRequest) -> SDKResult<GetRealTimeMonitoringResponse> {
+    pub async fn get_real_time_monitoring(
+        &self,
+        request: &GetRealTimeMonitoringRequest,
+    ) -> SDKResult<GetRealTimeMonitoringResponse> {
         let current_time = chrono::Utc::now().timestamp();
 
         let metrics = vec![
@@ -41,12 +44,12 @@ impl MonitoringService {
                     critical_threshold: 1000.0,
                     operator: ComparisonOperator::GreaterThan,
                 },
-                trend_data: (0..60).map(|i| {
-                    MetricDataPoint {
+                trend_data: (0..60)
+                    .map(|i| MetricDataPoint {
                         timestamp: current_time - (60 - i) * 60,
                         value: 120.0 + (i as f64 * 0.5) + ((i as f64 * 0.1).sin() * 10.0),
-                    }
-                }).collect(),
+                    })
+                    .collect(),
                 alerts: vec![],
                 last_updated: current_time,
             },
@@ -62,22 +65,20 @@ impl MonitoringService {
                     critical_threshold: 90.0,
                     operator: ComparisonOperator::GreaterThan,
                 },
-                trend_data: (0..60).map(|i| {
-                    MetricDataPoint {
+                trend_data: (0..60)
+                    .map(|i| MetricDataPoint {
                         timestamp: current_time - (60 - i) * 60,
                         value: 65.0 + (i as f64 * 0.1) + ((i as f64 * 0.15).cos() * 8.0),
-                    }
-                }).collect(),
-                alerts: vec![
-                    ActiveAlert {
-                        alert_id: "alert_001".to_string(),
-                        severity: AlertSeverity::Warning,
-                        title: "CPU使用率接近警告阈值".to_string(),
-                        description: "当前CPU使用率67.8%，接近70%警告阈值".to_string(),
-                        triggered_at: current_time - 300,
-                        acknowledged: false,
-                    }
-                ],
+                    })
+                    .collect(),
+                alerts: vec![ActiveAlert {
+                    alert_id: "alert_001".to_string(),
+                    severity: AlertSeverity::Warning,
+                    title: "CPU使用率接近警告阈值".to_string(),
+                    description: "当前CPU使用率67.8%，接近70%警告阈值".to_string(),
+                    triggered_at: current_time - 300,
+                    acknowledged: false,
+                }],
                 last_updated: current_time,
             },
             RealTimeMetric {
@@ -92,12 +93,12 @@ impl MonitoringService {
                     critical_threshold: 1000.0,
                     operator: ComparisonOperator::LessThan,
                 },
-                trend_data: (0..60).map(|i| {
-                    MetricDataPoint {
+                trend_data: (0..60)
+                    .map(|i| MetricDataPoint {
                         timestamp: current_time - (60 - i) * 60,
                         value: 3200.0 + (i as f64 * 4.2) + ((i as f64 * 0.08).sin() * 150.0),
-                    }
-                }).collect(),
+                    })
+                    .collect(),
                 alerts: vec![],
                 last_updated: current_time,
             },
@@ -118,7 +119,10 @@ impl MonitoringService {
 
     /// 获取告警历史
     /// 获取历史告警记录和趋势分析
-    pub async fn get_alert_history(&self, request: &GetAlertHistoryRequest) -> SDKResult<GetAlertHistoryResponse> {
+    pub async fn get_alert_history(
+        &self,
+        request: &GetAlertHistoryRequest,
+    ) -> SDKResult<GetAlertHistoryResponse> {
         let current_time = chrono::Utc::now().timestamp();
 
         let alerts = vec![
@@ -161,10 +165,7 @@ impl MonitoringService {
                 resolved_at: None,
                 duration_minutes: 60,
                 affected_services: vec!["所有API服务".to_string()],
-                resolution_actions: vec![
-                    "扩容API服务器".to_string(),
-                    "优化数据库查询".to_string(),
-                ],
+                resolution_actions: vec!["扩容API服务器".to_string(), "优化数据库查询".to_string()],
                 impact_assessment: ImpactAssessment {
                     affected_users: 8500,
                     business_impact: "用户体验下降，操作响应缓慢".to_string(),
@@ -199,7 +200,10 @@ impl MonitoringService {
 
     /// 创建告警规则
     /// 创建自定义的告警规则和触发条件
-    pub async fn create_alert_rule(&self, request: &CreateAlertRuleRequest) -> SDKResult<CreateAlertRuleResponse> {
+    pub async fn create_alert_rule(
+        &self,
+        request: &CreateAlertRuleRequest,
+    ) -> SDKResult<CreateAlertRuleResponse> {
         let rule_id = format!("rule_{}", chrono::Utc::now().timestamp());
 
         Ok(CreateAlertRuleResponse {
@@ -211,16 +215,17 @@ impl MonitoringService {
             validation_result: RuleValidation {
                 is_valid: true,
                 validation_errors: vec![],
-                recommendations: vec![
-                    "建议设置更严格的告警阈值以减少误报".to_string(),
-                ],
+                recommendations: vec!["建议设置更严格的告警阈值以减少误报".to_string()],
             },
         })
     }
 
     /// 获取SLA监控数据
     /// 获取服务级别协议的监控和合规性数据
-    pub async fn get_sla_monitoring(&self, request: &GetSlaMonitoringRequest) -> SDKResult<GetSlaMonitoringResponse> {
+    pub async fn get_sla_monitoring(
+        &self,
+        request: &GetSlaMonitoringRequest,
+    ) -> SDKResult<GetSlaMonitoringResponse> {
         let current_time = chrono::Utc::now().timestamp();
 
         let sla_metrics = vec![
@@ -234,13 +239,13 @@ impl MonitoringService {
                 status: SLAStatus::Compliant,
                 violation_count: 0,
                 last_violation: None,
-                trend_data: (0..30).map(|i| {
-                    SLADataPoint {
+                trend_data: (0..30)
+                    .map(|i| SLADataPoint {
                         date: current_time - (30 - i) * 86400,
                         actual_value: 99.9 + ((i as f64 * 0.01).sin() * 0.05),
                         target_value: 99.9,
-                    }
-                }).collect(),
+                    })
+                    .collect(),
             },
             SLAMetric {
                 sla_id: "sla_002".to_string(),
@@ -252,13 +257,13 @@ impl MonitoringService {
                 status: SLAStatus::Compliant,
                 violation_count: 2,
                 last_violation: Some(current_time - 86400 * 3),
-                trend_data: (0..30).map(|i| {
-                    SLADataPoint {
+                trend_data: (0..30)
+                    .map(|i| SLADataPoint {
                         date: current_time - (30 - i) * 86400,
                         actual_value: 450.0 + ((i as f64 * 0.02).cos() * 50.0),
                         target_value: 500.0,
-                    }
-                }).collect(),
+                    })
+                    .collect(),
             },
         ];
 
@@ -278,7 +283,10 @@ impl MonitoringService {
 
     /// 获取监控仪表板
     /// 获取综合监控仪表板数据
-    pub async fn get_monitoring_dashboard(&self, request: &GetMonitoringDashboardRequest) -> SDKResult<GetMonitoringDashboardResponse> {
+    pub async fn get_monitoring_dashboard(
+        &self,
+        request: &GetMonitoringDashboardRequest,
+    ) -> SDKResult<GetMonitoringDashboardResponse> {
         let current_time = chrono::Utc::now().timestamp();
 
         Ok(GetMonitoringDashboardResponse {
@@ -360,7 +368,10 @@ impl MonitoringService {
 
     /// 获取监控报告
     /// 生成和获取监控分析报告
-    pub async fn get_monitoring_report(&self, request: &GetMonitoringReportRequest) -> SDKResult<GetMonitoringReportResponse> {
+    pub async fn get_monitoring_report(
+        &self,
+        request: &GetMonitoringReportRequest,
+    ) -> SDKResult<GetMonitoringReportResponse> {
         let current_time = chrono::Utc::now().timestamp();
 
         Ok(GetMonitoringReportResponse {
@@ -388,32 +399,26 @@ impl MonitoringService {
                     ],
                 },
                 performance_analysis: PerformanceAnalysis {
-                    availability_metrics: vec![
-                        AvailabilityMetric {
-                            service_name: "用户认证服务".to_string(),
-                            availability_percentage: 99.94,
-                            downtime_minutes: 43,
-                            mtbf: 720.5, // 平均故障间隔时间
-                        },
-                    ],
-                    performance_metrics: vec![
-                        PerformanceMetric {
-                            metric_name: "平均响应时间".to_string(),
-                            current_value: 125.5,
-                            previous_value: 148.2,
-                            improvement_percentage: 15.3,
-                            trend: "improving".to_string(),
-                        },
-                    ],
-                    capacity_metrics: vec![
-                        CapacityMetric {
-                            resource_name: "CPU使用率".to_string(),
-                            current_utilization: 67.8,
-                            peak_utilization: 89.2,
-                            average_utilization: 71.5,
-                            projected_capacity: "充足".to_string(),
-                        },
-                    ],
+                    availability_metrics: vec![AvailabilityMetric {
+                        service_name: "用户认证服务".to_string(),
+                        availability_percentage: 99.94,
+                        downtime_minutes: 43,
+                        mtbf: 720.5, // 平均故障间隔时间
+                    }],
+                    performance_metrics: vec![PerformanceMetric {
+                        metric_name: "平均响应时间".to_string(),
+                        current_value: 125.5,
+                        previous_value: 148.2,
+                        improvement_percentage: 15.3,
+                        trend: "improving".to_string(),
+                    }],
+                    capacity_metrics: vec![CapacityMetric {
+                        resource_name: "CPU使用率".to_string(),
+                        current_utilization: 67.8,
+                        peak_utilization: 89.2,
+                        average_utilization: 71.5,
+                        projected_capacity: "充足".to_string(),
+                    }],
                 },
                 alert_analysis: AlertAnalysis {
                     total_alerts: 156,

@@ -9,9 +9,9 @@
 
 use crate::core::config::Config;
 use crate::service::analytics::v1::*;
+use chrono::{DateTime, Utc};
 use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
 
 /// 用户行为分析服务
 #[derive(Debug, Clone)]
@@ -27,7 +27,10 @@ impl UserAnalyticsService {
     // ==================== 用户行为模式分析 ====================
 
     /// 获取用户行为模式
-    pub async fn get_user_behavior_patterns(&self, request: &GetUserBehaviorPatternsRequest) -> SDKResult<GetUserBehaviorPatternsResponse> {
+    pub async fn get_user_behavior_patterns(
+        &self,
+        request: &GetUserBehaviorPatternsRequest,
+    ) -> SDKResult<GetUserBehaviorPatternsResponse> {
         Ok(GetUserBehaviorPatternsResponse {
             user_id: request.user_id.clone(),
             analysis_period: request.period.clone(),
@@ -60,14 +63,12 @@ impl UserAnalyticsService {
                     pattern_type: BehaviorPatternType::WeekendActivity,
                     frequency: 45.3,
                     description: Some("周末偶尔登录，主要处理紧急事务".to_string()),
-                    time_distribution: vec![
-                        TimeSlot {
-                            start_hour: 10,
-                            end_hour: 12,
-                            activity_score: 35.6,
-                            primary_actions: vec!["查看消息".to_string(), "审批流程".to_string()],
-                        },
-                    ],
+                    time_distribution: vec![TimeSlot {
+                        start_hour: 10,
+                        end_hour: 12,
+                        activity_score: 35.6,
+                        primary_actions: vec!["查看消息".to_string(), "审批流程".to_string()],
+                    }],
                     consistency_score: 0.68,
                 },
             ],
@@ -82,7 +83,10 @@ impl UserAnalyticsService {
     }
 
     /// 获取用户行为路径
-    pub async fn get_user_journey(&self, request: &GetUserJourneyRequest) -> SDKResult<GetUserJourneyResponse> {
+    pub async fn get_user_journey(
+        &self,
+        request: &GetUserJourneyRequest,
+    ) -> SDKResult<GetUserJourneyResponse> {
         Ok(GetUserJourneyResponse {
             user_id: request.user_id.clone(),
             journey_id: format!("journey_{}", chrono::Utc::now().timestamp()),
@@ -97,34 +101,54 @@ impl UserAnalyticsService {
                     previous_step_id: None,
                     next_step_id: Some("step_002".to_string()),
                     metadata: std::collections::HashMap::from([
-                        ("device_type".to_string(), serde_json::Value::String("桌面端".to_string())),
-                        ("location".to_string(), serde_json::Value::String("公司内网".to_string())),
+                        (
+                            "device_type".to_string(),
+                            serde_json::Value::String("桌面端".to_string()),
+                        ),
+                        (
+                            "location".to_string(),
+                            serde_json::Value::String("公司内网".to_string()),
+                        ),
                     ]),
                 },
                 JourneyStep {
                     step_id: "step_002".to_string(),
                     action: "查看群组消息".to_string(),
                     application: "即时通讯".to_string(),
-                    timestamp: chrono::Utc::now() - chrono::Duration::hours(7) + chrono::Duration::minutes(45),
+                    timestamp: chrono::Utc::now() - chrono::Duration::hours(7)
+                        + chrono::Duration::minutes(45),
                     duration_seconds: 180,
                     previous_step_id: Some("step_001".to_string()),
                     next_step_id: Some("step_003".to_string()),
                     metadata: std::collections::HashMap::from([
-                        ("message_count".to_string(), serde_json::Value::Number(15.into())),
-                        ("group_count".to_string(), serde_json::Value::Number(3.into())),
+                        (
+                            "message_count".to_string(),
+                            serde_json::Value::Number(15.into()),
+                        ),
+                        (
+                            "group_count".to_string(),
+                            serde_json::Value::Number(3.into()),
+                        ),
                     ]),
                 },
                 JourneyStep {
                     step_id: "step_003".to_string(),
                     action: "打开文档".to_string(),
                     application: "云文档".to_string(),
-                    timestamp: chrono::Utc::now() - chrono::Duration::hours(7) + chrono::Duration::minutes(30),
+                    timestamp: chrono::Utc::now() - chrono::Duration::hours(7)
+                        + chrono::Duration::minutes(30),
                     duration_seconds: 600,
                     previous_step_id: Some("step_002".to_string()),
                     next_step_id: Some("step_004".to_string()),
                     metadata: std::collections::HashMap::from([
-                        ("document_type".to_string(), serde_json::Value::String("项目文档".to_string())),
-                        ("view_duration".to_string(), serde_json::Value::Number(600.into())),
+                        (
+                            "document_type".to_string(),
+                            serde_json::Value::String("项目文档".to_string()),
+                        ),
+                        (
+                            "view_duration".to_string(),
+                            serde_json::Value::Number(600.into()),
+                        ),
                     ]),
                 },
                 JourneyStep {
@@ -136,8 +160,14 @@ impl UserAnalyticsService {
                     previous_step_id: Some("step_003".to_string()),
                     next_step_id: Some("step_005".to_string()),
                     metadata: std::collections::HashMap::from([
-                        ("edit_count".to_string(), serde_json::Value::Number(25.into())),
-                        ("word_count".to_string(), serde_json::Value::Number(1500.into())),
+                        (
+                            "edit_count".to_string(),
+                            serde_json::Value::Number(25.into()),
+                        ),
+                        (
+                            "word_count".to_string(),
+                            serde_json::Value::Number(1500.into()),
+                        ),
                     ]),
                 },
                 JourneyStep {
@@ -149,8 +179,14 @@ impl UserAnalyticsService {
                     previous_step_id: Some("step_004".to_string()),
                     next_step_id: None,
                     metadata: std::collections::HashMap::from([
-                        ("share_count".to_string(), serde_json::Value::Number(3.into())),
-                        ("recipient_count".to_string(), serde_json::Value::Number(5.into())),
+                        (
+                            "share_count".to_string(),
+                            serde_json::Value::Number(3.into()),
+                        ),
+                        (
+                            "recipient_count".to_string(),
+                            serde_json::Value::Number(5.into()),
+                        ),
                     ]),
                 },
             ],
@@ -161,14 +197,21 @@ impl UserAnalyticsService {
                 completion_rate: 1.0,
                 engagement_score: 8.7,
                 primary_application: "云文档".to_string(),
-                common_actions: vec!["查看消息".to_string(), "编辑文档".to_string(), "分享内容".to_string()],
+                common_actions: vec![
+                    "查看消息".to_string(),
+                    "编辑文档".to_string(),
+                    "分享内容".to_string(),
+                ],
             },
             generated_at: Some(chrono::Utc::now()),
         })
     }
 
     /// 获取用户分群分析
-    pub async fn get_user_segmentation(&self, request: &GetUserSegmentationRequest) -> SDKResult<GetUserSegmentationResponse> {
+    pub async fn get_user_segmentation(
+        &self,
+        request: &GetUserSegmentationRequest,
+    ) -> SDKResult<GetUserSegmentationResponse> {
         Ok(GetUserSegmentationResponse {
             segmentation_criteria: request.criteria.clone(),
             segments: vec![
@@ -260,7 +303,10 @@ impl UserAnalyticsService {
     }
 
     /// 获取用户流失预警
-    pub async fn get_user_churn_prediction(&self, request: &GetUserChurnPredictionRequest) -> SDKResult<GetUserChurnPredictionResponse> {
+    pub async fn get_user_churn_prediction(
+        &self,
+        request: &GetUserChurnPredictionRequest,
+    ) -> SDKResult<GetUserChurnPredictionResponse> {
         Ok(GetUserChurnPredictionResponse {
             prediction_model: "churn_prediction_v2".to_string(),
             model_accuracy: 0.87,
@@ -369,7 +415,10 @@ impl UserAnalyticsService {
     }
 
     /// 获取用户价值评估
-    pub async fn get_user_value_assessment(&self, request: &GetUserValueAssessmentRequest) -> SDKResult<GetUserValueAssessmentResponse> {
+    pub async fn get_user_value_assessment(
+        &self,
+        request: &GetUserValueAssessmentRequest,
+    ) -> SDKResult<GetUserValueAssessmentResponse> {
         Ok(GetUserValueAssessmentResponse {
             user_id: request.user_id.clone(),
             assessment_period: request.period.clone(),
@@ -483,11 +532,18 @@ impl UserAnalyticsService {
                     let activity_score = base_activity * weekend_adjustment;
 
                     // 随机波动
-                    let random_factor = 0.8 + (user_id.len() as f64 * 0.1 + week as f64 * 0.05).sin().abs() * 0.2;
+                    let random_factor = 0.8
+                        + (user_id.len() as f64 * 0.1 + week as f64 * 0.05)
+                            .sin()
+                            .abs()
+                            * 0.2;
                     let final_score = (activity_score * random_factor).min(1.0);
 
                     heatmap.push(ActivityHeatmapPoint {
-                        date: (chrono::Utc::now() - chrono::Duration::weeks(3 - week) + chrono::Duration::days(day)).format("%Y-%m-%d").to_string(),
+                        date: (chrono::Utc::now() - chrono::Duration::weeks(3 - week)
+                            + chrono::Duration::days(day))
+                        .format("%Y-%m-%d")
+                        .to_string(),
                         hour: hour as i32,
                         day_of_week: day,
                         week_of_year: week,

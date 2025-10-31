@@ -9,10 +9,10 @@
 
 use crate::core::config::Config;
 
-/// 重新导出核心模块
-pub mod core;
 pub mod authorizations;
 pub mod basic_data;
+/// 重新导出核心模块
+pub mod core;
 pub mod leaves;
 
 /// Feishu People 服务主入口

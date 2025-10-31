@@ -7,9 +7,9 @@
 //! - 删除审批定义
 //! - 审批定义模板管理
 
+use super::models::*;
 use crate::core::config::Config;
 use open_lark_core::prelude::*;
-use super::models::*;
 
 /// 审批定义服务
 #[derive(Debug, Clone)]
@@ -25,7 +25,10 @@ impl ApprovalDefinitionService {
     // ==================== 审批定义管理 ====================
 
     /// 创建审批定义
-    pub async fn create(&self, request: &CreateApprovalRequest) -> SDKResult<ApprovalBaseResponse<CreateApprovalResponse>> {
+    pub async fn create(
+        &self,
+        request: &CreateApprovalRequest,
+    ) -> SDKResult<ApprovalBaseResponse<CreateApprovalResponse>> {
         // 模拟实现
         let approval_code = format!("approval_{}", chrono::Utc::now().timestamp());
 
@@ -96,28 +99,24 @@ impl ApprovalDefinitionService {
                             node_id: "node_001".to_string(),
                             node_name: "主管审批".to_string(),
                             node_type: "approve".to_string(),
-                            approvers: vec![
-                                UserInfo {
-                                    user_id: "manager_001".to_string(),
-                                    name: Some("李经理".to_string()),
-                                    email: Some("manager@example.com".to_string()),
-                                    avatar: Some("https://example.com/manager.jpg".to_string()),
-                                }
-                            ],
+                            approvers: vec![UserInfo {
+                                user_id: "manager_001".to_string(),
+                                name: Some("李经理".to_string()),
+                                email: Some("manager@example.com".to_string()),
+                                avatar: Some("https://example.com/manager.jpg".to_string()),
+                            }],
                             require_all_approve: Some(false),
                         },
                         ApprovalNode {
                             node_id: "node_002".to_string(),
                             node_name: "HR审批".to_string(),
                             node_type: "approve".to_string(),
-                            approvers: vec![
-                                UserInfo {
-                                    user_id: "hr_001".to_string(),
-                                    name: Some("王HR".to_string()),
-                                    email: Some("hr@example.com".to_string()),
-                                    avatar: Some("https://example.com/hr.jpg".to_string()),
-                                }
-                            ],
+                            approvers: vec![UserInfo {
+                                user_id: "hr_001".to_string(),
+                                name: Some("王HR".to_string()),
+                                email: Some("hr@example.com".to_string()),
+                                avatar: Some("https://example.com/hr.jpg".to_string()),
+                            }],
                             require_all_approve: Some(false),
                         },
                     ],
@@ -127,7 +126,11 @@ impl ApprovalDefinitionService {
     }
 
     /// 更新审批定义
-    pub async fn update(&self, approval_code: &str, request: &UpdateApprovalRequest) -> SDKResult<ApprovalBaseResponse<()>> {
+    pub async fn update(
+        &self,
+        approval_code: &str,
+        request: &UpdateApprovalRequest,
+    ) -> SDKResult<ApprovalBaseResponse<()>> {
         // 模拟实现
         Ok(ApprovalBaseResponse {
             code: 0,
@@ -147,7 +150,10 @@ impl ApprovalDefinitionService {
     }
 
     /// 查询审批定义列表
-    pub async fn list(&self, request: &ListApprovalRequest) -> SDKResult<ApprovalBaseResponse<ListApprovalResponse>> {
+    pub async fn list(
+        &self,
+        request: &ListApprovalRequest,
+    ) -> SDKResult<ApprovalBaseResponse<ListApprovalResponse>> {
         // 模拟实现
         let approvals = vec![
             Approval {
@@ -215,7 +221,10 @@ impl ApprovalDefinitionService {
     // ==================== 审批定义模板管理 ====================
 
     /// 获取审批定义模板列表
-    pub async fn list_templates(&self, request: &ListApprovalTemplateRequest) -> SDKResult<ApprovalBaseResponse<ListApprovalTemplateResponse>> {
+    pub async fn list_templates(
+        &self,
+        request: &ListApprovalTemplateRequest,
+    ) -> SDKResult<ApprovalBaseResponse<ListApprovalTemplateResponse>> {
         // 模拟实现
         let templates = vec![
             ApprovalTemplate {
@@ -249,15 +258,13 @@ impl ApprovalDefinitionService {
                 process_schema: Some(ApprovalProcess {
                     process_id: "process_template_001".to_string(),
                     process_name: "标准请假流程".to_string(),
-                    nodes: vec![
-                        ApprovalNode {
-                            node_id: "node_template_001".to_string(),
-                            node_name: "主管审批".to_string(),
-                            node_type: "approve".to_string(),
-                            approvers: vec![],
-                            require_all_approve: Some(false),
-                        }
-                    ],
+                    nodes: vec![ApprovalNode {
+                        node_id: "node_template_001".to_string(),
+                        node_name: "主管审批".to_string(),
+                        node_type: "approve".to_string(),
+                        approvers: vec![],
+                        require_all_approve: Some(false),
+                    }],
                 }),
                 create_time: Some("2024-01-01T00:00:00Z".to_string()),
                 update_time: Some("2024-01-01T00:00:00Z".to_string()),
@@ -293,15 +300,13 @@ impl ApprovalDefinitionService {
                 process_schema: Some(ApprovalProcess {
                     process_id: "process_template_002".to_string(),
                     process_name: "报销审批流程".to_string(),
-                    nodes: vec![
-                        ApprovalNode {
-                            node_id: "node_template_002".to_string(),
-                            node_name: "财务审批".to_string(),
-                            node_type: "approve".to_string(),
-                            approvers: vec![],
-                            require_all_approve: Some(false),
-                        }
-                    ],
+                    nodes: vec![ApprovalNode {
+                        node_id: "node_template_002".to_string(),
+                        node_name: "财务审批".to_string(),
+                        node_type: "approve".to_string(),
+                        approvers: vec![],
+                        require_all_approve: Some(false),
+                    }],
                 }),
                 create_time: Some("2024-01-01T00:00:00Z".to_string()),
                 update_time: Some("2024-01-01T00:00:00Z".to_string()),
@@ -321,7 +326,10 @@ impl ApprovalDefinitionService {
     }
 
     /// 基于模板创建审批定义
-    pub async fn create_from_template(&self, request: &CreateFromTemplateRequest) -> SDKResult<ApprovalBaseResponse<CreateApprovalResponse>> {
+    pub async fn create_from_template(
+        &self,
+        request: &CreateFromTemplateRequest,
+    ) -> SDKResult<ApprovalBaseResponse<CreateApprovalResponse>> {
         // 模拟实现
         let approval_code = format!("approval_{}", chrono::Utc::now().timestamp());
 
@@ -338,7 +346,10 @@ impl ApprovalDefinitionService {
     // ==================== 审批定义权限管理 ====================
 
     /// 获取审批定义权限配置
-    pub async fn get_approval_permissions(&self, approval_code: &str) -> SDKResult<ApprovalBaseResponse<ApprovalPermissions>> {
+    pub async fn get_approval_permissions(
+        &self,
+        approval_code: &str,
+    ) -> SDKResult<ApprovalBaseResponse<ApprovalPermissions>> {
         // 模拟实现
         Ok(ApprovalBaseResponse {
             code: 0,
@@ -355,7 +366,11 @@ impl ApprovalDefinitionService {
     }
 
     /// 更新审批定义权限配置
-    pub async fn update_approval_permissions(&self, approval_code: &str, request: &UpdateApprovalPermissionsRequest) -> SDKResult<ApprovalBaseResponse<()>> {
+    pub async fn update_approval_permissions(
+        &self,
+        approval_code: &str,
+        request: &UpdateApprovalPermissionsRequest,
+    ) -> SDKResult<ApprovalBaseResponse<()>> {
         // 模拟实现
         Ok(ApprovalBaseResponse {
             code: 0,

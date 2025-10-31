@@ -76,8 +76,12 @@ use serde::{Deserialize, Serialize};
 
 // 导入SDK核心模块
 use crate::core::{
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}, config::Config, constants::AccessTokenType, http::Transport,
-    req_option::RequestOption, SDKResult,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
 };
 
 // 导入端点常量

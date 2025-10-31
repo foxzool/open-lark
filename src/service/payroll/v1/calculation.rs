@@ -9,9 +9,9 @@
 
 use crate::core::config::Config;
 use crate::service::payroll::models::*;
+use chrono::{DateTime, Utc};
 use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
 
 /// 薪资计算服务
 #[derive(Debug, Clone)]
@@ -27,15 +27,22 @@ impl CalculationService {
     // ==================== 薪资计算 ====================
 
     /// 执行薪资计算
-    pub async fn calculate(&self, request: &SalaryCalculationRequest) -> SDKResult<SalaryCalculationResponse> {
+    pub async fn calculate(
+        &self,
+        request: &SalaryCalculationRequest,
+    ) -> SDKResult<SalaryCalculationResponse> {
         // 模拟实现
         let calculation_id = format!("calc_{}", chrono::Utc::now().timestamp());
 
         // 模拟计算结果
-        let gross_salary = request.base_salary + request.allowances.iter().map(|a| a.amount).sum::<f64>();
+        let gross_salary =
+            request.base_salary + request.allowances.iter().map(|a| a.amount).sum::<f64>();
         let tax_deduction = gross_salary * 0.1; // 简化的税收计算
         let social_insurance = gross_salary * 0.08; // 简化的社保计算
-        let net_salary = gross_salary - tax_deduction - social_insurance - request.deductions.iter().map(|d| d.amount).sum::<f64>();
+        let net_salary = gross_salary
+            - tax_deduction
+            - social_insurance
+            - request.deductions.iter().map(|d| d.amount).sum::<f64>();
 
         Ok(SalaryCalculationResponse {
             calculation_id,
@@ -75,7 +82,10 @@ impl CalculationService {
     }
 
     /// 批量薪资计算
-    pub async fn batch_calculate(&self, request: &BatchSalaryCalculationRequest) -> SDKResult<BatchSalaryCalculationResponse> {
+    pub async fn batch_calculate(
+        &self,
+        request: &BatchSalaryCalculationRequest,
+    ) -> SDKResult<BatchSalaryCalculationResponse> {
         // 模拟批量计算
         let mut results = Vec::new();
 
@@ -104,18 +114,23 @@ impl CalculationService {
     }
 
     /// 薪资模拟计算
-    pub async fn simulate(&self, request: &SalarySimulationRequest) -> SDKResult<SalarySimulationResponse> {
+    pub async fn simulate(
+        &self,
+        request: &SalarySimulationRequest,
+    ) -> SDKResult<SalarySimulationResponse> {
         // 模拟不同场景下的薪资计算
         let mut scenarios = Vec::new();
 
         // 场景1：当前薪资
-        let current_calc = self.calculate(&SalaryCalculationRequest {
-            employee_id: request.employee_id.clone(),
-            calculation_period: request.calculation_period.clone(),
-            base_salary: request.current_base_salary,
-            allowances: request.current_allowances.clone(),
-            deductions: request.current_deductions.clone(),
-        }).await?;
+        let current_calc = self
+            .calculate(&SalaryCalculationRequest {
+                employee_id: request.employee_id.clone(),
+                calculation_period: request.calculation_period.clone(),
+                base_salary: request.current_base_salary,
+                allowances: request.current_allowances.clone(),
+                deductions: request.current_deductions.clone(),
+            })
+            .await?;
 
         scenarios.push(SalaryScenario {
             scenario_name: "当前薪资".to_string(),
@@ -126,13 +141,15 @@ impl CalculationService {
         });
 
         // 场景2：加薪10%
-        let raise_calc = self.calculate(&SalaryCalculationRequest {
-            employee_id: request.employee_id.clone(),
-            calculation_period: request.calculation_period.clone(),
-            base_salary: request.current_base_salary * 1.1,
-            allowances: request.current_allowances.clone(),
-            deductions: request.current_deductions.clone(),
-        }).await?;
+        let raise_calc = self
+            .calculate(&SalaryCalculationRequest {
+                employee_id: request.employee_id.clone(),
+                calculation_period: request.calculation_period.clone(),
+                base_salary: request.current_base_salary * 1.1,
+                allowances: request.current_allowances.clone(),
+                deductions: request.current_deductions.clone(),
+            })
+            .await?;
 
         scenarios.push(SalaryScenario {
             scenario_name: "加薪10%".to_string(),
@@ -151,7 +168,13 @@ impl CalculationService {
     }
 
     /// 获取计算历史
-    pub async fn get_calculation_history(&self, employee_id: &str, period: Option<&str>, page_size: i32, page_token: Option<&str>) -> SDKResult<CalculationHistoryResponse> {
+    pub async fn get_calculation_history(
+        &self,
+        employee_id: &str,
+        period: Option<&str>,
+        page_size: i32,
+        page_token: Option<&str>,
+    ) -> SDKResult<CalculationHistoryResponse> {
         // 模拟历史记录
         let history = vec![
             CalculationHistory {

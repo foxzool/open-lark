@@ -8,9 +8,9 @@
 
 use crate::core::config::Config;
 use crate::service::payroll::models::*;
+use chrono::{DateTime, Utc};
 use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
 
 /// 薪酬报表服务
 #[derive(Debug, Clone)]
@@ -26,7 +26,10 @@ impl ReportService {
     // ==================== 薪酬报表生成 ====================
 
     /// 生成月度薪酬报表
-    pub async fn generate_monthly_report(&self, request: &GenerateMonthlyReportRequest) -> SDKResult<GenerateMonthlyReportResponse> {
+    pub async fn generate_monthly_report(
+        &self,
+        request: &GenerateMonthlyReportRequest,
+    ) -> SDKResult<GenerateMonthlyReportResponse> {
         let report_id = format!("report_{}", chrono::Utc::now().timestamp());
 
         // 模拟月度报表数据
@@ -88,7 +91,10 @@ impl ReportService {
     }
 
     /// 生成年度薪酬报表
-    pub async fn generate_annual_report(&self, request: &GenerateAnnualReportRequest) -> SDKResult<GenerateAnnualReportResponse> {
+    pub async fn generate_annual_report(
+        &self,
+        request: &GenerateAnnualReportRequest,
+    ) -> SDKResult<GenerateAnnualReportResponse> {
         let report_id = format!("annual_report_{}", chrono::Utc::now().timestamp());
 
         let summary = AnnualReportSummary {
@@ -146,7 +152,10 @@ impl ReportService {
     }
 
     /// 生成员工个人薪酬报表
-    pub async fn generate_employee_report(&self, request: &GenerateEmployeeReportRequest) -> SDKResult<GenerateEmployeeReportResponse> {
+    pub async fn generate_employee_report(
+        &self,
+        request: &GenerateEmployeeReportRequest,
+    ) -> SDKResult<GenerateEmployeeReportResponse> {
         let report_id = format!("emp_report_{}", chrono::Utc::now().timestamp());
 
         let employee_summary = EmployeeSalarySummary {
@@ -208,7 +217,10 @@ impl ReportService {
     // ==================== 报表管理 ====================
 
     /// 获取报表列表
-    pub async fn list_reports(&self, request: &ListReportsRequest) -> SDKResult<ListReportsResponse> {
+    pub async fn list_reports(
+        &self,
+        request: &ListReportsRequest,
+    ) -> SDKResult<ListReportsResponse> {
         let reports = vec![
             ReportInfo {
                 report_id: "report_001".to_string(),
@@ -243,9 +255,17 @@ impl ReportService {
         ];
 
         let filtered_reports = if let Some(report_type) = &request.report_type_filter {
-            reports.iter().filter(|r| &r.report_type == report_type).cloned().collect()
+            reports
+                .iter()
+                .filter(|r| &r.report_type == report_type)
+                .cloned()
+                .collect()
         } else if let Some(status) = &request.status_filter {
-            reports.iter().filter(|r| &r.status == status).cloned().collect()
+            reports
+                .iter()
+                .filter(|r| &r.status == status)
+                .cloned()
+                .collect()
         } else {
             reports
         };
@@ -299,9 +319,15 @@ impl ReportService {
     // ==================== 报表导出和分发 ====================
 
     /// 导出报表
-    pub async fn export_report(&self, request: &ExportReportRequest) -> SDKResult<ExportReportResponse> {
+    pub async fn export_report(
+        &self,
+        request: &ExportReportRequest,
+    ) -> SDKResult<ExportReportResponse> {
         let export_id = format!("export_{}", chrono::Utc::now().timestamp());
-        let download_url = format!("https://company.com/exports/{}.{}", export_id, request.format);
+        let download_url = format!(
+            "https://company.com/exports/{}.{}",
+            export_id, request.format
+        );
 
         Ok(ExportReportResponse {
             export_id: export_id.clone(),
@@ -320,7 +346,10 @@ impl ReportService {
     }
 
     /// 分发报表
-    pub async fn distribute_report(&self, request: &DistributeReportRequest) -> SDKResult<DistributeReportResponse> {
+    pub async fn distribute_report(
+        &self,
+        request: &DistributeReportRequest,
+    ) -> SDKResult<DistributeReportResponse> {
         let distribution_id = format!("dist_{}", chrono::Utc::now().timestamp());
 
         Ok(DistributeReportResponse {
@@ -337,7 +366,10 @@ impl ReportService {
     // ==================== 统计分析 ====================
 
     /// 获取薪酬统计概览
-    pub async fn get_salary_overview(&self, request: &GetSalaryOverviewRequest) -> SDKResult<GetSalaryOverviewResponse> {
+    pub async fn get_salary_overview(
+        &self,
+        request: &GetSalaryOverviewRequest,
+    ) -> SDKResult<GetSalaryOverviewResponse> {
         Ok(GetSalaryOverviewResponse {
             period: request.period.clone(),
             total_employees: 250,
@@ -505,21 +537,30 @@ impl ReportService {
                 grade_range: "L1-L3".to_string(),
                 employee_count: 60,
                 average_salary: 7000.0,
-                salary_range: SalaryRange { min: 5000.0, max: 9000.0 },
+                salary_range: SalaryRange {
+                    min: 5000.0,
+                    max: 9000.0,
+                },
             },
             SalaryBandAnalysis {
                 band_name: "中级".to_string(),
                 grade_range: "L4-L6".to_string(),
                 employee_count: 120,
                 average_salary: 10000.0,
-                salary_range: SalaryRange { min: 8000.0, max: 15000.0 },
+                salary_range: SalaryRange {
+                    min: 8000.0,
+                    max: 15000.0,
+                },
             },
             SalaryBandAnalysis {
                 band_name: "高级".to_string(),
                 grade_range: "L7-L9".to_string(),
                 employee_count: 50,
                 average_salary: 16000.0,
-                salary_range: SalaryRange { min: 12000.0, max: 25000.0 },
+                salary_range: SalaryRange {
+                    min: 12000.0,
+                    max: 25000.0,
+                },
             },
         ]
     }

@@ -6,13 +6,13 @@
 //! - 周期统计分析
 //! - 周期配置管理
 
+use crate::core::api_resp::EmptyResponse;
 use crate::core::config::Config;
 use crate::service::performance::models;
 use crate::service::performance::PageResponse;
-use crate::core::api_resp::EmptyResponse;
+use chrono::{DateTime, Utc};
 use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
 
 /// 绩效周期管理服务
 #[derive(Debug, Clone)]
@@ -26,7 +26,10 @@ impl CyclesService {
     }
 
     /// 获取绩效周期详情
-    pub async fn get(&self, semester_id: &str) -> SDKResult<crate::service::performance::models::SemesterResponse> {
+    pub async fn get(
+        &self,
+        semester_id: &str,
+    ) -> SDKResult<crate::service::performance::models::SemesterResponse> {
         // 模拟实现
         Ok(crate::service::performance::models::SemesterResponse {
             code: 0,
@@ -45,7 +48,11 @@ impl CyclesService {
     }
 
     /// 获取绩效周期列表
-    pub async fn list(&self, page_size: i32, page_token: Option<&str>) -> SDKResult<crate::service::performance::models::SemesterListResponse> {
+    pub async fn list(
+        &self,
+        page_size: i32,
+        page_token: Option<&str>,
+    ) -> SDKResult<crate::service::performance::models::SemesterListResponse> {
         // 模拟实现
         let cycles = vec![
             crate::service::performance::models::Semester {
@@ -64,7 +71,7 @@ impl CyclesService {
                 description: Some("2023年第四季度绩效考核".to_string()),
                 status: Some(crate::service::performance::models::SemesterStatus::Finished),
                 start_time: Some(1698796800000), // 2023-10-01
-                end_time: Some(1704067199000),  // 2023-12-31
+                end_time: Some(1704067199000),   // 2023-12-31
                 created_at: Some(1698710400000),
                 updated_at: Some(1704067200000),
             },
@@ -83,7 +90,10 @@ impl CyclesService {
     }
 
     /// 创建绩效周期
-    pub async fn create(&self, request: &CreateSemesterRequest) -> SDKResult<crate::service::performance::models::SemesterResponse> {
+    pub async fn create(
+        &self,
+        request: &CreateSemesterRequest,
+    ) -> SDKResult<crate::service::performance::models::SemesterResponse> {
         // 模拟实现
         let semester_id = format!("sem_{}", chrono::Utc::now().timestamp());
         Ok(crate::service::performance::models::SemesterResponse {
@@ -103,7 +113,11 @@ impl CyclesService {
     }
 
     /// 更新绩效周期
-    pub async fn update(&self, semester_id: &str, request: &UpdateSemesterRequest) -> SDKResult<crate::service::performance::models::SemesterResponse> {
+    pub async fn update(
+        &self,
+        semester_id: &str,
+        request: &UpdateSemesterRequest,
+    ) -> SDKResult<crate::service::performance::models::SemesterResponse> {
         // 模拟实现
         Ok(crate::service::performance::models::SemesterResponse {
             code: 0,
@@ -128,7 +142,10 @@ impl CyclesService {
     }
 
     /// 启动绩效周期
-    pub async fn start(&self, semester_id: &str) -> SDKResult<crate::service::performance::models::SemesterResponse> {
+    pub async fn start(
+        &self,
+        semester_id: &str,
+    ) -> SDKResult<crate::service::performance::models::SemesterResponse> {
         // 模拟实现
         Ok(crate::service::performance::models::SemesterResponse {
             code: 0,
@@ -147,7 +164,10 @@ impl CyclesService {
     }
 
     /// 暂停绩效周期
-    pub async fn pause(&self, semester_id: &str) -> SDKResult<crate::service::performance::models::SemesterResponse> {
+    pub async fn pause(
+        &self,
+        semester_id: &str,
+    ) -> SDKResult<crate::service::performance::models::SemesterResponse> {
         // 模拟实现
         Ok(crate::service::performance::models::SemesterResponse {
             code: 0,
@@ -166,7 +186,10 @@ impl CyclesService {
     }
 
     /// 结束绩效周期
-    pub async fn finish(&self, semester_id: &str) -> SDKResult<crate::service::performance::models::SemesterResponse> {
+    pub async fn finish(
+        &self,
+        semester_id: &str,
+    ) -> SDKResult<crate::service::performance::models::SemesterResponse> {
         // 模拟实现
         Ok(crate::service::performance::models::SemesterResponse {
             code: 0,
@@ -226,7 +249,12 @@ impl CyclesService {
     }
 
     /// 获取周期活动列表
-    pub async fn get_activities(&self, semester_id: &str, page_size: i32, page_token: Option<&str>) -> SDKResult<crate::service::performance::models::ActivityListResponse> {
+    pub async fn get_activities(
+        &self,
+        semester_id: &str,
+        page_size: i32,
+        page_token: Option<&str>,
+    ) -> SDKResult<crate::service::performance::models::ActivityListResponse> {
         // 模拟实现
         let activities = vec![
             crate::service::performance::models::Activity {
@@ -245,7 +273,9 @@ impl CyclesService {
                 activity_id: "act_002".to_string(),
                 name: "上级评估".to_string(),
                 description: Some("直属上级评估员工表现".to_string()),
-                activity_type: Some(crate::service::performance::models::ActivityType::ManagerReview),
+                activity_type: Some(
+                    crate::service::performance::models::ActivityType::ManagerReview,
+                ),
                 status: Some(crate::service::performance::models::ActivityStatus::NotStarted),
                 semester_id: Some(semester_id.to_string()),
                 start_time: Some(1706662800000),

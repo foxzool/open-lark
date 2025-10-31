@@ -8,9 +8,9 @@
 
 use crate::core::config::Config;
 use crate::service::payroll::models::*;
+use chrono::{DateTime, Utc};
 use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
 
 /// 数据源管理服务
 #[derive(Debug, Clone)]
@@ -26,7 +26,10 @@ impl DatasourceService {
     // ==================== 数据源管理 ====================
 
     /// 创建数据源
-    pub async fn create_datasource(&self, request: &CreateDatasourceRequest) -> SDKResult<CreateDatasourceResponse> {
+    pub async fn create_datasource(
+        &self,
+        request: &CreateDatasourceRequest,
+    ) -> SDKResult<CreateDatasourceResponse> {
         let datasource_id = format!("ds_{}", chrono::Utc::now().timestamp());
 
         Ok(CreateDatasourceResponse {
@@ -68,7 +71,11 @@ impl DatasourceService {
     }
 
     /// 更新数据源
-    pub async fn update_datasource(&self, datasource_id: &str, request: &UpdateDatasourceRequest) -> SDKResult<UpdateDatasourceResponse> {
+    pub async fn update_datasource(
+        &self,
+        datasource_id: &str,
+        request: &UpdateDatasourceRequest,
+    ) -> SDKResult<UpdateDatasourceResponse> {
         Ok(UpdateDatasourceResponse {
             datasource_id: datasource_id.to_string(),
             datasource_name: request.datasource_name.clone(),
@@ -80,7 +87,10 @@ impl DatasourceService {
     }
 
     /// 删除数据源
-    pub async fn delete_datasource(&self, datasource_id: &str) -> SDKResult<DeleteDatasourceResponse> {
+    pub async fn delete_datasource(
+        &self,
+        datasource_id: &str,
+    ) -> SDKResult<DeleteDatasourceResponse> {
         Ok(DeleteDatasourceResponse {
             datasource_id: datasource_id.to_string(),
             deleted: true,
@@ -89,7 +99,10 @@ impl DatasourceService {
     }
 
     /// 获取数据源列表
-    pub async fn list_datasources(&self, request: &ListDatasourcesRequest) -> SDKResult<ListDatasourcesResponse> {
+    pub async fn list_datasources(
+        &self,
+        request: &ListDatasourcesRequest,
+    ) -> SDKResult<ListDatasourcesResponse> {
         let datasources = vec![
             DatasourceInfo {
                 datasource_id: "ds_001".to_string(),
@@ -127,9 +140,17 @@ impl DatasourceService {
         ];
 
         let filtered_datasources = if let Some(datasource_type) = &request.datasource_type_filter {
-            datasources.iter().filter(|ds| &ds.datasource_type == datasource_type).cloned().collect()
+            datasources
+                .iter()
+                .filter(|ds| &ds.datasource_type == datasource_type)
+                .cloned()
+                .collect()
         } else if let Some(is_active) = &request.is_active_filter {
-            datasources.iter().filter(|ds| &ds.is_active == is_active).cloned().collect()
+            datasources
+                .iter()
+                .filter(|ds| &ds.is_active == is_active)
+                .cloned()
+                .collect()
         } else {
             datasources
         };
@@ -157,13 +178,11 @@ impl DatasourceService {
             new_records: 8,
             updated_records: 237,
             skipped_records: 0,
-            error_details: vec![
-                SyncError {
-                    record_id: "emp_001".to_string(),
-                    error_type: "validation_error".to_string(),
-                    error_message: "员工编号格式不正确".to_string(),
-                },
-            ],
+            error_details: vec![SyncError {
+                record_id: "emp_001".to_string(),
+                error_type: "validation_error".to_string(),
+                error_message: "员工编号格式不正确".to_string(),
+            }],
         };
 
         Ok(SyncDataResponse {
@@ -178,7 +197,10 @@ impl DatasourceService {
     }
 
     /// 获取同步历史
-    pub async fn get_sync_history(&self, request: &GetSyncHistoryRequest) -> SDKResult<GetSyncHistoryResponse> {
+    pub async fn get_sync_history(
+        &self,
+        request: &GetSyncHistoryRequest,
+    ) -> SDKResult<GetSyncHistoryResponse> {
         let history = vec![
             SyncHistoryItem {
                 sync_id: "sync_001".to_string(),
@@ -227,7 +249,10 @@ impl DatasourceService {
     }
 
     /// 测试数据源连接
-    pub async fn test_datasource_connection(&self, datasource_id: &str) -> SDKResult<TestDatasourceConnectionResponse> {
+    pub async fn test_datasource_connection(
+        &self,
+        datasource_id: &str,
+    ) -> SDKResult<TestDatasourceConnectionResponse> {
         // 模拟连接测试
         let connection_test = ConnectionTestResult {
             connection_status: ConnectionStatus::Success,
@@ -270,7 +295,10 @@ impl DatasourceService {
     // ==================== 数据质量管理 ====================
 
     /// 获取数据质量报告
-    pub async fn get_data_quality_report(&self, request: &GetDataQualityReportRequest) -> SDKResult<GetDataQualityReportResponse> {
+    pub async fn get_data_quality_report(
+        &self,
+        request: &GetDataQualityReportRequest,
+    ) -> SDKResult<GetDataQualityReportResponse> {
         let quality_metrics = vec![
             QualityMetric {
                 metric_name: "完整性".to_string(),
@@ -388,7 +416,10 @@ impl DatasourceService {
     // ==================== 数据源统计 ====================
 
     /// 获取数据源使用统计
-    pub async fn get_datasource_stats(&self, request: &GetDatasourceStatsRequest) -> SDKResult<GetDatasourceStatsResponse> {
+    pub async fn get_datasource_stats(
+        &self,
+        request: &GetDatasourceStatsRequest,
+    ) -> SDKResult<GetDatasourceStatsResponse> {
         Ok(GetDatasourceStatsResponse {
             datasource_id: request.datasource_id.clone(),
             period: request.period.clone(),

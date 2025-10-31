@@ -18,10 +18,10 @@ use crate::service::aily::AilyService;
 use crate::service::analytics::AnalyticsService;
 #[cfg(feature = "app_engine")]
 use crate::service::app_engine::AppengineService;
-#[cfg(feature = "attendance")]
-use crate::service::attendance::AttendanceService;
 #[cfg(feature = "approval")]
 use crate::service::approval::ApprovalService;
+#[cfg(feature = "attendance")]
+use crate::service::attendance::AttendanceService;
 #[cfg(feature = "auth")]
 use crate::service::auth::AuthService;
 #[cfg(feature = "authentication")]
@@ -36,28 +36,28 @@ use crate::service::ccm::CcmService;
 use crate::service::cloud_docs::ClouddocsService;
 #[cfg(feature = "contact")]
 use crate::service::contact::ContactService;
+#[cfg(feature = "feishu_people")]
+use crate::service::feishu_people::FeishuPeopleService;
 #[cfg(feature = "group")]
 use crate::service::group::GroupService;
 #[cfg(feature = "im")]
 use crate::service::im::ImService;
-#[cfg(feature = "search")]
-use crate::service::search::SearchService;
-#[cfg(feature = "task")]
-use crate::service::task::TaskService;
 #[cfg(feature = "okr")]
 use crate::service::okr::OkrService;
+#[cfg(feature = "performance")]
+use crate::service::performance::PerformanceService;
+#[cfg(feature = "search")]
+use crate::service::search::SearchService;
+#[cfg(feature = "security_and_compliance")]
+use crate::service::security_and_compliance::SecurityAndComplianceService;
+#[cfg(feature = "task")]
+use crate::service::task::TaskService;
 #[cfg(feature = "board")]
 use open_lark_extensions::board::BoardService;
 #[cfg(feature = "event")]
 use open_lark_extensions::event::EventService;
 #[cfg(feature = "compensation-management")]
 use open_lark_hr_suite::compensation_management::CompensationManagementService;
-#[cfg(feature = "feishu_people")]
-use crate::service::feishu_people::FeishuPeopleService;
-#[cfg(feature = "performance")]
-use crate::service::performance::PerformanceService;
-#[cfg(feature = "security_and_compliance")]
-use crate::service::security_and_compliance::SecurityAndComplianceService;
 
 /// 飞书开放平台SDK主客户端
 ///

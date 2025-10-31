@@ -69,16 +69,16 @@
 //! }
 //! ```
 
-use open_lark_core::core::api_req::ApiRequest;
+use super::models::*;
 use crate::core::{
-    api_resp::{BaseResponse, ApiResponseTrait},
+    api_resp::{ApiResponseTrait, BaseResponse},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
     SDKResult,
 };
+use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
-use super::models::*;
 
 // ==================== Builder实现 ====================
 
@@ -767,7 +767,10 @@ impl UpdateLeaveRuleBuilder {
 
     /// 添加适用部门
     pub fn add_applicable_department(mut self, department: impl Into<String>) -> Self {
-        let mut departments = self.update_fields.applicable_departments.unwrap_or_default();
+        let mut departments = self
+            .update_fields
+            .applicable_departments
+            .unwrap_or_default();
         departments.push(department.into());
         self.update_fields.applicable_departments = Some(departments);
         self
@@ -860,7 +863,9 @@ impl CancelLeaveBuilder {
 
     /// 执行请假申请取消
     pub async fn execute(self, service: &LeaveService) -> SDKResult<EmptyResponse> {
-        service.cancel_leave_request(&self.leave_id, &self.reason).await
+        service
+            .cancel_leave_request(&self.leave_id, &self.reason)
+            .await
     }
 }
 
@@ -925,13 +930,15 @@ impl AdjustLeaveBalanceBuilder {
 
     /// 执行请假余额调整
     pub async fn execute(self, service: &LeaveService) -> SDKResult<LeaveBalanceResponse> {
-        service.adjust_leave_balance(
-            &self.employee_id,
-            self.leave_type,
-            self.year,
-            self.adjustment_days,
-            &self.reason,
-        ).await
+        service
+            .adjust_leave_balance(
+                &self.employee_id,
+                self.leave_type,
+                self.year,
+                self.adjustment_days,
+                &self.reason,
+            )
+            .await
     }
 }
 
@@ -976,7 +983,9 @@ impl GetPendingApprovalsBuilder {
 
     /// 执行待审批列表查询
     pub async fn execute(self, service: &LeaveService) -> SDKResult<LeaveRecordListResponse> {
-        service.get_pending_approvals(self.page_size, self.page_token).await
+        service
+            .get_pending_approvals(self.page_size, self.page_token)
+            .await
     }
 }
 
@@ -1029,7 +1038,9 @@ impl GetLeaveRulesBuilder {
 
     /// 执行请假规则列表查询
     pub async fn execute(self, service: &LeaveService) -> SDKResult<LeaveRuleListResponse> {
-        service.get_leave_rules(self.leave_type, self.page_size, self.page_token).await
+        service
+            .get_leave_rules(self.leave_type, self.page_size, self.page_token)
+            .await
     }
 }
 
@@ -1110,7 +1121,10 @@ impl LeaveService {
     /// let response = leave_service.create_leave(&request).await?;
     /// println!("请假申请ID: {}", response.data.leave_id);
     /// ```
-    pub async fn create_leave(&self, request: &CreateLeaveRequest) -> SDKResult<LeaveRecordResponse> {
+    pub async fn create_leave(
+        &self,
+        request: &CreateLeaveRequest,
+    ) -> SDKResult<LeaveRecordResponse> {
         // 参数验证
         self.validate_create_leave_request(request)?;
 
@@ -1153,7 +1167,10 @@ impl LeaveService {
             ));
         }
 
-        let url = format!("{}/open-apis/ehr/v1/leaves/{}", self.config.base_url, leave_id);
+        let url = format!(
+            "{}/open-apis/ehr/v1/leaves/{}",
+            self.config.base_url, leave_id
+        );
         let api_req = ApiRequest::new()
             .method("GET")
             .url(&url)
@@ -1194,11 +1211,17 @@ impl LeaveService {
     ///
     /// let response = leave_service.update_leave_record(&request).await?;
     /// ```
-    pub async fn update_leave_record(&self, request: &UpdateLeaveRequest) -> SDKResult<LeaveRecordResponse> {
+    pub async fn update_leave_record(
+        &self,
+        request: &UpdateLeaveRequest,
+    ) -> SDKResult<LeaveRecordResponse> {
         // 参数验证
         self.validate_update_leave_request(request)?;
 
-        let url = format!("{}/open-apis/ehr/v1/leaves/{}", self.config.base_url, request.leave_id);
+        let url = format!(
+            "{}/open-apis/ehr/v1/leaves/{}",
+            self.config.base_url, request.leave_id
+        );
         let api_req = ApiRequest::new()
             .method("PUT")
             .url(&url)
@@ -1231,7 +1254,11 @@ impl LeaveService {
     /// let response = leave_service.cancel_leave_request("leave_001", "计划变更").await?;
     /// println!("请假申请已取消");
     /// ```
-    pub async fn cancel_leave_request(&self, leave_id: &str, reason: &str) -> SDKResult<EmptyResponse> {
+    pub async fn cancel_leave_request(
+        &self,
+        leave_id: &str,
+        reason: &str,
+    ) -> SDKResult<EmptyResponse> {
         if leave_id.is_empty() {
             return Err(open_lark_core::error::SDKError::InvalidParameter(
                 "请假记录ID不能为空".to_string(),
@@ -1249,7 +1276,10 @@ impl LeaveService {
             "action": "cancel"
         });
 
-        let url = format!("{}/open-apis/ehr/v1/leaves/{}/cancel", self.config.base_url, leave_id);
+        let url = format!(
+            "{}/open-apis/ehr/v1/leaves/{}/cancel",
+            self.config.base_url, leave_id
+        );
         let api_req = ApiRequest::new()
             .method("POST")
             .url(&url)
@@ -1289,7 +1319,10 @@ impl LeaveService {
     /// let response = leave_service.query_leave_records(&request).await?;
     /// println!("找到 {} 条请假记录", response.data.items.len());
     /// ```
-    pub async fn query_leave_records(&self, request: &QueryLeaveRecordsRequest) -> SDKResult<LeaveRecordListResponse> {
+    pub async fn query_leave_records(
+        &self,
+        request: &QueryLeaveRecordsRequest,
+    ) -> SDKResult<LeaveRecordListResponse> {
         // 参数验证
         self.validate_query_leave_records_request(request)?;
 
@@ -1334,11 +1367,17 @@ impl LeaveService {
     /// let response = leave_service.approve_leave_request(&request).await?;
     /// println!("请假审批完成");
     /// ```
-    pub async fn approve_leave_request(&self, request: &ApproveLeaveRequest) -> SDKResult<LeaveApprovalResponse> {
+    pub async fn approve_leave_request(
+        &self,
+        request: &ApproveLeaveRequest,
+    ) -> SDKResult<LeaveApprovalResponse> {
         // 参数验证
         self.validate_approve_leave_request(request)?;
 
-        let url = format!("{}/open-apis/ehr/v1/leaves/{}/approve", self.config.base_url, request.leave_id);
+        let url = format!(
+            "{}/open-apis/ehr/v1/leaves/{}/approve",
+            self.config.base_url, request.leave_id
+        );
         let api_req = ApiRequest::new()
             .method("POST")
             .url(&url)
@@ -1370,14 +1409,21 @@ impl LeaveService {
     /// let response = leave_service.get_pending_approvals(Some(50), None).await?;
     /// println!("待审批请假申请: {} 个", response.data.items.len());
     /// ```
-    pub async fn get_pending_approvals(&self, page_size: Option<i32>, page_token: Option<String>) -> SDKResult<LeaveRecordListResponse> {
+    pub async fn get_pending_approvals(
+        &self,
+        page_size: Option<i32>,
+        page_token: Option<String>,
+    ) -> SDKResult<LeaveRecordListResponse> {
         let query_params = serde_json::json!({
             "status": LeaveStatus::PendingApproval,
             "page_size": page_size.unwrap_or(20),
             "page_token": page_token
         });
 
-        let url = format!("{}/open-apis/ehr/v1/leaves/pending_approvals", self.config.base_url);
+        let url = format!(
+            "{}/open-apis/ehr/v1/leaves/pending_approvals",
+            self.config.base_url
+        );
         let api_req = ApiRequest::new()
             .method("GET")
             .url(&url)
@@ -1416,11 +1462,17 @@ impl LeaveService {
     /// let response = leave_service.query_leave_balance(&request).await?;
     /// println!("年假余额: {} 天", response.data.remaining_days);
     /// ```
-    pub async fn query_leave_balance(&self, request: &QueryLeaveBalanceRequest) -> SDKResult<LeaveBalanceListResponse> {
+    pub async fn query_leave_balance(
+        &self,
+        request: &QueryLeaveBalanceRequest,
+    ) -> SDKResult<LeaveBalanceListResponse> {
         // 参数验证
         self.validate_query_leave_balance_request(request)?;
 
-        let url = format!("{}/open-apis/ehr/v1/leave_balances/query", self.config.base_url);
+        let url = format!(
+            "{}/open-apis/ehr/v1/leave_balances/query",
+            self.config.base_url
+        );
         let api_req = ApiRequest::new()
             .method("POST")
             .url(&url)
@@ -1489,7 +1541,10 @@ impl LeaveService {
             "reason": reason
         });
 
-        let url = format!("{}/open-apis/ehr/v1/leave_balances/adjust", self.config.base_url);
+        let url = format!(
+            "{}/open-apis/ehr/v1/leave_balances/adjust",
+            self.config.base_url
+        );
         let api_req = ApiRequest::new()
             .method("POST")
             .url(&url)
@@ -1529,7 +1584,10 @@ impl LeaveService {
     /// let response = leave_service.get_leave_statistics(&request).await?;
     /// println!("2024年总请假天数: {}", response.data.total_leave_days);
     /// ```
-    pub async fn get_leave_statistics(&self, request: &GetLeaveStatisticsRequest) -> SDKResult<LeaveStatisticsResponse> {
+    pub async fn get_leave_statistics(
+        &self,
+        request: &GetLeaveStatisticsRequest,
+    ) -> SDKResult<LeaveStatisticsResponse> {
         // 参数验证
         self.validate_get_leave_statistics_request(request)?;
 
@@ -1618,7 +1676,10 @@ impl LeaveService {
     /// let response = leave_service.create_leave_rule(&request).await?;
     /// println!("请假规则创建成功，ID: {}", response.data.rule_id);
     /// ```
-    pub async fn create_leave_rule(&self, request: &CreateLeaveRuleRequest) -> SDKResult<LeaveRuleResponse> {
+    pub async fn create_leave_rule(
+        &self,
+        request: &CreateLeaveRuleRequest,
+    ) -> SDKResult<LeaveRuleResponse> {
         // 参数验证
         self.validate_create_leave_rule_request(request)?;
 
@@ -1714,11 +1775,17 @@ impl LeaveService {
     /// let response = leave_service.update_leave_rule(&request).await?;
     /// println!("请假规则已更新");
     /// ```
-    pub async fn update_leave_rule(&self, request: &UpdateLeaveRuleRequest) -> SDKResult<LeaveRuleResponse> {
+    pub async fn update_leave_rule(
+        &self,
+        request: &UpdateLeaveRuleRequest,
+    ) -> SDKResult<LeaveRuleResponse> {
         // 参数验证
         self.validate_update_leave_rule_request(request)?;
 
-        let url = format!("{}/open-apis/ehr/v1/leave_rules/{}", self.config.base_url, request.rule_id);
+        let url = format!(
+            "{}/open-apis/ehr/v1/leave_rules/{}",
+            self.config.base_url, request.rule_id
+        );
         let api_req = ApiRequest::new()
             .method("PUT")
             .url(&url)
@@ -1756,7 +1823,10 @@ impl LeaveService {
             ));
         }
 
-        let url = format!("{}/open-apis/ehr/v1/leave_rules/{}", self.config.base_url, rule_id);
+        let url = format!(
+            "{}/open-apis/ehr/v1/leave_rules/{}",
+            self.config.base_url, rule_id
+        );
         let api_req = ApiRequest::new()
             .method("DELETE")
             .url(&url)
@@ -1843,7 +1913,10 @@ impl LeaveService {
     }
 
     /// 验证查询请假记录请求参数
-    fn validate_query_leave_records_request(&self, request: &QueryLeaveRecordsRequest) -> SDKResult<()> {
+    fn validate_query_leave_records_request(
+        &self,
+        request: &QueryLeaveRecordsRequest,
+    ) -> SDKResult<()> {
         // 验证日期格式
         if let Some(ref start_date) = request.start_date {
             if let Err(_) = chrono::NaiveDate::parse_from_str(start_date, "%Y-%m-%d") {
@@ -1883,7 +1956,9 @@ impl LeaveService {
 
         // 如果是转交操作，必须提供转交对象
         if matches!(request.decision, LeaveApprovalDecision::Forward) {
-            if request.forward_to_user_id.is_none() || request.forward_to_user_id.as_ref().unwrap().is_empty() {
+            if request.forward_to_user_id.is_none()
+                || request.forward_to_user_id.as_ref().unwrap().is_empty()
+            {
                 return Err(open_lark_core::error::SDKError::InvalidParameter(
                     "转交操作必须提供转交对象用户ID".to_string(),
                 ));
@@ -1894,7 +1969,10 @@ impl LeaveService {
     }
 
     /// 验证查询请假余额请求参数
-    fn validate_query_leave_balance_request(&self, request: &QueryLeaveBalanceRequest) -> SDKResult<()> {
+    fn validate_query_leave_balance_request(
+        &self,
+        request: &QueryLeaveBalanceRequest,
+    ) -> SDKResult<()> {
         if request.employee_id.is_empty() {
             return Err(open_lark_core::error::SDKError::InvalidParameter(
                 "员工ID不能为空".to_string(),
@@ -1913,7 +1991,10 @@ impl LeaveService {
     }
 
     /// 验证获取请假统计请求参数
-    fn validate_get_leave_statistics_request(&self, request: &GetLeaveStatisticsRequest) -> SDKResult<()> {
+    fn validate_get_leave_statistics_request(
+        &self,
+        request: &GetLeaveStatisticsRequest,
+    ) -> SDKResult<()> {
         if request.year < 2000 || request.year > 2100 {
             return Err(open_lark_core::error::SDKError::InvalidParameter(
                 "年份必须在2000-2100之间".to_string(),
@@ -1932,7 +2013,10 @@ impl LeaveService {
     }
 
     /// 验证创建请假规则请求参数
-    fn validate_create_leave_rule_request(&self, request: &CreateLeaveRuleRequest) -> SDKResult<()> {
+    fn validate_create_leave_rule_request(
+        &self,
+        request: &CreateLeaveRuleRequest,
+    ) -> SDKResult<()> {
         if request.name.is_empty() {
             return Err(open_lark_core::error::SDKError::InvalidParameter(
                 "规则名称不能为空".to_string(),
@@ -1967,7 +2051,10 @@ impl LeaveService {
     }
 
     /// 验证更新请假规则请求参数
-    fn validate_update_leave_rule_request(&self, request: &UpdateLeaveRuleRequest) -> SDKResult<()> {
+    fn validate_update_leave_rule_request(
+        &self,
+        request: &UpdateLeaveRuleRequest,
+    ) -> SDKResult<()> {
         if request.rule_id.is_empty() {
             return Err(open_lark_core::error::SDKError::InvalidParameter(
                 "规则ID不能为空".to_string(),

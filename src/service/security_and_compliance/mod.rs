@@ -25,7 +25,9 @@ impl SecurityAndComplianceService {
         Self {
             config: config.clone(),
             #[cfg(feature = "security_and_compliance")]
-            v1: crate::service::security_and_compliance::v1::SecurityAndComplianceServiceV1::new(config),
+            v1: crate::service::security_and_compliance::v1::SecurityAndComplianceServiceV1::new(
+                config,
+            ),
         }
     }
 }

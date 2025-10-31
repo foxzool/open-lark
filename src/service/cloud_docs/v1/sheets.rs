@@ -102,9 +102,8 @@
 //! }
 //! ```
 
-use open_lark_core::core::{api_req::ApiRequest, trait_system::ExecutableBuilder};
 use crate::core::{
-    api_resp::{BaseResponse, ApiResponseTrait},
+    api_resp::{ApiResponseTrait, BaseResponse},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
@@ -112,6 +111,7 @@ use crate::core::{
     SDKResult,
 };
 use async_trait::async_trait;
+use open_lark_core::core::{api_req::ApiRequest, trait_system::ExecutableBuilder};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -317,10 +317,16 @@ impl SheetsServiceV3 {
         query_params.insert("range".to_string(), request.range);
 
         if let Some(value_render_option) = &request.value_render_option {
-            query_params.insert("value_render_option".to_string(), value_render_option.clone());
+            query_params.insert(
+                "value_render_option".to_string(),
+                value_render_option.clone(),
+            );
         }
         if let Some(datetime_render_option) = &request.datetime_render_option {
-            query_params.insert("datetime_render_option".to_string(), datetime_render_option.clone());
+            query_params.insert(
+                "datetime_render_option".to_string(),
+                datetime_render_option.clone(),
+            );
         }
 
         let api_req = ApiRequest {

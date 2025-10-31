@@ -8,8 +8,8 @@
 //! - 多语言支持
 
 use crate::core::config::Config;
-use open_lark_core::prelude::*;
 pub use crate::service::okr::models::*;
+use open_lark_core::prelude::*;
 
 /// OKR服务 V1版本
 #[derive(Debug, Clone)]
@@ -150,26 +150,32 @@ impl OkrServiceV1 {
                 user_id: _request.user_id.clone(),
                 period_id: _request.period_id.clone(),
                 status: Some(OkrStatus::Normal),
-                objectives: Some(_request.objectives.iter().enumerate().map(|(i, obj)| {
-                    Objective {
-                        objective_id: format!("obj_{}", i + 1),
-                        content: Some(obj.content.clone()),
-                        progress_rate: Some(0.0),
-                        key_results: obj.key_results.as_ref().map(|krs| {
-                            krs.iter().enumerate().map(|(j, kr)| {
-                                KeyResult {
-                                    kr_id: format!("kr_{}_{}", i + 1, j + 1),
-                                    content: Some(kr.content.clone()),
-                                    kr_type: Some(kr.kr_type.clone()),
-                                    current_value: Some(0.0),
-                                    target_value: kr.target_value,
-                                    progress_rate: Some(0.0),
-                                    completed: Some(false),
-                                }
-                            }).collect()
-                        }),
-                    }
-                }).collect()),
+                objectives: Some(
+                    _request
+                        .objectives
+                        .iter()
+                        .enumerate()
+                        .map(|(i, obj)| Objective {
+                            objective_id: format!("obj_{}", i + 1),
+                            content: Some(obj.content.clone()),
+                            progress_rate: Some(0.0),
+                            key_results: obj.key_results.as_ref().map(|krs| {
+                                krs.iter()
+                                    .enumerate()
+                                    .map(|(j, kr)| KeyResult {
+                                        kr_id: format!("kr_{}_{}", i + 1, j + 1),
+                                        content: Some(kr.content.clone()),
+                                        kr_type: Some(kr.kr_type.clone()),
+                                        current_value: Some(0.0),
+                                        target_value: kr.target_value,
+                                        progress_rate: Some(0.0),
+                                        completed: Some(false),
+                                    })
+                                    .collect()
+                            }),
+                        })
+                        .collect(),
+                ),
                 create_time: Some(1704067200000),
                 modify_time: Some(1704067200000),
             }),
@@ -187,45 +193,43 @@ impl OkrServiceV1 {
                 user_id: "user_001".to_string(),
                 period_id: "period_q1_2024".to_string(),
                 status: Some(OkrStatus::Normal),
-                objectives: Some(vec![
-                    Objective {
-                        objective_id: "obj_001".to_string(),
-                        content: Some(I18nText {
-                            zh_cn: Some("提升产品核心指标".to_string()),
-                            en_us: Some("Improve core product metrics".to_string()),
-                            ja_jp: None,
-                        }),
-                        progress_rate: Some(75.0),
-                        key_results: Some(vec![
-                            KeyResult {
-                                kr_id: "kr_001".to_string(),
-                                content: Some(I18nText {
-                                    zh_cn: Some("DAU增长到10万".to_string()),
-                                    en_us: Some("Grow DAU to 100k".to_string()),
-                                    ja_jp: None,
-                                }),
-                                kr_type: Some(KeyResultType::Numeric),
-                                current_value: Some(85000.0),
-                                target_value: Some(100000.0),
-                                progress_rate: Some(85.0),
-                                completed: Some(false),
-                            },
-                            KeyResult {
-                                kr_id: "kr_002".to_string(),
-                                content: Some(I18nText {
-                                    zh_cn: Some("用户留存率提升到80%".to_string()),
-                                    en_us: Some("Improve user retention to 80%".to_string()),
-                                    ja_jp: None,
-                                }),
-                                kr_type: Some(KeyResultType::Percentage),
-                                current_value: Some(78.5),
-                                target_value: Some(80.0),
-                                progress_rate: Some(98.125),
-                                completed: Some(false),
-                            },
-                        ]),
-                    },
-                ]),
+                objectives: Some(vec![Objective {
+                    objective_id: "obj_001".to_string(),
+                    content: Some(I18nText {
+                        zh_cn: Some("提升产品核心指标".to_string()),
+                        en_us: Some("Improve core product metrics".to_string()),
+                        ja_jp: None,
+                    }),
+                    progress_rate: Some(75.0),
+                    key_results: Some(vec![
+                        KeyResult {
+                            kr_id: "kr_001".to_string(),
+                            content: Some(I18nText {
+                                zh_cn: Some("DAU增长到10万".to_string()),
+                                en_us: Some("Grow DAU to 100k".to_string()),
+                                ja_jp: None,
+                            }),
+                            kr_type: Some(KeyResultType::Numeric),
+                            current_value: Some(85000.0),
+                            target_value: Some(100000.0),
+                            progress_rate: Some(85.0),
+                            completed: Some(false),
+                        },
+                        KeyResult {
+                            kr_id: "kr_002".to_string(),
+                            content: Some(I18nText {
+                                zh_cn: Some("用户留存率提升到80%".to_string()),
+                                en_us: Some("Improve user retention to 80%".to_string()),
+                                ja_jp: None,
+                            }),
+                            kr_type: Some(KeyResultType::Percentage),
+                            current_value: Some(78.5),
+                            target_value: Some(80.0),
+                            progress_rate: Some(98.125),
+                            completed: Some(false),
+                        },
+                    ]),
+                }]),
                 create_time: Some(1704067200000),
                 modify_time: Some(1706745600000),
             }),
@@ -236,22 +240,26 @@ impl OkrServiceV1 {
     pub async fn update_okr(&self, _request: &UpdateOkrRequest) -> SDKResult<OkrResponse> {
         // 模拟实现 - 转换UpdateObjectiveRequest为Objective
         let objectives = _request.objectives.as_ref().map(|objs| {
-            objs.iter().map(|obj| Objective {
-                objective_id: obj.objective_id.clone(),
-                content: obj.content.clone(),
-                progress_rate: None, // 更新时通常不设置进度
-                key_results: obj.key_results.as_ref().map(|krs| {
-                    krs.iter().map(|kr| KeyResult {
-                        kr_id: kr.kr_id.clone(),
-                        content: kr.content.clone(),
-                        kr_type: None, // 更新时不改变类型
-                        current_value: kr.current_value,
-                        target_value: kr.target_value,
-                        progress_rate: None, // 重新计算
-                        completed: kr.completed,
-                    }).collect()
-                }),
-            }).collect()
+            objs.iter()
+                .map(|obj| Objective {
+                    objective_id: obj.objective_id.clone(),
+                    content: obj.content.clone(),
+                    progress_rate: None, // 更新时通常不设置进度
+                    key_results: obj.key_results.as_ref().map(|krs| {
+                        krs.iter()
+                            .map(|kr| KeyResult {
+                                kr_id: kr.kr_id.clone(),
+                                content: kr.content.clone(),
+                                kr_type: None, // 更新时不改变类型
+                                current_value: kr.current_value,
+                                target_value: kr.target_value,
+                                progress_rate: None, // 重新计算
+                                completed: kr.completed,
+                            })
+                            .collect()
+                    }),
+                })
+                .collect()
         });
 
         Ok(OkrResponse {
@@ -279,48 +287,45 @@ impl OkrServiceV1 {
     }
 
     /// 获取用户OKR列表
-    pub async fn list_user_okrs(&self, _request: &UserOkrListRequest) -> SDKResult<UserOkrListResponse> {
+    pub async fn list_user_okrs(
+        &self,
+        _request: &UserOkrListRequest,
+    ) -> SDKResult<UserOkrListResponse> {
         // 模拟实现
         Ok(UserOkrListResponse {
             code: 0,
             msg: "success".to_string(),
             data: Some(PageResponse {
-                items: vec![
-                    Okr {
-                        okr_id: "okr_001".to_string(),
-                        user_id: _request.user_id.clone().unwrap_or_default(),
-                        period_id: "period_q1_2024".to_string(),
-                        status: Some(OkrStatus::Normal),
-                        objectives: Some(vec![
-                            Objective {
-                                objective_id: "obj_001".to_string(),
-                                content: Some(I18nText {
-                                    zh_cn: Some("提升产品核心指标".to_string()),
-                                    en_us: Some("Improve core product metrics".to_string()),
-                                    ja_jp: None,
-                                }),
-                                progress_rate: Some(75.0),
-                                key_results: Some(vec![
-                                    KeyResult {
-                                        kr_id: "kr_001".to_string(),
-                                        content: Some(I18nText {
-                                            zh_cn: Some("DAU增长到10万".to_string()),
-                                            en_us: Some("Grow DAU to 100k".to_string()),
-                                            ja_jp: None,
-                                        }),
-                                        kr_type: Some(KeyResultType::Numeric),
-                                        current_value: Some(85000.0),
-                                        target_value: Some(100000.0),
-                                        progress_rate: Some(85.0),
-                                        completed: Some(false),
-                                    },
-                                ]),
-                            },
-                        ]),
-                        create_time: Some(1704067200000),
-                        modify_time: Some(1706745600000),
-                    },
-                ],
+                items: vec![Okr {
+                    okr_id: "okr_001".to_string(),
+                    user_id: _request.user_id.clone().unwrap_or_default(),
+                    period_id: "period_q1_2024".to_string(),
+                    status: Some(OkrStatus::Normal),
+                    objectives: Some(vec![Objective {
+                        objective_id: "obj_001".to_string(),
+                        content: Some(I18nText {
+                            zh_cn: Some("提升产品核心指标".to_string()),
+                            en_us: Some("Improve core product metrics".to_string()),
+                            ja_jp: None,
+                        }),
+                        progress_rate: Some(75.0),
+                        key_results: Some(vec![KeyResult {
+                            kr_id: "kr_001".to_string(),
+                            content: Some(I18nText {
+                                zh_cn: Some("DAU增长到10万".to_string()),
+                                en_us: Some("Grow DAU to 100k".to_string()),
+                                ja_jp: None,
+                            }),
+                            kr_type: Some(KeyResultType::Numeric),
+                            current_value: Some(85000.0),
+                            target_value: Some(100000.0),
+                            progress_rate: Some(85.0),
+                            completed: Some(false),
+                        }]),
+                    }]),
+                    create_time: Some(1704067200000),
+                    modify_time: Some(1706745600000),
+                }],
                 page_token: None,
                 has_more: Some(false),
             }),
@@ -333,14 +338,17 @@ impl OkrServiceV1 {
         Ok(BatchOkrResponse {
             code: 0,
             msg: "success".to_string(),
-            data: Some(_request.okr_ids.iter().enumerate().map(|(i, okr_id)| {
-                Okr {
-                    okr_id: okr_id.clone(),
-                    user_id: format!("user_{:03}", i + 1),
-                    period_id: "period_q1_2024".to_string(),
-                    status: Some(OkrStatus::Normal),
-                    objectives: Some(vec![
-                        Objective {
+            data: Some(
+                _request
+                    .okr_ids
+                    .iter()
+                    .enumerate()
+                    .map(|(i, okr_id)| Okr {
+                        okr_id: okr_id.clone(),
+                        user_id: format!("user_{:03}", i + 1),
+                        period_id: "period_q1_2024".to_string(),
+                        status: Some(OkrStatus::Normal),
+                        objectives: Some(vec![Objective {
                             objective_id: format!("obj_{}", i + 1),
                             content: Some(I18nText {
                                 zh_cn: Some(format!("目标 {}", i + 1)),
@@ -349,19 +357,22 @@ impl OkrServiceV1 {
                             }),
                             progress_rate: Some((i as f64 + 1.0) * 25.0),
                             key_results: Some(vec![]),
-                        },
-                    ]),
-                    create_time: Some(1704067200000),
-                    modify_time: Some(1706745600000),
-                }
-            }).collect()),
+                        }]),
+                        create_time: Some(1704067200000),
+                        modify_time: Some(1706745600000),
+                    })
+                    .collect(),
+            ),
         })
     }
 
     // ==================== 进展记录管理 ====================
 
     /// 创建进展记录
-    pub async fn create_progress_record(&self, _request: &CreateProgressRecordRequest) -> SDKResult<ProgressRecordResponse> {
+    pub async fn create_progress_record(
+        &self,
+        _request: &CreateProgressRecordRequest,
+    ) -> SDKResult<ProgressRecordResponse> {
         // 模拟实现
         Ok(ProgressRecordResponse {
             code: 0,
@@ -389,7 +400,10 @@ impl OkrServiceV1 {
     }
 
     /// 获取进展记录列表
-    pub async fn list_progress_records(&self, _request: &ListProgressRecordsRequest) -> SDKResult<ProgressRecordsResponse> {
+    pub async fn list_progress_records(
+        &self,
+        _request: &ListProgressRecordsRequest,
+    ) -> SDKResult<ProgressRecordsResponse> {
         // 模拟实现
         Ok(ProgressRecordsResponse {
             code: 0,
@@ -402,15 +416,13 @@ impl OkrServiceV1 {
                         content: Some("本周完成了核心功能开发，用户反馈良好".to_string()),
                         record_type: Some(ProgressRecordType::Detail),
                         progress_rate: Some(75.0),
-                        attachments: Some(vec![
-                            ProgressAttachment {
-                                attachment_id: "att_001".to_string(),
-                                name: Some("数据报表.xlsx".to_string()),
-                                url: Some("https://example.com/report.xlsx".to_string()),
-                                file_type: Some("application/xlsx".to_string()),
-                                size: Some(2048000),
-                            },
-                        ]),
+                        attachments: Some(vec![ProgressAttachment {
+                            attachment_id: "att_001".to_string(),
+                            name: Some("数据报表.xlsx".to_string()),
+                            url: Some("https://example.com/report.xlsx".to_string()),
+                            file_type: Some("application/xlsx".to_string()),
+                            size: Some(2048000),
+                        }]),
                         creator: Some(User {
                             user_id: "user_001".to_string(),
                             name: Some(I18nText {
@@ -487,7 +499,9 @@ impl OkrServiceV1 {
                 review_id: _request.review_id.clone(),
                 okr_id: "okr_001".to_string(),
                 period_id: "period_q1_2024".to_string(),
-                content: Some("本季度目标基本达成，团队协作有所提升，下季度需要重点关注效率优化".to_string()),
+                content: Some(
+                    "本季度目标基本达成，团队协作有所提升，下季度需要重点关注效率优化".to_string(),
+                ),
                 score: Some(8.5),
                 reviewer: Some(User {
                     user_id: "user_002".to_string(),

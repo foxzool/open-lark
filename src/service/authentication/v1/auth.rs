@@ -67,18 +67,12 @@
 //! }
 //! ```
 
-use open_lark_core::core::trait_system::ExecutableBuilder;
 use crate::core::{
-    api_req::ApiRequest,
-    api_resp::BaseResponse,
-    config::Config,
-    constants::AccessTokenType,
-    endpoints::auth::*,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api_req::ApiRequest, api_resp::BaseResponse, config::Config, constants::AccessTokenType,
+    endpoints::auth::*, http::Transport, req_option::RequestOption, SDKResult,
 };
 use async_trait::async_trait;
+use open_lark_core::core::trait_system::ExecutableBuilder;
 use serde::{Deserialize, Serialize};
 
 // ==================== 用户信息服务 ====================
@@ -160,10 +154,7 @@ impl UserInfoService {
     /// println!("用户姓名: {}", response.data.name);
     /// println!("用户邮箱: {:?}", response.data.email);
     /// ```
-    pub async fn get(
-        &self,
-        user_access_token: impl ToString,
-    ) -> SDKResult<BaseResponse<UserInfo>> {
+    pub async fn get(&self, user_access_token: impl ToString) -> SDKResult<BaseResponse<UserInfo>> {
         let api_req = ApiRequest {
             api_path: AUTHEN_V1_USER_INFO.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
@@ -1150,16 +1141,25 @@ mod tests {
             "employee_no": "111222333"
         }"#;
 
-        let user_info: UserInfo = serde_json::from_str(json_str)
-            .expect("Failed to parse test user info JSON");
+        let user_info: UserInfo =
+            serde_json::from_str(json_str).expect("Failed to parse test user info JSON");
 
         assert_eq!(user_info.name, "张三");
         assert_eq!(user_info.en_name, "zhangsan");
         assert_eq!(user_info.avatar_url, "www.feishu.cn/avatar/icon");
-        assert_eq!(user_info.open_id, "ou-caecc734c2e3328a62489fe0648c4b98779515d3");
-        assert_eq!(user_info.union_id, "on-d89jhsdhjsajkda7828enjdj328ydhhw3u43yjhdj");
+        assert_eq!(
+            user_info.open_id,
+            "ou-caecc734c2e3328a62489fe0648c4b98779515d3"
+        );
+        assert_eq!(
+            user_info.union_id,
+            "on-d89jhsdhjsajkda7828enjdj328ydhhw3u43yjhdj"
+        );
         assert_eq!(user_info.email, Some("zhangsan@feishu.cn".to_string()));
-        assert_eq!(user_info.enterprise_email, Some("demo@mail.com".to_string()));
+        assert_eq!(
+            user_info.enterprise_email,
+            Some("demo@mail.com".to_string())
+        );
         assert_eq!(user_info.user_id, "5d9bdxxx");
         assert_eq!(user_info.mobile, Some("+86130002883xx".to_string()));
         assert_eq!(user_info.tenant_key, "736588c92lxf175d");
@@ -1363,7 +1363,10 @@ mod tests {
             .map(|i| {
                 let service_clone = Arc::clone(&service);
                 thread::spawn(move || {
-                    format!("thread_{}_config_app_id: {}", i, service_clone.config.app_id)
+                    format!(
+                        "thread_{}_config_app_id: {}",
+                        i, service_clone.config.app_id
+                    )
                 })
             })
             .collect();

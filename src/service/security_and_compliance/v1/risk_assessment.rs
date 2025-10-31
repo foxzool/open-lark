@@ -16,9 +16,7 @@ use serde::{Deserialize, Serialize};
 use super::types::*;
 
 // 导入共享数据结构
-use super::{
-    RiskAssessment, RiskMitigationAction, TimeRange, AccessCondition, PolicyStatus
-};
+use super::{AccessCondition, PolicyStatus, RiskAssessment, RiskMitigationAction, TimeRange};
 
 /// 风险评估服务
 #[derive(Debug, Clone)]
@@ -33,7 +31,10 @@ impl RiskAssessmentService {
 
     /// 获取风险评估结果
     /// 提供全面的风险评估结果和分析
-    pub async fn get_risk_assessment_results(&self, request: &GetRiskAssessmentResultsRequest) -> SDKResult<GetRiskAssessmentResultsResponse> {
+    pub async fn get_risk_assessment_results(
+        &self,
+        request: &GetRiskAssessmentResultsRequest,
+    ) -> SDKResult<GetRiskAssessmentResultsResponse> {
         let current_time = chrono::Utc::now().timestamp();
 
         let risks = vec![
@@ -125,7 +126,10 @@ impl RiskAssessmentService {
 
     /// 获取风险矩阵
     /// 提供风险矩阵分析和可视化
-    pub async fn get_risk_matrix(&self, request: &GetRiskMatrixRequest) -> SDKResult<GetRiskMatrixResponse> {
+    pub async fn get_risk_matrix(
+        &self,
+        request: &GetRiskMatrixRequest,
+    ) -> SDKResult<GetRiskMatrixResponse> {
         let current_time = chrono::Utc::now().timestamp();
 
         Ok(GetRiskMatrixResponse {
@@ -173,7 +177,13 @@ impl RiskAssessmentService {
                         impact: 3,
                         risk_level: SecurityLevel::Medium,
                         risk_count: 5,
-                        risk_ids: vec!["risk_004".to_string(), "risk_005".to_string(), "risk_006".to_string(), "risk_007".to_string(), "risk_008".to_string()],
+                        risk_ids: vec![
+                            "risk_004".to_string(),
+                            "risk_005".to_string(),
+                            "risk_006".to_string(),
+                            "risk_007".to_string(),
+                            "risk_008".to_string(),
+                        ],
                         total_exposure: 800000.0,
                         color: "#FFBB33".to_string(),
                     },
@@ -181,7 +191,8 @@ impl RiskAssessmentService {
                 risk_tolerance: RiskTolerance {
                     acceptable_risk_level: SecurityLevel::Medium,
                     maximum_acceptable_exposure: 1000000.0,
-                    risk_appetite_statement: "公司接受中等及以下风险水平，高风险需要立即采取缓解措施".to_string(),
+                    risk_appetite_statement:
+                        "公司接受中等及以下风险水平，高风险需要立即采取缓解措施".to_string(),
                 },
             },
             analysis: RiskMatrixAnalysis {
@@ -196,7 +207,8 @@ impl RiskAssessmentService {
                 emerging_risks: vec![
                     EmergingRisk {
                         risk_name: "AI系统安全风险".to_string(),
-                        description: "随着AI技术在业务中的广泛应用，可能带来新的安全挑战".to_string(),
+                        description: "随着AI技术在业务中的广泛应用，可能带来新的安全挑战"
+                            .to_string(),
                         potential_impact: "中高".to_string(),
                         time_horizon: "6-12个月".to_string(),
                         recommended_action: "建立AI安全治理框架".to_string(),
@@ -209,15 +221,13 @@ impl RiskAssessmentService {
                         recommended_action: "建立供应链风险评估机制".to_string(),
                     },
                 ],
-                risk_reduction_opportunities: vec![
-                    ReductionOpportunity {
-                        opportunity: "加强员工安全意识培训".to_string(),
-                        description: "通过定期培训可以显著降低人为错误导致的安全事件".to_string(),
-                        potential_reduction: "30-40%".to_string(),
-                        implementation_cost: "低".to_string(),
-                        timeframe: "1-3个月".to_string(),
-                    },
-                ],
+                risk_reduction_opportunities: vec![ReductionOpportunity {
+                    opportunity: "加强员工安全意识培训".to_string(),
+                    description: "通过定期培训可以显著降低人为错误导致的安全事件".to_string(),
+                    potential_reduction: "30-40%".to_string(),
+                    implementation_cost: "低".to_string(),
+                    timeframe: "1-3个月".to_string(),
+                }],
             },
             generated_at: current_time,
         })
@@ -225,7 +235,10 @@ impl RiskAssessmentService {
 
     /// 获取风险监控仪表板
     /// 提供实时的风险监控和预警
-    pub async fn get_risk_monitoring_dashboard(&self, request: &GetRiskMonitoringDashboardRequest) -> SDKResult<GetRiskMonitoringDashboardResponse> {
+    pub async fn get_risk_monitoring_dashboard(
+        &self,
+        request: &GetRiskMonitoringDashboardRequest,
+    ) -> SDKResult<GetRiskMonitoringDashboardResponse> {
         let current_time = chrono::Utc::now().timestamp();
 
         Ok(GetRiskMonitoringDashboardResponse {
@@ -253,7 +266,9 @@ impl RiskAssessmentService {
                     },
                     KeyMetric {
                         name: "缓解措施完成率".to_string(),
-                        value: serde_json::Value::Number(serde_json::Number::from_f64(68.5).unwrap()),
+                        value: serde_json::Value::Number(
+                            serde_json::Number::from_f64(68.5).unwrap(),
+                        ),
                         unit: "%".to_string(),
                         trend: "上升".to_string(),
                         trend_percentage: 12.3,
@@ -261,7 +276,9 @@ impl RiskAssessmentService {
                     },
                     KeyMetric {
                         name: "风险暴露金额".to_string(),
-                        value: serde_json::Value::Number(serde_json::Number::from_f64(850000.0).unwrap()),
+                        value: serde_json::Value::Number(
+                            serde_json::Number::from_f64(850000.0).unwrap(),
+                        ),
                         unit: "元".to_string(),
                         trend: "下降".to_string(),
                         trend_percentage: -15.6,
@@ -302,20 +319,14 @@ impl RiskAssessmentService {
                         risk_count: 12,
                         average_score: 4.2,
                         trend: "稳定".to_string(),
-                        top_risks: vec![
-                            "系统漏洞风险".to_string(),
-                            "网络安全风险".to_string(),
-                        ],
+                        top_risks: vec!["系统漏洞风险".to_string(), "网络安全风险".to_string()],
                     },
                     RiskCategory {
                         category: "运营风险".to_string(),
                         risk_count: 8,
                         average_score: 3.8,
                         trend: "改善".to_string(),
-                        top_risks: vec![
-                            "业务连续性风险".to_string(),
-                            "供应链风险".to_string(),
-                        ],
+                        top_risks: vec!["业务连续性风险".to_string(), "供应链风险".to_string()],
                     },
                 ],
                 upcoming_reviews: vec![
@@ -472,7 +483,10 @@ pub enum MatrixType {
     /// 简化3x3矩阵
     Simplified,
     /// 自定义矩阵
-    Custom { likelihood_levels: i32, impact_levels: i32 },
+    Custom {
+        likelihood_levels: i32,
+        impact_levels: i32,
+    },
 }
 
 /// 风险矩阵响应

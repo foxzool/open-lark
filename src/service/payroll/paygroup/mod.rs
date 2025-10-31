@@ -1,6 +1,3 @@
-use reqwest::Method;
-use serde::{Deserialize, Serialize};
-use open_lark_core::core::api_req::ApiRequest;
 use crate::{
     core::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
@@ -14,6 +11,9 @@ use crate::{
     },
     service::payroll::models::{PageResponse, Paygroup, PaygroupListRequest, PaymentDaySetting},
 };
+use open_lark_core::core::api_req::ApiRequest;
+use reqwest::Method;
+use serde::{Deserialize, Serialize};
 
 /// 薪资组服务
 pub struct PaygroupService {
@@ -180,7 +180,9 @@ impl PaygroupService {
 
         let api_req = ApiRequest {
             method: Method::GET,
-            url: self.config.build_url("/open-apis/payroll/v4/paygroups/{paygroup_id}"),
+            url: self
+                .config
+                .build_url("/open-apis/payroll/v4/paygroups/{paygroup_id}"),
             query_params: std::collections::HashMap::new(),
             path_params,
             headers: std::collections::HashMap::new(),
@@ -307,7 +309,9 @@ impl PaygroupService {
 
         let api_req = ApiRequest {
             method: Method::PUT,
-            url: self.config.build_url("/open-apis/payroll/v4/paygroups/{paygroup_id}"),
+            url: self
+                .config
+                .build_url("/open-apis/payroll/v4/paygroups/{paygroup_id}"),
             query_params: std::collections::HashMap::new(),
             path_params,
             headers: std::collections::HashMap::new(),
@@ -353,7 +357,9 @@ impl PaygroupService {
 
         let api_req = ApiRequest {
             method: Method::DELETE,
-            url: self.config.build_url("/open-apis/payroll/v4/paygroups/{paygroup_id}"),
+            url: self
+                .config
+                .build_url("/open-apis/payroll/v4/paygroups/{paygroup_id}"),
             query_params: std::collections::HashMap::new(),
             path_params,
             headers: std::collections::HashMap::new(),
@@ -399,7 +405,9 @@ impl PaygroupService {
 
         let api_req = ApiRequest {
             method: Method::POST,
-            url: self.config.build_url("/open-apis/payroll/v4/paygroups/{paygroup_id}/activate"),
+            url: self
+                .config
+                .build_url("/open-apis/payroll/v4/paygroups/{paygroup_id}/activate"),
             query_params: std::collections::HashMap::new(),
             path_params,
             headers: std::collections::HashMap::new(),
@@ -445,7 +453,9 @@ impl PaygroupService {
 
         let api_req = ApiRequest {
             method: Method::POST,
-            url: self.config.build_url("/open-apis/payroll/v4/paygroups/{paygroup_id}/deactivate"),
+            url: self
+                .config
+                .build_url("/open-apis/payroll/v4/paygroups/{paygroup_id}/deactivate"),
             query_params: std::collections::HashMap::new(),
             path_params,
             headers: std::collections::HashMap::new(),

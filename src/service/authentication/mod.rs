@@ -35,9 +35,9 @@ pub mod v1;
 
 // 重新导出V1版本的主要类型
 pub use v1::{
-    AppAccessTokenResponse, AppAccessTokenService, AppTicketService,
-    GetAppAccessTokenBuilder, GetAppAccessTokenInternalBuilder, GetAppAccessTokenInternalRequest,
-    GetAppAccessTokenRequest, GetTenantAccessTokenBuilder, GetTenantAccessTokenInternalBuilder,
+    AppAccessTokenResponse, AppAccessTokenService, AppTicketService, GetAppAccessTokenBuilder,
+    GetAppAccessTokenInternalBuilder, GetAppAccessTokenInternalRequest, GetAppAccessTokenRequest,
+    GetTenantAccessTokenBuilder, GetTenantAccessTokenInternalBuilder,
     GetTenantAccessTokenInternalRequest, GetTenantAccessTokenRequest, GetUserInfoBuilder,
     ResendAppTicketBuilder, ResendAppTicketRequest, ResendAppTicketResponse,
     TenantAccessTokenResponse, TenantAccessTokenService, UserInfo, UserInfoService, V1,

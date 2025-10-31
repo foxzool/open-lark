@@ -45,22 +45,22 @@ impl SecurityAndComplianceServiceV1 {
 pub mod types;
 
 // 导入所有子模块
-pub mod security_monitoring;
-pub mod compliance_management;
-pub mod risk_assessment;
 pub mod access_control;
 pub mod audit_trail;
+pub mod compliance_management;
+pub mod risk_assessment;
+pub mod security_monitoring;
 pub mod security_policy;
 
 // 重新导出核心类型
 pub use types::*;
 
 // 重新导出核心服务
-pub use security_monitoring::SecurityMonitoringService;
-pub use compliance_management::ComplianceManagementService;
-pub use risk_assessment::RiskAssessmentService;
 pub use access_control::AccessControlService;
 pub use audit_trail::AuditTrailService;
+pub use compliance_management::ComplianceManagementService;
+pub use risk_assessment::RiskAssessmentService;
+pub use security_monitoring::SecurityMonitoringService;
 pub use security_policy::SecurityPolicyService;
 
 // ==================== 共享数据结构 ====================

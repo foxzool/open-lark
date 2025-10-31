@@ -25,7 +25,10 @@ impl AttendanceServiceV1 {
     // ==================== 用户打卡任务管理 ====================
 
     /// 获取用户打卡任务
-    pub async fn get_user_task(&self, _request: &GetUserTaskRequest) -> SDKResult<UserTaskResponse> {
+    pub async fn get_user_task(
+        &self,
+        _request: &GetUserTaskRequest,
+    ) -> SDKResult<UserTaskResponse> {
         // 模拟实现
         Ok(UserTaskResponse {
             code: 0,
@@ -46,7 +49,10 @@ impl AttendanceServiceV1 {
     }
 
     /// 查询用户打卡任务列表
-    pub async fn query_user_tasks(&self, _request: &QueryUserTasksRequest) -> SDKResult<UserTaskListResponse> {
+    pub async fn query_user_tasks(
+        &self,
+        _request: &QueryUserTasksRequest,
+    ) -> SDKResult<UserTaskListResponse> {
         // 模拟实现
         Ok(UserTaskListResponse {
             code: 0,
@@ -99,18 +105,16 @@ impl AttendanceServiceV1 {
                 is_flexible: Some(false),
                 flexible_minutes: Some(0),
                 no_need_off: Some(false),
-                punch_time_rule: Some(vec![
-                    PunchTimeRule {
-                        on_time: "09:00".to_string(),
-                        off_time: "18:00".to_string(),
-                        on_advance_minutes: 15,
-                        off_delay_minutes: 30,
-                        late_minutes_as_late: Some(10),
-                        late_minutes_as_lack: Some(30),
-                        early_minutes_as_early: Some(10),
-                        early_minutes_as_lack: Some(30),
-                    }
-                ]),
+                punch_time_rule: Some(vec![PunchTimeRule {
+                    on_time: "09:00".to_string(),
+                    off_time: "18:00".to_string(),
+                    on_advance_minutes: 15,
+                    off_delay_minutes: 30,
+                    late_minutes_as_late: Some(10),
+                    late_minutes_as_lack: Some(30),
+                    early_minutes_as_early: Some(10),
+                    early_minutes_as_lack: Some(30),
+                }]),
                 allow_outside_apply: Some(true),
                 outside_apply_limit: Some(2),
                 create_time: Some("2024-01-01T00:00:00Z".to_string()),
@@ -135,18 +139,16 @@ impl AttendanceServiceV1 {
                         is_flexible: Some(false),
                         flexible_minutes: Some(0),
                         no_need_off: Some(false),
-                        punch_time_rule: Some(vec![
-                            PunchTimeRule {
-                                on_time: "09:00".to_string(),
-                                off_time: "18:00".to_string(),
-                                on_advance_minutes: 15,
-                                off_delay_minutes: 30,
-                                late_minutes_as_late: Some(10),
-                                late_minutes_as_lack: Some(30),
-                                early_minutes_as_early: Some(10),
-                                early_minutes_as_lack: Some(30),
-                            }
-                        ]),
+                        punch_time_rule: Some(vec![PunchTimeRule {
+                            on_time: "09:00".to_string(),
+                            off_time: "18:00".to_string(),
+                            on_advance_minutes: 15,
+                            off_delay_minutes: 30,
+                            late_minutes_as_late: Some(10),
+                            late_minutes_as_lack: Some(30),
+                            early_minutes_as_early: Some(10),
+                            early_minutes_as_lack: Some(30),
+                        }]),
                         allow_outside_apply: Some(true),
                         outside_apply_limit: Some(2),
                         create_time: Some("2024-01-01T00:00:00Z".to_string()),
@@ -159,12 +161,10 @@ impl AttendanceServiceV1 {
                         punch_times: 2,
                         is_flexible: Some(true),
                         flexible_minutes: Some(30),
-                        flexible_rule: Some(vec![
-                            FlexibleRule {
-                                flexible_early_minutes: 30,
-                                flexible_late_minutes: 30,
-                            }
-                        ]),
+                        flexible_rule: Some(vec![FlexibleRule {
+                            flexible_early_minutes: 30,
+                            flexible_late_minutes: 30,
+                        }]),
                         no_need_off: Some(false),
                         allow_outside_apply: Some(true),
                         outside_apply_limit: Some(3),
@@ -182,7 +182,10 @@ impl AttendanceServiceV1 {
     // ==================== 考勤统计 ====================
 
     /// 获取用户考勤统计
-    pub async fn get_user_stats(&self, _request: &GetUserStatsRequest) -> SDKResult<UserStatsResponse> {
+    pub async fn get_user_stats(
+        &self,
+        _request: &GetUserStatsRequest,
+    ) -> SDKResult<UserStatsResponse> {
         // 模拟实现
         Ok(UserStatsResponse {
             code: 0,

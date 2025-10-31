@@ -34,18 +34,14 @@
 //! }
 //! ```
 
-use open_lark_core::core::{api_req::ApiRequest, trait_system::ExecutableBuilder};
-use crate::core::{
-    api_resp::BaseResponse,
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult
-};
-use open_lark_core::prelude::*;
 use super::*;
+use crate::core::{
+    api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
+    req_option::RequestOption, SDKResult,
+};
 use async_trait::async_trait;
+use open_lark_core::core::{api_req::ApiRequest, trait_system::ExecutableBuilder};
+use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 // 导入核心类型
@@ -133,7 +129,9 @@ impl SecurityMonitoringService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: "/open-apis/security_and_compliance/v1/security_monitoring/get_real_time_events".to_string(),
+            api_path:
+                "/open-apis/security_and_compliance/v1/security_monitoring/get_real_time_events"
+                    .to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
             ..Default::default()
@@ -196,7 +194,9 @@ impl SecurityMonitoringService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: "/open-apis/security_and_compliance/v1/security_monitoring/get_posture_analysis".to_string(),
+            api_path:
+                "/open-apis/security_and_compliance/v1/security_monitoring/get_posture_analysis"
+                    .to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
             ..Default::default()
@@ -204,7 +204,6 @@ impl SecurityMonitoringService {
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
-
     }
 
     /// 获取异常行为检测结果
@@ -270,7 +269,10 @@ impl SecurityMonitoringService {
     }
 
     // 模拟实现，用于演示和测试
-    pub async fn get_anomaly_detection_results_mock(&self, request: &GetAnomalyDetectionResultsRequest) -> SDKResult<GetAnomalyDetectionResultsResponse> {
+    pub async fn get_anomaly_detection_results_mock(
+        &self,
+        request: &GetAnomalyDetectionResultsRequest,
+    ) -> SDKResult<GetAnomalyDetectionResultsResponse> {
         let current_time = chrono::Utc::now().timestamp();
 
         let anomalies = vec![
@@ -314,7 +316,8 @@ impl SecurityMonitoringService {
                 description: "检测到异常大量数据向外传输，传输速度超出正常范围500%".to_string(),
                 detected_at: current_time - 3600,
                 baseline_behavior: "正常数据传输速度10-50MB/小时，主要在业务时间".to_string(),
-                anomalous_behavior: "传输速度250MB/小时，持续传输12小时，包含非业务时间".to_string(),
+                anomalous_behavior: "传输速度250MB/小时，持续传输12小时，包含非业务时间"
+                    .to_string(),
                 risk_factors: vec![
                     "传输速度异常".to_string(),
                     "传输时间异常".to_string(),
@@ -356,7 +359,10 @@ impl SecurityMonitoringService {
 
     /// 获取攻击链分析
     /// 分析攻击链的各个阶段和攻击路径
-    pub async fn get_attack_chain_analysis(&self, request: &GetAttackChainAnalysisRequest) -> SDKResult<BaseResponse<GetAttackChainAnalysisResponse>> {
+    pub async fn get_attack_chain_analysis(
+        &self,
+        request: &GetAttackChainAnalysisRequest,
+    ) -> SDKResult<BaseResponse<GetAttackChainAnalysisResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
@@ -371,7 +377,10 @@ impl SecurityMonitoringService {
     }
 
     // 模拟实现，用于演示和测试
-    pub async fn get_attack_chain_analysis_mock(&self, request: &GetAttackChainAnalysisRequest) -> SDKResult<GetAttackChainAnalysisResponse> {
+    pub async fn get_attack_chain_analysis_mock(
+        &self,
+        request: &GetAttackChainAnalysisRequest,
+    ) -> SDKResult<GetAttackChainAnalysisResponse> {
         let current_time = chrono::Utc::now().timestamp();
 
         Ok(GetAttackChainAnalysisResponse {
@@ -442,10 +451,7 @@ impl SecurityMonitoringService {
             attack_path: AttackPath {
                 entry_point: "钓鱼邮件".to_string(),
                 initial_compromise: "员工工作站".to_string(),
-                pivot_points: vec![
-                    "文件服务器".to_string(),
-                    "域控制器".to_string(),
-                ],
+                pivot_points: vec!["文件服务器".to_string(), "域控制器".to_string()],
                 final_target: "客户数据库".to_string(),
                 current_location: "域控制器".to_string(),
             },
@@ -462,7 +468,10 @@ impl SecurityMonitoringService {
                     technique: "OS Credential Dumping".to_string(),
                     technique_id: "T1003".to_string(),
                     description: "从操作系统中转储用户凭证".to_string(),
-                    observed_indicators: vec!["Mimikatz使用".to_string(), "LSASS进程访问".to_string()],
+                    observed_indicators: vec![
+                        "Mimikatz使用".to_string(),
+                        "LSASS进程访问".to_string(),
+                    ],
                 },
             ],
             impact_assessment: AttackImpact {

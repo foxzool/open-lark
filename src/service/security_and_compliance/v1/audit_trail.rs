@@ -16,9 +16,7 @@ use serde::{Deserialize, Serialize};
 use super::types::*;
 
 // 导入共享数据结构
-use super::{
-    TimeRange, SecurityLevel, PaginationInfo, SecurityEvent
-};
+use super::{PaginationInfo, SecurityEvent, SecurityLevel, TimeRange};
 
 /// 审计追踪服务
 #[derive(Debug, Clone)]
@@ -33,15 +31,18 @@ impl AuditTrailService {
 
     /// 搜索审计日志
     /// 根据条件搜索和过滤审计日志
-    pub async fn search_audit_logs(&self, request: &SearchAuditLogsRequest) -> SDKResult<SearchAuditLogsResponse> {
+    pub async fn search_audit_logs(
+        &self,
+        request: &SearchAuditLogsRequest,
+    ) -> SDKResult<SearchAuditLogsResponse> {
         let current_time = chrono::Utc::now().timestamp();
 
         let logs = vec![
             AuditLog {
-                        session_id: Some("session_001".to_string()),
-                        request_id: Some("req_001".to_string()),
-                        location: Some("北京".to_string()),
-                        device_info: Some("Windows 10 PC".to_string()),
+                session_id: Some("session_001".to_string()),
+                request_id: Some("req_001".to_string()),
+                location: Some("北京".to_string()),
+                device_info: Some("Windows 10 PC".to_string()),
                 log_id: "log_001".to_string(),
                 action: AuditAction::UserLogin,
                 user_id: "user_001".to_string(),
@@ -54,15 +55,18 @@ impl AuditTrailService {
                 timestamp: current_time - 3600,
                 result: AuditResult::Success,
                 additional_attributes: std::collections::HashMap::from([
-                    ("login_method".to_string(), serde_json::Value::String("SSO".to_string())),
+                    (
+                        "login_method".to_string(),
+                        serde_json::Value::String("SSO".to_string()),
+                    ),
                     ("mfa_verified".to_string(), serde_json::Value::Bool(true)),
                 ]),
             },
             AuditLog {
-                        session_id: Some("session_001".to_string()),
-                        request_id: Some("req_001".to_string()),
-                        location: Some("北京".to_string()),
-                        device_info: Some("Windows 10 PC".to_string()),
+                session_id: Some("session_001".to_string()),
+                request_id: Some("req_001".to_string()),
+                location: Some("北京".to_string()),
+                device_info: Some("Windows 10 PC".to_string()),
                 log_id: "log_002".to_string(),
                 action: AuditAction::DataAccess,
                 user_id: "user_002".to_string(),
@@ -75,15 +79,21 @@ impl AuditTrailService {
                 timestamp: current_time - 1800,
                 result: AuditResult::Success,
                 additional_attributes: std::collections::HashMap::from([
-                    ("file_size".to_string(), serde_json::Value::Number(serde_json::Number::from(15728640))),
-                    ("access_duration".to_string(), serde_json::Value::Number(serde_json::Number::from(1200))),
+                    (
+                        "file_size".to_string(),
+                        serde_json::Value::Number(serde_json::Number::from(15728640)),
+                    ),
+                    (
+                        "access_duration".to_string(),
+                        serde_json::Value::Number(serde_json::Number::from(1200)),
+                    ),
                 ]),
             },
             AuditLog {
-                        session_id: Some("session_001".to_string()),
-                        request_id: Some("req_001".to_string()),
-                        location: Some("北京".to_string()),
-                        device_info: Some("Windows 10 PC".to_string()),
+                session_id: Some("session_001".to_string()),
+                request_id: Some("req_001".to_string()),
+                location: Some("北京".to_string()),
+                device_info: Some("Windows 10 PC".to_string()),
                 log_id: "log_003".to_string(),
                 action: AuditAction::PermissionChange,
                 user_id: "admin_001".to_string(),
@@ -96,9 +106,18 @@ impl AuditTrailService {
                 timestamp: current_time - 900,
                 result: AuditResult::Success,
                 additional_attributes: std::collections::HashMap::from([
-                    ("previous_permission".to_string(), serde_json::Value::String("Read".to_string())),
-                    ("new_permission".to_string(), serde_json::Value::String("ReadWrite".to_string())),
-                    ("change_reason".to_string(), serde_json::Value::String("工作需要".to_string())),
+                    (
+                        "previous_permission".to_string(),
+                        serde_json::Value::String("Read".to_string()),
+                    ),
+                    (
+                        "new_permission".to_string(),
+                        serde_json::Value::String("ReadWrite".to_string()),
+                    ),
+                    (
+                        "change_reason".to_string(),
+                        serde_json::Value::String("工作需要".to_string()),
+                    ),
                 ]),
             },
         ];
@@ -126,14 +145,17 @@ impl AuditTrailService {
 
     /// 获取审计日志详情
     /// 获取特定审计日志的详细信息
-    pub async fn get_audit_log_details(&self, request: &GetAuditLogDetailsRequest) -> SDKResult<GetAuditLogDetailsResponse> {
+    pub async fn get_audit_log_details(
+        &self,
+        request: &GetAuditLogDetailsRequest,
+    ) -> SDKResult<GetAuditLogDetailsResponse> {
         let current_time = chrono::Utc::now().timestamp();
 
         let log = AuditLog {
-                        session_id: Some("session_001".to_string()),
-                        request_id: Some("req_001".to_string()),
-                        location: Some("北京".to_string()),
-                        device_info: Some("Windows 10 PC".to_string()),
+            session_id: Some("session_001".to_string()),
+            request_id: Some("req_001".to_string()),
+            location: Some("北京".to_string()),
+            device_info: Some("Windows 10 PC".to_string()),
             log_id: request.log_id.clone(),
             action: AuditAction::DataModification,
             user_id: "user_004".to_string(),
@@ -146,32 +168,48 @@ impl AuditTrailService {
             timestamp: current_time - 600,
             result: AuditResult::Success,
             additional_attributes: std::collections::HashMap::from([
-                ("operation_type".to_string(), serde_json::Value::String("UPDATE".to_string())),
-                ("table_name".to_string(), serde_json::Value::String("customers".to_string())),
-                ("record_id".to_string(), serde_json::Value::String("12345".to_string())),
-                ("fields_modified".to_string(), serde_json::json!(["phone", "address", "updated_at"])),
-                ("previous_values".to_string(), serde_json::json!({
-                    "phone": "13800138000",
-                    "address": "北京市朝阳区"
-                })),
-                ("new_values".to_string(), serde_json::json!({
-                    "phone": "13900139000",
-                    "address": "北京市海淀区"
-                })),
+                (
+                    "operation_type".to_string(),
+                    serde_json::Value::String("UPDATE".to_string()),
+                ),
+                (
+                    "table_name".to_string(),
+                    serde_json::Value::String("customers".to_string()),
+                ),
+                (
+                    "record_id".to_string(),
+                    serde_json::Value::String("12345".to_string()),
+                ),
+                (
+                    "fields_modified".to_string(),
+                    serde_json::json!(["phone", "address", "updated_at"]),
+                ),
+                (
+                    "previous_values".to_string(),
+                    serde_json::json!({
+                        "phone": "13800138000",
+                        "address": "北京市朝阳区"
+                    }),
+                ),
+                (
+                    "new_values".to_string(),
+                    serde_json::json!({
+                        "phone": "13900139000",
+                        "address": "北京市海淀区"
+                    }),
+                ),
             ]),
         };
 
         Ok(GetAuditLogDetailsResponse {
             log,
-            related_events: vec![
-                RelatedEvent {
-                    event_id: "event_001".to_string(),
-                    event_type: "权限检查".to_string(),
-                    description: "系统验证用户是否有修改权限".to_string(),
-                    timestamp: current_time - 605,
-                    result: "通过".to_string(),
-                },
-            ],
+            related_events: vec![RelatedEvent {
+                event_id: "event_001".to_string(),
+                event_type: "权限检查".to_string(),
+                description: "系统验证用户是否有修改权限".to_string(),
+                timestamp: current_time - 605,
+                result: "通过".to_string(),
+            }],
             compliance_tags: vec![
                 "GDPR数据处理记录".to_string(),
                 "ISO27001访问控制".to_string(),
@@ -194,7 +232,10 @@ impl AuditTrailService {
 
     /// 生成审计报告
     /// 基于审计日志生成审计报告
-    pub async fn generate_audit_report(&self, request: &GenerateAuditReportRequest) -> SDKResult<GenerateAuditReportResponse> {
+    pub async fn generate_audit_report(
+        &self,
+        request: &GenerateAuditReportRequest,
+    ) -> SDKResult<GenerateAuditReportResponse> {
         let current_time = chrono::Utc::now().timestamp();
 
         Ok(GenerateAuditReportResponse {
@@ -273,14 +314,12 @@ impl AuditTrailService {
                             last_activity: current_time - 180,
                         },
                     ],
-                    access_patterns: vec![
-                        AccessPattern {
-                            pattern_type: "工作时间访问".to_string(),
-                            percentage: 85.2,
-                            typical_hours: vec!["09:00-18:00".to_string()],
-                            description: "大部分用户在工作时间内进行系统访问".to_string(),
-                        },
-                    ],
+                    access_patterns: vec![AccessPattern {
+                        pattern_type: "工作时间访问".to_string(),
+                        percentage: 85.2,
+                        typical_hours: vec!["09:00-18:00".to_string()],
+                        description: "大部分用户在工作时间内进行系统访问".to_string(),
+                    }],
                 },
                 security_events: vec![
                     SecurityEvent {
@@ -640,7 +679,6 @@ pub struct AccessPattern {
     /// 描述
     pub description: String,
 }
-
 
 /// 合规指标
 #[derive(Debug, Clone, Serialize, Deserialize)]

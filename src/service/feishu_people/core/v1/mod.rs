@@ -5,18 +5,18 @@
 use crate::core::config::Config;
 
 // 声明子模块
-pub mod persons;
-pub mod departments;
-pub mod positions;
-pub mod contracts;
 pub mod companies;
+pub mod contracts;
+pub mod departments;
+pub mod persons;
+pub mod positions;
 
 // 重新导出服务类型
-pub use persons::PersonsService;
-pub use departments::DepartmentsService;
-pub use positions::PositionsService;
-pub use contracts::ContractsService;
 pub use companies::CompaniesService;
+pub use contracts::ContractsService;
+pub use departments::DepartmentsService;
+pub use persons::PersonsService;
+pub use positions::PositionsService;
 
 /// 核心人事管理v1版本服务
 #[derive(Debug, Clone)]

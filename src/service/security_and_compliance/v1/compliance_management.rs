@@ -8,16 +8,12 @@
 //! - 法规更新跟踪和解读
 //! - 合规改进建议和实施
 
-use open_lark_core::core::{api_req::ApiRequest, trait_system::ExecutableBuilder};
 use crate::core::{
-    api_resp::BaseResponse,
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult
+    api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
+    req_option::RequestOption, SDKResult,
 };
 use async_trait::async_trait;
+use open_lark_core::core::{api_req::ApiRequest, trait_system::ExecutableBuilder};
 use serde::{Deserialize, Serialize};
 
 // 导入核心类型
@@ -25,9 +21,8 @@ use super::types::*;
 
 // 导入共享数据结构
 use super::{
-    ComplianceCheckItem, ComplianceEvidence, MitigationStrategy,
-    ImpactAssessment, ResponseAction, TimeRange, RiskAssessment,
-    RiskMitigationAction, AccessCondition, PolicyStatus
+    AccessCondition, ComplianceCheckItem, ComplianceEvidence, ImpactAssessment, MitigationStrategy,
+    PolicyStatus, ResponseAction, RiskAssessment, RiskMitigationAction, TimeRange,
 };
 
 /// 合规管理服务
@@ -93,7 +88,8 @@ impl ComplianceManagementService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: "/open-apis/security_and_compliance/v1/compliance_management/get_overview".to_string(),
+            api_path: "/open-apis/security_and_compliance/v1/compliance_management/get_overview"
+                .to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
             ..Default::default()

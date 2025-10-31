@@ -9,9 +9,9 @@
 
 use crate::core::config::Config;
 use crate::service::payroll::models::*;
+use chrono::{DateTime, Utc};
 use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
 
 /// 发薪服务
 #[derive(Debug, Clone)]
@@ -27,7 +27,10 @@ impl PaymentService {
     // ==================== 发薪活动管理 ====================
 
     /// 创建发薪活动
-    pub async fn create_payment_activity(&self, request: &CreatePaymentActivityRequest) -> SDKResult<CreatePaymentActivityResponse> {
+    pub async fn create_payment_activity(
+        &self,
+        request: &CreatePaymentActivityRequest,
+    ) -> SDKResult<CreatePaymentActivityResponse> {
         // 模拟实现
         let activity_id = format!("activity_{}", chrono::Utc::now().timestamp());
 
@@ -44,7 +47,10 @@ impl PaymentService {
     }
 
     /// 获取发薪活动详情
-    pub async fn get_payment_activity(&self, activity_id: &str) -> SDKResult<PaymentActivityResponse> {
+    pub async fn get_payment_activity(
+        &self,
+        activity_id: &str,
+    ) -> SDKResult<PaymentActivityResponse> {
         // 模拟实现
         Ok(PaymentActivityResponse {
             activity_id: activity_id.to_string(),
@@ -65,7 +71,10 @@ impl PaymentService {
     }
 
     /// 查询发薪活动列表
-    pub async fn list_payment_activities(&self, request: &ListPaymentActivitiesRequest) -> SDKResult<ListPaymentActivitiesResponse> {
+    pub async fn list_payment_activities(
+        &self,
+        request: &ListPaymentActivitiesRequest,
+    ) -> SDKResult<ListPaymentActivitiesResponse> {
         // 模拟实现
         let activities = vec![
             PaymentActivity {
@@ -101,17 +110,28 @@ impl PaymentService {
     }
 
     /// 更新发薪活动
-    pub async fn update_payment_activity(&self, activity_id: &str, request: &UpdatePaymentActivityRequest) -> SDKResult<UpdatePaymentActivityResponse> {
+    pub async fn update_payment_activity(
+        &self,
+        activity_id: &str,
+        request: &UpdatePaymentActivityRequest,
+    ) -> SDKResult<UpdatePaymentActivityResponse> {
         // 模拟实现
         Ok(UpdatePaymentActivityResponse {
             activity_id: activity_id.to_string(),
-            updated_fields: vec!["activity_name".to_string(), "scheduled_payment_date".to_string()],
+            updated_fields: vec![
+                "activity_name".to_string(),
+                "scheduled_payment_date".to_string(),
+            ],
             updated_at: Some(chrono::Utc::now()),
         })
     }
 
     /// 取消发薪活动
-    pub async fn cancel_payment_activity(&self, activity_id: &str, reason: &str) -> SDKResult<CancelPaymentActivityResponse> {
+    pub async fn cancel_payment_activity(
+        &self,
+        activity_id: &str,
+        reason: &str,
+    ) -> SDKResult<CancelPaymentActivityResponse> {
         // 模拟实现
         Ok(CancelPaymentActivityResponse {
             activity_id: activity_id.to_string(),
@@ -124,7 +144,10 @@ impl PaymentService {
     // ==================== 发薪明细管理 ====================
 
     /// 查询发薪明细
-    pub async fn get_payment_details(&self, request: &PaymentDetailListRequest) -> SDKResult<PaymentDetailListResponse> {
+    pub async fn get_payment_details(
+        &self,
+        request: &PaymentDetailListRequest,
+    ) -> SDKResult<PaymentDetailListResponse> {
         // 模拟实现
         let details = vec![
             PaymentDetail {
@@ -168,7 +191,10 @@ impl PaymentService {
     }
 
     /// 批量查询发薪明细
-    pub async fn batch_get_payment_details(&self, request: &PaymentDetailQueryRequest) -> SDKResult<PaymentDetailQueryResponse> {
+    pub async fn batch_get_payment_details(
+        &self,
+        request: &PaymentDetailQueryRequest,
+    ) -> SDKResult<PaymentDetailQueryResponse> {
         // 模拟实现
         let mut details = Vec::new();
 
@@ -198,7 +224,10 @@ impl PaymentService {
     }
 
     /// 重新发放失败的发薪明细
-    pub async fn retry_payment(&self, request: &RetryPaymentRequest) -> SDKResult<RetryPaymentResponse> {
+    pub async fn retry_payment(
+        &self,
+        request: &RetryPaymentRequest,
+    ) -> SDKResult<RetryPaymentResponse> {
         // 模拟实现
         Ok(RetryPaymentResponse {
             payment_activity_id: request.payment_activity_id.clone(),
@@ -228,7 +257,10 @@ impl PaymentService {
     }
 
     /// 获取发薪执行状态
-    pub async fn get_payment_execution_status(&self, execution_id: &str) -> SDKResult<PaymentExecutionStatusResponse> {
+    pub async fn get_payment_execution_status(
+        &self,
+        execution_id: &str,
+    ) -> SDKResult<PaymentExecutionStatusResponse> {
         // 模拟实现
         Ok(PaymentExecutionStatusResponse {
             execution_id: execution_id.to_string(),
@@ -240,18 +272,19 @@ impl PaymentService {
             failed_count: 2,
             started_at: "2024-01-31T09:00:00Z".to_string(),
             completed_at: Some("2024-01-31T11:30:00Z".to_string()),
-            error_details: Some(vec![
-                PaymentError {
-                    employee_id: "emp_150".to_string(),
-                    error_code: "BANK_ACCOUNT_INVALID".to_string(),
-                    error_message: "银行账户无效".to_string(),
-                },
-            ]),
+            error_details: Some(vec![PaymentError {
+                employee_id: "emp_150".to_string(),
+                error_code: "BANK_ACCOUNT_INVALID".to_string(),
+                error_message: "银行账户无效".to_string(),
+            }]),
         })
     }
 
     /// 停止发薪执行
-    pub async fn stop_payment_execution(&self, execution_id: &str) -> SDKResult<StopPaymentExecutionResponse> {
+    pub async fn stop_payment_execution(
+        &self,
+        execution_id: &str,
+    ) -> SDKResult<StopPaymentExecutionResponse> {
         // 模拟实现
         Ok(StopPaymentExecutionResponse {
             execution_id: execution_id.to_string(),

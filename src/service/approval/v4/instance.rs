@@ -7,9 +7,9 @@
 //! - 审批实例详情获取
 //! - 审批实例统计
 
+use super::models::*;
 use crate::core::config::Config;
 use open_lark_core::prelude::*;
-use super::models::*;
 
 /// 审批实例服务
 #[derive(Debug, Clone)]
@@ -25,10 +25,16 @@ impl InstanceService {
     // ==================== 审批实例管理 ====================
 
     /// 创建审批实例
-    pub async fn create(&self, request: &CreateInstanceRequest) -> SDKResult<ApprovalBaseResponse<CreateInstanceResponse>> {
+    pub async fn create(
+        &self,
+        request: &CreateInstanceRequest,
+    ) -> SDKResult<ApprovalBaseResponse<CreateInstanceResponse>> {
         // 模拟实现
         let instance_code = format!("instance_{}", chrono::Utc::now().timestamp());
-        let uuid = format!("uuid_{}", chrono::Utc::now().timestamp_nanos_opt().unwrap_or(0));
+        let uuid = format!(
+            "uuid_{}",
+            chrono::Utc::now().timestamp_nanos_opt().unwrap_or(0)
+        );
 
         Ok(ApprovalBaseResponse {
             code: 0,
@@ -41,7 +47,11 @@ impl InstanceService {
     }
 
     /// 获取审批实例详情
-    pub async fn get(&self, instance_code: &str, user_id_type: Option<&str>) -> SDKResult<ApprovalBaseResponse<ApprovalInstance>> {
+    pub async fn get(
+        &self,
+        instance_code: &str,
+        user_id_type: Option<&str>,
+    ) -> SDKResult<ApprovalBaseResponse<ApprovalInstance>> {
         // 模拟实现
         Ok(ApprovalBaseResponse {
             code: 0,
@@ -65,24 +75,22 @@ impl InstanceService {
                     "end_date": "2024-01-17",
                     "reason": "个人事务处理"
                 })),
-                tasks: Some(vec![
-                    ApprovalTask {
-                        task_id: "task_001".to_string(),
-                        instance_code: instance_code.to_string(),
-                        task_name: "主管审批".to_string(),
-                        approver: Some(UserInfo {
-                            user_id: "manager_001".to_string(),
-                            name: Some("李经理".to_string()),
-                            email: Some("manager@example.com".to_string()),
-                            avatar: Some("https://example.com/manager.jpg".to_string()),
-                        }),
-                        status: TaskStatus::Pending,
-                        create_time: Some("2024-01-15T09:00:00Z".to_string()),
-                        update_time: Some("2024-01-15T09:00:00Z".to_string()),
-                        due_time: Some("2024-01-16T18:00:00Z".to_string()),
-                        comment: None,
-                    }
-                ]),
+                tasks: Some(vec![ApprovalTask {
+                    task_id: "task_001".to_string(),
+                    instance_code: instance_code.to_string(),
+                    task_name: "主管审批".to_string(),
+                    approver: Some(UserInfo {
+                        user_id: "manager_001".to_string(),
+                        name: Some("李经理".to_string()),
+                        email: Some("manager@example.com".to_string()),
+                        avatar: Some("https://example.com/manager.jpg".to_string()),
+                    }),
+                    status: TaskStatus::Pending,
+                    create_time: Some("2024-01-15T09:00:00Z".to_string()),
+                    update_time: Some("2024-01-15T09:00:00Z".to_string()),
+                    due_time: Some("2024-01-16T18:00:00Z".to_string()),
+                    comment: None,
+                }]),
                 current_node: Some("node_001".to_string()),
                 comment: Some("请批准我的请假申请".to_string()),
             }),
@@ -90,7 +98,10 @@ impl InstanceService {
     }
 
     /// 查询审批实例列表
-    pub async fn query(&self, request: &QueryInstanceRequest) -> SDKResult<ApprovalBaseResponse<QueryInstanceResponse>> {
+    pub async fn query(
+        &self,
+        request: &QueryInstanceRequest,
+    ) -> SDKResult<ApprovalBaseResponse<QueryInstanceResponse>> {
         // 模拟实现
         let instances = vec![
             ApprovalInstance {
@@ -174,7 +185,11 @@ impl InstanceService {
     }
 
     /// 撤回审批实例
-    pub async fn withdraw(&self, instance_code: &str, user_id_type: Option<&str>) -> SDKResult<ApprovalBaseResponse<()>> {
+    pub async fn withdraw(
+        &self,
+        instance_code: &str,
+        user_id_type: Option<&str>,
+    ) -> SDKResult<ApprovalBaseResponse<()>> {
         // 模拟实现
         Ok(ApprovalBaseResponse {
             code: 0,
@@ -184,7 +199,11 @@ impl InstanceService {
     }
 
     /// 催办审批实例
-    pub async fn urge(&self, instance_code: &str, user_id_type: Option<&str>) -> SDKResult<ApprovalBaseResponse<()>> {
+    pub async fn urge(
+        &self,
+        instance_code: &str,
+        user_id_type: Option<&str>,
+    ) -> SDKResult<ApprovalBaseResponse<()>> {
         // 模拟实现
         Ok(ApprovalBaseResponse {
             code: 0,
@@ -194,26 +213,33 @@ impl InstanceService {
     }
 
     /// 批量获取审批实例
-    pub async fn batch_get(&self, instance_codes: Vec<String>, user_id_type: Option<&str>) -> SDKResult<ApprovalBaseResponse<Vec<ApprovalInstance>>> {
+    pub async fn batch_get(
+        &self,
+        instance_codes: Vec<String>,
+        user_id_type: Option<&str>,
+    ) -> SDKResult<ApprovalBaseResponse<Vec<ApprovalInstance>>> {
         // 模拟实现
-        let instances = instance_codes.into_iter().map(|code| ApprovalInstance {
-            instance_code: code.clone(),
-            approval_code: "approval_001".to_string(),
-            approval_name: Some("通用审批".to_string()),
-            initiator: Some(UserInfo {
-                user_id: "user_001".to_string(),
-                name: Some("用户".to_string()),
-                email: None,
-                avatar: None,
-            }),
-            status: ApprovalStatus::InProgress,
-            create_time: Some("2024-01-15T09:00:00Z".to_string()),
-            update_time: Some("2024-01-15T09:00:00Z".to_string()),
-            form_data: None,
-            tasks: None,
-            current_node: None,
-            comment: None,
-        }).collect();
+        let instances = instance_codes
+            .into_iter()
+            .map(|code| ApprovalInstance {
+                instance_code: code.clone(),
+                approval_code: "approval_001".to_string(),
+                approval_name: Some("通用审批".to_string()),
+                initiator: Some(UserInfo {
+                    user_id: "user_001".to_string(),
+                    name: Some("用户".to_string()),
+                    email: None,
+                    avatar: None,
+                }),
+                status: ApprovalStatus::InProgress,
+                create_time: Some("2024-01-15T09:00:00Z".to_string()),
+                update_time: Some("2024-01-15T09:00:00Z".to_string()),
+                form_data: None,
+                tasks: None,
+                current_node: None,
+                comment: None,
+            })
+            .collect();
 
         Ok(ApprovalBaseResponse {
             code: 0,
@@ -225,7 +251,11 @@ impl InstanceService {
     // ==================== 审批实例统计 ====================
 
     /// 获取我的审批统计
-    pub async fn get_my_approval_stats(&self, user_id: &str, user_id_type: Option<&str>) -> SDKResult<ApprovalBaseResponse<ApprovalStats>> {
+    pub async fn get_my_approval_stats(
+        &self,
+        user_id: &str,
+        user_id_type: Option<&str>,
+    ) -> SDKResult<ApprovalBaseResponse<ApprovalStats>> {
         // 模拟实现
         Ok(ApprovalBaseResponse {
             code: 0,
@@ -245,7 +275,11 @@ impl InstanceService {
     }
 
     /// 获取部门审批统计
-    pub async fn get_department_approval_stats(&self, department_id: &str, department_id_type: Option<&str>) -> SDKResult<ApprovalBaseResponse<DepartmentApprovalStats>> {
+    pub async fn get_department_approval_stats(
+        &self,
+        department_id: &str,
+        department_id_type: Option<&str>,
+    ) -> SDKResult<ApprovalBaseResponse<DepartmentApprovalStats>> {
         // 模拟实现
         Ok(ApprovalBaseResponse {
             code: 0,

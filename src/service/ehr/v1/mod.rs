@@ -12,71 +12,106 @@ use crate::core::config::Config;
 use open_lark_core::prelude::*;
 
 // 导入modules模块
-pub mod models;
 pub mod attendance;
 pub mod leave;
+pub mod models;
 
 // 重新导出models中的核心类型（排除AttendanceRecord和AttendanceStatus，避免冲突）
 pub use models::{
-    Gender, MaritalStatus, EmployeeStatus, EmploymentType, EducationLevel,
-    Employee, EmergencyContact, BankAccount, SocialInsurance, Department,
-    Position, SalaryRange, EmployeePosition, Salary, Allowance, Deduction,
-    SalaryAdjustment, PerformanceEvaluation, PerformanceDimension, EvaluationStatus,
-    LeaveStatus, LeaveType, LeaveRecord, LeaveBalance, LeaveRule, LeaveStatistics,
-    LeaveTypeStat, LeaveApproval, LeaveApprovalDecision,
-    CreateEmployeeRequest, UpdateEmployeeRequest, QueryEmployeeRequest, EmployeeUpdateFields,
-    CreateLeaveRequest, UpdateLeaveRequest, LeaveUpdateFields, QueryLeaveRecordsRequest,
-    ApproveLeaveRequest, QueryLeaveBalanceRequest, GetLeaveStatisticsRequest,
-    CreateLeaveRuleRequest, UpdateLeaveRuleRequest, LeaveRuleUpdateFields,
-    PageResponse, BaseResponse, EmployeeListResponse, EmployeeResponse, DepartmentListResponse,
-    PositionListResponse, SalaryListResponse, PerformanceListResponse, EmptyResponse,
-    LeaveRecordListResponse, LeaveRecordResponse, LeaveBalanceListResponse, LeaveBalanceResponse,
-    LeaveRuleListResponse, LeaveRuleResponse, LeaveStatisticsResponse, LeaveApprovalResponse,
+    Allowance, ApproveLeaveRequest, BankAccount, BaseResponse, CreateEmployeeRequest,
+    CreateLeaveRequest, CreateLeaveRuleRequest, Deduction, Department, DepartmentListResponse,
+    EducationLevel, EmergencyContact, Employee, EmployeeListResponse, EmployeePosition,
+    EmployeeResponse, EmployeeStatus, EmployeeUpdateFields, EmploymentType, EmptyResponse,
+    EvaluationStatus, Gender, GetLeaveStatisticsRequest, LeaveApproval, LeaveApprovalDecision,
+    LeaveApprovalResponse, LeaveBalance, LeaveBalanceListResponse, LeaveBalanceResponse,
+    LeaveRecord, LeaveRecordListResponse, LeaveRecordResponse, LeaveRule, LeaveRuleListResponse,
+    LeaveRuleResponse, LeaveRuleUpdateFields, LeaveStatistics, LeaveStatisticsResponse,
+    LeaveStatus, LeaveType, LeaveTypeStat, LeaveUpdateFields, MaritalStatus, PageResponse,
+    PerformanceDimension, PerformanceEvaluation, PerformanceListResponse, Position,
+    PositionListResponse, QueryEmployeeRequest, QueryLeaveBalanceRequest, QueryLeaveRecordsRequest,
+    Salary, SalaryAdjustment, SalaryListResponse, SalaryRange, SocialInsurance,
+    UpdateEmployeeRequest, UpdateLeaveRequest, UpdateLeaveRuleRequest,
 };
 
 // 重新导出attendance中的类型
 pub use attendance::{
+    AbsentSummary,
+    AttendanceException,
+    AttendanceExceptionProcessData,
+
+    AttendanceListResponse,
+
+    // 数据结构体
+    AttendanceRecord,
     // 服务
     AttendanceService,
 
-    // API请求响应类型
-    GetAttendanceRecordsRequest, GetAttendanceRecordsResponse,
-    BatchGetAttendanceRecordsRequest, BatchGetAttendanceRecordsResponse,
-    CreateCheckinRecordRequest, CreateCheckinRecordResponse,
-    UpdateCheckinRecordRequest, UpdateCheckinRecordResponse,
-    DeleteCheckinRecordResponse,
-    GetAttendanceStatisticsRequest, GetAttendanceStatisticsResponse,
-    GetAttendanceExceptionsRequest, GetAttendanceExceptionsResponse,
-    ProcessAttendanceExceptionRequest, ProcessAttendanceExceptionResponse,
-    GetAttendanceReportRequest, GetAttendanceReportResponse,
-    AttendanceListResponse,
-
-    // Builder类型
-    GetAttendanceRecordsBuilder, BatchGetAttendanceRecordsBuilder,
-    CreateCheckinRecordBuilder, UpdateCheckinRecordBuilder, DeleteCheckinRecordBuilder,
-    GetAttendanceStatisticsBuilder, GetAttendanceExceptionsBuilder,
-    ProcessAttendanceExceptionBuilder, GetAttendanceReportBuilder,
-
-    // 数据结构体
-    AttendanceRecord, CheckinRecord, CheckinLocation,
-    CheckinRecordCreateData, CheckinRecordUpdateData, EmployeeAttendanceSummary,
-    AttendanceStatistics, ExceptionSummary, LateSummary, EarlyLeaveSummary, AbsentSummary,
-    AttendanceException, AttendanceExceptionProcessData,
-
+    AttendanceStatistics,
     // 枚举类型
-    AttendanceStatus, CheckinType, StatisticsType, ExceptionAction, ReportType, ReportFormat,
+    AttendanceStatus,
+    BatchGetAttendanceRecordsBuilder,
+    BatchGetAttendanceRecordsRequest,
+    BatchGetAttendanceRecordsResponse,
+    CheckinLocation,
+    CheckinRecord,
+    CheckinRecordCreateData,
+    CheckinRecordUpdateData,
+    CheckinType,
+    CreateCheckinRecordBuilder,
+    CreateCheckinRecordRequest,
+    CreateCheckinRecordResponse,
+    DeleteCheckinRecordBuilder,
+    DeleteCheckinRecordResponse,
+    EarlyLeaveSummary,
+    EmployeeAttendanceSummary,
+    ExceptionAction,
+    ExceptionSummary,
+    GetAttendanceExceptionsBuilder,
+    GetAttendanceExceptionsRequest,
+    GetAttendanceExceptionsResponse,
+    // Builder类型
+    GetAttendanceRecordsBuilder,
+    // API请求响应类型
+    GetAttendanceRecordsRequest,
+    GetAttendanceRecordsResponse,
+    GetAttendanceReportBuilder,
+
+    GetAttendanceReportRequest,
+    GetAttendanceReportResponse,
+    GetAttendanceStatisticsBuilder,
+    GetAttendanceStatisticsRequest,
+    GetAttendanceStatisticsResponse,
+    LateSummary,
+    ProcessAttendanceExceptionBuilder,
+    ProcessAttendanceExceptionRequest,
+    ProcessAttendanceExceptionResponse,
+    ReportFormat,
+    ReportType,
+    StatisticsType,
+    UpdateCheckinRecordBuilder,
+    UpdateCheckinRecordRequest,
+    UpdateCheckinRecordResponse,
 };
 
 // 重新导出leave中的类型
 pub use leave::{
+    AdjustLeaveBalanceBuilder,
+    ApproveLeaveBuilder,
+    CancelLeaveBuilder,
+    // Builder类型
+    CreateLeaveBuilder,
+    CreateLeaveRuleBuilder,
+    DeleteLeaveRuleBuilder,
+    GetLeaveRulesBuilder,
+    GetLeaveStatisticsBuilder,
+    GetPendingApprovalsBuilder,
     // 服务
     LeaveService,
 
-    // Builder类型
-    CreateLeaveBuilder, QueryLeaveRecordsBuilder, UpdateLeaveBuilder, ApproveLeaveBuilder,
-    QueryLeaveBalanceBuilder, GetLeaveStatisticsBuilder, CreateLeaveRuleBuilder,
-    UpdateLeaveRuleBuilder, DeleteLeaveRuleBuilder, CancelLeaveBuilder,
-    AdjustLeaveBalanceBuilder, GetPendingApprovalsBuilder, GetLeaveRulesBuilder,
+    QueryLeaveBalanceBuilder,
+    QueryLeaveRecordsBuilder,
+    UpdateLeaveBuilder,
+    UpdateLeaveRuleBuilder,
 };
 
 /// EHR服务 v1版本
@@ -103,7 +138,10 @@ impl EhrServiceV1 {
     // ==================== 员工管理 ====================
 
     /// 创建员工
-    pub async fn create_employee(&self, request: &CreateEmployeeRequest) -> SDKResult<EmployeeResponse> {
+    pub async fn create_employee(
+        &self,
+        request: &CreateEmployeeRequest,
+    ) -> SDKResult<EmployeeResponse> {
         // 模拟实现
         let employee_id = format!("emp_{}", chrono::Utc::now().timestamp());
 
@@ -170,7 +208,10 @@ impl EhrServiceV1 {
     }
 
     /// 更新员工信息
-    pub async fn update_employee(&self, request: &UpdateEmployeeRequest) -> SDKResult<EmployeeResponse> {
+    pub async fn update_employee(
+        &self,
+        request: &UpdateEmployeeRequest,
+    ) -> SDKResult<EmployeeResponse> {
         // 模拟实现 - 先获取现有员工信息，然后更新指定字段
         let mut employee = match self.get_employee(&request.employee_id).await {
             Ok(response) => response.data.unwrap_or_default(),
@@ -213,7 +254,10 @@ impl EhrServiceV1 {
     }
 
     /// 查询员工列表
-    pub async fn query_employees(&self, request: &QueryEmployeeRequest) -> SDKResult<EmployeeListResponse> {
+    pub async fn query_employees(
+        &self,
+        request: &QueryEmployeeRequest,
+    ) -> SDKResult<EmployeeListResponse> {
         // 模拟实现
         let employees = vec![
             Employee {
@@ -287,7 +331,10 @@ impl EhrServiceV1 {
     // ==================== 组织架构管理 ====================
 
     /// 创建部门
-    pub async fn create_department(&self, department: &Department) -> SDKResult<BaseResponse<Department>> {
+    pub async fn create_department(
+        &self,
+        department: &Department,
+    ) -> SDKResult<BaseResponse<Department>> {
         // 模拟实现
         let mut new_dept = department.clone();
         new_dept.department_id = format!("dept_{}", chrono::Utc::now().timestamp());
@@ -301,7 +348,10 @@ impl EhrServiceV1 {
     }
 
     /// 获取部门列表
-    pub async fn list_departments(&self, parent_id: Option<&str>) -> SDKResult<DepartmentListResponse> {
+    pub async fn list_departments(
+        &self,
+        parent_id: Option<&str>,
+    ) -> SDKResult<DepartmentListResponse> {
         // 模拟实现
         let departments = vec![
             Department {
@@ -347,7 +397,8 @@ impl EhrServiceV1 {
 
         // 根据parent_id筛选
         let filtered_depts = if let Some(parent_id) = parent_id {
-            departments.into_iter()
+            departments
+                .into_iter()
                 .filter(|dept| dept.parent_department_id.as_ref() == Some(&parent_id.to_string()))
                 .collect()
         } else {
@@ -381,7 +432,10 @@ impl EhrServiceV1 {
     }
 
     /// 获取职位列表
-    pub async fn list_positions(&self, department_id: Option<&str>) -> SDKResult<PositionListResponse> {
+    pub async fn list_positions(
+        &self,
+        department_id: Option<&str>,
+    ) -> SDKResult<PositionListResponse> {
         // 模拟实现
         let positions = vec![
             Position {
@@ -445,7 +499,8 @@ impl EhrServiceV1 {
 
         // 根据department_id筛选
         let filtered_positions = if let Some(dept_id) = department_id {
-            positions.into_iter()
+            positions
+                .into_iter()
                 .filter(|pos| pos.department_id.as_ref() == Some(&dept_id.to_string()))
                 .collect()
         } else {
@@ -481,7 +536,11 @@ impl EhrServiceV1 {
     }
 
     /// 获取员工薪资信息
-    pub async fn get_employee_salary(&self, employee_id: &str, period: Option<&str>) -> SDKResult<BaseResponse<Salary>> {
+    pub async fn get_employee_salary(
+        &self,
+        employee_id: &str,
+        period: Option<&str>,
+    ) -> SDKResult<BaseResponse<Salary>> {
         // 模拟实现
         Ok(BaseResponse {
             code: 0,
@@ -543,7 +602,12 @@ impl EhrServiceV1 {
     // ==================== 考勤管理 ====================
 
     /// 获取员工考勤记录
-    pub async fn get_attendance_records(&self, employee_id: &str, start_date: &str, end_date: &str) -> SDKResult<AttendanceListResponse> {
+    pub async fn get_attendance_records(
+        &self,
+        employee_id: &str,
+        start_date: &str,
+        end_date: &str,
+    ) -> SDKResult<AttendanceListResponse> {
         // 模拟实现
         let records = vec![
             AttendanceRecord {
@@ -604,7 +668,10 @@ impl EhrServiceV1 {
     // ==================== 绩效管理 ====================
 
     /// 创建绩效评估
-    pub async fn create_performance_evaluation(&self, evaluation: &PerformanceEvaluation) -> SDKResult<BaseResponse<PerformanceEvaluation>> {
+    pub async fn create_performance_evaluation(
+        &self,
+        evaluation: &PerformanceEvaluation,
+    ) -> SDKResult<BaseResponse<PerformanceEvaluation>> {
         // 模拟实现
         let mut new_eval = evaluation.clone();
         new_eval.evaluation_id = format!("eval_{}", chrono::Utc::now().timestamp());
@@ -618,7 +685,11 @@ impl EhrServiceV1 {
     }
 
     /// 获取员工绩效评估
-    pub async fn get_employee_performance(&self, employee_id: &str, period: &str) -> SDKResult<PerformanceListResponse> {
+    pub async fn get_employee_performance(
+        &self,
+        employee_id: &str,
+        period: &str,
+    ) -> SDKResult<PerformanceListResponse> {
         // 模拟实现
         let evaluations = vec![
             PerformanceEvaluation {

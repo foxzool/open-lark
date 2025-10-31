@@ -9,9 +9,9 @@
 
 use crate::core::config::Config;
 use crate::service::analytics::v1::*;
+use chrono::{DateTime, Utc};
 use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
 
 /// 应用分析服务
 #[derive(Debug, Clone)]
@@ -27,7 +27,10 @@ impl AppAnalyticsService {
     // ==================== 应用使用统计 ====================
 
     /// 获取应用使用统计
-    pub async fn get_app_usage_statistics(&self, request: &GetAppUsageStatisticsRequest) -> SDKResult<GetAppUsageStatisticsResponse> {
+    pub async fn get_app_usage_statistics(
+        &self,
+        request: &GetAppUsageStatisticsRequest,
+    ) -> SDKResult<GetAppUsageStatisticsResponse> {
         Ok(GetAppUsageStatisticsResponse {
             analysis_period: request.period.clone(),
             overall_statistics: OverallStatistics {
@@ -149,7 +152,10 @@ impl AppAnalyticsService {
     }
 
     /// 获取应用功能使用分析
-    pub async fn get_feature_usage_analysis(&self, request: &GetFeatureUsageAnalysisRequest) -> SDKResult<GetFeatureUsageAnalysisResponse> {
+    pub async fn get_feature_usage_analysis(
+        &self,
+        request: &GetFeatureUsageAnalysisRequest,
+    ) -> SDKResult<GetFeatureUsageAnalysisResponse> {
         Ok(GetFeatureUsageAnalysisResponse {
             app_id: request.app_id.clone(),
             analysis_period: request.period.clone(),
@@ -238,7 +244,10 @@ impl AppAnalyticsService {
     }
 
     /// 获取应用性能分析
-    pub async fn get_app_performance_analysis(&self, request: &GetAppPerformanceAnalysisRequest) -> SDKResult<GetAppPerformanceAnalysisResponse> {
+    pub async fn get_app_performance_analysis(
+        &self,
+        request: &GetAppPerformanceAnalysisRequest,
+    ) -> SDKResult<GetAppPerformanceAnalysisResponse> {
         Ok(GetAppPerformanceAnalysisResponse {
             app_id: request.app_id.clone(),
             analysis_period: request.period.clone(),
@@ -345,7 +354,10 @@ impl AppAnalyticsService {
     }
 
     /// 获取应用集成分析
-    pub async fn get_app_integration_analysis(&self, request: &GetAppIntegrationAnalysisRequest) -> SDKResult<GetAppIntegrationAnalysisResponse> {
+    pub async fn get_app_integration_analysis(
+        &self,
+        request: &GetAppIntegrationAnalysisRequest,
+    ) -> SDKResult<GetAppIntegrationAnalysisResponse> {
         Ok(GetAppIntegrationAnalysisResponse {
             app_id: request.app_id.clone(),
             analysis_period: request.period.clone(),
@@ -426,7 +438,10 @@ impl AppAnalyticsService {
     }
 
     /// 获取应用ROI分析
-    pub async fn get_app_roi_analysis(&self, request: &GetAppRoiAnalysisRequest) -> SDKResult<GetAppRoiAnalysisResponse> {
+    pub async fn get_app_roi_analysis(
+        &self,
+        request: &GetAppRoiAnalysisRequest,
+    ) -> SDKResult<GetAppRoiAnalysisResponse> {
         Ok(GetAppRoiAnalysisResponse {
             app_id: request.app_id.clone(),
             analysis_period: request.period.clone(),

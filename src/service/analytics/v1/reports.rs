@@ -9,9 +9,9 @@
 
 use crate::core::config::Config;
 use crate::service::analytics::v1::*;
+use chrono::{DateTime, Utc};
 use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
 
 /// 报表服务
 #[derive(Debug, Clone)]
@@ -27,7 +27,10 @@ impl ReportService {
     // ==================== 报表管理 ====================
 
     /// 创建自定义报表
-    pub async fn create_custom_report(&self, request: &CreateCustomReportRequest) -> SDKResult<CreateCustomReportResponse> {
+    pub async fn create_custom_report(
+        &self,
+        request: &CreateCustomReportRequest,
+    ) -> SDKResult<CreateCustomReportResponse> {
         let report_id = format!("report_{}", chrono::Utc::now().timestamp());
 
         Ok(CreateCustomReportResponse {
@@ -70,7 +73,11 @@ impl ReportService {
     }
 
     /// 更新报表
-    pub async fn update_report(&self, report_id: &str, request: &UpdateReportRequest) -> SDKResult<UpdateReportResponse> {
+    pub async fn update_report(
+        &self,
+        report_id: &str,
+        request: &UpdateReportRequest,
+    ) -> SDKResult<UpdateReportResponse> {
         Ok(UpdateReportResponse {
             report_id: report_id.to_string(),
             report_name: request.report_name.clone(),
@@ -91,7 +98,10 @@ impl ReportService {
     }
 
     /// 获取报表列表
-    pub async fn list_reports(&self, request: &ListReportsRequest) -> SDKResult<ListReportsResponse> {
+    pub async fn list_reports(
+        &self,
+        request: &ListReportsRequest,
+    ) -> SDKResult<ListReportsResponse> {
         let reports = vec![
             ReportInfo {
                 report_id: "report_001".to_string(),
@@ -129,9 +139,17 @@ impl ReportService {
         ];
 
         let filtered_reports = if let Some(report_type_filter) = &request.report_type_filter {
-            reports.iter().filter(|r| &r.report_type == report_type_filter).cloned().collect()
+            reports
+                .iter()
+                .filter(|r| &r.report_type == report_type_filter)
+                .cloned()
+                .collect()
         } else if let Some(status_filter) = &request.status_filter {
-            reports.iter().filter(|r| &r.status == status_filter).cloned().collect()
+            reports
+                .iter()
+                .filter(|r| &r.status == status_filter)
+                .cloned()
+                .collect()
         } else {
             reports
         };
@@ -147,11 +165,15 @@ impl ReportService {
     // ==================== 报表生成 ====================
 
     /// 生成报表
-    pub async fn generate_report(&self, request: &GenerateReportRequest) -> SDKResult<GenerateReportResponse> {
+    pub async fn generate_report(
+        &self,
+        request: &GenerateReportRequest,
+    ) -> SDKResult<GenerateReportResponse> {
         let generation_id = format!("gen_{}", chrono::Utc::now().timestamp());
 
         // 模拟报表生成
-        let report_data = self.generate_report_data(request.report_id.as_str(), &request.parameters);
+        let report_data =
+            self.generate_report_data(request.report_id.as_str(), &request.parameters);
 
         Ok(GenerateReportResponse {
             generation_id: generation_id.clone(),
@@ -167,7 +189,10 @@ impl ReportService {
     }
 
     /// 获取报表数据
-    pub async fn get_report_data(&self, request: &GetReportDataRequest) -> SDKResult<GetReportDataResponse> {
+    pub async fn get_report_data(
+        &self,
+        request: &GetReportDataRequest,
+    ) -> SDKResult<GetReportDataResponse> {
         Ok(GetReportDataResponse {
             report_id: request.report_id.clone(),
             data_type: request.data_type.clone(),
@@ -178,7 +203,10 @@ impl ReportService {
     }
 
     /// 预览报表
-    pub async fn preview_report(&self, request: &PreviewReportRequest) -> SDKResult<PreviewReportResponse> {
+    pub async fn preview_report(
+        &self,
+        request: &PreviewReportRequest,
+    ) -> SDKResult<PreviewReportResponse> {
         Ok(PreviewReportResponse {
             report_id: request.report_id.clone(),
             preview_data: self.generate_preview_data(request.report_id.as_str()),
@@ -192,9 +220,15 @@ impl ReportService {
     // ==================== 报表导出 ====================
 
     /// 导出报表
-    pub async fn export_report(&self, request: &ExportReportRequest) -> SDKResult<ExportReportResponse> {
+    pub async fn export_report(
+        &self,
+        request: &ExportReportRequest,
+    ) -> SDKResult<ExportReportResponse> {
         let export_id = format!("export_{}", chrono::Utc::now().timestamp());
-        let download_url = format!("https://company.com/reports/export/{}.{}", export_id, request.format);
+        let download_url = format!(
+            "https://company.com/reports/export/{}.{}",
+            export_id, request.format
+        );
 
         Ok(ExportReportResponse {
             export_id: export_id.clone(),
@@ -208,7 +242,10 @@ impl ReportService {
     }
 
     /// 获取导出历史
-    pub async fn get_export_history(&self, request: &GetExportHistoryRequest) -> SDKResult<GetExportHistoryResponse> {
+    pub async fn get_export_history(
+        &self,
+        request: &GetExportHistoryRequest,
+    ) -> SDKResult<GetExportHistoryResponse> {
         Ok(GetExportHistoryResponse {
             report_id: request.report_id.clone(),
             exports: vec![
@@ -241,7 +278,10 @@ impl ReportService {
     // ==================== 报表模板管理 ====================
 
     /// 创建报表模板
-    pub async fn create_report_template(&self, request: &CreateReportTemplateRequest) -> SDKResult<CreateReportTemplateResponse> {
+    pub async fn create_report_template(
+        &self,
+        request: &CreateReportTemplateRequest,
+    ) -> SDKResult<CreateReportTemplateResponse> {
         let template_id = format!("template_{}", chrono::Utc::now().timestamp());
 
         Ok(CreateReportTemplateResponse {
@@ -256,7 +296,10 @@ impl ReportService {
     }
 
     /// 获取报表模板列表
-    pub async fn list_report_templates(&self, request: &ListReportTemplatesRequest) -> SDKResult<ListReportTemplatesResponse> {
+    pub async fn list_report_templates(
+        &self,
+        request: &ListReportTemplatesRequest,
+    ) -> SDKResult<ListReportTemplatesResponse> {
         Ok(ListReportTemplatesResponse {
             templates: vec![
                 ReportTemplateInfo {
@@ -301,7 +344,10 @@ impl ReportService {
     // ==================== 报表调度管理 ====================
 
     /// 设置报表调度
-    pub async fn set_report_schedule(&self, request: &SetReportScheduleRequest) -> SDKResult<SetReportScheduleResponse> {
+    pub async fn set_report_schedule(
+        &self,
+        request: &SetReportScheduleRequest,
+    ) -> SDKResult<SetReportScheduleResponse> {
         Ok(SetReportScheduleResponse {
             report_id: request.report_id.clone(),
             schedule_config: request.schedule_config.clone(),
@@ -311,7 +357,10 @@ impl ReportService {
     }
 
     /// 获取报表调度信息
-    pub async fn get_report_schedule(&self, report_id: &str) -> SDKResult<GetReportScheduleResponse> {
+    pub async fn get_report_schedule(
+        &self,
+        report_id: &str,
+    ) -> SDKResult<GetReportScheduleResponse> {
         Ok(GetReportScheduleResponse {
             report_id: report_id.to_string(),
             schedule_config: ReportScheduleConfig {
@@ -326,14 +375,16 @@ impl ReportService {
                 ScheduleRunHistory {
                     run_id: "run_001".to_string(),
                     scheduled_time: chrono::Utc::now() - chrono::Duration::days(30),
-                    actual_time: chrono::Utc::now() - chrono::Duration::days(30) + chrono::Duration::minutes(5),
+                    actual_time: chrono::Utc::now() - chrono::Duration::days(30)
+                        + chrono::Duration::minutes(5),
                     status: RunStatus::Success,
                     duration_seconds: 45,
                 },
                 ScheduleRunHistory {
                     run_id: "run_002".to_string(),
                     scheduled_time: chrono::Utc::now() - chrono::Duration::days(60),
-                    actual_time: chrono::Utc::now() - chrono::Duration::days(60) + chrono::Duration::minutes(12),
+                    actual_time: chrono::Utc::now() - chrono::Duration::days(60)
+                        + chrono::Duration::minutes(12),
                     status: RunStatus::Success,
                     duration_seconds: 52,
                 },
@@ -344,7 +395,10 @@ impl ReportService {
     // ==================== 报表权限管理 ====================
 
     /// 设置报表权限
-    pub async fn set_report_permissions(&self, request: &SetReportPermissionsRequest) -> SDKResult<SetReportPermissionsResponse> {
+    pub async fn set_report_permissions(
+        &self,
+        request: &SetReportPermissionsRequest,
+    ) -> SDKResult<SetReportPermissionsResponse> {
         Ok(SetReportPermissionsResponse {
             report_id: request.report_id.clone(),
             permissions: request.permissions.clone(),
@@ -353,7 +407,10 @@ impl ReportService {
     }
 
     /// 获取报表权限
-    pub async fn get_report_permissions(&self, report_id: &str) -> SDKResult<GetReportPermissionsResponse> {
+    pub async fn get_report_permissions(
+        &self,
+        report_id: &str,
+    ) -> SDKResult<GetReportPermissionsResponse> {
         Ok(GetReportPermissionsResponse {
             report_id: report_id.to_string(),
             permissions: vec![
@@ -384,7 +441,11 @@ impl ReportService {
 
     // ==================== 辅助方法 ====================
 
-    fn generate_report_data(&self, report_id: &str, parameters: &std::collections::HashMap<String, serde_json::Value>) -> ReportData {
+    fn generate_report_data(
+        &self,
+        report_id: &str,
+        parameters: &std::collections::HashMap<String, serde_json::Value>,
+    ) -> ReportData {
         ReportData {
             report_id: report_id.to_string(),
             title: "月度业务分析报表".to_string(),
@@ -459,52 +520,54 @@ impl ReportService {
                                 data_points: self.generate_chart_data("app_usage", 15),
                             },
                         ],
-                        tables: vec![
-                            TableData {
-                                table_id: "table_001".to_string(),
-                                title: "部门活跃度统计".to_string(),
-                                headers: vec![
-                                    TableHeader {
-                                        name: "部门".to_string(),
-                                        data_type: "string".to_string(),
-                                        sortable: true,
-                                    },
-                                    TableHeader {
-                                        name: "用户数".to_string(),
-                                        data_type: "number".to_string(),
-                                        sortable: true,
-                                    },
-                                    TableHeader {
-                                        name: "活跃用户数".to_string(),
-                                        data_type: "number".to_string(),
-                                        sortable: true,
-                                    },
-                                    TableHeader {
-                                        name: "活跃度".to_string(),
-                                        data_type: "percentage".to_string(),
-                                        sortable: true,
-                                    },
-                                ],
-                                rows: vec![
-                                    TableRow {
-                                        cells: vec![
-                                            TableCell { value: "技术研发部".to_string() },
-                                            TableCell { value: 450 },
-                                            TableCell { value: 438 },
-                                            TableCell { value: "97.3%" },
-                                        ],
-                                    },
-                                    TableRow {
-                                        cells: vec![
-                                            TableCell { value: "市场营销部".to_string() },
-                                            TableCell { value: 180 },
-                                            TableCell { value: 168 },
-                                            TableCell { value: "93.3%" },
-                                        ],
-                                    },
-                                ],
-                            }
-                        ],
+                        tables: vec![TableData {
+                            table_id: "table_001".to_string(),
+                            title: "部门活跃度统计".to_string(),
+                            headers: vec![
+                                TableHeader {
+                                    name: "部门".to_string(),
+                                    data_type: "string".to_string(),
+                                    sortable: true,
+                                },
+                                TableHeader {
+                                    name: "用户数".to_string(),
+                                    data_type: "number".to_string(),
+                                    sortable: true,
+                                },
+                                TableHeader {
+                                    name: "活跃用户数".to_string(),
+                                    data_type: "number".to_string(),
+                                    sortable: true,
+                                },
+                                TableHeader {
+                                    name: "活跃度".to_string(),
+                                    data_type: "percentage".to_string(),
+                                    sortable: true,
+                                },
+                            ],
+                            rows: vec![
+                                TableRow {
+                                    cells: vec![
+                                        TableCell {
+                                            value: "技术研发部".to_string(),
+                                        },
+                                        TableCell { value: 450 },
+                                        TableCell { value: 438 },
+                                        TableCell { value: "97.3%" },
+                                    ],
+                                },
+                                TableRow {
+                                    cells: vec![
+                                        TableCell {
+                                            value: "市场营销部".to_string(),
+                                        },
+                                        TableCell { value: 180 },
+                                        TableCell { value: 168 },
+                                        TableCell { value: "93.3%" },
+                                    ],
+                                },
+                            ],
+                        }],
                     }),
                 },
             ],

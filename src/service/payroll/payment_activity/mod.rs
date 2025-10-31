@@ -1,6 +1,3 @@
-use reqwest::Method;
-use serde::{Deserialize, Serialize};
-use open_lark_core::core::api_req::ApiRequest;
 use crate::{
     core::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
@@ -16,6 +13,9 @@ use crate::{
         PageResponse, PaymentActivity, PaymentActivityArchiveRequest, PaymentActivityListRequest,
     },
 };
+use open_lark_core::core::api_req::ApiRequest;
+use reqwest::Method;
+use serde::{Deserialize, Serialize};
 
 /// 发薪活动服务
 pub struct PaymentActivityService {
@@ -118,7 +118,9 @@ impl PaymentActivityService {
 
         let api_req = ApiRequest {
             method: Method::GET,
-            url: self.config.build_url("/open-apis/payroll/v4/payment_activities"),
+            url: self
+                .config
+                .build_url("/open-apis/payroll/v4/payment_activities"),
             query_params,
             path_params: std::collections::HashMap::new(),
             headers: std::collections::HashMap::new(),
@@ -158,11 +160,16 @@ impl PaymentActivityService {
         payment_activity_id: &str,
     ) -> SDKResult<BaseResponse<PaymentActivityResponse>> {
         let mut path_params = std::collections::HashMap::new();
-        path_params.insert("payment_activity_id".to_string(), payment_activity_id.to_string());
+        path_params.insert(
+            "payment_activity_id".to_string(),
+            payment_activity_id.to_string(),
+        );
 
         let api_req = ApiRequest {
             method: Method::GET,
-            url: self.config.build_url("/open-apis/payroll/v4/payment_activities/{payment_activity_id}"),
+            url: self
+                .config
+                .build_url("/open-apis/payroll/v4/payment_activities/{payment_activity_id}"),
             query_params: std::collections::HashMap::new(),
             path_params,
             headers: std::collections::HashMap::new(),
@@ -209,16 +216,24 @@ impl PaymentActivityService {
         request: &PaymentActivityArchiveRequest,
     ) -> SDKResult<BaseResponse<ArchiveResponse>> {
         let mut path_params = std::collections::HashMap::new();
-        path_params.insert("payment_activity_id".to_string(), request.payment_activity_id.clone());
+        path_params.insert(
+            "payment_activity_id".to_string(),
+            request.payment_activity_id.clone(),
+        );
 
         let mut body_data = serde_json::Map::new();
         if let Some(reason) = &request.archive_reason {
-            body_data.insert("archive_reason".to_string(), serde_json::Value::String(reason.clone()));
+            body_data.insert(
+                "archive_reason".to_string(),
+                serde_json::Value::String(reason.clone()),
+            );
         }
 
         let api_req = ApiRequest {
             method: Method::POST,
-            url: self.config.build_url("/open-apis/payroll/v4/payment_activities/{payment_activity_id}/archive"),
+            url: self.config.build_url(
+                "/open-apis/payroll/v4/payment_activities/{payment_activity_id}/archive",
+            ),
             query_params: std::collections::HashMap::new(),
             path_params,
             headers: std::collections::HashMap::new(),
@@ -260,11 +275,16 @@ impl PaymentActivityService {
         payment_activity_id: &str,
     ) -> SDKResult<BaseResponse<ArchiveResponse>> {
         let mut path_params = std::collections::HashMap::new();
-        path_params.insert("payment_activity_id".to_string(), payment_activity_id.to_string());
+        path_params.insert(
+            "payment_activity_id".to_string(),
+            payment_activity_id.to_string(),
+        );
 
         let api_req = ApiRequest {
             method: Method::POST,
-            url: self.config.build_url("/open-apis/payroll/v4/payment_activities/{payment_activity_id}/cancel"),
+            url: self
+                .config
+                .build_url("/open-apis/payroll/v4/payment_activities/{payment_activity_id}/cancel"),
             query_params: std::collections::HashMap::new(),
             path_params,
             headers: std::collections::HashMap::new(),

@@ -9,9 +9,9 @@
 
 use crate::core::config::Config;
 use crate::service::analytics::v1::*;
+use chrono::{DateTime, Utc};
 use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
 
 /// 数据概览服务
 #[derive(Debug, Clone)]
@@ -27,7 +27,10 @@ impl OverviewService {
     // ==================== 企业数据概览 ====================
 
     /// 获取企业概览数据
-    pub async fn get_enterprise_overview(&self, request: &GetEnterpriseOverviewRequest) -> SDKResult<GetEnterpriseOverviewResponse> {
+    pub async fn get_enterprise_overview(
+        &self,
+        request: &GetEnterpriseOverviewRequest,
+    ) -> SDKResult<GetEnterpriseOverviewResponse> {
         // 模拟企业概览数据
         Ok(GetEnterpriseOverviewResponse {
             enterprise_info: EnterpriseInfo {
@@ -109,7 +112,10 @@ impl OverviewService {
     }
 
     /// 获取用户活跃度概览
-    pub async fn get_user_activity_overview(&self, request: &GetUserActivityOverviewRequest) -> SDKResult<GetUserActivityOverviewResponse> {
+    pub async fn get_user_activity_overview(
+        &self,
+        request: &GetUserActivityOverviewRequest,
+    ) -> SDKResult<GetUserActivityOverviewResponse> {
         Ok(GetUserActivityOverviewResponse {
             summary: UserActivitySummary {
                 total_users: 1250,
@@ -182,7 +188,10 @@ impl OverviewService {
     }
 
     /// 获取应用使用概览
-    pub async fn get_app_usage_overview(&self, request: &GetAppUsageOverviewRequest) -> SDKResult<GetAppUsageOverviewResponse> {
+    pub async fn get_app_usage_overview(
+        &self,
+        request: &GetAppUsageOverviewRequest,
+    ) -> SDKResult<GetAppUsageOverviewResponse> {
         Ok(GetAppUsageOverviewResponse {
             summary: AppUsageSummary {
                 total_applications: 15,
@@ -276,7 +285,10 @@ impl OverviewService {
     }
 
     /// 获取关键业务指标
-    pub async fn get_key_business_metrics(&self, request: &GetKeyBusinessMetricsRequest) -> SDKResult<GetKeyBusinessMetricsResponse> {
+    pub async fn get_key_business_metrics(
+        &self,
+        request: &GetKeyBusinessMetricsRequest,
+    ) -> SDKResult<GetKeyBusinessMetricsResponse> {
         Ok(GetKeyBusinessMetricsResponse {
             metrics: vec![
                 BusinessMetric {
@@ -334,7 +346,10 @@ impl OverviewService {
     }
 
     /// 获取数据质量概览
-    pub async fn get_data_quality_overview(&self, request: &GetDataQualityOverviewRequest) -> SDKResult<GetDataQualityOverviewResponse> {
+    pub async fn get_data_quality_overview(
+        &self,
+        request: &GetDataQualityOverviewRequest,
+    ) -> SDKResult<GetDataQualityOverviewResponse> {
         Ok(GetDataQualityOverviewResponse {
             overall_score: 92.3,
             quality_dimensions: vec![
@@ -343,27 +358,21 @@ impl OverviewService {
                     score: 95.2,
                     weight: 0.25,
                     description: Some("数据字段的完整性评分".to_string()),
-                    issues: vec![
-                        "部分用户档案缺少部门信息".to_string(),
-                    ],
+                    issues: vec!["部分用户档案缺少部门信息".to_string()],
                 },
                 QualityDimension {
                     dimension_name: "准确性".to_string(),
                     score: 91.8,
                     weight: 0.30,
                     description: Some("数据准确性和一致性评分".to_string()),
-                    issues: vec![
-                        "少量重复数据需要清理".to_string(),
-                    ],
+                    issues: vec!["少量重复数据需要清理".to_string()],
                 },
                 QualityDimension {
                     dimension_name: "及时性".to_string(),
                     score: 89.6,
                     weight: 0.20,
                     description: Some("数据更新的及时性评分".to_string()),
-                    issues: vec![
-                        "部分统计数据延迟24小时".to_string(),
-                    ],
+                    issues: vec!["部分统计数据延迟24小时".to_string()],
                 },
                 QualityDimension {
                     dimension_name: "一致性".to_string(),
@@ -373,17 +382,15 @@ impl OverviewService {
                     issues: vec![],
                 },
             ],
-            recent_issues: vec![
-                DataQualityIssue {
-                    issue_id: "dq_001".to_string(),
-                    severity: IssueSeverity::Low,
-                    category: "数据完整性".to_string(),
-                    description: "5%的用户缺少部门信息".to_string(),
-                    affected_records: 62,
-                    detected_at: chrono::Utc::now() - chrono::Duration::hours(2),
-                    suggested_action: "联系HR部门补充用户部门信息".to_string(),
-                },
-            ],
+            recent_issues: vec![DataQualityIssue {
+                issue_id: "dq_001".to_string(),
+                severity: IssueSeverity::Low,
+                category: "数据完整性".to_string(),
+                description: "5%的用户缺少部门信息".to_string(),
+                affected_records: 62,
+                detected_at: chrono::Utc::now() - chrono::Duration::hours(2),
+                suggested_action: "联系HR部门补充用户部门信息".to_string(),
+            }],
             quality_trends: vec![
                 QualityTrend {
                     date: "2024-10-28".to_string(),

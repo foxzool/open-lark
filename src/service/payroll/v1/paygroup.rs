@@ -8,9 +8,9 @@
 
 use crate::core::config::Config;
 use crate::service::payroll::models::*;
+use chrono::{DateTime, Utc};
 use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
 
 /// 薪资组管理服务
 #[derive(Debug, Clone)]
@@ -26,7 +26,10 @@ impl PaygroupService {
     // ==================== 薪资组管理 ====================
 
     /// 创建薪资组
-    pub async fn create_paygroup(&self, request: &CreatePaygroupRequest) -> SDKResult<CreatePaygroupResponse> {
+    pub async fn create_paygroup(
+        &self,
+        request: &CreatePaygroupRequest,
+    ) -> SDKResult<CreatePaygroupResponse> {
         let paygroup_id = format!("pg_{}", chrono::Utc::now().timestamp());
 
         Ok(CreatePaygroupResponse {
@@ -72,7 +75,11 @@ impl PaygroupService {
     }
 
     /// 更新薪资组
-    pub async fn update_paygroup(&self, paygroup_id: &str, request: &UpdatePaygroupRequest) -> SDKResult<UpdatePaygroupResponse> {
+    pub async fn update_paygroup(
+        &self,
+        paygroup_id: &str,
+        request: &UpdatePaygroupRequest,
+    ) -> SDKResult<UpdatePaygroupResponse> {
         Ok(UpdatePaygroupResponse {
             paygroup_id: paygroup_id.to_string(),
             paygroup_name: request.paygroup_name.clone(),
@@ -93,7 +100,10 @@ impl PaygroupService {
     }
 
     /// 获取薪资组列表
-    pub async fn list_paygroups(&self, request: &ListPaygroupsRequest) -> SDKResult<ListPaygroupsResponse> {
+    pub async fn list_paygroups(
+        &self,
+        request: &ListPaygroupsRequest,
+    ) -> SDKResult<ListPaygroupsResponse> {
         // 模拟薪资组列表
         let paygroups = vec![
             PaygroupInfo {
@@ -136,7 +146,11 @@ impl PaygroupService {
     // ==================== 薪资组配置 ====================
 
     /// 设置薪资组规则
-    pub async fn set_salary_rules(&self, paygroup_id: &str, request: &SetSalaryRulesRequest) -> SDKResult<SetSalaryRulesResponse> {
+    pub async fn set_salary_rules(
+        &self,
+        paygroup_id: &str,
+        request: &SetSalaryRulesRequest,
+    ) -> SDKResult<SetSalaryRulesResponse> {
         Ok(SetSalaryRulesResponse {
             paygroup_id: paygroup_id.to_string(),
             rule_count: request.rules.len() as i32,
@@ -178,7 +192,11 @@ impl PaygroupService {
     // ==================== 员工组关联管理 ====================
 
     /// 添加员工到薪资组
-    pub async fn add_employees_to_paygroup(&self, paygroup_id: &str, request: &AddEmployeesRequest) -> SDKResult<AddEmployeesResponse> {
+    pub async fn add_employees_to_paygroup(
+        &self,
+        paygroup_id: &str,
+        request: &AddEmployeesRequest,
+    ) -> SDKResult<AddEmployeesResponse> {
         Ok(AddEmployeesResponse {
             paygroup_id: paygroup_id.to_string(),
             added_count: request.employee_ids.len() as i32,
@@ -189,7 +207,11 @@ impl PaygroupService {
     }
 
     /// 从薪资组移除员工
-    pub async fn remove_employees_from_paygroup(&self, paygroup_id: &str, request: &RemoveEmployeesRequest) -> SDKResult<RemoveEmployeesResponse> {
+    pub async fn remove_employees_from_paygroup(
+        &self,
+        paygroup_id: &str,
+        request: &RemoveEmployeesRequest,
+    ) -> SDKResult<RemoveEmployeesResponse> {
         Ok(RemoveEmployeesResponse {
             paygroup_id: paygroup_id.to_string(),
             removed_count: request.employee_ids.len() as i32,
@@ -200,7 +222,11 @@ impl PaygroupService {
     }
 
     /// 获取薪资组员工列表
-    pub async fn get_paygroup_employees(&self, paygroup_id: &str, request: &GetPaygroupEmployeesRequest) -> SDKResult<GetPaygroupEmployeesResponse> {
+    pub async fn get_paygroup_employees(
+        &self,
+        paygroup_id: &str,
+        request: &GetPaygroupEmployeesRequest,
+    ) -> SDKResult<GetPaygroupEmployeesResponse> {
         // 模拟员工列表
         let employees = vec![
             PaygroupEmployee {
@@ -235,7 +261,11 @@ impl PaygroupService {
     // ==================== 薪资组统计分析 ====================
 
     /// 获取薪资组统计信息
-    pub async fn get_paygroup_statistics(&self, paygroup_id: &str, period: &str) -> SDKResult<GetPaygroupStatisticsResponse> {
+    pub async fn get_paygroup_statistics(
+        &self,
+        paygroup_id: &str,
+        period: &str,
+    ) -> SDKResult<GetPaygroupStatisticsResponse> {
         Ok(GetPaygroupStatisticsResponse {
             paygroup_id: paygroup_id.to_string(),
             period: period.to_string(),

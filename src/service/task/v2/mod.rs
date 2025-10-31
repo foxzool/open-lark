@@ -7,8 +7,8 @@
 //! - 自定义字段和工作流集成
 
 use crate::core::config::Config;
-use open_lark_core::prelude::*;
 pub use crate::service::task::models::*;
+use open_lark_core::prelude::*;
 
 /// Task服务 v2版本
 #[derive(Debug, Clone)]
@@ -131,7 +131,10 @@ impl TaskServiceV2 {
     // ==================== 任务清单管理 ====================
 
     /// 创建任务清单
-    pub async fn create_tasklist(&self, _request: &CreateTaskListRequest) -> SDKResult<TaskListDetailResponse> {
+    pub async fn create_tasklist(
+        &self,
+        _request: &CreateTaskListRequest,
+    ) -> SDKResult<TaskListDetailResponse> {
         // 模拟实现
         Ok(TaskListDetailResponse {
             code: 0,
@@ -150,7 +153,10 @@ impl TaskServiceV2 {
     }
 
     /// 获取任务清单详情
-    pub async fn get_tasklist(&self, _request: &GetTaskListRequest) -> SDKResult<TaskListDetailResponse> {
+    pub async fn get_tasklist(
+        &self,
+        _request: &GetTaskListRequest,
+    ) -> SDKResult<TaskListDetailResponse> {
         // 模拟实现
         Ok(TaskListDetailResponse {
             code: 0,
@@ -169,7 +175,10 @@ impl TaskServiceV2 {
     }
 
     /// 更新任务清单
-    pub async fn update_tasklist(&self, _request: &UpdateTaskListRequest) -> SDKResult<TaskListDetailResponse> {
+    pub async fn update_tasklist(
+        &self,
+        _request: &UpdateTaskListRequest,
+    ) -> SDKResult<TaskListDetailResponse> {
         // 模拟实现
         Ok(TaskListDetailResponse {
             code: 0,
@@ -185,7 +194,10 @@ impl TaskServiceV2 {
     }
 
     /// 删除任务清单
-    pub async fn delete_tasklist(&self, _request: &DeleteTaskListRequest) -> SDKResult<EmptyResponse> {
+    pub async fn delete_tasklist(
+        &self,
+        _request: &DeleteTaskListRequest,
+    ) -> SDKResult<EmptyResponse> {
         // 模拟实现
         Ok(EmptyResponse {
             code: 0,
@@ -194,7 +206,10 @@ impl TaskServiceV2 {
     }
 
     /// 获取任务清单列表
-    pub async fn list_tasklists(&self, _request: &ListTaskListsRequest) -> SDKResult<TaskListsResponse> {
+    pub async fn list_tasklists(
+        &self,
+        _request: &ListTaskListsRequest,
+    ) -> SDKResult<TaskListsResponse> {
         // 模拟实现
         Ok(TaskListsResponse {
             code: 0,
@@ -238,7 +253,10 @@ impl TaskServiceV2 {
     // ==================== 成员管理 ====================
 
     /// 添加任务成员
-    pub async fn add_task_members(&self, _request: &AddTaskMembersRequest) -> SDKResult<EmptyResponse> {
+    pub async fn add_task_members(
+        &self,
+        _request: &AddTaskMembersRequest,
+    ) -> SDKResult<EmptyResponse> {
         // 模拟实现
         Ok(EmptyResponse {
             code: 0,
@@ -247,7 +265,10 @@ impl TaskServiceV2 {
     }
 
     /// 移除任务成员
-    pub async fn remove_task_members(&self, _request: &RemoveTaskMembersRequest) -> SDKResult<EmptyResponse> {
+    pub async fn remove_task_members(
+        &self,
+        _request: &RemoveTaskMembersRequest,
+    ) -> SDKResult<EmptyResponse> {
         // 模拟实现
         Ok(EmptyResponse {
             code: 0,
@@ -256,7 +277,10 @@ impl TaskServiceV2 {
     }
 
     /// 添加任务清单成员
-    pub async fn add_tasklist_members(&self, _request: &AddTaskListMembersRequest) -> SDKResult<EmptyResponse> {
+    pub async fn add_tasklist_members(
+        &self,
+        _request: &AddTaskListMembersRequest,
+    ) -> SDKResult<EmptyResponse> {
         // 模拟实现
         Ok(EmptyResponse {
             code: 0,
@@ -265,7 +289,10 @@ impl TaskServiceV2 {
     }
 
     /// 移除任务清单成员
-    pub async fn remove_tasklist_members(&self, _request: &RemoveTaskListMembersRequest) -> SDKResult<EmptyResponse> {
+    pub async fn remove_tasklist_members(
+        &self,
+        _request: &RemoveTaskListMembersRequest,
+    ) -> SDKResult<EmptyResponse> {
         // 模拟实现
         Ok(EmptyResponse {
             code: 0,
@@ -276,7 +303,10 @@ impl TaskServiceV2 {
     // ==================== 评论系统 ====================
 
     /// 创建评论
-    pub async fn create_comment(&self, _request: &CreateCommentRequest) -> SDKResult<CommentResponse> {
+    pub async fn create_comment(
+        &self,
+        _request: &CreateCommentRequest,
+    ) -> SDKResult<CommentResponse> {
         // 模拟实现
         Ok(CommentResponse {
             code: 0,
@@ -318,22 +348,20 @@ impl TaskServiceV2 {
                         created_at: Some("2024-01-15T10:30:00+08:00".to_string()),
                         updated_at: Some("2024-01-15T10:30:00+08:00".to_string()),
                         parent_id: None,
-                        replies: Some(vec![
-                            TaskComment {
-                                id: Some("comment_002".to_string()),
-                                content: Some("同意，我会立即开始处理".to_string()),
-                                author: Some(TaskMember {
-                                    id: "user_002".to_string(),
-                                    r#type: "user".to_string(),
-                                    name: Some("李四".to_string()),
-                                    avatar: Some("https://example.com/avatar2.jpg".to_string()),
-                                }),
-                                created_at: Some("2024-01-15T11:00:00+08:00".to_string()),
-                                updated_at: Some("2024-01-15T11:00:00+08:00".to_string()),
-                                parent_id: Some("comment_001".to_string()),
-                                replies: None,
-                            }
-                        ]),
+                        replies: Some(vec![TaskComment {
+                            id: Some("comment_002".to_string()),
+                            content: Some("同意，我会立即开始处理".to_string()),
+                            author: Some(TaskMember {
+                                id: "user_002".to_string(),
+                                r#type: "user".to_string(),
+                                name: Some("李四".to_string()),
+                                avatar: Some("https://example.com/avatar2.jpg".to_string()),
+                            }),
+                            created_at: Some("2024-01-15T11:00:00+08:00".to_string()),
+                            updated_at: Some("2024-01-15T11:00:00+08:00".to_string()),
+                            parent_id: Some("comment_001".to_string()),
+                            replies: None,
+                        }]),
                     },
                     TaskComment {
                         id: Some("comment_003".to_string()),
@@ -359,7 +387,10 @@ impl TaskServiceV2 {
     // ==================== 附件系统 ====================
 
     /// 上传附件
-    pub async fn upload_attachment(&self, _request: &UploadAttachmentRequest) -> SDKResult<AttachmentResponse> {
+    pub async fn upload_attachment(
+        &self,
+        _request: &UploadAttachmentRequest,
+    ) -> SDKResult<AttachmentResponse> {
         // 模拟实现
         Ok(AttachmentResponse {
             code: 0,
@@ -382,7 +413,10 @@ impl TaskServiceV2 {
     }
 
     /// 获取附件列表
-    pub async fn get_attachments(&self, _request: &GetAttachmentsRequest) -> SDKResult<AttachmentsResponse> {
+    pub async fn get_attachments(
+        &self,
+        _request: &GetAttachmentsRequest,
+    ) -> SDKResult<AttachmentsResponse> {
         // 模拟实现
         Ok(AttachmentsResponse {
             code: 0,
@@ -427,7 +461,10 @@ impl TaskServiceV2 {
     // ==================== 自定义字段 ====================
 
     /// 创建自定义字段
-    pub async fn create_custom_field(&self, _request: &CreateCustomFieldRequest) -> SDKResult<CustomFieldResponse> {
+    pub async fn create_custom_field(
+        &self,
+        _request: &CreateCustomFieldRequest,
+    ) -> SDKResult<CustomFieldResponse> {
         // 模拟实现
         Ok(CustomFieldResponse {
             code: 0,
@@ -443,7 +480,10 @@ impl TaskServiceV2 {
     }
 
     /// 获取自定义字段列表
-    pub async fn get_custom_fields(&self, _request: &GetCustomFieldsRequest) -> SDKResult<CustomFieldsResponse> {
+    pub async fn get_custom_fields(
+        &self,
+        _request: &GetCustomFieldsRequest,
+    ) -> SDKResult<CustomFieldsResponse> {
         // 模拟实现
         Ok(CustomFieldsResponse {
             code: 0,

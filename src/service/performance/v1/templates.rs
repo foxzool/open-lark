@@ -6,10 +6,10 @@
 //! - 模板配置管理
 //! - 模板应用功能
 
+use crate::core::api_resp::EmptyResponse;
 use crate::core::config::Config;
 use crate::service::performance::models;
 use crate::service::performance::PageResponse;
-use crate::core::api_resp::EmptyResponse;
 use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
@@ -44,7 +44,13 @@ impl TemplatesService {
     }
 
     /// 获取评估模板列表
-    pub async fn list(&self, activity_id: Option<&str>, template_type: Option<crate::service::performance::models::TemplateType>, page_size: i32, page_token: Option<&str>) -> SDKResult<TemplateListResponse> {
+    pub async fn list(
+        &self,
+        activity_id: Option<&str>,
+        template_type: Option<crate::service::performance::models::TemplateType>,
+        page_size: i32,
+        page_token: Option<&str>,
+    ) -> SDKResult<TemplateListResponse> {
         // 模拟实现
         let templates = vec![
             crate::service::performance::models::ReviewTemplate {

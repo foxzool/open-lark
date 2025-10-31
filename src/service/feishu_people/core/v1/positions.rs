@@ -63,9 +63,8 @@
 //! }
 //! ```
 
-use open_lark_core::core::{api_req::ApiRequest, trait_system::ExecutableBuilder};
 use crate::core::{
-    api_resp::{BaseResponse, ApiResponseTrait},
+    api_resp::{ApiResponseTrait, BaseResponse},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
@@ -73,6 +72,7 @@ use crate::core::{
     SDKResult,
 };
 use async_trait::async_trait;
+use open_lark_core::core::{api_req::ApiRequest, trait_system::ExecutableBuilder};
 use serde::{Deserialize, Serialize};
 
 /// 职位管理服务
@@ -698,7 +698,10 @@ impl PositionsService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/feishu_people/core/v1/positions/{}/holders", position_id),
+            api_path: format!(
+                "/open-apis/feishu_people/core/v1/positions/{}/holders",
+                position_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params,
@@ -772,7 +775,10 @@ impl PositionsService {
     ///
     /// let response = builder.execute(&client.feishu_people.core.v1.positions).await?;
     /// ```
-    pub fn get_positions_by_department_builder(&self, department_id: &str) -> GetPositionsByDepartmentBuilder {
+    pub fn get_positions_by_department_builder(
+        &self,
+        department_id: &str,
+    ) -> GetPositionsByDepartmentBuilder {
         GetPositionsByDepartmentBuilder::new(department_id)
     }
 
@@ -979,8 +985,18 @@ impl Default for GetPositionBuilder {
 
 // 应用ExecutableBuilder trait - 使用自定义实现
 #[async_trait::async_trait]
-impl open_lark_core::core::trait_system::ExecutableBuilder<PositionsService, (String, GetPositionRequest), BaseResponse<GetPositionResponse>> for GetPositionBuilder {
-    async fn execute(&self, service: &PositionsService, _option: Option<RequestOption>) -> SDKResult<BaseResponse<GetPositionResponse>> {
+impl
+    open_lark_core::core::trait_system::ExecutableBuilder<
+        PositionsService,
+        (String, GetPositionRequest),
+        BaseResponse<GetPositionResponse>,
+    > for GetPositionBuilder
+{
+    async fn execute(
+        &self,
+        service: &PositionsService,
+        _option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<GetPositionResponse>> {
         service.get_with_tuple(self.clone().build()).await
     }
 }
@@ -1238,8 +1254,18 @@ impl Default for UpdatePositionBuilder {
 
 // 应用ExecutableBuilder trait - 使用自定义实现
 #[async_trait::async_trait]
-impl open_lark_core::core::trait_system::ExecutableBuilder<PositionsService, (String, UpdatePositionRequest), BaseResponse<UpdatePositionResponse>> for UpdatePositionBuilder {
-    async fn execute(&self, service: &PositionsService, _option: Option<RequestOption>) -> SDKResult<BaseResponse<UpdatePositionResponse>> {
+impl
+    open_lark_core::core::trait_system::ExecutableBuilder<
+        PositionsService,
+        (String, UpdatePositionRequest),
+        BaseResponse<UpdatePositionResponse>,
+    > for UpdatePositionBuilder
+{
+    async fn execute(
+        &self,
+        service: &PositionsService,
+        _option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<UpdatePositionResponse>> {
         service.update_with_tuple(self.clone().build()).await
     }
 }
@@ -1280,8 +1306,18 @@ impl Default for DeletePositionBuilder {
 
 // 应用ExecutableBuilder trait - 使用自定义实现
 #[async_trait::async_trait]
-impl open_lark_core::core::trait_system::ExecutableBuilder<PositionsService, (String, DeletePositionRequest), BaseResponse<DeletePositionResponse>> for DeletePositionBuilder {
-    async fn execute(&self, service: &PositionsService, _option: Option<RequestOption>) -> SDKResult<BaseResponse<DeletePositionResponse>> {
+impl
+    open_lark_core::core::trait_system::ExecutableBuilder<
+        PositionsService,
+        (String, DeletePositionRequest),
+        BaseResponse<DeletePositionResponse>,
+    > for DeletePositionBuilder
+{
+    async fn execute(
+        &self,
+        service: &PositionsService,
+        _option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<DeletePositionResponse>> {
         service.delete_with_tuple(self.clone().build()).await
     }
 }
@@ -1422,9 +1458,21 @@ impl Default for GetPositionHoldersBuilder {
 
 // 应用ExecutableBuilder trait - 使用自定义实现
 #[async_trait::async_trait]
-impl open_lark_core::core::trait_system::ExecutableBuilder<PositionsService, (String, GetPositionHoldersRequest), BaseResponse<GetPositionHoldersResponse>> for GetPositionHoldersBuilder {
-    async fn execute(&self, service: &PositionsService, _option: Option<RequestOption>) -> SDKResult<BaseResponse<GetPositionHoldersResponse>> {
-        service.get_position_holders_with_tuple(self.clone().build()).await
+impl
+    open_lark_core::core::trait_system::ExecutableBuilder<
+        PositionsService,
+        (String, GetPositionHoldersRequest),
+        BaseResponse<GetPositionHoldersResponse>,
+    > for GetPositionHoldersBuilder
+{
+    async fn execute(
+        &self,
+        service: &PositionsService,
+        _option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<GetPositionHoldersResponse>> {
+        service
+            .get_position_holders_with_tuple(self.clone().build())
+            .await
     }
 }
 
@@ -1471,9 +1519,7 @@ pub struct GetPositionRequest {
 
 impl Default for GetPositionRequest {
     fn default() -> Self {
-        Self {
-            user_id_type: None,
-        }
+        Self { user_id_type: None }
     }
 }
 
@@ -1667,9 +1713,7 @@ pub struct DeletePositionRequest {
 
 impl Default for DeletePositionRequest {
     fn default() -> Self {
-        Self {
-            user_id_type: None,
-        }
+        Self { user_id_type: None }
     }
 }
 

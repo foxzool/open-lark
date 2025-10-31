@@ -6,10 +6,10 @@
 //! - 结果统计分析
 //! - 绩效等级管理
 
+use crate::core::api_resp::EmptyResponse;
 use crate::core::config::Config;
 use crate::service::performance::models;
 use crate::service::performance::PageResponse;
-use crate::core::api_resp::EmptyResponse;
 use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
@@ -25,30 +25,41 @@ impl ResultsService {
     }
 
     /// 获取绩效结果详情
-    pub async fn get(&self, result_id: &str) -> SDKResult<crate::service::performance::models::PerformanceResultResponse> {
+    pub async fn get(
+        &self,
+        result_id: &str,
+    ) -> SDKResult<crate::service::performance::models::PerformanceResultResponse> {
         // 模拟实现
-        Ok(crate::service::performance::models::PerformanceResultResponse {
-            code: 0,
-            msg: "success".to_string(),
-            data: Some(crate::service::performance::models::PerformanceResult {
-                result_id: result_id.to_string(),
-                reviewee_id: "user_001".to_string(),
-                activity_id: "act_001".to_string(),
-                semester_id: "sem_2024".to_string(),
-                level: Some(crate::service::performance::models::PerformanceLevel::Excellent),
-                score: Some(92.5),
-                rank: Some(5),
-                overall_comment: Some("表现优秀，工作积极主动，团队协作能力强".to_string()),
-                result_opened: Some(true),
-                opened_at: Some(1706745600000),
-                created_at: Some(1703980800000),
-                updated_at: Some(1706745600000),
-            }),
-        })
+        Ok(
+            crate::service::performance::models::PerformanceResultResponse {
+                code: 0,
+                msg: "success".to_string(),
+                data: Some(crate::service::performance::models::PerformanceResult {
+                    result_id: result_id.to_string(),
+                    reviewee_id: "user_001".to_string(),
+                    activity_id: "act_001".to_string(),
+                    semester_id: "sem_2024".to_string(),
+                    level: Some(crate::service::performance::models::PerformanceLevel::Excellent),
+                    score: Some(92.5),
+                    rank: Some(5),
+                    overall_comment: Some("表现优秀，工作积极主动，团队协作能力强".to_string()),
+                    result_opened: Some(true),
+                    opened_at: Some(1706745600000),
+                    created_at: Some(1703980800000),
+                    updated_at: Some(1706745600000),
+                }),
+            },
+        )
     }
 
     /// 获取绩效结果列表
-    pub async fn list(&self, semester_id: Option<&str>, user_id: Option<&str>, page_size: i32, page_token: Option<&str>) -> SDKResult<crate::service::performance::models::PerformanceResultListResponse> {
+    pub async fn list(
+        &self,
+        semester_id: Option<&str>,
+        user_id: Option<&str>,
+        page_size: i32,
+        page_token: Option<&str>,
+    ) -> SDKResult<crate::service::performance::models::PerformanceResultListResponse> {
         // 模拟实现
         let results = vec![
             crate::service::performance::models::PerformanceResult {
@@ -81,44 +92,62 @@ impl ResultsService {
             },
         ];
 
-        Ok(crate::service::performance::models::PerformanceResultListResponse {
-            code: 0,
-            msg: "success".to_string(),
-            data: Some(PageResponse {
-                items: results,
-                page_token: page_token.map(|s| s.to_string()),
-                has_more: Some(false),
-                total: Some(2),
-            }),
-        })
+        Ok(
+            crate::service::performance::models::PerformanceResultListResponse {
+                code: 0,
+                msg: "success".to_string(),
+                data: Some(PageResponse {
+                    items: results,
+                    page_token: page_token.map(|s| s.to_string()),
+                    has_more: Some(false),
+                    total: Some(2),
+                }),
+            },
+        )
     }
 
     /// 开通绩效结果
-    pub async fn open_results(&self, activity_id: &str, user_ids: &[String]) -> SDKResult<EmptyResponse> {
+    pub async fn open_results(
+        &self,
+        activity_id: &str,
+        user_ids: &[String],
+    ) -> SDKResult<EmptyResponse> {
         // 模拟实现
         Ok(EmptyResponse {})
     }
 
     /// 确认绩效结果
-    pub async fn confirm_result(&self, result_id: &str, confirmed: bool, comments: Option<&str>) -> SDKResult<crate::service::performance::models::PerformanceResultResponse> {
+    pub async fn confirm_result(
+        &self,
+        result_id: &str,
+        confirmed: bool,
+        comments: Option<&str>,
+    ) -> SDKResult<crate::service::performance::models::PerformanceResultResponse> {
         // 模拟实现
-        Ok(crate::service::performance::models::PerformanceResultResponse {
-            code: 0,
-            msg: if confirmed { "绩效结果确认成功" } else { "绩效结果确认取消" }.to_string(),
-            data: Some(crate::service::performance::models::PerformanceResult {
-                result_id: result_id.to_string(),
-                reviewee_id: "user_001".to_string(),
-                activity_id: "act_001".to_string(),
-                semester_id: "sem_2024".to_string(),
-                level: Some(crate::service::performance::models::PerformanceLevel::Excellent),
-                score: Some(92.5),
-                rank: Some(5),
-                overall_comment: Some("表现优秀".to_string()),
-                result_opened: Some(true),
-                opened_at: Some(1706745600000),
-                created_at: Some(1703980800000),
-                updated_at: Some(chrono::Utc::now().timestamp()),
-            }),
-        })
+        Ok(
+            crate::service::performance::models::PerformanceResultResponse {
+                code: 0,
+                msg: if confirmed {
+                    "绩效结果确认成功"
+                } else {
+                    "绩效结果确认取消"
+                }
+                .to_string(),
+                data: Some(crate::service::performance::models::PerformanceResult {
+                    result_id: result_id.to_string(),
+                    reviewee_id: "user_001".to_string(),
+                    activity_id: "act_001".to_string(),
+                    semester_id: "sem_2024".to_string(),
+                    level: Some(crate::service::performance::models::PerformanceLevel::Excellent),
+                    score: Some(92.5),
+                    rank: Some(5),
+                    overall_comment: Some("表现优秀".to_string()),
+                    result_opened: Some(true),
+                    opened_at: Some(1706745600000),
+                    created_at: Some(1703980800000),
+                    updated_at: Some(chrono::Utc::now().timestamp()),
+                }),
+            },
+        )
     }
 }

@@ -486,7 +486,6 @@ pub enum MeetingRoomStatus {
     Disabled,
 }
 
-
 /// 会议室数据
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MeetingRoomsData {

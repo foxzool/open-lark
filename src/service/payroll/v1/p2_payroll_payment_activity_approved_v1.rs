@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use crate::event::{context::EventContext, dispatcher::EventHandler};
+use serde::{Deserialize, Serialize};
 
 /// 发薪活动封存事件数据
 #[derive(Debug, Clone)]

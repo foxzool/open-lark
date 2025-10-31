@@ -16,9 +16,7 @@ use serde::{Deserialize, Serialize};
 use super::types::*;
 
 // 导入共享数据结构
-use super::{
-    TimeRange, SecurityLevel, ComplianceLevel, PaginationInfo
-};
+use super::{ComplianceLevel, PaginationInfo, SecurityLevel, TimeRange};
 
 /// 安全策略服务
 #[derive(Debug, Clone)]
@@ -33,7 +31,10 @@ impl SecurityPolicyService {
 
     /// 获取安全策略列表
     /// 获取系统中的所有安全策略及其状态
-    pub async fn get_security_policies(&self, request: &GetSecurityPoliciesRequest) -> SDKResult<GetSecurityPoliciesResponse> {
+    pub async fn get_security_policies(
+        &self,
+        request: &GetSecurityPoliciesRequest,
+    ) -> SDKResult<GetSecurityPoliciesResponse> {
         let current_time = chrono::Utc::now().timestamp();
 
         Ok(GetSecurityPoliciesResponse {
@@ -58,7 +59,11 @@ impl SecurityPolicyService {
                     approved_by: Some("安全总监".to_string()),
                     approved_at: Some(current_time - 86400 * 90),
                     scope: PolicyScope {
-                        departments: vec!["技术部".to_string(), "产品部".to_string(), "运营部".to_string()],
+                        departments: vec![
+                            "技术部".to_string(),
+                            "产品部".to_string(),
+                            "运营部".to_string(),
+                        ],
                         user_groups: vec!["全体员工".to_string()],
                         systems: vec!["核心业务系统".to_string(), "内部管理系统".to_string()],
                         locations: vec!["总部".to_string(), "分支机构".to_string()],
@@ -82,7 +87,11 @@ impl SecurityPolicyService {
                     risk_score: 75.5,
                     last_assessment_date: current_time - 86400 * 15,
                     next_assessment_date: current_time + 86400 * 75,
-                    tags: vec!["密码安全".to_string(), "身份认证".to_string(), "合规要求".to_string()],
+                    tags: vec![
+                        "密码安全".to_string(),
+                        "身份认证".to_string(),
+                        "合规要求".to_string(),
+                    ],
                 },
                 SecurityPolicy {
                     policy_id: "policy_002".to_string(),
@@ -104,8 +113,16 @@ impl SecurityPolicyService {
                     approved_by: Some("CISO".to_string()),
                     approved_at: Some(current_time - 86400 * 300),
                     scope: PolicyScope {
-                        departments: vec!["技术部".to_string(), "财务部".to_string(), "人力资源部".to_string()],
-                        user_groups: vec!["管理员".to_string(), "普通用户".to_string(), "审计员".to_string()],
+                        departments: vec![
+                            "技术部".to_string(),
+                            "财务部".to_string(),
+                            "人力资源部".to_string(),
+                        ],
+                        user_groups: vec![
+                            "管理员".to_string(),
+                            "普通用户".to_string(),
+                            "审计员".to_string(),
+                        ],
                         systems: vec!["所有业务系统".to_string()],
                         locations: vec!["全部办公地点".to_string()],
                     },
@@ -135,7 +152,11 @@ impl SecurityPolicyService {
                     risk_score: 85.0,
                     last_assessment_date: current_time - 86400 * 10,
                     next_assessment_date: current_time + 86400 * 80,
-                    tags: vec!["访问控制".to_string(), "RBAC".to_string(), "权限管理".to_string()],
+                    tags: vec![
+                        "访问控制".to_string(),
+                        "RBAC".to_string(),
+                        "权限管理".to_string(),
+                    ],
                 },
                 SecurityPolicy {
                     policy_id: "policy_003".to_string(),
@@ -181,7 +202,11 @@ impl SecurityPolicyService {
                     risk_score: 70.0,
                     last_assessment_date: current_time - 86400 * 25,
                     next_assessment_date: current_time + 86400 * 65,
-                    tags: vec!["数据安全".to_string(), "数据分类".to_string(), "合规要求".to_string()],
+                    tags: vec![
+                        "数据安全".to_string(),
+                        "数据分类".to_string(),
+                        "合规要求".to_string(),
+                    ],
                 },
             ],
             total_count: 3,
@@ -198,7 +223,10 @@ impl SecurityPolicyService {
 
     /// 创建安全策略
     /// 创建新的安全策略或更新现有策略
-    pub async fn create_security_policy(&self, request: &CreateSecurityPolicyRequest) -> SDKResult<CreateSecurityPolicyResponse> {
+    pub async fn create_security_policy(
+        &self,
+        request: &CreateSecurityPolicyRequest,
+    ) -> SDKResult<CreateSecurityPolicyResponse> {
         let current_time = chrono::Utc::now().timestamp();
         let policy_id = format!("policy_{}", current_time);
 
@@ -232,7 +260,10 @@ impl SecurityPolicyService {
 
     /// 评估策略合规性
     /// 评估系统对特定安全策略的合规性
-    pub async fn evaluate_policy_compliance(&self, request: &EvaluatePolicyComplianceRequest) -> SDKResult<EvaluatePolicyComplianceResponse> {
+    pub async fn evaluate_policy_compliance(
+        &self,
+        request: &EvaluatePolicyComplianceRequest,
+    ) -> SDKResult<EvaluatePolicyComplianceResponse> {
         let current_time = chrono::Utc::now().timestamp();
 
         Ok(EvaluatePolicyComplianceResponse {
@@ -250,16 +281,14 @@ impl SecurityPolicyService {
                     status: ComplianceStatus::Compliant,
                     compliant_items: 18450,
                     total_items: 20050,
-                    non_compliant_items: vec![
-                        NonCompliantItem {
-                            item_id: "user_1234".to_string(),
-                            item_name: "张三".to_string(),
-                            description: "密码缺少特殊字符".to_string(),
-                            severity: SecurityLevel::Medium,
-                            risk_score: 45.0,
-                            recommended_action: "更新密码以满足复杂度要求".to_string(),
-                        },
-                    ],
+                    non_compliant_items: vec![NonCompliantItem {
+                        item_id: "user_1234".to_string(),
+                        item_name: "张三".to_string(),
+                        description: "密码缺少特殊字符".to_string(),
+                        severity: SecurityLevel::Medium,
+                        risk_score: 45.0,
+                        recommended_action: "更新密码以满足复杂度要求".to_string(),
+                    }],
                 },
                 PolicyComplianceDetail {
                     requirement: "密码更换周期".to_string(),
@@ -268,16 +297,14 @@ impl SecurityPolicyService {
                     status: ComplianceStatus::PartiallyCompliant,
                     compliant_items: 16600,
                     total_items: 20050,
-                    non_compliant_items: vec![
-                        NonCompliantItem {
-                            item_id: "user_5678".to_string(),
-                            item_name: "李四".to_string(),
-                            description: "密码已过期未更换".to_string(),
-                            severity: SecurityLevel::High,
-                            risk_score: 65.0,
-                            recommended_action: "立即更换过期密码".to_string(),
-                        },
-                    ],
+                    non_compliant_items: vec![NonCompliantItem {
+                        item_id: "user_5678".to_string(),
+                        item_name: "李四".to_string(),
+                        description: "密码已过期未更换".to_string(),
+                        severity: SecurityLevel::High,
+                        risk_score: 65.0,
+                        recommended_action: "立即更换过期密码".to_string(),
+                    }],
                 },
             ],
             compliance_trend: ComplianceTrend {
@@ -321,7 +348,10 @@ impl SecurityPolicyService {
 
     /// 获取策略执行报告
     /// 生成安全策略执行效果报告
-    pub async fn get_policy_enforcement_report(&self, request: &GetPolicyEnforcementReportRequest) -> SDKResult<GetPolicyEnforcementReportResponse> {
+    pub async fn get_policy_enforcement_report(
+        &self,
+        request: &GetPolicyEnforcementReportRequest,
+    ) -> SDKResult<GetPolicyEnforcementReportResponse> {
         let current_time = chrono::Utc::now().timestamp();
 
         Ok(GetPolicyEnforcementReportResponse {

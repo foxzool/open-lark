@@ -8,9 +8,9 @@
 
 use crate::core::config::Config;
 use crate::service::payroll::models::*;
+use chrono::{DateTime, Utc};
 use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
 
 /// 算薪项管理服务
 #[derive(Debug, Clone)]
@@ -26,7 +26,10 @@ impl AcctItemService {
     // ==================== 算薪项管理 ====================
 
     /// 创建算薪项
-    pub async fn create_acct_item(&self, request: &CreateAcctItemRequest) -> SDKResult<CreateAcctItemResponse> {
+    pub async fn create_acct_item(
+        &self,
+        request: &CreateAcctItemRequest,
+    ) -> SDKResult<CreateAcctItemResponse> {
         let item_id = format!("item_{}", chrono::Utc::now().timestamp());
 
         Ok(CreateAcctItemResponse {
@@ -66,7 +69,11 @@ impl AcctItemService {
             social_insurance_config: Some(SocialInsuranceConfig {
                 included: true,
                 contribution_base: Some(true),
-                categories: vec!["养老保险".to_string(), "医疗保险".to_string(), "失业保险".to_string()],
+                categories: vec![
+                    "养老保险".to_string(),
+                    "医疗保险".to_string(),
+                    "失业保险".to_string(),
+                ],
             }),
             created_at: Some(chrono::Utc::now()),
             updated_at: Some(chrono::Utc::now()),
@@ -74,7 +81,11 @@ impl AcctItemService {
     }
 
     /// 更新算薪项
-    pub async fn update_acct_item(&self, item_id: &str, request: &UpdateAcctItemRequest) -> SDKResult<UpdateAcctItemResponse> {
+    pub async fn update_acct_item(
+        &self,
+        item_id: &str,
+        request: &UpdateAcctItemRequest,
+    ) -> SDKResult<UpdateAcctItemResponse> {
         Ok(UpdateAcctItemResponse {
             item_id: item_id.to_string(),
             item_name: request.item_name.clone(),
@@ -103,7 +114,10 @@ impl AcctItemService {
     }
 
     /// 获取算薪项列表
-    pub async fn list_acct_items(&self, request: &ListAcctItemsRequest) -> SDKResult<ListAcctItemsResponse> {
+    pub async fn list_acct_items(
+        &self,
+        request: &ListAcctItemsRequest,
+    ) -> SDKResult<ListAcctItemsResponse> {
         // 模拟算薪项列表
         let items = vec![
             AcctItemInfo {
@@ -164,9 +178,17 @@ impl AcctItemService {
         ];
 
         let filtered_items = if let Some(item_type) = &request.item_type_filter {
-            items.iter().filter(|item| &item.item_type == item_type).cloned().collect()
+            items
+                .iter()
+                .filter(|item| &item.item_type == item_type)
+                .cloned()
+                .collect()
         } else if let Some(category) = &request.category_filter {
-            items.iter().filter(|item| &item.category == category).cloned().collect()
+            items
+                .iter()
+                .filter(|item| &item.category == category)
+                .cloned()
+                .collect()
         } else {
             items
         };
@@ -182,7 +204,11 @@ impl AcctItemService {
     // ==================== 算薪项配置管理 ====================
 
     /// 设置算薪项公式
-    pub async fn set_acct_item_formula(&self, item_id: &str, request: &SetAcctItemFormulaRequest) -> SDKResult<SetAcctItemFormulaResponse> {
+    pub async fn set_acct_item_formula(
+        &self,
+        item_id: &str,
+        request: &SetAcctItemFormulaRequest,
+    ) -> SDKResult<SetAcctItemFormulaResponse> {
         Ok(SetAcctItemFormulaResponse {
             item_id: item_id.to_string(),
             formula: request.formula.clone(),
@@ -193,7 +219,10 @@ impl AcctItemService {
     }
 
     /// 获取算薪项公式
-    pub async fn get_acct_item_formula(&self, item_id: &str) -> SDKResult<GetAcctItemFormulaResponse> {
+    pub async fn get_acct_item_formula(
+        &self,
+        item_id: &str,
+    ) -> SDKResult<GetAcctItemFormulaResponse> {
         Ok(GetAcctItemFormulaResponse {
             item_id: item_id.to_string(),
             formula: Some("base_salary * performance_coefficient".to_string()),
@@ -215,17 +244,17 @@ impl AcctItemService {
                     description: Some("员工绩效考核系数".to_string()),
                 },
             ],
-            conditions: Some(vec![
-                CalculationCondition {
-                    condition: "performance_coefficient > 0".to_string(),
-                    description: Some("绩效系数必须大于0".to_string()),
-                },
-            ]),
+            conditions: Some(vec![CalculationCondition {
+                condition: "performance_coefficient > 0".to_string(),
+                description: Some("绩效系数必须大于0".to_string()),
+            }]),
             test_result: Some(FormulaTestResult {
                 test_values: vec![
                     ("base_salary".to_string(), 8000.0),
                     ("performance_coefficient".to_string(), 1.2),
-                ].into_iter().collect(),
+                ]
+                .into_iter()
+                .collect(),
                 result: 9600.0,
                 success: true,
                 error_message: None,
@@ -234,7 +263,10 @@ impl AcctItemService {
     }
 
     /// 测试算薪项公式
-    pub async fn test_acct_item_formula(&self, request: &TestAcctItemFormulaRequest) -> SDKResult<TestAcctItemFormulaResponse> {
+    pub async fn test_acct_item_formula(
+        &self,
+        request: &TestAcctItemFormulaRequest,
+    ) -> SDKResult<TestAcctItemFormulaResponse> {
         // 模拟公式测试
         let result = match request.formula.as_str() {
             "base_salary * 1.1" => {
@@ -261,7 +293,11 @@ impl AcctItemService {
             test_values: request.test_values.clone(),
             result,
             success,
-            error_message: if success { None } else { Some("公式计算失败或缺少必要参数".to_string()) },
+            error_message: if success {
+                None
+            } else {
+                Some("公式计算失败或缺少必要参数".to_string())
+            },
             execution_time: Some(15), // 毫秒
         })
     }
@@ -269,7 +305,10 @@ impl AcctItemService {
     // ==================== 算薪项模板管理 ====================
 
     /// 创建算薪项模板
-    pub async fn create_acct_item_template(&self, request: &CreateAcctItemTemplateRequest) -> SDKResult<CreateAcctItemTemplateResponse> {
+    pub async fn create_acct_item_template(
+        &self,
+        request: &CreateAcctItemTemplateRequest,
+    ) -> SDKResult<CreateAcctItemTemplateResponse> {
         let template_id = format!("template_{}", chrono::Utc::now().timestamp());
 
         Ok(CreateAcctItemTemplateResponse {
@@ -283,7 +322,10 @@ impl AcctItemService {
     }
 
     /// 获取算薪项模板列表
-    pub async fn list_acct_item_templates(&self, request: &ListAcctItemTemplatesRequest) -> SDKResult<ListAcctItemTemplatesResponse> {
+    pub async fn list_acct_item_templates(
+        &self,
+        request: &ListAcctItemTemplatesRequest,
+    ) -> SDKResult<ListAcctItemTemplatesResponse> {
         let templates = vec![
             AcctItemTemplateInfo {
                 template_id: "template_001".to_string(),
@@ -316,7 +358,11 @@ impl AcctItemService {
     // ==================== 算薪项统计分析 ====================
 
     /// 获取算薪项使用统计
-    pub async fn get_acct_item_usage_stats(&self, item_id: &str, period: &str) -> SDKResult<GetAcctItemUsageStatsResponse> {
+    pub async fn get_acct_item_usage_stats(
+        &self,
+        item_id: &str,
+        period: &str,
+    ) -> SDKResult<GetAcctItemUsageStatsResponse> {
         Ok(GetAcctItemUsageStatsResponse {
             item_id: item_id.to_string(),
             period: period.to_string(),
@@ -368,7 +414,10 @@ impl AcctItemService {
     }
 
     /// 批量导入算薪项
-    pub async fn batch_import_acct_items(&self, request: &BatchImportAcctItemsRequest) -> SDKResult<BatchImportAcctItemsResponse> {
+    pub async fn batch_import_acct_items(
+        &self,
+        request: &BatchImportAcctItemsRequest,
+    ) -> SDKResult<BatchImportAcctItemsResponse> {
         let mut success_count = 0;
         let mut failed_items = vec![];
 
