@@ -65,7 +65,7 @@ pub struct JoinedMeetingParticipant {
     pub join_time: String,
     /// 加入方式 (dial_in, web, mobile, desktop, room_system),
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub join_method: Option<String>,
+    pub join_http_method: Option<String>,
     /// 设备信息,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub device_info: Option<DeviceInfo>,
@@ -184,7 +184,7 @@ pub struct InvitationInfo {
     pub invitation_time: Option<String>,
     /// 邀请方式 (email, sms, link, calendar, direct),
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub invitation_method: Option<String>,
+    pub invitation_http_method: Option<String>,
     /// 是否通过等候室加入,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub joined_via_waiting_room: Option<bool>,

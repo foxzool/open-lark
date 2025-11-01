@@ -183,7 +183,7 @@ impl SubjectService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SubjectOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: HIRE_V1_SUBJECTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -226,7 +226,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SubjectDetailResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(HIRE_V1_SUBJECT_GET, "subject_id", subject_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -282,7 +282,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SubjectListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: HIRE_V1_SUBJECTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -339,7 +339,7 @@ if let Some(owner_id) = request.owner_id {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SubjectOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(HIRE_V1_SUBJECT_GET, "subject_id", subject_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -368,7 +368,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SubjectOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::DELETE,
+            http_http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(HIRE_V1_SUBJECT_GET, "subject_id", subject_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -397,7 +397,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SubjectOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 HIRE_V1_SUBJECT_ENABLE,
                 "subject_id",
@@ -430,7 +430,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SubjectOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 HIRE_V1_SUBJECT_DISABLE,
                 "subject_id",

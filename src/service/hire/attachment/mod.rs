@@ -31,11 +31,11 @@ pub struct Attachment {
     /// 文件大小（字节）
     pub file_size: u64,
     /// 附件URL
-    pub url: String,
+    pub api_path: String,
     /// 下载URL
-    pub download_url: Option<String>,
+    pub download_api_path: Option<String>,
     /// 预览URL
-    pub preview_url: Option<String>,
+    pub preview_api_path: Option<String>,
     /// 关联对象类型
     pub object_type: String,
     /// 关联对象ID
@@ -75,9 +75,9 @@ pub struct AttachmentUploadRequest {
 pub struct AttachmentUploadInfo {
 }
     /// 上传URL
-    pub upload_url: String,
+    pub upload_api_path: String,
     /// 上传方法
-    pub upload_method: String,
+    pub upload_http_method: String,
     /// 上传头部信息
     pub upload_headers: Option<std::collections::HashMap<String, String>>,
     /// 附件ID
@@ -232,7 +232,7 @@ impl AttachmentService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<AttachmentUploadResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: HIRE_V1_ATTACHMENT_UPLOAD.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -274,7 +274,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<AttachmentDetailResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 HIRE_V1_ATTACHMENT_GET,
                 "attachment_id",
@@ -338,7 +338,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<AttachmentListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: HIRE_V1_ATTACHMENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -403,7 +403,7 @@ if let Some(created_end_time) = request.created_end_time {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<AttachmentOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 HIRE_V1_ATTACHMENT_GET,
                 "attachment_id",
@@ -436,7 +436,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<AttachmentOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::DELETE,
+            http_http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
                 HIRE_V1_ATTACHMENT_GET,
                 "attachment_id",
@@ -469,7 +469,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<serde_json::Value>> {,
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 HIRE_V1_ATTACHMENT_DOWNLOAD,
                 "attachment_id",
@@ -502,7 +502,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<serde_json::Value>> {,
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 HIRE_V1_ATTACHMENT_PREVIEW,
                 "attachment_id",
@@ -556,7 +556,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BatchDownloadResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: HIRE_V1_ATTACHMENTS_BATCH_DOWNLOAD.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -595,7 +595,7 @@ let api_req = ApiRequest {,
         }
         let request = BatchDeleteRequest { attachment_ids };
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: HIRE_V1_ATTACHMENTS_BATCH_DELETE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -636,7 +636,7 @@ pub async fn get_attachment_statistics(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<serde_json::Value>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: HIRE_V1_ATTACHMENT_STATISTICS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]

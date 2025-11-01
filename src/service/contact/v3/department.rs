@@ -89,7 +89,7 @@ impl DepartmentService {
         request: &CreateDepartmentRequest,
     ) -> SDKResult<BaseResponse<CreateDepartmentResponse>> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/contact/v3/departments".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -110,7 +110,7 @@ impl DepartmentService {
         let api_path = format!("/open-apis/contact/v3/departments/{}", department_id);
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::PATCH,
+            http_http_method: reqwest::Method::PATCH,
             api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -131,7 +131,7 @@ impl DepartmentService {
         let api_path = format!("/open-apis/contact/v3/departments/{}", department_id);
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::PUT,
+            http_http_method: reqwest::Method::PUT,
             api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -152,7 +152,7 @@ impl DepartmentService {
         let api_path = format!("/open-apis/contact/v3/departments/{}/update_id", department_id);
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::PATCH,
+            http_http_method: reqwest::Method::PATCH,
             api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -187,7 +187,7 @@ impl DepartmentService {
         }
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
+            http_http_method: reqwest::Method::GET,
             api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
@@ -205,7 +205,7 @@ impl DepartmentService {
         request: &BatchGetDepartmentsRequest,
     ) -> SDKResult<BaseResponse<BatchGetDepartmentsResponse>> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/contact/v3/departments/batch_get".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -251,7 +251,7 @@ impl DepartmentService {
         }
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
+            http_http_method: reqwest::Method::GET,
             api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
@@ -288,7 +288,7 @@ impl DepartmentService {
         }
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
+            http_http_method: reqwest::Method::GET,
             api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
@@ -306,7 +306,7 @@ impl DepartmentService {
         request: &SearchDepartmentsRequest,
     ) -> SDKResult<BaseResponse<SearchDepartmentsResponse>> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/contact/v3/departments/search".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(request)?,
@@ -333,7 +333,7 @@ impl DepartmentService {
         }
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::DELETE,
+            http_http_method: reqwest::Method::DELETE,
             api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),

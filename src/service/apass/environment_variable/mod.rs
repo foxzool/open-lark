@@ -50,7 +50,7 @@ pub async fn query_environment_variables(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<EnvironmentVariableQueryResponse>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 Endpoints::APASS_V1_ENVIRONMENT_VARIABLE_QUERY,
                 "app_id",
@@ -82,7 +82,7 @@ pub async fn get_environment_variable(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<EnvironmentVariableGetResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_ENVIRONMENT_VARIABLE_GET,
                 &[

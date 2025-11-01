@@ -58,7 +58,7 @@ if let Some(task_status) = params.task_status {,
 if let Some(user_id_type) = params.user_id_type {,
                 query_params.insert("user_id_type", user_id_type.as_str().to_string());
         let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: APPROVAL_V4_EXTERNAL_TASKS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,

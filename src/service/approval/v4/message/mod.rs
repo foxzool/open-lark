@@ -47,7 +47,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: APPROVAL_V4_MESSAGES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
@@ -74,7 +74,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_method: Method::PATCH,
+            http_http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
                 APPROVAL_V4_MESSAGE_PATCH,
                 "message_id",

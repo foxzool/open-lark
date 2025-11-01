@@ -19,7 +19,7 @@ impl WorkCityService {
     /// 获取单个工作城市信息
     pub async fn get(&self, work_city_id: &str) -> crate::core::SDKResult<GetWorkCityResponse> {,
 let api_req = ApiRequest {,
-            http_method: reqwest::Method::GET,
+            http_http_method: reqwest::Method::GET,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::contact::CONTACT_V3_WORK_CITY_GET,
                 "work_city_id",
@@ -39,7 +39,7 @@ Ok(resp.data.unwrap_or_default()),
         _req: &ListWorkCitiesRequest,
     ) -> crate::core::SDKResult<ListWorkCitiesResponse> {,
 let api_req = ApiRequest {,
-            http_method: reqwest::Method::GET,
+            http_http_method: reqwest::Method::GET,
             api_path: crate::core::endpoints::contact::CONTACT_V3_WORK_CITIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),

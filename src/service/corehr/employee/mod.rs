@@ -85,7 +85,7 @@ impl EmployeeService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<EmployeeBatchGetResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: COREHR_EMPLOYEES_BATCH_GET.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -145,7 +145,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<EmployeeSearchResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: COREHR_EMPLOYEES_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()

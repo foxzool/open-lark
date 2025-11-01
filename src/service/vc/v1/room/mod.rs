@@ -113,7 +113,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: VC_ROOM_CREATE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
@@ -136,7 +136,7 @@ let mut query_params = HashMap::new();
 if let Some(user_id_type) = user_id_type {,
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_method: Method::PATCH,
+            http_http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(VC_ROOM_UPDATE, "{room_id}", room_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
@@ -158,7 +158,7 @@ let mut query_params = HashMap::new();
 if let Some(user_id_type) = user_id_type {,
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_method: Method::DELETE,
+            http_http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(VC_ROOM_DELETE, "{room_id}", room_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
@@ -179,7 +179,7 @@ let mut query_params = HashMap::new();
 if let Some(user_id_type) = user_id_type {,
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(VC_ROOM_GET, "{room_id}", room_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
@@ -205,7 +205,7 @@ if let Some(room_id_type) = room_id_type {,
 if let Some(user_id_type) = user_id_type {,
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: VC_ROOM_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
@@ -233,7 +233,7 @@ if let Some(room_id_type) = params.room_id_type {,
 if let Some(user_id_type) = params.user_id_type {,
                 query_params.insert("user_id_type", user_id_type.as_str().to_string());
         let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: VC_ROOM_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,

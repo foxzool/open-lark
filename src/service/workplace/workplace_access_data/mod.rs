@@ -46,7 +46,7 @@ pub async fn search(,
         option: Option<RequestOption>,
     ) -> SDKResult<AccessDataSearchResponse> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: WORKPLACE_ACCESS_DATA_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
@@ -99,7 +99,7 @@ pub async fn search_custom(,
         option: Option<RequestOption>,
     ) -> SDKResult<CustomAccessDataSearchResponse> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: WORKPLACE_CUSTOM_ACCESS_DATA_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
@@ -148,7 +148,7 @@ pub async fn search_custom_widget(,
         option: Option<RequestOption>,
     ) -> SDKResult<CustomWidgetAccessDataSearchResponse> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: WORKPLACE_WIDGET_ACCESS_DATA_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]

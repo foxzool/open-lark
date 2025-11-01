@@ -159,7 +159,7 @@ impl PersonsService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
+            http_http_method: reqwest::Method::GET,
             api_path: format!("/open-apis/feishu_people/core/v1/persons/{}", user_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -210,7 +210,7 @@ impl PersonsService {
     ) -> SDKResult<BaseResponse<BatchGetPersonsResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/feishu_people/core/v1/persons/batch_get".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -275,7 +275,7 @@ impl PersonsService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
+            http_http_method: reqwest::Method::GET,
             api_path: "/open-apis/feishu_people/core/v1/persons/list_by_department".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -328,7 +328,7 @@ impl PersonsService {
     ) -> SDKResult<BaseResponse<SearchPersonsResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/feishu_people/core/v1/persons/search".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -386,7 +386,7 @@ impl PersonsService {
     ) -> SDKResult<BaseResponse<UpdatePersonResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::PUT,
+            http_http_method: reqwest::Method::PUT,
             api_path: format!("/open-apis/feishu_people/core/v1/persons/{}", user_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -438,7 +438,7 @@ impl PersonsService {
     ) -> SDKResult<BaseResponse<UpdatePersonStatusResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::PUT,
+            http_http_method: reqwest::Method::PUT,
             api_path: format!(
                 "/open-apis/feishu_people/core/v1/persons/{}/status",
                 user_id
@@ -502,7 +502,7 @@ impl PersonsService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
+            http_http_method: reqwest::Method::GET,
             api_path: format!(
                 "/open-apis/feishu_people/core/v1/persons/{}/avatar",
                 user_id
@@ -565,7 +565,7 @@ impl PersonsService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: format!(
                 "/open-apis/feishu_people/core/v1/persons/{}/avatar",
                 user_id
@@ -626,7 +626,7 @@ impl PersonsService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
+            http_http_method: reqwest::Method::GET,
             api_path: format!(
                 "/open-apis/feishu_people/core/v1/persons/{}/basic_info",
                 user_id

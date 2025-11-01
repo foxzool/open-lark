@@ -135,13 +135,13 @@ impl PaygroupService {
         }
 
         let api_req = ApiRequest {
-            method: Method::GET,
-            url: self.config.build_url("/open-apis/payroll/v4/paygroups"),
+            http_method: reqwest::Method::GET,
+             api_path: ("/open-apis/payroll/v4/paygroups".to_string()"),
             query_params,
             path_params: std::collections::HashMap::new(),
-            headers: std::collections::HashMap::new(),
-            body: None,
-            access_token_type: AccessTokenType::Tenant,
+            
+            body: Vec::new(),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -179,15 +179,15 @@ impl PaygroupService {
         path_params.insert("paygroup_id".to_string(), paygroup_id.to_string());
 
         let api_req = ApiRequest {
-            method: Method::GET,
+            http_method: reqwest::Method::GET,
             url: self
                 .config
-                .build_url("/open-apis/payroll/v4/paygroups/{paygroup_id}"),
+                .build_url("/open-apis/payroll/v4/paygroups/".to_string() + &paygroup_id.to_string()"),
             query_params: std::collections::HashMap::new(),
             path_params,
-            headers: std::collections::HashMap::new(),
-            body: None,
-            access_token_type: AccessTokenType::Tenant,
+            
+            body: Vec::new(),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -244,12 +244,12 @@ impl PaygroupService {
     ) -> SDKResult<BaseResponse<PaygroupResponse>> {
         let api_req = ApiRequest {
             method: Method::POST,
-            url: self.config.build_url("/open-apis/payroll/v4/paygroups"),
+             api_path: ("/open-apis/payroll/v4/paygroups".to_string()"),
             query_params: std::collections::HashMap::new(),
             path_params: std::collections::HashMap::new(),
-            headers: std::collections::HashMap::new(),
+            
             body: Some(serde_json::to_value(request)?),
-            access_token_type: AccessTokenType::Tenant,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -311,12 +311,12 @@ impl PaygroupService {
             method: Method::PUT,
             url: self
                 .config
-                .build_url("/open-apis/payroll/v4/paygroups/{paygroup_id}"),
+                .build_url("/open-apis/payroll/v4/paygroups/".to_string() + &paygroup_id.to_string()"),
             query_params: std::collections::HashMap::new(),
             path_params,
-            headers: std::collections::HashMap::new(),
+            
             body: Some(serde_json::to_value(request)?),
-            access_token_type: AccessTokenType::Tenant,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -359,12 +359,12 @@ impl PaygroupService {
             method: Method::DELETE,
             url: self
                 .config
-                .build_url("/open-apis/payroll/v4/paygroups/{paygroup_id}"),
+                .build_url("/open-apis/payroll/v4/paygroups/".to_string() + &paygroup_id.to_string()"),
             query_params: std::collections::HashMap::new(),
             path_params,
-            headers: std::collections::HashMap::new(),
-            body: None,
-            access_token_type: AccessTokenType::Tenant,
+            
+            body: Vec::new(),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -407,12 +407,12 @@ impl PaygroupService {
             method: Method::POST,
             url: self
                 .config
-                .build_url("/open-apis/payroll/v4/paygroups/{paygroup_id}/activate"),
+                .build_url("/open-apis/payroll/v4/paygroups/".to_string() + &paygroup_id.to_string()/activate"),
             query_params: std::collections::HashMap::new(),
             path_params,
-            headers: std::collections::HashMap::new(),
+            
             body: Some(serde_json::Value::Object(serde_json::Map::new())),
-            access_token_type: AccessTokenType::Tenant,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -455,12 +455,12 @@ impl PaygroupService {
             method: Method::POST,
             url: self
                 .config
-                .build_url("/open-apis/payroll/v4/paygroups/{paygroup_id}/deactivate"),
+                .build_url(&format!("/open-apis/payroll/v4/paygroups/{}/deactivate", paygroup_id)),
             query_params: std::collections::HashMap::new(),
             path_params,
-            headers: std::collections::HashMap::new(),
+            
             body: Some(serde_json::Value::Object(serde_json::Map::new())),
-            access_token_type: AccessTokenType::Tenant,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
         };
 
         let response = Transport::request(api_req, &self.config).await?;

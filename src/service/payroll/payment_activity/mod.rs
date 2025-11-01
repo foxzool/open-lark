@@ -117,15 +117,14 @@ impl PaymentActivityService {
         }
 
         let api_req = ApiRequest {
-            method: Method::GET,
-            url: self
+            http_method: Method::GET,
+            api_path: self
                 .config
                 .build_url("/open-apis/payroll/v4/payment_activities"),
             query_params,
             path_params: std::collections::HashMap::new(),
-            headers: std::collections::HashMap::new(),
             body: None,
-            access_token_type: AccessTokenType::Tenant,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -166,15 +165,14 @@ impl PaymentActivityService {
         );
 
         let api_req = ApiRequest {
-            method: Method::GET,
-            url: self
+            http_method: Method::GET,
+            api_path: self
                 .config
                 .build_url("/open-apis/payroll/v4/payment_activities/{payment_activity_id}"),
             query_params: std::collections::HashMap::new(),
             path_params,
-            headers: std::collections::HashMap::new(),
             body: None,
-            access_token_type: AccessTokenType::Tenant,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -230,15 +228,14 @@ impl PaymentActivityService {
         }
 
         let api_req = ApiRequest {
-            method: Method::POST,
-            url: self.config.build_url(
+            http_method: Method::POST,
+            api_path: self.config.build_url(
                 "/open-apis/payroll/v4/payment_activities/{payment_activity_id}/archive",
             ),
             query_params: std::collections::HashMap::new(),
             path_params,
-            headers: std::collections::HashMap::new(),
             body: Some(serde_json::Value::Object(body_data)),
-            access_token_type: AccessTokenType::Tenant,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -281,15 +278,14 @@ impl PaymentActivityService {
         );
 
         let api_req = ApiRequest {
-            method: Method::POST,
-            url: self
+            http_method: Method::POST,
+            api_path: self
                 .config
                 .build_url("/open-apis/payroll/v4/payment_activities/{payment_activity_id}/cancel"),
             query_params: std::collections::HashMap::new(),
             path_params,
-            headers: std::collections::HashMap::new(),
             body: Some(serde_json::Value::Object(serde_json::Map::new())),
-            access_token_type: AccessTokenType::Tenant,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
         };
 
         let response = Transport::request(api_req, &self.config).await?;

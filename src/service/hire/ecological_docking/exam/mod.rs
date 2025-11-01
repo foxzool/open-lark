@@ -262,7 +262,7 @@ impl ExamService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExamPaperListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: HIRE_V1_EXAM_PAPERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -336,7 +336,7 @@ if let Some(enabled) = request.enabled {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExamOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: HIRE_V1_EXAM_ARRANGEMENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -378,7 +378,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExamRecordDetailResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 HIRE_V1_EXAM_RECORD_GET,
                 "record_id",
@@ -442,7 +442,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExamRecordListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: HIRE_V1_EXAM_RECORDS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -508,7 +508,7 @@ if let Some(start_time_to) = request.start_time_to {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExamOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: HIRE_V1_EXAM_SUBMISSIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -547,7 +547,7 @@ let api_req = ApiRequest {,
             reason: reason.to_string(),
         };
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 HIRE_V1_EXAM_RECORD_CANCEL,
                 "record_id",
@@ -600,7 +600,7 @@ pub async fn reschedule_exam(,
             new_end_time: new_end_time.to_string(),
         };
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 HIRE_V1_EXAM_RECORD_RESCHEDULE,
                 "record_id",
@@ -645,7 +645,7 @@ pub async fn get_exam_statistics(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<serde_json::Value>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: HIRE_V1_EXAM_STATISTICS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]

@@ -311,7 +311,7 @@ impl OfferService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OfferOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: HIRE_V1_OFFERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -353,7 +353,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OfferDetailResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(HIRE_V1_OFFER_GET, "offer_id", offer_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -413,7 +413,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OfferListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: HIRE_V1_OFFERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -484,7 +484,7 @@ if let Some(created_end_time) = request.created_end_time {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OfferOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(HIRE_V1_OFFER_GET, "offer_id", offer_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -520,20 +520,20 @@ let api_req = ApiRequest {,
 pub async fn send_offer(,
         &self,
         offer_id: &str,
-        send_method: &str,
+        send_http_method: &str,
         message: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OfferOperationResponse>> {,
 #[derive(Debug, Clone)]
         struct SendOfferRequest {
-            send_method: String,
+            send_http_method: String,
             message: Option<String>,
         let request = SendOfferRequest {,
-            send_method: send_method.to_string(),
+            send_http_method: send_method.to_string(),
             message,
         };
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(HIRE_V1_OFFER_SEND, "offer_id", offer_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -572,7 +572,7 @@ let api_req = ApiRequest {,
             reason: reason.to_string(),
         };
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(HIRE_V1_OFFER_WITHDRAW, "offer_id", offer_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -614,7 +614,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OfferOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: HIRE_V1_ONBOARDINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -654,7 +654,7 @@ pub async fn list_onboardings(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OnboardingListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: HIRE_V1_ONBOARDINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -715,7 +715,7 @@ pub async fn update_onboarding_progress(,
             remark: Option<String>,
         let request = UpdateProgressRequest { completed, remark };
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: {,
 let path = EndpointBuilder::replace_param(,
                     HIRE_V1_ONBOARDING_PROGRESS,

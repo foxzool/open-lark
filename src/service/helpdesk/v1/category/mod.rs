@@ -84,7 +84,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: HELPDESK_V1_CATEGORIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
@@ -103,7 +103,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 HELPDESK_V1_CATEGORY_GET,
                 "category_id",
@@ -126,7 +126,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_method: Method::PATCH,
+            http_http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
                 HELPDESK_V1_CATEGORY_GET,
                 "category_id",
@@ -149,7 +149,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_method: Method::DELETE,
+            http_http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
                 HELPDESK_V1_CATEGORY_GET,
                 "category_id",
@@ -179,7 +179,7 @@ if let Some(page_token) = page_token {,
 if let Some(page_size) = page_size {,
             query_params.insert("page_size", page_size.to_string());
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: HELPDESK_V1_CATEGORIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,

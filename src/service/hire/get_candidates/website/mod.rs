@@ -64,7 +64,7 @@ pub struct WebsiteApplication {
     /// 候选人电话
     pub candidate_phone: Option<String>,
     /// 简历附件URL
-    pub resume_url: Option<String>,
+    pub resume_api_path: Option<String>,
     /// 投递状态
     pub status: String,
     /// 投递时间
@@ -92,7 +92,7 @@ pub struct WebsiteConfiguration {
     /// 网站描述
     pub site_description: Option<I18nText>,
     /// 网站Logo URL
-    pub logo_url: Option<String>,
+    pub logo_api_path: Option<String>,
     /// 联系邮箱
     pub contact_email: Option<String>,
     /// 联系电话
@@ -221,7 +221,7 @@ impl WebsiteService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<WebsiteJobListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: HIRE_V1_WEBSITE_JOBS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -287,7 +287,7 @@ if let Some(location) = location {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<WebsiteOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: HIRE_V1_WEBSITE_JOBS_PUBLISH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -316,7 +316,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<WebsiteOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 HIRE_V1_WEBSITE_JOB_UNPUBLISH,
                 "job_id",
@@ -381,7 +381,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<WebsiteApplicationListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: HIRE_V1_WEBSITE_APPLICATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -448,7 +448,7 @@ if let Some(apply_end_time) = request.apply_end_time {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<WebsiteConfigurationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: HIRE_V1_WEBSITE_CONFIGURATION.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -500,7 +500,7 @@ let api_req = ApiRequest {,
     ///             ja_jp: None
     ///         })
     ///         description: None
-    ///         favicon_url: None
+    ///         favicon_api_path: None
     ///     })
     ///     ..Default::default()
     /// };
@@ -513,7 +513,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<WebsiteOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: HIRE_V1_WEBSITE_CONFIGURATION.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -542,7 +542,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<WebsiteOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 HIRE_V1_WEBSITE_APPLICATION_CONVERT,
                 "website_application_id",
@@ -587,7 +587,7 @@ pub async fn get_website_job_statistics(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<serde_json::Value>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: HIRE_V1_WEBSITE_STATISTICS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]

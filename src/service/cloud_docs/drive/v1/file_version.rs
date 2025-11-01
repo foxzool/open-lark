@@ -35,7 +35,7 @@ impl FileVersionService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateVersionRespData>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: DRIVE_V1_FILE_VERSIONS.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             ..Default::default()
@@ -60,7 +60,7 @@ Ok(api_resp),
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<DeleteVersionRespData>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::DELETE,
+            http_http_method: Method::DELETE,
             api_path: DRIVE_V1_FILE_VERSION_GET
                 .replace("{}", &request.file_token)
                 .replace()
@@ -85,7 +85,7 @@ Ok(api_resp),
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetVersionRespData>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: DRIVE_V1_FILE_VERSION_GET
                 .replace("{}", &request.file_token)
                 .replace()
@@ -110,7 +110,7 @@ Ok(api_resp),
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListVersionsRespData>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: DRIVE_V1_FILE_VERSIONS.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             ..Default::default()

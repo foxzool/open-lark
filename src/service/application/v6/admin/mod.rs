@@ -39,7 +39,7 @@ if let Some(page_size) = page_size {,
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token);
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: crate::core::endpoints::application::APPLICATION_V6_ADMIN_APPS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
@@ -66,7 +66,7 @@ if let Some(page_size) = page_size {,
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token);
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::application::APPLICATION_V6_ADMIN_USER_AVAILABLE_APPS,
                 "user_id",
@@ -94,7 +94,7 @@ query_params.insert(,
 if let Some(user_id_type) = user_id_type {,
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::application::APPLICATION_V6_ADMIN_APP_CONTACTS_RANGE_CONFIGURATION_GET,
                 "app_id",
@@ -123,7 +123,7 @@ query_params.insert(,
 if let Some(user_id_type) = user_id_type {,
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_method: Method::PATCH,
+            http_http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::application::APPLICATION_V6_ADMIN_APP_CONTACTS_RANGE_CONFIGURATION_SET,
                 "app_id",
@@ -152,7 +152,7 @@ if let Some(department_id_type) = department_id_type {,
                 department_id_type.as_str().to_string(),
             );
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::application::APPLICATION_V6_ADMIN_APP_VISIBILITY,
                 "app_id",
@@ -181,7 +181,7 @@ if let Some(department_id_type) = department_id_type {,
                 department_id_type.as_str().to_string(),
             );
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::application::APPLICATION_V6_ADMIN_APP_CHECK_WHITE_BLACK_LIST,
                 "app_id",
@@ -211,7 +211,7 @@ if let Some(department_id_type) = department_id_type {,
                 department_id_type.as_str().to_string(),
             );
 let api_req = ApiRequest {,
-            http_method: Method::PATCH,
+            http_http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::application::APPLICATION_V6_ADMIN_APP_VISIBILITY_CREATE,
                 "app_id",
@@ -231,7 +231,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<EmptyResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::PATCH,
+            http_http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::application::APPLICATION_V6_ADMIN_APP_ENABLE,
                 "app_id",
@@ -259,7 +259,7 @@ if let Some(page_size) = page_size {,
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token);
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::application::APPLICATION_V6_ADMIN_APP_ADMINS,
                 "app_id",
@@ -288,7 +288,7 @@ if let Some(department_id_type) = department_id_type {,
                 department_id_type.as_str().to_string(),
             );
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
                 crate::core::endpoints::application::APPLICATION_V6_ADMIN_APP_ADMIN_MANAGEMENT_PERMISSIONS,
                 &[("app_id", app_id), ("user_id", user_id)]
@@ -310,7 +310,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
                 crate::core::endpoints::application::APPLICATION_V6_ADMIN_APP_ADMIN_VERIFY,
                 &[("app_id", app_id), ("user_id", user_id)]

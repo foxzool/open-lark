@@ -35,7 +35,7 @@ impl EventService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SubscribeFileEventsRespData>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: DRIVE_V1_FILES_SUBSCRIBE.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             body: serde_json::to_vec(&request)?,
@@ -57,7 +57,7 @@ Ok(api_resp),
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetFileSubscriptionRespData>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: DRIVE_V1_FILE_SUBSCRIPTIONS
                 .replace("{}", &request.file_token)
                 .replace()
@@ -82,7 +82,7 @@ Ok(api_resp),
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UnsubscribeFileEventsRespData>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::DELETE,
+            http_http_method: Method::DELETE,
             api_path: DRIVE_V1_FILE_SUBSCRIPTIONS
                 .replace("{}", &request.file_token)
                 .replace()

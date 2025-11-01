@@ -726,9 +726,9 @@ pub struct GetAppRoiAnalysisRequest {
     /// 分析周期
     pub period: String,
     /// 成本计算方式
-    pub cost_calculation_method: Option<String>,
+    pub cost_calculation_http_method: Option<String>,
     /// 收益计算方式
-    pub benefit_calculation_method: Option<String>,
+    pub benefit_calculation_http_method: Option<String>,
 }
 
 // ==================== 响应数据模型 ====================
@@ -1333,8 +1333,8 @@ impl Default for GetAppRoiAnalysisRequest {
         Self {
             app_id: String::new(),
             period: "last_12_months".to_string(),
-            cost_calculation_method: Some("full_cost".to_string()),
-            benefit_calculation_method: Some("productivity_based".to_string()),
+            cost_calculation_http_method: Some("full_cost".to_string()),
+            benefit_calculation_http_method: Some("productivity_based".to_string()),
         }
     }
 }

@@ -94,7 +94,7 @@ impl OkrContentService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UserOkrListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: OKR_V1_OKRS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
@@ -132,7 +132,7 @@ pub async fn batch_get_okrs(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BatchOkrResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: OKR_V1_OKRS_BATCH_GET.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,

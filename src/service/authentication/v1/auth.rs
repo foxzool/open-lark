@@ -285,7 +285,7 @@ impl AppAccessTokenService {
         request: &GetAppAccessTokenRequest,
     ) -> SDKResult<BaseResponse<AppAccessTokenResponse>> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: AUTH_V3_APP_ACCESS_TOKEN.to_string(),
             supported_access_token_types: vec![],
             body: serde_json::to_vec(request)?,
@@ -339,7 +339,7 @@ impl AppAccessTokenService {
         request: &GetAppAccessTokenInternalRequest,
     ) -> SDKResult<BaseResponse<AppAccessTokenResponse>> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: AUTH_V3_APP_ACCESS_TOKEN_INTERNAL.to_string(),
             supported_access_token_types: vec![],
             body: serde_json::to_vec(request)?,
@@ -440,7 +440,7 @@ impl TenantAccessTokenService {
         request: &GetTenantAccessTokenRequest,
     ) -> SDKResult<BaseResponse<TenantAccessTokenResponse>> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: AUTH_V3_TENANT_ACCESS_TOKEN.to_string(),
             supported_access_token_types: vec![],
             body: serde_json::to_vec(request)?,
@@ -495,7 +495,7 @@ impl TenantAccessTokenService {
         request: &GetTenantAccessTokenInternalRequest,
     ) -> SDKResult<BaseResponse<TenantAccessTokenResponse>> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: AUTH_V3_TENANT_ACCESS_TOKEN_INTERNAL.to_string(),
             supported_access_token_types: vec![],
             body: serde_json::to_vec(request)?,
@@ -597,7 +597,7 @@ impl AppTicketService {
         request: &ResendAppTicketRequest,
     ) -> SDKResult<BaseResponse<ResendAppTicketResponse>> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: AUTH_V3_APP_TICKET_RESEND.to_string(),
             supported_access_token_types: vec![],
             body: serde_json::to_vec(request)?,
@@ -933,7 +933,7 @@ pub struct UserInfo {
 //    pub en_name: String,
 
 //    /// 用户头像URL
-//    pub avatar_url: String,
+//    pub avatar_api_path: String,
 
 //    /// 用户头像 72x72
 //    pub avatar_thumb: String,

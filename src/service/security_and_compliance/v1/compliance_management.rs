@@ -87,7 +87,7 @@ impl ComplianceManagementService {
     ) -> SDKResult<BaseResponse<GetComplianceOverviewResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/security_and_compliance/v1/compliance_management/get_overview"
                 .to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],

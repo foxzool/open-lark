@@ -34,7 +34,7 @@ impl FileService {
         option: Option<RequestOption>,
     ) -> SDKResult<GetFileMetaRespData> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: DRIVE_V1_METAS_BATCH_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             body: serde_json::to_vec(&request)?,
@@ -52,7 +52,7 @@ api_resp.into_result(),
         option: Option<RequestOption>,
     ) -> SDKResult<GetFileStatisticsRespData> {,
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: DRIVE_V1_FILE_STATISTICS.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             ..Default::default()
@@ -70,7 +70,7 @@ api_resp.into_result(),
         option: Option<RequestOption>,
     ) -> SDKResult<ListFileViewRecordsRespData> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: DRIVE_V1_FILE_VIEW_RECORDS.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             ..Default::default()
@@ -95,7 +95,7 @@ api_resp.into_result(),
         option: Option<RequestOption>,
     ) -> SDKResult<CreateFileRespData> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: DRIVE_V1_FILES.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             body: serde_json::to_vec(&request)?,
@@ -118,7 +118,7 @@ api_resp.into_result(),
             "type": request.copy_type,
             "parent_token": request.parent_token});
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: DRIVE_V1_FILE_COPY.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             body: serde_json::to_vec(&body)?,
@@ -137,7 +137,7 @@ api_resp.into_result(),
         option: Option<RequestOption>,
     ) -> SDKResult<DeleteFileRespData> {,
 let api_req = ApiRequest {,
-            http_method: Method::DELETE,
+            http_http_method: Method::DELETE,
             api_path: DRIVE_V1_FILE_GET.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             ..Default::default()
@@ -187,7 +187,7 @@ api_resp.into_result(),
         option: Option<RequestOption>,
     ) -> SDKResult<CreateFileShortcutRespData> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: DRIVE_V1_FILES_CREATE_SHORTCUT.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             body: serde_json::to_vec(&request)?,
@@ -205,7 +205,7 @@ api_resp.into_result(),
         option: Option<RequestOption>,
     ) -> SDKResult<SearchFilesRespData> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: DRIVE_V1_FILES_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             ..Default::default()};
@@ -238,7 +238,7 @@ api_resp.into_result(),
         option: Option<RequestOption>,
     ) -> SDKResult<FileUploadPrepareRespData> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: DRIVE_V1_FILES_UPLOAD_PREPARE.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             body: serde_json::to_vec(&request)?,
@@ -280,7 +280,7 @@ api_resp.into_result()}
         option: Option<RequestOption>,
     ) -> SDKResult<FileUploadFinishRespData> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: DRIVE_V1_FILES_UPLOAD_FINISH.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             body: serde_json::to_vec(&request)?,
@@ -302,7 +302,7 @@ api_resp.into_result(),
         option: Option<RequestOption>,
     ) -> SDKResult<CreateImportTaskRespData> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: DRIVE_V1_IMPORT_TASKS.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             body: serde_json::to_vec(&request)?,
@@ -324,7 +324,7 @@ api_resp.into_result(),
         option: Option<RequestOption>,
     ) -> SDKResult<GetImportTaskRespData> {,
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: DRIVE_V1_IMPORT_TASK_GET.replace("{}", &request.ticket),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             ..Default::default()
@@ -340,7 +340,7 @@ pub struct GetFileMetaRequest {
     /// 文件token列表
     pub request_docs: Vec<RequestDoc>,
     /// 是否获取额外信息
-    pub with_url: Option<bool>}
+    pub with_api_path: Option<bool>}
 
 #[derive(Debug, Clone)]
 pub struct RequestDoc {
@@ -372,7 +372,7 @@ pub struct FileMeta {
     /// 更新时间
     pub update_time: String,
     /// 文件URL
-    pub url: Option<String>}
+    pub api_path: Option<String>}
 impl ApiResponseTrait for.* {
     pub fn new(config: Config) -> Self {
         Self { config }
@@ -471,7 +471,7 @@ pub struct CreateFileRespData {
     /// 新建文件的token
     pub token: String,
     /// 新建文件的链接
-    pub url: String,
+    pub api_path: String,
 impl ApiResponseTrait for.* {
     pub fn new(config: Config) -> Self {
         Self { config }
@@ -499,7 +499,7 @@ pub struct CopyFileRespData {
     /// 复制后文件的token
     pub token: String,
     /// 复制后文件的链接
-    pub url: String,
+    pub api_path: String,
 impl ApiResponseTrait for.* {
     pub fn new(config: Config) -> Self {
         Self { config }
@@ -551,7 +551,7 @@ pub struct CreateFileShortcutRespData {
     /// 快捷方式token
     pub token: String,
     /// 快捷方式链接
-    pub url: String,
+    pub api_path: String,
 impl ApiResponseTrait for.* {
     pub fn new(config: Config) -> Self {
         Self { config }
@@ -600,7 +600,7 @@ pub struct SearchFileItem {
 #[serde(rename = "type")]
     pub file_type: String,
     /// 文件链接
-    pub url: String,
+    pub api_path: String,
     /// 拥有者ID
     pub owner_id: String,
 impl ApiResponseTrait for.* {
@@ -784,7 +784,7 @@ pub struct ImportTaskResult {
     /// 导入结果
     pub token: Option<String>,
     /// 导入结果类型
-    pub url: Option<String>}
+    pub api_path: Option<String>}
 impl ApiResponseTrait for.* {
     pub fn new(config: Config) -> Self {
         Self { config }
@@ -1078,7 +1078,7 @@ let request2 = GetImportTaskRequest::new("another_ticket".to_string());
     #[case(GetFileMetaRespData { metas: vec![] })]
     #[case(GetFileStatisticsRespData { uv: 0, pv: 0, like_count: 0, comment_count: 0 })]
     #[case(ListFileViewRecordsRespData { has_more: false, page_token: None, items: vec![] })]
-    #[case(CreateFileRespData { token: "test".to_string(), url: "http://test.com".to_string() })]
+    #[case(CreateFileRespData { token: "test".to_string(), api_path: "http://test.com".to_string() })]
 fn test_response_data_serialization<T>(#[case] data: T),
     where
         T: serde::Serialize + for<'de> serde::Deserialize<'de> + PartialEq + std::fmt::Debug,
@@ -1095,7 +1095,7 @@ let file_meta = FileMeta {,
             owner_id: "owner123".to_string(),
             create_time: "2023-01-01T00:00:00Z".to_string(),
             update_time: "2023-01-02T00:00:00Z".to_string(),
-            url: Some("https://example.com/doc".to_string())};
+            api_path: Some("https://example.com/doc".to_string())};
 let json = serde_json::to_string(&file_meta).unwrap();
         let deserialized: FileMeta = serde_json::from_str(&json).unwrap();
 
@@ -1108,7 +1108,7 @@ let item = SearchFileItem {,
             token: "file_token".to_string(),
             name: "Important File".to_string(),
             file_type: "doc".to_string(),
-            url: "https://example.com/file".to_string(),
+            api_path: "https://example.com/file".to_string(),
             owner_id: "user123".to_string()};
 let json = serde_json::to_string(&item).unwrap();
         assert!(json.contains("\"type\":\"doc\""));
@@ -1123,7 +1123,7 @@ let result = ImportTaskResult {,
             job_status: 1,
             job_error_msg: Some("Error occurred".to_string()),
             token: Some("result_token".to_string()),
-            url: Some("https://result.com".to_string())};
+            api_path: Some("https://result.com".to_string())};
 let json = serde_json::to_string(&result).unwrap();
         assert!(json.contains("\"type\":\"import\""));
 let deserialized: ImportTaskResult = serde_json::from_str(&json).unwrap();

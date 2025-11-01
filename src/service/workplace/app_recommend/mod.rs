@@ -43,7 +43,7 @@ pub async fn get_favourite_apps(,
         option: Option<RequestOption>,
     ) -> SDKResult<FavouriteAppsResponse> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: WORKPLACE_APP_RECOMMEND_FAVOURITE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
@@ -80,7 +80,7 @@ pub async fn get_recommended_apps(,
         option: Option<RequestOption>,
     ) -> SDKResult<RecommendedAppsResponse> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: WORKPLACE_APP_RECOMMEND_RECOMMEND.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
@@ -121,7 +121,7 @@ pub async fn list_recommend_rules(,
         option: Option<RequestOption>,
     ) -> SDKResult<RecommendRulesListResponse> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: WORKPLACE_APP_RECOMMEND_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]

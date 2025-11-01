@@ -140,7 +140,7 @@ pub struct Employee {
     /// 社保公积金信息
     pub social_insurance: Option<SocialInsurance>,
     /// 头像URL
-    pub avatar_url: Option<String>,
+    pub avatar_api_path: Option<String>,
     /// 所属部门ID
     pub department_id: Option<String>,
     /// 职位ID
@@ -321,7 +321,7 @@ pub struct Allowance {
     /// 金额
     pub amount: f64,
     /// 计算方式
-    pub calculation_method: Option<String>,
+    pub calculation_http_method: Option<String>,
 }
 
 /// 扣款项
@@ -334,7 +334,7 @@ pub struct Deduction {
     /// 金额
     pub amount: f64,
     /// 计算方式
-    pub calculation_method: Option<String>,
+    pub calculation_http_method: Option<String>,
 }
 
 /// 薪资调整记录

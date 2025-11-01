@@ -74,7 +74,7 @@ pub struct EndedVcMeeting {
     pub settings: Option<MeetingSettings>,
     /// 会议链接,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub meeting_url: Option<String>,
+    pub meeting_api_path: Option<String>,
     /// 会议室信息,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub meeting_room: Option<MeetingRoom>,
@@ -220,7 +220,7 @@ pub struct RecordingFile {
     pub quality: Option<String>,
     /// 文件URL,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub download_url: Option<String>,
+    pub download_api_path: Option<String>,
 /// 会议结束原因,
 #[derive(Debug, Clone)]
 pub struct MeetingEndReason {
@@ -270,4 +270,4 @@ pub struct MeetingCost {
     pub currency: Option<String>,
     /// 计费方式 (per_minute, per_participant, flat_rate),
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub billing_method: Option<String>,
+    pub billing_http_method: Option<String>,

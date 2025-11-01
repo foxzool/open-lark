@@ -109,15 +109,14 @@ impl PaymentDetailService {
         }
 
         let api_req = ApiRequest {
-            method: Method::GET,
-            url: self
+            http_method: Method::GET,
+            api_path: self
                 .config
                 .build_url("/open-apis/payroll/v4/payment_details"),
             query_params,
             path_params: std::collections::HashMap::new(),
-            headers: std::collections::HashMap::new(),
             body: None,
-            access_token_type: AccessTokenType::Tenant,
+            supported_access_token_types: vec![AccessTokenType::Tenant,
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -173,15 +172,14 @@ impl PaymentDetailService {
         }
 
         let api_req = ApiRequest {
-            method: Method::GET,
-            url: self
+            http_method: Method::GET,
+            api_path: self
                 .config
                 .build_url("/open-apis/payroll/v4/payment_details/query"),
             query_params,
             path_params: std::collections::HashMap::new(),
-            headers: std::collections::HashMap::new(),
             body: None,
-            access_token_type: AccessTokenType::Tenant,
+            supported_access_token_types: vec![AccessTokenType::Tenant,
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -232,15 +230,14 @@ impl PaymentDetailService {
         }
 
         let api_req = ApiRequest {
-            method: Method::GET,
-            url: self
+            http_method: Method::GET,
+            api_path: self
                 .config
                 .build_url("/open-apis/payroll/v4/payment_details/detail"),
             query_params,
             path_params: std::collections::HashMap::new(),
-            headers: std::collections::HashMap::new(),
             body: None,
-            access_token_type: AccessTokenType::Tenant,
+            supported_access_token_types: vec![AccessTokenType::Tenant,
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -303,15 +300,14 @@ impl PaymentDetailService {
         }
 
         let api_req = ApiRequest {
-            method: Method::POST,
-            url: self
+            http_method: Method::POST,
+            api_path: self
                 .config
                 .build_url("/open-apis/payroll/v4/payment_details/export"),
             query_params,
             path_params: std::collections::HashMap::new(),
-            headers: std::collections::HashMap::new(),
             body: Some(serde_json::Value::Object(serde_json::Map::new())),
-            access_token_type: AccessTokenType::Tenant,
+            supported_access_token_types: vec![AccessTokenType::Tenant,
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -323,7 +319,7 @@ impl PaymentDetailService {
 #[derive(Debug, Clone)]
 pub struct ExportResponse {
     /// 下载链接
-    pub download_url: String,
+    pub download_api_path: String,
     /// 文件名
     pub filename: String,
     /// 文件大小（字节）

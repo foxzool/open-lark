@@ -148,4 +148,4 @@ pub struct EventReminder {
     pub minutes: i32,
     /// 提醒方式 (popup, email),
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub method: Option<String>,
+    pub http_method: Option<String>,

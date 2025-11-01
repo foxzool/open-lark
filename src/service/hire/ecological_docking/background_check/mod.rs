@@ -74,7 +74,7 @@ pub struct BackgroundCheckOrder {
     /// 背调结果
     pub result: Option<String>,
     /// 背调报告URL
-    pub report_url: Option<String>,
+    pub report_api_path: Option<String>,
     /// 订单金额
     pub amount: Option<String>,
     /// 币种
@@ -249,7 +249,7 @@ impl BackgroundCheckService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BackgroundCheckPackageListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: HIRE_V1_BACKGROUND_CHECK_PACKAGES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -337,7 +337,7 @@ if let Some(enabled) = request.enabled {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BackgroundCheckOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: HIRE_V1_BACKGROUND_CHECK_ORDERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -379,7 +379,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BackgroundCheckOrderDetailResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 HIRE_V1_BACKGROUND_CHECK_ORDER_GET,
                 "order_id",
@@ -441,7 +441,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BackgroundCheckOrderListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: HIRE_V1_BACKGROUND_CHECK_ORDERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -499,7 +499,7 @@ if let Some(created_end_time) = request.created_end_time {,
             reason: reason.to_string(),
         };
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 HIRE_V1_BACKGROUND_CHECK_ORDER_CANCEL,
                 "order_id",
@@ -532,7 +532,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<serde_json::Value>> {,
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 HIRE_V1_BACKGROUND_CHECK_ORDER_REPORT,
                 "order_id",
@@ -581,7 +581,7 @@ let api_req = ApiRequest {,
         }
         let request = BatchCreateRequest { orders };
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: HIRE_V1_BACKGROUND_CHECK_ORDERS_BATCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()

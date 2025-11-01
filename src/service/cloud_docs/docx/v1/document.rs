@@ -35,7 +35,7 @@ impl DocumentService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateDocumentRespData>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: DOCX_V1_DOCUMENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             body: serde_json::to_vec(&request)?,
@@ -57,7 +57,7 @@ Ok(api_resp),
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetDocumentRespData>> {,
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: DOCX_V1_DOCUMENT_GET.replace("{}", &document_id.into()),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             ..Default::default()
@@ -79,7 +79,7 @@ Ok(api_resp),
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetRawContentRespData>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: DOCX_V1_DOCUMENT_RAW_CONTENT.replace("{}", &document_id.into()),
             ..Default::default()
 };
@@ -102,7 +102,7 @@ Ok(api_resp),
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListDocumentBlocksRespData>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: DOCX_V1_DOCUMENT_BLOCKS.replace()
             ..Default::default()};
 api_req
@@ -131,7 +131,7 @@ Ok(api_resp),
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ConvertToDocxRespData>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: DOCX_V1_DOCUMENT_CONVERT.replace("{}", &document_id.into()),
             ..Default::default()
 };

@@ -101,7 +101,7 @@ impl PeriodService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<PeriodCreateResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: Endpoints::OKR_V1_PERIODS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
@@ -128,7 +128,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<PeriodStatusUpdateResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::PATCH,
+            http_http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
                 Endpoints::OKR_V1_PERIOD_GET,
                 "period_id",
@@ -157,7 +157,7 @@ pub async fn list_periods(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<PeriodListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: Endpoints::OKR_V1_PERIODS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]

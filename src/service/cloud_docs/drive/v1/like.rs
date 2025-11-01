@@ -35,7 +35,7 @@ impl LikeService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListFileLikesRespData>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: DRIVE_V1_FILE_LIKE_RECORDS.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             ..Default::default()
@@ -106,7 +106,7 @@ pub struct FileLikeRecord {
     /// 点赞时间（时间戳，单位：秒）
     pub like_time: String,
     /// 点赞者头像
-    pub avatar_url: Option<String>}
+    pub avatar_api_path: Option<String>}
 impl ApiResponseTrait for.* {
     pub fn new(config: Config) -> Self {
         Self { config }

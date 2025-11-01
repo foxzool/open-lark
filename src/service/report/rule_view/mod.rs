@@ -34,7 +34,7 @@ pub async fn remove(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<RuleViewRemoveResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::DELETE,
+            http_http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
                 Endpoints::REPORT_V1_RULE_VIEWS_OPERATION,
                 "view_id",

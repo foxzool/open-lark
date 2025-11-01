@@ -79,7 +79,7 @@ impl DataItemService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateDataItemResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::search::SEARCH_V2_DATA_ITEM_CREATE,
                 "data_source_id",
@@ -110,7 +110,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BatchCreateDataItemResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::search::SEARCH_V2_DATA_ITEM_BATCH_CREATE,
                 "data_source_id",
@@ -137,7 +137,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<EmptyDataItemResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::DELETE,
+            http_http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_params_from_array(
                 crate::core::endpoints::search::SEARCH_V2_DATA_ITEM_OPERATION,
                 &[
@@ -165,7 +165,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetDataItemResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
                 crate::core::endpoints::search::SEARCH_V2_DATA_ITEM_OPERATION,
                 &[

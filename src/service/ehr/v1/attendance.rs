@@ -187,7 +187,7 @@ impl AttendanceService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
+            http_http_method: reqwest::Method::GET,
             api_path: "/open-apis/ehr/v1/attendance/records".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -240,7 +240,7 @@ impl AttendanceService {
     ) -> SDKResult<BaseResponse<BatchGetAttendanceRecordsResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/ehr/v1/attendance/records/batch_get".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -303,7 +303,7 @@ impl AttendanceService {
     ) -> SDKResult<BaseResponse<CreateCheckinRecordResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/ehr/v1/attendance/checkins".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -360,7 +360,7 @@ impl AttendanceService {
     ) -> SDKResult<BaseResponse<UpdateCheckinRecordResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::PUT,
+            http_http_method: reqwest::Method::PUT,
             api_path: format!("/open-apis/ehr/v1/attendance/checkins/{}", record_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -405,7 +405,7 @@ impl AttendanceService {
     ) -> SDKResult<BaseResponse<DeleteCheckinRecordResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::DELETE,
+            http_http_method: reqwest::Method::DELETE,
             api_path: format!("/open-apis/ehr/v1/attendance/checkins/{}", record_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -473,7 +473,7 @@ impl AttendanceService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
+            http_http_method: reqwest::Method::GET,
             api_path: "/open-apis/ehr/v1/attendance/statistics".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -545,7 +545,7 @@ impl AttendanceService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
+            http_http_method: reqwest::Method::GET,
             api_path: "/open-apis/ehr/v1/attendance/exceptions".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -602,7 +602,7 @@ impl AttendanceService {
     ) -> SDKResult<BaseResponse<ProcessAttendanceExceptionResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/ehr/v1/attendance/exceptions/process".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -670,7 +670,7 @@ impl AttendanceService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
+            http_http_method: reqwest::Method::GET,
             api_path: "/open-apis/ehr/v1/attendance/reports".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -1953,7 +1953,7 @@ pub struct CheckinRecord {
     /// 设备信息
     pub device_info: Option<String>,
     /// 打卡照片
-    pub photo_url: Option<String>,
+    pub photo_api_path: Option<String>,
     /// 备注
     pub remarks: Option<String>,
     /// 创建时间
@@ -1991,7 +1991,7 @@ pub struct CheckinRecordCreateData {
     /// 设备信息
     pub device_info: Option<String>,
     /// 打卡照片
-    pub photo_url: Option<String>,
+    pub photo_api_path: Option<String>,
     /// 备注
     pub remarks: Option<String>,
 }
@@ -2006,7 +2006,7 @@ pub struct CheckinRecordUpdateData {
     /// 设备信息
     pub device_info: Option<String>,
     /// 打卡照片
-    pub photo_url: Option<String>,
+    pub photo_api_path: Option<String>,
     /// 备注
     pub remarks: Option<String>,
 }

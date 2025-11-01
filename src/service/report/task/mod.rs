@@ -36,7 +36,7 @@ pub async fn query(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TaskQueryResponse>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: REPORT_V1_TASKS_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]

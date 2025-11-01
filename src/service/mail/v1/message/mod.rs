@@ -107,7 +107,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 Endpoints::MAIL_V1_USER_MAILBOX_MESSAGES,
                 "user_mailbox_id",
@@ -146,7 +146,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(,
 &EndpointBuilder::replace_param(,
                     Endpoints::MAIL_V1_USER_MAILBOX_MESSAGE,
@@ -198,7 +198,7 @@ if let Some(page_token) = page_token {,
 if let Some(user_id_type) = user_id_type {,
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 Endpoints::MAIL_V1_USER_MAILBOX_MESSAGES,
                 "user_mailbox_id",
@@ -245,7 +245,7 @@ if let Some(page_token) = page_token {,
 if let Some(user_id_type) = user_id_type {,
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 Endpoints::MAIL_V1_USER_MAILBOX_MESSAGES_GET_BY_CARD,
                 "user_mailbox_id",

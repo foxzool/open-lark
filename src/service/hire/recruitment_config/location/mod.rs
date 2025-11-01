@@ -58,7 +58,7 @@ impl LocationService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<LocationListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: HIRE_V1_LOCATIONS_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -95,7 +95,7 @@ pub async fn list_locations(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<LocationListResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: HIRE_V1_LOCATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]

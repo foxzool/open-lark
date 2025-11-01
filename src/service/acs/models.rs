@@ -261,7 +261,7 @@ pub struct AccessRecord {
     pub access_type: Option<AccessType>,
     /// 访问方式,
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub access_method: Option<AccessMethod>,
+    pub access_http_method: Option<AccessMethod>,
     /// 访问结果
     pub result: AccessResult,
     /// 是否有人脸识别图片,
@@ -444,7 +444,7 @@ let record = AccessRecord {,
             device_id: "device_789".to_string(),
             device_name: Some("前台门禁".to_string()),
             access_type: Some(AccessType::Entry),
-            access_method: Some(AccessMethod::FaceRecognition),
+            access_http_method: Some(AccessMethod::FaceRecognition),
             result: AccessResult::Success,
             has_face_image: Some(true),
             access_time: 1672531200,

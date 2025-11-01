@@ -33,7 +33,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
                 crate::core::endpoints::application::APPLICATION_V6_APPSTORE_PAID_INFO_CHECK,
                 &[
@@ -61,7 +61,7 @@ let mut query_params = HashMap::new();
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token);
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::application::APPLICATION_V6_APPSTORE_PAID_INFO_PRICING_PLANS,
                 "app_id",
@@ -80,7 +80,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetOrderInfoResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
                 crate::core::endpoints::application::APPLICATION_V6_APPSTORE_PAID_INFO_ORDER_GET,
                 &[("app_id", app_id), ("order_id", order_id)]

@@ -37,7 +37,7 @@ pub async fn list_repos(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<RepoListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: LINGO_REPO_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]

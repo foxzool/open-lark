@@ -291,7 +291,7 @@ impl ReportService {
             generated_at: Some(chrono::Utc::now()),
             completed_at: Some(chrono::Utc::now()),
             file_size: Some(2048576),
-            download_url: Some(format!("https://company.com/reports/{}.xlsx", report_id)),
+            download_api_path: Some(format!("https://company.com/reports/{}.xlsx", report_id)),
             parameters: vec![
                 ReportParameter {
                     name: "period".to_string(),
@@ -356,7 +356,7 @@ impl ReportService {
             distribution_id: distribution_id.clone(),
             report_id: request.report_id.clone(),
             recipients: request.recipients.clone(),
-            method: request.method.clone(),
+            http_method: request.method.clone(),
             status: DistributionStatus::Sent,
             sent_at: Some(chrono::Utc::now()),
             failed_recipients: vec![],
@@ -677,7 +677,7 @@ pub struct DistributeReportRequest {
     /// 接收者列表
     pub recipients: Vec<String>,
     /// 分发方式
-    pub method: DistributionMethod,
+    pub http_method: DistributionMethod,
     /// 主题
     pub subject: Option<String>,
     /// 消息内容
@@ -803,7 +803,7 @@ pub struct GetReportResponse {
     /// 文件大小
     pub file_size: Option<i64>,
     /// 下载链接
-    pub download_url: Option<String>,
+    pub download_api_path: Option<String>,
     /// 报表参数
     pub parameters: Vec<ReportParameter>,
 }
@@ -829,7 +829,7 @@ pub struct ExportReportResponse {
     /// 导出格式
     pub format: String,
     /// 下载链接
-    pub download_url: String,
+    pub download_api_path: String,
     /// 文件大小
     pub file_size: Option<i64>,
     /// 过期时间
@@ -848,7 +848,7 @@ pub struct DistributeReportResponse {
     /// 接收者列表
     pub recipients: Vec<String>,
     /// 分发方式
-    pub method: DistributionMethod,
+    pub http_method: DistributionMethod,
     /// 分发状态
     pub status: DistributionStatus,
     /// 发送时间
@@ -1329,7 +1329,7 @@ impl Default for DistributeReportRequest {
         Self {
             report_id: String::new(),
             recipients: vec![],
-            method: DistributionMethod::Email,
+            http_method: DistributionMethod::Email,
             subject: None,
             message: None,
         }

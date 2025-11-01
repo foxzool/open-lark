@@ -120,7 +120,7 @@ impl OrganizationService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<DepartmentCreateResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: COREHR_DEPARTMENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -157,7 +157,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<DepartmentBatchGetResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: COREHR_DEPARTMENTS_BATCH_GET.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&serde_json::json!({,
@@ -203,7 +203,7 @@ pub async fn get_department_tree(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<DepartmentTreeResponse>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: COREHR_DEPARTMENTS_TREE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -258,7 +258,7 @@ let mut api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CompanyCreateResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: COREHR_COMPANIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -304,7 +304,7 @@ pub async fn list_companies(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CompanyListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: COREHR_COMPANIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]

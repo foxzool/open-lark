@@ -202,7 +202,7 @@ impl SheetsServiceV3 {
         request: CreateSpreadsheetRequest,
     ) -> SDKResult<BaseResponse<CreateSpreadsheetResponse>> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/sheets/v3/spreadsheets".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
@@ -256,7 +256,7 @@ impl SheetsServiceV3 {
         }
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
+            http_http_method: reqwest::Method::GET,
             api_path: format!(
                 "{}/open-apis/sheets/v3/spreadsheets/{}/meta",
                 self.config.base_url, request.spreadsheet_token
@@ -328,7 +328,7 @@ impl SheetsServiceV3 {
         }
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
+            http_http_method: reqwest::Method::GET,
             api_path: format!(
                 "{}/open-apis/sheets/v3/spreadsheets/{}/values",
                 self.config.base_url, request.spreadsheet_token
@@ -386,7 +386,7 @@ impl SheetsServiceV3 {
         request: WriteRangeRequest,
     ) -> SDKResult<BaseResponse<WriteRangeResponse>> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::PUT,
+            http_http_method: reqwest::Method::PUT,
             api_path: format!(
                 "{}/open-apis/sheets/v3/spreadsheets/{}/values",
                 self.config.base_url, request.spreadsheet_token
@@ -442,7 +442,7 @@ impl SheetsServiceV3 {
         request: CreateChartRequest,
     ) -> SDKResult<BaseResponse<CreateChartResponse>> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: format!(
                 "{}/open-apis/sheets/v3/spreadsheets/{}/charts",
                 self.config.base_url, request.spreadsheet_token
@@ -494,7 +494,7 @@ impl SheetsServiceV3 {
         request: DeleteSheetRequest,
     ) -> SDKResult<BaseResponse<DeleteSheetResponse>> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::DELETE,
+            http_http_method: reqwest::Method::DELETE,
             api_path: format!(
                 "{}/open-apis/sheets/v3/spreadsheets/{}/sheets/{}",
                 self.config.base_url, request.spreadsheet_token, request.sheet_id
@@ -549,7 +549,7 @@ impl SheetsServiceV3 {
         request: AddSheetRequest,
     ) -> SDKResult<BaseResponse<AddSheetResponse>> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: format!(
                 "{}/open-apis/sheets/v3/spreadsheets/{}/sheets",
                 self.config.base_url, request.spreadsheet_token
@@ -603,7 +603,7 @@ impl SheetsServiceV3 {
         request: UpdateSheetRequest,
     ) -> SDKResult<BaseResponse<UpdateSheetResponse>> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::PATCH,
+            http_http_method: reqwest::Method::PATCH,
             api_path: format!(
                 "{}/open-apis/sheets/v3/spreadsheets/{}/sheets/{}",
                 self.config.base_url, request.spreadsheet_token, request.sheet_id
@@ -657,7 +657,7 @@ impl SheetsServiceV3 {
         request: CopySheetRequest,
     ) -> SDKResult<BaseResponse<CopySheetResponse>> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: format!(
                 "{}/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/copy",
                 self.config.base_url, request.spreadsheet_token, request.sheet_id
@@ -715,7 +715,7 @@ impl SheetsServiceV3 {
         request: BatchUpdateRequest,
     ) -> SDKResult<BaseResponse<BatchUpdateResponse>> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: format!(
                 "{}/open-apis/sheets/v3/spreadsheets/{}/batchUpdate",
                 self.config.base_url, request.spreadsheet_token
@@ -756,7 +756,7 @@ pub struct CreateSpreadsheetResponse {
     pub spreadsheet_token: String,
     /// 电子表格URL
     #[serde(rename = "spreadsheet_url")]
-    pub url: String,
+    pub api_path: String,
     /// 应用ID
     #[serde(rename = "app_id")]
     pub app_id: String,
@@ -917,7 +917,7 @@ pub struct CreateChartResponse {
     pub chart_id: String,
     /// 图表URL
     #[serde(rename = "chart_url")]
-    pub chart_url: String,
+    pub chart_api_path: String,
     /// 创建时间
     #[serde(rename = "create_time")]
     pub created_at: String,

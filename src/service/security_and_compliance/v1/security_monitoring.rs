@@ -128,7 +128,7 @@ impl SecurityMonitoringService {
     ) -> SDKResult<BaseResponse<GetRealTimeSecurityEventsResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path:
                 "/open-apis/security_and_compliance/v1/security_monitoring/get_real_time_events"
                     .to_string(),
@@ -193,7 +193,7 @@ impl SecurityMonitoringService {
     ) -> SDKResult<BaseResponse<GetSecurityPostureAnalysisResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path:
                 "/open-apis/security_and_compliance/v1/security_monitoring/get_posture_analysis"
                     .to_string(),
@@ -257,7 +257,7 @@ impl SecurityMonitoringService {
     ) -> SDKResult<BaseResponse<GetAnomalyDetectionResultsResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/security_and_compliance/v1/security_monitoring/get_anomaly_detection_results".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -365,7 +365,7 @@ impl SecurityMonitoringService {
     ) -> SDKResult<BaseResponse<GetAttackChainAnalysisResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/security_and_compliance/v1/security_monitoring/get_attack_chain_analysis".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,

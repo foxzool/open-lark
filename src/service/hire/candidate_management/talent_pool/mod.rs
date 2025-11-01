@@ -203,7 +203,7 @@ impl TalentPoolService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentPoolOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: HIRE_V1_TALENT_POOLS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -246,7 +246,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentPoolDetailResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(HIRE_V1_TALENT_POOL_GET, "pool_id", pool_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -302,7 +302,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentPoolListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: HIRE_V1_TALENT_POOLS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -374,7 +374,7 @@ if let Some(owner_id) = request.owner_id {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentPoolTalentListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 HIRE_V1_TALENT_POOL_TALENTS,
                 "pool_id",
@@ -425,7 +425,7 @@ if let Some(education) = request.education {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentPoolOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 &EndpointBuilder::replace_param(HIRE_V1_TALENT_POOL_TALENT_GET, "pool_id", pool_id),
                 "talent_id",
@@ -461,7 +461,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentPoolOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::DELETE,
+            http_http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
                 &EndpointBuilder::replace_param(HIRE_V1_TALENT_POOL_TALENT_GET, "pool_id", pool_id),
                 "talent_id",
@@ -510,7 +510,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentPoolOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(HIRE_V1_TALENT_POOL_GET, "pool_id", pool_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -539,7 +539,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentPoolOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::DELETE,
+            http_http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(HIRE_V1_TALENT_POOL_GET, "pool_id", pool_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]

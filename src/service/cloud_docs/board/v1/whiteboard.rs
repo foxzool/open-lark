@@ -29,7 +29,7 @@ impl WhiteboardService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BinaryResponse>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: BOARD_V1_WHITEBOARD_THUMBNAIL.replace("{}", &request.whiteboard_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             ..Default::default()

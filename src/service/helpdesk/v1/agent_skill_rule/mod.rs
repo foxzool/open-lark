@@ -63,7 +63,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: HELPDESK_V1_AGENT_SKILL_RULES_OPERATOR_OPTIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
@@ -100,7 +100,7 @@ if let Some(page_token) = page_token {,
 if let Some(page_size) = page_size {,
             query_params.insert("page_size", page_size.to_string());
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: HELPDESK_V1_AGENT_SKILL_RULES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,

@@ -38,7 +38,7 @@ pub async fn invoke_function(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<FunctionInvokeResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FUNCTION_INVOKE,
                 &[

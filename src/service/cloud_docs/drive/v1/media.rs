@@ -71,7 +71,7 @@ pub async fn upload_prepare(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UploadPrepareRespData>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: DRIVE_V1_MEDIAS_UPLOAD_PREPARE.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             body: serde_json::to_vec(&request)?,
@@ -115,7 +115,7 @@ pub async fn upload_finish(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UploadFinishRespData>> {,
 let api_req = ApiRequest {,
-            http_method: Method::POST,
+            http_http_method: Method::POST,
             api_path: DRIVE_V1_MEDIAS_UPLOAD_FINISH.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             body: serde_json::to_vec(&request)?,
@@ -138,7 +138,7 @@ pub async fn download(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BinaryResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: DRIVE_V1_MEDIAS_DOWNLOAD.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             ..Default::default()
@@ -161,7 +161,7 @@ pub async fn batch_get_tmp_download_url(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BatchGetTmpDownloadUrlRespData>> {,
 let mut api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: DRIVE_V1_MEDIAS_BATCH_GET_TMP_DOWNLOAD_URL.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             ..Default::default()};
@@ -405,7 +405,7 @@ pub struct TmpDownloadUrl {
     /// 素材token
     pub file_token: String,
     /// 临时下载链接
-    pub tmp_download_url: String,
+    pub tmp_download_api_path: String,
 impl ApiResponseTrait for.* {
     pub fn new(config: Config) -> Self {
         Self { config }
@@ -645,7 +645,7 @@ let data = UploadFinishRespData {,
 let data = BatchGetTmpDownloadUrlRespData {,
             tmp_download_urls: vec![TmpDownloadUrl {
                 file_token: "token123".to_string(),
-                tmp_download_url: "https://temp.example.com/download/abc123".to_string()}],
+                tmp_download_api_path: "https://temp.example.com/download/abc123".to_string()}],
         };
 assert_eq!(,
             data.tmp_download_urls[0].tmp_download_url,
@@ -764,7 +764,7 @@ let json = serde_json::to_string(&original).unwrap();
                 let original = BatchGetTmpDownloadUrlRespData {,
 tmp_download_urls: vec![TmpDownloadUrl {,
                         file_token: "token123".to_string(),
-                        tmp_download_url: "https://example.com/temp".to_string()}],
+                        tmp_download_api_path: "https://example.com/temp".to_string()}],
                 };
 let json = serde_json::to_string(&original).unwrap();
                 let deserialized: BatchGetTmpDownloadUrlRespData =,
@@ -893,7 +893,7 @@ let long_token = "a".repeat(1000);
 let data = BatchGetTmpDownloadUrlRespData {,
             tmp_download_urls: vec![TmpDownloadUrl {
                 file_token: "token123".to_string(),
-                tmp_download_url: long_url.clone()}],
+                tmp_download_api_path: long_url.clone()}],
         };
         assert_eq!(data.tmp_download_urls[0].tmp_download_url, long_url);
 // === Clone and Debug Tests ===,

@@ -32,7 +32,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_method: Method::PATCH,
+            http_http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_params_from_array(
                 crate::core::endpoints::application::APPLICATION_V6_APP_BADGE_SET,
                 &[("app_id", app_id), ("user_id", user_id)]

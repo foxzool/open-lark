@@ -53,7 +53,7 @@ pub async fn query(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetTenantProductAssignInfoResponse>> {,
 let api_req = ApiRequest {,
-            http_method: Method::GET,
+            http_http_method: Method::GET,
             api_path: TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             ..Default::default()};

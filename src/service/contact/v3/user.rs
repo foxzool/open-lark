@@ -130,7 +130,7 @@ impl UserService {
     ) -> SDKResult<BaseResponse<CreateUserResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/contact/v3/users".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -188,7 +188,7 @@ impl UserService {
     ) -> SDKResult<BaseResponse<PatchUserResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::PATCH,
+            http_http_method: reqwest::Method::PATCH,
             api_path: format!("/open-apis/contact/v3/users/{}", user_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -248,7 +248,7 @@ impl UserService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
+            http_http_method: reqwest::Method::GET,
             api_path: format!("/open-apis/contact/v3/users/{}", user_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
@@ -299,7 +299,7 @@ impl UserService {
     ) -> SDKResult<BaseResponse<BatchGetUsersResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/contact/v3/users/batch_get_id".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -365,7 +365,7 @@ impl UserService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
+            http_http_method: reqwest::Method::GET,
             api_path: "/open-apis/contact/v3/users".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
@@ -426,7 +426,7 @@ impl UserService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::DELETE,
+            http_http_method: reqwest::Method::DELETE,
             api_path: format!("/open-apis/contact/v3/users/{}", user_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -479,7 +479,7 @@ impl UserService {
     ) -> SDKResult<BaseResponse<SearchUsersResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/contact/v3/users/search".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(request)?,
