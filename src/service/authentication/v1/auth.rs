@@ -1385,5 +1385,4 @@ impl ApiResponseTrait for AppAccessTokenResponse {}
 
 impl ApiResponseTrait for TenantAccessTokenResponse {}
 
-impl ApiResponseTrait for OauthUserInfoResponse {}
 impl ApiResponseTrait for ResendAppTicketResponse {}
