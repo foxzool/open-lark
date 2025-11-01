@@ -136,10 +136,10 @@ impl PaygroupService {
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-             api_path: "/open-apis/payroll/v4/paygroups".to_string(),
+            api_path: "/open-apis/payroll/v4/paygroups".to_string(),
             query_params,
             path_params: std::collections::HashMap::new(),
-            
+
             body: Vec::new(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
         };
@@ -185,7 +185,7 @@ impl PaygroupService {
                 .build_url("/open-apis/payroll/v4/paygroups/{paygroup_id}"),
             query_params: std::collections::HashMap::new(),
             path_params,
-            
+
             body: Vec::new(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
         };
@@ -244,10 +244,10 @@ impl PaygroupService {
     ) -> SDKResult<BaseResponse<PaygroupResponse>> {
         let api_req = ApiRequest {
             method: Method::POST,
-             api_path: "/open-apis/payroll/v4/paygroups".to_string(),
+            api_path: "/open-apis/payroll/v4/paygroups".to_string(),
             query_params: std::collections::HashMap::new(),
             path_params: std::collections::HashMap::new(),
-            
+
             body: Some(serde_json::to_value(request)?),
             supported_access_token_types: vec![AccessTokenType::Tenant],
         };
@@ -314,7 +314,7 @@ impl PaygroupService {
                 .build_url("/open-apis/payroll/v4/paygroups/{paygroup_id}"),
             query_params: std::collections::HashMap::new(),
             path_params,
-            
+
             body: Some(serde_json::to_value(request)?),
             supported_access_token_types: vec![AccessTokenType::Tenant],
         };
@@ -362,7 +362,7 @@ impl PaygroupService {
                 .build_url("/open-apis/payroll/v4/paygroups/{paygroup_id}"),
             query_params: std::collections::HashMap::new(),
             path_params,
-            
+
             body: Vec::new(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
         };
@@ -410,7 +410,7 @@ impl PaygroupService {
                 .build_url("/open-apis/payroll/v4/paygroups/{paygroup_id}/activate"),
             query_params: std::collections::HashMap::new(),
             path_params,
-            
+
             body: Some(serde_json::Value::Object(serde_json::Map::new())),
             supported_access_token_types: vec![AccessTokenType::Tenant],
         };
@@ -458,7 +458,7 @@ impl PaygroupService {
                 .build_url("/open-apis/payroll/v4/paygroups/{paygroup_id}/deactivate"),
             query_params: std::collections::HashMap::new(),
             path_params,
-            
+
             body: Some(serde_json::Value::Object(serde_json::Map::new())),
             supported_access_token_types: vec![AccessTokenType::Tenant],
         };

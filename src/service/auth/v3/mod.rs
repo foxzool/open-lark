@@ -2,7 +2,6 @@
 //!
 //! 提供应用和租户级别的认证令牌管理功能，支持自建应用和商店应用。
 
-
 use crate::core::config::Config;
 use crate::core::SDKResult;
 

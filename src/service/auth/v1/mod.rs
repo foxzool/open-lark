@@ -2,7 +2,6 @@
 //!
 //! 提供用户级别的认证功能，包括用户信息获取、OIDC标准协议支持等。
 
-
 use crate::core::config::Config;
 use crate::core::SDKResult;
 

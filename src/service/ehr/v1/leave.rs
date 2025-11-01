@@ -70,13 +70,7 @@
 //! ```
 
 use super::models::*;
-use crate::core::{
-    
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    SDKResult,
-};
+use crate::core::{config::Config, constants::AccessTokenType, http::Transport, SDKResult};
 use open_lark_core::core::api_req::ApiRequest;
 
 // ==================== Builder实现 ====================

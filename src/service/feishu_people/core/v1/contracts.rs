@@ -55,11 +55,7 @@
 //! ```
 
 use crate::core::{
-    api_resp::BaseResponse,
-    config::Config,
-    error::LarkAPIError,
-    http::Transport,
-    SDKResult,
+    api_resp::BaseResponse, config::Config, error::LarkAPIError, http::Transport, SDKResult,
 };
 use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use serde::{Deserialize, Serialize};

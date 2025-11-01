@@ -8,6 +8,7 @@
 //! - 报表数据缓存和性能优化
 
 use crate::core::config::Config;
+use crate::core::SDKResult;
 use crate::service::analytics::v1::*;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
