@@ -202,13 +202,11 @@ impl SheetsServiceV3 {
         request: CreateSpreadsheetRequest,
     ) -> SDKResult<BaseResponse<CreateSpreadsheetResponse>> {
         let api_req = ApiRequest {
-            method: "POST".to_string(),
-            url: format!("{}/open-apis/sheets/v3/spreadsheets", self.config.base_url),
-            query_params: Default::default(),
-            path_params: Default::default(),
-            headers: Default::default(),
-            body: Some(serde_json::to_value(request)?),
-            access_token_type: AccessTokenType::Tenant,
+            http_method: reqwest::Method::POST,
+            api_path: "/open-apis/sheets/v3/spreadsheets".to_string(),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: serde_json::to_vec(&request)?,
+            ..Default::default()
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -258,16 +256,17 @@ impl SheetsServiceV3 {
         }
 
         let api_req = ApiRequest {
-            method: "GET".to_string(),
-            url: format!(
+            http_method: reqwest::Method::GET,
+            api_path: format!(
                 "{}/open-apis/sheets/v3/spreadsheets/{}/meta",
                 self.config.base_url, request.spreadsheet_token
             ),
             query_params,
-            path_params: Default::default(),
-            headers: Default::default(),
+
+
             body: None,
-            access_token_type: AccessTokenType::Tenant,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: Vec::new(),
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -330,16 +329,17 @@ impl SheetsServiceV3 {
         }
 
         let api_req = ApiRequest {
-            method: "GET".to_string(),
-            url: format!(
+            http_method: reqwest::Method::GET,
+            api_path: format!(
                 "{}/open-apis/sheets/v3/spreadsheets/{}/values",
                 self.config.base_url, request.spreadsheet_token
             ),
             query_params,
-            path_params: Default::default(),
-            headers: Default::default(),
+
+
             body: None,
-            access_token_type: AccessTokenType::Tenant,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: Vec::new(),
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -388,16 +388,17 @@ impl SheetsServiceV3 {
         request: WriteRangeRequest,
     ) -> SDKResult<BaseResponse<WriteRangeResponse>> {
         let api_req = ApiRequest {
-            method: "PUT".to_string(),
-            url: format!(
+            http_method: reqwest::Method::PUT,
+            api_path: format!(
                 "{}/open-apis/sheets/v3/spreadsheets/{}/values",
                 self.config.base_url, request.spreadsheet_token
             ),
             query_params: Default::default(),
-            path_params: Default::default(),
-            headers: Default::default(),
-            body: Some(serde_json::to_value(request)?),
-            access_token_type: AccessTokenType::Tenant,
+
+
+            body: serde_json::to_vec(&request)?,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: Vec::new(),
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -444,16 +445,17 @@ impl SheetsServiceV3 {
         request: CreateChartRequest,
     ) -> SDKResult<BaseResponse<CreateChartResponse>> {
         let api_req = ApiRequest {
-            method: "POST".to_string(),
-            url: format!(
+            http_method: reqwest::Method::POST,
+            api_path: format!(
                 "{}/open-apis/sheets/v3/spreadsheets/{}/charts",
                 self.config.base_url, request.spreadsheet_token
             ),
             query_params: Default::default(),
-            path_params: Default::default(),
-            headers: Default::default(),
-            body: Some(serde_json::to_value(request)?),
-            access_token_type: AccessTokenType::Tenant,
+
+
+            body: serde_json::to_vec(&request)?,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: Vec::new(),
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -496,16 +498,17 @@ impl SheetsServiceV3 {
         request: DeleteSheetRequest,
     ) -> SDKResult<BaseResponse<DeleteSheetResponse>> {
         let api_req = ApiRequest {
-            method: "DELETE".to_string(),
-            url: format!(
+            http_method: reqwest::Method::DELETE,
+            api_path: format!(
                 "{}/open-apis/sheets/v3/spreadsheets/{}/sheets/{}",
                 self.config.base_url, request.spreadsheet_token, request.sheet_id
             ),
             query_params: Default::default(),
-            path_params: Default::default(),
-            headers: Default::default(),
+
+
             body: None,
-            access_token_type: AccessTokenType::Tenant,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: Vec::new(),
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -551,16 +554,17 @@ impl SheetsServiceV3 {
         request: AddSheetRequest,
     ) -> SDKResult<BaseResponse<AddSheetResponse>> {
         let api_req = ApiRequest {
-            method: "POST".to_string(),
-            url: format!(
+            http_method: reqwest::Method::POST,
+            api_path: format!(
                 "{}/open-apis/sheets/v3/spreadsheets/{}/sheets",
                 self.config.base_url, request.spreadsheet_token
             ),
             query_params: Default::default(),
-            path_params: Default::default(),
-            headers: Default::default(),
-            body: Some(serde_json::to_value(request)?),
-            access_token_type: AccessTokenType::Tenant,
+
+
+            body: serde_json::to_vec(&request)?,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: Vec::new(),
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -605,16 +609,17 @@ impl SheetsServiceV3 {
         request: UpdateSheetRequest,
     ) -> SDKResult<BaseResponse<UpdateSheetResponse>> {
         let api_req = ApiRequest {
-            method: "PATCH".to_string(),
-            url: format!(
+            http_method: reqwest::Method::PATCH,
+            api_path: format!(
                 "{}/open-apis/sheets/v3/spreadsheets/{}/sheets/{}",
                 self.config.base_url, request.spreadsheet_token, request.sheet_id
             ),
             query_params: Default::default(),
-            path_params: Default::default(),
-            headers: Default::default(),
-            body: Some(serde_json::to_value(request)?),
-            access_token_type: AccessTokenType::Tenant,
+
+
+            body: serde_json::to_vec(&request)?,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: Vec::new(),
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -659,16 +664,17 @@ impl SheetsServiceV3 {
         request: CopySheetRequest,
     ) -> SDKResult<BaseResponse<CopySheetResponse>> {
         let api_req = ApiRequest {
-            method: "POST".to_string(),
-            url: format!(
+            http_method: reqwest::Method::POST,
+            api_path: format!(
                 "{}/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/copy",
                 self.config.base_url, request.spreadsheet_token, request.sheet_id
             ),
             query_params: Default::default(),
-            path_params: Default::default(),
-            headers: Default::default(),
-            body: Some(serde_json::to_value(request)?),
-            access_token_type: AccessTokenType::Tenant,
+
+
+            body: serde_json::to_vec(&request)?,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: Vec::new(),
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -717,16 +723,17 @@ impl SheetsServiceV3 {
         request: BatchUpdateRequest,
     ) -> SDKResult<BaseResponse<BatchUpdateResponse>> {
         let api_req = ApiRequest {
-            method: "POST".to_string(),
-            url: format!(
+            http_method: reqwest::Method::POST,
+            api_path: format!(
                 "{}/open-apis/sheets/v3/spreadsheets/{}/batchUpdate",
                 self.config.base_url, request.spreadsheet_token
             ),
             query_params: Default::default(),
-            path_params: Default::default(),
-            headers: Default::default(),
-            body: Some(serde_json::to_value(request)?),
-            access_token_type: AccessTokenType::Tenant,
+
+
+            body: serde_json::to_vec(&request)?,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: Vec::new(),
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -2338,26 +2345,3 @@ impl ExecutableBuilder<SheetsServiceV3, BatchUpdateRequest, BaseResponse<BatchUp
     }
 }
 
-#[async_trait]
-impl ExecutableBuilder<SheetsServiceV3, UpdateSheetRequest, BaseResponse<UpdateSheetResponse>> for UpdateSheetBuilder {
-
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<UpdateSheetResponse>> {
-        service.update_sheet(self.request).await
-    }
-}
-
-#[async_trait]
-impl ExecutableBuilder<SheetsServiceV3, CopySheetRequest, BaseResponse<CopySheetResponse>> for CopySheetBuilder {
-
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<CopySheetResponse>> {
-        service.copy_sheet(self.request).await
-    }
-}
-
-#[async_trait]
-impl ExecutableBuilder<SheetsServiceV3, BatchUpdateRequest, BaseResponse<BatchUpdateResponse>> for BatchUpdateBuilder {
-
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<BatchUpdateResponse>> {
-        service.batch_update(self.request).await
-    }
-}
