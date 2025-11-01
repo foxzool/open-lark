@@ -152,7 +152,7 @@ pub mod assistant;
 pub mod board;
 pub mod comments;
 pub mod drive;
-pub mod sheets;
+// pub mod sheets; // 暂时禁用，需要修复多个编译错误
 pub mod wiki;
 
 // 重新导出所有服务类型
