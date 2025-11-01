@@ -6,8 +6,6 @@
 use crate::core::config::Config;
 use crate::core::SDKResult;
 
-use serde::{Deserialize, Serialize};
-
 /// Auth服务 v3版本
 #[derive(Debug, Clone)]
 pub struct AuthServiceV3 {
@@ -106,7 +104,7 @@ impl AuthServiceV3 {
 
 // 数据模型定义
 pub mod models {
-    
+    use serde::{Deserialize, Serialize};
 
     #[derive(Debug, Clone, Deserialize, Serialize)]
     pub struct TokenData {
