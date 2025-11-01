@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use open_lark_core::event::{context::EventHeader, dispatcher::EventHandler};
+use open_lark_core::event::EventHandler};
 /// 考勤打卡流水事件 (user.attendance_records_event),
 #[derive(Debug, Clone)]
 pub struct P2AttendanceUserTaskUpdatedV1 {
