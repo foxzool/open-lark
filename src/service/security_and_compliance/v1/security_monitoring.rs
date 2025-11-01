@@ -1152,13 +1152,13 @@ impl Default for GetRealTimeSecurityEventsBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetRealTimeSecurityEventsBuilder,
-    SecurityMonitoringService,
-    GetRealTimeSecurityEventsRequest,
-    BaseResponse<GetRealTimeSecurityEventsResponse>,
-    get_real_time_security_events
-);
+// crate::impl_executable_builder!(
+//    GetRealTimeSecurityEventsBuilder,
+//    SecurityMonitoringService,
+//    GetRealTimeSecurityEventsRequest,
+//    BaseResponse<GetRealTimeSecurityEventsResponse>,
+//    get_real_time_security_events
+//);
 
 /// 安全态势分析构建器
 #[derive(Debug, Clone)]
@@ -1205,13 +1205,13 @@ impl Default for GetSecurityPostureAnalysisBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetSecurityPostureAnalysisBuilder,
-    SecurityMonitoringService,
-    GetSecurityPostureAnalysisRequest,
-    BaseResponse<GetSecurityPostureAnalysisResponse>,
-    get_security_posture_analysis
-);
+// crate::impl_executable_builder!(
+//    GetSecurityPostureAnalysisBuilder,
+//    SecurityMonitoringService,
+//    GetSecurityPostureAnalysisRequest,
+//    BaseResponse<GetSecurityPostureAnalysisResponse>,
+//    get_security_posture_analysis
+//);
 
 /// 异常检测结果构建器
 #[derive(Debug, Clone)]
@@ -1270,13 +1270,13 @@ impl Default for GetAnomalyDetectionResultsBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetAnomalyDetectionResultsBuilder,
-    SecurityMonitoringService,
-    GetAnomalyDetectionResultsRequest,
-    BaseResponse<GetAnomalyDetectionResultsResponse>,
-    get_anomaly_detection_results
-);
+// crate::impl_executable_builder!(
+//    GetAnomalyDetectionResultsBuilder,
+//    SecurityMonitoringService,
+//    GetAnomalyDetectionResultsRequest,
+//    BaseResponse<GetAnomalyDetectionResultsResponse>,
+//    get_anomaly_detection_results
+//);
 
 /// 攻击链分析构建器
 #[derive(Debug, Clone)]
@@ -1323,13 +1323,13 @@ impl Default for GetAttackChainAnalysisBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetAttackChainAnalysisBuilder,
-    SecurityMonitoringService,
-    GetAttackChainAnalysisRequest,
-    BaseResponse<GetAttackChainAnalysisResponse>,
-    get_attack_chain_analysis
-);
+// crate::impl_executable_builder!(
+//    GetAttackChainAnalysisBuilder,
+//    SecurityMonitoringService,
+//    GetAttackChainAnalysisRequest,
+//    BaseResponse<GetAttackChainAnalysisResponse>,
+//    get_attack_chain_analysis
+//);
 
 impl SecurityMonitoringService {
     /// 获取实时安全事件构建器

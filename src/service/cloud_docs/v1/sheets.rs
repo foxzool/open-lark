@@ -263,7 +263,6 @@ impl SheetsServiceV3 {
             ),
             query_params,
 
-
             body: None,
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -336,7 +335,6 @@ impl SheetsServiceV3 {
             ),
             query_params,
 
-
             body: None,
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -395,7 +393,6 @@ impl SheetsServiceV3 {
             ),
             query_params: Default::default(),
 
-
             body: serde_json::to_vec(&request)?,
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -452,7 +449,6 @@ impl SheetsServiceV3 {
             ),
             query_params: Default::default(),
 
-
             body: serde_json::to_vec(&request)?,
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -504,7 +500,6 @@ impl SheetsServiceV3 {
                 self.config.base_url, request.spreadsheet_token, request.sheet_id
             ),
             query_params: Default::default(),
-
 
             body: None,
             supported_access_token_types: vec![AccessTokenType::Tenant],
@@ -561,7 +556,6 @@ impl SheetsServiceV3 {
             ),
             query_params: Default::default(),
 
-
             body: serde_json::to_vec(&request)?,
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -616,7 +610,6 @@ impl SheetsServiceV3 {
             ),
             query_params: Default::default(),
 
-
             body: serde_json::to_vec(&request)?,
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -670,7 +663,6 @@ impl SheetsServiceV3 {
                 self.config.base_url, request.spreadsheet_token, request.sheet_id
             ),
             query_params: Default::default(),
-
 
             body: serde_json::to_vec(&request)?,
             supported_access_token_types: vec![AccessTokenType::Tenant],
@@ -729,7 +721,6 @@ impl SheetsServiceV3 {
                 self.config.base_url, request.spreadsheet_token
             ),
             query_params: Default::default(),
-
 
             body: serde_json::to_vec(&request)?,
             supported_access_token_types: vec![AccessTokenType::Tenant],
@@ -2240,53 +2231,85 @@ impl SheetsServiceV3 {
 
 /// 实现所有构建器的可执行特征
 #[async_trait]
-impl ExecutableBuilder<SheetsServiceV3, CreateSpreadsheetRequest, BaseResponse<CreateSpreadsheetResponse>> for CreateSpreadsheetBuilder {
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<CreateSpreadsheetResponse>> {
+impl
+    ExecutableBuilder<
+        SheetsServiceV3,
+        CreateSpreadsheetRequest,
+        BaseResponse<CreateSpreadsheetResponse>,
+    > for CreateSpreadsheetBuilder
+{
+    async fn execute(
+        self,
+        service: &SheetsServiceV3,
+    ) -> SDKResult<BaseResponse<CreateSpreadsheetResponse>> {
         service.create_spreadsheet(self.request).await
     }
 }
 
 #[async_trait]
-impl ExecutableBuilder<SheetsServiceV3, GetSheetMetaRequest, BaseResponse<GetSheetMetaResponse>> for GetSheetMetaBuilder {
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<GetSheetMetaResponse>> {
+impl ExecutableBuilder<SheetsServiceV3, GetSheetMetaRequest, BaseResponse<GetSheetMetaResponse>>
+    for GetSheetMetaBuilder
+{
+    async fn execute(
+        self,
+        service: &SheetsServiceV3,
+    ) -> SDKResult<BaseResponse<GetSheetMetaResponse>> {
         service.get_sheet_meta(self.request).await
     }
 }
 
 #[async_trait]
-impl ExecutableBuilder<SheetsServiceV3, ReadRangeRequest, BaseResponse<ReadRangeResponse>> for ReadRangeBuilder {
-
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<ReadRangeResponse>> {
+impl ExecutableBuilder<SheetsServiceV3, ReadRangeRequest, BaseResponse<ReadRangeResponse>>
+    for ReadRangeBuilder
+{
+    async fn execute(
+        self,
+        service: &SheetsServiceV3,
+    ) -> SDKResult<BaseResponse<ReadRangeResponse>> {
         service.read_range(self.request).await
     }
 }
 
 #[async_trait]
-impl ExecutableBuilder<SheetsServiceV3, WriteRangeRequest, BaseResponse<WriteRangeResponse>> for WriteRangeBuilder {
-
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<WriteRangeResponse>> {
+impl ExecutableBuilder<SheetsServiceV3, WriteRangeRequest, BaseResponse<WriteRangeResponse>>
+    for WriteRangeBuilder
+{
+    async fn execute(
+        self,
+        service: &SheetsServiceV3,
+    ) -> SDKResult<BaseResponse<WriteRangeResponse>> {
         service.write_range(self.request).await
     }
 }
 
 #[async_trait]
-impl ExecutableBuilder<SheetsServiceV3, CreateChartRequest, BaseResponse<CreateChartResponse>> for CreateChartBuilder {
-
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<CreateChartResponse>> {
+impl ExecutableBuilder<SheetsServiceV3, CreateChartRequest, BaseResponse<CreateChartResponse>>
+    for CreateChartBuilder
+{
+    async fn execute(
+        self,
+        service: &SheetsServiceV3,
+    ) -> SDKResult<BaseResponse<CreateChartResponse>> {
         service.create_chart(self.request).await
     }
 }
 
 #[async_trait]
-impl ExecutableBuilder<SheetsServiceV3, DeleteSheetRequest, BaseResponse<DeleteSheetResponse>> for DeleteSheetBuilder {
-
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<DeleteSheetResponse>> {
+impl ExecutableBuilder<SheetsServiceV3, DeleteSheetRequest, BaseResponse<DeleteSheetResponse>>
+    for DeleteSheetBuilder
+{
+    async fn execute(
+        self,
+        service: &SheetsServiceV3,
+    ) -> SDKResult<BaseResponse<DeleteSheetResponse>> {
         service.delete_sheet(self.request).await
     }
 }
 
 #[async_trait]
-impl ExecutableBuilder<SheetsServiceV3, AddSheetRequest, BaseResponse<AddSheetResponse>> for AddSheetBuilder {
+impl ExecutableBuilder<SheetsServiceV3, AddSheetRequest, BaseResponse<AddSheetResponse>>
+    for AddSheetBuilder
+{
     fn build(self) -> AddSheetRequest {
         self.request
     }
@@ -2295,53 +2318,83 @@ impl ExecutableBuilder<SheetsServiceV3, AddSheetRequest, BaseResponse<AddSheetRe
         service.add_sheet(self.request).await
     }
 
-    async fn execute_with_options(self, service: &SheetsServiceV3, _options: RequestOption) -> SDKResult<BaseResponse<AddSheetResponse>> {
+    async fn execute_with_options(
+        self,
+        service: &SheetsServiceV3,
+        _options: RequestOption,
+    ) -> SDKResult<BaseResponse<AddSheetResponse>> {
         self.execute(service).await
     }
 }
 
 #[async_trait]
-impl ExecutableBuilder<SheetsServiceV3, UpdateSheetRequest, BaseResponse<UpdateSheetResponse>> for UpdateSheetBuilder {
+impl ExecutableBuilder<SheetsServiceV3, UpdateSheetRequest, BaseResponse<UpdateSheetResponse>>
+    for UpdateSheetBuilder
+{
     fn build(self) -> UpdateSheetRequest {
         self.request
     }
 
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<UpdateSheetResponse>> {
+    async fn execute(
+        self,
+        service: &SheetsServiceV3,
+    ) -> SDKResult<BaseResponse<UpdateSheetResponse>> {
         service.update_sheet(self.request).await
     }
 
-    async fn execute_with_options(self, service: &SheetsServiceV3, _options: RequestOption) -> SDKResult<BaseResponse<UpdateSheetResponse>> {
+    async fn execute_with_options(
+        self,
+        service: &SheetsServiceV3,
+        _options: RequestOption,
+    ) -> SDKResult<BaseResponse<UpdateSheetResponse>> {
         self.execute(service).await
     }
 }
 
 #[async_trait]
-impl ExecutableBuilder<SheetsServiceV3, CopySheetRequest, BaseResponse<CopySheetResponse>> for CopySheetBuilder {
+impl ExecutableBuilder<SheetsServiceV3, CopySheetRequest, BaseResponse<CopySheetResponse>>
+    for CopySheetBuilder
+{
     fn build(self) -> CopySheetRequest {
         self.request
     }
 
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<CopySheetResponse>> {
+    async fn execute(
+        self,
+        service: &SheetsServiceV3,
+    ) -> SDKResult<BaseResponse<CopySheetResponse>> {
         service.copy_sheet(self.request).await
     }
 
-    async fn execute_with_options(self, service: &SheetsServiceV3, _options: RequestOption) -> SDKResult<BaseResponse<CopySheetResponse>> {
+    async fn execute_with_options(
+        self,
+        service: &SheetsServiceV3,
+        _options: RequestOption,
+    ) -> SDKResult<BaseResponse<CopySheetResponse>> {
         self.execute(service).await
     }
 }
 
 #[async_trait]
-impl ExecutableBuilder<SheetsServiceV3, BatchUpdateRequest, BaseResponse<BatchUpdateResponse>> for BatchUpdateBuilder {
+impl ExecutableBuilder<SheetsServiceV3, BatchUpdateRequest, BaseResponse<BatchUpdateResponse>>
+    for BatchUpdateBuilder
+{
     fn build(self) -> BatchUpdateRequest {
         self.request
     }
 
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<BatchUpdateResponse>> {
+    async fn execute(
+        self,
+        service: &SheetsServiceV3,
+    ) -> SDKResult<BaseResponse<BatchUpdateResponse>> {
         service.batch_update(self.request).await
     }
 
-    async fn execute_with_options(self, service: &SheetsServiceV3, _options: RequestOption) -> SDKResult<BaseResponse<BatchUpdateResponse>> {
+    async fn execute_with_options(
+        self,
+        service: &SheetsServiceV3,
+        _options: RequestOption,
+    ) -> SDKResult<BaseResponse<BatchUpdateResponse>> {
         self.execute(service).await
     }
 }
-

@@ -79,8 +79,6 @@ pub struct LarkClient {
     pub board: BoardService,
     #[cfg(feature = "event")]
     pub event: EventService,
-    #[cfg(feature = "auth")]
-    pub auth: AuthService,
     #[cfg(feature = "ai")]
     pub ai: AiService,
     #[cfg(feature = "aily")]

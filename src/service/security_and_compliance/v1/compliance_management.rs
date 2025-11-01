@@ -223,13 +223,13 @@ impl Default for GetComplianceOverviewBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetComplianceOverviewBuilder,
-    ComplianceManagementService,
-    GetComplianceOverviewRequest,
-    BaseResponse<GetComplianceOverviewResponse>,
-    get_compliance_overview
-);
+// crate::impl_executable_builder!(
+//    GetComplianceOverviewBuilder,
+//    ComplianceManagementService,
+//    GetComplianceOverviewRequest,
+//    BaseResponse<GetComplianceOverviewResponse>,
+//    get_compliance_overview
+//);
 
 impl ComplianceManagementService {
     /// 获取合规状态概览构建器

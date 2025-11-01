@@ -552,13 +552,13 @@ impl Default for GetAccessPermissionsBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetAccessPermissionsBuilder,
-    AccessControlService,
-    GetAccessPermissionsRequest,
-    BaseResponse<GetAccessPermissionsResponse>,
-    get_access_permissions
-);
+// crate::impl_executable_builder!(
+//    GetAccessPermissionsBuilder,
+//    AccessControlService,
+//    GetAccessPermissionsRequest,
+//    BaseResponse<GetAccessPermissionsResponse>,
+//    get_access_permissions
+//);
 
 /// 创建访问策略构建器
 #[derive(Debug, Clone)]
@@ -623,13 +623,13 @@ impl Default for CreateAccessPolicyBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    CreateAccessPolicyBuilder,
-    AccessControlService,
-    CreateAccessPolicyRequest,
-    BaseResponse<CreateAccessPolicyResponse>,
-    create_access_policy
-);
+// crate::impl_executable_builder!(
+//    CreateAccessPolicyBuilder,
+//    AccessControlService,
+//    CreateAccessPolicyRequest,
+//    BaseResponse<CreateAccessPolicyResponse>,
+//    create_access_policy
+//);
 
 /// 获取用户权限总结构建器
 #[derive(Debug, Clone)]
@@ -670,13 +670,13 @@ impl Default for GetUserPermissionSummaryBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetUserPermissionSummaryBuilder,
-    AccessControlService,
-    GetUserPermissionSummaryRequest,
-    BaseResponse<GetUserPermissionSummaryResponse>,
-    get_user_permission_summary
-);
+// crate::impl_executable_builder!(
+//    GetUserPermissionSummaryBuilder,
+//    AccessControlService,
+//    GetUserPermissionSummaryRequest,
+//    BaseResponse<GetUserPermissionSummaryResponse>,
+//    get_user_permission_summary
+//);
 
 impl AccessControlService {
     /// 获取访问权限构建器

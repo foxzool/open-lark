@@ -499,7 +499,7 @@ pub struct Paygroup {
 }
 
 /// 发薪日设置
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PaymentDaySetting {
     /// 发薪日类型
     pub payment_day_type: String,
