@@ -2280,61 +2280,9 @@ impl ExecutableBuilder<SheetsServiceV3, DeleteSheetRequest, BaseResponse<DeleteS
 
 #[async_trait]
 impl ExecutableBuilder<SheetsServiceV3, AddSheetRequest, BaseResponse<AddSheetResponse>> for AddSheetBuilder {
-    fn build(self) -> AddSheetRequest {
-        self.request
-    }
 
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<AddSheetResponse>> {
+    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<ReadRangeResponse>> {
         service.add_sheet(self.request).await
-    }
-
-    async fn execute_with_options(self, service: &SheetsServiceV3, _options: RequestOption) -> SDKResult<BaseResponse<AddSheetResponse>> {
-        self.execute(service).await
-    }
-}
-
-#[async_trait]
-impl ExecutableBuilder<SheetsServiceV3, UpdateSheetRequest, BaseResponse<UpdateSheetResponse>> for UpdateSheetBuilder {
-    fn build(self) -> UpdateSheetRequest {
-        self.request
-    }
-
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<UpdateSheetResponse>> {
-        service.update_sheet(self.request).await
-    }
-
-    async fn execute_with_options(self, service: &SheetsServiceV3, _options: RequestOption) -> SDKResult<BaseResponse<UpdateSheetResponse>> {
-        self.execute(service).await
-    }
-}
-
-#[async_trait]
-impl ExecutableBuilder<SheetsServiceV3, CopySheetRequest, BaseResponse<CopySheetResponse>> for CopySheetBuilder {
-    fn build(self) -> CopySheetRequest {
-        self.request
-    }
-
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<CopySheetResponse>> {
-        service.copy_sheet(self.request).await
-    }
-
-    async fn execute_with_options(self, service: &SheetsServiceV3, _options: RequestOption) -> SDKResult<BaseResponse<CopySheetResponse>> {
-        self.execute(service).await
-    }
-}
-
-#[async_trait]
-impl ExecutableBuilder<SheetsServiceV3, BatchUpdateRequest, BaseResponse<BatchUpdateResponse>> for BatchUpdateBuilder {
-    fn build(self) -> BatchUpdateRequest {
-        self.request
-    }
-
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<BatchUpdateResponse>> {
-        service.batch_update(self.request).await
-    }
-
-    async fn execute_with_options(self, service: &SheetsServiceV3, _options: RequestOption) -> SDKResult<BaseResponse<BatchUpdateResponse>> {
-        self.execute(service).await
     }
 }
 
