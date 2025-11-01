@@ -64,11 +64,12 @@
 //! ```
 
 use crate::core::{
-use crate::core::{SDKResult, api_resp::{ApiResponseTrait, BaseResponse}},
+    api_resp::{ApiResponseTrait, BaseResponse},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
     req_option::RequestOption,
+    SDKResult,
 };
 
 // Use open_lark_core's error type for compatibility with async traits
