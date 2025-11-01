@@ -8,9 +8,9 @@
 //! - 外部审批集成
 
 use crate::core::config::Config;
-use open_lark_core::prelude::*;
-use serde::{Deserialize, Serialize};
+use serde;
 
+use serde::{Deserialize, Serialize};
 /// Approval服务 v4版本
 #[derive(Debug, Clone)]
 pub struct ApprovalServiceV4 {

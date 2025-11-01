@@ -10,7 +10,6 @@
 use crate::core::config::Config;
 use crate::service::analytics::v1::*;
 use chrono::{DateTime, Utc};
-use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 /// 用户行为分析服务

@@ -116,7 +116,7 @@ impl PaymentDetailService {
             query_params,
             path_params: std::collections::HashMap::new(),
             body: None,
-            supported_access_token_types: vec![AccessTokenType::Tenant,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -179,7 +179,7 @@ impl PaymentDetailService {
             query_params,
             path_params: std::collections::HashMap::new(),
             body: None,
-            supported_access_token_types: vec![AccessTokenType::Tenant,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -237,7 +237,7 @@ impl PaymentDetailService {
             query_params,
             path_params: std::collections::HashMap::new(),
             body: None,
-            supported_access_token_types: vec![AccessTokenType::Tenant,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
         };
 
         let response = Transport::request(api_req, &self.config).await?;
@@ -307,7 +307,7 @@ impl PaymentDetailService {
             query_params,
             path_params: std::collections::HashMap::new(),
             body: Some(serde_json::Value::Object(serde_json::Map::new())),
-            supported_access_token_types: vec![AccessTokenType::Tenant,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
         };
 
         let response = Transport::request(api_req, &self.config).await?;

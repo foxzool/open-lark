@@ -45,13 +45,13 @@ pub mod overview;
 pub mod reports;
 pub mod user_analytics;
 
-// 重新导出所有模块和类型
-pub use app_analytics::*;
-pub use insights::*;
-pub use monitoring::*;
-pub use overview::*;
-pub use reports::*;
-pub use user_analytics::*;
+// 重新导出服务
+pub use app_analytics::AppAnalyticsService;
+pub use insights::InsightsService;
+pub use monitoring::MonitoringService;
+pub use overview::OverviewService;
+pub use reports::ReportService;
+pub use user_analytics::UserAnalyticsService;
 
 // ==================== 核心数据模型 ====================
 

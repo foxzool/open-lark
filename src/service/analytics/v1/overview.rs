@@ -11,7 +11,6 @@ use crate::core::config::Config;
 use crate::service::analytics::v1::*;
 use crate::service::payroll::v1::datasource::IssueSeverity;
 use chrono::{DateTime, Utc};
-use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 /// 数据概览服务

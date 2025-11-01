@@ -10,7 +10,6 @@
 
 use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
 use crate::core::config::Config;
-use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 // 导入V1版本的服务

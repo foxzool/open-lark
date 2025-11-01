@@ -2,9 +2,10 @@
 //!
 //! 提供用户级别的认证功能，包括用户信息获取、OIDC标准协议支持等。
 
-use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
+
 use crate::core::config::Config;
 use crate::core::SDKResult;
+
 use serde::{Deserialize, Serialize};
 
 /// Auth服务 v1版本
@@ -123,7 +124,7 @@ impl AuthServiceV1 {
 
 // 数据模型定义
 pub mod models {
-    use serde::{Deserialize, Serialize};
+    
 
     #[derive(Debug, Clone, Deserialize, Serialize)]
     pub struct UserInfoResponse {
