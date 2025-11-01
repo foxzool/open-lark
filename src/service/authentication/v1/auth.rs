@@ -68,7 +68,7 @@
 //! ```
 
 use crate::core::{
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api_resp::{ApiResponseTrait, BaseResponse},
     config::Config,
     constants::AccessTokenType,
     endpoints::auth::*,
