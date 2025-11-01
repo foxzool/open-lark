@@ -714,44 +714,6 @@ impl Default for GetAppAccessTokenBuilder {
 //     get
 // );
 
-/// 自建应用获取App Access Token构建器
-#[derive(Debug, Clone)]
-pub struct GetAppAccessTokenInternalBuilder {
-    //    request: GetAppAccessTokenInternalRequest,
-}
-
-impl GetAppAccessTokenInternalBuilder {
-    //    /// 创建新的Builder实例
-    //    pub fn new() -> Self {
-    //        Self {
-    //            request: GetAppAccessTokenInternalRequest::default(),
-    //        }
-    }
-
-    //    /// 设置应用ID
-    //    pub fn app_id(mut self, app_id: impl ToString) -> Self {
-    //        self.request.app_id = app_id.to_string();
-    //        self
-    }
-
-    //    /// 设置应用密钥
-    //    pub fn app_secret(mut self, app_secret: impl ToString) -> Self {
-    //        self.request.app_secret = app_secret.to_string();
-    //        self
-    }
-
-    //    /// 构建最终的请求对象
-    //    pub fn build(self) -> GetAppAccessTokenInternalRequest {
-    //        self.request
-    }
-}
-
-impl Default for GetAppAccessTokenInternalBuilder {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 // crate::impl_executable_builder!(
 //     GetAppAccessTokenInternalBuilder,
 //     AppAccessTokenService,
