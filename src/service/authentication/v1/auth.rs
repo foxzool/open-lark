@@ -7,8 +7,8 @@
 //! - 应用票据（App Ticket）管理
 
 use serde::{Deserialize, Serialize};
-use crate::core::SDKResult;
-use crate::core::standard_response::StandardResponse;
+use crate::core::api_resp::BaseResponse;
+use crate::core::config::Config;
 
 // 租户访问令牌响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -153,44 +153,44 @@ pub struct ResendAppTicketRequest {
 // 服务类型定义
 #[derive(Debug, Clone)]
 pub struct TenantAccessTokenService {
-    pub config: crate::core::Config,
+    pub config: Config,
 }
 
 impl TenantAccessTokenService {
-    pub fn new(config: crate::core::Config) -> Self {
+    pub fn new(config: Config) -> Self {
         Self { config }
     }
 }
 
 #[derive(Debug, Clone)]
 pub struct AppAccessTokenService {
-    pub config: crate::core::Config,
+    pub config: Config,
 }
 
 impl AppAccessTokenService {
-    pub fn new(config: crate::core::Config) -> Self {
+    pub fn new(config: Config) -> Self {
         Self { config }
     }
 }
 
 #[derive(Debug, Clone)]
 pub struct UserInfoService {
-    pub config: crate::core::Config,
+    pub config: Config,
 }
 
 impl UserInfoService {
-    pub fn new(config: crate::core::Config) -> Self {
+    pub fn new(config: Config) -> Self {
         Self { config }
     }
 }
 
 #[derive(Debug, Clone)]
 pub struct AppTicketService {
-    pub config: crate::core::Config,
+    pub config: Config,
 }
 
 impl AppTicketService {
-    pub fn new(config: crate::core::Config) -> Self {
+    pub fn new(config: Config) -> Self {
         Self { config }
     }
 }
@@ -199,10 +199,10 @@ impl AppTicketService {
 pub type UserInfo = UserInfoResponse;
 
 // 请求和响应类型别名
-pub type GetTenantAccessTokenResponse = StandardResponse<TenantAccessTokenResponse>;
-pub type GetAppAccessTokenResponse = StandardResponse<AppAccessTokenResponse>;
-pub type GetUserInfoResponse = StandardResponse<UserInfoResponse>;
-pub type ResendAppTicketResponse = StandardResponse<serde_json::Value>;
+pub type GetTenantAccessTokenResponse = BaseResponse<TenantAccessTokenResponse>;
+pub type GetAppAccessTokenResponse = BaseResponse<AppAccessTokenResponse>;
+pub type GetUserInfoResponse = BaseResponse<UserInfoResponse>;
+pub type ResendAppTicketResponse = BaseResponse<serde_json::Value>;
 
 #[cfg(test)]
 mod tests {
