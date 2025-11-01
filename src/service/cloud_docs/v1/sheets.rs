@@ -2233,91 +2233,79 @@ impl SheetsServiceV3 {
 
 /// 实现所有构建器的可执行特征
 #[async_trait]
-impl ExecutableBuilder for CreateSpreadsheetBuilder {
-    type Response = BaseResponse<CreateSpreadsheetResponse>;
-
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<Self::Response> {
+impl ExecutableBuilder<SheetsServiceV3, CreateSpreadsheetRequest, BaseResponse<CreateSpreadsheetResponse>> for CreateSpreadsheetBuilder {
+    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<CreateSpreadsheetResponse>> {
         service.create_spreadsheet(self.request).await
     }
 }
 
 #[async_trait]
-impl ExecutableBuilder for GetSheetMetaBuilder {
-    type Response = BaseResponse<GetSheetMetaResponse>;
-
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<Self::Response> {
+impl ExecutableBuilder<SheetsServiceV3, GetSheetMetaRequest, BaseResponse<GetSheetMetaResponse>> for GetSheetMetaBuilder {
+    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<GetSheetMetaResponse>> {
         service.get_sheet_meta(self.request).await
     }
 }
 
 #[async_trait]
-impl ExecutableBuilder for ReadRangeBuilder {
-    type Response = BaseResponse<ReadRangeResponse>;
+impl ExecutableBuilder<SheetsServiceV3, ReadRangeRequest, BaseResponse<ReadRangeResponse>> for ReadRangeBuilder {
 
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<Self::Response> {
+    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<ReadRangeResponse>> {
         service.read_range(self.request).await
     }
 }
 
 #[async_trait]
-impl ExecutableBuilder for WriteRangeBuilder {
-    type Response = BaseResponse<WriteRangeResponse>;
+impl ExecutableBuilder<SheetsServiceV3, WriteRangeRequest, BaseResponse<WriteRangeResponse>> for WriteRangeBuilder {
 
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<Self::Response> {
+    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<ReadRangeResponse>> {
         service.write_range(self.request).await
     }
 }
 
 #[async_trait]
-impl ExecutableBuilder for CreateChartBuilder {
-    type Response = BaseResponse<CreateChartResponse>;
+impl ExecutableBuilder<SheetsServiceV3, CreateChartRequest, BaseResponse<CreateChartResponse>> for CreateChartBuilder {
 
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<Self::Response> {
+    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<ReadRangeResponse>> {
         service.create_chart(self.request).await
     }
 }
 
 #[async_trait]
-impl ExecutableBuilder for DeleteSheetBuilder {
-    type Response = BaseResponse<DeleteSheetResponse>;
+impl ExecutableBuilder<SheetsServiceV3, DeleteSheetRequest, BaseResponse<DeleteSheetResponse>> for DeleteSheetBuilder {
 
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<Self::Response> {
+    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<ReadRangeResponse>> {
         service.delete_sheet(self.request).await
     }
 }
 
 #[async_trait]
-impl ExecutableBuilder for AddSheetBuilder {
-    type Response = BaseResponse<AddSheetResponse>;
+impl ExecutableBuilder<SheetsServiceV3, AddSheetRequest, BaseResponse<AddSheetResponse>> for AddSheetBuilder {
 
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<Self::Response> {
+    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<ReadRangeResponse>> {
         service.add_sheet(self.request).await
     }
 }
 
 #[async_trait]
-impl ExecutableBuilder for UpdateSheetBuilder {
-    type Response = BaseResponse<UpdateSheetResponse>;
+impl ExecutableBuilder<SheetsServiceV3, UpdateSheetRequest, BaseResponse<UpdateSheetResponse>> for UpdateSheetBuilder {
 
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<Self::Response> {
+    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<ReadRangeResponse>> {
         service.update_sheet(self.request).await
     }
 }
 
 #[async_trait]
-impl ExecutableBuilder for CopySheetBuilder {
-    type Response = BaseResponse<CopySheetResponse>;
+impl ExecutableBuilder<SheetsServiceV3, CopySheetRequest, BaseResponse<CopySheetResponse>> for CopySheetBuilder {
 
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<Self::Response> {
+    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<ReadRangeResponse>> {
         service.copy_sheet(self.request).await
     }
 }
 
 #[async_trait]
-impl ExecutableBuilder for BatchUpdateBuilder {
-    type Response = BaseResponse<BatchUpdateResponse>;
+impl ExecutableBuilder<SheetsServiceV3, BatchUpdateRequest, BaseResponse<BatchUpdateResponse>> for BatchUpdateBuilder {
 
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<Self::Response> {
+    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<ReadRangeResponse>> {
         service.batch_update(self.request).await
     }
 }

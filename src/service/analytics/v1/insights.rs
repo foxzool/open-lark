@@ -8,6 +8,7 @@
 //! - 深度数据挖掘和模式识别
 
 use crate::core::config::Config;
+use crate::service::analytics::v1::TrendDirection;
 use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
