@@ -76,7 +76,7 @@ use serde::{Deserialize, Serialize};
 
 // 导入SDK核心模块
 use crate::core::{
-use crate::core::{SDKResult, api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}},
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
