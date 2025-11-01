@@ -2257,7 +2257,7 @@ impl ExecutableBuilder<SheetsServiceV3, ReadRangeRequest, BaseResponse<ReadRange
 #[async_trait]
 impl ExecutableBuilder<SheetsServiceV3, WriteRangeRequest, BaseResponse<WriteRangeResponse>> for WriteRangeBuilder {
 
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<ReadRangeResponse>> {
+    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<WriteRangeResponse>> {
         service.write_range(self.request).await
     }
 }
@@ -2265,7 +2265,7 @@ impl ExecutableBuilder<SheetsServiceV3, WriteRangeRequest, BaseResponse<WriteRan
 #[async_trait]
 impl ExecutableBuilder<SheetsServiceV3, CreateChartRequest, BaseResponse<CreateChartResponse>> for CreateChartBuilder {
 
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<ReadRangeResponse>> {
+    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<CreateChartResponse>> {
         service.create_chart(self.request).await
     }
 }
@@ -2273,7 +2273,7 @@ impl ExecutableBuilder<SheetsServiceV3, CreateChartRequest, BaseResponse<CreateC
 #[async_trait]
 impl ExecutableBuilder<SheetsServiceV3, DeleteSheetRequest, BaseResponse<DeleteSheetResponse>> for DeleteSheetBuilder {
 
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<ReadRangeResponse>> {
+    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<DeleteSheetResponse>> {
         service.delete_sheet(self.request).await
     }
 }
@@ -2341,7 +2341,7 @@ impl ExecutableBuilder<SheetsServiceV3, BatchUpdateRequest, BaseResponse<BatchUp
 #[async_trait]
 impl ExecutableBuilder<SheetsServiceV3, UpdateSheetRequest, BaseResponse<UpdateSheetResponse>> for UpdateSheetBuilder {
 
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<ReadRangeResponse>> {
+    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<UpdateSheetResponse>> {
         service.update_sheet(self.request).await
     }
 }
@@ -2349,7 +2349,7 @@ impl ExecutableBuilder<SheetsServiceV3, UpdateSheetRequest, BaseResponse<UpdateS
 #[async_trait]
 impl ExecutableBuilder<SheetsServiceV3, CopySheetRequest, BaseResponse<CopySheetResponse>> for CopySheetBuilder {
 
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<ReadRangeResponse>> {
+    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<CopySheetResponse>> {
         service.copy_sheet(self.request).await
     }
 }
@@ -2357,7 +2357,7 @@ impl ExecutableBuilder<SheetsServiceV3, CopySheetRequest, BaseResponse<CopySheet
 #[async_trait]
 impl ExecutableBuilder<SheetsServiceV3, BatchUpdateRequest, BaseResponse<BatchUpdateResponse>> for BatchUpdateBuilder {
 
-    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<ReadRangeResponse>> {
+    async fn execute(self, service: &SheetsServiceV3) -> SDKResult<BaseResponse<BatchUpdateResponse>> {
         service.batch_update(self.request).await
     }
 }
