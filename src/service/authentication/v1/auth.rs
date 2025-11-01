@@ -68,7 +68,7 @@
 //! ```
 
 use crate::core::{
-    ApiRequest, api_resp::BaseResponse, config::Config, constants::AccessTokenType,
+    ApiRequest, api_resp::{ApiResponseTrait, BaseResponse}, config::Config, constants::AccessTokenType,
     endpoints::auth::*, http::Transport, req_option::RequestOption, SDKResult,
 };
 use async_trait::async_trait;
@@ -1378,3 +1378,12 @@ mod tests {
         }
     }
 }
+
+impl ApiResponseTrait for UserInfo {}
+
+impl ApiResponseTrait for AppAccessTokenResponse {}
+
+impl ApiResponseTrait for TenantAccessTokenResponse {}
+
+impl ApiResponseTrait for OauthUserInfoResponse {}
+impl ApiResponseTrait for ResendAppTicketResponse {}
