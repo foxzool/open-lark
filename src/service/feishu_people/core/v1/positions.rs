@@ -69,7 +69,6 @@ use crate::core::{
     constants::AccessTokenType,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 
 // Use open_lark_core's error type for compatibility with async traits
