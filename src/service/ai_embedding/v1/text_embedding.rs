@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use crate::core::SDKResult;
 /// 文本嵌入服务,
 pub struct TextEmbeddingService {
     config: crate::core::config::Config,

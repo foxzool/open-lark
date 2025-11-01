@@ -6,7 +6,7 @@
 //! - 更新任务状态
 //! - 删除任务
 
-use crate::core::config::Config;
+use crate::core::{config::Config, SDKResult};
 use serde::{Deserialize, Serialize};
 
 /// 任务服务 v1版本

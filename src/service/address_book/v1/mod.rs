@@ -6,7 +6,7 @@
 //! - 批量操作
 //! - 搜索和过滤
 
-use crate::core::config::Config;
+use crate::core::{config::Config, SDKResult};
 use serde::{Deserialize, Serialize};
 
 /// 地址簿服务 v1版本

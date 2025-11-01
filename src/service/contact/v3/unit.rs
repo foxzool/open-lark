@@ -7,6 +7,7 @@ use crate::{,
     service::contact::models::*,
 };
 use serde::{Deserialize, Serialize};
+use crate::core::SDKResult;
 /// 单位管理服务,
 pub struct UnitService {
     config: Config,

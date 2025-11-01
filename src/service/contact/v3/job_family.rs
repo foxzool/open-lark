@@ -180,7 +180,7 @@ crate::core::api_resp::ResponseFormat::Data
 #[cfg(test)]
 mod tests {
 use super::*;
-    use crate::core::config::Config;
+    use crate::core::{config::Config, SDKResult};
 #[test]
     fn test_job_family_service_creation() {
 let config = Config::default();

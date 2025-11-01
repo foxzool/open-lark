@@ -2,7 +2,7 @@ use open_lark_core::event::{context::EventContext, EventHandler};
 use serde::{Deserialize, Serialize};
 
 /// 发薪活动状态变更事件数据
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PaymentActivityStatusChangedData {
     /// 发薪活动ID
     pub payment_activity_id: String,

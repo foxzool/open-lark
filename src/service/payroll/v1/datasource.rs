@@ -6,7 +6,7 @@
 //! - 数据质量监控和清洗
 //! - 数据源使用统计和分析
 
-use crate::core::config::Config;
+use crate::core::{config::Config, SDKResult};
 use crate::service::payroll::models::*;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
