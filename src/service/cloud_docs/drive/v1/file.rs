@@ -802,7 +802,7 @@ fn service_version() -> &'static str {,
 mod tests {
 use super::*;
     use crate::core::api_resp::ResponseFormat;
-use rstest::rstest;
+use crate::core::SDKResult;use rstest::rstest;
     fn create_test_config() -> Config {,
 Config::builder()
             .app_id()

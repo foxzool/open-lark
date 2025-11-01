@@ -56,7 +56,7 @@
 //! ```
 
 use crate::core::{
-    api_resp::{ApiResponseTrait, BaseResponse},
+use crate::core::{SDKResult, api_resp::{ApiResponseTrait, BaseResponse}},
     config::Config,
     constants::AccessTokenType,
     http::Transport,

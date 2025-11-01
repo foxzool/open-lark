@@ -9,7 +9,7 @@
 //! - 审计日志归档管理
 
 use crate::core::config::Config;
-use serde::{Deserialize, Serialize};
+use crate::core::SDKResult;use serde::{Deserialize, Serialize};
 
 // 导入核心类型
 use super::types::*;

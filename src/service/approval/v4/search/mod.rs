@@ -104,7 +104,7 @@ use std::collections::HashMap;
 
 // 导入SDK核心模块
 use crate::core::{
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+use crate::core::{SDKResult, api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}},
     config::Config,
     constants::AccessTokenType,
     http::Transport,

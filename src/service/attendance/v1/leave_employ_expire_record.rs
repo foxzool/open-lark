@@ -40,7 +40,7 @@ fn service_version() -> &'static str {,
 mod tests {
 use super::*;
     use crate::core::config::Config;
-#[test]
+use crate::core::SDKResult;#[test]
     fn test_leave_employ_expire_record_service_creation() {
 let config = Config::default();
         let service = LeaveEmployExpireRecordService { config };

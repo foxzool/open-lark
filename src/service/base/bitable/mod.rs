@@ -2,7 +2,7 @@
 //,
 // 提供多维表格相关的完整功能
 use crate::core::{,
-    api_resp::BaseResponse,
+use crate::core::SDKResult;    api_resp::BaseResponse,
     config::Config,
     constants::AccessTokenType,
     http::Transport,

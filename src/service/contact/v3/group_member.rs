@@ -206,7 +206,7 @@ crate::core::api_resp::ResponseFormat::Data
 mod tests {
 use super::*;
     use crate::core::config::Config;
-#[test]
+use crate::core::SDKResult;#[test]
     fn test_group_member_service_creation() {
 let config = Config::default();
         let service = GroupMemberService::new(config);

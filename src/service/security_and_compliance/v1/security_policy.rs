@@ -9,7 +9,7 @@
 //! - 跨系统策略同步和分发
 
 use crate::core::config::Config;
-use serde::{Deserialize, Serialize};
+use crate::core::SDKResult;use serde::{Deserialize, Serialize};
 
 // 导入核心类型
 use super::types::*;

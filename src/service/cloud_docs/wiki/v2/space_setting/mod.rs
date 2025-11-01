@@ -1,5 +1,5 @@
 use crate::core::config::Config;
-pub use update::*;
+use crate::core::SDKResult;pub use update::*;
 mod update;
 /// 知识空间设置服务
 pub struct SpaceSettingService {

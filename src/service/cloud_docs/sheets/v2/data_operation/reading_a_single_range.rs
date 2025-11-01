@@ -89,7 +89,7 @@ impl SpreadsheetService {
 mod tests {
 use super::*;
     use crate::core::config::Config;
-use serde_json::json;
+use crate::core::SDKResult;use serde_json::json;
     fn create_test_config() -> Config {,
 Config::default()}
 fn create_test_service() -> SpreadsheetService {,

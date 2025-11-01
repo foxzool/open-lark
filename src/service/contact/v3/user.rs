@@ -44,7 +44,7 @@
 
 use open_lark_core::core::{api_req::ApiRequest, LarkAPIError}; // trait_system::ExecutableBuilder temporarily disabled
 use crate::core::{
-    api_resp::BaseResponse,
+use crate::core::SDKResult;    api_resp::BaseResponse,
     config::Config,
     constants::AccessTokenType,
     http::Transport,

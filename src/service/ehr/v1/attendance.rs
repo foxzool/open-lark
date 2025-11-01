@@ -71,11 +71,11 @@
 //! ```
 
 use crate::core::{
+    SDKResult,
     api_resp::{ApiResponseTrait, BaseResponse},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
-    SDKResult,
 };
 use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};

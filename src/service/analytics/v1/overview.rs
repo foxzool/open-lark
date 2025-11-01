@@ -416,7 +416,7 @@ impl OverviewService {
 
     // ==================== 辅助方法 ====================
 
-    fn generate_daily_activity_data(&self, _period: period: &strstr) -> Vec<DailyActivityData> {
+    fn generate_daily_activity_data(&self, _period: &str) -> Vec<DailyActivityData> {
         let mut data = Vec::new();
         let base_date = chrono::Utc::now();
 

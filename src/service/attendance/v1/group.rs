@@ -2,7 +2,7 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;
 use serde_json::json;
 use crate::core::{,
-    api_resp::BaseResponse,
+use crate::core::SDKResult;    api_resp::BaseResponse,
     config::Config,
     constants::AccessTokenType,
     endpoints::{attendance::*, EndpointBuilder}

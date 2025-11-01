@@ -3,7 +3,7 @@ pub mod list;
 pub mod patch;
 pub mod patch_meta;
 use crate::core::config::Config;
-pub use get::*;
+use crate::core::SDKResult;pub use get::*;
 pub use list::*;
 pub use patch::*;
 pub use patch_meta::*;
