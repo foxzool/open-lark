@@ -78,7 +78,7 @@ pub struct I18nText {
 }
 
 impl Service for PaygroupService {
-    fn get_config(&self) -> &Config {
+    fn config(&self) -> &Config {
         &self.config
     }
 }

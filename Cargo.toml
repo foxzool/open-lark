@@ -317,7 +317,7 @@ required-features = ["apass"]
 [[example]]
 name = "websocket_client"
 path = "examples/basic/websocket_client.rs"
-required-features = ["websocket"]
+required-features = ["websocket", "im"]
 
 [[example]]
 name = "enhanced_drive_operations"

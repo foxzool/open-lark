@@ -68,7 +68,7 @@
 //! ```
 
 use crate::core::{
-    api_req::ApiRequest, api_resp::BaseResponse, config::Config, constants::AccessTokenType,
+    ApiRequest, api_resp::BaseResponse, config::Config, constants::AccessTokenType,
     endpoints::auth::*, http::Transport, req_option::RequestOption, SDKResult,
 };
 use async_trait::async_trait;

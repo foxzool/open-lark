@@ -34,7 +34,7 @@ pub struct OperatorInfo {
 }
 
 /// 发薪活动状态变更事件
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct P2PayrollPaymentActivityStatusChangedV1 {
     /// 事件通用信息
     #[serde(flatten)]

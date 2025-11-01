@@ -93,13 +93,14 @@ pub mod {};
         config.pascal_name,
         config.pascal_name,
         config.name,
+        "crate::service",
         config.name,
         config.version,
         config.pascal_name,
         config.name,
+        "crate::service",
         config.name,
-        config.version,
-        config.name
+        config.version
     )
 }
 
@@ -234,8 +235,7 @@ pub use models::*;
         config.version,
         config.pascal_name,
         config.version,
-        config.pascal_name,
-        config.version
+        config.pascal_name
     )
 }
 
@@ -495,7 +495,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {{
         config.version,
         config.name,
         config.version,
-        config.pascal_name,
         config.name,
         config.pascal_name
     )

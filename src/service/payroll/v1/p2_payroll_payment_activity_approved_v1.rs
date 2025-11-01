@@ -43,7 +43,7 @@ pub struct PaymentAmount {
 }
 
 /// 发薪活动封存事件
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct P2PayrollPaymentActivityApprovedV1 {
     /// 事件通用信息
     #[serde(flatten)]

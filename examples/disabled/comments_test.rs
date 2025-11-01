@@ -1,3 +1,5 @@
+#![cfg(feature = "cloud-docs")]
+
 //! Cloud Docs Comments API 使用示例
 //!
 //! 本示例演示如何使用云文档评论相关的API功能，包括：

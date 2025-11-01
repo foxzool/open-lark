@@ -48,7 +48,7 @@ pub struct ArchiveResponse {
 }
 
 impl Service for PaymentActivityService {
-    fn get_config(&self) -> &Config {
+    fn config(&self) -> &Config {
         &self.config
     }
 }

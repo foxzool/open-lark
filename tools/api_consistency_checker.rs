@@ -89,11 +89,13 @@ pub enum Severity {
 pub struct ApiConsistencyChecker {
     service_dir: PathBuf,
     analyses: Vec<ApiAnalysis>,
+    #[allow(dead_code)]
     builder_pattern: Regex,
     executable_builder_pattern: Regex,
     standard_response_pattern: Regex,
     base_response_pattern: Regex,
     api_response_trait_pattern: Regex,
+    #[allow(dead_code)]
     doc_comment_pattern: Regex,
     error_unwrap_pattern: Regex,
 }
@@ -247,7 +249,7 @@ impl ApiConsistencyChecker {
 
         // 检查ExecutableBuilder宏 - 这是我们的新标准
         let has_executable_builder =
-            self.executable_builder_pattern.is_match(content) && content.contains(&method_name);
+            self.executable_builder_pattern.is_match(content) && content.contains(method_name);
 
         has_struct_builder || has_executable_builder
     }
@@ -303,16 +305,11 @@ impl ApiConsistencyChecker {
         content: &str,
         _method_name: &str,
     ) -> ErrorHandlingPattern {
-        // 检查是否使用BaseResponse<T>格式（新标准）
-        if self.base_response_pattern.is_match(content) {
-            ErrorHandlingPattern::StandardResponse
-        }
-        // 检查是否使用ApiResponseTrait（新标准）
-        else if self.api_response_trait_pattern.is_match(content) {
-            ErrorHandlingPattern::StandardResponse
-        }
-        // 检查是否使用传统的.into_result()（旧标准）
-        else if self.standard_response_pattern.is_match(content) {
+        // 检查是否使用标准响应格式
+        if self.base_response_pattern.is_match(content)
+            || self.api_response_trait_pattern.is_match(content)
+            || self.standard_response_pattern.is_match(content)
+        {
             ErrorHandlingPattern::StandardResponse
         }
         // 检查是否使用直接unwrap

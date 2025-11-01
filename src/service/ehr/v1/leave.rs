@@ -1162,7 +1162,7 @@ impl LeaveService {
     /// ```
     pub async fn get_leave_record(&self, leave_id: &str) -> SDKResult<LeaveRecordResponse> {
         if leave_id.is_empty() {
-            return Err(open_lark_core::error::SDKError::InvalidParameter(
+            return Err(crate::core::error::LarkAPIError::IllegalParamError(
                 "请假记录ID不能为空".to_string(),
             ));
         }
@@ -1260,13 +1260,13 @@ impl LeaveService {
         reason: &str,
     ) -> SDKResult<EmptyResponse> {
         if leave_id.is_empty() {
-            return Err(open_lark_core::error::SDKError::InvalidParameter(
+            return Err(crate::core::error::LarkAPIError::IllegalParamError(
                 "请假记录ID不能为空".to_string(),
             ));
         }
 
         if reason.is_empty() {
-            return Err(open_lark_core::error::SDKError::InvalidParameter(
+            return Err(crate::core::error::LarkAPIError::IllegalParamError(
                 "取消原因不能为空".to_string(),
             ));
         }
@@ -1522,13 +1522,13 @@ impl LeaveService {
         reason: &str,
     ) -> SDKResult<LeaveBalanceResponse> {
         if employee_id.is_empty() {
-            return Err(open_lark_core::error::SDKError::InvalidParameter(
+            return Err(crate::core::error::LarkAPIError::IllegalParamError(
                 "员工ID不能为空".to_string(),
             ));
         }
 
         if reason.is_empty() {
-            return Err(open_lark_core::error::SDKError::InvalidParameter(
+            return Err(crate::core::error::LarkAPIError::IllegalParamError(
                 "调整原因不能为空".to_string(),
             ));
         }
@@ -1631,7 +1631,7 @@ impl LeaveService {
         month: Option<i32>,
     ) -> SDKResult<LeaveStatisticsResponse> {
         if department_id.is_empty() {
-            return Err(open_lark_core::error::SDKError::InvalidParameter(
+            return Err(crate::core::error::LarkAPIError::IllegalParamError(
                 "部门ID不能为空".to_string(),
             ));
         }
@@ -1818,7 +1818,7 @@ impl LeaveService {
     /// ```
     pub async fn delete_leave_rule(&self, rule_id: &str) -> SDKResult<EmptyResponse> {
         if rule_id.is_empty() {
-            return Err(open_lark_core::error::SDKError::InvalidParameter(
+            return Err(crate::core::error::LarkAPIError::IllegalParamError(
                 "规则ID不能为空".to_string(),
             ));
         }
@@ -1843,38 +1843,38 @@ impl LeaveService {
     /// 验证创建请假申请请求参数
     fn validate_create_leave_request(&self, request: &CreateLeaveRequest) -> SDKResult<()> {
         if request.employee_id.is_empty() {
-            return Err(open_lark_core::error::SDKError::InvalidParameter(
+            return Err(crate::core::error::LarkAPIError::IllegalParamError(
                 "员工ID不能为空".to_string(),
             ));
         }
 
         if request.start_time.is_empty() {
-            return Err(open_lark_core::error::SDKError::InvalidParameter(
+            return Err(crate::core::error::LarkAPIError::IllegalParamError(
                 "请假开始时间不能为空".to_string(),
             ));
         }
 
         if request.end_time.is_empty() {
-            return Err(open_lark_core::error::SDKError::InvalidParameter(
+            return Err(crate::core::error::LarkAPIError::IllegalParamError(
                 "请假结束时间不能为空".to_string(),
             ));
         }
 
         if request.reason.is_empty() {
-            return Err(open_lark_core::error::SDKError::InvalidParameter(
+            return Err(crate::core::error::LarkAPIError::IllegalParamError(
                 "请假原因不能为空".to_string(),
             ));
         }
 
         // 验证时间格式和逻辑
         if let Err(_) = chrono::DateTime::parse_from_rfc3339(&request.start_time) {
-            return Err(open_lark_core::error::SDKError::InvalidParameter(
+            return Err(crate::core::error::LarkAPIError::IllegalParamError(
                 "请假开始时间格式无效，请使用RFC3339格式".to_string(),
             ));
         }
 
         if let Err(_) = chrono::DateTime::parse_from_rfc3339(&request.end_time) {
-            return Err(open_lark_core::error::SDKError::InvalidParameter(
+            return Err(crate::core::error::LarkAPIError::IllegalParamError(
                 "请假结束时间格式无效，请使用RFC3339格式".to_string(),
             ));
         }
@@ -1884,7 +1884,7 @@ impl LeaveService {
         let end_time = chrono::DateTime::parse_from_rfc3339(&request.end_time).unwrap();
 
         if start_time >= end_time {
-            return Err(open_lark_core::error::SDKError::InvalidParameter(
+            return Err(crate::core::error::LarkAPIError::IllegalParamError(
                 "请假结束时间必须晚于开始时间".to_string(),
             ));
         }
@@ -1895,7 +1895,7 @@ impl LeaveService {
     /// 验证更新请假记录请求参数
     fn validate_update_leave_request(&self, request: &UpdateLeaveRequest) -> SDKResult<()> {
         if request.leave_id.is_empty() {
-            return Err(open_lark_core::error::SDKError::InvalidParameter(
+            return Err(crate::core::error::LarkAPIError::IllegalParamError(
                 "请假记录ID不能为空".to_string(),
             ));
         }
@@ -1903,7 +1903,7 @@ impl LeaveService {
         // 如果有更新原因，不能为空
         if let Some(ref reason) = request.update_fields.reason {
             if reason.is_empty() {
-                return Err(open_lark_core::error::SDKError::InvalidParameter(
+                return Err(crate::core::error::LarkAPIError::IllegalParamError(
                     "更新后的请假原因不能为空".to_string(),
                 ));
             }
@@ -1920,7 +1920,7 @@ impl LeaveService {
         // 验证日期格式
         if let Some(ref start_date) = request.start_date {
             if let Err(_) = chrono::NaiveDate::parse_from_str(start_date, "%Y-%m-%d") {
-                return Err(open_lark_core::error::SDKError::InvalidParameter(
+                return Err(crate::core::error::LarkAPIError::IllegalParamError(
                     "开始日期格式无效，请使用YYYY-MM-DD格式".to_string(),
                 ));
             }
@@ -1928,7 +1928,7 @@ impl LeaveService {
 
         if let Some(ref end_date) = request.end_date {
             if let Err(_) = chrono::NaiveDate::parse_from_str(end_date, "%Y-%m-%d") {
-                return Err(open_lark_core::error::SDKError::InvalidParameter(
+                return Err(crate::core::error::LarkAPIError::IllegalParamError(
                     "结束日期格式无效，请使用YYYY-MM-DD格式".to_string(),
                 ));
             }
@@ -1937,7 +1937,7 @@ impl LeaveService {
         // 验证分页参数
         if let Some(page_size) = request.page_size {
             if page_size <= 0 || page_size > 1000 {
-                return Err(open_lark_core::error::SDKError::InvalidParameter(
+                return Err(crate::core::error::LarkAPIError::IllegalParamError(
                     "分页大小必须在1-1000之间".to_string(),
                 ));
             }
@@ -1949,7 +1949,7 @@ impl LeaveService {
     /// 验证请假审批请求参数
     fn validate_approve_leave_request(&self, request: &ApproveLeaveRequest) -> SDKResult<()> {
         if request.leave_id.is_empty() {
-            return Err(open_lark_core::error::SDKError::InvalidParameter(
+            return Err(crate::core::error::LarkAPIError::IllegalParamError(
                 "请假记录ID不能为空".to_string(),
             ));
         }
@@ -1959,7 +1959,7 @@ impl LeaveService {
             if request.forward_to_user_id.is_none()
                 || request.forward_to_user_id.as_ref().unwrap().is_empty()
             {
-                return Err(open_lark_core::error::SDKError::InvalidParameter(
+                return Err(crate::core::error::LarkAPIError::IllegalParamError(
                     "转交操作必须提供转交对象用户ID".to_string(),
                 ));
             }
@@ -1974,14 +1974,14 @@ impl LeaveService {
         request: &QueryLeaveBalanceRequest,
     ) -> SDKResult<()> {
         if request.employee_id.is_empty() {
-            return Err(open_lark_core::error::SDKError::InvalidParameter(
+            return Err(crate::core::error::LarkAPIError::IllegalParamError(
                 "员工ID不能为空".to_string(),
             ));
         }
 
         if let Some(year) = request.year {
             if year < 2000 || year > 2100 {
-                return Err(open_lark_core::error::SDKError::InvalidParameter(
+                return Err(crate::core::error::LarkAPIError::IllegalParamError(
                     "年份必须在2000-2100之间".to_string(),
                 ));
             }
@@ -1996,14 +1996,14 @@ impl LeaveService {
         request: &GetLeaveStatisticsRequest,
     ) -> SDKResult<()> {
         if request.year < 2000 || request.year > 2100 {
-            return Err(open_lark_core::error::SDKError::InvalidParameter(
+            return Err(crate::core::error::LarkAPIError::IllegalParamError(
                 "年份必须在2000-2100之间".to_string(),
             ));
         }
 
         if let Some(month) = request.month {
             if month < 1 || month > 12 {
-                return Err(open_lark_core::error::SDKError::InvalidParameter(
+                return Err(crate::core::error::LarkAPIError::IllegalParamError(
                     "月份必须在1-12之间".to_string(),
                 ));
             }
@@ -2018,14 +2018,14 @@ impl LeaveService {
         request: &CreateLeaveRuleRequest,
     ) -> SDKResult<()> {
         if request.name.is_empty() {
-            return Err(open_lark_core::error::SDKError::InvalidParameter(
+            return Err(crate::core::error::LarkAPIError::IllegalParamError(
                 "规则名称不能为空".to_string(),
             ));
         }
 
         if let Some(max_days) = request.max_leave_days {
             if max_days <= 0.0 {
-                return Err(open_lark_core::error::SDKError::InvalidParameter(
+                return Err(crate::core::error::LarkAPIError::IllegalParamError(
                     "最大请假天数必须大于0".to_string(),
                 ));
             }
@@ -2033,7 +2033,7 @@ impl LeaveService {
 
         if let Some(min_hours) = request.min_duration_hours {
             if min_hours < 0.0 {
-                return Err(open_lark_core::error::SDKError::InvalidParameter(
+                return Err(crate::core::error::LarkAPIError::IllegalParamError(
                     "最小请假时长不能为负数".to_string(),
                 ));
             }
@@ -2041,7 +2041,7 @@ impl LeaveService {
 
         if let Some(advance_days) = request.advance_notice_days {
             if advance_days < 0 {
-                return Err(open_lark_core::error::SDKError::InvalidParameter(
+                return Err(crate::core::error::LarkAPIError::IllegalParamError(
                     "提前申请天数不能为负数".to_string(),
                 ));
             }
@@ -2056,7 +2056,7 @@ impl LeaveService {
         request: &UpdateLeaveRuleRequest,
     ) -> SDKResult<()> {
         if request.rule_id.is_empty() {
-            return Err(open_lark_core::error::SDKError::InvalidParameter(
+            return Err(crate::core::error::LarkAPIError::IllegalParamError(
                 "规则ID不能为空".to_string(),
             ));
         }
@@ -2064,7 +2064,7 @@ impl LeaveService {
         // 验证各更新字段的值
         if let Some(ref name) = request.update_fields.name {
             if name.is_empty() {
-                return Err(open_lark_core::error::SDKError::InvalidParameter(
+                return Err(crate::core::error::LarkAPIError::IllegalParamError(
                     "规则名称不能为空".to_string(),
                 ));
             }
@@ -2072,7 +2072,7 @@ impl LeaveService {
 
         if let Some(max_days) = request.update_fields.max_leave_days {
             if max_days <= 0.0 {
-                return Err(open_lark_core::error::SDKError::InvalidParameter(
+                return Err(crate::core::error::LarkAPIError::IllegalParamError(
                     "最大请假天数必须大于0".to_string(),
                 ));
             }
@@ -2080,7 +2080,7 @@ impl LeaveService {
 
         if let Some(min_hours) = request.update_fields.min_duration_hours {
             if min_hours < 0.0 {
-                return Err(open_lark_core::error::SDKError::InvalidParameter(
+                return Err(crate::core::error::LarkAPIError::IllegalParamError(
                     "最小请假时长不能为负数".to_string(),
                 ));
             }

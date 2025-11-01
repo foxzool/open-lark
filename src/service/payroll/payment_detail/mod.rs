@@ -39,7 +39,7 @@ pub struct PaymentDetailResponse {
 }
 
 impl Service for PaymentDetailService {
-    fn get_config(&self) -> &Config {
+    fn config(&self) -> &Config {
         &self.config
     }
 }

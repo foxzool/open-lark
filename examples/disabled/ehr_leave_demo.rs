@@ -1,3 +1,5 @@
+#![cfg(feature = "ehr")]
+
 //! EHR Leave Management Demo
 //!
 //! 演示如何使用open-lark SDK的请假管理功能

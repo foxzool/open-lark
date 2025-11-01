@@ -4,7 +4,6 @@
 
 use std::env;
 use std::fs;
-use std::io::Write;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -136,18 +135,18 @@ impl {}Service {{
 pub mod {};
 "#,
         pascal_name,
-        format!("{} API服务", pascal_name),
+        "{} API服务",
         pascal_name,
         pascal_name,
-        version,
-        pascal_name,
-        version,
         pascal_name,
         version,
         pascal_name,
         version,
         pascal_name,
-        version
+        version,
+        pascal_name,
+        version,
+        pascal_name
     )
 }
 
@@ -275,15 +274,7 @@ pub mod models;
 // 重新导出
 pub use models::*;
 "#,
-        pascal_name,
-        version,
-        format!("{} API服务", pascal_name),
-        pascal_name,
-        version,
-        pascal_name,
-        version,
-        pascal_name,
-        version
+        pascal_name, version, "{} API服务", pascal_name, pascal_name, version, pascal_name, version
     )
 }
 
@@ -413,7 +404,7 @@ impl Default for ListRequest {
     .to_string()
 }
 
-fn generate_example(service_name: &str, version: &str, feature_flag: &str) -> String {
+fn generate_example(service_name: &str, version: &str, _feature_flag: &str) -> String {
     let pascal_name = to_pascal_case(service_name);
     format!(
         r#"//! {}模块使用示例
@@ -527,7 +518,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {{
 }}
 "#,
         pascal_name,
-        format!("{} API服务", pascal_name),
+        "{} API服务",
         service_name,
         version,
         service_name,

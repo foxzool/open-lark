@@ -169,8 +169,6 @@ pub mod personal_settings;
 pub mod report;
 #[cfg(feature = "search")]
 pub mod search;
-#[cfg(feature = "security-and-compliance")]
-pub mod security_and_compliance;
 #[cfg(feature = "security_and_compliance")]
 pub mod security_and_compliance;
 #[cfg(feature = "task")]

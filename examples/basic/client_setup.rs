@@ -9,13 +9,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app_secret = std::env::var("APP_SECRET").expect("APP_SECRET environment variable not set");
 
     // 创建客户端
-    let _client = LarkClient::builder(&app_id, &app_secret)
-        .with_enable_token_cache(true)
-        .build();
+    let _client = LarkClient::builder(&app_id, &app_secret).build();
 
     println!("✅ Lark client created successfully!");
     println!("📱 App ID: {app_id}");
-    println!("🔧 Token cache: enabled");
+    // println!("🔧 Token cache: enabled");
 
     println!("\n🚀 Available services:");
     println!("- IM (instant messaging)");

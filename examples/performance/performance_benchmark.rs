@@ -58,7 +58,7 @@ impl BenchmarkResult {
     }
 
     /// 计算统计数据
-    pub fn calculate_statistics(&mut self, response_times: &mut Vec<u64>) {
+    pub fn calculate_statistics(&mut self, response_times: &mut [u64]) {
         if response_times.is_empty() {
             return;
         }
