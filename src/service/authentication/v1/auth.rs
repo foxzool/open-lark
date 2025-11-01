@@ -74,10 +74,10 @@ use crate::core::{
     endpoints::auth::*,
     http::Transport,
     req_option::RequestOption,
-    ApiRequest, SDKResult,
+    SDKResult,
 };
-use async_trait::async_trait;
-use open_lark_core::core::trait_system::ExecutableBuilder;
+use open_lark_core::core::{api_req::ApiRequest, trait_system::ExecutableBuilder};
+// use async_trait::async_trait; // 暂时注释，等待ExecutableBuilder修复
 use serde::{Deserialize, Serialize};
 
 // ==================== 用户信息服务 ====================
@@ -649,7 +649,9 @@ impl Default for GetUserInfoBuilder {
     }
 }
 
+// TODO: 修复ExecutableBuilder trait实现 - 方法签名不匹配
 // 应用ExecutableBuilder trait for UserInfo
+/*
 crate::impl_executable_builder!(
     GetUserInfoBuilder,
     UserInfoService,
@@ -657,6 +659,7 @@ crate::impl_executable_builder!(
     BaseResponse<UserInfo>,
     get
 );
+*/
 
 // 应用访问令牌构建器
 /// 商店应用获取App Access Token构建器
@@ -703,13 +706,13 @@ impl Default for GetAppAccessTokenBuilder {
     }
 }
 
-crate::impl_executable_builder!(
-    GetAppAccessTokenBuilder,
-    AppAccessTokenService,
-    GetAppAccessTokenRequest,
-    BaseResponse<AppAccessTokenResponse>,
-    get
-);
+// crate::impl_executable_builder!(
+//     GetAppAccessTokenBuilder,
+//     AppAccessTokenService,
+//     GetAppAccessTokenRequest,
+//     BaseResponse<AppAccessTokenResponse>,
+//     get
+// );
 
 /// 自建应用获取App Access Token构建器
 #[derive(Debug, Clone)]
@@ -749,13 +752,13 @@ impl Default for GetAppAccessTokenInternalBuilder {
     }
 }
 
-crate::impl_executable_builder!(
-    GetAppAccessTokenInternalBuilder,
-    AppAccessTokenService,
-    GetAppAccessTokenInternalRequest,
-    BaseResponse<AppAccessTokenResponse>,
-    get_internal
-);
+// crate::impl_executable_builder!(
+//     GetAppAccessTokenInternalBuilder,
+//     AppAccessTokenService,
+//     GetAppAccessTokenInternalRequest,
+//     BaseResponse<AppAccessTokenResponse>,
+//     get_internal
+// );
 
 // 租户访问令牌构建器
 /// 商店应用获取Tenant Access Token构建器
@@ -802,13 +805,13 @@ impl Default for GetTenantAccessTokenBuilder {
     }
 }
 
-crate::impl_executable_builder!(
-    GetTenantAccessTokenBuilder,
-    TenantAccessTokenService,
-    GetTenantAccessTokenRequest,
-    BaseResponse<TenantAccessTokenResponse>,
-    get
-);
+// crate::impl_executable_builder!(
+//     GetTenantAccessTokenBuilder,
+//     TenantAccessTokenService,
+//     GetTenantAccessTokenRequest,
+//     BaseResponse<TenantAccessTokenResponse>,
+//     get
+// );
 
 /// 自建应用获取Tenant Access Token构建器
 #[derive(Debug, Clone)]
@@ -854,13 +857,13 @@ impl Default for GetTenantAccessTokenInternalBuilder {
     }
 }
 
-crate::impl_executable_builder!(
-    GetTenantAccessTokenInternalBuilder,
-    TenantAccessTokenService,
-    GetTenantAccessTokenInternalRequest,
-    BaseResponse<TenantAccessTokenResponse>,
-    get_internal
-);
+// crate::impl_executable_builder!(
+//     GetTenantAccessTokenInternalBuilder,
+//     TenantAccessTokenService,
+//     GetTenantAccessTokenInternalRequest,
+//     BaseResponse<TenantAccessTokenResponse>,
+//     get_internal
+// );
 
 // 应用票据构建器
 /// 重新获取App Ticket构建器
@@ -907,13 +910,13 @@ impl Default for ResendAppTicketBuilder {
     }
 }
 
-crate::impl_executable_builder!(
-    ResendAppTicketBuilder,
-    AppTicketService,
-    ResendAppTicketRequest,
-    BaseResponse<ResendAppTicketResponse>,
-    resend
-);
+// crate::impl_executable_builder!(
+//     ResendAppTicketBuilder,
+//     AppTicketService,
+//     ResendAppTicketRequest,
+//     BaseResponse<ResendAppTicketResponse>,
+//     resend
+// );
 
 // ==================== 数据模型 ====================
 
