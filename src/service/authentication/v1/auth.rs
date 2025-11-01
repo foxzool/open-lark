@@ -726,30 +726,30 @@ impl GetAppAccessTokenInternalBuilder {
     //        Self {
     //            request: GetAppAccessTokenInternalRequest::default(),
     //        }
-    //    }
+    }
 
     //    /// 设置应用ID
     //    pub fn app_id(mut self, app_id: impl ToString) -> Self {
     //        self.request.app_id = app_id.to_string();
     //        self
-    //    }
+    }
 
     //    /// 设置应用密钥
     //    pub fn app_secret(mut self, app_secret: impl ToString) -> Self {
     //        self.request.app_secret = app_secret.to_string();
     //        self
-    //    }
+    }
 
     //    /// 构建最终的请求对象
     //    pub fn build(self) -> GetAppAccessTokenInternalRequest {
     //        self.request
-    //    }
+    }
 }
 
 impl Default for GetAppAccessTokenInternalBuilder {
-    //    fn default() -> Self {
-    //        Self::new()
-    //    }
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 // crate::impl_executable_builder!(
@@ -773,36 +773,36 @@ impl GetTenantAccessTokenBuilder {
     //        Self {
     //            request: GetTenantAccessTokenRequest::default(),
     //        }
-    //    }
+    }
 
     //    /// 设置应用ID
     //    pub fn app_id(mut self, app_id: impl ToString) -> Self {
     //        self.request.app_id = app_id.to_string();
     //        self
-    //    }
+    }
 
     //    /// 设置应用密钥
     //    pub fn app_secret(mut self, app_secret: impl ToString) -> Self {
     //        self.request.app_secret = app_secret.to_string();
     //        self
-    //    }
+    }
 
     //    /// 设置企业标识
     //    pub fn tenant_key(mut self, tenant_key: impl ToString) -> Self {
     //        self.request.tenant_key = Some(tenant_key.to_string());
     //        self
-    //    }
+    }
 
     //    /// 构建最终的请求对象
     //    pub fn build(self) -> GetTenantAccessTokenRequest {
     //        self.request
-    //    }
+    }
 }
 
 impl Default for GetTenantAccessTokenBuilder {
-    //    fn default() -> Self {
-    //        Self::new()
-    //    }
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 // crate::impl_executable_builder!(
@@ -825,36 +825,36 @@ impl GetTenantAccessTokenInternalBuilder {
     //        Self {
     //            request: GetTenantAccessTokenInternalRequest::default(),
     //        }
-    //    }
+    }
 
     //    /// 设置应用ID
     //    pub fn app_id(mut self, app_id: impl ToString) -> Self {
     //        self.request.app_id = app_id.to_string();
     //        self
-    //    }
+    }
 
     //    /// 设置应用密钥
     //    pub fn app_secret(mut self, app_secret: impl ToString) -> Self {
     //        self.request.app_secret = app_secret.to_string();
     //        self
-    //    }
+    }
 
     //    /// 设置企业标识
     //    pub fn tenant_key(mut self, tenant_key: impl ToString) -> Self {
     //        self.request.tenant_key = Some(tenant_key.to_string());
     //        self
-    //    }
+    }
 
     //    /// 构建最终的请求对象
     //    pub fn build(self) -> GetTenantAccessTokenInternalRequest {
     //        self.request
-    //    }
+    }
 }
 
 impl Default for GetTenantAccessTokenInternalBuilder {
-    //    fn default() -> Self {
-    //        Self::new()
-    //    }
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 // crate::impl_executable_builder!(
@@ -878,36 +878,36 @@ impl ResendAppTicketBuilder {
     //        Self {
     //            request: ResendAppTicketRequest::default(),
     //        }
-    //    }
+    }
 
     //    /// 设置应用ID
     //    pub fn app_id(mut self, app_id: impl ToString) -> Self {
     //        self.request.app_id = app_id.to_string();
     //        self
-    //    }
+    }
 
     //    /// 设置应用密钥
     //    pub fn app_secret(mut self, app_secret: impl ToString) -> Self {
     //        self.request.app_secret = app_secret.to_string();
     //        self
-    //    }
+    }
 
     //    /// 设置回调地址
     //    pub fn callback_address(mut self, callback_address: impl ToString) -> Self {
     //        self.request.callback_address = Some(callback_address.to_string());
     //        self
-    //    }
+    }
 
     //    /// 构建最终的请求对象
     //    pub fn build(self) -> ResendAppTicketRequest {
     //        self.request
-    //    }
+    }
 }
 
 impl Default for ResendAppTicketBuilder {
-    //    fn default() -> Self {
-    //        Self::new()
-    //    }
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 // crate::impl_executable_builder!(
@@ -982,13 +982,13 @@ pub struct GetAppAccessTokenRequest {
 }
 
 impl Default for GetAppAccessTokenRequest {
-    //    fn default() -> Self {
+    fn default() -> Self {
     //        Self {
     //            app_id: String::new(),
     //            app_secret: String::new(),
     //            app_type: None,
     //        }
-    //    }
+    }
 }
 
 /// 自建应用获取App Access Token请求
@@ -1001,12 +1001,12 @@ pub struct GetAppAccessTokenInternalRequest {
 }
 
 impl Default for GetAppAccessTokenInternalRequest {
-    //    fn default() -> Self {
+    fn default() -> Self {
     //        Self {
     //            app_id: String::new(),
     //            app_secret: String::new(),
     //        }
-    //    }
+    }
 }
 
 /// 商店应用获取Tenant Access Token请求
@@ -1022,13 +1022,13 @@ pub struct GetTenantAccessTokenRequest {
 }
 
 impl Default for GetTenantAccessTokenRequest {
-    //    fn default() -> Self {
+    fn default() -> Self {
     //        Self {
     //            app_id: String::new(),
     //            app_secret: String::new(),
     //            tenant_key: None,
     //        }
-    //    }
+    }
 }
 
 /// 自建应用获取Tenant Access Token请求
@@ -1044,13 +1044,13 @@ pub struct GetTenantAccessTokenInternalRequest {
 }
 
 impl Default for GetTenantAccessTokenInternalRequest {
-    //    fn default() -> Self {
+    fn default() -> Self {
     //        Self {
     //            app_id: String::new(),
     //            app_secret: String::new(),
     //            tenant_key: None,
     //        }
-    //    }
+    }
 }
 
 /// 重新获取App Ticket请求
@@ -1066,13 +1066,13 @@ pub struct ResendAppTicketRequest {
 }
 
 impl Default for ResendAppTicketRequest {
-    //    fn default() -> Self {
+    fn default() -> Self {
     //        Self {
     //            app_id: String::new(),
     //            app_secret: String::new(),
     //            callback_address: None,
     //        }
-    //    }
+    }
 }
 
 /// App Access Token响应
@@ -1172,7 +1172,7 @@ mod tests {
     //        assert_eq!(user_info.mobile, Some("+86130002883xx".to_string()));
     //        assert_eq!(user_info.tenant_key, "736588c92lxf175d");
     //        assert_eq!(user_info.employee_no, "111222333");
-    //    }
+    }
 
     //    #[test]
     //    fn test_user_info_optional_fields() {
@@ -1196,7 +1196,7 @@ mod tests {
     //        assert!(user_info.email.is_none());
     //        assert!(user_info.enterprise_email.is_none());
     //        assert!(user_info.mobile.is_none());
-    //    }
+    }
 
     //    #[test]
     //    fn test_service_creation() {
@@ -1215,7 +1215,7 @@ mod tests {
     //        assert_eq!(app_token_service.config.app_id, "test_app");
     //        assert_eq!(tenant_token_service.config.app_id, "test_app");
     //        assert_eq!(app_ticket_service.config.app_id, "test_app");
-    //    }
+    }
 
     //    #[test]
     //    fn test_builder_default_implementations() {
@@ -1237,7 +1237,7 @@ mod tests {
 
     //        let app_ticket_builder = ResendAppTicketBuilder::default();
     //        assert_eq!(app_ticket_builder.request.app_id, "");
-    //    }
+    }
 
     //    #[test]
     //    fn test_request_default_implementations() {
@@ -1265,7 +1265,7 @@ mod tests {
     //        assert_eq!(app_ticket_req.app_id, "");
     //        assert_eq!(app_ticket_req.app_secret, "");
     //        assert!(app_ticket_req.callback_address.is_none());
-    //    }
+    }
 
     //    #[test]
     //    fn test_builder_chaining() {
@@ -1289,7 +1289,7 @@ mod tests {
     //        assert_eq!(request.app_id, "test_app");
     //        assert_eq!(request.app_secret, "test_secret");
     //        assert_eq!(request.tenant_key, Some("test_tenant".to_string()));
-    //    }
+    }
 
     //    #[test]
     //    fn test_user_info_service_config_independence() {
@@ -1309,7 +1309,7 @@ mod tests {
     //        assert_eq!(service1.config.app_id, "app1");
     //        assert_eq!(service2.config.app_id, "app2");
     //        assert_ne!(service1.config.app_id, service2.config.app_id);
-    //    }
+    }
 
     //    #[test]
     //    fn test_app_token_response_structure() {
@@ -1327,7 +1327,7 @@ mod tests {
     //        assert_eq!(response.expires_in, 7200);
     //        assert_eq!(response.refresh_token, Some("refresh_token".to_string()));
     //        assert_eq!(response.refresh_expires_in, Some(604800));
-    //    }
+    }
 
     //    #[test]
     //    fn test_tenant_token_response_structure() {
@@ -1343,7 +1343,7 @@ mod tests {
     //        assert_eq!(response.expires_in, 7200);
     //        assert!(response.refresh_token.is_none());
     //        assert!(response.refresh_expires_in.is_none());
-    //    }
+    }
 
     //    #[test]
     //    fn test_app_ticket_response_structure() {
@@ -1355,7 +1355,7 @@ mod tests {
     //        let response: ResendAppTicketResponse = serde_json::from_str(json_str).unwrap();
     //        assert_eq!(response.app_ticket, Some("test_ticket".to_string()));
     //        assert_eq!(response.status, Some("success".to_string()));
-    //    }
+    }
 
     //    #[test]
     //    fn test_service_thread_safety() {
@@ -1384,29 +1384,29 @@ mod tests {
     //            let result = handle.join().unwrap();
     //            assert!(result.contains("thread_test_app"));
     //        }
-    //    }
+    }
 }
 
 impl ApiResponseTrait for UserInfo {
     //    fn data_format() -> ResponseFormat {
     //        ResponseFormat::Data
-    //    }
+    }
 }
 
 impl ApiResponseTrait for AppAccessTokenResponse {
     //    fn data_format() -> ResponseFormat {
     //        ResponseFormat::Data
-    //    }
+    }
 }
 
 impl ApiResponseTrait for TenantAccessTokenResponse {
     //    fn data_format() -> ResponseFormat {
     //        ResponseFormat::Data
-    //    }
+    }
 }
 
 impl ApiResponseTrait for ResendAppTicketResponse {
     //    fn data_format() -> ResponseFormat {
     //        ResponseFormat::Data
-    //    }
+    }
 }
