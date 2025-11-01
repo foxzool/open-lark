@@ -68,8 +68,13 @@
 //! ```
 
 use crate::core::{
-    ApiRequest, api_resp::{ApiResponseTrait, BaseResponse}, config::Config, constants::AccessTokenType,
-    endpoints::auth::*, http::Transport, req_option::RequestOption, SDKResult,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    endpoints::auth::*,
+    http::Transport,
+    req_option::RequestOption,
+    ApiRequest, SDKResult,
 };
 use async_trait::async_trait;
 use open_lark_core::core::trait_system::ExecutableBuilder;
@@ -1379,10 +1384,26 @@ mod tests {
     }
 }
 
-impl ApiResponseTrait for UserInfo {}
+impl ApiResponseTrait for UserInfo {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
 
-impl ApiResponseTrait for AppAccessTokenResponse {}
+impl ApiResponseTrait for AppAccessTokenResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
 
-impl ApiResponseTrait for TenantAccessTokenResponse {}
+impl ApiResponseTrait for TenantAccessTokenResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
 
-impl ApiResponseTrait for ResendAppTicketResponse {}
+impl ApiResponseTrait for ResendAppTicketResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
