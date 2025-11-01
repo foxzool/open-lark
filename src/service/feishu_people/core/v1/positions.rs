@@ -72,7 +72,7 @@ use crate::core::{
     SDKResult,
 };
 use async_trait::async_trait;
-use open_lark_core::core::{api_req::ApiRequest, trait_system::ExecutableBuilder};
+use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use serde::{Deserialize, Serialize};
 
 /// 职位管理服务
@@ -1040,13 +1040,13 @@ impl Default for BatchGetPositionsBuilder {
 }
 
 // 应用ExecutableBuilder trait - 标准实现
-crate::impl_executable_builder!(
-    BatchGetPositionsBuilder,
-    PositionsService,
-    BatchGetPositionsRequest,
-    BaseResponse<BatchGetPositionsResponse>,
-    batch_get
-);
+// crate::impl_executable_builder!(
+//    BatchGetPositionsBuilder,
+//    PositionsService,
+//    BatchGetPositionsRequest,
+//    BaseResponse<BatchGetPositionsResponse>,
+//    batch_get
+//);
 
 /// 根据部门获取职位列表构建器
 #[derive(Debug, Clone)]
@@ -1098,13 +1098,13 @@ impl Default for GetPositionsByDepartmentBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetPositionsByDepartmentBuilder,
-    PositionsService,
-    GetPositionsByDepartmentRequest,
-    BaseResponse<GetPositionsByDepartmentResponse>,
-    get_by_department
-);
+// crate::impl_executable_builder!(
+//    GetPositionsByDepartmentBuilder,
+//    PositionsService,
+//    GetPositionsByDepartmentRequest,
+//    BaseResponse<GetPositionsByDepartmentResponse>,
+//    get_by_department
+//);
 
 /// 搜索职位构建器
 #[derive(Debug, Clone)]
@@ -1157,13 +1157,13 @@ impl Default for SearchPositionsBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    SearchPositionsBuilder,
-    PositionsService,
-    SearchPositionsRequest,
-    BaseResponse<SearchPositionsResponse>,
-    search
-);
+// crate::impl_executable_builder!(
+//    SearchPositionsBuilder,
+//    PositionsService,
+//    SearchPositionsRequest,
+//    BaseResponse<SearchPositionsResponse>,
+//    search
+//);
 
 /// 创建职位构建器
 #[derive(Debug, Clone)]
@@ -1204,13 +1204,13 @@ impl Default for CreatePositionBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    CreatePositionBuilder,
-    PositionsService,
-    CreatePositionRequest,
-    BaseResponse<CreatePositionResponse>,
-    create
-);
+// crate::impl_executable_builder!(
+//    CreatePositionBuilder,
+//    PositionsService,
+//    CreatePositionRequest,
+//    BaseResponse<CreatePositionResponse>,
+//    create
+//);
 
 /// 更新职位构建器
 #[derive(Debug, Clone)]
@@ -1361,13 +1361,13 @@ impl Default for GetPositionSequencesBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetPositionSequencesBuilder,
-    PositionsService,
-    GetPositionSequencesRequest,
-    BaseResponse<GetPositionSequencesResponse>,
-    get_position_sequences
-);
+// crate::impl_executable_builder!(
+//    GetPositionSequencesBuilder,
+//    PositionsService,
+//    GetPositionSequencesRequest,
+//    BaseResponse<GetPositionSequencesResponse>,
+//    get_position_sequences
+//);
 
 /// 获取职位统计信息构建器
 #[derive(Debug, Clone)]
@@ -1402,13 +1402,13 @@ impl Default for GetPositionStatisticsBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetPositionStatisticsBuilder,
-    PositionsService,
-    GetPositionStatisticsRequest,
-    BaseResponse<GetPositionStatisticsResponse>,
-    get_statistics
-);
+// crate::impl_executable_builder!(
+//    GetPositionStatisticsBuilder,
+//    PositionsService,
+//    GetPositionStatisticsRequest,
+//    BaseResponse<GetPositionStatisticsResponse>,
+//    get_statistics
+//);
 
 /// 获取职位人员列表构建器
 #[derive(Debug, Clone)]

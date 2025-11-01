@@ -72,7 +72,7 @@ use crate::core::{
     SDKResult,
 };
 use async_trait::async_trait;
-use open_lark_core::core::{api_req::ApiRequest, trait_system::ExecutableBuilder};
+use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use serde::{Deserialize, Serialize};
 
 /// 部门管理服务
@@ -1048,13 +1048,13 @@ impl Default for BatchGetDepartmentsBuilder {
 }
 
 // 应用ExecutableBuilder trait - 标准实现
-crate::impl_executable_builder!(
-    BatchGetDepartmentsBuilder,
-    DepartmentsService,
-    BatchGetDepartmentsRequest,
-    BaseResponse<BatchGetDepartmentsResponse>,
-    batch_get
-);
+// crate::impl_executable_builder!(
+//    BatchGetDepartmentsBuilder,
+//    DepartmentsService,
+//    BatchGetDepartmentsRequest,
+//    BaseResponse<BatchGetDepartmentsResponse>,
+//    batch_get
+//);
 
 /// 获取子部门列表构建器
 #[derive(Debug, Clone)]
@@ -1106,13 +1106,13 @@ impl Default for GetSubDepartmentsBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetSubDepartmentsBuilder,
-    DepartmentsService,
-    GetSubDepartmentsRequest,
-    BaseResponse<GetSubDepartmentsResponse>,
-    get_sub_departments
-);
+// crate::impl_executable_builder!(
+//    GetSubDepartmentsBuilder,
+//    DepartmentsService,
+//    GetSubDepartmentsRequest,
+//    BaseResponse<GetSubDepartmentsResponse>,
+//    get_sub_departments
+//);
 
 /// 获取根部门列表构建器
 #[derive(Debug, Clone)]
@@ -1159,13 +1159,13 @@ impl Default for GetRootDepartmentsBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetRootDepartmentsBuilder,
-    DepartmentsService,
-    GetRootDepartmentsRequest,
-    BaseResponse<GetRootDepartmentsResponse>,
-    get_root_departments
-);
+// crate::impl_executable_builder!(
+//    GetRootDepartmentsBuilder,
+//    DepartmentsService,
+//    GetRootDepartmentsRequest,
+//    BaseResponse<GetRootDepartmentsResponse>,
+//    get_root_departments
+//);
 
 /// 搜索部门构建器
 #[derive(Debug, Clone)]
@@ -1218,13 +1218,13 @@ impl Default for SearchDepartmentsBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    SearchDepartmentsBuilder,
-    DepartmentsService,
-    SearchDepartmentsRequest,
-    BaseResponse<SearchDepartmentsResponse>,
-    search
-);
+// crate::impl_executable_builder!(
+//    SearchDepartmentsBuilder,
+//    DepartmentsService,
+//    SearchDepartmentsRequest,
+//    BaseResponse<SearchDepartmentsResponse>,
+//    search
+//);
 
 /// 创建部门构建器
 #[derive(Debug, Clone)]
@@ -1265,13 +1265,13 @@ impl Default for CreateDepartmentBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    CreateDepartmentBuilder,
-    DepartmentsService,
-    CreateDepartmentRequest,
-    BaseResponse<CreateDepartmentResponse>,
-    create
-);
+// crate::impl_executable_builder!(
+//    CreateDepartmentBuilder,
+//    DepartmentsService,
+//    CreateDepartmentRequest,
+//    BaseResponse<CreateDepartmentResponse>,
+//    create
+//);
 
 /// 更新部门构建器
 #[derive(Debug, Clone)]
@@ -1433,13 +1433,13 @@ impl Default for GetDepartmentMembersBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetDepartmentMembersBuilder,
-    DepartmentsService,
-    GetDepartmentMembersRequest,
-    BaseResponse<GetDepartmentMembersResponse>,
-    get_members
-);
+// crate::impl_executable_builder!(
+//    GetDepartmentMembersBuilder,
+//    DepartmentsService,
+//    GetDepartmentMembersRequest,
+//    BaseResponse<GetDepartmentMembersResponse>,
+//    get_members
+//);
 
 /// 获取部门统计信息构建器
 #[derive(Debug, Clone)]
@@ -1470,13 +1470,13 @@ impl Default for GetDepartmentStatisticsBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetDepartmentStatisticsBuilder,
-    DepartmentsService,
-    GetDepartmentStatisticsRequest,
-    BaseResponse<GetDepartmentStatisticsResponse>,
-    get_statistics
-);
+// crate::impl_executable_builder!(
+//    GetDepartmentStatisticsBuilder,
+//    DepartmentsService,
+//    GetDepartmentStatisticsRequest,
+//    BaseResponse<GetDepartmentStatisticsResponse>,
+//    get_statistics
+//);
 
 // 为DepartmentsService实现辅助方法，处理Builder的参数
 impl DepartmentsService {

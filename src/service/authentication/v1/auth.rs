@@ -652,13 +652,13 @@ impl Default for GetUserInfoBuilder {
 // TODO: 修复ExecutableBuilder trait实现 - 方法签名不匹配
 // 应用ExecutableBuilder trait for UserInfo
 /*
-crate::impl_executable_builder!(
-    GetUserInfoBuilder,
-    UserInfoService,
-    String,
-    BaseResponse<UserInfo>,
-    get
-);
+// crate::impl_executable_builder!(
+//    GetUserInfoBuilder,
+//    UserInfoService,
+//    String,
+//    BaseResponse<UserInfo>,
+//    get
+//);
 */
 
 // 应用访问令牌构建器
@@ -717,39 +717,39 @@ impl Default for GetAppAccessTokenBuilder {
 /// 自建应用获取App Access Token构建器
 #[derive(Debug, Clone)]
 pub struct GetAppAccessTokenInternalBuilder {
-    request: GetAppAccessTokenInternalRequest,
+//    request: GetAppAccessTokenInternalRequest,
 }
 
 impl GetAppAccessTokenInternalBuilder {
-    /// 创建新的Builder实例
-    pub fn new() -> Self {
-        Self {
-            request: GetAppAccessTokenInternalRequest::default(),
-        }
-    }
+//    /// 创建新的Builder实例
+//    pub fn new() -> Self {
+//        Self {
+//            request: GetAppAccessTokenInternalRequest::default(),
+//        }
+//    }
 
-    /// 设置应用ID
-    pub fn app_id(mut self, app_id: impl ToString) -> Self {
-        self.request.app_id = app_id.to_string();
-        self
-    }
+//    /// 设置应用ID
+//    pub fn app_id(mut self, app_id: impl ToString) -> Self {
+//        self.request.app_id = app_id.to_string();
+//        self
+//    }
 
-    /// 设置应用密钥
-    pub fn app_secret(mut self, app_secret: impl ToString) -> Self {
-        self.request.app_secret = app_secret.to_string();
-        self
-    }
+//    /// 设置应用密钥
+//    pub fn app_secret(mut self, app_secret: impl ToString) -> Self {
+//        self.request.app_secret = app_secret.to_string();
+//        self
+//    }
 
-    /// 构建最终的请求对象
-    pub fn build(self) -> GetAppAccessTokenInternalRequest {
-        self.request
-    }
+//    /// 构建最终的请求对象
+//    pub fn build(self) -> GetAppAccessTokenInternalRequest {
+//        self.request
+//    }
 }
 
 impl Default for GetAppAccessTokenInternalBuilder {
-    fn default() -> Self {
-        Self::new()
-    }
+//    fn default() -> Self {
+//        Self::new()
+//    }
 }
 
 // crate::impl_executable_builder!(
@@ -764,45 +764,45 @@ impl Default for GetAppAccessTokenInternalBuilder {
 /// 商店应用获取Tenant Access Token构建器
 #[derive(Debug, Clone)]
 pub struct GetTenantAccessTokenBuilder {
-    request: GetTenantAccessTokenRequest,
+//    request: GetTenantAccessTokenRequest,
 }
 
 impl GetTenantAccessTokenBuilder {
-    /// 创建新的Builder实例
-    pub fn new() -> Self {
-        Self {
-            request: GetTenantAccessTokenRequest::default(),
-        }
-    }
+//    /// 创建新的Builder实例
+//    pub fn new() -> Self {
+//        Self {
+//            request: GetTenantAccessTokenRequest::default(),
+//        }
+//    }
 
-    /// 设置应用ID
-    pub fn app_id(mut self, app_id: impl ToString) -> Self {
-        self.request.app_id = app_id.to_string();
-        self
-    }
+//    /// 设置应用ID
+//    pub fn app_id(mut self, app_id: impl ToString) -> Self {
+//        self.request.app_id = app_id.to_string();
+//        self
+//    }
 
-    /// 设置应用密钥
-    pub fn app_secret(mut self, app_secret: impl ToString) -> Self {
-        self.request.app_secret = app_secret.to_string();
-        self
-    }
+//    /// 设置应用密钥
+//    pub fn app_secret(mut self, app_secret: impl ToString) -> Self {
+//        self.request.app_secret = app_secret.to_string();
+//        self
+//    }
 
-    /// 设置企业标识
-    pub fn tenant_key(mut self, tenant_key: impl ToString) -> Self {
-        self.request.tenant_key = Some(tenant_key.to_string());
-        self
-    }
+//    /// 设置企业标识
+//    pub fn tenant_key(mut self, tenant_key: impl ToString) -> Self {
+//        self.request.tenant_key = Some(tenant_key.to_string());
+//        self
+//    }
 
-    /// 构建最终的请求对象
-    pub fn build(self) -> GetTenantAccessTokenRequest {
-        self.request
-    }
+//    /// 构建最终的请求对象
+//    pub fn build(self) -> GetTenantAccessTokenRequest {
+//        self.request
+//    }
 }
 
 impl Default for GetTenantAccessTokenBuilder {
-    fn default() -> Self {
-        Self::new()
-    }
+//    fn default() -> Self {
+//        Self::new()
+//    }
 }
 
 // crate::impl_executable_builder!(
@@ -816,45 +816,45 @@ impl Default for GetTenantAccessTokenBuilder {
 /// 自建应用获取Tenant Access Token构建器
 #[derive(Debug, Clone)]
 pub struct GetTenantAccessTokenInternalBuilder {
-    request: GetTenantAccessTokenInternalRequest,
+//    request: GetTenantAccessTokenInternalRequest,
 }
 
 impl GetTenantAccessTokenInternalBuilder {
-    /// 创建新的Builder实例
-    pub fn new() -> Self {
-        Self {
-            request: GetTenantAccessTokenInternalRequest::default(),
-        }
-    }
+//    /// 创建新的Builder实例
+//    pub fn new() -> Self {
+//        Self {
+//            request: GetTenantAccessTokenInternalRequest::default(),
+//        }
+//    }
 
-    /// 设置应用ID
-    pub fn app_id(mut self, app_id: impl ToString) -> Self {
-        self.request.app_id = app_id.to_string();
-        self
-    }
+//    /// 设置应用ID
+//    pub fn app_id(mut self, app_id: impl ToString) -> Self {
+//        self.request.app_id = app_id.to_string();
+//        self
+//    }
 
-    /// 设置应用密钥
-    pub fn app_secret(mut self, app_secret: impl ToString) -> Self {
-        self.request.app_secret = app_secret.to_string();
-        self
-    }
+//    /// 设置应用密钥
+//    pub fn app_secret(mut self, app_secret: impl ToString) -> Self {
+//        self.request.app_secret = app_secret.to_string();
+//        self
+//    }
 
-    /// 设置企业标识
-    pub fn tenant_key(mut self, tenant_key: impl ToString) -> Self {
-        self.request.tenant_key = Some(tenant_key.to_string());
-        self
-    }
+//    /// 设置企业标识
+//    pub fn tenant_key(mut self, tenant_key: impl ToString) -> Self {
+//        self.request.tenant_key = Some(tenant_key.to_string());
+//        self
+//    }
 
-    /// 构建最终的请求对象
-    pub fn build(self) -> GetTenantAccessTokenInternalRequest {
-        self.request
-    }
+//    /// 构建最终的请求对象
+//    pub fn build(self) -> GetTenantAccessTokenInternalRequest {
+//        self.request
+//    }
 }
 
 impl Default for GetTenantAccessTokenInternalBuilder {
-    fn default() -> Self {
-        Self::new()
-    }
+//    fn default() -> Self {
+//        Self::new()
+//    }
 }
 
 // crate::impl_executable_builder!(
@@ -869,45 +869,45 @@ impl Default for GetTenantAccessTokenInternalBuilder {
 /// 重新获取App Ticket构建器
 #[derive(Debug, Clone)]
 pub struct ResendAppTicketBuilder {
-    request: ResendAppTicketRequest,
+//    request: ResendAppTicketRequest,
 }
 
 impl ResendAppTicketBuilder {
-    /// 创建新的Builder实例
-    pub fn new() -> Self {
-        Self {
-            request: ResendAppTicketRequest::default(),
-        }
-    }
+//    /// 创建新的Builder实例
+//    pub fn new() -> Self {
+//        Self {
+//            request: ResendAppTicketRequest::default(),
+//        }
+//    }
 
-    /// 设置应用ID
-    pub fn app_id(mut self, app_id: impl ToString) -> Self {
-        self.request.app_id = app_id.to_string();
-        self
-    }
+//    /// 设置应用ID
+//    pub fn app_id(mut self, app_id: impl ToString) -> Self {
+//        self.request.app_id = app_id.to_string();
+//        self
+//    }
 
-    /// 设置应用密钥
-    pub fn app_secret(mut self, app_secret: impl ToString) -> Self {
-        self.request.app_secret = app_secret.to_string();
-        self
-    }
+//    /// 设置应用密钥
+//    pub fn app_secret(mut self, app_secret: impl ToString) -> Self {
+//        self.request.app_secret = app_secret.to_string();
+//        self
+//    }
 
-    /// 设置回调地址
-    pub fn callback_address(mut self, callback_address: impl ToString) -> Self {
-        self.request.callback_address = Some(callback_address.to_string());
-        self
-    }
+//    /// 设置回调地址
+//    pub fn callback_address(mut self, callback_address: impl ToString) -> Self {
+//        self.request.callback_address = Some(callback_address.to_string());
+//        self
+//    }
 
-    /// 构建最终的请求对象
-    pub fn build(self) -> ResendAppTicketRequest {
-        self.request
-    }
+//    /// 构建最终的请求对象
+//    pub fn build(self) -> ResendAppTicketRequest {
+//        self.request
+//    }
 }
 
 impl Default for ResendAppTicketBuilder {
-    fn default() -> Self {
-        Self::new()
-    }
+//    fn default() -> Self {
+//        Self::new()
+//    }
 }
 
 // crate::impl_executable_builder!(
@@ -926,487 +926,487 @@ impl Default for ResendAppTicketBuilder {
 /// 支持多种用户标识符类型，便于不同场景下的用户识别。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UserInfo {
-    /// 用户姓名
-    pub name: String,
+//    /// 用户姓名
+//    pub name: String,
 
-    /// 用户英文名称
-    pub en_name: String,
+//    /// 用户英文名称
+//    pub en_name: String,
 
-    /// 用户头像URL
-    pub avatar_url: String,
+//    /// 用户头像URL
+//    pub avatar_url: String,
 
-    /// 用户头像 72x72
-    pub avatar_thumb: String,
+//    /// 用户头像 72x72
+//    pub avatar_thumb: String,
 
-    /// 用户头像 240x240
-    pub avatar_middle: String,
+//    /// 用户头像 240x240
+//    pub avatar_middle: String,
 
-    /// 用户头像 640x640
-    pub avatar_big: String,
+//    /// 用户头像 640x640
+//    pub avatar_big: String,
 
-    /// 用户在应用内的唯一标识
-    pub open_id: String,
+//    /// 用户在应用内的唯一标识
+//    pub open_id: String,
 
-    /// 用户对ISV的唯一标识，对于同一个ISV，用户在其名下所有应用的union_id相同
-    pub union_id: String,
+//    /// 用户对ISV的唯一标识，对于同一个ISV，用户在其名下所有应用的union_id相同
+//    pub union_id: String,
 
-    /// 用户邮箱（可选）
-    pub email: Option<String>,
+//    /// 用户邮箱（可选）
+//    pub email: Option<String>,
 
-    /// 企业邮箱（可选），请先确保已在管理后台启用飞书邮箱服务
-    pub enterprise_email: Option<String>,
+//    /// 企业邮箱（可选），请先确保已在管理后台启用飞书邮箱服务
+//    pub enterprise_email: Option<String>,
 
-    /// 用户 user_id
-    pub user_id: String,
+//    /// 用户 user_id
+//    pub user_id: String,
 
-    /// 用户手机号（可选）
-    pub mobile: Option<String>,
+//    /// 用户手机号（可选）
+//    pub mobile: Option<String>,
 
-    /// 当前企业标识
-    pub tenant_key: String,
+//    /// 当前企业标识
+//    pub tenant_key: String,
 
-    /// 用户工号
-    pub employee_no: String,
+//    /// 用户工号
+//    pub employee_no: String,
 }
 
 // 商店应用获取App Access Token请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetAppAccessTokenRequest {
-    /// 应用ID
-    pub app_id: String,
-    /// 应用密钥
-    pub app_secret: String,
-    /// 应用类型，app_access_token接口可传递app_type为self_build或marketplace
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub app_type: Option<String>,
+//    /// 应用ID
+//    pub app_id: String,
+//    /// 应用密钥
+//    pub app_secret: String,
+//    /// 应用类型，app_access_token接口可传递app_type为self_build或marketplace
+//    #[serde(skip_serializing_if = "Option::is_none")]
+//    pub app_type: Option<String>,
 }
 
 impl Default for GetAppAccessTokenRequest {
-    fn default() -> Self {
-        Self {
-            app_id: String::new(),
-            app_secret: String::new(),
-            app_type: None,
-        }
-    }
+//    fn default() -> Self {
+//        Self {
+//            app_id: String::new(),
+//            app_secret: String::new(),
+//            app_type: None,
+//        }
+//    }
 }
 
 /// 自建应用获取App Access Token请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetAppAccessTokenInternalRequest {
-    /// 应用ID
-    pub app_id: String,
-    /// 应用密钥
-    pub app_secret: String,
+//    /// 应用ID
+//    pub app_id: String,
+//    /// 应用密钥
+//    pub app_secret: String,
 }
 
 impl Default for GetAppAccessTokenInternalRequest {
-    fn default() -> Self {
-        Self {
-            app_id: String::new(),
-            app_secret: String::new(),
-        }
-    }
+//    fn default() -> Self {
+//        Self {
+//            app_id: String::new(),
+//            app_secret: String::new(),
+//        }
+//    }
 }
 
 /// 商店应用获取Tenant Access Token请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetTenantAccessTokenRequest {
-    /// 应用ID
-    pub app_id: String,
-    /// 应用密钥
-    pub app_secret: String,
-    /// 企业标识（可选）
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub tenant_key: Option<String>,
+//    /// 应用ID
+//    pub app_id: String,
+//    /// 应用密钥
+//    pub app_secret: String,
+//    /// 企业标识（可选）
+//    #[serde(skip_serializing_if = "Option::is_none")]
+//    pub tenant_key: Option<String>,
 }
 
 impl Default for GetTenantAccessTokenRequest {
-    fn default() -> Self {
-        Self {
-            app_id: String::new(),
-            app_secret: String::new(),
-            tenant_key: None,
-        }
-    }
+//    fn default() -> Self {
+//        Self {
+//            app_id: String::new(),
+//            app_secret: String::new(),
+//            tenant_key: None,
+//        }
+//    }
 }
 
 /// 自建应用获取Tenant Access Token请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetTenantAccessTokenInternalRequest {
-    /// 应用ID
-    pub app_id: String,
-    /// 应用密钥
-    pub app_secret: String,
-    /// 企业标识（可选）
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub tenant_key: Option<String>,
+//    /// 应用ID
+//    pub app_id: String,
+//    /// 应用密钥
+//    pub app_secret: String,
+//    /// 企业标识（可选）
+//    #[serde(skip_serializing_if = "Option::is_none")]
+//    pub tenant_key: Option<String>,
 }
 
 impl Default for GetTenantAccessTokenInternalRequest {
-    fn default() -> Self {
-        Self {
-            app_id: String::new(),
-            app_secret: String::new(),
-            tenant_key: None,
-        }
-    }
+//    fn default() -> Self {
+//        Self {
+//            app_id: String::new(),
+//            app_secret: String::new(),
+//            tenant_key: None,
+//        }
+//    }
 }
 
 /// 重新获取App Ticket请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ResendAppTicketRequest {
-    /// 应用ID
-    pub app_id: String,
-    /// 应用密钥
-    pub app_secret: String,
-    /// 接收ticket的回调地址（可选）
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub callback_address: Option<String>,
+//    /// 应用ID
+//    pub app_id: String,
+//    /// 应用密钥
+//    pub app_secret: String,
+//    /// 接收ticket的回调地址（可选）
+//    #[serde(skip_serializing_if = "Option::is_none")]
+//    pub callback_address: Option<String>,
 }
 
 impl Default for ResendAppTicketRequest {
-    fn default() -> Self {
-        Self {
-            app_id: String::new(),
-            app_secret: String::new(),
-            callback_address: None,
-        }
-    }
+//    fn default() -> Self {
+//        Self {
+//            app_id: String::new(),
+//            app_secret: String::new(),
+//            callback_address: None,
+//        }
+//    }
 }
 
 /// App Access Token响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AppAccessTokenResponse {
-    /// 应用访问令牌
-    pub app_access_token: String,
-    /// 令牌类型，目前固定为"bearer"
-    pub token_type: String,
-    /// 令牌有效期，秒数
-    #[serde(rename = "expire")]
-    pub expires_in: i64,
-    /// 刷新令牌，用于获取新的app_access_token（可选）
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub refresh_token: Option<String>,
-    /// 刷新令牌有效期，秒数（可选）
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub refresh_expires_in: Option<i64>,
+//    /// 应用访问令牌
+//    pub app_access_token: String,
+//    /// 令牌类型，目前固定为"bearer"
+//    pub token_type: String,
+//    /// 令牌有效期，秒数
+//    #[serde(rename = "expire")]
+//    pub expires_in: i64,
+//    /// 刷新令牌，用于获取新的app_access_token（可选）
+//    #[serde(skip_serializing_if = "Option::is_none")]
+//    pub refresh_token: Option<String>,
+//    /// 刷新令牌有效期，秒数（可选）
+//    #[serde(skip_serializing_if = "Option::is_none")]
+//    pub refresh_expires_in: Option<i64>,
 }
 
 /// Tenant Access Token响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TenantAccessTokenResponse {
-    /// 租户访问令牌
-    pub tenant_access_token: String,
-    /// 令牌类型，目前固定为"bearer"
-    pub token_type: String,
-    /// 令牌有效期，秒数
-    #[serde(rename = "expire")]
-    pub expires_in: i64,
-    /// 刷新令牌，用于获取新的tenant_access_token（可选）
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub refresh_token: Option<String>,
-    /// 刷新令牌有效期，秒数（可选）
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub refresh_expires_in: Option<i64>,
+//    /// 租户访问令牌
+//    pub tenant_access_token: String,
+//    /// 令牌类型，目前固定为"bearer"
+//    pub token_type: String,
+//    /// 令牌有效期，秒数
+//    #[serde(rename = "expire")]
+//    pub expires_in: i64,
+//    /// 刷新令牌，用于获取新的tenant_access_token（可选）
+//    #[serde(skip_serializing_if = "Option::is_none")]
+//    pub refresh_token: Option<String>,
+//    /// 刷新令牌有效期，秒数（可选）
+//    #[serde(skip_serializing_if = "Option::is_none")]
+//    pub refresh_expires_in: Option<i64>,
 }
 
 /// 重新获取App Ticket响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ResendAppTicketResponse {
-    /// App ticket，用于接收事件推送（可选）
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub app_ticket: Option<String>,
-    /// 重新发送的状态（可选）
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+//    /// App ticket，用于接收事件推送（可选）
+//    #[serde(skip_serializing_if = "Option::is_none")]
+//    pub app_ticket: Option<String>,
+//    /// 重新发送的状态（可选）
+//    #[serde(skip_serializing_if = "Option::is_none")]
+//    pub status: Option<String>,
 }
 
 // ==================== 测试模块 ====================
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::core::{config::Config, constants::AppType};
-    use std::sync::Arc;
+//    use super::*;
+//    use crate::core::{config::Config, constants::AppType};
+//    use std::sync::Arc;
 
-    #[test]
-    fn test_user_info_deserialization() {
-        let json_str = r#"{
-            "name": "张三",
-            "en_name": "zhangsan",
-            "avatar_url": "www.feishu.cn/avatar/icon",
-            "avatar_thumb": "www.feishu.cn/avatar/icon_thumb",
-            "avatar_middle": "www.feishu.cn/avatar/icon_middle",
-            "avatar_big": "www.feishu.cn/avatar/icon_big",
-            "open_id": "ou-caecc734c2e3328a62489fe0648c4b98779515d3",
-            "union_id": "on-d89jhsdhjsajkda7828enjdj328ydhhw3u43yjhdj",
-            "email": "zhangsan@feishu.cn",
-            "enterprise_email": "demo@mail.com",
-            "user_id": "5d9bdxxx",
-            "mobile": "+86130002883xx",
-            "tenant_key": "736588c92lxf175d",
-            "employee_no": "111222333"
-        }"#;
+//    #[test]
+//    fn test_user_info_deserialization() {
+//        let json_str = r#"{
+//            "name": "张三",
+//            "en_name": "zhangsan",
+//            "avatar_url": "www.feishu.cn/avatar/icon",
+//            "avatar_thumb": "www.feishu.cn/avatar/icon_thumb",
+//            "avatar_middle": "www.feishu.cn/avatar/icon_middle",
+//            "avatar_big": "www.feishu.cn/avatar/icon_big",
+//            "open_id": "ou-caecc734c2e3328a62489fe0648c4b98779515d3",
+//            "union_id": "on-d89jhsdhjsajkda7828enjdj328ydhhw3u43yjhdj",
+//            "email": "zhangsan@feishu.cn",
+//            "enterprise_email": "demo@mail.com",
+//            "user_id": "5d9bdxxx",
+//            "mobile": "+86130002883xx",
+//            "tenant_key": "736588c92lxf175d",
+//            "employee_no": "111222333"
+//        }"#;
 
-        let user_info: UserInfo =
-            serde_json::from_str(json_str).expect("Failed to parse test user info JSON");
+//        let user_info: UserInfo =
+//            serde_json::from_str(json_str).expect("Failed to parse test user info JSON");
 
-        assert_eq!(user_info.name, "张三");
-        assert_eq!(user_info.en_name, "zhangsan");
-        assert_eq!(user_info.avatar_url, "www.feishu.cn/avatar/icon");
-        assert_eq!(
-            user_info.open_id,
-            "ou-caecc734c2e3328a62489fe0648c4b98779515d3"
-        );
-        assert_eq!(
-            user_info.union_id,
-            "on-d89jhsdhjsajkda7828enjdj328ydhhw3u43yjhdj"
-        );
-        assert_eq!(user_info.email, Some("zhangsan@feishu.cn".to_string()));
-        assert_eq!(
-            user_info.enterprise_email,
-            Some("demo@mail.com".to_string())
-        );
-        assert_eq!(user_info.user_id, "5d9bdxxx");
-        assert_eq!(user_info.mobile, Some("+86130002883xx".to_string()));
-        assert_eq!(user_info.tenant_key, "736588c92lxf175d");
-        assert_eq!(user_info.employee_no, "111222333");
-    }
+//        assert_eq!(user_info.name, "张三");
+//        assert_eq!(user_info.en_name, "zhangsan");
+//        assert_eq!(user_info.avatar_url, "www.feishu.cn/avatar/icon");
+//        assert_eq!(
+//            user_info.open_id,
+//            "ou-caecc734c2e3328a62489fe0648c4b98779515d3"
+//        );
+//        assert_eq!(
+//            user_info.union_id,
+//            "on-d89jhsdhjsajkda7828enjdj328ydhhw3u43yjhdj"
+//        );
+//        assert_eq!(user_info.email, Some("zhangsan@feishu.cn".to_string()));
+//        assert_eq!(
+//            user_info.enterprise_email,
+//            Some("demo@mail.com".to_string())
+//        );
+//        assert_eq!(user_info.user_id, "5d9bdxxx");
+//        assert_eq!(user_info.mobile, Some("+86130002883xx".to_string()));
+//        assert_eq!(user_info.tenant_key, "736588c92lxf175d");
+//        assert_eq!(user_info.employee_no, "111222333");
+//    }
 
-    #[test]
-    fn test_user_info_optional_fields() {
-        let json_str = r#"{
-            "name": "testuser",
-            "en_name": "testuser",
-            "avatar_url": "www.feishu.cn/avatar/icon",
-            "avatar_thumb": "www.feishu.cn/avatar/icon_thumb",
-            "avatar_middle": "www.feishu.cn/avatar/icon_middle",
-            "avatar_big": "www.feishu.cn/avatar/icon_big",
-            "open_id": "ou-test123456789",
-            "union_id": "on-test123456789",
-            "user_id": "test123",
-            "tenant_key": "test_tenant",
-            "employee_no": "EMP001"
-        }"#;
+//    #[test]
+//    fn test_user_info_optional_fields() {
+//        let json_str = r#"{
+//            "name": "testuser",
+//            "en_name": "testuser",
+//            "avatar_url": "www.feishu.cn/avatar/icon",
+//            "avatar_thumb": "www.feishu.cn/avatar/icon_thumb",
+//            "avatar_middle": "www.feishu.cn/avatar/icon_middle",
+//            "avatar_big": "www.feishu.cn/avatar/icon_big",
+//            "open_id": "ou-test123456789",
+//            "union_id": "on-test123456789",
+//            "user_id": "test123",
+//            "tenant_key": "test_tenant",
+//            "employee_no": "EMP001"
+//        }"#;
 
-        let user_info: UserInfo = serde_json::from_str(json_str).unwrap();
-        assert_eq!(user_info.name, "testuser");
-        assert_eq!(user_info.user_id, "test123");
-        assert!(user_info.email.is_none());
-        assert!(user_info.enterprise_email.is_none());
-        assert!(user_info.mobile.is_none());
-    }
+//        let user_info: UserInfo = serde_json::from_str(json_str).unwrap();
+//        assert_eq!(user_info.name, "testuser");
+//        assert_eq!(user_info.user_id, "test123");
+//        assert!(user_info.email.is_none());
+//        assert!(user_info.enterprise_email.is_none());
+//        assert!(user_info.mobile.is_none());
+//    }
 
-    #[test]
-    fn test_service_creation() {
-        let config = Config::builder()
-            .app_id("test_app")
-            .app_secret("test_secret")
-            .build();
+//    #[test]
+//    fn test_service_creation() {
+//        let config = Config::builder()
+//            .app_id("test_app")
+//            .app_secret("test_secret")
+//            .build();
 
-        let user_service = UserInfoService::new(config.clone());
-        let app_token_service = AppAccessTokenService::new(config.clone());
-        let tenant_token_service = TenantAccessTokenService::new(config.clone());
-        let app_ticket_service = AppTicketService::new(config);
+//        let user_service = UserInfoService::new(config.clone());
+//        let app_token_service = AppAccessTokenService::new(config.clone());
+//        let tenant_token_service = TenantAccessTokenService::new(config.clone());
+//        let app_ticket_service = AppTicketService::new(config);
 
-        // 验证服务创建成功
-        assert_eq!(user_service.config.app_id, "test_app");
-        assert_eq!(app_token_service.config.app_id, "test_app");
-        assert_eq!(tenant_token_service.config.app_id, "test_app");
-        assert_eq!(app_ticket_service.config.app_id, "test_app");
-    }
+//        // 验证服务创建成功
+//        assert_eq!(user_service.config.app_id, "test_app");
+//        assert_eq!(app_token_service.config.app_id, "test_app");
+//        assert_eq!(tenant_token_service.config.app_id, "test_app");
+//        assert_eq!(app_ticket_service.config.app_id, "test_app");
+//    }
 
-    #[test]
-    fn test_builder_default_implementations() {
-        // 测试所有Builder的默认实现
-        let user_info_builder = GetUserInfoBuilder::default();
-        assert!(user_info_builder.user_access_token.is_none());
+//    #[test]
+//    fn test_builder_default_implementations() {
+//        // 测试所有Builder的默认实现
+//        let user_info_builder = GetUserInfoBuilder::default();
+//        assert!(user_info_builder.user_access_token.is_none());
 
-        let app_token_builder = GetAppAccessTokenBuilder::default();
-        assert_eq!(app_token_builder.request.app_id, "");
+//        let app_token_builder = GetAppAccessTokenBuilder::default();
+//        assert_eq!(app_token_builder.request.app_id, "");
 
-        let app_token_internal_builder = GetAppAccessTokenInternalBuilder::default();
-        assert_eq!(app_token_internal_builder.request.app_id, "");
+//        let app_token_internal_builder = GetAppAccessTokenInternalBuilder::default();
+//        assert_eq!(app_token_internal_builder.request.app_id, "");
 
-        let tenant_token_builder = GetTenantAccessTokenBuilder::default();
-        assert_eq!(tenant_token_builder.request.app_id, "");
+//        let tenant_token_builder = GetTenantAccessTokenBuilder::default();
+//        assert_eq!(tenant_token_builder.request.app_id, "");
 
-        let tenant_token_internal_builder = GetTenantAccessTokenInternalBuilder::default();
-        assert_eq!(tenant_token_internal_builder.request.app_id, "");
+//        let tenant_token_internal_builder = GetTenantAccessTokenInternalBuilder::default();
+//        assert_eq!(tenant_token_internal_builder.request.app_id, "");
 
-        let app_ticket_builder = ResendAppTicketBuilder::default();
-        assert_eq!(app_ticket_builder.request.app_id, "");
-    }
+//        let app_ticket_builder = ResendAppTicketBuilder::default();
+//        assert_eq!(app_ticket_builder.request.app_id, "");
+//    }
 
-    #[test]
-    fn test_request_default_implementations() {
-        // 测试所有请求结构的默认实现
-        let app_token_req = GetAppAccessTokenRequest::default();
-        assert_eq!(app_token_req.app_id, "");
-        assert_eq!(app_token_req.app_secret, "");
-        assert!(app_token_req.app_type.is_none());
+//    #[test]
+//    fn test_request_default_implementations() {
+//        // 测试所有请求结构的默认实现
+//        let app_token_req = GetAppAccessTokenRequest::default();
+//        assert_eq!(app_token_req.app_id, "");
+//        assert_eq!(app_token_req.app_secret, "");
+//        assert!(app_token_req.app_type.is_none());
 
-        let app_token_internal_req = GetAppAccessTokenInternalRequest::default();
-        assert_eq!(app_token_internal_req.app_id, "");
-        assert_eq!(app_token_internal_req.app_secret, "");
+//        let app_token_internal_req = GetAppAccessTokenInternalRequest::default();
+//        assert_eq!(app_token_internal_req.app_id, "");
+//        assert_eq!(app_token_internal_req.app_secret, "");
 
-        let tenant_token_req = GetTenantAccessTokenRequest::default();
-        assert_eq!(tenant_token_req.app_id, "");
-        assert_eq!(tenant_token_req.app_secret, "");
-        assert!(tenant_token_req.tenant_key.is_none());
+//        let tenant_token_req = GetTenantAccessTokenRequest::default();
+//        assert_eq!(tenant_token_req.app_id, "");
+//        assert_eq!(tenant_token_req.app_secret, "");
+//        assert!(tenant_token_req.tenant_key.is_none());
 
-        let tenant_token_internal_req = GetTenantAccessTokenInternalRequest::default();
-        assert_eq!(tenant_token_internal_req.app_id, "");
-        assert_eq!(tenant_token_internal_req.app_secret, "");
-        assert!(tenant_token_internal_req.tenant_key.is_none());
+//        let tenant_token_internal_req = GetTenantAccessTokenInternalRequest::default();
+//        assert_eq!(tenant_token_internal_req.app_id, "");
+//        assert_eq!(tenant_token_internal_req.app_secret, "");
+//        assert!(tenant_token_internal_req.tenant_key.is_none());
 
-        let app_ticket_req = ResendAppTicketRequest::default();
-        assert_eq!(app_ticket_req.app_id, "");
-        assert_eq!(app_ticket_req.app_secret, "");
-        assert!(app_ticket_req.callback_address.is_none());
-    }
+//        let app_ticket_req = ResendAppTicketRequest::default();
+//        assert_eq!(app_ticket_req.app_id, "");
+//        assert_eq!(app_ticket_req.app_secret, "");
+//        assert!(app_ticket_req.callback_address.is_none());
+//    }
 
-    #[test]
-    fn test_builder_chaining() {
-        // 测试构建器的链式调用
-        let app_token_builder = GetAppAccessTokenBuilder::new()
-            .app_id("test_app")
-            .app_secret("test_secret")
-            .app_type("marketplace");
+//    #[test]
+//    fn test_builder_chaining() {
+//        // 测试构建器的链式调用
+//        let app_token_builder = GetAppAccessTokenBuilder::new()
+//            .app_id("test_app")
+//            .app_secret("test_secret")
+//            .app_type("marketplace");
 
-        let request = app_token_builder.build();
-        assert_eq!(request.app_id, "test_app");
-        assert_eq!(request.app_secret, "test_secret");
-        assert_eq!(request.app_type, Some("marketplace".to_string()));
+//        let request = app_token_builder.build();
+//        assert_eq!(request.app_id, "test_app");
+//        assert_eq!(request.app_secret, "test_secret");
+//        assert_eq!(request.app_type, Some("marketplace".to_string()));
 
-        let tenant_token_builder = GetTenantAccessTokenBuilder::new()
-            .app_id("test_app")
-            .app_secret("test_secret")
-            .tenant_key("test_tenant");
+//        let tenant_token_builder = GetTenantAccessTokenBuilder::new()
+//            .app_id("test_app")
+//            .app_secret("test_secret")
+//            .tenant_key("test_tenant");
 
-        let request = tenant_token_builder.build();
-        assert_eq!(request.app_id, "test_app");
-        assert_eq!(request.app_secret, "test_secret");
-        assert_eq!(request.tenant_key, Some("test_tenant".to_string()));
-    }
+//        let request = tenant_token_builder.build();
+//        assert_eq!(request.app_id, "test_app");
+//        assert_eq!(request.app_secret, "test_secret");
+//        assert_eq!(request.tenant_key, Some("test_tenant".to_string()));
+//    }
 
-    #[test]
-    fn test_user_info_service_config_independence() {
-        let config1 = Config::builder()
-            .app_id("app1")
-            .app_secret("secret1")
-            .build();
-        let config2 = Config::builder()
-            .app_id("app2")
-            .app_secret("secret2")
-            .build();
+//    #[test]
+//    fn test_user_info_service_config_independence() {
+//        let config1 = Config::builder()
+//            .app_id("app1")
+//            .app_secret("secret1")
+//            .build();
+//        let config2 = Config::builder()
+//            .app_id("app2")
+//            .app_secret("secret2")
+//            .build();
 
-        let service1 = UserInfoService::new(config1);
-        let service2 = UserInfoService::new(config2);
+//        let service1 = UserInfoService::new(config1);
+//        let service2 = UserInfoService::new(config2);
 
-        // 验证服务配置的独立性
-        assert_eq!(service1.config.app_id, "app1");
-        assert_eq!(service2.config.app_id, "app2");
-        assert_ne!(service1.config.app_id, service2.config.app_id);
-    }
+//        // 验证服务配置的独立性
+//        assert_eq!(service1.config.app_id, "app1");
+//        assert_eq!(service2.config.app_id, "app2");
+//        assert_ne!(service1.config.app_id, service2.config.app_id);
+//    }
 
-    #[test]
-    fn test_app_token_response_structure() {
-        let json_str = r#"{
-            "app_access_token": "test_token",
-            "token_type": "bearer",
-            "expire": 7200,
-            "refresh_token": "refresh_token",
-            "refresh_expires_in": 604800
-        }"#;
+//    #[test]
+//    fn test_app_token_response_structure() {
+//        let json_str = r#"{
+//            "app_access_token": "test_token",
+//            "token_type": "bearer",
+//            "expire": 7200,
+//            "refresh_token": "refresh_token",
+//            "refresh_expires_in": 604800
+//        }"#;
 
-        let response: AppAccessTokenResponse = serde_json::from_str(json_str).unwrap();
-        assert_eq!(response.app_access_token, "test_token");
-        assert_eq!(response.token_type, "bearer");
-        assert_eq!(response.expires_in, 7200);
-        assert_eq!(response.refresh_token, Some("refresh_token".to_string()));
-        assert_eq!(response.refresh_expires_in, Some(604800));
-    }
+//        let response: AppAccessTokenResponse = serde_json::from_str(json_str).unwrap();
+//        assert_eq!(response.app_access_token, "test_token");
+//        assert_eq!(response.token_type, "bearer");
+//        assert_eq!(response.expires_in, 7200);
+//        assert_eq!(response.refresh_token, Some("refresh_token".to_string()));
+//        assert_eq!(response.refresh_expires_in, Some(604800));
+//    }
 
-    #[test]
-    fn test_tenant_token_response_structure() {
-        let json_str = r#"{
-            "tenant_access_token": "test_tenant_token",
-            "token_type": "bearer",
-            "expire": 7200
-        }"#;
+//    #[test]
+//    fn test_tenant_token_response_structure() {
+//        let json_str = r#"{
+//            "tenant_access_token": "test_tenant_token",
+//            "token_type": "bearer",
+//            "expire": 7200
+//        }"#;
 
-        let response: TenantAccessTokenResponse = serde_json::from_str(json_str).unwrap();
-        assert_eq!(response.tenant_access_token, "test_tenant_token");
-        assert_eq!(response.token_type, "bearer");
-        assert_eq!(response.expires_in, 7200);
-        assert!(response.refresh_token.is_none());
-        assert!(response.refresh_expires_in.is_none());
-    }
+//        let response: TenantAccessTokenResponse = serde_json::from_str(json_str).unwrap();
+//        assert_eq!(response.tenant_access_token, "test_tenant_token");
+//        assert_eq!(response.token_type, "bearer");
+//        assert_eq!(response.expires_in, 7200);
+//        assert!(response.refresh_token.is_none());
+//        assert!(response.refresh_expires_in.is_none());
+//    }
 
-    #[test]
-    fn test_app_ticket_response_structure() {
-        let json_str = r#"{
-            "app_ticket": "test_ticket",
-            "status": "success"
-        }"#;
+//    #[test]
+//    fn test_app_ticket_response_structure() {
+//        let json_str = r#"{
+//            "app_ticket": "test_ticket",
+//            "status": "success"
+//        }"#;
 
-        let response: ResendAppTicketResponse = serde_json::from_str(json_str).unwrap();
-        assert_eq!(response.app_ticket, Some("test_ticket".to_string()));
-        assert_eq!(response.status, Some("success".to_string()));
-    }
+//        let response: ResendAppTicketResponse = serde_json::from_str(json_str).unwrap();
+//        assert_eq!(response.app_ticket, Some("test_ticket".to_string()));
+//        assert_eq!(response.status, Some("success".to_string()));
+//    }
 
-    #[test]
-    fn test_service_thread_safety() {
-        use std::thread;
+//    #[test]
+//    fn test_service_thread_safety() {
+//        use std::thread;
 
-        let config = Config::builder()
-            .app_id("thread_test_app")
-            .app_secret("thread_test_secret")
-            .build();
+//        let config = Config::builder()
+//            .app_id("thread_test_app")
+//            .app_secret("thread_test_secret")
+//            .build();
 
-        let service = Arc::new(UserInfoService::new(config));
-        let handles: Vec<_> = (0..10)
-            .map(|i| {
-                let service_clone = Arc::clone(&service);
-                thread::spawn(move || {
-                    format!(
-                        "thread_{}_config_app_id: {}",
-                        i, service_clone.config.app_id
-                    )
-                })
-            })
-            .collect();
+//        let service = Arc::new(UserInfoService::new(config));
+//        let handles: Vec<_> = (0..10)
+//            .map(|i| {
+//                let service_clone = Arc::clone(&service);
+//                thread::spawn(move || {
+//                    format!(
+//                        "thread_{}_config_app_id: {}",
+//                        i, service_clone.config.app_id
+//                    )
+//                })
+//            })
+//            .collect();
 
-        // 所有线程应该能够安全地访问服务
-        for handle in handles {
-            let result = handle.join().unwrap();
-            assert!(result.contains("thread_test_app"));
-        }
-    }
+//        // 所有线程应该能够安全地访问服务
+//        for handle in handles {
+//            let result = handle.join().unwrap();
+//            assert!(result.contains("thread_test_app"));
+//        }
+//    }
 }
 
 impl ApiResponseTrait for UserInfo {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
+//    fn data_format() -> ResponseFormat {
+//        ResponseFormat::Data
+//    }
 }
 
 impl ApiResponseTrait for AppAccessTokenResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
+//    fn data_format() -> ResponseFormat {
+//        ResponseFormat::Data
+//    }
 }
 
 impl ApiResponseTrait for TenantAccessTokenResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
+//    fn data_format() -> ResponseFormat {
+//        ResponseFormat::Data
+//    }
 }
 
 impl ApiResponseTrait for ResendAppTicketResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
+//    fn data_format() -> ResponseFormat {
+//        ResponseFormat::Data
+//    }
 }

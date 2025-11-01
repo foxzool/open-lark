@@ -642,7 +642,7 @@ pub struct LeaveStatistics {
 }
 
 /// 请假类型统计
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LeaveTypeStat {
     /// 请假类型
     pub leave_type: LeaveType,
@@ -655,7 +655,7 @@ pub struct LeaveTypeStat {
 }
 
 /// 请假审批记录
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LeaveApproval {
     /// 审批ID
     pub approval_id: String,
@@ -778,7 +778,7 @@ pub struct UpdateLeaveRequest {
 }
 
 /// 请假更新字段
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LeaveUpdateFields {
     /// 请假原因
     pub reason: Option<String>,
@@ -889,7 +889,7 @@ pub struct UpdateLeaveRuleRequest {
 }
 
 /// 请假规则更新字段
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LeaveRuleUpdateFields {
     /// 规则名称
     pub name: Option<String>,

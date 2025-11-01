@@ -968,13 +968,13 @@ impl Default for GetAttendanceRecordsBuilder {
 }
 
 // 应用ExecutableBuilder trait - 标准实现
-crate::impl_executable_builder!(
-    GetAttendanceRecordsBuilder,
-    AttendanceService,
-    (String, GetAttendanceRecordsRequest),
-    BaseResponse<GetAttendanceRecordsResponse>,
-    get_attendance_records_with_tuple
-);
+// crate::impl_executable_builder!(
+//    GetAttendanceRecordsBuilder,
+//    AttendanceService,
+//    (String, GetAttendanceRecordsRequest),
+//    BaseResponse<GetAttendanceRecordsResponse>,
+//    get_attendance_records_with_tuple
+//);
 
 /// 批量获取考勤记录构建器
 #[derive(Debug, Clone)]
@@ -1027,13 +1027,13 @@ impl Default for BatchGetAttendanceRecordsBuilder {
 }
 
 // 应用ExecutableBuilder trait - 标准实现
-crate::impl_executable_builder!(
-    BatchGetAttendanceRecordsBuilder,
-    AttendanceService,
-    BatchGetAttendanceRecordsRequest,
-    BaseResponse<BatchGetAttendanceRecordsResponse>,
-    batch_get_attendance_records_with_tuple
-);
+// crate::impl_executable_builder!(
+//    BatchGetAttendanceRecordsBuilder,
+//    AttendanceService,
+//    BatchGetAttendanceRecordsRequest,
+//    BaseResponse<BatchGetAttendanceRecordsResponse>,
+//    batch_get_attendance_records_with_tuple
+//);
 
 /// 创建打卡记录构建器
 #[derive(Debug, Clone)]
@@ -1068,13 +1068,13 @@ impl Default for CreateCheckinRecordBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    CreateCheckinRecordBuilder,
-    AttendanceService,
-    CreateCheckinRecordRequest,
-    BaseResponse<CreateCheckinRecordResponse>,
-    create_checkin_record_with_tuple
-);
+// crate::impl_executable_builder!(
+//    CreateCheckinRecordBuilder,
+//    AttendanceService,
+//    CreateCheckinRecordRequest,
+//    BaseResponse<CreateCheckinRecordResponse>,
+//    create_checkin_record_with_tuple
+//);
 
 /// 更新打卡记录构建器
 #[derive(Debug, Clone)]
@@ -1111,13 +1111,13 @@ impl Default for UpdateCheckinRecordBuilder {
 }
 
 // 应用ExecutableBuilder trait - 标准实现
-crate::impl_executable_builder!(
-    UpdateCheckinRecordBuilder,
-    AttendanceService,
-    (String, UpdateCheckinRecordRequest),
-    BaseResponse<UpdateCheckinRecordResponse>,
-    update_checkin_record_with_tuple
-);
+// crate::impl_executable_builder!(
+//    UpdateCheckinRecordBuilder,
+//    AttendanceService,
+//    (String, UpdateCheckinRecordRequest),
+//    BaseResponse<UpdateCheckinRecordResponse>,
+//    update_checkin_record_with_tuple
+//);
 
 /// 删除打卡记录构建器
 #[derive(Debug, Clone)]
@@ -1146,13 +1146,13 @@ impl Default for DeleteCheckinRecordBuilder {
 }
 
 // 应用ExecutableBuilder trait - 标准实现
-crate::impl_executable_builder!(
-    DeleteCheckinRecordBuilder,
-    AttendanceService,
-    String,
-    BaseResponse<DeleteCheckinRecordResponse>,
-    delete_checkin_record_with_string
-);
+// crate::impl_executable_builder!(
+//    DeleteCheckinRecordBuilder,
+//    AttendanceService,
+//    String,
+//    BaseResponse<DeleteCheckinRecordResponse>,
+//    delete_checkin_record_with_string
+//);
 
 /// 获取考勤统计信息构建器
 #[derive(Debug, Clone)]
@@ -1211,13 +1211,13 @@ impl Default for GetAttendanceStatisticsBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetAttendanceStatisticsBuilder,
-    AttendanceService,
-    GetAttendanceStatisticsRequest,
-    BaseResponse<GetAttendanceStatisticsResponse>,
-    get_attendance_statistics_with_tuple
-);
+// crate::impl_executable_builder!(
+//    GetAttendanceStatisticsBuilder,
+//    AttendanceService,
+//    GetAttendanceStatisticsRequest,
+//    BaseResponse<GetAttendanceStatisticsResponse>,
+//    get_attendance_statistics_with_tuple
+//);
 
 /// 获取考勤异常记录构建器
 #[derive(Debug, Clone)]
@@ -1288,13 +1288,13 @@ impl Default for GetAttendanceExceptionsBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetAttendanceExceptionsBuilder,
-    AttendanceService,
-    GetAttendanceExceptionsRequest,
-    BaseResponse<GetAttendanceExceptionsResponse>,
-    get_attendance_exceptions_with_tuple
-);
+// crate::impl_executable_builder!(
+//    GetAttendanceExceptionsBuilder,
+//    AttendanceService,
+//    GetAttendanceExceptionsRequest,
+//    BaseResponse<GetAttendanceExceptionsResponse>,
+//    get_attendance_exceptions_with_tuple
+//);
 
 /// 处理考勤异常构建器
 #[derive(Debug, Clone)]
@@ -1329,13 +1329,13 @@ impl Default for ProcessAttendanceExceptionBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    ProcessAttendanceExceptionBuilder,
-    AttendanceService,
-    ProcessAttendanceExceptionRequest,
-    BaseResponse<ProcessAttendanceExceptionResponse>,
-    process_attendance_exception_with_tuple
-);
+// crate::impl_executable_builder!(
+//    ProcessAttendanceExceptionBuilder,
+//    AttendanceService,
+//    ProcessAttendanceExceptionRequest,
+//    BaseResponse<ProcessAttendanceExceptionResponse>,
+//    process_attendance_exception_with_tuple
+//);
 
 /// 获取考勤报表构建器
 #[derive(Debug, Clone)]
@@ -1400,13 +1400,13 @@ impl Default for GetAttendanceReportBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetAttendanceReportBuilder,
-    AttendanceService,
-    GetAttendanceReportRequest,
-    BaseResponse<GetAttendanceReportResponse>,
-    get_attendance_report_with_tuple
-);
+// crate::impl_executable_builder!(
+//    GetAttendanceReportBuilder,
+//    AttendanceService,
+//    GetAttendanceReportRequest,
+//    BaseResponse<GetAttendanceReportResponse>,
+//    get_attendance_report_with_tuple
+//);
 
 // 为AttendanceService实现辅助方法，处理Builder的参数
 impl AttendanceService {

@@ -40,7 +40,7 @@ use crate::core::{
     req_option::RequestOption, SDKResult,
 };
 use async_trait::async_trait;
-use open_lark_core::core::{api_req::ApiRequest, trait_system::ExecutableBuilder};
+use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
@@ -1163,45 +1163,45 @@ impl Default for GetRealTimeSecurityEventsBuilder {
 /// 安全态势分析构建器
 #[derive(Debug, Clone)]
 pub struct GetSecurityPostureAnalysisBuilder {
-    request: GetSecurityPostureAnalysisRequest,
+//    request: GetSecurityPostureAnalysisRequest,
 }
 
 impl GetSecurityPostureAnalysisBuilder {
-    /// 创建新的Builder实例
-    pub fn new() -> Self {
-        Self {
-            request: GetSecurityPostureAnalysisRequest::default(),
-        }
-    }
+//    /// 创建新的Builder实例
+//    pub fn new() -> Self {
+//        Self {
+//            request: GetSecurityPostureAnalysisRequest::default(),
+//        }
+//    }
 
-    /// 设置开始时间
-    pub fn start_time(mut self, start_time: i64) -> Self {
-        self.request.start_time = start_time;
-        self
-    }
+//    /// 设置开始时间
+//    pub fn start_time(mut self, start_time: i64) -> Self {
+//        self.request.start_time = start_time;
+//        self
+//    }
 
-    /// 设置结束时间
-    pub fn end_time(mut self, end_time: i64) -> Self {
-        self.request.end_time = end_time;
-        self
-    }
+//    /// 设置结束时间
+//    pub fn end_time(mut self, end_time: i64) -> Self {
+//        self.request.end_time = end_time;
+//        self
+//    }
 
-    /// 设置分析类型
-    pub fn analysis_types(mut self, analysis_types: Vec<AnalysisType>) -> Self {
-        self.request.analysis_types = analysis_types;
-        self
-    }
+//    /// 设置分析类型
+//    pub fn analysis_types(mut self, analysis_types: Vec<AnalysisType>) -> Self {
+//        self.request.analysis_types = analysis_types;
+//        self
+//    }
 
-    /// 构建最终的请求对象
-    pub fn build(self) -> GetSecurityPostureAnalysisRequest {
-        self.request
-    }
+//    /// 构建最终的请求对象
+//    pub fn build(self) -> GetSecurityPostureAnalysisRequest {
+//        self.request
+//    }
 }
 
 impl Default for GetSecurityPostureAnalysisBuilder {
-    fn default() -> Self {
-        Self::new()
-    }
+//    fn default() -> Self {
+//        Self::new()
+//    }
 }
 
 // 应用ExecutableBuilder trait
@@ -1216,57 +1216,57 @@ impl Default for GetSecurityPostureAnalysisBuilder {
 /// 异常检测结果构建器
 #[derive(Debug, Clone)]
 pub struct GetAnomalyDetectionResultsBuilder {
-    request: GetAnomalyDetectionResultsRequest,
+//    request: GetAnomalyDetectionResultsRequest,
 }
 
 impl GetAnomalyDetectionResultsBuilder {
-    /// 创建新的Builder实例
-    pub fn new() -> Self {
-        Self {
-            request: GetAnomalyDetectionResultsRequest::default(),
-        }
-    }
+//    /// 创建新的Builder实例
+//    pub fn new() -> Self {
+//        Self {
+//            request: GetAnomalyDetectionResultsRequest::default(),
+//        }
+//    }
 
-    /// 设置开始时间
-    pub fn start_time(mut self, start_time: i64) -> Self {
-        self.request.start_time = start_time;
-        self
-    }
+//    /// 设置开始时间
+//    pub fn start_time(mut self, start_time: i64) -> Self {
+//        self.request.start_time = start_time;
+//        self
+//    }
 
-    /// 设置结束时间
-    pub fn end_time(mut self, end_time: i64) -> Self {
-        self.request.end_time = end_time;
-        self
-    }
+//    /// 设置结束时间
+//    pub fn end_time(mut self, end_time: i64) -> Self {
+//        self.request.end_time = end_time;
+//        self
+//    }
 
-    /// 设置实体类型
-    pub fn entity_types(mut self, entity_types: Vec<String>) -> Self {
-        self.request.entity_types = entity_types;
-        self
-    }
+//    /// 设置实体类型
+//    pub fn entity_types(mut self, entity_types: Vec<String>) -> Self {
+//        self.request.entity_types = entity_types;
+//        self
+//    }
 
-    /// 设置置信度阈值
-    pub fn confidence_threshold(mut self, threshold: f64) -> Self {
-        self.request.confidence_threshold = Some(threshold);
-        self
-    }
+//    /// 设置置信度阈值
+//    pub fn confidence_threshold(mut self, threshold: f64) -> Self {
+//        self.request.confidence_threshold = Some(threshold);
+//        self
+//    }
 
-    /// 设置严重性级别过滤
-    pub fn severity_levels(mut self, levels: Vec<SecurityLevel>) -> Self {
-        self.request.severity_levels = Some(levels);
-        self
-    }
+//    /// 设置严重性级别过滤
+//    pub fn severity_levels(mut self, levels: Vec<SecurityLevel>) -> Self {
+//        self.request.severity_levels = Some(levels);
+//        self
+//    }
 
-    /// 构建最终的请求对象
-    pub fn build(self) -> GetAnomalyDetectionResultsRequest {
-        self.request
-    }
+//    /// 构建最终的请求对象
+//    pub fn build(self) -> GetAnomalyDetectionResultsRequest {
+//        self.request
+//    }
 }
 
 impl Default for GetAnomalyDetectionResultsBuilder {
-    fn default() -> Self {
-        Self::new()
-    }
+//    fn default() -> Self {
+//        Self::new()
+//    }
 }
 
 // 应用ExecutableBuilder trait
@@ -1281,45 +1281,45 @@ impl Default for GetAnomalyDetectionResultsBuilder {
 /// 攻击链分析构建器
 #[derive(Debug, Clone)]
 pub struct GetAttackChainAnalysisBuilder {
-    request: GetAttackChainAnalysisRequest,
+//    request: GetAttackChainAnalysisRequest,
 }
 
 impl GetAttackChainAnalysisBuilder {
-    /// 创建新的Builder实例
-    pub fn new() -> Self {
-        Self {
-            request: GetAttackChainAnalysisRequest::default(),
-        }
-    }
+//    /// 创建新的Builder实例
+//    pub fn new() -> Self {
+//        Self {
+//            request: GetAttackChainAnalysisRequest::default(),
+//        }
+//    }
 
-    /// 设置攻击链ID
-    pub fn attack_chain_id(mut self, attack_chain_id: String) -> Self {
-        self.request.attack_chain_id = attack_chain_id;
-        self
-    }
+//    /// 设置攻击链ID
+//    pub fn attack_chain_id(mut self, attack_chain_id: String) -> Self {
+//        self.request.attack_chain_id = attack_chain_id;
+//        self
+//    }
 
-    /// 设置是否包含指标信息
-    pub fn include_indicators(mut self, include: bool) -> Self {
-        self.request.include_indicators = include;
-        self
-    }
+//    /// 设置是否包含指标信息
+//    pub fn include_indicators(mut self, include: bool) -> Self {
+//        self.request.include_indicators = include;
+//        self
+//    }
 
-    /// 设置是否包含TTP信息
-    pub fn include_ttp(mut self, include: bool) -> Self {
-        self.request.include_ttp = include;
-        self
-    }
+//    /// 设置是否包含TTP信息
+//    pub fn include_ttp(mut self, include: bool) -> Self {
+//        self.request.include_ttp = include;
+//        self
+//    }
 
-    /// 构建最终的请求对象
-    pub fn build(self) -> GetAttackChainAnalysisRequest {
-        self.request
-    }
+//    /// 构建最终的请求对象
+//    pub fn build(self) -> GetAttackChainAnalysisRequest {
+//        self.request
+//    }
 }
 
 impl Default for GetAttackChainAnalysisBuilder {
-    fn default() -> Self {
-        Self::new()
-    }
+//    fn default() -> Self {
+//        Self::new()
+//    }
 }
 
 // 应用ExecutableBuilder trait
@@ -1332,23 +1332,23 @@ impl Default for GetAttackChainAnalysisBuilder {
 //);
 
 impl SecurityMonitoringService {
-    /// 获取实时安全事件构建器
-    pub fn get_real_time_security_events_builder(&self) -> GetRealTimeSecurityEventsBuilder {
-        GetRealTimeSecurityEventsBuilder::new()
-    }
+//    /// 获取实时安全事件构建器
+//    pub fn get_real_time_security_events_builder(&self) -> GetRealTimeSecurityEventsBuilder {
+//        GetRealTimeSecurityEventsBuilder::new()
+//    }
 
-    /// 获取安全态势分析构建器
-    pub fn get_security_posture_analysis_builder(&self) -> GetSecurityPostureAnalysisBuilder {
-        GetSecurityPostureAnalysisBuilder::new()
-    }
+//    /// 获取安全态势分析构建器
+//    pub fn get_security_posture_analysis_builder(&self) -> GetSecurityPostureAnalysisBuilder {
+//        GetSecurityPostureAnalysisBuilder::new()
+//    }
 
-    /// 获取异常检测结果构建器
-    pub fn get_anomaly_detection_results_builder(&self) -> GetAnomalyDetectionResultsBuilder {
-        GetAnomalyDetectionResultsBuilder::new()
-    }
+//    /// 获取异常检测结果构建器
+//    pub fn get_anomaly_detection_results_builder(&self) -> GetAnomalyDetectionResultsBuilder {
+//        GetAnomalyDetectionResultsBuilder::new()
+//    }
 
-    /// 获取攻击链分析构建器
-    pub fn get_attack_chain_analysis_builder(&self) -> GetAttackChainAnalysisBuilder {
-        GetAttackChainAnalysisBuilder::new()
-    }
+//    /// 获取攻击链分析构建器
+//    pub fn get_attack_chain_analysis_builder(&self) -> GetAttackChainAnalysisBuilder {
+//        GetAttackChainAnalysisBuilder::new()
+//    }
 }

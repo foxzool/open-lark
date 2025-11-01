@@ -13,7 +13,7 @@ use crate::core::{
     req_option::RequestOption, SDKResult,
 };
 use async_trait::async_trait;
-use open_lark_core::core::{api_req::ApiRequest, trait_system::ExecutableBuilder};
+use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use serde::{Deserialize, Serialize};
 
 // 导入核心类型
@@ -232,8 +232,8 @@ impl Default for GetComplianceOverviewBuilder {
 //);
 
 impl ComplianceManagementService {
-    /// 获取合规状态概览构建器
-    pub fn get_compliance_overview_builder(&self) -> GetComplianceOverviewBuilder {
-        GetComplianceOverviewBuilder::new()
-    }
+//    /// 获取合规状态概览构建器
+//    pub fn get_compliance_overview_builder(&self) -> GetComplianceOverviewBuilder {
+//        GetComplianceOverviewBuilder::new()
+//    }
 }

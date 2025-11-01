@@ -74,7 +74,7 @@ use crate::core::{
     SDKResult,
 };
 use async_trait::async_trait;
-use open_lark_core::core::{api_req::ApiRequest, trait_system::ExecutableBuilder};
+use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use serde::{Deserialize, Serialize};
 
 /// 公司管理服务
@@ -946,13 +946,13 @@ impl Default for BatchGetCompaniesBuilder {
 }
 
 // 应用ExecutableBuilder trait - 标准实现
-crate::impl_executable_builder!(
-    BatchGetCompaniesBuilder,
-    CompaniesService,
-    BatchGetCompaniesRequest,
-    BaseResponse<BatchGetCompaniesResponse>,
-    batch_get
-);
+// crate::impl_executable_builder!(
+//    BatchGetCompaniesBuilder,
+//    CompaniesService,
+//    BatchGetCompaniesRequest,
+//    BaseResponse<BatchGetCompaniesResponse>,
+//    batch_get
+//);
 
 /// 搜索公司构建器
 #[derive(Debug, Clone)]
@@ -1005,13 +1005,13 @@ impl Default for SearchCompaniesBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    SearchCompaniesBuilder,
-    CompaniesService,
-    SearchCompaniesRequest,
-    BaseResponse<SearchCompaniesResponse>,
-    search
-);
+// crate::impl_executable_builder!(
+//    SearchCompaniesBuilder,
+//    CompaniesService,
+//    SearchCompaniesRequest,
+//    BaseResponse<SearchCompaniesResponse>,
+//    search
+//);
 
 /// 创建公司构建器
 #[derive(Debug, Clone)]
@@ -1052,13 +1052,13 @@ impl Default for CreateCompanyBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    CreateCompanyBuilder,
-    CompaniesService,
-    CreateCompanyRequest,
-    BaseResponse<CreateCompanyResponse>,
-    create
-);
+// crate::impl_executable_builder!(
+//    CreateCompanyBuilder,
+//    CompaniesService,
+//    CreateCompanyRequest,
+//    BaseResponse<CreateCompanyResponse>,
+//    create
+//);
 
 /// 更新公司构建器
 #[derive(Debug, Clone)]
@@ -1199,13 +1199,13 @@ impl Default for GetCompanyStatisticsBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetCompanyStatisticsBuilder,
-    CompaniesService,
-    GetCompanyStatisticsRequest,
-    BaseResponse<GetCompanyStatisticsResponse>,
-    get_statistics
-);
+// crate::impl_executable_builder!(
+//    GetCompanyStatisticsBuilder,
+//    CompaniesService,
+//    GetCompanyStatisticsRequest,
+//    BaseResponse<GetCompanyStatisticsResponse>,
+//    get_statistics
+//);
 
 /// 获取公司组织架构构建器
 #[derive(Debug, Clone)]
@@ -1243,13 +1243,13 @@ impl Default for GetOrganizationStructureBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetOrganizationStructureBuilder,
-    CompaniesService,
-    GetOrganizationStructureRequest,
-    BaseResponse<GetOrganizationStructureResponse>,
-    get_organization_structure
-);
+// crate::impl_executable_builder!(
+//    GetOrganizationStructureBuilder,
+//    CompaniesService,
+//    GetOrganizationStructureRequest,
+//    BaseResponse<GetOrganizationStructureResponse>,
+//    get_organization_structure
+//);
 
 /// 获取子公司列表构建器
 #[derive(Debug, Clone)]
@@ -1301,13 +1301,13 @@ impl Default for GetSubsidiariesBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetSubsidiariesBuilder,
-    CompaniesService,
-    GetSubsidiariesRequest,
-    BaseResponse<GetSubsidiariesResponse>,
-    get_subsidiaries
-);
+// crate::impl_executable_builder!(
+//    GetSubsidiariesBuilder,
+//    CompaniesService,
+//    GetSubsidiariesRequest,
+//    BaseResponse<GetSubsidiariesResponse>,
+//    get_subsidiaries
+//);
 
 // 为CompaniesService实现辅助方法，处理Builder的参数
 impl CompaniesService {

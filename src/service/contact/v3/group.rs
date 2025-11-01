@@ -7,7 +7,7 @@
 //! - 查询用户所属用户组
 //! - 企业级用户组权限管理
 
-use open_lark_core::core::{api_req::ApiRequest, trait_system::ExecutableBuilder};
+use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use crate::core::{
     api_resp::BaseResponse,
     config::Config,
@@ -589,13 +589,13 @@ impl Default for CreateGroupBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    CreateGroupBuilder,
-    GroupService,
-    CreateGroupRequest,
-    BaseResponse<CreateGroupResponse>,
-    create
-);
+// crate::impl_executable_builder!(
+//    CreateGroupBuilder,
+//    GroupService,
+//    CreateGroupRequest,
+//    BaseResponse<CreateGroupResponse>,
+//    create
+//);
 
 /// 修改用户组请求构建器
 #[derive(Debug, Clone)]
@@ -630,13 +630,13 @@ impl Default for PatchGroupBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    PatchGroupBuilder,
-    GroupService,
-    PatchGroupRequest,
-    BaseResponse<PatchGroupResponse>,
-    patch
-);
+// crate::impl_executable_builder!(
+//    PatchGroupBuilder,
+//    GroupService,
+//    PatchGroupRequest,
+//    BaseResponse<PatchGroupResponse>,
+//    patch
+//);
 
 /// 查询用户组列表请求构建器
 #[derive(Debug, Clone)]
@@ -689,13 +689,13 @@ impl Default for ListGroupsBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    ListGroupsBuilder,
-    GroupService,
-    ListGroupsRequest,
-    BaseResponse<ListGroupsResponse>,
-    simple_list
-);
+// crate::impl_executable_builder!(
+//    ListGroupsBuilder,
+//    GroupService,
+//    ListGroupsRequest,
+//    BaseResponse<ListGroupsResponse>,
+//    simple_list
+//);
 
 /// 查询用户所属用户组请求构建器
 #[derive(Debug, Clone)]
@@ -748,13 +748,13 @@ impl Default for GetUserGroupsBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetUserGroupsBuilder,
-    GroupService,
-    GetUserGroupsRequest,
-    BaseResponse<GetUserGroupsResponse>,
-    get_user_groups
-);
+// crate::impl_executable_builder!(
+//    GetUserGroupsBuilder,
+//    GroupService,
+//    GetUserGroupsRequest,
+//    BaseResponse<GetUserGroupsResponse>,
+//    get_user_groups
+//);
 
 /// 获取用户组详细信息请求构建器
 #[derive(Debug, Clone)]
@@ -801,13 +801,13 @@ impl Default for GetGroupDetailBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetGroupDetailBuilder,
-    GroupService,
-    GetGroupDetailRequest,
-    BaseResponse<GetGroupDetailResponse>,
-    get_detail
-);
+// crate::impl_executable_builder!(
+//    GetGroupDetailBuilder,
+//    GroupService,
+//    GetGroupDetailRequest,
+//    BaseResponse<GetGroupDetailResponse>,
+//    get_detail
+//);
 
 impl GroupService {
     /// 创建用户组构建器

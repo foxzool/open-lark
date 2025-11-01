@@ -513,13 +513,13 @@ impl SearchUserRequestBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    SearchUserRequestBuilder,
-    UserService,
-    SearchUserRequest,
-    BaseResponse<SearchUserResponse>,
-    search
-);
+// crate::impl_executable_builder!(
+//    SearchUserRequestBuilder,
+//    UserService,
+//    SearchUserRequest,
+//    BaseResponse<SearchUserResponse>,
+//    search
+//);
 
 /// 搜索用户响应
 ///

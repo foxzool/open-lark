@@ -674,13 +674,13 @@ impl SearchInstancesRequestBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    SearchInstancesRequestBuilder,
-    SearchService,
-    SearchInstancesRequest,
-    BaseResponse<SearchInstancesResponse>,
-    search_instances
-);
+// crate::impl_executable_builder!(
+//    SearchInstancesRequestBuilder,
+//    SearchService,
+//    SearchInstancesRequest,
+//    BaseResponse<SearchInstancesResponse>,
+//    search_instances
+//);
 
 /// 搜索审批实例响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -868,13 +868,13 @@ impl SearchTasksRequestBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    SearchTasksRequestBuilder,
-    SearchService,
-    SearchTasksRequest,
-    BaseResponse<SearchTasksResponse>,
-    search_tasks
-);
+// crate::impl_executable_builder!(
+//    SearchTasksRequestBuilder,
+//    SearchService,
+//    SearchTasksRequest,
+//    BaseResponse<SearchTasksResponse>,
+//    search_tasks
+//);
 
 /// 搜索审批任务响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1023,13 +1023,13 @@ impl SearchCcRequestBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    SearchCcRequestBuilder,
-    SearchService,
-    SearchCcRequest,
-    BaseResponse<SearchCcResponse>,
-    search_cc
-);
+// crate::impl_executable_builder!(
+//    SearchCcRequestBuilder,
+//    SearchService,
+//    SearchCcRequest,
+//    BaseResponse<SearchCcResponse>,
+//    search_cc
+//);
 
 /// 搜索审批抄送响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1115,13 +1115,13 @@ impl SearchApprovalIdRequestBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    SearchApprovalIdRequestBuilder,
-    SearchService,
-    SearchApprovalIdRequest,
-    BaseResponse<SearchApprovalIdResponse>,
-    search_approval_id
-);
+// crate::impl_executable_builder!(
+//    SearchApprovalIdRequestBuilder,
+//    SearchService,
+//    SearchApprovalIdRequest,
+//    BaseResponse<SearchApprovalIdResponse>,
+//    search_approval_id
+//);
 
 /// 搜索审批定义ID响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1292,10 +1292,10 @@ impl SearchUserTasksRequestBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    SearchUserTasksRequestBuilder,
-    SearchService,
-    SearchUserTasksRequest,
-    BaseResponse<SearchTasksResponse>,
-    search_user_tasks
-);
+// crate::impl_executable_builder!(
+//    SearchUserTasksRequestBuilder,
+//    SearchService,
+//    SearchUserTasksRequest,
+//    BaseResponse<SearchTasksResponse>,
+//    search_user_tasks
+//);

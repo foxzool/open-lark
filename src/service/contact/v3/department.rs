@@ -9,7 +9,7 @@
 //! - 部门ID更新
 //! - 企业级部门架构管理
 
-use open_lark_core::core::{api_req::ApiRequest, trait_system::ExecutableBuilder};
+use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use crate::core::{
     api_resp::BaseResponse,
     config::Config,
@@ -739,13 +739,13 @@ impl Default for CreateDepartmentBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    CreateDepartmentBuilder,
-    DepartmentService,
-    CreateDepartmentRequest,
-    BaseResponse<CreateDepartmentResponse>,
-    create
-);
+// crate::impl_executable_builder!(
+//    CreateDepartmentBuilder,
+//    DepartmentService,
+//    CreateDepartmentRequest,
+//    BaseResponse<CreateDepartmentResponse>,
+//    create
+//);
 
 /// 修改部门请求构建器
 #[derive(Debug, Clone)]
@@ -792,13 +792,13 @@ impl Default for PatchDepartmentBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    PatchDepartmentBuilder,
-    DepartmentService,
-    PatchDepartmentRequest,
-    BaseResponse<PatchDepartmentResponse>,
-    patch
-);
+// crate::impl_executable_builder!(
+//    PatchDepartmentBuilder,
+//    DepartmentService,
+//    PatchDepartmentRequest,
+//    BaseResponse<PatchDepartmentResponse>,
+//    patch
+//);
 
 /// 更新部门请求构建器
 #[derive(Debug, Clone)]
@@ -845,13 +845,13 @@ impl Default for UpdateDepartmentBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    UpdateDepartmentBuilder,
-    DepartmentService,
-    UpdateDepartmentRequest,
-    BaseResponse<UpdateDepartmentResponse>,
-    update
-);
+// crate::impl_executable_builder!(
+//    UpdateDepartmentBuilder,
+//    DepartmentService,
+//    UpdateDepartmentRequest,
+//    BaseResponse<UpdateDepartmentResponse>,
+//    update
+//);
 
 /// 批量获取部门请求构建器
 #[derive(Debug, Clone)]
@@ -898,13 +898,13 @@ impl Default for BatchGetDepartmentsBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    BatchGetDepartmentsBuilder,
-    DepartmentService,
-    BatchGetDepartmentsRequest,
-    BaseResponse<BatchGetDepartmentsResponse>,
-    batch_get
-);
+// crate::impl_executable_builder!(
+//    BatchGetDepartmentsBuilder,
+//    DepartmentService,
+//    BatchGetDepartmentsRequest,
+//    BaseResponse<BatchGetDepartmentsResponse>,
+//    batch_get
+//);
 
 /// 获取子部门列表请求构建器
 #[derive(Debug, Clone)]
@@ -969,13 +969,13 @@ impl Default for GetChildrenDepartmentsBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetChildrenDepartmentsBuilder,
-    DepartmentService,
-    GetChildrenDepartmentsRequest,
-    BaseResponse<GetChildrenDepartmentsResponse>,
-    get_children
-);
+// crate::impl_executable_builder!(
+//    GetChildrenDepartmentsBuilder,
+//    DepartmentService,
+//    GetChildrenDepartmentsRequest,
+//    BaseResponse<GetChildrenDepartmentsResponse>,
+//    get_children
+//);
 
 /// 搜索部门请求构建器
 #[derive(Debug, Clone)]
@@ -1034,13 +1034,13 @@ impl Default for SearchDepartmentsBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    SearchDepartmentsBuilder,
-    DepartmentService,
-    SearchDepartmentsRequest,
-    BaseResponse<SearchDepartmentsResponse>,
-    search
-);
+// crate::impl_executable_builder!(
+//    SearchDepartmentsBuilder,
+//    DepartmentService,
+//    SearchDepartmentsRequest,
+//    BaseResponse<SearchDepartmentsResponse>,
+//    search
+//);
 
 impl DepartmentService {
     /// 创建部门构建器

@@ -42,7 +42,7 @@
 //! }
 //! ```
 
-use open_lark_core::core::{api_req::ApiRequest, trait_system::ExecutableBuilder};
+use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use crate::core::{
     api_resp::BaseResponse,
     config::Config,
@@ -693,13 +693,13 @@ impl Default for CreateUserBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    CreateUserBuilder,
-    UserService,
-    CreateUserRequest,
-    BaseResponse<CreateUserResponse>,
-    create
-);
+// crate::impl_executable_builder!(
+//    CreateUserBuilder,
+//    UserService,
+//    CreateUserRequest,
+//    BaseResponse<CreateUserResponse>,
+//    create
+//);
 
 /// 修改用户构建器
 #[derive(Debug, Clone)]
@@ -748,13 +748,13 @@ impl Default for PatchUserBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    PatchUserBuilder,
-    UserService,
-    PatchUserRequest,
-    BaseResponse<PatchUserResponse>,
-    patch
-);
+// crate::impl_executable_builder!(
+//    PatchUserBuilder,
+//    UserService,
+//    PatchUserRequest,
+//    BaseResponse<PatchUserResponse>,
+//    patch
+//);
 
 /// 获取用户构建器
 #[derive(Debug, Clone)]
@@ -797,13 +797,13 @@ impl Default for GetUserBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    GetUserBuilder,
-    UserService,
-    GetUserRequest,
-    BaseResponse<GetUserResponse>,
-    get
-);
+// crate::impl_executable_builder!(
+//    GetUserBuilder,
+//    UserService,
+//    GetUserRequest,
+//    BaseResponse<GetUserResponse>,
+//    get
+//);
 
 /// 批量获取用户构建器
 #[derive(Debug, Clone)]
@@ -850,13 +850,13 @@ impl Default for BatchGetUsersBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    BatchGetUsersBuilder,
-    UserService,
-    BatchGetUsersRequest,
-    BaseResponse<BatchGetUsersResponse>,
-    batch
-);
+// crate::impl_executable_builder!(
+//    BatchGetUsersBuilder,
+//    UserService,
+//    BatchGetUsersRequest,
+//    BaseResponse<BatchGetUsersResponse>,
+//    batch
+//);
 
 /// 获取用户列表构建器
 #[derive(Debug, Clone)]
@@ -909,13 +909,13 @@ impl Default for ListUsersBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    ListUsersBuilder,
-    UserService,
-    ListUsersRequest,
-    BaseResponse<ListUsersResponse>,
-    list
-);
+// crate::impl_executable_builder!(
+//    ListUsersBuilder,
+//    UserService,
+//    ListUsersRequest,
+//    BaseResponse<ListUsersResponse>,
+//    list
+//);
 
 /// 删除用户构建器
 #[derive(Debug, Clone)]
@@ -958,13 +958,13 @@ impl Default for DeleteUserBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    DeleteUserBuilder,
-    UserService,
-    DeleteUserRequest,
-    BaseResponse<DeleteUserResponse>,
-    delete
-);
+// crate::impl_executable_builder!(
+//    DeleteUserBuilder,
+//    UserService,
+//    DeleteUserRequest,
+//    BaseResponse<DeleteUserResponse>,
+//    delete
+//);
 
 /// 搜索用户构建器
 #[derive(Debug, Clone)]
@@ -1023,13 +1023,13 @@ impl Default for SearchUsersBuilder {
 }
 
 // 应用ExecutableBuilder trait
-crate::impl_executable_builder!(
-    SearchUsersBuilder,
-    UserService,
-    SearchUsersRequest,
-    BaseResponse<SearchUsersResponse>,
-    search
-);
+// crate::impl_executable_builder!(
+//    SearchUsersBuilder,
+//    UserService,
+//    SearchUsersRequest,
+//    BaseResponse<SearchUsersResponse>,
+//    search
+//);
 
 // ==================== 数据模型 ====================
 
