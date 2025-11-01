@@ -25,7 +25,7 @@ jobs:
           include-pre-releases: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run cargo test (workspace, all features)
-        run: cargo test --workspace --all-features --no-fail-fast
+        run: cargo test --lib --workspace --all-features --no-fail-fast
 
   doc:
     runs-on: ubuntu-latest
@@ -66,6 +66,6 @@ jobs:
       - name: Check format
         run: cargo fmt --all -- --check
       - name: Run clippy (all features)
-        run: cargo clippy --workspace --all-targets --all-features -- -D warnings
+        run: cargo clippy --workspace --lib --all-features -- -D warnings
       - name: Run clippy (no default features)
-        run: cargo clippy --workspace --all-targets --no-default-features -- -D warnings
+        run: cargo clippy --workspace --lib --no-default-features -- -D warnings

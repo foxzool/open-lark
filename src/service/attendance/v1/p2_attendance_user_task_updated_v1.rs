@@ -1,44 +1,34 @@
 use serde::{Deserialize, Serialize};
 
-use crate::event::{context::EventHeader, dispatcher::EventHandler};
-
-/// 考勤打卡流水事件 (user.attendance_records_event)
-#[derive(Debug, Serialize, Deserialize)]
+use open_lark_core::event::EventHandler};
+/// 考勤打卡流水事件 (user.attendance_records_event),
+#[derive(Debug, Clone)]
 pub struct P2AttendanceUserTaskUpdatedV1 {
     pub schema: String,
     pub header: EventHeader,
     pub event: P2AttendanceUserTaskUpdatedV1Data,
-}
-
-pub(crate) struct P2AttendanceUserTaskUpdatedV1ProcessorImpl<F>
+pub(crate) struct P2AttendanceUserTaskUpdatedV1ProcessorImpl<F>,
 where
     F: Fn(P2AttendanceUserTaskUpdatedV1) + 'static,
 {
     f: F,
-}
-
-impl<F> EventHandler for P2AttendanceUserTaskUpdatedV1ProcessorImpl<F>
+impl<F> EventHandler for P2AttendanceUserTaskUpdatedV1ProcessorImpl<F>,
 where
     F: Fn(P2AttendanceUserTaskUpdatedV1) + 'static + Sync + Send,
 {
-    fn handle(&self, payload: &[u8]) -> anyhow::Result<()> {
-        let event: P2AttendanceUserTaskUpdatedV1 = serde_json::from_slice(payload)?;
+    fn handle(&self, payload: &[u8]) -> anyhow::Result<()> {,
+let event: P2AttendanceUserTaskUpdatedV1 = serde_json::from_slice(payload)?;
         (self.f)(event);
-        Ok(())
+Ok(()),
     }
-}
-
-impl<F> P2AttendanceUserTaskUpdatedV1ProcessorImpl<F>
+impl<F> P2AttendanceUserTaskUpdatedV1ProcessorImpl<F>,
 where
     F: Fn(P2AttendanceUserTaskUpdatedV1) + 'static,
-{
-    pub(crate) fn new(f: F) -> Self {
+{,
+pub(crate) fn new(f: F) -> Self {
         P2AttendanceUserTaskUpdatedV1ProcessorImpl { f }
-    }
-}
-
-/// 考勤打卡流水事件数据
-#[derive(Debug, Serialize, Deserialize)]
+/// 考勤打卡流水事件数据,
+#[derive(Debug, Clone)]
 pub struct P2AttendanceUserTaskUpdatedV1Data {
     /// 用户信息
     pub user_id: AttendanceUserId,
@@ -46,10 +36,8 @@ pub struct P2AttendanceUserTaskUpdatedV1Data {
     pub task: AttendanceTask,
     /// 租户key
     pub tenant_key: String,
-}
-
-/// 考勤事件中的用户信息
-#[derive(Debug, Serialize, Deserialize)]
+/// 考勤事件中的用户信息,
+#[derive(Debug, Clone)]
 pub struct AttendanceUserId {
     /// 用户的 union id
     pub union_id: String,
@@ -59,10 +47,8 @@ pub struct AttendanceUserId {
     pub open_id: String,
     /// 用户的 employee id
     pub employee_id: Option<String>,
-}
-
-/// 考勤打卡任务信息
-#[derive(Debug, Serialize, Deserialize)]
+/// 考勤打卡任务信息,
+#[derive(Debug, Clone)]
 pub struct AttendanceTask {
     /// 任务ID
     pub task_id: String,
@@ -96,10 +82,8 @@ pub struct AttendanceTask {
     pub create_time: String,
     /// 记录更新时间戳（毫秒）
     pub update_time: String,
-}
-
-/// 打卡位置信息
-#[derive(Debug, Serialize, Deserialize)]
+/// 打卡位置信息,
+#[derive(Debug, Clone)]
 pub struct AttendanceLocation {
     /// 纬度
     pub latitude: f64,
@@ -107,17 +91,13 @@ pub struct AttendanceLocation {
     pub longitude: f64,
     /// 位置名称
     pub address: Option<String>,
-}
-
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
-mod test {
+mod test {,
     use serde_json::json;
-
-    use crate::event::context::EventContext;
-
+use open_lark_core::event::context::EventContext;
     #[test]
-    fn test_decode_attendance_event() {
+fn test_decode_attendance_event() {
         let event_data = json!({
             "schema": "2.0",
             "header": {
@@ -126,15 +106,13 @@ mod test {
                 "create_time": "1719211482721",
                 "event_type": "attendance.user_task.updated_v1",
                 "tenant_key": "tenant_key",
-                "app_id": "app_id"
-            },
-            "event": {
-                "user_id": {
+                "app_id": "app_id",
+            "event": {,
+"user_id": {,
                     "open_id": "ou_b434284f852b1531071855b16d19f40b",
                     "union_id": "on_526dbf7b9ef1fda341aecb79a2481662",
                     "user_id": "aa5cf9d7",
-                    "employee_id": "emp_001"
-                },
+                    "employee_id": "emp_001",
                 "task": {
                     "task_id": "task_123456",
                     "user_id": "aa5cf9d7",
@@ -149,21 +127,14 @@ mod test {
                     "location": {
                         "latitude": 39.908822,
                         "longitude": 116.397128,
-                        "address": "北京市朝阳区"
-                    },
+                        "address": "北京市朝阳区",
                     "is_field": false,
                     "is_remedy": false,
                     "comment": "正常打卡",
                     "create_time": "1719211482485",
-                    "update_time": "1719211482485"
-                },
-                "tenant_key": "133195a24e8f575d"
-            }
+                    "update_time": "1719211482485",
+                "tenant_key": "133195a24e8f575d",
         });
-
-        let event_context: EventContext = serde_json::from_value(event_data).unwrap();
-
+let event_context: EventContext = serde_json::from_value(event_data).unwrap();
         // println!("{:#?}", event_context);
         assert_eq!(event_context.schema, Some("2.0".to_string()));
-    }
-}

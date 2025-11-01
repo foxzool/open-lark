@@ -55,5 +55,5 @@ pub mod custom_bot;
 pub mod event;
 /// 常用类型和trait的重导出，方便用户使用
 pub mod prelude;
-/// 所有飞书开放平台API服务的实现
+// 所有飞书开放平台 API 服务的实现
 pub mod service;

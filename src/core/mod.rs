@@ -1,6 +1,7 @@
 use crate::core::error::LarkAPIError;
 
-pub mod api_req;
+// Re-export ApiRequest from open-lark-core
+pub use open_lark_core::core::api_req::ApiRequest;
 pub mod api_resp;
 pub mod app_ticket_manager;
 pub mod cache;

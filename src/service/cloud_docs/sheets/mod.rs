@@ -74,16 +74,12 @@ pub struct SheetsService {
 
 impl SheetsService {
     /// 创建新的Sheets服务实例
-    ///
-    /// # 参数
-    /// - `config`: 客户端配置
     pub fn new(config: Config) -> Self {
-        let config_arc = Arc::new(config.clone());
         Self {
             config: config.clone(),
-            config_arc: config_arc.clone(),
+            config_arc: Arc::new(config.clone()),
             v2: v2::V2::new(config.clone()),
-            v3: v3::V3::new(config.clone()),
+            v3: v3::V3::new(config),
         }
     }
 

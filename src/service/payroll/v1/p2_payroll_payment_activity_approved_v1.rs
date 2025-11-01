@@ -1,9 +1,8 @@
+use open_lark_core::event::{context::EventContext, EventHandler};
 use serde::{Deserialize, Serialize};
 
-use crate::event::{context::EventContext, dispatcher::EventHandler};
-
 /// 发薪活动封存事件数据
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct PaymentActivityApprovedData {
     /// 发薪活动ID
     pub payment_activity_id: String,
@@ -24,7 +23,7 @@ pub struct PaymentActivityApprovedData {
 }
 
 /// 操作人信息
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct OperatorInfo {
     /// 用户ID
     pub user_id: String,
@@ -35,7 +34,7 @@ pub struct OperatorInfo {
 }
 
 /// 发薪金额信息
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct PaymentAmount {
     /// 金额
     pub amount: String,
@@ -44,7 +43,7 @@ pub struct PaymentAmount {
 }
 
 /// 发薪活动封存事件
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct P2PayrollPaymentActivityApprovedV1 {
     /// 事件通用信息
     #[serde(flatten)]

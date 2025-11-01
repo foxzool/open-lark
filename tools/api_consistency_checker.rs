@@ -40,6 +40,10 @@ pub struct ApiMethod {
     pub has_documentation: bool,
     pub error_handling_pattern: ErrorHandlingPattern,
     pub async_pattern: AsyncPattern,
+    pub is_enterprise_refactored: bool, // 新增：是否为企业级重构
+    pub uses_executable_builder: bool,  // 新增：是否使用ExecutableBuilder
+    pub uses_base_response: bool,       // 新增：是否使用BaseResponse
+    pub has_real_http_api: bool,        // 新增：是否使用真实HTTP API
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -85,25 +89,36 @@ pub enum Severity {
 pub struct ApiConsistencyChecker {
     service_dir: PathBuf,
     analyses: Vec<ApiAnalysis>,
-    _builder_pattern: Regex,
+    #[allow(dead_code)]
+    builder_pattern: Regex,
+    executable_builder_pattern: Regex,
     standard_response_pattern: Regex,
-    _doc_comment_pattern: Regex,
+    base_response_pattern: Regex,
+    api_response_trait_pattern: Regex,
+    #[allow(dead_code)]
+    doc_comment_pattern: Regex,
     error_unwrap_pattern: Regex,
 }
 
 impl ApiConsistencyChecker {
     pub fn new<P: AsRef<Path>>(service_dir: P) -> Self {
         let builder_pattern = Regex::new(r"struct\s+(\w+)Builder\s*\{").unwrap();
+        let executable_builder_pattern = Regex::new(r"impl_executable_builder!\s*\(").unwrap();
         let standard_response_pattern = Regex::new(r"\.into_result\(\)").unwrap();
+        let base_response_pattern = Regex::new(r"BaseResponse<").unwrap();
+        let api_response_trait_pattern = Regex::new(r"#\[derive.*ApiResponseTrait\]").unwrap();
         let doc_comment_pattern = Regex::new(r"///\s+").unwrap();
         let error_unwrap_pattern = Regex::new(r"\.unwrap_or_default\(\)").unwrap();
 
         Self {
             service_dir: service_dir.as_ref().to_path_buf(),
             analyses: Vec::new(),
-            _builder_pattern: builder_pattern,
+            builder_pattern,
+            executable_builder_pattern,
             standard_response_pattern,
-            _doc_comment_pattern: doc_comment_pattern,
+            base_response_pattern,
+            api_response_trait_pattern,
+            doc_comment_pattern,
             error_unwrap_pattern,
         }
     }
@@ -193,6 +208,12 @@ impl ApiConsistencyChecker {
                     AsyncPattern::Sync
                 };
 
+                // 新增：检测企业级重构特征
+                let is_enterprise_refactored = self.check_is_enterprise_refactored(content);
+                let uses_executable_builder = self.executable_builder_pattern.is_match(content);
+                let uses_base_response = self.base_response_pattern.is_match(content);
+                let has_real_http_api = content.contains("Transport::request");
+
                 methods.push(ApiMethod {
                     name: method_name,
                     has_builder,
@@ -200,6 +221,10 @@ impl ApiConsistencyChecker {
                     has_documentation,
                     error_handling_pattern,
                     async_pattern,
+                    is_enterprise_refactored,
+                    uses_executable_builder,
+                    uses_base_response,
+                    has_real_http_api,
                 });
             }
         }
@@ -216,13 +241,45 @@ impl ApiConsistencyChecker {
     }
 
     fn check_has_builder(&self, content: &str, method_name: &str) -> bool {
-        // 检查是否有对应的Builder结构体
+        // 检查是否有对应的Builder结构体或ExecutableBuilder宏
         let builder_name = format!("{}Builder", method_name.to_case_camel_case());
-        content.contains(&builder_name)
+
+        // 检查Builder结构体
+        let has_struct_builder = content.contains(&builder_name);
+
+        // 检查ExecutableBuilder宏 - 这是我们的新标准
+        let has_executable_builder =
+            self.executable_builder_pattern.is_match(content) && content.contains(method_name);
+
+        has_struct_builder || has_executable_builder
+    }
+
+    fn check_is_enterprise_refactored(&self, content: &str) -> bool {
+        // 检查是否具备企业级重构的所有特征
+        let has_executable_builder = self.executable_builder_pattern.is_match(content);
+        let has_base_response = self.base_response_pattern.is_match(content);
+        let has_api_response_trait = self.api_response_trait_pattern.is_match(content);
+        let has_real_http_api = content.contains("Transport::request");
+        let has_chinese_docs = content.contains("///") && content.contains("///");
+
+        has_executable_builder
+            && has_base_response
+            && has_api_response_trait
+            && has_real_http_api
+            && has_chinese_docs
     }
 
     fn check_uses_standard_response(&self, content: &str, _method_name: &str) -> bool {
-        self.standard_response_pattern.is_match(content)
+        // 检查是否使用BaseResponse<T>格式（新标准）
+        let uses_base_response = self.base_response_pattern.is_match(content);
+
+        // 检查是否使用ApiResponseTrait（新标准）
+        let uses_api_response_trait = self.api_response_trait_pattern.is_match(content);
+
+        // 检查是否使用传统的.into_result()（旧标准）
+        let uses_into_result = self.standard_response_pattern.is_match(content);
+
+        uses_base_response || uses_api_response_trait || uses_into_result
     }
 
     fn check_has_documentation(&self, lines: &[&str], method_index: usize) -> bool {
@@ -248,12 +305,24 @@ impl ApiConsistencyChecker {
         content: &str,
         _method_name: &str,
     ) -> ErrorHandlingPattern {
-        if self.standard_response_pattern.is_match(content) {
+        // 检查是否使用标准响应格式
+        if self.base_response_pattern.is_match(content)
+            || self.api_response_trait_pattern.is_match(content)
+            || self.standard_response_pattern.is_match(content)
+        {
             ErrorHandlingPattern::StandardResponse
-        } else if self.error_unwrap_pattern.is_match(content) {
+        }
+        // 检查是否使用直接unwrap
+        else if self.error_unwrap_pattern.is_match(content) {
             ErrorHandlingPattern::DirectUnwrap
-        } else if content.contains("match") && content.contains("Result") {
+        }
+        // 检查是否使用手动匹配
+        else if content.contains("match") && content.contains("Result") {
             ErrorHandlingPattern::ManualMatch
+        }
+        // 检查是否使用Transport.request（真实HTTP调用）
+        else if content.contains("Transport::request") {
+            ErrorHandlingPattern::StandardResponse
         } else {
             ErrorHandlingPattern::Unknown
         }

@@ -7,8 +7,8 @@ pub use header_builder::HeaderBuilder;
 pub use multipart_builder::MultipartBuilder;
 
 use crate::core::{
-    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
-    req_option::RequestOption,
+    config::Config, constants::AccessTokenType, error::LarkAPIError, req_option::RequestOption,
+    ApiRequest,
 };
 use reqwest::RequestBuilder;
 use std::{future::Future, pin::Pin};
@@ -66,7 +66,7 @@ impl UnifiedRequestBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::{api_req::ApiRequest, constants::AppType};
+    use crate::core::{constants::AppType, ApiRequest};
     use reqwest::Method;
     use std::collections::HashMap;
 
@@ -80,14 +80,11 @@ mod tests {
     }
 
     fn create_test_api_request() -> ApiRequest {
-        ApiRequest {
-            http_method: Method::GET,
-            api_path: "/open-apis/test".to_string(),
-            body: vec![],
-            file: vec![],
-            query_params: HashMap::new(),
-            ..Default::default()
-        }
+        let mut api_req = ApiRequest::with_method_and_path(Method::GET, "/open-apis/test");
+        api_req.body = vec![];
+        api_req.file = vec![];
+        api_req.query_params = HashMap::new();
+        api_req
     }
 
     #[test]
@@ -112,7 +109,7 @@ mod tests {
     #[tokio::test]
     async fn test_build_request_with_body() {
         let mut api_req = create_test_api_request();
-        api_req.http_method = Method::POST;
+        api_req.set_http_method(Method::POST);
         api_req.body = b"{\"test\": \"data\"}".to_vec();
 
         let config = create_test_config();
@@ -128,7 +125,7 @@ mod tests {
     #[tokio::test]
     async fn test_build_request_with_files() {
         let mut api_req = create_test_api_request();
-        api_req.http_method = Method::POST;
+        api_req.set_http_method(Method::POST);
 
         // Add a file to the request
         api_req.file = b"file content".to_vec();
@@ -223,7 +220,7 @@ mod tests {
 
         for method in methods.iter() {
             let mut api_req = create_test_api_request();
-            api_req.http_method = method.clone();
+            api_req.set_http_method(method.clone());
 
             let result =
                 UnifiedRequestBuilder::build(&mut api_req, AccessTokenType::None, &config, &option)
@@ -335,14 +332,10 @@ mod tests {
 
     #[tokio::test]
     async fn test_build_request_complex_scenario() {
-        let mut api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: "/open-apis/complex/test".to_string(),
-            body: b"{\"complex\": \"data\", \"nested\": {\"value\": 123}}".to_vec(),
-            file: vec![],
-            query_params: HashMap::new(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::with_method_and_path(Method::POST, "/open-apis/complex/test");
+        api_req.body = b"{\"complex\": \"data\", \"nested\": {\"value\": 123}}".to_vec();
+        api_req.file = vec![];
+        api_req.query_params = HashMap::new();
         api_req.query_params.insert("version", "v1".to_string());
         api_req.query_params.insert("format", "json".to_string());
 
@@ -373,7 +366,7 @@ mod tests {
     #[tokio::test]
     async fn test_build_request_with_body_and_files_edge_case() {
         let mut api_req = create_test_api_request();
-        api_req.http_method = Method::POST;
+        api_req.set_http_method(Method::POST);
         api_req.body = b"regular body".to_vec();
 
         // Add files - this should take precedence over body
@@ -394,7 +387,7 @@ mod tests {
     fn test_build_url_with_path_segments() {
         let config = create_test_config();
         let mut api_req = create_test_api_request();
-        api_req.api_path = "/open-apis/v1/users/123/messages".to_string();
+        api_req.set_api_path("/open-apis/v1/users/123/messages".to_string());
 
         let result = UnifiedRequestBuilder::build_url(&config, &api_req);
 

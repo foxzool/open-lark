@@ -1,5 +1,8 @@
+#![cfg(all(feature = "websocket", feature = "im"))]
+
 use log::{debug, error, info, warn};
 use open_lark::prelude::*;
+use open_lark::service::im::v1::message::{CreateMessageRequest, CreateMessageRequestBody};
 use std::time::Instant;
 
 /// 处理接收到的消息内容并发送回显
@@ -102,7 +105,7 @@ async fn send_echo_message(
             .build();
 
         // 尝试发送消息
-        match client.im.v1.message.create(echo_request, None).await {
+        match client.im.v1.message.create(&echo_request).await {
             Ok(response) => {
                 info!(
                     "✅ Echo 消息发送成功: {} (尝试次数: {})",
@@ -186,7 +189,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         info!("初始化 Lark 客户端...");
         let client = LarkClient::builder(&app_id, &app_secret)
             .with_app_type(AppType::SelfBuild)
-            .with_enable_token_cache(true)
             .build();
 
         let client_for_echo = Arc::new(client);
