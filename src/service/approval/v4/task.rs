@@ -8,6 +8,7 @@
 //! - 查询审批任务
 
 use super::models::*;
+use serde::{Deserialize, Serialize};
 use crate::core::config::Config;
 
 /// 审批任务服务

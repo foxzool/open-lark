@@ -8,6 +8,7 @@
 //! - 审批实例统计
 
 use super::models::*;
+use serde::{Deserialize, Serialize};
 use crate::core::config::Config;
 
 /// 审批实例服务
