@@ -93,7 +93,7 @@ impl AccessControlService {
     ) -> SDKResult<BaseResponse<GetAccessPermissionsResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::POST,
+            http_http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/security_and_compliance/v1/access_control/get_permissions"
                 .to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
@@ -113,7 +113,7 @@ impl AccessControlService {
     ) -> SDKResult<BaseResponse<CreateAccessPolicyResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::POST,
+            http_http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/security_and_compliance/v1/access_control/create_policy"
                 .to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
@@ -155,7 +155,7 @@ impl AccessControlService {
     ) -> SDKResult<BaseResponse<GetUserPermissionSummaryResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::POST,
+            http_http_http_method: reqwest::Method::POST,
             api_path:
                 "/open-apis/security_and_compliance/v1/access_control/get_user_permission_summary"
                     .to_string(),
@@ -563,63 +563,63 @@ impl Default for GetAccessPermissionsBuilder {
 /// 创建访问策略构建器
 #[derive(Debug, Clone)]
 pub struct CreateAccessPolicyBuilder {
-//    request: CreateAccessPolicyRequest,
+    //    request: CreateAccessPolicyRequest,
 }
 
 impl CreateAccessPolicyBuilder {
-//    /// 创建新的Builder实例
-//    pub fn new() -> Self {
-//        Self {
-//            request: CreateAccessPolicyRequest::default(),
-//        }
-//    }
+    //    /// 创建新的Builder实例
+    //    pub fn new() -> Self {
+    //        Self {
+    //            request: CreateAccessPolicyRequest::default(),
+    //        }
+    //    }
 
-//    /// 设置策略名称
-//    pub fn policy_name(mut self, policy_name: &str) -> Self {
-//        self.request.policy_name = policy_name.to_string();
-//        self
-//    }
+    //    /// 设置策略名称
+    //    pub fn policy_name(mut self, policy_name: &str) -> Self {
+    //        self.request.policy_name = policy_name.to_string();
+    //        self
+    //    }
 
-//    /// 设置策略类型
-//    pub fn policy_type(mut self, policy_type: &str) -> Self {
-//        self.request.policy_type = policy_type.to_string();
-//        self
-//    }
+    //    /// 设置策略类型
+    //    pub fn policy_type(mut self, policy_type: &str) -> Self {
+    //        self.request.policy_type = policy_type.to_string();
+    //        self
+    //    }
 
-//    /// 设置描述
-//    pub fn description(mut self, description: &str) -> Self {
-//        self.request.description = description.to_string();
-//        self
-//    }
+    //    /// 设置描述
+    //    pub fn description(mut self, description: &str) -> Self {
+    //        self.request.description = description.to_string();
+    //        self
+    //    }
 
-//    /// 设置目标资源
-//    pub fn target_resources(mut self, resources: Vec<String>) -> Self {
-//        self.request.target_resources = resources;
-//        self
-//    }
+    //    /// 设置目标资源
+    //    pub fn target_resources(mut self, resources: Vec<String>) -> Self {
+    //        self.request.target_resources = resources;
+    //        self
+    //    }
 
-//    /// 设置目标主体
-//    pub fn target_subjects(mut self, subjects: Vec<String>) -> Self {
-//        self.request.target_subjects = subjects;
-//        self
-//    }
+    //    /// 设置目标主体
+    //    pub fn target_subjects(mut self, subjects: Vec<String>) -> Self {
+    //        self.request.target_subjects = subjects;
+    //        self
+    //    }
 
-//    /// 设置权限级别
-//    pub fn permission_level(mut self, level: PermissionLevel) -> Self {
-//        self.request.permission_level = level;
-//        self
-//    }
+    //    /// 设置权限级别
+    //    pub fn permission_level(mut self, level: PermissionLevel) -> Self {
+    //        self.request.permission_level = level;
+    //        self
+    //    }
 
-//    /// 构建最终的请求对象
-//    pub fn build(self) -> CreateAccessPolicyRequest {
-//        self.request
-//    }
+    //    /// 构建最终的请求对象
+    //    pub fn build(self) -> CreateAccessPolicyRequest {
+    //        self.request
+    //    }
 }
 
 impl Default for CreateAccessPolicyBuilder {
-//    fn default() -> Self {
-//        Self::new()
-//    }
+    //    fn default() -> Self {
+    //        Self::new()
+    //    }
 }
 
 // 应用ExecutableBuilder trait
@@ -634,39 +634,39 @@ impl Default for CreateAccessPolicyBuilder {
 /// 获取用户权限总结构建器
 #[derive(Debug, Clone)]
 pub struct GetUserPermissionSummaryBuilder {
-//    request: GetUserPermissionSummaryRequest,
+    //    request: GetUserPermissionSummaryRequest,
 }
 
 impl GetUserPermissionSummaryBuilder {
-//    /// 创建新的Builder实例
-//    pub fn new() -> Self {
-//        Self {
-//            request: GetUserPermissionSummaryRequest::default(),
-//        }
-//    }
+    //    /// 创建新的Builder实例
+    //    pub fn new() -> Self {
+    //        Self {
+    //            request: GetUserPermissionSummaryRequest::default(),
+    //        }
+    //    }
 
-//    /// 设置用户ID
-//    pub fn user_id(mut self, user_id: &str) -> Self {
-//        self.request.user_id = user_id.to_string();
-//        self
-//    }
+    //    /// 设置用户ID
+    //    pub fn user_id(mut self, user_id: &str) -> Self {
+    //        self.request.user_id = user_id.to_string();
+    //        self
+    //    }
 
-//    /// 设置资源类型过滤
-//    pub fn resource_types(mut self, resource_types: Vec<String>) -> Self {
-//        self.request.resource_types = Some(resource_types);
-//        self
-//    }
+    //    /// 设置资源类型过滤
+    //    pub fn resource_types(mut self, resource_types: Vec<String>) -> Self {
+    //        self.request.resource_types = Some(resource_types);
+    //        self
+    //    }
 
-//    /// 构建最终的请求对象
-//    pub fn build(self) -> GetUserPermissionSummaryRequest {
-//        self.request
-//    }
+    //    /// 构建最终的请求对象
+    //    pub fn build(self) -> GetUserPermissionSummaryRequest {
+    //        self.request
+    //    }
 }
 
 impl Default for GetUserPermissionSummaryBuilder {
-//    fn default() -> Self {
-//        Self::new()
-//    }
+    //    fn default() -> Self {
+    //        Self::new()
+    //    }
 }
 
 // 应用ExecutableBuilder trait
@@ -679,18 +679,18 @@ impl Default for GetUserPermissionSummaryBuilder {
 //);
 
 impl AccessControlService {
-//    /// 获取访问权限构建器
-//    pub fn get_access_permissions_builder(&self) -> GetAccessPermissionsBuilder {
-//        GetAccessPermissionsBuilder::new()
-//    }
+    //    /// 获取访问权限构建器
+    //    pub fn get_access_permissions_builder(&self) -> GetAccessPermissionsBuilder {
+    //        GetAccessPermissionsBuilder::new()
+    //    }
 
-//    /// 创建访问策略构建器
-//    pub fn create_access_policy_builder(&self) -> CreateAccessPolicyBuilder {
-//        CreateAccessPolicyBuilder::new()
-//    }
+    //    /// 创建访问策略构建器
+    //    pub fn create_access_policy_builder(&self) -> CreateAccessPolicyBuilder {
+    //        CreateAccessPolicyBuilder::new()
+    //    }
 
-//    /// 获取用户权限总结构建器
-//    pub fn get_user_permission_summary_builder(&self) -> GetUserPermissionSummaryBuilder {
-//        GetUserPermissionSummaryBuilder::new()
-//    }
+    //    /// 获取用户权限总结构建器
+    //    pub fn get_user_permission_summary_builder(&self) -> GetUserPermissionSummaryBuilder {
+    //        GetUserPermissionSummaryBuilder::new()
+    //    }
 }

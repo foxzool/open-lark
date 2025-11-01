@@ -90,7 +90,7 @@ impl EmployeeService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<EmployeeListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: "/open-apis/ehr/v1/employees".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]

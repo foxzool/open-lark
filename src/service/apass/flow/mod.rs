@@ -90,7 +90,7 @@ pub async fn execute_flow(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<FlowExecuteResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FLOW_EXECUTE,
                 &[
@@ -119,7 +119,7 @@ pub async fn query_user_tasks(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UserTaskQueryResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 Endpoints::APASS_V1_FLOW_USER_TASK_QUERY,
                 "app_id",
@@ -153,7 +153,7 @@ pub async fn agree_user_task(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UserTaskActionResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FLOW_USER_TASK_AGREE,
                 &[("app_id", &request.app_id), ("task_id", &request.task_id)]
@@ -180,7 +180,7 @@ pub async fn reject_user_task(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UserTaskActionResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FLOW_USER_TASK_REJECT,
                 &[("app_id", &request.app_id), ("task_id", &request.task_id)]
@@ -207,7 +207,7 @@ pub async fn transfer_user_task(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UserTaskActionResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FLOW_USER_TASK_TRANSFER,
                 &[("app_id", &request.app_id), ("task_id", &request.task_id)]
@@ -234,7 +234,7 @@ pub async fn add_assignee_user_task(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UserTaskActionResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FLOW_USER_TASK_ADD_ASSIGNEE,
                 &[("app_id", &request.app_id), ("task_id", &request.task_id)]
@@ -261,7 +261,7 @@ pub async fn cc_user_task(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UserTaskActionResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FLOW_USER_TASK_CC,
                 &[("app_id", &request.app_id), ("task_id", &request.task_id)]
@@ -288,7 +288,7 @@ pub async fn expedite_user_task(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UserTaskActionResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FLOW_USER_TASK_EXPEDITING,
                 &[("app_id", &request.app_id), ("task_id", &request.task_id)]
@@ -314,7 +314,7 @@ pub async fn cancel_user_task(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UserTaskActionResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FLOW_USER_TASK_CANCEL,
                 &[("app_id", &request.app_id), ("task_id", &request.task_id)]
@@ -342,7 +342,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UserTaskRollbackPointsResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FLOW_USER_TASK_ROLLBACK_POINTS,
                 &[("app_id", &app_id), ("task_id", &task_id)]
@@ -366,7 +366,7 @@ pub async fn rollback_user_task(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UserTaskActionResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FLOW_USER_TASK_ROLLBACK,
                 &[("app_id", &request.app_id), ("task_id", &request.task_id)]
@@ -393,7 +393,7 @@ pub async fn create_user_task_chat_group(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UserTaskChatGroupResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FLOW_USER_TASK_CHAT_GROUP,
                 &[("app_id", &request.app_id), ("task_id", &request.task_id)]

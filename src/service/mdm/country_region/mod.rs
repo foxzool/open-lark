@@ -38,7 +38,7 @@ pub async fn get(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CountryRegionGetResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: MDM_V1_COUNTRY_REGIONS_BATCH_GET.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
@@ -63,7 +63,7 @@ pub async fn list(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CountryRegionListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: MDM_V1_COUNTRY_REGIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]

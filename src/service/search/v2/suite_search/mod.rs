@@ -57,7 +57,7 @@ impl SuiteSearchService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SearchMessageResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: crate::core::endpoints::search::SEARCH_V2_MESSAGE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,
@@ -92,7 +92,7 @@ if let Some(page_token) = &request.page_token {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SearchAppResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: crate::core::endpoints::search::SEARCH_V2_APP.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,

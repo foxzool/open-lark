@@ -78,7 +78,7 @@ impl SchemaService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateSchemaResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 Endpoints::SEARCH_V2_SCHEMA_CREATE,
                 "data_source_id",
@@ -105,7 +105,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<EmptySchemaResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::DELETE,
+            http_http_http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::SEARCH_V2_SCHEMA_OPERATION,
                 &[("data_source_id", data_source_id), ("schema_id", schema_id)]
@@ -132,7 +132,7 @@ pub async fn patch(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UpdateSchemaResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::PATCH,
+            http_http_http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::SEARCH_V2_SCHEMA_OPERATION,
                 &[("data_source_id", data_source_id), ("schema_id", schema_id)]
@@ -158,7 +158,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetSchemaResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::SEARCH_V2_SCHEMA_OPERATION,
                 &[("data_source_id", data_source_id), ("schema_id", schema_id)]

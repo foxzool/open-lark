@@ -49,7 +49,7 @@ pub async fn batch_remove_role_member_authorization(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OperationSuccessResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::DELETE,
+            http_http_http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_PERMISSION_ROLE_MEMBERS_BATCH_REMOVE,
                 &[
@@ -78,7 +78,7 @@ pub async fn batch_create_role_member_authorization(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OperationSuccessResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_PERMISSION_ROLE_MEMBERS_BATCH_CREATE,
                 &[
@@ -111,7 +111,7 @@ pub async fn get_role_member(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<RoleMemberGetResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_PERMISSION_ROLE_MEMBER_GET,
                 &[
@@ -139,7 +139,7 @@ pub async fn batch_remove_record_permission_member_authorization(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OperationSuccessResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::DELETE,
+            http_http_http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_PERMISSION_RECORD_MEMBERS_BATCH_REMOVE,
                 &[
@@ -172,7 +172,7 @@ pub async fn batch_create_record_permission_member_authorization(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OperationSuccessResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_PERMISSION_RECORD_MEMBERS_BATCH_CREATE,
                 &[

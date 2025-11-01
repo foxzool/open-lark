@@ -160,7 +160,7 @@ impl PaymentService {
                 deduction_total: 1500.0,
                 gross_salary: 10000.0,
                 net_salary: 8500.0,
-                payment_http_method: PaymentMethod::BankTransfer,
+                payment_http_http_method: PaymentMethod::BankTransfer,
                 bank_account: Some("622202******1234".to_string()),
                 payment_status: PaymentDetailStatus::Paid,
                 payment_time: Some("2024-01-31T10:30:00Z".to_string()),
@@ -175,7 +175,7 @@ impl PaymentService {
                 deduction_total: 1800.0,
                 gross_salary: 12000.0,
                 net_salary: 10200.0,
-                payment_http_method: PaymentMethod::BankTransfer,
+                payment_http_http_method: PaymentMethod::BankTransfer,
                 bank_account: Some("622202******5678".to_string()),
                 payment_status: PaymentDetailStatus::Paid,
                 payment_time: Some("2024-01-31T10:35:00Z".to_string()),
@@ -209,7 +209,7 @@ impl PaymentService {
                 deduction_total: 1500.0,
                 gross_salary: 10000.0,
                 net_salary: 8500.0,
-                payment_http_method: PaymentMethod::BankTransfer,
+                payment_http_http_method: PaymentMethod::BankTransfer,
                 bank_account: Some("622202******0000".to_string()),
                 payment_status: PaymentDetailStatus::Pending,
                 payment_time: None,
@@ -609,7 +609,7 @@ pub struct PaymentDetail {
     /// 税后工资
     pub net_salary: f64,
     /// 发放方式
-    pub payment_http_method: PaymentMethod,
+    pub payment_http_http_method: PaymentMethod,
     /// 银行账户
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bank_account: Option<String>,

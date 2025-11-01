@@ -356,7 +356,7 @@ impl ReportService {
             distribution_id: distribution_id.clone(),
             report_id: request.report_id.clone(),
             recipients: request.recipients.clone(),
-            http_method: request.method.clone(),
+            http_http_method: request.method.clone(),
             status: DistributionStatus::Sent,
             sent_at: Some(chrono::Utc::now()),
             failed_recipients: vec![],
@@ -677,7 +677,7 @@ pub struct DistributeReportRequest {
     /// 接收者列表
     pub recipients: Vec<String>,
     /// 分发方式
-    pub http_method: DistributionMethod,
+    pub http_http_method: DistributionMethod,
     /// 主题
     pub subject: Option<String>,
     /// 消息内容
@@ -848,7 +848,7 @@ pub struct DistributeReportResponse {
     /// 接收者列表
     pub recipients: Vec<String>,
     /// 分发方式
-    pub http_method: DistributionMethod,
+    pub http_http_method: DistributionMethod,
     /// 分发状态
     pub status: DistributionStatus,
     /// 发送时间
@@ -1329,7 +1329,7 @@ impl Default for DistributeReportRequest {
         Self {
             report_id: String::new(),
             recipients: vec![],
-            http_method: DistributionMethod::Email,
+            http_http_method: DistributionMethod::Email,
             subject: None,
             message: None,
         }

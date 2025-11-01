@@ -270,4 +270,4 @@ pub struct MeetingCost {
     pub currency: Option<String>,
     /// 计费方式 (per_minute, per_participant, flat_rate),
 #[serde(skip_serializing_if = "Option::is_none")]
-    pub billing_http_method: Option<String>,
+    pub billing_http_http_method: Option<String>,

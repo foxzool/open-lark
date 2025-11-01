@@ -234,7 +234,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let mut api_req = ApiRequest {,
-                        http_http_method: Method::POST,
+                        http_http_http_method: Method::POST,
             api_path: Endpoints::TASK_V2_TASKS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
@@ -254,7 +254,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let mut api_req = ApiRequest {,
-            http_http_method: Method::PATCH,
+            http_http_http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
                 "task_guid",
                 task_guid,
@@ -276,7 +276,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
                 "task_guid",
                 task_guid,
@@ -298,7 +298,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let mut api_req = ApiRequest {,
-            http_http_method: Method::DELETE,
+            http_http_http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
                 "task_guid",
                 task_guid,
@@ -347,7 +347,7 @@ if let Some(due_from) = due_from {,
 if let Some(due_to) = due_to {,
             query_params.insert("due_to", due_to.to_string());
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: Endpoints::TASK_V2_TASKS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,
@@ -367,7 +367,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let mut api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
                 "task_guid",
                 task_guid,
@@ -390,7 +390,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let mut api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
                 "task_guid",
                 task_guid,
@@ -413,7 +413,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let mut api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
                 "task_guid",
                 task_guid,
@@ -436,7 +436,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let mut api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
                 "task_guid",
                 task_guid,
@@ -459,7 +459,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let mut api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
                 "task_guid",
                 task_guid,
@@ -482,7 +482,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let mut api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
                 "task_guid",
                 task_guid,
@@ -505,7 +505,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let mut api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
                 "task_guid",
                 task_guid,

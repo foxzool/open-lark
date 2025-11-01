@@ -19,7 +19,7 @@ impl JobTitleService {
     /// 获取单个职务信息
     pub async fn get(&self, job_title_id: &str) -> crate::core::SDKResult<GetJobTitleResponse> {,
 let api_req = ApiRequest {,
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::contact::CONTACT_V3_JOB_TITLE_GET,
                 "job_title_id",
@@ -39,7 +39,7 @@ Ok(resp.data.unwrap_or_default()),
         _req: &ListJobTitlesRequest,
     ) -> crate::core::SDKResult<ListJobTitlesResponse> {,
 let api_req = ApiRequest {,
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path: crate::core::endpoints::contact::CONTACT_V3_JOB_TITLES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),

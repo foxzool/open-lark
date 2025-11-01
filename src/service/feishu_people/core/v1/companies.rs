@@ -170,7 +170,7 @@ impl CompaniesService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path: format!("/open-apis/feishu_people/core/v1/companies/{}", company_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -221,7 +221,7 @@ impl CompaniesService {
     ) -> SDKResult<BaseResponse<BatchGetCompaniesResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::POST,
+            http_http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/feishu_people/core/v1/companies/batch_get".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -273,7 +273,7 @@ impl CompaniesService {
     ) -> SDKResult<BaseResponse<SearchCompaniesResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::POST,
+            http_http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/feishu_people/core/v1/companies/search".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -333,7 +333,7 @@ impl CompaniesService {
     ) -> SDKResult<BaseResponse<CreateCompanyResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::POST,
+            http_http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/feishu_people/core/v1/companies".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -391,7 +391,7 @@ impl CompaniesService {
     ) -> SDKResult<BaseResponse<UpdateCompanyResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::PUT,
+            http_http_http_method: reqwest::Method::PUT,
             api_path: format!("/open-apis/feishu_people/core/v1/companies/{}", company_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -448,7 +448,7 @@ impl CompaniesService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::DELETE,
+            http_http_http_method: reqwest::Method::DELETE,
             api_path: format!("/open-apis/feishu_people/core/v1/companies/{}", company_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -503,7 +503,7 @@ impl CompaniesService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path: "/open-apis/feishu_people/core/v1/companies/statistics".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -562,7 +562,7 @@ impl CompaniesService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path: "/open-apis/feishu_people/core/v1/companies/organization_structure"
                 .to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
@@ -629,7 +629,7 @@ impl CompaniesService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path: "/open-apis/feishu_people/core/v1/companies/subsidiaries".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),

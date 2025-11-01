@@ -168,7 +168,7 @@ impl PositionsService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path: format!("/open-apis/feishu_people/core/v1/positions/{}", position_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -219,7 +219,7 @@ impl PositionsService {
     ) -> SDKResult<BaseResponse<BatchGetPositionsResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::POST,
+            http_http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/feishu_people/core/v1/positions/batch_get".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -284,7 +284,7 @@ impl PositionsService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path: "/open-apis/feishu_people/core/v1/positions/list_by_department".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -337,7 +337,7 @@ impl PositionsService {
     ) -> SDKResult<BaseResponse<SearchPositionsResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::POST,
+            http_http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/feishu_people/core/v1/positions/search".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -399,7 +399,7 @@ impl PositionsService {
     ) -> SDKResult<BaseResponse<CreatePositionResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::POST,
+            http_http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/feishu_people/core/v1/positions".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -457,7 +457,7 @@ impl PositionsService {
     ) -> SDKResult<BaseResponse<UpdatePositionResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::PUT,
+            http_http_http_method: reqwest::Method::PUT,
             api_path: format!("/open-apis/feishu_people/core/v1/positions/{}", position_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -514,7 +514,7 @@ impl PositionsService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::DELETE,
+            http_http_http_method: reqwest::Method::DELETE,
             api_path: format!("/open-apis/feishu_people/core/v1/positions/{}", position_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -574,7 +574,7 @@ impl PositionsService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path: "/open-apis/feishu_people/core/v1/position_sequences".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -631,7 +631,7 @@ impl PositionsService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path: "/open-apis/feishu_people/core/v1/positions/statistics".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -697,7 +697,7 @@ impl PositionsService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path: format!(
                 "/open-apis/feishu_people/core/v1/positions/{}/holders",
                 position_id

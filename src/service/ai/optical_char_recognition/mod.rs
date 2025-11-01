@@ -45,7 +45,7 @@ pub async fn basic_recognize(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OcrResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: Endpoints::OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&request)?,

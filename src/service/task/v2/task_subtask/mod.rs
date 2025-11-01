@@ -53,7 +53,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 Endpoints::TASK_V2_TASK_SUBTASKS,
                 "task_guid",
@@ -82,7 +82,7 @@ if let Some(page_size) = page_size {,
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token.to_string());
 let api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 Endpoints::TASK_V2_TASK_SUBTASKS,
                 "task_guid",

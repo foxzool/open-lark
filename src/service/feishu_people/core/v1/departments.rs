@@ -168,7 +168,7 @@ impl DepartmentsService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path: format!(
                 "/open-apis/feishu_people/core/v1/departments/{}",
                 department_id
@@ -222,7 +222,7 @@ impl DepartmentsService {
     ) -> SDKResult<BaseResponse<BatchGetDepartmentsResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::POST,
+            http_http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/feishu_people/core/v1/departments/batch_get".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -287,7 +287,7 @@ impl DepartmentsService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path: "/open-apis/feishu_people/core/v1/departments/sub_departments".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -351,7 +351,7 @@ impl DepartmentsService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path: "/open-apis/feishu_people/core/v1/departments/root_departments".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -404,7 +404,7 @@ impl DepartmentsService {
     ) -> SDKResult<BaseResponse<SearchDepartmentsResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::POST,
+            http_http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/feishu_people/core/v1/departments/search".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -463,7 +463,7 @@ impl DepartmentsService {
     ) -> SDKResult<BaseResponse<CreateDepartmentResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::POST,
+            http_http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/feishu_people/core/v1/departments".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -521,7 +521,7 @@ impl DepartmentsService {
     ) -> SDKResult<BaseResponse<UpdateDepartmentResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::PUT,
+            http_http_http_method: reqwest::Method::PUT,
             api_path: format!(
                 "/open-apis/feishu_people/core/v1/departments/{}",
                 department_id
@@ -581,7 +581,7 @@ impl DepartmentsService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::DELETE,
+            http_http_http_method: reqwest::Method::DELETE,
             api_path: format!(
                 "/open-apis/feishu_people/core/v1/departments/{}",
                 department_id
@@ -650,7 +650,7 @@ impl DepartmentsService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path: "/open-apis/feishu_people/core/v1/departments/members".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -705,7 +705,7 @@ impl DepartmentsService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path: "/open-apis/feishu_people/core/v1/departments/statistics".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),

@@ -73,7 +73,7 @@ impl AuthService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<RoleDetailResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(HIRE_V1_ROLE_GET, "role_id", role_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -108,7 +108,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<RoleListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: HIRE_V1_ROLES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -144,7 +144,7 @@ if let Some(page_token) = request.page_token {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UserRoleListResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(HIRE_V1_USER_ROLES, "user_id", user_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]

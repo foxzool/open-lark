@@ -85,7 +85,7 @@ impl GroupService {
         request: &CreateGroupRequest,
     ) -> SDKResult<BaseResponse<CreateGroupResponse>> {
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::POST,
+            http_http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/contact/v3/groups".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -106,7 +106,7 @@ impl GroupService {
         let api_path = format!("/open-apis/contact/v3/groups/{}", group_id);
 
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::PATCH,
+            http_http_http_method: reqwest::Method::PATCH,
             api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -141,7 +141,7 @@ impl GroupService {
         }
 
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
@@ -181,7 +181,7 @@ impl GroupService {
         }
 
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
@@ -221,7 +221,7 @@ impl GroupService {
         }
 
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
@@ -241,7 +241,7 @@ impl GroupService {
         let api_path = format!("/open-apis/contact/v3/groups/{}", group_id);
 
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::DELETE,
+            http_http_http_method: reqwest::Method::DELETE,
             api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -279,7 +279,7 @@ impl GroupService {
         }
 
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),

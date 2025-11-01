@@ -63,7 +63,7 @@ pub async fn list_talent_tags(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentTagListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: HIRE_V1_TALENT_TAGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -100,7 +100,7 @@ pub async fn list_registration_forms(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<RegistrationFormListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: HIRE_V1_REGISTRATION_FORMS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]

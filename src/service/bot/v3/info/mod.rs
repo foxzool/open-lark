@@ -48,7 +48,7 @@ impl InfoService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetBotInfoResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: "/open-apis/bot/v3/info".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             ..Default::default()

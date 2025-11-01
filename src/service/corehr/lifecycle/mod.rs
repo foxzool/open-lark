@@ -139,7 +139,7 @@ impl LifecycleService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<PreHireCreateResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: COREHR_PRE_HIRES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -187,7 +187,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<PreHireSearchResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: COREHR_PRE_HIRES_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -240,7 +240,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<JobChangeCreateResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: COREHR_JOB_CHANGES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -289,7 +289,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<JobChangeSearchResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: COREHR_JOB_CHANGES_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -336,7 +336,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OffboardingCreateResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: COREHR_OFFBOARDINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -385,7 +385,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OffboardingSearchResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: COREHR_OFFBOARDINGS_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()

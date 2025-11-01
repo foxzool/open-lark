@@ -42,7 +42,7 @@ if let Some(page_size) = page_size {,
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token);
 let api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::application::APPLICATION_V6_APP_USAGE_DEPARTMENT_OVERVIEW,
                 "app_id",
@@ -65,7 +65,7 @@ let mut query_params = HashMap::new();
         query_params.insert("start_date", start_date.to_string());
         query_params.insert("end_date", end_date.to_string());
 let api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::application::APPLICATION_V6_APP_USAGE_MESSAGE_PUSH_OVERVIEW,
                 "app_id",
@@ -88,7 +88,7 @@ let mut query_params = HashMap::new();
         query_params.insert("start_date", start_date.to_string());
         query_params.insert("end_date", end_date.to_string());
 let api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::application::APPLICATION_V6_APP_USAGE_OVERVIEW,
                 "app_id",

@@ -105,7 +105,7 @@ impl JobService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<JobOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: HIRE_V1_JOB_COMBINED_CREATE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -151,7 +151,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<JobOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 HIRE_V1_JOB_COMBINED_UPDATE,
                 "job_id",
@@ -199,7 +199,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<JobDetailResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(HIRE_V1_JOB_GET_DETAIL, "job_id", job_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -258,7 +258,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<JobListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: HIRE_V1_JOBS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -308,7 +308,7 @@ if let Some(created_end_time) = request.created_end_time {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<JobOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(HIRE_V1_JOB_CLOSE, "job_id", job_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -337,7 +337,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<JobOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(HIRE_V1_JOB_OPEN, "job_id", job_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]

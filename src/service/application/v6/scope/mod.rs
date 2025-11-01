@@ -28,7 +28,7 @@ impl ScopeService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<EmptyResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::application::APPLICATION_V6_APP_SCOPE_APPLY,
                 "app_id",
@@ -50,7 +50,7 @@ let mut query_params = HashMap::new();
         if let Some(lang) = lang {
             query_params.insert("lang", lang);
 let api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::application::APPLICATION_V6_APP_SCOPE_GET,
                 "app_id",

@@ -69,7 +69,7 @@ pub struct WithdrawalRecord {
     /// 币种
     pub currency: String,
     /// 提现方式
-    pub withdrawal_http_method: String,
+    pub withdrawal_http_http_method: String,
     /// 提现账户信息
     pub account_info: WithdrawalAccountInfo,
     /// 提现状态
@@ -135,7 +135,7 @@ pub struct WithdrawalApplicationRequest {
     /// 提现金额
     pub amount: String,
     /// 提现方式
-    pub withdrawal_http_method: String,
+    pub withdrawal_http_http_method: String,
     /// 提现账户信息
     pub account_info: WithdrawalAccountInfo,
     /// 申请备注
@@ -288,7 +288,7 @@ impl ReferralAccountService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralAccountOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: HIRE_V1_REFERRAL_ACCOUNTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -342,7 +342,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralAccountListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: HIRE_V1_REFERRAL_ACCOUNTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -396,7 +396,7 @@ if let Some(user_id) = request.user_id {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralAccountBalanceResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 HIRE_REFERRAL_ACCOUNT_BALANCE,
                 "user_id",
@@ -458,7 +458,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<IncomeRecordListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: HIRE_REFERRAL_INCOME_RECORDS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -518,7 +518,7 @@ if let Some(end_time) = request.end_time {,
     /// let request = WithdrawalApplicationRequest {
     ///     user_id: "user_123456".to_string()
     ///     amount: "1000.00".to_string()
-    ///     withdrawal_http_method: "bank_transfer".to_string()
+    ///     withdrawal_http_http_method: "bank_transfer".to_string()
     ///     account_info: WithdrawalAccountInfo {
     ///         account_type: "bank_card".to_string()
     ///         account_number: "6228480000000000000".to_string()
@@ -537,7 +537,7 @@ if let Some(end_time) = request.end_time {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralAccountOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: HIRE_REFERRAL_WITHDRAWALS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -595,7 +595,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<WithdrawalRecordListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: HIRE_REFERRAL_WITHDRAWALS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -660,7 +660,7 @@ pub async fn approve_withdrawal(,
             remark: Option<String>,
         let request = ApprovalRequest { approved, remark };
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 HIRE_REFERRAL_WITHDRAWAL_APPROVE,
                 "withdrawal_id",
@@ -693,7 +693,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralAccountOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 HIRE_REFERRAL_ACCOUNT_ENABLE,
                 "user_id",
@@ -736,7 +736,7 @@ let api_req = ApiRequest {,
             reason: reason.to_string(),
         };
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 HIRE_REFERRAL_ACCOUNT_DISABLE,
                 "user_id",
@@ -777,7 +777,7 @@ pub async fn get_referral_statistics(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<serde_json::Value>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: HIRE_REFERRAL_STATISTICS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]

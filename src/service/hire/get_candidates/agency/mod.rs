@@ -227,7 +227,7 @@ impl AgencyService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<AgencyOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: HIRE_V1_AGENCIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -285,7 +285,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<AgencyListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: HIRE_V1_AGENCIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -348,7 +348,7 @@ if let Some(service_area) = request.service_area {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<AgencyOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: HIRE_V1_AGENCY_RECOMMENDATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -388,7 +388,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<AgencyRecommendationListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: HIRE_V1_AGENCY_RECOMMENDATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -449,7 +449,7 @@ if let Some(recommendation_end_time) = request.recommendation_end_time {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<AgencyOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: HIRE_V1_AGENCY_CONSULTANTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -482,7 +482,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<AgencyConsultantListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 HIRE_V1_AGENCIES_CONSULTANTS,
                 "agency_id",
@@ -535,7 +535,7 @@ pub async fn confirm_recommendation(,
         }
         let request = ConfirmRequest { remark };
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 HIRE_V1_AGENCY_RECOMMENDATION_CONFIRM,
                 "recommendation_id",
@@ -588,7 +588,7 @@ pub async fn reject_recommendation(,
             feedback,
         };
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 HIRE_V1_AGENCY_RECOMMENDATION_REJECT,
                 "recommendation_id",

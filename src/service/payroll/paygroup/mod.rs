@@ -136,7 +136,7 @@ impl PaygroupService {
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-             api_path: ("/open-apis/payroll/v4/paygroups".to_string()"),
+             api_path: (""/open-apis/payroll/v4/paygroups".to_string()"),
             query_params,
             path_params: std::collections::HashMap::new(),
             
@@ -182,7 +182,7 @@ impl PaygroupService {
             http_method: reqwest::Method::GET,
             url: self
                 .config
-                .build_url("/open-apis/payroll/v4/paygroups/".to_string() + &paygroup_id.to_string()"),
+                .build_url(""/open-apis/payroll/v4/paygroups".to_string()/{paygroup_id}"),
             query_params: std::collections::HashMap::new(),
             path_params,
             
@@ -244,7 +244,7 @@ impl PaygroupService {
     ) -> SDKResult<BaseResponse<PaygroupResponse>> {
         let api_req = ApiRequest {
             method: Method::POST,
-             api_path: ("/open-apis/payroll/v4/paygroups".to_string()"),
+             api_path: (""/open-apis/payroll/v4/paygroups".to_string()"),
             query_params: std::collections::HashMap::new(),
             path_params: std::collections::HashMap::new(),
             
@@ -311,7 +311,7 @@ impl PaygroupService {
             method: Method::PUT,
             url: self
                 .config
-                .build_url("/open-apis/payroll/v4/paygroups/".to_string() + &paygroup_id.to_string()"),
+                .build_url(""/open-apis/payroll/v4/paygroups".to_string()/{paygroup_id}"),
             query_params: std::collections::HashMap::new(),
             path_params,
             
@@ -359,7 +359,7 @@ impl PaygroupService {
             method: Method::DELETE,
             url: self
                 .config
-                .build_url("/open-apis/payroll/v4/paygroups/".to_string() + &paygroup_id.to_string()"),
+                .build_url(""/open-apis/payroll/v4/paygroups".to_string()/{paygroup_id}"),
             query_params: std::collections::HashMap::new(),
             path_params,
             
@@ -407,7 +407,7 @@ impl PaygroupService {
             method: Method::POST,
             url: self
                 .config
-                .build_url("/open-apis/payroll/v4/paygroups/".to_string() + &paygroup_id.to_string()/activate"),
+                .build_url(""/open-apis/payroll/v4/paygroups".to_string()/{paygroup_id}/activate"),
             query_params: std::collections::HashMap::new(),
             path_params,
             
@@ -455,7 +455,7 @@ impl PaygroupService {
             method: Method::POST,
             url: self
                 .config
-                .build_url(&format!("/open-apis/payroll/v4/paygroups/{}/deactivate", paygroup_id)),
+                .build_url(""/open-apis/payroll/v4/paygroups".to_string()/{paygroup_id}/deactivate"),
             query_params: std::collections::HashMap::new(),
             path_params,
             

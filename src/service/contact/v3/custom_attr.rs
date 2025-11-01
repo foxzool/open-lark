@@ -19,7 +19,7 @@ impl CustomAttrService {
         _req: &ListCustomAttrsRequest,
     ) -> crate::core::SDKResult<ListCustomAttrsResponse> {,
 let api_req = ApiRequest {,
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path: crate::core::endpoints::contact::CONTACT_V3_CUSTOM_ATTRS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),

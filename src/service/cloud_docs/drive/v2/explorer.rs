@@ -32,7 +32,7 @@ impl ExplorerService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExplorerRootMeta>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: DRIVE_EXPLORER_V2_ROOT_FOLDER_META.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             ..Default::default()};
@@ -49,7 +49,7 @@ Ok(api_resp),
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExplorerFolderMeta>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: DRIVE_EXPLORER_V2_FOLDER_META.replace("{folder_token}", folder_token),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             ..Default::default()

@@ -87,7 +87,7 @@ impl ComplianceManagementService {
     ) -> SDKResult<BaseResponse<GetComplianceOverviewResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_method: reqwest::Method::POST,
+            http_http_http_method: reqwest::Method::POST,
             api_path: "/open-apis/security_and_compliance/v1/compliance_management/get_overview"
                 .to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
@@ -232,8 +232,8 @@ impl Default for GetComplianceOverviewBuilder {
 //);
 
 impl ComplianceManagementService {
-//    /// 获取合规状态概览构建器
-//    pub fn get_compliance_overview_builder(&self) -> GetComplianceOverviewBuilder {
-//        GetComplianceOverviewBuilder::new()
-//    }
+    //    /// 获取合规状态概览构建器
+    //    pub fn get_compliance_overview_builder(&self) -> GetComplianceOverviewBuilder {
+    //        GetComplianceOverviewBuilder::new()
+    //    }
 }

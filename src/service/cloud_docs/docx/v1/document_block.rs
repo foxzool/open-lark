@@ -32,7 +32,7 @@ impl DocumentBlockService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateBlockRespData>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: DOCX_V1_DOCUMENT_BLOCKS.replace("{}", &document_id.into()),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             body: serde_json::to_vec(&request)?,
@@ -56,7 +56,7 @@ Ok(api_resp),
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetBlockRespData>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: DOCX_V1_DOCUMENT_BLOCK_GET
                 .replace("{document_id}", &document_id.into())
                 .replace("{block_id}", &block_id.into()),
@@ -82,7 +82,7 @@ Ok(api_resp),
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<PatchBlockRespData>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::PATCH,
+            http_http_http_method: Method::PATCH,
             api_path: DOCX_V1_DOCUMENT_BLOCK_GET
                 .replace("{document_id}", &document_id.into())
                 .replace("{block_id}", &block_id.into()),
@@ -108,7 +108,7 @@ Ok(api_resp),
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BatchUpdateBlockRespData>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::PATCH,
+            http_http_http_method: Method::PATCH,
             api_path: DOCX_V1_DOCUMENT_BLOCKS_BATCH_UPDATE
                 .replace("{document_id}", &document_id.into()),
             ..Default::default()
@@ -133,7 +133,7 @@ Ok(api_resp),
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BatchDeleteBlockRespData>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::DELETE,
+            http_http_http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
                 DOCX_V1_DOCUMENT_BLOCKS_BATCH_DELETE,
                 "document_id",
@@ -163,7 +163,7 @@ Ok(api_resp),
 let document_id_str = document_id.into();
         let block_id_str = block_id.into();
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
                 DOCX_V1_DOCUMENT_BLOCK_CHILDREN,
                 &[

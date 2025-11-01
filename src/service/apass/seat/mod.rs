@@ -51,7 +51,7 @@ pub async fn list_seat_assignment(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SeatAssignmentListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: Endpoints::APASS_V1_SEAT_ASSIGNMENT_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]
@@ -79,7 +79,7 @@ pub async fn list_seat_activity(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SeatActivityListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: Endpoints::APASS_V1_SEAT_ACTIVITY_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]

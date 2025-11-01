@@ -164,7 +164,7 @@ impl TalentService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: HIRE_V1_TALENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -213,7 +213,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentDetailResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(HIRE_V1_TALENT_GET, "talent_id", talent_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -280,7 +280,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: HIRE_V1_TALENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -356,7 +356,7 @@ if let Some(created_end_time) = request.created_end_time {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(HIRE_V1_TALENT_GET, "talent_id", talent_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()
@@ -389,7 +389,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentOperationResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::DELETE,
+            http_http_http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(HIRE_V1_TALENT_GET, "talent_id", talent_id),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: vec![]
@@ -443,7 +443,7 @@ let api_req = ApiRequest {,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentApplicationHistoryResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 HIRE_V1_TALENT_APPLICATIONS,
                 "talent_id",
@@ -503,7 +503,7 @@ if let Some(page_token) = page_token {,
         }
         let request = BatchImportRequest { talents };
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: HIRE_V1_TALENTS_BATCH_IMPORT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&request).unwrap_or_default()

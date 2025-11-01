@@ -75,7 +75,7 @@ impl PeriodRuleService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<PeriodRuleListResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: OKR_V1_PERIOD_RULES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: vec![]

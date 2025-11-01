@@ -81,7 +81,7 @@ pub async fn download_attachment(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<EmployeeAttachmentDownloadResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: format!(
                 "/open-apis/ehr/v1/employees/{}/attachments/{}",
                 request.employee_id, request.attachment_id

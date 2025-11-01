@@ -321,7 +321,7 @@ pub struct Allowance {
     /// 金额
     pub amount: f64,
     /// 计算方式
-    pub calculation_http_method: Option<String>,
+    pub calculation_http_http_method: Option<String>,
 }
 
 /// 扣款项
@@ -334,7 +334,7 @@ pub struct Deduction {
     /// 金额
     pub amount: f64,
     /// 计算方式
-    pub calculation_http_method: Option<String>,
+    pub calculation_http_http_method: Option<String>,
 }
 
 /// 薪资调整记录

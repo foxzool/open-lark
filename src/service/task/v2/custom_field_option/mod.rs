@@ -53,7 +53,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 Endpoints::TASK_V2_CUSTOM_FIELD_OPTIONS,
                 "custom_field_guid",
@@ -83,7 +83,7 @@ let temp_path = EndpointBuilder::replace_param(,
             custom_field_guid,
         );
 let api_req = ApiRequest {,
-            http_http_method: Method::PATCH,
+            http_http_http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(&temp_path, "option_guid", option_guid),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             query_params,

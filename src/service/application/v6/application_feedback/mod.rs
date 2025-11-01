@@ -32,7 +32,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_http_method: Method::PATCH,
+            http_http_http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::application::APPLICATION_V6_APPLICATION_FEEDBACK_GET,
                 "feedback_id",
@@ -72,7 +72,7 @@ if let Some(page_size) = page_size {,
 if let Some(page_token) = page_token {,
             query_params.insert("page_token", page_token);
 let api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: crate::core::endpoints::application::APPLICATION_V6_APPLICATION_FEEDBACK
                 .to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]

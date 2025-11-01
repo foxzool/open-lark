@@ -55,7 +55,7 @@ impl AcctItemService {
             category: "固定收入".to_string(),
             description: Some("员工基本工资项目".to_string()),
             is_active: true,
-            calculation_http_method: CalculationMethod::Fixed,
+            calculation_http_http_method: CalculationMethod::Fixed,
             default_value: Some(8000.0),
             unit: Some("元".to_string()),
             precision: Some(2),
@@ -94,7 +94,7 @@ impl AcctItemService {
             category: request.category.clone(),
             description: request.description.clone(),
             is_active: request.is_active.unwrap_or(true),
-            calculation_http_method: request.calculation_method.clone(),
+            calculation_http_http_method: request.calculation_method.clone(),
             default_value: request.default_value,
             unit: request.unit.clone(),
             precision: request.precision,
@@ -127,7 +127,7 @@ impl AcctItemService {
                 item_type: AcctItemType::Income,
                 category: "固定收入".to_string(),
                 is_active: true,
-                calculation_http_method: CalculationMethod::Fixed,
+                calculation_http_http_method: CalculationMethod::Fixed,
                 default_value: Some(8000.0),
                 created_at: Some(chrono::Utc::now()),
             },
@@ -138,7 +138,7 @@ impl AcctItemService {
                 item_type: AcctItemType::Income,
                 category: "浮动收入".to_string(),
                 is_active: true,
-                calculation_http_method: CalculationMethod::Formula,
+                calculation_http_http_method: CalculationMethod::Formula,
                 default_value: None,
                 created_at: Some(chrono::Utc::now()),
             },
@@ -149,7 +149,7 @@ impl AcctItemService {
                 item_type: AcctItemType::Income,
                 category: "津贴补贴".to_string(),
                 is_active: true,
-                calculation_http_method: CalculationMethod::Fixed,
+                calculation_http_http_method: CalculationMethod::Fixed,
                 default_value: Some(500.0),
                 created_at: Some(chrono::Utc::now()),
             },
@@ -160,7 +160,7 @@ impl AcctItemService {
                 item_type: AcctItemType::Deduction,
                 category: "法定扣除".to_string(),
                 is_active: true,
-                calculation_http_method: CalculationMethod::Formula,
+                calculation_http_http_method: CalculationMethod::Formula,
                 default_value: None,
                 created_at: Some(chrono::Utc::now()),
             },
@@ -171,7 +171,7 @@ impl AcctItemService {
                 item_type: AcctItemType::Deduction,
                 category: "法定扣除".to_string(),
                 is_active: true,
-                calculation_http_method: CalculationMethod::Formula,
+                calculation_http_http_method: CalculationMethod::Formula,
                 default_value: None,
                 created_at: Some(chrono::Utc::now()),
             },
@@ -478,7 +478,7 @@ pub struct UpdateAcctItemRequest {
     /// 是否激活
     pub is_active: Option<bool>,
     /// 计算方法
-    pub calculation_http_method: Option<CalculationMethod>,
+    pub calculation_http_http_method: Option<CalculationMethod>,
     /// 默认值
     pub default_value: Option<f64>,
     /// 单位
@@ -596,7 +596,7 @@ pub struct GetAcctItemResponse {
     /// 是否激活
     pub is_active: bool,
     /// 计算方法
-    pub calculation_http_method: CalculationMethod,
+    pub calculation_http_http_method: CalculationMethod,
     /// 默认值
     pub default_value: Option<f64>,
     /// 单位
@@ -635,7 +635,7 @@ pub struct UpdateAcctItemResponse {
     /// 是否激活
     pub is_active: bool,
     /// 计算方法
-    pub calculation_http_method: Option<CalculationMethod>,
+    pub calculation_http_http_method: Option<CalculationMethod>,
     /// 默认值
     pub default_value: Option<f64>,
     /// 单位
@@ -807,7 +807,7 @@ pub struct AcctItemInfo {
     /// 是否激活
     pub is_active: bool,
     /// 计算方法
-    pub calculation_http_method: CalculationMethod,
+    pub calculation_http_http_method: CalculationMethod,
     /// 默认值
     pub default_value: Option<f64>,
     /// 创建时间
@@ -995,7 +995,7 @@ impl Default for UpdateAcctItemRequest {
             category: None,
             description: None,
             is_active: None,
-            calculation_http_method: None,
+            calculation_http_http_method: None,
             default_value: None,
             unit: None,
             precision: None,

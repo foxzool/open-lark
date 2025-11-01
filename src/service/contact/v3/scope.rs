@@ -23,7 +23,7 @@ impl ScopeService {
     /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/scope/listscope/listscope/list
     pub async fn list(&self, _req: &GetScopeRequest) -> crate::core::SDKResult<GetScopeResponse> {,
 let api_req = ApiRequest {,
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path: crate::core::endpoints::contact::CONTACT_V3_SCOPES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
@@ -45,7 +45,7 @@ Ok(resp.data.unwrap_or_default()),
         req: &GetScopeAuthorityRequest,
     ) -> crate::core::SDKResult<GetScopeAuthorityResponse> {,
 let api_req = ApiRequest {,
-            http_http_method: reqwest::Method::GET,
+            http_http_http_method: reqwest::Method::GET,
             api_path: crate::core::endpoints::contact::CONTACT_V3_SCOPES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
@@ -79,7 +79,7 @@ Ok(resp.data.unwrap_or_default()),
         req: &UpdateScopeAuthorityRequest,
     ) -> crate::core::SDKResult<UpdateScopeAuthorityResponse> {,
 let api_req = ApiRequest {,
-            http_http_method: reqwest::Method::PUT,
+            http_http_http_method: reqwest::Method::PUT,
             api_path: crate::core::endpoints::contact::CONTACT_V3_SCOPES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(&req).unwrap_or_default(),

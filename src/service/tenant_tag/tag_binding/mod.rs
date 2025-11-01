@@ -70,7 +70,7 @@ if let Some(page_token) = request.page_token {,
 if let Some(user_id_type) = request.user_id_type {,
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: TENANT_TAG_V1_TAG_BINDINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             query_params,
@@ -88,7 +88,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: TENANT_TAG_V1_TAG_BINDINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             query_params,
@@ -107,7 +107,7 @@ let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
 let api_req = ApiRequest {,
-            http_http_method: Method::PUT,
+            http_http_http_method: Method::PUT,
             api_path: TENANT_TAG_V1_TAG_BINDINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant]
             query_params,

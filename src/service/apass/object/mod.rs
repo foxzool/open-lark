@@ -122,7 +122,7 @@ pub async fn oql_query(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OqlQueryResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 Endpoints::APASS_V1_OBJECT_OQL,
                 "app_id",
@@ -150,7 +150,7 @@ pub async fn search_records(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<RecordSearchResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_OBJECT_RECORD_SEARCH,
                 &[
@@ -186,7 +186,7 @@ pub async fn get_record(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<RecordQueryResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::GET,
+            http_http_http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_OBJECT_RECORD_GET,
                 &[
@@ -217,7 +217,7 @@ pub async fn update_record(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<RecordUpdateResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::PATCH,
+            http_http_http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_OBJECT_RECORD_UPDATE,
                 &[
@@ -245,7 +245,7 @@ pub async fn delete_record(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<RecordDeleteResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::DELETE,
+            http_http_http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_OBJECT_RECORD_DELETE,
                 &[
@@ -273,7 +273,7 @@ pub async fn create_record(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<RecordCreateResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_OBJECT_RECORD_CREATE,
                 &[
@@ -300,7 +300,7 @@ pub async fn batch_update_records(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BatchRecordResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::PATCH,
+            http_http_http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_OBJECT_RECORD_BATCH_UPDATE,
                 &[
@@ -329,7 +329,7 @@ pub async fn batch_query_records(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BatchRecordQueryResponse>> {,
 let mut api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_OBJECT_RECORD_BATCH_QUERY,
                 &[
@@ -366,7 +366,7 @@ pub async fn batch_delete_records(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BatchRecordResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::DELETE,
+            http_http_http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_OBJECT_RECORD_BATCH_DELETE,
                 &[
@@ -395,7 +395,7 @@ pub async fn batch_create_records(,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BatchRecordResponse>> {,
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_OBJECT_RECORD_BATCH_CREATE,
                 &[

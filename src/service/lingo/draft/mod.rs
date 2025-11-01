@@ -44,7 +44,7 @@ let draft_id = draft_id.to_string(); // 移到闭包外部以避免借用检查�
         <Self as AsyncServiceOperation<DraftUpdateRequest, BaseResponse<DraftUpdateResponse>>>::execute_with_observability(
             self, "update_draft", move || async move {,
 let api_req = ApiRequest {,
-                http_http_method: Method::PUT,
+                http_http_http_method: Method::PUT,
                 api_path: EndpointBuilder::replace_param(LINGO_DRAFT_UPDATE, "{draft_id}", &draft_id),
                 supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
                 body: serde_json::to_vec(&request)?,

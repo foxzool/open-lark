@@ -51,7 +51,7 @@ let metadata = serde_json::json!({,
             "file_name": file_name,
 });
 let api_req = ApiRequest {,
-            http_http_method: Method::POST,
+            http_http_http_method: Method::POST,
             api_path: APPROVAL_V4_FILE_UPLOAD.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(&metadata)
