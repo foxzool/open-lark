@@ -288,3 +288,33 @@ impl Default for AnalyticsQuery {
         }
     }
 }
+
+/// 报表章节类型
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SectionType {
+    /// 概要章节
+    Summary,
+    /// 详细章节
+    Detailed,
+    /// 图表章节
+    Chart,
+    /// 表格章节
+    Table,
+    /// 文本章节
+    Text,
+}
+
+/// 对齐方式
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum Alignment {
+    /// 左对齐
+    Left,
+    /// 居中对齐
+    Center,
+    /// 右对齐
+    Right,
+    /// 两端对齐
+    Justify,
+}

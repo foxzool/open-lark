@@ -1,4 +1,4 @@
-use crate::event::{context::EventContext, dispatcher::EventHandler};
+use open_lark_core::event::{context::EventContext, dispatcher::EventHandler};
 use serde::{Deserialize, Serialize};
 
 /// 发薪活动封存事件数据

@@ -1,7 +1,7 @@
 //! 通讯录 API v3版本
 
 use serde::{Deserialize, Serialize};
-use crate::event::EventHandler;
+use open_lark_core::event::EventHandler;
 use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
 
 // 简单的占位符模块，用于解决导入问题
