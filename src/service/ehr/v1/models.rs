@@ -524,7 +524,7 @@ pub enum LeaveType {
 }
 
 /// 请假记录
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LeaveRecord {
     /// 请假记录ID
     pub leave_id: String,
@@ -563,7 +563,7 @@ pub struct LeaveRecord {
 }
 
 /// 请假余额
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LeaveBalance {
     /// 余额ID
     pub balance_id: String,
@@ -586,7 +586,7 @@ pub struct LeaveBalance {
 }
 
 /// 请假规则配置
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LeaveRule {
     /// 规则ID
     pub rule_id: String,
@@ -619,7 +619,7 @@ pub struct LeaveRule {
 }
 
 /// 请假统计
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LeaveStatistics {
     /// 统计ID
     pub statistics_id: String,
