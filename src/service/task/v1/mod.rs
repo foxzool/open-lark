@@ -7,7 +7,6 @@
 //! - 删除任务
 
 use crate::core::config::Config;
-use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 /// 任务服务 v1版本

@@ -8,7 +8,6 @@
 //! - 考勤审批流程
 
 use crate::core::config::Config;
-use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 /// Attendance服务 v1版本

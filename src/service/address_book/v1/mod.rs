@@ -7,7 +7,6 @@
 //! - 搜索和过滤
 
 use crate::core::config::Config;
-use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 /// 地址簿服务 v1版本

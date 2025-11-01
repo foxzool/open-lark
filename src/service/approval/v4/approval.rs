@@ -9,7 +9,7 @@
 
 use super::models::*;
 use crate::core::config::Config;
-use open_lark_core::prelude::*;
+use serde::{Deserialize, Serialize};
 
 /// 审批定义服务
 #[derive(Debug, Clone)]

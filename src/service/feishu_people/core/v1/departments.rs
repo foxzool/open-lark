@@ -71,7 +71,6 @@ use crate::core::{
     req_option::RequestOption,
     SDKResult,
 };
-use async_trait::async_trait;
 use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use serde::{Deserialize, Serialize};
 

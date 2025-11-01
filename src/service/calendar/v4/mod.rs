@@ -7,7 +7,6 @@
 //! - 忙闲时间查询
 
 use crate::core::config::Config;
-use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 /// Calendar服务 v4版本

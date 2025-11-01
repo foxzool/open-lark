@@ -9,7 +9,6 @@
 //! - 审计日志归档管理
 
 use crate::core::config::Config;
-use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 // 导入核心类型

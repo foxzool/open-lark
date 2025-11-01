@@ -9,7 +9,6 @@
 
 use crate::core::config::Config;
 pub use crate::service::okr::models::*;
-use open_lark_core::prelude::*;
 
 /// OKR服务 V1版本
 #[derive(Debug, Clone)]

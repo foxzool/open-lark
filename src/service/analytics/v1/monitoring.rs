@@ -9,7 +9,6 @@
 //! - SLA监控和服务质量保证
 
 use crate::core::config::Config;
-use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 /// 监控服务

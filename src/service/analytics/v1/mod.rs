@@ -8,7 +8,6 @@
 //! - 实时监控和智能告警
 
 use crate::core::config::Config;
-use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 /// Analytics服务 v1版本

@@ -9,7 +9,6 @@
 //! - 数据源管理
 
 use crate::core::config::Config;
-use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 /// Payroll服务 v1版本

@@ -9,7 +9,6 @@
 
 use crate::core::config::Config;
 use crate::service::analytics::v1::TrendDirection;
-use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 /// 洞察服务

@@ -41,7 +41,6 @@ use crate::core::{
 };
 use async_trait::async_trait;
 use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
-use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 // 导入核心类型

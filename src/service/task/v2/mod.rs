@@ -8,7 +8,6 @@
 
 use crate::core::config::Config;
 pub use crate::service::task::models::*;
-use open_lark_core::prelude::*;
 
 /// Task服务 v2版本
 #[derive(Debug, Clone)]

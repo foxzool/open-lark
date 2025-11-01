@@ -8,7 +8,6 @@
 //! - 统计分析功能
 
 use crate::core::config::Config;
-use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 // 声明子模块

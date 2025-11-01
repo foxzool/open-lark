@@ -9,7 +9,6 @@
 //! - 绩效评估系统
 
 use crate::core::config::Config;
-use open_lark_core::prelude::*;
 
 // 导入modules模块
 pub mod attendance;

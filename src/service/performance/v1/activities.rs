@@ -11,7 +11,6 @@ use crate::core::config::Config;
 use crate::service::performance::models;
 use crate::service::performance::PageResponse;
 use chrono::{DateTime, Utc};
-use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 /// 绩效活动管理服务

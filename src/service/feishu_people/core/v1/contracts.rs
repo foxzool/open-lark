@@ -55,12 +55,10 @@
 //! ```
 
 use crate::core::{
-    api_resp::{ApiResponseTrait, BaseResponse},
+    api_resp::BaseResponse,
     config::Config,
-    constants::AccessTokenType,
     error::LarkAPIError,
     http::Transport,
-    req_option::RequestOption,
     SDKResult,
 };
 use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled

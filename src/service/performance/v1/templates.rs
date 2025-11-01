@@ -10,7 +10,6 @@ use crate::core::api_resp::EmptyResponse;
 use crate::core::config::Config;
 use crate::service::performance::models;
 use crate::service::performance::PageResponse;
-use open_lark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 /// 评估模板管理服务

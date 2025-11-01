@@ -62,7 +62,6 @@ use crate::core::{
     http::Transport,
     SDKResult,
 };
-use async_trait::async_trait;
 use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 

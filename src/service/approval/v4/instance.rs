@@ -9,7 +9,6 @@
 
 use super::models::*;
 use crate::core::config::Config;
-use open_lark_core::prelude::*;
 
 /// 审批实例服务
 #[derive(Debug, Clone)]
