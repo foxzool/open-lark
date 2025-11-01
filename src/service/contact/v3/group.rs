@@ -7,17 +7,19 @@
 //! - 查询用户所属用户组
 //! - 企业级用户组权限管理
 
-use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
+use open_lark_core::core::{api_req::ApiRequest, LarkAPIError}; // trait_system::ExecutableBuilder temporarily disabled
 use crate::core::{
     api_resp::BaseResponse,
     config::Config,
     constants::AccessTokenType,
     http::Transport,
     req_option::RequestOption,
-    SDKResult
 };
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
+
+// 使用 open_lark_core 的错误类型以兼容 async trait
+pub type SDKResult<T> = Result<T, LarkAPIError>;
 
 // 导入核心类型
 use super::types::*;

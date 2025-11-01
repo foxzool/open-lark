@@ -108,12 +108,14 @@ use crate::core::{
     constants::AccessTokenType,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 use async_trait::async_trait;
-use open_lark_core::core::{api_req::ApiRequest, trait_system::ExecutableBuilder};
+use open_lark_core::core::{api_req::ApiRequest, trait_system::ExecutableBuilder, LarkAPIError};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+
+// 使用 open_lark_core 的错误类型以兼容 async trait
+pub type SDKResult<T> = Result<T, LarkAPIError>;
 
 /// 表格管理服务 v3
 ///
