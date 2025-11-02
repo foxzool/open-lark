@@ -1,18 +1,29 @@
-//! 应用使用分析服务
-//!
-//! 提供企业应用使用的深度分析功能：
-//! - 应用使用统计和趋势分析
-//! - 应用功能使用情况分析
-//! - 应用性能和用户体验评估
-//! - 应用集成和协作分析
-//! - 应用ROI和价值评估
+use serde::{Deserialize, Serialize};
+
+/// 问题严重程度
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum IssueSeverity {
+    /// 低
+    Low,
+    /// 中
+    Medium,
+    /// 高
+    High,
+    /// 严重
+    Critical,
+}
+
+// 提供企业应用使用的深度分析功能：
+// - 应用使用统计和趋势分析
+// - 应用功能使用情况分析
+// - 应用性能和用户体验评估
+// - 应用集成和协作分析
+// - 应用ROI和价值评估
 
 use crate::core::config::Config;
 use crate::core::SDKResult;
 use crate::service::analytics::v1::*;
-use crate::service::payroll::v1::datasource::IssueSeverity;
 use chrono::{DateTime, Utc};
-use serde::{Deserialize, Serialize};
 
 /// 应用分析服务
 #[derive(Debug, Clone)]

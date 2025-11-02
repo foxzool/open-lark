@@ -34,6 +34,7 @@ impl PerformanceService {
 
 // 重新导出常用类型
 pub use models::*;
+pub use models::PageResponse;
 
 /// Performance服务类型别名（向后兼容）
 pub type ServiceType = PerformanceService;

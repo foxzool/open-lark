@@ -13,17 +13,20 @@ pub enum IssueSeverity {
     Critical,
 }
 
+//!
 // 提供数据质量的全面分析功能：
 // - 数据完整性检查和评估
 // - 数据一致性和准确性分析
 // - 数据质量趋势监控
 // - 数据问题诊断和修复建议
-// - 数据趋势和变化分析
+
+//! - 数据趋势和变化分析
 
 use crate::core::config::Config;
 use crate::core::SDKResult;
 use crate::service::analytics::v1::*;
 use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
 
 /// 数据概览服务
 #[derive(Debug, Clone)]
