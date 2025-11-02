@@ -73,7 +73,7 @@ impl MonitoringService {
                     .collect(),
                 alerts: vec![ActiveAlert {
                     alert_id: "alert_001".to_string(),
-                    severity: AlertSeverity::Warning,
+                    severity: AlertSeverity::Low,
                     title: "CPU使用率接近警告阈值".to_string(),
                     description: "当前CPU使用率67.8%，接近70%警告阈值".to_string(),
                     triggered_at: current_time - 300,
@@ -175,8 +175,9 @@ impl MonitoringService {
         ];
 
         Ok(GetAlertHistoryResponse {
-            alerts,
-            total_count: alerts.len() as i32,
+            alerts,.clone()
+            total_count: alerts.len() as i32,total_count: 
+            alerts,.len() as i32,
             alert_statistics: AlertStatistics {
                 total_alerts: 156,
                 critical_alerts: 12,
@@ -268,9 +269,10 @@ impl MonitoringService {
         ];
 
         Ok(GetSlaMonitoringResponse {
-            sla_metrics,
+            sla_metrics,.clone()
             sla_summary: SLASummary {
-                total_sla_metrics: sla_metrics.len() as i32,
+                total_sla_metrics: sla_metrics.len() as i32,total_sla_metrics: 
+            sla_metrics,.len() as i32,
                 compliant_metrics: 2,
                 non_compliant_metrics: 0,
                 overall_compliance_rate: 100.0,

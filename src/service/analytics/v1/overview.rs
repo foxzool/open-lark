@@ -73,7 +73,7 @@ impl OverviewService {
                     metric_name: "日活用户数".to_string(),
                     current_period: UsageTrendData {
                         total: 980,
-                        average_daily: 980,
+                        average_daily: 980.0,
                         peak_value: 1156,
                         peak_date: Some("2024-10-28".to_string()),
                         trend_direction: TrendDirection::Up,
@@ -81,7 +81,7 @@ impl OverviewService {
                     },
                     previous_period: Some(UsageTrendData {
                         total: 903,
-                        average_daily: 903,
+                        average_daily: 903.0,
                         peak_value: 1089,
                         peak_date: Some("2024-09-30".to_string()),
                         trend_direction: TrendDirection::Up,
@@ -92,7 +92,7 @@ impl OverviewService {
                     metric_name: "消息发送量".to_string(),
                     current_period: UsageTrendData {
                         total: 156780,
-                        average_daily: 5226,
+                        average_daily: 5226.0,
                         peak_value: 7890,
                         peak_date: Some("2024-10-28".to_string()),
                         trend_direction: TrendDirection::Up,
@@ -100,7 +100,7 @@ impl OverviewService {
                     },
                     previous_period: Some(UsageTrendData {
                         total: 127092,
-                        average_daily: 4236,
+                        average_daily: 4236.0,
                         peak_value: 6234,
                         peak_date: Some("2024-09-30".to_string()),
                         trend_direction: TrendDirection::Up,

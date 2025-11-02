@@ -85,7 +85,7 @@ impl InsightsService {
         ];
 
         Ok(GetIntelligentInsightsResponse {
-            insights,
+            insights: insights.clone(),
             total_count: insights.len() as i32,
             has_more: false,
             next_cursor: None,
@@ -179,9 +179,10 @@ impl InsightsService {
         ];
 
         Ok(GetPredictiveAnalysisResponse {
-            predictions,
+            predictions,.clone()
             analysis_summary: PredictionSummary {
-                total_predictions: predictions.len() as i32,
+                total_predictions: predictions.len() as i32,total_predictions: 
+            predictions,.len() as i32,
                 high_confidence_predictions: 2,
                 average_accuracy: 0.915,
                 analysis_period_start: request.start_time,
@@ -261,9 +262,10 @@ impl InsightsService {
         ];
 
         Ok(DetectAnomaliesResponse {
-            anomalies,
+            anomalies,.clone()
             detection_summary: AnomalyDetectionSummary {
-                total_anomalies: anomalies.len() as i32,
+                total_anomalies: anomalies.len() as i32,total_anomalies: 
+            anomalies,.len() as i32,
                 critical_anomalies: 1,
                 high_anomalies: 1,
                 detection_sensitivity: request.detection_sensitivity.clone(),
@@ -344,9 +346,10 @@ impl InsightsService {
         }];
 
         Ok(GetDecisionRecommendationsResponse {
-            recommendations,
+            recommendations,.clone()
             recommendation_summary: RecommendationSummary {
-                total_recommendations: recommendations.len() as i32,
+                total_recommendations: recommendations.len() as i32,total_recommendations: 
+            recommendations,.len() as i32,
                 high_priority_recommendations: 1,
                 average_roi: 180.0,
                 total_potential_value: 350000.0,

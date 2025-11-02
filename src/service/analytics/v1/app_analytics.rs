@@ -413,7 +413,7 @@ impl AppAnalyticsService {
                     flow_direction: DataFlowDirection::Bidirectional,
                     volume_gb_per_day: 0.125,
                     success_rate: 96.5,
-                    latency_ms: 1250,
+                    latency_ms: 1250.0,
                     last_activity: chrono::Utc::now() - chrono::Duration::minutes(20),
                 },
                 DataFlow {
@@ -424,7 +424,7 @@ impl AppAnalyticsService {
                     flow_direction: DataFlowDirection::Unidirectional,
                     volume_gb_per_day: 0.089,
                     success_rate: 92.8,
-                    latency_ms: 800,
+                    latency_ms: 800.0,
                     last_activity: chrono::Utc::now() - chrono::Duration::minutes(8),
                 },
             ],

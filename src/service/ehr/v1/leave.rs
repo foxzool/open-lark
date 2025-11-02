@@ -1122,14 +1122,14 @@ impl LeaveService {
         self.validate_create_leave_request(request)?;
 
         let url = format!("{}/open-apis/ehr/v1/leaves", self.config.base_url);
-        let api_req = ApiRequest::new()
+        let api_req = ApiRequest::with_method_and_path(reqwest::Method::GET, "")
             .method("POST")
             .url(&url)
             .body(serde_json::to_value(request)?)
             .access_token_type(AccessTokenType::Tenant);
 
-        let api_resp = Transport::request(api_req, &self.config).await?;
-        let response: LeaveRecordResponse = api_resp.parse()?;
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        let response: LeaveRecordResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1164,13 +1164,13 @@ impl LeaveService {
             "{}/open-apis/ehr/v1/leaves/{}",
             self.config.base_url, leave_id
         );
-        let api_req = ApiRequest::new()
+        let api_req = ApiRequest::with_method_and_path(reqwest::Method::GET, "")
             .method("GET")
             .url(&url)
             .access_token_type(AccessTokenType::Tenant);
 
-        let api_resp = Transport::request(api_req, &self.config).await?;
-        let response: LeaveRecordResponse = api_resp.parse()?;
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        let response: LeaveRecordResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1215,14 +1215,14 @@ impl LeaveService {
             "{}/open-apis/ehr/v1/leaves/{}",
             self.config.base_url, request.leave_id
         );
-        let api_req = ApiRequest::new()
+        let api_req = ApiRequest::with_method_and_path(reqwest::Method::GET, "")
             .method("PUT")
             .url(&url)
             .body(serde_json::to_value(&request.update_fields)?)
             .access_token_type(AccessTokenType::Tenant);
 
-        let api_resp = Transport::request(api_req, &self.config).await?;
-        let response: LeaveRecordResponse = api_resp.parse()?;
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        let response: LeaveRecordResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1273,14 +1273,14 @@ impl LeaveService {
             "{}/open-apis/ehr/v1/leaves/{}/cancel",
             self.config.base_url, leave_id
         );
-        let api_req = ApiRequest::new()
+        let api_req = ApiRequest::with_method_and_path(reqwest::Method::GET, "")
             .method("POST")
             .url(&url)
             .body(cancel_data)
             .access_token_type(AccessTokenType::Tenant);
 
-        let api_resp = Transport::request(api_req, &self.config).await?;
-        let response: EmptyResponse = api_resp.parse()?;
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        let response: EmptyResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1320,14 +1320,14 @@ impl LeaveService {
         self.validate_query_leave_records_request(request)?;
 
         let url = format!("{}/open-apis/ehr/v1/leaves/query", self.config.base_url);
-        let api_req = ApiRequest::new()
+        let api_req = ApiRequest::with_method_and_path(reqwest::Method::GET, "")
             .method("POST")
             .url(&url)
             .body(serde_json::to_value(request)?)
             .access_token_type(AccessTokenType::Tenant);
 
-        let api_resp = Transport::request(api_req, &self.config).await?;
-        let response: LeaveRecordListResponse = api_resp.parse()?;
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        let response: LeaveRecordListResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1371,14 +1371,14 @@ impl LeaveService {
             "{}/open-apis/ehr/v1/leaves/{}/approve",
             self.config.base_url, request.leave_id
         );
-        let api_req = ApiRequest::new()
+        let api_req = ApiRequest::with_method_and_path(reqwest::Method::GET, "")
             .method("POST")
             .url(&url)
             .body(serde_json::to_value(request)?)
             .access_token_type(AccessTokenType::Tenant);
 
-        let api_resp = Transport::request(api_req, &self.config).await?;
-        let response: LeaveApprovalResponse = api_resp.parse()?;
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        let response: LeaveApprovalResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1417,14 +1417,14 @@ impl LeaveService {
             "{}/open-apis/ehr/v1/leaves/pending_approvals",
             self.config.base_url
         );
-        let api_req = ApiRequest::new()
+        let api_req = ApiRequest::with_method_and_path(reqwest::Method::GET, "")
             .method("GET")
             .url(&url)
             .query_params(Some(query_params))
             .access_token_type(AccessTokenType::Tenant);
 
-        let api_resp = Transport::request(api_req, &self.config).await?;
-        let response: LeaveRecordListResponse = api_resp.parse()?;
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        let response: LeaveRecordListResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1466,14 +1466,14 @@ impl LeaveService {
             "{}/open-apis/ehr/v1/leave_balances/query",
             self.config.base_url
         );
-        let api_req = ApiRequest::new()
+        let api_req = ApiRequest::with_method_and_path(reqwest::Method::GET, "")
             .method("POST")
             .url(&url)
             .body(serde_json::to_value(request)?)
             .access_token_type(AccessTokenType::Tenant);
 
-        let api_resp = Transport::request(api_req, &self.config).await?;
-        let response: LeaveBalanceListResponse = api_resp.parse()?;
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        let response: LeaveBalanceListResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1538,14 +1538,14 @@ impl LeaveService {
             "{}/open-apis/ehr/v1/leave_balances/adjust",
             self.config.base_url
         );
-        let api_req = ApiRequest::new()
+        let api_req = ApiRequest::with_method_and_path(reqwest::Method::GET, "")
             .method("POST")
             .url(&url)
             .body(adjustment_data)
             .access_token_type(AccessTokenType::Tenant);
 
-        let api_resp = Transport::request(api_req, &self.config).await?;
-        let response: LeaveBalanceResponse = api_resp.parse()?;
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        let response: LeaveBalanceResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1585,14 +1585,14 @@ impl LeaveService {
         self.validate_get_leave_statistics_request(request)?;
 
         let url = format!("{}/open-apis/ehr/v1/leave_statistics", self.config.base_url);
-        let api_req = ApiRequest::new()
+        let api_req = ApiRequest::with_method_and_path(reqwest::Method::GET, "")
             .method("POST")
             .url(&url)
             .body(serde_json::to_value(request)?)
             .access_token_type(AccessTokenType::Tenant);
 
-        let api_resp = Transport::request(api_req, &self.config).await?;
-        let response: LeaveStatisticsResponse = api_resp.parse()?;
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        let response: LeaveStatisticsResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1677,14 +1677,14 @@ impl LeaveService {
         self.validate_create_leave_rule_request(request)?;
 
         let url = format!("{}/open-apis/ehr/v1/leave_rules", self.config.base_url);
-        let api_req = ApiRequest::new()
+        let api_req = ApiRequest::with_method_and_path(reqwest::Method::GET, "")
             .method("POST")
             .url(&url)
             .body(serde_json::to_value(request)?)
             .access_token_type(AccessTokenType::Tenant);
 
-        let api_resp = Transport::request(api_req, &self.config).await?;
-        let response: LeaveRuleResponse = api_resp.parse()?;
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        let response: LeaveRuleResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1727,14 +1727,14 @@ impl LeaveService {
         }
 
         let url = format!("{}/open-apis/ehr/v1/leave_rules", self.config.base_url);
-        let api_req = ApiRequest::new()
+        let api_req = ApiRequest::with_method_and_path(reqwest::Method::GET, "")
             .method("GET")
             .url(&url)
             .query_params(Some(serde_json::Value::Object(query_params)))
             .access_token_type(AccessTokenType::Tenant);
 
-        let api_resp = Transport::request(api_req, &self.config).await?;
-        let response: LeaveRuleListResponse = api_resp.parse()?;
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        let response: LeaveRuleListResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1779,14 +1779,14 @@ impl LeaveService {
             "{}/open-apis/ehr/v1/leave_rules/{}",
             self.config.base_url, request.rule_id
         );
-        let api_req = ApiRequest::new()
+        let api_req = ApiRequest::with_method_and_path(reqwest::Method::GET, "")
             .method("PUT")
             .url(&url)
             .body(serde_json::to_value(&request.update_fields)?)
             .access_token_type(AccessTokenType::Tenant);
 
-        let api_resp = Transport::request(api_req, &self.config).await?;
-        let response: LeaveRuleResponse = api_resp.parse()?;
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        let response: LeaveRuleResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1820,13 +1820,13 @@ impl LeaveService {
             "{}/open-apis/ehr/v1/leave_rules/{}",
             self.config.base_url, rule_id
         );
-        let api_req = ApiRequest::new()
+        let api_req = ApiRequest::with_method_and_path(reqwest::Method::GET, "")
             .method("DELETE")
             .url(&url)
             .access_token_type(AccessTokenType::Tenant);
 
-        let api_resp = Transport::request(api_req, &self.config).await?;
-        let response: EmptyResponse = api_resp.parse()?;
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        let response: EmptyResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
