@@ -72,7 +72,7 @@ use crate::core::{
 };
 
 // Use open_lark_core's error type for compatibility with async traits
-use open_lark_core::core::LarkAPIError;
+use crate::core::error::LarkAPIError;
 pub type SDKResult<T> = Result<T, LarkAPIError>;
 use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use serde::{Deserialize, Serialize};

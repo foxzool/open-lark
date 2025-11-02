@@ -74,7 +74,7 @@ use crate::core::{
 };
 
 // Use open_lark_core's error type for compatibility with async traits
-use open_lark_core::core::LarkAPIError;
+use crate::core::error::LarkAPIError;
 pub type SDKResult<T> = Result<T, LarkAPIError>;
 use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use serde::{Deserialize, Serialize};
@@ -903,7 +903,6 @@ impl
     async fn execute(
         &self,
         service: &CompaniesService,
-        _option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetCompanyResponse>> {
         service.get_with_tuple(self.clone().build()).await
     }
@@ -1114,7 +1113,6 @@ impl
     async fn execute(
         &self,
         service: &CompaniesService,
-        _option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UpdateCompanyResponse>> {
         service.update_with_tuple(self.clone().build()).await
     }
@@ -1166,7 +1164,6 @@ impl
     async fn execute(
         &self,
         service: &CompaniesService,
-        _option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<DeleteCompanyResponse>> {
         service.delete_with_tuple(self.clone().build()).await
     }
