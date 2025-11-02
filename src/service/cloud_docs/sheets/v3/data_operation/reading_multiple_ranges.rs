@@ -1,5 +1,5 @@
 use crate::core::SDKResult;use reqwest::Method;
-use crate::crate::core::error::LarkAPIError;
+use crate::core::error::LarkAPIError;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::,
 {
@@ -44,18 +44,18 @@ impl ReadingMultipleRangesRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
 }if self.ranges.is_empty() {,
-            return Err(crate::crate::core::error::LarkAPIError::illegal_param(
+            return Err(crate::core::error::LarkAPIError::illegal_param(
                 "ranges cannot be empty".to_string(),
             ));
 // 验证范围数量限制,
         if self.ranges.len() > 500 {,
-return Err(crate::crate::core::error::LarkAPIError::illegal_param(,
+return Err(crate::core::error::LarkAPIError::illegal_param(,
                 "Too many ranges. Maximum 500 ranges allowed".to_string(),
             ));
 // 验证每个单元格范围格式,
         for (i, range) in self.ranges.iter().enumerate() {,
 if let ValidationResult::Invalid(msg) = validation::validate_cell_range(range) {,
-                return Err(crate::crate::core::error::LarkAPIError::illegal_param(format!(
+                return Err(crate::core::error::LarkAPIError::illegal_param(format!(
                     "Invalid cell range at index {}: '{}': {}",
                     i, range, msg,
 )));
@@ -64,7 +64,7 @@ if let ValidationResult::Invalid(msg) = validation::validate_cell_range(range) {
         if let ValidationResult::Invalid(msg) =,
 validation::validate_value_render_option(&self.value_render_option),
         {,
-return Err(crate::crate::core::error::LarkAPIError::illegal_param(format!(,
+return Err(crate::core::error::LarkAPIError::illegal_param(format!(,
                 "Invalid valueRenderOption: {}",
                 msg,
 )));
@@ -73,7 +73,7 @@ return Err(crate::crate::core::error::LarkAPIError::illegal_param(format!(,
         if let ValidationResult::Invalid(msg) =,
 validation::validate_date_time_render_option(&self.date_time_render_option),
         {,
-return Err(crate::crate::core::error::LarkAPIError::illegal_param(format!(,
+return Err(crate::core::error::LarkAPIError::illegal_param(format!(,
                 "Invalid dateTimeRenderOption: {}",
                 msg,
 )));

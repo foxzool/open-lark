@@ -6,7 +6,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use crate::core::SDKResult;
-use crate::crate::core::error::LarkAPIError;
+use crate::core::error::LarkAPIError;
 
 use crate::{
     core::{
@@ -176,21 +176,21 @@ impl ReadingSingleRangeRequest {
     pub fn validate(&self) -> SDKResult<()> {
         // 验证spreadsheet_token
         if self.spreadsheet_token.is_empty() {
-            return Err(crate::crate::core::error::LarkAPIError::illegal_param(
+            return Err(crate::core::error::LarkAPIError::illegal_param(
                 "spreadsheet_token不能为空".to_string()
             ));
         }
 
         // 验证range
         if self.range.is_empty() {
-            return Err(crate::crate::core::error::LarkAPIError::illegal_param(
+            return Err(crate::core::error::LarkAPIError::illegal_param(
                 "range不能为空".to_string()
             ));
         }
 
         // 验证单元格范围格式（基础验证）
         if !self.range.contains('!') {
-            return Err(crate::crate::core::error::LarkAPIError::illegal_param(
+            return Err(crate::core::error::LarkAPIError::illegal_param(
                 "range格式不正确，应包含工作表名称，如：Sheet1!A1:C10".to_string()
             ));
         }
@@ -202,7 +202,7 @@ impl ReadingSingleRangeRequest {
                     // 有效的值
                 }
                 _ => {
-                    return Err(crate::crate::core::error::LarkAPIError::illegal_param(
+                    return Err(crate::core::error::LarkAPIError::illegal_param(
                         format!(
                             "valueRenderOption必须是以下值之一：UnformattedValue, FormattedValue, Formula，当前值：{}",
                             option
@@ -219,7 +219,7 @@ impl ReadingSingleRangeRequest {
                     // 有效的值
                 }
                 _ => {
-                    return Err(crate::crate::core::error::LarkAPIError::illegal_param(
+                    return Err(crate::core::error::LarkAPIError::illegal_param(
                         format!(
                             "dateTimeRenderOption必须是以下值之一：SerialNumber, FormattedString，当前值：{}",
                             option
@@ -236,7 +236,7 @@ impl ReadingSingleRangeRequest {
                     // 有效的值
                 }
                 _ => {
-                    return Err(crate::crate::core::error::LarkAPIError::illegal_param(
+                    return Err(crate::core::error::LarkAPIError::illegal_param(
                         format!(
                             "user_id_type必须是以下值之一：open_id, union_id, user_id，当前值：{}",
                             user_id_type

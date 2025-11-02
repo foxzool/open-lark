@@ -1,5 +1,5 @@
-use crate::core::{error::LarkAPIError, config::Config, req_option::RequestOption, SDKResult};
-    error::LarkAPIError,
+use crate::core::{ config::Config, req_option::RequestOption, SDKResult};
+    
 pub use copy::{copy_space_node, CopiedNode, CopySpaceNodeRequest, CopySpaceNodeResponse};
 pub use create::{create_space_node, CreateSpaceNodeRequest, CreateSpaceNodeResponse, CreatedNode};
 pub use get::{get_space_node, GetSpaceNodeRequest, GetSpaceNodeResponse, SpaceNode};
@@ -37,7 +37,7 @@ pub async fn create(,
     ) -> SDKResult<CreateSpaceNodeResponse> {
         let result = create_space_node(request, &self.config, option).await?;
 result.data.ok_or_else(|| {,
-            crate::crate::core::error::LarkAPIError::IllegalParamError(
+            crate::core::error::LarkAPIError::IllegalParamError(
                 "Response data is missing".to_string(),
             ),
 }),
@@ -56,7 +56,7 @@ pub async fn get(,
     ) -> SDKResult<GetSpaceNodeResponse> {
         let result = get_space_node(request, &self.config, option).await?;
 result.data.ok_or_else(|| {,
-            crate::crate::core::error::LarkAPIError::IllegalParamError(
+            crate::core::error::LarkAPIError::IllegalParamError(
                 "Response data is missing".to_string(),
             ),
 }),
@@ -75,7 +75,7 @@ pub async fn list(,
     ) -> SDKResult<ListSpaceNodeResponse> {
         let result = list_space_node(request, &self.config, option).await?;
 result.data.ok_or_else(|| {,
-            crate::crate::core::error::LarkAPIError::IllegalParamError(
+            crate::core::error::LarkAPIError::IllegalParamError(
                 "Response data is missing".to_string(),
             ),
 }),
@@ -94,7 +94,7 @@ pub async fn r#move(,
     ) -> SDKResult<MoveSpaceNodeResponse> {
         let result = move_space_node(request, &self.config, option).await?;
 result.data.ok_or_else(|| {,
-            crate::crate::core::error::LarkAPIError::IllegalParamError(
+            crate::core::error::LarkAPIError::IllegalParamError(
                 "Response data is missing".to_string(),
             ),
 }),
@@ -113,7 +113,7 @@ pub async fn update_title(,
     ) -> SDKResult<UpdateSpaceNodeTitleResponse> {
         let result = update_space_node_title(request, &self.config, option).await?;
 result.data.ok_or_else(|| {,
-            crate::crate::core::error::LarkAPIError::IllegalParamError(
+            crate::core::error::LarkAPIError::IllegalParamError(
                 "Response data is missing".to_string(),
             ),
 }),
@@ -132,7 +132,7 @@ pub async fn copy(,
     ) -> SDKResult<CopySpaceNodeResponse> {
         let result = copy_space_node(request, &self.config, option).await?;
 result.data.ok_or_else(|| {,
-            crate::crate::core::error::LarkAPIError::IllegalParamError(
+            crate::core::error::LarkAPIError::IllegalParamError(
                 "Response data is missing".to_string(),
             ),
 }),

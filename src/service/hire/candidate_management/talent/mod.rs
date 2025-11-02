@@ -1,5 +1,5 @@
 use crate::core::SDKResult;use reqwest::Method;
-use crate::crate::core::error::LarkAPIError;
+use crate::core::error::LarkAPIError;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{
     core::{
@@ -7,7 +7,7 @@ use crate::{
         constants::AccessTokenType,
         endpoints::hire::*,
         endpoints::EndpointBuilder,
-        error::LarkAPIError,
+        
         http::Transport,
         req_option::RequestOption,
         SDKResult,

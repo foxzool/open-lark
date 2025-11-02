@@ -333,7 +333,7 @@ assert!(!service.config.app_id.is_empty() || service.config.app_id.is_empty());
 #[test]
     fn test_error_handling_patterns() {
 // Test that error handling is consistent across operations,
-        use crate::crate::core::error::LarkAPIError;
+        use crate::core::error::LarkAPIError;
 // All operations should return SDKResult which can contain LarkAPIError,
         let error = LarkAPIError::illegal_param("Test error".to_string());
 let sdk_result: crate::core::SDKResult<()> = Err(error);

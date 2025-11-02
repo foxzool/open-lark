@@ -1,5 +1,5 @@
-use crate::core::{error::LarkAPIError, config::Config, req_option::RequestOption, SDKResult};
-    error::LarkAPIError,
+use crate::core::{ config::Config, req_option::RequestOption, SDKResult};
+    
 pub use get::{get_task, GetTaskRequest, GetTaskResponse, MoveResult, TaskDetail, TaskStatus};
 pub use move_docs_to_wiki::{,
     move_docs_to_wiki, MoveDocsToWikiRequest, MoveDocsToWikiResponse, MoveTask,
@@ -22,7 +22,7 @@ impl TaskService {
     ) -> SDKResult<MoveDocsToWikiResponse> {
         let result = move_docs_to_wiki(request, &self.config, option).await?;
 result.data.ok_or_else(|| {,
-            crate::crate::core::error::LarkAPIError::IllegalParamError(
+            crate::core::error::LarkAPIError::IllegalParamError(
                 "Response data is missing".to_string(),
             ),
 }),
@@ -34,7 +34,7 @@ result.data.ok_or_else(|| {,
     ) -> SDKResult<GetTaskResponse> {
         let result = get_task(request, &self.config, option).await?;
 result.data.ok_or_else(|| {,
-            crate::crate::core::error::LarkAPIError::IllegalParamError(
+            crate::core::error::LarkAPIError::IllegalParamError(
                 "Response data is missing".to_string(),
             ),
 }),

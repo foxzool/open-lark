@@ -6,7 +6,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use crate::core::SDKResult;
-use crate::crate::core::error::LarkAPIError;
+use crate::core::error::LarkAPIError;
 
 use crate::{
     core::{
@@ -119,7 +119,7 @@ impl CreateSpreadsheetRequest {
         // 验证标题长度
         if let Some(title) = &self.title {
             if title.len() > 255 {
-                return Err(crate::crate::core::error::LarkAPIError::illegal_param(
+                return Err(crate::core::error::LarkAPIError::illegal_param(
                     format!("标题长度不能超过255个字符，当前长度：{}", title.len())
                 ));
             }
@@ -128,7 +128,7 @@ impl CreateSpreadsheetRequest {
         // 如果提供了folder_token，验证其格式
         if let Some(folder_token) = &self.folder_token {
             if folder_token.is_empty() {
-                return Err(crate::crate::core::error::LarkAPIError::illegal_param(
+                return Err(crate::core::error::LarkAPIError::illegal_param(
                     "folder_token不能为空".to_string()
                 ));
             }
