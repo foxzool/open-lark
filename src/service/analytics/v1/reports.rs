@@ -559,7 +559,9 @@ impl ReportService {
                                         },
                                         TableCell { value: 450 },
                                         TableCell { value: 438 },
-                                        TableCell { value: "97.3%".into() },
+                                        TableCell {
+                                            value: "97.3%".into(),
+                                        },
                                     ],
                                 },
                                 TableRow {
@@ -569,7 +571,9 @@ impl ReportService {
                                         },
                                         TableCell { value: 180 },
                                         TableCell { value: 168 },
-                                        TableCell { value: "93.3%".into() },
+                                        TableCell {
+                                            value: "93.3%".into(),
+                                        },
                                     ],
                                 },
                             ],
