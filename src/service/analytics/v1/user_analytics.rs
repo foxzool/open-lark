@@ -545,8 +545,8 @@ impl UserAnalyticsService {
                         .format("%Y-%m-%d")
                         .to_string(),
                         hour: hour as i32,
-                        day_of_week: day,
-                        week_of_year: week,
+                        day_of_week: day as i32,
+                        week_of_year: week as i32,
                         activity_score: final_score,
                         interaction_count: (final_score * 50.0) as i32,
                     });

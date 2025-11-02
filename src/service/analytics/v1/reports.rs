@@ -1111,7 +1111,6 @@ pub struct ReportInfo {
 /// 报表类型
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
-#[derive(PartialEq, Clone, Debug)]
 pub enum ReportType {
     /// 系统报表
     System,
@@ -1125,7 +1124,6 @@ pub enum ReportType {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 #[derive(PartialEq, Clone, Debug)]
-pub enum ReportStatus {
     /// 草稿
     Draft,
     /// 已发布
