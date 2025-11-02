@@ -1,19 +1,12 @@
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        config::Config,
-        constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
-        http::Transport,
-        req_option::RequestOption,
-        trait_system::Service,
-        SDKResult,
+        api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
+        trait_system::Service, SDKResult,
     },
     service::payroll::models::{PageResponse, Paygroup, PaygroupListRequest, PaymentDaySetting},
 };
 use open_lark_core::core::api_req::ApiRequest;
 use reqwest::Method;
-use serde::{Deserialize, Serialize};
 
 /// 薪资组服务
 pub struct PaygroupService {

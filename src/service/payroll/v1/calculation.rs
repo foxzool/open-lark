@@ -8,7 +8,8 @@
 //! - 薪资模拟和预测
 
 use crate::core::config::Config;
-use crate::core::SDKResult;use crate::service::payroll::models::*;
+use crate::core::SDKResult;
+use crate::service::payroll::models::*;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 

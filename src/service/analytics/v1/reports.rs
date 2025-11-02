@@ -196,7 +196,13 @@ impl ReportService {
         Ok(GetReportDataResponse {
             report_id: request.report_id.clone(),
             data_type: request.data_type.clone(),
-            report_data: self.generate_report_data(request.report_id.as_str(), request.parameters.as_ref().unwrap_or(&std::collections::HashMap::new())),
+            report_data: self.generate_report_data(
+                request.report_id.as_str(),
+                request
+                    .parameters
+                    .as_ref()
+                    .unwrap_or(&std::collections::HashMap::new()),
+            ),
             generated_at: Some(chrono::Utc::now()),
             expires_at: Some(chrono::Utc::now() + chrono::Duration::hours(24)),
         })
@@ -1105,7 +1111,8 @@ pub struct ReportInfo {
 /// 报表类型
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
-#[derive(PartialEq, Clone, Debug)]pub enum ReportType {
+#[derive(PartialEq, Clone, Debug)]
+pub enum ReportType {
     /// 系统报表
     System,
     /// 模板报表
@@ -1117,7 +1124,8 @@ pub struct ReportInfo {
 /// 报表状态
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
-#[derive(PartialEq, Clone, Debug)]pub enum ReportStatus {
+#[derive(PartialEq, Clone, Debug)]
+pub enum ReportStatus {
     /// 草稿
     Draft,
     /// 已发布

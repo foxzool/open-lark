@@ -1,13 +1,7 @@
 use crate::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        config::Config,
-        constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
-        http::Transport,
-        req_option::RequestOption,
-        trait_system::Service,
-        SDKResult,
+        api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
+        trait_system::Service, SDKResult,
     },
     service::payroll::models::{
         PageResponse, PaymentActivity, PaymentActivityArchiveRequest, PaymentActivityListRequest,
@@ -15,7 +9,6 @@ use crate::{
 };
 use open_lark_core::core::api_req::ApiRequest;
 use reqwest::Method;
-use serde::{Deserialize, Serialize};
 
 /// 发薪活动服务
 pub struct PaymentActivityService {

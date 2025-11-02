@@ -12,7 +12,6 @@ use crate::core::config::Config;
 use serde::{Deserialize, Serialize};
 
 // 导入特定类型以避免命名冲突
-use super::types::ComplianceStatus;
 
 /// Security & Compliance服务 v1版本
 #[derive(Debug, Clone)]

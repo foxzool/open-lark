@@ -103,8 +103,8 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 // 导入SDK核心模块
-use crate::core::{
-use crate::core::{SDKResult, api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}},
+use crate::core::{error::LarkAPIError, 
+use crate::core::{error::LarkAPIError, SDKResult, api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}},
     config::Config,
     constants::AccessTokenType,
     http::Transport,

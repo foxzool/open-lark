@@ -70,7 +70,9 @@
 //! ```
 
 use super::models::*;
-use crate::core::{config::Config, constants::AccessTokenType, http::Transport, SDKResult};
+use crate::core::{
+    config::Config, constants::AccessTokenType, error::LarkAPIError, http::Transport, SDKResult,
+};
 use open_lark_core::core::api_req::ApiRequest;
 
 // ==================== Builder实现 ====================
@@ -1129,7 +1131,9 @@ impl LeaveService {
             .access_token_type(AccessTokenType::Tenant);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
-        let response: LeaveRecordResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
+        let response: LeaveRecordResponse = api_resp
+            .data
+            .ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1170,7 +1174,9 @@ impl LeaveService {
             .access_token_type(AccessTokenType::Tenant);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
-        let response: LeaveRecordResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
+        let response: LeaveRecordResponse = api_resp
+            .data
+            .ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1222,7 +1228,9 @@ impl LeaveService {
             .access_token_type(AccessTokenType::Tenant);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
-        let response: LeaveRecordResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
+        let response: LeaveRecordResponse = api_resp
+            .data
+            .ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1280,7 +1288,9 @@ impl LeaveService {
             .access_token_type(AccessTokenType::Tenant);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
-        let response: EmptyResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
+        let response: EmptyResponse = api_resp
+            .data
+            .ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1327,7 +1337,9 @@ impl LeaveService {
             .access_token_type(AccessTokenType::Tenant);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
-        let response: LeaveRecordListResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
+        let response: LeaveRecordListResponse = api_resp
+            .data
+            .ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1378,7 +1390,9 @@ impl LeaveService {
             .access_token_type(AccessTokenType::Tenant);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
-        let response: LeaveApprovalResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
+        let response: LeaveApprovalResponse = api_resp
+            .data
+            .ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1424,7 +1438,9 @@ impl LeaveService {
             .access_token_type(AccessTokenType::Tenant);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
-        let response: LeaveRecordListResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
+        let response: LeaveRecordListResponse = api_resp
+            .data
+            .ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1473,7 +1489,9 @@ impl LeaveService {
             .access_token_type(AccessTokenType::Tenant);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
-        let response: LeaveBalanceListResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
+        let response: LeaveBalanceListResponse = api_resp
+            .data
+            .ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1545,7 +1563,9 @@ impl LeaveService {
             .access_token_type(AccessTokenType::Tenant);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
-        let response: LeaveBalanceResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
+        let response: LeaveBalanceResponse = api_resp
+            .data
+            .ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1592,7 +1612,9 @@ impl LeaveService {
             .access_token_type(AccessTokenType::Tenant);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
-        let response: LeaveStatisticsResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
+        let response: LeaveStatisticsResponse = api_resp
+            .data
+            .ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1684,7 +1706,9 @@ impl LeaveService {
             .access_token_type(AccessTokenType::Tenant);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
-        let response: LeaveRuleResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
+        let response: LeaveRuleResponse = api_resp
+            .data
+            .ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1734,7 +1758,9 @@ impl LeaveService {
             .access_token_type(AccessTokenType::Tenant);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
-        let response: LeaveRuleListResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
+        let response: LeaveRuleListResponse = api_resp
+            .data
+            .ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1786,7 +1812,9 @@ impl LeaveService {
             .access_token_type(AccessTokenType::Tenant);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
-        let response: LeaveRuleResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
+        let response: LeaveRuleResponse = api_resp
+            .data
+            .ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }
@@ -1826,7 +1854,9 @@ impl LeaveService {
             .access_token_type(AccessTokenType::Tenant);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
-        let response: EmptyResponse = api_resp.data.ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
+        let response: EmptyResponse = api_resp
+            .data
+            .ok_or_else(|| LarkAPIError::from_response(&api_resp))??;
 
         Ok(response)
     }

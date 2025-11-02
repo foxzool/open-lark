@@ -247,7 +247,6 @@ pub use moments::MomentsService;
 #[cfg(feature = "okr")]
 pub use okr::OkrService;
 #[cfg(feature = "payroll")]
-pub use payroll::PayrollService;
 #[cfg(feature = "performance")]
 pub use performance::PerformanceService;
 #[cfg(feature = "personal-settings")]
