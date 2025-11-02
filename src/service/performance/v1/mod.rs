@@ -20,7 +20,6 @@ pub mod templates;
 // 重新导出服务类型
 pub use activities::ActivitiesService;
 pub use cycles::CyclesService;
-pub use results::ResultsService;
 pub use reviews::ReviewsService;
 pub use templates::TemplatesService;
 
