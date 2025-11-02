@@ -2,7 +2,7 @@
 #[allow(unused_variables, unused_unsafe)]
 mod talent_tests {,
     use crate::core::validation::ValidateBuilder;
-use crate::core::error::LarkAPIError;
+use crate::crate::core::error::LarkAPIError;
 use crate::service::hire::candidate_management::talent::{,
         TalentCreateRequestBuilder, TalentListRequestBuilder,
     };
@@ -37,7 +37,7 @@ let result = TalentCreateRequestBuilder::default(),
 .build();
         assert!(result.is_err());
 match result.unwrap_err() {,
-            crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
+            crate::crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
 assert!(msg.contains("name is required"));
             }
             _ => panic!("Expected IllegalParamError"),
@@ -49,7 +49,7 @@ let result = TalentCreateRequestBuilder::default(),
 .build();
         assert!(result.is_err());
 match result.unwrap_err() {,
-            crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
+            crate::crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
 assert!(msg.contains("Invalid name"));
                 assert!(msg.contains("must be at least"));
             _ => panic!("Expected IllegalParamError"),
@@ -62,7 +62,7 @@ let long_name = "张".repeat(101); // 101 characters,
             .build();
 assert!(result.is_err());
         match result.unwrap_err() {,
-crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
+crate::crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
                 assert!(msg.contains("Invalid name"));
 assert!(msg.contains("must not exceed"));
             }
@@ -75,7 +75,7 @@ let result = TalentCreateRequestBuilder::default(),
 .build();
         assert!(result.is_err());
 match result.unwrap_err() {,
-            crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
+            crate::crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
 assert!(msg.contains("Invalid name"));
                 assert!(msg.contains("invalid characters"));
             _ => panic!("Expected IllegalParamError"),
@@ -88,7 +88,7 @@ let result = TalentCreateRequestBuilder::default(),
             .build();
 assert!(result.is_err());
         match result.unwrap_err() {,
-crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
+crate::crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
                 assert!(msg.contains("Invalid email"));
             _ => panic!("Expected IllegalParamError"),
         }
@@ -100,7 +100,7 @@ let result = TalentCreateRequestBuilder::default(),
             .build();
 assert!(result.is_err());
         match result.unwrap_err() {,
-crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
+crate::crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
                 assert!(msg.contains("Invalid phone"));
 assert!(msg.contains("must be at least"));
             }
@@ -114,7 +114,7 @@ let result = TalentCreateRequestBuilder::default(),
             .build();
 assert!(result.is_err());
         match result.unwrap_err() {,
-crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
+crate::crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
                 assert!(msg.contains("Invalid work experience"));
 assert!(msg.contains("must not exceed"));
             }
@@ -128,7 +128,7 @@ let result = TalentCreateRequestBuilder::default(),
             .build();
 assert!(result.is_err());
         match result.unwrap_err() {,
-crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
+crate::crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
                 assert!(msg.contains("Invalid birthday"));
 assert!(msg.contains("YYYY-MM-DD"));
             }
@@ -142,7 +142,7 @@ let result = TalentCreateRequestBuilder::default(),
             .build();
 assert!(result.is_err());
         match result.unwrap_err() {,
-crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
+crate::crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
                 assert!(msg.contains("Invalid expected salary"));
             _ => panic!("Expected IllegalParamError"),
         }
@@ -155,7 +155,7 @@ let long_tag = "a".repeat(51); // 51 characters,
 .build();
         assert!(result.is_err());
 match result.unwrap_err() {,
-            crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
+            crate::crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
 assert!(msg.contains("Invalid tag at index 0"));
                 assert!(msg.contains("must not exceed"));
             _ => panic!("Expected IllegalParamError"),
@@ -169,7 +169,7 @@ for i in 0..21 {,
 let result = builder.build();
         assert!(result.is_err());
 match result.unwrap_err() {,
-            crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
+            crate::crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
 assert!(msg.contains("Invalid tags"));
                 assert!(msg.contains("maximum number"));
             _ => panic!("Expected IllegalParamError"),
@@ -182,7 +182,7 @@ let result = TalentCreateRequestBuilder::default(),
             .build();
 assert!(result.is_err());
         match result.unwrap_err() {,
-crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
+crate::crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
                 assert!(msg.contains("Invalid resume attachment"));
 assert!(msg.contains("cannot be empty"));
             }
@@ -201,7 +201,7 @@ let result = TalentCreateRequestBuilder::default(),
             .build();
 assert!(result.is_err());
         match result.unwrap_err() {,
-crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
+crate::crate::core::error::LarkAPIError::IllegalParamError(msg) => {,
                 assert!(msg.contains("Invalid custom fields"));
 assert!(msg.contains("key cannot be empty"));
             }

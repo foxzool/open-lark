@@ -6,7 +6,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use crate::core::SDKResult;
-use crate::core::error::LarkAPIError;
+use crate::crate::core::error::LarkAPIError;
 
 use crate::{
     core::{
@@ -137,21 +137,21 @@ impl WriteDataToMultipleRangesRequest {
     pub fn validate(&self) -> SDKResult<()> {
         // 验证spreadsheet_token
         if self.spreadsheet_token.is_empty() {
-            return Err(crate::core::error::LarkAPIError::illegal_param(
+            return Err(crate::crate::core::error::LarkAPIError::illegal_param(
                 "spreadsheet_token不能为空".to_string()
             ));
         }
 
         // 验证value_ranges不为空
         if self.value_ranges.is_empty() {
-            return Err(crate::core::error::LarkAPIError::illegal_param(
+            return Err(crate::crate::core::error::LarkAPIError::illegal_param(
                 "value_ranges不能为空".to_string()
             ));
         }
 
         // 验证数据范围数量限制（API通常有批量操作限制）
         if self.value_ranges.len() > 500 {
-            return Err(crate::core::error::LarkAPIError::illegal_param(
+            return Err(crate::crate::core::error::LarkAPIError::illegal_param(
                 format!(
                     "value_ranges数量超过限制，最大允许500个，当前数量：{}",
                     self.value_ranges.len()
@@ -163,14 +163,14 @@ impl WriteDataToMultipleRangesRequest {
         for (index, range_data) in self.value_ranges.iter().enumerate() {
             // 验证范围格式
             if range_data.range.is_empty() {
-                return Err(crate::core::error::LarkAPIError::illegal_param(
+                return Err(crate::crate::core::error::LarkAPIError::illegal_param(
                     format!("第{}个value_ranges的range不能为空", index + 1)
                 ));
             }
 
             // 基础范围格式验证
             if !range_data.range.contains('!') {
-                return Err(crate::core::error::LarkAPIError::illegal_param(
+                return Err(crate::crate::core::error::LarkAPIError::illegal_param(
                     format!(
                         "第{}个value_ranges的range格式不正确，应包含工作表名称，如：Sheet1!A1:C10",
                         index + 1
@@ -180,7 +180,7 @@ impl WriteDataToMultipleRangesRequest {
 
             // 验证数据不为空
             if range_data.values.is_empty() {
-                return Err(crate::core::error::LarkAPIError::illegal_param(
+                return Err(crate::crate::core::error::LarkAPIError::illegal_param(
                     format!("第{}个value_ranges的values不能为空", index + 1)
                 ));
             }
@@ -188,7 +188,7 @@ impl WriteDataToMultipleRangesRequest {
             // 验证行数限制（防止过大请求）
             let total_rows: usize = range_data.values.iter().map(|row| row.len()).count();
             if total_rows > 10000 {
-                return Err(crate::core::error::LarkAPIError::illegal_param(
+                return Err(crate::crate::core::error::LarkAPIError::illegal_param(
                     format!(
                         "第{}个value_ranges的数据量过大，建议分批处理，当前数据量：{}",
                         index + 1, total_rows
@@ -201,7 +201,7 @@ impl WriteDataToMultipleRangesRequest {
         let mut ranges = std::collections::HashSet::new();
         for range_data in &self.value_ranges {
             if !ranges.insert(&range_data.range) {
-                return Err(crate::core::error::LarkAPIError::illegal_param(
+                return Err(crate::crate::core::error::LarkAPIError::illegal_param(
                     format!("检测到重复的范围：{}", range_data.range)
                 ));
             }

@@ -6,7 +6,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use crate::core::SDKResult;
-use crate::core::error::LarkAPIError;
+use crate::crate::core::error::LarkAPIError;
 
 use crate::{
     core::{
@@ -134,7 +134,7 @@ impl GetSpreadsheetRequest {
     pub fn validate(&self) -> SDKResult<()> {
         // 验证spreadsheet_token
         if self.spreadsheet_token.is_empty() {
-            return Err(crate::core::error::LarkAPIError::illegal_param(
+            return Err(crate::crate::core::error::LarkAPIError::illegal_param(
                 "spreadsheet_token不能为空".to_string()
             ));
         }
@@ -146,7 +146,7 @@ impl GetSpreadsheetRequest {
                     // 有效的值
                 }
                 _ => {
-                    return Err(crate::core::error::LarkAPIError::illegal_param(
+                    return Err(crate::crate::core::error::LarkAPIError::illegal_param(
                         format!(
                             "user_id_type必须是以下值之一：open_id, union_id, user_id，当前值：{}",
                             user_id_type

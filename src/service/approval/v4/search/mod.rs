@@ -104,7 +104,9 @@ use std::collections::HashMap;
 
 // 导入SDK核心模块
 use crate::core::{error::LarkAPIError, 
+    error::LarkAPIError,
 use crate::core::{error::LarkAPIError, SDKResult, api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}},
+    error::LarkAPIError,
     config::Config,
     constants::AccessTokenType,
     http::Transport,
@@ -647,12 +649,12 @@ impl SearchInstancesRequestBuilder {
     /// 设置页面大小
     pub fn page_size(mut self, page_size: u32) -> SDKResult<Self> {
         if page_size == 0 {
-            return Err(crate::core::error::LarkAPIError::illegal_param(
+            return Err(crate::crate::core::error::LarkAPIError::illegal_param(
                 "Page size cannot be 0, minimum value is 1".to_string(),
             ));
         }
         if page_size > 200 {
-            return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+            return Err(crate::crate::core::error::LarkAPIError::illegal_param(format!(
                 "Page size {} exceeds maximum limit of 200",
                 page_size
             )));
@@ -841,12 +843,12 @@ impl SearchTasksRequestBuilder {
     /// 设置页面大小
     pub fn page_size(mut self, page_size: u32) -> SDKResult<Self> {
         if page_size == 0 {
-            return Err(crate::core::error::LarkAPIError::illegal_param(
+            return Err(crate::crate::core::error::LarkAPIError::illegal_param(
                 "Page size cannot be 0, minimum value is 1".to_string(),
             ));
         }
         if page_size > 200 {
-            return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+            return Err(crate::crate::core::error::LarkAPIError::illegal_param(format!(
                 "Page size {} exceeds maximum limit of 200",
                 page_size
             )));
@@ -996,12 +998,12 @@ impl SearchCcRequestBuilder {
     /// 设置页面大小
     pub fn page_size(mut self, page_size: u32) -> SDKResult<Self> {
         if page_size == 0 {
-            return Err(crate::core::error::LarkAPIError::illegal_param(
+            return Err(crate::crate::core::error::LarkAPIError::illegal_param(
                 "Page size cannot be 0, minimum value is 1".to_string(),
             ));
         }
         if page_size > 200 {
-            return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+            return Err(crate::crate::core::error::LarkAPIError::illegal_param(format!(
                 "Page size {} exceeds maximum limit of 200",
                 page_size
             )));
@@ -1265,12 +1267,12 @@ impl SearchUserTasksRequestBuilder {
     /// 设置页面大小
     pub fn page_size(mut self, page_size: u32) -> SDKResult<Self> {
         if page_size == 0 {
-            return Err(crate::core::error::LarkAPIError::illegal_param(
+            return Err(crate::crate::core::error::LarkAPIError::illegal_param(
                 "Page size cannot be 0, minimum value is 1".to_string(),
             ));
         }
         if page_size > 200 {
-            return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+            return Err(crate::crate::core::error::LarkAPIError::illegal_param(format!(
                 "Page size {} exceeds maximum limit of 200",
                 page_size
             )));

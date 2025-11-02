@@ -76,6 +76,7 @@ use serde::{Deserialize, Serialize};
 
 // 导入SDK核心模块
 use crate::core::{
+    error::LarkAPIError,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -471,13 +472,13 @@ impl SearchUserRequestBuilder {
         if let Some(size) = page_size {
             // 搜索服务有更严格的分页大小限制（1-200）
             if size > 200 {
-                return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                return Err(crate::crate::core::error::LarkAPIError::illegal_param(format!(
                     "Page size {} exceeds maximum limit of 200 for search service",
                     size,
                 )));
             }
             if size == 0 {
-                return Err(crate::core::error::LarkAPIError::illegal_param(
+                return Err(crate::crate::core::error::LarkAPIError::illegal_param(
                     "Page size cannot be 0, minimum value is 1".to_string(),
                 ));
             }

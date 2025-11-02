@@ -1,5 +1,5 @@
 use crate::core::SDKResult;use serde::{Deserialize, Serialize};
-use crate::core::error::LarkAPIError;
+use crate::crate::core::error::LarkAPIError;
 use open_lark_core::core::api_req::ApiRequest;
 use crate::,
 {,
@@ -43,11 +43,11 @@ impl FindCellsRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
 }if self.sheet_id.is_empty() {,
-            return Err(crate::core::error::LarkAPIError::illegal_param(
+            return Err(crate::crate::core::error::LarkAPIError::illegal_param(
                 "sheet_id cannot be empty".to_string(),
             ));
 if self.find.is_empty() {,
-            return Err(crate::core::error::LarkAPIError::illegal_param(
+            return Err(crate::crate::core::error::LarkAPIError::illegal_param(
                 "find cannot be empty".to_string(),
             ));
 // 验证查找条件,
@@ -57,7 +57,7 @@ if self.find.is_empty() {,
             &self.find_condition.search_by_regex,
             &self.find_condition.include_formulas,
         ) {,
-return Err(crate::core::error::LarkAPIError::illegal_param(format!(,
+return Err(crate::crate::core::error::LarkAPIError::illegal_param(format!(,
                 "Invalid find options: {}",
                 msg,
 )));
@@ -67,14 +67,14 @@ return Err(crate::core::error::LarkAPIError::illegal_param(format!(,
 if let ValidationResult::Invalid(msg) =,
                 validation::validate_cell_range(&self.find_condition.range),
 {,
-                return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                return Err(crate::crate::core::error::LarkAPIError::illegal_param(format!(
                     "Invalid search range '{}': {}",
                     self.find_condition.range, msg,
 )));
             }
 // 验证查找字符串长度,
         if self.find.len() > 1000 {,
-return Err(crate::core::error::LarkAPIError::illegal_param(,
+return Err(crate::crate::core::error::LarkAPIError::illegal_param(,
                 "find string too long. Maximum 1000 characters allowed".to_string(),
             ));
 Ok(()),
@@ -86,11 +86,11 @@ impl FindCellsRequestBuilder {
     pub fn new(config: Config) -> Self {
         Self { config }
 }if self.request.sheet_id.is_empty() {,
-            return Err(crate::core::error::LarkAPIError::illegal_param(
+            return Err(crate::crate::core::error::LarkAPIError::illegal_param(
                 "sheet_id cannot be empty".to_string(),
             ));
 if self.request.find.is_empty() {,
-            return Err(crate::core::error::LarkAPIError::illegal_param(
+            return Err(crate::crate::core::error::LarkAPIError::illegal_param(
                 "find cannot be empty".to_string(),
             ));
 // 验证查找条件,
@@ -100,7 +100,7 @@ if self.request.find.is_empty() {,
             &self.request.find_condition.search_by_regex,
             &self.request.find_condition.include_formulas,
         ) {,
-return Err(crate::core::error::LarkAPIError::illegal_param(format!(,
+return Err(crate::crate::core::error::LarkAPIError::illegal_param(format!(,
                 "Invalid find options: {}",
                 msg,
 )));
@@ -110,14 +110,14 @@ return Err(crate::core::error::LarkAPIError::illegal_param(format!(,
 if let ValidationResult::Invalid(msg) =,
                 validation::validate_cell_range(&self.request.find_condition.range),
 {,
-                return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                return Err(crate::crate::core::error::LarkAPIError::illegal_param(format!(
                     "Invalid search range '{}': {}",
                     self.request.find_condition.range, msg,
 )));
             }
 // 验证查找字符串长度,
         if self.request.find.len() > 1000 {,
-return Err(crate::core::error::LarkAPIError::illegal_param(,
+return Err(crate::crate::core::error::LarkAPIError::illegal_param(,
                 "find string too long. Maximum 1000 characters allowed".to_string(),
             ));
 Ok(()),

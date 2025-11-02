@@ -34,7 +34,7 @@ impl SubscriptionService {
     ) -> SDKResult<GetSubscriptionResponse> {
         let result = get_subscription(request, &self.config, option).await?;
         result.data.ok_or_else(|| {
-            open_lark_core::core::error::LarkAPIError::IllegalParamError(
+            open_lark_core::crate::core::error::LarkAPIError::IllegalParamError(
                 "Response data is missing".to_string(),
             )
         })
@@ -48,7 +48,7 @@ impl SubscriptionService {
     ) -> SDKResult<CreateSubscriptionResponse> {
         let result = create_subscription(request, &self.config, option).await?;
         result.data.ok_or_else(|| {
-            open_lark_core::core::error::LarkAPIError::IllegalParamError(
+            open_lark_core::crate::core::error::LarkAPIError::IllegalParamError(
                 "Response data is missing".to_string(),
             )
         })
@@ -62,7 +62,7 @@ impl SubscriptionService {
     ) -> SDKResult<PatchSubscriptionResponse> {
         let result = patch_subscription(request, &self.config, option).await?;
         result.data.ok_or_else(|| {
-            open_lark_core::core::error::LarkAPIError::IllegalParamError(
+            open_lark_core::crate::core::error::LarkAPIError::IllegalParamError(
                 "Response data is missing".to_string(),
             )
         })
