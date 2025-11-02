@@ -1123,7 +1123,7 @@ pub enum ReportType {
 /// 报表状态
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
-#[derive(PartialEq, Clone, Debug)]
+pub enum ReportStatus {
     /// 草稿
     Draft,
     /// 已发布
