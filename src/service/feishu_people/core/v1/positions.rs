@@ -1001,7 +1001,9 @@ impl
         self,
         service: &PositionsService,
     ) -> SDKResult<BaseResponse<GetPositionResponse>> {
-        service.get_with_tuple((self.position_id, self.request)).await
+        service
+            .get_with_tuple((self.position_id, self.request))
+            .await
     }
 
     async fn execute_with_options(
@@ -1009,7 +1011,9 @@ impl
         service: &PositionsService,
         _option: open_lark_core::core::req_option::RequestOption,
     ) -> SDKResult<BaseResponse<GetPositionResponse>> {
-        service.get_with_tuple((self.position_id, self.request)).await
+        service
+            .get_with_tuple((self.position_id, self.request))
+            .await
     }
 }
 
@@ -1281,7 +1285,9 @@ impl
         self,
         service: &PositionsService,
     ) -> SDKResult<BaseResponse<UpdatePositionResponse>> {
-        service.update_with_tuple((self.position_id, self.request)).await
+        service
+            .update_with_tuple((self.position_id, self.request))
+            .await
     }
 
     async fn execute_with_options(
@@ -1289,7 +1295,9 @@ impl
         service: &PositionsService,
         _option: open_lark_core::core::req_option::RequestOption,
     ) -> SDKResult<BaseResponse<UpdatePositionResponse>> {
-        service.update_with_tuple((self.position_id, self.request)).await
+        service
+            .update_with_tuple((self.position_id, self.request))
+            .await
     }
 }
 
@@ -1344,7 +1352,9 @@ impl
         self,
         service: &PositionsService,
     ) -> SDKResult<BaseResponse<DeletePositionResponse>> {
-        service.delete_with_tuple((self.position_id, self.request)).await
+        service
+            .delete_with_tuple((self.position_id, self.request))
+            .await
     }
 
     async fn execute_with_options(
@@ -1352,7 +1362,9 @@ impl
         service: &PositionsService,
         _option: open_lark_core::core::req_option::RequestOption,
     ) -> SDKResult<BaseResponse<DeletePositionResponse>> {
-        service.delete_with_tuple((self.position_id, self.request)).await
+        service
+            .delete_with_tuple((self.position_id, self.request))
+            .await
     }
 }
 

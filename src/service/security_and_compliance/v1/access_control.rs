@@ -615,7 +615,7 @@ impl CreateAccessPolicyBuilder {
 
 impl Default for CreateAccessPolicyBuilder {
     fn default() -> Self {
-        Self { }
+        Self {}
     }
 }
 
@@ -662,7 +662,7 @@ impl GetUserPermissionSummaryBuilder {
 
 impl Default for GetUserPermissionSummaryBuilder {
     fn default() -> Self {
-        Self { }
+        Self {}
     }
 }
 

@@ -1194,8 +1194,8 @@ impl GetSecurityPostureAnalysisBuilder {
 }
 
 impl Default for GetSecurityPostureAnalysisBuilder {
-        fn default() -> Self {
-            Self { }
+    fn default() -> Self {
+        Self {}
     }
 }
 
@@ -1259,8 +1259,8 @@ impl GetAnomalyDetectionResultsBuilder {
 }
 
 impl Default for GetAnomalyDetectionResultsBuilder {
-        fn default() -> Self {
-            Self { }
+    fn default() -> Self {
+        Self {}
     }
 }
 
@@ -1312,8 +1312,8 @@ impl GetAttackChainAnalysisBuilder {
 }
 
 impl Default for GetAttackChainAnalysisBuilder {
-        fn default() -> Self {
-            Self { }
+    fn default() -> Self {
+        Self {}
     }
 }
 

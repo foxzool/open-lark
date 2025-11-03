@@ -1009,7 +1009,9 @@ impl
         self,
         service: &DepartmentsService,
     ) -> SDKResult<BaseResponse<GetDepartmentResponse>> {
-        service.get_with_tuple((self.department_id, self.request)).await
+        service
+            .get_with_tuple((self.department_id, self.request))
+            .await
     }
 
     async fn execute_with_options(
@@ -1017,7 +1019,9 @@ impl
         service: &DepartmentsService,
         _option: open_lark_core::core::req_option::RequestOption,
     ) -> SDKResult<BaseResponse<GetDepartmentResponse>> {
-        service.get_with_tuple((self.department_id, self.request)).await
+        service
+            .get_with_tuple((self.department_id, self.request))
+            .await
     }
 }
 
@@ -1342,7 +1346,9 @@ impl
         self,
         service: &DepartmentsService,
     ) -> SDKResult<BaseResponse<UpdateDepartmentResponse>> {
-        service.update_with_tuple((self.department_id, self.request)).await
+        service
+            .update_with_tuple((self.department_id, self.request))
+            .await
     }
 
     async fn execute_with_options(
@@ -1350,7 +1356,9 @@ impl
         service: &DepartmentsService,
         _option: open_lark_core::core::req_option::RequestOption,
     ) -> SDKResult<BaseResponse<UpdateDepartmentResponse>> {
-        service.update_with_tuple((self.department_id, self.request)).await
+        service
+            .update_with_tuple((self.department_id, self.request))
+            .await
     }
 }
 
@@ -1405,7 +1413,9 @@ impl
         self,
         service: &DepartmentsService,
     ) -> SDKResult<BaseResponse<DeleteDepartmentResponse>> {
-        service.delete_with_tuple((self.department_id, self.request)).await
+        service
+            .delete_with_tuple((self.department_id, self.request))
+            .await
     }
 
     async fn execute_with_options(
@@ -1413,7 +1423,9 @@ impl
         service: &DepartmentsService,
         _option: open_lark_core::core::req_option::RequestOption,
     ) -> SDKResult<BaseResponse<DeleteDepartmentResponse>> {
-        service.delete_with_tuple((self.department_id, self.request)).await
+        service
+            .delete_with_tuple((self.department_id, self.request))
+            .await
     }
 }
 

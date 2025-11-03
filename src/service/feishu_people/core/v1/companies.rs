@@ -907,7 +907,9 @@ impl
         self,
         service: &CompaniesService,
     ) -> SDKResult<BaseResponse<GetCompanyResponse>> {
-        service.get_with_tuple((self.company_id, self.request)).await
+        service
+            .get_with_tuple((self.company_id, self.request))
+            .await
     }
 
     async fn execute_with_options(
@@ -915,7 +917,9 @@ impl
         service: &CompaniesService,
         _option: open_lark_core::core::req_option::RequestOption,
     ) -> SDKResult<BaseResponse<GetCompanyResponse>> {
-        service.get_with_tuple((self.company_id, self.request)).await
+        service
+            .get_with_tuple((self.company_id, self.request))
+            .await
     }
 }
 
@@ -1129,7 +1133,9 @@ impl
         self,
         service: &CompaniesService,
     ) -> SDKResult<BaseResponse<UpdateCompanyResponse>> {
-        service.update_with_tuple((self.company_id, self.request)).await
+        service
+            .update_with_tuple((self.company_id, self.request))
+            .await
     }
 
     async fn execute_with_options(
@@ -1137,7 +1143,9 @@ impl
         service: &CompaniesService,
         _option: open_lark_core::core::req_option::RequestOption,
     ) -> SDKResult<BaseResponse<UpdateCompanyResponse>> {
-        service.update_with_tuple((self.company_id, self.request)).await
+        service
+            .update_with_tuple((self.company_id, self.request))
+            .await
     }
 }
 
@@ -1192,7 +1200,9 @@ impl
         self,
         service: &CompaniesService,
     ) -> SDKResult<BaseResponse<DeleteCompanyResponse>> {
-        service.delete_with_tuple((self.company_id, self.request)).await
+        service
+            .delete_with_tuple((self.company_id, self.request))
+            .await
     }
 
     async fn execute_with_options(
@@ -1200,7 +1210,9 @@ impl
         service: &CompaniesService,
         _option: open_lark_core::core::req_option::RequestOption,
     ) -> SDKResult<BaseResponse<DeleteCompanyResponse>> {
-        service.delete_with_tuple((self.company_id, self.request)).await
+        service
+            .delete_with_tuple((self.company_id, self.request))
+            .await
     }
 }
 
