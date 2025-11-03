@@ -80,10 +80,11 @@ impl RiskAssessmentService {
             },
         ];
 
+        let total_risks = risks.len() as i32;
         Ok(GetRiskAssessmentResultsResponse {
             risks,
             assessment_summary: RiskAssessmentSummary {
-                total_risks: risks.len() as i32,
+                total_risks,
                 critical_risks: 1,
                 high_risks: 2,
                 medium_risks: 0,

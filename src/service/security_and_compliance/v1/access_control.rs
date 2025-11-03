@@ -90,7 +90,7 @@ impl AccessControlService {
     ) -> SDKResult<BaseResponse<GetAccessPermissionsResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::POST,
+            http_method: reqwest::Method::POST,
             api_path: "/open-apis/security_and_compliance/v1/access_control/get_permissions"
                 .to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
@@ -110,7 +110,7 @@ impl AccessControlService {
     ) -> SDKResult<BaseResponse<CreateAccessPolicyResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::POST,
+            http_method: reqwest::Method::POST,
             api_path: "/open-apis/security_and_compliance/v1/access_control/create_policy"
                 .to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
@@ -152,7 +152,7 @@ impl AccessControlService {
     ) -> SDKResult<BaseResponse<GetUserPermissionSummaryResponse>> {
         // 构建API请求
         let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::POST,
+            http_method: reqwest::Method::POST,
             api_path:
                 "/open-apis/security_and_compliance/v1/access_control/get_user_permission_summary"
                     .to_string(),
