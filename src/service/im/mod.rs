@@ -32,12 +32,14 @@ impl ApiResponseTrait for SimpleResponse {
 #[derive(Debug, Clone)]
 pub struct ImService {
     pub service: SimpleService,
+    pub v1: crate::service::im::v1::MessageService,
 }
 
 impl ImService {
     pub fn new(config: Config) -> Self {
         Self {
             service: SimpleService::new(config),
+            v1: crate::service::im::v1::MessageService::new(),
         }
     }
 }

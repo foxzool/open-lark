@@ -212,6 +212,12 @@ impl LarkClientBuilder {
         self
     }
 
+    /// 设置是否启用令牌缓存
+    pub fn with_enable_token_cache(mut self, enable: bool) -> Self {
+        self.config_builder = self.config_builder.enable_token_cache(enable);
+        self
+    }
+
     /// 构建客户端实例
     pub fn build(self) -> LarkClient {
         let config = self.config_builder.build();
