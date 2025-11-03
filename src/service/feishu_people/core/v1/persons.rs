@@ -56,7 +56,6 @@
 //! ```
 
 use crate::core::{
-    
     api_resp::{ApiResponseTrait, BaseResponse},
     config::Config,
     constants::AccessTokenType,

@@ -5,7 +5,6 @@
 
 use crate::core::config::Config;
 
-
 /// 请假管理服务
 #[derive(Debug, Clone)]
 pub struct LeaveService {

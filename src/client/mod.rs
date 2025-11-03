@@ -172,7 +172,6 @@ impl LarkClient {
             search: SearchService::new(config.clone()),
             #[cfg(feature = "compensation-management")]
             /* compensation_management: CompensationManagementService::new(config), // Temporarily disabled */
-
             #[cfg(feature = "task")]
             task: TaskService::new(config.clone()),
 

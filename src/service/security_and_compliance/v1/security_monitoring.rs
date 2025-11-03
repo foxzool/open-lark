@@ -32,8 +32,8 @@
 //! }
 //! ```
 
-use crate::core::SDKResult;
 use super::*;
+use crate::core::SDKResult;
 use crate::core::{
     api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
 };

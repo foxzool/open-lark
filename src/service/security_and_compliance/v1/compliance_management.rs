@@ -18,8 +18,9 @@ use serde::{Deserialize, Serialize};
 
 // 导入共享数据结构
 use super::{
-    AccessCondition, ComplianceCheckItem, ComplianceEvidence, ComplianceStandard, ComplianceStatus, ImpactAssessment, MitigationStrategy,
-    PolicyStatus, ResponseAction, RiskAssessment, RiskMitigationAction, RiskStatus, TimeRange,
+    AccessCondition, ComplianceCheckItem, ComplianceEvidence, ComplianceStandard, ComplianceStatus,
+    ImpactAssessment, MitigationStrategy, PolicyStatus, ResponseAction, RiskAssessment,
+    RiskMitigationAction, RiskStatus, TimeRange,
 };
 
 /// 合规管理服务
