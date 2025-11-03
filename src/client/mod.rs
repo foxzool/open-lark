@@ -140,7 +140,7 @@ impl LarkClient {
             #[cfg(feature = "event")]
             event: EventService::new(unsafe { std::mem::transmute_copy(&config) }),
             #[cfg(feature = "auth")]
-            auth: AuthService::new(config.clone()),
+            auth: AuthenticationService::new(config.clone()),
             #[cfg(feature = "ai")]
             ai: AiService::new(config.clone()),
             #[cfg(feature = "aily")]
@@ -154,7 +154,6 @@ impl LarkClient {
             #[cfg(feature = "approval")]
             approval: ApprovalService::new(config.clone()),
             #[cfg(feature = "authentication")]
-            auth: AuthenticationService::new(config.clone()),
             #[cfg(feature = "bot")]
             bot: BotService::new(config.clone()),
             #[cfg(feature = "calendar")]
@@ -172,15 +171,20 @@ impl LarkClient {
             #[cfg(feature = "search")]
             search: SearchService::new(config.clone()),
             #[cfg(feature = "compensation-management")]
-            compensation_management: CompensationManagementService::new(config),
+            /* compensation_management: CompensationManagementService::new(config), // Temporarily disabled */
+
             #[cfg(feature = "task")]
             task: TaskService::new(config.clone()),
+
             #[cfg(feature = "okr")]
-            okr: OkrService::new(config),
+            okr: OkrService::new(config.clone()),
+
             #[cfg(feature = "feishu_people")]
             feishu_people: FeishuPeopleService::new(config.clone()),
+
             #[cfg(feature = "performance")]
             performance: PerformanceService::new(config.clone()),
+
             #[cfg(feature = "security_and_compliance")]
             security_and_compliance: SecurityAndComplianceService::new(config.clone()),
         }

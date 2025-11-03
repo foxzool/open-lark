@@ -1,8 +1,8 @@
-//! Security & Compliance 核心数据类型
 //!
 //! 定义所有服务模块共享的核心数据类型，避免循环导入问题
 
 use serde::{Deserialize, Serialize};
+use crate::core::SDKResult;
 
 /// 安全级别枚举
 #[derive(Debug, Clone, Serialize, Deserialize)]

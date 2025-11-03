@@ -1,4 +1,3 @@
-//! Security & Compliance安全与合规服务 v1版本
 //!
 //! 提供企业级安全与合规管理的完整功能：
 //! - 实时安全监控和威胁检测
@@ -9,6 +8,7 @@
 //! - 安全策略配置和自动化执行
 
 use crate::core::config::Config;
+use crate::core::SDKResult;
 use serde::{Deserialize, Serialize};
 
 // 导入特定类型以避免命名冲突

@@ -555,7 +555,7 @@ impl ReportService {
                                 TableRow {
                                     cells: vec![
                                         TableCell {
-                                            value: "技术研发部".to_string(),
+                                            value: serde_json::Value::String("技术研发部".to_string()),
                                         },
                                         TableCell { value: 450 },
                                         TableCell { value: 438 },
@@ -567,7 +567,7 @@ impl ReportService {
                                 TableRow {
                                     cells: vec![
                                         TableCell {
-                                            value: "市场营销部".to_string(),
+                                            value: serde_json::Value::String("市场营销部".to_string()),
                                         },
                                         TableCell { value: 180 },
                                         TableCell { value: 168 },

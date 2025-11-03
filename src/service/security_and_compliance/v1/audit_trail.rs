@@ -1,4 +1,4 @@
-//! AuditTrail审计追踪服务
+use crate::core::SDKResult;
 //!
 //! 提供企业级审计追踪功能：
 //! - 完整的操作日志记录
@@ -9,14 +9,12 @@
 //! - 审计日志归档管理
 
 use crate::core::config::Config;
-use crate::core::SDKResult;
 use serde::{Deserialize, Serialize};
 
 // 导入核心类型
-use super::types::*;
 
 // 导入共享数据结构
-use super::{PaginationInfo, SecurityEvent, SecurityLevel, TimeRange};
+use super::{PaginationInfo, SecurityEvent, SecurityLevel};
 
 /// 审计追踪服务
 #[derive(Debug, Clone)]

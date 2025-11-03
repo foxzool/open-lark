@@ -1,4 +1,4 @@
-//! AccessControl访问控制服务
+use crate::core::SDKResult;
 //!
 //! 提供企业级访问控制功能：
 //! - 基于角色的访问控制(RBAC)
@@ -10,17 +10,14 @@
 
 use crate::core::{
     api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
-    req_option::RequestOption, SDKResult,
 };
-use async_trait::async_trait;
 use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use serde::{Deserialize, Serialize};
 
 // 导入核心类型
-use super::types::*;
 
 // 导入共享数据结构
-use super::{AccessCondition, PolicyStatus, TimeRange};
+use super::{AccessCondition, PolicyStatus};
 
 /// 访问控制服务
 #[derive(Debug, Clone)]
