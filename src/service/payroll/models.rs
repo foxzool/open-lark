@@ -218,7 +218,7 @@ pub struct DatasourceRecordQueryRequest {
 }
 
 /// 外部数据源记录
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct DatasourceRecord {
     /// 记录ID
     pub record_id: Option<String>,
@@ -246,7 +246,7 @@ pub struct DatasourceListRequest {
 }
 
 /// 外部数据源配置
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Datasource {
     /// 数据源ID
     pub datasource_id: String,
@@ -267,7 +267,7 @@ pub struct Datasource {
 }
 
 /// 数据源字段配置
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct DatasourceFieldConfig {
     /// 字段ID
     pub field_id: String,

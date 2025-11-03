@@ -20,7 +20,7 @@ impl MessageService {
 impl MessageServiceInner {
     pub async fn create(
         &self,
-        request: crate::service::im::v1::message::CreateMessageRequest,
+        _request: crate::service::im::v1::message::CreateMessageRequest,
         _optional: Option<String>,
     ) -> Result<crate::service::im::v1::message::MessageResponse, String> {
         // 简化实现，用于测试
@@ -126,7 +126,10 @@ pub mod message {
             CreateMessageRequestBuilder::new()
         }
 
-        pub async fn execute(&self, message_service: &super::MessageServiceInner) -> Result<MessageResponse, String> {
+        pub async fn execute(
+            &self,
+            message_service: &super::MessageServiceInner,
+        ) -> Result<MessageResponse, String> {
             message_service.create(self.clone(), None).await
         }
     }
@@ -165,7 +168,10 @@ pub mod message {
             self.request
         }
 
-        pub async fn execute(self, message_service: &super::MessageServiceInner) -> Result<MessageResponse, String> {
+        pub async fn execute(
+            self,
+            message_service: &super::MessageServiceInner,
+        ) -> Result<MessageResponse, String> {
             self.request.execute(message_service).await
         }
     }
