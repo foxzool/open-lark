@@ -9,7 +9,10 @@
 use crate::core::SDKResult;
 
 use crate::core::{
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}, config::Config, constants::AccessTokenType, http::Transport,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
 };
 use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use serde::{Deserialize, Serialize};
@@ -82,7 +85,7 @@ impl ComplianceManagementService {
         // 构建API请求
         let mut api_req = ApiRequest::with_method_and_path(
             reqwest::Method::POST,
-            "/open-apis/security_and_compliance/v1/compliance_management/get_overview"
+            "/open-apis/security_and_compliance/v1/compliance_management/get_overview",
         );
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         api_req.body = serde_json::to_vec(request)?;

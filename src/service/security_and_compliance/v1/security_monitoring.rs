@@ -127,7 +127,7 @@ impl SecurityMonitoringService {
         // 构建API请求
         let mut api_req = ApiRequest::with_method_and_path(
             reqwest::Method::POST,
-            "/open-apis/security_and_compliance/v1/security_monitoring/get_real_time_events"
+            "/open-apis/security_and_compliance/v1/security_monitoring/get_real_time_events",
         );
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         api_req.body = serde_json::to_vec(request)?;
@@ -189,7 +189,7 @@ impl SecurityMonitoringService {
         // 构建API请求
         let mut api_req = ApiRequest::with_method_and_path(
             reqwest::Method::POST,
-            "/open-apis/security_and_compliance/v1/security_monitoring/get_posture_analysis"
+            "/open-apis/security_and_compliance/v1/security_monitoring/get_posture_analysis",
         );
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         api_req.body = serde_json::to_vec(request)?;
@@ -357,7 +357,7 @@ impl SecurityMonitoringService {
         // 构建API请求
         let mut api_req = ApiRequest::with_method_and_path(
             reqwest::Method::POST,
-            "/open-apis/security_and_compliance/v1/security_monitoring/get_attack_chain_analysis"
+            "/open-apis/security_and_compliance/v1/security_monitoring/get_attack_chain_analysis",
         );
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         api_req.body = serde_json::to_vec(request)?;

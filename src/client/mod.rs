@@ -135,7 +135,7 @@ impl LarkClient {
             board: BoardService::new(unsafe { std::mem::transmute_copy(&config) }),
             #[cfg(feature = "event")]
             event: EventService::new(unsafe { std::mem::transmute_copy(&config) }),
-              #[cfg(feature = "ai")]
+            #[cfg(feature = "ai")]
             ai: AiService::new(config.clone()),
             #[cfg(feature = "aily")]
             aily: AilyService::new(config.clone()),
