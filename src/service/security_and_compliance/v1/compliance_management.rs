@@ -1,5 +1,3 @@
-use crate::core::SDKResult;
-//!
 //! 提供企业级合规管理功能：
 //! - 多标准合规监控和管理
 //! - 自动化合规检查和报告
@@ -7,6 +5,8 @@ use crate::core::SDKResult;
 //! - 审计证据收集和管理
 //! - 法规更新跟踪和解读
 //! - 合规改进建议和实施
+
+use crate::core::SDKResult;
 
 use crate::core::{
     api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,

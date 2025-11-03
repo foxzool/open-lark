@@ -1,5 +1,3 @@
-use crate::core::SDKResult;
-//!
 //! 提供企业级访问控制功能：
 //! - 基于角色的访问控制(RBAC)
 //! - 细粒度权限管理
@@ -7,6 +5,8 @@ use crate::core::SDKResult;
 //! - 访问策略配置
 //! - 权限审计和监控
 //! - 身份验证集成
+
+use crate::core::SDKResult;
 
 use crate::core::{
     api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,

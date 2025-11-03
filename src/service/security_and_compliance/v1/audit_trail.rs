@@ -1,5 +1,3 @@
-use crate::core::SDKResult;
-//!
 //! 提供企业级审计追踪功能：
 //! - 完整的操作日志记录
 //! - 审计数据保护和完整性
@@ -7,6 +5,8 @@ use crate::core::SDKResult;
 //! - 审计事件分析和监控
 //! - 数据溯源和追踪
 //! - 审计日志归档管理
+
+use crate::core::SDKResult;
 
 use crate::core::config::Config;
 use serde::{Deserialize, Serialize};

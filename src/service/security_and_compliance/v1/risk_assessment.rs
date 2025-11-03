@@ -1,5 +1,3 @@
-use crate::core::SDKResult;
-//!
 //! 提供企业级风险评估和管理功能：
 //! - 全面的风险识别和评估
 //! - 量化的风险分析和计算
@@ -7,6 +5,8 @@ use crate::core::SDKResult;
 //! - 风险缓解措施管理
 //! - 风险趋势分析和预测
 //! - 风险报告和决策支持
+
+use crate::core::SDKResult;
 
 use crate::core::config::Config;
 use serde::{Deserialize, Serialize};
