@@ -560,8 +560,8 @@ impl ReportService {
                                                 "技术研发部".to_string(),
                                             ),
                                         },
-                                        TableCell { value: 450 },
-                                        TableCell { value: 438 },
+                                        TableCell { value: serde_json::Value::Number(serde_json::Number::from(450)) },
+                                        TableCell { value: serde_json::Value::Number(serde_json::Number::from(438)) },
                                         TableCell {
                                             value: "97.3%".into(),
                                         },
@@ -574,8 +574,8 @@ impl ReportService {
                                                 "市场营销部".to_string(),
                                             ),
                                         },
-                                        TableCell { value: 180 },
-                                        TableCell { value: 168 },
+                                        TableCell { value: serde_json::Value::Number(serde_json::Number::from(180)) },
+                                        TableCell { value: serde_json::Value::Number(serde_json::Number::from(168)) },
                                         TableCell {
                                             value: "93.3%".into(),
                                         },

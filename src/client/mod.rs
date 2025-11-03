@@ -108,7 +108,7 @@ pub struct LarkClient {
     #[cfg(feature = "search")]
     pub search: SearchService,
     #[cfg(feature = "compensation-management")]
-    pub compensation_management: CompensationManagementService,
+    /* pub compensation_management: CompensationManagementService, // Temporarily disabled due to config type mismatch */
     #[cfg(feature = "task")]
     pub task: TaskService,
     #[cfg(feature = "okr")]
@@ -169,7 +169,7 @@ impl LarkClient {
             #[cfg(feature = "search")]
             search: SearchService::new(config.clone()),
             #[cfg(feature = "compensation-management")]
-            /* compensation_management: CompensationManagementService::new(config), // Temporarily disabled */
+            /* compensation_management: CompensationManagementService::new(config), // Temporarily disabled due to config type mismatch */
             #[cfg(feature = "task")]
             task: TaskService::new(config.clone()),
 
