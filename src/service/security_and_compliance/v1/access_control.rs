@@ -17,7 +17,7 @@ use serde::{Deserialize, Serialize};
 // 导入核心类型
 
 // 导入共享数据结构
-use super::{AccessCondition, PolicyStatus};
+use super::{AccessCondition, PermissionLevel, PolicyStatus};
 
 /// 访问控制服务
 #[derive(Debug, Clone)]

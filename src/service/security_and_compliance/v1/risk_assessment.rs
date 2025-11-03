@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 // 导入核心类型
 
 // 导入共享数据结构
-use super::{ PaginationInfo, RiskAssessment };
+use super::{ PaginationInfo, RiskAssessment, RiskStatus, SecurityLevel, TimeRange };
 
 /// 风险评估服务
 #[derive(Debug, Clone)]

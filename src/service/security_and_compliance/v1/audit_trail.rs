@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 // 导入核心类型
 
 // 导入共享数据结构
-use super::{PaginationInfo, SecurityEvent, SecurityLevel};
+use super::{AuditAction, AuditResult, PaginationInfo, SecurityEvent, SecurityLevel};
 
 /// 审计追踪服务
 #[derive(Debug, Clone)]
