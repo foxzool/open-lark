@@ -1,5 +1,3 @@
-use crate::core::SDKResult;
-//!
 //! 提供企业级实时安全监控功能：
 //! - 实时威胁检测和分析
 //! - 安全事件智能分类和优先级排序
@@ -34,6 +32,7 @@ use crate::core::SDKResult;
 //! }
 //! ```
 
+use crate::core::SDKResult;
 use super::*;
 use crate::core::{
     api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,

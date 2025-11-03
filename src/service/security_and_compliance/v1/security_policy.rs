@@ -1,4 +1,3 @@
-use crate::core::SDKResult;
 //!
 //! 提供企业级安全策略管理功能：
 //! - 策略模板和配置管理
@@ -8,6 +7,7 @@ use crate::core::SDKResult;
 //! - 策略效果分析和优化
 //! - 跨系统策略同步和分发
 
+use crate::core::SDKResult;
 use crate::core::config::Config;
 use serde::{Deserialize, Serialize};
 
