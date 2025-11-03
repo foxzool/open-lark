@@ -154,9 +154,10 @@ impl ReportService {
             reports
         };
 
+        let total_count = filtered_reports.len() as i32;
         Ok(ListReportsResponse {
             reports: filtered_reports,
-            total_count: filtered_reports.len() as i32,
+            total_count,
             has_more: Some(false),
             next_page_token: None,
         })
@@ -304,7 +305,7 @@ impl ReportService {
     /// 获取报表模板列表
     pub async fn list_report_templates(
         &self,
-        request: &ListReportTemplatesRequest,
+        _request: &ListReportTemplatesRequest,
     ) -> SDKResult<ListReportTemplatesResponse> {
         Ok(ListReportTemplatesResponse {
             templates: vec![
@@ -1117,7 +1118,7 @@ pub struct ReportInfo {
 }
 
 /// 报表类型
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum ReportType {
     /// 系统报表
@@ -1129,7 +1130,7 @@ pub enum ReportType {
 }
 
 /// 报表状态
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum ReportStatus {
     /// 草稿

@@ -68,11 +68,10 @@ use crate::core::{
     config::Config,
     constants::AccessTokenType,
     http::Transport,
-    req_option::RequestOption,
 };
 
 // Use open_lark_core's error type for compatibility with async traits
-use crate::core::error::LarkAPIError;
+use open_lark_core::core::error::LarkAPIError;
 pub type SDKResult<T> = Result<T, LarkAPIError>;
 use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use serde::{Deserialize, Serialize};
@@ -994,12 +993,23 @@ impl
         BaseResponse<GetPositionResponse>,
     > for GetPositionBuilder
 {
+    fn build(self) -> (String, GetPositionRequest) {
+        (self.position_id, self.request)
+    }
+
     async fn execute(
-        &self,
+        self,
         service: &PositionsService,
-        _option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetPositionResponse>> {
-        service.get_with_tuple(self.clone().build()).await
+        service.get_with_tuple((self.position_id, self.request)).await
+    }
+
+    async fn execute_with_options(
+        self,
+        service: &PositionsService,
+        _option: open_lark_core::core::req_option::RequestOption,
+    ) -> SDKResult<BaseResponse<GetPositionResponse>> {
+        service.get_with_tuple((self.position_id, self.request)).await
     }
 }
 
@@ -1263,12 +1273,23 @@ impl
         BaseResponse<UpdatePositionResponse>,
     > for UpdatePositionBuilder
 {
+    fn build(self) -> (String, UpdatePositionRequest) {
+        (self.position_id, self.request)
+    }
+
     async fn execute(
-        &self,
+        self,
         service: &PositionsService,
-        _option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UpdatePositionResponse>> {
-        service.update_with_tuple(self.clone().build()).await
+        service.update_with_tuple((self.position_id, self.request)).await
+    }
+
+    async fn execute_with_options(
+        self,
+        service: &PositionsService,
+        _option: open_lark_core::core::req_option::RequestOption,
+    ) -> SDKResult<BaseResponse<UpdatePositionResponse>> {
+        service.update_with_tuple((self.position_id, self.request)).await
     }
 }
 
@@ -1315,12 +1336,23 @@ impl
         BaseResponse<DeletePositionResponse>,
     > for DeletePositionBuilder
 {
+    fn build(self) -> (String, DeletePositionRequest) {
+        (self.position_id, self.request)
+    }
+
     async fn execute(
-        &self,
+        self,
         service: &PositionsService,
-        _option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<DeletePositionResponse>> {
-        service.delete_with_tuple(self.clone().build()).await
+        service.delete_with_tuple((self.position_id, self.request)).await
+    }
+
+    async fn execute_with_options(
+        self,
+        service: &PositionsService,
+        _option: open_lark_core::core::req_option::RequestOption,
+    ) -> SDKResult<BaseResponse<DeletePositionResponse>> {
+        service.delete_with_tuple((self.position_id, self.request)).await
     }
 }
 
@@ -1467,13 +1499,26 @@ impl
         BaseResponse<GetPositionHoldersResponse>,
     > for GetPositionHoldersBuilder
 {
+    fn build(self) -> (String, GetPositionHoldersRequest) {
+        (self.position_id, self.request)
+    }
+
     async fn execute(
-        &self,
+        self,
         service: &PositionsService,
-        _option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetPositionHoldersResponse>> {
         service
-            .get_position_holders_with_tuple(self.clone().build())
+            .get_position_holders_with_tuple((self.position_id, self.request))
+            .await
+    }
+
+    async fn execute_with_options(
+        self,
+        service: &PositionsService,
+        _option: open_lark_core::core::req_option::RequestOption,
+    ) -> SDKResult<BaseResponse<GetPositionHoldersResponse>> {
+        service
+            .get_position_holders_with_tuple((self.position_id, self.request))
             .await
     }
 }

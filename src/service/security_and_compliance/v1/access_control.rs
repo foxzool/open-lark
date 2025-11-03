@@ -614,9 +614,9 @@ impl CreateAccessPolicyBuilder {
 }
 
 impl Default for CreateAccessPolicyBuilder {
-    //    fn default() -> Self {
-    //        Self::new()
-    //    }
+    fn default() -> Self {
+        Self { }
+    }
 }
 
 // 应用ExecutableBuilder trait
@@ -661,9 +661,9 @@ impl GetUserPermissionSummaryBuilder {
 }
 
 impl Default for GetUserPermissionSummaryBuilder {
-    //    fn default() -> Self {
-    //        Self::new()
-    //    }
+    fn default() -> Self {
+        Self { }
+    }
 }
 
 // 应用ExecutableBuilder trait

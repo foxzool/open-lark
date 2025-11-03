@@ -1194,9 +1194,9 @@ impl GetSecurityPostureAnalysisBuilder {
 }
 
 impl Default for GetSecurityPostureAnalysisBuilder {
-    //    fn default() -> Self {
-    //        Self::new()
-    //    }
+        fn default() -> Self {
+            Self { }
+    }
 }
 
 // 应用ExecutableBuilder trait
@@ -1259,9 +1259,9 @@ impl GetAnomalyDetectionResultsBuilder {
 }
 
 impl Default for GetAnomalyDetectionResultsBuilder {
-    //    fn default() -> Self {
-    //        Self::new()
-    //    }
+        fn default() -> Self {
+            Self { }
+    }
 }
 
 // 应用ExecutableBuilder trait
@@ -1312,9 +1312,9 @@ impl GetAttackChainAnalysisBuilder {
 }
 
 impl Default for GetAttackChainAnalysisBuilder {
-    //    fn default() -> Self {
-    //        Self::new()
-    //    }
+        fn default() -> Self {
+            Self { }
+    }
 }
 
 // 应用ExecutableBuilder trait

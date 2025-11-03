@@ -129,8 +129,8 @@ impl ApprovalDefinitionService {
     /// 更新审批定义
     pub async fn update(
         &self,
-        approval_code: &str,
-        request: &UpdateApprovalRequest,
+        _approval_code: &str,
+        _request: &UpdateApprovalRequest,
     ) -> SDKResult<ApprovalBaseResponse<()>> {
         // 模拟实现
         Ok(ApprovalBaseResponse {
@@ -141,7 +141,7 @@ impl ApprovalDefinitionService {
     }
 
     /// 删除审批定义
-    pub async fn delete(&self, approval_code: &str) -> SDKResult<ApprovalBaseResponse<()>> {
+    pub async fn delete(&self, _approval_code: &str) -> SDKResult<ApprovalBaseResponse<()>> {
         // 模拟实现
         Ok(ApprovalBaseResponse {
             code: 0,
@@ -153,7 +153,7 @@ impl ApprovalDefinitionService {
     /// 查询审批定义列表
     pub async fn list(
         &self,
-        request: &ListApprovalRequest,
+        _request: &ListApprovalRequest,
     ) -> SDKResult<ApprovalBaseResponse<ListApprovalResponse>> {
         // 模拟实现
         let approvals = vec![

@@ -27,7 +27,7 @@ impl MonitoringService {
     /// 获取系统和业务的实时性能指标
     pub async fn get_real_time_monitoring(
         &self,
-        request: &GetRealTimeMonitoringRequest,
+        _request: &GetRealTimeMonitoringRequest,
     ) -> SDKResult<GetRealTimeMonitoringResponse> {
         let current_time = chrono::Utc::now().timestamp();
 
@@ -105,7 +105,7 @@ impl MonitoringService {
         ];
 
         Ok(GetRealTimeMonitoringResponse {
-            metrics,
+            metrics: metrics.clone(),
             monitoring_summary: MonitoringSummary {
                 total_metrics: metrics.len() as i32,
                 healthy_metrics: 2,
@@ -176,6 +176,7 @@ impl MonitoringService {
 
         Ok(GetAlertHistoryResponse {
             alerts: alerts.clone(),
+            total_count: alerts.len() as i32,
             alert_statistics: AlertStatistics {
                 total_alerts: 156,
                 critical_alerts: 12,
@@ -284,7 +285,7 @@ impl MonitoringService {
     /// 获取综合监控仪表板数据
     pub async fn get_monitoring_dashboard(
         &self,
-        request: &GetMonitoringDashboardRequest,
+        _request: &GetMonitoringDashboardRequest,
     ) -> SDKResult<GetMonitoringDashboardResponse> {
         let current_time = chrono::Utc::now().timestamp();
 

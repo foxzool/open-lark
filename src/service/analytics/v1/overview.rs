@@ -360,7 +360,7 @@ impl OverviewService {
     /// 获取数据质量概览
     pub async fn get_data_quality_overview(
         &self,
-        request: &GetDataQualityOverviewRequest,
+        _request: &GetDataQualityOverviewRequest,
     ) -> SDKResult<GetDataQualityOverviewResponse> {
         Ok(GetDataQualityOverviewResponse {
             overall_score: 92.3,

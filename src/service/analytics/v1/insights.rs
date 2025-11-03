@@ -27,7 +27,7 @@ impl InsightsService {
     /// 自动分析数据并生成有价值的业务洞察
     pub async fn get_intelligent_insights(
         &self,
-        request: &GetIntelligentInsightsRequest,
+        _request: &GetIntelligentInsightsRequest,
     ) -> SDKResult<GetIntelligentInsightsResponse> {
         // 模拟智能分析计算
         let insights = vec![
@@ -277,7 +277,7 @@ impl InsightsService {
     /// 基于数据分析提供具体的决策建议和行动方案
     pub async fn get_decision_recommendations(
         &self,
-        request: &GetDecisionRecommendationsRequest,
+        _request: &GetDecisionRecommendationsRequest,
     ) -> SDKResult<GetDecisionRecommendationsResponse> {
         let recommendations = vec![DecisionRecommendation {
             recommendation_id: "rec_001".to_string(),
