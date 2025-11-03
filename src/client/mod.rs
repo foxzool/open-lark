@@ -22,8 +22,6 @@ use crate::service::app_engine::AppengineService;
 use crate::service::approval::ApprovalService;
 #[cfg(feature = "attendance")]
 use crate::service::attendance::AttendanceService;
-#[cfg(feature = "auth")]
-use crate::service::auth::AuthService;
 #[cfg(feature = "authentication")]
 use crate::service::authentication::AuthenticationService;
 #[cfg(feature = "bot")]

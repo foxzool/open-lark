@@ -17,11 +17,7 @@ use serde::{Deserialize, Serialize};
 // 导入核心类型
 
 // 导入共享数据结构
-use super::{
-    AccessCondition, ComplianceCheckItem, ComplianceEvidence, ComplianceStandard, ComplianceStatus,
-    ImpactAssessment, MitigationStrategy, PolicyStatus, ResponseAction, RiskAssessment,
-    RiskMitigationAction, RiskStatus, TimeRange,
-};
+use super::{ComplianceStandard, ComplianceStatus, RiskAssessment, TimeRange};
 
 /// 合规管理服务
 #[derive(Debug, Clone)]

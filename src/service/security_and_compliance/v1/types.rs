@@ -1,7 +1,6 @@
 //!
 //! 定义所有服务模块共享的核心数据类型，避免循环导入问题
 
-use crate::core::SDKResult;
 use serde::{Deserialize, Serialize};
 
 /// 安全级别枚举
