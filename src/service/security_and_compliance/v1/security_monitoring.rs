@@ -35,7 +35,10 @@
 use super::*;
 use crate::core::SDKResult;
 use crate::core::{
-    api_resp::{BaseResponse, ApiResponseTrait, ResponseFormat}, config::Config, constants::AccessTokenType, http::Transport,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
 };
 use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use serde::{Deserialize, Serialize};
