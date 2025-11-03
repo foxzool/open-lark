@@ -451,7 +451,7 @@ impl ReportService {
     fn generate_report_data(
         &self,
         report_id: &str,
-        parameters: &std::collections::HashMap<String, serde_json::Value>,
+        _parameters: &std::collections::HashMap<String, serde_json::Value>,
     ) -> ReportData {
         ReportData {
             report_id: report_id.to_string(),

@@ -735,6 +735,7 @@ mod tests {
             items: vec!["item1".to_string(), "item2".to_string()],
             page_token: Some("token123".to_string()),
             has_more: Some(true),
+            total: Some(2),
         };
         let json = serde_json::to_string(&page).unwrap();
         assert!(json.contains("token123"));

@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 /// 分页响应通用结构
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PageResponse<T> {
     /// 数据列表
     pub items: Vec<T>,
@@ -13,7 +13,7 @@ pub struct PageResponse<T> {
 }
 
 /// I18n 多语言文本
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct I18nText {
     /// 中文
     pub zh_cn: Option<String>,
@@ -34,7 +34,7 @@ impl Default for I18nText {
 }
 
 /// 发薪明细列表请求
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PaymentDetailListRequest {
     /// 发薪活动ID
     pub payment_activity_id: String,
@@ -474,7 +474,7 @@ pub struct PaygroupListRequest {
 }
 
 /// 薪资组基本信息
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Paygroup {
     /// 薪资组ID
     pub paygroup_id: String,
