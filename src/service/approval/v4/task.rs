@@ -51,12 +51,12 @@ impl TaskService {
     /// 同意审批任务
     pub async fn approve(
         &self,
-        task_id: &str,
+        _task_id: &str,
         comment: Option<String>,
-        user_id_type: Option<&str>,
+        _user_id_type: Option<&str>,
     ) -> SDKResult<ApprovalBaseResponse<ProcessTaskResponse>> {
         let request = ProcessTaskRequest {
-            task_id: task_id.to_string(),
+            task_id: _task_id.to_string(),
             action: TaskAction::Approve,
             comment,
             transfer_to_user_id: None,
@@ -68,12 +68,12 @@ impl TaskService {
     /// 拒绝审批任务
     pub async fn reject(
         &self,
-        task_id: &str,
+        _task_id: &str,
         comment: Option<String>,
-        user_id_type: Option<&str>,
+        _user_id_type: Option<&str>,
     ) -> SDKResult<ApprovalBaseResponse<ProcessTaskResponse>> {
         let request = ProcessTaskRequest {
-            task_id: task_id.to_string(),
+            task_id: _task_id.to_string(),
             action: TaskAction::Reject,
             comment,
             transfer_to_user_id: None,
@@ -85,13 +85,13 @@ impl TaskService {
     /// 转交审批任务
     pub async fn transfer(
         &self,
-        task_id: &str,
+        _task_id: &str,
         transfer_to_user_id: &str,
         comment: Option<String>,
-        user_id_type: Option<&str>,
+        _user_id_type: Option<&str>,
     ) -> SDKResult<ApprovalBaseResponse<ProcessTaskResponse>> {
         let request = ProcessTaskRequest {
-            task_id: task_id.to_string(),
+            task_id: _task_id.to_string(),
             action: TaskAction::Transfer,
             comment,
             transfer_to_user_id: Some(transfer_to_user_id.to_string()),
@@ -103,12 +103,12 @@ impl TaskService {
     /// 退回审批任务
     pub async fn rollback(
         &self,
-        task_id: &str,
+        _task_id: &str,
         comment: Option<String>,
-        user_id_type: Option<&str>,
+        _user_id_type: Option<&str>,
     ) -> SDKResult<ApprovalBaseResponse<ProcessTaskResponse>> {
         let request = ProcessTaskRequest {
-            task_id: task_id.to_string(),
+            task_id: _task_id.to_string(),
             action: TaskAction::Rollback,
             comment,
             transfer_to_user_id: None,
@@ -120,13 +120,13 @@ impl TaskService {
     /// 加签审批任务
     pub async fn add_approver(
         &self,
-        task_id: &str,
+        _task_id: &str,
         add_approvers: Vec<String>,
         comment: Option<String>,
-        user_id_type: Option<&str>,
+        _user_id_type: Option<&str>,
     ) -> SDKResult<ApprovalBaseResponse<ProcessTaskResponse>> {
         let request = ProcessTaskRequest {
-            task_id: task_id.to_string(),
+            task_id: _task_id.to_string(),
             action: TaskAction::AddApprover,
             comment,
             transfer_to_user_id: None,
@@ -170,7 +170,7 @@ impl TaskService {
     /// 查询审批任务列表
     pub async fn query(
         &self,
-        request: &QueryTaskRequest,
+        _request: &QueryTaskRequest,
     ) -> SDKResult<ApprovalBaseResponse<QueryTaskResponse>> {
         // 模拟实现
         let tasks = vec![
@@ -240,7 +240,7 @@ impl TaskService {
     pub async fn batch_get(
         &self,
         task_ids: Vec<String>,
-        user_id_type: Option<&str>,
+        _user_id_type: Option<&str>,
     ) -> SDKResult<ApprovalBaseResponse<Vec<ApprovalTask>>> {
         // 模拟实现
         let tasks = task_ids
@@ -275,14 +275,14 @@ impl TaskService {
     /// 获取审批任务操作记录
     pub async fn get_task_operations(
         &self,
-        task_id: &str,
-        user_id_type: Option<&str>,
+        _task_id: &str,
+        _user_id_type: Option<&str>,
     ) -> SDKResult<ApprovalBaseResponse<Vec<TaskOperation>>> {
         // 模拟实现
         let operations = vec![
             TaskOperation {
                 operation_id: "op_001".to_string(),
-                task_id: task_id.to_string(),
+                task_id: _task_id.to_string(),
                 operator: UserInfo {
                     user_id: "user_001".to_string(),
                     name: Some("张三".to_string()),
@@ -296,7 +296,7 @@ impl TaskService {
             },
             TaskOperation {
                 operation_id: "op_002".to_string(),
-                task_id: task_id.to_string(),
+                task_id: _task_id.to_string(),
                 operator: UserInfo {
                     user_id: "manager_001".to_string(),
                     name: Some("李经理".to_string()),
@@ -320,8 +320,8 @@ impl TaskService {
     /// 催办审批任务
     pub async fn urge_task(
         &self,
-        task_id: &str,
-        user_id_type: Option<&str>,
+        _task_id: &str,
+        _user_id_type: Option<&str>,
     ) -> SDKResult<ApprovalBaseResponse<()>> {
         // 模拟实现
         Ok(ApprovalBaseResponse {

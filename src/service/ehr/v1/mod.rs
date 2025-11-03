@@ -39,7 +39,6 @@ pub use attendance::{
     AttendanceExceptionProcessData,
 
     AttendanceListResponse,
-
     // 数据结构体
     AttendanceRecord,
     // 服务
@@ -73,6 +72,7 @@ pub use attendance::{
     // API请求响应类型
     GetAttendanceRecordsRequest,
     GetAttendanceRecordsResponse,
+
     GetAttendanceReportBuilder,
 
     GetAttendanceReportRequest,
@@ -155,13 +155,13 @@ impl EhrServiceV1 {
     }
 
     /// 获取员工详情
-    pub async fn get_employee(&self, employee_id: &str) -> SDKResult<EmployeeResponse> {
+    pub async fn get_employee(&self, _employee_id: &str) -> SDKResult<EmployeeResponse> {
         // 模拟实现
         Ok(EmployeeResponse {
             code: 0,
             msg: "success".to_string(),
             data: Some(Employee {
-                employee_id: employee_id.to_string(),
+                employee_id: _employee_id.to_string(),
                 employee_number: Some("E2024001".to_string()),
                 name: "张三".to_string(),
                 english_name: Some("Zhang San".to_string()),
@@ -255,7 +255,7 @@ impl EhrServiceV1 {
     /// 查询员工列表
     pub async fn query_employees(
         &self,
-        request: &QueryEmployeeRequest,
+        _request: &QueryEmployeeRequest,
     ) -> SDKResult<EmployeeListResponse> {
         // 模拟实现
         let employees = vec![
@@ -319,7 +319,7 @@ impl EhrServiceV1 {
     }
 
     /// 删除员工
-    pub async fn delete_employee(&self, employee_id: &str) -> SDKResult<EmptyResponse> {
+    pub async fn delete_employee(&self, _employee_id: &str) -> SDKResult<EmptyResponse> {
         // 模拟实现
         Ok(EmptyResponse {
             code: 0,
@@ -537,7 +537,7 @@ impl EhrServiceV1 {
     /// 获取员工薪资信息
     pub async fn get_employee_salary(
         &self,
-        employee_id: &str,
+        _employee_id: &str,
         period: Option<&str>,
     ) -> SDKResult<BaseResponse<Salary>> {
         // 模拟实现
@@ -546,7 +546,7 @@ impl EhrServiceV1 {
             msg: "success".to_string(),
             data: Some(Salary {
                 salary_id: "salary_001".to_string(),
-                employee_id: employee_id.to_string(),
+                employee_id: _employee_id.to_string(),
                 base_salary: 15000.0,
                 position_salary: Some(5000.0),
                 performance_salary: Some(3000.0),
@@ -590,7 +590,7 @@ impl EhrServiceV1 {
     }
 
     /// 薪资调整
-    pub async fn adjust_salary(&self, adjustment: &SalaryAdjustment) -> SDKResult<EmptyResponse> {
+    pub async fn adjust_salary(&self, _adjustment: &SalaryAdjustment) -> SDKResult<EmptyResponse> {
         // 模拟实现
         Ok(EmptyResponse {
             code: 0,
@@ -603,15 +603,15 @@ impl EhrServiceV1 {
     /// 获取员工考勤记录
     pub async fn get_attendance_records(
         &self,
-        employee_id: &str,
-        start_date: &str,
-        end_date: &str,
+        _employee_id: &str,
+        _start_date: &str,
+        _end_date: &str,
     ) -> SDKResult<AttendanceListResponse> {
         // 模拟实现
         let records = vec![
             AttendanceRecord {
                 record_id: "att_001".to_string(),
-                employee_id: employee_id.to_string(),
+                employee_id: _employee_id.to_string(),
                 attendance_date: "2024-01-15".to_string(),
                 check_in_time: Some("2024-01-15T08:55:00Z".to_string()),
                 check_out_time: Some("2024-01-15T18:05:00Z".to_string()),
@@ -625,7 +625,7 @@ impl EhrServiceV1 {
             },
             AttendanceRecord {
                 record_id: "att_002".to_string(),
-                employee_id: employee_id.to_string(),
+                employee_id: _employee_id.to_string(),
                 attendance_date: "2024-01-16".to_string(),
                 check_in_time: Some("2024-01-16T09:15:00Z".to_string()),
                 check_out_time: Some("2024-01-16T18:30:00Z".to_string()),
@@ -639,7 +639,7 @@ impl EhrServiceV1 {
             },
             AttendanceRecord {
                 record_id: "att_003".to_string(),
-                employee_id: employee_id.to_string(),
+                employee_id: _employee_id.to_string(),
                 attendance_date: "2024-01-17".to_string(),
                 check_in_time: Some("2024-01-17T08:45:00Z".to_string()),
                 check_out_time: Some("2024-01-17T17:30:00Z".to_string()),
@@ -655,10 +655,10 @@ impl EhrServiceV1 {
         Ok(AttendanceListResponse {
             code: 0,
             msg: "success".to_string(),
-            data: Some(PageResponse {
+            data: Some(GetAttendanceRecordsResponse {
                 items: records,
-                page_token: None,
                 has_more: Some(false),
+                page_token: None,
                 total: Some(3),
             }),
         })
@@ -686,14 +686,14 @@ impl EhrServiceV1 {
     /// 获取员工绩效评估
     pub async fn get_employee_performance(
         &self,
-        employee_id: &str,
+        _employee_id: &str,
         period: &str,
     ) -> SDKResult<PerformanceListResponse> {
         // 模拟实现
         let evaluations = vec![
             PerformanceEvaluation {
                 evaluation_id: "eval_001".to_string(),
-                employee_id: employee_id.to_string(),
+                employee_id: _employee_id.to_string(),
                 evaluation_period: period.to_string(),
                 evaluation_type: "季度评估".to_string(),
                 evaluator_id: "manager_001".to_string(),

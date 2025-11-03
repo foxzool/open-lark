@@ -125,15 +125,12 @@ impl SecurityMonitoringService {
         request: &GetRealTimeSecurityEventsRequest,
     ) -> SDKResult<BaseResponse<GetRealTimeSecurityEventsResponse>> {
         // 构建API请求
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path:
-                "/open-apis/security_and_compliance/v1/security_monitoring/get_real_time_events"
-                    .to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::with_method_and_path(
+            reqwest::Method::POST,
+            "/open-apis/security_and_compliance/v1/security_monitoring/get_real_time_events"
+        );
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(request)?;
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -190,15 +187,12 @@ impl SecurityMonitoringService {
         request: &GetSecurityPostureAnalysisRequest,
     ) -> SDKResult<BaseResponse<GetSecurityPostureAnalysisResponse>> {
         // 构建API请求
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path:
-                "/open-apis/security_and_compliance/v1/security_monitoring/get_posture_analysis"
-                    .to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::with_method_and_path(
+            reqwest::Method::POST,
+            "/open-apis/security_and_compliance/v1/security_monitoring/get_posture_analysis"
+        );
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(request)?;
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -254,13 +248,12 @@ impl SecurityMonitoringService {
         request: &GetAnomalyDetectionResultsRequest,
     ) -> SDKResult<BaseResponse<GetAnomalyDetectionResultsResponse>> {
         // 构建API请求
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: "/open-apis/security_and_compliance/v1/security_monitoring/get_anomaly_detection_results".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::with_method_and_path(
+            reqwest::Method::POST,
+            "/open-apis/security_and_compliance/v1/security_monitoring/get_anomaly_detection_results"
+        );
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(request)?;
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -362,13 +355,12 @@ impl SecurityMonitoringService {
         request: &GetAttackChainAnalysisRequest,
     ) -> SDKResult<BaseResponse<GetAttackChainAnalysisResponse>> {
         // 构建API请求
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: "/open-apis/security_and_compliance/v1/security_monitoring/get_attack_chain_analysis".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::with_method_and_path(
+            reqwest::Method::POST,
+            "/open-apis/security_and_compliance/v1/security_monitoring/get_attack_chain_analysis"
+        );
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(request)?;
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -1354,24 +1346,24 @@ impl SecurityMonitoringService {
 // 为响应类型实现 ApiResponseTrait
 impl ApiResponseTrait for GetRealTimeSecurityEventsResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::Json
+        ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for GetSecurityPostureAnalysisResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::Json
+        ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for GetAnomalyDetectionResultsResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::Json
+        ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for GetAttackChainAnalysisResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::Json
+        ResponseFormat::Data
     }
 }

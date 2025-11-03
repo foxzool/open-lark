@@ -59,13 +59,13 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse},
     config::Config,
     constants::AccessTokenType,
+    error::LarkAPIError,
     http::Transport,
+    SDKResult,
 };
-
-// Use open_lark_core's error type for compatibility with async traits
-use open_lark_core::core::error::LarkAPIError;
-pub type SDKResult<T> = Result<T, LarkAPIError>;
-use open_lark_core::core::api_req::ApiRequest;
+use open_lark_core::core::{
+    api_req::ApiRequest, error::LarkAPIError as CoreLarkAPIError, SDKResult as CoreSDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 /// 人员管理服务
@@ -160,14 +160,14 @@ impl PersonsService {
         }
 
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::GET,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
             api_path: format!("/open-apis/feishu_people/core/v1/persons/{}", user_id),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -211,13 +211,13 @@ impl PersonsService {
         request: &BatchGetPersonsRequest,
     ) -> SDKResult<BaseResponse<BatchGetPersonsResponse>> {
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::POST,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
             api_path: "/open-apis/feishu_people/core/v1/persons/batch_get".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -276,14 +276,14 @@ impl PersonsService {
         }
 
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::GET,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
             api_path: "/open-apis/feishu_people/core/v1/persons/list_by_department".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -329,13 +329,13 @@ impl PersonsService {
         request: &SearchPersonsRequest,
     ) -> SDKResult<BaseResponse<SearchPersonsResponse>> {
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::POST,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
             api_path: "/open-apis/feishu_people/core/v1/persons/search".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -387,13 +387,13 @@ impl PersonsService {
         request: &UpdatePersonRequest,
     ) -> SDKResult<BaseResponse<UpdatePersonResponse>> {
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::PUT,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::PUT,
             api_path: format!("/open-apis/feishu_people/core/v1/persons/{}", user_id),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -439,16 +439,16 @@ impl PersonsService {
         request: &UpdatePersonStatusRequest,
     ) -> SDKResult<BaseResponse<UpdatePersonStatusResponse>> {
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::PUT,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::PUT,
             api_path: format!(
                 "/open-apis/feishu_people/core/v1/persons/{}/status",
                 user_id
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -503,17 +503,17 @@ impl PersonsService {
         }
 
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::GET,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
             api_path: format!(
                 "/open-apis/feishu_people/core/v1/persons/{}/avatar",
                 user_id
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -566,17 +566,17 @@ impl PersonsService {
         }
 
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::POST,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
             api_path: format!(
                 "/open-apis/feishu_people/core/v1/persons/{}/avatar",
                 user_id
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: request.image_data.clone(),
             query_params,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -627,17 +627,17 @@ impl PersonsService {
         }
 
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::GET,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
             api_path: format!(
                 "/open-apis/feishu_people/core/v1/persons/{}/basic_info",
                 user_id
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -889,6 +889,31 @@ impl Default for GetPersonBuilder {
     }
 }
 
+fn map_sdk_error(err: LarkAPIError) -> CoreLarkAPIError {
+    match err {
+        LarkAPIError::IOErr(msg) => CoreLarkAPIError::IOErr(msg),
+        LarkAPIError::IllegalParamError(msg) => CoreLarkAPIError::IllegalParamError(msg),
+        LarkAPIError::DeserializeError(msg) => CoreLarkAPIError::DeserializeError(msg),
+        LarkAPIError::RequestError(msg) => CoreLarkAPIError::RequestError(msg),
+        LarkAPIError::UrlParseError(msg) => CoreLarkAPIError::UrlParseError(msg),
+        LarkAPIError::ApiError {
+            code,
+            message,
+            request_id,
+        } => CoreLarkAPIError::ApiError {
+            code,
+            message,
+            request_id,
+        },
+        LarkAPIError::MissingAccessToken => CoreLarkAPIError::MissingAccessToken,
+        LarkAPIError::BadRequest(msg) => CoreLarkAPIError::BadRequest(msg),
+        LarkAPIError::DataError(msg) => CoreLarkAPIError::DataError(msg),
+        LarkAPIError::APIError { code, msg, error } => {
+            CoreLarkAPIError::APIError { code, msg, error }
+        }
+    }
+}
+
 // 应用ExecutableBuilder trait - 使用自定义实现
 #[async_trait::async_trait]
 impl
@@ -902,16 +927,25 @@ impl
         (self.user_id, self.request)
     }
 
-    async fn execute(self, service: &PersonsService) -> SDKResult<BaseResponse<GetPersonResponse>> {
-        service.get_with_tuple(self.build()).await
+    async fn execute(
+        self,
+        service: &PersonsService,
+    ) -> CoreSDKResult<BaseResponse<GetPersonResponse>> {
+        service
+            .get_with_tuple(self.build())
+            .await
+            .map_err(map_sdk_error)
     }
 
     async fn execute_with_options(
         self,
         service: &PersonsService,
         _option: open_lark_core::core::req_option::RequestOption,
-    ) -> SDKResult<BaseResponse<GetPersonResponse>> {
-        service.get_with_tuple(self.build()).await
+    ) -> CoreSDKResult<BaseResponse<GetPersonResponse>> {
+        service
+            .get_with_tuple(self.build())
+            .await
+            .map_err(map_sdk_error)
     }
 }
 
@@ -970,16 +1004,22 @@ impl
     async fn execute(
         self,
         service: &PersonsService,
-    ) -> SDKResult<BaseResponse<BatchGetPersonsResponse>> {
-        service.batch_get(&self.build()).await
+    ) -> CoreSDKResult<BaseResponse<BatchGetPersonsResponse>> {
+        service
+            .batch_get(&self.build())
+            .await
+            .map_err(map_sdk_error)
     }
 
     async fn execute_with_options(
         self,
         service: &PersonsService,
         _option: open_lark_core::core::req_option::RequestOption,
-    ) -> SDKResult<BaseResponse<BatchGetPersonsResponse>> {
-        service.batch_get(&self.build()).await
+    ) -> CoreSDKResult<BaseResponse<BatchGetPersonsResponse>> {
+        service
+            .batch_get(&self.build())
+            .await
+            .map_err(map_sdk_error)
     }
 }
 
@@ -1048,16 +1088,22 @@ impl
     async fn execute(
         self,
         service: &PersonsService,
-    ) -> SDKResult<BaseResponse<GetPersonsByDepartmentResponse>> {
-        service.get_by_department(&self.build()).await
+    ) -> CoreSDKResult<BaseResponse<GetPersonsByDepartmentResponse>> {
+        service
+            .get_by_department(&self.build())
+            .await
+            .map_err(map_sdk_error)
     }
 
     async fn execute_with_options(
         self,
         service: &PersonsService,
         _option: open_lark_core::core::req_option::RequestOption,
-    ) -> SDKResult<BaseResponse<GetPersonsByDepartmentResponse>> {
-        service.get_by_department(&self.build()).await
+    ) -> CoreSDKResult<BaseResponse<GetPersonsByDepartmentResponse>> {
+        service
+            .get_by_department(&self.build())
+            .await
+            .map_err(map_sdk_error)
     }
 }
 
@@ -1127,16 +1173,16 @@ impl
     async fn execute(
         self,
         service: &PersonsService,
-    ) -> SDKResult<BaseResponse<SearchPersonsResponse>> {
-        service.search(&self.build()).await
+    ) -> CoreSDKResult<BaseResponse<SearchPersonsResponse>> {
+        service.search(&self.build()).await.map_err(map_sdk_error)
     }
 
     async fn execute_with_options(
         self,
         service: &PersonsService,
         _option: open_lark_core::core::req_option::RequestOption,
-    ) -> SDKResult<BaseResponse<SearchPersonsResponse>> {
-        service.search(&self.build()).await
+    ) -> CoreSDKResult<BaseResponse<SearchPersonsResponse>> {
+        service.search(&self.build()).await.map_err(map_sdk_error)
     }
 }
 
@@ -1196,16 +1242,22 @@ impl
     async fn execute(
         self,
         service: &PersonsService,
-    ) -> SDKResult<BaseResponse<UpdatePersonResponse>> {
-        service.update_with_tuple(self.build()).await
+    ) -> CoreSDKResult<BaseResponse<UpdatePersonResponse>> {
+        service
+            .update_with_tuple(self.build())
+            .await
+            .map_err(map_sdk_error)
     }
 
     async fn execute_with_options(
         self,
         service: &PersonsService,
         _option: open_lark_core::core::req_option::RequestOption,
-    ) -> SDKResult<BaseResponse<UpdatePersonResponse>> {
-        service.update_with_tuple(self.build()).await
+    ) -> CoreSDKResult<BaseResponse<UpdatePersonResponse>> {
+        service
+            .update_with_tuple(self.build())
+            .await
+            .map_err(map_sdk_error)
     }
 }
 
@@ -1265,16 +1317,22 @@ impl
     async fn execute(
         self,
         service: &PersonsService,
-    ) -> SDKResult<BaseResponse<UpdatePersonStatusResponse>> {
-        service.update_status_with_tuple(self.build()).await
+    ) -> CoreSDKResult<BaseResponse<UpdatePersonStatusResponse>> {
+        service
+            .update_status_with_tuple(self.build())
+            .await
+            .map_err(map_sdk_error)
     }
 
     async fn execute_with_options(
         self,
         service: &PersonsService,
         _option: open_lark_core::core::req_option::RequestOption,
-    ) -> SDKResult<BaseResponse<UpdatePersonStatusResponse>> {
-        service.update_status_with_tuple(self.build()).await
+    ) -> CoreSDKResult<BaseResponse<UpdatePersonStatusResponse>> {
+        service
+            .update_status_with_tuple(self.build())
+            .await
+            .map_err(map_sdk_error)
     }
 }
 
@@ -1334,16 +1392,22 @@ impl
     async fn execute(
         self,
         service: &PersonsService,
-    ) -> SDKResult<BaseResponse<GetPersonAvatarResponse>> {
-        service.get_avatar_with_tuple(self.build()).await
+    ) -> CoreSDKResult<BaseResponse<GetPersonAvatarResponse>> {
+        service
+            .get_avatar_with_tuple(self.build())
+            .await
+            .map_err(map_sdk_error)
     }
 
     async fn execute_with_options(
         self,
         service: &PersonsService,
         _option: open_lark_core::core::req_option::RequestOption,
-    ) -> SDKResult<BaseResponse<GetPersonAvatarResponse>> {
-        service.get_avatar_with_tuple(self.build()).await
+    ) -> CoreSDKResult<BaseResponse<GetPersonAvatarResponse>> {
+        service
+            .get_avatar_with_tuple(self.build())
+            .await
+            .map_err(map_sdk_error)
     }
 }
 
@@ -1403,16 +1467,22 @@ impl
     async fn execute(
         self,
         service: &PersonsService,
-    ) -> SDKResult<BaseResponse<UploadPersonAvatarResponse>> {
-        service.upload_avatar_with_tuple(self.build()).await
+    ) -> CoreSDKResult<BaseResponse<UploadPersonAvatarResponse>> {
+        service
+            .upload_avatar_with_tuple(self.build())
+            .await
+            .map_err(map_sdk_error)
     }
 
     async fn execute_with_options(
         self,
         service: &PersonsService,
         _option: open_lark_core::core::req_option::RequestOption,
-    ) -> SDKResult<BaseResponse<UploadPersonAvatarResponse>> {
-        service.upload_avatar_with_tuple(self.build()).await
+    ) -> CoreSDKResult<BaseResponse<UploadPersonAvatarResponse>> {
+        service
+            .upload_avatar_with_tuple(self.build())
+            .await
+            .map_err(map_sdk_error)
     }
 }
 
@@ -1466,16 +1536,22 @@ impl
     async fn execute(
         self,
         service: &PersonsService,
-    ) -> SDKResult<BaseResponse<GetPersonBasicInfoResponse>> {
-        service.get_basic_info_with_tuple(self.build()).await
+    ) -> CoreSDKResult<BaseResponse<GetPersonBasicInfoResponse>> {
+        service
+            .get_basic_info_with_tuple(self.build())
+            .await
+            .map_err(map_sdk_error)
     }
 
     async fn execute_with_options(
         self,
         service: &PersonsService,
         _option: open_lark_core::core::req_option::RequestOption,
-    ) -> SDKResult<BaseResponse<GetPersonBasicInfoResponse>> {
-        service.get_basic_info_with_tuple(self.build()).await
+    ) -> CoreSDKResult<BaseResponse<GetPersonBasicInfoResponse>> {
+        service
+            .get_basic_info_with_tuple(self.build())
+            .await
+            .map_err(map_sdk_error)
     }
 }
 

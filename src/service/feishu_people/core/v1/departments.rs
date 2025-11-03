@@ -67,13 +67,15 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse},
     config::Config,
     constants::AccessTokenType,
+    error::LarkAPIError,
     http::Transport,
+    SDKResult,
 };
-
-// Use open_lark_core's error type for compatibility with async traits
-use open_lark_core::core::error::LarkAPIError;
-pub type SDKResult<T> = Result<T, LarkAPIError>;
-use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
+use open_lark_core::core::{
+    api_req::ApiRequest, // trait_system::ExecutableBuilder temporarily disabled
+    error::LarkAPIError as CoreLarkAPIError,
+    SDKResult as CoreSDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 /// 部门管理服务
@@ -168,17 +170,17 @@ impl DepartmentsService {
         }
 
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::GET,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
             api_path: format!(
                 "/open-apis/feishu_people/core/v1/departments/{}",
                 department_id
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -222,13 +224,13 @@ impl DepartmentsService {
         request: &BatchGetDepartmentsRequest,
     ) -> SDKResult<BaseResponse<BatchGetDepartmentsResponse>> {
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::POST,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
             api_path: "/open-apis/feishu_people/core/v1/departments/batch_get".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -287,14 +289,14 @@ impl DepartmentsService {
         }
 
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::GET,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
             api_path: "/open-apis/feishu_people/core/v1/departments/sub_departments".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -351,14 +353,14 @@ impl DepartmentsService {
         }
 
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::GET,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
             api_path: "/open-apis/feishu_people/core/v1/departments/root_departments".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -404,13 +406,13 @@ impl DepartmentsService {
         request: &SearchDepartmentsRequest,
     ) -> SDKResult<BaseResponse<SearchDepartmentsResponse>> {
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::POST,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
             api_path: "/open-apis/feishu_people/core/v1/departments/search".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -463,13 +465,13 @@ impl DepartmentsService {
         request: &CreateDepartmentRequest,
     ) -> SDKResult<BaseResponse<CreateDepartmentResponse>> {
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::POST,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
             api_path: "/open-apis/feishu_people/core/v1/departments".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -521,16 +523,16 @@ impl DepartmentsService {
         request: &UpdateDepartmentRequest,
     ) -> SDKResult<BaseResponse<UpdateDepartmentResponse>> {
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::PUT,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::PUT,
             api_path: format!(
                 "/open-apis/feishu_people/core/v1/departments/{}",
                 department_id
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -581,17 +583,17 @@ impl DepartmentsService {
         }
 
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::DELETE,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::DELETE,
             api_path: format!(
                 "/open-apis/feishu_people/core/v1/departments/{}",
                 department_id
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -650,14 +652,14 @@ impl DepartmentsService {
         }
 
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::GET,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
             api_path: "/open-apis/feishu_people/core/v1/departments/members".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -705,14 +707,14 @@ impl DepartmentsService {
         query_params.insert("department_id", request.department_id.clone());
 
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::GET,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
             api_path: "/open-apis/feishu_people/core/v1/departments/statistics".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -992,6 +994,31 @@ impl Default for GetDepartmentBuilder {
     }
 }
 
+fn map_sdk_error(err: LarkAPIError) -> CoreLarkAPIError {
+    match err {
+        LarkAPIError::IOErr(msg) => CoreLarkAPIError::IOErr(msg),
+        LarkAPIError::IllegalParamError(msg) => CoreLarkAPIError::IllegalParamError(msg),
+        LarkAPIError::DeserializeError(msg) => CoreLarkAPIError::DeserializeError(msg),
+        LarkAPIError::RequestError(msg) => CoreLarkAPIError::RequestError(msg),
+        LarkAPIError::UrlParseError(msg) => CoreLarkAPIError::UrlParseError(msg),
+        LarkAPIError::ApiError {
+            code,
+            message,
+            request_id,
+        } => CoreLarkAPIError::ApiError {
+            code,
+            message,
+            request_id,
+        },
+        LarkAPIError::MissingAccessToken => CoreLarkAPIError::MissingAccessToken,
+        LarkAPIError::BadRequest(msg) => CoreLarkAPIError::BadRequest(msg),
+        LarkAPIError::DataError(msg) => CoreLarkAPIError::DataError(msg),
+        LarkAPIError::APIError { code, msg, error } => {
+            CoreLarkAPIError::APIError { code, msg, error }
+        }
+    }
+}
+
 // 应用ExecutableBuilder trait - 使用自定义实现
 #[async_trait::async_trait]
 impl
@@ -1008,20 +1035,22 @@ impl
     async fn execute(
         self,
         service: &DepartmentsService,
-    ) -> SDKResult<BaseResponse<GetDepartmentResponse>> {
+    ) -> CoreSDKResult<BaseResponse<GetDepartmentResponse>> {
         service
             .get_with_tuple((self.department_id, self.request))
             .await
+            .map_err(map_sdk_error)
     }
 
     async fn execute_with_options(
         self,
         service: &DepartmentsService,
         _option: open_lark_core::core::req_option::RequestOption,
-    ) -> SDKResult<BaseResponse<GetDepartmentResponse>> {
+    ) -> CoreSDKResult<BaseResponse<GetDepartmentResponse>> {
         service
             .get_with_tuple((self.department_id, self.request))
             .await
+            .map_err(map_sdk_error)
     }
 }
 
@@ -1345,20 +1374,22 @@ impl
     async fn execute(
         self,
         service: &DepartmentsService,
-    ) -> SDKResult<BaseResponse<UpdateDepartmentResponse>> {
+    ) -> CoreSDKResult<BaseResponse<UpdateDepartmentResponse>> {
         service
             .update_with_tuple((self.department_id, self.request))
             .await
+            .map_err(map_sdk_error)
     }
 
     async fn execute_with_options(
         self,
         service: &DepartmentsService,
         _option: open_lark_core::core::req_option::RequestOption,
-    ) -> SDKResult<BaseResponse<UpdateDepartmentResponse>> {
+    ) -> CoreSDKResult<BaseResponse<UpdateDepartmentResponse>> {
         service
             .update_with_tuple((self.department_id, self.request))
             .await
+            .map_err(map_sdk_error)
     }
 }
 
@@ -1412,20 +1443,22 @@ impl
     async fn execute(
         self,
         service: &DepartmentsService,
-    ) -> SDKResult<BaseResponse<DeleteDepartmentResponse>> {
+    ) -> CoreSDKResult<BaseResponse<DeleteDepartmentResponse>> {
         service
             .delete_with_tuple((self.department_id, self.request))
             .await
+            .map_err(map_sdk_error)
     }
 
     async fn execute_with_options(
         self,
         service: &DepartmentsService,
         _option: open_lark_core::core::req_option::RequestOption,
-    ) -> SDKResult<BaseResponse<DeleteDepartmentResponse>> {
+    ) -> CoreSDKResult<BaseResponse<DeleteDepartmentResponse>> {
         service
             .delete_with_tuple((self.department_id, self.request))
             .await
+            .map_err(map_sdk_error)
     }
 }
 

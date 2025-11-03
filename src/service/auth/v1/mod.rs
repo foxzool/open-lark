@@ -33,7 +33,7 @@ impl AuthServiceV1 {
     /// 获取OIDC用户访问令牌
     pub async fn oidc_access_token(
         &self,
-        request: &OidcAccessTokenRequest,
+        _request: &OidcAccessTokenRequest,
     ) -> SDKResult<OidcAccessTokenResponse> {
         // 模拟实现
         Ok(OidcAccessTokenResponse {
@@ -51,7 +51,7 @@ impl AuthServiceV1 {
     /// 刷新OIDC用户访问令牌
     pub async fn oidc_refresh_access_token(
         &self,
-        request: &OidcRefreshAccessTokenRequest,
+        _request: &OidcRefreshAccessTokenRequest,
     ) -> SDKResult<OidcAccessTokenResponse> {
         // 模拟实现
         Ok(OidcAccessTokenResponse {
@@ -69,7 +69,7 @@ impl AuthServiceV1 {
     /// 获取登录预授权码
     pub async fn get_auth_code(
         &self,
-        request: &GetAuthCodeRequest,
+        _request: &GetAuthCodeRequest,
     ) -> SDKResult<GetAuthCodeResponse> {
         // 模拟实现
         Ok(GetAuthCodeResponse {
@@ -85,7 +85,7 @@ impl AuthServiceV1 {
     /// 获取用户访问令牌（v1版本）
     pub async fn access_token(
         &self,
-        request: &AccessTokenRequest,
+        _request: &AccessTokenRequest,
     ) -> SDKResult<AccessTokenResponse> {
         // 模拟实现
         Ok(AccessTokenResponse {
@@ -103,7 +103,7 @@ impl AuthServiceV1 {
     /// 刷新用户访问令牌（v1版本）
     pub async fn refresh_access_token(
         &self,
-        request: &RefreshAccessTokenRequest,
+        _request: &RefreshAccessTokenRequest,
     ) -> SDKResult<AccessTokenResponse> {
         // 模拟实现
         Ok(AccessTokenResponse {

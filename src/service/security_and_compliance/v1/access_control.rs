@@ -9,7 +9,7 @@
 use crate::core::SDKResult;
 
 use crate::core::{
-    api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}, config::Config, constants::AccessTokenType, http::Transport,
 };
 use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use serde::{Deserialize, Serialize};
@@ -89,14 +89,12 @@ impl AccessControlService {
         request: &GetAccessPermissionsRequest,
     ) -> SDKResult<BaseResponse<GetAccessPermissionsResponse>> {
         // 构建API请求
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: "/open-apis/security_and_compliance/v1/access_control/get_permissions"
-                .to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::with_method_and_path(
+            reqwest::Method::POST,
+            "/open-apis/security_and_compliance/v1/access_control/get_permissions"
+        );
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(request)?;
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -109,14 +107,12 @@ impl AccessControlService {
         request: &CreateAccessPolicyRequest,
     ) -> SDKResult<BaseResponse<CreateAccessPolicyResponse>> {
         // 构建API请求
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: "/open-apis/security_and_compliance/v1/access_control/create_policy"
-                .to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::with_method_and_path(
+            reqwest::Method::POST,
+            "/open-apis/security_and_compliance/v1/access_control/create_policy"
+        );
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(request)?;
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -151,15 +147,12 @@ impl AccessControlService {
         request: &GetUserPermissionSummaryRequest,
     ) -> SDKResult<BaseResponse<GetUserPermissionSummaryResponse>> {
         // 构建API请求
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path:
-                "/open-apis/security_and_compliance/v1/access_control/get_user_permission_summary"
-                    .to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::with_method_and_path(
+            reqwest::Method::POST,
+            "/open-apis/security_and_compliance/v1/access_control/get_user_permission_summary"
+        );
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(request)?;
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -674,6 +667,24 @@ impl Default for GetUserPermissionSummaryBuilder {
 //    BaseResponse<GetUserPermissionSummaryResponse>,
 //    get_user_permission_summary
 //);
+
+impl ApiResponseTrait for GetAccessPermissionsResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for CreateAccessPolicyResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for GetUserPermissionSummaryResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
 
 impl AccessControlService {
     //    /// 获取访问权限构建器

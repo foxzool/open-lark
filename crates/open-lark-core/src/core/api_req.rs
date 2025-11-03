@@ -108,8 +108,8 @@ pub struct ApiRequest {
     /// - `App`：应用访问令牌
     ///
     /// Transport层会根据这个列表和当前配置选择合适的令牌类型。
-    /// 使用 `pub(crate)` 确保只能由服务层设置。
-    pub(crate) supported_access_token_types: Vec<AccessTokenType>,
+    /// 跨 crate 访问需要使用 public 可见性。
+    pub supported_access_token_types: Vec<AccessTokenType>,
 
     /// 文件内容（用于multipart/form-data请求）
     ///

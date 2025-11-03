@@ -9,7 +9,7 @@
 use crate::core::SDKResult;
 
 use crate::core::{
-    api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}, config::Config, constants::AccessTokenType, http::Transport,
 };
 use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use serde::{Deserialize, Serialize};
@@ -80,14 +80,12 @@ impl ComplianceManagementService {
         request: &GetComplianceOverviewRequest,
     ) -> SDKResult<BaseResponse<GetComplianceOverviewResponse>> {
         // 构建API请求
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: "/open-apis/security_and_compliance/v1/compliance_management/get_overview"
-                .to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::with_method_and_path(
+            reqwest::Method::POST,
+            "/open-apis/security_and_compliance/v1/compliance_management/get_overview"
+        );
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(request)?;
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -224,6 +222,12 @@ impl Default for GetComplianceOverviewBuilder {
 //    BaseResponse<GetComplianceOverviewResponse>,
 //    get_compliance_overview
 //);
+
+impl ApiResponseTrait for GetComplianceOverviewResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
 
 impl ComplianceManagementService {
     //    /// 获取合规状态概览构建器

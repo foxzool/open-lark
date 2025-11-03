@@ -69,13 +69,16 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse},
     config::Config,
     constants::AccessTokenType,
+    error::LarkAPIError,
     http::Transport,
+    SDKResult,
 };
 
-// Use open_lark_core's error type for compatibility with async traits
-use open_lark_core::core::error::LarkAPIError;
-pub type SDKResult<T> = Result<T, LarkAPIError>;
-use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
+use open_lark_core::core::{
+    api_req::ApiRequest, // trait_system::ExecutableBuilder temporarily disabled
+    error::LarkAPIError as CoreLarkAPIError,
+    SDKResult as CoreSDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 /// 公司管理服务
@@ -170,14 +173,14 @@ impl CompaniesService {
         }
 
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::GET,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
             api_path: format!("/open-apis/feishu_people/core/v1/companies/{}", company_id),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -221,13 +224,13 @@ impl CompaniesService {
         request: &BatchGetCompaniesRequest,
     ) -> SDKResult<BaseResponse<BatchGetCompaniesResponse>> {
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::POST,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
             api_path: "/open-apis/feishu_people/core/v1/companies/batch_get".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -273,13 +276,13 @@ impl CompaniesService {
         request: &SearchCompaniesRequest,
     ) -> SDKResult<BaseResponse<SearchCompaniesResponse>> {
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::POST,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
             api_path: "/open-apis/feishu_people/core/v1/companies/search".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -333,13 +336,13 @@ impl CompaniesService {
         request: &CreateCompanyRequest,
     ) -> SDKResult<BaseResponse<CreateCompanyResponse>> {
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::POST,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
             api_path: "/open-apis/feishu_people/core/v1/companies".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -391,13 +394,13 @@ impl CompaniesService {
         request: &UpdateCompanyRequest,
     ) -> SDKResult<BaseResponse<UpdateCompanyResponse>> {
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::PUT,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::PUT,
             api_path: format!("/open-apis/feishu_people/core/v1/companies/{}", company_id),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -448,14 +451,14 @@ impl CompaniesService {
         }
 
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::DELETE,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::DELETE,
             api_path: format!("/open-apis/feishu_people/core/v1/companies/{}", company_id),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -503,14 +506,14 @@ impl CompaniesService {
         query_params.insert("company_id", request.company_id.clone());
 
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::GET,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
             api_path: "/open-apis/feishu_people/core/v1/companies/statistics".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -562,15 +565,15 @@ impl CompaniesService {
         }
 
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::GET,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
             api_path: "/open-apis/feishu_people/core/v1/companies/organization_structure"
                 .to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -629,14 +632,14 @@ impl CompaniesService {
         }
 
         // 构建API请求
-        let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::GET,
+        let mut api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
             api_path: "/open-apis/feishu_people/core/v1/companies/subsidiaries".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params,
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, None).await?;
         Ok(api_resp)
@@ -890,6 +893,31 @@ impl Default for GetCompanyBuilder {
     }
 }
 
+fn map_sdk_error(err: LarkAPIError) -> CoreLarkAPIError {
+    match err {
+        LarkAPIError::IOErr(msg) => CoreLarkAPIError::IOErr(msg),
+        LarkAPIError::IllegalParamError(msg) => CoreLarkAPIError::IllegalParamError(msg),
+        LarkAPIError::DeserializeError(msg) => CoreLarkAPIError::DeserializeError(msg),
+        LarkAPIError::RequestError(msg) => CoreLarkAPIError::RequestError(msg),
+        LarkAPIError::UrlParseError(msg) => CoreLarkAPIError::UrlParseError(msg),
+        LarkAPIError::ApiError {
+            code,
+            message,
+            request_id,
+        } => CoreLarkAPIError::ApiError {
+            code,
+            message,
+            request_id,
+        },
+        LarkAPIError::MissingAccessToken => CoreLarkAPIError::MissingAccessToken,
+        LarkAPIError::BadRequest(msg) => CoreLarkAPIError::BadRequest(msg),
+        LarkAPIError::DataError(msg) => CoreLarkAPIError::DataError(msg),
+        LarkAPIError::APIError { code, msg, error } => {
+            CoreLarkAPIError::APIError { code, msg, error }
+        }
+    }
+}
+
 // 应用ExecutableBuilder trait - 使用自定义实现
 #[async_trait::async_trait]
 impl
@@ -906,20 +934,22 @@ impl
     async fn execute(
         self,
         service: &CompaniesService,
-    ) -> SDKResult<BaseResponse<GetCompanyResponse>> {
+    ) -> CoreSDKResult<BaseResponse<GetCompanyResponse>> {
         service
             .get_with_tuple((self.company_id, self.request))
             .await
+            .map_err(map_sdk_error)
     }
 
     async fn execute_with_options(
         self,
         service: &CompaniesService,
         _option: open_lark_core::core::req_option::RequestOption,
-    ) -> SDKResult<BaseResponse<GetCompanyResponse>> {
+    ) -> CoreSDKResult<BaseResponse<GetCompanyResponse>> {
         service
             .get_with_tuple((self.company_id, self.request))
             .await
+            .map_err(map_sdk_error)
     }
 }
 
@@ -1132,20 +1162,22 @@ impl
     async fn execute(
         self,
         service: &CompaniesService,
-    ) -> SDKResult<BaseResponse<UpdateCompanyResponse>> {
+    ) -> CoreSDKResult<BaseResponse<UpdateCompanyResponse>> {
         service
             .update_with_tuple((self.company_id, self.request))
             .await
+            .map_err(map_sdk_error)
     }
 
     async fn execute_with_options(
         self,
         service: &CompaniesService,
         _option: open_lark_core::core::req_option::RequestOption,
-    ) -> SDKResult<BaseResponse<UpdateCompanyResponse>> {
+    ) -> CoreSDKResult<BaseResponse<UpdateCompanyResponse>> {
         service
             .update_with_tuple((self.company_id, self.request))
             .await
+            .map_err(map_sdk_error)
     }
 }
 
@@ -1199,20 +1231,22 @@ impl
     async fn execute(
         self,
         service: &CompaniesService,
-    ) -> SDKResult<BaseResponse<DeleteCompanyResponse>> {
+    ) -> CoreSDKResult<BaseResponse<DeleteCompanyResponse>> {
         service
             .delete_with_tuple((self.company_id, self.request))
             .await
+            .map_err(map_sdk_error)
     }
 
     async fn execute_with_options(
         self,
         service: &CompaniesService,
         _option: open_lark_core::core::req_option::RequestOption,
-    ) -> SDKResult<BaseResponse<DeleteCompanyResponse>> {
+    ) -> CoreSDKResult<BaseResponse<DeleteCompanyResponse>> {
         service
             .delete_with_tuple((self.company_id, self.request))
             .await
+            .map_err(map_sdk_error)
     }
 }
 

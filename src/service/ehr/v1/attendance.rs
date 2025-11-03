@@ -70,8 +70,9 @@
 //! }
 //! ```
 
+use super::models::BaseResponse;
 use crate::core::{
-    api_resp::{ApiResponseTrait, BaseResponse},
+    api_resp::{ApiResponseTrait, BaseResponse as CoreBaseResponse},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
@@ -79,6 +80,15 @@ use crate::core::{
 };
 use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
+
+/// Helper function to convert core BaseResponse to models BaseResponse
+fn convert_core_to_models_response<T>(core_resp: CoreBaseResponse<T>) -> BaseResponse<T> {
+    BaseResponse {
+        code: core_resp.raw_response.code,
+        msg: core_resp.raw_response.msg,
+        data: core_resp.data,
+    }
+}
 
 /// 考勤管理服务
 ///
@@ -195,8 +205,8 @@ impl AttendanceService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, None).await?;
-        Ok(api_resp)
+        let core_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(convert_core_to_models_response(core_resp))
     }
 
     /// 批量获取员工考勤记录
@@ -247,8 +257,8 @@ impl AttendanceService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, None).await?;
-        Ok(api_resp)
+        let core_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(convert_core_to_models_response(core_resp))
     }
 
     /// 创建打卡记录
@@ -310,8 +320,8 @@ impl AttendanceService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, None).await?;
-        Ok(api_resp)
+        let core_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(convert_core_to_models_response(core_resp))
     }
 
     /// 更新打卡记录
@@ -367,8 +377,8 @@ impl AttendanceService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, None).await?;
-        Ok(api_resp)
+        let core_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(convert_core_to_models_response(core_resp))
     }
 
     /// 删除打卡记录
@@ -412,8 +422,8 @@ impl AttendanceService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, None).await?;
-        Ok(api_resp)
+        let core_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(convert_core_to_models_response(core_resp))
     }
 
     /// 获取考勤统计信息
@@ -481,8 +491,8 @@ impl AttendanceService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, None).await?;
-        Ok(api_resp)
+        let core_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(convert_core_to_models_response(core_resp))
     }
 
     /// 获取考勤异常记录
@@ -553,8 +563,8 @@ impl AttendanceService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, None).await?;
-        Ok(api_resp)
+        let core_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(convert_core_to_models_response(core_resp))
     }
 
     /// 处理考勤异常
@@ -609,8 +619,8 @@ impl AttendanceService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, None).await?;
-        Ok(api_resp)
+        let core_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(convert_core_to_models_response(core_resp))
     }
 
     /// 获取考勤报表
@@ -678,8 +688,8 @@ impl AttendanceService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, None).await?;
-        Ok(api_resp)
+        let core_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(convert_core_to_models_response(core_resp))
     }
 
     // ==================== Builder模式实现 ====================

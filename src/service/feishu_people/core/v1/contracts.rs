@@ -55,12 +55,17 @@
 //! ```
 
 use crate::core::{
-    api_resp::BaseResponse, config::Config, error::LarkAPIError, http::Transport, SDKResult,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    error::LarkAPIError,
+    http::Transport,
+    SDKResult,
 };
 use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use serde::{Deserialize, Serialize};
 use serde_json::json;
-use std::collections::HashMap;
+use std::fmt::Debug;
 
 /// 合同管理服务
 ///
@@ -113,29 +118,23 @@ impl ContractsService {
     ) -> SDKResult<BaseResponse<Contract>> {
         // 参数验证
         if contract_id.is_empty() {
-            return Err(LarkAPIError::invalid_parameter("合同ID不能为空").into());
+            return Err(LarkAPIError::illegal_param("合同ID不能为空").into());
         }
         if !["open_id", "user_id", "union_id"].contains(&user_id_type) {
-            return Err(LarkAPIError::invalid_parameter("用户ID类型不合法").into());
+            return Err(LarkAPIError::illegal_param("用户ID类型不合法").into());
         }
 
-        let url = format!(
-            "{}/open-apis/feishu_people/v1/contracts/{}",
-            self.config.domain_url, contract_id
+        let mut api_req = ApiRequest::with_method_and_path(
+            reqwest::Method::GET,
+            format!("/open-apis/feishu_people/core/v1/contracts/{}", contract_id),
         );
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req
+            .query_params
+            .insert("user_id_type", user_id_type.to_string());
 
-        let mut query_params = HashMap::new();
-        query_params.insert("user_id_type", user_id_type);
-
-        let request = ApiRequest::builder()
-            .method("GET")
-            .url(&url)
-            .query_params(query_params)
-            .build()?;
-
-        let base_response: BaseResponse<Contract> =
-            Transport::request(request, &self.config, None).await?;
-        Ok(base_response)
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 批量获取合同信息
@@ -168,37 +167,31 @@ impl ContractsService {
     ) -> SDKResult<BaseResponse<PageResponse<Contract>>> {
         // 参数验证
         if contract_ids.is_empty() {
-            return Err(LarkAPIError::invalid_parameter("合同ID列表不能为空").into());
+            return Err(LarkAPIError::illegal_param("合同ID列表不能为空").into());
         }
         if contract_ids.len() > 100 {
-            return Err(LarkAPIError::invalid_parameter("合同ID数量不能超过100个").into());
+            return Err(LarkAPIError::illegal_param("合同ID数量不能超过100个").into());
         }
         if !["open_id", "user_id", "union_id"].contains(&user_id_type) {
-            return Err(LarkAPIError::invalid_parameter("用户ID类型不合法").into());
+            return Err(LarkAPIError::illegal_param("用户ID类型不合法").into());
         }
 
-        let url = format!(
-            "{}/open-apis/feishu_people/v1/contracts/batchGet",
-            self.config.domain_url
+        let mut api_req = ApiRequest::with_method_and_path(
+            reqwest::Method::POST,
+            "/open-apis/feishu_people/core/v1/contracts/batch_get",
         );
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req
+            .query_params
+            .insert("user_id_type", user_id_type.to_string());
 
-        let mut query_params = HashMap::new();
-        query_params.insert("user_id_type", user_id_type);
-
-        let request_body = json!({
+        let payload = json!({
             "contract_ids": contract_ids
         });
+        api_req.set_body(serde_json::to_vec(&payload)?);
 
-        let request = ApiRequest::builder()
-            .method("POST")
-            .url(&url)
-            .query_params(query_params)
-            .body(request_body)
-            .build()?;
-
-        let base_response: BaseResponse<PageResponse<Contract>> =
-            Transport::request(request, &self.config, None).await?;
-        Ok(base_response)
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 根据用户获取合同列表
@@ -233,34 +226,27 @@ impl ContractsService {
     ) -> SDKResult<BaseResponse<PageResponse<Contract>>> {
         // 参数验证
         if user_id.is_empty() {
-            return Err(LarkAPIError::invalid_parameter("用户ID不能为空").into());
+            return Err(LarkAPIError::illegal_param("用户ID不能为空").into());
         }
         if page_size < 1 || page_size > 100 {
-            return Err(LarkAPIError::invalid_parameter("分页大小必须在1-100之间").into());
+            return Err(LarkAPIError::illegal_param("分页大小必须在1-100之间").into());
         }
 
-        let url = format!(
-            "{}/open-apis/feishu_people/v1/contracts",
-            self.config.domain_url
+        let mut api_req = ApiRequest::with_method_and_path(
+            reqwest::Method::GET,
+            "/open-apis/feishu_people/core/v1/contracts",
         );
-
-        let mut query_params = HashMap::new();
-        query_params.insert("user_id", user_id);
-        query_params.insert("page_size", &page_size.to_string());
-
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.query_params.insert("user_id", user_id.to_string());
+        api_req
+            .query_params
+            .insert("page_size", page_size.to_string());
         if let Some(token) = page_token {
-            query_params.insert("page_token", token);
+            api_req.query_params.insert("page_token", token.to_string());
         }
 
-        let request = ApiRequest::builder()
-            .method("GET")
-            .url(&url)
-            .query_params(query_params)
-            .build()?;
-
-        let base_response: BaseResponse<PageResponse<Contract>> =
-            Transport::request(request, &self.config, None).await?;
-        Ok(base_response)
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 搜索合同
@@ -294,34 +280,29 @@ impl ContractsService {
     ) -> SDKResult<BaseResponse<ContractSearchData>> {
         // 参数验证
         if query.is_empty() {
-            return Err(LarkAPIError::invalid_parameter("搜索关键字不能为空").into());
+            return Err(LarkAPIError::illegal_param("搜索关键字不能为空").into());
         }
         if page_size < 1 || page_size > 100 {
-            return Err(LarkAPIError::invalid_parameter("分页大小必须在1-100之间").into());
+            return Err(LarkAPIError::illegal_param("分页大小必须在1-100之间").into());
         }
 
-        let url = format!(
-            "{}/open-apis/feishu_people/v1/contracts/search",
-            self.config.domain_url
-        );
-
-        let mut query_params = HashMap::new();
-        query_params.insert("query", query);
-        query_params.insert("page_size", &page_size.to_string());
-
+        let mut payload = json!({
+            "query": query,
+            "page_size": page_size,
+        });
         if let Some(token) = page_token {
-            query_params.insert("page_token", token);
+            payload["page_token"] = json!(token);
         }
 
-        let request = ApiRequest::builder()
-            .method("GET")
-            .url(&url)
-            .query_params(query_params)
-            .build()?;
+        let mut api_req = ApiRequest::with_method_and_path(
+            reqwest::Method::POST,
+            "/open-apis/feishu_people/core/v1/contracts/search",
+        );
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.set_body(serde_json::to_vec(&payload)?);
 
-        let base_response: BaseResponse<PageResponse<Contract>> =
-            Transport::request(request, &self.config, None).await?;
-        Ok(base_response)
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 创建合同
@@ -361,29 +342,24 @@ impl ContractsService {
     ) -> SDKResult<BaseResponse<Contract>> {
         // 参数验证
         if create_data.user_id.is_empty() {
-            return Err(LarkAPIError::invalid_parameter("用户ID不能为空").into());
+            return Err(LarkAPIError::illegal_param("用户ID不能为空").into());
         }
         if create_data.contract_type.is_empty() {
-            return Err(LarkAPIError::invalid_parameter("合同类型不能为空").into());
+            return Err(LarkAPIError::illegal_param("合同类型不能为空").into());
         }
         if create_data.start_date.is_empty() || create_data.end_date.is_empty() {
-            return Err(LarkAPIError::invalid_parameter("合同开始和结束日期不能为空").into());
+            return Err(LarkAPIError::illegal_param("合同开始和结束日期不能为空").into());
         }
 
-        let url = format!(
-            "{}/open-apis/feishu_people/v1/contracts",
-            self.config.domain_url
+        let mut api_req = ApiRequest::with_method_and_path(
+            reqwest::Method::POST,
+            "/open-apis/feishu_people/core/v1/contracts",
         );
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.set_body(serde_json::to_vec(create_data)?);
 
-        let request = ApiRequest::builder()
-            .method("POST")
-            .url(&url)
-            .body(create_data)
-            .build()?;
-
-        let base_response: BaseResponse<PageResponse<Contract>> =
-            Transport::request(request, &self.config, None).await?;
-        Ok(base_response)
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 更新合同信息
@@ -421,23 +397,18 @@ impl ContractsService {
     ) -> SDKResult<BaseResponse<Contract>> {
         // 参数验证
         if contract_id.is_empty() {
-            return Err(LarkAPIError::invalid_parameter("合同ID不能为空").into());
+            return Err(LarkAPIError::illegal_param("合同ID不能为空").into());
         }
 
-        let url = format!(
-            "{}/open-apis/feishu_people/v1/contracts/{}",
-            self.config.domain_url, contract_id
+        let mut api_req = ApiRequest::with_method_and_path(
+            reqwest::Method::PATCH,
+            format!("/open-apis/feishu_people/core/v1/contracts/{}", contract_id),
         );
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.set_body(serde_json::to_vec(update_data)?);
 
-        let request = ApiRequest::builder()
-            .method("PATCH")
-            .url(&url)
-            .body(update_data)
-            .build()?;
-
-        let base_response: BaseResponse<PageResponse<Contract>> =
-            Transport::request(request, &self.config, None).await?;
-        Ok(base_response)
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 终止合同
@@ -473,34 +444,32 @@ impl ContractsService {
     ) -> SDKResult<BaseResponse<Contract>> {
         // 参数验证
         if contract_id.is_empty() {
-            return Err(LarkAPIError::invalid_parameter("合同ID不能为空").into());
+            return Err(LarkAPIError::illegal_param("合同ID不能为空").into());
         }
         if reason.is_empty() {
-            return Err(LarkAPIError::invalid_parameter("终止原因不能为空").into());
+            return Err(LarkAPIError::illegal_param("终止原因不能为空").into());
         }
         if termination_date.is_empty() {
-            return Err(LarkAPIError::invalid_parameter("终止日期不能为空").into());
+            return Err(LarkAPIError::illegal_param("终止日期不能为空").into());
         }
 
-        let url = format!(
-            "{}/open-apis/feishu_people/v1/contracts/{}/terminate",
-            self.config.domain_url, contract_id
-        );
-
-        let request_body = json!({
+        let payload = json!({
             "termination_reason": reason,
             "termination_date": termination_date
         });
 
-        let request = ApiRequest::builder()
-            .method("POST")
-            .url(&url)
-            .body(request_body)
-            .build()?;
+        let mut api_req = ApiRequest::with_method_and_path(
+            reqwest::Method::POST,
+            format!(
+                "/open-apis/feishu_people/core/v1/contracts/{}/terminate",
+                contract_id
+            ),
+        );
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.set_body(serde_json::to_vec(&payload)?);
 
-        let base_response: BaseResponse<PageResponse<Contract>> =
-            Transport::request(request, &self.config, None).await?;
-        Ok(base_response)
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 续签合同
@@ -541,40 +510,36 @@ impl ContractsService {
     ) -> SDKResult<BaseResponse<Contract>> {
         // 参数验证
         if contract_id.is_empty() {
-            return Err(LarkAPIError::invalid_parameter("合同ID不能为空").into());
+            return Err(LarkAPIError::illegal_param("合同ID不能为空").into());
         }
         if new_end_date.is_empty() {
-            return Err(LarkAPIError::invalid_parameter("新的结束日期不能为空").into());
+            return Err(LarkAPIError::illegal_param("新的结束日期不能为空").into());
         }
 
-        let url = format!(
-            "{}/open-apis/feishu_people/v1/contracts/{}/renew",
-            self.config.domain_url, contract_id
-        );
-
-        let mut request_body = json!({
-            "new_end_date": new_end_date
-        });
-
+        let mut payload = serde_json::Map::new();
+        payload.insert("new_end_date".into(), json!(new_end_date));
         if let Some(new_salary) = renewal_terms.new_salary {
-            request_body["new_salary"] = json!(new_salary);
+            payload.insert("new_salary".into(), json!(new_salary));
         }
         if let Some(terms) = &renewal_terms.renewal_terms {
-            request_body["renewal_terms"] = json!(terms);
+            payload.insert("renewal_terms".into(), json!(terms));
         }
         if let Some(remarks) = &renewal_terms.remarks {
-            request_body["remarks"] = json!(remarks);
+            payload.insert("remarks".into(), json!(remarks));
         }
 
-        let request = ApiRequest::builder()
-            .method("POST")
-            .url(&url)
-            .body(request_body)
-            .build()?;
+        let mut api_req = ApiRequest::with_method_and_path(
+            reqwest::Method::POST,
+            format!(
+                "/open-apis/feishu_people/core/v1/contracts/{}/renew",
+                contract_id
+            ),
+        );
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.set_body(serde_json::to_vec(&serde_json::Value::Object(payload))?);
 
-        let base_response: BaseResponse<PageResponse<Contract>> =
-            Transport::request(request, &self.config, None).await?;
-        Ok(base_response)
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 获取即将到期的合同
@@ -608,34 +573,27 @@ impl ContractsService {
     ) -> SDKResult<BaseResponse<PageResponse<Contract>>> {
         // 参数验证
         if days < 1 || days > 365 {
-            return Err(LarkAPIError::invalid_parameter("天数范围必须在1-365之间").into());
+            return Err(LarkAPIError::illegal_param("天数范围必须在1-365之间").into());
         }
         if page_size < 1 || page_size > 100 {
-            return Err(LarkAPIError::invalid_parameter("分页大小必须在1-100之间").into());
+            return Err(LarkAPIError::illegal_param("分页大小必须在1-100之间").into());
         }
 
-        let url = format!(
-            "{}/open-apis/feishu_people/v1/contracts/expiring",
-            self.config.domain_url
+        let mut api_req = ApiRequest::with_method_and_path(
+            reqwest::Method::GET,
+            "/open-apis/feishu_people/core/v1/contracts/expiring",
         );
-
-        let mut query_params = HashMap::new();
-        query_params.insert("days", &days.to_string());
-        query_params.insert("page_size", &page_size.to_string());
-
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.query_params.insert("days", days.to_string());
+        api_req
+            .query_params
+            .insert("page_size", page_size.to_string());
         if let Some(token) = page_token {
-            query_params.insert("page_token", token);
+            api_req.query_params.insert("page_token", token.to_string());
         }
 
-        let request = ApiRequest::builder()
-            .method("GET")
-            .url(&url)
-            .query_params(query_params)
-            .build()?;
-
-        let base_response: BaseResponse<PageResponse<Contract>> =
-            Transport::request(request, &self.config, None).await?;
-        Ok(base_response)
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 获取合同统计信息
@@ -663,25 +621,19 @@ impl ContractsService {
         &self,
         department_id: Option<&str>,
     ) -> SDKResult<BaseResponse<ContractStatistics>> {
-        let url = format!(
-            "{}/open-apis/feishu_people/v1/contracts/statistics",
-            self.config.domain_url
+        let mut api_req = ApiRequest::with_method_and_path(
+            reqwest::Method::GET,
+            "/open-apis/feishu_people/core/v1/contracts/statistics",
         );
-
-        let mut query_params = HashMap::new();
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         if let Some(dept_id) = department_id {
-            query_params.insert("department_id", dept_id);
+            api_req
+                .query_params
+                .insert("department_id", dept_id.to_string());
         }
 
-        let request = ApiRequest::builder()
-            .method("GET")
-            .url(&url)
-            .query_params(query_params)
-            .build()?;
-
-        let base_response: BaseResponse<PageResponse<Contract>> =
-            Transport::request(request, &self.config, None).await?;
-        Ok(base_response)
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 }
 
@@ -803,7 +755,7 @@ impl<'a> CreateContractBuilder<'a> {
     pub async fn execute(self) -> SDKResult<BaseResponse<Contract>> {
         let contract_data = self
             .contract_data
-            .ok_or_else(|| LarkAPIError::invalid_parameter("合同数据不能为空"))?;
+            .ok_or_else(|| LarkAPIError::illegal_param("合同数据不能为空"))?;
         self.service.create(&contract_data).await
     }
 }
@@ -825,7 +777,7 @@ impl<'a> UpdateContractBuilder<'a> {
     pub async fn execute(self) -> SDKResult<BaseResponse<Contract>> {
         let update_data = self
             .update_data
-            .ok_or_else(|| LarkAPIError::invalid_parameter("更新数据不能为空"))?;
+            .ok_or_else(|| LarkAPIError::illegal_param("更新数据不能为空"))?;
         self.service.update(&self.contract_id, &update_data).await
     }
 }
@@ -853,10 +805,10 @@ impl<'a> TerminateContractBuilder<'a> {
     pub async fn execute(self) -> SDKResult<BaseResponse<Contract>> {
         let reason = self
             .reason
-            .ok_or_else(|| LarkAPIError::invalid_parameter("终止原因不能为空"))?;
+            .ok_or_else(|| LarkAPIError::illegal_param("终止原因不能为空"))?;
         let termination_date = self
             .termination_date
-            .ok_or_else(|| LarkAPIError::invalid_parameter("终止日期不能为空"))?;
+            .ok_or_else(|| LarkAPIError::illegal_param("终止日期不能为空"))?;
         self.service
             .terminate(&self.contract_id, &reason, &termination_date)
             .await
@@ -886,7 +838,7 @@ impl<'a> RenewContractBuilder<'a> {
     pub async fn execute(self) -> SDKResult<BaseResponse<Contract>> {
         let new_end_date = self
             .new_end_date
-            .ok_or_else(|| LarkAPIError::invalid_parameter("新的结束日期不能为空"))?;
+            .ok_or_else(|| LarkAPIError::illegal_param("新的结束日期不能为空"))?;
         let renewal_terms = self.renewal_terms.unwrap_or_default();
         self.service
             .renew(&self.contract_id, &new_end_date, &renewal_terms)
@@ -1060,6 +1012,12 @@ pub struct ContractSearchData {
     pub total: Option<i32>,
 }
 
+impl ApiResponseTrait for ContractSearchData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
 /// 合同搜索结果
 ///
 /// 单个合同的搜索结果，包含合同基本信息和匹配分数。
@@ -1112,6 +1070,12 @@ pub struct ContractStatistics {
     /// 部门分布统计，JSON 格式，包含各部门的合同数量分布
     #[serde(skip_serializing_if = "Option::is_none")]
     pub department_distribution: Option<serde_json::Value>,
+}
+
+impl ApiResponseTrait for ContractStatistics {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 /// 合同信息
@@ -1173,6 +1137,12 @@ pub struct Contract {
     /// 扩展属性，JSON 格式，用于存储自定义字段
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extended_attributes: Option<serde_json::Value>,
+}
+
+impl ApiResponseTrait for Contract {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 /// 合同创建数据
@@ -1292,4 +1262,13 @@ pub struct PageResponse<T> {
     /// 总记录数量，可选字段，某些查询可能不提供总数
     #[serde(skip_serializing_if = "Option::is_none")]
     pub total: Option<i32>,
+}
+
+impl<T> ApiResponseTrait for PageResponse<T>
+where
+    T: Serialize + for<'de> Deserialize<'de> + Send + Sync + 'static + Debug,
+{
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }

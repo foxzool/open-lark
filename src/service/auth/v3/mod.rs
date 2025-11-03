@@ -19,7 +19,7 @@ impl AuthServiceV3 {
     /// 自建应用获取租户访问令牌
     pub async fn tenant_access_token_internal(
         &self,
-        request: &TenantAccessTokenInternalRequest,
+        _request: &TenantAccessTokenInternalRequest,
     ) -> SDKResult<TenantAccessTokenResponse> {
         // 模拟实现
         Ok(TenantAccessTokenResponse {
@@ -36,7 +36,7 @@ impl AuthServiceV3 {
     /// 自建应用获取应用访问令牌
     pub async fn app_access_token_internal(
         &self,
-        request: &AppAccessTokenInternalRequest,
+        _request: &AppAccessTokenInternalRequest,
     ) -> SDKResult<AppAccessTokenResponse> {
         // 模拟实现
         Ok(AppAccessTokenResponse {
@@ -53,7 +53,7 @@ impl AuthServiceV3 {
     /// 重新获取应用票据
     pub async fn app_ticket_resend(
         &self,
-        request: &AppTicketResendRequest,
+        _request: &AppTicketResendRequest,
     ) -> SDKResult<AppTicketResendResponse> {
         // 模拟实现
         Ok(AppTicketResendResponse {
@@ -69,7 +69,7 @@ impl AuthServiceV3 {
     /// 商店应用获取应用访问令牌
     pub async fn app_access_token(
         &self,
-        request: &AppAccessTokenRequest,
+        _request: &AppAccessTokenRequest,
     ) -> SDKResult<AppAccessTokenResponse> {
         // 模拟实现
         Ok(AppAccessTokenResponse {
@@ -86,7 +86,7 @@ impl AuthServiceV3 {
     /// 商店应用获取租户访问令牌
     pub async fn tenant_access_token(
         &self,
-        request: &TenantAccessTokenRequest,
+        _request: &TenantAccessTokenRequest,
     ) -> SDKResult<TenantAccessTokenResponse> {
         // 模拟实现
         Ok(TenantAccessTokenResponse {

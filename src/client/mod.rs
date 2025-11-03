@@ -54,8 +54,6 @@ use crate::service::task::TaskService;
 use open_lark_extensions::board::BoardService;
 #[cfg(feature = "event")]
 use open_lark_extensions::event::EventService;
-#[cfg(feature = "compensation-management")]
-use open_lark_hr_suite::compensation_management::CompensationManagementService;
 
 /// 飞书开放平台SDK主客户端
 ///
@@ -90,7 +88,7 @@ pub struct LarkClient {
     #[cfg(feature = "approval")]
     pub approval: ApprovalService,
     #[cfg(feature = "authentication")]
-    pub auth: AuthenticationService,
+    pub authentication: AuthenticationService,
     #[cfg(feature = "bot")]
     pub bot: BotService,
     #[cfg(feature = "calendar")]
@@ -137,9 +135,7 @@ impl LarkClient {
             board: BoardService::new(unsafe { std::mem::transmute_copy(&config) }),
             #[cfg(feature = "event")]
             event: EventService::new(unsafe { std::mem::transmute_copy(&config) }),
-            #[cfg(feature = "auth")]
-            auth: AuthenticationService::new(config.clone()),
-            #[cfg(feature = "ai")]
+              #[cfg(feature = "ai")]
             ai: AiService::new(config.clone()),
             #[cfg(feature = "aily")]
             aily: AilyService::new(config.clone()),
@@ -152,6 +148,7 @@ impl LarkClient {
             #[cfg(feature = "approval")]
             approval: ApprovalService::new(config.clone()),
             #[cfg(feature = "authentication")]
+            authentication: AuthenticationService::new(config.clone()),
             #[cfg(feature = "bot")]
             bot: BotService::new(config.clone()),
             #[cfg(feature = "calendar")]
@@ -178,7 +175,6 @@ impl LarkClient {
 
             #[cfg(feature = "feishu_people")]
             feishu_people: FeishuPeopleService::new(config.clone()),
-
             #[cfg(feature = "performance")]
             performance: PerformanceService::new(config.clone()),
 

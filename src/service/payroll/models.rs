@@ -303,7 +303,7 @@ pub struct AcctItemListRequest {
 }
 
 /// 算薪项信息
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct AcctItem {
     /// 算薪项ID
     pub acct_item_id: String,
@@ -349,7 +349,7 @@ pub struct CostAllocationReportListRequest {
 }
 
 /// 成本分摊报表数据
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct CostAllocationReport {
     /// 报表ID
     pub report_id: String,
@@ -378,7 +378,7 @@ pub struct CostAllocationReport {
 }
 
 /// 分摊明细
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct AllocationDetail {
     /// 算薪项ID
     pub acct_item_id: String,
@@ -406,7 +406,7 @@ pub struct CostAllocationPlanListRequest {
 }
 
 /// 成本分摊方案
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct CostAllocationPlan {
     /// 方案ID
     pub plan_id: String,
@@ -433,7 +433,7 @@ pub struct CostAllocationPlan {
 }
 
 /// 分摊规则
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct AllocationRule {
     /// 规则ID
     pub rule_id: String,
@@ -452,7 +452,7 @@ pub struct AllocationRule {
 }
 
 /// 规则条件
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct RuleCondition {
     /// 条件字段
     pub field: String,

@@ -224,7 +224,7 @@ impl ApprovalDefinitionService {
     /// 获取审批定义模板列表
     pub async fn list_templates(
         &self,
-        request: &ListApprovalTemplateRequest,
+        _request: &ListApprovalTemplateRequest,
     ) -> SDKResult<ApprovalBaseResponse<ListApprovalTemplateResponse>> {
         // 模拟实现
         let templates = vec![
@@ -369,8 +369,8 @@ impl ApprovalDefinitionService {
     /// 更新审批定义权限配置
     pub async fn update_approval_permissions(
         &self,
-        approval_code: &str,
-        request: &UpdateApprovalPermissionsRequest,
+        _approval_code: &str,
+        _request: &UpdateApprovalPermissionsRequest,
     ) -> SDKResult<ApprovalBaseResponse<()>> {
         // 模拟实现
         Ok(ApprovalBaseResponse {

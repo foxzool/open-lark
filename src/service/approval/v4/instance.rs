@@ -28,7 +28,7 @@ impl InstanceService {
     /// 创建审批实例
     pub async fn create(
         &self,
-        request: &CreateInstanceRequest,
+        _request: &CreateInstanceRequest,
     ) -> SDKResult<ApprovalBaseResponse<CreateInstanceResponse>> {
         // 模拟实现
         let instance_code = format!("instance_{}", chrono::Utc::now().timestamp());
@@ -50,15 +50,15 @@ impl InstanceService {
     /// 获取审批实例详情
     pub async fn get(
         &self,
-        instance_code: &str,
-        user_id_type: Option<&str>,
+        _instance_code: &str,
+        _user_id_type: Option<&str>,
     ) -> SDKResult<ApprovalBaseResponse<ApprovalInstance>> {
         // 模拟实现
         Ok(ApprovalBaseResponse {
             code: 0,
             msg: "success".to_string(),
             data: Some(ApprovalInstance {
-                instance_code: instance_code.to_string(),
+                instance_code: _instance_code.to_string(),
                 approval_code: "approval_001".to_string(),
                 approval_name: Some("请假审批".to_string()),
                 initiator: Some(UserInfo {
@@ -78,7 +78,7 @@ impl InstanceService {
                 })),
                 tasks: Some(vec![ApprovalTask {
                     task_id: "task_001".to_string(),
-                    instance_code: instance_code.to_string(),
+                    instance_code: _instance_code.to_string(),
                     task_name: "主管审批".to_string(),
                     approver: Some(UserInfo {
                         user_id: "manager_001".to_string(),
@@ -101,7 +101,7 @@ impl InstanceService {
     /// 查询审批实例列表
     pub async fn query(
         &self,
-        request: &QueryInstanceRequest,
+        _request: &QueryInstanceRequest,
     ) -> SDKResult<ApprovalBaseResponse<QueryInstanceResponse>> {
         // 模拟实现
         let instances = vec![
@@ -188,8 +188,8 @@ impl InstanceService {
     /// 撤回审批实例
     pub async fn withdraw(
         &self,
-        instance_code: &str,
-        user_id_type: Option<&str>,
+        _instance_code: &str,
+        _user_id_type: Option<&str>,
     ) -> SDKResult<ApprovalBaseResponse<()>> {
         // 模拟实现
         Ok(ApprovalBaseResponse {
@@ -202,8 +202,8 @@ impl InstanceService {
     /// 催办审批实例
     pub async fn urge(
         &self,
-        instance_code: &str,
-        user_id_type: Option<&str>,
+        _instance_code: &str,
+        _user_id_type: Option<&str>,
     ) -> SDKResult<ApprovalBaseResponse<()>> {
         // 模拟实现
         Ok(ApprovalBaseResponse {
@@ -217,7 +217,7 @@ impl InstanceService {
     pub async fn batch_get(
         &self,
         instance_codes: Vec<String>,
-        user_id_type: Option<&str>,
+        _user_id_type: Option<&str>,
     ) -> SDKResult<ApprovalBaseResponse<Vec<ApprovalInstance>>> {
         // 模拟实现
         let instances = instance_codes
@@ -254,8 +254,8 @@ impl InstanceService {
     /// 获取我的审批统计
     pub async fn get_my_approval_stats(
         &self,
-        user_id: &str,
-        user_id_type: Option<&str>,
+        _user_id: &str,
+        _user_id_type: Option<&str>,
     ) -> SDKResult<ApprovalBaseResponse<ApprovalStats>> {
         // 模拟实现
         Ok(ApprovalBaseResponse {
@@ -279,7 +279,7 @@ impl InstanceService {
     pub async fn get_department_approval_stats(
         &self,
         department_id: &str,
-        department_id_type: Option<&str>,
+        _department_id_type: Option<&str>,
     ) -> SDKResult<ApprovalBaseResponse<DepartmentApprovalStats>> {
         // 模拟实现
         Ok(ApprovalBaseResponse {
