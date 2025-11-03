@@ -71,7 +71,7 @@ use crate::core::{
 };
 
 // Use open_lark_core's error type for compatibility with async traits
-use crate::core::error::LarkAPIError;
+use open_lark_core::core::error::LarkAPIError;
 pub type SDKResult<T> = Result<T, LarkAPIError>;
 use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use serde::{Deserialize, Serialize};
@@ -1001,11 +1001,23 @@ impl
         BaseResponse<GetDepartmentResponse>,
     > for GetDepartmentBuilder
 {
+    fn build(self) -> (String, GetDepartmentRequest) {
+        (self.department_id, self.request)
+    }
+
     async fn execute(
-        &self,
+        self,
         service: &DepartmentsService,
     ) -> SDKResult<BaseResponse<GetDepartmentResponse>> {
-        service.get_with_tuple(self.clone().build()).await
+        service.get_with_tuple((self.department_id, self.request)).await
+    }
+
+    async fn execute_with_options(
+        self,
+        service: &DepartmentsService,
+        _option: open_lark_core::core::req_option::RequestOption,
+    ) -> SDKResult<BaseResponse<GetDepartmentResponse>> {
+        service.get_with_tuple((self.department_id, self.request)).await
     }
 }
 
@@ -1322,11 +1334,23 @@ impl
         BaseResponse<UpdateDepartmentResponse>,
     > for UpdateDepartmentBuilder
 {
+    fn build(self) -> (String, UpdateDepartmentRequest) {
+        (self.department_id, self.request)
+    }
+
     async fn execute(
-        &self,
+        self,
         service: &DepartmentsService,
     ) -> SDKResult<BaseResponse<UpdateDepartmentResponse>> {
-        service.update_with_tuple(self.clone().build()).await
+        service.update_with_tuple((self.department_id, self.request)).await
+    }
+
+    async fn execute_with_options(
+        self,
+        service: &DepartmentsService,
+        _option: open_lark_core::core::req_option::RequestOption,
+    ) -> SDKResult<BaseResponse<UpdateDepartmentResponse>> {
+        service.update_with_tuple((self.department_id, self.request)).await
     }
 }
 
@@ -1373,11 +1397,23 @@ impl
         BaseResponse<DeleteDepartmentResponse>,
     > for DeleteDepartmentBuilder
 {
+    fn build(self) -> (String, DeleteDepartmentRequest) {
+        (self.department_id, self.request)
+    }
+
     async fn execute(
-        &self,
+        self,
         service: &DepartmentsService,
     ) -> SDKResult<BaseResponse<DeleteDepartmentResponse>> {
-        service.delete_with_tuple(self.clone().build()).await
+        service.delete_with_tuple((self.department_id, self.request)).await
+    }
+
+    async fn execute_with_options(
+        self,
+        service: &DepartmentsService,
+        _option: open_lark_core::core::req_option::RequestOption,
+    ) -> SDKResult<BaseResponse<DeleteDepartmentResponse>> {
+        service.delete_with_tuple((self.department_id, self.request)).await
     }
 }
 

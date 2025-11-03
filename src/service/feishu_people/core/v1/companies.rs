@@ -73,7 +73,7 @@ use crate::core::{
 };
 
 // Use open_lark_core's error type for compatibility with async traits
-use crate::core::error::LarkAPIError;
+use open_lark_core::core::error::LarkAPIError;
 pub type SDKResult<T> = Result<T, LarkAPIError>;
 use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use serde::{Deserialize, Serialize};
@@ -899,11 +899,23 @@ impl
         BaseResponse<GetCompanyResponse>,
     > for GetCompanyBuilder
 {
+    fn build(self) -> (String, GetCompanyRequest) {
+        (self.company_id, self.request)
+    }
+
     async fn execute(
-        &self,
+        self,
         service: &CompaniesService,
     ) -> SDKResult<BaseResponse<GetCompanyResponse>> {
-        service.get_with_tuple(self.clone().build()).await
+        service.get_with_tuple((self.company_id, self.request)).await
+    }
+
+    async fn execute_with_options(
+        self,
+        service: &CompaniesService,
+        _option: open_lark_core::core::req_option::RequestOption,
+    ) -> SDKResult<BaseResponse<GetCompanyResponse>> {
+        service.get_with_tuple((self.company_id, self.request)).await
     }
 }
 
@@ -1109,11 +1121,23 @@ impl
         BaseResponse<UpdateCompanyResponse>,
     > for UpdateCompanyBuilder
 {
+    fn build(self) -> (String, UpdateCompanyRequest) {
+        (self.company_id, self.request)
+    }
+
     async fn execute(
-        &self,
+        self,
         service: &CompaniesService,
     ) -> SDKResult<BaseResponse<UpdateCompanyResponse>> {
-        service.update_with_tuple(self.clone().build()).await
+        service.update_with_tuple((self.company_id, self.request)).await
+    }
+
+    async fn execute_with_options(
+        self,
+        service: &CompaniesService,
+        _option: open_lark_core::core::req_option::RequestOption,
+    ) -> SDKResult<BaseResponse<UpdateCompanyResponse>> {
+        service.update_with_tuple((self.company_id, self.request)).await
     }
 }
 
@@ -1160,11 +1184,23 @@ impl
         BaseResponse<DeleteCompanyResponse>,
     > for DeleteCompanyBuilder
 {
+    fn build(self) -> (String, DeleteCompanyRequest) {
+        (self.company_id, self.request)
+    }
+
     async fn execute(
-        &self,
+        self,
         service: &CompaniesService,
     ) -> SDKResult<BaseResponse<DeleteCompanyResponse>> {
-        service.delete_with_tuple(self.clone().build()).await
+        service.delete_with_tuple((self.company_id, self.request)).await
+    }
+
+    async fn execute_with_options(
+        self,
+        service: &CompaniesService,
+        _option: open_lark_core::core::req_option::RequestOption,
+    ) -> SDKResult<BaseResponse<DeleteCompanyResponse>> {
+        service.delete_with_tuple((self.company_id, self.request)).await
     }
 }
 
