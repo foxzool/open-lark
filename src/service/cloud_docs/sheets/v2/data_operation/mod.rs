@@ -10,7 +10,6 @@ pub use split_cells::*;
 pub use write_data_to_a_single_range::*;
 pub use write_data_to_multi_ranges::*;
 pub use write_image::*;
-
 mod append_data;
 mod batch_set_cell_style;
 mod merge_cells;

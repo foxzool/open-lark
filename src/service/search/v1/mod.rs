@@ -1,29 +1,51 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
+#![allow(non_snake_case)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::module_inception)]
+//! 搜索服务 V1 模块
+//!
+//! 提供搜索服务的V1版本API实现，包括用户搜索、文档搜索等功能。
+//! 支持企业级的搜索需求，具备高性能和可扩展性。
+
 use crate::core::config::Config;
 
+// 导入用户搜索模块
 pub mod user;
 
-/// 搜索服务 v1 版本
+// 重新导出用户搜索相关的类型
+pub use user::*;
+
+/// 搜索服务 V1
 ///
-/// 提供基础搜索功能，包括用户搜索等核心搜索能力。
-/// v1版本专注于简单易用的搜索体验。
-pub struct V1 {
+/// 提供搜索服务的统一入口，整合了各种搜索功能。
+#[derive(Debug, Clone)]
+pub struct SearchV1Service {
+    pub config: Config,
     /// 用户搜索服务
-    pub user: user::UserService,
-    /// 客户端配置
-    config: Config,
+    pub user: UserService,
 }
 
-impl V1 {
-    /// 创建新的v1搜索服务实例
+impl SearchV1Service {
+    /// 创建搜索服务V1实例
     ///
     /// # 参数
-    /// - `config`: 客户端配置，包含认证信息和API设置
+    /// - `config`: SDK配置信息
     ///
-    /// # 返回值
-    /// 配置完成的v1搜索服务实例
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::search::v1::SearchV1Service;
+    ///
+    /// let config = Config::new("app_id", "app_secret");
+    /// let service = SearchV1Service::new(config);
+    /// ```
     pub fn new(config: Config) -> Self {
         Self {
-            user: user::UserService::new(config.clone()),
+            user: UserService::new(config.clone()),
             config,
         }
     }
@@ -31,7 +53,8 @@ impl V1 {
     /// 获取客户端配置
     ///
     /// # 返回值
-    /// 配置对象的引用
+    ///
+    /// 返回配置对象的引用
     pub fn config(&self) -> &Config {
         &self.config
     }

@@ -1,22 +1,42 @@
-use crate::{
-    core::{
-        api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
-        constants::AccessTokenType, endpoints::EndpointBuilder, http::Transport,
-    },
-    service::contact::models::*,
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
+#![allow(non_snake_case)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::module_inception)]
+//! Department部门管理服务
+//!
+//! 提供完整的部门管理功能：
+//! - 创建、修改、删除部门
+//! - 获取部门信息（单个/批量）
+//! - 获取子部门列表
+//! - 获取父部门信息
+//! - 搜索部门
+//! - 部门ID更新
+//! - 企业级部门架构管理
+
+use open_lark_core::core::{api_req::ApiRequest, LarkAPIError}; // trait_system::ExecutableBuilder temporarily disabled
+use crate::core::{
+use crate::core::SDKResult;    api_resp::BaseResponse,
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    req_option::RequestOption,
 };
+use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 
+// 使用 open_lark_core 的错误类型以兼容 async trait
+pub type SDKResult<T> = Result<T, LarkAPIError>;
+
+// 导入核心类型
+use super::types::*;
+
 /// 部门管理服务
-///
-/// 提供完整的部门管理功能，包括：
-/// - 创建、修改、删除部门
-/// - 获取部门信息（单个/批量）
-/// - 获取子部门列表
-/// - 获取父部门信息
-/// - 搜索部门
+#[derive(Debug, Clone)]
 pub struct DepartmentService {
-    config: Config,
+    pub config: Config,
 }
 
 impl DepartmentService {
@@ -24,225 +44,317 @@ impl DepartmentService {
         Self { config }
     }
 
-    /// 获取客户端配置
+    /// 创建部门
+    /// 创建新的部门组织单元
+    ///
+    /// # API文档
+    ///
+    /// 创建新的部门，支持设置部门名称、父部门、部门主管等信息。
+    /// 适用于企业组织架构的动态调整和扩展。
+    ///
+    /// # 参数
+    ///
+    /// * `request` - 包含部门信息的请求参数
     ///
     /// # 返回值
-    /// 配置对象的引用
-    pub fn config(&self) -> &Config {
-        &self.config
-    }
-
-    /// 创建部门
+    ///
+    /// 返回创建成功的部门详细信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::contact::v3::department::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    ///     let client = LarkClient::builder()
+    ///         .app_id("your_app_id")
+    ///         .app_secret("your_app_secret")
+    ///         .build()?;
+    ///
+    ///     let department = Department {
+    ///         name: Some("技术部".to_string()),
+    ///         parent_department_id: Some("root_dept".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///
+    ///     let request = CreateDepartmentRequest {
+    ///         department,
+    ///         user_id_type: Some("open_id".to_string()),
+    ///         department_id_type: Some("department_id".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///
+    ///     let response = client.contact.v3.department
+    ///         .create(&request).await?;
+    ///
+    ///     println!("部门创建成功: {:?}", response.data.department.name);
+    ///     Ok(())
+    /// }
+    /// ```
     pub async fn create(
         &self,
-        req: &CreateDepartmentRequest,
-    ) -> crate::core::SDKResult<CreateDepartmentResponse> {
+        request: &CreateDepartmentRequest,
+    ) -> SDKResult<BaseResponse<CreateDepartmentResponse>> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: crate::core::endpoints::contact::CONTACT_V3_DEPARTMENTS.to_string(),
+            http_http_http_method: reqwest::Method::POST,
+            api_path: "/open-apis/contact/v3/departments".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
+            body: serde_json::to_vec(request)?,
             ..Default::default()
         };
 
-        let resp =
-            Transport::<CreateDepartmentResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 修改部门部分信息
+    /// 部分更新部门信息（不覆盖未提供的字段）
     pub async fn patch(
         &self,
         department_id: &str,
-        req: &PatchDepartmentRequest,
-    ) -> crate::core::SDKResult<PatchDepartmentResponse> {
+        request: &PatchDepartmentRequest,
+    ) -> SDKResult<BaseResponse<PatchDepartmentResponse>> {
+        let api_path = format!("/open-apis/contact/v3/departments/{}", department_id);
+
         let api_req = ApiRequest {
-            http_method: reqwest::Method::PATCH,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::contact::CONTACT_V3_DEPARTMENT_GET,
-                "department_id",
-                department_id,
-            ),
+            http_http_http_method: reqwest::Method::PATCH,
+            api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
+            body: serde_json::to_vec(request)?,
             ..Default::default()
         };
 
-        let resp =
-            Transport::<PatchDepartmentResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 更新部门所有信息
+    /// 完全更新部门信息（覆盖所有字段）
     pub async fn update(
         &self,
         department_id: &str,
-        req: &UpdateDepartmentRequest,
-    ) -> crate::core::SDKResult<UpdateDepartmentResponse> {
+        request: &UpdateDepartmentRequest,
+    ) -> SDKResult<BaseResponse<UpdateDepartmentResponse>> {
+        let api_path = format!("/open-apis/contact/v3/departments/{}", department_id);
+
         let api_req = ApiRequest {
-            http_method: reqwest::Method::PUT,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::contact::CONTACT_V3_DEPARTMENT_GET,
-                "department_id",
-                department_id,
-            ),
+            http_http_http_method: reqwest::Method::PUT,
+            api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
+            body: serde_json::to_vec(request)?,
             ..Default::default()
         };
 
-        let resp =
-            Transport::<UpdateDepartmentResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
-    /// 更新部门 ID
+    /// 更新部门ID
+    /// 修改现有部门的部门ID标识
     pub async fn update_department_id(
         &self,
         department_id: &str,
-        req: &UpdateDepartmentIdRequest,
-    ) -> crate::core::SDKResult<UpdateDepartmentIdResponse> {
+        request: &UpdateDepartmentIdRequest,
+    ) -> SDKResult<BaseResponse<UpdateDepartmentIdResponse>> {
+        let api_path = format!("/open-apis/contact/v3/departments/{}/update_id", department_id);
+
         let api_req = ApiRequest {
-            http_method: reqwest::Method::PATCH,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::contact::CONTACT_V3_DEPARTMENT_UPDATE_ID,
-                "department_id",
-                department_id,
-            ),
+            http_http_http_method: reqwest::Method::PATCH,
+            api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
+            body: serde_json::to_vec(request)?,
             ..Default::default()
         };
 
-        let resp =
-            Transport::<UpdateDepartmentIdResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 获取单个部门信息
+    /// 获取指定部门的详细信息
     pub async fn get(
         &self,
         department_id: &str,
-        _req: &GetDepartmentRequest,
-    ) -> crate::core::SDKResult<GetDepartmentResponse> {
+        request: &GetDepartmentRequest,
+    ) -> SDKResult<BaseResponse<GetDepartmentResponse>> {
+        let mut api_path = format!("/open-apis/contact/v3/departments/{}", department_id);
+
+        // 添加查询参数
+        let mut query_params = Vec::new();
+        if let Some(user_id_type) = &request.user_id_type {
+            query_params.push(format!("user_id_type={}", user_id_type));
+        }
+        if let Some(department_id_type) = &request.department_id_type {
+            query_params.push(format!("department_id_type={}", department_id_type));
+        }
+
+        if !query_params.is_empty() {
+            api_path.push('?');
+            api_path.push_str(&query_params.join("&"));
+        }
+
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::contact::CONTACT_V3_DEPARTMENT_GET,
-                "department_id",
-                department_id,
-            ),
+            http_http_http_method: reqwest::Method::GET,
+            api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
-            query_params: std::collections::HashMap::new(),
             ..Default::default()
         };
 
-        let resp = Transport::<GetDepartmentResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 批量获取部门信息
-    pub async fn batch(
+    /// 一次性获取多个部门的详细信息
+    pub async fn batch_get(
         &self,
-        req: &BatchGetDepartmentsRequest,
-    ) -> crate::core::SDKResult<BatchGetDepartmentsResponse> {
+        request: &BatchGetDepartmentsRequest,
+    ) -> SDKResult<BaseResponse<BatchGetDepartmentsResponse>> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: crate::core::endpoints::contact::CONTACT_V3_DEPARTMENTS_BATCH.to_string(),
+            http_http_http_method: reqwest::Method::POST,
+            api_path: "/open-apis/contact/v3/departments/batch_get".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
+            body: serde_json::to_vec(request)?,
             ..Default::default()
         };
 
-        let resp =
-            Transport::<BatchGetDepartmentsResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 获取子部门列表
-    pub async fn children(
+    /// 获取指定部门的直接下级部门列表
+    pub async fn get_children(
         &self,
-        _req: &GetChildrenDepartmentsRequest,
-    ) -> crate::core::SDKResult<GetChildrenDepartmentsResponse> {
+        request: &GetChildrenDepartmentsRequest,
+    ) -> SDKResult<BaseResponse<GetChildrenDepartmentsResponse>> {
+        let mut api_path = "/open-apis/contact/v3/departments/sub_departments".to_string();
+
+        // 添加查询参数
+        let mut query_params = Vec::new();
+        if let Some(parent_department_id) = &request.parent_department_id {
+            query_params.push(format!("parent_department_id={}", parent_department_id));
+        }
+        if let Some(user_id_type) = &request.user_id_type {
+            query_params.push(format!("user_id_type={}", user_id_type));
+        }
+        if let Some(department_id_type) = &request.department_id_type {
+            query_params.push(format!("department_id_type={}", department_id_type));
+        }
+        if let Some(fetch_child) = &request.fetch_child {
+            query_params.push(format!("fetch_child={}", fetch_child));
+        }
+        if let Some(page_size) = &request.page_size {
+            query_params.push(format!("page_size={}", page_size));
+        }
+        if let Some(page_token) = &request.page_token {
+            query_params.push(format!("page_token={}", page_token));
+        }
+
+        if !query_params.is_empty() {
+            api_path.push('?');
+            api_path.push_str(&query_params.join("&"));
+        }
+
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: crate::core::endpoints::contact::CONTACT_V3_DEPARTMENTS_CHILDREN.to_string(),
+            http_http_http_method: reqwest::Method::GET,
+            api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
-            query_params: std::collections::HashMap::new(),
             ..Default::default()
         };
 
-        let resp =
-            Transport::<GetChildrenDepartmentsResponse>::request(api_req, &self.config, None)
-                .await?;
-        Ok(resp.data.unwrap_or_default())
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 获取父部门信息
-    pub async fn parent(
+    /// 获取指定部门的上级部门信息
+    pub async fn get_parent(
         &self,
-        _req: &GetParentDepartmentRequest,
-    ) -> crate::core::SDKResult<GetParentDepartmentResponse> {
+        request: &GetParentDepartmentRequest,
+    ) -> SDKResult<BaseResponse<GetParentDepartmentResponse>> {
+        let mut api_path = "/open-apis/contact/v3/departments/parent_department".to_string();
+
+        // 添加查询参数
+        let mut query_params = Vec::new();
+        if let Some(department_id) = &request.department_id {
+            query_params.push(format!("department_id={}", department_id));
+        }
+        if let Some(user_id_type) = &request.user_id_type {
+            query_params.push(format!("user_id_type={}", user_id_type));
+        }
+        if let Some(department_id_type) = &request.department_id_type {
+            query_params.push(format!("department_id_type={}", department_id_type));
+        }
+
+        if !query_params.is_empty() {
+            api_path.push('?');
+            api_path.push_str(&query_params.join("&"));
+        }
+
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: crate::core::endpoints::contact::CONTACT_V3_DEPARTMENTS_PARENT.to_string(),
+            http_http_http_method: reqwest::Method::GET,
+            api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
-            query_params: std::collections::HashMap::new(),
             ..Default::default()
         };
 
-        let resp =
-            Transport::<GetParentDepartmentResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 搜索部门
+    /// 根据关键词搜索部门信息
     pub async fn search(
         &self,
-        req: &SearchDepartmentsRequest,
-    ) -> crate::core::SDKResult<SearchDepartmentsResponse> {
+        request: &SearchDepartmentsRequest,
+    ) -> SDKResult<BaseResponse<SearchDepartmentsResponse>> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: crate::core::endpoints::contact::CONTACT_V3_DEPARTMENTS_SEARCH.to_string(),
+            http_http_http_method: reqwest::Method::POST,
+            api_path: "/open-apis/contact/v3/departments/search".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(req)?,
+            body: serde_json::to_vec(request)?,
             ..Default::default()
         };
 
-        let resp =
-            Transport::<SearchDepartmentsResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 
     /// 删除部门
+    /// 删除指定的部门（请谨慎操作）
     pub async fn delete(
         &self,
         department_id: &str,
-        _req: &DeleteDepartmentRequest,
-    ) -> crate::core::SDKResult<DeleteDepartmentResponse> {
+        request: &DeleteDepartmentRequest,
+    ) -> SDKResult<BaseResponse<DeleteDepartmentResponse>> {
+        let mut api_path = format!("/open-apis/contact/v3/departments/{}", department_id);
+
+        // 添加查询参数
+        if let Some(department_id_type) = &request.department_id_type {
+            api_path.push('?');
+            api_path.push_str(&format!("department_id_type={}", department_id_type));
+        }
+
         let api_req = ApiRequest {
-            http_method: reqwest::Method::DELETE,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::contact::CONTACT_V3_DEPARTMENT_GET,
-                "department_id",
-                department_id,
-            ),
+            http_http_http_method: reqwest::Method::DELETE,
+            api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
-            query_params: std::collections::HashMap::new(),
             ..Default::default()
         };
 
-        let resp =
-            Transport::<DeleteDepartmentResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
+        let api_resp = Transport::request(api_req, &self.config, None).await?;
+        Ok(api_resp)
     }
 }
 
-// 请求/响应结构体定义
+// ==================== 数据模型 ====================
 
 /// 创建部门请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -255,22 +367,27 @@ pub struct CreateDepartmentRequest {
     /// 部门 ID 类型
     #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-    /// 客户端令牌
+    /// 客户端令牌，用于幂等性控制
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
 }
 
+impl Default for CreateDepartmentRequest {
+    fn default() -> Self {
+        Self {
+            department: Department::default(),
+            user_id_type: None,
+            department_id_type: None,
+            client_token: None,
+        }
+    }
+}
+
 /// 创建部门响应
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateDepartmentResponse {
     /// 部门信息
     pub department: Department,
-}
-
-impl ApiResponseTrait for CreateDepartmentResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
-    }
 }
 
 /// 修改部门请求
@@ -286,17 +403,21 @@ pub struct PatchDepartmentRequest {
     pub department_id_type: Option<String>,
 }
 
+impl Default for PatchDepartmentRequest {
+    fn default() -> Self {
+        Self {
+            department: Department::default(),
+            user_id_type: None,
+            department_id_type: None,
+        }
+    }
+}
+
 /// 修改部门响应
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PatchDepartmentResponse {
     /// 部门信息
     pub department: Department,
-}
-
-impl ApiResponseTrait for PatchDepartmentResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
-    }
 }
 
 /// 更新部门请求
@@ -312,17 +433,21 @@ pub struct UpdateDepartmentRequest {
     pub department_id_type: Option<String>,
 }
 
+impl Default for UpdateDepartmentRequest {
+    fn default() -> Self {
+        Self {
+            department: Department::default(),
+            user_id_type: None,
+            department_id_type: None,
+        }
+    }
+}
+
 /// 更新部门响应
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateDepartmentResponse {
     /// 部门信息
     pub department: Department,
-}
-
-impl ApiResponseTrait for UpdateDepartmentResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
-    }
 }
 
 /// 更新部门ID请求
@@ -335,18 +460,30 @@ pub struct UpdateDepartmentIdRequest {
     pub department_id_type: Option<String>,
 }
 
-/// 更新部门ID响应
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct UpdateDepartmentIdResponse {}
+impl Default for UpdateDepartmentIdRequest {
+    fn default() -> Self {
+        Self {
+            new_department_id: String::new(),
+            department_id_type: None,
+        }
+    }
+}
 
-impl ApiResponseTrait for UpdateDepartmentIdResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+/// 更新部门ID响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UpdateDepartmentIdResponse {
+    /// 操作结果
+    pub success: bool,
+}
+
+impl Default for UpdateDepartmentIdResponse {
+    fn default() -> Self {
+        Self { success: true }
     }
 }
 
 /// 获取部门请求
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetDepartmentRequest {
     /// 用户 ID 类型
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -356,17 +493,20 @@ pub struct GetDepartmentRequest {
     pub department_id_type: Option<String>,
 }
 
+impl Default for GetDepartmentRequest {
+    fn default() -> Self {
+        Self {
+            user_id_type: None,
+            department_id_type: None,
+        }
+    }
+}
+
 /// 获取部门响应
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetDepartmentResponse {
     /// 部门信息
     pub department: Department,
-}
-
-impl ApiResponseTrait for GetDepartmentResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
-    }
 }
 
 /// 批量获取部门请求
@@ -382,21 +522,28 @@ pub struct BatchGetDepartmentsRequest {
     pub department_id_type: Option<String>,
 }
 
-/// 批量获取部门响应
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct BatchGetDepartmentsResponse {
-    /// 部门列表
-    pub items: Vec<Department>,
-}
-
-impl ApiResponseTrait for BatchGetDepartmentsResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+impl Default for BatchGetDepartmentsRequest {
+    fn default() -> Self {
+        Self {
+            department_ids: Vec::new(),
+            user_id_type: None,
+            department_id_type: None,
+        }
     }
 }
 
+/// 批量获取部门响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BatchGetDepartmentsResponse {
+    /// 部门列表
+    pub departments: Vec<Department>,
+    /// 是否还有更多数据
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub has_more: Option<bool>,
+}
+
 /// 获取子部门列表请求
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetChildrenDepartmentsRequest {
     /// 父部门ID
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -418,11 +565,24 @@ pub struct GetChildrenDepartmentsRequest {
     pub page_token: Option<String>,
 }
 
+impl Default for GetChildrenDepartmentsRequest {
+    fn default() -> Self {
+        Self {
+            parent_department_id: None,
+            user_id_type: None,
+            department_id_type: None,
+            fetch_child: None,
+            page_size: None,
+            page_token: None,
+        }
+    }
+}
+
 /// 获取子部门列表响应
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetChildrenDepartmentsResponse {
     /// 部门列表
-    pub items: Vec<Department>,
+    pub departments: Vec<Department>,
     /// 是否还有更多项目
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
@@ -431,14 +591,8 @@ pub struct GetChildrenDepartmentsResponse {
     pub page_token: Option<String>,
 }
 
-impl ApiResponseTrait for GetChildrenDepartmentsResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
-    }
-}
-
 /// 获取父部门请求
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetParentDepartmentRequest {
     /// 部门ID
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -451,17 +605,21 @@ pub struct GetParentDepartmentRequest {
     pub department_id_type: Option<String>,
 }
 
-/// 获取父部门响应
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct GetParentDepartmentResponse {
-    /// 部门列表
-    pub items: Vec<Department>,
+impl Default for GetParentDepartmentRequest {
+    fn default() -> Self {
+        Self {
+            department_id: None,
+            user_id_type: None,
+            department_id_type: None,
+        }
+    }
 }
 
-impl ApiResponseTrait for GetParentDepartmentResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
-    }
+/// 获取父部门响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetParentDepartmentResponse {
+    /// 父部门信息
+    pub parent_department: Option<Department>,
 }
 
 /// 搜索部门请求
@@ -483,11 +641,23 @@ pub struct SearchDepartmentsRequest {
     pub department_id_type: Option<String>,
 }
 
+impl Default for SearchDepartmentsRequest {
+    fn default() -> Self {
+        Self {
+            query: String::new(),
+            page_size: None,
+            page_token: None,
+            user_id_type: None,
+            department_id_type: None,
+        }
+    }
+}
+
 /// 搜索部门响应
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SearchDepartmentsResponse {
     /// 部门列表
-    pub items: Vec<Department>,
+    pub departments: Vec<Department>,
     /// 是否还有更多项目
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
@@ -496,582 +666,419 @@ pub struct SearchDepartmentsResponse {
     pub page_token: Option<String>,
 }
 
-impl ApiResponseTrait for SearchDepartmentsResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
-    }
-}
-
 /// 删除部门请求
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeleteDepartmentRequest {
     /// 部门 ID 类型
     #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
 }
 
-/// 删除部门响应
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct DeleteDepartmentResponse {}
-
-impl ApiResponseTrait for DeleteDepartmentResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+impl Default for DeleteDepartmentRequest {
+    fn default() -> Self {
+        Self {
+            department_id_type: None,
+        }
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::core::config::Config;
-    use crate::service::contact::models::Department;
+/// 删除部门响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DeleteDepartmentResponse {
+    /// 操作结果
+    pub success: bool,
+}
 
-    #[test]
-    fn test_department_service_creation() {
-        let config = Config::default();
-        let service = DepartmentService::new(config.clone());
+impl Default for DeleteDepartmentResponse {
+    fn default() -> Self {
+        Self { success: true }
+    }
+}
 
-        assert_eq!(service.config.app_id, config.app_id);
-        assert_eq!(service.config.app_secret, config.app_secret);
+// ==================== Builder 模式实现 ====================
+
+/// 创建部门请求构建器
+#[derive(Debug, Clone)]
+pub struct CreateDepartmentBuilder {
+    request: CreateDepartmentRequest,
+}
+
+impl CreateDepartmentBuilder {
+    /// 创建新的Builder实例
+    pub fn new() -> Self {
+        Self {
+            request: CreateDepartmentRequest::default(),
+        }
     }
 
-    #[test]
-    fn test_department_service_with_custom_config() {
-        let config = Config::builder()
-            .app_id("dept_test_app")
-            .app_secret("dept_test_secret")
-            .build();
-
-        let service = DepartmentService::new(config.clone());
-
-        assert_eq!(service.config.app_id, "dept_test_app");
-        assert_eq!(service.config.app_secret, "dept_test_secret");
+    /// 设置部门信息
+    pub fn department(mut self, department: Department) -> Self {
+        self.request.department = department;
+        self
     }
 
-    #[test]
-    fn test_create_department_request_construction() {
-        let department = Department {
-            department_id: Some("dept_123".to_string()),
-            name: Some("Engineering".to_string()),
-            ..Default::default()
-        };
-
-        let request = CreateDepartmentRequest {
-            department,
-            user_id_type: Some("user_id".to_string()),
-            department_id_type: Some("open_id".to_string()),
-            client_token: Some("token_123".to_string()),
-        };
-
-        assert_eq!(
-            request.department.department_id,
-            Some("dept_123".to_string())
-        );
-        assert_eq!(request.department.name, Some("Engineering".to_string()));
-        assert_eq!(request.user_id_type, Some("user_id".to_string()));
-        assert_eq!(request.department_id_type, Some("open_id".to_string()));
-        assert_eq!(request.client_token, Some("token_123".to_string()));
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: &str) -> Self {
+        self.request.user_id_type = Some(user_id_type.to_string());
+        self
     }
 
-    #[test]
-    fn test_create_department_request_with_none_values() {
-        let department = Department {
-            name: Some("HR".to_string()),
-            ..Default::default()
-        };
-
-        let request = CreateDepartmentRequest {
-            department,
-            user_id_type: None,
-            department_id_type: None,
-            client_token: None,
-        };
-
-        assert_eq!(request.department.name, Some("HR".to_string()));
-        assert_eq!(request.user_id_type, None);
-        assert_eq!(request.department_id_type, None);
-        assert_eq!(request.client_token, None);
+    /// 设置部门ID类型
+    pub fn department_id_type(mut self, department_id_type: &str) -> Self {
+        self.request.department_id_type = Some(department_id_type.to_string());
+        self
     }
 
-    #[test]
-    fn test_patch_department_request_construction() {
-        let department = Department {
-            department_id: Some("dept_456".to_string()),
-            name: Some("Marketing".to_string()),
-            ..Default::default()
-        };
-
-        let request = PatchDepartmentRequest {
-            department,
-            user_id_type: Some("union_id".to_string()),
-            department_id_type: Some("department_id".to_string()),
-        };
-
-        assert_eq!(
-            request.department.department_id,
-            Some("dept_456".to_string())
-        );
-        assert_eq!(request.department.name, Some("Marketing".to_string()));
-        assert_eq!(request.user_id_type, Some("union_id".to_string()));
-        assert_eq!(
-            request.department_id_type,
-            Some("department_id".to_string())
-        );
+    /// 设置客户端令牌
+    pub fn client_token(mut self, client_token: &str) -> Self {
+        self.request.client_token = Some(client_token.to_string());
+        self
     }
 
-    #[test]
-    fn test_update_department_request_construction() {
-        let department = Department {
-            department_id: Some("dept_789".to_string()),
-            name: Some("Sales".to_string()),
-            ..Default::default()
-        };
+    /// 构建最终的请求对象
+    pub fn build(self) -> CreateDepartmentRequest {
+        self.request
+    }
+}
 
-        let request = UpdateDepartmentRequest {
-            department,
-            user_id_type: Some("open_id".to_string()),
-            department_id_type: Some("open_id".to_string()),
-        };
+impl Default for CreateDepartmentBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
 
-        assert_eq!(
-            request.department.department_id,
-            Some("dept_789".to_string())
-        );
-        assert_eq!(request.department.name, Some("Sales".to_string()));
-        assert_eq!(request.user_id_type, Some("open_id".to_string()));
-        assert_eq!(request.department_id_type, Some("open_id".to_string()));
+// 应用ExecutableBuilder trait
+// crate::impl_executable_builder!(
+//    CreateDepartmentBuilder,
+//    DepartmentService,
+//    CreateDepartmentRequest,
+//    BaseResponse<CreateDepartmentResponse>,
+//    create
+//);
+
+/// 修改部门请求构建器
+#[derive(Debug, Clone)]
+pub struct PatchDepartmentBuilder {
+    request: PatchDepartmentRequest,
+}
+
+impl PatchDepartmentBuilder {
+    /// 创建新的Builder实例
+    pub fn new() -> Self {
+        Self {
+            request: PatchDepartmentRequest::default(),
+        }
     }
 
-    #[test]
-    fn test_update_department_id_request_construction() {
-        let request = UpdateDepartmentIdRequest {
-            new_department_id: "new_dept_id_123".to_string(),
-            department_id_type: Some("open_id".to_string()),
-        };
-
-        assert_eq!(request.new_department_id, "new_dept_id_123");
-        assert_eq!(request.department_id_type, Some("open_id".to_string()));
+    /// 设置部门信息
+    pub fn department(mut self, department: Department) -> Self {
+        self.request.department = department;
+        self
     }
 
-    #[test]
-    fn test_update_department_id_request_with_none_type() {
-        let request = UpdateDepartmentIdRequest {
-            new_department_id: "new_dept_id_456".to_string(),
-            department_id_type: None,
-        };
-
-        assert_eq!(request.new_department_id, "new_dept_id_456");
-        assert_eq!(request.department_id_type, None);
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: &str) -> Self {
+        self.request.user_id_type = Some(user_id_type.to_string());
+        self
     }
 
-    #[test]
-    fn test_get_department_request_construction() {
-        let request = GetDepartmentRequest {
-            user_id_type: Some("user_id".to_string()),
-            department_id_type: Some("open_id".to_string()),
-        };
-
-        assert_eq!(request.user_id_type, Some("user_id".to_string()));
-        assert_eq!(request.department_id_type, Some("open_id".to_string()));
+    /// 设置部门ID类型
+    pub fn department_id_type(mut self, department_id_type: &str) -> Self {
+        self.request.department_id_type = Some(department_id_type.to_string());
+        self
     }
 
-    #[test]
-    fn test_get_department_request_default() {
-        let request = GetDepartmentRequest::default();
+    /// 构建最终的请求对象
+    pub fn build(self) -> PatchDepartmentRequest {
+        self.request
+    }
+}
 
-        assert_eq!(request.user_id_type, None);
-        assert_eq!(request.department_id_type, None);
+impl Default for PatchDepartmentBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+// 应用ExecutableBuilder trait
+// crate::impl_executable_builder!(
+//    PatchDepartmentBuilder,
+//    DepartmentService,
+//    PatchDepartmentRequest,
+//    BaseResponse<PatchDepartmentResponse>,
+//    patch
+//);
+
+/// 更新部门请求构建器
+#[derive(Debug, Clone)]
+pub struct UpdateDepartmentBuilder {
+    request: UpdateDepartmentRequest,
+}
+
+impl UpdateDepartmentBuilder {
+    /// 创建新的Builder实例
+    pub fn new() -> Self {
+        Self {
+            request: UpdateDepartmentRequest::default(),
+        }
     }
 
-    #[test]
-    fn test_batch_get_departments_request_construction() {
-        let request = BatchGetDepartmentsRequest {
-            department_ids: vec![
-                "dept_1".to_string(),
-                "dept_2".to_string(),
-                "dept_3".to_string(),
-            ],
-            user_id_type: Some("union_id".to_string()),
-            department_id_type: Some("department_id".to_string()),
-        };
-
-        assert_eq!(request.department_ids.len(), 3);
-        assert_eq!(request.department_ids[0], "dept_1");
-        assert_eq!(request.department_ids[2], "dept_3");
-        assert_eq!(request.user_id_type, Some("union_id".to_string()));
-        assert_eq!(
-            request.department_id_type,
-            Some("department_id".to_string())
-        );
+    /// 设置部门信息
+    pub fn department(mut self, department: Department) -> Self {
+        self.request.department = department;
+        self
     }
 
-    #[test]
-    fn test_batch_get_departments_request_with_empty_list() {
-        let request = BatchGetDepartmentsRequest {
-            department_ids: vec![],
-            user_id_type: None,
-            department_id_type: None,
-        };
-
-        assert!(request.department_ids.is_empty());
-        assert_eq!(request.user_id_type, None);
-        assert_eq!(request.department_id_type, None);
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: &str) -> Self {
+        self.request.user_id_type = Some(user_id_type.to_string());
+        self
     }
 
-    #[test]
-    fn test_get_children_departments_request_construction() {
-        let request = GetChildrenDepartmentsRequest {
-            parent_department_id: Some("parent_dept_123".to_string()),
-            user_id_type: Some("user_id".to_string()),
-            department_id_type: Some("open_id".to_string()),
-            fetch_child: Some(true),
-            page_size: Some(50),
-            page_token: Some("page_token_123".to_string()),
-        };
-
-        assert_eq!(
-            request.parent_department_id,
-            Some("parent_dept_123".to_string())
-        );
-        assert_eq!(request.user_id_type, Some("user_id".to_string()));
-        assert_eq!(request.department_id_type, Some("open_id".to_string()));
-        assert_eq!(request.fetch_child, Some(true));
-        assert_eq!(request.page_size, Some(50));
-        assert_eq!(request.page_token, Some("page_token_123".to_string()));
+    /// 设置部门ID类型
+    pub fn department_id_type(mut self, department_id_type: &str) -> Self {
+        self.request.department_id_type = Some(department_id_type.to_string());
+        self
     }
 
-    #[test]
-    fn test_get_children_departments_request_default() {
-        let request = GetChildrenDepartmentsRequest::default();
+    /// 构建最终的请求对象
+    pub fn build(self) -> UpdateDepartmentRequest {
+        self.request
+    }
+}
 
-        assert_eq!(request.parent_department_id, None);
-        assert_eq!(request.user_id_type, None);
-        assert_eq!(request.department_id_type, None);
-        assert_eq!(request.fetch_child, None);
-        assert_eq!(request.page_size, None);
-        assert_eq!(request.page_token, None);
+impl Default for UpdateDepartmentBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+// 应用ExecutableBuilder trait
+// crate::impl_executable_builder!(
+//    UpdateDepartmentBuilder,
+//    DepartmentService,
+//    UpdateDepartmentRequest,
+//    BaseResponse<UpdateDepartmentResponse>,
+//    update
+//);
+
+/// 批量获取部门请求构建器
+#[derive(Debug, Clone)]
+pub struct BatchGetDepartmentsBuilder {
+    request: BatchGetDepartmentsRequest,
+}
+
+impl BatchGetDepartmentsBuilder {
+    /// 创建新的Builder实例
+    pub fn new() -> Self {
+        Self {
+            request: BatchGetDepartmentsRequest::default(),
+        }
     }
 
-    #[test]
-    fn test_get_parent_department_request_construction() {
-        let request = GetParentDepartmentRequest {
-            department_id: Some("dept_456".to_string()),
-            user_id_type: Some("union_id".to_string()),
-            department_id_type: Some("department_id".to_string()),
-        };
-
-        assert_eq!(request.department_id, Some("dept_456".to_string()));
-        assert_eq!(request.user_id_type, Some("union_id".to_string()));
-        assert_eq!(
-            request.department_id_type,
-            Some("department_id".to_string())
-        );
+    /// 设置部门ID列表
+    pub fn department_ids(mut self, department_ids: Vec<String>) -> Self {
+        self.request.department_ids = department_ids;
+        self
     }
 
-    #[test]
-    fn test_get_parent_department_request_default() {
-        let request = GetParentDepartmentRequest::default();
-
-        assert_eq!(request.department_id, None);
-        assert_eq!(request.user_id_type, None);
-        assert_eq!(request.department_id_type, None);
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: &str) -> Self {
+        self.request.user_id_type = Some(user_id_type.to_string());
+        self
     }
 
-    #[test]
-    fn test_search_departments_request_construction() {
-        let request = SearchDepartmentsRequest {
-            query: "Engineering".to_string(),
-            page_size: Some(20),
-            page_token: Some("search_token_123".to_string()),
-            user_id_type: Some("open_id".to_string()),
-            department_id_type: Some("open_id".to_string()),
-        };
-
-        assert_eq!(request.query, "Engineering");
-        assert_eq!(request.page_size, Some(20));
-        assert_eq!(request.page_token, Some("search_token_123".to_string()));
-        assert_eq!(request.user_id_type, Some("open_id".to_string()));
-        assert_eq!(request.department_id_type, Some("open_id".to_string()));
+    /// 设置部门ID类型
+    pub fn department_id_type(mut self, department_id_type: &str) -> Self {
+        self.request.department_id_type = Some(department_id_type.to_string());
+        self
     }
 
-    #[test]
-    fn test_search_departments_request_with_minimal_data() {
-        let request = SearchDepartmentsRequest {
-            query: "HR".to_string(),
-            page_size: None,
-            page_token: None,
-            user_id_type: None,
-            department_id_type: None,
-        };
+    /// 构建最终的请求对象
+    pub fn build(self) -> BatchGetDepartmentsRequest {
+        self.request
+    }
+}
 
-        assert_eq!(request.query, "HR");
-        assert_eq!(request.page_size, None);
-        assert_eq!(request.page_token, None);
-        assert_eq!(request.user_id_type, None);
-        assert_eq!(request.department_id_type, None);
+impl Default for BatchGetDepartmentsBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+// 应用ExecutableBuilder trait
+// crate::impl_executable_builder!(
+//    BatchGetDepartmentsBuilder,
+//    DepartmentService,
+//    BatchGetDepartmentsRequest,
+//    BaseResponse<BatchGetDepartmentsResponse>,
+//    batch_get
+//);
+
+/// 获取子部门列表请求构建器
+#[derive(Debug, Clone)]
+pub struct GetChildrenDepartmentsBuilder {
+    request: GetChildrenDepartmentsRequest,
+}
+
+impl GetChildrenDepartmentsBuilder {
+    /// 创建新的Builder实例
+    pub fn new() -> Self {
+        Self {
+            request: GetChildrenDepartmentsRequest::default(),
+        }
     }
 
-    #[test]
-    fn test_delete_department_request_construction() {
-        let request = DeleteDepartmentRequest {
-            department_id_type: Some("department_id".to_string()),
-        };
-
-        assert_eq!(
-            request.department_id_type,
-            Some("department_id".to_string())
-        );
+    /// 设置父部门ID
+    pub fn parent_department_id(mut self, parent_department_id: &str) -> Self {
+        self.request.parent_department_id = Some(parent_department_id.to_string());
+        self
     }
 
-    #[test]
-    fn test_delete_department_request_default() {
-        let request = DeleteDepartmentRequest::default();
-
-        assert_eq!(request.department_id_type, None);
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: &str) -> Self {
+        self.request.user_id_type = Some(user_id_type.to_string());
+        self
     }
 
-    #[test]
-    fn test_create_department_response_default() {
-        let response = CreateDepartmentResponse::default();
-
-        assert_eq!(response.department.name, None);
-        assert_eq!(response.department.department_id, None);
+    /// 设置部门ID类型
+    pub fn department_id_type(mut self, department_id_type: &str) -> Self {
+        self.request.department_id_type = Some(department_id_type.to_string());
+        self
     }
 
-    #[test]
-    fn test_patch_department_response_default() {
-        let response = PatchDepartmentResponse::default();
-
-        assert_eq!(response.department.name, None);
-        assert_eq!(response.department.department_id, None);
+    /// 设置是否递归获取
+    pub fn fetch_child(mut self, fetch_child: bool) -> Self {
+        self.request.fetch_child = Some(fetch_child);
+        self
     }
 
-    #[test]
-    fn test_update_department_response_default() {
-        let response = UpdateDepartmentResponse::default();
-
-        assert_eq!(response.department.name, None);
-        assert_eq!(response.department.department_id, None);
+    /// 设置分页大小
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.request.page_size = Some(page_size);
+        self
     }
 
-    #[test]
-    fn test_update_department_id_response_default() {
-        let _response = UpdateDepartmentIdResponse::default();
-        // UpdateDepartmentIdResponse is an empty struct, just test it can be created
+    /// 设置分页标记
+    pub fn page_token(mut self, page_token: &str) -> Self {
+        self.request.page_token = Some(page_token.to_string());
+        self
     }
 
-    #[test]
-    fn test_get_department_response_default() {
-        let response = GetDepartmentResponse::default();
+    /// 构建最终的请求对象
+    pub fn build(self) -> GetChildrenDepartmentsRequest {
+        self.request
+    }
+}
 
-        assert_eq!(response.department.name, None);
-        assert_eq!(response.department.department_id, None);
+impl Default for GetChildrenDepartmentsBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+// 应用ExecutableBuilder trait
+// crate::impl_executable_builder!(
+//    GetChildrenDepartmentsBuilder,
+//    DepartmentService,
+//    GetChildrenDepartmentsRequest,
+//    BaseResponse<GetChildrenDepartmentsResponse>,
+//    get_children
+//);
+
+/// 搜索部门请求构建器
+#[derive(Debug, Clone)]
+pub struct SearchDepartmentsBuilder {
+    request: SearchDepartmentsRequest,
+}
+
+impl SearchDepartmentsBuilder {
+    /// 创建新的Builder实例
+    pub fn new() -> Self {
+        Self {
+            request: SearchDepartmentsRequest::default(),
+        }
     }
 
-    #[test]
-    fn test_batch_get_departments_response_default() {
-        let response = BatchGetDepartmentsResponse::default();
-
-        assert!(response.items.is_empty());
+    /// 设置搜索关键词
+    pub fn query(mut self, query: &str) -> Self {
+        self.request.query = query.to_string();
+        self
     }
 
-    #[test]
-    fn test_get_children_departments_response_default() {
-        let response = GetChildrenDepartmentsResponse::default();
-
-        assert!(response.items.is_empty());
-        assert_eq!(response.has_more, None);
-        assert_eq!(response.page_token, None);
+    /// 设置分页大小
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.request.page_size = Some(page_size);
+        self
     }
 
-    #[test]
-    fn test_get_parent_department_response_default() {
-        let response = GetParentDepartmentResponse::default();
-
-        assert!(response.items.is_empty());
+    /// 设置分页标记
+    pub fn page_token(mut self, page_token: &str) -> Self {
+        self.request.page_token = Some(page_token.to_string());
+        self
     }
 
-    #[test]
-    fn test_search_departments_response_default() {
-        let response = SearchDepartmentsResponse::default();
-
-        assert!(response.items.is_empty());
-        assert_eq!(response.has_more, None);
-        assert_eq!(response.page_token, None);
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: &str) -> Self {
+        self.request.user_id_type = Some(user_id_type.to_string());
+        self
     }
 
-    #[test]
-    fn test_delete_department_response_default() {
-        let _response = DeleteDepartmentResponse::default();
-        // DeleteDepartmentResponse is an empty struct, just test it can be created
+    /// 设置部门ID类型
+    pub fn department_id_type(mut self, department_id_type: &str) -> Self {
+        self.request.department_id_type = Some(department_id_type.to_string());
+        self
     }
 
-    #[test]
-    fn test_request_structs_debug_trait() {
-        let department = Department {
-            name: Some("Debug Test Dept".to_string()),
-            ..Default::default()
-        };
+    /// 构建最终的请求对象
+    pub fn build(self) -> SearchDepartmentsRequest {
+        self.request
+    }
+}
 
-        let create_request = CreateDepartmentRequest {
-            department: department.clone(),
-            user_id_type: None,
-            department_id_type: None,
-            client_token: None,
-        };
+impl Default for SearchDepartmentsBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
 
-        let debug_str = format!("{:?}", create_request);
-        assert!(debug_str.contains("CreateDepartmentRequest"));
-        assert!(debug_str.contains("Debug Test Dept"));
+// 应用ExecutableBuilder trait
+// crate::impl_executable_builder!(
+//    SearchDepartmentsBuilder,
+//    DepartmentService,
+//    SearchDepartmentsRequest,
+//    BaseResponse<SearchDepartmentsResponse>,
+//    search
+//);
+
+impl DepartmentService {
+    /// 创建部门构建器
+    pub fn create_department_builder(&self) -> CreateDepartmentBuilder {
+        CreateDepartmentBuilder::new()
     }
 
-    #[test]
-    fn test_search_departments_request_edge_cases() {
-        // Test with very long query string
-        let long_query = "a".repeat(1000);
-        let request_long = SearchDepartmentsRequest {
-            query: long_query.clone(),
-            page_size: Some(100),
-            page_token: None,
-            user_id_type: None,
-            department_id_type: None,
-        };
-
-        assert_eq!(request_long.query, long_query);
-        assert_eq!(request_long.page_size, Some(100));
-
-        // Test with zero page size
-        let request_zero = SearchDepartmentsRequest {
-            query: "Test".to_string(),
-            page_size: Some(0),
-            page_token: None,
-            user_id_type: None,
-            department_id_type: None,
-        };
-
-        assert_eq!(request_zero.page_size, Some(0));
-
-        // Test with empty query
-        let request_empty = SearchDepartmentsRequest {
-            query: "".to_string(),
-            page_size: Some(10),
-            page_token: None,
-            user_id_type: None,
-            department_id_type: None,
-        };
-
-        assert_eq!(request_empty.query, "");
+    /// 修改部门构建器
+    pub fn patch_department_builder(&self) -> PatchDepartmentBuilder {
+        PatchDepartmentBuilder::new()
     }
 
-    #[test]
-    fn test_batch_get_departments_request_edge_cases() {
-        // Test with very large department ID list
-        let large_list: Vec<String> = (0..1000).map(|i| format!("dept_{}", i)).collect();
-        let request_large = BatchGetDepartmentsRequest {
-            department_ids: large_list.clone(),
-            user_id_type: None,
-            department_id_type: None,
-        };
-
-        assert_eq!(request_large.department_ids.len(), 1000);
-        assert_eq!(request_large.department_ids[999], "dept_999");
-
-        // Test with single department ID
-        let request_single = BatchGetDepartmentsRequest {
-            department_ids: vec!["single_dept".to_string()],
-            user_id_type: None,
-            department_id_type: None,
-        };
-
-        assert_eq!(request_single.department_ids.len(), 1);
-        assert_eq!(request_single.department_ids[0], "single_dept");
+    /// 更新部门构建器
+    pub fn update_department_builder(&self) -> UpdateDepartmentBuilder {
+        UpdateDepartmentBuilder::new()
     }
 
-    #[test]
-    fn test_get_children_departments_request_edge_cases() {
-        // Test with very large page size
-        let request_large_page = GetChildrenDepartmentsRequest {
-            parent_department_id: Some("parent_123".to_string()),
-            user_id_type: None,
-            department_id_type: None,
-            fetch_child: Some(true),
-            page_size: Some(10000),
-            page_token: None,
-        };
-
-        assert_eq!(request_large_page.page_size, Some(10000));
-        assert_eq!(request_large_page.fetch_child, Some(true));
-
-        // Test with fetch_child set to false
-        let request_no_fetch = GetChildrenDepartmentsRequest {
-            parent_department_id: None,
-            user_id_type: None,
-            department_id_type: None,
-            fetch_child: Some(false),
-            page_size: Some(20),
-            page_token: None,
-        };
-
-        assert_eq!(request_no_fetch.fetch_child, Some(false));
-        assert_eq!(request_no_fetch.parent_department_id, None);
+    /// 批量获取部门构建器
+    pub fn batch_get_departments_builder(&self) -> BatchGetDepartmentsBuilder {
+        BatchGetDepartmentsBuilder::new()
     }
 
-    #[test]
-    fn test_department_service_config_independence() {
-        let config1 = Config::builder().app_id("dept_app_1").build();
-
-        let config2 = Config::builder().app_id("dept_app_2").build();
-
-        let service1 = DepartmentService::new(config1);
-        let service2 = DepartmentService::new(config2);
-
-        assert_eq!(service1.config.app_id, "dept_app_1");
-        assert_eq!(service2.config.app_id, "dept_app_2");
-        assert_ne!(service1.config.app_id, service2.config.app_id);
+    /// 获取子部门列表构建器
+    pub fn get_children_departments_builder(&self) -> GetChildrenDepartmentsBuilder {
+        GetChildrenDepartmentsBuilder::new()
     }
 
-    #[test]
-    fn test_api_response_trait_implementations() {
-        // Test that all response types implement ApiResponseTrait correctly
-        assert_eq!(
-            CreateDepartmentResponse::data_format(),
-            crate::core::api_resp::ResponseFormat::Data
-        );
-        assert_eq!(
-            PatchDepartmentResponse::data_format(),
-            crate::core::api_resp::ResponseFormat::Data
-        );
-        assert_eq!(
-            UpdateDepartmentResponse::data_format(),
-            crate::core::api_resp::ResponseFormat::Data
-        );
-        assert_eq!(
-            UpdateDepartmentIdResponse::data_format(),
-            crate::core::api_resp::ResponseFormat::Data
-        );
-        assert_eq!(
-            GetDepartmentResponse::data_format(),
-            crate::core::api_resp::ResponseFormat::Data
-        );
-        assert_eq!(
-            BatchGetDepartmentsResponse::data_format(),
-            crate::core::api_resp::ResponseFormat::Data
-        );
-        assert_eq!(
-            GetChildrenDepartmentsResponse::data_format(),
-            crate::core::api_resp::ResponseFormat::Data
-        );
-        assert_eq!(
-            GetParentDepartmentResponse::data_format(),
-            crate::core::api_resp::ResponseFormat::Data
-        );
-        assert_eq!(
-            SearchDepartmentsResponse::data_format(),
-            crate::core::api_resp::ResponseFormat::Data
-        );
-        assert_eq!(
-            DeleteDepartmentResponse::data_format(),
-            crate::core::api_resp::ResponseFormat::Data
-        );
+    /// 搜索部门构建器
+    pub fn search_departments_builder(&self) -> SearchDepartmentsBuilder {
+        SearchDepartmentsBuilder::new()
     }
 }

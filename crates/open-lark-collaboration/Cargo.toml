@@ -1,0 +1,24 @@
+[package]
+name = "open-lark-collaboration"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "open-lark-collaboration module for OpenLark SDK"
+
+[dependencies]
+open-lark-core = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+reqwest = { workspace = true }
+chrono = { workspace = true }
+tokio = { workspace = true }
+async-trait = { workspace = true }
+rand = { workspace = true }
+serde_repr = { workspace = true }
+log = { workspace = true }
+anyhow = { workspace = true }
+
+[features]
+default = []
+

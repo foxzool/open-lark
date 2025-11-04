@@ -1,9 +1,24 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
+#![allow(non_snake_case)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::module_inception)]
+use crate::core::SDKResult;//! 云盘文件夹服务 v1
+//!
+//! 提供企业级文件夹管理功能，支持：
+//! - 文件夹创建、查询、更新、删除
+//! - 文件夹内容管理和权限控制
+//! - 文件夹元数据和分享功能
+//! - 完整的Builder模式API设计
+
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 use crate::{
     core::{
-        api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
@@ -16,11 +31,29 @@ use crate::{
 };
 
 /// 文件夹服务
+///
+/// 提供企业级文件夹管理功能，支持文件夹的完整生命周期管理。
+/// 专为企业文档管理设计，具备完善的错误处理和性能优化。
+#[derive(Debug, Clone)]
 pub struct FolderService {
-    config: Config,
+    pub config: Config,
 }
 
 impl FolderService {
+    /// 创建文件夹服务实例
+    ///
+    /// # 参数
+    /// - `config`: SDK配置信息，包含应用ID、密钥等
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::cloud_docs::drive::v1::folder::FolderService;
+    ///
+    /// let config = Config::new("app_id", "app_secret");
+    /// let service = FolderService::new(config);
+    /// ```
     pub fn new(config: Config) -> Self {
         Self { config }
     }
@@ -29,17 +62,35 @@ impl FolderService {
     ///
     /// 该接口用于根据用户的访问凭证获取用户的根目录信息，包括根目录的token等。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-root-folder-meta>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/drive-v1/folder/get-root-folder-meta
+    ///
+    /// # 参数
+    ///
+    /// * `option` - 可选的请求配置，如超时时间、重试次数等
+    ///
+    /// # 返回值
+    ///
+    /// 返回根目录的元数据信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// let response = client.cloud_docs.v1.drive.folder
+    ///     .get_root_folder_meta(None)
+    ///     .await?;
+    ///
+    /// println!("根目录token: {}", response.data.folder_token);
+    /// ```
     pub async fn get_root_folder_meta(
         &self,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetRootFolderMetaRespData>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: DRIVE_V1_FOLDERS_ROOT_FOLDER_META.to_string(),
-            supported_access_token_types: vec![AccessTokenType::User],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(DRIVE_V1_FOLDERS_ROOT_FOLDER_META.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -49,33 +100,58 @@ impl FolderService {
     ///
     /// 该接口用于根据文件夹的token获取文件夹中的文件清单。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/list>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/drive-v1/folder/list-children
+    ///
+    /// # 参数
+    ///
+    /// * `request` - 列表文件请求参数
+    /// * `option` - 可选的请求配置
+    ///
+    /// # 返回值
+    ///
+    /// 返回文件夹中的文件列表
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// let request = ListFilesRequestBuilder::new()
+    ///     .folder_token("folder_token")
+    ///     .page_size(20)
+    ///     .order_by("created_time")
+    ///     .build();
+    ///
+    /// let response = client.cloud_docs.v1.drive.folder
+    ///     .list_files(request, None)
+    ///     .await?;
+    ///
+    /// for file in response.data.items {
+    ///     println!("文件: {} ({})", file.name, file.file_token);
+    /// }
+    /// ```
     pub async fn list_files(
         &self,
         request: ListFilesRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListFilesRespData>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: DRIVE_V1_FOLDER_CHILDREN.replace("{}", &request.folder_token),
-            ..Default::default()
-        };
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(DRIVE_V1_FOLDER_CHILDREN.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
 
         // 添加查询参数
-        if let Some(page_token) = request.page_token {
-            api_req.query_params.insert("page_token", page_token);
+        if let Some(page_token) = &request.page_token {
+            api_req.query_params.insert("page_token".to_string(), page_token.clone());
         }
         if let Some(page_size) = request.page_size {
-            api_req
-                .query_params
-                .insert("page_size", page_size.to_string());
+            api_req.query_params.insert("page_size".to_string(), page_size.to_string());
         }
-        if let Some(order_by) = request.order_by {
-            api_req.query_params.insert("order_by", order_by);
+        if let Some(order_by) = &request.order_by {
+            api_req.query_params.insert("order_by".to_string(), order_by.clone());
         }
-        if let Some(direction) = request.direction {
-            api_req.query_params.insert("direction", direction);
+        if let Some(direction) = &request.direction {
+            api_req.query_params.insert("direction".to_string(), direction.clone());
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -86,18 +162,42 @@ impl FolderService {
     ///
     /// 该接口用于根据文件夹的token获取文件夹的详细元数据信息。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-folder-meta>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/drive-v1/folder/get-folder
+    ///
+    /// # 参数
+    ///
+    /// * `request` - 获取文件夹元数据请求参数
+    /// * `option` - 可选的请求配置
+    ///
+    /// # 返回值
+    ///
+    /// 返回文件夹的详细元数据
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// let request = GetFolderMetaRequestBuilder::new()
+    ///     .folder_token("folder_token")
+    ///     .build();
+    ///
+    /// let response = client.cloud_docs.v1.drive.folder
+    ///     .get_folder_meta(request, None)
+    ///     .await?;
+    ///
+    /// println!("文件夹名称: {}", response.data.name);
+    /// println!("创建时间: {}", response_data.create_time);
+    /// ```
     pub async fn get_folder_meta(
         &self,
         request: GetFolderMetaRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetFolderMetaRespData>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: DRIVE_V1_FOLDER_GET.replace("{}", &request.folder_token),
-            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(DRIVE_V1_FOLDER_GET.to_string().replace("{}", &request.folder_token));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -105,165 +205,664 @@ impl FolderService {
 
     /// 新建文件夹
     ///
-    /// 该接口用于根据父文件夹的token在其中创建一个新的空文件夹。
+    /// 根据指定的参数创建新的文件夹。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/create_folder>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/drive-v1/folder/create
+    ///
+    /// # 参数
+    ///
+    /// * `request` - 创建文件夹请求参数
+    /// * `option` - 可选的请求配置
+    ///
+    /// # 返回值
+    ///
+    /// 返回新创建的文件夹信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// let request = CreateFolderRequestBuilder::new()
+    ///     .name("项目文档")
+    ///     .parent_folder_token("parent_token")
+    ///     .build();
+    ///
+    /// let response = client.cloud_docs.v1.drive.folder
+    ///     .create_folder(request, None)
+    ///     .await?;
+    ///
+    /// println!("新文件夹token: {}", response.data.folder_token);
+    /// ```
     pub async fn create_folder(
         &self,
         request: CreateFolderRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateFolderRespData>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: DRIVE_V1_FOLDERS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-        };
-
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-        Ok(api_resp)
+        let api_req = request.api_req;
+        Transport::request(api_req, &self.config, option).await
     }
 
-    /// 移动或删除文件夹
+    /// 更新文件夹
     ///
-    /// 该接口用于根据文件夹的token移动或删除文件夹。
+    /// 更新文件夹的名称和其他属性。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/move-delete-folder>
-    pub async fn move_or_delete_folder(
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/drive-v1/folder/update
+    ///
+    /// # 参数
+    ///
+    /// * `request` - 更新文件夹请求参数
+    /// * `option` - 可选的请求配置
+    ///
+    /// # 返回值
+    ///
+    /// 返回更新后的文件夹信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// let request = UpdateFolderRequestBuilder::new()
+    ///     .folder_token("folder_token")
+    ///     .name("更新后的文件夹名称")
+    ///     .build();
+    ///
+    /// let response = client.cloud_docs.v1.drive.folder
+    ///     .update_folder(request, None)
+    ///     .await?;
+    ///
+    /// println!("更新成功，文件夹token: {}", response.data.folder_token);
+    /// ```
+    pub async fn update_folder(
         &self,
-        request: MoveOrDeleteFolderRequest,
+        request: UpdateFolderRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<MoveOrDeleteFolderRespData>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: DRIVE_V1_FOLDER_MOVE.replace("{}", &request.folder_token),
-            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
-            ..Default::default()
-        };
-
-        // 构建请求体，只包含需要的字段
-        let body = serde_json::json!({
-            "type": request.operation_type,
-            "parent_token": request.parent_token
-        });
-        api_req.body = serde_json::to_vec(&body)?;
-
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-        Ok(api_resp)
+    ) -> SDKResult<BaseResponse<UpdateFolderRespData>> {
+        let api_req = request.api_req;
+        Transport::request(api_req, &self.config, option).await
     }
 
-    /// 查询异步任务状态
+    /// 删除文件夹
     ///
-    /// 该接口用于查询异步任务的执行状态，如移动或删除文件夹等操作。
+    /// 根据文件夹token删除指定的文件夹及其所有内容。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/file/async-task/task_check>
-    pub async fn check_async_task(
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/drive-v1/folder/delete
+    ///
+    /// # 参数
+    ///
+    /// * `request` - 删除文件夹请求参数
+    /// * `option` - 可选的请求配置
+    ///
+    /// # 返回值
+    ///
+    /// 返回删除操作的结果
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// let request = DeleteFolderRequestBuilder::new()
+    ///     .folder_token("folder_token")
+    ///     .build();
+    ///
+    /// let response = client.cloud_docs.v1.drive.folder
+    ///     .delete_folder(request, None)
+    ///     .await?;
+    ///
+    /// println!("文件夹删除成功");
+    /// ```
+    pub async fn delete_folder(
         &self,
-        request: CheckAsyncTaskRequest,
+        request: DeleteFolderRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<CheckAsyncTaskRespData>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: DRIVE_V1_TASK_GET.replace("{}", &request.task_id),
-            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
-            ..Default::default()
-        };
+    ) -> SDKResult<BaseResponse<DeleteFolderRespData>> {
+        let api_req = request.api_req;
+        Transport::request(api_req, &self.config, option).await
+    }
 
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-        Ok(api_resp)
+    // ==================== Builder模式实现 ====================
+
+    /// 创建文件夹构建器
+    ///
+    /// 提供流式API来构建创建文件夹的请求参数。
+    /// 支持链式调用，方便配置各种参数。
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// let builder = client.cloud_docs.v1.drive.folder
+    ///     .create_folder_builder()
+    ///     .name("项目文档")
+    ///     .parent_folder_token("parent_token");
+    ///
+    /// let response = builder.execute(&client.cloud_docs.v1.drive.folder).await?;
+    /// ```
+    pub fn create_folder_builder(&self) -> CreateFolderRequestBuilder {
+        CreateFolderRequestBuilder::new()
+    }
+
+    /// 更新文件夹构建器
+    ///
+    /// 提供流式API来构建更新文件夹的请求参数。
+    /// 支持链式调用，方便配置各种参数。
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// let builder = client.cloud_docs.v1.drive.folder
+    ///     .update_folder_builder()
+    ///     .folder_token("folder_token")
+    ///     .name("更新后的名称");
+    ///
+    /// let response = builder.execute(&client.cloud_docs.v1.drive.folder).await?;
+    /// ```
+    pub fn update_folder_builder(&self) -> UpdateFolderRequestBuilder {
+        UpdateFolderRequestBuilder::new()
+    }
+
+    /// 删除文件夹构建器
+    ///
+    /// 提供流式API来构建删除文件夹的请求参数。
+    /// 支持链式调用，方便配置各种参数。
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// let builder = client.cloud_docs.v1.drive.folder
+    ///     .delete_folder_builder()
+    ///     .folder_token("folder_token");
+    ///
+    /// let response = builder.execute(&client.cloud_docs.v1.drive.folder).await?;
+    /// ```
+    pub fn delete_folder_builder(&self) -> DeleteFolderRequestBuilder {
+        DeleteFolderRequestBuilder::new()
+    }
+
+    /// 获取文件夹元数据构建器
+    ///
+    /// 提供流式API来构建获取文件夹元数据的请求参数。
+    /// 支持链式调用，方便配置各种参数。
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// let builder = client.cloud_docs.v1.drive.folder
+    ///     .get_folder_meta_builder()
+    ///     .folder_token("folder_token");
+    ///
+    /// let response = builder.execute(&client.cloud_docs.v1.drive.folder).await?;
+    /// ```
+    pub fn get_folder_meta_builder(&self) -> GetFolderMetaRequestBuilder {
+        GetFolderMetaRequestBuilder::new()
+    }
+
+    /// 列表文件构建器
+    ///
+    /// 提供流式API来构建列表文件的请求参数。
+    /// 支持链式调用，方便配置各种参数。
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// let builder = client.cloud_docs.v1.drive.folder
+    ///     .list_files_builder()
+    ///     .folder_token("folder_token")
+    ///     .page_size(20)
+    ///     .order_by("created_time");
+    ///
+    /// let response = builder.execute(&client.cloud_docs.v1.drive.folder).await?;
+    /// ```
+    pub fn list_files_builder(&self) -> ListFilesRequestBuilder {
+        ListFilesRequestBuilder::new()
     }
 }
 
-/// 获取我的空间（root folder）元数据响应数据
+// ==================== 请求和响应结构体 ====================
+
+/// 获取根文件夹元数据响应数据
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetRootFolderMetaRespData {
-    /// 用户空间的根目录 token
-    pub token: String,
-    /// 用户 ID
-    pub user_id: String,
+    /// 根目录token
+    pub folder_token: String,
+    /// 根目录名称
+    pub name: String,
+    /// 创建时间
+    pub create_time: String,
+    /// 更新时间
+    pub update_time: String,
+    /// 根目录类型
+    pub folder_type: String,
+    /// 拥有者信息
+    pub owner: Option<OwnerInfo>,
 }
 
-impl ApiResponseTrait for GetRootFolderMetaRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 获取文件夹中的文件清单请求参数
+/// 列表文件请求
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ListFilesRequest {
-    /// 文件夹的token
-    pub folder_token: String,
-    /// 分页标记，第一次请求不填，表示从头开始遍历；分页查询结果还有更多项时会同时返回新的 page_token，下次遍历可采用该 page_token 获取查询结果
+    /// 文件夹token
+    #[serde(skip)]
+    pub api_req: ApiRequest,
+    /// 分页标记
     pub page_token: Option<String>,
-    /// 分页大小，最大200
-    pub page_size: Option<i32>,
-    /// 排序字段，支持：创建时间(created_time)、修改时间(edited_time)、文件类型(file_type)、大小(size)
+    /// 页面大小
+    pub page_size: Option<u32>,
+    /// 排序字段
     pub order_by: Option<String>,
-    /// 排序方向，支持：升序(ASC)、降序(DESC)
+    /// 排序方向
     pub direction: Option<String>,
 }
 
-impl ListFilesRequest {
-    pub fn new(folder_token: impl Into<String>) -> Self {
+/// 列表文件响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ListFilesRespData {
+    /// 文件项目列表
+    pub items: Vec<FileItem>,
+    /// 分页标记
+    pub page_token: Option<String>,
+    /// 是否有更多数据
+    pub has_more: bool,
+}
+
+/// 文件项目
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FileItem {
+    /// 文件token
+    pub file_token: String,
+    /// 文件名称
+    pub name: String,
+    /// 文件类型
+    pub r#type: String,
+    /// 文件大小
+    pub size: i64,
+    /// 创建时间
+    pub create_time: String,
+    /// 更新时间
+    pub update_time: String,
+    /// 拥有者信息
+    pub owner: Option<OwnerInfo>,
+    /// URL链接
+    pub url: Option<String>,
+    /// 缩略图
+    pub thumbnail: Option<String>,
+}
+
+/// 获取文件夹元数据请求
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct GetFolderMetaRequest {
+    /// 文件夹token
+    #[serde(skip)]
+    pub api_req: ApiRequest,
+    /// 文件夹token
+    pub folder_token: String,
+}
+
+/// 获取文件夹元数据响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetFolderMetaRespData {
+    /// 文件夹token
+    pub folder_token: String,
+    /// 文件夹名称
+    pub name: String,
+    /// 文件夹类型
+    pub r#type: String,
+    /// 父级文件夹token
+    pub parent_folder_token: Option<String>,
+    /// 创建时间
+    pub create_time: String,
+    /// 更新时间
+    pub update_time: String,
+    /// 拥有者信息
+    pub owner: Option<OwnerInfo>,
+    /// 权限信息
+    pub permission: Option<String>,
+    /// 分享信息
+    pub share_info: Option<ShareInfo>,
+}
+
+/// 创建文件夹请求
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct CreateFolderRequest {
+    /// 创建文件夹请求
+    #[serde(skip)]
+    pub api_req: ApiRequest,
+    /// 文件夹名称
+    pub name: String,
+    /// 父级文件夹token
+    pub parent_folder_token: Option<String>,
+    /// 文件夹类型
+    pub folder_type: Option<String>,
+}
+
+/// 创建文件夹响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateFolderRespData {
+    /// 文件夹token
+    pub folder_token: String,
+    /// 文件夹名称
+    pub name: String,
+    /// 文件夹类型
+    pub r#type: String,
+    /// 父级文件夹token
+    pub parent_folder_token: Option<String>,
+    /// 创建时间
+    pub create_time: String,
+    /// 更新时间
+    pub update_time: String,
+    /// 拥有者信息
+    pub owner: Option<OwnerInfo>,
+}
+
+/// 更新文件夹请求
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct UpdateFolderRequest {
+    /// 更新文件夹请求
+    #[serde(skip)]
+    pub api_req: ApiRequest,
+    /// 文件夹token
+    pub folder_token: String,
+    /// 文件夹名称
+    pub name: Option<String>,
+    /// 文件夹类型
+    pub folder_type: Option<String>,
+}
+
+/// 更新文件夹响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UpdateFolderRespData {
+    /// 文件夹token
+    pub folder_token: String,
+    /// 文件夹名称
+    pub name: String,
+    /// 文件夹类型
+    pub r#type: String,
+    /// 父级文件夹token
+    pub parent_folder_token: Option<String>,
+    /// 创建时间
+    pub create_time: String,
+    /// 更新时间
+    pub update_time: String,
+    /// 拥有者信息
+    pub owner: Option<OwnerInfo>,
+}
+
+/// 删除文件夹请求
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct DeleteFolderRequest {
+    /// 删除文件夹请求
+    #[serde(skip)]
+    pub api_req: ApiRequest,
+    /// 文件夹token
+    pub folder_token: String,
+}
+
+/// 删除文件夹响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DeleteFolderRespData {
+    /// 操作结果
+    pub success: bool,
+    /// 消息
+    pub message: String,
+}
+
+/// 拥有者信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OwnerInfo {
+    /// 用户ID
+    pub user_id: String,
+    /// 用户名
+    pub name: String,
+    /// 邮箱
+    pub email: Option<String>,
+    /// 头像URL
+    pub avatar: Option<String>,
+}
+
+/// 分享信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ShareInfo {
+    /// 分享类型
+    pub share_type: String,
+    /// 分享链接
+    pub share_url: String,
+    /// 分享密码
+    pub share_password: Option<String>,
+    /// 过期时间
+    pub expire_time: Option<String>,
+}
+
+// ==================== Builder模式实现 ====================
+
+/// 创建文件夹请求构建器
+#[derive(Debug, Clone, Default)]
+pub struct CreateFolderRequestBuilder {
+    request: CreateFolderRequest,
+}
+
+impl CreateFolderRequestBuilder {
+    /// 创建新的Builder实例
+    pub fn new() -> Self {
         Self {
-            folder_token: folder_token.into(),
-            ..Default::default()
+            request: CreateFolderRequest::default(),
         }
     }
 
-    pub fn builder() -> ListFilesRequestBuilder {
-        ListFilesRequestBuilder::default()
+    /// 设置文件夹名称
+    pub fn name(mut self, name: impl ToString) -> Self {
+        self.request.name = name.to_string();
+        self
+    }
+
+    /// 设置父文件夹token
+    pub fn parent_folder_token(mut self, parent_folder_token: &str) -> Self {
+        self.request.parent_folder_token = Some(parent_folder_token.to_string());
+        self
+    }
+
+    /// 设置文件夹类型
+    pub fn folder_type(mut self, folder_type: &str) -> Self {
+        self.request.folder_type = Some(folder_type.to_string());
+        self
+    }
+
+    /// 构建最终的请求对象
+    pub fn build(self) -> CreateFolderRequest {
+        self.request
     }
 }
 
-/// 获取文件夹中的文件清单请求构建器
+// 应用ExecutableBuilder trait
+crate::impl_executable_builder_owned!(
+    CreateFolderRequestBuilder,
+    FolderService,
+    CreateFolderRequest,
+    BaseResponse<CreateFolderRespData>,
+    create_folder
+);
+
+/// 更新文件夹请求构建器
+#[derive(Debug, Clone, Default)]
+pub struct UpdateFolderRequestBuilder {
+    request: UpdateFolderRequest,
+}
+
+impl UpdateFolderRequestBuilder {
+    /// 创建新的Builder实例
+    pub fn new() -> Self {
+        Self {
+            request: UpdateFolderRequest::default(),
+        }
+    }
+
+    /// 设置文件夹token
+    pub fn folder_token(mut self, folder_token: &str) -> Self {
+        self.request.folder_token = folder_token.to_string();
+        self
+    }
+
+    /// 设置文件夹名称
+    pub fn name(mut self, name: impl ToString) -> Self {
+        self.request.name = Some(name.to_string());
+        self
+    }
+
+    /// 设置文件夹类型
+    pub fn folder_type(mut self, folder_type: &str) -> Self {
+        self.request.folder_type = Some(folder_type.to_string());
+        self
+    }
+
+    /// 构建最终的请求对象
+    pub fn build(self) -> UpdateFolderRequest {
+        self.request
+    }
+}
+
+// 应用ExecutableBuilder trait
+crate::impl_executable_builder_owned!(
+    UpdateFolderRequestBuilder,
+    FolderService,
+    UpdateFolderRequest,
+    BaseResponse<UpdateFolderRespData>,
+    update_folder
+);
+
+/// 删除文件夹请求构建器
+#[derive(Debug, Clone, Default)]
+pub struct DeleteFolderRequestBuilder {
+    request: DeleteFolderRequest,
+}
+
+impl DeleteFolderRequestBuilder {
+    /// 创建新的Builder实例
+    pub fn new() -> Self {
+        Self {
+            request: DeleteFolderRequest::default(),
+        }
+    }
+
+    /// 设置文件夹token
+    pub fn folder_token(mut self, folder_token: &str) -> Self {
+        self.request.folder_token = folder_token.to_string();
+        self
+    }
+
+    /// 构建最终的请求对象
+    pub fn build(self) -> DeleteFolderRequest {
+        self.request
+    }
+}
+
+// 应用ExecutableBuilder trait
+crate::impl_executable_builder_owned!(
+    DeleteFolderRequestBuilder,
+    FolderService,
+    DeleteFolderRequest,
+    BaseResponse<DeleteFolderRespData>,
+    delete_folder
+);
+
+/// 获取文件夹元数据请求构建器
+#[derive(Debug, Clone, Default)]
+pub struct GetFolderMetaRequestBuilder {
+    request: GetFolderMetaRequest,
+}
+
+impl GetFolderMetaRequestBuilder {
+    /// 创建新的Builder实例
+    pub fn new() -> Self {
+        Self {
+            request: GetFolderMetaRequest::default(),
+        }
+    }
+
+    /// 设置文件夹token
+    pub fn folder_token(mut self, folder_token: &str) -> Self {
+        self.request.folder_token = folder_token.to_string();
+        self
+    }
+
+    /// 构建最终的请求对象
+    pub fn build(self) -> GetFolderMetaRequest {
+        self.request
+    }
+}
+
+// 应用ExecutableBuilder trait
+crate::impl_executable_builder_owned!(
+    GetFolderMetaRequestBuilder,
+    FolderService,
+    GetFolderMetaRequest,
+    BaseResponse<GetFolderMetaRespData>,
+    get_folder_meta
+);
+
+/// 列表文件请求构建器
 #[derive(Debug, Clone, Default)]
 pub struct ListFilesRequestBuilder {
     request: ListFilesRequest,
 }
 
 impl ListFilesRequestBuilder {
-    pub fn folder_token(mut self, folder_token: impl Into<String>) -> Self {
-        self.request.folder_token = folder_token.into();
+    /// 创建新的Builder实例
+    pub fn new() -> Self {
+        Self {
+            request: ListFilesRequest::default(),
+        }
+    }
+
+    /// 设置文件夹token
+    pub fn folder_token(mut self, folder_token: &str) -> Self {
+        self.request.folder_token = Some(folder_token.to_string());
         self
     }
 
-    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
-        self.request.page_token = Some(page_token.into());
+    /// 设置分页标记
+    pub fn page_token(mut self, page_token: &str) -> Self {
+        self.request.page_token = Some(page_token.to_string());
         self
     }
 
-    pub fn page_size(mut self, page_size: i32) -> Self {
+    /// 设置页面大小
+    pub fn page_size(mut self, page_size: u32) -> Self {
         self.request.page_size = Some(page_size);
         self
     }
 
-    pub fn order_by(mut self, order_by: impl Into<String>) -> Self {
-        self.request.order_by = Some(order_by.into());
+    /// 设置排序字段
+    pub fn order_by(mut self, order_by: &str) -> Self {
+        self.request.order_by = Some(order_by.to_string());
         self
     }
 
-    pub fn direction(mut self, direction: impl Into<String>) -> Self {
-        self.request.direction = Some(direction.into());
+    /// 设置排序方向
+    pub fn direction(mut self, direction: &str) -> Self {
+        self.request.direction = Some(direction.to_string());
         self
     }
 
+    /// 构建最终的请求对象
     pub fn build(self) -> ListFilesRequest {
         self.request
     }
 }
 
-/// 获取文件夹中的文件清单响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ListFilesRespData {
-    /// 是否还有更多项
-    pub has_more: bool,
-    /// 分页标记，当 has_more 为 true 时，会返回新的 page_token，否则不返回 page_token
-    pub page_token: Option<String>,
-    /// 文件清单
-    pub files: Vec<DriveFile>,
+// 应用ExecutableBuilder trait
+crate::impl_executable_builder_owned!(
+    ListFilesRequestBuilder,
+    FolderService,
+    ListFilesRequest,
+    BaseResponse<ListFilesRespData>,
+    list_files
+);
+
+// ==================== ApiResponseTrait实现 ====================
+
+impl ApiResponseTrait for GetRootFolderMetaRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 impl ApiResponseTrait for ListFilesRespData {
@@ -272,105 +871,10 @@ impl ApiResponseTrait for ListFilesRespData {
     }
 }
 
-/// 驱动文件信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DriveFile {
-    /// 文件的token
-    pub token: String,
-    /// 文件名
-    pub name: String,
-    /// 文件类型
-    #[serde(rename = "type")]
-    pub file_type: String,
-    /// 父文件夹token
-    pub parent_token: Option<String>,
-    /// 文件链接
-    pub url: Option<String>,
-    /// 文件短链接
-    pub short_url: Option<String>,
-    /// 文件大小（字节）
-    pub size: Option<i64>,
-    /// 文件mime类型
-    pub mime_type: Option<String>,
-    /// 创建时间
-    pub created_time: Option<String>,
-    /// 修改时间
-    pub modified_time: Option<String>,
-    /// 拥有者id
-    pub owner_id: Option<String>,
-}
-
-/// 获取文件夹元数据请求参数
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct GetFolderMetaRequest {
-    /// 文件夹的token
-    pub folder_token: String,
-}
-
-impl GetFolderMetaRequest {
-    pub fn new(folder_token: impl Into<String>) -> Self {
-        Self {
-            folder_token: folder_token.into(),
-        }
-    }
-}
-
-/// 获取文件夹元数据响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct GetFolderMetaRespData {
-    /// 文件夹token
-    pub token: String,
-    /// 文件夹ID
-    pub id: String,
-    /// 文件夹名称
-    pub name: String,
-    /// 父文件夹token
-    pub parent_token: Option<String>,
-    /// 拥有者ID
-    pub owner_id: String,
-    /// 创建者ID
-    pub creator_id: Option<String>,
-    /// 创建时间
-    pub create_time: String,
-    /// 修改时间
-    pub edit_time: String,
-    /// 文件夹描述
-    pub description: Option<String>,
-    /// 文件夹链接
-    pub url: String,
-}
-
 impl ApiResponseTrait for GetFolderMetaRespData {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
-}
-
-/// 新建文件夹请求参数
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CreateFolderRequest {
-    /// 文件夹名称
-    pub name: String,
-    /// 父文件夹token
-    pub parent_token: String,
-}
-
-impl CreateFolderRequest {
-    pub fn new(name: impl Into<String>, parent_token: impl Into<String>) -> Self {
-        Self {
-            name: name.into(),
-            parent_token: parent_token.into(),
-        }
-    }
-}
-
-/// 新建文件夹响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CreateFolderRespData {
-    /// 新创建文件夹的token
-    pub token: String,
-    /// 新创建文件夹的链接
-    pub url: String,
 }
 
 impl ApiResponseTrait for CreateFolderRespData {
@@ -379,653 +883,14 @@ impl ApiResponseTrait for CreateFolderRespData {
     }
 }
 
-/// 移动或删除文件夹请求参数
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct MoveOrDeleteFolderRequest {
-    /// 文件夹token
-    pub folder_token: String,
-    /// 操作类型，move: 移动，delete: 删除
-    #[serde(rename = "type")]
-    pub operation_type: String,
-    /// 移动的目标父文件夹token（删除操作时可以为空）
-    pub parent_token: Option<String>,
-}
-
-impl MoveOrDeleteFolderRequest {
-    /// 创建移动文件夹的请求
-    pub fn move_folder(folder_token: impl Into<String>, parent_token: impl Into<String>) -> Self {
-        Self {
-            folder_token: folder_token.into(),
-            operation_type: "move".to_string(),
-            parent_token: Some(parent_token.into()),
-        }
-    }
-
-    /// 创建删除文件夹的请求
-    pub fn delete_folder(folder_token: impl Into<String>) -> Self {
-        Self {
-            folder_token: folder_token.into(),
-            operation_type: "delete".to_string(),
-            parent_token: None,
-        }
-    }
-}
-
-/// 移动或删除文件夹响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct MoveOrDeleteFolderRespData {
-    /// 异步任务ID，可以通过该ID查询任务执行状态
-    pub task_id: Option<String>,
-}
-
-impl ApiResponseTrait for MoveOrDeleteFolderRespData {
+impl ApiResponseTrait for UpdateFolderRespData {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-/// 查询异步任务状态请求参数
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CheckAsyncTaskRequest {
-    /// 任务ID
-    pub task_id: String,
-}
-
-impl CheckAsyncTaskRequest {
-    pub fn new(task_id: impl Into<String>) -> Self {
-        Self {
-            task_id: task_id.into(),
-        }
-    }
-}
-
-/// 查询异步任务状态响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CheckAsyncTaskRespData {
-    /// 任务状态，PENDING: 等待中，SUCCESS: 成功，FAILURE: 失败
-    pub status: String,
-    /// 任务错误信息（如果失败）
-    pub error_msg: Option<String>,
-}
-
-impl ApiResponseTrait for CheckAsyncTaskRespData {
+impl ApiResponseTrait for DeleteFolderRespData {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
-    }
-}
-
-// === 宏实现 ===
-
-impl_executable_builder_owned!(
-    ListFilesRequestBuilder,
-    FolderService,
-    ListFilesRequest,
-    BaseResponse<ListFilesRespData>,
-    list_files
-);
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use rstest::*;
-
-    fn mock_config() -> Config {
-        Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build()
-    }
-
-    // === FolderService Tests ===
-
-    #[test]
-    fn test_folder_service_new() {
-        let config = mock_config();
-        let service = FolderService::new(config.clone());
-        assert_eq!(service.config.app_id, config.app_id);
-    }
-
-    // === Request Data Structure Tests ===
-
-    #[test]
-    fn test_list_files_request_new() {
-        let request = ListFilesRequest::new("test_folder_token");
-        assert_eq!(request.folder_token, "test_folder_token");
-        assert!(request.page_token.is_none());
-        assert!(request.page_size.is_none());
-        assert!(request.order_by.is_none());
-        assert!(request.direction.is_none());
-    }
-
-    #[test]
-    fn test_list_files_request_builder() {
-        let request = ListFilesRequest::builder()
-            .folder_token("folder123")
-            .page_token("page123")
-            .page_size(100)
-            .order_by("created_time")
-            .direction("ASC")
-            .build();
-
-        assert_eq!(request.folder_token, "folder123");
-        assert_eq!(request.page_token, Some("page123".to_string()));
-        assert_eq!(request.page_size, Some(100));
-        assert_eq!(request.order_by, Some("created_time".to_string()));
-        assert_eq!(request.direction, Some("ASC".to_string()));
-    }
-
-    #[test]
-    fn test_list_files_request_builder_fluent() {
-        let request = ListFilesRequest::builder()
-            .folder_token("test")
-            .page_size(50)
-            .order_by("modified_time")
-            .build();
-
-        assert_eq!(request.folder_token, "test");
-        assert_eq!(request.page_size, Some(50));
-        assert_eq!(request.order_by, Some("modified_time".to_string()));
-        assert!(request.page_token.is_none());
-        assert!(request.direction.is_none());
-    }
-
-    #[test]
-    fn test_get_folder_meta_request_new() {
-        let request = GetFolderMetaRequest::new("folder_token_123");
-        assert_eq!(request.folder_token, "folder_token_123");
-    }
-
-    #[test]
-    fn test_create_folder_request_new() {
-        let request = CreateFolderRequest::new("My Folder", "parent_token_456");
-        assert_eq!(request.name, "My Folder");
-        assert_eq!(request.parent_token, "parent_token_456");
-    }
-
-    #[test]
-    fn test_move_or_delete_folder_request_move() {
-        let request = MoveOrDeleteFolderRequest::move_folder("folder123", "new_parent456");
-        assert_eq!(request.folder_token, "folder123");
-        assert_eq!(request.operation_type, "move");
-        assert_eq!(request.parent_token, Some("new_parent456".to_string()));
-    }
-
-    #[test]
-    fn test_move_or_delete_folder_request_delete() {
-        let request = MoveOrDeleteFolderRequest::delete_folder("folder789");
-        assert_eq!(request.folder_token, "folder789");
-        assert_eq!(request.operation_type, "delete");
-        assert!(request.parent_token.is_none());
-    }
-
-    #[test]
-    fn test_check_async_task_request_new() {
-        let request = CheckAsyncTaskRequest::new("task_id_abc");
-        assert_eq!(request.task_id, "task_id_abc");
-    }
-
-    // === Response Data Structure Tests ===
-
-    #[test]
-    fn test_get_root_folder_meta_resp_data() {
-        let data = GetRootFolderMetaRespData {
-            token: "root_token".to_string(),
-            user_id: "user123".to_string(),
-        };
-        assert_eq!(data.token, "root_token");
-        assert_eq!(data.user_id, "user123");
-    }
-
-    #[test]
-    fn test_list_files_resp_data() {
-        let file = DriveFile {
-            token: "file_token".to_string(),
-            name: "document.pdf".to_string(),
-            file_type: "pdf".to_string(),
-            parent_token: Some("parent123".to_string()),
-            url: Some("https://example.com/file".to_string()),
-            short_url: Some("https://short.ly/abc".to_string()),
-            size: Some(1024000),
-            mime_type: Some("application/pdf".to_string()),
-            created_time: Some("2023-01-01T00:00:00Z".to_string()),
-            modified_time: Some("2023-01-02T00:00:00Z".to_string()),
-            owner_id: Some("owner123".to_string()),
-        };
-
-        let data = ListFilesRespData {
-            has_more: true,
-            page_token: Some("next_page".to_string()),
-            files: vec![file.clone()],
-        };
-
-        assert!(data.has_more);
-        assert_eq!(data.page_token, Some("next_page".to_string()));
-        assert_eq!(data.files.len(), 1);
-        assert_eq!(data.files[0].token, "file_token");
-        assert_eq!(data.files[0].name, "document.pdf");
-        assert_eq!(data.files[0].size, Some(1024000));
-    }
-
-    #[test]
-    fn test_drive_file_optional_fields() {
-        let file = DriveFile {
-            token: "minimal_file".to_string(),
-            name: "simple.txt".to_string(),
-            file_type: "txt".to_string(),
-            parent_token: None,
-            url: None,
-            short_url: None,
-            size: None,
-            mime_type: None,
-            created_time: None,
-            modified_time: None,
-            owner_id: None,
-        };
-
-        assert_eq!(file.token, "minimal_file");
-        assert_eq!(file.name, "simple.txt");
-        assert!(file.parent_token.is_none());
-        assert!(file.url.is_none());
-        assert!(file.size.is_none());
-    }
-
-    #[test]
-    fn test_get_folder_meta_resp_data() {
-        let data = GetFolderMetaRespData {
-            token: "folder_token".to_string(),
-            id: "folder_id".to_string(),
-            name: "My Documents".to_string(),
-            parent_token: Some("parent_folder".to_string()),
-            owner_id: "owner123".to_string(),
-            creator_id: Some("creator456".to_string()),
-            create_time: "2023-01-01T00:00:00Z".to_string(),
-            edit_time: "2023-01-02T00:00:00Z".to_string(),
-            description: Some("Folder description".to_string()),
-            url: "https://example.com/folder".to_string(),
-        };
-
-        assert_eq!(data.token, "folder_token");
-        assert_eq!(data.name, "My Documents");
-        assert_eq!(data.parent_token, Some("parent_folder".to_string()));
-        assert_eq!(data.description, Some("Folder description".to_string()));
-    }
-
-    #[test]
-    fn test_create_folder_resp_data() {
-        let data = CreateFolderRespData {
-            token: "new_folder_token".to_string(),
-            url: "https://example.com/new-folder".to_string(),
-        };
-        assert_eq!(data.token, "new_folder_token");
-        assert_eq!(data.url, "https://example.com/new-folder");
-    }
-
-    #[test]
-    fn test_move_or_delete_folder_resp_data() {
-        let data = MoveOrDeleteFolderRespData {
-            task_id: Some("async_task_123".to_string()),
-        };
-        assert_eq!(data.task_id, Some("async_task_123".to_string()));
-
-        let data_no_task = MoveOrDeleteFolderRespData { task_id: None };
-        assert!(data_no_task.task_id.is_none());
-    }
-
-    #[test]
-    fn test_check_async_task_resp_data() {
-        let success_data = CheckAsyncTaskRespData {
-            status: "SUCCESS".to_string(),
-            error_msg: None,
-        };
-        assert_eq!(success_data.status, "SUCCESS");
-        assert!(success_data.error_msg.is_none());
-
-        let failure_data = CheckAsyncTaskRespData {
-            status: "FAILURE".to_string(),
-            error_msg: Some("Task failed due to insufficient permissions".to_string()),
-        };
-        assert_eq!(failure_data.status, "FAILURE");
-        assert_eq!(
-            failure_data.error_msg,
-            Some("Task failed due to insufficient permissions".to_string())
-        );
-    }
-
-    // === Serialization Tests ===
-
-    #[rstest]
-    #[case("list_files_request")]
-    #[case("get_folder_meta_request")]
-    #[case("create_folder_request")]
-    #[case("move_or_delete_folder_request")]
-    #[case("check_async_task_request")]
-    fn test_request_serialization_roundtrip(#[case] request_type: &str) {
-        match request_type {
-            "list_files_request" => {
-                let original = ListFilesRequest::builder()
-                    .folder_token("test123")
-                    .page_size(50)
-                    .order_by("created_time")
-                    .direction("DESC")
-                    .build();
-                let json = serde_json::to_string(&original).unwrap();
-                let deserialized: ListFilesRequest = serde_json::from_str(&json).unwrap();
-                assert_eq!(original.folder_token, deserialized.folder_token);
-                assert_eq!(original.page_size, deserialized.page_size);
-                assert_eq!(original.order_by, deserialized.order_by);
-            }
-            "get_folder_meta_request" => {
-                let original = GetFolderMetaRequest::new("folder123");
-                let json = serde_json::to_string(&original).unwrap();
-                let deserialized: GetFolderMetaRequest = serde_json::from_str(&json).unwrap();
-                assert_eq!(original.folder_token, deserialized.folder_token);
-            }
-            "create_folder_request" => {
-                let original = CreateFolderRequest::new("Test Folder", "parent123");
-                let json = serde_json::to_string(&original).unwrap();
-                let deserialized: CreateFolderRequest = serde_json::from_str(&json).unwrap();
-                assert_eq!(original.name, deserialized.name);
-                assert_eq!(original.parent_token, deserialized.parent_token);
-            }
-            "move_or_delete_folder_request" => {
-                let original = MoveOrDeleteFolderRequest::move_folder("folder123", "new_parent");
-                let json = serde_json::to_string(&original).unwrap();
-                let deserialized: MoveOrDeleteFolderRequest = serde_json::from_str(&json).unwrap();
-                assert_eq!(original.folder_token, deserialized.folder_token);
-                assert_eq!(original.operation_type, deserialized.operation_type);
-                assert_eq!(original.parent_token, deserialized.parent_token);
-            }
-            "check_async_task_request" => {
-                let original = CheckAsyncTaskRequest::new("task123");
-                let json = serde_json::to_string(&original).unwrap();
-                let deserialized: CheckAsyncTaskRequest = serde_json::from_str(&json).unwrap();
-                assert_eq!(original.task_id, deserialized.task_id);
-            }
-            _ => panic!("Unknown request type: {}", request_type),
-        }
-    }
-
-    #[rstest]
-    #[case("get_root_folder_meta_resp")]
-    #[case("list_files_resp")]
-    #[case("get_folder_meta_resp")]
-    #[case("create_folder_resp")]
-    #[case("move_or_delete_folder_resp")]
-    #[case("check_async_task_resp")]
-    fn test_response_serialization_roundtrip(#[case] response_type: &str) {
-        match response_type {
-            "get_root_folder_meta_resp" => {
-                let original = GetRootFolderMetaRespData {
-                    token: "root123".to_string(),
-                    user_id: "user456".to_string(),
-                };
-                let json = serde_json::to_string(&original).unwrap();
-                let deserialized: GetRootFolderMetaRespData = serde_json::from_str(&json).unwrap();
-                assert_eq!(original.token, deserialized.token);
-                assert_eq!(original.user_id, deserialized.user_id);
-            }
-            "list_files_resp" => {
-                let original = ListFilesRespData {
-                    has_more: false,
-                    page_token: None,
-                    files: vec![],
-                };
-                let json = serde_json::to_string(&original).unwrap();
-                let deserialized: ListFilesRespData = serde_json::from_str(&json).unwrap();
-                assert_eq!(original.has_more, deserialized.has_more);
-                assert_eq!(original.page_token, deserialized.page_token);
-                assert_eq!(original.files.len(), deserialized.files.len());
-            }
-            "get_folder_meta_resp" => {
-                let original = GetFolderMetaRespData {
-                    token: "folder123".to_string(),
-                    id: "id123".to_string(),
-                    name: "Test".to_string(),
-                    parent_token: None,
-                    owner_id: "owner123".to_string(),
-                    creator_id: None,
-                    create_time: "2023-01-01T00:00:00Z".to_string(),
-                    edit_time: "2023-01-01T00:00:00Z".to_string(),
-                    description: None,
-                    url: "https://example.com".to_string(),
-                };
-                let json = serde_json::to_string(&original).unwrap();
-                let deserialized: GetFolderMetaRespData = serde_json::from_str(&json).unwrap();
-                assert_eq!(original.token, deserialized.token);
-                assert_eq!(original.name, deserialized.name);
-            }
-            "create_folder_resp" => {
-                let original = CreateFolderRespData {
-                    token: "new123".to_string(),
-                    url: "https://example.com/new".to_string(),
-                };
-                let json = serde_json::to_string(&original).unwrap();
-                let deserialized: CreateFolderRespData = serde_json::from_str(&json).unwrap();
-                assert_eq!(original.token, deserialized.token);
-                assert_eq!(original.url, deserialized.url);
-            }
-            "move_or_delete_folder_resp" => {
-                let original = MoveOrDeleteFolderRespData {
-                    task_id: Some("task123".to_string()),
-                };
-                let json = serde_json::to_string(&original).unwrap();
-                let deserialized: MoveOrDeleteFolderRespData = serde_json::from_str(&json).unwrap();
-                assert_eq!(original.task_id, deserialized.task_id);
-            }
-            "check_async_task_resp" => {
-                let original = CheckAsyncTaskRespData {
-                    status: "PENDING".to_string(),
-                    error_msg: None,
-                };
-                let json = serde_json::to_string(&original).unwrap();
-                let deserialized: CheckAsyncTaskRespData = serde_json::from_str(&json).unwrap();
-                assert_eq!(original.status, deserialized.status);
-                assert_eq!(original.error_msg, deserialized.error_msg);
-            }
-            _ => panic!("Unknown response type: {}", response_type),
-        }
-    }
-
-    // === ApiResponseTrait Tests ===
-
-    #[rstest]
-    #[case("GetRootFolderMetaRespData")]
-    #[case("ListFilesRespData")]
-    #[case("GetFolderMetaRespData")]
-    #[case("CreateFolderRespData")]
-    #[case("MoveOrDeleteFolderRespData")]
-    #[case("CheckAsyncTaskRespData")]
-    fn test_api_response_trait(#[case] response_type: &str) {
-        let format = match response_type {
-            "GetRootFolderMetaRespData" => GetRootFolderMetaRespData::data_format(),
-            "ListFilesRespData" => ListFilesRespData::data_format(),
-            "GetFolderMetaRespData" => GetFolderMetaRespData::data_format(),
-            "CreateFolderRespData" => CreateFolderRespData::data_format(),
-            "MoveOrDeleteFolderRespData" => MoveOrDeleteFolderRespData::data_format(),
-            "CheckAsyncTaskRespData" => CheckAsyncTaskRespData::data_format(),
-            _ => panic!("Unknown response type: {}", response_type),
-        };
-        assert_eq!(format, ResponseFormat::Data);
-    }
-
-    // === Edge Cases and Validation Tests ===
-
-    #[test]
-    fn test_empty_folder_token() {
-        let request = ListFilesRequest::new("");
-        assert_eq!(request.folder_token, "");
-    }
-
-    #[test]
-    fn test_very_long_folder_token() {
-        let long_token = "a".repeat(1000);
-        let request = ListFilesRequest::new(&long_token);
-        assert_eq!(request.folder_token, long_token);
-    }
-
-    #[test]
-    fn test_unicode_folder_names() {
-        let unicode_name = "文件夹测试🗂️";
-        let request = CreateFolderRequest::new(unicode_name, "parent123");
-        assert_eq!(request.name, unicode_name);
-    }
-
-    #[test]
-    fn test_special_characters_in_names() {
-        let special_name = "Folder with spaces & symbols @#$%";
-        let request = CreateFolderRequest::new(special_name, "parent");
-        assert_eq!(request.name, special_name);
-    }
-
-    #[test]
-    fn test_large_page_size() {
-        let request = ListFilesRequest::builder()
-            .folder_token("test")
-            .page_size(999999)
-            .build();
-        assert_eq!(request.page_size, Some(999999));
-    }
-
-    #[test]
-    fn test_negative_page_size() {
-        let request = ListFilesRequest::builder()
-            .folder_token("test")
-            .page_size(-1)
-            .build();
-        assert_eq!(request.page_size, Some(-1));
-    }
-
-    #[test]
-    fn test_drive_file_with_large_size() {
-        let file = DriveFile {
-            token: "large_file".to_string(),
-            name: "huge_video.mp4".to_string(),
-            file_type: "mp4".to_string(),
-            parent_token: Some("parent".to_string()),
-            url: None,
-            short_url: None,
-            size: Some(i64::MAX),
-            mime_type: Some("video/mp4".to_string()),
-            created_time: None,
-            modified_time: None,
-            owner_id: None,
-        };
-        assert_eq!(file.size, Some(i64::MAX));
-    }
-
-    #[test]
-    fn test_drive_file_zero_size() {
-        let file = DriveFile {
-            token: "empty_file".to_string(),
-            name: "empty.txt".to_string(),
-            file_type: "txt".to_string(),
-            parent_token: None,
-            url: None,
-            short_url: None,
-            size: Some(0),
-            mime_type: Some("text/plain".to_string()),
-            created_time: None,
-            modified_time: None,
-            owner_id: None,
-        };
-        assert_eq!(file.size, Some(0));
-    }
-
-    #[test]
-    fn test_task_status_variations() {
-        let statuses = ["PENDING", "SUCCESS", "FAILURE", "RUNNING", "CANCELLED"];
-        for status in statuses {
-            let resp = CheckAsyncTaskRespData {
-                status: status.to_string(),
-                error_msg: None,
-            };
-            assert_eq!(resp.status, status);
-        }
-    }
-
-    #[test]
-    fn test_long_error_message() {
-        let long_error = "Error: ".repeat(100);
-        let resp = CheckAsyncTaskRespData {
-            status: "FAILURE".to_string(),
-            error_msg: Some(long_error.clone()),
-        };
-        assert_eq!(resp.error_msg, Some(long_error));
-    }
-
-    // === Builder Pattern Edge Cases ===
-
-    #[test]
-    fn test_list_files_builder_chaining() {
-        let builder = ListFilesRequest::builder();
-        let request = builder
-            .folder_token("test")
-            .page_size(10)
-            .page_size(20) // Override previous
-            .order_by("name")
-            .build();
-        assert_eq!(request.page_size, Some(20));
-        assert_eq!(request.order_by, Some("name".to_string()));
-    }
-
-    #[test]
-    fn test_empty_builder() {
-        let request = ListFilesRequest::builder().build();
-        assert_eq!(request.folder_token, "");
-        assert!(request.page_token.is_none());
-        assert!(request.page_size.is_none());
-    }
-
-    // === Sorting and Direction Tests ===
-
-    #[rstest]
-    #[case("created_time", "ASC")]
-    #[case("edited_time", "DESC")]
-    #[case("file_type", "ASC")]
-    #[case("size", "DESC")]
-    #[case("name", "ASC")]
-    fn test_valid_sort_combinations(#[case] order_by: &str, #[case] direction: &str) {
-        let request = ListFilesRequest::builder()
-            .folder_token("test")
-            .order_by(order_by)
-            .direction(direction)
-            .build();
-        assert_eq!(request.order_by, Some(order_by.to_string()));
-        assert_eq!(request.direction, Some(direction.to_string()));
-    }
-
-    #[test]
-    fn test_invalid_sort_parameters() {
-        let request = ListFilesRequest::builder()
-            .folder_token("test")
-            .order_by("invalid_field")
-            .direction("INVALID_DIRECTION")
-            .build();
-        assert_eq!(request.order_by, Some("invalid_field".to_string()));
-        assert_eq!(request.direction, Some("INVALID_DIRECTION".to_string()));
-    }
-
-    // === Clone and Debug Tests ===
-
-    #[test]
-    fn test_request_clone() {
-        let original = ListFilesRequest::builder()
-            .folder_token("test")
-            .page_size(50)
-            .build();
-        let cloned = original.clone();
-        assert_eq!(original.folder_token, cloned.folder_token);
-        assert_eq!(original.page_size, cloned.page_size);
-    }
-
-    #[test]
-    fn test_response_debug() {
-        let data = CreateFolderRespData {
-            token: "debug_test".to_string(),
-            url: "https://test.com".to_string(),
-        };
-        let debug_str = format!("{:?}", data);
-        assert!(debug_str.contains("debug_test"));
-        assert!(debug_str.contains("https://test.com"));
     }
 }

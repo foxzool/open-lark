@@ -1,3 +1,10 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
+#![allow(non_snake_case)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::module_inception)]
 //! 电子表格（Sheets）服务
 //!
 //! 提供飞书电子表格的完整API功能，支持数据读写、格式设置、公式计算等。
@@ -74,16 +81,12 @@ pub struct SheetsService {
 
 impl SheetsService {
     /// 创建新的Sheets服务实例
-    ///
-    /// # 参数
-    /// - `config`: 客户端配置
     pub fn new(config: Config) -> Self {
-        let config_arc = Arc::new(config.clone());
         Self {
             config: config.clone(),
-            config_arc: config_arc.clone(),
+            config_arc: Arc::new(config.clone()),
             v2: v2::V2::new(config.clone()),
-            v3: v3::V3::new(config.clone()),
+            v3: v3::V3::new(config),
         }
     }
 

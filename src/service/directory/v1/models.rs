@@ -1,7 +1,6 @@
 use serde::{Deserialize, Serialize};
-
-/// 员工信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// 员工信息,
+#[derive(Debug, Clone)]
 pub struct Employee {
     /// 员工ID
     pub employee_id: Option<String>,
@@ -31,22 +30,18 @@ pub struct Employee {
     pub job_title: Option<String>,
     /// 上级ID
     pub leader_id: Option<String>,
-}
-
-/// 员工状态
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// 员工状态,
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
 pub enum EmployeeStatus {
-    /// 在职
+/// 在职,
     Active,
     /// 离职
     Inactive,
     /// 待离职
     ToBeResigned,
-}
-
-/// 部门信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// 部门信息,
+#[derive(Debug, Clone)]
 pub struct Department {
     /// 部门ID
     pub department_id: Option<String>,
@@ -66,73 +61,56 @@ pub struct Department {
     pub update_time: Option<String>,
     /// 部门顺序
     pub order: Option<i32>,
-}
-
-/// 部门状态
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// 部门状态,
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
 pub enum DepartmentStatus {
-    /// 正常
+/// 正常,
     Normal,
     /// 删除
     Deleted,
-}
-
-/// 用户ID类型
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// 用户ID类型,
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
 pub enum UserIdType {
-    /// Open ID
+/// Open ID,
     OpenId,
     /// Union ID
     UnionId,
     /// User ID
     UserId,
-}
-
-impl std::fmt::Display for UserIdType {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
+impl std::fmt::Display for UserIdType {,
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {,
+match self {,
             UserIdType::OpenId => write!(f, "open_id"),
             UserIdType::UnionId => write!(f, "union_id"),
             UserIdType::UserId => write!(f, "user_id"),
         }
-    }
-}
-
-/// 部门ID类型
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// 部门ID类型,
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
 pub enum DepartmentIdType {
-    /// Open Department ID
+/// Open Department ID,
     OpenDepartmentId,
     /// Department ID
     DepartmentId,
-}
-
-impl std::fmt::Display for DepartmentIdType {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
+impl std::fmt::Display for DepartmentIdType {,
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {,
+match self {,
             DepartmentIdType::OpenDepartmentId => write!(f, "open_department_id"),
             DepartmentIdType::DepartmentId => write!(f, "department_id"),
         }
-    }
-}
-
-/// 分页参数
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// 分页参数,
+#[derive(Debug, Clone)]
 pub struct Pagination {
     /// 分页大小
     pub page_size: Option<i32>,
     /// 分页标记
     pub page_token: Option<String>,
-}
-
-/// 搜索参数
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// 搜索参数,
+#[derive(Debug, Clone)]
 pub struct SearchQuery {
     /// 搜索关键词
     pub query: String,
     /// 搜索范围
     pub scope: Option<String>,
-}

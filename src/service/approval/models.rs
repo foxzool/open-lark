@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 /// 用户ID类型
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum UserIdType {
     /// 用户ID
     #[serde(rename = "user_id")]
@@ -15,6 +15,7 @@ pub enum UserIdType {
 }
 
 impl UserIdType {
+    /// 获取用户ID类型的字符串表示
     pub fn as_str(&self) -> &'static str {
         match self {
             UserIdType::UserId => "user_id",
@@ -25,7 +26,7 @@ impl UserIdType {
 }
 
 /// 部门ID类型
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum DepartmentIdType {
     /// 部门ID
     #[serde(rename = "department_id")]
@@ -36,6 +37,7 @@ pub enum DepartmentIdType {
 }
 
 impl DepartmentIdType {
+    /// 获取部门ID类型的字符串表示
     pub fn as_str(&self) -> &'static str {
         match self {
             DepartmentIdType::DepartmentId => "department_id",
@@ -45,7 +47,7 @@ impl DepartmentIdType {
 }
 
 /// 审批状态
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ApprovalStatus {
     /// 审批中
     #[serde(rename = "PENDING")]
@@ -65,7 +67,7 @@ pub enum ApprovalStatus {
 }
 
 /// 任务状态
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum TaskStatus {
     /// 待处理
     #[serde(rename = "PENDING")]
@@ -92,18 +94,25 @@ pub struct Approval {
     /// 审批定义名称
     pub approval_name: String,
     /// 审批定义描述
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 审批定义状态
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
     /// 创建者
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creator: Option<UserInfo>,
     /// 创建时间
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<String>,
     /// 更新时间
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
     /// 表单字段
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub form: Option<Vec<FormField>>,
     /// 审批流程
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub process: Option<ApprovalProcess>,
 }
 
@@ -115,20 +124,27 @@ pub struct ApprovalInstance {
     /// 审批定义编码
     pub approval_code: String,
     /// 审批定义名称
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approval_name: Option<String>,
     /// 发起人
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub initiator: Option<UserInfo>,
     /// 审批状态
     pub status: ApprovalStatus,
     /// 创建时间
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<String>,
     /// 更新时间
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
     /// 表单数据
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub form: Option<Vec<FormData>>,
     /// 审批流程
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub timeline: Option<Vec<ApprovalNode>>,
     /// 抄送人
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cc_users: Option<Vec<UserInfo>>,
 }
 
@@ -142,18 +158,24 @@ pub struct ApprovalTask {
     /// 审批定义编码
     pub approval_code: String,
     /// 审批定义名称
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approval_name: Option<String>,
     /// 发起人
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub initiator: Option<UserInfo>,
     /// 审批人
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approver: Option<UserInfo>,
     /// 任务状态
     pub status: TaskStatus,
     /// 创建时间
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<String>,
     /// 更新时间
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
     /// 任务链接
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_links: Option<Vec<TaskLink>>,
 }
 
@@ -163,10 +185,13 @@ pub struct UserInfo {
     /// 用户ID
     pub user_id: String,
     /// 用户名称
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// 用户头像
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub avatar: Option<String>,
     /// 用户邮箱
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
 }
 
@@ -180,8 +205,10 @@ pub struct FormField {
     /// 字段类型
     pub field_type: String,
     /// 是否必填
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub required: Option<bool>,
     /// 字段属性
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub properties: Option<serde_json::Value>,
 }
 
@@ -191,8 +218,10 @@ pub struct FormData {
     /// 字段ID
     pub id: String,
     /// 字段名称
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// 字段值
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<serde_json::Value>,
 }
 
@@ -209,10 +238,12 @@ pub struct ProcessNode {
     /// 节点ID
     pub node_id: String,
     /// 节点名称
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub node_name: Option<String>,
     /// 节点类型
     pub node_type: String,
     /// 审批人
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approvers: Option<Vec<UserInfo>>,
 }
 
@@ -222,16 +253,21 @@ pub struct ApprovalNode {
     /// 节点ID
     pub node_id: String,
     /// 节点名称
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub node_name: Option<String>,
     /// 节点类型
     pub node_type: String,
     /// 审批人
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approver: Option<UserInfo>,
     /// 审批状态
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
     /// 审批时间
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approve_time: Option<String>,
     /// 审批意见
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
 }
 
@@ -252,10 +288,13 @@ pub struct ApprovalFile {
     /// 文件名
     pub filename: String,
     /// 文件大小
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub file_size: Option<i64>,
     /// 文件类型
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub file_type: Option<String>,
     /// 上传时间
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub upload_time: Option<String>,
 }
 
@@ -267,12 +306,16 @@ pub struct ApprovalComment {
     /// 评论内容
     pub content: String,
     /// 评论者
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub commenter: Option<UserInfo>,
     /// 创建时间
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<String>,
     /// 更新时间
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
     /// 附件
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attachments: Option<Vec<CommentAttachment>>,
 }
 
@@ -286,11 +329,11 @@ pub struct CommentAttachment {
     /// 附件类型
     pub attachment_type: String,
     /// 附件链接
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub link: Option<String>,
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 
@@ -299,7 +342,6 @@ mod tests {
         let user_id_type = UserIdType::UserId;
         let serialized = serde_json::to_string(&user_id_type).unwrap();
         assert_eq!(serialized, "\"user_id\"");
-
         let deserialized: UserIdType = serde_json::from_str(&serialized).unwrap();
         assert_eq!(user_id_type, deserialized);
     }
@@ -316,7 +358,6 @@ mod tests {
         let dept_id_type = DepartmentIdType::DepartmentId;
         let serialized = serde_json::to_string(&dept_id_type).unwrap();
         assert_eq!(serialized, "\"department_id\"");
-
         let deserialized: DepartmentIdType = serde_json::from_str(&serialized).unwrap();
         assert_eq!(dept_id_type, deserialized);
     }
@@ -335,7 +376,6 @@ mod tests {
         let status = ApprovalStatus::Pending;
         let serialized = serde_json::to_string(&status).unwrap();
         assert_eq!(serialized, "\"PENDING\"");
-
         let deserialized: ApprovalStatus = serde_json::from_str(&serialized).unwrap();
         assert_eq!(status, deserialized);
     }
@@ -345,7 +385,6 @@ mod tests {
         let status = TaskStatus::Approved;
         let serialized = serde_json::to_string(&status).unwrap();
         assert_eq!(serialized, "\"APPROVED\"");
-
         let deserialized: TaskStatus = serde_json::from_str(&serialized).unwrap();
         assert_eq!(status, deserialized);
     }
@@ -386,7 +425,6 @@ mod tests {
                 }],
             }),
         };
-
         let serialized = serde_json::to_string(&approval).unwrap();
         let deserialized: Approval = serde_json::from_str(&serialized).unwrap();
 
@@ -395,11 +433,11 @@ mod tests {
         assert_eq!(approval.description, deserialized.description);
         assert_eq!(
             approval.creator.as_ref().unwrap().user_id,
-            deserialized.creator.as_ref().unwrap().user_id
+            deserialized.creator.as_ref().unwrap().user_id,
         );
         assert_eq!(
             approval.form.as_ref().unwrap().len(),
-            deserialized.form.as_ref().unwrap().len()
+            deserialized.form.as_ref().unwrap().len(),
         );
     }
 
@@ -444,7 +482,6 @@ mod tests {
                 email: Some("hr@example.com".to_string()),
             }]),
         };
-
         let serialized = serde_json::to_string(&instance).unwrap();
         let deserialized: ApprovalInstance = serde_json::from_str(&serialized).unwrap();
 
@@ -453,11 +490,11 @@ mod tests {
         assert_eq!(instance.status, deserialized.status);
         assert_eq!(
             instance.initiator.as_ref().unwrap().user_id,
-            deserialized.initiator.as_ref().unwrap().user_id
+            deserialized.initiator.as_ref().unwrap().user_id,
         );
         assert_eq!(
             instance.timeline.as_ref().unwrap().len(),
-            deserialized.timeline.as_ref().unwrap().len()
+            deserialized.timeline.as_ref().unwrap().len(),
         );
     }
 
@@ -488,7 +525,6 @@ mod tests {
                 link: "https://approval.example.com/task/TASK_001".to_string(),
             }]),
         };
-
         let serialized = serde_json::to_string(&task).unwrap();
         let deserialized: ApprovalTask = serde_json::from_str(&serialized).unwrap();
 
@@ -497,11 +533,11 @@ mod tests {
         assert_eq!(task.status, deserialized.status);
         assert_eq!(
             task.approver.as_ref().unwrap().user_id,
-            deserialized.approver.as_ref().unwrap().user_id
+            deserialized.approver.as_ref().unwrap().user_id,
         );
         assert_eq!(
             task.task_links.as_ref().unwrap().len(),
-            deserialized.task_links.as_ref().unwrap().len()
+            deserialized.task_links.as_ref().unwrap().len(),
         );
     }
 
@@ -513,7 +549,6 @@ mod tests {
             avatar: Some("https://example.com/avatar.jpg".to_string()),
             email: Some("test@example.com".to_string()),
         };
-
         let serialized = serde_json::to_string(&user).unwrap();
         let deserialized: UserInfo = serde_json::from_str(&serialized).unwrap();
 
@@ -532,7 +567,6 @@ mod tests {
             required: Some(true),
             properties: Some(serde_json::json!({"max_length": 50})),
         };
-
         let serialized = serde_json::to_string(&field).unwrap();
         let deserialized: FormField = serde_json::from_str(&serialized).unwrap();
 
@@ -549,7 +583,6 @@ mod tests {
             name: Some("员工姓名".to_string()),
             value: Some(serde_json::json!("张三")),
         };
-
         let serialized = serde_json::to_string(&data).unwrap();
         let deserialized: FormData = serde_json::from_str(&serialized).unwrap();
 
@@ -567,7 +600,6 @@ mod tests {
             file_type: Some("application/pdf".to_string()),
             upload_time: Some("2024-01-01T10:00:00Z".to_string()),
         };
-
         let serialized = serde_json::to_string(&file).unwrap();
         let deserialized: ApprovalFile = serde_json::from_str(&serialized).unwrap();
 
@@ -597,7 +629,6 @@ mod tests {
                 link: Some("https://example.com/attach/001.jpg".to_string()),
             }]),
         };
-
         let serialized = serde_json::to_string(&comment).unwrap();
         let deserialized: ApprovalComment = serde_json::from_str(&serialized).unwrap();
 
@@ -605,11 +636,11 @@ mod tests {
         assert_eq!(comment.content, deserialized.content);
         assert_eq!(
             comment.commenter.as_ref().unwrap().user_id,
-            deserialized.commenter.as_ref().unwrap().user_id
+            deserialized.commenter.as_ref().unwrap().user_id,
         );
         assert_eq!(
             comment.attachments.as_ref().unwrap().len(),
-            deserialized.attachments.as_ref().unwrap().len()
+            deserialized.attachments.as_ref().unwrap().len(),
         );
     }
 
@@ -621,7 +652,6 @@ mod tests {
             attachment_type: "document".to_string(),
             link: Some("https://example.com/files/attach_001.doc".to_string()),
         };
-
         let serialized = serde_json::to_string(&attachment).unwrap();
         let deserialized: CommentAttachment = serde_json::from_str(&serialized).unwrap();
 
@@ -639,7 +669,6 @@ mod tests {
             avatar: None,
             email: None,
         };
-
         let serialized = serde_json::to_string(&user).unwrap();
         let deserialized: UserInfo = serde_json::from_str(&serialized).unwrap();
 
@@ -725,10 +754,9 @@ mod tests {
                         avatar: None,
                         email: Some("hr@example.com".to_string()),
                     }]),
-                },
+                }
             ],
         };
-
         let serialized = serde_json::to_string(&process).unwrap();
         let deserialized: ApprovalProcess = serde_json::from_str(&serialized).unwrap();
 

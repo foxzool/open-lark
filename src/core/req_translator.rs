@@ -3,9 +3,11 @@ use std::{future::Future, pin::Pin};
 use reqwest::RequestBuilder;
 
 use crate::core::{
-    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
-    req_option::RequestOption, request_builder::UnifiedRequestBuilder,
+    config::Config, constants::AccessTokenType, error::LarkAPIError, req_option::RequestOption,
+    request_builder::UnifiedRequestBuilder,
 };
+// Re-export ApiRequest from open-lark-core
+use super::ApiRequest;
 
 pub struct ReqTranslator;
 
@@ -24,7 +26,8 @@ impl ReqTranslator {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::{api_req::ApiRequest, constants::AppType};
+    use crate::core::constants::AppType;
+    use open_lark_core::core::api_req::ApiRequest;
     use reqwest::Method;
 
     #[test]
@@ -36,11 +39,7 @@ mod tests {
     #[tokio::test]
     async fn test_req_translator_translate_delegation() {
         // Create test data
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: "/test".to_string(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::with_method_and_path(Method::GET, "/test");
 
         let config = Config::builder()
             .app_id("test_app_id")
@@ -63,12 +62,8 @@ mod tests {
 
     #[tokio::test]
     async fn test_req_translator_with_different_token_types() {
-        let mut api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: "/open-apis/test".to_string(),
-            body: b"test body".to_vec(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::with_method_and_path(Method::POST, "/open-apis/test");
+        api_req.body = b"test body".to_vec();
 
         let config = Config::builder()
             .app_id("test_app")
@@ -115,11 +110,7 @@ mod tests {
         ];
 
         for method in methods.iter() {
-            let mut api_req = ApiRequest {
-                http_method: method.clone(),
-                api_path: "/test/path".to_string(),
-                ..Default::default()
-            };
+            let mut api_req = ApiRequest::with_method_and_path(method.clone(), "/test/path");
 
             let result =
                 ReqTranslator::translate(&mut api_req, AccessTokenType::App, &config, &option)
@@ -142,11 +133,8 @@ mod tests {
 
     #[tokio::test]
     async fn test_req_translator_with_marketplace_app() {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: "/open-apis/marketplace/test".to_string(),
-            ..Default::default()
-        };
+        let mut api_req =
+            ApiRequest::with_method_and_path(Method::GET, "/open-apis/marketplace/test");
 
         let config = Config::builder()
             .app_id("marketplace_app")

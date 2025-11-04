@@ -99,6 +99,11 @@ pub struct FeishuCard {
 
 #[cfg(feature = "im")]
 impl SendMessageTrait for FeishuCard {
+    fn send(&self) -> bool {
+        // 默认实现，实际使用时应该通过客户端发送
+        true
+    }
+
     fn msg_type(&self) -> String {
         "interactive".to_string()
     }

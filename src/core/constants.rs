@@ -1,4 +1,7 @@
-use std::fmt::Display;
+// use std::fmt::Display; // 暂时注释掉未使用的导入
+
+// Re-export types from open-lark-core
+pub use open_lark_core::core::constants::AccessTokenType;
 
 /// 应用类型
 #[derive(Default, Hash, Eq, PartialEq, Debug, Copy, Clone)]
@@ -16,30 +19,6 @@ pub const TENANT_ACCESS_TOKEN_INTERNAL_URL_PATH: &str =
     "/open-apis/auth/v3/tenant_access_token/internal";
 pub const TENANT_ACCESS_TOKEN_URL_PATH: &str = "/open-apis/auth/v3/tenant_access_token";
 pub const APPLY_APP_TICKET_PATH: &str = "/open-apis/auth/v3/app_ticket/resend";
-
-#[derive(Default, Hash, Eq, PartialEq, Debug, Copy, Clone)]
-/// 访问令牌类型
-///
-/// 定义不同的访问令牌类型，用于API认证
-pub enum AccessTokenType {
-    #[default]
-    None,
-    App,
-    Tenant,
-    User,
-}
-
-impl Display for AccessTokenType {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let str = match self {
-            AccessTokenType::None => String::from("none_access_token"),
-            AccessTokenType::App => String::from("app_access_token"),
-            AccessTokenType::Tenant => String::from("tenant_access_token"),
-            AccessTokenType::User => String::from("user_access_token"),
-        };
-        write!(f, "{str}")
-    }
-}
 
 pub const PROJECT: &str = "open-lark";
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
