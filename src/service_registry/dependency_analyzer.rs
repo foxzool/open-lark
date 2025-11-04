@@ -94,7 +94,12 @@ impl DependencyAnalyzer {
     }
 
     /// 基于服务元数据推断依赖关系
-    fn infer_dependencies_from_metadata(&self, service_name: &str, _service_info: &ServiceInfo, registered_services: &[&str]) -> Vec<String> {
+    fn infer_dependencies_from_metadata(
+        &self,
+        service_name: &str,
+        _service_info: &ServiceInfo,
+        registered_services: &[&str],
+    ) -> Vec<String> {
         let mut dependencies = Vec::new();
 
         // 基于实际注册的服务和服务类型推断依赖
@@ -113,7 +118,11 @@ impl DependencyAnalyzer {
     }
 
     /// 基于服务命名模式推断依赖关系
-    fn infer_dependencies_from_naming(&self, service_name: &str, registered_services: &[&str]) -> Vec<String> {
+    fn infer_dependencies_from_naming(
+        &self,
+        service_name: &str,
+        registered_services: &[&str],
+    ) -> Vec<String> {
         let mut dependencies = Vec::new();
 
         // 基于实际注册的服务推断依赖
@@ -139,15 +148,21 @@ impl DependencyAnalyzer {
         }
 
         // 基于服务类型的依赖关系
-        if service_name.contains("group") && (potential_dependency.contains("contact") || potential_dependency.contains("im")) {
+        if service_name.contains("group")
+            && (potential_dependency.contains("contact") || potential_dependency.contains("im"))
+        {
             return true;
         }
 
-        if service_name.contains("search") && (potential_dependency.contains("im") || potential_dependency.contains("contact")) {
+        if service_name.contains("search")
+            && (potential_dependency.contains("im") || potential_dependency.contains("contact"))
+        {
             return true;
         }
 
-        if service_name.contains("approval") && (potential_dependency.contains("im") || potential_dependency.contains("contact")) {
+        if service_name.contains("approval")
+            && (potential_dependency.contains("im") || potential_dependency.contains("contact"))
+        {
             return true;
         }
 
@@ -155,7 +170,10 @@ impl DependencyAnalyzer {
     }
 
     /// 计算依赖层级
-    fn calculate_dependency_levels(&self, dependency_graph: &HashMap<String, Vec<String>>) -> HashMap<String, usize> {
+    fn calculate_dependency_levels(
+        &self,
+        dependency_graph: &HashMap<String, Vec<String>>,
+    ) -> HashMap<String, usize> {
         let mut levels = HashMap::new();
         let mut visited = HashSet::new();
 
@@ -199,7 +217,10 @@ impl DependencyAnalyzer {
     }
 
     /// 检测循环依赖
-    fn detect_circular_dependencies(&self, dependency_graph: &HashMap<String, Vec<String>>) -> Vec<CircularDependency> {
+    fn detect_circular_dependencies(
+        &self,
+        dependency_graph: &HashMap<String, Vec<String>>,
+    ) -> Vec<CircularDependency> {
         let mut circular_deps = Vec::new();
         let mut visited = HashSet::new();
         let mut rec_stack = HashSet::new();
@@ -273,7 +294,10 @@ impl DependencyAnalyzer {
     }
 
     /// 分析关键路径
-    fn analyze_critical_paths(&self, dependency_graph: &HashMap<String, Vec<String>>) -> Vec<CriticalPath> {
+    fn analyze_critical_paths(
+        &self,
+        dependency_graph: &HashMap<String, Vec<String>>,
+    ) -> Vec<CriticalPath> {
         let mut critical_paths = Vec::new();
 
         // 找出被最多服务依赖的关键服务
@@ -318,7 +342,10 @@ impl DependencyAnalyzer {
     }
 
     /// 识别孤立服务
-    fn identify_isolated_services(&self, dependency_graph: &HashMap<String, Vec<String>>) -> Vec<String> {
+    fn identify_isolated_services(
+        &self,
+        dependency_graph: &HashMap<String, Vec<String>>,
+    ) -> Vec<String> {
         let mut dependent_services = HashSet::new();
         let mut dependent_on_others = HashSet::new();
 
@@ -356,7 +383,10 @@ impl DependencyAnalyzer {
                 category: RecommendationCategory::DependencyIssue,
                 priority: RecommendationPriority::Critical,
                 title: "解决循环依赖".to_string(),
-                description: format!("发现 {} 个循环依赖，需要立即解决", circular_dependencies.len()),
+                description: format!(
+                    "发现 {} 个循环依赖，需要立即解决",
+                    circular_dependencies.len()
+                ),
                 actions: vec![
                     "重构服务架构以消除循环依赖".to_string(),
                     "引入依赖注入或事件驱动架构".to_string(),
@@ -401,7 +431,10 @@ impl DependencyAnalyzer {
                 category: RecommendationCategory::ServiceUtilization,
                 priority: RecommendationPriority::Medium,
                 title: "评估孤立服务".to_string(),
-                description: format!("发现 {} 个孤立服务，建议评估其必要性", isolated_services.len()),
+                description: format!(
+                    "发现 {} 个孤立服务，建议评估其必要性",
+                    isolated_services.len()
+                ),
                 actions: vec![
                     "检查孤立服务是否仍在使用".to_string(),
                     "考虑移除不再需要的孤立服务".to_string(),
@@ -452,7 +485,11 @@ impl DependencyAnalyzer {
                 label: service_name.clone(),
                 level: *level,
                 status: info.status.clone(),
-                dependency_count: report.dependency_graph.get(service_name).unwrap_or(&vec![]).len(),
+                dependency_count: report
+                    .dependency_graph
+                    .get(service_name)
+                    .unwrap_or(&vec![])
+                    .len(),
             });
         }
 
@@ -475,10 +512,15 @@ impl DependencyAnalyzer {
         let report = self.analyze_dependencies();
 
         // 找出直接依赖
-        let direct_dependencies = report.dependency_graph.get(service).cloned().unwrap_or_default();
+        let direct_dependencies = report
+            .dependency_graph
+            .get(service)
+            .cloned()
+            .unwrap_or_default();
 
         // 找出依赖此服务的服务
-        let dependents: Vec<String> = report.dependency_graph
+        let dependents: Vec<String> = report
+            .dependency_graph
             .iter()
             .filter_map(|(s, deps)| {
                 if deps.contains(&service.to_string()) {
@@ -507,7 +549,11 @@ impl DependencyAnalyzer {
     }
 
     /// 计算影响范围
-    fn calculate_impact_scope(&self, service: &str, dependency_graph: &HashMap<String, Vec<String>>) -> Vec<String> {
+    fn calculate_impact_scope(
+        &self,
+        service: &str,
+        dependency_graph: &HashMap<String, Vec<String>>,
+    ) -> Vec<String> {
         let mut affected = HashSet::new();
         let mut to_visit = vec![service.to_string()];
 
@@ -547,7 +593,11 @@ impl DependencyAnalyzer {
     }
 
     /// 估算停机时间
-    fn estimate_downtime(&self, risk_level: &RiskLevel, dependents: &[String]) -> std::time::Duration {
+    fn estimate_downtime(
+        &self,
+        risk_level: &RiskLevel,
+        dependents: &[String],
+    ) -> std::time::Duration {
         let base_time = match risk_level {
             RiskLevel::Critical => std::time::Duration::from_secs(300), // 5分钟
             RiskLevel::High => std::time::Duration::from_secs(180),     // 3分钟
@@ -561,7 +611,11 @@ impl DependencyAnalyzer {
     }
 
     /// 推荐迁移策略
-    fn recommend_migration_strategy(&self, risk_level: &RiskLevel, dependents: &[String]) -> String {
+    fn recommend_migration_strategy(
+        &self,
+        risk_level: &RiskLevel,
+        dependents: &[String],
+    ) -> String {
         match (risk_level, dependents.len()) {
             (RiskLevel::Critical, _) => "使用蓝绿部署，确保零停机".to_string(),
             (RiskLevel::High, _) => "使用金丝雀发布，逐步验证".to_string(),
@@ -787,8 +841,13 @@ impl DependencyAnalysisReport {
                     CircularDependencySeverity::Medium => "🟡",
                     CircularDependencySeverity::Low => "🟢",
                 };
-                println!("  {} 循环 {}: {:?} -> {}",
-                    severity_icon, i + 1, cd.cycle, cd.cycle.get(0).unwrap_or(&"<unknown>".to_string()));
+                println!(
+                    "  {} 循环 {}: {:?} -> {}",
+                    severity_icon,
+                    i + 1,
+                    cd.cycle,
+                    cd.cycle.get(0).unwrap_or(&"<unknown>".to_string())
+                );
             }
             println!();
         }
@@ -802,8 +861,13 @@ impl DependencyAnalysisReport {
                     CriticalPathType::Hub => "🔗",
                     CriticalPathType::Bridge => "🌉",
                 };
-                println!("  {} {}: {} (影响: {} 个服务)",
-                    type_icon, i + 1, path.critical_service, path.impact_score);
+                println!(
+                    "  {} {}: {} (影响: {} 个服务)",
+                    type_icon,
+                    i + 1,
+                    path.critical_service,
+                    path.impact_score
+                );
                 if path.dependents.len() <= 3 {
                     println!("    依赖服务: {:?}", path.dependents);
                 } else {
@@ -823,12 +887,22 @@ impl DependencyAnalysisReport {
         }
 
         // 高优先级建议
-        let high_priority_recommendations: Vec<_> = self.recommendations.iter()
-            .filter(|r| matches!(r.priority, RecommendationPriority::Critical | RecommendationPriority::High))
+        let high_priority_recommendations: Vec<_> = self
+            .recommendations
+            .iter()
+            .filter(|r| {
+                matches!(
+                    r.priority,
+                    RecommendationPriority::Critical | RecommendationPriority::High
+                )
+            })
             .collect();
 
         if !high_priority_recommendations.is_empty() {
-            println!("🚨 高优先级建议 ({} 个):", high_priority_recommendations.len());
+            println!(
+                "🚨 高优先级建议 ({} 个):",
+                high_priority_recommendations.len()
+            );
             for rec in high_priority_recommendations {
                 let priority_icon = match rec.priority {
                     RecommendationPriority::Critical => "🔴",
@@ -853,7 +927,10 @@ impl DependencyAnalysisReport {
         println!("📈 依赖统计:");
         println!("  总依赖关系: {}", total_dependencies);
         println!("  平均依赖数: {:.1}", avg_dependencies);
-        println!("  最大依赖深度: {:?}", self.dependency_levels.values().max());
+        println!(
+            "  最大依赖深度: {:?}",
+            self.dependency_levels.values().max()
+        );
         println!("  循环依赖数: {}", self.circular_dependencies.len());
         println!("  关键路径数: {}", self.critical_paths.len());
         println!("  孤立服务数: {}", self.isolated_services.len());
@@ -863,7 +940,7 @@ impl DependencyAnalysisReport {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::service_registry::{ServiceRegistry, Service, ServiceStatus};
+    use crate::service_registry::{Service, ServiceRegistry, ServiceStatus};
     use std::any::Any;
 
     #[derive(Debug)]
@@ -979,7 +1056,10 @@ mod tests {
         // search-service 应该依赖 authentication-service
         assert!(search_deps.iter().any(|dep| dep.contains("auth")));
 
-        let auth_deps = report.dependency_graph.get("authentication-service").unwrap();
+        let auth_deps = report
+            .dependency_graph
+            .get("authentication-service")
+            .unwrap();
         // 认证服务应该没有依赖
         assert!(auth_deps.is_empty());
     }

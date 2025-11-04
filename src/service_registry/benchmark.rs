@@ -7,7 +7,7 @@ use std::time::{Duration, Instant};
 use tokio::task::JoinSet;
 
 use crate::core::config::{Config, ConfigBuilder};
-use crate::service_registry::{ServiceRegistry, ServiceError};
+use crate::service_registry::{ServiceError, ServiceRegistry};
 // 条件编译导入适配器
 #[cfg(feature = "authentication")]
 use crate::service_registry::adapters::AuthenticationServiceAdapter;
@@ -77,13 +77,21 @@ impl BenchmarkResult {
         println!("📊 {}", self.test_name);
         println!("  迭代次数: {}", self.iterations);
         println!("  总耗时: {:?}", self.total_duration);
-        println!("  平均耗时: {} ns ({:.2} μs)", self.avg_duration_nanos, self.avg_duration_nanos as f64 / 1000.0);
+        println!(
+            "  平均耗时: {} ns ({:.2} μs)",
+            self.avg_duration_nanos,
+            self.avg_duration_nanos as f64 / 1000.0
+        );
         println!("  最小耗时: {} ns", self.min_duration_nanos);
         println!("  最大耗时: {} ns", self.max_duration_nanos);
         println!("  每秒操作数: {:.0}", self.ops_per_second);
 
         if let Some(memory) = self.memory_usage_bytes {
-            println!("  内存使用: {} bytes ({:.2} KB)", memory, memory as f64 / 1024.0);
+            println!(
+                "  内存使用: {} bytes ({:.2} KB)",
+                memory,
+                memory as f64 / 1024.0
+            );
         }
         println!();
     }
@@ -133,7 +141,8 @@ impl BenchmarkSuite {
     pub fn setup_core_services(&self) -> Result<(), ServiceError> {
         #[cfg(feature = "authentication")]
         {
-            let auth_service = crate::service::authentication::AuthenticationService::new(self.config.clone());
+            let auth_service =
+                crate::service::authentication::AuthenticationService::new(self.config.clone());
             let auth_adapter = AuthenticationServiceAdapter::new(auth_service);
             self.registry.register(auth_adapter)?;
         }
@@ -201,7 +210,8 @@ impl BenchmarkSuite {
     pub fn benchmark_service_retrieval(&self, iterations: usize) -> BenchmarkResult {
         // 确保有可用的服务
         if self.registry.service_count() == 0 {
-            self.setup_core_services().expect("Failed to setup core services");
+            self.setup_core_services()
+                .expect("Failed to setup core services");
         }
 
         let mut measurements = Vec::with_capacity(iterations);
@@ -236,7 +246,8 @@ impl BenchmarkSuite {
     pub fn benchmark_service_discovery(&self, iterations: usize) -> BenchmarkResult {
         // 确保有可用的服务
         if self.registry.service_count() == 0 {
-            self.setup_core_services().expect("Failed to setup core services");
+            self.setup_core_services()
+                .expect("Failed to setup core services");
         }
 
         let mut measurements = Vec::with_capacity(iterations);
@@ -263,10 +274,15 @@ impl BenchmarkSuite {
     }
 
     /// 基准测试：并发访问性能
-    pub async fn benchmark_concurrent_access(&self, iterations: usize, concurrency: usize) -> BenchmarkResult {
+    pub async fn benchmark_concurrent_access(
+        &self,
+        iterations: usize,
+        concurrency: usize,
+    ) -> BenchmarkResult {
         // 确保有可用的服务
         if self.registry.service_count() == 0 {
-            self.setup_core_services().expect("Failed to setup core services");
+            self.setup_core_services()
+                .expect("Failed to setup core services");
         }
 
         let mut measurements = Vec::with_capacity(iterations);
@@ -323,7 +339,8 @@ impl BenchmarkSuite {
         // 1. 服务注册性能测试
         println!("📝 测试1: 服务注册性能");
         let result1 = self.benchmark_service_registration(1000);
-        if let Err(e) = result1.validate_performance(100_000) { // 100微秒
+        if let Err(e) = result1.validate_performance(100_000) {
+            // 100微秒
             println!("⚠️  警告: {}", e);
         }
         results.push(result1);
@@ -331,7 +348,8 @@ impl BenchmarkSuite {
         // 2. 服务检索性能测试
         println!("🔍 测试2: 服务检索性能");
         let result2 = self.benchmark_service_retrieval(10_000);
-        if let Err(e) = result2.validate_performance(1_000) { // 1微秒
+        if let Err(e) = result2.validate_performance(1_000) {
+            // 1微秒
             println!("⚠️  警告: {}", e);
         }
         results.push(result2);
@@ -339,7 +357,8 @@ impl BenchmarkSuite {
         // 3. 服务发现性能测试
         println!("🔎 测试3: 服务发现性能");
         let result3 = self.benchmark_service_discovery(5_000);
-        if let Err(e) = result3.validate_performance(5_000) { // 5微秒
+        if let Err(e) = result3.validate_performance(5_000) {
+            // 5微秒
             println!("⚠️  警告: {}", e);
         }
         results.push(result3);
@@ -347,7 +366,8 @@ impl BenchmarkSuite {
         // 4. 并发访问性能测试
         println!("⚡ 测试4: 并发访问性能");
         let result4 = self.benchmark_concurrent_access(1_000, 10).await;
-        if let Err(e) = result4.validate_performance(2_000) { // 2微秒
+        if let Err(e) = result4.validate_performance(2_000) {
+            // 2微秒
             println!("⚠️  警告: {}", e);
         }
         results.push(result4);
@@ -356,8 +376,13 @@ impl BenchmarkSuite {
         println!("{}", "=".repeat(60));
         println!("📊 基准测试总结:");
         for (i, result) in results.iter().enumerate() {
-            println!("  {}. {}: {:.0} ops/sec (平均: {} ns)",
-                i + 1, result.test_name, result.ops_per_second, result.avg_duration_nanos);
+            println!(
+                "  {}. {}: {:.0} ops/sec (平均: {} ns)",
+                i + 1,
+                result.test_name,
+                result.ops_per_second,
+                result.avg_duration_nanos
+            );
         }
         println!();
 
@@ -411,7 +436,9 @@ mod tests {
     #[tokio::test]
     async fn test_benchmark_suite() {
         let suite = BenchmarkSuite::new();
-        suite.setup_core_services().expect("Failed to setup services");
+        suite
+            .setup_core_services()
+            .expect("Failed to setup services");
 
         let results = suite.run_full_benchmark_suite().await;
 
@@ -420,8 +447,14 @@ mod tests {
 
         // 验证基本性能要求
         for result in &results {
-            assert!(result.avg_duration_nanos > 0, "Average duration should be positive");
-            assert!(result.ops_per_second > 0.0, "Ops per second should be positive");
+            assert!(
+                result.avg_duration_nanos > 0,
+                "Average duration should be positive"
+            );
+            assert!(
+                result.ops_per_second > 0.0,
+                "Ops per second should be positive"
+            );
         }
     }
 
@@ -434,12 +467,7 @@ mod tests {
         ];
         let total = Duration::from_nanos(600);
 
-        let result = BenchmarkResult::new(
-            "test".to_string(),
-            3,
-            total,
-            &measurements,
-        );
+        let result = BenchmarkResult::new("test".to_string(), 3, total, &measurements);
 
         assert_eq!(result.avg_duration_nanos, 200);
         assert_eq!(result.min_duration_nanos, 100);

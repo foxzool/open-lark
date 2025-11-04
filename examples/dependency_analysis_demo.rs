@@ -86,13 +86,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 /// 演示循环依赖检测
-fn demonstrate_circular_dependency_detection(report: &DependencyAnalysisReport) -> Result<(), Box<dyn std::error::Error>> {
+fn demonstrate_circular_dependency_detection(
+    report: &DependencyAnalysisReport,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("   循环依赖检测结果:");
 
     if report.circular_dependencies.is_empty() {
         println!("   ✅ 未发现循环依赖");
     } else {
-        println!("   🚨 发现 {} 个循环依赖:", report.circular_dependencies.len());
+        println!(
+            "   🚨 发现 {} 个循环依赖:",
+            report.circular_dependencies.len()
+        );
 
         for (i, cd) in report.circular_dependencies.iter().enumerate() {
             let severity_text = match cd.severity {
@@ -124,7 +129,9 @@ fn demonstrate_circular_dependency_detection(report: &DependencyAnalysisReport) 
 }
 
 /// 演示关键路径分析
-fn demonstrate_critical_path_analysis(report: &DependencyAnalysisReport) -> Result<(), Box<dyn std::error::Error>> {
+fn demonstrate_critical_path_analysis(
+    report: &DependencyAnalysisReport,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("   关键路径分析结果:");
 
     if report.critical_paths.is_empty() {
@@ -140,8 +147,11 @@ fn demonstrate_critical_path_analysis(report: &DependencyAnalysisReport) -> Resu
             };
 
             println!("     {}. {} - {}", i + 1, path.critical_service, type_text);
-            println!("        影响分数: {} (被 {} 个服务依赖)",
-                path.impact_score, path.dependents.len());
+            println!(
+                "        影响分数: {} (被 {} 个服务依赖)",
+                path.impact_score,
+                path.dependents.len()
+            );
 
             if path.dependents.len() <= 3 {
                 println!("        依赖服务: {:?}", path.dependents);
@@ -170,7 +180,9 @@ fn demonstrate_critical_path_analysis(report: &DependencyAnalysisReport) -> Resu
 }
 
 /// 演示迁移影响分析
-async fn demonstrate_migration_impact_analysis(analyzer: &DependencyAnalyzer) -> Result<(), Box<dyn std::error::Error>> {
+async fn demonstrate_migration_impact_analysis(
+    analyzer: &DependencyAnalyzer,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("   迁移影响分析:");
 
     // 分析几个关键服务的迁移影响
@@ -178,7 +190,7 @@ async fn demonstrate_migration_impact_analysis(analyzer: &DependencyAnalyzer) ->
         "authentication-service",
         "im-service",
         "contact-service",
-        "group-service"
+        "group-service",
     ];
 
     for service in critical_services {
@@ -194,9 +206,15 @@ async fn demonstrate_migration_impact_analysis(analyzer: &DependencyAnalyzer) ->
         };
 
         println!("     风险等级: {}", risk_level_text);
-        println!("     直接依赖: {} 个服务", impact_analysis.direct_dependencies.len());
+        println!(
+            "     直接依赖: {} 个服务",
+            impact_analysis.direct_dependencies.len()
+        );
         println!("     被依赖: {} 个服务", impact_analysis.dependents.len());
-        println!("     影响范围: {} 个服务", impact_analysis.impact_scope.len());
+        println!(
+            "     影响范围: {} 个服务",
+            impact_analysis.impact_scope.len()
+        );
         println!("     预估停机: {:?}", impact_analysis.estimated_downtime);
         println!("     推荐策略: {}", impact_analysis.recommended_strategy);
 
@@ -213,7 +231,9 @@ async fn demonstrate_migration_impact_analysis(analyzer: &DependencyAnalyzer) ->
 }
 
 /// 演示依赖图可视化数据生成
-fn demonstrate_dependency_graph_generation(analyzer: &DependencyAnalyzer) -> Result<(), Box<dyn std::error::Error>> {
+fn demonstrate_dependency_graph_generation(
+    analyzer: &DependencyAnalyzer,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("   生成依赖图可视化数据...");
 
     let graph_data = analyzer.generate_dependency_graph_data();
@@ -225,8 +245,13 @@ fn demonstrate_dependency_graph_generation(analyzer: &DependencyAnalyzer) -> Res
 
     println!("   🎯 节点详情 (前5个):");
     for (i, node) in graph_data.nodes.iter().take(5).enumerate() {
-        println!("     {}. {} (层级: {}, 依赖数: {})",
-            i + 1, node.label, node.level, node.dependency_count);
+        println!(
+            "     {}. {} (层级: {}, 依赖数: {})",
+            i + 1,
+            node.label,
+            node.level,
+            node.dependency_count
+        );
     }
     println!();
 
@@ -265,14 +290,26 @@ fn demonstrate_architecture_optimization(report: &DependencyAnalysisReport) {
     println!("   基于依赖分析的架构优化建议:");
 
     // 统计信息
-    let total_dependencies: usize = report.dependency_graph.values().map(|deps| deps.len()).sum();
+    let total_dependencies: usize = report
+        .dependency_graph
+        .values()
+        .map(|deps| deps.len())
+        .sum();
     let avg_dependencies = total_dependencies as f64 / report.total_services as f64;
-    let max_dependencies = report.dependency_graph.values().map(|deps| deps.len()).max().unwrap_or(0);
+    let max_dependencies = report
+        .dependency_graph
+        .values()
+        .map(|deps| deps.len())
+        .max()
+        .unwrap_or(0);
 
     println!("   📊 当前架构指标:");
     println!("     - 平均依赖数: {:.1}", avg_dependencies);
     println!("     - 最大依赖数: {}", max_dependencies);
-    println!("     - 依赖层级数: {:?}", report.dependency_levels.values().max());
+    println!(
+        "     - 依赖层级数: {:?}",
+        report.dependency_levels.values().max()
+    );
     println!();
 
     // 架构健康度评估
@@ -341,7 +378,12 @@ fn calculate_architecture_health_score(report: &DependencyAnalysisReport) -> f64
     score -= report.isolated_services.len() as f64 * 5.0;
 
     // 平均依赖数扣分
-    let avg_dependencies: f64 = report.dependency_graph.values().map(|deps| deps.len()).sum::<usize>() as f64 / report.total_services as f64;
+    let avg_dependencies: f64 = report
+        .dependency_graph
+        .values()
+        .map(|deps| deps.len())
+        .sum::<usize>() as f64
+        / report.total_services as f64;
     if avg_dependencies > 2.0 {
         score -= (avg_dependencies - 2.0) * 10.0;
     }
@@ -357,7 +399,9 @@ fn calculate_architecture_health_score(report: &DependencyAnalysisReport) -> f64
 }
 
 /// 演示依赖监控
-async fn demonstrate_dependency_monitoring(analyzer: &DependencyAnalyzer) -> Result<(), Box<dyn std::error::Error>> {
+async fn demonstrate_dependency_monitoring(
+    analyzer: &DependencyAnalyzer,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("   模拟实时依赖监控...");
 
     // 模拟监控过程
@@ -370,16 +414,26 @@ async fn demonstrate_dependency_monitoring(analyzer: &DependencyAnalyzer) -> Res
         let health_score = calculate_architecture_health_score(&report);
         let risk_count = report.circular_dependencies.len();
 
-        println!("     监控点 {}: 健康度 {:.1}%, 风险数 {} (状态: {})",
-            i, health_score, risk_count,
-            if health_score >= 80.0 && risk_count == 0 { "✅ 健康" }
-            else if health_score >= 60.0 { "⚠️ 警告" }
-            else { "🚨 异常" });
+        println!(
+            "     监控点 {}: 健康度 {:.1}%, 风险数 {} (状态: {})",
+            i,
+            health_score,
+            risk_count,
+            if health_score >= 80.0 && risk_count == 0 {
+                "✅ 健康"
+            } else if health_score >= 60.0 {
+                "⚠️ 警告"
+            } else {
+                "🚨 异常"
+            }
+        );
 
         // 模拟发现问题时的响应
         if i == 3 {
             println!("       🔔 检测到依赖变化，触发分析...");
-            let critical_services = report.critical_paths.iter()
+            let critical_services = report
+                .critical_paths
+                .iter()
                 .take(2)
                 .map(|p| p.critical_service.clone())
                 .collect::<Vec<_>>();

@@ -25,7 +25,8 @@ mod integration_tests {
         }
 
         fn set_unhealthy(&self) {
-            self.status.store(false, std::sync::atomic::Ordering::SeqCst);
+            self.status
+                .store(false, std::sync::atomic::Ordering::SeqCst);
         }
 
         fn set_healthy(&self) {
@@ -104,7 +105,9 @@ mod integration_tests {
         let registry = ServiceRegistry::new();
 
         // 注册构建器
-        let builder = ServiceBuilderFactory::type_erased("mock-builder", || Ok(MockService::new("mock-service")));
+        let builder = ServiceBuilderFactory::type_erased("mock-builder", || {
+            Ok(MockService::new("mock-service"))
+        });
         registry.register_builder(builder).unwrap();
 
         // 通过构建器创建服务
@@ -188,7 +191,9 @@ mod integration_tests {
             }
         }
 
-        let service2 = MockService2 { name: "mock-service-2" };
+        let service2 = MockService2 {
+            name: "mock-service-2",
+        };
 
         registry.register(service1).unwrap();
         registry.register(service2).unwrap();
@@ -218,7 +223,8 @@ mod integration_tests {
         assert_eq!(info.version, "1.0.0");
 
         // 按状态筛选
-        let healthy_services = registry.get_all_services_info()
+        let healthy_services = registry
+            .get_all_services_info()
             .into_iter()
             .filter(|info| info.status == ServiceStatus::Healthy)
             .collect::<Vec<_>>();
@@ -244,7 +250,10 @@ mod integration_tests {
         registry.register(service.clone()).unwrap();
         let result = registry.register(service);
         assert!(result.is_err());
-        assert!(matches!(result, Err(ServiceError::ServiceAlreadyExists { .. })));
+        assert!(matches!(
+            result,
+            Err(ServiceError::ServiceAlreadyExists { .. })
+        ));
     }
 }
 
@@ -262,7 +271,7 @@ mod performance_tests {
         fn new(id: u32) -> Self {
             Self {
                 id,
-                name: format!("perf-service-{}", id)
+                name: format!("perf-service-{}", id),
             }
         }
     }
@@ -314,7 +323,11 @@ mod performance_tests {
         println!("  Average time per retrieval: {} ns", avg_time);
 
         // 性能要求：平均检索时间应小于1000纳秒（1微秒）
-        assert!(avg_time < 1000, "Service retrieval too slow: {} ns", avg_time);
+        assert!(
+            avg_time < 1000,
+            "Service retrieval too slow: {} ns",
+            avg_time
+        );
     }
 
     #[test]
@@ -336,11 +349,18 @@ mod performance_tests {
         let avg_time = duration.as_nanos() / ITERATIONS as u128;
 
         println!("Service discovery performance:");
-        println!("  {} iterations in {:?} (100 services)", ITERATIONS, duration);
+        println!(
+            "  {} iterations in {:?} (100 services)",
+            ITERATIONS, duration
+        );
         println!("  Average time per discovery: {} ns", avg_time);
 
         // 性能要求：平均发现时间应小于5000纳秒（5微秒）
-        assert!(avg_time < 5000, "Service discovery too slow: {} ns", avg_time);
+        assert!(
+            avg_time < 5000,
+            "Service discovery too slow: {} ns",
+            avg_time
+        );
     }
 
     #[test]
@@ -374,11 +394,18 @@ mod performance_tests {
         let avg_time = duration.as_nanos() / total_iterations as u128;
 
         println!("Concurrent performance:");
-        println!("  {} iterations across {} threads in {:?}", total_iterations, THREADS, duration);
+        println!(
+            "  {} iterations across {} threads in {:?}",
+            total_iterations, THREADS, duration
+        );
         println!("  Average time per retrieval: {} ns", avg_time);
 
         // 性能要求：并发访问时平均检索时间应小于2000纳秒（2微秒）
-        assert!(avg_time < 2000, "Concurrent service retrieval too slow: {} ns", avg_time);
+        assert!(
+            avg_time < 2000,
+            "Concurrent service retrieval too slow: {} ns",
+            avg_time
+        );
     }
 
     #[test]
@@ -417,7 +444,7 @@ mod stress_tests {
         fn new(id: usize) -> Self {
             Self {
                 id,
-                name: format!("stress-service-{}", id)
+                name: format!("stress-service-{}", id),
             }
         }
     }
@@ -490,7 +517,11 @@ mod stress_tests {
         println!("  Operations per second: {:.0}", ops_per_second);
 
         // 性能要求：每秒至少完成100,000次操作
-        assert!(ops_per_second >= 100_000.0, "Operations per second too low: {:.0}", ops_per_second);
+        assert!(
+            ops_per_second >= 100_000.0,
+            "Operations per second too low: {:.0}",
+            ops_per_second
+        );
     }
 
     #[test]
@@ -517,6 +548,9 @@ mod stress_tests {
         println!("  1000 retrievals in {:?}", duration);
 
         // 性能要求：即使在内存压力下，1000次检索应在100ms内完成
-        assert!(duration.as_millis() < 100, "Performance degraded under memory pressure");
+        assert!(
+            duration.as_millis() < 100,
+            "Performance degraded under memory pressure"
+        );
     }
 }

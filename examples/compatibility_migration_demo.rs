@@ -84,14 +84,29 @@ fn demonstrate_version_compatibility() -> Result<(), Box<dyn std::error::Error>>
     println!();
 
     println!("   兼容性检查 (非严格模式):");
-    println!("     1.2.3 兼容 1.1.0: {}", v1_2_3.is_compatible_with(&v1_1_0, false));
-    println!("     1.1.0 兼容 1.2.3: {}", v1_1_0.is_compatible_with(&v1_2_3, false));
-    println!("     1.0.0 兼容 2.0.0: {}", v1_0_0.is_compatible_with(&v2_0_0, false));
+    println!(
+        "     1.2.3 兼容 1.1.0: {}",
+        v1_2_3.is_compatible_with(&v1_1_0, false)
+    );
+    println!(
+        "     1.1.0 兼容 1.2.3: {}",
+        v1_1_0.is_compatible_with(&v1_2_3, false)
+    );
+    println!(
+        "     1.0.0 兼容 2.0.0: {}",
+        v1_0_0.is_compatible_with(&v2_0_0, false)
+    );
     println!();
 
     println!("   兼容性检查 (严格模式):");
-    println!("     1.2.3 兼容 1.2.3: {}", v1_2_3.is_compatible_with(&v1_2_3, true));
-    println!("     1.2.3 兼容 1.1.0: {}", v1_2_3.is_compatible_with(&v1_1_0, true));
+    println!(
+        "     1.2.3 兼容 1.2.3: {}",
+        v1_2_3.is_compatible_with(&v1_2_3, true)
+    );
+    println!(
+        "     1.2.3 兼容 1.1.0: {}",
+        v1_2_3.is_compatible_with(&v1_1_0, true)
+    );
     println!();
 
     Ok(())
@@ -115,7 +130,11 @@ async fn demonstrate_compatibility_checking(
 
     // 检查服务兼容性
     let service_version = ServiceVersion::new(1, 0, 0);
-    let result = checker.check_service_compatibility("authentication-service", &service_version, &registry)?;
+    let result = checker.check_service_compatibility(
+        "authentication-service",
+        &service_version,
+        &registry,
+    )?;
 
     println!("   服务兼容性检查:");
     println!("     服务: authentication-service");
@@ -225,7 +244,10 @@ async fn demonstrate_actual_migration(
     println!("   迁移前服务数量: {}", registry.service_count());
 
     // 执行渐进式迁移
-    let services = vec!["authentication-service".to_string(), "im-service".to_string()];
+    let services = vec![
+        "authentication-service".to_string(),
+        "im-service".to_string(),
+    ];
     let task_id = "demo-migration-1".to_string();
     let strategy = MigrationStrategy::Gradual {
         batch_size: 1,
@@ -251,15 +273,22 @@ async fn demonstrate_actual_migration(
         tokio::time::sleep(Duration::from_millis(200)).await;
 
         if let Some(task) = migration_helper.get_migration_status(&migration_id).await {
-            if let open_lark::service_registry::MigrationStatus::InProgress { progress } = task.status {
+            if let open_lark::service_registry::MigrationStatus::InProgress { progress } =
+                task.status
+            {
                 if (progress - last_progress).abs() > 0.1 {
                     println!("   迁移进度: {:.1}%", progress);
                     last_progress = progress;
                 }
-            } else if matches!(task.status, open_lark::service_registry::MigrationStatus::Completed) {
+            } else if matches!(
+                task.status,
+                open_lark::service_registry::MigrationStatus::Completed
+            ) {
                 println!("   ✅ 迁移完成！");
                 break;
-            } else if let open_lark::service_registry::MigrationStatus::Failed { error } = &task.status {
+            } else if let open_lark::service_registry::MigrationStatus::Failed { error } =
+                &task.status
+            {
                 println!("   ❌ 迁移失败: {}", error);
                 break;
             }
@@ -329,9 +358,7 @@ async fn demonstrate_large_scale_migration(
     let migration_helper = AdvancedMigrationHelper::new(registry.clone(), compatibility_config);
 
     // 生成大量模拟服务
-    let services: Vec<String> = (0..20)
-        .map(|i| format!("service-{:03}", i))
-        .collect();
+    let services: Vec<String> = (0..20).map(|i| format!("service-{:03}", i)).collect();
 
     println!("   服务数量: {}", services.len());
 
@@ -359,12 +386,17 @@ async fn demonstrate_large_scale_migration(
         tokio::time::sleep(Duration::from_millis(200)).await;
 
         if let Some(task) = migration_helper.get_migration_status(&migration_id).await {
-            if let open_lark::service_registry::MigrationStatus::InProgress { progress } = task.status {
+            if let open_lark::service_registry::MigrationStatus::InProgress { progress } =
+                task.status
+            {
                 if progress > 99.0 {
                     println!("   🎉 大规模迁移即将完成: {:.1}%", progress);
                     break;
                 }
-            } else if matches!(task.status, open_lark::service_registry::MigrationStatus::Completed) {
+            } else if matches!(
+                task.status,
+                open_lark::service_registry::MigrationStatus::Completed
+            ) {
                 println!("   ✅ 大规模迁移完成！");
                 break;
             }

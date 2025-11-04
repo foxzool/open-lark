@@ -1,8 +1,8 @@
 //! 服务元数据管理
 
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::time::SystemTime;
-use serde::{Deserialize, Serialize};
 
 use super::service::{ServiceInfo, ServiceStatus};
 
