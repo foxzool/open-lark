@@ -1,0 +1,16 @@
+[package]
+name = "open-lark-ai-platform"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "open-lark-ai-platform module for OpenLark SDK"
+
+[dependencies]
+open-lark-core = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+async-trait = { workspace = true }

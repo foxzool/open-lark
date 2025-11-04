@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 /// 分页响应通用结构
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PageResponse<T> {
     /// 数据列表
     pub items: Vec<T>,
@@ -13,7 +13,7 @@ pub struct PageResponse<T> {
 }
 
 /// I18n 多语言文本
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct I18nText {
     /// 中文
     pub zh_cn: Option<String>,
@@ -23,8 +23,18 @@ pub struct I18nText {
     pub ja_jp: Option<String>,
 }
 
+impl Default for I18nText {
+    fn default() -> Self {
+        Self {
+            zh_cn: None,
+            en_us: None,
+            ja_jp: None,
+        }
+    }
+}
+
 /// 发薪明细列表请求
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PaymentDetailListRequest {
     /// 发薪活动ID
     pub payment_activity_id: String,
@@ -40,8 +50,21 @@ pub struct PaymentDetailListRequest {
     pub department_id_type: Option<String>,
 }
 
+impl Default for PaymentDetailListRequest {
+    fn default() -> Self {
+        Self {
+            payment_activity_id: String::new(),
+            page_size: None,
+            page_token: None,
+            employee_id: None,
+            user_id_type: None,
+            department_id_type: None,
+        }
+    }
+}
+
 /// 发薪明细批量查询请求
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize)]
 pub struct PaymentDetailQueryRequest {
     /// 发薪活动ID
     pub payment_activity_id: String,
@@ -54,7 +77,7 @@ pub struct PaymentDetailQueryRequest {
 }
 
 /// 发薪明细信息
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct PaymentDetail {
     /// 员工ID
     pub employee_id: String,
@@ -85,7 +108,7 @@ pub struct PaymentDetail {
 }
 
 /// 发薪项目
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct PaymentItem {
     /// 算薪项ID
     pub acct_item_id: String,
@@ -104,7 +127,7 @@ pub struct PaymentItem {
 }
 
 /// 发薪活动列表请求
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize)]
 pub struct PaymentActivityListRequest {
     /// 分页大小，最大值100
     pub page_size: Option<u32>,
@@ -121,7 +144,7 @@ pub struct PaymentActivityListRequest {
 }
 
 /// 发薪活动封存请求
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize)]
 pub struct PaymentActivityArchiveRequest {
     /// 发薪活动ID
     pub payment_activity_id: String,
@@ -130,7 +153,7 @@ pub struct PaymentActivityArchiveRequest {
 }
 
 /// 发薪活动信息
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct PaymentActivity {
     /// 发薪活动ID
     pub payment_activity_id: String,
@@ -142,10 +165,6 @@ pub struct PaymentActivity {
     pub paygroup_id: String,
     /// 薪资组名称
     pub paygroup_name: Option<I18nText>,
-    /// 发薪周期开始时间
-    pub period_start: String,
-    /// 发薪周期结束时间
-    pub period_end: String,
     /// 计划发薪日期
     pub planned_payment_date: Option<String>,
     /// 实际发薪日期
@@ -167,7 +186,7 @@ pub struct PaymentActivity {
 }
 
 /// 外部数据源记录保存请求
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize)]
 pub struct DatasourceRecordSaveRequest {
     /// 数据源ID
     pub datasource_id: String,
@@ -182,16 +201,16 @@ pub struct DatasourceRecordSaveRequest {
 }
 
 /// 外部数据源记录查询请求
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize)]
 pub struct DatasourceRecordQueryRequest {
     /// 数据源ID
     pub datasource_id: String,
-    /// 员工ID列表
-    pub employee_ids: Vec<String>,
+    /// 员工ID筛选
+    pub employee_id: Option<String>,
     /// 用户ID类型
     pub user_id_type: Option<String>,
-    /// 发薪周期
-    pub payment_period: String,
+    /// 发薪周期筛选
+    pub payment_period: Option<String>,
     /// 分页大小
     pub page_size: Option<u32>,
     /// 分页标记
@@ -199,7 +218,7 @@ pub struct DatasourceRecordQueryRequest {
 }
 
 /// 外部数据源记录
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct DatasourceRecord {
     /// 记录ID
     pub record_id: Option<String>,
@@ -216,7 +235,7 @@ pub struct DatasourceRecord {
 }
 
 /// 外部数据源配置列表请求
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize)]
 pub struct DatasourceListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -227,7 +246,7 @@ pub struct DatasourceListRequest {
 }
 
 /// 外部数据源配置
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Datasource {
     /// 数据源ID
     pub datasource_id: String,
@@ -235,7 +254,7 @@ pub struct Datasource {
     pub datasource_name: I18nText,
     /// 数据源类型
     pub datasource_type: String,
-    /// 数据源状态
+    /// 状态
     pub status: String,
     /// 字段配置
     pub field_configs: Vec<DatasourceFieldConfig>,
@@ -248,7 +267,7 @@ pub struct Datasource {
 }
 
 /// 数据源字段配置
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize)]
 pub struct DatasourceFieldConfig {
     /// 字段ID
     pub field_id: String,
@@ -258,8 +277,18 @@ pub struct DatasourceFieldConfig {
     pub field_type: String,
 }
 
+impl Default for DatasourceFieldConfig {
+    fn default() -> Self {
+        Self {
+            field_id: String::new(),
+            field_name: I18nText::default(),
+            field_type: String::new(),
+        }
+    }
+}
+
 /// 算薪项列表请求
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize)]
 pub struct AcctItemListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -274,7 +303,7 @@ pub struct AcctItemListRequest {
 }
 
 /// 算薪项信息
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct AcctItem {
     /// 算薪项ID
     pub acct_item_id: String,
@@ -282,12 +311,8 @@ pub struct AcctItem {
     pub item_name: I18nText,
     /// 算薪项类型
     pub item_type: String,
-    /// 算薪项分类
+    /// 算薪项类别
     pub category: Option<String>,
-    /// 计算方式
-    pub calculation_method: Option<String>,
-    /// 计算公式
-    pub formula: Option<String>,
     /// 是否参与个税计算
     pub tax_related: bool,
     /// 是否参与社保计算
@@ -305,7 +330,7 @@ pub struct AcctItem {
 }
 
 /// 成本分摊报表列表请求
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize)]
 pub struct CostAllocationReportListRequest {
     /// 开始日期
     pub start_date: String,
@@ -324,7 +349,7 @@ pub struct CostAllocationReportListRequest {
 }
 
 /// 成本分摊报表数据
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct CostAllocationReport {
     /// 报表ID
     pub report_id: String,
@@ -353,7 +378,7 @@ pub struct CostAllocationReport {
 }
 
 /// 分摊明细
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct AllocationDetail {
     /// 算薪项ID
     pub acct_item_id: String,
@@ -368,7 +393,7 @@ pub struct AllocationDetail {
 }
 
 /// 成本分摊方案列表请求
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize)]
 pub struct CostAllocationPlanListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -381,7 +406,7 @@ pub struct CostAllocationPlanListRequest {
 }
 
 /// 成本分摊方案
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct CostAllocationPlan {
     /// 方案ID
     pub plan_id: String,
@@ -408,7 +433,7 @@ pub struct CostAllocationPlan {
 }
 
 /// 分摊规则
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct AllocationRule {
     /// 规则ID
     pub rule_id: String,
@@ -427,7 +452,7 @@ pub struct AllocationRule {
 }
 
 /// 规则条件
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct RuleCondition {
     /// 条件字段
     pub field: String,
@@ -438,7 +463,7 @@ pub struct RuleCondition {
 }
 
 /// 薪资组列表请求
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize)]
 pub struct PaygroupListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -449,7 +474,7 @@ pub struct PaygroupListRequest {
 }
 
 /// 薪资组基本信息
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Paygroup {
     /// 薪资组ID
     pub paygroup_id: String,
@@ -474,7 +499,7 @@ pub struct Paygroup {
 }
 
 /// 发薪日设置
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PaymentDaySetting {
     /// 发薪日类型
     pub payment_day_type: String,
@@ -594,12 +619,8 @@ mod tests {
                 en_us: Some("Tech Dept".to_string()),
                 ja_jp: None,
             }),
-            job_id: Some("job123".to_string()),
-            job_name: Some(I18nText {
-                zh_cn: Some("软件工程师".to_string()),
-                en_us: Some("Software Engineer".to_string()),
-                ja_jp: None,
-            }),
+            job_id: None,
+            job_name: None,
             payment_items: vec![],
             total_amount: Some("8000.00".to_string()),
             currency: Some("CNY".to_string()),
@@ -648,10 +669,8 @@ mod tests {
                 en_us: Some("Tech Group".to_string()),
                 ja_jp: None,
             }),
-            period_start: "2024-01-01".to_string(),
-            period_end: "2024-01-31".to_string(),
-            planned_payment_date: Some("2024-02-01".to_string()),
-            actual_payment_date: Some("2024-02-01".to_string()),
+            planned_payment_date: Some("2024-01-31".to_string()),
+            actual_payment_date: Some("2024-01-31".to_string()),
             employee_count: Some(50),
             total_amount: Some("400000.00".to_string()),
             currency: Some("CNY".to_string()),
@@ -694,7 +713,6 @@ mod tests {
             "bonus_rate".to_string(),
             serde_json::Value::Number(serde_json::Number::from_f64(1.5).unwrap()),
         );
-
         let record = DatasourceRecord {
             record_id: Some("rec123".to_string()),
             employee_id: "emp789".to_string(),
@@ -755,11 +773,9 @@ mod tests {
             },
             item_type: "bonus".to_string(),
             category: Some("variable".to_string()),
-            calculation_method: Some("formula".to_string()),
-            formula: Some("base_salary * performance_ratio".to_string()),
             tax_related: true,
             social_security_related: false,
-            display_order: Some(10),
+            display_order: Some(1),
             status: "active".to_string(),
             created_time: Some("2024-01-01T00:00:00Z".to_string()),
             updated_time: Some("2024-01-02T00:00:00Z".to_string()),
@@ -789,8 +805,8 @@ mod tests {
             }),
             department_id: Some("dept456".to_string()),
             department_name: Some(I18nText {
-                zh_cn: Some("技术部".to_string()),
-                en_us: Some("Tech Department".to_string()),
+                zh_cn: Some("研发部".to_string()),
+                en_us: Some("R&D Department".to_string()),
                 ja_jp: None,
             }),
             employee_count: 25,
@@ -844,7 +860,7 @@ mod tests {
             allocation_rules: vec![],
             effective_date: Some("2024-01-01".to_string()),
             expiry_date: Some("2024-12-31".to_string()),
-            created_time: Some("2023-12-01T00:00:00Z".to_string()),
+            created_time: Some("2024-01-01T00:00:00Z".to_string()),
             updated_time: Some("2024-01-01T00:00:00Z".to_string()),
             creator_id: Some("user456".to_string()),
             description: Some(I18nText {

@@ -1,4 +1,11 @@
-use crate::core::{config::Config, req_option::RequestOption, SDKResult};
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
+#![allow(non_snake_case)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::module_inception)]
+use open_lark_core::{core::{config::Config, req_option::RequestOption, SDKResult}};
 
 pub use create::{
     create_subscription, CreateSubscriptionRequest, CreateSubscriptionResponse, SubscriptionConfig,
@@ -15,12 +22,13 @@ pub mod get;
 pub mod patch;
 
 /// 订阅服务
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SubscriptionService {
     config: Config,
 }
 
 impl SubscriptionService {
+    /// 创建新的订阅服务实例
     pub fn new(config: Config) -> Self {
         Self { config }
     }
@@ -33,7 +41,7 @@ impl SubscriptionService {
     ) -> SDKResult<GetSubscriptionResponse> {
         let result = get_subscription(request, &self.config, option).await?;
         result.data.ok_or_else(|| {
-            crate::core::error::LarkAPIError::IllegalParamError(
+            open_lark_core::crate::core::error::LarkAPIError::IllegalParamError(
                 "Response data is missing".to_string(),
             )
         })
@@ -47,7 +55,7 @@ impl SubscriptionService {
     ) -> SDKResult<CreateSubscriptionResponse> {
         let result = create_subscription(request, &self.config, option).await?;
         result.data.ok_or_else(|| {
-            crate::core::error::LarkAPIError::IllegalParamError(
+            open_lark_core::crate::core::error::LarkAPIError::IllegalParamError(
                 "Response data is missing".to_string(),
             )
         })
@@ -61,7 +69,7 @@ impl SubscriptionService {
     ) -> SDKResult<PatchSubscriptionResponse> {
         let result = patch_subscription(request, &self.config, option).await?;
         result.data.ok_or_else(|| {
-            crate::core::error::LarkAPIError::IllegalParamError(
+            open_lark_core::crate::core::error::LarkAPIError::IllegalParamError(
                 "Response data is missing".to_string(),
             )
         })
@@ -74,26 +82,10 @@ impl SubscriptionService {
         option: Option<RequestOption>,
     ) -> SDKResult<CreateSubscriptionResponse> {
         let request = CreateSubscriptionRequest::builder()
-            .file_token(file_token)
+            .file_token(file_token.to_string())
             .as_doc()
             .basic_subscription()
             .build();
-
-        self.create(request, option).await
-    }
-
-    /// 快速订阅多维表格（高级配置）
-    pub async fn quick_subscribe_bitable(
-        &self,
-        file_token: impl ToString,
-        option: Option<RequestOption>,
-    ) -> SDKResult<CreateSubscriptionResponse> {
-        let request = CreateSubscriptionRequest::builder()
-            .file_token(file_token)
-            .as_bitable()
-            .premium_subscription()
-            .build();
-
         self.create(request, option).await
     }
 
@@ -104,26 +96,88 @@ impl SubscriptionService {
         option: Option<RequestOption>,
     ) -> SDKResult<CreateSubscriptionResponse> {
         let request = CreateSubscriptionRequest::builder()
-            .file_token(file_token)
+            .file_token(file_token.to_string())
             .as_sheet()
             .basic_subscription()
             .build();
-
         self.create(request, option).await
     }
 
-    /// 快速订阅Wiki（基础配置）
-    pub async fn quick_subscribe_wiki(
+    /// 快速订阅幻灯片（基础配置）
+    pub async fn quick_subscribe_slide(
         &self,
         file_token: impl ToString,
         option: Option<RequestOption>,
     ) -> SDKResult<CreateSubscriptionResponse> {
         let request = CreateSubscriptionRequest::builder()
-            .file_token(file_token)
-            .as_wiki()
+            .file_token(file_token.to_string())
+            .as_slide()
             .basic_subscription()
             .build();
+        self.create(request, option).await
+    }
 
+    /// 快速订阅白板（基础配置）
+    pub async fn quick_subscribe_whiteboard(
+        &self,
+        file_token: impl ToString,
+        option: Option<RequestOption>,
+    ) -> SDKResult<CreateSubscriptionResponse> {
+        let request = CreateSubscriptionRequest::builder()
+            .file_token(file_token.to_string())
+            .as_whiteboard()
+            .basic_subscription()
+            .build();
+        self.create(request, option).await
+    }
+
+    /// 快速订阅思维导图（基础配置）
+    pub async fn quick_subscribe_mindnote(
+        &self,
+        file_token: impl ToString,
+        option: Option<RequestOption>,
+    ) -> SDKResult<CreateSubscriptionResponse> {
+        let request = CreateSubscriptionRequest::builder()
+            .file_token(file_token.to_string())
+            .as_mindnote()
+            .basic_subscription()
+            .build();
+        self.create(request, option).await
+    }
+
+    /// 高级订阅文档（高级配置）
+    pub async fn premium_subscribe_doc(
+        &self,
+        file_token: impl ToString,
+        option: Option<RequestOption>,
+    ) -> SDKResult<CreateSubscriptionResponse> {
+        let request = CreateSubscriptionRequest::builder()
+            .file_token(file_token.to_string())
+            .as_doc()
+            .high_priority()
+            .notification_interval(1800) // 30分钟
+            .auto_renew()
+            .add_tag("premium")
+            .add_tag("document")
+            .build();
+        self.create(request, option).await
+    }
+
+    /// 紧急订阅表格（紧急配置）
+    pub async fn urgent_subscribe_sheet(
+        &self,
+        file_token: impl ToString,
+        option: Option<RequestOption>,
+    ) -> SDKResult<CreateSubscriptionResponse> {
+        let request = CreateSubscriptionRequest::builder()
+            .file_token(file_token.to_string())
+            .as_sheet()
+            .urgent_priority()
+            .notification_interval(300) // 5分钟
+            .auto_renew()
+            .add_tag("urgent")
+            .add_tag("spreadsheet")
+            .build();
         self.create(request, option).await
     }
 
@@ -135,11 +189,10 @@ impl SubscriptionService {
         option: Option<RequestOption>,
     ) -> SDKResult<PatchSubscriptionResponse> {
         let request = PatchSubscriptionRequest::builder()
-            .file_token(file_token)
+            .file_token(file_token.to_string())
             .file_type(file_type)
             .activate()
             .build();
-
         self.patch(request, option).await
     }
 
@@ -151,11 +204,10 @@ impl SubscriptionService {
         option: Option<RequestOption>,
     ) -> SDKResult<PatchSubscriptionResponse> {
         let request = PatchSubscriptionRequest::builder()
-            .file_token(file_token)
+            .file_token(file_token.to_string())
             .file_type(file_type)
             .pause()
             .build();
-
         self.patch(request, option).await
     }
 
@@ -167,11 +219,10 @@ impl SubscriptionService {
         option: Option<RequestOption>,
     ) -> SDKResult<PatchSubscriptionResponse> {
         let request = PatchSubscriptionRequest::builder()
-            .file_token(file_token)
+            .file_token(file_token.to_string())
             .file_type(file_type)
             .cancel()
             .build();
-
         self.patch(request, option).await
     }
 
@@ -183,11 +234,10 @@ impl SubscriptionService {
         option: Option<RequestOption>,
     ) -> SDKResult<PatchSubscriptionResponse> {
         let request = PatchSubscriptionRequest::builder()
-            .file_token(file_token)
+            .file_token(file_token.to_string())
             .file_type(file_type)
             .quick_activate()
             .build();
-
         self.patch(request, option).await
     }
 
@@ -199,11 +249,10 @@ impl SubscriptionService {
         option: Option<RequestOption>,
     ) -> SDKResult<PatchSubscriptionResponse> {
         let request = PatchSubscriptionRequest::builder()
-            .file_token(file_token)
+            .file_token(file_token.to_string())
             .file_type(file_type)
             .eco_activate()
             .build();
-
         self.patch(request, option).await
     }
 
@@ -215,11 +264,10 @@ impl SubscriptionService {
         option: Option<RequestOption>,
     ) -> SDKResult<PatchSubscriptionResponse> {
         let request = PatchSubscriptionRequest::builder()
-            .file_token(file_token)
+            .file_token(file_token.to_string())
             .file_type(file_type)
             .safe_pause()
             .build();
-
         self.patch(request, option).await
     }
 
@@ -231,10 +279,9 @@ impl SubscriptionService {
         option: Option<RequestOption>,
     ) -> SDKResult<bool> {
         let request = GetSubscriptionRequest::builder()
-            .file_token(file_token)
+            .file_token(file_token.to_string())
             .file_type(file_type)
             .build();
-
         let response = self.get(request, option).await?;
         Ok(response.subscription.is_subscribed())
     }
@@ -246,18 +293,43 @@ impl SubscriptionService {
         option: Option<RequestOption>,
     ) -> Vec<SDKResult<CreateSubscriptionResponse>> {
         let mut results = Vec::new();
-
         for (file_token, file_type) in files {
             let request = CreateSubscriptionRequest::builder()
                 .file_token(file_token)
-                .file_type(file_type)
+                .file_type(file_type.to_string().as_str().into())
                 .basic_subscription()
                 .build();
-
             let result = self.create(request, option.clone()).await;
             results.push(result);
         }
+        results
+    }
 
+    /// 批量激活订阅
+    pub async fn batch_activate(
+        &self,
+        files: Vec<(String, FileType)>,
+        option: Option<RequestOption>,
+    ) -> Vec<SDKResult<PatchSubscriptionResponse>> {
+        let mut results = Vec::new();
+        for (file_token, file_type) in files {
+            let result = self.activate(file_token, file_type, option.clone()).await;
+            results.push(result);
+        }
+        results
+    }
+
+    /// 批量暂停订阅
+    pub async fn batch_pause(
+        &self,
+        files: Vec<(String, FileType)>,
+        option: Option<RequestOption>,
+    ) -> Vec<SDKResult<PatchSubscriptionResponse>> {
+        let mut results = Vec::new();
+        for (file_token, file_type) in files {
+            let result = self.pause(file_token, file_type, option.clone()).await;
+            results.push(result);
+        }
         results
     }
 }

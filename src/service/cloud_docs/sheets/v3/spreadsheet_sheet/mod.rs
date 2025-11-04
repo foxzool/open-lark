@@ -1,4 +1,22 @@
-use serde::Deserialize;
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
+#![allow(non_snake_case)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::module_inception)]
+//! 工作表操作服务
+//!
+//! 提供飞书电子表格工作表的完整管理功能，包括工作表的创建、查询、
+//! 更新、删除等基础操作，以及工作表属性管理。
+
+use serde::{Deserialize, Serialize};
+
+use crate::core::{
+use crate::core::SDKResult;    config::Config,
+    api_resp::{ApiResponseTrait, ResponseFormat},
+    SDKResult,
+};
 
 pub use get::*;
 pub use query::*;
@@ -6,13 +24,33 @@ pub use query::*;
 mod get;
 mod query;
 
-#[derive(Deserialize, Debug)]
+/// 工作表服务
+///
+/// 处理电子表格工作表的CRUD操作和属性管理。
+pub struct SpreadsheetSheetService {
+    config: Config,
+}
+
+impl SpreadsheetSheetService {
+    /// 创建新的工作表服务实例
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+
+    /// 获取配置引用
+    pub fn config(&self) -> &Config {
+        &self.config
+    }
+}
+
+/// 工作表基础信息
+#[derive(Debug, Clone, Deserialize)]
 pub struct Sheet {
     /// 工作表 ID
     pub sheet_id: String,
     /// 工作表标题
     pub title: String,
-    /// 工作表索引位置，索引从 0 开始计数。
+    /// 工作表索引位置，索引从 0 开始计数
     pub index: u32,
     /// 工作表是否被隐藏
     ///
@@ -31,8 +69,14 @@ pub struct Sheet {
     pub merges: Option<Vec<MergeRange>>,
 }
 
+impl ApiResponseTrait for Sheet {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
 /// 单元格属性，仅当 resource_type 为 sheet 即工作表类型为电子表格时返回
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct GridProperties {
     /// 冻结的行数量
     pub frozen_row_count: i32,
@@ -45,7 +89,7 @@ pub struct GridProperties {
 }
 
 /// 合并单元格的相关信息
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct MergeRange {
     /// 起始行，从 0 开始计数
     pub start_row_index: i32,

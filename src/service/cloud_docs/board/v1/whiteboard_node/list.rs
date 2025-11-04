@@ -1,13 +1,13 @@
-use reqwest::Method;
+use crate::core::SDKResult;use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{
+use open_lark_core::{
     core::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::cloud_docs::*,
+        endpoints::cloud_docs::BOARD_V1_WHITEBOARD_NODES,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -16,84 +16,86 @@ use crate::{
 };
 
 /// 获取画板所有节点请求
-#[derive(Debug, Serialize, Default, Clone)]
+#[derive(Debug, Clone, Default, Serialize)]
 pub struct ListWhiteboardNodesRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 画板token
     #[serde(skip)]
-    whiteboard_token: String,
+    pub whiteboard_token: String,
     /// 分页大小
     #[serde(skip_serializing_if = "Option::is_none")]
-    page_size: Option<i32>,
+    pub page_size: Option<i32>,
     /// 分页标记
     #[serde(skip_serializing_if = "Option::is_none")]
-    page_token: Option<String>,
+    pub page_token: Option<String>,
 }
 
 impl ListWhiteboardNodesRequest {
+    /// 创建新的获取画板节点列表请求
+    pub fn new(whiteboard_token: impl Into<String>) -> Self {
+        Self {
+            api_request: ApiRequest::new(),
+            whiteboard_token: whiteboard_token.into(),
+            page_size: None,
+            page_token: None,
+        }
+    }
+
+    /// 创建构建器
     pub fn builder() -> ListWhiteboardNodesRequestBuilder {
         ListWhiteboardNodesRequestBuilder::default()
     }
-
-    pub fn new(whiteboard_token: impl ToString) -> Self {
-        Self {
-            whiteboard_token: whiteboard_token.to_string(),
-            ..Default::default()
-        }
-    }
 }
 
-#[derive(Default)]
+/// 获取画板所有节点请求构建器
+#[derive(Debug, Clone, Default)]
 pub struct ListWhiteboardNodesRequestBuilder {
     request: ListWhiteboardNodesRequest,
 }
 
 impl ListWhiteboardNodesRequestBuilder {
-    /// 画板token
-    pub fn whiteboard_token(mut self, token: impl ToString) -> Self {
-        self.request.whiteboard_token = token.to_string();
+    /// 设置画板token
+    pub fn whiteboard_token(mut self, token: impl Into<String>) -> Self {
+        self.request.whiteboard_token = token.into();
         self
     }
 
-    /// 分页大小，最大值100
+    /// 设置分页大小
     pub fn page_size(mut self, size: i32) -> Self {
-        self.request.page_size = Some(size.clamp(1, 100));
+        self.request.page_size = Some(size);
         self
     }
 
-    /// 分页标记
-    pub fn page_token(mut self, token: impl ToString) -> Self {
-        self.request.page_token = Some(token.to_string());
+    /// 设置分页标记
+    pub fn page_token(mut self, token: impl Into<String>) -> Self {
+        self.request.page_token = Some(token.into());
         self
     }
 
-    /// 设置小分页（20个节点）
-    pub fn small_page(mut self) -> Self {
-        self.request.page_size = Some(20);
-        self
+    /// 小页面（20个节点）
+    pub fn small_page(self) -> Self {
+        self.page_size(20)
     }
 
-    /// 设置中等分页（50个节点）
-    pub fn medium_page(mut self) -> Self {
-        self.request.page_size = Some(50);
-        self
+    /// 中等页面（50个节点）
+    pub fn medium_page(self) -> Self {
+        self.page_size(50)
     }
 
-    /// 设置大分页（100个节点）
-    pub fn large_page(mut self) -> Self {
-        self.request.page_size = Some(100);
-        self
+    /// 大页面（100个节点）
+    pub fn large_page(self) -> Self {
+        self.page_size(100)
     }
 
-    pub fn build(mut self) -> ListWhiteboardNodesRequest {
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
+    /// 构建请求
+    pub fn build(self) -> ListWhiteboardNodesRequest {
         self.request
     }
 }
 
 /// 画板节点类型
-#[derive(Debug, Deserialize, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum NodeType {
     /// 形状节点
@@ -119,160 +121,18 @@ pub enum NodeType {
     Unknown,
 }
 
-/// 画板节点样式
-#[derive(Debug, Deserialize, Clone)]
-pub struct NodeStyle {
-    /// 颜色
-    pub color: Option<String>,
-    /// 填充颜色
-    pub fill_color: Option<String>,
-    /// 字体大小
-    pub font_size: Option<f64>,
-    /// 字体粗细
-    pub font_weight: Option<String>,
-    /// 透明度
-    pub opacity: Option<f64>,
-    /// 线条粗细
-    pub stroke_width: Option<f64>,
-    /// 线条样式
-    pub stroke_style: Option<String>,
-}
-
-/// 画板节点位置
-#[derive(Debug, Deserialize, Clone)]
-pub struct NodePosition {
-    /// X坐标
-    pub x: f64,
-    /// Y坐标
-    pub y: f64,
-    /// 宽度
-    pub width: f64,
-    /// 高度
-    pub height: f64,
-    /// 旋转角度
-    pub rotation: Option<f64>,
-}
-
-/// 画板节点内容
-#[derive(Debug, Deserialize, Clone)]
-pub struct NodeContent {
-    /// 文本内容
-    pub text: Option<String>,
-    /// 图片URL
-    pub image_url: Option<String>,
-    /// 图片大小
-    pub image_size: Option<i64>,
-    /// 连接点信息
-    pub connections: Option<Vec<serde_json::Value>>,
-    /// 其他自定义属性
-    pub properties: Option<serde_json::Value>,
-}
-
-/// 画板节点
-#[derive(Debug, Deserialize, Clone)]
-pub struct WhiteboardNode {
-    /// 节点ID
-    pub node_id: String,
-    /// 节点类型
-    pub node_type: NodeType,
-    /// 节点位置和尺寸
-    pub position: NodePosition,
-    /// 节点样式
-    pub style: Option<NodeStyle>,
-    /// 节点内容
-    pub content: Option<NodeContent>,
-    /// 创建时间
-    pub create_time: Option<i64>,
-    /// 更新时间
-    pub update_time: Option<i64>,
-    /// 创建者ID
-    pub creator_id: Option<String>,
-    /// 最后编辑者ID
-    pub last_editor_id: Option<String>,
-    /// 节点层级
-    pub z_index: Option<i32>,
-    /// 是否锁定
-    pub locked: Option<bool>,
-    /// 是否可见
-    pub visible: Option<bool>,
-}
-
-/// 获取画板所有节点响应
-#[derive(Debug, Deserialize)]
-pub struct ListWhiteboardNodesResponse {
-    /// 节点列表
-    pub items: Vec<WhiteboardNode>,
-    /// 是否还有更多
-    pub has_more: bool,
-    /// 下一页标记
-    pub page_token: Option<String>,
-    /// 总数量
-    pub total: Option<i32>,
-}
-
-impl ApiResponseTrait for ListWhiteboardNodesResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-impl_executable_builder_owned!(
-    ListWhiteboardNodesRequestBuilder,
-    crate::service::cloud_docs::board::BoardService,
-    ListWhiteboardNodesRequest,
-    BaseResponse<ListWhiteboardNodesResponse>,
-    list_nodes
-);
-
-/// 获取画板所有节点
-pub async fn list_whiteboard_nodes(
-    request: ListWhiteboardNodesRequest,
-    config: &Config,
-    option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<ListWhiteboardNodesResponse>> {
-    let mut api_req = request.api_request;
-    api_req.http_method = Method::GET;
-
-    let mut path = BOARD_V1_WHITEBOARD_NODES.replace("{}", &request.whiteboard_token);
-
-    // 添加查询参数
-    let mut query_params = Vec::new();
-
-    if let Some(page_size) = request.page_size {
-        query_params.push(format!("page_size={page_size}"));
-    }
-
-    if let Some(ref page_token) = request.page_token {
-        query_params.push(format!("page_token={page_token}"));
-    }
-
-    if !query_params.is_empty() {
-        path.push('?');
-        path.push_str(&query_params.join("&"));
-    }
-
-    api_req.api_path = path;
-    api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
-
-    let api_resp = Transport::request(api_req, config, option).await?;
-    Ok(api_resp)
-}
-
 impl NodeType {
-    /// 是否是绘图类型节点
+    /// 判断是否为绘图类型
     pub fn is_drawing_type(&self) -> bool {
         matches!(self, NodeType::Shape | NodeType::Line | NodeType::Freehand)
     }
 
-    /// 是否是内容类型节点
+    /// 判断是否为内容类型
     pub fn is_content_type(&self) -> bool {
-        matches!(
-            self,
-            NodeType::Text | NodeType::StickyNote | NodeType::Image | NodeType::Table
-        )
+        matches!(self, NodeType::Text | NodeType::StickyNote | NodeType::Image | NodeType::Table)
     }
 
-    /// 是否是容器类型节点
+    /// 判断是否为容器类型
     pub fn is_container_type(&self) -> bool {
         matches!(self, NodeType::Frame | NodeType::Group)
     }
@@ -289,7 +149,7 @@ impl NodeType {
             NodeType::Table => "表格",
             NodeType::Frame => "框架",
             NodeType::Group => "组合",
-            NodeType::Unknown => "未知类型",
+            NodeType::Unknown => "未知",
         }
     }
 
@@ -307,53 +167,37 @@ impl NodeType {
     }
 }
 
-impl NodePosition {
-    /// 计算节点面积
-    pub fn area(&self) -> f64 {
-        self.width * self.height
-    }
-
-    /// 计算节点中心点
-    pub fn center(&self) -> (f64, f64) {
-        (self.x + self.width / 2.0, self.y + self.height / 2.0)
-    }
-
-    /// 检查是否与另一个节点重叠
-    pub fn overlaps_with(&self, other: &NodePosition) -> bool {
-        self.x < other.x + other.width
-            && self.x + self.width > other.x
-            && self.y < other.y + other.height
-            && self.y + self.height > other.y
-    }
-
-    /// 计算与另一个节点的距离
-    pub fn distance_to(&self, other: &NodePosition) -> f64 {
-        let (x1, y1) = self.center();
-        let (x2, y2) = other.center();
-        ((x2 - x1).powi(2) + (y2 - y1).powi(2)).sqrt()
-    }
-
-    /// 获取节点边界描述
-    pub fn bounds_description(&self) -> String {
-        format!(
-            "位置: ({:.1}, {:.1}), 大小: {:.1}×{:.1}",
-            self.x, self.y, self.width, self.height
-        )
-    }
+/// 画板节点样式
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct NodeStyle {
+    /// 颜色
+    pub color: Option<String>,
+    /// 填充颜色
+    pub fill_color: Option<String>,
+    /// 字体大小
+    pub font_size: Option<f64>,
+    /// 字体粗细
+    pub font_weight: Option<String>,
+    /// 透明度
+    pub opacity: Option<f64>,
+    /// 线条粗细
+    pub stroke_width: Option<f64>,
+    /// 线条样式
+    pub stroke_style: Option<String>,
 }
 
 impl NodeStyle {
-    /// 是否有颜色设置
+    /// 判断是否有颜色设置
     pub fn has_color(&self) -> bool {
         self.color.is_some() || self.fill_color.is_some()
     }
 
-    /// 是否有字体设置
+    /// 判断是否有字体设置
     pub fn has_font_settings(&self) -> bool {
         self.font_size.is_some() || self.font_weight.is_some()
     }
 
-    /// 是否有线条设置
+    /// 判断是否有线条设置
     pub fn has_stroke_settings(&self) -> bool {
         self.stroke_width.is_some() || self.stroke_style.is_some()
     }
@@ -365,19 +209,15 @@ impl NodeStyle {
         if let Some(ref color) = self.color {
             summary.push(format!("颜色: {color}"));
         }
-
         if let Some(ref fill_color) = self.fill_color {
             summary.push(format!("填充: {fill_color}"));
         }
-
         if let Some(font_size) = self.font_size {
             summary.push(format!("字体: {font_size:.0}px"));
         }
-
         if let Some(opacity) = self.opacity {
             summary.push(format!("透明度: {:.0}%", opacity * 100.0));
         }
-
         if let Some(stroke_width) = self.stroke_width {
             summary.push(format!("线宽: {stroke_width:.0}px"));
         }
@@ -386,33 +226,105 @@ impl NodeStyle {
     }
 }
 
-impl NodeContent {
-    /// 是否有文本内容
-    pub fn has_text(&self) -> bool {
-        self.text.as_ref().is_some_and(|t| !t.is_empty())
+/// 画板节点位置
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NodePosition {
+    /// X坐标
+    pub x: f64,
+    /// Y坐标
+    pub y: f64,
+    /// 宽度
+    pub width: f64,
+    /// 高度
+    pub height: f64,
+    /// 旋转角度
+    pub rotation: Option<f64>,
+}
+
+impl NodePosition {
+    /// 计算面积
+    pub fn area(&self) -> f64 {
+        self.width * self.height
     }
 
-    /// 是否有图片内容
+    /// 获取中心点
+    pub fn center(&self) -> (f64, f64) {
+        (self.x + self.width / 2.0, self.y + self.height / 2.0)
+    }
+
+    /// 判断是否与另一个位置重叠
+    pub fn overlaps_with(&self, other: &NodePosition) -> bool {
+        !(self.x + self.width <= other.x
+            || other.x + other.width <= self.x
+            || self.y + self.height <= other.y
+            || other.y + other.height <= self.y)
+    }
+
+    /// 计算到另一个位置的距离
+    pub fn distance_to(&self, other: &NodePosition) -> f64 {
+        let (cx1, cy1) = self.center();
+        let (cx2, cy2) = other.center();
+        ((cx2 - cx1).powi(2) + (cy2 - cy1).powi(2)).sqrt()
+    }
+
+    /// 获取边界描述
+    pub fn bounds_description(&self) -> String {
+        if let Some(rotation) = self.rotation {
+            format!(
+                "位置: ({:.1},{:.1}) 大小: {:.1}×{:.1} 旋转: {:.1}°",
+                self.x, self.y, self.width, self.height, rotation
+            )
+        } else {
+            format!(
+                "位置: ({:.1},{:.1}) 大小: {:.1}×{:.1}",
+                self.x, self.y, self.width, self.height
+            )
+        }
+    }
+}
+
+/// 画板节点内容
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NodeContent {
+    /// 文本内容
+    pub text: Option<String>,
+    /// 图片URL
+    pub image_url: Option<String>,
+    /// 图片大小
+    pub image_size: Option<i64>,
+    /// 连接点信息
+    pub connections: Option<Vec<serde_json::Value>>,
+    /// 其他自定义属性
+    pub properties: Option<serde_json::Value>,
+}
+
+impl NodeContent {
+    /// 判断是否有文本内容
+    pub fn has_text(&self) -> bool {
+        self.text.as_ref().map_or(false, |t| !t.is_empty())
+    }
+
+    /// 判断是否有图片
     pub fn has_image(&self) -> bool {
         self.image_url.is_some()
     }
 
-    /// 是否有连接信息
+    /// 判断是否有连接
     pub fn has_connections(&self) -> bool {
-        self.connections.as_ref().is_some_and(|c| !c.is_empty())
+        self.connections.as_ref().map_or(false, |c| !c.is_empty())
     }
 
     /// 获取内容摘要
     pub fn content_summary(&self) -> String {
         let mut parts = Vec::new();
 
-        if let Some(ref text) = self.text {
-            let preview = if text.len() > 20 {
-                format!("{}...", &text[..20])
+        if self.has_text() {
+            let text = self.text.as_ref().unwrap();
+            if text.len() > 20 {
+                parts.push(format!("文本: {}...", &text[..20]));
             } else {
-                text.clone()
-            };
-            parts.push(format!("文本: \"{preview}\""));
+                parts.push(format!("文本: {text}"));
+            }
         }
 
         if self.has_image() {
@@ -440,47 +352,69 @@ impl NodeContent {
     }
 }
 
+/// 画板节点
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WhiteboardNode {
+    /// 节点ID
+    pub node_id: String,
+    /// 节点类型
+    pub node_type: NodeType,
+    /// 节点位置和尺寸
+    pub position: NodePosition,
+    /// 节点样式
+    pub style: Option<NodeStyle>,
+    /// 节点内容
+    pub content: Option<NodeContent>,
+    /// 创建时间
+    pub create_time: Option<i64>,
+    /// 更新时间
+    pub update_time: Option<i64>,
+    /// 创建者ID
+    pub creator_id: Option<String>,
+    /// 最后编辑者ID
+    pub last_editor_id: Option<String>,
+    /// 节点层级
+    pub z_index: Option<i32>,
+    /// 是否锁定
+    pub locked: Option<bool>,
+    /// 是否可见
+    pub visible: Option<bool>,
+}
+
 impl WhiteboardNode {
-    /// 是否有样式设置
-    pub fn has_style(&self) -> bool {
-        self.style.is_some()
-    }
-
-    /// 是否有内容
-    pub fn has_content(&self) -> bool {
-        self.content.is_some()
-    }
-
-    /// 是否被锁定
+    /// 判断是否被锁定
     pub fn is_locked(&self) -> bool {
         self.locked.unwrap_or(false)
     }
 
-    /// 是否可见
+    /// 判断是否可见
     pub fn is_visible(&self) -> bool {
         self.visible.unwrap_or(true)
     }
 
-    /// 获取创建时间格式化字符串
-    pub fn create_time_formatted(&self) -> Option<String> {
-        self.create_time.map(|timestamp| {
-            let datetime =
-                chrono::DateTime::from_timestamp(timestamp, 0).unwrap_or_else(chrono::Utc::now);
-            datetime.format("%Y-%m-%d %H:%M:%S").to_string()
+    /// 判断是否有内容
+    pub fn has_content(&self) -> bool {
+        self.content.as_ref().map_or(false, |c| c.has_text() || c.has_image() || c.has_connections())
+    }
+
+    /// 判断是否有样式
+    pub fn has_style(&self) -> bool {
+        self.style.as_ref().map_or(false, |s| {
+            s.has_color() || s.has_font_settings() || s.has_stroke_settings()
         })
     }
 
     /// 获取更新时间格式化字符串
     pub fn update_time_formatted(&self) -> Option<String> {
         self.update_time.map(|timestamp| {
-            let datetime =
-                chrono::DateTime::from_timestamp(timestamp, 0).unwrap_or_else(chrono::Utc::now);
+            let datetime = chrono::DateTime::from_timestamp(timestamp, 0)
+                .unwrap_or_else(|| chrono::Utc::now());
             datetime.format("%Y-%m-%d %H:%M:%S").to_string()
         })
     }
 
     /// 获取节点摘要
-    pub fn node_summary(&self) -> String {
+    pub fn summary(&self) -> String {
         let mut parts = Vec::new();
 
         parts.push(format!("类型: {}", self.node_type.description()));
@@ -509,14 +443,14 @@ impl WhiteboardNode {
     }
 
     /// 获取节点状态
-    pub fn node_status(&self) -> Vec<String> {
+    pub fn status(&self) -> Vec<String> {
         let mut status = Vec::new();
 
         status.push(format!("ID: {}", self.node_id));
         status.push(format!(
             "类型: {} ({})",
             self.node_type.description(),
-            self.node_type.category()
+            self.node_type.category(),
         ));
 
         if self.is_locked() {
@@ -582,76 +516,57 @@ impl WhiteboardNode {
     }
 }
 
+/// 获取画板所有节点响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ListWhiteboardNodesResponse {
+    /// 节点列表
+    pub items: Vec<WhiteboardNode>,
+    /// 是否还有更多
+    pub has_more: bool,
+    /// 下一页标记
+    pub page_token: Option<String>,
+    /// 总数量
+    pub total: Option<i32>,
+}
+
+impl ApiResponseTrait for ListWhiteboardNodesResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
 impl ListWhiteboardNodesResponse {
     /// 获取节点数量
     pub fn node_count(&self) -> usize {
         self.items.len()
     }
 
-    /// 是否为空
-    pub fn is_empty(&self) -> bool {
-        self.items.is_empty()
-    }
+    /// 获取响应摘要
+    pub fn summary(&self) -> String {
+        let mut summary = vec![format!("节点数量: {}", self.node_count())];
 
-    /// 按类型统计节点
-    pub fn count_by_type(&self) -> std::collections::HashMap<NodeType, usize> {
-        let mut counts = std::collections::HashMap::new();
+        // 统计节点类型
+        let mut type_counts = std::collections::HashMap::new();
+        let mut locked_count = 0;
+        let mut hidden_count = 0;
+
         for node in &self.items {
-            *counts.entry(node.node_type.clone()).or_insert(0) += 1;
+            *type_counts.entry(node.node_type.clone()).or_insert(0) += 1;
+
+            if node.is_locked() {
+                locked_count += 1;
+            }
+
+            if !node.is_visible() {
+                hidden_count += 1;
+            }
         }
-        counts
-    }
-
-    /// 获取指定类型的节点
-    pub fn nodes_of_type(&self, node_type: &NodeType) -> Vec<&WhiteboardNode> {
-        self.items
-            .iter()
-            .filter(|node| &node.node_type == node_type)
-            .collect()
-    }
-
-    /// 获取有内容的节点
-    pub fn content_nodes(&self) -> Vec<&WhiteboardNode> {
-        self.items
-            .iter()
-            .filter(|node| node.has_content())
-            .collect()
-    }
-
-    /// 获取锁定的节点
-    pub fn locked_nodes(&self) -> Vec<&WhiteboardNode> {
-        self.items.iter().filter(|node| node.is_locked()).collect()
-    }
-
-    /// 获取隐藏的节点
-    pub fn hidden_nodes(&self) -> Vec<&WhiteboardNode> {
-        self.items
-            .iter()
-            .filter(|node| !node.is_visible())
-            .collect()
-    }
-
-    /// 按复杂度排序节点
-    pub fn nodes_by_complexity(&self) -> Vec<&WhiteboardNode> {
-        let mut nodes: Vec<&WhiteboardNode> = self.items.iter().collect();
-        nodes.sort_by_key(|node| std::cmp::Reverse(node.complexity_score()));
-        nodes
-    }
-
-    /// 获取统计摘要
-    pub fn statistics_summary(&self) -> String {
-        let total = self.node_count();
-        let type_counts = self.count_by_type();
-        let locked_count = self.locked_nodes().len();
-        let hidden_count = self.hidden_nodes().len();
-
-        let mut summary = vec![format!("总节点数: {}", total)];
 
         if !type_counts.is_empty() {
-            let mut type_info = Vec::new();
-            for (node_type, count) in type_counts {
-                type_info.push(format!("{}: {}", node_type.description(), count));
-            }
+            let type_info: Vec<String> = type_counts
+                .into_iter()
+                .map(|(node_type, count)| format!("{}: {}个", node_type.description(), count))
+                .collect();
             summary.push(format!("类型分布: {}", type_info.join(", ")));
         }
 
@@ -677,7 +592,7 @@ impl ListWhiteboardNodesResponse {
                 format!(
                     "当前页: {}个节点，还有更多 (下一页token: {})",
                     self.node_count(),
-                    token
+                    token,
                 )
             } else {
                 format!("当前页: {}个节点，还有更多", self.node_count())
@@ -688,6 +603,49 @@ impl ListWhiteboardNodesResponse {
             format!("全部{}个节点已加载完成", self.node_count())
         }
     }
+}
+
+// 实现Builder模式的宏调用
+impl_executable_builder_owned!(
+    ListWhiteboardNodesRequestBuilder,
+    crate::service::cloud_docs::board::BoardService,
+    ListWhiteboardNodesRequest,
+    BaseResponse<ListWhiteboardNodesResponse>,
+    list_nodes,
+);
+
+/// 获取画板所有节点
+pub async fn list_whiteboard_nodes(
+    request: ListWhiteboardNodesRequest,
+    config: &Config,
+    option: Option<RequestOption>,
+) -> SDKResult<BaseResponse<ListWhiteboardNodesResponse>> {
+    let mut api_req = request.api_request;
+    api_req.set_http_method(Method::GET);
+
+    let mut path = BOARD_V1_WHITEBOARD_NODES.replace("{}", &request.whiteboard_token);
+
+    // 添加查询参数
+    let mut query_params = Vec::new();
+
+    if let Some(page_size) = request.page_size {
+        query_params.push(format!("page_size={page_size}"));
+    }
+
+    if let Some(ref page_token) = request.page_token {
+        query_params.push(format!("page_token={page_token}"));
+    }
+
+    if !query_params.is_empty() {
+        path.push('?');
+        path.push_str(&query_params.join("&"));
+    }
+
+    api_req.set_api_path(path);
+    api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+
+    let api_resp = Transport::request(api_req, config, option).await?;
+    Ok(api_resp)
 }
 
 #[cfg(test)]

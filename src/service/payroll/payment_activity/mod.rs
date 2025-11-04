@@ -1,22 +1,21 @@
-use reqwest::Method;
-use serde::{Deserialize, Serialize};
-
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
+#![allow(non_snake_case)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::module_inception)]
 use crate::{
     core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        config::Config,
-        constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
-        http::Transport,
-        req_option::RequestOption,
-        trait_system::Service,
-        SDKResult,
+        api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
+        trait_system::Service, SDKResult,
     },
     service::payroll::models::{
         PageResponse, PaymentActivity, PaymentActivityArchiveRequest, PaymentActivityListRequest,
     },
 };
+use open_lark_core::core::api_req::ApiRequest;
+use reqwest::Method;
 
 /// 发薪活动服务
 pub struct PaymentActivityService {
@@ -24,196 +23,272 @@ pub struct PaymentActivityService {
 }
 
 /// 发薪活动列表响应
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct PaymentActivityListResponse {
     /// 发薪活动列表
-    #[serde(flatten)]
-    pub activities: PageResponse<PaymentActivity>,
+    pub items: Vec<PaymentActivity>,
+    /// 分页信息
+    pub page: PageResponse<PaymentActivity>,
 }
 
-impl ApiResponseTrait for PaymentActivityListResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
+/// 发薪活动响应
+#[derive(Debug, Clone)]
+pub struct PaymentActivityResponse {
+    /// 发薪活动信息
+    pub data: PaymentActivity,
 }
 
-/// 发薪活动封存响应
-#[derive(Debug, Serialize, Deserialize)]
-pub struct PaymentActivityArchiveResponse {
-    /// 封存结果
+/// 封存操作响应
+#[derive(Debug, Clone)]
+pub struct ArchiveResponse {
+    /// 操作结果
     pub success: bool,
-    /// 封存时间
-    pub archived_time: Option<String>,
     /// 消息
-    pub message: Option<String>,
-}
-
-impl ApiResponseTrait for PaymentActivityArchiveResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-impl PaymentActivityService {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-    }
-
-    /// 查询发薪活动列表
-    ///
-    /// 该接口用于查询企业的发薪活动列表，支持按状态、薪资组、
-    /// 发薪周期等条件筛选。可以获取发薪活动的基本信息、
-    /// 状态、关联员工数量、发薪金额等数据。
-    ///
-    /// # 参数
-    ///
-    /// - `request`: 发薪活动列表查询请求参数，包括：
-    ///   - `page_size`: 分页大小，最大值100
-    ///   - `page_token`: 分页标记
-    ///   - `status`: 活动状态筛选
-    ///   - `paygroup_id`: 薪资组ID筛选
-    ///   - `period_start`: 发薪周期开始时间
-    ///   - `period_end`: 发薪周期结束时间
-    /// - `option`: 可选的请求配置
-    ///
-    /// # 返回值
-    ///
-    /// 返回分页的发薪活动列表，包括：
-    /// - 发薪活动基本信息（活动名称、状态、薪资组等）
-    /// - 发薪周期和时间信息（周期开始结束时间、计划发薪日期等）
-    /// - 统计信息（员工总数、发薪总金额等）
-    /// - 创建和更新时间、创建人信息
-    /// - 分页信息（是否有更多数据、下一页标记）
-    ///
-    /// # 示例
-    ///
-    /// ```ignore
-    /// use open_lark::service::payroll::models::PaymentActivityListRequest;
-    ///
-    /// let request = PaymentActivityListRequest {
-    ///     page_size: Some(50),
-    ///     page_token: None,
-    ///     status: Some("active".to_string()),
-    ///     paygroup_id: Some("paygroup_123".to_string()),
-    ///     period_start: Some("2024-01-01".to_string()),
-    ///     period_end: Some("2024-12-31".to_string()),
-    /// };
-    ///
-    /// let response = client.payroll.payment_activity.list_activities(request, None).await?;
-    /// ```
-    pub async fn list_activities(
-        &self,
-        request: PaymentActivityListRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<PaymentActivityListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: Endpoints::PAYROLL_V1_PAYMENT_ACTIVITIES.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
-        // 添加查询参数
-        if let Some(page_size) = request.page_size {
-            api_req
-                .query_params
-                .insert("page_size", page_size.to_string());
-        }
-
-        if let Some(page_token) = request.page_token {
-            api_req.query_params.insert("page_token", page_token);
-        }
-
-        if let Some(status) = request.status {
-            api_req.query_params.insert("status", status);
-        }
-
-        if let Some(paygroup_id) = request.paygroup_id {
-            api_req.query_params.insert("paygroup_id", paygroup_id);
-        }
-
-        if let Some(period_start) = request.period_start {
-            api_req.query_params.insert("period_start", period_start);
-        }
-
-        if let Some(period_end) = request.period_end {
-            api_req.query_params.insert("period_end", period_end);
-        }
-
-        Transport::request(api_req, &self.config, option).await
-    }
-
-    /// 封存发薪活动
-    ///
-    /// 该接口用于封存指定的发薪活动，封存后的活动将不能再进行
-    /// 修改操作。通常在发薪完成并确认数据无误后进行封存操作，
-    /// 用于数据归档和合规管理。
-    ///
-    /// # 参数
-    ///
-    /// - `request`: 发薪活动封存请求参数，包括：
-    ///   - `payment_activity_id`: 发薪活动ID（必填）
-    ///   - `archive_reason`: 封存原因（可选）
-    /// - `option`: 可选的请求配置
-    ///
-    /// # 返回值
-    ///
-    /// 返回封存操作结果，包括：
-    /// - `success`: 封存是否成功
-    /// - `archived_time`: 封存时间
-    /// - `message`: 操作结果消息
-    ///
-    /// # 示例
-    ///
-    /// ```ignore
-    /// use open_lark::service::payroll::models::PaymentActivityArchiveRequest;
-    ///
-    /// let request = PaymentActivityArchiveRequest {
-    ///     payment_activity_id: "activity_123456".to_string(),
-    ///     archive_reason: Some("发薪完成，数据确认无误".to_string()),
-    /// };
-    ///
-    /// let response = client.payroll.payment_activity.archive_activity(request, None).await?;
-    /// ```
-    ///
-    /// # 注意事项
-    ///
-    /// - 封存操作不可逆，请谨慎操作
-    /// - 只有特定状态的发薪活动才能进行封存
-    /// - 封存后的活动数据将进入只读状态
-    /// - 建议在封存前做好数据备份
-    pub async fn archive_activity(
-        &self,
-        request: PaymentActivityArchiveRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<PaymentActivityArchiveResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                Endpoints::PAYROLL_V1_PAYMENT_ACTIVITY_ARCHIVE,
-                "payment_activity_id",
-                &request.payment_activity_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
-        Transport::request(api_req, &self.config, option).await
-    }
+    pub message: String,
 }
 
 impl Service for PaymentActivityService {
     fn config(&self) -> &Config {
         &self.config
     }
+}
 
-    fn service_name() -> &'static str {
-        "payment_activity"
+impl PaymentActivityService {
+    /// 创建发薪活动服务实例
+    pub fn new(config: Config) -> Self {
+        Self { config }
     }
 
-    fn service_version() -> &'static str {
-        "v1"
+    /// 查询发薪活动列表
+    ///
+    /// # API文档
+    ///
+    /// 查询发薪活动列表，支持分页和筛选功能。
+    ///
+    /// # 参数
+    ///
+    /// * `request` - 查询请求参数
+    ///
+    /// # 返回值
+    ///
+    /// 返回发薪活动列表和分页信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::payroll::payment_activity::*;
+    ///
+    /// let request = PaymentActivityListRequest {
+    ///     page_size: Some(20),
+    ///     page_token: None,
+    ///     status: Some("active".to_string()),
+    ///     paygroup_id: Some("pg123".to_string()),
+    ///     period_start: Some("2024-01-01".to_string()),
+    ///     period_end: Some("2024-01-31".to_string()),
+    /// };
+    ///
+    /// let response = service.list_payment_activities(&request).await?;
+    /// println!("找到 {} 个发薪活动", response.page.items.len());
+    /// ```
+    pub async fn list_payment_activities(
+        &self,
+        request: &PaymentActivityListRequest,
+    ) -> SDKResult<BaseResponse<PaymentActivityListResponse>> {
+        let mut query_params = std::collections::HashMap::new();
+
+        if let Some(page_size) = &request.page_size {
+            query_params.insert("page_size".to_string(), page_size.to_string());
+        }
+        if let Some(page_token) = &request.page_token {
+            query_params.insert("page_token".to_string(), page_token.clone());
+        }
+        if let Some(status) = &request.status {
+            query_params.insert("status".to_string(), status.clone());
+        }
+        if let Some(paygroup_id) = &request.paygroup_id {
+            query_params.insert("paygroup_id".to_string(), paygroup_id.clone());
+        }
+        if let Some(period_start) = &request.period_start {
+            query_params.insert("period_start".to_string(), period_start.clone());
+        }
+        if let Some(period_end) = &request.period_end {
+            query_params.insert("period_end".to_string(), period_end.clone());
+        }
+
+        let api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: self
+                .config
+                .build_url("/open-apis/payroll/v4/payment_activities"),
+            query_params,
+            path_params: std::collections::HashMap::new(),
+            body: None,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+        };
+
+        let response = Transport::request(api_req, &self.config).await?;
+        Ok(response.into())
+    }
+
+    /// 获取发薪活动详情
+    ///
+    /// # API文档
+    ///
+    /// 根据发薪活动ID获取详细信息。
+    ///
+    /// # 参数
+    ///
+    /// * `payment_activity_id` - 发薪活动ID
+    ///
+    /// # 返回值
+    ///
+    /// 返回发薪活动的详细信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::payroll::payment_activity::*;
+    ///
+    /// let response = service.get_payment_activity("pa_123456").await?;
+    /// println!("活动名称: {:?}", response.data.activity_name.zh_cn);
+    /// ```
+    pub async fn get_payment_activity(
+        &self,
+        payment_activity_id: &str,
+    ) -> SDKResult<BaseResponse<PaymentActivityResponse>> {
+        let mut path_params = std::collections::HashMap::new();
+        path_params.insert(
+            "payment_activity_id".to_string(),
+            payment_activity_id.to_string(),
+        );
+
+        let api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: self
+                .config
+                .build_url("/open-apis/payroll/v4/payment_activities/{payment_activity_id}"),
+            query_params: std::collections::HashMap::new(),
+            path_params,
+            body: None,
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+        };
+
+        let response = Transport::request(api_req, &self.config).await?;
+        Ok(response.into())
+    }
+
+    /// 封存发薪活动
+    ///
+    /// # API文档
+    ///
+    /// 将指定的发薪活动进行封存操作，封存后的活动不能修改。
+    ///
+    /// # 参数
+    ///
+    /// * `request` - 封存请求参数
+    ///
+    /// # 返回值
+    ///
+    /// 返回封存操作的执行结果
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::payroll::payment_activity::*;
+    ///
+    /// let request = PaymentActivityArchiveRequest {
+    ///     payment_activity_id: "pa_123456".to_string(),
+    ///     archive_reason: Some("月度结账需要封存".to_string()),
+    /// };
+    ///
+    /// let response = service.archive_payment_activity(&request).await?;
+    /// if response.data.success {
+    ///     println!("活动封存成功");
+    /// }
+    /// ```
+    pub async fn archive_payment_activity(
+        &self,
+        request: &PaymentActivityArchiveRequest,
+    ) -> SDKResult<BaseResponse<ArchiveResponse>> {
+        let mut path_params = std::collections::HashMap::new();
+        path_params.insert(
+            "payment_activity_id".to_string(),
+            request.payment_activity_id.clone(),
+        );
+
+        let mut body_data = serde_json::Map::new();
+        if let Some(reason) = &request.archive_reason {
+            body_data.insert(
+                "archive_reason".to_string(),
+                serde_json::Value::String(reason.clone()),
+            );
+        }
+
+        let api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: self.config.build_url(
+                "/open-apis/payroll/v4/payment_activities/{payment_activity_id}/archive",
+            ),
+            query_params: std::collections::HashMap::new(),
+            path_params,
+            body: Some(serde_json::Value::Object(body_data)),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+        };
+
+        let response = Transport::request(api_req, &self.config).await?;
+        Ok(response.into())
+    }
+
+    /// 取消发薪活动
+    ///
+    /// # API文档
+    ///
+    /// 取消未开始的发薪活动。
+    ///
+    /// # 参数
+    ///
+    /// * `payment_activity_id` - 发薪活动ID
+    ///
+    /// # 返回值
+    ///
+    /// 返回取消操作的执行结果
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::payroll::payment_activity::*;
+    ///
+    /// let response = service.cancel_payment_activity("pa_123456").await?;
+    /// if response.data.success {
+    ///     println!("活动取消成功");
+    /// }
+    /// ```
+    pub async fn cancel_payment_activity(
+        &self,
+        payment_activity_id: &str,
+    ) -> SDKResult<BaseResponse<ArchiveResponse>> {
+        let mut path_params = std::collections::HashMap::new();
+        path_params.insert(
+            "payment_activity_id".to_string(),
+            payment_activity_id.to_string(),
+        );
+
+        let api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: self
+                .config
+                .build_url("/open-apis/payroll/v4/payment_activities/{payment_activity_id}/cancel"),
+            query_params: std::collections::HashMap::new(),
+            path_params,
+            body: Some(serde_json::Value::Object(serde_json::Map::new())),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+        };
+
+        let response = Transport::request(api_req, &self.config).await?;
+        Ok(response.into())
     }
 }

@@ -1,9 +1,8 @@
 use serde::{Deserialize, Serialize};
-
-/// Offer状态变更事件数据
+/// Offer状态变更事件数据,
 ///
 /// 当Offer状态发生变更时触发此事件，包含状态变更的详细信息。
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct OfferStatusChangedData {
     /// Offer ID
     pub offer_id: String,
@@ -19,22 +18,21 @@ pub struct OfferStatusChangedData {
     pub new_status: OfferStatus,
     /// 状态变更时间（毫秒时间戳）
     pub change_time: i64,
-    /// 操作者ID
-    #[serde(skip_serializing_if = "Option::is_none")]
+    /// 操作者ID,
+#[serde(skip_serializing_if = "Option::is_none")]
     pub operator_id: Option<String>,
-    /// 变更原因
-    #[serde(skip_serializing_if = "Option::is_none")]
+    /// 变更原因,
+#[serde(skip_serializing_if = "Option::is_none")]
     pub reason: Option<String>,
-    /// Offer详情
-    #[serde(skip_serializing_if = "Option::is_none")]
+    /// Offer详情,
+#[serde(skip_serializing_if = "Option::is_none")]
     pub offer_info: Option<OfferInfo>,
 }
-
-/// Offer状态枚举
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// Offer状态枚举,
+#[derive(Debug, Clone)]
 #[serde(rename_all = "snake_case")]
 pub enum OfferStatus {
-    /// 草稿
+/// 草稿,
     Draft,
     /// 待审批
     PendingApproval,
@@ -53,26 +51,25 @@ pub enum OfferStatus {
     /// 已过期
     Expired,
 }
-
-/// Offer基本信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// Offer基本信息,
+#[derive(Debug, Clone)]
 pub struct OfferInfo {
-    /// Offer标题
-    #[serde(skip_serializing_if = "Option::is_none")]
+    /// Offer标题,
+#[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
-    /// 职位名称
-    #[serde(skip_serializing_if = "Option::is_none")]
+    /// 职位名称,
+#[serde(skip_serializing_if = "Option::is_none")]
     pub job_title: Option<String>,
-    /// 部门
-    #[serde(skip_serializing_if = "Option::is_none")]
+    /// 部门,
+#[serde(skip_serializing_if = "Option::is_none")]
     pub department: Option<String>,
-    /// 薪资范围
-    #[serde(skip_serializing_if = "Option::is_none")]
+    /// 薪资范围,
+#[serde(skip_serializing_if = "Option::is_none")]
     pub salary_range: Option<String>,
-    /// 入职日期
-    #[serde(skip_serializing_if = "Option::is_none")]
+    /// 入职日期,
+#[serde(skip_serializing_if = "Option::is_none")]
     pub start_date: Option<String>,
-    /// Offer有效期至
-    #[serde(skip_serializing_if = "Option::is_none")]
+    /// Offer有效期至,
+#[serde(skip_serializing_if = "Option::is_none")]
     pub expire_date: Option<String>,
 }

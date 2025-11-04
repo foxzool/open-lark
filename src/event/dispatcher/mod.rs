@@ -150,10 +150,6 @@ impl EventDispatcherHandler {
     }
 }
 
-pub trait EventHandler: Send + Sync {
-    fn handle(&self, payload: &[u8]) -> anyhow::Result<()>;
-}
-
 pub struct EventDispatcherHandlerBuilder {
     /// 事件map,key为事件类型，value为事件处理器
     processor_map: HashMap<String, Box<dyn EventHandler>>,

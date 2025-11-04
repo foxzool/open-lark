@@ -59,7 +59,9 @@ async fn demonstrate_authentication_errors() {
         Ok(_) => println!("✅ 意外成功"),
         Err(error) => {
             println!("❌ 捕获到错误（预期）");
-            handle_error_with_enhanced_features(&error);
+            // 将 String 错误转换为 LarkAPIError 进行演示
+            let lark_error = LarkAPIError::RequestError(error.clone());
+            handle_error_with_enhanced_features(&lark_error);
         }
     }
 }
@@ -293,8 +295,11 @@ async fn enhanced_api_call_example() -> Result<(), Box<dyn std::error::Error>> {
         Err(error) => {
             println!("❌ API调用失败");
 
+            // 将 String 错误转换为 LarkAPIError
+            let lark_error = LarkAPIError::RequestError(error.clone());
+
             // 创建错误上下文并处理
-            let context = ErrorHelper::create_error_context(&error);
+            let context = ErrorHelper::create_error_context(&lark_error);
 
             // 判断是否可以重试
             if context.is_retryable {
