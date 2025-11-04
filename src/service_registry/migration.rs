@@ -8,7 +8,9 @@ use std::time::{Duration, Instant};
 
 use super::{
     adapters::MigrationHelper as BaseMigrationHelper,
-    compatibility::{CompatibilityChecker, CompatibilityConfig, CompatibilityHandler, CompatibilityResult},
+    compatibility::{
+        CompatibilityChecker, CompatibilityConfig, CompatibilityHandler, CompatibilityResult,
+    },
     error::ServiceError,
     metadata::ServiceMetadata,
     service::{NamedService, Service, ServiceInfo},
@@ -35,7 +37,10 @@ pub struct ServiceMigrationReport {
 #[derive(Debug, Clone, PartialEq)]
 pub enum MigrationStrategy {
     /// 渐进式迁移
-    Gradual { batch_size: usize, delay_between_batches: Duration },
+    Gradual {
+        batch_size: usize,
+        delay_between_batches: Duration,
+    },
     /// 立即迁移
     Immediate,
     /// 金丝雀发布
@@ -115,7 +120,8 @@ pub struct AdvancedMigrationHelper {
 impl AdvancedMigrationHelper {
     /// 创建新的高级迁移助手
     pub fn new(registry: Arc<ServiceRegistry>, compatibility_config: CompatibilityConfig) -> Self {
-        let compatibility_handler = CompatibilityHandler::new(registry.clone(), compatibility_config);
+        let compatibility_handler =
+            CompatibilityHandler::new(registry.clone(), compatibility_config);
 
         Self {
             registry,
@@ -135,7 +141,9 @@ impl AdvancedMigrationHelper {
     ) -> Result<String, ServiceError> {
         // 验证输入
         if services.is_empty() {
-            return Err(ServiceError::validation_error("No services specified for migration"));
+            return Err(ServiceError::validation_error(
+                "No services specified for migration",
+            ));
         }
 
         // 创建迁移任务
@@ -170,12 +178,16 @@ impl AdvancedMigrationHelper {
                 handler,
                 migrations,
                 task_id_for_logging.clone(),
-            ).await;
+            )
+            .await;
 
             // 处理结果
             match result {
                 Ok(_) => {
-                    log::info!("Migration task {} completed successfully", task_id_for_logging);
+                    log::info!(
+                        "Migration task {} completed successfully",
+                        task_id_for_logging
+                    );
                 }
                 Err(e) => {
                     log::error!("Migration task {} failed: {}", task_id_for_logging, e);
@@ -196,7 +208,8 @@ impl AdvancedMigrationHelper {
         // 获取任务信息
         let (task, strategy, services, target_config) = {
             let mut migration_map = migrations.write().await;
-            let task = migration_map.get_mut(&task_id)
+            let task = migration_map
+                .get_mut(&task_id)
                 .ok_or_else(|| ServiceError::not_found("Migration task"))?;
 
             task.status = MigrationStatus::InProgress { progress: 0.0 };
@@ -214,12 +227,16 @@ impl AdvancedMigrationHelper {
 
         // 根据策略执行迁移
         match strategy {
-            MigrationStrategy::Gradual { batch_size, delay_between_batches } => {
+            MigrationStrategy::Gradual {
+                batch_size,
+                delay_between_batches,
+            } => {
                 for (batch_index, batch) in services.chunks(batch_size).enumerate() {
                     let batch_start = Instant::now();
 
                     // 更新进度
-                    let progress = (batch_index * batch_size) as f64 / services.len() as f64 * 100.0;
+                    let progress =
+                        (batch_index * batch_size) as f64 / services.len() as f64 * 100.0;
                     Self::update_task_progress(&migrations, &task_id, progress).await;
 
                     // 批量迁移
@@ -229,7 +246,9 @@ impl AdvancedMigrationHelper {
                             &compatibility_handler,
                             service_name,
                             &target_config,
-                        ).await {
+                        )
+                        .await
+                        {
                             Ok(report) => {
                                 successful_services.push(service_name.clone());
                                 reports.push(report);
@@ -246,7 +265,11 @@ impl AdvancedMigrationHelper {
                         tokio::time::sleep(delay_between_batches).await;
                     }
 
-                    log::info!("Batch {} completed in {:?}", batch_index + 1, batch_start.elapsed());
+                    log::info!(
+                        "Batch {} completed in {:?}",
+                        batch_index + 1,
+                        batch_start.elapsed()
+                    );
                 }
             }
             MigrationStrategy::Immediate => {
@@ -257,7 +280,9 @@ impl AdvancedMigrationHelper {
                         &compatibility_handler,
                         service_name,
                         &target_config,
-                    ).await {
+                    )
+                    .await
+                    {
                         Ok(report) => {
                             successful_services.push(service_name.clone());
                             reports.push(report);
@@ -271,7 +296,8 @@ impl AdvancedMigrationHelper {
             }
             MigrationStrategy::Canary { canary_services } => {
                 // 先迁移金丝雀服务
-                let canary_set: std::collections::HashSet<_> = canary_services.iter().map(|s| s.as_str()).collect();
+                let canary_set: std::collections::HashSet<_> =
+                    canary_services.iter().map(|s| s.as_str()).collect();
                 let mut canary_success = true;
 
                 for service_name in &services {
@@ -281,7 +307,9 @@ impl AdvancedMigrationHelper {
                             &compatibility_handler,
                             service_name,
                             &target_config,
-                        ).await {
+                        )
+                        .await
+                        {
                             Ok(report) => {
                                 successful_services.push(service_name.clone());
                                 reports.push(report);
@@ -304,14 +332,20 @@ impl AdvancedMigrationHelper {
                                 &compatibility_handler,
                                 service_name,
                                 &target_config,
-                            ).await {
+                            )
+                            .await
+                            {
                                 Ok(report) => {
                                     successful_services.push(service_name.clone());
                                     reports.push(report);
                                 }
                                 Err(e) => {
                                     failed_services.push((service_name.clone(), e.to_string()));
-                                    log::error!("Failed to migrate service '{}': {}", service_name, e);
+                                    log::error!(
+                                        "Failed to migrate service '{}': {}",
+                                        service_name,
+                                        e
+                                    );
                                 }
                             }
                         }
@@ -328,7 +362,9 @@ impl AdvancedMigrationHelper {
                     reports.clear();
                 }
             }
-            MigrationStrategy::BlueGreen { validate_before_switch } => {
+            MigrationStrategy::BlueGreen {
+                validate_before_switch,
+            } => {
                 // 蓝绿部署：先在绿色环境部署，验证后再切换
                 if validate_before_switch {
                     // 这里可以实现验证逻辑
@@ -341,7 +377,9 @@ impl AdvancedMigrationHelper {
                         &compatibility_handler,
                         service_name,
                         &target_config,
-                    ).await {
+                    )
+                    .await
+                    {
                         Ok(report) => {
                             successful_services.push(service_name.clone());
                             reports.push(report);
@@ -366,12 +404,15 @@ impl AdvancedMigrationHelper {
                     MigrationStatus::Completed
                 } else {
                     MigrationStatus::Failed {
-                        error: format!("{} services failed to migrate", failed_services.len())
+                        error: format!("{} services failed to migrate", failed_services.len()),
                     }
                 };
                 task.end_time = Some(Instant::now());
                 task.migrated_services = successful_services.clone();
-                task.failed_services = failed_services.iter().map(|(name, _)| name.clone()).collect();
+                task.failed_services = failed_services
+                    .iter()
+                    .map(|(name, _)| name.clone())
+                    .collect();
             }
         }
 
@@ -382,7 +423,10 @@ impl AdvancedMigrationHelper {
             total_count: services.len(),
             duration,
             successful_services,
-            failed_services: failed_services.into_iter().map(|(name, error)| format!("{}: {}", name, error)).collect(),
+            failed_services: failed_services
+                .into_iter()
+                .map(|(name, error)| format!("{}: {}", name, error))
+                .collect(),
             reports,
         })
     }
@@ -471,7 +515,7 @@ impl AdvancedMigrationHelper {
         let mut migrations = self.active_migrations.write().await;
         if let Some(task) = migrations.get_mut(task_id) {
             task.status = MigrationStatus::Failed {
-                error: "Migration cancelled by user".to_string()
+                error: "Migration cancelled by user".to_string(),
             };
             task.end_time = Some(Instant::now());
             Ok(())
@@ -486,7 +530,12 @@ impl AdvancedMigrationHelper {
         let initial_count = migrations.len();
 
         migrations.retain(|_, task| {
-            !matches!(task.status, MigrationStatus::Completed | MigrationStatus::Failed { .. } | MigrationStatus::RolledBack)
+            !matches!(
+                task.status,
+                MigrationStatus::Completed
+                    | MigrationStatus::Failed { .. }
+                    | MigrationStatus::RolledBack
+            )
         });
 
         initial_count - migrations.len()
@@ -516,18 +565,24 @@ impl AdvancedMigrationHelper {
     }
 
     /// 估算迁移时间
-    fn estimate_migration_duration(&self, services: &[String], strategy: &MigrationStrategy) -> Duration {
+    fn estimate_migration_duration(
+        &self,
+        services: &[String],
+        strategy: &MigrationStrategy,
+    ) -> Duration {
         let base_time_per_service = Duration::from_millis(100); // 基础时间估算
 
         match strategy {
-            MigrationStrategy::Gradual { batch_size, delay_between_batches } => {
+            MigrationStrategy::Gradual {
+                batch_size,
+                delay_between_batches,
+            } => {
                 let batch_count = (services.len() + batch_size - 1) / batch_size;
-                let total_delay = delay_between_batches.saturating_mul(batch_count.saturating_sub(1) as u32);
+                let total_delay =
+                    delay_between_batches.saturating_mul(batch_count.saturating_sub(1) as u32);
                 total_delay + base_time_per_service * services.len() as u32
             }
-            MigrationStrategy::Immediate => {
-                base_time_per_service * services.len() as u32
-            }
+            MigrationStrategy::Immediate => base_time_per_service * services.len() as u32,
             MigrationStrategy::Canary { .. } => {
                 // 金丝雀部署需要更多时间进行验证
                 base_time_per_service * services.len() as u32 * 2
@@ -540,7 +595,11 @@ impl AdvancedMigrationHelper {
     }
 
     /// 执行预迁移检查
-    fn perform_pre_migration_checks(&self, services: &[String], target_config: &Config) -> Vec<CompatibilityResult> {
+    fn perform_pre_migration_checks(
+        &self,
+        services: &[String],
+        target_config: &Config,
+    ) -> Vec<CompatibilityResult> {
         let mut results = Vec::new();
 
         for service_name in services {
@@ -548,7 +607,8 @@ impl AdvancedMigrationHelper {
             // 目前返回模拟结果
             results.push(CompatibilityResult {
                 is_compatible: true,
-                compatibility_level: crate::service_registry::compatibility::CompatibilityLevel::Full,
+                compatibility_level:
+                    crate::service_registry::compatibility::CompatibilityLevel::Full,
                 issues: vec![],
                 recommendations: vec![],
             });
@@ -558,7 +618,12 @@ impl AdvancedMigrationHelper {
     }
 
     /// 识别迁移风险
-    fn identify_migration_risks(&self, services: &[String], source_config: &Config, target_config: &Config) -> Vec<MigrationRisk> {
+    fn identify_migration_risks(
+        &self,
+        services: &[String],
+        source_config: &Config,
+        target_config: &Config,
+    ) -> Vec<MigrationRisk> {
         let mut risks = Vec::new();
 
         // 检查配置差异
@@ -597,14 +662,20 @@ impl AdvancedMigrationHelper {
     }
 
     /// 生成迁移建议
-    fn generate_migration_recommendations(&self, services: &[String], strategy: &MigrationStrategy) -> Vec<String> {
+    fn generate_migration_recommendations(
+        &self,
+        services: &[String],
+        strategy: &MigrationStrategy,
+    ) -> Vec<String> {
         let mut recommendations = Vec::new();
 
-        recommendations.push("Ensure all services have proper backups before migration".to_string());
+        recommendations
+            .push("Ensure all services have proper backups before migration".to_string());
         recommendations.push("Test migration in staging environment first".to_string());
 
         if services.len() > 10 {
-            recommendations.push("Consider using gradual migration for large service sets".to_string());
+            recommendations
+                .push("Consider using gradual migration for large service sets".to_string());
         }
 
         match strategy {
@@ -612,13 +683,16 @@ impl AdvancedMigrationHelper {
                 recommendations.push("Monitor each batch closely before proceeding".to_string());
             }
             MigrationStrategy::Canary { .. } => {
-                recommendations.push("Prepare rollback plan in case canary deployment fails".to_string());
+                recommendations
+                    .push("Prepare rollback plan in case canary deployment fails".to_string());
             }
             MigrationStrategy::BlueGreen { .. } => {
-                recommendations.push("Ensure green environment is fully validated before switch".to_string());
+                recommendations
+                    .push("Ensure green environment is fully validated before switch".to_string());
             }
             MigrationStrategy::Immediate => {
-                recommendations.push("Ensure all services can be safely restarted simultaneously".to_string());
+                recommendations
+                    .push("Ensure all services can be safely restarted simultaneously".to_string());
             }
         }
 
@@ -692,7 +766,12 @@ impl MigrationPlan {
                     crate::service_registry::compatibility::IssueSeverity::Warning => "⚠️",
                     crate::service_registry::compatibility::IssueSeverity::Info => "ℹ️",
                 };
-                println!("  {} {}: {}", severity_icon, format!("{:?}", risk.risk_type), risk.description);
+                println!(
+                    "  {} {}: {}",
+                    severity_icon,
+                    format!("{:?}", risk.risk_type),
+                    risk.description
+                );
                 println!("    缓解措施: {}", risk.mitigation);
             }
             println!();
@@ -720,10 +799,13 @@ mod tests {
             delay_between_batches: Duration::from_secs(1),
         };
 
-        assert_eq!(strategy, MigrationStrategy::Gradual {
-            batch_size: 5,
-            delay_between_batches: Duration::from_secs(1),
-        });
+        assert_eq!(
+            strategy,
+            MigrationStrategy::Gradual {
+                batch_size: 5,
+                delay_between_batches: Duration::from_secs(1),
+            }
+        );
     }
 
     #[test]
@@ -739,7 +821,8 @@ mod tests {
             .build();
         let target_config = source_config.clone();
 
-        let plan = helper.generate_migration_plan(&services, strategy, &source_config, &target_config);
+        let plan =
+            helper.generate_migration_plan(&services, strategy, &source_config, &target_config);
 
         assert_eq!(plan.services.len(), 2);
         assert!(matches!(plan.strategy, MigrationStrategy::Immediate));

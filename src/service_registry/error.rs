@@ -6,42 +6,24 @@ use std::fmt;
 #[derive(Debug, Clone)]
 pub enum ServiceError {
     /// 服务未找到
-    ServiceNotFound {
-        service_name: String,
-    },
+    ServiceNotFound { service_name: String },
     /// 服务已存在
-    ServiceAlreadyExists {
-        service_name: String,
-    },
+    ServiceAlreadyExists { service_name: String },
     /// 类型转换失败
-    TypeMismatch {
-        expected: String,
-        actual: String,
-    },
+    TypeMismatch { expected: String, actual: String },
     /// 服务不可用
     ServiceUnavailable {
         service_name: String,
         reason: String,
     },
     /// 注册表已满
-    RegistryFull {
-        current: usize,
-        max: usize,
-    },
+    RegistryFull { current: usize, max: usize },
     /// 无效配置
-    InvalidConfiguration {
-        field: String,
-        value: String,
-    },
+    InvalidConfiguration { field: String, value: String },
     /// 内部错误
-    InternalError {
-        message: String,
-    },
+    InternalError { message: String },
     /// 健康检查失败
-    HealthCheckFailed {
-        service_name: String,
-        error: String,
-    },
+    HealthCheckFailed { service_name: String, error: String },
 }
 
 impl ServiceError {
@@ -152,7 +134,11 @@ impl fmt::Display for ServiceError {
                 write!(f, "Service '{}' already exists", service_name)
             }
             Self::TypeMismatch { expected, actual } => {
-                write!(f, "Type mismatch: expected '{}', found '{}'", expected, actual)
+                write!(
+                    f,
+                    "Type mismatch: expected '{}', found '{}'",
+                    expected, actual
+                )
             }
             Self::ServiceUnavailable {
                 service_name,
@@ -169,8 +155,15 @@ impl fmt::Display for ServiceError {
             Self::InternalError { message } => {
                 write!(f, "Internal error: {}", message)
             }
-            Self::HealthCheckFailed { service_name, error } => {
-                write!(f, "Health check failed for service '{}': {}", service_name, error)
+            Self::HealthCheckFailed {
+                service_name,
+                error,
+            } => {
+                write!(
+                    f,
+                    "Health check failed for service '{}': {}",
+                    service_name, error
+                )
             }
         }
     }
@@ -217,7 +210,13 @@ mod tests {
     #[test]
     fn test_registry_full_error() {
         let error = ServiceError::registry_full(100, 50);
-        assert!(matches!(error, ServiceError::RegistryFull { current: 100, max: 50 }));
+        assert!(matches!(
+            error,
+            ServiceError::RegistryFull {
+                current: 100,
+                max: 50
+            }
+        ));
         assert_eq!(error.to_string(), "Registry full: 100/50 services");
     }
 }

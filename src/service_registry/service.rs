@@ -238,7 +238,9 @@ mod tests {
 
     impl TestService {
         fn new() -> Self {
-            Self { name: "test-service" }
+            Self {
+                name: "test-service",
+            }
         }
     }
 

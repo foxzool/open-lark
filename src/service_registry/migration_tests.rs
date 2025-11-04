@@ -6,19 +6,19 @@
 mod tests {
     use crate::core::config::{Config, ConfigBuilder};
     use crate::service_registry::{
-        ServiceRegistry, MigrationHelper, Service, ServiceStatus, ServiceError,
+        MigrationHelper, Service, ServiceError, ServiceRegistry, ServiceStatus,
     };
 
     #[cfg(feature = "authentication")]
     use crate::service_registry::AuthenticationServiceAdapter;
     #[cfg(feature = "contact")]
     use crate::service_registry::ContactServiceAdapter;
+    #[cfg(feature = "group")]
+    use crate::service_registry::GroupServiceAdapter;
     #[cfg(feature = "im")]
     use crate::service_registry::ImServiceAdapter;
     #[cfg(feature = "search")]
     use crate::service_registry::SearchServiceAdapter;
-    #[cfg(feature = "group")]
-    use crate::service_registry::GroupServiceAdapter;
 
     fn create_test_config() -> Config {
         ConfigBuilder::default()
@@ -195,7 +195,12 @@ mod tests {
     }
 
     #[test]
-    #[cfg(all(feature = "authentication", feature = "im", feature = "contact", feature = "search"))]
+    #[cfg(all(
+        feature = "authentication",
+        feature = "im",
+        feature = "contact",
+        feature = "search"
+    ))]
     fn test_four_services_migration() {
         let registry = ServiceRegistry::new();
         let config = create_test_config();
@@ -311,7 +316,10 @@ mod tests {
         let im_adapter2 = ImServiceAdapter::new(im_service2);
         let result = registry.register(im_adapter2);
         assert!(result.is_err());
-        assert!(matches!(result, Err(ServiceError::ServiceAlreadyExists { .. })));
+        assert!(matches!(
+            result,
+            Err(ServiceError::ServiceAlreadyExists { .. })
+        ));
     }
 
     #[test]
@@ -350,7 +358,6 @@ mod tests {
         assert!(result.is_ok());
     }
 
-  
     #[test]
     fn test_service_adapter_inner_access() {
         #[cfg(feature = "im")]
@@ -409,7 +416,8 @@ mod tests {
                 // 并发获取不同的服务
                 match i % 3 {
                     0 => {
-                        let _: std::sync::Arc<AuthenticationServiceAdapter> = registry_clone.get().unwrap();
+                        let _: std::sync::Arc<AuthenticationServiceAdapter> =
+                            registry_clone.get().unwrap();
                         format!("auth-{}", i)
                     }
                     1 => {
@@ -417,7 +425,8 @@ mod tests {
                         format!("im-{}", i)
                     }
                     _ => {
-                        let _: std::sync::Arc<ContactServiceAdapter> = registry_clone.get().unwrap();
+                        let _: std::sync::Arc<ContactServiceAdapter> =
+                            registry_clone.get().unwrap();
                         format!("contact-{}", i)
                     }
                 }

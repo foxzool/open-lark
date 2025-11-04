@@ -239,7 +239,9 @@ impl TypeErasedServiceBuilder {
             build_fn: Box::new(move || {
                 // 由于类型擦除，我们无法直接使用配置
                 // 这是一个简化实现，实际使用中可能需要更复杂的策略
-                Err(ServiceError::internal_error("Configured builders not fully supported with type erasure"))
+                Err(ServiceError::internal_error(
+                    "Configured builders not fully supported with type erasure",
+                ))
             }),
             validate_fn: Box::new(|| Ok(())),
             supports_async: false,
@@ -316,9 +318,7 @@ mod tests {
 
     #[test]
     fn test_basic_service_builder() {
-        let builder = ServiceBuilderFactory::basic("test-builder", || {
-            Ok(TestService::new())
-        });
+        let builder = ServiceBuilderFactory::basic("test-builder", || Ok(TestService::new()));
 
         assert_eq!(builder.name(), "test-builder");
         assert_eq!(builder.version(), "1.0.0");
@@ -338,9 +338,10 @@ mod tests {
             value: "configured".to_string(),
         };
 
-        let builder = ServiceBuilderFactory::configurable("configurable-builder", config.clone(), |c| {
-            Ok(TestService::new())
-        });
+        let builder =
+            ServiceBuilderFactory::configurable("configurable-builder", config.clone(), |c| {
+                Ok(TestService::new())
+            });
 
         assert_eq!(builder.config().value, "configured");
 
@@ -350,9 +351,7 @@ mod tests {
 
     #[test]
     fn test_builder_validation() {
-        let builder = ServiceBuilderFactory::basic("test-builder", || {
-            Ok(TestService::new())
-        });
+        let builder = ServiceBuilderFactory::basic("test-builder", || Ok(TestService::new()));
 
         // 默认验证应该成功
         assert!(builder.validate().is_ok());

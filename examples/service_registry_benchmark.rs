@@ -2,8 +2,8 @@
 //!
 //! 展示ServiceRegistry在各种场景下的性能表现
 
-use open_lark::service_registry::benchmark::BenchmarkSuite;
 use open_lark::core::config::{Config, ConfigBuilder};
+use open_lark::service_registry::benchmark::BenchmarkSuite;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 #[tokio::main]
@@ -29,7 +29,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 设置核心服务
     println!("📋 设置核心服务...");
-    suite.setup_core_services().expect("Failed to setup core services");
+    suite
+        .setup_core_services()
+        .expect("Failed to setup core services");
     println!("✅ 核心服务设置完成");
     println!();
 
@@ -51,7 +53,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         println!("{}. {} [{}]", i + 1, result.test_name, status);
         println!("   📈 性能: {:.0} ops/sec", result.ops_per_second);
-        println!("   ⏱️  平均耗时: {:.2} μs", result.avg_duration_nanos as f64 / 1000.0);
+        println!(
+            "   ⏱️  平均耗时: {:.2} μs",
+            result.avg_duration_nanos as f64 / 1000.0
+        );
 
         if let Some(memory) = result.memory_usage_bytes {
             println!("   💾 内存使用: {:.2} KB", memory as f64 / 1024.0);
@@ -64,9 +69,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("{}", "-".repeat(50));
 
     for result in &results {
-        if result.avg_duration_nanos > 10_000 { // 10微秒
-            println!("⚠️  {}: 平均耗时 {:.2} μs 超过建议值，建议检查实现",
-                result.test_name, result.avg_duration_nanos as f64 / 1000.0);
+        if result.avg_duration_nanos > 10_000 {
+            // 10微秒
+            println!(
+                "⚠️  {}: 平均耗时 {:.2} μs 超过建议值，建议检查实现",
+                result.test_name,
+                result.avg_duration_nanos as f64 / 1000.0
+            );
         }
     }
 

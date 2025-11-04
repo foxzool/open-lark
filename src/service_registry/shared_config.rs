@@ -2,16 +2,16 @@
 //!
 //! 提供配置共享机制，减少多个服务持有相同配置的内存开销
 
-use std::sync::Arc;
 use crate::core::config::Config;
+use std::sync::Arc;
 
 /// 共享配置包装器
 ///
-/// 使用Arc<Config>实现配置在多个服务间的安全共享，
+/// 使用 `Arc<Config>` 实现配置在多个服务间的安全共享，
 /// 减少内存使用同时保持配置的不可变性。
 #[derive(Debug, Clone)]
 pub struct SharedConfig {
-    /// 内部使用Arc<Config>实现线程安全的配置共享
+    /// 内部使用 `Arc<Config>` 实现线程安全的配置共享
     config: Arc<Config>,
 }
 
@@ -47,10 +47,10 @@ impl SharedConfig {
         &self.config
     }
 
-    /// 获取Arc<Config>的引用，用于需要Arc的场景
+    /// 获取 `Arc<Config>` 的引用，用于需要 Arc 的场景
     ///
     /// # Returns
-    /// 返回Arc<Config>的引用
+    /// 返回 `Arc<Config>` 的引用
     pub fn arc_config(&self) -> &Arc<Config> {
         &self.config
     }
@@ -128,7 +128,10 @@ impl SharedConfigFactory {
     ///
     /// # Returns
     /// 返回SharedConfig实例和包含每个服务配置的向量
-    pub fn create_batch(config: Config, service_names: &[&str]) -> (SharedConfig, Vec<SharedConfig>) {
+    pub fn create_batch(
+        config: Config,
+        service_names: &[&str],
+    ) -> (SharedConfig, Vec<SharedConfig>) {
         let shared_config = SharedConfig::new(config);
         let service_configs: Vec<SharedConfig> = service_names
             .iter()
@@ -193,15 +196,21 @@ impl ConfigUsageStats {
         println!("📊 配置使用统计:");
         println!("  总配置实例: {}", self.total_configs);
         println!("  共享配置实例: {}", self.shared_configs);
-        println!("  估算内存使用: {} bytes ({:.2} KB)",
+        println!(
+            "  估算内存使用: {} bytes ({:.2} KB)",
             self.estimated_memory_bytes,
-            self.estimated_memory_bytes as f64 / 1024.0);
+            self.estimated_memory_bytes as f64 / 1024.0
+        );
         if self.saved_memory_bytes > 0 {
-            println!("  节省内存: {} bytes ({:.2} KB)",
+            println!(
+                "  节省内存: {} bytes ({:.2} KB)",
                 self.saved_memory_bytes,
-                self.saved_memory_bytes as f64 / 1024.0);
-            println!("  内存节省率: {:.1}%",
-                (self.saved_memory_bytes as f64 / self.estimated_memory_bytes as f64) * 100.0);
+                self.saved_memory_bytes as f64 / 1024.0
+            );
+            println!(
+                "  内存节省率: {:.1}%",
+                (self.saved_memory_bytes as f64 / self.estimated_memory_bytes as f64) * 100.0
+            );
         }
         println!();
     }
@@ -210,7 +219,7 @@ impl ConfigUsageStats {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::{ConfigBuilder};
+    use crate::core::config::ConfigBuilder;
 
     fn create_test_config() -> Config {
         ConfigBuilder::default()
@@ -261,7 +270,8 @@ mod tests {
     fn test_factory_create_batch() {
         let config = create_test_config();
         let service_names = vec!["service1", "service2", "service3"];
-        let (shared_config, service_configs) = SharedConfigFactory::create_batch(config, &service_names);
+        let (shared_config, service_configs) =
+            SharedConfigFactory::create_batch(config, &service_names);
 
         assert_eq!(service_configs.len(), 3);
         assert_eq!(shared_config.ref_count(), 4); // 1 + 3 service configs

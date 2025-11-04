@@ -4,8 +4,8 @@
 
 use open_lark::core::config::{Config, ConfigBuilder};
 use open_lark::service_registry::{
-    AdvancedCompatibilityAnalyzer, CompatibilityAnalysisReport, CompatibilityConfig, MigrationHelper,
-    ServiceRegistry, SharedConfig,
+    AdvancedCompatibilityAnalyzer, CompatibilityAnalysisReport, CompatibilityConfig,
+    MigrationHelper, ServiceRegistry, SharedConfig,
 };
 use std::time::Duration;
 
@@ -66,13 +66,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         open_lark::service_registry::MigrationStrategy::Immediate => {
             println!("  🚀 立即迁移");
         }
-        open_lark::service_registry::MigrationStrategy::Gradual { batch_size, delay_between_batches } => {
-            println!("  📈 渐进式迁移 (批次大小: {}, 延迟: {:?})", batch_size, delay_between_batches);
+        open_lark::service_registry::MigrationStrategy::Gradual {
+            batch_size,
+            delay_between_batches,
+        } => {
+            println!(
+                "  📈 渐进式迁移 (批次大小: {}, 延迟: {:?})",
+                batch_size, delay_between_batches
+            );
         }
         open_lark::service_registry::MigrationStrategy::Canary { canary_services } => {
             println!("  🐤 金丝雀发布 (金丝雀服务: {:?})", canary_services);
         }
-        open_lark::service_registry::MigrationStrategy::BlueGreen { validate_before_switch } => {
+        open_lark::service_registry::MigrationStrategy::BlueGreen {
+            validate_before_switch,
+        } => {
             println!("  🔄 蓝绿部署 (切换前验证: {})", validate_before_switch);
         }
     }
@@ -114,7 +122,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 /// 演示风险评估功能
-fn demonstrate_risk_assessment(report: &CompatibilityAnalysisReport) -> Result<(), Box<dyn std::error::Error>> {
+fn demonstrate_risk_assessment(
+    report: &CompatibilityAnalysisReport,
+) -> Result<(), Box<dyn std::error::Error>> {
     let mut total_risks = 0;
     let mut critical_risks = 0;
     let mut high_risks = 0;
@@ -124,7 +134,9 @@ fn demonstrate_risk_assessment(report: &CompatibilityAnalysisReport) -> Result<(
         total_risks += analysis.risks.len();
         for risk in &analysis.risks {
             match risk.severity {
-                open_lark::service_registry::compatibility::IssueSeverity::Critical => critical_risks += 1,
+                open_lark::service_registry::compatibility::IssueSeverity::Critical => {
+                    critical_risks += 1
+                }
                 open_lark::service_registry::compatibility::IssueSeverity::Error => high_risks += 1,
                 _ => {}
             }
@@ -172,8 +184,7 @@ async fn demonstrate_migration_planning(
     match &strategy.strategy {
         open_lark::service_registry::MigrationStrategy::Gradual { batch_size, .. } => {
             for (i, batch) in services.chunks(*batch_size).enumerate() {
-                println!("     阶段 {}: {:?} (第 {} 分钟)",
-                    i + 1, batch, i * 30 + 5);
+                println!("     阶段 {}: {:?} (第 {} 分钟)", i + 1, batch, i * 30 + 5);
             }
         }
         open_lark::service_registry::MigrationStrategy::Canary { canary_services } => {
@@ -219,24 +230,42 @@ async fn demonstrate_compatibility_monitoring(
             // 模拟出现问题
             let mut report = analyzer.analyze_compatibility(services);
             if let Some(analysis) = report.service_analysis.values_mut().next() {
-                analysis.risks.push(open_lark::service_registry::ServiceRisk {
-                    risk_type: open_lark::service_registry::ServiceRiskType::ConfigurationIssue,
-                    severity: open_lark::service_registry::compatibility::IssueSeverity::Warning,
-                    description: "检测到配置漂移".to_string(),
-                    impact: "可能影响服务间通信".to_string(),
-                    mitigation: "同步配置文件".to_string(),
-                });
+                analysis
+                    .risks
+                    .push(open_lark::service_registry::ServiceRisk {
+                        risk_type: open_lark::service_registry::ServiceRiskType::ConfigurationIssue,
+                        severity:
+                            open_lark::service_registry::compatibility::IssueSeverity::Warning,
+                        description: "检测到配置漂移".to_string(),
+                        impact: "可能影响服务间通信".to_string(),
+                        mitigation: "同步配置文件".to_string(),
+                    });
             }
             report
         };
 
-        let compatible_count = report.service_analysis.values()
-            .filter(|s| matches!(s.compatibility_level, open_lark::service_registry::compatibility::CompatibilityLevel::Full))
+        let compatible_count = report
+            .service_analysis
+            .values()
+            .filter(|s| {
+                matches!(
+                    s.compatibility_level,
+                    open_lark::service_registry::compatibility::CompatibilityLevel::Full
+                )
+            })
             .count();
 
-        println!("     监控点 {}: {}/{} 服务兼容 (状态: {})",
-            i, compatible_count, services.len(),
-            if compatible_count == services.len() { "✅ 正常" } else { "⚠️ 异常" });
+        println!(
+            "     监控点 {}: {}/{} 服务兼容 (状态: {})",
+            i,
+            compatible_count,
+            services.len(),
+            if compatible_count == services.len() {
+                "✅ 正常"
+            } else {
+                "⚠️ 异常"
+            }
+        );
     }
 
     println!("   📊 监控总结:");
@@ -280,7 +309,9 @@ fn demonstrate_best_practices(report: &CompatibilityAnalysisReport) {
     }
 
     // 基于问题数量提供建议
-    let total_issues = report.service_analysis.values()
+    let total_issues = report
+        .service_analysis
+        .values()
         .map(|s| s.issues.len())
         .sum::<usize>();
 

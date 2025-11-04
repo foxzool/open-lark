@@ -2,11 +2,14 @@
 
 use std::any::Any;
 use std::collections::HashMap;
-use std::sync::{Arc, RwLock, PoisonError};
+use std::sync::{Arc, PoisonError, RwLock};
 
 use super::{
-    builder::{ServiceBuilder, TypeErasedServiceBuilder}, error::ServiceError, metadata::ServiceMetadata,
-    service::{NamedService, Service, ServiceInfo, ServiceStatus}, RegistryConfig,
+    builder::{ServiceBuilder, TypeErasedServiceBuilder},
+    error::ServiceError,
+    metadata::ServiceMetadata,
+    service::{NamedService, Service, ServiceInfo, ServiceStatus},
+    RegistryConfig,
 };
 
 /// 线程安全的服务注册表
@@ -14,7 +17,9 @@ pub struct ServiceRegistry {
     /// 服务存储
     services: Arc<RwLock<HashMap<&'static str, Arc<dyn Service>>>>,
     /// 服务构建器存储
-    builders: Arc<RwLock<HashMap<&'static str, Box<dyn ServiceBuilder<Output = dyn Service> + Send + Sync>>>>,
+    builders: Arc<
+        RwLock<HashMap<&'static str, Box<dyn ServiceBuilder<Output = dyn Service> + Send + Sync>>>,
+    >,
     /// 服务元数据
     metadata: Arc<RwLock<ServiceMetadata>>,
     /// 配置
@@ -49,7 +54,10 @@ impl ServiceRegistry {
 
         // 检查服务是否已存在
         {
-            let services = self.services.read().map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
+            let services = self
+                .services
+                .read()
+                .map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
             if services.contains_key(name) {
                 return Err(ServiceError::service_already_exists(name));
             }
@@ -57,16 +65,25 @@ impl ServiceRegistry {
 
         // 注册服务
         {
-            let mut services = self.services.write().map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
+            let mut services = self
+                .services
+                .write()
+                .map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
             services.insert(name, service_arc);
         }
 
         // 更新元数据
         {
-            let services = self.services.read().map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
+            let services = self
+                .services
+                .read()
+                .map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
             if let Some(service) = services.get(name) {
                 let info = ServiceInfo::new(service.as_ref());
-                let mut metadata = self.metadata.write().map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
+                let mut metadata = self
+                    .metadata
+                    .write()
+                    .map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
                 metadata.register_service(info);
             }
         }
@@ -80,7 +97,10 @@ impl ServiceRegistry {
 
         // 检查构建器是否已存在
         {
-            let builders = self.builders.read().map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
+            let builders = self
+                .builders
+                .read()
+                .map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
             if builders.contains_key(name) {
                 return Err(ServiceError::service_already_exists(name));
             }
@@ -88,8 +108,14 @@ impl ServiceRegistry {
 
         // 注册构建器
         {
-            let mut builders = self.builders.write().map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
-            builders.insert(name, Box::new(builder) as Box<dyn ServiceBuilder<Output = dyn Service> + Send + Sync>);
+            let mut builders = self
+                .builders
+                .write()
+                .map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
+            builders.insert(
+                name,
+                Box::new(builder) as Box<dyn ServiceBuilder<Output = dyn Service> + Send + Sync>,
+            );
         }
 
         Ok(())
@@ -99,9 +125,13 @@ impl ServiceRegistry {
     pub fn build_and_register_service(&self, builder_name: &str) -> Result<(), ServiceError> {
         // 构建服务（需要从锁中取出构建器来构建）
         let service_box = {
-            let builders = self.builders.read().map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
-            let builder = builders.get(builder_name)
-                .ok_or_else(|| ServiceError::service_not_found(&format!("Builder '{}' not found", builder_name)))?;
+            let builders = self
+                .builders
+                .read()
+                .map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
+            let builder = builders.get(builder_name).ok_or_else(|| {
+                ServiceError::service_not_found(&format!("Builder '{}' not found", builder_name))
+            })?;
 
             // 验证构建器
             builder.validate()?;
@@ -119,7 +149,10 @@ impl ServiceRegistry {
 
         // 检查服务是否已存在
         {
-            let services = self.services.read().map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
+            let services = self
+                .services
+                .read()
+                .map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
             if services.contains_key(service_name) {
                 return Err(ServiceError::service_already_exists(service_name));
             }
@@ -127,14 +160,20 @@ impl ServiceRegistry {
 
         // 注册服务
         {
-            let mut services = self.services.write().map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
+            let mut services = self
+                .services
+                .write()
+                .map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
             services.insert(service_name, service.clone());
         }
 
         // 更新元数据
         {
             let info = ServiceInfo::new(service.as_ref());
-            let mut metadata = self.metadata.write().map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
+            let mut metadata = self
+                .metadata
+                .write()
+                .map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
             metadata.register_service(info);
         }
 
@@ -146,21 +185,21 @@ impl ServiceRegistry {
     where
         S: Service + NamedService,
     {
-        let services = self.services.read().map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
+        let services = self
+            .services
+            .read()
+            .map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
 
         let service_name = S::name_static().ok_or_else(|| {
             ServiceError::invalid_configuration("service_name", "missing static name")
         })?;
 
-        let entry = services.get(service_name).ok_or_else(|| {
-            ServiceError::service_not_found(service_name)
-        })?;
+        let entry = services
+            .get(service_name)
+            .ok_or_else(|| ServiceError::service_not_found(service_name))?;
 
         let concrete = entry.as_any().downcast_ref::<S>().ok_or_else(|| {
-            ServiceError::type_mismatch(
-                std::any::type_name::<S>(),
-                std::any::type_name::<()>(),
-            )
+            ServiceError::type_mismatch(std::any::type_name::<S>(), std::any::type_name::<()>())
         })?;
 
         // 检查服务是否可用
@@ -176,7 +215,10 @@ impl ServiceRegistry {
 
     /// 通过名称获取服务（动态）
     pub fn get_by_name(&self, name: &str) -> Result<Arc<dyn Service>, ServiceError> {
-        let services = self.services.read().map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
+        let services = self
+            .services
+            .read()
+            .map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
 
         // 首先尝试静态名称
         if let Some(service) = services.get(name) {
@@ -221,13 +263,21 @@ impl ServiceRegistry {
     pub fn unregister(&self, name: &str) -> Result<(), ServiceError> {
         // 从服务存储中移除
         {
-            let mut services = self.services.write().map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
-            services.remove(name).ok_or_else(|| ServiceError::service_not_found(name))?;
+            let mut services = self
+                .services
+                .write()
+                .map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
+            services
+                .remove(name)
+                .ok_or_else(|| ServiceError::service_not_found(name))?;
         }
 
         // 从元数据中移除
         {
-            let mut metadata = self.metadata.write().map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
+            let mut metadata = self
+                .metadata
+                .write()
+                .map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
             metadata.remove_service(name);
         }
 
@@ -267,11 +317,8 @@ impl ServiceRegistry {
 
         // 从服务存储中移除过期服务
         if expired_services > 0 {
-            let services_to_remove: Vec<String> = metadata
-                .get_all_services()
-                .keys()
-                .cloned()
-                .collect();
+            let services_to_remove: Vec<String> =
+                metadata.get_all_services().keys().cloned().collect();
 
             let mut services = self.services.write().unwrap_or_else(|_| {
                 std::process::abort();
@@ -340,9 +387,15 @@ impl ServiceRegistry {
 
     /// 验证容量限制
     fn validate_capacity(&self) -> Result<(), ServiceError> {
-        let services = self.services.read().map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
+        let services = self
+            .services
+            .read()
+            .map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
         if services.len() >= self.config.max_services {
-            return Err(ServiceError::registry_full(services.len(), self.config.max_services));
+            return Err(ServiceError::registry_full(
+                services.len(),
+                self.config.max_services,
+            ));
         }
         Ok(())
     }
@@ -486,7 +539,10 @@ mod tests {
         // 尝试注册重复服务
         let result = registry.register(service2);
         assert!(result.is_err());
-        assert!(matches!(result, Err(ServiceError::ServiceAlreadyExists { .. })));
+        assert!(matches!(
+            result,
+            Err(ServiceError::ServiceAlreadyExists { .. })
+        ));
     }
 
     #[test]

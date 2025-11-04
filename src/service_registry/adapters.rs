@@ -2,9 +2,9 @@
 //!
 //! 为现有服务创建 ServiceRegistry 兼容的适配器，实现渐进式迁移策略
 
-use std::any::Any;
+use super::{NamedService, Service, ServiceError, ServiceStatus};
 use crate::core::config::Config;
-use super::{Service, NamedService, ServiceStatus, ServiceError};
+use std::any::Any;
 
 /// 服务详情
 #[derive(Debug, Clone)]
@@ -432,7 +432,10 @@ impl MigrationHelper {
         registry: &crate::service_registry::ServiceRegistry,
         config: &Config,
     ) -> Result<(), ServiceError> {
-        Self::register_services_with_shared_config(registry, &crate::service_registry::SharedConfig::new(config.clone()))
+        Self::register_services_with_shared_config(
+            registry,
+            &crate::service_registry::SharedConfig::new(config.clone()),
+        )
     }
 
     /// 批量注册服务到 ServiceRegistry（使用共享配置）
@@ -450,7 +453,9 @@ impl MigrationHelper {
         // 注册 Authentication 服务
         #[cfg(feature = "authentication")]
         {
-            let auth_service = crate::service::authentication::AuthenticationService::new(shared_config.config().clone());
+            let auth_service = crate::service::authentication::AuthenticationService::new(
+                shared_config.config().clone(),
+            );
             let auth_adapter = AuthenticationServiceAdapter::new(auth_service);
             registry.register(auth_adapter)?;
         }
@@ -466,7 +471,8 @@ impl MigrationHelper {
         // 注册 Contact 服务
         #[cfg(feature = "contact")]
         {
-            let contact_service = crate::service::contact::ContactService::new(shared_config.config().clone());
+            let contact_service =
+                crate::service::contact::ContactService::new(shared_config.config().clone());
             let contact_adapter = ContactServiceAdapter::new(contact_service);
             registry.register(contact_adapter)?;
         }
@@ -474,7 +480,8 @@ impl MigrationHelper {
         // 注册 Group 服务
         #[cfg(feature = "group")]
         {
-            let group_service = crate::service::group::GroupService::new(shared_config.config().clone());
+            let group_service =
+                crate::service::group::GroupService::new(shared_config.config().clone());
             let group_adapter = GroupServiceAdapter::new(group_service);
             registry.register(group_adapter)?;
         }
@@ -482,7 +489,8 @@ impl MigrationHelper {
         // 注册 Search 服务
         #[cfg(feature = "search")]
         {
-            let search_service = crate::service::search::SearchService::new(shared_config.config().clone());
+            let search_service =
+                crate::service::search::SearchService::new(shared_config.config().clone());
             let search_adapter = SearchServiceAdapter::new(search_service);
             registry.register(search_adapter)?;
         }
@@ -491,7 +499,9 @@ impl MigrationHelper {
     }
 
     /// 验证服务迁移的完整性
-    pub fn validate_migration(registry: &crate::service_registry::ServiceRegistry) -> Result<(), ServiceError> {
+    pub fn validate_migration(
+        registry: &crate::service_registry::ServiceRegistry,
+    ) -> Result<(), ServiceError> {
         let expected_services = vec![
             ("authentication-service", "authentication"),
             ("im-service", "im"),
@@ -546,14 +556,14 @@ impl MigrationHelper {
         if config.app_id.is_empty() {
             return Err(ServiceError::invalid_configuration(
                 "app_id",
-                "App ID cannot be empty"
+                "App ID cannot be empty",
             ));
         }
 
         if config.app_secret.is_empty() {
             return Err(ServiceError::invalid_configuration(
                 "app_secret",
-                "App Secret cannot be empty"
+                "App Secret cannot be empty",
             ));
         }
 
@@ -561,7 +571,7 @@ impl MigrationHelper {
         if !config.base_url.starts_with("http://") && !config.base_url.starts_with("https://") {
             return Err(ServiceError::invalid_configuration(
                 "base_url",
-                "Base URL must start with http:// or https://"
+                "Base URL must start with http:// or https://",
             ));
         }
 
@@ -590,9 +600,15 @@ impl MigrationHelper {
         let mut registered_services = Vec::new();
 
         // 简化的实现：直接注册适配器，避免复杂的闭包类型问题
-        let requested_services = service_names.unwrap_or_else(|| vec![
-            "authentication-service", "im-service", "contact-service", "group-service", "search-service"
-        ]);
+        let requested_services = service_names.unwrap_or_else(|| {
+            vec![
+                "authentication-service",
+                "im-service",
+                "contact-service",
+                "group-service",
+                "search-service",
+            ]
+        });
 
         // Authentication 服务
         #[cfg(feature = "authentication")]
@@ -685,7 +701,9 @@ impl MigrationHelper {
         }
 
         if registered_services.is_empty() {
-            return Err(ServiceError::internal_error("No services were successfully migrated"));
+            return Err(ServiceError::internal_error(
+                "No services were successfully migrated",
+            ));
         }
 
         Ok(registered_services)
@@ -714,12 +732,14 @@ impl MigrationHelper {
         }
 
         if !failed_rollback.is_empty() {
-            let error_details = failed_rollback.into_iter()
+            let error_details = failed_rollback
+                .into_iter()
                 .map(|(name, error)| format!("{}: {}", name, error))
                 .collect::<Vec<_>>()
                 .join(", ");
             return Err(ServiceError::internal_error(&format!(
-                "Rollback failed for some services: {}", error_details
+                "Rollback failed for some services: {}",
+                error_details
             )));
         }
 
@@ -733,14 +753,18 @@ impl MigrationHelper {
     ///
     /// # Returns
     /// 返回迁移状态报告
-    pub fn get_migration_report(registry: &crate::service_registry::ServiceRegistry) -> MigrationReport {
+    pub fn get_migration_report(
+        registry: &crate::service_registry::ServiceRegistry,
+    ) -> MigrationReport {
         let stats = registry.get_stats();
         let discovered_services = registry.discover_services();
 
-        let service_details = discovered_services.into_iter()
+        let service_details = discovered_services
+            .into_iter()
             .map(|name| {
                 // 使用get_service_info获取服务信息
-                let status = registry.get_service_info(&name)
+                let status = registry
+                    .get_service_info(&name)
                     .map(|info| info.status)
                     .unwrap_or(crate::service_registry::ServiceStatus::Healthy); // 默认假设健康
                 ServiceDetail {
@@ -787,7 +811,7 @@ impl MigrationHelper {
         if !incompatible_services.is_empty() {
             return Err(ServiceError::invalid_configuration(
                 "service_versions",
-                &format!("Incompatible service versions: {:?}", incompatible_services)
+                &format!("Incompatible service versions: {:?}", incompatible_services),
             ));
         }
 
@@ -799,7 +823,7 @@ impl MigrationHelper {
 mod tests {
     use super::*;
     use crate::core::config::{Config, ConfigBuilder};
-    use crate::service_registry::{ServiceRegistry, Service};
+    use crate::service_registry::{Service, ServiceRegistry};
 
     fn create_test_config() -> Config {
         ConfigBuilder::default()
@@ -814,7 +838,8 @@ mod tests {
 
         #[cfg(feature = "authentication")]
         {
-            let auth_service = crate::service::authentication::AuthenticationService::new(config.clone());
+            let auth_service =
+                crate::service::authentication::AuthenticationService::new(config.clone());
             let adapter = AuthenticationServiceAdapter::new(auth_service);
 
             assert_eq!(adapter.name(), "authentication-service");
@@ -864,7 +889,7 @@ mod tests {
 
         // 测试无效配置 - 空 app_id
         let invalid_config = ConfigBuilder::default()
-            .app_id("")  // 空 app_id
+            .app_id("") // 空 app_id
             .app_secret("test_app_secret")
             .base_url("https://open.feishu.cn")
             .build();
@@ -873,7 +898,7 @@ mod tests {
         // 测试无效配置 - 空 app_secret
         let invalid_config = ConfigBuilder::default()
             .app_id("test_app_id")
-            .app_secret("")  // 空 app_secret
+            .app_secret("") // 空 app_secret
             .base_url("https://open.feishu.cn")
             .build();
         assert!(MigrationHelper::check_config_compatibility(&invalid_config).is_err());
@@ -882,7 +907,7 @@ mod tests {
         let invalid_config = ConfigBuilder::default()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .base_url("invalid-url")  // 无效 URL
+            .base_url("invalid-url") // 无效 URL
             .build();
         assert!(MigrationHelper::check_config_compatibility(&invalid_config).is_err());
     }
@@ -895,7 +920,13 @@ mod tests {
 
         // 测试迁移所有服务
         let result = MigrationHelper::gradual_migration(&registry, &shared_config, None);
-        #[cfg(any(feature = "authentication", feature = "im", feature = "contact", feature = "group", feature = "search"))]
+        #[cfg(any(
+            feature = "authentication",
+            feature = "im",
+            feature = "contact",
+            feature = "group",
+            feature = "search"
+        ))]
         {
             assert!(result.is_ok());
             let registered_services = result.unwrap();
@@ -910,7 +941,8 @@ mod tests {
 
         // 测试迁移指定服务
         let specific_services = vec!["im-service", "contact-service"];
-        let result = MigrationHelper::gradual_migration(&registry, &shared_config, Some(specific_services));
+        let result =
+            MigrationHelper::gradual_migration(&registry, &shared_config, Some(specific_services));
 
         #[cfg(all(feature = "im", feature = "contact"))]
         {
@@ -961,7 +993,8 @@ mod tests {
                 assert!(!registered_services.is_empty());
 
                 // 回滚迁移
-                let rollback_result = MigrationHelper::rollback_migration(&registry, &registered_services);
+                let rollback_result =
+                    MigrationHelper::rollback_migration(&registry, &registered_services);
                 assert!(rollback_result.is_ok());
 
                 // 验证服务已被移除

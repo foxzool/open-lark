@@ -133,10 +133,10 @@ impl LarkClient {
             #[cfg(feature = "admin")]
             admin: AdminService::new(config.clone()),
             // TODO: Fix config type mismatch for extension services
-        // #[cfg(feature = "board")]
-        // board: BoardService::new(config.clone()),
-        // #[cfg(feature = "event")]
-        // event: EventService::new(config.clone()),
+            // #[cfg(feature = "board")]
+            // board: BoardService::new(config.clone()),
+            // #[cfg(feature = "event")]
+            // event: EventService::new(config.clone()),
             #[cfg(feature = "ai")]
             ai: AiService::new(config.clone()),
             #[cfg(feature = "aily")]
