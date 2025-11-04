@@ -1,3 +1,10 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
+#![allow(non_snake_case)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::module_inception)]
 // drive v1 - 云空间文件管理v1版本API
 //,
 // 包含云空间文件管理的核心功能，这是使用最广泛的版本

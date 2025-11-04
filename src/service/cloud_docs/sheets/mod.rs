@@ -1,3 +1,10 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
+#![allow(non_snake_case)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::module_inception)]
 //! 电子表格（Sheets）服务
 //!
 //! 提供飞书电子表格的完整API功能，支持数据读写、格式设置、公式计算等。

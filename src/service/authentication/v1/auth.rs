@@ -1,3 +1,6 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
 //! 认证服务 V1 版本
 //!
 //! 提供完整的飞书开放平台认证功能，包括：

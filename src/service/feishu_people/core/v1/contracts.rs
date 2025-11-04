@@ -1,3 +1,4 @@
+#![allow(elided_lifetimes_in_paths)]
 //! Contracts v1 - 合同管理API
 //!
 //! 提供完整的合同生命周期管理功能，包括：

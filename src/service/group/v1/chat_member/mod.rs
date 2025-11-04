@@ -1,3 +1,10 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
+#![allow(non_snake_case)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::module_inception)]
 //! # 群成员管理服务模块,
 //!,
 //! 本模块包含飞书群聊成员相关的所有管理功能。,

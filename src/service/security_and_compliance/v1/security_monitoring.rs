@@ -1,3 +1,6 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
 //! 提供企业级实时安全监控功能：
 //! - 实时威胁检测和分析
 //! - 安全事件智能分类和优先级排序

@@ -1,3 +1,10 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
+#![allow(non_snake_case)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::module_inception)]
 //! Cloud Docs Drive服务 v1
 //!
 //! 提供企业级的云盘管理功能，包括文件和文件夹的完整生命周期管理：

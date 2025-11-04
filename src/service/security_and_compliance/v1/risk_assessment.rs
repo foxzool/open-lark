@@ -1,3 +1,6 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
 //! 提供企业级风险评估和管理功能：
 //! - 全面的风险识别和评估
 //! - 量化的风险分析和计算

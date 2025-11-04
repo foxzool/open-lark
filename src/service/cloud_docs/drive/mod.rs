@@ -1,3 +1,10 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
+#![allow(non_snake_case)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::module_inception)]
 //! 云盘Drive服务,
 //!,
 //! 提供飞书云盘相关的所有API功能，包括文件上传下载、文件夹管理、权限控制等。,

@@ -1,3 +1,10 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
+#![allow(non_snake_case)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::module_inception)]
 //! 搜索服务 V1 模块
 //!
 //! 提供搜索服务的V1版本API实现，包括用户搜索、文档搜索等功能。

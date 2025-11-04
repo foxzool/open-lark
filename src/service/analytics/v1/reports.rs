@@ -1,3 +1,8 @@
+#![allow(clippy::derivable_impls)]
+#![allow(elided_lifetimes_in_paths)]
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
 //! 报表服务
 //!
 //! 提供企业级报表生成和管理功能：

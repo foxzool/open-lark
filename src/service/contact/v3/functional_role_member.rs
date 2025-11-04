@@ -1,3 +1,10 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
+#![allow(non_snake_case)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::module_inception)]
 use open_lark_core::core::api_req::ApiRequest;
 use crate::core::{,
 use crate::core::SDKResult;    api_resp::ApiResponseTrait, config::Config, constants::AccessTokenType,

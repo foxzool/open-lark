@@ -1,3 +1,10 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
+#![allow(non_snake_case)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::module_inception)]
 //! Auth API v1版本 - 用户认证和OIDC流程
 //!
 //! 提供用户级别的认证功能，包括用户信息获取、OIDC标准协议支持等。

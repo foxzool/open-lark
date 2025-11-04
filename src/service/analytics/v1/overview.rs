@@ -1,3 +1,6 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 
 /// 问题严重程度

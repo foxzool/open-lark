@@ -1,3 +1,6 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
 //! 用户行为分析服务
 //!
 //! 提供深度的用户行为分析和洞察：

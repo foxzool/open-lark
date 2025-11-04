@@ -1,3 +1,6 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
 //! 评估模板管理服务
 //!
 //! 实现评估模板的完整功能：

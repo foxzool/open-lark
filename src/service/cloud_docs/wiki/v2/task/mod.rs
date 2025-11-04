@@ -1,3 +1,10 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
+#![allow(non_snake_case)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::module_inception)]
 use crate::core::{ config::Config, req_option::RequestOption, SDKResult};
     
 pub use get::{get_task, GetTaskRequest, GetTaskResponse, MoveResult, TaskDetail, TaskStatus};

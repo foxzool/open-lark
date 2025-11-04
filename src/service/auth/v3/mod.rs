@@ -1,3 +1,10 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
+#![allow(non_snake_case)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::module_inception)]
 //! Auth API v3版本 - 应用和租户令牌管理
 //!
 //! 提供应用和租户级别的认证令牌管理功能，支持自建应用和商店应用。

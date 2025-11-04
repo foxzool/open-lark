@@ -1,3 +1,10 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
+#![allow(non_snake_case)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::module_inception)]
 //! Cloud Docs Drive v1服务模块
 //!
 //! 云盘文件管理服务，提供文件和文件夹的增删改查、权限管理、
