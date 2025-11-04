@@ -132,9 +132,9 @@ impl LarkClient {
             #[cfg(feature = "admin")]
             admin: AdminService::new(config.clone()),
             #[cfg(feature = "board")]
-            board: BoardService::new(unsafe { std::mem::transmute_copy(&config) }),
+            board: BoardService::new_from_shared(self.shared_config.clone()),
             #[cfg(feature = "event")]
-            event: EventService::new(unsafe { std::mem::transmute_copy(&config) }),
+            event: EventService::new_from_shared(self.shared_config.clone()),
             #[cfg(feature = "ai")]
             ai: AiService::new(config.clone()),
             #[cfg(feature = "aily")]
