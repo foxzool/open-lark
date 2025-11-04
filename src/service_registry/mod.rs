@@ -2,14 +2,23 @@
 //!
 //! 提供类型安全的服务注册、发现和管理功能，支持动态服务加载和生命周期管理。
 
+pub mod adapters;
 pub mod builder;
 pub mod error;
 pub mod metadata;
 pub mod registry;
 pub mod service;
 pub mod tests;
+pub mod migration_tests;
 
 // 重新导出核心公共接口
+#[cfg(feature = "authentication")]
+pub use adapters::AuthenticationServiceAdapter;
+#[cfg(feature = "contact")]
+pub use adapters::ContactServiceAdapter;
+#[cfg(feature = "im")]
+pub use adapters::ImServiceAdapter;
+pub use adapters::MigrationHelper;
 pub use builder::ServiceBuilder;
 pub use error::{ServiceError, ServiceResult};
 pub use metadata::ServiceMetadata;
