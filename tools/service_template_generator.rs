@@ -3,7 +3,7 @@
 //! 用于快速生成标准化的飞书API服务实现模板。
 //!
 //! 使用方法：
-//!     cargo run --bin service_template_generator -- <service_name> <version> <feature_flag>
+//!     cargo run --bin service_template_generator -- \<service_name\> \<version\> \<feature_flag\>
 //!
 //! 示例：
 //!     cargo run --bin service_template_generator -- contact v1 contact

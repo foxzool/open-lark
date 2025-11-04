@@ -64,7 +64,7 @@ impl Default for PaymentDetailListRequest {
 }
 
 /// 发薪明细批量查询请求
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct PaymentDetailQueryRequest {
     /// 发薪活动ID
     pub payment_activity_id: String,
@@ -77,7 +77,7 @@ pub struct PaymentDetailQueryRequest {
 }
 
 /// 发薪明细信息
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct PaymentDetail {
     /// 员工ID
     pub employee_id: String,
@@ -108,7 +108,7 @@ pub struct PaymentDetail {
 }
 
 /// 发薪项目
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct PaymentItem {
     /// 算薪项ID
     pub acct_item_id: String,
@@ -127,7 +127,7 @@ pub struct PaymentItem {
 }
 
 /// 发薪活动列表请求
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct PaymentActivityListRequest {
     /// 分页大小，最大值100
     pub page_size: Option<u32>,
@@ -144,7 +144,7 @@ pub struct PaymentActivityListRequest {
 }
 
 /// 发薪活动封存请求
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct PaymentActivityArchiveRequest {
     /// 发薪活动ID
     pub payment_activity_id: String,
@@ -153,7 +153,7 @@ pub struct PaymentActivityArchiveRequest {
 }
 
 /// 发薪活动信息
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct PaymentActivity {
     /// 发薪活动ID
     pub payment_activity_id: String,
@@ -186,7 +186,7 @@ pub struct PaymentActivity {
 }
 
 /// 外部数据源记录保存请求
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct DatasourceRecordSaveRequest {
     /// 数据源ID
     pub datasource_id: String,
@@ -201,7 +201,7 @@ pub struct DatasourceRecordSaveRequest {
 }
 
 /// 外部数据源记录查询请求
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct DatasourceRecordQueryRequest {
     /// 数据源ID
     pub datasource_id: String,
@@ -235,7 +235,7 @@ pub struct DatasourceRecord {
 }
 
 /// 外部数据源配置列表请求
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct DatasourceListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -288,7 +288,7 @@ impl Default for DatasourceFieldConfig {
 }
 
 /// 算薪项列表请求
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct AcctItemListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -330,7 +330,7 @@ pub struct AcctItem {
 }
 
 /// 成本分摊报表列表请求
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct CostAllocationReportListRequest {
     /// 开始日期
     pub start_date: String,
@@ -393,7 +393,7 @@ pub struct AllocationDetail {
 }
 
 /// 成本分摊方案列表请求
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct CostAllocationPlanListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -463,7 +463,7 @@ pub struct RuleCondition {
 }
 
 /// 薪资组列表请求
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct PaygroupListRequest {
     /// 分页大小
     pub page_size: Option<u32>,

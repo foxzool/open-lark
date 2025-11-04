@@ -1,3 +1,4 @@
+#![allow(unused_variables)]
 //! 绩效结果管理服务
 //!
 //! 实现绩效结果的完整功能：
@@ -51,9 +52,9 @@ impl ResultsService {
     /// 获取绩效结果列表
     pub async fn list(
         &self,
-        semester_id: Option<&str>,
-        user_id: Option<&str>,
-        page_size: i32,
+        _semester_id: Option<&str>,
+        _user_id: Option<&str>,
+        _page_size: i32,
         page_token: Option<&str>,
     ) -> SDKResult<crate::service::performance::models::PerformanceResultListResponse> {
         // 模拟实现
