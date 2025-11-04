@@ -100,12 +100,11 @@ mod integration_tests {
     }
 
     #[test]
-    #[ignore] // TODO: 重新启用此测试当构建器功能实现时
     fn test_builder_integration() {
         let registry = ServiceRegistry::new();
 
         // 注册构建器
-        let builder = ServiceBuilderFactory::basic("mock-builder", || Ok(MockService::new("mock-service")));
+        let builder = ServiceBuilderFactory::type_erased("mock-builder", || Ok(MockService::new("mock-service")));
         registry.register_builder(builder).unwrap();
 
         // 通过构建器创建服务

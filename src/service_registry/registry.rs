@@ -5,7 +5,7 @@ use std::collections::HashMap;
 use std::sync::{Arc, RwLock, PoisonError};
 
 use super::{
-    builder::ServiceBuilder, error::ServiceError, metadata::ServiceMetadata,
+    builder::{ServiceBuilder, TypeErasedServiceBuilder}, error::ServiceError, metadata::ServiceMetadata,
     service::{NamedService, Service, ServiceInfo, ServiceStatus}, RegistryConfig,
 };
 
@@ -74,12 +74,8 @@ impl ServiceRegistry {
         Ok(())
     }
 
-    /// 注册服务构建器
-    pub fn register_builder<B>(&self, builder: B) -> Result<(), ServiceError>
-    where
-        B: ServiceBuilder + 'static,
-        B::Output: Service + 'static,
-    {
+    /// 注册服务构建器（接受类型擦除的构建器）
+    pub fn register_builder(&self, builder: TypeErasedServiceBuilder) -> Result<(), ServiceError> {
         let name = builder.name();
 
         // 检查构建器是否已存在
@@ -90,16 +86,59 @@ impl ServiceRegistry {
             }
         }
 
-        // 暂时简化构建器注册逻辑
-        // TODO: 实现类型擦除的构建器包装器
+        // 注册构建器
+        {
+            let mut builders = self.builders.write().map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
+            builders.insert(name, Box::new(builder) as Box<dyn ServiceBuilder<Output = dyn Service> + Send + Sync>);
+        }
 
         Ok(())
     }
 
     /// 通过构建器创建并注册服务
-    pub fn build_and_register_service(&self, _builder_name: &str) -> Result<(), ServiceError> {
-        // TODO: 实现构建器服务创建逻辑
-        Err(ServiceError::internal_error("Builder functionality not yet implemented"))
+    pub fn build_and_register_service(&self, builder_name: &str) -> Result<(), ServiceError> {
+        // 构建服务（需要从锁中取出构建器来构建）
+        let service_box = {
+            let builders = self.builders.read().map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
+            let builder = builders.get(builder_name)
+                .ok_or_else(|| ServiceError::service_not_found(&format!("Builder '{}' not found", builder_name)))?;
+
+            // 验证构建器
+            builder.validate()?;
+
+            // 构建服务
+            builder.build()?
+        };
+
+        // 将Box<dyn Service>转换为Arc<dyn Service>
+        let service: Arc<dyn Service> = Arc::from(service_box);
+        let service_name = service.name();
+
+        // 注册服务
+        self.validate_capacity()?;
+
+        // 检查服务是否已存在
+        {
+            let services = self.services.read().map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
+            if services.contains_key(service_name) {
+                return Err(ServiceError::service_already_exists(service_name));
+            }
+        }
+
+        // 注册服务
+        {
+            let mut services = self.services.write().map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
+            services.insert(service_name, service.clone());
+        }
+
+        // 更新元数据
+        {
+            let info = ServiceInfo::new(service.as_ref());
+            let mut metadata = self.metadata.write().map_err(|_| ServiceError::internal_error("Poisoned lock"))?;
+            metadata.register_service(info);
+        }
+
+        Ok(())
     }
 
     /// 获取服务实例（类型安全）
@@ -374,7 +413,7 @@ mod tests {
 
     impl Service for TestService {
         fn name(&self) -> &'static str {
-            "test-service"
+            self.name
         }
 
         fn version(&self) -> &'static str {
@@ -391,7 +430,7 @@ mod tests {
     }
 
     impl NamedService for TestService {
-        const NAME: &'static str = "test-service";
+        const NAME: &'static str = "test";
 
         fn clone_owned(&self) -> Self {
             Self::new()
@@ -406,25 +445,24 @@ mod tests {
         // 注册服务
         assert!(registry.register(service).is_ok());
         assert_eq!(registry.service_count(), 1);
-        assert!(registry.has_service("test-service"));
+        assert!(registry.has_service("test"));
 
         // 获取服务
         let retrieved: Arc<TestService> = registry.get().unwrap();
-        assert_eq!(retrieved.name(), "test-service");
+        assert_eq!(retrieved.name(), "test");
 
         // 发现服务
         let services = registry.discover_services();
         assert_eq!(services.len(), 1);
-        assert!(services.contains(&"test-service"));
+        assert!(services.contains(&"test"));
     }
 
     #[test]
-    #[ignore] // TODO: 重新启用此测试当构建器功能实现时
     fn test_service_registry_builder() {
         let registry = ServiceRegistry::new();
 
         // 注册构建器
-        let builder = ServiceBuilderFactory::basic("test-builder", || Ok(TestService::new()));
+        let builder = ServiceBuilderFactory::type_erased("test-builder", || Ok(TestService::new()));
         assert!(registry.register_builder(builder).is_ok());
 
         // 通过构建器创建服务
@@ -493,6 +531,6 @@ mod tests {
 
         let results = registry.health_check_all().await;
         assert_eq!(results.len(), 1);
-        assert!(results.get("test-service").unwrap_or(&false));
+        assert!(results.get("test").unwrap_or(&false));
     }
 }

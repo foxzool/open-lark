@@ -277,6 +277,13 @@ impl BenchmarkSuite {
         for i in 0..iterations {
             let registry = Arc::clone(&self.registry);
             let services = registry.discover_services();
+
+            // 防止除零错误：确保服务列表不为空
+            if services.is_empty() {
+                // 如果没有服务，跳过此次迭代
+                continue;
+            }
+
             let service_name = services[i % services.len()].to_string();
 
             set.spawn(async move {

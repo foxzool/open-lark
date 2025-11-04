@@ -178,6 +178,15 @@ impl ServiceBuilderFactory {
         ConfigurableServiceBuilder::new(name, config, factory)
     }
 
+    /// 创建类型擦除的基础构建器（用于ServiceRegistry）
+    pub fn type_erased<T, F>(name: &'static str, factory: F) -> TypeErasedServiceBuilder
+    where
+        T: Service + 'static,
+        F: Fn() -> ServiceResult<T> + Send + Sync + 'static,
+    {
+        TypeErasedServiceBuilder::new(name, factory)
+    }
+
     // TODO: 重新实现单例构建器
     // pub fn singleton<T, F>(name: &'static str, factory: F) -> SingletonServiceBuilder<T>
     // where
@@ -186,6 +195,80 @@ impl ServiceBuilderFactory {
     // {
     //     SingletonServiceBuilder::new(name, factory)
     // }
+}
+
+/// 类型擦除的服务构建器包装器
+pub struct TypeErasedServiceBuilder {
+    name: &'static str,
+    version: &'static str,
+    build_fn: Box<dyn Fn() -> ServiceResult<Box<dyn Service>> + Send + Sync>,
+    validate_fn: Box<dyn Fn() -> ServiceResult<()> + Send + Sync>,
+    supports_async: bool,
+}
+
+impl TypeErasedServiceBuilder {
+    /// 创建新的类型擦除构建器
+    pub fn new<T, F>(name: &'static str, factory: F) -> Self
+    where
+        T: Service + 'static,
+        F: Fn() -> ServiceResult<T> + Send + Sync + 'static,
+    {
+        Self {
+            name,
+            version: "1.0.0",
+            build_fn: Box::new(move || {
+                let service = factory()?;
+                Ok(Box::new(service) as Box<dyn Service>)
+            }),
+            validate_fn: Box::new(|| Ok(())),
+            supports_async: false,
+        }
+    }
+
+    /// 创建带配置的类型擦除构建器
+    pub fn with_config<T, C, F>(name: &'static str, _config: C, factory: F) -> Self
+    where
+        T: Service + 'static,
+        C: Send + Sync + 'static,
+        F: Fn(C) -> ServiceResult<T> + Send + Sync + 'static,
+    {
+        // 注意：这里简化处理，实际应用中可能需要存储配置
+        Self {
+            name,
+            version: "1.0.0",
+            build_fn: Box::new(move || {
+                // 由于类型擦除，我们无法直接使用配置
+                // 这是一个简化实现，实际使用中可能需要更复杂的策略
+                Err(ServiceError::internal_error("Configured builders not fully supported with type erasure"))
+            }),
+            validate_fn: Box::new(|| Ok(())),
+            supports_async: false,
+        }
+    }
+}
+
+impl ServiceBuilder for TypeErasedServiceBuilder {
+    type Output = dyn Service;
+
+    fn build(&self) -> ServiceResult<Box<Self::Output>> {
+        (self.build_fn)()
+    }
+
+    fn name(&self) -> &'static str {
+        self.name
+    }
+
+    fn version(&self) -> &'static str {
+        self.version
+    }
+
+    fn validate(&self) -> ServiceResult<()> {
+        (self.validate_fn)()
+    }
+
+    fn supports_async(&self) -> bool {
+        self.supports_async
+    }
 }
 
 #[cfg(test)]
