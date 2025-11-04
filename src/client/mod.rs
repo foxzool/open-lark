@@ -71,10 +71,11 @@ pub struct LarkClient {
     pub acs: AcsService,
     #[cfg(feature = "admin")]
     pub admin: AdminService,
-    #[cfg(feature = "board")]
-    pub board: BoardService,
-    #[cfg(feature = "event")]
-    pub event: EventService,
+    // TODO: Fix config type mismatch for extension services
+    // #[cfg(feature = "board")]
+    // pub board: BoardService,
+    // #[cfg(feature = "event")]
+    // pub event: EventService,
     #[cfg(feature = "ai")]
     pub ai: AiService,
     #[cfg(feature = "aily")]
@@ -131,10 +132,11 @@ impl LarkClient {
             acs: AcsService::new(config.clone()),
             #[cfg(feature = "admin")]
             admin: AdminService::new(config.clone()),
-            #[cfg(feature = "board")]
-            board: BoardService::new_from_shared(self.shared_config.clone()),
-            #[cfg(feature = "event")]
-            event: EventService::new_from_shared(self.shared_config.clone()),
+            // TODO: Fix config type mismatch for extension services
+        // #[cfg(feature = "board")]
+        // board: BoardService::new(config.clone()),
+        // #[cfg(feature = "event")]
+        // event: EventService::new(config.clone()),
             #[cfg(feature = "ai")]
             ai: AiService::new(config.clone()),
             #[cfg(feature = "aily")]
