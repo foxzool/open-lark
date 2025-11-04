@@ -716,6 +716,10 @@ path = "examples/api/attendance_demo.rs"
 required-features = ["attendance"]
 
 [[example]]
+name = "shared_config_demo"
+path = "examples/shared_config_demo.rs"
+
+[[example]]
 name = "performance_benchmark"
 path = "examples/performance/performance_benchmark.rs"
 
