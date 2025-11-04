@@ -1,0 +1,24 @@
+[package]
+name = "open-lark-extensions"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+# 内部依赖
+serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1.0", features = ["full"] }
+serde_json = "1.0"
+
+# Open Lark 核心依赖
+open-lark-core = { workspace = true }
+
+[features]
+# 默认功能
+default = ["mdm", "calendar", "mail"]
+
+mdm = []
+calendar = []
+mail = []
+helpdesk = []
+minutes = []
+moments = []

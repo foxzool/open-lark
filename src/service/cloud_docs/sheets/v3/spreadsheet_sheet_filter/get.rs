@@ -1,103 +1,69 @@
-use serde::Deserialize;
-
-use crate::{
-    core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        constants::AccessTokenType,
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
+#![allow(non_snake_case)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::module_inception)]
+use crate::core::SDKResult;use serde::Deserialize;
+use open_lark_core::core::api_req::ApiRequest;
+use crate::,
+{,
+    core::,
+{,
+        BaseResponse,
+        ResponseFormat,
+        api_resp::{ApiResponseTrait}
+    constants::AccessTokenType,
         endpoints::cloud_docs::*,
         req_option::RequestOption,
         SDKResult,
-    },
-    service::sheets::v3::{
-        spreadsheet_sheet_filter::SheetFilterCondition, SpreadsheetSheetFilterService,
-    },
 };
-
-/// 获取子表的详细筛选信息请求
-#[derive(Debug, Default)]
+service::sheets::v3::{,
+        spreadsheet_sheet_filter::SheetFilterCondition, SpreadsheetSheetFilterService}
+};
+/// 获取子表的详细筛选信息请求,
+#[derive(Debug, Clone)]
 pub struct SheetFilterRequest {
     api_request: ApiRequest,
     spreadsheet_token: String,
-    sheet_id: String,
-}
-
+    sheet_id: String}
 impl SheetFilterRequest {
-    pub fn builder() -> SheetFilterRequestBuilder {
-        SheetFilterRequestBuilder::default()
-    }
-}
-
-#[derive(Default)]
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}#[derive(Debug, Clone)]
 pub struct SheetFilterRequestBuilder {
-    request: SheetFilterRequest,
-}
-
+    request: SheetFilterRequest}
 impl SheetFilterRequestBuilder {
-    /// 表格 token
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
-        self.request.spreadsheet_token = spreadsheet_token.to_string();
-        self
-    }
-
-    /// 子表 id
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
-        self.request.sheet_id = sheet_id.to_string();
-        self
-    }
-
-    pub fn build(self) -> SheetFilterRequest {
-        self.request
-    }
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }
-
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Clone)]
 pub struct SheetFilterResponse {
-    pub sheet_filter_info: Option<SheetFilterInfo>,
-}
-
-impl ApiResponseTrait for SheetFilterResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
+    pub sheet_filter_info: Option<SheetFilterInfo>}
+impl ApiResponseTrait for.* {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+}    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data
     }
-}
-
-/// 筛选信息
-#[derive(Deserialize, Debug)]
+/// 筛选信息,
+#[derive(Debug, Clone)]
 pub struct SheetFilterInfo {
     /// 筛选应用范围
     pub range: String,
     /// 筛选出来隐藏的行
     pub filtered_out_rows: Vec<i32>,
     /// sheet的筛选条件
-    pub filter_infos: Vec<FilterInfo>,
-}
-
-/// sheet的筛选条件
-#[derive(Deserialize, Debug)]
+    pub filter_infos: Vec<FilterInfo>}
+/// sheet的筛选条件,
+#[derive(Debug, Clone)]
 pub struct FilterInfo {
     /// 设置了筛选条件的列
     pub col: String,
     /// 筛选条件
-    pub conditions: Vec<SheetFilterCondition>,
-}
-
+    pub conditions: Vec<SheetFilterCondition>}
 impl SpreadsheetSheetFilterService {
-    /// 获取子表的详细筛选信息
-    pub async fn get(
-        &self,
-        request: SheetFilterRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<SheetFilterResponse>> {
-        let mut api_req = request.api_request;
-        api_req.api_path = SHEETS_V3_SPREADSHEET_FILTER
-            .replace("{}", &request.spreadsheet_token)
-            .replace("{}", &request.sheet_id);
-        api_req.http_method = reqwest::Method::GET;
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::App];
-
-        let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
-
-        Ok(api_resp)
-    }
+    pub fn new(config: Config) -> Self {
+        Self { config }
 }

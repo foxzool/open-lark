@@ -11,7 +11,7 @@ fmt-check:
 # Lint code
 lint:
   @echo "🔍 Linting code (exclude benches/dev-tests)..."
-  cargo clippy --workspace --all-targets --no-default-features --features "full,websocket" -- -Dwarnings
+  cargo clippy --workspace --all-targets --no-default-features --features "complete,websocket" -- -Dwarnings
 
 # Run tests
 test:

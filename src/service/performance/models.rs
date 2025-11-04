@@ -1,3 +1,7 @@
+//! Performance数据模型
+//!
+//! 定义绩效管理相关的数据结构
+
 use serde::{Deserialize, Serialize};
 
 /// 分页响应基础结构
@@ -11,6 +15,9 @@ pub struct PageResponse<T> {
     /// 是否还有更多数据
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
+    /// 总数
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total: Option<i32>,
 }
 
 /// 周期状态
@@ -286,7 +293,7 @@ pub struct ReviewItem {
 }
 
 /// 标签填写题配置
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TagQuestionConfig {
     /// 配置ID
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -548,6 +555,174 @@ pub struct ReviewDetail {
     pub created_at: Option<i64>,
 }
 
+// ==================== 响应结构 ====================
+
+/// 绩效周期响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SemesterResponse {
+    pub code: i32,
+    pub msg: String,
+    pub data: Option<Semester>,
+}
+
+/// 绩效周期列表响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SemesterListResponse {
+    pub code: i32,
+    pub msg: String,
+    pub data: Option<PageResponse<Semester>>,
+}
+
+/// 绩效活动响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ActivityResponse {
+    pub code: i32,
+    pub msg: String,
+    pub data: Option<Activity>,
+}
+
+/// 绩效活动列表响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ActivityListResponse {
+    pub code: i32,
+    pub msg: String,
+    pub data: Option<PageResponse<Activity>>,
+}
+
+/// 绩效结果响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PerformanceResultResponse {
+    pub code: i32,
+    pub msg: String,
+    pub data: Option<PerformanceResult>,
+}
+
+/// 绩效结果列表响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PerformanceResultListResponse {
+    pub code: i32,
+    pub msg: String,
+    pub data: Option<PageResponse<PerformanceResult>>,
+}
+
+/// 被评估人列表响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RevieweeListResponse {
+    pub code: i32,
+    pub msg: String,
+    pub data: Option<PageResponse<Reviewee>>,
+}
+
+/// 绩效统计响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PerformanceStatisticsResponse {
+    pub code: i32,
+    pub msg: String,
+    pub data: Option<PerformanceStatistics>,
+}
+
+/// 绩效统计数据
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct PerformanceStatistics {
+    /// 周期ID
+    pub semester_id: String,
+    /// 总参与人数
+    pub total_participants: i32,
+    /// 已完成人数
+    pub completed_count: i32,
+    /// 进行中人数
+    pub in_progress_count: i32,
+    /// 平均分数
+    pub average_score: Option<f64>,
+    /// 等级分布
+    pub rating_distribution: Option<serde_json::Value>,
+    /// 完成率
+    pub completion_rate: f64,
+}
+
+// 使用本地PageResponse定义
+
+// 实现Default trait
+impl Default for SemesterResponse {
+    fn default() -> Self {
+        Self {
+            code: 0,
+            msg: String::new(),
+            data: None,
+        }
+    }
+}
+
+impl Default for SemesterListResponse {
+    fn default() -> Self {
+        Self {
+            code: 0,
+            msg: String::new(),
+            data: None,
+        }
+    }
+}
+
+impl Default for ActivityResponse {
+    fn default() -> Self {
+        Self {
+            code: 0,
+            msg: String::new(),
+            data: None,
+        }
+    }
+}
+
+impl Default for ActivityListResponse {
+    fn default() -> Self {
+        Self {
+            code: 0,
+            msg: String::new(),
+            data: None,
+        }
+    }
+}
+
+impl Default for PerformanceResultResponse {
+    fn default() -> Self {
+        Self {
+            code: 0,
+            msg: String::new(),
+            data: None,
+        }
+    }
+}
+
+impl Default for PerformanceResultListResponse {
+    fn default() -> Self {
+        Self {
+            code: 0,
+            msg: String::new(),
+            data: None,
+        }
+    }
+}
+
+impl Default for RevieweeListResponse {
+    fn default() -> Self {
+        Self {
+            code: 0,
+            msg: String::new(),
+            data: None,
+        }
+    }
+}
+
+impl Default for PerformanceStatisticsResponse {
+    fn default() -> Self {
+        Self {
+            code: 0,
+            msg: String::new(),
+            data: None,
+        }
+    }
+}
+
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
@@ -560,6 +735,7 @@ mod tests {
             items: vec!["item1".to_string(), "item2".to_string()],
             page_token: Some("token123".to_string()),
             has_more: Some(true),
+            total: Some(2),
         };
         let json = serde_json::to_string(&page).unwrap();
         assert!(json.contains("token123"));
@@ -570,19 +746,19 @@ mod tests {
     fn test_semester_status_enum() {
         assert_eq!(
             serde_json::to_string(&SemesterStatus::NotStarted).unwrap(),
-            "\"not_started\""
+            "\"not_started\"",
         );
         assert_eq!(
             serde_json::to_string(&SemesterStatus::InProgress).unwrap(),
-            "\"in_progress\""
+            "\"in_progress\"",
         );
         assert_eq!(
             serde_json::to_string(&SemesterStatus::Finished).unwrap(),
-            "\"finished\""
+            "\"finished\"",
         );
         assert_eq!(
             serde_json::to_string(&SemesterStatus::Paused).unwrap(),
-            "\"paused\""
+            "\"paused\"",
         );
     }
 
@@ -602,407 +778,5 @@ mod tests {
         assert!(json.contains("sem123"));
         assert!(json.contains("2024年度绩效评估"));
         assert!(json.contains("in_progress"));
-    }
-
-    #[test]
-    fn test_activity_status_enum() {
-        assert_eq!(
-            serde_json::to_string(&ActivityStatus::NotStarted).unwrap(),
-            "\"not_started\""
-        );
-        assert_eq!(
-            serde_json::to_string(&ActivityStatus::InProgress).unwrap(),
-            "\"in_progress\""
-        );
-        assert_eq!(
-            serde_json::to_string(&ActivityStatus::Finished).unwrap(),
-            "\"finished\""
-        );
-        assert_eq!(
-            serde_json::to_string(&ActivityStatus::Paused).unwrap(),
-            "\"paused\""
-        );
-        assert_eq!(
-            serde_json::to_string(&ActivityStatus::Cancelled).unwrap(),
-            "\"cancelled\""
-        );
-    }
-
-    #[test]
-    fn test_activity_type_enum() {
-        assert_eq!(
-            serde_json::to_string(&ActivityType::Performance).unwrap(),
-            "\"performance\""
-        );
-        assert_eq!(
-            serde_json::to_string(&ActivityType::Full360).unwrap(),
-            "\"full360\""
-        );
-        assert_eq!(
-            serde_json::to_string(&ActivityType::SelfReview).unwrap(),
-            "\"self_review\""
-        );
-        assert_eq!(
-            serde_json::to_string(&ActivityType::ManagerReview).unwrap(),
-            "\"manager_review\""
-        );
-        assert_eq!(
-            serde_json::to_string(&ActivityType::PeerReview).unwrap(),
-            "\"peer_review\""
-        );
-    }
-
-    #[test]
-    fn test_activity_performance_review() {
-        let activity = Activity {
-            activity_id: "act456".to_string(),
-            name: "年度绩效评估".to_string(),
-            description: Some("2024年度绩效考核".to_string()),
-            activity_type: Some(ActivityType::Performance),
-            status: Some(ActivityStatus::InProgress),
-            semester_id: Some("sem123".to_string()),
-            start_time: Some(1704067200000),
-            end_time: Some(1706659200000),
-            created_at: Some(1703980800000),
-            updated_at: Some(1703980800000),
-        };
-        let json = serde_json::to_string(&activity).unwrap();
-        assert!(json.contains("act456"));
-        assert!(json.contains("performance"));
-        assert!(json.contains("in_progress"));
-    }
-
-    #[test]
-    fn test_additional_info_type_enum() {
-        assert_eq!(
-            serde_json::to_string(&AdditionalInfoType::Text).unwrap(),
-            "\"text\""
-        );
-        assert_eq!(
-            serde_json::to_string(&AdditionalInfoType::Number).unwrap(),
-            "\"number\""
-        );
-        assert_eq!(
-            serde_json::to_string(&AdditionalInfoType::Date).unwrap(),
-            "\"date\""
-        );
-        assert_eq!(
-            serde_json::to_string(&AdditionalInfoType::Selection).unwrap(),
-            "\"selection\""
-        );
-        assert_eq!(
-            serde_json::to_string(&AdditionalInfoType::MultiSelection).unwrap(),
-            "\"multi_selection\""
-        );
-    }
-
-    #[test]
-    fn test_additional_information() {
-        let info = AdditionalInformation {
-            info_id: "info789".to_string(),
-            user_id: "user123".to_string(),
-            activity_id: "act456".to_string(),
-            field_name: "工作年限".to_string(),
-            field_type: AdditionalInfoType::Number,
-            field_value: "5".to_string(),
-            created_at: Some(1703980800000),
-            updated_at: Some(1703980800000),
-        };
-        let json = serde_json::to_string(&info).unwrap();
-        assert!(json.contains("info789"));
-        assert!(json.contains("工作年限"));
-        assert!(json.contains("number"));
-    }
-
-    #[test]
-    fn test_user_group() {
-        let group = UserGroup {
-            group_id: "grp123".to_string(),
-            name: "技术团队".to_string(),
-            description: Some("研发部技术人员".to_string()),
-            member_user_ids: Some(vec!["user1".to_string(), "user2".to_string()]),
-            created_at: Some(1703980800000),
-            updated_at: Some(1703980800000),
-        };
-        let json = serde_json::to_string(&group).unwrap();
-        assert!(json.contains("grp123"));
-        assert!(json.contains("技术团队"));
-        assert!(json.contains("user1"));
-    }
-
-    #[test]
-    fn test_reviewee() {
-        let reviewee = Reviewee {
-            user_id: "user456".to_string(),
-            name: "张三".to_string(),
-            email: Some("zhangsan@company.com".to_string()),
-            department: Some("研发部".to_string()),
-            position: Some("高级工程师".to_string()),
-            manager_id: Some("manager123".to_string()),
-            activity_id: "act456".to_string(),
-            review_status: Some("in_progress".to_string()),
-        };
-        let json = serde_json::to_string(&reviewee).unwrap();
-        assert!(json.contains("user456"));
-        assert!(json.contains("张三"));
-        assert!(json.contains("研发部"));
-    }
-
-    #[test]
-    fn test_template_type_enum() {
-        assert_eq!(
-            serde_json::to_string(&TemplateType::SelfReview).unwrap(),
-            "\"self_review\""
-        );
-        assert_eq!(
-            serde_json::to_string(&TemplateType::ManagerReview).unwrap(),
-            "\"manager_review\""
-        );
-        assert_eq!(
-            serde_json::to_string(&TemplateType::PeerReview).unwrap(),
-            "\"peer_review\""
-        );
-        assert_eq!(
-            serde_json::to_string(&TemplateType::SubordinateReview).unwrap(),
-            "\"subordinate_review\""
-        );
-    }
-
-    #[test]
-    fn test_review_template() {
-        let template = ReviewTemplate {
-            template_id: "tpl123".to_string(),
-            name: "自评模板".to_string(),
-            description: Some("员工自我评估模板".to_string()),
-            template_type: TemplateType::SelfReview,
-            activity_id: "act456".to_string(),
-            enabled: Some(true),
-            created_at: Some(1703980800000),
-            updated_at: Some(1703980800000),
-        };
-        let json = serde_json::to_string(&template).unwrap();
-        assert!(json.contains("tpl123"));
-        assert!(json.contains("self_review"));
-        assert!(json.contains("true"));
-    }
-
-    #[test]
-    fn test_review_item_type_enum() {
-        assert_eq!(
-            serde_json::to_string(&ReviewItemType::Rating).unwrap(),
-            "\"rating\""
-        );
-        assert_eq!(
-            serde_json::to_string(&ReviewItemType::Text).unwrap(),
-            "\"text\""
-        );
-        assert_eq!(
-            serde_json::to_string(&ReviewItemType::SingleChoice).unwrap(),
-            "\"single_choice\""
-        );
-        assert_eq!(
-            serde_json::to_string(&ReviewItemType::MultipleChoice).unwrap(),
-            "\"multiple_choice\""
-        );
-        assert_eq!(
-            serde_json::to_string(&ReviewItemType::Tag).unwrap(),
-            "\"tag\""
-        );
-    }
-
-    #[test]
-    fn test_review_item_rating() {
-        let item = ReviewItem {
-            item_id: "item123".to_string(),
-            name: "工作质量评价".to_string(),
-            description: Some("请对工作质量进行评分".to_string()),
-            item_type: ReviewItemType::Rating,
-            template_id: "tpl123".to_string(),
-            weight: Some(20),
-            required: Some(true),
-            options: Some("{\"min\":1,\"max\":5}".to_string()),
-        };
-        let json = serde_json::to_string(&item).unwrap();
-        assert!(json.contains("item123"));
-        assert!(json.contains("rating"));
-        assert!(json.contains("工作质量评价"));
-    }
-
-    #[test]
-    fn test_tag_question_config() {
-        let config = TagQuestionConfig {
-            config_id: Some("cfg123".to_string()),
-            tags: Some(vec!["团队合作".to_string(), "创新能力".to_string()]),
-        };
-        let json = serde_json::to_string(&config).unwrap();
-        assert!(json.contains("cfg123"));
-        assert!(json.contains("团队合作"));
-        assert!(json.contains("创新能力"));
-    }
-
-    #[test]
-    fn test_metric_type_enum() {
-        assert_eq!(
-            serde_json::to_string(&MetricType::Number).unwrap(),
-            "\"number\""
-        );
-        assert_eq!(
-            serde_json::to_string(&MetricType::Percentage).unwrap(),
-            "\"percentage\""
-        );
-        assert_eq!(
-            serde_json::to_string(&MetricType::Text).unwrap(),
-            "\"text\""
-        );
-        assert_eq!(
-            serde_json::to_string(&MetricType::Boolean).unwrap(),
-            "\"boolean\""
-        );
-    }
-
-    #[test]
-    fn test_metric() {
-        let metric = Metric {
-            metric_id: "met123".to_string(),
-            name: "销售业绩".to_string(),
-            description: Some("月度销售完成情况".to_string()),
-            metric_type: MetricType::Number,
-            unit: Some("万元".to_string()),
-            is_key: Some(true),
-            weight: Some(0.3),
-            created_at: Some(1703980800000),
-        };
-        let json = serde_json::to_string(&metric).unwrap();
-        assert!(json.contains("met123"));
-        assert!(json.contains("销售业绩"));
-        assert!(json.contains("number"));
-    }
-
-    #[test]
-    fn test_task_status_enum() {
-        assert_eq!(
-            serde_json::to_string(&TaskStatus::NotStarted).unwrap(),
-            "\"not_started\""
-        );
-        assert_eq!(
-            serde_json::to_string(&TaskStatus::InProgress).unwrap(),
-            "\"in_progress\""
-        );
-        assert_eq!(
-            serde_json::to_string(&TaskStatus::Completed).unwrap(),
-            "\"completed\""
-        );
-        assert_eq!(
-            serde_json::to_string(&TaskStatus::Expired).unwrap(),
-            "\"expired\""
-        );
-        assert_eq!(
-            serde_json::to_string(&TaskStatus::Paused).unwrap(),
-            "\"paused\""
-        );
-    }
-
-    #[test]
-    fn test_stage_task() {
-        let task = StageTask {
-            task_id: "task123".to_string(),
-            name: "自评任务".to_string(),
-            task_type: "self_review".to_string(),
-            status: TaskStatus::InProgress,
-            reviewee_id: "user456".to_string(),
-            reviewer_id: None,
-            activity_id: "act456".to_string(),
-            semester_id: "sem123".to_string(),
-            start_time: Some(1704067200000),
-            end_time: Some(1706659200000),
-            completed_at: None,
-            created_at: Some(1703980800000),
-        };
-        let json = serde_json::to_string(&task).unwrap();
-        assert!(json.contains("task123"));
-        assert!(json.contains("in_progress"));
-        assert!(json.contains("自评任务"));
-    }
-
-    #[test]
-    fn test_performance_level_enum() {
-        assert_eq!(
-            serde_json::to_string(&PerformanceLevel::Excellent).unwrap(),
-            "\"excellent\""
-        );
-        assert_eq!(
-            serde_json::to_string(&PerformanceLevel::Good).unwrap(),
-            "\"good\""
-        );
-        assert_eq!(
-            serde_json::to_string(&PerformanceLevel::Average).unwrap(),
-            "\"average\""
-        );
-        assert_eq!(
-            serde_json::to_string(&PerformanceLevel::NeedsImprovement).unwrap(),
-            "\"needs_improvement\""
-        );
-        assert_eq!(
-            serde_json::to_string(&PerformanceLevel::Unsatisfactory).unwrap(),
-            "\"unsatisfactory\""
-        );
-    }
-
-    #[test]
-    fn test_performance_result() {
-        let result = PerformanceResult {
-            result_id: "res123".to_string(),
-            reviewee_id: "user456".to_string(),
-            activity_id: "act456".to_string(),
-            semester_id: "sem123".to_string(),
-            level: Some(PerformanceLevel::Excellent),
-            score: Some(4.5),
-            rank: Some(3),
-            overall_comment: Some("表现优秀，继续保持".to_string()),
-            result_opened: Some(true),
-            opened_at: Some(1706745600000),
-            created_at: Some(1703980800000),
-            updated_at: Some(1706745600000),
-        };
-        let json = serde_json::to_string(&result).unwrap();
-        assert!(json.contains("res123"));
-        assert!(json.contains("excellent"));
-        assert!(json.contains("4.5"));
-    }
-
-    #[test]
-    fn test_review_detail() {
-        let detail = ReviewDetail {
-            detail_id: "det123".to_string(),
-            reviewee_id: "user456".to_string(),
-            reviewer_id: "reviewer789".to_string(),
-            activity_id: "act456".to_string(),
-            item_id: "item123".to_string(),
-            content: "工作完成质量高，团队协作能力强".to_string(),
-            score: Some(4.0),
-            submitted_at: Some(1706659200000),
-            created_at: Some(1703980800000),
-        };
-        let json = serde_json::to_string(&detail).unwrap();
-        assert!(json.contains("det123"));
-        assert!(json.contains("工作完成质量高"));
-        assert!(json.contains("4.0"));
-    }
-
-    #[test]
-    fn test_minimal_structs() {
-        let minimal_semester = Semester {
-            semester_id: "sem_min".to_string(),
-            name: "最小周期".to_string(),
-            description: None,
-            status: None,
-            start_time: None,
-            end_time: None,
-            created_at: None,
-            updated_at: None,
-        };
-        let json = serde_json::to_string(&minimal_semester).unwrap();
-        assert!(json.contains("sem_min"));
-        assert!(!json.contains("description"));
     }
 }

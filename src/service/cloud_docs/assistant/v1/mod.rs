@@ -1,4 +1,4 @@
-use crate::core::config::Config;
+use open_lark_core::core::config::Config;
 
 pub use subscription::SubscriptionService;
 
@@ -13,6 +13,7 @@ pub struct V1 {
 }
 
 impl V1 {
+    /// 创建新的云文档助手V1服务实例
     pub fn new(config: Config) -> Self {
         Self {
             subscription: SubscriptionService::new(config.clone()),
