@@ -3,27 +3,35 @@
 //! 提供类型安全的服务注册、发现和管理功能，支持动态服务加载和生命周期管理。
 
 pub mod adapters;
+pub mod benchmark;
 pub mod builder;
 pub mod error;
 pub mod metadata;
 pub mod registry;
 pub mod service;
+pub mod shared_config;
 pub mod tests;
 pub mod migration_tests;
+pub mod shared_config_tests;
 
 // 重新导出核心公共接口
 #[cfg(feature = "authentication")]
 pub use adapters::AuthenticationServiceAdapter;
 #[cfg(feature = "contact")]
 pub use adapters::ContactServiceAdapter;
+#[cfg(feature = "group")]
+pub use adapters::GroupServiceAdapter;
 #[cfg(feature = "im")]
 pub use adapters::ImServiceAdapter;
+#[cfg(feature = "search")]
+pub use adapters::SearchServiceAdapter;
 pub use adapters::MigrationHelper;
 pub use builder::ServiceBuilder;
 pub use error::{ServiceError, ServiceResult};
 pub use metadata::ServiceMetadata;
 pub use registry::ServiceRegistry;
 pub use service::{Service, NamedService, ServiceStatus};
+pub use shared_config::{SharedConfig, SharedConfigFactory, ConfigUsageStats};
 
 /// ServiceRegistry预配置，提供常用的默认配置
 pub struct ServiceRegistryBuilder {
