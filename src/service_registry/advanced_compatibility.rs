@@ -7,8 +7,8 @@ use std::sync::Arc;
 
 use super::{
     compatibility::{
-        CompatibilityChecker, CompatibilityConfig, CompatibilityHandler, CompatibilityLevel,
-        CompatibilityIssue, CompatibilityIssueType, IssueSeverity, ServiceVersion,
+        CompatibilityChecker, CompatibilityConfig, CompatibilityHandler, CompatibilityIssue,
+        CompatibilityIssueType, CompatibilityLevel, IssueSeverity, ServiceVersion,
     },
     error::ServiceError,
     migration::{MigrationRisk, MigrationRiskType, MigrationStrategy},
@@ -70,24 +70,24 @@ impl AdvancedCompatibilityAnalyzer {
         // 获取服务信息
         if let Some(service_info) = self.registry.get_service_info(service_name) {
             // 检查服务版本兼容性
-            let current_version = ServiceVersion::from_string(&service_info.version).unwrap_or_else(|_| {
-                ServiceVersion::new(1, 0, 0) // 默认版本
-            });
+            let current_version = ServiceVersion::from_string(&service_info.version)
+                .unwrap_or_else(|_| {
+                    ServiceVersion::new(1, 0, 0) // 默认版本
+                });
 
             // 模拟兼容性检查（实际应该与目标版本比较）
-            let compatibility_result = self.checker.check_service_compatibility(
-                service_name,
-                &current_version,
-                &self.registry,
-            ).unwrap_or_else(|_| {
-                // 如果检查失败，创建一个默认结果
-                crate::service_registry::compatibility::CompatibilityResult {
-                    is_compatible: true,
-                    compatibility_level: CompatibilityLevel::Full,
-                    issues: vec![],
-                    recommendations: vec![],
-                }
-            });
+            let compatibility_result = self
+                .checker
+                .check_service_compatibility(service_name, &current_version, &self.registry)
+                .unwrap_or_else(|_| {
+                    // 如果检查失败，创建一个默认结果
+                    crate::service_registry::compatibility::CompatibilityResult {
+                        is_compatible: true,
+                        compatibility_level: CompatibilityLevel::Full,
+                        issues: vec![],
+                        recommendations: vec![],
+                    }
+                });
 
             // 分析问题类型
             for issue in &compatibility_result.issues {
@@ -158,7 +158,10 @@ impl AdvancedCompatibilityAnalyzer {
     }
 
     /// 分析跨服务依赖
-    fn analyze_cross_service_dependencies(&self, services: &[String]) -> Vec<CrossServiceDependency> {
+    fn analyze_cross_service_dependencies(
+        &self,
+        services: &[String],
+    ) -> Vec<CrossServiceDependency> {
         let mut dependencies = Vec::new();
         let service_set: HashSet<_> = services.iter().collect();
 
@@ -239,7 +242,11 @@ impl AdvancedCompatibilityAnalyzer {
                     category: RecommendationCategory::ServiceSpecific,
                     priority: RecommendationPriority::High,
                     title: format!("解决 {} 的兼容性问题", analysis.service_name),
-                    description: format!("服务 {} 存在 {} 个兼容性问题", analysis.service_name, analysis.issues.len()),
+                    description: format!(
+                        "服务 {} 存在 {} 个兼容性问题",
+                        analysis.service_name,
+                        analysis.issues.len()
+                    ),
                     actions: vec![
                         "检查服务版本".to_string(),
                         "验证依赖关系".to_string(),
@@ -308,7 +315,10 @@ impl AdvancedCompatibilityAnalyzer {
         match service_name {
             "im-service" => vec!["authentication-service".to_string()],
             "contact-service" => vec!["authentication-service".to_string()],
-            "group-service" => vec!["authentication-service".to_string(), "im-service".to_string()],
+            "group-service" => vec![
+                "authentication-service".to_string(),
+                "im-service".to_string(),
+            ],
             _ => Vec::new(),
         }
     }
@@ -323,34 +333,45 @@ impl AdvancedCompatibilityAnalyzer {
 
         // 分析服务数量和复杂度
         let service_count = services.len();
-        let has_critical_issues = analysis.global_issues.iter()
-            .any(|issue| matches!(issue.severity, IssueSeverity::Critical | IssueSeverity::Error));
+        let has_critical_issues = analysis.global_issues.iter().any(|issue| {
+            matches!(
+                issue.severity,
+                IssueSeverity::Critical | IssueSeverity::Error
+            )
+        });
         let has_many_dependencies = analysis.cross_service_dependencies.len() > service_count / 2;
 
         let strategy = match (service_count, has_critical_issues, has_many_dependencies) {
-            (0..=5, false, false) => {
-                (MigrationStrategy::Immediate, "服务数量少，无关键问题，建议立即迁移".to_string())
-            }
-            (6..=20, false, false) => {
-                (MigrationStrategy::Gradual {
+            (0..=5, false, false) => (
+                MigrationStrategy::Immediate,
+                "服务数量少，无关键问题，建议立即迁移".to_string(),
+            ),
+            (6..=20, false, false) => (
+                MigrationStrategy::Gradual {
                     batch_size: 5,
-                    delay_between_batches: std::time::Duration::from_secs(30)
-                }, "服务数量适中，建议分批渐进迁移".to_string())
-            }
-            (_, true, _) => {
-                (MigrationStrategy::Canary {
-                    canary_services: vec!["authentication-service".to_string()]
-                }, "存在关键问题，建议金丝雀发布".to_string())
-            }
-            (_, _, true) => {
-                (MigrationStrategy::BlueGreen { validate_before_switch: true }, "依赖关系复杂，建议蓝绿部署".to_string())
-            }
-            _ => {
-                (MigrationStrategy::Gradual {
+                    delay_between_batches: std::time::Duration::from_secs(30),
+                },
+                "服务数量适中，建议分批渐进迁移".to_string(),
+            ),
+            (_, true, _) => (
+                MigrationStrategy::Canary {
+                    canary_services: vec!["authentication-service".to_string()],
+                },
+                "存在关键问题，建议金丝雀发布".to_string(),
+            ),
+            (_, _, true) => (
+                MigrationStrategy::BlueGreen {
+                    validate_before_switch: true,
+                },
+                "依赖关系复杂，建议蓝绿部署".to_string(),
+            ),
+            _ => (
+                MigrationStrategy::Gradual {
                     batch_size: 3,
-                    delay_between_batches: std::time::Duration::from_secs(60)
-                }, "复杂场景，建议保守的渐进迁移".to_string())
-            }
+                    delay_between_batches: std::time::Duration::from_secs(60),
+                },
+                "复杂场景，建议保守的渐进迁移".to_string(),
+            ),
         };
 
         let (strategy, reason) = strategy;
@@ -368,29 +389,38 @@ impl AdvancedCompatibilityAnalyzer {
         let mut confidence = 0.8; // 基础置信度
 
         // 根据问题数量调整
-        let total_issues = analysis.service_analysis.values()
+        let total_issues = analysis
+            .service_analysis
+            .values()
             .map(|s| s.issues.len())
             .sum::<usize>();
         confidence -= (total_issues as f64 * 0.05).min(0.3);
 
         // 根据依赖复杂度调整
-        let dependency_ratio = analysis.cross_service_dependencies.len() as f64 / analysis.total_services as f64;
+        let dependency_ratio =
+            analysis.cross_service_dependencies.len() as f64 / analysis.total_services as f64;
         confidence -= (dependency_ratio * 0.1).min(0.2);
 
         confidence.max(0.1).min(0.95)
     }
 
     /// 估算迁移时间
-    fn estimate_migration_duration(&self, services: &[String], strategy: &MigrationStrategy) -> std::time::Duration {
+    fn estimate_migration_duration(
+        &self,
+        services: &[String],
+        strategy: &MigrationStrategy,
+    ) -> std::time::Duration {
         let base_time_per_service = std::time::Duration::from_secs(5); // 基础时间估算
 
         match strategy {
-            MigrationStrategy::Immediate => {
-                base_time_per_service * services.len() as u32
-            }
-            MigrationStrategy::Gradual { batch_size, delay_between_batches } => {
+            MigrationStrategy::Immediate => base_time_per_service * services.len() as u32,
+            MigrationStrategy::Gradual {
+                batch_size,
+                delay_between_batches,
+            } => {
                 let batch_count = (services.len() + batch_size - 1) / batch_size;
-                let total_delay = delay_between_batches.saturating_mul(batch_count.saturating_sub(1) as u32);
+                let total_delay =
+                    delay_between_batches.saturating_mul(batch_count.saturating_sub(1) as u32);
                 total_delay + base_time_per_service * services.len() as u32
             }
             MigrationStrategy::Canary { .. } => {
@@ -617,13 +647,19 @@ impl CompatibilityAnalysisReport {
         println!();
 
         // 服务分析摘要
-        let compatible_count = self.service_analysis.values()
+        let compatible_count = self
+            .service_analysis
+            .values()
             .filter(|s| matches!(s.compatibility_level, CompatibilityLevel::Full))
             .count();
-        let partial_count = self.service_analysis.values()
+        let partial_count = self
+            .service_analysis
+            .values()
             .filter(|s| matches!(s.compatibility_level, CompatibilityLevel::Partial))
             .count();
-        let incompatible_count = self.service_analysis.values()
+        let incompatible_count = self
+            .service_analysis
+            .values()
             .filter(|s| matches!(s.compatibility_level, CompatibilityLevel::Incompatible))
             .count();
 
@@ -635,15 +671,20 @@ impl CompatibilityAnalysisReport {
 
         // 跨服务依赖
         if !self.cross_service_dependencies.is_empty() {
-            println!("🔗 跨服务依赖 ({} 个):", self.cross_service_dependencies.len());
+            println!(
+                "🔗 跨服务依赖 ({} 个):",
+                self.cross_service_dependencies.len()
+            );
             for dep in &self.cross_service_dependencies {
                 let criticality_icon = match dep.criticality {
                     DependencyCriticality::High => "🔴",
                     DependencyCriticality::Medium => "🟡",
                     DependencyCriticality::Low => "🟢",
                 };
-                println!("  {} {} -> {} ({:?})",
-                    criticality_icon, dep.from_service, dep.to_service, dep.dependency_type);
+                println!(
+                    "  {} {} -> {} ({:?})",
+                    criticality_icon, dep.from_service, dep.to_service, dep.dependency_type
+                );
             }
             println!();
         }
@@ -667,12 +708,22 @@ impl CompatibilityAnalysisReport {
         }
 
         // 高优先级建议
-        let high_priority_recommendations: Vec<_> = self.recommendations.iter()
-            .filter(|r| matches!(r.priority, RecommendationPriority::Critical | RecommendationPriority::High))
+        let high_priority_recommendations: Vec<_> = self
+            .recommendations
+            .iter()
+            .filter(|r| {
+                matches!(
+                    r.priority,
+                    RecommendationPriority::Critical | RecommendationPriority::High
+                )
+            })
             .collect();
 
         if !high_priority_recommendations.is_empty() {
-            println!("🚨 高优先级建议 ({} 个):", high_priority_recommendations.len());
+            println!(
+                "🚨 高优先级建议 ({} 个):",
+                high_priority_recommendations.len()
+            );
             for rec in high_priority_recommendations {
                 let priority_icon = match rec.priority {
                     RecommendationPriority::Critical => "🔴",
@@ -696,7 +747,9 @@ impl CompatibilityAnalysisReport {
         println!("💡 建议摘要 (共 {} 个):", self.recommendations.len());
         let mut category_counts = HashMap::new();
         for rec in &self.recommendations {
-            *category_counts.entry(format!("{:?}", rec.category)).or_insert(0) += 1;
+            *category_counts
+                .entry(format!("{:?}", rec.category))
+                .or_insert(0) += 1;
         }
         for (category, count) in category_counts {
             println!("  {}: {} 个建议", category, count);

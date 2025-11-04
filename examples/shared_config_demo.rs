@@ -3,7 +3,9 @@
 //! 展示如何使用SharedConfig来优化配置管理和内存使用
 
 use open_lark::core::config::{Config, ConfigBuilder};
-use open_lark::service_registry::{SharedConfig, SharedConfigFactory, ConfigUsageStats, ServiceRegistry, MigrationHelper};
+use open_lark::service_registry::{
+    ConfigUsageStats, MigrationHelper, ServiceRegistry, SharedConfig, SharedConfigFactory,
+};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("🚀 ServiceRegistry 共享配置演示");
@@ -32,7 +34,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 共享方式：所有服务共享同一个配置
     let shared_config = SharedConfig::new(config.clone());
     let shared_configs: Vec<SharedConfig> = (0..5).map(|_| shared_config.clone_shared()).collect();
-    let shared_memory = std::mem::size_of::<Config>() + (shared_configs.len() * std::mem::size_of::<SharedConfig>());
+    let shared_memory = std::mem::size_of::<Config>()
+        + (shared_configs.len() * std::mem::size_of::<SharedConfig>());
 
     let memory_saved = traditional_memory.saturating_sub(shared_memory);
     let savings_percentage = if traditional_memory > 0 {
@@ -43,7 +46,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("   传统方式: {} bytes", traditional_memory);
     println!("   共享方式: {} bytes", shared_memory);
-    println!("   内存节省: {} bytes ({:.1}%)", memory_saved, savings_percentage);
+    println!(
+        "   内存节省: {} bytes ({:.1}%)",
+        memory_saved, savings_percentage
+    );
     println!("   引用计数: {}", shared_config.ref_count());
     println!();
 
@@ -56,7 +62,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 批量创建服务配置
     let service_names = vec!["auth-service", "im-service", "contact-service"];
-    let (main_config, service_configs) = SharedConfigFactory::create_batch(config.clone(), &service_names);
+    let (main_config, service_configs) =
+        SharedConfigFactory::create_batch(config.clone(), &service_names);
 
     println!("   批量创建: {} 个服务配置", service_configs.len());
     println!("   主配置引用: {}", main_config.ref_count());
@@ -79,7 +86,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 使用共享配置方式注册服务
     println!("   共享配置方式注册服务...");
-    let result_shared = MigrationHelper::register_services_with_shared_config(&registry, &shared_config);
+    let result_shared =
+        MigrationHelper::register_services_with_shared_config(&registry, &shared_config);
     if result_shared.is_ok() {
         println!("   ✅ 共享配置方式注册成功");
         println!("   共享配置引用计数: {}", shared_config.ref_count());
@@ -95,10 +103,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 6. 演示大规模场景
     println!("🚀 6. 大规模场景演示");
 
-    let large_shared_config = SharedConfig::new(ConfigBuilder::default()
-        .app_id("large_scale_app")
-        .app_secret("large_scale_secret")
-        .build());
+    let large_shared_config = SharedConfig::new(
+        ConfigBuilder::default()
+            .app_id("large_scale_app")
+            .app_secret("large_scale_secret")
+            .build(),
+    );
 
     // 模拟100个服务
     let large_service_count = 100;
@@ -113,10 +123,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 7. 并发访问演示
     println!("⚡ 7. 并发访问演示");
 
-    let concurrent_config = std::sync::Arc::new(SharedConfig::new(ConfigBuilder::default()
-        .app_id("concurrent_app")
-        .app_secret("concurrent_secret")
-        .build()));
+    let concurrent_config = std::sync::Arc::new(SharedConfig::new(
+        ConfigBuilder::default()
+            .app_id("concurrent_app")
+            .app_secret("concurrent_secret")
+            .build(),
+    ));
 
     // 使用标准库的并发测试
     use std::thread;
@@ -133,7 +145,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             // 模拟一些处理时间
             thread::sleep(std::time::Duration::from_millis(1));
 
-            println!("   并发任务 {}: AppID={}, 引用计数={}", i, app_id, ref_count);
+            println!(
+                "   并发任务 {}: AppID={}, 引用计数={}",
+                i, app_id, ref_count
+            );
         });
         handles.push(handle);
     }

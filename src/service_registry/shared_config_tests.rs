@@ -6,8 +6,7 @@
 mod tests {
     use crate::core::config::{Config, ConfigBuilder};
     use crate::service_registry::{
-        ServiceRegistry, SharedConfig, SharedConfigFactory, ConfigUsageStats,
-        MigrationHelper
+        ConfigUsageStats, MigrationHelper, ServiceRegistry, SharedConfig, SharedConfigFactory,
     };
 
     fn create_test_config() -> Config {
@@ -53,8 +52,14 @@ mod tests {
         assert!(cloned_config2.is_shared());
 
         // 验证内容一致
-        assert_eq!(shared_config.config().app_id, cloned_config1.config().app_id);
-        assert_eq!(shared_config.config().app_id, cloned_config2.config().app_id);
+        assert_eq!(
+            shared_config.config().app_id,
+            cloned_config1.config().app_id
+        );
+        assert_eq!(
+            shared_config.config().app_id,
+            cloned_config2.config().app_id
+        );
     }
 
     #[test]
@@ -66,12 +71,14 @@ mod tests {
         assert_eq!(shared_config.config().app_id, "test_app_id");
 
         // 测试create_for_service
-        let service_config = SharedConfigFactory::create_for_service(config.clone(), "test-service");
+        let service_config =
+            SharedConfigFactory::create_for_service(config.clone(), "test-service");
         assert_eq!(service_config.config().app_id, "test_app_id");
 
         // 测试create_batch
         let service_names = vec!["service1", "service2", "service3"];
-        let (main_config, service_configs) = SharedConfigFactory::create_batch(config, &service_names);
+        let (main_config, service_configs) =
+            SharedConfigFactory::create_batch(config, &service_names);
 
         assert_eq!(service_configs.len(), 3);
         assert_eq!(main_config.ref_count(), 4); // 1 + 3 services
@@ -89,7 +96,8 @@ mod tests {
         let shared_config = SharedConfig::new(config);
 
         // 模拟多个服务共享配置
-        let service_configs: Vec<SharedConfig> = (0..5).map(|_| shared_config.clone_shared()).collect();
+        let service_configs: Vec<SharedConfig> =
+            (0..5).map(|_| shared_config.clone_shared()).collect();
 
         // 创建使用统计
         let stats = ConfigUsageStats::new(&shared_config, 5);
@@ -97,9 +105,12 @@ mod tests {
         // 验证统计数据
         assert_eq!(stats.total_configs, 5);
         assert_eq!(stats.shared_configs, 6); // 1 original + 5 services
-        // 对于小配置结构体，内存节省可能不明显
+                                             // 对于小配置结构体，内存节省可能不明显
         if stats.saved_memory_bytes > 0 {
-            println!("✅ Memory savings achieved: {} bytes", stats.saved_memory_bytes);
+            println!(
+                "✅ Memory savings achieved: {} bytes",
+                stats.saved_memory_bytes
+            );
         } else {
             println!("ℹ️  No memory savings detected (expected for small Config structures)");
         }
@@ -110,7 +121,8 @@ mod tests {
 
         // 验证内存节省效果（对于小配置可能不明显）
         if stats.saved_memory_bytes > 0 {
-            let savings_percentage = (stats.saved_memory_bytes as f64 / stats.estimated_memory_bytes as f64) * 100.0;
+            let savings_percentage =
+                (stats.saved_memory_bytes as f64 / stats.estimated_memory_bytes as f64) * 100.0;
             println!("Memory savings: {:.1}%", savings_percentage);
         } else {
             println!("No memory savings detected (expected for small Config structures)");
@@ -129,7 +141,8 @@ mod tests {
         let shared_config = SharedConfig::new(config);
 
         // 使用共享配置注册服务
-        let result = MigrationHelper::register_services_with_shared_config(&registry, &shared_config);
+        let result =
+            MigrationHelper::register_services_with_shared_config(&registry, &shared_config);
         assert!(result.is_ok());
 
         // 验证服务注册成功
@@ -146,8 +159,13 @@ mod tests {
 
         // 注意：由于当前服务构造函数需要Config的拥有权，共享配置效果不明显
         // 这是未来服务优化的机会
-        println!("Shared config ref count after migration: {}", shared_config.ref_count());
-        println!("Note: Current services need Config ownership, this is an optimization opportunity");
+        println!(
+            "Shared config ref count after migration: {}",
+            shared_config.ref_count()
+        );
+        println!(
+            "Note: Current services need Config ownership, this is an optimization opportunity"
+        );
     }
 
     #[test]
@@ -160,8 +178,10 @@ mod tests {
 
         // 共享方式：所有服务共享配置
         let shared_config = SharedConfig::new(config);
-        let shared_configs: Vec<SharedConfig> = (0..5).map(|_| shared_config.clone_shared()).collect();
-        let shared_memory = std::mem::size_of::<Config>() + (shared_configs.len() * std::mem::size_of::<SharedConfig>());
+        let shared_configs: Vec<SharedConfig> =
+            (0..5).map(|_| shared_config.clone_shared()).collect();
+        let shared_memory = std::mem::size_of::<Config>()
+            + (shared_configs.len() * std::mem::size_of::<SharedConfig>());
 
         // 计算内存节省
         let memory_saved = traditional_memory.saturating_sub(shared_memory);
@@ -170,7 +190,10 @@ mod tests {
         println!("Memory efficiency comparison:");
         println!("  Traditional: {} bytes", traditional_memory);
         println!("  Shared: {} bytes", shared_memory);
-        println!("  Saved: {} bytes ({:.1}%)", memory_saved, savings_percentage);
+        println!(
+            "  Saved: {} bytes ({:.1}%)",
+            memory_saved, savings_percentage
+        );
 
         // 验证基本功能正确性
         assert!(traditional_memory > 0);
@@ -178,7 +201,10 @@ mod tests {
 
         // 对于小Config结构体，内存节省可能不明显
         if memory_saved > 0 {
-            println!("✅ Memory savings achieved: {} bytes ({:.1}%)", memory_saved, savings_percentage);
+            println!(
+                "✅ Memory savings achieved: {} bytes ({:.1}%)",
+                memory_saved, savings_percentage
+            );
             assert!(savings_percentage > 20.0); // 至少节省20%内存
         } else {
             println!("ℹ️  No memory savings detected (expected for small Config structures)");
@@ -260,7 +286,9 @@ mod tests {
 
         // 创建大量共享实例（模拟真实场景）
         let service_count = 1000;
-        let configs: Vec<SharedConfig> = (0..service_count).map(|_| shared_config.clone_shared()).collect();
+        let configs: Vec<SharedConfig> = (0..service_count)
+            .map(|_| shared_config.clone_shared())
+            .collect();
 
         // 验证引用计数
         assert_eq!(shared_config.ref_count(), service_count + 1); // +1 for original

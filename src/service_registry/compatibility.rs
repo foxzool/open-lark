@@ -249,9 +249,10 @@ impl CompatibilityChecker {
                 is_compatible: false,
                 compatibility_level: CompatibilityLevel::Incompatible,
                 issues,
-                recommendations: vec![
-                    format!("Register service '{}' before checking compatibility", service_name)
-                ],
+                recommendations: vec![format!(
+                    "Register service '{}' before checking compatibility",
+                    service_name
+                )],
             });
         }
 
@@ -341,7 +342,8 @@ impl CompatibilityChecker {
                 affected_services: vec!["all".to_string()],
             });
 
-            recommendations.push("Update base URL to include protocol (http:// or https://)".to_string());
+            recommendations
+                .push("Update base URL to include protocol (http:// or https://)".to_string());
         }
 
         // 确定兼容性级别
@@ -378,9 +380,15 @@ impl CompatibilityChecker {
             return CompatibilityLevel::Full;
         }
 
-        let has_critical = issues.iter().any(|i| matches!(i.severity, IssueSeverity::Critical));
-        let has_error = issues.iter().any(|i| matches!(i.severity, IssueSeverity::Error));
-        let has_warning = issues.iter().any(|i| matches!(i.severity, IssueSeverity::Warning));
+        let has_critical = issues
+            .iter()
+            .any(|i| matches!(i.severity, IssueSeverity::Critical));
+        let has_error = issues
+            .iter()
+            .any(|i| matches!(i.severity, IssueSeverity::Error));
+        let has_warning = issues
+            .iter()
+            .any(|i| matches!(i.severity, IssueSeverity::Warning));
 
         if has_critical || has_error {
             CompatibilityLevel::Incompatible
@@ -415,14 +423,22 @@ impl CompatibilityHandler {
         version: &str,
     ) -> Result<(), ServiceError> {
         let service_version = ServiceVersion::from_string(version)?;
-        let result = self.checker.check_service_compatibility(service_name, &service_version, &self.registry)?;
+        let result = self.checker.check_service_compatibility(
+            service_name,
+            &service_version,
+            &self.registry,
+        )?;
 
         if !result.is_compatible {
             let error_msg = format!(
                 "Service '{}' version {} is not compatible: {}",
                 service_name,
                 version,
-                result.issues.first().map(|i| &i.description).unwrap_or(&"Unknown issue".to_string())
+                result
+                    .issues
+                    .first()
+                    .map(|i| &i.description)
+                    .unwrap_or(&"Unknown issue".to_string())
             );
             return Err(ServiceError::validation_error(&error_msg));
         }
@@ -432,10 +448,18 @@ impl CompatibilityHandler {
             for issue in &result.issues {
                 match issue.severity {
                     IssueSeverity::Warning => {
-                        log::warn!("Compatibility warning for service '{}': {}", service_name, issue.description);
+                        log::warn!(
+                            "Compatibility warning for service '{}': {}",
+                            service_name,
+                            issue.description
+                        );
                     }
                     IssueSeverity::Info => {
-                        log::info!("Compatibility info for service '{}': {}", service_name, issue.description);
+                        log::info!(
+                            "Compatibility info for service '{}': {}",
+                            service_name,
+                            issue.description
+                        );
                     }
                     _ => {}
                 }
@@ -453,7 +477,11 @@ impl CompatibilityHandler {
         for service_name in registered_services {
             if let Some(service_info) = self.registry.get_service_info(service_name) {
                 if let Ok(version) = ServiceVersion::from_string(&service_info.version) {
-                    if let Ok(result) = self.checker.check_service_compatibility(service_name, &version, &self.registry) {
+                    if let Ok(result) = self.checker.check_service_compatibility(
+                        service_name,
+                        &version,
+                        &self.registry,
+                    ) {
                         service_results.insert(service_name.to_string(), result);
                     }
                 }
@@ -517,7 +545,12 @@ impl CompatibilityReport {
                         IssueSeverity::Warning => "⚠️",
                         IssueSeverity::Info => "ℹ️",
                     };
-                    println!("    {} {}: {}", severity_icon, format!("{:?}", issue.issue_type), issue.description);
+                    println!(
+                        "    {} {}: {}",
+                        severity_icon,
+                        format!("{:?}", issue.issue_type),
+                        issue.description
+                    );
                 }
 
                 if !result.recommendations.is_empty() {
