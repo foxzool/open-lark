@@ -75,64 +75,83 @@ impl DependencyAnalyzer {
 
     /// 获取服务依赖（基于服务类型和常见模式）
     fn get_service_dependencies(&self, service_name: &str) -> Vec<String> {
-        // 基于服务名称推断依赖关系
-        match service_name {
-            // 核心服务依赖
-            "authentication-service" => vec![], // 无依赖，基础服务
+        // 基于实际注册的服务进行依赖分析
+        let registered_services = self.registry.discover_services();
 
-            // 业务服务依赖
-            "im-service" => vec!["authentication-service".to_string()],
-            "contact-service" => vec!["authentication-service".to_string()],
-            "group-service" => vec![
-                "authentication-service".to_string(),
-                "im-service".to_string(),
-                "contact-service".to_string(),
-            ],
-            "search-service" => vec![
-                "authentication-service".to_string(),
-                "im-service".to_string(),
-                "contact-service".to_string(),
-            ],
-
-            // 高级服务依赖
-            "calendar-service" => vec![
-                "authentication-service".to_string(),
-                "contact-service".to_string(),
-            ],
-            "approval-service" => vec![
-                "authentication-service".to_string(),
-                "im-service".to_string(),
-                "contact-service".to_string(),
-            ],
-            "drive-service" => vec![
-                "authentication-service".to_string(),
-                "contact-service".to_string(),
-            ],
-            "wiki-service" => vec![
-                "authentication-service".to_string(),
-                "contact-service".to_string(),
-            ],
-
-            // AI 服务依赖
-            "ai-service" => vec![
-                "authentication-service".to_string(),
-                "drive-service".to_string(),
-            ],
-
-            // 企业服务依赖
-            "hr-service" => vec![
-                "authentication-service".to_string(),
-                "contact-service".to_string(),
-                "approval-service".to_string(),
-            ],
-            "finance-service" => vec![
-                "authentication-service".to_string(),
-                "approval-service".to_string(),
-            ],
-
-            // 默认：只依赖认证服务
-            _ => vec!["authentication-service".to_string()],
+        // 如果没有注册任何服务，返回空依赖
+        if registered_services.is_empty() {
+            return vec![];
         }
+
+        // 基于服务元数据和实际注册情况推断依赖关系
+        if let Some(service_info) = self.registry.get_service_info(service_name) {
+            // 基于服务的实际元数据推断依赖
+            self.infer_dependencies_from_metadata(service_name, &service_info, &registered_services)
+        } else {
+            // 如果没有服务元数据，基于服务名称模式和实际注册的服务推断
+            self.infer_dependencies_from_naming(service_name, &registered_services)
+        }
+    }
+
+    /// 基于服务元数据推断依赖关系
+    fn infer_dependencies_from_metadata(&self, service_name: &str, _service_info: &ServiceInfo, registered_services: &[&str]) -> Vec<String> {
+        let mut dependencies = Vec::new();
+
+        // 基于实际注册的服务和服务类型推断依赖
+        for &registered_service in registered_services {
+            if registered_service == service_name {
+                continue; // 不依赖自己
+            }
+
+            // 基于服务名称模式推断依赖关系
+            if self.should_depend_on(service_name, registered_service) {
+                dependencies.push(registered_service.to_string());
+            }
+        }
+
+        dependencies
+    }
+
+    /// 基于服务命名模式推断依赖关系
+    fn infer_dependencies_from_naming(&self, service_name: &str, registered_services: &[&str]) -> Vec<String> {
+        let mut dependencies = Vec::new();
+
+        // 基于实际注册的服务推断依赖
+        for &registered_service in registered_services {
+            if registered_service == service_name {
+                continue; // 不依赖自己
+            }
+
+            // 基于服务名称模式推断依赖关系
+            if self.should_depend_on(service_name, registered_service) {
+                dependencies.push(registered_service.to_string());
+            }
+        }
+
+        dependencies
+    }
+
+    /// 判断服务是否应该依赖另一个服务
+    fn should_depend_on(&self, service_name: &str, potential_dependency: &str) -> bool {
+        // 认证服务是基础服务，其他服务通常依赖它
+        if potential_dependency.contains("auth") && !service_name.contains("auth") {
+            return true;
+        }
+
+        // 基于服务类型的依赖关系
+        if service_name.contains("group") && (potential_dependency.contains("contact") || potential_dependency.contains("im")) {
+            return true;
+        }
+
+        if service_name.contains("search") && (potential_dependency.contains("im") || potential_dependency.contains("contact")) {
+            return true;
+        }
+
+        if service_name.contains("approval") && (potential_dependency.contains("im") || potential_dependency.contains("contact")) {
+            return true;
+        }
+
+        false
     }
 
     /// 计算依赖层级
@@ -838,5 +857,130 @@ impl DependencyAnalysisReport {
         println!("  循环依赖数: {}", self.circular_dependencies.len());
         println!("  关键路径数: {}", self.critical_paths.len());
         println!("  孤立服务数: {}", self.isolated_services.len());
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::service_registry::{ServiceRegistry, Service, ServiceStatus};
+    use std::any::Any;
+
+    #[derive(Debug)]
+    struct MockService {
+        name: &'static str,
+    }
+
+    impl MockService {
+        fn new(name: &'static str) -> Self {
+            Self { name }
+        }
+    }
+
+    impl Service for MockService {
+        fn name(&self) -> &'static str {
+            self.name
+        }
+
+        fn version(&self) -> &'static str {
+            "1.0.0"
+        }
+
+        fn status(&self) -> ServiceStatus {
+            ServiceStatus::Healthy
+        }
+
+        fn description(&self) -> &'static str {
+            "Mock service for testing"
+        }
+
+        fn as_any(&self) -> &dyn Any {
+            self
+        }
+
+        fn as_any_mut(&mut self) -> &mut dyn Any {
+            self
+        }
+    }
+
+    #[test]
+    fn test_dependency_analyzer_with_real_services() {
+        let registry = ServiceRegistry::new();
+
+        // 注册一些模拟服务
+        let auth_service = MockService::new("auth-service");
+        let im_service = MockService::new("im-service");
+        let contact_service = MockService::new("contact-service");
+
+        registry.register(auth_service).unwrap();
+        registry.register(im_service).unwrap();
+        registry.register(contact_service).unwrap();
+
+        // 创建依赖分析器
+        let analyzer = DependencyAnalyzer::new(Arc::new(registry));
+
+        // 执行分析
+        let report = analyzer.analyze_dependencies();
+
+        // 验证结果基于实际注册的服务
+        assert_eq!(report.total_services, 3);
+        assert!(report.dependency_graph.contains_key("auth-service"));
+        assert!(report.dependency_graph.contains_key("im-service"));
+        assert!(report.dependency_graph.contains_key("contact-service"));
+
+        // 验证依赖关系是基于实际注册的服务推断的
+        let im_deps = report.dependency_graph.get("im-service").unwrap();
+        assert!(im_deps.contains(&"auth-service".to_string()));
+
+        let contact_deps = report.dependency_graph.get("contact-service").unwrap();
+        assert!(contact_deps.contains(&"auth-service".to_string()));
+
+        // 认证服务应该没有依赖（基于我们的推断逻辑）
+        let auth_deps = report.dependency_graph.get("auth-service").unwrap();
+        assert!(auth_deps.is_empty());
+    }
+
+    #[test]
+    fn test_dependency_analyzer_empty_registry() {
+        let registry = ServiceRegistry::new();
+        let analyzer = DependencyAnalyzer::new(Arc::new(registry));
+
+        // 执行分析
+        let report = analyzer.analyze_dependencies();
+
+        // 验证空注册表的结果
+        assert_eq!(report.total_services, 0);
+        assert!(report.dependency_graph.is_empty());
+        assert!(report.isolated_services.is_empty());
+    }
+
+    #[test]
+    fn test_dependency_inference_logic() {
+        let registry = ServiceRegistry::new();
+
+        // 注册不同类型的服务
+        let auth_service = MockService::new("authentication-service");
+        let group_service = MockService::new("group-service");
+        let search_service = MockService::new("search-service");
+
+        registry.register(auth_service).unwrap();
+        registry.register(group_service).unwrap();
+        registry.register(search_service).unwrap();
+
+        let analyzer = DependencyAnalyzer::new(Arc::new(registry));
+        let report = analyzer.analyze_dependencies();
+
+        // 验证依赖推断逻辑
+        let group_deps = report.dependency_graph.get("group-service").unwrap();
+        // group-service 应该依赖 authentication-service（基于命名模式）
+        assert!(group_deps.iter().any(|dep| dep.contains("auth")));
+
+        let search_deps = report.dependency_graph.get("search-service").unwrap();
+        // search-service 应该依赖 authentication-service
+        assert!(search_deps.iter().any(|dep| dep.contains("auth")));
+
+        let auth_deps = report.dependency_graph.get("authentication-service").unwrap();
+        // 认证服务应该没有依赖
+        assert!(auth_deps.is_empty());
     }
 }

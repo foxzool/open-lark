@@ -34,7 +34,7 @@ pub use advanced_compatibility::{
     AdvancedCompatibilityAnalyzer, CompatibilityAnalysisReport, RecommendedStrategy,
     ServiceCompatibilityAnalysis, ServiceRisk, ServiceRiskType,
 };
-pub use builder::ServiceBuilder;
+pub use builder::{ServiceBuilder, TypeErasedServiceBuilder};
 pub use compatibility::{
     CompatibilityChecker, CompatibilityConfig, CompatibilityHandler, CompatibilityReport,
     CompatibilityResult, ServiceVersion,
