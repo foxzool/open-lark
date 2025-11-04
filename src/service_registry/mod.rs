@@ -11,12 +11,12 @@ pub mod dependency_analyzer;
 pub mod error;
 pub mod metadata;
 pub mod migration;
+pub mod migration_tests;
 pub mod registry;
 pub mod service;
 pub mod shared_config;
-pub mod tests;
-pub mod migration_tests;
 pub mod shared_config_tests;
+pub mod tests;
 
 // 重新导出核心公共接口
 #[cfg(feature = "authentication")]
@@ -27,14 +27,14 @@ pub use adapters::ContactServiceAdapter;
 pub use adapters::GroupServiceAdapter;
 #[cfg(feature = "im")]
 pub use adapters::ImServiceAdapter;
+pub use adapters::MigrationHelper;
 #[cfg(feature = "search")]
 pub use adapters::SearchServiceAdapter;
-pub use adapters::MigrationHelper;
-pub use builder::ServiceBuilder;
 pub use advanced_compatibility::{
     AdvancedCompatibilityAnalyzer, CompatibilityAnalysisReport, RecommendedStrategy,
     ServiceCompatibilityAnalysis, ServiceRisk, ServiceRiskType,
 };
+pub use builder::ServiceBuilder;
 pub use compatibility::{
     CompatibilityChecker, CompatibilityConfig, CompatibilityHandler, CompatibilityReport,
     CompatibilityResult, ServiceVersion,
@@ -51,8 +51,8 @@ pub use migration::{
     MigrationTask, ServiceMigrationReport,
 };
 pub use registry::ServiceRegistry;
-pub use service::{Service, NamedService, ServiceStatus};
-pub use shared_config::{SharedConfig, SharedConfigFactory, ConfigUsageStats};
+pub use service::{NamedService, Service, ServiceStatus};
+pub use shared_config::{ConfigUsageStats, SharedConfig, SharedConfigFactory};
 
 /// ServiceRegistry预配置，提供常用的默认配置
 pub struct ServiceRegistryBuilder {
