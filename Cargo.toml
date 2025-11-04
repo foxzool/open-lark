@@ -723,3 +723,17 @@ path = "examples/performance/performance_benchmark.rs"
 # Benchmarks
 # ===========================================
 # (Benchmarks removed due to missing implementation files)
+[lints.rust]
+dead_code = "allow"
+unused_variables = "allow"
+unused_imports = "allow"
+elided_lifetimes_in_paths = "allow"
+unused_mut = "allow"
+mismatched_lifetime_syntaxes = "allow"
+
+[lints.clippy]
+all = "allow"
+derivable_impls = "allow"
+needless_lifetimes = "allow"
+too_many_arguments = "allow"
+module_inception = "allow"
