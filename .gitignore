@@ -23,3 +23,12 @@ lcov.info
 coverage-html
 
 *.changeset
+
+# POC and experimental files (next phase development)
+*_poc.toml
+poc_*.toml
+*_poc.rs
+poc_service_registry
+
+# Zen precommit temporary files
+zen_precommit.changeset
