@@ -595,8 +595,11 @@ impl MigrationHelper {
         ]);
 
         // Authentication 服务
-        if requested_services.contains(&"authentication-service") && cfg!(feature = "authentication") {
-            let service = crate::service::authentication::AuthenticationService::new(shared_config.config().clone());
+        #[cfg(feature = "authentication")]
+        if requested_services.contains(&"authentication-service") {
+            use crate::service::authentication::AuthenticationService;
+
+            let service = AuthenticationService::new(shared_config.config().clone());
             let adapter = AuthenticationServiceAdapter::new(service);
             match registry.register(adapter) {
                 Ok(_) => {
@@ -610,8 +613,11 @@ impl MigrationHelper {
         }
 
         // IM 服务
-        if requested_services.contains(&"im-service") && cfg!(feature = "im") {
-            let service = crate::service::im::ImService::new(shared_config.config().clone());
+        #[cfg(feature = "im")]
+        if requested_services.contains(&"im-service") {
+            use crate::service::im::ImService;
+
+            let service = ImService::new(shared_config.config().clone());
             let adapter = ImServiceAdapter::new(service);
             match registry.register(adapter) {
                 Ok(_) => {
@@ -625,8 +631,11 @@ impl MigrationHelper {
         }
 
         // Contact 服务
-        if requested_services.contains(&"contact-service") && cfg!(feature = "contact") {
-            let service = crate::service::contact::ContactService::new(shared_config.config().clone());
+        #[cfg(feature = "contact")]
+        if requested_services.contains(&"contact-service") {
+            use crate::service::contact::ContactService;
+
+            let service = ContactService::new(shared_config.config().clone());
             let adapter = ContactServiceAdapter::new(service);
             match registry.register(adapter) {
                 Ok(_) => {
@@ -640,8 +649,11 @@ impl MigrationHelper {
         }
 
         // Group 服务
-        if requested_services.contains(&"group-service") && cfg!(feature = "group") {
-            let service = crate::service::group::GroupService::new(shared_config.config().clone());
+        #[cfg(feature = "group")]
+        if requested_services.contains(&"group-service") {
+            use crate::service::group::GroupService;
+
+            let service = GroupService::new(shared_config.config().clone());
             let adapter = GroupServiceAdapter::new(service);
             match registry.register(adapter) {
                 Ok(_) => {
@@ -655,8 +667,11 @@ impl MigrationHelper {
         }
 
         // Search 服务
-        if requested_services.contains(&"search-service") && cfg!(feature = "search") {
-            let service = crate::service::search::SearchService::new(shared_config.config().clone());
+        #[cfg(feature = "search")]
+        if requested_services.contains(&"search-service") {
+            use crate::service::search::SearchService;
+
+            let service = SearchService::new(shared_config.config().clone());
             let adapter = SearchServiceAdapter::new(service);
             match registry.register(adapter) {
                 Ok(_) => {
@@ -921,10 +936,8 @@ mod tests {
         let report = MigrationHelper::get_migration_report(&registry);
 
         // 验证报告内容
-        assert!(report.total_services >= 0);
-        assert!(report.healthy_services >= 0);
-        assert!(report.unhealthy_services >= 0);
-        assert!(report.services.len() == report.total_services);
+        assert_eq!(report.services.len(), report.total_services);
+        assert!(report.total_services >= report.healthy_services + report.unhealthy_services);
 
         // 打印报告（用于演示）
         report.print_summary();

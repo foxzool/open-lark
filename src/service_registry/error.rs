@@ -103,6 +103,21 @@ impl ServiceError {
         }
     }
 
+    /// 创建验证错误
+    pub fn validation_error(message: impl Into<String>) -> Self {
+        Self::InvalidConfiguration {
+            field: "validation".to_string(),
+            value: message.into(),
+        }
+    }
+
+    /// 创建未找到错误（通用）
+    pub fn not_found(item: impl Into<String>) -> Self {
+        Self::InternalError {
+            message: format!("{} not found", item.into()),
+        }
+    }
+
     /// 检查是否为可重试错误
     pub fn is_retryable(&self) -> bool {
         matches!(

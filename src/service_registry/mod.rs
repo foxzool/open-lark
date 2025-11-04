@@ -3,10 +3,14 @@
 //! 提供类型安全的服务注册、发现和管理功能，支持动态服务加载和生命周期管理。
 
 pub mod adapters;
+pub mod advanced_compatibility;
 pub mod benchmark;
 pub mod builder;
+pub mod compatibility;
+pub mod dependency_analyzer;
 pub mod error;
 pub mod metadata;
+pub mod migration;
 pub mod registry;
 pub mod service;
 pub mod shared_config;
@@ -27,8 +31,25 @@ pub use adapters::ImServiceAdapter;
 pub use adapters::SearchServiceAdapter;
 pub use adapters::MigrationHelper;
 pub use builder::ServiceBuilder;
+pub use advanced_compatibility::{
+    AdvancedCompatibilityAnalyzer, CompatibilityAnalysisReport, RecommendedStrategy,
+    ServiceCompatibilityAnalysis, ServiceRisk, ServiceRiskType,
+};
+pub use compatibility::{
+    CompatibilityChecker, CompatibilityConfig, CompatibilityHandler, CompatibilityReport,
+    CompatibilityResult, ServiceVersion,
+};
+pub use dependency_analyzer::{
+    CircularDependencySeverity, CriticalPathType, DependencyAnalysisReport, DependencyAnalyzer,
+    DependencyGraphData, MigrationImpactAnalysis, RecommendationCategory, RecommendationPriority,
+    RiskLevel,
+};
 pub use error::{ServiceError, ServiceResult};
 pub use metadata::ServiceMetadata;
+pub use migration::{
+    AdvancedMigrationHelper, MigrationPlan, MigrationResult, MigrationStatus, MigrationStrategy,
+    MigrationTask, ServiceMigrationReport,
+};
 pub use registry::ServiceRegistry;
 pub use service::{Service, NamedService, ServiceStatus};
 pub use shared_config::{SharedConfig, SharedConfigFactory, ConfigUsageStats};
