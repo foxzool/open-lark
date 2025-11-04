@@ -6,9 +6,19 @@
 mod tests {
     use crate::core::config::{Config, ConfigBuilder};
     use crate::service_registry::{
-        ServiceRegistry, AuthenticationServiceAdapter, ContactServiceAdapter,
-        ImServiceAdapter, MigrationHelper, Service, ServiceStatus, ServiceError,
+        ServiceRegistry, MigrationHelper, Service, ServiceStatus, ServiceError,
     };
+
+    #[cfg(feature = "authentication")]
+    use crate::service_registry::AuthenticationServiceAdapter;
+    #[cfg(feature = "contact")]
+    use crate::service_registry::ContactServiceAdapter;
+    #[cfg(feature = "im")]
+    use crate::service_registry::ImServiceAdapter;
+    #[cfg(feature = "search")]
+    use crate::service_registry::SearchServiceAdapter;
+    #[cfg(feature = "group")]
+    use crate::service_registry::GroupServiceAdapter;
 
     fn create_test_config() -> Config {
         ConfigBuilder::default()
@@ -78,6 +88,46 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "search")]
+    fn test_search_service_migration() {
+        let registry = ServiceRegistry::new();
+        let config = create_test_config();
+
+        // 注册搜索服务
+        let search_service = crate::service::search::SearchService::new(config);
+        let search_adapter = SearchServiceAdapter::new(search_service);
+
+        assert!(registry.register(search_adapter).is_ok());
+        assert!(registry.has_service("search-service"));
+
+        // 通过 ServiceRegistry 获取服务
+        let retrieved: std::sync::Arc<SearchServiceAdapter> = registry.get().unwrap();
+        assert_eq!(retrieved.name(), "search-service");
+        assert_eq!(retrieved.version(), "1.0.0");
+        assert!(retrieved.is_available());
+    }
+
+    #[test]
+    #[cfg(feature = "group")]
+    fn test_group_service_migration() {
+        let registry = ServiceRegistry::new();
+        let config = create_test_config();
+
+        // 注册group服务
+        let group_service = crate::service::group::GroupService::new(config);
+        let group_adapter = GroupServiceAdapter::new(group_service);
+
+        assert!(registry.register(group_adapter).is_ok());
+        assert!(registry.has_service("group-service"));
+
+        // 通过 ServiceRegistry 获取服务
+        let retrieved: std::sync::Arc<GroupServiceAdapter> = registry.get().unwrap();
+        assert_eq!(retrieved.name(), "group-service");
+        assert_eq!(retrieved.version(), "1.0.0");
+        assert!(retrieved.is_available());
+    }
+
+    #[test]
     #[cfg(all(feature = "authentication", feature = "im", feature = "contact"))]
     fn test_multiple_services_migration() {
         let registry = ServiceRegistry::new();
@@ -92,11 +142,22 @@ mod tests {
         assert!(registry.has_service("im-service"));
         assert!(registry.has_service("contact-service"));
 
+        // 动态计算期望的服务数量
+        let mut expected_count = 3; // authentication, im, contact
+        if cfg!(feature = "group") {
+            expected_count += 1;
+            assert!(registry.has_service("group-service"));
+        }
+        if cfg!(feature = "search") {
+            expected_count += 1;
+            assert!(registry.has_service("search-service"));
+        }
+
         // 验证服务数量
-        assert_eq!(registry.service_count(), 3);
+        assert_eq!(registry.service_count(), expected_count);
 
         // 验证健康服务数量
-        assert_eq!(registry.healthy_service_count(), 3);
+        assert_eq!(registry.healthy_service_count(), expected_count);
 
         // 获取服务信息
         let auth_info = registry.get_service_info("authentication-service").unwrap();
@@ -113,6 +174,84 @@ mod tests {
         assert_eq!(contact_info.name, "contact-service");
         assert_eq!(contact_info.version, "1.0.0");
         assert_eq!(contact_info.status, ServiceStatus::Healthy);
+
+        // 如果启用了group功能，验证group服务信息
+        #[cfg(feature = "group")]
+        {
+            let group_info = registry.get_service_info("group-service").unwrap();
+            assert_eq!(group_info.name, "group-service");
+            assert_eq!(group_info.version, "1.0.0");
+            assert_eq!(group_info.status, ServiceStatus::Healthy);
+        }
+
+        // 如果启用了search功能，验证search服务信息
+        #[cfg(feature = "search")]
+        {
+            let search_info = registry.get_service_info("search-service").unwrap();
+            assert_eq!(search_info.name, "search-service");
+            assert_eq!(search_info.version, "1.0.0");
+            assert_eq!(search_info.status, ServiceStatus::Healthy);
+        }
+    }
+
+    #[test]
+    #[cfg(all(feature = "authentication", feature = "im", feature = "contact", feature = "search"))]
+    fn test_four_services_migration() {
+        let registry = ServiceRegistry::new();
+        let config = create_test_config();
+
+        // 批量注册所有核心服务
+        let result = MigrationHelper::register_services(&registry, &config);
+        assert!(result.is_ok());
+
+        // 验证所有服务都已注册
+        assert!(registry.has_service("authentication-service"));
+        assert!(registry.has_service("im-service"));
+        assert!(registry.has_service("contact-service"));
+        assert!(registry.has_service("search-service"));
+
+        // 动态计算期望的服务数量
+        let mut expected_count = 4; // authentication, im, contact, search
+        if cfg!(feature = "group") {
+            expected_count += 1;
+            assert!(registry.has_service("group-service"));
+        }
+
+        // 验证服务数量
+        assert_eq!(registry.service_count(), expected_count);
+
+        // 验证健康服务数量
+        assert_eq!(registry.healthy_service_count(), expected_count);
+
+        // 获取服务信息
+        let auth_info = registry.get_service_info("authentication-service").unwrap();
+        assert_eq!(auth_info.name, "authentication-service");
+        assert_eq!(auth_info.version, "1.0.0");
+        assert_eq!(auth_info.status, ServiceStatus::Healthy);
+
+        let im_info = registry.get_service_info("im-service").unwrap();
+        assert_eq!(im_info.name, "im-service");
+        assert_eq!(im_info.version, "1.0.0");
+        assert_eq!(im_info.status, ServiceStatus::Healthy);
+
+        let contact_info = registry.get_service_info("contact-service").unwrap();
+        assert_eq!(contact_info.name, "contact-service");
+        assert_eq!(contact_info.version, "1.0.0");
+        assert_eq!(contact_info.status, ServiceStatus::Healthy);
+
+        let search_info = registry.get_service_info("search-service").unwrap();
+        assert_eq!(search_info.name, "search-service");
+        assert_eq!(search_info.version, "1.0.0");
+        assert_eq!(search_info.status, ServiceStatus::Healthy);
+
+        // 如果启用了group功能，验证group服务信息
+        #[cfg(feature = "group")]
+        {
+            let group_info = registry.get_service_info("group-service").unwrap();
+            assert_eq!(group_info.name, "group-service");
+            assert_eq!(group_info.version, "1.0.0");
+            assert_eq!(group_info.status, ServiceStatus::Healthy);
+        }
     }
 
     #[test]
@@ -126,19 +265,33 @@ mod tests {
 
         // 发现所有服务
         let services = registry.discover_services();
-        assert_eq!(services.len(), 3);
+        let mut expected_count = 3; // authentication, im, contact
+        if cfg!(feature = "group") {
+            expected_count += 1;
+        }
+        if cfg!(feature = "search") {
+            expected_count += 1;
+        }
+
+        assert_eq!(services.len(), expected_count);
         assert!(services.contains(&"authentication-service"));
         assert!(services.contains(&"im-service"));
         assert!(services.contains(&"contact-service"));
+        if cfg!(feature = "group") {
+            assert!(services.contains(&"group-service"));
+        }
+        if cfg!(feature = "search") {
+            assert!(services.contains(&"search-service"));
+        }
 
         // 获取所有服务信息
         let all_services_info = registry.get_all_services_info();
-        assert_eq!(all_services_info.len(), 3);
+        assert_eq!(all_services_info.len(), expected_count);
 
         // 验证服务统计
         let stats = registry.get_stats();
-        assert_eq!(stats.total_services, 3);
-        assert_eq!(stats.healthy_services, 3);
+        assert_eq!(stats.total_services, expected_count);
+        assert_eq!(stats.healthy_services, expected_count);
         assert_eq!(stats.unhealthy_services, 0);
     }
 
