@@ -10,6 +10,7 @@ members = [
     "crates/open-lark-integrations",
     "crates/open-lark-extensions",
     "crates/protobuf",
+    "tools",
 ]
 
 [workspace.package]
@@ -124,6 +125,8 @@ complete = ["communication", "collaboration", "hr-suite", "ai-platform", "enterp
 # Legacy feature mapping for backward compatibility
 im = ["communication"]
 cloud-docs = ["collaboration"]
+docx = ["cloud-docs"]  # 向后兼容：docx映射到cloud-docs
+drive = ["cloud-docs"]  # 向后兼容：drive映射到cloud-docs
 contact = ["communication"]
 group = ["communication"]
 authentication = ["communication"]
@@ -132,6 +135,7 @@ acs = ["open-lark-extensions"]
 admin = ["enterprise"]
 analytics = ["enterprise"]
 auth = ["enterprise"]
+authen = ["auth"]  # 向后兼容：authen映射到auth
 ai = ["ai-platform"]
 aily = ["ai-platform"]
 app_engine = ["enterprise"]
@@ -328,6 +332,16 @@ required-features = ["cloud-docs"]
 name = "drive_builder_execute_demo"
 path = "examples/api/drive_builder_execute_demo.rs"
 required-features = ["cloud-docs"]
+
+[[example]]
+name = "cloud_docs_unified_example"
+path = "examples/api/cloud_docs_unified_example.rs"
+required-features = ["cloud-docs"]
+
+[[example]]
+name = "feature_flag_examples"
+path = "examples/api/feature_flag_examples.rs"
+required-features = ["auth", "im", "contact", "cloud-docs"]
 
 [[example]]
 name = "enterprise_scenario_with_enhanced_builder"

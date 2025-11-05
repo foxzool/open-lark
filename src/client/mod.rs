@@ -34,6 +34,8 @@ use crate::service::ccm::CcmService;
 use crate::service::cloud_docs::ClouddocsService;
 #[cfg(feature = "contact")]
 use crate::service::contact::ContactService;
+#[cfg(feature = "event")]
+use crate::service::event::EventService;
 #[cfg(feature = "feishu_people")]
 use crate::service::feishu_people::FeishuPeopleService;
 #[cfg(feature = "group")]
@@ -52,8 +54,6 @@ use crate::service::security_and_compliance::SecurityAndComplianceService;
 use crate::service::task::TaskService;
 #[cfg(feature = "board")]
 use open_lark_extensions::board::BoardService;
-#[cfg(feature = "event")]
-use crate::service::event::EventService;
 
 /// 飞书开放平台SDK主客户端
 ///

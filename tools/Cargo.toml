@@ -1,0 +1,22 @@
+[package]
+name = "open-lark-tools"
+version = "0.1.0"
+edition = "2021"
+authors = ["open-lark team"]
+description = "Tools for open-lark SDK development and maintenance"
+
+[[bin]]
+name = "feature_flag_validator"
+path = "src/bin/feature_flag_validator.rs"
+
+[[bin]]
+name = "generate_feature_report"
+path = "src/bin/generate_feature_report.rs"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+clap = { version = "4.0", features = ["derive"] }
+anyhow = "1.0"
+csv = "1.2"
+chrono = { version = "0.4", features = ["serde"] }
