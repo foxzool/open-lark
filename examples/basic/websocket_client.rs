@@ -1,9 +1,40 @@
 #![cfg(all(feature = "websocket", feature = "im"))]
 
 use log::{debug, error, info, warn};
+use open_lark::core::config::{Config, ConfigBuilder};
 use open_lark::prelude::*;
 use open_lark::service::im::v1::message::{CreateMessageRequest, CreateMessageRequestBody};
+use open_lark::service_registry::{SharedConfig, SharedConfigFactory};
+use std::sync::Arc;
 use std::time::Instant;
+
+/// 使用共享配置创建WebSocket客户端
+///
+/// # Arguments
+/// * `app_id` - 应用ID
+/// * `app_secret` - 应用密钥
+///
+/// # Returns
+/// 返回 (LarkClient, Arc<Config>, SharedConfig) 元组
+fn create_websocket_client(
+    app_id: &str,
+    app_secret: &str,
+) -> (LarkClient, Arc<Config>, SharedConfig) {
+    // 使用共享配置方式创建客户端
+    let shared_config = SharedConfigFactory::create_shared(
+        ConfigBuilder::default()
+            .app_id(app_id)
+            .app_secret(app_secret)
+            .app_type(AppType::SelfBuild)
+            .enable_token_cache(true)
+            .build(),
+    );
+
+    let client = LarkClient::new(shared_config.config().clone());
+    let config = Arc::new(shared_config.config().clone());
+
+    (client, config, shared_config)
+}
 
 /// 处理接收到的消息内容并发送回显
 ///
@@ -159,8 +190,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("  • 带时间戳的回显消息");
     println!("  • 自动重试机制和性能监控");
     println!("  • 结构化日志记录");
+    println!("  • 使用新的共享配置接口优化内存使用");
     println!();
     println!("⚠️  注意: WebSocket 功能需要启用 'websocket' feature 标志");
+    println!("🔄 新接口特性: 使用 SharedConfig 减少 WebSocket 和服务间的内存开销");
 
     #[cfg(not(feature = "websocket"))]
     {
@@ -187,12 +220,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         // 创建客户端并获取配置
         info!("初始化 Lark 客户端...");
-        let client = LarkClient::builder(&app_id, &app_secret)
-            .with_app_type(AppType::SelfBuild)
-            .build();
 
+        // 使用新的辅助函数创建WebSocket客户端
+        let (client, config, shared_config) = create_websocket_client(&app_id, &app_secret);
         let client_for_echo = Arc::new(client);
-        let config = Arc::new(client_for_echo.config.clone());
+
+        info!("✅ 使用共享配置创建客户端成功");
+        info!("📊 配置引用计数: {}", shared_config.ref_count());
+        info!("💾 内存使用优化: 所有服务共享同一个配置实例");
 
         // 创建事件处理器，实现增强的 echo bot 功能和完整的 IM 事件监控
         let echo_client = client_for_echo.clone();
