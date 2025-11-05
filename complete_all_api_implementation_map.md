@@ -1,15 +1,15 @@
 # 完整API实现映射表
 
-**生成时间**: 2025-11-05 14:41:55  
+**生成时间**: 2025-11-05 15:17:07  
 **总API数**: 1551  
-**已实现**: 864  
-**实现率**: 55.7%  
-**处理耗时**: 1.3 分钟  
-**处理速度**: 20.4 API/秒  
+**已实现**: 865  
+**实现率**: 55.8%  
+**处理耗时**: 1.2 分钟  
+**处理速度**: 20.9 API/秒  
 
 | 序号 | API名称 | 请求方式 | API地址 | 文档链接 | 文件路径 | 行号 | 状态 |
 |------|---------|----------|---------|----------|----------|------|------|
-| 1 | [获取事件出口 IP](https://open.feishu.cn/document/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-v1/outbound_ip/list) | GET | `/open-apis/event/v1/outbound_ip` | https://open.feishu.cn/document/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-v1/outbound_ip/list | `未找到` | - | ❌ 未实现 |
+| 1 | [获取事件出口 IP](https://open.feishu.cn/document/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-v1/outbound_ip/list) | GET | `/open-apis/event/v1/outbound_ip` | https://open.feishu.cn/document/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-v1/outbound_ip/list | `../src/service/event/v1/mod.rs` | 52 | ✅ 已实现 |
 | 2 | [获取用户信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/authen-v1/user_info/get) | GET | `/open-apis/authen/v1/user_info` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/authen-v1/user_info/get | `../src/service/auth/v1/mod.rs` | 27 | ✅ 已实现 |
 | 3 | [批量获取脱敏的用户登录信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/passport-v1/session/query) | POST | `/open-apis/passport/v1/sessions/query` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/passport-v1/session/query | `../src/service/attendance/v1/user_task.rs` | 86 | ✅ 已实现 |
 | 4 | [退出登录](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/passport-v1/session/logout) | POST | `/open-apis/passport/v1/sessions/logout` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/passport-v1/session/logout | `未找到` | - | ❌ 未实现 |
@@ -1567,11 +1567,10 @@
 ### 按服务分类的实现情况
 
 
-### 未实现的API (687个)
+### 未实现的API (686个)
 
 以下是前100个未实现的API:
 
-- 获取事件出口 IP (GET /open-apis/event/v1/outbound_ip)
 - 退出登录 (POST /open-apis/passport/v1/sessions/logout)
 - 查询用户所属用户组 (GET /open-apis/contact/v3/group/member_belong)
 - 获取企业自定义用户字段 (GET /open-apis/contact/v3/custom_attrs)
@@ -1671,4 +1670,5 @@
 - 更新块的内容 (PATCH /open-apis/docx/v1/documents/:document_id/blocks/:block_id)
 - 获取块的内容 (GET /open-apis/docx/v1/documents/:document_id/blocks/:block_id)
 - 创建电子表格 (POST /open-apis/sheets/v3/spreadsheets)
-- ... 还有 587 个未实现的API
+- 操作工作表 (POST /open-apis/sheets/v2/spreadsheets/:spreadsheetToken/sheets_batch_update)
+- ... 还有 586 个未实现的API
