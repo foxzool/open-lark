@@ -1,5 +1,6 @@
 use dotenvy::dotenv;
 use open_lark::{
+    core::config::ConfigBuilder,
     prelude::*,
     service::im::v1::{
         batch_message::BatchSendMessageRequest,
@@ -8,12 +9,14 @@ use open_lark::{
         models::{ReceiveIdType, UserIdType},
         url_preview::{BatchUpdateUrlPreviewRequest, UrlPreviewInfo},
     },
+    service_registry::{SharedConfig, SharedConfigFactory},
 };
 use serde_json::json;
 
 /// IM v1模块功能演示
 ///
 /// 展示消息表情回复、Pin消息、图片文件处理、批量消息等功能
+/// 现在使用新的共享配置接口来优化内存使用
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
@@ -21,13 +24,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app_id = std::env::var("APP_ID").expect("APP_ID environment variable not set");
     let app_secret = std::env::var("APP_SECRET").expect("APP_SECRET environment variable not set");
 
-    // 创建客户端
-    let client = LarkClient::builder(&app_id, &app_secret)
-        .with_app_type(AppType::SelfBuild)
-        .with_enable_token_cache(true)
-        .build();
+    // 使用共享配置创建客户端
+    let shared_config = SharedConfigFactory::create_shared(
+        ConfigBuilder::default()
+            .app_id(&app_id)
+            .app_secret(&app_secret)
+            .app_type(AppType::SelfBuild)
+            .enable_token_cache(true)
+            .build(),
+    );
 
-    println!("🚀 开始演示 IM v1 模块功能...\n");
+    let client = LarkClient::new(shared_config.config().clone());
+
+    println!("🚀 开始演示 IM v1 模块功能...");
+    println!("🔄 使用新的共享配置接口，优化内存使用");
+    println!("📊 配置引用计数: {}", shared_config.ref_count());
+    println!();
 
     // 演示消息表情回复功能
     demo_message_reactions(&client).await?;

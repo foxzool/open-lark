@@ -1,7 +1,8 @@
 use open_lark::core::trait_system::ExecutableBuilder;
 /// 文件上传示例
 ///
-/// 这个示例演示如何使用飞书SDK上传文件到云空间。
+/// 这个示例演示如何使用SharedConfig接口上传文件到云空间，
+/// 展示了新接口在文件操作场景中的优势。
 ///
 /// 使用方法：
 /// cargo run --example upload_file
@@ -11,7 +12,11 @@ use open_lark::core::trait_system::ExecutableBuilder;
 /// APP_SECRET=your_app_secret
 /// USER_ACCESS_TOKEN=your_user_access_token
 /// FOLDER_TOKEN=target_folder_token (可选，默认使用根文件夹)
-use open_lark::prelude::*;
+use open_lark::{
+    prelude::*,
+    service_registry::{SharedConfig, SharedConfigFactory},
+    core::{constants::AppType, config::ConfigBuilder},
+};
 use std::fs;
 
 #[tokio::main]
@@ -24,10 +29,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let _user_access_token = std::env::var("USER_ACCESS_TOKEN")
         .expect("USER_ACCESS_TOKEN environment variable not set (required for file operations)");
 
-    // 创建客户端（文件操作需要用户访问令牌）
-    let client = LarkClient::builder(&app_id, &app_secret)
-        .with_enable_token_cache(true)
-        .build();
+    // 使用SharedConfig创建客户端（文件操作需要用户访问令牌）
+    let shared_config = SharedConfigFactory::create_shared(
+        ConfigBuilder::default()
+            .app_id(&app_id)
+            .app_secret(&app_secret)
+            .app_type(AppType::SelfBuild)
+            .enable_token_cache(true)
+            .build()
+    );
+    let client = LarkClient::new(shared_config.config().clone());
+
+    println!("📁 文件上传示例 (SharedConfig版本)");
+    println!("📊 配置引用计数: {}", shared_config.ref_count());
+    println!("🚀 使用共享配置优化文件操作性能\n");
 
     println!("📤 飞书文件上传示例");
     println!("{}", "=".repeat(50));

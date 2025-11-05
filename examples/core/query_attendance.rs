@@ -8,7 +8,11 @@
 /// 环境变量：
 /// APP_ID=your_app_id
 /// APP_SECRET=your_app_secret
-use open_lark::prelude::*;
+use open_lark::{
+    core::{config::ConfigBuilder, constants::AppType},
+    prelude::*,
+    service_registry::{SharedConfig, SharedConfigFactory},
+};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -18,10 +22,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app_id = std::env::var("APP_ID").expect("APP_ID environment variable not set");
     let app_secret = std::env::var("APP_SECRET").expect("APP_SECRET environment variable not set");
 
-    // 创建客户端
-    let client = LarkClient::builder(&app_id, &app_secret)
-        .with_enable_token_cache(true)
-        .build();
+    // 使用SharedConfig创建客户端
+    let shared_config = SharedConfigFactory::create_shared(
+        ConfigBuilder::default()
+            .app_id(&app_id)
+            .app_secret(&app_secret)
+            .app_type(AppType::SelfBuild)
+            .enable_token_cache(true)
+            .build(),
+    );
+    let client = LarkClient::new(shared_config.config().clone());
 
     println!("📊 飞书考勤数据查询示例");
     println!("{}", "=".repeat(50));
