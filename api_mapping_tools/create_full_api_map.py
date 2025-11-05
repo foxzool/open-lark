@@ -64,6 +64,24 @@ def find_api_implementation_efficient(api_name, method, path):
     if service_name != 'unknown':
         keywords.append(service_name)
 
+    # 5. 特殊映射规则（提高准确性）
+    special_mappings = {
+        'user_info': ['user_info'],
+        'tenant_access_token': ['tenant_access_token'],
+        'app_access_token': ['app_access_token'],
+        'app_ticket': ['app_ticket'],
+        'message': ['message', 'send_message'],
+        'users': ['user'],
+        'departments': ['department'],
+        'employee': ['employee'],
+        'sessions': ['session'],
+        'scopes': ['scope']
+    }
+
+    for special_key, special_keywords in special_mappings.items():
+        if special_key in path.lower() or special_key in api_name.lower():
+            keywords.extend(special_keywords)
+
     # 在最可能的目录中搜索
     for search_dir in search_dirs:
         if not os.path.exists(search_dir):
@@ -151,12 +169,14 @@ def process_all_apis():
 
     print(f"总共读取到 {len(apis)} 个API")
 
-    # 分批处理API
-    batch_size = 200
+    # 分批处理API - 调整批处理大小以提高效率
+    batch_size = 100  # 减小批处理大小以提供更频繁的进度更新
     total_batches = (len(apis) + batch_size - 1) // batch_size
     all_results = []
     found_count = 0
     start_time = time.time()
+
+    print(f"开始处理 {len(apis)} 个API，分为 {total_batches} 个批次")
 
     for batch_idx in range(total_batches):
         start_idx = batch_idx * batch_size
