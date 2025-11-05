@@ -41,6 +41,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 生成增强报告
     let report_path = "reports/enhanced_api_consistency_report.md";
+
+    // 确保reports目录存在
+    if let Some(parent) = Path::new(report_path).parent() {
+        fs::create_dir_all(parent)?;
+    }
+
     generate_enhanced_report(&results, &issues, report_path)?;
     println!("\n📄 详细报告已生成: {report_path}");
 

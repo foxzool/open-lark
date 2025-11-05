@@ -577,6 +577,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     checker.analyze_all_services()?;
 
     let report_path = "reports/api_consistency_report.md";
+
+    // 确保reports目录存在
+    if let Some(parent) = std::path::Path::new(report_path).parent() {
+        std::fs::create_dir_all(parent)?;
+    }
+
     checker.save_report(report_path)?;
 
     println!("📄 报告已生成: {report_path}");
