@@ -94,7 +94,7 @@ impl GroupService {
         request: &CreateGroupRequest,
     ) -> SDKResult<BaseResponse<CreateGroupResponse>> {
         let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::POST,
+            http_method: reqwest::Method::POST,
             api_path: "/open-apis/contact/v3/groups".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -115,7 +115,7 @@ impl GroupService {
         let api_path = format!("/open-apis/contact/v3/groups/{}", group_id);
 
         let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::PATCH,
+            http_method: reqwest::Method::PATCH,
             api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(request)?,
@@ -150,7 +150,7 @@ impl GroupService {
         }
 
         let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::GET,
+            http_method: reqwest::Method::GET,
             api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
@@ -190,7 +190,7 @@ impl GroupService {
         }
 
         let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::GET,
+            http_method: reqwest::Method::GET,
             api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
@@ -207,7 +207,7 @@ impl GroupService {
         &self,
         request: &GetUserGroupsRequest,
     ) -> SDKResult<BaseResponse<GetUserGroupsResponse>> {
-        let mut api_path = "/open-apis/contact/v3/groups/member_belong".to_string();
+        let mut api_path = crate::core::endpoints_original::Endpoints::CONTACT_V3_GROUPS_MEMBER_BELONG.to_string();
 
         // 添加查询参数
         let mut query_params = Vec::new();
@@ -230,7 +230,7 @@ impl GroupService {
         }
 
         let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::GET,
+            http_method: reqwest::Method::GET,
             api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
@@ -250,7 +250,7 @@ impl GroupService {
         let api_path = format!("/open-apis/contact/v3/groups/{}", group_id);
 
         let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::DELETE,
+            http_method: reqwest::Method::DELETE,
             api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -288,7 +288,7 @@ impl GroupService {
         }
 
         let api_req = ApiRequest {
-            http_http_http_method: reqwest::Method::GET,
+            http_method: reqwest::Method::GET,
             api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
@@ -842,5 +842,77 @@ impl GroupService {
     /// 获取用户组详细信息构建器
     pub fn get_group_detail_builder(&self) -> GetGroupDetailBuilder {
         GetGroupDetailBuilder::new()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_group_service_creation() {
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
+
+        let service = GroupService::new(config);
+        // Service created successfully
+    }
+
+    #[test]
+    fn test_get_user_groups_request_default() {
+        let request = GetUserGroupsRequest::default();
+        assert_eq!(request.member_id, None);
+        assert_eq!(request.member_id_type, None);
+        assert_eq!(request.page_size, None);
+        assert_eq!(request.page_token, None);
+    }
+
+    #[test]
+    fn test_get_user_groups_request_with_params() {
+        let request = GetUserGroupsRequest {
+            member_id: Some("user_123".to_string()),
+            member_id_type: Some("open_id".to_string()),
+            page_size: Some(50),
+            page_token: Some("next_page".to_string()),
+        };
+
+        assert_eq!(request.member_id, Some("user_123".to_string()));
+        assert_eq!(request.member_id_type, Some("open_id".to_string()));
+        assert_eq!(request.page_size, Some(50));
+        assert_eq!(request.page_token, Some("next_page".to_string()));
+    }
+
+    #[test]
+    fn test_get_user_groups_builder() {
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
+
+        let service = GroupService::new(config);
+        let builder = service.get_user_groups_builder();
+
+        // Test builder with all parameters
+        let request = builder
+            .member_id("user_456")
+            .member_id_type("user_id")
+            .page_size(20)
+            .page_token("page_token")
+            .build();
+
+        assert_eq!(request.member_id, Some("user_456".to_string()));
+        assert_eq!(request.member_id_type, Some("user_id".to_string()));
+        assert_eq!(request.page_size, Some(20));
+        assert_eq!(request.page_token, Some("page_token".to_string()));
+    }
+
+    #[test]
+    fn test_endpoint_constant() {
+        assert_eq!(
+            crate::core::endpoints_original::Endpoints::CONTACT_V3_GROUPS_MEMBER_BELONG,
+            "/open-apis/contact/v3/groups/member_belong"
+        );
     }
 }
