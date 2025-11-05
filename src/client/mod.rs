@@ -34,6 +34,8 @@ use crate::service::ccm::CcmService;
 use crate::service::cloud_docs::ClouddocsService;
 #[cfg(feature = "contact")]
 use crate::service::contact::ContactService;
+#[cfg(feature = "event")]
+use crate::service::event::EventService;
 #[cfg(feature = "feishu_people")]
 use crate::service::feishu_people::FeishuPeopleService;
 #[cfg(feature = "group")]
@@ -52,8 +54,6 @@ use crate::service::security_and_compliance::SecurityAndComplianceService;
 use crate::service::task::TaskService;
 #[cfg(feature = "board")]
 use open_lark_extensions::board::BoardService;
-#[cfg(feature = "event")]
-use open_lark_extensions::event::EventService;
 
 /// 飞书开放平台SDK主客户端
 ///
@@ -74,8 +74,8 @@ pub struct LarkClient {
     // TODO: Fix config type mismatch for extension services
     // #[cfg(feature = "board")]
     // pub board: BoardService,
-    // #[cfg(feature = "event")]
-    // pub event: EventService,
+    #[cfg(feature = "event")]
+    pub event: EventService,
     #[cfg(feature = "ai")]
     pub ai: AiService,
     #[cfg(feature = "aily")]
@@ -135,8 +135,8 @@ impl LarkClient {
             // TODO: Fix config type mismatch for extension services
             // #[cfg(feature = "board")]
             // board: BoardService::new(config.clone()),
-            // #[cfg(feature = "event")]
-            // event: EventService::new(config.clone()),
+            #[cfg(feature = "event")]
+            event: EventService::new(config.clone()),
             #[cfg(feature = "ai")]
             ai: AiService::new(config.clone()),
             #[cfg(feature = "aily")]
