@@ -1,6 +1,8 @@
 use dotenvy::dotenv;
+use open_lark::prelude::*;
+use open_lark::service_registry::{SharedConfig, SharedConfigFactory};
+use open_lark::core::config::ConfigBuilder;
 use open_lark::service::contact::*;
-use open_lark::LarkClient;
 use std::env;
 
 #[tokio::main]
@@ -11,12 +13,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app_id = env::var("APP_ID").expect("APP_ID must be set");
     let app_secret = env::var("APP_SECRET").expect("APP_SECRET must be set");
 
-    // 创建飞书客户端
-    let client = LarkClient::builder(&app_id, &app_secret)
-        .with_enable_token_cache(true)
-        .build();
+    // 使用共享配置创建飞书客户端
+    let shared_config = SharedConfigFactory::create_shared(
+        ConfigBuilder::default()
+            .app_id(&app_id)
+            .app_secret(&app_secret)
+            .enable_token_cache(true)
+            .build()
+    );
 
-    println!("=== 飞书通讯录 v3 用户管理示例 ===\n");
+    let client = LarkClient::new(shared_config.config().clone());
+
+    println!("=== 飞书通讯录 v3 用户管理示例 ===");
+    println!("🔄 使用新的共享配置接口，优化内存使用");
+    println!("📊 配置引用计数: {}", shared_config.ref_count());
+    println!();
 
     // 1. 获取通讯录权限范围
     println!("1. 获取通讯录权限范围");
