@@ -61,11 +61,7 @@ impl EventServiceV1 {
         api_req.set_supported_access_token_types(vec![AccessTokenType::App]);
 
         let option = RequestOption::default();
-        let api_resp = Transport::request(
-            api_req,
-            &self.config,
-            Some(option)
-        ).await?;
+        let api_resp = Transport::request(api_req, &self.config, Some(option)).await?;
 
         Ok(GetOutboundIpResponse {
             code: api_resp.code(),
@@ -172,10 +168,7 @@ mod tests {
     #[test]
     fn test_outbound_ip_data_creation() {
         let data = OutboundIpData {
-            ip_list: vec![
-                "1.2.3.4".to_string(),
-                "5.6.7.8".to_string(),
-            ],
+            ip_list: vec!["1.2.3.4".to_string(), "5.6.7.8".to_string()],
         };
         assert_eq!(data.ip_list.len(), 2);
         assert_eq!(data.ip_list[0], "1.2.3.4");

@@ -135,9 +135,9 @@ pub mod directory;
 pub mod ehr;
 #[cfg(feature = "elearning")]
 pub mod elearning;
+pub mod endpoints;
 #[cfg(feature = "event")]
 pub mod event;
-pub mod endpoints;
 #[cfg(feature = "feishu_people")]
 pub mod feishu_people;
 #[cfg(feature = "group")]
