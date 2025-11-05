@@ -36,12 +36,15 @@ impl ApiResponseTrait for SimpleResponse {
 #[derive(Debug, Clone)]
 pub struct PassportService {
     pub service: SimpleService,
+    /// v1版本的API服务
+    pub v1: PassportV1Service,
 }
 
 impl PassportService {
     pub fn new(config: Config) -> Self {
         Self {
-            service: SimpleService::new(config),
+            service: SimpleService::new(config.clone()),
+            v1: PassportV1Service::new(config),
         }
     }
 }
@@ -49,3 +52,10 @@ impl PassportService {
 // Type alias for compatibility
 pub type ServiceType = PassportService;
 pub type ResponseType = SimpleResponse;
+
+// 导入v1服务
+pub use v1::PassportV1Service;
+
+pub mod models;
+pub mod sessions;
+pub mod v1;
