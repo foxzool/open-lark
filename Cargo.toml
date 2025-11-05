@@ -117,7 +117,7 @@ hr-suite = ["communication", "open-lark-hr-suite"]
 ai-platform = ["communication", "open-lark-ai-platform"]
 enterprise = ["communication", "open-lark-enterprise"]
 extensions = ["open-lark-extensions"]
-event = ["open-lark-extensions"]
+event = []
 integrations = ["open-lark-integrations"]
 complete = ["communication", "collaboration", "hr-suite", "ai-platform", "enterprise", "extensions", "integrations"]
 
@@ -513,6 +513,11 @@ required-features = ["board"]
 [[example]]
 name = "event_example"
 path = "examples/api/event_example.rs"
+required-features = ["event"]
+
+[[example]]
+name = "get_outbound_ip"
+path = "examples/api/get_outbound_ip.rs"
 required-features = ["event"]
 
 [[example]]
