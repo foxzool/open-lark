@@ -1,4 +1,4 @@
-名称,请求方式,地址,说明,支持自建应用,支持商店应用,文档链接
+name,method,path,description,self_build,store_app,doc_link
 获取事件出口 IP,GET,/open-apis/event/v1/outbound_ip,飞书开放平台向应用配置的回调地址推送事件时，是通过特定的 IP 发送出去的，应用可以通过本接口获取所有相关的 IP 地址。,是,是,https://open.feishu.cn/document/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-v1/outbound_ip/list
 获取用户信息,GET,/open-apis/authen/v1/user_info,通过 `user_access_token` 获取登录用户的信息。,是,是,https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/authen-v1/user_info/get
 批量获取脱敏的用户登录信息,POST,/open-apis/passport/v1/sessions/query,该接口用于查询用户的登录信息。,是,否,https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/passport-v1/session/query
@@ -263,8 +263,8 @@ Markdown/HTML 内容转换为文档块,POST,/open-apis/docx/documents/blocks/con
 拆分单元格,POST,/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/unmerge_cells,根据 spreadsheetToken 和维度信息拆分单元格；单次操作不超过5000行，100列。,是,是,https://open.feishu.cn/document/ukTMukTMukTM/uATNzUjLwUzM14CM1MTN
 查找单元格,POST,/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/find,在指定范围内查找符合查找条件的单元格。,是,是,https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet/find
 替换单元格,POST,/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/replace,按照指定的条件查找子表的某个范围内的数据符合条件的单元格并替换值，返回替换成功的单元格位置。一次请求最多允许替换5000个单元格，如果超过请将range缩小范围再操作。请求体中的 range、find、replaccement 字段必填。,是,是,https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet/replace
-设置单元格样式 ,PUT,/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/style,根据 spreadsheetToken 、range 和样式信息更新单元格样式；单次写入不超过5000行，100列。,是,是,https://open.feishu.cn/document/ukTMukTMukTM/ukjMzUjL5IzM14SOyMTN
-批量设置单元格样式 ,PUT,/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/styles_batch_update,根据 spreadsheetToken 、range和样式信息 批量更新单元格样式；单次写入不超过5000行，100列。,是,是,https://open.feishu.cn/document/ukTMukTMukTM/uAzMzUjLwMzM14CMzMTN
+设置单元格样式,PUT,/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/style,根据 spreadsheetToken 、range 和样式信息更新单元格样式；单次写入不超过5000行，100列。,是,是,https://open.feishu.cn/document/ukTMukTMukTM/ukjMzUjL5IzM14SOyMTN
+批量设置单元格样式,PUT,/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/styles_batch_update,根据 spreadsheetToken 、range和样式信息 批量更新单元格样式；单次写入不超过5000行，100列。,是,是,https://open.feishu.cn/document/ukTMukTMukTM/uAzMzUjLwMzM14CMzMTN
 插入数据,POST,/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values_prepend,根据 spreadsheetToken 和 range 向范围之前增加相应数据的行和相应的数据，相当于数组的插入操作；单次写入不超过5000行，100列，每个格子不超过5万字符。,是,是,https://open.feishu.cn/document/ukTMukTMukTM/uIjMzUjLyIzM14iMyMTN
 追加数据,POST,/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values_append,根据 spreadsheetToken 和 range 遇到空行则进行覆盖追加或新增行追加数据。 空行：默认该行第一个格子是空，则认为是空行；单次写入不超过5000行，100列，每个格子不超过5万字符。,是,是,https://open.feishu.cn/document/ukTMukTMukTM/uMjMzUjLzIzM14yMyMTN
 写入图片,POST,/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values_image,根据 spreadsheetToken 和 range 向单个格子写入图片。,是,是,https://open.feishu.cn/document/ukTMukTMukTM/uUDNxYjL1QTM24SN0EjN

@@ -3,8 +3,8 @@
     "total_apis": 1551,
     "found_count": 864,
     "implementation_rate": 55.705996131528046,
-    "processing_time": 76.70313596725464,
-    "generated_at": "2025-11-05T12:44:40.336283"
+    "processing_time": 76.11505508422852,
+    "generated_at": "2025-11-05T14:41:55.664293"
   },
   "service_stats": {
     "event": {
@@ -3658,7 +3658,7 @@
       "status": "not_found"
     },
     {
-      "name": "设置单元格样式 ",
+      "name": "设置单元格样式",
       "method": "PUT",
       "path": "/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/style",
       "description": "根据 spreadsheetToken 、range 和样式信息更新单元格样式；单次写入不超过5000行，100列。",
@@ -3671,7 +3671,7 @@
       "status": "not_found"
     },
     {
-      "name": "批量设置单元格样式 ",
+      "name": "批量设置单元格样式",
       "method": "PUT",
       "path": "/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/styles_batch_update",
       "description": "根据 spreadsheetToken 、range和样式信息 批量更新单元格样式；单次写入不超过5000行，100列。",
