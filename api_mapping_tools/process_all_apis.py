@@ -320,18 +320,27 @@ class APIProcessor:
             f.write(f"**处理耗时**: {total_time/60:.1f} 分钟  \n")
             f.write(f"**处理速度**: {total_apis/total_time:.1f} API/秒  \n\n")
 
-            f.write("| 序号 | API名称 | 请求方式 | API地址 | 文件路径 | 行号 | 状态 |\n")
-            f.write("|------|---------|----------|---------|----------|------|------|\n")
+            f.write("| 序号 | API名称 | 请求方式 | API地址 | 文档链接 | 文件路径 | 行号 | 状态 |\n")
+            f.write("|------|---------|----------|---------|----------|----------|------|------|\n")
 
             for i, result in enumerate(self.results, 1):
-                name = result['name'].replace('|', '\\|')
+                raw_name = result['name']
+                name = raw_name.replace('|', '\\|')
                 method = result['method']
                 path = result['path'].replace('|', '\\|')
                 file_path = result['file_path'].replace('|', '\\|')
                 line_num = result['line_number']
                 status = "✅ 已实现" if result['status'] == 'found' else "❌ 未实现"
+                doc_link = result.get('doc_link', '') or ''
+                doc_cell = doc_link.replace('|', '\\|') if doc_link else "-"
+                if doc_link:
+                    name_cell = f"[{name}]({doc_cell})"
+                else:
+                    name_cell = name
 
-                f.write(f"| {i} | {name} | {method} | `{path}` | `{file_path}` | {line_num} | {status} |\n")
+                f.write(
+                    f"| {i} | {name_cell} | {method} | `{path}` | {doc_cell} | `{file_path}` | {line_num} | {status} |\n"
+                )
 
             # 添加统计信息
             f.write("\n\n## 实现统计\n\n")
