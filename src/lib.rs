@@ -46,6 +46,8 @@
 pub mod card;
 /// 客户端实现和WebSocket支持
 pub mod client;
+/// 共享数据模型和工具
+pub mod common;
 /// 核心功能：HTTP传输、配置、错误处理等
 pub mod core;
 // pub mod message;

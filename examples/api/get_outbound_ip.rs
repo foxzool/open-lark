@@ -20,8 +20,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app_secret = std::env::var("APP_SECRET").unwrap_or_else(|_| "your_app_secret".to_string());
 
     // 创建客户端
-    let client = LarkClient::builder(&app_id, &app_secret)
-        .build();
+    let client = LarkClient::builder(&app_id, &app_secret).build();
 
     println!("🚀 开始获取事件出口IP地址...");
 
