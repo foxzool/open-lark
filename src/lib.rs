@@ -57,3 +57,5 @@ pub mod event;
 pub mod prelude;
 // 所有飞书开放平台 API 服务的实现
 pub mod service;
+/// ServiceRegistry - 服务注册与发现系统
+pub mod service_registry;

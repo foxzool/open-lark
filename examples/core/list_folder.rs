@@ -11,7 +11,11 @@ use open_lark::core::trait_system::ExecutableBuilder;
 /// APP_SECRET=your_app_secret
 /// USER_ACCESS_TOKEN=your_user_access_token
 /// FOLDER_TOKEN=target_folder_token (可选，默认列出根文件夹)
-use open_lark::prelude::*;
+use open_lark::{
+    core::{config::ConfigBuilder, constants::AppType},
+    prelude::*,
+    service_registry::{SharedConfig, SharedConfigFactory},
+};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -23,10 +27,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let _user_access_token = std::env::var("USER_ACCESS_TOKEN")
         .expect("USER_ACCESS_TOKEN environment variable not set (required for file operations)");
 
-    // 创建客户端
-    let client = LarkClient::builder(&app_id, &app_secret)
-        .with_enable_token_cache(true)
-        .build();
+    // 使用SharedConfig创建客户端
+    let shared_config = SharedConfigFactory::create_shared(
+        ConfigBuilder::default()
+            .app_id(&app_id)
+            .app_secret(&app_secret)
+            .app_type(AppType::SelfBuild)
+            .enable_token_cache(true)
+            .build(),
+    );
+    let client = LarkClient::new(shared_config.config().clone());
 
     println!("📁 飞书文件夹列表示例");
     println!("{}", "=".repeat(50));

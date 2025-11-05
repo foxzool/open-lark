@@ -8,7 +8,7 @@
 
 支持自定义机器人、长连接机器人、云文档、飞书卡片、消息、群组、招聘管理等API调用。
 
-## ✨ 项目状态 (2025-10-29更新)
+## ✨ 项目状态 (2025-11-04更新)
 
 ### 🎯 高覆盖率企业级SDK
 - **✅ 高API覆盖**: 实现1,134个飞书平台API，86.3%覆盖率
@@ -25,13 +25,72 @@
 - **测试覆盖**: 关键模块100%测试通过
 
 ### 🚀 新增高级功能模块
+- **🔄 SharedConfig接口**: 全新的配置管理系统，优化多服务场景内存使用
 - **AI向量嵌入**: 完整的向量化和语义搜索功能
 - **AI工作流**: 智能业务流程自动化和决策支持
 - **高级分析**: 实时数据分析、预测模型、商业智能
 - **零信任安全**: 现代安全架构、合规检查、威胁防护
 - **平台集成**: 第三方服务集成、DevOps支持、API网关
 
+### 🔧 SharedConfig配置系统 (新特性)
+- **💾 内存优化**: 使用`Arc<Config>`实现多客户端配置共享，显著降低内存占用
+- **🔒 线程安全**: 支持高并发场景下的安全配置访问
+- **📊 引用计数**: 自动管理配置生命周期，智能资源释放
+- **🔄 向后兼容**: 与传统客户端创建方式完全兼容，支持渐进式迁移
+- **⚡ 性能提升**: 多服务场景下性能提升明显，减少重复配置开销
+
 ### 📚 快速开始
+
+#### 🚀 SharedConfig 方式 (推荐)
+
+```rust
+use open_lark::prelude::*;
+use open_lark::service_registry::{SharedConfig, SharedConfigFactory};
+use open_lark::core::{constants::AppType, config::ConfigBuilder};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // 创建共享配置 - 优化内存使用
+    let shared_config = SharedConfigFactory::create_shared(
+        ConfigBuilder::default()
+            .app_id("your_app_id")
+            .app_secret("your_app_secret")
+            .app_type(AppType::SelfBuild)
+            .enable_token_cache(true)
+            .build()
+    );
+
+    // 创建客户端
+    let client = LarkClient::new(shared_config.config().clone());
+
+    println!("配置引用计数: {}", shared_config.ref_count());
+
+    // 多客户端共享同一配置
+    let client2 = LarkClient::new(shared_config.config().clone());
+    let client3 = LarkClient::new(shared_config.config().clone());
+
+    // 3个客户端共享1个配置实例，节省内存
+    Ok(())
+}
+```
+
+#### 📖 传统方式 (仍支持)
+
+```rust
+use open_lark::prelude::*;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // 传统客户端创建
+    let client = LarkClient::builder("your_app_id", "your_app_secret")
+        .with_app_type(AppType::SelfBuild)
+        .with_enable_token_cache(true)
+        .build();
+
+    // 使用客户端...
+    Ok(())
+}
+```
 
 ## 🎉 最新更新
 
@@ -158,17 +217,73 @@ open-lark = { version = "0.13.2", features = ["full"] }
 
 将`.env-example`文件重命名为`.env`，并填写相关配置。
 
-### 快速开始 - 招聘管理
+### 🔧 SharedConfig 配置指南
+
+#### 何时使用 SharedConfig
+- ✅ **新项目**: 直接使用SharedConfig获得最佳性能
+- ✅ **多服务场景**: 多个飞书服务同时使用时显著优化内存
+- ✅ **高并发应用**: 线程安全的配置访问
+- ✅ **微服务架构**: 多个微服务共享相同飞书配置
+
+#### 迁移指南
+
+**步骤1: 更新导入**
+```rust
+// 新增导入
+use open_lark::service_registry::{SharedConfig, SharedConfigFactory};
+use open_lark::core::{constants::AppType, config::ConfigBuilder};
+```
+
+**步骤2: 替换客户端创建**
+```rust
+// 原代码
+let client = LarkClient::builder(&app_id, &app_secret)
+    .with_app_type(AppType::SelfBuild)
+    .with_enable_token_cache(true)
+    .build();
+
+// 新代码
+let shared_config = SharedConfigFactory::create_shared(
+    ConfigBuilder::default()
+        .app_id(&app_id)
+        .app_secret(&app_secret)
+        .app_type(AppType::SelfBuild)
+        .enable_token_cache(true)
+        .build()
+);
+let client = LarkClient::new(shared_config.config().clone());
+```
+
+**步骤3: 验证迁移**
+```rust
+// 检查引用计数
+println!("引用计数: {}", shared_config.ref_count());
+
+// 创建多个客户端验证共享
+let client2 = LarkClient::new(shared_config.config().clone());
+println!("共享成功: {}", shared_config.ref_count() >= 2);
+```
+
+### 快速开始 - 招聘管理 (使用SharedConfig)
 
 ```rust,ignore
 use open_lark::prelude::*;
+use open_lark::service_registry::{SharedConfig, SharedConfigFactory};
+use open_lark::core::{constants::AppType, config::ConfigBuilder};
 use open_lark::service::hire::models::*;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let client = LarkClient::builder("your_app_id", "your_app_secret")
-        .with_app_type(AppType::SelfBuild)
-        .build();
+    // 使用SharedConfig创建客户端
+    let shared_config = SharedConfigFactory::create_shared(
+        ConfigBuilder::default()
+            .app_id("your_app_id")
+            .app_secret("your_app_secret")
+            .app_type(AppType::SelfBuild)
+            .enable_token_cache(true)
+            .build()
+    );
+    let client = LarkClient::new(shared_config.config().clone());
 
     // 获取职位列表
     let job_request = JobListRequest {

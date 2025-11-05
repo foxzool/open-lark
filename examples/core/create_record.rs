@@ -10,10 +10,12 @@
 /// APP_SECRET=your_app_secret
 /// APP_TOKEN=your_bitable_app_token
 /// TABLE_ID=your_table_id
-use open_lark::prelude::*;
 use open_lark::{
     core::trait_system::ExecutableBuilder,
+    core::{config::ConfigBuilder, constants::AppType},
+    prelude::*,
     service::cloud_docs::bitable::v1::app_table_record::create::*,
+    service_registry::{SharedConfig, SharedConfigFactory},
 };
 use serde_json::{json, Value};
 use std::collections::HashMap;
@@ -29,10 +31,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         std::env::var("APP_TOKEN").unwrap_or_else(|_| "bascnCMII2ORuEjIDXvVecCKNEc".to_string()); // 示例token
     let table_id = std::env::var("TABLE_ID").unwrap_or_else(|_| "tblsRc9GRRXKqhvW".to_string()); // 示例table_id
 
-    // 创建客户端
-    let client = LarkClient::builder(&app_id, &app_secret)
-        .with_enable_token_cache(true)
-        .build();
+    // 使用SharedConfig创建客户端
+    let shared_config = SharedConfigFactory::create_shared(
+        ConfigBuilder::default()
+            .app_id(&app_id)
+            .app_secret(&app_secret)
+            .app_type(AppType::SelfBuild)
+            .enable_token_cache(true)
+            .build(),
+    );
+    let client = LarkClient::new(shared_config.config().clone());
 
     println!("📝 飞书多维表格创建记录示例");
     println!("应用Token: {app_token}");

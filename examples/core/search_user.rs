@@ -9,7 +9,11 @@
 /// APP_ID=your_app_id
 /// APP_SECRET=your_app_secret
 /// USER_ACCESS_TOKEN=your_user_access_token (必需，用户搜索需要用户令牌)
-use open_lark::prelude::*;
+use open_lark::{
+    core::{config::ConfigBuilder, constants::AppType},
+    prelude::*,
+    service_registry::{SharedConfig, SharedConfigFactory},
+};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -21,10 +25,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let user_access_token =
         std::env::var("USER_ACCESS_TOKEN").expect("USER_ACCESS_TOKEN environment variable not set");
 
-    // 创建客户端
-    let client = LarkClient::builder(&app_id, &app_secret)
-        .with_enable_token_cache(true)
-        .build();
+    // 使用SharedConfig创建客户端
+    let shared_config = SharedConfigFactory::create_shared(
+        ConfigBuilder::default()
+            .app_id(&app_id)
+            .app_secret(&app_secret)
+            .app_type(AppType::SelfBuild)
+            .enable_token_cache(true)
+            .build(),
+    );
+    let client = LarkClient::new(shared_config.config().clone());
 
     println!("🔍 飞书用户搜索示例");
     println!("{}", "=".repeat(50));
@@ -64,7 +74,7 @@ async fn basic_user_search(
         .search
         .v1
         .user
-        .search_user(request, Some(request_option))
+        .search(request, Some(request_option))
         .await
     {
         Ok(response) => {
@@ -152,7 +162,7 @@ async fn paginated_search(
             .search
             .v1
             .user
-            .search_user(request, Some(request_option.clone()))
+            .search(request, Some(request_option.clone()))
             .await
         {
             Ok(response) => {
@@ -219,7 +229,7 @@ async fn advanced_search_demo(
             .search
             .v1
             .user
-            .search_user(request, Some(request_option.clone()))
+            .search(request, Some(request_option.clone()))
             .await
         {
             Ok(response) => {
@@ -278,7 +288,7 @@ async fn display_user_details(
         .search
         .v1
         .user
-        .search_user(request, Some(request_option))
+        .search(request, Some(request_option))
         .await
     {
         Ok(response) => {
