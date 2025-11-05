@@ -2817,6 +2817,10 @@ impl Endpoints {
     /// 获取用户信息
     pub const AUTHEN_V1_USER_INFO: &'static str = "/open-apis/authen/v1/user_info";
 
+    // ==================== Passport 护照服务相关端点 ====================
+    /// 退出登录
+    pub const PASSPORT_V1_SESSIONS_LOGOUT: &'static str = "/open-apis/passport/v1/sessions/logout";
+
     // ==================== Calendar 日历相关端点 (补充) ====================
     /// 日历管理
     pub const CALENDAR_V4_CALENDARS: &'static str = "/open-apis/calendar/v4/calendars";
