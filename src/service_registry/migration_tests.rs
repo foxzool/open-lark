@@ -379,7 +379,7 @@ mod tests {
 
             // 测试访问内部服务
             let inner_ref = adapter.inner();
-            assert_eq!(inner_ref.service.config.app_id, "test_app_id");
+            assert_eq!(inner_ref.config.app_id, "test_app_id");
         }
 
         #[cfg(feature = "authentication")]
