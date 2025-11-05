@@ -53,7 +53,7 @@ use crate::service::task::TaskService;
 #[cfg(feature = "board")]
 use open_lark_extensions::board::BoardService;
 #[cfg(feature = "event")]
-use open_lark_extensions::event::EventService;
+use crate::service::event::EventService;
 
 /// 飞书开放平台SDK主客户端
 ///
@@ -74,8 +74,8 @@ pub struct LarkClient {
     // TODO: Fix config type mismatch for extension services
     // #[cfg(feature = "board")]
     // pub board: BoardService,
-    // #[cfg(feature = "event")]
-    // pub event: EventService,
+    #[cfg(feature = "event")]
+    pub event: EventService,
     #[cfg(feature = "ai")]
     pub ai: AiService,
     #[cfg(feature = "aily")]
@@ -135,8 +135,8 @@ impl LarkClient {
             // TODO: Fix config type mismatch for extension services
             // #[cfg(feature = "board")]
             // board: BoardService::new(config.clone()),
-            // #[cfg(feature = "event")]
-            // event: EventService::new(config.clone()),
+            #[cfg(feature = "event")]
+            event: EventService::new(config.clone()),
             #[cfg(feature = "ai")]
             ai: AiService::new(config.clone()),
             #[cfg(feature = "aily")]

@@ -51,6 +51,9 @@
 //! - [`apass`] - 通行证服务
 //! - [`acs`] - 门禁服务
 //!
+//! ## 事件与回调
+//! - [`event`] - 事件服务，事件订阅和回调管理
+//!
 //! ## 其他服务
 //! - [`helpdesk`] - 服务台，客户服务
 //! - [`moments`] - 公司圈，企业社交
@@ -132,6 +135,8 @@ pub mod directory;
 pub mod ehr;
 #[cfg(feature = "elearning")]
 pub mod elearning;
+#[cfg(feature = "event")]
+pub mod event;
 pub mod endpoints;
 #[cfg(feature = "feishu_people")]
 pub mod feishu_people;
@@ -224,6 +229,8 @@ pub use directory::DirectoryService;
 pub use ehr::EhrService;
 #[cfg(feature = "elearning")]
 pub use elearning::ElearningService;
+#[cfg(feature = "event")]
+pub use event::EventService;
 #[cfg(feature = "feishu_people")]
 pub use feishu_people::FeishuPeopleService;
 #[cfg(feature = "group")]

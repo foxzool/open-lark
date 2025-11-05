@@ -1,10 +1,10 @@
 {
   "metadata": {
     "total_apis": 1551,
-    "found_count": 864,
-    "implementation_rate": 55.705996131528046,
-    "processing_time": 76.11505508422852,
-    "generated_at": "2025-11-05T14:41:55.664293"
+    "found_count": 865,
+    "implementation_rate": 55.77047066408769,
+    "processing_time": 74.31610798835754,
+    "generated_at": "2025-11-05T15:17:07.208801"
   },
   "service_stats": {
     "event": {
@@ -233,10 +233,10 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-v1/outbound_ip/list",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/event/v1/mod.rs",
+      "line_number": "52",
+      "implementation_preview": "pub async fn get_outbound_ip(",
+      "status": "found"
     },
     {
       "name": "获取用户信息",
