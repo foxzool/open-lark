@@ -5,495 +5,873 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use open_lark_core::core::api_req::ApiRequest;
-use crate::core::{,
-use crate::core::SDKResult;    api_resp::ApiResponseTrait, config::Config, constants::AccessTokenType,
-    endpoints::EndpointBuilder, http::Transport,
+//! 职能角色服务
+//!
+//! 提供完整的职能角色管理功能：
+//! - 创建职能角色
+//! - 更新职能角色
+//! - 获取单个职能角色信息
+//! - 获取职能角色列表
+//! - 删除职能角色
+//! - 支持分页查询
+
+use crate::core::{
+    api_resp::{ApiResponseTrait, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    ApiRequest, SDKResult,
 };
 use serde::{Deserialize, Serialize};
-/// 角色管理服务,
-#[derive(Debug)]
+
+/// 职能角色信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FunctionalRole {
+    /// 角色ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_id: Option<String>,
+    /// 角色名称
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_name: Option<String>,
+    /// 角色描述
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// 创建时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<String>,
+    /// 更新时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_time: Option<String>,
+}
+
+impl Default for FunctionalRole {
+    fn default() -> Self {
+        Self {
+            role_id: None,
+            role_name: None,
+            description: None,
+            create_time: None,
+            update_time: None,
+        }
+    }
+}
+
+/// 职能角色服务
+#[derive(Debug, Clone)]
 pub struct FunctionalRoleService {
     config: Config,
+}
+
 impl FunctionalRoleService {
+    /// 创建新的职能角色服务实例
     pub fn new(config: Config) -> Self {
         Self { config }
-}/// 创建角色,
+    }
+
+    /// 创建职能角色
+    ///
+    /// 创建一个新的职能角色，用于管理系统中具有特定职责的用户群体
+    ///
+    /// # 参数
+    /// * `req` - 创建职能角色请求
+    ///
+    /// # 返回值
+    /// 返回创建成功的职能角色信息，包含角色ID
     pub async fn create(
         &self,
         req: &CreateFunctionalRoleRequest,
-    ) -> crate::core::SDKResult<CreateFunctionalRoleResponse> {,
-let api_req = ApiRequest {,
-            http_http_http_method: reqwest::Method::POST,
-            api_path: crate::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLES.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant]
+    ) -> SDKResult<CreateFunctionalRoleResponse> {
+        let api_path =
+            crate::core::endpoints_original::Endpoints::CONTACT_V3_FUNCTIONAL_ROLES.to_string();
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
+            api_path,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(req)?,
             ..Default::default()
-};
-let resp =,
+        };
+
+        let resp =
             Transport::<CreateFunctionalRoleResponse>::request(api_req, &self.config, None).await?;
-Ok(resp.data.unwrap_or_default()),
+        Ok(resp.data.unwrap_or_default())
     }
-/// 修改角色名称,
+
+    /// 更新职能角色
+    ///
+    /// 更新指定职能角色的基本信息
+    ///
+    /// # 参数
+    /// * `role_id` - 角色ID
+    /// * `req` - 更新职能角色请求
+    ///
+    /// # 返回值
+    /// 返回更新成功的职能角色信息
     pub async fn update(
         &self,
         role_id: &str,
         req: &UpdateFunctionalRoleRequest,
-    ) -> crate::core::SDKResult<UpdateFunctionalRoleResponse> {,
-let api_req = ApiRequest {,
-            http_http_http_method: reqwest::Method::PUT,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_GET,
-                "role_id",
-                role_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant]
+    ) -> SDKResult<UpdateFunctionalRoleResponse> {
+        let api_path = crate::core::endpoints_original::Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_GET
+            .replace("{role_id}", role_id);
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::PUT,
+            api_path,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(req)?,
             ..Default::default()
-};
-let resp =,
+        };
+
+        let resp =
             Transport::<UpdateFunctionalRoleResponse>::request(api_req, &self.config, None).await?;
-Ok(resp.data.unwrap_or_default()),
+        Ok(resp.data.unwrap_or_default())
     }
-/// # API文档,
-    ///,
-/// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/get,
-    /// 获取单个角色信息
-    pub async fn get(&self, role_id: &str) -> crate::core::SDKResult<GetFunctionalRoleResponse> {,
-let api_req = ApiRequest {,
-            http_http_http_method: reqwest::Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_GET,
-                "role_id",
-                role_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant]
+
+    /// 获取单个职能角色信息
+    ///
+    /// 根据角色ID获取职能角色的详细信息
+    ///
+    /// # 参数
+    /// * `role_id` - 角色ID
+    ///
+    /// # 返回值
+    /// 返回职能角色的详细信息
+    pub async fn get(&self, role_id: &str) -> SDKResult<GetFunctionalRoleResponse> {
+        let api_path = crate::core::endpoints_original::Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_GET
+            .replace("{role_id}", role_id);
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             ..Default::default()
-};
-let resp =,
+        };
+
+        let resp =
             Transport::<GetFunctionalRoleResponse>::request(api_req, &self.config, None).await?;
-Ok(resp.data.unwrap_or_default()),
+        Ok(resp.data.unwrap_or_default())
     }
-/// 获取角色列表,
+
+    /// 获取职能角色列表
+    ///
+    /// 获取企业内所有职能角色的列表，支持分页查询
+    ///
+    /// # 参数
+    /// * `req` - 查询职能角色列表请求
+    ///
+    /// # 返回值
+    /// 返回职能角色列表，支持分页
     pub async fn list(
         &self,
         req: &ListFunctionalRolesRequest,
-    ) -> crate::core::SDKResult<ListFunctionalRolesResponse> {,
-let mut api_req = ApiRequest {,
-            http_http_http_method: reqwest::Method::GET,
-            api_path: crate::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLES.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant]
+    ) -> SDKResult<ListFunctionalRolesResponse> {
+        let mut api_path =
+            crate::core::endpoints_original::Endpoints::CONTACT_V3_FUNCTIONAL_ROLES.to_string();
+
+        // 添加查询参数
+        let mut query_params = Vec::new();
+        if let Some(page_size) = &req.page_size {
+            query_params.push(format!("page_size={}", page_size));
+        }
+        if let Some(page_token) = &req.page_token {
+            query_params.push(format!("page_token={}", page_token));
+        }
+
+        if !query_params.is_empty() {
+            api_path.push('?');
+            api_path.push_str(&query_params.join("&"));
+        }
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             ..Default::default()
-};
-// 添加查询参数,
-        if let Some(page_size) = req.page_size {,
-api_req
-                .query_params
-                .insert("page_size", page_size.to_string());
-if let Some(page_token) = &req.page_token {,
-            api_req
-.query_params
-                .insert("page_token", page_token.clone());
-let resp =,
+        };
+
+        let resp =
             Transport::<ListFunctionalRolesResponse>::request(api_req, &self.config, None).await?;
-Ok(resp.data.unwrap_or_default()),
+        Ok(resp.data.unwrap_or_default())
     }
-/// 删除角色,
-    pub async fn delete(
-        &self,
-        role_id: &str,
-    ) -> crate::core::SDKResult<DeleteFunctionalRoleResponse> {,
-let api_req = ApiRequest {,
-            http_http_http_method: reqwest::Method::DELETE,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_GET,
-                "role_id",
-                role_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant]
+
+    /// 删除职能角色
+    ///
+    /// 删除指定的职能角色
+    ///
+    /// # 参数
+    /// * `role_id` - 角色ID
+    ///
+    /// # 返回值
+    /// 返回删除操作的结果
+    pub async fn delete(&self, role_id: &str) -> SDKResult<DeleteFunctionalRoleResponse> {
+        let api_path = crate::core::endpoints_original::Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_GET
+            .replace("{role_id}", role_id);
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::DELETE,
+            api_path,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             ..Default::default()
-};
-let resp =,
+        };
+
+        let resp =
             Transport::<DeleteFunctionalRoleResponse>::request(api_req, &self.config, None).await?;
-Ok(resp.data.unwrap_or_default()),
+        Ok(resp.data.unwrap_or_default())
     }
+}
 
-#[derive(Debug, Clone)]
+// ==================== 数据模型 ====================
+
+/// 创建职能角色请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateFunctionalRoleRequest {
+    /// 角色名称
     pub role_name: String,
+    /// 角色描述
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+}
 
-#[derive(Debug, Clone)]
+/// 创建职能角色响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct CreateFunctionalRoleResponse {
+    /// 角色ID
     pub role_id: String,
-impl ApiResponseTrait for.* {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data
-    }
-
-#[derive(Debug, Clone)]
-pub struct UpdateFunctionalRoleRequest {
+    /// 角色名称
     pub role_name: String,
-
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct UpdateFunctionalRoleResponse {}
-impl ApiResponseTrait for.* {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data
-    }
-
-#[derive(Debug, Clone)]
-pub struct GetFunctionalRoleResponse {
-    pub role: FunctionalRole,
-impl ApiResponseTrait for.* {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data
-    }
-
-#[derive(Debug, Clone)]
-pub struct ListFunctionalRolesRequest {
-    /// 分页大小,
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_size: Option<i32>,
-    /// 分页标记,
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-
-#[derive(Debug, Clone)]
-pub struct ListFunctionalRolesResponse {
-    pub roles: Vec<FunctionalRole>,
+    /// 角色描述
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub has_more: Option<bool>,
+    pub description: Option<String>,
+    /// 创建时间
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-impl ApiResponseTrait for.* {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data
-    }
+    pub create_time: Option<String>,
+}
 
-#[derive(Debug, Clone)]
-pub struct FunctionalRole {
-    /// 角色ID,
-#[serde(skip_serializing_if = "Option::is_none")]
-    pub role_id: Option<String>,
-    /// 角色名称,
-#[serde(skip_serializing_if = "Option::is_none")]
+impl ApiResponseTrait for CreateFunctionalRoleResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 更新职能角色请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UpdateFunctionalRoleRequest {
+    /// 角色名称
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_name: Option<String>,
+    /// 角色描述
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+}
 
+/// 更新职能角色响应
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct DeleteFunctionalRoleResponse {}
-impl ApiResponseTrait for.* {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data
+pub struct UpdateFunctionalRoleResponse {
+    /// 角色信息
+    pub role: FunctionalRole,
+}
+
+impl ApiResponseTrait for UpdateFunctionalRoleResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
-#[cfg(test)]
-mod tests {
-use super::*;
-    use crate::core::config::Config;
-#[test]
-    fn test_functional_role_service_creation() {
-let config = Config::default();
-        let service = FunctionalRoleService::new(config);
-        assert!(!format!("{:?}", service).is_empty());
-#[test]
-    fn test_functional_role_service_creation_with_custom_config() {
-let config = Config::builder()
-            .app_id()
-.app_secret()
-            .build();
-let service = FunctionalRoleService::new(config);
-        assert!(!format!("{:?}", service).is_empty());
-#[test]
-    fn test_create_functional_role_request_construction() {
-let request = CreateFunctionalRoleRequest {,
-            role_name: "测试角色".to_string(),
-        };
-        assert_eq!(request.role_name, "测试角色");
-        assert!(format!("{:?}", request).contains("测试角色"));
-#[test]
-    fn test_create_functional_role_request_with_empty_name() {
-let request = CreateFunctionalRoleRequest {,
-            role_name: "".to_string(),
-        };
-        assert_eq!(request.role_name, "");
-#[test]
-    fn test_create_functional_role_request_with_long_name() {
-let long_name = "a".repeat(500);
-        let request = CreateFunctionalRoleRequest {
-            role_name: long_name.clone(),
-        };
-        assert_eq!(request.role_name, long_name);
-#[test]
-    fn test_create_functional_role_response_default() {
-let response = CreateFunctionalRoleResponse::default();
-        assert_eq!(response.role_id, "");
-#[test]
-    fn test_create_functional_role_response_construction() {
-let response = CreateFunctionalRoleResponse {,
-            role_id: "role_123".to_string(),
-        };
-        assert_eq!(response.role_id, "role_123");
-#[test]
-    fn test_create_functional_role_response_data_format() {
-assert_eq!(,
-            CreateFunctionalRoleResponse::data_format(),
-            crate::core::api_resp::ResponseFormat::Data
-);
+}
+
+/// 获取单个职能角色信息响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct GetFunctionalRoleResponse {
+    /// 角色信息
+    pub role: FunctionalRole,
+}
+
+impl ApiResponseTrait for GetFunctionalRoleResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
-#[test]
-    fn test_update_functional_role_request_construction() {
-let request = UpdateFunctionalRoleRequest {,
-            role_name: "更新后角色".to_string(),
-        };
-        assert_eq!(request.role_name, "更新后角色");
-        assert!(format!("{:?}", request).contains("更新后角色"));
-#[test]
-    fn test_update_functional_role_request_with_empty_name() {
-let request = UpdateFunctionalRoleRequest {,
-            role_name: "".to_string(),
-        };
-        assert_eq!(request.role_name, "");
-#[test]
-    fn test_update_functional_role_request_with_long_name() {
-let long_name = "b".repeat(1000);
-        let request = UpdateFunctionalRoleRequest {
-            role_name: long_name.clone(),
-        };
-        assert_eq!(request.role_name, long_name);
-#[test]
-    fn test_update_functional_role_response_default() {
-let response = UpdateFunctionalRoleResponse::default();
-        assert!(!format!("{:?}", response).is_empty());
-#[test]
-    fn test_update_functional_role_response_data_format() {
-assert_eq!(,
-            UpdateFunctionalRoleResponse::data_format(),
-            crate::core::api_resp::ResponseFormat::Data
-);
-    }
-#[test]
-    fn test_get_functional_role_response_default() {
-let response = GetFunctionalRoleResponse::default();
-        assert_eq!(response.role.role_id, None);
-        assert_eq!(response.role.role_name, None);
-#[test]
-    fn test_get_functional_role_response_construction() {
-let role = FunctionalRole {,
-            role_id: Some("role_456".to_string()),
-            role_name: Some("管理员角色".to_string()),
-        };
-        let response = GetFunctionalRoleResponse { role };
-        assert_eq!(response.role.role_id, Some("role_456".to_string()));
-        assert_eq!(response.role.role_name, Some("管理员角色".to_string()));
-#[test]
-    fn test_get_functional_role_response_data_format() {
-assert_eq!(,
-            GetFunctionalRoleResponse::data_format(),
-            crate::core::api_resp::ResponseFormat::Data
-);
-    }
-#[test]
-    fn test_list_functional_roles_request_default() {
-let request = ListFunctionalRolesRequest {,
+}
+
+/// 查询职能角色列表请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ListFunctionalRolesRequest {
+    /// 分页大小
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i32>,
+    /// 分页标记
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+}
+
+impl Default for ListFunctionalRolesRequest {
+    fn default() -> Self {
+        Self {
             page_size: None,
             page_token: None,
+        }
+    }
+}
+
+/// 查询职能角色列表响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct ListFunctionalRolesResponse {
+    /// 职能角色列表
+    pub items: Vec<FunctionalRole>,
+    /// 是否还有更多项目
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub has_more: Option<bool>,
+    /// 分页标记
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+}
+
+impl ApiResponseTrait for ListFunctionalRolesResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 删除职能角色响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct DeleteFunctionalRoleResponse {
+    /// 删除成功标识
+    pub success: bool,
+}
+
+impl ApiResponseTrait for DeleteFunctionalRoleResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+// ==================== 构建器模式 ====================
+
+/// 创建职能角色构建器
+#[derive(Debug, Clone)]
+pub struct CreateFunctionalRoleBuilder {
+    request: CreateFunctionalRoleRequest,
+}
+
+impl Default for CreateFunctionalRoleBuilder {
+    fn default() -> Self {
+        Self {
+            request: CreateFunctionalRoleRequest {
+                role_name: String::new(),
+                description: None,
+            },
+        }
+    }
+}
+
+impl CreateFunctionalRoleBuilder {
+    /// 创建新的构建器
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 设置角色名称
+    pub fn role_name(mut self, role_name: impl Into<String>) -> Self {
+        self.request.role_name = role_name.into();
+        self
+    }
+
+    /// 设置角色描述
+    pub fn description(mut self, description: impl Into<String>) -> Self {
+        self.request.description = Some(description.into());
+        self
+    }
+
+    /// 执行创建
+    pub async fn execute(
+        self,
+        service: &FunctionalRoleService,
+    ) -> SDKResult<CreateFunctionalRoleResponse> {
+        service.create(&self.request).await
+    }
+}
+
+/// 查询职能角色列表构建器
+#[derive(Debug, Clone)]
+pub struct ListFunctionalRolesBuilder {
+    request: ListFunctionalRolesRequest,
+}
+
+impl Default for ListFunctionalRolesBuilder {
+    fn default() -> Self {
+        Self {
+            request: ListFunctionalRolesRequest::default(),
+        }
+    }
+}
+
+impl ListFunctionalRolesBuilder {
+    /// 创建新的查询构建器
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 设置分页大小
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.request.page_size = Some(page_size);
+        self
+    }
+
+    /// 设置分页标记
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.request.page_token = Some(page_token.into());
+        self
+    }
+
+    /// 执行查询
+    pub async fn execute(
+        self,
+        service: &FunctionalRoleService,
+    ) -> SDKResult<ListFunctionalRolesResponse> {
+        service.list(&self.request).await
+    }
+}
+
+impl FunctionalRoleService {
+    /// 创建职能角色构建器
+    pub fn create_functional_role_builder(&self) -> CreateFunctionalRoleBuilder {
+        CreateFunctionalRoleBuilder::new()
+    }
+
+    /// 创建查询构建器
+    pub fn list_functional_roles_builder(&self) -> ListFunctionalRolesBuilder {
+        ListFunctionalRolesBuilder::new()
+    }
+}
+
+// ==================== 单元测试 ====================
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_functional_role_service_creation() {
+        let config = Config::default();
+        let service = FunctionalRoleService::new(config);
+        assert!(!format!("{:?}", service).is_empty());
+    }
+
+    #[test]
+    fn test_functional_role_default_creation() {
+        let role = FunctionalRole::default();
+        assert_eq!(role.role_id, None);
+        assert_eq!(role.role_name, None);
+        assert_eq!(role.description, None);
+        assert_eq!(role.create_time, None);
+        assert_eq!(role.update_time, None);
+    }
+
+    #[test]
+    fn test_functional_role_with_data() {
+        let role = FunctionalRole {
+            role_id: Some("role_123".to_string()),
+            role_name: Some("管理员".to_string()),
+            description: Some("系统管理员角色".to_string()),
+            create_time: Some("2023-01-01T00:00:00Z".to_string()),
+            update_time: Some("2023-01-02T00:00:00Z".to_string()),
         };
+
+        assert_eq!(role.role_id, Some("role_123".to_string()));
+        assert_eq!(role.role_name, Some("管理员".to_string()));
+        assert_eq!(role.description, Some("系统管理员角色".to_string()));
+        assert_eq!(role.create_time, Some("2023-01-01T00:00:00Z".to_string()));
+        assert_eq!(role.update_time, Some("2023-01-02T00:00:00Z".to_string()));
+    }
+
+    #[test]
+    fn test_create_functional_role_request() {
+        let request = CreateFunctionalRoleRequest {
+            role_name: "新角色".to_string(),
+            description: Some("角色描述".to_string()),
+        };
+
+        assert_eq!(request.role_name, "新角色");
+        assert_eq!(request.description, Some("角色描述".to_string()));
+    }
+
+    #[test]
+    fn test_create_functional_role_request_without_description() {
+        let request = CreateFunctionalRoleRequest {
+            role_name: "简单角色".to_string(),
+            description: None,
+        };
+
+        assert_eq!(request.role_name, "简单角色");
+        assert_eq!(request.description, None);
+    }
+
+    #[test]
+    fn test_update_functional_role_request() {
+        let request = UpdateFunctionalRoleRequest {
+            role_name: Some("更新后角色名".to_string()),
+            description: Some("更新后描述".to_string()),
+        };
+
+        assert_eq!(request.role_name, Some("更新后角色名".to_string()));
+        assert_eq!(request.description, Some("更新后描述".to_string()));
+    }
+
+    #[test]
+    fn test_update_functional_role_request_partial() {
+        let request1 = UpdateFunctionalRoleRequest {
+            role_name: Some("只更新名称".to_string()),
+            description: None,
+        };
+
+        let request2 = UpdateFunctionalRoleRequest {
+            role_name: None,
+            description: Some("只更新描述".to_string()),
+        };
+
+        assert_eq!(request1.role_name, Some("只更新名称".to_string()));
+        assert_eq!(request1.description, None);
+        assert_eq!(request2.role_name, None);
+        assert_eq!(request2.description, Some("只更新描述".to_string()));
+    }
+
+    #[test]
+    fn test_list_functional_roles_request_default() {
+        let request = ListFunctionalRolesRequest::default();
         assert_eq!(request.page_size, None);
         assert_eq!(request.page_token, None);
-#[test]
+    }
+
+    #[test]
     fn test_list_functional_roles_request_with_pagination() {
-let request = ListFunctionalRolesRequest {,
+        let request = ListFunctionalRolesRequest {
             page_size: Some(50),
             page_token: Some("token_123".to_string()),
         };
+
         assert_eq!(request.page_size, Some(50));
         assert_eq!(request.page_token, Some("token_123".to_string()));
-#[test]
-    fn test_list_functional_roles_request_with_large_page_size() {
-let request = ListFunctionalRolesRequest {,
-            page_size: Some(10000),
-            page_token: Some("large_page_token".to_string()),
-        };
-        assert_eq!(request.page_size, Some(10000));
-        assert_eq!(request.page_token, Some("large_page_token".to_string()));
-#[test]
-    fn test_list_functional_roles_request_with_zero_page_size() {
-let request = ListFunctionalRolesRequest {,
-            page_size: Some(0),
-            page_token: None,
-        };
-        assert_eq!(request.page_size, Some(0));
-#[test]
-    fn test_list_functional_roles_request_with_negative_page_size() {
-let request = ListFunctionalRolesRequest {,
-            page_size: Some(-1),
-            page_token: None,
-        };
-        assert_eq!(request.page_size, Some(-1));
-#[test]
-    fn test_list_functional_roles_request_with_empty_token() {
-let request = ListFunctionalRolesRequest {,
-            page_size: Some(20),
-            page_token: Some("".to_string()),
-        };
-        assert_eq!(request.page_token, Some("".to_string()));
-#[test]
-    fn test_list_functional_roles_request_with_long_token() {
-let long_token = "x".repeat(2000);
-        let request = ListFunctionalRolesRequest {
-            page_size: Some(100),
-            page_token: Some(long_token.clone()),
-        };
-        assert_eq!(request.page_token, Some(long_token));
-#[test]
-    fn test_list_functional_roles_response_default() {
-let response = ListFunctionalRolesResponse::default();
-        assert_eq!(response.roles.len(), 0);
-        assert_eq!(response.has_more, None);
-        assert_eq!(response.page_token, None);
-#[test]
-    fn test_list_functional_roles_response_with_roles() {
-let roles = vec![,
-            FunctionalRole {
-                role_id: Some("role_1".to_string()),
-                role_name: Some("角色1".to_string()),
-            }
-            FunctionalRole {
-                role_id: Some("role_2".to_string()),
-                role_name: Some("角色2".to_string()),
-            }
-        ];
-let response = ListFunctionalRolesResponse {,
-            roles,
-            has_more: Some(true),
-            page_token: Some("next_page".to_string()),
-        };
-        assert_eq!(response.roles.len(), 2);
-        assert_eq!(response.has_more, Some(true));
-        assert_eq!(response.page_token, Some("next_page".to_string()));
-#[test]
-    fn test_list_functional_roles_response_with_large_role_list() {
-let mut roles = Vec::new();
-        for i in 0..1000 {,
-roles.push(FunctionalRole {,
-                role_id: Some(format!("role_{}", i)),
-                role_name: Some(format!("角色{}", i)),
-            });
-let response = ListFunctionalRolesResponse {,
-            roles,
-            has_more: Some(false),
-            page_token: None,
-        };
-        assert_eq!(response.roles.len(), 1000);
-        assert_eq!(response.has_more, Some(false));
-#[test]
-    fn test_list_functional_roles_response_data_format() {
-assert_eq!(,
-            ListFunctionalRolesResponse::data_format(),
-            crate::core::api_resp::ResponseFormat::Data
-);
     }
-#[test]
-    fn test_functional_role_default() {
-let role = FunctionalRole::default();
-        assert_eq!(role.role_id, None);
-        assert_eq!(role.role_name, None);
-#[test]
-    fn test_functional_role_construction() {
-let role = FunctionalRole {,
-            role_id: Some("role_789".to_string()),
-            role_name: Some("超级管理员".to_string()),
-        };
-        assert_eq!(role.role_id, Some("role_789".to_string()));
-        assert_eq!(role.role_name, Some("超级管理员".to_string()));
-#[test]
-    fn test_functional_role_with_empty_values() {
-let role = FunctionalRole {,
-            role_id: Some("".to_string()),
-            role_name: Some("".to_string()),
-        };
-        assert_eq!(role.role_id, Some("".to_string()));
-        assert_eq!(role.role_name, Some("".to_string()));
-#[test]
-    fn test_functional_role_with_long_values() {
-let long_id = "id_".repeat(500);
-        let long_name = "name_".repeat(500);
-let role = FunctionalRole {,
-            role_id: Some(long_id.clone()),
-            role_name: Some(long_name.clone()),
-        };
-        assert_eq!(role.role_id, Some(long_id));
-        assert_eq!(role.role_name, Some(long_name));
-#[test]
-    fn test_functional_role_partial_none() {
-let role1 = FunctionalRole {,
-            role_id: Some("role_only_id".to_string()),
-            role_name: None,
-        };
-let role2 = FunctionalRole {,
-            role_id: None,
-            role_name: Some("name_only".to_string()),
-        };
-        assert_eq!(role1.role_id, Some("role_only_id".to_string()));
-        assert_eq!(role1.role_name, None);
-        assert_eq!(role2.role_id, None);
-        assert_eq!(role2.role_name, Some("name_only".to_string()));
-#[test]
-    fn test_delete_functional_role_response_default() {
-let response = DeleteFunctionalRoleResponse::default();
-        assert!(!format!("{:?}", response).is_empty());
-#[test]
-    fn test_delete_functional_role_response_data_format() {
-assert_eq!(,
-            DeleteFunctionalRoleResponse::data_format(),
-            crate::core::api_resp::ResponseFormat::Data
-);
-    }
-#[test]
-    fn test_config_independence() {
-let config1 = Config::default();
-        let config2 = Config::default();
-let service1 = FunctionalRoleService::new(config1);
-        let service2 = FunctionalRoleService::new(config2);
-        assert!(!format!("{:?}", service1).is_empty());
-        assert!(!format!("{:?}", service2).is_empty());
-#[test]
-    fn test_all_structs_debug_trait() {
-let request1 = CreateFunctionalRoleRequest {,
-            role_name: "test".to_string(),
-        };
-let request2 = UpdateFunctionalRoleRequest {,
-            role_name: "test".to_string(),
-        };
-let request3 = ListFunctionalRolesRequest {,
-            page_size: Some(10),
-            page_token: Some("test".to_string()),
-        };
-let response1 = CreateFunctionalRoleResponse::default();
-        let response2 = UpdateFunctionalRoleResponse::default();
-let response3 = GetFunctionalRoleResponse::default();
-        let response4 = ListFunctionalRolesResponse::default();
-let response5 = DeleteFunctionalRoleResponse::default();
-        let role = FunctionalRole::default();
 
-        assert!(format!("{:?}", request1).contains("test"));
-        assert!(format!("{:?}", request2).contains("test"));
-        assert!(format!("{:?}", request3).contains("test"));
-        assert!(!format!("{:?}", response1).is_empty());
-        assert!(!format!("{:?}", response2).is_empty());
-        assert!(!format!("{:?}", response3).is_empty());
-        assert!(!format!("{:?}", response4).is_empty());
-        assert!(!format!("{:?}", response5).is_empty());
-        assert!(!format!("{:?}", role).is_empty());
+    #[test]
+    fn test_response_default_creation() {
+        let create_response = CreateFunctionalRoleResponse::default();
+        assert_eq!(create_response.role_id, "");
+        assert_eq!(create_response.role_name, "");
+
+        let update_response = UpdateFunctionalRoleResponse::default();
+        assert_eq!(update_response.role.role_id, None);
+
+        let get_response = GetFunctionalRoleResponse::default();
+        assert_eq!(get_response.role.role_id, None);
+
+        let list_response = ListFunctionalRolesResponse::default();
+        assert_eq!(list_response.items.len(), 0);
+        assert_eq!(list_response.has_more, None);
+        assert_eq!(list_response.page_token, None);
+
+        let delete_response = DeleteFunctionalRoleResponse::default();
+        assert_eq!(delete_response.success, false);
+    }
+
+    #[test]
+    fn test_response_with_data() {
+        let mut create_response = CreateFunctionalRoleResponse::default();
+        create_response.role_id = "role_456".to_string();
+        create_response.role_name = "测试角色".to_string();
+
+        assert_eq!(create_response.role_id, "role_456");
+        assert_eq!(create_response.role_name, "测试角色");
+
+        let role = FunctionalRole {
+            role_id: Some("role_789".to_string()),
+            role_name: Some("角色789".to_string()),
+            ..Default::default()
+        };
+
+        let mut get_response = GetFunctionalRoleResponse::default();
+        get_response.role = role.clone();
+        assert_eq!(get_response.role.role_id, Some("role_789".to_string()));
+
+        let mut list_response = ListFunctionalRolesResponse::default();
+        list_response.items = vec![role.clone()];
+        list_response.has_more = Some(true);
+        list_response.page_token = Some("next_page".to_string());
+
+        assert_eq!(list_response.items.len(), 1);
+        assert_eq!(list_response.has_more, Some(true));
+        assert_eq!(list_response.page_token, Some("next_page".to_string()));
+
+        let mut delete_response = DeleteFunctionalRoleResponse::default();
+        delete_response.success = true;
+        assert_eq!(delete_response.success, true);
+    }
+
+    #[test]
+    fn test_api_response_trait_implementation() {
+        assert_eq!(
+            CreateFunctionalRoleResponse::data_format(),
+            ResponseFormat::Data
+        );
+        assert_eq!(
+            UpdateFunctionalRoleResponse::data_format(),
+            ResponseFormat::Data
+        );
+        assert_eq!(
+            GetFunctionalRoleResponse::data_format(),
+            ResponseFormat::Data
+        );
+        assert_eq!(
+            ListFunctionalRolesResponse::data_format(),
+            ResponseFormat::Data
+        );
+        assert_eq!(
+            DeleteFunctionalRoleResponse::data_format(),
+            ResponseFormat::Data
+        );
+    }
+
+    #[test]
+    fn test_request_serialization() {
+        let create_request = CreateFunctionalRoleRequest {
+            role_name: "序列化测试".to_string(),
+            description: Some("测试序列化".to_string()),
+        };
+
+        let serialized = serde_json::to_string(&create_request).unwrap();
+        let deserialized: CreateFunctionalRoleRequest = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(create_request.role_name, deserialized.role_name);
+        assert_eq!(create_request.description, deserialized.description);
+
+        let list_request = ListFunctionalRolesRequest {
+            page_size: Some(100),
+            page_token: Some("test_token".to_string()),
+        };
+
+        let serialized = serde_json::to_string(&list_request).unwrap();
+        let deserialized: ListFunctionalRolesRequest = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(list_request.page_size, deserialized.page_size);
+        assert_eq!(list_request.page_token, deserialized.page_token);
+    }
+
+    #[test]
+    fn test_query_parameters_construction() {
+        let request = ListFunctionalRolesRequest {
+            page_size: Some(20),
+            page_token: Some("test_token".to_string()),
+        };
+
+        let mut query_params = Vec::new();
+        if let Some(page_size) = &request.page_size {
+            query_params.push(format!("page_size={}", page_size));
+        }
+        if let Some(page_token) = &request.page_token {
+            query_params.push(format!("page_token={}", page_token));
+        }
+
+        assert_eq!(query_params.len(), 2);
+        assert!(query_params.contains(&"page_size=20".to_string()));
+        assert!(query_params.contains(&"page_token=test_token".to_string()));
+    }
+
+    #[test]
+    fn test_endpoint_constants() {
+        // Test that the endpoint constants are properly defined
+        assert_eq!(
+            crate::core::endpoints_original::Endpoints::CONTACT_V3_FUNCTIONAL_ROLES,
+            "/open-apis/contact/v3/functional_roles"
+        );
+        assert_eq!(
+            crate::core::endpoints_original::Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_GET,
+            "/open-apis/contact/v3/functional_roles/{role_id}"
+        );
+    }
+
+    #[test]
+    fn test_create_functional_role_builder() {
+        let builder = CreateFunctionalRoleBuilder::new()
+            .role_name("构建器角色")
+            .description("使用构建器创建的角色");
+
+        assert_eq!(builder.request.role_name, "构建器角色");
+        assert_eq!(
+            builder.request.description,
+            Some("使用构建器创建的角色".to_string())
+        );
+    }
+
+    #[test]
+    fn test_create_functional_role_builder_default() {
+        let builder = CreateFunctionalRoleBuilder::default();
+        assert_eq!(builder.request.role_name, "");
+        assert_eq!(builder.request.description, None);
+    }
+
+    #[test]
+    fn test_list_functional_roles_builder() {
+        let builder = ListFunctionalRolesBuilder::new()
+            .page_size(30)
+            .page_token("builder_token");
+
+        assert_eq!(builder.request.page_size, Some(30));
+        assert_eq!(
+            builder.request.page_token,
+            Some("builder_token".to_string())
+        );
+    }
+
+    #[test]
+    fn test_list_functional_roles_builder_default() {
+        let builder = ListFunctionalRolesBuilder::default();
+        assert_eq!(builder.request.page_size, None);
+        assert_eq!(builder.request.page_token, None);
+    }
+
+    #[test]
+    fn test_functional_role_description_handling() {
+        // Test different description scenarios
+        let role_with_description = FunctionalRole {
+            role_id: Some("role_desc_1".to_string()),
+            role_name: Some("带描述的角色".to_string()),
+            description: Some("这是一个详细的角色描述".to_string()),
+            ..Default::default()
+        };
+
+        let role_without_description = FunctionalRole {
+            role_id: Some("role_no_desc".to_string()),
+            role_name: Some("无描述角色".to_string()),
+            description: None,
+            ..Default::default()
+        };
+
+        let role_with_empty_description = FunctionalRole {
+            role_id: Some("role_empty_desc".to_string()),
+            role_name: Some("空描述角色".to_string()),
+            description: Some("".to_string()),
+            ..Default::default()
+        };
+
+        assert_eq!(
+            role_with_description.description,
+            Some("这是一个详细的角色描述".to_string())
+        );
+        assert_eq!(role_without_description.description, None);
+        assert_eq!(
+            role_with_empty_description.description,
+            Some("".to_string())
+        );
+    }
+
+    #[test]
+    fn test_functional_role_time_fields() {
+        // Test different time formats
+        let role_with_iso_time = FunctionalRole {
+            role_id: Some("role_time_1".to_string()),
+            role_name: Some("ISO时间角色".to_string()),
+            create_time: Some("2023-12-31T23:59:59Z".to_string()),
+            update_time: Some("2024-01-01T00:00:00Z".to_string()),
+            ..Default::default()
+        };
+
+        let role_with_chinese_time = FunctionalRole {
+            role_id: Some("role_time_2".to_string()),
+            role_name: Some("中文时间角色".to_string()),
+            create_time: Some("2023年12月31日 23:59:59".to_string()),
+            update_time: Some("2024年01月01日 00:00:00".to_string()),
+            ..Default::default()
+        };
+
+        assert_eq!(
+            role_with_iso_time.create_time,
+            Some("2023-12-31T23:59:59Z".to_string())
+        );
+        assert_eq!(
+            role_with_iso_time.update_time,
+            Some("2024-01-01T00:00:00Z".to_string())
+        );
+        assert_eq!(
+            role_with_chinese_time.create_time,
+            Some("2023年12月31日 23:59:59".to_string())
+        );
+        assert_eq!(
+            role_with_chinese_time.update_time,
+            Some("2024年01月01日 00:00:00".to_string())
+        );
+    }
+
+    #[test]
+    fn test_functional_role_name_variations() {
+        // Test different role name scenarios
+        let admin_role = FunctionalRole {
+            role_id: Some("admin_role".to_string()),
+            role_name: Some("系统管理员".to_string()),
+            ..Default::default()
+        };
+
+        let user_role = FunctionalRole {
+            role_id: Some("user_role".to_string()),
+            role_name: Some("普通用户".to_string()),
+            ..Default::default()
+        };
+
+        let guest_role = FunctionalRole {
+            role_id: Some("guest_role".to_string()),
+            role_name: Some("访客用户".to_string()),
+            ..Default::default()
+        };
+
+        let long_name_role = FunctionalRole {
+            role_id: Some("long_name_role".to_string()),
+            role_name: Some(
+                "这是一个非常非常长的角色名称用于测试系统对长角色名称的处理能力".to_string(),
+            ),
+            ..Default::default()
+        };
+
+        assert_eq!(admin_role.role_name, Some("系统管理员".to_string()));
+        assert_eq!(user_role.role_name, Some("普通用户".to_string()));
+        assert_eq!(guest_role.role_name, Some("访客用户".to_string()));
+        assert_eq!(
+            long_name_role.role_name,
+            Some("这是一个非常非常长的角色名称用于测试系统对长角色名称的处理能力".to_string())
+        );
+    }
+
+    #[test]
+    fn test_comprehensive_functional_role_data() {
+        // Test comprehensive functional role data with all fields
+        let comprehensive_role = FunctionalRole {
+            role_id: Some("comprehensive_001".to_string()),
+            role_name: Some("综合测试角色".to_string()),
+            description: Some(
+                "这是一个用于全面测试的角色，包含所有可能的字段和数据类型".to_string(),
+            ),
+            create_time: Some("2023-01-01T08:00:00Z".to_string()),
+            update_time: Some("2023-12-31T16:00:00Z".to_string()),
+        };
+
+        assert_eq!(
+            comprehensive_role.role_id,
+            Some("comprehensive_001".to_string())
+        );
+        assert_eq!(
+            comprehensive_role.role_name,
+            Some("综合测试角色".to_string())
+        );
+        assert_eq!(
+            comprehensive_role.description,
+            Some("这是一个用于全面测试的角色，包含所有可能的字段和数据类型".to_string())
+        );
+        assert_eq!(
+            comprehensive_role.create_time,
+            Some("2023-01-01T08:00:00Z".to_string())
+        );
+        assert_eq!(
+            comprehensive_role.update_time,
+            Some("2023-12-31T16:00:00Z".to_string())
+        );
+    }
+}
