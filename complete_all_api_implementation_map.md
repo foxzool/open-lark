@@ -1,9 +1,9 @@
 # 完整API实现映射表
 
-**生成时间**: 2025-11-06 18:25:00
+**生成时间**: 2025-11-06 18:25:30
 **总API数**: 1551
-**已实现**: 938
-**实现率**: 60.4%
+**已实现**: 937
+**实现率**: 60.5%
 **处理耗时**: 1.3 分钟
 **处理速度**: 19.7 API/秒  
 
@@ -36,9 +36,9 @@
 | 25 | [查询用户所属用户组](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/member_belong) | GET | `/open-apis/contact/v3/group/member_belong` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/member_belong | `../src/service/contact/v3/group.rs` | 276 | ✅ 已实现 |
 | 26 | [删除用户组](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/delete) | DELETE | `/open-apis/contact/v3/group/:group_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/delete | `../src/service/contact/v3/group.rs` | 192 | ✅ 已实现 |
 | 27 | [获取企业自定义用户字段](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/custom_attr/list) | GET | `/open-apis/contact/v3/custom_attrs` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/custom_attr/list | `../src/service/contact/v3/custom_attr.rs` | 82 | ✅ 已实现 |
-| 28 | [新增人员类型](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/create) | POST | `/open-apis/contact/v3/employee_type_enums` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/create | `未找到` | - | ❌ 未实现 |
+| 28 | [新增人员类型](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/create) | POST | `/open-apis/contact/v3/employee_type_enums` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/create | `../src/service/contact/v3/employee_type_enum.rs` | 88 | ✅ 已实现 |
 | 29 | [更新人员类型](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/update) | PUT | `/open-apis/contact/v3/employee_type_enums/:enum_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/update | `../src/service/contact/v3/employee_type_enum.rs` | 147 | ✅ 已实现 |
-| 30 | [查询人员类型](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/list) | GET | `/open-apis/contact/v3/employee_type_enums` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/list | `未找到` | - | ❌ 未实现 |
+| 30 | [查询人员类型](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/list) | GET | `/open-apis/contact/v3/employee_type_enums` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/list | `../src/service/contact/v3/employee_type_enum.rs` | 174 | ✅ 已实现 |
 | 31 | [删除人员类型](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/delete) | DELETE | `/open-apis/contact/v3/employee_type_enums/:enum_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/delete | `../src/service/contact/v3/employee_type_enum.rs` | 147 | ✅ 已实现 |
 | 32 | [创建部门](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/department/create) | POST | `/open-apis/contact/v3/departments` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/department/create | `../src/service/contact/v3/unit.rs` | 300 | ✅ 已实现 |
 | 33 | [修改部门部分信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/department/patch) | PATCH | `/open-apis/contact/v3/departments/:department_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/department/patch | `../src/service/contact/v3/department.rs` | 258 | ✅ 已实现 |
@@ -86,9 +86,9 @@
 | 75 | [获取租户职务列表](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/job_title/list) | GET | `/open-apis/contact/v3/job_titles` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/job_title/list | `../src/service/contact/v3/job_title.rs` | 229 | ✅ 已实现 |
 | 76 | [获取单个工作城市信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/work_city/get) | GET | `/open-apis/contact/v3/work_cities/:work_city_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/work_city/get | `../src/service/contact/v3/work_city.rs` | 97 | ✅ 已实现 |
 | 77 | [获取租户工作城市列表](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact/v3/work_city/list) | GET | `/open-apis/contact/v3/work_cities` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact/v3/work_city/list | `../src/service/contact/v3/work_city.rs` | 250 | ✅ 已实现 |
-| 78 | [创建员工](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/create) | POST | `/open-apis/directory/v1/employees` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/create | `../src/service/ehr/v1/mod.rs` | 263 | ✅ 已实现 |
-| 79 | [更新员工信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/patch) | PATCH | `/open-apis/directory/v1/employees/:employee_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/patch | `../src/service/ehr/v1/mod.rs` | 165 | ✅ 已实现 |
-| 80 | [离职员工](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/delete) | DELETE | `/open-apis/directory/v1/employees/:employee_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/delete | `../src/service/ehr/v1/mod.rs` | 165 | ✅ 已实现 |
+| 78 | [创建员工](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/create) | POST | `/open-apis/directory/v1/employees` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/create | `未找到` | - | ❌ 未实现 |
+| 79 | [更新员工信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/patch) | PATCH | `/open-apis/directory/v1/employees/:employee_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/patch | `未找到` | - | ❌ 未实现 |
+| 80 | [离职员工](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/delete) | DELETE | `/open-apis/directory/v1/employees/:employee_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/delete | `未找到` | - | ❌ 未实现 |
 | 81 | [恢复离职员工](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/resurrect) | POST | `/open-apis/directory/v1/employees/:employee_id/resurrect` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/resurrect | `未找到` | - | ❌ 未实现 |
 | 82 | [更新在职员工为待离职](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/to_be_resigned) | PATCH | `/open-apis/directory/v1/employees/:employee_id/to_be_resigned` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/to_be_resigned | `未找到` | - | ❌ 未实现 |
 | 83 | [更新待离职成员为在职](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/regular) | PATCH | `/open-apis/directory/v1/employees/:employee_id/regular` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/regular | `未找到` | - | ❌ 未实现 |
@@ -204,7 +204,7 @@
 | 193 | [移动文件或文件夹](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/move) | POST | `/open-apis/drive/v1/files/:file_token/move` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/move | `../src/service/contact/v3/group_member.rs` | 189 | ✅ 已实现 |
 | 194 | [删除文件或文件夹](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/delete) | DELETE | `/open-apis/drive/v1/files/:file_token` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/delete | `未找到` | - | ❌ 未实现 |
 | 195 | [创建文件快捷方式](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/create_shortcut) | POST | `/open-apis/drive/v1/files/create_shortcut` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/create_shortcut | `未找到` | - | ❌ 未实现 |
-| 196 | [搜索云文档](https://open.feishu.cn/document/ukTMukTMukTM/ugDM4UjL4ADO14COwgTN) | POST | `/open-apis/suite/docs-api/search/object` | https://open.feishu.cn/document/ukTMukTMukTM/ugDM4UjL4ADO14COwgTN | `未找到` | - | ❌ 未实现 |
+| 196 | [搜索云文档](https://open.feishu.cn/document/ukTMukTMukTM/ugDM4UjL4ADO14COwgTN) | POST | `/open-apis/suite/docs-api/search/object` | https://open.feishu.cn/document/ukTMukTMukTM/ugDM4UjL4ADO14COwgTN | `../src/service/search/v2/suite_search/mod.rs` | 299 | ✅ 已实现 |
 | 197 | [上传文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_all) | POST | `/open-apis/drive/v1/files/upload_all` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_all | `../src/service/cloud_docs/drive/v1/media.rs` | 39 | ✅ 已实现 |
 | 198 | [分片上传文件-预上传](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_prepare) | POST | `/open-apis/drive/v1/files/upload_prepare` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_prepare | `../src/service/cloud_docs/drive/v1/media.rs` | 75 | ✅ 已实现 |
 | 199 | [分片上传文件-上传分片](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_part) | POST | `/open-apis/drive/v1/files/upload_part` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_part | `../src/service/cloud_docs/drive/v1/media.rs` | 98 | ✅ 已实现 |
@@ -882,7 +882,7 @@
 | 871 | [获取授予名单列表](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge-grant/list) | GET | `/open-apis/admin/v1/badges/:badge_id/grants` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge-grant/list | `未找到` | - | ❌ 未实现 |
 | 872 | [获取授予名单详情](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge-grant/get) | GET | `/open-apis/admin/v1/badges/:badge_id/grants/:grant_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge-grant/get | `未找到` | - | ❌ 未实现 |
 | 873 | [查询帖子信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/moments-v1/post/get) | GET | `/open-apis/moments/v1/posts/:post_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/moments-v1/post/get | `未找到` | - | ❌ 未实现 |
-| 874 | [批量获取员工花名册信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/ehr/ehr-v1/employee/list) | GET | `/open-apis/ehr/v1/employees` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/ehr/ehr-v1/employee/list | `../src/service/ehr/v1/mod.rs` | 263 | ✅ 已实现 |
+| 874 | [批量获取员工花名册信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/ehr/ehr-v1/employee/list) | GET | `/open-apis/ehr/v1/employees` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/ehr/ehr-v1/employee/list | `../src/service/ehr/employee/mod.rs` | - | ❌ 未实现 |
 | 875 | [下载人员的附件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/ehr/ehr-v1/attachment/get) | GET | `/open-apis/ehr/v1/attachments/:token` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/ehr/ehr-v1/attachment/get | `../src/service/auth/v1/mod.rs` | 41 | ✅ 已实现 |
 | 876 | [获取飞书人事对象列表](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/custom_field/list_object_api_name) | GET | `/open-apis/corehr/v1/custom_fields/list_object_api_name` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/custom_field/list_object_api_name | `未找到` | - | ❌ 未实现 |
 | 877 | [获取自定义字段列表](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/custom_field/query) | GET | `/open-apis/corehr/v1/custom_fields/query` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/custom_field/query | `../src/service/corehr/job_management/mod.rs` | 383 | ✅ 已实现 |
@@ -1571,8 +1571,6 @@
 
 以下是前100个未实现的API:
 
-- 新增人员类型 (POST /open-apis/contact/v3/employee_type_enums)
-- 查询人员类型 (GET /open-apis/contact/v3/employee_type_enums)
 - 恢复离职员工 (POST /open-apis/directory/v1/employees/:employee_id/resurrect)
 - 更新在职员工为待离职 (PATCH /open-apis/directory/v1/employees/:employee_id/to_be_resigned)
 - 更新待离职成员为在职 (PATCH /open-apis/directory/v1/employees/:employee_id/regular)
