@@ -1,6 +1,6 @@
 // passport模块的数据模型定义
-use serde::{Deserialize, Serialize};
 use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
+use serde::{Deserialize, Serialize};
 
 /// 用户会话信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -212,7 +212,8 @@ mod tests {
         };
 
         let serialized = serde_json::to_string(&passport_response).unwrap();
-        let deserialized: PassportResponse<LogoutResponse> = serde_json::from_str(&serialized).unwrap();
+        let deserialized: PassportResponse<LogoutResponse> =
+            serde_json::from_str(&serialized).unwrap();
 
         assert_eq!(deserialized.code, 0);
         assert_eq!(deserialized.msg, "success");

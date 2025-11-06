@@ -2,8 +2,10 @@
 //!
 //! 提供用户会话相关的API功能，包括登录、登出、会话查询等。
 
-use crate::core::{ApiRequest, SDKResult, error::LarkAPIError};
-use crate::core::{config::Config, constants::AccessTokenType, http::Transport, endpoints_original::Endpoints};
+use crate::core::{
+    config::Config, constants::AccessTokenType, endpoints_original::Endpoints, http::Transport,
+};
+use crate::core::{error::LarkAPIError, ApiRequest, SDKResult};
 use crate::service::passport::models::{LogoutRequest, LogoutResponse, PassportResponse};
 
 /// 会话管理服务
@@ -39,7 +41,9 @@ impl SessionsService {
     pub async fn logout(&self, request: &LogoutRequest) -> SDKResult<LogoutResponse> {
         // 验证用户ID列表不为空
         if request.user_ids.is_empty() {
-            return Err(LarkAPIError::IllegalParamError("用户ID列表不能为空".to_string()));
+            return Err(LarkAPIError::IllegalParamError(
+                "用户ID列表不能为空".to_string(),
+            ));
         }
 
         let mut api_req = ApiRequest::default();
@@ -47,7 +51,9 @@ impl SessionsService {
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         api_req.set_body(serde_json::to_vec(request)?);
 
-        let resp = Transport::<PassportResponse<LogoutResponse>>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<PassportResponse<LogoutResponse>>::request(api_req, &self.config, None)
+                .await?;
         Ok(resp.data.and_then(|r| r.data).unwrap_or_default())
     }
 
@@ -108,7 +114,9 @@ impl LogoutBuilder {
     pub async fn execute(self) -> SDKResult<LogoutResponse> {
         // 验证用户ID列表不为空
         if self.user_ids.is_empty() {
-            return Err(LarkAPIError::IllegalParamError("用户ID列表不能为空".to_string()));
+            return Err(LarkAPIError::IllegalParamError(
+                "用户ID列表不能为空".to_string(),
+            ));
         }
 
         let request = LogoutRequest {
@@ -121,7 +129,9 @@ impl LogoutBuilder {
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         api_req.set_body(serde_json::to_vec(&request)?);
 
-        let resp = Transport::<PassportResponse<LogoutResponse>>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<PassportResponse<LogoutResponse>>::request(api_req, &self.config, None)
+                .await?;
         Ok(resp.data.and_then(|r| r.data).unwrap_or_default())
     }
 }
@@ -164,7 +174,8 @@ mod tests {
             .build();
 
         let service = SessionsService::new(config);
-        let builder = service.logout_builder()
+        let builder = service
+            .logout_builder()
             .user_id("user_123")
             .user_id_type("user_id");
 
@@ -181,7 +192,8 @@ mod tests {
             .build();
 
         let service = SessionsService::new(config);
-        let builder = service.logout_builder()
+        let builder = service
+            .logout_builder()
             .user_ids(vec!["user_123".to_string(), "user_456".to_string()]);
 
         assert_eq!(builder.user_ids.len(), 2);
@@ -245,6 +257,9 @@ mod tests {
 
     #[test]
     fn test_endpoint_constant() {
-        assert_eq!(Endpoints::PASSPORT_V1_SESSIONS_LOGOUT, "/open-apis/passport/v1/sessions/logout");
+        assert_eq!(
+            Endpoints::PASSPORT_V1_SESSIONS_LOGOUT,
+            "/open-apis/passport/v1/sessions/logout"
+        );
     }
 }
