@@ -1079,6 +1079,228 @@ impl ApiResponseTrait for CreateShortcutResponse {
     }
 }
 
+// ==================== API #188 查询异步任务状态 ====================
+
+/// 查询异步任务状态请求
+#[derive(Debug, Clone)]
+pub struct GetAsyncTaskStatusRequest {
+    /// 任务ID，通过创建异步任务的API返回获取
+    pub task_id: String,
+    /// 用户ID类型
+    pub user_id_type: Option<String>,
+}
+
+impl GetAsyncTaskStatusRequest {
+    /// 创建新的请求实例
+    pub fn new(task_id: impl Into<String>) -> Self {
+        Self {
+            task_id: task_id.into(),
+            user_id_type: None,
+        }
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.user_id_type = Some(user_id_type.into());
+        self
+    }
+
+    /// 验证请求参数
+    pub fn validate(&self) -> Result<(), String> {
+        if self.task_id.trim().is_empty() {
+            return Err("任务ID不能为空".to_string());
+        }
+
+        // 验证任务ID长度（飞书通常使用64位任务ID）
+        if self.task_id.len() > 100 {
+            return Err("任务ID长度不能超过100个字符".to_string());
+        }
+
+        // 验证任务ID格式（只允许字母、数字、下划线、连字符）
+        if !self.task_id.chars().all(|c| c.is_alphanumeric() || c == '_' || c == '-') {
+            return Err("任务ID只能包含字母、数字、下划线和连字符".to_string());
+        }
+
+        if let Some(ref user_id_type) = self.user_id_type {
+            let valid_types = ["open_id", "user_id", "union_id"];
+            if !valid_types.contains(&user_id_type.as_str()) {
+                return Err(format!(
+                    "无效的用户ID类型: {}，支持的类型: open_id, user_id, union_id",
+                    user_id_type
+                ));
+            }
+        }
+
+        Ok(())
+    }
+}
+
+/// 异步任务状态信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AsyncTask {
+    /// 任务ID
+    pub task_id: String,
+    /// 任务状态
+    pub status: String,
+    /// 任务进度
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub progress: Option<i32>,
+    /// 任务类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_type: Option<String>,
+    /// 创建时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<String>,
+    /// 完成时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub complete_time: Option<String>,
+    /// 任务结果
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result: Option<serde_json::Value>,
+    /// 错误信息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// 额外信息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub extra: Option<serde_json::Value>,
+}
+
+/// 查询异步任务状态响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetAsyncTaskStatusResponseData {
+    /// 异步任务信息
+    pub task: AsyncTask,
+}
+
+/// 查询异步任务状态响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct GetAsyncTaskStatusResponse {
+    /// 响应数据
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data: Option<GetAsyncTaskStatusResponseData>,
+    /// 是否成功
+    pub success: bool,
+    /// 错误消息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// 错误代码
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+}
+
+impl ApiResponseTrait for GetAsyncTaskStatusResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl FilesService {
+    /// 查询异步任务状态
+    ///
+    /// 查询指定异步任务的执行状态和结果信息，支持监控任务进度
+    /// 适用于文件导入、批量操作等长时间运行的异步任务
+    ///
+    /// # 参数
+    /// * `req` - 查询任务状态请求
+    ///
+    /// # 返回值
+    /// 返回异步任务的详细状态信息
+    ///
+    /// # 示例
+    /// ```rust
+    /// let request = GetAsyncTaskStatusRequest::new("task_123456789")
+    ///     .user_id_type("open_id");
+    /// let response = service.get_async_task_status(&request).await?;
+    ///
+    /// match response.data {
+    ///     Some(data) => {
+    ///         match data.task.status.as_str() {
+    ///             "success" => println!("任务完成: {:?}", data.task.result),
+    ///             "processing" => println!("任务进行中: {}%", data.task.progress.unwrap_or(0)),
+    ///             "failed" => println!("任务失败: {}", data.task.error_message.unwrap_or_default()),
+    ///             _ => println!("未知状态"),
+    ///         }
+    ///     }
+    ///     None => println!("无任务数据"),
+    /// }
+    /// ```
+    pub async fn get_async_task_status(&self, req: &GetAsyncTaskStatusRequest) -> SDKResult<GetAsyncTaskStatusResponse> {
+        req.validate().map_err(|e| SDKError::InvalidParameter(e))?;
+        log::debug!("开始查询异步任务状态: task_id={}", req.task_id);
+
+        // 构建查询参数
+        let mut query_params: HashMap<&str, String> = HashMap::new();
+        if let Some(user_id_type) = &req.user_id_type {
+            query_params.insert("user_id_type", user_id_type.clone());
+        }
+
+        // 构建API路径，替换task_id占位符
+        let api_path = crate::core::endpoints_original::Endpoints::DRIVE_V1_TASK_GET
+            .replace("{}", &req.task_id);
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params,
+            body: Vec::new(), // GET请求不需要body
+            ..Default::default()
+        };
+
+        let resp = Transport::<GetAsyncTaskStatusResponse>::request(api_req, &self.config, None).await?;
+        let response = resp.data.unwrap_or_default();
+
+        if response.success {
+            log::info!("异步任务状态查询成功: task_id={}, status={}",
+                req.task_id,
+                response.data.as_ref()
+                    .map(|d| d.task.status.clone())
+                    .unwrap_or_else(|| "unknown".to_string())
+            );
+        } else {
+            log::warn!("异步任务状态查询失败: task_id={}, error={:?}",
+                req.task_id, response.error_message);
+        }
+
+        Ok(response)
+    }
+}
+
+// ==================== 构建器模式 ====================
+
+/// 查询异步任务状态构建器
+#[derive(Debug, Clone)]
+pub struct GetAsyncTaskStatusBuilder {
+    request: GetAsyncTaskStatusRequest,
+}
+
+impl GetAsyncTaskStatusBuilder {
+    /// 创建新的构建器
+    pub fn new(task_id: impl Into<String>) -> Self {
+        Self {
+            request: GetAsyncTaskStatusRequest::new(task_id),
+        }
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.request = self.request.user_id_type(user_id_type);
+        self
+    }
+
+    /// 执行查询异步任务状态操作
+    pub async fn execute(self, service: &FilesService) -> SDKResult<GetAsyncTaskStatusResponse> {
+        service.get_async_task_status(&self.request).await
+    }
+}
+
+impl FilesService {
+    /// 查询异步任务状态构建器
+    pub fn get_async_task_status_builder(&self, task_id: impl Into<String>) -> GetAsyncTaskStatusBuilder {
+        GetAsyncTaskStatusBuilder::new(task_id)
+    }
+}
+
 impl FilesService {
     /// 创建文件快捷方式
     ///
@@ -1659,6 +1881,441 @@ mod create_shortcut_tests {
         assert_eq!(file_info.size, 1024);
         assert_eq!(file_info.create_time, "2023-12-01T10:00:00Z");
         assert_eq!(file_info.modify_time, "2023-12-01T15:30:00Z");
+    }
+}
+
+#[cfg(test)]
+mod get_async_task_status_tests {
+    use super::*;
+    use crate::core::config::Config;
+
+    #[test]
+    fn test_get_async_task_status_request_creation() {
+        let request = GetAsyncTaskStatusRequest::new("task_123456789");
+        assert_eq!(request.task_id, "task_123456789");
+        assert_eq!(request.user_id_type, None);
+    }
+
+    #[test]
+    fn test_get_async_task_status_request_with_fields() {
+        let request = GetAsyncTaskStatusRequest::new("task_987654321")
+            .user_id_type("open_id");
+
+        assert_eq!(request.task_id, "task_987654321");
+        assert_eq!(request.user_id_type, Some("open_id".to_string()));
+    }
+
+    #[test]
+    fn test_get_async_task_status_request_validation() {
+        // 测试正常情况
+        let valid_request = GetAsyncTaskStatusRequest::new("task_valid_123")
+            .user_id_type("user_id");
+        assert!(valid_request.validate().is_ok());
+
+        // 测试空任务ID
+        let empty_task_request = GetAsyncTaskStatusRequest::new("");
+        assert!(empty_task_request.validate().is_err());
+
+        // 测试空格任务ID
+        let whitespace_task_request = GetAsyncTaskStatusRequest::new("  ");
+        assert!(whitespace_task_request.validate().is_err());
+
+        // 测试超长任务ID
+        let long_task_request = GetAsyncTaskStatusRequest::new(&"a".repeat(101));
+        assert!(long_task_request.validate().is_err());
+
+        // 测试包含非法字符的任务ID
+        let invalid_char_requests = vec![
+            "task@invalid", "task#invalid", "task invalid", "task.invalid",
+            "task,invalid", "task(invalid)", "task)invalid"
+        ];
+
+        for invalid_task_id in invalid_char_requests {
+            let invalid_request = GetAsyncTaskStatusRequest::new(invalid_task_id);
+            assert!(invalid_request.validate().is_err(),
+                "Task ID '{}' should be invalid", invalid_task_id);
+        }
+
+        // 测试无效的用户ID类型
+        let invalid_user_type_request = GetAsyncTaskStatusRequest::new("task_valid_123")
+            .user_id_type("invalid_type");
+        assert!(invalid_user_type_request.validate().is_err());
+
+        // 测试有效的任务ID格式
+        let valid_task_ids = vec![
+            "task_123456789", "Task-ABC-123", "task_456", "import_task_789",
+            "batch-process-123", "file-upload-001", "TASK_001", "a1-b2-c3"
+        ];
+
+        for valid_task_id in valid_task_ids {
+            let valid_request = GetAsyncTaskStatusRequest::new(valid_task_id);
+            assert!(valid_request.validate().is_ok(),
+                "Task ID '{}' should be valid", valid_task_id);
+        }
+
+        // 测试有效的用户ID类型
+        let valid_user_types = vec!["open_id", "user_id", "union_id"];
+        for user_type in valid_user_types {
+            let valid_request = GetAsyncTaskStatusRequest::new("task_valid_123")
+                .user_id_type(user_type);
+            assert!(valid_request.validate().is_ok(),
+                "User ID type '{}' should be valid", user_type);
+        }
+    }
+
+    #[test]
+    fn test_async_task_creation() {
+        let task = AsyncTask {
+            task_id: "task_123456".to_string(),
+            status: "success".to_string(),
+            progress: Some(100),
+            task_type: Some("file_import".to_string()),
+            create_time: Some("2023-12-01T10:00:00Z".to_string()),
+            complete_time: Some("2023-12-01T10:05:00Z".to_string()),
+            result: Some(serde_json::json!({"files_imported": 5})),
+            error_message: None,
+            extra: Some(serde_json::json!({"total_files": 5})),
+        };
+
+        assert_eq!(task.task_id, "task_123456");
+        assert_eq!(task.status, "success");
+        assert_eq!(task.progress, Some(100));
+        assert_eq!(task.task_type, Some("file_import".to_string()));
+        assert_eq!(task.create_time, Some("2023-12-01T10:00:00Z".to_string()));
+        assert_eq!(task.complete_time, Some("2023-12-01T10:05:00Z".to_string()));
+        assert!(task.result.is_some());
+        assert!(task.extra.is_some());
+        assert_eq!(task.error_message, None);
+    }
+
+    #[test]
+    fn test_get_async_task_status_response_creation() {
+        let task = AsyncTask {
+            task_id: "task_789".to_string(),
+            status: "processing".to_string(),
+            progress: Some(50),
+            task_type: Some("batch_operation".to_string()),
+            create_time: Some("2023-12-01T12:00:00Z".to_string()),
+            complete_time: None,
+            result: None,
+            error_message: None,
+            extra: None,
+        };
+
+        let response_data = GetAsyncTaskStatusResponseData {
+            task,
+        };
+
+        let response = GetAsyncTaskStatusResponse {
+            data: Some(response_data),
+            success: true,
+            ..Default::default()
+        };
+
+        assert!(response.success);
+        assert!(response.data.is_some());
+        assert_eq!(response.data.as_ref().unwrap().task.task_id, "task_789");
+        assert_eq!(response.data.as_ref().unwrap().task.status, "processing");
+        assert_eq!(response.data.as_ref().unwrap().task.progress, Some(50));
+    }
+
+    #[test]
+    fn test_get_async_task_status_builder() {
+        let builder = GetAsyncTaskStatusBuilder::new("task_builder_test")
+            .user_id_type("union_id");
+
+        assert_eq!(builder.request.task_id, "task_builder_test");
+        assert_eq!(builder.request.user_id_type, Some("union_id".to_string()));
+    }
+
+    #[test]
+    fn test_get_async_task_status_builder_validation() {
+        // 测试有效构建器
+        let valid_builder = GetAsyncTaskStatusBuilder::new("task_valid_001")
+            .user_id_type("open_id");
+        assert!(valid_builder.request.validate().is_ok());
+
+        // 测试无效构建器
+        let invalid_builder = GetAsyncTaskStatusBuilder::new("")
+            .user_id_type("open_id");
+        assert!(invalid_builder.request.validate().is_err());
+
+        // 测试无效用户ID类型
+        let invalid_user_type_builder = GetAsyncTaskStatusBuilder::new("task_valid_001")
+            .user_id_type("invalid");
+        assert!(invalid_user_type_builder.request.validate().is_err());
+    }
+
+    #[test]
+    fn test_get_async_task_status_service_method() {
+        let config = Config::default();
+        let service = FilesService::new(config);
+
+        // 验证服务包含所需的方法
+        let service_str = format!("{:?}", service);
+        assert!(!service_str.is_empty());
+
+        // 验证构建器方法存在
+        let builder = service.get_async_task_status_builder("task_service_test");
+        assert_eq!(builder.request.task_id, "task_service_test");
+    }
+
+    #[test]
+    fn test_get_async_task_status_endpoint_construction() {
+        // 验证端点常量存在
+        assert_eq!(
+            crate::core::endpoints_original::Endpoints::DRIVE_V1_TASK_GET,
+            "/open-apis/drive/v1/tasks/{}"
+        );
+
+        // 验证路径替换逻辑
+        let template = crate::core::endpoints_original::Endpoints::DRIVE_V1_TASK_GET;
+        let final_path = template.replace("{}", "task_123456");
+        assert_eq!(final_path, "/open-apis/drive/v1/tasks/task_123456");
+    }
+
+    #[test]
+    fn test_async_task_status_scenarios() {
+        // 测试不同任务状态
+        let task_statuses = vec![
+            ("success", 100, Some("任务完成成功")),
+            ("processing", 50, Some("任务正在处理中")),
+            ("failed", 0, Some("任务执行失败")),
+            ("pending", 0, Some("任务等待执行")),
+            ("cancelled", 0, Some("任务已取消")),
+        ];
+
+        for (status, progress, description) in task_statuses {
+            let task = AsyncTask {
+                task_id: format!("task_status_{}", status),
+                status: status.to_string(),
+                progress: Some(progress),
+                task_type: Some("test_task".to_string()),
+                create_time: Some("2023-12-01T10:00:00Z".to_string()),
+                complete_time: if status == "success" {
+                    Some("2023-12-01T10:10:00Z".to_string())
+                } else {
+                    None
+                },
+                result: if status == "success" {
+                    Some(serde_json::json!({"message": "操作成功"}))
+                } else {
+                    None
+                },
+                error_message: if status == "failed" {
+                    Some("网络连接失败".to_string())
+                } else {
+                    None
+                },
+                extra: None,
+            };
+
+            let response_data = GetAsyncTaskStatusResponseData { task };
+            let response = GetAsyncTaskStatusResponse {
+                data: Some(response_data),
+                success: true,
+                ..Default::default()
+            };
+
+            assert_eq!(response.data.unwrap().task.status, status);
+            assert_eq!(response.data.unwrap().task.progress, Some(progress));
+        }
+    }
+
+    #[test]
+    fn test_async_task_different_types() {
+        // 测试不同类型的异步任务
+        let task_types = vec![
+            ("file_import", "文件导入任务"),
+            ("batch_delete", "批量删除任务"),
+            ("export", "数据导出任务"),
+            ("backup", "数据备份任务"),
+            ("sync", "数据同步任务"),
+        ];
+
+        for (task_type, description) in task_types {
+            let task = AsyncTask {
+                task_id: format!("task_{}_001", task_type),
+                status: "processing".to_string(),
+                progress: Some(25),
+                task_type: Some(task_type.to_string()),
+                create_time: Some("2023-12-01T14:00:00Z".to_string()),
+                complete_time: None,
+                result: None,
+                error_message: None,
+                extra: Some(serde_json::json!({"description": description})),
+            };
+
+            assert_eq!(task.task_type.unwrap(), task_type);
+            assert_eq!(task.progress, Some(25));
+            assert!(task.extra.is_some());
+        }
+    }
+
+    #[test]
+    fn test_get_async_task_status_edge_cases() {
+        // 测试边界情况
+        let edge_cases = vec![
+            ("a", "最小长度任务ID"),
+            (&"a".repeat(100), "最大长度任务ID"),
+            ("task-123_ABC", "混合字符任务ID"),
+            ("TASK_001", "全大写任务ID"),
+            ("task_001", "全小写任务ID"),
+        ];
+
+        for (task_id, description) in edge_cases {
+            let request = GetAsyncTaskStatusRequest::new(task_id);
+            assert!(request.validate().is_ok(),
+                "{}: '{}' should be valid", description, task_id);
+        }
+
+        // 测试无效字符边界情况
+        let invalid_chars = vec![
+            "task with spaces", "task@symbol", "task#hash", "task$dollar",
+            "task%percent", "task^caret", "task&ampersand", "task*asterisk",
+            "task(parentheses)", "task)parentheses", "task+plus", "task=equals"
+        ];
+
+        for invalid_task_id in invalid_chars {
+            let request = GetAsyncTaskStatusRequest::new(invalid_task_id);
+            assert!(request.validate().is_err(),
+                "Task ID '{}' should be invalid", invalid_task_id);
+        }
+    }
+
+    #[test]
+    fn test_get_async_task_status_response_trait() {
+        assert_eq!(GetAsyncTaskStatusResponse::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_async_task_comprehensive_scenario() {
+        // 测试完整的业务场景 - 文件导入任务
+        let import_task = AsyncTask {
+            task_id: "file_import_task_001".to_string(),
+            status: "processing".to_string(),
+            progress: Some(75),
+            task_type: Some("file_import".to_string()),
+            create_time: Some("2023-12-01T09:00:00Z".to_string()),
+            complete_time: None,
+            result: None,
+            error_message: None,
+            extra: Some(serde_json::json!({
+                "total_files": 10,
+                "processed_files": 7,
+                "failed_files": 1,
+                "remaining_files": 2,
+                "estimated_completion": "2023-12-01T09:15:00Z"
+            })),
+        };
+
+        let request = GetAsyncTaskStatusRequest::new("file_import_task_001")
+            .user_id_type("open_id");
+
+        assert!(request.validate().is_ok());
+        assert_eq!(request.task_id, "file_import_task_001");
+        assert_eq!(request.user_id_type, Some("open_id".to_string()));
+
+        let response_data = GetAsyncTaskStatusResponseData { task: import_task };
+        let response = GetAsyncTaskStatusResponse {
+            data: Some(response_data),
+            success: true,
+            ..Default::default()
+        };
+
+        let task_info = response.data.unwrap().task;
+        assert_eq!(task_info.task_id, "file_import_task_001");
+        assert_eq!(task_info.status, "processing");
+        assert_eq!(task_info.progress, Some(75));
+        assert_eq!(task_info.task_type, Some("file_import".to_string()));
+
+        let extra_info = task_info.extra.unwrap();
+        assert_eq!(extra_info["total_files"], 10);
+        assert_eq!(extra_info["processed_files"], 7);
+        assert_eq!(extra_info["failed_files"], 1);
+        assert_eq!(extra_info["remaining_files"], 2);
+    }
+
+    #[test]
+    fn test_get_async_task_status_builder_pattern() {
+        // 测试构建器模式的流畅性
+        let builder = GetAsyncTaskStatusBuilder::new("builder_test_task")
+            .user_id_type("union_id");
+
+        // 验证构建器状态
+        assert_eq!(builder.request.task_id, "builder_test_task");
+        assert_eq!(builder.request.user_id_type, Some("union_id".to_string()));
+
+        // 验证请求验证通过
+        assert!(builder.request.validate().is_ok());
+
+        // 测试重新设置任务ID
+        let updated_builder = GetAsyncTaskStatusBuilder::new("original_task")
+            .user_id_type("open_id");
+
+        let final_request = updated_builder.request;
+        assert_eq!(final_request.task_id, "original_task");
+        assert_eq!(final_request.user_id_type, Some("open_id".to_string()));
+    }
+
+    #[test]
+    fn test_async_task_result_and_error_handling() {
+        // 测试成功任务结果
+        let success_task = AsyncTask {
+            task_id: "success_task_001".to_string(),
+            status: "success".to_string(),
+            progress: Some(100),
+            task_type: Some("data_export".to_string()),
+            create_time: Some("2023-12-01T10:00:00Z".to_string()),
+            complete_time: Some("2023-12-01T10:30:00Z".to_string()),
+            result: Some(serde_json::json!({
+                "export_url": "https://example.com/export/data_001.zip",
+                "file_size": 2048576,
+                "file_count": 15,
+                "export_duration": 1800
+            })),
+            error_message: None,
+            extra: None,
+        };
+
+        // 测试失败任务错误
+        let failed_task = AsyncTask {
+            task_id: "failed_task_001".to_string(),
+            status: "failed".to_string(),
+            progress: Some(45),
+            task_type: Some("batch_operation".to_string()),
+            create_time: Some("2023-12-01T11:00:00Z".to_string()),
+            complete_time: Some("2023-12-01T11:15:00Z".to_string()),
+            result: None,
+            error_message: Some("操作超时：处理时间超过了最大限制".to_string()),
+            extra: Some(serde_json::json!({
+                "timeout_limit": 900,
+                "actual_duration": 915,
+                "processed_items": 45,
+                "total_items": 100
+            })),
+        };
+
+        // 验证成功任务
+        assert_eq!(success_task.status, "success");
+        assert!(success_task.result.is_some());
+        assert!(success_task.error_message.is_none());
+
+        let success_result = success_task.result.unwrap();
+        assert!(success_result["export_url"].is_string());
+        assert_eq!(success_result["file_count"], 15);
+
+        // 验证失败任务
+        assert_eq!(failed_task.status, "failed");
+        assert!(failed_task.error_message.is_some());
+        assert!(failed_task.result.is_none());
+
+        let error_message = failed_task.error_message.unwrap();
+        assert!(error_message.contains("超时"));
+
+        let failed_extra = failed_task.extra.unwrap();
+        assert_eq!(failed_extra["processed_items"], 45);
+        assert_eq!(failed_extra["total_items"], 100);
     }
 }
 
