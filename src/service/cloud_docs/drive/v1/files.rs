@@ -868,3 +868,358 @@ mod tests {
         assert_eq!(builder.request.size, file_data.len() as i64);
     }
 }
+
+// ==================== 文件删除功能 ====================
+
+/// 删除文件请求
+#[derive(Debug, Clone)]
+pub struct DeleteFileRequest {
+    /// 文件token，用于唯一标识文件
+    pub file_token: String,
+}
+
+impl DeleteFileRequest {
+    /// 创建新的删除请求实例
+    ///
+    /// # 参数
+    /// - `file_token`: 要删除的文件token
+    ///
+    /// # 示例
+    /// ```rust
+    /// let request = DeleteFileRequest::new("file_token_123");
+    /// ```
+    pub fn new(file_token: impl Into<String>) -> Self {
+        Self {
+            file_token: file_token.into(),
+        }
+    }
+
+    /// 验证请求参数
+    ///
+    /// 验证file_token的有效性，确保符合API要求
+    ///
+    /// # 返回
+    /// - `Ok(())`: 验证通过
+    /// - `Err(String)`: 验证失败，包含错误信息
+    pub fn validate(&self) -> Result<(), String> {
+        if self.file_token.trim().is_empty() {
+            return Err("file_token不能为空".to_string());
+        }
+
+        // 验证token长度
+        if self.file_token.len() > 200 {
+            return Err("file_token长度不能超过200个字符".to_string());
+        }
+
+        // 验证字符安全性，只允许字母、数字、连字符、下划线
+        let allowed_chars = self.file_token.chars().all(|c| c.is_alphanumeric() || c == '_' || c == '-');
+        if !allowed_chars {
+            return Err("file_token包含不支持的字符，只允许字母、数字、下划线和连字符".to_string());
+        }
+
+        Ok(())
+    }
+}
+
+/// 删除文件响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DeleteFileResponseData {
+    /// 是否成功删除
+    pub deleted: bool,
+    /// 被删除的文件token
+    pub file_token: String,
+    /// 删除时间戳（毫秒）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delete_time: Option<i64>,
+}
+
+/// 删除文件响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct DeleteFileResponse {
+    /// 响应数据
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data: Option<DeleteFileResponseData>,
+    /// 是否成功
+    pub success: bool,
+    /// 错误消息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// 错误代码
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+}
+
+impl ApiResponseTrait for DeleteFileResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl FilesService {
+    /// 删除文件或文件夹
+    ///
+    /// 删除指定token对应的文件或文件夹。删除操作不可恢复，请谨慎使用。
+    /// 支持删除各种类型的文件，包括文档、表格、图片等。
+    ///
+    /// # 参数
+    /// - `req`: 删除文件请求
+    ///
+    /// # 返回值
+    /// 返回删除操作的结果，包含删除状态和时间信息
+    ///
+    /// # 示例
+    /// ```rust
+    /// let request = DeleteFileRequest::new("file_token_123");
+    /// let response = service.delete_file(&request).await?;
+    ///
+    /// if response.success {
+    ///     println!("文件删除成功");
+    /// } else {
+    ///     println!("文件删除失败: {:?}", response.error_message);
+    /// }
+    /// ```
+    pub async fn delete_file(&self, req: &DeleteFileRequest) -> SDKResult<DeleteFileResponse> {
+        req.validate().map_err(|e| SDKError::InvalidParameter(e))?;
+        debug!("开始删除文件: {}", req.file_token);
+
+        // 构建API路径，替换file_token占位符
+        let api_path = crate::core::endpoints_original::Endpoints::DRIVE_V1_FILES_DELETE
+            .replace("{}", &req.file_token);
+
+        let api_req = ApiRequest {
+            http_method: Method::DELETE,
+            api_path,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: Vec::new(), // DELETE请求不需要请求体
+            ..Default::default()
+        };
+
+        match Transport::request(api_req, &self.config, None).await {
+            Ok(resp) => {
+                let response = resp.data.unwrap_or_default();
+                if response.success {
+                    info!("文件删除成功: {}", req.file_token);
+                } else {
+                    warn!("文件删除失败: {}, error: {:?}", req.file_token, response.error_message);
+                }
+                Ok(response)
+            }
+            Err(e) => {
+                error!("删除文件请求失败: {}", e);
+                Err(e)
+            }
+        }
+    }
+}
+
+// ==================== 删除文件构建器模式 ====================
+
+/// 删除文件构建器
+#[derive(Debug, Clone, Default)]
+pub struct DeleteFileRequestBuilder {
+    request: DeleteFileRequest,
+}
+
+impl DeleteFileRequestBuilder {
+    /// 创建新的构建器
+    ///
+    /// # 参数
+    /// - `file_token`: 要删除的文件token
+    ///
+    /// # 示例
+    /// ```rust
+    /// let builder = DeleteFileRequestBuilder::new("file_token_123");
+    /// ```
+    pub fn new(file_token: impl Into<String>) -> Self {
+        Self {
+            request: DeleteFileRequest::new(file_token),
+        }
+    }
+
+    /// 设置文件token
+    ///
+    /// # 参数
+    /// - `file_token`: 文件token
+    ///
+    /// # 返回
+    /// 返回构建器实例，支持链式调用
+    pub fn file_token(mut self, file_token: impl Into<String>) -> Self {
+        self.request.file_token = file_token.into();
+        self
+    }
+
+    /// 执行删除操作
+    ///
+    /// 构建请求并执行文件删除
+    ///
+    /// # 参数
+    /// - `service`: FilesService实例
+    ///
+    /// # 返回
+    /// 删除操作的响应结果
+    ///
+    /// # 错误
+    /// 如果参数验证失败或删除过程中出现错误，返回相应的错误信息
+    pub async fn execute(self, service: &FilesService) -> SDKResult<DeleteFileResponse> {
+        debug!("执行文件删除: {}", self.request.file_token);
+
+        match self.request.validate() {
+            Ok(()) => service.delete_file(&self.request).await,
+            Err(e) => {
+                error!("删除文件请求验证失败: {}", e);
+                Err(SDKError::InvalidParameter(e))
+            }
+        }
+    }
+}
+
+impl FilesService {
+    /// 创建删除文件Builder
+    ///
+    /// 创建一个用于删除文件的构建器，只需要提供文件 token 即可。
+    /// 文件 token 可以从上传文件、文件列表等接口获取。
+    ///
+    /// # 特性
+    /// - 自动参数验证
+    /// - 支持链式调用
+    /// - 错误处理完善
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// let builder = service.create_delete_file_builder()
+    ///     .file_token("file_token_123");
+    ///
+    /// let response = builder.execute(&service).await?;
+    /// ```
+    pub fn create_delete_file_builder(&self, file_token: impl Into<String>) -> DeleteFileRequestBuilder {
+        DeleteFileRequestBuilder::new(file_token)
+    }
+}
+
+// ==================== ExecutableBuilder宏实现 ====================
+
+crate::impl_executable_builder_owned!(
+    DeleteFileRequestBuilder,
+    FilesService,
+    DeleteFileRequest,
+    DeleteFileResponse,
+    delete_file,
+);
+
+// ==================== 单元测试 ====================
+
+#[cfg(test)]
+mod delete_file_tests {
+    use super::*;
+
+    #[test]
+    fn test_delete_file_request_creation() {
+        let request = DeleteFileRequest::new("test_file_token");
+        assert_eq!(request.file_token, "test_file_token");
+    }
+
+    #[test]
+    fn test_delete_file_request_validation() {
+        // 测试正常情况
+        let valid_request = DeleteFileRequest::new("valid_token_123");
+        assert!(valid_request.validate().is_ok());
+
+        // 测试空token
+        let empty_request = DeleteFileRequest::new("");
+        assert!(empty_request.validate().is_err());
+
+        // 测试超长token
+        let long_request = DeleteFileRequest::new("a".repeat(201));
+        assert!(long_request.validate().is_err());
+
+        // 测试非法字符
+        let invalid_request = DeleteFileRequest::new("token@invalid");
+        assert!(invalid_request.validate().is_err());
+    }
+
+    #[test]
+    fn test_delete_file_builder() {
+        let builder = DeleteFileRequestBuilder::new("test_token")
+            .file_token("updated_token");
+
+        assert_eq!(builder.request.file_token, "updated_token");
+    }
+
+    #[test]
+    fn test_delete_file_service_method() {
+        let config = Config::default();
+        let service = FilesService::new(config);
+
+        // 验证服务包含所需的方法
+        let service_str = format!("{:?}", service);
+        assert!(!service_str.is_empty());
+
+        // 验证构建器方法存在
+        let builder = service.create_delete_file_builder("test_token");
+        assert_eq!(builder.request.file_token, "test_token");
+    }
+
+    #[test]
+    fn test_delete_file_response_creation() {
+        let response_data = DeleteFileResponseData {
+            deleted: true,
+            file_token: "test_token".to_string(),
+            delete_time: Some(1699123456789),
+        };
+
+        let response = DeleteFileResponse {
+            data: Some(response_data),
+            success: true,
+            ..Default::default()
+        };
+
+        assert!(response.success);
+        assert!(response.data.is_some());
+        assert_eq!(response.data.as_ref().unwrap().file_token, "test_token");
+        assert_eq!(response.data.as_ref().unwrap().deleted, true);
+    }
+
+    #[test]
+    fn test_delete_file_response_trait() {
+        assert_eq!(DeleteFileResponse::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_delete_file_edge_cases() {
+        // 测试边界长度
+        let max_length_request = DeleteFileRequest::new("a".repeat(200));
+        assert!(max_length_request.validate().is_ok());
+
+        // 测试特殊允许字符
+        let special_chars_request = DeleteFileRequest::new("token_with_-chars");
+        assert!(special_chars_request.validate().is_ok());
+
+        // 测试混合字符
+        let mixed_request = DeleteFileRequest::new("Token123_ABC-def");
+        assert!(mixed_request.validate().is_ok());
+    }
+
+    #[test]
+    fn test_delete_file_builder_validation() {
+        // 测试有效构建器
+        let valid_builder = DeleteFileRequestBuilder::new("valid_token_123");
+        assert!(valid_builder.request.validate().is_ok());
+
+        // 测试无效构建器
+        let invalid_builder = DeleteFileRequestBuilder::new("");
+        assert!(invalid_builder.request.validate().is_err());
+    }
+
+    #[test]
+    fn test_delete_file_comprehensive_scenario() {
+        // 测试完整的业务场景 - 删除一个真实文件的模拟
+        let request = DeleteFileRequest::new("real_file_token_abc123")
+            .validate()
+            .map(|_| DeleteFileRequest::new("real_file_token_abc123"))
+            .unwrap();
+
+        assert_eq!(request.file_token, "real_file_token_abc123");
+        assert!(request.validate().is_ok());
+    }
+}
