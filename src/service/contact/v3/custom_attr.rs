@@ -5,15 +5,14 @@
 //! - 支持分页查询
 //! - 支持字段类型过滤
 
-use serde::{Deserialize, Serialize};
 use crate::core::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
-    ApiRequest,
-    SDKResult,
+    ApiRequest, SDKResult,
 };
+use serde::{Deserialize, Serialize};
 // 使用本地的 CustomAttr 定义，避免依赖有问题的 models.rs
 
 /// 自定义用户字段信息
@@ -80,11 +79,9 @@ impl CustomAttrService {
     ///
     /// # 返回
     /// 返回自定义字段列表，支持分页
-    pub async fn list(
-        &self,
-        req: &ListCustomAttrsRequest,
-    ) -> SDKResult<ListCustomAttrsResponse> {
-        let mut api_path = crate::core::endpoints_original::Endpoints::CONTACT_V3_CUSTOM_ATTRS.to_string();
+    pub async fn list(&self, req: &ListCustomAttrsRequest) -> SDKResult<ListCustomAttrsResponse> {
+        let mut api_path =
+            crate::core::endpoints_original::Endpoints::CONTACT_V3_CUSTOM_ATTRS.to_string();
 
         // 添加查询参数
         let mut query_params = Vec::new();
@@ -108,7 +105,8 @@ impl CustomAttrService {
             ..Default::default()
         };
 
-        let resp = Transport::<ListCustomAttrsResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<ListCustomAttrsResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
     }
 }
@@ -268,13 +266,11 @@ mod tests {
     #[test]
     fn test_response_with_data() {
         let mut response = ListCustomAttrsResponse::default();
-        response.items = vec![
-            CustomAttr {
-                key: "field1".to_string(),
-                name: "字段1".to_string(),
-                ..Default::default()
-            }
-        ];
+        response.items = vec![CustomAttr {
+            key: "field1".to_string(),
+            name: "字段1".to_string(),
+            ..Default::default()
+        }];
         response.has_more = Some(true);
         response.page_token = Some("next_page".to_string());
 

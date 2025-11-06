@@ -1,10 +1,10 @@
 {
   "metadata": {
     "total_apis": 1551,
-    "found_count": 865,
-    "implementation_rate": 55.77047066408769,
-    "processing_time": 75.41310000419617,
-    "generated_at": "2025-11-05T15:48:41.186981"
+    "found_count": 866,
+    "implementation_rate": 55.834945196647325,
+    "processing_time": 76.14846205711365,
+    "generated_at": "2025-11-05T20:03:08.058889"
   },
   "service_stats": {
     "event": {
@@ -272,10 +272,10 @@
       "self_build": "是",
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/passport-v1/session/logout",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/passport/v1/sessions/mod.rs",
+      "line_number": "39",
+      "implementation_preview": "pub async fn logout(&self, request: &LogoutRequest...",
+      "status": "found"
     },
     {
       "name": "自建应用获取 tenant_access_token",
@@ -416,7 +416,7 @@
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/user/batch",
       "file_path": "../src/service/contact/v3/group_member.rs",
-      "line_number": "44",
+      "line_number": "65",
       "implementation_preview": "pub async fn batch_add(",
       "status": "found"
     },
@@ -533,7 +533,7 @@
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/simplelist",
       "file_path": "../src/service/contact/v3/group_member.rs",
-      "line_number": "62",
+      "line_number": "89",
       "implementation_preview": "pub async fn simplelist(",
       "status": "found"
     },
@@ -715,7 +715,7 @@
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/department/batch",
       "file_path": "../src/service/contact/v3/group_member.rs",
-      "line_number": "44",
+      "line_number": "65",
       "implementation_preview": "pub async fn batch_add(",
       "status": "found"
     },
@@ -884,7 +884,7 @@
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group-member/add",
       "file_path": "../src/service/contact/v3/group_member.rs",
-      "line_number": "26",
+      "line_number": "41",
       "implementation_preview": "pub async fn add(",
       "status": "found"
     },
@@ -897,7 +897,7 @@
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group-member/batch_add",
       "file_path": "../src/service/contact/v3/group_member.rs",
-      "line_number": "44",
+      "line_number": "65",
       "implementation_preview": "pub async fn batch_add(",
       "status": "found"
     },
@@ -910,7 +910,7 @@
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group-member/simplelist",
       "file_path": "../src/service/contact/v3/group_member.rs",
-      "line_number": "62",
+      "line_number": "89",
       "implementation_preview": "pub async fn simplelist(",
       "status": "found"
     },
@@ -923,7 +923,7 @@
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group-member/remove",
       "file_path": "../src/service/contact/v3/group_member.rs",
-      "line_number": "84",
+      "line_number": "138",
       "implementation_preview": "pub async fn remove(",
       "status": "found"
     },
@@ -936,7 +936,7 @@
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group-member/batch_remove",
       "file_path": "../src/service/contact/v3/group_member.rs",
-      "line_number": "105",
+      "line_number": "162",
       "implementation_preview": "pub async fn batch_remove(",
       "status": "found"
     },
@@ -2730,7 +2730,7 @@
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/move",
       "file_path": "../src/service/contact/v3/group_member.rs",
-      "line_number": "84",
+      "line_number": "138",
       "implementation_preview": "pub async fn remove(",
       "status": "found"
     },
@@ -3224,7 +3224,7 @@
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/move",
       "file_path": "../src/service/contact/v3/group_member.rs",
-      "line_number": "84",
+      "line_number": "138",
       "implementation_preview": "pub async fn remove(",
       "status": "found"
     },
@@ -10971,9 +10971,9 @@
       "self_build": "是",
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/apaas-v1/application-flow/execute",
-      "file_path": "../src/service/apass/flow/mod.rs",
-      "line_number": "94",
-      "implementation_preview": "pub async fn execute_flow(,",
+      "file_path": "../src/service/contact/v3/custom_attr.rs",
+      "line_number": "192",
+      "implementation_preview": "pub async fn execute(self, service: &CustomAttrSer...",
       "status": "found"
     },
     {
@@ -14755,7 +14755,7 @@
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/compensation-v1/lump_sum_payment/batch_remove",
       "file_path": "../src/service/contact/v3/group_member.rs",
-      "line_number": "105",
+      "line_number": "162",
       "implementation_preview": "pub async fn batch_remove(",
       "status": "found"
     },
@@ -14794,7 +14794,7 @@
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/compensation-v1/recurring_payment/batch_remove",
       "file_path": "../src/service/contact/v3/group_member.rs",
-      "line_number": "105",
+      "line_number": "162",
       "implementation_preview": "pub async fn batch_remove(",
       "status": "found"
     },
@@ -19370,7 +19370,7 @@
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uYzMwUjL2MDM14iNzATN",
       "file_path": "../src/service/contact/v3/group_member.rs",
-      "line_number": "62",
+      "line_number": "89",
       "implementation_preview": "pub async fn simplelist(",
       "status": "found"
     },
@@ -19409,7 +19409,7 @@
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uMDOwUjLzgDM14yM4ATN",
       "file_path": "../src/service/contact/v3/group_member.rs",
-      "line_number": "44",
+      "line_number": "65",
       "implementation_preview": "pub async fn batch_add(",
       "status": "found"
     },
@@ -19422,7 +19422,7 @@
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uIDOwUjLygDM14iM4ATN",
       "file_path": "../src/service/contact/v3/group_member.rs",
-      "line_number": "44",
+      "line_number": "65",
       "implementation_preview": "pub async fn batch_add(",
       "status": "found"
     },

@@ -2,8 +2,8 @@
 //!
 //! 演示如何使用contact服务的查询用户所属用户组功能
 
-use open_lark::prelude::*;
 use open_lark::core::config::{Config, ConfigBuilder};
+use open_lark::prelude::*;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
