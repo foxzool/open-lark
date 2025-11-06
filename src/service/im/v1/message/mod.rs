@@ -337,6 +337,58 @@ impl MessageService {
         let resp = Transport::<ForwardMessageResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
     }
+
+    /// 上传图片
+    ///
+    /// 上传图片到飞书服务器，获取图片的image_key用于发送消息
+    ///
+    /// # 参数
+    /// * `req` - 图片上传请求，包含文件数据和元信息
+    ///
+    /// # 返回值
+    /// 返回上传成功的图片信息，包括image_key等
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// let image_data = std::fs::read("test.jpg")?;
+    /// let request = ImageUploadRequest {
+    ///     file_name: "test.jpg".to_string(),
+    ///     image_type: "message".to_string(),
+    ///     file_data: image_data,
+    /// };
+    ///
+    /// let response = client.im.v1.message.upload_image(&request).await?;
+    /// println!("图片上传成功，image_key: {}", response.image_key);
+    /// ```
+    pub async fn upload_image(&self, req: &ImageUploadRequest) -> SDKResult<ImageUploadResponse> {
+        debug!("开始上传图片: {}", req.file_name);
+
+        let mut api_req = ApiRequest::default();
+        api_req.http_method = reqwest::Method::POST;
+        api_req.api_path = crate::core::endpoints_original::Endpoints::IM_V1_IMAGES_UPLOAD.to_string();
+        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        api_req.file = req.file_data.clone();
+
+        // 构建表单数据
+        let mut form_data = serde_json::Map::new();
+        form_data.insert("file_name".to_string(), serde_json::Value::String(req.file_name.clone()));
+        form_data.insert("image_type".to_string(), serde_json::Value::String(req.image_type.clone()));
+
+        let body = serde_json::to_vec(&form_data).unwrap();
+        api_req.body = body;
+
+        let option = Some(crate::core::req_option::RequestOption::builder().file_upload(true).build());
+        let resp = Transport::<ImageUploadResponse>::request(api_req, &self.config, option).await?;
+
+        match resp.data {
+            Some(data) => {
+                info!("图片上传成功: {} -> {}", req.file_name, data.image_key);
+                Ok(data)
+            }
+            None => Err(crate::core::error::SDKError::APIError("上传响应数据为空".to_string())),
+        }
+    }
 }
 
 // ==================== 数据模型 ====================
@@ -491,6 +543,180 @@ pub struct ForwardMessageResponse {
 impl ApiResponseTrait for ForwardMessageResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
+    }
+}
+
+// ==================== 图片上传数据模型 ====================
+
+/// 图片上传请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ImageUploadRequest {
+    /// 文件名
+    ///
+    /// 示例值："avatar.jpg"
+    pub file_name: String,
+    /// 图片类型
+    ///
+    /// 可选值：
+    /// - "message": 消息图片
+    /// - "avatar": 用户头像
+    /// - "chat_avatar": 群头像
+    pub image_type: String,
+    /// 图片二进制内容
+    #[serde(skip)]
+    pub file_data: Vec<u8>,
+}
+
+impl Default for ImageUploadRequest {
+    fn default() -> Self {
+        Self {
+            file_name: String::new(),
+            image_type: "message".to_string(),
+            file_data: Vec::new(),
+        }
+    }
+}
+
+impl ImageUploadRequest {
+    /// 创建新的图片上传请求
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 设置文件名
+    pub fn file_name(mut self, file_name: impl Into<String>) -> Self {
+        self.file_name = file_name.into();
+        self
+    }
+
+    /// 设置图片类型
+    pub fn image_type(mut self, image_type: impl Into<String>) -> Self {
+        self.image_type = image_type.into();
+        self
+    }
+
+    /// 设置文件数据
+    pub fn file_data(mut self, file_data: Vec<u8>) -> Self {
+        self.file_data = file_data;
+        self
+    }
+
+    /// 验证请求参数
+    pub fn validate(&self) -> SDKResult<()> {
+        // 验证文件名
+        if self.file_name.is_empty() {
+            return Err(crate::core::error::SDKError::InvalidParameter("文件名不能为空".to_string()));
+        }
+
+        // 验证图片类型
+        let valid_types = ["message", "avatar", "chat_avatar"];
+        if !valid_types.contains(&self.image_type.as_str()) {
+            return Err(crate::core::error::SDKError::InvalidParameter(
+                format!("无效的图片类型: {}，支持的类型: {:?}", self.image_type, valid_types)
+            ));
+        }
+
+        // 验证文件数据
+        if self.file_data.is_empty() {
+            return Err(crate::core::error::SDKError::InvalidParameter("文件数据不能为空".to_string()));
+        }
+
+        // 验证文件大小 (IM图片最大10MB)
+        if self.file_data.len() > 10 * 1024 * 1024 {
+            return Err(crate::core::error::SDKError::InvalidParameter(
+                "图片文件大小不能超过10MB".to_string()
+            ));
+        }
+
+        // 验证文件扩展名
+        let valid_extensions = [".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp"];
+        let has_valid_extension = valid_extensions.iter().any(|ext| {
+            self.file_name.to_lowercase().ends_with(ext)
+        });
+
+        if !has_valid_extension {
+            return Err(crate::core::error::SDKError::InvalidParameter(
+                format!("不支持的图片格式，支持的格式: {:?}", valid_extensions)
+            ));
+        }
+
+        Ok(())
+    }
+}
+
+/// 图片上传响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct ImageUploadResponse {
+    /// 图片唯一标识
+    pub image_key: String,
+    /// 图片宽度（像素）
+    pub width: Option<i32>,
+    /// 图片高度（像素）
+    pub height: Option<i32>,
+    /// 创建时间
+    pub create_time: Option<String>,
+}
+
+impl ApiResponseTrait for ImageUploadResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+// ==================== 图片上传构建器模式 ====================
+
+/// 图片上传构建器
+#[derive(Debug, Clone)]
+pub struct ImageUploadBuilder {
+    request: ImageUploadRequest,
+}
+
+impl Default for ImageUploadBuilder {
+    fn default() -> Self {
+        Self {
+            request: ImageUploadRequest::default(),
+        }
+    }
+}
+
+impl ImageUploadBuilder {
+    /// 创建新的图片上传构建器
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 设置文件名
+    pub fn file_name(mut self, file_name: impl Into<String>) -> Self {
+        self.request.file_name = file_name.into();
+        self
+    }
+
+    /// 设置图片类型
+    pub fn image_type(mut self, image_type: impl Into<String>) -> Self {
+        self.request.image_type = image_type.into();
+        self
+    }
+
+    /// 设置文件数据
+    pub fn file_data(mut self, file_data: Vec<u8>) -> Self {
+        self.request.file_data = file_data;
+        self
+    }
+
+    /// 从文件路径加载数据
+    pub fn from_file_path<P: AsRef<std::path::Path>>(mut self, path: P) -> std::io::Result<Self> {
+        let file_data = std::fs::read(path)?;
+        self.request.file_data = file_data;
+        Ok(self)
+    }
+
+    /// 执行上传
+    pub async fn execute(self, service: &MessageService) -> SDKResult<ImageUploadResponse> {
+        // 验证请求参数
+        self.request.validate()?;
+
+        // 执行上传
+        service.upload_image(&self.request).await
     }
 }
 
@@ -865,6 +1091,11 @@ impl MessageService {
     /// 创建转发消息构建器
     pub fn forward_message_builder(&self) -> ForwardMessageBuilder {
         ForwardMessageBuilder::new()
+    }
+
+    /// 创建图片上传构建器
+    pub fn upload_image_builder(&self) -> ImageUploadBuilder {
+        ImageUploadBuilder::new()
     }
 }
 
@@ -1445,5 +1676,267 @@ mod tests {
 
         assert_eq!(long_request.receive_id.len(), 1000);
         assert!(long_request.uuid.unwrap().len(), 103);
+    }
+
+    // ==================== 图片上传测试 ====================
+
+    #[test]
+    fn test_image_upload_request_default() {
+        let request = ImageUploadRequest::default();
+        assert_eq!(request.file_name, "");
+        assert_eq!(request.image_type, "message");
+        assert_eq!(request.file_data.len(), 0);
+    }
+
+    #[test]
+    fn test_image_upload_request_builder() {
+        let image_data = vec![0xFF, 0xD8, 0xFF, 0xE0]; // JPEG header
+        let request = ImageUploadRequest::new()
+            .file_name("test.jpg")
+            .image_type("avatar")
+            .file_data(image_data.clone());
+
+        assert_eq!(request.file_name, "test.jpg");
+        assert_eq!(request.image_type, "avatar");
+        assert_eq!(request.file_data, image_data);
+    }
+
+    #[test]
+    fn test_image_upload_request_validation_success() {
+        let valid_requests = vec![
+            ImageUploadRequest {
+                file_name: "avatar.jpg".to_string(),
+                image_type: "message".to_string(),
+                file_data: vec![0u8; 1024],
+            },
+            ImageUploadRequest {
+                file_name: "profile.png".to_string(),
+                image_type: "avatar".to_string(),
+                file_data: vec![0u8; 512],
+            },
+            ImageUploadRequest {
+                file_name: "chat_avatar.gif".to_string(),
+                image_type: "chat_avatar".to_string(),
+                file_data: vec![0u8; 2048],
+            },
+        ];
+
+        for request in valid_requests {
+            assert!(request.validate().is_ok(), "Validation should succeed for {:?}", request.file_name);
+        }
+    }
+
+    #[test]
+    fn test_image_upload_request_validation_empty_filename() {
+        let request = ImageUploadRequest {
+            file_name: "".to_string(),
+            image_type: "message".to_string(),
+            file_data: vec![0u8; 1024],
+        };
+
+        let result = request.validate();
+        assert!(result.is_err());
+        assert!(result.unwrap_err().to_string().contains("文件名不能为空"));
+    }
+
+    #[test]
+    fn test_image_upload_request_validation_invalid_type() {
+        let request = ImageUploadRequest {
+            file_name: "test.jpg".to_string(),
+            image_type: "invalid_type".to_string(),
+            file_data: vec![0u8; 1024],
+        };
+
+        let result = request.validate();
+        assert!(result.is_err());
+        assert!(result.unwrap_err().to_string().contains("无效的图片类型"));
+    }
+
+    #[test]
+    fn test_image_upload_request_validation_empty_data() {
+        let request = ImageUploadRequest {
+            file_name: "test.jpg".to_string(),
+            image_type: "message".to_string(),
+            file_data: vec![],
+        };
+
+        let result = request.validate();
+        assert!(result.is_err());
+        assert!(result.unwrap_err().to_string().contains("文件数据不能为空"));
+    }
+
+    #[test]
+    fn test_image_upload_request_validation_too_large() {
+        let request = ImageUploadRequest {
+            file_name: "large.jpg".to_string(),
+            image_type: "message".to_string(),
+            file_data: vec![0u8; 11 * 1024 * 1024], // 11MB
+        };
+
+        let result = request.validate();
+        assert!(result.is_err());
+        assert!(result.unwrap_err().to_string().contains("图片文件大小不能超过10MB"));
+    }
+
+    #[test]
+    fn test_image_upload_request_validation_invalid_extension() {
+        let request = ImageUploadRequest {
+            file_name: "test.txt".to_string(),
+            image_type: "message".to_string(),
+            file_data: vec![0u8; 1024],
+        };
+
+        let result = request.validate();
+        assert!(result.is_err());
+        assert!(result.unwrap_err().to_string().contains("不支持的图片格式"));
+    }
+
+    #[test]
+    fn test_image_upload_request_validation_valid_extensions() {
+        let valid_extensions = ["jpg", "jpeg", "png", "gif", "webp", "bmp"];
+
+        for ext in valid_extensions {
+            let request = ImageUploadRequest {
+                file_name: format!("test.{}", ext),
+                image_type: "message".to_string(),
+                file_data: vec![0u8; 1024],
+            };
+
+            assert!(request.validate().is_ok(), "Extension {} should be valid", ext);
+        }
+    }
+
+    #[test]
+    fn test_image_upload_response_default() {
+        let response = ImageUploadResponse::default();
+        assert_eq!(response.image_key, "");
+        assert_eq!(response.width, None);
+        assert_eq!(response.height, None);
+        assert_eq!(response.create_time, None);
+    }
+
+    #[test]
+    fn test_image_upload_response_with_data() {
+        let response = ImageUploadResponse {
+            image_key: "img_v2_123456".to_string(),
+            width: Some(1920),
+            height: Some(1080),
+            create_time: Some("2024-06-15T14:30:22Z".to_string()),
+        };
+
+        assert_eq!(response.image_key, "img_v2_123456");
+        assert_eq!(response.width, Some(1920));
+        assert_eq!(response.height, Some(1080));
+        assert_eq!(response.create_time, Some("2024-06-15T14:30:22Z"));
+    }
+
+    #[test]
+    fn test_image_upload_builder_default() {
+        let builder = ImageUploadBuilder::default();
+        assert_eq!(builder.request.file_name, "");
+        assert_eq!(builder.request.image_type, "message");
+        assert_eq!(builder.request.file_data.len(), 0);
+    }
+
+    #[test]
+    fn test_image_upload_builder_fluent_api() {
+        let image_data = vec![0xFF, 0xD8, 0xFF, 0xE0];
+        let builder = ImageUploadBuilder::new()
+            .file_name("profile.jpg")
+            .image_type("avatar")
+            .file_data(image_data);
+
+        assert_eq!(builder.request.file_name, "profile.jpg");
+        assert_eq!(builder.request.image_type, "avatar");
+        assert_eq!(builder.request.file_data, image_data);
+    }
+
+    #[test]
+    fn test_image_upload_builder_with_string_types() {
+        let builder = ImageUploadBuilder::new()
+            .file_name("test.png")
+            .image_type("message");
+
+        assert_eq!(builder.request.file_name, "test.png");
+        assert_eq!(builder.request.image_type, "message");
+    }
+
+    #[test]
+    fn test_image_upload_request_serialization() {
+        let request = ImageUploadRequest {
+            file_name: "test.jpg".to_string(),
+            image_type: "message".to_string(),
+            file_data: vec![1, 2, 3, 4],
+        };
+
+        let serialized = serde_json::to_string(&request).unwrap();
+        let deserialized: ImageUploadRequest = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(deserialized.file_name, "test.jpg");
+        assert_eq!(deserialized.image_type, "message");
+        // file_data should be skipped in serialization
+        assert_eq!(deserialized.file_data.len(), 0);
+    }
+
+    #[test]
+    fn test_image_upload_response_serialization() {
+        let response = ImageUploadResponse {
+            image_key: "img_test_123".to_string(),
+            width: Some(800),
+            height: Some(600),
+            create_time: Some("2024-06-15T10:00:00Z".to_string()),
+        };
+
+        let serialized = serde_json::to_string(&response).unwrap();
+        let deserialized: ImageUploadResponse = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(deserialized.image_key, "img_test_123");
+        assert_eq!(deserialized.width, Some(800));
+        assert_eq!(deserialized.height, Some(600));
+        assert_eq!(deserialized.create_time, Some("2024-06-15T10:00:00Z"));
+    }
+
+    #[test]
+    fn test_image_upload_api_response_trait() {
+        assert_eq!(ImageUploadResponse::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_image_upload_edge_cases() {
+        // Test case sensitivity in extensions
+        let uppercase_request = ImageUploadRequest {
+            file_name: "test.JPG".to_string(), // uppercase extension
+            image_type: "message".to_string(),
+            file_data: vec![0u8; 1024],
+        };
+
+        assert!(uppercase_request.validate().is_ok(), "Uppercase extension should be valid");
+
+        // Test mixed case extensions
+        let mixed_case_request = ImageUploadRequest {
+            file_name: "test.PnG".to_string(), // mixed case extension
+            image_type: "message".to_string(),
+            file_data: vec![0u8; 1024],
+        };
+
+        assert!(mixed_case_request.validate().is_ok(), "Mixed case extension should be valid");
+    }
+
+    #[test]
+    fn test_image_upload_builder_edge_cases() {
+        // Test very long filename
+        let long_filename = "a".repeat(200) + ".jpg";
+        let builder = ImageUploadBuilder::new()
+            .file_name(&long_filename)
+            .image_type("message");
+
+        assert_eq!(builder.request.file_name.len(), long_filename.len());
+
+        // Test empty image type (should use default)
+        let builder = ImageUploadBuilder::new()
+            .file_name("test.jpg")
+            .image_type("");
+
+        assert_eq!(builder.request.image_type, "");
     }
 }
