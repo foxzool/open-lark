@@ -673,15 +673,15 @@ impl GetGroupAnnouncementRequest {
     /// 验证请求参数
     pub fn validate(&self) -> SDKResult<()> {
         if self.chat_id.is_empty() {
-            return Err(LarkAPIError::InvalidParams("群聊ID不能为空".to_string()));
+            return Err(LarkAPIError::illegal_param("群聊ID不能为空"));
         }
 
         if let Some(user_id_type) = &self.user_id_type {
             match user_id_type.as_str() {
                 "open_id" | "user_id" | "union_id" => {},
                 _ => {
-                    return Err(LarkAPIError::InvalidParams(
-                        "无效的用户ID类型，必须是 open_id、user_id 或 union_id".to_string()
+                    return Err(LarkAPIError::illegal_param(
+                        "无效的用户ID类型，必须是 open_id、user_id 或 union_id"
                     ));
                 }
             }
@@ -745,6 +745,97 @@ pub struct GetGroupAnnouncementResponse {
 }
 
 impl ApiResponseTrait for GetGroupAnnouncementResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+// ==================== 群公告块内容数据模型 ====================
+
+/// 获取群公告块内容请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetAnnouncementBlockContentRequest {
+    /// 群聊ID
+    pub chat_id: String,
+    /// 公告块ID
+    pub block_id: String,
+    /// 用户ID类型，可选值包括 open_id、user_id、union_id
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id_type: Option<String>,
+}
+
+impl GetAnnouncementBlockContentRequest {
+    /// 创建新的获取群公告块内容请求
+    pub fn new(chat_id: impl Into<String>, block_id: impl Into<String>) -> Self {
+        Self {
+            chat_id: chat_id.into(),
+            block_id: block_id.into(),
+            user_id_type: None,
+        }
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.user_id_type = Some(user_id_type.into());
+        self
+    }
+
+    /// 验证请求参数
+    pub fn validate(&self) -> SDKResult<()> {
+        if self.chat_id.is_empty() {
+            return Err(LarkAPIError::illegal_param("群聊ID不能为空"));
+        }
+
+        if self.block_id.is_empty() {
+            return Err(LarkAPIError::illegal_param("公告块ID不能为空"));
+        }
+
+        if let Some(user_id_type) = &self.user_id_type {
+            match user_id_type.as_str() {
+                "open_id" | "user_id" | "union_id" => {},
+                _ => {
+                    return Err(LarkAPIError::illegal_param(
+                        "无效的用户ID类型，必须是 open_id、user_id 或 union_id"
+                    ));
+                }
+            }
+        }
+
+        Ok(())
+    }
+}
+
+/// 获取群公告块内容响应数据
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct GetAnnouncementBlockContentResponseData {
+    /// 公告块内容
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content: Option<String>,
+    /// 公告块类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_type: Option<String>,
+    /// 公告块标题
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
+}
+
+/// 获取群公告块内容响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct GetAnnouncementBlockContentResponse {
+    /// 响应数据
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data: Option<GetAnnouncementBlockContentResponseData>,
+    /// 操作是否成功
+    pub success: bool,
+    /// 错误码
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<i32>,
+    /// 错误消息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+}
+
+impl ApiResponseTrait for GetAnnouncementBlockContentResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }

@@ -2638,6 +2638,10 @@ impl Endpoints {
     pub const CARDKIT_V1_CARD_ELEMENTS_PATCH: &'static str =
         "/open-apis/cardkit/v1/cards/{card_id}/elements/{element_id}";
 
+    /// 删除卡片元素
+    pub const CARDKIT_V1_CARD_ELEMENTS_DELETE: &'static str =
+        "/open-apis/cardkit/v1/cards/{card_id}/elements/{element_id}";
+
     /// 卡片设置
     pub const CARDKIT_V1_CARD_SETTINGS: &'static str =
         "/open-apis/cardkit/v1/cards/{card_id}/settings";
@@ -3210,6 +3214,7 @@ pub const CARDKIT_V1_CARDS: &str = Endpoints::CARDKIT_V1_CARDS;
 pub const CARDKIT_V1_CARD_ELEMENTS: &str = Endpoints::CARDKIT_V1_CARD_ELEMENTS;
 pub const CARDKIT_V1_CARD_ELEMENTS_UPDATE: &str = Endpoints::CARDKIT_V1_CARD_ELEMENTS_UPDATE;
 pub const CARDKIT_V1_CARD_ELEMENTS_PATCH: &str = Endpoints::CARDKIT_V1_CARD_ELEMENTS_PATCH;
+pub const CARDKIT_V1_CARD_ELEMENTS_DELETE: &str = Endpoints::CARDKIT_V1_CARD_ELEMENTS_DELETE;
 pub const CARDKIT_V1_CARD_SETTINGS: &str = Endpoints::CARDKIT_V1_CARD_SETTINGS;
 pub const CARDKIT_V1_CARD_UPDATE: &str = Endpoints::CARDKIT_V1_CARD_UPDATE;
 pub const CARDKIT_V1_CARD_BATCH_UPDATE: &str = Endpoints::CARDKIT_V1_CARD_BATCH_UPDATE;
