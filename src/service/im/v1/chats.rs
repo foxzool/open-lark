@@ -215,6 +215,70 @@ impl ChatsService {
 
         Ok(response)
     }
+
+    /// 获取群公告块的内容
+    ///
+    /// 获取指定群公告块的详细内容信息
+    ///
+    /// # 参数
+    /// * `req` - 获取群公告块内容请求
+    ///
+    /// # 返回值
+    /// 返回群公告块内容的详细信息
+    ///
+    /// # 示例
+    /// ```rust
+    /// use open_lark::service::im::v1::chats::{GetAnnouncementBlockContentRequest};
+    /// let request = GetAnnouncementBlockContentRequest::new("chat_id", "block_id")
+    ///     .user_id_type("open_id");
+    /// let response = service.get_announcement_block_content(&request).await?;
+    /// ```
+    pub async fn get_announcement_block_content(
+        &self,
+        req: &GetAnnouncementBlockContentRequest,
+    ) -> SDKResult<GetAnnouncementBlockContentResponse> {
+        req.validate()?;
+        debug!(
+            "开始获取群公告块内容: chat_id={}, block_id={}",
+            req.chat_id, req.block_id
+        );
+
+        // 构建查询参数
+        let mut query_params: HashMap<&str, String> = HashMap::new();
+        if let Some(user_id_type) = &req.user_id_type {
+            query_params.insert("user_id_type", user_id_type.clone());
+        }
+
+        // 构建API路径，替换chat_id和block_id占位符
+        let api_path = crate::core::endpoints_original::Endpoints::DOCX_V1_CHAT_ANNOUNCEMENT_BLOCK
+            .replace("{}", &req.chat_id)
+            .replace("{}", &req.block_id);
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params,
+            ..Default::default()
+        };
+
+        let resp = Transport::<GetAnnouncementBlockContentResponse>::request(api_req, &self.config, None).await?;
+        let response = resp.data.unwrap_or_default();
+
+        if response.success {
+            info!(
+                "群公告块内容获取成功: chat_id={}, block_id={}",
+                req.chat_id, req.block_id
+            );
+        } else {
+            warn!(
+                "群公告块内容获取失败: chat_id={}, block_id={}, error={:?}",
+                req.chat_id, req.block_id, response.error_message
+            );
+        }
+
+        Ok(response)
+    }
 }
 
 // ==================== 数据模型 ====================
@@ -795,6 +859,15 @@ impl ChatsService {
     pub fn get_announcement_builder(&self, chat_id: impl Into<String>) -> GetGroupAnnouncementBuilder {
         GetGroupAnnouncementBuilder::new(chat_id)
     }
+
+    /// 获取群公告块内容构建器
+    pub fn get_announcement_block_content_builder(
+        &self,
+        chat_id: impl Into<String>,
+        block_id: impl Into<String>,
+    ) -> GetAnnouncementBlockContentBuilder {
+        GetAnnouncementBlockContentBuilder::new(chat_id, block_id)
+    }
 }
 
 /// 解散群聊构建器
@@ -846,6 +919,32 @@ impl GetGroupAnnouncementBuilder {
     /// 执行获取群公告操作
     pub async fn execute(self, service: &ChatsService) -> SDKResult<GetGroupAnnouncementResponse> {
         service.get_announcement(&self.request).await
+    }
+}
+
+/// 获取群公告块内容构建器
+#[derive(Debug, Clone)]
+pub struct GetAnnouncementBlockContentBuilder {
+    request: GetAnnouncementBlockContentRequest,
+}
+
+impl GetAnnouncementBlockContentBuilder {
+    /// 创建新的构建器
+    pub fn new(chat_id: impl Into<String>, block_id: impl Into<String>) -> Self {
+        Self {
+            request: GetAnnouncementBlockContentRequest::new(chat_id, block_id),
+        }
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.request = self.request.user_id_type(user_id_type);
+        self
+    }
+
+    /// 执行获取群公告块内容操作
+    pub async fn execute(self, service: &ChatsService) -> SDKResult<GetAnnouncementBlockContentResponse> {
+        service.get_announcement_block_content(&self.request).await
     }
 }
 
@@ -1707,5 +1806,246 @@ mod tests {
         assert_eq!(announcement_ref.content, Some("明天下午3点开会".to_string()));
         assert_eq!(announcement_ref.status, Some("active".to_string()));
         assert_eq!(announcement_ref.creator.as_ref().unwrap().name, Some("管理员".to_string()));
+    }
+
+    // ==================== API #149 获取群公告块内容测试 ====================
+
+    #[test]
+    fn test_get_announcement_block_content_request_creation() {
+        let request = GetAnnouncementBlockContentRequest::new("chat_123", "block_456");
+        assert_eq!(request.chat_id, "chat_123");
+        assert_eq!(request.block_id, "block_456");
+        assert_eq!(request.user_id_type, None);
+    }
+
+    #[test]
+    fn test_get_announcement_block_content_request_with_user_id_type() {
+        let request = GetAnnouncementBlockContentRequest::new("chat_123", "block_456")
+            .user_id_type("open_id");
+        assert_eq!(request.chat_id, "chat_123");
+        assert_eq!(request.block_id, "block_456");
+        assert_eq!(request.user_id_type, Some("open_id".to_string()));
+    }
+
+    #[test]
+    fn test_get_announcement_block_content_request_validation() {
+        // 测试正常情况
+        let valid_request = GetAnnouncementBlockContentRequest::new("chat_123", "block_456");
+        assert!(valid_request.validate().is_ok());
+
+        // 测试空chat_id
+        let empty_chat_request = GetAnnouncementBlockContentRequest::new("", "block_456");
+        assert!(empty_chat_request.validate().is_err());
+
+        // 测试空block_id
+        let empty_block_request = GetAnnouncementBlockContentRequest::new("chat_123", "");
+        assert!(empty_block_request.validate().is_err());
+    }
+
+    #[test]
+    fn test_get_announcement_block_content_response_creation() {
+        let mut block_content = AnnouncementBlockContent::default();
+        block_content.block_id = Some("block_456".to_string());
+        block_content.block_type = Some("text".to_string());
+        block_content.content = Some(serde_json::json!({
+            "text": "这是公告块内容"
+        }));
+
+        let response = GetAnnouncementBlockContentResponse {
+            block: Some(block_content),
+            success: true,
+            ..Default::default()
+        };
+
+        assert!(response.success);
+        let block_ref = response.block.as_ref().unwrap();
+        assert_eq!(block_ref.block_id, Some("block_456".to_string()));
+        assert_eq!(block_ref.block_type, Some("text".to_string()));
+        assert!(block_ref.content.is_some());
+    }
+
+    #[test]
+    fn test_get_announcement_block_content_builder() {
+        let builder = GetAnnouncementBlockContentBuilder::new("chat_123", "block_456")
+            .user_id_type("union_id");
+
+        assert_eq!(builder.request.chat_id, "chat_123");
+        assert_eq!(builder.request.block_id, "block_456");
+        assert_eq!(builder.request.user_id_type, Some("union_id".to_string()));
+    }
+
+    #[test]
+    fn test_get_announcement_block_content_builder_validation() {
+        // 测试有效构建器
+        let valid_builder = GetAnnouncementBlockContentBuilder::new("chat_123", "block_456");
+        assert!(valid_builder.request.validate().is_ok());
+
+        // 测试无效构建器
+        let invalid_builder = GetAnnouncementBlockContentBuilder::new("", "block_456");
+        assert!(invalid_builder.request.validate().is_err());
+    }
+
+    #[test]
+    fn test_announcement_block_content_comprehensive() {
+        // 测试完整的公告块内容结构
+        let mut comprehensive_block = AnnouncementBlockContent::default();
+        comprehensive_block.block_id = Some("comprehensive_block_001".to_string());
+        comprehensive_block.parent_id = Some("parent_block_002".to_string());
+        comprehensive_block.block_type = Some("rich_text".to_string());
+        comprehensive_block.content = Some(serde_json::json!({
+            "elements": [
+                {
+                    "type": "text",
+                    "content": "重要通知："
+                },
+                {
+                    "type": "text",
+                    "content": "请大家准时参加明天的会议"
+                }
+            ]
+        }));
+        comprehensive_block.children = Some(vec![
+            "child_block_001".to_string(),
+            "child_block_002".to_string(),
+        ]);
+
+        let response = GetAnnouncementBlockContentResponse {
+            block: Some(comprehensive_block),
+            success: true,
+            ..Default::default()
+        };
+
+        assert!(response.success);
+        let block_ref = response.block.as_ref().unwrap();
+        assert_eq!(block_ref.block_id, Some("comprehensive_block_001".to_string()));
+        assert_eq!(block_ref.parent_id, Some("parent_block_002".to_string()));
+        assert_eq!(block_ref.block_type, Some("rich_text".to_string()));
+        assert!(block_ref.content.is_some());
+        assert_eq!(block_ref.children.as_ref().unwrap().len(), 2);
+    }
+
+    #[test]
+    fn test_get_announcement_block_content_error_response() {
+        let error_response = GetAnnouncementBlockContentResponse {
+            block: None,
+            success: false,
+            error_message: Some("公告块不存在".to_string()),
+            error_code: Some("BLOCK_NOT_FOUND".to_string()),
+            ..Default::default()
+        };
+
+        assert!(!error_response.success);
+        assert_eq!(error_response.error_message, Some("公告块不存在".to_string()));
+        assert_eq!(error_response.error_code, Some("BLOCK_NOT_FOUND".to_string()));
+        assert!(error_response.block.is_none());
+    }
+
+    #[test]
+    fn test_get_announcement_block_content_all_user_id_types() {
+        let user_id_types = ["open_id", "user_id", "union_id"];
+
+        for user_id_type in user_id_types.iter() {
+            let request = GetAnnouncementBlockContentRequest::new("chat_test", "block_test")
+                .user_id_type(*user_id_type);
+            assert!(request.validate().is_ok());
+            assert_eq!(request.user_id_type, Some(user_id_type.to_string()));
+        }
+    }
+
+    #[test]
+    fn test_get_announcement_block_content_service_method() {
+        // 测试服务方法存在性（实际HTTP调用需要模拟）
+        let config = Config::default();
+        let service = ChatsService::new(config);
+
+        // 验证服务包含所需的方法
+        let service_str = format!("{:?}", service);
+        assert!(!service_str.is_empty());
+
+        // 验证构建器方法存在
+        let builder = service.get_announcement_block_content_builder("chat_123", "block_456");
+        assert_eq!(builder.request.chat_id, "chat_123");
+        assert_eq!(builder.request.block_id, "block_456");
+    }
+
+    #[test]
+    fn test_announcement_block_content_json_serialization() {
+        let block_content = AnnouncementBlockContent {
+            block_id: Some("block_json_test".to_string()),
+            block_type: Some("text".to_string()),
+            content: Some(serde_json::json!({
+                "format": "plain_text",
+                "value": "JSON测试内容"
+            })),
+            ..Default::default()
+        };
+
+        // 测试序列化
+        let serialized = serde_json::to_string(&block_content);
+        assert!(serialized.is_ok());
+
+        // 测试反序列化
+        let deserialized: Result<AnnouncementBlockContent, _> = serde_json::from_str(&serialized.unwrap());
+        assert!(deserialized.is_ok());
+        let block = deserialized.unwrap();
+        assert_eq!(block.block_id, Some("block_json_test".to_string()));
+        assert_eq!(block.block_type, Some("text".to_string()));
+    }
+
+    #[test]
+    fn test_get_announcement_block_content_endpoint_construction() {
+        // 验证端点常量存在
+        assert_eq!(
+            crate::core::endpoints_original::Endpoints::DOCX_V1_CHAT_ANNOUNCEMENT_BLOCK,
+            "/open-apis/docx/v1/chats/{}/announcement/blocks/{}"
+        );
+
+        // 验证路径替换逻辑
+        let template = crate::core::endpoints_original::Endpoints::DOCX_V1_CHAT_ANNOUNCEMENT_BLOCK;
+        let final_path = template
+            .replace("{}", "chat_123")
+            .replace("{}", "block_456");
+        assert_eq!(
+            final_path,
+            "/open-apis/docx/v1/chats/chat_123/announcement/blocks/block_456"
+        );
+    }
+
+    #[test]
+    fn test_get_announcement_block_content_edge_cases() {
+        // 测试极长chat_id和block_id
+        let long_chat_id = "c".repeat(100);
+        let long_block_id = "b".repeat(100);
+        let long_request = GetAnnouncementBlockContentRequest::new(&long_chat_id, &long_block_id);
+        assert!(long_request.validate().is_ok());
+
+        // 测试特殊字符
+        let special_request = GetAnnouncementBlockContentRequest::new("chat_特殊字符", "block_@#$%");
+        assert!(special_request.validate().is_ok());
+
+        // 测试Unicode字符
+        let unicode_request = GetAnnouncementBlockContentRequest::new("群聊🎉", "公告块📝");
+        assert!(unicode_request.validate().is_ok());
+    }
+
+    #[test]
+    fn test_get_announcement_block_content_builder_pattern() {
+        // 测试构建器模式的流畅性
+        let builder = GetAnnouncementBlockContentBuilder::new("test_chat", "test_block")
+            .user_id_type("open_id");
+
+        // 验证构建器状态
+        assert_eq!(builder.request.chat_id, "test_chat");
+        assert_eq!(builder.request.block_id, "test_block");
+        assert_eq!(builder.request.user_id_type, Some("open_id".to_string()));
+
+        // 验证请求验证通过
+        assert!(builder.request.validate().is_ok());
+
+        // 测试链式调用
+        let chained_builder = builder
+            .user_id_type("user_id")  // 重新设置user_id_type
+            .request;
+        assert_eq!(chained_builder.user_id_type, Some("user_id".to_string()));
     }
 }
