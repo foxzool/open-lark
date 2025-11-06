@@ -371,6 +371,9 @@ impl Endpoints {
     pub const IM_V1_FORWARD_MESSAGE: &'static str =
         "/open-apis/im/v1/messages/{message_id}/forward";
 
+    /// 上传图片
+    pub const IM_V1_IMAGES_UPLOAD: &'static str = "/open-apis/im/v1/images";
+
     // 聊天管理
     /// 创建聊天
     pub const IM_CHAT_CREATE: &'static str = "/open-apis/im/v1/chats";
