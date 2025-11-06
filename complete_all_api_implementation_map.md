@@ -1,8 +1,8 @@
 # 完整API实现映射表
 
-**生成时间**: 2025-11-06 18:24:30
+**生成时间**: 2025-11-06 18:25:00
 **总API数**: 1551
-**已实现**: 937
+**已实现**: 938
 **实现率**: 60.4%
 **处理耗时**: 1.3 分钟
 **处理速度**: 19.7 API/秒  
@@ -35,7 +35,7 @@
 | 24 | [查询用户组列表](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/simplelist) | GET | `/open-apis/contact/v3/group/simplelist` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/simplelist | `../src/service/contact/v3/group_member.rs` | 137 | ✅ 已实现 |
 | 25 | [查询用户所属用户组](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/member_belong) | GET | `/open-apis/contact/v3/group/member_belong` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/member_belong | `../src/service/contact/v3/group.rs` | 276 | ✅ 已实现 |
 | 26 | [删除用户组](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/delete) | DELETE | `/open-apis/contact/v3/group/:group_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/delete | `../src/service/contact/v3/group.rs` | 192 | ✅ 已实现 |
-| 27 | [获取企业自定义用户字段](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/custom_attr/list) | GET | `/open-apis/contact/v3/custom_attrs` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/custom_attr/list | `未找到` | - | ❌ 未实现 |
+| 27 | [获取企业自定义用户字段](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/custom_attr/list) | GET | `/open-apis/contact/v3/custom_attrs` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/custom_attr/list | `../src/service/contact/v3/custom_attr.rs` | 82 | ✅ 已实现 |
 | 28 | [新增人员类型](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/create) | POST | `/open-apis/contact/v3/employee_type_enums` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/create | `未找到` | - | ❌ 未实现 |
 | 29 | [更新人员类型](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/update) | PUT | `/open-apis/contact/v3/employee_type_enums/:enum_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/update | `../src/service/contact/v3/employee_type_enum.rs` | 147 | ✅ 已实现 |
 | 30 | [查询人员类型](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/list) | GET | `/open-apis/contact/v3/employee_type_enums` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/list | `未找到` | - | ❌ 未实现 |
@@ -1571,7 +1571,6 @@
 
 以下是前100个未实现的API:
 
-- 获取企业自定义用户字段 (GET /open-apis/contact/v3/custom_attrs)
 - 新增人员类型 (POST /open-apis/contact/v3/employee_type_enums)
 - 查询人员类型 (GET /open-apis/contact/v3/employee_type_enums)
 - 恢复离职员工 (POST /open-apis/directory/v1/employees/:employee_id/resurrect)
