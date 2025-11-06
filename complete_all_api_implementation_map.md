@@ -1,9 +1,9 @@
 # 完整API实现映射表
 
-**生成时间**: 2025-11-06 16:48:15
+**生成时间**: 2025-11-06 17:18:45
 **总API数**: 1551
-**已实现**: 929
-**实现率**: 59.9%
+**已实现**: 931
+**实现率**: 60.0%
 **处理耗时**: 1.3 分钟
 **处理速度**: 19.7 API/秒  
 
@@ -175,8 +175,8 @@
 | 164 | [创建卡片实体](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/create) | POST | `/open-apis/cardkit/v1/cards` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/create | `../src/service/cardkit/v1/card/create.rs` | 127 | ✅ 已实现 |
 | 165 | [更新卡片实体配置](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/settings) | PATCH | `/open-apis/cardkit/v1/cards/:card_id/settings` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/settings | `../src/service/hire/recruitment_config/offer_settings/mod.rs` | 161 | ✅ 已实现 |
 | 166 | [局部更新卡片实体](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/batch_update) | POST | `/open-apis/cardkit/v1/cards/:card_id/batch_update` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/batch_update | `../src/service/apass/object/mod.rs` | 304 | ✅ 已实现 |
-| 167 | [全量更新卡片实体](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/update) | PUT | `/open-apis/cardkit/v1/cards/:card_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/update | `未找到` | - | ❌ 未实现 |
-| 168 | [新增组件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/create) | POST | `/open-apis/cardkit/v1/cards/:card_id/elements` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/create | `未找到` | - | ❌ 未实现 |
+| 167 | [全量更新卡片实体](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/update) | PUT | `/open-apis/cardkit/v1/cards/:card_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/update | `../src/service/cardkit/v1/card/update.rs` | 575 | ✅ 已实现 |
+| 168 | [新增组件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/create) | POST | `/open-apis/cardkit/v1/cards/:card_id/elements` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/create | `../src/service/cardkit/v1/card_element/create.rs` | 589 | ✅ 已实现 |
 | 169 | [更新组件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/update) | PUT | `/open-apis/cardkit/v1/cards/:card_id/elements/:element_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/update | `未找到` | - | ❌ 未实现 |
 | 170 | [更新组件属性](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/patch) | PATCH | `/open-apis/cardkit/v1/cards/:card_id/elements/:element_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/patch | `未找到` | - | ❌ 未实现 |
 | 171 | [流式更新文本](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/content) | PUT | `/open-apis/cardkit/v1/cards/:card_id/elements/:element_id/content` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/content | `../src/service/cloud_docs/docx/v1/document.rs` | 83 | ✅ 已实现 |
