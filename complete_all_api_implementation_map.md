@@ -1,9 +1,9 @@
 # 完整API实现映射表
 
-**生成时间**: 2025-11-06 18:48:00
+**生成时间**: 2025-11-06 19:15:00
 **总API数**: 1551
-**已实现**: 938
-**实现率**: 60.5%
+**已实现**: 939
+**实现率**: 60.6%
 **处理耗时**: 1.3 分钟
 **处理速度**: 19.7 API/秒  
 
@@ -203,7 +203,7 @@
 | 192 | [复制文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/copy) | POST | `/open-apis/drive/v1/files/:file_token/copy` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/copy | `../src/service/cloud_docs/bitable/v1/app_dashboard/copy.rs` | 67 | ✅ 已实现 |
 | 193 | [移动文件或文件夹](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/move) | POST | `/open-apis/drive/v1/files/:file_token/move` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/move | `../src/service/contact/v3/group_member.rs` | 189 | ✅ 已实现 |
 | 194 | [删除文件或文件夹](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/delete) | DELETE | `/open-apis/drive/v1/files/:file_token` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/delete | `../src/service/cloud_docs/drive/v1/files.rs` | 981 | ✅ 已实现 |
-| 195 | [创建文件快捷方式](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/create_shortcut) | POST | `/open-apis/drive/v1/files/create_shortcut` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/create_shortcut | `未找到` | - | ❌ 未实现 |
+| 195 | [创建文件快捷方式](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/create_shortcut) | POST | `/open-apis/drive/v1/files/create_shortcut` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/create_shortcut | `../src/service/cloud_docs/drive/v1/files.rs` | 1058 | ✅ 已实现 |
 | 196 | [搜索云文档](https://open.feishu.cn/document/ukTMukTMukTM/ugDM4UjL4ADO14COwgTN) | POST | `/open-apis/suite/docs-api/search/object` | https://open.feishu.cn/document/ukTMukTMukTM/ugDM4UjL4ADO14COwgTN | `../src/service/search/v2/suite_search/mod.rs` | 299 | ✅ 已实现 |
 | 197 | [上传文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_all) | POST | `/open-apis/drive/v1/files/upload_all` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_all | `../src/service/cloud_docs/drive/v1/media.rs` | 39 | ✅ 已实现 |
 | 198 | [分片上传文件-预上传](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_prepare) | POST | `/open-apis/drive/v1/files/upload_prepare` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_prepare | `../src/service/cloud_docs/drive/v1/media.rs` | 75 | ✅ 已实现 |
