@@ -623,6 +623,9 @@ impl Endpoints {
     /// 发送消息
     pub const APPROVAL_V4_MESSAGES: &'static str = "/open-apis/approval/v4/messages";
 
+    /// 批量发送消息 v4
+    pub const MESSAGE_V4_BATCH_SEND: &'static str = "/open-apis/message/v4/batch_send/";
+
     /// 更新消息 (需要使用 EndpointBuilder::replace_param 替换 {message_id})
     pub const APPROVAL_V4_MESSAGE_PATCH: &'static str =
         "/open-apis/approval/v4/messages/{message_id}";
