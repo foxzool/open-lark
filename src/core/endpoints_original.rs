@@ -2135,6 +2135,8 @@ impl Endpoints {
     pub const DRIVE_V1_FILE_GET: &'static str = "/open-apis/drive/v1/files/{}";
     pub const DRIVE_V1_FILE_COPY: &'static str = "/open-apis/drive/v1/files/{}/copy";
     pub const DRIVE_V1_FILE_DOWNLOAD: &'static str = "/open-apis/drive/v1/files/{}/download";
+    /// 删除文件或文件夹
+    pub const DRIVE_V1_FILES_DELETE: &'static str = "/open-apis/drive/v1/files/{}";
     pub const DRIVE_V1_FILE_STATISTICS: &'static str = "/open-apis/drive/v1/files/{}/statistics";
     pub const DRIVE_V1_FILE_VIEW_RECORDS: &'static str =
         "/open-apis/drive/v1/files/{}/view_records";
