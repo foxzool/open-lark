@@ -2,8 +2,8 @@
 
 **生成时间**: 2025-11-06 17:25:35
 **总API数**: 1551
-**已实现**: 933
-**实现率**: 60.2%
+**已实现**: 934
+**实现率**: 60.3%
 **处理耗时**: 1.3 分钟
 **处理速度**: 19.7 API/秒  
 
@@ -180,7 +180,7 @@
 | 169 | [更新组件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/update) | PUT | `/open-apis/cardkit/v1/cards/:card_id/elements/:element_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/update | `../src/service/cardkit/v1/card_element/update.rs` | 685 | ✅ 已实现 |
 | 170 | [更新组件属性](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/patch) | PATCH | `/open-apis/cardkit/v1/cards/:card_id/elements/:element_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/patch | `../src/service/cardkit/v1/card_element/patch.rs` | 208 | ✅ 已实现 |
 | 171 | [流式更新文本](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/content) | PUT | `/open-apis/cardkit/v1/cards/:card_id/elements/:element_id/content` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/content | `../src/service/cloud_docs/docx/v1/document.rs` | 83 | ✅ 已实现 |
-| 172 | [删除组件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/delete) | DELETE | `/open-apis/cardkit/v1/cards/:card_id/elements/:element_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/delete | `未找到` | - | ❌ 未实现 |
+| 172 | [删除组件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/delete) | DELETE | `/open-apis/cardkit/v1/cards/:card_id/elements/:element_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/delete | `../src/service/cardkit/v1/card_element/delete.rs` | 670 | ✅ 已实现 |
 | 173 | [创建应用消息流卡片](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/group/im-v2/app_feed_card/create) | POST | `/open-apis/im/v2/app_feed_card` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/group/im-v2/app_feed_card/create | `../src/service/im/v1/message/mod.rs` | 364 | ✅ 已实现 |
 | 174 | [更新应用消息流卡片](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/group/im-v2/app_feed_card-batch/update) | PUT | `/open-apis/im/v2/app_feed_card/batch` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/group/im-v2/app_feed_card-batch/update | `../src/service/im/v1/url_preview/mod.rs` | 31 | ✅ 已实现 |
 | 175 | [删除应用消息流卡片](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/group/im-v2/app_feed_card-batch/delete) | DELETE | `/open-apis/im/v2/app_feed_card/batch` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/group/im-v2/app_feed_card-batch/delete | `../src/service/im/v1/url_preview/mod.rs` | 31 | ✅ 已实现 |
@@ -1591,7 +1591,7 @@
 - 新增组件 (POST /open-apis/cardkit/v1/cards/:card_id/elements)
 - 更新组件 (PUT /open-apis/cardkit/v1/cards/:card_id/elements/:element_id)
 - ~~更新组件属性 (PATCH /open-apis/cardkit/v1/cards/:card_id/elements/:element_id)~~ ✅ 已实现
-- 删除组件 (DELETE /open-apis/cardkit/v1/cards/:card_id/elements/:element_id)
+- ~~删除组件 (DELETE /open-apis/cardkit/v1/cards/:card_id/elements/:element_id)~~ ✅ 已实现
 - 查询异步任务状态 (GET /open-apis/drive/v1/files/task_check)
 - 删除文件或文件夹 (DELETE /open-apis/drive/v1/files/:file_token)
 - 创建文件快捷方式 (POST /open-apis/drive/v1/files/create_shortcut)
