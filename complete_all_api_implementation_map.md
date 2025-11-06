@@ -1,9 +1,9 @@
 # 完整API实现映射表
 
-**生成时间**: 2025-11-06 17:25:35
+**生成时间**: 2025-11-06 18:24:30
 **总API数**: 1551
-**已实现**: 934
-**实现率**: 60.3%
+**已实现**: 937
+**实现率**: 60.4%
 **处理耗时**: 1.3 分钟
 **处理速度**: 19.7 API/秒  
 
@@ -33,7 +33,7 @@
 | 22 | [更新用户组](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/patch) | PATCH | `/open-apis/contact/v3/group/:group_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/patch | `../src/service/contact/v3/group.rs` | 192 | ✅ 已实现 |
 | 23 | [查询指定用户组](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/get) | GET | `/open-apis/contact/v3/group/:group_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/get | `../src/service/contact/v3/group.rs` | 192 | ✅ 已实现 |
 | 24 | [查询用户组列表](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/simplelist) | GET | `/open-apis/contact/v3/group/simplelist` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/simplelist | `../src/service/contact/v3/group_member.rs` | 137 | ✅ 已实现 |
-| 25 | [查询用户所属用户组](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/member_belong) | GET | `/open-apis/contact/v3/group/member_belong` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/member_belong | `未找到` | - | ❌ 未实现 |
+| 25 | [查询用户所属用户组](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/member_belong) | GET | `/open-apis/contact/v3/group/member_belong` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/member_belong | `../src/service/contact/v3/group.rs` | 276 | ✅ 已实现 |
 | 26 | [删除用户组](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/delete) | DELETE | `/open-apis/contact/v3/group/:group_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/group/delete | `../src/service/contact/v3/group.rs` | 192 | ✅ 已实现 |
 | 27 | [获取企业自定义用户字段](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/custom_attr/list) | GET | `/open-apis/contact/v3/custom_attrs` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/custom_attr/list | `未找到` | - | ❌ 未实现 |
 | 28 | [新增人员类型](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/create) | POST | `/open-apis/contact/v3/employee_type_enums` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/create | `未找到` | - | ❌ 未实现 |
@@ -83,9 +83,9 @@
 | 72 | [获取租户序列列表](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/job_family/list) | GET | `/open-apis/contact/v3/job_families` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/job_family/list | `../src/service/corehr/job_management/mod.rs` | 190 | ✅ 已实现 |
 | 73 | [删除序列](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/job_family/delete) | DELETE | `/open-apis/contact/v3/job_families/:job_family_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/job_family/delete | `../src/service/contact/v3/job_family.rs` | 139 | ✅ 已实现 |
 | 74 | [获取单个职务信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/job_title/get) | GET | `/open-apis/contact/v3/job_titles/:job_title_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/job_title/get | `../src/service/contact/v3/job_title.rs` | 77 | ✅ 已实现 |
-| 75 | [获取租户职务列表](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/job_title/list) | GET | `/open-apis/contact/v3/job_titles` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/job_title/list | `未找到` | - | ❌ 未实现 |
+| 75 | [获取租户职务列表](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/job_title/list) | GET | `/open-apis/contact/v3/job_titles` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/job_title/list | `../src/service/contact/v3/job_title.rs` | 229 | ✅ 已实现 |
 | 76 | [获取单个工作城市信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/work_city/get) | GET | `/open-apis/contact/v3/work_cities/:work_city_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/work_city/get | `../src/service/contact/v3/work_city.rs` | 97 | ✅ 已实现 |
-| 77 | [获取租户工作城市列表](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/work_city/list) | GET | `/open-apis/contact/v3/work_cities` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/work_city/list | `未找到` | - | ❌ 未实现 |
+| 77 | [获取租户工作城市列表](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact/v3/work_city/list) | GET | `/open-apis/contact/v3/work_cities` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact/v3/work_city/list | `../src/service/contact/v3/work_city.rs` | 250 | ✅ 已实现 |
 | 78 | [创建员工](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/create) | POST | `/open-apis/directory/v1/employees` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/create | `../src/service/ehr/v1/mod.rs` | 263 | ✅ 已实现 |
 | 79 | [更新员工信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/patch) | PATCH | `/open-apis/directory/v1/employees/:employee_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/patch | `../src/service/ehr/v1/mod.rs` | 165 | ✅ 已实现 |
 | 80 | [离职员工](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/delete) | DELETE | `/open-apis/directory/v1/employees/:employee_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/delete | `../src/service/ehr/v1/mod.rs` | 165 | ✅ 已实现 |
@@ -1571,12 +1571,9 @@
 
 以下是前100个未实现的API:
 
-- 查询用户所属用户组 (GET /open-apis/contact/v3/group/member_belong)
 - 获取企业自定义用户字段 (GET /open-apis/contact/v3/custom_attrs)
 - 新增人员类型 (POST /open-apis/contact/v3/employee_type_enums)
 - 查询人员类型 (GET /open-apis/contact/v3/employee_type_enums)
-- 获取租户职务列表 (GET /open-apis/contact/v3/job_titles)
-- 获取租户工作城市列表 (GET /open-apis/contact/v3/work_cities)
 - 恢复离职员工 (POST /open-apis/directory/v1/employees/:employee_id/resurrect)
 - 更新在职员工为待离职 (PATCH /open-apis/directory/v1/employees/:employee_id/to_be_resigned)
 - 更新待离职成员为在职 (PATCH /open-apis/directory/v1/employees/:employee_id/regular)
