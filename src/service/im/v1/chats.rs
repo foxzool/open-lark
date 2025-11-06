@@ -24,7 +24,7 @@ use crate::core::{
     http::Transport,
     ApiRequest, SDKResult,
 };
-use tracing::{debug, info};
+use tracing::{debug, info, warn};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -86,6 +86,75 @@ impl ChatsService {
 
         let response = resp.data.unwrap_or_default();
         info!("群聊创建成功: chat_id={}, name={}", response.chat_id, response.name.as_deref().unwrap_or_default());
+
+        Ok(response)
+    }
+
+    /// 解散群聊
+    ///
+    /// 解散指定的群聊，仅群主或管理员可以执行此操作
+    ///
+    /// # 参数
+    /// * `req` - 解散群聊请求
+    ///
+    /// # 返回值
+    /// 返回解散操作的结果
+    ///
+    /// # 示例
+    /// ```rust
+    /// let request = DeleteChatRequest::new("chat_123456")
+    ///     .user_id_type("open_id");
+    ///
+    /// let response = chats_service.delete(&request).await?;
+    /// if response.success {
+    ///     println!("群聊解散成功");
+    /// }
+    /// ```
+    ///
+    /// # 权限要求
+    /// - 仅群主可以解散群聊
+    /// - 需要具有相应的应用权限
+    ///
+    /// # 错误处理
+    /// - HTTP 403: 权限不足
+    /// - HTTP 404: 群聊不存在
+    /// - HTTP 400: 参数错误
+    pub async fn delete(&self, req: &DeleteChatRequest) -> SDKResult<DeleteChatResponse> {
+        // 验证请求参数
+        req.validate()?;
+
+        debug!("开始解散群聊: {}", req.chat_id);
+
+        let mut query_params: HashMap<&str, String> = HashMap::new();
+
+        // 设置用户ID类型
+        if let Some(user_id_type) = &req.user_id_type {
+            query_params.insert("user_id_type", user_id_type.clone());
+        }
+
+        // 构建API路径，替换chat_id占位符
+        let api_path = crate::core::endpoints_original::Endpoints::IM_CHAT_DELETE
+            .replace("{chat_id}", &req.chat_id);
+
+        // 构建API请求
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::DELETE,
+            api_path,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params,
+            ..Default::default()
+        };
+
+        let resp = Transport::<DeleteChatResponse>::request(api_req, &self.config, None).await?;
+
+        let response = resp.data.unwrap_or_default();
+
+        if response.success {
+            info!("群聊解散成功: chat_id={}", req.chat_id);
+        } else {
+            warn!("群聊解散失败: chat_id={}, error={:?}",
+                  req.chat_id, response.error_message);
+        }
 
         Ok(response)
     }
@@ -380,6 +449,79 @@ impl ApiResponseTrait for CreateChatResponse {
     }
 }
 
+/// 解散群聊请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DeleteChatRequest {
+    /// 群聊ID
+    ///
+    /// 要解散的群聊的唯一标识符
+    pub chat_id: String,
+    /// 用户ID类型
+    ///
+    /// 可选值：open_id、user_id、union_id
+    /// 默认值：open_id
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id_type: Option<String>,
+}
+
+impl DeleteChatRequest {
+    /// 创建新的解散群聊请求
+    pub fn new(chat_id: impl Into<String>) -> Self {
+        Self {
+            chat_id: chat_id.into(),
+            user_id_type: Some("open_id".to_string()),
+        }
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.user_id_type = Some(user_id_type.into());
+        self
+    }
+
+    /// 验证请求参数
+    pub fn validate(&self) -> SDKResult<()> {
+        // 验证群聊ID
+        if self.chat_id.is_empty() {
+            return Err(LarkAPIError::IllegalParamError("群聊ID不能为空".to_string()));
+        }
+
+        // 验证用户ID类型
+        if let Some(user_id_type) = &self.user_id_type {
+            let valid_types = ["open_id", "user_id", "union_id"];
+            if !valid_types.contains(&user_id_type.as_str()) {
+                return Err(LarkAPIError::IllegalParamError(
+                    format!("无效的用户ID类型: {}，支持的类型: {:?}", user_id_type, valid_types)
+                ));
+            }
+        }
+
+        Ok(())
+    }
+}
+
+/// 解散群聊响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct DeleteChatResponse {
+    /// 操作是否成功
+    pub success: bool,
+    /// 错误码
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<i32>,
+    /// 错误消息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// 操作时间戳
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation_time: Option<String>,
+}
+
+impl ApiResponseTrait for DeleteChatResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
 // ==================== 构建器模式 ====================
 
 /// 创建群聊构建器
@@ -478,6 +620,37 @@ impl ChatsService {
     /// 创建群聊构建器
     pub fn create_chat_builder(&self) -> CreateChatBuilder {
         CreateChatBuilder::new()
+    }
+
+    /// 解散群聊构建器
+    pub fn delete_chat_builder(&self, chat_id: impl Into<String>) -> DeleteChatBuilder {
+        DeleteChatBuilder::new(chat_id)
+    }
+}
+
+/// 解散群聊构建器
+#[derive(Debug, Clone)]
+pub struct DeleteChatBuilder {
+    request: DeleteChatRequest,
+}
+
+impl DeleteChatBuilder {
+    /// 创建新的构建器
+    pub fn new(chat_id: impl Into<String>) -> Self {
+        Self {
+            request: DeleteChatRequest::new(chat_id),
+        }
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.request = self.request.user_id_type(user_id_type);
+        self
+    }
+
+    /// 执行解散操作
+    pub async fn execute(self, service: &ChatsService) -> SDKResult<DeleteChatResponse> {
+        service.delete(&self.request).await
     }
 }
 
@@ -919,5 +1092,212 @@ mod tests {
 
         assert_eq!(builder.request.user_id_list.len(), 5);
         assert_eq!(builder.request.user_id_list, vec!["user_1", "user_2", "user_3", "user_4", "user_5"]);
+    }
+
+    // ==================== 解散群功能测试 ====================
+
+    #[test]
+    fn test_delete_chat_request_creation() {
+        let request = DeleteChatRequest::new("chat_123456");
+        assert_eq!(request.chat_id, "chat_123456");
+        assert_eq!(request.user_id_type, Some("open_id".to_string()));
+    }
+
+    #[test]
+    fn test_delete_chat_request_builder() {
+        let request = DeleteChatRequest::new("chat_test_789")
+            .user_id_type("user_id");
+
+        assert_eq!(request.chat_id, "chat_test_789");
+        assert_eq!(request.user_id_type, Some("user_id".to_string()));
+    }
+
+    #[test]
+    fn test_delete_chat_request_validation_success() {
+        let request = DeleteChatRequest::new("valid_chat_id");
+        let result = request.validate();
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_delete_chat_request_validation_empty_chat_id() {
+        let request = DeleteChatRequest::new("");
+        let result = request.validate();
+        assert!(result.is_err());
+        assert!(result.unwrap_err().to_string().contains("群聊ID不能为空"));
+    }
+
+    #[test]
+    fn test_delete_chat_request_validation_invalid_user_id_type() {
+        let request = DeleteChatRequest::new("chat_123")
+            .user_id_type("invalid_type");
+
+        let result = request.validate();
+        assert!(result.is_err());
+        assert!(result.unwrap_err().to_string().contains("无效的用户ID类型"));
+    }
+
+    #[test]
+    fn test_delete_chat_response_creation() {
+        let response = DeleteChatResponse::default();
+        assert_eq!(response.success, false);
+        assert_eq!(response.error_code, None);
+        assert_eq!(response.error_message, None);
+        assert_eq!(response.operation_time, None);
+    }
+
+    #[test]
+    fn test_delete_chat_response_with_data() {
+        let response = DeleteChatResponse {
+            success: true,
+            error_code: None,
+            error_message: None,
+            operation_time: Some("2023-01-01T12:00:00Z".to_string()),
+        };
+
+        assert_eq!(response.success, true);
+        assert_eq!(response.error_code, None);
+        assert_eq!(response.error_message, None);
+        assert_eq!(response.operation_time, Some("2023-01-01T12:00:00Z".to_string()));
+    }
+
+    #[test]
+    fn test_delete_chat_response_failure() {
+        let response = DeleteChatResponse {
+            success: false,
+            error_code: Some(403),
+            error_message: Some("权限不足".to_string()),
+            operation_time: Some("2023-01-01T12:00:00Z".to_string()),
+        };
+
+        assert_eq!(response.success, false);
+        assert_eq!(response.error_code, Some(403));
+        assert_eq!(response.error_message, Some("权限不足".to_string()));
+        assert_eq!(response.operation_time, Some("2023-01-01T12:00:00Z".to_string()));
+    }
+
+    #[test]
+    fn test_delete_chat_request_serialization() {
+        let request = DeleteChatRequest {
+            chat_id: "chat_serialize_123".to_string(),
+            user_id_type: Some("union_id".to_string()),
+        };
+
+        // 测试序列化
+        let serialized = serde_json::to_string(&request).unwrap();
+        assert!(serialized.contains("chat_serialize_123"));
+        assert!(serialized.contains("union_id"));
+
+        // 测试反序列化
+        let deserialized: DeleteChatRequest = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(deserialized.chat_id, "chat_serialize_123");
+        assert_eq!(deserialized.user_id_type, Some("union_id".to_string()));
+    }
+
+    #[test]
+    fn test_delete_chat_response_serialization() {
+        let response = DeleteChatResponse {
+            success: true,
+            error_code: None,
+            error_message: Some("操作成功".to_string()),
+            operation_time: Some("2023-12-31T23:59:59Z".to_string()),
+        };
+
+        // 测试序列化
+        let serialized = serde_json::to_string(&response).unwrap();
+        assert!(serialized.contains("true"));
+        assert!(serialized.contains("操作成功"));
+        assert!(serialized.contains("2023-12-31T23:59:59Z"));
+
+        // 测试反序列化
+        let deserialized: DeleteChatResponse = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(deserialized.success, true);
+        assert_eq!(deserialized.error_message, Some("操作成功".to_string()));
+        assert_eq!(deserialized.operation_time, Some("2023-12-31T23:59:59Z".to_string()));
+    }
+
+    #[test]
+    fn test_delete_chat_api_response_trait() {
+        assert_eq!(DeleteChatResponse::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_delete_chat_endpoint_constant() {
+        // 测试解散群端点常量是否正确定义
+        assert_eq!(
+            crate::core::endpoints_original::Endpoints::IM_CHAT_DELETE,
+            "/open-apis/im/v1/chats/{chat_id}"
+        );
+    }
+
+    #[test]
+    fn test_delete_chat_builder() {
+        let builder = DeleteChatBuilder::new("chat_builder_test")
+            .user_id_type("open_id");
+
+        assert_eq!(builder.request.chat_id, "chat_builder_test");
+        assert_eq!(builder.request.user_id_type, Some("open_id".to_string()));
+    }
+
+    #[test]
+    fn test_delete_chat_service_builder() {
+        let config = Config::default();
+        let service = ChatsService::new(config);
+
+        let builder = service.delete_chat_builder("chat_service_test");
+        assert_eq!(builder.request.chat_id, "chat_service_test");
+        assert_eq!(builder.request.user_id_type, Some("open_id".to_string()));
+    }
+
+    #[test]
+    fn test_delete_chat_different_user_id_types() {
+        let user_id_types = vec![
+            ("open_id", "open_id"),
+            ("user_id", "user_id"),
+            ("union_id", "union_id"),
+        ];
+
+        for (user_id_type, expected) in user_id_types {
+            let request = DeleteChatRequest::new("chat_test")
+                .user_id_type(user_id_type);
+
+            assert_eq!(request.chat_id, "chat_test");
+            assert_eq!(request.user_id_type, Some(expected.to_string()));
+
+            // 验证应该成功
+            let result = request.validate();
+            assert!(result.is_ok(), "Valid user_id_type {} should pass validation", user_id_type);
+        }
+    }
+
+    #[test]
+    fn test_delete_chat_comprehensive_response() {
+        let comprehensive_response = DeleteChatResponse {
+            success: false,
+            error_code: Some(404),
+            error_message: Some("群聊不存在或已被删除".to_string()),
+            operation_time: Some("2023-06-15T14:30:00Z".to_string()),
+        };
+
+        assert_eq!(comprehensive_response.success, false);
+        assert_eq!(comprehensive_response.error_code, Some(404));
+        assert_eq!(comprehensive_response.error_message, Some("群聊不存在或已被删除".to_string()));
+        assert_eq!(comprehensive_response.operation_time, Some("2023-06-15T14:30:00Z".to_string()));
+    }
+
+    #[test]
+    fn test_delete_chat_request_edge_cases() {
+        // 测试包含特殊字符的群ID
+        let special_chars_request = DeleteChatRequest::new("chat_特殊字符_123");
+        assert_eq!(special_chars_request.chat_id, "chat_特殊字符_123");
+
+        // 测试很长的群ID
+        let long_chat_id = "chat_".to_string() + &"a".repeat(100);
+        let long_id_request = DeleteChatRequest::new(&long_chat_id);
+        assert_eq!(long_id_request.chat_id, long_chat_id);
+
+        // 验证应该成功（群ID长度在API规范允许范围内）
+        let result = long_id_request.validate();
+        assert!(result.is_ok());
     }
 }
