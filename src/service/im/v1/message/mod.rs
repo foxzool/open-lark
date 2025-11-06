@@ -311,6 +311,32 @@ impl MessageService {
         let resp = Transport::<PatchMessageResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
     }
+
+    /// 转发消息
+    ///
+    /// 将指定消息转发给用户、群聊或话题
+    ///
+    /// # 参数
+    /// * `message_id` - 要转发的消息ID
+    /// * `req` - 转发消息请求
+    ///
+    /// # 返回值
+    /// 返回转发后的消息信息
+    pub async fn forward(&self, message_id: &str, req: &ForwardMessageRequest) -> SDKResult<ForwardMessageResponse> {
+        let api_path = crate::core::endpoints_original::Endpoints::IM_V1_FORWARD_MESSAGE
+            .replace("{message_id}", message_id);
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
+            api_path,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: serde_json::to_vec(&req)?,
+            ..Default::default()
+        };
+
+        let resp = Transport::<ForwardMessageResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
+    }
 }
 
 // ==================== 数据模型 ====================
@@ -424,6 +450,45 @@ pub struct PatchMessageResponse {
 }
 
 impl ApiResponseTrait for PatchMessageResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 转发消息请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ForwardMessageRequest {
+    /// 接收者ID
+    pub receive_id: String,
+    /// 接收者类型
+    pub receive_id_type: String,
+    /// 转发消息的UUID，用于避免重复转发
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub uuid: Option<String>,
+}
+
+impl Default for ForwardMessageRequest {
+    fn default() -> Self {
+        Self {
+            receive_id: String::new(),
+            receive_id_type: "user_id".to_string(),
+            uuid: None,
+        }
+    }
+}
+
+/// 转发消息响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
+pub struct ForwardMessageResponse {
+    /// 消息ID
+    pub message_id: Option<String>,
+    /// 消息创建时间
+    pub create_time: Option<String>,
+    /// 消息更新时间
+    pub update_time: Option<String>,
+}
+
+impl ApiResponseTrait for ForwardMessageResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
@@ -737,6 +802,50 @@ impl PatchMessageBuilder {
     }
 }
 
+/// 转发消息构建器
+#[derive(Debug, Clone)]
+pub struct ForwardMessageBuilder {
+    request: ForwardMessageRequest,
+}
+
+impl Default for ForwardMessageBuilder {
+    fn default() -> Self {
+        Self {
+            request: ForwardMessageRequest::default(),
+        }
+    }
+}
+
+impl ForwardMessageBuilder {
+    /// 创建新的转发消息构建器
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 设置接收者ID
+    pub fn receive_id(mut self, receive_id: impl Into<String>) -> Self {
+        self.request.receive_id = receive_id.into();
+        self
+    }
+
+    /// 设置接收者类型
+    pub fn receive_id_type(mut self, receive_id_type: impl Into<String>) -> Self {
+        self.request.receive_id_type = receive_id_type.into();
+        self
+    }
+
+    /// 设置转发消息的UUID
+    pub fn uuid(mut self, uuid: impl Into<String>) -> Self {
+        self.request.uuid = Some(uuid.into());
+        self
+    }
+
+    /// 执行转发消息
+    pub async fn execute(self, service: &MessageService, message_id: &str) -> SDKResult<ForwardMessageResponse> {
+        service.forward(message_id, &self.request).await
+    }
+}
+
 impl MessageService {
     /// 创建编辑消息构建器
     pub fn update_message_builder(&self) -> UpdateMessageBuilder {
@@ -751,6 +860,11 @@ impl MessageService {
     /// 创建部分更新消息构建器
     pub fn patch_message_builder(&self) -> PatchMessageBuilder {
         PatchMessageBuilder::new()
+    }
+
+    /// 创建转发消息构建器
+    pub fn forward_message_builder(&self) -> ForwardMessageBuilder {
+        ForwardMessageBuilder::new()
     }
 }
 
@@ -1106,5 +1220,230 @@ mod tests {
         } else {
             panic!("Expected Interactive content");
         }
+    }
+
+    #[test]
+    fn test_forward_message_request_default() {
+        let request = ForwardMessageRequest::default();
+        assert_eq!(request.receive_id_type, "user_id");
+        assert_eq!(request.receive_id, String::new());
+        assert!(request.uuid.is_none());
+    }
+
+    #[test]
+    fn test_forward_message_request_with_data() {
+        let request = ForwardMessageRequest {
+            receive_id: "user_123".to_string(),
+            receive_id_type: "open_id".to_string(),
+            uuid: Some("unique_forward_id".to_string()),
+        };
+
+        assert_eq!(request.receive_id, "user_123");
+        assert_eq!(request.receive_id_type, "open_id");
+        assert_eq!(request.uuid, Some("unique_forward_id".to_string()));
+    }
+
+    #[test]
+    fn test_forward_message_response_default() {
+        let response = ForwardMessageResponse::default();
+        assert!(response.message_id.is_none());
+        assert!(response.create_time.is_none());
+        assert!(response.update_time.is_none());
+    }
+
+    #[test]
+    fn test_forward_message_response_with_data() {
+        let response = ForwardMessageResponse {
+            message_id: Some("forwarded_msg_456".to_string()),
+            create_time: Some("2023-01-01T12:00:00Z".to_string()),
+            update_time: Some("2023-01-01T12:00:01Z".to_string()),
+        };
+
+        assert_eq!(response.message_id, Some("forwarded_msg_456".to_string()));
+        assert_eq!(response.create_time, Some("2023-01-01T12:00:00Z".to_string()));
+        assert_eq!(response.update_time, Some("2023-01-01T12:00:01Z".to_string()));
+    }
+
+    #[test]
+    fn test_forward_message_builder() {
+        let builder = ForwardMessageBuilder::new()
+            .receive_id("user_789")
+            .receive_id_type("open_id")
+            .uuid("forward_uuid_123");
+
+        assert_eq!(builder.request.receive_id, "user_789");
+        assert_eq!(builder.request.receive_id_type, "open_id");
+        assert_eq!(builder.request.uuid, Some("forward_uuid_123".to_string()));
+    }
+
+    #[test]
+    fn test_forward_message_builder_default() {
+        let builder = ForwardMessageBuilder::default();
+        assert_eq!(builder.request.receive_id_type, "user_id");
+        assert_eq!(builder.request.receive_id, String::new());
+        assert!(builder.request.uuid.is_none());
+    }
+
+    #[test]
+    fn test_forward_message_builder_chain_calls() {
+        let builder = ForwardMessageBuilder::new()
+            .receive_id("chat_456")
+            .receive_id_type("chat_id")
+            .uuid("chain_test_uuid");
+
+        assert_eq!(builder.request.receive_id, "chat_456");
+        assert_eq!(builder.request.receive_id_type, "chat_id");
+        assert_eq!(builder.request.uuid, Some("chain_test_uuid".to_string()));
+    }
+
+    #[test]
+    fn test_forward_message_serialization() {
+        let request = ForwardMessageRequest {
+            receive_id: "group_123".to_string(),
+            receive_id_type: "chat_id".to_string(),
+            uuid: Some("test_uuid_456".to_string()),
+        };
+
+        let serialized = serde_json::to_string(&request).unwrap();
+        let deserialized: ForwardMessageRequest = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(request.receive_id, deserialized.receive_id);
+        assert_eq!(request.receive_id_type, deserialized.receive_id_type);
+        assert_eq!(request.uuid, deserialized.uuid);
+    }
+
+    #[test]
+    fn test_forward_message_response_serialization() {
+        let response = ForwardMessageResponse {
+            message_id: Some("msg_789".to_string()),
+            create_time: Some("2023-12-31T23:59:59Z".to_string()),
+            update_time: Some("2024-01-01T00:00:00Z".to_string()),
+        };
+
+        let serialized = serde_json::to_string(&response).unwrap();
+        let deserialized: ForwardMessageResponse = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(response.message_id, deserialized.message_id);
+        assert_eq!(response.create_time, deserialized.create_time);
+        assert_eq!(response.update_time, deserialized.update_time);
+    }
+
+    #[test]
+    fn test_forward_message_different_receive_id_types() {
+        // Test user_id type
+        let user_request = ForwardMessageBuilder::new()
+            .receive_id("user_123")
+            .receive_id_type("user_id");
+
+        assert_eq!(user_request.request.receive_id_type, "user_id");
+
+        // Test open_id type
+        let open_request = ForwardMessageBuilder::new()
+            .receive_id("ou_123456789")
+            .receive_id_type("open_id");
+
+        assert_eq!(open_request.request.receive_id_type, "open_id");
+
+        // Test chat_id type
+        let chat_request = ForwardMessageBuilder::new()
+            .receive_id("oc_123456789")
+            .receive_id_type("chat_id");
+
+        assert_eq!(chat_request.request.receive_id_type, "chat_id");
+    }
+
+    #[test]
+    fn test_forward_message_optional_uuid() {
+        // Test without UUID
+        let request_no_uuid = ForwardMessageBuilder::new()
+            .receive_id("user_123")
+            .receive_id_type("user_id");
+
+        assert!(request_no_uuid.request.uuid.is_none());
+
+        // Test with UUID
+        let request_with_uuid = ForwardMessageBuilder::new()
+            .receive_id("user_123")
+            .receive_id_type("user_id")
+            .uuid("unique_forward_uuid");
+
+        assert_eq!(request_with_uuid.request.uuid, Some("unique_forward_uuid".to_string()));
+    }
+
+    #[test]
+    fn test_api_response_trait_implementation() {
+        assert_eq!(ForwardMessageResponse::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_endpoint_constants() {
+        assert_eq!(
+            crate::core::endpoints_original::Endpoints::IM_V1_FORWARD_MESSAGE,
+            "/open-apis/im/v1/messages/{message_id}/forward"
+        );
+    }
+
+    #[test]
+    fn test_forward_message_request_json_structure() {
+        let request = ForwardMessageRequest {
+            receive_id: "test_user".to_string(),
+            receive_id_type: "user_id".to_string(),
+            uuid: Some("test-uuid-123".to_string()),
+        };
+
+        let json = serde_json::to_value(&request).unwrap();
+
+        assert_eq!(json.get("receive_id").unwrap().as_str().unwrap(), "test_user");
+        assert_eq!(json.get("receive_id_type").unwrap().as_str().unwrap(), "user_id");
+        assert_eq!(json.get("uuid").unwrap().as_str().unwrap(), "test-uuid-123");
+    }
+
+    #[test]
+    fn test_forward_message_response_json_structure() {
+        let response = ForwardMessageResponse {
+            message_id: Some("msg_forwarded_123".to_string()),
+            create_time: Some("2023-06-15T10:30:00Z".to_string()),
+            update_time: Some("2023-06-15T10:30:01Z".to_string()),
+        };
+
+        let json = serde_json::to_value(&response).unwrap();
+
+        assert_eq!(json.get("message_id").unwrap().as_str().unwrap(), "msg_forwarded_123");
+        assert_eq!(json.get("create_time").unwrap().as_str().unwrap(), "2023-06-15T10:30:00Z");
+        assert_eq!(json.get("update_time").unwrap().as_str().unwrap(), "2023-06-15T10:30:01Z");
+    }
+
+    #[test]
+    fn test_forward_message_builder_with_realistic_data() {
+        let builder = ForwardMessageBuilder::new()
+            .receive_id("oc_a0553eda8614c201fa69617a4f9c2a8b") // 真实的群聊ID格式
+            .receive_id_type("chat_id")
+            .uuid("forward_20240615_143022");
+
+        assert_eq!(builder.request.receive_id, "oc_a0553eda8614c201fa69617a4f9c2a8b");
+        assert_eq!(builder.request.receive_id_type, "chat_id");
+        assert_eq!(builder.request.uuid, Some("forward_20240615_143022".to_string()));
+    }
+
+    #[test]
+    fn test_forward_message_edge_cases() {
+        // Test empty receive_id
+        let empty_request = ForwardMessageRequest {
+            receive_id: String::new(),
+            receive_id_type: "user_id".to_string(),
+            uuid: None,
+        };
+
+        assert_eq!(empty_request.receive_id, "");
+
+        // Test very long receive_id
+        let long_request = ForwardMessageRequest {
+            receive_id: "a".repeat(1000),
+            receive_id_type: "user_id".to_string(),
+            uuid: Some("uuid".repeat(100)),
+        };
+
+        assert_eq!(long_request.receive_id.len(), 1000);
+        assert!(long_request.uuid.unwrap().len(), 103);
     }
 }
