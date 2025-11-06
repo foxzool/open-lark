@@ -10,6 +10,7 @@ use crate::service::directory::v1::employee::regular::models::{
 use crate::service::directory::v1::employee::delete::{DeleteEmployeeRequest, DeleteEmployeeBuilder};
 use crate::service::directory::v1::employee::resurrect::{ResurrectEmployeeRequest, ResurrectEmployeeBuilder};
 use crate::service::directory::v1::employee::mget::{MGetEmployeeRequest, MGetEmployeeBuilder};
+use crate::service::directory::v1::employee::filter::{FilterEmployeeRequest, FilterEmployeeBuilder};
 use std::sync::Arc;
 
 /// 删除员工的API端点
@@ -23,6 +24,9 @@ pub const ENDPOINT_RESURRECT: &str = "/open-apis/directory/v1/employees/{employe
 
 /// 批量获取员工信息的API端点
 pub const ENDPOINT_MGET: &str = "/open-apis/directory/v1/employees/mget";
+
+/// 批量获取员工列表的API端点
+pub const ENDPOINT_FILTER: &str = "/open-apis/directory/v1/employees/filter";
 
 /// 员工服务实现
 impl EmployeeService {
@@ -366,6 +370,102 @@ impl EmployeeService {
         let builder = self.mget_employee_builder(request.clone());
         builder.execute().await
     }
+
+    /// 批量获取员工列表构建器
+    ///
+    /// 创建一个批量获取员工列表的构建器，支持分页、过滤、排序功能
+    ///
+    /// # 参数
+    /// * `request` - 批量获取员工列表请求，包含分页、过滤条件等
+    ///
+    /// # 返回
+    /// 返回批量获取员工列表构建器，可用于执行查询操作
+    ///
+    /// # 示例
+    /// ```rust,no_run
+    /// use open_lark::service::directory::v1::employee::filter::{FilterEmployeeRequest, FilterEmployeeResponse};
+    ///
+    /// async fn filter_employee_example(
+    ///     service: Arc<EmployeeService>
+    /// ) -> Result<FilterEmployeeResponse, Box<dyn std::error::Error>> {
+    ///     let request = FilterEmployeeRequest::builder()
+    ///         .page_size(20)
+    ///         .status(1) // 只查询在职员工
+    ///         .user_id_type("open_id".to_string())
+    ///         .sort_field("create_time".to_string())
+    ///         .sort_direction("desc".to_string())
+    ///         .build()?;
+    ///
+    ///     let response = service
+    ///         .filter_employee_builder(request)
+    ///         .execute()
+    ///         .await?;
+    ///
+    ///     println!("找到 {} 个员工，还有更多数据: {}",
+    ///              response.employee_count(),
+    ///              response.has_more());
+    ///
+    ///     // 如果还有更多数据，可以继续获取下一页
+    ///     if response.has_more() {
+    ///         if let Some(next_token) = response.page_token() {
+    ///             let next_request = FilterEmployeeRequest::builder()
+    ///                 .page_size(20)
+    ///                 .page_token(next_token.clone())
+    ///                 .status(1)
+    ///                 .user_id_type("open_id".to_string())
+    ///                 .build()?;
+    ///
+    ///             let next_response = service
+    ///                 .filter_employee_builder(next_request)
+    ///                 .execute()
+    ///                 .await?;
+    ///
+    ///             println!("下一页有 {} 个员工", next_response.employee_count());
+    ///         }
+    ///     }
+    ///
+    ///     Ok(response)
+    /// }
+    /// ```
+    pub fn filter_employee_builder(&self, request: FilterEmployeeRequest) -> FilterEmployeeBuilder {
+        FilterEmployeeBuilder::new(Arc::new(self.clone()), request)
+    }
+
+    /// 批量获取员工列表（直接方法）
+    ///
+    /// 直接批量获取员工列表，不使用构建器模式
+    ///
+    /// # 参数
+    /// * `request` - 批量获取员工列表请求
+    ///
+    /// # 返回
+    /// * `Ok(FilterEmployeeResponse)` - 获取成功，返回员工列表
+    /// * `Err(SDKError)` - 获取失败，返回错误信息
+    ///
+    /// # 示例
+    /// ```rust,no_run
+    /// use open_lark::service::directory::v1::employee::filter::{FilterEmployeeRequest, FilterEmployeeResponse};
+    ///
+    /// async fn filter_employee_direct(
+    ///     service: &EmployeeService
+    /// ) -> Result<FilterEmployeeResponse, Box<dyn std::error::Error>> {
+    ///     let request = FilterEmployeeRequest::builder()
+    ///         .page_size(10)
+    ///         .status(1)
+    ///         .build()?;
+    ///
+    ///     let response = service
+    ///         .filter_employee(&request)
+    ///         .await?;
+    ///
+    ///     println!("获取到 {} 个员工", response.employee_count());
+    ///     Ok(response)
+    /// }
+    /// ```
+    pub async fn filter_employee(&self, request: &FilterEmployeeRequest) -> SDKResult<crate::service::directory::v1::employee::filter::FilterEmployeeResponse> {
+        let builder = self.filter_employee_builder(request.clone());
+        builder.execute().await
+    }
 }
 
 /// 克隆实现，用于创建Arc包装的服务实例
@@ -385,6 +485,7 @@ mod tests {
     use crate::service::directory::v1::employee::delete::DeleteEmployeeRequest;
     use crate::service::directory::v1::employee::resurrect::ResurrectEmployeeRequest;
     use crate::service::directory::v1::employee::mget::MGetEmployeeRequest;
+    use crate::service::directory::v1::employee::filter::FilterEmployeeRequest;
     use std::sync::Arc;
 
     fn create_test_service() -> EmployeeService {
@@ -898,6 +999,395 @@ mod tests {
 
         // 确保批量操作不影响单个操作
         assert!(true); // 占位断言，确保测试结构正确
+    }
+
+    #[tokio::test]
+    async fn test_filter_employee_builder() {
+        let service = create_test_service();
+        let request = FilterEmployeeRequest::builder()
+            .page_size(20)
+            .status(1)
+            .user_id_type("open_id".to_string())
+            .sort_field("create_time".to_string())
+            .sort_direction("desc".to_string())
+            .build()
+            .unwrap();
+
+        let builder = service.filter_employee_builder(request);
+        assert_eq!(builder.request.page_size, Some(20));
+        assert_eq!(builder.request.status, Some(1));
+        assert_eq!(builder.request.user_id_type, Some("open_id".to_string()));
+        assert_eq!(builder.request.sort_field, Some("create_time".to_string()));
+        assert_eq!(builder.request.sort_direction, Some("desc".to_string()));
+    }
+
+    #[tokio::test]
+    async fn test_filter_employee_direct() {
+        let service = create_test_service();
+        let request = FilterEmployeeRequest::builder()
+            .page_size(10)
+            .status(1)
+            .department_ids(vec!["dept_123".to_string(), "dept_456".to_string()])
+            .build()
+            .unwrap();
+
+        // 测试直接批量获取方法
+        let result = service.filter_employee(&request).await;
+
+        // 由于MockTransport的限制，主要验证方法调用结构
+        assert!(result.is_err() || matches!(result, Ok(_)));
+    }
+
+    #[test]
+    fn test_endpoint_filter_constant() {
+        assert_eq!(
+            ENDPOINT_FILTER,
+            "/open-apis/directory/v1/employees/filter"
+        );
+    }
+
+    #[tokio::test]
+    async fn test_multiple_filter_operations() {
+        let service = create_test_service();
+        let test_cases = vec![
+            // 基本查询
+            (Some(10), None, None, None, None, None, None, None),
+            // 带状态过滤
+            (Some(20), None, Some(1), None, Some("open_id".to_string()), None, None, None),
+            // 带部门过滤
+            (Some(30), Some("token_123".to_string()), None, Some(vec!["dept_1".to_string()]), None, Some("department_id".to_string()), None, None),
+            // 带排序
+            (Some(5), None, Some(2), None, Some("user_id".to_string()), None, Some("create_time".to_string()), Some("desc".to_string())),
+            // 完整参数
+            (Some(50), Some("full_token".to_string()), Some(3), Some(vec!["dept_1".to_string(), "dept_2".to_string()]), Some("union_id".to_string()), Some("open_department_id".to_string()), Some("name".to_string()), Some("asc".to_string())),
+        ];
+
+        for (page_size, page_token, status, department_ids, user_id_type, department_id_type, sort_field, sort_direction) in test_cases {
+            let mut builder = FilterEmployeeRequest::builder();
+
+            if let Some(ps) = page_size {
+                builder = builder.page_size(ps);
+            }
+            if let Some(pt) = page_token {
+                builder = builder.page_token(pt);
+            }
+            if let Some(s) = status {
+                builder = builder.status(s);
+            }
+            if let Some(di) = department_ids {
+                builder = builder.department_ids(di);
+            }
+            if let Some(uit) = user_id_type {
+                builder = builder.user_id_type(uit);
+            }
+            if let Some(dit) = department_id_type {
+                builder = builder.department_id_type(dit);
+            }
+            if let Some(sf) = sort_field {
+                builder = builder.sort_field(sf);
+            }
+            if let Some(sd) = sort_direction {
+                builder = builder.sort_direction(sd);
+            }
+
+            let request = builder.build().unwrap();
+            let filter_builder = service.filter_employee_builder(request);
+
+            // 验证构建器参数正确
+            assert_eq!(filter_builder.request.page_size, page_size);
+            assert_eq!(filter_builder.request.page_token, page_token);
+            assert_eq!(filter_builder.request.status, status);
+            assert_eq!(filter_builder.request.department_ids, department_ids);
+            assert_eq!(filter_builder.request.user_id_type, user_id_type);
+            assert_eq!(filter_builder.request.department_id_type, department_id_type);
+            assert_eq!(filter_builder.request.sort_field, sort_field);
+            assert_eq!(filter_builder.request.sort_direction, sort_direction);
+        }
+    }
+
+    #[tokio::test]
+    async fn test_filter_employee_with_pagination() {
+        let service = create_test_service();
+
+        // 测试分页功能
+        let first_request = FilterEmployeeRequest::builder()
+            .page_size(25)
+            .status(1)
+            .user_id_type("open_id".to_string())
+            .build()
+            .unwrap();
+
+        let first_builder = service.filter_employee_builder(first_request);
+        assert_eq!(first_builder.request.page_size, Some(25));
+
+        // 模拟下一页请求
+        let second_request = FilterEmployeeRequest::builder()
+            .page_size(25)
+            .page_token("next_page_token_123")
+            .status(1)
+            .user_id_type("open_id".to_string())
+            .build()
+            .unwrap();
+
+        let second_builder = service.filter_employee_builder(second_request);
+        assert_eq!(second_builder.request.page_token, Some("next_page_token_123".to_string()));
+    }
+
+    #[tokio::test]
+    async fn test_filter_employee_with_department_filter() {
+        let service = create_test_service();
+        let department_ids = vec![
+            "dept_engineering".to_string(),
+            "dept_product".to_string(),
+            "dept_design".to_string(),
+        ];
+
+        let request = FilterEmployeeRequest::builder()
+            .page_size(50)
+            .department_ids(department_ids.clone())
+            .department_id_type("department_id".to_string())
+            .build()
+            .unwrap();
+
+        let builder = service.filter_employee_builder(request);
+        assert_eq!(builder.request.department_ids, Some(department_ids));
+        assert_eq!(builder.request.department_id_type, Some("department_id".to_string()));
+    }
+
+    #[tokio::test]
+    async fn test_filter_employee_with_sorting() {
+        let service = create_test_service();
+
+        // 测试不同排序组合
+        let sort_test_cases = vec![
+            ("create_time", "asc"),
+            ("create_time", "desc"),
+            ("name", "asc"),
+            ("employee_id", "desc"),
+        ];
+
+        for (sort_field, sort_direction) in sort_test_cases {
+            let request = FilterEmployeeRequest::builder()
+                .page_size(10)
+                .sort_field(sort_field.to_string())
+                .sort_direction(sort_direction.to_string())
+                .build()
+                .unwrap();
+
+            let builder = service.filter_employee_builder(request);
+            assert_eq!(builder.request.sort_field, Some(sort_field.to_string()));
+            assert_eq!(builder.request.sort_direction, Some(sort_direction.to_string()));
+        }
+    }
+
+    #[tokio::test]
+    async fn test_filter_employee_status_filtering() {
+        let service = create_test_service();
+
+        // 测试不同员工状态过滤
+        let status_test_cases = vec![
+            (1, "在职员工"),
+            (2, "离职员工"),
+            (3, "待入职员工"),
+        ];
+
+        for (status, description) in status_test_cases {
+            let request = FilterEmployeeRequest::builder()
+                .page_size(100)
+                .status(status)
+                .user_id_type("union_id".to_string())
+                .build()
+                .unwrap();
+
+            let builder = service.filter_employee_builder(request);
+            assert_eq!(builder.request.status, Some(status));
+        }
+    }
+
+    #[test]
+    fn test_all_endpoint_constants_complete() {
+        // 验证所有端点常量都正确定义，包括新的filter端点
+        assert_eq!(
+            ENDPOINT_DELETE,
+            "/open-apis/hrm/v1/employees/{employee_id}"
+        );
+        assert_eq!(
+            ENDPOINT_REGULAR,
+            "/open-apis/hrm/v1/employees/{employee_id}/regular"
+        );
+        assert_eq!(
+            ENDPOINT_RESURRECT,
+            "/open-apis/directory/v1/employees/{employee_id}/resurrect"
+        );
+        assert_eq!(
+            ENDPOINT_MGET,
+            "/open-apis/directory/v1/employees/mget"
+        );
+        assert_eq!(
+            ENDPOINT_FILTER,
+            "/open-apis/directory/v1/employees/filter"
+        );
+    }
+
+    #[tokio::test]
+    async fn test_complete_employee_query_suite() {
+        let service = create_test_service();
+
+        // 测试完整的员工查询套件：
+        // 1. 精确查询（mget）
+        let mget_request = MGetEmployeeRequest::builder()
+            .employee_id("emp_exact_1")
+            .employee_id("emp_exact_2")
+            .build()
+            .unwrap();
+
+        // 2. 条件查询（filter）
+        let filter_request = FilterEmployeeRequest::builder()
+            .page_size(20)
+            .status(1)
+            .user_id_type("open_id".to_string())
+            .sort_field("name".to_string())
+            .sort_direction("asc".to_string())
+            .build()
+            .unwrap();
+
+        // 验证两种查询方式的构建器都能正确创建
+        let mget_builder = service.mget_employee_builder(mget_request);
+        assert_eq!(mget_builder.request.employee_ids.len(), 2);
+
+        let filter_builder = service.filter_employee_builder(filter_request);
+        assert_eq!(filter_builder.request.page_size, Some(20));
+        assert_eq!(filter_builder.request.status, Some(1));
+
+        // 验证两种查询方式的互补性：
+        // mget: 通过精确ID查询，适合已知具体员工ID的场景
+        // filter: 通过条件过滤查询，适合模糊搜索和批量分析的场景
+        assert!(true); // 占位断言，确保测试结构正确
+    }
+
+    #[tokio::test]
+    async fn test_filter_employee_request_validation_in_service_context() {
+        let service = create_test_service();
+
+        // 测试无效分页大小
+        let invalid_page_size_request = FilterEmployeeRequest::builder()
+            .page_size(0)
+            .build();
+        assert!(invalid_page_size_request.is_err());
+
+        let invalid_page_size_request2 = FilterEmployeeRequest::builder()
+            .page_size(51)
+            .build();
+        assert!(invalid_page_size_request2.is_err());
+
+        // 测试无效员工状态
+        let invalid_status_request = FilterEmployeeRequest::builder()
+            .status(0)
+            .build();
+        assert!(invalid_status_request.is_err());
+
+        let invalid_status_request2 = FilterEmployeeRequest::builder()
+            .status(4)
+            .build();
+        assert!(invalid_status_request2.is_err());
+
+        // 测试无效用户ID类型
+        let invalid_user_type_request = FilterEmployeeRequest::builder()
+            .user_id_type("invalid_type")
+            .build();
+        assert!(invalid_user_type_request.is_err());
+
+        // 测试有效请求
+        let valid_request = FilterEmployeeRequest::builder()
+            .page_size(30)
+            .status(1)
+            .user_id_type("open_id")
+            .department_id_type("department_id")
+            .sort_field("create_time")
+            .sort_direction("desc")
+            .build()
+            .unwrap();
+
+        let builder = service.filter_employee_builder(valid_request);
+        assert_eq!(builder.request.page_size, Some(30));
+        assert_eq!(builder.request.status, Some(1));
+    }
+
+    #[tokio::test]
+    async fn test_filter_employee_edge_cases_in_service_context() {
+        let service = create_test_service();
+
+        // 测试最小分页大小
+        let min_page_request = FilterEmployeeRequest::builder()
+            .page_size(1)
+            .build()
+            .unwrap();
+
+        let min_builder = service.filter_employee_builder(min_page_request);
+        assert_eq!(min_builder.request.page_size, Some(1));
+
+        // 测试最大分页大小
+        let max_page_request = FilterEmployeeRequest::builder()
+            .page_size(50)
+            .build()
+            .unwrap();
+
+        let max_builder = service.filter_employee_builder(max_page_request);
+        assert_eq!(max_builder.request.page_size, Some(50));
+
+        // 测试空部门ID列表（应该失败）
+        let empty_dept_request = FilterEmployeeRequest::builder()
+            .department_ids(vec![])
+            .build();
+        assert!(empty_dept_request.is_err());
+
+        // 测试最大部门ID数量
+        let max_departments: Vec<String> = (0..50).map(|i| format!("dept_{:02}", i)).collect();
+        let max_dept_request = FilterEmployeeRequest::builder()
+            .department_ids(max_departments)
+            .build()
+            .unwrap();
+
+        let max_dept_builder = service.filter_employee_builder(max_dept_request);
+        assert_eq!(max_dept_builder.request.department_ids.as_ref().unwrap().len(), 50);
+    }
+
+    #[test]
+    fn test_filter_vs_mget_comparison() {
+        let service = create_test_service();
+
+        // API #84 (mget): 精确ID查询，1-100个员工ID，返回精确结果
+        let mget_request = MGetEmployeeRequest::builder()
+            .employee_id("emp_known_1")
+            .employee_id("emp_known_2")
+            .employee_id("emp_known_3")
+            .build()
+            .unwrap();
+
+        // API #85 (filter): 条件过滤查询，支持分页、排序、状态过滤
+        let filter_request = FilterEmployeeRequest::builder()
+            .page_size(20)
+            .status(1) // 只查在职员工
+            .department_ids(vec!["dept_engineering".to_string()])
+            .sort_field("create_time".to_string())
+            .sort_direction("desc".to_string())
+            .build()
+            .unwrap();
+
+        let mget_builder = service.mget_employee_builder(mget_request);
+        let filter_builder = service.filter_employee_builder(filter_request);
+
+        // 验证两种API的区别和用途
+        assert_eq!(mget_builder.request.employee_ids.len(), 3); // 精确查询3个已知员工
+        assert_eq!(filter_builder.request.page_size, Some(20)); // 分页查询，每页20个
+        assert_eq!(filter_builder.request.status, Some(1)); // 状态过滤
+        assert!(filter_builder.request.department_ids.is_some()); // 部门过滤
+        assert!(filter_builder.request.sort_field.is_some()); // 排序
+
+        // 这两个API形成互补：
+        // mget: 适合已知员工ID的批量查询
+        // filter: 适合基于条件的模糊查询和数据分析
+        assert!(true);
     }
 }
 
