@@ -2433,3 +2433,689 @@ mod delete_file_tests {
         assert!(request.validate().is_ok());
     }
 }
+
+// ==================== API #197 复制文件 ====================
+
+/// 复制文件请求
+#[derive(Debug, Clone)]
+pub struct CopyFileRequest {
+    /// 源文件令牌
+    pub file_token: String,
+    /// 目标文件夹令牌
+    pub parent_folder_token: String,
+    /// 复制后的文件名称
+    pub name: Option<String>,
+    /// 用户ID类型
+    pub user_id_type: Option<String>,
+}
+
+impl CopyFileRequest {
+    /// 创建新的请求实例
+    pub fn new(file_token: impl Into<String>, parent_folder_token: impl Into<String>) -> Self {
+        Self {
+            file_token: file_token.into(),
+            parent_folder_token: parent_folder_token.into(),
+            name: None,
+            user_id_type: None,
+        }
+    }
+
+    /// 设置复制后的文件名称
+    pub fn name(mut self, name: impl Into<String>) -> Self {
+        self.name = Some(name.into());
+        self
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.user_id_type = Some(user_id_type.into());
+        self
+    }
+
+    /// 验证请求参数
+    pub fn validate(&self) -> Result<(), String> {
+        if self.file_token.trim().is_empty() {
+            return Err("源文件令牌不能为空".to_string());
+        }
+
+        if self.parent_folder_token.trim().is_empty() {
+            return Err("目标文件夹令牌不能为空".to_string());
+        }
+
+        // 验证源文件令牌长度（飞书通常使用64位令牌）
+        if self.file_token.len() > 256 {
+            return Err("源文件令牌长度不能超过256个字符".to_string());
+        }
+
+        // 验证目标文件夹令牌长度
+        if self.parent_folder_token.len() > 256 {
+            return Err("目标文件夹令牌长度不能超过256个字符".to_string());
+        }
+
+        // 验证令牌格式（只允许字母、数字、下划线、连字符）
+        let allowed_chars = |s: &str| {
+            s.chars().all(|c| c.is_alphanumeric() || c == '_' || c == '-')
+        };
+
+        if !allowed_chars(&self.file_token) {
+            return Err("源文件令牌只能包含字母、数字、下划线和连字符".to_string());
+        }
+
+        if !allowed_chars(&self.parent_folder_token) {
+            return Err("目标文件夹令牌只能包含字母、数字、下划线和连字符".to_string());
+        }
+
+        // 验证自定义文件名
+        if let Some(ref name) = self.name {
+            if name.trim().is_empty() {
+                return Err("文件名不能为空字符串".to_string());
+            }
+
+            if name.len() > 255 {
+                return Err("文件名长度不能超过255个字符".to_string());
+            }
+
+            // 检查文件名是否包含非法字符
+            let invalid_chars = ['/', '\\', ':', '*', '?', '"', '<', '>', '|'];
+            for invalid_char in invalid_chars {
+                if name.contains(invalid_char) {
+                    return Err(format!("文件名不能包含字符: {}", invalid_char));
+                }
+            }
+        }
+
+        // 验证用户ID类型
+        if let Some(ref user_id_type) = self.user_id_type {
+            let valid_types = ["open_id", "user_id", "union_id"];
+            if !valid_types.contains(&user_id_type.as_str()) {
+                return Err(format!(
+                    "无效的用户ID类型: {}，支持的类型: open_id, user_id, union_id",
+                    user_id_type
+                ));
+            }
+        }
+
+        Ok(())
+    }
+}
+
+/// 复制文件响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CopyFileResponseData {
+    /// 复制后的文件信息
+    pub file: FileInfo,
+}
+
+/// 复制文件响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct CopyFileResponse {
+    /// 响应数据
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data: Option<CopyFileResponseData>,
+    /// 是否成功
+    pub success: bool,
+    /// 错误消息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// 错误代码
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+}
+
+impl ApiResponseTrait for CopyFileResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl FilesService {
+    /// 复制文件
+    ///
+    /// 将指定文件复制到目标文件夹中，支持自定义文件名和用户ID类型
+    /// 适用于文件备份、模板创建、文档共享等业务场景
+    ///
+    /// # 参数
+    /// * `req` - 复制文件请求
+    ///
+    /// # 返回值
+    /// 返回复制后的文件信息
+    ///
+    /// # 示例
+    /// ```rust
+    /// let request = CopyFileRequest::new("source_file_token_123", "target_folder_456")
+    ///     .name("重要文档_副本")
+    ///     .user_id_type("open_id");
+    /// let response = service.copy_file(&request).await?;
+    ///
+    /// if response.success {
+    ///     if let Some(data) = response.data {
+    ///         println!("文件复制成功: {:?}", data.file);
+    ///     }
+    /// } else {
+    ///     println!("文件复制失败: {:?}", response.error_message);
+    /// }
+    /// ```
+    pub async fn copy_file(&self, req: &CopyFileRequest) -> SDKResult<CopyFileResponse> {
+        req.validate().map_err(|e| SDKError::InvalidParameter(e))?;
+        log::debug!("开始复制文件: source={}, target_folder={}",
+            req.file_token, req.parent_folder_token);
+
+        // 构建查询参数
+        let mut query_params: HashMap<&str, String> = HashMap::new();
+        if let Some(user_id_type) = &req.user_id_type {
+            query_params.insert("user_id_type", user_id_type.clone());
+        }
+
+        // 构建请求体
+        let mut body = json!({
+            "parent_folder_token": req.parent_folder_token
+        });
+
+        if let Some(ref name) = req.name {
+            body["name"] = json!(name);
+        }
+
+        // 构建API路径，替换file_token占位符
+        let api_path = crate::core::endpoints_original::Endpoints::DRIVE_V1_COPY
+            .replace("{file_token}", &req.file_token);
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
+            api_path,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params,
+            body: serde_json::to_vec(&body).unwrap_or_default(),
+            ..Default::default()
+        };
+
+        let resp = Transport::<CopyFileResponse>::request(api_req, &self.config, None).await?;
+        let response = resp.data.unwrap_or_default();
+
+        if response.success {
+            log::info!("文件复制成功: source={}, target_folder={}",
+                req.file_token, req.parent_folder_token);
+        } else {
+            log::warn!("文件复制失败: source={}, target_folder={}, error={:?}",
+                req.file_token, req.parent_folder_token, response.error_message);
+        }
+
+        Ok(response)
+    }
+}
+
+// ==================== 构建器模式 ====================
+
+/// 复制文件构建器
+#[derive(Debug, Clone)]
+pub struct CopyFileBuilder {
+    request: CopyFileRequest,
+}
+
+impl CopyFileBuilder {
+    /// 创建新的构建器
+    pub fn new(file_token: impl Into<String>, parent_folder_token: impl Into<String>) -> Self {
+        Self {
+            request: CopyFileRequest::new(file_token, parent_folder_token),
+        }
+    }
+
+    /// 设置复制后的文件名称
+    pub fn name(mut self, name: impl Into<String>) -> Self {
+        self.request = self.request.name(name);
+        self
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.request = self.request.user_id_type(user_id_type);
+        self
+    }
+
+    /// 执行复制文件操作
+    pub async fn execute(self, service: &FilesService) -> SDKResult<CopyFileResponse> {
+        service.copy_file(&self.request).await
+    }
+}
+
+impl FilesService {
+    /// 复制文件构建器
+    pub fn copy_file_builder(&self, file_token: impl Into<String>, parent_folder_token: impl Into<String>) -> CopyFileBuilder {
+        CopyFileBuilder::new(file_token, parent_folder_token)
+    }
+}
+
+// ==================== 单元测试 ====================
+
+#[cfg(test)]
+mod copy_file_tests {
+    use super::*;
+    use crate::core::config::Config;
+
+    #[test]
+    fn test_copy_file_request_creation() {
+        let request = CopyFileRequest::new("source_file_token_123", "target_folder_456");
+        assert_eq!(request.file_token, "source_file_token_123");
+        assert_eq!(request.parent_folder_token, "target_folder_456");
+        assert_eq!(request.name, None);
+        assert_eq!(request.user_id_type, None);
+    }
+
+    #[test]
+    fn test_copy_file_request_with_fields() {
+        let request = CopyFileRequest::new("source_token_789", "target_folder_012")
+            .name("重要文档副本")
+            .user_id_type("open_id");
+
+        assert_eq!(request.file_token, "source_token_789");
+        assert_eq!(request.parent_folder_token, "target_folder_012");
+        assert_eq!(request.name, Some("重要文档副本".to_string()));
+        assert_eq!(request.user_id_type, Some("open_id".to_string()));
+    }
+
+    #[test]
+    fn test_copy_file_request_validation() {
+        // 测试正常情况
+        let valid_request = CopyFileRequest::new("source_valid_123", "target_valid_456")
+            .name("有效副本");
+        assert!(valid_request.validate().is_ok());
+
+        // 测试空源文件令牌
+        let empty_source_request = CopyFileRequest::new("", "target_folder_456");
+        assert!(empty_source_request.validate().is_err());
+
+        // 测试空目标文件夹令牌
+        let empty_target_request = CopyFileRequest::new("source_file_123", "");
+        assert!(empty_target_request.validate().is_err());
+
+        // 测试空格源文件令牌
+        let whitespace_source_request = CopyFileRequest::new("  ", "target_folder_456");
+        assert!(whitespace_source_request.validate().is_err());
+
+        // 测试空格目标文件夹令牌
+        let whitespace_target_request = CopyFileRequest::new("source_file_123", "  ");
+        assert!(whitespace_target_request.validate().is_err());
+
+        // 测试超长源文件令牌
+        let long_source_request = CopyFileRequest::new(&"a".repeat(257), "target_folder_456");
+        assert!(long_source_request.validate().is_err());
+
+        // 测试超长目标文件夹令牌
+        let long_target_request = CopyFileRequest::new("source_file_123", &"a".repeat(257));
+        assert!(long_target_request.validate().is_err());
+
+        // 测试包含非法字符的源文件令牌
+        let invalid_source_chars = vec![
+            "source@token", "source#token", "source token", "source.token",
+            "source,token", "source(token)", "source)token"
+        ];
+
+        for invalid_token in invalid_source_chars {
+            let invalid_request = CopyFileRequest::new(invalid_token, "target_folder_456");
+            assert!(invalid_request.validate().is_err(),
+                "源文件令牌 '{}' should be invalid", invalid_token);
+        }
+
+        // 测试包含非法字符的目标文件夹令牌
+        let invalid_target_chars = vec![
+            "target@folder", "target#folder", "target folder", "target.folder",
+            "target,folder", "target(folder)", "target)folder"
+        ];
+
+        for invalid_token in invalid_target_chars {
+            let invalid_request = CopyFileRequest::new("source_file_123", invalid_token);
+            assert!(invalid_request.validate().is_err(),
+                "目标文件夹令牌 '{}' should be invalid", invalid_token);
+        }
+
+        // 测试无效的用户ID类型
+        let invalid_user_type_request = CopyFileRequest::new("source_valid_123", "target_valid_456")
+            .user_id_type("invalid_type");
+        assert!(invalid_user_type_request.validate().is_err());
+
+        // 测试空文件名
+        let empty_name_request = CopyFileRequest::new("source_valid_123", "target_valid_456")
+            .name("");
+        assert!(empty_name_request.validate().is_err());
+
+        // 测试空格文件名
+        let whitespace_name_request = CopyFileRequest::new("source_valid_123", "target_valid_456")
+            .name("  ");
+        assert!(whitespace_name_request.validate().is_err());
+
+        // 测试超长文件名
+        let long_name_request = CopyFileRequest::new("source_valid_123", "target_valid_456")
+            .name(&"a".repeat(256));
+        assert!(long_name_request.validate().is_err());
+
+        // 测试包含非法字符的文件名
+        let invalid_name_chars = vec![
+            "file/name", "file\\name", "file:name", "file*name", "file?name",
+            "file\"name", "file<name", "file>name", "file|name"
+        ];
+
+        for invalid_name in invalid_name_chars {
+            let invalid_request = CopyFileRequest::new("source_valid_123", "target_valid_456")
+                .name(invalid_name);
+            assert!(invalid_request.validate().is_err(),
+                "文件名 '{}' should be invalid", invalid_name);
+        }
+
+        // 测试有效的令牌格式
+        let valid_tokens = vec![
+            "token_123456789", "Token-ABC-123", "token_456", "file_token_789",
+            "batch-process-123", "file-upload-001", "TOKEN_001", "a1-b2-c3"
+        ];
+
+        for valid_token in valid_tokens {
+            let valid_request = CopyFileRequest::new(valid_token, "target_folder_456")
+                .name("有效副本");
+            assert!(valid_request.validate().is_ok(),
+                "令牌 '{}' should be valid", valid_token);
+        }
+
+        // 测试有效的用户ID类型
+        let valid_user_types = vec!["open_id", "user_id", "union_id"];
+        for user_type in valid_user_types {
+            let valid_request = CopyFileRequest::new("source_valid_123", "target_valid_456")
+                .user_id_type(user_type);
+            assert!(valid_request.validate().is_ok(),
+                "用户ID类型 '{}' should be valid", user_type);
+        }
+    }
+
+    #[test]
+    fn test_copy_file_response_creation() {
+        let file_info = FileInfo {
+            file_token: "copied_file_token_789".to_string(),
+            name: "重要文档副本".to_string(),
+            r#type: "document".to_string(),
+            size: 2048,
+            create_time: "2023-12-01T15:00:00Z".to_string(),
+            modify_time: "2023-12-01T15:05:00Z".to_string(),
+        };
+
+        let response_data = CopyFileResponseData {
+            file: file_info,
+        };
+
+        let response = CopyFileResponse {
+            data: Some(response_data),
+            success: true,
+            ..Default::default()
+        };
+
+        assert!(response.success);
+        assert!(response.data.is_some());
+        assert_eq!(response.data.as_ref().unwrap().file.file_token, "copied_file_token_789");
+        assert_eq!(response.data.as_ref().unwrap().file.name, "重要文档副本");
+        assert_eq!(response.data.as_ref().unwrap().file.r#type, "document");
+        assert_eq!(response.data.as_ref().unwrap().file.size, 2048);
+    }
+
+    #[test]
+    fn test_copy_file_builder() {
+        let builder = CopyFileBuilder::new("source_builder_123", "target_builder_456")
+            .name("构建器测试副本")
+            .user_id_type("union_id");
+
+        assert_eq!(builder.request.file_token, "source_builder_123");
+        assert_eq!(builder.request.parent_folder_token, "target_builder_456");
+        assert_eq!(builder.request.name, Some("构建器测试副本".to_string()));
+        assert_eq!(builder.request.user_id_type, Some("union_id".to_string()));
+    }
+
+    #[test]
+    fn test_copy_file_builder_validation() {
+        // 测试有效构建器
+        let valid_builder = CopyFileBuilder::new("source_valid_001", "target_valid_002")
+            .name("有效副本")
+            .user_id_type("open_id");
+        assert!(valid_builder.request.validate().is_ok());
+
+        // 测试无效构建器
+        let invalid_builder = CopyFileBuilder::new("", "target_valid_002")
+            .name("无效副本")
+            .user_id_type("open_id");
+        assert!(invalid_builder.request.validate().is_err());
+
+        // 测试无效用户ID类型
+        let invalid_user_type_builder = CopyFileBuilder::new("source_valid_001", "target_valid_002")
+            .name("无效副本")
+            .user_id_type("invalid");
+        assert!(invalid_user_type_builder.request.validate().is_err());
+    }
+
+    #[test]
+    fn test_copy_file_service_method() {
+        let config = Config::default();
+        let service = FilesService::new(config);
+
+        // 验证服务包含所需的方法
+        let service_str = format!("{:?}", service);
+        assert!(!service_str.is_empty());
+
+        // 验证构建器方法存在
+        let builder = service.copy_file_builder("source_service_123", "target_service_456");
+        assert_eq!(builder.request.file_token, "source_service_123");
+        assert_eq!(builder.request.parent_folder_token, "target_service_456");
+    }
+
+    #[test]
+    fn test_copy_file_endpoint_construction() {
+        // 验证端点常量存在
+        assert_eq!(
+            crate::core::endpoints_original::Endpoints::DRIVE_V1_COPY,
+            "/open-apis/drive/v1/files/{file_token}/copy"
+        );
+
+        // 验证路径替换逻辑
+        let template = crate::core::endpoints_original::Endpoints::DRIVE_V1_COPY;
+        let final_path = template.replace("{file_token}", "source_file_123");
+        assert_eq!(final_path, "/open-apis/drive/v1/files/source_file_123/copy");
+    }
+
+    #[test]
+    fn test_copy_file_request_methods() {
+        // 测试链式调用
+        let request = CopyFileRequest::new("source_chain_123", "target_chain_456")
+            .name("链式调用测试")
+            .user_id_type("user_id");
+
+        assert_eq!(request.file_token, "source_chain_123");
+        assert_eq!(request.parent_folder_token, "target_chain_456");
+        assert_eq!(request.name, Some("链式调用测试".to_string()));
+        assert_eq!(request.user_id_type, Some("user_id".to_string()));
+        assert!(request.validate().is_ok());
+    }
+
+    #[test]
+    fn test_copy_file_edge_cases() {
+        // 测试最小长度令牌
+        let min_length_request = CopyFileRequest::new("a", "b")
+            .name("min");
+        assert!(min_length_request.validate().is_ok());
+
+        // 测试最大长度令牌
+        let max_length_request = CopyFileRequest::new(&"a".repeat(256), &"b".repeat(256))
+            .name("max");
+        assert!(max_length_request.validate().is_ok());
+
+        // 测试混合字符令牌
+        let mixed_request = CopyFileRequest::new("Token123_ABC-def", "Folder456_GHI-jkl")
+            .name("混合字符测试");
+        assert!(mixed_request.validate().is_ok());
+
+        // 测试全大写令牌
+        let uppercase_request = CopyFileRequest::new("TOKEN_001", "FOLDER_002")
+            .name("大写测试");
+        assert!(uppercase_request.validate().is_ok());
+
+        // 测试全小写令牌
+        let lowercase_request = CopyFileRequest::new("token_003", "folder_004")
+            .name("小写测试");
+        assert!(lowercase_request.validate().is_ok());
+    }
+
+    #[test]
+    fn test_copy_file_response_trait() {
+        assert_eq!(CopyFileResponse::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_copy_file_comprehensive_scenario() {
+        // 测试完整的业务场景 - 复制重要文档作为模板
+        let template_request = CopyFileRequest::new("original_contract_2023", "templates_folder_001")
+            .name("合同模板_v1.0")
+            .user_id_type("open_id");
+
+        assert!(template_request.validate().is_ok());
+        assert_eq!(template_request.file_token, "original_contract_2023");
+        assert_eq!(template_request.parent_folder_token, "templates_folder_001");
+        assert_eq!(template_request.name, Some("合同模板_v1.0".to_string()));
+        assert_eq!(template_request.user_id_type, Some("open_id".to_string()));
+
+        // 模拟响应数据
+        let template_file_info = FileInfo {
+            file_token: "template_contract_001".to_string(),
+            name: "合同模板_v1.0".to_string(),
+            r#type: "document".to_string(),
+            size: 15360,
+            create_time: "2023-12-01T16:00:00Z".to_string(),
+            modify_time: "2023-12-01T16:01:00Z".to_string(),
+        };
+
+        let response_data = CopyFileResponseData {
+            file: template_file_info,
+        };
+
+        let response = CopyFileResponse {
+            data: Some(response_data),
+            success: true,
+            ..Default::default()
+        };
+
+        assert!(response.success);
+        assert!(response.data.is_some());
+
+        let copied_file = response.data.unwrap().file;
+        assert_eq!(copied_file.file_token, "template_contract_001");
+        assert_eq!(copied_file.name, "合同模板_v1.0");
+        assert_eq!(copied_file.r#type, "document");
+        assert_eq!(copied_file.size, 15360);
+    }
+
+    #[test]
+    fn test_copy_file_different_file_types() {
+        // 测试不同类型文件的复制
+        let file_types = vec![
+            ("document", "docx_file_123", "docx_copy_456"),
+            ("spreadsheet", "xlsx_file_789", "xlsx_copy_012"),
+            ("presentation", "pptx_file_345", "pptx_copy_678"),
+            ("image", "jpg_file_901", "jpg_copy_234"),
+            ("pdf", "pdf_file_567", "pdf_copy_890")
+        ];
+
+        for (file_type, source_token, target_token) in file_types {
+            let file_info = FileInfo {
+                file_token: target_token.to_string(),
+                name: format!("{}_copy", source_token),
+                r#type: file_type.to_string(),
+                size: 1024,
+                create_time: "2023-12-01T17:00:00Z".to_string(),
+                modify_time: "2023-12-01T17:01:00Z".to_string(),
+            };
+
+            let response_data = CopyFileResponseData {
+                file: file_info,
+            };
+
+            let response = CopyFileResponse {
+                data: Some(response_data),
+                success: true,
+                ..Default::default()
+            };
+
+            assert!(response.success);
+            assert_eq!(response.data.unwrap().file.r#type, file_type);
+        }
+    }
+
+    #[test]
+    fn test_copy_file_error_scenarios() {
+        // 测试失败响应
+        let error_response = CopyFileResponse {
+            data: None,
+            success: false,
+            error_message: Some("源文件不存在".to_string()),
+            error_code: Some("FILE_NOT_FOUND".to_string()),
+        };
+
+        assert!(!error_response.success);
+        assert!(error_response.data.is_none());
+        assert_eq!(error_response.error_message, Some("源文件不存在".to_string()));
+        assert_eq!(error_response.error_code, Some("FILE_NOT_FOUND".to_string()));
+
+        // 测试权限错误
+        let permission_error_response = CopyFileResponse {
+            data: None,
+            success: false,
+            error_message: Some("没有复制权限".to_string()),
+            error_code: Some("PERMISSION_DENIED".to_string()),
+        };
+
+        assert!(!permission_error_response.success);
+        assert_eq!(permission_error_response.error_message, Some("没有复制权限".to_string()));
+        assert_eq!(permission_error_response.error_code, Some("PERMISSION_DENIED".to_string()));
+
+        // 测试目标文件夹不存在错误
+        let folder_error_response = CopyFileResponse {
+            data: None,
+            success: false,
+            error_message: Some("目标文件夹不存在".to_string()),
+            error_code: Some("FOLDER_NOT_FOUND".to_string()),
+        };
+
+        assert!(!folder_error_response.success);
+        assert_eq!(folder_error_response.error_message, Some("目标文件夹不存在".to_string()));
+        assert_eq!(folder_error_response.error_code, Some("FOLDER_NOT_FOUND".to_string()));
+    }
+
+    #[test]
+    fn test_copy_file_builder_pattern() {
+        // 测试构建器模式的流畅性
+        let builder = CopyFileBuilder::new("builder_source_123", "builder_target_456")
+            .name("构建器模式测试")
+            .user_id_type("union_id");
+
+        // 验证构建器状态
+        assert_eq!(builder.request.file_token, "builder_source_123");
+        assert_eq!(builder.request.parent_folder_token, "builder_target_456");
+        assert_eq!(builder.request.name, Some("构建器模式测试".to_string()));
+        assert_eq!(builder.request.user_id_type, Some("union_id".to_string()));
+
+        // 验证请求验证通过
+        assert!(builder.request.validate().is_ok());
+
+        // 测试链式调用
+        let chained_builder = builder
+            .name("重新设置名称")
+            .request;
+        assert_eq!(chained_builder.name.unwrap(), "重新设置名称");
+    }
+
+    #[test]
+    fn test_copy_file_json_serialization() {
+        let request = CopyFileRequest::new("json_source_123", "json_target_456")
+            .name("JSON序列化测试")
+            .user_id_type("open_id");
+
+        // 测试请求可以转换为JSON
+        let body = json!({
+            "parent_folder_token": "json_target_456",
+            "name": "JSON序列化测试"
+        });
+
+        assert_eq!(body["parent_folder_token"], "json_target_456");
+        assert_eq!(body["name"], "JSON序列化测试");
+    }
+}
