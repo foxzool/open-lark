@@ -1,10 +1,10 @@
 # 完整API实现映射表
 
-**生成时间**: 2025-11-06 15:40:21  
-**总API数**: 1551  
-**已实现**: 927  
-**实现率**: 59.8%  
-**处理耗时**: 1.3 分钟  
+**生成时间**: 2025-11-06 16:48:15
+**总API数**: 1551
+**已实现**: 929
+**实现率**: 59.9%
+**处理耗时**: 1.3 分钟
 **处理速度**: 19.7 API/秒  
 
 | 序号 | API名称 | 请求方式 | API地址 | 文档链接 | 文件路径 | 行号 | 状态 |
@@ -157,7 +157,7 @@
 | 146 | [获取群公告所有块](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block/list) | GET | `/open-apis/docx/v1/chats/:chat_id/announcement/blocks` | https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block/list | `../src/service/cloud_docs/docx/v1/document.rs` | 106 | ✅ 已实现 |
 | 147 | [在群公告中创建块](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block-children/create) | POST | `/open-apis/docx/v1/chats/:chat_id/announcement/blocks/:block_id/children` | https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block-children/create | `../src/service/cloud_docs/docx/v1/document_block.rs` | 163 | ✅ 已实现 |
 | 148 | [批量更新群公告块的内容](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block/batch_update) | PATCH | `/open-apis/docx/v1/chats/:chat_id/announcement/blocks/batch_update` | https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block/batch_update | `../src/service/apass/object/mod.rs` | 304 | ✅ 已实现 |
-| 149 | [获取群公告块的内容](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block/get) | GET | `/open-apis/docx/v1/chats/:chat_id/announcement/blocks/:block_id` | https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block/get | `未找到` | - | ❌ 未实现 |
+| 149 | [获取群公告块的内容](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block/get) | GET | `/open-apis/docx/v1/chats/:chat_id/announcement/blocks/:block_id` | https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block/get | `../src/service/im/v1/chats.rs` | 239 | ✅ 已实现 |
 | 150 | [获取所有子块](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block-children/get) | GET | `/open-apis/docx/v1/chats/:chat_id/announcement/blocks/:block_id/children` | https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block-children/get | `../src/service/cloud_docs/docx/v1/document_block.rs` | 163 | ✅ 已实现 |
 | 151 | [删除群公告中的块](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block-children/batch_delete) | DELETE | `/open-apis/docx/v1/chats/:chat_id/announcement/blocks/:block_id/children/batch_delete` | https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block-children/batch_delete | `../src/service/contact/v3/functional_role_member.rs` | 347 | ✅ 已实现 |
 | 152 | [更新群公告信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-announcement/patch) | PATCH | `/open-apis/im/v1/chats/:chat_id/announcement` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-announcement/patch | `../src/service/im/v1/message/mod.rs` | 364 | ✅ 已实现 |
@@ -172,7 +172,7 @@
 | 161 | [修改群菜单元信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-menu_item/patch) | PATCH | `/open-apis/im/v1/chats/:chat_id/menu_items/:menu_item_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-menu_item/patch | `../src/service/im/v1/message/mod.rs` | 364 | ✅ 已实现 |
 | 162 | [排序群菜单](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-menu_tree/sort) | POST | `/open-apis/im/v1/chats/:chat_id/menu_tree/sort` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-menu_tree/sort | `../src/service/im/v1/message/mod.rs` | 364 | ✅ 已实现 |
 | 163 | [获取群菜单](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-menu_tree/get) | GET | `/open-apis/im/v1/chats/:chat_id/menu_tree` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-menu_tree/get | `../src/service/im/v1/message/mod.rs` | 364 | ✅ 已实现 |
-| 164 | [创建卡片实体](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/create) | POST | `/open-apis/cardkit/v1/cards` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/create | `未找到` | - | ❌ 未实现 |
+| 164 | [创建卡片实体](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/create) | POST | `/open-apis/cardkit/v1/cards` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/create | `../src/service/cardkit/v1/card/create.rs` | 127 | ✅ 已实现 |
 | 165 | [更新卡片实体配置](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/settings) | PATCH | `/open-apis/cardkit/v1/cards/:card_id/settings` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/settings | `../src/service/hire/recruitment_config/offer_settings/mod.rs` | 161 | ✅ 已实现 |
 | 166 | [局部更新卡片实体](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/batch_update) | POST | `/open-apis/cardkit/v1/cards/:card_id/batch_update` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/batch_update | `../src/service/apass/object/mod.rs` | 304 | ✅ 已实现 |
 | 167 | [全量更新卡片实体](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/update) | PUT | `/open-apis/cardkit/v1/cards/:card_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/update | `未找到` | - | ❌ 未实现 |

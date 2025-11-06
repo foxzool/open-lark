@@ -2127,6 +2127,7 @@ impl Endpoints {
 
     /// 群公告管理
     pub const DOCX_V1_CHAT_ANNOUNCEMENT: &'static str = "/open-apis/docx/v1/chats/{}/announcement";
+    pub const DOCX_V1_CHAT_ANNOUNCEMENT_BLOCK: &'static str = "/open-apis/docx/v1/chats/{}/announcement/blocks/{}";
 
     // Drive 云盘服务
     /// 文件管理
