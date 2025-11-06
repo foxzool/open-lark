@@ -5,142 +5,200 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-//! Group用户组管理服务
+//! 用户组管理服务
 //!
 //! 提供完整的用户组管理功能：
-//! - 创建、修改、删除用户组
-//! - 获取用户组信息（单个/列表）
+//! - 创建用户组
+//! - 修改用户组
+//! - 获取单个用户组信息
+//! - 获取用户组列表
 //! - 获取用户组详细信息（包含成员）
 //! - 查询用户所属用户组
-//! - 企业级用户组权限管理
+//! - 删除用户组
+//! - 支持分页查询
 
-use open_lark_core::core::{api_req::ApiRequest, LarkAPIError}; // trait_system::ExecutableBuilder temporarily disabled
 use crate::core::{
-use crate::core::SDKResult;    api_resp::BaseResponse,
+    api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
-    req_option::RequestOption,
+    ApiRequest, SDKResult,
 };
-use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 
-// 使用 open_lark_core 的错误类型以兼容 async trait
-pub type SDKResult<T> = Result<T, LarkAPIError>;
+/// 用户组信息
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct Group {
+    /// 用户组ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_id: Option<String>,
+    /// 用户组名称
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// 用户组描述
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// 用户组类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_type: Option<String>,
+    /// 创建时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<String>,
+    /// 更新时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_time: Option<String>,
+}
 
-// 导入核心类型
-use super::types::*;
+impl Default for Group {
+    fn default() -> Self {
+        Self {
+            group_id: None,
+            name: None,
+            description: None,
+            group_type: None,
+            create_time: None,
+            update_time: None,
+        }
+    }
+}
+
+/// 用户组成员
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct GroupMember {
+    /// 成员ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member_id: Option<String>,
+    /// 成员类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member_type: Option<String>,
+    /// 成员名称
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// 加入时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub join_time: Option<String>,
+}
+
+impl Default for GroupMember {
+    fn default() -> Self {
+        Self {
+            member_id: None,
+            member_type: None,
+            name: None,
+            join_time: None,
+        }
+    }
+}
+
+/// 用户组详细信息
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct GroupDetail {
+    /// 用户组信息
+    pub group: Group,
+    /// 用户组成员列表
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub members: Option<Vec<GroupMember>>,
+    /// 成员总数
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member_count: Option<i32>,
+}
+
+impl Default for GroupDetail {
+    fn default() -> Self {
+        Self {
+            group: Group::default(),
+            members: None,
+            member_count: None,
+        }
+    }
+}
 
 /// 用户组管理服务
 #[derive(Debug, Clone)]
 pub struct GroupService {
-    pub config: Config,
+    config: Config,
 }
 
 impl GroupService {
+    /// 创建新的用户组管理服务实例
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
     /// 创建用户组
+    ///
     /// 创建新的用户组来管理用户权限和访问控制
     ///
-    /// # API文档
-    ///
-    /// 创建新的用户组，支持设置组名称、描述、成员等信息。
-    /// 适用于企业内部的权限管理和访问控制。
-    ///
     /// # 参数
-    ///
-    /// * `request` - 包含用户组信息的请求参数
+    /// * `req` - 创建用户组请求
     ///
     /// # 返回值
-    ///
-    /// 返回创建成功的用户组详细信息
-    ///
-    /// # 示例
-    ///
-    /// ```rust,no_run
-    /// use open_lark::prelude::*;
-    /// use open_lark::service::contact::v3::group::*;
-    ///
-    /// #[tokio::main]
-    /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    ///     let client = LarkClient::builder()
-    ///         .app_id("your_app_id")
-    ///         .app_secret("your_app_secret")
-    ///         .build()?;
-    ///
-    ///     let group = Group {
-    ///         name: Some("产品管理组".to_string()),
-    ///         description: Some("负责产品规划和管理的用户组".to_string()),
-    ///         ..Default::default()
-    ///     };
-    ///
-    ///     let request = CreateGroupRequest {
-    ///         group,
-    ///         ..Default::default()
-    ///     };
-    ///
-    ///     let response = client.contact.v3.group
-    ///         .create(&request).await?;
-    ///
-    ///     println!("用户组创建成功: {:?}", response.data.group.name);
-    ///     Ok(())
-    /// }
-    /// ```
-    pub async fn create(
-        &self,
-        request: &CreateGroupRequest,
-    ) -> SDKResult<BaseResponse<CreateGroupResponse>> {
+    /// 返回创建成功的用户组信息
+    pub async fn create(&self, req: &CreateGroupRequest) -> SDKResult<CreateGroupResponse> {
+        let api_path = crate::core::endpoints_original::Endpoints::CONTACT_V3_GROUPS.to_string();
+
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: "/open-apis/contact/v3/groups".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(request)?,
+            api_path,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: serde_json::to_vec(req)?,
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, None).await?;
-        Ok(api_resp)
+        let resp = Transport::<CreateGroupResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 
     /// 修改用户组
+    ///
     /// 部分更新用户组信息（不覆盖未提供的字段）
+    ///
+    /// # 参数
+    /// * `group_id` - 用户组ID
+    /// * `req` - 修改用户组请求
+    ///
+    /// # 返回值
+    /// 返回修改成功的用户组信息
     pub async fn patch(
         &self,
         group_id: &str,
-        request: &PatchGroupRequest,
-    ) -> SDKResult<BaseResponse<PatchGroupResponse>> {
-        let api_path = format!("/open-apis/contact/v3/groups/{}", group_id);
+        req: &PatchGroupRequest,
+    ) -> SDKResult<PatchGroupResponse> {
+        let api_path = crate::core::endpoints_original::Endpoints::CONTACT_V3_GROUPS
+            .replace("{group_id}", group_id);
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
             api_path,
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(request)?,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: serde_json::to_vec(req)?,
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, None).await?;
-        Ok(api_resp)
+        let resp = Transport::<PatchGroupResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 
-    /// 获取指定用户组
+    /// 获取单个用户组信息
+    ///
     /// 获取指定用户组的详细信息
-    pub async fn get(
-        &self,
-        group_id: &str,
-        request: &GetGroupRequest,
-    ) -> SDKResult<BaseResponse<GetGroupResponse>> {
-        let mut api_path = format!("/open-apis/contact/v3/groups/{}", group_id);
+    ///
+    /// # 参数
+    /// * `group_id` - 用户组ID
+    /// * `req` - 获取用户组请求
+    ///
+    /// # 返回值
+    /// 返回用户组的详细信息
+    pub async fn get(&self, group_id: &str, req: &GetGroupRequest) -> SDKResult<GetGroupResponse> {
+        let mut api_path = crate::core::endpoints_original::Endpoints::CONTACT_V3_GROUPS
+            .replace("{group_id}", group_id);
 
         // 添加查询参数
         let mut query_params = Vec::new();
-        if let Some(user_id_type) = &request.user_id_type {
+        if let Some(user_id_type) = &req.user_id_type {
             query_params.push(format!("user_id_type={}", user_id_type));
         }
-        if let Some(department_id_type) = &request.department_id_type {
+        if let Some(department_id_type) = &req.department_id_type {
             query_params.push(format!("department_id_type={}", department_id_type));
         }
 
@@ -157,30 +215,35 @@ impl GroupService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, None).await?;
-        Ok(api_resp)
+        let resp = Transport::<GetGroupResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 
     /// 查询用户组列表
+    ///
     /// 获取用户组的基本信息列表
-    pub async fn simple_list(
-        &self,
-        request: &ListGroupsRequest,
-    ) -> SDKResult<BaseResponse<ListGroupsResponse>> {
-        let mut api_path = "/open-apis/contact/v3/groups/simple_list".to_string();
+    ///
+    /// # 参数
+    /// * `req` - 查询用户组列表请求
+    ///
+    /// # 返回值
+    /// 返回用户组列表，支持分页
+    pub async fn simple_list(&self, req: &ListGroupsRequest) -> SDKResult<ListGroupsResponse> {
+        let mut api_path =
+            crate::core::endpoints_original::Endpoints::CONTACT_V3_GROUPS_SIMPLELIST.to_string();
 
         // 添加查询参数
         let mut query_params = Vec::new();
-        if let Some(page_size) = &request.page_size {
+        if let Some(page_size) = &req.page_size {
             query_params.push(format!("page_size={}", page_size));
         }
-        if let Some(page_token) = &request.page_token {
+        if let Some(page_token) = &req.page_token {
             query_params.push(format!("page_token={}", page_token));
         }
-        if let Some(user_id_type) = &request.user_id_type {
+        if let Some(user_id_type) = &req.user_id_type {
             query_params.push(format!("user_id_type={}", user_id_type));
         }
-        if let Some(department_id_type) = &request.department_id_type {
+        if let Some(department_id_type) = &req.department_id_type {
             query_params.push(format!("department_id_type={}", department_id_type));
         }
 
@@ -197,30 +260,38 @@ impl GroupService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, None).await?;
-        Ok(api_resp)
+        let resp = Transport::<ListGroupsResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 
     /// 查询用户所属用户组
+    ///
     /// 获取指定用户所属的所有用户组
+    ///
+    /// # 参数
+    /// * `req` - 查询用户所属用户组请求
+    ///
+    /// # 返回值
+    /// 返回用户所属的用户组列表
     pub async fn get_user_groups(
         &self,
-        request: &GetUserGroupsRequest,
-    ) -> SDKResult<BaseResponse<GetUserGroupsResponse>> {
-        let mut api_path = crate::core::endpoints_original::Endpoints::CONTACT_V3_GROUPS_MEMBER_BELONG.to_string();
+        req: &GetUserGroupsRequest,
+    ) -> SDKResult<GetUserGroupsResponse> {
+        let mut api_path =
+            crate::core::endpoints_original::Endpoints::CONTACT_V3_GROUPS_MEMBER_BELONG.to_string();
 
         // 添加查询参数
         let mut query_params = Vec::new();
-        if let Some(member_id) = &request.member_id {
+        if let Some(member_id) = &req.member_id {
             query_params.push(format!("member_id={}", member_id));
         }
-        if let Some(member_id_type) = &request.member_id_type {
+        if let Some(member_id_type) = &req.member_id_type {
             query_params.push(format!("member_id_type={}", member_id_type));
         }
-        if let Some(page_size) = &request.page_size {
+        if let Some(page_size) = &req.page_size {
             query_params.push(format!("page_size={}", page_size));
         }
-        if let Some(page_token) = &request.page_token {
+        if let Some(page_token) = &req.page_token {
             query_params.push(format!("page_token={}", page_token));
         }
 
@@ -237,48 +308,37 @@ impl GroupService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, None).await?;
-        Ok(api_resp)
-    }
-
-    /// 删除用户组
-    /// 删除指定的用户组（请谨慎操作）
-    pub async fn delete(
-        &self,
-        group_id: &str,
-    ) -> SDKResult<BaseResponse<DeleteGroupResponse>> {
-        let api_path = format!("/open-apis/contact/v3/groups/{}", group_id);
-
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::DELETE,
-            api_path,
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: Vec::new(),
-            ..Default::default()
-        };
-
-        let api_resp = Transport::request(api_req, &self.config, None).await?;
-        Ok(api_resp)
+        let resp = Transport::<GetUserGroupsResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 
     /// 获取用户组详细信息
+    ///
     /// 获取用户组的完整信息，包括成员列表
+    ///
+    /// # 参数
+    /// * `group_id` - 用户组ID
+    /// * `req` - 获取用户组详细信息请求
+    ///
+    /// # 返回值
+    /// 返回用户组的详细信息
     pub async fn get_detail(
         &self,
         group_id: &str,
-        request: &GetGroupDetailRequest,
-    ) -> SDKResult<BaseResponse<GetGroupDetailResponse>> {
-        let mut api_path = format!("/open-apis/contact/v3/groups/{}/detail", group_id);
+        req: &GetGroupDetailRequest,
+    ) -> SDKResult<GetGroupDetailResponse> {
+        let mut api_path = crate::core::endpoints_original::Endpoints::CONTACT_V3_GROUP_DETAIL
+            .replace("{group_id}", group_id);
 
         // 添加查询参数
         let mut query_params = Vec::new();
-        if let Some(user_id_type) = &request.user_id_type {
+        if let Some(user_id_type) = &req.user_id_type {
             query_params.push(format!("user_id_type={}", user_id_type));
         }
-        if let Some(department_id_type) = &request.department_id_type {
+        if let Some(department_id_type) = &req.department_id_type {
             query_params.push(format!("department_id_type={}", department_id_type));
         }
-        if let Some(include_members) = &request.include_members {
+        if let Some(include_members) = &req.include_members {
             query_params.push(format!("include_members={}", include_members));
         }
 
@@ -295,8 +355,34 @@ impl GroupService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, None).await?;
-        Ok(api_resp)
+        let resp =
+            Transport::<GetGroupDetailResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
+    }
+
+    /// 删除用户组
+    ///
+    /// 删除指定的用户组（请谨慎操作）
+    ///
+    /// # 参数
+    /// * `group_id` - 用户组ID
+    ///
+    /// # 返回值
+    /// 返回删除操作的结果
+    pub async fn delete(&self, group_id: &str) -> SDKResult<DeleteGroupResponse> {
+        let api_path = crate::core::endpoints_original::Endpoints::CONTACT_V3_GROUPS
+            .replace("{group_id}", group_id);
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::DELETE,
+            api_path,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: Vec::new(),
+            ..Default::default()
+        };
+
+        let resp = Transport::<DeleteGroupResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 }
 
@@ -318,10 +404,16 @@ impl Default for CreateGroupRequest {
 }
 
 /// 创建用户组响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct CreateGroupResponse {
     /// 用户组信息
     pub group: Group,
+}
+
+impl ApiResponseTrait for CreateGroupResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 /// 修改用户组请求
@@ -340,10 +432,16 @@ impl Default for PatchGroupRequest {
 }
 
 /// 修改用户组响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct PatchGroupResponse {
     /// 用户组信息
     pub group: Group,
+}
+
+impl ApiResponseTrait for PatchGroupResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 /// 获取用户组请求
@@ -367,10 +465,16 @@ impl Default for GetGroupRequest {
 }
 
 /// 获取用户组响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct GetGroupResponse {
     /// 用户组信息
     pub group: Group,
+}
+
+impl ApiResponseTrait for GetGroupResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 /// 查询用户组列表请求
@@ -402,16 +506,22 @@ impl Default for ListGroupsRequest {
 }
 
 /// 查询用户组列表响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ListGroupsResponse {
     /// 用户组列表
-    pub groups: Vec<Group>,
+    pub items: Vec<Group>,
     /// 是否还有更多项目
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
     /// 分页标记
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
+}
+
+impl ApiResponseTrait for ListGroupsResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 /// 查询用户所属用户组请求
@@ -443,10 +553,10 @@ impl Default for GetUserGroupsRequest {
 }
 
 /// 查询用户所属用户组响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct GetUserGroupsResponse {
     /// 用户组列表
-    pub group_list: Vec<Group>,
+    pub items: Vec<Group>,
     /// 是否还有更多项目
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
@@ -455,16 +565,9 @@ pub struct GetUserGroupsResponse {
     pub page_token: Option<String>,
 }
 
-/// 删除用户组响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DeleteGroupResponse {
-    /// 操作结果
-    pub success: bool,
-}
-
-impl Default for DeleteGroupResponse {
-    fn default() -> Self {
-        Self { success: true }
+impl ApiResponseTrait for GetUserGroupsResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
@@ -493,172 +596,147 @@ impl Default for GetGroupDetailRequest {
 }
 
 /// 获取用户组详细信息响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct GetGroupDetailResponse {
     /// 用户组详细信息
-    pub group: GroupDetail,
+    pub group_detail: GroupDetail,
 }
 
-/// 用户组详细信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct GroupDetail {
-    /// 用户组ID
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub group_id: Option<String>,
-    /// 用户组名称
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-    /// 用户组描述
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    /// 用户组类型
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub group_type: Option<String>,
-    /// 创建时间
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub create_time: Option<String>,
-    /// 更新时间
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub update_time: Option<String>,
-    /// 用户组成员列表
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub members: Option<Vec<GroupMember>>,
-}
-
-impl Default for GroupDetail {
-    fn default() -> Self {
-        Self {
-            group_id: None,
-            name: None,
-            description: None,
-            group_type: None,
-            create_time: None,
-            update_time: None,
-            members: None,
-        }
+impl ApiResponseTrait for GetGroupDetailResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-/// 用户组成员
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct GroupMember {
-    /// 成员ID
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub member_id: Option<String>,
-    /// 成员类型
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub member_type: Option<String>,
-    /// 加入时间
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub join_time: Option<String>,
+/// 删除用户组响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct DeleteGroupResponse {
+    /// 操作结果
+    pub success: bool,
 }
 
-impl Default for GroupMember {
-    fn default() -> Self {
-        Self {
-            member_id: None,
-            member_type: None,
-            join_time: None,
-        }
+impl ApiResponseTrait for DeleteGroupResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-// ==================== Builder 模式实现 ====================
+// ==================== 构建器模式 ====================
 
-/// 创建用户组请求构建器
+/// 创建用户组构建器
 #[derive(Debug, Clone)]
 pub struct CreateGroupBuilder {
     request: CreateGroupRequest,
 }
 
-impl CreateGroupBuilder {
-    /// 创建新的Builder实例
-    pub fn new() -> Self {
+impl Default for CreateGroupBuilder {
+    fn default() -> Self {
         Self {
-            request: CreateGroupRequest::default(),
+            request: CreateGroupRequest {
+                group: Group::default(),
+            },
         }
     }
+}
 
-    /// 设置用户组信息
-    pub fn group(mut self, group: Group) -> Self {
-        self.request.group = group;
+impl CreateGroupBuilder {
+    /// 创建新的构建器
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 设置用户组名称
+    pub fn name(mut self, name: impl Into<String>) -> Self {
+        self.request.group.name = Some(name.into());
         self
     }
 
-    /// 构建最终的请求对象
-    pub fn build(self) -> CreateGroupRequest {
-        self.request
+    /// 设置用户组描述
+    pub fn description(mut self, description: impl Into<String>) -> Self {
+        self.request.group.description = Some(description.into());
+        self
+    }
+
+    /// 设置用户组类型
+    pub fn group_type(mut self, group_type: impl Into<String>) -> Self {
+        self.request.group.group_type = Some(group_type.into());
+        self
+    }
+
+    /// 执行创建
+    pub async fn execute(self, service: &GroupService) -> SDKResult<CreateGroupResponse> {
+        service.create(&self.request).await
     }
 }
 
-impl Default for CreateGroupBuilder {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-// 应用ExecutableBuilder trait
-// crate::impl_executable_builder!(
-//    CreateGroupBuilder,
-//    GroupService,
-//    CreateGroupRequest,
-//    BaseResponse<CreateGroupResponse>,
-//    create
-//);
-
-/// 修改用户组请求构建器
+/// 修改用户组构建器
 #[derive(Debug, Clone)]
 pub struct PatchGroupBuilder {
     request: PatchGroupRequest,
 }
 
-impl PatchGroupBuilder {
-    /// 创建新的Builder实例
-    pub fn new() -> Self {
+impl Default for PatchGroupBuilder {
+    fn default() -> Self {
         Self {
-            request: PatchGroupRequest::default(),
+            request: PatchGroupRequest {
+                group: Group::default(),
+            },
         }
     }
+}
 
-    /// 设置用户组信息
-    pub fn group(mut self, group: Group) -> Self {
-        self.request.group = group;
+impl PatchGroupBuilder {
+    /// 创建新的构建器
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 设置用户组名称
+    pub fn name(mut self, name: impl Into<String>) -> Self {
+        self.request.group.name = Some(name.into());
         self
     }
 
-    /// 构建最终的请求对象
-    pub fn build(self) -> PatchGroupRequest {
-        self.request
+    /// 设置用户组描述
+    pub fn description(mut self, description: impl Into<String>) -> Self {
+        self.request.group.description = Some(description.into());
+        self
+    }
+
+    /// 设置用户组类型
+    pub fn group_type(mut self, group_type: impl Into<String>) -> Self {
+        self.request.group.group_type = Some(group_type.into());
+        self
+    }
+
+    /// 执行修改
+    pub async fn execute(
+        self,
+        service: &GroupService,
+        group_id: &str,
+    ) -> SDKResult<PatchGroupResponse> {
+        service.patch(group_id, &self.request).await
     }
 }
 
-impl Default for PatchGroupBuilder {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-// 应用ExecutableBuilder trait
-// crate::impl_executable_builder!(
-//    PatchGroupBuilder,
-//    GroupService,
-//    PatchGroupRequest,
-//    BaseResponse<PatchGroupResponse>,
-//    patch
-//);
-
-/// 查询用户组列表请求构建器
+/// 查询用户组列表构建器
 #[derive(Debug, Clone)]
 pub struct ListGroupsBuilder {
     request: ListGroupsRequest,
 }
 
-impl ListGroupsBuilder {
-    /// 创建新的Builder实例
-    pub fn new() -> Self {
+impl Default for ListGroupsBuilder {
+    fn default() -> Self {
         Self {
             request: ListGroupsRequest::default(),
         }
+    }
+}
+
+impl ListGroupsBuilder {
+    /// 创建新的查询构建器
+    pub fn new() -> Self {
+        Self::default()
     }
 
     /// 设置分页大小
@@ -668,67 +746,58 @@ impl ListGroupsBuilder {
     }
 
     /// 设置分页标记
-    pub fn page_token(mut self, page_token: &str) -> Self {
-        self.request.page_token = Some(page_token.to_string());
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.request.page_token = Some(page_token.into());
         self
     }
 
     /// 设置用户ID类型
-    pub fn user_id_type(mut self, user_id_type: &str) -> Self {
-        self.request.user_id_type = Some(user_id_type.to_string());
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.request.user_id_type = Some(user_id_type.into());
         self
     }
 
     /// 设置部门ID类型
-    pub fn department_id_type(mut self, department_id_type: &str) -> Self {
-        self.request.department_id_type = Some(department_id_type.to_string());
+    pub fn department_id_type(mut self, department_id_type: impl Into<String>) -> Self {
+        self.request.department_id_type = Some(department_id_type.into());
         self
     }
 
-    /// 构建最终的请求对象
-    pub fn build(self) -> ListGroupsRequest {
-        self.request
+    /// 执行查询
+    pub async fn execute(self, service: &GroupService) -> SDKResult<ListGroupsResponse> {
+        service.simple_list(&self.request).await
     }
 }
 
-impl Default for ListGroupsBuilder {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-// 应用ExecutableBuilder trait
-// crate::impl_executable_builder!(
-//    ListGroupsBuilder,
-//    GroupService,
-//    ListGroupsRequest,
-//    BaseResponse<ListGroupsResponse>,
-//    simple_list
-//);
-
-/// 查询用户所属用户组请求构建器
+/// 查询用户所属用户组构建器
 #[derive(Debug, Clone)]
 pub struct GetUserGroupsBuilder {
     request: GetUserGroupsRequest,
 }
 
-impl GetUserGroupsBuilder {
-    /// 创建新的Builder实例
-    pub fn new() -> Self {
+impl Default for GetUserGroupsBuilder {
+    fn default() -> Self {
         Self {
             request: GetUserGroupsRequest::default(),
         }
     }
+}
+
+impl GetUserGroupsBuilder {
+    /// 创建新的查询构建器
+    pub fn new() -> Self {
+        Self::default()
+    }
 
     /// 设置成员ID
-    pub fn member_id(mut self, member_id: &str) -> Self {
-        self.request.member_id = Some(member_id.to_string());
+    pub fn member_id(mut self, member_id: impl Into<String>) -> Self {
+        self.request.member_id = Some(member_id.into());
         self
     }
 
     /// 设置成员ID类型
-    pub fn member_id_type(mut self, member_id_type: &str) -> Self {
-        self.request.member_id_type = Some(member_id_type.to_string());
+    pub fn member_id_type(mut self, member_id_type: impl Into<String>) -> Self {
+        self.request.member_id_type = Some(member_id_type.into());
         self
     }
 
@@ -739,55 +808,46 @@ impl GetUserGroupsBuilder {
     }
 
     /// 设置分页标记
-    pub fn page_token(mut self, page_token: &str) -> Self {
-        self.request.page_token = Some(page_token.to_string());
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.request.page_token = Some(page_token.into());
         self
     }
 
-    /// 构建最终的请求对象
-    pub fn build(self) -> GetUserGroupsRequest {
-        self.request
+    /// 执行查询
+    pub async fn execute(self, service: &GroupService) -> SDKResult<GetUserGroupsResponse> {
+        service.get_user_groups(&self.request).await
     }
 }
 
-impl Default for GetUserGroupsBuilder {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-// 应用ExecutableBuilder trait
-// crate::impl_executable_builder!(
-//    GetUserGroupsBuilder,
-//    GroupService,
-//    GetUserGroupsRequest,
-//    BaseResponse<GetUserGroupsResponse>,
-//    get_user_groups
-//);
-
-/// 获取用户组详细信息请求构建器
+/// 获取用户组详细信息构建器
 #[derive(Debug, Clone)]
 pub struct GetGroupDetailBuilder {
     request: GetGroupDetailRequest,
 }
 
-impl GetGroupDetailBuilder {
-    /// 创建新的Builder实例
-    pub fn new() -> Self {
+impl Default for GetGroupDetailBuilder {
+    fn default() -> Self {
         Self {
             request: GetGroupDetailRequest::default(),
         }
     }
+}
+
+impl GetGroupDetailBuilder {
+    /// 创建新的查询构建器
+    pub fn new() -> Self {
+        Self::default()
+    }
 
     /// 设置用户ID类型
-    pub fn user_id_type(mut self, user_id_type: &str) -> Self {
-        self.request.user_id_type = Some(user_id_type.to_string());
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.request.user_id_type = Some(user_id_type.into());
         self
     }
 
     /// 设置部门ID类型
-    pub fn department_id_type(mut self, department_id_type: &str) -> Self {
-        self.request.department_id_type = Some(department_id_type.to_string());
+    pub fn department_id_type(mut self, department_id_type: impl Into<String>) -> Self {
+        self.request.department_id_type = Some(department_id_type.into());
         self
     }
 
@@ -797,26 +857,15 @@ impl GetGroupDetailBuilder {
         self
     }
 
-    /// 构建最终的请求对象
-    pub fn build(self) -> GetGroupDetailRequest {
-        self.request
+    /// 执行查询
+    pub async fn execute(
+        self,
+        service: &GroupService,
+        group_id: &str,
+    ) -> SDKResult<GetGroupDetailResponse> {
+        service.get_detail(group_id, &self.request).await
     }
 }
-
-impl Default for GetGroupDetailBuilder {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-// 应用ExecutableBuilder trait
-// crate::impl_executable_builder!(
-//    GetGroupDetailBuilder,
-//    GroupService,
-//    GetGroupDetailRequest,
-//    BaseResponse<GetGroupDetailResponse>,
-//    get_detail
-//);
 
 impl GroupService {
     /// 创建用户组构建器
@@ -845,19 +894,150 @@ impl GroupService {
     }
 }
 
+// ==================== 单元测试 ====================
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn test_group_service_creation() {
-        let config = Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build();
-
+        let config = Config::default();
         let service = GroupService::new(config);
-        // Service created successfully
+        assert!(!format!("{:?}", service).is_empty());
+    }
+
+    #[test]
+    fn test_group_default_creation() {
+        let group = Group::default();
+        assert_eq!(group.group_id, None);
+        assert_eq!(group.name, None);
+        assert_eq!(group.description, None);
+        assert_eq!(group.group_type, None);
+        assert_eq!(group.create_time, None);
+        assert_eq!(group.update_time, None);
+    }
+
+    #[test]
+    fn test_group_with_data() {
+        let group = Group {
+            group_id: Some("group_123".to_string()),
+            name: Some("产品管理组".to_string()),
+            description: Some("负责产品规划和管理的用户组".to_string()),
+            group_type: Some("custom".to_string()),
+            create_time: Some("2023-01-01T00:00:00Z".to_string()),
+            update_time: Some("2023-01-02T00:00:00Z".to_string()),
+        };
+
+        assert_eq!(group.group_id, Some("group_123".to_string()));
+        assert_eq!(group.name, Some("产品管理组".to_string()));
+        assert_eq!(
+            group.description,
+            Some("负责产品规划和管理的用户组".to_string())
+        );
+        assert_eq!(group.group_type, Some("custom".to_string()));
+        assert_eq!(group.create_time, Some("2023-01-01T00:00:00Z".to_string()));
+        assert_eq!(group.update_time, Some("2023-01-02T00:00:00Z".to_string()));
+    }
+
+    #[test]
+    fn test_group_member_default_creation() {
+        let member = GroupMember::default();
+        assert_eq!(member.member_id, None);
+        assert_eq!(member.member_type, None);
+        assert_eq!(member.name, None);
+        assert_eq!(member.join_time, None);
+    }
+
+    #[test]
+    fn test_group_member_with_data() {
+        let member = GroupMember {
+            member_id: Some("user_001".to_string()),
+            member_type: Some("user".to_string()),
+            name: Some("张三".to_string()),
+            join_time: Some("2023-01-01T00:00:00Z".to_string()),
+        };
+
+        assert_eq!(member.member_id, Some("user_001".to_string()));
+        assert_eq!(member.member_type, Some("user".to_string()));
+        assert_eq!(member.name, Some("张三".to_string()));
+        assert_eq!(member.join_time, Some("2023-01-01T00:00:00Z".to_string()));
+    }
+
+    #[test]
+    fn test_group_detail_default_creation() {
+        let detail = GroupDetail::default();
+        assert_eq!(detail.group.group_id, None);
+        assert_eq!(detail.members, None);
+        assert_eq!(detail.member_count, None);
+    }
+
+    #[test]
+    fn test_group_detail_with_data() {
+        let group = Group {
+            group_id: Some("group_456".to_string()),
+            name: Some("开发团队".to_string()),
+            ..Default::default()
+        };
+
+        let member = GroupMember {
+            member_id: Some("user_002".to_string()),
+            member_type: Some("user".to_string()),
+            name: Some("李四".to_string()),
+            ..Default::default()
+        };
+
+        let detail = GroupDetail {
+            group,
+            members: Some(vec![member]),
+            member_count: Some(1),
+        };
+
+        assert_eq!(detail.group.group_id, Some("group_456".to_string()));
+        assert_eq!(detail.group.name, Some("开发团队".to_string()));
+        assert_eq!(detail.members.as_ref().unwrap().len(), 1);
+        assert_eq!(detail.member_count, Some(1));
+    }
+
+    #[test]
+    fn test_create_group_request() {
+        let group = Group {
+            name: Some("新用户组".to_string()),
+            description: Some("测试用户组".to_string()),
+            ..Default::default()
+        };
+
+        let request = CreateGroupRequest { group };
+
+        assert_eq!(request.group.name, Some("新用户组".to_string()));
+        assert_eq!(request.group.description, Some("测试用户组".to_string()));
+    }
+
+    #[test]
+    fn test_list_groups_request_default() {
+        let request = ListGroupsRequest::default();
+        assert_eq!(request.page_size, None);
+        assert_eq!(request.page_token, None);
+        assert_eq!(request.user_id_type, None);
+        assert_eq!(request.department_id_type, None);
+    }
+
+    #[test]
+    fn test_list_groups_request_with_all_fields() {
+        let request = ListGroupsRequest {
+            page_size: Some(50),
+            page_token: Some("token_123".to_string()),
+            user_id_type: Some("open_id".to_string()),
+            department_id_type: Some("department_id".to_string()),
+        };
+
+        assert_eq!(request.page_size, Some(50));
+        assert_eq!(request.page_token, Some("token_123".to_string()));
+        assert_eq!(request.user_id_type, Some("open_id".to_string()));
+        assert_eq!(
+            request.department_id_type,
+            Some("department_id".to_string())
+        );
     }
 
     #[test]
@@ -885,34 +1065,343 @@ mod tests {
     }
 
     #[test]
-    fn test_get_user_groups_builder() {
-        let config = Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build();
+    fn test_response_default_creation() {
+        let create_response = CreateGroupResponse::default();
+        assert_eq!(create_response.group.group_id, None);
 
-        let service = GroupService::new(config);
-        let builder = service.get_user_groups_builder();
+        let patch_response = PatchGroupResponse::default();
+        assert_eq!(patch_response.group.group_id, None);
 
-        // Test builder with all parameters
-        let request = builder
-            .member_id("user_456")
-            .member_id_type("user_id")
-            .page_size(20)
-            .page_token("page_token")
-            .build();
+        let get_response = GetGroupResponse::default();
+        assert_eq!(get_response.group.group_id, None);
 
-        assert_eq!(request.member_id, Some("user_456".to_string()));
-        assert_eq!(request.member_id_type, Some("user_id".to_string()));
-        assert_eq!(request.page_size, Some(20));
-        assert_eq!(request.page_token, Some("page_token".to_string()));
+        let list_response = ListGroupsResponse::default();
+        assert_eq!(list_response.items.len(), 0);
+        assert_eq!(list_response.has_more, None);
+        assert_eq!(list_response.page_token, None);
+
+        let get_user_groups_response = GetUserGroupsResponse::default();
+        assert_eq!(get_user_groups_response.items.len(), 0);
+        assert_eq!(get_user_groups_response.has_more, None);
+        assert_eq!(get_user_groups_response.page_token, None);
+
+        let get_detail_response = GetGroupDetailResponse::default();
+        assert_eq!(get_detail_response.group_detail.group.group_id, None);
+
+        let delete_response = DeleteGroupResponse::default();
+        assert_eq!(delete_response.success, false);
     }
 
     #[test]
-    fn test_endpoint_constant() {
+    fn test_api_response_trait_implementation() {
+        assert_eq!(CreateGroupResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(PatchGroupResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(GetGroupResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(ListGroupsResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(GetUserGroupsResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(GetGroupDetailResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(DeleteGroupResponse::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_request_serialization() {
+        let group = Group {
+            name: Some("序列化测试".to_string()),
+            description: Some("测试序列化功能".to_string()),
+            group_type: Some("test".to_string()),
+            ..Default::default()
+        };
+
+        let create_request = CreateGroupRequest { group };
+
+        let serialized = serde_json::to_string(&create_request).unwrap();
+        let deserialized: CreateGroupRequest = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(create_request.group.name, deserialized.group.name);
+        assert_eq!(
+            create_request.group.description,
+            deserialized.group.description
+        );
+        assert_eq!(
+            create_request.group.group_type,
+            deserialized.group.group_type
+        );
+
+        let list_request = ListGroupsRequest {
+            page_size: Some(100),
+            page_token: Some("test_token".to_string()),
+            user_id_type: Some("open_id".to_string()),
+            department_id_type: Some("department_id".to_string()),
+        };
+
+        let serialized = serde_json::to_string(&list_request).unwrap();
+        let deserialized: ListGroupsRequest = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(list_request.page_size, deserialized.page_size);
+        assert_eq!(list_request.page_token, deserialized.page_token);
+        assert_eq!(list_request.user_id_type, deserialized.user_id_type);
+        assert_eq!(
+            list_request.department_id_type,
+            deserialized.department_id_type
+        );
+    }
+
+    #[test]
+    fn test_query_parameters_construction() {
+        let request = ListGroupsRequest {
+            page_size: Some(20),
+            page_token: Some("test_token".to_string()),
+            user_id_type: Some("open_id".to_string()),
+            department_id_type: Some("department_id".to_string()),
+        };
+
+        let mut query_params = Vec::new();
+        if let Some(page_size) = &request.page_size {
+            query_params.push(format!("page_size={}", page_size));
+        }
+        if let Some(page_token) = &request.page_token {
+            query_params.push(format!("page_token={}", page_token));
+        }
+        if let Some(user_id_type) = &request.user_id_type {
+            query_params.push(format!("user_id_type={}", user_id_type));
+        }
+        if let Some(department_id_type) = &request.department_id_type {
+            query_params.push(format!("department_id_type={}", department_id_type));
+        }
+
+        assert_eq!(query_params.len(), 4);
+        assert!(query_params.contains(&"page_size=20".to_string()));
+        assert!(query_params.contains(&"page_token=test_token".to_string()));
+        assert!(query_params.contains(&"user_id_type=open_id".to_string()));
+        assert!(query_params.contains(&"department_id_type=department_id".to_string()));
+    }
+
+    #[test]
+    fn test_endpoint_constants() {
+        // Test that the endpoint constants are properly defined
+        assert_eq!(
+            crate::core::endpoints_original::Endpoints::CONTACT_V3_GROUPS,
+            "/open-apis/contact/v3/groups"
+        );
+        assert_eq!(
+            crate::core::endpoints_original::Endpoints::CONTACT_V3_GROUPS_SIMPLELIST,
+            "/open-apis/contact/v3/groups/simplelist"
+        );
         assert_eq!(
             crate::core::endpoints_original::Endpoints::CONTACT_V3_GROUPS_MEMBER_BELONG,
             "/open-apis/contact/v3/groups/member_belong"
+        );
+        assert_eq!(
+            crate::core::endpoints_original::Endpoints::CONTACT_V3_GROUP_DETAIL,
+            "/open-apis/contact/v3/groups/{group_id}/detail"
+        );
+    }
+
+    #[test]
+    fn test_create_group_builder() {
+        let builder = CreateGroupBuilder::new()
+            .name("构建器测试组")
+            .description("使用构建器创建的测试用户组")
+            .group_type("test");
+
+        assert_eq!(builder.request.group.name, Some("构建器测试组".to_string()));
+        assert_eq!(
+            builder.request.group.description,
+            Some("使用构建器创建的测试用户组".to_string())
+        );
+        assert_eq!(builder.request.group.group_type, Some("test".to_string()));
+    }
+
+    #[test]
+    fn test_create_group_builder_default() {
+        let builder = CreateGroupBuilder::default();
+        assert_eq!(builder.request.group.name, None);
+        assert_eq!(builder.request.group.description, None);
+        assert_eq!(builder.request.group.group_type, None);
+    }
+
+    #[test]
+    fn test_patch_group_builder() {
+        let builder = PatchGroupBuilder::new()
+            .name("修改后的名称")
+            .description("修改后的描述")
+            .group_type("modified");
+
+        assert_eq!(builder.request.group.name, Some("修改后的名称".to_string()));
+        assert_eq!(
+            builder.request.group.description,
+            Some("修改后的描述".to_string())
+        );
+        assert_eq!(
+            builder.request.group.group_type,
+            Some("modified".to_string())
+        );
+    }
+
+    #[test]
+    fn test_list_groups_builder() {
+        let builder = ListGroupsBuilder::new()
+            .page_size(30)
+            .page_token("builder_token")
+            .user_id_type("open_id")
+            .department_id_type("department_id");
+
+        assert_eq!(builder.request.page_size, Some(30));
+        assert_eq!(
+            builder.request.page_token,
+            Some("builder_token".to_string())
+        );
+        assert_eq!(builder.request.user_id_type, Some("open_id".to_string()));
+        assert_eq!(
+            builder.request.department_id_type,
+            Some("department_id".to_string())
+        );
+    }
+
+    #[test]
+    fn test_list_groups_builder_default() {
+        let builder = ListGroupsBuilder::default();
+        assert_eq!(builder.request.page_size, None);
+        assert_eq!(builder.request.page_token, None);
+        assert_eq!(builder.request.user_id_type, None);
+        assert_eq!(builder.request.department_id_type, None);
+    }
+
+    #[test]
+    fn test_get_user_groups_builder() {
+        let builder = GetUserGroupsBuilder::new()
+            .member_id("user_001")
+            .member_id_type("open_id")
+            .page_size(20)
+            .page_token("page_token");
+
+        assert_eq!(builder.request.member_id, Some("user_001".to_string()));
+        assert_eq!(builder.request.member_id_type, Some("open_id".to_string()));
+        assert_eq!(builder.request.page_size, Some(20));
+        assert_eq!(builder.request.page_token, Some("page_token".to_string()));
+    }
+
+    #[test]
+    fn test_get_user_groups_builder_default() {
+        let builder = GetUserGroupsBuilder::default();
+        assert_eq!(builder.request.member_id, None);
+        assert_eq!(builder.request.member_id_type, None);
+        assert_eq!(builder.request.page_size, None);
+        assert_eq!(builder.request.page_token, None);
+    }
+
+    #[test]
+    fn test_get_group_detail_builder() {
+        let builder = GetGroupDetailBuilder::new()
+            .user_id_type("open_id")
+            .department_id_type("department_id")
+            .include_members(true);
+
+        assert_eq!(builder.request.user_id_type, Some("open_id".to_string()));
+        assert_eq!(
+            builder.request.department_id_type,
+            Some("department_id".to_string())
+        );
+        assert_eq!(builder.request.include_members, Some(true));
+    }
+
+    #[test]
+    fn test_get_group_detail_builder_default() {
+        let builder = GetGroupDetailBuilder::default();
+        assert_eq!(builder.request.user_id_type, None);
+        assert_eq!(builder.request.department_id_type, None);
+        assert_eq!(builder.request.include_members, None);
+    }
+
+    #[test]
+    fn test_group_type_variations() {
+        // Test different group types
+        let admin_group = Group {
+            group_id: Some("admin_group".to_string()),
+            name: Some("管理员组".to_string()),
+            group_type: Some("admin".to_string()),
+            ..Default::default()
+        };
+
+        let dev_group = Group {
+            group_id: Some("dev_group".to_string()),
+            name: Some("开发组".to_string()),
+            group_type: Some("development".to_string()),
+            ..Default::default()
+        };
+
+        let custom_group = Group {
+            group_id: Some("custom_group".to_string()),
+            name: Some("自定义组".to_string()),
+            group_type: Some("custom".to_string()),
+            ..Default::default()
+        };
+
+        assert_eq!(admin_group.group_type, Some("admin".to_string()));
+        assert_eq!(dev_group.group_type, Some("development".to_string()));
+        assert_eq!(custom_group.group_type, Some("custom".to_string()));
+    }
+
+    #[test]
+    fn test_group_member_type_variations() {
+        // Test different member types
+        let user_member = GroupMember {
+            member_id: Some("user_001".to_string()),
+            member_type: Some("user".to_string()),
+            ..Default::default()
+        };
+
+        let dept_member = GroupMember {
+            member_id: Some("dept_001".to_string()),
+            member_type: Some("department".to_string()),
+            ..Default::default()
+        };
+
+        let group_member = GroupMember {
+            member_id: Some("group_001".to_string()),
+            member_type: Some("group".to_string()),
+            ..Default::default()
+        };
+
+        assert_eq!(user_member.member_type, Some("user".to_string()));
+        assert_eq!(dept_member.member_type, Some("department".to_string()));
+        assert_eq!(group_member.member_type, Some("group".to_string()));
+    }
+
+    #[test]
+    fn test_comprehensive_group_data() {
+        // Test comprehensive group data with all fields
+        let comprehensive_group = Group {
+            group_id: Some("comprehensive_001".to_string()),
+            name: Some("综合测试组".to_string()),
+            description: Some(
+                "这是一个用于全面测试的用户组，包含所有可能的字段和数据类型".to_string(),
+            ),
+            group_type: Some("comprehensive".to_string()),
+            create_time: Some("2023-01-01T08:00:00Z".to_string()),
+            update_time: Some("2023-12-31T16:00:00Z".to_string()),
+        };
+
+        assert_eq!(
+            comprehensive_group.group_id,
+            Some("comprehensive_001".to_string())
+        );
+        assert_eq!(comprehensive_group.name, Some("综合测试组".to_string()));
+        assert_eq!(
+            comprehensive_group.description,
+            Some("这是一个用于全面测试的用户组，包含所有可能的字段和数据类型".to_string())
+        );
+        assert_eq!(
+            comprehensive_group.group_type,
+            Some("comprehensive".to_string())
+        );
+        assert_eq!(
+            comprehensive_group.create_time,
+            Some("2023-01-01T08:00:00Z".to_string())
+        );
+        assert_eq!(
+            comprehensive_group.update_time,
+            Some("2023-12-31T16:00:00Z".to_string())
         );
     }
 }

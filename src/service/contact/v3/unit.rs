@@ -16,15 +16,14 @@
 //! - 单位与部门的绑定/解绑
 //! - 获取单位下的部门列表
 
-use serde::{Deserialize, Serialize};
 use crate::core::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
-    ApiRequest,
-    SDKResult,
+    ApiRequest, SDKResult,
 };
+use serde::{Deserialize, Serialize};
 
 /// 单位信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -730,19 +729,10 @@ mod tests {
         assert_eq!(unit.name, Some("研发中心".to_string()));
         assert_eq!(unit.unit_code, Some("RD001".to_string()));
         assert_eq!(unit.parent_unit_id, Some("unit_root".to_string()));
-        assert_eq!(
-            unit.description,
-            Some("负责研发工作的中心".to_string())
-        );
+        assert_eq!(unit.description, Some("负责研发工作的中心".to_string()));
         assert_eq!(unit.status, Some(1));
-        assert_eq!(
-            unit.create_time,
-            Some("2023-01-01T00:00:00Z".to_string())
-        );
-        assert_eq!(
-            unit.update_time,
-            Some("2023-01-02T00:00:00Z".to_string())
-        );
+        assert_eq!(unit.create_time, Some("2023-01-01T00:00:00Z".to_string()));
+        assert_eq!(unit.update_time, Some("2023-01-02T00:00:00Z".to_string()));
     }
 
     #[test]
@@ -757,10 +747,7 @@ mod tests {
         assert_eq!(request.name, "市场部".to_string());
         assert_eq!(request.unit_code, Some("MKT001".to_string()));
         assert_eq!(request.parent_unit_id, Some("unit_root".to_string()));
-        assert_eq!(
-            request.description,
-            Some("负责市场营销工作".to_string())
-        );
+        assert_eq!(request.description, Some("负责市场营销工作".to_string()));
     }
 
     #[test]
@@ -802,10 +789,7 @@ mod tests {
 
         assert_eq!(dept.department_id, Some("dept_456".to_string()));
         assert_eq!(dept.name, Some("前端开发组".to_string()));
-        assert_eq!(
-            dept.bind_time,
-            Some("2023-01-01T00:00:00Z".to_string())
-        );
+        assert_eq!(dept.bind_time, Some("2023-01-01T00:00:00Z".to_string()));
     }
 
     #[test]
@@ -895,10 +879,7 @@ mod tests {
         list_response.page_token = Some("next_page".to_string());
 
         assert_eq!(list_response.items.len(), 1);
-        assert_eq!(
-            list_response.items[0].unit_id,
-            Some("unit_101".to_string())
-        );
+        assert_eq!(list_response.items[0].unit_id, Some("unit_101".to_string()));
         assert_eq!(list_response.has_more, Some(true));
         assert_eq!(list_response.page_token, Some("next_page".to_string()));
 
@@ -916,7 +897,10 @@ mod tests {
         assert_eq!(ListUnitsResponse::data_format(), ResponseFormat::Data);
         assert_eq!(DeleteUnitResponse::data_format(), ResponseFormat::Data);
         assert_eq!(BindDepartmentResponse::data_format(), ResponseFormat::Data);
-        assert_eq!(UnbindDepartmentResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            UnbindDepartmentResponse::data_format(),
+            ResponseFormat::Data
+        );
         assert_eq!(
             ListUnitDepartmentsResponse::data_format(),
             ResponseFormat::Data
@@ -987,7 +971,7 @@ mod tests {
         );
         assert_eq!(
             crate::core::endpoints_original::Endpoints::CONTACT_V3_UNIT_LIST_DEPARTMENT,
-            "/open-apis/contact/v3/units/{unit_id}/departments"
+            "/open-apis/contact/v3/units/{unit_id}/list_department"
         );
     }
 
