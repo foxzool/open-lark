@@ -158,6 +158,63 @@ impl ChatsService {
 
         Ok(response)
     }
+
+    /// 获取群公告基本信息
+    ///
+    /// 获取指定群聊的公告基本信息，包括标题、内容、创建时间等
+    ///
+    /// # 参数
+    /// * `req` - 获取群公告请求
+    ///
+    /// # 返回值
+    /// 返回群公告基本信息
+    ///
+    /// # 错误处理
+    /// - HTTP 403: 权限不足
+    /// - HTTP 404: 群聊不存在或公告不存在
+    /// - HTTP 400: 参数错误
+    pub async fn get_announcement(&self, req: &GetGroupAnnouncementRequest) -> SDKResult<GetGroupAnnouncementResponse> {
+        // 验证请求参数
+        req.validate()?;
+
+        debug!("开始获取群公告: chat_id={}", req.chat_id);
+
+        let mut query_params: HashMap<&str, String> = HashMap::new();
+
+        // 设置用户ID类型
+        if let Some(user_id_type) = &req.user_id_type {
+            query_params.insert("user_id_type", user_id_type.clone());
+        }
+
+        // 构建API路径，替换chat_id占位符
+        let api_path = crate::core::endpoints_original::Endpoints::DOCX_V1_CHAT_ANNOUNCEMENT
+            .replace("{}", &req.chat_id);
+
+        // 构建API请求
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params,
+            ..Default::default()
+        };
+
+        let resp = Transport::<GetGroupAnnouncementResponse>::request(api_req, &self.config, None).await?;
+
+        let response = resp.data.unwrap_or_default();
+
+        if response.success {
+            info!("群公告获取成功: chat_id={}", req.chat_id);
+            if let Some(announcement) = &response.announcement {
+                debug!("公告详情: title={:?}, status={:?}", announcement.title, announcement.status);
+            }
+        } else {
+            warn!("群公告获取失败: chat_id={}, error={:?}",
+                  req.chat_id, response.error_message);
+        }
+
+        Ok(response)
+    }
 }
 
 // ==================== 数据模型 ====================
@@ -522,6 +579,113 @@ impl ApiResponseTrait for DeleteChatResponse {
     }
 }
 
+// ==================== 群公告数据模型 ====================
+
+/// 获取群公告基本信息请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetGroupAnnouncementRequest {
+    /// 群聊ID
+    pub chat_id: String,
+    /// 用户ID类型，可选值包括 open_id、user_id、union_id
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id_type: Option<String>,
+}
+
+impl GetGroupAnnouncementRequest {
+    /// 创建新的获取群公告请求
+    pub fn new(chat_id: impl Into<String>) -> Self {
+        Self {
+            chat_id: chat_id.into(),
+            user_id_type: None,
+        }
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.user_id_type = Some(user_id_type.into());
+        self
+    }
+
+    /// 验证请求参数
+    pub fn validate(&self) -> SDKResult<()> {
+        if self.chat_id.is_empty() {
+            return Err(LarkAPIError::InvalidParams("群聊ID不能为空".to_string()));
+        }
+
+        if let Some(user_id_type) = &self.user_id_type {
+            match user_id_type.as_str() {
+                "open_id" | "user_id" | "union_id" => {},
+                _ => {
+                    return Err(LarkAPIError::InvalidParams(
+                        "无效的用户ID类型，必须是 open_id、user_id 或 union_id".to_string()
+                    ));
+                }
+            }
+        }
+
+        Ok(())
+    }
+}
+
+/// 群公告基本信息
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct GroupAnnouncementInfo {
+    /// 公告标题
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
+    /// 公告内容
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content: Option<String>,
+    /// 公告创建时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<String>,
+    /// 公告更新时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_time: Option<String>,
+    /// 公告创建者信息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creator: Option<AnnouncementCreator>,
+    /// 公告状态（active/inactive）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// 公告创建者信息
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct AnnouncementCreator {
+    /// 创建者ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<String>,
+    /// 创建者名称
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// 创建者头像URL
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub avatar: Option<String>,
+}
+
+/// 获取群公告响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct GetGroupAnnouncementResponse {
+    /// 群公告信息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub announcement: Option<GroupAnnouncementInfo>,
+    /// 操作是否成功
+    pub success: bool,
+    /// 错误码
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<i32>,
+    /// 错误消息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+}
+
+impl ApiResponseTrait for GetGroupAnnouncementResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
 // ==================== 构建器模式 ====================
 
 /// 创建群聊构建器
@@ -626,6 +790,11 @@ impl ChatsService {
     pub fn delete_chat_builder(&self, chat_id: impl Into<String>) -> DeleteChatBuilder {
         DeleteChatBuilder::new(chat_id)
     }
+
+    /// 获取群公告构建器
+    pub fn get_announcement_builder(&self, chat_id: impl Into<String>) -> GetGroupAnnouncementBuilder {
+        GetGroupAnnouncementBuilder::new(chat_id)
+    }
 }
 
 /// 解散群聊构建器
@@ -651,6 +820,32 @@ impl DeleteChatBuilder {
     /// 执行解散操作
     pub async fn execute(self, service: &ChatsService) -> SDKResult<DeleteChatResponse> {
         service.delete(&self.request).await
+    }
+}
+
+/// 获取群公告构建器
+#[derive(Debug, Clone)]
+pub struct GetGroupAnnouncementBuilder {
+    request: GetGroupAnnouncementRequest,
+}
+
+impl GetGroupAnnouncementBuilder {
+    /// 创建新的构建器
+    pub fn new(chat_id: impl Into<String>) -> Self {
+        Self {
+            request: GetGroupAnnouncementRequest::new(chat_id),
+        }
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.request = self.request.user_id_type(user_id_type);
+        self
+    }
+
+    /// 执行获取群公告操作
+    pub async fn execute(self, service: &ChatsService) -> SDKResult<GetGroupAnnouncementResponse> {
+        service.get_announcement(&self.request).await
     }
 }
 
@@ -1299,5 +1494,218 @@ mod tests {
         // 验证应该成功（群ID长度在API规范允许范围内）
         let result = long_id_request.validate();
         assert!(result.is_ok());
+    }
+
+    // ==================== 群公告相关测试 ====================
+
+    #[test]
+    fn test_get_group_announcement_request_creation() {
+        let request = GetGroupAnnouncementRequest::new("test_chat_id");
+        assert_eq!(request.chat_id, "test_chat_id");
+        assert!(request.user_id_type.is_none());
+    }
+
+    #[test]
+    fn test_get_group_announcement_request_with_user_id_type() {
+        let request = GetGroupAnnouncementRequest::new("test_chat_id")
+            .user_id_type("open_id");
+        assert_eq!(request.chat_id, "test_chat_id");
+        assert_eq!(request.user_id_type, Some("open_id".to_string()));
+    }
+
+    #[test]
+    fn test_get_group_announcement_request_validation_empty_chat_id() {
+        let request = GetGroupAnnouncementRequest::new("");
+        let result = request.validate();
+        assert!(result.is_err());
+        assert!(result.unwrap_err().to_string().contains("群聊ID不能为空"));
+    }
+
+    #[test]
+    fn test_get_group_announcement_request_validation_invalid_user_id_type() {
+        let request = GetGroupAnnouncementRequest::new("chat_123")
+            .user_id_type("invalid_type");
+
+        let result = request.validate();
+        assert!(result.is_err());
+        assert!(result.unwrap_err().to_string().contains("无效的用户ID类型"));
+    }
+
+    #[test]
+    fn test_get_group_announcement_request_validation_valid_user_id_types() {
+        let chat_id = "test_chat_123";
+        let valid_types = vec!["open_id", "user_id", "union_id"];
+
+        for user_id_type in valid_types {
+            let request = GetGroupAnnouncementRequest::new(chat_id)
+                .user_id_type(user_id_type);
+
+            // 验证应该成功
+            let result = request.validate();
+            assert!(result.is_ok(), "Valid user_id_type {} should pass validation", user_id_type);
+        }
+    }
+
+    #[test]
+    fn test_group_announcement_info_creation() {
+        let announcement = GroupAnnouncementInfo {
+            title: Some("测试公告".to_string()),
+            content: Some("这是一个测试公告内容".to_string()),
+            status: Some("active".to_string()),
+            ..Default::default()
+        };
+
+        assert_eq!(announcement.title, Some("测试公告".to_string()));
+        assert_eq!(announcement.content, Some("这是一个测试公告内容".to_string()));
+        assert_eq!(announcement.status, Some("active".to_string()));
+    }
+
+    #[test]
+    fn test_announcement_creator_creation() {
+        let creator = AnnouncementCreator {
+            user_id: Some("user_123".to_string()),
+            name: Some("张三".to_string()),
+            avatar: Some("https://example.com/avatar.jpg".to_string()),
+        };
+
+        assert_eq!(creator.user_id, Some("user_123".to_string()));
+        assert_eq!(creator.name, Some("张三".to_string()));
+        assert_eq!(creator.avatar, Some("https://example.com/avatar.jpg".to_string()));
+    }
+
+    #[test]
+    fn test_get_group_announcement_response_creation() {
+        let creator = AnnouncementCreator {
+            user_id: Some("user_123".to_string()),
+            name: Some("张三".to_string()),
+            ..Default::default()
+        };
+
+        let announcement = GroupAnnouncementInfo {
+            title: Some("测试公告".to_string()),
+            content: Some("这是一个测试公告内容".to_string()),
+            creator: Some(creator),
+            ..Default::default()
+        };
+
+        let response = GetGroupAnnouncementResponse {
+            announcement: Some(announcement),
+            success: true,
+            ..Default::default()
+        };
+
+        assert!(response.success);
+        assert!(response.announcement.is_some());
+        assert_eq!(response.announcement.as_ref().unwrap().title, Some("测试公告".to_string()));
+        assert_eq!(response.announcement.as_ref().unwrap().creator.as_ref().unwrap().name, Some("张三".to_string()));
+    }
+
+    #[test]
+    fn test_get_group_announcement_builder() {
+        let builder = GetGroupAnnouncementBuilder::new("chat_builder_test")
+            .user_id_type("open_id");
+
+        assert_eq!(builder.request.chat_id, "chat_builder_test");
+        assert_eq!(builder.request.user_id_type, Some("open_id".to_string()));
+    }
+
+    #[test]
+    fn test_get_group_announcement_endpoint_constant() {
+        // 测试群公告端点常量是否正确定义
+        assert_eq!(
+            crate::core::endpoints_original::Endpoints::DOCX_V1_CHAT_ANNOUNCEMENT,
+            "/open-apis/docx/v1/chats/{}/announcement"
+        );
+    }
+
+    #[test]
+    fn test_get_group_announcement_response_default() {
+        let response = GetGroupAnnouncementResponse::default();
+        assert!(!response.success);
+        assert!(response.announcement.is_none());
+        assert!(response.error_code.is_none());
+        assert!(response.error_message.is_none());
+    }
+
+    #[test]
+    fn test_get_group_announcement_response_error() {
+        let error_response = GetGroupAnnouncementResponse {
+            success: false,
+            error_code: Some(404),
+            error_message: Some("群公告不存在".to_string()),
+            ..Default::default()
+        };
+
+        assert!(!error_response.success);
+        assert_eq!(error_response.error_code, Some(404));
+        assert_eq!(error_response.error_message, Some("群公告不存在".to_string()));
+    }
+
+    #[test]
+    fn test_announcement_creator_default() {
+        let creator = AnnouncementCreator::default();
+        assert!(creator.user_id.is_none());
+        assert!(creator.name.is_none());
+        assert!(creator.avatar.is_none());
+    }
+
+    #[test]
+    fn test_group_announcement_info_complete() {
+        let timestamp = "2023-12-01T10:00:00Z".to_string();
+        let creator = AnnouncementCreator {
+            user_id: Some("creator_456".to_string()),
+            name: Some("李四".to_string()),
+            avatar: Some("https://example.com/avatar2.jpg".to_string()),
+        };
+
+        let announcement = GroupAnnouncementInfo {
+            title: Some("完整测试公告".to_string()),
+            content: Some("这是一个包含所有字段的完整公告".to_string()),
+            create_time: Some(timestamp.clone()),
+            update_time: Some(timestamp.clone()),
+            creator: Some(creator),
+            status: Some("active".to_string()),
+        };
+
+        assert_eq!(announcement.title, Some("完整测试公告".to_string()));
+        assert_eq!(announcement.create_time, Some(timestamp.clone()));
+        assert_eq!(announcement.update_time, Some(timestamp));
+        assert!(announcement.creator.is_some());
+        assert_eq!(announcement.creator.as_ref().unwrap().name, Some("李四".to_string()));
+        assert_eq!(announcement.status, Some("active".to_string()));
+    }
+
+    #[test]
+    fn test_api_response_trait_implementation() {
+        assert_eq!(GetGroupAnnouncementResponse::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_get_group_announcement_comprehensive_scenario() {
+        // 测试完整的业务场景
+        let mut announcement = GroupAnnouncementInfo::default();
+        announcement.title = Some("重要通知".to_string());
+        announcement.content = Some("明天下午3点开会".to_string());
+        announcement.status = Some("active".to_string());
+
+        let creator = AnnouncementCreator {
+            user_id: Some("admin_001".to_string()),
+            name: Some("管理员".to_string()),
+            ..Default::default()
+        };
+        announcement.creator = Some(creator);
+
+        let response = GetGroupAnnouncementResponse {
+            announcement: Some(announcement),
+            success: true,
+            ..Default::default()
+        };
+
+        assert!(response.success);
+        let announcement_ref = response.announcement.as_ref().unwrap();
+        assert_eq!(announcement_ref.title, Some("重要通知".to_string()));
+        assert_eq!(announcement_ref.content, Some("明天下午3点开会".to_string()));
+        assert_eq!(announcement_ref.status, Some("active".to_string()));
+        assert_eq!(announcement_ref.creator.as_ref().unwrap().name, Some("管理员".to_string()));
     }
 }
