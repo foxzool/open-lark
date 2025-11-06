@@ -3,10 +3,7 @@ use crate::core::error::SDKError;
 use crate::core::response::SDKResult;
 use crate::core::service_trait::Service;
 use crate::core::transport::Transport;
-use crate::service::directory::v1::employee::regular::models::{
-    RegularEmployeeRequest, RegularEmployeeRequestBuilder, RegularEmployeeResponse,
-    RegularEmployeeResponseData,
-};
+// 模型定义在文件底部，无需导入
 use crate::service::directory::v1::employee::delete::{DeleteEmployeeRequest, DeleteEmployeeBuilder};
 use crate::service::directory::v1::employee::resurrect::{ResurrectEmployeeRequest, ResurrectEmployeeBuilder};
 use crate::service::directory::v1::employee::mget::{MGetEmployeeRequest, MGetEmployeeBuilder};
@@ -18,7 +15,7 @@ use std::sync::Arc;
 pub const ENDPOINT_DELETE: &str = "/open-apis/hrm/v1/employees/{employee_id}";
 
 /// 更新待离职成员为在职的API端点
-pub const ENDPOINT_REGULAR: &str = "/open-apis/hrm/v1/employees/{employee_id}/regular";
+pub const ENDPOINT_REGULAR: &str = "/open-apis/directory/v1/employees/{employee_id}/regular";
 
 /// 恢复离职员工的API端点
 pub const ENDPOINT_RESURRECT: &str = "/open-apis/directory/v1/employees/{employee_id}/resurrect";
