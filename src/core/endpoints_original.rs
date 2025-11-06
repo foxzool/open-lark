@@ -2125,6 +2125,9 @@ impl Endpoints {
     pub const DOCX_V1_DOCUMENT_BLOCKS_BATCH_DELETE: &'static str =
         "/open-apis/docx/v1/documents/{}/blocks/batch_delete";
 
+    /// 群公告管理
+    pub const DOCX_V1_CHAT_ANNOUNCEMENT: &'static str = "/open-apis/docx/v1/chats/{}/announcement";
+
     // Drive 云盘服务
     /// 文件管理
     pub const DRIVE_V1_FILES: &'static str = "/open-apis/drive/v1/files";
