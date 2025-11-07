@@ -561,8 +561,10 @@ pub mod models;
 
 // 重新导出所有模块和类型
 pub use models::*;
+
+// Calendar事件模块
+pub mod calendar_event;
 // 暂时注释掉有语法错误的子模块
-// pub mod calendar_event;
 // pub mod calendar;
 // pub mod attendee;
 // pub mod meeting_room_event;
