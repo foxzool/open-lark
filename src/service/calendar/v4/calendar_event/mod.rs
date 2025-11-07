@@ -16,6 +16,7 @@ pub use get::{GetCalendarEventRequest, GetCalendarEventResponse, GetCalendarEven
 pub use create::{CreateCalendarEventRequest, CreateCalendarEventResponse, CreateCalendarEventBuilder};
 pub use delete::{DeleteCalendarEventRequest, DeleteCalendarEventResponse, DeleteCalendarEventBuilder};
 pub use list::{ListCalendarEventsRequest, ListCalendarEventsResponse, ListCalendarEventsBuilder};
+pub use reply::{ReplyCalendarEventRequest, ReplyCalendarEventResponse, ReplyCalendarEventBuilder, EventReplyStatus};
 pub use patch::{PatchCalendarEventRequest, PatchCalendarEventResponse, PatchCalendarEventBuilder};
 
 /// 日程管理服务
@@ -521,5 +522,113 @@ impl CalendarEventService {
         event_id: impl Into<String>,
     ) -> PatchCalendarEventBuilder {
         PatchCalendarEventBuilder::new(calendar_id, event_id)
+    }
+
+    /// 回复日程邀请
+    ///
+    /// 回复日程事件的邀请，支持接受、拒绝或暂定回复。
+    /// 用户可以根据自己的日程安排对收到的日程邀请进行响应。
+    ///
+    /// # 参数
+    /// - `req`: 回复日程事件请求
+    ///
+    /// # 返回
+    /// - `Ok(ReplyCalendarEventResponse)`: 回复成功，返回操作结果
+    /// - `Err(SDKError)`: 回复失败，返回错误信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::calendar::v4::calendar_event::{ReplyCalendarEventRequest, EventReplyStatus};
+    ///
+    /// # async fn example() -> Result<(), Box<dyn std::error::Error>> {
+    /// let client = LarkClient::builder("app_id", "app_secret").build()?;
+    /// let request = ReplyCalendarEventRequest::new(
+    ///     "calendar_123",
+    ///     "event_456",
+    ///     EventReplyStatus::Accept
+    /// );
+    /// let response = client.calendar.v4.calendar_event.reply(&request).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub async fn reply(&self, req: &ReplyCalendarEventRequest) -> SDKResult<ReplyCalendarEventResponse> {
+        req.validate()
+            .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
+        log::debug!("开始回复日程邀请: calendar_id={}, event_id={}, reply_status={:?}",
+                   req.calendar_id, req.event_id, req.reply_status);
+
+        // 构建动态端点路径
+        let endpoint = crate::core::endpoints_original::Endpoints::CALENDAR_EVENT_REPLY
+            .replace("{}", &req.calendar_id)
+            .replace("{}", &req.event_id);
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
+            api_path: endpoint,
+            supported_access_token_types: vec![
+                crate::core::constants::AccessTokenType::Tenant,
+                crate::core::constants::AccessTokenType::User
+            ],
+            body: serde_json::to_vec(req)?,
+            ..Default::default()
+        };
+
+        let resp = crate::core::http::Transport::<ReplyCalendarEventResponse>::request(api_req, &self.config, None).await?;
+        let response = resp.data.unwrap_or_default();
+
+        log::info!("日程邀请回复完成: calendar_id={}, event_id={}, reply_status={:?}, success={:?}",
+                   req.calendar_id, req.event_id, response.reply_status, response.success);
+
+        Ok(response)
+    }
+
+    /// 回复日程邀请构建器
+    ///
+    /// 创建一个用于回复日程邀请的构建器实例，支持流式API设计。
+    ///
+    /// # 参数
+    /// - `calendar_id`: 日历ID
+    /// - `event_id`: 日程ID
+    /// - `reply_status`: 回复状态
+    ///
+    /// # 返回
+    /// - `ReplyCalendarEventBuilder`: 日程邀请回复构建器实例
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::calendar::v4::calendar_event::{ReplyCalendarEventBuilder, EventReplyStatus};
+    ///
+    /// # async fn example() -> Result<(), Box<dyn std::error::Error>> {
+    /// let client = LarkClient::builder("app_id", "app_secret").build()?;
+    /// let response = client
+    ///     .calendar
+    ///     .v4
+    ///     .calendar_event
+    ///     .reply_calendar_event_builder("calendar_123", "event_456", EventReplyStatus::Accept)
+    ///     .comment("我会准时参加这个重要会议")
+    ///     .send_notifications(true)
+    ///     .user_id_type("open_id")
+    ///     .execute(&client.calendar.v4.calendar_event)
+    ///     .await?;
+    ///
+    /// if let Some(success) = response.success {
+    ///     if success {
+    ///         println!("日程邀请回复成功");
+    ///     }
+    /// }
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub fn reply_calendar_event_builder(
+        &self,
+        calendar_id: impl Into<String>,
+        event_id: impl Into<String>,
+        reply_status: EventReplyStatus,
+    ) -> ReplyCalendarEventBuilder {
+        ReplyCalendarEventBuilder::new(calendar_id, event_id, reply_status)
     }
 }
