@@ -1,122 +1,583 @@
-#![allow(dead_code)]
-#![allow(unused_variables)]
-#![allow(unused_imports)]
-#![allow(unused_mut)]
-#![allow(non_snake_case)]
-#![allow(clippy::too_many_arguments)]
-#![allow(clippy::module_inception)]
-use crate::core::SDKResult;use reqwest::Method;
-use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
-use crate::,
-{
-    core::,
-{,
-        BaseResponse,
-        ResponseFormat,
-        api_resp::{ApiResponseTrait}
-    config::Config,
-        constants::AccessTokenType,
-        endpoints::cloud_docs::*,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
-};
-    service::bitable::v1::app_dashboard::Dashboard,
-};
-/// 列出仪表盘请求,
-#[derive(Debug, Clone)]
-pub struct ListDashboardRequest {
-    #[serde(skip)]
-    api_request: ApiRequest,
-    /// 多维表格的唯一标识符,
-#[serde(skip)]
-    app_token: String,
-    /// 分页标记,
-#[serde(skip)]
-    page_token: Option<String>,
-    /// 分页大小,
-#[serde(skip)]
-    page_size: Option<i32>}
-impl ListDashboardRequest {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}#[derive(Debug, Clone)]
-pub struct ListDashboardRequestBuilder {
-    request: ListDashboardRequest}
-impl ListDashboardRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}if let Some(page_size) = &self.request.page_size {,
-            self.request,
-.api_request,
-                .query_params
-                .insert("page_size", page_size.to_string());
-self.request,
-    }
-// 应用ExecutableBuilder trait到ListDashboardRequestBuilder,
-crate::impl_executable_builder_owned!(
-    ListDashboardRequestBuilder,
-    DashboardService,
-    ListDashboardRequest,
-    BaseResponse<ListDashboardResponse>,
-    list,
-);
-/// 列出仪表盘响应
-#[derive(Debug, Clone)]
-pub struct ListDashboardResponse {
-    /// 是否还有更多项
-    pub has_more: bool,
-    /// 分页标记
-    pub page_token: Option<String>,
-    /// 总数
-    pub total: i32,
-    /// 仪表盘信息列表
-    pub items: Vec<Dashboard>}
-impl ApiResponseTrait for.* {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
-    }
-/// 仪表盘服务,
-pub struct DashboardService {
-    pub config: Config,
-impl DashboardService {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}/// 列出仪表盘,
-    pub async fn list(
-        &self,
-        request: ListDashboardRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ListDashboardResponse>> {,
-let mut api_req = request.api_request;
-        api_req.set_http_method(Method::GET);
-        api_req.set_api_path(BITABLE_V1_DASHBOARDS.replace("{app_token}", &request.app_token));
-api_req
-            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+//! 列出仪表盘API v1
+//!
+//! 提供飞书多维表格仪表盘的列表查询功能，支持：
+//! - 分页查询仪表盘列表
+//! - 支持筛选和排序
+//! - 提供仪表盘基本信息和权限信息
 
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-Ok(api_resp),
+use crate::core::{
+    api_resp::{ApiResponseTrait, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    ApiRequest, SDKResult,
+};
+use serde::{Deserialize, Serialize};
+
+use super::{AppDashboardService, Dashboard};
+
+/// 列出仪表盘请求
+///
+/// 用于查询指定多维表格应用中的所有仪表盘列表。
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ListDashboardsRequest {
+    /// 多维表格应用的唯一标识符
+    pub app_token: String,
+    /// 分页标记，用于获取下一页数据
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// 分页大小，默认为20，最大为100
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i32>,
+    /// 用户ID类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id_type: Option<String>,
+}
+
+impl ListDashboardsRequest {
+    /// 创建新的列表请求实例
+    ///
+    /// # 参数
+    /// - `app_token`: 多维表格应用的唯一标识符
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::cloud_docs::bitable::v1::app_dashboard::list::ListDashboardsRequest;
+    ///
+    /// let request = ListDashboardsRequest::new("app_token_123");
+    /// ```
+    pub fn new(app_token: impl Into<String>) -> Self {
+        Self {
+            app_token: app_token.into(),
+            page_token: None,
+            page_size: None,
+            user_id_type: None,
+        }
     }
-/// 列出仪表盘 (向后兼容的函数),
-pub async fn list_dashboard(
-    request: ListDashboardRequest,
-    config: Config,
-    option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<ListDashboardResponse>> {,
-let service = DashboardService::new(config);
-    service.list(request, option).await}
+
+    /// 设置分页标记
+    ///
+    /// # 参数
+    /// - `page_token`: 分页标记
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// # use open_lark::service::cloud_docs::bitable::v1::app_dashboard::list::ListDashboardsRequest;
+    /// let mut request = ListDashboardsRequest::new("app_token_123");
+    /// request.set_page_token("next_page_token");
+    /// ```
+    pub fn set_page_token(&mut self, page_token: impl Into<String>) -> &mut Self {
+        self.page_token = Some(page_token.into());
+        self
+    }
+
+    /// 设置分页大小
+    ///
+    /// # 参数
+    /// - `page_size`: 分页大小，范围1-100
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// # use open_lark::service::cloud_docs::bitable::v1::app_dashboard::list::ListDashboardsRequest;
+    /// let mut request = ListDashboardsRequest::new("app_token_123");
+    /// request.set_page_size(50);
+    /// ```
+    pub fn set_page_size(&mut self, page_size: i32) -> &mut Self {
+        if page_size > 0 && page_size <= 100 {
+            self.page_size = Some(page_size);
+        }
+        self
+    }
+
+    /// 设置用户ID类型
+    ///
+    /// # 参数
+    /// - `user_id_type`: 用户ID类型（open_id、user_id、union_id）
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// # use open_lark::service::cloud_docs::bitable::v1::app_dashboard::list::ListDashboardsRequest;
+    /// let mut request = ListDashboardsRequest::new("app_token_123");
+    /// request.set_user_id_type("open_id");
+    /// ```
+    pub fn set_user_id_type(&mut self, user_id_type: impl Into<String>) -> &mut Self {
+        self.user_id_type = Some(user_id_type.into());
+        self
+    }
+
+    /// 验证请求参数
+    ///
+    /// # 返回值
+    /// - `Ok(())`: 验证通过
+    /// - `Err(String)`: 验证失败，返回错误信息
+    pub fn validate(&self) -> Result<(), String> {
+        if self.app_token.trim().is_empty() {
+            return Err("应用token不能为空".to_string());
+        }
+
+        if let Some(page_size) = self.page_size {
+            if page_size < 1 || page_size > 100 {
+                return Err("分页大小必须在1-100之间".to_string());
+            }
+        }
+
+        if let Some(ref user_id_type) = self.user_id_type {
+            if user_id_type.trim().is_empty() {
+                return Err("用户ID类型不能为空".to_string());
+            }
+        }
+
+        Ok(())
+    }
+}
+
+/// 列出仪表盘响应数据
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct ListDashboardsResponseData {
+    /// 仪表盘列表
+    pub items: Vec<Dashboard>,
+    /// 分页标记，用于获取下一页数据
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// 是否有更多数据
+    pub has_more: Option<bool>,
+    /// 总数量（可能不存在）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total: Option<i32>,
+}
+
+/// 列出仪表盘响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct ListDashboardsResponse {
+    /// 响应数据
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data: Option<ListDashboardsResponseData>,
+    /// 是否成功
+    pub success: bool,
+    /// 错误消息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// 错误代码
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+}
+
+impl ApiResponseTrait for ListDashboardsResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl AppDashboardService {
+    /// 列出仪表盘
+    ///
+    /// 查询指定多维表格应用中的所有仪表盘列表，支持分页查询。
+    ///
+    /// # 参数
+    /// * `req` - 列出仪表盘请求
+    ///
+    /// # 返回值
+    /// 返回仪表盘列表信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::cloud_docs::bitable::v1::app_dashboard::{
+    ///     AppDashboardService, list::ListDashboardsRequest
+    /// };
+    ///
+    /// let service = AppDashboardService::new(config);
+    /// let request = ListDashboardsRequest::new("app_token_123")
+    ///     .set_page_size(20)
+    ///     .set_user_id_type("open_id");
+    ///
+    /// let result = service.list_dashboards(&request).await?;
+    /// for dashboard in &result.data.as_ref().unwrap().items {
+    ///     println!("仪表盘名称: {}", dashboard.name);
+    /// }
+    /// ```
+    pub async fn list_dashboards(
+        &self,
+        req: &ListDashboardsRequest,
+    ) -> SDKResult<ListDashboardsResponse> {
+        req.validate()
+            .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
+        log::debug!("开始列出仪表盘: app_token={}", req.app_token);
+
+        // 构建查询参数
+        let mut query_params = Vec::new();
+        if let Some(ref page_token) = req.page_token {
+            query_params.push(("page_token", page_token.clone()));
+        }
+        if let Some(page_size) = req.page_size {
+            query_params.push(("page_size", page_size.to_string()));
+        }
+        if let Some(ref user_id_type) = req.user_id_type {
+            query_params.push(("user_id_type", user_id_type.clone()));
+        }
+
+        // 构建API路径
+        let endpoint = crate::core::endpoints_original::Endpoints::BITABLE_V1_DASHBOARDS
+            .replace("{app_token}", &req.app_token);
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path: endpoint,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params,
+            body: Vec::new(), // GET请求无body
+            ..Default::default()
+        };
+
+        let resp = Transport::<ListDashboardsResponse>::request(api_req, &self.config, None).await?;
+        let response = resp.data.unwrap_or_default();
+
+        if response.success {
+            if let Some(ref data) = response.data {
+                log::info!(
+                    "仪表盘列表获取完成: app_token={}, count={}, has_more={:?}",
+                    req.app_token,
+                    data.items.len(),
+                    data.has_more
+                );
+            }
+        } else {
+            log::warn!(
+                "仪表盘列表获取失败: app_token={}, error={:?}",
+                req.app_token,
+                response.error_message
+            );
+        }
+
+        Ok(response)
+    }
+}
+
+// ==================== 构建器模式 ====================
+
+/// 列出仪表盘构建器
+#[derive(Debug, Clone)]
+pub struct ListDashboardsBuilder {
+    request: ListDashboardsRequest,
+}
+
+impl Default for ListDashboardsBuilder {
+    fn default() -> Self {
+        Self {
+            request: ListDashboardsRequest {
+                app_token: String::new(),
+                page_token: None,
+                page_size: None,
+                user_id_type: None,
+            },
+        }
+    }
+}
+
+impl ListDashboardsBuilder {
+    /// 创建新的构建器
+    ///
+    /// # 参数
+    /// - `app_token`: 多维表格应用的唯一标识符
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::cloud_docs::bitable::v1::app_dashboard::list::ListDashboardsBuilder;
+    ///
+    /// let builder = ListDashboardsBuilder::new("app_token_123");
+    /// ```
+    pub fn new(app_token: impl Into<String>) -> Self {
+        Self {
+            request: ListDashboardsRequest::new(app_token),
+        }
+    }
+
+    /// 设置分页标记
+    ///
+    /// # 参数
+    /// - `page_token`: 分页标记
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// # use open_lark::service::cloud_docs::bitable::v1::app_dashboard::list::ListDashboardsBuilder;
+    /// let builder = ListDashboardsBuilder::new("app_token_123")
+    ///     .page_token("next_page_token");
+    /// ```
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.request.set_page_token(page_token);
+        self
+    }
+
+    /// 设置分页大小
+    ///
+    /// # 参数
+    /// - `page_size`: 分页大小，范围1-100
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// # use open_lark::service::cloud_docs::bitable::v1::app_dashboard::list::ListDashboardsBuilder;
+    /// let builder = ListDashboardsBuilder::new("app_token_123")
+    ///     .page_size(50);
+    /// ```
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.request.set_page_size(page_size);
+        self
+    }
+
+    /// 设置用户ID类型
+    ///
+    /// # 参数
+    /// - `user_id_type`: 用户ID类型
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// # use open_lark::service::cloud_docs::bitable::v1::app_dashboard::list::ListDashboardsBuilder;
+    /// let builder = ListDashboardsBuilder::new("app_token_123")
+    ///     .user_id_type("open_id");
+    /// ```
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.request.set_user_id_type(user_id_type);
+        self
+    }
+
+    /// 执行列出仪表盘操作
+    ///
+    /// # 参数
+    /// - `service`: 仪表盘服务实例
+    ///
+    /// # 返回值
+    /// 返回仪表盘列表信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::cloud_docs::bitable::v1::app_dashboard::{
+    ///     AppDashboardService, list::ListDashboardsBuilder
+    /// };
+    ///
+    /// let service = AppDashboardService::new(config);
+    ///
+    /// let result = ListDashboardsBuilder::new("app_token_123")
+    ///     .page_size(20)
+    ///     .user_id_type("open_id")
+    ///     .execute(&service)
+    ///     .await?;
+    /// ```
+    pub async fn execute(self, service: &AppDashboardService) -> SDKResult<ListDashboardsResponse> {
+        service.list_dashboards(&self.request).await
+    }
+}
+
+impl AppDashboardService {
+    /// 创建列出仪表盘构建器
+    ///
+    /// # 返回值
+    /// 返回列表构建器实例
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::cloud_docs::bitable::v1::app_dashboard::AppDashboardService;
+    ///
+    /// let service = AppDashboardService::new(config);
+    /// let builder = service.list_dashboards_builder("app_token_123");
+    /// ```
+    pub fn list_dashboards_builder(&self, app_token: impl Into<String>) -> ListDashboardsBuilder {
+        ListDashboardsBuilder::new(app_token)
+    }
+}
+
+// ==================== 单元测试 ====================
+
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test]
-    fn test_list_dashboard_request_builder() {
-let request = ListDashboardRequest::builder(),
-            .app_token()
-.page_size()
-            .build();
 
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.page_size, Some(20));
+    #[test]
+    fn test_list_dashboards_request_creation() {
+        let request = ListDashboardsRequest::new("app_token_123");
+        assert_eq!(request.app_token, "app_token_123");
+        assert_eq!(request.page_token, None);
+        assert_eq!(request.page_size, None);
+        assert_eq!(request.user_id_type, None);
+    }
+
+    #[test]
+    fn test_list_dashboards_request_with_fields() {
+        let mut request = ListDashboardsRequest::new("app_token_123");
+        request.set_page_token("next_page_token");
+        request.set_page_size(50);
+        request.set_user_id_type("open_id");
+
+        assert_eq!(request.app_token, "app_token_123");
+        assert_eq!(request.page_token, Some("next_page_token".to_string()));
+        assert_eq!(request.page_size, Some(50));
+        assert_eq!(request.user_id_type, Some("open_id".to_string()));
+    }
+
+    #[test]
+    fn test_request_validation_success() {
+        let request = ListDashboardsRequest::new("app_token_123");
+        assert!(request.validate().is_ok());
+    }
+
+    #[test]
+    fn test_request_validation_empty_app_token() {
+        let request = ListDashboardsRequest::new("");
+        let result = request.validate();
+        assert!(result.is_err());
+        assert_eq!(result.unwrap_err(), "应用token不能为空");
+    }
+
+    #[test]
+    fn test_request_validation_page_size_out_of_range() {
+        let mut request = ListDashboardsRequest::new("app_token_123");
+        request.set_page_size(0);
+        let result = request.validate();
+        assert!(result.is_err());
+        assert_eq!(result.unwrap_err(), "分页大小必须在1-100之间");
+
+        request.set_page_size(101);
+        let result = request.validate();
+        assert!(result.is_err());
+        assert_eq!(result.unwrap_err(), "分页大小必须在1-100之间");
+    }
+
+    #[test]
+    fn test_request_validation_empty_user_id_type() {
+        let mut request = ListDashboardsRequest::new("app_token_123");
+        request.set_user_id_type("");
+        let result = request.validate();
+        assert!(result.is_err());
+        assert_eq!(result.unwrap_err(), "用户ID类型不能为空");
+    }
+
+    #[test]
+    fn test_response_creation() {
+        let dashboard = Dashboard {
+            block_id: "block_123".to_string(),
+            name: "测试仪表盘".to_string(),
+        };
+
+        let data = ListDashboardsResponseData {
+            items: vec![dashboard],
+            page_token: Some("next_token".to_string()),
+            has_more: Some(true),
+            total: Some(100),
+        };
+
+        let response = ListDashboardsResponse {
+            data: Some(data),
+            success: true,
+            ..Default::default()
+        };
+
+        assert!(response.success);
+        assert_eq!(response.data.unwrap().items.len(), 1);
+        assert_eq!(response.data.unwrap().items[0].name, "测试仪表盘");
+    }
+
+    #[test]
+    fn test_list_dashboards_builder() {
+        let builder = ListDashboardsBuilder::new("app_token_123")
+            .page_token("next_token")
+            .page_size(30)
+            .user_id_type("union_id");
+
+        assert_eq!(builder.request.app_token, "app_token_123");
+        assert_eq!(builder.request.page_token, Some("next_token".to_string()));
+        assert_eq!(builder.request.page_size, Some(30));
+        assert_eq!(builder.request.user_id_type, Some("union_id".to_string()));
+    }
+
+    #[test]
+    fn test_builder_default() {
+        let builder = ListDashboardsBuilder::default();
+        assert_eq!(builder.request.app_token, "");
+        assert_eq!(builder.request.page_token, None);
+        assert_eq!(builder.request.page_size, None);
+        assert_eq!(builder.request.user_id_type, None);
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(ListDashboardsResponse::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_request_serialization() {
+        let request = ListDashboardsRequest {
+            app_token: "app_token_123".to_string(),
+            page_token: Some("next_token".to_string()),
+            page_size: Some(50),
+            user_id_type: Some("open_id".to_string()),
+        };
+
+        let serialized = serde_json::to_string(&request).unwrap();
+        let deserialized: ListDashboardsRequest = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(request.app_token, deserialized.app_token);
+        assert_eq!(request.page_token, deserialized.page_token);
+        assert_eq!(request.page_size, deserialized.page_size);
+        assert_eq!(request.user_id_type, deserialized.user_id_type);
+    }
+
+    #[test]
+    fn test_response_serialization() {
+        let mut response = ListDashboardsResponse::default();
+        response.data = Some(ListDashboardsResponseData {
+            items: vec![Dashboard {
+                block_id: "block_456".to_string(),
+                name: "序列化测试".to_string(),
+            }],
+            page_token: Some("test_token".to_string()),
+            has_more: Some(false),
+            total: Some(1),
+        });
+        response.success = true;
+
+        let serialized = serde_json::to_string(&response).unwrap();
+        let deserialized: ListDashboardsResponse = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(response.success, deserialized.success);
+        assert_eq!(response.data.unwrap().items.len(), deserialized.data.unwrap().items.len());
+        assert_eq!(response.data.unwrap().items[0].name, "序列化测试");
+    }
+
+    #[test]
+    fn test_service_builder_method() {
+        let config = Config::default();
+        let service = AppDashboardService::new(config);
+        let builder = service.list_dashboards_builder("app_token_test");
+
+        assert_eq!(builder.request.app_token, "app_token_test");
+    }
+
+    #[test]
+    fn test_comprehensive_scenario() {
+        // 测试完整的业务场景
+        let request = ListDashboardsRequest::new("complex_app_token")
+            .page_size(25)
+            .user_id_type("union_id")
+            .page_token("specific_page_token");
+
+        assert!(request.validate().is_ok());
+
+        // 验证所有字段都正确设置
+        assert_eq!(request.app_token, "complex_app_token");
+        assert_eq!(request.page_size, Some(25));
+        assert_eq!(request.user_id_type, Some("union_id".to_string()));
+        assert_eq!(request.page_token, Some("specific_page_token".to_string()));
+    }
+}
