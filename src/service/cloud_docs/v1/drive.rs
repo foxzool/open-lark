@@ -335,6 +335,198 @@ impl ApiResponseTrait for DeleteFileResponse {
     }
 }
 
+// ==================== 导出任务管理 ====================
+
+/// 导出任务设置
+///
+/// 配置导出任务的详细参数，包括导出格式、质量控制等选项
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct ExportSettings {
+    /// 导出质量
+    /// 文档导出的质量控制选项，如高清、标准等
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quality: Option<String>,
+    /// 是否包含批注
+    /// true表示包含文档批注，false表示不包含
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_comments: Option<bool>,
+    /// 页面范围
+    /// 指定导出的页面范围，如"1-5,8,10-12"
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_range: Option<String>,
+    /// 水印设置
+    /// 导出文档的水印配置
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub watermark: Option<String>,
+}
+
+/// 导出任务请求
+///
+/// 用于创建文档导出任务的请求参数，支持多种文件格式导出
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ExportTaskRequest {
+    /// 请求体
+    #[serde(skip)]
+    pub api_req: ApiRequest,
+    /// 导出文件类型
+    /// 支持的导出格式：docx、pdf、png、jpg等
+    pub file_type: String,
+    /// 文件Token列表
+    /// 要导出的文件或文件夹的唯一标识符列表
+    pub file_tokens: Vec<String>,
+    /// 导出设置
+    /// 导出任务的详细配置选项
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_settings: Option<ExportSettings>,
+}
+
+impl Default for ExportTaskRequest {
+    fn default() -> Self {
+        Self {
+            api_req: ApiRequest::default(),
+            file_type: String::new(),
+            file_tokens: Vec::new(),
+            export_settings: None,
+        }
+    }
+}
+
+impl ExportTaskRequest {
+    /// 创建新的导出任务请求
+    ///
+    /// # 参数
+    /// * `file_type` - 导出文件类型（如"docx", "pdf"等）
+    ///
+    /// # 返回
+    /// 返回导出任务请求实例
+    ///
+    /// # 示例
+    /// ```rust
+    /// let request = ExportTaskRequest::new("pdf");
+    /// ```
+    pub fn new(file_type: impl Into<String>) -> Self {
+        Self {
+            api_req: ApiRequest::default(),
+            file_type: file_type.into(),
+            file_tokens: Vec::new(),
+            export_settings: None,
+        }
+    }
+
+    /// 添加文件Token
+    ///
+    /// # 参数
+    /// * `file_token` - 文件或文件夹Token
+    ///
+    /// # 返回
+    /// 返回自身支持链式调用
+    ///
+    /// # 示例
+    /// ```rust
+    /// let request = ExportTaskRequest::new("docx")
+    ///     .add_file_token("file_123")
+    ///     .add_file_token("file_456");
+    /// ```
+    pub fn add_file_token(mut self, file_token: impl Into<String>) -> Self {
+        self.file_tokens.push(file_token.into());
+        self
+    }
+
+    /// 设置导出配置
+    ///
+    /// # 参数
+    /// * `settings` - 导出设置配置
+    ///
+    /// # 返回
+    /// 返回自身支持链式调用
+    pub fn export_settings(mut self, settings: ExportSettings) -> Self {
+        self.export_settings = Some(settings);
+        self
+    }
+
+    /// 验证请求参数
+    ///
+    /// # 返回
+    /// * `Ok(())` - 验证通过
+    /// * `Err(String)` - 验证失败，返回错误描述
+    pub fn validate(&self) -> Result<(), String> {
+        if self.file_type.trim().is_empty() {
+            return Err("导出文件类型不能为空".to_string());
+        }
+
+        let valid_types = ["docx", "pdf", "txt", "html", "png", "jpg", "jpeg"];
+        if !valid_types.contains(&self.file_type.to_lowercase().as_str()) {
+            return Err(format!(
+                "不支持的导出文件类型: {}，支持的类型: {}",
+                self.file_type,
+                valid_types.join(", ")
+            ));
+        }
+
+        if self.file_tokens.is_empty() {
+            return Err("文件Token列表不能为空".to_string());
+        }
+
+        for (index, file_token) in self.file_tokens.iter().enumerate() {
+            if file_token.trim().is_empty() {
+                return Err(format!("第{}个文件Token不能为空", index + 1));
+            }
+            if file_token.len() > 200 {
+                return Err(format!("第{}个文件Token长度不能超过200个字符", index + 1));
+            }
+        }
+
+        Ok(())
+    }
+}
+
+/// 导出任务响应
+///
+/// 包含创建的导出任务信息，包括任务ID、状态和下载链接
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct ExportTaskResponse {
+    /// 任务ID
+    /// 导出任务的唯一标识符，用于查询任务状态和获取结果
+    pub task_id: String,
+    /// 任务状态
+    /// 任务当前状态：processing(处理中)、completed(已完成)、failed(失败)
+    pub task_status: String,
+    /// 下载链接
+    /// 任务完成后，可通过此链接下载导出的文件
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub download_url: Option<String>,
+    /// 过期时间
+    /// 下载链接的过期时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expire_time: Option<String>,
+    /// 文件大小
+    /// 导出文件的大小（字节）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_size: Option<i64>,
+    /// 创建时间
+    /// 任务的创建时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<String>,
+    /// 完成时间
+    /// 任务的完成时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub complete_time: Option<String>,
+    /// 错误信息
+    /// 如果任务失败，包含具体的错误信息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// 错误代码
+    /// 如果任务失败，包含具体的错误代码
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+}
+
+impl ApiResponseTrait for ExportTaskResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
 /// 云盘服务 v1
 ///
 /// 提供完整的文件管理功能，包括：
@@ -503,6 +695,84 @@ impl DriveServiceV1 {
     pub fn delete_file_builder(&self, request: DeleteFileRequest) -> DeleteFileBuilder {
         DeleteFileBuilder::new(std::sync::Arc::new(self.clone()), request)
     }
+
+    /// 创建导出任务
+    ///
+    /// 创建文档导出任务，支持将云文档导出为多种格式（PDF、Word、图片等）。
+    /// 适用于批量文档处理、文档归档、格式转换等企业应用场景。
+    ///
+    /// # 参数
+    /// * `request` - 导出任务请求
+    /// * `option` - 可选请求配置
+    ///
+    /// # 返回
+    /// 成功返回导出任务响应，包含任务ID和状态信息；失败返回错误信息
+    ///
+    /// # 示例
+    /// ```rust
+    /// let mut request = ExportTaskRequest::new("pdf");
+    /// request.add_file_token("file_token_123456789");
+    /// let response = service.create_export_task(request, None).await?;
+    ///
+    /// match response.task_status {
+    ///     "processing" => println!("任务处理中..."),
+    ///     "completed" => println!("任务完成，下载链接: {:?}", response.download_url),
+    ///     "failed" => println!("任务失败: {:?}", response.error_message),
+    ///     _ => println!("未知状态"),
+    /// }
+    /// ```
+    pub async fn create_export_task(
+        &self,
+        request: ExportTaskRequest,
+        option: Option<crate::core::req_option::RequestOption>,
+    ) -> SDKResult<BaseResponse<ExportTaskResponse>> {
+        // 验证请求参数
+        request.validate().map_err(|e| {
+            crate::core::error::LarkAPIError::IllegalParamError(format!("参数验证失败: {}", e))
+        })?;
+
+        // 创建API请求
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
+            api_path: crate::core::endpoints_original::Endpoints::DRIVE_V1_EXPORT_TASKS.to_string(),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: serde_json::to_vec(&request)?,
+            ..Default::default()
+        };
+
+        // 发送HTTP请求
+        let api_resp =
+            Transport::<ExportTaskResponse>::request(api_req, &self.config, option).await?;
+
+        Ok(api_resp)
+    }
+
+    /// 获取导出任务构建器
+    ///
+    /// 创建一个导出任务的构建器，支持链式调用和完整的错误处理
+    ///
+    /// # 参数
+    /// * `request` - 导出任务请求
+    ///
+    /// # 返回
+    /// 返回导出任务构建器实例
+    ///
+    /// # 示例
+    /// ```rust
+    /// let response = service
+    ///     .create_export_task_builder(ExportTaskRequest::new("pdf"))
+    ///     .add_file_token("file_123")
+    ///     .export_settings(ExportSettings {
+    ///         quality: Some("high".to_string()),
+    ///         include_comments: Some(true),
+    ///         ..Default::default()
+    ///     })
+    ///     .execute()
+    ///     .await?;
+    /// ```
+    pub fn create_export_task_builder(&self, request: ExportTaskRequest) -> CreateExportTaskBuilder {
+        CreateExportTaskBuilder::new(std::sync::Arc::new(self.clone()), request)
+    }
 }
 
 // ==================== GetTaskStatusBuilder 构建器模式 ====================
@@ -624,6 +894,199 @@ impl DeleteFileBuilder {
         self.service
             .as_ref()
             .delete_file(self.request.clone(), None)
+            .await
+    }
+}
+
+// ==================== CreateExportTaskBuilder 构建器模式 ====================
+
+/// 创建导出任务构建器
+///
+/// 提供流畅的API来构建创建导出任务的请求，支持链式调用
+/// 和完整的参数验证。支持多种导出格式和高级配置选项。
+#[derive(Debug, Clone)]
+pub struct CreateExportTaskBuilder {
+    service: std::sync::Arc<DriveServiceV1>,
+    request: ExportTaskRequest,
+}
+
+impl CreateExportTaskBuilder {
+    /// 创建新的导出任务构建器
+    ///
+    /// # 参数
+    /// * `service` - Drive服务实例
+    /// * `request` - 导出任务请求
+    pub fn new(service: std::sync::Arc<DriveServiceV1>, request: ExportTaskRequest) -> Self {
+        Self { service, request }
+    }
+
+    /// 设置导出文件类型
+    ///
+    /// # 参数
+    /// * `file_type` - 导出文件类型（如"docx", "pdf"等）
+    ///
+    /// # 示例
+    /// ```rust
+    /// let builder = CreateExportTaskBuilder::new(service, request)
+    ///     .file_type("pdf");
+    /// ```
+    pub fn file_type(mut self, file_type: impl Into<String>) -> Self {
+        self.request.file_type = file_type.into();
+        self
+    }
+
+    /// 添加文件Token
+    ///
+    /// # 参数
+    /// * `file_token` - 文件或文件夹Token
+    ///
+    /// # 示例
+    /// ```rust
+    /// let builder = CreateExportTaskBuilder::new(service, request)
+    ///     .add_file_token("file_123456789")
+    ///     .add_file_token("file_987654321");
+    /// ```
+    pub fn add_file_token(mut self, file_token: impl Into<String>) -> Self {
+        self.request.file_tokens.push(file_token.into());
+        self
+    }
+
+    /// 设置文件Token列表
+    ///
+    /// # 参数
+    /// * `file_tokens` - 文件Token列表
+    ///
+    /// # 示例
+    /// ```rust
+    /// let file_tokens = vec!["file_123".to_string(), "file_456".to_string()];
+    /// let builder = CreateExportTaskBuilder::new(service, request)
+    ///     .file_tokens(file_tokens);
+    /// ```
+    pub fn file_tokens(mut self, file_tokens: Vec<String>) -> Self {
+        self.request.file_tokens = file_tokens;
+        self
+    }
+
+    /// 设置导出配置
+    ///
+    /// # 参数
+    /// * `settings` - 导出设置配置
+    ///
+    /// # 示例
+    /// ```rust
+    /// let settings = ExportSettings {
+    ///     quality: Some("high".to_string()),
+    ///     include_comments: Some(true),
+    ///     ..Default::default()
+    /// };
+    /// let builder = CreateExportTaskBuilder::new(service, request)
+    ///     .export_settings(settings);
+    /// ```
+    pub fn export_settings(mut self, settings: ExportSettings) -> Self {
+        self.request.export_settings = Some(settings);
+        self
+    }
+
+    /// 设置导出质量
+    ///
+    /// # 参数
+    /// * `quality` - 导出质量（如"high", "standard"等）
+    ///
+    /// # 示例
+    /// ```rust
+    /// let builder = CreateExportTaskBuilder::new(service, request)
+    ///     .quality("high");
+    /// ```
+    pub fn quality(mut self, quality: impl Into<String>) -> Self {
+        if self.request.export_settings.is_none() {
+            self.request.export_settings = Some(ExportSettings::default());
+        }
+        self.request.export_settings.as_mut().unwrap().quality = Some(quality.into());
+        self
+    }
+
+    /// 设置是否包含批注
+    ///
+    /// # 参数
+    /// * `include_comments` - 是否包含批注
+    ///
+    /// # 示例
+    /// ```rust
+    /// let builder = CreateExportTaskBuilder::new(service, request)
+    ///     .include_comments(true);
+    /// ```
+    pub fn include_comments(mut self, include_comments: bool) -> Self {
+        if self.request.export_settings.is_none() {
+            self.request.export_settings = Some(ExportSettings::default());
+        }
+        self.request.export_settings.as_mut().unwrap().include_comments = Some(include_comments);
+        self
+    }
+
+    /// 设置页面范围
+    ///
+    /// # 参数
+    /// * `page_range` - 页面范围（如"1-5,8,10-12"）
+    ///
+    /// # 示例
+    /// ```rust
+    /// let builder = CreateExportTaskBuilder::new(service, request)
+    ///     .page_range("1-5,8,10-12");
+    /// ```
+    pub fn page_range(mut self, page_range: impl Into<String>) -> Self {
+        if self.request.export_settings.is_none() {
+            self.request.export_settings = Some(ExportSettings::default());
+        }
+        self.request.export_settings.as_mut().unwrap().page_range = Some(page_range.into());
+        self
+    }
+
+    /// 设置水印
+    ///
+    /// # 参数
+    /// * `watermark` - 水印设置
+    ///
+    /// # 示例
+    /// ```rust
+    /// let builder = CreateExportTaskBuilder::new(service, request)
+    ///     .watermark("机密文档");
+    /// ```
+    pub fn watermark(mut self, watermark: impl Into<String>) -> Self {
+        if self.request.export_settings.is_none() {
+            self.request.export_settings = Some(ExportSettings::default());
+        }
+        self.request.export_settings.as_mut().unwrap().watermark = Some(watermark.into());
+        self
+    }
+
+    /// 执行创建导出任务请求
+    ///
+    /// # 返回
+    /// 成功返回导出任务响应，失败返回错误信息
+    ///
+    /// # 示例
+    /// ```rust
+    /// let response = CreateExportTaskBuilder::new(service, request)
+    ///     .file_type("pdf")
+    ///     .add_file_token("file_123456789")
+    ///     .quality("high")
+    ///     .include_comments(true)
+    ///     .execute()
+    ///     .await?;
+    ///
+    /// println!("任务ID: {}", response.task_id);
+    /// println!("任务状态: {}", response.task_status);
+    /// ```
+    pub async fn execute(self) -> SDKResult<BaseResponse<ExportTaskResponse>> {
+        // 验证请求参数
+        self.request.validate().map_err(|e| {
+            crate::core::error::LarkAPIError::IllegalParamError(format!("参数验证失败: {}", e))
+        })?;
+
+        // 执行请求
+        self.service
+            .as_ref()
+            .create_export_task(self.request.clone(), None)
             .await
     }
 }
@@ -1294,6 +1757,556 @@ mod tests {
                 should_be_valid,
                 is_valid
             );
+        }
+    }
+
+    // ==================== 导出任务单元测试 ====================
+
+    #[test]
+    fn test_export_settings_default_creation() {
+        let settings = ExportSettings::default();
+        assert_eq!(settings.quality, None);
+        assert_eq!(settings.include_comments, None);
+        assert_eq!(settings.page_range, None);
+        assert_eq!(settings.watermark, None);
+    }
+
+    #[test]
+    fn test_export_settings_with_data() {
+        let settings = ExportSettings {
+            quality: Some("high".to_string()),
+            include_comments: Some(true),
+            page_range: Some("1-5,8".to_string()),
+            watermark: Some("机密文档".to_string()),
+        };
+
+        assert_eq!(settings.quality, Some("high".to_string()));
+        assert_eq!(settings.include_comments, Some(true));
+        assert_eq!(settings.page_range, Some("1-5,8".to_string()));
+        assert_eq!(settings.watermark, Some("机密文档".to_string()));
+    }
+
+    #[test]
+    fn test_export_task_request_default_creation() {
+        let request = ExportTaskRequest::default();
+        assert_eq!(request.file_type, "");
+        assert!(request.file_tokens.is_empty());
+        assert_eq!(request.export_settings, None);
+    }
+
+    #[test]
+    fn test_export_task_request_new() {
+        let request = ExportTaskRequest::new("pdf");
+        assert_eq!(request.file_type, "pdf");
+        assert!(request.file_tokens.is_empty());
+        assert_eq!(request.export_settings, None);
+    }
+
+    #[test]
+    fn test_export_task_request_add_file_token() {
+        let request = ExportTaskRequest::new("docx")
+            .add_file_token("file_123")
+            .add_file_token("file_456");
+
+        assert_eq!(request.file_type, "docx");
+        assert_eq!(request.file_tokens.len(), 2);
+        assert_eq!(request.file_tokens[0], "file_123");
+        assert_eq!(request.file_tokens[1], "file_456");
+    }
+
+    #[test]
+    fn test_export_task_request_export_settings() {
+        let settings = ExportSettings {
+            quality: Some("standard".to_string()),
+            include_comments: Some(false),
+            ..Default::default()
+        };
+
+        let request = ExportTaskRequest::new("pdf")
+            .add_file_token("file_123")
+            .export_settings(settings);
+
+        assert_eq!(request.file_type, "pdf");
+        assert_eq!(request.file_tokens.len(), 1);
+        assert!(request.export_settings.is_some());
+        assert_eq!(
+            request.export_settings.as_ref().unwrap().quality,
+            Some("standard".to_string())
+        );
+        assert_eq!(
+            request.export_settings.as_ref().unwrap().include_comments,
+            Some(false)
+        );
+    }
+
+    #[test]
+    fn test_export_task_request_validation_success() {
+        let request = ExportTaskRequest::new("pdf")
+            .add_file_token("file_123456789")
+            .add_file_token("file_987654321");
+
+        assert!(request.validate().is_ok());
+    }
+
+    #[test]
+    fn test_export_task_request_validation_empty_file_type() {
+        let request = ExportTaskRequest::new("")
+            .add_file_token("file_123");
+
+        let result = request.validate();
+        assert!(result.is_err());
+        assert!(result.unwrap_err().contains("导出文件类型不能为空"));
+    }
+
+    #[test]
+    fn test_export_task_request_validation_invalid_file_type() {
+        let request = ExportTaskRequest::new("xyz")
+            .add_file_token("file_123");
+
+        let result = request.validate();
+        assert!(result.is_err());
+        assert!(result.unwrap_err().contains("不支持的导出文件类型"));
+    }
+
+    #[test]
+    fn test_export_task_request_validation_empty_file_tokens() {
+        let request = ExportTaskRequest::new("pdf");
+
+        let result = request.validate();
+        assert!(result.is_err());
+        assert!(result.unwrap_err().contains("文件Token列表不能为空"));
+    }
+
+    #[test]
+    fn test_export_task_request_validation_empty_token() {
+        let request = ExportTaskRequest::new("pdf")
+            .add_file_token("")
+            .add_file_token("file_123");
+
+        let result = request.validate();
+        assert!(result.is_err());
+        assert!(result.unwrap_err().contains("第1个文件Token不能为空"));
+    }
+
+    #[test]
+    fn test_export_task_request_validation_token_too_long() {
+        let long_token = "a".repeat(201);
+        let request = ExportTaskRequest::new("pdf")
+            .add_file_token("file_123")
+            .add_file_token(long_token);
+
+        let result = request.validate();
+        assert!(result.is_err());
+        assert!(result.unwrap_err().contains("第2个文件Token长度不能超过200个字符"));
+    }
+
+    #[test]
+    fn test_export_task_request_case_insensitive_file_type() {
+        let request = ExportTaskRequest::new("PDF")
+            .add_file_token("file_123");
+
+        assert!(request.validate().is_ok());
+    }
+
+    #[test]
+    fn test_export_task_response_default_creation() {
+        let response = ExportTaskResponse::default();
+        assert_eq!(response.task_id, "");
+        assert_eq!(response.task_status, "");
+        assert_eq!(response.download_url, None);
+        assert_eq!(response.expire_time, None);
+        assert_eq!(response.file_size, None);
+        assert_eq!(response.create_time, None);
+        assert_eq!(response.complete_time, None);
+        assert_eq!(response.error_message, None);
+        assert_eq!(response.error_code, None);
+    }
+
+    #[test]
+    fn test_export_task_response_with_data() {
+        let response = ExportTaskResponse {
+            task_id: "task_123456789".to_string(),
+            task_status: "completed".to_string(),
+            download_url: Some("https://example.com/export.pdf".to_string()),
+            expire_time: Some("2024-12-31T23:59:59Z".to_string()),
+            file_size: Some(1024000),
+            create_time: Some("2024-01-01T10:00:00Z".to_string()),
+            complete_time: Some("2024-01-01T10:05:00Z".to_string()),
+            error_message: None,
+            error_code: None,
+        };
+
+        assert_eq!(response.task_id, "task_123456789");
+        assert_eq!(response.task_status, "completed");
+        assert_eq!(response.download_url, Some("https://example.com/export.pdf".to_string()));
+        assert_eq!(response.expire_time, Some("2024-12-31T23:59:59Z".to_string()));
+        assert_eq!(response.file_size, Some(1024000));
+        assert_eq!(response.create_time, Some("2024-01-01T10:00:00Z".to_string()));
+        assert_eq!(response.complete_time, Some("2024-01-01T10:05:00Z".to_string()));
+        assert_eq!(response.error_message, None);
+        assert_eq!(response.error_code, None);
+    }
+
+    #[test]
+    fn test_export_task_response_error_case() {
+        let response = ExportTaskResponse {
+            task_id: "task_123456789".to_string(),
+            task_status: "failed".to_string(),
+            download_url: None,
+            expire_time: None,
+            file_size: None,
+            create_time: Some("2024-01-01T10:00:00Z".to_string()),
+            complete_time: Some("2024-01-01T10:02:00Z".to_string()),
+            error_message: Some("文件格式不支持".to_string()),
+            error_code: Some("INVALID_FORMAT".to_string()),
+        };
+
+        assert_eq!(response.task_id, "task_123456789");
+        assert_eq!(response.task_status, "failed");
+        assert_eq!(response.download_url, None);
+        assert_eq!(response.error_message, Some("文件格式不支持".to_string()));
+        assert_eq!(response.error_code, Some("INVALID_FORMAT".to_string()));
+    }
+
+    #[test]
+    fn test_export_task_request_serialization() {
+        let request = ExportTaskRequest::new("pdf")
+            .add_file_token("file_123")
+            .add_file_token("file_456");
+
+        let serialized = serde_json::to_string(&request).unwrap();
+        let deserialized: ExportTaskRequest = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(deserialized.file_type, "pdf");
+        assert_eq!(deserialized.file_tokens.len(), 2);
+        assert_eq!(deserialized.file_tokens[0], "file_123");
+        assert_eq!(deserialized.file_tokens[1], "file_456");
+    }
+
+    #[test]
+    fn test_export_task_response_serialization() {
+        let response = ExportTaskResponse {
+            task_id: "task_123".to_string(),
+            task_status: "processing".to_string(),
+            download_url: Some("https://example.com/file.pdf".to_string()),
+            file_size: Some(500000),
+            ..Default::default()
+        };
+
+        let serialized = serde_json::to_string(&response).unwrap();
+        let deserialized: ExportTaskResponse = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(deserialized.task_id, "task_123");
+        assert_eq!(deserialized.task_status, "processing");
+        assert_eq!(deserialized.download_url, Some("https://example.com/file.pdf".to_string()));
+        assert_eq!(deserialized.file_size, Some(500000));
+    }
+
+    #[test]
+    fn test_create_export_task_builder_new() {
+        let config = Config::default();
+        let service = DriveServiceV1::new(config);
+        let request = ExportTaskRequest::new("docx");
+        let builder = service.create_export_task_builder(request);
+
+        assert_eq!(builder.request.file_type, "docx");
+        assert!(builder.request.file_tokens.is_empty());
+    }
+
+    #[test]
+    fn test_create_export_task_builder_file_type() {
+        let config = Config::default();
+        let service = DriveServiceV1::new(config);
+        let request = ExportTaskRequest::new("pdf");
+        let builder = service.create_export_task_builder(request).file_type("docx");
+
+        assert_eq!(builder.request.file_type, "docx");
+    }
+
+    #[test]
+    fn test_create_export_task_builder_add_file_token() {
+        let config = Config::default();
+        let service = DriveServiceV1::new(config);
+        let request = ExportTaskRequest::new("pdf");
+        let builder = service
+            .create_export_task_builder(request)
+            .add_file_token("file_123")
+            .add_file_token("file_456");
+
+        assert_eq!(builder.request.file_tokens.len(), 2);
+        assert_eq!(builder.request.file_tokens[0], "file_123");
+        assert_eq!(builder.request.file_tokens[1], "file_456");
+    }
+
+    #[test]
+    fn test_create_export_task_builder_file_tokens() {
+        let config = Config::default();
+        let service = DriveServiceV1::new(config);
+        let request = ExportTaskRequest::new("pdf");
+        let file_tokens = vec!["file_a".to_string(), "file_b".to_string(), "file_c".to_string()];
+        let builder = service.create_export_task_builder(request).file_tokens(file_tokens);
+
+        assert_eq!(builder.request.file_tokens.len(), 3);
+        assert_eq!(builder.request.file_tokens[0], "file_a");
+        assert_eq!(builder.request.file_tokens[1], "file_b");
+        assert_eq!(builder.request.file_tokens[2], "file_c");
+    }
+
+    #[test]
+    fn test_create_export_task_builder_quality() {
+        let config = Config::default();
+        let service = DriveServiceV1::new(config);
+        let request = ExportTaskRequest::new("pdf");
+        let builder = service.create_export_task_builder(request).quality("high");
+
+        assert!(builder.request.export_settings.is_some());
+        assert_eq!(
+            builder.request.export_settings.as_ref().unwrap().quality,
+            Some("high".to_string())
+        );
+    }
+
+    #[test]
+    fn test_create_export_task_builder_include_comments() {
+        let config = Config::default();
+        let service = DriveServiceV1::new(config);
+        let request = ExportTaskRequest::new("pdf");
+        let builder = service.create_export_task_builder(request).include_comments(true);
+
+        assert!(builder.request.export_settings.is_some());
+        assert_eq!(
+            builder.request.export_settings.as_ref().unwrap().include_comments,
+            Some(true)
+        );
+    }
+
+    #[test]
+    fn test_create_export_task_builder_page_range() {
+        let config = Config::default();
+        let service = DriveServiceV1::new(config);
+        let request = ExportTaskRequest::new("pdf");
+        let builder = service.create_export_task_builder(request).page_range("1-5,8,10-12");
+
+        assert!(builder.request.export_settings.is_some());
+        assert_eq!(
+            builder.request.export_settings.as_ref().unwrap().page_range,
+            Some("1-5,8,10-12".to_string())
+        );
+    }
+
+    #[test]
+    fn test_create_export_task_builder_watermark() {
+        let config = Config::default();
+        let service = DriveServiceV1::new(config);
+        let request = ExportTaskRequest::new("pdf");
+        let builder = service.create_export_task_builder(request).watermark("机密文档");
+
+        assert!(builder.request.export_settings.is_some());
+        assert_eq!(
+            builder.request.export_settings.as_ref().unwrap().watermark,
+            Some("机密文档".to_string())
+        );
+    }
+
+    #[test]
+    fn test_create_export_task_builder_export_settings() {
+        let config = Config::default();
+        let service = DriveServiceV1::new(config);
+        let request = ExportTaskRequest::new("pdf");
+        let settings = ExportSettings {
+            quality: Some("high".to_string()),
+            include_comments: Some(true),
+            page_range: Some("1-10".to_string()),
+            watermark: Some("内部使用".to_string()),
+        };
+
+        let builder = service.create_export_task_builder(request).export_settings(settings);
+
+        assert!(builder.request.export_settings.is_some());
+        let export_settings = builder.request.export_settings.as_ref().unwrap();
+        assert_eq!(export_settings.quality, Some("high".to_string()));
+        assert_eq!(export_settings.include_comments, Some(true));
+        assert_eq!(export_settings.page_range, Some("1-10".to_string()));
+        assert_eq!(export_settings.watermark, Some("内部使用".to_string()));
+    }
+
+    #[test]
+    fn test_create_export_task_builder_chain_methods() {
+        let config = Config::default();
+        let service = DriveServiceV1::new(config);
+        let request = ExportTaskRequest::new("pdf");
+        let builder = service
+            .create_export_task_builder(request)
+            .file_type("docx")
+            .add_file_token("file_123")
+            .add_file_token("file_456")
+            .quality("high")
+            .include_comments(true)
+            .page_range("1-5")
+            .watermark("测试文档");
+
+        assert_eq!(builder.request.file_type, "docx");
+        assert_eq!(builder.request.file_tokens.len(), 2);
+        assert!(builder.request.export_settings.is_some());
+
+        let settings = builder.request.export_settings.as_ref().unwrap();
+        assert_eq!(settings.quality, Some("high".to_string()));
+        assert_eq!(settings.include_comments, Some(true));
+        assert_eq!(settings.page_range, Some("1-5".to_string()));
+        assert_eq!(settings.watermark, Some("测试文档".to_string()));
+    }
+
+    #[test]
+    fn test_create_export_task_builder_validation() {
+        let config = Config::default();
+        let service = DriveServiceV1::new(config);
+        let request = ExportTaskRequest::new("pdf")
+            .add_file_token("file_123");
+        let builder = service.create_export_task_builder(request);
+
+        // 验证构建器包含有效的请求
+        assert!(builder.request.validate().is_ok());
+    }
+
+    #[test]
+    fn test_create_export_task_builder_invalid_request() {
+        let config = Config::default();
+        let service = DriveServiceV1::new(config);
+        let request = ExportTaskRequest::new("");  // 无效的文件类型
+        let builder = service.create_export_task_builder(request);
+
+        // 验证构建器包含无效的请求
+        assert!(builder.request.validate().is_err());
+    }
+
+    #[test]
+    fn test_export_task_service_creation() {
+        let config = Config::default();
+        let service = DriveServiceV1::new(config);
+        assert!(!format!("{:?}", service).is_empty());
+    }
+
+    #[test]
+    fn test_export_task_service_builder_creation() {
+        let config = Config::default();
+        let service = DriveServiceV1::new(config);
+        let request = ExportTaskRequest::new("pdf").add_file_token("file_123");
+        let builder = service.create_export_task_builder(request);
+        assert!(!format!("{:?}", builder).is_empty());
+    }
+
+    #[test]
+    fn test_export_task_api_response_trait() {
+        assert_eq!(ExportTaskResponse::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_export_task_comprehensive_scenarios() {
+        // 测试多种导出格式的组合
+        let formats = ["pdf", "docx", "txt", "png", "jpg"];
+
+        for format in formats.iter() {
+            let settings = ExportSettings {
+                quality: Some("high".to_string()),
+                include_comments: Some(true),
+                page_range: Some("1-5".to_string()),
+                watermark: Some(format!("测试{}", format.to_uppercase()).to_string()),
+            };
+
+            let request = ExportTaskRequest::new(*format)
+                .add_file_token("file_123")
+                .add_file_token("file_456")
+                .export_settings(settings);
+
+            assert!(request.validate().is_ok(), "Format {} should be valid", format);
+        }
+    }
+
+    #[test]
+    fn test_export_task_edge_cases() {
+        // 测试边界情况
+
+        // 最小有效请求
+        let minimal_request = ExportTaskRequest::new("pdf")
+            .add_file_token("a");
+        assert!(minimal_request.validate().is_ok());
+
+        // 最大有效文件Token数量
+        let mut request = ExportTaskRequest::new("pdf");
+        for i in 0..100 {
+            request = request.add_file_token(format!("file_{}", i));
+        }
+        assert!(request.validate().is_ok());
+        assert_eq!(request.file_tokens.len(), 100);
+
+        // 包含特殊字符的Token
+        let special_chars_request = ExportTaskRequest::new("pdf")
+            .add_file_token("file_123-abc_456.def")
+            .add_file_token("file_with_中文字符_123");
+        assert!(special_chars_request.validate().is_ok());
+    }
+
+    #[test]
+    fn test_export_task_builder_state_management() {
+        let config = Config::default();
+        let service = DriveServiceV1::new(config);
+
+        // 测试构建器状态不会互相影响
+        let request1 = ExportTaskRequest::new("pdf");
+        let request2 = ExportTaskRequest::new("docx");
+
+        let builder1 = service.create_export_task_builder(request1)
+            .quality("high")
+            .include_comments(true);
+
+        let builder2 = service.create_export_task_builder(request2)
+            .quality("standard")
+            .watermark("文档2");
+
+        // 验证两个构建器的状态独立
+        assert_eq!(builder1.request.file_type, "pdf");
+        assert_eq!(builder2.request.file_type, "docx");
+
+        assert_eq!(
+            builder1.request.export_settings.as_ref().unwrap().quality,
+            Some("high".to_string())
+        );
+        assert_eq!(
+            builder2.request.export_settings.as_ref().unwrap().quality,
+            Some("standard".to_string())
+        );
+
+        assert_eq!(
+            builder1.request.export_settings.as_ref().unwrap().watermark,
+            None
+        );
+        assert_eq!(
+            builder2.request.export_settings.as_ref().unwrap().watermark,
+            Some("文档2".to_string())
+        );
+    }
+
+    #[test]
+    fn test_export_task_endpoint_constant() {
+        // 测试端点常量是否正确定义
+        assert_eq!(
+            crate::core::endpoints_original::Endpoints::DRIVE_V1_EXPORT_TASKS,
+            "/open-apis/drive/v1/export_tasks"
+        );
+    }
+
+    #[test]
+    fn test_export_task_supported_file_types() {
+        // 测试所有支持的文件类型
+        let supported_types = [
+            "docx", "pdf", "txt", "html", "png", "jpg", "jpeg",
+            "DOCX", "PDF", "TXT", "HTML", "PNG", "JPG", "JPEG"  // 大小写
+        ];
+
+        for file_type in supported_types.iter() {
+            let request = ExportTaskRequest::new(*file_type)
+                .add_file_token("file_123");
+            assert!(request.validate().is_ok(), "Type {} should be supported", file_type);
         }
     }
 }

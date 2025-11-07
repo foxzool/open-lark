@@ -2202,6 +2202,10 @@ impl Endpoints {
     pub const DRIVE_V1_IMPORT_TASKS: &'static str = "/open-apis/drive/v1/import_tasks";
     pub const DRIVE_V1_IMPORT_TASK_GET: &'static str = "/open-apis/drive/v1/import_tasks/{}";
 
+    /// 导出任务管理
+    pub const DRIVE_V1_EXPORT_TASKS: &'static str = "/open-apis/drive/v1/export_tasks";
+    pub const DRIVE_V1_EXPORT_TASK_GET: &'static str = "/open-apis/drive/v1/export_tasks/{}";
+
     /// 元信息管理
     pub const DRIVE_V1_METAS_BATCH_QUERY: &'static str = "/open-apis/drive/v1/metas/batch_query";
 
