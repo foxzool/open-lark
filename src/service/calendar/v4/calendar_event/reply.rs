@@ -27,9 +27,13 @@
 //! - 组织者通常不需要回复自己的日程
 //! - 回复后可能需要同步到其他日历系统
 
-use serde::{Deserialize, Serialize};
-use crate::core::{http::Transport, SDKResult, ApiRequest, api_resp::{ApiResponseTrait, ResponseFormat}};
+use crate::core::{
+    api_resp::{ApiResponseTrait, ResponseFormat},
+    http::Transport,
+    ApiRequest, SDKResult,
+};
 use crate::service::calendar::v4::models::CalendarEvent;
+use serde::{Deserialize, Serialize};
 
 /// 日程邀请回复状态
 ///
@@ -366,8 +370,12 @@ impl ReplyCalendarEventBuilder {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn execute(self, service: &crate::service::calendar::v4::calendar_event::CalendarEventService) -> SDKResult<ReplyCalendarEventResponse> {
-        let request = self.build()
+    pub async fn execute(
+        self,
+        service: &crate::service::calendar::v4::calendar_event::CalendarEventService,
+    ) -> SDKResult<ReplyCalendarEventResponse> {
+        let request = self
+            .build()
             .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
         service.reply(&request).await
     }
@@ -394,11 +402,8 @@ mod tests {
 
     #[test]
     fn test_reply_calendar_event_request_creation() {
-        let request = ReplyCalendarEventRequest::new(
-            "calendar_123",
-            "event_456",
-            EventReplyStatus::Accept
-        );
+        let request =
+            ReplyCalendarEventRequest::new("calendar_123", "event_456", EventReplyStatus::Accept);
         assert_eq!(request.calendar_id, "calendar_123");
         assert_eq!(request.event_id, "event_456");
         assert!(matches!(request.reply_status, EventReplyStatus::Accept));
@@ -408,54 +413,38 @@ mod tests {
 
     #[test]
     fn test_set_comment() {
-        let mut request = ReplyCalendarEventRequest::new(
-            "calendar_123",
-            "event_456",
-            EventReplyStatus::Accept
-        );
+        let mut request =
+            ReplyCalendarEventRequest::new("calendar_123", "event_456", EventReplyStatus::Accept);
         request.set_comment("我会准时参加");
         assert_eq!(request.comment, Some("我会准时参加".to_string()));
     }
 
     #[test]
     fn test_set_send_notifications() {
-        let mut request = ReplyCalendarEventRequest::new(
-            "calendar_123",
-            "event_456",
-            EventReplyStatus::Accept
-        );
+        let mut request =
+            ReplyCalendarEventRequest::new("calendar_123", "event_456", EventReplyStatus::Accept);
         request.set_send_notifications(false);
         assert_eq!(request.send_notifications, Some(false));
     }
 
     #[test]
     fn test_set_user_id_type() {
-        let mut request = ReplyCalendarEventRequest::new(
-            "calendar_123",
-            "event_456",
-            EventReplyStatus::Accept
-        );
+        let mut request =
+            ReplyCalendarEventRequest::new("calendar_123", "event_456", EventReplyStatus::Accept);
         request.set_user_id_type("user_id");
         assert_eq!(request.user_id_type, Some("user_id".to_string()));
     }
 
     #[test]
     fn test_request_validation_success() {
-        let request = ReplyCalendarEventRequest::new(
-            "calendar_123",
-            "event_456",
-            EventReplyStatus::Accept
-        );
+        let request =
+            ReplyCalendarEventRequest::new("calendar_123", "event_456", EventReplyStatus::Accept);
         assert!(request.validate().is_ok());
     }
 
     #[test]
     fn test_request_validation_empty_calendar_id() {
-        let request = ReplyCalendarEventRequest::new(
-            "",
-            "event_456",
-            EventReplyStatus::Accept
-        );
+        let request = ReplyCalendarEventRequest::new("", "event_456", EventReplyStatus::Accept);
         let result = request.validate();
         assert!(result.is_err());
         assert_eq!(result.unwrap_err(), "日历ID不能为空");
@@ -463,11 +452,7 @@ mod tests {
 
     #[test]
     fn test_request_validation_empty_event_id() {
-        let request = ReplyCalendarEventRequest::new(
-            "calendar_123",
-            "",
-            EventReplyStatus::Accept
-        );
+        let request = ReplyCalendarEventRequest::new("calendar_123", "", EventReplyStatus::Accept);
         let result = request.validate();
         assert!(result.is_err());
         assert_eq!(result.unwrap_err(), "日程ID不能为空");
@@ -475,11 +460,8 @@ mod tests {
 
     #[test]
     fn test_request_validation_empty_user_id_type() {
-        let mut request = ReplyCalendarEventRequest::new(
-            "calendar_123",
-            "event_456",
-            EventReplyStatus::Accept
-        );
+        let mut request =
+            ReplyCalendarEventRequest::new("calendar_123", "event_456", EventReplyStatus::Accept);
         request.set_user_id_type("");
         let result = request.validate();
         assert!(result.is_err());
@@ -488,11 +470,8 @@ mod tests {
 
     #[test]
     fn test_request_validation_comment_too_long() {
-        let mut request = ReplyCalendarEventRequest::new(
-            "calendar_123",
-            "event_456",
-            EventReplyStatus::Accept
-        );
+        let mut request =
+            ReplyCalendarEventRequest::new("calendar_123", "event_456", EventReplyStatus::Accept);
         let long_comment = "a".repeat(1001);
         request.set_comment(&long_comment);
         let result = request.validate();
@@ -502,11 +481,8 @@ mod tests {
 
     #[test]
     fn test_request_validation_comment_max_length() {
-        let mut request = ReplyCalendarEventRequest::new(
-            "calendar_123",
-            "event_456",
-            EventReplyStatus::Accept
-        );
+        let mut request =
+            ReplyCalendarEventRequest::new("calendar_123", "event_456", EventReplyStatus::Accept);
         let long_comment = "a".repeat(1000);
         request.set_comment(&long_comment);
         let result = request.validate();
@@ -516,82 +492,76 @@ mod tests {
     #[test]
     fn test_reply_status_variants() {
         // Test all reply status variants
-        let accept_request = ReplyCalendarEventRequest::new(
-            "calendar_123",
-            "event_456",
+        let accept_request =
+            ReplyCalendarEventRequest::new("calendar_123", "event_456", EventReplyStatus::Accept);
+        assert!(matches!(
+            accept_request.reply_status,
             EventReplyStatus::Accept
-        );
-        assert!(matches!(accept_request.reply_status, EventReplyStatus::Accept));
+        ));
 
-        let decline_request = ReplyCalendarEventRequest::new(
-            "calendar_123",
-            "event_456",
+        let decline_request =
+            ReplyCalendarEventRequest::new("calendar_123", "event_456", EventReplyStatus::Decline);
+        assert!(matches!(
+            decline_request.reply_status,
             EventReplyStatus::Decline
-        );
-        assert!(matches!(decline_request.reply_status, EventReplyStatus::Decline));
+        ));
 
         let tentative_request = ReplyCalendarEventRequest::new(
             "calendar_123",
             "event_456",
-            EventReplyStatus::Tentative
+            EventReplyStatus::Tentative,
         );
-        assert!(matches!(tentative_request.reply_status, EventReplyStatus::Tentative));
+        assert!(matches!(
+            tentative_request.reply_status,
+            EventReplyStatus::Tentative
+        ));
     }
 
     #[test]
     fn test_reply_calendar_event_builder_creation() {
-        let builder = ReplyCalendarEventBuilder::new(
-            "calendar_123",
-            "event_456",
-            EventReplyStatus::Accept
-        );
+        let builder =
+            ReplyCalendarEventBuilder::new("calendar_123", "event_456", EventReplyStatus::Accept);
         assert_eq!(builder.request.calendar_id, "calendar_123");
         assert_eq!(builder.request.event_id, "event_456");
-        assert!(matches!(builder.request.reply_status, EventReplyStatus::Accept));
+        assert!(matches!(
+            builder.request.reply_status,
+            EventReplyStatus::Accept
+        ));
         assert!(builder.request.comment.is_none());
     }
 
     #[test]
     fn test_builder_comment() {
-        let builder = ReplyCalendarEventBuilder::new(
-            "calendar_123",
-            "event_456",
-            EventReplyStatus::Accept
-        ).comment("确认参加");
+        let builder =
+            ReplyCalendarEventBuilder::new("calendar_123", "event_456", EventReplyStatus::Accept)
+                .comment("确认参加");
         assert_eq!(builder.request.comment, Some("确认参加".to_string()));
     }
 
     #[test]
     fn test_builder_send_notifications() {
-        let builder = ReplyCalendarEventBuilder::new(
-            "calendar_123",
-            "event_456",
-            EventReplyStatus::Accept
-        ).send_notifications(false);
+        let builder =
+            ReplyCalendarEventBuilder::new("calendar_123", "event_456", EventReplyStatus::Accept)
+                .send_notifications(false);
         assert_eq!(builder.request.send_notifications, Some(false));
     }
 
     #[test]
     fn test_builder_user_id_type() {
-        let builder = ReplyCalendarEventBuilder::new(
-            "calendar_123",
-            "event_456",
-            EventReplyStatus::Accept
-        ).user_id_type("union_id");
+        let builder =
+            ReplyCalendarEventBuilder::new("calendar_123", "event_456", EventReplyStatus::Accept)
+                .user_id_type("union_id");
         assert_eq!(builder.request.user_id_type, Some("union_id".to_string()));
     }
 
     #[test]
     fn test_builder_build_success() {
-        let result = ReplyCalendarEventBuilder::new(
-            "calendar_123",
-            "event_456",
-            EventReplyStatus::Accept
-        )
-        .comment("我会准时参加")
-        .send_notifications(true)
-        .user_id_type("open_id")
-        .build();
+        let result =
+            ReplyCalendarEventBuilder::new("calendar_123", "event_456", EventReplyStatus::Accept)
+                .comment("我会准时参加")
+                .send_notifications(true)
+                .user_id_type("open_id")
+                .build();
         assert!(result.is_ok());
         let request = result.unwrap();
         assert_eq!(request.calendar_id, "calendar_123");
@@ -604,22 +574,16 @@ mod tests {
 
     #[test]
     fn test_builder_build_failure_empty_calendar_id() {
-        let result = ReplyCalendarEventBuilder::new(
-            "",
-            "event_456",
-            EventReplyStatus::Accept
-        ).build();
+        let result =
+            ReplyCalendarEventBuilder::new("", "event_456", EventReplyStatus::Accept).build();
         assert!(result.is_err());
         assert_eq!(result.unwrap_err(), "日历ID不能为空");
     }
 
     #[test]
     fn test_builder_build_failure_empty_event_id() {
-        let result = ReplyCalendarEventBuilder::new(
-            "calendar_123",
-            "",
-            EventReplyStatus::Accept
-        ).build();
+        let result =
+            ReplyCalendarEventBuilder::new("calendar_123", "", EventReplyStatus::Accept).build();
         assert!(result.is_err());
         assert_eq!(result.unwrap_err(), "日程ID不能为空");
     }
@@ -629,7 +593,10 @@ mod tests {
         let builder = ReplyCalendarEventBuilder::default();
         assert_eq!(builder.request.calendar_id, "");
         assert_eq!(builder.request.event_id, "");
-        assert!(matches!(builder.request.reply_status, EventReplyStatus::Accept));
+        assert!(matches!(
+            builder.request.reply_status,
+            EventReplyStatus::Accept
+        ));
         assert!(builder.request.comment.is_none());
         assert!(builder.request.send_notifications.is_none());
     }
@@ -720,7 +687,10 @@ mod tests {
         "#;
         let response: ReplyCalendarEventResponse = serde_json::from_str(json).unwrap();
         assert!(response.event.is_some());
-        assert!(matches!(response.reply_status, Some(EventReplyStatus::Accept)));
+        assert!(matches!(
+            response.reply_status,
+            Some(EventReplyStatus::Accept)
+        ));
         assert_eq!(response.success, Some(true));
         assert_eq!(response.message, Some("回复成功".to_string()));
     }
@@ -736,11 +706,7 @@ mod tests {
 
     #[test]
     fn test_request_with_whitespace_calendar_id() {
-        let request = ReplyCalendarEventRequest::new(
-            "   ",
-            "event_456",
-            EventReplyStatus::Accept
-        );
+        let request = ReplyCalendarEventRequest::new("   ", "event_456", EventReplyStatus::Accept);
         let result = request.validate();
         assert!(result.is_err());
         assert_eq!(result.unwrap_err(), "日历ID不能为空");
@@ -748,11 +714,8 @@ mod tests {
 
     #[test]
     fn test_request_with_whitespace_event_id() {
-        let request = ReplyCalendarEventRequest::new(
-            "calendar_123",
-            "   ",
-            EventReplyStatus::Accept
-        );
+        let request =
+            ReplyCalendarEventRequest::new("calendar_123", "   ", EventReplyStatus::Accept);
         let result = request.validate();
         assert!(result.is_err());
         assert_eq!(result.unwrap_err(), "日程ID不能为空");
@@ -760,11 +723,8 @@ mod tests {
 
     #[test]
     fn test_request_with_whitespace_user_id_type() {
-        let mut request = ReplyCalendarEventRequest::new(
-            "calendar_123",
-            "event_456",
-            EventReplyStatus::Accept
-        );
+        let mut request =
+            ReplyCalendarEventRequest::new("calendar_123", "event_456", EventReplyStatus::Accept);
         request.set_user_id_type("   ");
         let result = request.validate();
         assert!(result.is_err());
@@ -779,11 +739,8 @@ mod tests {
         assert!(request.validate().is_ok());
 
         // Test with Unicode characters in comment
-        let mut request = ReplyCalendarEventRequest::new(
-            "calendar_123",
-            "event_456",
-            EventReplyStatus::Accept
-        );
+        let mut request =
+            ReplyCalendarEventRequest::new("calendar_123", "event_456", EventReplyStatus::Accept);
         request.set_comment("很高兴参加这个重要的会议，期待与大家交流合作！");
         assert!(request.validate().is_ok());
     }
@@ -793,7 +750,7 @@ mod tests {
         let builder = ReplyCalendarEventBuilder::new(
             "calendar_123",
             "event_456",
-            EventReplyStatus::Tentative
+            EventReplyStatus::Tentative,
         )
         .comment("暂时确认，可能需要调整时间")
         .send_notifications(true)
@@ -801,8 +758,14 @@ mod tests {
 
         assert_eq!(builder.request.calendar_id, "calendar_123");
         assert_eq!(builder.request.event_id, "event_456");
-        assert!(matches!(builder.request.reply_status, EventReplyStatus::Tentative));
-        assert_eq!(builder.request.comment, Some("暂时确认，可能需要调整时间".to_string()));
+        assert!(matches!(
+            builder.request.reply_status,
+            EventReplyStatus::Tentative
+        ));
+        assert_eq!(
+            builder.request.comment,
+            Some("暂时确认，可能需要调整时间".to_string())
+        );
         assert_eq!(builder.request.send_notifications, Some(true));
         assert_eq!(builder.request.user_id_type, Some("union_id".to_string()));
 
@@ -812,15 +775,12 @@ mod tests {
 
     #[test]
     fn test_fluent_api_chain() {
-        let result = ReplyCalendarEventBuilder::new(
-            "calendar_123",
-            "event_456",
-            EventReplyStatus::Decline
-        )
-        .comment("抱歉，时间冲突无法参加")
-        .send_notifications(false)
-        .user_id_type("user_id")
-        .build();
+        let result =
+            ReplyCalendarEventBuilder::new("calendar_123", "event_456", EventReplyStatus::Decline)
+                .comment("抱歉，时间冲突无法参加")
+                .send_notifications(false)
+                .user_id_type("user_id")
+                .build();
         assert!(result.is_ok());
         let request = result.unwrap();
         assert_eq!(request.calendar_id, "calendar_123");
@@ -834,27 +794,30 @@ mod tests {
     #[test]
     fn test_all_reply_status_builders() {
         // Test accept builder
-        let accept_builder = ReplyCalendarEventBuilder::new(
-            "calendar_123",
-            "event_456",
+        let accept_builder =
+            ReplyCalendarEventBuilder::new("calendar_123", "event_456", EventReplyStatus::Accept);
+        assert!(matches!(
+            accept_builder.request.reply_status,
             EventReplyStatus::Accept
-        );
-        assert!(matches!(accept_builder.request.reply_status, EventReplyStatus::Accept));
+        ));
 
         // Test decline builder
-        let decline_builder = ReplyCalendarEventBuilder::new(
-            "calendar_123",
-            "event_456",
+        let decline_builder =
+            ReplyCalendarEventBuilder::new("calendar_123", "event_456", EventReplyStatus::Decline);
+        assert!(matches!(
+            decline_builder.request.reply_status,
             EventReplyStatus::Decline
-        );
-        assert!(matches!(decline_builder.request.reply_status, EventReplyStatus::Decline));
+        ));
 
         // Test tentative builder
         let tentative_builder = ReplyCalendarEventBuilder::new(
             "calendar_123",
             "event_456",
-            EventReplyStatus::Tentative
+            EventReplyStatus::Tentative,
         );
-        assert!(matches!(tentative_builder.request.reply_status, EventReplyStatus::Tentative));
+        assert!(matches!(
+            tentative_builder.request.reply_status,
+            EventReplyStatus::Tentative
+        ));
     }
 }

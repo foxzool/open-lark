@@ -144,9 +144,17 @@ impl SpaceMemberService {
     ///     println!("成员删除失败: {:?}", result.error_message);
     /// }
     /// ```
-    pub async fn delete(&self, req: &DeleteSpaceMemberRequest) -> SDKResult<DeleteSpaceMemberResponse> {
-        req.validate().map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
-        log::debug!("开始删除知识空间成员: space_id={}, member_id={}", req.space_id, req.member_id);
+    pub async fn delete(
+        &self,
+        req: &DeleteSpaceMemberRequest,
+    ) -> SDKResult<DeleteSpaceMemberResponse> {
+        req.validate()
+            .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
+        log::debug!(
+            "开始删除知识空间成员: space_id={}, member_id={}",
+            req.space_id,
+            req.member_id
+        );
 
         // 构建动态端点路径
         let endpoint = crate::core::endpoints_original::Endpoints::WIKI_V2_SPACE_MEMBER_DELETE
@@ -161,11 +169,16 @@ impl SpaceMemberService {
             ..Default::default()
         };
 
-        let resp = Transport::<DeleteSpaceMemberResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<DeleteSpaceMemberResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("知识空间成员删除完成: space_id={}, member_id={}, success={}",
-                   req.space_id, req.member_id, response.success);
+        log::info!(
+            "知识空间成员删除完成: space_id={}, member_id={}, success={}",
+            req.space_id,
+            req.member_id,
+            response.success
+        );
 
         Ok(response)
     }
@@ -251,7 +264,10 @@ impl DeleteSpaceMemberBuilder {
     ///     .execute(&service)
     ///     .await?;
     /// ```
-    pub async fn execute(self, service: &SpaceMemberService) -> SDKResult<DeleteSpaceMemberResponse> {
+    pub async fn execute(
+        self,
+        service: &SpaceMemberService,
+    ) -> SDKResult<DeleteSpaceMemberResponse> {
         service.delete(&self.request).await
     }
 }
