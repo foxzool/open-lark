@@ -44,6 +44,8 @@ use crate::service::group::GroupService;
 use crate::service::im::ImService;
 #[cfg(feature = "okr")]
 use crate::service::okr::OkrService;
+#[cfg(feature = "passport")]
+use crate::service::passport::PassportService;
 #[cfg(feature = "performance")]
 use crate::service::performance::PerformanceService;
 #[cfg(feature = "search")]
@@ -112,6 +114,8 @@ pub struct LarkClient {
     pub task: TaskService,
     #[cfg(feature = "okr")]
     pub okr: OkrService,
+    #[cfg(feature = "passport")]
+    pub passport: PassportService,
     #[cfg(feature = "feishu_people")]
     pub feishu_people: FeishuPeopleService,
     #[cfg(feature = "performance")]
@@ -174,7 +178,8 @@ impl LarkClient {
 
             #[cfg(feature = "okr")]
             okr: OkrService::new(config.clone()),
-
+            #[cfg(feature = "passport")]
+            passport: PassportService::new(config.clone()),
             #[cfg(feature = "feishu_people")]
             feishu_people: FeishuPeopleService::new(config.clone()),
             #[cfg(feature = "performance")]
