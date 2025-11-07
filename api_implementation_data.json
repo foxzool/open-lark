@@ -1,10 +1,10 @@
 {
   "metadata": {
     "total_apis": 1551,
-    "found_count": 927,
-    "implementation_rate": 59.767891682785304,
-    "processing_time": 78.88255214691162,
-    "generated_at": "2025-11-06T15:40:21.107604"
+    "found_count": 947,
+    "implementation_rate": 61.05738233397808,
+    "processing_time": 73.33844995498657,
+    "generated_at": "2025-11-07T09:55:49.041105"
   },
   "service_stats": {
     "event": {
@@ -44,10 +44,6 @@
       "total": 0
     },
     "drive": {
-      "found": 0,
-      "total": 0
-    },
-    "suite": {
       "found": 0,
       "total": 0
     },
@@ -1230,9 +1226,9 @@
       "self_build": "是",
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/create",
-      "file_path": "../src/service/ehr/v1/mod.rs",
-      "line_number": "263",
-      "implementation_preview": "pub async fn query_employees(",
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "466",
+      "implementation_preview": "pub async fn filter_employee(&self, request: &Filt...",
       "status": "found"
     },
     {
@@ -1243,9 +1239,9 @@
       "self_build": "是",
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/patch",
-      "file_path": "../src/service/ehr/v1/mod.rs",
-      "line_number": "165",
-      "implementation_preview": "pub async fn get_employee(&self, _employee_id: &st...",
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "466",
+      "implementation_preview": "pub async fn filter_employee(&self, request: &Filt...",
       "status": "found"
     },
     {
@@ -1256,9 +1252,9 @@
       "self_build": "是",
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/delete",
-      "file_path": "../src/service/ehr/v1/mod.rs",
-      "line_number": "165",
-      "implementation_preview": "pub async fn get_employee(&self, _employee_id: &st...",
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "466",
+      "implementation_preview": "pub async fn filter_employee(&self, request: &Filt...",
       "status": "found"
     },
     {
@@ -1269,10 +1265,10 @@
       "self_build": "是",
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/resurrect",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "295",
+      "implementation_preview": "pub async fn resurrect_employee(",
+      "status": "found"
     },
     {
       "name": "更新在职员工为待离职",
@@ -1282,10 +1278,10 @@
       "self_build": "是",
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/to_be_resigned",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "558",
+      "implementation_preview": "pub async fn to_be_resigned_employee(",
+      "status": "found"
     },
     {
       "name": "更新待离职成员为在职",
@@ -1295,10 +1291,10 @@
       "self_build": "是",
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/regular",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "154",
+      "implementation_preview": "pub async fn regular_employee(",
+      "status": "found"
     },
     {
       "name": "批量获取员工信息",
@@ -1308,10 +1304,10 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/mget",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "370",
+      "implementation_preview": "pub async fn mget_employee(&self, request: &MGetEm...",
+      "status": "found"
     },
     {
       "name": "批量获取员工列表",
@@ -1321,10 +1317,10 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/filter",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "466",
+      "implementation_preview": "pub async fn filter_employee(&self, request: &Filt...",
+      "status": "found"
     },
     {
       "name": "搜索员工信息",
@@ -1334,9 +1330,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/search",
-      "file_path": "../src/service/attendance/v1/group.rs",
-      "line_number": "154",
-      "implementation_preview": "pub async fn search(",
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "466",
+      "implementation_preview": "pub async fn filter_employee(&self, request: &Filt...",
       "status": "found"
     },
     {
@@ -1347,9 +1343,9 @@
       "self_build": "是",
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/department/create",
-      "file_path": "../src/service/contact/v3/unit.rs",
-      "line_number": "300",
-      "implementation_preview": "pub async fn list_departments(",
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "466",
+      "implementation_preview": "pub async fn filter_employee(&self, request: &Filt...",
       "status": "found"
     },
     {
@@ -1360,9 +1356,9 @@
       "self_build": "是",
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/department/patch",
-      "file_path": "../src/service/contact/v3/department.rs",
-      "line_number": "258",
-      "implementation_preview": "pub async fn delete(&self, department_id: &str) ->...",
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "466",
+      "implementation_preview": "pub async fn filter_employee(&self, request: &Filt...",
       "status": "found"
     },
     {
@@ -1373,9 +1369,9 @@
       "self_build": "是",
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/department/delete",
-      "file_path": "../src/service/contact/v3/department.rs",
-      "line_number": "258",
-      "implementation_preview": "pub async fn delete(&self, department_id: &str) ->...",
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "466",
+      "implementation_preview": "pub async fn filter_employee(&self, request: &Filt...",
       "status": "found"
     },
     {
@@ -1386,10 +1382,10 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/department/mget",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "370",
+      "implementation_preview": "pub async fn mget_employee(&self, request: &MGetEm...",
+      "status": "found"
     },
     {
       "name": "获取部门列表",
@@ -1399,10 +1395,10 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/department/filter",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "466",
+      "implementation_preview": "pub async fn filter_employee(&self, request: &Filt...",
+      "status": "found"
     },
     {
       "name": "搜索部门",
@@ -1412,9 +1408,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/department/search",
-      "file_path": "../src/service/attendance/v1/group.rs",
-      "line_number": "154",
-      "implementation_preview": "pub async fn search(",
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "466",
+      "implementation_preview": "pub async fn filter_employee(&self, request: &Filt...",
       "status": "found"
     },
     {
@@ -2101,10 +2097,10 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement/get",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/im/v1/chats.rs",
+      "line_number": "176",
+      "implementation_preview": "pub async fn get_announcement(&self, req: &GetGrou...",
+      "status": "found"
     },
     {
       "name": "获取群公告所有块",
@@ -2192,9 +2188,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-announcement/patch",
-      "file_path": "../src/service/im/v1/message/mod.rs",
-      "line_number": "364",
-      "implementation_preview": "pub async fn upload_image(&self, req: &ImageUpload...",
+      "file_path": "../src/service/im/v1/chats.rs",
+      "line_number": "176",
+      "implementation_preview": "pub async fn get_announcement(&self, req: &GetGrou...",
       "status": "found"
     },
     {
@@ -2205,9 +2201,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-announcement/get",
-      "file_path": "../src/service/im/v1/message/mod.rs",
-      "line_number": "364",
-      "implementation_preview": "pub async fn upload_image(&self, req: &ImageUpload...",
+      "file_path": "../src/service/im/v1/chats.rs",
+      "line_number": "176",
+      "implementation_preview": "pub async fn get_announcement(&self, req: &GetGrou...",
       "status": "found"
     },
     {
@@ -2439,9 +2435,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/content",
-      "file_path": "../src/service/cloud_docs/docx/v1/document.rs",
-      "line_number": "83",
-      "implementation_preview": "pub async fn get_raw_content(",
+      "file_path": "../src/service/im/v1/chats.rs",
+      "line_number": "236",
+      "implementation_preview": "pub async fn get_announcement_block_content(",
       "status": "found"
     },
     {
@@ -2751,10 +2747,10 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/create_shortcut",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/cloud_docs/drive/v1/files.rs",
+      "line_number": "1329",
+      "implementation_preview": "pub async fn create_shortcut(&self, req: &CreateSh...",
+      "status": "found"
     },
     {
       "name": "搜索云文档",
@@ -2764,10 +2760,10 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/ugDM4UjL4ADO14COwgTN",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/search/v2/suite_search/mod.rs",
+      "line_number": "300",
+      "implementation_preview": "pub async fn search_suite_object(&self, req: &Suit...",
+      "status": "found"
     },
     {
       "name": "上传文件",
@@ -2985,8 +2981,8 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-version/create",
-      "file_path": "../src/service/cloud_docs/drive/v1/file_version.rs",
-      "line_number": "114",
+      "file_path": "../src/service/application/v6/application/mod.rs",
+      "line_number": "136",
       "implementation_preview": "pub async fn list_versions(",
       "status": "found"
     },
@@ -2998,8 +2994,8 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-version/list",
-      "file_path": "../src/service/cloud_docs/drive/v1/file_version.rs",
-      "line_number": "114",
+      "file_path": "../src/service/application/v6/application/mod.rs",
+      "line_number": "136",
       "implementation_preview": "pub async fn list_versions(",
       "status": "found"
     },
@@ -3778,10 +3774,10 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter/create",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "466",
+      "implementation_preview": "pub async fn filter_employee(&self, request: &Filt...",
+      "status": "found"
     },
     {
       "name": "更新筛选",
@@ -3791,10 +3787,10 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter/update",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "466",
+      "implementation_preview": "pub async fn filter_employee(&self, request: &Filt...",
+      "status": "found"
     },
     {
       "name": "获取筛选",
@@ -3804,10 +3800,10 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter/get",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "466",
+      "implementation_preview": "pub async fn filter_employee(&self, request: &Filt...",
+      "status": "found"
     },
     {
       "name": "删除筛选",
@@ -3817,10 +3813,10 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter/delete",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "466",
+      "implementation_preview": "pub async fn filter_employee(&self, request: &Filt...",
+      "status": "found"
     },
     {
       "name": "创建筛选视图",
@@ -5130,9 +5126,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/docs-v1/content/get",
-      "file_path": "../src/service/cloud_docs/docx/v1/document.rs",
-      "line_number": "83",
-      "implementation_preview": "pub async fn get_raw_content(",
+      "file_path": "../src/service/im/v1/chats.rs",
+      "line_number": "236",
+      "implementation_preview": "pub async fn get_announcement_block_content(",
       "status": "found"
     },
     {
@@ -6105,10 +6101,10 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room_level/mget",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "370",
+      "implementation_preview": "pub async fn mget_employee(&self, request: &MGetEm...",
+      "status": "found"
     },
     {
       "name": "查询会议室层级列表",
@@ -6196,10 +6192,10 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room/mget",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "370",
+      "implementation_preview": "pub async fn mget_employee(&self, request: &MGetEm...",
+      "status": "found"
     },
     {
       "name": "查询会议室列表",
@@ -10161,9 +10157,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/search-v2/message/create",
-      "file_path": "../src/service/search/v2/suite_search/mod.rs",
-      "line_number": "61",
-      "implementation_preview": "pub async fn search_message(",
+      "file_path": "../src/service/search/v1/user.rs",
+      "line_number": "177",
+      "implementation_preview": "pub async fn search(",
       "status": "found"
     },
     {
@@ -10174,9 +10170,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/search-v2/app/create",
-      "file_path": "../src/service/search/v2/suite_search/mod.rs",
-      "line_number": "96",
-      "implementation_preview": "pub async fn search_app(",
+      "file_path": "../src/service/search/v1/user.rs",
+      "line_number": "177",
+      "implementation_preview": "pub async fn search(",
       "status": "found"
     },
     {
@@ -12384,10 +12380,10 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/default_cost_center/create_version",
-      "file_path": "../src/service/cloud_docs/drive/v1/file_version.rs",
-      "line_number": "39",
-      "implementation_preview": "pub async fn create_version(",
-      "status": "found"
+      "file_path": "未找到",
+      "line_number": "-",
+      "implementation_preview": "-",
+      "status": "not_found"
     },
     {
       "name": "查询默认成本中心",
@@ -12436,10 +12432,10 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/cost_allocation/create_version",
-      "file_path": "../src/service/cloud_docs/drive/v1/file_version.rs",
-      "line_number": "39",
-      "implementation_preview": "pub async fn create_version(",
-      "status": "found"
+      "file_path": "未找到",
+      "line_number": "-",
+      "implementation_preview": "-",
+      "status": "not_found"
     },
     {
       "name": "查询成本分摊",
@@ -12917,8 +12913,8 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/cost_center-version/create",
-      "file_path": "../src/service/cloud_docs/drive/v1/file_version.rs",
-      "line_number": "114",
+      "file_path": "../src/service/application/v6/application/mod.rs",
+      "line_number": "136",
       "implementation_preview": "pub async fn list_versions(",
       "status": "found"
     },
@@ -18299,10 +18295,10 @@
       "self_build": "是",
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/collboration_share_entity/list",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "466",
+      "implementation_preview": "pub async fn filter_employee(&self, request: &Filt...",
+      "status": "found"
     },
     {
       "name": "管理员获取所有关联组织列表",
@@ -18312,10 +18308,10 @@
       "self_build": "是",
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/collaboration_tenant/list",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "466",
+      "implementation_preview": "pub async fn filter_employee(&self, request: &Filt...",
+      "status": "found"
     },
     {
       "name": "新增可搜可见规则",
@@ -18325,10 +18321,10 @@
       "self_build": "是",
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/collaboration_rule/create",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "466",
+      "implementation_preview": "pub async fn filter_employee(&self, request: &Filt...",
+      "status": "found"
     },
     {
       "name": "更新可搜可见规则",
@@ -18338,10 +18334,10 @@
       "self_build": "是",
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/collaboration_rule/update",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "466",
+      "implementation_preview": "pub async fn filter_employee(&self, request: &Filt...",
+      "status": "found"
     },
     {
       "name": "查询可搜可见规则",
@@ -18351,10 +18347,10 @@
       "self_build": "是",
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/collaboration_rule/list",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "466",
+      "implementation_preview": "pub async fn filter_employee(&self, request: &Filt...",
+      "status": "found"
     },
     {
       "name": "删除可搜可见规则",
@@ -18364,10 +18360,10 @@
       "self_build": "是",
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/collaboration_rule/delete",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/directory/v1/employee/regular.rs",
+      "line_number": "466",
+      "implementation_preview": "pub async fn filter_employee(&self, request: &Filt...",
+      "status": "found"
     },
     {
       "name": "获取工作台访问数据",
@@ -19560,9 +19556,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uUDM2YjL1AjN24SNwYjN",
-      "file_path": "../src/service/cloud_docs/docx/v1/document.rs",
-      "line_number": "83",
-      "implementation_preview": "pub async fn get_raw_content(",
+      "file_path": "../src/service/im/v1/chats.rs",
+      "line_number": "236",
+      "implementation_preview": "pub async fn get_announcement_block_content(",
       "status": "found"
     },
     {
