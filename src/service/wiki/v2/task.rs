@@ -260,8 +260,12 @@ impl TaskService {
     ///     _ => println!("任务状态未知"),
     /// }
     /// ```
-    pub async fn get_task_result(&self, req: &GetTaskResultRequest) -> SDKResult<GetTaskResultResponse> {
-        req.validate().map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
+    pub async fn get_task_result(
+        &self,
+        req: &GetTaskResultRequest,
+    ) -> SDKResult<GetTaskResultResponse> {
+        req.validate()
+            .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
         log::debug!("开始获取任务结果: task_id={}", req.task_id);
 
         // 构建动态端点路径
@@ -279,8 +283,11 @@ impl TaskService {
         let resp = Transport::<GetTaskResultResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("任务结果获取完成: task_id={}, status={:?}",
-                   req.task_id, response.task.status);
+        log::info!(
+            "任务结果获取完成: task_id={}, status={:?}",
+            req.task_id,
+            response.task.status
+        );
 
         Ok(response)
     }
@@ -429,7 +436,10 @@ mod tests {
     #[test]
     fn test_task_error_with_data() {
         let mut details = HashMap::new();
-        details.insert("field".to_string(), serde_json::Value::String("value".to_string()));
+        details.insert(
+            "field".to_string(),
+            serde_json::Value::String("value".to_string()),
+        );
 
         let error = TaskError {
             code: Some("ERROR_CODE".to_string()),
@@ -447,7 +457,10 @@ mod tests {
         // 测试成功结果
         let success_result = TaskResult::Success(serde_json::json!({"key": "value"}));
         if let TaskResult::Success(value) = success_result {
-            assert_eq!(value.get("key"), Some(&serde_json::Value::String("value".to_string())));
+            assert_eq!(
+                value.get("key"),
+                Some(&serde_json::Value::String("value".to_string()))
+            );
         }
 
         // 测试错误结果
@@ -486,7 +499,10 @@ mod tests {
     #[test]
     fn test_task_info_with_data() {
         let mut extra_data = HashMap::new();
-        extra_data.insert("batch_id".to_string(), serde_json::Value::String("batch_123".to_string()));
+        extra_data.insert(
+            "batch_id".to_string(),
+            serde_json::Value::String("batch_123".to_string()),
+        );
 
         let task_info = TaskInfo {
             task_id: Some("task_123".to_string()),
@@ -496,7 +512,9 @@ mod tests {
             create_time: Some("2023-01-01T00:00:00Z".to_string()),
             update_time: Some("2023-01-01T00:05:00Z".to_string()),
             finish_time: Some("2023-01-01T00:05:00Z".to_string()),
-            result: Some(TaskResult::Success(serde_json::json!({"imported_count": 10}))),
+            result: Some(TaskResult::Success(
+                serde_json::json!({"imported_count": 10}),
+            )),
             error: None,
             extra_data: Some(extra_data),
         };
@@ -505,9 +523,18 @@ mod tests {
         assert_eq!(task_info.status, Some(TaskStatus::Success));
         assert_eq!(task_info.progress, Some(100));
         assert_eq!(task_info.task_type, Some("document_import".to_string()));
-        assert_eq!(task_info.create_time, Some("2023-01-01T00:00:00Z".to_string()));
-        assert_eq!(task_info.update_time, Some("2023-01-01T00:05:00Z".to_string()));
-        assert_eq!(task_info.finish_time, Some("2023-01-01T00:05:00Z".to_string()));
+        assert_eq!(
+            task_info.create_time,
+            Some("2023-01-01T00:00:00Z".to_string())
+        );
+        assert_eq!(
+            task_info.update_time,
+            Some("2023-01-01T00:05:00Z".to_string())
+        );
+        assert_eq!(
+            task_info.finish_time,
+            Some("2023-01-01T00:05:00Z".to_string())
+        );
         assert!(task_info.result.is_some());
         assert!(task_info.extra_data.is_some());
     }
@@ -575,10 +602,7 @@ mod tests {
 
     #[test]
     fn test_api_response_trait_implementation() {
-        assert_eq!(
-            GetTaskResultResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(GetTaskResultResponse::data_format(), ResponseFormat::Data);
     }
 
     #[test]
@@ -690,7 +714,10 @@ mod tests {
     #[test]
     fn test_task_error_serialization() {
         let mut details = HashMap::new();
-        details.insert("retry_count".to_string(), serde_json::Value::Number(serde_json::Number::from(3)));
+        details.insert(
+            "retry_count".to_string(),
+            serde_json::Value::Number(serde_json::Number::from(3)),
+        );
 
         let error = TaskError {
             code: Some("NETWORK_ERROR".to_string()),

@@ -163,23 +163,32 @@ impl SpreadsheetService {
     ///
     /// # 返回值
     /// 返回创建的电子表格信息
-    pub async fn create(&self, req: &CreateSpreadsheetRequest) -> SDKResult<CreateSpreadsheetResponse> {
-        req.validate().map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
+    pub async fn create(
+        &self,
+        req: &CreateSpreadsheetRequest,
+    ) -> SDKResult<CreateSpreadsheetResponse> {
+        req.validate()
+            .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
         log::debug!("开始创建电子表格: title={:?}", req.title);
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: crate::core::endpoints_original::Endpoints::SHEETS_V3_SPREADSHEETS.to_string(),
+            api_path: crate::core::endpoints_original::Endpoints::SHEETS_V3_SPREADSHEETS
+                .to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(req)?,
             ..Default::default()
         };
 
-        let resp = Transport::<CreateSpreadsheetResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<CreateSpreadsheetResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("电子表格创建成功: title={}, spreadsheet_id={:?}",
-                   req.title, response.spreadsheet.spreadsheet_id);
+        log::info!(
+            "电子表格创建成功: title={}, spreadsheet_id={:?}",
+            req.title,
+            response.spreadsheet.spreadsheet_id
+        );
 
         Ok(response)
     }
@@ -228,7 +237,10 @@ impl CreateSpreadsheetBuilder {
     }
 
     /// 执行创建电子表格操作
-    pub async fn execute(self, service: &SpreadsheetService) -> SDKResult<CreateSpreadsheetResponse> {
+    pub async fn execute(
+        self,
+        service: &SpreadsheetService,
+    ) -> SDKResult<CreateSpreadsheetResponse> {
         service.create(&self.request).await
     }
 }
@@ -285,9 +297,18 @@ mod tests {
 
         assert_eq!(spreadsheet.spreadsheet_id, Some("sheet_456".to_string()));
         assert_eq!(spreadsheet.title, Some("财务报表".to_string()));
-        assert_eq!(spreadsheet.url, Some("https://example.com/sheet".to_string()));
-        assert_eq!(spreadsheet.creator.as_ref().unwrap().user_id, Some("user_123".to_string()));
-        assert_eq!(spreadsheet.creator.as_ref().unwrap().name, Some("张三".to_string()));
+        assert_eq!(
+            spreadsheet.url,
+            Some("https://example.com/sheet".to_string())
+        );
+        assert_eq!(
+            spreadsheet.creator.as_ref().unwrap().user_id,
+            Some("user_123".to_string())
+        );
+        assert_eq!(
+            spreadsheet.creator.as_ref().unwrap().name,
+            Some("张三".to_string())
+        );
         assert_eq!(spreadsheet.folder_token, Some("folder_789".to_string()));
     }
 
@@ -301,8 +322,7 @@ mod tests {
 
     #[test]
     fn test_create_spreadsheet_request() {
-        let request = CreateSpreadsheetRequest::new("测试表格")
-            .folder_token("folder_token");
+        let request = CreateSpreadsheetRequest::new("测试表格").folder_token("folder_token");
 
         assert_eq!(request.title, "测试表格");
         assert_eq!(request.folder_token, Some("folder_token".to_string()));
@@ -338,7 +358,10 @@ mod tests {
             .folder_token("test_folder");
 
         assert_eq!(builder.request.title, "构建器测试");
-        assert_eq!(builder.request.folder_token, Some("test_folder".to_string()));
+        assert_eq!(
+            builder.request.folder_token,
+            Some("test_folder".to_string())
+        );
     }
 
     #[test]
@@ -364,7 +387,10 @@ mod tests {
             ..Default::default()
         };
 
-        assert_eq!(response.spreadsheet.spreadsheet_id, Some("sheet_abc".to_string()));
+        assert_eq!(
+            response.spreadsheet.spreadsheet_id,
+            Some("sheet_abc".to_string())
+        );
         assert_eq!(response.spreadsheet.title, Some("响应测试".to_string()));
     }
 
@@ -378,8 +404,7 @@ mod tests {
 
     #[test]
     fn test_request_serialization() {
-        let request = CreateSpreadsheetRequest::new("序列化测试")
-            .folder_token("test_folder");
+        let request = CreateSpreadsheetRequest::new("序列化测试").folder_token("test_folder");
 
         let serialized = serde_json::to_string(&request).unwrap();
         let deserialized: CreateSpreadsheetRequest = serde_json::from_str(&serialized).unwrap();
@@ -443,7 +468,10 @@ mod tests {
             comprehensive_spreadsheet.spreadsheet_id,
             Some("comprehensive_sheet_001".to_string())
         );
-        assert_eq!(comprehensive_spreadsheet.title, Some("2023年度预算表".to_string()));
+        assert_eq!(
+            comprehensive_spreadsheet.title,
+            Some("2023年度预算表".to_string())
+        );
         assert_eq!(
             comprehensive_spreadsheet.url,
             Some("https://docs.example.com/sheets/comprehensive_sheet_001".to_string())

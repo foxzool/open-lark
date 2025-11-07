@@ -133,6 +133,8 @@ pub mod contact;
 pub mod corehr;
 #[cfg(feature = "directory")]
 pub mod directory;
+#[cfg(feature = "collaboration")]
+pub mod docx;
 #[cfg(feature = "ehr")]
 pub mod ehr;
 #[cfg(feature = "elearning")]
@@ -178,14 +180,10 @@ pub mod personal_settings;
 pub mod report;
 #[cfg(feature = "search")]
 pub mod search;
-#[cfg(feature = "collaboration")]
-pub mod sheets;
-#[cfg(feature = "collaboration")]
-pub mod docx;
-#[cfg(feature = "collaboration")]
-pub mod wiki;
 #[cfg(feature = "security_and_compliance")]
 pub mod security_and_compliance;
+#[cfg(feature = "collaboration")]
+pub mod sheets;
 #[cfg(feature = "task")]
 pub mod task;
 #[cfg(feature = "tenant")]
@@ -198,6 +196,8 @@ pub mod trust_party;
 pub mod vc;
 #[cfg(feature = "verification")]
 pub mod verification;
+#[cfg(feature = "collaboration")]
+pub mod wiki;
 #[cfg(feature = "workplace")]
 pub mod workplace;
 // 云文档服务模块
@@ -270,6 +270,8 @@ pub use passport::PassportService;
 // PayrollService is temporarily disabled due to serde conflicts
 // #[cfg(feature = "payroll")]
 // pub use payroll::PayrollService;
+#[cfg(feature = "collaboration")]
+pub use docx::DocxService;
 #[cfg(feature = "performance")]
 pub use performance::PerformanceService;
 #[cfg(feature = "personal-settings")]
@@ -278,14 +280,10 @@ pub use personal_settings::PersonalsettingsService;
 pub use report::ReportService;
 #[cfg(feature = "search")]
 pub use search::SearchService;
-#[cfg(feature = "collaboration")]
-pub use sheets::SheetsService;
-#[cfg(feature = "collaboration")]
-pub use docx::DocxService;
-#[cfg(feature = "collaboration")]
-pub use wiki::WikiService;
 #[cfg(feature = "security-and-compliance")]
 pub use security_and_compliance::SecurityandcomplianceService;
+#[cfg(feature = "collaboration")]
+pub use sheets::SheetsService;
 #[cfg(feature = "task")]
 pub use task::TaskService;
 #[cfg(feature = "tenant")]
@@ -298,5 +296,7 @@ pub use trust_party::TrustpartyService;
 pub use vc::VcService;
 #[cfg(feature = "verification")]
 pub use verification::VerificationService;
+#[cfg(feature = "collaboration")]
+pub use wiki::WikiService;
 #[cfg(feature = "workplace")]
 pub use workplace::WorkplaceService;

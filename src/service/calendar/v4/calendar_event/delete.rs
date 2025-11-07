@@ -20,9 +20,13 @@
 //! - 删除后该事件的所有相关信息将被清除
 //! - 如果事件有参与者，他们将收到删除通知
 
-use serde::{Deserialize, Serialize};
-use crate::core::{http::Transport, SDKResult, ApiRequest, api_resp::{ApiResponseTrait, ResponseFormat}};
+use crate::core::{
+    api_resp::{ApiResponseTrait, ResponseFormat},
+    http::Transport,
+    ApiRequest, SDKResult,
+};
 use crate::service::calendar::v4::models::CalendarEvent;
+use serde::{Deserialize, Serialize};
 
 /// 删除日程事件请求
 ///
@@ -226,8 +230,12 @@ impl DeleteCalendarEventBuilder {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn execute(self, service: &crate::service::calendar::v4::calendar_event::CalendarEventService) -> SDKResult<DeleteCalendarEventResponse> {
-        let request = self.build()
+    pub async fn execute(
+        self,
+        service: &crate::service::calendar::v4::calendar_event::CalendarEventService,
+    ) -> SDKResult<DeleteCalendarEventResponse> {
+        let request = self
+            .build()
             .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
         service.delete(&request).await
     }
@@ -305,8 +313,8 @@ mod tests {
 
     #[test]
     fn test_builder_user_id_type() {
-        let builder = DeleteCalendarEventBuilder::new("calendar_123", "event_456")
-            .user_id_type("open_id");
+        let builder =
+            DeleteCalendarEventBuilder::new("calendar_123", "event_456").user_id_type("open_id");
         assert_eq!(builder.request.user_id_type, Some("open_id".to_string()));
     }
 
@@ -411,7 +419,10 @@ mod tests {
         let response: DeleteCalendarEventResponse = serde_json::from_str(json).unwrap();
         assert_eq!(response.success, Some(true));
         assert!(response.event.is_some());
-        assert_eq!(response.event.unwrap().event_id, Some("event_456".to_string()));
+        assert_eq!(
+            response.event.unwrap().event_id,
+            Some("event_456".to_string())
+        );
         assert_eq!(response.message, Some("删除成功".to_string()));
     }
 
@@ -449,8 +460,8 @@ mod tests {
 
     #[test]
     fn test_builder_fluent_with_all_options() {
-        let builder = DeleteCalendarEventBuilder::new("calendar_123", "event_456")
-            .user_id_type("union_id");
+        let builder =
+            DeleteCalendarEventBuilder::new("calendar_123", "event_456").user_id_type("union_id");
 
         assert_eq!(builder.request.calendar_id, "calendar_123");
         assert_eq!(builder.request.event_id, "event_456");

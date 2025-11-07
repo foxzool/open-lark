@@ -249,8 +249,13 @@ impl SpaceNodeService {
     /// println!("节点类型: {:?}", result.node.node_type);
     /// ```
     pub async fn get(&self, req: &GetSpaceNodeRequest) -> SDKResult<GetSpaceNodeResponse> {
-        req.validate().map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
-        log::debug!("开始获取知识空间节点: space_id={}, node_id={}", req.space_id, req.node_id);
+        req.validate()
+            .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
+        log::debug!(
+            "开始获取知识空间节点: space_id={}, node_id={}",
+            req.space_id,
+            req.node_id
+        );
 
         // 构建动态端点路径
         let endpoint = crate::core::endpoints_original::Endpoints::WIKI_V2_SPACE_NODE_GET
@@ -268,8 +273,12 @@ impl SpaceNodeService {
         let resp = Transport::<GetSpaceNodeResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("知识空间节点获取完成: space_id={}, node_id={}, title={:?}",
-                   req.space_id, req.node_id, response.node.title);
+        log::info!(
+            "知识空间节点获取完成: space_id={}, node_id={}, title={:?}",
+            req.space_id,
+            req.node_id,
+            response.node.title
+        );
 
         Ok(response)
     }
@@ -484,12 +493,27 @@ mod tests {
         assert_eq!(node_info.node_id, Some("node_789".to_string()));
         assert_eq!(node_info.title, Some("项目文档".to_string()));
         assert_eq!(node_info.node_type, Some("doc".to_string()));
-        assert_eq!(node_info.parent_node_id, Some("parent_node_001".to_string()));
+        assert_eq!(
+            node_info.parent_node_id,
+            Some("parent_node_001".to_string())
+        );
         assert_eq!(node_info.version, Some(3));
-        assert_eq!(node_info.creator.as_ref().unwrap().user_id, Some("user_123".to_string()));
-        assert_eq!(node_info.creator.as_ref().unwrap().name, Some("张三".to_string()));
-        assert_eq!(node_info.updater.as_ref().unwrap().user_id, Some("user_456".to_string()));
-        assert_eq!(node_info.updater.as_ref().unwrap().name, Some("李四".to_string()));
+        assert_eq!(
+            node_info.creator.as_ref().unwrap().user_id,
+            Some("user_123".to_string())
+        );
+        assert_eq!(
+            node_info.creator.as_ref().unwrap().name,
+            Some("张三".to_string())
+        );
+        assert_eq!(
+            node_info.updater.as_ref().unwrap().user_id,
+            Some("user_456".to_string())
+        );
+        assert_eq!(
+            node_info.updater.as_ref().unwrap().name,
+            Some("李四".to_string())
+        );
         assert_eq!(node_info.status, Some("published".to_string()));
         assert_eq!(node_info.has_child, Some(true));
     }
@@ -551,10 +575,7 @@ mod tests {
 
     #[test]
     fn test_api_response_trait_implementation() {
-        assert_eq!(
-            GetSpaceNodeResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(GetSpaceNodeResponse::data_format(), ResponseFormat::Data);
     }
 
     #[test]
@@ -682,7 +703,10 @@ mod tests {
             comprehensive_node.node_id,
             Some("comprehensive_node_001".to_string())
         );
-        assert_eq!(comprehensive_node.title, Some("2023年度工作总结".to_string()));
+        assert_eq!(
+            comprehensive_node.title,
+            Some("2023年度工作总结".to_string())
+        );
         assert_eq!(comprehensive_node.node_type, Some("doc".to_string()));
         assert_eq!(
             comprehensive_node.parent_node_id,

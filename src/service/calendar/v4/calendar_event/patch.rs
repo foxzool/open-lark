@@ -15,9 +15,15 @@
 //!
 //! 需要 `calendar:calendar` 权限。
 
+use crate::core::{
+    api_resp::{ApiResponseTrait, ResponseFormat},
+    http::Transport,
+    ApiRequest, SDKResult,
+};
+use crate::service::calendar::v4::models::{
+    CalendarEvent, EventAttendee, Location, MeetingRoom, Reminder, TimeInfo,
+};
 use serde::{Deserialize, Serialize};
-use crate::core::{http::Transport, SDKResult, ApiRequest, api_resp::{ApiResponseTrait, ResponseFormat}};
-use crate::service::calendar::v4::models::{CalendarEvent, TimeInfo, Reminder, EventAttendee, MeetingRoom, Location};
 
 /// 更新日程事件请求
 ///
@@ -212,9 +218,7 @@ pub struct PatchCalendarEventResponse {
 
 impl Default for PatchCalendarEventResponse {
     fn default() -> Self {
-        Self {
-            event: None,
-        }
+        Self { event: None }
     }
 }
 
@@ -360,8 +364,12 @@ impl PatchCalendarEventBuilder {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn execute(self, service: &crate::service::calendar::v4::calendar_event::CalendarEventService) -> SDKResult<PatchCalendarEventResponse> {
-        let request = self.build()
+    pub async fn execute(
+        self,
+        service: &crate::service::calendar::v4::calendar_event::CalendarEventService,
+    ) -> SDKResult<PatchCalendarEventResponse> {
+        let request = self
+            .build()
             .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
         service.patch(&request).await
     }
@@ -504,36 +512,34 @@ mod tests {
 
     #[test]
     fn test_builder_summary() {
-        let builder = PatchCalendarEventBuilder::new("calendar_123", "event_456")
-            .summary("更新的会议");
+        let builder =
+            PatchCalendarEventBuilder::new("calendar_123", "event_456").summary("更新的会议");
         assert_eq!(builder.request.summary, Some("更新的会议".to_string()));
     }
 
     #[test]
     fn test_builder_description() {
-        let builder = PatchCalendarEventBuilder::new("calendar_123", "event_456")
-            .description("更新的描述");
+        let builder =
+            PatchCalendarEventBuilder::new("calendar_123", "event_456").description("更新的描述");
         assert_eq!(builder.request.description, Some("更新的描述".to_string()));
     }
 
     #[test]
     fn test_builder_is_all_day() {
-        let builder = PatchCalendarEventBuilder::new("calendar_123", "event_456")
-            .is_all_day(true);
+        let builder = PatchCalendarEventBuilder::new("calendar_123", "event_456").is_all_day(true);
         assert_eq!(builder.request.is_all_day, Some(true));
     }
 
     #[test]
     fn test_builder_color() {
-        let builder = PatchCalendarEventBuilder::new("calendar_123", "event_456")
-            .color(5);
+        let builder = PatchCalendarEventBuilder::new("calendar_123", "event_456").color(5);
         assert_eq!(builder.request.color, Some(5));
     }
 
     #[test]
     fn test_builder_user_id_type() {
-        let builder = PatchCalendarEventBuilder::new("calendar_123", "event_456")
-            .user_id_type("open_id");
+        let builder =
+            PatchCalendarEventBuilder::new("calendar_123", "event_456").user_id_type("open_id");
         assert_eq!(builder.request.user_id_type, Some("open_id".to_string()));
     }
 
@@ -639,7 +645,10 @@ mod tests {
         "#;
         let response: PatchCalendarEventResponse = serde_json::from_str(json).unwrap();
         assert!(response.event.is_some());
-        assert_eq!(response.event.unwrap().event_id, Some("event_456".to_string()));
+        assert_eq!(
+            response.event.unwrap().event_id,
+            Some("event_456".to_string())
+        );
     }
 
     #[test]
