@@ -404,6 +404,11 @@ path = "examples/api/sheets_v3_basic_example.rs"
 required-features = ["cloud-docs"]
 
 [[example]]
+name = "sheets_v2_update_cell"
+path = "examples/api/sheets_v2_update_cell.rs"
+required-features = ["cloud-docs"]
+
+[[example]]
 name = "core_query_attendance"
 path = "examples/core/query_attendance.rs"
 required-features = ["attendance"]
