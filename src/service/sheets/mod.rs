@@ -30,9 +30,11 @@
 //!     .await?;
 //! ```
 
+pub mod v2;
 pub mod v3;
 
 // 重新导出所有服务类型
+pub use v2::*;
 pub use v3::*;
 
 use crate::core::config::Config;
@@ -44,6 +46,8 @@ use crate::core::config::Config;
 #[derive(Debug, Clone)]
 pub struct SheetsService {
     config: Config,
+    /// v2版本服务
+    pub v2: v2::SheetsServiceV2,
     /// v3版本服务
     pub v3: v3::SheetsServiceV3,
 }
@@ -66,6 +70,7 @@ impl SheetsService {
     pub fn new(config: Config) -> Self {
         Self {
             config: config.clone(),
+            v2: v2::SheetsServiceV2::new(config.clone()),
             #[cfg(feature = "collaboration")]
             v3: v3::SheetsServiceV3::new(config),
         }
