@@ -7,10 +7,13 @@
 #![allow(clippy::module_inception)]
 //! IM API v1版本
 
-/// 简单的占位符模块，用于解决导入问题
+use crate::service::im::v1::chats::ChatsService;
+
+/// IM API v1版本服务
 #[derive(Debug, Clone)]
 pub struct MessageService {
     pub message: MessageServiceInner,
+    pub chats: ChatsService,
 }
 
 #[derive(Debug, Clone)]
@@ -20,6 +23,7 @@ impl MessageService {
     pub fn new() -> Self {
         Self {
             message: MessageServiceInner,
+            chats: ChatsService::new(crate::core::config::Config::default()),
         }
     }
 }
@@ -256,6 +260,8 @@ pub mod message {
         }
     }
 }
+
+pub mod chats;
 
 pub mod p2_im_message_read_v1 {
     use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};

@@ -367,6 +367,13 @@ impl Endpoints {
     /// 获取消息列表
     pub const IM_V1_LIST_MESSAGE: &'static str = "/open-apis/im/v1/messages";
 
+    /// 转发消息
+    pub const IM_V1_FORWARD_MESSAGE: &'static str =
+        "/open-apis/im/v1/messages/{message_id}/forward";
+
+    /// 上传图片
+    pub const IM_V1_IMAGES_UPLOAD: &'static str = "/open-apis/im/v1/images";
+
     // 聊天管理
     /// 创建聊天
     pub const IM_CHAT_CREATE: &'static str = "/open-apis/im/v1/chats";
@@ -615,6 +622,9 @@ impl Endpoints {
 
     /// 发送消息
     pub const APPROVAL_V4_MESSAGES: &'static str = "/open-apis/approval/v4/messages";
+
+    /// 批量发送消息 v4
+    pub const MESSAGE_V4_BATCH_SEND: &'static str = "/open-apis/message/v4/batch_send/";
 
     /// 更新消息 (需要使用 EndpointBuilder::replace_param 替换 {message_id})
     pub const APPROVAL_V4_MESSAGE_PATCH: &'static str =
@@ -2115,12 +2125,19 @@ impl Endpoints {
     pub const DOCX_V1_DOCUMENT_BLOCKS_BATCH_DELETE: &'static str =
         "/open-apis/docx/v1/documents/{}/blocks/batch_delete";
 
+    /// 群公告管理
+    pub const DOCX_V1_CHAT_ANNOUNCEMENT: &'static str = "/open-apis/docx/v1/chats/{}/announcement";
+    pub const DOCX_V1_CHAT_ANNOUNCEMENT_BLOCK: &'static str =
+        "/open-apis/docx/v1/chats/{}/announcement/blocks/{}";
+
     // Drive 云盘服务
     /// 文件管理
     pub const DRIVE_V1_FILES: &'static str = "/open-apis/drive/v1/files";
     pub const DRIVE_V1_FILE_GET: &'static str = "/open-apis/drive/v1/files/{}";
     pub const DRIVE_V1_FILE_COPY: &'static str = "/open-apis/drive/v1/files/{}/copy";
     pub const DRIVE_V1_FILE_DOWNLOAD: &'static str = "/open-apis/drive/v1/files/{}/download";
+    /// 删除文件或文件夹
+    pub const DRIVE_V1_FILES_DELETE: &'static str = "/open-apis/drive/v1/files/{}";
     pub const DRIVE_V1_FILE_STATISTICS: &'static str = "/open-apis/drive/v1/files/{}/statistics";
     pub const DRIVE_V1_FILE_VIEW_RECORDS: &'static str =
         "/open-apis/drive/v1/files/{}/view_records";
@@ -2140,6 +2157,14 @@ impl Endpoints {
     /// 文件订阅管理
     pub const DRIVE_V1_FILE_SUBSCRIPTIONS: &'static str =
         "/open-apis/drive/v1/files/{}/subscriptions/{}";
+
+    /// 查询云文档事件订阅状态
+    pub const DRIVE_V1_FILE_GET_SUBSCRIBE: &'static str =
+        "/open-apis/drive/v1/files/{}/get_subscribe";
+
+    /// 取消云文档事件订阅
+    pub const DRIVE_V1_FILE_DELETE_SUBSCRIBE: &'static str =
+        "/open-apis/drive/v1/files/{}/delete_subscribe";
 
     /// 文件夹管理
     pub const DRIVE_V1_FOLDERS: &'static str = "/open-apis/drive/v1/folders";
@@ -2523,6 +2548,9 @@ impl Endpoints {
     /// 搜索应用
     pub const SEARCH_V2_APP: &'static str = "/open-apis/search/v2/app";
 
+    /// 搜索云文档对象
+    pub const SUITE_DOCS_SEARCH_OBJECT: &'static str = "/open-apis/suite/docs-api/search/object";
+
     /// 数据源操作（创建/列表）
     pub const SEARCH_V2_DATA_SOURCES: &'static str = "/open-apis/search/v2/data_sources";
 
@@ -2615,6 +2643,18 @@ impl Endpoints {
     /// 创建卡片元素
     pub const CARDKIT_V1_CARD_ELEMENTS: &'static str =
         "/open-apis/cardkit/v1/cards/{card_id}/elements";
+
+    /// 更新卡片元素
+    pub const CARDKIT_V1_CARD_ELEMENTS_UPDATE: &'static str =
+        "/open-apis/cardkit/v1/cards/{card_id}/elements/{element_id}";
+
+    /// 更新组件属性
+    pub const CARDKIT_V1_CARD_ELEMENTS_PATCH: &'static str =
+        "/open-apis/cardkit/v1/cards/{card_id}/elements/{element_id}";
+
+    /// 删除卡片元素
+    pub const CARDKIT_V1_CARD_ELEMENTS_DELETE: &'static str =
+        "/open-apis/cardkit/v1/cards/{card_id}/elements/{element_id}";
 
     /// 卡片设置
     pub const CARDKIT_V1_CARD_SETTINGS: &'static str =
@@ -2816,6 +2856,10 @@ impl Endpoints {
     // ==================== Authentication 用户认证相关端点 ====================
     /// 获取用户信息
     pub const AUTHEN_V1_USER_INFO: &'static str = "/open-apis/authen/v1/user_info";
+
+    // ==================== Passport 护照服务相关端点 ====================
+    /// 退出登录
+    pub const PASSPORT_V1_SESSIONS_LOGOUT: &'static str = "/open-apis/passport/v1/sessions/logout";
 
     // ==================== Calendar 日历相关端点 (补充) ====================
     /// 日历管理
@@ -3182,6 +3226,9 @@ pub const TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULE_OPERATION: &str =
 // CARDKIT constants
 pub const CARDKIT_V1_CARDS: &str = Endpoints::CARDKIT_V1_CARDS;
 pub const CARDKIT_V1_CARD_ELEMENTS: &str = Endpoints::CARDKIT_V1_CARD_ELEMENTS;
+pub const CARDKIT_V1_CARD_ELEMENTS_UPDATE: &str = Endpoints::CARDKIT_V1_CARD_ELEMENTS_UPDATE;
+pub const CARDKIT_V1_CARD_ELEMENTS_PATCH: &str = Endpoints::CARDKIT_V1_CARD_ELEMENTS_PATCH;
+pub const CARDKIT_V1_CARD_ELEMENTS_DELETE: &str = Endpoints::CARDKIT_V1_CARD_ELEMENTS_DELETE;
 pub const CARDKIT_V1_CARD_SETTINGS: &str = Endpoints::CARDKIT_V1_CARD_SETTINGS;
 pub const CARDKIT_V1_CARD_UPDATE: &str = Endpoints::CARDKIT_V1_CARD_UPDATE;
 pub const CARDKIT_V1_CARD_BATCH_UPDATE: &str = Endpoints::CARDKIT_V1_CARD_BATCH_UPDATE;

@@ -164,6 +164,8 @@ pub mod minutes;
 pub mod moments;
 #[cfg(feature = "okr")]
 pub mod okr;
+#[cfg(feature = "passport")]
+pub mod passport;
 #[cfg(feature = "payroll")]
 pub mod payroll;
 #[cfg(feature = "performance")]
@@ -253,7 +255,11 @@ pub use minutes::MinutesService;
 pub use moments::MomentsService;
 #[cfg(feature = "okr")]
 pub use okr::OkrService;
-#[cfg(feature = "payroll")]
+#[cfg(feature = "passport")]
+pub use passport::PassportService;
+// PayrollService is temporarily disabled due to serde conflicts
+// #[cfg(feature = "payroll")]
+// pub use payroll::PayrollService;
 #[cfg(feature = "performance")]
 pub use performance::PerformanceService;
 #[cfg(feature = "personal-settings")]
