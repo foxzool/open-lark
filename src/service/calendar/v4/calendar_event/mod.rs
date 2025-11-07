@@ -15,6 +15,7 @@ pub mod unsubscription;
 pub use get::{GetCalendarEventRequest, GetCalendarEventResponse, GetCalendarEventBuilder};
 pub use create::{CreateCalendarEventRequest, CreateCalendarEventResponse, CreateCalendarEventBuilder};
 pub use delete::{DeleteCalendarEventRequest, DeleteCalendarEventResponse, DeleteCalendarEventBuilder};
+pub use list::{ListCalendarEventsRequest, ListCalendarEventsResponse, ListCalendarEventsBuilder};
 pub use patch::{PatchCalendarEventRequest, PatchCalendarEventResponse, PatchCalendarEventBuilder};
 
 /// 日程管理服务
@@ -135,6 +136,118 @@ impl CalendarEventService {
         event_id: impl Into<String>,
     ) -> GetCalendarEventBuilder {
         GetCalendarEventBuilder::new(calendar_id, event_id)
+    }
+
+    /// 获取日程事件列表
+    ///
+    /// 分页获取指定日历中的日程事件列表，支持按时间范围、关键词等条件过滤，
+    /// 支持多种排序方式。
+    ///
+    /// # 参数
+    /// - `req`: 获取日程事件列表请求
+    ///
+    /// # 返回
+    /// - `Ok(ListCalendarEventsResponse)`: 获取成功，返回日程事件列表和分页信息
+    /// - `Err(SDKError)`: 获取失败，返回错误信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::calendar::v4::calendar_event::ListCalendarEventsRequest;
+    ///
+    /// # async fn example() -> Result<(), Box<dyn std::error::Error>> {
+    /// let client = LarkClient::builder("app_id", "app_secret").build()?;
+    /// let request = ListCalendarEventsRequest::new("calendar_123")
+    ///     .page_size(20)
+    ///     .time_min("2024-01-01T00:00:00Z")
+    ///     .time_max("2024-01-31T23:59:59Z")
+    ///     .sort_by("start_time")
+    ///     .user_id_type("open_id");
+    /// let response = client.calendar.v4.calendar_event.list(&request).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub async fn list(&self, req: &ListCalendarEventsRequest) -> SDKResult<ListCalendarEventsResponse> {
+        req.validate()
+            .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
+        log::debug!("开始获取日程事件列表: calendar_id={}, page_size={:?}",
+                   req.calendar_id, req.page_size);
+
+        // 构建动态端点路径和查询参数
+        let base_endpoint = crate::core::endpoints_original::Endpoints::CALENDAR_EVENT_LIST
+            .replace("{}", &req.calendar_id);
+        let query_string = req.build_query_string();
+        let endpoint = format!("{}{}", base_endpoint, query_string);
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path: endpoint,
+            supported_access_token_types: vec![
+                crate::core::constants::AccessTokenType::Tenant,
+                crate::core::constants::AccessTokenType::User
+            ],
+            body: Vec::new(), // GET请求无body
+            ..Default::default()
+        };
+
+        let resp = crate::core::http::Transport::<ListCalendarEventsResponse>::request(api_req, &self.config, None).await?;
+        let response = resp.data.unwrap_or_default();
+
+        let event_count = response.events.as_ref().map_or(0, |e| e.len());
+        log::info!("日程事件列表获取完成: calendar_id={}, event_count={}, has_more={:?}",
+                   req.calendar_id, event_count, response.has_more);
+
+        Ok(response)
+    }
+
+    /// 获取日程事件列表构建器
+    ///
+    /// 创建一个用于获取日程事件列表的构建器实例，支持流式API设计。
+    ///
+    /// # 参数
+    /// - `calendar_id`: 日历ID
+    ///
+    /// # 返回
+    /// - `ListCalendarEventsBuilder`: 日程事件列表获取构建器实例
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    ///
+    /// # async fn example() -> Result<(), Box<dyn std::error::Error>> {
+    /// let client = LarkClient::builder("app_id", "app_secret").build()?;
+    /// let response = client
+    ///     .calendar
+    ///     .v4
+    ///     .calendar_event
+    ///     .list_calendar_events_builder("calendar_123")
+    ///     .page_size(20)
+    ///     .time_min("2024-01-01T00:00:00Z")
+    ///     .time_max("2024-01-31T23:59:59Z")
+    ///     .sort_by("start_time")
+    ///     .sort_order("asc")
+    ///     .user_id_type("open_id")
+    ///     .execute(&client.calendar.v4.calendar_event)
+    ///     .await?;
+    ///
+    /// if let Some(events) = response.events {
+    ///     println!("获取到 {} 个日程事件", events.len());
+    ///     for event in events {
+    ///         if let Some(summary) = event.summary {
+    ///             println!("- {}", summary);
+    ///         }
+    ///     }
+    /// }
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub fn list_calendar_events_builder(
+        &self,
+        calendar_id: impl Into<String>,
+    ) -> ListCalendarEventsBuilder {
+        ListCalendarEventsBuilder::new(calendar_id)
     }
 
     /// 创建日程事件
