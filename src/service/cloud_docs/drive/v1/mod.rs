@@ -278,6 +278,49 @@ impl DriveServiceV1 {
     pub fn get_file_subscription_builder(&self, request: GetFileSubscriptionRequest) -> GetFileSubscriptionBuilder {
         GetFileSubscriptionBuilder::new(std::sync::Arc::new(self.clone()), request)
     }
+
+    /// 取消云文档事件订阅构建器
+    ///
+    /// 创建一个取消云文档事件订阅的构建器，支持取消指定文件的文档事件订阅。
+    /// 可以取消特定类型的订阅或全部订阅，包含安全确认机制防止误操作。
+    ///
+    /// # 参数
+    /// * `request` - 取消云文档事件订阅请求，包含文件令牌和确认标志
+    ///
+    /// # 返回
+    /// 返回取消云文档事件订阅构建器，可用于执行取消操作
+    ///
+    /// # 安全措施
+    /// * 必须显式确认取消操作（confirm=true）
+    /// * 支持选择性取消特定订阅类型
+    /// * 提供详细的操作结果和影响范围
+    /// * 记录操作时间戳和前后状态对比
+    ///
+    /// # 示例
+    /// ```rust,no_run
+    /// use open_lark::service::cloud_docs::drive::v1::subscription::{DeleteFileSubscriptionRequest, DeleteFileSubscriptionResponse, SubscriptionType};
+    ///
+    /// async fn delete_file_subscription_example(
+    ///     service: std::sync::Arc<DriveServiceV1>,
+    /// ) -> Result<DeleteFileSubscriptionResponse, Box<dyn std::error::Error>> {
+    ///     let request = DeleteFileSubscriptionRequest::builder()
+    ///         .file_token("file_token_123")
+    ///         .confirm(true)  // 必须显式确认
+    ///         .subscription_type(SubscriptionType::FileContentChanged)
+    ///         .build()?;
+    ///
+    ///     let response = service
+    ///         .delete_file_subscription_builder(request)
+    ///         .execute()
+    ///         .await?;
+    ///
+    ///     println!("取消订阅成功，影响订阅者: {}", response.data.as_ref().unwrap().affected_subscribers);
+    ///     Ok(response)
+    /// }
+    /// ```
+    pub fn delete_file_subscription_builder(&self, request: DeleteFileSubscriptionRequest) -> DeleteFileSubscriptionBuilder {
+        DeleteFileSubscriptionBuilder::new(std::sync::Arc::new(self.clone()), request)
+    }
 }
 
 impl crate::core::service_trait::Service for DriveServiceV1 {
@@ -460,5 +503,109 @@ mod tests {
             .build();
 
         assert!(invalid_request.is_err());
+    }
+
+    #[test]
+    fn test_delete_file_subscription_builder_creation() {
+        let service = create_test_service();
+        let request = DeleteFileSubscriptionRequest::builder()
+            .file_token("file_token_123")
+            .confirm(true)
+            .build()
+            .unwrap();
+
+        let builder = service.delete_file_subscription_builder(request);
+        // 验证构建器创建成功
+        assert_eq!(builder.request.file_token, "file_token_123");
+        assert!(builder.request.confirm);
+    }
+
+    #[test]
+    fn test_delete_subscription_module_integration() {
+        // 测试DELETE订阅模块正确集成到DriveServiceV1中
+        let service = create_test_service();
+
+        // 验证可以正确创建删除订阅请求
+        let request = DeleteFileSubscriptionRequest::new("test_delete_file_789", true);
+        assert_eq!(request.file_token, "test_delete_file_789");
+        assert!(request.confirm);
+
+        // 验证可以正确创建构建器
+        let builder = service.delete_file_subscription_builder(request);
+        assert_eq!(builder.request.file_token, "test_delete_file_789");
+        assert!(builder.request.confirm);
+    }
+
+    #[test]
+    fn test_delete_subscription_request_validation() {
+        let service = create_test_service();
+
+        // 测试有效的删除请求
+        let valid_request = DeleteFileSubscriptionRequest::builder()
+            .file_token("valid_file_token_12345")
+            .confirm(true)
+            .subscription_type(SubscriptionType::FileContentChanged)
+            .build()
+            .unwrap();
+
+        let _builder = service.delete_file_subscription_builder(valid_request);
+
+        // 测试空文件令牌
+        let empty_request = DeleteFileSubscriptionRequest::builder()
+            .confirm(true)
+            .build();
+
+        assert!(empty_request.is_err());
+
+        // 测试缺少确认
+        let no_confirm_request = DeleteFileSubscriptionRequest::builder()
+            .file_token("valid_file_token_123")
+            .build();
+
+        assert!(no_confirm_request.is_err());
+
+        // 测试过短的文件令牌
+        let short_request = DeleteFileSubscriptionRequest::new("short", true);
+        assert!(short_request.build().is_err());
+
+        // 测试包含无效字符的文件令牌
+        let invalid_request = DeleteFileSubscriptionRequest::new("token@invalid", true);
+        assert!(invalid_request.build().is_err());
+
+        // 测试未确认的请求
+        let unconfirmed_request = DeleteFileSubscriptionRequest::new("valid_file_token_123", false);
+        assert!(unconfirmed_request.build().is_err());
+    }
+
+    #[test]
+    fn test_subscription_and_delete_functionality_together() {
+        // 测试GET和DELETE订阅功能协同工作
+        let service = create_test_service();
+
+        // 创建查询订阅请求
+        let get_request = GetFileSubscriptionRequest::builder()
+            .file_token("test_file_both_123")
+            .build()
+            .unwrap();
+
+        let get_builder = service.get_file_subscription_builder(get_request);
+        assert_eq!(get_builder.request.file_token, "test_file_both_123");
+
+        // 创建删除订阅请求
+        let delete_request = DeleteFileSubscriptionRequest::builder()
+            .file_token("test_file_both_123")
+            .confirm(true)
+            .build()
+            .unwrap();
+
+        let delete_builder = service.delete_file_subscription_builder(delete_request);
+        assert_eq!(delete_builder.request.file_token, "test_file_both_123");
+        assert!(delete_builder.request.confirm);
+
+        // 验证两个构建器都指向同一个文件
+        assert_eq!(
+            get_builder.request.file_token,
+            delete_builder.request.file_token
+        );
     }
 }
