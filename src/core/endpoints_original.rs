@@ -2160,6 +2160,9 @@ impl Endpoints {
     /// 查询云文档事件订阅状态
     pub const DRIVE_V1_FILE_GET_SUBSCRIBE: &'static str = "/open-apis/drive/v1/files/{}/get_subscribe";
 
+    /// 取消云文档事件订阅
+    pub const DRIVE_V1_FILE_DELETE_SUBSCRIBE: &'static str = "/open-apis/drive/v1/files/{}/delete_subscribe";
+
     /// 文件夹管理
     pub const DRIVE_V1_FOLDERS: &'static str = "/open-apis/drive/v1/folders";
     pub const DRIVE_V1_FOLDER_GET: &'static str = "/open-apis/drive/v1/folders/{}";
