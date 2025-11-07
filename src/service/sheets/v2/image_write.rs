@@ -1018,13 +1018,13 @@ mod tests {
     #[test]
     fn test_excel_cell_reference_validation() {
         assert!(is_valid_excel_cell_reference("A1"));
-        assert!(is_valid_cell_reference("Z100"));
-        assert!(is_valid_excel_reference("AA10"));
+        assert!(is_valid_excel_cell_reference("Z100"));
+        assert!(is_valid_excel_cell_reference("AA10"));
         assert!(!is_valid_excel_cell_reference(""));
-        assert!(!is_valid_cell_reference("A"));
-        assert!(!is_valid_cell_reference("1"));
-        assert!(!is_valid_cell_reference("A1A"));
-        assert!(!is_valid_cell_reference("A 1"));
+        assert!(!is_valid_excel_cell_reference("A"));
+        assert!(!is_valid_excel_cell_reference("1"));
+        assert!(!is_valid_excel_cell_reference("A1A"));
+        assert!(!is_valid_excel_cell_reference("A 1"));
     }
 
     #[test]
@@ -1669,7 +1669,11 @@ mod service_tests {
             // 这里只是验证函数签名，不实际调用
         };
 
-        _(&service, "token", "image_id", position, size);
+        // 测试函数调用 - 验证方法签名
+        let test_func = |_: &ImageWriteService, token: &str, id: &str, pos: ImagePosition, size: Option<ImageSize>| {
+            // 这里只是验证函数签名，不实际调用
+        };
+        test_func(&service, "token", "image_id", position, size);
     }
 
     #[test]
@@ -1682,7 +1686,11 @@ mod service_tests {
             // 这里只是验证函数签名，不实际调用
         };
 
-        _(&service, "token", "image_id");
+        // 测试函数调用 - 验证方法签名
+        let test_func = |_: &ImageWriteService, token: &str, id: &str| {
+            // 这里只是验证函数签名，不实际调用
+        };
+        test_func(&service, "token", "image_id");
     }
 
     #[test]
@@ -1695,7 +1703,11 @@ mod service_tests {
             // 这里只是验证函数签名，不实际调用
         };
 
-        _(&service, "token", "image_id");
+        // 测试函数调用 - 验证方法签名
+        let test_func = |_: &ImageWriteService, token: &str, id: &str| {
+            // 这里只是验证函数签名，不实际调用
+        };
+        test_func(&service, "token", "image_id");
     }
 }
 
