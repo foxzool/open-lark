@@ -180,6 +180,8 @@ pub mod report;
 pub mod search;
 #[cfg(feature = "collaboration")]
 pub mod sheets;
+#[cfg(feature = "collaboration")]
+pub mod docx;
 #[cfg(feature = "security_and_compliance")]
 pub mod security_and_compliance;
 #[cfg(feature = "task")]
@@ -276,6 +278,8 @@ pub use report::ReportService;
 pub use search::SearchService;
 #[cfg(feature = "collaboration")]
 pub use sheets::SheetsService;
+#[cfg(feature = "collaboration")]
+pub use docx::DocxService;
 #[cfg(feature = "security-and-compliance")]
 pub use security_and_compliance::SecurityandcomplianceService;
 #[cfg(feature = "task")]
