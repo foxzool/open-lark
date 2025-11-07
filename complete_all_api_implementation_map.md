@@ -1,10 +1,10 @@
 # 完整API实现映射表
 
-**生成时间**: 2025-11-07 17:30:00
+**生成时间**: 2025-11-07 19:48:00
 **总API数**: 1551
-**已实现**: 950
-**实现率**: 61.3%  
-**处理耗时**: 1.4 分钟  
+**已实现**: 951
+**实现率**: 61.3%
+**处理耗时**: 1.4 分钟
 **处理速度**: 18.8 API/秒  
 
 | 序号 | API名称 | 请求方式 | API地址 | 文档链接 | 文件路径 | 行号 | 状态 |
@@ -250,7 +250,7 @@
 | 239 | [获取文档纯文本内容](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/raw_content) | GET | `/open-apis/docx/v1/documents/:document_id/raw_content` | https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/raw_content | `../src/service/cloud_docs/docx/v1/document.rs` | 83 | ✅ 已实现 |
 | 240 | [获取文档所有块](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block/list) | GET | `/open-apis/docx/v1/documents/:document_id/blocks` | https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block/list | `../src/service/cloud_docs/docx/v1/document.rs` | 106 | ✅ 已实现 |
 | 241 | [创建块](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block-children/create) | POST | `/open-apis/docx/v1/documents/:document_id/blocks/:block_id/children` | https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block-children/create | `../src/service/cloud_docs/docx/v1/document_block.rs` | 163 | ✅ 已实现 |
-| 242 | [创建嵌套块](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block-descendant/create) | POST | `/open-apis/docx/v1/documents/:document_id/blocks/:block_id/descendant` | https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block-descendant/create | `未找到` | - | ❌ 未实现 |
+| 242 | [创建嵌套块](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block-descendant/create) | POST | `/open-apis/docx/v1/documents/:document_id/blocks/:block_id/descendant` | https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block-descendant/create | `../src/service/cloud_docs/docx/v1/document_block_descendant.rs` | 770 | ✅ 已实现 |
 | 243 | [更新块的内容](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block/patch) | PATCH | `/open-apis/docx/v1/documents/:document_id/blocks/:block_id` | https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block/patch | `未找到` | - | ❌ 未实现 |
 | 244 | [获取块的内容](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block/get) | GET | `/open-apis/docx/v1/documents/:document_id/blocks/:block_id` | https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block/get | `未找到` | - | ❌ 未实现 |
 | 245 | [批量更新块的内容](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block/batch_update) | PATCH | `/open-apis/docx/v1/documents/:document_id/blocks/batch_update` | https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block/batch_update | `../src/service/apass/object/mod.rs` | 304 | ✅ 已实现 |

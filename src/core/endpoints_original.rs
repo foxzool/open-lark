@@ -2127,6 +2127,8 @@ impl Endpoints {
         "/open-apis/docx/v1/documents/{}/blocks/{}/children";
     pub const DOCX_V1_DOCUMENT_BLOCKS_BATCH_UPDATE: &'static str =
         "/open-apis/docx/v1/documents/{document_id}/blocks/batch_update";
+    pub const DOCX_V1_DOCUMENT_BLOCK_DESCENDANT_CREATE: &'static str =
+        "/open-apis/docx/v1/documents/{document_id}/blocks/{block_id}/descendant";
     pub const DOCX_V1_DOCUMENT_BLOCKS_BATCH_DELETE: &'static str =
         "/open-apis/docx/v1/documents/{}/blocks/batch_delete";
 
