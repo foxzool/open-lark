@@ -14,6 +14,7 @@ pub mod unsubscription;
 // 重新导出所有请求和响应类型
 pub use get::{GetCalendarEventRequest, GetCalendarEventResponse, GetCalendarEventBuilder};
 pub use create::{CreateCalendarEventRequest, CreateCalendarEventResponse, CreateCalendarEventBuilder};
+pub use delete::{DeleteCalendarEventRequest, DeleteCalendarEventResponse, DeleteCalendarEventBuilder};
 
 /// 日程管理服务
 ///
@@ -223,5 +224,96 @@ impl CalendarEventService {
         calendar_id: impl Into<String>,
     ) -> CreateCalendarEventBuilder {
         CreateCalendarEventBuilder::new(calendar_id)
+    }
+
+    /// 删除日程事件
+    ///
+    /// 删除指定的日程事件，删除后不可恢复，请谨慎使用。
+    ///
+    /// # 参数
+    /// - `req`: 删除日程事件请求
+    ///
+    /// # 返回
+    /// - `Ok(DeleteCalendarEventResponse)`: 删除成功，返回操作结果
+    /// - `Err(SDKError)`: 删除失败，返回错误信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::calendar::v4::calendar_event::DeleteCalendarEventRequest;
+    ///
+    /// # async fn example() -> Result<(), Box<dyn std::error::Error>> {
+    /// let client = LarkClient::builder("app_id", "app_secret").build()?;
+    /// let request = DeleteCalendarEventRequest::new("calendar_123", "event_456");
+    /// let response = client.calendar.v4.calendar_event.delete(&request).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub async fn delete(&self, req: &DeleteCalendarEventRequest) -> SDKResult<DeleteCalendarEventResponse> {
+        req.validate()
+            .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
+        log::debug!("开始删除日程事件: calendar_id={}, event_id={}", req.calendar_id, req.event_id);
+
+        // 构建动态端点路径
+        let endpoint = crate::core::endpoints_original::Endpoints::CALENDAR_EVENT_DELETE
+            .replace("{}", &req.calendar_id)
+            .replace("{}", &req.event_id);
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::DELETE,
+            api_path: endpoint,
+            supported_access_token_types: vec![
+                crate::core::constants::AccessTokenType::Tenant,
+                crate::core::constants::AccessTokenType::User
+            ],
+            body: Vec::new(), // DELETE请求无body
+            ..Default::default()
+        };
+
+        let resp = crate::core::http::Transport::<DeleteCalendarEventResponse>::request(api_req, &self.config, None).await?;
+        let response = resp.data.unwrap_or_default();
+
+        log::info!("日程事件删除完成: calendar_id={}, event_id={}, success={:?}",
+                   req.calendar_id, req.event_id, response.success);
+
+        Ok(response)
+    }
+
+    /// 删除日程事件构建器
+    ///
+    /// 创建一个用于删除日程事件的构建器实例，支持流式API设计。
+    ///
+    /// # 参数
+    /// - `calendar_id`: 日历ID
+    /// - `event_id`: 日程ID
+    ///
+    /// # 返回
+    /// - `DeleteCalendarEventBuilder`: 日程事件删除构建器实例
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    ///
+    /// # async fn example() -> Result<(), Box<dyn std::error::Error>> {
+    /// let client = LarkClient::builder("app_id", "app_secret").build()?;
+    /// let response = client
+    ///     .calendar
+    ///     .v4
+    ///     .calendar_event
+    ///     .delete_calendar_event_builder("calendar_123", "event_456")
+    ///     .user_id_type("open_id")
+    ///     .execute(&client.calendar.v4.calendar_event)
+    ///     .await?;
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub fn delete_calendar_event_builder(
+        &self,
+        calendar_id: impl Into<String>,
+        event_id: impl Into<String>,
+    ) -> DeleteCalendarEventBuilder {
+        DeleteCalendarEventBuilder::new(calendar_id, event_id)
     }
 }
