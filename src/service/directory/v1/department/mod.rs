@@ -72,6 +72,46 @@ impl DepartmentService {
     pub fn mget_department_builder(&self, request: MGetDepartmentRequest) -> MGetDepartmentBuilder {
         MGetDepartmentBuilder::new(Arc::new(self.clone()), request)
     }
+
+    /// 获取部门列表构建器
+    ///
+    /// 创建一个获取部门列表的构建器，支持链式调用和完整的错误处理
+    ///
+    /// # 参数
+    /// * `request` - 获取部门列表请求，包含分页和过滤参数
+    ///
+    /// # 返回
+    /// 返回获取部门列表构建器，可用于执行查询操作
+    ///
+    /// # 示例
+    /// ```rust,no_run
+    /// use open_lark::service::directory::v1::department::filter::{FilterDepartmentRequest, FilterDepartmentResponse};
+    ///
+    /// async fn filter_department_example(
+    ///     service: Arc<DepartmentService>,
+    /// ) -> Result<FilterDepartmentResponse, Box<dyn std::error::Error>> {
+    ///     let request = FilterDepartmentRequest::builder()
+    ///         .page_size(20)
+    ///         .parent_department_id("od_parent")
+    ///         .user_id_type("open_id")
+    ///         .department_id_type("open_department_id")
+    ///         .department_status("active")
+    ///         .sort_field("name")
+    ///         .sort_direction("asc")
+    ///         .build()?;
+    ///
+    ///     let response = service
+    ///         .filter_department_builder(request)
+    ///         .execute()
+    ///         .await?;
+    ///
+    ///     println!("成功获取{}个部门信息", response.department_count());
+    ///     Ok(response)
+    /// }
+    /// ```
+    pub fn filter_department_builder(&self, request: FilterDepartmentRequest) -> FilterDepartmentBuilder {
+        FilterDepartmentBuilder::new(Arc::new(self.clone()), request)
+    }
 }
 
 impl Service for DepartmentService {
@@ -120,6 +160,31 @@ mod tests {
         assert_eq!(builder.request.department_ids.len(), 2);
         assert_eq!(builder.request.user_id_type, Some("open_id".to_string()));
         assert_eq!(builder.request.department_id_type, Some("open_department_id".to_string()));
+    }
+
+    #[tokio::test]
+    async fn test_filter_department_builder() {
+        let service = create_test_service();
+        let request = FilterDepartmentRequest::builder()
+            .page_size(20)
+            .parent_department_id("od_parent")
+            .user_id_type("open_id")
+            .department_id_type("open_department_id")
+            .department_status("active")
+            .sort_field("name")
+            .sort_direction("asc")
+            .build()
+            .unwrap();
+
+        let builder = service.filter_department_builder(request);
+        // 验证构建器创建成功，实际网络请求需要mock配置
+        assert_eq!(builder.request.page_size, Some(20));
+        assert_eq!(builder.request.parent_department_id, Some("od_parent".to_string()));
+        assert_eq!(builder.request.user_id_type, Some("open_id".to_string()));
+        assert_eq!(builder.request.department_id_type, Some("open_department_id".to_string()));
+        assert_eq!(builder.request.department_status, Some("active".to_string()));
+        assert_eq!(builder.request.sort_field, Some("name".to_string()));
+        assert_eq!(builder.request.sort_direction, Some("asc".to_string()));
     }
 
     #[test]

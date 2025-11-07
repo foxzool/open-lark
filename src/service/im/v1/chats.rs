@@ -24,9 +24,9 @@ use crate::core::{
     http::Transport,
     ApiRequest, SDKResult,
 };
-use tracing::{debug, info, warn};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use tracing::{debug, info, warn};
 
 /// 群聊服务
 #[derive(Debug, Clone)]
@@ -85,7 +85,11 @@ impl ChatsService {
         let resp = Transport::<CreateChatResponse>::request(api_req, &self.config, None).await?;
 
         let response = resp.data.unwrap_or_default();
-        info!("群聊创建成功: chat_id={}, name={}", response.chat_id, response.name.as_deref().unwrap_or_default());
+        info!(
+            "群聊创建成功: chat_id={}, name={}",
+            response.chat_id,
+            response.name.as_deref().unwrap_or_default()
+        );
 
         Ok(response)
     }
@@ -152,8 +156,10 @@ impl ChatsService {
         if response.success {
             info!("群聊解散成功: chat_id={}", req.chat_id);
         } else {
-            warn!("群聊解散失败: chat_id={}, error={:?}",
-                  req.chat_id, response.error_message);
+            warn!(
+                "群聊解散失败: chat_id={}, error={:?}",
+                req.chat_id, response.error_message
+            );
         }
 
         Ok(response)
@@ -173,7 +179,10 @@ impl ChatsService {
     /// - HTTP 403: 权限不足
     /// - HTTP 404: 群聊不存在或公告不存在
     /// - HTTP 400: 参数错误
-    pub async fn get_announcement(&self, req: &GetGroupAnnouncementRequest) -> SDKResult<GetGroupAnnouncementResponse> {
+    pub async fn get_announcement(
+        &self,
+        req: &GetGroupAnnouncementRequest,
+    ) -> SDKResult<GetGroupAnnouncementResponse> {
         // 验证请求参数
         req.validate()?;
 
@@ -199,18 +208,24 @@ impl ChatsService {
             ..Default::default()
         };
 
-        let resp = Transport::<GetGroupAnnouncementResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<GetGroupAnnouncementResponse>::request(api_req, &self.config, None).await?;
 
         let response = resp.data.unwrap_or_default();
 
         if response.success {
             info!("群公告获取成功: chat_id={}", req.chat_id);
             if let Some(announcement) = &response.announcement {
-                debug!("公告详情: title={:?}, status={:?}", announcement.title, announcement.status);
+                debug!(
+                    "公告详情: title={:?}, status={:?}",
+                    announcement.title, announcement.status
+                );
             }
         } else {
-            warn!("群公告获取失败: chat_id={}, error={:?}",
-                  req.chat_id, response.error_message);
+            warn!(
+                "群公告获取失败: chat_id={}, error={:?}",
+                req.chat_id, response.error_message
+            );
         }
 
         Ok(response)
@@ -262,7 +277,9 @@ impl ChatsService {
             ..Default::default()
         };
 
-        let resp = Transport::<GetAnnouncementBlockContentResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<GetAnnouncementBlockContentResponse>::request(api_req, &self.config, None)
+                .await?;
         let response = resp.data.unwrap_or_default();
 
         if response.success {
@@ -426,36 +443,47 @@ impl CreateChatRequest {
     pub fn validate(&self) -> SDKResult<()> {
         // 验证群名称
         if self.name.is_empty() {
-            return Err(LarkAPIError::IllegalParamError("群名称不能为空".to_string()));
+            return Err(LarkAPIError::IllegalParamError(
+                "群名称不能为空".to_string(),
+            ));
         }
 
         if self.name.len() > 100 {
-            return Err(LarkAPIError::IllegalParamError("群名称长度不能超过100个字符".to_string()));
+            return Err(LarkAPIError::IllegalParamError(
+                "群名称长度不能超过100个字符".to_string(),
+            ));
         }
 
         // 验证群描述
         if let Some(description) = &self.description {
             if description.len() > 500 {
-                return Err(LarkAPIError::IllegalParamError("群描述长度不能超过500个字符".to_string()));
+                return Err(LarkAPIError::IllegalParamError(
+                    "群描述长度不能超过500个字符".to_string(),
+                ));
             }
         }
 
         // 验证用户ID列表
         if self.user_id_list.is_empty() {
-            return Err(LarkAPIError::IllegalParamError("用户ID列表不能为空".to_string()));
+            return Err(LarkAPIError::IllegalParamError(
+                "用户ID列表不能为空".to_string(),
+            ));
         }
 
         if self.user_id_list.len() > 50 {
-            return Err(LarkAPIError::IllegalParamError("用户ID数量不能超过50个".to_string()));
+            return Err(LarkAPIError::IllegalParamError(
+                "用户ID数量不能超过50个".to_string(),
+            ));
         }
 
         // 验证用户ID类型
         if let Some(user_id_type) = &self.user_id_type {
             let valid_types = ["open_id", "user_id", "union_id"];
             if !valid_types.contains(&user_id_type.as_str()) {
-                return Err(LarkAPIError::IllegalParamError(
-                    format!("无效的用户ID类型: {}，支持的类型: {:?}", user_id_type, valid_types)
-                ));
+                return Err(LarkAPIError::IllegalParamError(format!(
+                    "无效的用户ID类型: {}，支持的类型: {:?}",
+                    user_id_type, valid_types
+                )));
             }
         }
 
@@ -463,9 +491,10 @@ impl CreateChatRequest {
         if let Some(chat_type) = &self.chat_type {
             let valid_types = ["private", "public"];
             if !valid_types.contains(&chat_type.as_str()) {
-                return Err(LarkAPIError::IllegalParamError(
-                    format!("无效的群类型: {}，支持的类型: {:?}", chat_type, valid_types)
-                ));
+                return Err(LarkAPIError::IllegalParamError(format!(
+                    "无效的群类型: {}，支持的类型: {:?}",
+                    chat_type, valid_types
+                )));
             }
         }
 
@@ -473,9 +502,10 @@ impl CreateChatRequest {
         if let Some(join_permission) = &self.join_permission {
             let valid_permissions = ["all", "need_approval", "forbidden"];
             if !valid_permissions.contains(&join_permission.as_str()) {
-                return Err(LarkAPIError::IllegalParamError(
-                    format!("无效的加入权限: {}，支持的权限: {:?}", join_permission, valid_permissions)
-                ));
+                return Err(LarkAPIError::IllegalParamError(format!(
+                    "无效的加入权限: {}，支持的权限: {:?}",
+                    join_permission, valid_permissions
+                )));
             }
         }
 
@@ -483,9 +513,10 @@ impl CreateChatRequest {
         if let Some(share_permission) = &self.share_permission {
             let valid_permissions = ["all", "admin", "forbidden"];
             if !valid_permissions.contains(&share_permission.as_str()) {
-                return Err(LarkAPIError::IllegalParamError(
-                    format!("无效的共享权限: {}，支持的权限: {:?}", share_permission, valid_permissions)
-                ));
+                return Err(LarkAPIError::IllegalParamError(format!(
+                    "无效的共享权限: {}，支持的权限: {:?}",
+                    share_permission, valid_permissions
+                )));
             }
         }
 
@@ -493,16 +524,19 @@ impl CreateChatRequest {
         if let Some(management_mode) = &self.management_mode {
             let valid_modes = ["all", "admin", "owner"];
             if !valid_modes.contains(&management_mode.as_str()) {
-                return Err(LarkAPIError::IllegalParamError(
-                    format!("无效的管理模式: {}，支持的模式: {:?}", management_mode, valid_modes)
-                ));
+                return Err(LarkAPIError::IllegalParamError(format!(
+                    "无效的管理模式: {}，支持的模式: {:?}",
+                    management_mode, valid_modes
+                )));
             }
         }
 
         // 验证UUID长度
         if let Some(uuid) = &self.uuid {
             if uuid.len() > 50 {
-                return Err(LarkAPIError::IllegalParamError("UUID长度不能超过50个字符".to_string()));
+                return Err(LarkAPIError::IllegalParamError(
+                    "UUID长度不能超过50个字符".to_string(),
+                ));
             }
         }
 
@@ -604,16 +638,19 @@ impl DeleteChatRequest {
     pub fn validate(&self) -> SDKResult<()> {
         // 验证群聊ID
         if self.chat_id.is_empty() {
-            return Err(LarkAPIError::IllegalParamError("群聊ID不能为空".to_string()));
+            return Err(LarkAPIError::IllegalParamError(
+                "群聊ID不能为空".to_string(),
+            ));
         }
 
         // 验证用户ID类型
         if let Some(user_id_type) = &self.user_id_type {
             let valid_types = ["open_id", "user_id", "union_id"];
             if !valid_types.contains(&user_id_type.as_str()) {
-                return Err(LarkAPIError::IllegalParamError(
-                    format!("无效的用户ID类型: {}，支持的类型: {:?}", user_id_type, valid_types)
-                ));
+                return Err(LarkAPIError::IllegalParamError(format!(
+                    "无效的用户ID类型: {}，支持的类型: {:?}",
+                    user_id_type, valid_types
+                )));
             }
         }
 
@@ -678,10 +715,10 @@ impl GetGroupAnnouncementRequest {
 
         if let Some(user_id_type) = &self.user_id_type {
             match user_id_type.as_str() {
-                "open_id" | "user_id" | "union_id" => {},
+                "open_id" | "user_id" | "union_id" => {}
                 _ => {
                     return Err(LarkAPIError::illegal_param(
-                        "无效的用户ID类型，必须是 open_id、user_id 或 union_id"
+                        "无效的用户ID类型，必须是 open_id、user_id 或 union_id",
                     ));
                 }
             }
@@ -792,10 +829,10 @@ impl GetAnnouncementBlockContentRequest {
 
         if let Some(user_id_type) = &self.user_id_type {
             match user_id_type.as_str() {
-                "open_id" | "user_id" | "union_id" => {},
+                "open_id" | "user_id" | "union_id" => {}
                 _ => {
                     return Err(LarkAPIError::illegal_param(
-                        "无效的用户ID类型，必须是 open_id、user_id 或 union_id"
+                        "无效的用户ID类型，必须是 open_id、user_id 或 union_id",
                     ));
                 }
             }
@@ -947,7 +984,10 @@ impl ChatsService {
     }
 
     /// 获取群公告构建器
-    pub fn get_announcement_builder(&self, chat_id: impl Into<String>) -> GetGroupAnnouncementBuilder {
+    pub fn get_announcement_builder(
+        &self,
+        chat_id: impl Into<String>,
+    ) -> GetGroupAnnouncementBuilder {
         GetGroupAnnouncementBuilder::new(chat_id)
     }
 
@@ -1034,7 +1074,10 @@ impl GetAnnouncementBlockContentBuilder {
     }
 
     /// 执行获取群公告块内容操作
-    pub async fn execute(self, service: &ChatsService) -> SDKResult<GetAnnouncementBlockContentResponse> {
+    pub async fn execute(
+        self,
+        service: &ChatsService,
+    ) -> SDKResult<GetAnnouncementBlockContentResponse> {
         service.get_announcement_block_content(&self.request).await
     }
 }
@@ -1095,8 +1138,7 @@ mod tests {
 
     #[test]
     fn test_create_chat_request_validation_empty_name() {
-        let request = CreateChatRequest::new()
-            .user_id_list(vec!["user_1".to_string()]);
+        let request = CreateChatRequest::new().user_id_list(vec!["user_1".to_string()]);
 
         let result = request.validate();
         assert!(result.is_err());
@@ -1112,17 +1154,22 @@ mod tests {
 
         let result = request.validate();
         assert!(result.is_err());
-        assert!(result.unwrap_err().to_string().contains("群名称长度不能超过100个字符"));
+        assert!(result
+            .unwrap_err()
+            .to_string()
+            .contains("群名称长度不能超过100个字符"));
     }
 
     #[test]
     fn test_create_chat_request_validation_empty_user_list() {
-        let request = CreateChatRequest::new()
-            .name("测试群");
+        let request = CreateChatRequest::new().name("测试群");
 
         let result = request.validate();
         assert!(result.is_err());
-        assert!(result.unwrap_err().to_string().contains("用户ID列表不能为空"));
+        assert!(result
+            .unwrap_err()
+            .to_string()
+            .contains("用户ID列表不能为空"));
     }
 
     #[test]
@@ -1134,7 +1181,10 @@ mod tests {
 
         let result = request.validate();
         assert!(result.is_err());
-        assert!(result.unwrap_err().to_string().contains("用户ID数量不能超过50个"));
+        assert!(result
+            .unwrap_err()
+            .to_string()
+            .contains("用户ID数量不能超过50个"));
     }
 
     #[test]
@@ -1171,7 +1221,10 @@ mod tests {
 
         let result = request.validate();
         assert!(result.is_err());
-        assert!(result.unwrap_err().to_string().contains("UUID长度不能超过50个字符"));
+        assert!(result
+            .unwrap_err()
+            .to_string()
+            .contains("UUID长度不能超过50个字符"));
     }
 
     #[test]
@@ -1227,7 +1280,10 @@ mod tests {
         assert_eq!(response.description, Some("测试群描述".to_string()));
         assert_eq!(response.avatar, Some("img_v2_avatar".to_string()));
         assert_eq!(response.chat_type, Some("private".to_string()));
-        assert_eq!(response.create_time, Some("2023-01-01T00:00:00Z".to_string()));
+        assert_eq!(
+            response.create_time,
+            Some("2023-01-01T00:00:00Z".to_string())
+        );
         assert_eq!(response.creator_id, Some("creator_123".to_string()));
         assert_eq!(response.member_count, Some(98));
         assert_eq!(response.invalid_user_id_list, Some(invalid_ids));
@@ -1269,10 +1325,16 @@ mod tests {
         let deserialized: CreateChatResponse = serde_json::from_str(&serialized).unwrap();
         assert_eq!(deserialized.chat_id, "chat_test_123");
         assert_eq!(deserialized.name, Some("序列化测试群".to_string()));
-        assert_eq!(deserialized.description, Some("用于序列化测试的群聊".to_string()));
+        assert_eq!(
+            deserialized.description,
+            Some("用于序列化测试的群聊".to_string())
+        );
         assert_eq!(deserialized.avatar, Some("img_v2_serialize".to_string()));
         assert_eq!(deserialized.chat_type, Some("private".to_string()));
-        assert_eq!(deserialized.create_time, Some("2023-12-31T23:59:59Z".to_string()));
+        assert_eq!(
+            deserialized.create_time,
+            Some("2023-12-31T23:59:59Z".to_string())
+        );
         assert_eq!(deserialized.creator_id, Some("creator_test".to_string()));
         assert_eq!(deserialized.member_count, Some(10));
         assert_eq!(deserialized.valid_user_id_count, Some(9));
@@ -1313,7 +1375,10 @@ mod tests {
         assert_eq!(deserialized.name, "序列化测试群");
         assert_eq!(deserialized.description, Some("用于序列化测试".to_string()));
         assert_eq!(deserialized.avatar, Some("img_v2_serialize".to_string()));
-        assert_eq!(deserialized.user_id_list, vec!["user_1".to_string(), "user_2".to_string()]);
+        assert_eq!(
+            deserialized.user_id_list,
+            vec!["user_1".to_string(), "user_2".to_string()]
+        );
         assert_eq!(deserialized.user_id_type, Some("open_id".to_string()));
         assert_eq!(deserialized.chat_type, Some("private".to_string()));
         assert_eq!(deserialized.join_permission, Some("all".to_string()));
@@ -1352,11 +1417,20 @@ mod tests {
             .uuid("builder_uuid_456");
 
         assert_eq!(builder.request.name, "构建器测试群");
-        assert_eq!(builder.request.description, Some("使用构建器创建的群聊".to_string()));
-        assert_eq!(builder.request.user_id_list, vec!["user_1", "user_2", "user_3"]);
+        assert_eq!(
+            builder.request.description,
+            Some("使用构建器创建的群聊".to_string())
+        );
+        assert_eq!(
+            builder.request.user_id_list,
+            vec!["user_1", "user_2", "user_3"]
+        );
         assert_eq!(builder.request.user_id_type, Some("user_id".to_string()));
         assert_eq!(builder.request.chat_type, Some("public".to_string()));
-        assert_eq!(builder.request.join_permission, Some("need_approval".to_string()));
+        assert_eq!(
+            builder.request.join_permission,
+            Some("need_approval".to_string())
+        );
         assert_eq!(builder.request.share_permission, Some("admin".to_string()));
         assert_eq!(builder.request.management_mode, Some("all".to_string()));
         assert_eq!(builder.request.uuid, Some("builder_uuid_456".to_string()));
@@ -1371,7 +1445,10 @@ mod tests {
         assert_eq!(builder.request.user_id_list, Vec::<String>::new());
         assert_eq!(builder.request.user_id_type, Some("open_id".to_string()));
         assert_eq!(builder.request.chat_type, Some("private".to_string()));
-        assert_eq!(builder.request.join_permission, Some("need_approval".to_string()));
+        assert_eq!(
+            builder.request.join_permission,
+            Some("need_approval".to_string())
+        );
         assert_eq!(builder.request.share_permission, Some("admin".to_string()));
         assert_eq!(builder.request.management_mode, Some("admin".to_string()));
         assert_eq!(builder.request.uuid, None);
@@ -1392,10 +1469,7 @@ mod tests {
     #[test]
     fn test_create_chat_different_chat_types() {
         // Test different chat types
-        let chat_types = vec![
-            ("private", "私有群聊"),
-            ("public", "公开群聊"),
-        ];
+        let chat_types = vec![("private", "私有群聊"), ("public", "公开群聊")];
 
         for (chat_type, description) in chat_types {
             let request = CreateChatRequest::new()
@@ -1453,14 +1527,35 @@ mod tests {
         };
 
         assert_eq!(comprehensive_response.chat_id, "comprehensive_chat_001");
-        assert_eq!(comprehensive_response.name, Some("全面测试群聊".to_string()));
-        assert_eq!(comprehensive_response.description, Some("包含所有字段的全面测试群聊".to_string()));
-        assert_eq!(comprehensive_response.avatar, Some("comprehensive_avatar".to_string()));
-        assert_eq!(comprehensive_response.chat_type, Some("private".to_string()));
-        assert_eq!(comprehensive_response.create_time, Some("2023-06-15T10:30:00Z".to_string()));
-        assert_eq!(comprehensive_response.creator_id, Some("comprehensive_creator".to_string()));
+        assert_eq!(
+            comprehensive_response.name,
+            Some("全面测试群聊".to_string())
+        );
+        assert_eq!(
+            comprehensive_response.description,
+            Some("包含所有字段的全面测试群聊".to_string())
+        );
+        assert_eq!(
+            comprehensive_response.avatar,
+            Some("comprehensive_avatar".to_string())
+        );
+        assert_eq!(
+            comprehensive_response.chat_type,
+            Some("private".to_string())
+        );
+        assert_eq!(
+            comprehensive_response.create_time,
+            Some("2023-06-15T10:30:00Z".to_string())
+        );
+        assert_eq!(
+            comprehensive_response.creator_id,
+            Some("comprehensive_creator".to_string())
+        );
         assert_eq!(comprehensive_response.member_count, Some(95));
-        assert_eq!(comprehensive_response.invalid_user_id_list, Some(invalid_ids));
+        assert_eq!(
+            comprehensive_response.invalid_user_id_list,
+            Some(invalid_ids)
+        );
         assert_eq!(comprehensive_response.valid_user_id_count, Some(95));
         assert_eq!(comprehensive_response.invalid_user_id_count, Some(5));
     }
@@ -1476,7 +1571,10 @@ mod tests {
             .add_user_id("user_5");
 
         assert_eq!(builder.request.user_id_list.len(), 5);
-        assert_eq!(builder.request.user_id_list, vec!["user_1", "user_2", "user_3", "user_4", "user_5"]);
+        assert_eq!(
+            builder.request.user_id_list,
+            vec!["user_1", "user_2", "user_3", "user_4", "user_5"]
+        );
     }
 
     // ==================== 解散群功能测试 ====================
@@ -1490,8 +1588,7 @@ mod tests {
 
     #[test]
     fn test_delete_chat_request_builder() {
-        let request = DeleteChatRequest::new("chat_test_789")
-            .user_id_type("user_id");
+        let request = DeleteChatRequest::new("chat_test_789").user_id_type("user_id");
 
         assert_eq!(request.chat_id, "chat_test_789");
         assert_eq!(request.user_id_type, Some("user_id".to_string()));
@@ -1514,8 +1611,7 @@ mod tests {
 
     #[test]
     fn test_delete_chat_request_validation_invalid_user_id_type() {
-        let request = DeleteChatRequest::new("chat_123")
-            .user_id_type("invalid_type");
+        let request = DeleteChatRequest::new("chat_123").user_id_type("invalid_type");
 
         let result = request.validate();
         assert!(result.is_err());
@@ -1543,7 +1639,10 @@ mod tests {
         assert_eq!(response.success, true);
         assert_eq!(response.error_code, None);
         assert_eq!(response.error_message, None);
-        assert_eq!(response.operation_time, Some("2023-01-01T12:00:00Z".to_string()));
+        assert_eq!(
+            response.operation_time,
+            Some("2023-01-01T12:00:00Z".to_string())
+        );
     }
 
     #[test]
@@ -1558,7 +1657,10 @@ mod tests {
         assert_eq!(response.success, false);
         assert_eq!(response.error_code, Some(403));
         assert_eq!(response.error_message, Some("权限不足".to_string()));
-        assert_eq!(response.operation_time, Some("2023-01-01T12:00:00Z".to_string()));
+        assert_eq!(
+            response.operation_time,
+            Some("2023-01-01T12:00:00Z".to_string())
+        );
     }
 
     #[test]
@@ -1598,7 +1700,10 @@ mod tests {
         let deserialized: DeleteChatResponse = serde_json::from_str(&serialized).unwrap();
         assert_eq!(deserialized.success, true);
         assert_eq!(deserialized.error_message, Some("操作成功".to_string()));
-        assert_eq!(deserialized.operation_time, Some("2023-12-31T23:59:59Z".to_string()));
+        assert_eq!(
+            deserialized.operation_time,
+            Some("2023-12-31T23:59:59Z".to_string())
+        );
     }
 
     #[test]
@@ -1617,8 +1722,7 @@ mod tests {
 
     #[test]
     fn test_delete_chat_builder() {
-        let builder = DeleteChatBuilder::new("chat_builder_test")
-            .user_id_type("open_id");
+        let builder = DeleteChatBuilder::new("chat_builder_test").user_id_type("open_id");
 
         assert_eq!(builder.request.chat_id, "chat_builder_test");
         assert_eq!(builder.request.user_id_type, Some("open_id".to_string()));
@@ -1643,15 +1747,18 @@ mod tests {
         ];
 
         for (user_id_type, expected) in user_id_types {
-            let request = DeleteChatRequest::new("chat_test")
-                .user_id_type(user_id_type);
+            let request = DeleteChatRequest::new("chat_test").user_id_type(user_id_type);
 
             assert_eq!(request.chat_id, "chat_test");
             assert_eq!(request.user_id_type, Some(expected.to_string()));
 
             // 验证应该成功
             let result = request.validate();
-            assert!(result.is_ok(), "Valid user_id_type {} should pass validation", user_id_type);
+            assert!(
+                result.is_ok(),
+                "Valid user_id_type {} should pass validation",
+                user_id_type
+            );
         }
     }
 
@@ -1666,8 +1773,14 @@ mod tests {
 
         assert_eq!(comprehensive_response.success, false);
         assert_eq!(comprehensive_response.error_code, Some(404));
-        assert_eq!(comprehensive_response.error_message, Some("群聊不存在或已被删除".to_string()));
-        assert_eq!(comprehensive_response.operation_time, Some("2023-06-15T14:30:00Z".to_string()));
+        assert_eq!(
+            comprehensive_response.error_message,
+            Some("群聊不存在或已被删除".to_string())
+        );
+        assert_eq!(
+            comprehensive_response.operation_time,
+            Some("2023-06-15T14:30:00Z".to_string())
+        );
     }
 
     #[test]
@@ -1697,8 +1810,7 @@ mod tests {
 
     #[test]
     fn test_get_group_announcement_request_with_user_id_type() {
-        let request = GetGroupAnnouncementRequest::new("test_chat_id")
-            .user_id_type("open_id");
+        let request = GetGroupAnnouncementRequest::new("test_chat_id").user_id_type("open_id");
         assert_eq!(request.chat_id, "test_chat_id");
         assert_eq!(request.user_id_type, Some("open_id".to_string()));
     }
@@ -1713,8 +1825,7 @@ mod tests {
 
     #[test]
     fn test_get_group_announcement_request_validation_invalid_user_id_type() {
-        let request = GetGroupAnnouncementRequest::new("chat_123")
-            .user_id_type("invalid_type");
+        let request = GetGroupAnnouncementRequest::new("chat_123").user_id_type("invalid_type");
 
         let result = request.validate();
         assert!(result.is_err());
@@ -1727,12 +1838,15 @@ mod tests {
         let valid_types = vec!["open_id", "user_id", "union_id"];
 
         for user_id_type in valid_types {
-            let request = GetGroupAnnouncementRequest::new(chat_id)
-                .user_id_type(user_id_type);
+            let request = GetGroupAnnouncementRequest::new(chat_id).user_id_type(user_id_type);
 
             // 验证应该成功
             let result = request.validate();
-            assert!(result.is_ok(), "Valid user_id_type {} should pass validation", user_id_type);
+            assert!(
+                result.is_ok(),
+                "Valid user_id_type {} should pass validation",
+                user_id_type
+            );
         }
     }
 
@@ -1746,7 +1860,10 @@ mod tests {
         };
 
         assert_eq!(announcement.title, Some("测试公告".to_string()));
-        assert_eq!(announcement.content, Some("这是一个测试公告内容".to_string()));
+        assert_eq!(
+            announcement.content,
+            Some("这是一个测试公告内容".to_string())
+        );
         assert_eq!(announcement.status, Some("active".to_string()));
     }
 
@@ -1760,7 +1877,10 @@ mod tests {
 
         assert_eq!(creator.user_id, Some("user_123".to_string()));
         assert_eq!(creator.name, Some("张三".to_string()));
-        assert_eq!(creator.avatar, Some("https://example.com/avatar.jpg".to_string()));
+        assert_eq!(
+            creator.avatar,
+            Some("https://example.com/avatar.jpg".to_string())
+        );
     }
 
     #[test]
@@ -1786,14 +1906,26 @@ mod tests {
 
         assert!(response.success);
         assert!(response.announcement.is_some());
-        assert_eq!(response.announcement.as_ref().unwrap().title, Some("测试公告".to_string()));
-        assert_eq!(response.announcement.as_ref().unwrap().creator.as_ref().unwrap().name, Some("张三".to_string()));
+        assert_eq!(
+            response.announcement.as_ref().unwrap().title,
+            Some("测试公告".to_string())
+        );
+        assert_eq!(
+            response
+                .announcement
+                .as_ref()
+                .unwrap()
+                .creator
+                .as_ref()
+                .unwrap()
+                .name,
+            Some("张三".to_string())
+        );
     }
 
     #[test]
     fn test_get_group_announcement_builder() {
-        let builder = GetGroupAnnouncementBuilder::new("chat_builder_test")
-            .user_id_type("open_id");
+        let builder = GetGroupAnnouncementBuilder::new("chat_builder_test").user_id_type("open_id");
 
         assert_eq!(builder.request.chat_id, "chat_builder_test");
         assert_eq!(builder.request.user_id_type, Some("open_id".to_string()));
@@ -1828,7 +1960,10 @@ mod tests {
 
         assert!(!error_response.success);
         assert_eq!(error_response.error_code, Some(404));
-        assert_eq!(error_response.error_message, Some("群公告不存在".to_string()));
+        assert_eq!(
+            error_response.error_message,
+            Some("群公告不存在".to_string())
+        );
     }
 
     #[test]
@@ -1861,13 +1996,19 @@ mod tests {
         assert_eq!(announcement.create_time, Some(timestamp.clone()));
         assert_eq!(announcement.update_time, Some(timestamp));
         assert!(announcement.creator.is_some());
-        assert_eq!(announcement.creator.as_ref().unwrap().name, Some("李四".to_string()));
+        assert_eq!(
+            announcement.creator.as_ref().unwrap().name,
+            Some("李四".to_string())
+        );
         assert_eq!(announcement.status, Some("active".to_string()));
     }
 
     #[test]
     fn test_api_response_trait_implementation() {
-        assert_eq!(GetGroupAnnouncementResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            GetGroupAnnouncementResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 
     #[test]
@@ -1894,9 +2035,15 @@ mod tests {
         assert!(response.success);
         let announcement_ref = response.announcement.as_ref().unwrap();
         assert_eq!(announcement_ref.title, Some("重要通知".to_string()));
-        assert_eq!(announcement_ref.content, Some("明天下午3点开会".to_string()));
+        assert_eq!(
+            announcement_ref.content,
+            Some("明天下午3点开会".to_string())
+        );
         assert_eq!(announcement_ref.status, Some("active".to_string()));
-        assert_eq!(announcement_ref.creator.as_ref().unwrap().name, Some("管理员".to_string()));
+        assert_eq!(
+            announcement_ref.creator.as_ref().unwrap().name,
+            Some("管理员".to_string())
+        );
     }
 
     // ==================== API #149 获取群公告块内容测试 ====================
@@ -2008,7 +2155,10 @@ mod tests {
 
         assert!(response.success);
         let block_ref = response.block.as_ref().unwrap();
-        assert_eq!(block_ref.block_id, Some("comprehensive_block_001".to_string()));
+        assert_eq!(
+            block_ref.block_id,
+            Some("comprehensive_block_001".to_string())
+        );
         assert_eq!(block_ref.parent_id, Some("parent_block_002".to_string()));
         assert_eq!(block_ref.block_type, Some("rich_text".to_string()));
         assert!(block_ref.content.is_some());
@@ -2026,8 +2176,14 @@ mod tests {
         };
 
         assert!(!error_response.success);
-        assert_eq!(error_response.error_message, Some("公告块不存在".to_string()));
-        assert_eq!(error_response.error_code, Some("BLOCK_NOT_FOUND".to_string()));
+        assert_eq!(
+            error_response.error_message,
+            Some("公告块不存在".to_string())
+        );
+        assert_eq!(
+            error_response.error_code,
+            Some("BLOCK_NOT_FOUND".to_string())
+        );
         assert!(error_response.block.is_none());
     }
 
@@ -2076,7 +2232,8 @@ mod tests {
         assert!(serialized.is_ok());
 
         // 测试反序列化
-        let deserialized: Result<AnnouncementBlockContent, _> = serde_json::from_str(&serialized.unwrap());
+        let deserialized: Result<AnnouncementBlockContent, _> =
+            serde_json::from_str(&serialized.unwrap());
         assert!(deserialized.is_ok());
         let block = deserialized.unwrap();
         assert_eq!(block.block_id, Some("block_json_test".to_string()));
@@ -2111,7 +2268,8 @@ mod tests {
         assert!(long_request.validate().is_ok());
 
         // 测试特殊字符
-        let special_request = GetAnnouncementBlockContentRequest::new("chat_特殊字符", "block_@#$%");
+        let special_request =
+            GetAnnouncementBlockContentRequest::new("chat_特殊字符", "block_@#$%");
         assert!(special_request.validate().is_ok());
 
         // 测试Unicode字符
@@ -2135,7 +2293,7 @@ mod tests {
 
         // 测试链式调用
         let chained_builder = builder
-            .user_id_type("user_id")  // 重新设置user_id_type
+            .user_id_type("user_id") // 重新设置user_id_type
             .request;
         assert_eq!(chained_builder.user_id_type, Some("user_id".to_string()));
     }
