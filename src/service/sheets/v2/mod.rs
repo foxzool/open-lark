@@ -8,9 +8,11 @@
 //! - 数据读写操作
 
 pub mod sheet_cells;
+pub mod batch_read;
 
 // 重新导出所有服务类型
 pub use sheet_cells::*;
+pub use batch_read::*;
 
 use crate::core::config::Config;
 
@@ -23,6 +25,8 @@ pub struct SheetsServiceV2 {
     config: Config,
     /// 单元格管理服务
     pub sheet_cells: SheetCellsService,
+    /// 批量读取服务
+    pub batch_read: BatchReadService,
 }
 
 impl SheetsServiceV2 {
@@ -43,7 +47,8 @@ impl SheetsServiceV2 {
     pub fn new(config: Config) -> Self {
         Self {
             config: config.clone(),
-            sheet_cells: SheetCellsService::new(config),
+            sheet_cells: SheetCellsService::new(config.clone()),
+            batch_read: BatchReadService::new(config),
         }
     }
 }
@@ -97,5 +102,15 @@ mod tests {
         // 验证sheet_cells服务可用
         let sheet_cells_service_str = format!("{:?}", service.sheet_cells);
         assert!(!sheet_cells_service_str.is_empty());
+    }
+
+    #[test]
+    fn test_batch_read_service_available() {
+        let config = Config::default();
+        let service = SheetsServiceV2::new(config);
+
+        // 验证batch_read服务可用
+        let batch_read_service_str = format!("{:?}", service.batch_read);
+        assert!(!batch_read_service_str.is_empty());
     }
 }
