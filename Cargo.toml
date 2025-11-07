@@ -419,6 +419,11 @@ path = "examples/api/sheets_v2_batch_write.rs"
 required-features = ["cloud-docs"]
 
 [[example]]
+name = "sheets_v2_image_write"
+path = "examples/api/sheets_v2_image_write.rs"
+required-features = ["cloud-docs"]
+
+[[example]]
 name = "core_query_attendance"
 path = "examples/core/query_attendance.rs"
 required-features = ["attendance"]

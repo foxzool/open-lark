@@ -6,22 +6,25 @@
 //! - 工作表操作和单元格管理
 //! - 单元格内容更新和格式化
 //! - 数据读写操作
+//! - 图片写入和管理
 
 pub mod sheet_cells;
 pub mod batch_read;
 pub mod batch_write;
+pub mod image_write;
 
 // 重新导出所有服务类型
 pub use sheet_cells::*;
 pub use batch_read::*;
 pub use batch_write::*;
+pub use image_write::*;
 
 use crate::core::config::Config;
 
 /// Sheets电子表格服务 v2版本
 ///
 /// 提供飞书电子表格v2版本的统一入口，支持现代化的电子表格管理。
-/// 包括创建、编辑、格式化、数据读写等企业级功能。
+/// 包括创建、编辑、格式化、数据读写、图片管理等企业级功能。
 #[derive(Debug, Clone)]
 pub struct SheetsServiceV2 {
     config: Config,
@@ -31,6 +34,8 @@ pub struct SheetsServiceV2 {
     pub batch_read: BatchReadService,
     /// 批量写入服务
     pub batch_write: BatchWriteService,
+    /// 图片写入服务
+    pub image_write: ImageWriteService,
 }
 
 impl SheetsServiceV2 {
@@ -53,7 +58,8 @@ impl SheetsServiceV2 {
             config: config.clone(),
             sheet_cells: SheetCellsService::new(config.clone()),
             batch_read: BatchReadService::new(config.clone()),
-            batch_write: BatchWriteService::new(config),
+            batch_write: BatchWriteService::new(config.clone()),
+            image_write: ImageWriteService::new(config),
         }
     }
 }
@@ -127,5 +133,34 @@ mod tests {
         // 验证batch_write服务可用
         let batch_write_service_str = format!("{:?}", service.batch_write);
         assert!(!batch_write_service_str.is_empty());
+    }
+
+    #[test]
+    fn test_image_write_service_available() {
+        let config = Config::default();
+        let service = SheetsServiceV2::new(config);
+
+        // 验证image_write服务可用
+        let image_write_service_str = format!("{:?}", service.image_write);
+        assert!(!image_write_service_str.is_empty());
+    }
+
+    #[test]
+    fn test_sheets_v2_complete_integration() {
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
+        let service = SheetsServiceV2::new(config);
+
+        // 验证所有服务都可用
+        assert!(!format!("{:?}", service.sheet_cells).is_empty());
+        assert!(!format!("{:?}", service.batch_read).is_empty());
+        assert!(!format!("{:?}", service.batch_write).is_empty());
+        assert!(!format!("{:?}", service.image_write).is_empty());
+
+        // 验证服务名
+        assert_eq!(SheetsServiceV2::service_name(), "SheetsServiceV2");
+        assert_eq!(service.config().app_id, "test_app_id");
     }
 }
