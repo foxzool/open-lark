@@ -1,11 +1,11 @@
 # 完整API实现映射表
 
-**生成时间**: 2025-11-07 12:06:00
+**生成时间**: 2025-11-07 12:28:00
 **总API数**: 1551
-**已实现**: 959
+**已实现**: 960
 **实现率**: 61.9%
-**处理耗时**: 1.4 分钟
-**处理速度**: 20.6 API/秒  
+**处理耗时**: 1.5 分钟
+**处理速度**: 20.4 API/秒  
 
 | 序号 | API名称 | 请求方式 | API地址 | 文档链接 | 文件路径 | 行号 | 状态 |
 |------|---------|----------|---------|----------|----------|------|------|
@@ -196,7 +196,7 @@
 | 185 | [获取文件夹中的文件清单](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/list) | GET | `/open-apis/drive/v1/files` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/list | `../src/service/cloud_docs/drive/v1/folder.rs` | 133 | ✅ 已实现 |
 | 186 | [获取文件夹元数据](https://open.feishu.cn/document/ukTMukTMukTM/uAjNzUjLwYzM14CM2MTN) | GET | `/open-apis/drive/explorer/v2/folder/:folderToken/meta` | https://open.feishu.cn/document/ukTMukTMukTM/uAjNzUjLwYzM14CM2MTN | `../src/service/ccm/sheets/v2/spreadsheet.rs` | 37 | ✅ 已实现 |
 | 187 | [新建文件夹](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/create_folder) | POST | `/open-apis/drive/v1/files/create_folder` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/create_folder | `../src/service/cloud_docs/drive/v1/folder.rs` | 237 | ✅ 已实现 |
-| 188 | [查询异步任务状态](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/task_check) | GET | `/open-apis/drive/v1/files/task_check` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/task_check | `未找到` | - | ❌ 未实现 |
+| 188 | [查询异步任务状态](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/task_check) | GET | `/open-apis/drive/v1/tasks/{}` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/task_check | `../src/service/cloud_docs/v1/drive.rs` | 252 | ✅ 已实现 |
 | 189 | [获取文件元数据](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/meta/batch_query) | POST | `/open-apis/drive/v1/metas/batch_query` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/meta/batch_query | `../src/service/apass/object/mod.rs` | 333 | ✅ 已实现 |
 | 190 | [获取文件统计信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-statistics/get) | GET | `/open-apis/drive/v1/files/:file_token/statistics` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-statistics/get | `../src/service/elearning/course_registration/mod.rs` | 203 | ✅ 已实现 |
 | 191 | [获取文件访问记录](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-view_record/list) | GET | `/open-apis/drive/v1/files/:file_token/view_records` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-view_record/list | `../src/service/cloud_docs/drive/v1/file.rs` | 74 | ✅ 已实现 |
