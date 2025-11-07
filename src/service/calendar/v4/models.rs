@@ -147,7 +147,7 @@ pub struct CalendarEvent {
 }
 
 /// 时间信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct TimeInfo {
     /// 时间戳
     pub timestamp: Option<String>,
