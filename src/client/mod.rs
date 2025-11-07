@@ -16,6 +16,8 @@ use crate::service::ai::AiService;
 use crate::service::aily::AilyService;
 #[cfg(feature = "analytics")]
 use crate::service::analytics::AnalyticsService;
+#[cfg(feature = "apaas")]
+use crate::service::apaas::ApaasServiceV1;
 #[cfg(feature = "app_engine")]
 use crate::service::app_engine::AppengineService;
 #[cfg(feature = "approval")]
@@ -84,6 +86,8 @@ pub struct LarkClient {
     pub aily: AilyService,
     #[cfg(feature = "analytics")]
     pub analytics: AnalyticsService,
+    #[cfg(feature = "apaas")]
+    pub apaas: ApaasServiceV1,
     #[cfg(feature = "app_engine")]
     pub app_engine: AppengineService,
     #[cfg(feature = "attendance")]
@@ -147,6 +151,8 @@ impl LarkClient {
             aily: AilyService::new(config.clone()),
             #[cfg(feature = "analytics")]
             analytics: AnalyticsService::new(config.clone()),
+            #[cfg(feature = "apaas")]
+            apaas: ApaasServiceV1::new(config.clone()),
             #[cfg(feature = "app_engine")]
             app_engine: AppengineService::new(config.clone()),
             #[cfg(feature = "attendance")]

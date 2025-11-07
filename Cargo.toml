@@ -134,6 +134,7 @@ search = ["communication"]
 acs = ["open-lark-extensions"]
 admin = ["enterprise"]
 analytics = ["enterprise"]
+apaas = ["enterprise"]
 auth = ["enterprise"]
 authen = ["auth"]  # 向后兼容：authen映射到auth
 ai = ["ai-platform"]

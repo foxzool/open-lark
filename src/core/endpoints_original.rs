@@ -694,6 +694,11 @@ impl Endpoints {
     /// 获取用户信息
     pub const AUTH_USER_INFO: &'static str = "/open-apis/authen/v1/user_info";
 
+    // ==================== APAAS应用开放平台服务端点 ====================
+
+    /// 查看应用基本信息
+    pub const APAAS_V1_APPS: &'static str = "/open-apis/apaas/v1/apps";
+
     // ==================== 联系人服务端点 ====================
 
     // 用户管理

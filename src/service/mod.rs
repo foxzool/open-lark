@@ -99,6 +99,8 @@ pub mod ai;
 pub mod aily;
 #[cfg(feature = "analytics")]
 pub mod analytics;
+#[cfg(feature = "apaas")]
+pub mod apaas;
 #[cfg(feature = "apass")]
 pub mod apass;
 #[cfg(feature = "app_engine")]
@@ -207,6 +209,8 @@ pub use admin::AdminService;
 pub use ai::AiService;
 #[cfg(feature = "aily")]
 pub use aily::AilyService;
+#[cfg(feature = "apaas")]
+pub use apaas::ApaasServiceV1;
 #[cfg(feature = "apass")]
 pub use apass::ApassService;
 #[cfg(feature = "application")]

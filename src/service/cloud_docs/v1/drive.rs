@@ -400,10 +400,12 @@ impl DriveServiceV1 {
         api_req.set_api_path(api_path);
 
         // 设置支持的访问令牌类型
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         // 发送HTTP请求
-        let api_resp = Transport::<GetTaskStatusResponse>::request(api_req, &self.config, option).await?;
+        let api_resp =
+            Transport::<GetTaskStatusResponse>::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
@@ -471,10 +473,12 @@ impl DriveServiceV1 {
         api_req.set_api_path(api_path);
 
         // 设置支持的访问令牌类型
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         // 发送HTTP请求
-        let api_resp = Transport::<DeleteFileResponse>::request(api_req, &self.config, option).await?;
+        let api_resp =
+            Transport::<DeleteFileResponse>::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
@@ -617,7 +621,10 @@ impl DeleteFileBuilder {
         })?;
 
         // 执行请求
-        self.service.as_ref().delete_file(self.request.clone(), None).await
+        self.service
+            .as_ref()
+            .delete_file(self.request.clone(), None)
+            .await
     }
 }
 
@@ -795,7 +802,8 @@ mod tests {
         let service = Arc::new(DriveServiceV1::new(config));
         let request = GetTaskStatusRequest::new("initial_task");
 
-        let builder = service.get_task_status_builder(request)
+        let builder = service
+            .get_task_status_builder(request)
             .task_id("new_task_id");
 
         assert_eq!(builder.request.task_id, "new_task_id");
@@ -887,7 +895,10 @@ mod tests {
         assert_eq!(task.task_id, "complex_file_upload_123");
         assert!(!task.is_completed());
         assert_eq!(task.get_progress_percentage(), Some(45.0));
-        assert_eq!(task.get_progress_text(), Some("45000000/100000000".to_string()));
+        assert_eq!(
+            task.get_progress_text(),
+            Some("45000000/100000000".to_string())
+        );
         assert_eq!(task.task_type, Some("file_upload".to_string()));
         assert_eq!(task.estimated_remaining_seconds, Some(300));
     }
@@ -957,7 +968,10 @@ mod tests {
         assert!(response.task.is_success());
         assert!(response.task.is_completed());
         assert_eq!(response.task.get_progress_percentage(), Some(100.0));
-        assert_eq!(response.task.get_progress_text(), Some("500/500".to_string()));
+        assert_eq!(
+            response.task.get_progress_text(),
+            Some("500/500".to_string())
+        );
     }
 
     // ==================== DeleteFile API 测试 ====================
@@ -1052,8 +1066,7 @@ mod tests {
         let service = Arc::new(DriveServiceV1::new(config));
         let request = DeleteFileRequest::new("initial_token");
 
-        let builder = DeleteFileBuilder::new(service, request)
-            .file_token("new_token_123");
+        let builder = DeleteFileBuilder::new(service, request).file_token("new_token_123");
 
         assert_eq!(builder.request.file_token, "new_token_123");
         assert!(builder.request.validate().is_ok());
@@ -1079,8 +1092,7 @@ mod tests {
         let service = Arc::new(DriveServiceV1::new(config));
         let request = DeleteFileRequest::new("valid_token");
 
-        let builder = DeleteFileBuilder::new(service, request)
-            .file_token(""); // 设置无效token
+        let builder = DeleteFileBuilder::new(service, request).file_token(""); // 设置无效token
 
         assert_eq!(builder.request.file_token, "");
         assert!(builder.request.validate().is_err());
@@ -1156,15 +1168,12 @@ mod tests {
     #[test]
     fn test_delete_file_builder_with_various_service_instances() {
         // 测试使用不同服务实例的构建器
-        let configs = vec![
-            Config::default(),
-            {
-                let mut config = Config::default();
-                // 这里假设app_id是String类型，如果不对需要调整
-                // config.app_id = Some("test_app_id".to_string());
-                config
-            },
-        ];
+        let configs = vec![Config::default(), {
+            let mut config = Config::default();
+            // 这里假设app_id是String类型，如果不对需要调整
+            // config.app_id = Some("test_app_id".to_string());
+            config
+        }];
 
         for config in configs {
             let service = Arc::new(DriveServiceV1::new(config));
@@ -1269,10 +1278,12 @@ mod tests {
             let is_valid = validation_result.is_ok();
 
             if !is_valid && should_be_valid {
-                println!("Token '{}' (length: {}) failed validation: {:?}",
+                println!(
+                    "Token '{}' (length: {}) failed validation: {:?}",
                     token.chars().take(20).collect::<String>(),
                     token.len(),
-                    validation_result);
+                    validation_result
+                );
             }
 
             assert_eq!(
