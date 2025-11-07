@@ -9,10 +9,12 @@
 
 pub mod sheet_cells;
 pub mod batch_read;
+pub mod batch_write;
 
 // 重新导出所有服务类型
 pub use sheet_cells::*;
 pub use batch_read::*;
+pub use batch_write::*;
 
 use crate::core::config::Config;
 
@@ -27,6 +29,8 @@ pub struct SheetsServiceV2 {
     pub sheet_cells: SheetCellsService,
     /// 批量读取服务
     pub batch_read: BatchReadService,
+    /// 批量写入服务
+    pub batch_write: BatchWriteService,
 }
 
 impl SheetsServiceV2 {
@@ -48,7 +52,8 @@ impl SheetsServiceV2 {
         Self {
             config: config.clone(),
             sheet_cells: SheetCellsService::new(config.clone()),
-            batch_read: BatchReadService::new(config),
+            batch_read: BatchReadService::new(config.clone()),
+            batch_write: BatchWriteService::new(config),
         }
     }
 }
@@ -112,5 +117,15 @@ mod tests {
         // 验证batch_read服务可用
         let batch_read_service_str = format!("{:?}", service.batch_read);
         assert!(!batch_read_service_str.is_empty());
+    }
+
+    #[test]
+    fn test_batch_write_service_available() {
+        let config = Config::default();
+        let service = SheetsServiceV2::new(config);
+
+        // 验证batch_write服务可用
+        let batch_write_service_str = format!("{:?}", service.batch_write);
+        assert!(!batch_write_service_str.is_empty());
     }
 }
