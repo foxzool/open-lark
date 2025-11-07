@@ -1,219 +1,326 @@
 {
   "metadata": {
     "total_apis": 1551,
-    "found_count": 949,
-    "implementation_rate": 61.18633139909736,
-    "processing_time": 82.39554810523987,
-    "generated_at": "2025-11-07T17:00:03.442639"
+    "found_count": 950,
+    "implementation_rate": 61.25080593165699,
+    "processing_time": 88.15726804733276,
+    "generated_at": "2025-11-07T17:43:37.450159"
   },
   "service_stats": {
     "event": {
-      "found": 0,
-      "total": 0
+      "found": 1,
+      "total": 1,
+      "rate": 100.0
+    },
+    "authen": {
+      "found": 5,
+      "total": 6,
+      "rate": 83.33333333333334
     },
     "passport": {
-      "found": 0,
-      "total": 0
+      "found": 2,
+      "total": 2,
+      "rate": 100.0
     },
     "auth": {
-      "found": 0,
-      "total": 0
+      "found": 5,
+      "total": 5,
+      "rate": 100.0
     },
     "contact": {
-      "found": 0,
-      "total": 0
+      "found": 69,
+      "total": 75,
+      "rate": 92.0
     },
     "search": {
-      "found": 0,
-      "total": 0
+      "found": 15,
+      "total": 15,
+      "rate": 100.0
     },
     "directory": {
-      "found": 0,
-      "total": 0
+      "found": 21,
+      "total": 21,
+      "rate": 100.0
     },
     "im": {
-      "found": 0,
-      "total": 0
+      "found": 71,
+      "total": 71,
+      "rate": 100.0
+    },
+    "message": {
+      "found": 1,
+      "total": 1,
+      "rate": 100.0
+    },
+    "interactive": {
+      "found": 1,
+      "total": 1,
+      "rate": 100.0
+    },
+    "ephemeral": {
+      "found": 2,
+      "total": 2,
+      "rate": 100.0
     },
     "docx": {
-      "found": 0,
-      "total": 0
+      "found": 14,
+      "total": 19,
+      "rate": 73.68421052631578
     },
     "cardkit": {
-      "found": 0,
-      "total": 0
+      "found": 3,
+      "total": 10,
+      "rate": 30.0
     },
     "drive": {
-      "found": 0,
-      "total": 0
+      "found": 48,
+      "total": 70,
+      "rate": 68.57142857142857
+    },
+    "suite": {
+      "found": 2,
+      "total": 2,
+      "rate": 100.0
     },
     "wiki": {
-      "found": 0,
-      "total": 0
+      "found": 13,
+      "total": 16,
+      "rate": 81.25
     },
     "sheets": {
-      "found": 0,
-      "total": 0
+      "found": 18,
+      "total": 60,
+      "rate": 30.0
     },
     "bitable": {
-      "found": 0,
-      "total": 0
+      "found": 39,
+      "total": 46,
+      "rate": 84.78260869565217
+    },
+    "base": {
+      "found": 3,
+      "total": 3,
+      "rate": 100.0
     },
     "board": {
-      "found": 0,
-      "total": 0
+      "found": 2,
+      "total": 6,
+      "rate": 33.33333333333333
+    },
+    "docs": {
+      "found": 1,
+      "total": 1,
+      "rate": 100.0
     },
     "calendar": {
-      "found": 0,
-      "total": 0
+      "found": 44,
+      "total": 44,
+      "rate": 100.0
+    },
+    "meeting_room": {
+      "found": 15,
+      "total": 17,
+      "rate": 88.23529411764706
     },
     "vc": {
-      "found": 0,
-      "total": 0
+      "found": 19,
+      "total": 56,
+      "rate": 33.92857142857143
     },
     "minutes": {
-      "found": 0,
-      "total": 0
+      "found": 1,
+      "total": 4,
+      "rate": 25.0
     },
     "attendance": {
-      "found": 0,
-      "total": 0
+      "found": 24,
+      "total": 39,
+      "rate": 61.53846153846154
     },
     "approval": {
-      "found": 0,
-      "total": 0
+      "found": 29,
+      "total": 29,
+      "rate": 100.0
+    },
+    "unknown": {
+      "found": 23,
+      "total": 24,
+      "rate": 95.83333333333334
     },
     "helpdesk": {
-      "found": 0,
-      "total": 0
+      "found": 21,
+      "total": 50,
+      "rate": 42.0
     },
     "task": {
-      "found": 0,
-      "total": 0
+      "found": 75,
+      "total": 75,
+      "rate": 100.0
     },
     "mail": {
-      "found": 0,
-      "total": 0
+      "found": 26,
+      "total": 67,
+      "rate": 38.80597014925373
     },
     "application": {
-      "found": 0,
-      "total": 0
+      "found": 17,
+      "total": 32,
+      "rate": 53.125
+    },
+    "user": {
+      "found": 1,
+      "total": 1,
+      "rate": 100.0
+    },
+    "pay": {
+      "found": 3,
+      "total": 3,
+      "rate": 100.0
     },
     "tenant": {
-      "found": 0,
-      "total": 0
+      "found": 2,
+      "total": 2,
+      "rate": 100.0
     },
     "verification": {
       "found": 0,
-      "total": 0
+      "total": 1,
+      "rate": 0.0
     },
     "personal_settings": {
-      "found": 0,
-      "total": 0
+      "found": 2,
+      "total": 6,
+      "rate": 33.33333333333333
     },
     "document_ai": {
-      "found": 0,
-      "total": 0
+      "found": 17,
+      "total": 18,
+      "rate": 94.44444444444444
+    },
+    "optical_char_recognition": {
+      "found": 1,
+      "total": 1,
+      "rate": 100.0
+    },
+    "speech_to_text": {
+      "found": 2,
+      "total": 2,
+      "rate": 100.0
     },
     "translation": {
-      "found": 0,
-      "total": 0
+      "found": 1,
+      "total": 2,
+      "rate": 50.0
     },
     "apaas": {
-      "found": 0,
-      "total": 0
+      "found": 27,
+      "total": 37,
+      "rate": 72.97297297297297
     },
     "aily": {
-      "found": 0,
-      "total": 0
+      "found": 15,
+      "total": 21,
+      "rate": 71.42857142857143
     },
     "admin": {
       "found": 0,
-      "total": 0
+      "total": 14,
+      "rate": 0.0
     },
     "moments": {
       "found": 0,
-      "total": 0
+      "total": 1,
+      "rate": 0.0
     },
     "ehr": {
-      "found": 0,
-      "total": 0
+      "found": 2,
+      "total": 2,
+      "rate": 100.0
     },
     "corehr": {
-      "found": 0,
-      "total": 0
+      "found": 94,
+      "total": 249,
+      "rate": 37.75100401606426
     },
     "compensation": {
-      "found": 0,
-      "total": 0
+      "found": 15,
+      "total": 21,
+      "rate": 71.42857142857143
     },
     "payroll": {
-      "found": 0,
-      "total": 0
+      "found": 6,
+      "total": 12,
+      "rate": 50.0
     },
     "hire": {
-      "found": 0,
-      "total": 0
+      "found": 66,
+      "total": 182,
+      "rate": 36.26373626373626
     },
     "okr": {
-      "found": 0,
-      "total": 0
+      "found": 12,
+      "total": 12,
+      "rate": 100.0
     },
     "human_authentication": {
       "found": 0,
-      "total": 0
+      "total": 1,
+      "rate": 0.0
     },
     "face_verify": {
       "found": 0,
-      "total": 0
+      "total": 3,
+      "rate": 0.0
     },
     "acs": {
-      "found": 0,
-      "total": 0
+      "found": 3,
+      "total": 14,
+      "rate": 21.428571428571427
     },
     "performance": {
-      "found": 0,
-      "total": 0
+      "found": 20,
+      "total": 20,
+      "rate": 100.0
     },
     "lingo": {
-      "found": 0,
-      "total": 0
+      "found": 8,
+      "total": 14,
+      "rate": 57.14285714285714
     },
     "security_and_compliance": {
-      "found": 0,
-      "total": 0
+      "found": 1,
+      "total": 8,
+      "rate": 12.5
     },
     "trust_party": {
-      "found": 0,
-      "total": 0
+      "found": 2,
+      "total": 5,
+      "rate": 40.0
     },
     "workplace": {
-      "found": 0,
-      "total": 0
+      "found": 3,
+      "total": 3,
+      "rate": 100.0
     },
     "mdm": {
-      "found": 0,
-      "total": 0
+      "found": 2,
+      "total": 4,
+      "rate": 50.0
     },
     "report": {
-      "found": 0,
-      "total": 0
-    },
-    "authen": {
-      "found": 0,
-      "total": 0
+      "found": 3,
+      "total": 3,
+      "rate": 100.0
     },
     "baike": {
-      "found": 0,
-      "total": 0
+      "found": 8,
+      "total": 13,
+      "rate": 61.53846153846154
     },
     "doc": {
-      "found": 0,
-      "total": 0
-    },
-    "meeting_room": {
-      "found": 0,
-      "total": 0
+      "found": 4,
+      "total": 6,
+      "rate": 66.66666666666666
     }
   },
   "results": [
@@ -2111,7 +2218,7 @@
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block/list",
       "file_path": "../src/service/cloud_docs/docx/v1/document.rs",
-      "line_number": "106",
+      "line_number": "959",
       "implementation_preview": "pub async fn list_blocks(",
       "status": "found"
     },
@@ -3320,7 +3427,7 @@
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/raw_content",
       "file_path": "../src/service/cloud_docs/docx/v1/document.rs",
-      "line_number": "83",
+      "line_number": "889",
       "implementation_preview": "pub async fn get_raw_content(",
       "status": "found"
     },
@@ -3333,7 +3440,7 @@
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block/list",
       "file_path": "../src/service/cloud_docs/docx/v1/document.rs",
-      "line_number": "106",
+      "line_number": "959",
       "implementation_preview": "pub async fn list_blocks(",
       "status": "found"
     },
@@ -3358,10 +3465,10 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block-descendant/create",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/cloud_docs/docx/v1/document_block_descendant.rs",
+      "line_number": "377",
+      "implementation_preview": "pub async fn create_descendant_block(",
+      "status": "found"
     },
     {
       "name": "更新块的内容",
@@ -4541,10 +4648,10 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-dashboard/list",
-      "file_path": "未找到",
-      "line_number": "-",
-      "implementation_preview": "-",
-      "status": "not_found"
+      "file_path": "../src/service/cloud_docs/bitable/v1/app_dashboard/list.rs",
+      "line_number": "204",
+      "implementation_preview": "pub async fn list_dashboards(",
+      "status": "found"
     },
     {
       "name": "更新表单元数据",
@@ -7167,9 +7274,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uUDOyUjL1gjM14SN4ITN",
-      "file_path": "../src/service/approval/v4/file/mod.rs",
-      "line_number": "49",
-      "implementation_preview": "pub async fn upload(,",
+      "file_path": "../src/service/attendance/v1/user_setting.rs",
+      "line_number": "77",
+      "implementation_preview": "pub async fn upload_photo(",
       "status": "found"
     },
     {
@@ -7258,10 +7365,10 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/ukjNyYjL5YjM24SO2IjN/quick-approval-callback",
-      "file_path": "../src/service/approval/v4/instance.rs",
-      "line_number": "262",
-      "implementation_preview": "pub async fn get_my_approval_stats(",
-      "status": "found"
+      "file_path": "未找到",
+      "line_number": "-",
+      "implementation_preview": "-",
+      "status": "not_found"
     },
     {
       "name": "同步三方审批实例",
@@ -7310,9 +7417,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/ugDNyYjL4QjM24CO0IjN",
-      "file_path": "../src/service/approval/v4/message/mod.rs",
-      "line_number": "52",
-      "implementation_preview": "pub async fn send(,",
+      "file_path": "../src/service/auth/v3/mod.rs",
+      "line_number": "61",
+      "implementation_preview": "pub async fn app_ticket_resend(",
       "status": "found"
     },
     {
@@ -7323,9 +7430,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uAjNyYjLwYjM24CM2IjN",
-      "file_path": "../src/service/approval/v4/message/mod.rs",
-      "line_number": "78",
-      "implementation_preview": "pub async fn update(,",
+      "file_path": "../src/service/lingo/draft/mod.rs",
+      "line_number": "44",
+      "implementation_preview": "pub async fn update_draft(",
       "status": "found"
     },
     {
@@ -7388,9 +7495,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uEDN5UjLxQTO14SM0kTN",
-      "file_path": "../src/service/approval/v4/instance.rs",
-      "line_number": "58",
-      "implementation_preview": "pub async fn get(",
+      "file_path": "../src/service/attendance/v1/mod.rs",
+      "line_number": "34",
+      "implementation_preview": "pub async fn get_user_task(",
       "status": "found"
     },
     {
@@ -19101,9 +19208,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/ucDOyUjL3gjM14yN4ITN",
-      "file_path": "../src/service/approval/v4/instance.rs",
-      "line_number": "262",
-      "implementation_preview": "pub async fn get_my_approval_stats(",
+      "file_path": "../src/service/calendar/v4/mod.rs",
+      "line_number": "497",
+      "implementation_preview": "pub async fn subscribe_calendar(",
       "status": "found"
     },
     {
@@ -19114,9 +19221,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/ugDOyUjL4gjM14CO4ITN",
-      "file_path": "../src/service/approval/v4/instance.rs",
-      "line_number": "262",
-      "implementation_preview": "pub async fn get_my_approval_stats(",
+      "file_path": "../src/service/calendar/v4/mod.rs",
+      "line_number": "518",
+      "implementation_preview": "pub async fn unsubscribe_calendar(",
       "status": "found"
     },
     {
@@ -19127,9 +19234,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uADNyUjLwQjM14CM0ITN",
-      "file_path": "../src/service/approval/v4/instance.rs",
-      "line_number": "58",
-      "implementation_preview": "pub async fn get(",
+      "file_path": "../src/service/attendance/v1/mod.rs",
+      "line_number": "34",
+      "implementation_preview": "pub async fn get_user_task(",
       "status": "found"
     },
     {
@@ -19140,8 +19247,8 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uIDNyUjLyQjM14iM0ITN",
-      "file_path": "../src/service/approval/v4/instance.rs",
-      "line_number": "36",
+      "file_path": "../src/service/attendance/v1/user_approval.rs",
+      "line_number": "54",
       "implementation_preview": "pub async fn create(",
       "status": "found"
     },
@@ -19153,9 +19260,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uEDNyUjLxQjM14SM0ITN",
-      "file_path": "../src/service/approval/v4/instance.rs",
-      "line_number": "58",
-      "implementation_preview": "pub async fn get(",
+      "file_path": "../src/service/attendance/v1/mod.rs",
+      "line_number": "34",
+      "implementation_preview": "pub async fn get_user_task(",
       "status": "found"
     },
     {
@@ -19166,9 +19273,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uQDOyUjL0gjM14CN4ITN",
-      "file_path": "../src/service/approval/v4/external_task/mod.rs",
-      "line_number": "51",
-      "implementation_preview": "pub async fn list(",
+      "file_path": "../src/service/attendance/v1/mod.rs",
+      "line_number": "134",
+      "implementation_preview": "pub async fn list_shifts(&self, _request: &ListShi...",
       "status": "found"
     },
     {
@@ -19179,9 +19286,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uADOzYjLwgzM24CM4MjN",
-      "file_path": "../src/service/approval/v4/search/mod.rs",
-      "line_number": "311",
-      "implementation_preview": "pub async fn search_cc(",
+      "file_path": "../src/service/auth/v1/mod.rs",
+      "line_number": "41",
+      "implementation_preview": "pub async fn oidc_access_token(",
       "status": "found"
     },
     {
@@ -19192,9 +19299,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uYDNyUjL2QjM14iN0ITN",
-      "file_path": "../src/service/approval/v4/instance.rs",
-      "line_number": "262",
-      "implementation_preview": "pub async fn get_my_approval_stats(",
+      "file_path": "../src/service/apass/flow/mod.rs",
+      "line_number": "318",
+      "implementation_preview": "pub async fn cancel_user_task(,",
       "status": "found"
     },
     {
@@ -19205,9 +19312,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uMDNyUjLzQjM14yM0ITN",
-      "file_path": "../src/service/approval/v4/task.rs",
-      "line_number": "59",
-      "implementation_preview": "pub async fn approve(",
+      "file_path": "../src/service/hire/referral_account/mod.rs",
+      "line_number": "657",
+      "implementation_preview": "pub async fn approve_withdrawal(,",
       "status": "found"
     },
     {
@@ -19218,9 +19325,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uQDNyUjL0QjM14CN0ITN",
-      "file_path": "../src/service/approval/v4/task.rs",
-      "line_number": "76",
-      "implementation_preview": "pub async fn reject(",
+      "file_path": "../src/service/apass/flow/mod.rs",
+      "line_number": "184",
+      "implementation_preview": "pub async fn reject_user_task(,",
       "status": "found"
     },
     {
@@ -19231,9 +19338,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uUDNyUjL1QjM14SN0ITN",
-      "file_path": "../src/service/approval/v4/task.rs",
-      "line_number": "93",
-      "implementation_preview": "pub async fn transfer(",
+      "file_path": "../src/service/apass/flow/mod.rs",
+      "line_number": "211",
+      "implementation_preview": "pub async fn transfer_user_task(,",
       "status": "found"
     },
     {
@@ -19244,8 +19351,8 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uIDNyYjLyQjM24iM0IjN",
-      "file_path": "../src/service/approval/v4/instance.rs",
-      "line_number": "36",
+      "file_path": "../src/service/attendance/v1/user_approval.rs",
+      "line_number": "54",
       "implementation_preview": "pub async fn create(",
       "status": "found"
     },
@@ -19257,8 +19364,8 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uczM3UjL3MzN14yNzcTN",
-      "file_path": "../src/service/approval/v4/instance.rs",
-      "line_number": "36",
+      "file_path": "../src/service/attendance/v1/user_approval.rs",
+      "line_number": "54",
       "implementation_preview": "pub async fn create(",
       "status": "found"
     },
@@ -19270,9 +19377,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uUDNyYjL1QjM24SN0IjN",
-      "file_path": "../src/service/approval/v4/external_instance/mod.rs",
-      "line_number": "70",
-      "implementation_preview": "pub async fn check(",
+      "file_path": "../src/service/ehr/v1/attendance.rs",
+      "line_number": "317",
+      "implementation_preview": "pub async fn create_checkin_record(",
       "status": "found"
     },
     {
@@ -19283,9 +19390,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/ukjNyYjL5YjM24SO2IjN/external_status",
-      "file_path": "../src/service/approval/v4/external_task/mod.rs",
-      "line_number": "51",
-      "implementation_preview": "pub async fn list(",
+      "file_path": "../src/service/attendance/v1/mod.rs",
+      "line_number": "134",
+      "implementation_preview": "pub async fn list_shifts(&self, _request: &ListShi...",
       "status": "found"
     },
     {
@@ -19296,8 +19403,8 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uUzNyYjL1cjM24SN3IjN",
-      "file_path": "../src/service/approval/v4/instance.rs",
-      "line_number": "36",
+      "file_path": "../src/service/attendance/v1/user_approval.rs",
+      "line_number": "54",
       "implementation_preview": "pub async fn create(",
       "status": "found"
     },
@@ -19309,9 +19416,9 @@
       "self_build": "是",
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uQjMxYjL0ITM24CNyEjN",
-      "file_path": "../src/service/approval/v4/search/mod.rs",
-      "line_number": "212",
-      "implementation_preview": "pub async fn search_instances(",
+      "file_path": "../src/service/attendance/v1/group.rs",
+      "line_number": "154",
+      "implementation_preview": "pub async fn search(",
       "status": "found"
     },
     {
@@ -19322,9 +19429,9 @@
       "self_build": "是",
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uUjMxYjL1ITM24SNyEjN",
-      "file_path": "../src/service/approval/v4/search/mod.rs",
-      "line_number": "212",
-      "implementation_preview": "pub async fn search_instances(",
+      "file_path": "../src/service/attendance/v1/group.rs",
+      "line_number": "154",
+      "implementation_preview": "pub async fn search(",
       "status": "found"
     },
     {
@@ -19335,9 +19442,9 @@
       "self_build": "是",
       "store_app": "否",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/uYjMxYjL2ITM24iNyEjN",
-      "file_path": "../src/service/approval/v4/search/mod.rs",
-      "line_number": "212",
-      "implementation_preview": "pub async fn search_instances(",
+      "file_path": "../src/service/attendance/v1/group.rs",
+      "line_number": "154",
+      "implementation_preview": "pub async fn search(",
       "status": "found"
     },
     {
@@ -19544,7 +19651,7 @@
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/ukzNzUjL5czM14SO3MTN",
       "file_path": "../src/service/cloud_docs/docx/v1/document.rs",
-      "line_number": "83",
+      "line_number": "889",
       "implementation_preview": "pub async fn get_raw_content(",
       "status": "found"
     },
