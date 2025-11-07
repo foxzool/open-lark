@@ -15,9 +15,13 @@
 //!
 //! 需要 `calendar:calendar:readonly` 权限。
 
-use serde::{Deserialize, Serialize};
-use crate::core::{http::Transport, SDKResult, ApiRequest, api_resp::{ApiResponseTrait, ResponseFormat}};
+use crate::core::{
+    api_resp::{ApiResponseTrait, ResponseFormat},
+    http::Transport,
+    ApiRequest, SDKResult,
+};
 use crate::service::calendar::v4::models::CalendarEvent;
+use serde::{Deserialize, Serialize};
 
 /// 获取日程事件请求
 ///
@@ -221,8 +225,12 @@ impl GetCalendarEventBuilder {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn execute(self, service: &crate::service::calendar::v4::calendar_event::CalendarEventService) -> SDKResult<GetCalendarEventResponse> {
-        let request = self.build()
+    pub async fn execute(
+        self,
+        service: &crate::service::calendar::v4::calendar_event::CalendarEventService,
+    ) -> SDKResult<GetCalendarEventResponse> {
+        let request = self
+            .build()
             .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
         service.get(&request).await
     }
@@ -300,8 +308,8 @@ mod tests {
 
     #[test]
     fn test_builder_user_id_type() {
-        let builder = GetCalendarEventBuilder::new("calendar_123", "event_456")
-            .user_id_type("open_id");
+        let builder =
+            GetCalendarEventBuilder::new("calendar_123", "event_456").user_id_type("open_id");
         assert_eq!(builder.request.user_id_type, Some("open_id".to_string()));
     }
 
@@ -405,7 +413,10 @@ mod tests {
         "#;
         let response: GetCalendarEventResponse = serde_json::from_str(json).unwrap();
         assert!(response.event.is_some());
-        assert_eq!(response.event.unwrap().event_id, Some("event_456".to_string()));
+        assert_eq!(
+            response.event.unwrap().event_id,
+            Some("event_456".to_string())
+        );
         assert_eq!(response.has_more, Some(false));
         assert_eq!(response.page_token, Some("next_page_token".to_string()));
     }

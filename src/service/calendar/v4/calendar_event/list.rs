@@ -26,9 +26,13 @@
 //! - `sort_order`: 排序方向（asc, desc）
 //! - `user_id_type`: 用户ID类型
 
-use serde::{Deserialize, Serialize};
-use crate::core::{http::Transport, SDKResult, ApiRequest, api_resp::{ApiResponseTrait, ResponseFormat}};
+use crate::core::{
+    api_resp::{ApiResponseTrait, ResponseFormat},
+    http::Transport,
+    ApiRequest, SDKResult,
+};
 use crate::service::calendar::v4::models::CalendarEvent;
+use serde::{Deserialize, Serialize};
 
 /// 获取日程事件列表请求
 ///
@@ -213,8 +217,12 @@ impl ListCalendarEventsRequest {
 
         // 验证排序字段
         if let Some(sort_by) = &self.sort_by {
-            if !["start_time", "updated_time", "created_time", "summary"].contains(&sort_by.as_str()) {
-                return Err("排序字段必须是 start_time、updated_time、created_time 或 summary".to_string());
+            if !["start_time", "updated_time", "created_time", "summary"]
+                .contains(&sort_by.as_str())
+            {
+                return Err(
+                    "排序字段必须是 start_time、updated_time、created_time 或 summary".to_string(),
+                );
             }
         }
 
@@ -264,7 +272,10 @@ impl ListCalendarEventsRequest {
         }
 
         if let Some(user_id_type) = &self.user_id_type {
-            params.push(format!("user_id_type={}", urlencoding::encode(user_id_type)));
+            params.push(format!(
+                "user_id_type={}",
+                urlencoding::encode(user_id_type)
+            ));
         }
 
         if params.is_empty() {
@@ -535,8 +546,12 @@ impl ListCalendarEventsBuilder {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn execute(self, service: &crate::service::calendar::v4::calendar_event::CalendarEventService) -> SDKResult<ListCalendarEventsResponse> {
-        let request = self.build()
+    pub async fn execute(
+        self,
+        service: &crate::service::calendar::v4::calendar_event::CalendarEventService,
+    ) -> SDKResult<ListCalendarEventsResponse> {
+        let request = self
+            .build()
             .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
         service.list(&request).await
     }
@@ -675,7 +690,10 @@ mod tests {
         request.set_sort_by("invalid_field");
         let result = request.validate();
         assert!(result.is_err());
-        assert!(result.unwrap_err(), "排序字段必须是 start_time、updated_time、created_time 或 summary");
+        assert!(
+            result.unwrap_err(),
+            "排序字段必须是 start_time、updated_time、created_time 或 summary"
+        );
     }
 
     #[test]
@@ -733,57 +751,60 @@ mod tests {
 
     #[test]
     fn test_builder_page_token() {
-        let builder = ListCalendarEventsBuilder::new("calendar_123")
-            .page_token("next_page_token");
-        assert_eq!(builder.request.page_token, Some("next_page_token".to_string()));
+        let builder = ListCalendarEventsBuilder::new("calendar_123").page_token("next_page_token");
+        assert_eq!(
+            builder.request.page_token,
+            Some("next_page_token".to_string())
+        );
     }
 
     #[test]
     fn test_builder_page_size() {
-        let builder = ListCalendarEventsBuilder::new("calendar_123")
-            .page_size(50);
+        let builder = ListCalendarEventsBuilder::new("calendar_123").page_size(50);
         assert_eq!(builder.request.page_size, Some(50));
     }
 
     #[test]
     fn test_builder_time_min() {
-        let builder = ListCalendarEventsBuilder::new("calendar_123")
-            .time_min("2024-01-01T00:00:00Z");
-        assert_eq!(builder.request.time_min, Some("2024-01-01T00:00:00Z".to_string()));
+        let builder =
+            ListCalendarEventsBuilder::new("calendar_123").time_min("2024-01-01T00:00:00Z");
+        assert_eq!(
+            builder.request.time_min,
+            Some("2024-01-01T00:00:00Z".to_string())
+        );
     }
 
     #[test]
     fn test_builder_time_max() {
-        let builder = ListCalendarEventsBuilder::new("calendar_123")
-            .time_max("2024-12-31T23:59:59Z");
-        assert_eq!(builder.request.time_max, Some("2024-12-31T23:59:59Z".to_string()));
+        let builder =
+            ListCalendarEventsBuilder::new("calendar_123").time_max("2024-12-31T23:59:59Z");
+        assert_eq!(
+            builder.request.time_max,
+            Some("2024-12-31T23:59:59Z".to_string())
+        );
     }
 
     #[test]
     fn test_builder_query() {
-        let builder = ListCalendarEventsBuilder::new("calendar_123")
-            .query("周会");
+        let builder = ListCalendarEventsBuilder::new("calendar_123").query("周会");
         assert_eq!(builder.request.query, Some("周会".to_string()));
     }
 
     #[test]
     fn test_builder_sort_by() {
-        let builder = ListCalendarEventsBuilder::new("calendar_123")
-            .sort_by("updated_time");
+        let builder = ListCalendarEventsBuilder::new("calendar_123").sort_by("updated_time");
         assert_eq!(builder.request.sort_by, Some("updated_time".to_string()));
     }
 
     #[test]
     fn test_builder_sort_order() {
-        let builder = ListCalendarEventsBuilder::new("calendar_123")
-            .sort_order("desc");
+        let builder = ListCalendarEventsBuilder::new("calendar_123").sort_order("desc");
         assert_eq!(builder.request.sort_order, Some("desc".to_string()));
     }
 
     #[test]
     fn test_builder_user_id_type() {
-        let builder = ListCalendarEventsBuilder::new("calendar_123")
-            .user_id_type("union_id");
+        let builder = ListCalendarEventsBuilder::new("calendar_123").user_id_type("union_id");
         assert_eq!(builder.request.user_id_type, Some("union_id".to_string()));
     }
 
@@ -887,7 +908,10 @@ mod tests {
         let response: ListCalendarEventsResponse = serde_json::from_str(json).unwrap();
         assert!(response.events.is_some());
         assert_eq!(response.events.unwrap().len(), 1);
-        assert_eq!(response.next_page_token, Some("next_page_token_789".to_string()));
+        assert_eq!(
+            response.next_page_token,
+            Some("next_page_token_789".to_string())
+        );
         assert_eq!(response.page_size, Some(20));
         assert_eq!(response.total, Some(1));
         assert_eq!(response.has_more, Some(false));
@@ -958,8 +982,14 @@ mod tests {
         assert_eq!(builder.request.calendar_id, "calendar_123");
         assert_eq!(builder.request.page_token, Some("next_token".to_string()));
         assert_eq!(builder.request.page_size, Some(50));
-        assert_eq!(builder.request.time_min, Some("2024-01-01T00:00:00Z".to_string()));
-        assert_eq!(builder.request.time_max, Some("2024-12-31T23:59:59Z".to_string()));
+        assert_eq!(
+            builder.request.time_min,
+            Some("2024-01-01T00:00:00Z".to_string())
+        );
+        assert_eq!(
+            builder.request.time_max,
+            Some("2024-12-31T23:59:59Z".to_string())
+        );
         assert_eq!(builder.request.query, Some("年度会议".to_string()));
         assert_eq!(builder.request.sort_by, Some("summary".to_string()));
         assert_eq!(builder.request.sort_order, Some("desc".to_string()));

@@ -236,7 +236,8 @@ impl DocumentService {
     /// # 返回值
     /// 返回创建的文档信息
     pub async fn create(&self, req: &CreateDocumentRequest) -> SDKResult<CreateDocumentResponse> {
-        req.validate().map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
+        req.validate()
+            .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
         log::debug!("开始创建文档: title={:?}", req.title);
 
         let api_req = ApiRequest {
@@ -247,11 +248,15 @@ impl DocumentService {
             ..Default::default()
         };
 
-        let resp = Transport::<CreateDocumentResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<CreateDocumentResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("文档创建成功: title={}, document_id={:?}",
-                   req.title, response.document.document_id);
+        log::info!(
+            "文档创建成功: title={}, document_id={:?}",
+            req.title,
+            response.document.document_id
+        );
 
         Ok(response)
     }
@@ -280,7 +285,8 @@ impl DocumentService {
     /// println!("文档版本: {:?}", result.document.version);
     /// ```
     pub async fn get(&self, req: &GetDocumentRequest) -> SDKResult<GetDocumentResponse> {
-        req.validate().map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
+        req.validate()
+            .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
         log::debug!("开始获取文档信息: document_id={}", req.document_id);
 
         // 构建动态端点路径
@@ -298,8 +304,11 @@ impl DocumentService {
         let resp = Transport::<GetDocumentResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("文档信息获取完成: document_id={}, title={:?}",
-                   req.document_id, response.document.title);
+        log::info!(
+            "文档信息获取完成: document_id={}, title={:?}",
+            req.document_id,
+            response.document.title
+        );
 
         Ok(response)
     }
@@ -487,8 +496,14 @@ mod tests {
         assert_eq!(document.title, Some("项目计划".to_string()));
         assert_eq!(document.url, Some("https://example.com/doc".to_string()));
         assert_eq!(document.version, Some(1));
-        assert_eq!(document.creator.as_ref().unwrap().user_id, Some("user_123".to_string()));
-        assert_eq!(document.creator.as_ref().unwrap().name, Some("张三".to_string()));
+        assert_eq!(
+            document.creator.as_ref().unwrap().user_id,
+            Some("user_123".to_string())
+        );
+        assert_eq!(
+            document.creator.as_ref().unwrap().name,
+            Some("张三".to_string())
+        );
         assert_eq!(document.folder_token, Some("folder_789".to_string()));
         assert_eq!(document.status, Some("active".to_string()));
     }
@@ -503,8 +518,7 @@ mod tests {
 
     #[test]
     fn test_create_document_request() {
-        let request = CreateDocumentRequest::new("测试文档")
-            .folder_token("folder_token");
+        let request = CreateDocumentRequest::new("测试文档").folder_token("folder_token");
 
         assert_eq!(request.title, "测试文档");
         assert_eq!(request.folder_token, Some("folder_token".to_string()));
@@ -540,7 +554,10 @@ mod tests {
             .folder_token("test_folder");
 
         assert_eq!(builder.request.title, "构建器测试");
-        assert_eq!(builder.request.folder_token, Some("test_folder".to_string()));
+        assert_eq!(
+            builder.request.folder_token,
+            Some("test_folder".to_string())
+        );
     }
 
     #[test]
@@ -572,16 +589,12 @@ mod tests {
 
     #[test]
     fn test_api_response_trait_implementation() {
-        assert_eq!(
-            CreateDocumentResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(CreateDocumentResponse::data_format(), ResponseFormat::Data);
     }
 
     #[test]
     fn test_request_serialization() {
-        let request = CreateDocumentRequest::new("序列化测试")
-            .folder_token("test_folder");
+        let request = CreateDocumentRequest::new("序列化测试").folder_token("test_folder");
 
         let serialized = serde_json::to_string(&request).unwrap();
         let deserialized: CreateDocumentRequest = serde_json::from_str(&serialized).unwrap();
@@ -647,7 +660,10 @@ mod tests {
             comprehensive_document.document_id,
             Some("comprehensive_doc_001".to_string())
         );
-        assert_eq!(comprehensive_document.title, Some("2023年度工作总结".to_string()));
+        assert_eq!(
+            comprehensive_document.title,
+            Some("2023年度工作总结".to_string())
+        );
         assert_eq!(
             comprehensive_document.url,
             Some("https://docs.example.com/comprehensive_doc_001".to_string())
@@ -776,10 +792,7 @@ mod tests {
 
     #[test]
     fn test_get_document_response_api_trait() {
-        assert_eq!(
-            GetDocumentResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(GetDocumentResponse::data_format(), ResponseFormat::Data);
     }
 
     #[test]
@@ -803,7 +816,10 @@ mod tests {
         let serialized = serde_json::to_string(&response).unwrap();
         let deserialized: GetDocumentResponse = serde_json::from_str(&serialized).unwrap();
 
-        assert_eq!(response.document.document_id, deserialized.document.document_id);
+        assert_eq!(
+            response.document.document_id,
+            deserialized.document.document_id
+        );
         assert_eq!(response.document.title, deserialized.document.title);
         assert_eq!(response.document.version, deserialized.document.version);
     }
@@ -868,7 +884,10 @@ mod tests {
             comprehensive_response.document.document_id,
             Some("doc_comprehensive".to_string())
         );
-        assert_eq!(comprehensive_response.document.title, Some("综合测试文档".to_string()));
+        assert_eq!(
+            comprehensive_response.document.title,
+            Some("综合测试文档".to_string())
+        );
         assert_eq!(
             comprehensive_response.document.url,
             Some("https://docs.example.com/doc_comprehensive".to_string())
@@ -883,17 +902,30 @@ mod tests {
             Some("2023-12-31T16:00:00Z".to_string())
         );
         assert_eq!(
-            comprehensive_response.document.creator.as_ref().unwrap().user_id,
+            comprehensive_response
+                .document
+                .creator
+                .as_ref()
+                .unwrap()
+                .user_id,
             Some("user_001".to_string())
         );
         assert_eq!(
-            comprehensive_response.document.creator.as_ref().unwrap().name,
+            comprehensive_response
+                .document
+                .creator
+                .as_ref()
+                .unwrap()
+                .name,
             Some("测试用户".to_string())
         );
         assert_eq!(
             comprehensive_response.document.folder_token,
             Some("folder_123".to_string())
         );
-        assert_eq!(comprehensive_response.document.status, Some("published".to_string()));
+        assert_eq!(
+            comprehensive_response.document.status,
+            Some("published".to_string())
+        );
     }
 }

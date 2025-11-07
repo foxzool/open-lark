@@ -15,9 +15,15 @@
 //!
 //! 需要 `calendar:calendar` 权限。
 
+use crate::core::{
+    api_resp::{ApiResponseTrait, ResponseFormat},
+    http::Transport,
+    ApiRequest, SDKResult,
+};
+use crate::service::calendar::v4::models::{
+    CalendarEvent, EventAttendee, EventStatus, Location, MeetingRoom, Reminder, TimeInfo,
+};
 use serde::{Deserialize, Serialize};
-use crate::core::{http::Transport, SDKResult, ApiRequest, api_resp::{ApiResponseTrait, ResponseFormat}};
-use crate::service::calendar::v4::models::{CalendarEvent, TimeInfo, Reminder, EventAttendee, MeetingRoom, Location, EventStatus};
 
 /// 创建日程事件请求
 ///
@@ -196,9 +202,7 @@ pub struct CreateCalendarEventResponse {
 
 impl Default for CreateCalendarEventResponse {
     fn default() -> Self {
-        Self {
-            event: None,
-        }
+        Self { event: None }
     }
 }
 
@@ -346,8 +350,12 @@ impl CreateCalendarEventBuilder {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn execute(self, service: &crate::service::calendar::v4::calendar_event::CalendarEventService) -> SDKResult<CreateCalendarEventResponse> {
-        let request = self.build()
+    pub async fn execute(
+        self,
+        service: &crate::service::calendar::v4::calendar_event::CalendarEventService,
+    ) -> SDKResult<CreateCalendarEventResponse> {
+        let request = self
+            .build()
             .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
         service.create(&request).await
     }
@@ -472,29 +480,28 @@ mod tests {
 
     #[test]
     fn test_builder_summary() {
-        let builder = CreateCalendarEventBuilder::new("calendar_123")
-            .summary("团队会议");
+        let builder = CreateCalendarEventBuilder::new("calendar_123").summary("团队会议");
         assert_eq!(builder.request.summary, Some("团队会议".to_string()));
     }
 
     #[test]
     fn test_builder_description() {
-        let builder = CreateCalendarEventBuilder::new("calendar_123")
-            .description("讨论项目进展");
-        assert_eq!(builder.request.description, Some("讨论项目进展".to_string()));
+        let builder = CreateCalendarEventBuilder::new("calendar_123").description("讨论项目进展");
+        assert_eq!(
+            builder.request.description,
+            Some("讨论项目进展".to_string())
+        );
     }
 
     #[test]
     fn test_builder_is_all_day() {
-        let builder = CreateCalendarEventBuilder::new("calendar_123")
-            .is_all_day(true);
+        let builder = CreateCalendarEventBuilder::new("calendar_123").is_all_day(true);
         assert_eq!(builder.request.is_all_day, Some(true));
     }
 
     #[test]
     fn test_builder_user_id_type() {
-        let builder = CreateCalendarEventBuilder::new("calendar_123")
-            .user_id_type("open_id");
+        let builder = CreateCalendarEventBuilder::new("calendar_123").user_id_type("open_id");
         assert_eq!(builder.request.user_id_type, Some("open_id".to_string()));
     }
 
@@ -586,7 +593,10 @@ mod tests {
         "#;
         let response: CreateCalendarEventResponse = serde_json::from_str(json).unwrap();
         assert!(response.event.is_some());
-        assert_eq!(response.event.unwrap().event_id, Some("event_456".to_string()));
+        assert_eq!(
+            response.event.unwrap().event_id,
+            Some("event_456".to_string())
+        );
     }
 
     #[test]

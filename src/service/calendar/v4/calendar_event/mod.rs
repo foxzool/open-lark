@@ -1,4 +1,4 @@
-use crate::{core::config::Config, core::SDKResult, core::ApiRequest, impl_full_service};
+use crate::{core::config::Config, core::ApiRequest, core::SDKResult, impl_full_service};
 pub mod create;
 pub mod delete;
 pub mod get;
@@ -12,12 +12,19 @@ pub mod subscription;
 pub mod unsubscription;
 
 // 重新导出所有请求和响应类型
-pub use get::{GetCalendarEventRequest, GetCalendarEventResponse, GetCalendarEventBuilder};
-pub use create::{CreateCalendarEventRequest, CreateCalendarEventResponse, CreateCalendarEventBuilder};
-pub use delete::{DeleteCalendarEventRequest, DeleteCalendarEventResponse, DeleteCalendarEventBuilder};
-pub use list::{ListCalendarEventsRequest, ListCalendarEventsResponse, ListCalendarEventsBuilder};
-pub use reply::{ReplyCalendarEventRequest, ReplyCalendarEventResponse, ReplyCalendarEventBuilder, EventReplyStatus};
-pub use patch::{PatchCalendarEventRequest, PatchCalendarEventResponse, PatchCalendarEventBuilder};
+pub use create::{
+    CreateCalendarEventBuilder, CreateCalendarEventRequest, CreateCalendarEventResponse,
+};
+pub use delete::{
+    DeleteCalendarEventBuilder, DeleteCalendarEventRequest, DeleteCalendarEventResponse,
+};
+pub use get::{GetCalendarEventBuilder, GetCalendarEventRequest, GetCalendarEventResponse};
+pub use list::{ListCalendarEventsBuilder, ListCalendarEventsRequest, ListCalendarEventsResponse};
+pub use patch::{PatchCalendarEventBuilder, PatchCalendarEventRequest, PatchCalendarEventResponse};
+pub use reply::{
+    EventReplyStatus, ReplyCalendarEventBuilder, ReplyCalendarEventRequest,
+    ReplyCalendarEventResponse,
+};
 
 /// 日程管理服务
 ///
@@ -75,7 +82,11 @@ impl CalendarEventService {
     pub async fn get(&self, req: &GetCalendarEventRequest) -> SDKResult<GetCalendarEventResponse> {
         req.validate()
             .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
-        log::debug!("开始获取日程事件: calendar_id={}, event_id={}", req.calendar_id, req.event_id);
+        log::debug!(
+            "开始获取日程事件: calendar_id={}, event_id={}",
+            req.calendar_id,
+            req.event_id
+        );
 
         // 构建动态端点路径
         let endpoint = crate::core::endpoints_original::Endpoints::CALENDAR_EVENT_GET
@@ -87,17 +98,26 @@ impl CalendarEventService {
             api_path: endpoint,
             supported_access_token_types: vec![
                 crate::core::constants::AccessTokenType::Tenant,
-                crate::core::constants::AccessTokenType::User
+                crate::core::constants::AccessTokenType::User,
             ],
             body: Vec::new(), // GET请求无body
             ..Default::default()
         };
 
-        let resp = crate::core::http::Transport::<GetCalendarEventResponse>::request(api_req, &self.config, None).await?;
+        let resp = crate::core::http::Transport::<GetCalendarEventResponse>::request(
+            api_req,
+            &self.config,
+            None,
+        )
+        .await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("日程事件获取完成: calendar_id={}, event_id={}, title={:?}",
-                   req.calendar_id, req.event_id, response.event.as_ref().and_then(|e| e.summary.as_ref()));
+        log::info!(
+            "日程事件获取完成: calendar_id={}, event_id={}, title={:?}",
+            req.calendar_id,
+            req.event_id,
+            response.event.as_ref().and_then(|e| e.summary.as_ref())
+        );
 
         Ok(response)
     }
@@ -169,11 +189,17 @@ impl CalendarEventService {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn list(&self, req: &ListCalendarEventsRequest) -> SDKResult<ListCalendarEventsResponse> {
+    pub async fn list(
+        &self,
+        req: &ListCalendarEventsRequest,
+    ) -> SDKResult<ListCalendarEventsResponse> {
         req.validate()
             .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
-        log::debug!("开始获取日程事件列表: calendar_id={}, page_size={:?}",
-                   req.calendar_id, req.page_size);
+        log::debug!(
+            "开始获取日程事件列表: calendar_id={}, page_size={:?}",
+            req.calendar_id,
+            req.page_size
+        );
 
         // 构建动态端点路径和查询参数
         let base_endpoint = crate::core::endpoints_original::Endpoints::CALENDAR_EVENT_LIST
@@ -186,18 +212,27 @@ impl CalendarEventService {
             api_path: endpoint,
             supported_access_token_types: vec![
                 crate::core::constants::AccessTokenType::Tenant,
-                crate::core::constants::AccessTokenType::User
+                crate::core::constants::AccessTokenType::User,
             ],
             body: Vec::new(), // GET请求无body
             ..Default::default()
         };
 
-        let resp = crate::core::http::Transport::<ListCalendarEventsResponse>::request(api_req, &self.config, None).await?;
+        let resp = crate::core::http::Transport::<ListCalendarEventsResponse>::request(
+            api_req,
+            &self.config,
+            None,
+        )
+        .await?;
         let response = resp.data.unwrap_or_default();
 
         let event_count = response.events.as_ref().map_or(0, |e| e.len());
-        log::info!("日程事件列表获取完成: calendar_id={}, event_count={}, has_more={:?}",
-                   req.calendar_id, event_count, response.has_more);
+        log::info!(
+            "日程事件列表获取完成: calendar_id={}, event_count={}, has_more={:?}",
+            req.calendar_id,
+            event_count,
+            response.has_more
+        );
 
         Ok(response)
     }
@@ -275,10 +310,17 @@ impl CalendarEventService {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn create(&self, req: &CreateCalendarEventRequest) -> SDKResult<CreateCalendarEventResponse> {
+    pub async fn create(
+        &self,
+        req: &CreateCalendarEventRequest,
+    ) -> SDKResult<CreateCalendarEventResponse> {
         req.validate()
             .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
-        log::debug!("开始创建日程事件: calendar_id={}, summary={:?}", req.calendar_id, req.summary);
+        log::debug!(
+            "开始创建日程事件: calendar_id={}, summary={:?}",
+            req.calendar_id,
+            req.summary
+        );
 
         // 构建动态端点路径
         let endpoint = crate::core::endpoints_original::Endpoints::CALENDAR_EVENT_CREATE
@@ -289,17 +331,26 @@ impl CalendarEventService {
             api_path: endpoint,
             supported_access_token_types: vec![
                 crate::core::constants::AccessTokenType::Tenant,
-                crate::core::constants::AccessTokenType::User
+                crate::core::constants::AccessTokenType::User,
             ],
             body: serde_json::to_vec(req)?,
             ..Default::default()
         };
 
-        let resp = crate::core::http::Transport::<CreateCalendarEventResponse>::request(api_req, &self.config, None).await?;
+        let resp = crate::core::http::Transport::<CreateCalendarEventResponse>::request(
+            api_req,
+            &self.config,
+            None,
+        )
+        .await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("日程事件创建完成: calendar_id={}, event_id={:?}, title={:?}",
-                   req.calendar_id, response.event.as_ref().and_then(|e| e.event_id.as_ref()), response.event.as_ref().and_then(|e| e.summary.as_ref()));
+        log::info!(
+            "日程事件创建完成: calendar_id={}, event_id={:?}, title={:?}",
+            req.calendar_id,
+            response.event.as_ref().and_then(|e| e.event_id.as_ref()),
+            response.event.as_ref().and_then(|e| e.summary.as_ref())
+        );
 
         Ok(response)
     }
@@ -365,10 +416,17 @@ impl CalendarEventService {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn delete(&self, req: &DeleteCalendarEventRequest) -> SDKResult<DeleteCalendarEventResponse> {
+    pub async fn delete(
+        &self,
+        req: &DeleteCalendarEventRequest,
+    ) -> SDKResult<DeleteCalendarEventResponse> {
         req.validate()
             .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
-        log::debug!("开始删除日程事件: calendar_id={}, event_id={}", req.calendar_id, req.event_id);
+        log::debug!(
+            "开始删除日程事件: calendar_id={}, event_id={}",
+            req.calendar_id,
+            req.event_id
+        );
 
         // 构建动态端点路径
         let endpoint = crate::core::endpoints_original::Endpoints::CALENDAR_EVENT_DELETE
@@ -380,17 +438,26 @@ impl CalendarEventService {
             api_path: endpoint,
             supported_access_token_types: vec![
                 crate::core::constants::AccessTokenType::Tenant,
-                crate::core::constants::AccessTokenType::User
+                crate::core::constants::AccessTokenType::User,
             ],
             body: Vec::new(), // DELETE请求无body
             ..Default::default()
         };
 
-        let resp = crate::core::http::Transport::<DeleteCalendarEventResponse>::request(api_req, &self.config, None).await?;
+        let resp = crate::core::http::Transport::<DeleteCalendarEventResponse>::request(
+            api_req,
+            &self.config,
+            None,
+        )
+        .await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("日程事件删除完成: calendar_id={}, event_id={}, success={:?}",
-                   req.calendar_id, req.event_id, response.success);
+        log::info!(
+            "日程事件删除完成: calendar_id={}, event_id={}, success={:?}",
+            req.calendar_id,
+            req.event_id,
+            response.success
+        );
 
         Ok(response)
     }
@@ -456,10 +523,17 @@ impl CalendarEventService {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn patch(&self, req: &PatchCalendarEventRequest) -> SDKResult<PatchCalendarEventResponse> {
+    pub async fn patch(
+        &self,
+        req: &PatchCalendarEventRequest,
+    ) -> SDKResult<PatchCalendarEventResponse> {
         req.validate()
             .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
-        log::debug!("开始更新日程事件: calendar_id={}, event_id={}", req.calendar_id, req.event_id);
+        log::debug!(
+            "开始更新日程事件: calendar_id={}, event_id={}",
+            req.calendar_id,
+            req.event_id
+        );
 
         // 构建动态端点路径
         let endpoint = crate::core::endpoints_original::Endpoints::CALENDAR_EVENT_UPDATE
@@ -471,17 +545,26 @@ impl CalendarEventService {
             api_path: endpoint,
             supported_access_token_types: vec![
                 crate::core::constants::AccessTokenType::Tenant,
-                crate::core::constants::AccessTokenType::User
+                crate::core::constants::AccessTokenType::User,
             ],
             body: serde_json::to_vec(req)?,
             ..Default::default()
         };
 
-        let resp = crate::core::http::Transport::<PatchCalendarEventResponse>::request(api_req, &self.config, None).await?;
+        let resp = crate::core::http::Transport::<PatchCalendarEventResponse>::request(
+            api_req,
+            &self.config,
+            None,
+        )
+        .await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("日程事件更新完成: calendar_id={}, event_id={}, title={:?}",
-                   req.calendar_id, req.event_id, response.event.as_ref().and_then(|e| e.summary.as_ref()));
+        log::info!(
+            "日程事件更新完成: calendar_id={}, event_id={}, title={:?}",
+            req.calendar_id,
+            req.event_id,
+            response.event.as_ref().and_then(|e| e.summary.as_ref())
+        );
 
         Ok(response)
     }
@@ -553,11 +636,18 @@ impl CalendarEventService {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn reply(&self, req: &ReplyCalendarEventRequest) -> SDKResult<ReplyCalendarEventResponse> {
+    pub async fn reply(
+        &self,
+        req: &ReplyCalendarEventRequest,
+    ) -> SDKResult<ReplyCalendarEventResponse> {
         req.validate()
             .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
-        log::debug!("开始回复日程邀请: calendar_id={}, event_id={}, reply_status={:?}",
-                   req.calendar_id, req.event_id, req.reply_status);
+        log::debug!(
+            "开始回复日程邀请: calendar_id={}, event_id={}, reply_status={:?}",
+            req.calendar_id,
+            req.event_id,
+            req.reply_status
+        );
 
         // 构建动态端点路径
         let endpoint = crate::core::endpoints_original::Endpoints::CALENDAR_EVENT_REPLY
@@ -569,17 +659,27 @@ impl CalendarEventService {
             api_path: endpoint,
             supported_access_token_types: vec![
                 crate::core::constants::AccessTokenType::Tenant,
-                crate::core::constants::AccessTokenType::User
+                crate::core::constants::AccessTokenType::User,
             ],
             body: serde_json::to_vec(req)?,
             ..Default::default()
         };
 
-        let resp = crate::core::http::Transport::<ReplyCalendarEventResponse>::request(api_req, &self.config, None).await?;
+        let resp = crate::core::http::Transport::<ReplyCalendarEventResponse>::request(
+            api_req,
+            &self.config,
+            None,
+        )
+        .await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("日程邀请回复完成: calendar_id={}, event_id={}, reply_status={:?}, success={:?}",
-                   req.calendar_id, req.event_id, response.reply_status, response.success);
+        log::info!(
+            "日程邀请回复完成: calendar_id={}, event_id={}, reply_status={:?}, success={:?}",
+            req.calendar_id,
+            req.event_id,
+            response.reply_status,
+            response.success
+        );
 
         Ok(response)
     }

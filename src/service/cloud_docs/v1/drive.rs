@@ -770,7 +770,10 @@ impl DriveServiceV1 {
     ///     .execute()
     ///     .await?;
     /// ```
-    pub fn create_export_task_builder(&self, request: ExportTaskRequest) -> CreateExportTaskBuilder {
+    pub fn create_export_task_builder(
+        &self,
+        request: ExportTaskRequest,
+    ) -> CreateExportTaskBuilder {
         CreateExportTaskBuilder::new(std::sync::Arc::new(self.clone()), request)
     }
 }
@@ -1019,7 +1022,11 @@ impl CreateExportTaskBuilder {
         if self.request.export_settings.is_none() {
             self.request.export_settings = Some(ExportSettings::default());
         }
-        self.request.export_settings.as_mut().unwrap().include_comments = Some(include_comments);
+        self.request
+            .export_settings
+            .as_mut()
+            .unwrap()
+            .include_comments = Some(include_comments);
         self
     }
 
@@ -1850,8 +1857,7 @@ mod tests {
 
     #[test]
     fn test_export_task_request_validation_empty_file_type() {
-        let request = ExportTaskRequest::new("")
-            .add_file_token("file_123");
+        let request = ExportTaskRequest::new("").add_file_token("file_123");
 
         let result = request.validate();
         assert!(result.is_err());
@@ -1860,8 +1866,7 @@ mod tests {
 
     #[test]
     fn test_export_task_request_validation_invalid_file_type() {
-        let request = ExportTaskRequest::new("xyz")
-            .add_file_token("file_123");
+        let request = ExportTaskRequest::new("xyz").add_file_token("file_123");
 
         let result = request.validate();
         assert!(result.is_err());
@@ -1897,13 +1902,14 @@ mod tests {
 
         let result = request.validate();
         assert!(result.is_err());
-        assert!(result.unwrap_err().contains("第2个文件Token长度不能超过200个字符"));
+        assert!(result
+            .unwrap_err()
+            .contains("第2个文件Token长度不能超过200个字符"));
     }
 
     #[test]
     fn test_export_task_request_case_insensitive_file_type() {
-        let request = ExportTaskRequest::new("PDF")
-            .add_file_token("file_123");
+        let request = ExportTaskRequest::new("PDF").add_file_token("file_123");
 
         assert!(request.validate().is_ok());
     }
@@ -1938,11 +1944,23 @@ mod tests {
 
         assert_eq!(response.task_id, "task_123456789");
         assert_eq!(response.task_status, "completed");
-        assert_eq!(response.download_url, Some("https://example.com/export.pdf".to_string()));
-        assert_eq!(response.expire_time, Some("2024-12-31T23:59:59Z".to_string()));
+        assert_eq!(
+            response.download_url,
+            Some("https://example.com/export.pdf".to_string())
+        );
+        assert_eq!(
+            response.expire_time,
+            Some("2024-12-31T23:59:59Z".to_string())
+        );
         assert_eq!(response.file_size, Some(1024000));
-        assert_eq!(response.create_time, Some("2024-01-01T10:00:00Z".to_string()));
-        assert_eq!(response.complete_time, Some("2024-01-01T10:05:00Z".to_string()));
+        assert_eq!(
+            response.create_time,
+            Some("2024-01-01T10:00:00Z".to_string())
+        );
+        assert_eq!(
+            response.complete_time,
+            Some("2024-01-01T10:05:00Z".to_string())
+        );
         assert_eq!(response.error_message, None);
         assert_eq!(response.error_code, None);
     }
@@ -1998,7 +2016,10 @@ mod tests {
 
         assert_eq!(deserialized.task_id, "task_123");
         assert_eq!(deserialized.task_status, "processing");
-        assert_eq!(deserialized.download_url, Some("https://example.com/file.pdf".to_string()));
+        assert_eq!(
+            deserialized.download_url,
+            Some("https://example.com/file.pdf".to_string())
+        );
         assert_eq!(deserialized.file_size, Some(500000));
     }
 
@@ -2018,7 +2039,9 @@ mod tests {
         let config = Config::default();
         let service = DriveServiceV1::new(config);
         let request = ExportTaskRequest::new("pdf");
-        let builder = service.create_export_task_builder(request).file_type("docx");
+        let builder = service
+            .create_export_task_builder(request)
+            .file_type("docx");
 
         assert_eq!(builder.request.file_type, "docx");
     }
@@ -2043,8 +2066,14 @@ mod tests {
         let config = Config::default();
         let service = DriveServiceV1::new(config);
         let request = ExportTaskRequest::new("pdf");
-        let file_tokens = vec!["file_a".to_string(), "file_b".to_string(), "file_c".to_string()];
-        let builder = service.create_export_task_builder(request).file_tokens(file_tokens);
+        let file_tokens = vec![
+            "file_a".to_string(),
+            "file_b".to_string(),
+            "file_c".to_string(),
+        ];
+        let builder = service
+            .create_export_task_builder(request)
+            .file_tokens(file_tokens);
 
         assert_eq!(builder.request.file_tokens.len(), 3);
         assert_eq!(builder.request.file_tokens[0], "file_a");
@@ -2071,11 +2100,18 @@ mod tests {
         let config = Config::default();
         let service = DriveServiceV1::new(config);
         let request = ExportTaskRequest::new("pdf");
-        let builder = service.create_export_task_builder(request).include_comments(true);
+        let builder = service
+            .create_export_task_builder(request)
+            .include_comments(true);
 
         assert!(builder.request.export_settings.is_some());
         assert_eq!(
-            builder.request.export_settings.as_ref().unwrap().include_comments,
+            builder
+                .request
+                .export_settings
+                .as_ref()
+                .unwrap()
+                .include_comments,
             Some(true)
         );
     }
@@ -2085,7 +2121,9 @@ mod tests {
         let config = Config::default();
         let service = DriveServiceV1::new(config);
         let request = ExportTaskRequest::new("pdf");
-        let builder = service.create_export_task_builder(request).page_range("1-5,8,10-12");
+        let builder = service
+            .create_export_task_builder(request)
+            .page_range("1-5,8,10-12");
 
         assert!(builder.request.export_settings.is_some());
         assert_eq!(
@@ -2099,7 +2137,9 @@ mod tests {
         let config = Config::default();
         let service = DriveServiceV1::new(config);
         let request = ExportTaskRequest::new("pdf");
-        let builder = service.create_export_task_builder(request).watermark("机密文档");
+        let builder = service
+            .create_export_task_builder(request)
+            .watermark("机密文档");
 
         assert!(builder.request.export_settings.is_some());
         assert_eq!(
@@ -2120,7 +2160,9 @@ mod tests {
             watermark: Some("内部使用".to_string()),
         };
 
-        let builder = service.create_export_task_builder(request).export_settings(settings);
+        let builder = service
+            .create_export_task_builder(request)
+            .export_settings(settings);
 
         assert!(builder.request.export_settings.is_some());
         let export_settings = builder.request.export_settings.as_ref().unwrap();
@@ -2160,8 +2202,7 @@ mod tests {
     fn test_create_export_task_builder_validation() {
         let config = Config::default();
         let service = DriveServiceV1::new(config);
-        let request = ExportTaskRequest::new("pdf")
-            .add_file_token("file_123");
+        let request = ExportTaskRequest::new("pdf").add_file_token("file_123");
         let builder = service.create_export_task_builder(request);
 
         // 验证构建器包含有效的请求
@@ -2172,7 +2213,7 @@ mod tests {
     fn test_create_export_task_builder_invalid_request() {
         let config = Config::default();
         let service = DriveServiceV1::new(config);
-        let request = ExportTaskRequest::new("");  // 无效的文件类型
+        let request = ExportTaskRequest::new(""); // 无效的文件类型
         let builder = service.create_export_task_builder(request);
 
         // 验证构建器包含无效的请求
@@ -2218,7 +2259,11 @@ mod tests {
                 .add_file_token("file_456")
                 .export_settings(settings);
 
-            assert!(request.validate().is_ok(), "Format {} should be valid", format);
+            assert!(
+                request.validate().is_ok(),
+                "Format {} should be valid",
+                format
+            );
         }
     }
 
@@ -2227,8 +2272,7 @@ mod tests {
         // 测试边界情况
 
         // 最小有效请求
-        let minimal_request = ExportTaskRequest::new("pdf")
-            .add_file_token("a");
+        let minimal_request = ExportTaskRequest::new("pdf").add_file_token("a");
         assert!(minimal_request.validate().is_ok());
 
         // 最大有效文件Token数量
@@ -2255,11 +2299,13 @@ mod tests {
         let request1 = ExportTaskRequest::new("pdf");
         let request2 = ExportTaskRequest::new("docx");
 
-        let builder1 = service.create_export_task_builder(request1)
+        let builder1 = service
+            .create_export_task_builder(request1)
             .quality("high")
             .include_comments(true);
 
-        let builder2 = service.create_export_task_builder(request2)
+        let builder2 = service
+            .create_export_task_builder(request2)
             .quality("standard")
             .watermark("文档2");
 
@@ -2299,14 +2345,17 @@ mod tests {
     fn test_export_task_supported_file_types() {
         // 测试所有支持的文件类型
         let supported_types = [
-            "docx", "pdf", "txt", "html", "png", "jpg", "jpeg",
-            "DOCX", "PDF", "TXT", "HTML", "PNG", "JPG", "JPEG"  // 大小写
+            "docx", "pdf", "txt", "html", "png", "jpg", "jpeg", "DOCX", "PDF", "TXT", "HTML",
+            "PNG", "JPG", "JPEG", // 大小写
         ];
 
         for file_type in supported_types.iter() {
-            let request = ExportTaskRequest::new(*file_type)
-                .add_file_token("file_123");
-            assert!(request.validate().is_ok(), "Type {} should be supported", file_type);
+            let request = ExportTaskRequest::new(*file_type).add_file_token("file_123");
+            assert!(
+                request.validate().is_ok(),
+                "Type {} should be supported",
+                file_type
+            );
         }
     }
 }
