@@ -97,6 +97,57 @@ pub struct CreateDocumentRequest {
     pub folder_token: Option<String>,
 }
 
+/// 获取文档请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetDocumentRequest {
+    /// 文档ID
+    pub document_id: String,
+}
+
+impl GetDocumentRequest {
+    /// 创建新的请求实例
+    ///
+    /// # 参数
+    /// - `document_id`: 文档ID
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docx::v1::document::GetDocumentRequest;
+    ///
+    /// let request = GetDocumentRequest::new("doc_123");
+    /// ```
+    pub fn new(document_id: impl Into<String>) -> Self {
+        Self {
+            document_id: document_id.into(),
+        }
+    }
+
+    /// 验证请求参数
+    ///
+    /// # 返回值
+    /// - `Ok(())`: 参数验证通过
+    /// - `Err(String)`: 参数验证失败，返回错误信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docx::v1::document::GetDocumentRequest;
+    ///
+    /// let request = GetDocumentRequest::new("doc_123");
+    /// assert!(request.validate().is_ok());
+    /// ```
+    pub fn validate(&self) -> Result<(), String> {
+        if self.document_id.trim().is_empty() {
+            return Err("文档ID不能为空".to_string());
+        }
+        if self.document_id.len() > 200 {
+            return Err("文档ID长度不能超过200个字符".to_string());
+        }
+        Ok(())
+    }
+}
+
 impl CreateDocumentRequest {
     /// 创建新的请求实例
     pub fn new(title: impl Into<String>) -> Self {
@@ -132,6 +183,19 @@ pub struct CreateDocumentResponse {
 }
 
 impl ApiResponseTrait for CreateDocumentResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 获取文档响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct GetDocumentResponse {
+    /// 文档信息
+    pub document: Document,
+}
+
+impl ApiResponseTrait for GetDocumentResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
@@ -191,6 +255,54 @@ impl DocumentService {
 
         Ok(response)
     }
+
+    /// 获取文档信息
+    ///
+    /// 获取指定文档的详细信息，包括标题、版本、创建者、
+    /// 更新时间等元数据信息。
+    ///
+    /// # 参数
+    /// * `req` - 获取文档请求
+    ///
+    /// # 返回值
+    /// 返回文档的详细信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docx::v1::document::{DocumentService, GetDocumentRequest};
+    ///
+    /// let service = DocumentService::new(config);
+    /// let request = GetDocumentRequest::new("doc_123");
+    ///
+    /// let result = service.get(&request).await?;
+    /// println!("文档标题: {:?}", result.document.title);
+    /// println!("文档版本: {:?}", result.document.version);
+    /// ```
+    pub async fn get(&self, req: &GetDocumentRequest) -> SDKResult<GetDocumentResponse> {
+        req.validate().map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
+        log::debug!("开始获取文档信息: document_id={}", req.document_id);
+
+        // 构建动态端点路径
+        let endpoint = crate::core::endpoints_original::Endpoints::DOCX_V1_DOCUMENT_GET
+            .replace("{}", &req.document_id);
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path: endpoint,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: Vec::new(), // GET请求无body
+            ..Default::default()
+        };
+
+        let resp = Transport::<GetDocumentResponse>::request(api_req, &self.config, None).await?;
+        let response = resp.data.unwrap_or_default();
+
+        log::info!("文档信息获取完成: document_id={}, title={:?}",
+                   req.document_id, response.document.title);
+
+        Ok(response)
+    }
 }
 
 // ==================== 构建器模式 ====================
@@ -236,10 +348,91 @@ impl CreateDocumentBuilder {
     }
 }
 
+/// 获取文档构建器
+#[derive(Debug, Clone)]
+pub struct GetDocumentBuilder {
+    request: GetDocumentRequest,
+}
+
+impl Default for GetDocumentBuilder {
+    fn default() -> Self {
+        Self {
+            request: GetDocumentRequest {
+                document_id: String::new(),
+            },
+        }
+    }
+}
+
+impl GetDocumentBuilder {
+    /// 创建新的构建器
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 设置文档ID
+    ///
+    /// # 参数
+    /// - `document_id`: 文档ID
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docx::v1::document::GetDocumentBuilder;
+    ///
+    /// let builder = GetDocumentBuilder::new().document_id("doc_123");
+    /// ```
+    pub fn document_id(mut self, document_id: impl Into<String>) -> Self {
+        self.request.document_id = document_id.into();
+        self
+    }
+
+    /// 执行获取文档操作
+    ///
+    /// # 参数
+    /// - `service`: 文档管理服务实例
+    ///
+    /// # 返回值
+    /// 返回文档的详细信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docx::v1::document::{DocumentService, GetDocumentBuilder};
+    ///
+    /// let service = DocumentService::new(config);
+    ///
+    /// let result = GetDocumentBuilder::new()
+    ///     .document_id("doc_123")
+    ///     .execute(&service)
+    ///     .await?;
+    /// ```
+    pub async fn execute(self, service: &DocumentService) -> SDKResult<GetDocumentResponse> {
+        service.get(&self.request).await
+    }
+}
+
 impl DocumentService {
     /// 创建文档构建器
     pub fn create_document_builder(&self) -> CreateDocumentBuilder {
         CreateDocumentBuilder::new()
+    }
+
+    /// 创建获取文档构建器
+    ///
+    /// # 返回值
+    /// 返回获取文档构建器实例
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docx::v1::document::DocumentService;
+    ///
+    /// let service = DocumentService::new(config);
+    /// let builder = service.get_document_builder();
+    /// ```
+    pub fn get_document_builder(&self) -> GetDocumentBuilder {
+        GetDocumentBuilder::new()
     }
 }
 
@@ -518,5 +711,189 @@ mod tests {
         };
 
         assert_eq!(unversioned_doc.version, None);
+    }
+
+    #[test]
+    fn test_get_document_request() {
+        let request = GetDocumentRequest::new("doc_123");
+        assert_eq!(request.document_id, "doc_123");
+    }
+
+    #[test]
+    fn test_get_document_request_validation() {
+        // 测试正常情况
+        let valid_request = GetDocumentRequest::new("doc_123");
+        assert!(valid_request.validate().is_ok());
+
+        // 测试空document_id
+        let empty_request = GetDocumentRequest::new("");
+        assert!(empty_request.validate().is_err());
+
+        // 测试空白字符
+        let whitespace_request = GetDocumentRequest::new("   ");
+        assert!(whitespace_request.validate().is_err());
+
+        // 测试长度超限
+        let long_request = GetDocumentRequest::new(&"a".repeat(201));
+        assert!(long_request.validate().is_err());
+
+        // 测试长度边界
+        let boundary_request = GetDocumentRequest::new(&"a".repeat(200));
+        assert!(boundary_request.validate().is_ok());
+    }
+
+    #[test]
+    fn test_get_document_builder() {
+        let builder = GetDocumentBuilder::new().document_id("doc_123");
+        assert_eq!(builder.request.document_id, "doc_123");
+    }
+
+    #[test]
+    fn test_get_document_builder_default() {
+        let builder = GetDocumentBuilder::default();
+        assert_eq!(builder.request.document_id, "");
+    }
+
+    #[test]
+    fn test_get_document_response_default_creation() {
+        let response = GetDocumentResponse::default();
+        assert_eq!(response.document.document_id, None);
+        assert_eq!(response.document.title, None);
+    }
+
+    #[test]
+    fn test_get_document_response_with_data() {
+        let mut response = GetDocumentResponse::default();
+        response.document = Document {
+            document_id: Some("doc_abc".to_string()),
+            title: Some("获取测试文档".to_string()),
+            ..Default::default()
+        };
+
+        assert_eq!(response.document.document_id, Some("doc_abc".to_string()));
+        assert_eq!(response.document.title, Some("获取测试文档".to_string()));
+    }
+
+    #[test]
+    fn test_get_document_response_api_trait() {
+        assert_eq!(
+            GetDocumentResponse::data_format(),
+            ResponseFormat::Data
+        );
+    }
+
+    #[test]
+    fn test_get_document_request_serialization() {
+        let request = GetDocumentRequest::new("doc_123");
+        let serialized = serde_json::to_string(&request).unwrap();
+        let deserialized: GetDocumentRequest = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(request.document_id, deserialized.document_id);
+    }
+
+    #[test]
+    fn test_get_document_response_serialization() {
+        let mut response = GetDocumentResponse::default();
+        response.document = Document {
+            document_id: Some("doc_xyz".to_string()),
+            title: Some("序列化测试".to_string()),
+            version: Some(2),
+            ..Default::default()
+        };
+
+        let serialized = serde_json::to_string(&response).unwrap();
+        let deserialized: GetDocumentResponse = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(response.document.document_id, deserialized.document.document_id);
+        assert_eq!(response.document.title, deserialized.document.title);
+        assert_eq!(response.document.version, deserialized.document.version);
+    }
+
+    #[test]
+    fn test_get_document_builder_chain_calls() {
+        let builder = GetDocumentBuilder::new()
+            .document_id("doc_123")
+            .document_id("doc_456"); // 覆盖之前的值
+
+        assert_eq!(builder.request.document_id, "doc_456");
+    }
+
+    #[test]
+    fn test_get_document_request_validation_edge_cases() {
+        // 测试仅包含空白字符的document_id
+        let whitespace_request = GetDocumentRequest::new("  \t\n  ");
+        assert!(whitespace_request.validate().is_err());
+
+        // 测试中文字符（虽然可能不常见，但应该能处理）
+        let chinese_request = GetDocumentRequest::new("文档_123");
+        assert!(chinese_request.validate().is_ok());
+
+        // 测试包含特殊字符的document_id
+        let special_chars_request = GetDocumentRequest::new("doc_abc-123_xyz");
+        assert!(special_chars_request.validate().is_ok());
+    }
+
+    #[test]
+    fn test_get_document_endpoint_constant() {
+        // 测试端点常量是否正确定义
+        assert_eq!(
+            crate::core::endpoints_original::Endpoints::DOCX_V1_DOCUMENT_GET,
+            "/open-apis/docx/v1/documents/{}"
+        );
+    }
+
+    #[test]
+    fn test_get_document_response_comprehensive_data() {
+        // 测试包含完整数据的文档响应
+        let comprehensive_creator = Creator {
+            user_id: Some("user_001".to_string()),
+            name: Some("测试用户".to_string()),
+            avatar: Some("https://example.com/avatar.jpg".to_string()),
+        };
+
+        let comprehensive_response = GetDocumentResponse {
+            document: Document {
+                document_id: Some("doc_comprehensive".to_string()),
+                title: Some("综合测试文档".to_string()),
+                url: Some("https://docs.example.com/doc_comprehensive".to_string()),
+                version: Some(5),
+                create_time: Some("2023-01-01T08:00:00Z".to_string()),
+                update_time: Some("2023-12-31T16:00:00Z".to_string()),
+                creator: Some(comprehensive_creator),
+                folder_token: Some("folder_123".to_string()),
+                status: Some("published".to_string()),
+            },
+        };
+
+        assert_eq!(
+            comprehensive_response.document.document_id,
+            Some("doc_comprehensive".to_string())
+        );
+        assert_eq!(comprehensive_response.document.title, Some("综合测试文档".to_string()));
+        assert_eq!(
+            comprehensive_response.document.url,
+            Some("https://docs.example.com/doc_comprehensive".to_string())
+        );
+        assert_eq!(comprehensive_response.document.version, Some(5));
+        assert_eq!(
+            comprehensive_response.document.create_time,
+            Some("2023-01-01T08:00:00Z".to_string())
+        );
+        assert_eq!(
+            comprehensive_response.document.update_time,
+            Some("2023-12-31T16:00:00Z".to_string())
+        );
+        assert_eq!(
+            comprehensive_response.document.creator.as_ref().unwrap().user_id,
+            Some("user_001".to_string())
+        );
+        assert_eq!(
+            comprehensive_response.document.creator.as_ref().unwrap().name,
+            Some("测试用户".to_string())
+        );
+        assert_eq!(
+            comprehensive_response.document.folder_token,
+            Some("folder_123".to_string())
+        );
+        assert_eq!(comprehensive_response.document.status, Some("published".to_string()));
     }
 }
