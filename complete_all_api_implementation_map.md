@@ -2,8 +2,8 @@
 
 **生成时间**: 2025-11-07 11:30:00
 **总API数**: 1551
-**已实现**: 949
-**实现率**: 61.2%
+**已实现**: 951
+**实现率**: 61.3%
 **处理耗时**: 1.3 分钟
 **处理速度**: 20.8 API/秒  
 
@@ -227,7 +227,7 @@
 | 216 | [删除文档版本](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-version/delete) | DELETE | `/open-apis/drive/v1/files/:file_token/versions/:version_id` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-version/delete | `未找到` | - | ❌ 未实现 |
 | 217 | [获取云文档的点赞者列表](https://open.feishu.cn/document/ukTMukTMukTM/uIzNzUjLyczM14iM3MTN/drive-v2/file-like/list) | GET | `/open-apis/drive/v2/files/:file_token/likes` | https://open.feishu.cn/document/ukTMukTMukTM/uIzNzUjLyczM14iM3MTN/drive-v2/file-like/list | `../src/service/cloud_docs/drive/v1/like.rs` | 39 | ✅ 已实现 |
 | 218 | [订阅云文档事件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/subscribe) | POST | `/open-apis/drive/v1/files/:file_token/subscribe` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/subscribe | `../src/service/calendar/v4/mod.rs` | 497 | ✅ 已实现 |
-| 219 | [查询云文档事件订阅状态](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/get_subscribe) | GET | `/open-apis/drive/v1/files/:file_token/get_subscribe` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/get_subscribe | `未找到` | - | ❌ 未实现 |
+| 219 | [查询云文档事件订阅状态](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/get_subscribe) | GET | `/open-apis/drive/v1/files/:file_token/get_subscribe` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/get_subscribe | `../src/service/cloud_docs/drive/v1/subscription.rs` | 1159 | ✅ 已实现 |
 | 220 | [取消云文档事件订阅](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/delete_subscribe) | DELETE | `/open-apis/drive/v1/files/:file_token/delete_subscribe` | https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/delete_subscribe | `../src/service/cloud_docs/drive/v1/subscription.rs` | 1159 | ✅ 已实现 |
 | 221 | [获取知识空间列表](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/list) | GET | `/open-apis/wiki/v2/spaces` | https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/list | `../src/service/cloud_docs/wiki/v2/space/list.rs` | 71 | ✅ 已实现 |
 | 222 | [获取知识空间信息](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/get) | GET | `/open-apis/wiki/v2/spaces/:space_id` | https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/get | `../src/service/cloud_docs/wiki/v2/space/get.rs` | 486 | ✅ 已实现 |
@@ -1590,7 +1590,6 @@
 - 创建导出任务 (POST /open-apis/drive/v1/export_tasks)
 - 获取文档版本信息 (GET /open-apis/drive/v1/files/:file_token/versions/:version_id)
 - 删除文档版本 (DELETE /open-apis/drive/v1/files/:file_token/versions/:version_id)
-- 查询云文档事件订阅状态 (GET /open-apis/drive/v1/files/:file_token/get_subscribe)
 - 删除知识空间成员 (DELETE /open-apis/wiki/v2/spaces/:space_id/members/:member_id)
 - 获取知识空间节点信息 (GET /open-apis/wiki/v2/spaces/get_node)
 - 获取任务结果 (GET /open-apis/wiki/v2/tasks/:task_id)
