@@ -33,6 +33,7 @@ pub mod folder;
 pub mod import_task;
 pub mod export_task;
 pub mod file_version;
+pub mod subscription;
 
 // 重新导出所有服务类型
 pub use files::*;
@@ -40,6 +41,7 @@ pub use folder::*;
 pub use import_task::*;
 pub use export_task::*;
 pub use file_version::*;
+pub use subscription::*;
 
 use crate::core::config::Config;
 
@@ -235,6 +237,47 @@ impl DriveServiceV1 {
     pub fn delete_file_version_builder(&self, request: DeleteFileVersionRequest) -> DeleteFileVersionBuilder {
         DeleteFileVersionBuilder::new(std::sync::Arc::new(self.clone()), request)
     }
+
+    /// 查询云文档事件订阅状态构建器
+    ///
+    /// 创建一个查询云文档事件订阅状态的构建器，支持查询指定文件的文档事件订阅信息。
+    /// 包括订阅状态、订阅类型、订阅者详情等完整信息。
+    ///
+    /// # 参数
+    /// * `request` - 查询云文档事件订阅状态请求，包含文件令牌
+    ///
+    /// # 返回
+    /// 返回查询云文档事件订阅状态构建器，可用于执行查询操作
+    ///
+    /// # 功能特性
+    /// * 实时查询文档事件订阅状态
+    /// * 支持多种订阅类型查询
+    /// * 提供详细的订阅者信息
+    /// * 包含订阅时间线和状态变更历史
+    ///
+    /// # 示例
+    /// ```rust,no_run
+    /// use open_lark::service::cloud_docs::drive::v1::subscription::{GetFileSubscriptionRequest, GetFileSubscriptionResponse};
+    ///
+    /// async fn get_file_subscription_example(
+    ///     service: std::sync::Arc<DriveServiceV1>,
+    /// ) -> Result<GetFileSubscriptionResponse, Box<dyn std::error::Error>> {
+    ///     let request = GetFileSubscriptionRequest::builder()
+    ///         .file_token("file_token_123")
+    ///         .build()?;
+    ///
+    ///     let response = service
+    ///         .get_file_subscription_builder(request)
+    ///         .execute()
+    ///         .await?;
+    ///
+    ///     println!("查询订阅状态成功，订阅状态: {:?}", response.data);
+    ///     Ok(response)
+    /// }
+    /// ```
+    pub fn get_file_subscription_builder(&self, request: GetFileSubscriptionRequest) -> GetFileSubscriptionBuilder {
+        GetFileSubscriptionBuilder::new(std::sync::Arc::new(self.clone()), request)
+    }
 }
 
 impl crate::core::service_trait::Service for DriveServiceV1 {
@@ -356,5 +399,66 @@ mod tests {
 
         assert_eq!(service.config().app_id(), cloned_service.config().app_id());
         assert_eq!(service.config().app_secret(), cloned_service.config().app_secret());
+    }
+
+    #[test]
+    fn test_get_file_subscription_builder_creation() {
+        let service = create_test_service();
+        let request = GetFileSubscriptionRequest::builder()
+            .file_token("file_token_123")
+            .build()
+            .unwrap();
+
+        let builder = service.get_file_subscription_builder(request);
+        // 验证构建器创建成功
+        assert_eq!(builder.request.file_token, "file_token_123");
+    }
+
+    #[test]
+    fn test_subscription_module_integration() {
+        // 测试订阅模块正确集成到DriveServiceV1中
+        let service = create_test_service();
+
+        // 验证可以正确创建订阅请求
+        let request = GetFileSubscriptionRequest::new("test_subscription_file_456");
+        assert_eq!(request.file_token, "test_subscription_file_456");
+
+        // 验证可以正确创建构建器
+        let builder = service.get_file_subscription_builder(request);
+        assert_eq!(builder.request.file_token, "test_subscription_file_456");
+    }
+
+    #[test]
+    fn test_subscription_request_validation() {
+        let service = create_test_service();
+
+        // 测试有效的文件令牌
+        let valid_request = GetFileSubscriptionRequest::builder()
+            .file_token("valid_file_token_12345")
+            .build()
+            .unwrap();
+
+        let _builder = service.get_file_subscription_builder(valid_request);
+
+        // 测试空文件令牌
+        let empty_request = GetFileSubscriptionRequest::builder()
+            .file_token("")
+            .build();
+
+        assert!(empty_request.is_err());
+
+        // 测试过短的文件令牌
+        let short_request = GetFileSubscriptionRequest::builder()
+            .file_token("short")
+            .build();
+
+        assert!(short_request.is_err());
+
+        // 测试包含无效字符的文件令牌
+        let invalid_request = GetFileSubscriptionRequest::builder()
+            .file_token("token@invalid")
+            .build();
+
+        assert!(invalid_request.is_err());
     }
 }
