@@ -7,9 +7,13 @@
 //! - 搜索和任务管理
 
 pub mod space_member;
+pub mod space_node;
+pub mod task;
 
 // 重新导出所有服务类型
 pub use space_member::*;
+pub use space_node::*;
+pub use task::*;
 
 use crate::core::config::Config;
 
@@ -22,6 +26,10 @@ pub struct WikiServiceV2 {
     config: Config,
     /// 空间成员管理服务
     pub space_member: SpaceMemberService,
+    /// 空间节点管理服务
+    pub space_node: SpaceNodeService,
+    /// 任务管理服务
+    pub task: TaskService,
 }
 
 impl WikiServiceV2 {
@@ -42,7 +50,9 @@ impl WikiServiceV2 {
     pub fn new(config: Config) -> Self {
         Self {
             config: config.clone(),
-            space_member: SpaceMemberService::new(config),
+            space_member: SpaceMemberService::new(config.clone()),
+            space_node: SpaceNodeService::new(config.clone()),
+            task: TaskService::new(config),
         }
     }
 }
@@ -96,5 +106,25 @@ mod tests {
         // 验证space_member服务可用
         let space_member_service_str = format!("{:?}", service.space_member);
         assert!(!space_member_service_str.is_empty());
+    }
+
+    #[test]
+    fn test_space_node_service_available() {
+        let config = Config::default();
+        let service = WikiServiceV2::new(config);
+
+        // 验证space_node服务可用
+        let space_node_service_str = format!("{:?}", service.space_node);
+        assert!(!space_node_service_str.is_empty());
+    }
+
+    #[test]
+    fn test_task_service_available() {
+        let config = Config::default();
+        let service = WikiServiceV2::new(config);
+
+        // 验证task服务可用
+        let task_service_str = format!("{:?}", service.task);
+        assert!(!task_service_str.is_empty());
     }
 }
