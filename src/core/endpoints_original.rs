@@ -2127,7 +2127,8 @@ impl Endpoints {
 
     /// 群公告管理
     pub const DOCX_V1_CHAT_ANNOUNCEMENT: &'static str = "/open-apis/docx/v1/chats/{}/announcement";
-    pub const DOCX_V1_CHAT_ANNOUNCEMENT_BLOCK: &'static str = "/open-apis/docx/v1/chats/{}/announcement/blocks/{}";
+    pub const DOCX_V1_CHAT_ANNOUNCEMENT_BLOCK: &'static str =
+        "/open-apis/docx/v1/chats/{}/announcement/blocks/{}";
 
     // Drive 云盘服务
     /// 文件管理
@@ -2158,10 +2159,12 @@ impl Endpoints {
         "/open-apis/drive/v1/files/{}/subscriptions/{}";
 
     /// 查询云文档事件订阅状态
-    pub const DRIVE_V1_FILE_GET_SUBSCRIBE: &'static str = "/open-apis/drive/v1/files/{}/get_subscribe";
+    pub const DRIVE_V1_FILE_GET_SUBSCRIBE: &'static str =
+        "/open-apis/drive/v1/files/{}/get_subscribe";
 
     /// 取消云文档事件订阅
-    pub const DRIVE_V1_FILE_DELETE_SUBSCRIBE: &'static str = "/open-apis/drive/v1/files/{}/delete_subscribe";
+    pub const DRIVE_V1_FILE_DELETE_SUBSCRIBE: &'static str =
+        "/open-apis/drive/v1/files/{}/delete_subscribe";
 
     /// 文件夹管理
     pub const DRIVE_V1_FOLDERS: &'static str = "/open-apis/drive/v1/folders";
