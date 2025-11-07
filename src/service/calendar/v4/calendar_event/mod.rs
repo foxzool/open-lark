@@ -15,6 +15,7 @@ pub mod unsubscription;
 pub use get::{GetCalendarEventRequest, GetCalendarEventResponse, GetCalendarEventBuilder};
 pub use create::{CreateCalendarEventRequest, CreateCalendarEventResponse, CreateCalendarEventBuilder};
 pub use delete::{DeleteCalendarEventRequest, DeleteCalendarEventResponse, DeleteCalendarEventBuilder};
+pub use patch::{PatchCalendarEventRequest, PatchCalendarEventResponse, PatchCalendarEventBuilder};
 
 /// 日程管理服务
 ///
@@ -315,5 +316,97 @@ impl CalendarEventService {
         event_id: impl Into<String>,
     ) -> DeleteCalendarEventBuilder {
         DeleteCalendarEventBuilder::new(calendar_id, event_id)
+    }
+
+    /// 更新日程事件
+    ///
+    /// 部分更新指定日程事件的信息，支持更新事件标题、描述、时间、地点、参与者等信息的任意组合。
+    ///
+    /// # 参数
+    /// - `req`: 更新日程事件请求
+    ///
+    /// # 返回
+    /// - `Ok(PatchCalendarEventResponse)`: 更新成功，返回日程事件详细信息
+    /// - `Err(SDKError)`: 更新失败，返回错误信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::calendar::v4::calendar_event::PatchCalendarEventRequest;
+    ///
+    /// # async fn example() -> Result<(), Box<dyn std::error::Error>> {
+    /// let client = LarkClient::builder("app_id", "app_secret").build()?;
+    /// let request = PatchCalendarEventRequest::new("calendar_123", "event_456");
+    /// let response = client.calendar.v4.calendar_event.patch(&request).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub async fn patch(&self, req: &PatchCalendarEventRequest) -> SDKResult<PatchCalendarEventResponse> {
+        req.validate()
+            .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
+        log::debug!("开始更新日程事件: calendar_id={}, event_id={}", req.calendar_id, req.event_id);
+
+        // 构建动态端点路径
+        let endpoint = crate::core::endpoints_original::Endpoints::CALENDAR_EVENT_UPDATE
+            .replace("{}", &req.calendar_id)
+            .replace("{}", &req.event_id);
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::PATCH,
+            api_path: endpoint,
+            supported_access_token_types: vec![
+                crate::core::constants::AccessTokenType::Tenant,
+                crate::core::constants::AccessTokenType::User
+            ],
+            body: serde_json::to_vec(req)?,
+            ..Default::default()
+        };
+
+        let resp = crate::core::http::Transport::<PatchCalendarEventResponse>::request(api_req, &self.config, None).await?;
+        let response = resp.data.unwrap_or_default();
+
+        log::info!("日程事件更新完成: calendar_id={}, event_id={}, title={:?}",
+                   req.calendar_id, req.event_id, response.event.as_ref().and_then(|e| e.summary.as_ref()));
+
+        Ok(response)
+    }
+
+    /// 更新日程事件构建器
+    ///
+    /// 创建一个用于更新日程事件的构建器实例，支持流式API设计。
+    ///
+    /// # 参数
+    /// - `calendar_id`: 日历ID
+    /// - `event_id`: 日程ID
+    ///
+    /// # 返回
+    /// - `PatchCalendarEventBuilder`: 日程事件更新构建器实例
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    ///
+    /// # async fn example() -> Result<(), Box<dyn std::error::Error>> {
+    /// let client = LarkClient::builder("app_id", "app_secret").build()?;
+    /// let response = client
+    ///     .calendar
+    ///     .v4
+    ///     .calendar_event
+    ///     .patch_calendar_event_builder("calendar_123", "event_456")
+    ///     .summary("更新的会议标题")
+    ///     .user_id_type("open_id")
+    ///     .execute(&client.calendar.v4.calendar_event)
+    ///     .await?;
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub fn patch_calendar_event_builder(
+        &self,
+        calendar_id: impl Into<String>,
+        event_id: impl Into<String>,
+    ) -> PatchCalendarEventBuilder {
+        PatchCalendarEventBuilder::new(calendar_id, event_id)
     }
 }
