@@ -3,8 +3,8 @@
     "total_apis": 1551,
     "found_count": 950,
     "implementation_rate": 61.25080593165699,
-    "processing_time": 88.15726804733276,
-    "generated_at": "2025-11-07T17:43:37.450159"
+    "processing_time": 87.20108199119568,
+    "generated_at": "2025-11-07T19:42:00.542373"
   },
   "service_stats": {
     "event": {
@@ -3829,9 +3829,9 @@
       "self_build": "是",
       "store_app": "是",
       "doc_link": "https://open.feishu.cn/document/ukTMukTMukTM/ugTMzUjL4EzM14COxMTN",
-      "file_path": "../src/service/cloud_docs/sheets/v3/data_operation/reading_single_range.rs",
-      "line_number": "70",
-      "implementation_preview": "pub async fn reading_single_range(",
+      "file_path": "../src/service/sheets/v2/single_write.rs",
+      "line_number": "263",
+      "implementation_preview": "pub async fn write_range(&self, request: &SingleWr...",
       "status": "found"
     },
     {
