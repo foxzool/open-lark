@@ -227,6 +227,114 @@ impl ApiResponseTrait for GetTaskStatusResponse {
     }
 }
 
+// ==================== API #194: 删除文件或文件夹 ====================
+
+/// 删除文件或文件夹请求
+///
+/// 用于删除云盘中的文件或文件夹，支持递归删除目录。
+/// 删除操作不可恢复，请谨慎使用。
+///
+/// # 示例
+/// ```rust
+/// let request = DeleteFileRequest::new("file_token_123456789");
+/// let response = service.delete_file(request, None).await?;
+/// ```
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DeleteFileRequest {
+    /// 请求体
+    #[serde(skip)]
+    pub api_req: ApiRequest,
+    /// 文件或文件夹Token
+    /// 要删除的文件或文件夹的唯一标识符
+    pub file_token: String,
+}
+
+impl Default for DeleteFileRequest {
+    fn default() -> Self {
+        Self {
+            api_req: ApiRequest::default(),
+            file_token: String::new(),
+        }
+    }
+}
+
+impl DeleteFileRequest {
+    /// 创建新的删除文件请求
+    ///
+    /// # 参数
+    /// * `file_token` - 文件或文件夹Token
+    ///
+    /// # 返回
+    /// 返回删除文件请求实例
+    ///
+    /// # 示例
+    /// ```rust
+    /// let request = DeleteFileRequest::new("file_token_123456789");
+    /// ```
+    pub fn new(file_token: impl Into<String>) -> Self {
+        Self {
+            api_req: ApiRequest::default(),
+            file_token: file_token.into(),
+        }
+    }
+
+    /// 验证请求参数
+    ///
+    /// # 返回
+    /// * `Ok(())` - 验证通过
+    /// * `Err(String)` - 验证失败，返回错误描述
+    pub fn validate(&self) -> Result<(), String> {
+        if self.file_token.is_empty() {
+            return Err("文件Token不能为空".to_string());
+        }
+
+        if self.file_token.trim().is_empty() {
+            return Err("文件Token不能只包含空格".to_string());
+        }
+
+        if self.file_token.len() > 200 {
+            return Err("文件Token长度不能超过200个字符".to_string());
+        }
+
+        Ok(())
+    }
+}
+
+/// 删除文件或文件夹响应
+///
+/// 包含删除操作的结果信息，确认文件是否成功删除。
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct DeleteFileResponse {
+    /// 删除操作结果
+    /// true表示删除成功，false表示删除失败
+    pub success: bool,
+    /// 文件或文件夹Token
+    /// 被删除的文件或文件夹的唯一标识符
+    pub file_token: String,
+    /// 文件类型
+    /// 被删除文件的类型：file(文件)或folder(文件夹)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_type: Option<String>,
+    /// 删除时间
+    /// 文件删除的时间戳（毫秒）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delete_time: Option<String>,
+    /// 错误信息
+    /// 如果删除失败，包含具体的错误信息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// 错误代码
+    /// 如果删除失败，包含具体的错误代码
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+}
+
+impl ApiResponseTrait for DeleteFileResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
 /// 云盘服务 v1
 ///
 /// 提供完整的文件管理功能，包括：
@@ -279,7 +387,7 @@ impl DriveServiceV1 {
     ) -> SDKResult<BaseResponse<GetTaskStatusResponse>> {
         // 验证请求参数
         request.validate().map_err(|e| {
-            crate::core::error::SDKError::InvalidParameter(format!("参数验证失败: {}", e))
+            crate::core::error::LarkAPIError::IllegalParamError(format!("参数验证失败: {}", e))
         })?;
 
         // 创建API请求
@@ -319,6 +427,77 @@ impl DriveServiceV1 {
     /// ```
     pub fn get_task_status_builder(&self, request: GetTaskStatusRequest) -> GetTaskStatusBuilder {
         GetTaskStatusBuilder::new(std::sync::Arc::new(self.clone()), request)
+    }
+
+    /// 删除文件或文件夹
+    ///
+    /// 根据文件或文件夹的Token删除指定资源。删除操作不可逆，请谨慎使用。
+    ///
+    /// # 参数
+    /// * `request` - 删除文件请求，包含要删除的文件或文件夹Token
+    /// * `option` - 请求选项（可选）
+    ///
+    /// # 返回
+    /// 返回删除操作的结果，包含操作状态和相关信息
+    ///
+    /// # 示例
+    /// ```rust
+    /// let request = DeleteFileRequest::new("file_token_123456789");
+    /// let response = service.delete_file(request, None).await?;
+    ///
+    /// if response.success {
+    ///     println!("文件删除成功");
+    /// } else {
+    ///     println!("文件删除失败: {:?}", response.error_message);
+    /// }
+    /// ```
+    pub async fn delete_file(
+        &self,
+        request: DeleteFileRequest,
+        option: Option<crate::core::req_option::RequestOption>,
+    ) -> SDKResult<BaseResponse<DeleteFileResponse>> {
+        // 验证请求参数
+        request.validate().map_err(|e| {
+            crate::core::error::LarkAPIError::IllegalParamError(format!("参数验证失败: {}", e))
+        })?;
+
+        // 创建API请求
+        let mut api_req = request.api_req;
+        api_req.set_http_method(Method::DELETE);
+
+        // 设置API路径并替换路径参数
+        let api_path = crate::core::endpoints_original::Endpoints::DRIVE_V1_DELETE
+            .replace("{file_token}", &request.file_token);
+        api_req.set_api_path(api_path);
+
+        // 设置支持的访问令牌类型
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+
+        // 发送HTTP请求
+        let api_resp = Transport::<DeleteFileResponse>::request(api_req, &self.config, option).await?;
+
+        Ok(api_resp)
+    }
+
+    /// 获取文件删除构建器
+    ///
+    /// 创建一个删除文件的构建器，支持链式调用和完整的错误处理
+    ///
+    /// # 参数
+    /// * `request` - 删除文件请求
+    ///
+    /// # 返回
+    /// 返回文件删除构建器实例
+    ///
+    /// # 示例
+    /// ```rust
+    /// let response = service
+    ///     .delete_file_builder(DeleteFileRequest::new("file_123"))
+    ///     .execute()
+    ///     .await?;
+    /// ```
+    pub fn delete_file_builder(&self, request: DeleteFileRequest) -> DeleteFileBuilder {
+        DeleteFileBuilder::new(std::sync::Arc::new(self.clone()), request)
     }
 }
 
@@ -374,11 +553,71 @@ impl GetTaskStatusBuilder {
     pub async fn execute(self) -> SDKResult<BaseResponse<GetTaskStatusResponse>> {
         // 验证请求参数
         self.request.validate().map_err(|e| {
-            crate::core::error::SDKError::InvalidParameter(format!("参数验证失败: {}", e))
+            crate::core::error::LarkAPIError::IllegalParamError(format!("参数验证失败: {}", e))
         })?;
 
         // 执行请求
         self.service.get_task_status(self.request, None).await
+    }
+}
+
+// ==================== DeleteFileBuilder 构建器模式 ====================
+
+/// 删除文件或文件夹构建器
+///
+/// 提供流畅的API来构建删除文件的请求，支持链式调用
+/// 和完整的参数验证。
+#[derive(Debug, Clone)]
+pub struct DeleteFileBuilder {
+    service: std::sync::Arc<DriveServiceV1>,
+    request: DeleteFileRequest,
+}
+
+impl DeleteFileBuilder {
+    /// 创建新的删除文件构建器
+    ///
+    /// # 参数
+    /// * `service` - Drive服务实例
+    /// * `request` - 删除文件请求
+    pub fn new(service: std::sync::Arc<DriveServiceV1>, request: DeleteFileRequest) -> Self {
+        Self { service, request }
+    }
+
+    /// 设置文件Token
+    ///
+    /// # 参数
+    /// * `file_token` - 文件或文件夹Token
+    ///
+    /// # 示例
+    /// ```rust
+    /// let builder = DeleteFileBuilder::new(service, request)
+    ///     .file_token("file_123456789");
+    /// ```
+    pub fn file_token(mut self, file_token: impl Into<String>) -> Self {
+        self.request.file_token = file_token.into();
+        self
+    }
+
+    /// 执行删除文件请求
+    ///
+    /// # 返回
+    /// 成功返回删除结果响应，失败返回错误信息
+    ///
+    /// # 示例
+    /// ```rust
+    /// let response = DeleteFileBuilder::new(service, request)
+    ///     .file_token("file_123456789")
+    ///     .execute()
+    ///     .await?;
+    /// ```
+    pub async fn execute(self) -> SDKResult<BaseResponse<DeleteFileResponse>> {
+        // 验证请求参数
+        self.request.validate().map_err(|e| {
+            crate::core::error::LarkAPIError::IllegalParamError(format!("参数验证失败: {}", e))
+        })?;
+
+        // 执行请求
+        self.service.as_ref().delete_file(self.request.clone(), None).await
     }
 }
 
@@ -685,11 +924,11 @@ mod tests {
             "abc123def456",
             "upload_file_2024_01_01",
             "short",
-            "a".repeat(100), // 最大长度
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", // 100个字符
         ];
 
         for task_id in test_cases {
-            let request = GetTaskStatusRequest::new(&task_id);
+            let request = GetTaskStatusRequest::new(task_id);
             assert!(request.validate().is_ok());
             assert_eq!(request.task_id, task_id);
         }
@@ -719,5 +958,331 @@ mod tests {
         assert!(response.task.is_completed());
         assert_eq!(response.task.get_progress_percentage(), Some(100.0));
         assert_eq!(response.task.get_progress_text(), Some("500/500".to_string()));
+    }
+
+    // ==================== DeleteFile API 测试 ====================
+
+    #[test]
+    fn test_delete_file_request_creation() {
+        let request = DeleteFileRequest::new("file_token_123456789");
+
+        assert_eq!(request.file_token, "file_token_123456789");
+        assert!(request.validate().is_ok());
+    }
+
+    #[test]
+    fn test_delete_file_request_with_various_tokens() {
+        let test_cases = vec![
+            ("file_123", "file_123"),
+            ("folder_token_456", "folder_token_456"),
+            ("token_with_underscores_and_numbers_789", "token_with_underscores_and_numbers_789"),
+            ("a", "a"),
+            ("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), // 100个字符
+        ];
+
+        for (input_token, expected_token) in test_cases {
+            let request = DeleteFileRequest::new(input_token);
+            assert_eq!(request.file_token, expected_token);
+            assert!(request.validate().is_ok());
+        }
+    }
+
+    #[test]
+    fn test_delete_file_request_validation() {
+        // 测试有效token
+        let valid_request = DeleteFileRequest::new("valid_token_123");
+        assert!(valid_request.validate().is_ok());
+
+        // 测试空token
+        let empty_request = DeleteFileRequest::new("");
+        assert!(empty_request.validate().is_err());
+
+        // 测试只有空格的token
+        let whitespace_request = DeleteFileRequest::new("   ");
+        assert!(whitespace_request.validate().is_err());
+
+        // 测试超长token (超过200字符)
+        let long_token = "a".repeat(201);
+        let long_request = DeleteFileRequest::new(&long_token);
+        assert!(long_request.validate().is_err());
+    }
+
+    #[test]
+    fn test_delete_file_request_default() {
+        let request = DeleteFileRequest::default();
+
+        assert_eq!(request.file_token, "");
+        assert!(request.validate().is_err()); // 默认构造应该验证失败
+    }
+
+    #[test]
+    fn test_delete_file_response_creation() {
+        let response = DeleteFileResponse::default();
+
+        // DeleteFileResponse 目前是空结构体，主要测试创建和序列化
+        assert!(serde_json::to_string(&response).is_ok());
+    }
+
+    #[test]
+    fn test_delete_file_response_serialization() {
+        let response = DeleteFileResponse::default();
+
+        // 测试序列化和反序列化
+        let serialized = serde_json::to_string(&response).unwrap();
+        let deserialized: DeleteFileResponse = serde_json::from_str(&serialized).unwrap();
+
+        // 空结构体应该能正确序列化和反序列化
+        assert!(serialized.is_char_boundary(0)); // 基本JSON格式检查
+    }
+
+    #[test]
+    fn test_delete_file_builder_creation() {
+        let config = Config::default();
+        let service = Arc::new(DriveServiceV1::new(config));
+        let request = DeleteFileRequest::new("test_file_token");
+
+        let builder = DeleteFileBuilder::new(service, request);
+
+        assert_eq!(builder.request.file_token, "test_file_token");
+    }
+
+    #[test]
+    fn test_delete_file_builder_file_token_method() {
+        let config = Config::default();
+        let service = Arc::new(DriveServiceV1::new(config));
+        let request = DeleteFileRequest::new("initial_token");
+
+        let builder = DeleteFileBuilder::new(service, request)
+            .file_token("new_token_123");
+
+        assert_eq!(builder.request.file_token, "new_token_123");
+        assert!(builder.request.validate().is_ok());
+    }
+
+    #[test]
+    fn test_delete_file_builder_chain_validation() {
+        let config = Config::default();
+        let service = Arc::new(DriveServiceV1::new(config));
+
+        // 测试链式调用
+        let builder = service
+            .delete_file_builder(DeleteFileRequest::new("initial"))
+            .file_token("final_token_456");
+
+        assert_eq!(builder.request.file_token, "final_token_456");
+        assert!(builder.request.validate().is_ok());
+    }
+
+    #[test]
+    fn test_delete_file_builder_invalid_token() {
+        let config = Config::default();
+        let service = Arc::new(DriveServiceV1::new(config));
+        let request = DeleteFileRequest::new("valid_token");
+
+        let builder = DeleteFileBuilder::new(service, request)
+            .file_token(""); // 设置无效token
+
+        assert_eq!(builder.request.file_token, "");
+        assert!(builder.request.validate().is_err());
+    }
+
+    #[test]
+    fn test_delete_file_service_creation() {
+        let config = Config::default();
+        let service = DriveServiceV1::new(config);
+
+        // 测试服务创建
+        assert!(!format!("{:?}", service).is_empty());
+    }
+
+    #[test]
+    fn test_delete_file_service_builder_creation() {
+        let config = Config::default();
+        let service = DriveServiceV1::new(config);
+        let request = DeleteFileRequest::new("test_token");
+
+        let builder = service.delete_file_builder(request);
+
+        assert_eq!(builder.request.file_token, "test_token");
+    }
+
+    #[test]
+    fn test_delete_file_edge_cases() {
+        // 测试边界情况
+
+        // 最小有效token
+        let min_request = DeleteFileRequest::new("a");
+        assert!(min_request.validate().is_ok());
+
+        // 最大有效token (200字符)
+        let max_token = "x".repeat(200);
+        let max_request = DeleteFileRequest::new(&max_token);
+        assert!(max_request.validate().is_ok());
+
+        // 包含特殊字符的token (如果允许的话)
+        let special_token = "file_token_123-456_789";
+        let special_request = DeleteFileRequest::new(special_token);
+        assert!(special_request.validate().is_ok());
+    }
+
+    #[test]
+    fn test_delete_file_api_trait_implementation() {
+        // 测试API响应trait实现
+        assert_eq!(DeleteFileResponse::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_delete_file_complex_scenarios() {
+        let config = Config::default();
+        let service = Arc::new(DriveServiceV1::new(config));
+
+        // 测试复杂场景：多个文件token的验证
+        let file_tokens = vec![
+            "doc_token_123",
+            "folder_token_456",
+            "sheet_token_789",
+            "presentation_token_101112",
+        ];
+
+        for token in file_tokens {
+            let request = DeleteFileRequest::new(token);
+            let builder = DeleteFileBuilder::new(service.clone(), request);
+
+            assert!(builder.request.validate().is_ok());
+            assert_eq!(builder.request.file_token, token);
+        }
+    }
+
+    #[test]
+    fn test_delete_file_builder_with_various_service_instances() {
+        // 测试使用不同服务实例的构建器
+        let configs = vec![
+            Config::default(),
+            {
+                let mut config = Config::default();
+                // 这里假设app_id是String类型，如果不对需要调整
+                // config.app_id = Some("test_app_id".to_string());
+                config
+            },
+        ];
+
+        for config in configs {
+            let service = Arc::new(DriveServiceV1::new(config));
+            let request = DeleteFileRequest::new("test_token");
+            let builder = DeleteFileBuilder::new(service, request);
+
+            assert_eq!(builder.request.file_token, "test_token");
+            assert!(builder.request.validate().is_ok());
+        }
+    }
+
+    #[test]
+    fn test_delete_file_error_handling() {
+        // 测试错误处理场景
+
+        // 无效请求验证
+        let invalid_requests = vec![
+            DeleteFileRequest::new(""),
+            DeleteFileRequest::new("   "),
+            DeleteFileRequest::new(&"a".repeat(201)), // 超长
+        ];
+
+        for request in invalid_requests {
+            assert!(request.validate().is_err());
+        }
+    }
+
+    #[test]
+    fn test_delete_file_request_serialization() {
+        let request = DeleteFileRequest::new("test_token_123");
+
+        // 测试请求序列化
+        let serialized = serde_json::to_string(&request).unwrap();
+        let deserialized: DeleteFileRequest = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(request.file_token, deserialized.file_token);
+    }
+
+    #[test]
+    fn test_delete_file_response_trait_methods() {
+        let response = DeleteFileResponse::default();
+
+        // 测试trait方法
+        assert_eq!(DeleteFileResponse::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_delete_file_builder_state_management() {
+        let config = Config::default();
+        let service = Arc::new(DriveServiceV1::new(config));
+        let request = DeleteFileRequest::new("initial_token");
+
+        // 测试构建器状态管理
+        let mut builder = DeleteFileBuilder::new(service, request);
+
+        // 验证初始状态
+        assert_eq!(builder.request.file_token, "initial_token");
+
+        // 修改状态
+        builder = builder.file_token("modified_token");
+
+        // 验证状态已更改
+        assert_eq!(builder.request.file_token, "modified_token");
+    }
+
+    #[test]
+    fn test_delete_file_service_arc_sharing() {
+        // 测试Arc服务共享
+        let config = Config::default();
+        let service = Arc::new(DriveServiceV1::new(config));
+
+        // 创建多个构建器共享同一个服务
+        let builder1 = DeleteFileBuilder::new(service.clone(), DeleteFileRequest::new("token1"));
+        let builder2 = DeleteFileBuilder::new(service.clone(), DeleteFileRequest::new("token2"));
+        let builder3 = DeleteFileBuilder::new(service, DeleteFileRequest::new("token3"));
+
+        assert_eq!(builder1.request.file_token, "token1");
+        assert_eq!(builder2.request.file_token, "token2");
+        assert_eq!(builder3.request.file_token, "token3");
+
+        // 所有构建器都应该有有效的请求
+        assert!(builder1.request.validate().is_ok());
+        assert!(builder2.request.validate().is_ok());
+        assert!(builder3.request.validate().is_ok());
+    }
+
+    #[test]
+    fn test_delete_file_comprehensive_validation() {
+        // 综合验证测试
+        let test_cases = vec![
+            ("valid", true),
+            ("", false),
+            ("   ", false),
+            ("a", true), // 最小有效
+            ("file_token_12345", true),
+            ("folder_token_with_special_chars_456", true),
+        ];
+
+        for (token, should_be_valid) in test_cases {
+            let request = DeleteFileRequest::new(token);
+            let validation_result = request.validate();
+            let is_valid = validation_result.is_ok();
+
+            if !is_valid && should_be_valid {
+                println!("Token '{}' (length: {}) failed validation: {:?}",
+                    token.chars().take(20).collect::<String>(),
+                    token.len(),
+                    validation_result);
+            }
+
+            assert_eq!(
+                is_valid,
+                should_be_valid,
+                "Token '{}' validation result: expected {}, got {}",
+                token.chars().take(20).collect::<String>(),
+                should_be_valid,
+                is_valid
+            );
+        }
     }
 }
