@@ -178,6 +178,8 @@ pub mod personal_settings;
 pub mod report;
 #[cfg(feature = "search")]
 pub mod search;
+#[cfg(feature = "collaboration")]
+pub mod sheets;
 #[cfg(feature = "security_and_compliance")]
 pub mod security_and_compliance;
 #[cfg(feature = "task")]
@@ -272,6 +274,8 @@ pub use personal_settings::PersonalsettingsService;
 pub use report::ReportService;
 #[cfg(feature = "search")]
 pub use search::SearchService;
+#[cfg(feature = "collaboration")]
+pub use sheets::SheetsService;
 #[cfg(feature = "security-and-compliance")]
 pub use security_and_compliance::SecurityandcomplianceService;
 #[cfg(feature = "task")]
