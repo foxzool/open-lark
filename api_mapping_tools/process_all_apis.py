@@ -21,25 +21,47 @@ class APIProcessor:
         self.start_time = None
         self.service_stats = {}
 
-    def find_api_implementation_optimized(self, api_name, method, path):
-        """优化的API实现查找"""
-
-        # 从路径提取服务信息
+    def extract_service_info(self, path):
+        """提取服务信息的独立方法"""
         path_parts = path.strip('/').split('/')
         if len(path_parts) >= 2 and path_parts[0] == 'open-apis':
-            service_parts = path_parts[1:]
-            service_name = service_parts[0] if service_parts else 'unknown'
-
-            # 提取版本
+            service = path_parts[1]
             version = 'v1'
-            for part in service_parts:
+            for part in path_parts[1:]:
                 if part.startswith('v') and part[1:].isdigit():
                     version = part
                     break
-        else:
-            service_parts = path_parts
-            service_name = service_parts[0] if service_parts else 'unknown'
-            version = 'v1'
+            return service, version
+        return 'unknown', 'v1'
+
+    def update_service_stats(self, service, found):
+        """统一的服务统计更新方法"""
+        if service not in self.service_stats:
+            self.service_stats[service] = {
+                'found': 0,
+                'total': 0,
+                'rate': 0.0
+            }
+
+        self.service_stats[service]['total'] += 1
+        if found:
+            self.service_stats[service]['found'] += 1
+
+        # 实时计算实现率
+        self.service_stats[service]['rate'] = (
+            self.service_stats[service]['found'] /
+            self.service_stats[service]['total'] * 100
+        )
+
+    def find_api_implementation_optimized(self, api_name, method, path):
+        """优化的API实现查找"""
+
+        # 使用新的服务信息提取方法
+        service_name, version = self.extract_service_info(path)
+
+        # 从路径提取service_parts用于关键词搜索
+        path_parts = path.strip('/').split('/')
+        service_parts = path_parts[1:] if len(path_parts) >= 2 and path_parts[0] == 'open-apis' else path_parts
 
         # 优先搜索的服务目录路径
         search_dirs = []
@@ -166,10 +188,6 @@ class APIProcessor:
         except Exception:
             pass
 
-        # 更新服务统计
-        if service_name not in self.service_stats:
-            self.service_stats[service_name] = {'found': 0, 'total': 0}
-
         return None, None, None
 
     def process_single_api(self, api, index, total):
@@ -179,18 +197,15 @@ class APIProcessor:
                 api['name'], api['method'], api['path']
             )
 
-            if file_path:
-                self.found_count += 1
-                # 更新服务统计
-                path_parts = api['path'].split('/')
-                if len(path_parts) >= 2 and path_parts[0] == 'open-apis':
-                    service = path_parts[1]
-                else:
-                    service = 'unknown'
+            # 提取服务信息并更新统计
+            service, _ = self.extract_service_info(api['path'])
+            found = file_path is not None
 
-                if service in self.service_stats:
-                    self.service_stats[service]['found'] += 1
-                    self.service_stats[service]['total'] += 1
+            # 使用统一的统计更新方法
+            self.update_service_stats(service, found)
+
+            if found:
+                self.found_count += 1
 
                 result = {
                     **api,
@@ -200,16 +215,6 @@ class APIProcessor:
                     'status': 'found'
                 }
             else:
-                # 更新服务统计
-                path_parts = api['path'].split('/')
-                if len(path_parts) >= 2 and path_parts[0] == 'open-apis':
-                    service = path_parts[1]
-                else:
-                    service = 'unknown'
-
-                if service in self.service_stats:
-                    self.service_stats[service]['total'] += 1
-
                 result = {
                     **api,
                     'file_path': "未找到",
@@ -270,20 +275,92 @@ class APIProcessor:
 
         print(f"总共读取到 {len(apis)} 个API")
 
-        # 初始化服务统计
-        for api in apis:
-            path_parts = api['path'].split('/')
-            if len(path_parts) >= 2 and path_parts[0] == 'open-apis':
-                service = path_parts[1]
-                if service not in self.service_stats:
-                    self.service_stats[service] = {'found': 0, 'total': 0}
-
         # 处理所有API
         for i, api in enumerate(apis, 1):
             self.process_single_api(api, i, len(apis))
 
         # 生成报告
         self.generate_reports(len(apis), output_file, json_file)
+
+    def analyze_service_coverage(self):
+        """分析服务覆盖率"""
+        analysis = {
+            'high_coverage': [],    # 实现率 >= 80%
+            'medium_coverage': [],  # 实现率 50-79%
+            'low_coverage': [],     # 实现率 < 50%
+            'no_coverage': []       # 实现率 = 0%
+        }
+
+        for service, stats in self.service_stats.items():
+            if stats['total'] == 0:
+                continue
+
+            rate = stats['rate']
+            service_info = {
+                'name': service,
+                'found': stats['found'],
+                'total': stats['total'],
+                'rate': rate
+            }
+
+            if rate >= 80:
+                analysis['high_coverage'].append(service_info)
+            elif rate >= 50:
+                analysis['medium_coverage'].append(service_info)
+            elif rate > 0:
+                analysis['low_coverage'].append(service_info)
+            else:
+                analysis['no_coverage'].append(service_info)
+
+        return analysis
+
+    def generate_module_grouped_report(self, f, sorted_services):
+        """生成按模块分组的报告"""
+        f.write("\n\n## 按模块分组的API实现情况\n\n")
+
+        for service, stats in sorted_services:
+            if stats['total'] == 0:
+                continue
+
+            # 模块标题
+            rate = stats['rate']
+            status_emoji = "🟢" if rate >= 80 else "🟡" if rate >= 50 else "🔴"
+            f.write(f"### {status_emoji} {service.upper()} 模块 ({stats['found']}/{stats['total']} - {rate:.1f}%)\n\n")
+
+            # 该模块的API列表
+            module_apis = [r for r in self.results
+                          if self.extract_service_info(r['path'])[0] == service]
+
+            if module_apis:
+                f.write("| 序号 | API名称 | 请求方式 | API地址 | 状态 |\n")
+                f.write("|------|---------|----------|---------|------|\n")
+
+                for i, api in enumerate(module_apis, 1):
+                    name = api['name'].replace('|', '\\|')
+                    method = api['method']
+                    path = api['path'].replace('|', '\\|')
+                    status = "✅" if api['status'] == 'found' else "❌"
+
+                    f.write(f"| {i} | {name} | {method} | `{path}` | {status} |\n")
+
+                f.write("\n")
+
+    def generate_summary_report(self, f):
+        """生成汇总报告"""
+        analysis = self.analyze_service_coverage()
+
+        f.write("## 实现覆盖率分析\n\n")
+        f.write(f"🟢 **高覆盖率模块 (≥80%)**: {len(analysis['high_coverage'])} 个\n")
+        f.write(f"🟡 **中等覆盖率模块 (50-79%)**: {len(analysis['medium_coverage'])} 个\n")
+        f.write(f"🔴 **低覆盖率模块 (<50%)**: {len(analysis['low_coverage'])} 个\n")
+        f.write(f"⚫ **零覆盖率模块**: {len(analysis['no_coverage'])} 个\n\n")
+
+        # 优先改进建议
+        if analysis['low_coverage']:
+            f.write("### 🚀 优先改进建议\n\n")
+            f.write("以下模块实现率较低，建议优先完善：\n\n")
+            for service in sorted(analysis['low_coverage'], key=lambda x: x['rate'])[:5]:
+                f.write(f"- **{service['name']}**: {service['found']}/{service['total']} ({service['rate']:.1f}%)\n")
 
     def generate_reports(self, total_apis, md_file, json_file):
         """生成报告文件"""
@@ -345,15 +422,17 @@ class APIProcessor:
             # 添加统计信息
             f.write("\n\n## 实现统计\n\n")
 
-            # 按服务分类
-            f.write("### 按服务分类的实现情况\n\n")
-            sorted_services = sorted(self.service_stats.items(),
-                                   key=lambda x: x[1]['found'], reverse=True)
+            # 改进的排序逻辑：按实现率排序，实现率相同的按服务名排序
+            sorted_services = sorted(
+                self.service_stats.items(),
+                key=lambda x: (-x[1]['rate'], x[0])  # 实现率降序，服务名升序
+            )
 
-            for service, stats in sorted_services:
-                if stats['total'] > 0:
-                    found_pct = (stats['found'] / stats['total']) * 100
-                    f.write(f"- **{service}**: {stats['found']}/{stats['total']} ({found_pct:.1f}%)\n")
+            # 生成汇总报告
+            self.generate_summary_report(f)
+
+            # 生成按模块分组的详细报告
+            self.generate_module_grouped_report(f, sorted_services)
 
             # 未实现的API
             not_found = [r for r in self.results if r['status'] == 'not_found']
