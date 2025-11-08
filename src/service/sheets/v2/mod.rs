@@ -9,6 +9,9 @@
 //! - 图片写入和管理
 //! - 单个范围数据写入
 //! - 单元格合并和拆分操作
+//! - 行列插入、删除和移动操作
+//! - 单元格样式设置和格式化
+//! - 数据验证和下拉列表设置
 
 pub mod sheet_cells;
 pub mod batch_read;
@@ -17,6 +20,9 @@ pub mod image_write;
 pub mod single_write;
 pub mod sheet_management;
 pub mod merge_cells;
+pub mod dimension_operations;
+pub mod style_operations;
+pub mod data_validation;
 
 // 重新导出所有服务类型
 pub use sheet_cells::*;
@@ -26,6 +32,9 @@ pub use image_write::*;
 pub use single_write::*;
 pub use sheet_management::*;
 pub use merge_cells::*;
+pub use dimension_operations::*;
+pub use style_operations::*;
+pub use data_validation::*;
 
 use crate::core::config::Config;
 
@@ -50,6 +59,12 @@ pub struct SheetsServiceV2 {
     pub sheet_management: SheetManagementService,
     /// 单元格合并服务
     pub merge_cells: MergeCellsService,
+    /// 行列操作服务
+    pub dimension_operations: DimensionOperationsService,
+    /// 样式操作服务
+    pub style_operations: StyleOperationsService,
+    /// 数据验证服务
+    pub data_validation: DataValidationService,
 }
 
 impl SheetsServiceV2 {
@@ -76,7 +91,10 @@ impl SheetsServiceV2 {
             image_write: ImageWriteService::new(config.clone()),
             single_write: SingleWriteService::new(config.clone()),
             sheet_management: SheetManagementService::new(config.clone()),
-            merge_cells: MergeCellsService::new(config),
+            merge_cells: MergeCellsService::new(config.clone()),
+            dimension_operations: DimensionOperationsService::new(config.clone()),
+            style_operations: StyleOperationsService::new(config.clone()),
+            data_validation: DataValidationService::new(config),
         }
     }
 }
@@ -214,6 +232,36 @@ mod tests {
         // 验证merge_cells服务可用
         let merge_cells_service_str = format!("{:?}", service.merge_cells);
         assert!(!merge_cells_service_str.is_empty());
+    }
+
+    #[test]
+    fn test_dimension_operations_service_available() {
+        let config = Config::default();
+        let service = SheetsServiceV2::new(config);
+
+        // 验证dimension_operations服务可用
+        let dimension_operations_service_str = format!("{:?}", service.dimension_operations);
+        assert!(!dimension_operations_service_str.is_empty());
+    }
+
+    #[test]
+    fn test_style_operations_service_available() {
+        let config = Config::default();
+        let service = SheetsServiceV2::new(config);
+
+        // 验证style_operations服务可用
+        let style_operations_service_str = format!("{:?}", service.style_operations);
+        assert!(!style_operations_service_str.is_empty());
+    }
+
+    #[test]
+    fn test_data_validation_service_available() {
+        let config = Config::default();
+        let service = SheetsServiceV2::new(config);
+
+        // 验证data_validation服务可用
+        let data_validation_service_str = format!("{:?}", service.data_validation);
+        assert!(!data_validation_service_str.is_empty());
     }
 
     #[test]
