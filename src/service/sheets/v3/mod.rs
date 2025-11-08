@@ -5,20 +5,27 @@
 //! - 电子表格信息查询和管理
 //! - 工作表操作和单元格管理
 //! - 数据格式化和样式设置
+//! - 筛选视图和筛选条件管理
 
 pub mod spreadsheet;
 pub mod sheet;
+pub mod filter_views;
+pub mod data_filter;
+pub mod conditional_format;
 
 // 重新导出所有服务类型
 pub use spreadsheet::*;
 pub use sheet::*;
+pub use filter_views::*;
+pub use data_filter::*;
+pub use conditional_format::*;
 
 use crate::core::config::Config;
 
 /// Sheets电子表格服务 v3版本
 ///
 /// 提供飞书电子表格v3版本的统一入口，支持现代化的电子表格管理。
-/// 包括创建、编辑、格式化、数据验证等企业级功能。
+/// 包括创建、编辑、格式化、数据验证、筛选视图、数据过滤器、条件格式等企业级功能。
 #[derive(Debug, Clone)]
 pub struct SheetsServiceV3 {
     config: Config,
@@ -26,6 +33,12 @@ pub struct SheetsServiceV3 {
     pub spreadsheet: SpreadsheetService,
     /// 工作表管理服务
     pub sheet: SheetService,
+    /// 筛选视图管理服务
+    pub filter_views: FilterViewsService,
+    /// 数据过滤器管理服务
+    pub data_filter: DataFilterService,
+    /// 条件格式管理服务
+    pub conditional_format: ConditionalFormatService,
 }
 
 impl SheetsServiceV3 {
@@ -46,8 +59,11 @@ impl SheetsServiceV3 {
     pub fn new(config: Config) -> Self {
         Self {
             config: config.clone(),
-            spreadsheet: SpreadsheetService::new(config),
-            sheet: SheetService::new(config),
+            spreadsheet: SpreadsheetService::new(config.clone()),
+            sheet: SheetService::new(config.clone()),
+            filter_views: FilterViewsService::new(config.clone()),
+            data_filter: DataFilterService::new(config.clone()),
+            conditional_format: ConditionalFormatService::new(config),
         }
     }
 }
@@ -101,5 +117,55 @@ mod tests {
         // 验证spreadsheet服务可用
         let spreadsheet_service_str = format!("{:?}", service.spreadsheet);
         assert!(!spreadsheet_service_str.is_empty());
+    }
+
+    #[test]
+    fn test_filter_views_service_available() {
+        let config = Config::default();
+        let service = SheetsServiceV3::new(config);
+
+        // 验证filter_views服务可用
+        let filter_views_service_str = format!("{:?}", service.filter_views);
+        assert!(!filter_views_service_str.is_empty());
+    }
+
+    #[test]
+    fn test_data_filter_service_available() {
+        let config = Config::default();
+        let service = SheetsServiceV3::new(config);
+
+        // 验证data_filter服务可用
+        let data_filter_service_str = format!("{:?}", service.data_filter);
+        assert!(!data_filter_service_str.is_empty());
+    }
+
+    #[test]
+    fn test_conditional_format_service_available() {
+        let config = Config::default();
+        let service = SheetsServiceV3::new(config);
+
+        // 验证conditional_format服务可用
+        let conditional_format_service_str = format!("{:?}", service.conditional_format);
+        assert!(!conditional_format_service_str.is_empty());
+    }
+
+    #[test]
+    fn test_sheets_v3_complete_integration() {
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
+        let service = SheetsServiceV3::new(config);
+
+        // 验证所有服务都可用
+        assert!(!format!("{:?}", service.spreadsheet).is_empty());
+        assert!(!format!("{:?}", service.sheet).is_empty());
+        assert!(!format!("{:?}", service.filter_views).is_empty());
+        assert!(!format!("{:?}", service.data_filter).is_empty());
+        assert!(!format!("{:?}", service.conditional_format).is_empty());
+
+        // 验证服务名
+        assert_eq!(SheetsServiceV3::service_name(), "SheetsServiceV3");
+        assert_eq!(service.config().app_id, "test_app_id");
     }
 }
