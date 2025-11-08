@@ -8,6 +8,7 @@
 //! - 筛选视图和筛选条件管理
 
 pub mod spreadsheet;
+pub mod spreadsheet_create;
 pub mod sheet;
 pub mod filter_views;
 pub mod data_filter;
@@ -23,6 +24,7 @@ pub mod float_images;
 
 // 重新导出所有服务类型
 pub use spreadsheet::*;
+pub use spreadsheet_create::*;
 pub use sheet::*;
 pub use filter_views::*;
 pub use data_filter::*;
@@ -47,6 +49,8 @@ pub struct SheetsServiceV3 {
     config: Config,
     /// 电子表格管理服务
     pub spreadsheet: SpreadsheetService,
+    /// 电子表格创建服务
+    pub spreadsheet_create: SpreadsheetCreateService,
     /// 工作表管理服务
     pub sheet: SheetService,
     /// 筛选视图管理服务
@@ -92,6 +96,7 @@ impl SheetsServiceV3 {
         Self {
             config: config.clone(),
             spreadsheet: SpreadsheetService::new(config.clone()),
+            spreadsheet_create: SpreadsheetCreateService::new(config.clone()),
             sheet: SheetService::new(config.clone()),
             filter_views: FilterViewsService::new(config.clone()),
             data_filter: DataFilterService::new(config.clone()),
@@ -267,6 +272,20 @@ mod tests {
         // 验证float_images服务可用
         let float_images_service_str = format!("{:?}", service.float_images);
         assert!(!float_images_service_str.is_empty());
+    }
+
+    #[test]
+    fn test_spreadsheet_create_service_available() {
+        let config = Config::default();
+        let service = SheetsServiceV3::new(config);
+
+        // 验证spreadsheet服务可用
+        let spreadsheet_service_str = format!("{:?}", service.spreadsheet);
+        assert!(!spreadsheet_service_str.is_empty());
+
+        // 验证spreadsheet_create服务可用
+        let spreadsheet_create_service_str = format!("{:?}", service.spreadsheet_create);
+        assert!(!spreadsheet_create_service_str.is_empty());
     }
 
     #[test]
