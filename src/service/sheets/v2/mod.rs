@@ -4,6 +4,7 @@
 //! - 创建和删除电子表格
 //! - 电子表格信息查询和管理
 //! - 工作表操作和单元格管理
+//! - 工作表批量更新，支持增删改查操作
 //! - 单元格内容更新和格式化
 //! - 数据读写操作
 //! - 图片写入和管理
@@ -25,6 +26,7 @@ pub mod dimension_operations;
 pub mod style_operations;
 pub mod data_validation;
 pub mod values_append;
+pub mod sheets_batch_update;
 
 // 重新导出所有服务类型
 pub use sheet_cells::*;
@@ -38,13 +40,14 @@ pub use dimension_operations::*;
 pub use style_operations::*;
 pub use data_validation::*;
 pub use values_append::*;
+pub use sheets_batch_update::*;
 
 use crate::core::config::Config;
 
 /// Sheets电子表格服务 v2版本
 ///
 /// 提供飞书电子表格v2版本的统一入口，支持现代化的电子表格管理。
-/// 包括创建、编辑、格式化、数据读写、图片管理、单个范围写入、数据追加等企业级功能。
+/// 包括创建、编辑、格式化、数据读写、图片管理、单个范围写入、数据追加、工作表批量更新等企业级功能。
 #[derive(Debug, Clone)]
 pub struct SheetsServiceV2 {
     config: Config,
@@ -70,6 +73,8 @@ pub struct SheetsServiceV2 {
     pub data_validation: DataValidationService,
     /// 数据追加服务
     pub values_append: ValuesAppendService,
+    /// 工作表批量更新服务
+    pub sheets_batch_update: SheetsBatchUpdateService,
 }
 
 impl SheetsServiceV2 {
@@ -100,7 +105,8 @@ impl SheetsServiceV2 {
             dimension_operations: DimensionOperationsService::new(config.clone()),
             style_operations: StyleOperationsService::new(config.clone()),
             data_validation: DataValidationService::new(config.clone()),
-            values_append: ValuesAppendService::new(config),
+            values_append: ValuesAppendService::new(config.clone()),
+            sheets_batch_update: SheetsBatchUpdateService::new(config),
         }
     }
 }
@@ -293,5 +299,15 @@ mod tests {
         // 验证values_append服务可用
         let values_append_service_str = format!("{:?}", service.values_append);
         assert!(!values_append_service_str.is_empty());
+    }
+
+    #[test]
+    fn test_sheets_batch_update_service_available() {
+        let config = Config::default();
+        let service = SheetsServiceV2::new(config);
+
+        // 验证sheets_batch_update服务可用
+        let sheets_batch_update_service_str = format!("{:?}", service.sheets_batch_update);
+        assert!(!sheets_batch_update_service_str.is_empty());
     }
 }
