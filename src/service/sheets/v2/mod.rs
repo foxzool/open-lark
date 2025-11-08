@@ -8,6 +8,7 @@
 //! - 数据读写操作
 //! - 图片写入和管理
 //! - 单个范围数据写入
+//! - 数据追加功能，支持CSV、HashMap等多种格式
 //! - 单元格合并和拆分操作
 //! - 行列插入、删除和移动操作
 //! - 单元格样式设置和格式化
@@ -23,6 +24,7 @@ pub mod merge_cells;
 pub mod dimension_operations;
 pub mod style_operations;
 pub mod data_validation;
+pub mod values_append;
 
 // 重新导出所有服务类型
 pub use sheet_cells::*;
@@ -35,13 +37,14 @@ pub use merge_cells::*;
 pub use dimension_operations::*;
 pub use style_operations::*;
 pub use data_validation::*;
+pub use values_append::*;
 
 use crate::core::config::Config;
 
 /// Sheets电子表格服务 v2版本
 ///
 /// 提供飞书电子表格v2版本的统一入口，支持现代化的电子表格管理。
-/// 包括创建、编辑、格式化、数据读写、图片管理、单个范围写入等企业级功能。
+/// 包括创建、编辑、格式化、数据读写、图片管理、单个范围写入、数据追加等企业级功能。
 #[derive(Debug, Clone)]
 pub struct SheetsServiceV2 {
     config: Config,
@@ -65,6 +68,8 @@ pub struct SheetsServiceV2 {
     pub style_operations: StyleOperationsService,
     /// 数据验证服务
     pub data_validation: DataValidationService,
+    /// 数据追加服务
+    pub values_append: ValuesAppendService,
 }
 
 impl SheetsServiceV2 {
@@ -94,7 +99,8 @@ impl SheetsServiceV2 {
             merge_cells: MergeCellsService::new(config.clone()),
             dimension_operations: DimensionOperationsService::new(config.clone()),
             style_operations: StyleOperationsService::new(config.clone()),
-            data_validation: DataValidationService::new(config),
+            data_validation: DataValidationService::new(config.clone()),
+            values_append: ValuesAppendService::new(config),
         }
     }
 }
@@ -277,5 +283,15 @@ mod tests {
 
         // 验证配置传递正确
         assert_eq!(service.config().app_id, "test_app_id");
+    }
+
+    #[test]
+    fn test_values_append_service_available() {
+        let config = Config::default();
+        let service = SheetsServiceV2::new(config);
+
+        // 验证values_append服务可用
+        let values_append_service_str = format!("{:?}", service.values_append);
+        assert!(!values_append_service_str.is_empty());
     }
 }
