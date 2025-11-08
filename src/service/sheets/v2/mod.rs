@@ -8,12 +8,15 @@
 //! - 数据读写操作
 //! - 图片写入和管理
 //! - 单个范围数据写入
+//! - 单元格合并和拆分操作
 
 pub mod sheet_cells;
 pub mod batch_read;
 pub mod batch_write;
 pub mod image_write;
 pub mod single_write;
+pub mod sheet_management;
+pub mod merge_cells;
 
 // 重新导出所有服务类型
 pub use sheet_cells::*;
@@ -21,6 +24,8 @@ pub use batch_read::*;
 pub use batch_write::*;
 pub use image_write::*;
 pub use single_write::*;
+pub use sheet_management::*;
+pub use merge_cells::*;
 
 use crate::core::config::Config;
 
@@ -41,6 +46,10 @@ pub struct SheetsServiceV2 {
     pub image_write: ImageWriteService,
     /// 单个范围写入服务
     pub single_write: SingleWriteService,
+    /// 工作表管理服务
+    pub sheet_management: SheetManagementService,
+    /// 单元格合并服务
+    pub merge_cells: MergeCellsService,
 }
 
 impl SheetsServiceV2 {
@@ -65,7 +74,9 @@ impl SheetsServiceV2 {
             batch_read: BatchReadService::new(config.clone()),
             batch_write: BatchWriteService::new(config.clone()),
             image_write: ImageWriteService::new(config.clone()),
-            single_write: SingleWriteService::new(config),
+            single_write: SingleWriteService::new(config.clone()),
+            sheet_management: SheetManagementService::new(config.clone()),
+            merge_cells: MergeCellsService::new(config),
         }
     }
 }
@@ -183,6 +194,26 @@ mod tests {
         // 验证服务名称和版本
         assert_eq!(crate::service::sheets::v2::single_write::SingleWriteService::service_name(), "SingleWriteService");
         assert_eq!(crate::service::sheets::v2::single_write::SingleWriteService::service_version(), "v2");
+    }
+
+    #[test]
+    fn test_sheet_management_service_available() {
+        let config = Config::default();
+        let service = SheetsServiceV2::new(config);
+
+        // 验证sheet_management服务可用
+        let sheet_management_service_str = format!("{:?}", service.sheet_management);
+        assert!(!sheet_management_service_str.is_empty());
+    }
+
+    #[test]
+    fn test_merge_cells_service_available() {
+        let config = Config::default();
+        let service = SheetsServiceV2::new(config);
+
+        // 验证merge_cells服务可用
+        let merge_cells_service_str = format!("{:?}", service.merge_cells);
+        assert!(!merge_cells_service_str.is_empty());
     }
 
     #[test]

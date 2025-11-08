@@ -7,7 +7,7 @@
 //! - 电子表格权限管理
 
 use crate::core::{
-    api_resp::{ApiResponseTrait, ResponseFormat},
+    api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
     config::Config,
     constants::AccessTokenType,
     http::Transport,

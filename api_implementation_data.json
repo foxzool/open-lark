@@ -3,8 +3,8 @@
     "total_apis": 1551,
     "found_count": 950,
     "implementation_rate": 61.25080593165699,
-    "processing_time": 87.20108199119568,
-    "generated_at": "2025-11-07T19:42:00.542373"
+    "processing_time": 90.22512102127075,
+    "generated_at": "2025-11-07T23:29:00.044641"
   },
   "service_stats": {
     "event": {

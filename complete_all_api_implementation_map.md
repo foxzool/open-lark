@@ -1,11 +1,11 @@
 # 完整API实现映射表
 
-**生成时间**: 2025-11-07 19:42:00  
+**生成时间**: 2025-11-07 23:29:00  
 **总API数**: 1551  
 **已实现**: 950  
 **实现率**: 61.3%  
 **处理耗时**: 1.5 分钟  
-**处理速度**: 17.8 API/秒  
+**处理速度**: 17.2 API/秒  
 
 | 序号 | API名称 | 请求方式 | API地址 | 文档链接 | 文件路径 | 行号 | 状态 |
 |------|---------|----------|---------|----------|----------|------|------|
@@ -277,9 +277,9 @@
 | 266 | [批量设置单元格样式](https://open.feishu.cn/document/ukTMukTMukTM/uAzMzUjLwMzM14CMzMTN) | PUT | `/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/styles_batch_update` | https://open.feishu.cn/document/ukTMukTMukTM/uAzMzUjLwMzM14CMzMTN | `未找到` | - | ❌ 未实现 |
 | 267 | [插入数据](https://open.feishu.cn/document/ukTMukTMukTM/uIjMzUjLyIzM14iMyMTN) | POST | `/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values_prepend` | https://open.feishu.cn/document/ukTMukTMukTM/uIjMzUjLyIzM14iMyMTN | `未找到` | - | ❌ 未实现 |
 | 268 | [追加数据](https://open.feishu.cn/document/ukTMukTMukTM/uMjMzUjLzIzM14yMyMTN) | POST | `/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values_append` | https://open.feishu.cn/document/ukTMukTMukTM/uMjMzUjLzIzM14yMyMTN | `未找到` | - | ❌ 未实现 |
-| 269 | [写入图片](https://open.feishu.cn/document/ukTMukTMukTM/uUDNxYjL1QTM24SN0EjN) | POST | `/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values_image` | https://open.feishu.cn/document/ukTMukTMukTM/uUDNxYjL1QTM24SN0EjN | `../src/service/sheets/v2/image_write.rs` | 1926 | ✅ 已实现 |
+| 269 | [写入图片](https://open.feishu.cn/document/ukTMukTMukTM/uUDNxYjL1QTM24SN0EjN) | POST | `/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values_image` | https://open.feishu.cn/document/ukTMukTMukTM/uUDNxYjL1QTM24SN0EjN | `未找到` | - | ❌ 未实现 |
 | 270 | [读取单个范围](https://open.feishu.cn/document/ukTMukTMukTM/ugTMzUjL4EzM14COxMTN) | GET | `/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values/:range` | https://open.feishu.cn/document/ukTMukTMukTM/ugTMzUjL4EzM14COxMTN | `../src/service/sheets/v2/single_write.rs` | 263 | ✅ 已实现 |
-| 271 | [读取多个范围](https://open.feishu.cn/document/ukTMukTMukTM/ukTMzUjL5EzM14SOxMTN) | GET | `/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values_batch_get` | https://open.feishu.cn/document/ukTMukTMukTM/ukTMzUjL5EzM14SOxMTN | `../src/service/sheets/v2/batch_read.rs` | 759 | ✅ 已实现 |
+| 271 | [读取多个范围](https://open.feishu.cn/document/ukTMukTMukTM/ukTMzUjL5EzM14SOxMTN) | GET | `/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values_batch_get` | https://open.feishu.cn/document/ukTMukTMukTM/ukTMzUjL5EzM14SOxMTN | `未找到` | - | ❌ 未实现 |
 | 272 | [向单个范围写入数据](https://open.feishu.cn/document/ukTMukTMukTM/uAjMzUjLwIzM14CMyMTN) | PUT | `/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values` | https://open.feishu.cn/document/ukTMukTMukTM/uAjMzUjLwIzM14CMyMTN | `未找到` | - | ❌ 未实现 |
 | 273 | [向多个范围写入数据](https://open.feishu.cn/document/ukTMukTMukTM/uEjMzUjLxIzM14SMyMTN) | POST | `/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values_batch_update` | https://open.feishu.cn/document/ukTMukTMukTM/uEjMzUjLxIzM14SMyMTN | `未找到` | - | ❌ 未实现 |
 | 274 | [创建筛选](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter/create) | POST | `/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/filter` | https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter/create | `../src/service/directory/v1/employee/regular.rs` | 466 | ✅ 已实现 |
