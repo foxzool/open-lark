@@ -12,6 +12,7 @@ pub mod sheet;
 pub mod filter_views;
 pub mod data_filter;
 pub mod conditional_format;
+pub mod charts;
 
 // 重新导出所有服务类型
 pub use spreadsheet::*;
@@ -19,13 +20,14 @@ pub use sheet::*;
 pub use filter_views::*;
 pub use data_filter::*;
 pub use conditional_format::*;
+pub use charts::*;
 
 use crate::core::config::Config;
 
 /// Sheets电子表格服务 v3版本
 ///
 /// 提供飞书电子表格v3版本的统一入口，支持现代化的电子表格管理。
-/// 包括创建、编辑、格式化、数据验证、筛选视图、数据过滤器、条件格式等企业级功能。
+/// 包括创建、编辑、格式化、数据验证、筛选视图、数据过滤器、条件格式、图表等企业级功能。
 #[derive(Debug, Clone)]
 pub struct SheetsServiceV3 {
     config: Config,
@@ -39,6 +41,8 @@ pub struct SheetsServiceV3 {
     pub data_filter: DataFilterService,
     /// 条件格式管理服务
     pub conditional_format: ConditionalFormatService,
+    /// 图表管理服务
+    pub charts: ChartService,
 }
 
 impl SheetsServiceV3 {
@@ -63,7 +67,8 @@ impl SheetsServiceV3 {
             sheet: SheetService::new(config.clone()),
             filter_views: FilterViewsService::new(config.clone()),
             data_filter: DataFilterService::new(config.clone()),
-            conditional_format: ConditionalFormatService::new(config),
+            conditional_format: ConditionalFormatService::new(config.clone()),
+            charts: ChartService::new(config),
         }
     }
 }
@@ -150,6 +155,16 @@ mod tests {
     }
 
     #[test]
+    fn test_charts_service_available() {
+        let config = Config::default();
+        let service = SheetsServiceV3::new(config);
+
+        // 验证charts服务可用
+        let charts_service_str = format!("{:?}", service.charts);
+        assert!(!charts_service_str.is_empty());
+    }
+
+    #[test]
     fn test_sheets_v3_complete_integration() {
         let config = Config::builder()
             .app_id("test_app_id")
@@ -163,6 +178,7 @@ mod tests {
         assert!(!format!("{:?}", service.filter_views).is_empty());
         assert!(!format!("{:?}", service.data_filter).is_empty());
         assert!(!format!("{:?}", service.conditional_format).is_empty());
+        assert!(!format!("{:?}", service.charts).is_empty());
 
         // 验证服务名
         assert_eq!(SheetsServiceV3::service_name(), "SheetsServiceV3");
