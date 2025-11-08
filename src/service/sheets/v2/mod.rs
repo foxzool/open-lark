@@ -8,6 +8,7 @@
 //! - 单元格内容更新和格式化
 //! - 数据读写操作
 //! - 图片写入和管理
+//! - 增强图片写入功能，支持多种格式和精确定位
 //! - 单个范围数据写入
 //! - 数据追加功能，支持CSV、HashMap等多种格式
 //! - 数据前置插入功能，智能移动现有数据
@@ -21,7 +22,10 @@ pub mod batch_read;
 pub mod batch_read_ranges;
 pub mod batch_write;
 pub mod image_write;
+pub mod image_write_enhanced;
 pub mod single_write;
+pub mod values_single_write;
+pub mod values_batch_write;
 pub mod sheet_management;
 pub mod merge_cells;
 pub mod dimension_operations;
@@ -37,7 +41,10 @@ pub use batch_read::*;
 pub use batch_read_ranges::*;
 pub use batch_write::*;
 pub use image_write::*;
+pub use image_write_enhanced::*;
 pub use single_write::*;
+pub use values_single_write::*;
+pub use values_batch_write::*;
 pub use sheet_management::*;
 pub use merge_cells::*;
 pub use dimension_operations::*;
@@ -52,7 +59,7 @@ use crate::core::config::Config;
 /// Sheets电子表格服务 v2版本
 ///
 /// 提供飞书电子表格v2版本的统一入口，支持现代化的电子表格管理。
-/// 包括创建、编辑、格式化、数据读写、图片管理、单个范围写入、数据追加、工作表批量更新等企业级功能。
+/// 包括创建、编辑、格式化、数据读写、图片管理、增强图片写入、单个范围写入、数据追加、工作表批量更新等企业级功能。
 #[derive(Debug, Clone)]
 pub struct SheetsServiceV2 {
     config: Config,
@@ -66,8 +73,14 @@ pub struct SheetsServiceV2 {
     pub batch_write: BatchWriteService,
     /// 图片写入服务
     pub image_write: ImageWriteService,
+    /// 增强图片写入服务
+    pub image_write_enhanced: ImageWriteEnhancedService,
     /// 单个范围写入服务
     pub single_write: SingleWriteService,
+    /// 值单个范围写入服务
+    pub values_single_write: ValuesSingleWriteService,
+    /// 值批量范围写入服务
+    pub values_batch_write: ValuesBatchWriteService,
     /// 工作表管理服务
     pub sheet_management: SheetManagementService,
     /// 单元格合并服务
@@ -109,7 +122,10 @@ impl SheetsServiceV2 {
             batch_read_ranges: BatchReadRangesService::new(config.clone()),
             batch_write: BatchWriteService::new(config.clone()),
             image_write: ImageWriteService::new(config.clone()),
+            image_write_enhanced: ImageWriteEnhancedService::new(config.clone()),
             single_write: SingleWriteService::new(config.clone()),
+            values_single_write: ValuesSingleWriteService::new(config.clone()),
+            values_batch_write: ValuesBatchWriteService::new(config.clone()),
             sheet_management: SheetManagementService::new(config.clone()),
             merge_cells: MergeCellsService::new(config.clone()),
             dimension_operations: DimensionOperationsService::new(config.clone()),
@@ -218,6 +234,16 @@ mod tests {
     }
 
     #[test]
+    fn test_image_write_enhanced_service_available() {
+        let config = Config::default();
+        let service = SheetsServiceV2::new(config);
+
+        // 验证image_write_enhanced服务可用
+        let image_write_enhanced_service_str = format!("{:?}", service.image_write_enhanced);
+        assert!(!image_write_enhanced_service_str.is_empty());
+    }
+
+    #[test]
     fn test_sheets_v2_complete_integration() {
         let config = Config::builder()
             .app_id("test_app_id")
@@ -230,6 +256,7 @@ mod tests {
         assert!(!format!("{:?}", service.batch_read).is_empty());
         assert!(!format!("{:?}", service.batch_write).is_empty());
         assert!(!format!("{:?}", service.image_write).is_empty());
+        assert!(!format!("{:?}", service.image_write_enhanced).is_empty());
         assert!(!format!("{:?}", service.single_write).is_empty());
 
         // 验证服务名
@@ -249,6 +276,44 @@ mod tests {
         // 验证服务名称和版本
         assert_eq!(crate::service::sheets::v2::single_write::SingleWriteService::service_name(), "SingleWriteService");
         assert_eq!(crate::service::sheets::v2::single_write::SingleWriteService::service_version(), "v2");
+    }
+
+    #[test]
+    fn test_values_single_write_service_available() {
+        let config = Config::default();
+        let service = SheetsServiceV2::new(config);
+
+        // 验证single_write服务可用
+        let single_write_service_str = format!("{:?}", service.single_write);
+        assert!(!single_write_service_str.is_empty());
+
+        // 验证values_single_write服务可用
+        let values_single_write_service_str = format!("{:?}", service.values_single_write);
+        assert!(!values_single_write_service_str.is_empty());
+
+        // 验证服务名称
+        assert_eq!(ValuesSingleWriteService::service_name(), "ValuesSingleWriteService");
+    }
+
+    #[test]
+    fn test_values_batch_write_service_available() {
+        let config = Config::default();
+        let service = SheetsServiceV2::new(config);
+
+        // 验证batch_write服务可用
+        let batch_write_service_str = format!("{:?}", service.batch_write);
+        assert!(!batch_write_service_str.is_empty());
+
+        // 验证values_single_write服务可用
+        let values_single_write_service_str = format!("{:?}", service.values_single_write);
+        assert!(!values_single_write_service_str.is_empty());
+
+        // 验证values_batch_write服务可用
+        let values_batch_write_service_str = format!("{:?}", service.values_batch_write);
+        assert!(!values_batch_write_service_str.is_empty());
+
+        // 验证服务名称
+        assert_eq!(ValuesBatchWriteService::service_name(), "ValuesBatchWriteService");
     }
 
     #[test]
