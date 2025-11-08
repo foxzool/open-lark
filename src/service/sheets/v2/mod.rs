@@ -10,6 +10,7 @@
 //! - 图片写入和管理
 //! - 单个范围数据写入
 //! - 数据追加功能，支持CSV、HashMap等多种格式
+//! - 数据前置插入功能，智能移动现有数据
 //! - 单元格合并和拆分操作
 //! - 行列插入、删除和移动操作
 //! - 单元格样式设置和格式化
@@ -17,6 +18,7 @@
 
 pub mod sheet_cells;
 pub mod batch_read;
+pub mod batch_read_ranges;
 pub mod batch_write;
 pub mod image_write;
 pub mod single_write;
@@ -27,10 +29,12 @@ pub mod style_operations;
 pub mod data_validation;
 pub mod values_append;
 pub mod sheets_batch_update;
+pub mod values_prepend;
 
 // 重新导出所有服务类型
 pub use sheet_cells::*;
 pub use batch_read::*;
+pub use batch_read_ranges::*;
 pub use batch_write::*;
 pub use image_write::*;
 pub use single_write::*;
@@ -41,6 +45,7 @@ pub use style_operations::*;
 pub use data_validation::*;
 pub use values_append::*;
 pub use sheets_batch_update::*;
+pub use values_prepend::*;
 
 use crate::core::config::Config;
 
@@ -55,6 +60,8 @@ pub struct SheetsServiceV2 {
     pub sheet_cells: SheetCellsService,
     /// 批量读取服务
     pub batch_read: BatchReadService,
+    /// 批量范围读取服务
+    pub batch_read_ranges: BatchReadRangesService,
     /// 批量写入服务
     pub batch_write: BatchWriteService,
     /// 图片写入服务
@@ -75,6 +82,8 @@ pub struct SheetsServiceV2 {
     pub values_append: ValuesAppendService,
     /// 工作表批量更新服务
     pub sheets_batch_update: SheetsBatchUpdateService,
+    /// 数据前置插入服务
+    pub values_prepend: ValuesPrependService,
 }
 
 impl SheetsServiceV2 {
@@ -97,16 +106,18 @@ impl SheetsServiceV2 {
             config: config.clone(),
             sheet_cells: SheetCellsService::new(config.clone()),
             batch_read: BatchReadService::new(config.clone()),
+            batch_read_ranges: BatchReadRangesService::new(config.clone()),
             batch_write: BatchWriteService::new(config.clone()),
             image_write: ImageWriteService::new(config.clone()),
             single_write: SingleWriteService::new(config.clone()),
             sheet_management: SheetManagementService::new(config.clone()),
             merge_cells: MergeCellsService::new(config.clone()),
             dimension_operations: DimensionOperationsService::new(config.clone()),
-            style_operations: StyleOperationsService::new(config.clone()),
+        style_operations: StyleOperationsService::new(config.clone()),
             data_validation: DataValidationService::new(config.clone()),
             values_append: ValuesAppendService::new(config.clone()),
-            sheets_batch_update: SheetsBatchUpdateService::new(config),
+            sheets_batch_update: SheetsBatchUpdateService::new(config.clone()),
+            values_prepend: ValuesPrependService::new(config),
         }
     }
 }
@@ -170,6 +181,20 @@ mod tests {
         // 验证batch_read服务可用
         let batch_read_service_str = format!("{:?}", service.batch_read);
         assert!(!batch_read_service_str.is_empty());
+    }
+
+    #[test]
+    fn test_batch_read_ranges_service_available() {
+        let config = Config::default();
+        let service = SheetsServiceV2::new(config);
+
+        // 验证batch_read服务可用
+        let batch_read_service_str = format!("{:?}", service.batch_read);
+        assert!(!batch_read_service_str.is_empty());
+
+        // 验证batch_read_ranges服务可用
+        let batch_read_ranges_service_str = format!("{:?}", service.batch_read_ranges);
+        assert!(!batch_read_ranges_service_str.is_empty());
     }
 
     #[test]
@@ -309,5 +334,44 @@ mod tests {
         // 验证sheets_batch_update服务可用
         let sheets_batch_update_service_str = format!("{:?}", service.sheets_batch_update);
         assert!(!sheets_batch_update_service_str.is_empty());
+    }
+
+    #[test]
+    fn test_values_prepend_service_available() {
+        let config = Config::default();
+        let service = SheetsServiceV2::new(config);
+
+        // 验证values_append服务可用
+        let values_append_service_str = format!("{:?}", service.values_append);
+        assert!(!values_append_service_str.is_empty());
+
+        // 验证values_prepend服务可用
+        let values_prepend_service_str = format!("{:?}", service.values_prepend);
+        assert!(!values_prepend_service_str.is_empty());
+    }
+
+    #[test]
+    fn test_sheets_v2_complete_data_operations_integration() {
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
+        let service = SheetsServiceV2::new(config);
+
+        // 验证数据操作相关服务都可用
+        assert!(!format!("{:?}", service.batch_read).is_empty());
+        assert!(!format!("{:?}", service.batch_write).is_empty());
+        assert!(!format!("{:?}", service.single_write).is_empty());
+        assert!(!format!("{:?}", service.values_append).is_empty());
+        assert!(!format!("{:?}", service.values_prepend).is_empty());
+        assert!(!format!("{:?}", service.sheets_batch_update).is_empty());
+
+        // 验证服务名和版本
+        assert_eq!(SheetsServiceV2::service_name(), "SheetsServiceV2");
+        assert_eq!(service.config().app_id, "test_app_id");
+
+        // 验证数据前置插入服务配置
+        let prepend_service_str = format!("{:?}", service.values_prepend);
+        assert!(!prepend_service_str.is_empty());
     }
 }
