@@ -250,6 +250,228 @@ impl SpreadsheetService {
     pub fn create_spreadsheet_builder(&self) -> CreateSpreadsheetBuilder {
         CreateSpreadsheetBuilder::new()
     }
+
+    /// 获取电子表格信息
+    ///
+    /// 根据电子表格token获取电子表格的基础信息。
+    ///
+    /// # 参数
+    /// - `spreadsheet_token`: 电子表格的token
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::prelude::*;
+    ///
+    /// let response = client.sheets.v3.spreadsheet
+    ///     .get("spreadsheet_token")
+    ///     .await?;
+    /// ```
+    pub async fn get(&self, spreadsheet_token: &str) -> SDKResult<BaseResponse<GetSpreadsheetResponse>> {
+        let endpoint = format!(
+            "{}/{}",
+            crate::core::endpoints_original::Endpoints::SHEETS_V3_SPREADSHEETS,
+            spreadsheet_token
+        );
+
+        let request = ApiRequest {
+            method: "GET".to_string(),
+            url: endpoint,
+            headers: vec![],
+            params: vec![],
+            body: None,
+        };
+
+        self.transport.request(&request).await
+    }
+
+    /// 更新电子表格属性
+    ///
+    /// 根据电子表格token更新电子表格的属性。
+    ///
+    /// # 参数
+    /// - `spreadsheet_token`: 电子表格的token
+    /// - `request`: 更新请求
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::prelude::*;
+    ///
+    /// let request = UpdateSpreadsheetRequest::new("新标题")
+    ///     .folder_token("new_folder_token");
+    ///
+    /// let response = client.sheets.v3.spreadsheet
+    ///     .update("spreadsheet_token", &request)
+    ///     .await?;
+    /// ```
+    pub async fn update(
+        &self,
+        spreadsheet_token: &str,
+        request: &UpdateSpreadsheetRequest,
+    ) -> SDKResult<BaseResponse<UpdateSpreadsheetResponse>> {
+        let endpoint = format!(
+            "{}/{}",
+            crate::core::endpoints_original::Endpoints::SHEETS_V3_SPREADSHEETS,
+            spreadsheet_token
+        );
+
+        let api_request = ApiRequest {
+            method: "PATCH".to_string(),
+            url: endpoint,
+            headers: vec![],
+            params: vec![],
+            body: Some(serde_json::to_value(request)?),
+        };
+
+        self.transport.request(&api_request).await
+    }
+}
+
+/// 更新电子表格请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UpdateSpreadsheetRequest {
+    /// 电子表格标题
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
+    /// 所在文件夹token（可选）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folder_token: Option<String>,
+}
+
+impl UpdateSpreadsheetRequest {
+    /// 创建新的更新请求实例
+    pub fn new(title: impl Into<String>) -> Self {
+        Self {
+            title: Some(title.into()),
+            folder_token: None,
+        }
+    }
+
+    /// 设置文件夹token
+    pub fn folder_token(mut self, folder_token: impl Into<String>) -> Self {
+        self.folder_token = Some(folder_token.into());
+        self
+    }
+
+    /// 验证请求参数
+    pub fn validate(&self) -> Result<(), String> {
+        if let Some(ref title) = self.title {
+            if title.trim().is_empty() {
+                return Err("电子表格标题不能为空".to_string());
+            }
+            if title.len() > 100 {
+                return Err("电子表格标题长度不能超过100个字符".to_string());
+            }
+        }
+        Ok(())
+    }
+}
+
+/// 获取电子表格响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetSpreadsheetResponse {
+    /// 电子表格信息
+    pub data: GetSpreadsheetData,
+}
+
+/// 获取电子表格数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetSpreadsheetData {
+    /// 电子表格信息
+    pub spreadsheet: Spreadsheet,
+}
+
+impl Default for GetSpreadsheetResponse {
+    fn default() -> Self {
+        Self {
+            data: GetSpreadsheetData {
+                spreadsheet: Spreadsheet::default(),
+            },
+        }
+    }
+}
+
+impl ApiResponseTrait for GetSpreadsheetResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 更新电子表格响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UpdateSpreadsheetResponse {
+    /// 电子表格信息
+    pub data: UpdateSpreadsheetData,
+}
+
+/// 更新电子表格数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UpdateSpreadsheetData {
+    /// 电子表格信息
+    pub spreadsheet: Spreadsheet,
+}
+
+impl Default for UpdateSpreadsheetResponse {
+    fn default() -> Self {
+        Self {
+            data: UpdateSpreadsheetData {
+                spreadsheet: Spreadsheet::default(),
+            },
+        }
+    }
+}
+
+impl ApiResponseTrait for UpdateSpreadsheetResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 更新电子表格构建器
+#[derive(Debug, Clone)]
+pub struct UpdateSpreadsheetBuilder {
+    request: UpdateSpreadsheetRequest,
+    transport: Transport,
+}
+
+impl UpdateSpreadsheetBuilder {
+    /// 创建新的构建器实例
+    pub fn new(transport: Transport) -> Self {
+        Self {
+            request: UpdateSpreadsheetRequest::new(""),
+            transport,
+        }
+    }
+
+    /// 设置电子表格标题
+    pub fn title(mut self, title: impl Into<String>) -> Self {
+        self.request.title = Some(title.into());
+        self
+    }
+
+    /// 设置文件夹token
+    pub fn folder_token(mut self, folder_token: impl Into<String>) -> Self {
+        self.request.folder_token = Some(folder_token.into());
+        self
+    }
+
+    /// 执行更新请求
+    pub async fn execute(
+        self,
+        service: &SpreadsheetService,
+        spreadsheet_token: &str,
+    ) -> SDKResult<BaseResponse<UpdateSpreadsheetResponse>> {
+        self.request.validate()?;
+        service.update(spreadsheet_token, &self.request).await
+    }
+}
+
+impl SpreadsheetService {
+    /// 创建更新电子表格构建器
+    pub fn update_spreadsheet_builder(&self) -> UpdateSpreadsheetBuilder {
+        UpdateSpreadsheetBuilder::new(self.transport.clone())
+    }
 }
 
 // ==================== 单元测试 ====================
