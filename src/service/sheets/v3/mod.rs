@@ -19,6 +19,7 @@ pub mod comments;
 pub mod macros;
 pub mod sheet_protection;
 pub mod move_dimension;
+pub mod float_images;
 
 // 重新导出所有服务类型
 pub use spreadsheet::*;
@@ -33,13 +34,14 @@ pub use comments::*;
 pub use macros::*;
 pub use sheet_protection::*;
 pub use move_dimension::*;
+pub use float_images::*;
 
 use crate::core::config::Config;
 
 /// Sheets电子表格服务 v3版本
 ///
 /// 提供飞书电子表格v3版本的统一入口，支持现代化的电子表格管理。
-/// 包括创建、编辑、格式化、数据验证、筛选视图、数据过滤器、条件格式、图表、数据透视表、查找替换、评论协作、宏自动化、工作表保护、行列移动等企业级功能。
+/// 包括创建、编辑、格式化、数据验证、筛选视图、数据过滤器、条件格式、图表、数据透视表、查找替换、评论协作、宏自动化、工作表保护、行列移动、浮动图片等企业级功能。
 #[derive(Debug, Clone)]
 pub struct SheetsServiceV3 {
     config: Config,
@@ -67,6 +69,8 @@ pub struct SheetsServiceV3 {
     pub sheet_protection: SheetProtectionService,
     /// 行列移动服务
     pub move_dimension: MoveDimensionService,
+    /// 浮动图片管理服务
+    pub float_images: FloatImagesService,
 }
 
 impl SheetsServiceV3 {
@@ -98,7 +102,8 @@ impl SheetsServiceV3 {
             comments: CommentService::new(config.clone()),
             macros: MacroService::new(config.clone()),
             sheet_protection: SheetProtectionService::new(config.clone()),
-            move_dimension: MoveDimensionService::new(config),
+            move_dimension: MoveDimensionService::new(config.clone()),
+            float_images: FloatImagesService::new(config),
         }
     }
 }
@@ -255,6 +260,16 @@ mod tests {
     }
 
     #[test]
+    fn test_float_images_service_available() {
+        let config = Config::default();
+        let service = SheetsServiceV3::new(config);
+
+        // 验证float_images服务可用
+        let float_images_service_str = format!("{:?}", service.float_images);
+        assert!(!float_images_service_str.is_empty());
+    }
+
+    #[test]
     fn test_sheets_v3_complete_integration() {
         let config = Config::builder()
             .app_id("test_app_id")
@@ -275,6 +290,7 @@ mod tests {
         assert!(!format!("{:?}", service.macros).is_empty());
         assert!(!format!("{:?}", service.sheet_protection).is_empty());
         assert!(!format!("{:?}", service.move_dimension).is_empty());
+        assert!(!format!("{:?}", service.float_images).is_empty());
 
         // 验证服务名
         assert_eq!(SheetsServiceV3::service_name(), "SheetsServiceV3");
