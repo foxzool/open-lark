@@ -7,9 +7,11 @@
 //! - 数据格式化和样式设置
 
 pub mod spreadsheet;
+pub mod sheet;
 
 // 重新导出所有服务类型
 pub use spreadsheet::*;
+pub use sheet::*;
 
 use crate::core::config::Config;
 
@@ -22,6 +24,8 @@ pub struct SheetsServiceV3 {
     config: Config,
     /// 电子表格管理服务
     pub spreadsheet: SpreadsheetService,
+    /// 工作表管理服务
+    pub sheet: SheetService,
 }
 
 impl SheetsServiceV3 {
@@ -43,6 +47,7 @@ impl SheetsServiceV3 {
         Self {
             config: config.clone(),
             spreadsheet: SpreadsheetService::new(config),
+            sheet: SheetService::new(config),
         }
     }
 }
