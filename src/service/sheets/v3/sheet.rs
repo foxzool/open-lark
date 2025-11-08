@@ -277,6 +277,235 @@ impl SheetService {
     pub fn get_sheet_builder(&self, spreadsheet_token: &str, sheet_id: &str) -> GetSheetBuilder {
         GetSheetBuilder::new(self.transport.clone(), spreadsheet_token, sheet_id)
     }
+
+    /// 查找单元格
+    ///
+    /// 在指定范围内查找符合查找条件的单元格。
+    ///
+    /// # 参数
+    /// - `spreadsheet_token`: 电子表格的token
+    /// - `sheet_id`: 工作表的ID
+    /// - `request`: 查找请求
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::prelude::*;
+    ///
+    /// let request = FindCellsRequest::new("查找内容")
+    ///     .range("A1:C10")
+    ///     .match_type("exact");
+    ///
+    /// let response = client.sheets.v3.sheet
+    ///     .find_cells("spreadsheet_token", "sheet_id", &request)
+    ///     .await?;
+    /// ```
+    pub async fn find_cells(
+        &self,
+        spreadsheet_token: &str,
+        sheet_id: &str,
+        request: &FindCellsRequest,
+    ) -> SDKResult<BaseResponse<FindCellsResponse>> {
+        let endpoint = format!(
+            "{}/{}/sheets/{}/find",
+            crate::core::endpoints_original::Endpoints::SHEETS_V3_SPREADSHEETS,
+            spreadsheet_token,
+            sheet_id
+        );
+
+        let api_request = ApiRequest {
+            method: "POST".to_string(),
+            url: endpoint,
+            headers: vec![],
+            params: vec![],
+            body: Some(serde_json::to_value(request)?),
+        };
+
+        self.transport.request(&api_request).await
+    }
+
+    /// 创建查找单元格构建器
+    pub fn find_cells_builder(&self, spreadsheet_token: &str, sheet_id: &str) -> FindCellsBuilder {
+        FindCellsBuilder::new(self.transport.clone(), spreadsheet_token, sheet_id)
+    }
+}
+
+/// 查找单元格请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FindCellsRequest {
+    /// 查找内容
+    pub find: String,
+    /// 查找范围
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub range: Option<String>,
+    /// 匹配类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub match_type: Option<String>,
+    /// 是否区分大小写
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub case_sensitive: Option<bool>,
+    /// 是否整词匹配
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub match_whole_word: Option<bool>,
+}
+
+impl FindCellsRequest {
+    /// 创建新的查找请求
+    pub fn new(find: impl Into<String>) -> Self {
+        Self {
+            find: find.into(),
+            range: None,
+            match_type: None,
+            case_sensitive: None,
+            match_whole_word: None,
+        }
+    }
+
+    /// 设置查找范围
+    pub fn range(mut self, range: impl Into<String>) -> Self {
+        self.range = Some(range.into());
+        self
+    }
+
+    /// 设置匹配类型
+    pub fn match_type(mut self, match_type: impl Into<String>) -> Self {
+        self.match_type = Some(match_type.into());
+        self
+    }
+
+    /// 设置是否区分大小写
+    pub fn case_sensitive(mut self, case_sensitive: bool) -> Self {
+        self.case_sensitive = Some(case_sensitive);
+        self
+    }
+
+    /// 设置是否整词匹配
+    pub fn match_whole_word(mut self, match_whole_word: bool) -> Self {
+        self.match_whole_word = Some(match_whole_word);
+        self
+    }
+
+    /// 验证请求参数
+    pub fn validate(&self) -> Result<(), String> {
+        if self.find.trim().is_empty() {
+            return Err("查找内容不能为空".to_string());
+        }
+        if self.find.len() > 1000 {
+            return Err("查找内容长度不能超过1000个字符".to_string());
+        }
+        Ok(())
+    }
+}
+
+/// 查找单元格响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FindCellsResponse {
+    /// 查找结果数据
+    pub data: FindCellsData,
+}
+
+/// 查找单元格数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FindCellsData {
+    /// 查找结果
+    pub value_range: ValueRange,
+}
+
+/// 查找结果值范围
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ValueRange {
+    /// 电子表格token
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub spreadsheet_token: Option<String>,
+    /// 工作表ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sheet_id: Option<String>,
+    /// 查找范围
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub range: Option<String>,
+    /// 查找到的值
+    pub values: Vec<Vec<String>>,
+}
+
+impl Default for FindCellsResponse {
+    fn default() -> Self {
+        Self {
+            data: FindCellsData {
+                value_range: ValueRange {
+                    spreadsheet_token: None,
+                    sheet_id: None,
+                    range: None,
+                    values: vec![],
+                },
+            },
+        }
+    }
+}
+
+impl ApiResponseTrait for FindCellsResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 查找单元格构建器
+#[derive(Debug, Clone)]
+pub struct FindCellsBuilder {
+    request: FindCellsRequest,
+    transport: Transport,
+    spreadsheet_token: String,
+    sheet_id: String,
+}
+
+impl FindCellsBuilder {
+    /// 创建新的查找构建器实例
+    pub fn new(transport: Transport, spreadsheet_token: &str, sheet_id: &str) -> Self {
+        Self {
+            request: FindCellsRequest::new(""),
+            transport,
+            spreadsheet_token: spreadsheet_token.to_string(),
+            sheet_id: sheet_id.to_string(),
+        }
+    }
+
+    /// 设置查找内容
+    pub fn find(mut self, find: impl Into<String>) -> Self {
+        self.request.find = find.into();
+        self
+    }
+
+    /// 设置查找范围
+    pub fn range(mut self, range: impl Into<String>) -> Self {
+        self.request.range = Some(range.into());
+        self
+    }
+
+    /// 设置匹配类型
+    pub fn match_type(mut self, match_type: impl Into<String>) -> Self {
+        self.request.match_type = Some(match_type.into());
+        self
+    }
+
+    /// 设置是否区分大小写
+    pub fn case_sensitive(mut self, case_sensitive: bool) -> Self {
+        self.request.case_sensitive = Some(case_sensitive);
+        self
+    }
+
+    /// 设置是否整词匹配
+    pub fn match_whole_word(mut self, match_whole_word: bool) -> Self {
+        self.request.match_whole_word = Some(match_whole_word);
+        self
+    }
+
+    /// 执行查找请求
+    pub async fn execute(self) -> SDKResult<BaseResponse<FindCellsResponse>> {
+        self.request.validate()?;
+        let service = SheetService {
+            transport: self.transport,
+        };
+        service.find_cells(&self.spreadsheet_token, &self.sheet_id, &self.request).await
+    }
 }
 
 // ==================== 单元测试 ====================
@@ -427,6 +656,145 @@ mod tests {
 
         let get_builder = service.get_sheet_builder("test_token", "test_sheet");
         assert!(!format!("{:?}", get_builder).is_empty());
+    }
+
+    #[test]
+    fn test_find_cells_request_creation() {
+        let request = FindCellsRequest::new("查找内容");
+        assert_eq!(request.find, "查找内容");
+        assert_eq!(request.range, None);
+        assert_eq!(request.match_type, None);
+    }
+
+    #[test]
+    fn test_find_cells_request_builder() {
+        let request = FindCellsRequest::new("测试查找")
+            .range("A1:C10")
+            .match_type("exact")
+            .case_sensitive(true)
+            .match_whole_word(false);
+
+        assert_eq!(request.find, "测试查找");
+        assert_eq!(request.range, Some("A1:C10".to_string()));
+        assert_eq!(request.match_type, Some("exact".to_string()));
+        assert_eq!(request.case_sensitive, Some(true));
+        assert_eq!(request.match_whole_word, Some(false));
+    }
+
+    #[test]
+    fn test_find_cells_request_validation() {
+        // 测试正常内容
+        let valid_request = FindCellsRequest::new("正常查找内容");
+        assert!(valid_request.validate().is_ok());
+
+        // 测试空内容
+        let empty_request = FindCellsRequest::new("  ");
+        assert!(empty_request.validate().is_err());
+
+        // 测试过长内容
+        let long_request = FindCellsRequest::new(&"a".repeat(1001));
+        assert!(long_request.validate().is_err());
+    }
+
+    #[test]
+    fn test_find_cells_response_default() {
+        let response = FindCellsResponse::default();
+        assert!(response.data.value_range.values.is_empty());
+        assert_eq!(response.data.value_range.spreadsheet_token, None);
+        assert_eq!(response.data.value_range.sheet_id, None);
+        assert_eq!(response.data.value_range.range, None);
+    }
+
+    #[test]
+    fn test_find_cells_response_with_data() {
+        let value_range = ValueRange {
+            spreadsheet_token: Some("test_spreadsheet".to_string()),
+            sheet_id: Some("test_sheet".to_string()),
+            range: Some("A1:B2".to_string()),
+            values: vec![
+                vec!["结果1".to_string(), "结果2".to_string()],
+                vec!["结果3".to_string(), "结果4".to_string()],
+            ],
+        };
+
+        let response = FindCellsResponse {
+            data: FindCellsData { value_range },
+        };
+
+        assert_eq!(response.data.value_range.spreadsheet_token, Some("test_spreadsheet".to_string()));
+        assert_eq!(response.data.value_range.sheet_id, Some("test_sheet".to_string()));
+        assert_eq!(response.data.value_range.range, Some("A1:B2".to_string()));
+        assert_eq!(response.data.value_range.values.len(), 2);
+        assert_eq!(response.data.value_range.values[0][0], "结果1");
+    }
+
+    #[test]
+    fn test_find_cells_builder() {
+        let config = crate::core::config::Config::default();
+        let service = SheetService::new(config);
+
+        let find_builder = service.find_cells_builder("test_token", "test_sheet")
+            .find("查找文本")
+            .range("A1:D20")
+            .match_type("contains")
+            .case_sensitive(true);
+
+        assert_eq!(find_builder.request.find, "查找文本");
+        assert_eq!(find_builder.request.range, Some("A1:D20".to_string()));
+        assert_eq!(find_builder.request.match_type, Some("contains".to_string()));
+        assert_eq!(find_builder.request.case_sensitive, Some(true));
+        assert!(!format!("{:?}", find_builder).is_empty());
+    }
+
+    #[test]
+    fn test_find_cells_serialization() {
+        let request = FindCellsRequest::new("序列化测试")
+            .range("B2:C15")
+            .match_type("exact");
+
+        let serialized = serde_json::to_string(&request).unwrap();
+        let deserialized: FindCellsRequest = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(request.find, deserialized.find);
+        assert_eq!(request.range, deserialized.range);
+        assert_eq!(request.match_type, deserialized.match_type);
+    }
+
+    #[test]
+    fn test_value_range_creation() {
+        let value_range = ValueRange {
+            spreadsheet_token: Some("sheet_token_123".to_string()),
+            sheet_id: Some("sheet_456".to_string()),
+            range: Some("Sheet1!A1:Z100".to_string()),
+            values: vec![
+                vec!["A1".to_string(), "B1".to_string()],
+                vec!["A2".to_string(), "B2".to_string()],
+            ],
+        };
+
+        assert_eq!(value_range.spreadsheet_token, Some("sheet_token_123".to_string()));
+        assert_eq!(value_range.sheet_id, Some("sheet_456".to_string()));
+        assert_eq!(value_range.range, Some("Sheet1!A1:Z100".to_string()));
+        assert_eq!(value_range.values.len(), 2);
+        assert_eq!(value_range.values[0].len(), 2);
+    }
+
+    #[test]
+    fn test_endpoint_construction() {
+        let spreadsheet_token = "test_spreadsheet_789";
+        let sheet_id = "test_sheet_012";
+
+        let expected_endpoint = format!(
+            "{}/{}/sheets/{}/find",
+            crate::core::endpoints_original::Endpoints::SHEETS_V3_SPREADSHEETS,
+            spreadsheet_token,
+            sheet_id
+        );
+
+        assert!(expected_endpoint.contains("/sheets/"));
+        assert!(expected_endpoint.contains("/find"));
+        assert!(expected_endpoint.contains(spreadsheet_token));
+        assert!(expected_endpoint.contains(sheet_id));
     }
 
     #[test]
