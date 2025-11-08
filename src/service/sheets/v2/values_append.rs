@@ -822,8 +822,7 @@ mod tests {
         let long_content = ValuesAppendRequest::builder()
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .range("Sheet1!A1:A1".to_string())
-            .add_row(vec![("x".repeat(50001)]) // 50001个字符
-            .build());
+            .add_row(vec![("x".repeat(50001))]); // 50001个字符
         assert!(long_content.is_err());
     }
 

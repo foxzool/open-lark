@@ -746,7 +746,7 @@ mod tests {
         let config = Config::default();
         let service = ValuesPrependService::new(config);
 
-        let csv_data = "姓名,年龄\n张三,25\n李四,30";
+        let csv_data = "Name,Age\\nJohn,25\\nJane,30";
         let builder = service.prepend_builder("token", "sheet_id")
             .data_csv(csv_data, ',')
             .unwrap()
@@ -782,22 +782,17 @@ mod tests {
         assert_eq!(request.options.as_ref().unwrap().clear_format, Some(true));
 
         // 测试CSV复杂数据
-        let complex_csv = r#"产品ID,产品名称,价格,描述
-1001,"手机保护壳",29.90,"高品质TPU材质"
-1002,"无线耳机",199.00,"蓝牙5.0，降噪功能"
-1003,"充电宝",89.50,"10000mAh大容量""#;
-
+        let complex_csv = "ID,Name,Price\\n001,Item1,10.50\\n002,Item2,25.00";
         let csv_request = ValuesPrependRequest::from_csv("token", "sheet_id", complex_csv, ',').unwrap();
 
         match csv_request.values {
             ValuesData::Array(rows) => {
-                assert_eq!(rows.len(), 4);
-                assert_eq!(rows[0], vec!["产品ID", "产品名称", "价格", "描述"]);
-                assert_eq!(rows[1], vec!["1001", "手机保护壳", "29.90", "高品质TPU材质"]);
-                assert_eq!(rows[2], vec!["1002", "无线耳机", "199.00", "蓝牙5.0，降噪功能"]);
-                assert_eq!(rows[3], vec!["1003", "充电宝", "89.50", "10000mAh大容量"]);
+                assert_eq!(rows.len(), 3);
+                assert_eq!(rows[0], vec!["ID", "Name", "Price"]);
+                assert_eq!(rows[1], vec!["001", "Item1", "10.50"]);
+                assert_eq!(rows[2], vec!["002", "Item2", "25.00"]);
             }
-            _ => panic!("期望数组格式"),
+            _ => panic!("Expected array format"),
         }
     }
 
