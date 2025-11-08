@@ -16,6 +16,7 @@
 //! - 行列插入、删除和移动操作
 //! - 单元格样式设置和格式化
 //! - 数据验证和下拉列表设置
+//! - 表格元数据获取和权限管理
 
 pub mod sheet_cells;
 pub mod batch_read;
@@ -34,6 +35,7 @@ pub mod data_validation;
 pub mod values_append;
 pub mod sheets_batch_update;
 pub mod values_prepend;
+pub mod metainfo;
 
 // 重新导出所有服务类型
 pub use sheet_cells::*;
@@ -53,13 +55,14 @@ pub use data_validation::*;
 pub use values_append::*;
 pub use sheets_batch_update::*;
 pub use values_prepend::*;
+pub use metainfo::*;
 
 use crate::core::config::Config;
 
 /// Sheets电子表格服务 v2版本
 ///
 /// 提供飞书电子表格v2版本的统一入口，支持现代化的电子表格管理。
-/// 包括创建、编辑、格式化、数据读写、图片管理、增强图片写入、单个范围写入、数据追加、工作表批量更新等企业级功能。
+/// 包括创建、编辑、格式化、数据读写、图片管理、增强图片写入、单个范围写入、数据追加、工作表批量更新、表格元数据管理等企业级功能。
 #[derive(Debug, Clone)]
 pub struct SheetsServiceV2 {
     config: Config,
@@ -97,6 +100,8 @@ pub struct SheetsServiceV2 {
     pub sheets_batch_update: SheetsBatchUpdateService,
     /// 数据前置插入服务
     pub values_prepend: ValuesPrependService,
+    /// 表格元数据服务
+    pub metainfo: SpreadsheetMetaService,
 }
 
 impl SheetsServiceV2 {
@@ -133,7 +138,8 @@ impl SheetsServiceV2 {
             data_validation: DataValidationService::new(config.clone()),
             values_append: ValuesAppendService::new(config.clone()),
             sheets_batch_update: SheetsBatchUpdateService::new(config.clone()),
-            values_prepend: ValuesPrependService::new(config),
+            values_prepend: ValuesPrependService::new(config.clone()),
+            metainfo: SpreadsheetMetaService::new(config),
         }
     }
 }
@@ -416,6 +422,19 @@ mod tests {
     }
 
     #[test]
+    fn test_metainfo_service_available() {
+        let config = Config::default();
+        let service = SheetsServiceV2::new(config);
+
+        // 验证metainfo服务可用
+        let metainfo_service_str = format!("{:?}", service.metainfo);
+        assert!(!metainfo_service_str.is_empty());
+
+        // 验证服务名称
+        assert_eq!(SpreadsheetMetaService::service_name(), "SpreadsheetMetaService");
+    }
+
+    #[test]
     fn test_sheets_v2_complete_data_operations_integration() {
         let config = Config::builder()
             .app_id("test_app_id")
@@ -438,5 +457,9 @@ mod tests {
         // 验证数据前置插入服务配置
         let prepend_service_str = format!("{:?}", service.values_prepend);
         assert!(!prepend_service_str.is_empty());
+
+        // 验证元数据服务配置
+        let metainfo_service_str = format!("{:?}", service.metainfo);
+        assert!(!metainfo_service_str.is_empty());
     }
 }
