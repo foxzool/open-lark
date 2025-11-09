@@ -21,6 +21,8 @@ pub struct FormatParser {
     api_request_pattern: Regex,
     /// 参数占位符模式
     placeholder_pattern: Regex,
+    /// Base URL占位符模式 {}/open-apis/
+    base_url_placeholder_pattern: Regex,
     /// 变量提取模式
     variable_patterns: Vec<Regex>,
 }
@@ -29,21 +31,29 @@ impl FormatParser {
     /// 创建新的格式解析器
     pub fn new() -> Result<Self> {
         Ok(Self {
-            single_line_pattern: Regex::new(r#"format!\s*\(\s*"([^"]*(/open-apis/[^"]+))"[^)]*\)"#)
+            // 改进的正则表达式，支持 {}/open-apis/ 格式
+            single_line_pattern: Regex::new(r#"format!\s*\(\s*"([^"]*(?:/open-apis/|/[^"]*open-apis/)[^"]*)"[^)]*\)"#)
                 .context("Failed to compile single line format pattern")?,
 
             multiline_start_pattern: Regex::new(r"format!\s*\(\s*$")
                 .context("Failed to compile multiline start pattern")?,
 
-            url_first_line_pattern: Regex::new(r#"format!\s*\(\s*"([^"]*(/open-apis/[^"]+))""#)
+            // 改进的多行URL模式，支持 {}/open-apis/ 格式
+            url_first_line_pattern: Regex::new(r#"format!\s*\(\s*"([^"]*(?:/open-apis/|/[^"]*open-apis/)[^"]*)""#)
                 .context("Failed to compile URL first line pattern")?,
 
+            // 改进的ApiRequest模式
             api_request_pattern: Regex::new(
-                r#"ApiRequest::with_method_and_path\s*\([^,]*,\s*format!\s*\(\s*"([^"]*(/open-apis/[^"]+))"[^)]*\)"#
+                r#"ApiRequest::with_method_and_path\s*\([^,]*,\s*format!\s*\(\s*"([^"]*(?:/open-apis/|/[^"]*open-apis/)[^"]*)"[^)]*\)"#
             ).context("Failed to compile API request pattern")?,
 
             placeholder_pattern: Regex::new(r"\{\s*([^}]*)\s*\}")
                 .context("Failed to compile placeholder pattern")?,
+
+            // 新增：专门匹配 {}/open-apis/ 格式的模式
+            base_url_placeholder_pattern: Regex::new(
+                r#"format!\s*\(\s*"\{[^}]*\}(/open-apis/[^"]+)"[^)]*\)"#
+            ).context("Failed to compile base URL placeholder pattern")?,
 
             variable_patterns: vec![
                 Regex::new(r"&([a-zA-Z_][a-zA-Z0-9_]*)")
@@ -161,7 +171,41 @@ impl FormatParser {
     ) -> Result<Vec<URLDefinition>> {
         let mut results = Vec::new();
 
-        // 匹配包含open-apis的format!模式
+        // 首先匹配 {}/open-apis/ 格式（最常见的情况）
+        if let Some(cap) = self.base_url_placeholder_pattern.captures(line) {
+            if let Some(url_match) = cap.get(1) {
+                let url = url_match.as_str().to_string();
+
+                // 添加前导斜杠以确保格式一致
+                let normalized_url = if url.starts_with('/') {
+                    url
+                } else {
+                    format!("/{}", url)
+                };
+
+                let url_def = URLDefinition {
+                    url: normalized_url,
+                    method_detection: HTTPMethodDetection {
+                        method: HTTPMethod::default(),
+                        confidence: 0.4,
+                        source: MethodDetectionSource::Default,
+                        evidence: "Base URL placeholder format".to_string(),
+                        line_number: line_num + 1,
+                    },
+                    line_start: line_num + 1,
+                    line_end: line_num + 1,
+                    raw_format: line.to_string(),
+                    variables: Vec::new(), // 将在后续处理中提取
+                    extraction_type: URLExtractionType::SingleLine,
+                    file_path: file_path.to_path_buf(),
+                };
+
+                trace!("提取base_url占位符格式URL: {}", url_def.url);
+                results.push(url_def);
+            }
+        }
+
+        // 匹配包含open-apis的format!模式（原有的模式）
         let captures: Vec<_> = self.single_line_pattern.captures_iter(line).collect();
 
         for cap in captures {
@@ -231,6 +275,20 @@ impl FormatParser {
 
     /// 从format字符串中提取URL
     fn extract_url_from_format_string(&self, format_str: &str) -> Result<Option<String>> {
+        // 首先匹配base_url占位符格式: {}/open-apis/...
+        if let Some(cap) = self.base_url_placeholder_pattern.captures(format_str) {
+            if let Some(url_match) = cap.get(1) {
+                let url = url_match.as_str().to_string();
+                // 添加前导斜杠以确保格式一致
+                let normalized_url = if url.starts_with('/') {
+                    url
+                } else {
+                    format!("/{}", url)
+                };
+                return Ok(Some(normalized_url));
+            }
+        }
+
         // 匹配format!中的URL部分
         if let Some(cap) = self.url_first_line_pattern.captures(format_str) {
             if let Some(url_match) = cap.get(1) {

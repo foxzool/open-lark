@@ -21,6 +21,59 @@ impl ReportGenerator {
         Self {}
     }
 
+    /// 按服务名称分组并排序API匹配结果
+    fn group_and_sort_by_service<'a>(&self, match_results: &'a [APIMatch]) -> Vec<(&'a APIMatch, String)> {
+        use std::collections::HashMap;
+        use crate::models::HTTPMethod;
+
+        // 按服务名称分组
+        let mut service_groups: HashMap<String, Vec<&APIMatch>> = HashMap::new();
+        for result in match_results {
+            let service_name = &result.api_info.service;
+            service_groups.entry(service_name.clone()).or_insert_with(Vec::new).push(result);
+        }
+
+        // 对每个组内的API进行排序
+        for (_, apis) in service_groups.iter_mut() {
+            apis.sort_by(|a, b| {
+                // 首先按HTTP方法排序：GET < POST < PUT < PATCH < DELETE
+                let method_order = |method: &HTTPMethod| -> u8 {
+                    match method {
+                        HTTPMethod::Get => 1,
+                        HTTPMethod::Post => 2,
+                        HTTPMethod::Put => 3,
+                        HTTPMethod::Patch => 4,
+                        HTTPMethod::Delete => 5,
+                        HTTPMethod::Head => 6,
+                        HTTPMethod::Options => 7,
+                    }
+                };
+
+                let method_cmp = method_order(&a.api_info.method).cmp(&method_order(&b.api_info.method));
+                if method_cmp != std::cmp::Ordering::Equal {
+                    return method_cmp;
+                }
+
+                // 相同HTTP方法按API名称排序
+                a.api_info.name.cmp(&b.api_info.name)
+            });
+        }
+
+        // 对服务名称进行排序
+        let mut sorted_services: Vec<_> = service_groups.into_iter().collect();
+        sorted_services.sort_by_key(|(service, _)| service.clone());
+
+        // 展平为带有分组标题的元组
+        let mut result = Vec::new();
+        for (service_name, apis) in sorted_services {
+            for api in apis {
+                result.push((api, service_name.clone()));
+            }
+        }
+
+        result
+    }
+
     /// 生成Markdown报告
     pub fn generate_markdown_report(&self, match_results: &[APIMatch], output_path: &str) -> Result<()> {
         info!("生成Markdown报告: {}", output_path);
@@ -59,6 +112,19 @@ impl ReportGenerator {
         content.push_str(&format!("**已实现**: {}\n", found_apis));
         content.push_str(&format!("**实现率**: {:.1}%\n\n", implementation_rate));
 
+              // 先计算文档统计用于显示
+        let doc_stats = crate::models::DocumentationStats::calculate_from_matches(&match_results);
+
+        // 文档统计摘要
+        content.push_str("## 实现统计摘要\n\n");
+        content.push_str(&format!("- **已实现接口总数**: {}\n", doc_stats.total_implemented));
+        content.push_str(&format!("- **有文档地址**: {} ({:.1}%)\n",
+            doc_stats.with_documentation,
+            doc_stats.documentation_rate * 100.0));
+        content.push_str(&format!("- **无文档地址**: {} ({:.1}%)\n\n",
+            doc_stats.without_documentation,
+            (1.0 - doc_stats.documentation_rate) * 100.0));
+
         // 服务统计
         content.push_str("## 按服务统计\n\n");
         content.push_str("| 服务 | 总数 | 已实现 | 实现率 |\n");
@@ -79,11 +145,22 @@ impl ReportGenerator {
         }
 
         // 详细映射表
-        content.push_str("\n## 详细映射表\n\n");
-        content.push_str("| 序号 | API名称 | HTTP方法 | 路径 | 状态 | 函数名 | 文件路径 | 行号 |\n");
-        content.push_str("|------|---------|----------|------|------|--------|----------|------|\n");
+        content.push_str("\n## 详细映射表（按模块排序）\n\n");
+        content.push_str("| 序号 | API名称 | HTTP方法 | 路径 | 状态 | 文档地址 | 函数名 | 文件路径 | 行号 |\n");
+        content.push_str("|------|---------|----------|------|------|----------|--------|----------|------|\n");
 
-        for (i, result) in match_results.iter().enumerate() {
+        // 使用分组排序的结果
+        let grouped_results = self.group_and_sort_by_service(match_results);
+        let mut current_service = String::new();
+        let mut global_counter = 1;
+
+        for (index, (result, service_name)) in grouped_results.iter().enumerate() {
+            // 当服务名称改变时，添加模块标题
+            if service_name != &current_service {
+                current_service = service_name.clone();
+                content.push_str(&format!("\n### 📦 {} 模块\n\n", service_name));
+            }
+
             let status_emoji = if result.status == crate::models::MatchStatus::Found {
                 "✅"
             } else {
@@ -103,20 +180,29 @@ impl ReportGenerator {
                 "-".to_string()
             };
 
+            // 生成文档地址链接
+            let doc_link = if crate::models::has_documentation(&result.api_info.doc_link) {
+                format!("[文档]({})", result.api_info.doc_link)
+            } else {
+                "暂无文档".to_string()
+            };
+
             content.push_str(&format!(
-                "| {} | {} | {} | {} | {} {} | {} | {} | {} |\n",
-                i + 1,
+                "| {} | {} | {} | {} | {} | {} | {} | {} | {} |\n",
+                global_counter,
                 result.api_info.name,
                 result.api_info.method.as_str(),
                 result.api_info.path,
                 status_emoji,
-                format!("{:?}", result.status),
+                doc_link,
                 result.function_info.as_ref()
                     .map(|f| f.name.as_str())
                     .unwrap_or("-"),
                 file_path,
                 line_number
             ));
+
+            global_counter += 1;
         }
 
         // 写入文件
@@ -143,6 +229,13 @@ impl ReportGenerator {
         let found_apis = match_results.iter()
             .filter(|r| r.status == crate::models::MatchStatus::Found)
             .count();
+
+        // 验证implementation统计
+        let impl_count = match_results.iter()
+            .filter(|r| r.implementation.is_some())
+            .count();
+
+        info!("JSON报告生成器统计: total_apis={}, found_apis={}, impl_count={}", total_apis, found_apis, impl_count);
 
         let implementation_rate = if total_apis > 0 {
             (found_apis as f64 / total_apis as f64 * 100.0) as f32
@@ -193,10 +286,14 @@ impl ReportGenerator {
                 method: "rust_based_exact_matching".to_string(),
                 url_definitions_found: url_definitions.len(),
                 service_stats,
+                documentation_stats: crate::models::DocumentationStats::calculate_from_matches(&match_results),
             },
             url_function_map,
             apis: match_results.to_vec(),
         };
+
+        info!("最终报告数据: summary.found_apis={}, summary.implementation_rate={}",
+              report.summary.found_apis, report.summary.implementation_rate);
 
         // 序列化为JSON
         let json_content = serde_json::to_string_pretty(&report)

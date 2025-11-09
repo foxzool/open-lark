@@ -231,6 +231,60 @@ pub struct ServiceStats {
     pub implementation_rate: f32,
 }
 
+/// 文档统计信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DocumentationStats {
+    /// 已实现接口总数
+    pub total_implemented: usize,
+    /// 有文档地址的接口数
+    pub with_documentation: usize,
+    /// 无文档地址的接口数
+    pub without_documentation: usize,
+    /// 文档覆盖率百分比
+    pub documentation_rate: f32,
+}
+
+impl DocumentationStats {
+    /// 创建新的文档统计
+    pub fn new() -> Self {
+        Self {
+            total_implemented: 0,
+            with_documentation: 0,
+            without_documentation: 0,
+            documentation_rate: 0.0,
+        }
+    }
+
+    /// 计算文档统计
+    pub fn calculate_from_matches(matches: &[APIMatch]) -> Self {
+        let total = matches.len();
+        let with_doc = matches.iter()
+            .filter(|api| {
+                api.status == MatchStatus::Found &&
+                has_documentation(&api.api_info.doc_link)
+            })
+            .count();
+        let without_doc = total - with_doc;
+        let rate = if total > 0 { with_doc as f32 / total as f32 } else { 0.0 };
+
+        Self {
+            total_implemented: total,
+            with_documentation: with_doc,
+            without_documentation: without_doc,
+            documentation_rate: rate,
+        }
+    }
+}
+
+/// 判断是否有有效文档
+pub fn has_documentation(doc_link: &str) -> bool {
+    !doc_link.is_empty() &&
+    doc_link != "N/A" &&
+    doc_link != "n/a" &&
+    (doc_link.starts_with("https://open.feishu.cn/") ||
+     doc_link.starts_with("https://open.larksuite.com/"))
+}
+
 /// 汇总统计信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SummaryStats {
@@ -248,6 +302,8 @@ pub struct SummaryStats {
     pub url_definitions_found: usize,
     /// 按服务分组的统计
     pub service_stats: HashMap<String, ServiceStats>,
+    /// 文档统计信息
+    pub documentation_stats: DocumentationStats,
 }
 
 /// 最终的映射报告
@@ -273,6 +329,7 @@ impl MappingReport {
                 method: "rust_based_exact_matching".to_string(),
                 url_definitions_found: 0,
                 service_stats: HashMap::new(),
+                documentation_stats: DocumentationStats::new(),
             },
             url_function_map: HashMap::new(),
             apis: Vec::new(),
@@ -290,6 +347,9 @@ impl MappingReport {
             self.summary.implementation_rate =
                 (self.summary.found_apis as f64 / self.summary.total_apis as f64 * 100.0) as f32;
         }
+
+        // 计算文档统计
+        self.summary.documentation_stats = DocumentationStats::calculate_from_matches(&self.apis);
 
         // 计算各服务统计
         let mut service_stats = HashMap::new();

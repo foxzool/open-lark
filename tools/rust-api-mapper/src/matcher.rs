@@ -6,7 +6,7 @@ use anyhow::{Result, Context};
 use csv::Reader;
 use std::collections::HashMap;
 use std::fs::File;
-use tracing::{info, debug};
+use tracing::{info, debug, error};
 
 use crate::models::{URLDefinition, APIInfo, APIMatch, MatchStatus, HTTPMethod};
 use crate::normalizer::ParameterNormalizer;
@@ -122,6 +122,7 @@ impl APIMatcher {
 
             if let Some(url_def) = url_function_map.get(&normalized_api_key) {
                 // 找到匹配
+                info!("✅ 找到匹配: {} -> {}", normalized_api_key, url_def.url);
                 let match_confidence = self.calculate_match_confidence(api_info, url_def);
 
                 let result = APIMatch {
@@ -146,6 +147,11 @@ impl APIMatcher {
                 results.push(result);
             } else {
                 // 未找到匹配
+                if matched_count < 5 { // 只打印前几个未匹配的示例，避免输出太多
+                    info!("❌ 未找到匹配: {}", normalized_api_key);
+                    info!("   可用的URL示例: {:?}", url_function_map.keys().take(3).collect::<Vec<_>>());
+                }
+
                 let result = APIMatch {
                     api_info: api_info.clone(),
                     implementation: None,
@@ -161,10 +167,20 @@ impl APIMatcher {
 
         let match_rate = (matched_count as f64 / results.len() as f64) * 100.0;
 
+        // 验证结果统计
+        let verified_found_count = results.iter()
+            .filter(|r| r.status == MatchStatus::Found)
+            .count();
+
         info!("匹配完成！");
         info!("  总API数: {}", results.len());
         info!("  成功匹配: {}", matched_count);
+        info!("  验证Found状态: {}", verified_found_count);
         info!("  匹配率: {:.1}%", match_rate);
+
+        if matched_count != verified_found_count {
+            error!("⚠️ 数据不一致！matched_count={}, verified_found_count={}", matched_count, verified_found_count);
+        }
 
         Ok(results)
     }
