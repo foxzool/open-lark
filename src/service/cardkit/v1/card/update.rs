@@ -260,7 +260,7 @@ impl CardService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::config::Config;
+    use open_lark_core::config::Config;
 
     #[test]
     fn test_update_card_request_creation() {

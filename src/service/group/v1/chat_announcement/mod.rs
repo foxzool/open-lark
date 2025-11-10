@@ -5,7 +5,7 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use crate::config::Config;
+use open_lark_core::config::Config;
 // TODO: 以下功能待实现
 // pub mod get;
 // pub mod list;

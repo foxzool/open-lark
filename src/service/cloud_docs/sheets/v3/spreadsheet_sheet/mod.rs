@@ -13,7 +13,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::{
-use crate::SDKResult;    config::Config,
+use open_lark_core::SDKResult;    config::Config,
     api_resp::{ApiResponseTrait, ResponseFormat},
     SDKResult,
 };

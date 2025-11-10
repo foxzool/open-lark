@@ -6,7 +6,7 @@ use crate::{
     SDKResult,
 };
 // Re-export ApiRequest from open-lark-core
-use crate::http::ApiRequest;
+use open_lark_core::api_req::ApiRequest;
 
 /// 通用分页响应结构
 #[derive(Debug, Clone)]

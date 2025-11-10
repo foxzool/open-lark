@@ -10,7 +10,7 @@
 //! 提供飞书电子表格筛选视图条件的完整功能，包括筛选条件的创建、
 //! 查询、更新、删除等操作，支持复杂的条件组合和逻辑运算。
 
-use crate::config::Config;
+use open_lark_core::config::Config;
 
 pub mod create;
 pub mod delete;

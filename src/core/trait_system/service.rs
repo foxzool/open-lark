@@ -1,4 +1,4 @@
-use crate::{config::Config, observability::OperationTracker, SDKResult};
+use open_lark_core::{config::Config, observability::OperationTracker, SDKResult};
 use std::future::Future;
 
 /// 服务基础 trait
@@ -220,7 +220,7 @@ pub trait CacheableService: Service {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::config::Config;
+    use open_lark_core::config::Config;
 
     // 测试用的简单服务实现
     struct TestService {

@@ -6,7 +6,7 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 use log::error;
-use open_lark_core::core::api_req::ApiRequest;use reqwest::Method;
+use open_lark_core::api_req::ApiRequest;use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use crate::,
 {
@@ -808,8 +808,8 @@ fn service_version() -> &'static str {,
 #[cfg(test)]
 mod tests {
 use super::*;
-    use crate::api_resp::ResponseFormat;
-use crate::SDKResult;use rstest::rstest;
+    use open_lark_core::api_resp::ResponseFormat;
+use open_lark_core::SDKResult;use rstest::rstest;
     fn create_test_config() -> Config {,
 Config::builder()
             .app_id()

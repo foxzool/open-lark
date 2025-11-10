@@ -1549,8 +1549,8 @@ impl<'a> FloatImagesServiceBuilder<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::config::Config;
-    use crate::trait_system::Service;
+    use open_lark_core::config::Config;
+    use open_lark_core::trait_system::Service;
 
     #[test]
     fn test_float_images_service_creation() {

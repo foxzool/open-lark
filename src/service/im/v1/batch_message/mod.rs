@@ -5,11 +5,11 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use crate::SDKResult;use reqwest::Method;
+use open_lark_core::SDKResult;use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use crate::impl_full_service;
-use open_lark_core::core::api_req::ApiRequest;
+use open_lark_core::api_req::ApiRequest;
 use crate::{
     core::{,
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormatconfig::Config,

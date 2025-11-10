@@ -7,8 +7,8 @@
 #![allow(clippy::module_inception)]
 //! Hire服务模块 - 简化实现
 
-use crate::api_resp::{ApiResponseTrait, ResponseFormat};
-use crate::config::Config;
+use open_lark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use open_lark_core::config::Config;
 use serde::{Deserialize, Serialize};
 
 /// 简化的服务结构体

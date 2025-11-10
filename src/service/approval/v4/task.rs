@@ -15,8 +15,8 @@
 //! - 查询审批任务
 
 use super::models::*;
-use crate::config::Config;
-use crate::SDKResult;
+use open_lark_core::config::Config;
+use open_lark_core::SDKResult;
 use serde::{Deserialize, Serialize};
 
 /// 审批任务服务

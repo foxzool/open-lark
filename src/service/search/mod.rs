@@ -10,8 +10,8 @@
 //! 提供企业级的搜索功能，支持多种数据源的搜索和高级查询。
 //! 包含用户搜索、文档搜索等多种搜索场景的完整实现。
 
-use crate::api_resp::{ApiResponseTrait, ResponseFormat};
-use crate::config::Config;
+use open_lark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use open_lark_core::config::Config;
 use serde::{Deserialize, Serialize};
 
 // 导入V1版本API

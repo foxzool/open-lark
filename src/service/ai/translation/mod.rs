@@ -7,8 +7,8 @@
 #![allow(clippy::module_inception)]
 //! Translation服务模块 - 简化实现
 use serde::{Deserialize, Serialize};
-use crate::config::Config;
-use crate::api_resp::{ApiResponseTrait, ResponseFormat};
+use open_lark_core::config::Config;
+use open_lark_core::api_resp::{ApiResponseTrait, ResponseFormat};
 /// 简化的服务结构体
 #[derive(Debug, Clone)]
 pub struct SimpleService {

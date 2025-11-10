@@ -12,8 +12,8 @@
 
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
-use crate::SDKResult;
-use crate::error::LarkAPIError;
+use open_lark_core::SDKResult;
+use open_lark_core::error::LarkAPIError;
 
 use crate::{
     core::{

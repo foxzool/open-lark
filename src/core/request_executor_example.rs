@@ -244,7 +244,7 @@ impl ApiResponseTrait for EmptyResponse {
 mod tests {
     use super::*;
     use std::sync::Arc;
-    use crate::config::Config;
+    use open_lark_core::config::Config;
 
     #[tokio::test]
     async fn test_modern_message_service_api() {

@@ -12,10 +12,10 @@ use serde_json::Value;
 use std::collections::HashMap;
 
 use crate::request::Transport;
-use crate::SDKResult;
-use crate::config::Config;
-use crate::trait_system::Service;
-use crate::error::LarkAPIError;
+use open_lark_core::SDKResult;
+use open_lark_core::config::Config;
+use open_lark_core::trait_system::Service;
+use open_lark_core::error::LarkAPIError;
 
 /// 批量范围读取请求
 #[derive(Debug, Clone)]

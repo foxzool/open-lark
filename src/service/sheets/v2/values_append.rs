@@ -9,9 +9,9 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use crate::error::SDKError;
-use crate::http::{Transport, BaseResponse};
-use crate::trait_system::Service;
+use open_lark_core::error::SDKError;
+use open_lark_core::http::{Transport, BaseResponse};
+use open_lark_core::trait_system::Service;
 use crate::service::sheets::v2::common::SpreadsheetToken;
 
 /// 数据追加服务
@@ -722,8 +722,8 @@ impl<'a> ValuesAppendServiceBuilder<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::config::Config;
-    use crate::trait_system::Service;
+    use open_lark_core::config::Config;
+    use open_lark_core::trait_system::Service;
     use std::collections::HashMap;
 
     #[test]

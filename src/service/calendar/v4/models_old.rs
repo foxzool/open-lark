@@ -1,4 +1,4 @@
-use open_lark_core::core::api_req::ApiRequest;
+use open_lark_core::api_req::ApiRequest;
 use crate::{,
     api_resp::{ApiResponseTrait, ResponseFormat}
 };

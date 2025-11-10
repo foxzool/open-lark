@@ -2,7 +2,7 @@
 //!
 //! 提供卡片组件的创建、更新、删除等管理功能
 
-use crate::config::Config;
+use open_lark_core::config::Config;
 
 pub mod content;
 pub mod create;

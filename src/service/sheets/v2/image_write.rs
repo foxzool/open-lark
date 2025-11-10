@@ -1562,7 +1562,7 @@ impl crate::core::trait_system::Service for ImageWriteService {
 #[cfg(test)]
 mod service_tests {
     use super::*;
-    use crate::trait_system::Service;
+    use open_lark_core::trait_system::Service;
 
     #[test]
     fn test_service_creation() {

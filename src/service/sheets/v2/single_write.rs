@@ -479,7 +479,7 @@ impl<'a> SingleWriteServiceRequestBuilder<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::config::Config;
+    use open_lark_core::config::Config;
 
     fn create_test_config() -> Config {
         Config::builder()

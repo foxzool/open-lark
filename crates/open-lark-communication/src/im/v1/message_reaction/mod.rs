@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 use crate::im::v1::models::UserIdType;
-use open_lark_core::core::standard_response::StandardResponse;
-use open_lark_core::core::{
+use open_lark_core::standard_response::StandardResponse;
+use open_lark_core::{
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
     config::Config,
@@ -81,7 +81,7 @@ impl MessageReactionService {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V1_MESSAGE_REACTIONS,
+            open_lark_core::endpoints::im::IM_V1_MESSAGE_REACTIONS,
             "message_id",
             message_id,
         ));
@@ -120,7 +120,7 @@ impl MessageReactionService {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V1_MESSAGE_REACTIONS,
+            open_lark_core::endpoints::im::IM_V1_MESSAGE_REACTIONS,
             "message_id",
             message_id,
         ));
@@ -152,7 +152,7 @@ impl MessageReactionService {
         params.insert("message_id".to_string(), message_id.to_string());
         params.insert("reaction_id".to_string(), reaction_id.to_string());
         api_req.set_api_path(EndpointBuilder::replace_params(
-            open_lark_core::core::endpoints::im::IM_V1_MESSAGE_REACTIONS_DELETE,
+            open_lark_core::endpoints::im::IM_V1_MESSAGE_REACTIONS_DELETE,
             &params,
         ));
         api_req

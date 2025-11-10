@@ -43,7 +43,7 @@ pub use export_task::*;
 pub use file_version::*;
 pub use subscription::*;
 
-use crate::config::Config;
+use open_lark_core::config::Config;
 
 /// Drive服务 v1版本
 ///

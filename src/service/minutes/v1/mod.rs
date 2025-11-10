@@ -1,4 +1,4 @@
-use crate::config::Config;
+use open_lark_core::config::Config;
 pub mod media;
 pub mod minute;
 pub mod statistics;

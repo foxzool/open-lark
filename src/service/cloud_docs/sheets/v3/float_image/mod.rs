@@ -10,7 +10,7 @@
 //! 提供飞书电子表格浮动图片的完整功能，包括图片的创建、
 //! 查询、更新、删除等操作，支持图片的位置、大小和样式管理。
 
-use crate::config::Config;
+use open_lark_core::config::Config;
 
 pub mod create;
 pub mod delete;

@@ -10,7 +10,7 @@
 //! 文档评论系统，提供文档评论、回复、点赞、管理等功能，
 //! 支持富文本评论、@提及、附件等高级功能。
 
-use crate::config::Config;
+use open_lark_core::config::Config;
 
 /// 评论服务
 ///

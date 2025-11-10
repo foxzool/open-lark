@@ -6,7 +6,7 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 // 邮件组别名管理模块 - 占位符实现
-use crate::config::Config;
+use open_lark_core::config::Config;
 pub struct MailGroupAliasService {
 pub config: Config,
 }

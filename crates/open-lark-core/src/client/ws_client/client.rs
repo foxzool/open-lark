@@ -21,10 +21,10 @@ use tokio_tungstenite::{
 use url::Url;
 
 use crate::{
-    client::ws_client::{state_machine::StateMachineEvent, FrameHandler, WebSocketStateMachine},
-    cache::QuickCache,
-    constants::FEISHU_BASE_URL,
     api_resp::BaseResponse,
+    cache::QuickCache,
+    client::ws_client::{state_machine::StateMachineEvent, FrameHandler, WebSocketStateMachine},
+    constants::FEISHU_BASE_URL,
     event::dispatcher::EventDispatcherHandler,
 };
 

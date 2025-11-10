@@ -10,7 +10,7 @@
 //! 提供飞书电子表格数据验证的完整功能，包括验证规则的创建、
 //! 查询、更新、删除等操作，支持多种验证条件和错误提示。
 
-use crate::config::Config;
+use open_lark_core::config::Config;
 
 pub mod create;
 pub mod delete;

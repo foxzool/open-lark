@@ -5,7 +5,7 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use crate::config::Config;
+use open_lark_core::config::Config;
 pub use v1::V1;
 pub mod v1;
 /// 云文档助手服务

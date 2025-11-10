@@ -10,7 +10,7 @@
 //! 提供搜索服务的V1版本API实现，包括用户搜索、文档搜索等功能。
 //! 支持企业级的搜索需求，具备高性能和可扩展性。
 
-use crate::config::Config;
+use open_lark_core::config::Config;
 
 // 导入用户搜索模块
 pub mod user;

@@ -10,7 +10,7 @@
 // 提供完整的企业请假管理功能，包括：
 // - 请假申请的创建、查询、更新和取消
 
-use crate::config::Config;
+use open_lark_core::config::Config;
 
 /// 请假管理服务
 #[derive(Debug, Clone)]

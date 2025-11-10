@@ -1021,7 +1021,7 @@ fn map_sdk_error(err: LarkAPIError) -> CoreLarkAPIError {
 // 应用ExecutableBuilder trait - 使用自定义实现
 #[async_trait::async_trait]
 impl
-    open_lark_core::core::trait_system::ExecutableBuilder<
+    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
         PositionsService,
         (String, GetPositionRequest),
         BaseResponse<GetPositionResponse>,
@@ -1044,7 +1044,7 @@ impl
     async fn execute_with_options(
         self,
         service: &PositionsService,
-        _option: open_lark_core::core::req_option::RequestOption,
+        _option: open_lark_core::req_option::RequestOption,
     ) -> CoreSDKResult<BaseResponse<GetPositionResponse>> {
         service
             .get_with_tuple((self.position_id, self.request))
@@ -1307,7 +1307,7 @@ impl Default for UpdatePositionBuilder {
 // 应用ExecutableBuilder trait - 使用自定义实现
 #[async_trait::async_trait]
 impl
-    open_lark_core::core::trait_system::ExecutableBuilder<
+    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
         PositionsService,
         (String, UpdatePositionRequest),
         BaseResponse<UpdatePositionResponse>,
@@ -1330,7 +1330,7 @@ impl
     async fn execute_with_options(
         self,
         service: &PositionsService,
-        _option: open_lark_core::core::req_option::RequestOption,
+        _option: open_lark_core::req_option::RequestOption,
     ) -> CoreSDKResult<BaseResponse<UpdatePositionResponse>> {
         service
             .update_with_tuple((self.position_id, self.request))
@@ -1376,7 +1376,7 @@ impl Default for DeletePositionBuilder {
 // 应用ExecutableBuilder trait - 使用自定义实现
 #[async_trait::async_trait]
 impl
-    open_lark_core::core::trait_system::ExecutableBuilder<
+    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
         PositionsService,
         (String, DeletePositionRequest),
         BaseResponse<DeletePositionResponse>,
@@ -1399,7 +1399,7 @@ impl
     async fn execute_with_options(
         self,
         service: &PositionsService,
-        _option: open_lark_core::core::req_option::RequestOption,
+        _option: open_lark_core::req_option::RequestOption,
     ) -> CoreSDKResult<BaseResponse<DeletePositionResponse>> {
         service
             .delete_with_tuple((self.position_id, self.request))
@@ -1545,7 +1545,7 @@ impl Default for GetPositionHoldersBuilder {
 // 应用ExecutableBuilder trait - 使用自定义实现
 #[async_trait::async_trait]
 impl
-    open_lark_core::core::trait_system::ExecutableBuilder<
+    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
         PositionsService,
         (String, GetPositionHoldersRequest),
         BaseResponse<GetPositionHoldersResponse>,
@@ -1568,7 +1568,7 @@ impl
     async fn execute_with_options(
         self,
         service: &PositionsService,
-        _option: open_lark_core::core::req_option::RequestOption,
+        _option: open_lark_core::req_option::RequestOption,
     ) -> CoreSDKResult<BaseResponse<GetPositionHoldersResponse>> {
         service
             .get_position_holders_with_tuple((self.position_id, self.request))
@@ -1632,8 +1632,8 @@ pub struct GetPositionResponse {
 }
 
 impl ApiResponseTrait for GetPositionResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -1670,8 +1670,8 @@ pub struct BatchGetPositionsResponse {
 }
 
 impl ApiResponseTrait for BatchGetPositionsResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -1705,8 +1705,8 @@ pub struct GetPositionsByDepartmentResponse {
 }
 
 impl ApiResponseTrait for GetPositionsByDepartmentResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -2116,43 +2116,43 @@ pub struct Person {
 // ==================== ApiResponseTrait实现 ====================
 
 impl ApiResponseTrait for SearchPositionsResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for CreatePositionResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for UpdatePositionResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for DeletePositionResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for GetPositionSequencesResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for GetPositionStatisticsResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for GetPositionHoldersResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }

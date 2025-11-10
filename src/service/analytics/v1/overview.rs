@@ -23,8 +23,8 @@ pub enum IssueSeverity {
 // - 数据问题诊断和修复建议
 // - 数据趋势和变化分析
 
-use crate::config::Config;
-use crate::SDKResult;
+use open_lark_core::config::Config;
+use open_lark_core::SDKResult;
 use crate::service::analytics::v1::*;
 use chrono::{DateTime, Utc};
 

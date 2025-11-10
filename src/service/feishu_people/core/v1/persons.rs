@@ -924,7 +924,7 @@ fn map_sdk_error(err: LarkAPIError) -> CoreLarkAPIError {
 // 应用ExecutableBuilder trait - 使用自定义实现
 #[async_trait::async_trait]
 impl
-    open_lark_core::core::trait_system::ExecutableBuilder<
+    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
         PersonsService,
         (String, GetPersonRequest),
         BaseResponse<GetPersonResponse>,
@@ -947,7 +947,7 @@ impl
     async fn execute_with_options(
         self,
         service: &PersonsService,
-        _option: open_lark_core::core::req_option::RequestOption,
+        _option: open_lark_core::req_option::RequestOption,
     ) -> CoreSDKResult<BaseResponse<GetPersonResponse>> {
         service
             .get_with_tuple(self.build())
@@ -998,7 +998,7 @@ impl Default for BatchGetPersonsBuilder {
 // 使用自定义实现，因为batch_get方法不接受Option参数
 #[async_trait::async_trait]
 impl
-    open_lark_core::core::trait_system::ExecutableBuilder<
+    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
         PersonsService,
         BatchGetPersonsRequest,
         BaseResponse<BatchGetPersonsResponse>,
@@ -1021,7 +1021,7 @@ impl
     async fn execute_with_options(
         self,
         service: &PersonsService,
-        _option: open_lark_core::core::req_option::RequestOption,
+        _option: open_lark_core::req_option::RequestOption,
     ) -> CoreSDKResult<BaseResponse<BatchGetPersonsResponse>> {
         service
             .batch_get(&self.build())
@@ -1082,7 +1082,7 @@ impl Default for GetPersonsByDepartmentBuilder {
 // 应用ExecutableBuilder trait - 使用自定义实现
 #[async_trait::async_trait]
 impl
-    open_lark_core::core::trait_system::ExecutableBuilder<
+    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
         PersonsService,
         GetPersonsByDepartmentRequest,
         BaseResponse<GetPersonsByDepartmentResponse>,
@@ -1105,7 +1105,7 @@ impl
     async fn execute_with_options(
         self,
         service: &PersonsService,
-        _option: open_lark_core::core::req_option::RequestOption,
+        _option: open_lark_core::req_option::RequestOption,
     ) -> CoreSDKResult<BaseResponse<GetPersonsByDepartmentResponse>> {
         service
             .get_by_department(&self.build())
@@ -1167,7 +1167,7 @@ impl Default for SearchPersonsBuilder {
 // 应用ExecutableBuilder trait - 使用自定义实现
 #[async_trait::async_trait]
 impl
-    open_lark_core::core::trait_system::ExecutableBuilder<
+    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
         PersonsService,
         SearchPersonsRequest,
         BaseResponse<SearchPersonsResponse>,
@@ -1187,7 +1187,7 @@ impl
     async fn execute_with_options(
         self,
         service: &PersonsService,
-        _option: open_lark_core::core::req_option::RequestOption,
+        _option: open_lark_core::req_option::RequestOption,
     ) -> CoreSDKResult<BaseResponse<SearchPersonsResponse>> {
         service.search(&self.build()).await.map_err(map_sdk_error)
     }
@@ -1236,7 +1236,7 @@ impl Default for UpdatePersonBuilder {
 // 应用ExecutableBuilder trait - 使用自定义实现
 #[async_trait::async_trait]
 impl
-    open_lark_core::core::trait_system::ExecutableBuilder<
+    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
         PersonsService,
         (String, UpdatePersonRequest),
         BaseResponse<UpdatePersonResponse>,
@@ -1259,7 +1259,7 @@ impl
     async fn execute_with_options(
         self,
         service: &PersonsService,
-        _option: open_lark_core::core::req_option::RequestOption,
+        _option: open_lark_core::req_option::RequestOption,
     ) -> CoreSDKResult<BaseResponse<UpdatePersonResponse>> {
         service
             .update_with_tuple(self.build())
@@ -1311,7 +1311,7 @@ impl Default for UpdatePersonStatusBuilder {
 // 应用ExecutableBuilder trait - 使用自定义实现
 #[async_trait::async_trait]
 impl
-    open_lark_core::core::trait_system::ExecutableBuilder<
+    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
         PersonsService,
         (String, UpdatePersonStatusRequest),
         BaseResponse<UpdatePersonStatusResponse>,
@@ -1334,7 +1334,7 @@ impl
     async fn execute_with_options(
         self,
         service: &PersonsService,
-        _option: open_lark_core::core::req_option::RequestOption,
+        _option: open_lark_core::req_option::RequestOption,
     ) -> CoreSDKResult<BaseResponse<UpdatePersonStatusResponse>> {
         service
             .update_status_with_tuple(self.build())
@@ -1386,7 +1386,7 @@ impl Default for GetPersonAvatarBuilder {
 // 应用ExecutableBuilder trait - 使用自定义实现
 #[async_trait::async_trait]
 impl
-    open_lark_core::core::trait_system::ExecutableBuilder<
+    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
         PersonsService,
         (String, GetPersonAvatarRequest),
         BaseResponse<GetPersonAvatarResponse>,
@@ -1409,7 +1409,7 @@ impl
     async fn execute_with_options(
         self,
         service: &PersonsService,
-        _option: open_lark_core::core::req_option::RequestOption,
+        _option: open_lark_core::req_option::RequestOption,
     ) -> CoreSDKResult<BaseResponse<GetPersonAvatarResponse>> {
         service
             .get_avatar_with_tuple(self.build())
@@ -1461,7 +1461,7 @@ impl Default for UploadPersonAvatarBuilder {
 // 应用ExecutableBuilder trait - 使用自定义实现
 #[async_trait::async_trait]
 impl
-    open_lark_core::core::trait_system::ExecutableBuilder<
+    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
         PersonsService,
         (String, UploadPersonAvatarRequest),
         BaseResponse<UploadPersonAvatarResponse>,
@@ -1484,7 +1484,7 @@ impl
     async fn execute_with_options(
         self,
         service: &PersonsService,
-        _option: open_lark_core::core::req_option::RequestOption,
+        _option: open_lark_core::req_option::RequestOption,
     ) -> CoreSDKResult<BaseResponse<UploadPersonAvatarResponse>> {
         service
             .upload_avatar_with_tuple(self.build())
@@ -1530,7 +1530,7 @@ impl Default for GetPersonBasicInfoBuilder {
 // 应用ExecutableBuilder trait - 使用自定义实现
 #[async_trait::async_trait]
 impl
-    open_lark_core::core::trait_system::ExecutableBuilder<
+    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
         PersonsService,
         (String, GetPersonBasicInfoRequest),
         BaseResponse<GetPersonBasicInfoResponse>,
@@ -1553,7 +1553,7 @@ impl
     async fn execute_with_options(
         self,
         service: &PersonsService,
-        _option: open_lark_core::core::req_option::RequestOption,
+        _option: open_lark_core::req_option::RequestOption,
     ) -> CoreSDKResult<BaseResponse<GetPersonBasicInfoResponse>> {
         service
             .get_basic_info_with_tuple(self.build())
@@ -1631,8 +1631,8 @@ pub struct GetPersonResponse {
 }
 
 impl ApiResponseTrait for GetPersonResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -1669,8 +1669,8 @@ pub struct BatchGetPersonsResponse {
 }
 
 impl ApiResponseTrait for BatchGetPersonsResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -1704,8 +1704,8 @@ pub struct GetPersonsByDepartmentResponse {
 }
 
 impl ApiResponseTrait for GetPersonsByDepartmentResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -1998,37 +1998,37 @@ pub struct PersonUpdateData {
 // ==================== ApiResponseTrait实现 ====================
 
 impl ApiResponseTrait for SearchPersonsResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for UpdatePersonResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for UpdatePersonStatusResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for GetPersonAvatarResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for UploadPersonAvatarResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for GetPersonBasicInfoResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }

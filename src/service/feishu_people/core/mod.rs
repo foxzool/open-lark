@@ -15,7 +15,7 @@
 //! - 公司管理
 //! - 异动管理
 
-use crate::config::Config;
+use open_lark_core::config::Config;
 
 /// 核心人事管理服务
 #[derive(Debug, Clone)]

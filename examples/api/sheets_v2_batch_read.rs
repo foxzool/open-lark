@@ -3,9 +3,9 @@
 //! 本示例展示如何使用飞书开放平台SDK v2版本的电子表格API来批量读取多个范围的数据。
 //! 支持一次性读取多个单元格范围，提高数据获取效率。
 
-use open_lark::prelude::*;
-use open_lark::service::sheets::v2::{ReadMultipleRangesRequest, ValueRange, BatchReadService};
 use open_lark::core::config::Config;
+use open_lark::prelude::*;
+use open_lark::service::sheets::v2::{BatchReadService, ReadMultipleRangesRequest, ValueRange};
 
 #[tokio::main]
 async fn main() -> SDKResult<()> {
@@ -20,8 +20,8 @@ async fn main() -> SDKResult<()> {
     // 示例1: 批量读取两个范围
     println!("=== 示例1: 批量读取两个范围 ===");
     let request = ReadMultipleRangesRequest::new(
-        "shtcnmBA*****yGehy8",  // 电子表格令牌
-        "Sheet1!A1:C3,Sheet2!B2:D4",  // 两个范围，逗号分隔
+        "shtcnmBA*****yGehy8",       // 电子表格令牌
+        "Sheet1!A1:C3,Sheet2!B2:D4", // 两个范围，逗号分隔
     );
 
     match batch_service.read_multiple_ranges(request, None).await {
@@ -51,7 +51,10 @@ async fn main() -> SDKResult<()> {
         .user_id_type("open_id")
         .build();
 
-    match batch_service.read_multiple_ranges(builder_request, None).await {
+    match batch_service
+        .read_multiple_ranges(builder_request, None)
+        .await
+    {
         Ok(response) => {
             println!("✅ Builder模式批量读取成功!");
             if let Some(data) = &response.data {
@@ -60,7 +63,10 @@ async fn main() -> SDKResult<()> {
             }
         }
         Err(error) => {
-            println!("❌ Builder模式批量读取失败: {}", error.user_friendly_message());
+            println!(
+                "❌ Builder模式批量读取失败: {}",
+                error.user_friendly_message()
+            );
         }
     }
 
@@ -70,14 +76,13 @@ async fn main() -> SDKResult<()> {
         "项目跟踪!A1:E50",
         "任务分配!A1:G30",
         "进度报告!A1:D20",
-        "资源统计!A1:F25"
+        "资源统计!A1:F25",
     ];
 
-    match batch_service.read_ranges_from_vec(
-        "shtcnmBA*****yGehy8",
-        ranges,
-        None
-    ).await {
+    match batch_service
+        .read_ranges_from_vec("shtcnmBA*****yGehy8", ranges, None)
+        .await
+    {
         Ok(response) => {
             println!("✅ 向量范围读取成功!");
             if let Some(data) = &response.data {
@@ -91,11 +96,10 @@ async fn main() -> SDKResult<()> {
 
     // 示例4: 便捷方法读取单个范围
     println!("\n=== 示例4: 便捷方法读取单个范围 ===");
-    match batch_service.read_single_range(
-        "shtcnmBA*****yGehy8",
-        "摘要数据!A1:Z100",
-        None
-    ).await {
+    match batch_service
+        .read_single_range("shtcnmBA*****yGehy8", "摘要数据!A1:Z100", None)
+        .await
+    {
         Ok(response) => {
             println!("✅ 单个范围读取成功!");
             if let Some(data) = &response.data {
@@ -112,17 +116,11 @@ async fn main() -> SDKResult<()> {
 
     // 示例5: 动态添加范围
     println!("\n=== 示例5: 动态添加范围 ===");
-    let mut dynamic_request = ReadMultipleRangesRequest::new(
-        "shtcnmBA*****yGehy8",
-        "基础数据!A1:C10"
-    );
+    let mut dynamic_request =
+        ReadMultipleRangesRequest::new("shtcnmBA*****yGehy8", "基础数据!A1:C10");
 
     // 根据条件动态添加范围
-    let additional_ranges = vec![
-        "扩展数据1!D1:F20",
-        "扩展数据2!G1:I30",
-        "扩展数据3!J1:L40"
-    ];
+    let additional_ranges = vec!["扩展数据1!D1:F20", "扩展数据2!G1:I30", "扩展数据3!J1:L40"];
 
     for range in additional_ranges {
         dynamic_request = dynamic_request.add_range(range);
@@ -131,7 +129,10 @@ async fn main() -> SDKResult<()> {
     println!("最终范围列表: {}", dynamic_request.ranges);
     println!("范围数量: {}", dynamic_request.range_count());
 
-    match batch_service.read_multiple_ranges(dynamic_request, None).await {
+    match batch_service
+        .read_multiple_ranges(dynamic_request, None)
+        .await
+    {
         Ok(response) => {
             println!("✅ 动态范围读取成功!");
             if let Some(data) = &response.data {
@@ -147,12 +148,13 @@ async fn main() -> SDKResult<()> {
     println!("\n=== 示例6: 错误处理演示 ===");
 
     // 测试无效范围格式
-    let invalid_request = ReadMultipleRangesRequest::new(
-        "shtcnmBA*****yGehy8",
-        "InvalidRangeWithoutSheet"
-    );
+    let invalid_request =
+        ReadMultipleRangesRequest::new("shtcnmBA*****yGehy8", "InvalidRangeWithoutSheet");
 
-    match batch_service.read_multiple_ranges(invalid_request, None).await {
+    match batch_service
+        .read_multiple_ranges(invalid_request, None)
+        .await
+    {
         Ok(_) => {
             println!("意外成功，应该失败");
         }
@@ -162,12 +164,12 @@ async fn main() -> SDKResult<()> {
     }
 
     // 测试空电子表格令牌
-    let empty_token_request = ReadMultipleRangesRequest::new(
-        "",
-        "Sheet1!A1:B2"
-    );
+    let empty_token_request = ReadMultipleRangesRequest::new("", "Sheet1!A1:B2");
 
-    match batch_service.read_multiple_ranges(empty_token_request, None).await {
+    match batch_service
+        .read_multiple_ranges(empty_token_request, None)
+        .await
+    {
         Ok(_) => {
             println!("意外成功，应该失败");
         }
@@ -205,19 +207,24 @@ async fn main() -> SDKResult<()> {
     let large_request = ReadMultipleRangesRequest::builder()
         .spreadsheet_token("shtcnmBA*****yGehy8")
         .ranges(large_ranges)
-        .value_render_option("UnformattedValue")  // 使用未格式化值以提高性能
+        .value_render_option("UnformattedValue") // 使用未格式化值以提高性能
         .build();
 
     println!("准备读取 {} 个范围", large_request.range_count());
 
-    match batch_service.read_multiple_ranges(large_request, None).await {
+    match batch_service
+        .read_multiple_ranges(large_request, None)
+        .await
+    {
         Ok(response) => {
             println!("✅ 大规模读取成功!");
             if let Some(data) = &response.data {
                 println!("读取范围数: {}", data.value_ranges.len());
                 println!("总单元格数: {}", data.total_cells);
-                println!("平均每范围单元格数: {}",
-                    data.total_cells as f64 / data.value_ranges.len() as f64);
+                println!(
+                    "平均每范围单元格数: {}",
+                    data.total_cells as f64 / data.value_ranges.len() as f64
+                );
             }
         }
         Err(error) => {
@@ -252,10 +259,7 @@ mod tests {
 
     #[test]
     fn test_request_creation() {
-        let request = ReadMultipleRangesRequest::new(
-            "test_token",
-            "Sheet1!A1:B2,Sheet2!C1:D1"
-        );
+        let request = ReadMultipleRangesRequest::new("test_token", "Sheet1!A1:B2,Sheet2!C1:D1");
 
         assert_eq!(request.spreadsheet_token, "test_token");
         assert_eq!(request.ranges, "Sheet1!A1:B2,Sheet2!C1:D1");
@@ -286,17 +290,17 @@ mod tests {
 
         assert_eq!(request.spreadsheet_token, "test_token");
         assert_eq!(request.range_count(), 2);
-        assert_eq!(request.value_render_option, Some("FormattedValue".to_string()));
+        assert_eq!(
+            request.value_render_option,
+            Some("FormattedValue".to_string())
+        );
         assert_eq!(request.user_id_type, Some("open_id".to_string()));
     }
 
     #[test]
     fn test_request_validation() {
         // 测试有效请求
-        let valid_request = ReadMultipleRangesRequest::new(
-            "token123",
-            "Sheet1!A1:B2,Sheet2!C1:D1"
-        );
+        let valid_request = ReadMultipleRangesRequest::new("token123", "Sheet1!A1:B2,Sheet2!C1:D1");
         assert!(valid_request.validate().is_ok());
 
         // 测试无效请求（空令牌）
@@ -335,14 +339,14 @@ mod tests {
         let valid_types = ["open_id", "user_id", "union_id", "lark_id"];
 
         for user_id_type in &valid_types {
-            let request = ReadMultipleRangesRequest::new("token", "Sheet1!A1:B2")
-                .user_id_type(*user_id_type);
+            let request =
+                ReadMultipleRangesRequest::new("token", "Sheet1!A1:B2").user_id_type(*user_id_type);
             assert!(request.validate().is_ok());
         }
 
         // 测试无效的用户ID类型
-        let invalid_request = ReadMultipleRangesRequest::new("token", "Sheet1!A1:B2")
-            .user_id_type("invalid_type");
+        let invalid_request =
+            ReadMultipleRangesRequest::new("token", "Sheet1!A1:B2").user_id_type("invalid_type");
         assert!(invalid_request.validate().is_err());
     }
 
@@ -352,7 +356,7 @@ mod tests {
             "工作表1!A1:Z100",
             "Data Sheet!AA1:BB200",
             "Sheet with spaces!C1:D50",
-            "Sheet1!$A$1:$B$2"
+            "Sheet1!$A$1:$B$2",
         ];
 
         let request = ReadMultipleRangesRequest::builder()
@@ -382,7 +386,7 @@ mod tests {
         let request = ReadMultipleRangesRequest::builder()
             .spreadsheet_token("token")
             .range("Sheet1!A1:B2")
-            .range("")  // 空范围会被包含在字符串中
+            .range("") // 空范围会被包含在字符串中
             .range("Sheet2!C1:D1")
             .build();
 
@@ -416,11 +420,7 @@ mod tests {
         assert_eq!(count_cells_in_range(&single_row), 3);
 
         // 测试多行数据
-        let multi_row = serde_json::json!([
-            ["A1", "B1"],
-            ["A2", "B2"],
-            ["A3", "B3"]
-        ]);
+        let multi_row = serde_json::json!([["A1", "B1"], ["A2", "B2"], ["A3", "B3"]]);
         assert_eq!(count_cells_in_range(&multi_row), 6);
 
         // 测试单个值

@@ -5,7 +5,7 @@
 use crate::{
     config::Config, constants::AccessTokenType, endpoints_original::Endpoints, http::Transport,
 };
-use crate::{error::LarkAPIError, ApiRequest, SDKResult};
+use open_lark_core::{error::LarkAPIError, ApiRequest, SDKResult};
 use crate::service::passport::models::{LogoutRequest, LogoutResponse, PassportResponse};
 
 /// 会话管理服务

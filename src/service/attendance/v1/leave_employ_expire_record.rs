@@ -46,8 +46,8 @@ fn service_version() -> &'static str {,
 #[cfg(test)]
 mod tests {
 use super::*;
-    use crate::config::Config;
-use crate::SDKResult;#[test]
+    use open_lark_core::config::Config;
+use open_lark_core::SDKResult;#[test]
     fn test_leave_employ_expire_record_service_creation() {
 let config = Config::default();
         let service = LeaveEmployExpireRecordService { config };

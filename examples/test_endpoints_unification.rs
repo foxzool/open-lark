@@ -18,7 +18,10 @@ fn main() {
     // 测试2: 直接常量访问方式（兼容层）
     println!("\n✅ 测试直接常量访问方式:");
     println!("  IM_V1_SEND_MESSAGE: {}", Endpoints::IM_V1_SEND_MESSAGE);
-    println!("  WORKPLACE_ACCESS_DATA_SEARCH: {}", Endpoints::WORKPLACE_ACCESS_DATA_SEARCH);
+    println!(
+        "  WORKPLACE_ACCESS_DATA_SEARCH: {}",
+        Endpoints::WORKPLACE_ACCESS_DATA_SEARCH
+    );
 
     // 测试3: 兼容性别名
     println!("\n✅ 测试兼容性别名:");
@@ -30,7 +33,10 @@ fn main() {
     println!("\n✅ 验证具体端点值:");
     assert_eq!(messaging.SEND_MESSAGE, "/open-apis/im/v1/messages");
     assert_eq!(Endpoints::IM_V1_SEND_MESSAGE, "/open-apis/im/v1/messages");
-    assert_eq!(Endpoints::WORKPLACE_ACCESS_DATA_SEARCH, "/open-apis/workplace/v1/workplace_access_data/search");
+    assert_eq!(
+        Endpoints::WORKPLACE_ACCESS_DATA_SEARCH,
+        "/open-apis/workplace/v1/workplace_access_data/search"
+    );
 
     // 测试5: 验证兼容性别名正确性
     println!("\n✅ 验证兼容性别名正确性:");

@@ -57,7 +57,7 @@
 //! // client.sheets.v3.data_operation.write_data_to_multiple_ranges(write_request, None).await?;
 //! ```
 
-use crate::{config::Config, trait_system::Service};
+use open_lark_core::{config::Config, trait_system::Service};
 use std::sync::Arc;
 
 /// Sheets API v2版本

@@ -3,7 +3,8 @@
 // ===== 系统状态管理 =====
 
 /// 系统状态管理
-pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUSES: &str = "/open-apis/personal_settings/v1/system_statuses";
+pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUSES: &str =
+    "/open-apis/personal_settings/v1/system_statuses";
 
 /// 系统状态操作
 pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUS_OPERATION: &str =

@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
 #![allow(unused_imports)]
-use crate::SDKResult;use reqwest::Method;
+use open_lark_core::SDKResult;use reqwest::Method;
 use crate::{
     core::{
         api_req::api_resp::BaseResponse, config::Config, constants::AccessTokenType,

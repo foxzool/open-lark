@@ -12,7 +12,7 @@
 //! - 任务状态跟踪
 //! - 任务分配和协作
 
-use crate::config::Config;
+use open_lark_core::config::Config;
 
 /// 任务服务
 #[derive(Debug, Clone)]

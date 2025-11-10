@@ -1,4 +1,4 @@
-use crate::config::Config;
+use open_lark_core::config::Config;
 use crate::service::cloud_docs::assistant::v1::subscription::get::FileType;
 fn create_test_config() -> Config {,
 Config::builder()

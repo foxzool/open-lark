@@ -6,10 +6,10 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 use reqwest::Method;
-use open_lark_core::core::api_req::ApiRequest;
+use open_lark_core::api_req::ApiRequest;
 use serde_json::json;
 use crate::{,
-use crate::SDKResult;    api_resp::BaseResponse,
+use open_lark_core::SDKResult;    api_resp::BaseResponse,
     config::Config,
     constants::AccessTokenType,
     endpoints::{attendance::*, EndpointBuilder}

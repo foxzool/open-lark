@@ -17,7 +17,8 @@ pub const AILY_V1_RUNS: &str = "/open-apis/aily/v1/sessions/{session_id}/runs";
 pub const AILY_V1_RUN_GET: &str = "/open-apis/aily/v1/sessions/{session_id}/runs/{run_id}";
 
 /// 取消运行
-pub const AILY_V1_RUN_CANCEL: &str = "/open-apis/aily/v1/sessions/{session_id}/runs/{run_id}/cancel";
+pub const AILY_V1_RUN_CANCEL: &str =
+    "/open-apis/aily/v1/sessions/{session_id}/runs/{run_id}/cancel";
 
 // ===== 知识库管理 =====
 
@@ -25,13 +26,15 @@ pub const AILY_V1_RUN_CANCEL: &str = "/open-apis/aily/v1/sessions/{session_id}/r
 pub const AILY_V1_DATA_KNOWLEDGE_ASK: &str = "/open-apis/aily/v1/data_knowledge/ask";
 
 /// 知识库文件上传
-pub const AILY_V1_DATA_KNOWLEDGE_UPLOAD_FILE: &str = "/open-apis/aily/v1/data_knowledge/upload_file";
+pub const AILY_V1_DATA_KNOWLEDGE_UPLOAD_FILE: &str =
+    "/open-apis/aily/v1/data_knowledge/upload_file";
 
 /// 知识库操作（创建/列表）
 pub const AILY_V1_DATA_KNOWLEDGE: &str = "/open-apis/aily/v1/data_knowledge";
 
 /// 知识库操作（获取/删除）
-pub const AILY_V1_DATA_KNOWLEDGE_OPERATION: &str = "/open-apis/aily/v1/data_knowledge/{knowledge_id}";
+pub const AILY_V1_DATA_KNOWLEDGE_OPERATION: &str =
+    "/open-apis/aily/v1/data_knowledge/{knowledge_id}";
 
 /// 知识库分类
 pub const AILY_V1_DATA_KNOWLEDGE_CATEGORIES: &str = "/open-apis/aily/v1/data_knowledge/categories";
@@ -42,7 +45,8 @@ pub const AILY_V1_DATA_KNOWLEDGE_CATEGORIES: &str = "/open-apis/aily/v1/data_kno
 pub const AILY_V1_MESSAGES: &str = "/open-apis/aily/v1/sessions/{session_id}/messages";
 
 /// 消息获取
-pub const AILY_V1_MESSAGE_GET: &str = "/open-apis/aily/v1/sessions/{session_id}/messages/{message_id}";
+pub const AILY_V1_MESSAGE_GET: &str =
+    "/open-apis/aily/v1/sessions/{session_id}/messages/{message_id}";
 
 // ===== 技能管理 =====
 

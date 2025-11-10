@@ -1028,12 +1028,11 @@ fn map_sdk_error(err: LarkAPIError) -> CoreLarkAPIError {
 
 // 应用ExecutableBuilder trait - 使用自定义实现
 #[async_trait::async_trait]
-impl
-    open_lark_core::core::trait_system::ExecutableBuilder<
-        DepartmentsService,
-        (String, GetDepartmentRequest),
-        BaseResponse<GetDepartmentResponse>,
-    > for GetDepartmentBuilder
+impl open_lark_core::trait_system::ExecutableBuilder<
+    DepartmentsService,
+    (String, GetDepartmentRequest),
+    BaseResponse<GetDepartmentResponse>,
+> for GetDepartmentBuilder
 {
     fn build(self) -> (String, GetDepartmentRequest) {
         (self.department_id, self.request)
@@ -1052,7 +1051,7 @@ impl
     async fn execute_with_options(
         self,
         service: &DepartmentsService,
-        _option: open_lark_core::core::req_option::RequestOption,
+        _option: open_lark_core::req_option::RequestOption,
     ) -> CoreSDKResult<BaseResponse<GetDepartmentResponse>> {
         service
             .get_with_tuple((self.department_id, self.request))
@@ -1368,7 +1367,7 @@ impl Default for UpdateDepartmentBuilder {
 // 应用ExecutableBuilder trait - 使用自定义实现
 #[async_trait::async_trait]
 impl
-    open_lark_core::core::trait_system::ExecutableBuilder<
+    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
         DepartmentsService,
         (String, UpdateDepartmentRequest),
         BaseResponse<UpdateDepartmentResponse>,
@@ -1391,7 +1390,7 @@ impl
     async fn execute_with_options(
         self,
         service: &DepartmentsService,
-        _option: open_lark_core::core::req_option::RequestOption,
+        _option: open_lark_core::req_option::RequestOption,
     ) -> CoreSDKResult<BaseResponse<UpdateDepartmentResponse>> {
         service
             .update_with_tuple((self.department_id, self.request))
@@ -1437,7 +1436,7 @@ impl Default for DeleteDepartmentBuilder {
 // 应用ExecutableBuilder trait - 使用自定义实现
 #[async_trait::async_trait]
 impl
-    open_lark_core::core::trait_system::ExecutableBuilder<
+    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
         DepartmentsService,
         (String, DeleteDepartmentRequest),
         BaseResponse<DeleteDepartmentResponse>,
@@ -1460,7 +1459,7 @@ impl
     async fn execute_with_options(
         self,
         service: &DepartmentsService,
-        _option: open_lark_core::core::req_option::RequestOption,
+        _option: open_lark_core::req_option::RequestOption,
     ) -> CoreSDKResult<BaseResponse<DeleteDepartmentResponse>> {
         service
             .delete_with_tuple((self.department_id, self.request))
@@ -1612,8 +1611,8 @@ pub struct GetDepartmentResponse {
 }
 
 impl ApiResponseTrait for GetDepartmentResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -1650,8 +1649,8 @@ pub struct BatchGetDepartmentsResponse {
 }
 
 impl ApiResponseTrait for BatchGetDepartmentsResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -1685,8 +1684,8 @@ pub struct GetSubDepartmentsResponse {
 }
 
 impl ApiResponseTrait for GetSubDepartmentsResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -1728,8 +1727,8 @@ pub struct GetRootDepartmentsResponse {
 }
 
 impl ApiResponseTrait for GetRootDepartmentsResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -1875,8 +1874,8 @@ pub struct GetDepartmentMembersResponse {
 }
 
 impl ApiResponseTrait for GetDepartmentMembersResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -2071,31 +2070,31 @@ pub struct Person {
 // ==================== ApiResponseTrait实现 ====================
 
 impl ApiResponseTrait for SearchDepartmentsResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for CreateDepartmentResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for UpdateDepartmentResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for DeleteDepartmentResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for GetDepartmentStatisticsResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }

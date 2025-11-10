@@ -14,7 +14,7 @@
 //! - OKR复盘和评分
 //! - 多语言支持
 
-use crate::config::Config;
+use open_lark_core::config::Config;
 
 /// OKR服务
 #[derive(Debug, Clone)]

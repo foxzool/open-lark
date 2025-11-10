@@ -6,15 +6,15 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 use reqwest::Method;
-use crate::SDKResult;
+use open_lark_core::SDKResult;
 use serde::{Deserialize, Serialize};
-use crate::SDKResult;
-use open_lark_core::core::api_req::ApiRequest;
-use crate::SDKResult;
+use open_lark_core::SDKResult;
+use open_lark_core::api_req::ApiRequest;
+use open_lark_core::SDKResult;
 use std::collections::HashMap;
-use crate::SDKResult;
+use open_lark_core::SDKResult;
 use crate::{
-use crate::SDKResult;
+use open_lark_core::SDKResult;
     core::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
         constants::AccessTokenType,

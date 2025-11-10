@@ -8,7 +8,7 @@
 // lingo v1 - 词典v1版本API
 //,
 // 包含词典的完整功能
-use crate::config::Config;
+use open_lark_core::config::Config;
 /// 词典v1版本服务
 #[derive(Debug, Clone)]
 pub struct LingoV1Service {

@@ -12,10 +12,10 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
 
 use crate::request::Transport;
-use crate::SDKResult;
-use crate::config::Config;
-use crate::trait_system::Service;
-use crate::error::LarkAPIError;
+use open_lark_core::SDKResult;
+use open_lark_core::config::Config;
+use open_lark_core::trait_system::Service;
+use open_lark_core::error::LarkAPIError;
 
 /// 工作表更新请求类型
 #[derive(Debug, Clone, Serialize, Deserialize)]

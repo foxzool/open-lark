@@ -14,7 +14,7 @@
 //! - 国家证件类型管理
 //! - 自定义字段管理
 
-use crate::config::Config;
+use open_lark_core::config::Config;
 
 /// 基础数据管理v1版本服务
 #[derive(Debug, Clone)]

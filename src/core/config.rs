@@ -188,7 +188,7 @@ impl ConfigBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::constants::{AppType, FEISHU_BASE_URL};
+    use open_lark_core::constants::{AppType, FEISHU_BASE_URL};
     use std::time::Duration;
 
     #[test]

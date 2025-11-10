@@ -3,7 +3,7 @@
 //! 定义了多个服务模块都会用到的通用数据结构，
 //! 包括用户信息、分页、错误处理等基础模型。
 
-use crate::api_resp::ApiResponseTrait;
+use open_lark_core::api_resp::ApiResponseTrait;
 use serde::{Deserialize, Serialize};
 
 /// 用户标识符类型
@@ -192,7 +192,7 @@ pub type ExtraFields = std::collections::HashMap<String, serde_json::Value>;
 pub struct EmptyResponse;
 
 impl ApiResponseTrait for EmptyResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }

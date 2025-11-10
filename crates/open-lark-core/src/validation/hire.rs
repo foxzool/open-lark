@@ -162,8 +162,7 @@ pub fn validate_candidate_basic_info(
     }
 
     // 验证邮箱
-    if let ValidationResult::Invalid(msg) = crate::validation::validate_email(email, "email")
-    {
+    if let ValidationResult::Invalid(msg) = crate::validation::validate_email(email, "email") {
         return ValidationResult::Invalid(format!("Invalid email address: {}", msg));
     }
 

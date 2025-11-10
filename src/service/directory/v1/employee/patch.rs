@@ -540,7 +540,7 @@ impl EmployeeService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::config::Config;
+    use open_lark_core::config::Config;
 
     #[test]
     fn test_patch_employee_request_creation() {

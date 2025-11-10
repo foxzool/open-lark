@@ -13,7 +13,7 @@
 //! - 报表模板和自定义报表
 //! - 报表导出和分发管理
 
-use crate::{config::Config, SDKResult};
+use open_lark_core::{config::Config, SDKResult};
 use crate::service::payroll::models::*;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};

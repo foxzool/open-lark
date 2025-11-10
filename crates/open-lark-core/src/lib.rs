@@ -61,7 +61,7 @@ pub mod prelude {
 
     // Re-export commonly used dependencies
     pub use anyhow::Result;
-    
+
     /// Result type alias for convenience
     pub type SDKResult<T> = Result<T, LarkAPIError>;
     pub use serde::{Deserialize, Serialize};

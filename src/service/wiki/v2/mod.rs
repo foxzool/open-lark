@@ -15,7 +15,7 @@ pub use space_member::*;
 pub use space_node::*;
 pub use task::*;
 
-use crate::config::Config;
+use open_lark_core::config::Config;
 
 /// Wiki知识库服务 v2版本
 ///
@@ -73,7 +73,7 @@ impl crate::core::trait_system::Service for WikiServiceV2 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::trait_system::Service;
+    use open_lark_core::trait_system::Service;
 
     #[test]
     fn test_wiki_v2_service_creation() {

@@ -10,7 +10,7 @@
 //! 提供飞书电子表格单元格保护的完整功能，包括保护范围的创建、
 //! 查询、更新、删除等操作，支持精细的权限控制和保护设置。
 
-use crate::config::Config;
+use open_lark_core::config::Config;
 
 pub mod create;
 pub mod delete;

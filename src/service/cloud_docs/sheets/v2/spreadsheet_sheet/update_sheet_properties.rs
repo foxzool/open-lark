@@ -95,7 +95,7 @@ impl SpreadsheetSheetService {
 }#[cfg(test)]
 mod tests {
 use super::*;
-    use crate::{api_resp::BaseResponse, config::Config, SDKResult};
+    use open_lark_core::{config::Config, SDKResult};
 use rstest::*;
     fn create_test_config() -> Config {,
 Config::builder()

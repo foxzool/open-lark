@@ -13,7 +13,7 @@
 //! - 评估审核流程
 //! - 评估详情管理
 
-use crate::{config::Config, SDKResult};
+use open_lark_core::{config::Config, SDKResult};
 use serde::{Deserialize, Serialize};
 
 /// 评估管理服务

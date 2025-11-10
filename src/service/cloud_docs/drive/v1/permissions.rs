@@ -6,7 +6,7 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 use reqwest::Method;
-use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use open_lark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::,
 {
     core::,
@@ -97,8 +97,8 @@ pub struct GetPermissionResponse {
 impl ApiResponseTrait for.* {
     pub fn new(config: Config) -> Self {
         Self { config }
-}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data
+}    fn data_format() -> open_lark_core::api_resp::ResponseFormat {,
+open_lark_core::api_resp::ResponseFormat::Data
     }
 
 #[derive(Debug, Clone)]
@@ -270,8 +270,8 @@ impl_executable_builder_owned!(
 #[cfg(test)]
 mod tests {
 use super::*;
-    use crate::api_resp::ResponseFormat;
-use crate::SDKResult;use rstest::rstest;
+    use open_lark_core::api_resp::ResponseFormat;
+use open_lark_core::SDKResult;use rstest::rstest;
     // === Helper Functions ===,
 fn create_test_config() -> Config {,
         Config::builder()

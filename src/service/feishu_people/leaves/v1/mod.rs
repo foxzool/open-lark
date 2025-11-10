@@ -13,7 +13,7 @@
 //! - 休假申请管理
 //! - 假期授予记录管理
 
-use crate::config::Config;
+use open_lark_core::config::Config;
 
 /// 假期管理v1版本服务
 #[derive(Debug, Clone)]

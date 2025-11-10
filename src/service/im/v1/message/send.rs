@@ -6,7 +6,7 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 use reqwest::Method;
-use open_lark_core::core::api_req::ApiRequest;
+use open_lark_core::api_req::ApiRequest;
 use crate::{,
 core::{,
         api_resp::BaseResponse, constants::AccessTokenType, endpoints::EndpointBuilder,
@@ -263,7 +263,7 @@ assert!(config_ref.app_secret.is_empty()); // Default config should have empty a
     }
 #[test]
     fn test_error_types() {
-use crate::SDKResult;
+use open_lark_core::SDKResult;
         // All methods should return SDKResult,
 fn _check_create_result() -> SDKResult<crate::service::im::v1::message::Message> {,
             unimplemented!("Mock implementation")}
@@ -340,7 +340,7 @@ assert!(!service.config.app_id.is_empty() || service.config.app_id.is_empty());
 #[test]
     fn test_error_handling_patterns() {
 // Test that error handling is consistent across operations,
-        use crate::error::LarkAPIError;
+        use open_lark_core::error::LarkAPIError;
 // All operations should return SDKResult which can contain LarkAPIError,
         let error = LarkAPIError::illegal_param("Test error".to_string());
 let sdk_result: crate::core::SDKResult<()> = Err(error);

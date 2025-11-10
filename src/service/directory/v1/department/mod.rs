@@ -1,4 +1,4 @@
-use crate::config::Config;
+use open_lark_core::config::Config;
 use crate::service_trait::Service;
 use crate::transport::Transport;
 use std::sync::Arc;

@@ -5,8 +5,8 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use crate::config::Config;
-use crate::SDKResult;pub use update::*;
+use open_lark_core::config::Config;
+use open_lark_core::SDKResult;pub use update::*;
 mod update;
 /// 知识空间设置服务
 pub struct SpaceSettingService {

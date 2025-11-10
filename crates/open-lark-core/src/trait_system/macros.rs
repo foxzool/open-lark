@@ -35,9 +35,7 @@ macro_rules! impl_executable_builder {
         $method:ident
     ) => {
         #[async_trait::async_trait]
-        impl $crate::trait_system::ExecutableBuilder<$service, $request, $response>
-            for $builder
-        {
+        impl $crate::trait_system::ExecutableBuilder<$service, $request, $response> for $builder {
             fn build(self) -> $request {
                 self.build()
             }
@@ -70,9 +68,7 @@ macro_rules! impl_executable_builder_owned {
         $method:ident
     ) => {
         #[async_trait::async_trait]
-        impl $crate::trait_system::ExecutableBuilder<$service, $request, $response>
-            for $builder
-        {
+        impl $crate::trait_system::ExecutableBuilder<$service, $request, $response> for $builder {
             fn build(self) -> $request {
                 self.build()
             }

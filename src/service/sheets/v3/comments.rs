@@ -9,8 +9,8 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use crate::error::LarkAPIError;
-use crate::trait_system::Transport;
+use open_lark_core::error::LarkAPIError;
+use open_lark_core::trait_system::Transport;
 use crate::http_transport::HttpTransport;
 
 use super::models::{Sheet, Range};

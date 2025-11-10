@@ -290,8 +290,7 @@ impl LarkAPIError {
     pub fn is_retryable(&self) -> bool {
         match self {
             Self::ApiError { code, .. } => {
-                if let Some(error_code) = crate::error_codes::LarkErrorCode::from_code(*code)
-                {
+                if let Some(error_code) = crate::error_codes::LarkErrorCode::from_code(*code) {
                     error_code.is_retryable()
                 } else {
                     false
@@ -326,8 +325,7 @@ impl LarkAPIError {
     pub fn user_friendly_message(&self) -> String {
         match self {
             Self::ApiError { code, message, .. } => {
-                if let Some(error_code) = crate::error_codes::LarkErrorCode::from_code(*code)
-                {
+                if let Some(error_code) = crate::error_codes::LarkErrorCode::from_code(*code) {
                     error_code.detailed_description().to_string()
                 } else {
                     format!("API调用失败: {message} (错误码: {code})")

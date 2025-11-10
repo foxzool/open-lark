@@ -14,7 +14,7 @@
 //! - 评估模板和项目管理
 //! - 统计分析功能
 
-use crate::config::Config;
+use open_lark_core::config::Config;
 use serde::{Deserialize, Serialize};
 
 // 声明子模块

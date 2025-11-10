@@ -65,7 +65,7 @@ pub use sheets_batch_update::*;
 pub use values_prepend::*;
 pub use metainfo::*;
 
-use crate::config::Config;
+use open_lark_core::config::Config;
 
 /// Sheets电子表格服务 v2版本
 ///
@@ -174,7 +174,7 @@ impl crate::core::trait_system::Service for SheetsServiceV2 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::trait_system::Service;
+    use open_lark_core::trait_system::Service;
 
     #[test]
     fn test_sheets_v2_service_creation() {

@@ -535,7 +535,7 @@ impl BatchWriteService {
         }
 
         // 暂时返回模拟数据，直到Transport问题解决
-        use crate::api_resp::RawResponse;
+        use open_lark_core::api_resp::RawResponse;
         let updated_ranges = vec![]; // 这里应该是实际的更新结果
         let total_updated_cells: usize = updated_ranges.iter().map(|r: &UpdatedRangeInfo| r.updated_cells as usize).sum();
 

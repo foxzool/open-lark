@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 use crate::im::v1::models::{Pin, UserIdType};
-use open_lark_core::core::standard_response::StandardResponse;
-use open_lark_core::core::{
+use open_lark_core::standard_response::StandardResponse;
+use open_lark_core::{
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
     config::Config,
@@ -88,7 +88,7 @@ impl PinService {
 
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
-        api_req.set_api_path(open_lark_core::core::endpoints::im::IM_V1_PINS.to_string());
+        api_req.set_api_path(open_lark_core::endpoints::im::IM_V1_PINS.to_string());
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
         api_req.query_params = query_params;
@@ -114,7 +114,7 @@ impl PinService {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::DELETE);
         api_req.set_api_path(EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V1_DELETE_PIN,
+            open_lark_core::endpoints::im::IM_V1_DELETE_PIN,
             "pin_id",
             pin_id,
         ));
@@ -150,7 +150,7 @@ impl PinService {
 
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
-        api_req.set_api_path(open_lark_core::core::endpoints::im::IM_V1_PINS.to_string());
+        api_req.set_api_path(open_lark_core::endpoints::im::IM_V1_PINS.to_string());
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
         api_req.query_params = query_params;

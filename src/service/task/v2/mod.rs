@@ -13,7 +13,7 @@
 //! - 评论和附件系统
 //! - 自定义字段和工作流集成
 
-use crate::{config::Config, SDKResult};
+use open_lark_core::{config::Config, SDKResult};
 pub use crate::service::task::models::*;
 
 /// Task服务 v2版本

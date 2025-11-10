@@ -66,7 +66,7 @@ impl UnifiedRequestBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{constants::AppType, ApiRequest};
+    use open_lark_core::{constants::AppType, ApiRequest};
     use reqwest::Method;
     use std::collections::HashMap;
 

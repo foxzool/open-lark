@@ -14,7 +14,7 @@
 //! - 自定义报表和数据可视化
 //! - 实时监控和智能告警
 
-use crate::config::Config;
+use open_lark_core::config::Config;
 use serde::{Deserialize, Serialize};
 
 /// Analytics服务 v1版本

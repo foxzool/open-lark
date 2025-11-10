@@ -13,7 +13,7 @@
 //! - 算薪项分类和模板管理
 //! - 算薪项使用统计和分析
 
-use crate::{config::Config, SDKResult};
+use open_lark_core::{config::Config, SDKResult};
 use crate::service::payroll::models::*;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};

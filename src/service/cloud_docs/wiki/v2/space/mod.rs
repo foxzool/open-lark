@@ -6,7 +6,7 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 
-use crate::config::Config;
+use open_lark_core::config::Config;
 
 // 重新导出所有模块类型
 pub use create::*;

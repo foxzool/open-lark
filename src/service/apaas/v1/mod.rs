@@ -11,7 +11,7 @@ pub mod apps;
 // 重新导出所有服务类型
 pub use apps::*;
 
-use crate::config::Config;
+use open_lark_core::config::Config;
 
 /// APAAS应用开放平台服务 v1版本
 ///
@@ -63,7 +63,7 @@ impl crate::core::trait_system::Service for ApaasServiceV1 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::trait_system::Service;
+    use open_lark_core::trait_system::Service;
 
     #[test]
     fn test_apaas_service_creation() {

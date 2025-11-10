@@ -8,7 +8,7 @@
 // buildings - 建筑物管理服务
 //,
 // 提供建筑物管理相关的功能
-use crate::config::Config;
+use open_lark_core::config::Config;
 use crate::service::meeting_room::buildings::default::BuildingsDefaultService;
 /// 建筑物管理服务
 #[derive(Debug, Clone)]

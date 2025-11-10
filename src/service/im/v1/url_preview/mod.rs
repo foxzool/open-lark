@@ -9,7 +9,7 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use crate::{
-use crate::SDKResult;    api_resp::{BaseResponse, EmptyResponseconfig::Config,
+use open_lark_core::SDKResult;    api_resp::{BaseResponse, EmptyResponseconfig::Config,
     constants::AccessTokenType,
     endpoints::EndpointBuilder,
     http::Transport,

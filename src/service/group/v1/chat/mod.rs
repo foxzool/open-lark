@@ -22,7 +22,7 @@
 //! - `link`: 获取群分享链接,
 //!,
 //! 🚧 **待实现** - 以上功能模块尚未实现，敬请期待。
-use crate::{config::Config, trait_system::Service};
+use open_lark_core::{config::Config, trait_system::Service};
 // 规划中的功能模块（待实现）
 // pub mod create;
 // pub mod get;

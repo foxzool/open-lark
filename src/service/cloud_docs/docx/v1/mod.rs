@@ -1,4 +1,4 @@
-use crate::config::Config;
+use open_lark_core::config::Config;
 
 pub mod document;
 pub mod document_block;

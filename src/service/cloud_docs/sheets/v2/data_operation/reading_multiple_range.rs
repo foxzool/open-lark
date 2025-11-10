@@ -6,7 +6,7 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 use serde::Deserialize;
-use open_lark_core::core::api_req::ApiRequest;
+use open_lark_core::api_req::ApiRequest;
 use crate::,
 {,
     core::,
@@ -90,8 +90,8 @@ impl SpreadsheetService {
 }#[cfg(test)]
 mod tests {
 use super::*;
-    use crate::config::Config;
-use crate::SDKResult;use serde_json::json;
+    use open_lark_core::config::Config;
+use open_lark_core::SDKResult;use serde_json::json;
     fn create_test_config() -> Config {,
 Config::default()}
 fn create_test_service() -> SpreadsheetService {,

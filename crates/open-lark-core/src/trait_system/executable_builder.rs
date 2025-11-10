@@ -71,10 +71,7 @@ mod tests {
             self
         }
 
-        async fn process_request(
-            &self,
-            request: TestRequest,
-        ) -> crate::SDKResult<TestResponse> {
+        async fn process_request(&self, request: TestRequest) -> crate::SDKResult<TestResponse> {
             if self.should_fail {
                 return Err(crate::error::LarkAPIError::illegal_param(
                     "模拟失败".to_string(),

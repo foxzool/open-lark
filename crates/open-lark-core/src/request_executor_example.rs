@@ -1,13 +1,13 @@
-use std::collections::HashMap;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 use crate::{
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    request_executor::RequestExecutor,
     req_option::RequestOption,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    request_executor::RequestExecutor,
     SDKResult,
 };
 
@@ -19,7 +19,7 @@ pub struct ModernMessageService {
 
 impl ModernMessageService {
     /// 使用RequestExecutor重构的发送消息方法
-    /// 
+    ///
     /// 对比原方法，这个实现：
     /// 1. 消除了手动构建ApiRequest的重复代码
     /// 2. 统一了HTTP方法、路径、认证类型的设置
@@ -57,8 +57,11 @@ impl ModernMessageService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<Message>> {
         // 使用带查询参数的路径
-        let path = format!("/open-apis/im/v1/messages?receive_id_type={}", receive_id_type);
-        
+        let path = format!(
+            "/open-apis/im/v1/messages?receive_id_type={}",
+            receive_id_type
+        );
+
         // 最简洁的调用方式
         RequestExecutor::json_request(&self.config, Method::POST, &path, &body, option).await
     }
@@ -78,7 +81,7 @@ impl ModernMessageService {
         let mut query_params = HashMap::new();
         query_params.insert("container_id", container_id.to_string());
         query_params.insert("container_id_type", container_id_type.to_string());
-        
+
         if let Some(start) = start_time {
             query_params.insert("start_time", start.to_string());
         }
@@ -243,8 +246,8 @@ impl ApiResponseTrait for EmptyResponse {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::sync::Arc;
     use crate::config::Config;
+    use std::sync::Arc;
 
     #[tokio::test]
     async fn test_modern_message_service_api() {
@@ -263,13 +266,13 @@ mod tests {
         // 但它展示了API的使用方式
         println!("Modern API example:");
         println!("service.create_message_modern('open_id', body, None).await");
-        
+
         // 对比原始API调用方式：
         // 1. 需要手动构建CreateMessageRequest
         // 2. 需要使用builder模式设置receive_id_type
         // 3. 需要手动设置request_body
         // 4. 调用create方法
-        
+
         // 新API的优势：
         // 1. 直接传递参数，无需复杂的builder
         // 2. 更清晰的函数签名
@@ -288,7 +291,7 @@ impl BulkMessageOperations {
         option: Option<RequestOption>,
     ) -> Vec<SDKResult<BaseResponse<Message>>> {
         let mut results = Vec::new();
-        
+
         for (receive_id_type, body) in messages {
             let mut query_params = HashMap::new();
             query_params.insert("receive_id_type", receive_id_type);
@@ -303,37 +306,37 @@ impl BulkMessageOperations {
                 option.clone(),
             )
             .await;
-            
+
             results.push(result);
         }
-        
+
         results
     }
 }
 
 /// 总结：RequestExecutor的优势
-/// 
+///
 /// 1. **消除重复代码**：
 ///    - 原始方法：每个API都需要手动设置http_method、api_path、supported_access_token_types
 ///    - 新方法：这些设置被抽象到RequestExecutor中
-/// 
+///
 /// 2. **统一错误处理**：
 ///    - 所有请求都通过相同的错误处理流程
 ///    - 序列化错误统一处理
-/// 
+///
 /// 3. **更好的类型安全**：
 ///    - 泛型确保响应类型正确
 ///    - 编译时检查确保API契约
-/// 
+///
 /// 4. **更简洁的API**：
 ///    - query_request用于GET请求
 ///    - json_request用于JSON POST/PUT请求
 ///    - execute_with_path_params处理路径参数
-/// 
+///
 /// 5. **更好的可测试性**：
 ///    - 可以轻松模拟RequestExecutor
 ///    - 更清晰的函数签名便于单元测试
-/// 
+///
 /// 6. **向后兼容**：
 ///    - 可以逐步迁移现有API
 ///    - 保持相同的外部接口
