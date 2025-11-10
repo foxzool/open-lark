@@ -143,7 +143,7 @@ generate_report() {
 # API验证报告
 
 **生成时间**: $timestamp
-**项目**: open-lark Sheets模块
+**项目**: open-lark SDK
 
 ## 验证结果
 
