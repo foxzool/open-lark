@@ -2249,9 +2249,9 @@ impl Endpoints {
 
     /// 电子表格工作表管理 - v3
     pub const SHEETS_V3_SPREADSHEET_SHEETS_QUERY: &'static str =
-        "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/query";
+        "/open-apis/sheets/v3/spreadsheets/:spreadsheetToken/sheets/query";
     pub const SHEETS_V3_SPREADSHEET_SHEET_GET: &'static str =
-        "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}";
+        "/open-apis/sheets/v3/spreadsheets/:spreadsheetToken/sheets/{sheet_id}";
 
     /// 电子表格数据操作 - v3
     pub const SHEETS_V3_SPREADSHEET_VALUES_GET: &'static str =
@@ -2269,9 +2269,9 @@ impl Endpoints {
 
     /// 电子表格查找替换 - v3
     pub const SHEETS_V3_SPREADSHEET_SHEET_FIND: &'static str =
-        "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/find";
+        "/open-apis/sheets/v3/spreadsheets/:spreadsheetToken/sheets/{sheet_id}/find";
     pub const SHEETS_V3_SPREADSHEET_SHEET_REPLACE: &'static str =
-        "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/replace";
+        "/open-apis/sheets/v3/spreadsheets/:spreadsheetToken/sheets/{sheet_id}/replace";
 
     /// 电子表格合并拆分单元格 - v3
     pub const SHEETS_V3_SPREADSHEET_MERGE_CELLS: &'static str =
@@ -2291,7 +2291,7 @@ impl Endpoints {
     pub const SHEETS_V3_SPREADSHEET_DIMENSION_RANGE_INSERT: &'static str =
         "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/dimension_range:insert";
     pub const SHEETS_V3_SPREADSHEET_MOVE_DIMENSION: &'static str =
-        "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/move_dimension";
+        "/open-apis/sheets/v3/spreadsheets/:spreadsheetToken/sheets/{sheet_id}/move_dimension";
 
     /// 电子表格条件格式 - v3
     pub const SHEETS_V3_SPREADSHEET_CONDITION_FORMAT: &'static str =
@@ -2311,7 +2311,7 @@ impl Endpoints {
 
     /// 电子表格筛选器 - v3
     pub const SHEETS_V3_SPREADSHEET_FILTER: &'static str =
-        "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/filter";
+        "/open-apis/sheets/v3/spreadsheets/:spreadsheetToken/sheets/{sheet_id}/filter";
 
     /// 电子表格筛选视图 - v3
     pub const SHEETS_V3_SPREADSHEET_FILTER_VIEWS: &'static str =
@@ -2333,43 +2333,43 @@ impl Endpoints {
 
     /// 电子表格管理 - v2
       pub const SHEETS_V2_SPREADSHEET_VALUES: &'static str =
-        "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values";
+        "/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values";
     pub const SHEETS_V2_SPREADSHEET_VALUES_RANGE: &'static str =
-        "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values/{range}";
+        "/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values/{range}";
     pub const SHEETS_V2_SPREADSHEET_VALUES_APPEND: &'static str =
-        "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_append";
+        "/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values_append";
     pub const SHEETS_V2_SPREADSHEET_VALUES_PREPEND: &'static str =
-        "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_prepend";
+        "/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values_prepend";
     pub const SHEETS_V2_SPREADSHEET_VALUES_GET: &'static str =
-        "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values/{range}";
+        "/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values/:range";
     pub const SHEETS_V2_SPREADSHEET_VALUES_BATCH_GET: &'static str =
-        "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_batch_get";
+        "/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values_batch_get";
     pub const SHEETS_V2_SPREADSHEET_VALUES_BATCH_UPDATE: &'static str =
-        "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_batch_update";
+        "/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values_batch_update";
     pub const SHEETS_V2_SPREADSHEET_VALUES_IMAGE: &'static str =
-        "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_image";
+        "/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values_image";
 
     /// 电子表格样式管理 - v2
     pub const SHEETS_V2_SPREADSHEET_STYLE: &'static str =
-        "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/style";
+        "/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/style";
     pub const SHEETS_V2_SPREADSHEET_STYLES_BATCH_UPDATE: &'static str =
-        "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/styles_batch_update";
+        "/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/styles_batch_update";
 
     /// 电子表格合并拆分单元格 - v2
     pub const SHEETS_V2_SPREADSHEET_MERGE_CELLS: &'static str =
-        "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/merge_cells";
+        "/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/merge_cells";
     pub const SHEETS_V2_SPREADSHEET_UNMERGE_CELLS: &'static str =
-        "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/unmerge_cells";
+        "/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/unmerge_cells";
 
     /// 电子表格行列管理 - v2
     pub const SHEETS_V2_SPREADSHEET_DIMENSION_RANGE: &'static str =
-        "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/dimension_range";
+        "/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/dimension_range";
     pub const SHEETS_V2_SPREADSHEET_INSERT_DIMENSION_RANGE: &'static str =
-        "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/insert_dimension_range";
+        "/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/insert_dimension_range";
 
     /// 电子表格工作表管理 - v2
     pub const SHEETS_V2_SPREADSHEET_SHEETS_BATCH_UPDATE: &'static str =
-        "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/sheets_batch_update";
+        "/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/sheets_batch_update";
 
     // Wiki 知识库服务
     /// 知识库空间管理
