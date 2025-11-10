@@ -22,7 +22,9 @@ use url::Url;
 
 use crate::{
     client::ws_client::{state_machine::StateMachineEvent, FrameHandler, WebSocketStateMachine},
-    core::{api_resp::BaseResponse, cache::QuickCache, constants::FEISHU_BASE_URL},
+    cache::QuickCache,
+    constants::FEISHU_BASE_URL,
+    api_resp::BaseResponse,
     event::dispatcher::EventDispatcherHandler,
 };
 
