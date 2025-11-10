@@ -28,7 +28,8 @@
 //! - `drive` - 云盘相关API
 //! - 等等...
 
-// 注意：endpoints_original 现在在 core/mod.rs 中导入，无需重复导入
+// 注意：endpoints_original 仍然可用以保持向后兼容性
+// 主要端点常量现在从 endpoints_unified.rs 重新导出
 
 // 按服务域拆分的模块
 pub mod acs;
@@ -75,12 +76,12 @@ pub mod verification;
 pub mod workplace;
 pub mod zero_trust;
 
-// 重新导出原始端点文件中的所有常量，确保向后兼容性
-// 这是一个临时措施，在完成所有域模块迁移后将移除
-pub use super::endpoints_original::Endpoints;
+// 重新导出统一端点文件中的所有常量，确保向后兼容性
+// 合并 endpoints_original.rs, endpoints_clean.rs, endpoints_new.rs 到 endpoints_unified.rs
+pub use super::endpoints_unified::Endpoints;
 
-// 同时导出 EndpointBuilder (从原始文件)
-pub use super::endpoints_original::EndpointBuilder;
+// 同时导出 EndpointBuilder (从统一文件)
+pub use super::endpoints_unified::EndpointBuilder;
 
 // 重新导出各个域模块的常量
 pub use lingo::*;
