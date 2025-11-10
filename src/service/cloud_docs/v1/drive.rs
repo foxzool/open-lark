@@ -15,7 +15,7 @@
 //! - 支持任务进度跟踪
 //! - 错误信息获取和处理
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -1103,7 +1103,7 @@ impl CreateExportTaskBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
+    use crate::config::Config;
 
     #[test]
     fn test_task_status_default() {

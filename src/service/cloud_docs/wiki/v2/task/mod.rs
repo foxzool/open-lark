@@ -5,7 +5,7 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use crate::core::{ config::Config, req_option::RequestOption, SDKResult};
+use crate::{ config::Config, req_option::RequestOption, SDKResult};
     
 pub use get::{get_task, GetTaskRequest, GetTaskResponse, MoveResult, TaskDetail, TaskStatus};
 pub use move_docs_to_wiki::{,

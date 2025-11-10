@@ -78,7 +78,7 @@
 //! ```
 
 use super::models::BaseResponse;
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, BaseResponse as CoreBaseResponse},
     config::Config,
     constants::AccessTokenType,

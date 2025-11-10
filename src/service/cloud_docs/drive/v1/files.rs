@@ -20,7 +20,7 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::collections::HashMap;
-use crate::core::SDKResult;
+use crate::SDKResult;
 
 use crate::{
     core::{
@@ -1638,7 +1638,7 @@ crate::impl_executable_builder_owned!(
 #[cfg(test)]
 mod create_shortcut_tests {
     use super::*;
-    use crate::core::config::Config;
+    use crate::config::Config;
 
     #[test]
     fn test_create_shortcut_request_creation() {
@@ -1887,7 +1887,7 @@ mod create_shortcut_tests {
 #[cfg(test)]
 mod get_async_task_status_tests {
     use super::*;
-    use crate::core::config::Config;
+    use crate::config::Config;
 
     #[test]
     fn test_get_async_task_status_request_creation() {
@@ -2689,7 +2689,7 @@ impl FilesService {
 #[cfg(test)]
 mod copy_file_tests {
     use super::*;
-    use crate::core::config::Config;
+    use crate::config::Config;
 
     #[test]
     fn test_copy_file_request_creation() {

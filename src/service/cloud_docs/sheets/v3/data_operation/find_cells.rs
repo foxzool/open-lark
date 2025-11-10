@@ -5,8 +5,8 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use crate::core::SDKResult;use serde::{Deserialize, Serialize};
-use crate::core::error::LarkAPIError;
+use crate::SDKResult;use serde::{Deserialize, Serialize};
+use crate::error::LarkAPIError;
 use open_lark_core::core::api_req::ApiRequest;
 use crate::,
 {,

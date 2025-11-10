@@ -2,7 +2,7 @@
 //!
 //! 提供部分更新卡片组件属性的功能，支持只更新特定字段而不影响其他内容
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -310,7 +310,7 @@ impl CardElementService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
+    use crate::config::Config;
 
     #[test]
     fn test_patch_card_element_request_creation() {

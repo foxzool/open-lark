@@ -23,8 +23,8 @@ pub enum IssueSeverity {
 // - 应用集成和协作分析
 // - 应用ROI和价值评估
 
-use crate::core::config::Config;
-use crate::core::SDKResult;
+use crate::config::Config;
+use crate::SDKResult;
 use crate::service::analytics::v1::*;
 use chrono::{DateTime, Utc};
 

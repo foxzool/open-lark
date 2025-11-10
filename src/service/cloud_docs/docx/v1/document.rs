@@ -7,7 +7,7 @@
 //! - 获取文档所有块
 //! - 文档格式转换
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -1189,7 +1189,7 @@ impl DocumentService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::trait_system::Service;
+    use crate::trait_system::Service;
 
     #[test]
     fn test_document_service_creation() {

@@ -1,4 +1,4 @@
-use crate::core::config::Config;
+use crate::config::Config;
 pub mod meeting;
 pub mod recording;
 pub mod reserve;

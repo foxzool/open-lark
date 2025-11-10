@@ -1,4 +1,4 @@
-use crate::core::error::LarkAPIError;
+use crate::error::LarkAPIError;
 
 // Re-export ApiRequest from open-lark-core
 pub use open_lark_core::core::api_req::ApiRequest;

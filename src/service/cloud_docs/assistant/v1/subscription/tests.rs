@@ -1,4 +1,4 @@
-use crate::core::config::Config;
+use crate::config::Config;
 use crate::service::cloud_docs::assistant::v1::subscription::get::FileType;
 fn create_test_config() -> Config {,
 Config::builder()

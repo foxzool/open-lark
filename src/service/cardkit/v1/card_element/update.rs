@@ -2,7 +2,7 @@
 //!
 //! 提供全量更新卡片中指定组件的功能，支持修改组件类型、内容、属性等
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -297,7 +297,7 @@ impl CardElementService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
+    use crate::config::Config;
 
     #[test]
     fn test_update_card_element_request_creation() {

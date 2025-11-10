@@ -9,7 +9,7 @@
 //! - 模板配置管理
 //! - 模板应用功能
 
-use crate::core::{config::Config, SDKResult};
+use crate::{config::Config, SDKResult};
 use crate::service::performance::models::PageResponse;
 use serde::{Deserialize, Serialize};
 

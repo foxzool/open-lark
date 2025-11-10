@@ -270,8 +270,8 @@ impl_executable_builder_owned!(
 #[cfg(test)]
 mod tests {
 use super::*;
-    use crate::core::api_resp::ResponseFormat;
-use crate::core::SDKResult;use rstest::rstest;
+    use crate::api_resp::ResponseFormat;
+use crate::SDKResult;use rstest::rstest;
     // === Helper Functions ===,
 fn create_test_config() -> Config {,
         Config::builder()

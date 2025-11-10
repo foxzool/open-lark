@@ -1,4 +1,4 @@
-use crate::core::config::Config;
+use crate::config::Config;
 pub mod media;
 pub mod minute;
 pub mod statistics;

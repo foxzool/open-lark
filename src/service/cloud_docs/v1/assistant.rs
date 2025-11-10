@@ -9,7 +9,7 @@
 //!
 //! AI助手服务，提供文档智能分析、内容生成、自动摘要、
 /// 智能问答等AI辅助功能。
-use crate::core::config::Config;
+use crate::config::Config;
 
 /// AI助手服务 v1
 ///

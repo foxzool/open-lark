@@ -5,8 +5,8 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use crate::core::config::Config;
-use crate::core::SDKResult;pub use create::*;
+use crate::config::Config;
+use crate::SDKResult;pub use create::*;
 pub use delete::*;
 pub use list::*;
 mod create;

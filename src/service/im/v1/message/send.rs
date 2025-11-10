@@ -263,7 +263,7 @@ assert!(config_ref.app_secret.is_empty()); // Default config should have empty a
     }
 #[test]
     fn test_error_types() {
-use crate::core::SDKResult;
+use crate::SDKResult;
         // All methods should return SDKResult,
 fn _check_create_result() -> SDKResult<crate::service::im::v1::message::Message> {,
             unimplemented!("Mock implementation")}
@@ -340,7 +340,7 @@ assert!(!service.config.app_id.is_empty() || service.config.app_id.is_empty());
 #[test]
     fn test_error_handling_patterns() {
 // Test that error handling is consistent across operations,
-        use crate::core::error::LarkAPIError;
+        use crate::error::LarkAPIError;
 // All operations should return SDKResult which can contain LarkAPIError,
         let error = LarkAPIError::illegal_param("Test error".to_string());
 let sdk_result: crate::core::SDKResult<()> = Err(error);

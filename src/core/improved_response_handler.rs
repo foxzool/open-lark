@@ -2,7 +2,7 @@ use log::debug;
 use serde_json::Value;
 use tracing::{info_span, Instrument};
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, BaseResponse, RawResponse, ResponseFormat},
     error::LarkAPIError,
     observability::ResponseTracker,
@@ -388,7 +388,7 @@ macro_rules! impl_api_response {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::api_resp::ResponseFormat;
+    use crate::api_resp::ResponseFormat;
     use serde::{Deserialize, Serialize};
 
     #[derive(Debug, Serialize, Deserialize, PartialEq, Default, Clone)]

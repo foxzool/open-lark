@@ -36,8 +36,8 @@
 //! ```
 
 use super::*;
-use crate::core::SDKResult;
-use crate::core::{
+use crate::SDKResult;
+use crate::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,

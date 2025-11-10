@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use reqwest::Method;
 use serde::Serialize;
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, BaseResponse},
     config::Config,
     http::Transport,
@@ -300,7 +300,7 @@ impl RequestExecutor {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::api_resp::ResponseFormat;
+    use crate::api_resp::ResponseFormat;
     use serde::{Deserialize, Serialize};
 
     #[derive(Debug, Serialize, Deserialize)]
@@ -351,7 +351,7 @@ mod tests {
 
     #[test]
     fn test_request_executor_get_method() {
-        use crate::core::constants::AccessTokenType;
+        use crate::constants::AccessTokenType;
         use std::collections::HashMap;
 
         // Test that get method constructs the correct parameters
@@ -370,7 +370,7 @@ mod tests {
 
     #[test]
     fn test_request_executor_post_method_signature() {
-        use crate::core::constants::AccessTokenType;
+        use crate::constants::AccessTokenType;
 
         // Test POST method parameter types
         let supported_tokens = [AccessTokenType::App];
@@ -389,7 +389,7 @@ mod tests {
 
     #[test]
     fn test_request_executor_put_method_signature() {
-        use crate::core::constants::AccessTokenType;
+        use crate::constants::AccessTokenType;
 
         // Test PUT method parameter types
         let supported_tokens = [AccessTokenType::Tenant];
@@ -408,7 +408,7 @@ mod tests {
 
     #[test]
     fn test_request_executor_delete_method_signature() {
-        use crate::core::constants::AccessTokenType;
+        use crate::constants::AccessTokenType;
 
         // Test DELETE method parameter types
         let supported_tokens = [AccessTokenType::User];
@@ -420,7 +420,7 @@ mod tests {
 
     #[test]
     fn test_request_executor_patch_method_signature() {
-        use crate::core::constants::AccessTokenType;
+        use crate::constants::AccessTokenType;
 
         // Test PATCH method parameter types
         let supported_tokens = [AccessTokenType::Tenant, AccessTokenType::App];
@@ -510,7 +510,7 @@ mod tests {
 
     #[test]
     fn test_request_executor_json_request_defaults() {
-        use crate::core::constants::AccessTokenType;
+        use crate::constants::AccessTokenType;
 
         // Test that json_request uses default token types
         let default_tokens = [AccessTokenType::Tenant, AccessTokenType::User];
@@ -526,7 +526,7 @@ mod tests {
 
     #[test]
     fn test_request_executor_query_request_defaults() {
-        use crate::core::constants::AccessTokenType;
+        use crate::constants::AccessTokenType;
 
         // Test that query_request uses default token types
         let default_tokens = [AccessTokenType::Tenant, AccessTokenType::User];
@@ -603,7 +603,7 @@ mod tests {
 
     #[test]
     fn test_request_executor_access_token_types() {
-        use crate::core::constants::AccessTokenType;
+        use crate::constants::AccessTokenType;
 
         // Test all access token types
         let all_types = [
@@ -653,8 +653,8 @@ mod tests {
 
     #[test]
     fn test_request_executor_api_request_construction() {
-        use crate::core::constants::AccessTokenType;
-        use crate::core::ApiRequest;
+        use crate::constants::AccessTokenType;
+        use crate::ApiRequest;
         use reqwest::Method;
         use std::collections::HashMap;
 
@@ -715,7 +715,7 @@ mod tests {
 
     #[test]
     fn test_request_option_integration() {
-        use crate::core::req_option::RequestOption;
+        use crate::req_option::RequestOption;
 
         // Test that RequestOption can be created and used with RequestExecutor methods
         let option = RequestOption::builder()
@@ -971,7 +971,7 @@ mod tests {
     // Complex request option scenarios
     #[test]
     fn test_request_executor_request_option_complex_scenarios() {
-        use crate::core::req_option::RequestOption;
+        use crate::req_option::RequestOption;
 
         // Test with multiple headers
         let complex_option = RequestOption::builder()
@@ -1090,7 +1090,7 @@ mod tests {
     // Type system and generic tests
     #[test]
     fn test_request_executor_type_system() {
-        use crate::core::api_resp::ResponseFormat;
+        use crate::api_resp::ResponseFormat;
 
         // Test different response types
         #[derive(Debug, Serialize, Deserialize)]
@@ -1139,8 +1139,8 @@ mod tests {
     // API request building edge cases
     #[test]
     fn test_request_executor_api_request_building_edge_cases() {
-        use crate::core::constants::AccessTokenType;
-        use crate::core::ApiRequest;
+        use crate::constants::AccessTokenType;
+        use crate::ApiRequest;
         use reqwest::Method;
 
         // Test with very long path
@@ -1178,7 +1178,7 @@ mod tests {
     // Method chaining and composition tests
     #[test]
     fn test_request_executor_method_composition() {
-        use crate::core::constants::AccessTokenType;
+        use crate::constants::AccessTokenType;
 
         // Test that different methods can be composed together
         let common_tokens = vec![AccessTokenType::Tenant, AccessTokenType::User];

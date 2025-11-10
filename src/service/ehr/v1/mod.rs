@@ -15,7 +15,7 @@
 //! - 考勤记录管理
 //! - 绩效评估系统
 
-use crate::core::{config::Config, SDKResult};
+use crate::{config::Config, SDKResult};
 
 // 导入modules模块
 pub mod attendance;

@@ -1,5 +1,5 @@
 pub mod info;
-use crate::core::config::Config;
+use crate::config::Config;
 /// Bot API v3版本服务
 pub struct V3 {
     /// 机器人信息服务

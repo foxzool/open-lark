@@ -14,7 +14,7 @@
 //! - 批量发薪操作
 //! - 发薪报表生成
 
-use crate::core::{config::Config, SDKResult};
+use crate::{config::Config, SDKResult};
 use crate::service::payroll::models::*;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};

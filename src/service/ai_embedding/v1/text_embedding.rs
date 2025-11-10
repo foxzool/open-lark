@@ -6,7 +6,7 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 use serde::{Deserialize, Serialize};
-use crate::core::SDKResult;
+use crate::SDKResult;
 /// 文本嵌入服务,
 pub struct TextEmbeddingService {
     config: crate::core::config::Config,

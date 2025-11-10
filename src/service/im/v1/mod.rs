@@ -264,7 +264,7 @@ pub mod message {
 pub mod chats;
 
 pub mod p2_im_message_read_v1 {
-    use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
+    use crate::api_resp::{ApiResponseTrait, ResponseFormat};
     use serde::{Deserialize, Serialize};
 
     #[derive(Debug, Deserialize, Serialize)]

@@ -52,8 +52,8 @@ pub async fn upload(,
         file_content: Vec<u8>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UploadFileResponse>> {,
-use crate::core::error::LarkAPIError;
-use crate::core::SDKResult;        // 构建表单元数据
+use crate::error::LarkAPIError;
+use crate::SDKResult;        // 构建表单元数据
 let metadata = serde_json::json!({,
             "file_name": file_name,
 });

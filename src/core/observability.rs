@@ -764,7 +764,7 @@ mod tests {
     #[traced_test]
     #[tokio::test]
     async fn test_trace_auth_operation_macro() {
-        use crate::core::error::LarkAPIError;
+        use crate::error::LarkAPIError;
 
         // 测试成功场景 - 需要返回元组 (结果, 是否缓存命中)
         let result = trace_auth_operation!("get_app_token", "test_app", "app", async {
@@ -949,7 +949,7 @@ mod tests {
     #[traced_test]
     #[tokio::test]
     async fn test_trace_auth_operation_macro_error() {
-        use crate::core::error::LarkAPIError;
+        use crate::error::LarkAPIError;
 
         // Test error scenario with API error code
         let result = trace_auth_operation!("get_tenant_token", "test_app", "tenant", async {
@@ -970,7 +970,7 @@ mod tests {
     #[traced_test]
     #[tokio::test]
     async fn test_trace_auth_operation_macro_non_api_error() {
-        use crate::core::error::LarkAPIError;
+        use crate::error::LarkAPIError;
 
         // Test with non-API error (no error code)
         let result = trace_auth_operation!("validate_token", "test_app", "user", async {

@@ -1,8 +1,8 @@
-use crate::core::config::Config;
-use crate::core::error::SDKError;
-use crate::core::response::SDKResult;
-use crate::core::service_trait::Service;
-use crate::core::transport::Transport;
+use crate::config::Config;
+use crate::error::SDKError;
+use crate::response::SDKResult;
+use crate::service_trait::Service;
+use crate::transport::Transport;
 use crate::service::directory::v1::employee::regular::{EmployeeService, ENDPOINT_TO_BE_RESIGNED};
 use reqwest;
 use serde::{Deserialize, Serialize};
@@ -457,8 +457,8 @@ impl ToBeResignedBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
-    use crate::core::transport::MockTransport;
+    use crate::config::Config;
+    use crate::transport::MockTransport;
     use std::sync::Arc;
 
     fn create_test_service() -> Arc<EmployeeService> {

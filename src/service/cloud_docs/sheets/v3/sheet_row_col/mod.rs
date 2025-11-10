@@ -10,7 +10,7 @@
 //! 提供飞书电子表格行列的完整操作功能，包括行列的插入、删除、
 //! 更新、移动等操作，以及行列属性管理。
 
-use crate::core::config::Config;
+use crate::config::Config;
 
 pub use add_rows_or_columns::*;
 pub use delete_rows_or_columns::*;

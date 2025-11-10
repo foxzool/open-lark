@@ -2,7 +2,7 @@
 //!
 //! 提供飞书卡片实体的全量更新功能，支持对卡片内容的完整替换
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -260,7 +260,7 @@ impl CardService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
+    use crate::config::Config;
 
     #[test]
     fn test_update_card_request_creation() {

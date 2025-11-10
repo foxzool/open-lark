@@ -5,7 +5,7 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use crate::core::config::Config;
+use crate::config::Config;
 pub mod v1;
 pub struct DocxService {
 }    pub v1: v1::V1}

@@ -1,8 +1,8 @@
-use crate::core::config::Config;
-use crate::core::error::SDKError;
-use crate::core::response::SDKResult;
-use crate::core::service_trait::Service;
-use crate::core::transport::Transport;
+use crate::config::Config;
+use crate::error::SDKError;
+use crate::response::SDKResult;
+use crate::service_trait::Service;
+use crate::transport::Transport;
 // 模型定义在文件底部，无需导入
 use crate::service::directory::v1::employee::delete::{DeleteEmployeeRequest, DeleteEmployeeBuilder};
 use crate::service::directory::v1::employee::resurrect::{ResurrectEmployeeRequest, ResurrectEmployeeBuilder};
@@ -577,8 +577,8 @@ impl Clone for EmployeeService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
-    use crate::core::transport::MockTransport;
+    use crate::config::Config;
+    use crate::transport::MockTransport;
     use crate::service::directory::v1::employee::delete::DeleteEmployeeRequest;
     use crate::service::directory::v1::employee::resurrect::ResurrectEmployeeRequest;
     use crate::service::directory::v1::employee::mget::MGetEmployeeRequest;
@@ -1878,8 +1878,8 @@ mod tests {
 
 /// 模型和数据结构定义
 pub mod models {
-    use crate::core::response::SDKResult;
-    use crate::core::service_trait::Service;
+    use crate::response::SDKResult;
+    use crate::service_trait::Service;
     use crate::service::directory::v1::employee::regular::{EmployeeService, ENDPOINT_REGULAR};
     use serde::{Deserialize, Serialize};
     use std::sync::Arc;

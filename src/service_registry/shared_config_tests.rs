@@ -4,7 +4,7 @@
 
 #[cfg(test)]
 mod tests {
-    use crate::core::config::{Config, ConfigBuilder};
+    use crate::config::{Config, ConfigBuilder};
     use crate::service_registry::{
         ConfigUsageStats, MigrationHelper, ServiceRegistry, SharedConfig, SharedConfigFactory,
     };

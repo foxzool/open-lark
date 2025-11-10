@@ -6,7 +6,7 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 //! IM API v2版本
-use crate::core::config::Config;
+use crate::config::Config;
 /// 应用订阅卡片服务
 pub struct AppFeedCardService {
     _config: Config,
@@ -22,7 +22,7 @@ impl GroupsBotsService {
     pub mod app_feed_card {
     use serde::{Deserialize, Serialize
 };
-    use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
+    use crate::api_resp::{ApiResponseTrait, ResponseFormat};
     #[derive(Debug, Deserialize, Serialize)]
     pub struct CreateAppFeedCardResponse;
     impl ApiResponseTrait for CreateAppFeedCardResponse {
@@ -31,7 +31,7 @@ impl GroupsBotsService {
 }
 pub mod groups_bots {
     use serde::{Deserialize, Serialize};
-    use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
+    use crate::api_resp::{ApiResponseTrait, ResponseFormat};
     #[derive(Debug, Deserialize, Serialize)]
     pub struct ButtonInfo;
     pub type UserIdType = String;

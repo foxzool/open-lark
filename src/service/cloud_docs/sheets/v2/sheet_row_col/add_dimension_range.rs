@@ -70,8 +70,8 @@ ResponseFormat::Data
 #[cfg(test)]
 mod tests {
 use super::*;
-    use crate::core::config::Config;
-use crate::core::SDKResult;use rstest::rstest;
+    use crate::config::Config;
+use crate::SDKResult;use rstest::rstest;
     fn create_test_config() -> Config {,
 Config::builder()
             .app_id()

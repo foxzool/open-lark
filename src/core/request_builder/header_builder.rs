@@ -1,4 +1,4 @@
-use crate::core::{
+use crate::{
     config::Config,
     constants::{CUSTOM_REQUEST_ID, USER_AGENT_HEADER},
     req_option::RequestOption,
@@ -57,7 +57,7 @@ impl HeaderBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::constants::AppType;
+    use crate::constants::AppType;
     use reqwest::Client;
     use std::collections::HashMap;
 

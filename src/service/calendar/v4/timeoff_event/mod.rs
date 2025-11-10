@@ -5,7 +5,7 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use crate::core::{config::Config, trait_system::Service};
+use crate::{config::Config, trait_system::Service};
 pub mod create;
 pub mod delete;
 /// 请假日程服务

@@ -41,8 +41,8 @@
 //! # }
 //! ```
 
-use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
-use crate::core::config::Config;
+use crate::api_resp::{ApiResponseTrait, ResponseFormat};
+use crate::config::Config;
 use serde::{Deserialize, Serialize};
 
 // 声明版本模块

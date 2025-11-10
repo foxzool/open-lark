@@ -3,7 +3,7 @@ pub mod data_source;
 pub mod models;
 pub mod schema;
 pub mod suite_search;
-use crate::core::config::Config;
+use crate::config::Config;
 /// Search API v2版本服务
 ///,
 /// 提供增强版搜索功能，包括自定义数据源、高级搜索语法、

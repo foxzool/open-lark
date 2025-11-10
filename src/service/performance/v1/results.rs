@@ -7,7 +7,7 @@
 //! - 结果统计分析
 //! - 绩效等级管理
 
-use crate::core::{api_resp::EmptyResponse, config::Config, SDKResult};
+use crate::{api_resp::EmptyResponse, config::Config, SDKResult};
 use crate::service::performance::models::PageResponse;
 
 /// 绩效结果管理服务

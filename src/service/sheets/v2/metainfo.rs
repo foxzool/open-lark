@@ -11,7 +11,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
     config::Config,
     constants::AccessTokenType,
@@ -21,7 +21,7 @@ use crate::core::{
     error::LarkAPIError,
     trait_system::Service,
 };
-use crate::core::endpoints_original::Endpoints;
+use crate::endpoints_original::Endpoints;
 
 /// 表格元数据信息
 #[derive(Debug, Clone, Serialize, Deserialize)]

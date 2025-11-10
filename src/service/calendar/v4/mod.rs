@@ -13,7 +13,7 @@
 //! - 参与人和会议室管理
 //! - 忙闲时间查询
 
-use crate::core::{config::Config, SDKResult};
+use crate::{config::Config, SDKResult};
 use serde::{Deserialize, Serialize};
 
 /// Calendar服务 v4版本

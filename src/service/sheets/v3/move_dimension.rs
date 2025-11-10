@@ -8,9 +8,9 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::core::error::SDKError;
-use crate::core::http::{Transport, BaseResponse};
-use crate::core::trait_system::Service;
+use crate::error::SDKError;
+use crate::http::{Transport, BaseResponse};
+use crate::trait_system::Service;
 use crate::service::sheets::v3::models::spreadsheet::SpreadsheetToken;
 use crate::service::sheets::v3::models::sheet::SheetId;
 
@@ -475,8 +475,8 @@ impl<'a> MoveDimensionServiceBuilder<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
-    use crate::core::trait_system::Service;
+    use crate::config::Config;
+    use crate::trait_system::Service;
 
     #[test]
     fn test_move_dimension_service_creation() {

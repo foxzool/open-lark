@@ -7,7 +7,7 @@
 use std::sync::Arc;
 use std::time::Duration;
 
-use crate::core::{
+use crate::{
     config::{Config, ConfigBuilder},
     constants::AppType,
 };

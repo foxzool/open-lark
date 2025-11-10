@@ -54,8 +54,8 @@ impl SpreadsheetSheetService {
 }#[cfg(test)]
 mod tests {
 use super::*;
-    use crate::core::config::Config;
-use crate::core::SDKResult;    use serde_json::{json, Value};
+    use crate::config::Config;
+use crate::SDKResult;    use serde_json::{json, Value};
 fn create_test_config() -> Config {,
         Config::builder()
 .app_id()

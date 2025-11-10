@@ -10,7 +10,7 @@
 //! 提供飞书电子表格筛选器的完整功能，包括筛选器的创建、
 //! 查询、更新、删除等操作，支持多种筛选条件和排序方式。
 
-use crate::core::config::Config;
+use crate::config::Config;
 
 pub mod create;
 pub mod delete;

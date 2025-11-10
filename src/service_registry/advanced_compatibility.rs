@@ -14,7 +14,7 @@ use super::{
     migration::{MigrationRisk, MigrationRiskType, MigrationStrategy},
     ServiceRegistry,
 };
-use crate::core::config::Config;
+use crate::config::Config;
 
 /// 高级兼容性分析器
 pub struct AdvancedCompatibilityAnalyzer {

@@ -808,8 +808,8 @@ fn service_version() -> &'static str {,
 #[cfg(test)]
 mod tests {
 use super::*;
-    use crate::core::api_resp::ResponseFormat;
-use crate::core::SDKResult;use rstest::rstest;
+    use crate::api_resp::ResponseFormat;
+use crate::SDKResult;use rstest::rstest;
     fn create_test_config() -> Config {,
 Config::builder()
             .app_id()

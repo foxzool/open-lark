@@ -13,7 +13,7 @@ use tokio::{
 };
 use tracing::{info_span, Instrument};
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, RawResponse, ResponseFormat},
     app_ticket_manager::AppTicketManager,
     cache::QuickCache,
@@ -870,7 +870,7 @@ impl ApiResponseTrait for TenantAccessTokenResp {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::{config::Config, constants::AppType};
+    use crate::{config::Config, constants::AppType};
     use std::{sync::Arc, time::Duration};
     use tokio::sync::Mutex;
 
@@ -1052,7 +1052,7 @@ mod tests {
 
     #[test]
     fn test_cache_entry_expiry_calculations() {
-        use crate::core::cache::CacheEntry;
+        use crate::cache::CacheEntry;
         use std::time::Duration;
         use tokio::time::Instant;
 
@@ -1222,7 +1222,7 @@ mod tests {
 
     #[test]
     fn test_app_access_token_response() {
-        use crate::core::api_resp::{RawResponse, ResponseFormat};
+        use crate::api_resp::{RawResponse, ResponseFormat};
 
         // 测试ResponseFormat
         assert!(matches!(
@@ -1250,7 +1250,7 @@ mod tests {
 
     #[test]
     fn test_tenant_access_token_response() {
-        use crate::core::api_resp::{RawResponse, ResponseFormat};
+        use crate::api_resp::{RawResponse, ResponseFormat};
 
         // 测试ResponseFormat
         assert!(matches!(
@@ -1381,7 +1381,7 @@ mod tests {
 
     #[test]
     fn test_token_response_debug() {
-        use crate::core::api_resp::RawResponse;
+        use crate::api_resp::RawResponse;
 
         let raw_resp = RawResponse {
             code: 0,

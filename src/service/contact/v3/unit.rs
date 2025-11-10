@@ -16,7 +16,7 @@
 //! - 单位与部门的绑定/解绑
 //! - 获取单位下的部门列表
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,

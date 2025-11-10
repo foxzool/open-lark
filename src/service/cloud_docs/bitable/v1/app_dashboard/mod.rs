@@ -14,7 +14,7 @@ pub mod list;
 pub use copy::*;
 pub use list::*;
 
-use crate::core::config::Config;
+use crate::config::Config;
 
 /// 仪表盘信息
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -148,7 +148,7 @@ impl crate::core::trait_system::Service for AppDashboardService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::trait_system::Service;
+    use crate::trait_system::Service;
 
     #[test]
     fn test_app_dashboard_service_creation() {

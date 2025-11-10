@@ -51,7 +51,7 @@ impl LarkWsClient {
     }
 
     pub async fn open(
-        config: std::sync::Arc<crate::core::config::Config>,
+        config: std::sync::Arc<crate::config::Config>,
         event_handler: EventDispatcherHandler,
     ) -> WsClientResult<()> {
         let end_point = get_conn_url(&config).await?;
@@ -227,7 +227,7 @@ impl LarkWsClient {
 
 /// 获取连接配置
 async fn get_conn_url(
-    config: &std::sync::Arc<crate::core::config::Config>,
+    config: &std::sync::Arc<crate::config::Config>,
 ) -> WsClientResult<EndPointResponse> {
     let body = json!({
         "AppID": &config.app_id,

@@ -9,7 +9,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
     config::Config,
     constants::AccessTokenType,
@@ -17,7 +17,7 @@ use crate::core::{
     ApiRequest, SDKResult,
     error::LarkAPIError,
 };
-use crate::core::endpoints_original::Endpoints;
+use crate::endpoints_original::Endpoints;
 use crate::service::sheets::v3::models::spreadsheet::SpreadsheetToken;
 use crate::service::sheets::v3::models::sheet::SheetId;
 use crate::service::sheets::v3::common::SheetPagedResponse;
@@ -1549,8 +1549,8 @@ impl<'a> FloatImagesServiceBuilder<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
-    use crate::core::trait_system::Service;
+    use crate::config::Config;
+    use crate::trait_system::Service;
 
     #[test]
     fn test_float_images_service_creation() {

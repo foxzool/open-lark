@@ -9,7 +9,7 @@ pub mod app;
 pub mod app_table;
 pub mod app_table_record;
 pub mod app_table_view;
-use crate::core::config::Config;
+use crate::config::Config;
 mod app_dashboard;
 mod app_role;
 mod app_role_member;

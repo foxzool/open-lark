@@ -72,7 +72,7 @@
 //! }
 //! ```
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, BaseResponse},
     config::Config,
     constants::AccessTokenType,

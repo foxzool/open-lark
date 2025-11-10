@@ -12,7 +12,7 @@
 //! - 事件订阅管理
 //! - 回调配置管理
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -130,7 +130,7 @@ impl<'a> GetOutboundIpRequestBuilder<'a> {
 
 // ==================== 特征实现 ====================
 
-use crate::core::trait_system::Service;
+use crate::trait_system::Service;
 
 impl Service for EventServiceV1 {
     fn config(&self) -> &Config {

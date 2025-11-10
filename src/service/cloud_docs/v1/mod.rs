@@ -14,7 +14,7 @@
 //! - 知识库和表格操作
 //! - AI助手和白板功能
 
-use crate::core::config::Config;
+use crate::config::Config;
 
 /// Cloud Docs服务 v1版本
 ///

@@ -18,7 +18,7 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
     config::Config,
     constants::AccessTokenType,
@@ -27,7 +27,7 @@ use crate::core::{
     standard_response::StandardResponse,
     error::LarkAPIError,
 };
-use crate::core::endpoints_original::Endpoints;
+use crate::endpoints_original::Endpoints;
 use crate::impl_executable_builder_owned;
 
 /// 值范围响应
@@ -345,7 +345,7 @@ impl SingleReadService {
         }
 
         // 暂时返回模拟数据，直到Transport问题解决
-        use crate::core::api_resp::RawResponse;
+        use crate::api_resp::RawResponse;
         Ok(BaseResponse {
             raw_response: RawResponse {
                 code: 0,

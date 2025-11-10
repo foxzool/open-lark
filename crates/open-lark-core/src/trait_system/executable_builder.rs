@@ -25,7 +25,7 @@ where
     fn build(self) -> TRequest;
 
     /// 执行请求并返回响应
-    async fn execute(self, service: &TService) -> crate::core::SDKResult<TResponse>
+    async fn execute(self, service: &TService) -> crate::SDKResult<TResponse>
     where
         Self: Sized;
 
@@ -33,8 +33,8 @@ where
     async fn execute_with_options(
         self,
         service: &TService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<TResponse>
+        option: crate::req_option::RequestOption,
+    ) -> crate::SDKResult<TResponse>
     where
         Self: Sized;
 }
@@ -74,9 +74,9 @@ mod tests {
         async fn process_request(
             &self,
             request: TestRequest,
-        ) -> crate::core::SDKResult<TestResponse> {
+        ) -> crate::SDKResult<TestResponse> {
             if self.should_fail {
-                return Err(crate::core::error::LarkAPIError::illegal_param(
+                return Err(crate::error::LarkAPIError::illegal_param(
                     "模拟失败".to_string(),
                 ));
             }
@@ -93,8 +93,8 @@ mod tests {
         async fn process_request_with_options(
             &self,
             request: TestRequest,
-            _option: crate::core::req_option::RequestOption,
-        ) -> crate::core::SDKResult<TestResponse> {
+            _option: crate::req_option::RequestOption,
+        ) -> crate::SDKResult<TestResponse> {
             self.process_request(request).await
         }
     }
@@ -135,7 +135,7 @@ mod tests {
             self
         }
 
-        fn with_option(self, _option: &crate::core::req_option::RequestOption) -> Self {
+        fn with_option(self, _option: &crate::req_option::RequestOption) -> Self {
             // Store option if needed for future use
             self
         }
@@ -154,7 +154,7 @@ mod tests {
             self.build()
         }
 
-        async fn execute(self, service: &MockService) -> crate::core::SDKResult<TestResponse>
+        async fn execute(self, service: &MockService) -> crate::SDKResult<TestResponse>
         where
             Self: Sized,
         {
@@ -165,8 +165,8 @@ mod tests {
         async fn execute_with_options(
             self,
             service: &MockService,
-            option: crate::core::req_option::RequestOption,
-        ) -> crate::core::SDKResult<TestResponse>
+            option: crate::req_option::RequestOption,
+        ) -> crate::SDKResult<TestResponse>
         where
             Self: Sized,
         {
@@ -179,7 +179,7 @@ mod tests {
     #[derive(Debug, Default)]
     struct ChainableBuilder {
         request: TestRequest,
-        option: Option<crate::core::req_option::RequestOption>,
+        option: Option<crate::req_option::RequestOption>,
     }
 
     impl ChainableBuilder {
@@ -197,7 +197,7 @@ mod tests {
             self
         }
 
-        fn with_option(mut self, option: crate::core::req_option::RequestOption) -> Self {
+        fn with_option(mut self, option: crate::req_option::RequestOption) -> Self {
             self.option = Some(option);
             self
         }
@@ -213,7 +213,7 @@ mod tests {
             self.build()
         }
 
-        async fn execute(self, service: &MockService) -> crate::core::SDKResult<TestResponse>
+        async fn execute(self, service: &MockService) -> crate::SDKResult<TestResponse>
         where
             Self: Sized,
         {
@@ -223,8 +223,8 @@ mod tests {
         async fn execute_with_options(
             self,
             service: &MockService,
-            option: crate::core::req_option::RequestOption,
-        ) -> crate::core::SDKResult<TestResponse>
+            option: crate::req_option::RequestOption,
+        ) -> crate::SDKResult<TestResponse>
         where
             Self: Sized,
         {
@@ -246,7 +246,7 @@ mod tests {
             }
         }
 
-        async fn handle_generic<U>(&self, _item: U) -> crate::core::SDKResult<String>
+        async fn handle_generic<U>(&self, _item: U) -> crate::SDKResult<String>
         where
             U: Send + Sync,
         {
@@ -287,7 +287,7 @@ mod tests {
             self.item
         }
 
-        async fn execute(self, service: &GenericService<T>) -> crate::core::SDKResult<String>
+        async fn execute(self, service: &GenericService<T>) -> crate::SDKResult<String>
         where
             Self: Sized,
         {
@@ -297,8 +297,8 @@ mod tests {
         async fn execute_with_options(
             self,
             service: &GenericService<T>,
-            _option: crate::core::req_option::RequestOption,
-        ) -> crate::core::SDKResult<String>
+            _option: crate::req_option::RequestOption,
+        ) -> crate::SDKResult<String>
         where
             Self: Sized,
         {
@@ -320,7 +320,7 @@ mod tests {
     #[tokio::test]
     async fn test_executable_builder_with_options() {
         let service = MockService::new();
-        let option = crate::core::req_option::RequestOption::builder()
+        let option = crate::req_option::RequestOption::builder()
             .tenant_key("test_tenant")
             .build();
         let builder = TestBuilder::new()
@@ -350,7 +350,7 @@ mod tests {
     #[tokio::test]
     async fn test_executable_builder_chained_execution() {
         let service = MockService::new().with_response("chain_data".to_string());
-        let option = crate::core::req_option::RequestOption::builder()
+        let option = crate::req_option::RequestOption::builder()
             .user_access_token("user_token")
             .build();
 
@@ -449,7 +449,7 @@ mod tests {
         assert!(execute_result.is_err());
 
         // execute_with_options 方法也应该传播错误
-        let option = crate::core::req_option::RequestOption::default();
+        let option = crate::req_option::RequestOption::default();
         let execute_with_options_result = builder.execute_with_options(&service, option).await;
         assert!(execute_with_options_result.is_err());
 
@@ -550,7 +550,7 @@ mod tests {
     async fn test_executable_builder_with_custom_options() {
         // 测试自定义 RequestOption
         let service = MockService::new();
-        let custom_option = crate::core::req_option::RequestOption::builder()
+        let custom_option = crate::req_option::RequestOption::builder()
             .tenant_key("custom_tenant")
             .user_access_token("custom_user_token")
             .request_id("custom_request_id")

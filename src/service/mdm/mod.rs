@@ -7,8 +7,8 @@
 #![allow(clippy::module_inception)]
 //! Mdm服务模块 - 简化实现
 
-use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
-use crate::core::config::Config;
+use crate::api_resp::{ApiResponseTrait, ResponseFormat};
+use crate::config::Config;
 use serde::{Deserialize, Serialize};
 
 /// 简化的服务结构体

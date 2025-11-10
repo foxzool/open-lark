@@ -10,7 +10,7 @@
 //! 提供画板相关功能：,
 //! - 画板节点管理,
 pub mod v1;
-use crate::core::{config::Config, req_option::RequestOption, SDKResult};
+use crate::{config::Config, req_option::RequestOption, SDKResult};
 use self::v1::*;
 /// 画板服务
 pub struct BoardService {

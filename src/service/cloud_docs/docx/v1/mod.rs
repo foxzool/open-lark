@@ -1,4 +1,4 @@
-use crate::core::config::Config;
+use crate::config::Config;
 
 pub mod document;
 pub mod document_block;

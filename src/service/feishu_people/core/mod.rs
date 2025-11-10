@@ -15,7 +15,7 @@
 //! - 公司管理
 //! - 异动管理
 
-use crate::core::config::Config;
+use crate::config::Config;
 
 /// 核心人事管理服务
 #[derive(Debug, Clone)]

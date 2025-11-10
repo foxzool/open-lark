@@ -43,7 +43,7 @@ pub use export_task::*;
 pub use file_version::*;
 pub use subscription::*;
 
-use crate::core::config::Config;
+use crate::config::Config;
 
 /// Drive服务 v1版本
 ///
@@ -338,7 +338,7 @@ impl crate::core::service_trait::Service for DriveServiceV1 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::transport::MockTransport;
+    use crate::transport::MockTransport;
 
     fn create_test_service() -> DriveServiceV1 {
         let config = Config::new("test_app_id", "test_app_secret");

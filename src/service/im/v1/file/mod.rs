@@ -7,8 +7,8 @@
 #![allow(clippy::module_inception)]
 //! File服务模块 - 简化实现
 use serde::{Deserialize, Serialize};
-use crate::core::config::Config;
-use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
+use crate::config::Config;
+use crate::api_resp::{ApiResponseTrait, ResponseFormat};
 /// 简化的服务结构体
 #[derive(Debug, Clone)]
 pub struct SimpleService {

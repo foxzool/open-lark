@@ -6,7 +6,7 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 // 邮箱地址查询模块 - 占位符实现
-use crate::core::config::Config;
+use crate::config::Config;
 pub struct AddressService {
 pub config: Config,
 }

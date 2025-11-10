@@ -6,7 +6,7 @@
 //! - 删除电子表格
 //! - 电子表格权限管理
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
     config::Config,
     constants::AccessTokenType,

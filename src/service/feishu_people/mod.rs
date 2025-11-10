@@ -14,7 +14,7 @@
 //! - 公司信息管理
 //! - 人事统计分析
 
-use crate::core::config::Config;
+use crate::config::Config;
 
 pub mod authorizations;
 pub mod basic_data;

@@ -1,6 +1,6 @@
 mod auth;
 
-use crate::core::config::Config;
+use crate::config::Config;
 
 /// 认证服务 V1 版本
 ///

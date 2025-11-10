@@ -6,7 +6,7 @@ use std::sync::Arc;
 use std::time::{Duration, Instant};
 use tokio::task::JoinSet;
 
-use crate::core::config::{Config, ConfigBuilder};
+use crate::config::{Config, ConfigBuilder};
 use crate::service_registry::{ServiceError, ServiceRegistry};
 // 条件编译导入适配器
 #[cfg(feature = "authentication")]

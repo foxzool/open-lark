@@ -5,7 +5,7 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use crate::core::config::Config;
+use crate::config::Config;
 // TODO: 以下功能待实现
 // pub mod create;
 // pub mod delete;

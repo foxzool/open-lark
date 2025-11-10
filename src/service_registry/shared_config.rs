@@ -2,7 +2,7 @@
 //!
 //! 提供配置共享机制，减少多个服务持有相同配置的内存开销
 
-use crate::core::config::Config;
+use crate::config::Config;
 use std::sync::Arc;
 
 /// 共享配置包装器
@@ -219,7 +219,7 @@ impl ConfigUsageStats {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::ConfigBuilder;
+    use crate::config::ConfigBuilder;
 
     fn create_test_config() -> Config {
         ConfigBuilder::default()

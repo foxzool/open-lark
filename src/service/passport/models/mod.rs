@@ -1,5 +1,5 @@
 // passport模块的数据模型定义
-use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
+use crate::api_resp::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 
 /// 用户会话信息

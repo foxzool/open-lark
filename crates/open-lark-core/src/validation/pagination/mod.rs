@@ -1,6 +1,6 @@
 use std::marker::PhantomData;
 
-use crate::core::{
+use crate::{
     api_req::ApiRequest,
     error::LarkAPIError,
     validation::{self, ValidateBuilder, ValidationResult},
@@ -141,7 +141,7 @@ impl<T> PaginationRequestBuilder<T> {
         if let Some(ref page_token) = self.page_token {
             // Special check for empty page token
             if page_token.is_empty() {
-                return Err(LarkAPIError::illegal_param("page token cannot be empty"));
+                return Err(LarkAPIError::illegal_param("page token cannot be empty").into());
             }
 
             match validation::validate_page_token(page_token, "page_token") {

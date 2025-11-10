@@ -2889,6 +2889,32 @@ impl Endpoints {
     /// 日历详情操作
     pub const CALENDAR_V4_CALENDAR_OPERATION: &'static str =
         "/open-apis/calendar/v4/calendars/{calendar_id}";
+
+    // ==================== 兼容性别名 ====================
+    // 为了向后兼容，提供常用端点的别名
+
+    // IM相关别名
+    pub const IM_V1_MESSAGES: &'static str = Self::IM_V1_SEND_MESSAGE;
+    pub const IM_V1_CHATS: &'static str = Self::IM_CHAT_CREATE;
+    pub const IM_V1_BATCH_MESSAGES: &'static str = Self::IM_V1_SEND_MESSAGE; // 同样的端点
+
+    // 认证相关别名
+    pub const AUTH_APP_ACCESS_TOKEN_INTERNAL: &'static str = Self::AUTH_V3_APP_ACCESS_TOKEN;
+    pub const AUTH_TENANT_ACCESS_TOKEN_INTERNAL: &'static str = Self::AUTH_V3_TENANT_ACCESS_TOKEN;
+
+    // 搜索相关别名
+    pub const SEARCH_V1_USER_INTERNAL: &'static str = Self::SEARCH_V1_USER;
+
+    // 云盘相关别名
+    pub const DRIVE_V1_FILES_INTERNAL: &'static str = Self::DRIVE_V1_FILES;
+    pub const DRIVE_V1_FOLDERS_INTERNAL: &'static str = Self::DRIVE_V1_FILES;
+
+    // 表格相关别名
+    pub const SHEETS_V2_SPREADSHEETS_INTERNAL: &'static str = Self::SHEETS_V2_SPREADSHEETS;
+    pub const SHEETS_V3_SPREADSHEETS_INTERNAL: &'static str = Self::SHEETS_V3_SPREADSHEETS;
+
+    // 多维表格相关别名
+    pub const BITABLE_V1_APPS_INTERNAL: &'static str = Self::BITABLE_V1_APPS;
 }
 
 /// API端点构建辅助函数

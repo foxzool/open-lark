@@ -2,7 +2,7 @@
 //!
 //! 提供卡片组件的创建、更新、删除等管理功能
 
-use crate::core::config::Config;
+use crate::config::Config;
 
 pub mod content;
 pub mod create;

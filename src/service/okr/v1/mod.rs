@@ -14,7 +14,7 @@
 //! - OKR复盘和评分系统
 //! - 多语言支持
 
-use crate::core::{config::Config, SDKResult};
+use crate::{config::Config, SDKResult};
 pub use crate::service::okr::models::*;
 
 /// OKR服务 V1版本

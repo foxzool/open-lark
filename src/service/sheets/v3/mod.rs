@@ -41,7 +41,7 @@ pub use sheet_protection::*;
 pub use move_dimension::*;
 pub use float_images::*;
 
-use crate::core::config::Config;
+use crate::config::Config;
 
 /// Sheets电子表格服务 v3版本
 ///
@@ -132,7 +132,7 @@ impl crate::core::trait_system::Service for SheetsServiceV3 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::trait_system::Service;
+    use crate::trait_system::Service;
 
     #[test]
     fn test_sheets_v3_service_creation() {

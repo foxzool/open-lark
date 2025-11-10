@@ -1,5 +1,5 @@
 use super::MessageService;
-use crate::core::api_resp::ApiResponseTrait;
+use crate::api_resp::ApiResponseTrait;
 use serde::{Deserialize, Serialize};
 /// 发送消息的通用trait,
 ///
@@ -611,7 +611,7 @@ Message {,
             mentions: None,
         }
 fn create_test_message_service() -> MessageService {,
-        use crate::core::config::Config;
+        use crate::config::Config;
 MessageService {,
             config: Config::default()}
 fn create_test_list_request() -> crate::service::im::v1::message::list::ListMessageRequest {,

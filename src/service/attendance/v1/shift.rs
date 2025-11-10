@@ -240,8 +240,8 @@ fn service_version() -> &'static str {,
 #[cfg(test)]
 mod tests {
 use super::*;
-    use crate::core::config::Config;
-use crate::core::SDKResult;#[test]
+    use crate::config::Config;
+use crate::SDKResult;#[test]
     fn test_shift_service_creation() {
 let config = Config::default();
         let service = ShiftService {

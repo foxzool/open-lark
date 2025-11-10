@@ -7,8 +7,8 @@
 #![allow(clippy::module_inception)]
 use reqwest::Method;
 use serde_json::json;
-use crate::core::{
-use crate::core::SDKResult;    api_resp::BaseResponse,
+use crate::{
+use crate::SDKResult;    api_resp::BaseResponse,
     config::Config,
     constants::AccessTokenType,
     endpoints::{attendance::*, EndpointBuilder}
@@ -127,7 +127,7 @@ fn service_version() -> &'static str {,
 #[allow(clippy::field_reassign_with_default)]
 mod tests {
 use super::*;
-    use crate::core::config::Config;
+    use crate::config::Config;
 use crate::service::attendance::v1::models::UserTaskCreate;
     fn create_test_config() -> Config {,
 Config::builder()

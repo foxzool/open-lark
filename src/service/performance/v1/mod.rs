@@ -14,7 +14,7 @@
 //! - 评估模板和项目管理
 //! - 统计分析功能
 
-use crate::core::config::Config;
+use crate::config::Config;
 use serde::{Deserialize, Serialize};
 
 // 声明子模块

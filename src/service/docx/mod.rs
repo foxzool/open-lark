@@ -35,7 +35,7 @@ pub mod v1;
 // 重新导出所有服务类型
 pub use v1::*;
 
-use crate::core::config::Config;
+use crate::config::Config;
 
 /// Docx文档服务
 ///
@@ -89,7 +89,7 @@ impl crate::core::trait_system::Service for DocxService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::trait_system::Service;
+    use crate::trait_system::Service;
 
     #[test]
     fn test_docx_service_creation() {

@@ -9,7 +9,7 @@ pub mod agency;
 pub mod external_system;
 pub mod referral;
 pub mod website;
-use crate::core::config::Config;
+use crate::config::Config;
 use agency::AgencyService;
 use external_system::ExternalSystemService;
 use referral::ReferralService;

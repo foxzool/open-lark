@@ -7,7 +7,7 @@
 //! - 活动参与者管理
 //! - 活动进度跟踪
 
-use crate::core::{api_resp::EmptyResponse, config::Config, SDKResult};
+use crate::{api_resp::EmptyResponse, config::Config, SDKResult};
 use crate::service::performance::models::PageResponse;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};

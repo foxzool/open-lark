@@ -6,7 +6,7 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 
-use crate::core::config::Config;
+use crate::config::Config;
 
 // 重新导出所有模块类型
 pub use create::*;
@@ -200,7 +200,7 @@ impl crate::core::service_trait::Service for SpaceService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::transport::MockTransport;
+    use crate::transport::MockTransport;
 
     fn create_test_service() -> SpaceService {
         let config = Config::new("test_app_id", "test_app_secret");

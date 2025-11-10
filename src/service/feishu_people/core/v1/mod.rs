@@ -9,7 +9,7 @@
 //!
 //! 包含核心人事管理的完整功能，这是主要使用的版本
 
-use crate::core::config::Config;
+use crate::config::Config;
 
 // 声明子模块
 pub mod companies;

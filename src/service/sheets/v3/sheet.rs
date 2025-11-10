@@ -5,7 +5,7 @@
 //! - 查询特定工作表的属性信息
 //! - 工作表属性管理和操作
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
     config::Config,
     constants::AccessTokenType,

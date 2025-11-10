@@ -540,7 +540,7 @@ assert_eq!(,
     }
 #[test]
     fn test_error_handling_types() {
-use crate::core::SDKResult;
+use crate::SDKResult;
         // Verify that the list methods return SDKResult,
 fn _check_list_result() -> SDKResult<ListMessageRespData> {,
             unimplemented!("Mock implementation")}

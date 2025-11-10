@@ -3,7 +3,7 @@
 //! 提供企业员工创建功能，支持完整的员工信息录入和验证
 //! 适用于企业人力资源管理系统的员工入职流程
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -505,7 +505,7 @@ impl EmployeeService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
+    use crate::config::Config;
 
     #[test]
     fn test_create_employee_request_creation() {

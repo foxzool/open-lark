@@ -8,7 +8,7 @@ use serde_json::{json, Value};
 use sha2::Sha256;
 
 #[cfg(feature = "im")]
-use crate::core::{
+use crate::{
     api_resp::{BaseResponse, RawResponse},
     http::Transport,
     SDKResult,

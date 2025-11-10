@@ -5,7 +5,7 @@
 //! - 查询任务结果和进度
 //! - 错误信息和调试信息获取
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
