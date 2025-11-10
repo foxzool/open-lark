@@ -18,7 +18,10 @@
 //! - 数据验证和下拉列表设置
 //! - 表格元数据获取和权限管理
 
+pub mod batch_range_read;
+
 pub mod sheet_cells;
+pub mod single_read;
 pub mod batch_read;
 pub mod batch_read_ranges;
 pub mod batch_write;
@@ -36,9 +39,14 @@ pub mod values_append;
 pub mod sheets_batch_update;
 pub mod values_prepend;
 pub mod metainfo;
+pub mod single_range_read;
+
 
 // 重新导出所有服务类型
-pub use sheet_cells::*;
+    pub use batch_range_read::*;
+    pub use single_range_read::*;
+    pub use sheet_cells::*;
+pub use single_read::*;
 pub use batch_read::*;
 pub use batch_read_ranges::*;
 pub use batch_write::*;
@@ -68,6 +76,8 @@ pub struct SheetsServiceV2 {
     config: Config,
     /// 单元格管理服务
     pub sheet_cells: SheetCellsService,
+    /// 单个范围读取服务
+    pub single_read: SingleReadService,
     /// 批量读取服务
     pub batch_read: BatchReadService,
     /// 批量范围读取服务
@@ -102,7 +112,9 @@ pub struct SheetsServiceV2 {
     pub values_prepend: ValuesPrependService,
     /// 表格元数据服务
     pub metainfo: SpreadsheetMetaService,
-}
+    /// 多个范围读取服务
+    pub batch_range_read: BatchRangeReadService,
+    }
 
 impl SheetsServiceV2 {
     /// 创建Sheets v2服务实例
@@ -123,6 +135,7 @@ impl SheetsServiceV2 {
         Self {
             config: config.clone(),
             sheet_cells: SheetCellsService::new(config.clone()),
+            single_read: SingleReadService::new(config.clone()),
             batch_read: BatchReadService::new(config.clone()),
             batch_read_ranges: BatchReadRangesService::new(config.clone()),
             batch_write: BatchWriteService::new(config.clone()),
@@ -139,7 +152,8 @@ impl SheetsServiceV2 {
             values_append: ValuesAppendService::new(config.clone()),
             sheets_batch_update: SheetsBatchUpdateService::new(config.clone()),
             values_prepend: ValuesPrependService::new(config.clone()),
-            metainfo: SpreadsheetMetaService::new(config),
+            metainfo: SpreadsheetMetaService::new(config.clone()),
+            batch_range_read: BatchRangeReadService::new(config),
         }
     }
 }

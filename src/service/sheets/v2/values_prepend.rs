@@ -661,7 +661,9 @@ mod tests {
     #[test]
     fn test_csv_parsing() {
         // 测试简单CSV
-        let csv = "姓名,年龄,城市\n张三,25,北京\n李四,30,上海";
+        let csv = "姓名,年龄,城市
+张三,25,北京
+李四,30,上海";
         let request = ValuesPrependRequest::from_csv("token", "sheet_id", csv, ',').unwrap();
 
         match request.values {
@@ -708,7 +710,8 @@ mod tests {
     #[test]
     fn test_csv_parsing_invalid() {
         // 测试未闭合的引号
-        let csv_invalid = "名称,描述\n"产品A","未闭合的字段";
+        let csv_invalid = "名称,描述
+"产品A","未闭合的字段";
         let result = ValuesPrependRequest::from_csv("token", "sheet_id", csv_invalid, ',');
         assert!(result.is_err());
 
@@ -746,7 +749,9 @@ mod tests {
         let config = Config::default();
         let service = ValuesPrependService::new(config);
 
-        let csv_data = "Name,Age\\nJohn,25\\nJane,30";
+        let csv_data = "Name,Age
+John,25
+Jane,30";
         let builder = service.prepend_builder("token", "sheet_id")
             .data_csv(csv_data, ',')
             .unwrap()
@@ -782,7 +787,9 @@ mod tests {
         assert_eq!(request.options.as_ref().unwrap().clear_format, Some(true));
 
         // 测试CSV复杂数据
-        let complex_csv = "ID,Name,Price\\n001,Item1,10.50\\n002,Item2,25.00";
+        let complex_csv = "ID,Name,Price
+001,Item1,10.50
+002,Item2,25.00";
         let csv_request = ValuesPrependRequest::from_csv("token", "sheet_id", complex_csv, ',').unwrap();
 
         match csv_request.values {
@@ -792,7 +799,7 @@ mod tests {
                 assert_eq!(rows[1], vec!["001", "Item1", "10.50"]);
                 assert_eq!(rows[2], vec!["002", "Item2", "25.00"]);
             }
-            _ => panic!("Expected array format"),
+            _ => panic!("Expected array format")
         }
     }
 

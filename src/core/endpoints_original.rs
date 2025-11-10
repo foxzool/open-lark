@@ -2332,7 +2332,7 @@ impl Endpoints {
         "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images/{}";
 
     /// 电子表格管理 - v2
-    pub const SHEETS_V2_SPREADSHEET_VALUES: &'static str =
+      pub const SHEETS_V2_SPREADSHEET_VALUES: &'static str =
         "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values";
     pub const SHEETS_V2_SPREADSHEET_VALUES_RANGE: &'static str =
         "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values/{range}";
@@ -2340,6 +2340,8 @@ impl Endpoints {
         "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_append";
     pub const SHEETS_V2_SPREADSHEET_VALUES_PREPEND: &'static str =
         "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_prepend";
+    pub const SHEETS_V2_SPREADSHEET_VALUES_GET: &'static str =
+        "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values/{range}";
     pub const SHEETS_V2_SPREADSHEET_VALUES_BATCH_GET: &'static str =
         "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_batch_get";
     pub const SHEETS_V2_SPREADSHEET_VALUES_BATCH_UPDATE: &'static str =

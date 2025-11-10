@@ -21,8 +21,11 @@ pub mod macros;
 pub mod sheet_protection;
 pub mod move_dimension;
 pub mod float_images;
+pub mod spreadsheet_info;
+
 
 // 重新导出所有服务类型
+    pub use spreadsheet_info::*;
 pub use spreadsheet::*;
 pub use spreadsheet_create::*;
 pub use sheet::*;
