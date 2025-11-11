@@ -230,6 +230,8 @@ impl ApiResponseTrait for MessageData {
     }
 }
 
+pub struct Phase3MigrationChecklist;
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -272,44 +274,3 @@ mod tests {
         // 实际差异在大量请求时会更明显
     }
 }
-
-/// Phase 3 迁移清单
-///
-/// ## 已完成的优化
-///
-/// ### 1. 通用请求执行器 ✅
-/// - 创建了 `RequestExecutor` 统一所有API调用
-/// - 提供了多种便利方法：`execute`, `json_request`, `query_request` 等
-/// - 支持路径参数替换和查询参数处理
-/// - 减少67%的重复代码
-///
-/// ### 2. 响应解析优化 ✅  
-/// - 创建了 `ImprovedResponseHandler` 替代双重JSON解析
-/// - 实现单次解析，提升性能
-/// - 改进错误处理逻辑
-/// - 统一处理不同响应格式（Data, Flatten, Binary）
-///
-/// ### 3. 集成到现有系统 ✅
-/// - 将 `ImprovedResponseHandler` 集成到 `Transport::do_send`
-/// - 保持向后兼容性
-/// - 清理了未使用的代码
-///
-/// ## 待完成的任务
-///
-/// ### 3. 建立集成测试套件 🔄
-/// - 引入 wiremock 模拟API端点
-/// - 创建测试不同响应格式的用例
-/// - 验证 RequestExecutor 和 ImprovedResponseHandler 的正确性
-///
-/// ### 4. 编写端到端测试 🔄
-/// - 覆盖核心业务流程
-/// - 测试错误处理边界情况
-/// - 性能基准测试
-///
-/// ## 迁移建议
-///
-/// 1. **渐进式迁移**：可以逐步将现有API从手动构建迁移到使用 RequestExecutor
-/// 2. **保持兼容性**：新实现与旧接口完全兼容
-/// 3. **性能监控**：在生产环境中监控新实现的性能表现
-/// 4. **测试覆盖**：确保所有迁移的API都有充分的测试覆盖
-pub struct Phase3MigrationChecklist;

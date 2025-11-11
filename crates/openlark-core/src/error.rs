@@ -347,6 +347,9 @@ impl LarkAPIError {
     }
 }
 
+/// Result type alias for convenience
+pub type SDKResult<T> = Result<T, LarkAPIError>;
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -736,6 +739,3 @@ mod tests {
         assert_eq!(map.get(&ErrorSeverity::Critical), Some(&"critical"));
     }
 }
-
-/// Result type alias for convenience
-pub type SDKResult<T> = Result<T, LarkAPIError>;
