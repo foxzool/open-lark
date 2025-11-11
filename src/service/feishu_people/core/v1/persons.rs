@@ -70,7 +70,7 @@ use crate::{
     http::Transport,
     SDKResult,
 };
-use open_lark_core::core::{
+use openlark_core::core::{
     api_req::ApiRequest, error::LarkAPIError as CoreLarkAPIError, SDKResult as CoreSDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -921,40 +921,41 @@ fn map_sdk_error(err: LarkAPIError) -> CoreLarkAPIError {
     }
 }
 
-// 应用ExecutableBuilder trait - 使用自定义实现
-#[async_trait::async_trait]
-impl
-    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
-        PersonsService,
-        (String, GetPersonRequest),
-        BaseResponse<GetPersonResponse>,
-    > for GetPersonBuilder
-{
-    fn build(self) -> (String, GetPersonRequest) {
-        (self.user_id, self.request)
-    }
-
-    async fn execute(
-        self,
-        service: &PersonsService,
-    ) -> CoreSDKResult<BaseResponse<GetPersonResponse>> {
-        service
-            .get_with_tuple(self.build())
-            .await
-            .map_err(map_sdk_error)
-    }
-
-    async fn execute_with_options(
-        self,
-        service: &PersonsService,
-        _option: open_lark_core::req_option::RequestOption,
-    ) -> CoreSDKResult<BaseResponse<GetPersonResponse>> {
-        service
-            .get_with_tuple(self.build())
-            .await
-            .map_err(map_sdk_error)
-    }
-}
+// TEMP_COMMENTED: // 应用ExecutableBuilder trait - 使用自定义实现
+// TEMP_COMMENTED: #[async_trait::async_trait]
+// TEMP_COMMENTED: impl openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:     openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:     openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:         PersonsService,
+// TEMP_COMMENTED:         (String, GetPersonRequest),
+// TEMP_COMMENTED:         BaseResponse<GetPersonResponse>,
+// TEMP_COMMENTED:     > for GetPersonBuilder
+// TEMP_COMMENTED: {
+// TEMP_COMMENTED:     fn build(self) -> (String, GetPersonRequest) {
+// TEMP_COMMENTED:         (self.user_id, self.request)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PersonsService,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<GetPersonResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .get_with_tuple(self.build())
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute_with_options(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PersonsService,
+// TEMP_COMMENTED:         _option: openlark_core::req_option::RequestOption,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<GetPersonResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .get_with_tuple(self.build())
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED: }
 
 /// 批量获取人员构建器
 #[derive(Debug, Clone)]
@@ -998,7 +999,7 @@ impl Default for BatchGetPersonsBuilder {
 // 使用自定义实现，因为batch_get方法不接受Option参数
 #[async_trait::async_trait]
 impl
-    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
+    openlark_core::trait_system::ExecutableBuilder<
         PersonsService,
         BatchGetPersonsRequest,
         BaseResponse<BatchGetPersonsResponse>,
@@ -1021,7 +1022,7 @@ impl
     async fn execute_with_options(
         self,
         service: &PersonsService,
-        _option: open_lark_core::req_option::RequestOption,
+        _option: openlark_core::req_option::RequestOption,
     ) -> CoreSDKResult<BaseResponse<BatchGetPersonsResponse>> {
         service
             .batch_get(&self.build())
@@ -1079,40 +1080,40 @@ impl Default for GetPersonsByDepartmentBuilder {
     }
 }
 
-// 应用ExecutableBuilder trait - 使用自定义实现
-#[async_trait::async_trait]
-impl
-    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
-        PersonsService,
-        GetPersonsByDepartmentRequest,
-        BaseResponse<GetPersonsByDepartmentResponse>,
-    > for GetPersonsByDepartmentBuilder
-{
-    fn build(self) -> GetPersonsByDepartmentRequest {
-        self.request
-    }
-
-    async fn execute(
-        self,
-        service: &PersonsService,
-    ) -> CoreSDKResult<BaseResponse<GetPersonsByDepartmentResponse>> {
-        service
-            .get_by_department(&self.build())
-            .await
-            .map_err(map_sdk_error)
-    }
-
-    async fn execute_with_options(
-        self,
-        service: &PersonsService,
-        _option: open_lark_core::req_option::RequestOption,
-    ) -> CoreSDKResult<BaseResponse<GetPersonsByDepartmentResponse>> {
-        service
-            .get_by_department(&self.build())
-            .await
-            .map_err(map_sdk_error)
-    }
-}
+// TEMP_COMMENTED: // 应用ExecutableBuilder trait - 使用自定义实现
+// TEMP_COMMENTED: #[async_trait::async_trait]
+// TEMP_COMMENTED: impl openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:     openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:         PersonsService,
+// TEMP_COMMENTED:         GetPersonsByDepartmentRequest,
+// TEMP_COMMENTED:         BaseResponse<GetPersonsByDepartmentResponse>,
+// TEMP_COMMENTED:     > for GetPersonsByDepartmentBuilder
+// TEMP_COMMENTED: {
+// TEMP_COMMENTED:     fn build(self) -> GetPersonsByDepartmentRequest {
+// TEMP_COMMENTED:         self.request
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PersonsService,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<GetPersonsByDepartmentResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .get_by_department(&self.build())
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute_with_options(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PersonsService,
+// TEMP_COMMENTED:         _option: openlark_core::req_option::RequestOption,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<GetPersonsByDepartmentResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .get_by_department(&self.build())
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED: }
 
 /// 搜索人员构建器
 #[derive(Debug, Clone)]
@@ -1164,34 +1165,34 @@ impl Default for SearchPersonsBuilder {
     }
 }
 
-// 应用ExecutableBuilder trait - 使用自定义实现
-#[async_trait::async_trait]
-impl
-    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
-        PersonsService,
-        SearchPersonsRequest,
-        BaseResponse<SearchPersonsResponse>,
-    > for SearchPersonsBuilder
-{
-    fn build(self) -> SearchPersonsRequest {
-        self.request
-    }
-
-    async fn execute(
-        self,
-        service: &PersonsService,
-    ) -> CoreSDKResult<BaseResponse<SearchPersonsResponse>> {
-        service.search(&self.build()).await.map_err(map_sdk_error)
-    }
-
-    async fn execute_with_options(
-        self,
-        service: &PersonsService,
-        _option: open_lark_core::req_option::RequestOption,
-    ) -> CoreSDKResult<BaseResponse<SearchPersonsResponse>> {
-        service.search(&self.build()).await.map_err(map_sdk_error)
-    }
-}
+// TEMP_COMMENTED: // 应用ExecutableBuilder trait - 使用自定义实现
+// TEMP_COMMENTED: #[async_trait::async_trait]
+// TEMP_COMMENTED: impl openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:     openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:         PersonsService,
+// TEMP_COMMENTED:         SearchPersonsRequest,
+// TEMP_COMMENTED:         BaseResponse<SearchPersonsResponse>,
+// TEMP_COMMENTED:     > for SearchPersonsBuilder
+// TEMP_COMMENTED: {
+// TEMP_COMMENTED:     fn build(self) -> SearchPersonsRequest {
+// TEMP_COMMENTED:         self.request
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PersonsService,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<SearchPersonsResponse>> {
+// TEMP_COMMENTED:         service.search(&self.build()).await.map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute_with_options(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PersonsService,
+// TEMP_COMMENTED:         _option: openlark_core::req_option::RequestOption,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<SearchPersonsResponse>> {
+// TEMP_COMMENTED:         service.search(&self.build()).await.map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED: }
 
 /// 更新人员信息构建器
 #[derive(Debug, Clone)]
@@ -1233,40 +1234,40 @@ impl Default for UpdatePersonBuilder {
     }
 }
 
-// 应用ExecutableBuilder trait - 使用自定义实现
-#[async_trait::async_trait]
-impl
-    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
-        PersonsService,
-        (String, UpdatePersonRequest),
-        BaseResponse<UpdatePersonResponse>,
-    > for UpdatePersonBuilder
-{
-    fn build(self) -> (String, UpdatePersonRequest) {
-        (self.user_id, self.request)
-    }
-
-    async fn execute(
-        self,
-        service: &PersonsService,
-    ) -> CoreSDKResult<BaseResponse<UpdatePersonResponse>> {
-        service
-            .update_with_tuple(self.build())
-            .await
-            .map_err(map_sdk_error)
-    }
-
-    async fn execute_with_options(
-        self,
-        service: &PersonsService,
-        _option: open_lark_core::req_option::RequestOption,
-    ) -> CoreSDKResult<BaseResponse<UpdatePersonResponse>> {
-        service
-            .update_with_tuple(self.build())
-            .await
-            .map_err(map_sdk_error)
-    }
-}
+// TEMP_COMMENTED: // 应用ExecutableBuilder trait - 使用自定义实现
+// TEMP_COMMENTED: #[async_trait::async_trait]
+// TEMP_COMMENTED: impl openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:     openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:         PersonsService,
+// TEMP_COMMENTED:         (String, UpdatePersonRequest),
+// TEMP_COMMENTED:         BaseResponse<UpdatePersonResponse>,
+// TEMP_COMMENTED:     > for UpdatePersonBuilder
+// TEMP_COMMENTED: {
+// TEMP_COMMENTED:     fn build(self) -> (String, UpdatePersonRequest) {
+// TEMP_COMMENTED:         (self.user_id, self.request)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PersonsService,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<UpdatePersonResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .update_with_tuple(self.build())
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute_with_options(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PersonsService,
+// TEMP_COMMENTED:         _option: openlark_core::req_option::RequestOption,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<UpdatePersonResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .update_with_tuple(self.build())
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED: }
 
 /// 更新人员状态构建器
 #[derive(Debug, Clone)]
@@ -1308,40 +1309,40 @@ impl Default for UpdatePersonStatusBuilder {
     }
 }
 
-// 应用ExecutableBuilder trait - 使用自定义实现
-#[async_trait::async_trait]
-impl
-    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
-        PersonsService,
-        (String, UpdatePersonStatusRequest),
-        BaseResponse<UpdatePersonStatusResponse>,
-    > for UpdatePersonStatusBuilder
-{
-    fn build(self) -> (String, UpdatePersonStatusRequest) {
-        (self.user_id, self.request)
-    }
-
-    async fn execute(
-        self,
-        service: &PersonsService,
-    ) -> CoreSDKResult<BaseResponse<UpdatePersonStatusResponse>> {
-        service
-            .update_status_with_tuple(self.build())
-            .await
-            .map_err(map_sdk_error)
-    }
-
-    async fn execute_with_options(
-        self,
-        service: &PersonsService,
-        _option: open_lark_core::req_option::RequestOption,
-    ) -> CoreSDKResult<BaseResponse<UpdatePersonStatusResponse>> {
-        service
-            .update_status_with_tuple(self.build())
-            .await
-            .map_err(map_sdk_error)
-    }
-}
+// TEMP_COMMENTED: // 应用ExecutableBuilder trait - 使用自定义实现
+// TEMP_COMMENTED: #[async_trait::async_trait]
+// TEMP_COMMENTED: impl openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:     openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:         PersonsService,
+// TEMP_COMMENTED:         (String, UpdatePersonStatusRequest),
+// TEMP_COMMENTED:         BaseResponse<UpdatePersonStatusResponse>,
+// TEMP_COMMENTED:     > for UpdatePersonStatusBuilder
+// TEMP_COMMENTED: {
+// TEMP_COMMENTED:     fn build(self) -> (String, UpdatePersonStatusRequest) {
+// TEMP_COMMENTED:         (self.user_id, self.request)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PersonsService,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<UpdatePersonStatusResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .update_status_with_tuple(self.build())
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute_with_options(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PersonsService,
+// TEMP_COMMENTED:         _option: openlark_core::req_option::RequestOption,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<UpdatePersonStatusResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .update_status_with_tuple(self.build())
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED: }
 
 /// 获取用户头像构建器
 #[derive(Debug, Clone)]
@@ -1383,40 +1384,40 @@ impl Default for GetPersonAvatarBuilder {
     }
 }
 
-// 应用ExecutableBuilder trait - 使用自定义实现
-#[async_trait::async_trait]
-impl
-    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
-        PersonsService,
-        (String, GetPersonAvatarRequest),
-        BaseResponse<GetPersonAvatarResponse>,
-    > for GetPersonAvatarBuilder
-{
-    fn build(self) -> (String, GetPersonAvatarRequest) {
-        (self.user_id, self.request)
-    }
-
-    async fn execute(
-        self,
-        service: &PersonsService,
-    ) -> CoreSDKResult<BaseResponse<GetPersonAvatarResponse>> {
-        service
-            .get_avatar_with_tuple(self.build())
-            .await
-            .map_err(map_sdk_error)
-    }
-
-    async fn execute_with_options(
-        self,
-        service: &PersonsService,
-        _option: open_lark_core::req_option::RequestOption,
-    ) -> CoreSDKResult<BaseResponse<GetPersonAvatarResponse>> {
-        service
-            .get_avatar_with_tuple(self.build())
-            .await
-            .map_err(map_sdk_error)
-    }
-}
+// TEMP_COMMENTED: // 应用ExecutableBuilder trait - 使用自定义实现
+// TEMP_COMMENTED: #[async_trait::async_trait]
+// TEMP_COMMENTED: impl openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:     openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:         PersonsService,
+// TEMP_COMMENTED:         (String, GetPersonAvatarRequest),
+// TEMP_COMMENTED:         BaseResponse<GetPersonAvatarResponse>,
+// TEMP_COMMENTED:     > for GetPersonAvatarBuilder
+// TEMP_COMMENTED: {
+// TEMP_COMMENTED:     fn build(self) -> (String, GetPersonAvatarRequest) {
+// TEMP_COMMENTED:         (self.user_id, self.request)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PersonsService,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<GetPersonAvatarResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .get_avatar_with_tuple(self.build())
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute_with_options(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PersonsService,
+// TEMP_COMMENTED:         _option: openlark_core::req_option::RequestOption,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<GetPersonAvatarResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .get_avatar_with_tuple(self.build())
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED: }
 
 /// 上传用户头像构建器
 #[derive(Debug, Clone)]
@@ -1458,40 +1459,40 @@ impl Default for UploadPersonAvatarBuilder {
     }
 }
 
-// 应用ExecutableBuilder trait - 使用自定义实现
-#[async_trait::async_trait]
-impl
-    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
-        PersonsService,
-        (String, UploadPersonAvatarRequest),
-        BaseResponse<UploadPersonAvatarResponse>,
-    > for UploadPersonAvatarBuilder
-{
-    fn build(self) -> (String, UploadPersonAvatarRequest) {
-        (self.user_id, self.request)
-    }
-
-    async fn execute(
-        self,
-        service: &PersonsService,
-    ) -> CoreSDKResult<BaseResponse<UploadPersonAvatarResponse>> {
-        service
-            .upload_avatar_with_tuple(self.build())
-            .await
-            .map_err(map_sdk_error)
-    }
-
-    async fn execute_with_options(
-        self,
-        service: &PersonsService,
-        _option: open_lark_core::req_option::RequestOption,
-    ) -> CoreSDKResult<BaseResponse<UploadPersonAvatarResponse>> {
-        service
-            .upload_avatar_with_tuple(self.build())
-            .await
-            .map_err(map_sdk_error)
-    }
-}
+// TEMP_COMMENTED: // 应用ExecutableBuilder trait - 使用自定义实现
+// TEMP_COMMENTED: #[async_trait::async_trait]
+// TEMP_COMMENTED: impl openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:     openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:         PersonsService,
+// TEMP_COMMENTED:         (String, UploadPersonAvatarRequest),
+// TEMP_COMMENTED:         BaseResponse<UploadPersonAvatarResponse>,
+// TEMP_COMMENTED:     > for UploadPersonAvatarBuilder
+// TEMP_COMMENTED: {
+// TEMP_COMMENTED:     fn build(self) -> (String, UploadPersonAvatarRequest) {
+// TEMP_COMMENTED:         (self.user_id, self.request)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PersonsService,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<UploadPersonAvatarResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .upload_avatar_with_tuple(self.build())
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute_with_options(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PersonsService,
+// TEMP_COMMENTED:         _option: openlark_core::req_option::RequestOption,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<UploadPersonAvatarResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .upload_avatar_with_tuple(self.build())
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED: }
 
 /// 获取人员基础信息构建器
 #[derive(Debug, Clone)]
@@ -1527,40 +1528,40 @@ impl Default for GetPersonBasicInfoBuilder {
     }
 }
 
-// 应用ExecutableBuilder trait - 使用自定义实现
-#[async_trait::async_trait]
-impl
-    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
-        PersonsService,
-        (String, GetPersonBasicInfoRequest),
-        BaseResponse<GetPersonBasicInfoResponse>,
-    > for GetPersonBasicInfoBuilder
-{
-    fn build(self) -> (String, GetPersonBasicInfoRequest) {
-        (self.user_id, self.request)
-    }
-
-    async fn execute(
-        self,
-        service: &PersonsService,
-    ) -> CoreSDKResult<BaseResponse<GetPersonBasicInfoResponse>> {
-        service
-            .get_basic_info_with_tuple(self.build())
-            .await
-            .map_err(map_sdk_error)
-    }
-
-    async fn execute_with_options(
-        self,
-        service: &PersonsService,
-        _option: open_lark_core::req_option::RequestOption,
-    ) -> CoreSDKResult<BaseResponse<GetPersonBasicInfoResponse>> {
-        service
-            .get_basic_info_with_tuple(self.build())
-            .await
-            .map_err(map_sdk_error)
-    }
-}
+// TEMP_COMMENTED: // 应用ExecutableBuilder trait - 使用自定义实现
+// TEMP_COMMENTED: #[async_trait::async_trait]
+// TEMP_COMMENTED: impl openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:     openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:         PersonsService,
+// TEMP_COMMENTED:         (String, GetPersonBasicInfoRequest),
+// TEMP_COMMENTED:         BaseResponse<GetPersonBasicInfoResponse>,
+// TEMP_COMMENTED:     > for GetPersonBasicInfoBuilder
+// TEMP_COMMENTED: {
+// TEMP_COMMENTED:     fn build(self) -> (String, GetPersonBasicInfoRequest) {
+// TEMP_COMMENTED:         (self.user_id, self.request)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PersonsService,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<GetPersonBasicInfoResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .get_basic_info_with_tuple(self.build())
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute_with_options(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PersonsService,
+// TEMP_COMMENTED:         _option: openlark_core::req_option::RequestOption,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<GetPersonBasicInfoResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .get_basic_info_with_tuple(self.build())
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED: }
 
 // 为PersonsService实现辅助方法，处理Builder的参数
 impl PersonsService {
@@ -1631,8 +1632,8 @@ pub struct GetPersonResponse {
 }
 
 impl ApiResponseTrait for GetPersonResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
@@ -1669,8 +1670,8 @@ pub struct BatchGetPersonsResponse {
 }
 
 impl ApiResponseTrait for BatchGetPersonsResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
@@ -1704,8 +1705,8 @@ pub struct GetPersonsByDepartmentResponse {
 }
 
 impl ApiResponseTrait for GetPersonsByDepartmentResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
@@ -1998,37 +1999,37 @@ pub struct PersonUpdateData {
 // ==================== ApiResponseTrait实现 ====================
 
 impl ApiResponseTrait for SearchPersonsResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for UpdatePersonResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for UpdatePersonStatusResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for GetPersonAvatarResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for UploadPersonAvatarResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for GetPersonBasicInfoResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }

@@ -8,7 +8,7 @@
 // doc - 文档服务
 //,
 // 提供文档相关的功能
-use crate::prelude::*;
+use openlark_core::prelude::*;
 use crate::service::ccm::doc::v2::DocV2Service;
 /// 文档服务
 #[derive(Debug, Clone)]

@@ -658,7 +658,7 @@ impl HumanAuthenticationService {
     }
 }
 
-use open_lark_core::core::trait_system::Service;
+use openlark_core::trait_system::Service;
 
 impl Service for HumanAuthenticationService {
     fn config(&self) -> &Config {

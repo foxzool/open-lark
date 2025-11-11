@@ -15,12 +15,12 @@
 //! - 版本控制：文件版本历史和管理
 
 use log::{debug, error, info, warn};
-use open_lark_core::api_req::ApiRequest;
+use openlark_core::api_req::ApiRequest;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::collections::HashMap;
-use open_lark_core::SDKResult;
+use SDKResult;
 
 use crate::{
     core::{
@@ -397,8 +397,8 @@ pub struct UploadFileResponse {
 }
 
 impl ApiResponseTrait for UploadFileResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
@@ -463,8 +463,8 @@ pub struct DownloadFileResponse {
 }
 
 impl ApiResponseTrait for DownloadFileResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Binary
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Binary
     }
 }
 
@@ -1638,7 +1638,7 @@ crate::impl_executable_builder_owned!(
 #[cfg(test)]
 mod create_shortcut_tests {
     use super::*;
-    use open_lark_core::config::Config;
+    use config::Config;
 
     #[test]
     fn test_create_shortcut_request_creation() {
@@ -1887,7 +1887,7 @@ mod create_shortcut_tests {
 #[cfg(test)]
 mod get_async_task_status_tests {
     use super::*;
-    use open_lark_core::config::Config;
+    use config::Config;
 
     #[test]
     fn test_get_async_task_status_request_creation() {
@@ -2689,7 +2689,7 @@ impl FilesService {
 #[cfg(test)]
 mod copy_file_tests {
     use super::*;
-    use open_lark_core::config::Config;
+    use config::Config;
 
     #[test]
     fn test_copy_file_request_creation() {

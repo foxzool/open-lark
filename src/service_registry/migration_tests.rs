@@ -4,10 +4,10 @@
 
 #[cfg(test)]
 mod tests {
-    use open_lark_core::config::{Config, ConfigBuilder};
     use crate::service_registry::{
         MigrationHelper, Service, ServiceError, ServiceRegistry, ServiceStatus,
     };
+    use config::{Config, ConfigBuilder};
 
     #[cfg(feature = "authentication")]
     use crate::service_registry::AuthenticationServiceAdapter;

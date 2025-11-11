@@ -20,7 +20,7 @@ use crate::{
     req_option::RequestOption,
     SDKResult,
 };
-use open_lark_core::api_req::ApiRequest;
+use openlark_core::api_req::ApiRequest;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
@@ -130,7 +130,7 @@ impl<'a> GetOutboundIpRequestBuilder<'a> {
 
 // ==================== 特征实现 ====================
 
-use open_lark_core::trait_system::Service;
+use openlark_core::trait_system::Service;
 
 impl Service for EventServiceV1 {
     fn config(&self) -> &Config {

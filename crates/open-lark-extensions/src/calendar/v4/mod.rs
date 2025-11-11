@@ -1,4 +1,4 @@
-use open_lark_core::core::{config::Config, trait_system::Service};
+use openlark_core::{config::Config, trait_system::Service};
 
 // 子模块声明
 pub mod attendee;
@@ -328,7 +328,7 @@ impl Clone for V4 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::core::trait_system::Service;
+    use openlark_core::trait_system::Service;
 
     /// 创建测试配置
     fn create_test_config() -> Config {

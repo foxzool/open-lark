@@ -23,10 +23,10 @@ pub enum IssueSeverity {
 // - 数据问题诊断和修复建议
 // - 数据趋势和变化分析
 
-use open_lark_core::config::Config;
-use open_lark_core::SDKResult;
 use crate::service::analytics::v1::*;
 use chrono::{DateTime, Utc};
+use config::Config;
+use SDKResult;
 
 /// 数据概览服务
 #[derive(Debug, Clone)]

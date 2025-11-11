@@ -92,7 +92,7 @@ pub mod models;
 /// 帖子管理功能
 pub mod post;
 
-use open_lark_core::core::{config::Config, trait_system::Service};
+use openlark_core::{config::Config, trait_system::Service};
 use events::EventsService;
 use post::PostService;
 

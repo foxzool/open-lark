@@ -141,8 +141,8 @@ impl ApiResponseTrait for VisitorDeleteResponse {
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-    use open_lark_core::core::config::Config;
-    use open_lark_core::core::constants::AppType;
+    use openlark_core::config::Config;
+    use openlark_core::constants::AppType;
     use serde_json;
 
     #[test]

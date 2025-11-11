@@ -2,7 +2,7 @@
 //!
 //! 提供完整的卡片管理功能，包括卡片的创建、更新、配置等
 
-use open_lark_core::config::Config;
+use config::Config;
 
 pub mod card;
 pub mod card_element;

@@ -6,7 +6,7 @@ use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
 
 use super::{error::ServiceError, metadata::ServiceMetadata, ServiceRegistry};
-use open_lark_core::config::Config;
+use config::Config;
 
 /// 兼容性配置
 #[derive(Debug, Clone)]

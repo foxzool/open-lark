@@ -38,7 +38,7 @@ pub mod v2;
 #[cfg(feature = "collaboration")]
 pub use v2::*;
 
-use open_lark_core::config::Config;
+use config::Config;
 
 /// Wiki知识库服务
 ///
@@ -92,7 +92,7 @@ impl crate::core::trait_system::Service for WikiService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::trait_system::Service;
+    use openlark_core::trait_system::Service;
 
     #[test]
     fn test_wiki_service_creation() {

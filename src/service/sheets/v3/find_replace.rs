@@ -9,11 +9,11 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use open_lark_core::error::LarkAPIError;
-use open_lark_core::trait_system::Transport;
 use crate::http_transport::HttpTransport;
+use openlark_core::error::LarkAPIError;
+use openlark_core::trait_system::Transport;
 
-use super::models::{Sheet, Range};
+use super::models::{Range, Sheet};
 
 /// 查找匹配类型
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -335,24 +335,21 @@ impl FindRequestBuilder {
 
     /// 构建请求对象
     pub fn build(self) -> Result<FindRequest, LarkAPIError> {
-        let spreadsheet_token = self.spreadsheet_token
+        let spreadsheet_token = self
+            .spreadsheet_token
             .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
 
-        let sheet_id = self.sheet_id
+        let sheet_id = self
+            .sheet_id
             .ok_or_else(|| LarkAPIError::InvalidParameter("工作表ID不能为空".to_string()))?;
 
-        let find_text = self.find_text
+        let find_text = self
+            .find_text
             .ok_or_else(|| LarkAPIError::InvalidParameter("查找文本不能为空".to_string()))?;
 
-        let match_type = self.match_type
-            .unwrap_or(MatchType::Exact);
+        let match_type = self.match_type.unwrap_or(MatchType::Exact);
 
-        let mut request = FindRequest::new(
-            spreadsheet_token,
-            sheet_id,
-            find_text,
-            match_type,
-        );
+        let mut request = FindRequest::new(spreadsheet_token, sheet_id, find_text, match_type);
 
         if let Some(range_type) = self.range_type {
             request = request.range_type(range_type);
@@ -548,20 +545,23 @@ impl ReplaceRequestBuilder {
 
     /// 构建请求对象
     pub fn build(self) -> Result<ReplaceRequest, LarkAPIError> {
-        let spreadsheet_token = self.spreadsheet_token
+        let spreadsheet_token = self
+            .spreadsheet_token
             .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
 
-        let sheet_id = self.sheet_id
+        let sheet_id = self
+            .sheet_id
             .ok_or_else(|| LarkAPIError::InvalidParameter("工作表ID不能为空".to_string()))?;
 
-        let find_text = self.find_text
+        let find_text = self
+            .find_text
             .ok_or_else(|| LarkAPIError::InvalidParameter("查找文本不能为空".to_string()))?;
 
-        let replace_text = self.replace_text
+        let replace_text = self
+            .replace_text
             .ok_or_else(|| LarkAPIError::InvalidParameter("替换文本不能为空".to_string()))?;
 
-        let match_type = self.match_type
-            .unwrap_or(MatchType::Exact);
+        let match_type = self.match_type.unwrap_or(MatchType::Exact);
 
         let mut request = ReplaceRequest::new(
             spreadsheet_token,
@@ -641,14 +641,10 @@ impl FindReplaceService {
     /// let response = service.find(&request).await?;
     /// println!("找到 {} 个匹配项", response.total_matches);
     /// ```
-    pub async fn find(
-        &self,
-        request: &FindRequest,
-    ) -> crate::core::error::SDKResult<FindResponse> {
+    pub async fn find(&self, request: &FindRequest) -> crate::core::error::SDKResult<FindResponse> {
         let url = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/find",
-            self.config.base_url,
-            request.spreadsheet_token
+            self.config.base_url, request.spreadsheet_token
         );
 
         let transport = HttpTransport::new(&self.config);
@@ -658,12 +654,19 @@ impl FindReplaceService {
             .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
 
         let find_response: crate::core::response::BaseResponse<FindResponse> =
-            serde_json::from_str(&response.text().await
-                .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?)
+            serde_json::from_str(
+                &response
+                    .text()
+                    .await
+                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
+            )
             .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
 
         if find_response.code != 0 {
-            return Err(LarkAPIError::APIError(find_response.msg, find_response.code));
+            return Err(LarkAPIError::APIError(
+                find_response.msg,
+                find_response.code,
+            ));
         }
 
         find_response
@@ -710,8 +713,7 @@ impl FindReplaceService {
     ) -> crate::core::error::SDKResult<ReplaceResponse> {
         let url = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/replace",
-            self.config.base_url,
-            request.spreadsheet_token
+            self.config.base_url, request.spreadsheet_token
         );
 
         let transport = HttpTransport::new(&self.config);
@@ -721,12 +723,19 @@ impl FindReplaceService {
             .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
 
         let replace_response: crate::core::response::BaseResponse<ReplaceResponse> =
-            serde_json::from_str(&response.text().await
-                .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?)
+            serde_json::from_str(
+                &response
+                    .text()
+                    .await
+                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
+            )
             .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
 
         if replace_response.code != 0 {
-            return Err(LarkAPIError::APIError(replace_response.msg, replace_response.code));
+            return Err(LarkAPIError::APIError(
+                replace_response.msg,
+                replace_response.code,
+            ));
         }
 
         replace_response
@@ -797,8 +806,9 @@ mod tests {
             "sheet123".to_string(),
             "test".to_string(),
             MatchType::Contains,
-        ).range_type(SearchRangeType::All)
-         .find_options(FindOptions::new().case_sensitive(false));
+        )
+        .range_type(SearchRangeType::All)
+        .find_options(FindOptions::new().case_sensitive(false));
 
         assert_eq!(request.spreadsheet_token, "token123");
         assert_eq!(request.sheet_id, "sheet123");
@@ -853,7 +863,8 @@ mod tests {
             "sheet123".to_string(),
             "test".to_string(),
             MatchType::Exact,
-        ).range_type(SearchRangeType::Range);
+        )
+        .range_type(SearchRangeType::Range);
         assert!(invalid_request4.validate().is_err());
 
         // 测试Range类型有范围
@@ -862,8 +873,9 @@ mod tests {
             "sheet123".to_string(),
             "test".to_string(),
             MatchType::Exact,
-        ).range_type(SearchRangeType::Range)
-         .range(Range::new("A1".to_string(), "D10".to_string()));
+        )
+        .range_type(SearchRangeType::Range)
+        .range(Range::new("A1".to_string(), "D10".to_string()));
         assert!(valid_range_request.validate().is_ok());
     }
 
@@ -878,9 +890,11 @@ mod tests {
             .match_type(MatchType::Contains)
             .range_type(SearchRangeType::Range)
             .range(Range::new("A1".to_string(), "D10".to_string()))
-            .find_options(FindOptions::new()
-                .case_sensitive(false)
-                .match_whole_word(true))
+            .find_options(
+                FindOptions::new()
+                    .case_sensitive(false)
+                    .match_whole_word(true),
+            )
             .build()
             .unwrap();
 
@@ -901,8 +915,9 @@ mod tests {
             "old".to_string(),
             "new".to_string(),
             MatchType::Exact,
-        ).range_type(SearchRangeType::All)
-         .replace_options(ReplaceOptions::new().case_sensitive(true));
+        )
+        .range_type(SearchRangeType::All)
+        .replace_options(ReplaceOptions::new().case_sensitive(true));
 
         assert_eq!(request.spreadsheet_token, "token123");
         assert_eq!(request.sheet_id, "sheet123");
@@ -947,9 +962,11 @@ mod tests {
             .match_type(MatchType::Exact)
             .range_type(SearchRangeType::Values)
             .range(Range::new("A1".to_string(), "A100".to_string()))
-            .replace_options(ReplaceOptions::new()
-                .case_sensitive(false)
-                .confirm_replacements(false))
+            .replace_options(
+                ReplaceOptions::new()
+                    .case_sensitive(false)
+                    .confirm_replacements(false),
+            )
             .build()
             .unwrap();
 
@@ -981,8 +998,7 @@ mod tests {
             .find_text("完成".to_string())
             .match_type(MatchType::Contains)
             .range_type(SearchRangeType::All)
-            .find_options(FindOptions::new()
-                .case_sensitive(false))
+            .find_options(FindOptions::new().case_sensitive(false))
             .build()
             .unwrap();
 
@@ -996,8 +1012,7 @@ mod tests {
             .find_text("\\d{4}-\\d{2}-\\d{2}".to_string())
             .match_type(MatchType::Regex)
             .range_type(SearchRangeType::All)
-            .find_options(FindOptions::new()
-                .case_sensitive(false))
+            .find_options(FindOptions::new().case_sensitive(false))
             .build()
             .unwrap();
 
@@ -1012,9 +1027,11 @@ mod tests {
             .match_type(MatchType::Exact)
             .range_type(SearchRangeType::Range)
             .range(Range::new("A1".to_string(), "D50".to_string()))
-            .replace_options(ReplaceOptions::new()
-                .case_sensitive(true)
-                .confirm_replacements(false))
+            .replace_options(
+                ReplaceOptions::new()
+                    .case_sensitive(true)
+                    .confirm_replacements(false),
+            )
             .build()
             .unwrap();
 
@@ -1028,8 +1045,7 @@ mod tests {
             .find_text("SUM".to_string())
             .match_type(MatchType::Contains)
             .range_type(SearchRangeType::Formulas)
-            .find_options(FindOptions::new()
-                .look_in_formulas(true))
+            .find_options(FindOptions::new().look_in_formulas(true))
             .build()
             .unwrap();
 
@@ -1042,8 +1058,7 @@ mod tests {
             .find_text("总计".to_string())
             .match_type(MatchType::Contains)
             .range_type(SearchRangeType::Values)
-            .find_options(FindOptions::new()
-                .look_in_formulas(false))
+            .find_options(FindOptions::new().look_in_formulas(false))
             .build()
             .unwrap();
 
@@ -1086,7 +1101,8 @@ mod tests {
                 "sheet123".to_string(),
                 "test".to_string(),
                 MatchType::Exact,
-            ).range_type(range_type);
+            )
+            .range_type(range_type);
             assert_eq!(request.sheet_id, "sheet123");
         }
     }

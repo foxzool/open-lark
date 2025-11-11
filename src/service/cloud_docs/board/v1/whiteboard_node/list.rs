@@ -1,7 +1,7 @@
-use open_lark_core::SDKResult;use reqwest::Method;
+use SDKResult;use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use open_lark_core::{
+use openlark_core::{
     core::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},

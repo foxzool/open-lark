@@ -104,7 +104,7 @@
 //! 详细API文档请参考：[飞书开放平台 - 审批查询](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/approval-v4/approval/search)
 
 // 导入核心依赖
-use open_lark_core::api_req::ApiRequest;
+use openlark_core::api_req::ApiRequest;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -112,7 +112,7 @@ use std::collections::HashMap;
 // 导入SDK核心模块
 use crate::{ 
     
-use open_lark_core::{api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}},
+use openlark_core::{api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}},
     
     config::Config,
     constants::AccessTokenType,

@@ -127,7 +127,7 @@
 //! - 🔗 系统集成和连接
 //! - 📈 数字化转型支持
 
-use open_lark_core::core::config::Config;
+use openlark_core::config::Config;
 
 pub mod audit_log;
 pub mod environment_variable;

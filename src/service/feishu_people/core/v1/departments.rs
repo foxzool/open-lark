@@ -78,7 +78,7 @@ use crate::{
     http::Transport,
     SDKResult,
 };
-use open_lark_core::core::{
+use openlark_core::core::{
     api_req::ApiRequest, // trait_system::ExecutableBuilder temporarily disabled
     error::LarkAPIError as CoreLarkAPIError,
     SDKResult as CoreSDKResult,
@@ -1026,39 +1026,39 @@ fn map_sdk_error(err: LarkAPIError) -> CoreLarkAPIError {
     }
 }
 
-// 应用ExecutableBuilder trait - 使用自定义实现
-#[async_trait::async_trait]
-impl open_lark_core::trait_system::ExecutableBuilder<
-    DepartmentsService,
-    (String, GetDepartmentRequest),
-    BaseResponse<GetDepartmentResponse>,
-> for GetDepartmentBuilder
-{
-    fn build(self) -> (String, GetDepartmentRequest) {
-        (self.department_id, self.request)
-    }
-
-    async fn execute(
-        self,
-        service: &DepartmentsService,
-    ) -> CoreSDKResult<BaseResponse<GetDepartmentResponse>> {
-        service
-            .get_with_tuple((self.department_id, self.request))
-            .await
-            .map_err(map_sdk_error)
-    }
-
-    async fn execute_with_options(
-        self,
-        service: &DepartmentsService,
-        _option: open_lark_core::req_option::RequestOption,
-    ) -> CoreSDKResult<BaseResponse<GetDepartmentResponse>> {
-        service
-            .get_with_tuple((self.department_id, self.request))
-            .await
-            .map_err(map_sdk_error)
-    }
-}
+// TEMP_COMMENTED: // 应用ExecutableBuilder trait - 使用自定义实现
+// TEMP_COMMENTED: #[async_trait::async_trait]
+// TEMP_COMMENTED: impl openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:     DepartmentsService,
+// TEMP_COMMENTED:     (String, GetDepartmentRequest),
+// TEMP_COMMENTED:     BaseResponse<GetDepartmentResponse>,
+// TEMP_COMMENTED: > for GetDepartmentBuilder
+// TEMP_COMMENTED: {
+// TEMP_COMMENTED:     fn build(self) -> (String, GetDepartmentRequest) {
+// TEMP_COMMENTED:         (self.department_id, self.request)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &DepartmentsService,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<GetDepartmentResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .get_with_tuple((self.department_id, self.request))
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute_with_options(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &DepartmentsService,
+// TEMP_COMMENTED:         _option: openlark_core::req_option::RequestOption,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<GetDepartmentResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .get_with_tuple((self.department_id, self.request))
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED: }
 
 /// 批量获取部门构建器
 #[derive(Debug, Clone)]
@@ -1364,40 +1364,39 @@ impl Default for UpdateDepartmentBuilder {
     }
 }
 
-// 应用ExecutableBuilder trait - 使用自定义实现
-#[async_trait::async_trait]
-impl
-    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
-        DepartmentsService,
-        (String, UpdateDepartmentRequest),
-        BaseResponse<UpdateDepartmentResponse>,
-    > for UpdateDepartmentBuilder
-{
-    fn build(self) -> (String, UpdateDepartmentRequest) {
-        (self.department_id, self.request)
-    }
-
-    async fn execute(
-        self,
-        service: &DepartmentsService,
-    ) -> CoreSDKResult<BaseResponse<UpdateDepartmentResponse>> {
-        service
-            .update_with_tuple((self.department_id, self.request))
-            .await
-            .map_err(map_sdk_error)
-    }
-
-    async fn execute_with_options(
-        self,
-        service: &DepartmentsService,
-        _option: open_lark_core::req_option::RequestOption,
-    ) -> CoreSDKResult<BaseResponse<UpdateDepartmentResponse>> {
-        service
-            .update_with_tuple((self.department_id, self.request))
-            .await
-            .map_err(map_sdk_error)
-    }
-}
+// TEMP_COMMENTED: // 应用ExecutableBuilder trait - 使用自定义实现
+// TEMP_COMMENTED: #[async_trait::async_trait]
+// TEMP_COMMENTED: impl openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:         DepartmentsService,
+// TEMP_COMMENTED:         (String, UpdateDepartmentRequest),
+// TEMP_COMMENTED:         BaseResponse<UpdateDepartmentResponse>,
+// TEMP_COMMENTED:     > for UpdateDepartmentBuilder
+// TEMP_COMMENTED: {
+// TEMP_COMMENTED:     fn build(self) -> (String, UpdateDepartmentRequest) {
+// TEMP_COMMENTED:         (self.department_id, self.request)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &DepartmentsService,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<UpdateDepartmentResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .update_with_tuple((self.department_id, self.request))
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute_with_options(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &DepartmentsService,
+// TEMP_COMMENTED:         _option: openlark_core::req_option::RequestOption,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<UpdateDepartmentResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .update_with_tuple((self.department_id, self.request))
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED: }
 
 /// 删除部门构建器
 #[derive(Debug, Clone)]
@@ -1433,40 +1432,41 @@ impl Default for DeleteDepartmentBuilder {
     }
 }
 
-// 应用ExecutableBuilder trait - 使用自定义实现
-#[async_trait::async_trait]
-impl
-    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
-        DepartmentsService,
-        (String, DeleteDepartmentRequest),
-        BaseResponse<DeleteDepartmentResponse>,
-    > for DeleteDepartmentBuilder
-{
-    fn build(self) -> (String, DeleteDepartmentRequest) {
-        (self.department_id, self.request)
-    }
-
-    async fn execute(
-        self,
-        service: &DepartmentsService,
-    ) -> CoreSDKResult<BaseResponse<DeleteDepartmentResponse>> {
-        service
-            .delete_with_tuple((self.department_id, self.request))
-            .await
-            .map_err(map_sdk_error)
-    }
-
-    async fn execute_with_options(
-        self,
-        service: &DepartmentsService,
-        _option: open_lark_core::req_option::RequestOption,
-    ) -> CoreSDKResult<BaseResponse<DeleteDepartmentResponse>> {
-        service
-            .delete_with_tuple((self.department_id, self.request))
-            .await
-            .map_err(map_sdk_error)
-    }
-}
+// TEMP_COMMENTED: // 应用ExecutableBuilder trait - 使用自定义实现
+// TEMP_COMMENTED: #[async_trait::async_trait]
+// TEMP_COMMENTED: impl openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:     openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:     openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:         DepartmentsService,
+// TEMP_COMMENTED:         (String, DeleteDepartmentRequest),
+// TEMP_COMMENTED:         BaseResponse<DeleteDepartmentResponse>,
+// TEMP_COMMENTED:     > for DeleteDepartmentBuilder
+// TEMP_COMMENTED: {
+// TEMP_COMMENTED:     fn build(self) -> (String, DeleteDepartmentRequest) {
+// TEMP_COMMENTED:         (self.department_id, self.request)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &DepartmentsService,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<DeleteDepartmentResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .delete_with_tuple((self.department_id, self.request))
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute_with_options(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &DepartmentsService,
+// TEMP_COMMENTED:         _option: openlark_core::req_option::RequestOption,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<DeleteDepartmentResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .delete_with_tuple((self.department_id, self.request))
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED: }
 
 /// 获取部门人员列表构建器
 #[derive(Debug, Clone)]
@@ -1611,8 +1611,8 @@ pub struct GetDepartmentResponse {
 }
 
 impl ApiResponseTrait for GetDepartmentResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
@@ -1649,8 +1649,8 @@ pub struct BatchGetDepartmentsResponse {
 }
 
 impl ApiResponseTrait for BatchGetDepartmentsResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
@@ -1684,8 +1684,8 @@ pub struct GetSubDepartmentsResponse {
 }
 
 impl ApiResponseTrait for GetSubDepartmentsResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
@@ -1727,8 +1727,8 @@ pub struct GetRootDepartmentsResponse {
 }
 
 impl ApiResponseTrait for GetRootDepartmentsResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
@@ -1874,8 +1874,8 @@ pub struct GetDepartmentMembersResponse {
 }
 
 impl ApiResponseTrait for GetDepartmentMembersResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
@@ -2070,31 +2070,31 @@ pub struct Person {
 // ==================== ApiResponseTrait实现 ====================
 
 impl ApiResponseTrait for SearchDepartmentsResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for CreateDepartmentResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for UpdateDepartmentResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for DeleteDepartmentResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for GetDepartmentStatisticsResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }

@@ -79,7 +79,7 @@ struct ResendAppTicketReq {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::config::Config;
+    use config::Config;
     use std::time::Duration;
 
     fn create_test_config() -> Config {

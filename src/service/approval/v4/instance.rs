@@ -15,9 +15,9 @@
 //! - 审批实例统计
 
 use super::models::*;
-use open_lark_core::config::Config;
-use open_lark_core::SDKResult;
+use config::Config;
 use serde::{Deserialize, Serialize};
+use SDKResult;
 
 /// 审批实例服务
 #[derive(Debug, Clone)]

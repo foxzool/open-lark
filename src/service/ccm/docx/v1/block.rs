@@ -8,7 +8,7 @@
 // docx v1 block - 块操作API,
 //,
 // 实现文档块的操作,
-use crate::prelude::*;
+use openlark_core::prelude::*;
 /// 块操作服务
 #[derive(Debug, Clone)]
 pub struct BlockService {

@@ -8,7 +8,7 @@
 // drive v1 - 云空间文件管理v1版本API
 //,
 // 包含云空间文件管理的核心功能，这是使用最广泛的版本
-use crate::prelude::*;
+use openlark_core::prelude::*;
 use crate::service::ccm::drive::v1::file::FileService;
 use crate::service::ccm::drive::v1::meta::MetaService;
 use crate::service::ccm::drive::v1::statistics::StatisticsService;

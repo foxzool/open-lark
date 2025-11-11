@@ -1,4 +1,4 @@
-use open_lark_core::core::core::{
+use openlark_core::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     trait_system::Service,

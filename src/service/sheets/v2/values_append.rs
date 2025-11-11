@@ -9,10 +9,10 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use open_lark_core::error::SDKError;
-use open_lark_core::http::{Transport, BaseResponse};
-use open_lark_core::trait_system::Service;
 use crate::service::sheets::v2::common::SpreadsheetToken;
+use openlark_core::error::SDKError;
+use openlark_core::http::{BaseResponse, Transport};
+use openlark_core::trait_system::Service;
 
 /// 数据追加服务
 ///
@@ -159,7 +159,8 @@ impl ValuesAppendRequestBuilder {
         }
 
         // 确定行数（以最长的列为准）
-        let max_rows = columns.iter()
+        let max_rows = columns
+            .iter()
             .map(|col| data.get(col).map_or(&Vec::new(), |v| v.len()))
             .max()
             .unwrap_or(0);
@@ -204,10 +205,7 @@ impl ValuesAppendRequestBuilder {
                 continue;
             }
 
-            let row: Vec<String> = line
-                .split(',')
-                .map(|s| s.trim().to_string())
-                .collect();
+            let row: Vec<String> = line.split(',').map(|s| s.trim().to_string()).collect();
             self.values.push(row);
         }
 
@@ -217,10 +215,7 @@ impl ValuesAppendRequestBuilder {
     /// 从二维数组添加数据
     pub fn from_array(mut self, array_data: &[&[&str]]) -> Self {
         for row_data in array_data {
-            let row: Vec<String> = row_data
-                .iter()
-                .map(|s| s.to_string())
-                .collect();
+            let row: Vec<String> = row_data.iter().map(|s| s.to_string()).collect();
             self.values.push(row);
         }
         self
@@ -235,36 +230,33 @@ impl ValuesAppendRequestBuilder {
                 match &self.range {
                     Some(range) => {
                         if range.is_empty() {
-                            return Err(SDKError::InvalidParameter(
-                                "目标范围不能为空".to_string()
-                            ));
+                            return Err(SDKError::InvalidParameter("目标范围不能为空".to_string()));
                         }
 
                         // 验证范围格式
                         if !Self::is_valid_range(range) {
-                            return Err(SDKError::InvalidParameter(
-                                format!("无效的范围格式: {}", range)
-                            ));
+                            return Err(SDKError::InvalidParameter(format!(
+                                "无效的范围格式: {}",
+                                range
+                            )));
                         }
                     }
                     _ => {
-                        return Err(SDKError::InvalidParameter(
-                            "目标范围是必需的".to_string()
-                        ));
+                        return Err(SDKError::InvalidParameter("目标范围是必需的".to_string()));
                     }
                 }
 
                 // 验证数据
                 if self.values.is_empty() {
                     return Err(SDKError::InvalidParameter(
-                        "至少需要提供一行数据".to_string()
+                        "至少需要提供一行数据".to_string(),
                     ));
                 }
 
                 // 验证数据行数
                 if self.values.len() > 5000 {
                     return Err(SDKError::InvalidParameter(
-                        "单次追加不能超过5000行数据".to_string()
+                        "单次追加不能超过5000行数据".to_string(),
                     ));
                 }
 
@@ -272,21 +264,19 @@ impl ValuesAppendRequestBuilder {
                 if let Some(first_row) = self.values.first() {
                     if first_row.len() > 100 {
                         return Err(SDKError::InvalidParameter(
-                            "单行数据不能超过100列".to_string()
+                            "单行数据不能超过100列".to_string(),
                         ));
                     }
 
                     // 验证所有行的列数一致性
                     for (row_index, row) in self.values.iter().enumerate() {
                         if row.len() > first_row.len() + 10 {
-                            return Err(SDKError::InvalidParameter(
-                                format!(
-                                    "第{}行的列数({})超过首行列数({})过多，最多可超出10列",
-                                    row_index + 1,
-                                    row.len(),
-                                    first_row.len()
-                                )
-                            ));
+                            return Err(SDKError::InvalidParameter(format!(
+                                "第{}行的列数({})超过首行列数({})过多，最多可超出10列",
+                                row_index + 1,
+                                row.len(),
+                                first_row.len()
+                            )));
                         }
                     }
                 }
@@ -295,13 +285,11 @@ impl ValuesAppendRequestBuilder {
                 for (row_index, row) in self.values.iter().enumerate() {
                     for (col_index, cell) in row.iter().enumerate() {
                         if cell.len() > 50000 {
-                            return Err(SDKError::InvalidParameter(
-                                format!(
-                                    "第{}行第{}列的单元格内容过长，不能超过50000字符",
-                                    row_index + 1,
-                                    col_index + 1
-                                )
-                            ));
+                            return Err(SDKError::InvalidParameter(format!(
+                                "第{}行第{}列的单元格内容过长，不能超过50000字符",
+                                row_index + 1,
+                                col_index + 1
+                            )));
                         }
                     }
                 }
@@ -313,8 +301,8 @@ impl ValuesAppendRequestBuilder {
                 })
             }
             _ => Err(SDKError::InvalidParameter(
-                "电子表格Token是必需的".to_string()
-            ))
+                "电子表格Token是必需的".to_string(),
+            )),
         }
     }
 
@@ -350,7 +338,9 @@ impl ValuesAppendRequestBuilder {
         // 简单的单元格引用验证
         // 支持格式：A1、B2、A1:C10、A:A等
         // 这里使用简化的验证，实际应用中可能需要更复杂的解析
-        cell_ref.chars().all(|c| c.is_alphanumeric() || c == ':' || c.is_whitespace())
+        cell_ref
+            .chars()
+            .all(|c| c.is_alphanumeric() || c == ':' || c.is_whitespace())
     }
 }
 
@@ -634,7 +624,8 @@ impl<'a> ValuesAppendServiceBuilder<'a> {
         }
 
         // 确定行数（以最长的列为准）
-        let max_rows = columns.iter()
+        let max_rows = columns
+            .iter()
             .map(|col| data.get(col).map_or(&Vec::new(), |v| v.len()))
             .max()
             .unwrap_or(0);
@@ -679,10 +670,7 @@ impl<'a> ValuesAppendServiceBuilder<'a> {
                 continue;
             }
 
-            let row: Vec<String> = line
-                .split(',')
-                .map(|s| s.trim().to_string())
-                .collect();
+            let row: Vec<String> = line.split(',').map(|s| s.trim().to_string()).collect();
             self.values.push(row);
         }
 
@@ -692,10 +680,7 @@ impl<'a> ValuesAppendServiceBuilder<'a> {
     /// 从二维数组添加数据
     pub fn from_array(mut self, array_data: &[&[&str]]) -> Self {
         for row_data in array_data {
-            let row: Vec<String> = row_data
-                .iter()
-                .map(|s| s.to_string())
-                .collect();
+            let row: Vec<String> = row_data.iter().map(|s| s.to_string()).collect();
             self.values.push(row);
         }
         self
@@ -713,8 +698,8 @@ impl<'a> ValuesAppendServiceBuilder<'a> {
                 self.service.append(&request).await
             }
             _ => Err(SDKError::InvalidParameter(
-                "电子表格Token和目标范围都是必需的".to_string()
-            ))
+                "电子表格Token和目标范围都是必需的".to_string(),
+            )),
         }
     }
 }
@@ -722,8 +707,8 @@ impl<'a> ValuesAppendServiceBuilder<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::config::Config;
-    use open_lark_core::trait_system::Service;
+    use config::Config;
+    use openlark_core::trait_system::Service;
     use std::collections::HashMap;
 
     #[test]
@@ -742,13 +727,13 @@ mod tests {
                 "2025-01-08".to_string(),
                 "张三".to_string(),
                 "技术部".to_string(),
-                "10000".to_string()
+                "10000".to_string(),
             ])
             .add_row(vec![
                 "2025-01-08".to_string(),
                 "李四".to_string(),
                 "市场部".to_string(),
-                "15000".to_string()
+                "15000".to_string(),
             ])
             .build();
 
@@ -831,13 +816,19 @@ mod tests {
         // 测试有效的单元格引用
         assert!(ValuesAppendRequestBuilder::is_valid_cell_reference("A1"));
         assert!(ValuesAppendRequestBuilder::is_valid_cell_reference("B10"));
-        assert!(ValuesAppendRequestBuilder::is_valid_cell_reference("A1:C10"));
-        assert!(ValuesAppendRequestBuilder::is_valid_cell_reference("Sheet1!A1"));
+        assert!(ValuesAppendRequestBuilder::is_valid_cell_reference(
+            "A1:C10"
+        ));
+        assert!(ValuesAppendRequestBuilder::is_valid_cell_reference(
+            "Sheet1!A1"
+        ));
 
         // 测试无效的单元格引用
         assert!(!ValuesAppendRequestBuilder::is_valid_cell_reference(""));
         assert!(!ValuesAppendRequestBuilder::is_valid_cell_reference("!@#$"));
-        assert!(!ValuesAppendRequestBuilder::is_valid_cell_reference("A1:C10:D20:E30"));
+        assert!(!ValuesAppendRequestBuilder::is_valid_cell_reference(
+            "A1:C10:D20:E30"
+        ));
 
         // 测试有效的范围
         assert!(ValuesAppendRequestBuilder::is_valid_range("Sheet1!A1"));
@@ -855,22 +846,30 @@ mod tests {
         let service = ValuesAppendService::new(config);
 
         // 测试基本构建器
-        let builder = service.append_builder()
+        let builder = service
+            .append_builder()
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .range("Sheet1!A10:D100")
             .add_row(vec!["标题1", "标题2", "标题3", "标题4"])
             .add_row(vec!["数据1", "数据2", "数据3", "数据4"]);
 
-        assert_eq!(builder.spreadsheet_token.unwrap().as_str(), "shtcnmBRWQKbsJRHXXXXXXXXXX");
+        assert_eq!(
+            builder.spreadsheet_token.unwrap().as_str(),
+            "shtcnmBRWQKbsJRHXXXXXXXXXX"
+        );
         assert_eq!(builder.range.unwrap(), "Sheet1!A10:D100");
         assert_eq!(builder.values.len(), 2);
 
         // 测试HashMap构建器
         let mut data = HashMap::new();
-        data.insert("姓名".to_string(), vec!["张三".to_string(), "李四".to_string()]);
+        data.insert(
+            "姓名".to_string(),
+            vec!["张三".to_string(), "李四".to_string()],
+        );
         data.insert("年龄".to_string(), vec!["25".to_string(), "30".to_string()]);
 
-        let hashmap_builder = service.append_from_hashmap_builder()
+        let hashmap_builder = service
+            .append_from_hashmap_builder()
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .range("数据表!A1:C10")
             .data(data);
@@ -879,7 +878,8 @@ mod tests {
 
         // 测试CSV构建器
         let csv_data = "姓名,年龄,部门\n张三,25,技术部\n李四,30,市场部";
-        let csv_builder = service.append_from_csv_builder()
+        let csv_builder = service
+            .append_from_csv_builder()
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .range("人员表!A1:C10")
             .csv_data(csv_data)
@@ -892,8 +892,14 @@ mod tests {
     fn test_data_conversion_methods() {
         // 测试HashMap转换
         let mut data = HashMap::new();
-        data.insert("产品".to_string(), vec!["产品A".to_string(), "产品B".to_string()]);
-        data.insert("销量".to_string(), vec!["100".to_string(), "200".to_string()]);
+        data.insert(
+            "产品".to_string(),
+            vec!["产品A".to_string(), "产品B".to_string()],
+        );
+        data.insert(
+            "销量".to_string(),
+            vec!["100".to_string(), "200".to_string()],
+        );
         data.insert("价格".to_string(), vec!["299".to_string()]);
 
         let request = ValuesAppendRequest::builder()
@@ -1050,7 +1056,10 @@ mod tests {
 
         // 测试列数不一致的HashMap
         let mut uneven_data = HashMap::new();
-        uneven_data.insert("A".to_string(), vec!["1".to_string(), "2".to_string(), "3".to_string()]);
+        uneven_data.insert(
+            "A".to_string(),
+            vec!["1".to_string(), "2".to_string(), "3".to_string()],
+        );
         uneven_data.insert("B".to_string(), vec!["4".to_string()]); // 较短的列
 
         let uneven_request = ValuesAppendRequest::builder()

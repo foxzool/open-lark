@@ -5,8 +5,8 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use open_lark_core::config::Config;
-use open_lark_core::SDKResult;pub use create::*;
+use config::Config;
+use SDKResult;pub use create::*;
 pub use delete::*;
 pub use list::*;
 mod create;

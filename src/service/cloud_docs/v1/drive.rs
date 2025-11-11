@@ -1103,7 +1103,7 @@ impl CreateExportTaskBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::config::Config;
+    use config::Config;
 
     #[test]
     fn test_task_status_default() {

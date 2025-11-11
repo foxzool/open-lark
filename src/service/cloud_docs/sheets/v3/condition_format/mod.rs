@@ -10,7 +10,7 @@
 //! 提供飞书电子表格条件格式化的完整功能，包括条件格式的创建、
 //! 查询、更新、删除等操作，支持多种条件类型和格式样式。
 
-use open_lark_core::config::Config;
+use config::Config;
 
 pub mod create;
 pub mod delete;

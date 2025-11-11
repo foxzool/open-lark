@@ -3,12 +3,12 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    config::Config,
-    constants::AccessTokenType,
+config::Config,
+constants::AccessTokenType,
     request_executor::RequestExecutor,
-    req_option::RequestOption,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    SDKResult,
+req_option::RequestOption,
+api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+SDKResult,
 };
 
 /// 这是一个示例，展示如何使用RequestExecutor重构现有的API服务
@@ -244,7 +244,7 @@ impl ApiResponseTrait for EmptyResponse {
 mod tests {
     use super::*;
     use std::sync::Arc;
-    use open_lark_core::config::Config;
+    use config::Config;
 
     #[tokio::test]
     async fn test_modern_message_service_api() {

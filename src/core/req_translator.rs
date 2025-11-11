@@ -26,8 +26,8 @@ impl ReqTranslator {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::constants::AppType;
-    use open_lark_core::api_req::ApiRequest;
+    use constants::AppType;
+    use openlark_core::api_req::ApiRequest;
     use reqwest::Method;
 
     #[test]

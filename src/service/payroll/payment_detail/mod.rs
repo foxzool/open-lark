@@ -20,7 +20,7 @@ use crate::{
         PageResponse, PaymentDetail, PaymentDetailListRequest, PaymentDetailQueryRequest,
     },
 };
-use open_lark_core::api_req::ApiRequest;
+use openlark_core::api_req::ApiRequest;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 

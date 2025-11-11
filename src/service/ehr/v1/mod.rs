@@ -15,7 +15,7 @@
 //! - 考勤记录管理
 //! - 绩效评估系统
 
-use open_lark_core::{config::Config, SDKResult};
+use openlark_core::{config::Config, SDKResult};
 
 // 导入modules模块
 pub mod attendance;

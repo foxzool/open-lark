@@ -12,10 +12,10 @@ use serde_json::Value;
 use std::collections::HashMap;
 
 use crate::request::Transport;
-use open_lark_core::SDKResult;
-use open_lark_core::config::Config;
-use open_lark_core::trait_system::Service;
-use open_lark_core::error::LarkAPIError;
+use config::Config;
+use openlark_core::error::LarkAPIError;
+use openlark_core::trait_system::Service;
+use SDKResult;
 
 /// 批量范围读取请求
 #[derive(Debug, Clone)]
@@ -124,30 +124,45 @@ impl BatchReadRangesRequest {
     pub fn validate(&self) -> SDKResult<()> {
         // 验证电子表格token
         if self.spreadsheet_token.trim().is_empty() {
-            return Err(LarkAPIError::InvalidParameter("电子表格token不能为空".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "电子表格token不能为空".to_string(),
+            ));
         }
 
         // 验证范围列表
         if self.ranges.is_empty() {
-            return Err(LarkAPIError::InvalidParameter("至少需要指定一个读取范围".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "至少需要指定一个读取范围".to_string(),
+            ));
         }
 
         if self.ranges.len() > 10 {
-            return Err(LarkAPIError::InvalidParameter("一次最多只能读取10个范围".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "一次最多只能读取10个范围".to_string(),
+            ));
         }
 
         // 验证每个范围格式
         for (index, range) in self.ranges.iter().enumerate() {
             if range.trim().is_empty() {
-                return Err(LarkAPIError::InvalidParameter(format!("范围{}不能为空", index + 1)));
+                return Err(LarkAPIError::InvalidParameter(format!(
+                    "范围{}不能为空",
+                    index + 1
+                )));
             }
 
             // 基本的范围格式验证（A1:B10格式或命名范围）
             let range_upper = range.to_uppercase();
-            if !range_upper.contains('!') && !range_upper.matches(|c: char| c.is_ascii_alphabetic()).next().is_some() {
-                return Err(LarkAPIError::InvalidParameter(
-                    format!("范围{}格式不正确，应为SheetName!A1:B10格式或命名范围", index + 1)
-                ));
+            if !range_upper.contains('!')
+                && !range_upper
+                    .matches(|c: char| c.is_ascii_alphabetic())
+                    .next()
+                    .is_some()
+            {
+                return Err(LarkAPIError::InvalidParameter(format!(
+                    "范围{}格式不正确，应为SheetName!A1:B10格式或命名范围",
+                    index + 1
+                )));
             }
         }
 
@@ -278,7 +293,10 @@ impl BatchReadRangesService {
     ///         "Summary!A1:G15"
     ///     ]);
     /// ```
-    pub async fn batch_read(&self, request: BatchReadRangesRequest) -> SDKResult<BatchReadRangesResponse> {
+    pub async fn batch_read(
+        &self,
+        request: BatchReadRangesRequest,
+    ) -> SDKResult<BatchReadRangesResponse> {
         // 验证请求参数
         request.validate()?;
 
@@ -287,15 +305,20 @@ impl BatchReadRangesService {
 
         // 构建URL
         let url = if query_params.is_empty() {
-            format!("{}/open-apis/sheets/v2/spreadsheets/{}/values_batch_get",
-                self.config.base_url, request.spreadsheet_token)
+            format!(
+                "{}/open-apis/sheets/v2/spreadsheets/{}/values_batch_get",
+                self.config.base_url, request.spreadsheet_token
+            )
         } else {
-            format!("{}/open-apis/sheets/v2/spreadsheets/{}/values_batch_get?{}",
-                self.config.base_url, request.spreadsheet_token, query_params)
+            format!(
+                "{}/open-apis/sheets/v2/spreadsheets/{}/values_batch_get?{}",
+                self.config.base_url, request.spreadsheet_token, query_params
+            )
         };
 
         // 发送HTTP请求
-        let response = self.config
+        let response = self
+            .config
             .transport
             .get(&url)
             .send()
@@ -304,16 +327,24 @@ impl BatchReadRangesService {
 
         // 处理响应
         if response.status().is_success() {
-            let base_response: BaseResponse<BatchReadRangesResponseBody> = response.json().await
+            let base_response: BaseResponse<BatchReadRangesResponseBody> = response
+                .json()
+                .await
                 .map_err(|e| LarkAPIError::JsonParseError(format!("响应解析失败: {}", e)))?;
 
             if base_response.code == 0 {
                 Ok(base_response.data.data)
             } else {
-                Err(LarkAPIError::APIError(base_response.code, base_response.msg))
+                Err(LarkAPIError::APIError(
+                    base_response.code,
+                    base_response.msg,
+                ))
             }
         } else {
-            Err(LarkAPIError::HTTPError(response.status().as_u16(), "批量范围读取失败".to_string()))
+            Err(LarkAPIError::HTTPError(
+                response.status().as_u16(),
+                "批量范围读取失败".to_string(),
+            ))
         }
     }
 
@@ -330,17 +361,19 @@ impl BatchReadRangesService {
     ///
     /// # 返回
     /// 指定范围的数据
-    pub async fn read_range(&self,
+    pub async fn read_range(
+        &self,
         spreadsheet_token: impl Into<String>,
-        range: impl Into<String>
+        range: impl Into<String>,
     ) -> SDKResult<RangeData> {
-        let request = BatchReadRangesRequest::new(spreadsheet_token)
-            .add_range(range);
+        let request = BatchReadRangesRequest::new(spreadsheet_token).add_range(range);
 
         let response = self.batch_read(request).await?;
 
         // 返回第一个范围的数据
-        response.value_ranges.into_iter()
+        response
+            .value_ranges
+            .into_iter()
             .next()
             .ok_or_else(|| LarkAPIError::APIError(-1, "未找到范围数据".to_string()))
     }
@@ -420,11 +453,14 @@ impl BatchReadRangesBuilder {
 
     /// 执行读取操作
     pub async fn execute(self) -> SDKResult<BatchReadRangesResponse> {
-        let spreadsheet_token = self.spreadsheet_token
+        let spreadsheet_token = self
+            .spreadsheet_token
             .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格token不能为空".to_string()))?;
 
         if self.ranges.is_empty() {
-            return Err(LarkAPIError::InvalidParameter("至少需要指定一个读取范围".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "至少需要指定一个读取范围".to_string(),
+            ));
         }
 
         let mut request = BatchReadRangesRequest::new(spreadsheet_token);
@@ -453,8 +489,7 @@ mod tests {
     #[test]
     fn test_batch_read_ranges_request_validation() {
         // 测试空token
-        let request = BatchReadRangesRequest::new("")
-            .add_range("Sheet1!A1:C10");
+        let request = BatchReadRangesRequest::new("").add_range("Sheet1!A1:C10");
         assert!(request.validate().is_err());
 
         // 测试空范围列表
@@ -468,9 +503,10 @@ mod tests {
         assert!(request.validate().is_ok());
 
         // 测试范围数量限制
-        let ranges = (0..11).map(|i| format!("Sheet1!A{}:C{}", i * 10 + 1, i * 10 + 10)).collect();
-        let request = BatchReadRangesRequest::new("token")
-            .ranges(ranges);
+        let ranges = (0..11)
+            .map(|i| format!("Sheet1!A{}:C{}", i * 10 + 1, i * 10 + 10))
+            .collect();
+        let request = BatchReadRangesRequest::new("token").ranges(ranges);
         assert!(request.validate().is_err());
 
         // 测试空范围
@@ -533,7 +569,8 @@ mod tests {
         let config = Config::default();
         let service = BatchReadRangesService::new(config);
 
-        let builder = service.batch_read_builder()
+        let builder = service
+            .batch_read_builder()
             .spreadsheet_token("test_token")
             .add_range("Sheet1!A1:C10")
             .add_range("Sheet2!A1:E20")
@@ -543,8 +580,14 @@ mod tests {
         // 验证构建器设置
         assert_eq!(builder.spreadsheet_token.as_ref().unwrap(), "test_token");
         assert_eq!(builder.ranges.len(), 2);
-        assert!(matches!(builder.value_render_option, Some(ValueRenderOption::FormattedValue)));
-        assert!(matches!(builder.date_render_option, Some(DateRenderOption::FormattedString)));
+        assert!(matches!(
+            builder.value_render_option,
+            Some(ValueRenderOption::FormattedValue)
+        ));
+        assert!(matches!(
+            builder.date_render_option,
+            Some(DateRenderOption::FormattedString)
+        ));
     }
 
     #[test]
@@ -565,13 +608,16 @@ mod tests {
             "Data!$A$1:$C$10",
             "Summary!A:A",
             "Report!1:10",
-            "NamedRange"
+            "NamedRange",
         ];
 
         for range in valid_ranges {
-            let request = BatchReadRangesRequest::new("token")
-                .add_range(range);
-            assert!(request.validate().is_ok(), "Range '{}' should be valid", range);
+            let request = BatchReadRangesRequest::new("token").add_range(range);
+            assert!(
+                request.validate().is_ok(),
+                "Range '{}' should be valid",
+                range
+            );
         }
     }
 

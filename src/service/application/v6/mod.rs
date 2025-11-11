@@ -5,7 +5,7 @@ pub mod application;
 pub mod application_feedback;
 pub mod appstore_paid_info;
 pub mod scope;
-use open_lark_core::config::Config;
+use config::Config;
 /// Application API v6版本服务
 pub struct V6 {
     /// 应用信息管理

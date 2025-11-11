@@ -9,11 +9,11 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use open_lark_core::error::LarkAPIError;
-use open_lark_core::trait_system::Transport;
 use crate::http_transport::HttpTransport;
+use openlark_core::error::LarkAPIError;
+use openlark_core::trait_system::Transport;
 
-use super::models::{Sheet, Range};
+use super::models::{Range, Sheet};
 
 /// 评论状态
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -425,24 +425,24 @@ impl CreateCommentRequestBuilder {
 
     /// 构建请求对象
     pub fn build(self) -> Result<CreateCommentRequest, LarkAPIError> {
-        let spreadsheet_token = self.spreadsheet_token
+        let spreadsheet_token = self
+            .spreadsheet_token
             .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
 
-        let sheet_id = self.sheet_id
+        let sheet_id = self
+            .sheet_id
             .ok_or_else(|| LarkAPIError::InvalidParameter("工作表ID不能为空".to_string()))?;
 
-        let comment_type = self.comment_type
+        let comment_type = self
+            .comment_type
             .ok_or_else(|| LarkAPIError::InvalidParameter("评论类型不能为空".to_string()))?;
 
-        let content = self.content
+        let content = self
+            .content
             .ok_or_else(|| LarkAPIError::InvalidParameter("评论内容不能为空".to_string()))?;
 
-        let mut request = CreateCommentRequest::new(
-            spreadsheet_token,
-            sheet_id,
-            comment_type,
-            content,
-        );
+        let mut request =
+            CreateCommentRequest::new(spreadsheet_token, sheet_id, comment_type, content);
 
         if let Some(range) = self.range {
             request = request.range(range);
@@ -605,10 +605,12 @@ impl GetCommentsRequestBuilder {
 
     /// 构建请求对象
     pub fn build(self) -> Result<GetCommentsRequest, LarkAPIError> {
-        let spreadsheet_token = self.spreadsheet_token
+        let spreadsheet_token = self
+            .spreadsheet_token
             .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
 
-        let sheet_id = self.sheet_id
+        let sheet_id = self
+            .sheet_id
             .ok_or_else(|| LarkAPIError::InvalidParameter("工作表ID不能为空".to_string()))?;
 
         let mut request = GetCommentsRequest::new(spreadsheet_token, sheet_id);
@@ -679,9 +681,7 @@ impl DeleteCommentRequest {
         }
 
         if self.comment_id.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
-                "评论ID不能为空".to_string(),
-            ));
+            return Err(LarkAPIError::InvalidParameter("评论ID不能为空".to_string()));
         }
 
         Ok(())
@@ -710,10 +710,12 @@ impl DeleteCommentRequestBuilder {
 
     /// 构建请求对象
     pub fn build(self) -> Result<DeleteCommentRequest, LarkAPIError> {
-        let spreadsheet_token = self.spreadsheet_token
+        let spreadsheet_token = self
+            .spreadsheet_token
             .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
 
-        let comment_id = self.comment_id
+        let comment_id = self
+            .comment_id
             .ok_or_else(|| LarkAPIError::InvalidParameter("评论ID不能为空".to_string()))?;
 
         let request = DeleteCommentRequest::new(spreadsheet_token, comment_id);
@@ -780,8 +782,7 @@ impl CommentService {
     ) -> crate::core::error::SDKResult<CreateCommentResponse> {
         let url = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/comments",
-            self.config.base_url,
-            request.spreadsheet_token
+            self.config.base_url, request.spreadsheet_token
         );
 
         let transport = HttpTransport::new(&self.config);
@@ -791,12 +792,19 @@ impl CommentService {
             .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
 
         let create_response: crate::core::response::BaseResponse<CreateCommentResponse> =
-            serde_json::from_str(&response.text().await
-                .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?)
+            serde_json::from_str(
+                &response
+                    .text()
+                    .await
+                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
+            )
             .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
 
         if create_response.code != 0 {
-            return Err(LarkAPIError::APIError(create_response.msg, create_response.code));
+            return Err(LarkAPIError::APIError(
+                create_response.msg,
+                create_response.code,
+            ));
         }
 
         create_response
@@ -838,8 +846,7 @@ impl CommentService {
     ) -> crate::core::error::SDKResult<GetCommentsResponse> {
         let url = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/comments",
-            self.config.base_url,
-            request.spreadsheet_token
+            self.config.base_url, request.spreadsheet_token
         );
 
         let transport = HttpTransport::new(&self.config);
@@ -849,8 +856,12 @@ impl CommentService {
             .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
 
         let get_response: crate::core::response::BaseResponse<GetCommentsResponse> =
-            serde_json::from_str(&response.text().await
-                .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?)
+            serde_json::from_str(
+                &response
+                    .text()
+                    .await
+                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
+            )
             .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
 
         if get_response.code != 0 {
@@ -893,9 +904,7 @@ impl CommentService {
     ) -> crate::core::error::SDKResult<DeleteCommentResponse> {
         let url = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/comments/{}",
-            self.config.base_url,
-            request.spreadsheet_token,
-            request.comment_id
+            self.config.base_url, request.spreadsheet_token, request.comment_id
         );
 
         let transport = HttpTransport::new(&self.config);
@@ -905,12 +914,19 @@ impl CommentService {
             .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
 
         let delete_response: crate::core::response::BaseResponse<DeleteCommentResponse> =
-            serde_json::from_str(&response.text().await
-                .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?)
+            serde_json::from_str(
+                &response
+                    .text()
+                    .await
+                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
+            )
             .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
 
         if delete_response.code != 0 {
-            return Err(LarkAPIError::APIError(delete_response.msg, delete_response.code));
+            return Err(LarkAPIError::APIError(
+                delete_response.msg,
+                delete_response.code,
+            ));
         }
 
         delete_response
@@ -965,14 +981,15 @@ mod tests {
 
     #[test]
     fn test_comment_author_creation() {
-        let author = CommentAuthor::new(
-            "user123".to_string(),
-            "张三".to_string(),
-        ).avatar_url("https://example.com/avatar.jpg".to_string());
+        let author = CommentAuthor::new("user123".to_string(), "张三".to_string())
+            .avatar_url("https://example.com/avatar.jpg".to_string());
 
         assert_eq!(author.user_id, "user123");
         assert_eq!(author.user_name, "张三");
-        assert_eq!(author.avatar_url, Some("https://example.com/avatar.jpg".to_string()));
+        assert_eq!(
+            author.avatar_url,
+            Some("https://example.com/avatar.jpg".to_string())
+        );
     }
 
     #[test]
@@ -986,7 +1003,8 @@ mod tests {
             CommentType::Cell,
             content,
             author,
-        ).cell_reference("A1".to_string());
+        )
+        .cell_reference("A1".to_string());
 
         assert_eq!(comment.comment_id, "comment123");
         assert_eq!(comment.sheet_id, "sheet123");
@@ -1005,7 +1023,8 @@ mod tests {
             CommentType::Cell,
             content.clone(),
             author.clone(),
-        ).cell_reference("A1".to_string());
+        )
+        .cell_reference("A1".to_string());
         assert!(valid_cell_comment.validate().is_ok());
 
         // 测试有效范围评论
@@ -1016,7 +1035,8 @@ mod tests {
             CommentType::Range,
             content.clone(),
             author.clone(),
-        ).range(Range::new("A1".to_string(), "C3".to_string()));
+        )
+        .range(Range::new("A1".to_string(), "C3".to_string()));
         assert!(valid_range_comment.validate().is_ok());
 
         // 测试无效的单元格评论（无单元格引用）
@@ -1048,7 +1068,8 @@ mod tests {
             "sheet123".to_string(),
             CommentType::Cell,
             content,
-        ).cell_reference("A1".to_string());
+        )
+        .cell_reference("A1".to_string());
 
         assert_eq!(request.spreadsheet_token, "token123");
         assert_eq!(request.sheet_id, "sheet123");
@@ -1066,7 +1087,8 @@ mod tests {
             "sheet123".to_string(),
             CommentType::Cell,
             content,
-        ).cell_reference("A1".to_string());
+        )
+        .cell_reference("A1".to_string());
         assert!(valid_request.validate().is_ok());
 
         // 测试无效请求（空电子表格ID）
@@ -1075,7 +1097,8 @@ mod tests {
             "sheet123".to_string(),
             CommentType::Cell,
             CommentContent::new("测试".to_string()),
-        ).cell_reference("A1".to_string());
+        )
+        .cell_reference("A1".to_string());
         assert!(invalid_request1.validate().is_err());
 
         // 测试无效请求（空评论内容）
@@ -1084,7 +1107,8 @@ mod tests {
             "sheet123".to_string(),
             CommentType::Cell,
             CommentContent::new("".to_string()),
-        ).cell_reference("A1".to_string());
+        )
+        .cell_reference("A1".to_string());
         assert!(invalid_request2.validate().is_err());
     }
 
@@ -1131,17 +1155,17 @@ mod tests {
     #[test]
     fn test_get_comments_request_validation() {
         // 测试有效请求
-        let valid_request = GetCommentsRequest::new("token123".to_string(), "sheet123".to_string())
-            .page_size(20);
+        let valid_request =
+            GetCommentsRequest::new("token123".to_string(), "sheet123".to_string()).page_size(20);
         assert!(valid_request.validate().is_ok());
 
         // 测试无效页大小
-        let invalid_request = GetCommentsRequest::new("token123".to_string(), "sheet123".to_string())
-            .page_size(0);
+        let invalid_request =
+            GetCommentsRequest::new("token123".to_string(), "sheet123".to_string()).page_size(0);
         assert!(invalid_request.validate().is_err());
 
-        let invalid_request2 = GetCommentsRequest::new("token123".to_string(), "sheet123".to_string())
-            .page_size(101);
+        let invalid_request2 =
+            GetCommentsRequest::new("token123".to_string(), "sheet123".to_string()).page_size(101);
         assert!(invalid_request2.validate().is_err());
     }
 
@@ -1167,10 +1191,7 @@ mod tests {
 
     #[test]
     fn test_delete_comment_request() {
-        let request = DeleteCommentRequest::new(
-            "token123".to_string(),
-            "comment123".to_string(),
-        );
+        let request = DeleteCommentRequest::new("token123".to_string(), "comment123".to_string());
 
         assert_eq!(request.spreadsheet_token, "token123");
         assert_eq!(request.comment_id, "comment123");

@@ -1,4 +1,4 @@
-use open_lark_core::core::config::Config;
+use openlark_core::config::Config;
 
 pub mod create;
 pub mod delete;

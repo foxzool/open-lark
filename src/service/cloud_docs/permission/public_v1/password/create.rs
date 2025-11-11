@@ -1,7 +1,7 @@
 use reqwest::Method;
-use open_lark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::{,
-use open_lark_core::SDKResult;    api_req::ApiRequest,
+use SDKResult;    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,

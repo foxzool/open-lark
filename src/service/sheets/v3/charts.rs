@@ -9,11 +9,11 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use open_lark_core::error::LarkAPIError;
-use open_lark_core::trait_system::Transport;
 use crate::http_transport::HttpTransport;
+use openlark_core::error::LarkAPIError;
+use openlark_core::trait_system::Transport;
 
-use super::models::{Sheet, Range};
+use super::models::{Range, Sheet};
 
 /// 图表类型
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -572,16 +572,20 @@ impl CreateChartRequestBuilder {
 
     /// 构建请求对象
     pub fn build(self) -> Result<CreateChartRequest, LarkAPIError> {
-        let spreadsheet_token = self.spreadsheet_token
+        let spreadsheet_token = self
+            .spreadsheet_token
             .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
 
-        let chart_type = self.chart_type
+        let chart_type = self
+            .chart_type
             .ok_or_else(|| LarkAPIError::InvalidParameter("图表类型不能为空".to_string()))?;
 
-        let sheet_id = self.sheet_id
+        let sheet_id = self
+            .sheet_id
             .ok_or_else(|| LarkAPIError::InvalidParameter("工作表ID不能为空".to_string()))?;
 
-        let data_range = self.data_range
+        let data_range = self
+            .data_range
             .ok_or_else(|| LarkAPIError::InvalidParameter("数据范围不能为空".to_string()))?;
 
         let mut chart_config = ChartConfig::new(chart_type, sheet_id, data_range, self.series);
@@ -664,10 +668,12 @@ impl DeleteChartRequestBuilder {
 
     /// 构建请求对象
     pub fn build(self) -> Result<DeleteChartRequest, LarkAPIError> {
-        let spreadsheet_token = self.spreadsheet_token
+        let spreadsheet_token = self
+            .spreadsheet_token
             .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
 
-        let chart_id = self.chart_id
+        let chart_id = self
+            .chart_id
             .ok_or_else(|| LarkAPIError::InvalidParameter("图表ID不能为空".to_string()))?;
 
         Ok(DeleteChartRequest {
@@ -749,8 +755,7 @@ impl ChartService {
     ) -> crate::core::error::SDKResult<CreateChartResponse> {
         let url = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/charts",
-            self.config.base_url,
-            request.spreadsheet_token
+            self.config.base_url, request.spreadsheet_token
         );
 
         let transport = HttpTransport::new(&self.config);
@@ -760,12 +765,19 @@ impl ChartService {
             .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
 
         let create_response: crate::core::response::BaseResponse<CreateChartResponse> =
-            serde_json::from_str(&response.text().await
-                .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?)
+            serde_json::from_str(
+                &response
+                    .text()
+                    .await
+                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
+            )
             .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
 
         if create_response.code != 0 {
-            return Err(LarkAPIError::APIError(create_response.msg, create_response.code));
+            return Err(LarkAPIError::APIError(
+                create_response.msg,
+                create_response.code,
+            ));
         }
 
         create_response
@@ -804,9 +816,7 @@ impl ChartService {
     ) -> crate::core::error::SDKResult<DeleteChartResponse> {
         let url = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/charts/{}",
-            self.config.base_url,
-            request.spreadsheet_token,
-            request.chart_id
+            self.config.base_url, request.spreadsheet_token, request.chart_id
         );
 
         let transport = HttpTransport::new(&self.config);
@@ -816,12 +826,19 @@ impl ChartService {
             .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
 
         let delete_response: crate::core::response::BaseResponse<DeleteChartResponse> =
-            serde_json::from_str(&response.text().await
-                .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?)
+            serde_json::from_str(
+                &response
+                    .text()
+                    .await
+                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
+            )
             .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
 
         if delete_response.code != 0 {
-            return Err(LarkAPIError::APIError(delete_response.msg, delete_response.code));
+            return Err(LarkAPIError::APIError(
+                delete_response.msg,
+                delete_response.code,
+            ));
         }
 
         delete_response
@@ -888,11 +905,9 @@ mod tests {
         use super::super::models::Range;
 
         let data_range = Range::new("A1".to_string(), "A10".to_string());
-        let series = ChartSeries::new(
-            "销售额".to_string(),
-            data_range,
-        ).color("#FF0000".to_string())
-         .add_style("line_width".to_string(), "3".to_string());
+        let series = ChartSeries::new("销售额".to_string(), data_range)
+            .color("#FF0000".to_string())
+            .add_style("line_width".to_string(), "3".to_string());
 
         assert_eq!(series.name, "销售额");
         assert_eq!(series.color, Some("#FF0000".to_string()));
@@ -954,9 +969,10 @@ mod tests {
             "sheet123".to_string(),
             data_range,
             vec![series1, series2],
-        ).sub_type(ChartSubType::Clustered)
-         .style(ChartStyle::new())
-         .position(ChartPosition::new(1, 3, 8, 10));
+        )
+        .sub_type(ChartSubType::Clustered)
+        .style(ChartStyle::new())
+        .position(ChartPosition::new(1, 3, 8, 10));
 
         assert_eq!(config.sheet_id, "sheet123");
         assert_eq!(config.series.len(), 2);
@@ -1029,10 +1045,7 @@ mod tests {
 
     #[test]
     fn test_delete_chart_request() {
-        let request = DeleteChartRequest::new(
-            "token123".to_string(),
-            "chart123".to_string(),
-        );
+        let request = DeleteChartRequest::new("token123".to_string(), "chart123".to_string());
 
         assert_eq!(request.spreadsheet_token, "token123");
         assert_eq!(request.chart_id, "chart123");
@@ -1075,7 +1088,10 @@ mod tests {
             .build()
             .unwrap();
 
-        assert_eq!(column_chart_request.chart_config.chart_type, ChartType::Column);
+        assert_eq!(
+            column_chart_request.chart_config.chart_type,
+            ChartType::Column
+        );
 
         // 测试折线图场景
         let line_chart_request = CreateChartRequest::builder()
@@ -1108,7 +1124,10 @@ mod tests {
             .unwrap();
 
         assert_eq!(pie_chart_request.chart_config.chart_type, ChartType::Pie);
-        assert_eq!(pie_chart_request.chart_config.chart_sub_type, Some(ChartSubType::TwoD));
+        assert_eq!(
+            pie_chart_request.chart_config.chart_sub_type,
+            Some(ChartSubType::TwoD)
+        );
 
         // 测试多系列图表
         let multi_series_request = CreateChartRequest::builder()
@@ -1130,14 +1149,19 @@ mod tests {
                     Range::new("C1".to_string(), "C10".to_string()),
                 ),
             ])
-            .style(ChartStyle::new()
-                .title(ChartTitle::new("财务分析".to_string()))
-                .legend(ChartLegend::new().position(LegendPosition::Bottom)))
+            .style(
+                ChartStyle::new()
+                    .title(ChartTitle::new("财务分析".to_string()))
+                    .legend(ChartLegend::new().position(LegendPosition::Bottom)),
+            )
             .build()
             .unwrap();
 
         assert_eq!(multi_series_request.chart_config.series.len(), 3);
-        assert_eq!(multi_series_request.chart_config.chart_type, ChartType::Combo);
+        assert_eq!(
+            multi_series_request.chart_config.chart_type,
+            ChartType::Combo
+        );
     }
 
     #[test]

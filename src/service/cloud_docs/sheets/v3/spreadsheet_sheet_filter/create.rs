@@ -5,8 +5,8 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use open_lark_core::SDKResult;use serde::Serialize;
-use open_lark_core::api_req::ApiRequest;
+use SDKResult;use serde::Serialize;
+use openlark_core::api_req::ApiRequest;
 use crate::{,
 core::{,
         api_resp::{BaseResponse, EmptyResponse}

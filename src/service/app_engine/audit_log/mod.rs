@@ -8,7 +8,7 @@
 // audit_log - 审计日志服务
 //,
 // 提供审计日志相关的功能
-use crate::prelude::*;
+use openlark_core::prelude::*;
 use crate::service::app_engine::audit_log::v1::AuditLogV1Service;
 /// 审计日志服务
 #[derive(Debug, Clone)]

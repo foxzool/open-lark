@@ -1,4 +1,4 @@
-use open_lark_core::{config::Config, core::ApiRequest, core::SDKResult, impl_full_service};
+use openlark_core::{config::Config, core::ApiRequest, core::SDKResult, impl_full_service};
 pub mod create;
 pub mod delete;
 pub mod get;

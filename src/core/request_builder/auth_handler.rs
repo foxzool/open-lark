@@ -81,7 +81,7 @@ impl AuthHandler {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::constants::AppType;
+    use constants::AppType;
     use reqwest::Client;
 
     fn create_test_config() -> Config {

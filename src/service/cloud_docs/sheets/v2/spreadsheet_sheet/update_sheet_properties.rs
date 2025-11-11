@@ -95,7 +95,7 @@ impl SpreadsheetSheetService {
 }#[cfg(test)]
 mod tests {
 use super::*;
-    use open_lark_core::{config::Config, SDKResult};
+    use openlark_core::{config::Config, SDKResult};
 use rstest::*;
     fn create_test_config() -> Config {,
 Config::builder()

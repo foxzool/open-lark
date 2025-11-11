@@ -14,10 +14,10 @@ use serde_json::Value;
 use std::collections::HashMap;
 
 use crate::request::Transport;
-use open_lark_core::SDKResult;
-use open_lark_core::config::Config;
-use open_lark_core::trait_system::Service;
-use open_lark_core::error::LarkAPIError;
+use config::Config;
+use openlark_core::error::LarkAPIError;
+use openlark_core::trait_system::Service;
+use SDKResult;
 
 /// 单个写入范围数据结构
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -42,32 +42,44 @@ impl WriteRange {
     pub fn validate(&self) -> SDKResult<()> {
         // 验证范围
         if self.range.trim().is_empty() {
-            return Err(LarkAPIError::InvalidParameter("写入范围不能为空".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "写入范围不能为空".to_string(),
+            ));
         }
 
         // 验证数据
         if self.values.is_empty() {
-            return Err(LarkAPIError::InvalidParameter("写入数据不能为空".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "写入数据不能为空".to_string(),
+            ));
         }
 
         // 验证数据大小限制
         if self.values.len() > 5000 {
-            return Err(LarkAPIError::InvalidParameter("单个范围写入行数不能超过5000行".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "单个范围写入行数不能超过5000行".to_string(),
+            ));
         }
 
         for (row_index, row) in self.values.iter().enumerate() {
             if row.len() > 100 {
-                return Err(LarkAPIError::InvalidParameter(
-                    format!("第{}行列数不能超过100列", row_index + 1)
-                ));
+                return Err(LarkAPIError::InvalidParameter(format!(
+                    "第{}行列数不能超过100列",
+                    row_index + 1
+                )));
             }
         }
 
         // 验证范围格式
         let range_upper = self.range.to_uppercase();
-        if !range_upper.contains('!') && !range_upper.matches(|c: char| c.is_ascii_alphabetic()).next().is_some() {
+        if !range_upper.contains('!')
+            && !range_upper
+                .matches(|c: char| c.is_ascii_alphabetic())
+                .next()
+                .is_some()
+        {
             return Err(LarkAPIError::InvalidParameter(
-                "范围格式不正确，应为SheetName!A1:B10格式".to_string()
+                "范围格式不正确，应为SheetName!A1:B10格式".to_string(),
             ));
         }
 
@@ -211,30 +223,42 @@ impl ValuesBatchWriteRequest {
     pub fn validate(&self) -> SDKResult<()> {
         // 验证电子表格token
         if self.spreadsheet_token.trim().is_empty() {
-            return Err(LarkAPIError::InvalidParameter("电子表格token不能为空".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "电子表格token不能为空".to_string(),
+            ));
         }
 
         // 验证范围列表
         if self.ranges.is_empty() {
-            return Err(LarkAPIError::InvalidParameter("至少需要指定一个写入范围".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "至少需要指定一个写入范围".to_string(),
+            ));
         }
 
         if self.ranges.len() > 100 {
-            return Err(LarkAPIError::InvalidParameter("一次最多只能写入100个范围".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "一次最多只能写入100个范围".to_string(),
+            ));
         }
 
         // 验证每个范围
         for (index, range) in self.ranges.iter().enumerate() {
-            range.validate()
-                .map_err(|e| LarkAPIError::InvalidParameter(format!("范围{}验证失败: {}", index + 1, e)))?;
+            range.validate().map_err(|e| {
+                LarkAPIError::InvalidParameter(format!("范围{}验证失败: {}", index + 1, e))
+            })?;
         }
 
         // 验证总数据量限制
-        let total_cells: usize = self.ranges.iter().map(|r| r.values.len() * r.values.first().map_or(0, |row| row.len())).sum();
+        let total_cells: usize = self
+            .ranges
+            .iter()
+            .map(|r| r.values.len() * r.values.first().map_or(0, |row| row.len()))
+            .sum();
         if total_cells > 500000 {
-            return Err(LarkAPIError::InvalidParameter(
-                format!("总写入单元格数不能超过500000，当前为{}", total_cells)
-            ));
+            return Err(LarkAPIError::InvalidParameter(format!(
+                "总写入单元格数不能超过500000，当前为{}",
+                total_cells
+            )));
         }
 
         Ok(())
@@ -255,7 +279,10 @@ impl ValuesBatchWriteRequest {
                 ValueInputOption::Raw => "RAW",
                 ValueInputOption::UserEntered => "USER_ENTERED",
             };
-            body.insert("valueInputOption".to_string(), Value::String(option_str.to_string()));
+            body.insert(
+                "valueInputOption".to_string(),
+                Value::String(option_str.to_string()),
+            );
         }
 
         // 添加数据解析选项
@@ -264,7 +291,10 @@ impl ValuesBatchWriteRequest {
                 DataParseOption::ParseAuto => "PARSE_AUTO",
                 DataParseOption::ParseNone => "PARSE_NONE",
             };
-            body.insert("dataParseOption".to_string(), Value::String(option_str.to_string()));
+            body.insert(
+                "dataParseOption".to_string(),
+                Value::String(option_str.to_string()),
+            );
         }
 
         // 添加是否包含响应值
@@ -279,7 +309,10 @@ impl ValuesBatchWriteRequest {
                 ResponseValueRenderOption::UserEnteredFormat => "USER_ENTERED_FORMAT",
                 ResponseValueRenderOption::FormattedValue => "FORMATTED_VALUE",
             };
-            body.insert("responseValueRenderOption".to_string(), Value::String(option_str.to_string()));
+            body.insert(
+                "responseValueRenderOption".to_string(),
+                Value::String(option_str.to_string()),
+            );
         }
 
         // 添加响应日期渲染选项
@@ -288,7 +321,10 @@ impl ValuesBatchWriteRequest {
                 ResponseDateRenderOption::SerialNumber => "SERIAL_NUMBER",
                 ResponseDateRenderOption::FormattedString => "FORMATTED_STRING",
             };
-            body.insert("responseDateRenderOption".to_string(), Value::String(option_str.to_string()));
+            body.insert(
+                "responseDateRenderOption".to_string(),
+                Value::String(option_str.to_string()),
+            );
         }
 
         Ok(Value::Object(body))
@@ -387,7 +423,10 @@ impl ValuesBatchWriteService {
     ///     .value_input_option(ValueInputOption::Raw)
     ///     .include_values_in_response(true);
     /// ```
-    pub async fn batch_write(&self, request: ValuesBatchWriteRequest) -> SDKResult<ValuesBatchWriteResponse> {
+    pub async fn batch_write(
+        &self,
+        request: ValuesBatchWriteRequest,
+    ) -> SDKResult<ValuesBatchWriteResponse> {
         // 验证请求参数
         request.validate()?;
 
@@ -401,7 +440,8 @@ impl ValuesBatchWriteService {
         );
 
         // 发送HTTP请求
-        let response = self.config
+        let response = self
+            .config
             .transport
             .post(&url)
             .json(&body)
@@ -411,16 +451,25 @@ impl ValuesBatchWriteService {
 
         // 处理响应
         if response.status().is_success() {
-            let base_response: BaseResponse<ValuesBatchWriteResponseBody> = response.json().await
-                .map_err(|e| LarkAPIError::JsonParseError(format!("响应解析失败: {}", e)))?;
+            let base_response: BaseResponse<ValuesBatchWriteResponseBody> =
+                response
+                    .json()
+                    .await
+                    .map_err(|e| LarkAPIError::JsonParseError(format!("响应解析失败: {}", e)))?;
 
             if base_response.code == 0 {
                 Ok(base_response.data.data)
             } else {
-                Err(LarkAPIError::APIError(base_response.code, base_response.msg))
+                Err(LarkAPIError::APIError(
+                    base_response.code,
+                    base_response.msg,
+                ))
             }
         } else {
-            Err(LarkAPIError::HTTPError(response.status().as_u16(), "批量范围写入失败".to_string()))
+            Err(LarkAPIError::HTTPError(
+                response.status().as_u16(),
+                "批量范围写入失败".to_string(),
+            ))
         }
     }
 
@@ -440,15 +489,14 @@ impl ValuesBatchWriteService {
     pub async fn write_ranges(
         &self,
         spreadsheet_token: impl Into<String>,
-        ranges_data: HashMap<String, Vec<Vec<Value>>>
+        ranges_data: HashMap<String, Vec<Vec<Value>>>,
     ) -> SDKResult<ValuesBatchWriteResponse> {
         let mut ranges = Vec::new();
         for (range, values) in ranges_data {
             ranges.push(WriteRange::new(range, values));
         }
 
-        let request = ValuesBatchWriteRequest::new(spreadsheet_token)
-            .ranges(ranges);
+        let request = ValuesBatchWriteRequest::new(spreadsheet_token).ranges(ranges);
 
         self.batch_write(request).await
     }
@@ -565,24 +613,34 @@ impl ValuesBatchWriteService {
     }
 
     /// 将HashMap数据转换为值数组
-    fn hashmap_to_values(data: HashMap<String, Vec<Value>>, include_headers: bool) -> SDKResult<Vec<Vec<Value>>> {
+    fn hashmap_to_values(
+        data: HashMap<String, Vec<Value>>,
+        include_headers: bool,
+    ) -> SDKResult<Vec<Vec<Value>>> {
         if data.is_empty() {
-            return Err(LarkAPIError::InvalidParameter("HashMap数据为空".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "HashMap数据为空".to_string(),
+            ));
         }
 
         let keys: Vec<String> = data.keys().cloned().collect();
         let row_count = data.values().next().map(|v| v.len()).unwrap_or(0);
 
         if row_count == 0 {
-            return Err(LarkAPIError::InvalidParameter("HashMap数据行为空".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "HashMap数据行为空".to_string(),
+            ));
         }
 
         // 验证所有列的行数一致
         for (key, values) in &data {
             if values.len() != row_count {
-                return Err(LarkAPIError::InvalidParameter(
-                    format!("列 '{}' 的行数({})与其他列不一致({})", key, values.len(), row_count)
-                ));
+                return Err(LarkAPIError::InvalidParameter(format!(
+                    "列 '{}' 的行数({})与其他列不一致({})",
+                    key,
+                    values.len(),
+                    row_count
+                )));
             }
         }
 
@@ -700,11 +758,14 @@ impl ValuesBatchWriteBuilder {
 
     /// 执行批量写入操作
     pub async fn execute(self) -> SDKResult<ValuesBatchWriteResponse> {
-        let spreadsheet_token = self.spreadsheet_token
+        let spreadsheet_token = self
+            .spreadsheet_token
             .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格token不能为空".to_string()))?;
 
         if self.ranges.is_empty() {
-            return Err(LarkAPIError::InvalidParameter("至少需要指定一个写入范围".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "至少需要指定一个写入范围".to_string(),
+            ));
         }
 
         let mut request = ValuesBatchWriteRequest::new(spreadsheet_token);
@@ -772,8 +833,8 @@ mod tests {
     #[test]
     fn test_values_batch_write_request_validation() {
         // 测试空token
-        let request = ValuesBatchWriteRequest::new("")
-            .add_range("Sheet1!A1:C10", vec![vec![json!("test")]]);
+        let request =
+            ValuesBatchWriteRequest::new("").add_range("Sheet1!A1:C10", vec![vec![json!("test")]]);
         assert!(request.validate().is_err());
 
         // 测试空范围列表
@@ -781,11 +842,15 @@ mod tests {
         assert!(request.validate().is_err());
 
         // 测试范围数量限制
-        let ranges = (0..101).map(|i| {
-            WriteRange::new(format!("Sheet1!A{}:C{}", i * 10 + 1, i * 10 + 10), vec![vec![json!("test")]])
-        }).collect();
-        let request = ValuesBatchWriteRequest::new("token")
-            .ranges(ranges);
+        let ranges = (0..101)
+            .map(|i| {
+                WriteRange::new(
+                    format!("Sheet1!A{}:C{}", i * 10 + 1, i * 10 + 10),
+                    vec![vec![json!("test")]],
+                )
+            })
+            .collect();
+        let request = ValuesBatchWriteRequest::new("token").ranges(ranges);
         assert!(request.validate().is_err());
 
         // 测试正常请求
@@ -798,10 +863,13 @@ mod tests {
     #[test]
     fn test_to_request_body() {
         let request = ValuesBatchWriteRequest::new("token")
-            .add_range("Sheet1!A1:B2", vec![
-                vec![json!("姓名"), json!("年龄")],
-                vec![json!("张三"), json!(25)]
-            ])
+            .add_range(
+                "Sheet1!A1:B2",
+                vec![
+                    vec![json!("姓名"), json!("年龄")],
+                    vec![json!("张三"), json!(25)],
+                ],
+            )
             .value_input_option(ValueInputOption::Raw)
             .include_values_in_response(true);
 
@@ -876,7 +944,8 @@ mod tests {
         let values1 = vec![vec![json!("test1")]];
         let values2 = vec![vec![json!("test2")]];
 
-        let builder = service.batch_write_builder()
+        let builder = service
+            .batch_write_builder()
             .spreadsheet_token("test_token")
             .add_range("Sheet1!A1", values1)
             .add_range("Sheet2!B2", values2)
@@ -886,7 +955,10 @@ mod tests {
         // 验证构建器设置
         assert_eq!(builder.spreadsheet_token.as_ref().unwrap(), "test_token");
         assert_eq!(builder.ranges.len(), 2);
-        assert!(matches!(builder.value_input_option, Some(ValueInputOption::Raw)));
+        assert!(matches!(
+            builder.value_input_option,
+            Some(ValueInputOption::Raw)
+        ));
         assert_eq!(builder.include_values_in_response, Some(true));
     }
 
@@ -902,18 +974,22 @@ mod tests {
     #[test]
     fn test_complex_batch_write_scenarios() {
         let request = ValuesBatchWriteRequest::new("token")
-            .add_range("Sheet1!A1:C3", vec![
-                vec![json!("姓名"), json!("年龄"), json!("部门")],
-                vec![json!("张三"), json!(25), json!("技术部")],
-                vec![json!("李四"), json!(30), json!("产品部")]
-            ])
-            .add_range("Sheet2!A1:B2", vec![
-                vec![json!("项目"), json!("状态")],
-                vec![json!("项目A"), json!("进行中")]
-            ])
-            .add_range("Summary!D1:E1", vec![
-                vec![json!("总计"), json!(100)]
-            ])
+            .add_range(
+                "Sheet1!A1:C3",
+                vec![
+                    vec![json!("姓名"), json!("年龄"), json!("部门")],
+                    vec![json!("张三"), json!(25), json!("技术部")],
+                    vec![json!("李四"), json!(30), json!("产品部")],
+                ],
+            )
+            .add_range(
+                "Sheet2!A1:B2",
+                vec![
+                    vec![json!("项目"), json!("状态")],
+                    vec![json!("项目A"), json!("进行中")],
+                ],
+            )
+            .add_range("Summary!D1:E1", vec![vec![json!("总计"), json!(100)]])
             .value_input_option(ValueInputOption::UserEntered)
             .data_parse_option(DataParseOption::ParseAuto)
             .include_values_in_response(true)
@@ -952,14 +1028,18 @@ mod tests {
         // 测试总单元格数限制
         let large_range = WriteRange::new(
             "Sheet1!A1:CV5000", // 100列 x 5000行 = 500000单元格
-            (0..5000).map(|_| (0..100).map(|_| json!("data")).collect()).collect()
+            (0..5000)
+                .map(|_| (0..100).map(|_| json!("data")).collect())
+                .collect(),
         );
         assert!(large_range.validate().is_ok());
 
         // 测试超出限制的数据
         let very_large_range = WriteRange::new(
             "Sheet1!A1:CW5001", // 101列 x 5001行 = 506101单元格，超出限制
-            (0..5001).map(|_| (0..101).map(|_| json!("data")).collect()).collect()
+            (0..5001)
+                .map(|_| (0..101).map(|_| json!("data")).collect())
+                .collect(),
         );
         assert!(very_large_range.validate().is_err());
     }

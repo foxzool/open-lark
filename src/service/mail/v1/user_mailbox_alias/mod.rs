@@ -6,7 +6,7 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 // 用户邮箱别名管理模块 - 占位符实现
-use open_lark_core::config::Config;
+use config::Config;
 pub struct UserMailboxAliasService {
 pub config: Config,
 }

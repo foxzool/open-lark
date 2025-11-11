@@ -8,7 +8,7 @@
 // audit_log v1 - 审计日志v1版本API
 //,
 // 包含审计日志的完整功能
-use crate::prelude::*;
+use openlark_core::prelude::*;
 /// 审计日志v1版本服务
 #[derive(Debug, Clone)]
 pub struct AuditLogV1Service {

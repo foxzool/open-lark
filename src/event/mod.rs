@@ -6,4 +6,4 @@
 //! 此模块从 `open-lark-core` crate重新导出事件处理功能。
 
 // Re-export event functionality from core crate
-pub use open_lark_core::event::*;
+pub use openlark_core::event::*;

@@ -7,7 +7,7 @@
 #![allow(clippy::module_inception)]
 pub mod background_check;
 pub mod exam;
-use open_lark_core::config::Config;
+use config::Config;
 use background_check::BackgroundCheckService;
 use exam::ExamService;
 /// 生态对接服务

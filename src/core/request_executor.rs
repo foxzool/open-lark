@@ -7,10 +7,11 @@ use crate::{
     api_resp::{ApiResponseTrait, BaseResponse},
     config::Config,
     http::Transport,
+    prelude::ApiRequest,
     req_option::RequestOption,
-    ApiRequest, SDKResult,
+    SDKResult,
 };
-use open_lark_core::constants::AccessTokenType;
+use constants::AccessTokenType;
 
 /// 通用请求执行器，统一处理API调用逻辑
 /// 消除重复的请求-响应处理代码，提供统一的API调用入口
@@ -300,7 +301,7 @@ impl RequestExecutor {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::api_resp::ResponseFormat;
+    use api_resp::ResponseFormat;
     use serde::{Deserialize, Serialize};
 
     #[derive(Debug, Serialize, Deserialize)]
@@ -351,7 +352,7 @@ mod tests {
 
     #[test]
     fn test_request_executor_get_method() {
-        use open_lark_core::constants::AccessTokenType;
+        use constants::AccessTokenType;
         use std::collections::HashMap;
 
         // Test that get method constructs the correct parameters
@@ -370,7 +371,7 @@ mod tests {
 
     #[test]
     fn test_request_executor_post_method_signature() {
-        use open_lark_core::constants::AccessTokenType;
+        use constants::AccessTokenType;
 
         // Test POST method parameter types
         let supported_tokens = [AccessTokenType::App];
@@ -389,7 +390,7 @@ mod tests {
 
     #[test]
     fn test_request_executor_put_method_signature() {
-        use open_lark_core::constants::AccessTokenType;
+        use constants::AccessTokenType;
 
         // Test PUT method parameter types
         let supported_tokens = [AccessTokenType::Tenant];
@@ -408,7 +409,7 @@ mod tests {
 
     #[test]
     fn test_request_executor_delete_method_signature() {
-        use open_lark_core::constants::AccessTokenType;
+        use constants::AccessTokenType;
 
         // Test DELETE method parameter types
         let supported_tokens = [AccessTokenType::User];
@@ -420,7 +421,7 @@ mod tests {
 
     #[test]
     fn test_request_executor_patch_method_signature() {
-        use open_lark_core::constants::AccessTokenType;
+        use constants::AccessTokenType;
 
         // Test PATCH method parameter types
         let supported_tokens = [AccessTokenType::Tenant, AccessTokenType::App];
@@ -510,7 +511,7 @@ mod tests {
 
     #[test]
     fn test_request_executor_json_request_defaults() {
-        use open_lark_core::constants::AccessTokenType;
+        use constants::AccessTokenType;
 
         // Test that json_request uses default token types
         let default_tokens = [AccessTokenType::Tenant, AccessTokenType::User];
@@ -526,7 +527,7 @@ mod tests {
 
     #[test]
     fn test_request_executor_query_request_defaults() {
-        use open_lark_core::constants::AccessTokenType;
+        use constants::AccessTokenType;
 
         // Test that query_request uses default token types
         let default_tokens = [AccessTokenType::Tenant, AccessTokenType::User];
@@ -603,7 +604,7 @@ mod tests {
 
     #[test]
     fn test_request_executor_access_token_types() {
-        use open_lark_core::constants::AccessTokenType;
+        use constants::AccessTokenType;
 
         // Test all access token types
         let all_types = [
@@ -653,8 +654,8 @@ mod tests {
 
     #[test]
     fn test_request_executor_api_request_construction() {
-        use open_lark_core::constants::AccessTokenType;
-        use crate::ApiRequest;
+        use crate::core::ApiRequest;
+        use constants::AccessTokenType;
         use reqwest::Method;
         use std::collections::HashMap;
 
@@ -715,7 +716,7 @@ mod tests {
 
     #[test]
     fn test_request_option_integration() {
-        use open_lark_core::req_option::RequestOption;
+        use req_option::RequestOption;
 
         // Test that RequestOption can be created and used with RequestExecutor methods
         let option = RequestOption::builder()
@@ -971,7 +972,7 @@ mod tests {
     // Complex request option scenarios
     #[test]
     fn test_request_executor_request_option_complex_scenarios() {
-        use open_lark_core::req_option::RequestOption;
+        use req_option::RequestOption;
 
         // Test with multiple headers
         let complex_option = RequestOption::builder()
@@ -1090,7 +1091,7 @@ mod tests {
     // Type system and generic tests
     #[test]
     fn test_request_executor_type_system() {
-        use open_lark_core::api_resp::ResponseFormat;
+        use api_resp::ResponseFormat;
 
         // Test different response types
         #[derive(Debug, Serialize, Deserialize)]
@@ -1139,8 +1140,8 @@ mod tests {
     // API request building edge cases
     #[test]
     fn test_request_executor_api_request_building_edge_cases() {
-        use open_lark_core::constants::AccessTokenType;
-        use crate::ApiRequest;
+        use crate::core::ApiRequest;
+        use constants::AccessTokenType;
         use reqwest::Method;
 
         // Test with very long path
@@ -1178,7 +1179,7 @@ mod tests {
     // Method chaining and composition tests
     #[test]
     fn test_request_executor_method_composition() {
-        use open_lark_core::constants::AccessTokenType;
+        use constants::AccessTokenType;
 
         // Test that different methods can be composed together
         let common_tokens = vec![AccessTokenType::Tenant, AccessTokenType::User];

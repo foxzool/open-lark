@@ -10,7 +10,7 @@ pub mod ticket;
 pub mod ticket_customized_field;
 pub mod ticket_message;
 
-use open_lark_core::core::config::Config;
+use openlark_core::config::Config;
 
 /// Helpdesk API v1版本服务
 pub struct V1 {
@@ -87,7 +87,7 @@ impl V1 {
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-    use open_lark_core::core::{config::Config, constants::AppType};
+    use openlark_core::{config::Config, constants::AppType};
 
     fn create_test_config() -> Config {
         Config::default()

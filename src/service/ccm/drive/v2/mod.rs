@@ -8,7 +8,7 @@
 // drive v2 - 云空间文件管理v2版本API
 //,
 // 包含云空间文件管理的扩展功能
-use crate::prelude::*;
+use openlark_core::prelude::*;
 /// 云空间文件管理v2版本服务
 #[derive(Debug, Clone)]
 pub struct DriveV2Service {

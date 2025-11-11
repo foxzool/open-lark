@@ -14,10 +14,10 @@
 //! - 自动化决策建议系统
 //! - 深度数据挖掘和模式识别
 
-use open_lark_core::config::Config;
-use open_lark_core::SDKResult;
 use crate::service::analytics::v1::TrendDirection;
+use config::Config;
 use serde::{Deserialize, Serialize};
+use SDKResult;
 
 /// 洞察服务
 #[derive(Debug, Clone)]

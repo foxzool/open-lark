@@ -1,5 +1,5 @@
-use open_lark_core::config::Config;
-use open_lark_core::error::SDKError;
+use config::Config;
+use openlark_core::error::SDKError;
 use crate::response::SDKResult;
 use crate::service_trait::Service;
 use crate::transport::Transport;

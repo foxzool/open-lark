@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use open_lark_core::event::EventHandler};
+use openlark_core::event::EventHandler};
 /// 考勤打卡流水事件 (user.attendance_records_event),
 #[derive(Debug, Clone)]
 pub struct P2AttendanceUserTaskUpdatedV1 {
@@ -95,7 +95,7 @@ pub struct AttendanceLocation {
 #[allow(unused_variables, unused_unsafe)]
 mod test {,
     use serde_json::json;
-use open_lark_core::event::context::EventContext;
+use openlark_core::event::context::EventContext;
     #[test]
 fn test_decode_attendance_event() {
         let event_data = json!({

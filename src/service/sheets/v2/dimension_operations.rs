@@ -8,7 +8,7 @@
 //! - 移动行列位置
 
 use crate::{
-    api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -573,16 +573,16 @@ impl DimensionOperationsService {
             format!(
                 "/open-apis/sheets/v2/spreadsheets/{}/insert_dimension_range",
                 &request.spreadsheet_token
-            )
+            ),
         );
-        api_req.set_supported_access_token_types(vec![
-            AccessTokenType::Tenant,
-            AccessTokenType::User
-        ]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
         api_req.body = serde_json::to_vec(&request)?;
 
         // 发送请求
-        let api_resp = Transport::<InsertDimensionRangeResponse>::request(api_req, &self.config, option).await?;
+        let api_resp =
+            Transport::<InsertDimensionRangeResponse>::request(api_req, &self.config, option)
+                .await?;
 
         Ok(api_resp)
     }
@@ -627,16 +627,16 @@ impl DimensionOperationsService {
             format!(
                 "/open-apis/sheets/v2/spreadsheets/{}/dimension_range",
                 &request.spreadsheet_token
-            )
+            ),
         );
-        api_req.set_supported_access_token_types(vec![
-            AccessTokenType::Tenant,
-            AccessTokenType::User
-        ]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
         api_req.body = serde_json::to_vec(&request)?;
 
         // 发送请求
-        let api_resp = Transport::<DeleteDimensionRangeResponse>::request(api_req, &self.config, option).await?;
+        let api_resp =
+            Transport::<DeleteDimensionRangeResponse>::request(api_req, &self.config, option)
+                .await?;
 
         Ok(api_resp)
     }
@@ -687,16 +687,15 @@ impl DimensionOperationsService {
             format!(
                 "/open-apis/sheets/v2/spreadsheets/{}/dimension_range",
                 &request.spreadsheet_token
-            )
+            ),
         );
-        api_req.set_supported_access_token_types(vec![
-            AccessTokenType::Tenant,
-            AccessTokenType::User
-        ]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
         api_req.body = serde_json::to_vec(&request)?;
 
         // 发送请求
-        let api_resp = Transport::<AddDimensionRangeResponse>::request(api_req, &self.config, option).await?;
+        let api_resp =
+            Transport::<AddDimensionRangeResponse>::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
@@ -747,16 +746,16 @@ impl DimensionOperationsService {
             format!(
                 "/open-apis/sheets/v2/spreadsheets/{}/dimension_range",
                 &request.spreadsheet_token
-            )
+            ),
         );
-        api_req.set_supported_access_token_types(vec![
-            AccessTokenType::Tenant,
-            AccessTokenType::User
-        ]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
         api_req.body = serde_json::to_vec(&request)?;
 
         // 发送请求
-        let api_resp = Transport::<UpdateDimensionRangeResponse>::request(api_req, &self.config, option).await?;
+        let api_resp =
+            Transport::<UpdateDimensionRangeResponse>::request(api_req, &self.config, option)
+                .await?;
 
         Ok(api_resp)
     }
@@ -960,7 +959,8 @@ impl InsertDimensionRangeBuilder {
             self.dimension,
             self.start_index,
             self.end_index,
-        ).inherit_style(self.inherit_style);
+        )
+        .inherit_style(self.inherit_style);
 
         let service = DimensionOperationsService {
             config: self.config,
@@ -1167,7 +1167,8 @@ impl UpdateDimensionRangeBuilder {
             self.dimension,
             self.start_index,
             self.end_index,
-        ).properties(self.properties);
+        )
+        .properties(self.properties);
 
         let service = DimensionOperationsService {
             config: self.config,
@@ -1184,13 +1185,9 @@ mod tests {
 
     #[test]
     fn test_insert_dimension_range_request_creation() {
-        let request = InsertDimensionRangeRequest::new(
-            "test_token",
-            "sheet1",
-            Dimension::Rows,
-            1,
-            4,
-        ).inherit_style(true);
+        let request =
+            InsertDimensionRangeRequest::new("test_token", "sheet1", Dimension::Rows, 1, 4)
+                .inherit_style(true);
 
         assert_eq!(request.spreadsheet_token, "test_token");
         assert_eq!(request.sheet_id, "sheet1");
@@ -1203,65 +1200,35 @@ mod tests {
     #[test]
     fn test_insert_dimension_range_request_validation() {
         // 测试正常请求
-        let valid_request = InsertDimensionRangeRequest::new(
-            "test_token",
-            "sheet1",
-            Dimension::Columns,
-            0,
-            5,
-        );
+        let valid_request =
+            InsertDimensionRangeRequest::new("test_token", "sheet1", Dimension::Columns, 0, 5);
         assert!(valid_request.validate().is_ok());
 
         // 测试空token
-        let empty_token_request = InsertDimensionRangeRequest::new(
-            "",
-            "sheet1",
-            Dimension::Rows,
-            1,
-            3,
-        );
+        let empty_token_request =
+            InsertDimensionRangeRequest::new("", "sheet1", Dimension::Rows, 1, 3);
         assert!(empty_token_request.validate().is_err());
 
         // 测试负数索引
-        let negative_index_request = InsertDimensionRangeRequest::new(
-            "test_token",
-            "sheet1",
-            Dimension::Rows,
-            -1,
-            3,
-        );
+        let negative_index_request =
+            InsertDimensionRangeRequest::new("test_token", "sheet1", Dimension::Rows, -1, 3);
         assert!(negative_index_request.validate().is_err());
 
         // 测试结束索引小于起始索引
-        let invalid_range_request = InsertDimensionRangeRequest::new(
-            "test_token",
-            "sheet1",
-            Dimension::Rows,
-            5,
-            3,
-        );
+        let invalid_range_request =
+            InsertDimensionRangeRequest::new("test_token", "sheet1", Dimension::Rows, 5, 3);
         assert!(invalid_range_request.validate().is_err());
 
         // 测试范围过大
-        let large_range_request = InsertDimensionRangeRequest::new(
-            "test_token",
-            "sheet1",
-            Dimension::Rows,
-            0,
-            1001,
-        );
+        let large_range_request =
+            InsertDimensionRangeRequest::new("test_token", "sheet1", Dimension::Rows, 0, 1001);
         assert!(large_range_request.validate().is_err());
     }
 
     #[test]
     fn test_delete_dimension_range_request() {
-        let request = DeleteDimensionRangeRequest::new(
-            "test_token",
-            "sheet1",
-            Dimension::Columns,
-            2,
-            5,
-        );
+        let request =
+            DeleteDimensionRangeRequest::new("test_token", "sheet1", Dimension::Columns, 2, 5);
 
         assert_eq!(request.spreadsheet_token, "test_token");
         assert_eq!(request.sheet_id, "sheet1");
@@ -1292,7 +1259,8 @@ mod tests {
             Dimension::Rows,
             1,
             3,
-        ).inherit_style(true);
+        )
+        .inherit_style(true);
 
         assert_eq!(builder.spreadsheet_token, "test_token");
         assert_eq!(builder.sheet_id, "sheet1");
@@ -1313,7 +1281,8 @@ mod tests {
             Dimension::Columns,
             0,
             2,
-        ).range(5, 8);
+        )
+        .range(5, 8);
 
         assert_eq!(builder.spreadsheet_token, "test_token");
         assert_eq!(builder.sheet_id, "sheet1");
@@ -1358,18 +1327,17 @@ mod tests {
 
     #[test]
     fn test_serialization_deserialization() {
-        let original_request = InsertDimensionRangeRequest::new(
-            "test_token",
-            "sheet1",
-            Dimension::Columns,
-            2,
-            5,
-        ).inherit_style(true);
+        let original_request =
+            InsertDimensionRangeRequest::new("test_token", "sheet1", Dimension::Columns, 2, 5)
+                .inherit_style(true);
 
         let serialized = serde_json::to_string(&original_request).unwrap();
         let deserialized: InsertDimensionRangeRequest = serde_json::from_str(&serialized).unwrap();
 
-        assert_eq!(original_request.spreadsheet_token, deserialized.spreadsheet_token);
+        assert_eq!(
+            original_request.spreadsheet_token,
+            deserialized.spreadsheet_token
+        );
         assert_eq!(original_request.sheet_id, deserialized.sheet_id);
         assert_eq!(original_request.dimension, deserialized.dimension);
         assert_eq!(original_request.start_index, deserialized.start_index);
@@ -1406,44 +1374,23 @@ mod tests {
     #[test]
     fn test_boundary_values() {
         // 测试边界值
-        let min_insert = InsertDimensionRangeRequest::new(
-            "token",
-            "sheet",
-            Dimension::Rows,
-            0,
-            1,
-        );
+        let min_insert = InsertDimensionRangeRequest::new("token", "sheet", Dimension::Rows, 0, 1);
         assert!(min_insert.validate().is_ok());
 
-        let max_insert = InsertDimensionRangeRequest::new(
-            "token",
-            "sheet",
-            Dimension::Columns,
-            0,
-            1000,
-        );
+        let max_insert =
+            InsertDimensionRangeRequest::new("token", "sheet", Dimension::Columns, 0, 1000);
         assert!(max_insert.validate().is_ok());
 
         // 测试单行/列插入
-        let single_insert = InsertDimensionRangeRequest::new(
-            "token",
-            "sheet",
-            Dimension::Rows,
-            10,
-            11,
-        );
+        let single_insert =
+            InsertDimensionRangeRequest::new("token", "sheet", Dimension::Rows, 10, 11);
         assert!(single_insert.validate().is_ok());
     }
 
     #[test]
     fn test_add_dimension_range_request_creation() {
-        let request = AddDimensionRangeRequest::new(
-            "test_token",
-            "sheet1",
-            Dimension::Rows,
-            2,
-            7,
-        ).inherit_style(true);
+        let request = AddDimensionRangeRequest::new("test_token", "sheet1", Dimension::Rows, 2, 7)
+            .inherit_style(true);
 
         assert_eq!(request.spreadsheet_token, "test_token");
         assert_eq!(request.sheet_id, "sheet1");
@@ -1456,65 +1403,35 @@ mod tests {
     #[test]
     fn test_add_dimension_range_request_validation() {
         // 测试正常请求
-        let request = AddDimensionRangeRequest::new(
-            "test_token",
-            "sheet1",
-            Dimension::Columns,
-            1,
-            6,
-        );
+        let request =
+            AddDimensionRangeRequest::new("test_token", "sheet1", Dimension::Columns, 1, 6);
         assert!(request.validate().is_ok());
 
         // 测试空token
-        let request = AddDimensionRangeRequest::new(
-            "",
-            "sheet1",
-            Dimension::Columns,
-            1,
-            6,
-        );
+        let request = AddDimensionRangeRequest::new("", "sheet1", Dimension::Columns, 1, 6);
         assert!(request.validate().is_err());
 
         // 测试无效索引
-        let request = AddDimensionRangeRequest::new(
-            "test_token",
-            "sheet1",
-            Dimension::Columns,
-            -1,
-            6,
-        );
+        let request =
+            AddDimensionRangeRequest::new("test_token", "sheet1", Dimension::Columns, -1, 6);
         assert!(request.validate().is_err());
 
         // 测试索引范围错误
-        let request = AddDimensionRangeRequest::new(
-            "test_token",
-            "sheet1",
-            Dimension::Columns,
-            6,
-            1,
-        );
+        let request =
+            AddDimensionRangeRequest::new("test_token", "sheet1", Dimension::Columns, 6, 1);
         assert!(request.validate().is_err());
 
         // 测试超过最大数量
-        let request = AddDimensionRangeRequest::new(
-            "test_token",
-            "sheet1",
-            Dimension::Columns,
-            1,
-            1002,
-        );
+        let request =
+            AddDimensionRangeRequest::new("test_token", "sheet1", Dimension::Columns, 1, 1002);
         assert!(request.validate().is_err());
     }
 
     #[test]
     fn test_update_dimension_range_request_creation() {
-        let request = UpdateDimensionRangeRequest::new(
-            "test_token",
-            "sheet1",
-            Dimension::Rows,
-            1,
-            5,
-        ).pixel_size(30);
+        let request =
+            UpdateDimensionRangeRequest::new("test_token", "sheet1", Dimension::Rows, 1, 5)
+                .pixel_size(30);
 
         assert_eq!(request.spreadsheet_token, "test_token");
         assert_eq!(request.sheet_id, "sheet1");
@@ -1534,13 +1451,9 @@ mod tests {
             column_width: Some(120.0),
         };
 
-        let request = UpdateDimensionRangeRequest::new(
-            "test_token",
-            "sheet1",
-            Dimension::Columns,
-            2,
-            4,
-        ).properties(properties);
+        let request =
+            UpdateDimensionRangeRequest::new("test_token", "sheet1", Dimension::Columns, 2, 4)
+                .properties(properties);
 
         let props = request.properties.unwrap();
         assert_eq!(props.hidden_by_user, Some(true));
@@ -1552,53 +1465,32 @@ mod tests {
     #[test]
     fn test_update_dimension_range_request_validation() {
         // 测试正常请求
-        let request = UpdateDimensionRangeRequest::new(
-            "test_token",
-            "sheet1",
-            Dimension::Columns,
-            1,
-            6,
-        );
+        let request =
+            UpdateDimensionRangeRequest::new("test_token", "sheet1", Dimension::Columns, 1, 6);
         assert!(request.validate().is_ok());
 
         // 测试属性验证 - 无效行高
-        let request = UpdateDimensionRangeRequest::new(
-            "test_token",
-            "sheet1",
-            Dimension::Rows,
-            1,
-            6,
-        ).pixel_size(0);
+        let request =
+            UpdateDimensionRangeRequest::new("test_token", "sheet1", Dimension::Rows, 1, 6)
+                .pixel_size(0);
         assert!(request.validate().is_err());
 
         // 测试属性验证 - 行高过大
-        let request = UpdateDimensionRangeRequest::new(
-            "test_token",
-            "sheet1",
-            Dimension::Rows,
-            1,
-            6,
-        ).pixel_size(5000);
+        let request =
+            UpdateDimensionRangeRequest::new("test_token", "sheet1", Dimension::Rows, 1, 6)
+                .pixel_size(5000);
         assert!(request.validate().is_err());
 
         // 测试属性验证 - 无效列宽
-        let request = UpdateDimensionRangeRequest::new(
-            "test_token",
-            "sheet1",
-            Dimension::Columns,
-            1,
-            6,
-        ).column_width(-1.0);
+        let request =
+            UpdateDimensionRangeRequest::new("test_token", "sheet1", Dimension::Columns, 1, 6)
+                .column_width(-1.0);
         assert!(request.validate().is_err());
 
         // 测试属性验证 - 列宽过大
-        let request = UpdateDimensionRangeRequest::new(
-            "test_token",
-            "sheet1",
-            Dimension::Columns,
-            1,
-            6,
-        ).column_width(5000.0);
+        let request =
+            UpdateDimensionRangeRequest::new("test_token", "sheet1", Dimension::Columns, 1, 6)
+                .column_width(5000.0);
         assert!(request.validate().is_err());
     }
 
@@ -1621,7 +1513,8 @@ mod tests {
             Dimension::Rows,
             2,
             5,
-        ).inherit_style(true);
+        )
+        .inherit_style(true);
 
         assert_eq!(builder.spreadsheet_token, "test_token");
         assert_eq!(builder.sheet_id, "sheet1");
@@ -1655,10 +1548,7 @@ mod tests {
         assert_eq!(builder.end_index, 4);
 
         // 测试属性设置
-        let builder = builder
-            .hidden(true)
-            .frozen(false)
-            .column_width(150.0);
+        let builder = builder.hidden(true).frozen(false).column_width(150.0);
 
         assert_eq!(builder.properties.hidden_by_user, Some(true));
         assert_eq!(builder.properties.frozen, Some(false));
@@ -1687,7 +1577,8 @@ mod tests {
             Dimension::Rows,
             1,
             3,
-        ).properties(custom_props);
+        )
+        .properties(custom_props);
 
         assert_eq!(builder.properties.hidden_by_user, Some(false));
         assert_eq!(builder.properties.frozen, Some(true));
@@ -1742,7 +1633,8 @@ mod tests {
             Dimension::Rows,
             10,
             15, // 增加5行
-        ).inherit_style(false);
+        )
+        .inherit_style(false);
 
         assert!(add_request.validate().is_ok());
         assert_eq!(add_request.end_index - add_request.start_index, 5);
@@ -1754,8 +1646,9 @@ mod tests {
             Dimension::Columns,
             3,
             8, // 更新5列
-        ).frozen(true)
-         .column_width(120.5);
+        )
+        .frozen(true)
+        .column_width(120.5);
 
         assert!(update_request.validate().is_ok());
         assert_eq!(update_request.end_index - update_request.start_index, 5);

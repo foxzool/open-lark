@@ -23,10 +23,10 @@ pub enum IssueSeverity {
 // - 应用集成和协作分析
 // - 应用ROI和价值评估
 
-use open_lark_core::config::Config;
-use open_lark_core::SDKResult;
 use crate::service::analytics::v1::*;
 use chrono::{DateTime, Utc};
+use config::Config;
+use SDKResult;
 
 /// 应用分析服务
 #[derive(Debug, Clone)]

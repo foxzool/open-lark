@@ -5,8 +5,8 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use open_lark_core::SDKResult;use crate::{,
-use open_lark_core::api_req::ApiRequest;    core::{,
+use SDKResult;use crate::{,
+use openlark_core::api_req::ApiRequest;    core::{,
         api_resp::{BaseResponse, EmptyResponse}
         constants::AccessTokenType,
         endpoints::cloud_docs::*,

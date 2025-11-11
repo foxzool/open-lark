@@ -7,15 +7,15 @@
 //! - 设置工作表颜色和隐藏状态
 //! - 调整工作表顺序
 
-use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
+use std::collections::HashMap;
 
 use crate::request::Transport;
-use open_lark_core::SDKResult;
-use open_lark_core::config::Config;
-use open_lark_core::trait_system::Service;
-use open_lark_core::error::LarkAPIError;
+use config::Config;
+use openlark_core::error::LarkAPIError;
+use openlark_core::trait_system::Service;
+use SDKResult;
 
 /// 工作表更新请求类型
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -142,7 +142,11 @@ impl UpdateSheetRequest {
     }
 
     /// 创建复制工作表请求
-    pub fn duplicate_sheet(source_sheet_id: impl Into<String>, new_title: impl Into<String>, index: i32) -> Self {
+    pub fn duplicate_sheet(
+        source_sheet_id: impl Into<String>,
+        new_title: impl Into<String>,
+        index: i32,
+    ) -> Self {
         Self {
             update_type: UpdateSheetType::DuplicateSheet,
             properties: SheetProperties {
@@ -195,18 +199,30 @@ impl UpdateSheetRequest {
         // 验证工作表ID（对于需要ID的操作）
         match &self.update_type {
             UpdateSheetType::UpdateSheetProperties | UpdateSheetType::DeleteSheet => {
-                if self.properties.sheet_id.is_none() || self.properties.sheet_id.as_ref().unwrap().trim().is_empty() {
-                    return Err(LarkAPIError::InvalidParameter("工作表ID不能为空".to_string()));
+                if self.properties.sheet_id.is_none()
+                    || self.properties.sheet_id.as_ref().unwrap().trim().is_empty()
+                {
+                    return Err(LarkAPIError::InvalidParameter(
+                        "工作表ID不能为空".to_string(),
+                    ));
                 }
             }
             UpdateSheetType::DuplicateSheet => {
-                if self.source_sheet_id.is_none() || self.source_sheet_id.as_ref().unwrap().trim().is_empty() {
-                    return Err(LarkAPIError::InvalidParameter("源工作表ID不能为空".to_string()));
+                if self.source_sheet_id.is_none()
+                    || self.source_sheet_id.as_ref().unwrap().trim().is_empty()
+                {
+                    return Err(LarkAPIError::InvalidParameter(
+                        "源工作表ID不能为空".to_string(),
+                    ));
                 }
             }
             UpdateSheetType::AddSheet => {
-                if self.properties.title.is_none() || self.properties.title.as_ref().unwrap().trim().is_empty() {
-                    return Err(LarkAPIError::InvalidParameter("工作表标题不能为空".to_string()));
+                if self.properties.title.is_none()
+                    || self.properties.title.as_ref().unwrap().trim().is_empty()
+                {
+                    return Err(LarkAPIError::InvalidParameter(
+                        "工作表标题不能为空".to_string(),
+                    ));
                 }
             }
         }
@@ -214,27 +230,37 @@ impl UpdateSheetRequest {
         // 验证标题长度
         if let Some(title) = &self.properties.title {
             if title.trim().is_empty() {
-                return Err(LarkAPIError::InvalidParameter("工作表标题不能为空".to_string()));
+                return Err(LarkAPIError::InvalidParameter(
+                    "工作表标题不能为空".to_string(),
+                ));
             }
             if title.len() > 100 {
-                return Err(LarkAPIError::InvalidParameter("工作表标题长度不能超过100个字符".to_string()));
+                return Err(LarkAPIError::InvalidParameter(
+                    "工作表标题长度不能超过100个字符".to_string(),
+                ));
             }
         }
 
         // 验证索引范围
         if let Some(index) = self.properties.index {
             if index < 0 || index > 1000 {
-                return Err(LarkAPIError::InvalidParameter("工作表索引必须在0-1000之间".to_string()));
+                return Err(LarkAPIError::InvalidParameter(
+                    "工作表索引必须在0-1000之间".to_string(),
+                ));
             }
         }
 
         // 验证新标题长度（用于复制操作）
         if let Some(new_title) = &self.new_title {
             if new_title.trim().is_empty() {
-                return Err(LarkAPIError::InvalidParameter("新工作表标题不能为空".to_string()));
+                return Err(LarkAPIError::InvalidParameter(
+                    "新工作表标题不能为空".to_string(),
+                ));
             }
             if new_title.len() > 100 {
-                return Err(LarkAPIError::InvalidParameter("新工作表标题长度不能超过100个字符".to_string()));
+                return Err(LarkAPIError::InvalidParameter(
+                    "新工作表标题长度不能超过100个字符".to_string(),
+                ));
             }
         }
 
@@ -276,22 +302,32 @@ impl SheetsBatchUpdateRequest {
     pub fn validate(&self) -> SDKResult<()> {
         // 验证电子表格令牌
         if self.spreadsheet_token.trim().is_empty() {
-            return Err(LarkAPIError::InvalidParameter("电子表格令牌不能为空".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "电子表格令牌不能为空".to_string(),
+            ));
         }
 
         // 验证请求列表
         if self.requests.is_empty() {
-            return Err(LarkAPIError::InvalidParameter("更新请求列表不能为空".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "更新请求列表不能为空".to_string(),
+            ));
         }
 
         if self.requests.len() > 100 {
-            return Err(LarkAPIError::InvalidParameter("批量更新请求数量不能超过100个".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "批量更新请求数量不能超过100个".to_string(),
+            ));
         }
 
         // 验证每个更新请求
         for (index, request) in self.requests.iter().enumerate() {
             if let Err(e) = request.validate() {
-                return Err(LarkAPIError::InvalidParameter(format!("更新请求{}验证失败: {}", index + 1, e)));
+                return Err(LarkAPIError::InvalidParameter(format!(
+                    "更新请求{}验证失败: {}",
+                    index + 1,
+                    e
+                )));
             }
         }
 
@@ -303,10 +339,13 @@ impl SheetsBatchUpdateRequest {
         let mut map = Map::new();
 
         // 转换更新请求列表
-        let requests_value: Vec<Value> = self.requests.iter()
+        let requests_value: Vec<Value> = self
+            .requests
+            .iter()
             .map(|req| {
-                serde_json::to_value(req)
-                    .map_err(|e| LarkAPIError::InvalidParameter(format!("更新请求序列化失败: {}", e)))
+                serde_json::to_value(req).map_err(|e| {
+                    LarkAPIError::InvalidParameter(format!("更新请求序列化失败: {}", e))
+                })
             })
             .collect::<Result<_, _>>()?;
 
@@ -409,7 +448,10 @@ impl SheetsBatchUpdateService {
     ///
     /// let response = service.batch_update(batch_request).await?;
     /// ```
-    pub async fn batch_update(&self, request: SheetsBatchUpdateRequest) -> SDKResult<SheetsBatchUpdateResponse> {
+    pub async fn batch_update(
+        &self,
+        request: SheetsBatchUpdateRequest,
+    ) -> SDKResult<SheetsBatchUpdateResponse> {
         // 验证请求参数
         request.validate()?;
 
@@ -422,7 +464,8 @@ impl SheetsBatchUpdateService {
             self.config.base_url, request.spreadsheet_token
         );
 
-        let response = self.config
+        let response = self
+            .config
             .transport
             .post(&url)
             .json(&body)
@@ -432,16 +475,24 @@ impl SheetsBatchUpdateService {
 
         // 处理响应
         if response.status().is_success() {
-            let base_response: BaseResponse<SheetsBatchUpdateResponseBody> = response.json().await
+            let base_response: BaseResponse<SheetsBatchUpdateResponseBody> = response
+                .json()
+                .await
                 .map_err(|e| LarkAPIError::JsonParseError(format!("响应解析失败: {}", e)))?;
 
             if base_response.code == 0 {
                 Ok(base_response.data.data)
             } else {
-                Err(LarkAPIError::APIError(base_response.code, base_response.msg))
+                Err(LarkAPIError::APIError(
+                    base_response.code,
+                    base_response.msg,
+                ))
             }
         } else {
-            Err(LarkAPIError::HTTPError(response.status().as_u16(), "批量更新工作表失败".to_string()))
+            Err(LarkAPIError::HTTPError(
+                response.status().as_u16(),
+                "批量更新工作表失败".to_string(),
+            ))
         }
     }
 
@@ -489,17 +540,20 @@ impl SheetsBatchUpdateBuilder {
     }
 
     /// 添加带颜色的工作表
-    pub fn add_colored_sheet(mut self, title: impl Into<String>, index: i32, color: impl Into<String>) -> Self {
-        let request = UpdateSheetRequest::add_sheet(title, index)
-            .sheet_color(color);
+    pub fn add_colored_sheet(
+        mut self,
+        title: impl Into<String>,
+        index: i32,
+        color: impl Into<String>,
+    ) -> Self {
+        let request = UpdateSheetRequest::add_sheet(title, index).sheet_color(color);
         self.requests.push(request);
         self
     }
 
     /// 添加隐藏的工作表
     pub fn add_hidden_sheet(mut self, title: impl Into<String>, index: i32) -> Self {
-        let request = UpdateSheetRequest::add_sheet(title, index)
-            .hidden(true);
+        let request = UpdateSheetRequest::add_sheet(title, index).hidden(true);
         self.requests.push(request);
         self
     }
@@ -520,7 +574,12 @@ impl SheetsBatchUpdateBuilder {
     }
 
     /// 复制工作表
-    pub fn duplicate_sheet(mut self, source_sheet_id: impl Into<String>, new_title: impl Into<String>, index: i32) -> Self {
+    pub fn duplicate_sheet(
+        mut self,
+        source_sheet_id: impl Into<String>,
+        new_title: impl Into<String>,
+        index: i32,
+    ) -> Self {
         let request = UpdateSheetRequest::duplicate_sheet(source_sheet_id, new_title, index);
         self.requests.push(request);
         self
@@ -552,46 +611,48 @@ pub struct UpdateSheetBuilder {
 impl UpdateSheetBuilder {
     /// 设置工作表标题
     pub fn title(mut self, title: impl Into<String>) -> SheetsBatchUpdateBuilder {
-        let request = UpdateSheetRequest::update_properties(&self.sheet_id)
-            .title(title);
+        let request = UpdateSheetRequest::update_properties(&self.sheet_id).title(title);
         self.batch_builder.requests.push(request);
         self.batch_builder
     }
 
     /// 设置工作表索引
     pub fn index(mut self, index: i32) -> SheetsBatchUpdateBuilder {
-        let request = UpdateSheetRequest::update_properties(&self.sheet_id)
-            .index(index);
+        let request = UpdateSheetRequest::update_properties(&self.sheet_id).index(index);
         self.batch_builder.requests.push(request);
         self.batch_builder
     }
 
     /// 设置工作表颜色
     pub fn sheet_color(mut self, color: impl Into<String>) -> SheetsBatchUpdateBuilder {
-        let request = UpdateSheetRequest::update_properties(&self.sheet_id)
-            .sheet_color(color);
+        let request = UpdateSheetRequest::update_properties(&self.sheet_id).sheet_color(color);
         self.batch_builder.requests.push(request);
         self.batch_builder
     }
 
     /// 设置隐藏状态
     pub fn hidden(mut self, hidden: bool) -> SheetsBatchUpdateBuilder {
-        let request = UpdateSheetRequest::update_properties(&self.sheet_id)
-            .hidden(hidden);
+        let request = UpdateSheetRequest::update_properties(&self.sheet_id).hidden(hidden);
         self.batch_builder.requests.push(request);
         self.batch_builder
     }
 
     /// 设置网格属性
     pub fn grid_properties(mut self, grid_properties: GridProperties) -> SheetsBatchUpdateBuilder {
-        let request = UpdateSheetRequest::update_properties(&self.sheet_id)
-            .grid_properties(grid_properties);
+        let request =
+            UpdateSheetRequest::update_properties(&self.sheet_id).grid_properties(grid_properties);
         self.batch_builder.requests.push(request);
         self.batch_builder
     }
 
     /// 同时设置多个属性
-    pub fn properties(mut self, title: Option<String>, index: Option<i32>, sheet_color: Option<String>, hidden: Option<bool>) -> SheetsBatchUpdateBuilder {
+    pub fn properties(
+        mut self,
+        title: Option<String>,
+        index: Option<i32>,
+        sheet_color: Option<String>,
+        hidden: Option<bool>,
+    ) -> SheetsBatchUpdateBuilder {
         let mut request = UpdateSheetRequest::update_properties(&self.sheet_id);
 
         if let Some(t) = title {
@@ -652,7 +713,10 @@ mod tests {
             .sheet_color("#FF0000")
             .hidden(true);
 
-        assert!(matches!(request.update_type, UpdateSheetType::UpdateSheetProperties));
+        assert!(matches!(
+            request.update_type,
+            UpdateSheetType::UpdateSheetProperties
+        ));
         assert_eq!(request.properties.sheet_id.as_ref().unwrap(), "sheet123");
         assert_eq!(request.properties.title.as_ref().unwrap(), "新标题");
         assert_eq!(request.properties.index.unwrap(), 1);
@@ -672,7 +736,10 @@ mod tests {
     #[test]
     fn test_update_sheet_request_duplicate_sheet() {
         let request = UpdateSheetRequest::duplicate_sheet("source_sheet", "复制的工作表", 2);
-        assert!(matches!(request.update_type, UpdateSheetType::DuplicateSheet));
+        assert!(matches!(
+            request.update_type,
+            UpdateSheetType::DuplicateSheet
+        ));
         assert_eq!(request.source_sheet_id.as_ref().unwrap(), "source_sheet");
         assert_eq!(request.properties.title.as_ref().unwrap(), "复制的工作表");
         assert_eq!(request.properties.index.unwrap(), 2);
@@ -684,9 +751,11 @@ mod tests {
         let batch_request = SheetsBatchUpdateRequest::new("test_token")
             .add_request(UpdateSheetRequest::add_sheet("工作表1", 0))
             .add_request(UpdateSheetRequest::add_sheet("工作表2", 1))
-            .add_request(UpdateSheetRequest::update_properties("sheet1")
-                .title("重命名")
-                .sheet_color("#FF0000"));
+            .add_request(
+                UpdateSheetRequest::update_properties("sheet1")
+                    .title("重命名")
+                    .sheet_color("#FF0000"),
+            );
 
         assert_eq!(batch_request.spreadsheet_token, "test_token");
         assert_eq!(batch_request.requests.len(), 3);
@@ -696,8 +765,8 @@ mod tests {
     #[test]
     fn test_batch_update_validation() {
         // 测试空令牌
-        let batch_request = SheetsBatchUpdateRequest::new("")
-            .add_request(UpdateSheetRequest::add_sheet("测试", 0));
+        let batch_request =
+            SheetsBatchUpdateRequest::new("").add_request(UpdateSheetRequest::add_sheet("测试", 0));
         assert!(batch_request.validate().is_err());
 
         // 测试空请求列表
@@ -707,7 +776,8 @@ mod tests {
         // 测试请求数量超限
         let mut batch_request = SheetsBatchUpdateRequest::new("test_token");
         for i in 0..101 {
-            batch_request = batch_request.add_request(UpdateSheetRequest::add_sheet(format!("工作表{}", i), i));
+            batch_request =
+                batch_request.add_request(UpdateSheetRequest::add_sheet(format!("工作表{}", i), i));
         }
         assert!(batch_request.validate().is_err());
     }
@@ -725,15 +795,16 @@ mod tests {
             default_column_width: Some(100.0),
         };
 
-        let builder = service.batch_update_builder("spreadsheet_token")
+        let builder = service
+            .batch_update_builder("spreadsheet_token")
             .add_sheet("工作表1", 0)
             .add_colored_sheet("工作表2", 1, "#FF0000")
             .add_hidden_sheet("隐藏工作表", 2)
             .update_sheet("sheet1")
-                .title("重命名的工作表")
-                .index(0)
-                .sheet_color("#4CAF50")
-                .grid_properties(grid_props)
+            .title("重命名的工作表")
+            .index(0)
+            .sheet_color("#4CAF50")
+            .grid_properties(grid_props)
             .duplicate_sheet("source_sheet", "复制的工作表", 3)
             .delete_sheet("old_sheet");
 
@@ -741,27 +812,57 @@ mod tests {
         assert_eq!(builder.spreadsheet_token, "spreadsheet_token");
 
         // 验证第一个请求是添加工作表
-        assert!(matches!(builder.requests[0].update_type, UpdateSheetType::AddSheet));
-        assert_eq!(builder.requests[0].properties.title.as_ref().unwrap(), "工作表1");
+        assert!(matches!(
+            builder.requests[0].update_type,
+            UpdateSheetType::AddSheet
+        ));
+        assert_eq!(
+            builder.requests[0].properties.title.as_ref().unwrap(),
+            "工作表1"
+        );
 
         // 验证第二个请求是有颜色的添加工作表
-        assert!(matches!(builder.requests[1].update_type, UpdateSheetType::AddSheet));
-        assert_eq!(builder.requests[1].properties.sheet_color.as_ref().unwrap(), "#FF0000");
+        assert!(matches!(
+            builder.requests[1].update_type,
+            UpdateSheetType::AddSheet
+        ));
+        assert_eq!(
+            builder.requests[1].properties.sheet_color.as_ref().unwrap(),
+            "#FF0000"
+        );
 
         // 验证第三个请求是隐藏的添加工作表
-        assert!(matches!(builder.requests[2].update_type, UpdateSheetType::AddSheet));
+        assert!(matches!(
+            builder.requests[2].update_type,
+            UpdateSheetType::AddSheet
+        ));
         assert_eq!(builder.requests[2].properties.hidden.unwrap(), true);
 
         // 验证第四个请求是更新属性（包含多个更新）
-        assert!(matches!(builder.requests[3].update_type, UpdateSheetType::UpdateSheetProperties));
-        assert_eq!(builder.requests[3].properties.title.as_ref().unwrap(), "重命名的工作表");
+        assert!(matches!(
+            builder.requests[3].update_type,
+            UpdateSheetType::UpdateSheetProperties
+        ));
+        assert_eq!(
+            builder.requests[3].properties.title.as_ref().unwrap(),
+            "重命名的工作表"
+        );
 
         // 验证第五个请求是复制工作表
-        assert!(matches!(builder.requests[4].update_type, UpdateSheetType::DuplicateSheet));
-        assert_eq!(builder.requests[4].source_sheet_id.as_ref().unwrap(), "source_sheet");
+        assert!(matches!(
+            builder.requests[4].update_type,
+            UpdateSheetType::DuplicateSheet
+        ));
+        assert_eq!(
+            builder.requests[4].source_sheet_id.as_ref().unwrap(),
+            "source_sheet"
+        );
 
         // 验证第六个请求是删除工作表
-        assert!(matches!(builder.requests[5].update_type, UpdateSheetType::DeleteSheet));
+        assert!(matches!(
+            builder.requests[5].update_type,
+            UpdateSheetType::DeleteSheet
+        ));
     }
 
     #[test]
@@ -778,18 +879,28 @@ mod tests {
         };
 
         let batch_request = SheetsBatchUpdateRequest::new("spreadsheet_token")
-            .add_request(UpdateSheetRequest::add_sheet("数据表", 0)
-                .sheet_color("#2196F3")
-                .grid_properties(grid_props.clone()))
-            .add_request(UpdateSheetRequest::add_sheet("统计表", 1)
-                .sheet_color("#4CAF50")
-                .grid_properties(grid_props))
-            .add_request(UpdateSheetRequest::update_properties("existing_sheet")
-                .title("重命名的旧表")
-                .index(2)
-                .sheet_color("#FF9800")
-                .hidden(false))
-            .add_request(UpdateSheetRequest::duplicate_sheet("template_sheet", "基于模板的表", 3))
+            .add_request(
+                UpdateSheetRequest::add_sheet("数据表", 0)
+                    .sheet_color("#2196F3")
+                    .grid_properties(grid_props.clone()),
+            )
+            .add_request(
+                UpdateSheetRequest::add_sheet("统计表", 1)
+                    .sheet_color("#4CAF50")
+                    .grid_properties(grid_props),
+            )
+            .add_request(
+                UpdateSheetRequest::update_properties("existing_sheet")
+                    .title("重命名的旧表")
+                    .index(2)
+                    .sheet_color("#FF9800")
+                    .hidden(false),
+            )
+            .add_request(UpdateSheetRequest::duplicate_sheet(
+                "template_sheet",
+                "基于模板的表",
+                3,
+            ))
             .add_request(UpdateSheetRequest::delete_sheet("obsolete_sheet"));
 
         assert!(batch_request.validate().is_ok());
@@ -831,14 +942,15 @@ mod tests {
         let config = Config::default();
         let service = SheetsBatchUpdateService::new(config);
 
-        let builder = service.batch_update_builder("token")
+        let builder = service
+            .batch_update_builder("token")
             .update_sheet("sheet123")
-                .properties(
-                    Some("新标题".to_string()),
-                    Some(1),
-                    Some("#FF0000".to_string()),
-                    Some(false)
-                );
+            .properties(
+                Some("新标题".to_string()),
+                Some(1),
+                Some("#FF0000".to_string()),
+                Some(false),
+            );
 
         assert_eq!(builder.requests.len(), 1);
         let request = &builder.requests[0];

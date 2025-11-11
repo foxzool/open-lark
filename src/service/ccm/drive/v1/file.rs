@@ -8,8 +8,8 @@
 //! Drive v1 文件操作 - 简化实现
 
 use serde::{Deserialize, Serialize};
-use open_lark_core::config::Config;
-use open_lark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use config::Config;
+use api_resp::{ApiResponseTrait, ResponseFormat};
 
 /// 文件元数据
 #[derive(Debug, Deserialize, Serialize)]

@@ -388,7 +388,7 @@ macro_rules! impl_api_response {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::api_resp::ResponseFormat;
+    use api_resp::ResponseFormat;
     use serde::{Deserialize, Serialize};
 
     #[derive(Debug, Serialize, Deserialize, PartialEq, Default, Clone)]

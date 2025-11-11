@@ -1,9 +1,8 @@
-use std::sync::Arc;
-
 use crate::{
     config::{Config, ConfigBuilder},
     constants::AppType,
 };
+use openlark_core::{config, constants};
 
 // 条件导入服务
 #[cfg(feature = "acs")]

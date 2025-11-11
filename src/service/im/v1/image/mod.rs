@@ -9,7 +9,7 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use crate::{
-use open_lark_core::SDKResult;    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
+use SDKResult;    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
     constants::AccessTokenType,
     endpoints::EndpointBuilder,
     http::Transport,

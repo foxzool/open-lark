@@ -8,7 +8,7 @@
 //! - 数字格式设置
 
 use crate::{
-    api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -256,11 +256,21 @@ impl Color {
     }
 
     /// 常用颜色
-    pub fn black() -> Self { Self::rgb(0.0, 0.0, 0.0) }
-    pub fn white() -> Self { Self::rgb(255.0, 255.0, 255.0) }
-    pub fn red() -> Self { Self::rgb(255.0, 0.0, 0.0) }
-    pub fn green() -> Self { Self::rgb(0.0, 255.0, 0.0) }
-    pub fn blue() -> Self { Self::rgb(0.0, 0.0, 255.0) }
+    pub fn black() -> Self {
+        Self::rgb(0.0, 0.0, 0.0)
+    }
+    pub fn white() -> Self {
+        Self::rgb(255.0, 255.0, 255.0)
+    }
+    pub fn red() -> Self {
+        Self::rgb(255.0, 0.0, 0.0)
+    }
+    pub fn green() -> Self {
+        Self::rgb(0.0, 255.0, 0.0)
+    }
+    pub fn blue() -> Self {
+        Self::rgb(0.0, 0.0, 255.0)
+    }
 }
 
 /// 文本对齐方式
@@ -300,7 +310,10 @@ pub struct CellStyle {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub borders: Option<Borders>,
     /// 水平对齐
-    #[serde(rename = "horizontalAlignment", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "horizontalAlignment",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub horizontal_alignment: Option<TextAlignment>,
     /// 垂直对齐
     #[serde(rename = "verticalAlignment", skip_serializing_if = "Option::is_none")]
@@ -552,22 +565,24 @@ impl StyleOperationsService {
             format!(
                 "/open-apis/sheets/v2/spreadsheets/{}/styles_batch_update",
                 &request.spreadsheet_token
-            )
+            ),
         );
-        api_req.set_supported_access_token_types(vec![
-            AccessTokenType::Tenant,
-            AccessTokenType::User
-        ]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
         api_req.body = serde_json::to_vec(&request)?;
 
         // 发送请求
-        let api_resp = Transport::<BatchUpdateStylesResponse>::request(api_req, &self.config, option).await?;
+        let api_resp =
+            Transport::<BatchUpdateStylesResponse>::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
 
     /// 创建批量样式更新构建器
-    pub fn batch_update_builder(&self, spreadsheet_token: impl Into<String>) -> BatchUpdateStylesBuilder {
+    pub fn batch_update_builder(
+        &self,
+        spreadsheet_token: impl Into<String>,
+    ) -> BatchUpdateStylesBuilder {
         BatchUpdateStylesBuilder::new(self.config.clone(), spreadsheet_token.into())
     }
 }
@@ -605,8 +620,7 @@ impl BatchUpdateStylesBuilder {
 
     /// 执行批量更新请求
     pub async fn execute(self) -> SDKResult<BaseResponse<BatchUpdateStylesResponse>> {
-        let request = BatchUpdateStylesRequest::new(self.spreadsheet_token)
-            .add_styles(self.styles);
+        let request = BatchUpdateStylesRequest::new(self.spreadsheet_token).add_styles(self.styles);
 
         let service = StyleOperationsService {
             config: self.config,
@@ -745,9 +759,8 @@ mod tests {
         // 测试过多样式
         let mut too_many_request = BatchUpdateStylesRequest::new("token");
         for _ in 0..501 {
-            too_many_request = too_many_request.add_style(
-                StyleUpdate::new("A1:B2", CellStyle::new())
-            );
+            too_many_request =
+                too_many_request.add_style(StyleUpdate::new("A1:B2", CellStyle::new()));
         }
         assert!(too_many_request.validate().is_err());
     }
@@ -827,13 +840,12 @@ mod tests {
                     .italic(true)
                     .underline(true)
                     .strikethrough(false)
-                    .foreground_color(Color::hex("#1E88E5").unwrap())
+                    .foreground_color(Color::hex("#1E88E5").unwrap()),
             )
             .background_color(Color::rgba(245.0, 245.0, 245.0, 0.8))
             .borders(
-                Borders::new().all(
-                    Border::new(BorderStyle::Medium).color(Color::hex("#9E9E9E").unwrap())
-                )
+                Borders::new()
+                    .all(Border::new(BorderStyle::Medium).color(Color::hex("#9E9E9E").unwrap())),
             )
             .horizontal_alignment(TextAlignment::Center)
             .vertical_alignment(VerticalAlignment::Middle)

@@ -7,13 +7,13 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
+api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+config::Config,
+constants::AccessTokenType,
     improved_response_handler::{ImprovedResponseHandler, OptimizedBaseResponse},
     request_executor::RequestExecutor,
-    req_option::RequestOption,
-    SDKResult,
+req_option::RequestOption,
+SDKResult,
 };
 
 /// 迁移示例：从原始 MessageService 到现代化实现

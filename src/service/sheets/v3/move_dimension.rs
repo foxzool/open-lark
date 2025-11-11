@@ -8,11 +8,11 @@
 
 use serde::{Deserialize, Serialize};
 
-use open_lark_core::error::SDKError;
-use open_lark_core::http::{Transport, BaseResponse};
-use open_lark_core::trait_system::Service;
-use crate::service::sheets::v3::models::spreadsheet::SpreadsheetToken;
 use crate::service::sheets::v3::models::sheet::SheetId;
+use crate::service::sheets::v3::models::spreadsheet::SpreadsheetToken;
+use openlark_core::error::SDKError;
+use openlark_core::http::{BaseResponse, Transport};
+use openlark_core::trait_system::Service;
 
 /// 工作表行列移动服务
 ///
@@ -188,24 +188,29 @@ impl MoveDimensionRequestBuilder {
             self.source_end_index,
             self.destination_index,
         ) {
-            (Some(_), Some(_), Some(dimension), Some(source_start), Some(source_end), Some(dest_index)) => {
+            (
+                Some(_),
+                Some(_),
+                Some(dimension),
+                Some(source_start),
+                Some(source_end),
+                Some(dest_index),
+            ) => {
                 // 验证维度类型
                 if dimension != "ROWS" && dimension != "COLUMNS" {
                     return Err(SDKError::InvalidParameter(
-                        "维度必须是ROWS或COLUMNS".to_string()
+                        "维度必须是ROWS或COLUMNS".to_string(),
                     ));
                 }
 
                 // 验证索引范围
                 if source_start < 0 || source_end < 0 || dest_index < 0 {
-                    return Err(SDKError::InvalidParameter(
-                        "索引不能为负数".to_string()
-                    ));
+                    return Err(SDKError::InvalidParameter("索引不能为负数".to_string()));
                 }
 
                 if source_start > source_end {
                     return Err(SDKError::InvalidParameter(
-                        "源起始索引不能大于源结束索引".to_string()
+                        "源起始索引不能大于源结束索引".to_string(),
                     ));
                 }
 
@@ -213,7 +218,7 @@ impl MoveDimensionRequestBuilder {
                 let range_size = source_end - source_start + 1;
                 if range_size > 1000 {
                     return Err(SDKError::InvalidParameter(
-                        "单次移动范围不能超过1000行/列".to_string()
+                        "单次移动范围不能超过1000行/列".to_string(),
                     ));
                 }
 
@@ -227,8 +232,8 @@ impl MoveDimensionRequestBuilder {
                 })
             }
             _ => Err(SDKError::InvalidParameter(
-                "电子表格Token、工作表ID、维度、源索引和目标索引都是必需的".to_string()
-            ))
+                "电子表格Token、工作表ID、维度、源索引和目标索引都是必需的".to_string(),
+            )),
         }
     }
 }
@@ -451,9 +456,23 @@ impl<'a> MoveDimensionServiceBuilder<'a> {
     }
 
     /// 执行移动操作
-    pub async fn execute(self) -> crate::core::error::SDKResult<BaseResponse<MoveDimensionResponse>> {
-        match (self.spreadsheet_token, self.sheet_id, self.source_start_index, self.source_end_index, self.destination_index) {
-            (Some(spreadsheet_token), Some(sheet_id), Some(source_start), Some(source_end), Some(dest_index)) => {
+    pub async fn execute(
+        self,
+    ) -> crate::core::error::SDKResult<BaseResponse<MoveDimensionResponse>> {
+        match (
+            self.spreadsheet_token,
+            self.sheet_id,
+            self.source_start_index,
+            self.source_end_index,
+            self.destination_index,
+        ) {
+            (
+                Some(spreadsheet_token),
+                Some(sheet_id),
+                Some(source_start),
+                Some(source_end),
+                Some(dest_index),
+            ) => {
                 let request = MoveDimensionRequest {
                     spreadsheet_token,
                     sheet_id,
@@ -466,8 +485,8 @@ impl<'a> MoveDimensionServiceBuilder<'a> {
                 self.service.move_dimension(&request).await
             }
             _ => Err(SDKError::InvalidParameter(
-                "电子表格Token、工作表ID、源范围和目标位置都是必需的".to_string()
-            ))
+                "电子表格Token、工作表ID、源范围和目标位置都是必需的".to_string(),
+            )),
         }
     }
 }
@@ -475,8 +494,8 @@ impl<'a> MoveDimensionServiceBuilder<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::config::Config;
-    use open_lark_core::trait_system::Service;
+    use config::Config;
+    use openlark_core::trait_system::Service;
 
     #[test]
     fn test_move_dimension_service_creation() {
@@ -577,13 +596,17 @@ mod tests {
         let service = MoveDimensionService::new(config);
 
         // 测试移动行构建器
-        let row_builder = service.move_rows_builder()
+        let row_builder = service
+            .move_rows_builder()
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .sheet_id("0XXXXXXXXXX".to_string())
             .from_range(2, 6)
             .to_position(0);
 
-        assert_eq!(row_builder.spreadsheet_token.unwrap().as_str(), "shtcnmBRWQKbsJRHXXXXXXXXXX");
+        assert_eq!(
+            row_builder.spreadsheet_token.unwrap().as_str(),
+            "shtcnmBRWQKbsJRHXXXXXXXXXX"
+        );
         assert_eq!(row_builder.sheet_id.unwrap().as_str(), "0XXXXXXXXXX");
         assert_eq!(row_builder.dimension, "ROWS");
         assert_eq!(row_builder.source_start_index, Some(2));
@@ -591,7 +614,8 @@ mod tests {
         assert_eq!(row_builder.destination_index, Some(0));
 
         // 测试移动列构建器
-        let col_builder = service.move_columns_builder()
+        let col_builder = service
+            .move_columns_builder()
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .sheet_id("0XXXXXXXXXX".to_string())
             .from_range(1, 3)

@@ -20,52 +20,51 @@
 
 pub mod batch_range_read;
 
-pub mod sheet_cells;
-pub mod single_read;
 pub mod batch_read;
 pub mod batch_read_ranges;
 pub mod batch_write;
+pub mod data_validation;
+pub mod dimension_operations;
 pub mod image_write;
 pub mod image_write_enhanced;
-pub mod single_write;
-pub mod values_single_write;
-pub mod values_batch_write;
-pub mod sheet_management;
 pub mod merge_cells;
-pub mod dimension_operations;
-pub mod style_operations;
-pub mod data_validation;
-pub mod values_append;
-pub mod sheets_batch_update;
-pub mod values_prepend;
 pub mod metainfo;
+pub mod sheet_cells;
+pub mod sheet_management;
+pub mod sheets_batch_update;
 pub mod single_range_read;
-
+pub mod single_read;
+pub mod single_write;
+pub mod style_operations;
+pub mod values_append;
+pub mod values_batch_write;
+pub mod values_prepend;
+pub mod values_single_write;
 
 // 重新导出所有服务类型
-    pub use batch_range_read::*;
-    pub use single_range_read::*;
-    pub use sheet_cells::*;
-pub use single_read::*;
+pub use batch_range_read::*;
 pub use batch_read::*;
 pub use batch_read_ranges::*;
 pub use batch_write::*;
+pub use data_validation::*;
+pub use dimension_operations::*;
 pub use image_write::*;
 pub use image_write_enhanced::*;
-pub use single_write::*;
-pub use values_single_write::*;
-pub use values_batch_write::*;
-pub use sheet_management::*;
 pub use merge_cells::*;
-pub use dimension_operations::*;
-pub use style_operations::*;
-pub use data_validation::*;
-pub use values_append::*;
-pub use sheets_batch_update::*;
-pub use values_prepend::*;
 pub use metainfo::*;
+pub use sheet_cells::*;
+pub use sheet_management::*;
+pub use sheets_batch_update::*;
+pub use single_range_read::*;
+pub use single_read::*;
+pub use single_write::*;
+pub use style_operations::*;
+pub use values_append::*;
+pub use values_batch_write::*;
+pub use values_prepend::*;
+pub use values_single_write::*;
 
-use open_lark_core::config::Config;
+use config::Config;
 
 /// Sheets电子表格服务 v2版本
 ///
@@ -114,7 +113,7 @@ pub struct SheetsServiceV2 {
     pub metainfo: SpreadsheetMetaService,
     /// 多个范围读取服务
     pub batch_range_read: BatchRangeReadService,
-    }
+}
 
 impl SheetsServiceV2 {
     /// 创建Sheets v2服务实例
@@ -147,7 +146,7 @@ impl SheetsServiceV2 {
             sheet_management: SheetManagementService::new(config.clone()),
             merge_cells: MergeCellsService::new(config.clone()),
             dimension_operations: DimensionOperationsService::new(config.clone()),
-        style_operations: StyleOperationsService::new(config.clone()),
+            style_operations: StyleOperationsService::new(config.clone()),
             data_validation: DataValidationService::new(config.clone()),
             values_append: ValuesAppendService::new(config.clone()),
             sheets_batch_update: SheetsBatchUpdateService::new(config.clone()),
@@ -174,7 +173,7 @@ impl crate::core::trait_system::Service for SheetsServiceV2 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::trait_system::Service;
+    use openlark_core::trait_system::Service;
 
     #[test]
     fn test_sheets_v2_service_creation() {
@@ -294,8 +293,14 @@ mod tests {
         assert!(!single_write_service_str.is_empty());
 
         // 验证服务名称和版本
-        assert_eq!(crate::service::sheets::v2::single_write::SingleWriteService::service_name(), "SingleWriteService");
-        assert_eq!(crate::service::sheets::v2::single_write::SingleWriteService::service_version(), "v2");
+        assert_eq!(
+            crate::service::sheets::v2::single_write::SingleWriteService::service_name(),
+            "SingleWriteService"
+        );
+        assert_eq!(
+            crate::service::sheets::v2::single_write::SingleWriteService::service_version(),
+            "v2"
+        );
     }
 
     #[test]
@@ -312,7 +317,10 @@ mod tests {
         assert!(!values_single_write_service_str.is_empty());
 
         // 验证服务名称
-        assert_eq!(ValuesSingleWriteService::service_name(), "ValuesSingleWriteService");
+        assert_eq!(
+            ValuesSingleWriteService::service_name(),
+            "ValuesSingleWriteService"
+        );
     }
 
     #[test]
@@ -333,7 +341,10 @@ mod tests {
         assert!(!values_batch_write_service_str.is_empty());
 
         // 验证服务名称
-        assert_eq!(ValuesBatchWriteService::service_name(), "ValuesBatchWriteService");
+        assert_eq!(
+            ValuesBatchWriteService::service_name(),
+            "ValuesBatchWriteService"
+        );
     }
 
     #[test]
@@ -445,7 +456,10 @@ mod tests {
         assert!(!metainfo_service_str.is_empty());
 
         // 验证服务名称
-        assert_eq!(SpreadsheetMetaService::service_name(), "SpreadsheetMetaService");
+        assert_eq!(
+            SpreadsheetMetaService::service_name(),
+            "SpreadsheetMetaService"
+        );
     }
 
     #[test]

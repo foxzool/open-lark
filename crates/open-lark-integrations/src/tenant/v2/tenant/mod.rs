@@ -199,7 +199,7 @@ mod tests {
     #[test]
     fn test_api_path_constant() {
         // Verify the API path is correct
-        use open_lark_core::core::core::endpoints::tenant::TENANT_V2_QUERY;
+        use openlark_core::core::endpoints::tenant::TENANT_V2_QUERY;
         assert_eq!(TENANT_V2_QUERY, "/open-apis/tenant/v2/tenant/query");
     }
 

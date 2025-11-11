@@ -8,7 +8,7 @@
 // wiki v2 - 知识库v2版本API
 //,
 // 包含知识库的核心功能
-use crate::prelude::*;
+use openlark_core::prelude::*;
 /// 知识库v2版本服务
 #[derive(Debug, Clone)]
 pub struct WikiV2Service {

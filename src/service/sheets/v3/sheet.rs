@@ -6,7 +6,7 @@
 //! - 工作表属性管理和操作
 
 use crate::{
-    api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
@@ -156,7 +156,10 @@ impl SheetService {
     ///     .query_sheets("spreadsheet_token")
     ///     .await?;
     /// ```
-    pub async fn query_sheets(&self, spreadsheet_token: &str) -> SDKResult<BaseResponse<QuerySheetsResponse>> {
+    pub async fn query_sheets(
+        &self,
+        spreadsheet_token: &str,
+    ) -> SDKResult<BaseResponse<QuerySheetsResponse>> {
         let endpoint = format!(
             "{}/{}/sheets/query",
             crate::core::endpoints_original::Endpoints::SHEETS_V3_SPREADSHEETS,
@@ -263,7 +266,9 @@ impl GetSheetBuilder {
         let service = SheetService {
             transport: self.transport,
         };
-        service.get_sheet(&self.spreadsheet_token, &self.sheet_id).await
+        service
+            .get_sheet(&self.spreadsheet_token, &self.sheet_id)
+            .await
     }
 }
 
@@ -504,7 +509,9 @@ impl FindCellsBuilder {
         let service = SheetService {
             transport: self.transport,
         };
-        service.find_cells(&self.spreadsheet_token, &self.sheet_id, &self.request).await
+        service
+            .find_cells(&self.spreadsheet_token, &self.sheet_id, &self.request)
+            .await
     }
 }
 
@@ -576,7 +583,10 @@ mod tests {
         };
 
         assert_eq!(response.data.sheet_items.len(), 1);
-        assert_eq!(response.data.sheet_items[0].title, Some("财务数据".to_string()));
+        assert_eq!(
+            response.data.sheet_items[0].title,
+            Some("财务数据".to_string())
+        );
     }
 
     #[test]
@@ -587,14 +597,8 @@ mod tests {
 
     #[test]
     fn test_api_response_trait_implementation() {
-        assert_eq!(
-            QuerySheetsResponse::data_format(),
-            ResponseFormat::Data
-        );
-        assert_eq!(
-            GetSheetResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(QuerySheetsResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(GetSheetResponse::data_format(), ResponseFormat::Data);
     }
 
     #[test]
@@ -721,8 +725,14 @@ mod tests {
             data: FindCellsData { value_range },
         };
 
-        assert_eq!(response.data.value_range.spreadsheet_token, Some("test_spreadsheet".to_string()));
-        assert_eq!(response.data.value_range.sheet_id, Some("test_sheet".to_string()));
+        assert_eq!(
+            response.data.value_range.spreadsheet_token,
+            Some("test_spreadsheet".to_string())
+        );
+        assert_eq!(
+            response.data.value_range.sheet_id,
+            Some("test_sheet".to_string())
+        );
         assert_eq!(response.data.value_range.range, Some("A1:B2".to_string()));
         assert_eq!(response.data.value_range.values.len(), 2);
         assert_eq!(response.data.value_range.values[0][0], "结果1");
@@ -733,7 +743,8 @@ mod tests {
         let config = crate::core::config::Config::default();
         let service = SheetService::new(config);
 
-        let find_builder = service.find_cells_builder("test_token", "test_sheet")
+        let find_builder = service
+            .find_cells_builder("test_token", "test_sheet")
             .find("查找文本")
             .range("A1:D20")
             .match_type("contains")
@@ -741,7 +752,10 @@ mod tests {
 
         assert_eq!(find_builder.request.find, "查找文本");
         assert_eq!(find_builder.request.range, Some("A1:D20".to_string()));
-        assert_eq!(find_builder.request.match_type, Some("contains".to_string()));
+        assert_eq!(
+            find_builder.request.match_type,
+            Some("contains".to_string())
+        );
         assert_eq!(find_builder.request.case_sensitive, Some(true));
         assert!(!format!("{:?}", find_builder).is_empty());
     }
@@ -772,7 +786,10 @@ mod tests {
             ],
         };
 
-        assert_eq!(value_range.spreadsheet_token, Some("sheet_token_123".to_string()));
+        assert_eq!(
+            value_range.spreadsheet_token,
+            Some("sheet_token_123".to_string())
+        );
         assert_eq!(value_range.sheet_id, Some("sheet_456".to_string()));
         assert_eq!(value_range.range, Some("Sheet1!A1:Z100".to_string()));
         assert_eq!(value_range.values.len(), 2);

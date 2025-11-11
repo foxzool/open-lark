@@ -13,10 +13,10 @@ use serde_json::Value;
 use std::collections::HashMap;
 
 use crate::request::Transport;
-use open_lark_core::SDKResult;
-use open_lark_core::config::Config;
-use open_lark_core::trait_system::Service;
-use open_lark_core::error::LarkAPIError;
+use config::Config;
+use openlark_core::error::LarkAPIError;
+use openlark_core::trait_system::Service;
+use SDKResult;
 
 /// 单个范围写入请求
 #[derive(Debug, Clone)]
@@ -106,7 +106,7 @@ impl ValuesSingleWriteRequest {
     pub fn new(
         spreadsheet_token: impl Into<String>,
         range: impl Into<String>,
-        values: Vec<Vec<Value>>
+        values: Vec<Vec<Value>>,
     ) -> Self {
         Self {
             spreadsheet_token: spreadsheet_token.into(),
@@ -150,37 +150,51 @@ impl ValuesSingleWriteRequest {
     pub fn validate(&self) -> SDKResult<()> {
         // 验证电子表格token
         if self.spreadsheet_token.trim().is_empty() {
-            return Err(LarkAPIError::InvalidParameter("电子表格token不能为空".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "电子表格token不能为空".to_string(),
+            ));
         }
 
         // 验证范围
         if self.range.trim().is_empty() {
-            return Err(LarkAPIError::InvalidParameter("写入范围不能为空".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "写入范围不能为空".to_string(),
+            ));
         }
 
         // 验证数据
         if self.values.is_empty() {
-            return Err(LarkAPIError::InvalidParameter("写入数据不能为空".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "写入数据不能为空".to_string(),
+            ));
         }
 
         // 验证数据大小限制
         if self.values.len() > 10000 {
-            return Err(LarkAPIError::InvalidParameter("写入行数不能超过10000行".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "写入行数不能超过10000行".to_string(),
+            ));
         }
 
         for (row_index, row) in self.values.iter().enumerate() {
             if row.len() > 100 {
-                return Err(LarkAPIError::InvalidParameter(
-                    format!("第{}行列数不能超过100列", row_index + 1)
-                ));
+                return Err(LarkAPIError::InvalidParameter(format!(
+                    "第{}行列数不能超过100列",
+                    row_index + 1
+                )));
             }
         }
 
         // 验证范围格式
         let range_upper = self.range.to_uppercase();
-        if !range_upper.contains('!') && !range_upper.matches(|c: char| c.is_ascii_alphabetic()).next().is_some() {
+        if !range_upper.contains('!')
+            && !range_upper
+                .matches(|c: char| c.is_ascii_alphabetic())
+                .next()
+                .is_some()
+        {
             return Err(LarkAPIError::InvalidParameter(
-                "范围格式不正确，应为SheetName!A1:B10格式".to_string()
+                "范围格式不正确，应为SheetName!A1:B10格式".to_string(),
             ));
         }
 
@@ -205,7 +219,10 @@ impl ValuesSingleWriteRequest {
                 ValueInputOption::Raw => "RAW",
                 ValueInputOption::UserEntered => "USER_ENTERED",
             };
-            body.insert("valueInputOption".to_string(), Value::String(option_str.to_string()));
+            body.insert(
+                "valueInputOption".to_string(),
+                Value::String(option_str.to_string()),
+            );
         }
 
         // 添加数据解析选项
@@ -214,7 +231,10 @@ impl ValuesSingleWriteRequest {
                 DataParseOption::ParseAuto => "PARSE_AUTO",
                 DataParseOption::ParseNone => "PARSE_NONE",
             };
-            body.insert("dataParseOption".to_string(), Value::String(option_str.to_string()));
+            body.insert(
+                "dataParseOption".to_string(),
+                Value::String(option_str.to_string()),
+            );
         }
 
         // 添加是否包含响应值
@@ -229,7 +249,10 @@ impl ValuesSingleWriteRequest {
                 ResponseValueRenderOption::UserEnteredFormat => "USER_ENTERED_FORMAT",
                 ResponseValueRenderOption::FormattedValue => "FORMATTED_VALUE",
             };
-            body.insert("responseValueRenderOption".to_string(), Value::String(option_str.to_string()));
+            body.insert(
+                "responseValueRenderOption".to_string(),
+                Value::String(option_str.to_string()),
+            );
         }
 
         // 添加响应日期渲染选项
@@ -238,7 +261,10 @@ impl ValuesSingleWriteRequest {
                 ResponseDateRenderOption::SerialNumber => "SERIAL_NUMBER",
                 ResponseDateRenderOption::FormattedString => "FORMATTED_STRING",
             };
-            body.insert("responseDateRenderOption".to_string(), Value::String(option_str.to_string()));
+            body.insert(
+                "responseDateRenderOption".to_string(),
+                Value::String(option_str.to_string()),
+            );
         }
 
         Ok(Value::Object(body))
@@ -326,7 +352,10 @@ impl ValuesSingleWriteService {
     /// .value_input_option(ValueInputOption::Raw)
     /// .include_values_in_response(true);
     /// ```
-    pub async fn write(&self, request: ValuesSingleWriteRequest) -> SDKResult<ValuesSingleWriteResponse> {
+    pub async fn write(
+        &self,
+        request: ValuesSingleWriteRequest,
+    ) -> SDKResult<ValuesSingleWriteResponse> {
         // 验证请求参数
         request.validate()?;
 
@@ -340,7 +369,8 @@ impl ValuesSingleWriteService {
         );
 
         // 发送HTTP请求
-        let response = self.config
+        let response = self
+            .config
             .transport
             .put(&url)
             .json(&body)
@@ -350,16 +380,24 @@ impl ValuesSingleWriteService {
 
         // 处理响应
         if response.status().is_success() {
-            let base_response: BaseResponse<ValuesSingleWriteResponseBody> = response.json().await
+            let base_response: BaseResponse<ValuesSingleWriteResponseBody> = response
+                .json()
+                .await
                 .map_err(|e| LarkAPIError::JsonParseError(format!("响应解析失败: {}", e)))?;
 
             if base_response.code == 0 {
                 Ok(base_response.data.data)
             } else {
-                Err(LarkAPIError::APIError(base_response.code, base_response.msg))
+                Err(LarkAPIError::APIError(
+                    base_response.code,
+                    base_response.msg,
+                ))
             }
         } else {
-            Err(LarkAPIError::HTTPError(response.status().as_u16(), "单个范围写入失败".to_string()))
+            Err(LarkAPIError::HTTPError(
+                response.status().as_u16(),
+                "单个范围写入失败".to_string(),
+            ))
         }
     }
 
@@ -381,7 +419,7 @@ impl ValuesSingleWriteService {
         &self,
         spreadsheet_token: impl Into<String>,
         range: impl Into<String>,
-        values: Vec<Vec<Value>>
+        values: Vec<Vec<Value>>,
     ) -> SDKResult<ValuesSingleWriteResponse> {
         let request = ValuesSingleWriteRequest::new(spreadsheet_token, range, values);
         self.write(request).await
@@ -402,7 +440,7 @@ impl ValuesSingleWriteService {
         spreadsheet_token: impl Into<String>,
         range: impl Into<String>,
         csv_data: &str,
-        delimiter: char
+        delimiter: char,
     ) -> SDKResult<ValuesSingleWriteResponse> {
         let values = Self::parse_csv_to_values(csv_data, delimiter)?;
         let request = ValuesSingleWriteRequest::new(spreadsheet_token, range, values)
@@ -425,7 +463,7 @@ impl ValuesSingleWriteService {
         spreadsheet_token: impl Into<String>,
         range: impl Into<String>,
         data: HashMap<String, Vec<Value>>,
-        include_headers: bool
+        include_headers: bool,
     ) -> SDKResult<ValuesSingleWriteResponse> {
         let values = Self::hashmap_to_values(data, include_headers)?;
         let request = ValuesSingleWriteRequest::new(spreadsheet_token, range, values)
@@ -489,24 +527,34 @@ impl ValuesSingleWriteService {
     }
 
     /// 将HashMap数据转换为值数组
-    fn hashmap_to_values(data: HashMap<String, Vec<Value>>, include_headers: bool) -> SDKResult<Vec<Vec<Value>>> {
+    fn hashmap_to_values(
+        data: HashMap<String, Vec<Value>>,
+        include_headers: bool,
+    ) -> SDKResult<Vec<Vec<Value>>> {
         if data.is_empty() {
-            return Err(LarkAPIError::InvalidParameter("HashMap数据为空".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "HashMap数据为空".to_string(),
+            ));
         }
 
         let keys: Vec<String> = data.keys().cloned().collect();
         let row_count = data.values().next().map(|v| v.len()).unwrap_or(0);
 
         if row_count == 0 {
-            return Err(LarkAPIError::InvalidParameter("HashMap数据行为空".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "HashMap数据行为空".to_string(),
+            ));
         }
 
         // 验证所有列的行数一致
         for (key, values) in &data {
             if values.len() != row_count {
-                return Err(LarkAPIError::InvalidParameter(
-                    format!("列 '{}' 的行数({})与其他列不一致({})", key, values.len(), row_count)
-                ));
+                return Err(LarkAPIError::InvalidParameter(format!(
+                    "列 '{}' 的行数({})与其他列不一致({})",
+                    key,
+                    values.len(),
+                    row_count
+                )));
             }
         }
 
@@ -625,13 +673,16 @@ impl ValuesSingleWriteBuilder {
 
     /// 执行写入操作
     pub async fn execute(self) -> SDKResult<ValuesSingleWriteResponse> {
-        let spreadsheet_token = self.spreadsheet_token
+        let spreadsheet_token = self
+            .spreadsheet_token
             .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格token不能为空".to_string()))?;
 
-        let range = self.range
+        let range = self
+            .range
             .ok_or_else(|| LarkAPIError::InvalidParameter("写入范围不能为空".to_string()))?;
 
-        let values = self.values
+        let values = self
+            .values
             .ok_or_else(|| LarkAPIError::InvalidParameter("写入数据不能为空".to_string()))?;
 
         let mut request = ValuesSingleWriteRequest::new(spreadsheet_token, range, values);
@@ -699,7 +750,7 @@ mod tests {
     fn test_to_request_body() {
         let values = vec![
             vec![json!("姓名"), json!("年龄")],
-            vec![json!("张三"), json!(25)]
+            vec![json!("张三"), json!(25)],
         ];
 
         let request = ValuesSingleWriteRequest::new("token", "Sheet1!A1:B2", values)
@@ -787,7 +838,8 @@ mod tests {
         let service = ValuesSingleWriteService::new(config);
 
         let values = vec![vec![json!("test")]];
-        let builder = service.write_builder()
+        let builder = service
+            .write_builder()
             .spreadsheet_token("test_token")
             .range("Sheet1!A1")
             .values(values)
@@ -797,7 +849,10 @@ mod tests {
         // 验证构建器设置
         assert_eq!(builder.spreadsheet_token.as_ref().unwrap(), "test_token");
         assert_eq!(builder.range.as_ref().unwrap(), "Sheet1!A1");
-        assert!(matches!(builder.value_input_option, Some(ValueInputOption::Raw)));
+        assert!(matches!(
+            builder.value_input_option,
+            Some(ValueInputOption::Raw)
+        ));
         assert_eq!(builder.include_values_in_response, Some(true));
     }
 
@@ -819,22 +874,22 @@ mod tests {
                 json!("年龄"),
                 json!("入职日期"),
                 json!("是否全职"),
-                json!("薪资")
+                json!("薪资"),
             ],
             vec![
                 json!("张三"),
                 json!(25),
                 json!("2023-01-15"),
                 json!(true),
-                json!(8500.50)
+                json!(8500.50),
             ],
             vec![
                 json!("李四"),
                 json!(30),
                 json!("2022-06-01"),
                 json!(false),
-                json!(12000.00)
-            ]
+                json!(12000.00),
+            ],
         ];
 
         let request = ValuesSingleWriteRequest::new("token", "Sheet1!A1:E3", values)

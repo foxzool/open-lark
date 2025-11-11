@@ -8,7 +8,7 @@
 use reqwest::Method;
 use serde_json::json;
 use crate::{
-use open_lark_core::SDKResult;    api_resp::BaseResponse,
+use SDKResult;    api_resp::BaseResponse,
     config::Config,
     constants::AccessTokenType,
     endpoints::{attendance::*, EndpointBuilder}
@@ -127,7 +127,7 @@ fn service_version() -> &'static str {,
 #[allow(clippy::field_reassign_with_default)]
 mod tests {
 use super::*;
-    use open_lark_core::config::Config;
+    use config::Config;
 use crate::service::attendance::v1::models::UserTaskCreate;
     fn create_test_config() -> Config {,
 Config::builder()

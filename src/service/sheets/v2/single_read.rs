@@ -18,17 +18,18 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use crate::{
-    api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    ApiRequest, SDKResult, req_option::RequestOption,
-    standard_response::StandardResponse,
-    error::LarkAPIError,
-};
 use crate::endpoints_original::Endpoints;
 use crate::impl_executable_builder_owned;
+use crate::{
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    error::LarkAPIError,
+    http::Transport,
+    req_option::RequestOption,
+    standard_response::StandardResponse,
+    ApiRequest, SDKResult,
+};
 
 /// 值范围响应
 ///
@@ -72,7 +73,10 @@ pub struct ReadSingleRangeRequest {
     #[serde(rename = "valueRenderOption", skip_serializing_if = "Option::is_none")]
     pub value_render_option: Option<String>,
     /// 日期时间渲染选项（可选）
-    #[serde(rename = "dateTimeRenderOption", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "dateTimeRenderOption",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub date_time_render_option: Option<String>,
     /// 用户ID类型（可选）
     #[serde(rename = "user_id_type", skip_serializing_if = "Option::is_none")]
@@ -94,10 +98,7 @@ impl ReadSingleRangeRequest {
     ///     "Sheet1!A1:B2"
     /// );
     /// ```
-    pub fn new<T: Into<String>, U: Into<String>>(
-        spreadsheet_token: T,
-        range: U,
-    ) -> Self {
+    pub fn new<T: Into<String>, U: Into<String>>(spreadsheet_token: T, range: U) -> Self {
         Self {
             spreadsheet_token: spreadsheet_token.into(),
             range: range.into(),
@@ -163,15 +164,19 @@ impl ReadSingleRangeRequest {
         // 验证范围格式
         if !self.range.contains('!') {
             return Err(LarkAPIError::illegal_param(format!(
-                "无效的范围格式: {}，缺少工作表标识符", self.range
+                "无效的范围格式: {}，缺少工作表标识符",
+                self.range
             )));
         }
 
         // 验证值渲染选项
         if let Some(option) = &self.value_render_option {
-            if !["ToString", "FormattedValue", "Formula", "UnformattedValue"].contains(&option.as_str()) {
+            if !["ToString", "FormattedValue", "Formula", "UnformattedValue"]
+                .contains(&option.as_str())
+            {
                 return Err(LarkAPIError::illegal_param(format!(
-                    "无效的值渲染选项: {}", option
+                    "无效的值渲染选项: {}",
+                    option
                 )));
             }
         }
@@ -180,7 +185,8 @@ impl ReadSingleRangeRequest {
         if let Some(option) = &self.date_time_render_option {
             if option != "FormattedString" {
                 return Err(LarkAPIError::illegal_param(format!(
-                    "无效的日期时间渲染选项: {}", option
+                    "无效的日期时间渲染选项: {}",
+                    option
                 )));
             }
         }
@@ -189,7 +195,8 @@ impl ReadSingleRangeRequest {
         if let Some(user_id_type) = &self.user_id_type {
             if !["open_id", "user_id", "union_id", "lark_id"].contains(&user_id_type.as_str()) {
                 return Err(LarkAPIError::illegal_param(format!(
-                    "无效的用户ID类型: {}", user_id_type
+                    "无效的用户ID类型: {}",
+                    user_id_type
                 )));
             }
         }
@@ -326,26 +333,30 @@ impl SingleReadService {
             .replace("{range}", &request.range);
 
         api_req.set_api_path(api_path);
-        api_req.set_supported_access_token_types(vec![
-            AccessTokenType::Tenant,
-            AccessTokenType::User
-        ]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         // 添加查询参数
         if let Some(value_render_option) = &request.value_render_option {
-            api_req.query_params.insert("valueRenderOption", value_render_option.clone());
+            api_req
+                .query_params
+                .insert("valueRenderOption", value_render_option.clone());
         }
 
         if let Some(date_time_render_option) = &request.date_time_render_option {
-            api_req.query_params.insert("dateTimeRenderOption", date_time_render_option.clone());
+            api_req
+                .query_params
+                .insert("dateTimeRenderOption", date_time_render_option.clone());
         }
 
         if let Some(user_id_type) = &request.user_id_type {
-            api_req.query_params.insert("user_id_type", user_id_type.clone());
+            api_req
+                .query_params
+                .insert("user_id_type", user_id_type.clone());
         }
 
         // 暂时返回模拟数据，直到Transport问题解决
-        use open_lark_core::api_resp::RawResponse;
+        use api_resp::RawResponse;
         Ok(BaseResponse {
             raw_response: RawResponse {
                 code: 0,
@@ -410,7 +421,12 @@ impl SingleReadService {
         end_cell: impl Into<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReadSingleRangeResponseData>> {
-        let range = format!("{}!{}:{}", sheet_name.into(), start_cell.into(), end_cell.into());
+        let range = format!(
+            "{}!{}:{}",
+            sheet_name.into(),
+            start_cell.into(),
+            end_cell.into()
+        );
         let request = ReadSingleRangeRequest::new(spreadsheet_token, range);
         self.read_single_range(request, option).await
     }
@@ -458,7 +474,12 @@ impl SingleReadService {
         column_letter: impl Into<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReadSingleRangeResponseData>> {
-        let range = format!("{}!{}:{}", sheet_name.into(), column_letter.into(), column_letter.into());
+        let range = format!(
+            "{}!{}:{}",
+            sheet_name.into(),
+            column_letter.into(),
+            column_letter.into()
+        );
         let request = ReadSingleRangeRequest::new(spreadsheet_token, range);
         self.read_single_range(request, option).await
     }
@@ -552,10 +573,7 @@ mod tests {
 
     #[test]
     fn test_read_single_range_request_creation() {
-        let request = ReadSingleRangeRequest::new(
-            "token123",
-            "Sheet1!A1:B2"
-        );
+        let request = ReadSingleRangeRequest::new("token123", "Sheet1!A1:B2");
 
         assert_eq!(request.spreadsheet_token, "token123");
         assert_eq!(request.range, "Sheet1!A1:B2");
@@ -586,16 +604,16 @@ mod tests {
         let request = ReadSingleRangeRequest::new("token", "Sheet1!A1:B2")
             .value_render_option("FormattedValue");
 
-        assert_eq!(request.value_render_option, Some("FormattedValue".to_string()));
+        assert_eq!(
+            request.value_render_option,
+            Some("FormattedValue".to_string())
+        );
     }
 
     #[test]
     fn test_request_validation() {
         // 测试有效请求
-        let valid_request = ReadSingleRangeRequest::new(
-            "token123",
-            "Sheet1!A1:B2"
-        );
+        let valid_request = ReadSingleRangeRequest::new("token123", "Sheet1!A1:B2");
         assert!(valid_request.validate().is_ok());
 
         // 测试无效请求（空令牌）
@@ -622,7 +640,10 @@ mod tests {
 
         assert_eq!(request.spreadsheet_token, "token123");
         assert_eq!(request.range, "Sheet1!A1:B2");
-        assert_eq!(request.value_render_option, Some("FormattedValue".to_string()));
+        assert_eq!(
+            request.value_render_option,
+            Some("FormattedValue".to_string())
+        );
         assert_eq!(request.user_id_type, Some("open_id".to_string()));
     }
 
@@ -665,7 +686,7 @@ mod tests {
             "Sheet with spaces!C1:D50",
             "Sheet1!$A$1:$B$2",
             "SingleCell!A1",
-            "LargeRange!A1:XFD1048576"
+            "LargeRange!A1:XFD1048576",
         ];
 
         for range in complex_ranges {
@@ -686,8 +707,8 @@ mod tests {
         // 测试有效的值渲染选项
         let valid_options = ["ToString", "FormattedValue", "Formula", "UnformattedValue"];
         for option in &valid_options {
-            let request = ReadSingleRangeRequest::new("token", "Sheet1!A1:B2")
-                .value_render_option(*option);
+            let request =
+                ReadSingleRangeRequest::new("token", "Sheet1!A1:B2").value_render_option(*option);
             assert!(request.validate().is_ok());
         }
 
@@ -712,14 +733,14 @@ mod tests {
         // 测试有效的用户ID类型
         let valid_types = ["open_id", "user_id", "union_id", "lark_id"];
         for user_id_type in &valid_types {
-            let request = ReadSingleRangeRequest::new("token", "Sheet1!A1:B2")
-                .user_id_type(*user_id_type);
+            let request =
+                ReadSingleRangeRequest::new("token", "Sheet1!A1:B2").user_id_type(*user_id_type);
             assert!(request.validate().is_ok());
         }
 
         // 测试无效的用户ID类型
-        let invalid_request = ReadSingleRangeRequest::new("token", "Sheet1!A1:B2")
-            .user_id_type("invalid_type");
+        let invalid_request =
+            ReadSingleRangeRequest::new("token", "Sheet1!A1:B2").user_id_type("invalid_type");
         assert!(invalid_request.validate().is_err());
     }
 

@@ -7,41 +7,40 @@
 //! - 数据格式化和样式设置
 //! - 筛选视图和筛选条件管理
 
+pub mod charts;
+pub mod comments;
+pub mod conditional_format;
+pub mod data_filter;
+pub mod filter_views;
+pub mod find_replace;
+pub mod float_images;
+pub mod macros;
+pub mod move_dimension;
+pub mod pivot_tables;
+pub mod sheet;
+pub mod sheet_protection;
 pub mod spreadsheet;
 pub mod spreadsheet_create;
-pub mod sheet;
-pub mod filter_views;
-pub mod data_filter;
-pub mod conditional_format;
-pub mod charts;
-pub mod pivot_tables;
-pub mod find_replace;
-pub mod comments;
-pub mod macros;
-pub mod sheet_protection;
-pub mod move_dimension;
-pub mod float_images;
 pub mod spreadsheet_info;
 
-
 // 重新导出所有服务类型
-    pub use spreadsheet_info::*;
+pub use charts::*;
+pub use comments::*;
+pub use conditional_format::*;
+pub use data_filter::*;
+pub use filter_views::*;
+pub use find_replace::*;
+pub use float_images::*;
+pub use macros::*;
+pub use move_dimension::*;
+pub use pivot_tables::*;
+pub use sheet::*;
+pub use sheet_protection::*;
 pub use spreadsheet::*;
 pub use spreadsheet_create::*;
-pub use sheet::*;
-pub use filter_views::*;
-pub use data_filter::*;
-pub use conditional_format::*;
-pub use charts::*;
-pub use pivot_tables::*;
-pub use find_replace::*;
-pub use comments::*;
-pub use macros::*;
-pub use sheet_protection::*;
-pub use move_dimension::*;
-pub use float_images::*;
+pub use spreadsheet_info::*;
 
-use open_lark_core::config::Config;
+use config::Config;
 
 /// Sheets电子表格服务 v3版本
 ///
@@ -132,7 +131,7 @@ impl crate::core::trait_system::Service for SheetsServiceV3 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::trait_system::Service;
+    use openlark_core::trait_system::Service;
 
     #[test]
     fn test_sheets_v3_service_creation() {

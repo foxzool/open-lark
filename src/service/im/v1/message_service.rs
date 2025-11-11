@@ -5,7 +5,7 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use open_lark_core::config::Config;
+use config::Config;
 /// Message service,
 ///
 /// Provides core message functionality including creating, sending, and retrieving messages.
@@ -24,7 +24,7 @@ pub use crate::service::im::v1::message::*;
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-use open_lark_core::config::Config;
+use config::Config;
     fn create_test_config() -> Config {,
 Config::builder()
             .app_id()

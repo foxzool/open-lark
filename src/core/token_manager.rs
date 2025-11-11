@@ -870,7 +870,7 @@ impl ApiResponseTrait for TenantAccessTokenResp {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::{config::Config, constants::AppType};
+    use openlark_core::{config::Config, constants::AppType};
     use std::{sync::Arc, time::Duration};
     use tokio::sync::Mutex;
 
@@ -1052,7 +1052,7 @@ mod tests {
 
     #[test]
     fn test_cache_entry_expiry_calculations() {
-        use open_lark_core::cache::CacheEntry;
+        use cache::CacheEntry;
         use std::time::Duration;
         use tokio::time::Instant;
 
@@ -1222,7 +1222,7 @@ mod tests {
 
     #[test]
     fn test_app_access_token_response() {
-        use open_lark_core::api_resp::{RawResponse, ResponseFormat};
+        use api_resp::{RawResponse, ResponseFormat};
 
         // 测试ResponseFormat
         assert!(matches!(
@@ -1250,7 +1250,7 @@ mod tests {
 
     #[test]
     fn test_tenant_access_token_response() {
-        use open_lark_core::api_resp::{RawResponse, ResponseFormat};
+        use api_resp::{RawResponse, ResponseFormat};
 
         // 测试ResponseFormat
         assert!(matches!(
@@ -1381,7 +1381,7 @@ mod tests {
 
     #[test]
     fn test_token_response_debug() {
-        use open_lark_core::api_resp::RawResponse;
+        use api_resp::RawResponse;
 
         let raw_resp = RawResponse {
             code: 0,

@@ -15,7 +15,7 @@
 //! - 完整的审计追踪和日志管理
 //! - 安全策略配置和自动化执行
 
-use open_lark_core::config::Config;
+use config::Config;
 
 /// Security & Compliance服务主入口
 #[derive(Debug, Clone)]

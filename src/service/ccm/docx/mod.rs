@@ -16,7 +16,7 @@
 // - 文档搜索和统计
 //,
 // 覆盖18个API接口
-use crate::prelude::*;
+use openlark_core::prelude::*;
 use crate::service::ccm::docx::v1::DocxV1Service;
 use crate::service::ccm::docx::documents::DocumentsService;
 /// 文档服务

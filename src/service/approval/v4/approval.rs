@@ -15,9 +15,9 @@
 //! - 审批定义模板管理
 
 use super::models::*;
-use open_lark_core::config::Config;
-use open_lark_core::SDKResult;
+use config::Config;
 use serde::{Deserialize, Serialize};
+use SDKResult;
 
 /// 审批定义服务
 #[derive(Debug, Clone)]

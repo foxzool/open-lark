@@ -1,6 +1,6 @@
 // sessions - 会话管理服务
 // 提供会话管理相关的功能
-use open_lark_core::config::Config;
+use config::Config;
 
 /// 会话管理服务
 #[derive(Debug, Clone)]

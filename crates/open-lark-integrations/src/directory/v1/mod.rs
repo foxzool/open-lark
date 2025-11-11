@@ -1,4 +1,4 @@
-use open_lark_core::core::core::{config::Config, trait_system::Service};
+use openlark_core::core::{config::Config, trait_system::Service};
 
 pub mod department;
 pub mod employee;
@@ -143,7 +143,7 @@ impl V1 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::core::core::config::Config;
+    use openlark_core::core::config::Config;
     use std::sync::Arc;
 
     // Helper function to create test config

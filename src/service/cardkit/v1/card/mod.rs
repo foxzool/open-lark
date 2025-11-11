@@ -2,7 +2,7 @@
 //!
 //! 提供卡片的创建、更新、配置等管理功能
 
-use open_lark_core::config::Config;
+use config::Config;
 
 pub mod batch_update;
 pub mod create;

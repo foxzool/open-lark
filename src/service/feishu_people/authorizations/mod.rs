@@ -12,7 +12,7 @@
 //! - 角色管理
 //! - 权限范围管理
 
-use open_lark_core::config::Config;
+use config::Config;
 
 /// 权限管理服务
 #[derive(Debug, Clone)]

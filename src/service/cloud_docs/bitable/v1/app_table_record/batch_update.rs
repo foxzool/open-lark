@@ -1,5 +1,5 @@
-use open_lark_core::SDKResult;use reqwest::Method;
-use open_lark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use SDKResult;use reqwest::Method;
+use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use crate::,
 {,

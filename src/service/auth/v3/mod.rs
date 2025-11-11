@@ -9,8 +9,8 @@
 //!
 //! 提供应用和租户级别的认证令牌管理功能，支持自建应用和商店应用。
 
-use open_lark_core::config::Config;
-use open_lark_core::SDKResult;
+use config::Config;
+use SDKResult;
 
 /// Auth服务 v3版本
 #[derive(Debug, Clone)]

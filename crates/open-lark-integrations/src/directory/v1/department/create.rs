@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use open_lark_core::core::core::{
+use openlark_core::core::{
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
     config::Config,
@@ -52,7 +52,7 @@ impl crate::directory::v1::DepartmentService {
     ) -> SDKResult<BaseResponse<CreateDepartmentResponse>> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: open_lark_core::core::endpoints::directory::DIRECTORY_V1_DEPARTMENT_CREATE.to_string(),
+            api_path: openlark_core::endpoints::directory::DIRECTORY_V1_DEPARTMENT_CREATE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()

@@ -14,7 +14,7 @@ use super::{
     migration::{MigrationRisk, MigrationRiskType, MigrationStrategy},
     ServiceRegistry,
 };
-use open_lark_core::config::Config;
+use config::Config;
 
 /// 高级兼容性分析器
 pub struct AdvancedCompatibilityAnalyzer {

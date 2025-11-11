@@ -1,4 +1,4 @@
-use open_lark_core::core::core::config::Config;
+use openlark_core::core::config::Config;
 
 pub mod meeting;
 pub mod recording;

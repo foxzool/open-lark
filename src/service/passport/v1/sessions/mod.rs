@@ -2,11 +2,11 @@
 //!
 //! 提供用户会话相关的API功能，包括登录、登出、会话查询等。
 
+use crate::service::passport::models::{LogoutRequest, LogoutResponse, PassportResponse};
 use crate::{
     config::Config, constants::AccessTokenType, endpoints_original::Endpoints, http::Transport,
 };
-use open_lark_core::{error::LarkAPIError, ApiRequest, SDKResult};
-use crate::service::passport::models::{LogoutRequest, LogoutResponse, PassportResponse};
+use openlark_core::{error::LarkAPIError, ApiRequest, SDKResult};
 
 /// 会话管理服务
 #[derive(Debug, Clone)]

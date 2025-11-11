@@ -10,7 +10,7 @@
 //! 这个模块提供了从v1到v2 Wiki服务的兼容层，允许使用v1 API接口
 //! 访问v2的Wiki功能。
 
-use open_lark_core::config::Config;
+use config::Config;
 
 /// 知识库服务 v2（通过v1接口访问）
 #[derive(Debug, Clone)]

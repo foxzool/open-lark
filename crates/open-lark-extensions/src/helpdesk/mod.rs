@@ -106,7 +106,7 @@ pub mod models;
 /// 服务台服务 v1 版本
 pub mod v1;
 
-use open_lark_core::core::{config::Config, trait_system::Service};
+use openlark_core::{config::Config, trait_system::Service};
 
 /// 服务台服务
 ///

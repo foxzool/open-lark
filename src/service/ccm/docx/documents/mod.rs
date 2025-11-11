@@ -8,7 +8,7 @@
 // docx documents - 文档操作API
 //,
 // 提供文档操作的功能
-use crate::prelude::*;
+use openlark_core::prelude::*;
 /// 文档操作服务
 #[derive(Debug, Clone)]
 pub struct DocumentsService {

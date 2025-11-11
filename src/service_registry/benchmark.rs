@@ -6,8 +6,8 @@ use std::sync::Arc;
 use std::time::{Duration, Instant};
 use tokio::task::JoinSet;
 
-use open_lark_core::config::{Config, ConfigBuilder};
 use crate::service_registry::{ServiceError, ServiceRegistry};
+use config::{Config, ConfigBuilder};
 // 条件编译导入适配器
 #[cfg(feature = "authentication")]
 use crate::service_registry::adapters::AuthenticationServiceAdapter;

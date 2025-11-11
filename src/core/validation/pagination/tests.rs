@@ -10,7 +10,7 @@ pub struct TestPaginationResponse {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::validation::{
+    use validation::{
         pagination::PaginationRequestBuilder,
         ValidationResult,
     };
@@ -129,7 +129,7 @@ mod tests {
 
     #[test]
     fn test_paginated_response_wrapper() {
-        use open_lark_core::validation::pagination::PaginatedResponse;
+        use validation::pagination::PaginatedResponse;
 
         let response = TestPaginationResponse {
             items: vec!["item1".to_string(), "item2".to_string()],
@@ -146,7 +146,7 @@ mod tests {
 
     #[test]
     fn test_paginated_response_no_more() {
-        use open_lark_core::validation::pagination::PaginatedResponse;
+        use validation::pagination::PaginatedResponse;
 
         let response = TestPaginationResponse {
             items: vec!["item1".to_string()],

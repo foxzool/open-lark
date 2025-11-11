@@ -226,7 +226,7 @@ impl CardService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::config::Config;
+    use config::Config;
 
     #[test]
     fn test_create_card_request_creation() {

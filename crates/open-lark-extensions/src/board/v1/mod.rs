@@ -5,8 +5,8 @@
 //! - 画板缩略图获取 (1个API)
 //! - 节点管理 (2个API)
 
-use open_lark_core::core::config::Config;
-use open_lark_core::prelude::*;
+use openlark_core::config::Config;
+use openlark_core::prelude::*;
 use serde::{Deserialize, Serialize};
 
 /// 画板服务 v1版本

@@ -8,7 +8,7 @@
 //! - 支持多种验证类型和条件
 
 use crate::{
-    api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -378,9 +378,9 @@ fn is_valid_date(value: &str) -> bool {
     }
 
     // 简单的数字验证
-    parts.iter().all(|part| {
-        part.chars().all(|c| c.is_ascii_digit())
-    })
+    parts
+        .iter()
+        .all(|part| part.chars().all(|c| c.is_ascii_digit()))
 }
 
 /// 设置数据验证请求
@@ -396,10 +396,7 @@ pub struct SetDataValidationRequest {
 
 impl SetDataValidationRequest {
     /// 创建新的设置数据验证请求
-    pub fn new(
-        spreadsheet_token: impl Into<String>,
-        data_validation: DataValidation,
-    ) -> Self {
+    pub fn new(spreadsheet_token: impl Into<String>, data_validation: DataValidation) -> Self {
         Self {
             spreadsheet_token: spreadsheet_token.into(),
             data_validation,
@@ -600,16 +597,15 @@ impl DataValidationService {
             format!(
                 "/open-apis/sheets/v2/spreadsheets/{}/dataValidation",
                 &request.spreadsheet_token
-            )
+            ),
         );
-        api_req.set_supported_access_token_types(vec![
-            AccessTokenType::Tenant,
-            AccessTokenType::User
-        ]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
         api_req.body = serde_json::to_vec(&request)?;
 
         // 发送请求
-        let api_resp = Transport::<SetDataValidationResponse>::request(api_req, &self.config, option).await?;
+        let api_resp =
+            Transport::<SetDataValidationResponse>::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
@@ -660,19 +656,17 @@ impl DataValidationService {
             Method::PUT,
             format!(
                 "/open-apis/sheets/v2/spreadsheets/{}/dataValidation/{}/{}",
-                &request.spreadsheet_token,
-                &request.sheet_id,
-                &request.data_validation_id
-            )
+                &request.spreadsheet_token, &request.sheet_id, &request.data_validation_id
+            ),
         );
-        api_req.set_supported_access_token_types(vec![
-            AccessTokenType::Tenant,
-            AccessTokenType::User
-        ]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
         api_req.body = serde_json::to_vec(&request)?;
 
         // 发送请求
-        let api_resp = Transport::<UpdateDataValidationResponse>::request(api_req, &self.config, option).await?;
+        let api_resp =
+            Transport::<UpdateDataValidationResponse>::request(api_req, &self.config, option)
+                .await?;
 
         Ok(api_resp)
     }
@@ -724,12 +718,7 @@ pub struct DropdownValidationBuilder {
 
 impl DropdownValidationBuilder {
     /// 创建新的下拉列表验证构建器实例
-    pub fn new(
-        config: Config,
-        spreadsheet_token: String,
-        sheet_id: String,
-        range: String,
-    ) -> Self {
+    pub fn new(config: Config, spreadsheet_token: String, sheet_id: String, range: String) -> Self {
         Self {
             config,
             spreadsheet_token,
@@ -783,16 +772,19 @@ impl DropdownValidationBuilder {
 
     /// 执行设置请求
     pub async fn execute(self) -> SDKResult<BaseResponse<SetDataValidationResponse>> {
-        let data_validation = DataValidation::new(
-            self.sheet_id,
-            self.range,
-            ValidationType::Dropdown
-        )
-        .dropdown_source(DropdownSource::Values(self.values))
-        .prompt_message(self.prompt_message.unwrap_or_else(|| "请从下拉列表中选择".to_string()))
-        .error_message(self.error_message.unwrap_or_else(|| "输入的值不在允许的列表中".to_string()))
-        .allow_empty(self.allow_empty)
-        .strict_mode(self.strict_mode);
+        let data_validation =
+            DataValidation::new(self.sheet_id, self.range, ValidationType::Dropdown)
+                .dropdown_source(DropdownSource::Values(self.values))
+                .prompt_message(
+                    self.prompt_message
+                        .unwrap_or_else(|| "请从下拉列表中选择".to_string()),
+                )
+                .error_message(
+                    self.error_message
+                        .unwrap_or_else(|| "输入的值不在允许的列表中".to_string()),
+                )
+                .allow_empty(self.allow_empty)
+                .strict_mode(self.strict_mode);
 
         let request = SetDataValidationRequest::new(self.spreadsheet_token, data_validation);
 
@@ -819,12 +811,7 @@ pub struct NumberRangeValidationBuilder {
 
 impl NumberRangeValidationBuilder {
     /// 创建新的数字范围验证构建器实例
-    pub fn new(
-        config: Config,
-        spreadsheet_token: String,
-        sheet_id: String,
-        range: String,
-    ) -> Self {
+    pub fn new(config: Config, spreadsheet_token: String, sheet_id: String, range: String) -> Self {
         Self {
             config,
             spreadsheet_token,
@@ -858,8 +845,7 @@ impl NumberRangeValidationBuilder {
 
     /// 设置值对（用于Between等操作符）
     pub fn values(min_value: impl Into<String>, max_value: impl Into<String>) -> Self {
-        self.value1(Some(min_value.into()))
-            .value2(max_value)
+        self.value1(Some(min_value.into())).value2(max_value)
     }
 
     /// 设置提示信息
@@ -880,14 +866,17 @@ impl NumberRangeValidationBuilder {
             .value1(self.value1.unwrap_or_else(|| "0".to_string()))
             .value2(self.value2);
 
-        let data_validation = DataValidation::new(
-            self.sheet_id,
-            self.range,
-            ValidationType::NumberRange
-        )
-        .condition(condition)
-        .prompt_message(self.prompt_message.unwrap_or_else(|| "请输入有效的数字".to_string()))
-        .error_message(self.error_message.unwrap_or_else(|| "输入的数字不符合验证条件".to_string()));
+        let data_validation =
+            DataValidation::new(self.sheet_id, self.range, ValidationType::NumberRange)
+                .condition(condition)
+                .prompt_message(
+                    self.prompt_message
+                        .unwrap_or_else(|| "请输入有效的数字".to_string()),
+                )
+                .error_message(
+                    self.error_message
+                        .unwrap_or_else(|| "输入的数字不符合验证条件".to_string()),
+                );
 
         let request = SetDataValidationRequest::new(self.spreadsheet_token, data_validation);
 
@@ -928,8 +917,7 @@ mod tests {
 
     #[test]
     fn test_validation_condition() {
-        let condition = ValidationCondition::new(ValidationOperator::Between)
-            .values("10", "100");
+        let condition = ValidationCondition::new(ValidationOperator::Between).values("10", "100");
 
         assert_eq!(condition.operator, ValidationOperator::Between);
         assert_eq!(condition.value1, Some("10".to_string()));
@@ -961,18 +949,14 @@ mod tests {
 
     #[test]
     fn test_data_validation_creation() {
-        let validation = DataValidation::new(
-            "sheet1",
-            "A1:A10",
-            ValidationType::Dropdown
-        )
-        .dropdown_source(DropdownSource::Values(vec![
-            "男".to_string(),
-            "女".to_string()
-        ]))
-        .prompt_message("请选择性别")
-        .allow_empty(true)
-        .strict_mode(false);
+        let validation = DataValidation::new("sheet1", "A1:A10", ValidationType::Dropdown)
+            .dropdown_source(DropdownSource::Values(vec![
+                "男".to_string(),
+                "女".to_string(),
+            ]))
+            .prompt_message("请选择性别")
+            .allow_empty(true)
+            .strict_mode(false);
 
         assert_eq!(validation.sheet_id, "sheet1");
         assert_eq!(validation.range, "A1:A10");
@@ -1013,8 +997,9 @@ mod tests {
         assert!(invalid_numeric.validate().is_err());
 
         // 测试无效的范围格式
-        let invalid_range = DataValidation::new("sheet1", "invalid_range", ValidationType::Dropdown)
-            .dropdown_source(DropdownSource::Values(vec!["选项1".to_string()]));
+        let invalid_range =
+            DataValidation::new("sheet1", "invalid_range", ValidationType::Dropdown)
+                .dropdown_source(DropdownSource::Values(vec!["选项1".to_string()]));
         assert!(invalid_range.validate().is_err());
     }
 
@@ -1083,12 +1068,8 @@ mod tests {
         let validation = DataValidation::new("sheet1", "A1:A5", ValidationType::Dropdown)
             .dropdown_source(DropdownSource::Values(vec!["选项1".to_string()]));
 
-        let request = UpdateDataValidationRequest::new(
-            "test_token",
-            "sheet1",
-            "validation_123",
-            validation
-        );
+        let request =
+            UpdateDataValidationRequest::new("test_token", "sheet1", "validation_123", validation);
         assert_eq!(request.spreadsheet_token, "test_token");
         assert_eq!(request.sheet_id, "sheet1");
         assert_eq!(request.data_validation_id, "validation_123");
@@ -1109,7 +1090,11 @@ mod tests {
     fn test_dropdown_validation_builder() {
         let config = Config::default();
         let builder = DataValidationService::new(config.clone())
-            .dropdown_builder("token".to_string(), "sheet1".to_string(), "A1:A10".to_string())
+            .dropdown_builder(
+                "token".to_string(),
+                "sheet1".to_string(),
+                "A1:A10".to_string(),
+            )
             .add_value("选项1")
             .add_value("选项2")
             .add_values(vec!["选项3", "选项4"])
@@ -1131,7 +1116,11 @@ mod tests {
     fn test_number_range_validation_builder() {
         let config = Config::default();
         let builder = DataValidationService::new(config.clone())
-            .number_range_builder("token".to_string(), "sheet1".to_string(), "B1:B10".to_string())
+            .number_range_builder(
+                "token".to_string(),
+                "sheet1".to_string(),
+                "B1:B10".to_string(),
+            )
             .operator(ValidationOperator::Between)
             .values("18", "60")
             .prompt_message("请输入年龄")
@@ -1173,76 +1162,62 @@ mod tests {
 
     #[test]
     fn test_serialization_deserialization() {
-        let original_validation = DataValidation::new(
-            "sheet1",
-            "A1:B2",
-            ValidationType::Dropdown
-        )
-        .dropdown_source(DropdownSource::Values(vec![
-            "男".to_string(),
-            "女".to_string()
-        ]))
-        .prompt_message("请选择性别")
-        .allow_empty(false);
+        let original_validation = DataValidation::new("sheet1", "A1:B2", ValidationType::Dropdown)
+            .dropdown_source(DropdownSource::Values(vec![
+                "男".to_string(),
+                "女".to_string(),
+            ]))
+            .prompt_message("请选择性别")
+            .allow_empty(false);
 
         let serialized = serde_json::to_string(&original_validation).unwrap();
         let deserialized: DataValidation = serde_json::from_str(&serialized).unwrap();
 
         assert_eq!(original_validation.sheet_id, deserialized.sheet_id);
         assert_eq!(original_validation.range, deserialized.range);
-        assert_eq!(original_validation.validation_type, deserialized.validation_type);
+        assert_eq!(
+            original_validation.validation_type,
+            deserialized.validation_type
+        );
         assert_eq!(original_validation.allow_empty, deserialized.allow_empty);
     }
 
     #[test]
     fn test_complex_validation_scenarios() {
         // 测试复杂的文本长度验证
-        let text_length_validation = DataValidation::new(
-            "sheet1",
-            "C1:C100",
-            ValidationType::TextLength
-        )
-        .condition(
-            ValidationCondition::new(ValidationOperator::Between)
-                .values("5", "50")
-        )
-        .prompt_message("文本长度必须在5-50个字符之间")
-        .error_message("输入的文本长度不符合要求")
-        .allow_empty(false);
+        let text_length_validation =
+            DataValidation::new("sheet1", "C1:C100", ValidationType::TextLength)
+                .condition(ValidationCondition::new(ValidationOperator::Between).values("5", "50"))
+                .prompt_message("文本长度必须在5-50个字符之间")
+                .error_message("输入的文本长度不符合要求")
+                .allow_empty(false);
 
         assert!(text_length_validation.validate().is_ok());
         assert_eq!(text_length_validation.range, "C1:C100");
 
         // 测试日期范围验证
-        let date_validation = DataValidation::new(
-            "sheet1",
-            "D1:D50",
-            ValidationType::DateRange
-        )
-        .condition(
-            ValidationCondition::new(ValidationOperator::Between)
-                .values("2024-01-01", "2024-12-31")
-        )
-        .prompt_message("请选择2024年内的日期");
+        let date_validation = DataValidation::new("sheet1", "D1:D50", ValidationType::DateRange)
+            .condition(
+                ValidationCondition::new(ValidationOperator::Between)
+                    .values("2024-01-01", "2024-12-31"),
+            )
+            .prompt_message("请选择2024年内的日期");
 
         assert!(date_validation.validate().is_ok());
 
         // 测试多选下拉列表
-        let multi_select_validation = DataValidation::new(
-            "sheet1",
-            "E1:E20",
-            ValidationType::MultiSelectDropdown
-        )
-        .dropdown_source(DropdownSource::Values(vec![
-            "选项A".to_string(),
-            "选项B".to_string(),
-            "选项C".to_string(),
-            "选项D".to_string(),
-            "选项E".to_string()
-        ]))
-        .prompt_message("可选择多个选项")
-        .allow_empty(true)
-        .strict_mode(false);
+        let multi_select_validation =
+            DataValidation::new("sheet1", "E1:E20", ValidationType::MultiSelectDropdown)
+                .dropdown_source(DropdownSource::Values(vec![
+                    "选项A".to_string(),
+                    "选项B".to_string(),
+                    "选项C".to_string(),
+                    "选项D".to_string(),
+                    "选项E".to_string(),
+                ]))
+                .prompt_message("可选择多个选项")
+                .allow_empty(true)
+                .strict_mode(false);
 
         assert!(multi_select_validation.validate().is_ok());
     }

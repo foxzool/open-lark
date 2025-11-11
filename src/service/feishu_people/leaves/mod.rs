@@ -13,7 +13,7 @@
 //! - 休假申请管理
 //! - 假期授予记录管理
 
-use open_lark_core::config::Config;
+use config::Config;
 
 /// 假期管理服务
 #[derive(Debug, Clone)]

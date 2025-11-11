@@ -5,7 +5,7 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use open_lark_core::config::Config;
+use config::Config;
 // TODO: 以下功能待实现
 // pub mod create;
 // pub mod delete;

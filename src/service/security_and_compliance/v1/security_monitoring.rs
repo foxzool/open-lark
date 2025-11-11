@@ -36,15 +36,15 @@
 //! ```
 
 use super::*;
-use open_lark_core::SDKResult;
 use crate::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
 };
-use open_lark_core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
+use openlark_core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use serde::{Deserialize, Serialize};
+use SDKResult;
 
 // 导入核心类型
 

@@ -8,7 +8,7 @@
 use reqwest::Method;
 use serde_json::json;
 use crate::{
-use open_lark_core::SDKResult;    api_resp::BaseResponse, config::Config, constants::AccessTokenType, endpoints::attendance::*,
+use SDKResult;    api_resp::BaseResponse, config::Config, constants::AccessTokenType, endpoints::attendance::*,
     http::Transport, req_option::RequestOption, trait_system::Service, SDKResult,
 };
 use super::models::{,
@@ -34,7 +34,7 @@ fn service_version() -> &'static str {,
 #[cfg(test)]
 mod tests {
 use super::*;
-    use open_lark_core::config::Config;
+    use config::Config;
 #[test]
     fn test_user_daily_shift_service_creation() {
 let config = Config::default();

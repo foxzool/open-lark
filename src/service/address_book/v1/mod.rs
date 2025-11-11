@@ -13,7 +13,7 @@
 //! - 批量操作
 //! - 搜索和过滤
 
-use open_lark_core::{config::Config, SDKResult};
+use openlark_core::{config::Config, SDKResult};
 use serde::{Deserialize, Serialize};
 
 /// 地址簿服务 v1版本

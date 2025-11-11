@@ -15,9 +15,9 @@
 //! - 监控数据可视化和报告
 //! - SLA监控和服务质量保证
 
-use open_lark_core::config::Config;
-use open_lark_core::SDKResult;
+use config::Config;
 use serde::{Deserialize, Serialize};
+use SDKResult;
 
 /// 监控服务
 #[derive(Debug, Clone)]

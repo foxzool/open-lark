@@ -78,7 +78,7 @@ use crate::{
     http::Transport,
     SDKResult,
 };
-use open_lark_core::core::{
+use openlark_core::core::{
     api_req::ApiRequest, // trait_system::ExecutableBuilder temporarily disabled
     error::LarkAPIError as CoreLarkAPIError,
     SDKResult as CoreSDKResult,
@@ -1018,40 +1018,41 @@ fn map_sdk_error(err: LarkAPIError) -> CoreLarkAPIError {
     }
 }
 
-// 应用ExecutableBuilder trait - 使用自定义实现
-#[async_trait::async_trait]
-impl
-    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
-        PositionsService,
-        (String, GetPositionRequest),
-        BaseResponse<GetPositionResponse>,
-    > for GetPositionBuilder
-{
-    fn build(self) -> (String, GetPositionRequest) {
-        (self.position_id, self.request)
-    }
-
-    async fn execute(
-        self,
-        service: &PositionsService,
-    ) -> CoreSDKResult<BaseResponse<GetPositionResponse>> {
-        service
-            .get_with_tuple((self.position_id, self.request))
-            .await
-            .map_err(map_sdk_error)
-    }
-
-    async fn execute_with_options(
-        self,
-        service: &PositionsService,
-        _option: open_lark_core::req_option::RequestOption,
-    ) -> CoreSDKResult<BaseResponse<GetPositionResponse>> {
-        service
-            .get_with_tuple((self.position_id, self.request))
-            .await
-            .map_err(map_sdk_error)
-    }
-}
+// TEMP_COMMENTED: // 应用ExecutableBuilder trait - 使用自定义实现
+// TEMP_COMMENTED: #[async_trait::async_trait]
+// TEMP_COMMENTED: impl openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:     openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:     openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:         PositionsService,
+// TEMP_COMMENTED:         (String, GetPositionRequest),
+// TEMP_COMMENTED:         BaseResponse<GetPositionResponse>,
+// TEMP_COMMENTED:     > for GetPositionBuilder
+// TEMP_COMMENTED: {
+// TEMP_COMMENTED:     fn build(self) -> (String, GetPositionRequest) {
+// TEMP_COMMENTED:         (self.position_id, self.request)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PositionsService,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<GetPositionResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .get_with_tuple((self.position_id, self.request))
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute_with_options(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PositionsService,
+// TEMP_COMMENTED:         _option: openlark_core::req_option::RequestOption,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<GetPositionResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .get_with_tuple((self.position_id, self.request))
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED: }
 
 /// 批量获取职位构建器
 #[derive(Debug, Clone)]
@@ -1304,40 +1305,41 @@ impl Default for UpdatePositionBuilder {
     }
 }
 
-// 应用ExecutableBuilder trait - 使用自定义实现
-#[async_trait::async_trait]
-impl
-    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
-        PositionsService,
-        (String, UpdatePositionRequest),
-        BaseResponse<UpdatePositionResponse>,
-    > for UpdatePositionBuilder
-{
-    fn build(self) -> (String, UpdatePositionRequest) {
-        (self.position_id, self.request)
-    }
-
-    async fn execute(
-        self,
-        service: &PositionsService,
-    ) -> CoreSDKResult<BaseResponse<UpdatePositionResponse>> {
-        service
-            .update_with_tuple((self.position_id, self.request))
-            .await
-            .map_err(map_sdk_error)
-    }
-
-    async fn execute_with_options(
-        self,
-        service: &PositionsService,
-        _option: open_lark_core::req_option::RequestOption,
-    ) -> CoreSDKResult<BaseResponse<UpdatePositionResponse>> {
-        service
-            .update_with_tuple((self.position_id, self.request))
-            .await
-            .map_err(map_sdk_error)
-    }
-}
+// TEMP_COMMENTED: // 应用ExecutableBuilder trait - 使用自定义实现
+// TEMP_COMMENTED: #[async_trait::async_trait]
+// TEMP_COMMENTED: impl openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:     openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:     openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:         PositionsService,
+// TEMP_COMMENTED:         (String, UpdatePositionRequest),
+// TEMP_COMMENTED:         BaseResponse<UpdatePositionResponse>,
+// TEMP_COMMENTED:     > for UpdatePositionBuilder
+// TEMP_COMMENTED: {
+// TEMP_COMMENTED:     fn build(self) -> (String, UpdatePositionRequest) {
+// TEMP_COMMENTED:         (self.position_id, self.request)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PositionsService,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<UpdatePositionResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .update_with_tuple((self.position_id, self.request))
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute_with_options(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PositionsService,
+// TEMP_COMMENTED:         _option: openlark_core::req_option::RequestOption,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<UpdatePositionResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .update_with_tuple((self.position_id, self.request))
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED: }
 
 /// 删除职位构建器
 #[derive(Debug, Clone)]
@@ -1373,40 +1375,41 @@ impl Default for DeletePositionBuilder {
     }
 }
 
-// 应用ExecutableBuilder trait - 使用自定义实现
-#[async_trait::async_trait]
-impl
-    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
-        PositionsService,
-        (String, DeletePositionRequest),
-        BaseResponse<DeletePositionResponse>,
-    > for DeletePositionBuilder
-{
-    fn build(self) -> (String, DeletePositionRequest) {
-        (self.position_id, self.request)
-    }
-
-    async fn execute(
-        self,
-        service: &PositionsService,
-    ) -> CoreSDKResult<BaseResponse<DeletePositionResponse>> {
-        service
-            .delete_with_tuple((self.position_id, self.request))
-            .await
-            .map_err(map_sdk_error)
-    }
-
-    async fn execute_with_options(
-        self,
-        service: &PositionsService,
-        _option: open_lark_core::req_option::RequestOption,
-    ) -> CoreSDKResult<BaseResponse<DeletePositionResponse>> {
-        service
-            .delete_with_tuple((self.position_id, self.request))
-            .await
-            .map_err(map_sdk_error)
-    }
-}
+// TEMP_COMMENTED: // 应用ExecutableBuilder trait - 使用自定义实现
+// TEMP_COMMENTED: #[async_trait::async_trait]
+// TEMP_COMMENTED: impl openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:     openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:     openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:         PositionsService,
+// TEMP_COMMENTED:         (String, DeletePositionRequest),
+// TEMP_COMMENTED:         BaseResponse<DeletePositionResponse>,
+// TEMP_COMMENTED:     > for DeletePositionBuilder
+// TEMP_COMMENTED: {
+// TEMP_COMMENTED:     fn build(self) -> (String, DeletePositionRequest) {
+// TEMP_COMMENTED:         (self.position_id, self.request)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PositionsService,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<DeletePositionResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .delete_with_tuple((self.position_id, self.request))
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute_with_options(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PositionsService,
+// TEMP_COMMENTED:         _option: openlark_core::req_option::RequestOption,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<DeletePositionResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .delete_with_tuple((self.position_id, self.request))
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED: }
 
 /// 获取职位序列构建器
 #[derive(Debug, Clone)]
@@ -1542,40 +1545,41 @@ impl Default for GetPositionHoldersBuilder {
     }
 }
 
-// 应用ExecutableBuilder trait - 使用自定义实现
-#[async_trait::async_trait]
-impl
-    // TODO: Fix this reference - open_lark_core::trait_system::ExecutableBuilder<
-        PositionsService,
-        (String, GetPositionHoldersRequest),
-        BaseResponse<GetPositionHoldersResponse>,
-    > for GetPositionHoldersBuilder
-{
-    fn build(self) -> (String, GetPositionHoldersRequest) {
-        (self.position_id, self.request)
-    }
-
-    async fn execute(
-        self,
-        service: &PositionsService,
-    ) -> CoreSDKResult<BaseResponse<GetPositionHoldersResponse>> {
-        service
-            .get_position_holders_with_tuple((self.position_id, self.request))
-            .await
-            .map_err(map_sdk_error)
-    }
-
-    async fn execute_with_options(
-        self,
-        service: &PositionsService,
-        _option: open_lark_core::req_option::RequestOption,
-    ) -> CoreSDKResult<BaseResponse<GetPositionHoldersResponse>> {
-        service
-            .get_position_holders_with_tuple((self.position_id, self.request))
-            .await
-            .map_err(map_sdk_error)
-    }
-}
+// TEMP_COMMENTED: // 应用ExecutableBuilder trait - 使用自定义实现
+// TEMP_COMMENTED: #[async_trait::async_trait]
+// TEMP_COMMENTED: impl openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:     openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:     openlark_core::trait_system::ExecutableBuilder<
+// TEMP_COMMENTED:         PositionsService,
+// TEMP_COMMENTED:         (String, GetPositionHoldersRequest),
+// TEMP_COMMENTED:         BaseResponse<GetPositionHoldersResponse>,
+// TEMP_COMMENTED:     > for GetPositionHoldersBuilder
+// TEMP_COMMENTED: {
+// TEMP_COMMENTED:     fn build(self) -> (String, GetPositionHoldersRequest) {
+// TEMP_COMMENTED:         (self.position_id, self.request)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PositionsService,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<GetPositionHoldersResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .get_position_holders_with_tuple((self.position_id, self.request))
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED:
+// TEMP_COMMENTED:     async fn execute_with_options(
+// TEMP_COMMENTED:         self,
+// TEMP_COMMENTED:         service: &PositionsService,
+// TEMP_COMMENTED:         _option: openlark_core::req_option::RequestOption,
+// TEMP_COMMENTED:     ) -> CoreSDKResult<BaseResponse<GetPositionHoldersResponse>> {
+// TEMP_COMMENTED:         service
+// TEMP_COMMENTED:             .get_position_holders_with_tuple((self.position_id, self.request))
+// TEMP_COMMENTED:             .await
+// TEMP_COMMENTED:             .map_err(map_sdk_error)
+// TEMP_COMMENTED:     }
+// TEMP_COMMENTED: }
 
 // 为PositionsService实现辅助方法，处理Builder的参数
 impl PositionsService {
@@ -1632,8 +1636,8 @@ pub struct GetPositionResponse {
 }
 
 impl ApiResponseTrait for GetPositionResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
@@ -1670,8 +1674,8 @@ pub struct BatchGetPositionsResponse {
 }
 
 impl ApiResponseTrait for BatchGetPositionsResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
@@ -1705,8 +1709,8 @@ pub struct GetPositionsByDepartmentResponse {
 }
 
 impl ApiResponseTrait for GetPositionsByDepartmentResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
@@ -2116,43 +2120,43 @@ pub struct Person {
 // ==================== ApiResponseTrait实现 ====================
 
 impl ApiResponseTrait for SearchPositionsResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for CreatePositionResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for UpdatePositionResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for DeletePositionResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for GetPositionSequencesResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for GetPositionStatisticsResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for GetPositionHoldersResponse {
-    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
-        open_lark_core::api_resp::ResponseFormat::Data
+    fn data_format() -> api_resp::ResponseFormat {
+        api_resp::ResponseFormat::Data
     }
 }

@@ -23,17 +23,17 @@ pub mod vc;
 
 #[derive(Debug)]
 pub struct IntegrationsService {
-    config: open_lark_core::core::config::Config,
+    config: openlark_core::config::Config,
 }
 
 impl IntegrationsService {
-    pub fn new(config: open_lark_core::core::config::Config) -> Self {
+    pub fn new(config: openlark_core::config::Config) -> Self {
         Self { config }
     }
 }
 
-impl open_lark_core::core::trait_system::Service for IntegrationsService {
-    fn config(&self) -> &open_lark_core::core::config::Config {
+impl openlark_core::trait_system::Service for IntegrationsService {
+    fn config(&self) -> &openlark_core::config::Config {
         &self.config
     }
 
@@ -48,5 +48,5 @@ impl open_lark_core::core::trait_system::Service for IntegrationsService {
 
 /// Re-exports from open-lark-core for convenience.
 pub mod prelude {
-    pub use open_lark_core::core::*;
+    pub use openlark_core::*;
 }

@@ -16,7 +16,7 @@ use crate::{
     standard_response::StandardResponse,
     SDKResult,
 };
-use open_lark_core::api_req::ApiRequest;
+use openlark_core::api_req::ApiRequest;
 use crate::service::base::models::*;
 
 /// 多维表格服务
