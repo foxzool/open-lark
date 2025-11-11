@@ -1,6 +1,6 @@
 #![cfg(feature = "benchmarks")]
 use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion, Throughput};
-use open_lark::core::token_manager::{PreheatingConfig, TokenManager};
+use openlark_auth::{PreheatingConfig, TokenManager};
 use std::sync::Arc;
 use tokio::runtime::Runtime;
 

@@ -1,27 +1,40 @@
 //! Open-Lark Auth Module
 //!
 //! 飞书身份认证相关功能接口，包含应用或用户访问凭证获取与刷新等接口。
+//!
+//! 此模块重新导出 openlark-core 中的认证相关功能，提供统一的访问入口。
 
-use openlark_core::{client::LarkClient, SDKResult};
+// 重新导出 openlark-core 中的认证相关模块
+pub use openlark_core::{
+    app_ticket_manager::{apply_app_ticket, AppTicketManager},
+    cache::{CacheEntry, QuickCache},
+    constants::{AppType, FEISHU_BASE_URL, LARK_BASE_URL},
+    req_option::RequestOption,
+    token_manager::{PreheatingConfig, TokenManager, TokenMetrics},
+};
 
-/// Auth服务主入口
-pub struct WorkplaceService {
-    client: std::sync::Arc<LarkClient>,
+/// 认证服务聚合器，提供统一的认证接口访问
+pub struct AuthService;
+
+impl Default for AuthService {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
-impl WorkplaceService {
+impl AuthService {
     /// 创建新的认证服务实例
-    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
-        Self { client }
+    pub fn new() -> Self {
+        Self
     }
 
-    /// TODO: 实现获取访问令牌接口
-    pub async fn get_access_token(&self) -> SDKResult<String> {
-        todo!("实现获取访问令牌功能")
+    /// 获取Token管理器实例
+    pub fn token_manager() -> TokenManager {
+        TokenManager::new()
     }
 
-    /// TODO: 实现刷新访问令牌接口
-    pub async fn refresh_access_token(&self, refresh_token: &str) -> SDKResult<String> {
-        todo!("实现刷新访问令牌功能")
+    /// 获取AppTicket管理器实例
+    pub fn app_ticket_manager() -> AppTicketManager {
+        AppTicketManager::new()
     }
 }
