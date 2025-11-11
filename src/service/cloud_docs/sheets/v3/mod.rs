@@ -3,7 +3,7 @@
 //! 提供飞书电子表格的完整v3版本API功能，包括数据操作、样式设置、
 //! 工作表管理、图表操作等高级功能。这是推荐的API版本。
 
-use crate::core::config::Config;
+use open_lark_core::config::Config;
 
 pub mod condition_format;
 pub mod data_operation;

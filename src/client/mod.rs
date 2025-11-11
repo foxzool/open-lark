@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use crate::core::{
+use crate::{
     config::{Config, ConfigBuilder},
     constants::AppType,
 };

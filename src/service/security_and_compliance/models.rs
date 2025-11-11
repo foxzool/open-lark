@@ -1,4 +1,4 @@
-use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
+use open_lark_core::api_resp::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 /// OpenAPI 审计日志请求参数,
 #[derive(Debug, Clone)]

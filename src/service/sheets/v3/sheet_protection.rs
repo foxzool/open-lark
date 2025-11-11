@@ -9,9 +9,9 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use crate::core::error::SDKError;
-use crate::core::http::{Transport, BaseResponse};
-use crate::core::trait_system::Service;
+use open_lark_core::error::SDKError;
+use open_lark_core::http::{Transport, BaseResponse};
+use open_lark_core::trait_system::Service;
 use crate::service::sheets::v3::models::spreadsheet::SpreadsheetToken;
 use crate::service::sheets::v3::models::sheet::SheetId;
 use crate::service::sheets::v3::common::SheetPagedResponse;
@@ -1322,8 +1322,8 @@ impl<'a> SheetProtectionServiceBuilder<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
-    use crate::core::trait_system::Service;
+    use open_lark_core::config::Config;
+    use open_lark_core::trait_system::Service;
 
     #[test]
     fn test_sheet_protection_service_creation() {

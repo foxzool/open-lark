@@ -1,6 +1,6 @@
 mod auth;
 
-use crate::core::config::Config;
+use open_lark_core::config::Config;
 
 /// 认证服务 V1 版本
 ///

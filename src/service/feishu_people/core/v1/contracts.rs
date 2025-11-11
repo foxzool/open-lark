@@ -55,7 +55,7 @@
 //! }
 //! ```
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -63,7 +63,7 @@ use crate::core::{
     http::Transport,
     SDKResult,
 };
-use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
+use open_lark_core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::fmt::Debug;

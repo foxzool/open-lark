@@ -40,7 +40,7 @@
     feature = "verification",
     feature = "workplace"
 ))]
-use crate::core::config::Config;
+use crate::config::Config;
 #[cfg(any(
     feature = "contact",
     feature = "im",

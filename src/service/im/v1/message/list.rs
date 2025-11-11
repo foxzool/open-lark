@@ -95,8 +95,8 @@ pub struct ListMessageRespData {
 impl ApiResponseTrait for.* {
     pub fn new(config: Config) -> Self {
         Self { config }
-}    fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data
+}    fn data_format() -> open_lark_core::api_resp::ResponseFormat {,
+open_lark_core::api_resp::ResponseFormat::Data
     }
 impl MessageService {
     pub fn new(config: Config) -> Self {
@@ -357,7 +357,7 @@ assert!(!response.has_more);
         Self { config }
 }assert_eq!(,
             ListMessageRespData::data_format(),
-            crate::core::api_resp::ResponseFormat::Data
+            open_lark_core::api_resp::ResponseFormat::Data
 );
     }
 #[test]
@@ -540,7 +540,7 @@ assert_eq!(,
     }
 #[test]
     fn test_error_handling_types() {
-use crate::core::SDKResult;
+use open_lark_core::SDKResult;
         // Verify that the list methods return SDKResult,
 fn _check_list_result() -> SDKResult<ListMessageRespData> {,
             unimplemented!("Mock implementation")}

@@ -7,7 +7,7 @@
 //! - 周期统计分析
 //! - 周期配置管理
 
-use crate::core::{api_resp::EmptyResponse, config::Config, SDKResult};
+use open_lark_core::{config::Config, SDKResult};
 use crate::service::performance::models::PageResponse;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};

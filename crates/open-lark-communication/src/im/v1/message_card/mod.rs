@@ -2,7 +2,7 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use open_lark_core::core::{
+use open_lark_core::{
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
     config::Config,
@@ -80,7 +80,7 @@ impl MessageCardService {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::PATCH);
         api_req.set_api_path(EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V1_UPDATE_MESSAGE,
+            open_lark_core::endpoints::im::IM_V1_UPDATE_MESSAGE,
             "message_id",
             message_id,
         ));
@@ -101,7 +101,7 @@ impl MessageCardService {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V1_MESSAGE_DELAY_UPDATE,
+            open_lark_core::endpoints::im::IM_V1_MESSAGE_DELAY_UPDATE,
             "message_id",
             message_id,
         ));
@@ -122,7 +122,7 @@ impl MessageCardService {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V1_MESSAGE_URGENT_APP,
+            open_lark_core::endpoints::im::IM_V1_MESSAGE_URGENT_APP,
             "message_id",
             message_id,
         ));
@@ -147,7 +147,7 @@ impl MessageCardService {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::DELETE);
         api_req.set_api_path(EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V1_MESSAGE_URGENT_APP,
+            open_lark_core::endpoints::im::IM_V1_MESSAGE_URGENT_APP,
             "message_id",
             message_id,
         ));

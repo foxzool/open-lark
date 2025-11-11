@@ -14,7 +14,7 @@ pub mod job_requirement;
 pub mod location;
 pub mod offer_settings;
 pub mod subject;
-use crate::core::{config::Config, trait_system::Service};
+use open_lark_core::{config::Config, trait_system::Service};
 use application::ApplicationConfigService;
 use auth::AuthService;
 use interview_settings::InterviewSettingsService;

@@ -10,7 +10,7 @@
 //! - 文件大小和类型验证
 //! - 查询参数和选项验证
 
-use crate::core::validation::ValidationResult;
+use open_lark_core::validation::ValidationResult;
 
 /// 验证单元格范围格式
 ///

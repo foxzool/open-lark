@@ -7,7 +7,7 @@
 #![allow(clippy::module_inception)]
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
-use open_lark_core::core::api_req::ApiRequest;
+use open_lark_core::api_req::ApiRequest;
 use crate::{
     core::{,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormatconfig::Config,
@@ -52,8 +52,8 @@ pub async fn upload(,
         file_content: Vec<u8>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UploadFileResponse>> {,
-use crate::core::error::LarkAPIError;
-use crate::core::SDKResult;        // 构建表单元数据
+use open_lark_core::error::LarkAPIError;
+use open_lark_core::SDKResult;        // 构建表单元数据
 let metadata = serde_json::json!({,
             "file_name": file_name,
 });

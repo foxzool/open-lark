@@ -14,7 +14,7 @@
 //! - 请假管理
 //! - 考勤审批
 
-use crate::core::config::Config;
+use open_lark_core::config::Config;
 
 /// Attendance服务
 #[derive(Debug, Clone)]

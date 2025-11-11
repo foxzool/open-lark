@@ -13,7 +13,7 @@
 //! - 员工组关联管理
 //! - 薪资组统计分析
 
-use crate::core::{config::Config, SDKResult};
+use open_lark_core::{config::Config, SDKResult};
 use crate::service::payroll::models::*;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};

@@ -10,10 +10,12 @@
 pub const DEVICE_TRUST_ASSESSMENT: &str = "/open-apis/zero_trust/v1/device/trust/assess";
 
 /// 用户身份增强验证
-pub const ENHANCED_IDENTITY_VERIFICATION: &str = "/open-apis/zero_trust/v1/identity/enhanced_verify";
+pub const ENHANCED_IDENTITY_VERIFICATION: &str =
+    "/open-apis/zero_trust/v1/identity/enhanced_verify";
 
 /// 持续身份验证
-pub const CONTINUOUS_IDENTITY_VERIFICATION: &str = "/open-apis/zero_trust/v1/identity/continuous_verify";
+pub const CONTINUOUS_IDENTITY_VERIFICATION: &str =
+    "/open-apis/zero_trust/v1/identity/continuous_verify";
 
 /// 微分段访问控制
 pub const MICRO_SEGMENTATION_ACCESS: &str = "/open-apis/zero_trust/v1/access/micro_segment";
@@ -31,7 +33,6 @@ pub const BEHAVIORAL_BASELINE_ANALYSIS: &str = "/open-apis/zero_trust/v1/behavio
 pub const ANOMALY_BEHAVIOR_DETECTION: &str = "/open-apis/zero_trust/v1/behavior/anomaly";
 
 /// 高级审计和合规API
-
 /// 实时安全审计
 pub const REAL_TIME_SECURITY_AUDIT: &str = "/open-apis/zero_trust/v1/audit/realtime";
 
@@ -45,7 +46,6 @@ pub const GDPR_COMPLIANCE_CHECK: &str = "/open-apis/zero_trust/v1/compliance/gdp
 pub const SOC2_COMPLIANCE_CHECK: &str = "/open-apis/zero_trust/v1/compliance/soc2";
 
 /// 高级加密和密钥管理
-
 /// 端到端加密管理
 pub const END_TO_END_ENCRYPTION: &str = "/open-apis/zero_trust/v1/encryption/e2e";
 
@@ -56,7 +56,6 @@ pub const KEY_ROTATION_MANAGEMENT: &str = "/open-apis/zero_trust/v1/key/rotation
 pub const ZERO_KNOWLEDGE_PROOF: &str = "/open-apis/zero_trust/v1/cryptography/zkp";
 
 /// 威胁情报和响应
-
 /// 威胁情报订阅
 pub const THREAT_INTELLIGENCE_SUBSCRIPTION: &str = "/open-apis/zero_trust/v1/threat/intelligence";
 
@@ -70,7 +69,6 @@ pub const ATTACK_CHAIN_ANALYSIS: &str = "/open-apis/zero_trust/v1/threat/attack_
 pub const SECURITY_INCIDENT_CORRELATION: &str = "/open-apis/zero_trust/v1/incident/correlation";
 
 /// 零信任网络访问
-
 /// 零信任网络网关
 pub const ZERO_TRUST_NETWORK_GATEWAY: &str = "/open-apis/zero_trust/v1/network/gateway";
 
@@ -78,9 +76,9 @@ pub const ZERO_TRUST_NETWORK_GATEWAY: &str = "/open-apis/zero_trust/v1/network/g
 pub const SECURE_ACCESS_TUNNEL: &str = "/open-apis/zero_trust/v1/network/tunnel";
 
 /// 高级权限管理
-
 /// 细粒度权限控制
-pub const FINE_GRAINED_PERMISSION_CONTROL: &str = "/open-apis/zero_trust/v1/permission/fine_grained";
+pub const FINE_GRAINED_PERMISSION_CONTROL: &str =
+    "/open-apis/zero_trust/v1/permission/fine_grained";
 
 /// 动态权限调整
 pub const DYNAMIC_PERMISSION_ADJUSTMENT: &str = "/open-apis/zero_trust/v1/permission/dynamic";

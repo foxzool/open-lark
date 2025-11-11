@@ -1,12 +1,12 @@
 use std::marker::PhantomData;
 
-use crate::core::{
+use crate::{
     error::LarkAPIError,
     validation::{self, ValidateBuilder, ValidationResult},
     SDKResult,
 };
 // Re-export ApiRequest from open-lark-core
-use crate::core::http::ApiRequest;
+use open_lark_core::api_req::ApiRequest;
 
 /// 通用分页响应结构
 #[derive(Debug, Clone)]

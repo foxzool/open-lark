@@ -14,9 +14,9 @@
 /// # API文档,
 ///
 /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/portal_apply_schema/list>,
-use open_lark_core::core::api_req::ApiRequest;
-use crate::core::{
-use crate::core::{SDKResult, api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}},
+use open_lark_core::api_req::ApiRequest;
+use crate::{
+use open_lark_core::{api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat}},
     req_option::RequestOption,
     SDKResult,
 };

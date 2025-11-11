@@ -8,8 +8,8 @@
 //! Ai_Embedding服务模块 - 简化实现
 
 use serde::{Deserialize, Serialize};
-use crate::core::config::Config;
-use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
+use open_lark_core::config::Config;
+use open_lark_core::api_resp::{ApiResponseTrait, ResponseFormat};
 
 /// 简化的服务结构体
 #[derive(Debug, Clone)]

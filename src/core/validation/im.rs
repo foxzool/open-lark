@@ -2,7 +2,7 @@
 //!
 //! 提供消息相关功能的验证服务，包括消息内容、接收者、文件等验证。
 
-use crate::core::validation::{ValidateBuilder, ValidationResult};
+use open_lark_core::validation::{ValidateBuilder, ValidationResult};
 use serde_json::Value;
 
 /// 验证消息内容长度

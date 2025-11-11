@@ -2,7 +2,7 @@
 ///
 /// 为了解决项目中错误处理方式不统一的问题，提供统一的响应处理接口。
 /// 这个特征允许不同的响应类型以一致的方式处理成功和错误情况。
-use crate::core::{api_resp::BaseResponse, error::LarkAPIError, SDKResult};
+use open_lark_core::{error::LarkAPIError, SDKResult};
 
 /// 标准响应处理特征
 ///
@@ -76,7 +76,7 @@ impl<T> StandardResponse<T> for SDKResult<BaseResponse<T>> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::api_resp::{BaseResponse, RawResponse};
+    use open_lark_core::api_resp::{BaseResponse, RawResponse};
     use serde::{Deserialize, Serialize};
 
     #[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq)]

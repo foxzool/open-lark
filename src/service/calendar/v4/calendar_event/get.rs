@@ -15,7 +15,7 @@
 //!
 //! 需要 `calendar:calendar:readonly` 权限。
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     http::Transport,
     ApiRequest, SDKResult,

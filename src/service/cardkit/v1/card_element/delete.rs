@@ -2,7 +2,7 @@
 //!
 //! 提供删除卡片中指定组件的功能，支持完整的组件生命周期管理
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -212,7 +212,7 @@ impl CardElementService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
+    use open_lark_core::config::Config;
 
     #[test]
     fn test_delete_card_element_request_creation() {

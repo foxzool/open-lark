@@ -4,7 +4,7 @@
 
 #[cfg(test)]
 mod tests {
-    use crate::core::config::{Config, ConfigBuilder};
+    use open_lark_core::config::{Config, ConfigBuilder};
     use crate::service_registry::{
         MigrationHelper, Service, ServiceError, ServiceRegistry, ServiceStatus,
     };

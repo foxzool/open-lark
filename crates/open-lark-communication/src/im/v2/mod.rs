@@ -1,4 +1,4 @@
-use open_lark_core::core::config::Config;
+use open_lark_core::config::Config;
 
 pub mod app_feed_card;
 pub mod groups_bots;

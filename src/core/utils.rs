@@ -1,4 +1,4 @@
-use crate::core::constants::VERSION;
+use open_lark_core::constants::VERSION;
 
 pub fn user_agent() -> String {
     format!("open-lark/{VERSION}")

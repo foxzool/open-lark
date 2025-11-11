@@ -2,7 +2,7 @@
 //!
 //! 提供向卡片添加新组件的功能，支持多种组件类型和自定义属性
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -270,7 +270,7 @@ impl CardElementService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
+    use open_lark_core::config::Config;
 
     #[test]
     fn test_create_card_element_request_creation() {

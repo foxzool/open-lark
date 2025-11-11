@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
+use crate::{
     cache::QuickCache,
     config::Config,
     constants::{APPLY_APP_TICKET_PATH, APP_TICKET_KEY_PREFIX},
@@ -79,7 +79,7 @@ struct ResendAppTicketReq {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
+    use open_lark_core::config::Config;
     use std::time::Duration;
 
     fn create_test_config() -> Config {

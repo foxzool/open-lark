@@ -83,4 +83,5 @@ pub use super::endpoints_original::Endpoints;
 pub use super::endpoints_original::EndpointBuilder;
 
 // 重新导出各个域模块的常量
+pub use hire::*;
 pub use lingo::*;

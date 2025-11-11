@@ -35,22 +35,20 @@ macro_rules! impl_executable_builder {
         $method:ident
     ) => {
         #[async_trait::async_trait]
-        impl $crate::core::trait_system::ExecutableBuilder<$service, $request, $response>
-            for $builder
-        {
+        impl $crate::trait_system::ExecutableBuilder<$service, $request, $response> for $builder {
             fn build(self) -> $request {
                 self.build()
             }
 
-            async fn execute(self, service: &$service) -> $crate::core::SDKResult<$response> {
+            async fn execute(self, service: &$service) -> $crate::SDKResult<$response> {
                 service.$method(&self.build(), None).await
             }
 
             async fn execute_with_options(
                 self,
                 service: &$service,
-                option: $crate::core::req_option::RequestOption,
-            ) -> $crate::core::SDKResult<$response> {
+                option: $crate::req_option::RequestOption,
+            ) -> $crate::SDKResult<$response> {
                 service.$method(&self.build(), Some(option)).await
             }
         }
@@ -70,22 +68,20 @@ macro_rules! impl_executable_builder_owned {
         $method:ident
     ) => {
         #[async_trait::async_trait]
-        impl $crate::core::trait_system::ExecutableBuilder<$service, $request, $response>
-            for $builder
-        {
+        impl $crate::trait_system::ExecutableBuilder<$service, $request, $response> for $builder {
             fn build(self) -> $request {
                 self.build()
             }
 
-            async fn execute(self, service: &$service) -> $crate::core::SDKResult<$response> {
+            async fn execute(self, service: &$service) -> $crate::SDKResult<$response> {
                 service.$method(self.build(), None).await
             }
 
             async fn execute_with_options(
                 self,
                 service: &$service,
-                option: $crate::core::req_option::RequestOption,
-            ) -> $crate::core::SDKResult<$response> {
+                option: $crate::req_option::RequestOption,
+            ) -> $crate::SDKResult<$response> {
                 service.$method(self.build(), Some(option)).await
             }
         }
@@ -107,17 +103,17 @@ macro_rules! impl_executable_builder_config {
             /// 执行请求
             pub async fn execute(
                 self,
-                config: &$crate::core::config::Config,
-            ) -> $crate::core::SDKResult<$response> {
+                config: &$crate::config::Config,
+            ) -> $crate::SDKResult<$response> {
                 $function(self.build(), config, None).await
             }
 
             /// 执行请求（带选项）
             pub async fn execute_with_options(
                 self,
-                config: &$crate::core::config::Config,
-                option: $crate::core::req_option::RequestOption,
-            ) -> $crate::core::SDKResult<$response> {
+                config: &$crate::config::Config,
+                option: $crate::req_option::RequestOption,
+            ) -> $crate::SDKResult<$response> {
                 $function(self.build(), config, Some(option)).await
             }
         }
@@ -132,8 +128,8 @@ macro_rules! impl_executable_builder_config {
 #[macro_export]
 macro_rules! impl_basic_service {
     ($service_type:ty, $name:expr, $version:expr) => {
-        impl $crate::core::trait_system::Service for $service_type {
-            fn config(&self) -> &$crate::core::config::Config {
+        impl $crate::trait_system::Service for $service_type {
+            fn config(&self) -> &$crate::config::Config {
                 &self.config
             }
 
@@ -146,10 +142,10 @@ macro_rules! impl_basic_service {
             }
         }
 
-        impl $crate::core::trait_system::ServiceObservability for $service_type {}
+        impl $crate::trait_system::ServiceObservability for $service_type {}
 
-        impl $crate::core::trait_system::ServiceBuilder<$service_type> for $service_type {
-            fn build(config: $crate::core::config::Config) -> $service_type {
+        impl $crate::trait_system::ServiceBuilder<$service_type> for $service_type {
+            fn build(config: $crate::config::Config) -> $service_type {
                 Self { config }
             }
         }
@@ -160,7 +156,7 @@ macro_rules! impl_basic_service {
 #[macro_export]
 macro_rules! impl_async_service {
     ($service_type:ty, $request_type:ty, $response_type:ty) => {
-        impl $crate::core::trait_system::AsyncServiceOperation<$request_type, $response_type>
+        impl $crate::trait_system::AsyncServiceOperation<$request_type, $response_type>
             for $service_type
         {
         }
@@ -171,11 +167,11 @@ macro_rules! impl_async_service {
 #[macro_export]
 macro_rules! impl_service_health_check {
     ($service_type:ty) => {
-        impl $crate::core::trait_system::ServiceHealthCheck for $service_type {
+        impl $crate::trait_system::ServiceHealthCheck for $service_type {
             async fn health_check(
                 &self,
-            ) -> $crate::core::SDKResult<$crate::core::trait_system::ServiceHealthStatus> {
-                use $crate::core::trait_system::ServiceHealthStatus;
+            ) -> $crate::SDKResult<$crate::trait_system::ServiceHealthStatus> {
+                use $crate::trait_system::ServiceHealthStatus;
 
                 if !self.is_config_valid() {
                     return Ok(ServiceHealthStatus::Unhealthy(
@@ -194,11 +190,11 @@ macro_rules! impl_service_health_check {
 #[macro_export]
 macro_rules! impl_configurable_service {
     ($service_type:ty) => {
-        impl $crate::core::trait_system::ConfigurableService for $service_type {
+        impl $crate::trait_system::ConfigurableService for $service_type {
             fn update_config(
                 &mut self,
-                new_config: $crate::core::config::Config,
-            ) -> $crate::core::SDKResult<()> {
+                new_config: $crate::config::Config,
+            ) -> $crate::SDKResult<()> {
                 self.validate_config(&new_config)?;
                 self.config = new_config;
                 Ok(())
@@ -226,8 +222,8 @@ macro_rules! impl_service_constructor {
     ($service_type:ty) => {
         impl $service_type {
             /// 创建服务实例
-            pub fn new(config: $crate::core::config::Config) -> Self {
-                <Self as $crate::core::trait_system::ServiceBuilder<Self>>::build(config)
+            pub fn new(config: $crate::config::Config) -> Self {
+                <Self as $crate::trait_system::ServiceBuilder<Self>>::build(config)
             }
         }
     };
@@ -235,7 +231,7 @@ macro_rules! impl_service_constructor {
 
 #[cfg(test)]
 mod tests {
-    use crate::core::{
+    use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, RawResponse, ResponseFormat},
         config::Config,
         req_option::RequestOption,

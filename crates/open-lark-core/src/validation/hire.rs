@@ -2,7 +2,7 @@
 //!
 //! 提供招聘相关功能的验证服务，包括职位管理、人才信息、面试安排、Offer管理等。
 
-use crate::core::validation::{ValidateBuilder, ValidationResult};
+use crate::validation::{ValidateBuilder, ValidationResult};
 use chrono::{Datelike, NaiveDate};
 
 /// 验证职位信息
@@ -162,8 +162,7 @@ pub fn validate_candidate_basic_info(
     }
 
     // 验证邮箱
-    if let ValidationResult::Invalid(msg) = crate::core::validation::validate_email(email, "email")
-    {
+    if let ValidationResult::Invalid(msg) = crate::validation::validate_email(email, "email") {
         return ValidationResult::Invalid(format!("Invalid email address: {}", msg));
     }
 

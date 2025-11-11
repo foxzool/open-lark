@@ -3,7 +3,7 @@
 //! 为现有服务创建 ServiceRegistry 兼容的适配器，实现渐进式迁移策略
 
 use super::{NamedService, Service, ServiceError, ServiceStatus};
-use crate::core::config::Config;
+use open_lark_core::config::Config;
 use std::any::Any;
 
 /// 服务详情
@@ -822,7 +822,7 @@ impl MigrationHelper {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::{Config, ConfigBuilder};
+    use open_lark_core::config::{Config, ConfigBuilder};
     use crate::service_registry::{Service, ServiceRegistry};
 
     fn create_test_config() -> Config {

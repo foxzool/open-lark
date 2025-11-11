@@ -6,7 +6,7 @@
 //! - 查询合并状态
 //! - 支持水平、垂直和矩形区域合并
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
     config::Config,
     constants::AccessTokenType,

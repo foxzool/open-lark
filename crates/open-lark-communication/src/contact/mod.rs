@@ -3,7 +3,7 @@
 //! 提供企业通讯录的完整管理功能，支持用户、部门、组织架构等核心要素的
 //! 生命周期管理。这是企业人员和组织管理的核心服务模块。
 
-use open_lark_core::core::config::Config;
+use open_lark_core::config::Config;
 
 /// 通讯录数据模型定义
 pub mod models;
@@ -58,9 +58,9 @@ impl ContactService {
     }
 }
 
-use open_lark_core::core::trait_system::Service;
+use open_lark_core::trait_system::Service;
 
-impl open_lark_core::core::trait_system::Service for ContactService {
+impl open_lark_core::trait_system::Service for ContactService {
     fn config(&self) -> &Config {
         self.models.config()
     }
@@ -98,7 +98,7 @@ impl std::fmt::Debug for ContactService {
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-    use open_lark_core::core::config::Config;
+    use open_lark_core::config::Config;
     // use std::time::Duration; // 暂时注释掉未使用的导入
 
     /// 创建测试配置
