@@ -5,6 +5,7 @@
 use openlark_core::{client::LarkClient, SDKResult};
 
 /// Application服务主入口
+#[allow(dead_code)]
 pub struct WorkplaceService {
     client: std::sync::Arc<LarkClient>,
 }
