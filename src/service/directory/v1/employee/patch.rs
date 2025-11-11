@@ -3,7 +3,7 @@
 //! 提供企业员工信息部分更新功能，支持选择性字段更新
 //! 适用于企业人力资源管理系统的员工信息维护场景
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -540,7 +540,7 @@ impl EmployeeService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
+    use open_lark_core::config::Config;
 
     #[test]
     fn test_patch_employee_request_creation() {

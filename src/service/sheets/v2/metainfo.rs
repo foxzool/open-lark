@@ -11,11 +11,17 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
 
-use crate::core::request::Transport;
-use crate::core::SDKResult;
-use crate::core::config::Config;
-use crate::core::trait_system::Service;
-use crate::core::error::LarkAPIError;
+use crate::{
+    api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    ApiRequest, SDKResult,
+    standard_response::StandardResponse,
+    error::LarkAPIError,
+    trait_system::Service,
+};
+use crate::endpoints_original::Endpoints;
 
 /// 表格元数据信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -236,15 +242,16 @@ pub struct SpreadsheetMetaResponseBody {
     pub data: SpreadsheetMetaInfo,
 }
 
-/// 基础API响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BaseResponse<T> {
-    /// 响应码
-    pub code: i32,
-    /// 响应消息
-    pub msg: String,
-    /// 响应数据
-    pub data: T,
+impl ApiResponseTrait for SpreadsheetMetaInfo {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for SpreadsheetMetaResponseBody {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 /// 表格元数据服务
@@ -286,47 +293,35 @@ impl SpreadsheetMetaService {
     /// println!("表格标题: {}", meta_info.title);
     /// println!("工作表数量: {}", meta_info.sheet_count);
     /// ```
-    pub async fn get_spreadsheet_meta(&self, request: GetSpreadsheetMetaRequest) -> SDKResult<SpreadsheetMetaInfo> {
+    pub async fn get_spreadsheet_meta(&self, request: GetSpreadsheetMetaRequest) -> SDKResult<BaseResponse<SpreadsheetMetaInfo>> {
         // 验证请求参数
         request.validate()?;
 
-        // 构建查询参数
+        // 构建API请求
+        let endpoint = format!(
+            "{}/open-apis/sheets/v2/spreadsheets/{}/metainfo",
+            self.config.base_url, request.spreadsheet_token
+        );
+
+        let mut api_req = ApiRequest::with_method(reqwest::Method::GET);
+        api_req.set_api_path(endpoint);
+        api_req.set_supported_access_token_types(vec![
+            AccessTokenType::Tenant,
+            AccessTokenType::User
+        ]);
+
+        // 添加查询参数
         let query_params = request.build_query_params();
-
-        // 构建URL
-        let url = if query_params.is_empty() {
-            format!(
-                "{}/open-apis/sheets/v2/spreadsheets/{}/metainfo",
-                self.config.base_url, request.spreadsheet_token
-            )
-        } else {
-            format!(
-                "{}/open-apis/sheets/v2/spreadsheets/{}/metainfo?{}",
-                self.config.base_url, request.spreadsheet_token, query_params
-            )
-        };
-
-        // 发送HTTP请求
-        let response = self.config
-            .transport
-            .get(&url)
-            .send()
-            .await
-            .map_err(|e| LarkAPIError::NetworkError(format!("网络请求失败: {}", e)))?;
-
-        // 处理响应
-        if response.status().is_success() {
-            let base_response: BaseResponse<SpreadsheetMetaResponseBody> = response.json().await
-                .map_err(|e| LarkAPIError::JsonParseError(format!("响应解析失败: {}", e)))?;
-
-            if base_response.code == 0 {
-                Ok(base_response.data.data)
-            } else {
-                Err(LarkAPIError::APIError(base_response.code, base_response.msg))
+        if !query_params.is_empty() {
+            for param in query_params.split('&') {
+                if let Some((key, value)) = param.split_once('=') {
+                    api_req.query_params.insert(key, value);
+                }
             }
-        } else {
-            Err(LarkAPIError::HTTPError(response.status().as_u16(), "获取表格元数据失败".to_string()))
         }
+
+        // 发送请求
+        Transport::<SpreadsheetMetaInfo>::request(api_req, &self.config, None).await
     }
 
     /// 创建表格元数据获取构建器
@@ -341,7 +336,7 @@ impl SpreadsheetMetaService {
     ///
     /// # 返回
     /// 表格元数据信息
-    pub async fn get_basic_meta(&self, spreadsheet_token: impl Into<String>) -> SDKResult<SpreadsheetMetaInfo> {
+    pub async fn get_basic_meta(&self, spreadsheet_token: impl Into<String>) -> SDKResult<BaseResponse<SpreadsheetMetaInfo>> {
         let request = GetSpreadsheetMetaRequest::new(spreadsheet_token)
             .include_permissions(false)
             .include_custom_properties(false);
@@ -356,7 +351,7 @@ impl SpreadsheetMetaService {
     ///
     /// # 返回
     /// 包含权限和自定义属性的表格元数据信息
-    pub async fn get_full_meta(&self, spreadsheet_token: impl Into<String>) -> SDKResult<SpreadsheetMetaInfo> {
+    pub async fn get_full_meta(&self, spreadsheet_token: impl Into<String>) -> SDKResult<BaseResponse<SpreadsheetMetaInfo>> {
         let request = GetSpreadsheetMetaRequest::new(spreadsheet_token)
             .include_permissions(true)
             .include_custom_properties(true);
@@ -418,7 +413,7 @@ impl SpreadsheetMetaBuilder {
     }
 
     /// 执行获取操作
-    pub async fn execute(self) -> SDKResult<SpreadsheetMetaInfo> {
+    pub async fn execute(self) -> SDKResult<BaseResponse<SpreadsheetMetaInfo>> {
         let mut request = GetSpreadsheetMetaRequest::new(self.spreadsheet_token);
 
         if let Some(include_permissions) = self.include_permissions {

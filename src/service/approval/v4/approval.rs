@@ -15,8 +15,8 @@
 //! - 审批定义模板管理
 
 use super::models::*;
-use crate::core::config::Config;
-use crate::core::SDKResult;
+use open_lark_core::config::Config;
+use open_lark_core::SDKResult;
 use serde::{Deserialize, Serialize};
 
 /// 审批定义服务

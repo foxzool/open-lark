@@ -1,4 +1,4 @@
-use open_lark_core::core::config::Config;
+use open_lark_core::config::Config;
 
 pub use subscription::SubscriptionService;
 

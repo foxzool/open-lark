@@ -21,7 +21,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
     config::Config,
     constants::AccessTokenType,
@@ -30,7 +30,7 @@ use crate::core::{
     standard_response::StandardResponse,
     error::LarkAPIError,
 };
-use crate::core::endpoints_original::Endpoints;
+use crate::endpoints_original::Endpoints;
 use crate::service::sheets::v2::sheet_cells::CellValue;
 
 /// 向单个范围写入数据请求
@@ -479,7 +479,7 @@ impl<'a> SingleWriteServiceRequestBuilder<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
+    use open_lark_core::config::Config;
 
     fn create_test_config() -> Config {
         Config::builder()

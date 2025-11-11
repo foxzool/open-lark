@@ -9,9 +9,9 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use crate::core::error::SDKError;
-use crate::core::http::{Transport, BaseResponse};
-use crate::core::trait_system::Service;
+use open_lark_core::error::SDKError;
+use open_lark_core::http::{Transport, BaseResponse};
+use open_lark_core::trait_system::Service;
 use crate::service::sheets::v2::common::SpreadsheetToken;
 
 /// 数据追加服务
@@ -722,8 +722,8 @@ impl<'a> ValuesAppendServiceBuilder<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
-    use crate::core::trait_system::Service;
+    use open_lark_core::config::Config;
+    use open_lark_core::trait_system::Service;
     use std::collections::HashMap;
 
     #[test]
@@ -822,8 +822,7 @@ mod tests {
         let long_content = ValuesAppendRequest::builder()
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .range("Sheet1!A1:A1".to_string())
-            .add_row(vec![("x".repeat(50001)]) // 50001个字符
-            .build());
+            .add_row(vec![("x".repeat(50001))]); // 50001个字符
         assert!(long_content.is_err());
     }
 

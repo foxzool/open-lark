@@ -20,7 +20,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
     config::Config,
     constants::AccessTokenType,
@@ -29,7 +29,7 @@ use crate::core::{
     standard_response::StandardResponse,
     error::LarkAPIError,
 };
-use crate::core::endpoints_original::Endpoints;
+use crate::endpoints_original::Endpoints;
 use crate::impl_executable_builder_owned;
 use crate::service::sheets::v2::sheet_cells::CellValue;
 
@@ -535,7 +535,7 @@ impl BatchWriteService {
         }
 
         // 暂时返回模拟数据，直到Transport问题解决
-        use crate::core::api_resp::RawResponse;
+        use open_lark_core::api_resp::RawResponse;
         let updated_ranges = vec![]; // 这里应该是实际的更新结果
         let total_updated_cells: usize = updated_ranges.iter().map(|r: &UpdatedRangeInfo| r.updated_cells as usize).sum();
 

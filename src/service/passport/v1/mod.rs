@@ -2,7 +2,7 @@
 //!
 //! 提供飞书开放平台护照相关API的v1版本实现，包括会话管理等功能。
 
-use crate::core::config::Config;
+use open_lark_core::config::Config;
 use crate::prelude::*;
 use crate::service::passport::v1::sessions::SessionsService;
 

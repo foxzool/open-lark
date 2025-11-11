@@ -5,7 +5,7 @@
 //! - 查询特定工作表的属性信息
 //! - 工作表属性管理和操作
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
     config::Config,
     constants::AccessTokenType,
@@ -163,15 +163,15 @@ impl SheetService {
             spreadsheet_token
         );
 
-        let request = ApiRequest {
-            method: "GET".to_string(),
-            url: endpoint,
-            headers: vec![],
-            params: vec![],
-            body: None,
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path: endpoint,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: vec![],
+            ..Default::default()
         };
 
-        self.transport.request(&request).await
+        Transport::<QuerySheetsResponse>::request(api_req, &self.config, None).await
     }
 
     /// 获取单个工作表信息
@@ -203,15 +203,15 @@ impl SheetService {
             sheet_id
         );
 
-        let request = ApiRequest {
-            method: "GET".to_string(),
-            url: endpoint,
-            headers: vec![],
-            params: vec![],
-            body: None,
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path: endpoint,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: vec![],
+            ..Default::default()
         };
 
-        self.transport.request(&request).await
+        Transport::<GetSheetResponse>::request(api_req, &self.config, None).await
     }
 }
 

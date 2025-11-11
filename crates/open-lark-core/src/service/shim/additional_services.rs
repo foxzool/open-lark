@@ -15,7 +15,7 @@
     feature = "approval",
     feature = "payroll"
 ))]
-use crate::core::config::Config;
+use crate::config::Config;
 #[cfg(any(
     feature = "cloud-docs",
     feature = "acs",

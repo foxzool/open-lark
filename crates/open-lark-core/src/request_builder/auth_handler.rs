@@ -1,4 +1,4 @@
-use crate::core::{
+use crate::{
     config::Config, constants::AccessTokenType, error::LarkAPIError, req_option::RequestOption,
 };
 use reqwest::RequestBuilder;
@@ -81,7 +81,7 @@ impl AuthHandler {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::constants::AppType;
+    use crate::constants::AppType;
     use reqwest::Client;
 
     fn create_test_config() -> Config {

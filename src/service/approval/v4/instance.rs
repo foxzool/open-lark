@@ -15,8 +15,8 @@
 //! - 审批实例统计
 
 use super::models::*;
-use crate::core::config::Config;
-use crate::core::SDKResult;
+use open_lark_core::config::Config;
+use open_lark_core::SDKResult;
 use serde::{Deserialize, Serialize};
 
 /// 审批实例服务

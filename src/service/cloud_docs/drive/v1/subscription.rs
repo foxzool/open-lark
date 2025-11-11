@@ -1,10 +1,10 @@
-use crate::core::config::Config;
-use crate::core::error::SDKError;
-use crate::core::response::SDKResult;
-use crate::core::service_trait::Service;
-use crate::core::transport::Transport;
-use crate::core::endpoints_original::Endpoints;
-use open_lark_core::core::api_req::ApiRequest;
+use open_lark_core::config::Config;
+use open_lark_core::error::SDKError;
+use crate::response::SDKResult;
+use crate::service_trait::Service;
+use crate::transport::Transport;
+use crate::endpoints_original::Endpoints;
+use open_lark_core::api_req::ApiRequest;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -622,7 +622,7 @@ impl DeleteFileSubscriptionBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::transport::MockTransport;
+    use crate::transport::MockTransport;
 
     fn create_test_request() -> GetFileSubscriptionRequest {
         GetFileSubscriptionRequest::new("test_file_token_123")

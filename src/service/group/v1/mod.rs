@@ -1,4 +1,4 @@
-use crate::core::config::Config;
+use open_lark_core::config::Config;
 pub mod chat;
 pub mod chat_announcement;
 pub mod chat_member;

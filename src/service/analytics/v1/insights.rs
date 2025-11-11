@@ -14,8 +14,8 @@
 //! - 自动化决策建议系统
 //! - 深度数据挖掘和模式识别
 
-use crate::core::config::Config;
-use crate::core::SDKResult;
+use open_lark_core::config::Config;
+use open_lark_core::SDKResult;
 use crate::service::analytics::v1::TrendDirection;
 use serde::{Deserialize, Serialize};
 

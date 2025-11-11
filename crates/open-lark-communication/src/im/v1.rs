@@ -4,7 +4,7 @@ use crate::im::v1::{
     message_card::MessageCardService, message_reaction::MessageReactionService, pin::PinService,
     url_preview::UrlPreviewService,
 };
-use open_lark_core::core::config::Config;
+use open_lark_core::config::Config;
 
 // 现有模块
 pub mod chats;

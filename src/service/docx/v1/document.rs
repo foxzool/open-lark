@@ -6,7 +6,7 @@
 //! - 删除文档
 //! - 文档权限管理
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,

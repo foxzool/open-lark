@@ -77,12 +77,12 @@
 //!
 //! 详细API文档请参考：[飞书开放平台 - 搜索用户](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/search)
 // 导入核心依赖
-use open_lark_core::core::api_req::ApiRequest;
+use open_lark_core::api_req::ApiRequest;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 // 导入SDK核心模块
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,

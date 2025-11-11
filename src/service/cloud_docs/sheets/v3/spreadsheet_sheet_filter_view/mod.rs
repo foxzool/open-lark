@@ -10,7 +10,7 @@
 //! 提供飞书电子表格筛选视图的完整功能，包括筛选视图的创建、
 //! 查询、更新、删除等操作，支持自定义视图和共享设置。
 
-use crate::core::config::Config;
+use open_lark_core::config::Config;
 
 pub mod create;
 pub mod delete;

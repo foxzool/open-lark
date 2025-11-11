@@ -7,7 +7,7 @@
 //! - 文本对齐和格式化
 //! - 数字格式设置
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
     config::Config,
     constants::AccessTokenType,

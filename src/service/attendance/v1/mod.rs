@@ -14,7 +14,7 @@
 //! - 请假记录管理
 //! - 考勤审批流程
 
-use crate::core::{config::Config, SDKResult};
+use open_lark_core::{config::Config, SDKResult};
 use serde::{Deserialize, Serialize};
 
 /// Attendance服务 v1版本

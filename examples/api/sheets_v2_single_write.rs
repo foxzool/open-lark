@@ -10,9 +10,7 @@
 
 use open_lark::prelude::*;
 use open_lark::service::sheets::v2::{
-    SingleWriteService,
-    SingleWriteRequest,
-    sheet_cells::CellValue,
+    sheet_cells::CellValue, SingleWriteRequest, SingleWriteService,
 };
 
 #[tokio::main]
@@ -111,7 +109,9 @@ async fn builder_pattern_example(
     println!("--------------------");
 
     // 使用服务级别的构建器
-    let request_builder = sheets_service.single_write.write_range_builder()
+    let request_builder = sheets_service
+        .single_write
+        .write_range_builder()
         .spreadsheet_token("your_spreadsheet_token".to_string())
         .range("月度报告!B2:E5".to_string())
         .values(vec![
@@ -147,10 +147,19 @@ async fn builder_pattern_example(
     println!("📋 构建器配置信息：");
     println!("  - 电子表格令牌: {:?}", request_builder.spreadsheet_token);
     println!("  - 写入范围: {:?}", request_builder.range);
-    println!("  - 数据行数: {:?}", request_builder.values.as_ref().map(|v| v.len()));
+    println!(
+        "  - 数据行数: {:?}",
+        request_builder.values.as_ref().map(|v| v.len())
+    );
     println!("  - 值输入选项: {:?}", request_builder.value_input_option);
-    println!("  - 包含响应值: {:?}", request_builder.include_values_in_response);
-    println!("  - 响应渲染选项: {:?}", request_builder.response_value_render_option);
+    println!(
+        "  - 包含响应值: {:?}",
+        request_builder.include_values_in_response
+    );
+    println!(
+        "  - 响应渲染选项: {:?}",
+        request_builder.response_value_render_option
+    );
 
     println!("✅ 构建器配置完成（演示模式）");
 
@@ -180,15 +189,13 @@ async fn convenience_methods_example(
     let single_row_request = SingleWriteRequest::builder()
         .spreadsheet_token("your_spreadsheet_token".to_string())
         .range("表头!A1:E1".to_string())
-        .values(vec![
-            vec![
-                CellValue::Text("日期"),
-                CellValue::Text("销售额"),
-                CellValue::Text("利润"),
-                CellValue::Text("成本"),
-                CellValue::Text("利润率"),
-            ]
-        ])
+        .values(vec![vec![
+            CellValue::Text("日期"),
+            CellValue::Text("销售额"),
+            CellValue::Text("利润"),
+            CellValue::Text("成本"),
+            CellValue::Text("利润率"),
+        ]])
         .build()?;
 
     println!("📋 单行数据写入请求：");
@@ -293,8 +300,16 @@ mod tests {
             .spreadsheet_token("test_token".to_string())
             .range("Sheet1!A1:C3".to_string())
             .values(vec![
-                vec![CellValue::Text("a"), CellValue::Text("b"), CellValue::Text("c")],
-                vec![CellValue::Text("1"), CellValue::Text("2"), CellValue::Text("3")],
+                vec![
+                    CellValue::Text("a"),
+                    CellValue::Text("b"),
+                    CellValue::Text("c"),
+                ],
+                vec![
+                    CellValue::Text("1"),
+                    CellValue::Text("2"),
+                    CellValue::Text("3"),
+                ],
             ])
             .build();
 
@@ -309,24 +324,10 @@ mod tests {
 
     #[test]
     fn test_range_validation() {
-        let valid_ranges = vec![
-            "A1",
-            "A1:C3",
-            "Sheet1!A1",
-            "Sheet1!A1:C3",
-            "Data!AA1:ZZ999",
-        ];
+        let valid_ranges = vec!["A1", "A1:C3", "Sheet1!A1", "Sheet1!A1:C3", "Data!AA1:ZZ999"];
 
         let invalid_ranges = vec![
-            "",
-            "A",
-            "1",
-            "Sheet1!",
-            "Sheet1!A",
-            "Sheet1!1",
-            "A1:",
-            ":C3",
-            "A1::C3",
+            "", "A", "1", "Sheet1!", "Sheet1!A", "Sheet1!1", "A1:", ":C3", "A1::C3",
         ];
 
         for range in valid_ranges {
@@ -344,7 +345,11 @@ mod tests {
                 range.to_string(),
                 vec![vec![CellValue::Text("test")]],
             );
-            assert!(!request.is_valid_range(range), "范围 {} 应该是无效的", range);
+            assert!(
+                !request.is_valid_range(range),
+                "范围 {} 应该是无效的",
+                range
+            );
         }
     }
 

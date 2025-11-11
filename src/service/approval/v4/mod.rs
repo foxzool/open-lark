@@ -14,7 +14,7 @@
 //! - 审批查询和统计
 //! - 外部审批集成
 
-use crate::core::config::Config;
+use open_lark_core::config::Config;
 /// Approval服务 v4版本
 #[derive(Debug, Clone)]
 pub struct ApprovalServiceV4 {

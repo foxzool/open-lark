@@ -1,8 +1,8 @@
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat}
 };
 use serde::{Deserialize, Serialize};
-use open_lark_core::core::api_req::ApiRequest;
+use open_lark_core::api_req::ApiRequest;
 /// 班次信息
 #[derive(Debug, Clone)]
 pub struct Shift {
