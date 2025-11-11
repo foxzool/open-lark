@@ -13,7 +13,7 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,

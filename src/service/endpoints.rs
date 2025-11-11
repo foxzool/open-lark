@@ -1,9 +1,22 @@
 /// 飞书开放API接口端点常量管理
 ///
-/// 此模块集中管理所有API路径，提供统一的入口便于维护和更新
-// 认证相关
-pub const AUTH_APP_ACCESS_TOKEN: &str = "/open-apis/auth/v3/app_access_token";
-pub const AUTH_TENANT_ACCESS_TOKEN: &str = "/open-apis/auth/v3/tenant_access_token";
+/// 此模块重新导出统一端点定义，提供向后兼容性
+///
+/// 注意：这些端点定义已经迁移到 src/core/endpoints_unified.rs
+/// 为了向后兼容性，这里重新导出常用的端点常量
+
+// 重新导出统一端点系统的常用端点
+pub use crate::core::endpoints_unified::Endpoints;
+
+// 为了向后兼容性，提供常用的端点常量别名
+pub const IM_V1_MESSAGES: &str = Endpoints::IM_V1_MESSAGES;
+pub const IM_V1_CHATS: &str = Endpoints::IM_V1_CHATS;
+pub const IM_V1_BATCH_MESSAGES: &str = Endpoints::IM_V1_BATCH_MESSAGES;
+pub const IM_V2_MESSAGES: &str = "/open-apis/im/v2/messages";
+
+// 认证相关 - V3
+pub const AUTH_APP_ACCESS_TOKEN: &str = Endpoints::AUTH_V3_APP_ACCESS_TOKEN;
+pub const AUTH_TENANT_ACCESS_TOKEN: &str = Endpoints::AUTH_V3_TENANT_ACCESS_TOKEN;
 pub const AUTH_APP_TICKET_RESEND: &str = "/open-apis/auth/v3/app_ticket/resend";
 
 // Wiki相关 - V2
@@ -11,37 +24,25 @@ pub const WIKI_V2_SPACES: &str = "/open-apis/wiki/v2/spaces";
 pub const WIKI_V2_SPACE_NODES: &str = "/open-apis/wiki/v2/spaces/{space_id}/nodes";
 pub const WIKI_V2_TASKS: &str = "/open-apis/wiki/v2/tasks";
 
-// IM即时通讯相关 - V1
-pub const IM_V1_MESSAGES: &str = "/open-apis/im/v1/messages";
-pub const IM_V1_CHATS: &str = "/open-apis/im/v1/chats";
-pub const IM_V1_BATCH_MESSAGES: &str = "/open-apis/im/v1/batch_messages";
-
-// IM即时通讯相关 - V2
-pub const IM_V2_MESSAGES: &str = "/open-apis/im/v2/messages";
-
 // 云文档相关 - V1
 pub const DOCS_V1_DOCUMENTS: &str = "/open-apis/docx/v1/documents";
 
-// 云盘相关 - V1
-pub const DRIVE_V1_FILES: &str = "/open-apis/drive/v1/files";
-pub const DRIVE_V1_FOLDERS: &str = "/open-apis/drive/v1/folders";
-
-// 云盘相关 - V2
+// 云盘相关 - V1/V2
+pub const DRIVE_V1_FILES: &str = Endpoints::DRIVE_V1_FILES;
+pub const DRIVE_V1_FOLDERS: &str = Endpoints::DRIVE_V1_FOLDERS;
 pub const DRIVE_V2_FILES: &str = "/open-apis/drive/v2/files";
 
 // 搜索相关 - V1
 pub const SEARCH_V1_DATA_SOURCES: &str = "/open-apis/search/v1/data_sources";
 pub const SEARCH_V1_SCHEMA: &str = "/open-apis/search/v1/schema";
-pub const SEARCH_V1_USER: &str = "/open-apis/search/v1/user";
+pub const SEARCH_V1_USER: &str = Endpoints::SEARCH_V1_USER;
 
-// 电子表格相关 - V2
-pub const SHEETS_V2_SPREADSHEETS: &str = "/open-apis/sheets/v2/spreadsheets";
-
-// 电子表格相关 - V3
-pub const SHEETS_V3_SPREADSHEETS: &str = "/open-apis/sheets/v3/spreadsheets";
+// 电子表格相关 - V2/V3
+pub const SHEETS_V2_SPREADSHEETS: &str = Endpoints::SHEETS_V2_SPREADSHEETS;
+pub const SHEETS_V3_SPREADSHEETS: &str = Endpoints::SHEETS_V3_SPREADSHEETS;
 
 // 多维表格相关 - V1
-pub const BITABLE_V1_APPS: &str = "/open-apis/bitable/v1/apps";
+pub const BITABLE_V1_APPS: &str = Endpoints::BITABLE_V1_APPS;
 
 // 考勤相关 - V1
 pub const ATTENDANCE_V1_USER_FLOWS: &str = "/open-apis/attendance/v1/user_flows";
@@ -100,5 +101,13 @@ mod tests {
     fn test_has_unresolved_params() {
         assert!(EndpointHelper::has_unresolved_params(WIKI_V2_SPACE_NODES));
         assert!(!EndpointHelper::has_unresolved_params(WIKI_V2_SPACES));
+    }
+
+    #[test]
+    fn test_unified_endpoints_compatibility() {
+        // 验证统一端点系统的兼容性
+        assert_eq!(IM_V1_MESSAGES, Endpoints::IM_V1_MESSAGES);
+        assert_eq!(IM_V1_CHATS, Endpoints::IM_V1_CHATS);
+        assert_eq!(SEARCH_V1_USER, Endpoints::SEARCH_V1_USER);
     }
 }

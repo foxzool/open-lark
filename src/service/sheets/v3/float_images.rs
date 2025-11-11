@@ -9,9 +9,15 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::core::error::SDKError;
-use crate::core::http::{Transport, BaseResponse};
-use crate::core::trait_system::Service;
+use crate::{
+    api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    ApiRequest, SDKResult,
+    error::LarkAPIError,
+};
+use crate::endpoints_original::Endpoints;
 use crate::service::sheets::v3::models::spreadsheet::SpreadsheetToken;
 use crate::service::sheets::v3::models::sheet::SheetId;
 use crate::service::sheets::v3::common::SheetPagedResponse;
@@ -1165,8 +1171,8 @@ impl FloatImagesService {
     pub async fn get(
         &self,
         request: &GetFloatImageRequest,
-    ) -> crate::core::error::SDKResult<BaseResponse<GetFloatImageResponse>> {
-        let url = format!(
+    ) -> SDKResult<BaseResponse<GetFloatImageResponse>> {
+        let endpoint = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images/{}",
             self.config.base_url,
             request.spreadsheet_token.as_str(),
@@ -1174,15 +1180,15 @@ impl FloatImagesService {
             request.float_image_id
         );
 
-        let response = self.config.transport.get(&url).send().await?;
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path: endpoint,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: vec![],
+            ..Default::default()
+        };
 
-        let base_resp: BaseResponse<GetFloatImageResponse> = response.json().await?;
-
-        if let Some(err) = &base_resp.error {
-            return Err(SDKError::LarkAPIError(err.clone()));
-        }
-
-        Ok(base_resp)
+        Transport::<GetFloatImageResponse>::request(api_req, &self.config, None).await
     }
 
     /// 删除浮动图片
@@ -1543,8 +1549,8 @@ impl<'a> FloatImagesServiceBuilder<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
-    use crate::core::trait_system::Service;
+    use open_lark_core::config::Config;
+    use open_lark_core::trait_system::Service;
 
     #[test]
     fn test_float_images_service_creation() {

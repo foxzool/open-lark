@@ -4,7 +4,7 @@ use log::debug;
 use reqwest::RequestBuilder;
 use tracing::{info_span, Instrument};
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, BaseResponse},
     app_ticket_manager::apply_app_ticket,
     config::Config,
@@ -16,7 +16,7 @@ use crate::core::{
     SDKResult,
 };
 // Re-export ApiRequest from open-lark-core
-pub use open_lark_core::core::api_req::ApiRequest;
+pub use open_lark_core::api_req::ApiRequest;
 
 pub struct Transport<T> {
     phantom_data: PhantomData<T>,
@@ -297,7 +297,7 @@ fn decode_file_name(file_name: &str) -> Option<String> {
 mod test {
     use std::collections::HashMap;
 
-    use crate::core::{
+    use crate::{
         config::Config,
         constants::{AccessTokenType, AppType, HTTP_HEADER_KEY_REQUEST_ID, HTTP_HEADER_REQUEST_ID},
         error::LarkAPIError,

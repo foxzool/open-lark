@@ -2,7 +2,7 @@
 //!
 //! 提供文件相关功能的验证服务，包括文件上传、权限管理、搜索等功能。
 
-use crate::core::validation::{ValidateBuilder, ValidationResult};
+use crate::validation::{ValidateBuilder, ValidationResult};
 
 /// 验证文件类型
 ///

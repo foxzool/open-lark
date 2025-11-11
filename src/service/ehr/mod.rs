@@ -14,7 +14,7 @@
 //! - 考勤记录管理：打卡记录、考勤统计、异常处理
 //! - 绩效评估系统：评估维度、评分体系、改进建议
 
-use crate::core::config::Config;
+use open_lark_core::config::Config;
 
 /// EHR服务
 #[derive(Debug, Clone)]

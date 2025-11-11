@@ -6,7 +6,7 @@ pub use auth_handler::AuthHandler;
 pub use header_builder::HeaderBuilder;
 pub use multipart_builder::MultipartBuilder;
 
-use crate::core::{
+use crate::{
     api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
     req_option::RequestOption,
 };
@@ -43,8 +43,8 @@ impl UnifiedRequestBuilder {
             } else if !req.body.is_empty() {
                 req_builder = req_builder.body(req.body.clone());
                 req_builder = req_builder.header(
-                    crate::core::constants::CONTENT_TYPE_HEADER,
-                    crate::core::constants::DEFAULT_CONTENT_TYPE,
+                    crate::constants::CONTENT_TYPE_HEADER,
+                    crate::constants::DEFAULT_CONTENT_TYPE,
                 );
             }
 
@@ -66,7 +66,7 @@ impl UnifiedRequestBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::{api_req::ApiRequest, constants::AppType};
+    use crate::{api_req::ApiRequest, constants::AppType};
     use reqwest::Method;
     use std::collections::HashMap;
 

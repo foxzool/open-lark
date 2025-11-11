@@ -65,8 +65,12 @@ pub const HIRE_V1_JOB_OPEN: &str = "/open-apis/hire/v1/jobs/{job_id}/open";
 pub const HIRE_V1_JOB_CLOSE: &str = "/open-apis/hire/v1/jobs/{job_id}/close";
 pub const HIRE_V1_JOB_PROCESSES: &str = "/open-apis/hire/v1/job_processes";
 pub const HIRE_V1_JOB_PROCESS_GET: &str = "/open-apis/hire/v1/job_processes/{job_process_id}";
+pub const HIRE_V1_JOB_PROCESS_UPDATE: &str = "/open-apis/hire/v1/job_processes/{job_process_id}";
+pub const HIRE_V1_JOB_PROCESS_DELETE: &str = "/open-apis/hire/v1/job_processes/{job_process_id}";
 pub const HIRE_V1_JOB_REQUIREMENTS: &str = "/open-apis/hire/v1/job_requirements";
 pub const HIRE_V1_JOB_REQUIREMENT_GET: &str =
+    "/open-apis/hire/v1/job_requirements/{job_requirement_id}";
+pub const HIRE_V1_JOB_REQUIREMENT_UPDATE: &str =
     "/open-apis/hire/v1/job_requirements/{job_requirement_id}";
 
 /// 人才库管理
@@ -76,6 +80,10 @@ pub const HIRE_V1_TALENT_POOL_TALENTS: &str =
     "/open-apis/hire/v1/talent_pools/{talent_pool_id}/talents";
 pub const HIRE_V1_TALENT_POOL_TALENT_GET: &str =
     "/open-apis/hire/v1/talent_pools/{talent_pool_id}/talents/{talent_id}";
+pub const HIRE_V1_TALENT_POOL_ADD_TALENT: &str =
+    "/open-apis/hire/v1/talent_pools/{talent_pool_id}/talents";
+pub const HIRE_V1_TALENT_POOL_REMOVE_TALENT: &str =
+    "/open-apis/hire/v1/talent_pools/{talent_pool_id}/talents/{talent_id}/remove";
 
 /// 标签管理
 pub const HIRE_V1_TALENT_TAGS: &str = "/open-apis/hire/v1/talent_tags";
@@ -132,6 +140,10 @@ pub const HIRE_V1_EXTERNAL_SYSTEMS_TEST_CONNECTION: &str =
 /// 面试设置
 pub const HIRE_V1_INTERVIEW_SETTINGS: &str = "/open-apis/hire/v1/interview_settings";
 pub const HIRE_V1_INTERVIEW_SETTING_GET: &str =
+    "/open-apis/hire/v1/interview_settings/{interview_setting_id}";
+pub const HIRE_V1_INTERVIEW_SETTING_UPDATE: &str =
+    "/open-apis/hire/v1/interview_settings/{interview_setting_id}";
+pub const HIRE_V1_INTERVIEW_SETTING_DELETE: &str =
     "/open-apis/hire/v1/interview_settings/{interview_setting_id}";
 
 /// 地点管理
@@ -190,34 +202,10 @@ pub const HIRE_V1_WEBSITE_JOB_UNPUBLISH: &str =
     "/open-apis/hire/v1/website/jobs/{job_id}/unpublish";
 pub const HIRE_V1_WEBSITE_STATISTICS: &str = "/open-apis/hire/v1/website/statistics";
 
-/// Additional endpoints for CRUD operations
-pub const HIRE_V1_JOB_DELETE: &str = "/open-apis/hire/v1/jobs/{job_id}";
-pub const HIRE_V1_JOB_PROCESS_DELETE: &str = "/open-apis/hire/v1/job_processes/{job_process_id}";
-pub const HIRE_V1_JOB_PROCESS_UPDATE: &str = "/open-apis/hire/v1/job_processes/{job_process_id}";
-pub const HIRE_V1_JOB_REQUIREMENT_DELETE: &str = "/open-apis/hire/v1/job_requirements/{job_requirement_id}";
-pub const HIRE_V1_JOB_REQUIREMENT_UPDATE: &str = "/open-apis/hire/v1/job_requirements/{job_requirement_id}";
-pub const HIRE_V1_SUBJECT_DELETE: &str = "/open-apis/hire/v1/subjects/{subject_id}";
-pub const HIRE_V1_SUBJECT_UPDATE: &str = "/open-apis/hire/v1/subjects/{subject_id}";
-pub const HIRE_V1_EXAM_PAPER_DELETE: &str = "/open-apis/hire/v1/exam_papers/{exam_paper_id}";
-pub const HIRE_V1_EXAM_RECORD_UPDATE: &str = "/open-apis/hire/v1/exam_records/{exam_record_id}";
-pub const HIRE_V1_INTERVIEW_SETTING_DELETE: &str = "/open-apis/hire/v1/interview_settings/{interview_setting_id}";
-pub const HIRE_V1_INTERVIEW_SETTING_UPDATE: &str = "/open-apis/hire/v1/interview_settings/{interview_setting_id}";
-pub const HIRE_V1_OFFER_SETTING_DELETE: &str = "/open-apis/hire/v1/offer_settings/{offer_setting_id}";
-pub const HIRE_V1_OFFER_SETTING_UPDATE: &str = "/open-apis/hire/v1/offer_settings/{offer_setting_id}";
-pub const HIRE_V1_TALENT_POOL_DELETE: &str = "/open-apis/hire/v1/talent_pools/{talent_pool_id}";
-pub const HIRE_V1_TALENT_POOL_UPDATE: &str = "/open-apis/hire/v1/talent_pools/{talent_pool_id}";
-pub const HIRE_V1_INTERVIEW_ARRANGEMENT_UPDATE: &str = "/open-apis/hire/v1/interview_arrangements/{interview_id}";
-pub const HIRE_V1_AGENCY_RECOMMENDATION_DELETE: &str = "/open-apis/hire/v1/agency_recommendations/{recommendation_id}";
-pub const HIRE_V1_AGENCY_RECOMMENDATION_UPDATE: &str = "/open-apis/hire/v1/agency_recommendations/{recommendation_id}";
-pub const HIRE_V1_EXTERNAL_SYSTEM_DELETE: &str = "/open-apis/hire/v1/external_systems/{system_id}";
-pub const HIRE_V1_BACKGROUND_CHECK_ORDER_UPDATE: &str = "/open-apis/hire/v1/background_check_orders/{order_id}";
-pub const HIRE_V1_APPLICATION_OFFER: &str = "/open-apis/hire/v1/applications/{application_id}/offer";
-pub const HIRE_V1_APPLICATION_EVALUATIONS_ADD: &str = "/open-apis/hire/v1/applications/{application_id}/evaluations";
-pub const HIRE_V1_TALENT_POOL_ADD_TALENT: &str = "/open-apis/hire/v1/talent_pools/{talent_pool_id}/talents";
-pub const HIRE_V1_TALENT_POOL_REMOVE_TALENT: &str = "/open-apis/hire/v1/talent_pools/{talent_pool_id}/talents/{talent_id}";
-pub const HIRE_V1_ONBOARDING_PROGRESS: &str = "/open-apis/hire/v1/onboarding_progress";
-pub const HIRE_V1_COMBINED_UPDATE: &str = "/open-apis/hire/v1/jobs/{job_id}/combined_update";
-pub const HIRE_V1_EXTERNAL_SYSTEM_TEST_CONNECTION: &str = "/open-apis/hire/v1/external_systems/test_connection";
-pub const HIRE_V1_EXTERNAL_SYSTEM_DELETE: &str = "/open-apis/hire/v1/external_systems/{system_id}";
-pub const HIRE_V1_EXTERNAL_SYSTEMS_SYNC_TASKS: &str = "/open-apis/hire/v1/external_systems/sync_tasks";
-pub const HIRE_V1_EXTERNAL_SYSTEMS_SYNC_RECORDS: &str = "/open-apis/hire/v1/external_systems/sync_records";
+// 添加缺失的端点常量
+pub const HIRE_V1_JOB_REQUIREMENT_DELETE: &str =
+    "/open-apis/hire/v1/job_requirements/{job_requirement_id}";
+pub const HIRE_V1_OFFER_SETTING_UPDATE: &str =
+    "/open-apis/hire/v1/offer_settings/{offer_setting_id}";
+pub const HIRE_V1_OFFER_SETTING_DELETE: &str =
+    "/open-apis/hire/v1/offer_settings/{offer_setting_id}";

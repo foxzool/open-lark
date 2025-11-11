@@ -68,7 +68,7 @@ fn generate_main_service_mod(config: &ServiceConfig) -> String {
 //!
 //! 提供飞书{}相关的API功能。
 
-use crate::core::config::Config;
+use crate::config::Config;
 
 /// {}服务
 #[derive(Debug, Clone)]
@@ -111,7 +111,7 @@ fn generate_version_service_mod(config: &ServiceConfig) -> String {
 //!
 //! 实现{}管理的核心功能。
 
-use crate::core::config::Config;
+use crate::config::Config;
 use open_lark_core::prelude::*;
 use serde::{{Deserialize, Serialize}};
 

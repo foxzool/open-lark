@@ -4,7 +4,7 @@ use serde_json::Value;
 use std::collections::HashMap;
 
 use crate::im::v2::models::{ButtonInfo, UserIdType};
-use open_lark_core::core::{
+use open_lark_core::{
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
@@ -121,7 +121,7 @@ impl GroupsBotsService {
 
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
-        api_req.set_api_path(open_lark_core::core::endpoints::im::IM_V2_GROUPS_BOTS.to_string());
+        api_req.set_api_path(open_lark_core::endpoints::im::IM_V2_GROUPS_BOTS.to_string());
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
         api_req.query_params = query_params;
@@ -140,7 +140,7 @@ impl GroupsBotsService {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::PUT);
         api_req.set_api_path(EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V2_GROUPS_BOTS,
+            open_lark_core::endpoints::im::IM_V2_GROUPS_BOTS,
             "message_id",
             message_id,
         ));
@@ -163,7 +163,7 @@ impl GroupsBotsService {
 
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::PATCH);
-        api_req.set_api_path(open_lark_core::core::endpoints::im::IM_V2_GROUPS_BOTS.to_string());
+        api_req.set_api_path(open_lark_core::endpoints::im::IM_V2_GROUPS_BOTS.to_string());
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
         api_req.query_params = query_params;

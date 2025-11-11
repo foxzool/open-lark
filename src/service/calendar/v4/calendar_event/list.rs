@@ -26,7 +26,7 @@
 //! - `sort_order`: 排序方向（asc, desc）
 //! - `user_id_type`: 用户ID类型
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     http::Transport,
     ApiRequest, SDKResult,

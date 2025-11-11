@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use open_lark_core::core::standard_response::StandardResponse;
-use open_lark_core::core::{
+use open_lark_core::standard_response::StandardResponse;
+use open_lark_core::{
     api_req::ApiRequest,
     api_resp::{BaseResponse, EmptyResponse},
     config::Config,
@@ -63,7 +63,7 @@ impl UrlPreviewService {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::PATCH);
         api_req.set_api_path(EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V1_MESSAGE_URL_PREVIEW_BATCH_UPDATE,
+            open_lark_core::endpoints::im::IM_V1_MESSAGE_URL_PREVIEW_BATCH_UPDATE,
             "message_id",
             message_id,
         ));

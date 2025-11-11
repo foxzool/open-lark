@@ -11,7 +11,7 @@ pub mod document;
 // 重新导出所有服务类型
 pub use document::*;
 
-use crate::core::config::Config;
+use open_lark_core::config::Config;
 
 /// Docx文档服务 v1版本
 ///
@@ -63,7 +63,7 @@ impl crate::core::trait_system::Service for DocxServiceV1 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::trait_system::Service;
+    use open_lark_core::trait_system::Service;
 
     #[test]
     fn test_docx_v1_service_creation() {

@@ -13,7 +13,7 @@
 // - 更新表格属性,
 // - 删除表格,
 // - 获取表格所有工作表,
-use crate::core::{APIResult, LarkClient, RequestBuilder};
+use crate::{APIResult, LarkClient, RequestBuilder};
 use crate::service::ccm::models::CcmResponse;
 use serde::{Deserialize, Serialize};
 /// 表格操作服务,

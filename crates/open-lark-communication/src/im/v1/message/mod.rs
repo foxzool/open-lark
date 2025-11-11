@@ -18,7 +18,7 @@ pub use content_types::*;
 pub use list::{ListMessageRequest, ListMessageRequestBuilder, ListMessageRespData};
 pub use types::{CreateMessageResp, ListMessageIterator, Message, SendMessageTrait};
 
-use open_lark_core::core::config::Config;
+use open_lark_core::config::Config;
 
 /// Message service
 ///
@@ -49,8 +49,8 @@ impl MessageService {
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-    use open_lark_core::core::config::Config;
-    use open_lark_core::core::trait_system::Service;
+    use open_lark_core::config::Config;
+    use open_lark_core::trait_system::Service;
 
     fn create_test_config() -> Config {
         Config::default()

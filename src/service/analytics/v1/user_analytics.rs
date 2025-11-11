@@ -10,8 +10,8 @@
 //! - 用户流失预警和预测
 //! - 用户价值评估分析
 
-use crate::core::config::Config;
-use crate::core::SDKResult;
+use open_lark_core::config::Config;
+use open_lark_core::SDKResult;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 

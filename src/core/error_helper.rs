@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use crate::core::{
+use crate::{
     api_resp::BaseResponse,
     error::LarkAPIError,
     error_codes::{ErrorCategory, LarkErrorCode},

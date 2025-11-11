@@ -2,7 +2,7 @@
 //!
 //! 提供飞书云文档搜索功能，支持按关键字、文档类型、所有者等多维度搜索
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,

@@ -15,8 +15,8 @@
 //! - 智能业务洞察和预测分析
 //! - 实时监控和智能告警
 
-use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
-use crate::core::config::Config;
+use open_lark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use open_lark_core::config::Config;
 use serde::{Deserialize, Serialize};
 
 // 导入V1版本的服务

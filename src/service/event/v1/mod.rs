@@ -12,7 +12,7 @@
 //! - 事件订阅管理
 //! - 回调配置管理
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -20,7 +20,7 @@ use crate::core::{
     req_option::RequestOption,
     SDKResult,
 };
-use open_lark_core::core::api_req::ApiRequest;
+use open_lark_core::api_req::ApiRequest;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
@@ -130,7 +130,7 @@ impl<'a> GetOutboundIpRequestBuilder<'a> {
 
 // ==================== 特征实现 ====================
 
-use crate::core::trait_system::Service;
+use open_lark_core::trait_system::Service;
 
 impl Service for EventServiceV1 {
     fn config(&self) -> &Config {

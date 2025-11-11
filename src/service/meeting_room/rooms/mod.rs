@@ -8,7 +8,7 @@
 // rooms - 会议室管理服务
 //,
 // 提供会议室管理相关的功能
-use crate::core::config::Config;
+use open_lark_core::config::Config;
 use crate::service::meeting_room::rooms::default::RoomsDefaultService;
 /// 会议室管理服务
 #[derive(Debug, Clone)]

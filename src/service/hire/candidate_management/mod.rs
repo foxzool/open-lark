@@ -10,7 +10,7 @@ pub mod interview;
 pub mod offer;
 pub mod talent;
 pub mod talent_pool;
-use crate::core::config::Config;
+use open_lark_core::config::Config;
 use application::ApplicationService;
 use interview::InterviewService;
 use offer::OfferService;

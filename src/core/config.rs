@@ -1,7 +1,7 @@
 use std::{collections::HashMap, ops::Deref, sync::Arc, time::Duration};
 use tokio::sync::Mutex;
 
-use crate::core::{
+use crate::{
     app_ticket_manager::AppTicketManager,
     constants::{AppType, FEISHU_BASE_URL},
     performance::OptimizedHttpConfig,
@@ -188,7 +188,7 @@ impl ConfigBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::constants::{AppType, FEISHU_BASE_URL};
+    use open_lark_core::constants::{AppType, FEISHU_BASE_URL};
     use std::time::Duration;
 
     #[test]

@@ -78,14 +78,14 @@
 //! ```
 
 use super::models::BaseResponse;
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, BaseResponse as CoreBaseResponse},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
     SDKResult,
 };
-use open_lark_core::core::api_req::ApiRequest;
+use open_lark_core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 
 /// Helper function to convert core BaseResponse to models BaseResponse
@@ -1540,8 +1540,8 @@ pub struct GetAttendanceRecordsResponse {
 pub type AttendanceListResponse = BaseResponse<GetAttendanceRecordsResponse>;
 
 impl ApiResponseTrait for GetAttendanceRecordsResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -2169,49 +2169,49 @@ pub struct AttendanceExceptionProcessData {
 // ==================== ApiResponseTrait实现 ====================
 
 impl ApiResponseTrait for BatchGetAttendanceRecordsResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for CreateCheckinRecordResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for UpdateCheckinRecordResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for DeleteCheckinRecordResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for GetAttendanceStatisticsResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for GetAttendanceExceptionsResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for ProcessAttendanceExceptionResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for GetAttendanceReportResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }

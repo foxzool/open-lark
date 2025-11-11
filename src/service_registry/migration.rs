@@ -16,7 +16,7 @@ use super::{
     service::{NamedService, Service, ServiceInfo},
     ServiceRegistry,
 };
-use crate::core::config::Config;
+use open_lark_core::config::Config;
 
 /// 单个服务迁移报告
 #[derive(Debug, Clone)]

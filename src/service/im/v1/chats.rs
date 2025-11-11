@@ -16,7 +16,7 @@
 //! - 群成员管理
 //! - 群权限管理
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,

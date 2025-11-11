@@ -2,7 +2,7 @@
 //!
 //! 提供招聘相关功能的验证服务，包括职位管理、人才信息、面试安排、Offer管理等。
 
-use crate::core::validation::{ValidateBuilder, ValidationResult};
+use open_lark_core::validation::{ValidateBuilder, ValidationResult};
 use chrono::{Datelike, NaiveDate};
 
 /// 验证职位信息

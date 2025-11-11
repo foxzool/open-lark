@@ -1,4 +1,4 @@
-use crate::core::{config::Config, observability::OperationTracker, SDKResult};
+use crate::{config::Config, observability::OperationTracker, SDKResult};
 use std::future::Future;
 
 /// 服务基础 trait
@@ -178,13 +178,13 @@ pub trait ConfigurableService: Service {
     /// 验证新配置的有效性
     fn validate_config(&self, config: &Config) -> SDKResult<()> {
         if config.app_id.is_empty() {
-            return Err(crate::core::error::LarkAPIError::IllegalParamError(
+            return Err(crate::error::LarkAPIError::IllegalParamError(
                 "app_id cannot be empty".to_string(),
             ));
         }
 
         if config.app_secret.is_empty() {
-            return Err(crate::core::error::LarkAPIError::IllegalParamError(
+            return Err(crate::error::LarkAPIError::IllegalParamError(
                 "app_secret cannot be empty".to_string(),
             ));
         }
@@ -220,7 +220,7 @@ pub trait CacheableService: Service {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
+    use crate::config::Config;
 
     // 测试用的简单服务实现
     struct TestService {
@@ -385,7 +385,7 @@ mod tests {
         // 测试失败操作
         let result = service
             .execute_with_observability("test_operation_fail", || async {
-                Err(crate::core::error::LarkAPIError::IllegalParamError(
+                Err(crate::error::LarkAPIError::IllegalParamError(
                     "test error".to_string(),
                 ))
             })

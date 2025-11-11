@@ -2,7 +2,7 @@
 //!
 //! 提供飞书卡片实体的创建功能，支持各种类型的交互式卡片
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -226,7 +226,7 @@ impl CardService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
+    use open_lark_core::config::Config;
 
     #[test]
     fn test_create_card_request_creation() {

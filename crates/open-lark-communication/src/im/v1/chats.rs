@@ -1,5 +1,5 @@
-use open_lark_core::core::standard_response::StandardResponse;
-use open_lark_core::core::{
+use open_lark_core::standard_response::StandardResponse;
+use open_lark_core::{
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,

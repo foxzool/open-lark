@@ -6,7 +6,7 @@ pub use auth_handler::AuthHandler;
 pub use header_builder::HeaderBuilder;
 pub use multipart_builder::MultipartBuilder;
 
-use crate::core::{
+use crate::{
     config::Config, constants::AccessTokenType, error::LarkAPIError, req_option::RequestOption,
     ApiRequest,
 };
@@ -66,7 +66,7 @@ impl UnifiedRequestBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::{constants::AppType, ApiRequest};
+    use open_lark_core::{constants::AppType, ApiRequest};
     use reqwest::Method;
     use std::collections::HashMap;
 

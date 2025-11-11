@@ -5,7 +5,7 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use crate::{core::config::Config, impl_full_service};
+use open_lark_core::{config::Config, impl_full_service};
 pub mod batch_delete;
 pub mod create;
 pub mod list;

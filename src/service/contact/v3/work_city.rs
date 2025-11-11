@@ -12,7 +12,7 @@
 //! - 获取租户工作城市列表
 //! - 支持分页查询
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,

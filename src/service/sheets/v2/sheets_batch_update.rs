@@ -11,11 +11,11 @@ use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
 
-use crate::core::request::Transport;
-use crate::core::SDKResult;
-use crate::core::config::Config;
-use crate::core::trait_system::Service;
-use crate::core::error::LarkAPIError;
+use crate::request::Transport;
+use open_lark_core::SDKResult;
+use open_lark_core::config::Config;
+use open_lark_core::trait_system::Service;
+use open_lark_core::error::LarkAPIError;
 
 /// 工作表更新请求类型
 #[derive(Debug, Clone, Serialize, Deserialize)]

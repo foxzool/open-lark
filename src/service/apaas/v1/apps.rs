@@ -6,7 +6,7 @@
 //! - 应用配置查询
 //! - 分页查询支持
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,

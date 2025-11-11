@@ -78,7 +78,7 @@
 //!
 //! ```rust
 //! use open_lark::prelude::*;
-//! use open_lark_core::core::constants::AccessTokenType;
+//! use open_lark_core::constants::AccessTokenType;
 //!
 //! // 需要先上传图片文件获取 image_key
 //! let upload_response = client.im.v1.file.upload().await?;
@@ -167,7 +167,7 @@
 //!
 //! ```rust
 //! use open_lark::prelude::*;
-//! use open_lark_core::core::constants::AccessTokenType;
+//! use open_lark_core::constants::AccessTokenType;
 //!
 //! // 1. 启用令牌缓存
 //! let client = LarkClient::builder("app_id", "app_secret")

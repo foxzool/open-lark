@@ -13,7 +13,7 @@
 pub mod member;
 pub mod public_v1;
 pub mod public_v2;
-use crate::core::{config::Config, req_option::RequestOption, SDKResult};
+use open_lark_core::{config::Config, req_option::RequestOption, SDKResult};
 use self::{member::*, public_v1::*, public_v2::*};
 /// 权限服务
 pub struct PermissionService {

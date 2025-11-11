@@ -16,7 +16,7 @@
 //! - 部门ID更新
 //! - 企业级部门架构管理
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,

@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use open_lark_core::core::standard_response::StandardResponse;
-use open_lark_core::core::{
+use open_lark_core::standard_response::StandardResponse;
+use open_lark_core::{
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
@@ -67,7 +67,7 @@ impl FileService {
 
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
-        api_req.set_api_path(open_lark_core::core::endpoints::im::IM_V1_FILES.to_string());
+        api_req.set_api_path(open_lark_core::endpoints::im::IM_V1_FILES.to_string());
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
         api_req.query_params = query_params;
@@ -87,7 +87,7 @@ impl FileService {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V1_DOWNLOAD_FILE,
+            open_lark_core::endpoints::im::IM_V1_DOWNLOAD_FILE,
             "file_key",
             file_key,
         ));
@@ -104,7 +104,7 @@ impl FileService {
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-    use open_lark_core::core::config::Config;
+    use open_lark_core::config::Config;
     fn create_test_config() -> Config {
         Config::default()
     }

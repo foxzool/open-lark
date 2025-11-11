@@ -1,5 +1,5 @@
 use super::MessageService;
-use open_lark_core::core::api_resp::ApiResponseTrait;
+use open_lark_core::api_resp::ApiResponseTrait;
 use serde::{Deserialize, Serialize};
 
 /// 发送消息的通用trait
@@ -41,9 +41,9 @@ pub struct CreateMessageResp {
     pub data: Message,
 }
 
-impl open_lark_core::core::api_resp::ApiResponseTrait for CreateMessageResp {
-    fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-        open_lark_core::core::api_resp::ResponseFormat::Data
+impl open_lark_core::api_resp::ApiResponseTrait for CreateMessageResp {
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -91,8 +91,8 @@ pub struct Message {
 }
 
 impl ApiResponseTrait for Message {
-    fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-        open_lark_core::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -159,8 +159,8 @@ pub struct ListMessageRespData {
 }
 
 impl ApiResponseTrait for ListMessageRespData {
-    fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-        open_lark_core::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -559,19 +559,19 @@ mod tests {
         // Test CreateMessageResp
         assert_eq!(
             CreateMessageResp::data_format(),
-            open_lark_core::core::api_resp::ResponseFormat::Data
+            open_lark_core::api_resp::ResponseFormat::Data
         );
 
         // Test Message
         assert_eq!(
             Message::data_format(),
-            open_lark_core::core::api_resp::ResponseFormat::Data
+            open_lark_core::api_resp::ResponseFormat::Data
         );
 
         // Test ListMessageRespData
         assert_eq!(
             ListMessageRespData::data_format(),
-            open_lark_core::core::api_resp::ResponseFormat::Data
+            open_lark_core::api_resp::ResponseFormat::Data
         );
     }
 
@@ -744,7 +744,7 @@ mod tests {
     }
 
     fn create_test_message_service() -> MessageService {
-        use open_lark_core::core::config::Config;
+        use open_lark_core::config::Config;
 
         MessageService {
             config: Config::default(),

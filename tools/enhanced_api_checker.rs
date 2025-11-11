@@ -181,7 +181,7 @@ fn count_standard_response_usage(content: &str) -> u32 {
     count += content.matches(".into_result()").count() as u32;
 
     // 检查StandardResponse trait使用
-    if content.contains("use crate::core::standard_response::StandardResponse")
+    if content.contains("use crate::standard_response::StandardResponse")
         || content.contains("StandardResponse")
     {
         count += 1;

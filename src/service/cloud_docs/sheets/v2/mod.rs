@@ -5,7 +5,7 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use crate::core::config::Config;
+use open_lark_core::config::Config;
 /// 数据操作功能
 pub mod data_operation;
 /// 行列操作功能

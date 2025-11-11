@@ -21,8 +21,10 @@ use tokio_tungstenite::{
 use url::Url;
 
 use crate::{
+    api_resp::BaseResponse,
+    cache::QuickCache,
     client::ws_client::{state_machine::StateMachineEvent, FrameHandler, WebSocketStateMachine},
-    core::{api_resp::BaseResponse, cache::QuickCache, constants::FEISHU_BASE_URL},
+    constants::FEISHU_BASE_URL,
     event::dispatcher::EventDispatcherHandler,
 };
 
@@ -51,7 +53,7 @@ impl LarkWsClient {
     }
 
     pub async fn open(
-        config: std::sync::Arc<crate::core::config::Config>,
+        config: std::sync::Arc<crate::config::Config>,
         event_handler: EventDispatcherHandler,
     ) -> WsClientResult<()> {
         let end_point = get_conn_url(&config).await?;
@@ -227,7 +229,7 @@ impl LarkWsClient {
 
 /// 获取连接配置
 async fn get_conn_url(
-    config: &std::sync::Arc<crate::core::config::Config>,
+    config: &std::sync::Arc<crate::config::Config>,
 ) -> WsClientResult<EndPointResponse> {
     let body = json!({
         "AppID": &config.app_id,

@@ -9,8 +9,8 @@
 //! - 租户访问令牌（Tenant Access Token）管理
 //! - 应用票据（App Ticket）管理
 
-use crate::core::api_resp::BaseResponse;
-use crate::core::config::Config;
+use open_lark_core::api_resp::BaseResponse;
+use open_lark_core::config::Config;
 use serde::{Deserialize, Serialize};
 
 // 租户访问令牌响应

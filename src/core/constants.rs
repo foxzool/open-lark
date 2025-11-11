@@ -1,7 +1,7 @@
 // use std::fmt::Display; // 暂时注释掉未使用的导入
 
 // Re-export types from open-lark-core
-pub use open_lark_core::core::constants::AccessTokenType;
+pub use open_lark_core::constants::AccessTokenType;
 
 /// 应用类型
 #[derive(Default, Hash, Eq, PartialEq, Debug, Copy, Clone)]

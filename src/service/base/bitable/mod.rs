@@ -8,7 +8,7 @@
 // bitable - 多维表格API服务
 //
 // 提供多维表格相关的完整功能
-use crate::core::{
+use crate::{
     api_resp::BaseResponse,
     config::Config,
     constants::AccessTokenType,
@@ -16,7 +16,7 @@ use crate::core::{
     standard_response::StandardResponse,
     SDKResult,
 };
-use open_lark_core::core::api_req::ApiRequest;
+use open_lark_core::api_req::ApiRequest;
 use crate::service::base::models::*;
 
 /// 多维表格服务

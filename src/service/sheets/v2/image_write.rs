@@ -21,7 +21,7 @@ use serde_json::Value;
 use std::collections::HashMap;
 use futures_util::future;
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse, RawResponse},
     config::Config,
     constants::AccessTokenType,
@@ -30,7 +30,7 @@ use crate::core::{
     standard_response::StandardResponse,
     error::LarkAPIError,
 };
-use crate::core::endpoints_original::Endpoints;
+use crate::endpoints_original::Endpoints;
 use crate::impl_executable_builder_owned;
 
 /// 图片位置设置
@@ -1562,7 +1562,7 @@ impl crate::core::trait_system::Service for ImageWriteService {
 #[cfg(test)]
 mod service_tests {
     use super::*;
-    use crate::core::trait_system::Service;
+    use open_lark_core::trait_system::Service;
 
     #[test]
     fn test_service_creation() {

@@ -12,7 +12,7 @@
 //! - 事件订阅管理
 //! - 回调地址管理
 
-use crate::core::config::Config;
+use open_lark_core::config::Config;
 
 /// Event服务
 #[derive(Debug, Clone)]

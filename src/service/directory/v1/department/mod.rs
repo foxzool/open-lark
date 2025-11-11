@@ -1,6 +1,6 @@
-use crate::core::config::Config;
-use crate::core::service_trait::Service;
-use crate::core::transport::Transport;
+use open_lark_core::config::Config;
+use crate::service_trait::Service;
+use crate::transport::Transport;
 use std::sync::Arc;
 
 pub mod create;
@@ -127,7 +127,7 @@ impl Service for DepartmentService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::transport::MockTransport;
+    use crate::transport::MockTransport;
 
     fn create_test_service() -> Arc<DepartmentService> {
         let config = Config::new("test_app_id", "test_app_secret");

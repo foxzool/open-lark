@@ -13,15 +13,15 @@
 //! - 权限审计和监控
 //! - 身份验证集成
 
-use crate::core::SDKResult;
+use open_lark_core::SDKResult;
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
 };
-use open_lark_core::core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
+use open_lark_core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use serde::{Deserialize, Serialize};
 
 // 导入核心类型

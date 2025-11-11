@@ -2,7 +2,7 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use open_lark_core::core::{
+use open_lark_core::{
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
     config::Config,
@@ -89,7 +89,7 @@ impl AppFeedCardService {
     ) -> SDKResult<BaseResponse<CreateAppFeedCardResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
-        api_req.set_api_path(open_lark_core::core::endpoints::im::IM_V2_APP_FEED_CARDS.to_string());
+        api_req.set_api_path(open_lark_core::endpoints::im::IM_V2_APP_FEED_CARDS.to_string());
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
         api_req.body = serde_json::to_vec(&request)?;
@@ -107,7 +107,7 @@ impl AppFeedCardService {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::PUT);
         api_req.set_api_path(EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V2_APP_FEED_CARDS,
+            open_lark_core::endpoints::im::IM_V2_APP_FEED_CARDS,
             "card_id",
             card_id,
         ));
@@ -127,7 +127,7 @@ impl AppFeedCardService {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::DELETE);
         api_req.set_api_path(EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V2_APP_FEED_CARDS,
+            open_lark_core::endpoints::im::IM_V2_APP_FEED_CARDS,
             "card_id",
             card_id,
         ));

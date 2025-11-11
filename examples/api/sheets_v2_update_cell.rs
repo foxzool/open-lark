@@ -18,13 +18,19 @@ async fn main() -> SDKResult<()> {
     // 示例1: 更新文本内容
     println!("=== 示例1: 更新文本内容 ===");
     let text_request = UpdateCellRequest::new(
-        "shtcnmBA*****yGehy8",  // 电子表格令牌
-        "Sheet1",               // 工作表名称
-        "A1",                   // 单元格坐标
+        "shtcnmBA*****yGehy8", // 电子表格令牌
+        "Sheet1",              // 工作表名称
+        "A1",                  // 单元格坐标
         CellValue::text("Hello, 飞书电子表格!"),
     );
 
-    match client.sheets.v2.sheet_cells.update_cell(text_request, None).await {
+    match client
+        .sheets
+        .v2
+        .sheet_cells
+        .update_cell(text_request, None)
+        .await
+    {
         Ok(response) => {
             println!("✅ 文本更新成功!");
             println!("更新范围: {}", response.data.updated_range);
@@ -45,7 +51,13 @@ async fn main() -> SDKResult<()> {
         .value_render_option("FormattedValue")
         .build()?;
 
-    match client.sheets.v2.sheet_cells.update_cell(number_request, None).await {
+    match client
+        .sheets
+        .v2
+        .sheet_cells
+        .update_cell(number_request, None)
+        .await
+    {
         Ok(response) => {
             println!("✅ 数字更新成功!");
             println!("更新范围: {}", response.data.updated_range);
@@ -64,7 +76,13 @@ async fn main() -> SDKResult<()> {
         .value(CellValue::boolean(true))
         .build()?;
 
-    match client.sheets.v2.sheet_cells.update_cell(boolean_request, None).await {
+    match client
+        .sheets
+        .v2
+        .sheet_cells
+        .update_cell(boolean_request, None)
+        .await
+    {
         Ok(response) => {
             println!("✅ 布尔值更新成功!");
             println!("更新范围: {}", response.data.updated_range);
@@ -84,7 +102,13 @@ async fn main() -> SDKResult<()> {
         .value_render_option("Formula")
         .build()?;
 
-    match client.sheets.v2.sheet_cells.update_cell(formula_request, None).await {
+    match client
+        .sheets
+        .v2
+        .sheet_cells
+        .update_cell(formula_request, None)
+        .await
+    {
         Ok(response) => {
             println!("✅ 公式更新成功!");
             println!("更新范围: {}", response.data.updated_range);
@@ -109,19 +133,24 @@ async fn main() -> SDKResult<()> {
     ];
 
     for (cell, value) in updates {
-        let request = UpdateCellRequest::new(
-            "shtcnmBA*****yGehy8",
-            "Sheet1",
-            cell,
-            value,
-        );
+        let request = UpdateCellRequest::new("shtcnmBA*****yGehy8", "Sheet1", cell, value);
 
-        match client.sheets.v2.sheet_cells.update_cell(request, None).await {
+        match client
+            .sheets
+            .v2
+            .sheet_cells
+            .update_cell(request, None)
+            .await
+        {
             Ok(response) => {
                 println!("✅ 单元格 {} 更新成功!", cell);
             }
             Err(error) => {
-                println!("❌ 单元格 {} 更新失败: {}", cell, error.user_friendly_message());
+                println!(
+                    "❌ 单元格 {} 更新失败: {}",
+                    cell,
+                    error.user_friendly_message()
+                );
             }
         }
     }
@@ -133,11 +162,17 @@ async fn main() -> SDKResult<()> {
     let invalid_request = UpdateCellRequest::new(
         "shtcnmBA*****yGehy8",
         "Sheet1",
-        "INVALID_COORD",  // 无效坐标
+        "INVALID_COORD", // 无效坐标
         CellValue::text("测试"),
     );
 
-    match client.sheets.v2.sheet_cells.update_cell(invalid_request, None).await {
+    match client
+        .sheets
+        .v2
+        .sheet_cells
+        .update_cell(invalid_request, None)
+        .await
+    {
         Ok(_) => {
             println!("意外成功，应该失败");
         }
@@ -155,7 +190,13 @@ async fn main() -> SDKResult<()> {
         .value(CellValue::default()) // 空值
         .build()?;
 
-    match client.sheets.v2.sheet_cells.update_cell(blank_request, None).await {
+    match client
+        .sheets
+        .v2
+        .sheet_cells
+        .update_cell(blank_request, None)
+        .await
+    {
         Ok(response) => {
             println!("✅ 空值更新成功!");
             println!("更新范围: {}", response.data.updated_range);
@@ -217,30 +258,17 @@ mod tests {
     #[test]
     fn test_request_validation() {
         // 测试有效请求
-        let valid_request = UpdateCellRequest::new(
-            "token123",
-            "Sheet1",
-            "A1",
-            CellValue::text("Test"),
-        );
+        let valid_request =
+            UpdateCellRequest::new("token123", "Sheet1", "A1", CellValue::text("Test"));
         assert!(valid_request.validate().is_ok());
 
         // 测试无效请求（空令牌）
-        let invalid_request = UpdateCellRequest::new(
-            "",
-            "Sheet1",
-            "A1",
-            CellValue::text("Test"),
-        );
+        let invalid_request = UpdateCellRequest::new("", "Sheet1", "A1", CellValue::text("Test"));
         assert!(invalid_request.validate().is_err());
 
         // 测试无效请求（无效坐标）
-        let invalid_coord_request = UpdateCellRequest::new(
-            "token123",
-            "Sheet1",
-            "INVALID",
-            CellValue::text("Test"),
-        );
+        let invalid_coord_request =
+            UpdateCellRequest::new("token123", "Sheet1", "INVALID", CellValue::text("Test"));
         assert!(invalid_coord_request.validate().is_err());
     }
 }

@@ -5,8 +5,8 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use crate::core::SDKResult;use reqwest::Method;
-use open_lark_core::core::api_req::ApiRequest;use serde::Deserialize;
+use open_lark_core::SDKResult;use reqwest::Method;
+use open_lark_core::api_req::ApiRequest;use serde::Deserialize;
 use serde_json::json;
 use crate::{,
     core::{

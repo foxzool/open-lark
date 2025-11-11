@@ -14,7 +14,7 @@
 //! - 自定义字段：企业自定义用户字段管理
 //! - 职位信息：职位体系的管理
 
-use crate::core::config::Config;
+use open_lark_core::config::Config;
 
 // 数据模型 - 暂时禁用以修复语法错误
 // pub mod models;

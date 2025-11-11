@@ -32,3 +32,77 @@ poc_service_registry
 
 # Zen precommit temporary files
 zen_precommit.changeset
+
+# ============================================================================
+# Python Development Files
+# ============================================================================
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ============================================================================
+# Project-Specific Temporary Files
+# ============================================================================
+
+# Project analysis reports and data files
+*_analysis.md
+*_report.md
+api_implementation_data*.json
+complete_all_api_implementation_map*.md
+sheets_api_*_report.md
+FINAL_API_ANALYSIS_REPORT.md
+
+# Build tools output
+tools/*/target/
+tools/*/*.exe
+tools/*/*.json
+results/
+
+# ============================================================================
+# System and Editor Files
+# ============================================================================
+
+# macOS system files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows system files
+ehthumbs.db
+Thumbs.db
+
+# Editor files
+.vscode/
+*.swp
+*.swo
+*~
+
+# ============================================================================
+# Additional Rust Files
+# ============================================================================
+
+# Additional Rust backup and temp files
+**/*.rs.bk
+Cargo.lock

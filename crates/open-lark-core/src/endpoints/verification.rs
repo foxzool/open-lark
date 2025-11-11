@@ -1,3 +1,3 @@
-//! verification 服务端点常量定义
+//! Verification 实名认证服务端点常量定义
 
-// TODO: 从原始 endpoints.rs 迁移对应的端点常量
+// Verification服务的常量已集成在其他模块中，无需单独定义

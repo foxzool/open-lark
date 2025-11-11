@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 
 use super::MessageService;
 use crate::im::v1::message::{Message, SendMessageTrait};
-use open_lark_core::core::{
+use open_lark_core::{
     api_req::ApiRequest,
     validation::{
         message_limits, uuid_limits, validate_content_size, validate_required,

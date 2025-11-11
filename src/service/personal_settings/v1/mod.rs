@@ -1,5 +1,5 @@
 pub mod system_status;
-use crate::core::config::Config;
+use open_lark_core::config::Config;
 /// Personal Settings API v1版本服务
 pub struct V1 {
     /// 系统状态服务

@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 use crate::im::v1::models::UserIdType;
-use open_lark_core::core::standard_response::StandardResponse;
-use open_lark_core::core::{
+use open_lark_core::standard_response::StandardResponse;
+use open_lark_core::{
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
@@ -73,7 +73,7 @@ impl BuzzMessagesService {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::PATCH);
         api_req.set_api_path(EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V1_MESSAGE_URGENT_APP,
+            open_lark_core::endpoints::im::IM_V1_MESSAGE_URGENT_APP,
             "message_id",
             message_id,
         ));
@@ -102,7 +102,7 @@ impl BuzzMessagesService {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::PATCH);
         api_req.set_api_path(EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V1_MESSAGE_URGENT_SMS,
+            open_lark_core::endpoints::im::IM_V1_MESSAGE_URGENT_SMS,
             "message_id",
             message_id,
         ));
@@ -131,7 +131,7 @@ impl BuzzMessagesService {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::PATCH);
         api_req.set_api_path(EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V1_MESSAGE_URGENT_PHONE,
+            open_lark_core::endpoints::im::IM_V1_MESSAGE_URGENT_PHONE,
             "message_id",
             message_id,
         ));

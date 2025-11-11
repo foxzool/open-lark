@@ -6,7 +6,7 @@
 //! - 查询组成员列表
 //! - 成员权限管理
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,

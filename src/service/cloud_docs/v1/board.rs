@@ -9,7 +9,7 @@
 //!
 //! 白板服务，提供在线白板协作、绘图、思维导图、
 /// 协作编辑等可视化协作功能。
-use crate::core::config::Config;
+use open_lark_core::config::Config;
 
 /// 白板服务 v1
 ///

@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
+use crate::{
     config::Config,
     constants::AccessTokenType,
     request_executor::RequestExecutor,
@@ -244,7 +244,7 @@ impl ApiResponseTrait for EmptyResponse {
 mod tests {
     use super::*;
     use std::sync::Arc;
-    use crate::core::config::Config;
+    use open_lark_core::config::Config;
 
     #[tokio::test]
     async fn test_modern_message_service_api() {

@@ -14,7 +14,7 @@
 //! - 绩效结果分析与统计
 //! - 绩效流程审批
 
-use crate::core::config::Config;
+use open_lark_core::config::Config;
 
 // 声明子模块
 pub mod models;

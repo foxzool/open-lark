@@ -1,7 +1,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use open_lark_core::core::{
+use open_lark_core::{
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse},
     constants::AccessTokenType,
@@ -192,8 +192,8 @@ pub struct ListMessageRespData {
 }
 
 impl ApiResponseTrait for ListMessageRespData {
-    fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-        open_lark_core::core::api_resp::ResponseFormat::Data
+    fn data_format() -> open_lark_core::api_resp::ResponseFormat {
+        open_lark_core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -208,7 +208,7 @@ impl MessageService {
     ) -> SDKResult<ListMessageRespData> {
         let mut api_req = list_message_request.api_req;
         api_req.set_http_method(Method::GET);
-        api_req.set_api_path(open_lark_core::core::endpoints::im::IM_V1_LIST_MESSAGE.to_string());
+        api_req.set_api_path(open_lark_core::endpoints::im::IM_V1_LIST_MESSAGE.to_string());
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
@@ -254,7 +254,7 @@ impl MessageService {
 mod tests {
     use super::*;
     use crate::im::v1::message::{Message, MessageService};
-    use open_lark_core::core::{
+    use open_lark_core::{
         config::Config, constants::AccessTokenType, req_option::RequestOption,
     };
     use reqwest::Method;
@@ -560,7 +560,7 @@ mod tests {
     fn test_api_response_trait_implementation() {
         assert_eq!(
             ListMessageRespData::data_format(),
-            open_lark_core::core::api_resp::ResponseFormat::Data
+            open_lark_core::api_resp::ResponseFormat::Data
         );
     }
 
@@ -635,7 +635,7 @@ mod tests {
 
     #[test]
     fn test_endpoint_path_validation() {
-        let expected_path = open_lark_core::core::endpoints::im::IM_V1_LIST_MESSAGE;
+        let expected_path = open_lark_core::endpoints::im::IM_V1_LIST_MESSAGE;
 
         // Verify the endpoint exists and has the expected format
         assert!(!expected_path.is_empty());
@@ -782,7 +782,7 @@ mod tests {
 
     #[test]
     fn test_error_handling_types() {
-        use open_lark_core::core::SDKResult;
+        use open_lark_core::SDKResult;
         // Verify that the list methods return SDKResult
         fn _check_list_result() -> SDKResult<ListMessageRespData> {
             unimplemented!("Mock implementation")

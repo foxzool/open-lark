@@ -183,6 +183,36 @@ release VERSION:
   @echo ""
   @echo "🚀 Release process initiated successfully!"
 
+# Generate API implementation mapping report
+api-map:
+	@echo "🔍 Generating API implementation mapping report..."
+	@echo "Building Rust API mapper tool..."
+	cd tools/rust-api-mapper && cargo build --release
+	@echo "Running API mapping analysis..."
+	cd tools/rust-api-mapper && ./target/release/api_mapper \
+		--verbose \
+		--service-dir ../../src/service \
+		--api-list ../../server_api_list.csv \
+		--markdown-output ../complete_all_api_implementation_map_rust.md \
+		--json-output ../api_implementation_data_rust.json
+	@echo "✅ API implementation report generated!"
+	@echo "📄 Markdown report: complete_all_api_implementation_map_rust.md"
+	@echo "📊 JSON data: api_implementation_data_rust.json"
+
+# Quick API map analysis (clean build)
+api-map-clean:
+	@echo "🔍 Generating API map with clean build..."
+	cd tools/rust-api-mapper
+	@echo "Cleaning previous build..."
+	cargo clean
+	@echo "Building and running..."
+	cargo run --release \
+		--service-dir ../../src/service \
+		--api-list ../../server_api_list.csv \
+		--markdown-output ../complete_all_api_implementation_map_rust.md \
+		--json-output ../api_implementation_data_rust.json
+	@echo "✅ API implementation report generated with clean build!"
+
 # Show available commands
 help:
   @echo "📋 Available commands:"
@@ -201,5 +231,7 @@ help:
   @echo "  update-audit-db - Update security advisory database"
   @echo "  install-dev-tools - Install development tools"
   @echo "  check-all    - Run all pre-release checks (includes coverage & security)"
+  @echo "  api-map      - Generate API implementation mapping report"
+  @echo "  api-map-clean - Generate API map with clean build"
   @echo "  release VERSION - Release a new version (e.g., just release 0.4.0)"
   @echo "  help         - Show this help message"

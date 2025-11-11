@@ -1,4 +1,4 @@
-use crate::core::config::Config;
+use open_lark_core::config::Config;
 pub mod event;
 pub mod file;
 pub mod file_version;

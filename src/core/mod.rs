@@ -1,7 +1,7 @@
-use crate::core::error::LarkAPIError;
+use open_lark_core::error::LarkAPIError;
 
 // Re-export ApiRequest from open-lark-core
-pub use open_lark_core::core::api_req::ApiRequest;
+pub use open_lark_core::api_req::ApiRequest;
 pub mod api_resp;
 pub mod app_ticket_manager;
 pub mod cache;
@@ -9,6 +9,7 @@ pub mod config;
 pub mod constants;
 pub mod endpoints;
 pub mod endpoints_original;
+pub mod endpoints_unified;
 pub mod error;
 pub mod error_codes;
 pub mod error_helper;

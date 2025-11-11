@@ -235,7 +235,7 @@ macro_rules! impl_service_constructor {
 
 #[cfg(test)]
 mod tests {
-    use crate::core::{
+    use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, RawResponse, ResponseFormat},
         config::Config,
         req_option::RequestOption,

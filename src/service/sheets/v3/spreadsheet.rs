@@ -6,7 +6,7 @@
 //! - 删除电子表格
 //! - 电子表格权限管理
 
-use crate::core::{
+use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
     config::Config,
     constants::AccessTokenType,
@@ -274,15 +274,15 @@ impl SpreadsheetService {
             spreadsheet_token
         );
 
-        let request = ApiRequest {
-            method: "GET".to_string(),
-            url: endpoint,
-            headers: vec![],
-            params: vec![],
-            body: None,
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path: endpoint,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: vec![],
+            ..Default::default()
         };
 
-        self.transport.request(&request).await
+        Transport::<GetSpreadsheetResponse>::request(api_req, &self.config, None).await
     }
 
     /// 更新电子表格属性
@@ -316,15 +316,15 @@ impl SpreadsheetService {
             spreadsheet_token
         );
 
-        let api_request = ApiRequest {
-            method: "PATCH".to_string(),
-            url: endpoint,
-            headers: vec![],
-            params: vec![],
-            body: Some(serde_json::to_value(request)?),
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::PATCH,
+            api_path: endpoint,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: serde_json::to_vec(request)?,
+            ..Default::default()
         };
 
-        self.transport.request(&api_request).await
+        Transport::<UpdateSpreadsheetResponse>::request(api_req, &self.config, None).await
     }
 }
 
@@ -467,12 +467,6 @@ impl UpdateSpreadsheetBuilder {
     }
 }
 
-impl SpreadsheetService {
-    /// 创建更新电子表格构建器
-    pub fn update_spreadsheet_builder(&self) -> UpdateSpreadsheetBuilder {
-        UpdateSpreadsheetBuilder::new(self.transport.clone())
-    }
-}
 
 // ==================== 单元测试 ====================
 

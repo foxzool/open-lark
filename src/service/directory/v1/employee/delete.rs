@@ -1,8 +1,8 @@
-use crate::core::config::Config;
-use crate::core::error::SDKError;
-use crate::core::response::SDKResult;
-use crate::core::service_trait::Service;
-use crate::core::transport::Transport;
+use open_lark_core::config::Config;
+use open_lark_core::error::SDKError;
+use crate::response::SDKResult;
+use crate::service_trait::Service;
+use crate::transport::Transport;
 use crate::service::directory::v1::employee::regular::{EmployeeService, ENDPOINT_DELETE};
 use reqwest;
 use serde::{Deserialize, Serialize};
@@ -310,8 +310,8 @@ impl DeleteEmployeeBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
-    use crate::core::transport::MockTransport;
+    use open_lark_core::config::Config;
+    use crate::transport::MockTransport;
     use std::sync::Arc;
 
     fn create_test_service() -> Arc<EmployeeService> {

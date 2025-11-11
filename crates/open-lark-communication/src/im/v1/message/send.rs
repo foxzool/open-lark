@@ -1,6 +1,6 @@
 use reqwest::Method;
 
-use open_lark_core::core::{
+use open_lark_core::{
     api_req::ApiRequest, api_resp::BaseResponse, constants::AccessTokenType,
     endpoints::EndpointBuilder, http::Transport, req_option::RequestOption,
     standard_response::StandardResponse, SDKResult,
@@ -51,7 +51,7 @@ impl MessageService {
     ) -> SDKResult<Message> {
         let mut api_req = create_message_request.api_req;
         api_req.set_http_method(Method::POST);
-        api_req.set_api_path(open_lark_core::core::endpoints::im::IM_V1_SEND_MESSAGE.to_string());
+        api_req.set_api_path(open_lark_core::endpoints::im::IM_V1_SEND_MESSAGE.to_string());
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
@@ -93,7 +93,7 @@ impl MessageService {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::DELETE);
         api_req.set_api_path(EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V1_DELETE_MESSAGE,
+            open_lark_core::endpoints::im::IM_V1_DELETE_MESSAGE,
             "message_id",
             message_id,
         ));
@@ -122,7 +122,7 @@ impl MessageService {
         let mut api_req = update_message_request.api_req;
         api_req.set_http_method(Method::PATCH);
         api_req.set_api_path(EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V1_UPDATE_MESSAGE,
+            open_lark_core::endpoints::im::IM_V1_UPDATE_MESSAGE,
             "message_id",
             message_id,
         ));
@@ -151,7 +151,7 @@ impl MessageService {
         let mut api_req = reply_message_request.api_req;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V1_REPLY_MESSAGE,
+            open_lark_core::endpoints::im::IM_V1_REPLY_MESSAGE,
             "message_id",
             message_id,
         ));
@@ -169,7 +169,7 @@ impl MessageService {
 mod tests {
     use super::*;
     use crate::im::v1::message::builders::CreateMessageRequest;
-    use open_lark_core::core::{
+    use open_lark_core::{
         config::Config, constants::AccessTokenType, req_option::RequestOption,
     };
     use reqwest::Method;
@@ -228,11 +228,11 @@ mod tests {
     #[test]
     fn test_delete_message_endpoint_construction() {
         let message_id = "test_msg_123";
-        let expected_path = open_lark_core::core::endpoints::im::IM_V1_DELETE_MESSAGE
+        let expected_path = open_lark_core::endpoints::im::IM_V1_DELETE_MESSAGE
             .replace("{message_id}", message_id);
 
-        let constructed_path = open_lark_core::core::endpoints::EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V1_DELETE_MESSAGE,
+        let constructed_path = open_lark_core::endpoints::EndpointBuilder::replace_param(
+            open_lark_core::endpoints::im::IM_V1_DELETE_MESSAGE,
             "message_id",
             message_id,
         );
@@ -246,8 +246,8 @@ mod tests {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::DELETE);
         api_req.set_api_path(
-            open_lark_core::core::endpoints::EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::im::IM_V1_DELETE_MESSAGE,
+            open_lark_core::endpoints::EndpointBuilder::replace_param(
+                open_lark_core::endpoints::im::IM_V1_DELETE_MESSAGE,
                 "message_id",
                 message_id,
             ),
@@ -269,11 +269,11 @@ mod tests {
     #[test]
     fn test_update_message_endpoint_construction() {
         let message_id = "update_msg_123";
-        let expected_path = open_lark_core::core::endpoints::im::IM_V1_UPDATE_MESSAGE
+        let expected_path = open_lark_core::endpoints::im::IM_V1_UPDATE_MESSAGE
             .replace("{message_id}", message_id);
 
-        let constructed_path = open_lark_core::core::endpoints::EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V1_UPDATE_MESSAGE,
+        let constructed_path = open_lark_core::endpoints::EndpointBuilder::replace_param(
+            open_lark_core::endpoints::im::IM_V1_UPDATE_MESSAGE,
             "message_id",
             message_id,
         );
@@ -284,11 +284,11 @@ mod tests {
     #[test]
     fn test_reply_message_endpoint_construction() {
         let message_id = "reply_msg_123";
-        let expected_path = open_lark_core::core::endpoints::im::IM_V1_REPLY_MESSAGE
+        let expected_path = open_lark_core::endpoints::im::IM_V1_REPLY_MESSAGE
             .replace("{message_id}", message_id);
 
-        let constructed_path = open_lark_core::core::endpoints::EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V1_REPLY_MESSAGE,
+        let constructed_path = open_lark_core::endpoints::EndpointBuilder::replace_param(
+            open_lark_core::endpoints::im::IM_V1_REPLY_MESSAGE,
             "message_id",
             message_id,
         );
@@ -300,22 +300,22 @@ mod tests {
     fn test_message_request_endpoint_validations() {
         // Test create message endpoint
         assert_eq!(
-            open_lark_core::core::endpoints::im::IM_V1_SEND_MESSAGE,
+            open_lark_core::endpoints::im::IM_V1_SEND_MESSAGE,
             "/open-apis/im/v1/messages"
         );
 
         // Test delete message endpoint pattern
-        let delete_endpoint = open_lark_core::core::endpoints::im::IM_V1_DELETE_MESSAGE;
+        let delete_endpoint = open_lark_core::endpoints::im::IM_V1_DELETE_MESSAGE;
         assert!(delete_endpoint.contains("{message_id}"));
         assert!(delete_endpoint.starts_with("/open-apis/"));
 
         // Test update message endpoint pattern
-        let update_endpoint = open_lark_core::core::endpoints::im::IM_V1_UPDATE_MESSAGE;
+        let update_endpoint = open_lark_core::endpoints::im::IM_V1_UPDATE_MESSAGE;
         assert!(update_endpoint.contains("{message_id}"));
         assert!(update_endpoint.starts_with("/open-apis/"));
 
         // Test reply message endpoint pattern
-        let reply_endpoint = open_lark_core::core::endpoints::im::IM_V1_REPLY_MESSAGE;
+        let reply_endpoint = open_lark_core::endpoints::im::IM_V1_REPLY_MESSAGE;
         assert!(reply_endpoint.contains("{message_id}"));
         assert!(reply_endpoint.starts_with("/open-apis/"));
     }
@@ -357,8 +357,8 @@ mod tests {
 
         for message_id in valid_message_ids {
             // Test that message IDs can be properly substituted in endpoints
-            let path = open_lark_core::core::endpoints::EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::im::IM_V1_DELETE_MESSAGE,
+            let path = open_lark_core::endpoints::EndpointBuilder::replace_param(
+                open_lark_core::endpoints::im::IM_V1_DELETE_MESSAGE,
                 "message_id",
                 message_id,
             );
@@ -372,8 +372,8 @@ mod tests {
         let special_ids = ["msg_with.dots", "msg_with@symbols", "msg_with-utf8-测试"];
 
         for message_id in special_ids {
-            let path = open_lark_core::core::endpoints::EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::im::IM_V1_DELETE_MESSAGE,
+            let path = open_lark_core::endpoints::EndpointBuilder::replace_param(
+                open_lark_core::endpoints::im::IM_V1_DELETE_MESSAGE,
                 "message_id",
                 message_id,
             );
@@ -436,7 +436,7 @@ mod tests {
 
     #[test]
     fn test_error_types() {
-        use open_lark_core::core::SDKResult;
+        use open_lark_core::SDKResult;
         // All methods should return SDKResult
         fn _check_create_result() -> SDKResult<Message> {
             unimplemented!("Mock implementation")
@@ -464,10 +464,10 @@ mod tests {
     #[test]
     fn test_endpoint_constants_exist() {
         // Verify all required endpoint constants exist
-        let _create_endpoint = open_lark_core::core::endpoints::im::IM_V1_SEND_MESSAGE;
-        let _delete_endpoint = open_lark_core::core::endpoints::im::IM_V1_DELETE_MESSAGE;
-        let _update_endpoint = open_lark_core::core::endpoints::im::IM_V1_UPDATE_MESSAGE;
-        let _reply_endpoint = open_lark_core::core::endpoints::im::IM_V1_REPLY_MESSAGE;
+        let _create_endpoint = open_lark_core::endpoints::im::IM_V1_SEND_MESSAGE;
+        let _delete_endpoint = open_lark_core::endpoints::im::IM_V1_DELETE_MESSAGE;
+        let _update_endpoint = open_lark_core::endpoints::im::IM_V1_UPDATE_MESSAGE;
+        let _reply_endpoint = open_lark_core::endpoints::im::IM_V1_REPLY_MESSAGE;
 
         // If these compile, the constants exist
         assert!(!_create_endpoint.is_empty());
@@ -540,11 +540,11 @@ mod tests {
     #[test]
     fn test_error_handling_patterns() {
         // Test that error handling is consistent across operations
-        use open_lark_core::core::error::LarkAPIError;
-        use open_lark_core::core::standard_response::StandardResponse;
+        use open_lark_core::error::LarkAPIError;
+        use open_lark_core::standard_response::StandardResponse;
         // All operations should return SDKResult which can contain LarkAPIError
         let error = LarkAPIError::illegal_param("Test error".to_string());
-        let sdk_result: open_lark_core::core::SDKResult<()> = Err(error);
+        let sdk_result: open_lark_core::SDKResult<()> = Err(error);
 
         assert!(sdk_result.is_err());
         match sdk_result {

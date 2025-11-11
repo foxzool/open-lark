@@ -8,7 +8,7 @@
 // schedules - 会议室日程管理服务
 //,
 // 提供会议室日程管理相关的功能
-use crate::core::config::Config;
+use open_lark_core::config::Config;
 use crate::service::meeting_room::schedules::default::SchedulesDefaultService;
 /// 会议室日程管理服务
 #[derive(Debug, Clone)]

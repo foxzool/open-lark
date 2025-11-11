@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 use crate::im::v1::models::{BatchMessageStatus, ReceiveIdType, UserIdType};
-use open_lark_core::core::standard_response::StandardResponse;
-use open_lark_core::core::{
+use open_lark_core::standard_response::StandardResponse;
+use open_lark_core::{
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
     config::Config,
@@ -124,7 +124,7 @@ impl BatchMessageService {
     ) -> SDKResult<BatchSendMessageResponse> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
-        api_req.set_api_path(open_lark_core::core::endpoints::im::IM_V1_BATCH_MESSAGES.to_string());
+        api_req.set_api_path(open_lark_core::endpoints::im::IM_V1_BATCH_MESSAGES.to_string());
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
@@ -148,7 +148,7 @@ impl BatchMessageService {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::DELETE);
         api_req.set_api_path(EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V1_BATCH_MESSAGES_DELETE,
+            open_lark_core::endpoints::im::IM_V1_BATCH_MESSAGES_DELETE,
             "batch_message_id",
             batch_message_id,
         ));
@@ -169,7 +169,7 @@ impl BatchMessageService {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V1_BATCH_MESSAGE_PROGRESS,
+            open_lark_core::endpoints::im::IM_V1_BATCH_MESSAGE_PROGRESS,
             "batch_message_id",
             batch_message_id,
         ));
@@ -204,7 +204,7 @@ impl BatchMessageService {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(
-            open_lark_core::core::endpoints::im::IM_V1_BATCH_MESSAGE_READ_USER,
+            open_lark_core::endpoints::im::IM_V1_BATCH_MESSAGE_READ_USER,
             "batch_message_id",
             batch_message_id,
         ));

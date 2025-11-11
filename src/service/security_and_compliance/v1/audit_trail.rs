@@ -13,9 +13,9 @@
 //! - 数据溯源和追踪
 //! - 审计日志归档管理
 
-use crate::core::SDKResult;
+use open_lark_core::SDKResult;
 
-use crate::core::config::Config;
+use open_lark_core::config::Config;
 use serde::{Deserialize, Serialize};
 
 // 导入核心类型
