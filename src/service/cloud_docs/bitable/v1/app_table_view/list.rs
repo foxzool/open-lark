@@ -6,9 +6,9 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 use reqwest::Method;
-use open_lark_core::api_req::ApiRequest;use serde::Deserialize;
+use openlark_core::api_req::ApiRequest;use serde::Deserialize;
 use crate::{
-use open_lark_core::SDKResult;    api_req::ApiRequest,
+use SDKResult;    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     constants::AccessTokenType,
     endpoints::cloud_docs::*,

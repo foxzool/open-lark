@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use open_lark_core::event::EventHandler};
+use openlark_core::event::EventHandler};
 /// 考勤用户任务状态变更事件 (user.task_status_change_event),
 #[derive(Debug, Clone)]
 pub struct P2AttendanceUserTaskStatusChangeV1 {
@@ -112,7 +112,7 @@ pub struct AttendanceLocation {
 #[allow(unused_variables, unused_unsafe)]
 mod test {,
     use serde_json::json;
-use open_lark_core::event::context::EventContext;
+use openlark_core::event::context::EventContext;
     #[test]
 fn test_decode_attendance_status_change_event() {
         let event_data = json!({

@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use open_lark_core::event::EventHandler;
+use openlark_core::event::EventHandler;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct P2ContactUserCreatedV3;

@@ -2,7 +2,7 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use open_lark_core::core::core::{
+use openlark_core::core::{
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
     config::Config,
@@ -50,7 +50,7 @@ impl AdminService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: open_lark_core::core::endpoints::application::APPLICATION_V6_ADMIN_APPS.to_string(),
+            api_path: openlark_core::endpoints::application::APPLICATION_V6_ADMIN_APPS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -85,7 +85,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::application::APPLICATION_V6_ADMIN_USER_AVAILABLE_APPS,
+                openlark_core::endpoints::application::APPLICATION_V6_ADMIN_USER_AVAILABLE_APPS,
                 "user_id",
                 user_id,
             ),
@@ -119,7 +119,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::application::APPLICATION_V6_ADMIN_APP_CONTACTS_RANGE_CONFIGURATION_GET,
+                openlark_core::endpoints::application::APPLICATION_V6_ADMIN_APP_CONTACTS_RANGE_CONFIGURATION_GET,
                 "app_id",
                 app_id,
             ),
@@ -154,7 +154,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::application::APPLICATION_V6_ADMIN_APP_CONTACTS_RANGE_CONFIGURATION_SET,
+                openlark_core::endpoints::application::APPLICATION_V6_ADMIN_APP_CONTACTS_RANGE_CONFIGURATION_SET,
                 "app_id",
                 app_id,
             ),
@@ -189,7 +189,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::application::APPLICATION_V6_ADMIN_APP_VISIBILITY,
+                openlark_core::endpoints::application::APPLICATION_V6_ADMIN_APP_VISIBILITY,
                 "app_id",
                 app_id,
             ),
@@ -224,7 +224,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::application::APPLICATION_V6_ADMIN_APP_CHECK_WHITE_BLACK_LIST,
+                openlark_core::endpoints::application::APPLICATION_V6_ADMIN_APP_CHECK_WHITE_BLACK_LIST,
                 "app_id",
                 app_id,
             ),
@@ -260,7 +260,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::application::APPLICATION_V6_ADMIN_APP_VISIBILITY_CREATE,
+                openlark_core::endpoints::application::APPLICATION_V6_ADMIN_APP_VISIBILITY_CREATE,
                 "app_id",
                 app_id,
             ),
@@ -283,7 +283,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::application::APPLICATION_V6_ADMIN_APP_ENABLE,
+                openlark_core::endpoints::application::APPLICATION_V6_ADMIN_APP_ENABLE,
                 "app_id",
                 app_id,
             ),
@@ -318,7 +318,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::application::APPLICATION_V6_ADMIN_APP_ADMINS,
+                openlark_core::endpoints::application::APPLICATION_V6_ADMIN_APP_ADMINS,
                 "app_id",
                 app_id,
             ),
@@ -353,7 +353,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
-                open_lark_core::core::endpoints::application::APPLICATION_V6_ADMIN_APP_ADMIN_MANAGEMENT_PERMISSIONS,
+                openlark_core::endpoints::application::APPLICATION_V6_ADMIN_APP_ADMIN_MANAGEMENT_PERMISSIONS,
                 &[("app_id", app_id), ("user_id", user_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
@@ -380,7 +380,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
-                open_lark_core::core::endpoints::application::APPLICATION_V6_ADMIN_APP_ADMIN_VERIFY,
+                openlark_core::endpoints::application::APPLICATION_V6_ADMIN_APP_ADMIN_VERIFY,
                 &[("app_id", app_id), ("user_id", user_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],

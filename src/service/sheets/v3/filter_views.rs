@@ -7,7 +7,7 @@
 //! - 筛选状态和数据同步
 
 use crate::{
-    api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -117,27 +117,26 @@ impl FilterCondition {
 
         // 检查特定操作符的值要求
         match self.operator {
-            FilterOperator::Equal |
-            FilterOperator::NotEqual |
-            FilterOperator::Contains |
-            FilterOperator::DoesNotContain |
-            FilterOperator::BeginsWith |
-            FilterOperator::EndsWith => {
+            FilterOperator::Equal
+            | FilterOperator::NotEqual
+            | FilterOperator::Contains
+            | FilterOperator::DoesNotContain
+            | FilterOperator::BeginsWith
+            | FilterOperator::EndsWith => {
                 if self.values.as_ref().map_or(true, |v| v.is_empty()) {
                     return Err(format!("{:?} 操作符需要设置筛选值", self.operator));
                 }
             }
-            FilterOperator::Between |
-            FilterOperator::NotBetween => {
+            FilterOperator::Between | FilterOperator::NotBetween => {
                 let values_count = self.values.as_ref().map_or(0, |v| v.len());
                 if values_count != 2 {
                     return Err(format!("{:?} 操作符需要设置2个筛选值", self.operator));
                 }
             }
-            FilterOperator::GreaterThan |
-            FilterOperator::GreaterThanOrEqual |
-            FilterOperator::LessThan |
-            FilterOperator::LessThanOrEqual => {
+            FilterOperator::GreaterThan
+            | FilterOperator::GreaterThanOrEqual
+            | FilterOperator::LessThan
+            | FilterOperator::LessThanOrEqual => {
                 if self.values.as_ref().map_or(true, |v| v.is_empty()) {
                     return Err(format!("{:?} 操作符需要设置筛选值", self.operator));
                 }
@@ -145,13 +144,15 @@ impl FilterCondition {
                 if let Some(ref values) = self.values {
                     for value in values {
                         if value.trim().parse::<f64>().is_err() {
-                            return Err(format!("{:?} 操作符的筛选值必须是有效的数字: {}", self.operator, value));
+                            return Err(format!(
+                                "{:?} 操作符的筛选值必须是有效的数字: {}",
+                                self.operator, value
+                            ));
                         }
                     }
                 }
             }
-            FilterOperator::IsEmpty |
-            FilterOperator::IsNotEmpty => {
+            FilterOperator::IsEmpty | FilterOperator::IsNotEmpty => {
                 if self.values.is_some() && !self.values.as_ref().unwrap().is_empty() {
                     return Err(format!("{:?} 操作符不应设置筛选值", self.operator));
                 }
@@ -700,18 +701,16 @@ impl FilterViewsService {
             Method::POST,
             format!(
                 "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views",
-                &request.spreadsheet_token,
-                &request.sheet_id
-            )
+                &request.spreadsheet_token, &request.sheet_id
+            ),
         );
-        api_req.set_supported_access_token_types(vec![
-            AccessTokenType::Tenant,
-            AccessTokenType::User
-        ]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
         api_req.body = serde_json::to_vec(&request)?;
 
         // 发送请求
-        let api_resp = Transport::<CreateFilterViewResponse>::request(api_req, &self.config, option).await?;
+        let api_resp =
+            Transport::<CreateFilterViewResponse>::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
@@ -753,18 +752,15 @@ impl FilterViewsService {
             Method::GET,
             format!(
                 "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}",
-                &request.spreadsheet_token,
-                &request.sheet_id,
-                &request.filter_view_id
-            )
+                &request.spreadsheet_token, &request.sheet_id, &request.filter_view_id
+            ),
         );
-        api_req.set_supported_access_token_types(vec![
-            AccessTokenType::Tenant,
-            AccessTokenType::User
-        ]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         // 发送请求
-        let api_resp = Transport::<GetFilterViewResponse>::request(api_req, &self.config, option).await?;
+        let api_resp =
+            Transport::<GetFilterViewResponse>::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
@@ -811,19 +807,16 @@ impl FilterViewsService {
             Method::PATCH,
             format!(
                 "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}",
-                &request.spreadsheet_token,
-                &request.sheet_id,
-                &request.filter_view_id
-            )
+                &request.spreadsheet_token, &request.sheet_id, &request.filter_view_id
+            ),
         );
-        api_req.set_supported_access_token_types(vec![
-            AccessTokenType::Tenant,
-            AccessTokenType::User
-        ]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
         api_req.body = serde_json::to_vec(&request)?;
 
         // 发送请求
-        let api_resp = Transport::<UpdateFilterViewResponse>::request(api_req, &self.config, option).await?;
+        let api_resp =
+            Transport::<UpdateFilterViewResponse>::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
@@ -864,18 +857,15 @@ impl FilterViewsService {
             Method::DELETE,
             format!(
                 "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}",
-                &request.spreadsheet_token,
-                &request.sheet_id,
-                &request.filter_view_id
-            )
+                &request.spreadsheet_token, &request.sheet_id, &request.filter_view_id
+            ),
         );
-        api_req.set_supported_access_token_types(vec![
-            AccessTokenType::Tenant,
-            AccessTokenType::User
-        ]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         // 发送请求
-        let api_resp = Transport::<DeleteFilterViewResponse>::request(api_req, &self.config, option).await?;
+        let api_resp =
+            Transport::<DeleteFilterViewResponse>::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
@@ -920,11 +910,7 @@ pub struct CreateFilterViewBuilder {
 
 impl CreateFilterViewBuilder {
     /// 创建新的筛选视图构建器实例
-    pub fn new(
-        config: Config,
-        spreadsheet_token: String,
-        sheet_id: String,
-    ) -> Self {
+    pub fn new(config: Config, spreadsheet_token: String, sheet_id: String) -> Self {
         Self {
             config,
             spreadsheet_token,
@@ -959,11 +945,8 @@ impl CreateFilterViewBuilder {
 
     /// 执行创建请求
     pub async fn execute(self) -> SDKResult<BaseResponse<CreateFilterViewResponse>> {
-        let request = CreateFilterViewRequest::new(
-            self.spreadsheet_token,
-            self.sheet_id,
-            self.filter_view,
-        );
+        let request =
+            CreateFilterViewRequest::new(self.spreadsheet_token, self.sheet_id, self.filter_view);
 
         let service = FilterViewsService {
             config: self.config,
@@ -1080,15 +1063,17 @@ mod tests {
 
         assert_eq!(condition.column_index, 1);
         assert_eq!(condition.operator, FilterOperator::Equal);
-        assert_eq!(condition.values, Some(vec!["测试".to_string(), "示例".to_string()]));
+        assert_eq!(
+            condition.values,
+            Some(vec!["测试".to_string(), "示例".to_string()])
+        );
         assert_eq!(condition.ignore_case, Some(true));
     }
 
     #[test]
     fn test_filter_condition_validation() {
         // 测试正常条件
-        let valid_condition = FilterCondition::new(0, FilterOperator::Equal)
-            .value("测试值");
+        let valid_condition = FilterCondition::new(0, FilterOperator::Equal).value("测试值");
         assert!(valid_condition.validate().is_ok());
 
         // 测试 Between 操作符需要两个值
@@ -1096,25 +1081,22 @@ mod tests {
             .values(vec!["10".to_string(), "20".to_string()]);
         assert!(between_condition.validate().is_ok());
 
-        let invalid_between = FilterCondition::new(1, FilterOperator::Between)
-            .values(vec!["10".to_string()]);
+        let invalid_between =
+            FilterCondition::new(1, FilterOperator::Between).values(vec!["10".to_string()]);
         assert!(invalid_between.validate().is_err());
 
         // 测试数字操作符需要数字值
-        let number_condition = FilterCondition::new(2, FilterOperator::GreaterThan)
-            .value("100.5");
+        let number_condition = FilterCondition::new(2, FilterOperator::GreaterThan).value("100.5");
         assert!(number_condition.validate().is_ok());
 
-        let invalid_number = FilterCondition::new(2, FilterOperator::GreaterThan)
-            .value("abc");
+        let invalid_number = FilterCondition::new(2, FilterOperator::GreaterThan).value("abc");
         assert!(invalid_number.validate().is_err());
 
         // 测试 IsEmpty 不应该有值
         let empty_condition = FilterCondition::new(3, FilterOperator::IsEmpty);
         assert!(empty_condition.validate().is_ok());
 
-        let invalid_empty = FilterCondition::new(3, FilterOperator::IsEmpty)
-            .value("测试");
+        let invalid_empty = FilterCondition::new(3, FilterOperator::IsEmpty).value("测试");
         assert!(invalid_empty.validate().is_err());
 
         // 测试列索引不能为负数
@@ -1135,8 +1117,7 @@ mod tests {
     fn test_filter_view_creation() {
         let condition1 = FilterCondition::new(0, FilterOperator::Equal)
             .values(vec!["北京".to_string(), "上海".to_string()]);
-        let condition2 = FilterCondition::new(1, FilterOperator::Contains)
-            .value("技术");
+        let condition2 = FilterCondition::new(1, FilterOperator::Contains).value("技术");
 
         let filter_view = FilterView::new()
             .name("销售数据筛选")
@@ -1177,7 +1158,7 @@ mod tests {
         let mut too_many_conditions = FilterView::new().name("测试筛选");
         for i in 1..=51 {
             too_many_conditions = too_many_conditions.add_condition(
-                FilterCondition::new(0, FilterOperator::Equal).value(format!("值{}", i))
+                FilterCondition::new(0, FilterOperator::Equal).value(format!("值{}", i)),
             );
         }
         assert!(too_many_conditions.validate().is_err());
@@ -1220,7 +1201,8 @@ mod tests {
             .name("更新后的筛选")
             .add_condition(FilterCondition::new(1, FilterOperator::NotEmpty));
 
-        let request = UpdateFilterViewRequest::new("test_token", "sheet1", "filter_456", filter_view);
+        let request =
+            UpdateFilterViewRequest::new("test_token", "sheet1", "filter_456", filter_view);
         assert_eq!(request.spreadsheet_token, "test_token");
         assert_eq!(request.sheet_id, "sheet1");
         assert_eq!(request.filter_view_id, "filter_456");
@@ -1265,12 +1247,9 @@ mod tests {
             .show_in_toolbar(true)
             .add_condition(
                 FilterCondition::new(0, FilterOperator::Equal)
-                    .values(vec!["北京".to_string(), "上海".to_string()])
+                    .values(vec!["北京".to_string(), "上海".to_string()]),
             )
-            .add_condition(
-                FilterCondition::new(1, FilterOperator::Contains)
-                    .value("技术")
-            );
+            .add_condition(FilterCondition::new(1, FilterOperator::Contains).value("技术"));
 
         assert_eq!(builder.spreadsheet_token, "token");
         assert_eq!(builder.sheet_id, "sheet1");
@@ -1283,13 +1262,15 @@ mod tests {
     fn test_update_filter_view_builder() {
         let config = Config::default();
         let builder = FilterViewsService::new(config.clone())
-            .update_filter_view_builder("token".to_string(), "sheet1".to_string(), "filter_123".to_string())
+            .update_filter_view_builder(
+                "token".to_string(),
+                "sheet1".to_string(),
+                "filter_123".to_string(),
+            )
             .name("更新后的筛选")
             .clear_conditions()
             .show_in_toolbar(false)
-            .add_condition(
-                FilterCondition::new(2, FilterOperator::NotEmpty)
-            );
+            .add_condition(FilterCondition::new(2, FilterOperator::NotEmpty));
 
         assert_eq!(builder.spreadsheet_token, "token");
         assert_eq!(builder.sheet_id, "sheet1");
@@ -1326,10 +1307,7 @@ mod tests {
             CreateFilterViewResponse::data_format(),
             ResponseFormat::Data
         );
-        assert_eq!(
-            GetFilterViewResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(GetFilterViewResponse::data_format(), ResponseFormat::Data);
         assert_eq!(
             UpdateFilterViewResponse::data_format(),
             ResponseFormat::Data
@@ -1368,19 +1346,16 @@ mod tests {
             .add_condition(
                 FilterCondition::new(0, FilterOperator::Equal)
                     .values(vec!["产品A", "产品B", "产品C", "产品D"])
-                    .ignore_case(true)
+                    .ignore_case(true),
             )
             .add_condition(
                 FilterCondition::new(1, FilterOperator::Between)
-                    .values(vec!["100".to_string(), "1000".to_string()])
+                    .values(vec!["100".to_string(), "1000".to_string()]),
             )
-            .add_condition(
-                FilterCondition::new(2, FilterOperator::NotEqual)
-                    .value("已删除")
-            )
+            .add_condition(FilterCondition::new(2, FilterOperator::NotEqual).value("已删除"))
             .add_condition(
                 FilterCondition::new(3, FilterOperator::Contains)
-                    .values(vec!["技术", "研发", "产品"])
+                    .values(vec!["技术", "研发", "产品"]),
             );
 
         assert!(complex_filter.validate().is_ok());
@@ -1413,9 +1388,21 @@ mod tests {
         let fourth_condition = &conditions[3];
         assert_eq!(fourth_condition.operator, FilterOperator::Contains);
         assert_eq!(fourth_condition.values.as_ref().unwrap().len(), 3);
-        assert!(fourth_condition.values.as_ref().unwrap().contains(&"技术".to_string()));
-        assert!(fourth_condition.values.as_ref().unwrap().contains(&"研发".to_string()));
-        assert!(fourth_condition.values.as_ref().unwrap().contains(&"产品".to_string()));
+        assert!(fourth_condition
+            .values
+            .as_ref()
+            .unwrap()
+            .contains(&"技术".to_string()));
+        assert!(fourth_condition
+            .values
+            .as_ref()
+            .unwrap()
+            .contains(&"研发".to_string()));
+        assert!(fourth_condition
+            .values
+            .as_ref()
+            .unwrap()
+            .contains(&"产品".to_string()));
     }
 
     #[test]
@@ -1425,8 +1412,7 @@ mod tests {
         assert!(min_column.validate().is_ok());
 
         // 测试边界值 - 最大单个值
-        let single_value = FilterCondition::new(10, FilterOperator::Equal)
-            .value("单个值");
+        let single_value = FilterCondition::new(10, FilterOperator::Equal).value("单个值");
         assert!(single_value.validate().is_ok());
 
         // 测试边界值 - 10个值的限制

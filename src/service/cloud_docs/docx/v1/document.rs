@@ -1189,7 +1189,7 @@ impl DocumentService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::trait_system::Service;
+    use openlark_core::trait_system::Service;
 
     #[test]
     fn test_document_service_creation() {

@@ -1,7 +1,7 @@
-use open_lark_core::error::LarkAPIError;
+use openlark_core::error::LarkAPIError;
 
 // Re-export ApiRequest from open-lark-core
-pub use open_lark_core::api_req::ApiRequest;
+pub use openlark_core::api_req::ApiRequest;
 pub mod api_resp;
 pub mod app_ticket_manager;
 pub mod cache;

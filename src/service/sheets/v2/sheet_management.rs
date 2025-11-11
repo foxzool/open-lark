@@ -7,7 +7,7 @@
 //! - 工作表索引调整
 
 use crate::{
-    api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -133,9 +133,7 @@ pub struct BatchUpdateSheetsRequest {
 impl BatchUpdateSheetsRequest {
     /// 创建新的批量更新请求
     pub fn new() -> Self {
-        Self {
-            requests: vec![],
-        }
+        Self { requests: vec![] }
     }
 
     /// 添加更新请求
@@ -280,16 +278,18 @@ impl SheetManagementService {
         // 构建API请求
         let mut api_req = ApiRequest::with_method_and_path(
             Method::POST,
-            format!("/open-apis/sheets/v2/spreadsheets/{}/sheets_batch_update", spreadsheet_token)
+            format!(
+                "/open-apis/sheets/v2/spreadsheets/{}/sheets_batch_update",
+                spreadsheet_token
+            ),
         );
-        api_req.set_supported_access_token_types(vec![
-            AccessTokenType::Tenant,
-            AccessTokenType::User
-        ]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
         api_req.body = serde_json::to_vec(request)?;
 
         // 发送请求
-        let api_resp = Transport::<UpdateSheetsResponse>::request(api_req, &self.config, None).await?;
+        let api_resp =
+            Transport::<UpdateSheetsResponse>::request(api_req, &self.config, None).await?;
 
         Ok(api_resp)
     }
@@ -358,16 +358,20 @@ impl UpdateSheetBuilder {
     }
 
     /// 执行更新请求
-    pub async fn execute(self, spreadsheet_token: &str) -> SDKResult<BaseResponse<UpdateSheetsResponse>> {
+    pub async fn execute(
+        self,
+        spreadsheet_token: &str,
+    ) -> SDKResult<BaseResponse<UpdateSheetsResponse>> {
         self.request.validate()?;
 
-        let batch_request = BatchUpdateSheetsRequest::new()
-            .add_request(self.request);
+        let batch_request = BatchUpdateSheetsRequest::new().add_request(self.request);
 
         let service = SheetManagementService {
             config: self.config,
         };
-        service.batch_update_sheets(spreadsheet_token, &batch_request).await
+        service
+            .batch_update_sheets(spreadsheet_token, &batch_request)
+            .await
     }
 }
 
@@ -407,7 +411,9 @@ impl BatchUpdateSheetsBuilder {
         let service = SheetManagementService {
             config: self.config,
         };
-        service.batch_update_sheets(&self.spreadsheet_token, &self.batch_request).await
+        service
+            .batch_update_sheets(&self.spreadsheet_token, &self.batch_request)
+            .await
     }
 }
 
@@ -500,8 +506,14 @@ mod tests {
             .add_request(request2);
 
         assert_eq!(batch_request.requests.len(), 2);
-        assert_eq!(batch_request.requests[0].sheet_id, Some("sheet1".to_string()));
-        assert_eq!(batch_request.requests[1].sheet_id, Some("sheet2".to_string()));
+        assert_eq!(
+            batch_request.requests[0].sheet_id,
+            Some("sheet1".to_string())
+        );
+        assert_eq!(
+            batch_request.requests[1].sheet_id,
+            Some("sheet2".to_string())
+        );
     }
 
     #[test]
@@ -523,7 +535,8 @@ mod tests {
         // 测试过多请求
         let mut too_many_batch = BatchUpdateSheetsRequest::new();
         for i in 0..51 {
-            too_many_batch = too_many_batch.add_request(UpdateSheetRequest::new().title(&format!("工作表{}", i)));
+            too_many_batch = too_many_batch
+                .add_request(UpdateSheetRequest::new().title(&format!("工作表{}", i)));
         }
         assert!(too_many_batch.validate().is_err());
 
@@ -567,10 +580,7 @@ mod tests {
 
     #[test]
     fn test_api_response_trait_implementation() {
-        assert_eq!(
-            UpdateSheetsResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(UpdateSheetsResponse::data_format(), ResponseFormat::Data);
     }
 
     #[test]
@@ -612,18 +622,23 @@ mod tests {
         let service = SheetManagementService::new(config);
 
         // 测试单个更新构建器
-        let update_builder = service.update_sheet_builder()
+        let update_builder = service
+            .update_sheet_builder()
             .sheet_id("test_sheet")
             .title("测试标题")
             .index(0);
 
-        assert_eq!(update_builder.request.sheet_id, Some("test_sheet".to_string()));
+        assert_eq!(
+            update_builder.request.sheet_id,
+            Some("test_sheet".to_string())
+        );
         assert_eq!(update_builder.request.title, Some("测试标题".to_string()));
         assert_eq!(update_builder.request.index, Some(0));
         assert!(!format!("{:?}", update_builder).is_empty());
 
         // 测试批量更新构建器
-        let batch_builder = service.batch_update_builder("test_token")
+        let batch_builder = service
+            .batch_update_builder("test_token")
             .add_request(UpdateSheetRequest::new().title("批量更新1"))
             .add_request(UpdateSheetRequest::new().title("批量更新2"));
 

@@ -1,6 +1,6 @@
 pub mod info;
 
-use open_lark_core::core::core::config::Config;
+use openlark_core::core::config::Config;
 
 /// Bot API v3版本服务
 pub struct V3 {

@@ -5,7 +5,7 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use open_lark_core::SDKResult;use reqwest::Method;
+use SDKResult;use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use crate::impl_full_service;

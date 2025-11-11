@@ -7,8 +7,8 @@
 //! - 结果统计分析
 //! - 绩效等级管理
 
-use open_lark_core::{config::Config, SDKResult};
 use crate::service::performance::models::PageResponse;
+use openlark_core::{config::Config, SDKResult};
 
 /// 绩效结果管理服务
 #[derive(Debug, Clone)]

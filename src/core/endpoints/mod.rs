@@ -32,8 +32,7 @@ mod endpoints_lib;
 
 // 重新导出新的分类结构
 pub use endpoints_lib::{
-    Endpoints, Messaging, Content, HrManagement, Collaboration,
-    AiServices, Admin, Integration
+    Admin, AiServices, Collaboration, Content, Endpoints, HrManagement, Integration, Messaging,
 };
 
 // 重新导出分类模块，提供更细粒度的访问

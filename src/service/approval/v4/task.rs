@@ -15,9 +15,9 @@
 //! - 查询审批任务
 
 use super::models::*;
-use open_lark_core::config::Config;
-use open_lark_core::SDKResult;
+use config::Config;
 use serde::{Deserialize, Serialize};
+use SDKResult;
 
 /// 审批任务服务
 #[derive(Debug, Clone)]

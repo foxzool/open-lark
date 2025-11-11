@@ -5,7 +5,7 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use open_lark_core::{config::Config, req_option::RequestOption, SDKResult};
+use openlark_core::{config::Config, req_option::RequestOption, SDKResult};
 
 pub use batch_query::{
     batch_query_comments, BatchQueryCommentsRequest, BatchQueryCommentsResponse,
@@ -55,7 +55,7 @@ impl CommentsService {
     ///
     /// # 示例
     /// ```
-    /// use open_lark_core::config::Config;
+    /// use config::Config;
     /// use open_lark::service::cloud_docs::comments::CommentsService;
     ///
     /// let config = Config::new("app_id", "app_secret");

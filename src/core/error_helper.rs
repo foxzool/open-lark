@@ -1,5 +1,3 @@
-use std::time::Duration;
-
 use crate::{
     api_resp::BaseResponse,
     error::LarkAPIError,

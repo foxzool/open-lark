@@ -2,7 +2,7 @@
 //!
 //! 提供不依赖外部网络的性能测试功能
 
-use open_lark_core::performance::{OptimizedHttpConfig, PerformanceMetrics};
+use performance::{OptimizedHttpConfig, PerformanceMetrics};
 use std::time::Instant;
 use tracing::info;
 

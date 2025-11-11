@@ -120,7 +120,7 @@ impl ApiResponseTrait for DeviceListResponse {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::core::{config::Config, constants::AppType};
+    use openlark_core::{config::Config, constants::AppType};
 
     #[test]
     fn test_device_service_creation() {

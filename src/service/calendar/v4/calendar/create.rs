@@ -5,10 +5,10 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use open_lark_core::SDKResult;use reqwest::Method;
+use SDKResult;use reqwest::Method;
 use serde::Deserialize;
 use serde_json::json;
-use open_lark_core::api_req::ApiRequest;
+use openlark_core::api_req::ApiRequest;
 use crate::{,
 core::{,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},

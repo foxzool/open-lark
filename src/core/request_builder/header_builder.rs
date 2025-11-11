@@ -57,7 +57,7 @@ impl HeaderBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::constants::AppType;
+    use constants::AppType;
     use reqwest::Client;
     use std::collections::HashMap;
 

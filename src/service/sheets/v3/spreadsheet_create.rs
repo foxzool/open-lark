@@ -7,15 +7,15 @@
 //! - 指定初始工作表配置
 //! - 自定义电子表格属性
 
-use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
+use std::collections::HashMap;
 
 use crate::request::Transport;
-use open_lark_core::SDKResult;
-use open_lark_core::config::Config;
-use open_lark_core::trait_system::Service;
-use open_lark_core::error::LarkAPIError;
+use config::Config;
+use openlark_core::error::LarkAPIError;
+use openlark_core::trait_system::Service;
+use SDKResult;
 
 /// 工作表初始配置
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -150,34 +150,41 @@ impl CreateSpreadsheetRequest {
 
         // 设置工作表
         if let Some(sheets) = &self.sheets {
-            let sheets_value: Value = serde_json::to_value(sheets)
-                .map_err(|e| LarkAPIError::InvalidParameter(format!("工作表配置序列化失败: {}", e)))?;
+            let sheets_value: Value = serde_json::to_value(sheets).map_err(|e| {
+                LarkAPIError::InvalidParameter(format!("工作表配置序列化失败: {}", e))
+            })?;
             map.insert("sheets".to_string(), sheets_value);
         }
 
         // 设置时区
         if let Some(time_zone) = &self.time_zone {
-            let tz_value: Value = serde_json::to_value(time_zone)
-                .map_err(|e| LarkAPIError::InvalidParameter(format!("时区配置序列化失败: {}", e)))?;
+            let tz_value: Value = serde_json::to_value(time_zone).map_err(|e| {
+                LarkAPIError::InvalidParameter(format!("时区配置序列化失败: {}", e))
+            })?;
             map.insert("time_zone".to_string(), tz_value);
         }
 
         // 设置语言
         if let Some(locale) = &self.locale {
-            let locale_value: Value = serde_json::to_value(locale)
-                .map_err(|e| LarkAPIError::InvalidParameter(format!("语言配置序列化失败: {}", e)))?;
+            let locale_value: Value = serde_json::to_value(locale).map_err(|e| {
+                LarkAPIError::InvalidParameter(format!("语言配置序列化失败: {}", e))
+            })?;
             map.insert("locale".to_string(), locale_value);
         }
 
         // 设置文件夹路径
         if let Some(folder_path) = &self.folder_path {
-            map.insert("folder_path".to_string(), Value::String(folder_path.clone()));
+            map.insert(
+                "folder_path".to_string(),
+                Value::String(folder_path.clone()),
+            );
         }
 
         // 设置自定义属性
         if let Some(properties) = &self.properties {
-            let props_value: Value = serde_json::to_value(properties)
-                .map_err(|e| LarkAPIError::InvalidParameter(format!("自定义属性序列化失败: {}", e)))?;
+            let props_value: Value = serde_json::to_value(properties).map_err(|e| {
+                LarkAPIError::InvalidParameter(format!("自定义属性序列化失败: {}", e))
+            })?;
             map.insert("properties".to_string(), props_value);
         }
 
@@ -188,34 +195,51 @@ impl CreateSpreadsheetRequest {
     pub fn validate(&self) -> SDKResult<()> {
         // 验证标题
         if self.title.trim().is_empty() {
-            return Err(LarkAPIError::InvalidParameter("电子表格标题不能为空".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "电子表格标题不能为空".to_string(),
+            ));
         }
 
         if self.title.len() > 200 {
-            return Err(LarkAPIError::InvalidParameter("电子表格标题长度不能超过200个字符".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "电子表格标题长度不能超过200个字符".to_string(),
+            ));
         }
 
         // 验证工作表配置
         if let Some(sheets) = &self.sheets {
             if sheets.is_empty() {
-                return Err(LarkAPIError::InvalidParameter("工作表列表不能为空".to_string()));
+                return Err(LarkAPIError::InvalidParameter(
+                    "工作表列表不能为空".to_string(),
+                ));
             }
 
             if sheets.len() > 100 {
-                return Err(LarkAPIError::InvalidParameter("工作表数量不能超过100个".to_string()));
+                return Err(LarkAPIError::InvalidParameter(
+                    "工作表数量不能超过100个".to_string(),
+                ));
             }
 
             for (index, sheet) in sheets.iter().enumerate() {
                 if sheet.title.trim().is_empty() {
-                    return Err(LarkAPIError::InvalidParameter(format!("工作表{}标题不能为空", index + 1)));
+                    return Err(LarkAPIError::InvalidParameter(format!(
+                        "工作表{}标题不能为空",
+                        index + 1
+                    )));
                 }
 
                 if sheet.title.len() > 100 {
-                    return Err(LarkAPIError::InvalidParameter(format!("工作表{}标题长度不能超过100个字符", index + 1)));
+                    return Err(LarkAPIError::InvalidParameter(format!(
+                        "工作表{}标题长度不能超过100个字符",
+                        index + 1
+                    )));
                 }
 
                 if sheet.index < 0 || sheet.index >= 100 {
-                    return Err(LarkAPIError::InvalidParameter(format!("工作表{}索引必须在0-99之间", index + 1)));
+                    return Err(LarkAPIError::InvalidParameter(format!(
+                        "工作表{}索引必须在0-99之间",
+                        index + 1
+                    )));
                 }
             }
         }
@@ -224,14 +248,18 @@ impl CreateSpreadsheetRequest {
         if let Some(time_zone) = &self.time_zone {
             // 简单的时区格式验证
             if !time_zone.time_zone.contains('/') && !time_zone.time_zone.starts_with("UTC") {
-                return Err(LarkAPIError::InvalidParameter("时区格式不正确，请使用如'Asia/Shanghai'或'UTC+8'格式".to_string()));
+                return Err(LarkAPIError::InvalidParameter(
+                    "时区格式不正确，请使用如'Asia/Shanghai'或'UTC+8'格式".to_string(),
+                ));
             }
         }
 
         // 验证语言格式
         if let Some(locale) = &self.locale {
             if !locale.locale.contains('_') && locale.locale.len() != 2 {
-                return Err(LarkAPIError::InvalidParameter("语言格式不正确，请使用如'zh_CN'或'en'格式".to_string()));
+                return Err(LarkAPIError::InvalidParameter(
+                    "语言格式不正确，请使用如'zh_CN'或'en'格式".to_string(),
+                ));
             }
         }
 
@@ -338,7 +366,10 @@ impl SpreadsheetCreateService {
     ///     .time_zone("Asia/Shanghai")
     ///     .locale("zh_CN");
     /// ```
-    pub async fn create(&self, request: CreateSpreadsheetRequest) -> SDKResult<CreateSpreadsheetResponse> {
+    pub async fn create(
+        &self,
+        request: CreateSpreadsheetRequest,
+    ) -> SDKResult<CreateSpreadsheetResponse> {
         // 验证请求参数
         request.validate()?;
 
@@ -348,7 +379,8 @@ impl SpreadsheetCreateService {
         // 发送HTTP请求
         let url = format!("{}/open-apis/sheets/v3/spreadsheets", self.config.base_url);
 
-        let response = self.config
+        let response = self
+            .config
             .transport
             .post(&url)
             .json(&body)
@@ -358,16 +390,24 @@ impl SpreadsheetCreateService {
 
         // 处理响应
         if response.status().is_success() {
-            let base_response: BaseResponse<CreateSpreadsheetResponseBody> = response.json().await
+            let base_response: BaseResponse<CreateSpreadsheetResponseBody> = response
+                .json()
+                .await
                 .map_err(|e| LarkAPIError::JsonParseError(format!("响应解析失败: {}", e)))?;
 
             if base_response.code == 0 {
                 Ok(base_response.data.data)
             } else {
-                Err(LarkAPIError::APIError(base_response.code, base_response.msg))
+                Err(LarkAPIError::APIError(
+                    base_response.code,
+                    base_response.msg,
+                ))
             }
         } else {
-            Err(LarkAPIError::HTTPError(response.status().as_u16(), "创建电子表格失败".to_string()))
+            Err(LarkAPIError::HTTPError(
+                response.status().as_u16(),
+                "创建电子表格失败".to_string(),
+            ))
         }
     }
 
@@ -436,7 +476,12 @@ impl CreateSpreadsheetBuilder {
     }
 
     /// 添加带颜色的的工作表
-    pub fn add_colored_sheet(mut self, title: impl Into<String>, index: i32, color: impl Into<String>) -> Self {
+    pub fn add_colored_sheet(
+        mut self,
+        title: impl Into<String>,
+        index: i32,
+        color: impl Into<String>,
+    ) -> Self {
         let sheet = SheetProperty {
             title: title.into(),
             index,
@@ -475,7 +520,9 @@ impl CreateSpreadsheetBuilder {
 
     /// 执行创建操作
     pub async fn execute(self) -> SDKResult<CreateSpreadsheetResponse> {
-        let title = self.title.ok_or_else(|| LarkAPIError::InvalidParameter("电子表格标题不能为空".to_string()))?;
+        let title = self
+            .title
+            .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格标题不能为空".to_string()))?;
 
         let mut request = CreateSpreadsheetRequest::new(title);
 
@@ -534,8 +581,7 @@ mod tests {
             grid_properties: None,
         };
 
-        let request = CreateSpreadsheetRequest::new("测试")
-            .add_sheet(sheet);
+        let request = CreateSpreadsheetRequest::new("测试").add_sheet(sheet);
         assert!(request.validate().is_err());
 
         // 测试工作表标题过长
@@ -549,8 +595,7 @@ mod tests {
             grid_properties: None,
         };
 
-        let request = CreateSpreadsheetRequest::new("测试")
-            .add_sheet(sheet);
+        let request = CreateSpreadsheetRequest::new("测试").add_sheet(sheet);
         assert!(request.validate().is_err());
 
         // 测试工作表索引超出范围
@@ -563,44 +608,37 @@ mod tests {
             grid_properties: None,
         };
 
-        let request = CreateSpreadsheetRequest::new("测试")
-            .add_sheet(sheet);
+        let request = CreateSpreadsheetRequest::new("测试").add_sheet(sheet);
         assert!(request.validate().is_err());
     }
 
     #[test]
     fn test_time_zone_validation() {
         // 测试无效时区
-        let request = CreateSpreadsheetRequest::new("测试")
-            .time_zone("invalid_timezone");
+        let request = CreateSpreadsheetRequest::new("测试").time_zone("invalid_timezone");
         assert!(request.validate().is_err());
 
         // 测试有效时区
-        let request = CreateSpreadsheetRequest::new("测试")
-            .time_zone("Asia/Shanghai");
+        let request = CreateSpreadsheetRequest::new("测试").time_zone("Asia/Shanghai");
         assert!(request.validate().is_ok());
 
         // 测试UTC时区
-        let request = CreateSpreadsheetRequest::new("测试")
-            .time_zone("UTC+8");
+        let request = CreateSpreadsheetRequest::new("测试").time_zone("UTC+8");
         assert!(request.validate().is_ok());
     }
 
     #[test]
     fn test_locale_validation() {
         // 测试无效语言
-        let request = CreateSpreadsheetRequest::new("测试")
-            .locale("invalid");
+        let request = CreateSpreadsheetRequest::new("测试").locale("invalid");
         assert!(request.validate().is_err());
 
         // 测试有效语言
-        let request = CreateSpreadsheetRequest::new("测试")
-            .locale("zh_CN");
+        let request = CreateSpreadsheetRequest::new("测试").locale("zh_CN");
         assert!(request.validate().is_ok());
 
         // 测试简单语言代码
-        let request = CreateSpreadsheetRequest::new("测试")
-            .locale("en");
+        let request = CreateSpreadsheetRequest::new("测试").locale("en");
         assert!(request.validate().is_ok());
     }
 
@@ -622,7 +660,8 @@ mod tests {
         let config = Config::default();
         let service = SpreadsheetCreateService::new(config);
 
-        let builder = service.create_spreadsheet_builder()
+        let builder = service
+            .create_spreadsheet_builder()
             .title("测试电子表格")
             .add_sheet("工作表1", 0)
             .add_colored_sheet("工作表2", 1, "#FF0000")
@@ -675,8 +714,14 @@ mod tests {
         };
 
         let mut properties = HashMap::new();
-        properties.insert("category".to_string(), Value::String("销售报表".to_string()));
-        properties.insert("department".to_string(), Value::String("销售部".to_string()));
+        properties.insert(
+            "category".to_string(),
+            Value::String("销售报表".to_string()),
+        );
+        properties.insert(
+            "department".to_string(),
+            Value::String("销售部".to_string()),
+        );
 
         let request = CreateSpreadsheetRequest::new("2024年销售报表")
             .sheets(vec![sheet1, sheet2])

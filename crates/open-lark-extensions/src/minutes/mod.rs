@@ -94,7 +94,7 @@
 //! - 📈 数据洞察和分析
 //! - 🔄 持续学习和优化
 
-use open_lark_core::core::{config::Config, trait_system::Service};
+use openlark_core::{config::Config, trait_system::Service};
 
 /// 数据模型定义
 pub mod models;

@@ -14,7 +14,7 @@ use crate::{
         PageResponse, PaymentActivity, PaymentActivityArchiveRequest, PaymentActivityListRequest,
     },
 };
-use open_lark_core::api_req::ApiRequest;
+use openlark_core::api_req::ApiRequest;
 use reqwest::Method;
 
 /// 发薪活动服务

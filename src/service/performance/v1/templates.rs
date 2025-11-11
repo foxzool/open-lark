@@ -9,8 +9,8 @@
 //! - 模板配置管理
 //! - 模板应用功能
 
-use open_lark_core::{config::Config, SDKResult};
 use crate::service::performance::models::PageResponse;
+use openlark_core::{config::Config, SDKResult};
 use serde::{Deserialize, Serialize};
 
 /// 评估模板管理服务

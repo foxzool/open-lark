@@ -19,17 +19,18 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
 
-use crate::{
-    api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    ApiRequest, SDKResult, req_option::RequestOption,
-    standard_response::StandardResponse,
-    error::LarkAPIError,
-};
 use crate::endpoints_original::Endpoints;
 use crate::impl_executable_builder_owned;
+use crate::{
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    error::LarkAPIError,
+    http::Transport,
+    req_option::RequestOption,
+    standard_response::StandardResponse,
+    ApiRequest, SDKResult,
+};
 
 /// 单个值范围响应
 ///
@@ -94,10 +95,7 @@ impl ReadMultipleRangesRequest {
     ///     "Sheet1!A1:B2,Sheet2!C1:D1"
     /// );
     /// ```
-    pub fn new<T: Into<String>, U: Into<String>>(
-        spreadsheet_token: T,
-        ranges: U,
-    ) -> Self {
+    pub fn new<T: Into<String>, U: Into<String>>(spreadsheet_token: T, ranges: U) -> Self {
         Self {
             spreadsheet_token: spreadsheet_token.into(),
             ranges: ranges.into(),
@@ -193,16 +191,20 @@ impl ReadMultipleRangesRequest {
             // 基本范围格式验证
             if !range.contains('!') {
                 return Err(LarkAPIError::illegal_param(format!(
-                    "无效的范围格式: {}，缺少工作表标识符", range
+                    "无效的范围格式: {}，缺少工作表标识符",
+                    range
                 )));
             }
         }
 
         // 验证值渲染选项
         if let Some(option) = &self.value_render_option {
-            if !["ToString", "FormattedValue", "Formula", "UnformattedValue"].contains(&option.as_str()) {
+            if !["ToString", "FormattedValue", "Formula", "UnformattedValue"]
+                .contains(&option.as_str())
+            {
                 return Err(LarkAPIError::illegal_param(format!(
-                    "无效的值渲染选项: {}", option
+                    "无效的值渲染选项: {}",
+                    option
                 )));
             }
         }
@@ -211,7 +213,8 @@ impl ReadMultipleRangesRequest {
         if let Some(option) = &self.date_time_render_option {
             if option != "FormattedString" {
                 return Err(LarkAPIError::illegal_param(format!(
-                    "无效的日期时间渲染选项: {}", option
+                    "无效的日期时间渲染选项: {}",
+                    option
                 )));
             }
         }
@@ -220,7 +223,8 @@ impl ReadMultipleRangesRequest {
         if let Some(user_id_type) = &self.user_id_type {
             if !["open_id", "user_id", "union_id", "lark_id"].contains(&user_id_type.as_str()) {
                 return Err(LarkAPIError::illegal_param(format!(
-                    "无效的用户ID类型: {}", user_id_type
+                    "无效的用户ID类型: {}",
+                    user_id_type
                 )));
             }
         }
@@ -347,30 +351,36 @@ impl BatchReadService {
         let mut api_req = ApiRequest::with_method(Method::GET);
         api_req.set_api_path(
             Endpoints::SHEETS_V2_SPREADSHEET_VALUES_BATCH_GET
-                .replace("{spreadsheet_token}", &request.spreadsheet_token)
+                .replace("{spreadsheet_token}", &request.spreadsheet_token),
         );
-        api_req.set_supported_access_token_types(vec![
-            AccessTokenType::Tenant,
-            AccessTokenType::User
-        ]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         // 添加查询参数
-        api_req.query_params.insert("ranges", request.ranges.clone());
+        api_req
+            .query_params
+            .insert("ranges", request.ranges.clone());
 
         if let Some(value_render_option) = &request.value_render_option {
-            api_req.query_params.insert("valueRenderOption", value_render_option.clone());
+            api_req
+                .query_params
+                .insert("valueRenderOption", value_render_option.clone());
         }
 
         if let Some(date_time_render_option) = &request.date_time_render_option {
-            api_req.query_params.insert("dateTimeRenderOption", date_time_render_option.clone());
+            api_req
+                .query_params
+                .insert("dateTimeRenderOption", date_time_render_option.clone());
         }
 
         if let Some(user_id_type) = &request.user_id_type {
-            api_req.query_params.insert("user_id_type", user_id_type.clone());
+            api_req
+                .query_params
+                .insert("user_id_type", user_id_type.clone());
         }
 
         // 暂时返回模拟数据，直到Transport问题解决
-        use open_lark_core::api_resp::RawResponse;
+        use api_resp::RawResponse;
         Ok(BaseResponse {
             raw_response: RawResponse {
                 code: 0,
@@ -544,10 +554,7 @@ mod tests {
 
     #[test]
     fn test_read_multiple_ranges_request_creation() {
-        let request = ReadMultipleRangesRequest::new(
-            "token123",
-            "Sheet1!A1:B2,Sheet2!C1:D1"
-        );
+        let request = ReadMultipleRangesRequest::new("token123", "Sheet1!A1:B2,Sheet2!C1:D1");
 
         assert_eq!(request.spreadsheet_token, "token123");
         assert_eq!(request.ranges, "Sheet1!A1:B2,Sheet2!C1:D1");
@@ -569,16 +576,16 @@ mod tests {
         let request = ReadMultipleRangesRequest::new("token", "Sheet1!A1:B2")
             .value_render_option("FormattedValue");
 
-        assert_eq!(request.value_render_option, Some("FormattedValue".to_string()));
+        assert_eq!(
+            request.value_render_option,
+            Some("FormattedValue".to_string())
+        );
     }
 
     #[test]
     fn test_request_validation() {
         // 测试有效请求
-        let valid_request = ReadMultipleRangesRequest::new(
-            "token123",
-            "Sheet1!A1:B2,Sheet2!C1:D1"
-        );
+        let valid_request = ReadMultipleRangesRequest::new("token123", "Sheet1!A1:B2,Sheet2!C1:D1");
         assert!(valid_request.validate().is_ok());
 
         // 测试无效请求（空令牌）
@@ -596,10 +603,8 @@ mod tests {
 
     #[test]
     fn test_get_ranges() {
-        let request = ReadMultipleRangesRequest::new(
-            "token",
-            "Sheet1!A1:B2,Sheet2!C1:D1,Sheet3!E1:F5"
-        );
+        let request =
+            ReadMultipleRangesRequest::new("token", "Sheet1!A1:B2,Sheet2!C1:D1,Sheet3!E1:F5");
 
         let ranges = request.get_ranges();
         assert_eq!(ranges.len(), 3);
@@ -620,7 +625,10 @@ mod tests {
 
         assert_eq!(request.spreadsheet_token, "token123");
         assert_eq!(request.ranges, "Sheet1!A1:B2,Sheet2!C1:D1");
-        assert_eq!(request.value_render_option, Some("FormattedValue".to_string()));
+        assert_eq!(
+            request.value_render_option,
+            Some("FormattedValue".to_string())
+        );
         assert_eq!(request.user_id_type, Some("open_id".to_string()));
     }
 
@@ -634,7 +642,10 @@ mod tests {
 
         assert_eq!(request.spreadsheet_token, "token123");
         assert_eq!(request.range_count(), 3);
-        assert_eq!(request.date_time_render_option, Some("FormattedString".to_string()));
+        assert_eq!(
+            request.date_time_render_option,
+            Some("FormattedString".to_string())
+        );
     }
 
     #[test]
@@ -663,7 +674,10 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(ReadMultipleRangesResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            ReadMultipleRangesResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 
     #[test]
@@ -674,7 +688,7 @@ mod tests {
             "Sheet with spaces!C1:D50",
             "Sheet1!$A$1:$B$2",
             "SingleCell!A1",
-            "LargeRange!A1:XFD1048576"
+            "LargeRange!A1:XFD1048576",
         ];
 
         let request = ReadMultipleRangesRequest::builder()
@@ -718,14 +732,14 @@ mod tests {
         // 测试有效的用户ID类型
         let valid_types = ["open_id", "user_id", "union_id", "lark_id"];
         for user_id_type in &valid_types {
-            let request = ReadMultipleRangesRequest::new("token", "Sheet1!A1:B2")
-                .user_id_type(*user_id_type);
+            let request =
+                ReadMultipleRangesRequest::new("token", "Sheet1!A1:B2").user_id_type(*user_id_type);
             assert!(request.validate().is_ok());
         }
 
         // 测试无效的用户ID类型
-        let invalid_request = ReadMultipleRangesRequest::new("token", "Sheet1!A1:B2")
-            .user_id_type("invalid_type");
+        let invalid_request =
+            ReadMultipleRangesRequest::new("token", "Sheet1!A1:B2").user_id_type("invalid_type");
         assert!(invalid_request.validate().is_err());
     }
 
@@ -734,7 +748,7 @@ mod tests {
         let request = ReadMultipleRangesRequest::builder()
             .spreadsheet_token("token")
             .range("Sheet1!A1:B2")
-            .range("")  // 空范围应该被过滤
+            .range("") // 空范围应该被过滤
             .range("Sheet2!C1:D1")
             .build();
 

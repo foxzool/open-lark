@@ -12,7 +12,7 @@
 //! - 分组管理
 //! - 地址簿同步
 
-use open_lark_core::config::Config;
+use config::Config;
 
 /// 地址簿服务
 #[derive(Debug, Clone)]

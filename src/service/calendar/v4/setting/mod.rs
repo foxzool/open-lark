@@ -5,7 +5,7 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use open_lark_core::config::Config;
+use config::Config;
 pub mod generate_caldav_conf;
 /// 设置服务
 pub struct SettingService {

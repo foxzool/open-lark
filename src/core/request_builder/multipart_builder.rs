@@ -1,4 +1,4 @@
-use open_lark_core::error::LarkAPIError;
+use openlark_core::error::LarkAPIError;
 use reqwest::{multipart, RequestBuilder};
 use serde_json::Value;
 
@@ -84,7 +84,7 @@ impl MultipartBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::error::LarkAPIError;
+    use openlark_core::error::LarkAPIError;
     use reqwest::Client;
     use serde_json::json;
 

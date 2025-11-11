@@ -284,7 +284,7 @@ impl Service for TicketService {
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-    use open_lark_core::core::config::Config;
+    use openlark_core::config::Config;
     use serde_json;
 
     fn create_test_config() -> Config {

@@ -12,7 +12,7 @@ use crate::{
     },
     service::payroll::models::{PageResponse, Paygroup, PaygroupListRequest, PaymentDaySetting},
 };
-use open_lark_core::api_req::ApiRequest;
+use openlark_core::api_req::ApiRequest;
 use reqwest::Method;
 
 /// 薪资组服务

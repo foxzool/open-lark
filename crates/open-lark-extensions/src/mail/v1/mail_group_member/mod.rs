@@ -1,5 +1,5 @@
 // 邮件组成员管理模块 - 占位符实现
-use open_lark_core::core::config::Config;
+use openlark_core::config::Config;
 
 pub struct MailGroupMemberService {
     pub config: Config,

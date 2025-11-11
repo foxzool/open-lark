@@ -37,7 +37,7 @@ pub mod v3;
 pub use v2::*;
 pub use v3::*;
 
-use open_lark_core::config::Config;
+use config::Config;
 
 /// Sheets电子表格服务
 ///
@@ -93,7 +93,7 @@ impl crate::core::trait_system::Service for SheetsService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::trait_system::Service;
+    use openlark_core::trait_system::Service;
 
     #[test]
     fn test_sheets_service_creation() {

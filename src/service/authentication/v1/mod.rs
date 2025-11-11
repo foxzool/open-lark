@@ -1,6 +1,6 @@
 mod auth;
 
-use open_lark_core::config::Config;
+use config::Config;
 
 /// 认证服务 V1 版本
 ///

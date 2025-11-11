@@ -9,11 +9,11 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use open_lark_core::error::LarkAPIError;
-use open_lark_core::trait_system::Transport;
 use crate::http_transport::HttpTransport;
+use openlark_core::error::LarkAPIError;
+use openlark_core::trait_system::Transport;
 
-use super::models::{Sheet, Range};
+use super::models::{Range, Sheet};
 
 /// 汇总函数类型
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -320,11 +320,7 @@ pub struct PivotTableConfig {
 
 impl PivotTableConfig {
     /// 创建数据透视表配置
-    pub fn new(
-        sheet_id: String,
-        source_range: Range,
-        position: PivotTablePosition,
-    ) -> Self {
+    pub fn new(sheet_id: String, source_range: Range, position: PivotTablePosition) -> Self {
         Self {
             sheet_id,
             source_range,
@@ -525,25 +521,32 @@ impl CreatePivotTableRequestBuilder {
 
     /// 构建请求对象
     pub fn build(self) -> Result<CreatePivotTableRequest, LarkAPIError> {
-        let spreadsheet_token = self.spreadsheet_token
+        let spreadsheet_token = self
+            .spreadsheet_token
             .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
 
-        let sheet_id = self.sheet_id
+        let sheet_id = self
+            .sheet_id
             .ok_or_else(|| LarkAPIError::InvalidParameter("源工作表ID不能为空".to_string()))?;
 
-        let source_range = self.source_range
+        let source_range = self
+            .source_range
             .ok_or_else(|| LarkAPIError::InvalidParameter("数据源范围不能为空".to_string()))?;
 
-        let position_sheet_id = self.position_sheet_id
-            .ok_or_else(|| LarkAPIError::InvalidParameter("透视表位置工作表ID不能为空".to_string()))?;
+        let position_sheet_id = self.position_sheet_id.ok_or_else(|| {
+            LarkAPIError::InvalidParameter("透视表位置工作表ID不能为空".to_string())
+        })?;
 
-        let position_start_row = self.position_start_row
+        let position_start_row = self
+            .position_start_row
             .ok_or_else(|| LarkAPIError::InvalidParameter("透视表起始行不能为空".to_string()))?;
 
-        let position_start_column = self.position_start_column
+        let position_start_column = self
+            .position_start_column
             .ok_or_else(|| LarkAPIError::InvalidParameter("透视表起始列不能为空".to_string()))?;
 
-        let position = PivotTablePosition::new(position_sheet_id, position_start_row, position_start_column);
+        let position =
+            PivotTablePosition::new(position_sheet_id, position_start_row, position_start_column);
 
         let mut pivot_table_config = PivotTableConfig::new(sheet_id, source_range, position);
 
@@ -631,10 +634,12 @@ impl DeletePivotTableRequestBuilder {
 
     /// 构建请求对象
     pub fn build(self) -> Result<DeletePivotTableRequest, LarkAPIError> {
-        let spreadsheet_token = self.spreadsheet_token
+        let spreadsheet_token = self
+            .spreadsheet_token
             .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
 
-        let pivot_table_id = self.pivot_table_id
+        let pivot_table_id = self
+            .pivot_table_id
             .ok_or_else(|| LarkAPIError::InvalidParameter("透视表ID不能为空".to_string()))?;
 
         Ok(DeletePivotTableRequest {
@@ -720,8 +725,7 @@ impl PivotTableService {
     ) -> crate::core::error::SDKResult<CreatePivotTableResponse> {
         let url = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/pivot_tables",
-            self.config.base_url,
-            request.spreadsheet_token
+            self.config.base_url, request.spreadsheet_token
         );
 
         let transport = HttpTransport::new(&self.config);
@@ -731,12 +735,19 @@ impl PivotTableService {
             .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
 
         let create_response: crate::core::response::BaseResponse<CreatePivotTableResponse> =
-            serde_json::from_str(&response.text().await
-                .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?)
+            serde_json::from_str(
+                &response
+                    .text()
+                    .await
+                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
+            )
             .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
 
         if create_response.code != 0 {
-            return Err(LarkAPIError::APIError(create_response.msg, create_response.code));
+            return Err(LarkAPIError::APIError(
+                create_response.msg,
+                create_response.code,
+            ));
         }
 
         create_response
@@ -775,9 +786,7 @@ impl PivotTableService {
     ) -> crate::core::error::SDKResult<DeletePivotTableResponse> {
         let url = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/pivot_tables/{}",
-            self.config.base_url,
-            request.spreadsheet_token,
-            request.pivot_table_id
+            self.config.base_url, request.spreadsheet_token, request.pivot_table_id
         );
 
         let transport = HttpTransport::new(&self.config);
@@ -787,12 +796,19 @@ impl PivotTableService {
             .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
 
         let delete_response: crate::core::response::BaseResponse<DeletePivotTableResponse> =
-            serde_json::from_str(&response.text().await
-                .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?)
+            serde_json::from_str(
+                &response
+                    .text()
+                    .await
+                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
+            )
             .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
 
         if delete_response.code != 0 {
-            return Err(LarkAPIError::APIError(delete_response.msg, delete_response.code));
+            return Err(LarkAPIError::APIError(
+                delete_response.msg,
+                delete_response.code,
+            ));
         }
 
         delete_response
@@ -831,12 +847,9 @@ mod tests {
 
     #[test]
     fn test_value_field_creation() {
-        let field = ValueField::new(
-            "销售额".to_string(),
-            2,
-            SummaryFunction::Sum,
-        ).number_format("#,##0.00".to_string())
-         .custom_name("总销售额".to_string());
+        let field = ValueField::new("销售额".to_string(), 2, SummaryFunction::Sum)
+            .number_format("#,##0.00".to_string())
+            .custom_name("总销售额".to_string());
 
         assert_eq!(field.name, "销售额");
         assert_eq!(field.source_column, 2);
@@ -853,7 +866,10 @@ mod tests {
 
         assert_eq!(field.name, "地区");
         assert_eq!(field.source_column, 3);
-        assert_eq!(field.values, Some(vec!["北京".to_string(), "上海".to_string()]));
+        assert_eq!(
+            field.values,
+            Some(vec!["北京".to_string(), "上海".to_string()])
+        );
         assert_eq!(field.multiple_selections, Some(true));
     }
 
@@ -875,11 +891,7 @@ mod tests {
 
     #[test]
     fn test_pivot_table_position_creation() {
-        let position = PivotTablePosition::new(
-            "sheet123".to_string(),
-            1,
-            1,
-        );
+        let position = PivotTablePosition::new("sheet123".to_string(), 1, 1);
 
         assert_eq!(position.sheet_id, "sheet123");
         assert_eq!(position.start_row, 1);
@@ -929,8 +941,13 @@ mod tests {
             "".to_string(),
             Range::new("A1".to_string(), "D100".to_string()),
             PivotTablePosition::new("sheet123".to_string(), 1, 1),
-        ).add_row_field(PivotField::new("部门".to_string(), 0))
-         .add_value_field(ValueField::new("销售额".to_string(), 2, SummaryFunction::Sum));
+        )
+        .add_row_field(PivotField::new("部门".to_string(), 0))
+        .add_value_field(ValueField::new(
+            "销售额".to_string(),
+            2,
+            SummaryFunction::Sum,
+        ));
         assert!(invalid_config.validate().is_err());
 
         // 测试无值字段
@@ -938,7 +955,8 @@ mod tests {
             "sheet123".to_string(),
             Range::new("A1".to_string(), "D100".to_string()),
             PivotTablePosition::new("sheet123".to_string(), 1, 1),
-        ).add_row_field(PivotField::new("部门".to_string(), 0));
+        )
+        .add_row_field(PivotField::new("部门".to_string(), 0));
         assert!(invalid_config2.validate().is_err());
 
         // 测试无行列字段
@@ -946,7 +964,12 @@ mod tests {
             "sheet123".to_string(),
             Range::new("A1".to_string(), "D100".to_string()),
             PivotTablePosition::new("sheet123".to_string(), 1, 1),
-        ).add_value_field(ValueField::new("销售额".to_string(), 2, SummaryFunction::Sum));
+        )
+        .add_value_field(ValueField::new(
+            "销售额".to_string(),
+            2,
+            SummaryFunction::Sum,
+        ));
         assert!(invalid_config3.validate().is_err());
     }
 
@@ -961,7 +984,11 @@ mod tests {
             .position("target_sheet".to_string(), 1, 1)
             .add_row_field(PivotField::new("部门".to_string(), 0))
             .add_column_field(PivotField::new("季度".to_string(), 1))
-            .add_value_field(ValueField::new("销售额".to_string(), 2, SummaryFunction::Sum))
+            .add_value_field(ValueField::new(
+                "销售额".to_string(),
+                2,
+                SummaryFunction::Sum,
+            ))
             .layout(PivotTableLayout::new())
             .build()
             .unwrap();
@@ -976,10 +1003,7 @@ mod tests {
 
     #[test]
     fn test_delete_pivot_table_request() {
-        let request = DeletePivotTableRequest::new(
-            "token123".to_string(),
-            "pivot123".to_string(),
-        );
+        let request = DeletePivotTableRequest::new("token123".to_string(), "pivot123".to_string());
 
         assert_eq!(request.spreadsheet_token, "token123");
         assert_eq!(request.pivot_table_id, "pivot123");
@@ -1015,7 +1039,11 @@ mod tests {
             .source_range(Range::new("A1".to_string(), "C50".to_string()))
             .position("target_sheet".to_string(), 1, 1)
             .add_row_field(PivotField::new("部门".to_string(), 0))
-            .add_value_field(ValueField::new("销售额".to_string(), 2, SummaryFunction::Sum))
+            .add_value_field(ValueField::new(
+                "销售额".to_string(),
+                2,
+                SummaryFunction::Sum,
+            ))
             .build()
             .unwrap();
 
@@ -1031,13 +1059,24 @@ mod tests {
             .add_row_field(PivotField::new("部门".to_string(), 0).show_subtotals(true))
             .add_row_field(PivotField::new("产品".to_string(), 1))
             .add_column_field(PivotField::new("季度".to_string(), 2))
-            .add_value_field(ValueField::new("销售额".to_string(), 3, SummaryFunction::Sum).custom_name("总销售额".to_string()))
-            .add_value_field(ValueField::new("利润".to_string(), 4, SummaryFunction::Average).number_format("#,##0.00".to_string()))
-            .add_filter_field(FilterField::new("地区".to_string(), 5).values(vec!["北京".to_string(), "上海".to_string()]))
-            .layout(PivotTableLayout::new()
-                .show_row_grand_totals(true)
-                .show_column_grand_totals(true)
-                .merge_labels(true))
+            .add_value_field(
+                ValueField::new("销售额".to_string(), 3, SummaryFunction::Sum)
+                    .custom_name("总销售额".to_string()),
+            )
+            .add_value_field(
+                ValueField::new("利润".to_string(), 4, SummaryFunction::Average)
+                    .number_format("#,##0.00".to_string()),
+            )
+            .add_filter_field(
+                FilterField::new("地区".to_string(), 5)
+                    .values(vec!["北京".to_string(), "上海".to_string()]),
+            )
+            .layout(
+                PivotTableLayout::new()
+                    .show_row_grand_totals(true)
+                    .show_column_grand_totals(true)
+                    .merge_labels(true),
+            )
             .build()
             .unwrap();
 
@@ -1085,8 +1124,7 @@ mod tests {
 
     #[test]
     fn test_sort_order() {
-        let field = PivotField::new("测试".to_string(), 0)
-            .sort_order(SortOrder::Desc);
+        let field = PivotField::new("测试".to_string(), 0).sort_order(SortOrder::Desc);
 
         assert_eq!(field.sort_order, Some(SortOrder::Desc));
     }

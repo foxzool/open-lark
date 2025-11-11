@@ -7,7 +7,7 @@
 //! - 电子表格权限管理
 
 use crate::{
-    api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
@@ -267,7 +267,10 @@ impl SpreadsheetService {
     ///     .get("spreadsheet_token")
     ///     .await?;
     /// ```
-    pub async fn get(&self, spreadsheet_token: &str) -> SDKResult<BaseResponse<GetSpreadsheetResponse>> {
+    pub async fn get(
+        &self,
+        spreadsheet_token: &str,
+    ) -> SDKResult<BaseResponse<GetSpreadsheetResponse>> {
         let endpoint = format!(
             "{}/{}",
             crate::core::endpoints_original::Endpoints::SHEETS_V3_SPREADSHEETS,
@@ -466,7 +469,6 @@ impl UpdateSpreadsheetBuilder {
         service.update(spreadsheet_token, &self.request).await
     }
 }
-
 
 // ==================== 单元测试 ====================
 

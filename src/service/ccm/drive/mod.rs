@@ -15,7 +15,7 @@
 // - 文件搜索和统计
 //
 // 覆盖55个API接口
-use crate::prelude::*;
+use openlark_core::prelude::*;
 use crate::service::ccm::drive::v1::DriveV1Service;
 use crate::service::ccm::drive::v2::DriveV2Service;
 use crate::service::ccm::drive::explorer::DriveExplorerService;

@@ -20,18 +20,19 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
 
-use crate::{
-    api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    ApiRequest, SDKResult, req_option::RequestOption,
-    standard_response::StandardResponse,
-    error::LarkAPIError,
-};
 use crate::endpoints_original::Endpoints;
 use crate::impl_executable_builder_owned;
 use crate::service::sheets::v2::sheet_cells::CellValue;
+use crate::{
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    error::LarkAPIError,
+    http::Transport,
+    req_option::RequestOption,
+    standard_response::StandardResponse,
+    ApiRequest, SDKResult,
+};
 
 /// 单个写入范围数据结构
 ///
@@ -82,14 +83,16 @@ impl WriteRange {
         // 基本范围格式验证
         if !self.range.contains('!') {
             return Err(LarkAPIError::illegal_param(format!(
-                "无效的范围格式: {}，缺少工作表标识符", self.range
+                "无效的范围格式: {}，缺少工作表标识符",
+                self.range
             )));
         }
 
         // 验证数据不为空
         if self.values.is_empty() {
             return Err(LarkAPIError::illegal_param(format!(
-                "范围 {} 的数据不能为空", self.range
+                "范围 {} 的数据不能为空",
+                self.range
             )));
         }
 
@@ -100,7 +103,10 @@ impl WriteRange {
                 if row.len() != first_row_len {
                     return Err(LarkAPIError::illegal_param(format!(
                         "范围 {} 的第 {} 行数据长度不一致，期望 {} 个值，实际 {} 个值",
-                        self.range, row_index + 1, first_row_len, row.len()
+                        self.range,
+                        row_index + 1,
+                        first_row_len,
+                        row.len()
                     )));
                 }
             }
@@ -293,7 +299,8 @@ impl WriteMultipleRangesRequest {
             let valid_options = ["ToString", "FormattedValue", "Formula", "UnformattedValue"];
             if !valid_options.contains(&option.as_str()) {
                 return Err(LarkAPIError::illegal_param(format!(
-                    "无效的值渲染选项: {}，支持的选项: {:?}", option, valid_options
+                    "无效的值渲染选项: {}，支持的选项: {:?}",
+                    option, valid_options
                 )));
             }
         }
@@ -303,7 +310,8 @@ impl WriteMultipleRangesRequest {
             let valid_options = ["FormattedString", "SerialNumber"];
             if !valid_options.contains(&option.as_str()) {
                 return Err(LarkAPIError::illegal_param(format!(
-                    "无效的日期时间渲染选项: {}，支持的选项: {:?}", option, valid_options
+                    "无效的日期时间渲染选项: {}，支持的选项: {:?}",
+                    option, valid_options
                 )));
             }
         }
@@ -313,7 +321,8 @@ impl WriteMultipleRangesRequest {
             let valid_types = ["open_id", "user_id", "union_id", "lark_id"];
             if !valid_types.contains(&user_id_type.as_str()) {
                 return Err(LarkAPIError::illegal_param(format!(
-                    "无效的用户ID类型: {}，支持的类型: {:?}", user_id_type, valid_types
+                    "无效的用户ID类型: {}，支持的类型: {:?}",
+                    user_id_type, valid_types
                 )));
             }
         }
@@ -477,67 +486,89 @@ impl BatchWriteService {
         let mut body = HashMap::new();
 
         // 转换写入范围数据为API需要的格式
-        let api_data: Vec<Value> = request.data.into_iter().map(|range| {
-            let mut range_data = HashMap::new();
-            range_data.insert("range", serde_json::Value::String(range.range));
+        let api_data: Vec<Value> = request
+            .data
+            .into_iter()
+            .map(|range| {
+                let mut range_data = HashMap::new();
+                range_data.insert("range", serde_json::Value::String(range.range));
 
-            // 转换单元格数据为API格式
-            let api_values: Vec<Vec<Value>> = range.values.into_iter()
-                .map(|row| {
-                    row.into_iter()
-                        .map(|cell_value| {
-                            match cell_value {
+                // 转换单元格数据为API格式
+                let api_values: Vec<Vec<Value>> = range
+                    .values
+                    .into_iter()
+                    .map(|row| {
+                        row.into_iter()
+                            .map(|cell_value| match cell_value {
                                 CellValue::Text(s) => serde_json::Value::String(s),
-                                CellValue::Number(n) => serde_json::Value::Number(serde_json::Number::from_f64(n).unwrap_or(serde_json::Number::from(0))),
+                                CellValue::Number(n) => serde_json::Value::Number(
+                                    serde_json::Number::from_f64(n)
+                                        .unwrap_or(serde_json::Number::from(0)),
+                                ),
                                 CellValue::Boolean(b) => serde_json::Value::Bool(b),
                                 CellValue::Formula(f) => serde_json::Value::String(f),
                                 CellValue::Blank => serde_json::Value::Null,
                                 CellValue::Error(e) => serde_json::Value::String(e),
-                            }
-                        })
-                        .collect()
-                })
-                .collect();
+                            })
+                            .collect()
+                    })
+                    .collect();
 
-            range_data.insert("values", serde_json::Value::Array(
-                api_values.into_iter().map(|row| serde_json::Value::Array(row)).collect()
-            ));
+                range_data.insert(
+                    "values",
+                    serde_json::Value::Array(
+                        api_values
+                            .into_iter()
+                            .map(|row| serde_json::Value::Array(row))
+                            .collect(),
+                    ),
+                );
 
-            serde_json::to_value(range_data).unwrap_or_default()
-        }).collect();
+                serde_json::to_value(range_data).unwrap_or_default()
+            })
+            .collect();
 
         body.insert("data", serde_json::Value::Array(api_data));
 
         // 添加可选参数到请求体
         if let Some(value_render_option) = &request.value_render_option {
-            body.insert("valueRenderOption", serde_json::Value::String(value_render_option.clone()));
+            body.insert(
+                "valueRenderOption",
+                serde_json::Value::String(value_render_option.clone()),
+            );
         }
 
         if let Some(date_time_render_option) = &request.date_time_render_option {
-            body.insert("dateTimeRenderOption", serde_json::Value::String(date_time_render_option.clone()));
+            body.insert(
+                "dateTimeRenderOption",
+                serde_json::Value::String(date_time_render_option.clone()),
+            );
         }
 
         // 构建API请求
         let mut api_req = ApiRequest::with_method(Method::POST);
         api_req.set_api_path(
             Endpoints::SHEETS_V2_SPREADSHEET_VALUES_BATCH_UPDATE
-                .replace("{spreadsheet_token}", &request.spreadsheet_token)
+                .replace("{spreadsheet_token}", &request.spreadsheet_token),
         );
         api_req.set_body(serde_json::to_vec(&body)?);
-        api_req.set_supported_access_token_types(vec![
-            AccessTokenType::Tenant,
-            AccessTokenType::User
-        ]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         // 添加查询参数
         if let Some(user_id_type) = &request.user_id_type {
-            api_req.query_params.insert("user_id_type", user_id_type.clone());
+            api_req
+                .query_params
+                .insert("user_id_type", user_id_type.clone());
         }
 
         // 暂时返回模拟数据，直到Transport问题解决
-        use open_lark_core::api_resp::RawResponse;
+        use api_resp::RawResponse;
         let updated_ranges = vec![]; // 这里应该是实际的更新结果
-        let total_updated_cells: usize = updated_ranges.iter().map(|r: &UpdatedRangeInfo| r.updated_cells as usize).sum();
+        let total_updated_cells: usize = updated_ranges
+            .iter()
+            .map(|r: &UpdatedRangeInfo| r.updated_cells as usize)
+            .sum();
 
         Ok(BaseResponse {
             raw_response: RawResponse {
@@ -626,7 +657,8 @@ impl BatchWriteService {
         ranges_and_data: Vec<(U, Vec<Vec<CellValue>>)>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<WriteMultipleRangesResponseData>> {
-        let write_ranges: Vec<WriteRange> = ranges_and_data.into_iter()
+        let write_ranges: Vec<WriteRange> = ranges_and_data
+            .into_iter()
             .map(|(range, values)| WriteRange::new(range, values))
             .collect();
 
@@ -874,7 +906,7 @@ mod tests {
             vec![
                 vec![CellValue::text("姓名"), CellValue::text("年龄")],
                 vec![CellValue::text("张三"), CellValue::number(25)],
-            ]
+            ],
         );
 
         assert_eq!(range.range, "Sheet1!A1:B2");
@@ -886,10 +918,13 @@ mod tests {
     #[test]
     fn test_write_range_validation() {
         // 测试有效范围
-        let valid_range = WriteRange::new("Sheet1!A1:B2", vec![
-            vec![CellValue::text("A1"), CellValue::text("B1")],
-            vec![CellValue::text("A2"), CellValue::text("B2")],
-        ]);
+        let valid_range = WriteRange::new(
+            "Sheet1!A1:B2",
+            vec![
+                vec![CellValue::text("A1"), CellValue::text("B1")],
+                vec![CellValue::text("A2"), CellValue::text("B2")],
+            ],
+        );
         assert!(valid_range.validate().is_ok());
 
         // 测试空范围
@@ -897,9 +932,7 @@ mod tests {
         assert!(empty_range.validate().is_err());
 
         // 测试缺少工作表标识符
-        let invalid_range = WriteRange::new("A1:B2", vec![
-            vec![CellValue::text("A1")]
-        ]);
+        let invalid_range = WriteRange::new("A1:B2", vec![vec![CellValue::text("A1")]]);
         assert!(invalid_range.validate().is_err());
 
         // 测试空数据
@@ -907,26 +940,28 @@ mod tests {
         assert!(empty_data_range.validate().is_err());
 
         // 测试数据格式不一致
-        let inconsistent_range = WriteRange::new("Sheet1!A1:B2", vec![
-            vec![CellValue::text("A1"), CellValue::text("B1")],
-            vec![CellValue::text("A2")], // 只有一列
-        ]);
+        let inconsistent_range = WriteRange::new(
+            "Sheet1!A1:B2",
+            vec![
+                vec![CellValue::text("A1"), CellValue::text("B1")],
+                vec![CellValue::text("A2")], // 只有一列
+            ],
+        );
         assert!(inconsistent_range.validate().is_err());
     }
 
     #[test]
     fn test_write_multiple_ranges_request_creation() {
-        let range1 = WriteRange::new("Sheet1!A1:B2", vec![
-            vec![CellValue::text("姓名"), CellValue::text("年龄")]
-        ]);
-        let range2 = WriteRange::new("Sheet2!C1:D1", vec![
-            vec![CellValue::text("总计"), CellValue::number(100)]
-        ]);
-
-        let request = WriteMultipleRangesRequest::new(
-            "shtcnmBA*****yGehy8",
-            vec![range1, range2]
+        let range1 = WriteRange::new(
+            "Sheet1!A1:B2",
+            vec![vec![CellValue::text("姓名"), CellValue::text("年龄")]],
         );
+        let range2 = WriteRange::new(
+            "Sheet2!C1:D1",
+            vec![vec![CellValue::text("总计"), CellValue::number(100)]],
+        );
+
+        let request = WriteMultipleRangesRequest::new("shtcnmBA*****yGehy8", vec![range1, range2]);
 
         assert_eq!(request.spreadsheet_token, "shtcnmBA*****yGehy8");
         assert_eq!(request.range_count(), 2);
@@ -938,18 +973,20 @@ mod tests {
         // 测试有效请求
         let valid_request = WriteMultipleRangesRequest::new(
             "token123",
-            vec![WriteRange::new("Sheet1!A1:B2", vec![
-                vec![CellValue::text("A1"), CellValue::text("B1")]
-            ])]
+            vec![WriteRange::new(
+                "Sheet1!A1:B2",
+                vec![vec![CellValue::text("A1"), CellValue::text("B1")]],
+            )],
         );
         assert!(valid_request.validate().is_ok());
 
         // 测试空令牌
         let empty_token_request = WriteMultipleRangesRequest::new(
             "",
-            vec![WriteRange::new("Sheet1!A1:B2", vec![
-                vec![CellValue::text("A1")]
-            ])]
+            vec![WriteRange::new(
+                "Sheet1!A1:B2",
+                vec![vec![CellValue::text("A1")]],
+            )],
         );
         assert!(empty_token_request.validate().is_err());
 
@@ -960,19 +997,23 @@ mod tests {
         // 测试无效的值渲染选项
         let invalid_option_request = WriteMultipleRangesRequest::new(
             "token123",
-            vec![WriteRange::new("Sheet1!A1:B2", vec![
-                vec![CellValue::text("A1")]
-            ])]
-        ).value_render_option("InvalidOption");
+            vec![WriteRange::new(
+                "Sheet1!A1:B2",
+                vec![vec![CellValue::text("A1")]],
+            )],
+        )
+        .value_render_option("InvalidOption");
         assert!(invalid_option_request.validate().is_err());
 
         // 测试无效的用户ID类型
         let invalid_user_type_request = WriteMultipleRangesRequest::new(
             "token123",
-            vec![WriteRange::new("Sheet1!A1:B2", vec![
-                vec![CellValue::text("A1")]
-            ])]
-        ).user_id_type("invalid_type");
+            vec![WriteRange::new(
+                "Sheet1!A1:B2",
+                vec![vec![CellValue::text("A1")]],
+            )],
+        )
+        .user_id_type("invalid_type");
         assert!(invalid_user_type_request.validate().is_err());
     }
 
@@ -980,16 +1021,18 @@ mod tests {
     fn test_add_range_functionality() {
         let mut request = WriteMultipleRangesRequest::new(
             "token",
-            vec![WriteRange::new("Sheet1!A1:B2", vec![
-                vec![CellValue::text("A1"), CellValue::text("B1")]
-            ])]
+            vec![WriteRange::new(
+                "Sheet1!A1:B2",
+                vec![vec![CellValue::text("A1"), CellValue::text("B1")]],
+            )],
         );
 
         assert_eq!(request.range_count(), 1);
 
-        let additional_range = WriteRange::new("Sheet2!C1:D1", vec![
-            vec![CellValue::text("C1"), CellValue::text("D1")]
-        ]);
+        let additional_range = WriteRange::new(
+            "Sheet2!C1:D1",
+            vec![vec![CellValue::text("C1"), CellValue::text("D1")]],
+        );
 
         request = request.add_range(additional_range);
         assert_eq!(request.range_count(), 2);
@@ -1003,7 +1046,7 @@ mod tests {
             vec![
                 WriteRange::new("Sheet1!A1:B2", vec![vec![CellValue::text("A1")]]),
                 WriteRange::new("Sheet2!C1:D1", vec![vec![CellValue::text("C1")]]),
-            ]
+            ],
         );
 
         let ranges = request.get_ranges();
@@ -1016,20 +1059,27 @@ mod tests {
     fn test_builder_pattern() {
         let request = WriteMultipleRangesRequest::builder()
             .spreadsheet_token("test_token")
-            .add_range("Sheet1!A1:B2", vec![
-                vec![CellValue::text("姓名"), CellValue::text("年龄")],
-                vec![CellValue::text("张三"), CellValue::number(25)],
-            ])
-            .add_range("Sheet2!C1:D1", vec![
-                vec![CellValue::text("总计"), CellValue::number(100)],
-            ])
+            .add_range(
+                "Sheet1!A1:B2",
+                vec![
+                    vec![CellValue::text("姓名"), CellValue::text("年龄")],
+                    vec![CellValue::text("张三"), CellValue::number(25)],
+                ],
+            )
+            .add_range(
+                "Sheet2!C1:D1",
+                vec![vec![CellValue::text("总计"), CellValue::number(100)]],
+            )
             .value_render_option("FormattedValue")
             .user_id_type("open_id")
             .build();
 
         assert_eq!(request.spreadsheet_token, "test_token");
         assert_eq!(request.range_count(), 2);
-        assert_eq!(request.value_render_option, Some("FormattedValue".to_string()));
+        assert_eq!(
+            request.value_render_option,
+            Some("FormattedValue".to_string())
+        );
         assert_eq!(request.user_id_type, Some("open_id".to_string()));
     }
 
@@ -1038,9 +1088,10 @@ mod tests {
         // 测试有效构建并验证
         let valid_request = WriteMultipleRangesRequest::builder()
             .spreadsheet_token("test_token")
-            .add_range("Sheet1!A1:B2", vec![
-                vec![CellValue::text("A1"), CellValue::text("B1")]
-            ])
+            .add_range(
+                "Sheet1!A1:B2",
+                vec![vec![CellValue::text("A1"), CellValue::text("B1")]],
+            )
             .build_and_validate();
 
         assert!(valid_request.is_ok());
@@ -1048,9 +1099,7 @@ mod tests {
         // 测试无效构建并验证
         let invalid_request = WriteMultipleRangesRequest::builder()
             .spreadsheet_token("")
-            .add_range("Sheet1!A1:B2", vec![
-                vec![CellValue::text("A1")]
-            ])
+            .add_range("Sheet1!A1:B2", vec![vec![CellValue::text("A1")]])
             .build_and_validate();
 
         assert!(invalid_request.is_err());
@@ -1059,13 +1108,17 @@ mod tests {
     #[test]
     fn test_builder_from_tuples() {
         let ranges_data = vec![
-            ("Sheet1!A1:B2", vec![
-                vec![CellValue::text("姓名"), CellValue::text("年龄")],
-                vec![CellValue::text("张三"), CellValue::number(25)],
-            ]),
-            ("Sheet2!C1:D1", vec![
-                vec![CellValue::text("总计"), CellValue::number(100)],
-            ]),
+            (
+                "Sheet1!A1:B2",
+                vec![
+                    vec![CellValue::text("姓名"), CellValue::text("年龄")],
+                    vec![CellValue::text("张三"), CellValue::number(25)],
+                ],
+            ),
+            (
+                "Sheet2!C1:D1",
+                vec![vec![CellValue::text("总计"), CellValue::number(100)]],
+            ),
         ];
 
         let request = WriteMultipleRangesRequest::builder()
@@ -1081,9 +1134,10 @@ mod tests {
     fn test_builder_utilities() {
         let mut builder = WriteMultipleRangesRequest::builder()
             .spreadsheet_token("test_token")
-            .add_range("Sheet1!A1:B2", vec![
-                vec![CellValue::text("A1"), CellValue::text("B1")]
-            ]);
+            .add_range(
+                "Sheet1!A1:B2",
+                vec![vec![CellValue::text("A1"), CellValue::text("B1")]],
+            );
 
         assert_eq!(builder.range_count(), 1);
         assert_eq!(builder.total_cell_count(), 2);
@@ -1096,23 +1150,26 @@ mod tests {
 
     #[test]
     fn test_unicode_support() {
-        let unicode_range = WriteRange::new("工作表!A1:C3", vec![
+        let unicode_range = WriteRange::new(
+            "工作表!A1:C3",
             vec![
-                CellValue::text("姓名"),
-                CellValue::text("年龄"),
-                CellValue::text("部门")
+                vec![
+                    CellValue::text("姓名"),
+                    CellValue::text("年龄"),
+                    CellValue::text("部门"),
+                ],
+                vec![
+                    CellValue::text("张三"),
+                    CellValue::number(25),
+                    CellValue::text("技术部🚀"),
+                ],
+                vec![
+                    CellValue::text("李四"),
+                    CellValue::number(30),
+                    CellValue::text("产品部✨"),
+                ],
             ],
-            vec![
-                CellValue::text("张三"),
-                CellValue::number(25),
-                CellValue::text("技术部🚀")
-            ],
-            vec![
-                CellValue::text("李四"),
-                CellValue::number(30),
-                CellValue::text("产品部✨")
-            ],
-        ]);
+        );
 
         assert_eq!(unicode_range.range, "工作表!A1:C3");
         assert_eq!(unicode_range.row_count(), 3);
@@ -1120,10 +1177,7 @@ mod tests {
         assert_eq!(unicode_range.cell_count(), 9);
         assert!(unicode_range.validate().is_ok());
 
-        let request = WriteMultipleRangesRequest::new(
-            "测试令牌🔥",
-            vec![unicode_range]
-        );
+        let request = WriteMultipleRangesRequest::new("测试令牌🔥", vec![unicode_range]);
 
         assert_eq!(request.spreadsheet_token, "测试令牌🔥");
         assert!(request.validate().is_ok());
@@ -1131,24 +1185,26 @@ mod tests {
 
     #[test]
     fn test_different_cell_value_types() {
-        let mixed_data_range = WriteRange::new("Sheet1!A1:E1", vec![
-            vec![
+        let mixed_data_range = WriteRange::new(
+            "Sheet1!A1:E1",
+            vec![vec![
                 CellValue::text("文本"),
                 CellValue::number(42.5),
                 CellValue::boolean(true),
                 CellValue::formula("=SUM(A1:B1)"),
                 CellValue::Blank,
-            ]
-        ]);
+            ]],
+        );
 
         assert_eq!(mixed_data_range.column_count(), 5);
         assert_eq!(mixed_data_range.cell_count(), 5);
         assert!(mixed_data_range.validate().is_ok());
 
         // 测试错误值类型
-        let error_range = WriteRange::new("Sheet1!A1:A1", vec![
-            vec![CellValue::Error("#REF!".to_string())]
-        ]);
+        let error_range = WriteRange::new(
+            "Sheet1!A1:A1",
+            vec![vec![CellValue::Error("#REF!".to_string())]],
+        );
 
         assert!(error_range.validate().is_ok());
     }
@@ -1174,8 +1230,14 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(WriteMultipleRangesResponse::data_format(), ResponseFormat::Data);
-        assert_eq!(WriteMultipleRangesResponseData::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            WriteMultipleRangesResponse::data_format(),
+            ResponseFormat::Data
+        );
+        assert_eq!(
+            WriteMultipleRangesResponseData::data_format(),
+            ResponseFormat::Data
+        );
     }
 
     #[test]

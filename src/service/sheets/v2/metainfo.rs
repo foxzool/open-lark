@@ -11,17 +11,17 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
 
+use crate::endpoints_original::Endpoints;
 use crate::{
-    api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    http::Transport,
-    ApiRequest, SDKResult,
-    standard_response::StandardResponse,
     error::LarkAPIError,
+    http::Transport,
+    standard_response::StandardResponse,
     trait_system::Service,
+    ApiRequest, SDKResult,
 };
-use crate::endpoints_original::Endpoints;
 
 /// 表格元数据信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -200,7 +200,9 @@ impl GetSpreadsheetMetaRequest {
     pub fn validate(&self) -> SDKResult<()> {
         // 验证电子表格token
         if self.spreadsheet_token.trim().is_empty() {
-            return Err(LarkAPIError::InvalidParameter("电子表格token不能为空".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "电子表格token不能为空".to_string(),
+            ));
         }
 
         // 验证token长度（飞书token通常在10-100字符之间）
@@ -224,7 +226,10 @@ impl GetSpreadsheetMetaRequest {
         }
 
         if let Some(include_custom_properties) = self.include_custom_properties {
-            params.push(format!("include_custom_properties={}", include_custom_properties));
+            params.push(format!(
+                "include_custom_properties={}",
+                include_custom_properties
+            ));
         }
 
         if let Some(language) = &self.language {
@@ -293,7 +298,10 @@ impl SpreadsheetMetaService {
     /// println!("表格标题: {}", meta_info.title);
     /// println!("工作表数量: {}", meta_info.sheet_count);
     /// ```
-    pub async fn get_spreadsheet_meta(&self, request: GetSpreadsheetMetaRequest) -> SDKResult<BaseResponse<SpreadsheetMetaInfo>> {
+    pub async fn get_spreadsheet_meta(
+        &self,
+        request: GetSpreadsheetMetaRequest,
+    ) -> SDKResult<BaseResponse<SpreadsheetMetaInfo>> {
         // 验证请求参数
         request.validate()?;
 
@@ -305,10 +313,8 @@ impl SpreadsheetMetaService {
 
         let mut api_req = ApiRequest::with_method(reqwest::Method::GET);
         api_req.set_api_path(endpoint);
-        api_req.set_supported_access_token_types(vec![
-            AccessTokenType::Tenant,
-            AccessTokenType::User
-        ]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         // 添加查询参数
         let query_params = request.build_query_params();
@@ -325,7 +331,10 @@ impl SpreadsheetMetaService {
     }
 
     /// 创建表格元数据获取构建器
-    pub fn get_spreadsheet_meta_builder(&self, spreadsheet_token: impl Into<String>) -> SpreadsheetMetaBuilder {
+    pub fn get_spreadsheet_meta_builder(
+        &self,
+        spreadsheet_token: impl Into<String>,
+    ) -> SpreadsheetMetaBuilder {
         SpreadsheetMetaBuilder::new(self.clone(), spreadsheet_token)
     }
 
@@ -336,7 +345,10 @@ impl SpreadsheetMetaService {
     ///
     /// # 返回
     /// 表格元数据信息
-    pub async fn get_basic_meta(&self, spreadsheet_token: impl Into<String>) -> SDKResult<BaseResponse<SpreadsheetMetaInfo>> {
+    pub async fn get_basic_meta(
+        &self,
+        spreadsheet_token: impl Into<String>,
+    ) -> SDKResult<BaseResponse<SpreadsheetMetaInfo>> {
         let request = GetSpreadsheetMetaRequest::new(spreadsheet_token)
             .include_permissions(false)
             .include_custom_properties(false);
@@ -351,7 +363,10 @@ impl SpreadsheetMetaService {
     ///
     /// # 返回
     /// 包含权限和自定义属性的表格元数据信息
-    pub async fn get_full_meta(&self, spreadsheet_token: impl Into<String>) -> SDKResult<BaseResponse<SpreadsheetMetaInfo>> {
+    pub async fn get_full_meta(
+        &self,
+        spreadsheet_token: impl Into<String>,
+    ) -> SDKResult<BaseResponse<SpreadsheetMetaInfo>> {
         let request = GetSpreadsheetMetaRequest::new(spreadsheet_token)
             .include_permissions(true)
             .include_custom_properties(true);
@@ -474,7 +489,8 @@ mod tests {
         let config = Config::default();
         let service = SpreadsheetMetaService::new(config);
 
-        let builder = service.get_spreadsheet_meta_builder("test_token")
+        let builder = service
+            .get_spreadsheet_meta_builder("test_token")
             .include_permissions(true)
             .include_custom_properties(true)
             .language("en_US");

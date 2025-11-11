@@ -6,7 +6,7 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 use serde::{Deserialize, Serialize};
-use open_lark_core::api_req::ApiRequest;
+use openlark_core::api_req::ApiRequest;
 use crate::,
 {,
     core::,
@@ -70,8 +70,8 @@ ResponseFormat::Data
 #[cfg(test)]
 mod tests {
 use super::*;
-    use open_lark_core::config::Config;
-use open_lark_core::SDKResult;use rstest::rstest;
+    use config::Config;
+use SDKResult;use rstest::rstest;
     fn create_test_config() -> Config {,
 Config::builder()
             .app_id()

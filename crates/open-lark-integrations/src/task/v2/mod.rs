@@ -8,7 +8,7 @@ pub mod task_subtask;
 pub mod tasklist;
 pub mod tasklist_activity_subscription;
 
-use open_lark_core::core::core::config::Config;
+use openlark_core::core::config::Config;
 
 pub use attachment::AttachmentService;
 pub use comment::CommentService;

@@ -14,10 +14,10 @@ use serde_json::Value;
 use std::collections::HashMap;
 
 use crate::request::Transport;
-use open_lark_core::SDKResult;
-use open_lark_core::config::Config;
-use open_lark_core::trait_system::Service;
-use open_lark_core::error::LarkAPIError;
+use config::Config;
+use openlark_core::error::LarkAPIError;
+use openlark_core::trait_system::Service;
+use SDKResult;
 
 /// 图片位置类型
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -104,14 +104,14 @@ impl ImageAnchor {
             ImageAnchorType::Cell => {
                 if self.cell.is_none() || self.cell.as_ref().unwrap().trim().is_empty() {
                     return Err(LarkAPIError::InvalidParameter(
-                        "单元格锚定类型必须指定有效的单元格位置".to_string()
+                        "单元格锚定类型必须指定有效的单元格位置".to_string(),
                     ));
                 }
             }
             ImageAnchorType::Sheet => {
                 if self.sheet_id.is_none() || self.sheet_id.as_ref().unwrap().trim().is_empty() {
                     return Err(LarkAPIError::InvalidParameter(
-                        "工作表锚定类型必须指定有效的工作表ID".to_string()
+                        "工作表锚定类型必须指定有效的工作表ID".to_string(),
                     ));
                 }
             }
@@ -121,7 +121,7 @@ impl ImageAnchor {
         if let Some(offset_x) = self.offset_x {
             if offset_x < -10000 || offset_x > 10000 {
                 return Err(LarkAPIError::InvalidParameter(
-                    "X偏移量必须在-10000到10000像素之间".to_string()
+                    "X偏移量必须在-10000到10000像素之间".to_string(),
                 ));
             }
         }
@@ -129,7 +129,7 @@ impl ImageAnchor {
         if let Some(offset_y) = self.offset_y {
             if offset_y < -10000 || offset_y > 10000 {
                 return Err(LarkAPIError::InvalidParameter(
-                    "Y偏移量必须在-10000到10000像素之间".to_string()
+                    "Y偏移量必须在-10000到10000像素之间".to_string(),
                 ));
             }
         }
@@ -138,7 +138,7 @@ impl ImageAnchor {
         if let Some(width) = self.width {
             if width <= 0 || width > 20000 {
                 return Err(LarkAPIError::InvalidParameter(
-                    "图片宽度必须在1到20000像素之间".to_string()
+                    "图片宽度必须在1到20000像素之间".to_string(),
                 ));
             }
         }
@@ -146,7 +146,7 @@ impl ImageAnchor {
         if let Some(height) = self.height {
             if height <= 0 || height > 20000 {
                 return Err(LarkAPIError::InvalidParameter(
-                    "图片高度必须在1到20000像素之间".to_string()
+                    "图片高度必须在1到20000像素之间".to_string(),
                 ));
             }
         }
@@ -211,14 +211,18 @@ impl ImageSource {
     /// 验证图片源
     pub fn validate(&self) -> SDKResult<()> {
         if self.data.trim().is_empty() {
-            return Err(LarkAPIError::InvalidParameter("图片数据不能为空".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "图片数据不能为空".to_string(),
+            ));
         }
 
         match self.r#type {
             ImageSourceType::Url => {
                 // 基本URL格式验证
                 if !self.data.starts_with("http://") && !self.data.starts_with("https://") {
-                    return Err(LarkAPIError::InvalidParameter("无效的图片URL格式".to_string()));
+                    return Err(LarkAPIError::InvalidParameter(
+                        "无效的图片URL格式".to_string(),
+                    ));
                 }
             }
             ImageSourceType::FileId => {
@@ -230,19 +234,25 @@ impl ImageSource {
             ImageSourceType::Base64 => {
                 if self.mime_type.is_none() || self.mime_type.as_ref().unwrap().trim().is_empty() {
                     return Err(LarkAPIError::InvalidParameter(
-                        "Base64图片必须指定有效的MIME类型".to_string()
+                        "Base64图片必须指定有效的MIME类型".to_string(),
                     ));
                 }
 
                 // 验证MIME类型
                 let valid_mime_types = vec![
-                    "image/png", "image/jpeg", "image/jpg", "image/gif", "image/bmp", "image/webp"
+                    "image/png",
+                    "image/jpeg",
+                    "image/jpg",
+                    "image/gif",
+                    "image/bmp",
+                    "image/webp",
                 ];
                 let mime_type = self.mime_type.as_ref().unwrap();
                 if !valid_mime_types.contains(&mime_type.as_str()) {
-                    return Err(LarkAPIError::InvalidParameter(
-                        format!("不支持的图片格式: {}", mime_type)
-                    ));
+                    return Err(LarkAPIError::InvalidParameter(format!(
+                        "不支持的图片格式: {}",
+                        mime_type
+                    )));
                 }
             }
         }
@@ -314,7 +324,7 @@ impl ImageWriteOptions {
         if let Some(quality) = self.quality {
             if quality < 0.0 || quality > 1.0 {
                 return Err(LarkAPIError::InvalidParameter(
-                    "图片质量必须在0.0到1.0之间".to_string()
+                    "图片质量必须在0.0到1.0之间".to_string(),
                 ));
             }
         }
@@ -322,7 +332,7 @@ impl ImageWriteOptions {
         if let Some(opacity) = self.opacity {
             if opacity < 0.0 || opacity > 1.0 {
                 return Err(LarkAPIError::InvalidParameter(
-                    "图片透明度必须在0.0到1.0之间".to_string()
+                    "图片透明度必须在0.0到1.0之间".to_string(),
                 ));
             }
         }
@@ -386,7 +396,9 @@ impl ImageWriteEnhancedRequest {
     pub fn validate(&self) -> SDKResult<()> {
         // 验证电子表格token
         if self.spreadsheet_token.trim().is_empty() {
-            return Err(LarkAPIError::InvalidParameter("电子表格token不能为空".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "电子表格token不能为空".to_string(),
+            ));
         }
 
         // 验证锚定位置
@@ -414,14 +426,18 @@ impl ImageWriteEnhancedRequest {
 
         // 添加图片源
         let source_data = serde_json::Map::new();
-        source_data.insert("type".to_string(), Value::String(
-            match self.image_source.r#type {
+        source_data.insert(
+            "type".to_string(),
+            Value::String(match self.image_source.r#type {
                 ImageSourceType::Url => "URL",
                 ImageSourceType::FileId => "FILE_ID",
                 ImageSourceType::Base64 => "BASE64",
-            }
-        ));
-        source_data.insert("data".to_string(), Value::String(self.image_source.data.clone()));
+            }),
+        );
+        source_data.insert(
+            "data".to_string(),
+            Value::String(self.image_source.data.clone()),
+        );
 
         if let Some(mime_type) = &self.image_source.mime_type {
             source_data.insert("mimeType".to_string(), Value::String(mime_type.clone()));
@@ -431,8 +447,9 @@ impl ImageWriteEnhancedRequest {
 
         // 添加选项
         if let Some(options) = &self.options {
-            let options_value = serde_json::to_value(options)
-                .map_err(|e| LarkAPIError::InvalidParameter(format!("图片选项序列化失败: {}", e)))?;
+            let options_value = serde_json::to_value(options).map_err(|e| {
+                LarkAPIError::InvalidParameter(format!("图片选项序列化失败: {}", e))
+            })?;
             body.insert("options".to_string(), options_value);
         }
 
@@ -518,7 +535,10 @@ impl ImageWriteEnhancedService {
     ///     .image_source(ImageSource::base64(base64_data, "image/png"))
     ///     .anchor(ImageAnchor::cell("C3"));
     /// ```
-    pub async fn write_image(&self, request: ImageWriteEnhancedRequest) -> SDKResult<ImageWriteEnhancedResponse> {
+    pub async fn write_image(
+        &self,
+        request: ImageWriteEnhancedRequest,
+    ) -> SDKResult<ImageWriteEnhancedResponse> {
         // 验证请求参数
         request.validate()?;
 
@@ -532,7 +552,8 @@ impl ImageWriteEnhancedService {
         );
 
         // 发送HTTP请求
-        let response = self.config
+        let response = self
+            .config
             .transport
             .post(&url)
             .json(&body)
@@ -542,16 +563,24 @@ impl ImageWriteEnhancedService {
 
         // 处理响应
         if response.status().is_success() {
-            let base_response: BaseResponse<ImageWriteEnhancedResponseBody> = response.json().await
+            let base_response: BaseResponse<ImageWriteEnhancedResponseBody> = response
+                .json()
+                .await
                 .map_err(|e| LarkAPIError::JsonParseError(format!("响应解析失败: {}", e)))?;
 
             if base_response.code == 0 {
                 Ok(base_response.data.data)
             } else {
-                Err(LarkAPIError::APIError(base_response.code, base_response.msg))
+                Err(LarkAPIError::APIError(
+                    base_response.code,
+                    base_response.msg,
+                ))
             }
         } else {
-            Err(LarkAPIError::HTTPError(response.status().as_u16(), "图片写入失败".to_string()))
+            Err(LarkAPIError::HTTPError(
+                response.status().as_u16(),
+                "图片写入失败".to_string(),
+            ))
         }
     }
 
@@ -573,7 +602,7 @@ impl ImageWriteEnhancedService {
         &self,
         spreadsheet_token: impl Into<String>,
         cell: impl Into<String>,
-        image_url: impl Into<String>
+        image_url: impl Into<String>,
     ) -> SDKResult<ImageWriteEnhancedResponse> {
         let request = ImageWriteEnhancedRequest::new(spreadsheet_token)
             .image_source(ImageSource::url(image_url))
@@ -597,7 +626,7 @@ impl ImageWriteEnhancedService {
         spreadsheet_token: impl Into<String>,
         cell: impl Into<String>,
         base64_data: impl Into<String>,
-        mime_type: impl Into<String>
+        mime_type: impl Into<String>,
     ) -> SDKResult<ImageWriteEnhancedResponse> {
         let request = ImageWriteEnhancedRequest::new(spreadsheet_token)
             .image_source(ImageSource::base64(base64_data, mime_type))
@@ -617,7 +646,7 @@ impl ImageWriteEnhancedService {
     pub async fn batch_write_images(
         &self,
         spreadsheet_token: impl Into<String>,
-        images: Vec<(ImageAnchor, ImageSource)>
+        images: Vec<(ImageAnchor, ImageSource)>,
     ) -> SDKResult<Vec<ImageWriteEnhancedResponse>> {
         let mut results = Vec::new();
 
@@ -768,13 +797,16 @@ impl ImageWriteEnhancedBuilder {
 
     /// 执行图片写入操作
     pub async fn execute(self) -> SDKResult<ImageWriteEnhancedResponse> {
-        let spreadsheet_token = self.spreadsheet_token
+        let spreadsheet_token = self
+            .spreadsheet_token
             .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格token不能为空".to_string()))?;
 
-        let anchor = self.anchor
+        let anchor = self
+            .anchor
             .ok_or_else(|| LarkAPIError::InvalidParameter("必须指定图片锚定位置".to_string()))?;
 
-        let image_source = self.image_source
+        let image_source = self
+            .image_source
             .ok_or_else(|| LarkAPIError::InvalidParameter("必须指定图片源".to_string()))?;
 
         let options = self.options.unwrap_or_else(ImageWriteOptions::new);
@@ -923,8 +955,17 @@ mod tests {
     fn test_to_request_body() {
         let request = ImageWriteEnhancedRequest::new("token")
             .image_source(ImageSource::base64("data", "image/png"))
-            .anchor(ImageAnchor::cell("A1").offset_x(10).offset_y(5).size(200, 150))
-            .options(ImageWriteOptions::new().quality(0.9).maintain_aspect_ratio(false));
+            .anchor(
+                ImageAnchor::cell("A1")
+                    .offset_x(10)
+                    .offset_y(5)
+                    .size(200, 150),
+            )
+            .options(
+                ImageWriteOptions::new()
+                    .quality(0.9)
+                    .maintain_aspect_ratio(false),
+            );
 
         let body = request.to_request_body().unwrap();
 
@@ -950,7 +991,8 @@ mod tests {
         let config = Config::default();
         let service = ImageWriteEnhancedService::new(config);
 
-        let builder = service.write_builder()
+        let builder = service
+            .write_builder()
             .spreadsheet_token("test_token")
             .image_url("https://example.com/image.png")
             .cell("B2")
@@ -965,7 +1007,10 @@ mod tests {
         assert!(matches!(builder.image_source, Some(ImageSource { .. })));
         assert!(matches!(builder.anchor, Some(ImageAnchor { .. })));
         assert_eq!(builder.options.as_ref().unwrap().quality, Some(0.9));
-        assert_eq!(builder.options.as_ref().unwrap().maintain_aspect_ratio, Some(true));
+        assert_eq!(
+            builder.options.as_ref().unwrap().maintain_aspect_ratio,
+            Some(true)
+        );
         assert_eq!(builder.options.as_ref().unwrap().opacity, Some(0.8));
     }
 
@@ -1008,10 +1053,12 @@ mod tests {
         let request = ImageWriteEnhancedRequest::new("token")
             .image_source(ImageSource::url("https://cdn.example.com/image.jpg"))
             .anchor(anchor)
-            .options(ImageWriteOptions::new()
-                .quality(0.85)
-                .compress(true)
-                .opacity(0.9));
+            .options(
+                ImageWriteOptions::new()
+                    .quality(0.85)
+                    .compress(true)
+                    .opacity(0.9),
+            );
 
         assert!(request.validate().is_ok());
 
@@ -1036,16 +1083,13 @@ mod tests {
         let images = vec![
             (
                 ImageAnchor::cell("A1"),
-                ImageSource::url("https://example.com/image1.png")
+                ImageSource::url("https://example.com/image1.png"),
             ),
-            (
-                ImageAnchor::cell("C3"),
-                ImageSource::file_id("file_456")
-            ),
+            (ImageAnchor::cell("C3"), ImageSource::file_id("file_456")),
             (
                 ImageAnchor::cell("E5").size(200, 150),
-                ImageSource::base64("data1", "image/png")
-            )
+                ImageSource::base64("data1", "image/png"),
+            ),
         ];
 
         // 验证数据准备

@@ -14,7 +14,7 @@
 //! - 公司信息管理
 //! - 人事统计分析
 
-use open_lark_core::config::Config;
+use config::Config;
 
 pub mod authorizations;
 pub mod basic_data;

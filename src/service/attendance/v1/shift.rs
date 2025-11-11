@@ -6,7 +6,7 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 use reqwest::Method;
-use open_lark_core::api_req::ApiRequest;
+use openlark_core::api_req::ApiRequest;
 use serde_json::json;
 use crate::{,
     core::{
@@ -240,8 +240,8 @@ fn service_version() -> &'static str {,
 #[cfg(test)]
 mod tests {
 use super::*;
-    use open_lark_core::config::Config;
-use open_lark_core::SDKResult;#[test]
+    use config::Config;
+use SDKResult;#[test]
     fn test_shift_service_creation() {
 let config = Config::default();
         let service = ShiftService {

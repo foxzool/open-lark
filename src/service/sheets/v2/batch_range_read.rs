@@ -11,15 +11,15 @@ use serde_json::Value;
 use std::collections::HashMap;
 
 use crate::{
-    api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    http::Transport,
     endpoints_original::Endpoints,
-    ApiRequest, SDKResult,
-    standard_response::StandardResponse,
     error::LarkAPIError,
+    http::Transport,
+    standard_response::StandardResponse,
     trait_system::Service,
+    ApiRequest, SDKResult,
 };
 
 /// 值范围响应（批量读取中的单个范围）
@@ -126,10 +126,7 @@ impl BatchRangeReadRequest {
     ///     vec!["Sheet1!A1:B2", "Sheet1!D1:E10"]
     /// );
     /// ```
-    pub fn new<T: Into<String>, R: Into<String>>(
-        spreadsheet_token: T,
-        ranges: Vec<R>,
-    ) -> Self {
+    pub fn new<T: Into<String>, R: Into<String>>(spreadsheet_token: T, ranges: Vec<R>) -> Self {
         Self {
             spreadsheet_token: spreadsheet_token.into(),
             ranges: Some(ranges.into_iter().map(|r| r.into()).collect()),
@@ -197,18 +194,22 @@ impl BatchRangeReadRequest {
     pub fn validate(&self) -> SDKResult<()> {
         // 验证电子表格令牌
         if self.spreadsheet_token.trim().is_empty() {
-            return Err(LarkAPIError::InvalidParameter("电子表格令牌不能为空".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "电子表格令牌不能为空".to_string(),
+            ));
         }
 
         // 验证范围参数
         if let Some(ranges) = &self.ranges {
             if ranges.is_empty() {
-                return Err(LarkAPIError::InvalidParameter("至少需要一个范围".to_string()));
+                return Err(LarkAPIError::InvalidParameter(
+                    "至少需要一个范围".to_string(),
+                ));
             }
 
             if ranges.len() > 10 {
                 return Err(LarkAPIError::InvalidParameter(
-                    "范围数量不能超过10个".to_string()
+                    "范围数量不能超过10个".to_string(),
                 ));
             }
 
@@ -216,9 +217,10 @@ impl BatchRangeReadRequest {
             for (index, range) in ranges.iter().enumerate() {
                 let range = range.trim();
                 if range.is_empty() {
-                    return Err(LarkAPIError::InvalidParameter(
-                        format!("范围{}不能为空", index + 1)
-                    ));
+                    return Err(LarkAPIError::InvalidParameter(format!(
+                        "范围{}不能为空",
+                        index + 1
+                    )));
                 }
 
                 // 基本范围格式验证
@@ -226,28 +228,33 @@ impl BatchRangeReadRequest {
                     // 包含工作表名的格式：Sheet1!A1:B2
                     let parts: Vec<&str> = range.split('!').collect();
                     if parts.len() != 2 {
-                        return Err(LarkAPIError::InvalidParameter(
-                            format!("无效的范围格式: {}，工作表名和单元格引用之间应该用!分隔", range)
-                        ));
+                        return Err(LarkAPIError::InvalidParameter(format!(
+                            "无效的范围格式: {}，工作表名和单元格引用之间应该用!分隔",
+                            range
+                        )));
                     }
 
                     // 验证单元格引用格式
                     if parts[1].trim().is_empty() {
-                        return Err(LarkAPIError::InvalidParameter(
-                            format!("范围{}的单元格引用不能为空", index + 1)
-                        ));
+                        return Err(LarkAPIError::InvalidParameter(format!(
+                            "范围{}的单元格引用不能为空",
+                            index + 1
+                        )));
                     }
                 } else {
                     // 仅单元格引用的格式：A1:B2
                     if range.is_empty() {
-                        return Err(LarkAPIError::InvalidParameter(
-                            format!("范围{}的单元格引用不能为空", index + 1)
-                        ));
+                        return Err(LarkAPIError::InvalidParameter(format!(
+                            "范围{}的单元格引用不能为空",
+                            index + 1
+                        )));
                     }
                 }
             }
         } else {
-            return Err(LarkAPIError::InvalidParameter("范围列表不能为空".to_string()));
+            return Err(LarkAPIError::InvalidParameter(
+                "范围列表不能为空".to_string(),
+            ));
         }
 
         Ok(())
@@ -268,7 +275,10 @@ impl BatchRangeReadRequest {
         }
 
         if let Some(option) = &self.date_time_render_option {
-            params.push(format!("dateTimeRenderOption={}", urlencoding::encode(option)));
+            params.push(format!(
+                "dateTimeRenderOption={}",
+                urlencoding::encode(option)
+            ));
         }
 
         if let Some(user_id_type) = &self.user_id_type {
@@ -326,7 +336,10 @@ impl BatchRangeReadService {
     ///     println!("值: {:?}", value_range.values);
     /// }
     /// ```
-    pub async fn read_ranges(&self, request: BatchRangeReadRequest) -> SDKResult<BaseResponse<BatchRangeReadResponse>> {
+    pub async fn read_ranges(
+        &self,
+        request: BatchRangeReadRequest,
+    ) -> SDKResult<BaseResponse<BatchRangeReadResponse>> {
         // 验证请求参数
         request.validate()?;
 
@@ -334,12 +347,10 @@ impl BatchRangeReadService {
         let mut api_req = ApiRequest::with_method(reqwest::Method::GET);
         api_req.set_api_path(
             Endpoints::SHEETS_V2_SPREADSHEET_VALUES_BATCH_GET
-                .replace("{spreadsheet_token}", &request.spreadsheet_token)
+                .replace("{spreadsheet_token}", &request.spreadsheet_token),
         );
-        api_req.set_supported_access_token_types(vec![
-            AccessTokenType::Tenant,
-            AccessTokenType::User
-        ]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         // 添加查询参数
         let query_params = request.build_query_params();
@@ -356,7 +367,10 @@ impl BatchRangeReadService {
     }
 
     /// 创建多个范围读取构建器
-    pub fn read_ranges_builder(&self, spreadsheet_token: impl Into<String>) -> BatchRangeReadBuilder {
+    pub fn read_ranges_builder(
+        &self,
+        spreadsheet_token: impl Into<String>,
+    ) -> BatchRangeReadBuilder {
         BatchRangeReadBuilder::new(self.clone(), spreadsheet_token)
     }
 
@@ -483,12 +497,14 @@ mod tests {
         // 测试正常请求
         let request = BatchRangeReadRequest::new(
             "shtcnmBRWQKbsJRHXXXXXXXXXX",
-            vec!["Sheet1!A1:B2", "Sheet2!A1:C10"]
+            vec!["Sheet1!A1:B2", "Sheet2!A1:C10"],
         );
         assert!(request.validate().is_ok());
 
         // 测试范围数量限制
-        let many_ranges: Vec<String> = (0..15).map(|i| format!("Sheet1!A{}:B{}", i * 10 + 1, i * 10 + 10)).collect();
+        let many_ranges: Vec<String> = (0..15)
+            .map(|i| format!("Sheet1!A{}:B{}", i * 10 + 1, i * 10 + 10))
+            .collect();
         let request = BatchRangeReadRequest::new("token", many_ranges);
         assert!(request.validate().is_err());
 
@@ -499,10 +515,7 @@ mod tests {
 
     #[test]
     fn test_build_query_params() {
-        let request = BatchRangeReadRequest::new(
-            "token",
-            vec!["Sheet1!A1:B2", "Sheet2!A1:C10"]
-        )
+        let request = BatchRangeReadRequest::new("token", vec!["Sheet1!A1:B2", "Sheet2!A1:C10"])
             .value_render_option("FormattedValue")
             .date_time_render_option("FormattedString")
             .user_id_type("open_id");
@@ -519,7 +532,8 @@ mod tests {
         let config = Config::default();
         let service = BatchRangeReadService::new(config);
 
-        let builder = service.read_ranges_builder("test_token")
+        let builder = service
+            .read_ranges_builder("test_token")
             .add_range("Sheet1!A1:B2")
             .add_range("Sheet2!A1:C10")
             .value_render_option("FormattedValue")
@@ -528,8 +542,14 @@ mod tests {
         // 验证构建器设置
         assert_eq!(builder.spreadsheet_token, "test_token");
         assert_eq!(builder.ranges.len(), 2);
-        assert_eq!(builder.value_render_option, Some("FormattedValue".to_string()));
-        assert_eq!(builder.date_time_render_option, Some("FormattedString".to_string()));
+        assert_eq!(
+            builder.value_render_option,
+            Some("FormattedValue".to_string())
+        );
+        assert_eq!(
+            builder.date_time_render_option,
+            Some("FormattedString".to_string())
+        );
     }
 
     #[test]
