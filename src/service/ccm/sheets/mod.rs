@@ -16,7 +16,7 @@
 // - 条件格式和保护范围
 //,
 // 覆盖60个API接口（sheets/v2: 33个，sheets/v3: 27个）
-use crate::prelude::*;
+use openlark_core::prelude::*;
 use crate::service::ccm::sheets::v2::SheetsV2Service;
 use crate::service::ccm::sheets::v3::SheetsV3Service;
 /// 电子表格服务

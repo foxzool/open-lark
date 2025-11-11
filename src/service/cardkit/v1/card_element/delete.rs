@@ -212,7 +212,7 @@ impl CardElementService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::config::Config;
+    use config::Config;
 
     #[test]
     fn test_delete_card_element_request_creation() {

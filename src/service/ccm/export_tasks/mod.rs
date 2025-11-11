@@ -8,7 +8,7 @@
 // export_tasks - 导出任务API
 //,
 // 提供文档导出任务相关的功能
-use crate::prelude::*;
+use openlark_core::prelude::*;
 /// 导出任务服务
 #[derive(Debug, Clone)]
 pub struct ExportTasksService {

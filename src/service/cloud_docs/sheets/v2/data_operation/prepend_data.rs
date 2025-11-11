@@ -42,7 +42,7 @@ impl SpreadsheetSheetService {
 }#[cfg(test)]
 mod tests {
 use super::*;
-    use open_lark_core::{config::Config, constants::AppType, SDKResult};
+    use openlark_core::{config::Config, constants::AppType, SDKResult};
     use serde_json::{json, Value};
 fn create_test_config() -> Config {,
         Config::builder()

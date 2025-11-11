@@ -9,9 +9,9 @@
 //! - 风险趋势分析和预测
 //! - 风险报告和决策支持
 
-use open_lark_core::SDKResult;
+use SDKResult;
 
-use open_lark_core::config::Config;
+use config::Config;
 use serde::{Deserialize, Serialize};
 
 // 导入核心类型

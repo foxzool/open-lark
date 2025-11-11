@@ -9,18 +9,18 @@
 
 use serde::{Deserialize, Serialize};
 
+use crate::endpoints_original::Endpoints;
+use crate::service::sheets::v3::common::SheetPagedResponse;
+use crate::service::sheets::v3::models::sheet::SheetId;
+use crate::service::sheets::v3::models::spreadsheet::SpreadsheetToken;
 use crate::{
-    api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
+    error::LarkAPIError,
     http::Transport,
     ApiRequest, SDKResult,
-    error::LarkAPIError,
 };
-use crate::endpoints_original::Endpoints;
-use crate::service::sheets::v3::models::spreadsheet::SpreadsheetToken;
-use crate::service::sheets::v3::models::sheet::SheetId;
-use crate::service::sheets::v3::common::SheetPagedResponse;
 
 /// 浮动图片管理服务
 ///
@@ -263,32 +263,33 @@ impl CreateFloatImageRequestBuilder {
     /// 构建创建浮动图片请求对象
     pub fn build(self) -> crate::core::error::SDKResult<CreateFloatImageRequest> {
         // 验证必需参数
-        match (&self.spreadsheet_token, &self.sheet_id, &self.float_image_token, &self.range) {
+        match (
+            &self.spreadsheet_token,
+            &self.sheet_id,
+            &self.float_image_token,
+            &self.range,
+        ) {
             (Some(_), Some(_), Some(float_image_token), Some(range)) => {
                 // 验证浮动图片Token
                 if float_image_token.is_empty() {
                     return Err(SDKError::InvalidParameter(
-                        "浮动图片Token不能为空".to_string()
+                        "浮动图片Token不能为空".to_string(),
                     ));
                 }
 
                 // 验证范围格式
                 if range.is_empty() {
-                    return Err(SDKError::InvalidParameter(
-                        "图片范围不能为空".to_string()
-                    ));
+                    return Err(SDKError::InvalidParameter("图片范围不能为空".to_string()));
                 }
 
                 // 验证浮动图片ID格式（如果提供）
                 if let Some(ref id) = self.float_image_id {
                     if id.is_empty() {
-                        return Err(SDKError::InvalidParameter(
-                            "浮动图片ID不能为空".to_string()
-                        ));
+                        return Err(SDKError::InvalidParameter("浮动图片ID不能为空".to_string()));
                     }
                     if id.len() > 10 {
                         return Err(SDKError::InvalidParameter(
-                            "浮动图片ID长度不能超过10个字符".to_string()
+                            "浮动图片ID长度不能超过10个字符".to_string(),
                         ));
                     }
                 }
@@ -296,26 +297,22 @@ impl CreateFloatImageRequestBuilder {
                 // 验证尺寸参数
                 if let Some(width) = self.width {
                     if width <= 0 {
-                        return Err(SDKError::InvalidParameter(
-                            "图片宽度必须大于0".to_string()
-                        ));
+                        return Err(SDKError::InvalidParameter("图片宽度必须大于0".to_string()));
                     }
                     if width > 10000 {
                         return Err(SDKError::InvalidParameter(
-                            "图片宽度不能超过10000像素".to_string()
+                            "图片宽度不能超过10000像素".to_string(),
                         ));
                     }
                 }
 
                 if let Some(height) = self.height {
                     if height <= 0 {
-                        return Err(SDKError::InvalidParameter(
-                            "图片高度必须大于0".to_string()
-                        ));
+                        return Err(SDKError::InvalidParameter("图片高度必须大于0".to_string()));
                     }
                     if height > 10000 {
                         return Err(SDKError::InvalidParameter(
-                            "图片高度不能超过10000像素".to_string()
+                            "图片高度不能超过10000像素".to_string(),
                         ));
                     }
                 }
@@ -324,7 +321,7 @@ impl CreateFloatImageRequestBuilder {
                 if let Some(offset_x) = self.offset_x {
                     if offset_x < -10000 || offset_x > 10000 {
                         return Err(SDKError::InvalidParameter(
-                            "X轴偏移量范围应为-10000到10000".to_string()
+                            "X轴偏移量范围应为-10000到10000".to_string(),
                         ));
                     }
                 }
@@ -332,7 +329,7 @@ impl CreateFloatImageRequestBuilder {
                 if let Some(offset_y) = self.offset_y {
                     if offset_y < -10000 || offset_y > 10000 {
                         return Err(SDKError::InvalidParameter(
-                            "Y轴偏移量范围应为-10000到10000".to_string()
+                            "Y轴偏移量范围应为-10000到10000".to_string(),
                         ));
                     }
                 }
@@ -350,8 +347,8 @@ impl CreateFloatImageRequestBuilder {
                 })
             }
             _ => Err(SDKError::InvalidParameter(
-                "电子表格Token、工作表ID、浮动图片Token和范围都是必需的".to_string()
-            ))
+                "电子表格Token、工作表ID、浮动图片Token和范围都是必需的".to_string(),
+            )),
         }
     }
 }
@@ -520,19 +517,21 @@ impl UpdateFloatImageRequestBuilder {
     /// 构建更新浮动图片请求对象
     pub fn build(self) -> crate::core::error::SDKResult<UpdateFloatImageRequest> {
         // 验证必需参数
-        match (&self.spreadsheet_token, &self.sheet_id, &self.float_image_id) {
+        match (
+            &self.spreadsheet_token,
+            &self.sheet_id,
+            &self.float_image_id,
+        ) {
             (Some(_), Some(_), Some(float_image_id)) => {
                 // 验证浮动图片ID
                 if float_image_id.is_empty() {
-                    return Err(SDKError::InvalidParameter(
-                        "浮动图片ID不能为空".to_string()
-                    ));
+                    return Err(SDKError::InvalidParameter("浮动图片ID不能为空".to_string()));
                 }
 
                 // 验证更新字段
                 if self.fields.is_empty() {
                     return Err(SDKError::InvalidParameter(
-                        "至少需要指定一个更新字段".to_string()
+                        "至少需要指定一个更新字段".to_string(),
                     ));
                 }
 
@@ -540,36 +539,37 @@ impl UpdateFloatImageRequestBuilder {
                 let valid_fields = ["range", "width", "height", "offsetX", "offsetY"];
                 for field in &self.fields {
                     if !valid_fields.contains(&field.as_str()) {
-                        return Err(SDKError::InvalidParameter(
-                            format!("无效的更新字段: {}", field)
-                        ));
+                        return Err(SDKError::InvalidParameter(format!(
+                            "无效的更新字段: {}",
+                            field
+                        )));
                     }
                 }
 
                 // 验证提供的字段与字段列表一致性
                 if self.range.is_none() && self.fields.contains(&"range".to_string()) {
                     return Err(SDKError::InvalidParameter(
-                        "指定了range字段但未提供range值".to_string()
+                        "指定了range字段但未提供range值".to_string(),
                     ));
                 }
                 if self.width.is_none() && self.fields.contains(&"width".to_string()) {
                     return Err(SDKError::InvalidParameter(
-                        "指定了width字段但未提供width值".to_string()
+                        "指定了width字段但未提供width值".to_string(),
                     ));
                 }
                 if self.height.is_none() && self.fields.contains(&"height".to_string()) {
                     return Err(SDKError::InvalidParameter(
-                        "指定了height字段但未提供height值".to_string()
+                        "指定了height字段但未提供height值".to_string(),
                     ));
                 }
                 if self.offset_x.is_none() && self.fields.contains(&"offsetX".to_string()) {
                     return Err(SDKError::InvalidParameter(
-                        "指定了offsetX字段但未提供offsetX值".to_string()
+                        "指定了offsetX字段但未提供offsetX值".to_string(),
                     ));
                 }
                 if self.offset_y.is_none() && self.fields.contains(&"offsetY".to_string()) {
                     return Err(SDKError::InvalidParameter(
-                        "指定了offsetY字段但未提供offsetY值".to_string()
+                        "指定了offsetY字段但未提供offsetY值".to_string(),
                     ));
                 }
 
@@ -586,8 +586,8 @@ impl UpdateFloatImageRequestBuilder {
                 })
             }
             _ => Err(SDKError::InvalidParameter(
-                "电子表格Token、工作表ID和浮动图片ID都是必需的".to_string()
-            ))
+                "电子表格Token、工作表ID和浮动图片ID都是必需的".to_string(),
+            )),
         }
     }
 }
@@ -692,21 +692,17 @@ impl QueryFloatImagesRequestBuilder {
                 // 验证图片ID数量
                 if self.float_image_ids.len() > 10 {
                     return Err(SDKError::InvalidParameter(
-                        "单次最多支持查询10个浮动图片ID".to_string()
+                        "单次最多支持查询10个浮动图片ID".to_string(),
                     ));
                 }
 
                 // 验证页大小
                 if let Some(page_size) = self.page_size {
                     if page_size <= 0 {
-                        return Err(SDKError::InvalidParameter(
-                            "页大小必须大于0".to_string()
-                        ));
+                        return Err(SDKError::InvalidParameter("页大小必须大于0".to_string()));
                     }
                     if page_size > 100 {
-                        return Err(SDKError::InvalidParameter(
-                            "页大小不能超过100".to_string()
-                        ));
+                        return Err(SDKError::InvalidParameter("页大小不能超过100".to_string()));
                     }
                 }
 
@@ -719,8 +715,8 @@ impl QueryFloatImagesRequestBuilder {
                 })
             }
             _ => Err(SDKError::InvalidParameter(
-                "电子表格Token和工作表ID都是必需的".to_string()
-            ))
+                "电子表格Token和工作表ID都是必需的".to_string(),
+            )),
         }
     }
 }
@@ -792,12 +788,14 @@ impl GetFloatImageRequestBuilder {
 
     /// 构建获取浮动图片请求对象
     pub fn build(self) -> crate::core::error::SDKResult<GetFloatImageRequest> {
-        match (&self.spreadsheet_token, &self.sheet_id, &self.float_image_id) {
+        match (
+            &self.spreadsheet_token,
+            &self.sheet_id,
+            &self.float_image_id,
+        ) {
             (Some(_), Some(_), Some(float_image_id)) => {
                 if float_image_id.is_empty() {
-                    return Err(SDKError::InvalidParameter(
-                        "浮动图片ID不能为空".to_string()
-                    ));
+                    return Err(SDKError::InvalidParameter("浮动图片ID不能为空".to_string()));
                 }
 
                 Ok(GetFloatImageRequest {
@@ -807,8 +805,8 @@ impl GetFloatImageRequestBuilder {
                 })
             }
             _ => Err(SDKError::InvalidParameter(
-                "电子表格Token、工作表ID和浮动图片ID都是必需的".to_string()
-            ))
+                "电子表格Token、工作表ID和浮动图片ID都是必需的".to_string(),
+            )),
         }
     }
 }
@@ -880,12 +878,14 @@ impl DeleteFloatImageRequestBuilder {
 
     /// 构建删除浮动图片请求对象
     pub fn build(self) -> crate::core::error::SDKResult<DeleteFloatImageRequest> {
-        match (&self.spreadsheet_token, &self.sheet_id, &self.float_image_id) {
+        match (
+            &self.spreadsheet_token,
+            &self.sheet_id,
+            &self.float_image_id,
+        ) {
             (Some(_), Some(_), Some(float_image_id)) => {
                 if float_image_id.is_empty() {
-                    return Err(SDKError::InvalidParameter(
-                        "浮动图片ID不能为空".to_string()
-                    ));
+                    return Err(SDKError::InvalidParameter("浮动图片ID不能为空".to_string()));
                 }
 
                 Ok(DeleteFloatImageRequest {
@@ -895,8 +895,8 @@ impl DeleteFloatImageRequestBuilder {
                 })
             }
             _ => Err(SDKError::InvalidParameter(
-                "电子表格Token、工作表ID和浮动图片ID都是必需的".to_string()
-            ))
+                "电子表格Token、工作表ID和浮动图片ID都是必需的".to_string(),
+            )),
         }
     }
 }
@@ -1109,7 +1109,10 @@ impl FloatImagesService {
         let mut params = Vec::new();
 
         if !request.float_image_ids.is_empty() {
-            params.push(format!("float_image_ids={}", request.float_image_ids.join(",")));
+            params.push(format!(
+                "float_image_ids={}",
+                request.float_image_ids.join(",")
+            ));
         }
 
         if let Some(page_size) = request.page_size {
@@ -1549,8 +1552,8 @@ impl<'a> FloatImagesServiceBuilder<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::config::Config;
-    use open_lark_core::trait_system::Service;
+    use config::Config;
+    use openlark_core::trait_system::Service;
 
     #[test]
     fn test_float_images_service_creation() {
@@ -1732,7 +1735,8 @@ mod tests {
         let service = FloatImagesService::new(config);
 
         // 测试创建构建器
-        let create_builder = service.create_builder()
+        let create_builder = service
+            .create_builder()
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .sheet_id("0XXXXXXXXXX".to_string())
             .float_image_token("img_token_123456".to_string())
@@ -1740,9 +1744,15 @@ mod tests {
             .size(200, 80)
             .offset(50, 20);
 
-        assert_eq!(create_builder.spreadsheet_token.unwrap().as_str(), "shtcnmBRWQKbsJRHXXXXXXXXXX");
+        assert_eq!(
+            create_builder.spreadsheet_token.unwrap().as_str(),
+            "shtcnmBRWQKbsJRHXXXXXXXXXX"
+        );
         assert_eq!(create_builder.sheet_id.unwrap().as_str(), "0XXXXXXXXXX");
-        assert_eq!(create_builder.float_image_token.unwrap(), "img_token_123456");
+        assert_eq!(
+            create_builder.float_image_token.unwrap(),
+            "img_token_123456"
+        );
         assert_eq!(create_builder.range.unwrap(), "A1");
         assert_eq!(create_builder.width, Some(200));
         assert_eq!(create_builder.height, Some(80));
@@ -1750,7 +1760,8 @@ mod tests {
         assert_eq!(create_builder.offset_y, Some(20));
 
         // 测试更新构建器
-        let update_builder = service.update_builder()
+        let update_builder = service
+            .update_builder()
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .sheet_id("0XXXXXXXXXX".to_string())
             .float_image_id("img_789")

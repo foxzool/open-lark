@@ -8,7 +8,7 @@ pub struct BotService {
 }
 
 impl BotService {
-    pub fn new(_config: open_lark_core::core::config::Config) -> Self {
+    pub fn new(_config: openlark_core::config::Config) -> Self {
         Self {}
     }
 }

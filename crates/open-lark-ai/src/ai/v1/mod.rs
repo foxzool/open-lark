@@ -18,17 +18,17 @@ pub mod translation;
 
 #[derive(Debug)]
 pub struct AiService {
-    config: open_lark_core::core::config::Config,
+    config: openlark_core::config::Config,
 }
 
 impl AiService {
-    pub fn new(config: open_lark_core::core::config::Config) -> Self {
+    pub fn new(config: openlark_core::config::Config) -> Self {
         Self { config }
     }
 }
 
-impl open_lark_core::core::trait_system::Service for AiService {
-    fn config(&self) -> &open_lark_core::core::config::Config {
+impl openlark_core::trait_system::Service for AiService {
+    fn config(&self) -> &openlark_core::config::Config {
         &self.config
     }
 

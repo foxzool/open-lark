@@ -21,17 +21,18 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
 
-use crate::{
-    api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    ApiRequest, SDKResult, req_option::RequestOption,
-    standard_response::StandardResponse,
-    error::LarkAPIError,
-};
 use crate::endpoints_original::Endpoints;
 use crate::service::sheets::v2::sheet_cells::CellValue;
+use crate::{
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    error::LarkAPIError,
+    http::Transport,
+    req_option::RequestOption,
+    standard_response::StandardResponse,
+    ApiRequest, SDKResult,
+};
 
 /// 向单个范围写入数据请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -184,11 +185,18 @@ impl SingleWriteRequestBuilder {
     /// 构建请求对象
     pub fn build(self) -> SDKResult<SingleWriteRequest> {
         let request = SingleWriteRequest {
-            spreadsheet_token: self.spreadsheet_token
+            spreadsheet_token: self
+                .spreadsheet_token
                 .ok_or_else(|| LarkAPIError::illegal_param("电子表格令牌不能为空"))?,
-            range: self.range.ok_or_else(|| LarkAPIError::illegal_param("写入范围不能为空"))?,
-            values: self.values.ok_or_else(|| LarkAPIError::illegal_param("写入数据不能为空"))?,
-            value_input_option: self.value_input_option.or_else(|| Some("USER_ENTERED".to_string())),
+            range: self
+                .range
+                .ok_or_else(|| LarkAPIError::illegal_param("写入范围不能为空"))?,
+            values: self
+                .values
+                .ok_or_else(|| LarkAPIError::illegal_param("写入数据不能为空"))?,
+            value_input_option: self
+                .value_input_option
+                .or_else(|| Some("USER_ENTERED".to_string())),
             include_values_in_response: self.include_values_in_response.or_else(|| Some(false)),
             response_value_render_option: self.response_value_render_option,
             response_date_time_render_option: self.response_date_time_render_option,
@@ -260,7 +268,10 @@ impl SingleWriteService {
     }
 
     /// 向单个范围写入数据
-    pub async fn write_range(&self, request: &SingleWriteRequest) -> SDKResult<BaseResponse<SingleWriteResponse>> {
+    pub async fn write_range(
+        &self,
+        request: &SingleWriteRequest,
+    ) -> SDKResult<BaseResponse<SingleWriteResponse>> {
         // 验证请求参数
         request.validate()?;
 
@@ -306,31 +317,42 @@ impl SingleWriteService {
         let mut body = HashMap::new();
 
         // 转换数据格式
-        let values_json: Vec<Vec<Value>> = request.values
+        let values_json: Vec<Vec<Value>> = request
+            .values
             .iter()
             .map(|row| {
                 row.iter()
-                    .map(|cell| {
-                        match cell {
-                            CellValue::Text(s) => Value::String(s.clone()),
-                            CellValue::Number(n) => Value::Number(serde_json::Number::from_f64(*n).unwrap_or_else(|| serde_json::Number::from(0))),
-                            CellValue::Boolean(b) => Value::Bool(*b),
-                            CellValue::Formula(f) => Value::String(format!("={}", f)),
-                            CellValue::Blank => Value::Null,
-                            CellValue::Error(e) => Value::String(e.clone()),
-                        }
+                    .map(|cell| match cell {
+                        CellValue::Text(s) => Value::String(s.clone()),
+                        CellValue::Number(n) => Value::Number(
+                            serde_json::Number::from_f64(*n)
+                                .unwrap_or_else(|| serde_json::Number::from(0)),
+                        ),
+                        CellValue::Boolean(b) => Value::Bool(*b),
+                        CellValue::Formula(f) => Value::String(format!("={}", f)),
+                        CellValue::Blank => Value::Null,
+                        CellValue::Error(e) => Value::String(e.clone()),
                     })
                     .collect()
             })
             .collect();
 
-        body.insert("values".to_string(), Value::Array(
-            values_json.into_iter().map(|row| Value::Array(row)).collect()
-        ));
+        body.insert(
+            "values".to_string(),
+            Value::Array(
+                values_json
+                    .into_iter()
+                    .map(|row| Value::Array(row))
+                    .collect(),
+            ),
+        );
 
         // 添加可选参数
         if let Some(option) = &request.value_input_option {
-            body.insert("valueInputOption".to_string(), Value::String(option.clone()));
+            body.insert(
+                "valueInputOption".to_string(),
+                Value::String(option.clone()),
+            );
         }
 
         if let Some(include) = request.include_values_in_response {
@@ -338,11 +360,17 @@ impl SingleWriteService {
         }
 
         if let Some(option) = &request.response_value_render_option {
-            body.insert("responseValueRenderOption".to_string(), Value::String(option.clone()));
+            body.insert(
+                "responseValueRenderOption".to_string(),
+                Value::String(option.clone()),
+            );
         }
 
         if let Some(option) = &request.response_date_time_render_option {
-            body.insert("responseDateTimeRenderOption".to_string(), Value::String(option.clone()));
+            body.insert(
+                "responseDateTimeRenderOption".to_string(),
+                Value::String(option.clone()),
+            );
         }
 
         Ok(Value::Object(body.into_iter().collect()))
@@ -460,13 +488,18 @@ impl<'a> SingleWriteServiceRequestBuilder<'a> {
     /// 执行请求
     pub async fn execute(self) -> SDKResult<BaseResponse<SingleWriteResponse>> {
         let request = SingleWriteRequest {
-            spreadsheet_token: self.spreadsheet_token
+            spreadsheet_token: self
+                .spreadsheet_token
                 .ok_or_else(|| LarkAPIError::illegal_param("电子表格令牌不能为空"))?,
-            range: self.range
+            range: self
+                .range
                 .ok_or_else(|| LarkAPIError::illegal_param("写入范围不能为空"))?,
-            values: self.values
+            values: self
+                .values
                 .ok_or_else(|| LarkAPIError::illegal_param("写入数据不能为空"))?,
-            value_input_option: self.value_input_option.or_else(|| Some("USER_ENTERED".to_string())),
+            value_input_option: self
+                .value_input_option
+                .or_else(|| Some("USER_ENTERED".to_string())),
             include_values_in_response: self.include_values_in_response.or_else(|| Some(false)),
             response_value_render_option: self.response_value_render_option,
             response_date_time_render_option: self.response_date_time_render_option,
@@ -479,7 +512,7 @@ impl<'a> SingleWriteServiceRequestBuilder<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::config::Config;
+    use config::Config;
 
     fn create_test_config() -> Config {
         Config::builder()
@@ -494,7 +527,10 @@ mod tests {
             "test_token".to_string(),
             "Sheet1!A1:C3".to_string(),
             vec![
-                vec![CellValue::Text("姓名".to_string()), CellValue::Text("年龄".to_string())],
+                vec![
+                    CellValue::Text("姓名".to_string()),
+                    CellValue::Text("年龄".to_string()),
+                ],
                 vec![CellValue::Text("张三".to_string()), CellValue::Number(25.0)],
             ],
         );
@@ -512,8 +548,14 @@ mod tests {
             .spreadsheet_token("test_token".to_string())
             .range("Sheet1!A1:B2".to_string())
             .values(vec![
-                vec![CellValue::Text("标题1".to_string()), CellValue::Text("标题2".to_string())],
-                vec![CellValue::Text("数据1".to_string()), CellValue::Text("数据2".to_string())],
+                vec![
+                    CellValue::Text("标题1".to_string()),
+                    CellValue::Text("标题2".to_string()),
+                ],
+                vec![
+                    CellValue::Text("数据1".to_string()),
+                    CellValue::Text("数据2".to_string()),
+                ],
             ])
             .value_input_option("RAW".to_string())
             .include_values_in_response(true)
@@ -592,7 +634,9 @@ mod tests {
             .build();
         let service = SingleWriteService::new(config);
 
-        let url = service.build_request_url("token123", "Sheet1!A1:C3").unwrap();
+        let url = service
+            .build_request_url("token123", "Sheet1!A1:C3")
+            .unwrap();
         assert!(url.contains("open.feishu.cn"));
         assert!(url.contains("token123"));
         assert!(url.contains("A1%3AC3")); // URL编码的范围
@@ -607,8 +651,14 @@ mod tests {
             "test_token".to_string(),
             "Sheet1!A1:B2".to_string(),
             vec![
-                vec![CellValue::Text("Hello".to_string()), CellValue::Number(42.0)],
-                vec![CellValue::Boolean(true), CellValue::Text("World".to_string())],
+                vec![
+                    CellValue::Text("Hello".to_string()),
+                    CellValue::Number(42.0),
+                ],
+                vec![
+                    CellValue::Boolean(true),
+                    CellValue::Text("World".to_string()),
+                ],
             ],
         );
 
@@ -648,12 +698,21 @@ mod tests {
         let config = create_test_config();
         let service = SingleWriteService::new(config);
 
-        let request_builder = service.write_range_builder()
+        let request_builder = service
+            .write_range_builder()
             .spreadsheet_token("token".to_string())
             .range("Sheet1!A1:C3".to_string())
             .values(vec![
-                vec![CellValue::Text("A".to_string()), CellValue::Text("B".to_string()), CellValue::Text("C".to_string())],
-                vec![CellValue::Number(1.0), CellValue::Number(2.0), CellValue::Number(3.0)],
+                vec![
+                    CellValue::Text("A".to_string()),
+                    CellValue::Text("B".to_string()),
+                    CellValue::Text("C".to_string()),
+                ],
+                vec![
+                    CellValue::Number(1.0),
+                    CellValue::Number(2.0),
+                    CellValue::Number(3.0),
+                ],
             ])
             .value_input_option("USER_ENTERED".to_string())
             .include_values_in_response(true)
@@ -661,16 +720,21 @@ mod tests {
 
         assert_eq!(request_builder.spreadsheet_token, Some("token".to_string()));
         assert_eq!(request_builder.range, Some("Sheet1!A1:C3".to_string()));
-        assert_eq!(request_builder.value_input_option, Some("USER_ENTERED".to_string()));
+        assert_eq!(
+            request_builder.value_input_option,
+            Some("USER_ENTERED".to_string())
+        );
         assert_eq!(request_builder.include_values_in_response, Some(true));
-        assert_eq!(request_builder.response_value_render_option, Some("FORMATTED_VALUE".to_string()));
+        assert_eq!(
+            request_builder.response_value_render_option,
+            Some("FORMATTED_VALUE".to_string())
+        );
     }
 
     #[test]
     fn test_error_handling() {
         // 测试构建器验证错误
-        let result = SingleWriteRequest::builder()
-            .build();
+        let result = SingleWriteRequest::builder().build();
 
         assert!(result.is_err());
 
@@ -687,14 +751,12 @@ mod tests {
         let request = SingleWriteRequest::new(
             "test_token".to_string(),
             "Sheet1!A1:F1".to_string(),
-            vec![
-                vec![
-                    CellValue::Text("text".to_string()),
-                    CellValue::Number(42.5),
-                    CellValue::Boolean(true),
-                    CellValue::Formula("=SUM(A1:B1)".to_string()),
-                ]
-            ],
+            vec![vec![
+                CellValue::Text("text".to_string()),
+                CellValue::Number(42.5),
+                CellValue::Boolean(true),
+                CellValue::Formula("=SUM(A1:B1)".to_string()),
+            ]],
         );
 
         assert_eq!(request.row_count(), 1);

@@ -604,7 +604,7 @@ mod tests {
 
     #[test]
     fn test_severity_levels() {
-        use open_lark_core::error::ErrorSeverity;
+        use openlark_core::error::ErrorSeverity;
 
         // 测试不同严重级别
         assert_eq!(LarkErrorCode::Success.severity(), ErrorSeverity::Info);
@@ -1326,7 +1326,7 @@ mod tests {
 
     #[test]
     fn test_all_severity_levels() {
-        use open_lark_core::error::ErrorSeverity;
+        use openlark_core::error::ErrorSeverity;
 
         // Info级别
         assert_eq!(LarkErrorCode::Success.severity(), ErrorSeverity::Info);

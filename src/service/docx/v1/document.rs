@@ -284,7 +284,7 @@ impl GetAnnouncementBlockContentRequest {
 
             // 验证用户ID类型的有效性
             match user_id_type.as_str() {
-                "open_id" | "user_id" | "union_id" => {},
+                "open_id" | "user_id" | "union_id" => {}
                 _ => return Err("用户ID类型必须是 open_id、user_id 或 union_id".to_string()),
             }
         }
@@ -564,7 +564,11 @@ impl DocumentService {
     ) -> SDKResult<GetAnnouncementBlockContentResponse> {
         req.validate()
             .map_err(|msg| crate::core::error::LarkAPIError::illegal_param(msg))?;
-        log::debug!("开始获取群公告块内容: chat_id={}, block_id={:?}", req.chat_id, req.block_id);
+        log::debug!(
+            "开始获取群公告块内容: chat_id={}, block_id={:?}",
+            req.chat_id,
+            req.block_id
+        );
 
         // 构建API路径，替换两个路径参数
         let endpoint = crate::core::endpoints_original::Endpoints::DOCX_V1_CHAT_ANNOUNCEMENT_BLOCK
@@ -579,7 +583,9 @@ impl DocumentService {
             ..Default::default()
         };
 
-        let resp = Transport::<GetAnnouncementBlockContentResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<GetAnnouncementBlockContentResponse>::request(api_req, &self.config, None)
+                .await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!(
@@ -1348,7 +1354,10 @@ mod tests {
         request.set_user_id_type("invalid_type");
         let result = request.validate();
         assert!(result.is_err());
-        assert_eq!(result.unwrap_err(), "用户ID类型必须是 open_id、user_id 或 union_id");
+        assert_eq!(
+            result.unwrap_err(),
+            "用户ID类型必须是 open_id、user_id 或 union_id"
+        );
     }
 
     #[test]
@@ -1546,6 +1555,9 @@ mod tests {
         assert_eq!(content.block_type, Some("rich_text".to_string()));
         assert_eq!(content.content, Some("富文本公告内容".to_string()));
         assert_eq!(content.title, Some("系统公告".to_string()));
-        assert_eq!(content.creator.as_ref().unwrap().name, Some("张三".to_string()));
+        assert_eq!(
+            content.creator.as_ref().unwrap().name,
+            Some("张三".to_string())
+        );
     }
 }

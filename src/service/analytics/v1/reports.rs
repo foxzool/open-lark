@@ -12,11 +12,11 @@
 //! - 报表权限和访问控制
 //! - 报表数据缓存和性能优化
 
-use open_lark_core::config::Config;
-use open_lark_core::SDKResult;
 use crate::service::analytics::v1::*;
 use chrono::{DateTime, Utc};
+use config::Config;
 use serde::{Deserialize, Serialize};
+use SDKResult;
 
 /// 报表服务
 #[derive(Debug, Clone)]

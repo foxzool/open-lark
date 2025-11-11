@@ -16,7 +16,7 @@
 //! - 模板管理和快速创建
 //! - 权限管理和访问控制
 
-use open_lark_core::config::Config;
+use config::Config;
 
 /// Cloud Docs服务
 #[derive(Debug, Clone)]

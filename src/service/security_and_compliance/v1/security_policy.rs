@@ -14,9 +14,9 @@
 //! - 策略效果分析和优化
 //! - 跨系统策略同步和分发
 
-use open_lark_core::config::Config;
-use open_lark_core::SDKResult;
+use config::Config;
 use serde::{Deserialize, Serialize};
+use SDKResult;
 
 // 导入核心类型
 

@@ -3,7 +3,7 @@
 //! 提供飞书事件相关的API功能，包括：
 //! - 获取事件出口IP地址
 
-use open_lark_core::core::config::Config;
+use openlark_core::config::Config;
 
 /// 事件服务
 #[derive(Debug, Clone)]

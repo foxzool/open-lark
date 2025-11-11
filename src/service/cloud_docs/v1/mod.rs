@@ -14,7 +14,7 @@
 //! - 知识库和表格操作
 //! - AI助手和白板功能
 
-use open_lark_core::config::Config;
+use config::Config;
 
 /// Cloud Docs服务 v1版本
 ///

@@ -5,7 +5,7 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use open_lark_core::SDKResult;//! 云盘文件夹服务 v1
+use SDKResult;//! 云盘文件夹服务 v1
 //!
 //! 提供企业级文件夹管理功能，支持：
 //! - 文件夹创建、查询、更新、删除

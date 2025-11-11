@@ -15,7 +15,7 @@ pub mod public_mailbox_member;
 pub mod rule;
 pub mod user_mailbox_alias;
 
-use open_lark_core::core::{config::Config, trait_system::Service};
+use openlark_core::{config::Config, trait_system::Service};
 
 /// 邮件 v1 API 服务
 ///
@@ -267,7 +267,7 @@ impl Clone for V1 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::core::trait_system::Service;
+    use openlark_core::trait_system::Service;
 
     /// 创建测试配置
     fn create_test_config() -> Config {

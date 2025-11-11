@@ -15,7 +15,7 @@ pub struct ApplicationService {
 }
 
 impl ApplicationService {
-    pub fn new(config: open_lark_core::core::config::Config) -> Self {
+    pub fn new(config: openlark_core::config::Config) -> Self {
         Self {
             v6: v6::V6::new(config),
         }

@@ -9,7 +9,7 @@ pub mod event;
 
 /// Re-exports from open-lark-core for convenience.
 pub mod prelude {
-    pub use open_lark_core::*;
+    pub use openlark_core::*;
     // Board module exports
     pub use crate::board::v1::{
         CreateWhiteboardNodeRequest, DownloadWhiteboardAsImageRequest, GetWhiteboardThemeRequest,

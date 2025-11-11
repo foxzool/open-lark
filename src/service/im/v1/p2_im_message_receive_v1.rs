@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use open_lark_core::event::EventHandler};
+use openlark_core::event::EventHandler};
 
 #[derive(Debug, Clone)]
 pub struct P2ImMessageReceiveV1 {
@@ -99,7 +99,7 @@ pub struct MentionEvent {
 #[allow(unused_variables, unused_unsafe)]
 mod test {,
     use serde_json::json;
-use open_lark_core::event::context::EventContext;
+use openlark_core::event::context::EventContext;
     #[test]
 fn test_decode() {
         let p1 = json!({"schema":"2.0","header":{"event_id":"7db4fd0bb90cfa6127e3aaa446d39b37","token

@@ -16,7 +16,7 @@
 // - 节点权限管理
 //,
 // 覆盖16个API接口（wiki/v2: 15个，wiki/v1: 1个）
-use crate::prelude::*;
+use openlark_core::prelude::*;
 use crate::service::ccm::wiki::v2::WikiV2Service;
 use crate::service::ccm::wiki::v1::WikiV1Service;
 /// 知识库服务

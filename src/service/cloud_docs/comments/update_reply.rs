@@ -1,4 +1,4 @@
-use open_lark_core::SDKResult;use reqwest::Method;
+use SDKResult;use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::{

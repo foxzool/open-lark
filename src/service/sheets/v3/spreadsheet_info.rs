@@ -7,14 +7,14 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 use crate::{
-    api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    http::Transport,
-    ApiRequest, SDKResult,
-    standard_response::StandardResponse,
     error::LarkAPIError,
+    http::Transport,
+    standard_response::StandardResponse,
     trait_system::Service,
+    ApiRequest, SDKResult,
 };
 
 // ============================================================================
@@ -90,7 +90,10 @@ impl SpreadsheetInfoService {
     ///
     /// println!("操作成功: {:?}", response);
     /// ```
-    pub async fn get_spreadsheet_info(&self, request: SpreadsheetInfoRequest) -> SDKResult<BaseResponse<SpreadsheetInfoResponse>> {
+    pub async fn get_spreadsheet_info(
+        &self,
+        request: SpreadsheetInfoRequest,
+    ) -> SDKResult<BaseResponse<SpreadsheetInfoResponse>> {
         // 验证请求参数
         request.validate()?;
 
@@ -103,10 +106,8 @@ impl SpreadsheetInfoService {
 
         let mut api_req = ApiRequest::with_method(reqwest::Method::GET);
         api_req.set_api_path(endpoint);
-        api_req.set_supported_access_token_types(vec![
-            AccessTokenType::Tenant,
-            AccessTokenType::User
-        ]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         // 添加查询参数（如果需要）
         // let query_params = request.build_query_params();
@@ -123,8 +124,11 @@ impl SpreadsheetInfoService {
     }
 
     /// 便捷方法
-    pub fn get_spreadsheet_info_builder(&self, param: impl Into<String>) -> {{BuilderStruct}} {
-        {{BuilderStruct}}::new(self.clone(), param)
+    pub fn get_spreadsheet_info_builder(
+        &self,
+        param: impl Into<String>,
+    ) -> GetSpreadsheetInfoBuilder {
+        GetSpreadsheetInfoBuilder::new(self.clone(), param)
     }
 }
 
@@ -150,12 +154,12 @@ impl Service for SpreadsheetInfoService {
 // ============================================================================
 
 /// 电子表格信息构建器
-pub struct {{BuilderStruct}} {
+pub struct GetSpreadsheetInfoBuilder {
     service: SpreadsheetInfoService,
     // 构建器字段
 }
 
-impl {{BuilderStruct}} {
+impl GetSpreadsheetInfoBuilder {
     /// 创建新的构建器
     pub fn new(service: SpreadsheetInfoService, param: impl Into<String>) -> Self {
         Self {

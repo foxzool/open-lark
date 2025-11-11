@@ -14,7 +14,7 @@
 //! - 完整的审计追踪和日志管理
 //! - 安全策略配置和自动化执行
 
-use open_lark_core::config::Config;
+use config::Config;
 use serde::{Deserialize, Serialize};
 
 // 导入特定类型以避免命名冲突

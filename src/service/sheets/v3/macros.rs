@@ -9,11 +9,11 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use open_lark_core::error::LarkAPIError;
-use open_lark_core::trait_system::Transport;
 use crate::http_transport::HttpTransport;
+use openlark_core::error::LarkAPIError;
+use openlark_core::trait_system::Transport;
 
-use super::models::{Sheet, Range};
+use super::models::{Range, Sheet};
 
 /// 宏类型
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -236,9 +236,7 @@ impl MacroScript {
     /// 验证宏脚本
     pub fn validate(&self) -> Result<(), LarkAPIError> {
         if self.name.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
-                "宏名称不能为空".to_string(),
-            ));
+            return Err(LarkAPIError::InvalidParameter("宏名称不能为空".to_string()));
         }
 
         if self.script.is_empty() {
@@ -321,17 +319,16 @@ impl ExecuteMacroRequest {
         }
 
         if self.macro_name.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
-                "宏名称不能为空".to_string(),
-            ));
+            return Err(LarkAPIError::InvalidParameter("宏名称不能为空".to_string()));
         }
 
         // 验证必需参数
         for param in &self.parameters {
             if param.required && param.value.is_null() {
-                return Err(LarkAPIError::InvalidParameter(
-                    format!("必需参数 {} 的值不能为空", param.name),
-                ));
+                return Err(LarkAPIError::InvalidParameter(format!(
+                    "必需参数 {} 的值不能为空",
+                    param.name
+                )));
             }
         }
 
@@ -388,21 +385,20 @@ impl ExecuteMacroRequestBuilder {
 
     /// 构建请求对象
     pub fn build(self) -> Result<ExecuteMacroRequest, LarkAPIError> {
-        let spreadsheet_token = self.spreadsheet_token
+        let spreadsheet_token = self
+            .spreadsheet_token
             .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
 
-        let sheet_id = self.sheet_id
+        let sheet_id = self
+            .sheet_id
             .ok_or_else(|| LarkAPIError::InvalidParameter("工作表ID不能为空".to_string()))?;
 
-        let macro_name = self.macro_name
+        let macro_name = self
+            .macro_name
             .ok_or_else(|| LarkAPIError::InvalidParameter("宏名称不能为空".to_string()))?;
 
-        let mut request = ExecuteMacroRequest::new(
-            spreadsheet_token,
-            sheet_id,
-            macro_name,
-            self.parameters,
-        );
+        let mut request =
+            ExecuteMacroRequest::new(spreadsheet_token, sheet_id, macro_name, self.parameters);
 
         if let Some(async_execution) = self.async_execution {
             request = request.async_execution(async_execution);
@@ -455,11 +451,7 @@ pub struct CreateMacroRequest {
 
 impl CreateMacroRequest {
     /// 创建创建宏脚本请求
-    pub fn new(
-        spreadsheet_token: String,
-        sheet_id: String,
-        macro_script: MacroScript,
-    ) -> Self {
+    pub fn new(spreadsheet_token: String, sheet_id: String, macro_script: MacroScript) -> Self {
         Self {
             spreadsheet_token,
             sheet_id,
@@ -520,20 +512,19 @@ impl CreateMacroRequestBuilder {
 
     /// 构建请求对象
     pub fn build(self) -> Result<CreateMacroRequest, LarkAPIError> {
-        let spreadsheet_token = self.spreadsheet_token
+        let spreadsheet_token = self
+            .spreadsheet_token
             .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
 
-        let sheet_id = self.sheet_id
+        let sheet_id = self
+            .sheet_id
             .ok_or_else(|| LarkAPIError::InvalidParameter("工作表ID不能为空".to_string()))?;
 
-        let macro_script = self.macro_script
+        let macro_script = self
+            .macro_script
             .ok_or_else(|| LarkAPIError::InvalidParameter("宏脚本不能为空".to_string()))?;
 
-        let request = CreateMacroRequest::new(
-            spreadsheet_token,
-            sheet_id,
-            macro_script,
-        );
+        let request = CreateMacroRequest::new(spreadsheet_token, sheet_id, macro_script);
 
         request.validate()?;
         Ok(request)
@@ -585,9 +576,7 @@ impl GetMacroStatusRequest {
         }
 
         if self.execution_id.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
-                "执行ID不能为空".to_string(),
-            ));
+            return Err(LarkAPIError::InvalidParameter("执行ID不能为空".to_string()));
         }
 
         Ok(())
@@ -616,10 +605,12 @@ impl GetMacroStatusRequestBuilder {
 
     /// 构建请求对象
     pub fn build(self) -> Result<GetMacroStatusRequest, LarkAPIError> {
-        let spreadsheet_token = self.spreadsheet_token
+        let spreadsheet_token = self
+            .spreadsheet_token
             .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
 
-        let execution_id = self.execution_id
+        let execution_id = self
+            .execution_id
             .ok_or_else(|| LarkAPIError::InvalidParameter("执行ID不能为空".to_string()))?;
 
         let request = GetMacroStatusRequest::new(spreadsheet_token, execution_id);
@@ -688,8 +679,7 @@ impl MacroService {
     ) -> crate::core::error::SDKResult<ExecuteMacroResponse> {
         let url = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/macros/execute",
-            self.config.base_url,
-            request.spreadsheet_token
+            self.config.base_url, request.spreadsheet_token
         );
 
         let transport = HttpTransport::new(&self.config);
@@ -699,12 +689,19 @@ impl MacroService {
             .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
 
         let execute_response: crate::core::response::BaseResponse<ExecuteMacroResponse> =
-            serde_json::from_str(&response.text().await
-                .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?)
+            serde_json::from_str(
+                &response
+                    .text()
+                    .await
+                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
+            )
             .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
 
         if execute_response.code != 0 {
-            return Err(LarkAPIError::APIError(execute_response.msg, execute_response.code));
+            return Err(LarkAPIError::APIError(
+                execute_response.msg,
+                execute_response.code,
+            ));
         }
 
         execute_response
@@ -751,8 +748,7 @@ impl MacroService {
     ) -> crate::core::error::SDKResult<CreateMacroResponse> {
         let url = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/macros",
-            self.config.base_url,
-            request.spreadsheet_token
+            self.config.base_url, request.spreadsheet_token
         );
 
         let transport = HttpTransport::new(&self.config);
@@ -762,12 +758,19 @@ impl MacroService {
             .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
 
         let create_response: crate::core::response::BaseResponse<CreateMacroResponse> =
-            serde_json::from_str(&response.text().await
-                .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?)
+            serde_json::from_str(
+                &response
+                    .text()
+                    .await
+                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
+            )
             .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
 
         if create_response.code != 0 {
-            return Err(LarkAPIError::APIError(create_response.msg, create_response.code));
+            return Err(LarkAPIError::APIError(
+                create_response.msg,
+                create_response.code,
+            ));
         }
 
         create_response
@@ -805,9 +808,7 @@ impl MacroService {
     ) -> crate::core::error::SDKResult<GetMacroStatusResponse> {
         let url = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/macros/status/{}",
-            self.config.base_url,
-            request.spreadsheet_token,
-            request.execution_id
+            self.config.base_url, request.spreadsheet_token, request.execution_id
         );
 
         let transport = HttpTransport::new(&self.config);
@@ -817,12 +818,19 @@ impl MacroService {
             .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
 
         let status_response: crate::core::response::BaseResponse<GetMacroStatusResponse> =
-            serde_json::from_str(&response.text().await
-                .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?)
+            serde_json::from_str(
+                &response
+                    .text()
+                    .await
+                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
+            )
             .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
 
         if status_response.code != 0 {
-            return Err(LarkAPIError::APIError(status_response.msg, status_response.code));
+            return Err(LarkAPIError::APIError(
+                status_response.msg,
+                status_response.code,
+            ));
         }
 
         status_response
@@ -862,8 +870,14 @@ mod tests {
         assert_eq!(permissions.allow_file_access, Some(true));
         assert_eq!(permissions.allow_network_access, Some(false));
         assert_eq!(permissions.allow_system_calls, Some(false));
-        assert_eq!(permissions.allowed_sheets, Some(vec!["sheet1".to_string(), "sheet2".to_string()]));
-        assert_eq!(permissions.forbidden_operations, Some(vec!["DELETE".to_string(), "FORMAT".to_string()]));
+        assert_eq!(
+            permissions.allowed_sheets,
+            Some(vec!["sheet1".to_string(), "sheet2".to_string()])
+        );
+        assert_eq!(
+            permissions.forbidden_operations,
+            Some(vec!["DELETE".to_string(), "FORMAT".to_string()])
+        );
     }
 
     #[test]
@@ -903,9 +917,10 @@ mod tests {
             "TestMacro".to_string(),
             MacroType::JavaScript,
             "function test() { return 'hello'; }".to_string(),
-        ).description("测试宏".to_string())
-         .author("张三".to_string())
-         .permissions(permissions);
+        )
+        .description("测试宏".to_string())
+        .author("张三".to_string())
+        .permissions(permissions);
 
         assert_eq!(script.name, "TestMacro");
         assert_eq!(script.description, Some("测试宏".to_string()));
@@ -952,7 +967,8 @@ mod tests {
             "sheet123".to_string(),
             "TestMacro".to_string(),
             parameters,
-        ).async_execution(true);
+        )
+        .async_execution(true);
 
         assert_eq!(request.spreadsheet_token, "token123");
         assert_eq!(request.sheet_id, "sheet123");
@@ -995,7 +1011,11 @@ mod tests {
             "token123".to_string(),
             "sheet123".to_string(),
             "TestMacro".to_string(),
-            vec![MacroParameter::string("required_param".to_string(), "".to_string(), true)],
+            vec![MacroParameter::string(
+                "required_param".to_string(),
+                "".to_string(),
+                true,
+            )],
         );
         assert!(invalid_request3.validate().is_err());
     }
@@ -1006,8 +1026,16 @@ mod tests {
             .spreadsheet_token("token123".to_string())
             .sheet_id("sheet123".to_string())
             .macro_name("ProcessData".to_string())
-            .add_parameter(MacroParameter::string("source".to_string(), "A1:D10".to_string(), true))
-            .add_parameter(MacroParameter::boolean("include_headers".to_string(), true, false))
+            .add_parameter(MacroParameter::string(
+                "source".to_string(),
+                "A1:D10".to_string(),
+                true,
+            ))
+            .add_parameter(MacroParameter::boolean(
+                "include_headers".to_string(),
+                true,
+                false,
+            ))
             .async_execution(true)
             .build()
             .unwrap();
@@ -1027,11 +1055,8 @@ mod tests {
             "function test() { return 'hello'; }".to_string(),
         );
 
-        let request = CreateMacroRequest::new(
-            "token123".to_string(),
-            "sheet123".to_string(),
-            script,
-        );
+        let request =
+            CreateMacroRequest::new("token123".to_string(), "sheet123".to_string(), script);
 
         assert_eq!(request.spreadsheet_token, "token123");
         assert_eq!(request.sheet_id, "sheet123");
@@ -1044,7 +1069,8 @@ mod tests {
             "DataProcessor".to_string(),
             MacroType::VBA,
             "Sub ProcessData()\n    ' Process data here\nEnd Sub".to_string(),
-        ).description("数据处理宏".to_string());
+        )
+        .description("数据处理宏".to_string());
 
         let request = CreateMacroRequest::builder()
             .spreadsheet_token("token123".to_string())
@@ -1061,10 +1087,8 @@ mod tests {
 
     #[test]
     fn test_get_macro_status_request() {
-        let request = GetMacroStatusRequest::new(
-            "token123".to_string(),
-            "execution123".to_string(),
-        );
+        let request =
+            GetMacroStatusRequest::new("token123".to_string(), "execution123".to_string());
 
         assert_eq!(request.spreadsheet_token, "token123");
         assert_eq!(request.execution_id, "execution123");
@@ -1122,8 +1146,9 @@ mod tests {
             "ExcelExporter".to_string(),
             MacroType::VBA,
             "Sub ExportToExcel()\n    ' Export logic here\nEnd Sub".to_string(),
-        ).description("导出为Excel格式".to_string())
-         .author("Excel专家".to_string());
+        )
+        .description("导出为Excel格式".to_string())
+        .author("Excel专家".to_string());
 
         let vba_request = CreateMacroRequest::builder()
             .spreadsheet_token("token123".to_string())
@@ -1159,7 +1184,8 @@ mod tests {
             "Calculator".to_string(),
             MacroType::Formula,
             "SUM(A1:A10)".to_string(),
-        ).description("计算A1到A10的总和".to_string());
+        )
+        .description("计算A1到A10的总和".to_string());
 
         let formula_request = ExecuteMacroRequest::builder()
             .spreadsheet_token("token123".to_string())

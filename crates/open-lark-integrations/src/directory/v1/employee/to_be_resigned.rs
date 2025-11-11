@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use open_lark_core::core::core::{
+use openlark_core::core::{
     api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
     http::Transport,
     req_option::RequestOption,
@@ -45,12 +45,12 @@ impl crate::directory::v1::EmployeeService {
         request: ToBeResignedRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ToBeResignedResponse>> {
-        let mut api_req = open_lark_core::core::api_req::ApiRequest {
+        let mut api_req = openlark_core::api_req::ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: open_lark_core::core::endpoints::directory::DIRECTORY_V1_EMPLOYEE_TO_BE_RESIGNED.to_string(),
+            api_path: openlark_core::endpoints::directory::DIRECTORY_V1_EMPLOYEE_TO_BE_RESIGNED.to_string(),
             supported_access_token_types: vec![
-                open_lark_core::core::constants::AccessTokenType::Tenant,
-                open_lark_core::core::constants::AccessTokenType::User
+                openlark_core::constants::AccessTokenType::Tenant,
+                openlark_core::constants::AccessTokenType::User
             ],
             body: serde_json::to_vec(&request)?,
             ..Default::default()

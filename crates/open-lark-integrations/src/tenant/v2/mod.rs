@@ -1,5 +1,5 @@
-use open_lark_core::core::core::config::Config;
-use open_lark_core::core::core::trait_system::Service;
+use openlark_core::core::config::Config;
+use openlark_core::core::trait_system::Service;
 
 // 子模块声明
 pub mod tenant;
@@ -184,7 +184,7 @@ impl crate::core::trait_system::Service for V2 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::core::core::trait_system::Service;
+    use openlark_core::core::trait_system::Service;
 
     /// 创建测试配置
     fn create_test_config() -> crate::core::config::Config {

@@ -6,7 +6,7 @@
 //! - 节点创建和管理
 //! - 画板内容查询
 
-use open_lark_core::core::config::Config;
+use openlark_core::config::Config;
 
 /// 画板服务
 #[derive(Debug, Clone)]

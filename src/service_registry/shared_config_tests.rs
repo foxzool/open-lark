@@ -4,10 +4,10 @@
 
 #[cfg(test)]
 mod tests {
-    use open_lark_core::config::{Config, ConfigBuilder};
     use crate::service_registry::{
         ConfigUsageStats, MigrationHelper, ServiceRegistry, SharedConfig, SharedConfigFactory,
     };
+    use config::{Config, ConfigBuilder};
 
     fn create_test_config() -> Config {
         ConfigBuilder::default()

@@ -13,7 +13,7 @@
 //! - 参与人和会议室管理
 //! - 忙闲时间查询
 
-use open_lark_core::config::Config;
+use config::Config;
 
 /// Calendar服务
 #[derive(Debug, Clone)]

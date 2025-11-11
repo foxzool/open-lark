@@ -14,7 +14,7 @@
 //! - 国家证件类型管理
 //! - 自定义字段管理
 
-use open_lark_core::config::Config;
+use config::Config;
 
 /// 基础数据管理服务
 #[derive(Debug, Clone)]

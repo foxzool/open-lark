@@ -79,7 +79,7 @@
 //! - 📊 数据分析和报表支持
 //! - 🔒 企业安全策略兼容
 
-use open_lark_core::core::config::Config;
+use openlark_core::config::Config;
 
 /// 日历服务 v4 版本
 pub mod v4;
@@ -359,7 +359,7 @@ impl CalendarService {
     }
 }
 
-use open_lark_core::core::trait_system::Service;
+use openlark_core::trait_system::Service;
 
 impl Service for CalendarService {
     fn config(&self) -> &Config {

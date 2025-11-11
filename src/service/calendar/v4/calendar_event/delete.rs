@@ -20,12 +20,12 @@
 //! - 删除后该事件的所有相关信息将被清除
 //! - 如果事件有参与者，他们将收到删除通知
 
+use crate::service::calendar::v4::models::CalendarEvent;
 use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     http::Transport,
     ApiRequest, SDKResult,
 };
-use crate::service::calendar::v4::models::CalendarEvent;
 use serde::{Deserialize, Serialize};
 
 /// 删除日程事件请求

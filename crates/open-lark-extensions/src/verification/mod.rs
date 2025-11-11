@@ -104,8 +104,8 @@ pub mod models;
 /// 认证信息服务 v1 版本
 pub mod v1;
 
-use open_lark_core::core::config::Config;
-use open_lark_core::core::trait_system::Service;
+use openlark_core::config::Config;
+use openlark_core::trait_system::Service;
 
 /// 认证信息服务
 ///
@@ -306,7 +306,7 @@ impl Service for VerificationService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::core::config::Config;
+    use openlark_core::config::Config;
 
     /// 创建测试配置
     fn create_test_config() -> Config {

@@ -15,23 +15,24 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 
+use futures_util::future;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
-use futures_util::future;
 
-use crate::{
-    api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse, RawResponse},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    ApiRequest, SDKResult, req_option::RequestOption,
-    standard_response::StandardResponse,
-    error::LarkAPIError,
-};
 use crate::endpoints_original::Endpoints;
 use crate::impl_executable_builder_owned;
+use crate::{
+    api_resp::{ApiResponseTrait, BaseResponse, RawResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    error::LarkAPIError,
+    http::Transport,
+    req_option::RequestOption,
+    standard_response::StandardResponse,
+    ApiRequest, SDKResult,
+};
 
 /// 图片位置设置
 ///
@@ -100,20 +101,21 @@ impl ImagePosition {
         // 验证单元格格式（简单的Excel格式检查）
         if !is_valid_excel_cell_reference(&self.anchor_cell) {
             return Err(LarkAPIError::illegal_param(format!(
-                "无效的单元格引用格式: {}，期望格式如 A1, B2, AA10", self.anchor_cell
+                "无效的单元格引用格式: {}，期望格式如 A1, B2, AA10",
+                self.anchor_cell
             )));
         }
 
         // 验证偏移量范围（-10000 到 10000 像素）
         if self.offset_x < -10000 || self.offset_x > 10000 {
             return Err(LarkAPIError::illegal_param(
-                "X轴偏移量超出范围，应在-10000到10000像素之间"
+                "X轴偏移量超出范围，应在-10000到10000像素之间",
             ));
         }
 
         if self.offset_y < -10000 || self.offset_y > 10000 {
             return Err(LarkAPIError::illegal_param(
-                "Y轴偏移量超出范围，应在-10000到10000像素之间"
+                "Y轴偏移量超出范围，应在-10000到10000像素之间",
             ));
         }
 
@@ -125,10 +127,7 @@ impl ImagePosition {
     /// 将Excel单元格引用转换为像素坐标
     pub fn calculate_absolute_position(&self) -> (i32, i32) {
         let (base_x, base_y) = excel_cell_to_pixel(&self.anchor_cell);
-        (
-            base_x + self.offset_x,
-            base_y + self.offset_y,
-        )
+        (base_x + self.offset_x, base_y + self.offset_y)
     }
 }
 
@@ -231,13 +230,15 @@ impl ImageSize {
         let max_size = 2048; // 最大2048像素
         if self.width > max_size {
             return Err(LarkAPIError::illegal_param(format!(
-                "图片宽度超出限制，最大{}像素", max_size
+                "图片宽度超出限制，最大{}像素",
+                max_size
             )));
         }
 
         if self.height > max_size {
             return Err(LarkAPIError::illegal_param(format!(
-                "图片高度超出限制，最大{}像素", max_size
+                "图片高度超出限制，最大{}像素",
+                max_size
             )));
         }
 
@@ -371,7 +372,8 @@ impl ImageWriteRequest {
         // 验证图片URL格式
         if !is_valid_image_url(&self.image_url) {
             return Err(LarkAPIError::illegal_param(format!(
-                "无效的图片URL格式: {}", self.image_url
+                "无效的图片URL格式: {}",
+                self.image_url
             )));
         }
 
@@ -386,7 +388,8 @@ impl ImageWriteRequest {
             let valid_types = ["open_id", "user_id", "union_id", "lark_id"];
             if !valid_types.contains(&user_id_type.as_str()) {
                 return Err(LarkAPIError::illegal_param(format!(
-                    "无效的用户ID类型: {}，支持的类型: {:?}", user_id_type, valid_types
+                    "无效的用户ID类型: {}，支持的类型: {:?}",
+                    user_id_type, valid_types
                 )));
             }
         }
@@ -765,7 +768,9 @@ impl ImageWriteRequestBuilder {
     /// ```
     pub fn build(mut self) -> SDKResult<ImageWriteRequest> {
         if self.built {
-            return Err(LarkAPIError::illegal_param("Builder已经被构建，不能重复使用"));
+            return Err(LarkAPIError::illegal_param(
+                "Builder已经被构建，不能重复使用",
+            ));
         }
 
         // 验证请求
@@ -1054,7 +1059,7 @@ mod tests {
             "Sheet1",
             "https://example.com/logo.png",
             position,
-            size
+            size,
         );
 
         assert_eq!(request.spreadsheet_token, "shtcnmBA*****yGehy8");
@@ -1073,8 +1078,9 @@ mod tests {
             "DataSheet",
             "https://cdn.example.com/chart.jpg",
             position,
-            size
-        ).alt_text("销售图表")
+            size,
+        )
+        .alt_text("销售图表")
         .user_id_type("open_id");
 
         assert_eq!(request.spreadsheet_token, "token123");
@@ -1094,7 +1100,7 @@ mod tests {
             "Sheet1",
             "https://example.com/image.png",
             ImagePosition::new("A1", 0, 0),
-            ImageSize::new(200, 150, false)
+            ImageSize::new(200, 150, false),
         );
         assert!(valid_request.validate().is_ok());
 
@@ -1104,7 +1110,7 @@ mod tests {
             "Sheet1",
             "https://example.com/image.png",
             ImagePosition::new("A1", 0, 0),
-            ImageSize::new(200, 150, false)
+            ImageSize::new(200, 150, false),
         );
         assert!(empty_token_request.validate().is_err());
 
@@ -1114,7 +1120,7 @@ mod tests {
             "Sheet1",
             "",
             ImagePosition::new("A1", 0, 0),
-            ImageSize::new(200, 150, false)
+            ImageSize::new(200, 150, false),
         );
         assert!(empty_url_request.validate().is_err());
 
@@ -1124,7 +1130,7 @@ mod tests {
             "Sheet1",
             "ftp://example.com/image.png",
             ImagePosition::new("A1", 0, 0),
-            ImageSize::new(200, 150, false)
+            ImageSize::new(200, 150, false),
         );
         assert!(invalid_url_request.validate().is_err());
 
@@ -1134,8 +1140,9 @@ mod tests {
             "Sheet1",
             "https://example.com/image.png",
             ImagePosition::new("A1", 0, 0),
-            ImageSize::new(200, 150, false)
-        ).user_id_type("invalid_type");
+            ImageSize::new(200, 150, false),
+        )
+        .user_id_type("invalid_type");
         assert!(invalid_user_type_request.validate().is_err());
     }
 
@@ -1144,7 +1151,7 @@ mod tests {
         let position = ImagePosition::new("C3", 50, 30);
         let (x, y) = position.calculate_absolute_position();
         assert_eq!(x, 128 + 50); // C列是第3列: (3-1)*64 = 128
-        assert_eq!(y, 40 + 30);  // 第3行: (3-1)*20 = 40
+        assert_eq!(y, 40 + 30); // 第3行: (3-1)*20 = 40
     }
 
     #[test]
@@ -1154,8 +1161,9 @@ mod tests {
             "Sheet1",
             "https://example.com/logo.png",
             ImagePosition::new("B2", 15, 25).z_index(5),
-            ImageSize::new(300, 200, true)
-        ).alt_text("公司Logo");
+            ImageSize::new(300, 200, true),
+        )
+        .alt_text("公司Logo");
 
         let summary = request.summary();
         assert!(summary.contains("https://example.com/logo.png"));
@@ -1262,12 +1270,13 @@ impl ImageWriteService {
         // 构建API请求
         let mut api_req = ApiRequest::with_method_and_path(
             Method::POST,
-            format!("/open-apis/sheets/v2/spreadsheets/{}/images", &request.spreadsheet_token)
+            format!(
+                "/open-apis/sheets/v2/spreadsheets/{}/images",
+                &request.spreadsheet_token
+            ),
         );
-        api_req.set_supported_access_token_types(vec![
-            AccessTokenType::Tenant,
-            AccessTokenType::User
-        ]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
         api_req.body = serde_json::to_vec(&request)?;
 
         // 发送请求
@@ -1285,7 +1294,11 @@ impl ImageWriteService {
                 Err(LarkAPIError::api_error(-1, "响应数据为空", None))
             }
         } else {
-            Err(LarkAPIError::api_error(api_resp.raw_response.code, format!("API调用失败: {}", api_resp.raw_response.msg), None))
+            Err(LarkAPIError::api_error(
+                api_resp.raw_response.code,
+                format!("API调用失败: {}", api_resp.raw_response.msg),
+                None,
+            ))
         }
     }
 
@@ -1562,7 +1575,7 @@ impl crate::core::trait_system::Service for ImageWriteService {
 #[cfg(test)]
 mod service_tests {
     use super::*;
-    use open_lark_core::trait_system::Service;
+    use openlark_core::trait_system::Service;
 
     #[test]
     fn test_service_creation() {
@@ -1603,7 +1616,7 @@ mod service_tests {
             "Sheet1",
             "invalid_url",
             ImagePosition::new("A1", 0, 0),
-            ImageSize::new(100, 100, true)
+            ImageSize::new(100, 100, true),
         );
 
         let result = service.write_image(invalid_request, None).await;
@@ -1631,14 +1644,14 @@ mod service_tests {
                 "Sheet1",
                 "https://example.com/valid.png",
                 ImagePosition::new("A1", 0, 0),
-                ImageSize::new(100, 100, true)
+                ImageSize::new(100, 100, true),
             ),
             ImageWriteRequest::new(
                 "",
-                "Sheet1",  // 无效的令牌
+                "Sheet1", // 无效的令牌
                 "https://example.com/valid.png",
                 ImagePosition::new("B1", 0, 0),
-                ImageSize::new(100, 100, true)
+                ImageSize::new(100, 100, true),
             ),
         ];
 
@@ -1665,12 +1678,20 @@ mod service_tests {
         let size = Some(ImageSize::new(100, 100, true));
 
         // 编译测试，确保方法签名正确
-        let _ = |_: &ImageWriteService, token: &str, id: &str, pos: ImagePosition, sz: Option<ImageSize>| {
+        let _ = |_: &ImageWriteService,
+                 token: &str,
+                 id: &str,
+                 pos: ImagePosition,
+                 sz: Option<ImageSize>| {
             // 这里只是验证函数签名，不实际调用
         };
 
         // 测试函数调用 - 验证方法签名
-        let test_func = |_: &ImageWriteService, token: &str, id: &str, pos: ImagePosition, size: Option<ImageSize>| {
+        let test_func = |_: &ImageWriteService,
+                         token: &str,
+                         id: &str,
+                         pos: ImagePosition,
+                         size: Option<ImageSize>| {
             // 这里只是验证函数签名，不实际调用
         };
         test_func(&service, "token", "image_id", position, size);
@@ -1777,7 +1798,10 @@ mod builder_tests {
             .build();
 
         assert!(result.is_err());
-        assert!(result.unwrap_err().to_string().contains("电子表格令牌不能为空"));
+        assert!(result
+            .unwrap_err()
+            .to_string()
+            .contains("电子表格令牌不能为空"));
     }
 
     #[test]
@@ -1807,9 +1831,9 @@ mod builder_tests {
     #[test]
     fn test_builder_unchecked() {
         let request = ImageWriteRequest::builder()
-            .spreadsheet_token("")  // 无效的令牌
+            .spreadsheet_token("") // 无效的令牌
             .sheet_id("Sheet1")
-            .image_url("invalid_url")  // 无效的URL
+            .image_url("invalid_url") // 无效的URL
             .at_cell("A1", 0, 0)
             .with_dimensions(300, 200, true)
             .build_unchecked();
@@ -1821,12 +1845,8 @@ mod builder_tests {
 
     #[test]
     fn test_simple_convenience_method() {
-        let request = ImageWriteRequest::simple(
-            "token123",
-            "Sheet1",
-            "https://example.com/logo.png",
-            "A1"
-        );
+        let request =
+            ImageWriteRequest::simple("token123", "Sheet1", "https://example.com/logo.png", "A1");
 
         assert_eq!(request.spreadsheet_token, "token123");
         assert_eq!(request.sheet_id, "Sheet1");
@@ -1847,7 +1867,7 @@ mod builder_tests {
             "https://example.com/logo.png",
             "B2",
             500,
-            400
+            400,
         );
 
         assert_eq!(request.spreadsheet_token, "token123");
@@ -1867,7 +1887,7 @@ mod builder_tests {
             "https://example.com/logo.png",
             "C3",
             20,
-            30
+            30,
         );
 
         assert_eq!(request.spreadsheet_token, "token123");

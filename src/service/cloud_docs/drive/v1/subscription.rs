@@ -1,10 +1,10 @@
-use open_lark_core::config::Config;
-use open_lark_core::error::SDKError;
+use config::Config;
+use openlark_core::error::SDKError;
 use crate::response::SDKResult;
 use crate::service_trait::Service;
 use crate::transport::Transport;
 use crate::endpoints_original::Endpoints;
-use open_lark_core::api_req::ApiRequest;
+use openlark_core::api_req::ApiRequest;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;

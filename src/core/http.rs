@@ -16,7 +16,7 @@ use crate::{
     SDKResult,
 };
 // Re-export ApiRequest from open-lark-core
-pub use open_lark_core::api_req::ApiRequest;
+pub use openlark_core::api_req::ApiRequest;
 
 pub struct Transport<T> {
     phantom_data: PhantomData<T>,

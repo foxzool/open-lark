@@ -14,8 +14,8 @@
 //! - 税务和社保计算
 //! - 薪资模拟和预测
 
-use open_lark_core::config::Config;
-use open_lark_core::SDKResult;
+use config::Config;
+use SDKResult;
 use crate::service::payroll::models::*;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};

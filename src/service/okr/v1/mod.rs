@@ -14,8 +14,8 @@
 //! - OKR复盘和评分系统
 //! - 多语言支持
 
-use open_lark_core::{config::Config, SDKResult};
 pub use crate::service::okr::models::*;
+use openlark_core::{config::Config, SDKResult};
 
 /// OKR服务 V1版本
 #[derive(Debug, Clone)]

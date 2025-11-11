@@ -105,7 +105,7 @@ pub mod models;
 /// 邮箱服务 v1 版本
 pub mod v1;
 
-use open_lark_core::core::config::Config;
+use openlark_core::config::Config;
 
 /// 邮箱服务
 ///
@@ -552,7 +552,7 @@ impl MailService {
     }
 }
 
-use open_lark_core::core::trait_system::Service;
+use openlark_core::trait_system::Service;
 
 impl Service for MailService {
     fn config(&self) -> &Config {

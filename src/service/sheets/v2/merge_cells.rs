@@ -7,7 +7,7 @@
 //! - 支持水平、垂直和矩形区域合并
 
 use crate::{
-    api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -319,16 +319,15 @@ impl MergeCellsService {
             format!(
                 "/open-apis/sheets/v2/spreadsheets/{}/merge_cells",
                 &request.spreadsheet_token
-            )
+            ),
         );
-        api_req.set_supported_access_token_types(vec![
-            AccessTokenType::Tenant,
-            AccessTokenType::User
-        ]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
         api_req.body = serde_json::to_vec(&request)?;
 
         // 发送请求
-        let api_resp = Transport::<MergeCellsResponse>::request(api_req, &self.config, option).await?;
+        let api_resp =
+            Transport::<MergeCellsResponse>::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
@@ -370,16 +369,15 @@ impl MergeCellsService {
             format!(
                 "/open-apis/sheets/v2/spreadsheets/{}/unmerge_cells",
                 &request.spreadsheet_token
-            )
+            ),
         );
-        api_req.set_supported_access_token_types(vec![
-            AccessTokenType::Tenant,
-            AccessTokenType::User
-        ]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
         api_req.body = serde_json::to_vec(&request)?;
 
         // 发送请求
-        let api_resp = Transport::<UnmergeCellsResponse>::request(api_req, &self.config, option).await?;
+        let api_resp =
+            Transport::<UnmergeCellsResponse>::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
@@ -412,12 +410,7 @@ pub struct MergeCellsBuilder {
 
 impl MergeCellsBuilder {
     /// 创建新的合并构建器实例
-    pub fn new(
-        config: Config,
-        spreadsheet_token: String,
-        sheet_id: String,
-        range: String,
-    ) -> Self {
+    pub fn new(config: Config, spreadsheet_token: String, sheet_id: String, range: String) -> Self {
         Self {
             config,
             spreadsheet_token,
@@ -475,12 +468,7 @@ mod tests {
 
     #[test]
     fn test_merge_cells_request_creation() {
-        let request = MergeCellsRequest::new(
-            "test_token",
-            "sheet1",
-            "A1:C3",
-            MergeType::MergeAll,
-        );
+        let request = MergeCellsRequest::new("test_token", "sheet1", "A1:C3", MergeType::MergeAll);
 
         assert_eq!(request.spreadsheet_token, "test_token");
         assert_eq!(request.sheet_id, "sheet1");
@@ -491,39 +479,23 @@ mod tests {
     #[test]
     fn test_merge_cells_request_validation() {
         // 测试正常请求
-        let valid_request = MergeCellsRequest::new(
-            "test_token",
-            "sheet1",
-            "A1:B2",
-            MergeType::MergeAll,
-        );
+        let valid_request =
+            MergeCellsRequest::new("test_token", "sheet1", "A1:B2", MergeType::MergeAll);
         assert!(valid_request.validate().is_ok());
 
         // 测试空token
-        let empty_token_request = MergeCellsRequest::new(
-            "",
-            "sheet1",
-            "A1:B2",
-            MergeType::MergeAll,
-        );
+        let empty_token_request =
+            MergeCellsRequest::new("", "sheet1", "A1:B2", MergeType::MergeAll);
         assert!(empty_token_request.validate().is_err());
 
         // 测试空工作表ID
-        let empty_sheet_request = MergeCellsRequest::new(
-            "test_token",
-            "",
-            "A1:B2",
-            MergeType::MergeAll,
-        );
+        let empty_sheet_request =
+            MergeCellsRequest::new("test_token", "", "A1:B2", MergeType::MergeAll);
         assert!(empty_sheet_request.validate().is_err());
 
         // 测试空范围
-        let empty_range_request = MergeCellsRequest::new(
-            "test_token",
-            "sheet1",
-            "",
-            MergeType::MergeAll,
-        );
+        let empty_range_request =
+            MergeCellsRequest::new("test_token", "sheet1", "", MergeType::MergeAll);
         assert!(empty_range_request.validate().is_err());
     }
 
@@ -573,11 +545,7 @@ mod tests {
 
     #[test]
     fn test_unmerge_cells_request() {
-        let request = UnmergeCellsRequest::new(
-            "test_token",
-            "sheet1",
-            "merge_123456",
-        );
+        let request = UnmergeCellsRequest::new("test_token", "sheet1", "merge_123456");
 
         assert_eq!(request.spreadsheet_token, "test_token");
         assert_eq!(request.sheet_id, "sheet1");
@@ -628,7 +596,10 @@ mod tests {
     fn test_response_default() {
         let merge_response = MergeCellsResponse::default();
         assert!(merge_response.data.spreadsheet_token.is_empty());
-        assert_eq!(merge_response.data.merge_info.merge_type, MergeType::MergeAll);
+        assert_eq!(
+            merge_response.data.merge_info.merge_type,
+            MergeType::MergeAll
+        );
 
         let unmerge_response = UnmergeCellsResponse::default();
         assert!(unmerge_response.data.spreadsheet_token.is_empty());
@@ -637,29 +608,22 @@ mod tests {
 
     #[test]
     fn test_api_response_trait_implementation() {
-        assert_eq!(
-            MergeCellsResponse::data_format(),
-            ResponseFormat::Data
-        );
-        assert_eq!(
-            UnmergeCellsResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(MergeCellsResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(UnmergeCellsResponse::data_format(), ResponseFormat::Data);
     }
 
     #[test]
     fn test_serialization_deserialization() {
-        let original_request = MergeCellsRequest::new(
-            "test_token",
-            "sheet1",
-            "A1:C3",
-            MergeType::MergeColumns,
-        );
+        let original_request =
+            MergeCellsRequest::new("test_token", "sheet1", "A1:C3", MergeType::MergeColumns);
 
         let serialized = serde_json::to_string(&original_request).unwrap();
         let deserialized: MergeCellsRequest = serde_json::from_str(&serialized).unwrap();
 
-        assert_eq!(original_request.spreadsheet_token, deserialized.spreadsheet_token);
+        assert_eq!(
+            original_request.spreadsheet_token,
+            deserialized.spreadsheet_token
+        );
         assert_eq!(original_request.sheet_id, deserialized.sheet_id);
         assert_eq!(original_request.range, deserialized.range);
         assert_eq!(original_request.merge_type, deserialized.merge_type);
@@ -674,7 +638,8 @@ mod tests {
             "token".to_string(),
             "sheet".to_string(),
             "A1:A1".to_string(),
-        ).merge_all();
+        )
+        .merge_all();
         assert_eq!(all_merge_builder.merge_type, MergeType::MergeAll);
 
         let rows_merge_builder = MergeCellsBuilder::new(
@@ -682,7 +647,8 @@ mod tests {
             "token".to_string(),
             "sheet".to_string(),
             "A1:A1".to_string(),
-        ).merge_rows();
+        )
+        .merge_rows();
         assert_eq!(rows_merge_builder.merge_type, MergeType::MergeRows);
 
         let columns_merge_builder = MergeCellsBuilder::new(
@@ -690,7 +656,8 @@ mod tests {
             "token".to_string(),
             "sheet".to_string(),
             "A1:A1".to_string(),
-        ).merge_columns();
+        )
+        .merge_columns();
         assert_eq!(columns_merge_builder.merge_type, MergeType::MergeColumns);
     }
 

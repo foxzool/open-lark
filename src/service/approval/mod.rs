@@ -14,7 +14,7 @@
 //! - 外部审批集成
 //! - 审批事件处理
 
-use open_lark_core::config::Config;
+use config::Config;
 
 /// Approval服务
 #[derive(Debug, Clone)]

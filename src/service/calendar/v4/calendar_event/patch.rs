@@ -15,13 +15,13 @@
 //!
 //! 需要 `calendar:calendar` 权限。
 
+use crate::service::calendar::v4::models::{
+    CalendarEvent, EventAttendee, Location, MeetingRoom, Reminder, TimeInfo,
+};
 use crate::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     http::Transport,
     ApiRequest, SDKResult,
-};
-use crate::service::calendar::v4::models::{
-    CalendarEvent, EventAttendee, Location, MeetingRoom, Reminder, TimeInfo,
 };
 use serde::{Deserialize, Serialize};
 

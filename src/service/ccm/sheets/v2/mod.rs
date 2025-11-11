@@ -8,7 +8,7 @@
 // sheets v2 - 电子表格v2版本API
 //,
 // 包含电子表格的核心功能，这是广泛使用的版本
-use crate::prelude::*;
+use openlark_core::prelude::*;
 use crate::service::ccm::sheets::v2::spreadsheet::SpreadsheetService;
 use crate::service::ccm::sheets::v2::worksheet::WorksheetService;
 use crate::service::ccm::sheets::v2::range::RangeService;

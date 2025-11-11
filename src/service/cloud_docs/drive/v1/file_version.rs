@@ -1,9 +1,9 @@
-use open_lark_core::config::Config;
-use open_lark_core::error::SDKError;
+use config::Config;
+use openlark_core::error::SDKError;
 use crate::response::SDKResult;
 use crate::service_trait::Service;
 use crate::transport::Transport;
-use open_lark_core::api_req::ApiRequest;
+use openlark_core::api_req::ApiRequest;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -741,14 +741,14 @@ impl GetFileVersionBuilder {
         api_req.set_api_path(endpoint);
 
         // 设置支持的访问令牌类型
-        use open_lark_core::constants::AccessTokenType;
+        use constants::AccessTokenType;
         api_req.set_supported_access_token_types(vec![
             AccessTokenType::Tenant,
             AccessTokenType::User,
         ]);
 
         // 发送HTTP GET请求
-        let api_resp: open_lark_core::api_resp::BaseResponse<GetFileVersionResponse> =
+        let api_resp: api_resp::BaseResponse<GetFileVersionResponse> =
             self.service.transport().request(api_req, self.service.config(), None).await?;
 
         // 解析响应
@@ -836,14 +836,14 @@ impl DeleteFileVersionBuilder {
         api_req.set_api_path(endpoint);
 
         // 设置支持的访问令牌类型
-        use open_lark_core::constants::AccessTokenType;
+        use constants::AccessTokenType;
         api_req.set_supported_access_token_types(vec![
             AccessTokenType::Tenant,
             AccessTokenType::User,
         ]);
 
         // 发送HTTP DELETE请求
-        let api_resp: open_lark_core::api_resp::BaseResponse<DeleteFileVersionResponse> =
+        let api_resp: api_resp::BaseResponse<DeleteFileVersionResponse> =
             self.service.transport().request(api_req, self.service.config(), None).await?;
 
         // 解析响应

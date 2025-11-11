@@ -9,12 +9,12 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use open_lark_core::error::SDKError;
-use open_lark_core::http::{Transport, BaseResponse};
-use open_lark_core::trait_system::Service;
-use crate::service::sheets::v3::models::spreadsheet::SpreadsheetToken;
-use crate::service::sheets::v3::models::sheet::SheetId;
 use crate::service::sheets::v3::common::SheetPagedResponse;
+use crate::service::sheets::v3::models::sheet::SheetId;
+use crate::service::sheets::v3::models::spreadsheet::SpreadsheetToken;
+use openlark_core::error::SDKError;
+use openlark_core::http::{BaseResponse, Transport};
+use openlark_core::trait_system::Service;
 
 /// 工作表保护服务
 ///
@@ -227,7 +227,7 @@ impl SheetProtectionRangeBuilder {
         if let (Some(start_row), Some(end_row)) = (self.start_row_index, self.end_row_index) {
             if start_row > end_row {
                 return Err(SDKError::InvalidParameter(
-                    "起始行索引不能大于结束行索引".to_string()
+                    "起始行索引不能大于结束行索引".to_string(),
                 ));
             }
         }
@@ -235,7 +235,7 @@ impl SheetProtectionRangeBuilder {
         if let (Some(start_col), Some(end_col)) = (self.start_column_index, self.end_column_index) {
             if start_col > end_col {
                 return Err(SDKError::InvalidParameter(
-                    "起始列索引不能大于结束列索引".to_string()
+                    "起始列索引不能大于结束列索引".to_string(),
                 ));
             }
         }
@@ -331,14 +331,10 @@ impl SheetProtectionConditionBuilder {
         match (self.condition_type, self.content) {
             (Some(condition_type), Some(content)) => {
                 if condition_type.is_empty() {
-                    return Err(SDKError::InvalidParameter(
-                        "条件类型不能为空".to_string()
-                    ));
+                    return Err(SDKError::InvalidParameter("条件类型不能为空".to_string()));
                 }
                 if content.is_empty() {
-                    return Err(SDKError::InvalidParameter(
-                        "条件内容不能为空".to_string()
-                    ));
+                    return Err(SDKError::InvalidParameter("条件内容不能为空".to_string()));
                 }
 
                 Ok(SheetProtectionCondition {
@@ -349,8 +345,8 @@ impl SheetProtectionConditionBuilder {
                 })
             }
             _ => Err(SDKError::InvalidParameter(
-                "条件类型和内容都是必需的".to_string()
-            ))
+                "条件类型和内容都是必需的".to_string(),
+            )),
         }
     }
 }
@@ -499,11 +495,13 @@ impl CreateSheetProtectionRequestBuilder {
 
     /// 添加编辑者
     pub fn add_editor(mut self, user_id: &str, user_type: &str) -> Self {
-        let permissions = self.permissions.get_or_insert_with(|| SheetProtectionPermissions {
-            editors: Vec::new(),
-            allow_all_users: false,
-            allow_comments: false,
-        });
+        let permissions = self
+            .permissions
+            .get_or_insert_with(|| SheetProtectionPermissions {
+                editors: Vec::new(),
+                allow_all_users: false,
+                allow_comments: false,
+            });
 
         permissions.editors.push(SheetProtectionEditor {
             user_id: user_id.to_string(),
@@ -519,11 +517,13 @@ impl CreateSheetProtectionRequestBuilder {
     pub fn build(self) -> crate::core::error::SDKResult<CreateSheetProtectionRequest> {
         match (self.spreadsheet_token, self.sheet_id) {
             (Some(spreadsheet_token), Some(sheet_id)) => {
-                let permissions = self.permissions.unwrap_or_else(|| SheetProtectionPermissions {
-                    editors: Vec::new(),
-                    allow_all_users: false,
-                    allow_comments: false,
-                });
+                let permissions = self
+                    .permissions
+                    .unwrap_or_else(|| SheetProtectionPermissions {
+                        editors: Vec::new(),
+                        allow_all_users: false,
+                        allow_comments: false,
+                    });
 
                 Ok(CreateSheetProtectionRequest {
                     spreadsheet_token,
@@ -537,8 +537,8 @@ impl CreateSheetProtectionRequestBuilder {
                 })
             }
             _ => Err(SDKError::InvalidParameter(
-                "电子表格Token和工作表ID都是必需的".to_string()
-            ))
+                "电子表格Token和工作表ID都是必需的".to_string(),
+            )),
         }
     }
 }
@@ -639,18 +639,16 @@ impl QuerySheetProtectionRequestBuilder {
     /// 构建查询请求
     pub fn build(self) -> crate::core::error::SDKResult<QuerySheetProtectionRequest> {
         match (self.spreadsheet_token, self.sheet_id) {
-            (Some(spreadsheet_token), Some(sheet_id)) => {
-                Ok(QuerySheetProtectionRequest {
-                    spreadsheet_token,
-                    sheet_id,
-                    protection_ids: self.protection_ids,
-                    page_size: self.page_size,
-                    page_token: self.page_token,
-                })
-            }
+            (Some(spreadsheet_token), Some(sheet_id)) => Ok(QuerySheetProtectionRequest {
+                spreadsheet_token,
+                sheet_id,
+                protection_ids: self.protection_ids,
+                page_size: self.page_size,
+                page_token: self.page_token,
+            }),
             _ => Err(SDKError::InvalidParameter(
-                "电子表格Token和工作表ID都是必需的".to_string()
-            ))
+                "电子表格Token和工作表ID都是必需的".to_string(),
+            )),
         }
     }
 }
@@ -797,7 +795,7 @@ impl UpdateSheetProtectionRequestBuilder {
             (Some(spreadsheet_token), Some(sheet_id), Some(protection_id)) => {
                 if self.fields.is_empty() {
                     return Err(SDKError::InvalidParameter(
-                        "至少需要指定一个更新字段".to_string()
+                        "至少需要指定一个更新字段".to_string(),
                     ));
                 }
 
@@ -814,8 +812,8 @@ impl UpdateSheetProtectionRequestBuilder {
                 })
             }
             _ => Err(SDKError::InvalidParameter(
-                "电子表格Token、工作表ID和保护ID都是必需的".to_string()
-            ))
+                "电子表格Token、工作表ID和保护ID都是必需的".to_string(),
+            )),
         }
     }
 }
@@ -896,8 +894,8 @@ impl DeleteSheetProtectionRequestBuilder {
                 })
             }
             _ => Err(SDKError::InvalidParameter(
-                "电子表格Token、工作表ID和保护ID都是必需的".to_string()
-            ))
+                "电子表格Token、工作表ID和保护ID都是必需的".to_string(),
+            )),
         }
     }
 }
@@ -1029,7 +1027,10 @@ impl SheetProtectionService {
         let mut params = Vec::new();
 
         if !request.protection_ids.is_empty() {
-            params.push(format!("protection_ids={}", request.protection_ids.join(",")));
+            params.push(format!(
+                "protection_ids={}",
+                request.protection_ids.join(",")
+            ));
         }
 
         if let Some(page_size) = request.page_size {
@@ -1263,7 +1264,8 @@ impl<'a> SheetProtectionServiceBuilder<'a> {
 
     /// 添加编辑者
     pub fn add_editor(mut self, user_id: &str, user_type: &str) -> Self {
-        self.editors.push((user_id.to_string(), user_type.to_string()));
+        self.editors
+            .push((user_id.to_string(), user_type.to_string()));
         self
     }
 
@@ -1280,7 +1282,9 @@ impl<'a> SheetProtectionServiceBuilder<'a> {
     }
 
     /// 执行创建操作
-    pub async fn execute(self) -> crate::core::error::SDKResult<BaseResponse<CreateSheetProtectionResponse>> {
+    pub async fn execute(
+        self,
+    ) -> crate::core::error::SDKResult<BaseResponse<CreateSheetProtectionResponse>> {
         match (self.spreadsheet_token, self.sheet_id) {
             (Some(spreadsheet_token), Some(sheet_id)) => {
                 let mut editors = Vec::new();
@@ -1313,8 +1317,8 @@ impl<'a> SheetProtectionServiceBuilder<'a> {
                 self.service.create(&request).await
             }
             _ => Err(SDKError::InvalidParameter(
-                "电子表格Token和工作表ID都是必需的".to_string()
-            ))
+                "电子表格Token和工作表ID都是必需的".to_string(),
+            )),
         }
     }
 }
@@ -1322,8 +1326,8 @@ impl<'a> SheetProtectionServiceBuilder<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::config::Config;
-    use open_lark_core::trait_system::Service;
+    use config::Config;
+    use openlark_core::trait_system::Service;
 
     #[test]
     fn test_sheet_protection_service_creation() {
@@ -1439,7 +1443,7 @@ mod tests {
         // 测试无效范围
         let invalid_range = SheetProtectionRange::builder()
             .start_row_index(10)
-            .end_row_index(0)  // 起始行大于结束行
+            .end_row_index(0) // 起始行大于结束行
             .build();
         assert!(invalid_range.is_err());
 
@@ -1469,7 +1473,8 @@ mod tests {
         let config = Config::default();
         let service = SheetProtectionService::new(config);
 
-        let builder = service.create_protection_builder()
+        let builder = service
+            .create_protection_builder()
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .sheet_id("0XXXXXXXXXX".to_string())
             .description("测试保护".to_string())
@@ -1477,7 +1482,10 @@ mod tests {
             .warning_only(false);
 
         // 注意：这里只测试构建器设置，不实际执行API调用
-        assert_eq!(builder.spreadsheet_token.unwrap().as_str(), "shtcnmBRWQKbsJRHXXXXXXXXXX");
+        assert_eq!(
+            builder.spreadsheet_token.unwrap().as_str(),
+            "shtcnmBRWQKbsJRHXXXXXXXXXX"
+        );
         assert_eq!(builder.sheet_id.unwrap().as_str(), "0XXXXXXXXXX");
         assert_eq!(builder.description, Some("测试保护".to_string()));
         assert_eq!(builder.editors.len(), 1);

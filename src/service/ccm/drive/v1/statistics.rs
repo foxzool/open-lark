@@ -8,7 +8,7 @@
 // drive v1 statistics - 统计服务,
 //,
 // 提供文件统计相关的功能,
-use crate::prelude::*;
+use openlark_core::prelude::*;
 /// 统计服务
 #[derive(Debug, Clone)]
 pub struct StatisticsService {

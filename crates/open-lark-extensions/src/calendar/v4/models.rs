@@ -1,4 +1,4 @@
-use open_lark_core::core::{
+use openlark_core::{
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, ResponseFormat},
 };

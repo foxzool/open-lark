@@ -10,10 +10,10 @@
 //! - 用户流失预警和预测
 //! - 用户价值评估分析
 
-use open_lark_core::config::Config;
-use open_lark_core::SDKResult;
 use chrono::{DateTime, Utc};
+use config::Config;
 use serde::{Deserialize, Serialize};
+use SDKResult;
 
 /// 用户行为分析服务
 #[derive(Debug, Clone)]

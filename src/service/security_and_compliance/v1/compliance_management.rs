@@ -13,7 +13,7 @@
 //! - 法规更新跟踪和解读
 //! - 合规改进建议和实施
 
-use open_lark_core::SDKResult;
+use SDKResult;
 
 use crate::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
@@ -21,7 +21,7 @@ use crate::{
     constants::AccessTokenType,
     http::Transport,
 };
-use open_lark_core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
+use openlark_core::api_req::ApiRequest; // trait_system::ExecutableBuilder temporarily disabled
 use serde::{Deserialize, Serialize};
 
 // 导入核心类型

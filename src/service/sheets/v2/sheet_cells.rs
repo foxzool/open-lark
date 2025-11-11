@@ -18,17 +18,18 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use crate::{
-    api_resp::{ApiResponseTrait, ResponseFormat, BaseResponse},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    ApiRequest, SDKResult, req_option::RequestOption,
-    standard_response::StandardResponse,
-    error::LarkAPIError,
-};
 use crate::endpoints_original::Endpoints;
 use crate::impl_executable_builder_owned;
+use crate::{
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    error::LarkAPIError,
+    http::Transport,
+    req_option::RequestOption,
+    standard_response::StandardResponse,
+    ApiRequest, SDKResult,
+};
 
 /// 单元格值枚举
 ///
@@ -158,21 +159,29 @@ impl CellCoordinate {
         let coord_str = coordinate.into().to_uppercase();
 
         // 使用正则表达式解析单元格坐标
-        let re = regex::Regex::new(r"^([A-Z]+)(\d+)$").map_err(|e| {
-            LarkAPIError::illegal_param(format!("正则表达式编译失败: {}", e))
-        })?;
+        let re = regex::Regex::new(r"^([A-Z]+)(\d+)$")
+            .map_err(|e| LarkAPIError::illegal_param(format!("正则表达式编译失败: {}", e)))?;
 
         if let Some(captures) = re.captures(&coord_str) {
             let column = captures.get(1).unwrap().as_str().to_string();
-            let row = captures.get(2).unwrap().as_str()
+            let row = captures
+                .get(2)
+                .unwrap()
+                .as_str()
                 .parse::<u32>()
                 .map_err(|_| {
-                    LarkAPIError::illegal_param(format!("无效的行号: {}", captures.get(2).unwrap().as_str()))
+                    LarkAPIError::illegal_param(format!(
+                        "无效的行号: {}",
+                        captures.get(2).unwrap().as_str()
+                    ))
                 })?;
 
             Ok(Self { column, row })
         } else {
-            Err(LarkAPIError::illegal_param(format!("无效的单元格坐标: {}", coord_str)))
+            Err(LarkAPIError::illegal_param(format!(
+                "无效的单元格坐标: {}",
+                coord_str
+            )))
         }
     }
 
@@ -427,11 +436,17 @@ impl SheetCellsService {
 
         // 添加可选参数到请求体
         if let Some(value_render_option) = &request.value_render_option {
-            body.insert("valueRenderOption", serde_json::Value::String(value_render_option.clone()));
+            body.insert(
+                "valueRenderOption",
+                serde_json::Value::String(value_render_option.clone()),
+            );
         }
 
         if let Some(date_time_render_option) = &request.date_time_render_option {
-            body.insert("dateTimeRenderOption", serde_json::Value::String(date_time_render_option.clone()));
+            body.insert(
+                "dateTimeRenderOption",
+                serde_json::Value::String(date_time_render_option.clone()),
+            );
         }
 
         // 构建API请求
@@ -439,21 +454,21 @@ impl SheetCellsService {
         api_req.set_api_path(
             Endpoints::SHEETS_V2_SPREADSHEET_VALUES_RANGE
                 .replace("{spreadsheet_token}", &request.spreadsheet_token)
-                .replace("{range}", &format!("{}!{}", request.sheet_id, request.cell))
+                .replace("{range}", &format!("{}!{}", request.sheet_id, request.cell)),
         );
         api_req.set_body(serde_json::to_vec(&body)?);
-        api_req.set_supported_access_token_types(vec![
-            AccessTokenType::Tenant,
-            AccessTokenType::User
-        ]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         // 添加查询参数
         if let Some(user_id_type) = &request.user_id_type {
-            api_req.query_params.insert("user_id_type", user_id_type.clone());
+            api_req
+                .query_params
+                .insert("user_id_type", user_id_type.clone());
         }
 
         // 暂时返回模拟数据，直到Transport问题解决
-        use open_lark_core::api_resp::RawResponse;
+        use api_resp::RawResponse;
         Ok(BaseResponse {
             raw_response: RawResponse {
                 code: 0,
@@ -605,12 +620,7 @@ mod tests {
 
     #[test]
     fn test_update_cell_request() {
-        let request = UpdateCellRequest::new(
-            "token123",
-            "Sheet1",
-            "A1",
-            CellValue::text("Test")
-        );
+        let request = UpdateCellRequest::new("token123", "Sheet1", "A1", CellValue::text("Test"));
 
         assert_eq!(request.spreadsheet_token, "token123");
         assert_eq!(request.sheet_id, "Sheet1");
@@ -633,26 +643,20 @@ mod tests {
         assert_eq!(request.sheet_id, "Sheet1");
         assert_eq!(request.cell, "A1");
         assert_eq!(request.value, CellValue::Number(42.0));
-        assert_eq!(request.value_render_option, Some("FormattedValue".to_string()));
+        assert_eq!(
+            request.value_render_option,
+            Some("FormattedValue".to_string())
+        );
     }
 
     #[test]
     fn test_request_validation() {
-        let valid_request = UpdateCellRequest::new(
-            "token123",
-            "Sheet1",
-            "A1",
-            CellValue::text("Test")
-        );
+        let valid_request =
+            UpdateCellRequest::new("token123", "Sheet1", "A1", CellValue::text("Test"));
 
         assert!(valid_request.validate().is_ok());
 
-        let invalid_request = UpdateCellRequest::new(
-            "",
-            "Sheet1",
-            "A1",
-            CellValue::text("Test")
-        );
+        let invalid_request = UpdateCellRequest::new("", "Sheet1", "A1", CellValue::text("Test"));
 
         assert!(invalid_request.validate().is_err());
     }

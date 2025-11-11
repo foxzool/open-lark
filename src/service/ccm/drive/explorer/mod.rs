@@ -8,7 +8,7 @@
 // drive explorer - 资源浏览器API
 //,
 // 提供云空间资源浏览器相关的功能
-use crate::prelude::*;
+use openlark_core::prelude::*;
 /// 资源浏览器服务
 #[derive(Debug, Clone)]
 pub struct DriveExplorerService {
