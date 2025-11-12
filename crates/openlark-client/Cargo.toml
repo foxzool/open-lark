@@ -1,0 +1,57 @@
+[package]
+name = "openlark-client"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Client module for OpenLark SDK - provides unified client interfaces and service aggregation"
+
+[dependencies]
+# Core dependencies
+openlark-core = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+async-trait = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+
+# Optional service dependencies (conditionally included)
+openlark-docs = { workspace = true, optional = true }
+openlark-communication = { workspace = true, optional = true }
+openlark-hr = { workspace = true, optional = true }
+openlark-ai = { workspace = true, optional = true }
+openlark-auth = { workspace = true, optional = true }
+openlark-enterprise = { workspace = true, optional = true }
+
+[features]
+default = []
+
+# Core client feature
+client = []
+
+# Feature flags for service inclusion
+docs = ["openlark-docs/docs"]
+sheet = ["openlark-docs/sheet"]
+bitable = ["openlark-docs/bitable"]
+wiki = ["openlark-docs/wiki"]
+drive = ["openlark-docs/drive"]
+ccm = ["openlark-docs/ccm"]
+cloud-docs = ["openlark-docs/all-cloud-docs"]
+
+communication = ["openlark-communication"]
+hr = ["openlark-hr"]
+ai = ["openlark-ai"]
+auth = ["openlark-auth"]
+enterprise = ["openlark-enterprise"]
+
+# Convenience features
+all-services = ["docs", "sheet", "bitable", "wiki", "drive", "ccm", "communication", "hr", "ai", "auth", "enterprise"]
+base-services = ["docs", "sheet", "communication", "auth"]
+
+# Complete client features for easy selection
+client-docs = ["client", "docs"]
+client-communication = ["client", "communication"]
+client-hr = ["client", "hr"]
+client-ai = ["client", "ai"]
+client-auth = ["client", "auth"]
+client-all = ["client", "all-services"]

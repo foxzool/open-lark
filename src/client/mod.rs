@@ -7,6 +7,20 @@ use openlark_core::{config, constants};
 // 条件导入服务
 #[cfg(feature = "acs")]
 use crate::service::acs::AcsService;
+
+// 云文档服务从 openlark-docs crate 导入
+#[cfg(feature = "docs")]
+use openlark_docs::docs::DocxService;
+#[cfg(feature = "sheet")]
+use openlark_docs::sheet::SheetsService;
+#[cfg(feature = "bitable")]
+use openlark_docs::bitable::BitableService;
+#[cfg(feature = "wiki")]
+use openlark_docs::wiki::WikiService;
+#[cfg(feature = "drive")]
+use openlark_docs::drive::DriveService;
+#[cfg(feature = "ccm")]
+use openlark_docs::ccm::CcmService;
 #[cfg(feature = "admin")]
 use crate::service::admin::AdminService;
 #[cfg(feature = "ai")]
@@ -99,10 +113,19 @@ pub struct LarkClient {
     pub bot: BotService,
     #[cfg(feature = "calendar")]
     pub calendar: CalendarService,
+    // 云文档服务 - 从 openlark-docs crate
+    #[cfg(feature = "docs")]
+    pub docs: DocxService,
+    #[cfg(feature = "sheet")]
+    pub sheet: SheetsService,
+    #[cfg(feature = "bitable")]
+    pub bitable: BitableService,
+    #[cfg(feature = "wiki")]
+    pub wiki: WikiService,
+    #[cfg(feature = "drive")]
+    pub drive: DriveService,
     #[cfg(feature = "ccm")]
     pub ccm: CcmService,
-    #[cfg(feature = "cloud-docs")]
-    pub cloud_docs: ClouddocsService,
     #[cfg(feature = "contact")]
     pub contact: ContactService,
     #[cfg(feature = "group")]
@@ -164,10 +187,19 @@ impl LarkClient {
             bot: BotService::new(config.clone()),
             #[cfg(feature = "calendar")]
             calendar: CalendarService::new(config.clone()),
+            // 云文档服务 - 从 openlark-docs crate
+            #[cfg(feature = "docs")]
+            docs: DocxService::new(config.clone()),
+            #[cfg(feature = "sheet")]
+            sheet: SheetsService::new(config.clone()),
+            #[cfg(feature = "bitable")]
+            bitable: BitableService::new(config.clone()),
+            #[cfg(feature = "wiki")]
+            wiki: WikiService::new(config.clone()),
+            #[cfg(feature = "drive")]
+            drive: DriveService::new(config.clone()),
             #[cfg(feature = "ccm")]
             ccm: CcmService::new(config.clone()),
-            #[cfg(feature = "cloud-docs")]
-            cloud_docs: ClouddocsService::new(config.clone()),
             #[cfg(feature = "contact")]
             contact: ContactService::new(config.clone()),
             #[cfg(feature = "group")]

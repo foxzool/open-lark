@@ -3,7 +3,6 @@ resolver = "2"
 members = [
     "crates/openlark-core",
     "crates/openlark-auth",
-    "crates/openlark-client",
     "crates/openlark-communication",
     "crates/openlark-docs",
     "crates/openlark-hr",
@@ -41,7 +40,6 @@ documentation = "https://docs.rs/open-lark"
 # Internal dependencies (shared version management)
 openlark-core = { path = "crates/openlark-core", version = "0.15.0-dev" }
 openlark-auth = { path = "crates/openlark-auth", version = "0.15.0-dev" }
-openlark-client = { path = "crates/openlark-client", version = "0.15.0-dev" }
 openlark-communication = { path = "crates/openlark-communication", version = "0.15.0-dev" }
 openlark-docs = { path = "crates/openlark-docs", version = "0.15.0-dev" }
 openlark-hr = { path = "crates/openlark-hr", version = "0.15.0-dev" }
@@ -147,85 +145,72 @@ communication = ["openlark-communication"]
 collaboration = ["openlark-communication", "openlark-docs"]
 hr-suite = ["openlark-communication", "openlark-hr"]
 ai-platform = ["openlark-communication", "openlark-ai"]
-# enterprise = ["openlark-communication", "openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-# extensions = []  # 移除空feature
-# event = []  # 移除空feature
-# integrations = []  # 移除空feature
+enterprise = ["openlark-communication", "openlark-enterprise"]
+extensions = []
+event = []
+integrations = []
 auth = ["openlark-auth"]
-# complete = ["openlark-communication", "openlark-docs", "openlark-hr", "openlark-ai", "openlark-enterprise", "auth"]  # 暂时注释，等enterprise crate实现完成后再启用
+complete = ["openlark-communication", "openlark-docs", "openlark-hr", "openlark-ai", "openlark-enterprise", "auth"]
 
 # Legacy feature mapping for backward compatibility
 im = ["openlark-communication"]
-cloud-docs = ["openlark-docs/all-cloud-docs"]
-# 具体云文档功能映射
-docs = ["openlark-docs/docs"]
-sheet = ["openlark-docs/sheet"]
-bitable = ["openlark-docs/bitable"]
-wiki = ["openlark-docs/wiki"]
-drive = ["openlark-docs/drive"]
-ccm = ["openlark-docs/ccm"]
-# 向后兼容
-docx = ["docs"]  # 向后兼容：docx映射到docs
-sheets = ["sheet"]  # 向后兼容：sheets映射到sheet
+cloud-docs = ["openlark-docs"]
+docx = ["cloud-docs"]  # 向后兼容：docx映射到cloud-docs
+drive = ["cloud-docs"]  # 向后兼容：drive映射到cloud-docs
 contact = ["openlark-communication"]
 group = ["openlark-communication"]
 authentication = ["openlark-communication"]
 search = ["openlark-communication"]
-
-# New client-based features
-client-v2 = ["openlark-client/client"]
-client-v2-docs = ["openlark-client/client", "openlark-client/docs"]
-client-v2-communication = ["openlark-client/client", "openlark-client/communication"]
-client-v2-all = ["openlark-client/client", "openlark-client/all-services"]
-# admin = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-# analytics = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-# apaas = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+acs = []
+admin = ["openlark-enterprise"]
+analytics = ["openlark-enterprise"]
+apaas = ["openlark-enterprise"]
 # auth已经移动到新的feature系统
 authen = ["auth"]  # 向后兼容：authen映射到auth
 ai = ["openlark-ai"]
 aily = ["openlark-ai"]
-# app_engine = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+app_engine = ["openlark-enterprise"]
 baike = ["openlark-ai"]
-# apass = []  # 移除空feature
-# application = []  # 移除空feature
-base = ["bitable"]  # 改为具体的 bitable 功能
-# board = []  # 移除空feature
-approval = ["openlark-docs/all-cloud-docs"]
+apass = []
+application = []
+base = ["openlark-docs"]
+board = []
+approval = ["openlark-docs"]
 attendance = ["openlark-hr"]
 bot = ["openlark-communication"]
-calendar = ["openlark-docs/all-cloud-docs"]
+calendar = ["openlark-docs"]
 cardkit = ["openlark-communication"]
-# ccm = ["openlark-docs/ccm"]  # 使用具体的 ccm 功能（上面已经定义过了）
+ccm = ["openlark-docs"]
 corehr = ["openlark-hr"]
 compensation-management = ["openlark-hr"]
-# directory = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+directory = ["openlark-enterprise"]
 ehr = ["openlark-hr"]
-# elearning = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+elearning = ["openlark-enterprise"]
 feishu_people = ["openlark-hr"]
-# helpdesk = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+helpdesk = ["openlark-enterprise"]
 hire = ["openlark-hr"]
-# human-authentication = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+human-authentication = ["openlark-enterprise"]
 lingo = ["openlark-ai"]
 mail = ["openlark-communication"]
-# mdm = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-meeting_room = ["openlark-docs/all-cloud-docs"]
-minutes = ["openlark-docs/all-cloud-docs"]
-# moments = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+mdm = ["openlark-enterprise"]
+meeting_room = ["openlark-docs"]
+minutes = ["openlark-docs"]
+moments = ["openlark-enterprise"]
 okr = ["openlark-hr"]
 passport = ["openlark-communication"]
 payroll = ["openlark-hr"]
 performance = ["openlark-hr"]
-# personal-settings = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-# report = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-# security-and-compliance = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-# security_and_compliance = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-task = ["openlark-docs/all-cloud-docs"]
-# tenant = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-# tenant-tag = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-# trust-party = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+personal-settings = ["openlark-enterprise"]
+report = ["openlark-enterprise"]
+security-and-compliance = ["openlark-enterprise"]
+security_and_compliance = ["openlark-enterprise"]
+task = ["openlark-docs"]
+tenant = ["openlark-enterprise"]
+tenant-tag = ["openlark-enterprise"]
+trust-party = ["openlark-enterprise"]
 vc = ["openlark-communication"]
-# verification = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-# workplace = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+verification = ["openlark-enterprise"]
+workplace = ["openlark-enterprise"]
 
 # WebSocket support
 websocket = ["tokio-tungstenite", "prost"]
@@ -236,7 +221,6 @@ otel = ["opentelemetry", "opentelemetry_sdk", "opentelemetry-otlp", "tracing-ope
 [dependencies]
 openlark-core = { workspace = true }
 openlark-auth = { workspace = true, optional = true }
-openlark-client = { workspace = true, optional = true }
 openlark-communication = { workspace = true, optional = true }
 openlark-docs = { workspace = true, optional = true }
 openlark-hr = { workspace = true, optional = true }
