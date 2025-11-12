@@ -20,7 +20,7 @@ pub mod prelude {
 pub mod docs;
 
 #[cfg(feature = "sheet")]
-pub mod sheet;
+pub mod sheets;
 
 #[cfg(feature = "bitable")]
 pub mod bitable;
@@ -39,7 +39,7 @@ pub mod ccm;
 pub use docs::DocxService;
 
 #[cfg(feature = "sheet")]
-pub use sheet::SheetsService;
+pub use sheets::SheetsService;
 
 #[cfg(feature = "bitable")]
 pub use bitable::BitableService;
