@@ -68,7 +68,7 @@ use openlark_docs::docs::DocxService;
 #[cfg(feature = "drive")]
 use openlark_docs::drive::DriveService;
 #[cfg(feature = "sheet")]
-use openlark_docs::sheet::SheetsService;
+use openlark_docs::sheets::SheetsService;
 #[cfg(feature = "wiki")]
 use openlark_docs::wiki::WikiService;
 
