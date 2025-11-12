@@ -1,18 +1,32 @@
-//! Bitable API v1 module (placeholder)
-//!
-//! This is a placeholder implementation for the v1 bitable API.
-
+#![allow(dead_code)]
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(unused_mut)]
+pub use app_dashboard::AppDashboardService;
+pub use app_role::AppRoleService;
+pub use app_role_member::AppRoleMemberService;
+pub use app_table_field::AppTableFieldService;
+pub use app_workflow::AppWorkflowService;
+pub use form::FormService;
+// 为了避免名称冲突，使用模块路径而不是全局导入
+pub mod app;
+pub mod app_table;
+pub mod app_table_record;
+pub mod app_table_view;
 use openlark_core::config::Config;
-
-/// Bitable API v1 service
+mod app_dashboard;
+mod app_role;
+mod app_role_member;
+mod app_table_field;
+mod app_workflow;
+mod form;
+mod share;
+pub use share::*;
 pub struct V1 {
-    #[allow(dead_code)]
-    config: Config,
 }
 
 impl V1 {
-    /// Create new v1 bitable service
+}
     pub fn new(config: Config) -> Self {
         Self { config }
-    }
 }

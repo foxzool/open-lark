@@ -9,10 +9,10 @@
 //,
 // 包含云空间文件管理的核心功能，这是使用最广泛的版本
 use openlark_core::prelude::*;
-use openlark_core::service::ccm::drive::v1::file::FileService;
-use openlark_core::service::ccm::drive::v1::meta::MetaService;
-use openlark_core::service::ccm::drive::v1::statistics::StatisticsService;
-use openlark_core::service::ccm::drive::v1::view_record::ViewRecordService;
+use super::ccm::drive::v1::file::FileService;
+use super::ccm::drive::v1::meta::MetaService;
+use super::ccm::drive::v1::statistics::StatisticsService;
+use super::ccm::drive::v1::view_record::ViewRecordService;
 /// 云空间文件管理v1版本服务
 #[derive(Debug, Clone)]
 pub struct DriveV1Service {

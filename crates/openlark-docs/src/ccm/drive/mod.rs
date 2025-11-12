@@ -16,9 +16,9 @@
 //
 // 覆盖55个API接口
 use openlark_core::prelude::*;
-use openlark_core::service::ccm::drive::v1::DriveV1Service;
-use openlark_core::service::ccm::drive::v2::DriveV2Service;
-use openlark_core::service::ccm::drive::explorer::DriveExplorerService;
+use super::ccm::drive::v1::DriveV1Service;
+use super::ccm::drive::v2::DriveV2Service;
+use super::ccm::drive::explorer::DriveExplorerService;
 /// 云空间文件管理服务
 #[derive(Debug, Clone)]
 pub struct DriveService {

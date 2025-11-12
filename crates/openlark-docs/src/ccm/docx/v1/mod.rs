@@ -9,9 +9,9 @@
 //,
 // 包含文档的核心功能
 use openlark_core::prelude::*;
-use openlark_core::service::ccm::docx::v1::document::DocumentService;
-use openlark_core::service::ccm::docx::v1::block::BlockService;
-use openlark_core::service::ccm::docx::v1::comment::CommentService;
+use super::ccm::docx::v1::document::DocumentService;
+use super::ccm::docx::v1::block::BlockService;
+use super::ccm::docx::v1::comment::CommentService;
 /// 文档v1版本服务
 #[derive(Debug, Clone)]
 pub struct DocxV1Service {
