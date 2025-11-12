@@ -9,7 +9,7 @@ use crate::traits::ServiceRegistry;
 use openlark_docs::docs::DocxService;
 
 #[cfg(feature = "sheet")]
-use openlark_docs::sheet::SheetsService;
+use openlark_docs::sheets::SheetsService;
 
 #[cfg(feature = "bitable")]
 use openlark_docs::bitable::BitableService;
