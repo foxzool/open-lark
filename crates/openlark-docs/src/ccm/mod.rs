@@ -10,6 +10,7 @@
 use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
 use openlark_core::config::Config;
 use serde::{Deserialize, Serialize};
+use std::sync::Arc;
 
 /// 简化的服务结构体
 #[derive(Debug, Clone)]
@@ -42,6 +43,13 @@ impl CcmService {
     pub fn new(config: Config) -> Self {
         Self {
             service: SimpleService::new(config),
+        }
+    }
+
+    /// Create service with shared config (experimental)
+    pub fn new_from_shared(shared: Arc<Config>) -> Self {
+        Self {
+            service: SimpleService::new(shared.as_ref().clone()),
         }
     }
 }

@@ -6,6 +6,7 @@ use openlark_core::config::Config;
 
 /// Wiki API v2 service
 pub struct V2 {
+    #[allow(dead_code)]
     config: Config,
 }
 
