@@ -19,7 +19,7 @@ pub mod prelude {
 #[cfg(feature = "docs")]
 pub mod docs;
 
-#[cfg(feature = "sheet")]
+#[cfg(feature = "sheets")]
 pub mod sheets;
 
 #[cfg(feature = "bitable")]
@@ -38,7 +38,7 @@ pub mod ccm;
 #[cfg(feature = "docs")]
 pub use docs::DocxService;
 
-#[cfg(feature = "sheet")]
+#[cfg(feature = "sheets")]
 pub use sheets::SheetsService;
 
 #[cfg(feature = "bitable")]
