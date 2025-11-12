@@ -67,7 +67,7 @@ use openlark_docs::ccm::CcmService;
 use openlark_docs::docs::DocxService;
 #[cfg(feature = "drive")]
 use openlark_docs::drive::DriveService;
-#[cfg(feature = "sheet")]
+#[cfg(feature = "sheets")]
 use openlark_docs::sheets::SheetsService;
 #[cfg(feature = "wiki")]
 use openlark_docs::wiki::WikiService;
@@ -116,7 +116,7 @@ pub struct LarkClient {
     // 云文档服务 - 从 openlark-docs crate
     #[cfg(feature = "docs")]
     pub docs: DocxService,
-    #[cfg(feature = "sheet")]
+    #[cfg(feature = "sheets")]
     pub sheet: SheetsService,
     #[cfg(feature = "bitable")]
     pub bitable: BitableService,
@@ -190,7 +190,7 @@ impl LarkClient {
             // 云文档服务 - 从 openlark-docs crate
             #[cfg(feature = "docs")]
             docs: DocxService::new(config.clone()),
-            #[cfg(feature = "sheet")]
+            #[cfg(feature = "sheets")]
             sheet: SheetsService::new(config.clone()),
             #[cfg(feature = "bitable")]
             bitable: BitableService::new(config.clone()),

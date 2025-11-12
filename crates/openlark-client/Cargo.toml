@@ -31,7 +31,7 @@ client = []
 
 # Feature flags for service inclusion
 docs = ["openlark-docs/docs"]
-sheet = ["openlark-docs/sheet"]
+sheets = ["openlark-docs/sheets"]
 bitable = ["openlark-docs/bitable"]
 wiki = ["openlark-docs/wiki"]
 drive = ["openlark-docs/drive"]
@@ -45,8 +45,8 @@ auth = ["openlark-auth"]
 enterprise = ["openlark-enterprise"]
 
 # Convenience features
-all-services = ["docs", "sheet", "bitable", "wiki", "drive", "ccm", "communication", "hr", "ai", "auth", "enterprise"]
-base-services = ["docs", "sheet", "communication", "auth"]
+all-services = ["docs", "sheets", "bitable", "wiki", "drive", "ccm", "communication", "hr", "ai", "auth", "enterprise"]
+base-services = ["docs", "sheets", "communication", "auth"]
 
 # Complete client features for easy selection
 client-docs = ["client", "docs"]

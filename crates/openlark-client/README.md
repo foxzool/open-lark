@@ -33,7 +33,7 @@ openlark-client = { version = "0.15.0-dev", features = ["docs", "communication"]
 
 ```toml
 # 云文档服务
-features = ["docs", "sheet", "bitable", "wiki", "drive", "ccm"]
+features = ["docs", "sheets", "bitable", "wiki", "drive", "ccm"]
 
 # 通信服务
 features = ["communication"]

@@ -14,7 +14,7 @@ use openlark_communication::contact::ContactService;
 #[cfg(feature = "docs")]
 use openlark_docs::docs::DocxService;
 
-#[cfg(feature = "sheet")]
+#[cfg(feature = "sheets")]
 use openlark_docs::sheets::SheetsService;
 
 #[cfg(feature = "bitable")]
@@ -61,7 +61,7 @@ impl ServiceManager {
             registry.register_service("docs", service);
         }
 
-        #[cfg(feature = "sheet")]
+        #[cfg(feature = "sheets")]
         {
             tracing::debug!("Initializing sheet service");
             let service = SheetsService::new_from_shared(shared_config.clone());
@@ -145,7 +145,7 @@ impl ServiceManager {
         #[cfg(feature = "docs")]
         services.push("docs");
 
-        #[cfg(feature = "sheet")]
+        #[cfg(feature = "sheets")]
         services.push("sheet");
 
         #[cfg(feature = "bitable")]
