@@ -159,14 +159,14 @@ im = ["openlark-communication"]
 cloud-docs = ["openlark-docs/all-cloud-docs"]
 # 具体云文档功能映射
 docs = ["openlark-docs/docs"]
-sheet = ["openlark-docs/sheet"]
+sheets = ["openlark-docs/sheets"]
 bitable = ["openlark-docs/bitable"]
 wiki = ["openlark-docs/wiki"]
 drive = ["openlark-docs/drive"]
 ccm = ["openlark-docs/ccm"]
 # 向后兼容
 docx = ["docs"]  # 向后兼容：docx映射到docs
-sheets = ["sheet"]  # 向后兼容：sheets映射到sheet
+sheet = ["sheets"]  # 向后兼容：sheet映射到sheets
 contact = ["openlark-communication"]
 group = ["openlark-communication"]
 authentication = ["openlark-communication"]

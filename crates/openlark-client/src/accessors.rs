@@ -8,7 +8,7 @@ use crate::traits::ServiceRegistry;
 #[cfg(feature = "docs")]
 use openlark_docs::docs::DocxService;
 
-#[cfg(feature = "sheet")]
+#[cfg(feature = "sheets")]
 use openlark_docs::sheets::SheetsService;
 
 #[cfg(feature = "bitable")]
@@ -34,7 +34,7 @@ pub trait ServiceAccessorsExt {
     #[cfg(feature = "docs")]
     fn docs_ext(&self) -> Option<&DocxService>;
 
-    #[cfg(feature = "sheet")]
+    #[cfg(feature = "sheets")]
     fn sheet_ext(&self) -> Option<&SheetsService>;
 
     #[cfg(feature = "bitable")]
@@ -61,7 +61,7 @@ impl ServiceAccessorsExt for crate::registry::DefaultServiceRegistry {
         self.get_service("docs")
     }
 
-    #[cfg(feature = "sheet")]
+    #[cfg(feature = "sheets")]
     fn sheet_ext(&self) -> Option<&SheetsService> {
         self.get_service("sheet")
     }
