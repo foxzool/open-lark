@@ -14,7 +14,7 @@
 // - 删除表格,
 // - 获取表格所有工作表,
 use openlark_core::{APIResult, LarkClient, RequestBuilder};
-use openlark_core::service::ccm::models::CcmResponse;
+use super::ccm::models::CcmResponse;
 use serde::{Deserialize, Serialize};
 /// 表格操作服务,
 #[derive(Debug, Clone)]

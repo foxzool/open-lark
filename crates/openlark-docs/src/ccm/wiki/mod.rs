@@ -17,8 +17,8 @@
 //,
 // 覆盖16个API接口（wiki/v2: 15个，wiki/v1: 1个）
 use openlark_core::prelude::*;
-use openlark_core::service::ccm::wiki::v2::WikiV2Service;
-use openlark_core::service::ccm::wiki::v1::WikiV1Service;
+use super::ccm::wiki::v2::WikiV2Service;
+use super::ccm::wiki::v1::WikiV1Service;
 /// 知识库服务
 #[derive(Debug, Clone)]
 pub struct WikiService {

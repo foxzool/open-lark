@@ -1,37 +1,24 @@
-//! Wiki service module
+//! 知识库服务
 //!
-//! This module provides knowledge base and wiki management functionality.
+//! 基础服务架构，具体功能在后续版本中实现。
 
-use openlark_core::{config::Config, trait_system::Service};
-use std::sync::Arc;
+use openlark_core::{
+    config::Config,
+    trait_system::Service,
+};
 
-pub mod v2;
-
-/// Wiki service
+/// 知识库服务
+///
+/// 基础服务架构，具体功能在后续版本中实现。
+#[derive(Debug, Clone)]
 pub struct WikiService {
     config: Config,
-    #[allow(dead_code)]
-    config_arc: Arc<Config>,
-    pub v2: v2::V2,
 }
 
 impl WikiService {
-    /// Create new wiki service instance
+    /// 创建知识库服务实例
     pub fn new(config: Config) -> Self {
-        Self {
-            config: config.clone(),
-            config_arc: Arc::new(config.clone()),
-            v2: v2::V2::new(config),
-        }
-    }
-
-    /// Create service with shared config (experimental)
-    pub fn new_from_shared(shared: Arc<Config>) -> Self {
-        Self {
-            config: shared.as_ref().clone(),
-            config_arc: shared.clone(),
-            v2: v2::V2::new(shared.as_ref().clone()),
-        }
+        Self { config }
     }
 }
 
@@ -40,11 +27,38 @@ impl Service for WikiService {
         &self.config
     }
 
-    fn service_name() -> &'static str {
-        "wiki"
+    fn service_name() -> &'static str
+    where
+        Self: Sized,
+    {
+        "WikiService"
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::trait_system::Service;
+
+    #[test]
+    fn test_wiki_service_creation() {
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
+        let service = WikiService::new(config);
+        assert!(!format!("{:?}", service).is_empty());
     }
 
-    fn service_version() -> &'static str {
-        "v2"
+    #[test]
+    fn test_service_trait_implementation() {
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
+        let service = WikiService::new(config);
+
+        let config_ref = service.config();
+        assert_eq!(config_ref.app_id, "test_app_id");
     }
 }

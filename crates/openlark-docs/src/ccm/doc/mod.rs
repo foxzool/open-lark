@@ -9,7 +9,7 @@
 //,
 // 提供文档相关的功能
 use openlark_core::prelude::*;
-use openlark_core::service::ccm::doc::v2::DocV2Service;
+use super::ccm::doc::v2::DocV2Service;
 /// 文档服务
 #[derive(Debug, Clone)]
 pub struct DocService {

@@ -9,10 +9,10 @@
 //,
 // 包含电子表格的核心功能，这是广泛使用的版本
 use openlark_core::prelude::*;
-use openlark_core::service::ccm::sheets::v2::spreadsheet::SpreadsheetService;
-use openlark_core::service::ccm::sheets::v2::worksheet::WorksheetService;
-use openlark_core::service::ccm::sheets::v2::range::RangeService;
-use openlark_core::service::ccm::sheets::v2::style::StyleService;
+use super::ccm::sheets::v2::spreadsheet::SpreadsheetService;
+use super::ccm::sheets::v2::worksheet::WorksheetService;
+use super::ccm::sheets::v2::range::RangeService;
+use super::ccm::sheets::v2::style::StyleService;
 /// 电子表格v2版本服务
 #[derive(Debug, Clone)]
 pub struct SheetsV2Service {

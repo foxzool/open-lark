@@ -7,10 +7,10 @@
 #![allow(clippy::module_inception)]
 //! Ccm服务模块 - 简化实现
 
-use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
-use openlark_core::config::Config;
-use serde::{Deserialize, Serialize};
-use std::sync::Arc;
+use openlark_core::{
+    config::Config,
+    trait_system::Service,
+};
 
 /// 简化的服务结构体
 #[derive(Debug, Clone)]
@@ -24,14 +24,9 @@ impl SimpleService {
     }
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+// 简化的响应结构体，具体功能在后续版本中实现
+#[derive(Debug)]
 pub struct SimpleResponse;
-
-impl ApiResponseTrait for SimpleResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
 
 /// Ccm服务
 #[derive(Debug, Clone)]
@@ -45,12 +40,18 @@ impl CcmService {
             service: SimpleService::new(config),
         }
     }
+}
 
-    /// Create service with shared config (experimental)
-    pub fn new_from_shared(shared: Arc<Config>) -> Self {
-        Self {
-            service: SimpleService::new(shared.as_ref().clone()),
-        }
+impl Service for CcmService {
+    fn config(&self) -> &Config {
+        &self.service.config
+    }
+
+    fn service_name() -> &'static str
+    where
+        Self: Sized,
+    {
+        "CcmService"
     }
 }
 
