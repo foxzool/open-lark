@@ -1,37 +1,24 @@
-//! Bitable service module
+//! 多维表格服务
 //!
-//! This module provides multi-dimensional table (bitable) functionality.
+//! 基础服务架构，具体功能在后续版本中实现。
 
-use openlark_core::{config::Config, trait_system::Service};
-use std::sync::Arc;
+use openlark_core::{
+    config::Config,
+    trait_system::Service,
+};
 
-pub mod v1;
-
-/// Bitable service
+/// 多维表格服务
+///
+/// 基础服务架构，具体功能在后续版本中实现。
+#[derive(Debug, Clone)]
 pub struct BitableService {
     config: Config,
-    #[allow(dead_code)]
-    config_arc: Arc<Config>,
-    pub v1: v1::V1,
 }
 
 impl BitableService {
-    /// Create new bitable service instance
+    /// 创建多维表格服务实例
     pub fn new(config: Config) -> Self {
-        Self {
-            config: config.clone(),
-            config_arc: Arc::new(config.clone()),
-            v1: v1::V1::new(config),
-        }
-    }
-
-    /// Create service with shared config (experimental)
-    pub fn new_from_shared(shared: Arc<Config>) -> Self {
-        Self {
-            config: shared.as_ref().clone(),
-            config_arc: shared.clone(),
-            v1: v1::V1::new(shared.as_ref().clone()),
-        }
+        Self { config }
     }
 }
 
@@ -40,11 +27,38 @@ impl Service for BitableService {
         &self.config
     }
 
-    fn service_name() -> &'static str {
-        "bitable"
+    fn service_name() -> &'static str
+    where
+        Self: Sized,
+    {
+        "BitableService"
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::trait_system::Service;
+
+    #[test]
+    fn test_bitable_service_creation() {
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
+        let service = BitableService::new(config);
+        assert!(!format!("{:?}", service).is_empty());
     }
 
-    fn service_version() -> &'static str {
-        "v1"
+    #[test]
+    fn test_service_trait_implementation() {
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
+        let service = BitableService::new(config);
+
+        let config_ref = service.config();
+        assert_eq!(config_ref.app_id, "test_app_id");
     }
 }

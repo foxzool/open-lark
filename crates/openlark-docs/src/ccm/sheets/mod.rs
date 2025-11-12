@@ -17,8 +17,8 @@
 //,
 // 覆盖60个API接口（sheets/v2: 33个，sheets/v3: 27个）
 use openlark_core::prelude::*;
-use openlark_core::service::ccm::sheets::v2::SheetsV2Service;
-use openlark_core::service::ccm::sheets::v3::SheetsV3Service;
+use super::ccm::sheets::v2::SheetsV2Service;
+use super::ccm::sheets::v3::SheetsV3Service;
 /// 电子表格服务
 #[derive(Debug, Clone)]
 pub struct SheetsService {

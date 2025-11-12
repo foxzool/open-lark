@@ -1,43 +1,24 @@
-//! Drive service module
+//! 云空间文件管理服务
 //!
-//! This module provides file and folder storage management functionality.
+//! 基础服务架构，具体功能在后续版本中实现。
 
-use openlark_core::{config::Config, trait_system::Service};
-use std::sync::Arc;
+use openlark_core::{
+    config::Config,
+    trait_system::Service,
+};
 
-/// Drive API v1 version
-pub mod v1;
-/// Drive API v2 version
-pub mod v2;
-
-/// Drive service
+/// 云空间文件管理服务
+///
+/// 基础服务架构，具体功能在后续版本中实现。
+#[derive(Debug, Clone)]
 pub struct DriveService {
     config: Config,
-    #[allow(dead_code)]
-    config_arc: Arc<Config>,
-    pub v1: v1::V1,
-    pub v2: v2::V2,
 }
 
 impl DriveService {
-    /// Create new drive service instance
+    /// 创建云空间文件管理服务实例
     pub fn new(config: Config) -> Self {
-        Self {
-            config: config.clone(),
-            config_arc: Arc::new(config.clone()),
-            v1: v1::V1::new(config.clone()),
-            v2: v2::V2::new(config),
-        }
-    }
-
-    /// Create service with shared config (experimental)
-    pub fn new_from_shared(shared: Arc<Config>) -> Self {
-        Self {
-            config: shared.as_ref().clone(),
-            config_arc: shared.clone(),
-            v1: v1::V1::new(shared.as_ref().clone()),
-            v2: v2::V2::new(shared.as_ref().clone()),
-        }
+        Self { config }
     }
 }
 
@@ -46,11 +27,38 @@ impl Service for DriveService {
         &self.config
     }
 
-    fn service_name() -> &'static str {
-        "drive"
+    fn service_name() -> &'static str
+    where
+        Self: Sized,
+    {
+        "DriveService"
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::trait_system::Service;
+
+    #[test]
+    fn test_drive_service_creation() {
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
+        let service = DriveService::new(config);
+        assert!(!format!("{:?}", service).is_empty());
     }
 
-    fn service_version() -> &'static str {
-        "v2"
+    #[test]
+    fn test_service_trait_implementation() {
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
+        let service = DriveService::new(config);
+
+        let config_ref = service.config();
+        assert_eq!(config_ref.app_id, "test_app_id");
     }
 }

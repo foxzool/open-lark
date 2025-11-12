@@ -1,18 +1,35 @@
-//! Wiki API v2 module (placeholder)
-//!
-//! This is a placeholder implementation for the v2 wiki API.
-
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
+#![allow(non_snake_case)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::module_inception)]
+//! V2服务模块 - 简化实现
+use serde::{Deserialize, Serialize};
 use openlark_core::config::Config;
-
-/// Wiki API v2 service
-pub struct V2 {
-    #[allow(dead_code)]
-    config: Config,
+use api_resp::{ApiResponseTrait, ResponseFormat};
+/// 简化的服务结构体
+#[derive(Debug, Clone)]
+pub struct SimpleService {
 }
 
-impl V2 {
-    /// Create new v2 wiki service
-    pub fn new(config: Config) -> Self {
-        Self { config }
-    }
+impl SimpleService {
+}
+#[derive(Debug, Deserialize, Serialize)]
+pub struct SimpleResponse;
+impl ApiResponseTrait for SimpleResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+}
+/// V2服务
+#[derive(Debug, Clone)]
+pub struct V2Service {
+}
+
+impl V2Service {
+}
+// Type alias for compatibility
+pub type ServiceType = V2Service;
+pub type ResponseType = SimpleResponse;
 }

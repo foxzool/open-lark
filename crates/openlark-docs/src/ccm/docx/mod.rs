@@ -17,8 +17,8 @@
 //,
 // 覆盖18个API接口
 use openlark_core::prelude::*;
-use openlark_core::service::ccm::docx::v1::DocxV1Service;
-use openlark_core::service::ccm::docx::documents::DocumentsService;
+use super::ccm::docx::v1::DocxV1Service;
+use super::ccm::docx::documents::DocumentsService;
 /// 文档服务
 #[derive(Debug, Clone)]
 pub struct DocxService {
