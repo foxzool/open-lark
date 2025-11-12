@@ -95,6 +95,7 @@ impl ServiceAccessorsExt for crate::registry::DefaultServiceRegistry {
 /// 构建器扩展
 ///
 /// 提供与原有 LarkClientBuilder 兼容的构建方法
+#[derive(Debug)]
 pub struct CompatibleClientBuilder {
     app_id: String,
     app_secret: String,
@@ -151,7 +152,9 @@ mod tests {
     #[test]
     fn test_compatible_builder() {
         let builder = CompatibleClientBuilder::new("test_app_id", "test_app_secret");
-        let _client = builder.with_app_type(openlark_core::constants::AppType::SelfBuild).build();
+        let _client = builder
+            .with_app_type(openlark_core::constants::AppType::SelfBuild)
+            .build();
     }
 
     #[test]

@@ -9,18 +9,6 @@ use openlark_core::{config, constants};
 use crate::service::acs::AcsService;
 
 // 云文档服务从 openlark-docs crate 导入
-#[cfg(feature = "docs")]
-use openlark_docs::docs::DocxService;
-#[cfg(feature = "sheet")]
-use openlark_docs::sheet::SheetsService;
-#[cfg(feature = "bitable")]
-use openlark_docs::bitable::BitableService;
-#[cfg(feature = "wiki")]
-use openlark_docs::wiki::WikiService;
-#[cfg(feature = "drive")]
-use openlark_docs::drive::DriveService;
-#[cfg(feature = "ccm")]
-use openlark_docs::ccm::CcmService;
 #[cfg(feature = "admin")]
 use crate::service::admin::AdminService;
 #[cfg(feature = "ai")]
@@ -71,6 +59,18 @@ use crate::service::security_and_compliance::SecurityAndComplianceService;
 use crate::service::task::TaskService;
 #[cfg(feature = "board")]
 use open_lark_extensions::board::BoardService;
+#[cfg(feature = "bitable")]
+use openlark_docs::bitable::BitableService;
+#[cfg(feature = "ccm")]
+use openlark_docs::ccm::CcmService;
+#[cfg(feature = "docs")]
+use openlark_docs::docs::DocxService;
+#[cfg(feature = "drive")]
+use openlark_docs::drive::DriveService;
+#[cfg(feature = "sheet")]
+use openlark_docs::sheet::SheetsService;
+#[cfg(feature = "wiki")]
+use openlark_docs::wiki::WikiService;
 
 /// 飞书开放平台SDK主客户端
 ///

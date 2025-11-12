@@ -7,7 +7,7 @@ use std::sync::Arc;
 
 use openlark_core::{config::Config, constants::AppType};
 
-use crate::traits::{LarkClient, ClientBuilder};
+use crate::traits::{ClientBuilder, LarkClient};
 
 /// Default implementation of LarkClient
 ///
@@ -38,12 +38,20 @@ impl DefaultLarkClient {
 
         // 初始化所有启用的服务
         #[cfg(feature = "all-services")]
-        crate::services::ServiceManager::initialize_services(&config, &shared_config, &mut services);
+        crate::services::ServiceManager::initialize_services(
+            &config,
+            &shared_config,
+            &mut services,
+        );
 
         #[cfg(not(feature = "all-services"))]
         {
             // 根据具体功能标志初始化服务
-            crate::services::ServiceManager::initialize_services(&config, &shared_config, &mut services);
+            crate::services::ServiceManager::initialize_services(
+                &config,
+                &shared_config,
+                &mut services,
+            );
         }
 
         Self {
@@ -74,7 +82,10 @@ impl DefaultLarkClient {
     }
 
     /// Create client using compatible builder
-    pub fn builder(app_id: impl Into<String>, app_secret: impl Into<String>) -> crate::accessors::CompatibleClientBuilder {
+    pub fn builder(
+        app_id: impl Into<String>,
+        app_secret: impl Into<String>,
+    ) -> crate::accessors::CompatibleClientBuilder {
         crate::accessors::CompatibleClientBuilder::new(app_id, app_secret)
     }
 }
@@ -105,12 +116,14 @@ impl LarkClient for DefaultLarkClient {
 
 /// Builder for creating DefaultLarkClient instances
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct DefaultLarkClientBuilder {
     config: Option<Config>,
     shared_config: Option<Arc<Config>>,
     services: Option<crate::registry::DefaultServiceRegistry>,
 }
 
+#[allow(dead_code)]
 impl DefaultLarkClientBuilder {
     /// Create a new builder instance
     pub fn new() -> Self {
@@ -149,7 +162,9 @@ impl DefaultLarkClientBuilder {
                 .build()
         });
 
-        let shared_config = self.shared_config.unwrap_or_else(|| Arc::new(config.clone()));
+        let shared_config = self
+            .shared_config
+            .unwrap_or_else(|| Arc::new(config.clone()));
 
         let services = self.services.unwrap_or_default();
 
@@ -163,11 +178,13 @@ impl DefaultLarkClientBuilder {
     /// Build the client instance with shared config
     pub fn build_with_shared_config(self) -> DefaultLarkClient {
         let shared_config = self.shared_config.unwrap_or_else(|| {
-            Arc::new(Config::builder()
-                .app_id("app_id")
-                .app_secret("app_secret")
-                .app_type(AppType::SelfBuild)
-                .build())
+            Arc::new(
+                Config::builder()
+                    .app_id("app_id")
+                    .app_secret("app_secret")
+                    .app_type(AppType::SelfBuild)
+                    .build(),
+            )
         });
 
         let config = shared_config.as_ref().clone();
@@ -225,9 +242,7 @@ mod tests {
             .app_type(AppType::SelfBuild)
             .build();
 
-        let client = DefaultLarkClientBuilder::new()
-            .with_config(config)
-            .build();
+        let client = DefaultLarkClientBuilder::new().with_config(config).build();
 
         assert_eq!(client.config().app_id, "test_app_id");
     }

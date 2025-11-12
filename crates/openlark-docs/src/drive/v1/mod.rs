@@ -6,6 +6,7 @@ use openlark_core::config::Config;
 
 /// Drive API v1 service
 pub struct V1 {
+    #[allow(dead_code)]
     config: Config,
 }
 

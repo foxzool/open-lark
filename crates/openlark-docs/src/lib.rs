@@ -36,19 +36,19 @@ pub mod ccm;
 
 // Re-export service types for convenience
 #[cfg(feature = "docs")]
-pub use docs::*;
+pub use docs::DocxService;
 
 #[cfg(feature = "sheet")]
-pub use sheet::*;
+pub use sheet::SheetsService;
 
 #[cfg(feature = "bitable")]
-pub use bitable::*;
+pub use bitable::BitableService;
 
 #[cfg(feature = "wiki")]
-pub use wiki::*;
+pub use wiki::WikiService;
 
 #[cfg(feature = "drive")]
-pub use drive::*;
+pub use drive::DriveService;
 
 #[cfg(feature = "ccm")]
-pub use ccm::*;
+pub use ccm::CcmService;
