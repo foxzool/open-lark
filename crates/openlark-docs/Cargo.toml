@@ -22,3 +22,14 @@ anyhow = { workspace = true }
 [features]
 default = []
 
+# Cloud document modules
+docs = []
+sheet = []
+bitable = []
+wiki = []
+drive = []
+ccm = []
+
+# Convenience feature for all cloud docs
+all-cloud-docs = ["docs", "sheet", "bitable", "wiki", "drive", "ccm"]
+
