@@ -3,8 +3,8 @@
 //! This module provides a default implementation of the ServiceRegistry trait,
 //! allowing services to be registered, discovered, and managed dynamically.
 
-use std::collections::HashMap;
 use std::any::{Any, TypeId};
+use std::collections::HashMap;
 
 use crate::traits::ServiceRegistry;
 
@@ -51,7 +51,8 @@ impl ServiceRegistry for DefaultServiceRegistry {
     /// Register a service with the registry
     fn register_service<T: Send + Sync + 'static>(&mut self, name: &str, service: T) {
         self.services.insert(name.to_string(), Box::new(service));
-        self.type_registry.insert(name.to_string(), TypeId::of::<T>());
+        self.type_registry
+            .insert(name.to_string(), TypeId::of::<T>());
     }
 
     /// Get a service by name
@@ -132,7 +133,8 @@ mod tests {
         let retrieved: &TestService = registry.get_service("test_service").unwrap();
         assert_eq!(retrieved.name, "test");
 
-        let another_retrieved: &AnotherTestService = registry.get_service("another_service").unwrap();
+        let another_retrieved: &AnotherTestService =
+            registry.get_service("another_service").unwrap();
         assert_eq!(another_retrieved.value, 42);
 
         // Test service listing
@@ -177,9 +179,12 @@ mod tests {
     fn test_type_safety() {
         let mut registry = DefaultServiceRegistry::new();
 
-        registry.register_service("test_service", TestService {
-            name: "test".to_string(),
-        });
+        registry.register_service(
+            "test_service",
+            TestService {
+                name: "test".to_string(),
+            },
+        );
 
         // Try to retrieve with wrong type - should return None
         let wrong_type: Option<&AnotherTestService> = registry.get_service("test_service");
@@ -195,9 +200,12 @@ mod tests {
         assert_eq!(registry.len(), 0);
 
         // Add a service
-        registry.register_service("test", TestService {
-            name: "test".to_string(),
-        });
+        registry.register_service(
+            "test",
+            TestService {
+                name: "test".to_string(),
+            },
+        );
         assert!(!registry.is_empty());
         assert_eq!(registry.len(), 1);
 

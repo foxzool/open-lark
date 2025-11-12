@@ -3,6 +3,10 @@
 //! This module re-exports commonly used types and traits
 //! to make client usage more ergonomic.
 
-pub use crate::traits::{LarkClient, AsyncLarkClient, ServiceRegistry, ClientBuilder};
+// These exports are provided for consumer convenience
+#[allow(unused_imports)]
+pub use crate::traits::{AsyncLarkClient, ClientBuilder, LarkClient, ServiceRegistry};
+#[allow(unused_imports)]
 pub use crate::DefaultLarkClient;
-pub use openlark_core::{config::Config, SDKResult, constants::AppType};
+#[allow(unused_imports)]
+pub use openlark_core::{config::Config, constants::AppType, SDKResult};

@@ -28,6 +28,12 @@ impl AuthService {
         Self
     }
 
+    /// Create service with shared config (experimental)
+    /// Note: AuthService doesn't use config directly, but provided for API consistency
+    pub fn new_from_shared(_shared: std::sync::Arc<openlark_core::config::Config>) -> Self {
+        Self
+    }
+
     /// 获取Token管理器实例
     pub fn token_manager() -> TokenManager {
         TokenManager::new()

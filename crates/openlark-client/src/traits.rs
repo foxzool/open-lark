@@ -16,10 +16,14 @@ pub trait LarkClient {
     fn config(&self) -> &Config;
 
     /// Create a new client with the given configuration
-    fn new(config: Config) -> Self where Self: Sized;
+    fn new(config: Config) -> Self
+    where
+        Self: Sized;
 
     /// Create a client from a shared configuration (for performance optimization)
-    fn new_from_shared(config: std::sync::Arc<Config>) -> Self where Self: Sized;
+    fn new_from_shared(config: std::sync::Arc<Config>) -> Self
+    where
+        Self: Sized;
 }
 
 /// Async client trait for operations that need to be performed asynchronously

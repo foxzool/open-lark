@@ -9,17 +9,17 @@
 #![warn(missing_debug_implementations)]
 
 // Public re-exports
-pub use traits::{AsyncLarkClient, ServiceRegistry, ClientBuilder};
+pub use traits::{AsyncLarkClient, ClientBuilder, ServiceRegistry};
 
 // Public modules
-pub mod services;
 pub mod accessors;
+pub mod services;
 
 // Internal modules
-mod traits;
 mod client;
-mod registry;
 mod prelude;
+mod registry;
+mod traits;
 
 // Re-export the default client implementation
 pub use client::DefaultLarkClient;

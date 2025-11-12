@@ -3,7 +3,10 @@
 //! 展示如何从原有 LarkClient 迁移到新的 openlark-client
 
 #[cfg(feature = "docs")]
-use openlark_client::{DefaultLarkClient, ServiceRegistry, accessors::{CompatibleClientBuilder, ServiceAccessorsExt}};
+use openlark_client::{
+    accessors::{CompatibleClientBuilder, ServiceAccessorsExt},
+    DefaultLarkClient, ServiceRegistry,
+};
 
 #[cfg(feature = "docs")]
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -36,7 +39,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 方式 4: 通用服务访问
     println!("\n4️⃣  通用服务访问:");
-    if let Some(_docs_service) = client.services().get_service::<openlark_docs::docs::DocxService>("docs") {
+    if let Some(_docs_service) = client
+        .services()
+        .get_service::<openlark_docs::docs::DocxService>("docs")
+    {
         println!("✅ 通过 client.services().get_service<T>() 访问服务");
     }
 

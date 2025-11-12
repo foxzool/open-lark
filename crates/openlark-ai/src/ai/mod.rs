@@ -1,22 +1,23 @@
-//! Bitable service module
+//! AI service module
 //!
-//! This module provides multi-dimensional table (bitable) functionality.
+//! This module provides AI and machine learning functionality.
 
 use openlark_core::{config::Config, trait_system::Service};
 use std::sync::Arc;
 
 pub mod v1;
 
-/// Bitable service
-pub struct BitableService {
+/// AI service
+pub struct AiService {
     config: Config,
     #[allow(dead_code)]
     config_arc: Arc<Config>,
+    /// AI API v1 service
     pub v1: v1::V1,
 }
 
-impl BitableService {
-    /// Create new bitable service instance
+impl AiService {
+    /// Create new AI service instance
     pub fn new(config: Config) -> Self {
         Self {
             config: config.clone(),
@@ -35,13 +36,13 @@ impl BitableService {
     }
 }
 
-impl Service for BitableService {
+impl Service for AiService {
     fn config(&self) -> &Config {
         &self.config
     }
 
     fn service_name() -> &'static str {
-        "bitable"
+        "ai"
     }
 
     fn service_version() -> &'static str {
