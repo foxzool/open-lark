@@ -16,11 +16,18 @@
 //! - 行列插入、删除和移动操作
 //! - 单元格样式设置和格式化
 //! - 数据验证和下拉列表设置
+//! - 表格导入功能，支持CSV、Excel等多种格式
+//! - 导入进度跟踪和结果查询
+//! - 保护范围管理，支持权限控制和安全保护
+//! - 条件格式设置，支持数据条、色阶、图标集等
+//! - 表格属性管理，支持标题、描述等基础信息
 //! - 表格元数据获取和权限管理
 
 pub mod batch_range_read;
 
 pub mod batch_read;
+pub mod import;
+pub mod import_result;
 pub mod batch_read_ranges;
 pub mod batch_write;
 pub mod data_validation;
@@ -29,6 +36,9 @@ pub mod image_write;
 pub mod image_write_enhanced;
 pub mod merge_cells;
 pub mod metainfo;
+pub mod protected_ranges;
+pub mod condition_formats;
+pub mod properties;
 pub mod sheet_cells;
 pub mod sheet_management;
 pub mod sheets_batch_update;
@@ -44,6 +54,8 @@ pub mod values_single_write;
 // 重新导出所有服务类型
 pub use batch_range_read::*;
 pub use batch_read::*;
+pub use import::*;
+pub use import_result::*;
 pub use batch_read_ranges::*;
 pub use batch_write::*;
 pub use data_validation::*;
@@ -52,6 +64,9 @@ pub use image_write::*;
 pub use image_write_enhanced::*;
 pub use merge_cells::*;
 pub use metainfo::*;
+pub use protected_ranges::*;
+pub use condition_formats::*;
+pub use properties::*;
 pub use sheet_cells::*;
 pub use sheet_management::*;
 pub use sheets_batch_update::*;
@@ -123,8 +138,18 @@ pub struct SheetsServiceV2 {
     pub values_prepend: ValuesPrependService,
     /// 表格元数据服务
     pub metainfo: SpreadsheetMetaService,
+    /// 保护范围管理服务
+    pub protected_ranges: ProtectedRangesService,
+    /// 条件格式管理服务
+    pub conditional_formats: ConditionalFormatsService,
+    /// 表格属性管理服务
+    pub properties: PropertiesService,
     /// 多个范围读取服务
     pub batch_range_read: BatchRangeReadService,
+    /// 导入服务
+    pub import: ImportService,
+    /// 导入结果查询服务
+    pub import_result: ImportResultService,
 }
 
 impl SheetsServiceV2 {
@@ -164,7 +189,12 @@ impl SheetsServiceV2 {
             sheets_batch_update: SheetsBatchUpdateService::new(config.clone()),
             values_prepend: ValuesPrependService::new(config.clone()),
             metainfo: SpreadsheetMetaService::new(config.clone()),
-            batch_range_read: BatchRangeReadService::new(config),
+            protected_ranges: ProtectedRangesService::new(config.clone()),
+            conditional_formats: ConditionalFormatsService::new(config.clone()),
+            properties: PropertiesService::new(config.clone()),
+            batch_range_read: BatchRangeReadService::new(config.clone()),
+            import: ImportService::new(config.clone()),
+            import_result: ImportResultService::new(config),
         }
     }
 }

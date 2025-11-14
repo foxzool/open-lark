@@ -7,23 +7,12 @@
 //! - 批量查找替换操作
 
 use openlark_core::{
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    endpoints_original::Endpoints,
     error::LarkAPIError,
-    http::Transport,
-    req_option::RequestOption,
-    standard_response::StandardResponse,
-    api_req::ApiRequest,
-    SDKResult,
 };
 
+// 使用统一类型定义
+use super::Range;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-
-use openlark_core::error::LarkAPIError;
-
 
 /// 查找匹配类型
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -260,26 +249,26 @@ impl FindRequest {
     /// 验证请求
     pub fn validate(&self) -> Result<(), LarkAPIError> {
         if self.spreadsheet_token.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "电子表格ID不能为空".to_string(),
             ));
         }
 
         if self.sheet_id.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "工作表ID不能为空".to_string(),
             ));
         }
 
         if self.find_text.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "查找文本不能为空".to_string(),
             ));
         }
 
         // 如果范围类型是RANGE，必须提供范围
         if matches!(self.range_type, SearchRangeType::Range) && self.range.is_none() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "当范围类型为RANGE时，必须提供查找范围".to_string(),
             ));
         }
@@ -347,15 +336,15 @@ impl FindRequestBuilder {
     pub fn build(self) -> Result<FindRequest, LarkAPIError> {
         let spreadsheet_token = self
             .spreadsheet_token
-            .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("电子表格ID不能为空".to_string()))?;
 
         let sheet_id = self
             .sheet_id
-            .ok_or_else(|| LarkAPIError::InvalidParameter("工作表ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("工作表ID不能为空".to_string()))?;
 
         let find_text = self
             .find_text
-            .ok_or_else(|| LarkAPIError::InvalidParameter("查找文本不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("查找文本不能为空".to_string()))?;
 
         let match_type = self.match_type.unwrap_or(MatchType::Exact);
 
@@ -385,6 +374,12 @@ pub struct FindResponse {
     /// 匹配总数
     #[serde(rename = "total_matches")]
     pub total_matches: u32,
+}
+
+impl openlark_core::api_resp::ApiResponseTrait for FindResponse {
+    fn data_format() -> openlark_core::api_resp::ResponseFormat {
+        openlark_core::api_resp::ResponseFormat::Data
+    }
 }
 
 /// 替换请求
@@ -463,26 +458,26 @@ impl ReplaceRequest {
     /// 验证请求
     pub fn validate(&self) -> Result<(), LarkAPIError> {
         if self.spreadsheet_token.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "电子表格ID不能为空".to_string(),
             ));
         }
 
         if self.sheet_id.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "工作表ID不能为空".to_string(),
             ));
         }
 
         if self.find_text.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "查找文本不能为空".to_string(),
             ));
         }
 
         // 如果范围类型是RANGE，必须提供范围
         if matches!(self.range_type, SearchRangeType::Range) && self.range.is_none() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "当范围类型为RANGE时，必须提供查找范围".to_string(),
             ));
         }
@@ -557,19 +552,19 @@ impl ReplaceRequestBuilder {
     pub fn build(self) -> Result<ReplaceRequest, LarkAPIError> {
         let spreadsheet_token = self
             .spreadsheet_token
-            .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("电子表格ID不能为空".to_string()))?;
 
         let sheet_id = self
             .sheet_id
-            .ok_or_else(|| LarkAPIError::InvalidParameter("工作表ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("工作表ID不能为空".to_string()))?;
 
         let find_text = self
             .find_text
-            .ok_or_else(|| LarkAPIError::InvalidParameter("查找文本不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("查找文本不能为空".to_string()))?;
 
         let replace_text = self
             .replace_text
-            .ok_or_else(|| LarkAPIError::InvalidParameter("替换文本不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("替换文本不能为空".to_string()))?;
 
         let match_type = self.match_type.unwrap_or(MatchType::Exact);
 
@@ -605,6 +600,12 @@ pub struct ReplaceResponse {
     /// 是否成功
     #[serde(rename = "success")]
     pub success: bool,
+}
+
+impl openlark_core::api_resp::ApiResponseTrait for ReplaceResponse {
+    fn data_format() -> openlark_core::api_resp::ResponseFormat {
+        openlark_core::api_resp::ResponseFormat::Data
+    }
 }
 
 /// Sheets电子表格查找和替换服务 v3
@@ -652,36 +653,40 @@ impl FindReplaceService {
     /// println!("找到 {} 个匹配项", response.total_matches);
     /// ```
     pub async fn find(&self, request: &FindRequest) -> openlark_core::error::SDKResult<FindResponse> {
-        let url = format!(
-            "{}/open-apis/sheets/v3/spreadsheets/{}/find",
-            self.config.base_url, request.spreadsheet_token
+        use openlark_core::{
+            api_req::ApiRequest,
+            http::Transport,
+            api_resp::BaseResponse,
+            error::LarkAPIError,
+        };
+        use reqwest::Method;
+
+        let endpoint = format!(
+            "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/find",
+            request.spreadsheet_token,
+            request.sheet_id
         );
 
-        let transport = HttpTransport::new(&self.config);
-        let response = transport
-            .post(&url, Some(request))
-            .await
-            .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
+        let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
+        api_request.body = serde_json::to_vec(request)?;
 
-        let find_response: openlark_core::response::BaseResponse<FindResponse> =
-            serde_json::from_str(
-                &response
-                    .text()
-                    .await
-                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
-            )
-            .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
+        let response: BaseResponse<FindResponse> = Transport::request(api_request, &self.config, None).await?;
 
-        if find_response.code != 0 {
-            return Err(LarkAPIError::APIError(
-                find_response.msg,
-                find_response.code,
-            ));
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None,
+            });
         }
 
-        find_response
+        response
             .data
-            .ok_or_else(|| LarkAPIError::APIError("响应数据为空".to_string(), -1))
+            .ok_or_else(|| LarkAPIError::APIError {
+                code: -1,
+                msg: "响应数据为空".to_string(),
+                error: None,
+            })
     }
 
     /// 替换文本
@@ -721,36 +726,40 @@ impl FindReplaceService {
         &self,
         request: &ReplaceRequest,
     ) -> openlark_core::error::SDKResult<ReplaceResponse> {
-        let url = format!(
-            "{}/open-apis/sheets/v3/spreadsheets/{}/replace",
-            self.config.base_url, request.spreadsheet_token
+        use openlark_core::{
+            api_req::ApiRequest,
+            http::Transport,
+            api_resp::BaseResponse,
+            error::LarkAPIError,
+        };
+        use reqwest::Method;
+
+        let endpoint = format!(
+            "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/replace",
+            request.spreadsheet_token,
+            request.sheet_id
         );
 
-        let transport = HttpTransport::new(&self.config);
-        let response = transport
-            .post(&url, Some(request))
-            .await
-            .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
+        let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
+        api_request.body = serde_json::to_vec(request)?;
 
-        let replace_response: openlark_core::response::BaseResponse<ReplaceResponse> =
-            serde_json::from_str(
-                &response
-                    .text()
-                    .await
-                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
-            )
-            .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
+        let response: BaseResponse<ReplaceResponse> = Transport::request(api_request, &self.config, None).await?;
 
-        if replace_response.code != 0 {
-            return Err(LarkAPIError::APIError(
-                replace_response.msg,
-                replace_response.code,
-            ));
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None,
+            });
         }
 
-        replace_response
+        response
             .data
-            .ok_or_else(|| LarkAPIError::APIError("响应数据为空".to_string(), -1))
+            .ok_or_else(|| LarkAPIError::APIError {
+                code: -1,
+                msg: "响应数据为空".to_string(),
+                error: None,
+            })
     }
 
     /// 查找构建器
@@ -885,7 +894,7 @@ mod tests {
             MatchType::Exact,
         )
         .range_type(SearchRangeType::Range)
-        .range(Range::new("A1".to_string(), "D10".to_string()));
+        .range(Range::from("A1".to_string(), "D10".to_string()));
         assert!(valid_range_request.validate().is_ok());
     }
 
@@ -899,7 +908,7 @@ mod tests {
             .find_text("已完成".to_string())
             .match_type(MatchType::Contains)
             .range_type(SearchRangeType::Range)
-            .range(Range::new("A1".to_string(), "D10".to_string()))
+            .range(Range::from("A1".to_string(), "D10".to_string()))
             .find_options(
                 FindOptions::new()
                     .case_sensitive(false)
@@ -971,7 +980,7 @@ mod tests {
             .replace_text("进行中".to_string())
             .match_type(MatchType::Exact)
             .range_type(SearchRangeType::Values)
-            .range(Range::new("A1".to_string(), "A100".to_string()))
+            .range(Range::from("A1".to_string(), "A100".to_string()))
             .replace_options(
                 ReplaceOptions::new()
                     .case_sensitive(false)
@@ -1036,7 +1045,7 @@ mod tests {
             .replace_text("新值".to_string())
             .match_type(MatchType::Exact)
             .range_type(SearchRangeType::Range)
-            .range(Range::new("A1".to_string(), "D50".to_string()))
+            .range(Range::from("A1".to_string(), "D50".to_string()))
             .replace_options(
                 ReplaceOptions::new()
                     .case_sensitive(true)
