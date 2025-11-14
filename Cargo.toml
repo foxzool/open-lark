@@ -38,33 +38,6 @@ homepage = "https://github.com/foxzool/open-lark"
 documentation = "https://docs.rs/open-lark"
 
 [workspace.dependencies]
-# Internal dependencies (shared version management)
-openlark-core = { path = "crates/openlark-core", version = "0.15.0-dev" }
-openlark-docs = { path = "crates/openlark-docs", version = "0.15.0-dev" }
-openlark-auth = { path = "crates/openlark-auth", version = "0.15.0-dev" }
-openlark-client = { path = "crates/openlark-client", version = "0.15.0-dev" }
-openlark-communication = { path = "crates/openlark-communication", version = "0.15.0-dev" }
-
-openlark-hr = { path = "crates/openlark-hr", version = "0.15.0-dev" }
-openlark-ai = { path = "crates/openlark-ai", version = "0.15.0-dev" }
-openlark-enterprise = { path = "crates/openlark-enterprise", version = "0.15.0-dev" }
-openlark-protocol = { path = "crates/openlark-protocol", version = "0.15.0-dev" }
-openlark-application = { path = "crates/openlark-application", version = "0.15.0-dev" }
-openlark-contacts = { path = "crates/openlark-contacts", version = "0.15.0-dev" }
-openlark-workplace = { path = "crates/openlark-workplace", version = "0.15.0-dev" }
-openlark-im = { path = "crates/openlark-im", version = "0.15.0-dev" }
-openlark-mail = { path = "crates/openlark-mail", version = "0.15.0-dev" }
-openlark-calendar = { path = "crates/openlark-calendar", version = "0.15.0-dev" }
-openlark-meeting = { path = "crates/openlark-meeting", version = "0.15.0-dev" }
-openlark-search = { path = "crates/openlark-search", version = "0.15.0-dev" }
-openlark-approval = { path = "crates/openlark-approval", version = "0.15.0-dev" }
-openlark-task = { path = "crates/openlark-task", version = "0.15.0-dev" }
-openlark-helpdesk = { path = "crates/openlark-helpdesk", version = "0.15.0-dev" }
-openlark-hire = { path = "crates/openlark-hire", version = "0.15.0-dev" }
-openlark-learning = { path = "crates/openlark-learning", version = "0.15.0-dev" }
-openlark-lingo = { path = "crates/openlark-lingo", version = "0.15.0-dev" }
-openlark-apass = { path = "crates/openlark-apass", version = "0.15.0-dev" }
-
 # External dependencies (shared version management)
 anyhow = "1.0.86"
 async-trait = "0.1.83"
@@ -106,6 +79,32 @@ tokio-tungstenite = { version = "0.23", features = [
 ] }
 walkdir = "2.4"
 regex = "1.10"
+
+# Internal workspace dependencies
+openlark-core = { path = "crates/openlark-core" }
+openlark-auth = { path = "crates/openlark-auth" }
+openlark-client = { path = "crates/openlark-client" }
+openlark-communication = { path = "crates/openlark-communication" }
+openlark-docs = { path = "crates/openlark-docs" }
+openlark-hr = { path = "crates/openlark-hr" }
+openlark-ai = { path = "crates/openlark-ai" }
+openlark-enterprise = { path = "crates/openlark-enterprise" }
+openlark-protocol = { path = "crates/openlark-protocol" }
+openlark-application = { path = "crates/openlark-application" }
+openlark-contacts = { path = "crates/openlark-contacts" }
+openlark-workplace = { path = "crates/openlark-workplace" }
+openlark-im = { path = "crates/openlark-im" }
+openlark-mail = { path = "crates/openlark-mail" }
+openlark-calendar = { path = "crates/openlark-calendar" }
+openlark-meeting = { path = "crates/openlark-meeting" }
+openlark-search = { path = "crates/openlark-search" }
+openlark-approval = { path = "crates/openlark-approval" }
+openlark-task = { path = "crates/openlark-task" }
+openlark-helpdesk = { path = "crates/openlark-helpdesk" }
+openlark-hire = { path = "crates/openlark-hire" }
+openlark-learning = { path = "crates/openlark-learning" }
+openlark-lingo = { path = "crates/openlark-lingo" }
+openlark-apass = { path = "crates/openlark-apass" }
 
 # Dev dependencies
 dotenvy = "0.15.7"
