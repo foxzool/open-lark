@@ -6,24 +6,12 @@
 //! - 评论查询和编辑
 //! - @提及用户和通知
 
-use openlark_core::{
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    endpoints_original::Endpoints,
-    error::LarkAPIError,
-    http::Transport,
-    req_option::RequestOption,
-    standard_response::StandardResponse,
-    api_req::ApiRequest,
-    SDKResult,
-};
-
-use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-
 use openlark_core::error::LarkAPIError;
 
+// 使用统一类型定义
+use super::Range;
+
+use serde::{Deserialize, Serialize};
 
 /// 评论状态
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -37,6 +25,16 @@ pub enum CommentStatus {
     /// 已删除
     #[serde(rename = "DELETED")]
     Deleted,
+}
+
+impl std::fmt::Display for CommentStatus {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            CommentStatus::Active => write!(f, "ACTIVE"),
+            CommentStatus::Resolved => write!(f, "RESOLVED"),
+            CommentStatus::Deleted => write!(f, "DELETED"),
+        }
+    }
 }
 
 /// 评论类型
@@ -252,13 +250,13 @@ impl Comment {
     /// 验证评论
     pub fn validate(&self) -> Result<(), LarkAPIError> {
         if self.sheet_id.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "工作表ID不能为空".to_string(),
             ));
         }
 
         if self.content.text.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "评论内容不能为空".to_string(),
             ));
         }
@@ -267,14 +265,14 @@ impl Comment {
         match self.comment_type {
             CommentType::Cell => {
                 if self.cell_reference.is_none() {
-                    return Err(LarkAPIError::InvalidParameter(
+                    return Err(LarkAPIError::IllegalParamError(
                         "单元格评论必须提供单元格引用".to_string(),
                     ));
                 }
             }
             CommentType::Range => {
                 if self.range.is_none() {
-                    return Err(LarkAPIError::InvalidParameter(
+                    return Err(LarkAPIError::IllegalParamError(
                         "范围评论必须提供评论范围".to_string(),
                     ));
                 }
@@ -346,19 +344,19 @@ impl CreateCommentRequest {
     /// 验证请求
     pub fn validate(&self) -> Result<(), LarkAPIError> {
         if self.spreadsheet_token.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "电子表格ID不能为空".to_string(),
             ));
         }
 
         if self.sheet_id.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "工作表ID不能为空".to_string(),
             ));
         }
 
         if self.content.text.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "评论内容不能为空".to_string(),
             ));
         }
@@ -367,14 +365,14 @@ impl CreateCommentRequest {
         match self.comment_type {
             CommentType::Cell => {
                 if self.cell_reference.is_none() {
-                    return Err(LarkAPIError::InvalidParameter(
+                    return Err(LarkAPIError::IllegalParamError(
                         "单元格评论必须提供单元格引用".to_string(),
                     ));
                 }
             }
             CommentType::Range => {
                 if self.range.is_none() {
-                    return Err(LarkAPIError::InvalidParameter(
+                    return Err(LarkAPIError::IllegalParamError(
                         "范围评论必须提供评论范围".to_string(),
                     ));
                 }
@@ -437,19 +435,19 @@ impl CreateCommentRequestBuilder {
     pub fn build(self) -> Result<CreateCommentRequest, LarkAPIError> {
         let spreadsheet_token = self
             .spreadsheet_token
-            .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("电子表格ID不能为空".to_string()))?;
 
         let sheet_id = self
             .sheet_id
-            .ok_or_else(|| LarkAPIError::InvalidParameter("工作表ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("工作表ID不能为空".to_string()))?;
 
         let comment_type = self
             .comment_type
-            .ok_or_else(|| LarkAPIError::InvalidParameter("评论类型不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("评论类型不能为空".to_string()))?;
 
         let content = self
             .content
-            .ok_or_else(|| LarkAPIError::InvalidParameter("评论内容不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("评论内容不能为空".to_string()))?;
 
         let mut request =
             CreateCommentRequest::new(spreadsheet_token, sheet_id, comment_type, content);
@@ -472,6 +470,12 @@ pub struct CreateCommentResponse {
     /// 评论信息
     #[serde(rename = "comment")]
     pub comment: Comment,
+}
+
+impl openlark_core::api_resp::ApiResponseTrait for CreateCommentResponse {
+    fn data_format() -> openlark_core::api_resp::ResponseFormat {
+        openlark_core::api_resp::ResponseFormat::Data
+    }
 }
 
 /// 查询评论请求
@@ -542,20 +546,20 @@ impl GetCommentsRequest {
     /// 验证请求
     pub fn validate(&self) -> Result<(), LarkAPIError> {
         if self.spreadsheet_token.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "电子表格ID不能为空".to_string(),
             ));
         }
 
         if self.sheet_id.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "工作表ID不能为空".to_string(),
             ));
         }
 
         if let Some(page_size) = self.page_size {
             if page_size == 0 || page_size > 100 {
-                return Err(LarkAPIError::InvalidParameter(
+                return Err(LarkAPIError::IllegalParamError(
                     "每页大小必须在1-100之间".to_string(),
                 ));
             }
@@ -617,11 +621,11 @@ impl GetCommentsRequestBuilder {
     pub fn build(self) -> Result<GetCommentsRequest, LarkAPIError> {
         let spreadsheet_token = self
             .spreadsheet_token
-            .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("电子表格ID不能为空".to_string()))?;
 
         let sheet_id = self
             .sheet_id
-            .ok_or_else(|| LarkAPIError::InvalidParameter("工作表ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("工作表ID不能为空".to_string()))?;
 
         let mut request = GetCommentsRequest::new(spreadsheet_token, sheet_id);
 
@@ -657,6 +661,12 @@ pub struct GetCommentsResponse {
     pub has_more: bool,
 }
 
+impl openlark_core::api_resp::ApiResponseTrait for GetCommentsResponse {
+    fn data_format() -> openlark_core::api_resp::ResponseFormat {
+        openlark_core::api_resp::ResponseFormat::Data
+    }
+}
+
 /// 删除评论请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeleteCommentRequest {
@@ -685,13 +695,13 @@ impl DeleteCommentRequest {
     /// 验证请求
     pub fn validate(&self) -> Result<(), LarkAPIError> {
         if self.spreadsheet_token.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "电子表格ID不能为空".to_string(),
             ));
         }
 
         if self.comment_id.is_empty() {
-            return Err(LarkAPIError::InvalidParameter("评论ID不能为空".to_string()));
+            return Err(LarkAPIError::IllegalParamError("评论ID不能为空".to_string()));
         }
 
         Ok(())
@@ -722,11 +732,11 @@ impl DeleteCommentRequestBuilder {
     pub fn build(self) -> Result<DeleteCommentRequest, LarkAPIError> {
         let spreadsheet_token = self
             .spreadsheet_token
-            .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("电子表格ID不能为空".to_string()))?;
 
         let comment_id = self
             .comment_id
-            .ok_or_else(|| LarkAPIError::InvalidParameter("评论ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("评论ID不能为空".to_string()))?;
 
         let request = DeleteCommentRequest::new(spreadsheet_token, comment_id);
         request.validate()?;
@@ -740,6 +750,12 @@ pub struct DeleteCommentResponse {
     /// 是否成功删除
     #[serde(rename = "success")]
     pub success: bool,
+}
+
+impl openlark_core::api_resp::ApiResponseTrait for DeleteCommentResponse {
+    fn data_format() -> openlark_core::api_resp::ResponseFormat {
+        openlark_core::api_resp::ResponseFormat::Data
+    }
 }
 
 /// Sheets电子表格评论服务 v3
@@ -790,36 +806,34 @@ impl CommentService {
         &self,
         request: &CreateCommentRequest,
     ) -> openlark_core::error::SDKResult<CreateCommentResponse> {
-        let url = format!(
-            "{}/open-apis/sheets/v3/spreadsheets/{}/comments",
-            self.config.base_url, request.spreadsheet_token
+        use openlark_core::{
+            api_req::ApiRequest,
+            http::Transport,
+            api_resp::BaseResponse,
+            error::LarkAPIError,
+        };
+
+        let endpoint = format!(
+            "/open-apis/sheets/v3/spreadsheets/{}/comments",
+            request.spreadsheet_token
         );
 
-        let transport = HttpTransport::new(&self.config);
-        let response = transport
-            .post(&url, Some(request))
-            .await
-            .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
+        let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::POST, &endpoint);
+        api_request.body = serde_json::to_vec(request)?;
 
-        let create_response: openlark_core::response::BaseResponse<CreateCommentResponse> =
-            serde_json::from_str(
-                &response
-                    .text()
-                    .await
-                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
-            )
-            .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
+        let response: BaseResponse<CreateCommentResponse> = Transport::request(api_request, &self.config, None).await?;
 
-        if create_response.code != 0 {
-            return Err(LarkAPIError::APIError(
-                create_response.msg,
-                create_response.code,
-            ));
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None,
+            });
         }
 
-        create_response
+        response
             .data
-            .ok_or_else(|| LarkAPIError::APIError("响应数据为空".to_string(), -1))
+            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
     }
 
     /// 查询评论
@@ -854,33 +868,52 @@ impl CommentService {
         &self,
         request: &GetCommentsRequest,
     ) -> openlark_core::error::SDKResult<GetCommentsResponse> {
-        let url = format!(
-            "{}/open-apis/sheets/v3/spreadsheets/{}/comments",
-            self.config.base_url, request.spreadsheet_token
+        use openlark_core::{
+            api_req::ApiRequest,
+            http::Transport,
+            api_resp::BaseResponse,
+            error::LarkAPIError,
+        };
+
+        let endpoint = format!(
+            "/open-apis/sheets/v3/spreadsheets/{}/comments",
+            request.spreadsheet_token
         );
 
-        let transport = HttpTransport::new(&self.config);
-        let response = transport
-            .get(&url)
-            .await
-            .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
-
-        let get_response: openlark_core::response::BaseResponse<GetCommentsResponse> =
-            serde_json::from_str(
-                &response
-                    .text()
-                    .await
-                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
-            )
-            .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
-
-        if get_response.code != 0 {
-            return Err(LarkAPIError::APIError(get_response.msg, get_response.code));
+        // 构建查询参数
+        let mut query_params = Vec::new();
+        query_params.push(format!("sheet_id={}", &request.sheet_id));
+        if let Some(page_size) = request.page_size {
+            query_params.push(format!("page_size={}", page_size));
+        }
+        if let Some(page) = request.page {
+            query_params.push(format!("page={}", page));
+        }
+        if let Some(status) = &request.status {
+            query_params.push(format!("status={}", status));
         }
 
-        get_response
+        let endpoint_with_params = if !query_params.is_empty() {
+            format!("{}?{}", endpoint, query_params.join("&"))
+        } else {
+            endpoint
+        };
+
+        let api_request = ApiRequest::with_method_and_path(reqwest::Method::GET, &endpoint_with_params);
+
+        let response: BaseResponse<GetCommentsResponse> = Transport::request(api_request, &self.config, None).await?;
+
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None,
+            });
+        }
+
+        response
             .data
-            .ok_or_else(|| LarkAPIError::APIError("响应数据为空".to_string(), -1))
+            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
     }
 
     /// 删除评论
@@ -912,36 +945,33 @@ impl CommentService {
         &self,
         request: &DeleteCommentRequest,
     ) -> openlark_core::error::SDKResult<DeleteCommentResponse> {
-        let url = format!(
-            "{}/open-apis/sheets/v3/spreadsheets/{}/comments/{}",
-            self.config.base_url, request.spreadsheet_token, request.comment_id
+        use openlark_core::{
+            api_req::ApiRequest,
+            http::Transport,
+            api_resp::BaseResponse,
+            error::LarkAPIError,
+        };
+
+        let endpoint = format!(
+            "/open-apis/sheets/v3/spreadsheets/{}/comments/{}",
+            request.spreadsheet_token, request.comment_id
         );
 
-        let transport = HttpTransport::new(&self.config);
-        let response = transport
-            .delete(&url)
-            .await
-            .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
+        let api_request = ApiRequest::with_method_and_path(reqwest::Method::DELETE, &endpoint);
 
-        let delete_response: openlark_core::response::BaseResponse<DeleteCommentResponse> =
-            serde_json::from_str(
-                &response
-                    .text()
-                    .await
-                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
-            )
-            .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
+        let response: BaseResponse<DeleteCommentResponse> = Transport::request(api_request, &self.config, None).await?;
 
-        if delete_response.code != 0 {
-            return Err(LarkAPIError::APIError(
-                delete_response.msg,
-                delete_response.code,
-            ));
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None
+            });
         }
 
-        delete_response
+        response
             .data
-            .ok_or_else(|| LarkAPIError::APIError("响应数据为空".to_string(), -1))
+            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
     }
 
     /// 创建评论构建器
@@ -1046,7 +1076,7 @@ mod tests {
             content.clone(),
             author.clone(),
         )
-        .range(Range::new("A1".to_string(), "C3".to_string()));
+        .range(Range::from("A1".to_string(), "C3".to_string()));
         assert!(valid_range_comment.validate().is_ok());
 
         // 测试无效的单元格评论（无单元格引用）
@@ -1133,7 +1163,7 @@ mod tests {
             .spreadsheet_token("token123".to_string())
             .sheet_id("sheet123".to_string())
             .comment_type(CommentType::Range)
-            .range(Range::new("A1".to_string(), "C3".to_string()))
+            .range(Range::from("A1".to_string(), "C3".to_string()))
             .content(content)
             .build()
             .unwrap();
@@ -1256,7 +1286,7 @@ mod tests {
             .spreadsheet_token("token123".to_string())
             .sheet_id("sheet123".to_string())
             .comment_type(CommentType::Range)
-            .range(Range::new("A1".to_string(), "D10".to_string()))
+            .range(Range::from("A1".to_string(), "D10".to_string()))
             .content(range_content)
             .build()
             .unwrap();

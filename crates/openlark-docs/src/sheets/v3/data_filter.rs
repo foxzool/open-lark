@@ -7,23 +7,23 @@
 //! - 过滤器状态管理
 
 use openlark_core::{
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    endpoints_original::Endpoints,
+    api_resp::{ApiResponseTrait, ResponseFormat},
     error::LarkAPIError,
     http::Transport,
-    req_option::RequestOption,
-    standard_response::StandardResponse,
     api_req::ApiRequest,
-    SDKResult,
 };
 
+// 使用统一类型定义
+use super::Range;
+
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use reqwest::Method;
 
-use openlark_core::error::LarkAPIError;
-
+// v3模块核心类型定义
+pub type SpreadsheetToken = String;
+pub type SheetId = String;
+pub type CellValue = serde_json::Value;
+pub type SheetPagedResponse<T> = Vec<T>;
 
 /// 过滤条件操作符
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -167,13 +167,13 @@ impl DataFilter {
     /// 验证过滤器配置
     pub fn validate(&self) -> Result<(), LarkAPIError> {
         if self.sheet_id.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "工作表ID不能为空".to_string(),
             ));
         }
 
         if self.filter_conditions.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "至少需要一个过滤条件".to_string(),
             ));
         }
@@ -181,7 +181,7 @@ impl DataFilter {
         // 验证每个条件
         for condition in &self.filter_conditions {
             if condition.title.is_empty() {
-                return Err(LarkAPIError::InvalidParameter(
+                return Err(LarkAPIError::IllegalParamError(
                     "条件标题不能为空".to_string(),
                 ));
             }
@@ -190,7 +190,7 @@ impl DataFilter {
             match condition.filter_operator {
                 FilterOperator::IsEmpty | FilterOperator::IsNotEmpty => {
                     if !condition.values.is_empty() {
-                        return Err(LarkAPIError::InvalidParameter(format!(
+                        return Err(LarkAPIError::IllegalParamError(format!(
                             "操作符 {:?} 不应该有条件值",
                             condition.filter_operator
                         )));
@@ -198,14 +198,14 @@ impl DataFilter {
                 }
                 FilterOperator::Between | FilterOperator::NotBetween => {
                     if condition.values.len() != 2 {
-                        return Err(LarkAPIError::InvalidParameter(
+                        return Err(LarkAPIError::IllegalParamError(
                             "Between操作符需要两个条件值".to_string(),
                         ));
                     }
                 }
                 _ => {
                     if condition.values.is_empty() {
-                        return Err(LarkAPIError::InvalidParameter(format!(
+                        return Err(LarkAPIError::IllegalParamError(format!(
                             "操作符 {:?} 需要至少一个条件值",
                             condition.filter_operator
                         )));
@@ -295,15 +295,15 @@ impl SetDataFilterRequestBuilder {
     pub fn build(self) -> Result<SetDataFilterRequest, LarkAPIError> {
         let spreadsheet_token = self
             .spreadsheet_token
-            .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("电子表格ID不能为空".to_string()))?;
 
         let sheet_id = self
             .sheet_id
-            .ok_or_else(|| LarkAPIError::InvalidParameter("工作表ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("工作表ID不能为空".to_string()))?;
 
         let filter_range = self
             .filter_range
-            .ok_or_else(|| LarkAPIError::InvalidParameter("过滤范围不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("过滤范围不能为空".to_string()))?;
 
         let data_filter = DataFilter {
             filter_range,
@@ -382,11 +382,11 @@ impl DeleteDataFilterRequestBuilder {
     pub fn build(self) -> Result<DeleteDataFilterRequest, LarkAPIError> {
         let spreadsheet_token = self
             .spreadsheet_token
-            .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("电子表格ID不能为空".to_string()))?;
 
         let sheet_id = self
             .sheet_id
-            .ok_or_else(|| LarkAPIError::InvalidParameter("工作表ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("工作表ID不能为空".to_string()))?;
 
         Ok(DeleteDataFilterRequest {
             spreadsheet_token,
@@ -431,7 +431,7 @@ impl DataFilterService {
     /// use open_lark::service::sheets::v3::models::Range;
     ///
     /// // 创建范围对象
-    /// let filter_range = Range::new("A1".to_string(), "D10".to_string());
+    /// let filter_range = Range::from("A1".to_string(), "D10".to_string());
     ///
     /// // 创建过滤条件
     /// let condition1 = FilterCondition::text_equals("状态".to_string(), "已完成".to_string());
@@ -453,33 +453,30 @@ impl DataFilterService {
         &self,
         request: &SetDataFilterRequest,
     ) -> openlark_core::error::SDKResult<SetDataFilterResponse> {
-        let url = format!(
-            "{}/open-apis/sheets/v3/spreadsheets/{}/data_filter",
-            self.config.base_url, request.spreadsheet_token
+        let endpoint = format!(
+            "/open-apis/sheets/v3/spreadsheets/{}/data_filter",
+            request.spreadsheet_token
         );
 
-        let transport = HttpTransport::new(&self.config);
-        let response = transport
-            .post(&url, Some(request))
-            .await
-            .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
+        // 创建HTTP请求并序列化请求体
+        let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
+        api_request.body = serde_json::to_vec(request)?;
 
-        let set_response: openlark_core::response::BaseResponse<SetDataFilterResponse> =
-            serde_json::from_str(
-                &response
-                    .text()
-                    .await
-                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
-            )
-            .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
+        // 发送请求并获取响应
+        let response = Transport::<SetDataFilterResponse>::request(api_request, &self.config, None).await?;
 
-        if set_response.code != 0 {
-            return Err(LarkAPIError::APIError(set_response.msg, set_response.code));
+        // 检查响应是否成功
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None
+            });
         }
 
-        set_response
+        response
             .data
-            .ok_or_else(|| LarkAPIError::APIError("响应数据为空".to_string(), -1))
+            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
     }
 
     /// 删除数据过滤器
@@ -516,33 +513,27 @@ impl DataFilterService {
             self.config.base_url, request.spreadsheet_token
         );
 
-        let query_params = [("sheet_id", &request.sheet_id)];
+        // 构建带查询参数的URL
+        let url_with_params = format!("{}?sheet_id={}", url, &request.sheet_id);
 
-        let transport = HttpTransport::new(&self.config);
-        let response = transport
-            .delete_with_query(&url, &query_params)
-            .await
-            .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
+        // 创建HTTP请求
+        let api_request = ApiRequest::with_method_and_path(Method::DELETE, &url_with_params);
 
-        let delete_response: openlark_core::response::BaseResponse<DeleteDataFilterResponse> =
-            serde_json::from_str(
-                &response
-                    .text()
-                    .await
-                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
-            )
-            .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
+        // 发送请求并获取响应
+        let response = Transport::<DeleteDataFilterResponse>::request(api_request, &self.config, None).await?;
 
-        if delete_response.code != 0 {
-            return Err(LarkAPIError::APIError(
-                delete_response.msg,
-                delete_response.code,
-            ));
+        // 检查响应是否成功
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None
+            });
         }
 
-        delete_response
+        response
             .data
-            .ok_or_else(|| LarkAPIError::APIError("响应数据为空".to_string(), -1))
+            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
     }
 
     /// 设置数据过滤器构建器
@@ -553,6 +544,19 @@ impl DataFilterService {
     /// 删除数据过滤器构建器
     pub fn delete_data_filter_builder(&self) -> DeleteDataFilterRequestBuilder {
         DeleteDataFilterRequestBuilder::default()
+    }
+}
+
+// 为响应类型实现 ApiResponseTrait
+impl ApiResponseTrait for SetDataFilterResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for DeleteDataFilterResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
@@ -601,7 +605,7 @@ mod tests {
     fn test_data_filter_creation() {
         use super::super::models::Range;
 
-        let filter_range = Range::new("A1".to_string(), "D10".to_string());
+        let filter_range = Range::from("A1".to_string(), "D10".to_string());
         let condition = FilterCondition::text_equals("状态".to_string(), "已完成".to_string());
 
         let data_filter = DataFilter::new("sheet123".to_string(), filter_range, vec![condition]);
@@ -615,7 +619,7 @@ mod tests {
     fn test_data_filter_with_conditions() {
         use super::super::models::Range;
 
-        let filter_range = Range::new("A1".to_string(), "D10".to_string());
+        let filter_range = Range::from("A1".to_string(), "D10".to_string());
         let condition1 = FilterCondition::text_equals("状态".to_string(), "已完成".to_string());
         let condition2 = FilterCondition::number_between(
             "分数".to_string(),
@@ -633,8 +637,8 @@ mod tests {
     fn test_data_filter_with_sort_range() {
         use super::super::models::Range;
 
-        let filter_range = Range::new("A1".to_string(), "D10".to_string());
-        let sort_range = Range::new("A1".to_string(), "D1".to_string());
+        let filter_range = Range::from("A1".to_string(), "D10".to_string());
+        let sort_range = Range::from("A1".to_string(), "D1".to_string());
         let condition = FilterCondition::text_equals("状态".to_string(), "已完成".to_string());
 
         let data_filter = DataFilter::new("sheet123".to_string(), filter_range, vec![condition])
@@ -648,7 +652,7 @@ mod tests {
         use super::super::models::Range;
 
         // 测试有效过滤器
-        let filter_range = Range::new("A1".to_string(), "D10".to_string());
+        let filter_range = Range::from("A1".to_string(), "D10".to_string());
         let condition = FilterCondition::text_equals("状态".to_string(), "已完成".to_string());
         let data_filter = DataFilter::new("sheet123".to_string(), filter_range, vec![condition]);
 
@@ -669,7 +673,7 @@ mod tests {
     fn test_filter_condition_validation() {
         use super::super::models::Range;
 
-        let filter_range = Range::new("A1".to_string(), "D10".to_string());
+        let filter_range = Range::from("A1".to_string(), "D10".to_string());
 
         // 测试空标题
         let condition = FilterCondition::new(
@@ -708,7 +712,7 @@ mod tests {
     fn test_set_data_filter_request_builder() {
         use super::super::models::Range;
 
-        let filter_range = Range::new("A1".to_string(), "D10".to_string());
+        let filter_range = Range::from("A1".to_string(), "D10".to_string());
         let condition = FilterCondition::text_equals("状态".to_string(), "已完成".to_string());
 
         let request = SetDataFilterRequest::builder()
@@ -778,7 +782,7 @@ mod tests {
     fn test_comprehensive_filter_scenarios() {
         use super::super::models::Range;
 
-        let filter_range = Range::new("A1".to_string(), "D10".to_string());
+        let filter_range = Range::from("A1".to_string(), "D10".to_string());
 
         // 测试多条件组合
         let condition1 = FilterCondition::text_equals("状态".to_string(), "已完成".to_string());
@@ -819,7 +823,7 @@ mod tests {
     fn test_data_filter_serialization() {
         use serde_json;
 
-        let filter_range = super::super::models::Range::new("A1".to_string(), "D10".to_string());
+        let filter_range = super::super::models::Range::from("A1".to_string(), "D10".to_string());
         let condition = FilterCondition::text_equals("状态".to_string(), "已完成".to_string());
         let data_filter = DataFilter::new("sheet123".to_string(), filter_range, vec![condition]);
 

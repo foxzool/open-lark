@@ -6,24 +6,15 @@
 //! - 宏权限控制和安全设置
 //! - 宏调试和日志记录
 
-use openlark_core::{
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    endpoints_original::Endpoints,
-    error::LarkAPIError,
-    http::Transport,
-    req_option::RequestOption,
-    standard_response::StandardResponse,
-    api_req::ApiRequest,
-    SDKResult,
-};
-
-use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-
 use openlark_core::error::LarkAPIError;
 
+use serde::{Deserialize, Serialize};
+
+// v3模块核心类型定义
+pub type SpreadsheetToken = String;
+pub type SheetId = String;
+pub type CellValue = serde_json::Value;
+pub type SheetPagedResponse<T> = Vec<T>;
 
 /// 宏类型
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -246,18 +237,18 @@ impl MacroScript {
     /// 验证宏脚本
     pub fn validate(&self) -> Result<(), LarkAPIError> {
         if self.name.is_empty() {
-            return Err(LarkAPIError::InvalidParameter("宏名称不能为空".to_string()));
+            return Err(LarkAPIError::IllegalParamError("宏名称不能为空".to_string()));
         }
 
         if self.script.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "脚本内容不能为空".to_string(),
             ));
         }
 
         // 验证脚本长度
         if self.script.len() > 1024 * 1024 {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "脚本内容过长，最大支持1MB".to_string(),
             ));
         }
@@ -317,25 +308,25 @@ impl ExecuteMacroRequest {
     /// 验证请求
     pub fn validate(&self) -> Result<(), LarkAPIError> {
         if self.spreadsheet_token.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "电子表格ID不能为空".to_string(),
             ));
         }
 
         if self.sheet_id.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "工作表ID不能为空".to_string(),
             ));
         }
 
         if self.macro_name.is_empty() {
-            return Err(LarkAPIError::InvalidParameter("宏名称不能为空".to_string()));
+            return Err(LarkAPIError::IllegalParamError("宏名称不能为空".to_string()));
         }
 
         // 验证必需参数
         for param in &self.parameters {
             if param.required && param.value.is_null() {
-                return Err(LarkAPIError::InvalidParameter(format!(
+                return Err(LarkAPIError::IllegalParamError(format!(
                     "必需参数 {} 的值不能为空",
                     param.name
                 )));
@@ -397,15 +388,15 @@ impl ExecuteMacroRequestBuilder {
     pub fn build(self) -> Result<ExecuteMacroRequest, LarkAPIError> {
         let spreadsheet_token = self
             .spreadsheet_token
-            .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("电子表格ID不能为空".to_string()))?;
 
         let sheet_id = self
             .sheet_id
-            .ok_or_else(|| LarkAPIError::InvalidParameter("工作表ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("工作表ID不能为空".to_string()))?;
 
         let macro_name = self
             .macro_name
-            .ok_or_else(|| LarkAPIError::InvalidParameter("宏名称不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("宏名称不能为空".to_string()))?;
 
         let mut request =
             ExecuteMacroRequest::new(spreadsheet_token, sheet_id, macro_name, self.parameters);
@@ -445,6 +436,12 @@ pub struct ExecuteMacroResponse {
     pub logs: Option<Vec<String>>,
 }
 
+impl openlark_core::api_resp::ApiResponseTrait for ExecuteMacroResponse {
+    fn data_format() -> openlark_core::api_resp::ResponseFormat {
+        openlark_core::api_resp::ResponseFormat::Data
+    }
+}
+
 /// 创建宏脚本请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateMacroRequest {
@@ -477,13 +474,13 @@ impl CreateMacroRequest {
     /// 验证请求
     pub fn validate(&self) -> Result<(), LarkAPIError> {
         if self.spreadsheet_token.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "电子表格ID不能为空".to_string(),
             ));
         }
 
         if self.sheet_id.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "工作表ID不能为空".to_string(),
             ));
         }
@@ -524,15 +521,15 @@ impl CreateMacroRequestBuilder {
     pub fn build(self) -> Result<CreateMacroRequest, LarkAPIError> {
         let spreadsheet_token = self
             .spreadsheet_token
-            .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("电子表格ID不能为空".to_string()))?;
 
         let sheet_id = self
             .sheet_id
-            .ok_or_else(|| LarkAPIError::InvalidParameter("工作表ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("工作表ID不能为空".to_string()))?;
 
         let macro_script = self
             .macro_script
-            .ok_or_else(|| LarkAPIError::InvalidParameter("宏脚本不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("宏脚本不能为空".to_string()))?;
 
         let request = CreateMacroRequest::new(spreadsheet_token, sheet_id, macro_script);
 
@@ -550,6 +547,12 @@ pub struct CreateMacroResponse {
     /// 宏脚本
     #[serde(rename = "macro_script")]
     pub macro_script: MacroScript,
+}
+
+impl openlark_core::api_resp::ApiResponseTrait for CreateMacroResponse {
+    fn data_format() -> openlark_core::api_resp::ResponseFormat {
+        openlark_core::api_resp::ResponseFormat::Data
+    }
 }
 
 /// 查询宏状态请求
@@ -580,13 +583,13 @@ impl GetMacroStatusRequest {
     /// 验证请求
     pub fn validate(&self) -> Result<(), LarkAPIError> {
         if self.spreadsheet_token.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "电子表格ID不能为空".to_string(),
             ));
         }
 
         if self.execution_id.is_empty() {
-            return Err(LarkAPIError::InvalidParameter("执行ID不能为空".to_string()));
+            return Err(LarkAPIError::IllegalParamError("执行ID不能为空".to_string()));
         }
 
         Ok(())
@@ -617,11 +620,11 @@ impl GetMacroStatusRequestBuilder {
     pub fn build(self) -> Result<GetMacroStatusRequest, LarkAPIError> {
         let spreadsheet_token = self
             .spreadsheet_token
-            .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("电子表格ID不能为空".to_string()))?;
 
         let execution_id = self
             .execution_id
-            .ok_or_else(|| LarkAPIError::InvalidParameter("执行ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("执行ID不能为空".to_string()))?;
 
         let request = GetMacroStatusRequest::new(spreadsheet_token, execution_id);
         request.validate()?;
@@ -635,6 +638,12 @@ pub struct GetMacroStatusResponse {
     /// 执行信息
     #[serde(rename = "execution")]
     pub execution: ExecuteMacroResponse,
+}
+
+impl openlark_core::api_resp::ApiResponseTrait for GetMacroStatusResponse {
+    fn data_format() -> openlark_core::api_resp::ResponseFormat {
+        openlark_core::api_resp::ResponseFormat::Data
+    }
 }
 
 /// Sheets电子表格宏服务 v3
@@ -687,36 +696,33 @@ impl MacroService {
         &self,
         request: &ExecuteMacroRequest,
     ) -> openlark_core::error::SDKResult<ExecuteMacroResponse> {
-        let url = format!(
-            "{}/open-apis/sheets/v3/spreadsheets/{}/macros/execute",
-            self.config.base_url, request.spreadsheet_token
+        use openlark_core::{
+            api_req::ApiRequest,
+            http::Transport,
+            api_resp::BaseResponse,
+        };
+
+        let endpoint = format!(
+            "/open-apis/sheets/v3/spreadsheets/{}/macros/execute",
+            request.spreadsheet_token
         );
 
-        let transport = HttpTransport::new(&self.config);
-        let response = transport
-            .post(&url, Some(request))
-            .await
-            .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
+        let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::POST, &endpoint);
+        api_request.body = serde_json::to_vec(request)?;
 
-        let execute_response: openlark_core::response::BaseResponse<ExecuteMacroResponse> =
-            serde_json::from_str(
-                &response
-                    .text()
-                    .await
-                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
-            )
-            .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
+        let response: BaseResponse<ExecuteMacroResponse> = Transport::request(api_request, &self.config, None).await?;
 
-        if execute_response.code != 0 {
-            return Err(LarkAPIError::APIError(
-                execute_response.msg,
-                execute_response.code,
-            ));
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None,
+            });
         }
 
-        execute_response
+        response
             .data
-            .ok_or_else(|| LarkAPIError::APIError("响应数据为空".to_string(), -1))
+            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
     }
 
     /// 创建宏脚本
@@ -756,36 +762,33 @@ impl MacroService {
         &self,
         request: &CreateMacroRequest,
     ) -> openlark_core::error::SDKResult<CreateMacroResponse> {
-        let url = format!(
-            "{}/open-apis/sheets/v3/spreadsheets/{}/macros",
-            self.config.base_url, request.spreadsheet_token
+        use openlark_core::{
+            api_req::ApiRequest,
+            http::Transport,
+            api_resp::BaseResponse,
+        };
+
+        let endpoint = format!(
+            "/open-apis/sheets/v3/spreadsheets/{}/macros",
+            request.spreadsheet_token
         );
 
-        let transport = HttpTransport::new(&self.config);
-        let response = transport
-            .post(&url, Some(request))
-            .await
-            .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
+        let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::POST, &endpoint);
+        api_request.body = serde_json::to_vec(request)?;
 
-        let create_response: openlark_core::response::BaseResponse<CreateMacroResponse> =
-            serde_json::from_str(
-                &response
-                    .text()
-                    .await
-                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
-            )
-            .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
+        let response: BaseResponse<CreateMacroResponse> = Transport::request(api_request, &self.config, None).await?;
 
-        if create_response.code != 0 {
-            return Err(LarkAPIError::APIError(
-                create_response.msg,
-                create_response.code,
-            ));
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None,
+            });
         }
 
-        create_response
+        response
             .data
-            .ok_or_else(|| LarkAPIError::APIError("响应数据为空".to_string(), -1))
+            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
     }
 
     /// 查询宏状态
@@ -816,36 +819,32 @@ impl MacroService {
         &self,
         request: &GetMacroStatusRequest,
     ) -> openlark_core::error::SDKResult<GetMacroStatusResponse> {
-        let url = format!(
-            "{}/open-apis/sheets/v3/spreadsheets/{}/macros/status/{}",
-            self.config.base_url, request.spreadsheet_token, request.execution_id
+        use openlark_core::{
+            api_req::ApiRequest,
+            http::Transport,
+            api_resp::BaseResponse,
+        };
+
+        let endpoint = format!(
+            "/open-apis/sheets/v3/spreadsheets/{}/macros/status/{}",
+            request.spreadsheet_token, request.execution_id
         );
 
-        let transport = HttpTransport::new(&self.config);
-        let response = transport
-            .get(&url)
-            .await
-            .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
+        let api_request = ApiRequest::with_method_and_path(reqwest::Method::GET, &endpoint);
 
-        let status_response: openlark_core::response::BaseResponse<GetMacroStatusResponse> =
-            serde_json::from_str(
-                &response
-                    .text()
-                    .await
-                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
-            )
-            .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
+        let response: BaseResponse<GetMacroStatusResponse> = Transport::request(api_request, &self.config, None).await?;
 
-        if status_response.code != 0 {
-            return Err(LarkAPIError::APIError(
-                status_response.msg,
-                status_response.code,
-            ));
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None,
+            });
         }
 
-        status_response
+        response
             .data
-            .ok_or_else(|| LarkAPIError::APIError("响应数据为空".to_string(), -1))
+            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
     }
 
     /// 执行宏构建器

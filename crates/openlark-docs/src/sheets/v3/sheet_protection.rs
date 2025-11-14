@@ -8,23 +8,23 @@
 
 use openlark_core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    endpoints_original::Endpoints,
-    error::LarkAPIError,
     http::Transport,
-    req_option::RequestOption,
-    standard_response::StandardResponse,
     api_req::ApiRequest,
-    SDKResult,
 };
+
+use serde_json;
 
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use reqwest::Method;
 
-use openlark_core::error::LarkAPIError;
-use openlark_core::http::{BaseResponse, Transport};
 use openlark_core::trait_system::Service;
+
+// v3模块核心类型定义
+pub type SpreadsheetToken = String;
+pub type SheetId = String;
+pub type CellValue = serde_json::Value;
+pub type SheetPagedResponse<T> = Vec<T>;
 
 /// 工作表保护服务
 ///
@@ -236,7 +236,7 @@ impl SheetProtectionRangeBuilder {
         // 验证范围参数
         if let (Some(start_row), Some(end_row)) = (self.start_row_index, self.end_row_index) {
             if start_row > end_row {
-                return Err(openlark_core::SDKError::InvalidParameter(
+                return Err(openlark_core::error::LarkAPIError::IllegalParamError(
                     "起始行索引不能大于结束行索引".to_string(),
                 ));
             }
@@ -244,7 +244,7 @@ impl SheetProtectionRangeBuilder {
 
         if let (Some(start_col), Some(end_col)) = (self.start_column_index, self.end_column_index) {
             if start_col > end_col {
-                return Err(openlark_core::SDKError::InvalidParameter(
+                return Err(openlark_core::error::LarkAPIError::IllegalParamError(
                     "起始列索引不能大于结束列索引".to_string(),
                 ));
             }
@@ -341,10 +341,10 @@ impl SheetProtectionConditionBuilder {
         match (self.condition_type, self.content) {
             (Some(condition_type), Some(content)) => {
                 if condition_type.is_empty() {
-                    return Err(openlark_core::SDKError::InvalidParameter("条件类型不能为空".to_string()));
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError("条件类型不能为空".to_string()));
                 }
                 if content.is_empty() {
-                    return Err(openlark_core::SDKError::InvalidParameter("条件内容不能为空".to_string()));
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError("条件内容不能为空".to_string()));
                 }
 
                 Ok(SheetProtectionCondition {
@@ -354,7 +354,7 @@ impl SheetProtectionConditionBuilder {
                     description: self.description,
                 })
             }
-            _ => Err(openlark_core::SDKError::InvalidParameter(
+            _ => Err(openlark_core::error::LarkAPIError::IllegalParamError(
                 "条件类型和内容都是必需的".to_string(),
             )),
         }
@@ -457,13 +457,13 @@ impl CreateSheetProtectionRequestBuilder {
 
     /// 设置电子表格Token
     pub fn spreadsheet_token(mut self, spreadsheet_token: String) -> Self {
-        self.spreadsheet_token = Some(SpreadsheetToken::new(spreadsheet_token));
+        self.spreadsheet_token = Some(SpreadsheetToken::from(spreadsheet_token));
         self
     }
 
     /// 设置工作表ID
     pub fn sheet_id(mut self, sheet_id: String) -> Self {
-        self.sheet_id = Some(SheetId::new(sheet_id));
+        self.sheet_id = Some(SheetId::from(sheet_id));
         self
     }
 
@@ -546,7 +546,7 @@ impl CreateSheetProtectionRequestBuilder {
                     warning_only: self.warning_only,
                 })
             }
-            _ => Err(openlark_core::SDKError::InvalidParameter(
+            _ => Err(openlark_core::error::LarkAPIError::IllegalParamError(
                 "电子表格Token和工作表ID都是必需的".to_string(),
             )),
         }
@@ -612,13 +612,13 @@ impl QuerySheetProtectionRequestBuilder {
 
     /// 设置电子表格Token
     pub fn spreadsheet_token(mut self, spreadsheet_token: String) -> Self {
-        self.spreadsheet_token = Some(SpreadsheetToken::new(spreadsheet_token));
+        self.spreadsheet_token = Some(SpreadsheetToken::from(spreadsheet_token));
         self
     }
 
     /// 设置工作表ID
     pub fn sheet_id(mut self, sheet_id: String) -> Self {
-        self.sheet_id = Some(SheetId::new(sheet_id));
+        self.sheet_id = Some(SheetId::from(sheet_id));
         self
     }
 
@@ -656,7 +656,7 @@ impl QuerySheetProtectionRequestBuilder {
                 page_size: self.page_size,
                 page_token: self.page_token,
             }),
-            _ => Err(openlark_core::SDKError::InvalidParameter(
+            _ => Err(openlark_core::error::LarkAPIError::IllegalParamError(
                 "电子表格Token和工作表ID都是必需的".to_string(),
             )),
         }
@@ -741,13 +741,13 @@ impl UpdateSheetProtectionRequestBuilder {
 
     /// 设置电子表格Token
     pub fn spreadsheet_token(mut self, spreadsheet_token: String) -> Self {
-        self.spreadsheet_token = Some(SpreadsheetToken::new(spreadsheet_token));
+        self.spreadsheet_token = Some(SpreadsheetToken::from(spreadsheet_token));
         self
     }
 
     /// 设置工作表ID
     pub fn sheet_id(mut self, sheet_id: String) -> Self {
-        self.sheet_id = Some(SheetId::new(sheet_id));
+        self.sheet_id = Some(SheetId::from(sheet_id));
         self
     }
 
@@ -804,7 +804,7 @@ impl UpdateSheetProtectionRequestBuilder {
         match (self.spreadsheet_token, self.sheet_id, self.protection_id) {
             (Some(spreadsheet_token), Some(sheet_id), Some(protection_id)) => {
                 if self.fields.is_empty() {
-                    return Err(openlark_core::SDKError::InvalidParameter(
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError(
                         "至少需要指定一个更新字段".to_string(),
                     ));
                 }
@@ -821,7 +821,7 @@ impl UpdateSheetProtectionRequestBuilder {
                     warning_only: self.warning_only,
                 })
             }
-            _ => Err(openlark_core::SDKError::InvalidParameter(
+            _ => Err(openlark_core::error::LarkAPIError::IllegalParamError(
                 "电子表格Token、工作表ID和保护ID都是必需的".to_string(),
             )),
         }
@@ -877,13 +877,13 @@ impl DeleteSheetProtectionRequestBuilder {
 
     /// 设置电子表格Token
     pub fn spreadsheet_token(mut self, spreadsheet_token: String) -> Self {
-        self.spreadsheet_token = Some(SpreadsheetToken::new(spreadsheet_token));
+        self.spreadsheet_token = Some(SpreadsheetToken::from(spreadsheet_token));
         self
     }
 
     /// 设置工作表ID
     pub fn sheet_id(mut self, sheet_id: String) -> Self {
-        self.sheet_id = Some(SheetId::new(sheet_id));
+        self.sheet_id = Some(SheetId::from(sheet_id));
         self
     }
 
@@ -903,7 +903,7 @@ impl DeleteSheetProtectionRequestBuilder {
                     protection_id,
                 })
             }
-            _ => Err(openlark_core::SDKError::InvalidParameter(
+            _ => Err(openlark_core::error::LarkAPIError::IllegalParamError(
                 "电子表格Token、工作表ID和保护ID都是必需的".to_string(),
             )),
         }
@@ -970,19 +970,10 @@ impl SheetProtectionService {
             request.sheet_id.as_str()
         );
 
-        let response = self
-            .config
-            .transport
-            .post(&url)
-            .json(request)
-            .send()
-            .await?;
+        let mut api_request = ApiRequest::with_method_and_path(Method::POST, &url);
+        api_request.body = serde_json::to_vec(request)?;
 
-        let base_resp: BaseResponse<CreateSheetProtectionResponse> = response.json().await?;
-
-        if let Some(err) = &base_resp.error {
-            return Err(openlark_core::SDKError::LarkAPIError(err.clone()));
-        }
+        let base_resp = Transport::<CreateSheetProtectionResponse>::request(api_request, &self.config, None).await?;
 
         Ok(base_resp)
     }
@@ -1056,13 +1047,9 @@ impl SheetProtectionService {
             url.push_str(&params.join("&"));
         }
 
-        let response = self.config.transport.get(&url).send().await?;
+        let api_request = ApiRequest::with_method_and_path(Method::GET, &url);
 
-        let base_resp: BaseResponse<QuerySheetProtectionResponse> = response.json().await?;
-
-        if let Some(err) = &base_resp.error {
-            return Err(openlark_core::SDKError::LarkAPIError(err.clone()));
-        }
+        let base_resp = Transport::<QuerySheetProtectionResponse>::request(api_request, &self.config, None).await?;
 
         Ok(base_resp)
     }
@@ -1118,19 +1105,10 @@ impl SheetProtectionService {
             request.protection_id
         );
 
-        let response = self
-            .config
-            .transport
-            .patch(&url)
-            .json(request)
-            .send()
-            .await?;
+        let mut api_request = ApiRequest::with_method_and_path(Method::PATCH, &url);
+        api_request.body = serde_json::to_vec(request)?;
 
-        let base_resp: BaseResponse<UpdateSheetProtectionResponse> = response.json().await?;
-
-        if let Some(err) = &base_resp.error {
-            return Err(openlark_core::SDKError::LarkAPIError(err.clone()));
-        }
+        let base_resp = Transport::<UpdateSheetProtectionResponse>::request(api_request, &self.config, None).await?;
 
         Ok(base_resp)
     }
@@ -1179,13 +1157,9 @@ impl SheetProtectionService {
             request.protection_id
         );
 
-        let response = self.config.transport.delete(&url).send().await?;
+        let api_request = ApiRequest::with_method_and_path(Method::DELETE, &url);
 
-        let base_resp: BaseResponse<DeleteSheetProtectionResponse> = response.json().await?;
-
-        if let Some(err) = &base_resp.error {
-            return Err(openlark_core::SDKError::LarkAPIError(err.clone()));
-        }
+        let base_resp = Transport::<DeleteSheetProtectionResponse>::request(api_request, &self.config, None).await?;
 
         Ok(base_resp)
     }
@@ -1244,13 +1218,13 @@ pub struct SheetProtectionServiceBuilder<'a> {
 impl<'a> SheetProtectionServiceBuilder<'a> {
     /// 设置电子表格Token
     pub fn spreadsheet_token(mut self, spreadsheet_token: String) -> Self {
-        self.spreadsheet_token = Some(SpreadsheetToken::new(spreadsheet_token));
+        self.spreadsheet_token = Some(SpreadsheetToken::from(spreadsheet_token));
         self
     }
 
     /// 设置工作表ID
     pub fn sheet_id(mut self, sheet_id: String) -> Self {
-        self.sheet_id = Some(SheetId::new(sheet_id));
+        self.sheet_id = Some(SheetId::from(sheet_id));
         self
     }
 
@@ -1326,7 +1300,7 @@ impl<'a> SheetProtectionServiceBuilder<'a> {
 
                 self.service.create(&request).await
             }
-            _ => Err(openlark_core::SDKError::InvalidParameter(
+            _ => Err(openlark_core::error::LarkAPIError::IllegalParamError(
                 "电子表格Token和工作表ID都是必需的".to_string(),
             )),
         }
@@ -1581,5 +1555,30 @@ mod tests {
             .unwrap();
 
         assert_eq!(delete_request.protection_id, "protection_test_001");
+    }
+}
+
+// ApiResponseTrait implementations for Transport compatibility
+impl ApiResponseTrait for CreateSheetProtectionResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for QuerySheetProtectionResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for UpdateSheetProtectionResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for DeleteSheetProtectionResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }

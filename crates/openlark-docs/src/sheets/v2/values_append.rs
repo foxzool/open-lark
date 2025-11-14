@@ -22,8 +22,6 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use openlark_core::error::LarkAPIError;
-use openlark_core::http::{BaseResponse, Transport};
 use openlark_core::trait_system::Service;
 
 /// 数据追加服务

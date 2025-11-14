@@ -9,15 +9,20 @@
 
 use serde::{Deserialize, Serialize};
 
-use openlark_core::endpoints_original::Endpoints;
 use openlark_core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
     http::Transport,
     api_req::ApiRequest, SDKResult,
 };
+use reqwest::Method;
+
+// v3模块核心类型定义
+pub type SpreadsheetToken = String;
+pub type SheetId = String;
+pub type CellValue = serde_json::Value;
+pub type SheetPagedResponse<T> = Vec<T>;
 
 /// 浮动图片管理服务
 ///
@@ -191,13 +196,13 @@ impl CreateFloatImageRequestBuilder {
 
     /// 设置电子表格Token
     pub fn spreadsheet_token(mut self, spreadsheet_token: String) -> Self {
-        self.spreadsheet_token = Some(SpreadsheetToken::new(spreadsheet_token));
+        self.spreadsheet_token = Some(SpreadsheetToken::from(spreadsheet_token));
         self
     }
 
     /// 设置工作表ID
     pub fn sheet_id(mut self, sheet_id: String) -> Self {
-        self.sheet_id = Some(SheetId::new(sheet_id));
+        self.sheet_id = Some(SheetId::from(sheet_id));
         self
     }
 
@@ -269,23 +274,23 @@ impl CreateFloatImageRequestBuilder {
             (Some(_), Some(_), Some(float_image_token), Some(range)) => {
                 // 验证浮动图片Token
                 if float_image_token.is_empty() {
-                    return Err(openlark_core::SDKError::InvalidParameter(
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError(
                         "浮动图片Token不能为空".to_string(),
                     ));
                 }
 
                 // 验证范围格式
                 if range.is_empty() {
-                    return Err(openlark_core::SDKError::InvalidParameter("图片范围不能为空".to_string()));
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError("图片范围不能为空".to_string()));
                 }
 
                 // 验证浮动图片ID格式（如果提供）
                 if let Some(ref id) = self.float_image_id {
                     if id.is_empty() {
-                        return Err(openlark_core::SDKError::InvalidParameter("浮动图片ID不能为空".to_string()));
+                        return Err(openlark_core::error::LarkAPIError::IllegalParamError("浮动图片ID不能为空".to_string()));
                     }
                     if id.len() > 10 {
-                        return Err(openlark_core::SDKError::InvalidParameter(
+                        return Err(openlark_core::error::LarkAPIError::IllegalParamError(
                             "浮动图片ID长度不能超过10个字符".to_string(),
                         ));
                     }
@@ -294,10 +299,10 @@ impl CreateFloatImageRequestBuilder {
                 // 验证尺寸参数
                 if let Some(width) = self.width {
                     if width <= 0 {
-                        return Err(openlark_core::SDKError::InvalidParameter("图片宽度必须大于0".to_string()));
+                        return Err(openlark_core::error::LarkAPIError::IllegalParamError("图片宽度必须大于0".to_string()));
                     }
                     if width > 10000 {
-                        return Err(openlark_core::SDKError::InvalidParameter(
+                        return Err(openlark_core::error::LarkAPIError::IllegalParamError(
                             "图片宽度不能超过10000像素".to_string(),
                         ));
                     }
@@ -305,10 +310,10 @@ impl CreateFloatImageRequestBuilder {
 
                 if let Some(height) = self.height {
                     if height <= 0 {
-                        return Err(openlark_core::SDKError::InvalidParameter("图片高度必须大于0".to_string()));
+                        return Err(openlark_core::error::LarkAPIError::IllegalParamError("图片高度必须大于0".to_string()));
                     }
                     if height > 10000 {
-                        return Err(openlark_core::SDKError::InvalidParameter(
+                        return Err(openlark_core::error::LarkAPIError::IllegalParamError(
                             "图片高度不能超过10000像素".to_string(),
                         ));
                     }
@@ -317,7 +322,7 @@ impl CreateFloatImageRequestBuilder {
                 // 验证偏移量
                 if let Some(offset_x) = self.offset_x {
                     if offset_x < -10000 || offset_x > 10000 {
-                        return Err(openlark_core::SDKError::InvalidParameter(
+                        return Err(openlark_core::error::LarkAPIError::IllegalParamError(
                             "X轴偏移量范围应为-10000到10000".to_string(),
                         ));
                     }
@@ -325,7 +330,7 @@ impl CreateFloatImageRequestBuilder {
 
                 if let Some(offset_y) = self.offset_y {
                     if offset_y < -10000 || offset_y > 10000 {
-                        return Err(openlark_core::SDKError::InvalidParameter(
+                        return Err(openlark_core::error::LarkAPIError::IllegalParamError(
                             "Y轴偏移量范围应为-10000到10000".to_string(),
                         ));
                     }
@@ -343,7 +348,7 @@ impl CreateFloatImageRequestBuilder {
                     offset_y: self.offset_y,
                 })
             }
-            _ => Err(openlark_core::SDKError::InvalidParameter(
+            _ => Err(openlark_core::error::LarkAPIError::IllegalParamError(
                 "电子表格Token、工作表ID、浮动图片Token和范围都是必需的".to_string(),
             )),
         }
@@ -428,13 +433,13 @@ impl UpdateFloatImageRequestBuilder {
 
     /// 设置电子表格Token
     pub fn spreadsheet_token(mut self, spreadsheet_token: String) -> Self {
-        self.spreadsheet_token = Some(SpreadsheetToken::new(spreadsheet_token));
+        self.spreadsheet_token = Some(SpreadsheetToken::from(spreadsheet_token));
         self
     }
 
     /// 设置工作表ID
     pub fn sheet_id(mut self, sheet_id: String) -> Self {
-        self.sheet_id = Some(SheetId::new(sheet_id));
+        self.sheet_id = Some(SheetId::from(sheet_id));
         self
     }
 
@@ -522,12 +527,12 @@ impl UpdateFloatImageRequestBuilder {
             (Some(_), Some(_), Some(float_image_id)) => {
                 // 验证浮动图片ID
                 if float_image_id.is_empty() {
-                    return Err(openlark_core::SDKError::InvalidParameter("浮动图片ID不能为空".to_string()));
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError("浮动图片ID不能为空".to_string()));
                 }
 
                 // 验证更新字段
                 if self.fields.is_empty() {
-                    return Err(openlark_core::SDKError::InvalidParameter(
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError(
                         "至少需要指定一个更新字段".to_string(),
                     ));
                 }
@@ -536,7 +541,7 @@ impl UpdateFloatImageRequestBuilder {
                 let valid_fields = ["range", "width", "height", "offsetX", "offsetY"];
                 for field in &self.fields {
                     if !valid_fields.contains(&field.as_str()) {
-                        return Err(openlark_core::SDKError::InvalidParameter(format!(
+                        return Err(openlark_core::error::LarkAPIError::IllegalParamError(format!(
                             "无效的更新字段: {}",
                             field
                         )));
@@ -545,27 +550,27 @@ impl UpdateFloatImageRequestBuilder {
 
                 // 验证提供的字段与字段列表一致性
                 if self.range.is_none() && self.fields.contains(&"range".to_string()) {
-                    return Err(openlark_core::SDKError::InvalidParameter(
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError(
                         "指定了range字段但未提供range值".to_string(),
                     ));
                 }
                 if self.width.is_none() && self.fields.contains(&"width".to_string()) {
-                    return Err(openlark_core::SDKError::InvalidParameter(
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError(
                         "指定了width字段但未提供width值".to_string(),
                     ));
                 }
                 if self.height.is_none() && self.fields.contains(&"height".to_string()) {
-                    return Err(openlark_core::SDKError::InvalidParameter(
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError(
                         "指定了height字段但未提供height值".to_string(),
                     ));
                 }
                 if self.offset_x.is_none() && self.fields.contains(&"offsetX".to_string()) {
-                    return Err(openlark_core::SDKError::InvalidParameter(
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError(
                         "指定了offsetX字段但未提供offsetX值".to_string(),
                     ));
                 }
                 if self.offset_y.is_none() && self.fields.contains(&"offsetY".to_string()) {
-                    return Err(openlark_core::SDKError::InvalidParameter(
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError(
                         "指定了offsetY字段但未提供offsetY值".to_string(),
                     ));
                 }
@@ -582,7 +587,7 @@ impl UpdateFloatImageRequestBuilder {
                     offset_y: self.offset_y,
                 })
             }
-            _ => Err(openlark_core::SDKError::InvalidParameter(
+            _ => Err(openlark_core::error::LarkAPIError::IllegalParamError(
                 "电子表格Token、工作表ID和浮动图片ID都是必需的".to_string(),
             )),
         }
@@ -648,13 +653,13 @@ impl QueryFloatImagesRequestBuilder {
 
     /// 设置电子表格Token
     pub fn spreadsheet_token(mut self, spreadsheet_token: String) -> Self {
-        self.spreadsheet_token = Some(SpreadsheetToken::new(spreadsheet_token));
+        self.spreadsheet_token = Some(SpreadsheetToken::from(spreadsheet_token));
         self
     }
 
     /// 设置工作表ID
     pub fn sheet_id(mut self, sheet_id: String) -> Self {
-        self.sheet_id = Some(SheetId::new(sheet_id));
+        self.sheet_id = Some(SheetId::from(sheet_id));
         self
     }
 
@@ -688,7 +693,7 @@ impl QueryFloatImagesRequestBuilder {
             (Some(_), Some(_)) => {
                 // 验证图片ID数量
                 if self.float_image_ids.len() > 10 {
-                    return Err(openlark_core::SDKError::InvalidParameter(
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError(
                         "单次最多支持查询10个浮动图片ID".to_string(),
                     ));
                 }
@@ -696,10 +701,10 @@ impl QueryFloatImagesRequestBuilder {
                 // 验证页大小
                 if let Some(page_size) = self.page_size {
                     if page_size <= 0 {
-                        return Err(openlark_core::SDKError::InvalidParameter("页大小必须大于0".to_string()));
+                        return Err(openlark_core::error::LarkAPIError::IllegalParamError("页大小必须大于0".to_string()));
                     }
                     if page_size > 100 {
-                        return Err(openlark_core::SDKError::InvalidParameter("页大小不能超过100".to_string()));
+                        return Err(openlark_core::error::LarkAPIError::IllegalParamError("页大小不能超过100".to_string()));
                     }
                 }
 
@@ -711,7 +716,7 @@ impl QueryFloatImagesRequestBuilder {
                     page_token: self.page_token,
                 })
             }
-            _ => Err(openlark_core::SDKError::InvalidParameter(
+            _ => Err(openlark_core::error::LarkAPIError::IllegalParamError(
                 "电子表格Token和工作表ID都是必需的".to_string(),
             )),
         }
@@ -767,13 +772,13 @@ impl GetFloatImageRequestBuilder {
 
     /// 设置电子表格Token
     pub fn spreadsheet_token(mut self, spreadsheet_token: String) -> Self {
-        self.spreadsheet_token = Some(SpreadsheetToken::new(spreadsheet_token));
+        self.spreadsheet_token = Some(SpreadsheetToken::from(spreadsheet_token));
         self
     }
 
     /// 设置工作表ID
     pub fn sheet_id(mut self, sheet_id: String) -> Self {
-        self.sheet_id = Some(SheetId::new(sheet_id));
+        self.sheet_id = Some(SheetId::from(sheet_id));
         self
     }
 
@@ -792,7 +797,7 @@ impl GetFloatImageRequestBuilder {
         ) {
             (Some(_), Some(_), Some(float_image_id)) => {
                 if float_image_id.is_empty() {
-                    return Err(openlark_core::SDKError::InvalidParameter("浮动图片ID不能为空".to_string()));
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError("浮动图片ID不能为空".to_string()));
                 }
 
                 Ok(GetFloatImageRequest {
@@ -801,7 +806,7 @@ impl GetFloatImageRequestBuilder {
                     float_image_id: float_image_id.clone(),
                 })
             }
-            _ => Err(openlark_core::SDKError::InvalidParameter(
+            _ => Err(openlark_core::error::LarkAPIError::IllegalParamError(
                 "电子表格Token、工作表ID和浮动图片ID都是必需的".to_string(),
             )),
         }
@@ -813,6 +818,12 @@ impl GetFloatImageRequestBuilder {
 pub struct GetFloatImageResponse {
     /// 浮动图片信息
     pub data: FloatImage,
+}
+
+impl ApiResponseTrait for GetFloatImageResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 /// 删除浮动图片请求
@@ -857,13 +868,13 @@ impl DeleteFloatImageRequestBuilder {
 
     /// 设置电子表格Token
     pub fn spreadsheet_token(mut self, spreadsheet_token: String) -> Self {
-        self.spreadsheet_token = Some(SpreadsheetToken::new(spreadsheet_token));
+        self.spreadsheet_token = Some(SpreadsheetToken::from(spreadsheet_token));
         self
     }
 
     /// 设置工作表ID
     pub fn sheet_id(mut self, sheet_id: String) -> Self {
-        self.sheet_id = Some(SheetId::new(sheet_id));
+        self.sheet_id = Some(SheetId::from(sheet_id));
         self
     }
 
@@ -882,7 +893,7 @@ impl DeleteFloatImageRequestBuilder {
         ) {
             (Some(_), Some(_), Some(float_image_id)) => {
                 if float_image_id.is_empty() {
-                    return Err(openlark_core::SDKError::InvalidParameter("浮动图片ID不能为空".to_string()));
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError("浮动图片ID不能为空".to_string()));
                 }
 
                 Ok(DeleteFloatImageRequest {
@@ -891,7 +902,7 @@ impl DeleteFloatImageRequestBuilder {
                     float_image_id: float_image_id.clone(),
                 })
             }
-            _ => Err(openlark_core::SDKError::InvalidParameter(
+            _ => Err(openlark_core::error::LarkAPIError::IllegalParamError(
                 "电子表格Token、工作表ID和浮动图片ID都是必需的".to_string(),
             )),
         }
@@ -965,22 +976,20 @@ impl FloatImagesService {
             request.sheet_id.as_str()
         );
 
-        let response = self
-            .config
-            .transport
-            .post(&url)
-            .json(request)
-            .send()
-            .await?;
+        let mut api_request = ApiRequest::with_method_and_path(Method::POST, &url);
+        api_request.body = serde_json::to_vec(request)?;
 
-        let base_resp: BaseResponse<CreateFloatImageResponse> = response.json().await?;
+        let response = Transport::<CreateFloatImageResponse>::request(api_request, &self.config, None).await?;
 
-        if let Some(err) = &base_resp.error {
-            return Err(openlark_core::SDKError::LarkAPIError(err.clone()));
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None
+            });
         }
 
-        Ok(base_resp)
-    }
+        Ok(response)    }
 
     /// 更新浮动图片
     ///
@@ -1037,22 +1046,20 @@ impl FloatImagesService {
             request.float_image_id
         );
 
-        let response = self
-            .config
-            .transport
-            .patch(&url)
-            .json(request)
-            .send()
-            .await?;
+        let mut api_request = ApiRequest::with_method_and_path(Method::PATCH, &url);
+        api_request.body = serde_json::to_vec(request)?;
 
-        let base_resp: BaseResponse<UpdateFloatImageResponse> = response.json().await?;
+        let response = Transport::<UpdateFloatImageResponse>::request(api_request, &self.config, None).await?;
 
-        if let Some(err) = &base_resp.error {
-            return Err(openlark_core::SDKError::LarkAPIError(err.clone()));
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None
+            });
         }
 
-        Ok(base_resp)
-    }
+        Ok(response)    }
 
     /// 查询浮动图片列表
     ///
@@ -1125,15 +1132,22 @@ impl FloatImagesService {
             url.push_str(&params.join("&"));
         }
 
-        let response = self.config.transport.get(&url).send().await?;
+        // 创建HTTP请求
+        let api_request = ApiRequest::with_method_and_path(Method::GET, &url);
 
-        let base_resp: BaseResponse<QueryFloatImagesResponse> = response.json().await?;
+        // 发送请求并获取响应
+        let response = Transport::<QueryFloatImagesResponse>::request(api_request, &self.config, None).await?;
 
-        if let Some(err) = &base_resp.error {
-            return Err(openlark_core::SDKError::LarkAPIError(err.clone()));
+        // 检查响应是否成功
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None
+            });
         }
 
-        Ok(base_resp)
+        Ok(response)
     }
 
     /// 获取浮动图片信息
@@ -1180,15 +1194,10 @@ impl FloatImagesService {
             request.float_image_id
         );
 
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: endpoint,
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_request = ApiRequest::with_method_and_path(Method::GET, &endpoint);
+        api_request.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        Transport::<GetFloatImageResponse>::request(api_req, &self.config, None).await
+        Transport::<GetFloatImageResponse>::request(api_request, &self.config, None).await
     }
 
     /// 删除浮动图片
@@ -1235,15 +1244,22 @@ impl FloatImagesService {
             request.float_image_id
         );
 
-        let response = self.config.transport.delete(&url).send().await?;
+        // 创建HTTP请求
+        let api_request = ApiRequest::with_method_and_path(Method::DELETE, &url);
 
-        let base_resp: BaseResponse<DeleteFloatImageResponse> = response.json().await?;
+        // 发送请求并获取响应
+        let response = Transport::<DeleteFloatImageResponse>::request(api_request, &self.config, None).await?;
 
-        if let Some(err) = &base_resp.error {
-            return Err(openlark_core::SDKError::LarkAPIError(err.clone()));
+        // 检查响应是否成功
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None
+            });
         }
 
-        Ok(base_resp)
+        Ok(response)
     }
 
     /// 创建浮动图片构建器
@@ -1367,13 +1383,13 @@ pub struct FloatImagesServiceBuilder<'a> {
 impl<'a> FloatImagesServiceBuilder<'a> {
     /// 设置电子表格Token
     pub fn spreadsheet_token(mut self, spreadsheet_token: String) -> Self {
-        self.spreadsheet_token = Some(SpreadsheetToken::new(spreadsheet_token));
+        self.spreadsheet_token = Some(SpreadsheetToken::from(spreadsheet_token));
         self
     }
 
     /// 设置工作表ID
     pub fn sheet_id(mut self, sheet_id: String) -> Self {
-        self.sheet_id = Some(SheetId::new(sheet_id));
+        self.sheet_id = Some(SheetId::from(sheet_id));
         self
     }
 
@@ -1442,11 +1458,11 @@ impl<'a> FloatImagesServiceBuilder<'a> {
     /// 更新所有字段（仅用于更新操作）
     pub fn update_all(self) -> Self {
         self.fields(vec![
-            "range".to_string(),
-            "width".to_string(),
-            "height".to_string(),
-            "offsetX".to_string(),
-            "offsetY".to_string(),
+            "range",
+            "width",
+            "height",
+            "offsetX",
+            "offsetY",
         ])
     }
 
@@ -1543,6 +1559,31 @@ impl<'a> FloatImagesServiceBuilder<'a> {
                 Ok(serde_json::to_value(response.data)?)
             }
         }
+    }
+}
+
+// 为响应类型实现 ApiResponseTrait
+impl ApiResponseTrait for CreateFloatImageResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for UpdateFloatImageResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for QueryFloatImagesResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for DeleteFloatImageResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 

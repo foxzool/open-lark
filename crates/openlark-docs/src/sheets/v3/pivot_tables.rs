@@ -6,24 +6,12 @@
 //! - 值字段汇总方式
 //! - 筛选器和布局设置
 
-use openlark_core::{
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    endpoints_original::Endpoints,
-    error::LarkAPIError,
-    http::Transport,
-    req_option::RequestOption,
-    standard_response::StandardResponse,
-    api_req::ApiRequest,
-    SDKResult,
-};
-
-use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-
 use openlark_core::error::LarkAPIError;
 
+// 使用统一类型定义
+use super::Range;
+
+use serde::{Deserialize, Serialize};
 
 /// 汇总函数类型
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -376,19 +364,19 @@ impl PivotTableConfig {
     /// 验证透视表配置
     pub fn validate(&self) -> Result<(), LarkAPIError> {
         if self.sheet_id.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "工作表ID不能为空".to_string(),
             ));
         }
 
         if self.value_fields.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "至少需要一个值字段".to_string(),
             ));
         }
 
         if self.row_fields.is_empty() && self.column_fields.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "至少需要一个行字段或列字段".to_string(),
             ));
         }
@@ -396,7 +384,7 @@ impl PivotTableConfig {
         // 验证字段配置
         for field in &self.row_fields {
             if field.name.is_empty() {
-                return Err(LarkAPIError::InvalidParameter(
+                return Err(LarkAPIError::IllegalParamError(
                     "行字段名称不能为空".to_string(),
                 ));
             }
@@ -404,7 +392,7 @@ impl PivotTableConfig {
 
         for field in &self.column_fields {
             if field.name.is_empty() {
-                return Err(LarkAPIError::InvalidParameter(
+                return Err(LarkAPIError::IllegalParamError(
                     "列字段名称不能为空".to_string(),
                 ));
             }
@@ -412,7 +400,7 @@ impl PivotTableConfig {
 
         for field in &self.value_fields {
             if field.name.is_empty() {
-                return Err(LarkAPIError::InvalidParameter(
+                return Err(LarkAPIError::IllegalParamError(
                     "值字段名称不能为空".to_string(),
                 ));
             }
@@ -420,7 +408,7 @@ impl PivotTableConfig {
 
         for field in &self.filter_fields {
             if field.name.is_empty() {
-                return Err(LarkAPIError::InvalidParameter(
+                return Err(LarkAPIError::IllegalParamError(
                     "筛选器字段名称不能为空".to_string(),
                 ));
             }
@@ -533,32 +521,32 @@ impl CreatePivotTableRequestBuilder {
     pub fn build(self) -> Result<CreatePivotTableRequest, LarkAPIError> {
         let spreadsheet_token = self
             .spreadsheet_token
-            .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("电子表格ID不能为空".to_string()))?;
 
         let sheet_id = self
             .sheet_id
-            .ok_or_else(|| LarkAPIError::InvalidParameter("源工作表ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("源工作表ID不能为空".to_string()))?;
 
         let source_range = self
             .source_range
-            .ok_or_else(|| LarkAPIError::InvalidParameter("数据源范围不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("数据源范围不能为空".to_string()))?;
 
         let position_sheet_id = self.position_sheet_id.ok_or_else(|| {
-            LarkAPIError::InvalidParameter("透视表位置工作表ID不能为空".to_string())
+            LarkAPIError::IllegalParamError("透视表位置工作表ID不能为空".to_string())
         })?;
 
         let position_start_row = self
             .position_start_row
-            .ok_or_else(|| LarkAPIError::InvalidParameter("透视表起始行不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("透视表起始行不能为空".to_string()))?;
 
         let position_start_column = self
             .position_start_column
-            .ok_or_else(|| LarkAPIError::InvalidParameter("透视表起始列不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("透视表起始列不能为空".to_string()))?;
 
         let position =
             PivotTablePosition::new(position_sheet_id, position_start_row, position_start_column);
 
-        let mut pivot_table_config = PivotTableopenlark_core::config::Config::new(sheet_id, source_range, position);
+        let mut pivot_table_config = PivotTableConfig::new(sheet_id, source_range, position);
 
         for field in self.row_fields {
             pivot_table_config = pivot_table_config.add_row_field(field);
@@ -646,11 +634,11 @@ impl DeletePivotTableRequestBuilder {
     pub fn build(self) -> Result<DeletePivotTableRequest, LarkAPIError> {
         let spreadsheet_token = self
             .spreadsheet_token
-            .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("电子表格ID不能为空".to_string()))?;
 
         let pivot_table_id = self
             .pivot_table_id
-            .ok_or_else(|| LarkAPIError::InvalidParameter("透视表ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("透视表ID不能为空".to_string()))?;
 
         Ok(DeletePivotTableRequest {
             spreadsheet_token,
@@ -695,7 +683,7 @@ impl PivotTableService {
     /// use open_lark::service::sheets::v3::models::Range;
     ///
     /// // 创建数据源范围
-    /// let source_range = Range::new("A1".to_string(), "D100".to_string());
+    /// let source_range = Range::from("A1".to_string(), "D100".to_string());
     ///
     /// // 创建行字段
     /// let row_field = PivotField::new("部门".to_string(), 0)
@@ -737,32 +725,36 @@ impl PivotTableService {
             "{}/open-apis/sheets/v3/spreadsheets/{}/pivot_tables",
             self.config.base_url, request.spreadsheet_token
         );
-
-        let transport = HttpTransport::new(&self.config);
-        let response = transport
-            .post(&url, Some(request))
+        // 发送HTTP请求
+        let client = reqwest::Client::new();
+        let response = client
+            .post(&url)
+            .header("Content-Type", "application/json")
+            .json(&request)
+            .send()
             .await
-            .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
+            .map_err(|e| LarkAPIError::RequestError(e.to_string()))?;
 
-        let create_response: openlark_core::response::BaseResponse<CreatePivotTableResponse> =
+        // 解析响应
+        let create_response: openlark_core::api_resp::BaseResponse<CreatePivotTableResponse> =
             serde_json::from_str(
                 &response
                     .text()
                     .await
-                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
-            )
-            .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
+                    .map_err(|e| LarkAPIError::RequestError(e.to_string()))?,
+            )?;
 
-        if create_response.code != 0 {
-            return Err(LarkAPIError::APIError(
-                create_response.msg,
-                create_response.code,
-            ));
+        if create_response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: create_response.code(),
+                msg: create_response.msg().to_string(),
+                error: None
+            });
         }
 
         create_response
             .data
-            .ok_or_else(|| LarkAPIError::APIError("响应数据为空".to_string(), -1))
+            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
     }
 
     /// 删除数据透视表
@@ -798,32 +790,36 @@ impl PivotTableService {
             "{}/open-apis/sheets/v3/spreadsheets/{}/pivot_tables/{}",
             self.config.base_url, request.spreadsheet_token, request.pivot_table_id
         );
-
-        let transport = HttpTransport::new(&self.config);
-        let response = transport
+        // 发送HTTP请求
+        let client = reqwest::Client::new();
+        let response = client
             .delete(&url)
+            .header("Content-Type", "application/json")
+            .json(&request)
+            .send()
             .await
-            .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
+            .map_err(|e| LarkAPIError::RequestError(e.to_string()))?;
 
-        let delete_response: openlark_core::response::BaseResponse<DeletePivotTableResponse> =
+        // 解析响应
+        let delete_response: openlark_core::api_resp::BaseResponse<DeletePivotTableResponse> =
             serde_json::from_str(
                 &response
                     .text()
                     .await
-                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
-            )
-            .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
+                    .map_err(|e| LarkAPIError::RequestError(e.to_string()))?,
+            )?;
 
-        if delete_response.code != 0 {
-            return Err(LarkAPIError::APIError(
-                delete_response.msg,
-                delete_response.code,
-            ));
+        if delete_response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: delete_response.code(),
+                msg: delete_response.msg().to_string(),
+                error: None
+            });
         }
 
         delete_response
             .data
-            .ok_or_else(|| LarkAPIError::APIError("响应数据为空".to_string(), -1))
+            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
     }
 
     /// 创建数据透视表构建器
@@ -912,14 +908,14 @@ mod tests {
     fn test_pivot_table_config_creation() {
         use super::super::models::Range;
 
-        let source_range = Range::new("A1".to_string(), "D100".to_string());
+        let source_range = Range::from("A1".to_string(), "D100".to_string());
         let position = PivotTablePosition::new("sheet123".to_string(), 1, 1);
         let row_field = PivotField::new("部门".to_string(), 0);
         let column_field = PivotField::new("季度".to_string(), 1);
         let value_field = ValueField::new("销售额".to_string(), 2, SummaryFunction::Sum);
         let layout = PivotTableLayout::new();
 
-        let config = PivotTableopenlark_core::config::Config::new("sheet123".to_string(), source_range, position)
+        let config = openlark_core::config::Config::new("sheet123".to_string(), source_range, position)
             .add_row_field(row_field)
             .add_column_field(column_field)
             .add_value_field(value_field)
@@ -936,20 +932,20 @@ mod tests {
     fn test_pivot_table_config_validation() {
         use super::super::models::Range;
 
-        let source_range = Range::new("A1".to_string(), "D100".to_string());
+        let source_range = Range::from("A1".to_string(), "D100".to_string());
         let position = PivotTablePosition::new("sheet123".to_string(), 1, 1);
         let value_field = ValueField::new("销售额".to_string(), 2, SummaryFunction::Sum);
 
         // 测试有效配置
-        let valid_config = PivotTableopenlark_core::config::Config::new("sheet123".to_string(), source_range, position)
+        let valid_config = openlark_core::config::Config::new("sheet123".to_string(), source_range, position)
             .add_row_field(PivotField::new("部门".to_string(), 0))
             .add_value_field(value_field);
         assert!(valid_config.validate().is_ok());
 
         // 测试空工作表ID
-        let invalid_config = PivotTableopenlark_core::config::Config::new(
+        let invalid_config = openlark_core::config::Config::new(
             "".to_string(),
-            Range::new("A1".to_string(), "D100".to_string()),
+            Range::from("A1".to_string(), "D100".to_string()),
             PivotTablePosition::new("sheet123".to_string(), 1, 1),
         )
         .add_row_field(PivotField::new("部门".to_string(), 0))
@@ -961,18 +957,18 @@ mod tests {
         assert!(invalid_config.validate().is_err());
 
         // 测试无值字段
-        let invalid_config2 = PivotTableopenlark_core::config::Config::new(
+        let invalid_config2 = openlark_core::config::Config::new(
             "sheet123".to_string(),
-            Range::new("A1".to_string(), "D100".to_string()),
+            Range::from("A1".to_string(), "D100".to_string()),
             PivotTablePosition::new("sheet123".to_string(), 1, 1),
         )
         .add_row_field(PivotField::new("部门".to_string(), 0));
         assert!(invalid_config2.validate().is_err());
 
         // 测试无行列字段
-        let invalid_config3 = PivotTableopenlark_core::config::Config::new(
+        let invalid_config3 = openlark_core::config::Config::new(
             "sheet123".to_string(),
-            Range::new("A1".to_string(), "D100".to_string()),
+            Range::from("A1".to_string(), "D100".to_string()),
             PivotTablePosition::new("sheet123".to_string(), 1, 1),
         )
         .add_value_field(ValueField::new(
@@ -990,7 +986,7 @@ mod tests {
         let request = CreatePivotTableRequest::builder()
             .spreadsheet_token("token123".to_string())
             .sheet_id("source_sheet".to_string())
-            .source_range(Range::new("A1".to_string(), "D100".to_string()))
+            .source_range(Range::from("A1".to_string(), "D100".to_string()))
             .position("target_sheet".to_string(), 1, 1)
             .add_row_field(PivotField::new("部门".to_string(), 0))
             .add_column_field(PivotField::new("季度".to_string(), 1))
@@ -1046,7 +1042,7 @@ mod tests {
         let simple_request = CreatePivotTableRequest::builder()
             .spreadsheet_token("token123".to_string())
             .sheet_id("source_sheet".to_string())
-            .source_range(Range::new("A1".to_string(), "C50".to_string()))
+            .source_range(Range::from("A1".to_string(), "C50".to_string()))
             .position("target_sheet".to_string(), 1, 1)
             .add_row_field(PivotField::new("部门".to_string(), 0))
             .add_value_field(ValueField::new(
@@ -1064,7 +1060,7 @@ mod tests {
         let complex_request = CreatePivotTableRequest::builder()
             .spreadsheet_token("token123".to_string())
             .sheet_id("source_sheet".to_string())
-            .source_range(Range::new("A1".to_string(), "F200".to_string()))
+            .source_range(Range::from("A1".to_string(), "F200".to_string()))
             .position("target_sheet".to_string(), 1, 1)
             .add_row_field(PivotField::new("部门".to_string(), 0).show_subtotals(true))
             .add_row_field(PivotField::new("产品".to_string(), 1))
@@ -1123,9 +1119,9 @@ mod tests {
     fn test_pivot_table_serialization() {
         use serde_json;
 
-        let config = PivotTableopenlark_core::config::Config::new(
+        let config = openlark_core::config::Config::new(
             "sheet123".to_string(),
-            super::super::models::Range::new("A1".to_string(), "D100".to_string()),
+            super::super::models::Range::from("A1".to_string(), "D100".to_string()),
             PivotTablePosition::new("sheet123".to_string(), 1, 1),
         );
         let json = serde_json::to_string(&config).unwrap();
