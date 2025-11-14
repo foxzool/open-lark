@@ -8,14 +8,10 @@
 //! - 自定义电子表格属性
 
 use openlark_core::{
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
-    constants::AccessTokenType,
-    endpoints_original::Endpoints,
     error::LarkAPIError,
     http::Transport,
-    req_option::RequestOption,
-    standard_response::StandardResponse,
     api_req::ApiRequest,
     SDKResult,
 };
@@ -23,8 +19,8 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
 use std::collections::HashMap;
+use reqwest::Method;
 
-use openlark_core::error::LarkAPIError;
 use openlark_core::trait_system::Service;
 // use openlark_core::SDKResult;
 
@@ -162,7 +158,7 @@ impl CreateSpreadsheetRequest {
         // 设置工作表
         if let Some(sheets) = &self.sheets {
             let sheets_value: Value = serde_json::to_value(sheets).map_err(|e| {
-                LarkAPIError::InvalidParameter(format!("工作表配置序列化失败: {}", e))
+                LarkAPIError::IllegalParamError(format!("工作表配置序列化失败: {}", e))
             })?;
             map.insert("sheets".to_string(), sheets_value);
         }
@@ -170,7 +166,7 @@ impl CreateSpreadsheetRequest {
         // 设置时区
         if let Some(time_zone) = &self.time_zone {
             let tz_value: Value = serde_json::to_value(time_zone).map_err(|e| {
-                LarkAPIError::InvalidParameter(format!("时区配置序列化失败: {}", e))
+                LarkAPIError::IllegalParamError(format!("时区配置序列化失败: {}", e))
             })?;
             map.insert("time_zone".to_string(), tz_value);
         }
@@ -178,7 +174,7 @@ impl CreateSpreadsheetRequest {
         // 设置语言
         if let Some(locale) = &self.locale {
             let locale_value: Value = serde_json::to_value(locale).map_err(|e| {
-                LarkAPIError::InvalidParameter(format!("语言配置序列化失败: {}", e))
+                LarkAPIError::IllegalParamError(format!("语言配置序列化失败: {}", e))
             })?;
             map.insert("locale".to_string(), locale_value);
         }
@@ -194,7 +190,7 @@ impl CreateSpreadsheetRequest {
         // 设置自定义属性
         if let Some(properties) = &self.properties {
             let props_value: Value = serde_json::to_value(properties).map_err(|e| {
-                LarkAPIError::InvalidParameter(format!("自定义属性序列化失败: {}", e))
+                LarkAPIError::IllegalParamError(format!("自定义属性序列化失败: {}", e))
             })?;
             map.insert("properties".to_string(), props_value);
         }
@@ -206,13 +202,13 @@ impl CreateSpreadsheetRequest {
     pub fn validate(&self) -> SDKResult<()> {
         // 验证标题
         if self.title.trim().is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "电子表格标题不能为空".to_string(),
             ));
         }
 
         if self.title.len() > 200 {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "电子表格标题长度不能超过200个字符".to_string(),
             ));
         }
@@ -220,34 +216,34 @@ impl CreateSpreadsheetRequest {
         // 验证工作表配置
         if let Some(sheets) = &self.sheets {
             if sheets.is_empty() {
-                return Err(LarkAPIError::InvalidParameter(
+                return Err(LarkAPIError::IllegalParamError(
                     "工作表列表不能为空".to_string(),
                 ));
             }
 
             if sheets.len() > 100 {
-                return Err(LarkAPIError::InvalidParameter(
+                return Err(LarkAPIError::IllegalParamError(
                     "工作表数量不能超过100个".to_string(),
                 ));
             }
 
             for (index, sheet) in sheets.iter().enumerate() {
                 if sheet.title.trim().is_empty() {
-                    return Err(LarkAPIError::InvalidParameter(format!(
+                    return Err(LarkAPIError::IllegalParamError(format!(
                         "工作表{}标题不能为空",
                         index + 1
                     )));
                 }
 
                 if sheet.title.len() > 100 {
-                    return Err(LarkAPIError::InvalidParameter(format!(
+                    return Err(LarkAPIError::IllegalParamError(format!(
                         "工作表{}标题长度不能超过100个字符",
                         index + 1
                     )));
                 }
 
                 if sheet.index < 0 || sheet.index >= 100 {
-                    return Err(LarkAPIError::InvalidParameter(format!(
+                    return Err(LarkAPIError::IllegalParamError(format!(
                         "工作表{}索引必须在0-99之间",
                         index + 1
                     )));
@@ -259,7 +255,7 @@ impl CreateSpreadsheetRequest {
         if let Some(time_zone) = &self.time_zone {
             // 简单的时区格式验证
             if !time_zone.time_zone.contains('/') && !time_zone.time_zone.starts_with("UTC") {
-                return Err(LarkAPIError::InvalidParameter(
+                return Err(LarkAPIError::IllegalParamError(
                     "时区格式不正确，请使用如'Asia/Shanghai'或'UTC+8'格式".to_string(),
                 ));
             }
@@ -268,7 +264,7 @@ impl CreateSpreadsheetRequest {
         // 验证语言格式
         if let Some(locale) = &self.locale {
             if !locale.locale.contains('_') && locale.locale.len() != 2 {
-                return Err(LarkAPIError::InvalidParameter(
+                return Err(LarkAPIError::IllegalParamError(
                     "语言格式不正确，请使用如'zh_CN'或'en'格式".to_string(),
                 ));
             }
@@ -318,15 +314,7 @@ pub struct CreateSpreadsheetResponseBody {
 }
 
 /// 基础API响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BaseResponse<T> {
-    /// 响应码
-    pub code: i32,
-    /// 响应消息
-    pub msg: String,
-    /// 响应数据
-    pub data: T,
-}
+// 使用openlark_core::api_resp::BaseResponse，避免重复定义
 
 /// 电子表格创建服务
 #[derive(Debug, Clone)]
@@ -390,35 +378,27 @@ impl SpreadsheetCreateService {
         // 发送HTTP请求
         let url = format!("{}/open-apis/sheets/v3/spreadsheets", self.config.base_url);
 
-        let response = self
-            .config
-            .transport
-            .post(&url)
-            .json(&body)
-            .send()
-            .await
-            .map_err(|e| LarkAPIError::NetworkError(format!("网络请求失败: {}", e)))?;
+        let mut api_request = ApiRequest::with_method_and_path(Method::POST, &url);
+        api_request.body = serde_json::to_vec(&body)?;
+
+        let base_response = Transport::<CreateSpreadsheetResponseBody>::request(api_request, &self.config, None).await?;
 
         // 处理响应
-        if response.status().is_success() {
-            let base_response: BaseResponse<CreateSpreadsheetResponseBody> = response
-                .json()
-                .await
-                .map_err(|e| LarkAPIError::JsonParseError(format!("响应解析失败: {}", e)))?;
-
-            if base_response.code == 0 {
-                Ok(base_response.data.data)
-            } else {
-                Err(LarkAPIError::APIError(
-                    base_response.code,
-                    base_response.msg,
-                ))
+        if base_response.code() == 0 {
+            match base_response.data {
+                Some(response_body) => Ok(response_body.data),
+                None => Err(LarkAPIError::APIError {
+                    code: -1,
+                    msg: "响应数据为空".to_string(),
+                    error: None,
+                }),
             }
         } else {
-            Err(LarkAPIError::HTTPError(
-                response.status().as_u16(),
-                "创建电子表格失败".to_string(),
-            ))
+            Err(LarkAPIError::APIError {
+                code: base_response.code(),
+                msg: base_response.msg().to_string(),
+                error: None,
+            })
         }
     }
 
@@ -533,7 +513,7 @@ impl CreateSpreadsheetBuilder {
     pub async fn execute(self) -> SDKResult<CreateSpreadsheetResponse> {
         let title = self
             .title
-            .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格标题不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("电子表格标题不能为空".to_string()))?;
 
         let mut request = CreateSpreadsheetRequest::new(title);
 
@@ -751,5 +731,12 @@ mod tests {
         assert_eq!(body["locale"]["locale"], "zh_CN");
         assert_eq!(body["folder_path"], "/销售报表/2024");
         assert!(body["properties"].is_object());
+    }
+}
+
+// ApiResponseTrait implementation for Transport compatibility
+impl ApiResponseTrait for CreateSpreadsheetResponseBody {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }

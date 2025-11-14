@@ -542,6 +542,169 @@ impl ApiResponseTrait for UpdateDataValidationResponse {
     }
 }
 
+/// 查询数据验证请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetDataValidationRequest {
+    /// 电子表格token
+    #[serde(rename = "spreadsheetToken")]
+    pub spreadsheet_token: String,
+    /// 工作表ID
+    #[serde(rename = "sheetId")]
+    pub sheet_id: String,
+    /// 查询的范围，如果不指定则查询整个工作表
+    pub range: Option<String>,
+}
+
+/// 数据验证项目
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DataValidationItem {
+    /// 数据验证ID
+    #[serde(rename = "dataValidationId")]
+    pub data_validation_id: String,
+    /// 工作表ID
+    #[serde(rename = "sheetId")]
+    pub sheet_id: String,
+    /// 范围
+    pub range: String,
+    /// 数据验证信息
+    pub data_validation: DataValidation,
+}
+
+/// 查询数据验证响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetDataValidationResponse {
+    /// 数据验证列表
+    #[serde(rename = "dataValidation")]
+    pub data_validation: Vec<DataValidationItem>,
+}
+
+/// 删除数据验证请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DeleteDataValidationRequest {
+    /// 电子表格token
+    #[serde(rename = "spreadsheetToken")]
+    pub spreadsheet_token: String,
+    /// 工作表ID
+    #[serde(rename = "sheetId")]
+    pub sheet_id: String,
+    /// 数据验证ID列表，如果不指定则删除整个工作表的所有数据验证
+    #[serde(rename = "dataValidationId")]
+    pub data_validation_id: Option<String>,
+    /// 范围，当指定dataValidationId时可用
+    pub range: Option<String>,
+}
+
+/// 删除数据验证响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DeleteDataValidationResponse {
+    /// 删除状态
+    pub status: String,
+    /// 删除的数据验证数量
+    pub count: i32,
+}
+
+impl Default for GetDataValidationResponse {
+    fn default() -> Self {
+        Self {
+            data_validation: Vec::new(),
+        }
+    }
+}
+
+impl ApiResponseTrait for GetDataValidationResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl Default for DeleteDataValidationResponse {
+    fn default() -> Self {
+        Self {
+            status: "success".to_string(),
+            count: 0,
+        }
+    }
+}
+
+impl ApiResponseTrait for DeleteDataValidationResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl GetDataValidationRequest {
+    /// 创建新的查询数据验证请求
+    pub fn new(
+        spreadsheet_token: impl Into<String>,
+        sheet_id: impl Into<String>,
+    ) -> Self {
+        Self {
+            spreadsheet_token: spreadsheet_token.into(),
+            sheet_id: sheet_id.into(),
+            range: None,
+        }
+    }
+
+    /// 设置查询范围
+    pub fn range(mut self, range: impl Into<String>) -> Self {
+        self.range = Some(range.into());
+        self
+    }
+
+    /// 验证请求参数
+    pub fn validate(&self) -> Result<(), String> {
+        if self.spreadsheet_token.trim().is_empty() {
+            return Err("电子表格token不能为空".to_string());
+        }
+
+        if self.sheet_id.trim().is_empty() {
+            return Err("工作表ID不能为空".to_string());
+        }
+
+        Ok(())
+    }
+}
+
+impl DeleteDataValidationRequest {
+    /// 创建新的删除数据验证请求
+    pub fn new(
+        spreadsheet_token: impl Into<String>,
+        sheet_id: impl Into<String>,
+    ) -> Self {
+        Self {
+            spreadsheet_token: spreadsheet_token.into(),
+            sheet_id: sheet_id.into(),
+            data_validation_id: None,
+            range: None,
+        }
+    }
+
+    /// 设置数据验证ID
+    pub fn data_validation_id(mut self, id: impl Into<String>) -> Self {
+        self.data_validation_id = Some(id.into());
+        self
+    }
+
+    /// 设置范围
+    pub fn range(mut self, range: impl Into<String>) -> Self {
+        self.range = Some(range.into());
+        self
+    }
+
+    /// 验证请求参数
+    pub fn validate(&self) -> Result<(), String> {
+        if self.spreadsheet_token.trim().is_empty() {
+            return Err("电子表格token不能为空".to_string());
+        }
+
+        if self.sheet_id.trim().is_empty() {
+            return Err("工作表ID不能为空".to_string());
+        }
+
+        Ok(())
+    }
+}
+
 /// 数据验证操作服务
 #[derive(Debug, Clone)]
 pub struct DataValidationService {
@@ -669,6 +832,126 @@ impl DataValidationService {
                 .await?;
 
         Ok(api_resp)
+    }
+
+    /// 查询数据验证
+    ///
+    /// 查询指定工作表或范围内的数据验证设置。
+    ///
+    /// # 参数
+    /// - `request`: 查询数据验证请求
+    /// - `option`: 请求选项（可选）
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::sheets::v2::data_validation::{GetDataValidationRequest, DataValidationService};
+    ///
+    /// let config = openlark_core::config::Config::new("app_id", "app_secret");
+    /// let service = DataValidationService::new(config);
+    ///
+    /// let request = GetDataValidationRequest::new("spreadsheet_token", "sheet1")
+    ///     .range("A1:C10");
+    ///
+    /// let response = service.get_data_validation(request, None).await?;
+    /// println!("找到 {} 个数据验证规则", response.data.data_validation.len());
+    /// ```
+    pub async fn get_data_validation(
+        &self,
+        request: GetDataValidationRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<GetDataValidationResponse>> {
+        if let Err(err) = request.validate() {
+            return Err(LarkAPIError::InvalidParameter(err));
+        }
+
+        // 构建API请求
+        let endpoint = if let Some(range) = &request.range {
+            format!(
+                "/open-apis/sheets/v2/spreadsheets/{}/dataValidation?sheetId={}&range={}",
+                &request.spreadsheet_token, &request.sheet_id, range
+            )
+        } else {
+            format!(
+                "/open-apis/sheets/v2/spreadsheets/{}/dataValidation?sheetId={}",
+                &request.spreadsheet_token, &request.sheet_id
+            )
+        };
+
+        let mut api_req = ApiRequest::with_method_and_path(Method::GET, &endpoint);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+
+        // 发送请求
+        let api_resp = Transport::<GetDataValidationResponse>::request(api_req, &self.config, option).await?;
+
+        Ok(api_resp)
+    }
+
+    /// 删除数据验证
+    ///
+    /// 删除指定工作表或特定数据验证规则。
+    ///
+    /// # 参数
+    /// - `request`: 删除数据验证请求
+    /// - `option`: 请求选项（可选）
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::sheets::v2::data_validation::{DeleteDataValidationRequest, DataValidationService};
+    ///
+    /// let config = openlark_core::config::Config::new("app_id", "app_secret");
+    /// let service = DataValidationService::new(config);
+    ///
+    /// let request = DeleteDataValidationRequest::new("spreadsheet_token", "sheet1")
+    ///     .data_validation_id("validation_123");
+    ///
+    /// let response = service.delete_data_validation(request, None).await?;
+    /// println!("删除状态: {}, 删除数量: {}", response.data.status, response.data.count);
+    /// ```
+    pub async fn delete_data_validation(
+        &self,
+        request: DeleteDataValidationRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<DeleteDataValidationResponse>> {
+        if let Err(err) = request.validate() {
+            return Err(LarkAPIError::InvalidParameter(err));
+        }
+
+        // 构建API请求
+        let endpoint = if let Some(data_validation_id) = &request.data_validation_id {
+            format!(
+                "/open-apis/sheets/v2/spreadsheets/{}/dataValidation?sheetId={}&dataValidationId={}",
+                &request.spreadsheet_token, &request.sheet_id, data_validation_id
+            )
+        } else {
+            format!(
+                "/open-apis/sheets/v2/spreadsheets/{}/dataValidation?sheetId={}",
+                &request.spreadsheet_token, &request.sheet_id
+            )
+        };
+
+        let mut api_req = ApiRequest::with_method_and_path(Method::DELETE, &endpoint);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+
+        // 添加范围参数（如果有）
+        if let Some(range) = &request.range {
+            // 这里需要在URL中添加range参数，但由于ApiRequest的限制，我们需要使用不同的方式
+            let full_endpoint = format!("{}&range={}", endpoint, range);
+            let mut new_req = ApiRequest::with_method_and_path(Method::DELETE, &full_endpoint);
+            new_req
+                .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+
+            let api_resp = Transport::<DeleteDataValidationResponse>::request(new_req, &self.config, option).await?;
+            Ok(api_resp)
+        } else {
+            let api_resp = Transport::<DeleteDataValidationResponse>::request(api_req, &self.config, option).await?;
+            Ok(api_resp)
+        }
     }
 
     /// 创建下拉列表验证构建器
