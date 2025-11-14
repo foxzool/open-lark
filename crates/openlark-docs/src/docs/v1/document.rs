@@ -16,6 +16,12 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+// 导入请求类型
+use super::requests::ListDocumentsRequest;
+
+// 导入模型类型
+use super::models::{DocumentType, DocumentStatus};
+
 /// 文档信息
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Document {
@@ -199,6 +205,514 @@ pub struct GetDocumentResponse {
 impl ApiResponseTrait for GetDocumentResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
+    }
+}
+
+/// 删除文档请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DeleteDocumentRequest {
+    /// 文档ID
+    pub document_id: String,
+}
+
+impl DeleteDocumentRequest {
+    /// 创建新的请求实例
+    ///
+    /// # 参数
+    /// - `document_id`: 文档ID
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::DeleteDocumentRequest;
+    ///
+    /// let request = DeleteDocumentRequest::new("doc_123");
+    /// ```
+    pub fn new(document_id: impl Into<String>) -> Self {
+        Self {
+            document_id: document_id.into(),
+        }
+    }
+
+    /// 验证请求参数
+    ///
+    /// # 返回值
+    /// - `Ok(())`: 参数验证通过
+    /// - `Err(String)`: 参数验证失败，返回错误信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::DeleteDocumentRequest;
+    ///
+    /// let request = DeleteDocumentRequest::new("doc_123");
+    /// assert!(request.validate().is_ok());
+    /// ```
+    pub fn validate(&self) -> Result<(), String> {
+        if self.document_id.trim().is_empty() {
+            return Err("文档ID不能为空".to_string());
+        }
+        if self.document_id.len() > 200 {
+            return Err("文档ID长度不能超过200个字符".to_string());
+        }
+        Ok(())
+    }
+}
+
+/// 删除文档响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct DeleteDocumentResponse {
+    /// 是否成功删除
+    pub success: Option<bool>,
+    /// 操作结果消息
+    pub message: Option<String>,
+}
+
+impl ApiResponseTrait for DeleteDocumentResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 获取文档纯文本内容请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetDocumentRawContentRequest {
+    /// 文档ID
+    pub document_id: String,
+}
+
+impl GetDocumentRawContentRequest {
+    /// 创建新的请求实例
+    ///
+    /// # 参数
+    /// - `document_id`: 文档ID
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::GetDocumentRawContentRequest;
+    ///
+    /// let request = GetDocumentRawContentRequest::new("doc_123");
+    /// ```
+    pub fn new(document_id: impl Into<String>) -> Self {
+        Self {
+            document_id: document_id.into(),
+        }
+    }
+
+    /// 验证请求参数
+    ///
+    /// # 返回值
+    /// - `Ok(())`: 参数验证通过
+    /// - `Err(String)`: 参数验证失败，返回错误信息
+    pub fn validate(&self) -> Result<(), String> {
+        if self.document_id.trim().is_empty() {
+            return Err("文档ID不能为空".to_string());
+        }
+        if self.document_id.len() > 200 {
+            return Err("文档ID长度不能超过200个字符".to_string());
+        }
+        Ok(())
+    }
+}
+
+/// 获取文档纯文本内容响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct GetDocumentRawContentResponse {
+    /// 文档纯文本内容
+    pub content: Option<String>,
+    /// 文档版本号
+    pub version: Option<i32>,
+}
+
+impl ApiResponseTrait for GetDocumentRawContentResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 获取文档所有块请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetDocumentBlocksRequest {
+    /// 文档ID
+    pub document_id: String,
+    /// 分页大小
+    pub page_size: Option<i32>,
+    /// 页面标记
+    pub page_token: Option<String>,
+    /// 文档版本号
+    pub document_revision_id: Option<i32>,
+}
+
+impl GetDocumentBlocksRequest {
+    /// 创建新的请求实例
+    ///
+    /// # 参数
+    /// - `document_id`: 文档ID
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::GetDocumentBlocksRequest;
+    ///
+    /// let request = GetDocumentBlocksRequest::new("doc_123")
+    ///     .page_size(20);
+    /// ```
+    pub fn new(document_id: impl Into<String>) -> Self {
+        Self {
+            document_id: document_id.into(),
+            page_size: None,
+            page_token: None,
+            document_revision_id: None,
+        }
+    }
+
+    /// 设置分页大小
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.page_size = Some(page_size);
+        self
+    }
+
+    /// 设置页面标记
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.page_token = Some(page_token.into());
+        self
+    }
+
+    /// 设置文档版本号
+    pub fn document_revision_id(mut self, document_revision_id: i32) -> Self {
+        self.document_revision_id = Some(document_revision_id);
+        self
+    }
+
+    /// 验证请求参数
+    pub fn validate(&self) -> Result<(), String> {
+        if self.document_id.trim().is_empty() {
+            return Err("文档ID不能为空".to_string());
+        }
+        if self.document_id.len() > 200 {
+            return Err("文档ID长度不能超过200个字符".to_string());
+        }
+        if let Some(page_size) = self.page_size {
+            if page_size <= 0 || page_size > 200 {
+                return Err("分页大小必须在1-200之间".to_string());
+            }
+        }
+        Ok(())
+    }
+}
+
+/// 文档块信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DocumentBlock {
+    /// 块ID
+    pub block_id: Option<i64>,
+    /// 块类型
+    pub block_type: Option<i32>,
+    /// 块内容
+    pub block_content: Option<serde_json::Value>,
+    /// 父块ID
+    pub parent_block_id: Option<i64>,
+    /// 块索引
+    pub index: Option<i32>,
+    /// 创建时间
+    pub create_time: Option<i64>,
+    /// 更新时间
+    pub update_time: Option<i64>,
+}
+
+impl Default for DocumentBlock {
+    fn default() -> Self {
+        Self {
+            block_id: None,
+            block_type: None,
+            block_content: None,
+            parent_block_id: None,
+            index: None,
+            create_time: None,
+            update_time: None,
+        }
+    }
+}
+
+/// 获取文档所有块响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct GetDocumentBlocksResponse {
+    /// 块列表
+    pub items: Option<Vec<DocumentBlock>>,
+    /// 是否还有更多数据
+    pub has_more: Option<bool>,
+    /// 分页标记
+    pub page_token: Option<String>,
+    /// 文档版本号
+    pub document_revision_id: Option<i32>,
+}
+
+impl ApiResponseTrait for GetDocumentBlocksResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 创建文档块请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateDocumentBlockRequest {
+    /// 文档ID
+    pub document_id: String,
+    /// 父块ID
+    pub block_id: i64,
+    /// 块索引位置
+    pub index: i32,
+    /// 块内容列表
+    pub children: Vec<DocumentBlock>,
+}
+
+/// 文档块更新请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UpdateDocumentBlockRequest {
+    /// 文档ID
+    pub document_id: String,
+    /// 块ID
+    pub block_id: i64,
+    /// 块内容
+    pub block: DocumentBlock,
+    /// 是否为增量更新
+    pub is_insecure: Option<bool>,
+}
+
+/// 文档块删除请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DeleteDocumentBlockRequest {
+    /// 文档ID
+    pub document_id: String,
+    /// 块ID
+    pub block_id: i64,
+    /// 块内的子元素ID（可选，如果提供则删除特定子元素）
+    pub block_id_list: Option<Vec<i64>>,
+}
+
+impl CreateDocumentBlockRequest {
+    /// 创建新的请求实例
+    ///
+    /// # 参数
+    /// - `document_id`: 文档ID
+    /// - `block_id`: 父块ID
+    /// - `index`: 块索引位置
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::CreateDocumentBlockRequest;
+    ///
+    /// let request = CreateDocumentBlockRequest::new("doc_123", 123456, 0)
+    ///     .add_child(child_block);
+    /// ```
+    pub fn new(document_id: impl Into<String>, block_id: i64, index: i32) -> Self {
+        Self {
+            document_id: document_id.into(),
+            block_id,
+            index,
+            children: Vec::new(),
+        }
+    }
+
+    /// 添加子块
+    pub fn add_child(mut self, child: DocumentBlock) -> Self {
+        self.children.push(child);
+        self
+    }
+
+    /// 验证请求参数
+    pub fn validate(&self) -> Result<(), String> {
+        if self.document_id.trim().is_empty() {
+            return Err("文档ID不能为空".to_string());
+        }
+        if self.document_id.len() > 200 {
+            return Err("文档ID长度不能超过200个字符".to_string());
+        }
+        if self.block_id <= 0 {
+            return Err("父块ID必须大于0".to_string());
+        }
+        if self.index < 0 {
+            return Err("块索引不能为负数".to_string());
+        }
+        if self.children.is_empty() {
+            return Err("至少需要添加一个子块".to_string());
+        }
+        Ok(())
+    }
+}
+
+/// 创建文档块响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct CreateDocumentBlockResponse {
+    /// 创建的块列表
+    pub items: Option<Vec<DocumentBlock>>,
+    /// 文档版本号
+    pub document_revision_id: Option<i32>,
+}
+
+impl ApiResponseTrait for CreateDocumentBlockResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 更新文档块响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct UpdateDocumentBlockResponse {
+    /// 更新的块信息
+    pub block: Option<DocumentBlock>,
+    /// 文档版本号
+    pub document_revision_id: Option<i32>,
+}
+
+impl ApiResponseTrait for UpdateDocumentBlockResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 删除文档块响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct DeleteDocumentBlockResponse {
+    /// 删除是否成功
+    pub success: Option<bool>,
+    /// 文档版本号
+    pub document_revision_id: Option<i32>,
+}
+
+impl ApiResponseTrait for DeleteDocumentBlockResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 文档列表查询响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct DocumentListResponse {
+    /// 文档列表
+    pub items: Option<Vec<Document>>,
+    /// 分页信息
+    pub page_token: Option<String>,
+    /// 是否有更多数据
+    pub has_more: Option<bool>,
+    /// 总数
+    pub total: Option<i32>,
+}
+
+impl ApiResponseTrait for DocumentListResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl UpdateDocumentBlockRequest {
+    /// 创建新的请求实例
+    ///
+    /// # 参数
+    /// - `document_id`: 文档ID
+    /// - `block_id`: 块ID
+    /// - `block`: 块内容
+    ///
+    /// # 返回
+    /// 返回新的请求实例
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::{UpdateDocumentBlockRequest, DocumentBlock};
+    ///
+    /// let block = DocumentBlock::new();
+    /// let request = UpdateDocumentBlockRequest::new("doc_123", 123456, block)
+    ///     .is_insecure(true);
+    /// ```
+    pub fn new(document_id: impl Into<String>, block_id: i64, block: DocumentBlock) -> Self {
+        Self {
+            document_id: document_id.into(),
+            block_id,
+            block,
+            is_insecure: None,
+        }
+    }
+
+    /// 设置是否为增量更新
+    ///
+    /// # 参数
+    /// - `is_insecure`: 是否为增量更新
+    ///
+    /// # 返回
+    /// 返回自身以支持链式调用
+    pub fn is_insecure(mut self, is_insecure: bool) -> Self {
+        self.is_insecure = Some(is_insecure);
+        self
+    }
+
+    /// 验证请求参数
+    pub fn validate(&self) -> Result<(), String> {
+        if self.document_id.trim().is_empty() {
+            return Err("文档ID不能为空".to_string());
+        }
+        if self.document_id.len() > 200 {
+            return Err("文档ID长度不能超过200个字符".to_string());
+        }
+        if self.block_id <= 0 {
+            return Err("块ID必须大于0".to_string());
+        }
+        Ok(())
+    }
+}
+
+impl DeleteDocumentBlockRequest {
+    /// 创建新的请求实例
+    ///
+    /// # 参数
+    /// - `document_id`: 文档ID
+    /// - `block_id`: 块ID
+    ///
+    /// # 返回
+    /// 返回新的请求实例
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::DeleteDocumentBlockRequest;
+    ///
+    /// let request = DeleteDocumentBlockRequest::new("doc_123", 123456)
+    ///     .block_id_list(vec![789, 1011]);
+    /// ```
+    pub fn new(document_id: impl Into<String>, block_id: i64) -> Self {
+        Self {
+            document_id: document_id.into(),
+            block_id,
+            block_id_list: None,
+        }
+    }
+
+    /// 设置要删除的子元素ID列表
+    ///
+    /// # 参数
+    /// - `block_id_list`: 子元素ID列表
+    ///
+    /// # 返回
+    /// 返回自身以支持链式调用
+    pub fn block_id_list(mut self, block_id_list: Vec<i64>) -> Self {
+        self.block_id_list = Some(block_id_list);
+        self
+    }
+
+    /// 验证请求参数
+    pub fn validate(&self) -> Result<(), String> {
+        if self.document_id.trim().is_empty() {
+            return Err("文档ID不能为空".to_string());
+        }
+        if self.document_id.len() > 200 {
+            return Err("文档ID长度不能超过200个字符".to_string());
+        }
+        if self.block_id <= 0 {
+            return Err("块ID必须大于0".to_string());
+        }
+        Ok(())
     }
 }
 
@@ -641,7 +1155,7 @@ impl DocumentService {
     /// # 示例
     ///
     /// ```rust
-    /// use open_lark::service::docx::v1::document::{DocumentService, GetDocumentRequest};
+    /// use open_lark::service::docs::v1::document::{DocumentService, GetDocumentRequest};
     ///
     /// let service = DocumentService::new(config);
     /// let request = GetDocumentRequest::new("doc_123");
@@ -674,6 +1188,425 @@ impl DocumentService {
             "文档信息获取完成: document_id={}, title={:?}",
             req.document_id,
             response.document.title
+        );
+
+        Ok(response)
+    }
+
+    /// 获取文档纯文本内容
+    ///
+    /// 获取指定文档的纯文本内容，不包含富文本格式。
+    ///
+    /// # 参数
+    /// * `req` - 获取文档纯文本内容请求
+    ///
+    /// # 返回值
+    /// 返回文档的纯文本内容和版本信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::{DocumentService, GetDocumentRawContentRequest};
+    ///
+    /// let service = DocumentService::new(config);
+    /// let request = GetDocumentRawContentRequest::new("doc_123");
+    ///
+    /// let result = service.get_raw_content(&request).await?;
+    /// if let Some(content) = result.content {
+    ///     println!("文档内容: {}", content);
+    /// }
+    /// ```
+    pub async fn get_raw_content(&self, req: &GetDocumentRawContentRequest) -> SDKResult<GetDocumentRawContentResponse> {
+        req.validate()
+            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+        log::debug!("开始获取文档纯文本内容: document_id={}", req.document_id);
+
+        // 构建动态端点路径
+        let endpoint = openlark_core::endpoints_original::Endpoints::DOCX_V1_DOCUMENT_RAW_CONTENT
+            .replace("{}", &req.document_id);
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path: endpoint,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: Vec::new(), // GET请求无body
+            ..Default::default()
+        };
+
+        let resp = Transport::<GetDocumentRawContentResponse>::request(api_req, &self.config, None).await?;
+        let response = resp.data.unwrap_or_default();
+
+        log::info!(
+            "文档纯文本内容获取完成: document_id={}, version={:?}",
+            req.document_id,
+            response.version
+        );
+
+        Ok(response)
+    }
+
+    /// 获取文档所有块
+    ///
+    /// 获取指定文档的所有块的富文本内容并分页返回。
+    ///
+    /// # 参数
+    /// * `req` - 获取文档块请求
+    ///
+    /// # 返回值
+    /// 返回文档块的列表和分页信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::{DocumentService, GetDocumentBlocksRequest};
+    ///
+    /// let service = DocumentService::new(config);
+    /// let request = GetDocumentBlocksRequest::new("doc_123")
+    ///     .page_size(20);
+    ///
+    /// let result = service.get_blocks(&request).await?;
+    /// if let Some(blocks) = result.items {
+    ///     println!("找到 {} 个块", blocks.len());
+    /// }
+    /// ```
+    pub async fn get_blocks(&self, req: &GetDocumentBlocksRequest) -> SDKResult<GetDocumentBlocksResponse> {
+        req.validate()
+            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+        log::debug!("开始获取文档块: document_id={}", req.document_id);
+
+        // 构建动态端点路径
+        let endpoint = openlark_core::endpoints_original::Endpoints::DOCX_V1_DOCUMENT_BLOCKS
+            .replace("{}", &req.document_id);
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path: endpoint,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: Vec::new(), // GET请求无body
+            ..Default::default()
+        };
+
+        let resp = Transport::<GetDocumentBlocksResponse>::request(api_req, &self.config, None).await?;
+        let response = resp.data.unwrap_or_default();
+
+        log::info!(
+            "文档块获取完成: document_id={}, block_count={:?}",
+            req.document_id,
+            response.items.as_ref().map(|blocks| blocks.len())
+        );
+
+        Ok(response)
+    }
+
+    /// 创建文档块
+    ///
+    /// 在指定块的子块列表中，新创建一批子块，并放置到指定位置。
+    ///
+    /// # 参数
+    /// * `req` - 创建文档块请求
+    ///
+    /// # 返回值
+    /// 返回创建的块信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::{DocumentService, CreateDocumentBlockRequest, DocumentBlock};
+    ///
+    /// let service = DocumentService::new(config);
+    /// let child_block = DocumentBlock { /* 设置块内容 */ };
+    /// let request = CreateDocumentBlockRequest::new("doc_123", 123456, 0)
+    ///     .add_child(child_block);
+    ///
+    /// let result = service.create_block(&request).await?;
+    /// ```
+    pub async fn create_block(&self, req: &CreateDocumentBlockRequest) -> SDKResult<CreateDocumentBlockResponse> {
+        req.validate()
+            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+        log::debug!("开始创建文档块: document_id={}, block_id={}", req.document_id, req.block_id);
+
+        // 构建动态端点路径
+        let endpoint = openlark_core::endpoints_original::Endpoints::DOCX_V1_DOCUMENT_BLOCK_CHILDREN
+            .replace("{}", &req.document_id)
+            .replace("{}", &req.block_id.to_string());
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
+            api_path: endpoint,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: serde_json::to_vec(req)?,
+            ..Default::default()
+        };
+
+        let resp = Transport::<CreateDocumentBlockResponse>::request(api_req, &self.config, None).await?;
+        let response = resp.data.unwrap_or_default();
+
+        log::info!(
+            "文档块创建完成: document_id={}, block_count={:?}",
+            req.document_id,
+            response.items.as_ref().map(|blocks| blocks.len())
+        );
+
+        Ok(response)
+    }
+
+    /// 更新文档块
+    ///
+    /// 更新指定文档中的块内容，支持完整的块内容更新或增量更新。
+    ///
+    /// # 参数
+    /// - `req`: 更新文档块请求
+    ///
+    /// # 返回
+    /// 返回更新后的文档块信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::{DocumentService, UpdateDocumentBlockRequest, DocumentBlock};
+    ///
+    /// let service = DocumentService::new(config);
+    /// let block = DocumentBlock::new();
+    /// let request = UpdateDocumentBlockRequest::new("doc_123", 123456, block);
+    ///
+    /// let result = service.update_block(&request).await?;
+    /// if let Some(updated_block) = result.block {
+    ///     println!("更新成功: {:?}", updated_block);
+    /// }
+    /// ```
+    pub async fn update_block(&self, req: &UpdateDocumentBlockRequest) -> SDKResult<UpdateDocumentBlockResponse> {
+        req.validate()
+            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+        log::debug!("开始更新文档块: document_id={}, block_id={}", req.document_id, req.block_id);
+
+        // 构建动态端点路径
+        let endpoint = format!(
+            "/open-apis/docx/v1/documents/{}/blocks/{}",
+            req.document_id, req.block_id
+        );
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::PATCH,
+            api_path: endpoint,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: serde_json::to_vec(req)?,
+            ..Default::default()
+        };
+
+        let resp = Transport::<UpdateDocumentBlockResponse>::request(api_req, &self.config, None).await?;
+        let response = resp.data.unwrap_or_default();
+
+        log::info!(
+            "文档块更新完成: document_id={}, block_id={}, revision_id={:?}",
+            req.document_id,
+            req.block_id,
+            response.document_revision_id
+        );
+
+        Ok(response)
+    }
+
+    /// 删除文档块
+    ///
+    /// 删除指定文档中的块，支持删除整个块或块内的特定子元素。
+    ///
+    /// # 参数
+    /// - `req`: 删除文档块请求
+    ///
+    /// # 返回
+    /// 返回删除操作的结果
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::{DocumentService, DeleteDocumentBlockRequest};
+    ///
+    /// let service = DocumentService::new(config);
+    /// let request = DeleteDocumentBlockRequest::new("doc_123", 123456);
+    ///
+    /// let result = service.delete_block(&request).await?;
+    /// if result.success.unwrap_or(false) {
+    ///     println!("删除成功");
+    /// }
+    /// ```
+    pub async fn delete_block(&self, req: &DeleteDocumentBlockRequest) -> SDKResult<DeleteDocumentBlockResponse> {
+        req.validate()
+            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+        log::debug!("开始删除文档块: document_id={}, block_id={}", req.document_id, req.block_id);
+
+        // 构建动态端点路径
+        let endpoint = format!(
+            "/open-apis/docx/v1/documents/{}/blocks/{}",
+            req.document_id, req.block_id
+        );
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::DELETE,
+            api_path: endpoint,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: serde_json::to_vec(req)?,
+            ..Default::default()
+        };
+
+        let resp = Transport::<DeleteDocumentBlockResponse>::request(api_req, &self.config, None).await?;
+        let response = resp.data.unwrap_or_default();
+
+        log::info!(
+            "文档块删除完成: document_id={}, block_id={}, success={:?}",
+            req.document_id,
+            req.block_id,
+            response.success
+        );
+
+        Ok(response)
+    }
+
+    /// 查询文档列表
+    ///
+    /// 根据多种条件查询文档列表，支持分页、排序、搜索等功能。
+    ///
+    /// # 参数
+    /// - `req`: 文档列表查询请求
+    ///
+    /// # 返回
+    /// 返回符合条件的文档列表和分页信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::{DocumentService, ListDocumentsRequest};
+    ///
+    /// let service = DocumentService::new(config);
+    /// let request = ListDocumentsRequest::default()
+    ///     .page_size(20)
+    ///     .keyword("项目计划");
+    ///
+    /// let result = service.list_documents(&request).await?;
+    /// if let Some(documents) = result.items {
+    ///     println!("找到 {} 个文档", documents.len());
+    /// }
+    /// ```
+    pub async fn list_documents(&self, req: &ListDocumentsRequest) -> SDKResult<DocumentListResponse> {
+        log::debug!("开始查询文档列表: folder_id={:?}, keyword={:?}", req.folder_id, req.keyword);
+
+        // 构建查询参数
+        let mut query_params = Vec::new();
+
+        if let Some(folder_id) = &req.folder_id {
+            query_params.push(("folder_id".to_string(), folder_id.clone()));
+        }
+
+        if let Some(document_type) = &req.document_type {
+            query_params.push(("document_type".to_string(), format!("{:?}", document_type)));
+        }
+
+        if let Some(owner_id) = &req.owner_id {
+            query_params.push(("owner_id".to_string(), owner_id.clone()));
+        }
+
+        if let Some(status) = &req.status {
+            query_params.push(("status".to_string(), format!("{:?}", status)));
+        }
+
+        if let Some(keyword) = &req.keyword {
+            query_params.push(("keyword".to_string(), keyword.clone()));
+        }
+
+        if let Some(sort_field) = &req.sort_field {
+            query_params.push(("sort_field".to_string(), sort_field.clone()));
+        }
+
+        if let Some(sort_order) = &req.sort_order {
+            query_params.push(("sort_order".to_string(), sort_order.clone()));
+        }
+
+        if let Some(page_size) = req.page_size {
+            query_params.push(("page_size".to_string(), page_size.to_string()));
+        }
+
+        if let Some(page_token) = &req.page_token {
+            query_params.push(("page_token".to_string(), page_token.clone()));
+        }
+
+        // 构建查询字符串
+        let query_string = if !query_params.is_empty() {
+            format!("?{}", query_params.iter()
+                .map(|(k, v)| format!("{}={}", k, urlencoding::encode(v)))
+                .collect::<Vec<_>>()
+                .join("&"))
+        } else {
+            String::new()
+        };
+
+        let endpoint = format!("/open-apis/docx/v1/documents{}", query_string);
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path: endpoint,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: Vec::new(), // GET请求无body
+            ..Default::default()
+        };
+
+        let resp = Transport::<DocumentListResponse>::request(api_req, &self.config, None).await?;
+        let response = resp.data.unwrap_or_default();
+
+        log::info!(
+            "文档列表查询完成: found_count={:?}, has_more={:?}",
+            response.items.as_ref().map(|docs| docs.len()),
+            response.has_more
+        );
+
+        Ok(response)
+    }
+
+    /// 删除文档
+    ///
+    /// 删除指定的文档，删除操作不可恢复，请谨慎使用。
+    ///
+    /// # 参数
+    /// * `req` - 删除文档请求
+    ///
+    /// # 返回值
+    /// 返回删除操作的结果
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::{DocumentService, DeleteDocumentRequest};
+    ///
+    /// let service = DocumentService::new(config);
+    /// let request = DeleteDocumentRequest::new("doc_123");
+    ///
+    /// let result = service.delete(&request).await?;
+    /// if result.success.unwrap_or(false) {
+    ///     println!("文档删除成功");
+    /// }
+    /// ```
+    pub async fn delete(&self, req: &DeleteDocumentRequest) -> SDKResult<DeleteDocumentResponse> {
+        req.validate()
+            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+        log::debug!("开始删除文档: document_id={}", req.document_id);
+
+        // 构建动态端点路径
+        let endpoint = openlark_core::endpoints_original::Endpoints::DOCX_V1_DOCUMENT_GET
+            .replace("{}", &req.document_id);
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::DELETE,
+            api_path: endpoint,
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: Vec::new(), // DELETE请求无body
+            ..Default::default()
+        };
+
+        let resp = Transport::<DeleteDocumentResponse>::request(api_req, &self.config, None).await?;
+        let response = resp.data.unwrap_or_default();
+
+        log::info!(
+            "文档删除完成: document_id={}, success={:?}",
+            req.document_id,
+            response.success
         );
 
         Ok(response)
@@ -753,7 +1686,7 @@ impl GetDocumentBuilder {
     /// # 示例
     ///
     /// ```rust
-    /// use open_lark::service::docx::v1::document::GetDocumentBuilder;
+    /// use open_lark::service::docs::v1::document::GetDocumentBuilder;
     ///
     /// let builder = GetDocumentBuilder::new().document_id("doc_123");
     /// ```
@@ -773,7 +1706,7 @@ impl GetDocumentBuilder {
     /// # 示例
     ///
     /// ```rust
-    /// use open_lark::service::docx::v1::document::{DocumentService, GetDocumentBuilder};
+    /// use open_lark::service::docs::v1::document::{DocumentService, GetDocumentBuilder};
     ///
     /// let service = DocumentService::new(config);
     ///
@@ -784,6 +1717,401 @@ impl GetDocumentBuilder {
     /// ```
     pub async fn execute(self, service: &DocumentService) -> SDKResult<GetDocumentResponse> {
         service.get(&self.request).await
+    }
+}
+
+/// 删除文档构建器
+#[derive(Debug, Clone)]
+pub struct DeleteDocumentBuilder {
+    request: DeleteDocumentRequest,
+}
+
+impl DeleteDocumentBuilder {
+    /// 创建新的构建器
+    ///
+    /// # 参数
+    /// - `document_id`: 文档ID
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::DeleteDocumentBuilder;
+    ///
+    /// let builder = DeleteDocumentBuilder::new("doc_123");
+    /// ```
+    pub fn new(document_id: impl Into<String>) -> Self {
+        Self {
+            request: DeleteDocumentRequest::new(document_id),
+        }
+    }
+
+    /// 执行删除文档操作
+    ///
+    /// # 参数
+    /// - `service`: 文档管理服务实例
+    ///
+    /// # 返回值
+    /// 返回删除操作的结果
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::{DocumentService, DeleteDocumentBuilder};
+    ///
+    /// let service = DocumentService::new(config);
+    ///
+    /// let result = DeleteDocumentBuilder::new("doc_123")
+    ///     .execute(&service)
+    ///     .await?;
+    /// ```
+    pub async fn execute(self, service: &DocumentService) -> SDKResult<DeleteDocumentResponse> {
+        service.delete(&self.request).await
+    }
+}
+
+/// 获取文档块构建器
+#[derive(Debug, Clone)]
+pub struct GetDocumentBlocksBuilder {
+    request: GetDocumentBlocksRequest,
+}
+
+impl GetDocumentBlocksBuilder {
+    /// 创建新的构建器
+    ///
+    /// # 参数
+    /// - `document_id`: 文档ID
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::GetDocumentBlocksBuilder;
+    ///
+    /// let builder = GetDocumentBlocksBuilder::new("doc_123");
+    /// ```
+    pub fn new(document_id: impl Into<String>) -> Self {
+        Self {
+            request: GetDocumentBlocksRequest::new(document_id),
+        }
+    }
+
+    /// 设置分页大小
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.request = self.request.page_size(page_size);
+        self
+    }
+
+    /// 设置页面标记
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.request = self.request.page_token(page_token);
+        self
+    }
+
+    /// 设置文档版本号
+    pub fn document_revision_id(mut self, document_revision_id: i32) -> Self {
+        self.request = self.request.document_revision_id(document_revision_id);
+        self
+    }
+
+    /// 执行获取文档块操作
+    ///
+    /// # 参数
+    /// - `service`: 文档管理服务实例
+    ///
+    /// # 返回值
+    /// 返回文档块列表
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::{DocumentService, GetDocumentBlocksBuilder};
+    ///
+    /// let service = DocumentService::new(config);
+    ///
+    /// let result = GetDocumentBlocksBuilder::new("doc_123")
+    ///     .page_size(20)
+    ///     .execute(&service)
+    ///     .await?;
+    /// ```
+    pub async fn execute(self, service: &DocumentService) -> SDKResult<GetDocumentBlocksResponse> {
+        service.get_blocks(&self.request).await
+    }
+}
+
+/// 创建文档块构建器
+#[derive(Debug, Clone)]
+pub struct CreateDocumentBlockBuilder {
+    request: CreateDocumentBlockRequest,
+}
+
+impl CreateDocumentBlockBuilder {
+    /// 创建新的构建器
+    ///
+    /// # 参数
+    /// - `document_id`: 文档ID
+    /// - `block_id`: 父块ID
+    /// - `index`: 块索引位置
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::CreateDocumentBlockBuilder;
+    ///
+    /// let builder = CreateDocumentBlockBuilder::new("doc_123", 123456, 0);
+    /// ```
+    pub fn new(document_id: impl Into<String>, block_id: i64, index: i32) -> Self {
+        Self {
+            request: CreateDocumentBlockRequest::new(document_id, block_id, index),
+        }
+    }
+
+    /// 添加子块
+    pub fn add_child(mut self, child: DocumentBlock) -> Self {
+        self.request = self.request.add_child(child);
+        self
+    }
+
+    /// 执行创建文档块操作
+    ///
+    /// # 参数
+    /// - `service`: 文档管理服务实例
+    ///
+    /// # 返回值
+    /// 返回创建的块信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::{DocumentService, CreateDocumentBuilder, DocumentBlock};
+    ///
+    /// let service = DocumentService::new(config);
+    /// let child_block = DocumentBlock { /* 设置块内容 */ };
+    ///
+    /// let result = CreateDocumentBlockBuilder::new("doc_123", 123456, 0)
+    ///     .add_child(child_block)
+    ///     .execute(&service)
+    ///     .await?;
+    /// ```
+    pub async fn execute(self, service: &DocumentService) -> SDKResult<CreateDocumentBlockResponse> {
+        service.create_block(&self.request).await
+    }
+}
+
+/// 更新文档块构建器
+#[derive(Debug, Clone)]
+pub struct UpdateDocumentBlockBuilder {
+    request: UpdateDocumentBlockRequest,
+}
+
+impl UpdateDocumentBlockBuilder {
+    /// 创建新的构建器
+    ///
+    /// # 参数
+    /// - `document_id`: 文档ID
+    /// - `block_id`: 块ID
+    /// - `block`: 块内容
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::{UpdateDocumentBlockBuilder, DocumentBlock};
+    ///
+    /// let block = DocumentBlock::new();
+    /// let builder = UpdateDocumentBlockBuilder::new("doc_123", 123456, block);
+    /// ```
+    pub fn new(document_id: impl Into<String>, block_id: i64, block: DocumentBlock) -> Self {
+        Self {
+            request: UpdateDocumentBlockRequest::new(document_id, block_id, block),
+        }
+    }
+
+    /// 设置是否为增量更新
+    pub fn is_insecure(mut self, is_insecure: bool) -> Self {
+        self.request = self.request.is_insecure(is_insecure);
+        self
+    }
+
+    /// 执行更新文档块操作
+    ///
+    /// # 参数
+    /// - `service`: 文档管理服务实例
+    ///
+    /// # 返回值
+    /// 返回更新后的块信息
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::{DocumentService, UpdateDocumentBlockBuilder, DocumentBlock};
+    ///
+    /// let service = DocumentService::new(config);
+    /// let block = DocumentBlock { /* 设置块内容 */ };
+    ///
+    /// let result = UpdateDocumentBlockBuilder::new("doc_123", 123456, block)
+    ///     .is_insecure(true)
+    ///     .execute(&service)
+    ///     .await?;
+    /// ```
+    pub async fn execute(self, service: &DocumentService) -> SDKResult<UpdateDocumentBlockResponse> {
+        service.update_block(&self.request).await
+    }
+}
+
+/// 删除文档块构建器
+#[derive(Debug, Clone)]
+pub struct DeleteDocumentBlockBuilder {
+    request: DeleteDocumentBlockRequest,
+}
+
+/// 文档列表查询构建器
+#[derive(Debug, Clone)]
+pub struct ListDocumentsBuilder {
+    request: ListDocumentsRequest,
+}
+
+impl DeleteDocumentBlockBuilder {
+    /// 创建新的构建器
+    ///
+    /// # 参数
+    /// - `document_id`: 文档ID
+    /// - `block_id`: 块ID
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::DeleteDocumentBlockBuilder;
+    ///
+    /// let builder = DeleteDocumentBlockBuilder::new("doc_123", 123456);
+    /// ```
+    pub fn new(document_id: impl Into<String>, block_id: i64) -> Self {
+        Self {
+            request: DeleteDocumentBlockRequest::new(document_id, block_id),
+        }
+    }
+
+    /// 设置要删除的子元素ID列表
+    pub fn block_id_list(mut self, block_id_list: Vec<i64>) -> Self {
+        self.request = self.request.block_id_list(block_id_list);
+        self
+    }
+
+    /// 执行删除文档块操作
+    ///
+    /// # 参数
+    /// - `service`: 文档管理服务实例
+    ///
+    /// # 返回值
+    /// 返回删除操作的结果
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::{DocumentService, DeleteDocumentBlockBuilder};
+    ///
+    /// let service = DocumentService::new(config);
+    ///
+    /// let result = DeleteDocumentBlockBuilder::new("doc_123", 123456)
+    ///     .block_id_list(vec![789, 1011])
+    ///     .execute(&service)
+    ///     .await?;
+    /// ```
+    pub async fn execute(self, service: &DocumentService) -> SDKResult<DeleteDocumentBlockResponse> {
+        service.delete_block(&self.request).await
+    }
+}
+
+impl ListDocumentsBuilder {
+    /// 创建新的构建器
+    pub fn new() -> Self {
+        Self {
+            request: ListDocumentsRequest::new(),
+        }
+    }
+
+    /// 设置文件夹ID
+    pub fn folder_id(mut self, folder_id: impl Into<String>) -> Self {
+        self.request = self.request.folder_id(folder_id);
+        self
+    }
+
+    /// 设置文档类型
+    pub fn document_type(mut self, document_type: DocumentType) -> Self {
+        self.request = self.request.document_type(document_type);
+        self
+    }
+
+    /// 设置所有者ID
+    pub fn owner_id(mut self, owner_id: impl Into<String>) -> Self {
+        self.request = self.request.owner_id(owner_id);
+        self
+    }
+
+    /// 设置文档状态
+    pub fn status(mut self, status: DocumentStatus) -> Self {
+        self.request = self.request.status(status);
+        self
+    }
+
+    /// 设置搜索关键词
+    pub fn keyword(mut self, keyword: impl Into<String>) -> Self {
+        self.request = self.request.keyword(keyword);
+        self
+    }
+
+    /// 设置标签筛选
+    pub fn tags(mut self, tags: Vec<String>) -> Self {
+        self.request = self.request.tags(tags);
+        self
+    }
+
+    /// 设置排序字段
+    pub fn sort_field(mut self, sort_field: impl Into<String>) -> Self {
+        self.request = self.request.sort_field(sort_field);
+        self
+    }
+
+    /// 设置排序方向
+    pub fn sort_order(mut self, sort_order: impl Into<String>) -> Self {
+        self.request = self.request.sort_order(sort_order);
+        self
+    }
+
+    /// 设置分页大小
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.request = self.request.page_size(page_size);
+        self
+    }
+
+    /// 设置页面标记
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.request = self.request.page_token(page_token);
+        self
+    }
+
+    /// 执行文档列表查询操作
+    ///
+    /// # 参数
+    /// - `service`: 文档管理服务实例
+    ///
+    /// # 返回值
+    /// 返回符合条件的文档列表
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::{DocumentService, ListDocumentsBuilder};
+    ///
+    /// let service = DocumentService::new(config);
+    ///
+    /// let result = ListDocumentsBuilder::new()
+    ///     .keyword("项目计划")
+    ///     .page_size(20)
+    ///     .sort_field("update_time")
+    ///     .sort_order("desc")
+    ///     .execute(&service)
+    ///     .await?;
+    /// ```
+    pub async fn execute(self, service: &DocumentService) -> SDKResult<DocumentListResponse> {
+        service.list_documents(&self.request).await
     }
 }
 
@@ -801,13 +2129,137 @@ impl DocumentService {
     /// # 示例
     ///
     /// ```rust
-    /// use open_lark::service::docx::v1::document::DocumentService;
+    /// use open_lark::service::docs::v1::document::DocumentService;
     ///
     /// let service = DocumentService::new(config);
     /// let builder = service.get_document_builder();
     /// ```
     pub fn get_document_builder(&self) -> GetDocumentBuilder {
         GetDocumentBuilder::new()
+    }
+
+    /// 创建删除文档构建器
+    ///
+    /// # 参数
+    /// - `document_id`: 文档ID
+    ///
+    /// # 返回值
+    /// 返回删除文档构建器实例
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::DocumentService;
+    ///
+    /// let service = DocumentService::new(config);
+    /// let builder = service.delete_document_builder("doc_123");
+    /// ```
+    pub fn delete_document_builder(&self, document_id: impl Into<String>) -> DeleteDocumentBuilder {
+        DeleteDocumentBuilder::new(document_id)
+    }
+
+    /// 创建获取文档块构建器
+    ///
+    /// # 参数
+    /// - `document_id`: 文档ID
+    ///
+    /// # 返回值
+    /// 返回获取文档块构建器实例
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::DocumentService;
+    ///
+    /// let service = DocumentService::new(config);
+    /// let builder = service.get_blocks_builder("doc_123")
+    ///     .page_size(20);
+    /// ```
+    pub fn get_blocks_builder(&self, document_id: impl Into<String>) -> GetDocumentBlocksBuilder {
+        GetDocumentBlocksBuilder::new(document_id)
+    }
+
+    /// 创建文档块构建器
+    ///
+    /// # 参数
+    /// - `document_id`: 文档ID
+    /// - `block_id`: 父块ID
+    /// - `index`: 块索引位置
+    ///
+    /// # 返回值
+    /// 返回创建文档块构建器实例
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::DocumentService;
+    ///
+    /// let service = DocumentService::new(config);
+    /// let builder = service.create_block_builder("doc_123", 123456, 0);
+    /// ```
+    pub fn create_block_builder(&self, document_id: impl Into<String>, block_id: i64, index: i32) -> CreateDocumentBlockBuilder {
+        CreateDocumentBlockBuilder::new(document_id, block_id, index)
+    }
+
+    /// 更新文档块构建器
+    ///
+    /// # 参数
+    /// - `document_id`: 文档ID
+    /// - `block_id`: 块ID
+    /// - `block`: 块内容
+    ///
+    /// # 返回值
+    /// 返回更新文档块构建器实例
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::{DocumentService, DocumentBlock};
+    ///
+    /// let service = DocumentService::new(config);
+    /// let block = DocumentBlock::new();
+    /// let builder = service.update_block_builder("doc_123", 123456, block);
+    /// ```
+    pub fn update_block_builder(&self, document_id: impl Into<String>, block_id: i64, block: DocumentBlock) -> UpdateDocumentBlockBuilder {
+        UpdateDocumentBlockBuilder::new(document_id, block_id, block)
+    }
+
+    /// 删除文档块构建器
+    ///
+    /// # 参数
+    /// - `document_id`: 文档ID
+    /// - `block_id`: 块ID
+    ///
+    /// # 返回值
+    /// 返回删除文档块构建器实例
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::DocumentService;
+    ///
+    /// let service = DocumentService::new(config);
+    /// let builder = service.delete_block_builder("doc_123", 123456);
+    /// ```
+    pub fn delete_block_builder(&self, document_id: impl Into<String>, block_id: i64) -> DeleteDocumentBlockBuilder {
+        DeleteDocumentBlockBuilder::new(document_id, block_id)
+    }
+
+    /// 文档列表查询构建器
+    ///
+    /// # 返回值
+    /// 返回文档列表查询构建器实例
+    ///
+    /// # 示例
+    ///
+    /// ```rust
+    /// use open_lark::service::docs::v1::document::DocumentService;
+    ///
+    /// let service = DocumentService::new(config);
+    /// let builder = service.list_documents_builder();
+    /// ```
+    pub fn list_documents_builder(&self) -> ListDocumentsBuilder {
+        ListDocumentsBuilder::new()
     }
 }
 

@@ -36,7 +36,7 @@ pub mod ccm;
 
 // Re-export service types for convenience
 #[cfg(feature = "docs")]
-pub use docs::DocxService;
+pub use docs::DocsService;
 
 #[cfg(feature = "sheets")]
 pub use sheets::SheetsService;
