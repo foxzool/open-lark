@@ -29,6 +29,18 @@ pub mod bitable;
 #[cfg(feature = "ccm")]
 pub mod ccm;
 
+// Backward compatibility: provide docs module alias
+#[cfg(all(feature = "docs", feature = "ccm"))]
+pub mod docs {
+    pub use crate::ccm::doc::*;
+}
+
+// If docs is enabled but ccm is not, provide direct doc module
+#[cfg(all(feature = "docs", not(feature = "ccm")))]
+pub mod docs {
+    pub use crate::ccm::doc::*;
+}
+
 // Interactive card components
 #[cfg(feature = "cardkit")]
 pub mod cardkit;
