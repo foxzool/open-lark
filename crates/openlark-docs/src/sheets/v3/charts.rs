@@ -7,22 +7,19 @@
 //! - 数据范围和系列配置
 
 use openlark_core::{
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    endpoints_original::Endpoints,
+    api_resp::{ApiResponseTrait, ResponseFormat},
     error::LarkAPIError,
     http::Transport,
-    req_option::RequestOption,
-    standard_response::StandardResponse,
     api_req::ApiRequest,
-    SDKResult,
 };
 
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use reqwest::Method;
 
-use openlark_core::error::LarkAPIError;
+// 使用统一类型定义
+use super::Range;
+
 
 
 /// 图表类型
@@ -454,13 +451,13 @@ impl ChartConfig {
     /// 验证图表配置
     pub fn validate(&self) -> Result<(), LarkAPIError> {
         if self.sheet_id.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "工作表ID不能为空".to_string(),
             ));
         }
 
         if self.series.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "至少需要一个数据系列".to_string(),
             ));
         }
@@ -468,7 +465,7 @@ impl ChartConfig {
         // 验证系列配置
         for series in &self.series {
             if series.name.is_empty() {
-                return Err(LarkAPIError::InvalidParameter(
+                return Err(LarkAPIError::IllegalParamError(
                     "系列名称不能为空".to_string(),
                 ));
             }
@@ -476,7 +473,7 @@ impl ChartConfig {
 
         if let Some(ref position) = self.position {
             if position.width == 0 || position.height == 0 {
-                return Err(LarkAPIError::InvalidParameter(
+                return Err(LarkAPIError::IllegalParamError(
                     "图表宽度和高度必须大于0".to_string(),
                 ));
             }
@@ -584,21 +581,21 @@ impl CreateChartRequestBuilder {
     pub fn build(self) -> Result<CreateChartRequest, LarkAPIError> {
         let spreadsheet_token = self
             .spreadsheet_token
-            .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("电子表格ID不能为空".to_string()))?;
 
         let chart_type = self
             .chart_type
-            .ok_or_else(|| LarkAPIError::InvalidParameter("图表类型不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("图表类型不能为空".to_string()))?;
 
         let sheet_id = self
             .sheet_id
-            .ok_or_else(|| LarkAPIError::InvalidParameter("工作表ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("工作表ID不能为空".to_string()))?;
 
         let data_range = self
             .data_range
-            .ok_or_else(|| LarkAPIError::InvalidParameter("数据范围不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("数据范围不能为空".to_string()))?;
 
-        let mut chart_config = Chartopenlark_core::config::Config::new(chart_type, sheet_id, data_range, self.series);
+        let mut chart_config = ChartConfig::new(chart_type, sheet_id, data_range, self.series);
 
         if let Some(sub_type) = self.chart_sub_type {
             chart_config = chart_config.sub_type(sub_type);
@@ -628,6 +625,13 @@ pub struct CreateChartResponse {
     /// 图表配置
     #[serde(rename = "chart_config")]
     pub chart_config: ChartConfig,
+}
+
+// 实现API响应特征
+impl ApiResponseTrait for CreateChartResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 /// 删除图表请求
@@ -680,11 +684,11 @@ impl DeleteChartRequestBuilder {
     pub fn build(self) -> Result<DeleteChartRequest, LarkAPIError> {
         let spreadsheet_token = self
             .spreadsheet_token
-            .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("电子表格ID不能为空".to_string()))?;
 
         let chart_id = self
             .chart_id
-            .ok_or_else(|| LarkAPIError::InvalidParameter("图表ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("图表ID不能为空".to_string()))?;
 
         Ok(DeleteChartRequest {
             spreadsheet_token,
@@ -698,6 +702,13 @@ impl DeleteChartRequestBuilder {
 pub struct DeleteChartResponse {
     /// 是否成功删除
     pub success: bool,
+}
+
+// 实现API响应特征
+impl ApiResponseTrait for DeleteChartResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 /// Sheets电子表格图表服务 v3
@@ -729,17 +740,17 @@ impl ChartService {
     /// use open_lark::service::sheets::v3::models::Range;
     ///
     /// // 创建数据范围
-    /// let data_range = Range::new("A1".to_string(), "B10".to_string());
+    /// let data_range = Range::from("A1".to_string(), "B10".to_string());
     ///
     /// // 创建数据系列
     /// let series1 = ChartSeries::new(
     ///     "销售额".to_string(),
-    ///     Range::new("A1".to_string(), "A10".to_string())
+    ///     Range::from("A1".to_string(), "A10".to_string())
     /// ).color("#FF0000".to_string());
     ///
     /// let series2 = ChartSeries::new(
     ///     "利润".to_string(),
-    ///     Range::new("B1".to_string(), "B10".to_string())
+    ///     Range::from("B1".to_string(), "B10".to_string())
     /// ).color("#00FF00".to_string());
     ///
     /// // 设置图表位置
@@ -763,36 +774,34 @@ impl ChartService {
         &self,
         request: &CreateChartRequest,
     ) -> openlark_core::error::SDKResult<CreateChartResponse> {
-        let url = format!(
-            "{}/open-apis/sheets/v3/spreadsheets/{}/charts",
-            self.config.base_url, request.spreadsheet_token
+        use openlark_core::{
+            api_req::ApiRequest,
+            http::Transport,
+            api_resp::BaseResponse,
+            error::LarkAPIError,
+        };
+
+        let endpoint = format!(
+            "/open-apis/sheets/v3/spreadsheets/{}/charts",
+            request.spreadsheet_token
         );
 
-        let transport = HttpTransport::new(&self.config);
-        let response = transport
-            .post(&url, Some(request))
-            .await
-            .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
+        let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
+        api_request.body = serde_json::to_vec(request)?;
 
-        let create_response: openlark_core::response::BaseResponse<CreateChartResponse> =
-            serde_json::from_str(
-                &response
-                    .text()
-                    .await
-                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
-            )
-            .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
+        let response: BaseResponse<CreateChartResponse> = Transport::request(api_request, &self.config, None).await?;
 
-        if create_response.code != 0 {
-            return Err(LarkAPIError::APIError(
-                create_response.msg,
-                create_response.code,
-            ));
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None,
+            });
         }
 
-        create_response
+        response
             .data
-            .ok_or_else(|| LarkAPIError::APIError("响应数据为空".to_string(), -1))
+            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
     }
 
     /// 删除图表
@@ -824,36 +833,33 @@ impl ChartService {
         &self,
         request: &DeleteChartRequest,
     ) -> openlark_core::error::SDKResult<DeleteChartResponse> {
-        let url = format!(
-            "{}/open-apis/sheets/v3/spreadsheets/{}/charts/{}",
-            self.config.base_url, request.spreadsheet_token, request.chart_id
+        use openlark_core::{
+            api_req::ApiRequest,
+            http::Transport,
+            api_resp::BaseResponse,
+            error::LarkAPIError,
+        };
+
+        let endpoint = format!(
+            "/open-apis/sheets/v3/spreadsheets/{}/charts/{}",
+            request.spreadsheet_token, request.chart_id
         );
 
-        let transport = HttpTransport::new(&self.config);
-        let response = transport
-            .delete(&url)
-            .await
-            .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
+        let api_request = ApiRequest::with_method_and_path(Method::DELETE, &endpoint);
 
-        let delete_response: openlark_core::response::BaseResponse<DeleteChartResponse> =
-            serde_json::from_str(
-                &response
-                    .text()
-                    .await
-                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
-            )
-            .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
+        let response: BaseResponse<DeleteChartResponse> = Transport::request(api_request, &self.config, None).await?;
 
-        if delete_response.code != 0 {
-            return Err(LarkAPIError::APIError(
-                delete_response.msg,
-                delete_response.code,
-            ));
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None,
+            });
         }
 
-        delete_response
+        response
             .data
-            .ok_or_else(|| LarkAPIError::APIError("响应数据为空".to_string(), -1))
+            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
     }
 
     /// 创建图表构建器
@@ -914,7 +920,7 @@ mod tests {
     fn test_chart_series_creation() {
         use super::super::models::Range;
 
-        let data_range = Range::new("A1".to_string(), "A10".to_string());
+        let data_range = Range::from("A1".to_string(), "A10".to_string());
         let series = ChartSeries::new("销售额".to_string(), data_range)
             .color("#FF0000".to_string())
             .add_style("line_width".to_string(), "3".to_string());
@@ -964,17 +970,17 @@ mod tests {
     fn test_chart_config_creation() {
         use super::super::models::Range;
 
-        let data_range = Range::new("A1".to_string(), "B10".to_string());
+        let data_range = Range::from("A1".to_string(), "B10".to_string());
         let series1 = ChartSeries::new(
             "销售额".to_string(),
-            Range::new("A1".to_string(), "A10".to_string()),
+            Range::from("A1".to_string(), "A10".to_string()),
         );
         let series2 = ChartSeries::new(
             "利润".to_string(),
-            Range::new("B1".to_string(), "B10".to_string()),
+            Range::from("B1".to_string(), "B10".to_string()),
         );
 
-        let config = Chartopenlark_core::config::Config::new(
+        let config = openlark_core::config::Config::new(
             ChartType::Column,
             "sheet123".to_string(),
             data_range,
@@ -995,14 +1001,14 @@ mod tests {
     fn test_chart_config_validation() {
         use super::super::models::Range;
 
-        let data_range = Range::new("A1".to_string(), "B10".to_string());
+        let data_range = Range::from("A1".to_string(), "B10".to_string());
         let series = ChartSeries::new(
             "销售额".to_string(),
-            Range::new("A1".to_string(), "A10".to_string()),
+            Range::from("A1".to_string(), "A10".to_string()),
         );
 
         // 测试有效配置
-        let valid_config = Chartopenlark_core::config::Config::new(
+        let valid_config = openlark_core::config::Config::new(
             ChartType::Line,
             "sheet123".to_string(),
             data_range,
@@ -1011,19 +1017,19 @@ mod tests {
         assert!(valid_config.validate().is_ok());
 
         // 测试空工作表ID
-        let invalid_config = Chartopenlark_core::config::Config::new(
+        let invalid_config = openlark_core::config::Config::new(
             ChartType::Line,
             "".to_string(),
-            Range::new("A1".to_string(), "B10".to_string()),
+            Range::from("A1".to_string(), "B10".to_string()),
             vec![],
         );
         assert!(invalid_config.validate().is_err());
 
         // 测试空系列列表
-        let invalid_config2 = Chartopenlark_core::config::Config::new(
+        let invalid_config2 = openlark_core::config::Config::new(
             ChartType::Line,
             "sheet123".to_string(),
-            Range::new("A1".to_string(), "B10".to_string()),
+            Range::from("A1".to_string(), "B10".to_string()),
             vec![],
         );
         assert!(invalid_config2.validate().is_err());
@@ -1033,10 +1039,10 @@ mod tests {
     fn test_create_chart_request_builder() {
         use super::super::models::Range;
 
-        let data_range = Range::new("A1".to_string(), "B10".to_string());
+        let data_range = Range::from("A1".to_string(), "B10".to_string());
         let series = ChartSeries::new(
             "销售额".to_string(),
-            Range::new("A1".to_string(), "A10".to_string()),
+            Range::from("A1".to_string(), "A10".to_string()),
         );
 
         let request = CreateChartRequest::builder()
@@ -1089,10 +1095,10 @@ mod tests {
             .spreadsheet_token("token123".to_string())
             .chart_type(ChartType::Column)
             .sheet_id("sheet123".to_string())
-            .data_range(Range::new("A1".to_string(), "B10".to_string()))
+            .data_range(Range::from("A1".to_string(), "B10".to_string()))
             .add_series(ChartSeries::new(
                 "销售额".to_string(),
-                Range::new("A1".to_string(), "A10".to_string()),
+                Range::from("A1".to_string(), "A10".to_string()),
             ))
             .position(ChartPosition::new(1, 3, 8, 10))
             .build()
@@ -1108,10 +1114,10 @@ mod tests {
             .spreadsheet_token("token123".to_string())
             .chart_type(ChartType::Line)
             .sheet_id("sheet123".to_string())
-            .data_range(Range::new("A1".to_string(), "B10".to_string()))
+            .data_range(Range::from("A1".to_string(), "B10".to_string()))
             .add_series(ChartSeries::new(
                 "趋势".to_string(),
-                Range::new("A1".to_string(), "A10".to_string()),
+                Range::from("A1".to_string(), "A10".to_string()),
             ))
             .style(ChartStyle::new())
             .build()
@@ -1124,10 +1130,10 @@ mod tests {
             .spreadsheet_token("token123".to_string())
             .chart_type(ChartType::Pie)
             .sheet_id("sheet123".to_string())
-            .data_range(Range::new("A1".to_string(), "B10".to_string()))
+            .data_range(Range::from("A1".to_string(), "B10".to_string()))
             .add_series(ChartSeries::new(
                 "占比".to_string(),
-                Range::new("A1".to_string(), "A10".to_string()),
+                Range::from("A1".to_string(), "A10".to_string()),
             ))
             .sub_type(ChartSubType::TwoD)
             .build()
@@ -1144,19 +1150,19 @@ mod tests {
             .spreadsheet_token("token123".to_string())
             .chart_type(ChartType::Combo)
             .sheet_id("sheet123".to_string())
-            .data_range(Range::new("A1".to_string(), "C10".to_string()))
+            .data_range(Range::from("A1".to_string(), "C10".to_string()))
             .series(vec![
                 ChartSeries::new(
                     "销售额".to_string(),
-                    Range::new("A1".to_string(), "A10".to_string()),
+                    Range::from("A1".to_string(), "A10".to_string()),
                 ),
                 ChartSeries::new(
                     "利润".to_string(),
-                    Range::new("B1".to_string(), "B10".to_string()),
+                    Range::from("B1".to_string(), "B10".to_string()),
                 ),
                 ChartSeries::new(
                     "成本".to_string(),
-                    Range::new("C1".to_string(), "C10".to_string()),
+                    Range::from("C1".to_string(), "C10".to_string()),
                 ),
             ])
             .style(
@@ -1178,10 +1184,10 @@ mod tests {
     fn test_chart_serialization() {
         use serde_json;
 
-        let config = Chartopenlark_core::config::Config::new(
+        let config = openlark_core::config::Config::new(
             ChartType::Column,
             "sheet123".to_string(),
-            super::super::models::Range::new("A1".to_string(), "B10".to_string()),
+            super::super::models::Range::from("A1".to_string(), "B10".to_string()),
             vec![],
         );
         let json = serde_json::to_string(&config).unwrap();
@@ -1205,13 +1211,13 @@ mod tests {
         ];
 
         for chart_type in chart_types {
-            let config = Chartopenlark_core::config::Config::new(
+            let config = openlark_core::config::Config::new(
                 chart_type,
                 "sheet123".to_string(),
-                super::super::models::Range::new("A1".to_string(), "B10".to_string()),
+                super::super::models::Range::from("A1".to_string(), "B10".to_string()),
                 vec![ChartSeries::new(
                     "test".to_string(),
-                    super::super::models::Range::new("A1".to_string(), "A10".to_string()),
+                    super::super::models::Range::from("A1".to_string(), "A10".to_string()),
                 )],
             );
             assert!(config.validate().is_ok());

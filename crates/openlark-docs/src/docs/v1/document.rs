@@ -572,9 +572,10 @@ impl DocumentService {
         );
 
         // 构建API路径，替换两个路径参数
-        let endpoint = openlark_core::endpoints_original::Endpoints::DOCX_V1_CHAT_ANNOUNCEMENT_BLOCK
-            .replace("{}", &req.chat_id)
-            .replace("{}", &req.block_id);
+        let endpoint = format!(
+            "/open-apis/docx/v1/chats/{}/announcement/blocks/{}",
+            req.chat_id, req.block_id
+        );
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,

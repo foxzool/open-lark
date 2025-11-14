@@ -1,11 +1,24 @@
 //! Sheets电子表格服务 v3
 //!
-//! 提供飞书电子表格v3版本的完整管理功能，包括：
-//! - 创建和删除电子表格
-//! - 电子表格信息查询和管理
-//! - 工作表操作和单元格管理
-//! - 数据格式化和样式设置
-//! - 筛选视图和筛选条件管理
+//! 提供飞书电子表格v3版本的完整管理功能。
+
+// ============================================================================
+// 统一类型定义
+// ============================================================================
+
+/// 范围类型 - 统一定义避免模块间冲突
+pub type Range = String;
+
+/// 电子表格令牌类型
+pub type SpreadsheetToken = String;
+
+/// 工作表ID类型
+pub type SheetId = String;
+
+use openlark_core::{
+    config::Config,
+    trait_system::Service,
+};
 
 pub mod charts;
 pub mod comments;
@@ -24,6 +37,7 @@ pub mod spreadsheet_create;
 pub mod spreadsheet_info;
 
 // 重新导出所有服务类型
+#[allow(ambiguous_glob_reexports)]
 pub use charts::*;
 pub use comments::*;
 pub use conditional_format::*;
@@ -40,94 +54,21 @@ pub use spreadsheet::*;
 pub use spreadsheet_create::*;
 pub use spreadsheet_info::*;
 
-use openlark_core::{
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    endpoints_original::Endpoints,
-    error::LarkAPIError,
-    http::Transport,
-    req_option::RequestOption,
-    standard_response::StandardResponse,
-    api_req::ApiRequest,
-    SDKResult,
-};
-
-
-/// Sheets电子表格服务 v3版本
-///
-/// 提供飞书电子表格v3版本的统一入口，支持现代化的电子表格管理。
-/// 包括创建、编辑、格式化、数据验证、筛选视图、数据过滤器、条件格式、图表、数据透视表、查找替换、评论协作、宏自动化、工作表保护、行列移动、浮动图片等企业级功能。
+/// Sheets v3 服务主结构
 #[derive(Debug, Clone)]
-pub struct SheetsServiceV3 {
+pub struct SheetsV3Service {
+    /// 配置信息
     config: Config,
-    /// 电子表格管理服务
-    pub spreadsheet: SpreadsheetService,
-    /// 电子表格创建服务
-    pub spreadsheet_create: SpreadsheetCreateService,
-    /// 工作表管理服务
-    pub sheet: SheetService,
-    /// 筛选视图管理服务
-    pub filter_views: FilterViewsService,
-    /// 数据过滤器管理服务
-    pub data_filter: DataFilterService,
-    /// 条件格式管理服务
-    pub conditional_format: ConditionalFormatService,
-    /// 图表管理服务
-    pub charts: ChartService,
-    /// 数据透视表管理服务
-    pub pivot_tables: PivotTableService,
-    /// 查找和替换服务
-    pub find_replace: FindReplaceService,
-    /// 评论协作服务
-    pub comments: CommentService,
-    /// 宏自动化服务
-    pub macros: MacroService,
-    /// 工作表保护服务
-    pub sheet_protection: SheetProtectionService,
-    /// 行列移动服务
-    pub move_dimension: MoveDimensionService,
-    /// 浮动图片管理服务
-    pub float_images: FloatImagesService,
 }
 
-impl SheetsServiceV3 {
-    /// 创建Sheets v3服务实例
-    ///
-    /// # 参数
-    /// - `config`: SDK配置信息
-    ///
-    /// # 示例
-    ///
-    /// ```rust
-    /// use open_lark::prelude::*;
-    /// use open_lark::service::sheets::v3::SheetsServiceV3;
-    ///
-    /// let config = openlark_core::config::Config::new("app_id", "app_secret");
-    /// let service = SheetsServiceV3::new(config);
-    /// ```
+impl SheetsV3Service {
+    /// 创建新的 Sheets v3 服务实例
     pub fn new(config: Config) -> Self {
-        Self {
-            config: config.clone(),
-            spreadsheet: SpreadsheetService::new(config.clone()),
-            spreadsheet_create: SpreadsheetCreateService::new(config.clone()),
-            sheet: SheetService::new(config.clone()),
-            filter_views: FilterViewsService::new(config.clone()),
-            data_filter: DataFilterService::new(config.clone()),
-            conditional_format: ConditionalFormatService::new(config.clone()),
-            charts: ChartService::new(config.clone()),
-            pivot_tables: PivotTableService::new(config.clone()),
-            find_replace: FindReplaceService::new(config.clone()),
-            comments: CommentService::new(config.clone()),
-            macros: MacroService::new(config.clone()),
-            sheet_protection: SheetProtectionService::new(config.clone()),
-            move_dimension: MoveDimensionService::new(config.clone()),
-            float_images: FloatImagesService::new(config),
-        }
+        Self { config }
     }
 }
 
-impl openlark_core::core::trait_system::Service for SheetsServiceV3 {
+impl Service for SheetsV3Service {
     fn config(&self) -> &Config {
         &self.config
     }
@@ -136,197 +77,29 @@ impl openlark_core::core::trait_system::Service for SheetsServiceV3 {
     where
         Self: Sized,
     {
-        "SheetsServiceV3"
+        "SheetsV3Service"
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use openlark_core::trait_system::Service;
 
     #[test]
     fn test_sheets_v3_service_creation() {
-        let config = openlark_core::config::Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build();
-        let service = SheetsServiceV3::new(config);
-        assert!(!format!("{:?}", service).is_empty());
+        let config = Config::default();
+        let service = SheetsV3Service::new(config);
+        assert_eq!(service.service_name(), "SheetsV3Service");
     }
 
     #[test]
-    fn test_v3_service_trait_implementation() {
-        let config = openlark_core::config::Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build();
-        let service = SheetsServiceV3::new(config);
+    fn test_type_aliases() {
+        let range: Range = "A1:B10".to_string();
+        let token: SpreadsheetToken = "sheet_token_123".to_string();
+        let sheet_id: SheetId = "sheet_id_456".to_string();
 
-        // 测试Service trait的实现
-        let config_ref = service.config();
-        assert_eq!(config_ref.app_id, "test_app_id");
-    }
-
-    #[test]
-    fn test_spreadsheet_service_available() {
-        let config = openlark_core::config::Config::default();
-        let service = SheetsServiceV3::new(config);
-
-        // 验证spreadsheet服务可用
-        let spreadsheet_service_str = format!("{:?}", service.spreadsheet);
-        assert!(!spreadsheet_service_str.is_empty());
-    }
-
-    #[test]
-    fn test_filter_views_service_available() {
-        let config = openlark_core::config::Config::default();
-        let service = SheetsServiceV3::new(config);
-
-        // 验证filter_views服务可用
-        let filter_views_service_str = format!("{:?}", service.filter_views);
-        assert!(!filter_views_service_str.is_empty());
-    }
-
-    #[test]
-    fn test_data_filter_service_available() {
-        let config = openlark_core::config::Config::default();
-        let service = SheetsServiceV3::new(config);
-
-        // 验证data_filter服务可用
-        let data_filter_service_str = format!("{:?}", service.data_filter);
-        assert!(!data_filter_service_str.is_empty());
-    }
-
-    #[test]
-    fn test_conditional_format_service_available() {
-        let config = openlark_core::config::Config::default();
-        let service = SheetsServiceV3::new(config);
-
-        // 验证conditional_format服务可用
-        let conditional_format_service_str = format!("{:?}", service.conditional_format);
-        assert!(!conditional_format_service_str.is_empty());
-    }
-
-    #[test]
-    fn test_charts_service_available() {
-        let config = openlark_core::config::Config::default();
-        let service = SheetsServiceV3::new(config);
-
-        // 验证charts服务可用
-        let charts_service_str = format!("{:?}", service.charts);
-        assert!(!charts_service_str.is_empty());
-    }
-
-    #[test]
-    fn test_pivot_tables_service_available() {
-        let config = openlark_core::config::Config::default();
-        let service = SheetsServiceV3::new(config);
-
-        // 验证pivot_tables服务可用
-        let pivot_tables_service_str = format!("{:?}", service.pivot_tables);
-        assert!(!pivot_tables_service_str.is_empty());
-    }
-
-    #[test]
-    fn test_find_replace_service_available() {
-        let config = openlark_core::config::Config::default();
-        let service = SheetsServiceV3::new(config);
-
-        // 验证find_replace服务可用
-        let find_replace_service_str = format!("{:?}", service.find_replace);
-        assert!(!find_replace_service_str.is_empty());
-    }
-
-    #[test]
-    fn test_comments_service_available() {
-        let config = openlark_core::config::Config::default();
-        let service = SheetsServiceV3::new(config);
-
-        // 验证comments服务可用
-        let comments_service_str = format!("{:?}", service.comments);
-        assert!(!comments_service_str.is_empty());
-    }
-
-    #[test]
-    fn test_macros_service_available() {
-        let config = openlark_core::config::Config::default();
-        let service = SheetsServiceV3::new(config);
-
-        // 验证macros服务可用
-        let macros_service_str = format!("{:?}", service.macros);
-        assert!(!macros_service_str.is_empty());
-    }
-
-    #[test]
-    fn test_sheet_protection_service_available() {
-        let config = openlark_core::config::Config::default();
-        let service = SheetsServiceV3::new(config);
-
-        // 验证sheet_protection服务可用
-        let sheet_protection_service_str = format!("{:?}", service.sheet_protection);
-        assert!(!sheet_protection_service_str.is_empty());
-    }
-
-    #[test]
-    fn test_move_dimension_service_available() {
-        let config = openlark_core::config::Config::default();
-        let service = SheetsServiceV3::new(config);
-
-        // 验证move_dimension服务可用
-        let move_dimension_service_str = format!("{:?}", service.move_dimension);
-        assert!(!move_dimension_service_str.is_empty());
-    }
-
-    #[test]
-    fn test_float_images_service_available() {
-        let config = openlark_core::config::Config::default();
-        let service = SheetsServiceV3::new(config);
-
-        // 验证float_images服务可用
-        let float_images_service_str = format!("{:?}", service.float_images);
-        assert!(!float_images_service_str.is_empty());
-    }
-
-    #[test]
-    fn test_spreadsheet_create_service_available() {
-        let config = openlark_core::config::Config::default();
-        let service = SheetsServiceV3::new(config);
-
-        // 验证spreadsheet服务可用
-        let spreadsheet_service_str = format!("{:?}", service.spreadsheet);
-        assert!(!spreadsheet_service_str.is_empty());
-
-        // 验证spreadsheet_create服务可用
-        let spreadsheet_create_service_str = format!("{:?}", service.spreadsheet_create);
-        assert!(!spreadsheet_create_service_str.is_empty());
-    }
-
-    #[test]
-    fn test_sheets_v3_complete_integration() {
-        let config = openlark_core::config::Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build();
-        let service = SheetsServiceV3::new(config);
-
-        // 验证所有服务都可用
-        assert!(!format!("{:?}", service.spreadsheet).is_empty());
-        assert!(!format!("{:?}", service.sheet).is_empty());
-        assert!(!format!("{:?}", service.filter_views).is_empty());
-        assert!(!format!("{:?}", service.data_filter).is_empty());
-        assert!(!format!("{:?}", service.conditional_format).is_empty());
-        assert!(!format!("{:?}", service.charts).is_empty());
-        assert!(!format!("{:?}", service.pivot_tables).is_empty());
-        assert!(!format!("{:?}", service.find_replace).is_empty());
-        assert!(!format!("{:?}", service.comments).is_empty());
-        assert!(!format!("{:?}", service.macros).is_empty());
-        assert!(!format!("{:?}", service.sheet_protection).is_empty());
-        assert!(!format!("{:?}", service.move_dimension).is_empty());
-        assert!(!format!("{:?}", service.float_images).is_empty());
-
-        // 验证服务名
-        assert_eq!(SheetsServiceV3::service_name(), "SheetsServiceV3");
-        assert_eq!(service.config().app_id, "test_app_id");
+        assert_eq!(range, "A1:B10");
+        assert_eq!(token, "sheet_token_123");
+        assert_eq!(sheet_id, "sheet_id_456");
     }
 }

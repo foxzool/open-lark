@@ -9,9 +9,11 @@ use openlark_core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
+    error::LarkAPIError,
     http::Transport,
     api_req::ApiRequest, SDKResult,
 };
+use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 /// 工作表信息
@@ -129,15 +131,13 @@ impl ApiResponseTrait for GetSheetResponse {
 /// 工作表管理服务
 #[derive(Debug, Clone)]
 pub struct SheetService {
-    transport: Transport,
+    config: Config,
 }
 
 impl SheetService {
     /// 创建工作表服务实例
     pub fn new(config: Config) -> Self {
-        Self {
-            transport: Transport::new(config, AccessTokenType::Tenant),
-        }
+        Self { config }
     }
 
     /// 获取电子表格下的所有工作表
@@ -166,15 +166,10 @@ impl SheetService {
             spreadsheet_token
         );
 
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: endpoint,
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_request = ApiRequest::with_method_and_path(Method::GET, &endpoint);
+        api_request.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        Transport::<QuerySheetsResponse>::request(api_req, &self.config, None).await
+        Transport::<QuerySheetsResponse>::request(api_request, &self.config, None).await
     }
 
     /// 获取单个工作表信息
@@ -198,7 +193,7 @@ impl SheetService {
         &self,
         spreadsheet_token: &str,
         sheet_id: &str,
-    ) -> SDKResult<BaseResponse<GetSheetResponse>> {
+    ) -> openlark_core::SDKResult<BaseResponse<GetSheetResponse>> {
         let endpoint = format!(
             "{}/{}/sheets/{}",
             openlark_core::endpoints_original::Endpoints::SHEETS_V3_SPREADSHEETS,
@@ -206,81 +201,82 @@ impl SheetService {
             sheet_id
         );
 
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: endpoint,
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_request = ApiRequest::with_method_and_path(Method::GET, &endpoint);
+        api_request.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        Transport::<GetSheetResponse>::request(api_req, &self.config, None).await
+        let response = Transport::<GetSheetResponse>::request(api_request, &self.config, None).await?;
+
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None,
+            });
+        }
+
+        Ok(response)
     }
 }
 
 /// 工作表查询构建器
 #[derive(Debug, Clone)]
 pub struct QuerySheetsBuilder {
-    transport: Transport,
+    service: SheetService,
     spreadsheet_token: String,
 }
 
 impl QuerySheetsBuilder {
     /// 创建新的查询构建器实例
-    pub fn new(transport: Transport, spreadsheet_token: &str) -> Self {
+    pub fn new(service: SheetService, spreadsheet_token: &str) -> Self {
         Self {
-            transport,
+            service,
             spreadsheet_token: spreadsheet_token.to_string(),
         }
     }
 
     /// 执行查询请求
     pub async fn execute(self) -> SDKResult<BaseResponse<QuerySheetsResponse>> {
-        let service = SheetService {
-            transport: self.transport,
-        };
-        service.query_sheets(&self.spreadsheet_token).await
+        self.service.query_sheets(&self.spreadsheet_token).await
     }
 }
 
 /// 工作表获取构建器
 #[derive(Debug, Clone)]
 pub struct GetSheetBuilder {
-    transport: Transport,
+    service: SheetService,
     spreadsheet_token: String,
     sheet_id: String,
 }
 
 impl GetSheetBuilder {
-    /// 创建新的获取构建器实例
-    pub fn new(transport: Transport, spreadsheet_token: &str, sheet_id: &str) -> Self {
-        Self {
-            transport,
-            spreadsheet_token: spreadsheet_token.to_string(),
-            sheet_id: sheet_id.to_string(),
-        }
-    }
-
     /// 执行获取请求
-    pub async fn execute(self) -> SDKResult<BaseResponse<GetSheetResponse>> {
-        let service = SheetService {
-            transport: self.transport,
-        };
-        service
+    pub async fn execute(self) -> openlark_core::SDKResult<BaseResponse<GetSheetResponse>> {
+        Ok(self.service
             .get_sheet(&self.spreadsheet_token, &self.sheet_id)
-            .await
+            .await?)
     }
 }
 
 impl SheetService {
     /// 创建工作表查询构建器
     pub fn query_sheets_builder(&self, spreadsheet_token: &str) -> QuerySheetsBuilder {
-        QuerySheetsBuilder::new(self.transport.clone(), spreadsheet_token)
+        QuerySheetsBuilder {
+            service: SheetService {
+                config: self.config.clone(),
+            },
+            spreadsheet_token: spreadsheet_token.to_string(),
+        }
     }
 
     /// 创建工作表获取构建器
     pub fn get_sheet_builder(&self, spreadsheet_token: &str, sheet_id: &str) -> GetSheetBuilder {
-        GetSheetBuilder::new(self.transport.clone(), spreadsheet_token, sheet_id)
+        GetSheetBuilder {
+            service: SheetService {
+                config: self.config.clone(),
+            },
+            spreadsheet_token: spreadsheet_token.to_string(),
+            sheet_id: sheet_id.to_string(),
+        }
     }
 
     /// 查找单元格
@@ -310,7 +306,7 @@ impl SheetService {
         spreadsheet_token: &str,
         sheet_id: &str,
         request: &FindCellsRequest,
-    ) -> SDKResult<BaseResponse<FindCellsResponse>> {
+    ) -> openlark_core::SDKResult<BaseResponse<FindCellsResponse>> {
         let endpoint = format!(
             "{}/{}/sheets/{}/find",
             openlark_core::endpoints_original::Endpoints::SHEETS_V3_SPREADSHEETS,
@@ -318,20 +314,32 @@ impl SheetService {
             sheet_id
         );
 
-        let api_request = ApiRequest {
-            method: "POST".to_string(),
-            url: endpoint,
-            headers: vec![],
-            params: vec![],
-            body: Some(serde_json::to_value(request)?),
-        };
+        let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
+        api_request.body = serde_json::to_vec(request)?;
 
-        self.transport.request(&api_request).await
+        let response = Transport::<FindCellsResponse>::request(api_request, &self.config, None).await?;
+
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None,
+            });
+        }
+
+        Ok(response)
     }
 
     /// 创建查找单元格构建器
     pub fn find_cells_builder(&self, spreadsheet_token: &str, sheet_id: &str) -> FindCellsBuilder {
-        FindCellsBuilder::new(self.transport.clone(), spreadsheet_token, sheet_id)
+        FindCellsBuilder {
+            service: SheetService {
+                config: self.config.clone(),
+            },
+            spreadsheet_token: spreadsheet_token.to_string(),
+            sheet_id: sheet_id.to_string(),
+            request: FindCellsRequest::new(""),
+        }
     }
 }
 
@@ -457,17 +465,17 @@ impl ApiResponseTrait for FindCellsResponse {
 #[derive(Debug, Clone)]
 pub struct FindCellsBuilder {
     request: FindCellsRequest,
-    transport: Transport,
+    service: SheetService,
     spreadsheet_token: String,
     sheet_id: String,
 }
 
 impl FindCellsBuilder {
     /// 创建新的查找构建器实例
-    pub fn new(transport: Transport, spreadsheet_token: &str, sheet_id: &str) -> Self {
+    pub fn new(service: SheetService, spreadsheet_token: &str, sheet_id: &str) -> Self {
         Self {
             request: FindCellsRequest::new(""),
-            transport,
+            service,
             spreadsheet_token: spreadsheet_token.to_string(),
             sheet_id: sheet_id.to_string(),
         }
@@ -504,14 +512,12 @@ impl FindCellsBuilder {
     }
 
     /// 执行查找请求
-    pub async fn execute(self) -> SDKResult<BaseResponse<FindCellsResponse>> {
-        self.request.validate()?;
-        let service = SheetService {
-            transport: self.transport,
-        };
-        service
+    pub async fn execute(self) -> openlark_core::SDKResult<BaseResponse<FindCellsResponse>> {
+        self.request.validate()
+            .map_err(|msg| LarkAPIError::IllegalParamError(msg))?;
+        Ok(self.service
             .find_cells(&self.spreadsheet_token, &self.sheet_id, &self.request)
-            .await
+            .await?)
     }
 }
 
@@ -839,3 +845,4 @@ mod tests {
         assert_eq!(sheet.sheet_type, Some("object".to_string()));
     }
 }
+

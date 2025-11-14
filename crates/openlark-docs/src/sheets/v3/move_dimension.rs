@@ -8,22 +8,21 @@
 
 use openlark_core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    endpoints_original::Endpoints,
     error::LarkAPIError,
     http::Transport,
-    req_option::RequestOption,
-    standard_response::StandardResponse,
     api_req::ApiRequest,
-    SDKResult,
 };
+use reqwest::Method;
 
 use serde::{Deserialize, Serialize};
 
-use openlark_core::error::LarkAPIError;
-use openlark_core::http::{BaseResponse, Transport};
 use openlark_core::trait_system::Service;
+
+// v3模块核心类型定义
+pub type SpreadsheetToken = String;
+pub type SheetId = String;
+pub type CellValue = serde_json::Value;
+pub type SheetPagedResponse<T> = Vec<T>;
 
 /// 工作表行列移动服务
 ///
@@ -137,13 +136,13 @@ impl MoveDimensionRequestBuilder {
 
     /// 设置电子表格Token
     pub fn spreadsheet_token(mut self, spreadsheet_token: String) -> Self {
-        self.spreadsheet_token = Some(SpreadsheetToken::new(spreadsheet_token));
+        self.spreadsheet_token = Some(SpreadsheetToken::from(spreadsheet_token));
         self
     }
 
     /// 设置工作表ID
     pub fn sheet_id(mut self, sheet_id: String) -> Self {
-        self.sheet_id = Some(SheetId::new(sheet_id));
+        self.sheet_id = Some(SheetId::from(sheet_id));
         self
     }
 
@@ -209,18 +208,18 @@ impl MoveDimensionRequestBuilder {
             ) => {
                 // 验证维度类型
                 if dimension != "ROWS" && dimension != "COLUMNS" {
-                    return Err(openlark_core::SDKError::InvalidParameter(
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError(
                         "维度必须是ROWS或COLUMNS".to_string(),
                     ));
                 }
 
                 // 验证索引范围
                 if source_start < 0 || source_end < 0 || dest_index < 0 {
-                    return Err(openlark_core::SDKError::InvalidParameter("索引不能为负数".to_string()));
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError("索引不能为负数".to_string()));
                 }
 
                 if source_start > source_end {
-                    return Err(openlark_core::SDKError::InvalidParameter(
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError(
                         "源起始索引不能大于源结束索引".to_string(),
                     ));
                 }
@@ -228,7 +227,7 @@ impl MoveDimensionRequestBuilder {
                 // 验证移动范围大小（避免过大的操作）
                 let range_size = source_end - source_start + 1;
                 if range_size > 1000 {
-                    return Err(openlark_core::SDKError::InvalidParameter(
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError(
                         "单次移动范围不能超过1000行/列".to_string(),
                     ));
                 }
@@ -237,12 +236,12 @@ impl MoveDimensionRequestBuilder {
                     spreadsheet_token: self.spreadsheet_token.unwrap(),
                     sheet_id: self.sheet_id.unwrap(),
                     dimension: dimension.clone(),
-                    source_start_index: *source_start,
-                    source_end_index: *source_end,
-                    destination_index: *dest_index,
+                    source_start_index: source_start,
+                    source_end_index: source_end,
+                    destination_index: dest_index,
                 })
             }
-            _ => Err(openlark_core::SDKError::InvalidParameter(
+            _ => Err(openlark_core::error::LarkAPIError::IllegalParamError(
                 "电子表格Token、工作表ID、维度、源索引和目标索引都是必需的".to_string(),
             )),
         }
@@ -343,21 +342,23 @@ impl MoveDimensionService {
             request.sheet_id.as_str()
         );
 
-        let response = self
-            .config
-            .transport
-            .post(&url)
-            .json(request)
-            .send()
-            .await?;
+        // 创建HTTP请求并序列化请求体
+        let mut api_request = ApiRequest::with_method_and_path(Method::POST, &url);
+        api_request.body = serde_json::to_vec(request)?;
 
-        let base_resp: BaseResponse<MoveDimensionResponse> = response.json().await?;
+        // 发送请求并获取响应
+        let response = Transport::<MoveDimensionResponse>::request(api_request, &self.config, None).await?;
 
-        if let Some(err) = &base_resp.error {
-            return Err(openlark_core::SDKError::LarkAPIError(err.clone()));
+        // 检查响应是否成功
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None
+            });
         }
 
-        Ok(base_resp)
+        Ok(response)
     }
 
     /// 移动行构建器
@@ -443,13 +444,13 @@ pub struct MoveDimensionServiceBuilder<'a> {
 impl<'a> MoveDimensionServiceBuilder<'a> {
     /// 设置电子表格Token
     pub fn spreadsheet_token(mut self, spreadsheet_token: String) -> Self {
-        self.spreadsheet_token = Some(SpreadsheetToken::new(spreadsheet_token));
+        self.spreadsheet_token = Some(SpreadsheetToken::from(spreadsheet_token));
         self
     }
 
     /// 设置工作表ID
     pub fn sheet_id(mut self, sheet_id: String) -> Self {
-        self.sheet_id = Some(SheetId::new(sheet_id));
+        self.sheet_id = Some(SheetId::from(sheet_id));
         self
     }
 
@@ -495,10 +496,17 @@ impl<'a> MoveDimensionServiceBuilder<'a> {
 
                 self.service.move_dimension(&request).await
             }
-            _ => Err(openlark_core::SDKError::InvalidParameter(
+            _ => Err(openlark_core::error::LarkAPIError::IllegalParamError(
                 "电子表格Token、工作表ID、源范围和目标位置都是必需的".to_string(),
             )),
         }
+    }
+}
+
+// 为响应类型实现 ApiResponseTrait
+impl ApiResponseTrait for MoveDimensionResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 

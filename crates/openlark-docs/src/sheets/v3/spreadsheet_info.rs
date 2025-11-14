@@ -4,18 +4,16 @@
 //! 基于 metainfo.rs 的现代实现模式
 
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 
 use openlark_core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    error::LarkAPIError,
     http::Transport,
-    standard_response::StandardResponse,
     trait_system::Service,
     api_req::ApiRequest, SDKResult,
 };
+use reqwest::Method;
 
 // ============================================================================
 // 1. 数据结构定义
@@ -104,7 +102,7 @@ impl SpreadsheetInfoService {
             // 其他参数
         );
 
-        let mut api_req = ApiRequest::with_method(reqwest::Method::GET);
+        let mut api_req = ApiRequest::with_method(Method::GET);
         api_req.set_api_path(endpoint);
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
@@ -169,14 +167,14 @@ impl GetSpreadsheetInfoBuilder {
     }
 
     /// 设置字段（示例）
-    pub fn field_name(mut self, value: impl Into<String>) -> Self {
+    pub fn field_name(self, value: impl Into<String>) -> Self {
         // self.field = Some(value.into());
         self
     }
 
     /// 执行操作
     pub async fn execute(self) -> SDKResult<BaseResponse<SpreadsheetInfoResponse>> {
-        let mut request = SpreadsheetInfoRequest::new(/* 参数 */);
+        let request = SpreadsheetInfoRequest::new(/* 参数 */);
 
         // 设置请求字段
         // if let Some(value) = self.field {
@@ -200,7 +198,7 @@ impl SpreadsheetInfoRequest {
     }
 
     /// 设置字段（示例）
-    pub fn field_name(mut self, value: impl Into<String>) -> Self {
+    pub fn field_name(self, value: impl Into<String>) -> Self {
         // self.field = value.into();
         self
     }
@@ -213,7 +211,7 @@ impl SpreadsheetInfoRequest {
 
     /// 构建查询参数（如果需要）
     pub fn build_query_params(&self) -> String {
-        let mut params = Vec::new();
+        let params: Vec<String> = Vec::new();
 
         // 添加查询参数
         // if let Some(value) = &self.field {

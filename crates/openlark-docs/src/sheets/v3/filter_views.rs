@@ -693,7 +693,7 @@ impl FilterViewsService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateFilterViewResponse>> {
         if let Err(err) = request.validate() {
-            return Err(LarkAPIError::InvalidParameter(err));
+            return Err(LarkAPIError::IllegalParamError(err));
         }
 
         // 构建API请求
@@ -744,7 +744,7 @@ impl FilterViewsService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetFilterViewResponse>> {
         if let Err(err) = request.validate() {
-            return Err(LarkAPIError::InvalidParameter(err));
+            return Err(LarkAPIError::IllegalParamError(err));
         }
 
         // 构建API请求
@@ -799,7 +799,7 @@ impl FilterViewsService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UpdateFilterViewResponse>> {
         if let Err(err) = request.validate() {
-            return Err(LarkAPIError::InvalidParameter(err));
+            return Err(LarkAPIError::IllegalParamError(err));
         }
 
         // 构建API请求
@@ -849,7 +849,7 @@ impl FilterViewsService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<DeleteFilterViewResponse>> {
         if let Err(err) = request.validate() {
-            return Err(LarkAPIError::InvalidParameter(err));
+            return Err(LarkAPIError::IllegalParamError(err));
         }
 
         // 构建API请求
@@ -1473,5 +1473,280 @@ mod tests {
             .name("销售数据-筛选_2024")
             .add_condition(FilterCondition::new(0, FilterOperator::Equal).value("测试"));
         assert!(special_name.validate().is_ok());
+    }
+
+    /// 查询筛选视图
+    ///
+    /// 获取指定工作表中的所有筛选视图列表。
+    ///
+    /// # 参数
+    /// - `request`: 查询筛选视图请求
+    ///
+    /// # 返回
+    /// 返回筛选视图列表
+    pub async fn query_filter_views(
+        &self,
+        request: &QueryFilterViewsRequest,
+    ) -> openlark_core::error::SDKResult<QueryFilterViewsResponse> {
+        let endpoint = format!(
+            "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/query",
+            request.spreadsheet_token, request.sheet_id
+        );
+
+        let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::POST, &endpoint);
+        api_request.body = serde_json::to_vec(request)?;
+
+        let response: BaseResponse<QueryFilterViewsResponse> = Transport::request(api_request, &self.config, None).await?;
+
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None,
+            });
+        }
+
+        response
+            .data
+            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
+    }
+
+    /// 创建筛选视图条件
+    ///
+    /// 在指定筛选视图中添加新的筛选条件。
+    ///
+    /// # 参数
+    /// - `request`: 创建筛选视图条件请求
+    ///
+    /// # 返回
+    /// 返回创建后的筛选条件信息
+    pub async fn create_filter_view_condition(
+        &self,
+        request: &CreateFilterViewConditionRequest,
+    ) -> openlark_core::error::SDKResult<CreateFilterViewConditionResponse> {
+        let endpoint = format!(
+            "/open-apis/sheets/v3/spreadsheets/{}/filter_views/{}/conditions",
+            request.spreadsheet_token, request.filter_view_id
+        );
+
+        let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::POST, &endpoint);
+        api_request.body = serde_json::to_vec(request)?;
+
+        let response: BaseResponse<CreateFilterViewConditionResponse> = Transport::request(api_request, &self.config, None).await?;
+
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None,
+            });
+        }
+
+        response
+            .data
+            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
+    }
+
+    /// 更新筛选视图条件
+    ///
+    /// 更新指定筛选视图中的筛选条件。
+    ///
+    /// # 参数
+    /// - `request`: 更新筛选视图条件请求
+    ///
+    /// # 返回
+    /// 返回更新后的筛选条件信息
+    pub async fn update_filter_view_condition(
+        &self,
+        request: &UpdateFilterViewConditionRequest,
+    ) -> openlark_core::error::SDKResult<UpdateFilterViewConditionResponse> {
+        let endpoint = format!(
+            "/open-apis/sheets/v3/spreadsheets/{}/filter_views/{}/conditions/{}",
+            request.spreadsheet_token, request.filter_view_id, request.condition_id
+        );
+
+        let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::PUT, &endpoint);
+        api_request.body = serde_json::to_vec(request)?;
+
+        let response: BaseResponse<UpdateFilterViewConditionResponse> = Transport::request(api_request, &self.config, None).await?;
+
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None,
+            });
+        }
+
+        response
+            .data
+            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
+    }
+
+    /// 删除筛选视图条件
+    ///
+    /// 删除指定筛选视图中的筛选条件。
+    ///
+    /// # 参数
+    /// - `request`: 删除筛选视图条件请求
+    ///
+    /// # 返回
+    /// 返回删除结果
+    pub async fn delete_filter_view_condition(
+        &self,
+        request: &DeleteFilterViewConditionRequest,
+    ) -> openlark_core::error::SDKResult<DeleteFilterViewConditionResponse> {
+        let endpoint = format!(
+            "/open-apis/sheets/v3/spreadsheets/{}/filter_views/{}/conditions/{}",
+            request.spreadsheet_token, request.filter_view_id, request.condition_id
+        );
+
+        let api_request = ApiRequest::with_method_and_path(reqwest::Method::DELETE, &endpoint);
+
+        let response: BaseResponse<DeleteFilterViewConditionResponse> = Transport::request(api_request, &self.config, None).await?;
+
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None,
+            });
+        }
+
+        response
+            .data
+            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
+    }
+}
+
+// 新增缺失的请求和响应类型
+
+/// 查询筛选视图请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct QueryFilterViewsRequest {
+    /// 电子表格token
+    #[serde(rename = "spreadsheet_token")]
+    pub spreadsheet_token: String,
+    /// 工作表ID
+    #[serde(rename = "sheet_id")]
+    pub sheet_id: String,
+    /// 分页大小
+    #[serde(rename = "page_size")]
+    pub page_size: Option<i32>,
+    /// 页码
+    #[serde(rename = "page_token")]
+    pub page_token: Option<String>,
+}
+
+/// 查询筛选视图响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct QueryFilterViewsResponse {
+    /// 筛选视图列表
+    #[serde(rename = "filter_views")]
+    pub filter_views: Vec<FilterView>,
+    /// 是否有更多数据
+    #[serde(rename = "has_more")]
+    pub has_more: bool,
+    /// 下一页token
+    #[serde(rename = "page_token")]
+    pub page_token: Option<String>,
+}
+
+impl openlark_core::api_resp::ApiResponseTrait for QueryFilterViewsResponse {
+    fn data_format() -> openlark_core::api_resp::ResponseFormat {
+        openlark_core::api_resp::ResponseFormat::Data
+    }
+}
+
+/// 创建筛选视图条件请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateFilterViewConditionRequest {
+    /// 电子表格token
+    #[serde(rename = "spreadsheet_token")]
+    pub spreadsheet_token: String,
+    /// 筛选视图ID
+    #[serde(rename = "filter_view_id")]
+    pub filter_view_id: String,
+    /// 筛选条件
+    #[serde(rename = "condition")]
+    pub condition: FilterCondition,
+}
+
+/// 创建筛选视图条件响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateFilterViewConditionResponse {
+    /// 筛选条件ID
+    #[serde(rename = "condition_id")]
+    pub condition_id: String,
+    /// 筛选条件
+    #[serde(rename = "condition")]
+    pub condition: FilterCondition,
+}
+
+impl openlark_core::api_resp::ApiResponseTrait for CreateFilterViewConditionResponse {
+    fn data_format() -> openlark_core::api_resp::ResponseFormat {
+        openlark_core::api_resp::ResponseFormat::Data
+    }
+}
+
+/// 更新筛选视图条件请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UpdateFilterViewConditionRequest {
+    /// 电子表格token
+    #[serde(rename = "spreadsheet_token")]
+    pub spreadsheet_token: String,
+    /// 筛选视图ID
+    #[serde(rename = "filter_view_id")]
+    pub filter_view_id: String,
+    /// 条件ID
+    #[serde(rename = "condition_id")]
+    pub condition_id: String,
+    /// 筛选条件
+    #[serde(rename = "condition")]
+    pub condition: FilterCondition,
+}
+
+/// 更新筛选视图条件响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UpdateFilterViewConditionResponse {
+    /// 筛选条件ID
+    #[serde(rename = "condition_id")]
+    pub condition_id: String,
+    /// 筛选条件
+    #[serde(rename = "condition")]
+    pub condition: FilterCondition,
+}
+
+impl openlark_core::api_resp::ApiResponseTrait for UpdateFilterViewConditionResponse {
+    fn data_format() -> openlark_core::api_resp::ResponseFormat {
+        openlark_core::api_resp::ResponseFormat::Data
+    }
+}
+
+/// 删除筛选视图条件请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DeleteFilterViewConditionRequest {
+    /// 电子表格token
+    #[serde(rename = "spreadsheet_token")]
+    pub spreadsheet_token: String,
+    /// 筛选视图ID
+    #[serde(rename = "filter_view_id")]
+    pub filter_view_id: String,
+    /// 条件ID
+    #[serde(rename = "condition_id")]
+    pub condition_id: String,
+}
+
+/// 删除筛选视图条件响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DeleteFilterViewConditionResponse {
+    /// 是否成功
+    #[serde(rename = "success")]
+    pub success: bool,
+}
+
+impl openlark_core::api_resp::ApiResponseTrait for DeleteFilterViewConditionResponse {
+    fn data_format() -> openlark_core::api_resp::ResponseFormat {
+        openlark_core::api_resp::ResponseFormat::Data
     }
 }

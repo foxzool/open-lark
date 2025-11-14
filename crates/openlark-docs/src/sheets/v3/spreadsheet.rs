@@ -10,9 +10,11 @@ use openlark_core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
+    error::LarkAPIError,
     http::Transport,
     api_req::ApiRequest, SDKResult,
 };
+use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 /// 电子表格信息
@@ -167,21 +169,18 @@ impl SpreadsheetService {
         &self,
         req: &CreateSpreadsheetRequest,
     ) -> SDKResult<CreateSpreadsheetResponse> {
-        req.validate()
-            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+        req.validate().map_err(|msg| LarkAPIError::IllegalParamError(msg))?;
         log::debug!("开始创建电子表格: title={:?}", req.title);
 
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: openlark_core::endpoints_original::Endpoints::SHEETS_V3_SPREADSHEETS
-                .to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_request = ApiRequest::with_method_and_path(
+            Method::POST,
+            openlark_core::endpoints_original::Endpoints::SHEETS_V3_SPREADSHEETS
+        );
+        api_request.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        api_request.body = serde_json::to_vec(req)?;
 
         let resp =
-            Transport::<CreateSpreadsheetResponse>::request(api_req, &self.config, None).await?;
+            Transport::<CreateSpreadsheetResponse>::request(api_request, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!(
@@ -277,15 +276,10 @@ impl SpreadsheetService {
             spreadsheet_token
         );
 
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: endpoint,
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_request = ApiRequest::with_method_and_path(Method::GET, &endpoint);
+        api_request.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        Transport::<GetSpreadsheetResponse>::request(api_req, &self.config, None).await
+        Transport::<GetSpreadsheetResponse>::request(api_request, &self.config, None).await
     }
 
     /// 更新电子表格属性
@@ -319,15 +313,11 @@ impl SpreadsheetService {
             spreadsheet_token
         );
 
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::PATCH,
-            api_path: endpoint,
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(request)?,
-            ..Default::default()
-        };
+        let mut api_request = ApiRequest::with_method_and_path(Method::PATCH, &endpoint);
+        api_request.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        api_request.body = serde_json::to_vec(request)?;
 
-        Transport::<UpdateSpreadsheetResponse>::request(api_req, &self.config, None).await
+        Transport::<UpdateSpreadsheetResponse>::request(api_request, &self.config, None).await
     }
 }
 
@@ -432,15 +422,23 @@ impl ApiResponseTrait for UpdateSpreadsheetResponse {
 }
 
 /// 更新电子表格构建器
-#[derive(Debug, Clone)]
 pub struct UpdateSpreadsheetBuilder {
     request: UpdateSpreadsheetRequest,
-    transport: Transport,
+    transport: Transport<()>,
+}
+
+impl Clone for UpdateSpreadsheetBuilder {
+    fn clone(&self) -> Self {
+        Self {
+            request: self.request.clone(),
+            transport: Transport::new(), // 创建新的Transport实例
+        }
+    }
 }
 
 impl UpdateSpreadsheetBuilder {
     /// 创建新的构建器实例
-    pub fn new(transport: Transport) -> Self {
+    pub fn new(transport: Transport<()>) -> Self {
         Self {
             request: UpdateSpreadsheetRequest::new(""),
             transport,
@@ -465,7 +463,7 @@ impl UpdateSpreadsheetBuilder {
         service: &SpreadsheetService,
         spreadsheet_token: &str,
     ) -> SDKResult<BaseResponse<UpdateSpreadsheetResponse>> {
-        self.request.validate()?;
+        self.request.validate().map_err(|msg| LarkAPIError::IllegalParamError(msg))?;
         service.update(spreadsheet_token, &self.request).await
     }
 }

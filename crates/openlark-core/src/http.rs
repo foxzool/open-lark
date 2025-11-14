@@ -21,6 +21,14 @@ pub struct Transport<T> {
     phantom_data: PhantomData<T>,
 }
 
+impl<T> Transport<T> {
+    pub fn new() -> Self {
+        Self {
+            phantom_data: PhantomData,
+        }
+    }
+}
+
 impl<T: ApiResponseTrait> Transport<T> {
     pub async fn request(
         mut req: ApiRequest,

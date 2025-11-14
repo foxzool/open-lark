@@ -23,7 +23,6 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use openlark_core::error::LarkAPIError;
 use openlark_core::trait_system::Service;
 // use openlark_core::SDKResult;
 
@@ -248,15 +247,7 @@ pub struct BatchReadRangesResponseBody {
 }
 
 /// 基础API响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BaseResponse<T> {
-    /// 响应码
-    pub code: i32,
-    /// 响应消息
-    pub msg: String,
-    /// 响应数据
-    pub data: T,
-}
+// 移除重复的BaseResponse定义，使用openlark_core中的版本
 
 /// 批量范围读取服务
 #[derive(Debug, Clone)]

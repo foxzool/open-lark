@@ -7,23 +7,17 @@
 //! - 条件格式优先级管理
 
 use openlark_core::{
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    endpoints_original::Endpoints,
+    api_resp::{ApiResponseTrait, ResponseFormat},
     error::LarkAPIError,
     http::Transport,
-    req_option::RequestOption,
-    standard_response::StandardResponse,
     api_req::ApiRequest,
-    SDKResult,
 };
 
+// 使用统一类型定义
+use super::Range;
+
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-
-use openlark_core::error::LarkAPIError;
-
+use reqwest::Method;
 
 /// 条件格式规则类型
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -124,13 +118,13 @@ impl Color {
     pub fn hex(hex: &str) -> Result<Self, LarkAPIError> {
         let hex = hex.trim_start_matches('#');
         if hex.len() != 6 {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "无效的十六进制颜色格式".to_string(),
             ));
         }
 
         let rgb = u32::from_str_radix(hex, 16)
-            .map_err(|_| LarkAPIError::InvalidParameter("无效的十六进制颜色".to_string()))?;
+            .map_err(|_| LarkAPIError::IllegalParamError("无效的十六进制颜色".to_string()))?;
 
         Ok(Self::rgb(
             ((rgb >> 16) & 0xFF) as u8,
@@ -567,17 +561,15 @@ impl ConditionalFormat {
     /// 验证条件格式配置
     pub fn validate(&self) -> Result<(), LarkAPIError> {
         if self.sheet_id.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
+            return Err(LarkAPIError::IllegalParamError(
                 "工作表ID不能为空".to_string(),
             ));
         }
 
         // 验证范围格式
-        if self.range.start_sheet_id.is_none()
-            && self.range.start_row.is_none()
-            && self.range.start_column.is_none()
+        if self.range.is_empty()
         {
-            return Err(LarkAPIError::InvalidParameter("范围格式无效".to_string()));
+            return Err(LarkAPIError::IllegalParamError("范围格式无效".to_string()));
         }
 
         Ok(())
@@ -648,19 +640,19 @@ impl SetConditionalFormatRequestBuilder {
     pub fn build(self) -> Result<SetConditionalFormatRequest, LarkAPIError> {
         let spreadsheet_token = self
             .spreadsheet_token
-            .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("电子表格ID不能为空".to_string()))?;
 
         let sheet_id = self
             .sheet_id
-            .ok_or_else(|| LarkAPIError::InvalidParameter("工作表ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("工作表ID不能为空".to_string()))?;
 
         let range = self
             .range
-            .ok_or_else(|| LarkAPIError::InvalidParameter("范围不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("范围不能为空".to_string()))?;
 
         let rule = self
             .rule
-            .ok_or_else(|| LarkAPIError::InvalidParameter("条件格式规则不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("条件格式规则不能为空".to_string()))?;
 
         let conditional_format = ConditionalFormat::new(sheet_id, range, rule);
         conditional_format.validate()?;
@@ -681,6 +673,13 @@ pub struct SetConditionalFormatResponse {
     /// 条件格式设置
     #[serde(rename = "conditional_format")]
     pub conditional_format: ConditionalFormat,
+}
+
+// 实现API响应特征
+impl ApiResponseTrait for SetConditionalFormatResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 /// 删除条件格式请求
@@ -733,11 +732,11 @@ impl DeleteConditionalFormatRequestBuilder {
     pub fn build(self) -> Result<DeleteConditionalFormatRequest, LarkAPIError> {
         let spreadsheet_token = self
             .spreadsheet_token
-            .ok_or_else(|| LarkAPIError::InvalidParameter("电子表格ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("电子表格ID不能为空".to_string()))?;
 
         let conditional_format_id = self
             .conditional_format_id
-            .ok_or_else(|| LarkAPIError::InvalidParameter("条件格式ID不能为空".to_string()))?;
+            .ok_or_else(|| LarkAPIError::IllegalParamError("条件格式ID不能为空".to_string()))?;
 
         Ok(DeleteConditionalFormatRequest {
             spreadsheet_token,
@@ -751,6 +750,12 @@ impl DeleteConditionalFormatRequestBuilder {
 pub struct DeleteConditionalFormatResponse {
     /// 是否成功删除
     pub success: bool,
+}
+
+impl ApiResponseTrait for DeleteConditionalFormatResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 /// Sheets电子表格条件格式服务 v3
@@ -782,7 +787,7 @@ impl ConditionalFormatService {
     /// use open_lark::service::sheets::v3::models::Range;
     ///
     /// // 创建范围对象
-    /// let range = Range::new("A1".to_string(), "A10".to_string());
+    /// let range = Range::from("A1".to_string(), "A10".to_string());
     ///
     /// // 创建数据条规则
     /// let rule = ConditionalFormatRule::data_bar(
@@ -810,28 +815,24 @@ impl ConditionalFormatService {
             self.config.base_url, request.spreadsheet_token
         );
 
-        let transport = HttpTransport::new(&self.config);
-        let response = transport
-            .post(&url, Some(request))
-            .await
-            .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
+        // 创建HTTP请求
+        let api_request = ApiRequest::with_method_and_path(Method::POST, &url);
 
-        let set_response: openlark_core::response::BaseResponse<SetConditionalFormatResponse> =
-            serde_json::from_str(
-                &response
-                    .text()
-                    .await
-                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
-            )
-            .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
+        // 发送请求并获取响应
+        let response = Transport::<SetConditionalFormatResponse>::request(api_request, &self.config, None).await?;
 
-        if set_response.code != 0 {
-            return Err(LarkAPIError::APIError(set_response.msg, set_response.code));
+        // 检查响应是否成功
+        if response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: response.code(),
+                msg: response.msg().to_string(),
+                error: None
+            });
         }
 
-        set_response
+        response
             .data
-            .ok_or_else(|| LarkAPIError::APIError("响应数据为空".to_string(), -1))
+            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
     }
 
     /// 删除条件格式
@@ -868,31 +869,36 @@ impl ConditionalFormatService {
             self.config.base_url, request.spreadsheet_token, request.conditional_format_id
         );
 
-        let transport = HttpTransport::new(&self.config);
-        let response = transport
+        // 发送HTTP请求
+        let client = reqwest::Client::new();
+        let response = client
             .delete(&url)
+            .header("Content-Type", "application/json")
+            .json(&request)
+            .send()
             .await
-            .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?;
+            .map_err(|e| LarkAPIError::RequestError(e.to_string()))?;
 
-        let delete_response: openlark_core::response::BaseResponse<DeleteConditionalFormatResponse> =
+        let delete_response: openlark_core::api_resp::BaseResponse<DeleteConditionalFormatResponse> =
             serde_json::from_str(
                 &response
                     .text()
                     .await
-                    .map_err(|e| LarkAPIError::NetworkError(e.to_string()))?,
+                    .map_err(|e| LarkAPIError::RequestError(e.to_string()))?,
             )
-            .map_err(|e| LarkAPIError::JsonParseError(e.to_string()))?;
+            .map_err(|e| LarkAPIError::DeserializeError(e.to_string()))?;
 
-        if delete_response.code != 0 {
-            return Err(LarkAPIError::APIError(
-                delete_response.msg,
-                delete_response.code,
-            ));
+        if delete_response.code() != 0 {
+            return Err(LarkAPIError::APIError {
+                code: delete_response.code(),
+                msg: delete_response.msg().to_string(),
+                error: None
+            });
         }
 
         delete_response
             .data
-            .ok_or_else(|| LarkAPIError::APIError("响应数据为空".to_string(), -1))
+            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
     }
 
     /// 设置条件格式构建器
@@ -1051,7 +1057,7 @@ mod tests {
     fn test_conditional_format_creation() {
         use super::super::models::Range;
 
-        let range = Range::new("A1".to_string(), "A10".to_string());
+        let range = Range::from("A1".to_string(), "A10".to_string());
         let rule = ConditionalFormatRule::data_bar(Color::green(), Color::red());
         let conditional_format = ConditionalFormat::new("sheet123".to_string(), range, rule);
 
@@ -1063,7 +1069,7 @@ mod tests {
     fn test_conditional_format_validation() {
         use super::super::models::Range;
 
-        let range = Range::new("A1".to_string(), "A10".to_string());
+        let range = Range::from("A1".to_string(), "A10".to_string());
         let rule = ConditionalFormatRule::data_bar(Color::green(), Color::red());
 
         // 测试有效格式
@@ -1073,7 +1079,7 @@ mod tests {
         // 测试空工作表ID
         let invalid_format = ConditionalFormat::new(
             "".to_string(),
-            Range::new("A1".to_string(), "A10".to_string()),
+            Range::from("A1".to_string(), "A10".to_string()),
             ConditionalFormatRule::data_bar(Color::green(), Color::red()),
         );
         assert!(invalid_format.validate().is_err());
@@ -1083,7 +1089,7 @@ mod tests {
     fn test_set_conditional_format_request_builder() {
         use super::super::models::Range;
 
-        let range = Range::new("A1".to_string(), "A10".to_string());
+        let range = Range::from("A1".to_string(), "A10".to_string());
         let rule = ConditionalFormatRule::data_bar(Color::green(), Color::red());
 
         let request = SetConditionalFormatRequest::builder()
@@ -1122,7 +1128,7 @@ mod tests {
         let data_bar_request = SetConditionalFormatRequest::builder()
             .spreadsheet_token("token123".to_string())
             .sheet_id("sheet123".to_string())
-            .range(Range::new("A1".to_string(), "A10".to_string()))
+            .range(Range::from("A1".to_string(), "A10".to_string()))
             .rule(ConditionalFormatRule::data_bar(
                 Color::green(),
                 Color::red(),
@@ -1136,7 +1142,7 @@ mod tests {
         let color_scale_request = SetConditionalFormatRequest::builder()
             .spreadsheet_token("token123".to_string())
             .sheet_id("sheet123".to_string())
-            .range(Range::new("B1".to_string(), "B10".to_string()))
+            .range(Range::from("B1".to_string(), "B10".to_string()))
             .rule(ConditionalFormatRule::three_color_scale(
                 Color::blue(),
                 Color::yellow(),
@@ -1151,7 +1157,7 @@ mod tests {
         let icon_set_request = SetConditionalFormatRequest::builder()
             .spreadsheet_token("token123".to_string())
             .sheet_id("sheet123".to_string())
-            .range(Range::new("C1".to_string(), "C10".to_string()))
+            .range(Range::from("C1".to_string(), "C10".to_string()))
             .rule(ConditionalFormatRule::three_traffic_lights())
             .build()
             .unwrap();
@@ -1162,7 +1168,7 @@ mod tests {
         let single_condition_request = SetConditionalFormatRequest::builder()
             .spreadsheet_token("token123".to_string())
             .sheet_id("sheet123".to_string())
-            .range(Range::new("D1".to_string(), "D10".to_string()))
+            .range(Range::from("D1".to_string(), "D10".to_string()))
             .rule(ConditionalFormatRule::single_condition(
                 ConditionalFormatOperator::Equal,
                 "已完成".to_string(),
@@ -1179,7 +1185,7 @@ mod tests {
         let formula_request = SetConditionalFormatRequest::builder()
             .spreadsheet_token("token123".to_string())
             .sheet_id("sheet123".to_string())
-            .range(Range::new("E1".to_string(), "E10".to_string()))
+            .range(Range::from("E1".to_string(), "E10".to_string()))
             .rule(ConditionalFormatRule::formula("=A1>B1".to_string()))
             .build()
             .unwrap();
