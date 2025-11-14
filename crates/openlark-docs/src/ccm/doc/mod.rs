@@ -12,6 +12,13 @@
 //! ## v1版本
 //! - [`v1::document`] - 文档基础管理服务，提供创建、查询等核心功能
 //!
+//! ## v2版本（旧版文档）
+//! - [`v2::create`] - 旧版文档创建服务
+//! - [`v2::meta`] - 旧版文档元信息服务
+//! - [`v2::content`] - 旧版文档内容服务（纯文本和富文本）
+//! - [`v2::sheet_meta`] - 旧版电子表格元数据服务
+//! - [`v2::batch_update`] - 旧版文档批量编辑服务
+//!
 //! # 使用示例
 //!
 //! ```rust
@@ -21,19 +28,32 @@
 //!     .with_app_type(AppType::SelfBuild)
 //!     .build();
 //!
-//! // 创建协作文档
+//! // 创建协作文档（v1版本）
 //! let document = client.docs.v1.document
 //!     .create_document_builder()
 //!     .title("项目计划文档")
 //!     .folder_token("folder_token")
 //!     .execute(&client.docs.v1.document)
 //!     .await?;
+//!
+//! // 创建旧版文档（v2版本）
+//! let old_doc = client.docs.v2.create
+//!     .create_doc_builder()
+//!     .title("旧版文档")
+//!     .execute(&client.docs.v2.create)
+//!     .await?;
 //! ```
 
 pub mod v1;
+pub mod v2;
 
 // 重新导出所有服务类型
 pub use v1::*;
+pub use v2::*;
+
+// 为向后兼容性提供DocxService别名
+#[cfg(feature = "docs")]
+pub use v1::DocsServiceV1 as DocxService;
 
 use openlark_core::config::Config;
 
@@ -47,6 +67,9 @@ pub struct DocsService {
     /// v1版本服务
     #[cfg(feature = "docs")]
     pub v1: v1::DocsServiceV1,
+    /// v2版本服务（旧版文档）
+    #[cfg(feature = "docs")]
+    pub v2: v2::DocV2Service,
 }
 
 impl DocsService {
@@ -68,7 +91,9 @@ impl DocsService {
         Self {
             config: config.clone(),
             #[cfg(feature = "docs")]
-            v1: v1::DocsServiceV1::new(config),
+            v1: v1::DocsServiceV1::new(config.clone()),
+            #[cfg(feature = "docs")]
+            v2: v2::DocV2Service::new(config),
         }
     }
 }
