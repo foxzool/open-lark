@@ -5,6 +5,9 @@
 
 use crate::prelude::*;
 
+#[cfg(feature = "bitable")]
+pub mod bitable;
+
 pub struct BaseService {
     client: std::sync::Arc<LarkClient>,
 }

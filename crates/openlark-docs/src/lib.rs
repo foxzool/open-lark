@@ -13,33 +13,14 @@
 #[macro_use]
 mod macros;
 
-// Re-exports from open-lark-core for convenience.
-pub mod prelude {
-    pub use openlark_core::{client::LarkClient, SDKResult};
-}
-
 // Base modules - base and bitable projects
 #[cfg(feature = "base")]
 pub mod base;
-
-#[cfg(feature = "bitable")]
-pub mod bitable;
 
 // Content Collaboration Management (CCM) modules
 #[cfg(feature = "ccm")]
 pub mod ccm;
 
-// Backward compatibility: provide docs module alias
-#[cfg(all(feature = "docs", feature = "ccm"))]
-pub mod docs {
-    pub use crate::ccm::doc::*;
-}
-
-// If docs is enabled but ccm is not, provide direct doc module
-#[cfg(all(feature = "docs", not(feature = "ccm")))]
-pub mod docs {
-    pub use crate::ccm::doc::*;
-}
 
 // Interactive card components
 #[cfg(feature = "cardkit")]
@@ -52,9 +33,6 @@ pub mod report;
 // Re-export service types for convenience
 #[cfg(feature = "base")]
 pub use base::BaseService;
-
-#[cfg(feature = "bitable")]
-pub use bitable::BitableService;
 
 #[cfg(feature = "ccm")]
 pub use ccm::CcmService;
