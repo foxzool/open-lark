@@ -13,6 +13,9 @@
 #[macro_use]
 mod macros;
 
+// Prelude module with common imports
+pub mod prelude;
+
 // Base modules - base and bitable projects
 #[cfg(feature = "base")]
 pub mod base;
