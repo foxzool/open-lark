@@ -21,7 +21,7 @@ use openlark_core::,
     service::bitable::v1::form::Form,
 };
 /// 更新表单元数据请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct PatchFormMetaRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -58,14 +58,14 @@ pub struct PatchFormMetaRequest {
 impl PatchFormMetaRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct PatchFormMetaRequestBuilder {
     request: PatchFormMetaRequest}
 impl PatchFormMetaRequestBuilder {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 更新表单元数据响应,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct PatchFormMetaResponse {
     /// 更新后的表单信息
     pub form: Form,

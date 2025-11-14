@@ -31,7 +31,7 @@ impl AppTableService {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 批量删除数据表请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct BatchDeleteTablesRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token
@@ -41,7 +41,7 @@ pub struct BatchDeleteTablesRequest {
 impl BatchDeleteTablesRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct BatchDeleteTablesRequestBuilder {
     request: BatchDeleteTablesRequest}
 impl BatchDeleteTablesRequestBuilder {
@@ -58,7 +58,7 @@ impl BatchDeleteTablesRequestBuilder {
 struct BatchDeleteTablesRequestBody {
     table_ids: Vec<String>}
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct BatchDeleteTablesResponse {
     /// 删除结果列表
     pub deleted: bool,

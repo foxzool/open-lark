@@ -23,7 +23,7 @@ use openlark_core::,
     service::bitable::v1::form::FormQuestion,
 };
 /// 更新表单问题请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct PatchFormQuestionRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -54,7 +54,7 @@ pub struct PatchFormQuestionRequest {
 impl PatchFormQuestionRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct PatchFormQuestionRequestBuilder {
     request: PatchFormQuestionRequest}
 impl PatchFormQuestionRequestBuilder {
@@ -68,7 +68,7 @@ impl PatchFormQuestionRequestBuilder {
     patch,
 );
 /// 更新表单问题响应
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct PatchFormQuestionResponse {
     /// 更新后的问题信息
     pub question: FormQuestion,

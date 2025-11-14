@@ -5,7 +5,7 @@
 use serde::{Deserialize, Serialize};
 use serde_repr::{Deserialize_repr, Serialize_repr};
 /// 字段的具体内容,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 #[allow(dead_code)]
 pub enum FieldValue {
     MultiLine(String),
@@ -32,7 +32,7 @@ pub enum FieldValue {
     PhoneNumber(String),
     AutoSerial(String)}
 /// 人员,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct Person {
     /// 人员名字
     pub name: String,
@@ -43,7 +43,7 @@ pub struct Person {
     /// 邮箱
     pub email: String,
 /// 群组,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 #[allow(dead_code)]
 pub struct GroupChat {
 /// 群组名,
@@ -53,14 +53,14 @@ pub struct GroupChat {
     /// 群组id
     pub id: String,
 /// 超链接,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct Link {
     /// 文本名称
     pub text: String,
     /// 超链接
     pub link: String,
 /// 附件,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 #[allow(dead_code)]
 pub struct Attachment {
 /// 附件token,
@@ -76,7 +76,7 @@ pub struct Attachment {
     /// 生成附件临时下载链接的url，需access token鉴权
     pub tmp_url: Option<String>}
 /// 地理位置,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct Location {
     /// 经纬度
     pub location: String,
@@ -93,7 +93,7 @@ pub struct Location {
     /// 完整地址
     pub full_address: String,
 /// 字段信息,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct AppTableField {
     /// 多维表格字段名
     pub field_name: String,
@@ -112,7 +112,7 @@ pub struct AppTableField {
     /// 是否是隐藏字段
     pub is_hidden: Option<bool>}
 // 字段属性,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct AppTableFieldProperty {
     /// 单选、多选字段的选项信息,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -166,7 +166,7 @@ pub struct AppTableFieldProperty {
 #[serde(skip_serializing_if = "Option::is_none")]
     pub rating: Option<AppTableFieldPropertyRating>}
 /// 单选、多选字段的选项信息,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct AppTableFieldPropertyOption {
     /// 选项名
     pub name: String,
@@ -177,37 +177,37 @@ pub struct AppTableFieldPropertyOption {
 #[serde(skip_serializing_if = "Option::is_none")]
     pub color: Option<i32>}
 /// 自动编号类型,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct AppTableFieldPropertyAutoSerial {
     /// 自动编号类型: custom 或 auto_increment_number
     pub r#type: String,
     pub options: Vec<AppTableFieldPropertyAutoSerialOption>}
 /// 自动编号规则列表,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct AppTableFieldPropertyAutoSerialOption {
     /// 自动编号的可选规则项类型
     pub r#type: String,
     /// 与自动编号的可选规则项类型相对应的取值
     pub value: String,
 /// 地理位置输入方式,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct AppTableFieldPropertyLocation {
     /// 地理位置输入限制: only_mobile 或 not_limit
     pub input_type: String,
 /// 字段支持的编辑模式,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct AppTableFieldPropertyAllowedEditModes {
     /// 是否允许手动录入
     pub manual: bool,
     /// 是否允许移动端录入
     pub scan: bool,
 /// 评分字段的相关设置,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct AppTableFieldPropertyRating {
     /// 评分字段的符号展示
     pub symbol: String,
 /// 字段的描述,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct AppTableFieldDescription {
     /// 是否禁止同步,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -215,7 +215,7 @@ pub struct AppTableFieldDescription {
     /// 字段描述内容
     pub text: String,
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub enum UiType {
     Text,
     Barcode,
@@ -245,7 +245,7 @@ pub enum UiType {
     Lookup,
     Button}
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 #[repr(u16)]
 pub enum FieldType {
 #[default]

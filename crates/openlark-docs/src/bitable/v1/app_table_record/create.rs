@@ -24,7 +24,7 @@ use openlark_core::,
     service::bitable::v1::Record,
 };
 /// 新增记录请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct CreateRecordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -46,7 +46,7 @@ pub struct CreateRecordRequest {
 impl CreateRecordRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct CreateRecordRequestBuilder {
     request: CreateRecordRequest}
 impl CreateRecordRequestBuilder {
@@ -76,7 +76,7 @@ crate::impl_executable_builder_owned!(
     create,
 );
 /// 新增记录响应
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct CreateRecordResponse {
     /// 新增的记录
     pub record: Record,

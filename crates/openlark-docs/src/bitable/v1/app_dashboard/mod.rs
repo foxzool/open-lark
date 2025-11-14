@@ -111,7 +111,7 @@ impl Default for Permission {
 ///
 /// 提供飞书多维表格仪表盘v1版本的统一入口，支持现代化的仪表盘管理。
 /// 包括列表查询、复制、权限管理等企业级功能。
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct AppDashboardService {
     config: Config,
 }

@@ -8,9 +8,9 @@
 // drive v1 view_record - 访问记录服务,
 //,
 // 提供文件访问记录相关的功能,
-use openlark_core::prelude::*;
+use openlark_core::{config::Config, trait_system::Service};
 /// 访问记录服务
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct ViewRecordService {
     client: std::sync::Arc<LarkClient>,
 }

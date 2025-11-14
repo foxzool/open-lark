@@ -1,36 +1,51 @@
-#![allow(dead_code)]
-#![allow(unused_variables)]
-#![allow(unused_imports)]
-#![allow(unused_mut)]
-#![allow(non_snake_case)]
-#![allow(clippy::too_many_arguments)]
-#![allow(clippy::module_inception)]
-// docx - 文档服务
-//,
-// 提供文档相关的所有功能，包括：
-// - 文档的创建、读取、更新、删除
-// - 文档块操作（文本、图片、表格等）
-// - 文档版本管理
-// - 文档评论和回复
-// - 文档导入导出
-// - 文档搜索和统计
-//,
-// 覆盖18个API接口
-use openlark_core::prelude::*;
-use super::ccm::docx::v1::DocxV1Service;
-use super::ccm::docx::documents::DocumentsService;
-/// 文档服务
-#[derive(Debug, Clone)]
+//! Document (DOCX) module for OpenLark Docs
+//!
+//! This module provides comprehensive document (DOCX) functionality including:
+//! - Document creation, reading, updating, deletion
+//! - Document block operations (text, images, tables, etc.)
+//! - Document version management
+//! - Document comments and replies
+//! - Document import/export
+//! - Document search and statistics
+//!
+//! Covers 18 API interfaces.
+
+use crate::prelude::*;
+
+/// v1版本API
+pub mod v1;
+
+/// 文档操作API
+pub mod documents;
+
+/// Document (DOCX) Service
+#[derive(Clone)]
 pub struct DocxService {
+    client: std::sync::Arc<LarkClient>,
 }
 
 impl DocxService {
+    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
+        Self { client }
+    }
 }
-    pub fn new(config: Config) -> Self {
-        Self { config }
+
+impl std::ops::Deref for DocxService {
+    type Target = LarkClient;
+
+    fn deref(&self) -> &Self::Target {
+        &self.client
+    }
 }
-/// v1版本API
-pub mod v1;
-/// 文档操作API
-pub mod documents;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_docx_service_creation() {
+        // This is a placeholder test
+        // In a real implementation, you would create a mock client
+        // and test the DocxService functionality
+    }
 }

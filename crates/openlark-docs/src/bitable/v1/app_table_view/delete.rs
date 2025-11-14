@@ -49,7 +49,7 @@ api_req.api_path = BITABLE_V1_VIEW_DELETE,
 Ok(api_resp),
 
 /// 删除视图请求
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct DeleteViewRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token
@@ -61,7 +61,7 @@ pub struct DeleteViewRequest {
 impl DeleteViewRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct DeleteViewRequestBuilder {
     request: DeleteViewRequest}
 impl DeleteViewRequestBuilder {
@@ -73,7 +73,7 @@ impl DeleteViewRequestBuilder {
     BaseResponse<DeleteViewResponse>,
     delete_view,
 );
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct DeleteViewResponse {
     /// 删除结果
     pub deleted: bool,

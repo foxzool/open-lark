@@ -8,9 +8,9 @@
 // drive v1 meta - 元数据服务,
 //,
 // 提供文件元数据相关的功能,
-use openlark_core::prelude::*;
+use openlark_core::{config::Config, trait_system::Service};
 /// 元数据服务
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct MetaService {
     client: std::sync::Arc<LarkClient>,
 }

@@ -9,7 +9,7 @@
 
 use serde::{Deserialize, Serialize};
 use openlark_core::config::Config;
-use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use api_resp::{ApiResponseTrait, ResponseFormat};
 
 /// 文件元数据
 #[derive(Debug, Deserialize, Serialize)]

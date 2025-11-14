@@ -21,7 +21,7 @@ use openlark_core::,
     service::bitable::v1::app_role::AppRole,
 };
 /// 列出自定义角色请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct ListAppRoleRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -37,7 +37,7 @@ pub struct ListAppRoleRequest {
 impl ListAppRoleRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct ListAppRoleRequestBuilder {
     request: ListAppRoleRequest}
 impl ListAppRoleRequestBuilder {
@@ -59,7 +59,7 @@ crate::impl_executable_builder_owned!(
     list,
 );
 /// 列出自定义角色响应
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct ListAppRoleResponse {
     /// 是否还有更多项
     pub has_more: bool,

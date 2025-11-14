@@ -1,36 +1,64 @@
-#![allow(dead_code)]
-#![allow(unused_variables)]
-#![allow(unused_imports)]
-#![allow(unused_mut)]
-#![allow(non_snake_case)]
-#![allow(clippy::too_many_arguments)]
-#![allow(clippy::module_inception)]
-// wiki - 知识库服务
-//,
-// 提供知识库相关的所有功能，包括：
-// - 知识空间的创建、管理
-// - Wiki节点的创建、移动、复制、删除
-// - 节点内容管理
-// - 知识空间成员管理
-// - Wiki搜索功能
-// - 节点权限管理
-//,
-// 覆盖16个API接口（wiki/v2: 15个，wiki/v1: 1个）
-use openlark_core::prelude::*;
-use super::ccm::wiki::v2::WikiV2Service;
-use super::ccm::wiki::v1::WikiV1Service;
+//! 知识库服务
+//!
+//! 基础服务架构，具体功能在后续版本中实现。
+
+use openlark_core::{
+    config::Config,
+    trait_system::Service,
+};
+
 /// 知识库服务
-#[derive(Debug, Clone)]
+///
+/// 基础服务架构，具体功能在后续版本中实现。
+#[derive(Clone)]
 pub struct WikiService {
+    config: Config,
 }
 
 impl WikiService {
-}
+    /// 创建知识库服务实例
     pub fn new(config: Config) -> Self {
         Self { config }
+    }
 }
-/// v2版本API
-pub mod v2;
-/// v1版本API
-pub mod v1;
+
+impl Service for WikiService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str
+    where
+        Self: Sized,
+    {
+        "WikiService"
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::trait_system::Service;
+
+    #[test]
+    fn test_wiki_service_creation() {
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
+        let service = WikiService::new(config);
+        assert!(!format!("{:?}", service).is_empty());
+    }
+
+    #[test]
+    fn test_service_trait_implementation() {
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
+        let service = WikiService::new(config);
+
+        let config_ref = service.config();
+        assert_eq!(config_ref.app_id, "test_app_id");
+    }
 }

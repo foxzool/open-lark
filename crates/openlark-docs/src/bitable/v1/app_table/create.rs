@@ -31,7 +31,7 @@ impl AppTableService {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 新增数据表请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct CreateTableRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token
@@ -41,7 +41,7 @@ pub struct CreateTableRequest {
 impl CreateTableRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct CreateTableRequestBuilder {
     request: CreateTableRequest}
 impl CreateTableRequestBuilder {
@@ -55,7 +55,7 @@ impl CreateTableRequestBuilder {
     create,
 );
 /// 数据表数据
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct TableData {
     /// 数据表名称
     pub name: String,
@@ -79,7 +79,7 @@ impl TableData {
 self.fields = Some(fields);
         self}
 /// 字段信息,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct TableField {
     /// 字段名称
     pub field_name: String,
@@ -134,11 +134,11 @@ impl TableField {
             field_name: name.to_string(),
             field_type: 5, // 日期
             property: None}
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 struct CreateTableRequestBody {
     table: TableData}
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct CreateTableResponse {
     /// 数据表信息
     pub table_id: String,

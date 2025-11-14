@@ -22,7 +22,7 @@ use openlark_core::,
     impl_executable_builder_owned,
 };
 /// 批量删除协作者请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct BatchDeleteRoleMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -40,7 +40,7 @@ pub struct BatchDeleteRoleMemberRequest {
 impl BatchDeleteRoleMemberRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct BatchDeleteRoleMemberRequestBuilder {
     request: BatchDeleteRoleMemberRequest}
 impl BatchDeleteRoleMemberRequestBuilder {
@@ -56,14 +56,14 @@ impl_executable_builder_owned!(,
     batch_delete,
 );
 /// 删除结果
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct DeleteResult {
     /// 成员ID
     pub member_id: String,
     /// 是否删除成功
     pub deleted: bool,
 /// 批量删除协作者响应,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct BatchDeleteRoleMemberResponse {
     /// 删除结果列表
     pub results: Vec<DeleteResult>}

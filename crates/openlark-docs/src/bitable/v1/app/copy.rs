@@ -31,7 +31,7 @@ impl AppService {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 复制多维表格请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct CopyAppRequest {
     api_request: ApiRequest,
     /// 待复制的多维表格的 app_token
@@ -45,7 +45,7 @@ pub struct CopyAppRequest {
 impl CopyAppRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct CopyAppRequestBuilder {
     request: CopyAppRequest}
 impl CopyAppRequestBuilder {
@@ -67,12 +67,12 @@ struct CopyAppRequestBody {,
     #[serde(skip_serializing_if = "Option::is_none")]
     time_zone: Option<String>}
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct CopyAppResponse {
     /// 复制的多维表格的 app 信息
     pub app: CopyAppResponseData,
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct CopyAppResponseData {
     /// 多维表格的 app_token
     pub app_token: String,

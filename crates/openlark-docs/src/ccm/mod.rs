@@ -1,60 +1,92 @@
-#![allow(dead_code)]
-#![allow(unused_variables)]
-#![allow(unused_imports)]
-#![allow(unused_mut)]
-#![allow(non_snake_case)]
-#![allow(clippy::too_many_arguments)]
-#![allow(clippy::module_inception)]
-//! Ccm服务模块 - 简化实现
+//! Content Collaboration Management (CCM) module
+//!
+//! This module provides comprehensive document collaboration functionality
+//! including docs, sheets, wiki, drive, and related content management services.
 
-use openlark_core::{
-    config::Config,
-    trait_system::Service,
-};
+use crate::prelude::*;
 
-/// 简化的服务结构体
-#[derive(Debug, Clone)]
-pub struct SimpleService {
-    pub config: Config,
-}
+// Import submodules
+pub mod doc;
+pub mod docx;
+pub mod drive;
+pub mod models;
+pub mod sheets;
+pub mod wiki;
 
-impl SimpleService {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-    }
-}
+// Re-export services for convenience
+#[cfg(feature = "ccm-doc")]
+pub use doc::DocService;
 
-// 简化的响应结构体，具体功能在后续版本中实现
-#[derive(Debug)]
-pub struct SimpleResponse;
+#[cfg(feature = "ccm-docx")]
+pub use docx::DocxService;
 
-/// Ccm服务
-#[derive(Debug, Clone)]
+#[cfg(feature = "ccm-drive")]
+pub use drive::DriveService;
+
+#[cfg(feature = "ccm-sheets")]
+pub use sheets::SheetsService;
+
+#[cfg(feature = "ccm-wiki")]
+pub use wiki::WikiService;
+
+/// Main CCM Service providing access to all content collaboration features
+#[derive(Clone)]
 pub struct CcmService {
-    pub service: SimpleService,
+    client: std::sync::Arc<LarkClient>,
 }
 
 impl CcmService {
-    pub fn new(config: Config) -> Self {
-        Self {
-            service: SimpleService::new(config),
-        }
+    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
+        Self { client }
+    }
+
+    /// Get access to document services
+    #[cfg(feature = "ccm-doc")]
+    pub fn doc(&self) -> DocService {
+        DocService::new(self.client.clone())
+    }
+
+    /// Get access to document services
+    #[cfg(feature = "ccm-docx")]
+    pub fn docx(&self) -> DocxService {
+        DocxService::new(self.client.clone())
+    }
+
+    /// Get access to drive services
+    #[cfg(feature = "ccm-drive")]
+    pub fn drive(&self) -> DriveService {
+        DriveService::new(self.client.clone())
+    }
+
+    /// Get access to sheets services
+    #[cfg(feature = "ccm-sheets")]
+    pub fn sheets(&self) -> SheetsService {
+        SheetsService::new(self.client.clone())
+    }
+
+    /// Get access to wiki services
+    #[cfg(feature = "ccm-wiki")]
+    pub fn wiki(&self) -> WikiService {
+        WikiService::new(self.client.clone())
     }
 }
 
-impl Service for CcmService {
-    fn config(&self) -> &Config {
-        &self.service.config
-    }
+impl std::ops::Deref for CcmService {
+    type Target = LarkClient;
 
-    fn service_name() -> &'static str
-    where
-        Self: Sized,
-    {
-        "CcmService"
+    fn deref(&self) -> &Self::Target {
+        &self.client
     }
 }
 
-// Type alias for compatibility
-pub type ServiceType = CcmService;
-pub type ResponseType = SimpleResponse;
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_ccm_service_creation() {
+        // This is a placeholder test
+        // In a real implementation, you would create a mock client
+        // and test the CcmService functionality
+    }
+}

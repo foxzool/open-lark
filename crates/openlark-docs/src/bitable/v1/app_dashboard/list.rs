@@ -265,7 +265,7 @@ impl AppDashboardService {
 // ==================== 构建器模式 ====================
 
 /// 列出仪表盘构建器
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct ListDashboardsBuilder {
     request: ListDashboardsRequest,
 }

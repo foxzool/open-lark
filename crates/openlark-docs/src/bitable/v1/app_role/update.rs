@@ -23,7 +23,7 @@ use openlark_core::,
     service::bitable::v1::app_role::{AppRole, BlockRole, TableRole}
 };
 /// 更新自定义角色请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct UpdateAppRoleRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -45,7 +45,7 @@ pub struct UpdateAppRoleRequest {
 impl UpdateAppRoleRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct UpdateAppRoleRequestBuilder {
     request: UpdateAppRoleRequest}
 impl UpdateAppRoleRequestBuilder {
@@ -59,7 +59,7 @@ impl UpdateAppRoleRequestBuilder {
     update,
 );
 /// 更新自定义角色响应
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct UpdateAppRoleResponse {
     /// 更新后的自定义角色信息
     pub role: AppRole,

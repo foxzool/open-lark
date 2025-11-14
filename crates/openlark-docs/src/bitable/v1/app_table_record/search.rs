@@ -21,7 +21,7 @@ use openlark_core::,
     service::bitable::v1::Record,
 };
 /// 查询记录请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct SearchRecordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -51,7 +51,7 @@ pub struct SearchRecordRequest {
     /// 控制是否返回自动计算的字段
     automatic: Option<bool>}
 /// 排序条件,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct SortCondition {
     /// 字段名称
     pub field_name: String,
@@ -59,14 +59,14 @@ pub struct SortCondition {
 #[serde(skip_serializing_if = "Option::is_none")]
     pub desc: Option<bool>}
 /// 筛选条件,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct FilterInfo {
     /// 条件逻辑连接词: "and" 或 "or"
     pub conjunction: String,
     /// 筛选条件集合
     pub conditions: Vec<FilterCondition>}
 /// 单个筛选条件,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct FilterCondition {
     /// 筛选条件的左值，值为字段的名称
     pub field_name: String,
@@ -78,7 +78,7 @@ pub struct FilterCondition {
 impl SearchRecordRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct SearchRecordRequestBuilder {
     request: SearchRecordRequest}
 impl SearchRecordRequestBuilder {
@@ -105,7 +105,7 @@ crate::impl_executable_builder_owned!(
     search,
 );
 /// 查询记录响应
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct SearchRecordResponse {
     /// 记录列表
     pub items: Vec<Record>,

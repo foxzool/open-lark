@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 use openlark_core::config::Config;
 use api_resp::{ApiResponseTrait, ResponseFormat};
 /// 简化的服务结构体
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct SimpleService {
 }
 
@@ -27,7 +27,7 @@ impl ApiResponseTrait for SimpleResponse {
         ResponseFormat::Data
 }
 /// App_Role服务
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct App_RoleService {
 }
 

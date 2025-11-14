@@ -33,7 +33,7 @@ impl AppTableService {
 Ok(api_resp),
     }
 /// 列出数据表请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct ListTablesRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token
@@ -45,7 +45,7 @@ pub struct ListTablesRequest {
 impl ListTablesRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct ListTablesRequestBuilder {
     request: ListTablesRequest}
 impl ListTablesRequestBuilder {
@@ -59,7 +59,7 @@ crate::impl_executable_builder_owned!(
     BaseResponse<ListTablesResponse>,
     list,
 );
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct ListTablesResponse {
     /// 是否还有更多项
     pub has_more: bool,
@@ -70,7 +70,7 @@ pub struct ListTablesResponse {
     /// 数据表信息列表
     pub items: Vec<TableInfo>}
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct TableInfo {
     /// 数据表的 table_id
     pub table_id: String,

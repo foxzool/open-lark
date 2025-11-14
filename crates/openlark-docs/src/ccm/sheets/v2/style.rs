@@ -10,7 +10,7 @@
 // 实现单元格样式设置的操作,
 use openlark_core::prelude::*;
 /// 样式操作服务
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct StyleService {
     client: std::sync::Arc<LarkClient>,
 }

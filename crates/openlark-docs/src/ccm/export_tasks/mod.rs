@@ -10,7 +10,7 @@
 // 提供文档导出任务相关的功能
 use openlark_core::prelude::*;
 /// 导出任务服务
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct ExportTasksService {
     client: std::sync::Arc<LarkClient>,
 }

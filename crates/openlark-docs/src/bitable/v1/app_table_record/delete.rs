@@ -15,7 +15,7 @@ use SDKResult;    api_req::ApiRequest,
     SDKResult,
 };
 /// 删除记录请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct DeleteRecordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -31,7 +31,7 @@ pub struct DeleteRecordRequest {
 impl DeleteRecordRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct DeleteRecordRequestBuilder {
     request: DeleteRecordRequest}
 impl DeleteRecordRequestBuilder {
@@ -46,7 +46,7 @@ crate::impl_executable_builder_owned!(
     delete,
 );
 /// 删除记录响应
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct DeleteRecordResponse {
     /// 是否删除成功
     pub deleted: bool,

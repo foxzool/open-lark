@@ -15,7 +15,7 @@ use SDKResult;    api_req::ApiRequest,
     SDKResult,
 };
 /// 列出表单问题请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct ListFormQuestionRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -34,7 +34,7 @@ pub struct ListFormQuestionRequest {
 impl ListFormQuestionRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct ListFormQuestionRequestBuilder {
     request: ListFormQuestionRequest}
 impl ListFormQuestionRequestBuilder {
@@ -56,7 +56,7 @@ crate::impl_executable_builder_owned!(
     list,
 );
 /// 表单问题信息
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct FormQuestion {
     /// 问题ID
     pub question_id: String,
@@ -75,7 +75,7 @@ pub struct FormQuestion {
     /// 问题设置
     pub setting: Option<serde_json::Value>}
 /// 列出表单问题响应,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct ListFormQuestionResponse {
     /// 是否还有更多项
     pub has_more: bool,

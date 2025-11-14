@@ -31,7 +31,7 @@ impl AppService {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 获取多维表格元数据请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct GetAppRequest {
     api_request: ApiRequest,
     /// 多维表格的唯一标识符
@@ -39,7 +39,7 @@ pub struct GetAppRequest {
 impl GetAppRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct GetAppRequestBuilder {
     request: GetAppRequest}
 impl GetAppRequestBuilder {
@@ -52,12 +52,12 @@ impl GetAppRequestBuilder {
     BaseResponse<GetAppResponse>,
     get,
 );
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct GetAppResponse {
     /// 多维表格的 app 信息
     pub app: GetAppResponseData,
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct GetAppResponseData {
     /// 多维表格的 app_token
     pub app_token: String,
