@@ -1,6 +1,6 @@
-//! Docx文档服务
+//! Docs文档服务
 //!
-//! 提供飞书协作文档的完整管理功能，包括：
+//! 提供飞书文档的完整管理功能，包括：
 //! - 创建和删除文档
 //! - 读取和更新文档内容
 //! - 文档块操作和内容管理
@@ -22,11 +22,11 @@
 //!     .build();
 //!
 //! // 创建协作文档
-//! let document = client.docx.v1.document
+//! let document = client.docs.v1.document
 //!     .create_document_builder()
 //!     .title("项目计划文档")
 //!     .folder_token("folder_token")
-//!     .execute(&client.docx.v1.document)
+//!     .execute(&client.docs.v1.document)
 //!     .await?;
 //! ```
 
@@ -37,20 +37,20 @@ pub use v1::*;
 
 use openlark_core::config::Config;
 
-/// Docx文档服务
+/// Docs文档服务
 ///
-/// 提供飞书协作文档的统一入口，支持文档的全生命周期管理。
+/// 提供飞书文档的统一入口，支持文档的全生命周期管理。
 /// 包括创建、编辑、分享、协作等企业级功能。
 #[derive(Debug, Clone)]
-pub struct DocxService {
+pub struct DocsService {
     config: Config,
     /// v1版本服务
-    #[cfg(feature = "collaboration")]
-    pub v1: v1::DocxServiceV1,
+    #[cfg(feature = "docs")]
+    pub v1: v1::DocsServiceV1,
 }
 
-impl DocxService {
-    /// 创建Docx服务实例
+impl DocsService {
+    /// 创建Docs服务实例
     ///
     /// # 参数
     /// - `config`: SDK配置信息
@@ -59,21 +59,21 @@ impl DocxService {
     ///
     /// ```rust
     /// use open_lark::prelude::*;
-    /// use open_lark::service::docx::DocxService;
+    /// use open_lark::service::docs::DocsService;
     ///
     /// let config = openlark_core::config::Config::new("app_id", "app_secret");
-    /// let service = DocxService::new(config);
+    /// let service = DocsService::new(config);
     /// ```
     pub fn new(config: Config) -> Self {
         Self {
             config: config.clone(),
-            #[cfg(feature = "collaboration")]
-            v1: v1::DocxServiceV1::new(config),
+            #[cfg(feature = "docs")]
+            v1: v1::DocsServiceV1::new(config),
         }
     }
 }
 
-impl openlark_core::trait_system::Service for DocxService {
+impl openlark_core::trait_system::Service for DocsService {
     fn config(&self) -> &Config {
         &self.config
     }
@@ -82,7 +82,7 @@ impl openlark_core::trait_system::Service for DocxService {
     where
         Self: Sized,
     {
-        "DocxService"
+        "DocsService"
     }
 }
 
@@ -92,12 +92,12 @@ mod tests {
     use openlark_core::prelude::Service;
 
     #[test]
-    fn test_docx_service_creation() {
+    fn test_docs_service_creation() {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let service = DocxService::new(config);
+        let service = DocsService::new(config);
         assert!(!format!("{:?}", service).is_empty());
     }
 
@@ -107,7 +107,7 @@ mod tests {
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let service = DocxService::new(config);
+        let service = DocsService::new(config);
 
         // 测试Service trait的实现
         let config_ref = service.config();

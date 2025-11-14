@@ -1,31 +1,34 @@
-//! Docx文档服务 v1
+//! Docs文档服务 v1
 //!
-//! 提供飞书协作文档v1版本的完整管理功能，包括：
+//! 提供飞书文档v1版本的完整管理功能，包括：
 //! - 创建和删除文档
 //! - 文档信息查询和管理
 //! - 文档内容读取和编辑
 //! - 文档块操作和管理
 
 pub mod document;
+pub mod models;
+pub mod requests;
+pub mod responses;
 
 // 重新导出所有服务类型
 pub use document::*;
 
 use openlark_core::config::Config;
 
-/// Docx文档服务 v1版本
+/// Docs文档服务 v1版本
 ///
-/// 提供飞书协作文档v1版本的统一入口，支持现代化的文档管理。
+/// 提供飞书文档v1版本的统一入口，支持现代化的文档管理。
 /// 包括创建、编辑、格式化、协作等企业级功能。
 #[derive(Debug, Clone)]
-pub struct DocxServiceV1 {
+pub struct DocsServiceV1 {
     config: Config,
     /// 文档管理服务
     pub document: DocumentService,
 }
 
-impl DocxServiceV1 {
-    /// 创建Docx v1服务实例
+impl DocsServiceV1 {
+    /// 创建Docs v1服务实例
     ///
     /// # 参数
     /// - `config`: SDK配置信息
@@ -34,10 +37,10 @@ impl DocxServiceV1 {
     ///
     /// ```rust
     /// use open_lark::prelude::*;
-    /// use open_lark::service::docx::v1::DocxServiceV1;
+    /// use open_lark::service::docs::v1::DocsServiceV1;
     ///
     /// let config = openlark_core::config::Config::new("app_id", "app_secret");
-    /// let service = DocxServiceV1::new(config);
+    /// let service = DocsServiceV1::new(config);
     /// ```
     pub fn new(config: Config) -> Self {
         Self {
@@ -47,7 +50,7 @@ impl DocxServiceV1 {
     }
 }
 
-impl openlark_core::trait_system::Service for DocxServiceV1 {
+impl openlark_core::trait_system::Service for DocsServiceV1 {
     fn config(&self) -> &Config {
         &self.config
     }
@@ -56,7 +59,7 @@ impl openlark_core::trait_system::Service for DocxServiceV1 {
     where
         Self: Sized,
     {
-        "DocxServiceV1"
+        "DocsServiceV1"
     }
 }
 
@@ -66,12 +69,12 @@ mod tests {
     use openlark_core::prelude::Service;
 
     #[test]
-    fn test_docx_v1_service_creation() {
+    fn test_docs_v1_service_creation() {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let service = DocxServiceV1::new(config);
+        let service = DocsServiceV1::new(config);
         assert!(!format!("{:?}", service).is_empty());
     }
 
@@ -81,7 +84,7 @@ mod tests {
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let service = DocxServiceV1::new(config);
+        let service = DocsServiceV1::new(config);
 
         // 测试Service trait的实现
         let config_ref = service.config();
@@ -91,7 +94,7 @@ mod tests {
     #[test]
     fn test_document_service_available() {
         let config = openlark_core::config::Config::default();
-        let service = DocxServiceV1::new(config);
+        let service = DocsServiceV1::new(config);
 
         // 验证document服务可用
         let document_service_str = format!("{:?}", service.document);

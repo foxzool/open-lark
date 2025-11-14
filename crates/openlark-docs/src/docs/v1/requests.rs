@@ -1,6 +1,5 @@
 //! Cloud Docs API 请求类型定义
 
-use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -191,7 +190,7 @@ pub struct MoveFolderRequest {
 // ==================== 评论请求类型 ====================
 
 /// 创建评论请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateCommentRequest {
     /// 文档ID
     pub document_id: String,
@@ -426,7 +425,7 @@ pub struct UpdatePermissionsRequest {
 }
 
 /// 添加协作者请求
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AddCollaboratorRequest {
     /// 文档ID
     pub document_id: String,
@@ -521,5 +520,72 @@ impl Default for ListDocumentsRequest {
             page_size: Some(20),
             page_token: None,
         }
+    }
+}
+
+impl ListDocumentsRequest {
+    /// 创建新的请求实例
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 设置文件夹ID
+    pub fn folder_id(mut self, folder_id: impl Into<String>) -> Self {
+        self.folder_id = Some(folder_id.into());
+        self
+    }
+
+    /// 设置文档类型
+    pub fn document_type(mut self, document_type: DocumentType) -> Self {
+        self.document_type = Some(document_type);
+        self
+    }
+
+    /// 设置所有者ID
+    pub fn owner_id(mut self, owner_id: impl Into<String>) -> Self {
+        self.owner_id = Some(owner_id.into());
+        self
+    }
+
+    /// 设置文档状态
+    pub fn status(mut self, status: DocumentStatus) -> Self {
+        self.status = Some(status);
+        self
+    }
+
+    /// 设置搜索关键词
+    pub fn keyword(mut self, keyword: impl Into<String>) -> Self {
+        self.keyword = Some(keyword.into());
+        self
+    }
+
+    /// 设置标签筛选
+    pub fn tags(mut self, tags: Vec<String>) -> Self {
+        self.tags = Some(tags);
+        self
+    }
+
+    /// 设置排序字段
+    pub fn sort_field(mut self, sort_field: impl Into<String>) -> Self {
+        self.sort_field = Some(sort_field.into());
+        self
+    }
+
+    /// 设置排序方向
+    pub fn sort_order(mut self, sort_order: impl Into<String>) -> Self {
+        self.sort_order = Some(sort_order.into());
+        self
+    }
+
+    /// 设置分页大小
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.page_size = Some(page_size);
+        self
+    }
+
+    /// 设置页面标记
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.page_token = Some(page_token.into());
+        self
     }
 }
