@@ -10,7 +10,7 @@
 // 提供文档v2版本的功能
 use openlark_core::prelude::*;
 /// 文档v2版本服务
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct DocV2Service {
     client: std::sync::Arc<LarkClient>,
 }

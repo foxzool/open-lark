@@ -31,7 +31,7 @@ impl AppTableService {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 删除数据表请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct DeleteTableRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token
@@ -41,7 +41,7 @@ pub struct DeleteTableRequest {
 impl DeleteTableRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct DeleteTableRequestBuilder {
     request: DeleteTableRequest}
 impl DeleteTableRequestBuilder {
@@ -54,7 +54,7 @@ impl DeleteTableRequestBuilder {
     BaseResponse<DeleteTableResponse>,
     delete,
 );
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct DeleteTableResponse {
     /// 删除的数据表ID
     pub deleted: bool,

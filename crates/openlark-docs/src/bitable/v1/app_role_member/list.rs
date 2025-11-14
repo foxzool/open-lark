@@ -32,7 +32,7 @@ impl AppRoleMemberService {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 列出协作者请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct ListRoleMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -54,7 +54,7 @@ pub struct ListRoleMemberRequest {
 impl ListRoleMemberRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct ListRoleMemberRequestBuilder {
     request: ListRoleMemberRequest}
 impl ListRoleMemberRequestBuilder {
@@ -80,7 +80,7 @@ impl_executable_builder_owned!(,
     list,
 );
 /// 列出协作者响应
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct ListRoleMemberResponse {
     /// 是否还有更多项
     pub has_more: bool,

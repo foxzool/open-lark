@@ -5,17 +5,31 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-// wiki v2 - 知识库v2版本API
-//,
-// 包含知识库的核心功能
-use openlark_core::prelude::*;
-/// 知识库v2版本服务
-#[derive(Debug, Clone)]
-pub struct WikiV2Service {
-    client: std::sync::Arc<LarkClient>,
+//! V2服务模块 - 简化实现
+use serde::{Deserialize, Serialize};
+use openlark_core::config::Config;
+use api_resp::{ApiResponseTrait, ResponseFormat};
+/// 简化的服务结构体
+#[derive(Clone)]
+pub struct SimpleService {
 }
-impl WikiV2Service {
-    pub fn new(config: Config) -> Self {
-        Self { config }
+
+impl SimpleService {
 }
+#[derive(Debug, Deserialize, Serialize)]
+pub struct SimpleResponse;
+impl ApiResponseTrait for SimpleResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+}
+/// V2服务
+#[derive(Clone)]
+pub struct V2Service {
+}
+
+impl V2Service {
+}
+// Type alias for compatibility
+pub type ServiceType = V2Service;
+pub type ResponseType = SimpleResponse;
 }

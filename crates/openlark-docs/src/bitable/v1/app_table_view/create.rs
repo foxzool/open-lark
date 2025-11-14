@@ -31,7 +31,7 @@ impl AppTableViewService {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 新增视图请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct CreateViewRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token
@@ -43,7 +43,7 @@ pub struct CreateViewRequest {
 impl CreateViewRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct CreateViewRequestBuilder {
     request: CreateViewRequest}
 impl CreateViewRequestBuilder {
@@ -57,7 +57,7 @@ impl CreateViewRequestBuilder {
     create,
 );
 /// 视图数据
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct ViewData {
     /// 视图名称
     pub view_name: String,
@@ -112,11 +112,11 @@ impl ViewData {
     pub fn with_property(mut self, property: serde_json::Value) -> Self {
 self.property = Some(property);
         self}
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 struct CreateViewRequestBody {
     view: ViewData}
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct CreateViewResponse {
     /// 视图 ID
     pub view_id: String,

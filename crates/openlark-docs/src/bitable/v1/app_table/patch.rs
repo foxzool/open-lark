@@ -31,7 +31,7 @@ impl AppTableService {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 更新数据表请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct PatchTableRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token
@@ -43,7 +43,7 @@ pub struct PatchTableRequest {
 impl PatchTableRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct PatchTableRequestBuilder {
     request: PatchTableRequest}
 impl PatchTableRequestBuilder {
@@ -61,7 +61,7 @@ struct PatchTableRequestBody {,
 #[serde(skip_serializing_if = "Option::is_none")]
     name: Option<String>}
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct PatchTableResponse {
     /// 数据表的名称
     pub name: String,

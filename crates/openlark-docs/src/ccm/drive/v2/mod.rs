@@ -8,9 +8,9 @@
 // drive v2 - 云空间文件管理v2版本API
 //,
 // 包含云空间文件管理的扩展功能
-use openlark_core::prelude::*;
+use openlark_core::{config::Config, trait_system::Service};
 /// 云空间文件管理v2版本服务
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct DriveV2Service {
     client: std::sync::Arc<LarkClient>,
 }

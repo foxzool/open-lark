@@ -31,7 +31,7 @@ impl AppRoleService {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 新增自定义角色请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct CreateAppRoleRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -47,7 +47,7 @@ pub struct CreateAppRoleRequest {
 #[serde(skip_serializing_if = "Option::is_none")]
     block_roles: Option<Vec<BlockRole>>}
 /// 数据表权限,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct TableRole {
     /// 数据表 id
     pub table_id: String,
@@ -57,7 +57,7 @@ pub struct TableRole {
 #[serde(skip_serializing_if = "Option::is_none")]
     rec_rule: Option<String>}
 /// 数据表默认权限,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct BlockRole {
     /// 多维表格数据表的唯一标识符
     pub block_id: String,
@@ -66,7 +66,7 @@ pub struct BlockRole {
 impl CreateAppRoleRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct CreateAppRoleRequestBuilder {
     request: CreateAppRoleRequest}
 impl CreateAppRoleRequestBuilder {
@@ -80,7 +80,7 @@ impl CreateAppRoleRequestBuilder {
     create,
 );
 /// 自定义角色信息
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct AppRole {
     /// 自定义角色的id
     pub role_id: String,
@@ -91,7 +91,7 @@ pub struct AppRole {
     /// 数据表默认权限
     pub block_roles: Option<Vec<BlockRole>>}
 /// 新增自定义角色响应,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct CreateAppRoleResponse {
     /// 新增的自定义角色信息
     pub role: AppRole,

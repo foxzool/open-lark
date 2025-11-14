@@ -31,7 +31,7 @@ impl AppRoleMemberService {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 新增协作者请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct CreateRoleMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -51,7 +51,7 @@ pub struct CreateRoleMemberRequest {
 impl CreateRoleMemberRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct CreateRoleMemberRequestBuilder {
     request: CreateRoleMemberRequest}
 impl CreateRoleMemberRequestBuilder {
@@ -67,7 +67,7 @@ impl_executable_builder_owned!(,
     create,
 );
 /// 协作者信息
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct RoleMember {
     /// 成员id
     pub member_id: String,
@@ -76,7 +76,7 @@ pub struct RoleMember {
     /// 成员名称
     pub member_name: Option<String>}
 /// 新增协作者响应,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct CreateRoleMemberResponse {
     /// 新增的协作者信息
     pub member: RoleMember,

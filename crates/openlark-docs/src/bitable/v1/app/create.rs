@@ -31,7 +31,7 @@ impl AppService {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 创建多维表格请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct CreateAppRequest {
     api_request: ApiRequest,
     /// 多维表格 App 名字
@@ -43,7 +43,7 @@ pub struct CreateAppRequest {
 impl CreateAppRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct CreateAppRequestBuilder {
     request: CreateAppRequest}
 impl CreateAppRequestBuilder {
@@ -64,12 +64,12 @@ struct CreateAppRequestBody {
     #[serde(skip_serializing_if = "Option::is_none")]
     time_zone: Option<String>}
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct CreateAppResponse {
     /// 多维表格的 app 信息
     pub app: CreateAppResponseData,
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct CreateAppResponseData {
     /// 多维表格的 app_token
     pub app_token: String,

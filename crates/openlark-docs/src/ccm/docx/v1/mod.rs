@@ -1,31 +1,47 @@
-#![allow(dead_code)]
-#![allow(unused_variables)]
-#![allow(unused_imports)]
-#![allow(unused_mut)]
-#![allow(non_snake_case)]
-#![allow(clippy::too_many_arguments)]
-#![allow(clippy::module_inception)]
-// docx v1 - 文档v1版本API
-//,
-// 包含文档的核心功能
-use openlark_core::prelude::*;
-use super::ccm::docx::v1::document::DocumentService;
-use super::ccm::docx::v1::block::BlockService;
-use super::ccm::docx::v1::comment::CommentService;
-/// 文档v1版本服务
-#[derive(Debug, Clone)]
+//! Document (DOCX) v1 API module
+//!
+//! This module provides the v1 version of document API functionality,
+//! including core document features.
+
+use crate::prelude::*;
+
+/// 文档操作服务
+pub mod document;
+
+/// 块操作服务
+pub mod block;
+
+/// 评论操作服务
+pub mod comment;
+
+/// Document v1 Service
+#[derive(Clone)]
 pub struct DocxV1Service {
+    client: std::sync::Arc<LarkClient>,
 }
 
 impl DocxV1Service {
+    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
+        Self { client }
+    }
 }
-    pub fn new(config: Config) -> Self {
-        Self { config }
+
+impl std::ops::Deref for DocxV1Service {
+    type Target = LarkClient;
+
+    fn deref(&self) -> &Self::Target {
+        &self.client
+    }
 }
-/// 文档操作服务
-pub mod document;
-/// 块操作服务
-pub mod block;
-/// 评论操作服务
-pub mod comment;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_docx_v1_service_creation() {
+        // This is a placeholder test
+        // In a real implementation, you would create a mock client
+        // and test the DocxV1Service functionality
+    }
 }

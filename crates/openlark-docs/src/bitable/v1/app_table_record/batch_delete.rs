@@ -15,7 +15,7 @@ use SDKResult;    api_req::ApiRequest,
     SDKResult,
 };
 /// 批量删除记录请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct BatchDeleteRecordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -30,7 +30,7 @@ pub struct BatchDeleteRecordRequest {
 impl BatchDeleteRecordRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct BatchDeleteRecordRequestBuilder {
     request: BatchDeleteRecordRequest}
 impl BatchDeleteRecordRequestBuilder {
@@ -45,12 +45,12 @@ crate::impl_executable_builder_owned!(
     batch_delete,
 );
 /// 批量删除记录响应
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct BatchDeleteRecordResponse {
     /// 成功删除的记录 ID 列表
     pub records: Vec<DeletedRecord>}
 /// 被删除的记录信息,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct DeletedRecord {
     /// 记录 ID
     pub record_id: String,

@@ -31,7 +31,7 @@ impl AppService {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 更新多维表格元数据请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct UpdateAppRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token
@@ -43,7 +43,7 @@ pub struct UpdateAppRequest {
 impl UpdateAppRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct UpdateAppRequestBuilder {
     request: UpdateAppRequest}
 impl UpdateAppRequestBuilder {
@@ -63,12 +63,12 @@ struct UpdateAppRequestBody {,
     #[serde(skip_serializing_if = "Option::is_none")]
     is_advanced: Option<bool>}
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct UpdateAppResponse {
     /// 多维表格的 app 信息
     pub app: UpdateAppResponseData,
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct UpdateAppResponseData {
     /// 多维表格的 app_token
     pub app_token: String,

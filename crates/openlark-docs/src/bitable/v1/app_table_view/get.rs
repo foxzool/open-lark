@@ -31,7 +31,7 @@ impl AppTableViewService {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 获取视图请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct GetViewRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token
@@ -43,7 +43,7 @@ pub struct GetViewRequest {
 impl GetViewRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct GetViewRequestBuilder {
     request: GetViewRequest}
 impl GetViewRequestBuilder {
@@ -56,12 +56,12 @@ impl GetViewRequestBuilder {
     BaseResponse<GetViewResponse>,
     get,
 );
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct GetViewResponse {
     /// 视图信息
     pub view: ViewDetailInfo,
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct ViewDetailInfo {
     /// 视图 ID
     pub view_id: String,

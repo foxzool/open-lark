@@ -8,13 +8,13 @@
 // drive v1 - 云空间文件管理v1版本API
 //,
 // 包含云空间文件管理的核心功能，这是使用最广泛的版本
-use openlark_core::prelude::*;
-use super::ccm::drive::v1::file::FileService;
-use super::ccm::drive::v1::meta::MetaService;
-use super::ccm::drive::v1::statistics::StatisticsService;
-use super::ccm::drive::v1::view_record::ViewRecordService;
+use openlark_core::{config::Config, trait_system::Service};
+// use super::ccm::drive::v1::file::FileService;
+// use super::ccm::drive::v1::meta::MetaService;
+// use super::ccm::drive::v1::statistics::StatisticsService;
+// use super::ccm::drive::v1::view_record::ViewRecordService;
 /// 云空间文件管理v1版本服务
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct DriveV1Service {
     client: std::sync::Arc<LarkClient>,
     /// 文件操作服务

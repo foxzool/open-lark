@@ -23,7 +23,7 @@ use openlark_core::,
     service::bitable::v1::app_role_member::RoleMember,
 };
 /// 批量新增协作者请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct BatchCreateRoleMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -39,7 +39,7 @@ pub struct BatchCreateRoleMemberRequest {
     /// 成员列表
     members: Vec<MemberInfo>}
 /// 成员信息,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct MemberInfo {
     /// 成员id
     pub member_id: String,
@@ -48,7 +48,7 @@ pub struct MemberInfo {
 impl BatchCreateRoleMemberRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct BatchCreateRoleMemberRequestBuilder {
     request: BatchCreateRoleMemberRequest}
 impl BatchCreateRoleMemberRequestBuilder {
@@ -64,7 +64,7 @@ impl_executable_builder_owned!(,
     batch_create,
 );
 /// 批量新增协作者响应
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct BatchCreateRoleMemberResponse {
     /// 新增的协作者信息列表
     pub members: Vec<RoleMember>}

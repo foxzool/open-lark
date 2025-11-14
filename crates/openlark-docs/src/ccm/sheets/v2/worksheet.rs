@@ -10,7 +10,7 @@
 // 实现工作表级别的操作,
 use openlark_core::prelude::*;
 /// 工作表操作服务
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct WorksheetService {
     client: std::sync::Arc<LarkClient>,
 }
