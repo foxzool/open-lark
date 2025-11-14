@@ -2145,6 +2145,26 @@ impl Endpoints {
     pub const DOCX_V1_CHAT_ANNOUNCEMENT_BLOCK: &'static str =
         "/open-apis/docx/v1/chats/{}/announcement/blocks/{}";
 
+    // ==================== 旧版文档服务端点 (Doc V2) ====================
+
+    /// 创建旧版文档
+    pub const DOC_V2_CREATE: &'static str = "/open-apis/doc/v2/create";
+
+    /// 获取旧版文档元信息
+    pub const DOC_V2_META: &'static str = "/open-apis/doc/v2/meta/{docToken}";
+
+    /// 获取旧版文档中的电子表格元数据
+    pub const DOC_V2_SHEET_META: &'static str = "/open-apis/doc/v2/{docToken}/sheet_meta";
+
+    /// 获取旧版文档纯文本内容
+    pub const DOC_V2_RAW_CONTENT: &'static str = "/open-apis/doc/v2/{docToken}/raw_content";
+
+    /// 获取旧版文档富文本内容
+    pub const DOC_V2_CONTENT: &'static str = "/open-apis/doc/v2/{docToken}/content";
+
+    /// 编辑旧版文档内容
+    pub const DOC_V2_BATCH_UPDATE: &'static str = "/open-apis/doc/v2/{docToken}/batch_update";
+
     // Drive 云盘服务
     /// 文件管理
     pub const DRIVE_V1_FILES: &'static str = "/open-apis/drive/v1/files";
