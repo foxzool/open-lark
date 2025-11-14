@@ -2592,6 +2592,9 @@ impl Endpoints {
     /// 搜索云文档对象
     pub const SUITE_DOCS_SEARCH_OBJECT: &'static str = "/open-apis/suite/docs-api/search/object";
 
+    /// 获取云文档元数据
+    pub const SUITE_DOCS_META: &'static str = "/open-apis/suite/docs-api/meta";
+
     /// 数据源操作（创建/列表）
     pub const SEARCH_V2_DATA_SOURCES: &'static str = "/open-apis/search/v2/data_sources";
 
