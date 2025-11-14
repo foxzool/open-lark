@@ -21,7 +21,7 @@ use openlark_core::,
     impl_executable_builder_config,
 };
 /// 获取表单元数据请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct GetFormRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -34,7 +34,7 @@ pub struct GetFormRequest {
 impl GetFormRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct GetFormRequestBuilder {
     request: GetFormRequest}
 impl GetFormRequestBuilder {
@@ -47,7 +47,7 @@ impl GetFormRequestBuilder {
     get_form,
 );
 /// 表单信息
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct Form {
     /// 表单ID
     pub form_id: String,
@@ -70,7 +70,7 @@ pub struct Form {
     /// 状态：启用/禁用
     pub status: String,
 /// 获取表单元数据响应,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct GetFormResponse {
     /// 表单信息
     pub form: Form,

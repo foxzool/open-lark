@@ -21,7 +21,7 @@ use openlark_core::,
     service::bitable::v1::app_table_field::AppTableField,
 };
 /// 列出字段请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct ListFieldRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -46,7 +46,7 @@ pub struct ListFieldRequest {
 impl ListFieldRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct ListFieldRequestBuilder {
     request: ListFieldRequest}
 impl ListFieldRequestBuilder {
@@ -78,7 +78,7 @@ crate::impl_executable_builder_owned!(
     list,
 );
 /// 列出字段响应
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct ListFieldResponse {
     /// 是否还有更多项
     pub has_more: bool,

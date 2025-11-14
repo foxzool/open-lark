@@ -21,7 +21,7 @@ use openlark_core::,
     impl_executable_builder_config,
 };
 /// 删除字段请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct DeleteFieldRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -37,7 +37,7 @@ pub struct DeleteFieldRequest {
 impl DeleteFieldRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct DeleteFieldRequestBuilder {
     request: DeleteFieldRequest}
 impl DeleteFieldRequestBuilder {
@@ -50,7 +50,7 @@ impl DeleteFieldRequestBuilder {
     delete_field,
 );
 /// 删除字段响应
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct DeleteFieldResponse {
     /// 删除的字段 ID
     pub field_id: String,

@@ -15,7 +15,7 @@ use SDKResult;    api_req::ApiRequest,
     SDKResult,
 };
 /// 列出自动化流程请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct ListWorkflowRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -31,7 +31,7 @@ pub struct ListWorkflowRequest {
 impl ListWorkflowRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct ListWorkflowRequestBuilder {
     request: ListWorkflowRequest}
 impl ListWorkflowRequestBuilder {
@@ -53,7 +53,7 @@ crate::impl_executable_builder_owned!(
     list,
 );
 /// 自动化流程信息
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct Workflow {
     /// 自动化流程ID
     pub id: String,
@@ -74,7 +74,7 @@ pub struct Workflow {
 #[serde(default)]
     pub description: Option<String>}
 /// 列出自动化流程响应,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct ListWorkflowResponse {
     /// 自动化流程列表
     pub items: Vec<Workflow>,

@@ -24,7 +24,7 @@ use openlark_core::,
         AppTableField, AppTableFieldDescription, AppTableFieldProperty, FieldType, UiType}
 };
 /// 新增字段请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct CreateFieldRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -56,7 +56,7 @@ pub struct CreateFieldRequest {
 impl CreateFieldRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct CreateFieldRequestBuilder {
     request: CreateFieldRequest}
 impl CreateFieldRequestBuilder {
@@ -77,7 +77,7 @@ impl_executable_builder_owned!(,
     create,
 );
 /// 新增字段响应
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct CreateFieldResponse {
     /// 新增的字段信息
     pub field: AppTableField,

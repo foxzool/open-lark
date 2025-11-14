@@ -22,7 +22,7 @@ use openlark_core::,
     service::bitable::v1::Record,
 };
 /// 批量更新记录请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct BatchUpdateRecordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -38,7 +38,7 @@ pub struct BatchUpdateRecordRequest {
     /// 要更新的记录列表
     records: Vec<UpdateRecord>}
 /// 要更新的记录数据,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct UpdateRecord {
     /// 记录 ID
     pub record_id: String,
@@ -47,7 +47,7 @@ pub struct UpdateRecord {
 impl BatchUpdateRecordRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct BatchUpdateRecordRequestBuilder {
     request: BatchUpdateRecordRequest}
 impl BatchUpdateRecordRequestBuilder {
@@ -64,7 +64,7 @@ crate::impl_executable_builder_owned!(
     batch_update,
 );
 /// 批量更新记录响应
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct BatchUpdateRecordResponse {
     /// 更新后的记录列表
     pub records: Vec<Record>}

@@ -22,7 +22,7 @@ use openlark_core::,
     service::bitable::v1::Record,
 };
 /// 更新记录请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct UpdateRecordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -43,7 +43,7 @@ pub struct UpdateRecordRequest {
 impl UpdateRecordRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct UpdateRecordRequestBuilder {
     request: UpdateRecordRequest}
 impl UpdateRecordRequestBuilder {
@@ -68,7 +68,7 @@ crate::impl_executable_builder_owned!(
     update,
 );
 /// 更新记录响应
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct UpdateRecordResponse {
     /// 更新后的记录
     pub record: Record,

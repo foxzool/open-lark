@@ -21,7 +21,7 @@ use openlark_core::,
     impl_executable_builder_config,
 };
 /// 更新自动化流程状态请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct UpdateWorkflowRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -36,7 +36,7 @@ pub struct UpdateWorkflowRequest {
 impl UpdateWorkflowRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct UpdateWorkflowRequestBuilder {
     request: UpdateWorkflowRequest}
 impl UpdateWorkflowRequestBuilder {
@@ -49,7 +49,7 @@ impl UpdateWorkflowRequestBuilder {
     update_workflow,
 );
 /// 更新自动化流程状态响应
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct UpdateWorkflowResponse {
     /// 自动化流程ID
     pub workflow_id: String,

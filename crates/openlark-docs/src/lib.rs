@@ -1,8 +1,11 @@
 //! openlark-docs module for OpenLark SDK
 //!
 //! This crate provides cloud document functionality for the OpenLark SDK,
-//! including documents, spreadsheets, bitables, wikis, drive storage, and
-//! content collaboration management.
+//! organized according to meta.Project(s) business logic:
+//! - base: base, bitable
+//! - ccm: content collaboration management (docs, docx, sheets, wiki, drive)
+//! - cardkit: interactive card components
+//! - report: reporting and analytics
 
 #![allow(missing_docs)]
 
@@ -15,40 +18,37 @@ pub mod prelude {
     pub use openlark_core::{client::LarkClient, SDKResult};
 }
 
-// Cloud document service modules
-#[cfg(feature = "docs")]
-pub mod docs;
-
-#[cfg(feature = "sheets")]
-pub mod sheets;
+// Base modules - base and bitable projects
+#[cfg(feature = "base")]
+pub mod base;
 
 #[cfg(feature = "bitable")]
 pub mod bitable;
 
-#[cfg(feature = "wiki")]
-pub mod wiki;
-
-#[cfg(feature = "drive")]
-pub mod drive;
-
+// Content Collaboration Management (CCM) modules
 #[cfg(feature = "ccm")]
 pub mod ccm;
 
-// Re-export service types for convenience
-#[cfg(feature = "docs")]
-pub use docs::DocsService;
+// Interactive card components
+#[cfg(feature = "cardkit")]
+pub mod cardkit;
 
-#[cfg(feature = "sheets")]
-pub use sheets::SheetsService;
+// Reporting and analytics
+#[cfg(feature = "report")]
+pub mod report;
+
+// Re-export service types for convenience
+#[cfg(feature = "base")]
+pub use base::BaseService;
 
 #[cfg(feature = "bitable")]
 pub use bitable::BitableService;
 
-#[cfg(feature = "wiki")]
-pub use wiki::WikiService;
-
-#[cfg(feature = "drive")]
-pub use drive::DriveService;
-
 #[cfg(feature = "ccm")]
 pub use ccm::CcmService;
+
+#[cfg(feature = "cardkit")]
+pub use cardkit::CardKitService;
+
+#[cfg(feature = "report")]
+pub use report::ReportService;

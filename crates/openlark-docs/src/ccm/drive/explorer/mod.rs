@@ -8,9 +8,9 @@
 // drive explorer - 资源浏览器API
 //,
 // 提供云空间资源浏览器相关的功能
-use openlark_core::prelude::*;
+use openlark_core::{config::Config, trait_system::Service};
 /// 资源浏览器服务
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct DriveExplorerService {
     client: std::sync::Arc<LarkClient>,
 }

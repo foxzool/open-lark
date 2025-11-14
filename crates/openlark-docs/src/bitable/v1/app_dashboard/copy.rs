@@ -21,7 +21,7 @@ use openlark_core::,
     impl_executable_builder_config,
 };
 /// 复制仪表盘请求,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct CopyDashboardRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -37,7 +37,7 @@ pub struct CopyDashboardRequest {
 impl CopyDashboardRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Debug, Clone)]
+}#[derive(Clone)]
 pub struct CopyDashboardRequestBuilder {
     request: CopyDashboardRequest}
 impl CopyDashboardRequestBuilder {
@@ -50,14 +50,14 @@ impl CopyDashboardRequestBuilder {
     copy_dashboard,
 );
 /// 仪表盘信息
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct Dashboard {
     /// 仪表盘ID
     pub block_id: String,
     /// 仪表盘名称
     pub name: String,
 /// 复制仪表盘响应,
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct CopyDashboardResponse {
     /// 复制后的仪表盘信息
     pub dashboard: Dashboard,

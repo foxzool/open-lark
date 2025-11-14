@@ -10,7 +10,7 @@ use openlark_core::{
 /// 多维表格服务
 ///
 /// 基础服务架构，具体功能在后续版本中实现。
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct BitableService {
     config: Config,
 }
