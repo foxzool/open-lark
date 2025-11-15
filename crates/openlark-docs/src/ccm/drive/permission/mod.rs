@@ -1,25 +1,43 @@
-//! 权限管理API模块
+//! Drive Permission API模块
 //!
-//! 提供云空间文件权限管理相关的功能
+//! 提供云空间文件权限管理相关的功能，包括：
+//! - 协作者权限验证
+//! - 所有者转移
+//! - 公共权限设置获取
+//!
+//! # 示例
+//!
+//! ```rust
+//! use openlark_docs::ccm::drive::permission::{PermissionService, CheckMemberPermissionRequest};
+//!
+//! let service = PermissionService::new(config);
+//!
+//! // 检查用户权限
+//! let response = service
+//!     .check_member_permission_builder()
+//!     .file_token("token_xxx")
+//!     .permission("view")
+//!     .user_id("user_xxx")
+//!     .user_id_type("open_id")
+//!     .execute(&service)
+//!     .await?;
+//!
+//! if response.permitted.unwrap_or(false) {
+//!     println!("用户有权限");
+//! }
+//! ```
 
-use crate::prelude::*;
+/// 数据模型定义
+pub mod models;
 
-/// 权限管理服务
-#[derive(Clone)]
-pub struct PermissionService {
-    client: std::sync::Arc<LarkClient>,
-}
+/// API服务实现
+pub mod services;
 
-impl PermissionService {
-    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
-        Self { client }
-    }
-}
-
-impl std::ops::Deref for PermissionService {
-    type Target = LarkClient;
-
-    fn deref(&self) -> &Self::Target {
-        &self.client
-    }
-}
+// 重新导出主要类型
+pub use models::*;
+pub use services::{
+    PermissionService,
+    CheckMemberPermissionRequestBuilder,
+    TransferOwnerRequestBuilder,
+    GetPublicPermissionRequestBuilder
+};

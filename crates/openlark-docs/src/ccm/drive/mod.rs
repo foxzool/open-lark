@@ -25,6 +25,10 @@ pub mod v2;
 pub use v1::*;
 pub use v2::*;
 
+// 重新导出explorer和permission模块
+pub use explorer::*;
+pub use permission::*;
+
 /// 云空间文件管理服务
 #[derive(Clone)]
 pub struct DriveService {
