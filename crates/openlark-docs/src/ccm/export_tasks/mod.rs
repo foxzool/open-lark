@@ -1,21 +1,34 @@
-#![allow(dead_code)]
-#![allow(unused_variables)]
-#![allow(unused_imports)]
-#![allow(unused_mut)]
-#![allow(non_snake_case)]
-#![allow(clippy::too_many_arguments)]
-#![allow(clippy::module_inception)]
-// export_tasks - 导出任务API
-//,
-// 提供文档导出任务相关的功能
-use openlark_core::prelude::*;
-/// 导出任务服务
-#[derive(Clone)]
-pub struct ExportTasksService {
-    client: std::sync::Arc<LarkClient>,
-}
-impl ExportTasksService {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}
-}
+//! 导出任务API模块
+//!
+//! 提供文档导出任务相关的功能，包括：
+//! - 创建导出任务
+//! - 查询导出任务状态
+//! - 下载导出文件
+//!
+//! # 示例
+//! ```rust
+//! use openlark_docs::ccm::export_tasks::{ExportTasksService, CreateExportTaskRequest};
+//!
+//! let service = ExportTasksService::new(config);
+//!
+//! // 创建导出任务
+//! let request = CreateExportTaskRequest {
+//!     file_token: "file_token_xxx".to_string(),
+//!     file_type: "doc".to_string(),
+//!     export_type: "pdf".to_string(),
+//!     export_name: Some("导出文档".to_string()),
+//!     ..Default::default()
+//! };
+//!
+//! let response = service.create_export_task(&request).await?;
+//! ```
+
+/// 数据模型定义
+pub mod models;
+
+/// API服务实现
+pub mod services;
+
+// 重新导出主要类型
+pub use models::*;
+pub use services::{ExportTasksService, CreateExportTaskRequestBuilder, GetExportTaskRequestBuilder, DownloadExportFileRequestBuilder};

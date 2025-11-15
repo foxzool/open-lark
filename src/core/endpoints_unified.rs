@@ -1165,6 +1165,14 @@ impl Endpoints {
     pub const APASS_V1_OBJECT_RECORD_BATCH_CREATE: &'static str =
         "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/batch_create";
 
+    // ===== CCM 导出任务端点 =====
+    /// 创建导出任务
+    pub const DRIVE_V1_EXPORT_TASKS: &'static str = "/open-apis/drive/v1/export_tasks";
+    /// 查询导出任务结果
+    pub const DRIVE_V1_EXPORT_TASKS_TICKET: &'static str = "/open-apis/drive/v1/export_tasks/{ticket}";
+    /// 下载导出文件
+    pub const DRIVE_V1_EXPORT_TASKS_FILE_DOWNLOAD: &'static str = "/open-apis/drive/export_tasks/file/{file_token}/download";
+
     // ===== 环境变量管理端点 =====
     /// 查询环境变量
     pub const APASS_V1_ENVIRONMENT_VARIABLE_QUERY: &'static str =
