@@ -47,9 +47,14 @@
 pub mod v1;
 pub mod v2;
 
-// 重新导出所有服务类型
-pub use v1::*;
-pub use v2::*;
+// 重新导出所有服务类型，避免名称冲突
+pub use v1::{
+    DocsServiceV1, DocumentService
+};
+
+pub use v2::{
+    DocV2Service, CreateDocService, CreateDocBuilder
+};
 
 // 为向后兼容性提供DocxService别名
 #[cfg(feature = "docs")]

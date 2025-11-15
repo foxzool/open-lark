@@ -2,12 +2,12 @@
 //!
 //! 提供高性能的批量数据操作功能，包括：
 //! - 超大规模批量增删改
+use std::collections::HashMap;
 //! - 事务性批量操作
 //! - 异步批量处理
 //! - 操作结果追踪
 
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 use openlark_core::{
     error::LarkAPIError,
     config::Config,
@@ -17,7 +17,6 @@ use openlark_core::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     SDKResult,
 };
-use std::collections::HashMap;
 
 /// 数据模型
 pub mod models {

@@ -15,7 +15,6 @@ use SDKResult;//! 云盘文件夹服务 v1
 
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 
 use openlark_core::{
     core::{

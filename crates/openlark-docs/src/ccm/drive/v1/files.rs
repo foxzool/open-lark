@@ -2,6 +2,7 @@
 #![allow(unused_variables)]
 #![allow(unused_imports)]
 #![allow(unused_mut)]
+use std::collections::HashMap;
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
@@ -19,7 +20,6 @@ use openlark_core::api_req::ApiRequest;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
-use std::collections::HashMap;
 use SDKResult;
 
 use openlark_core::{

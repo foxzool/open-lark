@@ -3,7 +3,6 @@
 //! 提供创建和初始化旧版文档的功能。
 
 use openlark_core::{
-    api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,

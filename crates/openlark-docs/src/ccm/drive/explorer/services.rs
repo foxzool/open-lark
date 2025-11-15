@@ -2,11 +2,11 @@
 //!
 //! 提供资源浏览器相关的API服务，包括：
 //! - 文件夹和文件的基本操作
+use serde_json::Value;
+use std::collections::HashMap;
 //! - 文档复制和删除
 //! - 文件夹内容浏览
 
-use std::collections::HashMap;
-use serde_json::Value;
 
 use openlark_core::{
     error::LarkAPIError,

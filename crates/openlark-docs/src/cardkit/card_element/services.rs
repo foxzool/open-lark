@@ -2,12 +2,11 @@
 //!
 //! 提供卡片组件管理相关的API服务，包括：
 //! - 卡片组件的创建、更新、删除
+use std::collections::HashMap;
 //! - 组件属性的局部更新
 //! - 流式文本更新
 //! - 完整的错误处理和参数验证
 
-use std::collections::HashMap;
-use serde_json::Value;
 
 use openlark_core::{
     error::LarkAPIError,

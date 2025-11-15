@@ -2,12 +2,11 @@
 //!
 //! 提供卡片实体管理相关的API服务，包括：
 //! - 卡片的创建、更新、配置管理
+use std::collections::HashMap;
 //! - 批量更新操作
 //! - 卡片ID类型转换
 //! - 完整的错误处理和参数验证
 
-use std::collections::HashMap;
-use serde_json::Value;
 
 use openlark_core::{
     error::LarkAPIError,

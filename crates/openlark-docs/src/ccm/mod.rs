@@ -17,13 +17,13 @@ pub mod ccm_sheet;
 
 // Re-export services for convenience
 #[cfg(feature = "ccm-doc")]
-pub use doc::DocService;
+// pub use doc::DocService; // 暂时注释掉
 
 #[cfg(feature = "ccm-docx")]
-pub use docx::DocxService;
+// pub use docx::DocxService; // 暂时注释掉
 
 #[cfg(feature = "ccm-drive")]
-pub use drive::DriveService;
+// pub use drive::DriveService; // 暂时注释掉
 
 /// Export tasks service (included in ccm feature)
 pub use export_tasks::ExportTasksService;
@@ -38,10 +38,10 @@ pub use drive::ExplorerService;
 pub use drive::PermissionService;
 
 #[cfg(feature = "ccm-sheets")]
-pub use sheets::SheetsService;
+// pub use sheets::SheetsService; // 暂时注释掉
 
 #[cfg(feature = "ccm-wiki")]
-pub use wiki::WikiService;
+// pub use wiki::WikiService; // 暂时注释掉
 
 /// Main CCM Service providing access to all content collaboration features
 #[derive(Clone)]

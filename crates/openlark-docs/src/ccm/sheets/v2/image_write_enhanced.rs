@@ -2,6 +2,7 @@
 //!
 //! 提供飞书电子表格v2版本的高级图片写入功能，包括：
 //! - 向电子表格中插入多种格式的图片（PNG、JPEG、GIF等）
+use serde_json::Value;
 //! - 精确的图片位置控制（像素级定位和Excel风格定位）
 //! - 灵活的图片尺寸设置（原始尺寸、自定义尺寸、比例缩放）
 //! - 批量图片插入和管理功能
@@ -23,7 +24,6 @@ use openlark_core::{
 };
 
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 
 use openlark_core::trait_system::Service;
 // use openlark_core::SDKResult;

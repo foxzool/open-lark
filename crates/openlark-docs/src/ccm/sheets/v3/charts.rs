@@ -2,6 +2,7 @@
 //!
 //! 提供飞书电子表格v3版本的图表管理功能，包括：
 //! - 创建和删除图表
+use std::collections::HashMap;
 //! - 多种图表类型支持（柱状图、折线图、饼图、散点图等）
 //! - 图表样式和配置管理
 //! - 数据范围和系列配置
@@ -14,7 +15,6 @@ use openlark_core::{
 };
 
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 use reqwest::Method;
 
 // 使用统一类型定义

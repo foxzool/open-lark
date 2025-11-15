@@ -2,12 +2,12 @@
 //!
 //! 提供强大的数据搜索和过滤功能，包括：
 //! - 复杂查询条件支持
+use std::collections::HashMap;
 //! - 多字段联合搜索
 //! - 高性能索引搜索
 //! - 智能排序和分页
 
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 use openlark_core::{
     error::LarkAPIError,
     config::Config,
@@ -17,7 +17,6 @@ use openlark_core::{
     api_resp::{ApiResponseTrait, ResponseFormat},
     SDKResult,
 };
-use std::collections::HashMap;
 
 /// 数据模型
 pub mod models {

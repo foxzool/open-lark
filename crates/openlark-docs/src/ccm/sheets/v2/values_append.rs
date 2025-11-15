@@ -20,7 +20,6 @@ use openlark_core::{
 };
 
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 
 use openlark_core::trait_system::Service;
 
@@ -240,32 +239,32 @@ impl ValuesAppendRequestBuilder {
                 match &self.range {
                     Some(range) => {
                         if range.is_empty() {
-                            return Err(openlark_core::SDKError::InvalidParameter("目标范围不能为空".to_string()));
+                            return Err(openlark_core::error::LarkAPIError::InvalidParameter("目标范围不能为空".to_string()));
                         }
 
                         // 验证范围格式
                         if !Self::is_valid_range(range) {
-                            return Err(openlark_core::SDKError::InvalidParameter(format!(
+                            return Err(openlark_core::error::LarkAPIError::InvalidParameter(format!(
                                 "无效的范围格式: {}",
                                 range
                             )));
                         }
                     }
                     _ => {
-                        return Err(openlark_core::SDKError::InvalidParameter("目标范围是必需的".to_string()));
+                        return Err(openlark_core::error::LarkAPIError::InvalidParameter("目标范围是必需的".to_string()));
                     }
                 }
 
                 // 验证数据
                 if self.values.is_empty() {
-                    return Err(openlark_core::SDKError::InvalidParameter(
+                    return Err(openlark_core::error::LarkAPIError::InvalidParameter(
                         "至少需要提供一行数据".to_string(),
                     ));
                 }
 
                 // 验证数据行数
                 if self.values.len() > 5000 {
-                    return Err(openlark_core::SDKError::InvalidParameter(
+                    return Err(openlark_core::error::LarkAPIError::InvalidParameter(
                         "单次追加不能超过5000行数据".to_string(),
                     ));
                 }
@@ -273,7 +272,7 @@ impl ValuesAppendRequestBuilder {
                 // 验证数据列数
                 if let Some(first_row) = self.values.first() {
                     if first_row.len() > 100 {
-                        return Err(openlark_core::SDKError::InvalidParameter(
+                        return Err(openlark_core::error::LarkAPIError::InvalidParameter(
                             "单行数据不能超过100列".to_string(),
                         ));
                     }
@@ -281,7 +280,7 @@ impl ValuesAppendRequestBuilder {
                     // 验证所有行的列数一致性
                     for (row_index, row) in self.values.iter().enumerate() {
                         if row.len() > first_row.len() + 10 {
-                            return Err(openlark_core::SDKError::InvalidParameter(format!(
+                            return Err(openlark_core::error::LarkAPIError::InvalidParameter(format!(
                                 "第{}行的列数({})超过首行列数({})过多，最多可超出10列",
                                 row_index + 1,
                                 row.len(),
@@ -295,7 +294,7 @@ impl ValuesAppendRequestBuilder {
                 for (row_index, row) in self.values.iter().enumerate() {
                     for (col_index, cell) in row.iter().enumerate() {
                         if cell.len() > 50000 {
-                            return Err(openlark_core::SDKError::InvalidParameter(format!(
+                            return Err(openlark_core::error::LarkAPIError::InvalidParameter(format!(
                                 "第{}行第{}列的单元格内容过长，不能超过50000字符",
                                 row_index + 1,
                                 col_index + 1
@@ -310,7 +309,7 @@ impl ValuesAppendRequestBuilder {
                     values: self.values,
                 })
             }
-            _ => Err(openlark_core::SDKError::InvalidParameter(
+            _ => Err(openlark_core::error::LarkAPIError::InvalidParameter(
                 "电子表格Token是必需的".to_string(),
             )),
         }
@@ -469,7 +468,7 @@ impl ValuesAppendService {
         let base_resp: BaseResponse<ValuesAppendResponse> = response.json().await?;
 
         if let Some(err) = &base_resp.error {
-            return Err(openlark_core::SDKError::LarkAPIError(err.clone()));
+            return Err(openlark_core::error::LarkAPIError::LarkAPIError(err.clone()));
         }
 
         Ok(base_resp)
@@ -707,7 +706,7 @@ impl<'a> ValuesAppendServiceBuilder<'a> {
                 };
                 self.service.append(&request).await
             }
-            _ => Err(openlark_core::SDKError::InvalidParameter(
+            _ => Err(openlark_core::error::LarkAPIError::InvalidParameter(
                 "电子表格Token和目标范围都是必需的".to_string(),
             )),
         }

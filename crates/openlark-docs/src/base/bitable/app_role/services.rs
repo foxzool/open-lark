@@ -2,10 +2,10 @@
 //!
 //! 提供多维表格角色权限管理相关的API服务，包括：
 //! - 角色的创建、查询、更新、删除
+use std::collections::HashMap;
 //! - 权限配置和管理
 //! - 完整的错误处理和参数验证
 
-use std::collections::HashMap;
 
 use openlark_core::{
     error::LarkAPIError,

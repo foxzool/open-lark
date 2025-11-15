@@ -2,10 +2,10 @@
 //!
 //! 提供多维表格角色成员管理相关的API服务，包括：
 //! - 角色成员的添加、查询、删除
+use std::collections::HashMap;
 //! - 批量成员操作支持
 //! - 完整的错误处理和参数验证
 
-use std::collections::HashMap;
 
 use openlark_core::{
     error::LarkAPIError,

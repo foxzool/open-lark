@@ -2,10 +2,10 @@
 //!
 //! 提供视频会议报告相关的API服务，包括：
 //! - 每日会议使用报告
+use std::collections::HashMap;
 //! - Top用户统计报告
 //! - 完整的错误处理和参数验证
 
-use std::collections::HashMap;
 
 use openlark_core::{
     error::LarkAPIError,

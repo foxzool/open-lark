@@ -3,11 +3,6 @@
 //! 定义文档(DOCX)操作API的数据结构。
 
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
-
-// 重新导出用户信息和权限类型
-use super::models::{UserInfo, DocumentPermissions};
 
 /// 文档信息
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

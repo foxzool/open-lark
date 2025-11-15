@@ -18,7 +18,6 @@ use openlark_core::{
 };
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 
 /// 数据验证类型
 #[derive(Debug, Clone, Serialize, Deserialize)]
