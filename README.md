@@ -4,19 +4,21 @@
 [![Documentation](https://docs.rs/open-lark/badge.svg)](https://docs.rs/open-lark)
 ![Discord Shield](https://discord.com/api/guilds/1319490473060073532/widget.png?style=shield)
 
-# 飞书开放平台非官方SDK, 个人开发, 请谨慎使用
+# 飞书开放平台非官方SDK, 重构中, 请谨慎使用
 
 支持自定义机器人、长连接机器人、云文档、飞书卡片、消息、群组、招聘管理等API调用。
 
 ## ✨ 项目状态 (2025-11-04更新)
 
 ### 🎯 高覆盖率企业级SDK
+
 - **✅ 高API覆盖**: 实现1,134个飞书平台API，86.3%覆盖率
 - **🏗️ 企业级架构**: 51个服务模块，支持条件编译和模块化设计
 - **🛡️ 类型安全**: 完整的Rust类型系统和错误处理机制
 - **⚡ 高性能**: 原生async/await支持，优化的HTTP客户端和内存管理
 
 ### 📊 核心统计
+
 - **服务模块**: 51个主服务模块
 - **API方法**: 1,134个已实现的公共API方法
 - **完整实现模块**: 4个（50+ APIs each）
@@ -25,6 +27,7 @@
 - **测试覆盖**: 关键模块100%测试通过
 
 ### 🚀 新增高级功能模块
+
 - **🔄 SharedConfig接口**: 全新的配置管理系统，优化多服务场景内存使用
 - **AI向量嵌入**: 完整的向量化和语义搜索功能
 - **AI工作流**: 智能业务流程自动化和决策支持
@@ -33,6 +36,7 @@
 - **平台集成**: 第三方服务集成、DevOps支持、API网关
 
 ### 🔧 SharedConfig配置系统 (新特性)
+
 - **💾 内存优化**: 使用`Arc<Config>`实现多客户端配置共享，显著降低内存占用
 - **🔒 线程安全**: 支持高并发场景下的安全配置访问
 - **📊 引用计数**: 自动管理配置生命周期，智能资源释放
@@ -95,30 +99,36 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ## 🎉 最新更新
 
 ### v0.13.1 WebSocket 关键修复 🔧
+
 - **🐛 关键问题修复**: 修复 WebSocket frame payload 解析回归问题
 - **📡 完整示例**: websocket_client.rs 添加完整的连接和事件处理功能
 - **🧪 测试覆盖**: 完整的单包和多包消息处理测试
 
 ### v0.12.0+ 全面文档完善与质量提升 📚
+
 - **📝 完整中文文档**: 43个服务模块100%文档覆盖，企业级文档标准
 - **✅ 文档测试保证**: 72个文档测试100%通过，确保示例代码正确性
 - **🎯 开发者友好**: 丰富的使用示例、最佳实践指导、层次化文档结构
 - **🔧 零警告构建**: 消除所有文档警告，提供清洁的开发体验
 
 ### v0.11.0+ 现代化Builder模式与统一错误处理 ⭐
+
 - **🏗️ Builder模式**: 流畅链式调用，支持Contact、IM、Drive等核心服务，完全向后兼容
 - **📦 统一错误处理**: StandardResponse机制，详细错误信息与智能建议
 - **⚡ 类型安全**: ExecutableBuilder特征，编译时参数验证，现代化异步执行
 
 ### v0.11.0 招聘管理系统 🚀
+
 - **🎯 企业级招聘**: 6大服务模块，100+ API接口，完整业务流程
 - **📊 智能管理**: 人才库、面试、Offer、内推等全功能覆盖
 
-### v0.8.0 AI能力支持 🤖  
+### v0.8.0 AI能力支持 🤖
+
 - **🧠 智能识别**: 17种证件文档、OCR、语音识别、机器翻译
 - **📊 22个AI API**: 覆盖企业智能化应用全场景
 
 ### v0.6.0 企业级错误处理 🛡️
+
 - **智能分析**: 错误自动分析、重试机制、实时监控
 - **完整重构**: 68个文件优化，消除2000+个clone调用
 
@@ -127,24 +137,28 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 从 v0.12.0 开始，open-lark 支持按需编译，你可以只启用需要的服务模块，显著减少编译时间和二进制文件大小。
 
 ### 默认功能
+
 ```toml
 [dependencies]
 open-lark = "0.13.2"  # 包含: im, cloud-docs, contact, group, authentication, search
 ```
 
 ### 仅使用云文档 API
+
 ```toml
 [dependencies]
 open-lark = { version = "0.13.2", default-features = false, features = ["cloud-docs"] }
 ```
 
-### 仅使用消息 API  
+### 仅使用消息 API
+
 ```toml
 [dependencies]
 open-lark = { version = "0.13.2", default-features = false, features = ["im"] }
 ```
 
 ### 启用所有功能
+
 ```toml
 [dependencies]
 open-lark = { version = "0.13.2", features = ["full"] }
@@ -153,12 +167,14 @@ open-lark = { version = "0.13.2", features = ["full"] }
 ### 可用的功能模块
 
 #### 🟢 完整实现模块 (50+ APIs)
+
 - `cloud-docs` - 云文档管理 (296 APIs) - drive, sheets, bitable, wiki, docs
 - `hire` - 招聘管理 (153 APIs) - 职位、候选人、面试、Offer管理
 - `contact` - 通讯录管理 (76 APIs) - 用户、部门、组织架构
 - `task` - 任务管理 (50 APIs) - 任务创建、分配、状态跟踪
 
 #### 🟡 基本实现模块 (10-49 APIs)
+
 - `helpdesk` - 服务台 (47 APIs)
 - `application` - 应用管理 (32 APIs)
 - `im` - 即时消息 (34 APIs)
@@ -183,6 +199,7 @@ open-lark = { version = "0.13.2", features = ["full"] }
 - `trust_party` - 第三方信任 (11 APIs)
 
 #### 🟠 部分实现模块 (1-9 APIs)
+
 - `calendar` - 日历服务 (5 APIs)
 - `cardkit` - 卡片工具 (5 APIs)
 - `authentication` - 认证服务 (6 APIs)
@@ -203,6 +220,7 @@ open-lark = { version = "0.13.2", features = ["full"] }
 - `verification` - 验证服务 (1 API)
 
 #### 🔴 待实现模块 (计划中)
+
 - `feishu_people` - 飞书人员管理 (高优先级)
 - `analytics` - 数据分析 (高优先级)
 - `group` - 群组管理 (高优先级)
@@ -220,6 +238,7 @@ open-lark = { version = "0.13.2", features = ["full"] }
 ### 🔧 SharedConfig 配置指南
 
 #### 何时使用 SharedConfig
+
 - ✅ **新项目**: 直接使用SharedConfig获得最佳性能
 - ✅ **多服务场景**: 多个飞书服务同时使用时显著优化内存
 - ✅ **高并发应用**: 线程安全的配置访问
@@ -228,6 +247,7 @@ open-lark = { version = "0.13.2", features = ["full"] }
 #### 迁移指南
 
 **步骤1: 更新导入**
+
 ```rust
 // 新增导入
 use open_lark::service_registry::{SharedConfig, SharedConfigFactory};
@@ -235,26 +255,28 @@ use open_lark::core::{constants::AppType, config::ConfigBuilder};
 ```
 
 **步骤2: 替换客户端创建**
+
 ```rust
 // 原代码
-let client = LarkClient::builder(&app_id, &app_secret)
-    .with_app_type(AppType::SelfBuild)
-    .with_enable_token_cache(true)
-    .build();
+let client = LarkClient::builder( & app_id, & app_secret)
+.with_app_type(AppType::SelfBuild)
+.with_enable_token_cache(true)
+.build();
 
 // 新代码
 let shared_config = SharedConfigFactory::create_shared(
-    ConfigBuilder::default()
-        .app_id(&app_id)
-        .app_secret(&app_secret)
-        .app_type(AppType::SelfBuild)
-        .enable_token_cache(true)
-        .build()
+ConfigBuilder::default ()
+.app_id( & app_id)
+.app_secret( & app_secret)
+.app_type(AppType::SelfBuild)
+.enable_token_cache(true)
+.build()
 );
 let client = LarkClient::new(shared_config.config().clone());
 ```
 
 **步骤3: 验证迁移**
+
 ```rust
 // 检查引用计数
 println!("引用计数: {}", shared_config.ref_count());
@@ -546,6 +568,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### 🚀 Contact服务Builder模式示例
 
 #### 传统方式 (仍然支持)
+
 ```rust,ignore
 let request = CreateUserRequest {
     user: user.clone(),
@@ -557,6 +580,7 @@ let response = client.contact.v3.user.create(&request).await?;
 ```
 
 #### 新Builder模式 (推荐)
+
 ```rust,ignore
 use open_lark::core::trait_system::ExecutableBuilder;
 
@@ -575,6 +599,7 @@ let response = client
 ### 📁 IM文件和图片服务Builder模式 (v0.11.0+ 新增)
 
 #### 文件上传Builder模式
+
 ```rust,ignore
 use open_lark::core::trait_system::ExecutableBuilder;
 
@@ -606,6 +631,7 @@ println!("文件下载成功，大小: {} 字节", download_result.data.len());
 ```
 
 #### 图片上传Builder模式
+
 ```rust,ignore
 // 图片上传
 let image_upload = client
@@ -827,7 +853,7 @@ match result {
 
 - 员工管理
     - [x] 创建员工
-    - [x] 更新员工信息 
+    - [x] 更新员工信息
     - [x] 获取员工列表
     - [x] 批量获取员工信息
     - [x] 搜索员工
@@ -835,7 +861,7 @@ match result {
     - [x] 恢复员工为在职状态
     - [x] 恢复离职员工
     - [x] 离职员工
-- 部门管理  
+- 部门管理
     - [x] 创建部门
     - [x] 更新部门信息
     - [x] 获取部门列表
@@ -1059,29 +1085,29 @@ match result {
 
 ## 📊 功能完成度统计
 
-| 模块              | API数量   | 完成状态       | 说明                      |
-|-----------------|---------|------------|-------------------------|
-| **🔐 认证与授权**    | 1       | ✅ 100%     | 应用身份验证                  |
-| **🏢 企业信息**     | 2       | ✅ 100%     | 企业基础信息与席位管理             |
-| **🛡️ 认证信息**     | 1       | ✅ 100%     | 应用认证状态与权限信息             |
-| **🤖 自定义机器人**   | 2       | ✅ 100%     | 消息发送与签名验证               |
-| **🔗 长连接机器人**   | 1       | ✅ 100%     | 事件推送接收                  |
-| **☁️ 云文档-云空间**  | 7       | ✅ 100%     | 文件夹管理、上传下载              |
-| **🛡️ 云文档-权限**  | 2       | ✅ 100%     | 权限设置管理                  |
-| **📊 云文档-电子表格** | 33      | ✅ 100%     | 完整表格操作功能                |
-| **📋 云文档-多维表格** | 6       | ✅ 100%     | 数据表操作                   |
-| **👥 通讯录**      | 1       | ✅ 100%     | 用户搜索                    |
-| **🏢 组织架构**     | 15      | ✅ 100%     | **v0.12.0 新增** - 完整员工与部门管理 |
-| **🎨 飞书卡片**     | 25      | ✅ 100%     | 完整卡片组件系统                |
-| **💬 消息**       | 8       | ✅ 100%     | 消息发送、接收与完整IM事件监控         |
-| **👥 群组**       | 1       | ✅ 100%     | 群组管理                    |
-| **🔍 搜索**       | 14      | ✅ 100%     | 套件搜索与搜索连接器管理            |
-| **🏢 考勤管理**     | 43      | ✅ 100%     | 完整考勤解决方案                |
-| **⚙️ 个人设置**     | 7       | ✅ 100%     | 系统状态管理                  |
-| **🤖 AI能力**      | 22      | ✅ 100%     | **v0.8.0 新增** - 智能文档处理、OCR、语音识别、机器翻译 |
-| **🎯 招聘管理**     | **100+**| ✅ 100%     | **v0.11.0 新增** - 完整招聘管理系统 |
-| **🛡️ 错误处理系统**  | 5       | ✅ 100%     | **v0.6.0 新增** - 企业级错误管理 |
-| **📈 总计**       | **291+**| **✅ 100%** | **覆盖企业应用核心功能**          |
+| 模块              | API数量    | 完成状态       | 说明                                   |
+|-----------------|----------|------------|--------------------------------------|
+| **🔐 认证与授权**    | 1        | ✅ 100%     | 应用身份验证                               |
+| **🏢 企业信息**     | 2        | ✅ 100%     | 企业基础信息与席位管理                          |
+| **🛡️ 认证信息**    | 1        | ✅ 100%     | 应用认证状态与权限信息                          |
+| **🤖 自定义机器人**   | 2        | ✅ 100%     | 消息发送与签名验证                            |
+| **🔗 长连接机器人**   | 1        | ✅ 100%     | 事件推送接收                               |
+| **☁️ 云文档-云空间**  | 7        | ✅ 100%     | 文件夹管理、上传下载                           |
+| **🛡️ 云文档-权限**  | 2        | ✅ 100%     | 权限设置管理                               |
+| **📊 云文档-电子表格** | 33       | ✅ 100%     | 完整表格操作功能                             |
+| **📋 云文档-多维表格** | 6        | ✅ 100%     | 数据表操作                                |
+| **👥 通讯录**      | 1        | ✅ 100%     | 用户搜索                                 |
+| **🏢 组织架构**     | 15       | ✅ 100%     | **v0.12.0 新增** - 完整员工与部门管理           |
+| **🎨 飞书卡片**     | 25       | ✅ 100%     | 完整卡片组件系统                             |
+| **💬 消息**       | 8        | ✅ 100%     | 消息发送、接收与完整IM事件监控                     |
+| **👥 群组**       | 1        | ✅ 100%     | 群组管理                                 |
+| **🔍 搜索**       | 14       | ✅ 100%     | 套件搜索与搜索连接器管理                         |
+| **🏢 考勤管理**     | 43       | ✅ 100%     | 完整考勤解决方案                             |
+| **⚙️ 个人设置**     | 7        | ✅ 100%     | 系统状态管理                               |
+| **🤖 AI能力**     | 22       | ✅ 100%     | **v0.8.0 新增** - 智能文档处理、OCR、语音识别、机器翻译 |
+| **🎯 招聘管理**     | **100+** | ✅ 100%     | **v0.11.0 新增** - 完整招聘管理系统            |
+| **🛡️ 错误处理系统**  | 5        | ✅ 100%     | **v0.6.0 新增** - 企业级错误管理              |
+| **📈 总计**       | **291+** | **✅ 100%** | **覆盖企业应用核心功能**                       |
 
 ### 🎯 v0.11.0 招聘管理系统亮点
 
