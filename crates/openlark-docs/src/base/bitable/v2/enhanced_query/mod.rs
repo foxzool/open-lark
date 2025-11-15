@@ -14,8 +14,7 @@ use openlark_core::{
     constants::AccessTokenType,
     http::Transport,
     api_req::ApiRequest,
-    api_resp::ApiResponseTrait,
-    ResponseFormat,
+    api_resp::{ApiResponseTrait, ResponseFormat},
     SDKResult,
 };
 use std::collections::HashMap;
@@ -291,7 +290,8 @@ pub mod services {
         /// 返回查询结果和统计信息
         pub async fn execute_smart_query(&self, request: &models::SmartQueryRequest) -> SDKResult<models::SmartQueryResponse> {
             // 验证请求参数
-            request.validate()?;
+            request.validate()
+                .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
             log::info!("执行智能查询: app_token={}, table_id={}, query_type={:?}",
                       request.app_token, request.table_id, request.query_type);

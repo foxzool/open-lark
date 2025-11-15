@@ -1,25 +1,70 @@
-//! Report module for OpenLark Docs
+//! Report 报告分析API模块
 //!
-//! This module provides report functionality for creating and managing
-//! various types of reports and analytics from document data.
+//! 提供报告分析和数据统计相关的功能，包括：
+//! - VC会议报告和用户统计
+//! - 规则管理看板
+//! - 任务查询和分析
+//!
+//! # 示例
+//!
+//! ```rust
+//! use openlark_docs::report::{ReportService, GetDailyReportRequest};
+//!
+//! let service = ReportService::new(config);
+//!
+//! // 获取每日会议报告
+//! let response = service
+//!     .vc_report()
+//!     .get_daily_report_builder()
+//!     .start_date("2024-01-01")
+//!     .end_date("2024-01-31")
+//!     .execute(&service.vc_report())
+//!     .await?;
+//!
+//! if let Some(report_data) = response.data {
+//!     println!("报告数据: {:?}", report_data);
+//! }
+//! ```
 
-use crate::prelude::*;
+/// VC会议报告
+pub mod vc_report;
 
+/// 报告规则管理
+pub mod rule;
+
+/// 报告任务管理
+pub mod task;
+
+// 重新导出主要类型
+pub use vc_report::{VcReportService, GetDailyReportRequestBuilder, GetTopUserReportRequestBuilder};
+pub use rule::{RuleService, QueryRuleRequestBuilder, RemoveRuleViewRequestBuilder};
+pub use task::{TaskService, QueryTaskRequestBuilder};
+
+/// 报告分析服务
+#[derive(Debug, Clone)]
 pub struct ReportService {
-    client: std::sync::Arc<LarkClient>,
+    config: openlark_core::config::Config,
 }
 
 impl ReportService {
-    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
-        Self { client }
+    /// 创建新的报告分析服务实例
+    pub fn new(config: openlark_core::config::Config) -> Self {
+        Self { config }
     }
-}
 
-impl std::ops::Deref for ReportService {
-    type Target = LarkClient;
+    /// 获取VC会议报告服务
+    pub fn vc_report(&self) -> vc_report::VcReportService {
+        vc_report::VcReportService::new(self.config.clone())
+    }
 
-    fn deref(&self) -> &Self::Target {
-        &self.client
+    /// 获取规则管理服务
+    pub fn rule(&self) -> rule::RuleService {
+        rule::RuleService::new(self.config.clone())
+    }
+
+    /// 获取任务管理服务
+    pub fn task(&self) -> task::TaskService {
+        task::TaskService::new(self.config.clone())
     }
 }
 
@@ -29,8 +74,19 @@ mod tests {
 
     #[test]
     fn test_report_service_creation() {
-        // This is a placeholder test
-        // In a real implementation, you would create a mock client
-        // and test the ReportService functionality
+        let config = openlark_core::config::Config::default();
+        let service = ReportService::new(config);
+        assert!(!format!("{:?}", service).is_empty());
+    }
+
+    #[test]
+    fn test_service_submodules() {
+        let config = openlark_core::config::Config::default();
+        let service = ReportService::new(config);
+
+        // 测试子模块访问
+        let _vc_report_service = service.vc_report();
+        let _rule_service = service.rule();
+        let _task_service = service.task();
     }
 }

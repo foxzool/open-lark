@@ -52,13 +52,13 @@ impl AdvancedPermissionService {
         let mut query_params = HashMap::new();
 
         if let Some(page_size) = request.page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(ref page_token) = request.page_token {
-            query_params.insert("page_token".to_string(), page_token.clone());
+            query_params.insert("page_token", page_token.clone());
         }
         if let Some(ref role_type) = request.role_type {
-            query_params.insert("role_type".to_string(), serde_json::to_value(role_type)?.to_string());
+            query_params.insert("role_type", serde_json::to_value(role_type)?.to_string());
         }
 
         // 构建API请求
