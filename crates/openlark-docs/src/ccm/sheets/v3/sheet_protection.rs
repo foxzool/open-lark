@@ -15,7 +15,6 @@ use openlark_core::{
 use serde_json;
 
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 use reqwest::Method;
 
 use openlark_core::trait_system::Service;

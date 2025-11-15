@@ -2,11 +2,11 @@
 //!
 //! 提供权限管理相关的API服务，包括：
 //! - 权限验证
+use serde_json::Value;
+use std::collections::HashMap;
 //! - 所有者转移
 //! - 公共权限设置
 
-use std::collections::HashMap;
-use serde_json::Value;
 
 use openlark_core::{
     error::LarkAPIError,

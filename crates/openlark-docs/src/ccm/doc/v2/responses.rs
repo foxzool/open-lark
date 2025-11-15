@@ -5,7 +5,7 @@
 use serde::{Deserialize, Serialize};
 use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
 use super::models::{
-    DocumentInfo, DocumentContent, SheetMeta, BatchUpdateOperation
+    DocumentInfo, DocumentContent, SheetMeta
 };
 
 /// 创建旧版文档响应

@@ -2,10 +2,9 @@
 #![allow(unused_imports)]
 #![allow(unused_variables)]
 #![allow(unused_mut)]
+use std::collections::HashMap;
 use openlark_core::service::bitable::v1::app_table_field::Person;
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
-use std::collections::HashMap;
 
 #[derive(Clone)]
 pub struct Record {

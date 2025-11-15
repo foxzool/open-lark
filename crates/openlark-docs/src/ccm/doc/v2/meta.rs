@@ -2,8 +2,8 @@
 //!
 //! 提供获取旧版文档元数据的功能。
 
+use std::collections::HashMap;
 use openlark_core::{
-    api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,

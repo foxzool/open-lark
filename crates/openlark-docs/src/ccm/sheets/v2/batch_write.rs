@@ -2,6 +2,8 @@
 //!
 //! 提供飞书电子表格v2版本的批量范围写入功能，包括：
 //! - 一次性向多个单元格范围写入数据
+use serde_json::Value;
+use std::collections::HashMap;
 //! - 支持Excel风格的范围格式
 //! - 高效的批量数据更新
 //! - 企业级错误处理和数据验证
@@ -17,11 +19,9 @@
 
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 
 use openlark_core::endpoints_original::Endpoints;
 use openlark_core::impl_executable_builder_owned;
-use serde_json::Value;
 use openlark_core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,

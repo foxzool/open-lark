@@ -2,11 +2,11 @@
 //!
 //! 提供报告规则管理相关的API服务，包括：
 //! - 规则查询和过滤
+use std::collections::HashMap;
 //! - 规则删除和清理
 //! - 规则状态管理
 //! - 完整的错误处理和参数验证
 
-use std::collections::HashMap;
 
 use openlark_core::{
     error::LarkAPIError,

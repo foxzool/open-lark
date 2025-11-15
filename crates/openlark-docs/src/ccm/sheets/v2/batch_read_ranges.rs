@@ -21,7 +21,6 @@ use openlark_core::{
 };
 
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 
 use openlark_core::trait_system::Service;
 // use openlark_core::SDKResult;

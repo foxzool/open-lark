@@ -21,13 +21,14 @@ pub mod permission;
 pub mod v1;
 pub mod v2;
 
-// 重新导出版本模块
-pub use v1::*;
-pub use v2::*;
+// 重新导出版本模块，避免名称冲突
+// pub use v1::{}; // 暂时注释掉，避免未定义的导入
 
-// 重新导出explorer和permission模块
-pub use explorer::*;
-pub use permission::*;
+// pub use v2::{}; // 暂时注释掉，避免未定义的导入
+
+// 重新导出explorer和permission模块，避免名称冲突
+pub use explorer::ExplorerService;
+pub use permission::PermissionService;
 
 /// 云空间文件管理服务
 #[derive(Clone)]

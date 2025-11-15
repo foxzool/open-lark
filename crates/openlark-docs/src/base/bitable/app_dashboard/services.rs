@@ -2,11 +2,10 @@
 //!
 //! 提供多维表格仪表板管理相关的API服务，包括：
 //! - 仪表板的创建、查询、更新、删除
+use std::collections::HashMap;
 //! - 仪表板组件配置和布局管理
 //! - 完整的错误处理和参数验证
 
-use std::collections::HashMap;
-use serde_json::Value;
 
 use openlark_core::{
     error::LarkAPIError,
