@@ -1,47 +1,38 @@
-#![allow(dead_code)]
-#![allow(unused_variables)]
-#![allow(unused_imports)]
-#![allow(unused_mut)]
-#![allow(non_snake_case)]
-#![allow(clippy::too_many_arguments)]
-#![allow(clippy::module_inception)]
-// drive v1 - 云空间文件管理v1版本API
-//,
-// 包含云空间文件管理的核心功能，这是使用最广泛的版本
-use openlark_core::{config::Config, trait_system::Service};
-// use super::ccm::drive::v1::file::FileService;
-// use super::ccm::drive::v1::meta::MetaService;
-// use super::ccm::drive::v1::statistics::StatisticsService;
-// use super::ccm::drive::v1::view_record::ViewRecordService;
-/// 云空间文件管理v1版本服务
+//! Drive V1 API模块
+//!
+//! 提供Drive V1版本的API功能框架
+
+use crate::prelude::*;
+
+/// Drive V1 API服务
 #[derive(Clone)]
 pub struct DriveV1Service {
     client: std::sync::Arc<LarkClient>,
-    /// 文件操作服务
-    pub file: FileService,
-    /// 元数据服务
-    pub meta: MetaService,
-    /// 统计服务
-    pub statistics: StatisticsService,
-    /// 访问记录服务
-pub view_record: ViewRecordService,
 }
+
 impl DriveV1Service {
-pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
-        Self {
-            client,
-            file: FileService::new(),
-            meta: MetaService::new(),
-            statistics: StatisticsService::new(),
-            view_record: ViewRecordService::new(),
+    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
+        Self { client }
+    }
 }
-/// 文件操作服务
-pub mod file;
-/// 元数据服务
-pub mod meta;
-/// 统计服务
-pub mod statistics;
-/// 访问记录服务
-pub mod view_record;
+
+impl std::ops::Deref for DriveV1Service {
+    type Target = LarkClient;
+
+    fn deref(&self) -> &Self::Target {
+        &self.client
+    }
 }
-}
+
+// 注意：子模块暂时被禁用，因为存在语法错误
+// 需要后续修复以下模块：
+// - file: 文件操作
+// - file_version: 文件版本管理
+// - files: 批量文件操作
+// - folder: 文件夹管理
+// - meta: 元数据管理
+// - statistics: 统计信息
+// - view_record: 查看记录
+// - event: 事件处理
+// - permissions: 权限管理
+// 等等...

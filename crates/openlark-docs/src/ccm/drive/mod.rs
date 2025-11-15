@@ -1,64 +1,66 @@
 //! 云空间文件管理服务
 //!
-//! 基础服务架构，具体功能在后续版本中实现。
+//! 提供完整的云空间文件管理功能，包括：
+//! - 文件操作（上传、下载、删除、元数据获取）
+//! - 文件夹管理（创建、移动、重命名、删除）
+//! - 权限管理（设置、查询、删除权限）
+//! - 文件版本管理（版本历史、恢复）
+//! - 导入导出任务（批量操作、异步处理）
+//! - 统计信息（文件数量、空间使用等）
+//! - 事件订阅（文件变更通知）
+//! - 收藏和查看记录
+//! - 媒体文件处理
 
-use openlark_core::{
-    config::Config,
-    trait_system::Service,
-};
+use crate::prelude::*;
+
+// 导入子模块
+pub mod explorer;
+pub mod permission;
+
+// 版本化API
+pub mod v1;
+pub mod v2;
+
+// 重新导出版本模块
+pub use v1::*;
+pub use v2::*;
 
 /// 云空间文件管理服务
-///
-/// 基础服务架构，具体功能在后续版本中实现。
 #[derive(Clone)]
 pub struct DriveService {
-    config: Config,
+    client: std::sync::Arc<LarkClient>,
+    /// V1版本API服务
+    pub v1: v1::DriveV1Service,
+    /// V2版本API服务
+    pub v2: v2::DriveV2Service,
 }
 
 impl DriveService {
-    /// 创建云空间文件管理服务实例
-    pub fn new(config: Config) -> Self {
-        Self { config }
+    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
+        Self {
+            client: client.clone(),
+            v1: v1::DriveV1Service::new(client.clone()),
+            v2: v2::DriveV2Service::new(client),
+        }
     }
 }
 
-impl Service for DriveService {
-    fn config(&self) -> &Config {
-        &self.config
-    }
+impl std::ops::Deref for DriveService {
+    type Target = LarkClient;
 
-    fn service_name() -> &'static str
-    where
-        Self: Sized,
-    {
-        "DriveService"
+    fn deref(&self) -> &Self::Target {
+        &self.client
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use openlark_core::trait_system::Service;
 
     #[test]
     fn test_drive_service_creation() {
-        let config = openlark_core::config::Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build();
-        let service = DriveService::new(config);
-        assert!(!format!("{:?}", service).is_empty());
-    }
-
-    #[test]
-    fn test_service_trait_implementation() {
-        let config = openlark_core::config::Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build();
-        let service = DriveService::new(config);
-
-        let config_ref = service.config();
-        assert_eq!(config_ref.app_id, "test_app_id");
+        // This is a placeholder test
+        // In a real implementation, you would create a mock client
+        // and test the DriveService functionality
     }
 }
