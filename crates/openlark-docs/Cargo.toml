@@ -30,5 +30,10 @@ cardkit = []
 ccm = []
 report = []
 
+[[example]]
+name = "cardkit_example"
+path = "../../examples/api/cardkit_example.rs"
+required-features = ["cardkit"]
+
 
 
