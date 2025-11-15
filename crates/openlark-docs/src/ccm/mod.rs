@@ -13,6 +13,7 @@ pub mod export_tasks;
 pub mod models;
 pub mod sheets;
 pub mod wiki;
+pub mod ccm_sheet;
 
 // Re-export services for convenience
 #[cfg(feature = "ccm-doc")]
@@ -26,6 +27,15 @@ pub use drive::DriveService;
 
 /// Export tasks service (included in ccm feature)
 pub use export_tasks::ExportTasksService;
+
+/// CCM Sheet service (included in ccm feature)
+pub use ccm_sheet::CcmSheetService;
+
+/// Drive Explorer service (included in ccm feature)
+pub use drive::ExplorerService;
+
+/// Drive Permission service (included in ccm feature)
+pub use drive::PermissionService;
 
 #[cfg(feature = "ccm-sheets")]
 pub use sheets::SheetsService;
@@ -71,6 +81,11 @@ impl CcmService {
     /// Get access to export tasks services
     pub fn export_tasks(&self) -> ExportTasksService {
         ExportTasksService::new(openlark_core::config::Config::default())
+    }
+
+    /// Get access to CCM sheet services
+    pub fn ccm_sheet(&self) -> CcmSheetService {
+        CcmSheetService::new(openlark_core::config::Config::default())
     }
 
     /// Get access to wiki services
