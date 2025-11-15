@@ -41,7 +41,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("\n4️⃣  通用服务访问:");
     if let Some(_docs_service) = client
         .services()
-        .get_service::<openlark_docs::docs::DocxService>("docs")
+        .get_service::<openlark_docs::BaseService>("docs")
     {
         println!("✅ 通过 client.services().get_service<T>() 访问服务");
     }

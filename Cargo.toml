@@ -4,7 +4,7 @@ members = [
     "crates/openlark-core",
     "crates/openlark-docs",
     "crates/openlark-auth",
-#    "crates/openlark-client",
+    "crates/openlark-client",
     "crates/openlark-communication",
     "crates/openlark-hr",
     "crates/openlark-ai",
