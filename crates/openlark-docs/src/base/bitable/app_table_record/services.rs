@@ -290,10 +290,10 @@ impl AppTableRecordService {
         let mut query_params = HashMap::new();
 
         if let Some(ref field_type) = request.field_type {
-            query_params.insert("field_type".to_string(), field_type.clone());
+            query_params.insert("field_type", field_type.clone());
         }
         if let Some(need_field_name) = request.need_field_name {
-            query_params.insert("need_field_name".to_string(), need_field_name.to_string());
+            query_params.insert("need_field_name", need_field_name.to_string());
         }
 
         // 构建API请求
@@ -336,22 +336,22 @@ impl AppTableRecordService {
         let mut query_params = HashMap::new();
 
         if let Some(page_size) = request.page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(ref page_token) = request.page_token {
-            query_params.insert("page_token".to_string(), page_token.clone());
+            query_params.insert("page_token", page_token.clone());
         }
         if let Some(ref field_type) = request.field_type {
-            query_params.insert("field_type".to_string(), field_type.clone());
+            query_params.insert("field_type", field_type.clone());
         }
         if let Some(need_field_name) = request.need_field_name {
-            query_params.insert("need_field_name".to_string(), need_field_name.to_string());
+            query_params.insert("need_field_name", need_field_name.to_string());
         }
         if let Some(ref sort) = request.sort {
-            query_params.insert("sort".to_string(), serde_json::to_string(sort)?);
+            query_params.insert("sort", serde_json::to_string(sort)?);
         }
         if let Some(ref filter) = request.filter {
-            query_params.insert("filter".to_string(), serde_json::to_string(filter)?);
+            query_params.insert("filter", serde_json::to_string(filter)?);
         }
 
         // 构建API请求
@@ -398,10 +398,10 @@ impl AppTableRecordService {
         body.insert("record_ids", serde_json::to_value(&request.record_ids)?);
 
         if let Some(ref field_type) = request.field_type {
-            body.insert("field_type".to_string(), serde_json::to_value(field_type)?);
+            body.insert("field_type", serde_json::to_value(field_type)?);
         }
         if let Some(need_field_name) = request.need_field_name {
-            body.insert("need_field_name".to_string(), serde_json::to_value(need_field_name)?);
+            body.insert("need_field_name", serde_json::to_value(need_field_name)?);
         }
 
         // 构建API请求
@@ -442,22 +442,22 @@ impl AppTableRecordService {
 
         // 构建请求体
         let mut body = HashMap::new();
-        body.insert("search_string".to_string(), serde_json::to_value(&request.search_string)?);
+        body.insert("search_string", serde_json::to_value(&request.search_string)?);
 
         if let Some(page_size) = request.page_size {
-            body.insert("page_size".to_string(), serde_json::to_value(page_size)?);
+            body.insert("page_size", serde_json::to_value(page_size)?);
         }
         if let Some(ref page_token) = request.page_token {
-            body.insert("page_token".to_string(), serde_json::to_value(page_token)?);
+            body.insert("page_token", serde_json::to_value(page_token)?);
         }
         if let Some(ref field_type) = request.field_type {
-            body.insert("field_type".to_string(), serde_json::to_value(field_type)?);
+            body.insert("field_type", serde_json::to_value(field_type)?);
         }
         if let Some(need_field_name) = request.need_field_name {
-            body.insert("need_field_name".to_string(), serde_json::to_value(need_field_name)?);
+            body.insert("need_field_name", serde_json::to_value(need_field_name)?);
         }
         if let Some(ref sort) = request.sort {
-            body.insert("sort".to_string(), serde_json::to_value(sort)?);
+            body.insert("sort", serde_json::to_value(sort)?);
         }
 
         // 构建API请求

@@ -90,10 +90,10 @@ impl AppFormService {
         let mut query_params = HashMap::new();
 
         if let Some(page_size) = request.page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(ref page_token) = request.page_token {
-            query_params.insert("page_token".to_string(), page_token.clone());
+            query_params.insert("page_token", page_token.clone());
         }
 
         // 构建API请求
