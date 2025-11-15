@@ -2,7 +2,7 @@
 //!
 //! 提供高性能的批量数据操作功能，包括：
 //! - 超大规模批量增删改
-/// - 事务性批量操作
+//! - 事务性批量操作
 //! - 异步批量处理
 //! - 操作结果追踪
 
@@ -14,8 +14,7 @@ use openlark_core::{
     constants::AccessTokenType,
     http::Transport,
     api_req::ApiRequest,
-    api_resp::ApiResponseTrait,
-    ResponseFormat,
+    api_resp::{ApiResponseTrait, ResponseFormat},
     SDKResult,
 };
 use std::collections::HashMap;
@@ -195,7 +194,8 @@ pub mod services {
         /// 返回批量操作任务ID和初始状态
         pub async fn execute_bulk_operation(&self, request: &models::BulkOperationRequest) -> SDKResult<models::BulkOperationResponse> {
             // 验证请求参数
-            request.validate()?;
+            request.validate()
+                .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
             log::info!("执行批量操作: app_token={}, table_id={}, operation_type={:?}, count={}",
                       request.app_token, request.table_id, request.operation_type, request.data.len());
@@ -237,7 +237,8 @@ pub mod services {
         /// 返回操作状态和结果详情
         pub async fn get_bulk_operation_status(&self, request: &models::GetBulkOperationStatusRequest) -> SDKResult<models::GetBulkOperationStatusResponse> {
             // 验证请求参数
-            request.validate()?;
+            request.validate()
+                .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
             log::info!("查询批量操作状态: app_token={}, task_id={}", request.app_token, request.task_id);
 

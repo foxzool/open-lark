@@ -50,16 +50,16 @@ impl AppDashboardService {
 
         // 构建请求体
         let mut body = HashMap::new();
-        body.insert("dashboard_name".to_string(), serde_json::to_value(&request.dashboard_name)?);
+        body.insert("dashboard_name", serde_json::to_value(&request.dashboard_name)?);
 
         if let Some(ref description) = request.description {
-            body.insert("description".to_string(), serde_json::to_value(description)?);
+            body.insert("description", serde_json::to_value(description)?);
         }
         if let Some(ref layout_config) = request.layout_config {
-            body.insert("layout_config".to_string(), serde_json::to_value(layout_config)?);
+            body.insert("layout_config", serde_json::to_value(layout_config)?);
         }
         if let Some(ref components) = request.components {
-            body.insert("components".to_string(), serde_json::to_value(components)?);
+            body.insert("components", serde_json::to_value(components)?);
         }
 
         // 构建API请求
@@ -101,16 +101,16 @@ impl AppDashboardService {
         let mut body = HashMap::new();
 
         if let Some(ref dashboard_name) = request.dashboard_name {
-            body.insert("dashboard_name".to_string(), serde_json::to_value(dashboard_name)?);
+            body.insert("dashboard_name", serde_json::to_value(dashboard_name)?);
         }
         if let Some(ref description) = request.description {
-            body.insert("description".to_string(), serde_json::to_value(description)?);
+            body.insert("description", serde_json::to_value(description)?);
         }
         if let Some(ref layout_config) = request.layout_config {
-            body.insert("layout_config".to_string(), serde_json::to_value(layout_config)?);
+            body.insert("layout_config", serde_json::to_value(layout_config)?);
         }
         if let Some(ref components) = request.components {
-            body.insert("components".to_string(), serde_json::to_value(components)?);
+            body.insert("components", serde_json::to_value(components)?);
         }
 
         // 构建API请求
@@ -187,10 +187,10 @@ impl AppDashboardService {
         let mut query_params = HashMap::new();
 
         if let Some(page_size) = request.page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(ref page_token) = request.page_token {
-            query_params.insert("page_token".to_string(), page_token.clone());
+            query_params.insert("page_token", page_token.clone());
         }
 
         // 构建API请求

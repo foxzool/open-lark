@@ -14,8 +14,7 @@ use openlark_core::{
     constants::AccessTokenType,
     http::Transport,
     api_req::ApiRequest,
-    api_resp::ApiResponseTrait,
-    ResponseFormat,
+    api_resp::{ApiResponseTrait, ResponseFormat},
     SDKResult,
 };
 use std::collections::HashMap;
@@ -202,7 +201,8 @@ pub mod services {
         /// 返回搜索结果
         pub async fn search(&self, request: &models::AdvancedSearchRequest) -> SDKResult<models::AdvancedSearchResponse> {
             // 验证请求参数
-            request.validate()?;
+            request.validate()
+                .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
             log::info!("执行高级搜索: app_token={}, table_id={}, conditions={}",
                       request.app_token, request.table_id, request.conditions.len());
