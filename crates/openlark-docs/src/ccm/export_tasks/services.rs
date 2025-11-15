@@ -2,11 +2,10 @@
 //!
 //! 提供文档导出任务相关的API服务，包括：
 //! - 创建导出任务
+use std::collections::HashMap;
 //! - 查询导出任务结果
 //! - 下载导出文件
 
-use std::collections::HashMap;
-use serde_json::Value;
 
 use openlark_core::{
     error::LarkAPIError,
@@ -94,7 +93,7 @@ impl ExportTasksService {
         log::info!("查询导出任务结果: ticket={}", request.ticket);
 
         // 构建查询参数
-        let mut query_params = HashMap::new();
+        let query_params = HashMap::new();
 
         // 构建API请求
         let api_req = ApiRequest {
@@ -126,7 +125,7 @@ impl ExportTasksService {
         log::info!("下载导出文件: file_token={}", request.file_token);
 
         // 构建查询参数
-        let mut query_params = HashMap::new();
+        let query_params = HashMap::new();
 
         // 构建API请求
         let api_req = ApiRequest {

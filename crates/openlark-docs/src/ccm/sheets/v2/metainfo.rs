@@ -8,7 +8,6 @@
 //! - 获取电子表格版本和状态信息
 
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 
 use openlark_core::endpoints_original::Endpoints;
 use openlark_core::{

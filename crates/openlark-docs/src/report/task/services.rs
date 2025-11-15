@@ -2,11 +2,11 @@
 //!
 //! 提供报告任务管理相关的API服务，包括：
 //! - 任务查询和过滤
+use std::collections::HashMap;
 //! - 任务状态跟踪
 //! - 任务执行历史
 //! - 完整的错误处理和参数验证
 
-use std::collections::HashMap;
 
 use openlark_core::{
     error::LarkAPIError,

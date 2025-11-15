@@ -2,12 +2,12 @@
 //!
 //! 提供多维表格数据记录管理相关的API服务，包括：
 //! - 记录的创建、查询、更新、删除
+use serde_json::Value;
+use std::collections::HashMap;
 //! - 批量记录操作支持
 //! - 记录搜索和过滤功能
 //! - 完整的错误处理和参数验证
 
-use std::collections::HashMap;
-use serde_json::Value;
 
 use openlark_core::{
     error::LarkAPIError,

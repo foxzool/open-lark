@@ -2,11 +2,11 @@
 //!
 //! 提供多维表格字段管理相关的API服务，包括：
 //! - 字段的创建、查询、更新、删除
+use serde_json::Value;
+use std::collections::HashMap;
 //! - 字段类型配置和属性设置
 //! - 完整的错误处理和参数验证
 
-use std::collections::HashMap;
-use serde_json::Value;
 
 use openlark_core::{
     error::LarkAPIError,

@@ -31,6 +31,7 @@ use openlark_core::config::Config;
 /// 查询、编辑等基础功能。
 #[derive(Clone)]
 pub struct DocV2Service {
+    #[allow(dead_code)] // 配置保留供将来使用
     config: Config,
     /// 文档创建服务
     pub create: CreateDocService,
