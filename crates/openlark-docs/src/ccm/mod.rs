@@ -9,6 +9,7 @@ use crate::prelude::*;
 pub mod doc;
 pub mod docx;
 pub mod drive;
+pub mod export_tasks;
 pub mod models;
 pub mod sheets;
 pub mod wiki;
@@ -22,6 +23,9 @@ pub use docx::DocxService;
 
 #[cfg(feature = "ccm-drive")]
 pub use drive::DriveService;
+
+/// Export tasks service (included in ccm feature)
+pub use export_tasks::ExportTasksService;
 
 #[cfg(feature = "ccm-sheets")]
 pub use sheets::SheetsService;
@@ -62,6 +66,11 @@ impl CcmService {
     #[cfg(feature = "ccm-sheets")]
     pub fn sheets(&self) -> SheetsService {
         SheetsService::new(self.client.clone())
+    }
+
+    /// Get access to export tasks services
+    pub fn export_tasks(&self) -> ExportTasksService {
+        ExportTasksService::new(openlark_core::config::Config::default())
     }
 
     /// Get access to wiki services
