@@ -5,23 +5,14 @@
 // 条件导入服务类型
 use crate::traits::ServiceRegistry;
 
-#[cfg(feature = "docs")]
-use openlark_docs::docs::DocxService;
+// Map features to available services from openlark-docs
+// docs, bitable -> BaseService
+// sheets, wiki, drive, ccm -> CcmService
+#[cfg(any(feature = "docs", feature = "bitable"))]
+use openlark_docs::BaseService;
 
-#[cfg(feature = "sheets")]
-use openlark_docs::sheets::SheetsService;
-
-#[cfg(feature = "bitable")]
-use openlark_docs::bitable::BitableService;
-
-#[cfg(feature = "wiki")]
-use openlark_docs::wiki::WikiService;
-
-#[cfg(feature = "drive")]
-use openlark_docs::drive::DriveService;
-
-#[cfg(feature = "ccm")]
-use openlark_docs::ccm::CcmService;
+#[cfg(any(feature = "sheets", feature = "wiki", feature = "drive", feature = "ccm"))]
+use openlark_docs::CcmService;
 
 #[cfg(feature = "communication")]
 use openlark_communication::contact::ContactService;
@@ -30,21 +21,21 @@ use openlark_communication::contact::ContactService;
 ///
 /// 为服务注册表添加便利的服务访问方法
 pub trait ServiceAccessorsExt {
-    // 云文档服务访问器
+    // 云文档服务访问器 - 使用可用的服务类型
     #[cfg(feature = "docs")]
-    fn docs_ext(&self) -> Option<&DocxService>;
+    fn docs_ext(&self) -> Option<&BaseService>;
 
     #[cfg(feature = "sheets")]
-    fn sheet_ext(&self) -> Option<&SheetsService>;
+    fn sheet_ext(&self) -> Option<&CcmService>;
 
     #[cfg(feature = "bitable")]
-    fn bitable_ext(&self) -> Option<&BitableService>;
+    fn bitable_ext(&self) -> Option<&BaseService>;
 
     #[cfg(feature = "wiki")]
-    fn wiki_ext(&self) -> Option<&WikiService>;
+    fn wiki_ext(&self) -> Option<&CcmService>;
 
     #[cfg(feature = "drive")]
-    fn drive_ext(&self) -> Option<&DriveService>;
+    fn drive_ext(&self) -> Option<&CcmService>;
 
     #[cfg(feature = "ccm")]
     fn ccm_ext(&self) -> Option<&CcmService>;
@@ -57,27 +48,27 @@ pub trait ServiceAccessorsExt {
 // 为 DefaultServiceRegistry 实现便利访问器
 impl ServiceAccessorsExt for crate::registry::DefaultServiceRegistry {
     #[cfg(feature = "docs")]
-    fn docs_ext(&self) -> Option<&DocxService> {
+    fn docs_ext(&self) -> Option<&BaseService> {
         self.get_service("docs")
     }
 
     #[cfg(feature = "sheets")]
-    fn sheet_ext(&self) -> Option<&SheetsService> {
+    fn sheet_ext(&self) -> Option<&CcmService> {
         self.get_service("sheet")
     }
 
     #[cfg(feature = "bitable")]
-    fn bitable_ext(&self) -> Option<&BitableService> {
+    fn bitable_ext(&self) -> Option<&BaseService> {
         self.get_service("bitable")
     }
 
     #[cfg(feature = "wiki")]
-    fn wiki_ext(&self) -> Option<&WikiService> {
+    fn wiki_ext(&self) -> Option<&CcmService> {
         self.get_service("wiki")
     }
 
     #[cfg(feature = "drive")]
-    fn drive_ext(&self) -> Option<&DriveService> {
+    fn drive_ext(&self) -> Option<&CcmService> {
         self.get_service("drive")
     }
 

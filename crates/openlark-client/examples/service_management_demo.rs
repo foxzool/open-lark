@@ -27,7 +27,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 检查是否有 docs 服务
     if let Some(_docs_service) = client
         .services()
-        .get_service::<openlark_docs::docs::DocxService>("docs")
+        .get_service::<openlark_docs::BaseService>("docs")
     {
         println!("📄 Docs 服务已启用并可用");
 
