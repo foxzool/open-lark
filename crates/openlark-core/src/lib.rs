@@ -37,7 +37,6 @@ pub mod validation;
 pub mod client;
 pub mod contact;
 pub mod endpoints;
-pub mod endpoints_original;
 pub mod event;
 pub mod pagination;
 pub mod performance;

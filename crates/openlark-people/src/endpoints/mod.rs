@@ -28,7 +28,6 @@
 
 // 导入核心端点（auth, application等基础端点）
 pub use openlark_core::endpoints::{auth, application, apass, platform_integration};
-pub use openlark_core::endpoints::{Endpoints, EndpointBuilder};
 
 // ==================== Contact (联系人管理) v1/v3 ====================
 // 联系人系统 - 用户查询、联系人管理、联系人搜索
@@ -256,4 +255,4 @@ mod tests {
             assert!(endpoint.contains("/v1/"), "{} 应该包含 /v1/", endpoint);
         }
     }
-}
+}// Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints

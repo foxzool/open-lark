@@ -258,7 +258,7 @@ impl SpaceNodeService {
         );
 
         // 构建动态端点路径
-        let endpoint = openlark_core::endpoints_original::Endpoints::WIKI_V2_SPACE_NODE_GET
+        let endpoint = openlark_core::endpoints::Endpoints::WIKI_V2_SPACE_NODE_GET
             .replace("{}", &req.space_id)
             .replace("{}", &req.node_id);
 
@@ -663,7 +663,7 @@ mod tests {
     fn test_endpoint_constant() {
         // 测试端点常量是否正确定义
         assert_eq!(
-            openlark_core::endpoints_original::Endpoints::WIKI_V2_SPACE_NODE_GET,
+            openlark_core::endpoints::Endpoints::WIKI_V2_SPACE_NODE_GET,
             "/open-apis/wiki/v2/spaces/{}/nodes/{}"
         );
     }

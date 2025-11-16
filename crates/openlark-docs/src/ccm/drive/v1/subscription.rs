@@ -3,7 +3,7 @@ use openlark_core::error::SDKError;
 use crate::response::SDKResult;
 use crate::service_trait::Service;
 use crate::transport::Transport;
-use crate::endpoints_original::Endpoints;
+use openlark_core::endpoints::Endpoints;
 use openlark_core::api_req::ApiRequest;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};

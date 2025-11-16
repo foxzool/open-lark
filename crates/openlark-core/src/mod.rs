@@ -11,7 +11,6 @@ pub mod config;
 pub mod constants;
 pub mod contact;
 pub mod endpoints;
-pub mod endpoints_original;
 pub mod error;
 pub mod error_codes;
 pub mod error_helper;

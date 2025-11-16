@@ -227,7 +227,7 @@ impl AppDashboardService {
         }
 
         // 构建API路径
-        let endpoint = openlark_core::endpoints_original::Endpoints::BITABLE_V1_DASHBOARDS
+        let endpoint = openlark_core::endpoints::Endpoints::BITABLE_V1_DASHBOARDS
             .replace("{app_token}", &req.app_token);
 
         let api_req = ApiRequest {

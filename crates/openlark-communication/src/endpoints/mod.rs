@@ -33,7 +33,6 @@
 
 // 导入核心端点（auth, application等基础端点）
 pub use openlark_core::endpoints::{auth, application, apass, platform_integration};
-pub use openlark_core::endpoints::{Endpoints, EndpointBuilder};
 
 // ==================== IM (即时通讯) v1/v2 ====================
 // 即时通讯系统 - 消息发送、聊天管理、批量消息处理
@@ -322,4 +321,4 @@ mod tests {
             assert!(endpoint.contains("/moments/"), "{} 应该包含 /moments/", endpoint);
         }
     }
-}
+}// Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints

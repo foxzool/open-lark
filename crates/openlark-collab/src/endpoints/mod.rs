@@ -34,7 +34,6 @@
 
 // 导入核心端点（auth, application等基础端点）
 pub use openlark_core::endpoints::{auth, application, apass, platform_integration};
-pub use openlark_core::endpoints::{Endpoints, EndpointBuilder};
 
 // ==================== Board (项目看板) v1 ====================
 // 看板系统 - 看板管理、任务卡片、工作流
@@ -354,4 +353,4 @@ mod tests {
             assert!(endpoint.contains("/v1/"), "{} 应该包含 /v1/", endpoint);
         }
     }
-}
+}// Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints

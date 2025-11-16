@@ -34,7 +34,6 @@
 
 // 导入核心端点（auth, application等基础端点）
 pub use openlark_core::endpoints::{auth, application, apass, platform_integration};
-pub use openlark_core::endpoints::{Endpoints, EndpointBuilder};
 
 // ==================== Document AI (文档AI识别) ====================
 // 文档AI识别服务 - 支持各种证件和文档的智能识别
@@ -269,4 +268,4 @@ mod tests {
             assert!(endpoint.contains("/v1/"), "{} 应该包含 /v1/", endpoint);
         }
     }
-}
+}// Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints
