@@ -5,7 +5,7 @@
 
 // These exports are provided for consumer convenience
 #[allow(unused_imports)]
-pub use crate::traits::{AsyncLarkClient, ClientBuilder, LarkClient, ServiceRegistry};
+pub use crate::traits::{AsyncLarkClient, ClientBuilder, LarkClientTrait, ServiceRegistry};
 #[allow(unused_imports)]
 pub use crate::DefaultLarkClient;
 #[allow(unused_imports)]
