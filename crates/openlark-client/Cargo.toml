@@ -39,6 +39,12 @@ drive = ["openlark-docs/ccm-drive"]
 ccm = ["openlark-docs/ccm"]
 cloud-docs = ["openlark-docs/cloud-docs"]
 
+# 新的标准化特性名
+ccm-doc = ["openlark-docs/ccm-doc"]
+ccm-sheets = ["openlark-docs/ccm-sheets"]
+ccm-wiki = ["openlark-docs/ccm-wiki"]
+ccm-drive = ["openlark-docs/ccm-drive"]
+
 communication = ["openlark-communication"]
 hr = ["openlark-hr"]
 ai = ["openlark-ai"]

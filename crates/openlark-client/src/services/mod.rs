@@ -12,15 +12,15 @@ use std::sync::Arc;
 use openlark_communication::contact::ContactService;
 
 // Map features to available services from openlark-docs
-// docs, bitable -> BaseService
-// sheets, wiki, drive, ccm -> CcmService
-#[cfg(any(feature = "docs", feature = "bitable"))]
+// ccm-doc, bitable -> BaseService
+// ccm-sheets, ccm-wiki, ccm-drive, ccm -> CcmService
+#[cfg(any(feature = "ccm-doc", feature = "bitable"))]
 use openlark_docs::BaseService;
 
 #[cfg(any(
-    feature = "sheets",
-    feature = "wiki",
-    feature = "drive",
+    feature = "ccm-sheets",
+    feature = "ccm-wiki",
+    feature = "ccm-drive",
     feature = "ccm"
 ))]
 use openlark_docs::CcmService;
@@ -43,14 +43,14 @@ pub struct ServiceManager;
 impl ServiceManager {
     /// 初始化所有启用的服务并注册到注册表中
     pub fn initialize_services(
-        _config: &Config,
+        config: &Config,
         _shared_config: &Arc<Config>,
         registry: &mut DefaultServiceRegistry,
     ) {
         tracing::debug!("Initializing services with feature flags");
 
         // 云文档服务 - 使用可用的 BaseService 和 CcmService
-        #[cfg(feature = "docs")]
+        #[cfg(feature = "ccm-doc")]
         {
             tracing::debug!("Initializing docs service (using BaseService)");
             // TODO: Implement proper client creation from config
@@ -61,7 +61,7 @@ impl ServiceManager {
             );
         }
 
-        #[cfg(feature = "sheets")]
+        #[cfg(feature = "ccm-sheets")]
         {
             tracing::debug!("Initializing sheet service (using CcmService)");
             // TODO: Implement proper client creation from config
@@ -79,7 +79,7 @@ impl ServiceManager {
             );
         }
 
-        #[cfg(feature = "wiki")]
+        #[cfg(feature = "ccm-wiki")]
         {
             tracing::debug!("Initializing wiki service (using CcmService)");
             // TODO: Implement proper client creation from config
@@ -88,7 +88,7 @@ impl ServiceManager {
             );
         }
 
-        #[cfg(feature = "drive")]
+        #[cfg(feature = "ccm-drive")]
         {
             tracing::debug!("Initializing drive service (using CcmService)");
             // TODO: Implement proper client creation from config
@@ -148,15 +148,15 @@ impl ServiceManager {
     /// 获取已启用的服务列表
     pub fn get_enabled_services() -> Vec<&'static str> {
         let services = vec![
-            #[cfg(feature = "docs")]
+            #[cfg(feature = "ccm-doc")]
             "docs",
             #[cfg(feature = "bitable")]
             "bitable",
-            #[cfg(feature = "sheets")]
+            #[cfg(feature = "ccm-sheets")]
             "sheets",
-            #[cfg(feature = "wiki")]
+            #[cfg(feature = "ccm-wiki")]
             "wiki",
-            #[cfg(feature = "drive")]
+            #[cfg(feature = "ccm-drive")]
             "drive",
             #[cfg(feature = "ccm")]
             "ccm",
