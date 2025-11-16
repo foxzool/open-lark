@@ -187,6 +187,182 @@ pub const TENANT_QUERY: &str = TENANT_V2_QUERY;
 pub const WORKPLACE_SEARCH: &str = WORKPLACE_ACCESS_DATA_SEARCH;
 pub const WORKPLACE_RECOMMEND: &str = WORKPLACE_APP_RECOMMEND_LIST;
 
+// ==================== Zero Trust (零信任安全架构) ====================
+// 零信任安全架构 - 身份验证增强、设备信任评估、微分段访问控制、持续监控
+
+/// 设备信任评估
+pub const DEVICE_TRUST_ASSESSMENT: &str = "/open-apis/zero_trust/v1/device/trust/assess";
+
+/// 用户身份增强验证
+pub const ENHANCED_IDENTITY_VERIFICATION: &str = "/open-apis/zero_trust/v1/identity/enhanced_verify";
+
+/// 持续身份验证
+pub const CONTINUOUS_IDENTITY_VERIFICATION: &str = "/open-apis/zero_trust/v1/identity/continuous_verify";
+
+/// 微分段访问控制
+pub const MICRO_SEGMENTATION_ACCESS: &str = "/open-apis/zero_trust/v1/access/micro_segment";
+
+/// 上下文感知访问策略
+pub const CONTEXT_AWARE_ACCESS_POLICY: &str = "/open-apis/zero_trust/v1/policy/context_aware";
+
+/// 自适应访问控制
+pub const ADAPTIVE_ACCESS_CONTROL: &str = "/open-apis/zero_trust/v1/access/adaptive";
+
+/// 行为基线分析
+pub const BEHAVIORAL_BASELINE_ANALYSIS: &str = "/open-apis/zero_trust/v1/behavior/baseline";
+
+/// 异常行为检测
+pub const ANOMALY_BEHAVIOR_DETECTION: &str = "/open-apis/zero_trust/v1/behavior/anomaly";
+
+/// 实时安全审计
+pub const REAL_TIME_SECURITY_AUDIT: &str = "/open-apis/zero_trust/v1/audit/realtime";
+
+/// 合规状态检查
+pub const COMPLIANCE_STATUS_CHECK: &str = "/open-apis/zero_trust/v1/compliance/status";
+
+/// GDPR合规检查
+pub const GDPR_COMPLIANCE_CHECK: &str = "/open-apis/zero_trust/v1/compliance/gdpr";
+
+/// SOC2合规检查
+pub const SOC2_COMPLIANCE_CHECK: &str = "/open-apis/zero_trust/v1/compliance/soc2";
+
+/// 端到端加密管理
+pub const END_TO_END_ENCRYPTION: &str = "/open-apis/zero_trust/v1/encryption/e2e";
+
+/// 密钥轮换管理
+pub const KEY_ROTATION_MANAGEMENT: &str = "/open-apis/zero_trust/v1/key/rotation";
+
+/// 零知识证明
+pub const ZERO_KNOWLEDGE_PROOF: &str = "/open-apis/zero_trust/v1/cryptography/zkp";
+
+/// 威胁情报订阅
+pub const THREAT_INTELLIGENCE_SUBSCRIPTION: &str = "/open-apis/zero_trust/v1/threat/intelligence";
+
+/// 自动化威胁响应
+pub const AUTOMATED_THREAT_RESPONSE: &str = "/open-apis/zero_trust/v1/threat/response";
+
+/// 攻击链分析
+pub const ATTACK_CHAIN_ANALYSIS: &str = "/open-apis/zero_trust/v1/threat/attack_chain";
+
+/// 安全事件关联分析
+pub const SECURITY_INCIDENT_CORRELATION: &str = "/open-apis/zero_trust/v1/incident/correlation";
+
+/// 零信任网络网关
+pub const ZERO_TRUST_NETWORK_GATEWAY: &str = "/open-apis/zero_trust/v1/network/gateway";
+
+/// 安全访问隧道
+pub const SECURE_ACCESS_TUNNEL: &str = "/open-apis/zero_trust/v1/network/tunnel";
+
+/// 细粒度权限控制
+pub const FINE_GRAINED_PERMISSION_CONTROL: &str = "/open-apis/zero_trust/v1/permission/fine_grained";
+
+/// 动态权限调整
+pub const DYNAMIC_PERMISSION_ADJUSTMENT: &str = "/open-apis/zero_trust/v1/permission/dynamic";
+
+/// 权限审计追踪
+pub const PERMISSION_AUDIT_TRACKING: &str = "/open-apis/zero_trust/v1/permission/audit";
+
+// ==================== Analytics (数据分析) ====================
+// 数据分析服务 - 业务数据统计、用户行为分析、趋势预测
+
+/// 用户行为分析
+pub const USER_BEHAVIOR_ANALYTICS: &str = "/open-apis/analytics/v1/user_behavior";
+
+/// 应用使用统计
+pub const APP_USAGE_STATISTICS: &str = "/open-apis/analytics/v1/app_usage";
+
+/// 业务数据洞察
+pub const BUSINESS_DATA_INSIGHTS: &str = "/open-apis/analytics/v1/business_insights";
+
+/// 趋势预测分析
+pub const TREND_PREDICTION_ANALYTICS: &str = "/open-apis/analytics/v1/trend_prediction";
+
+/// 实时数据监控
+pub const REAL_TIME_DATA_MONITORING: &str = "/open-apis/analytics/v1/realtime_monitoring";
+
+/// 自定义报表生成
+pub const CUSTOM_REPORT_GENERATION: &str = "/open-apis/analytics/v1/custom_report";
+
+/// 数据导出服务
+pub const DATA_EXPORT_SERVICE: &str = "/open-apis/analytics/v1/data_export";
+
+/// 绩效指标分析
+pub const PERFORMANCE_METRICS_ANALYTICS: &str = "/open-apis/analytics/v1/performance_metrics";
+
+/// 转化漏斗分析
+pub const CONVERSION_FUNNEL_ANALYTICS: &str = "/open-apis/analytics/v1/conversion_funnel";
+
+/// 用户分群分析
+pub const USER_SEGMENTATION_ANALYTICS: &str = "/open-apis/analytics/v1/user_segmentation";
+
+/// A/B测试分析
+pub const AB_TEST_ANALYTICS: &str = "/open-apis/analytics/v1/ab_test";
+
+/// 数据质量评估
+pub const DATA_QUALITY_ASSESSMENT: &str = "/open-apis/analytics/v1/data_quality";
+
+/// 预测模型服务
+pub const PREDICTIVE_MODEL_SERVICE: &str = "/open-apis/analytics/v1/predictive_model";
+
+/// 数据可视化
+pub const DATA_VISUALIZATION: &str = "/open-apis/analytics/v1/visualization";
+
+/// 智能推荐引擎
+pub const INTELLIGENT_RECOMMENDATION: &str = "/open-apis/analytics/v1/recommendation";
+
+/// 异常检测分析
+pub const ANOMALY_DETECTION_ANALYTICS: &str = "/open-apis/analytics/v1/anomaly_detection";
+
+/// 根因分析
+pub const ROOT_CAUSE_ANALYSIS: &str = "/open-apis/analytics/v1/root_cause";
+
+/// 决策支持系统
+pub const DECISION_SUPPORT_SYSTEM: &str = "/open-apis/analytics/v1/decision_support";
+
+/// KPI监控仪表板
+pub const KPI_DASHBOARD_MONITORING: &str = "/open-apis/analytics/v1/kpi_dashboard";
+
+/// 资源利用率分析
+pub const RESOURCE_UTILIZATION_ANALYTICS: &str = "/open-apis/analytics/v1/resource_utilization";
+
+/// 成本效益分析
+pub const COST_BENEFIT_ANALYTICS: &str = "/open-apis/analytics/v1/cost_benefit";
+
+// ==================== Tenant Tag (租户标签) ====================
+// 租户标签管理 - 租户标识、分类、权限管理
+
+/// 租户标签管理
+pub const TENANT_TAG_V1_TAGS: &str = "/open-apis/tenant_tag/v1/tags";
+
+/// 租户标签获取
+pub const TENANT_TAG_V1_TAG_GET: &str = "/open-apis/tenant_tag/v1/tags/{tag_id}";
+
+/// 租户标签创建
+pub const TENANT_TAG_V1_TAG_CREATE: &str = "/open-apis/tenant_tag/v1/tags";
+
+/// 租户标签更新
+pub const TENANT_TAG_V1_TAG_UPDATE: &str = "/open-apis/tenant_tag/v1/tags/{tag_id}";
+
+/// 租户标签删除
+pub const TENANT_TAG_V1_TAG_DELETE: &str = "/open-apis/tenant_tag/v1/tags/{tag_id}";
+
+/// 租户标签搜索
+pub const TENANT_TAG_V1_TAGS_SEARCH: &str = "/open-apis/tenant_tag/v1/tags/search";
+
+// ==================== 兼容性别名 ====================
+
+/// 为保持向后兼容性，提供一些简短的别名
+/// Zero Trust别名
+pub const TRUST_ASSESSMENT: &str = DEVICE_TRUST_ASSESSMENT;
+pub const IDENTITY_VERIFY: &str = ENHANCED_IDENTITY_VERIFICATION;
+
+/// Analytics别名
+pub const USER_ANALYTICS: &str = USER_BEHAVIOR_ANALYTICS;
+pub const APP_STATS: &str = APP_USAGE_STATISTICS;
+
+/// Tenant Tag别名
+pub const TAGS: &str = TENANT_TAG_V1_TAGS;
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -319,6 +495,105 @@ mod tests {
         let trust_party_endpoints = [TRUST_PARTY_V1_COLLABORATION_ORGANIZATIONS, TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULES];
         for endpoint in trust_party_endpoints {
             assert!(endpoint.contains("/trust_party/"), "{} 应该包含 /trust_party/", endpoint);
+        }
+    }
+
+    #[test]
+    fn test_zero_trust_endpoints() {
+        // 验证Zero Trust端点
+        assert!(DEVICE_TRUST_ASSESSMENT.starts_with("/open-apis/zero_trust/"));
+        assert!(DEVICE_TRUST_ASSESSMENT.contains("device"));
+        assert!(ENHANCED_IDENTITY_VERIFICATION.contains("identity"));
+        assert!(MICRO_SEGMENTATION_ACCESS.contains("access"));
+        assert!(CONTEXT_AWARE_ACCESS_POLICY.contains("policy"));
+        assert!(BEHAVIORAL_BASELINE_ANALYSIS.contains("behavior"));
+        assert!(REAL_TIME_SECURITY_AUDIT.contains("audit"));
+        assert!(COMPLIANCE_STATUS_CHECK.contains("compliance"));
+        assert!(END_TO_END_ENCRYPTION.contains("encryption"));
+        assert!(THREAT_INTELLIGENCE_SUBSCRIPTION.contains("threat"));
+        assert!(ZERO_TRUST_NETWORK_GATEWAY.contains("network"));
+        assert!(FINE_GRAINED_PERMISSION_CONTROL.contains("permission"));
+    }
+
+    #[test]
+    fn test_analytics_endpoints() {
+        // 验证Analytics端点
+        assert!(USER_BEHAVIOR_ANALYTICS.starts_with("/open-apis/analytics/"));
+        assert!(USER_BEHAVIOR_ANALYTICS.contains("user_behavior"));
+        assert!(APP_USAGE_STATISTICS.contains("app_usage"));
+        assert!(BUSINESS_DATA_INSIGHTS.contains("business_insights"));
+        assert!(TREND_PREDICTION_ANALYTICS.contains("trend_prediction"));
+        assert!(REAL_TIME_DATA_MONITORING.contains("realtime_monitoring"));
+        assert!(CUSTOM_REPORT_GENERATION.contains("custom_report"));
+        assert!(PERFORMANCE_METRICS_ANALYTICS.contains("performance_metrics"));
+        assert!(CONVERSION_FUNNEL_ANALYTICS.contains("conversion_funnel"));
+        assert!(DATA_VISUALIZATION.contains("visualization"));
+        assert!(INTELLIGENT_RECOMMENDATION.contains("recommendation"));
+        assert!(KPI_DASHBOARD_MONITORING.contains("kpi_dashboard"));
+    }
+
+    #[test]
+    fn test_tenant_tag_endpoints() {
+        // 验证Tenant Tag端点
+        assert!(TENANT_TAG_V1_TAGS.starts_with("/open-apis/tenant_tag/"));
+        assert!(TENANT_TAG_V1_TAGS.contains("tags"));
+        assert!(TENANT_TAG_V1_TAG_GET.contains("{tag_id}"));
+        assert!(TENANT_TAG_V1_TAG_UPDATE.contains("{tag_id}"));
+        assert!(TENANT_TAG_V1_TAG_DELETE.contains("{tag_id}"));
+        assert!(TENANT_TAG_V1_TAGS_SEARCH.contains("search"));
+    }
+
+    #[test]
+    fn test_new_service_grouping() {
+        // 测试新增服务的分组正确性
+        let zero_trust_endpoints = [
+            DEVICE_TRUST_ASSESSMENT,
+            ENHANCED_IDENTITY_VERIFICATION,
+            MICRO_SEGMENTATION_ACCESS,
+        ];
+        for endpoint in zero_trust_endpoints {
+            assert!(endpoint.contains("/zero_trust/"), "{} 应该包含 /zero_trust/", endpoint);
+        }
+
+        let analytics_endpoints = [
+            USER_BEHAVIOR_ANALYTICS,
+            APP_USAGE_STATISTICS,
+            BUSINESS_DATA_INSIGHTS,
+        ];
+        for endpoint in analytics_endpoints {
+            assert!(endpoint.contains("/analytics/"), "{} 应该包含 /analytics/", endpoint);
+        }
+
+        let tenant_tag_endpoints = [
+            TENANT_TAG_V1_TAGS,
+            TENANT_TAG_V1_TAG_CREATE,
+            TENANT_TAG_V1_TAGS_SEARCH,
+        ];
+        for endpoint in tenant_tag_endpoints {
+            assert!(endpoint.contains("/tenant_tag/"), "{} 应该包含 /tenant_tag/", endpoint);
+        }
+    }
+
+    #[test]
+    fn test_new_backward_compatibility() {
+        // 验证新增端点的兼容性别名
+        assert_eq!(TRUST_ASSESSMENT, DEVICE_TRUST_ASSESSMENT);
+        assert_eq!(IDENTITY_VERIFY, ENHANCED_IDENTITY_VERIFICATION);
+        assert_eq!(USER_ANALYTICS, USER_BEHAVIOR_ANALYTICS);
+        assert_eq!(APP_STATS, APP_USAGE_STATISTICS);
+        assert_eq!(TAGS, TENANT_TAG_V1_TAGS);
+    }
+
+    #[test]
+    fn test_version_consistency_new_endpoints() {
+        // 测试新增端点的版本一致性
+        let v1_endpoints = [
+            DEVICE_TRUST_ASSESSMENT,
+            USER_BEHAVIOR_ANALYTICS,
+            TENANT_TAG_V1_TAGS,
+        ];
+        for endpoint in v1_endpoints {
+            assert!(endpoint.contains("/v1/"), "{} 应该包含 /v1/", endpoint);
         }
     }
 }
