@@ -41,7 +41,6 @@ pub mod event;
 pub mod pagination;
 pub mod performance;
 pub mod request_builder;
-pub mod service;
 pub mod trait_system;
 
 // Re-export commonly used types from crate root
