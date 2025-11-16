@@ -17,11 +17,9 @@ tracing = { workspace = true }
 
 # Optional service dependencies (conditionally included)
 openlark-docs = { workspace = true, optional = true }
-openlark-communication = { workspace = true, optional = true }
 openlark-hr = { workspace = true, optional = true }
 openlark-ai = { workspace = true, optional = true }
 openlark-auth = { workspace = true, optional = true }
-openlark-enterprise = { workspace = true, optional = true }
 
 [features]
 default = []
@@ -45,19 +43,16 @@ ccm-sheets = ["openlark-docs/ccm-sheets"]
 ccm-wiki = ["openlark-docs/ccm-wiki"]
 ccm-drive = ["openlark-docs/ccm-drive"]
 
-communication = ["openlark-communication"]
 hr = ["openlark-hr"]
 ai = ["openlark-ai"]
 auth = ["openlark-auth"]
-enterprise = ["openlark-enterprise"]
 
 # Convenience features
-all-services = ["docs", "sheets", "bitable", "wiki", "drive", "ccm", "communication", "hr", "ai", "auth", "enterprise"]
-base-services = ["docs", "sheets", "communication", "auth"]
+all-services = ["docs", "sheets", "bitable", "wiki", "drive", "ccm", "hr", "ai", "auth"]
+base-services = ["docs", "sheets", "auth"]
 
 # Complete client features for easy selection
 client-docs = ["client", "docs"]
-client-communication = ["client", "communication"]
 client-hr = ["client", "hr"]
 client-ai = ["client", "ai"]
 client-auth = ["client", "auth"]
