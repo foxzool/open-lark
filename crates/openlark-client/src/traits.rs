@@ -11,7 +11,7 @@ use openlark_core::{config::Config, SDKResult};
 /// This trait defines the fundamental interface for any Lark client,
 /// providing access to configuration and basic client functionality.
 /// Implementations can be synchronous or asynchronous depending on use case.
-pub trait LarkClient {
+pub trait LarkClientTrait {
     /// Get the configuration associated with this client
     fn config(&self) -> &Config;
 
@@ -31,7 +31,7 @@ pub trait LarkClient {
 /// This extends the basic client trait with async capabilities,
 /// allowing clients to perform operations like API calls without blocking.
 #[async_trait]
-pub trait AsyncLarkClient: LarkClient {
+pub trait AsyncLarkClient: LarkClientTrait {
     /// Perform an async health check
     async fn health_check(&self) -> SDKResult<bool>;
 

@@ -2,7 +2,7 @@
 //!
 //! 提供向后兼容的服务访问方法，使迁移更加平滑
 
-use crate::traits::ServiceRegistry;
+use crate::traits::{LarkClientTrait, ServiceRegistry};
 
 // Map features to available services from openlark-docs
 // ccm-doc, bitable -> BaseService
