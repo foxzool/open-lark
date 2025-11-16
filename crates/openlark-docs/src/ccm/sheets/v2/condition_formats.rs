@@ -8,6 +8,7 @@
 //! - 多种条件格式类型（数据条、色阶、图标集等）
 
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -15,7 +16,6 @@ use openlark_core::{
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
-    api_req::ApiRequest,
     SDKResult,
 };
 use reqwest::Method;
@@ -364,11 +364,11 @@ impl ConditionalFormatsService {
     ///
     /// let result = service.create(&request);
     /// ```
-    pub async fn create(&self, request: &CreateConditionalFormatsRequest) -> SDKResult<CreateConditionalFormatsResponse> {
-        use openlark_core::{
-            api_req::ApiRequest,
-            http::Transport,
-        };
+    pub async fn create(
+        &self,
+        request: &CreateConditionalFormatsRequest,
+    ) -> SDKResult<CreateConditionalFormatsResponse> {
+        use openlark_core::{api_req::ApiRequest, http::Transport};
         use reqwest::Method;
 
         let endpoint = format!(
@@ -379,21 +379,24 @@ impl ConditionalFormatsService {
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let create_response: StandardResponse<CreateConditionalFormatsResponse> = Transport::request(api_request, &self.config, None).await?;
+        let create_response: StandardResponse<CreateConditionalFormatsResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if let Some(data) = create_response.data {
             Ok(data)
         } else {
-            Err(LarkAPIError::InvalidResponse("Missing data field".to_string()))
+            Err(LarkAPIError::InvalidResponse(
+                "Missing data field".to_string(),
+            ))
         }
     }
 
     /// 批量更新条件格式
-    pub async fn update(&self, request: &UpdateConditionalFormatsRequest) -> SDKResult<UpdateConditionalFormatsResponse> {
-        use openlark_core::{
-            api_req::ApiRequest,
-            http::Transport,
-        };
+    pub async fn update(
+        &self,
+        request: &UpdateConditionalFormatsRequest,
+    ) -> SDKResult<UpdateConditionalFormatsResponse> {
+        use openlark_core::{api_req::ApiRequest, http::Transport};
         use reqwest::Method;
 
         let endpoint = format!(
@@ -404,21 +407,24 @@ impl ConditionalFormatsService {
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let update_response: StandardResponse<UpdateConditionalFormatsResponse> = Transport::request(api_request, &self.config, None).await?;
+        let update_response: StandardResponse<UpdateConditionalFormatsResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if let Some(data) = update_response.data {
             Ok(data)
         } else {
-            Err(LarkAPIError::InvalidResponse("Missing data field".to_string()))
+            Err(LarkAPIError::InvalidResponse(
+                "Missing data field".to_string(),
+            ))
         }
     }
 
     /// 批量获取条件格式
-    pub async fn get(&self, request: &GetConditionalFormatsRequest) -> SDKResult<GetConditionalFormatsResponse> {
-        use openlark_core::{
-            api_req::ApiRequest,
-            http::Transport,
-        };
+    pub async fn get(
+        &self,
+        request: &GetConditionalFormatsRequest,
+    ) -> SDKResult<GetConditionalFormatsResponse> {
+        use openlark_core::{api_req::ApiRequest, http::Transport};
         use reqwest::Method;
 
         let endpoint = format!(
@@ -428,21 +434,24 @@ impl ConditionalFormatsService {
         );
 
         let api_request = ApiRequest::with_method_and_path(Method::GET, &endpoint);
-        let get_response: StandardResponse<GetConditionalFormatsResponse> = Transport::request(api_request, &self.config, None).await?;
+        let get_response: StandardResponse<GetConditionalFormatsResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if let Some(data) = get_response.data {
             Ok(data)
         } else {
-            Err(LarkAPIError::InvalidResponse("Missing data field".to_string()))
+            Err(LarkAPIError::InvalidResponse(
+                "Missing data field".to_string(),
+            ))
         }
     }
 
     /// 批量删除条件格式
-    pub async fn delete(&self, request: &DeleteConditionalFormatsRequest) -> SDKResult<DeleteConditionalFormatsResponse> {
-        use openlark_core::{
-            api_req::ApiRequest,
-            http::Transport,
-        };
+    pub async fn delete(
+        &self,
+        request: &DeleteConditionalFormatsRequest,
+    ) -> SDKResult<DeleteConditionalFormatsResponse> {
+        use openlark_core::{api_req::ApiRequest, http::Transport};
         use reqwest::Method;
 
         let endpoint = format!(
@@ -453,12 +462,15 @@ impl ConditionalFormatsService {
         let mut api_request = ApiRequest::with_method_and_path(Method::DELETE, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let delete_response: StandardResponse<DeleteConditionalFormatsResponse> = Transport::request(api_request, &self.config, None).await?;
+        let delete_response: StandardResponse<DeleteConditionalFormatsResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if let Some(data) = delete_response.data {
             Ok(data)
         } else {
-            Err(LarkAPIError::InvalidResponse("Missing data field".to_string()))
+            Err(LarkAPIError::InvalidResponse(
+                "Missing data field".to_string(),
+            ))
         }
     }
 }
@@ -507,10 +519,22 @@ mod tests {
     #[test]
     fn test_conditional_format_type() {
         assert_eq!(ConditionalFormatType::CellIs, ConditionalFormatType::CellIs);
-        assert_eq!(ConditionalFormatType::Formula, ConditionalFormatType::Formula);
-        assert_eq!(ConditionalFormatType::DataBar, ConditionalFormatType::DataBar);
-        assert_eq!(ConditionalFormatType::ColorScale, ConditionalFormatType::ColorScale);
-        assert_eq!(ConditionalFormatType::IconSet, ConditionalFormatType::IconSet);
+        assert_eq!(
+            ConditionalFormatType::Formula,
+            ConditionalFormatType::Formula
+        );
+        assert_eq!(
+            ConditionalFormatType::DataBar,
+            ConditionalFormatType::DataBar
+        );
+        assert_eq!(
+            ConditionalFormatType::ColorScale,
+            ConditionalFormatType::ColorScale
+        );
+        assert_eq!(
+            ConditionalFormatType::IconSet,
+            ConditionalFormatType::IconSet
+        );
     }
 
     #[test]

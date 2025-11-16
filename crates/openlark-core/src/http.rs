@@ -21,6 +21,12 @@ pub struct Transport<T> {
     phantom_data: PhantomData<T>,
 }
 
+impl<T> Default for Transport<T> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<T> Transport<T> {
     pub fn new() -> Self {
         Self {

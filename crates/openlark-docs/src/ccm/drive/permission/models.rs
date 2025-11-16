@@ -2,8 +2,8 @@
 //!
 //! 提供权限管理相关的数据结构，支持权限设置、权限验证和所有者转移。
 
-use serde::{Deserialize, Serialize};
 use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use serde::{Deserialize, Serialize};
 
 /// 判断协作者是否有某权限请求
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

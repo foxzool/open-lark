@@ -1,3 +1,5 @@
+#![allow(unused_variables, unused_unsafe)]
+
 #![allow(dead_code)]
 #![allow(unused_imports)]
 #![allow(unused_variables)]
@@ -205,7 +207,6 @@ impl FilterCondition {
             operator: "isLess".to_string(),
             value: Some(vec![value.to_string()])}
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]

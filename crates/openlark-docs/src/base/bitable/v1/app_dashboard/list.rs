@@ -1,13 +1,14 @@
-#![allow(dead_code)]
-#![allow(unused_imports)]
-#![allow(unused_variables)]
-#![allow(unused_mut)]
 //! 列出仪表盘API v1
 //!
 //! 提供飞书多维表格仪表盘的列表查询功能，支持：
 //! - 分页查询仪表盘列表
 //! - 支持筛选和排序
 //! - 提供仪表盘基本信息和权限信息
+
+#![allow(dead_code)]
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(unused_mut)]
 
 use openlark_core::{
     api_resp::{ApiResponseTrait, ResponseFormat},

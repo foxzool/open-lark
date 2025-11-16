@@ -6,12 +6,13 @@
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
     trait_system::Service,
-    api_req::ApiRequest, SDKResult,
+    SDKResult,
 };
 use reqwest::Method;
 

@@ -2,18 +2,13 @@
 //!
 //! 提供多维表格表单管理相关的API服务，包括：
 //! - 表单的查询、更新、删除
-use std::collections::HashMap;
 //! - 表单问题和字段管理
 //! - 完整的错误处理和参数验证
-
+use std::collections::HashMap;
 
 use openlark_core::{
-    error::LarkAPIError,
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
+    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    http::Transport, SDKResult,
 };
 
 use super::models::*;
@@ -41,17 +36,24 @@ impl AppFormService {
     /// 返回表单信息
     pub async fn get_form(&self, request: &GetFormRequest) -> SDKResult<GetFormResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("获取表单: app_token={}, table_id={}, form_id={}",
-                  request.app_token, request.table_id, request.form_id);
+        log::info!(
+            "获取表单: app_token={}, table_id={}, form_id={}",
+            request.app_token,
+            request.table_id,
+            request.form_id
+        );
 
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}",
-                            request.app_token, request.table_id, request.form_id),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}",
+                request.app_token, request.table_id, request.form_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params: HashMap::new(),
@@ -62,8 +64,12 @@ impl AppFormService {
         let resp = Transport::<GetFormResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("获取表单完成: app_token={}, table_id={}, form_id={}",
-                  request.app_token, request.table_id, request.form_id);
+        log::info!(
+            "获取表单完成: app_token={}, table_id={}, form_id={}",
+            request.app_token,
+            request.table_id,
+            request.form_id
+        );
 
         Ok(response)
     }
@@ -77,13 +83,21 @@ impl AppFormService {
     ///
     /// # 返回
     /// 返回表单问题列表
-    pub async fn list_form_questions(&self, request: &ListFormQuestionsRequest) -> SDKResult<ListFormQuestionsResponse> {
+    pub async fn list_form_questions(
+        &self,
+        request: &ListFormQuestionsRequest,
+    ) -> SDKResult<ListFormQuestionsResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("列出表单问题: app_token={}, table_id={}, form_id={}",
-                  request.app_token, request.table_id, request.form_id);
+        log::info!(
+            "列出表单问题: app_token={}, table_id={}, form_id={}",
+            request.app_token,
+            request.table_id,
+            request.form_id
+        );
 
         // 构建查询参数
         let mut query_params = HashMap::new();
@@ -98,8 +112,10 @@ impl AppFormService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/questions",
-                            request.app_token, request.table_id, request.form_id),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/questions",
+                request.app_token, request.table_id, request.form_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params,
@@ -107,12 +123,17 @@ impl AppFormService {
         };
 
         // 发送请求
-        let resp = Transport::<ListFormQuestionsResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<ListFormQuestionsResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("列出表单问题完成: app_token={}, table_id={}, form_id={}, count={}",
-                  request.app_token, request.table_id, request.form_id,
-                  response.questions.as_ref().map(|q| q.len()).unwrap_or(0));
+        log::info!(
+            "列出表单问题完成: app_token={}, table_id={}, form_id={}, count={}",
+            request.app_token,
+            request.table_id,
+            request.form_id,
+            response.questions.as_ref().map(|q| q.len()).unwrap_or(0)
+        );
 
         Ok(response)
     }
@@ -126,22 +147,40 @@ impl AppFormService {
     ///
     /// # 返回
     /// 返回更新后的表单问题信息
-    pub async fn patch_form_question(&self, request: &PatchFormQuestionRequest) -> SDKResult<PatchFormQuestionResponse> {
+    pub async fn patch_form_question(
+        &self,
+        request: &PatchFormQuestionRequest,
+    ) -> SDKResult<PatchFormQuestionResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("更新表单问题: app_token={}, table_id={}, form_id={}, question_id={}",
-                  request.app_token, request.table_id, request.form_id, request.question_id);
+        log::info!(
+            "更新表单问题: app_token={}, table_id={}, form_id={}, question_id={}",
+            request.app_token,
+            request.table_id,
+            request.form_id,
+            request.question_id
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
         body.insert("title".to_string(), serde_json::to_value(&request.title)?);
-        body.insert("question_type".to_string(), serde_json::to_value(&request.question_type)?);
-        body.insert("required".to_string(), serde_json::to_value(&request.required)?);
+        body.insert(
+            "question_type".to_string(),
+            serde_json::to_value(&request.question_type)?,
+        );
+        body.insert(
+            "required".to_string(),
+            serde_json::to_value(&request.required)?,
+        );
 
         if let Some(ref description) = request.description {
-            body.insert("description".to_string(), serde_json::to_value(description)?);
+            body.insert(
+                "description".to_string(),
+                serde_json::to_value(description)?,
+            );
         }
         if let Some(ref options) = request.options {
             body.insert("options".to_string(), serde_json::to_value(options)?);
@@ -153,8 +192,10 @@ impl AppFormService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/questions/{}",
-                            request.app_token, request.table_id, request.form_id, request.question_id),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/questions/{}",
+                request.app_token, request.table_id, request.form_id, request.question_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -162,11 +203,17 @@ impl AppFormService {
         };
 
         // 发送请求
-        let resp = Transport::<PatchFormQuestionResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<PatchFormQuestionResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("更新表单问题完成: app_token={}, table_id={}, form_id={}, question_id={}",
-                  request.app_token, request.table_id, request.form_id, request.question_id);
+        log::info!(
+            "更新表单问题完成: app_token={}, table_id={}, form_id={}, question_id={}",
+            request.app_token,
+            request.table_id,
+            request.form_id,
+            request.question_id
+        );
 
         Ok(response)
     }
@@ -180,13 +227,21 @@ impl AppFormService {
     ///
     /// # 返回
     /// 返回更新后的表单信息
-    pub async fn patch_form_meta(&self, request: &PatchFormMetaRequest) -> SDKResult<PatchFormMetaResponse> {
+    pub async fn patch_form_meta(
+        &self,
+        request: &PatchFormMetaRequest,
+    ) -> SDKResult<PatchFormMetaResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("更新表单元数据: app_token={}, table_id={}, form_id={}",
-                  request.app_token, request.table_id, request.form_id);
+        log::info!(
+            "更新表单元数据: app_token={}, table_id={}, form_id={}",
+            request.app_token,
+            request.table_id,
+            request.form_id
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -195,7 +250,10 @@ impl AppFormService {
             body.insert("title".to_string(), serde_json::to_value(title)?);
         }
         if let Some(ref description) = request.description {
-            body.insert("description".to_string(), serde_json::to_value(description)?);
+            body.insert(
+                "description".to_string(),
+                serde_json::to_value(description)?,
+            );
         }
         if let Some(ref settings) = request.settings {
             body.insert("settings".to_string(), serde_json::to_value(settings)?);
@@ -204,8 +262,10 @@ impl AppFormService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}",
-                            request.app_token, request.table_id, request.form_id),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}",
+                request.app_token, request.table_id, request.form_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -216,8 +276,12 @@ impl AppFormService {
         let resp = Transport::<PatchFormMetaResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("更新表单元数据完成: app_token={}, table_id={}, form_id={}",
-                  request.app_token, request.table_id, request.form_id);
+        log::info!(
+            "更新表单元数据完成: app_token={}, table_id={}, form_id={}",
+            request.app_token,
+            request.table_id,
+            request.form_id
+        );
 
         Ok(response)
     }
@@ -229,7 +293,11 @@ pub struct GetFormRequestBuilder {
 }
 
 impl GetFormRequestBuilder {
-    pub fn new(app_token: impl Into<String>, table_id: impl Into<String>, form_id: impl Into<String>) -> Self {
+    pub fn new(
+        app_token: impl Into<String>,
+        table_id: impl Into<String>,
+        form_id: impl Into<String>,
+    ) -> Self {
         Self {
             request: GetFormRequest {
                 app_token: app_token.into(),
@@ -299,7 +367,11 @@ pub struct PatchFormMetaRequestBuilder {
 }
 
 impl PatchFormMetaRequestBuilder {
-    pub fn new(app_token: impl Into<String>, table_id: impl Into<String>, form_id: impl Into<String>) -> Self {
+    pub fn new(
+        app_token: impl Into<String>,
+        table_id: impl Into<String>,
+        form_id: impl Into<String>,
+    ) -> Self {
         Self {
             request: PatchFormMetaRequest {
                 app_token: app_token.into(),

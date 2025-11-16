@@ -48,4 +48,7 @@ pub mod services;
 
 // 重新导出主要类型
 pub use models::*;
-pub use services::{CcmSheetService, ReadSingleRangeRequestBuilder, WriteSingleRangeRequestBuilder, AppendDataRequestBuilder};
+pub use services::{
+    AppendDataRequestBuilder, CcmSheetService, ReadSingleRangeRequestBuilder,
+    WriteSingleRangeRequestBuilder,
+};

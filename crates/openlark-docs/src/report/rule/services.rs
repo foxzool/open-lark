@@ -2,19 +2,14 @@
 //!
 //! 提供报告规则管理相关的API服务，包括：
 //! - 规则查询和过滤
-use std::collections::HashMap;
 //! - 规则删除和清理
 //! - 规则状态管理
 //! - 完整的错误处理和参数验证
-
+use std::collections::HashMap;
 
 use openlark_core::{
-    error::LarkAPIError,
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
+    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    http::Transport, SDKResult,
 };
 
 use super::models::*;
@@ -42,11 +37,16 @@ impl RuleService {
     /// 返回报告规则列表数据
     pub async fn query_rule(&self, request: &QueryRuleRequest) -> SDKResult<QueryRuleResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("查询报告规则: rule_type={:?}, status={:?}, page_size={:?}",
-                  request.rule_type, request.status, request.page_size);
+        log::info!(
+            "查询报告规则: rule_type={:?}, status={:?}, page_size={:?}",
+            request.rule_type,
+            request.status,
+            request.page_size
+        );
 
         // 构建查询参数
         let mut query_params = HashMap::new();
@@ -84,13 +84,11 @@ impl RuleService {
         let resp = Transport::<QueryRuleResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("查询报告规则完成: total={}, has_more={}",
-                  response.data.as_ref()
-                      .map(|d| d.total)
-                      .unwrap_or(0),
-                  response.data.as_ref()
-                      .map(|d| d.has_more)
-                      .unwrap_or(false));
+        log::info!(
+            "查询报告规则完成: total={}, has_more={}",
+            response.data.as_ref().map(|d| d.total).unwrap_or(0),
+            response.data.as_ref().map(|d| d.has_more).unwrap_or(false)
+        );
 
         Ok(response)
     }
@@ -104,9 +102,13 @@ impl RuleService {
     ///
     /// # 返回
     /// 返回删除操作结果
-    pub async fn remove_rule_view(&self, request: &RemoveRuleViewRequest) -> SDKResult<RemoveRuleViewResponse> {
+    pub async fn remove_rule_view(
+        &self,
+        request: &RemoveRuleViewRequest,
+    ) -> SDKResult<RemoveRuleViewResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
         log::info!("删除报告规则: rule_id={}", request.rule_id);
@@ -130,14 +132,15 @@ impl RuleService {
         };
 
         // 发送请求
-        let resp = Transport::<RemoveRuleViewResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<RemoveRuleViewResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("删除报告规则完成: rule_id={}, success={:?}",
-                  request.rule_id,
-                  response.data.as_ref()
-                      .map(|d| d.success)
-                      .unwrap_or(false));
+        log::info!(
+            "删除报告规则完成: rule_id={}, success={:?}",
+            request.rule_id,
+            response.data.as_ref().map(|d| d.success).unwrap_or(false)
+        );
 
         Ok(response)
     }

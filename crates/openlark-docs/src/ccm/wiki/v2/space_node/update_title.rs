@@ -1,3 +1,4 @@
+#![allow(unused_variables, unused_unsafe)]
 use reqwest::Method;
 use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use openlark_core::{,
@@ -82,7 +83,6 @@ path};
 Ok(api_resp),
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]

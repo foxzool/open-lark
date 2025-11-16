@@ -2,20 +2,15 @@
 //!
 //! 提供多维表格数据记录管理相关的API服务，包括：
 //! - 记录的创建、查询、更新、删除
-use serde_json::Value;
-use std::collections::HashMap;
 //! - 批量记录操作支持
 //! - 记录搜索和过滤功能
 //! - 完整的错误处理和参数验证
-
+use serde_json::Value;
+use std::collections::HashMap;
 
 use openlark_core::{
-    error::LarkAPIError,
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
+    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    http::Transport, SDKResult,
 };
 
 use super::models::*;
@@ -41,12 +36,20 @@ impl AppTableRecordService {
     ///
     /// # 返回
     /// 返回新创建的记录信息
-    pub async fn create_record(&self, request: &CreateRecordRequest) -> SDKResult<CreateRecordResponse> {
+    pub async fn create_record(
+        &self,
+        request: &CreateRecordRequest,
+    ) -> SDKResult<CreateRecordResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("新增记录: app_token={}, table_id={}", request.app_token, request.table_id);
+        log::info!(
+            "新增记录: app_token={}, table_id={}",
+            request.app_token,
+            request.table_id
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -55,7 +58,10 @@ impl AppTableRecordService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/tables/{}/records", request.app_token, request.table_id),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/tables/{}/records",
+                request.app_token, request.table_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -66,7 +72,11 @@ impl AppTableRecordService {
         let resp = Transport::<CreateRecordResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("新增记录完成: app_token={}, table_id={}", request.app_token, request.table_id);
+        log::info!(
+            "新增记录完成: app_token={}, table_id={}",
+            request.app_token,
+            request.table_id
+        );
 
         Ok(response)
     }
@@ -80,13 +90,21 @@ impl AppTableRecordService {
     ///
     /// # 返回
     /// 返回新创建的记录信息列表
-    pub async fn batch_create_record(&self, request: &BatchCreateRecordRequest) -> SDKResult<BatchCreateRecordResponse> {
+    pub async fn batch_create_record(
+        &self,
+        request: &BatchCreateRecordRequest,
+    ) -> SDKResult<BatchCreateRecordResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("批量新增记录: app_token={}, table_id={}, count={}",
-                  request.app_token, request.table_id, request.records.len());
+        log::info!(
+            "批量新增记录: app_token={}, table_id={}, count={}",
+            request.app_token,
+            request.table_id,
+            request.records.len()
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -95,7 +113,10 @@ impl AppTableRecordService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_create", request.app_token, request.table_id),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_create",
+                request.app_token, request.table_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -103,10 +124,15 @@ impl AppTableRecordService {
         };
 
         // 发送请求
-        let resp = Transport::<BatchCreateRecordResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<BatchCreateRecordResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("批量新增记录完成: app_token={}, table_id={}", request.app_token, request.table_id);
+        log::info!(
+            "批量新增记录完成: app_token={}, table_id={}",
+            request.app_token,
+            request.table_id
+        );
 
         Ok(response)
     }
@@ -120,13 +146,21 @@ impl AppTableRecordService {
     ///
     /// # 返回
     /// 返回更新后的记录信息
-    pub async fn update_record(&self, request: &UpdateRecordRequest) -> SDKResult<UpdateRecordResponse> {
+    pub async fn update_record(
+        &self,
+        request: &UpdateRecordRequest,
+    ) -> SDKResult<UpdateRecordResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("更新记录: app_token={}, table_id={}, record_id={}",
-                  request.app_token, request.table_id, request.record_id);
+        log::info!(
+            "更新记录: app_token={}, table_id={}, record_id={}",
+            request.app_token,
+            request.table_id,
+            request.record_id
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -135,7 +169,10 @@ impl AppTableRecordService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::PUT,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/tables/{}/records/{}", request.app_token, request.table_id, request.record_id),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/tables/{}/records/{}",
+                request.app_token, request.table_id, request.record_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -146,8 +183,12 @@ impl AppTableRecordService {
         let resp = Transport::<UpdateRecordResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("更新记录完成: app_token={}, table_id={}, record_id={}",
-                  request.app_token, request.table_id, request.record_id);
+        log::info!(
+            "更新记录完成: app_token={}, table_id={}, record_id={}",
+            request.app_token,
+            request.table_id,
+            request.record_id
+        );
 
         Ok(response)
     }
@@ -161,13 +202,21 @@ impl AppTableRecordService {
     ///
     /// # 返回
     /// 返回更新后的记录信息列表
-    pub async fn batch_update_record(&self, request: &BatchUpdateRecordRequest) -> SDKResult<BatchUpdateRecordResponse> {
+    pub async fn batch_update_record(
+        &self,
+        request: &BatchUpdateRecordRequest,
+    ) -> SDKResult<BatchUpdateRecordResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("批量更新记录: app_token={}, table_id={}, count={}",
-                  request.app_token, request.table_id, request.records.len());
+        log::info!(
+            "批量更新记录: app_token={}, table_id={}, count={}",
+            request.app_token,
+            request.table_id,
+            request.records.len()
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -176,7 +225,10 @@ impl AppTableRecordService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_update", request.app_token, request.table_id),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_update",
+                request.app_token, request.table_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -184,10 +236,15 @@ impl AppTableRecordService {
         };
 
         // 发送请求
-        let resp = Transport::<BatchUpdateRecordResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<BatchUpdateRecordResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("批量更新记录完成: app_token={}, table_id={}", request.app_token, request.table_id);
+        log::info!(
+            "批量更新记录完成: app_token={}, table_id={}",
+            request.app_token,
+            request.table_id
+        );
 
         Ok(response)
     }
@@ -201,18 +258,29 @@ impl AppTableRecordService {
     ///
     /// # 返回
     /// 返回删除操作的结果
-    pub async fn delete_record(&self, request: &DeleteRecordRequest) -> SDKResult<DeleteRecordResponse> {
+    pub async fn delete_record(
+        &self,
+        request: &DeleteRecordRequest,
+    ) -> SDKResult<DeleteRecordResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("删除记录: app_token={}, table_id={}, record_id={}",
-                  request.app_token, request.table_id, request.record_id);
+        log::info!(
+            "删除记录: app_token={}, table_id={}, record_id={}",
+            request.app_token,
+            request.table_id,
+            request.record_id
+        );
 
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/tables/{}/records/{}", request.app_token, request.table_id, request.record_id),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/tables/{}/records/{}",
+                request.app_token, request.table_id, request.record_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params: HashMap::new(),
@@ -223,8 +291,12 @@ impl AppTableRecordService {
         let resp = Transport::<DeleteRecordResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("删除记录完成: app_token={}, table_id={}, record_id={}",
-                  request.app_token, request.table_id, request.record_id);
+        log::info!(
+            "删除记录完成: app_token={}, table_id={}, record_id={}",
+            request.app_token,
+            request.table_id,
+            request.record_id
+        );
 
         Ok(response)
     }
@@ -238,13 +310,21 @@ impl AppTableRecordService {
     ///
     /// # 返回
     /// 返回批量删除的结果
-    pub async fn batch_delete_record(&self, request: &BatchDeleteRecordRequest) -> SDKResult<BatchDeleteRecordResponse> {
+    pub async fn batch_delete_record(
+        &self,
+        request: &BatchDeleteRecordRequest,
+    ) -> SDKResult<BatchDeleteRecordResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("批量删除记录: app_token={}, table_id={}, count={}",
-                  request.app_token, request.table_id, request.record_ids.len());
+        log::info!(
+            "批量删除记录: app_token={}, table_id={}, count={}",
+            request.app_token,
+            request.table_id,
+            request.record_ids.len()
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -253,7 +333,10 @@ impl AppTableRecordService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_delete", request.app_token, request.table_id),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_delete",
+                request.app_token, request.table_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -261,10 +344,15 @@ impl AppTableRecordService {
         };
 
         // 发送请求
-        let resp = Transport::<BatchDeleteRecordResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<BatchDeleteRecordResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("批量删除记录完成: app_token={}, table_id={}", request.app_token, request.table_id);
+        log::info!(
+            "批量删除记录完成: app_token={}, table_id={}",
+            request.app_token,
+            request.table_id
+        );
 
         Ok(response)
     }
@@ -280,11 +368,16 @@ impl AppTableRecordService {
     /// 返回记录信息
     pub async fn get_record(&self, request: &GetRecordRequest) -> SDKResult<GetRecordResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("获取记录: app_token={}, table_id={}, record_id={}",
-                  request.app_token, request.table_id, request.record_id);
+        log::info!(
+            "获取记录: app_token={}, table_id={}, record_id={}",
+            request.app_token,
+            request.table_id,
+            request.record_id
+        );
 
         // 构建查询参数
         let mut query_params = HashMap::new();
@@ -299,7 +392,10 @@ impl AppTableRecordService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/tables/{}/records/{}", request.app_token, request.table_id, request.record_id),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/tables/{}/records/{}",
+                request.app_token, request.table_id, request.record_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params,
@@ -310,8 +406,12 @@ impl AppTableRecordService {
         let resp = Transport::<GetRecordResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("获取记录完成: app_token={}, table_id={}, record_id={}",
-                  request.app_token, request.table_id, request.record_id);
+        log::info!(
+            "获取记录完成: app_token={}, table_id={}, record_id={}",
+            request.app_token,
+            request.table_id,
+            request.record_id
+        );
 
         Ok(response)
     }
@@ -325,12 +425,20 @@ impl AppTableRecordService {
     ///
     /// # 返回
     /// 返回记录列表
-    pub async fn list_records(&self, request: &ListRecordsRequest) -> SDKResult<ListRecordsResponse> {
+    pub async fn list_records(
+        &self,
+        request: &ListRecordsRequest,
+    ) -> SDKResult<ListRecordsResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("列出记录: app_token={}, table_id={}", request.app_token, request.table_id);
+        log::info!(
+            "列出记录: app_token={}, table_id={}",
+            request.app_token,
+            request.table_id
+        );
 
         // 构建查询参数
         let mut query_params = HashMap::new();
@@ -357,7 +465,10 @@ impl AppTableRecordService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/tables/{}/records", request.app_token, request.table_id),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/tables/{}/records",
+                request.app_token, request.table_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params,
@@ -368,10 +479,12 @@ impl AppTableRecordService {
         let resp = Transport::<ListRecordsResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("列出记录完成: app_token={}, table_id={}, count={}",
-                  request.app_token,
-                  request.table_id,
-                  response.records.as_ref().map(|r| r.len()).unwrap_or(0));
+        log::info!(
+            "列出记录完成: app_token={}, table_id={}, count={}",
+            request.app_token,
+            request.table_id,
+            response.records.as_ref().map(|r| r.len()).unwrap_or(0)
+        );
 
         Ok(response)
     }
@@ -385,13 +498,21 @@ impl AppTableRecordService {
     ///
     /// # 返回
     /// 返回记录信息列表
-    pub async fn batch_get_record(&self, request: &BatchGetRecordRequest) -> SDKResult<BatchGetRecordResponse> {
+    pub async fn batch_get_record(
+        &self,
+        request: &BatchGetRecordRequest,
+    ) -> SDKResult<BatchGetRecordResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("批量获取记录: app_token={}, table_id={}, count={}",
-                  request.app_token, request.table_id, request.record_ids.len());
+        log::info!(
+            "批量获取记录: app_token={}, table_id={}, count={}",
+            request.app_token,
+            request.table_id,
+            request.record_ids.len()
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -407,7 +528,10 @@ impl AppTableRecordService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_get", request.app_token, request.table_id),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_get",
+                request.app_token, request.table_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -415,10 +539,15 @@ impl AppTableRecordService {
         };
 
         // 发送请求
-        let resp = Transport::<BatchGetRecordResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<BatchGetRecordResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("批量获取记录完成: app_token={}, table_id={}", request.app_token, request.table_id);
+        log::info!(
+            "批量获取记录完成: app_token={}, table_id={}",
+            request.app_token,
+            request.table_id
+        );
 
         Ok(response)
     }
@@ -432,17 +561,28 @@ impl AppTableRecordService {
     ///
     /// # 返回
     /// 返回搜索结果
-    pub async fn search_records(&self, request: &SearchRecordsRequest) -> SDKResult<SearchRecordsResponse> {
+    pub async fn search_records(
+        &self,
+        request: &SearchRecordsRequest,
+    ) -> SDKResult<SearchRecordsResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("搜索记录: app_token={}, table_id={}, search_string={}",
-                  request.app_token, request.table_id, request.search_string);
+        log::info!(
+            "搜索记录: app_token={}, table_id={}, search_string={}",
+            request.app_token,
+            request.table_id,
+            request.search_string
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
-        body.insert("search_string", serde_json::to_value(&request.search_string)?);
+        body.insert(
+            "search_string",
+            serde_json::to_value(&request.search_string)?,
+        );
 
         if let Some(page_size) = request.page_size {
             body.insert("page_size", serde_json::to_value(page_size)?);
@@ -463,7 +603,10 @@ impl AppTableRecordService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/tables/{}/records/search", request.app_token, request.table_id),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/tables/{}/records/search",
+                request.app_token, request.table_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -474,10 +617,12 @@ impl AppTableRecordService {
         let resp = Transport::<SearchRecordsResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("搜索记录完成: app_token={}, table_id={}, count={}",
-                  request.app_token,
-                  request.table_id,
-                  response.records.as_ref().map(|r| r.len()).unwrap_or(0));
+        log::info!(
+            "搜索记录完成: app_token={}, table_id={}, count={}",
+            request.app_token,
+            request.table_id,
+            response.records.as_ref().map(|r| r.len()).unwrap_or(0)
+        );
 
         Ok(response)
     }
@@ -514,7 +659,11 @@ pub struct UpdateRecordRequestBuilder {
 }
 
 impl UpdateRecordRequestBuilder {
-    pub fn new(app_token: impl Into<String>, table_id: impl Into<String>, record_id: impl Into<String>) -> Self {
+    pub fn new(
+        app_token: impl Into<String>,
+        table_id: impl Into<String>,
+        record_id: impl Into<String>,
+    ) -> Self {
         Self {
             request: UpdateRecordRequest {
                 app_token: app_token.into(),

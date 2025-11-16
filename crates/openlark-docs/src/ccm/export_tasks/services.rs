@@ -2,18 +2,13 @@
 //!
 //! 提供文档导出任务相关的API服务，包括：
 //! - 创建导出任务
-use std::collections::HashMap;
 //! - 查询导出任务结果
 //! - 下载导出文件
-
+use std::collections::HashMap;
 
 use openlark_core::{
-    error::LarkAPIError,
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
+    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    http::Transport, SDKResult,
 };
 
 use super::models::*;
@@ -31,13 +26,21 @@ impl ExportTasksService {
     }
 
     /// 创建导出任务
-    pub async fn create_export_task(&self, request: &CreateExportTaskRequest) -> SDKResult<CreateExportTaskResponse> {
+    pub async fn create_export_task(
+        &self,
+        request: &CreateExportTaskRequest,
+    ) -> SDKResult<CreateExportTaskResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("创建导出任务: file_token={}, file_type={}, export_type={}",
-                  request.file_token, request.file_type, request.export_type);
+        log::info!(
+            "创建导出任务: file_token={}, file_type={}, export_type={}",
+            request.file_token,
+            request.file_type,
+            request.export_type
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -61,7 +64,10 @@ impl ExportTasksService {
             body.insert("password".to_string(), password.clone());
         }
         if let Some(attachment_separate) = request.attachment_separate {
-            body.insert("attachment_separate".to_string(), attachment_separate.to_string());
+            body.insert(
+                "attachment_separate".to_string(),
+                attachment_separate.to_string(),
+            );
         }
 
         // 构建API请求
@@ -75,19 +81,27 @@ impl ExportTasksService {
         };
 
         // 发送请求
-        let resp = Transport::<CreateExportTaskResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<CreateExportTaskResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("创建导出任务完成: file_token={}, ticket={:?}",
-                  request.file_token, response.ticket);
+        log::info!(
+            "创建导出任务完成: file_token={}, ticket={:?}",
+            request.file_token,
+            response.ticket
+        );
 
         Ok(response)
     }
 
     /// 查询导出任务结果
-    pub async fn get_export_task(&self, request: &GetExportTaskRequest) -> SDKResult<GetExportTaskResponse> {
+    pub async fn get_export_task(
+        &self,
+        request: &GetExportTaskRequest,
+    ) -> SDKResult<GetExportTaskResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
         log::info!("查询导出任务结果: ticket={}", request.ticket);
@@ -109,17 +123,23 @@ impl ExportTasksService {
         let resp = Transport::<GetExportTaskResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("查询导出任务结果完成: ticket={}, status={:?}",
-                  request.ticket,
-                  response.result.as_ref().and_then(|r| r.status.as_ref()));
+        log::info!(
+            "查询导出任务结果完成: ticket={}, status={:?}",
+            request.ticket,
+            response.result.as_ref().and_then(|r| r.status.as_ref())
+        );
 
         Ok(response)
     }
 
     /// 下载导出文件
-    pub async fn download_export_file(&self, request: &DownloadExportFileRequest) -> SDKResult<DownloadExportFileResponse> {
+    pub async fn download_export_file(
+        &self,
+        request: &DownloadExportFileRequest,
+    ) -> SDKResult<DownloadExportFileResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
         log::info!("下载导出文件: file_token={}", request.file_token);
@@ -130,7 +150,10 @@ impl ExportTasksService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/drive/export_tasks/file/{}/download", request.file_token),
+            api_path: format!(
+                "/open-apis/drive/export_tasks/file/{}/download",
+                request.file_token
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params,
@@ -138,11 +161,15 @@ impl ExportTasksService {
         };
 
         // 发送请求
-        let resp = Transport::<DownloadExportFileResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<DownloadExportFileResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("下载导出文件完成: file_token={}, file_size={:?}",
-                  request.file_token, response.file_size);
+        log::info!(
+            "下载导出文件完成: file_token={}, file_size={:?}",
+            request.file_token,
+            response.file_size
+        );
 
         Ok(response)
     }
@@ -237,11 +264,20 @@ impl CreateExportTaskRequestBuilder {
         self
     }
 
-    pub async fn execute(self, service: &ExportTasksService) -> SDKResult<CreateExportTaskResponse> {
+    pub async fn execute(
+        self,
+        service: &ExportTasksService,
+    ) -> SDKResult<CreateExportTaskResponse> {
         let request = CreateExportTaskRequest {
-            file_token: self.file_token.ok_or_else(|| LarkAPIError::illegal_param("file_token is required".to_string()))?,
-            file_type: self.file_type.ok_or_else(|| LarkAPIError::illegal_param("file_type is required".to_string()))?,
-            export_type: self.export_type.ok_or_else(|| LarkAPIError::illegal_param("export_type is required".to_string()))?,
+            file_token: self
+                .file_token
+                .ok_or_else(|| LarkAPIError::illegal_param("file_token is required".to_string()))?,
+            file_type: self
+                .file_type
+                .ok_or_else(|| LarkAPIError::illegal_param("file_type is required".to_string()))?,
+            export_type: self.export_type.ok_or_else(|| {
+                LarkAPIError::illegal_param("export_type is required".to_string())
+            })?,
             export_name: self.export_name,
             locale: self.locale,
             include_comments: self.include_comments,
@@ -277,7 +313,9 @@ impl GetExportTaskRequestBuilder {
 
     pub async fn execute(self, service: &ExportTasksService) -> SDKResult<GetExportTaskResponse> {
         let request = GetExportTaskRequest {
-            ticket: self.ticket.ok_or_else(|| LarkAPIError::illegal_param("ticket is required".to_string()))?,
+            ticket: self
+                .ticket
+                .ok_or_else(|| LarkAPIError::illegal_param("ticket is required".to_string()))?,
         };
         service.get_export_task(&request).await
     }
@@ -305,9 +343,14 @@ impl DownloadExportFileRequestBuilder {
         self
     }
 
-    pub async fn execute(self, service: &ExportTasksService) -> SDKResult<DownloadExportFileResponse> {
+    pub async fn execute(
+        self,
+        service: &ExportTasksService,
+    ) -> SDKResult<DownloadExportFileResponse> {
         let request = DownloadExportFileRequest {
-            file_token: self.file_token.ok_or_else(|| LarkAPIError::illegal_param("file_token is required".to_string()))?,
+            file_token: self
+                .file_token
+                .ok_or_else(|| LarkAPIError::illegal_param("file_token is required".to_string()))?,
         };
         service.download_export_file(&request).await
     }

@@ -36,9 +36,11 @@ pub mod rule;
 pub mod task;
 
 // 重新导出主要类型
-pub use vc_report::{VcReportService, GetDailyReportRequestBuilder, GetTopUserReportRequestBuilder};
-pub use rule::{RuleService, QueryRuleRequestBuilder, RemoveRuleViewRequestBuilder};
-pub use task::{TaskService, QueryTaskRequestBuilder};
+pub use rule::{QueryRuleRequestBuilder, RemoveRuleViewRequestBuilder, RuleService};
+pub use task::{QueryTaskRequestBuilder, TaskService};
+pub use vc_report::{
+    GetDailyReportRequestBuilder, GetTopUserReportRequestBuilder, VcReportService,
+};
 
 /// 报告分析服务
 #[derive(Debug, Clone)]

@@ -4,19 +4,11 @@
 //! 范围删除、插入内容等操作。
 use std::collections::HashMap;
 
-use openlark_core::{
-    
-    
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
-};
+use openlark_core::{api_req::ApiRequest, constants::AccessTokenType, http::Transport, SDKResult};
 
 use super::{
-    requests::UpdateDocBatchV2Request,
+    models::BatchUpdateOperationType, requests::UpdateDocBatchV2Request,
     responses::UpdateDocBatchV2Response,
-    models::{BatchUpdateOperationType},
 };
 
 /// 文档批量更新服务
@@ -82,11 +74,18 @@ impl BatchUpdateDocService {
     ///     Ok(())
     /// }
     /// ```
-    pub async fn update(&self, req: &UpdateDocBatchV2Request) -> SDKResult<UpdateDocBatchV2Response> {
+    pub async fn update(
+        &self,
+        req: &UpdateDocBatchV2Request,
+    ) -> SDKResult<UpdateDocBatchV2Response> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
-        log::debug!("开始批量更新文档: doc_token={}, 操作数量={}", req.doc_token, req.operations.len());
+        log::debug!(
+            "开始批量更新文档: doc_token={}, 操作数量={}",
+            req.doc_token,
+            req.operations.len()
+        );
 
         // 构建动态端点路径，替换doc_token参数
         let endpoint = format!("/open-apis/doc/v2/{}/batch_update", req.doc_token);
@@ -105,13 +104,17 @@ impl BatchUpdateDocService {
             ..Default::default()
         };
 
-        let resp = Transport::<UpdateDocBatchV2Response>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<UpdateDocBatchV2Response>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!(
             "文档批量更新完成: doc_token={}, 新版本={:?}",
             req.doc_token,
-            response.batch_update_result.as_ref().and_then(|r| r.new_revision)
+            response
+                .batch_update_result
+                .as_ref()
+                .and_then(|r| r.new_revision)
         );
 
         Ok(response)

@@ -748,13 +748,15 @@ impl PivotTableService {
             return Err(LarkAPIError::APIError {
                 code: create_response.code(),
                 msg: create_response.msg().to_string(),
-                error: None
+                error: None,
             });
         }
 
-        create_response
-            .data
-            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
+        create_response.data.ok_or_else(|| LarkAPIError::APIError {
+            code: -1,
+            msg: "响应数据为空".to_string(),
+            error: None,
+        })
     }
 
     /// 删除数据透视表
@@ -813,13 +815,15 @@ impl PivotTableService {
             return Err(LarkAPIError::APIError {
                 code: delete_response.code(),
                 msg: delete_response.msg().to_string(),
-                error: None
+                error: None,
             });
         }
 
-        delete_response
-            .data
-            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
+        delete_response.data.ok_or_else(|| LarkAPIError::APIError {
+            code: -1,
+            msg: "响应数据为空".to_string(),
+            error: None,
+        })
     }
 
     /// 创建数据透视表构建器
@@ -915,11 +919,12 @@ mod tests {
         let value_field = ValueField::new("销售额".to_string(), 2, SummaryFunction::Sum);
         let layout = PivotTableLayout::new();
 
-        let config = openlark_core::config::Config::new("sheet123".to_string(), source_range, position)
-            .add_row_field(row_field)
-            .add_column_field(column_field)
-            .add_value_field(value_field)
-            .layout(layout);
+        let config =
+            openlark_core::config::Config::new("sheet123".to_string(), source_range, position)
+                .add_row_field(row_field)
+                .add_column_field(column_field)
+                .add_value_field(value_field)
+                .layout(layout);
 
         assert_eq!(config.sheet_id, "sheet123");
         assert_eq!(config.row_fields.len(), 1);
@@ -937,9 +942,10 @@ mod tests {
         let value_field = ValueField::new("销售额".to_string(), 2, SummaryFunction::Sum);
 
         // 测试有效配置
-        let valid_config = openlark_core::config::Config::new("sheet123".to_string(), source_range, position)
-            .add_row_field(PivotField::new("部门".to_string(), 0))
-            .add_value_field(value_field);
+        let valid_config =
+            openlark_core::config::Config::new("sheet123".to_string(), source_range, position)
+                .add_row_field(PivotField::new("部门".to_string(), 0))
+                .add_value_field(value_field);
         assert!(valid_config.validate().is_ok());
 
         // 测试空工作表ID

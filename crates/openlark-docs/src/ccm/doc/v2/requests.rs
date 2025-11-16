@@ -2,8 +2,8 @@
 //!
 //! 定义所有旧版文档API的请求参数结构。
 
+use super::models::{BatchUpdateOperation, BatchUpdateOperationType, DocType};
 use serde::{Deserialize, Serialize};
-use super::models::{DocType, BatchUpdateOperation, BatchUpdateOperationType};
 
 /// 创建旧版文档请求
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -143,19 +143,36 @@ impl UpdateDocBatchV2Request {
             if let Some(op_type) = &operation.operation_type {
                 match op_type {
                     BatchUpdateOperationType::Insert | BatchUpdateOperationType::Replace => {
-                        if operation.content.as_ref().map_or(true, |c| c.trim().is_empty()) {
-                            return Err(format!("第{}个操作: 插入或替换操作不能有空的content", index + 1));
+                        if operation
+                            .content
+                            .as_ref()
+                            .map_or(true, |c| c.trim().is_empty())
+                        {
+                            return Err(format!(
+                                "第{}个操作: 插入或替换操作不能有空的content",
+                                index + 1
+                            ));
                         }
                     }
                     BatchUpdateOperationType::UpdateTitle => {
-                        if operation.new_title.as_ref().map_or(true, |t| t.trim().is_empty()) {
-                            return Err(format!("第{}个操作: 更新标题操作不能有空的new_title", index + 1));
+                        if operation
+                            .new_title
+                            .as_ref()
+                            .map_or(true, |t| t.trim().is_empty())
+                        {
+                            return Err(format!(
+                                "第{}个操作: 更新标题操作不能有空的new_title",
+                                index + 1
+                            ));
                         }
                     }
                     BatchUpdateOperationType::Delete => {
                         // 删除操作需要有效的起始和结束位置
                         if operation.start_index.is_none() || operation.end_index.is_none() {
-                            return Err(format!("第{}个操作: 删除操作必须指定start_index和end_index", index + 1));
+                            return Err(format!(
+                                "第{}个操作: 删除操作必须指定start_index和end_index",
+                                index + 1
+                            ));
                         }
                     }
                 }

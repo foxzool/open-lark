@@ -1,3 +1,8 @@
+//! Cloud Docs Wiki v1服务模块（兼容层）
+//!
+//! 这个模块提供了从v1到v2 Wiki服务的兼容层，允许使用v1 API接口
+//! 访问v2的Wiki功能。
+
 #![allow(dead_code)]
 #![allow(unused_variables)]
 #![allow(unused_imports)]
@@ -5,10 +10,6 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-//! Cloud Docs Wiki v1服务模块（兼容层）
-//!
-//! 这个模块提供了从v1到v2 Wiki服务的兼容层，允许使用v1 API接口
-//! 访问v2的Wiki功能。
 
 use openlark_core::config::Config;
 

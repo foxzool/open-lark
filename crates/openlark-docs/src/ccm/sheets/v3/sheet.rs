@@ -6,12 +6,13 @@
 //! - 工作表属性管理和操作
 
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
     http::Transport,
-    api_req::ApiRequest, SDKResult,
+    SDKResult,
 };
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
@@ -167,7 +168,8 @@ impl SheetService {
         );
 
         let mut api_request = ApiRequest::with_method_and_path(Method::GET, &endpoint);
-        api_request.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        api_request.supported_access_token_types =
+            vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         Transport::<QuerySheetsResponse>::request(api_request, &self.config, None).await
     }
@@ -202,9 +204,11 @@ impl SheetService {
         );
 
         let mut api_request = ApiRequest::with_method_and_path(Method::GET, &endpoint);
-        api_request.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        api_request.supported_access_token_types =
+            vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let response = Transport::<GetSheetResponse>::request(api_request, &self.config, None).await?;
+        let response =
+            Transport::<GetSheetResponse>::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
@@ -251,7 +255,8 @@ pub struct GetSheetBuilder {
 impl GetSheetBuilder {
     /// 执行获取请求
     pub async fn execute(self) -> openlark_core::SDKResult<BaseResponse<GetSheetResponse>> {
-        Ok(self.service
+        Ok(self
+            .service
             .get_sheet(&self.spreadsheet_token, &self.sheet_id)
             .await?)
     }
@@ -317,7 +322,8 @@ impl SheetService {
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let response = Transport::<FindCellsResponse>::request(api_request, &self.config, None).await?;
+        let response =
+            Transport::<FindCellsResponse>::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
@@ -513,9 +519,11 @@ impl FindCellsBuilder {
 
     /// 执行查找请求
     pub async fn execute(self) -> openlark_core::SDKResult<BaseResponse<FindCellsResponse>> {
-        self.request.validate()
+        self.request
+            .validate()
             .map_err(|msg| LarkAPIError::IllegalParamError(msg))?;
-        Ok(self.service
+        Ok(self
+            .service
             .find_cells(&self.spreadsheet_token, &self.sheet_id, &self.request)
             .await?)
     }
@@ -845,4 +853,3 @@ mod tests {
         assert_eq!(sheet.sheet_type, Some("object".to_string()));
     }
 }
-

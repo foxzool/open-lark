@@ -6,6 +6,7 @@
 use crate::prelude::*;
 
 // Import submodules
+pub mod ccm_sheet;
 pub mod doc;
 pub mod docx;
 pub mod drive;
@@ -13,15 +14,12 @@ pub mod export_tasks;
 pub mod models;
 pub mod sheets;
 pub mod wiki;
-pub mod ccm_sheet;
 
 // Re-export services for convenience
 #[cfg(feature = "ccm-doc")]
 // pub use doc::DocService; // 暂时注释掉
-
 #[cfg(feature = "ccm-docx")]
 // pub use docx::DocxService; // 暂时注释掉
-
 #[cfg(feature = "ccm-drive")]
 // pub use drive::DriveService; // 暂时注释掉
 
@@ -39,7 +37,6 @@ pub use drive::PermissionService;
 
 #[cfg(feature = "ccm-sheets")]
 // pub use sheets::SheetsService; // 暂时注释掉
-
 #[cfg(feature = "ccm-wiki")]
 // pub use wiki::WikiService; // 暂时注释掉
 
@@ -73,7 +70,11 @@ impl CcmService {
     }
 
     /// Get access to sheets services
-    #[cfg(feature = "ccm-sheets")]
+    #[cfg(any(
+        feature = "ccm-sheets",
+        feature = "ccm-sheets-v2",
+        feature = "ccm-sheets-v3",
+    ))]
     pub fn sheets(&self) -> SheetsService {
         SheetsService::new(self.client.clone())
     }

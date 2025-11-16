@@ -2,6 +2,7 @@
 //!
 //! 提供飞书电子表格v3版本的完整管理功能。
 
+#![allow(ambiguous_glob_reexports)]
 // ============================================================================
 // 统一类型定义
 // ============================================================================
@@ -15,10 +16,7 @@ pub type SpreadsheetToken = String;
 /// 工作表ID类型
 pub type SheetId = String;
 
-use openlark_core::{
-    config::Config,
-    trait_system::Service,
-};
+use openlark_core::{config::Config, trait_system::Service};
 
 pub mod charts;
 pub mod comments;
@@ -37,7 +35,6 @@ pub mod spreadsheet_create;
 pub mod spreadsheet_info;
 
 // 重新导出所有服务类型
-#[allow(ambiguous_glob_reexports)]
 pub use charts::*;
 pub use comments::*;
 pub use conditional_format::*;

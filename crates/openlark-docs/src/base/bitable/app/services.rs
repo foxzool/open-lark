@@ -2,19 +2,15 @@
 //!
 //! 提供多维表格应用管理相关的API服务，包括：
 //! - 应用创建和复制
-use serde_json::Value;
-use std::collections::HashMap;
 //! - 应用元数据获取和更新
 //! - 应用删除操作
 
+use serde_json::Value;
+use std::collections::HashMap;
 
 use openlark_core::{
-    error::LarkAPIError,
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
+    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    http::Transport, SDKResult,
 };
 
 use super::models::*;
@@ -55,7 +51,8 @@ impl AppService {
     /// ```
     pub async fn create_app(&self, request: &CreateAppRequest) -> SDKResult<CreateAppResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
         log::info!("创建多维表格: name={}", request.name);
@@ -100,13 +97,18 @@ impl AppService {
     ///
     /// # 返回
     /// 返回复制后的多维表格信息
-    pub async fn copy_app(&self, app_token: &str, request: &CopyAppRequest) -> SDKResult<CopyAppResponse> {
+    pub async fn copy_app(
+        &self,
+        app_token: &str,
+        request: &CopyAppRequest,
+    ) -> SDKResult<CopyAppResponse> {
         if app_token.trim().is_empty() {
             return Err(LarkAPIError::illegal_param("应用token不能为空".to_string()));
         }
 
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
         log::info!("复制多维表格: app_token={}", app_token);
@@ -151,7 +153,8 @@ impl AppService {
     /// 返回多维表格的元数据信息
     pub async fn get_app(&self, request: &GetAppRequest) -> SDKResult<GetAppResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
         log::info!("获取多维表格元数据: app_token={}", request.app_token);
@@ -186,7 +189,8 @@ impl AppService {
     /// 返回更新后的多维表格信息
     pub async fn update_app(&self, request: &UpdateAppRequest) -> SDKResult<UpdateAppResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
         log::info!("更新多维表格元数据: app_token={}", request.app_token);
@@ -234,7 +238,8 @@ impl AppService {
     /// 返回删除操作的结果
     pub async fn delete_app(&self, request: &DeleteAppRequest) -> SDKResult<DeleteAppResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
         log::info!("删除多维表格: app_token={}", request.app_token);

@@ -38,10 +38,10 @@ pub mod documents;
 pub struct DocxService {
     client: std::sync::Arc<LarkClient>,
     /// ccm_docs API服务
-    #[cfg(feature = "ccm")]
+    #[cfg(feature = "ccm-docx")]
     pub ccm_docs: services::CcmDocsService,
     /// docx API服务
-    #[cfg(feature = "ccm")]
+    #[cfg(feature = "ccm-docx")]
     pub docx: services::DocxService,
 }
 
@@ -49,9 +49,9 @@ impl DocxService {
     pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
         Self {
             client: client.clone(),
-            #[cfg(feature = "ccm")]
+            #[cfg(feature = "ccm-docx")]
             ccm_docs: services::CcmDocsService::new(openlark_core::config::Config::default()),
-            #[cfg(feature = "ccm")]
+            #[cfg(feature = "ccm-docx")]
             docx: services::DocxService::new(openlark_core::config::Config::default()),
         }
     }

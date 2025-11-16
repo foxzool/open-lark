@@ -1,3 +1,5 @@
+#![allow(unused_variables, unused_unsafe)]
+
 #![allow(dead_code)]
 #![allow(unused_imports)]
 #![allow(unused_variables)]
@@ -65,7 +67,6 @@ impl ApiResponseTrait for.* {
 ResponseFormat::Data
     }
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]

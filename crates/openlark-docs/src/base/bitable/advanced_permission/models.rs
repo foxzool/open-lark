@@ -3,8 +3,8 @@
 //! 提供多维表格高级权限管理相关的数据结构，支持V2版本的
 //! 角色管理和高级权限控制等操作。
 
-use serde::{Deserialize, Serialize};
 use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use serde::{Deserialize, Serialize};
 
 /// 列出V2角色请求
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

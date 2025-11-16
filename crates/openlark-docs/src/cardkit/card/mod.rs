@@ -32,4 +32,7 @@ pub mod services;
 
 // 重新导出主要类型
 pub use models::*;
-pub use services::{CardService, CreateCardRequestBuilder, UpdateCardRequestBuilder, UpdateCardSettingsRequestBuilder, BatchUpdateCardRequestBuilder, ConvertCardIdRequestBuilder};
+pub use services::{
+    BatchUpdateCardRequestBuilder, CardService, ConvertCardIdRequestBuilder,
+    CreateCardRequestBuilder, UpdateCardRequestBuilder, UpdateCardSettingsRequestBuilder,
+};

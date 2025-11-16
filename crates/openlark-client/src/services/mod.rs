@@ -17,7 +17,12 @@ use openlark_communication::contact::ContactService;
 #[cfg(any(feature = "docs", feature = "bitable"))]
 use openlark_docs::BaseService;
 
-#[cfg(any(feature = "sheets", feature = "wiki", feature = "drive", feature = "ccm"))]
+#[cfg(any(
+    feature = "sheets",
+    feature = "wiki",
+    feature = "drive",
+    feature = "ccm"
+))]
 use openlark_docs::CcmService;
 
 #[cfg(feature = "hr")]
@@ -38,8 +43,8 @@ pub struct ServiceManager;
 impl ServiceManager {
     /// 初始化所有启用的服务并注册到注册表中
     pub fn initialize_services(
-        config: &Config,
-        shared_config: &Arc<Config>,
+        _config: &Config,
+        _shared_config: &Arc<Config>,
         registry: &mut DefaultServiceRegistry,
     ) {
         tracing::debug!("Initializing services with feature flags");
@@ -51,35 +56,45 @@ impl ServiceManager {
             // TODO: Implement proper client creation from config
             // For now, we'll register a placeholder to allow compilation
             // The actual service integration will need to be implemented
-            tracing::warn!("Docs service integration not yet implemented - registering placeholder");
+            tracing::warn!(
+                "Docs service integration not yet implemented - registering placeholder"
+            );
         }
 
         #[cfg(feature = "sheets")]
         {
             tracing::debug!("Initializing sheet service (using CcmService)");
             // TODO: Implement proper client creation from config
-            tracing::warn!("Sheets service integration not yet implemented - registering placeholder");
+            tracing::warn!(
+                "Sheets service integration not yet implemented - registering placeholder"
+            );
         }
 
         #[cfg(feature = "bitable")]
         {
             tracing::debug!("Initializing bitable service (using BaseService)");
             // TODO: Implement proper client creation from config
-            tracing::warn!("Bitable service integration not yet implemented - registering placeholder");
+            tracing::warn!(
+                "Bitable service integration not yet implemented - registering placeholder"
+            );
         }
 
         #[cfg(feature = "wiki")]
         {
             tracing::debug!("Initializing wiki service (using CcmService)");
             // TODO: Implement proper client creation from config
-            tracing::warn!("Wiki service integration not yet implemented - registering placeholder");
+            tracing::warn!(
+                "Wiki service integration not yet implemented - registering placeholder"
+            );
         }
 
         #[cfg(feature = "drive")]
         {
             tracing::debug!("Initializing drive service (using CcmService)");
             // TODO: Implement proper client creation from config
-            tracing::warn!("Drive service integration not yet implemented - registering placeholder");
+            tracing::warn!(
+                "Drive service integration not yet implemented - registering placeholder"
+            );
         }
 
         #[cfg(feature = "ccm")]
@@ -131,45 +146,31 @@ impl ServiceManager {
     }
 
     /// 获取已启用的服务列表
-    #[allow(clippy::vec_init_then_push)]
     pub fn get_enabled_services() -> Vec<&'static str> {
-        let mut services = Vec::new();
-
-        #[cfg(feature = "docs")]
-        services.push("docs");
-
-        #[cfg(feature = "sheets")]
-        services.push("sheet");
-
-        #[cfg(feature = "bitable")]
-        services.push("bitable");
-
-        #[cfg(feature = "wiki")]
-        services.push("wiki");
-
-        #[cfg(feature = "drive")]
-        services.push("drive");
-
-        #[cfg(feature = "ccm")]
-        services.push("ccm");
-
-        #[cfg(feature = "communication")]
-        {
-            services.push("contact");
-        }
-
-        #[cfg(feature = "hr")]
-        {
-            services.push("hire");
-            services.push("compensation_management");
-        }
-
-        #[cfg(feature = "ai")]
-        services.push("ai");
-
-        #[cfg(feature = "auth")]
-        services.push("auth");
-
+        let services = vec![
+            #[cfg(feature = "docs")]
+            "docs",
+            #[cfg(feature = "bitable")]
+            "bitable",
+            #[cfg(feature = "sheets")]
+            "sheets",
+            #[cfg(feature = "wiki")]
+            "wiki",
+            #[cfg(feature = "drive")]
+            "drive",
+            #[cfg(feature = "ccm")]
+            "ccm",
+            #[cfg(feature = "hr")]
+            "hr",
+            #[cfg(feature = "ai")]
+            "ai",
+            #[cfg(feature = "auth")]
+            "auth",
+            #[cfg(feature = "communication")]
+            "communication",
+            #[cfg(feature = "enterprise")]
+            "enterprise",
+        ];
         services
     }
 

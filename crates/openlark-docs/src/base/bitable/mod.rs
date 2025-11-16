@@ -28,39 +28,49 @@
 //!     .await?;
 //! ```
 
-use openlark_core::{
-    config::Config,
-};
+use openlark_core::config::Config;
 
 // 导入子模块
+pub mod advanced_permission;
 pub mod app;
-pub mod app_table;
-pub mod app_table_record;
-pub mod app_table_field;
-pub mod app_table_view;
-pub mod app_role;
-pub mod app_role_member;
 pub mod app_dashboard;
 pub mod app_form;
+pub mod app_role;
+pub mod app_role_member;
+pub mod app_table;
+pub mod app_table_field;
 pub mod app_table_form_field;
+pub mod app_table_record;
+pub mod app_table_view;
 pub mod app_workflow;
-pub mod advanced_permission;
 pub mod v2;
 
 // 重新导出主要类型
-pub use app::{AppService, AppInfo, CreateAppRequestBuilder, UpdateAppRequestBuilder};
-pub use app_table::{TableInfo, CreateTableRequestBuilder, UpdateTableRequestBuilder};
-pub use app_table_record::{RecordInfo, CreateRecordRequestBuilder, UpdateRecordRequestBuilder};
-pub use app_table_field::{FieldInfo, CreateFieldRequestBuilder, UpdateFieldRequestBuilder};
-pub use app_table_view::{ViewInfo, CreateViewRequestBuilder, UpdateViewRequestBuilder};
-pub use app_role::{RoleInfo, CreateRoleRequestBuilder, UpdateRoleRequestBuilder};
-pub use app_role_member::{RoleMemberInfo, CreateRoleMemberRequestBuilder};
-pub use app_dashboard::{DashboardInfo, CreateDashboardRequestBuilder};
-pub use app_form::{FormInfo, GetFormRequestBuilder, PatchFormMetaRequestBuilder, PatchFormQuestionRequestBuilder};
-pub use app_table_form_field::{AppTableFormFieldService, ListFormFieldRequestBuilder, PatchFormFieldRequestBuilder};
-pub use app_workflow::{AppWorkflowService, ListWorkflowRequestBuilder, UpdateWorkflowRequestBuilder};
-pub use advanced_permission::{AdvancedPermissionService, ListRolesV2RequestBuilder, CreateRoleV2RequestBuilder, UpdateRoleV2RequestBuilder};
-pub use v2::{BitableV2Service, AdvancedSearchRequestBuilder, BulkOperationRequestBuilder, SmartQueryRequestBuilder};
+pub use advanced_permission::{
+    AdvancedPermissionService, CreateRoleV2RequestBuilder, ListRolesV2RequestBuilder,
+    UpdateRoleV2RequestBuilder,
+};
+pub use app::{AppInfo, AppService, CreateAppRequestBuilder, UpdateAppRequestBuilder};
+pub use app_dashboard::{CreateDashboardRequestBuilder, DashboardInfo};
+pub use app_form::{
+    FormInfo, GetFormRequestBuilder, PatchFormMetaRequestBuilder, PatchFormQuestionRequestBuilder,
+};
+pub use app_role::{CreateRoleRequestBuilder, RoleInfo, UpdateRoleRequestBuilder};
+pub use app_role_member::{CreateRoleMemberRequestBuilder, RoleMemberInfo};
+pub use app_table::{CreateTableRequestBuilder, TableInfo, UpdateTableRequestBuilder};
+pub use app_table_field::{CreateFieldRequestBuilder, FieldInfo, UpdateFieldRequestBuilder};
+pub use app_table_form_field::{
+    AppTableFormFieldService, ListFormFieldRequestBuilder, PatchFormFieldRequestBuilder,
+};
+pub use app_table_record::{CreateRecordRequestBuilder, RecordInfo, UpdateRecordRequestBuilder};
+pub use app_table_view::{CreateViewRequestBuilder, UpdateViewRequestBuilder, ViewInfo};
+pub use app_workflow::{
+    AppWorkflowService, ListWorkflowRequestBuilder, UpdateWorkflowRequestBuilder,
+};
+pub use v2::{
+    AdvancedSearchRequestBuilder, BitableV2Service, BulkOperationRequestBuilder,
+    SmartQueryRequestBuilder,
+};
 
 /// 多维表格服务
 #[derive(Debug, Clone)]

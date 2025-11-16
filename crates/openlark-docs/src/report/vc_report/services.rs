@@ -2,18 +2,13 @@
 //!
 //! 提供视频会议报告相关的API服务，包括：
 //! - 每日会议使用报告
-use std::collections::HashMap;
 //! - Top用户统计报告
 //! - 完整的错误处理和参数验证
-
+use std::collections::HashMap;
 
 use openlark_core::{
-    error::LarkAPIError,
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
+    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    http::Transport, SDKResult,
 };
 
 use super::models::*;
@@ -39,13 +34,20 @@ impl VcReportService {
     ///
     /// # 返回
     /// 返回每日会议报告数据
-    pub async fn get_daily_report(&self, request: &GetDailyReportRequest) -> SDKResult<GetDailyReportResponse> {
+    pub async fn get_daily_report(
+        &self,
+        request: &GetDailyReportRequest,
+    ) -> SDKResult<GetDailyReportResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("获取每日会议报告: start_date={}, end_date={}",
-                  request.start_date, request.end_date);
+        log::info!(
+            "获取每日会议报告: start_date={}, end_date={}",
+            request.start_date,
+            request.end_date
+        );
 
         // 构建查询参数
         let mut query_params = HashMap::new();
@@ -67,11 +69,15 @@ impl VcReportService {
         };
 
         // 发送请求
-        let resp = Transport::<GetDailyReportResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<GetDailyReportResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("获取每日会议报告完成: start_date={}, end_date={}",
-                  request.start_date, request.end_date);
+        log::info!(
+            "获取每日会议报告完成: start_date={}, end_date={}",
+            request.start_date,
+            request.end_date
+        );
 
         Ok(response)
     }
@@ -85,13 +91,21 @@ impl VcReportService {
     ///
     /// # 返回
     /// 返回Top用户统计报告数据
-    pub async fn get_top_user_report(&self, request: &GetTopUserReportRequest) -> SDKResult<GetTopUserReportResponse> {
+    pub async fn get_top_user_report(
+        &self,
+        request: &GetTopUserReportRequest,
+    ) -> SDKResult<GetTopUserReportResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("获取Top用户报告: start_date={}, end_date={}, sort_type={:?}",
-                  request.start_date, request.end_date, request.sort_type);
+        log::info!(
+            "获取Top用户报告: start_date={}, end_date={}, sort_type={:?}",
+            request.start_date,
+            request.end_date,
+            request.sort_type
+        );
 
         // 构建查询参数
         let mut query_params = HashMap::new();
@@ -121,15 +135,21 @@ impl VcReportService {
         };
 
         // 发送请求
-        let resp = Transport::<GetTopUserReportResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<GetTopUserReportResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("获取Top用户报告完成: start_date={}, end_date={}, user_count={}",
-                  request.start_date, request.end_date,
-                  response.data.as_ref()
-                      .and_then(|d| d.top_users.as_ref())
-                      .map(|u| u.len())
-                      .unwrap_or(0));
+        log::info!(
+            "获取Top用户报告完成: start_date={}, end_date={}, user_count={}",
+            request.start_date,
+            request.end_date,
+            response
+                .data
+                .as_ref()
+                .and_then(|d| d.top_users.as_ref())
+                .map(|u| u.len())
+                .unwrap_or(0)
+        );
 
         Ok(response)
     }

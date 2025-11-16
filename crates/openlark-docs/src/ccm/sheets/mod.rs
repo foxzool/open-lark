@@ -28,16 +28,16 @@
 //!
 //! ```toml
 //! [dependencies]
-//! open-lark = { version = "0.15.0", features = ["sheets"] }
+//! open-lark = { version = "0.15.0", features = ["ccm-sheets"] }
 //!
 //! # 仅使用v3版本（推荐）
-//! open-lark = { version = "0.15.0", features = ["sheets-v3"] }
+//! open-lark = { version = "0.15.0", features = ["ccm-sheets-v3"] }
 //!
 //! # 实验性v2版本
-//! open-lark = { version = "0.15.0", features = ["sheets-v2"] }
+//! open-lark = { version = "0.15.0", features = ["ccm-sheets-v2"] }
 //!
 //! # 同时启用v2和v3
-//! open-lark = { version = "0.15.0", features = ["sheets-v2", "sheets-v3"] }
+//! open-lark = { version = "0.15.0", features = ["ccm-sheets-v2", "ccm-sheets-v3"] }
 //! ```
 //!
 //! ## 基础示例
@@ -59,7 +59,7 @@
 //!     .await?;
 //!
 //! // v2版本 - 实验性功能
-//! #[cfg(feature = "sheets-v2")]
+//! #[cfg(feature = "ccm-sheets-v2")]
 //! {
 //!     let sheet_info = client.sheets.v2.single_range_read
 //!         .read_range(&spreadsheet_token, "Sheet1!A1:C10")
@@ -135,23 +135,20 @@
 //! - 实现适当的重试策略
 
 // 启用v3模块作为稳定版本
-#[cfg(any(feature = "sheets", feature = "sheets-v3"))]
+#[cfg(any(feature = "ccm-sheets", feature = "ccm-sheets-v3"))]
 pub mod v3;
 
-#[cfg(any(feature = "sheets", feature = "sheets-v3"))]
+#[cfg(any(feature = "ccm-sheets", feature = "ccm-sheets-v3"))]
 pub use v3::*;
 
 // V2模块作为实验性功能，单独启用
-#[cfg(feature = "sheets-v2")]
+#[cfg(feature = "ccm-sheets-v2")]
 pub mod v2;
 
-#[cfg(feature = "sheets-v2")]
+#[cfg(feature = "ccm-sheets-v2")]
 pub use v2::*;
 
-use openlark_core::{
-    config::Config,
-};
-
+use openlark_core::config::Config;
 
 /// Sheets电子表格服务
 ///

@@ -2,22 +2,17 @@
 //!
 //! 提供电子表格操作相关的API服务，包括：
 //! - 单元格读写操作
-use serde_json::Value;
-use std::collections::HashMap;
 //! - 批量数据处理
 //! - 工作表管理
 //! - 样式设置
 //! - 维度操作（行列增删）
 //! - 表格元数据管理
-
+use serde_json::Value;
+use std::collections::HashMap;
 
 use openlark_core::{
-    error::LarkAPIError,
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
+    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    http::Transport, SDKResult,
 };
 
 use super::models::*;
@@ -60,13 +55,20 @@ impl CcmSheetService {
     ///              value_range.values.as_ref().and_then(|v| v.first()).map(|r| r.len()).unwrap_or(0));
     /// }
     /// ```
-    pub async fn read_single_range(&self, request: &ReadSingleRangeRequest) -> SDKResult<ReadSingleRangeResponse> {
+    pub async fn read_single_range(
+        &self,
+        request: &ReadSingleRangeRequest,
+    ) -> SDKResult<ReadSingleRangeResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("读取单个范围: spreadsheet_token={}, range={}",
-                  request.spreadsheet_token, request.range);
+        log::info!(
+            "读取单个范围: spreadsheet_token={}, range={}",
+            request.spreadsheet_token,
+            request.range
+        );
 
         // 构建查询参数
         let mut query_params = HashMap::new();
@@ -81,8 +83,10 @@ impl CcmSheetService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/sheets/v2/spreadsheets/{}/values/{}",
-                              request.spreadsheet_token, request.range),
+            api_path: format!(
+                "/open-apis/sheets/v2/spreadsheets/{}/values/{}",
+                request.spreadsheet_token, request.range
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params,
@@ -90,11 +94,15 @@ impl CcmSheetService {
         };
 
         // 发送请求
-        let resp = Transport::<ReadSingleRangeResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<ReadSingleRangeResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("读取单个范围完成: spreadsheet_token={}, range={}",
-                  request.spreadsheet_token, request.range);
+        log::info!(
+            "读取单个范围完成: spreadsheet_token={}, range={}",
+            request.spreadsheet_token,
+            request.range
+        );
 
         Ok(response)
     }
@@ -108,13 +116,20 @@ impl CcmSheetService {
     ///
     /// # 返回
     /// 返回所有指定范围的数据
-    pub async fn read_multiple_ranges(&self, request: &ReadMultipleRangesRequest) -> SDKResult<ReadMultipleRangesResponse> {
+    pub async fn read_multiple_ranges(
+        &self,
+        request: &ReadMultipleRangesRequest,
+    ) -> SDKResult<ReadMultipleRangesResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("读取多个范围: spreadsheet_token={}, range_count={}",
-                  request.spreadsheet_token, request.ranges.len());
+        log::info!(
+            "读取多个范围: spreadsheet_token={}, range_count={}",
+            request.spreadsheet_token,
+            request.ranges.len()
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -127,7 +142,10 @@ impl CcmSheetService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/sheets/v2/spreadsheets/{}/values:batchGet", request.spreadsheet_token),
+            api_path: format!(
+                "/open-apis/sheets/v2/spreadsheets/{}/values:batchGet",
+                request.spreadsheet_token
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -135,12 +153,15 @@ impl CcmSheetService {
         };
 
         // 发送请求
-        let resp = Transport::<ReadMultipleRangesResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<ReadMultipleRangesResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("读取多个范围完成: spreadsheet_token={}, range_count={}",
-                  request.spreadsheet_token,
-                  response.value_ranges.as_ref().map(|v| v.len()).unwrap_or(0));
+        log::info!(
+            "读取多个范围完成: spreadsheet_token={}, range_count={}",
+            request.spreadsheet_token,
+            response.value_ranges.as_ref().map(|v| v.len()).unwrap_or(0)
+        );
 
         Ok(response)
     }
@@ -154,13 +175,21 @@ impl CcmSheetService {
     ///
     /// # 返回
     /// 返回写入操作的统计信息
-    pub async fn write_single_range(&self, request: &WriteSingleRangeRequest) -> SDKResult<WriteSingleRangeResponse> {
+    pub async fn write_single_range(
+        &self,
+        request: &WriteSingleRangeRequest,
+    ) -> SDKResult<WriteSingleRangeResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("写入单个范围: spreadsheet_token={}, range={}, rows={}",
-                  request.spreadsheet_token, request.range, request.values.len());
+        log::info!(
+            "写入单个范围: spreadsheet_token={}, range={}, rows={}",
+            request.spreadsheet_token,
+            request.range,
+            request.values.len()
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -173,8 +202,10 @@ impl CcmSheetService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::PUT,
-            api_path: format!("/open-apis/sheets/v2/spreadsheets/{}/values/{}",
-                              request.spreadsheet_token, request.range),
+            api_path: format!(
+                "/open-apis/sheets/v2/spreadsheets/{}/values/{}",
+                request.spreadsheet_token, request.range
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -182,12 +213,16 @@ impl CcmSheetService {
         };
 
         // 发送请求
-        let resp = Transport::<WriteSingleRangeResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<WriteSingleRangeResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("写入单个范围完成: spreadsheet_token={}, range={}, updated_cells={}",
-                  request.spreadsheet_token, request.range,
-                  response.updated_cells.unwrap_or(0));
+        log::info!(
+            "写入单个范围完成: spreadsheet_token={}, range={}, updated_cells={}",
+            request.spreadsheet_token,
+            request.range,
+            response.updated_cells.unwrap_or(0)
+        );
 
         Ok(response)
     }
@@ -201,13 +236,20 @@ impl CcmSheetService {
     ///
     /// # 返回
     /// 返回所有写入操作的统计信息
-    pub async fn write_multiple_ranges(&self, request: &WriteMultipleRangesRequest) -> SDKResult<WriteMultipleRangesResponse> {
+    pub async fn write_multiple_ranges(
+        &self,
+        request: &WriteMultipleRangesRequest,
+    ) -> SDKResult<WriteMultipleRangesResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("写入多个范围: spreadsheet_token={}, data_count={}",
-                  request.spreadsheet_token, request.data.len());
+        log::info!(
+            "写入多个范围: spreadsheet_token={}, data_count={}",
+            request.spreadsheet_token,
+            request.data.len()
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -220,7 +262,10 @@ impl CcmSheetService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/sheets/v2/spreadsheets/{}/values:batchUpdate", request.spreadsheet_token),
+            api_path: format!(
+                "/open-apis/sheets/v2/spreadsheets/{}/values:batchUpdate",
+                request.spreadsheet_token
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -228,12 +273,15 @@ impl CcmSheetService {
         };
 
         // 发送请求
-        let resp = Transport::<WriteMultipleRangesResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<WriteMultipleRangesResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("写入多个范围完成: spreadsheet_token={}, reply_count={}",
-                  request.spreadsheet_token,
-                  response.replies.as_ref().map(|v| v.len()).unwrap_or(0));
+        log::info!(
+            "写入多个范围完成: spreadsheet_token={}, reply_count={}",
+            request.spreadsheet_token,
+            response.replies.as_ref().map(|v| v.len()).unwrap_or(0)
+        );
 
         Ok(response)
     }
@@ -249,11 +297,16 @@ impl CcmSheetService {
     /// 返回追加操作的统计信息
     pub async fn append_data(&self, request: &AppendDataRequest) -> SDKResult<AppendDataResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("追加数据: spreadsheet_token={}, range={}, rows={}",
-                  request.spreadsheet_token, request.range, request.values.len());
+        log::info!(
+            "追加数据: spreadsheet_token={}, range={}, rows={}",
+            request.spreadsheet_token,
+            request.range,
+            request.values.len()
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -270,7 +323,10 @@ impl CcmSheetService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/sheets/v2/spreadsheets/{}/values:append", request.spreadsheet_token),
+            api_path: format!(
+                "/open-apis/sheets/v2/spreadsheets/{}/values:append",
+                request.spreadsheet_token
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -281,9 +337,16 @@ impl CcmSheetService {
         let resp = Transport::<AppendDataResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("追加数据完成: spreadsheet_token={}, range={}, updated_rows={}",
-                  request.spreadsheet_token, request.range,
-                  response.updates.as_ref().and_then(|u| u.updated_rows).unwrap_or(0));
+        log::info!(
+            "追加数据完成: spreadsheet_token={}, range={}, updated_rows={}",
+            request.spreadsheet_token,
+            request.range,
+            response
+                .updates
+                .as_ref()
+                .and_then(|u| u.updated_rows)
+                .unwrap_or(0)
+        );
 
         Ok(response)
     }
@@ -297,13 +360,22 @@ impl CcmSheetService {
     ///
     /// # 返回
     /// 返回插入操作的结果
-    pub async fn insert_dimension(&self, request: &InsertDimensionRequest) -> SDKResult<InsertDimensionResponse> {
+    pub async fn insert_dimension(
+        &self,
+        request: &InsertDimensionRequest,
+    ) -> SDKResult<InsertDimensionResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("插入行列: spreadsheet_token={}, dimension={}, start_index={}, end_index={}",
-                  request.spreadsheet_token, request.dimension, request.start_index, request.end_index);
+        log::info!(
+            "插入行列: spreadsheet_token={}, dimension={}, start_index={}, end_index={}",
+            request.spreadsheet_token,
+            request.dimension,
+            request.start_index,
+            request.end_index
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -318,7 +390,10 @@ impl CcmSheetService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/sheets/v2/spreadsheets/{}/dimension:insert", request.spreadsheet_token),
+            api_path: format!(
+                "/open-apis/sheets/v2/spreadsheets/{}/dimension:insert",
+                request.spreadsheet_token
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -326,11 +401,15 @@ impl CcmSheetService {
         };
 
         // 发送请求
-        let resp = Transport::<InsertDimensionResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<InsertDimensionResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("插入行列完成: spreadsheet_token={}, dimension={}",
-                  request.spreadsheet_token, request.dimension);
+        log::info!(
+            "插入行列完成: spreadsheet_token={}, dimension={}",
+            request.spreadsheet_token,
+            request.dimension
+        );
 
         Ok(response)
     }
@@ -344,13 +423,22 @@ impl CcmSheetService {
     ///
     /// # 返回
     /// 返回删除操作的结果
-    pub async fn delete_dimension(&self, request: &DeleteDimensionRequest) -> SDKResult<DeleteDimensionResponse> {
+    pub async fn delete_dimension(
+        &self,
+        request: &DeleteDimensionRequest,
+    ) -> SDKResult<DeleteDimensionResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("删除行列: spreadsheet_token={}, dimension={}, start_index={}, end_index={}",
-                  request.spreadsheet_token, request.dimension, request.start_index, request.end_index);
+        log::info!(
+            "删除行列: spreadsheet_token={}, dimension={}, start_index={}, end_index={}",
+            request.spreadsheet_token,
+            request.dimension,
+            request.start_index,
+            request.end_index
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -361,7 +449,10 @@ impl CcmSheetService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/sheets/v2/spreadsheets/{}/dimension:delete", request.spreadsheet_token),
+            api_path: format!(
+                "/open-apis/sheets/v2/spreadsheets/{}/dimension:delete",
+                request.spreadsheet_token
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -369,11 +460,15 @@ impl CcmSheetService {
         };
 
         // 发送请求
-        let resp = Transport::<DeleteDimensionResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<DeleteDimensionResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("删除行列完成: spreadsheet_token={}, dimension={}",
-                  request.spreadsheet_token, request.dimension);
+        log::info!(
+            "删除行列完成: spreadsheet_token={}, dimension={}",
+            request.spreadsheet_token,
+            request.dimension
+        );
 
         Ok(response)
     }
@@ -387,13 +482,20 @@ impl CcmSheetService {
     ///
     /// # 返回
     /// 返回批量更新的结果
-    pub async fn batch_update_sheet(&self, request: &BatchUpdateSheetRequest) -> SDKResult<BatchUpdateSheetResponse> {
+    pub async fn batch_update_sheet(
+        &self,
+        request: &BatchUpdateSheetRequest,
+    ) -> SDKResult<BatchUpdateSheetResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("批量更新工作表: spreadsheet_token={}, request_count={}",
-                  request.spreadsheet_token, request.requests.len());
+        log::info!(
+            "批量更新工作表: spreadsheet_token={}, request_count={}",
+            request.spreadsheet_token,
+            request.requests.len()
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -406,7 +508,10 @@ impl CcmSheetService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/sheets/v2/spreadsheets/{}/sheets:batchUpdate", request.spreadsheet_token),
+            api_path: format!(
+                "/open-apis/sheets/v2/spreadsheets/{}/sheets:batchUpdate",
+                request.spreadsheet_token
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -414,12 +519,15 @@ impl CcmSheetService {
         };
 
         // 发送请求
-        let resp = Transport::<BatchUpdateSheetResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<BatchUpdateSheetResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("批量更新工作表完成: spreadsheet_token={}, reply_count={}",
-                  request.spreadsheet_token,
-                  response.replies.as_ref().map(|v| v.len()).unwrap_or(0));
+        log::info!(
+            "批量更新工作表完成: spreadsheet_token={}, reply_count={}",
+            request.spreadsheet_token,
+            response.replies.as_ref().map(|v| v.len()).unwrap_or(0)
+        );
 
         Ok(response)
     }
@@ -433,12 +541,19 @@ impl CcmSheetService {
     ///
     /// # 返回
     /// 返回表格的元数据信息
-    pub async fn get_sheet_meta(&self, request: &GetSheetMetaRequest) -> SDKResult<GetSheetMetaResponse> {
+    pub async fn get_sheet_meta(
+        &self,
+        request: &GetSheetMetaRequest,
+    ) -> SDKResult<GetSheetMetaResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("获取表格元数据: spreadsheet_token={}", request.spreadsheet_token);
+        log::info!(
+            "获取表格元数据: spreadsheet_token={}",
+            request.spreadsheet_token
+        );
 
         // 构建查询参数
         let mut query_params = HashMap::new();
@@ -453,7 +568,10 @@ impl CcmSheetService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/sheets/v2/spreadsheets/{}", request.spreadsheet_token),
+            api_path: format!(
+                "/open-apis/sheets/v2/spreadsheets/{}",
+                request.spreadsheet_token
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params,
@@ -464,9 +582,11 @@ impl CcmSheetService {
         let resp = Transport::<GetSheetMetaResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("获取表格元数据完成: spreadsheet_token={}, sheet_count={}",
-                  request.spreadsheet_token,
-                  response.sheets.as_ref().map(|v| v.len()).unwrap_or(0));
+        log::info!(
+            "获取表格元数据完成: spreadsheet_token={}, sheet_count={}",
+            request.spreadsheet_token,
+            response.sheets.as_ref().map(|v| v.len()).unwrap_or(0)
+        );
 
         Ok(response)
     }
@@ -480,13 +600,20 @@ impl CcmSheetService {
     ///
     /// # 返回
     /// 返回样式设置的结果
-    pub async fn set_cell_style(&self, request: &SetCellStyleRequest) -> SDKResult<SetCellStyleResponse> {
+    pub async fn set_cell_style(
+        &self,
+        request: &SetCellStyleRequest,
+    ) -> SDKResult<SetCellStyleResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("设置单元格样式: spreadsheet_token={}, range={}",
-                  request.spreadsheet_token, request.range);
+        log::info!(
+            "设置单元格样式: spreadsheet_token={}, range={}",
+            request.spreadsheet_token,
+            request.range
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -496,7 +623,10 @@ impl CcmSheetService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/sheets/v2/spreadsheets/{}/style:set", request.spreadsheet_token),
+            api_path: format!(
+                "/open-apis/sheets/v2/spreadsheets/{}/style:set",
+                request.spreadsheet_token
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -507,8 +637,11 @@ impl CcmSheetService {
         let resp = Transport::<SetCellStyleResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("设置单元格样式完成: spreadsheet_token={}, range={}",
-                  request.spreadsheet_token, request.range);
+        log::info!(
+            "设置单元格样式完成: spreadsheet_token={}, range={}",
+            request.spreadsheet_token,
+            request.range
+        );
 
         Ok(response)
     }
@@ -569,8 +702,12 @@ impl ReadSingleRangeRequestBuilder {
 
     pub async fn execute(self, service: &CcmSheetService) -> SDKResult<ReadSingleRangeResponse> {
         let request = ReadSingleRangeRequest {
-            spreadsheet_token: self.spreadsheet_token.ok_or_else(|| LarkAPIError::illegal_param("spreadsheet_token is required".to_string()))?,
-            range: self.range.ok_or_else(|| LarkAPIError::illegal_param("range is required".to_string()))?,
+            spreadsheet_token: self.spreadsheet_token.ok_or_else(|| {
+                LarkAPIError::illegal_param("spreadsheet_token is required".to_string())
+            })?,
+            range: self
+                .range
+                .ok_or_else(|| LarkAPIError::illegal_param("range is required".to_string()))?,
             include_format: self.include_format,
             value_render_option: self.value_render_option,
         };
@@ -623,9 +760,15 @@ impl WriteSingleRangeRequestBuilder {
 
     pub async fn execute(self, service: &CcmSheetService) -> SDKResult<WriteSingleRangeResponse> {
         let request = WriteSingleRangeRequest {
-            spreadsheet_token: self.spreadsheet_token.ok_or_else(|| LarkAPIError::illegal_param("spreadsheet_token is required".to_string()))?,
-            range: self.range.ok_or_else(|| LarkAPIError::illegal_param("range is required".to_string()))?,
-            values: self.values.ok_or_else(|| LarkAPIError::illegal_param("values is required".to_string()))?,
+            spreadsheet_token: self.spreadsheet_token.ok_or_else(|| {
+                LarkAPIError::illegal_param("spreadsheet_token is required".to_string())
+            })?,
+            range: self
+                .range
+                .ok_or_else(|| LarkAPIError::illegal_param("range is required".to_string()))?,
+            values: self
+                .values
+                .ok_or_else(|| LarkAPIError::illegal_param("values is required".to_string()))?,
             value_input_option: self.value_input_option,
         };
         service.write_single_range(&request).await
@@ -684,9 +827,15 @@ impl AppendDataRequestBuilder {
 
     pub async fn execute(self, service: &CcmSheetService) -> SDKResult<AppendDataResponse> {
         let request = AppendDataRequest {
-            spreadsheet_token: self.spreadsheet_token.ok_or_else(|| LarkAPIError::illegal_param("spreadsheet_token is required".to_string()))?,
-            range: self.range.ok_or_else(|| LarkAPIError::illegal_param("range is required".to_string()))?,
-            values: self.values.ok_or_else(|| LarkAPIError::illegal_param("values is required".to_string()))?,
+            spreadsheet_token: self.spreadsheet_token.ok_or_else(|| {
+                LarkAPIError::illegal_param("spreadsheet_token is required".to_string())
+            })?,
+            range: self
+                .range
+                .ok_or_else(|| LarkAPIError::illegal_param("range is required".to_string()))?,
+            values: self
+                .values
+                .ok_or_else(|| LarkAPIError::illegal_param("values is required".to_string()))?,
             value_input_option: self.value_input_option,
             insert_data_option: self.insert_data_option,
         };

@@ -1,4 +1,8 @@
 #![allow(dead_code)]
+#![allow(dead_code)]
+#![allow(dead_code)]
+
+#![allow(dead_code)]
 #![allow(unused_imports)]
 #![allow(unused_variables)]
 #![allow(unused_mut)]
@@ -6,7 +10,6 @@ use serde::{Deserialize, Serialize};
 use serde_repr::{Deserialize_repr, Serialize_repr};
 /// 字段的具体内容,
 #[derive(Clone)]
-#[allow(dead_code)]
 pub enum FieldValue {
     MultiLine(String),
     Barcode(String),
@@ -44,7 +47,6 @@ pub struct Person {
     pub email: String,
 /// 群组,
 #[derive(Clone)]
-#[allow(dead_code)]
 pub struct GroupChat {
 /// 群组名,
     pub name: String,
@@ -61,7 +63,6 @@ pub struct Link {
     pub link: String,
 /// 附件,
 #[derive(Clone)]
-#[allow(dead_code)]
 pub struct Attachment {
 /// 附件token,
     pub file_token: String,

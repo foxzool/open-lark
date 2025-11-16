@@ -2,21 +2,21 @@
 //!
 //! 提供强大的数据搜索和过滤功能，包括：
 //! - 复杂查询条件支持
-use std::collections::HashMap;
 //! - 多字段联合搜索
 //! - 高性能索引搜索
 //! - 智能排序和分页
+use std::collections::HashMap;
 
-use serde::{Deserialize, Serialize};
 use openlark_core::{
-    error::LarkAPIError,
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    error::LarkAPIError,
+    http::Transport,
     SDKResult,
 };
+use serde::{Deserialize, Serialize};
 
 /// 数据模型
 pub mod models {
@@ -198,13 +198,21 @@ pub mod services {
         ///
         /// # 返回
         /// 返回搜索结果
-        pub async fn search(&self, request: &models::AdvancedSearchRequest) -> SDKResult<models::AdvancedSearchResponse> {
+        pub async fn search(
+            &self,
+            request: &models::AdvancedSearchRequest,
+        ) -> SDKResult<models::AdvancedSearchResponse> {
             // 验证请求参数
-            request.validate()
+            request
+                .validate()
                 .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-            log::info!("执行高级搜索: app_token={}, table_id={}, conditions={}",
-                      request.app_token, request.table_id, request.conditions.len());
+            log::info!(
+                "执行高级搜索: app_token={}, table_id={}, conditions={}",
+                request.app_token,
+                request.table_id,
+                request.conditions.len()
+            );
 
             // 构建请求体
             let body = serde_json::to_value(request)?;
@@ -212,7 +220,10 @@ pub mod services {
             // 构建API请求
             let api_req = ApiRequest {
                 http_method: reqwest::Method::POST,
-                api_path: format!("/open-apis/bitable/v2/apps/{}/tables/{}/records/search", request.app_token, request.table_id),
+                api_path: format!(
+                    "/open-apis/bitable/v2/apps/{}/tables/{}/records/search",
+                    request.app_token, request.table_id
+                ),
                 supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
                 body: serde_json::to_vec(&body)?,
                 query_params: HashMap::new(),
@@ -220,16 +231,22 @@ pub mod services {
             };
 
             // 发送请求
-            let resp = Transport::<models::AdvancedSearchResponse>::request(api_req, &self.config, None).await?;
+            let resp =
+                Transport::<models::AdvancedSearchResponse>::request(api_req, &self.config, None)
+                    .await?;
             let response = resp.data.unwrap_or_default();
 
-            log::info!("高级搜索完成: app_token={}, table_id={}, found={}",
-                      request.app_token,
-                      request.table_id,
-                      response.data.as_ref()
-                          .and_then(|d| d.records.as_ref())
-                          .map(|r| r.len())
-                          .unwrap_or(0));
+            log::info!(
+                "高级搜索完成: app_token={}, table_id={}, found={}",
+                request.app_token,
+                request.table_id,
+                response
+                    .data
+                    .as_ref()
+                    .and_then(|d| d.records.as_ref())
+                    .map(|r| r.len())
+                    .unwrap_or(0)
+            );
 
             Ok(response)
         }
@@ -292,7 +309,12 @@ impl AdvancedSearchRequestBuilder {
         }
     }
 
-    pub fn condition(mut self, field_id_or_name: impl Into<String>, operator: models::SearchOperator, value: Value) -> Self {
+    pub fn condition(
+        mut self,
+        field_id_or_name: impl Into<String>,
+        operator: models::SearchOperator,
+        value: Value,
+    ) -> Self {
         self.request.conditions.push(models::SearchCondition {
             field_id_or_name: field_id_or_name.into(),
             operator,
@@ -317,7 +339,10 @@ impl AdvancedSearchRequestBuilder {
         self
     }
 
-    pub async fn execute(self, service: &AdvancedSearchService) -> SDKResult<models::AdvancedSearchResponse> {
+    pub async fn execute(
+        self,
+        service: &AdvancedSearchService,
+    ) -> SDKResult<models::AdvancedSearchResponse> {
         service.search(&self.request).await
     }
 }

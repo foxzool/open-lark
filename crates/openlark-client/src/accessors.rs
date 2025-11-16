@@ -2,7 +2,6 @@
 //!
 //! 提供向后兼容的服务访问方法，使迁移更加平滑
 
-// 条件导入服务类型
 use crate::traits::ServiceRegistry;
 
 // Map features to available services from openlark-docs
@@ -11,7 +10,12 @@ use crate::traits::ServiceRegistry;
 #[cfg(any(feature = "docs", feature = "bitable"))]
 use openlark_docs::BaseService;
 
-#[cfg(any(feature = "sheets", feature = "wiki", feature = "drive", feature = "ccm"))]
+#[cfg(any(
+    feature = "sheets",
+    feature = "wiki",
+    feature = "drive",
+    feature = "ccm"
+))]
 use openlark_docs::CcmService;
 
 #[cfg(feature = "communication")]

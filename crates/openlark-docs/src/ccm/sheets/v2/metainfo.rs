@@ -11,6 +11,7 @@ use serde::{Deserialize, Serialize};
 
 use openlark_core::endpoints_original::Endpoints;
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -18,7 +19,7 @@ use openlark_core::{
     http::Transport,
     standard_response::StandardResponse,
     trait_system::Service,
-    api_req::ApiRequest, SDKResult,
+    SDKResult,
 };
 
 /// 表格元数据信息

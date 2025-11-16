@@ -17,13 +17,12 @@ mod macros;
 pub mod prelude;
 
 // Base modules - base and bitable projects
-#[cfg(feature = "base")]
+#[cfg(any(feature = "base", feature = "bitable"))]
 pub mod base;
 
 // Content Collaboration Management (CCM) modules
-#[cfg(feature = "ccm")]
+#[cfg(feature = "ccm-core")]
 pub mod ccm;
-
 
 // Interactive card components
 #[cfg(feature = "cardkit")]
@@ -34,10 +33,10 @@ pub mod cardkit;
 pub mod report;
 
 // Re-export service types for convenience
-#[cfg(feature = "base")]
+#[cfg(any(feature = "base", feature = "bitable"))]
 pub use base::BaseService;
 
-#[cfg(feature = "ccm")]
+#[cfg(feature = "ccm-core")]
 pub use ccm::CcmService;
 
 #[cfg(feature = "cardkit")]

@@ -1,3 +1,5 @@
+#![allow(unused_variables, unused_unsafe)]
+
 #![allow(dead_code)]
 #![allow(unused_imports)]
 #![allow(unused_variables)]
@@ -93,7 +95,6 @@ impl UpdateRecord {
     pub fn new(config: Config) -> Self {
         Self { config }
 }#[cfg(test)]
-#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json::json;

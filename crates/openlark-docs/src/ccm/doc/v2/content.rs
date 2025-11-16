@@ -2,19 +2,12 @@
 //!
 //! 提供获取旧版文档内容的功能，包括纯文本和富文本内容。
 
+use openlark_core::{api_req::ApiRequest, constants::AccessTokenType, http::Transport, SDKResult};
 use std::collections::HashMap;
-use openlark_core::{
-    
-    
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
-};
 
 use super::{
-    requests::{GetDocRawContentV2Request, GetDocContentV2Request},
-    responses::{GetDocRawContentV2Response, GetDocContentV2Response},
+    requests::{GetDocContentV2Request, GetDocRawContentV2Request},
+    responses::{GetDocContentV2Response, GetDocRawContentV2Response},
 };
 
 /// 文档内容服务
@@ -63,13 +56,16 @@ impl ContentDocService {
     ///     Ok(())
     /// }
     /// ```
-    pub async fn get_raw(&self, req: &GetDocRawContentV2Request) -> SDKResult<GetDocRawContentV2Response> {
+    pub async fn get_raw(
+        &self,
+        req: &GetDocRawContentV2Request,
+    ) -> SDKResult<GetDocRawContentV2Response> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
         log::debug!("开始获取文档纯文本内容: doc_token={}", req.doc_token);
 
-          // 构建动态端点路径，替换doc_token参数
+        // 构建动态端点路径，替换doc_token参数
         let endpoint = format!("/open-apis/doc/v2/{}/raw_content", req.doc_token);
 
         let mut query_params = std::collections::HashMap::new();
@@ -85,13 +81,16 @@ impl ContentDocService {
             ..Default::default()
         };
 
-        let resp = Transport::<GetDocRawContentV2Response>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<GetDocRawContentV2Response>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!(
             "文档纯文本内容获取成功: doc_token={}, content_length={}",
             req.doc_token,
-            response.content.as_ref()
+            response
+                .content
+                .as_ref()
                 .and_then(|c| c.content.as_ref())
                 .map(|s| s.len())
                 .unwrap_or(0)
@@ -156,13 +155,16 @@ impl ContentDocService {
             ..Default::default()
         };
 
-        let resp = Transport::<GetDocContentV2Response>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<GetDocContentV2Response>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!(
             "文档富文本内容获取成功: doc_token={}, content_length={}",
             req.doc_token,
-            response.content.as_ref()
+            response
+                .content
+                .as_ref()
                 .and_then(|c| c.content.as_ref())
                 .map(|s| s.len())
                 .unwrap_or(0)
@@ -309,10 +311,7 @@ impl GetDocContentBuilder {
     }
 
     /// 执行获取操作
-    pub async fn execute(
-        self,
-        service: &ContentDocService,
-    ) -> SDKResult<GetDocContentV2Response> {
+    pub async fn execute(self, service: &ContentDocService) -> SDKResult<GetDocContentV2Response> {
         let doc_token = self.doc_token.ok_or_else(|| {
             openlark_core::error::LarkAPIError::illegal_param("文档Token是必需的")
         })?;

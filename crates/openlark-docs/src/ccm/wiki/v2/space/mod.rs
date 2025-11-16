@@ -1,3 +1,4 @@
+
 #![allow(dead_code)]
 #![allow(unused_variables)]
 #![allow(unused_imports)]
@@ -5,7 +6,6 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-
 use openlark_core::config::Config;
 
 // 重新导出所有模块类型

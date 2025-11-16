@@ -2,19 +2,14 @@
 //!
 //! 提供卡片组件管理相关的API服务，包括：
 //! - 卡片组件的创建、更新、删除
-use std::collections::HashMap;
 //! - 组件属性的局部更新
 //! - 流式文本更新
 //! - 完整的错误处理和参数验证
-
+use std::collections::HashMap;
 
 use openlark_core::{
-    error::LarkAPIError,
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
+    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    http::Transport, SDKResult,
 };
 
 use super::models::*;
@@ -40,20 +35,30 @@ impl CardElementService {
     ///
     /// # 返回
     /// 返回创建的组件信息
-    pub async fn create_card_element(&self, request: &CreateCardElementRequest) -> SDKResult<CreateCardElementResponse> {
+    pub async fn create_card_element(
+        &self,
+        request: &CreateCardElementRequest,
+    ) -> SDKResult<CreateCardElementResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("创建卡片组件: card_id={}, element_type={:?}",
-                  request.card_id, request.element_type);
+        log::info!(
+            "创建卡片组件: card_id={}, element_type={:?}",
+            request.card_id,
+            request.element_type
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
         body.insert("element".to_string(), request.element.clone());
 
         if let Some(ref element_type) = request.element_type {
-            body.insert("element_type".to_string(), serde_json::to_value(element_type)?);
+            body.insert(
+                "element_type".to_string(),
+                serde_json::to_value(element_type)?,
+            );
         }
         if let Some(ref tag) = request.tag {
             body.insert("tag".to_string(), serde_json::to_value(tag)?);
@@ -70,11 +75,15 @@ impl CardElementService {
         };
 
         // 发送请求
-        let resp = Transport::<CreateCardElementResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<CreateCardElementResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("创建卡片组件完成: card_id={}, element_id={:?}",
-                  request.card_id, response.element_id);
+        log::info!(
+            "创建卡片组件完成: card_id={}, element_id={:?}",
+            request.card_id,
+            response.element_id
+        );
 
         Ok(response)
     }
@@ -88,27 +97,39 @@ impl CardElementService {
     ///
     /// # 返回
     /// 返回更新后的组件信息
-    pub async fn update_card_element(&self, request: &UpdateCardElementRequest) -> SDKResult<UpdateCardElementResponse> {
+    pub async fn update_card_element(
+        &self,
+        request: &UpdateCardElementRequest,
+    ) -> SDKResult<UpdateCardElementResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("更新卡片组件: card_id={}, element_id={}",
-                  request.card_id, request.element_id);
+        log::info!(
+            "更新卡片组件: card_id={}, element_id={}",
+            request.card_id,
+            request.element_id
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
         body.insert("element".to_string(), request.element.clone());
 
         if let Some(ref update_mask) = request.update_mask {
-            body.insert("update_mask".to_string(), serde_json::to_value(update_mask)?);
+            body.insert(
+                "update_mask".to_string(),
+                serde_json::to_value(update_mask)?,
+            );
         }
 
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::PUT,
-            api_path: format!("/open-apis/cardkit/v1/cards/{}/elements/{}",
-                             request.card_id, request.element_id),
+            api_path: format!(
+                "/open-apis/cardkit/v1/cards/{}/elements/{}",
+                request.card_id, request.element_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -116,11 +137,15 @@ impl CardElementService {
         };
 
         // 发送请求
-        let resp = Transport::<UpdateCardElementResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<UpdateCardElementResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("更新卡片组件完成: card_id={}, element_id={}",
-                  request.card_id, request.element_id);
+        log::info!(
+            "更新卡片组件完成: card_id={}, element_id={}",
+            request.card_id,
+            request.element_id
+        );
 
         Ok(response)
     }
@@ -134,13 +159,20 @@ impl CardElementService {
     ///
     /// # 返回
     /// 返回更新后的组件信息
-    pub async fn patch_card_element(&self, request: &PatchCardElementRequest) -> SDKResult<PatchCardElementResponse> {
+    pub async fn patch_card_element(
+        &self,
+        request: &PatchCardElementRequest,
+    ) -> SDKResult<PatchCardElementResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("局部更新卡片组件: card_id={}, element_id={}",
-                  request.card_id, request.element_id);
+        log::info!(
+            "局部更新卡片组件: card_id={}, element_id={}",
+            request.card_id,
+            request.element_id
+        );
 
         // 构建请求体
         let body = serde_json::to_value(&request.properties)?;
@@ -148,8 +180,10 @@ impl CardElementService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
-            api_path: format!("/open-apis/cardkit/v1/cards/{}/elements/{}",
-                             request.card_id, request.element_id),
+            api_path: format!(
+                "/open-apis/cardkit/v1/cards/{}/elements/{}",
+                request.card_id, request.element_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -157,11 +191,15 @@ impl CardElementService {
         };
 
         // 发送请求
-        let resp = Transport::<PatchCardElementResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<PatchCardElementResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("局部更新卡片组件完成: card_id={}, element_id={}",
-                  request.card_id, request.element_id);
+        log::info!(
+            "局部更新卡片组件完成: card_id={}, element_id={}",
+            request.card_id,
+            request.element_id
+        );
 
         Ok(response)
     }
@@ -175,13 +213,22 @@ impl CardElementService {
     ///
     /// # 返回
     /// 返回更新结果
-    pub async fn update_card_element_content(&self, request: &UpdateCardElementContentRequest) -> SDKResult<UpdateCardElementContentResponse> {
+    pub async fn update_card_element_content(
+        &self,
+        request: &UpdateCardElementContentRequest,
+    ) -> SDKResult<UpdateCardElementContentResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("更新组件内容: card_id={}, element_id={}, append={:?}, stream={:?}",
-                  request.card_id, request.element_id, request.append, request.stream);
+        log::info!(
+            "更新组件内容: card_id={}, element_id={}, append={:?}, stream={:?}",
+            request.card_id,
+            request.element_id,
+            request.append,
+            request.stream
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -197,8 +244,10 @@ impl CardElementService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::PUT,
-            api_path: format!("/open-apis/cardkit/v1/cards/{}/elements/{}/content",
-                             request.card_id, request.element_id),
+            api_path: format!(
+                "/open-apis/cardkit/v1/cards/{}/elements/{}/content",
+                request.card_id, request.element_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -206,11 +255,17 @@ impl CardElementService {
         };
 
         // 发送请求
-        let resp = Transport::<UpdateCardElementContentResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<UpdateCardElementContentResponse>::request(api_req, &self.config, None)
+                .await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("更新组件内容完成: card_id={}, element_id={}, success={:?}",
-                  request.card_id, request.element_id, response.success);
+        log::info!(
+            "更新组件内容完成: card_id={}, element_id={}, success={:?}",
+            request.card_id,
+            request.element_id,
+            response.success
+        );
 
         Ok(response)
     }
@@ -224,19 +279,28 @@ impl CardElementService {
     ///
     /// # 返回
     /// 返回删除结果
-    pub async fn delete_card_element(&self, request: &DeleteCardElementRequest) -> SDKResult<DeleteCardElementResponse> {
+    pub async fn delete_card_element(
+        &self,
+        request: &DeleteCardElementRequest,
+    ) -> SDKResult<DeleteCardElementResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("删除卡片组件: card_id={}, element_id={}",
-                  request.card_id, request.element_id);
+        log::info!(
+            "删除卡片组件: card_id={}, element_id={}",
+            request.card_id,
+            request.element_id
+        );
 
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
-            api_path: format!("/open-apis/cardkit/v1/cards/{}/elements/{}",
-                             request.card_id, request.element_id),
+            api_path: format!(
+                "/open-apis/cardkit/v1/cards/{}/elements/{}",
+                request.card_id, request.element_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params: HashMap::new(),
@@ -244,11 +308,16 @@ impl CardElementService {
         };
 
         // 发送请求
-        let resp = Transport::<DeleteCardElementResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<DeleteCardElementResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("删除卡片组件完成: card_id={}, element_id={}, success={:?}",
-                  request.card_id, request.element_id, response.success);
+        log::info!(
+            "删除卡片组件完成: card_id={}, element_id={}, success={:?}",
+            request.card_id,
+            request.element_id,
+            response.success
+        );
 
         Ok(response)
     }
@@ -281,7 +350,10 @@ impl CreateCardElementRequestBuilder {
         self
     }
 
-    pub async fn execute(self, service: &CardElementService) -> SDKResult<CreateCardElementResponse> {
+    pub async fn execute(
+        self,
+        service: &CardElementService,
+    ) -> SDKResult<CreateCardElementResponse> {
         service.create_card_element(&self.request).await
     }
 }
@@ -307,7 +379,10 @@ impl UpdateCardElementRequestBuilder {
         self
     }
 
-    pub async fn execute(self, service: &CardElementService) -> SDKResult<UpdateCardElementResponse> {
+    pub async fn execute(
+        self,
+        service: &CardElementService,
+    ) -> SDKResult<UpdateCardElementResponse> {
         service.update_card_element(&self.request).await
     }
 }
@@ -317,7 +392,11 @@ pub struct PatchCardElementRequestBuilder {
 }
 
 impl PatchCardElementRequestBuilder {
-    pub fn new(card_id: impl Into<String>, element_id: impl Into<String>, properties: Value) -> Self {
+    pub fn new(
+        card_id: impl Into<String>,
+        element_id: impl Into<String>,
+        properties: Value,
+    ) -> Self {
         Self {
             request: PatchCardElementRequest {
                 card_id: card_id.into(),
@@ -327,7 +406,10 @@ impl PatchCardElementRequestBuilder {
         }
     }
 
-    pub async fn execute(self, service: &CardElementService) -> SDKResult<PatchCardElementResponse> {
+    pub async fn execute(
+        self,
+        service: &CardElementService,
+    ) -> SDKResult<PatchCardElementResponse> {
         service.patch_card_element(&self.request).await
     }
 }
@@ -359,7 +441,10 @@ impl UpdateCardElementContentRequestBuilder {
         self
     }
 
-    pub async fn execute(self, service: &CardElementService) -> SDKResult<UpdateCardElementContentResponse> {
+    pub async fn execute(
+        self,
+        service: &CardElementService,
+    ) -> SDKResult<UpdateCardElementContentResponse> {
         service.update_card_element_content(&self.request).await
     }
 }
@@ -378,7 +463,10 @@ impl DeleteCardElementRequestBuilder {
         }
     }
 
-    pub async fn execute(self, service: &CardElementService) -> SDKResult<DeleteCardElementResponse> {
+    pub async fn execute(
+        self,
+        service: &CardElementService,
+    ) -> SDKResult<DeleteCardElementResponse> {
         service.delete_card_element(&self.request).await
     }
 }

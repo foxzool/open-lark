@@ -2,8 +2,8 @@
 //!
 //! 定义文档导出任务API的数据结构。
 
-use serde::{Deserialize, Serialize};
 use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use serde::{Deserialize, Serialize};
 
 /// 创建导出任务请求
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

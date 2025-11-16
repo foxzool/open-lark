@@ -6,8 +6,8 @@
 //! - 规则状态和配置信息
 //! - 完整的序列化和验证支持
 
-use serde::{Deserialize, Serialize};
 use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use serde::{Deserialize, Serialize};
 
 /// 查询报告规则请求
 #[derive(Debug, Clone, Serialize, PartialEq)]
@@ -159,9 +159,7 @@ impl ApiResponseTrait for QueryRuleResponse {
 
 impl Default for QueryRuleResponse {
     fn default() -> Self {
-        Self {
-            data: None,
-        }
+        Self { data: None }
     }
 }
 
@@ -181,9 +179,7 @@ impl ApiResponseTrait for RemoveRuleViewResponse {
 
 impl Default for RemoveRuleViewResponse {
     fn default() -> Self {
-        Self {
-            data: None,
-        }
+        Self { data: None }
     }
 }
 
@@ -197,4 +193,3 @@ pub struct RemoveRuleViewData {
     #[serde(rename = "rule_id")]
     pub rule_id: String,
 }
-

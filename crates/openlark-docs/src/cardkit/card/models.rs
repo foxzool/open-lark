@@ -2,8 +2,8 @@
 //!
 //! 提供卡片实体管理相关的数据结构，支持卡片的创建、更新、配置等操作。
 
-use serde::{Deserialize, Serialize};
 use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use serde::{Deserialize, Serialize};
 
 /// 创建卡片请求
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -285,7 +285,12 @@ impl CardOperation {
         }
 
         // 验证操作类型是否支持
-        let valid_operations = vec!["update_element", "delete_element", "add_element", "update_config"];
+        let valid_operations = vec![
+            "update_element",
+            "delete_element",
+            "add_element",
+            "update_config",
+        ];
         if !valid_operations.contains(&self.operation_type.as_str()) {
             return Err(format!("不支持的操作类型: {}", self.operation_type));
         }

@@ -701,7 +701,9 @@ impl DeleteCommentRequest {
         }
 
         if self.comment_id.is_empty() {
-            return Err(LarkAPIError::IllegalParamError("评论ID不能为空".to_string()));
+            return Err(LarkAPIError::IllegalParamError(
+                "评论ID不能为空".to_string(),
+            ));
         }
 
         Ok(())
@@ -807,10 +809,7 @@ impl CommentService {
         request: &CreateCommentRequest,
     ) -> openlark_core::error::SDKResult<CreateCommentResponse> {
         use openlark_core::{
-            api_req::ApiRequest,
-            http::Transport,
-            api_resp::BaseResponse,
-            error::LarkAPIError,
+            api_req::ApiRequest, api_resp::BaseResponse, error::LarkAPIError, http::Transport,
         };
 
         let endpoint = format!(
@@ -821,7 +820,8 @@ impl CommentService {
         let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::POST, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let response: BaseResponse<CreateCommentResponse> = Transport::request(api_request, &self.config, None).await?;
+        let response: BaseResponse<CreateCommentResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
@@ -831,9 +831,11 @@ impl CommentService {
             });
         }
 
-        response
-            .data
-            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
+        response.data.ok_or_else(|| LarkAPIError::APIError {
+            code: -1,
+            msg: "响应数据为空".to_string(),
+            error: None,
+        })
     }
 
     /// 查询评论
@@ -869,10 +871,7 @@ impl CommentService {
         request: &GetCommentsRequest,
     ) -> openlark_core::error::SDKResult<GetCommentsResponse> {
         use openlark_core::{
-            api_req::ApiRequest,
-            http::Transport,
-            api_resp::BaseResponse,
-            error::LarkAPIError,
+            api_req::ApiRequest, api_resp::BaseResponse, error::LarkAPIError, http::Transport,
         };
 
         let endpoint = format!(
@@ -899,9 +898,11 @@ impl CommentService {
             endpoint
         };
 
-        let api_request = ApiRequest::with_method_and_path(reqwest::Method::GET, &endpoint_with_params);
+        let api_request =
+            ApiRequest::with_method_and_path(reqwest::Method::GET, &endpoint_with_params);
 
-        let response: BaseResponse<GetCommentsResponse> = Transport::request(api_request, &self.config, None).await?;
+        let response: BaseResponse<GetCommentsResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
@@ -911,9 +912,11 @@ impl CommentService {
             });
         }
 
-        response
-            .data
-            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
+        response.data.ok_or_else(|| LarkAPIError::APIError {
+            code: -1,
+            msg: "响应数据为空".to_string(),
+            error: None,
+        })
     }
 
     /// 删除评论
@@ -946,10 +949,7 @@ impl CommentService {
         request: &DeleteCommentRequest,
     ) -> openlark_core::error::SDKResult<DeleteCommentResponse> {
         use openlark_core::{
-            api_req::ApiRequest,
-            http::Transport,
-            api_resp::BaseResponse,
-            error::LarkAPIError,
+            api_req::ApiRequest, api_resp::BaseResponse, error::LarkAPIError, http::Transport,
         };
 
         let endpoint = format!(
@@ -959,19 +959,22 @@ impl CommentService {
 
         let api_request = ApiRequest::with_method_and_path(reqwest::Method::DELETE, &endpoint);
 
-        let response: BaseResponse<DeleteCommentResponse> = Transport::request(api_request, &self.config, None).await?;
+        let response: BaseResponse<DeleteCommentResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
                 code: response.code(),
                 msg: response.msg().to_string(),
-                error: None
+                error: None,
             });
         }
 
-        response
-            .data
-            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
+        response.data.ok_or_else(|| LarkAPIError::APIError {
+            code: -1,
+            msg: "响应数据为空".to_string(),
+            error: None,
+        })
     }
 
     /// 创建评论构建器

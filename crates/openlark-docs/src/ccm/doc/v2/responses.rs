@@ -2,11 +2,9 @@
 //!
 //! 定义所有旧版文档API的响应数据结构。
 
-use serde::{Deserialize, Serialize};
+use super::models::{DocumentContent, DocumentInfo, SheetMeta};
 use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
-use super::models::{
-    DocumentInfo, DocumentContent, SheetMeta
-};
+use serde::{Deserialize, Serialize};
 
 /// 创建旧版文档响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]

@@ -1,3 +1,5 @@
+#![allow(unused_variables, unused_unsafe)]
+
 #![allow(dead_code)]
 #![allow(unused_imports)]
 #![allow(unused_variables)]
@@ -107,7 +109,6 @@ let api_resp: BaseResponse<CreateRecordResponse> =,
 api_resp.into_result(),
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json::json;

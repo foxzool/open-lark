@@ -1,3 +1,4 @@
+#![allow(unused_variables, unused_unsafe)]
 use SDKResult;use reqwest::Method;
 use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 ,
@@ -129,7 +130,6 @@ self.move_results,
             .as_ref()
             .map_or(0, |results| results.len())}
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]

@@ -7,6 +7,7 @@
 //! - 自动行检测和智能追加
 
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -15,7 +16,6 @@ use openlark_core::{
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
-    api_req::ApiRequest,
     SDKResult,
 };
 
@@ -239,19 +239,22 @@ impl ValuesAppendRequestBuilder {
                 match &self.range {
                     Some(range) => {
                         if range.is_empty() {
-                            return Err(openlark_core::error::LarkAPIError::InvalidParameter("目标范围不能为空".to_string()));
+                            return Err(openlark_core::error::LarkAPIError::InvalidParameter(
+                                "目标范围不能为空".to_string(),
+                            ));
                         }
 
                         // 验证范围格式
                         if !Self::is_valid_range(range) {
-                            return Err(openlark_core::error::LarkAPIError::InvalidParameter(format!(
-                                "无效的范围格式: {}",
-                                range
-                            )));
+                            return Err(openlark_core::error::LarkAPIError::InvalidParameter(
+                                format!("无效的范围格式: {}", range),
+                            ));
                         }
                     }
                     _ => {
-                        return Err(openlark_core::error::LarkAPIError::InvalidParameter("目标范围是必需的".to_string()));
+                        return Err(openlark_core::error::LarkAPIError::InvalidParameter(
+                            "目标范围是必需的".to_string(),
+                        ));
                     }
                 }
 
@@ -280,12 +283,14 @@ impl ValuesAppendRequestBuilder {
                     // 验证所有行的列数一致性
                     for (row_index, row) in self.values.iter().enumerate() {
                         if row.len() > first_row.len() + 10 {
-                            return Err(openlark_core::error::LarkAPIError::InvalidParameter(format!(
-                                "第{}行的列数({})超过首行列数({})过多，最多可超出10列",
-                                row_index + 1,
-                                row.len(),
-                                first_row.len()
-                            )));
+                            return Err(openlark_core::error::LarkAPIError::InvalidParameter(
+                                format!(
+                                    "第{}行的列数({})超过首行列数({})过多，最多可超出10列",
+                                    row_index + 1,
+                                    row.len(),
+                                    first_row.len()
+                                ),
+                            ));
                         }
                     }
                 }
@@ -294,11 +299,13 @@ impl ValuesAppendRequestBuilder {
                 for (row_index, row) in self.values.iter().enumerate() {
                     for (col_index, cell) in row.iter().enumerate() {
                         if cell.len() > 50000 {
-                            return Err(openlark_core::error::LarkAPIError::InvalidParameter(format!(
-                                "第{}行第{}列的单元格内容过长，不能超过50000字符",
-                                row_index + 1,
-                                col_index + 1
-                            )));
+                            return Err(openlark_core::error::LarkAPIError::InvalidParameter(
+                                format!(
+                                    "第{}行第{}列的单元格内容过长，不能超过50000字符",
+                                    row_index + 1,
+                                    col_index + 1
+                                ),
+                            ));
                         }
                     }
                 }
@@ -468,7 +475,9 @@ impl ValuesAppendService {
         let base_resp: BaseResponse<ValuesAppendResponse> = response.json().await?;
 
         if let Some(err) = &base_resp.error {
-            return Err(openlark_core::error::LarkAPIError::LarkAPIError(err.clone()));
+            return Err(openlark_core::error::LarkAPIError::LarkAPIError(
+                err.clone(),
+            ));
         }
 
         Ok(base_resp)

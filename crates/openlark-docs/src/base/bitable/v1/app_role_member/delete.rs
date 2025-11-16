@@ -1,3 +1,5 @@
+#![allow(unused_variables, unused_unsafe)]
+
 #![allow(dead_code)]
 #![allow(unused_imports)]
 #![allow(unused_variables)]
@@ -87,7 +89,6 @@ api_req.api_path = BITABLE_V1_ROLE_MEMBER_DELETE,
 Ok(api_resp),
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 #[test]

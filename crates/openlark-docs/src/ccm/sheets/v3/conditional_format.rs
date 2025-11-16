@@ -7,17 +7,17 @@
 //! - 条件格式优先级管理
 
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, ResponseFormat},
     error::LarkAPIError,
     http::Transport,
-    api_req::ApiRequest,
 };
 
 // 使用统一类型定义
 use super::Range;
 
-use serde::{Deserialize, Serialize};
 use reqwest::Method;
+use serde::{Deserialize, Serialize};
 
 /// 条件格式规则类型
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -567,8 +567,7 @@ impl ConditionalFormat {
         }
 
         // 验证范围格式
-        if self.range.is_empty()
-        {
+        if self.range.is_empty() {
             return Err(LarkAPIError::IllegalParamError("范围格式无效".to_string()));
         }
 
@@ -819,20 +818,24 @@ impl ConditionalFormatService {
         let api_request = ApiRequest::with_method_and_path(Method::POST, &url);
 
         // 发送请求并获取响应
-        let response = Transport::<SetConditionalFormatResponse>::request(api_request, &self.config, None).await?;
+        let response =
+            Transport::<SetConditionalFormatResponse>::request(api_request, &self.config, None)
+                .await?;
 
         // 检查响应是否成功
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
                 code: response.code(),
                 msg: response.msg().to_string(),
-                error: None
+                error: None,
             });
         }
 
-        response
-            .data
-            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
+        response.data.ok_or_else(|| LarkAPIError::APIError {
+            code: -1,
+            msg: "响应数据为空".to_string(),
+            error: None,
+        })
     }
 
     /// 删除条件格式
@@ -879,26 +882,29 @@ impl ConditionalFormatService {
             .await
             .map_err(|e| LarkAPIError::RequestError(e.to_string()))?;
 
-        let delete_response: openlark_core::api_resp::BaseResponse<DeleteConditionalFormatResponse> =
-            serde_json::from_str(
-                &response
-                    .text()
-                    .await
-                    .map_err(|e| LarkAPIError::RequestError(e.to_string()))?,
-            )
-            .map_err(|e| LarkAPIError::DeserializeError(e.to_string()))?;
+        let delete_response: openlark_core::api_resp::BaseResponse<
+            DeleteConditionalFormatResponse,
+        > = serde_json::from_str(
+            &response
+                .text()
+                .await
+                .map_err(|e| LarkAPIError::RequestError(e.to_string()))?,
+        )
+        .map_err(|e| LarkAPIError::DeserializeError(e.to_string()))?;
 
         if delete_response.code() != 0 {
             return Err(LarkAPIError::APIError {
                 code: delete_response.code(),
                 msg: delete_response.msg().to_string(),
-                error: None
+                error: None,
             });
         }
 
-        delete_response
-            .data
-            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
+        delete_response.data.ok_or_else(|| LarkAPIError::APIError {
+            code: -1,
+            msg: "响应数据为空".to_string(),
+            error: None,
+        })
     }
 
     /// 设置条件格式构建器

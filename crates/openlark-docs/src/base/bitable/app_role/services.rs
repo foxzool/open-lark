@@ -2,18 +2,13 @@
 //!
 //! 提供多维表格角色权限管理相关的API服务，包括：
 //! - 角色的创建、查询、更新、删除
-use std::collections::HashMap;
 //! - 权限配置和管理
 //! - 完整的错误处理和参数验证
-
+use std::collections::HashMap;
 
 use openlark_core::{
-    error::LarkAPIError,
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
+    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    http::Transport, SDKResult,
 };
 
 use super::models::*;
@@ -41,11 +36,16 @@ impl AppRoleService {
     /// 返回新创建的角色信息
     pub async fn create_role(&self, request: &CreateRoleRequest) -> SDKResult<CreateRoleResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("创建角色: app_token={}, role_name={}, role_type={}",
-                  request.app_token, request.role_name, request.role_type);
+        log::info!(
+            "创建角色: app_token={}, role_name={}, role_type={}",
+            request.app_token,
+            request.role_name,
+            request.role_type
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -73,7 +73,11 @@ impl AppRoleService {
         let resp = Transport::<CreateRoleResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("创建角色完成: app_token={}, role_name={}", request.app_token, request.role_name);
+        log::info!(
+            "创建角色完成: app_token={}, role_name={}",
+            request.app_token,
+            request.role_name
+        );
 
         Ok(response)
     }
@@ -89,10 +93,15 @@ impl AppRoleService {
     /// 返回更新后的角色信息
     pub async fn update_role(&self, request: &UpdateRoleRequest) -> SDKResult<UpdateRoleResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("更新角色: app_token={}, role_id={}", request.app_token, request.role_id);
+        log::info!(
+            "更新角色: app_token={}, role_id={}",
+            request.app_token,
+            request.role_id
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -110,7 +119,10 @@ impl AppRoleService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/roles/{}", request.app_token, request.role_id),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/roles/{}",
+                request.app_token, request.role_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -121,7 +133,11 @@ impl AppRoleService {
         let resp = Transport::<UpdateRoleResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("更新角色完成: app_token={}, role_id={}", request.app_token, request.role_id);
+        log::info!(
+            "更新角色完成: app_token={}, role_id={}",
+            request.app_token,
+            request.role_id
+        );
 
         Ok(response)
     }
@@ -137,15 +153,23 @@ impl AppRoleService {
     /// 返回删除操作的结果
     pub async fn delete_role(&self, request: &DeleteRoleRequest) -> SDKResult<DeleteRoleResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("删除角色: app_token={}, role_id={}", request.app_token, request.role_id);
+        log::info!(
+            "删除角色: app_token={}, role_id={}",
+            request.app_token,
+            request.role_id
+        );
 
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/roles/{}", request.app_token, request.role_id),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/roles/{}",
+                request.app_token, request.role_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params: HashMap::new(),
@@ -156,7 +180,11 @@ impl AppRoleService {
         let resp = Transport::<DeleteRoleResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("删除角色完成: app_token={}, role_id={}", request.app_token, request.role_id);
+        log::info!(
+            "删除角色完成: app_token={}, role_id={}",
+            request.app_token,
+            request.role_id
+        );
 
         Ok(response)
     }
@@ -172,7 +200,8 @@ impl AppRoleService {
     /// 返回角色列表
     pub async fn list_roles(&self, request: &ListRolesRequest) -> SDKResult<ListRolesResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
         log::info!("列出角色: app_token={}", request.app_token);
@@ -201,9 +230,11 @@ impl AppRoleService {
         let resp = Transport::<ListRolesResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("列出角色完成: app_token={}, count={}",
-                  request.app_token,
-                  response.roles.as_ref().map(|r| r.len()).unwrap_or(0));
+        log::info!(
+            "列出角色完成: app_token={}, count={}",
+            request.app_token,
+            response.roles.as_ref().map(|r| r.len()).unwrap_or(0)
+        );
 
         Ok(response)
     }
@@ -215,7 +246,11 @@ pub struct CreateRoleRequestBuilder {
 }
 
 impl CreateRoleRequestBuilder {
-    pub fn new(app_token: impl Into<String>, role_name: impl Into<String>, role_type: impl Into<String>) -> Self {
+    pub fn new(
+        app_token: impl Into<String>,
+        role_name: impl Into<String>,
+        role_type: impl Into<String>,
+    ) -> Self {
         Self {
             request: CreateRoleRequest {
                 app_token: app_token.into(),

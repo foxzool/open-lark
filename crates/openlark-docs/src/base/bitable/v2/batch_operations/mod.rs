@@ -2,21 +2,21 @@
 //!
 //! 提供高性能的批量数据操作功能，包括：
 //! - 超大规模批量增删改
-use std::collections::HashMap;
 //! - 事务性批量操作
 //! - 异步批量处理
 //! - 操作结果追踪
+use std::collections::HashMap;
 
-use serde::{Deserialize, Serialize};
 use openlark_core::{
-    error::LarkAPIError,
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    error::LarkAPIError,
+    http::Transport,
     SDKResult,
 };
+use serde::{Deserialize, Serialize};
 
 /// 数据模型
 pub mod models {
@@ -191,13 +191,22 @@ pub mod services {
         ///
         /// # 返回
         /// 返回批量操作任务ID和初始状态
-        pub async fn execute_bulk_operation(&self, request: &models::BulkOperationRequest) -> SDKResult<models::BulkOperationResponse> {
+        pub async fn execute_bulk_operation(
+            &self,
+            request: &models::BulkOperationRequest,
+        ) -> SDKResult<models::BulkOperationResponse> {
             // 验证请求参数
-            request.validate()
+            request
+                .validate()
                 .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-            log::info!("执行批量操作: app_token={}, table_id={}, operation_type={:?}, count={}",
-                      request.app_token, request.table_id, request.operation_type, request.data.len());
+            log::info!(
+                "执行批量操作: app_token={}, table_id={}, operation_type={:?}, count={}",
+                request.app_token,
+                request.table_id,
+                request.operation_type,
+                request.data.len()
+            );
 
             // 构建请求体
             let body = serde_json::to_value(request)?;
@@ -205,7 +214,10 @@ pub mod services {
             // 构建API请求
             let api_req = ApiRequest {
                 http_method: reqwest::Method::POST,
-                api_path: format!("/open-apis/bitable/v2/apps/{}/tables/{}/bulk_operations", request.app_token, request.table_id),
+                api_path: format!(
+                    "/open-apis/bitable/v2/apps/{}/tables/{}/bulk_operations",
+                    request.app_token, request.table_id
+                ),
                 supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
                 body: serde_json::to_vec(&body)?,
                 query_params: HashMap::new(),
@@ -213,13 +225,17 @@ pub mod services {
             };
 
             // 发送请求
-            let resp = Transport::<models::BulkOperationResponse>::request(api_req, &self.config, None).await?;
+            let resp =
+                Transport::<models::BulkOperationResponse>::request(api_req, &self.config, None)
+                    .await?;
             let response = resp.data.unwrap_or_default();
 
             if let Some(ref data) = response.data {
-                log::info!("批量操作任务已创建: task_id={}, status={:?}",
-                          data.task_id.as_deref().unwrap_or("unknown"),
-                          data.status);
+                log::info!(
+                    "批量操作任务已创建: task_id={}, status={:?}",
+                    data.task_id.as_deref().unwrap_or("unknown"),
+                    data.status
+                );
             }
 
             Ok(response)
@@ -234,17 +250,28 @@ pub mod services {
         ///
         /// # 返回
         /// 返回操作状态和结果详情
-        pub async fn get_bulk_operation_status(&self, request: &models::GetBulkOperationStatusRequest) -> SDKResult<models::GetBulkOperationStatusResponse> {
+        pub async fn get_bulk_operation_status(
+            &self,
+            request: &models::GetBulkOperationStatusRequest,
+        ) -> SDKResult<models::GetBulkOperationStatusResponse> {
             // 验证请求参数
-            request.validate()
+            request
+                .validate()
                 .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-            log::info!("查询批量操作状态: app_token={}, task_id={}", request.app_token, request.task_id);
+            log::info!(
+                "查询批量操作状态: app_token={}, task_id={}",
+                request.app_token,
+                request.task_id
+            );
 
             // 构建API请求
             let api_req = ApiRequest {
                 http_method: reqwest::Method::GET,
-                api_path: format!("/open-apis/bitable/v2/apps/{}/bulk_operations/{}", request.app_token, request.task_id),
+                api_path: format!(
+                    "/open-apis/bitable/v2/apps/{}/bulk_operations/{}",
+                    request.app_token, request.task_id
+                ),
                 supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
                 body: Vec::new(),
                 query_params: HashMap::new(),
@@ -252,7 +279,12 @@ pub mod services {
             };
 
             // 发送请求
-            let resp = Transport::<models::GetBulkOperationStatusResponse>::request(api_req, &self.config, None).await?;
+            let resp = Transport::<models::GetBulkOperationStatusResponse>::request(
+                api_req,
+                &self.config,
+                None,
+            )
+            .await?;
             let response = resp.data.unwrap_or_default();
 
             if let Some(ref data) = response.data {
@@ -350,7 +382,10 @@ impl BulkOperationRequestBuilder {
         self
     }
 
-    pub async fn execute(self, service: &BatchOperationsService) -> SDKResult<models::BulkOperationResponse> {
+    pub async fn execute(
+        self,
+        service: &BatchOperationsService,
+    ) -> SDKResult<models::BulkOperationResponse> {
         service.execute_bulk_operation(&self.request).await
     }
 }

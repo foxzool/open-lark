@@ -2,19 +2,14 @@
 //!
 //! 提供多维表格高级权限管理相关的API服务，包括：
 //! - V2版本的角色管理
-use std::collections::HashMap;
 //! - 高级权限控制
 //! - 细粒度权限设置
 //! - 完整的错误处理和参数验证
-
+use std::collections::HashMap;
 
 use openlark_core::{
-    error::LarkAPIError,
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
+    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    http::Transport, SDKResult,
 };
 
 use super::models::*;
@@ -40,9 +35,13 @@ impl AdvancedPermissionService {
     ///
     /// # 返回
     /// 返回V2角色列表
-    pub async fn list_roles_v2(&self, request: &ListRolesV2Request) -> SDKResult<ListRolesV2Response> {
+    pub async fn list_roles_v2(
+        &self,
+        request: &ListRolesV2Request,
+    ) -> SDKResult<ListRolesV2Response> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
         log::info!("列出V2角色: app_token={}", request.app_token);
@@ -74,9 +73,11 @@ impl AdvancedPermissionService {
         let resp = Transport::<ListRolesV2Response>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("列出V2角色完成: app_token={}, count={}",
-                  request.app_token,
-                  response.roles.as_ref().map(|r| r.len()).unwrap_or(0));
+        log::info!(
+            "列出V2角色完成: app_token={}, count={}",
+            request.app_token,
+            response.roles.as_ref().map(|r| r.len()).unwrap_or(0)
+        );
 
         Ok(response)
     }
@@ -90,23 +91,40 @@ impl AdvancedPermissionService {
     ///
     /// # 返回
     /// 返回创建的V2角色信息
-    pub async fn create_role_v2(&self, request: &CreateRoleV2Request) -> SDKResult<CreateRoleV2Response> {
+    pub async fn create_role_v2(
+        &self,
+        request: &CreateRoleV2Request,
+    ) -> SDKResult<CreateRoleV2Response> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("创建V2角色: app_token={}, name={}, role_type={:?}",
-                  request.app_token, request.name, request.role_type);
+        log::info!(
+            "创建V2角色: app_token={}, name={}, role_type={:?}",
+            request.app_token,
+            request.name,
+            request.role_type
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
 
         body.insert("name".to_string(), serde_json::to_value(&request.name)?);
-        body.insert("role_type".to_string(), serde_json::to_value(&request.role_type)?);
-        body.insert("permissions".to_string(), serde_json::to_value(&request.permissions)?);
+        body.insert(
+            "role_type".to_string(),
+            serde_json::to_value(&request.role_type)?,
+        );
+        body.insert(
+            "permissions".to_string(),
+            serde_json::to_value(&request.permissions)?,
+        );
 
         if let Some(ref description) = request.description {
-            body.insert("description".to_string(), serde_json::to_value(description)?);
+            body.insert(
+                "description".to_string(),
+                serde_json::to_value(description)?,
+            );
         }
         if let Some(is_system) = request.is_system {
             body.insert("is_system".to_string(), serde_json::to_value(is_system)?);
@@ -126,8 +144,11 @@ impl AdvancedPermissionService {
         let resp = Transport::<CreateRoleV2Response>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("创建V2角色完成: app_token={}, role_id={:?}",
-                  request.app_token, response.role.as_ref().and_then(|r| r.role_id.clone()));
+        log::info!(
+            "创建V2角色完成: app_token={}, role_id={:?}",
+            request.app_token,
+            response.role.as_ref().and_then(|r| r.role_id.clone())
+        );
 
         Ok(response)
     }
@@ -141,12 +162,20 @@ impl AdvancedPermissionService {
     ///
     /// # 返回
     /// 返回更新后的V2角色信息
-    pub async fn update_role_v2(&self, request: &UpdateRoleV2Request) -> SDKResult<UpdateRoleV2Response> {
+    pub async fn update_role_v2(
+        &self,
+        request: &UpdateRoleV2Request,
+    ) -> SDKResult<UpdateRoleV2Response> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("更新V2角色: app_token={}, role_id={}", request.app_token, request.role_id);
+        log::info!(
+            "更新V2角色: app_token={}, role_id={}",
+            request.app_token,
+            request.role_id
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -155,10 +184,16 @@ impl AdvancedPermissionService {
             body.insert("name".to_string(), serde_json::to_value(name)?);
         }
         if let Some(ref description) = request.description {
-            body.insert("description".to_string(), serde_json::to_value(description)?);
+            body.insert(
+                "description".to_string(),
+                serde_json::to_value(description)?,
+            );
         }
         if let Some(ref permissions) = request.permissions {
-            body.insert("permissions".to_string(), serde_json::to_value(permissions)?);
+            body.insert(
+                "permissions".to_string(),
+                serde_json::to_value(permissions)?,
+            );
         }
         if let Some(ref status) = request.status {
             body.insert("status".to_string(), serde_json::to_value(status)?);
@@ -167,7 +202,10 @@ impl AdvancedPermissionService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/roles_v2/{}", request.app_token, request.role_id),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/roles_v2/{}",
+                request.app_token, request.role_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -178,7 +216,11 @@ impl AdvancedPermissionService {
         let resp = Transport::<UpdateRoleV2Response>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("更新V2角色完成: app_token={}, role_id={}", request.app_token, request.role_id);
+        log::info!(
+            "更新V2角色完成: app_token={}, role_id={}",
+            request.app_token,
+            request.role_id
+        );
 
         Ok(response)
     }
@@ -216,7 +258,10 @@ impl ListRolesV2RequestBuilder {
         self
     }
 
-    pub async fn execute(self, service: &AdvancedPermissionService) -> SDKResult<ListRolesV2Response> {
+    pub async fn execute(
+        self,
+        service: &AdvancedPermissionService,
+    ) -> SDKResult<ListRolesV2Response> {
         service.list_roles_v2(&self.request).await
     }
 }
@@ -226,7 +271,11 @@ pub struct CreateRoleV2RequestBuilder {
 }
 
 impl CreateRoleV2RequestBuilder {
-    pub fn new(app_token: impl Into<String>, name: impl Into<String>, role_type: RoleTypeV2) -> Self {
+    pub fn new(
+        app_token: impl Into<String>,
+        name: impl Into<String>,
+        role_type: RoleTypeV2,
+    ) -> Self {
         Self {
             request: CreateRoleV2Request {
                 app_token: app_token.into(),
@@ -259,7 +308,10 @@ impl CreateRoleV2RequestBuilder {
         self
     }
 
-    pub async fn execute(self, service: &AdvancedPermissionService) -> SDKResult<CreateRoleV2Response> {
+    pub async fn execute(
+        self,
+        service: &AdvancedPermissionService,
+    ) -> SDKResult<CreateRoleV2Response> {
         service.create_role_v2(&self.request).await
     }
 }
@@ -302,7 +354,10 @@ impl UpdateRoleV2RequestBuilder {
         self
     }
 
-    pub async fn execute(self, service: &AdvancedPermissionService) -> SDKResult<UpdateRoleV2Response> {
+    pub async fn execute(
+        self,
+        service: &AdvancedPermissionService,
+    ) -> SDKResult<UpdateRoleV2Response> {
         service.update_role_v2(&self.request).await
     }
 }

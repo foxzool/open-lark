@@ -4,19 +4,19 @@
 
 pub mod batch_range_read;
 pub mod batch_read;
-pub mod import;
-pub mod import_result;
 pub mod batch_read_ranges;
 pub mod batch_write;
+pub mod condition_formats;
 pub mod data_validation;
 pub mod dimension_operations;
 pub mod image_write;
 pub mod image_write_enhanced;
+pub mod import;
+pub mod import_result;
 pub mod merge_cells;
 pub mod metainfo;
-pub mod protected_ranges;
-pub mod condition_formats;
 pub mod properties;
+pub mod protected_ranges;
 pub mod sheet_cells;
 pub mod sheet_management;
 pub mod sheets_batch_update;
@@ -33,11 +33,7 @@ pub mod values_single_write;
 // 模块中的服务可以直接通过完整路径访问
 
 use openlark_core::{
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
+    api_req::ApiRequest, config::Config, constants::AccessTokenType, http::Transport, SDKResult,
 };
 
 /// Sheets电子表格服务 v2版本

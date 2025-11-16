@@ -4,19 +4,9 @@
 //! 行列数量等。
 use std::collections::HashMap;
 
-use openlark_core::{
-    
-    
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
-};
+use openlark_core::{api_req::ApiRequest, constants::AccessTokenType, http::Transport, SDKResult};
 
-use super::{
-    requests::GetDocSheetMetaV2Request,
-    responses::GetDocSheetMetaV2Response,
-};
+use super::{requests::GetDocSheetMetaV2Request, responses::GetDocSheetMetaV2Response};
 
 /// 电子表格元数据服务
 #[derive(Clone)]
@@ -72,14 +62,17 @@ impl SheetMetaDocService {
     ///     Ok(())
     /// }
     /// ```
-    pub async fn get(&self, req: &GetDocSheetMetaV2Request) -> SDKResult<GetDocSheetMetaV2Response> {
+    pub async fn get(
+        &self,
+        req: &GetDocSheetMetaV2Request,
+    ) -> SDKResult<GetDocSheetMetaV2Response> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
         log::debug!("开始获取电子表格元数据: doc_token={}", req.doc_token);
 
         // 构建动态端点路径，替换doc_token参数
-          let endpoint = format!("/open-apis/doc/v2/{}/sheet_meta", req.doc_token);
+        let endpoint = format!("/open-apis/doc/v2/{}/sheet_meta", req.doc_token);
 
         let mut query_params = std::collections::HashMap::new();
         if let Some(user_id_type) = &req.user_id_type {
@@ -94,7 +87,8 @@ impl SheetMetaDocService {
             ..Default::default()
         };
 
-        let resp = Transport::<GetDocSheetMetaV2Response>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<GetDocSheetMetaV2Response>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!(

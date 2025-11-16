@@ -10,11 +10,12 @@
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     constants::AccessTokenType,
     error::LarkAPIError,
     http::Transport,
-    api_req::ApiRequest, SDKResult,
+    SDKResult,
 };
 use reqwest::Method;
 
@@ -281,13 +282,17 @@ impl CreateFloatImageRequestBuilder {
 
                 // 验证范围格式
                 if range.is_empty() {
-                    return Err(openlark_core::error::LarkAPIError::IllegalParamError("图片范围不能为空".to_string()));
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError(
+                        "图片范围不能为空".to_string(),
+                    ));
                 }
 
                 // 验证浮动图片ID格式（如果提供）
                 if let Some(ref id) = self.float_image_id {
                     if id.is_empty() {
-                        return Err(openlark_core::error::LarkAPIError::IllegalParamError("浮动图片ID不能为空".to_string()));
+                        return Err(openlark_core::error::LarkAPIError::IllegalParamError(
+                            "浮动图片ID不能为空".to_string(),
+                        ));
                     }
                     if id.len() > 10 {
                         return Err(openlark_core::error::LarkAPIError::IllegalParamError(
@@ -299,7 +304,9 @@ impl CreateFloatImageRequestBuilder {
                 // 验证尺寸参数
                 if let Some(width) = self.width {
                     if width <= 0 {
-                        return Err(openlark_core::error::LarkAPIError::IllegalParamError("图片宽度必须大于0".to_string()));
+                        return Err(openlark_core::error::LarkAPIError::IllegalParamError(
+                            "图片宽度必须大于0".to_string(),
+                        ));
                     }
                     if width > 10000 {
                         return Err(openlark_core::error::LarkAPIError::IllegalParamError(
@@ -310,7 +317,9 @@ impl CreateFloatImageRequestBuilder {
 
                 if let Some(height) = self.height {
                     if height <= 0 {
-                        return Err(openlark_core::error::LarkAPIError::IllegalParamError("图片高度必须大于0".to_string()));
+                        return Err(openlark_core::error::LarkAPIError::IllegalParamError(
+                            "图片高度必须大于0".to_string(),
+                        ));
                     }
                     if height > 10000 {
                         return Err(openlark_core::error::LarkAPIError::IllegalParamError(
@@ -527,7 +536,9 @@ impl UpdateFloatImageRequestBuilder {
             (Some(_), Some(_), Some(float_image_id)) => {
                 // 验证浮动图片ID
                 if float_image_id.is_empty() {
-                    return Err(openlark_core::error::LarkAPIError::IllegalParamError("浮动图片ID不能为空".to_string()));
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError(
+                        "浮动图片ID不能为空".to_string(),
+                    ));
                 }
 
                 // 验证更新字段
@@ -541,10 +552,9 @@ impl UpdateFloatImageRequestBuilder {
                 let valid_fields = ["range", "width", "height", "offsetX", "offsetY"];
                 for field in &self.fields {
                     if !valid_fields.contains(&field.as_str()) {
-                        return Err(openlark_core::error::LarkAPIError::IllegalParamError(format!(
-                            "无效的更新字段: {}",
-                            field
-                        )));
+                        return Err(openlark_core::error::LarkAPIError::IllegalParamError(
+                            format!("无效的更新字段: {}", field),
+                        ));
                     }
                 }
 
@@ -701,10 +711,14 @@ impl QueryFloatImagesRequestBuilder {
                 // 验证页大小
                 if let Some(page_size) = self.page_size {
                     if page_size <= 0 {
-                        return Err(openlark_core::error::LarkAPIError::IllegalParamError("页大小必须大于0".to_string()));
+                        return Err(openlark_core::error::LarkAPIError::IllegalParamError(
+                            "页大小必须大于0".to_string(),
+                        ));
                     }
                     if page_size > 100 {
-                        return Err(openlark_core::error::LarkAPIError::IllegalParamError("页大小不能超过100".to_string()));
+                        return Err(openlark_core::error::LarkAPIError::IllegalParamError(
+                            "页大小不能超过100".to_string(),
+                        ));
                     }
                 }
 
@@ -797,7 +811,9 @@ impl GetFloatImageRequestBuilder {
         ) {
             (Some(_), Some(_), Some(float_image_id)) => {
                 if float_image_id.is_empty() {
-                    return Err(openlark_core::error::LarkAPIError::IllegalParamError("浮动图片ID不能为空".to_string()));
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError(
+                        "浮动图片ID不能为空".to_string(),
+                    ));
                 }
 
                 Ok(GetFloatImageRequest {
@@ -893,7 +909,9 @@ impl DeleteFloatImageRequestBuilder {
         ) {
             (Some(_), Some(_), Some(float_image_id)) => {
                 if float_image_id.is_empty() {
-                    return Err(openlark_core::error::LarkAPIError::IllegalParamError("浮动图片ID不能为空".to_string()));
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError(
+                        "浮动图片ID不能为空".to_string(),
+                    ));
                 }
 
                 Ok(DeleteFloatImageRequest {
@@ -979,17 +997,19 @@ impl FloatImagesService {
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &url);
         api_request.body = serde_json::to_vec(request)?;
 
-        let response = Transport::<CreateFloatImageResponse>::request(api_request, &self.config, None).await?;
+        let response =
+            Transport::<CreateFloatImageResponse>::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
                 code: response.code(),
                 msg: response.msg().to_string(),
-                error: None
+                error: None,
             });
         }
 
-        Ok(response)    }
+        Ok(response)
+    }
 
     /// 更新浮动图片
     ///
@@ -1049,17 +1069,19 @@ impl FloatImagesService {
         let mut api_request = ApiRequest::with_method_and_path(Method::PATCH, &url);
         api_request.body = serde_json::to_vec(request)?;
 
-        let response = Transport::<UpdateFloatImageResponse>::request(api_request, &self.config, None).await?;
+        let response =
+            Transport::<UpdateFloatImageResponse>::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
                 code: response.code(),
                 msg: response.msg().to_string(),
-                error: None
+                error: None,
             });
         }
 
-        Ok(response)    }
+        Ok(response)
+    }
 
     /// 查询浮动图片列表
     ///
@@ -1136,14 +1158,15 @@ impl FloatImagesService {
         let api_request = ApiRequest::with_method_and_path(Method::GET, &url);
 
         // 发送请求并获取响应
-        let response = Transport::<QueryFloatImagesResponse>::request(api_request, &self.config, None).await?;
+        let response =
+            Transport::<QueryFloatImagesResponse>::request(api_request, &self.config, None).await?;
 
         // 检查响应是否成功
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
                 code: response.code(),
                 msg: response.msg().to_string(),
-                error: None
+                error: None,
             });
         }
 
@@ -1195,7 +1218,8 @@ impl FloatImagesService {
         );
 
         let mut api_request = ApiRequest::with_method_and_path(Method::GET, &endpoint);
-        api_request.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        api_request.supported_access_token_types =
+            vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         Transport::<GetFloatImageResponse>::request(api_request, &self.config, None).await
     }
@@ -1248,14 +1272,15 @@ impl FloatImagesService {
         let api_request = ApiRequest::with_method_and_path(Method::DELETE, &url);
 
         // 发送请求并获取响应
-        let response = Transport::<DeleteFloatImageResponse>::request(api_request, &self.config, None).await?;
+        let response =
+            Transport::<DeleteFloatImageResponse>::request(api_request, &self.config, None).await?;
 
         // 检查响应是否成功
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
                 code: response.code(),
                 msg: response.msg().to_string(),
-                error: None
+                error: None,
             });
         }
 
@@ -1457,13 +1482,7 @@ impl<'a> FloatImagesServiceBuilder<'a> {
 
     /// 更新所有字段（仅用于更新操作）
     pub fn update_all(self) -> Self {
-        self.fields(vec![
-            "range",
-            "width",
-            "height",
-            "offsetX",
-            "offsetY",
-        ])
+        self.fields(vec!["range", "width", "height", "offsetX", "offsetY"])
     }
 
     /// 设置更新字段列表（仅用于更新操作）

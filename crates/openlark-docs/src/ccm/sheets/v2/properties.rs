@@ -7,6 +7,7 @@
 //! - 属性变更同步
 
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -14,7 +15,6 @@ use openlark_core::{
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
-    api_req::ApiRequest,
     SDKResult,
 };
 use reqwest::Method;
@@ -136,11 +136,11 @@ impl PropertiesService {
     ///
     /// let result = service.update(&request);
     /// ```
-    pub async fn update(&self, request: &UpdatePropertiesRequest) -> SDKResult<UpdatePropertiesResponse> {
-        use openlark_core::{
-            api_req::ApiRequest,
-            http::Transport,
-        };
+    pub async fn update(
+        &self,
+        request: &UpdatePropertiesRequest,
+    ) -> SDKResult<UpdatePropertiesResponse> {
+        use openlark_core::{api_req::ApiRequest, http::Transport};
         use reqwest::Method;
 
         let endpoint = format!(
@@ -151,12 +151,15 @@ impl PropertiesService {
         let mut api_request = ApiRequest::with_method_and_path(Method::PUT, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let update_response: StandardResponse<UpdatePropertiesResponse> = Transport::request(api_request, &self.config, None).await?;
+        let update_response: StandardResponse<UpdatePropertiesResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if let Some(data) = update_response.data {
             Ok(data)
         } else {
-            Err(LarkAPIError::InvalidResponse("Missing data field".to_string()))
+            Err(LarkAPIError::InvalidResponse(
+                "Missing data field".to_string(),
+            ))
         }
     }
 

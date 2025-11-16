@@ -3,8 +3,8 @@
 //! 提供多维表格应用管理相关的数据结构，支持应用创建、复制、
 //! 元数据管理和基础信息操作。
 
-use serde::{Deserialize, Serialize};
 use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use serde::{Deserialize, Serialize};
 
 /// 创建多维表格请求
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

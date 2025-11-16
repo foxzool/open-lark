@@ -3,6 +3,7 @@
 //! 提供飞书电子表格v2版本的数据前置插入功能。
 
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -11,7 +12,6 @@ use openlark_core::{
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
-    api_req::ApiRequest,
     SDKResult,
 };
 

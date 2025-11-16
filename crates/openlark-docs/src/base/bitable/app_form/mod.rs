@@ -35,4 +35,7 @@ pub mod services;
 
 // 重新导出主要类型
 pub use models::*;
-pub use services::{AppFormService, GetFormRequestBuilder, PatchFormMetaRequestBuilder, PatchFormQuestionRequestBuilder};
+pub use services::{
+    AppFormService, GetFormRequestBuilder, PatchFormMetaRequestBuilder,
+    PatchFormQuestionRequestBuilder,
+};
