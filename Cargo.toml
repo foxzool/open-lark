@@ -6,6 +6,7 @@ members = [
     "crates/openlark-auth",
     "crates/openlark-client",
     "crates/openlark-ai",
+    "crates/openlark-communication",
     "crates/openlark-protocol",
     "crates/openlark-application",
     "crates/openlark-approval",
