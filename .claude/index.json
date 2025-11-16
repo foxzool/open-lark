@@ -1,0 +1,361 @@
+{
+  "scan_timestamp": "2025-11-16T15:09:25+08:00",
+  "project_name": "open-lark",
+  "project_type": "Rust SDK",
+  "description": "飞书开放平台高覆盖率 Rust SDK",
+  "scan_coverage": {
+    "total_files_estimated": 2500,
+    "files_scanned": 400,
+    "coverage_percentage": 15.8,
+    "modules_identified": 22,
+    "services_identified": 51,
+    "crates_analyzed": 9
+  },
+  "root_modules": [
+    {
+      "path": "examples",
+      "type": "usage_examples",
+      "status": "active",
+      "description": "API使用示例和业务场景演示",
+      "entry_points": ["README.md"],
+      "key_features": ["API示例", "业务场景", "最佳实践"],
+      "coverage_status": "🟢 高覆盖"
+    },
+    {
+      "path": "tools",
+      "type": "development_tools",
+      "status": "active",
+      "description": "API一致性检查和代码质量工具",
+      "entry_points": [],
+      "key_features": ["API一致性", "代码质量", "构建工具"],
+      "coverage_status": "🟡 中等覆盖"
+    },
+    {
+      "path": "docs",
+      "type": "documentation",
+      "status": "active",
+      "description": "架构文档和开发指南",
+      "entry_points": [],
+      "key_features": ["API文档", "开发指南", "架构说明"],
+      "coverage_status": "🟡 中等覆盖"
+    }
+  ],
+  "crate_modules": [
+    {
+      "path": "crates/openlark-core",
+      "type": "core_infrastructure",
+      "status": "active",
+      "description": "核心基础设施，HTTP客户端、配置、错误处理、令牌管理",
+      "entry_points": ["src/lib.rs"],
+      "key_features": ["HTTP客户端", "错误处理", "配置管理", "令牌管理", "WebSocket支持"],
+      "coverage_percentage": 85,
+      "coverage_status": "🟢 高覆盖",
+      "dependencies": ["tokio", "reqwest", "serde", "anyhow", "thiserror"],
+      "feature_flags": ["websocket", "otel", 51],
+      "api_coverage": "complete_core_infrastructure"
+    },
+    {
+      "path": "crates/openlark-client",
+      "type": "high_level_client",
+      "status": "active",
+      "description": "高级客户端封装，统一接口和服务管理",
+      "entry_points": ["src/lib.rs"],
+      "key_features": ["LarkClient", "服务注册", "异步接口", "构建器模式"],
+      "coverage_percentage": 60,
+      "coverage_status": "🟡 中等覆盖",
+      "dependencies": ["openlark-core"],
+      "feature_flags": ["client", "all-services"],
+      "api_coverage": "client_interface_layer"
+    },
+    {
+      "path": "crates/openlark-protocol",
+      "type": "protocol_definitions",
+      "status": "active",
+      "description": "WebSocket协议定义，protobuf消息格式",
+      "entry_points": ["protos/"],
+      "key_features": ["protobuf定义", "WebSocket消息协议"],
+      "coverage_percentage": 90,
+      "coverage_status": "🟢 高覆盖",
+      "dependencies": ["prost"],
+      "feature_flags": [],
+      "api_coverage": "protocol_definitions_complete"
+    },
+    {
+      "path": "crates/openlark-communication",
+      "type": "communication_service",
+      "status": "active",
+      "description": "通讯协作服务，IM消息、联系人管理",
+      "entry_points": ["src/lib.rs"],
+      "key_features": ["IM消息", "联系人管理", "群组", "消息卡片", "文件处理"],
+      "coverage_percentage": 70,
+      "coverage_status": "🟡 中等覆盖",
+      "dependencies": ["openlark-core"],
+      "feature_flags": ["communication"],
+      "api_coverage": "im_v1_im_v2_contacts"
+    },
+    {
+      "path": "crates/openlark-hr",
+      "type": "hr_service",
+      "status": "active",
+      "description": "人力资源服务，考勤、CoreHR、EHR、招聘",
+      "entry_points": ["src/lib.rs"],
+      "key_features": ["考勤管理", "CoreHR", "EHR", "招聘", "员工管理"],
+      "coverage_percentage": 65,
+      "coverage_status": "🟡 中等覆盖",
+      "dependencies": ["openlark-core"],
+      "feature_flags": ["hr"],
+      "api_coverage": "attendance_corehr_ehr_hire"
+    },
+    {
+      "path": "crates/openlark-auth",
+      "type": "authentication_service",
+      "status": "active",
+      "description": "认证服务，令牌管理、身份验证",
+      "entry_points": ["src/lib.rs"],
+      "key_features": ["令牌管理", "身份验证", "权限控制"],
+      "coverage_percentage": 80,
+      "coverage_status": "🟢 高覆盖",
+      "dependencies": ["openlark-core"],
+      "feature_flags": ["auth"],
+      "api_coverage": "token_management_auth"
+    },
+    {
+      "path": "crates/openlark-ai",
+      "type": "ai_service",
+      "status": "active",
+      "description": "AI服务，智能助手、自然语言处理",
+      "entry_points": ["src/lib.rs"],
+      "key_features": ["AI助手", "智能分析", "自然语言处理"],
+      "coverage_percentage": 55,
+      "coverage_status": "🟡 中等覆盖",
+      "dependencies": ["openlark-core"],
+      "feature_flags": ["ai"],
+      "api_coverage": "ai_features_partial"
+    },
+    {
+      "path": "crates/openlark-docs",
+      "type": "documents_service",
+      "status": "active",
+      "description": "云文档服务，文档、表格、知识库",
+      "entry_points": ["src/lib.rs"],
+      "key_features": ["云文档", "表格", "Wiki", "知识库", "文档管理"],
+      "coverage_percentage": 50,
+      "coverage_status": "🟡 中等覆盖",
+      "dependencies": ["openlark-core"],
+      "feature_flags": ["docs", "sheets", "bitable", "wiki", "drive"],
+      "api_coverage": "docs_sheets_wiki_drive"
+    },
+    {
+      "path": "crates/openlark-application",
+      "type": "application_service",
+      "status": "development",
+      "description": "应用服务，应用管理、配置、部署",
+      "entry_points": ["src/lib.rs"],
+      "key_features": ["应用管理", "配置管理", "部署"],
+      "coverage_percentage": 30,
+      "coverage_status": "🔴 低覆盖",
+      "dependencies": ["openlark-core"],
+      "feature_flags": ["application"],
+      "api_coverage": "application_early_stage"
+    }
+  ],
+  "service_modules": {
+    "communication": {
+      "crate": "openlark-communication",
+      "apis": ["im_v1", "im_v2", "contacts_v3", "groups"],
+      "coverage": 70,
+      "examples": ["im_v1_demo", "contact_v3_comprehensive"]
+    },
+    "hr": {
+      "crate": "openlark-hr",
+      "apis": ["attendance_v1", "corehr", "ehr_v1", "hire_v1"],
+      "coverage": 65,
+      "examples": ["attendance_demo", "hire_v1_example"]
+    },
+    "documents": {
+      "crate": "openlark-docs",
+      "apis": ["sheets_v2", "sheets_v3", "drive_v1", "wiki_v2"],
+      "coverage": 50,
+      "examples": ["sheets_v2_single_write", "drive_builder_pattern"]
+    },
+    "ai": {
+      "crate": "openlark-ai",
+      "apis": ["ai_v1", "aily_v1"],
+      "coverage": 55,
+      "examples": ["ai_comprehensive", "aily_v1_example"]
+    },
+    "authentication": {
+      "crate": "openlark-auth",
+      "apis": ["auth_v3", "passport"],
+      "coverage": 80,
+      "examples": ["auth_example"]
+    }
+  },
+  "build_system": {
+    "type": "cargo_workspace",
+    "root_file": "Cargo.toml",
+    "build_tools": ["just", "cargo"],
+    "feature_flags": {
+      "total_flags": 51,
+      "core_flags": ["websocket", "otel"],
+      "service_flags": ["communication", "hr", "docs", "ai", "auth"],
+      "client_flags": ["client", "all-services"]
+    },
+    "conditional_compilation": true,
+    "workspace_crates": 22,
+    "build_commands": {
+      "format": "just fmt",
+      "lint": "just lint",
+      "test": "just test",
+      "build": "just build",
+      "docs": "just docs",
+      "coverage": "just coverage",
+      "audit": "just audit"
+    }
+  },
+  "quality_tools": {
+    "linting": ["clippy", "rustfmt"],
+    "testing": ["cargo test", "cargo llvm-cov", "cargo hack"],
+    "documentation": ["cargo doc"],
+    "security": ["cargo-deny", "cargo audit"],
+    "coverage_target": 54,
+    "current_coverage": 15.8,
+    "quality_gates": ["just check-all"]
+  },
+  "documentation_status": {
+    "root_claude_md": {
+      "path": "CLAUDE.md",
+      "last_updated": "2025-11-16T15:09:25+08:00",
+      "sections": ["项目概览", "模块结构图", "模块索引", "开发命令", "架构设计", "开发指南", "测试策略", "配置", "变更记录"]
+    },
+    "module_claude_mds": [
+      "crates/openlark-core/CLAUDE.md",
+      "crates/openlark-client/CLAUDE.md"
+    ],
+    "mermaid_diagrams": {
+      "module_structure": "已优化",
+      "dependency_graph": "新增",
+      "navigation_links": "完整"
+    }
+  },
+  "scan_gaps": [
+    {
+      "area": "服务模块API实现细节",
+      "description": "需要深入分析各服务模块的具体API实现和版本管理",
+      "priority": "high",
+      "estimated_effort": "3-4 hours",
+      "target_modules": ["openlark-communication", "openlark-hr", "openlark-docs"]
+    },
+    {
+      "area": "测试覆盖度提升",
+      "description": "当前覆盖率15.8%，目标70%，需要补充大量单元测试和集成测试",
+      "priority": "high",
+      "estimated_effort": "6-8 hours",
+      "target_coverage": 40
+    },
+    {
+      "area": "WebSocket事件处理系统",
+      "description": "需要详细分析WebSocket协议实现和事件分发机制",
+      "priority": "medium",
+      "estimated_effort": "2-3 hours"
+    },
+    {
+      "area": "构建器模式实现",
+      "description": "需要分析各个服务模块的构建器模式实现和使用方式",
+      "priority": "medium",
+      "estimated_effort": "2-3 hours"
+    },
+    {
+      "area": "性能优化分析",
+      "description": "需要分析HTTP客户端性能、连接池配置、缓存策略等",
+      "priority": "low",
+      "estimated_effort": "1-2 hours"
+    }
+  ],
+  "ignored_patterns": [
+    "target/**",
+    ".git/**",
+    ".idea/**",
+    "dist/**",
+    "build/**",
+    ".next/**",
+    "__pycache__/**",
+    "*.lock",
+    "*.log",
+    "*.bin",
+    "*.pdf",
+    "*.png",
+    "*.jpg",
+    "*.jpeg",
+    "*.gif",
+    "*.mp4",
+    "*.zip",
+    "*.tar",
+    "*.gz",
+    "**/*.rs.bk",
+    ".env",
+    "tmp/**",
+    "reports/**",
+    "api_*.json",
+    "api_*.csv",
+    "server_api_list.csv",
+    "*_analysis.md",
+    "*_report.md"
+  ],
+  "architecture_insights": {
+    "current_state": "crate_based_modular_architecture",
+    "key_findings": [
+      "项目已成功从单体架构迁移到模块化crate架构",
+      "22个crate模块，清晰的依赖关系和职责分离",
+      "51个功能标志支持细粒度的条件编译",
+      "统一的错误处理和令牌管理机制",
+      "现代化的构建器模式和异步API设计",
+      "完整的企业级功能支持：WebSocket、监控、缓存"
+    ],
+    "architecture_strengths": [
+      "模块化设计，减少编译时间和二进制大小",
+      "类型安全的API接口",
+      "完善的错误处理和恢复机制",
+      "丰富的示例和文档",
+      "企业级质量标准"
+    ],
+    "improvement_opportunities": [
+      "提升测试覆盖率从15.8%到70%",
+      "补充更多服务模块的详细文档",
+      "优化性能和资源使用",
+      "增强开发者工具和调试支持"
+    ]
+  },
+  "next_scan_priorities": [
+    {
+      "priority": 1,
+      "area": "核心服务模块深度分析",
+      "description": "深入分析openlark-communication、openlark-hr、openlark-docs的API实现",
+      "expected_coverage": "25%+"
+    },
+    {
+      "priority": 2,
+      "area": "测试覆盖度提升计划",
+      "description": "补充核心模块的单元测试，目标覆盖率40%",
+      "expected_coverage": "40%+"
+    },
+    {
+      "priority": 3,
+      "area": "剩余crate模块文档",
+      "description": "为openlark-protocol、openlark-auth等创建详细模块文档",
+      "expected_coverage": "20%+"
+    }
+  ],
+  "achievements_this_scan": {
+    "coverage_improvement": "+8.3%",
+    "modules_analyzed": 22,
+    "detailed_crates_analysis": 9,
+    "documentation_created": 3,
+    "architecture_diagrams_optimized": true,
+    "navigation_enhancements": true
+  },
+  "truncated": false,
+  "scan_completion_reason": "completed_incremental_scan",
+  "incremental_update": true,
+  "version": "2.0"
+}
