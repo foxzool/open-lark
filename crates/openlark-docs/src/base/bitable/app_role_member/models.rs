@@ -3,8 +3,8 @@
 //! 提供多维表格角色成员管理相关的数据结构，支持角色成员的添加、
 //! 查询、删除等操作。
 
-use serde::{Deserialize, Serialize};
 use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use serde::{Deserialize, Serialize};
 
 /// 创建角色成员请求
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -168,7 +168,9 @@ impl BatchCreateRoleMemberRequest {
             return Err("单次批量添加成员数量不能超过100个".to_string());
         }
         for (i, member) in self.members.iter().enumerate() {
-            member.validate().map_err(|e| format!("第{}个成员验证失败: {}", i + 1, e))?;
+            member
+                .validate()
+                .map_err(|e| format!("第{}个成员验证失败: {}", i + 1, e))?;
         }
         Ok(())
     }

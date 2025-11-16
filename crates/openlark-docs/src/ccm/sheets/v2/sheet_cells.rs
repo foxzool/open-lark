@@ -2,8 +2,6 @@
 //!
 //! 提供飞书电子表格v2版本的单元格内容更新功能，包括：
 //! - 单个单元格内容更新
-use serde_json::Value;
-use std::collections::HashMap;
 //! - 支持多种数据类型（文本、数字、布尔值、公式等）
 //! - Excel风格的单元格坐标定位系统
 //! - 企业级错误处理和数据验证
@@ -15,6 +13,8 @@ use std::collections::HashMap;
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
+use serde_json::Value;
+use std::collections::HashMap;
 
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
@@ -22,6 +22,7 @@ use serde::{Deserialize, Serialize};
 use openlark_core::endpoints_original::Endpoints;
 use openlark_core::impl_executable_builder_owned;
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -29,7 +30,7 @@ use openlark_core::{
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
-    api_req::ApiRequest, SDKResult,
+    SDKResult,
 };
 
 /// 单元格值枚举

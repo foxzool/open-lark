@@ -7,13 +7,14 @@
 //! - 筛选状态和数据同步
 
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
-    api_req::ApiRequest, SDKResult,
+    SDKResult,
 };
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
@@ -1496,7 +1497,8 @@ mod tests {
         let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::POST, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let response: BaseResponse<QueryFilterViewsResponse> = Transport::request(api_request, &self.config, None).await?;
+        let response: BaseResponse<QueryFilterViewsResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
@@ -1506,9 +1508,11 @@ mod tests {
             });
         }
 
-        response
-            .data
-            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
+        response.data.ok_or_else(|| LarkAPIError::APIError {
+            code: -1,
+            msg: "响应数据为空".to_string(),
+            error: None,
+        })
     }
 
     /// 创建筛选视图条件
@@ -1532,7 +1536,8 @@ mod tests {
         let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::POST, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let response: BaseResponse<CreateFilterViewConditionResponse> = Transport::request(api_request, &self.config, None).await?;
+        let response: BaseResponse<CreateFilterViewConditionResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
@@ -1542,9 +1547,11 @@ mod tests {
             });
         }
 
-        response
-            .data
-            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
+        response.data.ok_or_else(|| LarkAPIError::APIError {
+            code: -1,
+            msg: "响应数据为空".to_string(),
+            error: None,
+        })
     }
 
     /// 更新筛选视图条件
@@ -1568,7 +1575,8 @@ mod tests {
         let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::PUT, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let response: BaseResponse<UpdateFilterViewConditionResponse> = Transport::request(api_request, &self.config, None).await?;
+        let response: BaseResponse<UpdateFilterViewConditionResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
@@ -1578,9 +1586,11 @@ mod tests {
             });
         }
 
-        response
-            .data
-            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
+        response.data.ok_or_else(|| LarkAPIError::APIError {
+            code: -1,
+            msg: "响应数据为空".to_string(),
+            error: None,
+        })
     }
 
     /// 删除筛选视图条件
@@ -1603,7 +1613,8 @@ mod tests {
 
         let api_request = ApiRequest::with_method_and_path(reqwest::Method::DELETE, &endpoint);
 
-        let response: BaseResponse<DeleteFilterViewConditionResponse> = Transport::request(api_request, &self.config, None).await?;
+        let response: BaseResponse<DeleteFilterViewConditionResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
@@ -1613,9 +1624,11 @@ mod tests {
             });
         }
 
-        response
-            .data
-            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
+        response.data.ok_or_else(|| LarkAPIError::APIError {
+            code: -1,
+            msg: "响应数据为空".to_string(),
+            error: None,
+        })
     }
 }
 

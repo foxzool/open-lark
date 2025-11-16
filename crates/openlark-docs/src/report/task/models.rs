@@ -6,8 +6,8 @@
 //! - 任务执行历史和结果信息
 //! - 完整的序列化和验证支持
 
-use serde::{Deserialize, Serialize};
 use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use serde::{Deserialize, Serialize};
 
 /// 查询报告任务请求
 #[derive(Debug, Clone, Serialize, PartialEq)]
@@ -195,9 +195,6 @@ impl ApiResponseTrait for QueryTaskResponse {
 
 impl Default for QueryTaskResponse {
     fn default() -> Self {
-        Self {
-            data: None,
-        }
+        Self { data: None }
     }
 }
-

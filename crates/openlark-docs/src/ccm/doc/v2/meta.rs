@@ -2,19 +2,12 @@
 //!
 //! 提供获取旧版文档元数据的功能。
 
-use std::collections::HashMap;
 use openlark_core::{
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
+    api_req::ApiRequest, config::Config, constants::AccessTokenType, http::Transport, SDKResult,
 };
+use std::collections::HashMap;
 
-use super::{
-    requests::GetDocMetaV2Request,
-    responses::GetDocMetaV2Response,
-};
+use super::{requests::GetDocMetaV2Request, responses::GetDocMetaV2Response};
 
 /// 文档元信息服务
 #[derive(Clone)]
@@ -171,10 +164,7 @@ impl GetDocMetaBuilder {
     ///
     /// # 错误
     /// - 如果缺少必需参数（如doc_token），会返回错误
-    pub async fn execute(
-        self,
-        service: &MetaDocService,
-    ) -> SDKResult<GetDocMetaV2Response> {
+    pub async fn execute(self, service: &MetaDocService) -> SDKResult<GetDocMetaV2Response> {
         let doc_token = self.doc_token.ok_or_else(|| {
             openlark_core::error::LarkAPIError::illegal_param("文档Token是必需的")
         })?;

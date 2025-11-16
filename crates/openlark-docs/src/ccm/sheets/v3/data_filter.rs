@@ -7,17 +7,17 @@
 //! - 过滤器状态管理
 
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, ResponseFormat},
     error::LarkAPIError,
     http::Transport,
-    api_req::ApiRequest,
 };
 
 // 使用统一类型定义
 use super::Range;
 
-use serde::{Deserialize, Serialize};
 use reqwest::Method;
+use serde::{Deserialize, Serialize};
 
 // v3模块核心类型定义
 pub type SpreadsheetToken = String;
@@ -463,20 +463,23 @@ impl DataFilterService {
         api_request.body = serde_json::to_vec(request)?;
 
         // 发送请求并获取响应
-        let response = Transport::<SetDataFilterResponse>::request(api_request, &self.config, None).await?;
+        let response =
+            Transport::<SetDataFilterResponse>::request(api_request, &self.config, None).await?;
 
         // 检查响应是否成功
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
                 code: response.code(),
                 msg: response.msg().to_string(),
-                error: None
+                error: None,
             });
         }
 
-        response
-            .data
-            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
+        response.data.ok_or_else(|| LarkAPIError::APIError {
+            code: -1,
+            msg: "响应数据为空".to_string(),
+            error: None,
+        })
     }
 
     /// 删除数据过滤器
@@ -520,20 +523,23 @@ impl DataFilterService {
         let api_request = ApiRequest::with_method_and_path(Method::DELETE, &url_with_params);
 
         // 发送请求并获取响应
-        let response = Transport::<DeleteDataFilterResponse>::request(api_request, &self.config, None).await?;
+        let response =
+            Transport::<DeleteDataFilterResponse>::request(api_request, &self.config, None).await?;
 
         // 检查响应是否成功
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
                 code: response.code(),
                 msg: response.msg().to_string(),
-                error: None
+                error: None,
             });
         }
 
-        response
-            .data
-            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
+        response.data.ok_or_else(|| LarkAPIError::APIError {
+            code: -1,
+            msg: "响应数据为空".to_string(),
+            error: None,
+        })
     }
 
     /// 设置数据过滤器构建器

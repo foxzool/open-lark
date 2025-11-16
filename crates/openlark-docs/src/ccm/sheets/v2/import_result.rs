@@ -7,6 +7,7 @@
 //! - 进度跟踪
 
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -14,7 +15,6 @@ use openlark_core::{
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
-    api_req::ApiRequest,
     SDKResult,
 };
 use reqwest::Method;
@@ -126,11 +126,11 @@ impl ImportResultService {
     ///
     /// let result = service.get_result(&request);
     /// ```
-    pub async fn get_result(&self, request: &ImportResultRequest) -> SDKResult<ImportResultResponse> {
-        use openlark_core::{
-            api_req::ApiRequest,
-            http::Transport,
-        };
+    pub async fn get_result(
+        &self,
+        request: &ImportResultRequest,
+    ) -> SDKResult<ImportResultResponse> {
+        use openlark_core::{api_req::ApiRequest, http::Transport};
         use reqwest::Method;
 
         let endpoint = format!(
@@ -139,12 +139,15 @@ impl ImportResultService {
         );
 
         let api_request = ApiRequest::with_method_and_path(Method::GET, &endpoint);
-        let result_response: StandardResponse<ImportResultResponse> = Transport::request(api_request, &self.config, None).await?;
+        let result_response: StandardResponse<ImportResultResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if let Some(data) = result_response.data {
             Ok(data)
         } else {
-            Err(LarkAPIError::InvalidResponse("Missing data field".to_string()))
+            Err(LarkAPIError::InvalidResponse(
+                "Missing data field".to_string(),
+            ))
         }
     }
 
@@ -188,7 +191,8 @@ impl ImportResultService {
                 }
                 ImportStatus::Processing => {
                     if attempt < max_attempts {
-                        tokio::time::sleep(tokio::time::Duration::from_secs(interval_seconds)).await;
+                        tokio::time::sleep(tokio::time::Duration::from_secs(interval_seconds))
+                            .await;
                     }
                 }
             }
@@ -326,6 +330,9 @@ mod tests {
 
         let parsed_data = parsed.unwrap();
         assert_eq!(parsed_data.status, ImportStatus::Success);
-        assert_eq!(parsed_data.spreadsheet_token, Some("spreadsheet_token_123".to_string()));
+        assert_eq!(
+            parsed_data.spreadsheet_token,
+            Some("spreadsheet_token_123".to_string())
+        );
     }
 }

@@ -7,13 +7,14 @@
 //! - 支持水平、垂直和矩形区域合并
 
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
-    api_req::ApiRequest, SDKResult,
+    SDKResult,
 };
 use reqwest::Method;
 use serde::{Deserialize, Serialize};

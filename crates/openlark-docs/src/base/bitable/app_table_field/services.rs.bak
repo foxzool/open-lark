@@ -2,14 +2,19 @@
 //!
 //! 提供多维表格字段管理相关的API服务，包括：
 //! - 字段的创建、查询、更新、删除
-//! - 字段类型配置和属性设置
-//! - 完整的错误处理和参数验证
 use serde_json::Value;
 use std::collections::HashMap;
+//! - 字段类型配置和属性设置
+//! - 完整的错误处理和参数验证
+
 
 use openlark_core::{
-    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
-    http::Transport, SDKResult,
+    error::LarkAPIError,
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    api_req::ApiRequest,
+    SDKResult,
 };
 
 use super::models::*;
@@ -35,22 +40,13 @@ impl AppTableFieldService {
     ///
     /// # 返回
     /// 返回新创建的字段信息
-    pub async fn create_field(
-        &self,
-        request: &CreateFieldRequest,
-    ) -> SDKResult<CreateFieldResponse> {
+    pub async fn create_field(&self, request: &CreateFieldRequest) -> SDKResult<CreateFieldResponse> {
         // 验证请求参数
-        request
-            .validate()
+        request.validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!(
-            "新增字段: app_token={}, table_id={}, field_name={}, field_type={}",
-            request.app_token,
-            request.table_id,
-            request.field_name,
-            request.field_type
-        );
+        log::info!("新增字段: app_token={}, table_id={}, field_name={}, field_type={}",
+                  request.app_token, request.table_id, request.field_name, request.field_type);
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -70,10 +66,7 @@ impl AppTableFieldService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!(
-                "/open-apis/bitable/v1/apps/{}/tables/{}/fields",
-                request.app_token, request.table_id
-            ),
+            api_path: format!("/open-apis/bitable/v1/apps/{}/tables/{}/fields", request.app_token, request.table_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -84,12 +77,8 @@ impl AppTableFieldService {
         let resp = Transport::<CreateFieldResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!(
-            "新增字段完成: app_token={}, table_id={}, field_name={}",
-            request.app_token,
-            request.table_id,
-            request.field_name
-        );
+        log::info!("新增字段完成: app_token={}, table_id={}, field_name={}",
+                  request.app_token, request.table_id, request.field_name);
 
         Ok(response)
     }
@@ -103,21 +92,13 @@ impl AppTableFieldService {
     ///
     /// # 返回
     /// 返回更新后的字段信息
-    pub async fn update_field(
-        &self,
-        request: &UpdateFieldRequest,
-    ) -> SDKResult<UpdateFieldResponse> {
+    pub async fn update_field(&self, request: &UpdateFieldRequest) -> SDKResult<UpdateFieldResponse> {
         // 验证请求参数
-        request
-            .validate()
+        request.validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!(
-            "更新字段: app_token={}, table_id={}, field_id={}",
-            request.app_token,
-            request.table_id,
-            request.field_id
-        );
+        log::info!("更新字段: app_token={}, table_id={}, field_id={}",
+                  request.app_token, request.table_id, request.field_id);
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -138,10 +119,7 @@ impl AppTableFieldService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
-            api_path: format!(
-                "/open-apis/bitable/v1/apps/{}/tables/{}/fields/{}",
-                request.app_token, request.table_id, request.field_id
-            ),
+            api_path: format!("/open-apis/bitable/v1/apps/{}/tables/{}/fields/{}", request.app_token, request.table_id, request.field_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -152,12 +130,8 @@ impl AppTableFieldService {
         let resp = Transport::<UpdateFieldResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!(
-            "更新字段完成: app_token={}, table_id={}, field_id={}",
-            request.app_token,
-            request.table_id,
-            request.field_id
-        );
+        log::info!("更新字段完成: app_token={}, table_id={}, field_id={}",
+                  request.app_token, request.table_id, request.field_id);
 
         Ok(response)
     }
@@ -171,29 +145,18 @@ impl AppTableFieldService {
     ///
     /// # 返回
     /// 返回删除操作的结果
-    pub async fn delete_field(
-        &self,
-        request: &DeleteFieldRequest,
-    ) -> SDKResult<DeleteFieldResponse> {
+    pub async fn delete_field(&self, request: &DeleteFieldRequest) -> SDKResult<DeleteFieldResponse> {
         // 验证请求参数
-        request
-            .validate()
+        request.validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!(
-            "删除字段: app_token={}, table_id={}, field_id={}",
-            request.app_token,
-            request.table_id,
-            request.field_id
-        );
+        log::info!("删除字段: app_token={}, table_id={}, field_id={}",
+                  request.app_token, request.table_id, request.field_id);
 
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
-            api_path: format!(
-                "/open-apis/bitable/v1/apps/{}/tables/{}/fields/{}",
-                request.app_token, request.table_id, request.field_id
-            ),
+            api_path: format!("/open-apis/bitable/v1/apps/{}/tables/{}/fields/{}", request.app_token, request.table_id, request.field_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params: HashMap::new(),
@@ -204,12 +167,8 @@ impl AppTableFieldService {
         let resp = Transport::<DeleteFieldResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!(
-            "删除字段完成: app_token={}, table_id={}, field_id={}",
-            request.app_token,
-            request.table_id,
-            request.field_id
-        );
+        log::info!("删除字段完成: app_token={}, table_id={}, field_id={}",
+                  request.app_token, request.table_id, request.field_id);
 
         Ok(response)
     }
@@ -225,15 +184,10 @@ impl AppTableFieldService {
     /// 返回字段列表
     pub async fn list_fields(&self, request: &ListFieldsRequest) -> SDKResult<ListFieldsResponse> {
         // 验证请求参数
-        request
-            .validate()
+        request.validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!(
-            "列出字段: app_token={}, table_id={}",
-            request.app_token,
-            request.table_id
-        );
+        log::info!("列出字段: app_token={}, table_id={}", request.app_token, request.table_id);
 
         // 构建查询参数
         let mut query_params = HashMap::new();
@@ -248,10 +202,7 @@ impl AppTableFieldService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!(
-                "/open-apis/bitable/v1/apps/{}/tables/{}/fields",
-                request.app_token, request.table_id
-            ),
+            api_path: format!("/open-apis/bitable/v1/apps/{}/tables/{}/fields", request.app_token, request.table_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params,
@@ -262,12 +213,10 @@ impl AppTableFieldService {
         let resp = Transport::<ListFieldsResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!(
-            "列出字段完成: app_token={}, table_id={}, count={}",
-            request.app_token,
-            request.table_id,
-            response.fields.as_ref().map(|f| f.len()).unwrap_or(0)
-        );
+        log::info!("列出字段完成: app_token={}, table_id={}, count={}",
+                  request.app_token,
+                  request.table_id,
+                  response.fields.as_ref().map(|f| f.len()).unwrap_or(0));
 
         Ok(response)
     }
@@ -279,12 +228,7 @@ pub struct CreateFieldRequestBuilder {
 }
 
 impl CreateFieldRequestBuilder {
-    pub fn new(
-        app_token: impl Into<String>,
-        table_id: impl Into<String>,
-        field_name: impl Into<String>,
-        field_type: impl Into<String>,
-    ) -> Self {
+    pub fn new(app_token: impl Into<String>, table_id: impl Into<String>, field_name: impl Into<String>, field_type: impl Into<String>) -> Self {
         Self {
             request: CreateFieldRequest {
                 app_token: app_token.into(),
@@ -323,11 +267,7 @@ pub struct UpdateFieldRequestBuilder {
 }
 
 impl UpdateFieldRequestBuilder {
-    pub fn new(
-        app_token: impl Into<String>,
-        table_id: impl Into<String>,
-        field_id: impl Into<String>,
-    ) -> Self {
+    pub fn new(app_token: impl Into<String>, table_id: impl Into<String>, field_id: impl Into<String>) -> Self {
         Self {
             request: UpdateFieldRequest {
                 app_token: app_token.into(),

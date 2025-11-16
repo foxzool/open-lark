@@ -2,19 +2,15 @@
 //!
 //! 提供多维表格数据表管理相关的API服务，包括：
 //! - 数据表的创建、查询、更新、删除
-use serde_json::Value;
-use std::collections::HashMap;
 //! - 批量操作支持
 //! - 完整的错误处理和参数验证
 
+use serde_json::Value;
+use std::collections::HashMap;
 
 use openlark_core::{
-    error::LarkAPIError,
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
+    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    http::Transport, SDKResult,
 };
 
 use super::models::*;
@@ -40,12 +36,20 @@ impl AppTableService {
     ///
     /// # 返回
     /// 返回新创建的数据表信息
-    pub async fn create_table(&self, request: &CreateTableRequest) -> SDKResult<CreateTableResponse> {
+    pub async fn create_table(
+        &self,
+        request: &CreateTableRequest,
+    ) -> SDKResult<CreateTableResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("新增数据表: app_token={}, name={}", request.app_token, request.name);
+        log::info!(
+            "新增数据表: app_token={}, name={}",
+            request.app_token,
+            request.name
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -75,7 +79,11 @@ impl AppTableService {
         let resp = Transport::<CreateTableResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("新增数据表完成: app_token={}, name={}", request.app_token, request.name);
+        log::info!(
+            "新增数据表完成: app_token={}, name={}",
+            request.app_token,
+            request.name
+        );
 
         Ok(response)
     }
@@ -89,12 +97,20 @@ impl AppTableService {
     ///
     /// # 返回
     /// 返回创建的数据表信息列表
-    pub async fn batch_create_table(&self, request: &BatchCreateTableRequest) -> SDKResult<BatchCreateTableResponse> {
+    pub async fn batch_create_table(
+        &self,
+        request: &BatchCreateTableRequest,
+    ) -> SDKResult<BatchCreateTableResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("批量新增数据表: app_token={}, count={}", request.app_token, request.tables.len());
+        log::info!(
+            "批量新增数据表: app_token={}, count={}",
+            request.app_token,
+            request.tables.len()
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -103,7 +119,10 @@ impl AppTableService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/tables/batch_create", request.app_token),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/tables/batch_create",
+                request.app_token
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -111,7 +130,8 @@ impl AppTableService {
         };
 
         // 发送请求
-        let resp = Transport::<BatchCreateTableResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<BatchCreateTableResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!("批量新增数据表完成: app_token={}", request.app_token);
@@ -128,12 +148,20 @@ impl AppTableService {
     ///
     /// # 返回
     /// 返回更新后的数据表信息
-    pub async fn update_table(&self, request: &UpdateTableRequest) -> SDKResult<UpdateTableResponse> {
+    pub async fn update_table(
+        &self,
+        request: &UpdateTableRequest,
+    ) -> SDKResult<UpdateTableResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("更新数据表: app_token={}, table_id={}", request.app_token, request.table_id);
+        log::info!(
+            "更新数据表: app_token={}, table_id={}",
+            request.app_token,
+            request.table_id
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -151,7 +179,10 @@ impl AppTableService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/tables/{}", request.app_token, request.table_id),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/tables/{}",
+                request.app_token, request.table_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -162,7 +193,11 @@ impl AppTableService {
         let resp = Transport::<UpdateTableResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("更新数据表完成: app_token={}, table_id={}", request.app_token, request.table_id);
+        log::info!(
+            "更新数据表完成: app_token={}, table_id={}",
+            request.app_token,
+            request.table_id
+        );
 
         Ok(response)
     }
@@ -178,7 +213,8 @@ impl AppTableService {
     /// 返回数据表列表
     pub async fn list_tables(&self, request: &ListTablesRequest) -> SDKResult<ListTablesResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
         log::info!("列出数据表: app_token={}", request.app_token);
@@ -207,9 +243,11 @@ impl AppTableService {
         let resp = Transport::<ListTablesResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("列出数据表完成: app_token={}, count={}",
-                  request.app_token,
-                  response.tables.as_ref().map(|t| t.len()).unwrap_or(0));
+        log::info!(
+            "列出数据表完成: app_token={}, count={}",
+            request.app_token,
+            response.tables.as_ref().map(|t| t.len()).unwrap_or(0)
+        );
 
         Ok(response)
     }
@@ -223,17 +261,28 @@ impl AppTableService {
     ///
     /// # 返回
     /// 返回删除操作的结果
-    pub async fn delete_table(&self, request: &DeleteTableRequest) -> SDKResult<DeleteTableResponse> {
+    pub async fn delete_table(
+        &self,
+        request: &DeleteTableRequest,
+    ) -> SDKResult<DeleteTableResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("删除数据表: app_token={}, table_id={}", request.app_token, request.table_id);
+        log::info!(
+            "删除数据表: app_token={}, table_id={}",
+            request.app_token,
+            request.table_id
+        );
 
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/tables/{}", request.app_token, request.table_id),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/tables/{}",
+                request.app_token, request.table_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params: HashMap::new(),
@@ -244,7 +293,11 @@ impl AppTableService {
         let resp = Transport::<DeleteTableResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("删除数据表完成: app_token={}, table_id={}", request.app_token, request.table_id);
+        log::info!(
+            "删除数据表完成: app_token={}, table_id={}",
+            request.app_token,
+            request.table_id
+        );
 
         Ok(response)
     }
@@ -258,12 +311,20 @@ impl AppTableService {
     ///
     /// # 返回
     /// 返回批量删除的结果
-    pub async fn batch_delete_table(&self, request: &BatchDeleteTableRequest) -> SDKResult<BatchDeleteTableResponse> {
+    pub async fn batch_delete_table(
+        &self,
+        request: &BatchDeleteTableRequest,
+    ) -> SDKResult<BatchDeleteTableResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("批量删除数据表: app_token={}, count={}", request.app_token, request.table_ids.len());
+        log::info!(
+            "批量删除数据表: app_token={}, count={}",
+            request.app_token,
+            request.table_ids.len()
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -272,7 +333,10 @@ impl AppTableService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/tables/batch_delete", request.app_token),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/tables/batch_delete",
+                request.app_token
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -280,7 +344,8 @@ impl AppTableService {
         };
 
         // 发送请求
-        let resp = Transport::<BatchDeleteTableResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<BatchDeleteTableResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!("批量删除数据表完成: app_token={}", request.app_token);

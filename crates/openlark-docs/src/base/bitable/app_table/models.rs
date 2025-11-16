@@ -3,8 +3,8 @@
 //! 提供多维表格数据表管理相关的数据结构，支持数据表的创建、
 //! 查询、更新、删除等操作。
 
-use serde::{Deserialize, Serialize};
 use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use serde::{Deserialize, Serialize};
 
 /// 新增一个数据表请求
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -81,7 +81,9 @@ impl BatchCreateTableRequest {
             return Err("单次批量创建数据表数量不能超过50个".to_string());
         }
         for (i, table) in self.tables.iter().enumerate() {
-            table.validate().map_err(|e| format!("第{}个数据表验证失败: {}", i + 1, e))?;
+            table
+                .validate()
+                .map_err(|e| format!("第{}个数据表验证失败: {}", i + 1, e))?;
         }
         Ok(())
     }

@@ -1,10 +1,3 @@
-#![allow(dead_code)]
-#![allow(unused_variables)]
-#![allow(unused_imports)]
-#![allow(unused_mut)]
-#![allow(non_snake_case)]
-#![allow(clippy::too_many_arguments)]
-#![allow(clippy::module_inception)]
 //! Cloud Docs Drive v1服务模块
 //!
 //! 云盘文件管理服务，提供文件和文件夹的增删改查、权限管理、
@@ -14,6 +7,14 @@
 //! - 查询异步任务执行状态
 //! - 支持任务进度跟踪
 //! - 错误信息获取和处理
+
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
+#![allow(non_snake_case)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::module_inception)]
 
 use openlark_core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},

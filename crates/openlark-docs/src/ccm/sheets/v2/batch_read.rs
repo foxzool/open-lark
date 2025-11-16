@@ -2,7 +2,6 @@
 //!
 //! 提供飞书电子表格v2版本的批量范围读取功能，包括：
 //! - 一次性读取多个单元格范围
-use serde_json::Value;
 //! - 支持Excel风格的范围格式
 //! - 高效的批量数据获取
 //! - 企业级错误处理和数据验证
@@ -17,10 +16,12 @@ use serde_json::Value;
 
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 
 use openlark_core::endpoints_original::Endpoints;
 use openlark_core::impl_executable_builder_owned;
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -28,7 +29,7 @@ use openlark_core::{
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
-    api_req::ApiRequest, SDKResult,
+    SDKResult,
 };
 
 /// 单个值范围响应

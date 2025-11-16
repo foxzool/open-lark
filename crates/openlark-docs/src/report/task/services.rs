@@ -2,19 +2,14 @@
 //!
 //! 提供报告任务管理相关的API服务，包括：
 //! - 任务查询和过滤
-use std::collections::HashMap;
 //! - 任务状态跟踪
 //! - 任务执行历史
 //! - 完整的错误处理和参数验证
-
+use std::collections::HashMap;
 
 use openlark_core::{
-    error::LarkAPIError,
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
+    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    http::Transport, SDKResult,
 };
 
 use super::models::*;
@@ -42,11 +37,16 @@ impl TaskService {
     /// 返回报告任务列表数据
     pub async fn query_task(&self, request: &QueryTaskRequest) -> SDKResult<QueryTaskResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("查询报告任务: task_type={:?}, status={:?}, page_size={:?}",
-                  request.task_type, request.status, request.page_size);
+        log::info!(
+            "查询报告任务: task_type={:?}, status={:?}, page_size={:?}",
+            request.task_type,
+            request.status,
+            request.page_size
+        );
 
         // 构建查询参数
         let mut query_params = HashMap::new();
@@ -93,13 +93,11 @@ impl TaskService {
         let resp = Transport::<QueryTaskResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("查询报告任务完成: total={}, has_more={}",
-                  response.data.as_ref()
-                      .map(|d| d.total)
-                      .unwrap_or(0),
-                  response.data.as_ref()
-                      .map(|d| d.has_more)
-                      .unwrap_or(false));
+        log::info!(
+            "查询报告任务完成: total={}, has_more={}",
+            response.data.as_ref().map(|d| d.total).unwrap_or(0),
+            response.data.as_ref().map(|d| d.has_more).unwrap_or(false)
+        );
 
         Ok(response)
     }

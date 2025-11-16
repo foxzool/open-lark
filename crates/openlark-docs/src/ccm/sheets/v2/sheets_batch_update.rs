@@ -2,13 +2,14 @@
 //!
 //! 提供SHEETS v2工作表批量更新功能，支持：
 //! - 批量更新工作表属性
-use serde_json::Value;
 //! - 添加和删除工作表
 //! - 修改工作表标题和索引
 //! - 设置工作表颜色和隐藏状态
 //! - 调整工作表顺序
+use serde_json::Value;
 
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -17,7 +18,6 @@ use openlark_core::{
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
-    api_req::ApiRequest,
     SDKResult,
 };
 

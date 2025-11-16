@@ -30,8 +30,15 @@ pub mod card;
 pub mod card_element;
 
 // 重新导出主要类型
-pub use card::{CardService, CreateCardRequestBuilder, UpdateCardRequestBuilder, UpdateCardSettingsRequestBuilder, BatchUpdateCardRequestBuilder, ConvertCardIdRequestBuilder};
-pub use card_element::{CardElementService, CreateCardElementRequestBuilder, UpdateCardElementRequestBuilder, PatchCardElementRequestBuilder, UpdateCardElementContentRequestBuilder, DeleteCardElementRequestBuilder};
+pub use card::{
+    BatchUpdateCardRequestBuilder, CardService, ConvertCardIdRequestBuilder,
+    CreateCardRequestBuilder, UpdateCardRequestBuilder, UpdateCardSettingsRequestBuilder,
+};
+pub use card_element::{
+    CardElementService, CreateCardElementRequestBuilder, DeleteCardElementRequestBuilder,
+    PatchCardElementRequestBuilder, UpdateCardElementContentRequestBuilder,
+    UpdateCardElementRequestBuilder,
+};
 
 /// 卡片组件服务
 #[derive(Debug, Clone)]

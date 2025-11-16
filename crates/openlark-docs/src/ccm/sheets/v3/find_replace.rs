@@ -6,9 +6,7 @@
 //! - 范围限制和匹配选项
 //! - 批量查找替换操作
 
-use openlark_core::{
-    error::LarkAPIError,
-};
+use openlark_core::error::LarkAPIError;
 
 // 使用统一类型定义
 use super::Range;
@@ -652,25 +650,25 @@ impl FindReplaceService {
     /// let response = service.find(&request).await?;
     /// println!("找到 {} 个匹配项", response.total_matches);
     /// ```
-    pub async fn find(&self, request: &FindRequest) -> openlark_core::error::SDKResult<FindResponse> {
+    pub async fn find(
+        &self,
+        request: &FindRequest,
+    ) -> openlark_core::error::SDKResult<FindResponse> {
         use openlark_core::{
-            api_req::ApiRequest,
-            http::Transport,
-            api_resp::BaseResponse,
-            error::LarkAPIError,
+            api_req::ApiRequest, api_resp::BaseResponse, error::LarkAPIError, http::Transport,
         };
         use reqwest::Method;
 
         let endpoint = format!(
             "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/find",
-            request.spreadsheet_token,
-            request.sheet_id
+            request.spreadsheet_token, request.sheet_id
         );
 
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let response: BaseResponse<FindResponse> = Transport::request(api_request, &self.config, None).await?;
+        let response: BaseResponse<FindResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
@@ -680,13 +678,11 @@ impl FindReplaceService {
             });
         }
 
-        response
-            .data
-            .ok_or_else(|| LarkAPIError::APIError {
-                code: -1,
-                msg: "响应数据为空".to_string(),
-                error: None,
-            })
+        response.data.ok_or_else(|| LarkAPIError::APIError {
+            code: -1,
+            msg: "响应数据为空".to_string(),
+            error: None,
+        })
     }
 
     /// 替换文本
@@ -727,23 +723,20 @@ impl FindReplaceService {
         request: &ReplaceRequest,
     ) -> openlark_core::error::SDKResult<ReplaceResponse> {
         use openlark_core::{
-            api_req::ApiRequest,
-            http::Transport,
-            api_resp::BaseResponse,
-            error::LarkAPIError,
+            api_req::ApiRequest, api_resp::BaseResponse, error::LarkAPIError, http::Transport,
         };
         use reqwest::Method;
 
         let endpoint = format!(
             "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/replace",
-            request.spreadsheet_token,
-            request.sheet_id
+            request.spreadsheet_token, request.sheet_id
         );
 
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let response: BaseResponse<ReplaceResponse> = Transport::request(api_request, &self.config, None).await?;
+        let response: BaseResponse<ReplaceResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
@@ -753,13 +746,11 @@ impl FindReplaceService {
             });
         }
 
-        response
-            .data
-            .ok_or_else(|| LarkAPIError::APIError {
-                code: -1,
-                msg: "响应数据为空".to_string(),
-                error: None,
-            })
+        response.data.ok_or_else(|| LarkAPIError::APIError {
+            code: -1,
+            msg: "响应数据为空".to_string(),
+            error: None,
+        })
     }
 
     /// 查找构建器

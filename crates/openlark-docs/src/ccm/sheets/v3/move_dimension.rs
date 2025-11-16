@@ -7,10 +7,10 @@
 //! - 移动操作状态跟踪
 
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     error::LarkAPIError,
     http::Transport,
-    api_req::ApiRequest,
 };
 use reqwest::Method;
 
@@ -215,7 +215,9 @@ impl MoveDimensionRequestBuilder {
 
                 // 验证索引范围
                 if source_start < 0 || source_end < 0 || dest_index < 0 {
-                    return Err(openlark_core::error::LarkAPIError::IllegalParamError("索引不能为负数".to_string()));
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError(
+                        "索引不能为负数".to_string(),
+                    ));
                 }
 
                 if source_start > source_end {
@@ -347,14 +349,15 @@ impl MoveDimensionService {
         api_request.body = serde_json::to_vec(request)?;
 
         // 发送请求并获取响应
-        let response = Transport::<MoveDimensionResponse>::request(api_request, &self.config, None).await?;
+        let response =
+            Transport::<MoveDimensionResponse>::request(api_request, &self.config, None).await?;
 
         // 检查响应是否成功
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
                 code: response.code(),
                 msg: response.msg().to_string(),
-                error: None
+                error: None,
             });
         }
 

@@ -2,25 +2,25 @@
 //!
 //! 提供SHEETS v3电子表格创建功能，支持：
 //! - 创建新的空白电子表格
-use serde_json::Value;
-use std::collections::HashMap;
 //! - 设置电子表格标题和文件夹路径
 //! - 设置电子表格时区和语言
 //! - 指定初始工作表配置
 //! - 自定义电子表格属性
+use serde_json::Value;
+use std::collections::HashMap;
 
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     error::LarkAPIError,
     http::Transport,
-    api_req::ApiRequest,
     SDKResult,
 };
 
+use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
-use reqwest::Method;
 
 use openlark_core::trait_system::Service;
 // use openlark_core::SDKResult;
@@ -382,7 +382,9 @@ impl SpreadsheetCreateService {
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &url);
         api_request.body = serde_json::to_vec(&body)?;
 
-        let base_response = Transport::<CreateSpreadsheetResponseBody>::request(api_request, &self.config, None).await?;
+        let base_response =
+            Transport::<CreateSpreadsheetResponseBody>::request(api_request, &self.config, None)
+                .await?;
 
         // 处理响应
         if base_response.code() == 0 {

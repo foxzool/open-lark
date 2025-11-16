@@ -2,19 +2,14 @@
 //!
 //! 提供多维表格表单字段管理相关的API服务，包括：
 //! - 表单字段的列表查询和更新
-use std::collections::HashMap;
 //! - 表单字段类型配置
 //! - 表单字段验证规则设置
 //! - 完整的错误处理和参数验证
-
+use std::collections::HashMap;
 
 use openlark_core::{
-    error::LarkAPIError,
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
+    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    http::Transport, SDKResult,
 };
 
 use super::models::*;
@@ -40,13 +35,21 @@ impl AppTableFormFieldService {
     ///
     /// # 返回
     /// 返回表单字段列表
-    pub async fn list_form_field(&self, request: &ListFormFieldRequest) -> SDKResult<ListFormFieldResponse> {
+    pub async fn list_form_field(
+        &self,
+        request: &ListFormFieldRequest,
+    ) -> SDKResult<ListFormFieldResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("列出表单字段: app_token={}, table_id={}, form_id={}",
-                  request.app_token, request.table_id, request.form_id);
+        log::info!(
+            "列出表单字段: app_token={}, table_id={}, form_id={}",
+            request.app_token,
+            request.table_id,
+            request.form_id
+        );
 
         // 构建查询参数
         let mut query_params = HashMap::new();
@@ -75,9 +78,13 @@ impl AppTableFormFieldService {
         let resp = Transport::<ListFormFieldResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("列出表单字段完成: app_token={}, table_id={}, form_id={}, count={}",
-                  request.app_token, request.table_id, request.form_id,
-                  response.fields.as_ref().map(|f| f.len()).unwrap_or(0));
+        log::info!(
+            "列出表单字段完成: app_token={}, table_id={}, form_id={}, count={}",
+            request.app_token,
+            request.table_id,
+            request.form_id,
+            response.fields.as_ref().map(|f| f.len()).unwrap_or(0)
+        );
 
         Ok(response)
     }
@@ -91,13 +98,22 @@ impl AppTableFormFieldService {
     ///
     /// # 返回
     /// 返回更新后的表单字段信息
-    pub async fn patch_form_field(&self, request: &PatchFormFieldRequest) -> SDKResult<PatchFormFieldResponse> {
+    pub async fn patch_form_field(
+        &self,
+        request: &PatchFormFieldRequest,
+    ) -> SDKResult<PatchFormFieldResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("更新表单字段: app_token={}, table_id={}, form_id={}, field_count={}",
-                  request.app_token, request.table_id, request.form_id, request.fields.len());
+        log::info!(
+            "更新表单字段: app_token={}, table_id={}, form_id={}, field_count={}",
+            request.app_token,
+            request.table_id,
+            request.form_id,
+            request.fields.len()
+        );
 
         // 构建请求体
         let body = serde_json::to_value(request)?;
@@ -116,11 +132,16 @@ impl AppTableFormFieldService {
         };
 
         // 发送请求
-        let resp = Transport::<PatchFormFieldResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<PatchFormFieldResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("更新表单字段完成: app_token={}, table_id={}, form_id={}",
-                  request.app_token, request.table_id, request.form_id);
+        log::info!(
+            "更新表单字段完成: app_token={}, table_id={}, form_id={}",
+            request.app_token,
+            request.table_id,
+            request.form_id
+        );
 
         Ok(response)
     }
@@ -132,7 +153,11 @@ pub struct ListFormFieldRequestBuilder {
 }
 
 impl ListFormFieldRequestBuilder {
-    pub fn new(app_token: impl Into<String>, table_id: impl Into<String>, form_id: impl Into<String>) -> Self {
+    pub fn new(
+        app_token: impl Into<String>,
+        table_id: impl Into<String>,
+        form_id: impl Into<String>,
+    ) -> Self {
         Self {
             request: ListFormFieldRequest {
                 app_token: app_token.into(),
@@ -154,7 +179,10 @@ impl ListFormFieldRequestBuilder {
         self
     }
 
-    pub async fn execute(self, service: &AppTableFormFieldService) -> SDKResult<ListFormFieldResponse> {
+    pub async fn execute(
+        self,
+        service: &AppTableFormFieldService,
+    ) -> SDKResult<ListFormFieldResponse> {
         service.list_form_field(&self.request).await
     }
 }
@@ -164,7 +192,11 @@ pub struct PatchFormFieldRequestBuilder {
 }
 
 impl PatchFormFieldRequestBuilder {
-    pub fn new(app_token: impl Into<String>, table_id: impl Into<String>, form_id: impl Into<String>) -> Self {
+    pub fn new(
+        app_token: impl Into<String>,
+        table_id: impl Into<String>,
+        form_id: impl Into<String>,
+    ) -> Self {
         Self {
             request: PatchFormFieldRequest {
                 app_token: app_token.into(),
@@ -185,7 +217,10 @@ impl PatchFormFieldRequestBuilder {
         self
     }
 
-    pub async fn execute(self, service: &AppTableFormFieldService) -> SDKResult<PatchFormFieldResponse> {
+    pub async fn execute(
+        self,
+        service: &AppTableFormFieldService,
+    ) -> SDKResult<PatchFormFieldResponse> {
         service.patch_form_field(&self.request).await
     }
 }

@@ -2,10 +2,10 @@
 //!
 //! 提供飞书电子表格v3版本的宏管理功能，包括：
 //! - 创建和执行宏
-use serde_json::Value;
 //! - 宏脚本管理和配置
 //! - 宏权限控制和安全设置
 //! - 宏调试和日志记录
+use serde_json::Value;
 
 use openlark_core::error::LarkAPIError;
 
@@ -238,7 +238,9 @@ impl MacroScript {
     /// 验证宏脚本
     pub fn validate(&self) -> Result<(), LarkAPIError> {
         if self.name.is_empty() {
-            return Err(LarkAPIError::IllegalParamError("宏名称不能为空".to_string()));
+            return Err(LarkAPIError::IllegalParamError(
+                "宏名称不能为空".to_string(),
+            ));
         }
 
         if self.script.is_empty() {
@@ -321,7 +323,9 @@ impl ExecuteMacroRequest {
         }
 
         if self.macro_name.is_empty() {
-            return Err(LarkAPIError::IllegalParamError("宏名称不能为空".to_string()));
+            return Err(LarkAPIError::IllegalParamError(
+                "宏名称不能为空".to_string(),
+            ));
         }
 
         // 验证必需参数
@@ -590,7 +594,9 @@ impl GetMacroStatusRequest {
         }
 
         if self.execution_id.is_empty() {
-            return Err(LarkAPIError::IllegalParamError("执行ID不能为空".to_string()));
+            return Err(LarkAPIError::IllegalParamError(
+                "执行ID不能为空".to_string(),
+            ));
         }
 
         Ok(())
@@ -697,11 +703,7 @@ impl MacroService {
         &self,
         request: &ExecuteMacroRequest,
     ) -> openlark_core::error::SDKResult<ExecuteMacroResponse> {
-        use openlark_core::{
-            api_req::ApiRequest,
-            http::Transport,
-            api_resp::BaseResponse,
-        };
+        use openlark_core::{api_req::ApiRequest, api_resp::BaseResponse, http::Transport};
 
         let endpoint = format!(
             "/open-apis/sheets/v3/spreadsheets/{}/macros/execute",
@@ -711,7 +713,8 @@ impl MacroService {
         let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::POST, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let response: BaseResponse<ExecuteMacroResponse> = Transport::request(api_request, &self.config, None).await?;
+        let response: BaseResponse<ExecuteMacroResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
@@ -721,9 +724,11 @@ impl MacroService {
             });
         }
 
-        response
-            .data
-            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
+        response.data.ok_or_else(|| LarkAPIError::APIError {
+            code: -1,
+            msg: "响应数据为空".to_string(),
+            error: None,
+        })
     }
 
     /// 创建宏脚本
@@ -763,11 +768,7 @@ impl MacroService {
         &self,
         request: &CreateMacroRequest,
     ) -> openlark_core::error::SDKResult<CreateMacroResponse> {
-        use openlark_core::{
-            api_req::ApiRequest,
-            http::Transport,
-            api_resp::BaseResponse,
-        };
+        use openlark_core::{api_req::ApiRequest, api_resp::BaseResponse, http::Transport};
 
         let endpoint = format!(
             "/open-apis/sheets/v3/spreadsheets/{}/macros",
@@ -777,7 +778,8 @@ impl MacroService {
         let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::POST, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let response: BaseResponse<CreateMacroResponse> = Transport::request(api_request, &self.config, None).await?;
+        let response: BaseResponse<CreateMacroResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
@@ -787,9 +789,11 @@ impl MacroService {
             });
         }
 
-        response
-            .data
-            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
+        response.data.ok_or_else(|| LarkAPIError::APIError {
+            code: -1,
+            msg: "响应数据为空".to_string(),
+            error: None,
+        })
     }
 
     /// 查询宏状态
@@ -820,11 +824,7 @@ impl MacroService {
         &self,
         request: &GetMacroStatusRequest,
     ) -> openlark_core::error::SDKResult<GetMacroStatusResponse> {
-        use openlark_core::{
-            api_req::ApiRequest,
-            http::Transport,
-            api_resp::BaseResponse,
-        };
+        use openlark_core::{api_req::ApiRequest, api_resp::BaseResponse, http::Transport};
 
         let endpoint = format!(
             "/open-apis/sheets/v3/spreadsheets/{}/macros/status/{}",
@@ -833,7 +833,8 @@ impl MacroService {
 
         let api_request = ApiRequest::with_method_and_path(reqwest::Method::GET, &endpoint);
 
-        let response: BaseResponse<GetMacroStatusResponse> = Transport::request(api_request, &self.config, None).await?;
+        let response: BaseResponse<GetMacroStatusResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
@@ -843,9 +844,11 @@ impl MacroService {
             });
         }
 
-        response
-            .data
-            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
+        response.data.ok_or_else(|| LarkAPIError::APIError {
+            code: -1,
+            msg: "响应数据为空".to_string(),
+            error: None,
+        })
     }
 
     /// 执行宏构建器

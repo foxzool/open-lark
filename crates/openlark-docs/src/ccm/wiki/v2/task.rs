@@ -2,10 +2,10 @@
 //!
 //! 提供飞书知识库异步任务的管理功能，包括：
 //! - 获取任务执行状态
-use serde_json::Value;
-use std::collections::HashMap;
 //! - 查询任务结果和进度
 //! - 错误信息和调试信息获取
+use serde_json::Value;
+use std::collections::HashMap;
 
 use openlark_core::{
     api_resp::{ApiResponseTrait, ResponseFormat},

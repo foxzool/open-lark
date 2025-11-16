@@ -30,14 +30,14 @@ default = []
 client = []
 
 # Feature flags for service inclusion
-# Mapping to available openlark-docs features: base, ccm, cardkit, report
-docs = ["openlark-docs/base"]
-sheets = ["openlark-docs/ccm"]
-bitable = ["openlark-docs/base"]
-wiki = ["openlark-docs/ccm"]
-drive = ["openlark-docs/ccm"]
+# 与新的 openlark-docs feature 分类同步
+docs = ["openlark-docs/ccm-doc"]
+sheets = ["openlark-docs/ccm-sheets"]
+bitable = ["openlark-docs/bitable"]
+wiki = ["openlark-docs/ccm-wiki"]
+drive = ["openlark-docs/ccm-drive"]
 ccm = ["openlark-docs/ccm"]
-cloud-docs = ["openlark-docs/base", "openlark-docs/ccm"]
+cloud-docs = ["openlark-docs/cloud-docs"]
 
 communication = ["openlark-communication"]
 hr = ["openlark-hr"]

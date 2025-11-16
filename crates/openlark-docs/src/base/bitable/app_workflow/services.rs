@@ -2,18 +2,13 @@
 //!
 //! 提供多维表格工作流管理相关的API服务，包括：
 //! - 工作流的查询、更新
-use std::collections::HashMap;
 //! - 工作流状态管理
 //! - 完整的错误处理和参数验证
-
+use std::collections::HashMap;
 
 use openlark_core::{
-    error::LarkAPIError,
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
+    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    http::Transport, SDKResult,
 };
 
 use super::models::*;
@@ -39,9 +34,13 @@ impl AppWorkflowService {
     ///
     /// # 返回
     /// 返回工作流列表
-    pub async fn list_workflow(&self, request: &ListWorkflowRequest) -> SDKResult<ListWorkflowResponse> {
+    pub async fn list_workflow(
+        &self,
+        request: &ListWorkflowRequest,
+    ) -> SDKResult<ListWorkflowResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
         log::info!("列出工作流: app_token={}", request.app_token);
@@ -70,9 +69,11 @@ impl AppWorkflowService {
         let resp = Transport::<ListWorkflowResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("列出工作流完成: app_token={}, count={}",
-                  request.app_token,
-                  response.workflows.as_ref().map(|w| w.len()).unwrap_or(0));
+        log::info!(
+            "列出工作流完成: app_token={}, count={}",
+            request.app_token,
+            response.workflows.as_ref().map(|w| w.len()).unwrap_or(0)
+        );
 
         Ok(response)
     }
@@ -86,13 +87,20 @@ impl AppWorkflowService {
     ///
     /// # 返回
     /// 返回更新后的工作流信息
-    pub async fn update_workflow(&self, request: &UpdateWorkflowRequest) -> SDKResult<UpdateWorkflowResponse> {
+    pub async fn update_workflow(
+        &self,
+        request: &UpdateWorkflowRequest,
+    ) -> SDKResult<UpdateWorkflowResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("更新工作流: app_token={}, workflow_id={}",
-                  request.app_token, request.workflow_id);
+        log::info!(
+            "更新工作流: app_token={}, workflow_id={}",
+            request.app_token,
+            request.workflow_id
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -101,7 +109,10 @@ impl AppWorkflowService {
             body.insert("name".to_string(), serde_json::to_value(name)?);
         }
         if let Some(ref description) = request.description {
-            body.insert("description".to_string(), serde_json::to_value(description)?);
+            body.insert(
+                "description".to_string(),
+                serde_json::to_value(description)?,
+            );
         }
         if let Some(ref config) = request.config {
             body.insert("config".to_string(), serde_json::to_value(config)?);
@@ -113,7 +124,10 @@ impl AppWorkflowService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/workflows/{}", request.app_token, request.workflow_id),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/workflows/{}",
+                request.app_token, request.workflow_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -121,11 +135,15 @@ impl AppWorkflowService {
         };
 
         // 发送请求
-        let resp = Transport::<UpdateWorkflowResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<UpdateWorkflowResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("更新工作流完成: app_token={}, workflow_id={}",
-                  request.app_token, request.workflow_id);
+        log::info!(
+            "更新工作流完成: app_token={}, workflow_id={}",
+            request.app_token,
+            request.workflow_id
+        );
 
         Ok(response)
     }

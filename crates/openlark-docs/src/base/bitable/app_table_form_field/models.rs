@@ -3,8 +3,8 @@
 //! 提供多维表格表单字段管理相关的数据结构，支持表单字段的查询、
 //! 更新等操作。
 
-use serde::{Deserialize, Serialize};
 use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use serde::{Deserialize, Serialize};
 
 /// 列出表单字段请求
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
