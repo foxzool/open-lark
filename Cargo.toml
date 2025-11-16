@@ -9,6 +9,7 @@ members = [
     "crates/openlark-protocol",
     "crates/openlark-application",
     "crates/openlark-approval",
+    "crates/openlark-admin",
     "crates/openlark-apass",
     "crates/openlark-calendar",
     "crates/openlark-helpdesk",
@@ -23,11 +24,15 @@ members = [
 [workspace.package]
 version = "0.15.0-dev"
 edition = "2021"
+rust-version = "1.75"
 authors = ["ZoOL <zhooul@gmail.com>"]
 license = "Apache-2.0"
 repository = "https://github.com/foxzool/open-lark"
 homepage = "https://github.com/foxzool/open-lark"
 documentation = "https://docs.rs/open-lark"
+description = "飞书开放平台 Rust SDK - 企业级 API 客户端"
+keywords = ["feishu", "lark", "api", "sdk", "rust"]
+categories = ["api-bindings", "web-programming", "development-tools"]
 
 [workspace.dependencies]
 # External dependencies (shared version management)
