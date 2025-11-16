@@ -2,6 +2,7 @@
 //!
 //! 定义文档(DOCX)操作API的数据结构。
 
+use crate::prelude::*;
 use serde::{Deserialize, Serialize};
 
 /// 文档信息

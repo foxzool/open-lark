@@ -9,7 +9,8 @@ pub mod ai;
 
 /// Re-exports from open-lark-core for convenience.
 pub mod prelude {
-    pub use openlark_core::{client::LarkClient, SDKResult};
+    pub use openlark_core::client::LarkClient;
+    pub use openlark_core::SDKResult;
 }
 
 // Re-export service types for convenience

@@ -2,12 +2,13 @@
 //!
 //! 提供批量编辑更新文档内容的功能，包括更新标题、
 //! 范围删除、插入内容等操作。
-use std::collections::HashMap;
 
+use crate::prelude::*;
 use openlark_core::{api_req::ApiRequest, constants::AccessTokenType, http::Transport, SDKResult};
 
 use super::{
-    models::BatchUpdateOperationType, requests::UpdateDocBatchV2Request,
+    models::{BatchUpdateOperation, BatchUpdateOperationType},
+    requests::UpdateDocBatchV2Request,
     responses::UpdateDocBatchV2Response,
 };
 
