@@ -8,6 +8,7 @@ description = "openlark-docs module for OpenLark SDK"
 
 [dependencies]
 openlark-core = { workspace = true }
+# openlark-client = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 reqwest = { workspace = true }

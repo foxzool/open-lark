@@ -2,8 +2,8 @@
 //!
 //! 提供获取旧版文档内容的功能，包括纯文本和富文本内容。
 
+use crate::prelude::*;
 use openlark_core::{api_req::ApiRequest, constants::AccessTokenType, http::Transport, SDKResult};
-use std::collections::HashMap;
 
 use super::{
     requests::{GetDocContentV2Request, GetDocRawContentV2Request},

@@ -12,7 +12,8 @@ pub mod prelude {
     pub use crate::compensation_management::*;
     #[allow(ambiguous_glob_reexports)]
     pub use crate::hire::*;
-    pub use openlark_core::{client::LarkClient, SDKResult};
+      pub use openlark_core::client::LarkClient;
+    pub use openlark_core::SDKResult;
 }
 
 #[allow(ambiguous_glob_reexports)]
