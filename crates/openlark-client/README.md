@@ -26,14 +26,14 @@
 
 ```toml
 [dependencies]
-openlark-client = { version = "0.15.0-dev", features = ["docs", "communication"] }
+openlark-client = { version = "0.15.0-dev", features = ["ccm-doc", "communication"] }
 ```
 
 ### 功能标志
 
 ```toml
 # 云文档服务
-features = ["docs", "sheets", "bitable", "wiki", "drive", "ccm"]
+features = ["ccm-doc", "ccm-sheets", "bitable", "ccm-wiki", "ccm-drive", "ccm"]
 
 # 通信服务
 features = ["communication"]

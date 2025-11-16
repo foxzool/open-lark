@@ -2,12 +2,12 @@
 //!
 //! 展示 openlark-client 的条件编译服务管理功能
 
-#[cfg(feature = "docs")]
+#[cfg(feature = "ccm-doc")]
 use openlark_client::{DefaultLarkClient, LarkClient, ServiceRegistry};
-#[cfg(feature = "docs")]
+#[cfg(feature = "ccm-doc")]
 use openlark_core::{config::Config, constants::AppType};
 
-#[cfg(feature = "docs")]
+#[cfg(feature = "ccm-doc")]
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("🚀 OpenLark Client 服务管理演示");
 
@@ -49,8 +49,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-#[cfg(not(feature = "docs"))]
+#[cfg(not(feature = "ccm-doc"))]
 fn main() {
-    println!("请启用 docs 功能来运行此演示:");
-    println!("cargo run --example service_management_demo --features docs");
+    println!("请启用 ccm-doc 功能来运行此演示:");
+    println!("cargo run --example service_management_demo --features ccm-doc");
 }

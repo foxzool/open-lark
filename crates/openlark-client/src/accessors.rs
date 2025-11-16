@@ -5,15 +5,15 @@
 use crate::traits::ServiceRegistry;
 
 // Map features to available services from openlark-docs
-// docs, bitable -> BaseService
-// sheets, wiki, drive, ccm -> CcmService
-#[cfg(any(feature = "docs", feature = "bitable"))]
+// ccm-doc, bitable -> BaseService
+// ccm-sheets, ccm-wiki, ccm-drive, ccm -> CcmService
+#[cfg(any(feature = "ccm-doc", feature = "bitable"))]
 use openlark_docs::BaseService;
 
 #[cfg(any(
-    feature = "sheets",
-    feature = "wiki",
-    feature = "drive",
+    feature = "ccm-sheets",
+    feature = "ccm-wiki",
+    feature = "ccm-drive",
     feature = "ccm"
 ))]
 use openlark_docs::CcmService;
@@ -26,19 +26,19 @@ use openlark_communication::contact::ContactService;
 /// 为服务注册表添加便利的服务访问方法
 pub trait ServiceAccessorsExt {
     // 云文档服务访问器 - 使用可用的服务类型
-    #[cfg(feature = "docs")]
+    #[cfg(feature = "ccm-doc")]
     fn docs_ext(&self) -> Option<&BaseService>;
 
-    #[cfg(feature = "sheets")]
+    #[cfg(feature = "ccm-sheets")]
     fn sheet_ext(&self) -> Option<&CcmService>;
 
     #[cfg(feature = "bitable")]
     fn bitable_ext(&self) -> Option<&BaseService>;
 
-    #[cfg(feature = "wiki")]
+    #[cfg(feature = "ccm-wiki")]
     fn wiki_ext(&self) -> Option<&CcmService>;
 
-    #[cfg(feature = "drive")]
+    #[cfg(feature = "ccm-drive")]
     fn drive_ext(&self) -> Option<&CcmService>;
 
     #[cfg(feature = "ccm")]
@@ -51,12 +51,12 @@ pub trait ServiceAccessorsExt {
 
 // 为 DefaultServiceRegistry 实现便利访问器
 impl ServiceAccessorsExt for crate::registry::DefaultServiceRegistry {
-    #[cfg(feature = "docs")]
+    #[cfg(feature = "ccm-doc")]
     fn docs_ext(&self) -> Option<&BaseService> {
         self.get_service("docs")
     }
 
-    #[cfg(feature = "sheets")]
+    #[cfg(feature = "ccm-sheets")]
     fn sheet_ext(&self) -> Option<&CcmService> {
         self.get_service("sheet")
     }
@@ -66,12 +66,12 @@ impl ServiceAccessorsExt for crate::registry::DefaultServiceRegistry {
         self.get_service("bitable")
     }
 
-    #[cfg(feature = "wiki")]
+    #[cfg(feature = "ccm-wiki")]
     fn wiki_ext(&self) -> Option<&CcmService> {
         self.get_service("wiki")
     }
 
-    #[cfg(feature = "drive")]
+    #[cfg(feature = "ccm-drive")]
     fn drive_ext(&self) -> Option<&CcmService> {
         self.get_service("drive")
     }

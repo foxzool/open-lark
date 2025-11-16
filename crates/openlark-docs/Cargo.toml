@@ -65,16 +65,6 @@ report = []
 cloud-docs = ["base", "ccm"]
 all-cloud-docs = ["cloud-docs", "cardkit", "report"]
 
-# ---------------------------------
-# 兼容旧特性命名，避免外部依赖立刻破坏
-# ---------------------------------
-docs = ["ccm-doc"]
-docx = ["ccm-docx"]
-drive = ["ccm-drive"]
-wiki = ["ccm-wiki"]
-sheets = ["ccm-sheets"]
-sheets-v2 = ["ccm-sheets-v2"]
-sheets-v3 = ["ccm-sheets-v3"]
 
 [[example]]
 name = "cardkit_example"

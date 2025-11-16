@@ -2,13 +2,13 @@
 //!
 //! 展示如何从原有 LarkClient 迁移到新的 openlark-client
 
-#[cfg(feature = "docs")]
+#[cfg(feature = "ccm-doc")]
 use openlark_client::{
     accessors::{CompatibleClientBuilder, ServiceAccessorsExt},
     DefaultLarkClient, ServiceRegistry,
 };
 
-#[cfg(feature = "docs")]
+#[cfg(feature = "ccm-doc")]
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("🔄 OpenLark Client 迁移演示");
     println!("====================================");
@@ -63,8 +63,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-#[cfg(not(feature = "docs"))]
+#[cfg(not(feature = "ccm-doc"))]
 fn main() {
-    println!("请启用 docs 功能来运行此演示:");
-    println!("cargo run --example migration_demo --features docs");
+    println!("请启用 ccm-doc 功能来运行此演示:");
+    println!("cargo run --example migration_demo --features ccm-doc");
 }
