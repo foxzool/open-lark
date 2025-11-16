@@ -2,7 +2,6 @@
 //!
 //! 提供飞书电子表格v2版本的单个范围读取功能，包括：
 //! - 读取单个单元格范围的数据
-use serde_json::Value;
 //! - 支持Excel风格的范围格式
 //! - 灵活的数据渲染选项
 //! - 企业级错误处理和数据验证
@@ -14,6 +13,7 @@ use serde_json::Value;
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
+use serde_json::Value;
 
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
@@ -21,6 +21,7 @@ use serde::{Deserialize, Serialize};
 use openlark_core::endpoints_original::Endpoints;
 use openlark_core::impl_executable_builder_owned;
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -28,7 +29,7 @@ use openlark_core::{
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
-    api_req::ApiRequest, SDKResult,
+    SDKResult,
 };
 
 /// 值范围响应

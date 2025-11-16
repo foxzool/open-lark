@@ -22,6 +22,7 @@ use serde::{Deserialize, Serialize};
 use openlark_core::endpoints_original::Endpoints;
 use openlark_core::impl_executable_builder_owned;
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, RawResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -29,7 +30,7 @@ use openlark_core::{
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
-    api_req::ApiRequest, SDKResult,
+    SDKResult,
 };
 
 /// 图片位置设置

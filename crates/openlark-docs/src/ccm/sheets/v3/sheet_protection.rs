@@ -7,15 +7,15 @@
 //! - 查询和更新工作表保护状态
 
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     http::Transport,
-    api_req::ApiRequest,
 };
 
 use serde_json;
 
-use serde::{Deserialize, Serialize};
 use reqwest::Method;
+use serde::{Deserialize, Serialize};
 
 use openlark_core::trait_system::Service;
 
@@ -340,10 +340,14 @@ impl SheetProtectionConditionBuilder {
         match (self.condition_type, self.content) {
             (Some(condition_type), Some(content)) => {
                 if condition_type.is_empty() {
-                    return Err(openlark_core::error::LarkAPIError::IllegalParamError("条件类型不能为空".to_string()));
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError(
+                        "条件类型不能为空".to_string(),
+                    ));
                 }
                 if content.is_empty() {
-                    return Err(openlark_core::error::LarkAPIError::IllegalParamError("条件内容不能为空".to_string()));
+                    return Err(openlark_core::error::LarkAPIError::IllegalParamError(
+                        "条件内容不能为空".to_string(),
+                    ));
                 }
 
                 Ok(SheetProtectionCondition {
@@ -972,7 +976,9 @@ impl SheetProtectionService {
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &url);
         api_request.body = serde_json::to_vec(request)?;
 
-        let base_resp = Transport::<CreateSheetProtectionResponse>::request(api_request, &self.config, None).await?;
+        let base_resp =
+            Transport::<CreateSheetProtectionResponse>::request(api_request, &self.config, None)
+                .await?;
 
         Ok(base_resp)
     }
@@ -1048,7 +1054,9 @@ impl SheetProtectionService {
 
         let api_request = ApiRequest::with_method_and_path(Method::GET, &url);
 
-        let base_resp = Transport::<QuerySheetProtectionResponse>::request(api_request, &self.config, None).await?;
+        let base_resp =
+            Transport::<QuerySheetProtectionResponse>::request(api_request, &self.config, None)
+                .await?;
 
         Ok(base_resp)
     }
@@ -1107,7 +1115,9 @@ impl SheetProtectionService {
         let mut api_request = ApiRequest::with_method_and_path(Method::PATCH, &url);
         api_request.body = serde_json::to_vec(request)?;
 
-        let base_resp = Transport::<UpdateSheetProtectionResponse>::request(api_request, &self.config, None).await?;
+        let base_resp =
+            Transport::<UpdateSheetProtectionResponse>::request(api_request, &self.config, None)
+                .await?;
 
         Ok(base_resp)
     }
@@ -1158,7 +1168,9 @@ impl SheetProtectionService {
 
         let api_request = ApiRequest::with_method_and_path(Method::DELETE, &url);
 
-        let base_resp = Transport::<DeleteSheetProtectionResponse>::request(api_request, &self.config, None).await?;
+        let base_resp =
+            Transport::<DeleteSheetProtectionResponse>::request(api_request, &self.config, None)
+                .await?;
 
         Ok(base_resp)
     }

@@ -3,8 +3,8 @@
 //! 提供多维表格数据记录管理相关的数据结构，支持记录的创建、
 //! 查询、更新、删除等操作。
 
-use serde::{Deserialize, Serialize};
 use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use serde::{Deserialize, Serialize};
 
 /// 新增记录请求
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -74,7 +74,9 @@ impl BatchCreateRecordRequest {
             return Err("单次批量创建记录数量不能超过500个".to_string());
         }
         for (i, record) in self.records.iter().enumerate() {
-            record.validate().map_err(|e| format!("第{}个记录验证失败: {}", i + 1, e))?;
+            record
+                .validate()
+                .map_err(|e| format!("第{}个记录验证失败: {}", i + 1, e))?;
         }
         Ok(())
     }
@@ -167,7 +169,9 @@ impl BatchUpdateRecordRequest {
             return Err("单次批量更新记录数量不能超过500个".to_string());
         }
         for (i, record) in self.records.iter().enumerate() {
-            record.validate().map_err(|e| format!("第{}个记录验证失败: {}", i + 1, e))?;
+            record
+                .validate()
+                .map_err(|e| format!("第{}个记录验证失败: {}", i + 1, e))?;
         }
         Ok(())
     }

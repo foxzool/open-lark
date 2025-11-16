@@ -48,16 +48,12 @@ pub mod v1;
 pub mod v2;
 
 // 重新导出所有服务类型，避免名称冲突
-pub use v1::{
-    DocsServiceV1, DocumentService
-};
+pub use v1::{DocsServiceV1, DocumentService};
 
-pub use v2::{
-    DocV2Service, CreateDocService, CreateDocBuilder
-};
+pub use v2::{CreateDocBuilder, CreateDocService, DocV2Service};
 
 // 为向后兼容性提供DocxService别名
-#[cfg(feature = "docs")]
+#[cfg(feature = "ccm-doc")]
 pub use v1::DocsServiceV1 as DocxService;
 
 use openlark_core::config::Config;
@@ -70,10 +66,10 @@ use openlark_core::config::Config;
 pub struct DocsService {
     config: Config,
     /// v1版本服务
-    #[cfg(feature = "docs")]
+    #[cfg(feature = "ccm-doc")]
     pub v1: v1::DocsServiceV1,
     /// v2版本服务（旧版文档）
-    #[cfg(feature = "docs")]
+    #[cfg(feature = "ccm-doc")]
     pub v2: v2::DocV2Service,
 }
 
@@ -95,9 +91,9 @@ impl DocsService {
     pub fn new(config: Config) -> Self {
         Self {
             config: config.clone(),
-            #[cfg(feature = "docs")]
+            #[cfg(feature = "ccm-doc")]
             v1: v1::DocsServiceV1::new(config.clone()),
-            #[cfg(feature = "docs")]
+            #[cfg(feature = "ccm-doc")]
             v2: v2::DocV2Service::new(config),
         }
     }

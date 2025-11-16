@@ -3,18 +3,10 @@
 //! 提供创建和初始化旧版文档的功能。
 
 use openlark_core::{
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
+    api_req::ApiRequest, config::Config, constants::AccessTokenType, http::Transport, SDKResult,
 };
 
-use super::{
-    requests::CreateDocV2Request,
-    responses::CreateDocV2Response,
-    models::DocType,
-};
+use super::{models::DocType, requests::CreateDocV2Request, responses::CreateDocV2Response};
 
 /// 文档创建服务
 #[derive(Clone)]
@@ -81,7 +73,10 @@ impl CreateDocService {
         log::info!(
             "旧版文档创建成功: title={}, doc_token={:?}",
             req.title,
-            response.document.as_ref().and_then(|d| d.doc_token.as_ref())
+            response
+                .document
+                .as_ref()
+                .and_then(|d| d.doc_token.as_ref())
         );
 
         Ok(response)
@@ -190,13 +185,10 @@ impl CreateDocBuilder {
     ///
     /// # 错误
     /// - 如果缺少必需参数（如标题），会返回错误
-    pub async fn execute(
-        self,
-        service: &CreateDocService,
-    ) -> SDKResult<CreateDocV2Response> {
-        let title = self.title.ok_or_else(|| {
-            openlark_core::error::LarkAPIError::illegal_param("文档标题是必需的")
-        })?;
+    pub async fn execute(self, service: &CreateDocService) -> SDKResult<CreateDocV2Response> {
+        let title = self
+            .title
+            .ok_or_else(|| openlark_core::error::LarkAPIError::illegal_param("文档标题是必需的"))?;
 
         let request = CreateDocV2Request {
             title,

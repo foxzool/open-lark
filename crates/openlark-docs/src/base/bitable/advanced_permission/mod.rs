@@ -32,4 +32,7 @@ pub mod services;
 
 // 重新导出主要类型
 pub use models::*;
-pub use services::{AdvancedPermissionService, ListRolesV2RequestBuilder, CreateRoleV2RequestBuilder, UpdateRoleV2RequestBuilder};
+pub use services::{
+    AdvancedPermissionService, CreateRoleV2RequestBuilder, ListRolesV2RequestBuilder,
+    UpdateRoleV2RequestBuilder,
+};

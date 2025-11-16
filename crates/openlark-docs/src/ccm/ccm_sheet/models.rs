@@ -3,8 +3,8 @@
 //! 提供电子表格操作相关的数据结构，支持工作表管理、
 //! 单元格操作、样式设置、数据验证等功能。
 
-use serde::{Deserialize, Serialize};
 use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use serde::{Deserialize, Serialize};
 
 /// 读取单个范围请求
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -54,40 +54,38 @@ impl<'de> Deserialize<'de> for ReadSingleRangeResponse {
         let raw_value = Value::deserialize(deserializer)?;
 
         // 从原始 JSON 值中提取数据
-        let spreadsheet_id = raw_value.get("spreadsheet_id")
+        let spreadsheet_id = raw_value
+            .get("spreadsheet_id")
             .and_then(|v| v.as_str())
             .map(|s| s.to_string());
 
-        let value_range = raw_value.get("value_range")
-            .and_then(|v| {
-                // 手动解析 ValueRange
-                let range = v.get("range").and_then(|r| r.as_str()).map(|s| s.to_string());
-                let major_dimension = v.get("majorDimension")
-                    .and_then(|m| m.as_str())
-                    .map(|s| s.to_string());
-                let values = v.get("values")
-                    .and_then(|vals| vals.as_array())
-                    .map(|arr| {
-                        arr.iter()
-                            .filter_map(|row| row.as_array())
-                            .map(|row| {
-                                row.iter()
-                                    .map(|val| val.clone())
-                                    .collect::<Vec<_>>()
-                            })
-                            .collect::<Vec<_>>()
-                    });
-
-                if range.is_some() || major_dimension.is_some() || values.is_some() {
-                    Some(ValueRange {
-                        range,
-                        major_dimension,
-                        values,
-                    })
-                } else {
-                    None
-                }
+        let value_range = raw_value.get("value_range").and_then(|v| {
+            // 手动解析 ValueRange
+            let range = v
+                .get("range")
+                .and_then(|r| r.as_str())
+                .map(|s| s.to_string());
+            let major_dimension = v
+                .get("majorDimension")
+                .and_then(|m| m.as_str())
+                .map(|s| s.to_string());
+            let values = v.get("values").and_then(|vals| vals.as_array()).map(|arr| {
+                arr.iter()
+                    .filter_map(|row| row.as_array())
+                    .map(|row| row.iter().map(|val| val.clone()).collect::<Vec<_>>())
+                    .collect::<Vec<_>>()
             });
+
+            if range.is_some() || major_dimension.is_some() || values.is_some() {
+                Some(ValueRange {
+                    range,
+                    major_dimension,
+                    values,
+                })
+            } else {
+                None
+            }
+        });
 
         Ok(ReadSingleRangeResponse {
             value_range,
@@ -150,32 +148,32 @@ impl<'de> Deserialize<'de> for ReadMultipleRangesResponse {
         let raw_value = Value::deserialize(deserializer)?;
 
         // 从原始 JSON 值中提取数据
-        let spreadsheet_id = raw_value.get("spreadsheet_id")
+        let spreadsheet_id = raw_value
+            .get("spreadsheet_id")
             .and_then(|v| v.as_str())
             .map(|s| s.to_string());
 
-        let value_ranges = raw_value.get("value_ranges")
+        let value_ranges = raw_value
+            .get("value_ranges")
             .and_then(|vals| vals.as_array())
             .map(|arr| {
                 let mut ranges = Vec::new();
                 for v in arr {
                     // 手动解析每个 ValueRange
-                    let range = v.get("range").and_then(|r| r.as_str()).map(|s| s.to_string());
-                    let major_dimension = v.get("majorDimension")
+                    let range = v
+                        .get("range")
+                        .and_then(|r| r.as_str())
+                        .map(|s| s.to_string());
+                    let major_dimension = v
+                        .get("majorDimension")
                         .and_then(|m| m.as_str())
                         .map(|s| s.to_string());
-                    let values = v.get("values")
-                        .and_then(|vals| vals.as_array())
-                        .map(|arr| {
-                            arr.iter()
-                                .filter_map(|row| row.as_array())
-                                .map(|row| {
-                                    row.iter()
-                                        .map(|val| val.clone())
-                                        .collect::<Vec<_>>()
-                                })
-                                .collect::<Vec<_>>()
-                        });
+                    let values = v.get("values").and_then(|vals| vals.as_array()).map(|arr| {
+                        arr.iter()
+                            .filter_map(|row| row.as_array())
+                            .map(|row| row.iter().map(|val| val.clone()).collect::<Vec<_>>())
+                            .collect::<Vec<_>>()
+                    });
 
                     if range.is_some() || major_dimension.is_some() || values.is_some() {
                         ranges.push(ValueRange {

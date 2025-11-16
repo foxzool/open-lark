@@ -35,4 +35,4 @@ pub mod models;
 pub mod services;
 
 // 重新导出主要类型
-pub use services::{TaskService, QueryTaskRequestBuilder};
+pub use services::{QueryTaskRequestBuilder, TaskService};

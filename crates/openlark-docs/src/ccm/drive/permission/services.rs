@@ -2,19 +2,14 @@
 //!
 //! 提供权限管理相关的API服务，包括：
 //! - 权限验证
-use serde_json::Value;
-use std::collections::HashMap;
 //! - 所有者转移
 //! - 公共权限设置
-
+use serde_json::Value;
+use std::collections::HashMap;
 
 use openlark_core::{
-    error::LarkAPIError,
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
+    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    http::Transport, SDKResult,
 };
 
 use super::models::*;
@@ -55,13 +50,20 @@ impl PermissionService {
     ///     println!("用户有权限");
     /// }
     /// ```
-    pub async fn check_member_permission(&self, request: &CheckMemberPermissionRequest) -> SDKResult<CheckMemberPermissionResponse> {
+    pub async fn check_member_permission(
+        &self,
+        request: &CheckMemberPermissionRequest,
+    ) -> SDKResult<CheckMemberPermissionResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("判断协作者权限: file_token={}, permission={}",
-                  request.file_token, request.permission);
+        log::info!(
+            "判断协作者权限: file_token={}, permission={}",
+            request.file_token,
+            request.permission
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -86,11 +88,15 @@ impl PermissionService {
         };
 
         // 发送请求
-        let resp = Transport::<CheckMemberPermissionResponse>::request(api_req, &self.config, None).await?;
+        let resp = Transport::<CheckMemberPermissionResponse>::request(api_req, &self.config, None)
+            .await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("判断协作者权限完成: file_token={}, permitted={}",
-                  request.file_token, response.permitted.unwrap_or(false));
+        log::info!(
+            "判断协作者权限完成: file_token={}, permitted={}",
+            request.file_token,
+            response.permitted.unwrap_or(false)
+        );
 
         Ok(response)
     }
@@ -118,13 +124,20 @@ impl PermissionService {
     ///     println!("拥有者转移成功");
     /// }
     /// ```
-    pub async fn transfer_owner(&self, request: &TransferOwnerRequest) -> SDKResult<TransferOwnerResponse> {
+    pub async fn transfer_owner(
+        &self,
+        request: &TransferOwnerRequest,
+    ) -> SDKResult<TransferOwnerResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("转移拥有者: file_token={}, user_id={}",
-                  request.file_token, request.user_id);
+        log::info!(
+            "转移拥有者: file_token={}, user_id={}",
+            request.file_token,
+            request.user_id
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -149,8 +162,11 @@ impl PermissionService {
         let resp = Transport::<TransferOwnerResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("转移拥有者完成: file_token={}, success={}",
-                  request.file_token, response.success.unwrap_or(false));
+        log::info!(
+            "转移拥有者完成: file_token={}, success={}",
+            request.file_token,
+            response.success.unwrap_or(false)
+        );
 
         Ok(response)
     }
@@ -176,9 +192,13 @@ impl PermissionService {
     ///     println!("公共访问权限: {}", public_permission.permission.unwrap_or_else(|| "none".to_string()));
     /// }
     /// ```
-    pub async fn get_public_permission(&self, request: &GetPublicPermissionRequest) -> SDKResult<GetPublicPermissionResponse> {
+    pub async fn get_public_permission(
+        &self,
+        request: &GetPublicPermissionRequest,
+    ) -> SDKResult<GetPublicPermissionResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
         log::info!("获取云文档权限设置V2: file_token={}", request.file_token);
@@ -198,10 +218,14 @@ impl PermissionService {
         };
 
         // 发送请求
-        let resp = Transport::<GetPublicPermissionResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<GetPublicPermissionResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("获取云文档权限设置V2完成: file_token={}", request.file_token);
+        log::info!(
+            "获取云文档权限设置V2完成: file_token={}",
+            request.file_token
+        );
 
         Ok(response)
     }
@@ -244,7 +268,10 @@ impl CheckMemberPermissionRequestBuilder {
         self
     }
 
-    pub async fn execute(self, service: &PermissionService) -> SDKResult<CheckMemberPermissionResponse> {
+    pub async fn execute(
+        self,
+        service: &PermissionService,
+    ) -> SDKResult<CheckMemberPermissionResponse> {
         service.check_member_permission(&self.request).await
     }
 }
@@ -302,7 +329,10 @@ impl GetPublicPermissionRequestBuilder {
         self
     }
 
-    pub async fn execute(self, service: &PermissionService) -> SDKResult<GetPublicPermissionResponse> {
+    pub async fn execute(
+        self,
+        service: &PermissionService,
+    ) -> SDKResult<GetPublicPermissionResponse> {
         service.get_public_permission(&self.request).await
     }
 }

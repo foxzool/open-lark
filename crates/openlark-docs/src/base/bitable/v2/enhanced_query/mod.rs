@@ -2,21 +2,21 @@
 //!
 //! 提供智能查询和数据分析功能，包括：
 //! - 聚合查询和统计分析
-use std::collections::HashMap;
 //! - 关联数据查询
 //! - 智能推荐和预测
 //! - 数据导出功能
+use std::collections::HashMap;
 
-use serde::{Deserialize, Serialize};
 use openlark_core::{
-    error::LarkAPIError,
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    error::LarkAPIError,
+    http::Transport,
     SDKResult,
 };
+use serde::{Deserialize, Serialize};
 
 /// 数据模型
 pub mod models {
@@ -287,13 +287,21 @@ pub mod services {
         ///
         /// # 返回
         /// 返回查询结果和统计信息
-        pub async fn execute_smart_query(&self, request: &models::SmartQueryRequest) -> SDKResult<models::SmartQueryResponse> {
+        pub async fn execute_smart_query(
+            &self,
+            request: &models::SmartQueryRequest,
+        ) -> SDKResult<models::SmartQueryResponse> {
             // 验证请求参数
-            request.validate()
+            request
+                .validate()
                 .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-            log::info!("执行智能查询: app_token={}, table_id={}, query_type={:?}",
-                      request.app_token, request.table_id, request.query_type);
+            log::info!(
+                "执行智能查询: app_token={}, table_id={}, query_type={:?}",
+                request.app_token,
+                request.table_id,
+                request.query_type
+            );
 
             // 构建请求体
             let body = serde_json::to_value(request)?;
@@ -301,7 +309,10 @@ pub mod services {
             // 构建API请求
             let api_req = ApiRequest {
                 http_method: reqwest::Method::POST,
-                api_path: format!("/open-apis/bitable/v2/apps/{}/tables/{}/smart_query", request.app_token, request.table_id),
+                api_path: format!(
+                    "/open-apis/bitable/v2/apps/{}/tables/{}/smart_query",
+                    request.app_token, request.table_id
+                ),
                 supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
                 body: serde_json::to_vec(&body)?,
                 query_params: HashMap::new(),
@@ -309,14 +320,18 @@ pub mod services {
             };
 
             // 发送请求
-            let resp = Transport::<models::SmartQueryResponse>::request(api_req, &self.config, None).await?;
+            let resp =
+                Transport::<models::SmartQueryResponse>::request(api_req, &self.config, None)
+                    .await?;
             let response = resp.data.unwrap_or_default();
 
             if let Some(ref data) = response.data {
-                log::info!("智能查询完成: app_token={}, table_id={}, results={}",
-                          request.app_token,
-                          request.table_id,
-                          data.results.as_ref().map(|r| r.len()).unwrap_or(0));
+                log::info!(
+                    "智能查询完成: app_token={}, table_id={}, results={}",
+                    request.app_token,
+                    request.table_id,
+                    data.results.as_ref().map(|r| r.len()).unwrap_or(0)
+                );
             }
 
             Ok(response)
@@ -391,12 +406,19 @@ impl SmartQueryRequestBuilder {
         }
     }
 
-    pub fn aggregate_field(mut self, field_id_or_name: impl Into<String>, function: models::AggregateFunction) -> Self {
-        self.request.config.aggregate_fields.push(models::AggregateField {
-            field_id_or_name: field_id_or_name.into(),
-            function,
-            alias: None,
-        });
+    pub fn aggregate_field(
+        mut self,
+        field_id_or_name: impl Into<String>,
+        function: models::AggregateFunction,
+    ) -> Self {
+        self.request
+            .config
+            .aggregate_fields
+            .push(models::AggregateField {
+                field_id_or_name: field_id_or_name.into(),
+                function,
+                alias: None,
+            });
         self
     }
 
@@ -425,7 +447,10 @@ impl SmartQueryRequestBuilder {
         self
     }
 
-    pub async fn execute(self, service: &EnhancedQueryService) -> SDKResult<models::SmartQueryResponse> {
+    pub async fn execute(
+        self,
+        service: &EnhancedQueryService,
+    ) -> SDKResult<models::SmartQueryResponse> {
         service.execute_smart_query(&self.request).await
     }
 }

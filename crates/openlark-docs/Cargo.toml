@@ -25,15 +25,60 @@ regex = "1.0"
 [features]
 default = []
 
-base = []
+# ---------------------------------
+# 基础域（Base / Bitable）
+# ---------------------------------
+bitable = []
+base = ["bitable"]
+
+# ---------------------------------
+# 内容协同域（CCM）
+# - ccm-core：公共类型和 CcmService
+# - 其余 feature 以产品线拆分，可单独启用
+# ---------------------------------
+ccm-core = []
+ccm-doc = ["ccm-core"]
+ccm-docx = ["ccm-core"]
+ccm-drive = ["ccm-core"]
+ccm-sheets-v2 = ["ccm-core"]
+ccm-sheets-v3 = ["ccm-core"]
+ccm-sheets = ["ccm-core", "ccm-sheets-v3"]
+ccm-wiki = ["ccm-core"]
+ccm = [
+    "ccm-core",
+    "ccm-doc",
+    "ccm-docx",
+    "ccm-drive",
+    "ccm-sheets",
+    "ccm-wiki",
+]
+
+# ---------------------------------
+# 其他功能域
+# ---------------------------------
 cardkit = []
-ccm = []
 report = []
+
+# ---------------------------------
+# 聚合 feature，方便上层直接启用
+# ---------------------------------
+cloud-docs = ["base", "ccm"]
+all-cloud-docs = ["cloud-docs", "cardkit", "report"]
+
+# ---------------------------------
+# 兼容旧特性命名，避免外部依赖立刻破坏
+# ---------------------------------
+docs = ["ccm-doc"]
+docx = ["ccm-docx"]
+drive = ["ccm-drive"]
+wiki = ["ccm-wiki"]
+sheets = ["ccm-sheets"]
+sheets-v2 = ["ccm-sheets-v2"]
+sheets-v3 = ["ccm-sheets-v3"]
 
 [[example]]
 name = "cardkit_example"
 path = "../../examples/api/cardkit_example.rs"
 required-features = ["cardkit"]
-
 
 

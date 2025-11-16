@@ -36,8 +36,6 @@ pub mod services;
 // 重新导出主要类型
 pub use models::*;
 pub use services::{
-    PermissionService,
-    CheckMemberPermissionRequestBuilder,
+    CheckMemberPermissionRequestBuilder, GetPublicPermissionRequestBuilder, PermissionService,
     TransferOwnerRequestBuilder,
-    GetPublicPermissionRequestBuilder
 };

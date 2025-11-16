@@ -2,18 +2,13 @@
 //!
 //! 提供多维表格仪表板管理相关的API服务，包括：
 //! - 仪表板的创建、查询、更新、删除
-use std::collections::HashMap;
 //! - 仪表板组件配置和布局管理
 //! - 完整的错误处理和参数验证
-
+use std::collections::HashMap;
 
 use openlark_core::{
-    error::LarkAPIError,
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
+    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    http::Transport, SDKResult,
 };
 
 use super::models::*;
@@ -39,17 +34,27 @@ impl AppDashboardService {
     ///
     /// # 返回
     /// 返回新创建的仪表板信息
-    pub async fn create_dashboard(&self, request: &CreateDashboardRequest) -> SDKResult<CreateDashboardResponse> {
+    pub async fn create_dashboard(
+        &self,
+        request: &CreateDashboardRequest,
+    ) -> SDKResult<CreateDashboardResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("创建仪表板: app_token={}, dashboard_name={}",
-                  request.app_token, request.dashboard_name);
+        log::info!(
+            "创建仪表板: app_token={}, dashboard_name={}",
+            request.app_token,
+            request.dashboard_name
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
-        body.insert("dashboard_name", serde_json::to_value(&request.dashboard_name)?);
+        body.insert(
+            "dashboard_name",
+            serde_json::to_value(&request.dashboard_name)?,
+        );
 
         if let Some(ref description) = request.description {
             body.insert("description", serde_json::to_value(description)?);
@@ -64,7 +69,10 @@ impl AppDashboardService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/dashboards", request.app_token),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/dashboards",
+                request.app_token
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -72,10 +80,15 @@ impl AppDashboardService {
         };
 
         // 发送请求
-        let resp = Transport::<CreateDashboardResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<CreateDashboardResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("创建仪表板完成: app_token={}, dashboard_name={}", request.app_token, request.dashboard_name);
+        log::info!(
+            "创建仪表板完成: app_token={}, dashboard_name={}",
+            request.app_token,
+            request.dashboard_name
+        );
 
         Ok(response)
     }
@@ -89,12 +102,20 @@ impl AppDashboardService {
     ///
     /// # 返回
     /// 返回更新后的仪表板信息
-    pub async fn update_dashboard(&self, request: &UpdateDashboardRequest) -> SDKResult<UpdateDashboardResponse> {
+    pub async fn update_dashboard(
+        &self,
+        request: &UpdateDashboardRequest,
+    ) -> SDKResult<UpdateDashboardResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("更新仪表板: app_token={}, dashboard_id={}", request.app_token, request.dashboard_id);
+        log::info!(
+            "更新仪表板: app_token={}, dashboard_id={}",
+            request.app_token,
+            request.dashboard_id
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -115,7 +136,10 @@ impl AppDashboardService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/dashboards/{}", request.app_token, request.dashboard_id),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/dashboards/{}",
+                request.app_token, request.dashboard_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -123,10 +147,15 @@ impl AppDashboardService {
         };
 
         // 发送请求
-        let resp = Transport::<UpdateDashboardResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<UpdateDashboardResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("更新仪表板完成: app_token={}, dashboard_id={}", request.app_token, request.dashboard_id);
+        log::info!(
+            "更新仪表板完成: app_token={}, dashboard_id={}",
+            request.app_token,
+            request.dashboard_id
+        );
 
         Ok(response)
     }
@@ -140,17 +169,28 @@ impl AppDashboardService {
     ///
     /// # 返回
     /// 返回删除操作的结果
-    pub async fn delete_dashboard(&self, request: &DeleteDashboardRequest) -> SDKResult<DeleteDashboardResponse> {
+    pub async fn delete_dashboard(
+        &self,
+        request: &DeleteDashboardRequest,
+    ) -> SDKResult<DeleteDashboardResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("删除仪表板: app_token={}, dashboard_id={}", request.app_token, request.dashboard_id);
+        log::info!(
+            "删除仪表板: app_token={}, dashboard_id={}",
+            request.app_token,
+            request.dashboard_id
+        );
 
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/dashboards/{}", request.app_token, request.dashboard_id),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/dashboards/{}",
+                request.app_token, request.dashboard_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params: HashMap::new(),
@@ -158,10 +198,15 @@ impl AppDashboardService {
         };
 
         // 发送请求
-        let resp = Transport::<DeleteDashboardResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<DeleteDashboardResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("删除仪表板完成: app_token={}, dashboard_id={}", request.app_token, request.dashboard_id);
+        log::info!(
+            "删除仪表板完成: app_token={}, dashboard_id={}",
+            request.app_token,
+            request.dashboard_id
+        );
 
         Ok(response)
     }
@@ -175,9 +220,13 @@ impl AppDashboardService {
     ///
     /// # 返回
     /// 返回仪表板列表
-    pub async fn list_dashboards(&self, request: &ListDashboardsRequest) -> SDKResult<ListDashboardsResponse> {
+    pub async fn list_dashboards(
+        &self,
+        request: &ListDashboardsRequest,
+    ) -> SDKResult<ListDashboardsResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
         log::info!("列出仪表板: app_token={}", request.app_token);
@@ -195,7 +244,10 @@ impl AppDashboardService {
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/dashboards", request.app_token),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/dashboards",
+                request.app_token
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params,
@@ -203,12 +255,15 @@ impl AppDashboardService {
         };
 
         // 发送请求
-        let resp = Transport::<ListDashboardsResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<ListDashboardsResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("列出仪表板完成: app_token={}, count={}",
-                  request.app_token,
-                  response.dashboards.as_ref().map(|d| d.len()).unwrap_or(0));
+        log::info!(
+            "列出仪表板完成: app_token={}, count={}",
+            request.app_token,
+            response.dashboards.as_ref().map(|d| d.len()).unwrap_or(0)
+        );
 
         Ok(response)
     }
@@ -222,23 +277,40 @@ impl AppDashboardService {
     ///
     /// # 返回
     /// 返回复制的仪表板信息
-    pub async fn copy_dashboard(&self, request: &CopyDashboardRequest) -> SDKResult<CopyDashboardResponse> {
+    pub async fn copy_dashboard(
+        &self,
+        request: &CopyDashboardRequest,
+    ) -> SDKResult<CopyDashboardResponse> {
         // 验证请求参数
-        request.validate()
+        request
+            .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("复制仪表板: app_token={}, dashboard_id={}, new_name={}",
-                  request.app_token, request.dashboard_id, request.dashboard_name);
+        log::info!(
+            "复制仪表板: app_token={}, dashboard_id={}, new_name={}",
+            request.app_token,
+            request.dashboard_id,
+            request.dashboard_name
+        );
 
         // 构建请求体
         let mut body = HashMap::new();
-        body.insert("dashboard_id".to_string(), serde_json::to_value(&request.dashboard_id)?);
-        body.insert("dashboard_name".to_string(), serde_json::to_value(&request.dashboard_name)?);
+        body.insert(
+            "dashboard_id".to_string(),
+            serde_json::to_value(&request.dashboard_id)?,
+        );
+        body.insert(
+            "dashboard_name".to_string(),
+            serde_json::to_value(&request.dashboard_name)?,
+        );
 
         // 构建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/bitable/v1/apps/{}/dashboards/copy", request.app_token),
+            api_path: format!(
+                "/open-apis/bitable/v1/apps/{}/dashboards/copy",
+                request.app_token
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params: HashMap::new(),
@@ -249,7 +321,11 @@ impl AppDashboardService {
         let resp = Transport::<CopyDashboardResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("复制仪表板完成: app_token={}, dashboard_id={}", request.app_token, request.dashboard_id);
+        log::info!(
+            "复制仪表板完成: app_token={}, dashboard_id={}",
+            request.app_token,
+            request.dashboard_id
+        );
 
         Ok(response)
     }
@@ -288,7 +364,10 @@ impl CreateDashboardRequestBuilder {
         self
     }
 
-    pub async fn execute(self, service: &AppDashboardService) -> SDKResult<CreateDashboardResponse> {
+    pub async fn execute(
+        self,
+        service: &AppDashboardService,
+    ) -> SDKResult<CreateDashboardResponse> {
         service.create_dashboard(&self.request).await
     }
 }
@@ -331,7 +410,10 @@ impl UpdateDashboardRequestBuilder {
         self
     }
 
-    pub async fn execute(self, service: &AppDashboardService) -> SDKResult<UpdateDashboardResponse> {
+    pub async fn execute(
+        self,
+        service: &AppDashboardService,
+    ) -> SDKResult<UpdateDashboardResponse> {
         service.update_dashboard(&self.request).await
     }
 }

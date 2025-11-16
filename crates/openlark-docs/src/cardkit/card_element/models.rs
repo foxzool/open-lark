@@ -2,8 +2,8 @@
 //!
 //! 提供卡片组件管理相关的数据结构，支持组件的创建、更新、删除等操作。
 
-use serde::{Deserialize, Serialize};
 use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use serde::{Deserialize, Serialize};
 
 /// 创建卡片组件请求
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

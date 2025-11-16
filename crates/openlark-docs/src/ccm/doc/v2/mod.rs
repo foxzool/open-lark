@@ -7,21 +7,21 @@
 //! - 编辑文档内容
 //! - 获取电子表格元数据
 
+pub mod batch_update;
+pub mod content;
 pub mod create;
 pub mod meta;
-pub mod content;
-pub mod sheet_meta;
-pub mod batch_update;
 pub mod models;
 pub mod requests;
 pub mod responses;
+pub mod sheet_meta;
 
 // 重新导出所有服务类型
+pub use batch_update::*;
+pub use content::*;
 pub use create::*;
 pub use meta::*;
-pub use content::*;
 pub use sheet_meta::*;
-pub use batch_update::*;
 
 use openlark_core::config::Config;
 

@@ -7,9 +7,7 @@
 //!
 //! V2 API 提供了比 V1 更强大的功能和更好的性能表现。
 
-use openlark_core::{
-    config::Config,
-};
+use openlark_core::config::Config;
 
 // 导入子模块
 pub mod advanced_search;
@@ -17,7 +15,7 @@ pub mod batch_operations;
 pub mod enhanced_query;
 
 // 重新导出主要类型
-pub use advanced_search::{AdvancedSearchService, AdvancedSearchRequestBuilder};
+pub use advanced_search::{AdvancedSearchRequestBuilder, AdvancedSearchService};
 pub use batch_operations::{BatchOperationsService, BulkOperationRequestBuilder};
 pub use enhanced_query::{EnhancedQueryService, SmartQueryRequestBuilder};
 

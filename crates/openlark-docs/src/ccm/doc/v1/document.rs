@@ -7,11 +7,11 @@
 //! - 文档权限管理
 
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
-    api_req::ApiRequest,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -20,7 +20,7 @@ use serde::{Deserialize, Serialize};
 use super::requests::ListDocumentsRequest;
 
 // 导入模型类型
-use super::models::{DocumentType, DocumentStatus};
+use super::models::{DocumentStatus, DocumentType};
 
 /// 文档信息
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -1216,7 +1216,10 @@ impl DocumentService {
     ///     println!("文档内容: {}", content);
     /// }
     /// ```
-    pub async fn get_raw_content(&self, req: &GetDocumentRawContentRequest) -> SDKResult<GetDocumentRawContentResponse> {
+    pub async fn get_raw_content(
+        &self,
+        req: &GetDocumentRawContentRequest,
+    ) -> SDKResult<GetDocumentRawContentResponse> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
         log::debug!("开始获取文档纯文本内容: document_id={}", req.document_id);
@@ -1233,7 +1236,8 @@ impl DocumentService {
             ..Default::default()
         };
 
-        let resp = Transport::<GetDocumentRawContentResponse>::request(api_req, &self.config, None).await?;
+        let resp = Transport::<GetDocumentRawContentResponse>::request(api_req, &self.config, None)
+            .await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!(
@@ -1269,7 +1273,10 @@ impl DocumentService {
     ///     println!("找到 {} 个块", blocks.len());
     /// }
     /// ```
-    pub async fn get_blocks(&self, req: &GetDocumentBlocksRequest) -> SDKResult<GetDocumentBlocksResponse> {
+    pub async fn get_blocks(
+        &self,
+        req: &GetDocumentBlocksRequest,
+    ) -> SDKResult<GetDocumentBlocksResponse> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
         log::debug!("开始获取文档块: document_id={}", req.document_id);
@@ -1286,7 +1293,8 @@ impl DocumentService {
             ..Default::default()
         };
 
-        let resp = Transport::<GetDocumentBlocksResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<GetDocumentBlocksResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!(
@@ -1320,15 +1328,23 @@ impl DocumentService {
     ///
     /// let result = service.create_block(&request).await?;
     /// ```
-    pub async fn create_block(&self, req: &CreateDocumentBlockRequest) -> SDKResult<CreateDocumentBlockResponse> {
+    pub async fn create_block(
+        &self,
+        req: &CreateDocumentBlockRequest,
+    ) -> SDKResult<CreateDocumentBlockResponse> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
-        log::debug!("开始创建文档块: document_id={}, block_id={}", req.document_id, req.block_id);
+        log::debug!(
+            "开始创建文档块: document_id={}, block_id={}",
+            req.document_id,
+            req.block_id
+        );
 
         // 构建动态端点路径
-        let endpoint = openlark_core::endpoints_original::Endpoints::DOCX_V1_DOCUMENT_BLOCK_CHILDREN
-            .replace("{}", &req.document_id)
-            .replace("{}", &req.block_id.to_string());
+        let endpoint =
+            openlark_core::endpoints_original::Endpoints::DOCX_V1_DOCUMENT_BLOCK_CHILDREN
+                .replace("{}", &req.document_id)
+                .replace("{}", &req.block_id.to_string());
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
@@ -1338,7 +1354,8 @@ impl DocumentService {
             ..Default::default()
         };
 
-        let resp = Transport::<CreateDocumentBlockResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<CreateDocumentBlockResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!(
@@ -1374,10 +1391,17 @@ impl DocumentService {
     ///     println!("更新成功: {:?}", updated_block);
     /// }
     /// ```
-    pub async fn update_block(&self, req: &UpdateDocumentBlockRequest) -> SDKResult<UpdateDocumentBlockResponse> {
+    pub async fn update_block(
+        &self,
+        req: &UpdateDocumentBlockRequest,
+    ) -> SDKResult<UpdateDocumentBlockResponse> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
-        log::debug!("开始更新文档块: document_id={}, block_id={}", req.document_id, req.block_id);
+        log::debug!(
+            "开始更新文档块: document_id={}, block_id={}",
+            req.document_id,
+            req.block_id
+        );
 
         // 构建动态端点路径
         let endpoint = format!(
@@ -1393,7 +1417,8 @@ impl DocumentService {
             ..Default::default()
         };
 
-        let resp = Transport::<UpdateDocumentBlockResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<UpdateDocumentBlockResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!(
@@ -1429,10 +1454,17 @@ impl DocumentService {
     ///     println!("删除成功");
     /// }
     /// ```
-    pub async fn delete_block(&self, req: &DeleteDocumentBlockRequest) -> SDKResult<DeleteDocumentBlockResponse> {
+    pub async fn delete_block(
+        &self,
+        req: &DeleteDocumentBlockRequest,
+    ) -> SDKResult<DeleteDocumentBlockResponse> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
-        log::debug!("开始删除文档块: document_id={}, block_id={}", req.document_id, req.block_id);
+        log::debug!(
+            "开始删除文档块: document_id={}, block_id={}",
+            req.document_id,
+            req.block_id
+        );
 
         // 构建动态端点路径
         let endpoint = format!(
@@ -1448,7 +1480,8 @@ impl DocumentService {
             ..Default::default()
         };
 
-        let resp = Transport::<DeleteDocumentBlockResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<DeleteDocumentBlockResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!(
@@ -1486,8 +1519,15 @@ impl DocumentService {
     ///     println!("找到 {} 个文档", documents.len());
     /// }
     /// ```
-    pub async fn list_documents(&self, req: &ListDocumentsRequest) -> SDKResult<DocumentListResponse> {
-        log::debug!("开始查询文档列表: folder_id={:?}, keyword={:?}", req.folder_id, req.keyword);
+    pub async fn list_documents(
+        &self,
+        req: &ListDocumentsRequest,
+    ) -> SDKResult<DocumentListResponse> {
+        log::debug!(
+            "开始查询文档列表: folder_id={:?}, keyword={:?}",
+            req.folder_id,
+            req.keyword
+        );
 
         // 构建查询参数
         let mut query_params = Vec::new();
@@ -1530,10 +1570,14 @@ impl DocumentService {
 
         // 构建查询字符串
         let query_string = if !query_params.is_empty() {
-            format!("?{}", query_params.iter()
-                .map(|(k, v)| format!("{}={}", k, urlencoding::encode(v)))
-                .collect::<Vec<_>>()
-                .join("&"))
+            format!(
+                "?{}",
+                query_params
+                    .iter()
+                    .map(|(k, v)| format!("{}={}", k, urlencoding::encode(v)))
+                    .collect::<Vec<_>>()
+                    .join("&")
+            )
         } else {
             String::new()
         };
@@ -1600,7 +1644,8 @@ impl DocumentService {
             ..Default::default()
         };
 
-        let resp = Transport::<DeleteDocumentResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<DeleteDocumentResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!(
@@ -1891,7 +1936,10 @@ impl CreateDocumentBlockBuilder {
     ///     .execute(&service)
     ///     .await?;
     /// ```
-    pub async fn execute(self, service: &DocumentService) -> SDKResult<CreateDocumentBlockResponse> {
+    pub async fn execute(
+        self,
+        service: &DocumentService,
+    ) -> SDKResult<CreateDocumentBlockResponse> {
         service.create_block(&self.request).await
     }
 }
@@ -1951,7 +1999,10 @@ impl UpdateDocumentBlockBuilder {
     ///     .execute(&service)
     ///     .await?;
     /// ```
-    pub async fn execute(self, service: &DocumentService) -> SDKResult<UpdateDocumentBlockResponse> {
+    pub async fn execute(
+        self,
+        service: &DocumentService,
+    ) -> SDKResult<UpdateDocumentBlockResponse> {
         service.update_block(&self.request).await
     }
 }
@@ -2014,7 +2065,10 @@ impl DeleteDocumentBlockBuilder {
     ///     .execute(&service)
     ///     .await?;
     /// ```
-    pub async fn execute(self, service: &DocumentService) -> SDKResult<DeleteDocumentBlockResponse> {
+    pub async fn execute(
+        self,
+        service: &DocumentService,
+    ) -> SDKResult<DeleteDocumentBlockResponse> {
         service.delete_block(&self.request).await
     }
 }
@@ -2197,7 +2251,12 @@ impl DocumentService {
     /// let service = DocumentService::new(config);
     /// let builder = service.create_block_builder("doc_123", 123456, 0);
     /// ```
-    pub fn create_block_builder(&self, document_id: impl Into<String>, block_id: i64, index: i32) -> CreateDocumentBlockBuilder {
+    pub fn create_block_builder(
+        &self,
+        document_id: impl Into<String>,
+        block_id: i64,
+        index: i32,
+    ) -> CreateDocumentBlockBuilder {
         CreateDocumentBlockBuilder::new(document_id, block_id, index)
     }
 
@@ -2220,7 +2279,12 @@ impl DocumentService {
     /// let block = DocumentBlock::new();
     /// let builder = service.update_block_builder("doc_123", 123456, block);
     /// ```
-    pub fn update_block_builder(&self, document_id: impl Into<String>, block_id: i64, block: DocumentBlock) -> UpdateDocumentBlockBuilder {
+    pub fn update_block_builder(
+        &self,
+        document_id: impl Into<String>,
+        block_id: i64,
+        block: DocumentBlock,
+    ) -> UpdateDocumentBlockBuilder {
         UpdateDocumentBlockBuilder::new(document_id, block_id, block)
     }
 
@@ -2241,7 +2305,11 @@ impl DocumentService {
     /// let service = DocumentService::new(config);
     /// let builder = service.delete_block_builder("doc_123", 123456);
     /// ```
-    pub fn delete_block_builder(&self, document_id: impl Into<String>, block_id: i64) -> DeleteDocumentBlockBuilder {
+    pub fn delete_block_builder(
+        &self,
+        document_id: impl Into<String>,
+        block_id: i64,
+    ) -> DeleteDocumentBlockBuilder {
         DeleteDocumentBlockBuilder::new(document_id, block_id)
     }
 

@@ -2,8 +2,8 @@
 //!
 //! 提供视频会议报告相关的数据结构，支持每日报告和用户统计报告等操作。
 
-use serde::{Deserialize, Serialize};
 use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use serde::{Deserialize, Serialize};
 
 /// 获取每日会议报告请求
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -82,7 +82,9 @@ impl GetDailyReportRequest {
         }
 
         // 验证是否为数字
-        parts.iter().all(|part| part.chars().all(|c| c.is_ascii_digit()))
+        parts
+            .iter()
+            .all(|part| part.chars().all(|c| c.is_ascii_digit()))
     }
 
     /// 验证日期范围
@@ -191,7 +193,9 @@ impl GetTopUserReportRequest {
         }
 
         // 验证是否为数字
-        parts.iter().all(|part| part.chars().all(|c| c.is_ascii_digit()))
+        parts
+            .iter()
+            .all(|part| part.chars().all(|c| c.is_ascii_digit()))
     }
 
     /// 验证日期范围

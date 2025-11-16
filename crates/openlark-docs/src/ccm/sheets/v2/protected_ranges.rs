@@ -8,6 +8,7 @@
 //! - 权限验证和安全机制
 
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -15,7 +16,6 @@ use openlark_core::{
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
-    api_req::ApiRequest,
     SDKResult,
 };
 use reqwest::Method;
@@ -247,11 +247,11 @@ impl ProtectedRangesService {
     ///
     /// let result = service.create(&request);
     /// ```
-    pub async fn create(&self, request: &CreateProtectedRangesRequest) -> SDKResult<CreateProtectedRangesResponse> {
-        use openlark_core::{
-            api_req::ApiRequest,
-            http::Transport,
-        };
+    pub async fn create(
+        &self,
+        request: &CreateProtectedRangesRequest,
+    ) -> SDKResult<CreateProtectedRangesResponse> {
+        use openlark_core::{api_req::ApiRequest, http::Transport};
         use reqwest::Method;
 
         let endpoint = format!(
@@ -262,21 +262,24 @@ impl ProtectedRangesService {
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let create_response: StandardResponse<CreateProtectedRangesResponse> = Transport::request(api_request, &self.config, None).await?;
+        let create_response: StandardResponse<CreateProtectedRangesResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if let Some(data) = create_response.data {
             Ok(data)
         } else {
-            Err(LarkAPIError::InvalidResponse("Missing data field".to_string()))
+            Err(LarkAPIError::InvalidResponse(
+                "Missing data field".to_string(),
+            ))
         }
     }
 
     /// 批量更新保护范围
-    pub async fn update(&self, request: &UpdateProtectedRangesRequest) -> SDKResult<UpdateProtectedRangesResponse> {
-        use openlark_core::{
-            api_req::ApiRequest,
-            http::Transport,
-        };
+    pub async fn update(
+        &self,
+        request: &UpdateProtectedRangesRequest,
+    ) -> SDKResult<UpdateProtectedRangesResponse> {
+        use openlark_core::{api_req::ApiRequest, http::Transport};
         use reqwest::Method;
 
         let endpoint = format!(
@@ -287,21 +290,24 @@ impl ProtectedRangesService {
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let update_response: StandardResponse<UpdateProtectedRangesResponse> = Transport::request(api_request, &self.config, None).await?;
+        let update_response: StandardResponse<UpdateProtectedRangesResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if let Some(data) = update_response.data {
             Ok(data)
         } else {
-            Err(LarkAPIError::InvalidResponse("Missing data field".to_string()))
+            Err(LarkAPIError::InvalidResponse(
+                "Missing data field".to_string(),
+            ))
         }
     }
 
     /// 批量获取保护范围
-    pub async fn get(&self, request: &GetProtectedRangesRequest) -> SDKResult<GetProtectedRangesResponse> {
-        use openlark_core::{
-            api_req::ApiRequest,
-            http::Transport,
-        };
+    pub async fn get(
+        &self,
+        request: &GetProtectedRangesRequest,
+    ) -> SDKResult<GetProtectedRangesResponse> {
+        use openlark_core::{api_req::ApiRequest, http::Transport};
         use reqwest::Method;
 
         let endpoint = format!(
@@ -311,21 +317,24 @@ impl ProtectedRangesService {
         );
 
         let api_request = ApiRequest::with_method_and_path(Method::GET, &endpoint);
-        let get_response: StandardResponse<GetProtectedRangesResponse> = Transport::request(api_request, &self.config, None).await?;
+        let get_response: StandardResponse<GetProtectedRangesResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if let Some(data) = get_response.data {
             Ok(data)
         } else {
-            Err(LarkAPIError::InvalidResponse("Missing data field".to_string()))
+            Err(LarkAPIError::InvalidResponse(
+                "Missing data field".to_string(),
+            ))
         }
     }
 
     /// 批量删除保护范围
-    pub async fn delete(&self, request: &DeleteProtectedRangesRequest) -> SDKResult<DeleteProtectedRangesResponse> {
-        use openlark_core::{
-            api_req::ApiRequest,
-            http::Transport,
-        };
+    pub async fn delete(
+        &self,
+        request: &DeleteProtectedRangesRequest,
+    ) -> SDKResult<DeleteProtectedRangesResponse> {
+        use openlark_core::{api_req::ApiRequest, http::Transport};
         use reqwest::Method;
 
         let endpoint = format!(
@@ -336,12 +345,15 @@ impl ProtectedRangesService {
         let mut api_request = ApiRequest::with_method_and_path(Method::DELETE, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let delete_response: StandardResponse<DeleteProtectedRangesResponse> = Transport::request(api_request, &self.config, None).await?;
+        let delete_response: StandardResponse<DeleteProtectedRangesResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if let Some(data) = delete_response.data {
             Ok(data)
         } else {
-            Err(LarkAPIError::InvalidResponse("Missing data field".to_string()))
+            Err(LarkAPIError::InvalidResponse(
+                "Missing data field".to_string(),
+            ))
         }
     }
 }

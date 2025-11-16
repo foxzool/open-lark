@@ -34,4 +34,4 @@ pub mod models;
 pub mod services;
 
 // 重新导出主要类型
-pub use services::{RuleService, QueryRuleRequestBuilder, RemoveRuleViewRequestBuilder};
+pub use services::{QueryRuleRequestBuilder, RemoveRuleViewRequestBuilder, RuleService};

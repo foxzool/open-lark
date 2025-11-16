@@ -1,11 +1,12 @@
+
 #![allow(dead_code)]
 #![allow(unused_variables)]
 #![allow(unused_imports)]
 #![allow(unused_mut)]
-use std::collections::HashMap;
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
+use std::collections::HashMap;
 //! Cloud Docs Drive文件管理服务 v1
 //!
 //! 提供企业级的文件上传、下载、管理功能，支持多种文件格式和高级操作：

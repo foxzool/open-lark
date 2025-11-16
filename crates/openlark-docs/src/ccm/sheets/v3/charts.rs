@@ -2,25 +2,23 @@
 //!
 //! 提供飞书电子表格v3版本的图表管理功能，包括：
 //! - 创建和删除图表
-use std::collections::HashMap;
 //! - 多种图表类型支持（柱状图、折线图、饼图、散点图等）
 //! - 图表样式和配置管理
 //! - 数据范围和系列配置
+use std::collections::HashMap;
 
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, ResponseFormat},
     error::LarkAPIError,
     http::Transport,
-    api_req::ApiRequest,
 };
 
-use serde::{Deserialize, Serialize};
 use reqwest::Method;
+use serde::{Deserialize, Serialize};
 
 // 使用统一类型定义
 use super::Range;
-
-
 
 /// 图表类型
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -775,10 +773,7 @@ impl ChartService {
         request: &CreateChartRequest,
     ) -> openlark_core::error::SDKResult<CreateChartResponse> {
         use openlark_core::{
-            api_req::ApiRequest,
-            http::Transport,
-            api_resp::BaseResponse,
-            error::LarkAPIError,
+            api_req::ApiRequest, api_resp::BaseResponse, error::LarkAPIError, http::Transport,
         };
 
         let endpoint = format!(
@@ -789,7 +784,8 @@ impl ChartService {
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let response: BaseResponse<CreateChartResponse> = Transport::request(api_request, &self.config, None).await?;
+        let response: BaseResponse<CreateChartResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
@@ -799,9 +795,11 @@ impl ChartService {
             });
         }
 
-        response
-            .data
-            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
+        response.data.ok_or_else(|| LarkAPIError::APIError {
+            code: -1,
+            msg: "响应数据为空".to_string(),
+            error: None,
+        })
     }
 
     /// 删除图表
@@ -834,10 +832,7 @@ impl ChartService {
         request: &DeleteChartRequest,
     ) -> openlark_core::error::SDKResult<DeleteChartResponse> {
         use openlark_core::{
-            api_req::ApiRequest,
-            http::Transport,
-            api_resp::BaseResponse,
-            error::LarkAPIError,
+            api_req::ApiRequest, api_resp::BaseResponse, error::LarkAPIError, http::Transport,
         };
 
         let endpoint = format!(
@@ -847,7 +842,8 @@ impl ChartService {
 
         let api_request = ApiRequest::with_method_and_path(Method::DELETE, &endpoint);
 
-        let response: BaseResponse<DeleteChartResponse> = Transport::request(api_request, &self.config, None).await?;
+        let response: BaseResponse<DeleteChartResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
             return Err(LarkAPIError::APIError {
@@ -857,9 +853,11 @@ impl ChartService {
             });
         }
 
-        response
-            .data
-            .ok_or_else(|| LarkAPIError::APIError { code: -1, msg: "响应数据为空".to_string(), error: None })
+        response.data.ok_or_else(|| LarkAPIError::APIError {
+            code: -1,
+            msg: "响应数据为空".to_string(),
+            error: None,
+        })
     }
 
     /// 创建图表构建器

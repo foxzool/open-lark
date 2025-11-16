@@ -8,13 +8,14 @@
 //! - 支持多种验证类型和条件
 
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
-    api_req::ApiRequest, SDKResult,
+    SDKResult,
 };
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
@@ -633,10 +634,7 @@ impl ApiResponseTrait for DeleteDataValidationResponse {
 
 impl GetDataValidationRequest {
     /// 创建新的查询数据验证请求
-    pub fn new(
-        spreadsheet_token: impl Into<String>,
-        sheet_id: impl Into<String>,
-    ) -> Self {
+    pub fn new(spreadsheet_token: impl Into<String>, sheet_id: impl Into<String>) -> Self {
         Self {
             spreadsheet_token: spreadsheet_token.into(),
             sheet_id: sheet_id.into(),
@@ -666,10 +664,7 @@ impl GetDataValidationRequest {
 
 impl DeleteDataValidationRequest {
     /// 创建新的删除数据验证请求
-    pub fn new(
-        spreadsheet_token: impl Into<String>,
-        sheet_id: impl Into<String>,
-    ) -> Self {
+    pub fn new(spreadsheet_token: impl Into<String>, sheet_id: impl Into<String>) -> Self {
         Self {
             spreadsheet_token: spreadsheet_token.into(),
             sheet_id: sheet_id.into(),
@@ -883,7 +878,8 @@ impl DataValidationService {
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         // 发送请求
-        let api_resp = Transport::<GetDataValidationResponse>::request(api_req, &self.config, option).await?;
+        let api_resp =
+            Transport::<GetDataValidationResponse>::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
@@ -942,13 +938,19 @@ impl DataValidationService {
             // 这里需要在URL中添加range参数，但由于ApiRequest的限制，我们需要使用不同的方式
             let full_endpoint = format!("{}&range={}", endpoint, range);
             let mut new_req = ApiRequest::with_method_and_path(Method::DELETE, &full_endpoint);
-            new_req
-                .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+            new_req.set_supported_access_token_types(vec![
+                AccessTokenType::Tenant,
+                AccessTokenType::User,
+            ]);
 
-            let api_resp = Transport::<DeleteDataValidationResponse>::request(new_req, &self.config, option).await?;
+            let api_resp =
+                Transport::<DeleteDataValidationResponse>::request(new_req, &self.config, option)
+                    .await?;
             Ok(api_resp)
         } else {
-            let api_resp = Transport::<DeleteDataValidationResponse>::request(api_req, &self.config, option).await?;
+            let api_resp =
+                Transport::<DeleteDataValidationResponse>::request(api_req, &self.config, option)
+                    .await?;
             Ok(api_resp)
         }
     }

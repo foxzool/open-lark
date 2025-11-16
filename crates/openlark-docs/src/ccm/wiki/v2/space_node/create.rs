@@ -1,3 +1,4 @@
+#![allow(unused_variables, unused_unsafe)]
 use SDKResult;use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
@@ -308,7 +309,6 @@ impl_executable_builder_owned!(
 );
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 

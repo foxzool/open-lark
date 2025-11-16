@@ -7,6 +7,7 @@
 //! - 错误处理和结果查询
 
 use openlark_core::{
+    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -14,7 +15,6 @@ use openlark_core::{
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
-    api_req::ApiRequest,
     SDKResult,
 };
 use reqwest::Method;
@@ -140,10 +140,7 @@ impl ImportService {
     /// let result = service.import(&request);
     /// ```
     pub async fn import(&self, request: &ImportRequest) -> SDKResult<ImportResponse> {
-        use openlark_core::{
-            api_req::ApiRequest,
-            http::Transport,
-        };
+        use openlark_core::{api_req::ApiRequest, http::Transport};
         use reqwest::Method;
 
         let endpoint = "/open-apis/sheets/v2/import";
@@ -151,12 +148,15 @@ impl ImportService {
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let import_response: StandardResponse<ImportResponse> = Transport::request(api_request, &self.config, None).await?;
+        let import_response: StandardResponse<ImportResponse> =
+            Transport::request(api_request, &self.config, None).await?;
 
         if let Some(data) = import_response.data {
             Ok(data)
         } else {
-            Err(LarkAPIError::InvalidResponse("Missing data field".to_string()))
+            Err(LarkAPIError::InvalidResponse(
+                "Missing data field".to_string(),
+            ))
         }
     }
 }

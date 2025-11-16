@@ -2,46 +2,31 @@
 //!
 //! 提供完整的文档(DocX)功能实现，包括：
 //! - ccm_docs: 云文档搜索和元数据 (已实现)
+//! - docx: 新版文档操作、块操作、群公告等 (新增)
 use serde_json::Value;
 use std::collections::HashMap;
-//! - docx: 新版文档操作、块操作、群公告等 (新增)
 
-use openlark_core::{
-    
-    
-    constants::AccessTokenType,
-    http::Transport,
-    api_req::ApiRequest,
-    SDKResult,
-};
+use openlark_core::{api_req::ApiRequest, constants::AccessTokenType, http::Transport, SDKResult};
 
 // 导入ccm_docs API (已实现)
-use super::models::{
-    SearchDocsRequest, SearchDocsResponse,
-    GetDocMetaRequest, GetDocMetaResponse,
-};
+use super::models::{GetDocMetaRequest, GetDocMetaResponse, SearchDocsRequest, SearchDocsResponse};
 
 // 导入docx相关的模型 (待创建)
 use super::models_docx::{
-    CreateDocumentRequest, CreateDocumentResponse,
-    GetDocumentRequest, GetDocumentResponse,
-    GetDocumentRawContentRequest, GetDocumentRawContentResponse,
-    ListDocumentBlocksRequest, ListDocumentBlocksResponse,
-    CreateBlockChildrenRequest, CreateBlockChildrenResponse,
-    CreateBlockDescendantRequest, CreateBlockDescendantResponse,
-    UpdateBlockRequest, UpdateBlockResponse,
-    GetBlockRequest, GetBlockResponse,
-    BatchUpdateBlocksRequest, BatchUpdateBlocksResponse,
-    GetBlockChildrenRequest, GetBlockChildrenResponse,
-    DeleteBlockChildrenRequest, DeleteBlockChildrenResponse,
-    ConvertContentRequest, ConvertContentResponse,
-    ChatAnnouncementRequest, ChatAnnouncementResponse,
-    ListChatAnnouncementBlocksRequest, ListChatAnnouncementBlocksResponse,
+    BatchUpdateBlocksRequest, BatchUpdateBlocksResponse, BatchUpdateChatAnnouncementBlocksRequest,
+    BatchUpdateChatAnnouncementBlocksResponse, ChatAnnouncementRequest, ChatAnnouncementResponse,
+    ConvertContentRequest, ConvertContentResponse, CreateBlockChildrenRequest,
+    CreateBlockChildrenResponse, CreateBlockDescendantRequest, CreateBlockDescendantResponse,
     CreateChatAnnouncementBlockChildrenRequest, CreateChatAnnouncementBlockChildrenResponse,
-    BatchUpdateChatAnnouncementBlocksRequest, BatchUpdateChatAnnouncementBlocksResponse,
-    GetChatAnnouncementBlockRequest, GetChatAnnouncementBlockResponse,
-    GetChatAnnouncementBlockChildrenRequest, GetChatAnnouncementBlockChildrenResponse,
-    DeleteChatAnnouncementBlockChildrenRequest, DeleteChatAnnouncementBlockChildrenResponse,
+    CreateDocumentRequest, CreateDocumentResponse, DeleteBlockChildrenRequest,
+    DeleteBlockChildrenResponse, DeleteChatAnnouncementBlockChildrenRequest,
+    DeleteChatAnnouncementBlockChildrenResponse, GetBlockChildrenRequest, GetBlockChildrenResponse,
+    GetBlockRequest, GetBlockResponse, GetChatAnnouncementBlockChildrenRequest,
+    GetChatAnnouncementBlockChildrenResponse, GetChatAnnouncementBlockRequest,
+    GetChatAnnouncementBlockResponse, GetDocumentRawContentRequest, GetDocumentRawContentResponse,
+    GetDocumentRequest, GetDocumentResponse, ListChatAnnouncementBlocksRequest,
+    ListChatAnnouncementBlocksResponse, ListDocumentBlocksRequest, ListDocumentBlocksResponse,
+    UpdateBlockRequest, UpdateBlockResponse,
 };
 
 /// ccm_docs API 服务
@@ -104,10 +89,15 @@ impl CcmDocsService {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
-        log::debug!("开始搜索云文档: search_key={}, doc_types={:?}, search_scope={:?}",
-                   req.search_key, req.doc_types, req.search_scope);
+        log::debug!(
+            "开始搜索云文档: search_key={}, doc_types={:?}, search_scope={:?}",
+            req.search_key,
+            req.doc_types,
+            req.search_scope
+        );
 
-        let mut query_params: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
+        let mut query_params: std::collections::HashMap<&str, String> =
+            std::collections::HashMap::new();
 
         // 文档类型参数
         if let Some(ref doc_types) = req.doc_types {
@@ -121,7 +111,8 @@ impl CcmDocsService {
                     query_params.insert("search_scope", format!("folder:{}", folder_token));
                 }
                 _ => {
-                    query_params.insert("search_scope", format!("{:?}", search_scope).to_lowercase());
+                    query_params
+                        .insert("search_scope", format!("{:?}", search_scope).to_lowercase());
                 }
             }
         }
@@ -129,7 +120,10 @@ impl CcmDocsService {
         // 排序参数
         if let Some(ref sort) = req.sort {
             query_params.insert("sort_field", sort.sort_field.clone());
-            query_params.insert("sort_direction", format!("{:?}", sort.sort_direction).to_lowercase());
+            query_params.insert(
+                "sort_direction",
+                format!("{:?}", sort.sort_direction).to_lowercase(),
+            );
         }
 
         // 分页参数
@@ -159,7 +153,11 @@ impl CcmDocsService {
         log::info!(
             "云文档搜索完成: search_key={}, result_count={}, has_more={}",
             req.search_key,
-            response.items.as_ref().map(|items| items.len()).unwrap_or(0),
+            response
+                .items
+                .as_ref()
+                .map(|items| items.len())
+                .unwrap_or(0),
             response.has_more.unwrap_or(false)
         );
 
@@ -208,13 +206,17 @@ impl CcmDocsService {
     ///     Ok(())
     /// }
     /// ```
-    pub async fn get_documents_meta(&self, req: &GetDocMetaRequest) -> SDKResult<GetDocMetaResponse> {
+    pub async fn get_documents_meta(
+        &self,
+        req: &GetDocMetaRequest,
+    ) -> SDKResult<GetDocMetaResponse> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
         log::debug!("开始获取文档元数据: token_count={}", req.tokens.len());
 
-        let mut query_params: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
+        let mut query_params: std::collections::HashMap<&str, String> =
+            std::collections::HashMap::new();
 
         // 扩展字段参数
         if let Some(ref extra_fields) = req.extra_fields {
@@ -240,7 +242,11 @@ impl CcmDocsService {
         log::info!(
             "文档元数据获取完成: requested_count={}, result_count={}",
             req.tokens.len(),
-            response.items.as_ref().map(|items| items.len()).unwrap_or(0)
+            response
+                .items
+                .as_ref()
+                .map(|items| items.len())
+                .unwrap_or(0)
         );
 
         Ok(response)
@@ -260,7 +266,7 @@ pub struct SearchDocumentsBuilder {
     page_token: Option<String>,
 }
 
-use super::models::{SearchScope, SortRule, SortDirection};
+use super::models::{SearchScope, SortDirection, SortRule};
 
 impl SearchDocumentsBuilder {
     /// 创建新的搜索构建器实例
@@ -458,14 +464,21 @@ impl DocxService {
     ///     Ok(())
     /// }
     /// ```
-    pub async fn create_document(&self, req: &CreateDocumentRequest) -> SDKResult<CreateDocumentResponse> {
+    pub async fn create_document(
+        &self,
+        req: &CreateDocumentRequest,
+    ) -> SDKResult<CreateDocumentResponse> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
-        log::debug!("开始创建文档: title={}, folder_token={:?}",
-                   req.title, req.folder_token);
+        log::debug!(
+            "开始创建文档: title={}, folder_token={:?}",
+            req.title,
+            req.folder_token
+        );
 
-        let mut query_params: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
+        let mut query_params: std::collections::HashMap<&str, String> =
+            std::collections::HashMap::new();
 
         // 文件夹token参数
         if let Some(ref folder_token) = req.folder_token {
@@ -479,9 +492,15 @@ impl DocxService {
 
         // 构建请求体
         let mut body: HashMap<String, serde_json::Value> = HashMap::new();
-        body.insert("title".to_string(), serde_json::Value::String(req.title.clone()));
+        body.insert(
+            "title".to_string(),
+            serde_json::Value::String(req.title.clone()),
+        );
         if let Some(ref cover_key) = req.cover_key {
-            body.insert("cover_key".to_string(), serde_json::Value::String(cover_key.clone()));
+            body.insert(
+                "cover_key".to_string(),
+                serde_json::Value::String(cover_key.clone()),
+            );
         }
 
         let api_req = ApiRequest {
@@ -493,11 +512,15 @@ impl DocxService {
             ..Default::default()
         };
 
-        let resp = Transport::<CreateDocumentResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<CreateDocumentResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("文档创建完成: title={}, document_token={:?}",
-                  req.title, response.document_token);
+        log::info!(
+            "文档创建完成: title={}, document_token={:?}",
+            req.title,
+            response.document_token
+        );
 
         Ok(response)
     }
@@ -517,7 +540,8 @@ impl DocxService {
 
         log::debug!("开始获取文档信息: document_token={}", req.document_token);
 
-        let mut query_params: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
+        let mut query_params: std::collections::HashMap<&str, String> =
+            std::collections::HashMap::new();
 
         // 用户ID类型参数
         if let Some(ref user_id_type) = req.user_id_type {
@@ -559,13 +583,20 @@ impl DocxService {
     ///
     /// # 返回
     /// - `SDKResult<GetDocumentRawContentResponse>`: 原始内容
-    pub async fn get_document_raw_content(&self, req: &GetDocumentRawContentRequest) -> SDKResult<GetDocumentRawContentResponse> {
+    pub async fn get_document_raw_content(
+        &self,
+        req: &GetDocumentRawContentRequest,
+    ) -> SDKResult<GetDocumentRawContentResponse> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
-        log::debug!("开始获取文档原始内容: document_token={}", req.document_token);
+        log::debug!(
+            "开始获取文档原始内容: document_token={}",
+            req.document_token
+        );
 
-        let mut query_params: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
+        let mut query_params: std::collections::HashMap<&str, String> =
+            std::collections::HashMap::new();
 
         // 用户ID类型参数
         if let Some(ref user_id_type) = req.user_id_type {
@@ -574,16 +605,23 @@ impl DocxService {
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/docx/v1/documents/{}/raw_content", req.document_token),
+            api_path: format!(
+                "/open-apis/docx/v1/documents/{}/raw_content",
+                req.document_token
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
         };
 
-        let resp = Transport::<GetDocumentRawContentResponse>::request(api_req, &self.config, None).await?;
+        let resp = Transport::<GetDocumentRawContentResponse>::request(api_req, &self.config, None)
+            .await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("文档原始内容获取完成: document_token={}", req.document_token);
+        log::info!(
+            "文档原始内容获取完成: document_token={}",
+            req.document_token
+        );
 
         Ok(response)
     }
@@ -597,13 +635,17 @@ impl DocxService {
     ///
     /// # 返回
     /// - `SDKResult<ListDocumentBlocksResponse>`: 文档块列表
-    pub async fn list_document_blocks(&self, req: &ListDocumentBlocksRequest) -> SDKResult<ListDocumentBlocksResponse> {
+    pub async fn list_document_blocks(
+        &self,
+        req: &ListDocumentBlocksRequest,
+    ) -> SDKResult<ListDocumentBlocksResponse> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
         log::debug!("开始列出文档块: document_token={}", req.document_token);
 
-        let mut query_params: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
+        let mut query_params: std::collections::HashMap<&str, String> =
+            std::collections::HashMap::new();
 
         // 用户ID类型参数
         if let Some(ref user_id_type) = req.user_id_type {
@@ -631,11 +673,15 @@ impl DocxService {
             ..Default::default()
         };
 
-        let resp = Transport::<ListDocumentBlocksResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<ListDocumentBlocksResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("文档块列表获取完成: document_token={}, block_count={:?}",
-                  req.document_token, response.items.as_ref().map(|items| items.len()));
+        log::info!(
+            "文档块列表获取完成: document_token={}, block_count={:?}",
+            req.document_token,
+            response.items.as_ref().map(|items| items.len())
+        );
 
         Ok(response)
     }
@@ -649,14 +695,21 @@ impl DocxService {
     ///
     /// # 返回
     /// - `SDKResult<CreateBlockChildrenResponse>`: 创建结果
-    pub async fn create_block_children(&self, req: &CreateBlockChildrenRequest) -> SDKResult<CreateBlockChildrenResponse> {
+    pub async fn create_block_children(
+        &self,
+        req: &CreateBlockChildrenRequest,
+    ) -> SDKResult<CreateBlockChildrenResponse> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
-        log::debug!("开始创建块子级: document_token={}, block_id={}",
-                   req.document_token, req.block_id);
+        log::debug!(
+            "开始创建块子级: document_token={}, block_id={}",
+            req.document_token,
+            req.block_id
+        );
 
-        let mut query_params: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
+        let mut query_params: std::collections::HashMap<&str, String> =
+            std::collections::HashMap::new();
 
         // 用户ID类型参数
         if let Some(ref user_id_type) = req.user_id_type {
@@ -665,23 +718,34 @@ impl DocxService {
 
         // 构建请求体
         let mut body: HashMap<String, serde_json::Value> = HashMap::new();
-        body.insert("block_id".to_string(), serde_json::Value::String(req.block_id.clone()));
+        body.insert(
+            "block_id".to_string(),
+            serde_json::Value::String(req.block_id.clone()),
+        );
         body.insert("children".to_string(), serde_json::to_value(&req.children)?);
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/docx/v1/documents/{}/blocks/batch_create", req.document_token),
+            api_path: format!(
+                "/open-apis/docx/v1/documents/{}/blocks/batch_create",
+                req.document_token
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params,
             ..Default::default()
         };
 
-        let resp = Transport::<CreateBlockChildrenResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<CreateBlockChildrenResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("块子级创建完成: document_token={}, block_id={}, created_count={:?}",
-                  req.document_token, req.block_id, response.block_ids.as_ref().map(|ids| ids.len()));
+        log::info!(
+            "块子级创建完成: document_token={}, block_id={}, created_count={:?}",
+            req.document_token,
+            req.block_id,
+            response.block_ids.as_ref().map(|ids| ids.len())
+        );
 
         Ok(response)
     }
@@ -695,14 +759,21 @@ impl DocxService {
     ///
     /// # 返回
     /// - `SDKResult<CreateBlockDescendantResponse>`: 创建结果
-    pub async fn create_block_descendant(&self, req: &CreateBlockDescendantRequest) -> SDKResult<CreateBlockDescendantResponse> {
+    pub async fn create_block_descendant(
+        &self,
+        req: &CreateBlockDescendantRequest,
+    ) -> SDKResult<CreateBlockDescendantResponse> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
-        log::debug!("开始创建块后代: document_token={}, block_id={}",
-                   req.document_token, req.block_id);
+        log::debug!(
+            "开始创建块后代: document_token={}, block_id={}",
+            req.document_token,
+            req.block_id
+        );
 
-        let mut query_params: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
+        let mut query_params: std::collections::HashMap<&str, String> =
+            std::collections::HashMap::new();
 
         // 用户ID类型参数
         if let Some(ref user_id_type) = req.user_id_type {
@@ -715,18 +786,25 @@ impl DocxService {
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/docx/v1/documents/{}/blocks/create", req.document_token),
+            api_path: format!(
+                "/open-apis/docx/v1/documents/{}/blocks/create",
+                req.document_token
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params,
             ..Default::default()
         };
 
-        let resp = Transport::<CreateBlockDescendantResponse>::request(api_req, &self.config, None).await?;
+        let resp = Transport::<CreateBlockDescendantResponse>::request(api_req, &self.config, None)
+            .await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("块后代创建完成: document_token={}, block_count={:?}",
-                  req.document_token, response.block_ids.as_ref().map(|ids| ids.len()));
+        log::info!(
+            "块后代创建完成: document_token={}, block_count={:?}",
+            req.document_token,
+            response.block_ids.as_ref().map(|ids| ids.len())
+        );
 
         Ok(response)
     }
@@ -744,10 +822,14 @@ impl DocxService {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
-        log::debug!("开始更新块: document_token={}, block_id={}",
-                   req.document_token, req.block_id);
+        log::debug!(
+            "开始更新块: document_token={}, block_id={}",
+            req.document_token,
+            req.block_id
+        );
 
-        let mut query_params: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
+        let mut query_params: std::collections::HashMap<&str, String> =
+            std::collections::HashMap::new();
 
         // 用户ID类型参数
         if let Some(ref user_id_type) = req.user_id_type {
@@ -756,10 +838,16 @@ impl DocxService {
 
         // 构建请求体
         let mut body: HashMap<String, serde_json::Value> = HashMap::new();
-        body.insert("block_id".to_string(), serde_json::Value::String(req.block_id.clone()));
+        body.insert(
+            "block_id".to_string(),
+            serde_json::Value::String(req.block_id.clone()),
+        );
 
         if let Some(ref block_type) = req.block_type {
-            body.insert("block_type".to_string(), serde_json::Value::String(block_type.clone()));
+            body.insert(
+                "block_type".to_string(),
+                serde_json::Value::String(block_type.clone()),
+            );
         }
 
         if let Some(ref children) = req.children {
@@ -767,12 +855,18 @@ impl DocxService {
         }
 
         if let Some(ref text_elements) = req.text_elements {
-            body.insert("text_elements".to_string(), serde_json::to_value(text_elements)?);
+            body.insert(
+                "text_elements".to_string(),
+                serde_json::to_value(text_elements)?,
+            );
         }
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
-            api_path: format!("/open-apis/docx/v1/documents/{}/blocks/{}", req.document_token, req.block_id),
+            api_path: format!(
+                "/open-apis/docx/v1/documents/{}/blocks/{}",
+                req.document_token, req.block_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params,
@@ -782,8 +876,11 @@ impl DocxService {
         let resp = Transport::<UpdateBlockResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("块更新完成: document_token={}, block_id={}",
-                  req.document_token, req.block_id);
+        log::info!(
+            "块更新完成: document_token={}, block_id={}",
+            req.document_token,
+            req.block_id
+        );
 
         Ok(response)
     }
@@ -801,10 +898,14 @@ impl DocxService {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
-        log::debug!("开始获取块信息: document_token={}, block_id={}",
-                   req.document_token, req.block_id);
+        log::debug!(
+            "开始获取块信息: document_token={}, block_id={}",
+            req.document_token,
+            req.block_id
+        );
 
-        let mut query_params: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
+        let mut query_params: std::collections::HashMap<&str, String> =
+            std::collections::HashMap::new();
 
         // 用户ID类型参数
         if let Some(ref user_id_type) = req.user_id_type {
@@ -813,7 +914,10 @@ impl DocxService {
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/docx/v1/documents/{}/blocks/{}", req.document_token, req.block_id),
+            api_path: format!(
+                "/open-apis/docx/v1/documents/{}/blocks/{}",
+                req.document_token, req.block_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -822,8 +926,11 @@ impl DocxService {
         let resp = Transport::<GetBlockResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("块信息获取完成: document_token={}, block_id={}",
-                  req.document_token, req.block_id);
+        log::info!(
+            "块信息获取完成: document_token={}, block_id={}",
+            req.document_token,
+            req.block_id
+        );
 
         Ok(response)
     }
@@ -837,14 +944,21 @@ impl DocxService {
     ///
     /// # 返回
     /// - `SDKResult<BatchUpdateBlocksResponse>`: 批量更新结果
-    pub async fn batch_update_blocks(&self, req: &BatchUpdateBlocksRequest) -> SDKResult<BatchUpdateBlocksResponse> {
+    pub async fn batch_update_blocks(
+        &self,
+        req: &BatchUpdateBlocksRequest,
+    ) -> SDKResult<BatchUpdateBlocksResponse> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
-        log::debug!("开始批量更新块: document_token={}, block_count={}",
-                   req.document_token, req.requests.len());
+        log::debug!(
+            "开始批量更新块: document_token={}, block_count={}",
+            req.document_token,
+            req.requests.len()
+        );
 
-        let mut query_params: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
+        let mut query_params: std::collections::HashMap<&str, String> =
+            std::collections::HashMap::new();
 
         // 用户ID类型参数
         if let Some(ref user_id_type) = req.user_id_type {
@@ -857,18 +971,25 @@ impl DocxService {
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/docx/v1/documents/{}/blocks/batch_update", req.document_token),
+            api_path: format!(
+                "/open-apis/docx/v1/documents/{}/blocks/batch_update",
+                req.document_token
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params,
             ..Default::default()
         };
 
-        let resp = Transport::<BatchUpdateBlocksResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<BatchUpdateBlocksResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("块批量更新完成: document_token={}, success_count={:?}",
-                  req.document_token, response.responses.as_ref().map(|responses| responses.len()));
+        log::info!(
+            "块批量更新完成: document_token={}, success_count={:?}",
+            req.document_token,
+            response.responses.as_ref().map(|responses| responses.len())
+        );
 
         Ok(response)
     }
@@ -882,14 +1003,21 @@ impl DocxService {
     ///
     /// # 返回
     /// - `SDKResult<GetBlockChildrenResponse>`: 块子级列表
-    pub async fn get_block_children(&self, req: &GetBlockChildrenRequest) -> SDKResult<GetBlockChildrenResponse> {
+    pub async fn get_block_children(
+        &self,
+        req: &GetBlockChildrenRequest,
+    ) -> SDKResult<GetBlockChildrenResponse> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
-        log::debug!("开始获取块子级: document_token={}, block_id={}",
-                   req.document_token, req.block_id);
+        log::debug!(
+            "开始获取块子级: document_token={}, block_id={}",
+            req.document_token,
+            req.block_id
+        );
 
-        let mut query_params: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
+        let mut query_params: std::collections::HashMap<&str, String> =
+            std::collections::HashMap::new();
 
         // 用户ID类型参数
         if let Some(ref user_id_type) = req.user_id_type {
@@ -898,17 +1026,25 @@ impl DocxService {
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/docx/v1/documents/{}/blocks/{}/children", req.document_token, req.block_id),
+            api_path: format!(
+                "/open-apis/docx/v1/documents/{}/blocks/{}/children",
+                req.document_token, req.block_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
         };
 
-        let resp = Transport::<GetBlockChildrenResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<GetBlockChildrenResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("块子级获取完成: document_token={}, block_id={}, child_count={:?}",
-                  req.document_token, req.block_id, response.items.as_ref().map(|items| items.len()));
+        log::info!(
+            "块子级获取完成: document_token={}, block_id={}, child_count={:?}",
+            req.document_token,
+            req.block_id,
+            response.items.as_ref().map(|items| items.len())
+        );
 
         Ok(response)
     }
@@ -922,14 +1058,22 @@ impl DocxService {
     ///
     /// # 返回
     /// - `SDKResult<DeleteBlockChildrenResponse>`: 删除结果
-    pub async fn delete_block_children(&self, req: &DeleteBlockChildrenRequest) -> SDKResult<DeleteBlockChildrenResponse> {
+    pub async fn delete_block_children(
+        &self,
+        req: &DeleteBlockChildrenRequest,
+    ) -> SDKResult<DeleteBlockChildrenResponse> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
-        log::debug!("开始删除块子级: document_token={}, block_id={}, child_count={}",
-                   req.document_token, req.block_id, req.block_ids.len());
+        log::debug!(
+            "开始删除块子级: document_token={}, block_id={}, child_count={}",
+            req.document_token,
+            req.block_id,
+            req.block_ids.len()
+        );
 
-        let mut query_params: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
+        let mut query_params: std::collections::HashMap<&str, String> =
+            std::collections::HashMap::new();
 
         // 用户ID类型参数
         if let Some(ref user_id_type) = req.user_id_type {
@@ -938,23 +1082,37 @@ impl DocxService {
 
         // 构建请求体
         let mut body: HashMap<String, serde_json::Value> = HashMap::new();
-        body.insert("block_id".to_string(), serde_json::Value::String(req.block_id.clone()));
-        body.insert("block_ids".to_string(), serde_json::to_value(&req.block_ids)?);
+        body.insert(
+            "block_id".to_string(),
+            serde_json::Value::String(req.block_id.clone()),
+        );
+        body.insert(
+            "block_ids".to_string(),
+            serde_json::to_value(&req.block_ids)?,
+        );
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
-            api_path: format!("/open-apis/docx/v1/documents/{}/blocks/batch_delete", req.document_token),
+            api_path: format!(
+                "/open-apis/docx/v1/documents/{}/blocks/batch_delete",
+                req.document_token
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params,
             ..Default::default()
         };
 
-        let resp = Transport::<DeleteBlockChildrenResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<DeleteBlockChildrenResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("块子级删除完成: document_token={}, block_id={}, deleted_count={:?}",
-                  req.document_token, req.block_id, response.deleted_block_ids.as_ref().map(|ids| ids.len()));
+        log::info!(
+            "块子级删除完成: document_token={}, block_id={}, deleted_count={:?}",
+            req.document_token,
+            req.block_id,
+            response.deleted_block_ids.as_ref().map(|ids| ids.len())
+        );
 
         Ok(response)
     }
@@ -968,14 +1126,21 @@ impl DocxService {
     ///
     /// # 返回
     /// - `SDKResult<ConvertContentResponse>`: 转换结果
-    pub async fn convert_content(&self, req: &ConvertContentRequest) -> SDKResult<ConvertContentResponse> {
+    pub async fn convert_content(
+        &self,
+        req: &ConvertContentRequest,
+    ) -> SDKResult<ConvertContentResponse> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
-        log::debug!("开始内容转换: document_token={}, target_type={}",
-                   req.document_token, req.target_type);
+        log::debug!(
+            "开始内容转换: document_token={}, target_type={}",
+            req.document_token,
+            req.target_type
+        );
 
-        let mut query_params: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
+        let mut query_params: std::collections::HashMap<&str, String> =
+            std::collections::HashMap::new();
 
         // 用户ID类型参数
         if let Some(ref user_id_type) = req.user_id_type {
@@ -984,26 +1149,39 @@ impl DocxService {
 
         // 构建请求体
         let mut body: HashMap<String, serde_json::Value> = HashMap::new();
-        body.insert("target_type".to_string(), serde_json::Value::String(req.target_type.clone()));
+        body.insert(
+            "target_type".to_string(),
+            serde_json::Value::String(req.target_type.clone()),
+        );
 
         if let Some(ref block_id) = req.block_id {
-            body.insert("block_id".to_string(), serde_json::Value::String(block_id.clone()));
+            body.insert(
+                "block_id".to_string(),
+                serde_json::Value::String(block_id.clone()),
+            );
         }
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/docx/v1/documents/{}/content/convert", req.document_token),
+            api_path: format!(
+                "/open-apis/docx/v1/documents/{}/content/convert",
+                req.document_token
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params,
             ..Default::default()
         };
 
-        let resp = Transport::<ConvertContentResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<ConvertContentResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("内容转换完成: document_token={}, target_type={}",
-                  req.document_token, req.target_type);
+        log::info!(
+            "内容转换完成: document_token={}, target_type={}",
+            req.document_token,
+            req.target_type
+        );
 
         Ok(response)
     }
@@ -1017,13 +1195,17 @@ impl DocxService {
     ///
     /// # 返回
     /// - `SDKResult<ChatAnnouncementResponse>`: 群公告信息
-    pub async fn get_chat_announcement(&self, req: &ChatAnnouncementRequest) -> SDKResult<ChatAnnouncementResponse> {
+    pub async fn get_chat_announcement(
+        &self,
+        req: &ChatAnnouncementRequest,
+    ) -> SDKResult<ChatAnnouncementResponse> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
         log::debug!("开始获取群公告: chat_id={}", req.chat_id);
 
-        let mut query_params: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
+        let mut query_params: std::collections::HashMap<&str, String> =
+            std::collections::HashMap::new();
 
         // 用户ID类型参数
         if let Some(ref user_id_type) = req.user_id_type {
@@ -1038,7 +1220,8 @@ impl DocxService {
             ..Default::default()
         };
 
-        let resp = Transport::<ChatAnnouncementResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<ChatAnnouncementResponse>::request(api_req, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!("群公告获取完成: chat_id={}", req.chat_id);
@@ -1055,13 +1238,17 @@ impl DocxService {
     ///
     /// # 返回
     /// - `SDKResult<ListChatAnnouncementBlocksResponse>`: 群公告块列表
-    pub async fn list_chat_announcement_blocks(&self, req: &ListChatAnnouncementBlocksRequest) -> SDKResult<ListChatAnnouncementBlocksResponse> {
+    pub async fn list_chat_announcement_blocks(
+        &self,
+        req: &ListChatAnnouncementBlocksRequest,
+    ) -> SDKResult<ListChatAnnouncementBlocksResponse> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
         log::debug!("开始列出群公告块: chat_id={}", req.chat_id);
 
-        let mut query_params: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
+        let mut query_params: std::collections::HashMap<&str, String> =
+            std::collections::HashMap::new();
 
         // 用户ID类型参数
         if let Some(ref user_id_type) = req.user_id_type {
@@ -1070,17 +1257,25 @@ impl DocxService {
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/docx/v1/chats/{}/announcement/blocks", req.chat_id),
+            api_path: format!(
+                "/open-apis/docx/v1/chats/{}/announcement/blocks",
+                req.chat_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
         };
 
-        let resp = Transport::<ListChatAnnouncementBlocksResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<ListChatAnnouncementBlocksResponse>::request(api_req, &self.config, None)
+                .await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("群公告块列表获取完成: chat_id={}, block_count={:?}",
-                  req.chat_id, response.items.as_ref().map(|items| items.len()));
+        log::info!(
+            "群公告块列表获取完成: chat_id={}, block_count={:?}",
+            req.chat_id,
+            response.items.as_ref().map(|items| items.len())
+        );
 
         Ok(response)
     }
@@ -1094,14 +1289,21 @@ impl DocxService {
     ///
     /// # 返回
     /// - `SDKResult<CreateChatAnnouncementBlockChildrenResponse>`: 创建结果
-    pub async fn create_chat_announcement_block_children(&self, req: &CreateChatAnnouncementBlockChildrenRequest) -> SDKResult<CreateChatAnnouncementBlockChildrenResponse> {
+    pub async fn create_chat_announcement_block_children(
+        &self,
+        req: &CreateChatAnnouncementBlockChildrenRequest,
+    ) -> SDKResult<CreateChatAnnouncementBlockChildrenResponse> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
-        log::debug!("开始创建群公告块子级: chat_id={}, block_id={}",
-                   req.chat_id, req.block_id);
+        log::debug!(
+            "开始创建群公告块子级: chat_id={}, block_id={}",
+            req.chat_id,
+            req.block_id
+        );
 
-        let mut query_params: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
+        let mut query_params: std::collections::HashMap<&str, String> =
+            std::collections::HashMap::new();
 
         // 用户ID类型参数
         if let Some(ref user_id_type) = req.user_id_type {
@@ -1110,23 +1312,38 @@ impl DocxService {
 
         // 构建请求体
         let mut body: HashMap<String, serde_json::Value> = HashMap::new();
-        body.insert("block_id".to_string(), serde_json::Value::String(req.block_id.clone()));
+        body.insert(
+            "block_id".to_string(),
+            serde_json::Value::String(req.block_id.clone()),
+        );
         body.insert("children".to_string(), serde_json::to_value(&req.children)?);
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/docx/v1/chats/{}/announcement/blocks/batch_create", req.chat_id),
+            api_path: format!(
+                "/open-apis/docx/v1/chats/{}/announcement/blocks/batch_create",
+                req.chat_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params,
             ..Default::default()
         };
 
-        let resp = Transport::<CreateChatAnnouncementBlockChildrenResponse>::request(api_req, &self.config, None).await?;
+        let resp = Transport::<CreateChatAnnouncementBlockChildrenResponse>::request(
+            api_req,
+            &self.config,
+            None,
+        )
+        .await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("群公告块子级创建完成: chat_id={}, block_id={}, created_count={:?}",
-                  req.chat_id, req.block_id, response.block_ids.as_ref().map(|ids| ids.len()));
+        log::info!(
+            "群公告块子级创建完成: chat_id={}, block_id={}, created_count={:?}",
+            req.chat_id,
+            req.block_id,
+            response.block_ids.as_ref().map(|ids| ids.len())
+        );
 
         Ok(response)
     }
@@ -1140,14 +1357,21 @@ impl DocxService {
     ///
     /// # 返回
     /// - `SDKResult<BatchUpdateChatAnnouncementBlocksResponse>`: 批量更新结果
-    pub async fn batch_update_chat_announcement_blocks(&self, req: &BatchUpdateChatAnnouncementBlocksRequest) -> SDKResult<BatchUpdateChatAnnouncementBlocksResponse> {
+    pub async fn batch_update_chat_announcement_blocks(
+        &self,
+        req: &BatchUpdateChatAnnouncementBlocksRequest,
+    ) -> SDKResult<BatchUpdateChatAnnouncementBlocksResponse> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
-        log::debug!("开始批量更新群公告块: chat_id={}, block_count={}",
-                   req.chat_id, req.requests.len());
+        log::debug!(
+            "开始批量更新群公告块: chat_id={}, block_count={}",
+            req.chat_id,
+            req.requests.len()
+        );
 
-        let mut query_params: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
+        let mut query_params: std::collections::HashMap<&str, String> =
+            std::collections::HashMap::new();
 
         // 用户ID类型参数
         if let Some(ref user_id_type) = req.user_id_type {
@@ -1160,18 +1384,29 @@ impl DocxService {
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/docx/v1/chats/{}/announcement/blocks/batch_update", req.chat_id),
+            api_path: format!(
+                "/open-apis/docx/v1/chats/{}/announcement/blocks/batch_update",
+                req.chat_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params,
             ..Default::default()
         };
 
-        let resp = Transport::<BatchUpdateChatAnnouncementBlocksResponse>::request(api_req, &self.config, None).await?;
+        let resp = Transport::<BatchUpdateChatAnnouncementBlocksResponse>::request(
+            api_req,
+            &self.config,
+            None,
+        )
+        .await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("群公告块批量更新完成: chat_id={}, success_count={:?}",
-                  req.chat_id, response.responses.as_ref().map(|responses| responses.len()));
+        log::info!(
+            "群公告块批量更新完成: chat_id={}, success_count={:?}",
+            req.chat_id,
+            response.responses.as_ref().map(|responses| responses.len())
+        );
 
         Ok(response)
     }
@@ -1185,14 +1420,21 @@ impl DocxService {
     ///
     /// # 返回
     /// - `SDKResult<GetChatAnnouncementBlockResponse>`: 群公告块信息
-    pub async fn get_chat_announcement_block(&self, req: &GetChatAnnouncementBlockRequest) -> SDKResult<GetChatAnnouncementBlockResponse> {
+    pub async fn get_chat_announcement_block(
+        &self,
+        req: &GetChatAnnouncementBlockRequest,
+    ) -> SDKResult<GetChatAnnouncementBlockResponse> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
-        log::debug!("开始获取群公告块: chat_id={}, block_id={}",
-                   req.chat_id, req.block_id);
+        log::debug!(
+            "开始获取群公告块: chat_id={}, block_id={}",
+            req.chat_id,
+            req.block_id
+        );
 
-        let mut query_params: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
+        let mut query_params: std::collections::HashMap<&str, String> =
+            std::collections::HashMap::new();
 
         // 用户ID类型参数
         if let Some(ref user_id_type) = req.user_id_type {
@@ -1201,17 +1443,25 @@ impl DocxService {
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/docx/v1/chats/{}/announcement/blocks/{}", req.chat_id, req.block_id),
+            api_path: format!(
+                "/open-apis/docx/v1/chats/{}/announcement/blocks/{}",
+                req.chat_id, req.block_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
         };
 
-        let resp = Transport::<GetChatAnnouncementBlockResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<GetChatAnnouncementBlockResponse>::request(api_req, &self.config, None)
+                .await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("群公告块获取完成: chat_id={}, block_id={}",
-                  req.chat_id, req.block_id);
+        log::info!(
+            "群公告块获取完成: chat_id={}, block_id={}",
+            req.chat_id,
+            req.block_id
+        );
 
         Ok(response)
     }
@@ -1225,14 +1475,21 @@ impl DocxService {
     ///
     /// # 返回
     /// - `SDKResult<GetChatAnnouncementBlockChildrenResponse>`: 群公告块子级列表
-    pub async fn get_chat_announcement_block_children(&self, req: &GetChatAnnouncementBlockChildrenRequest) -> SDKResult<GetChatAnnouncementBlockChildrenResponse> {
+    pub async fn get_chat_announcement_block_children(
+        &self,
+        req: &GetChatAnnouncementBlockChildrenRequest,
+    ) -> SDKResult<GetChatAnnouncementBlockChildrenResponse> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
-        log::debug!("开始获取群公告块子级: chat_id={}, block_id={}",
-                   req.chat_id, req.block_id);
+        log::debug!(
+            "开始获取群公告块子级: chat_id={}, block_id={}",
+            req.chat_id,
+            req.block_id
+        );
 
-        let mut query_params: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
+        let mut query_params: std::collections::HashMap<&str, String> =
+            std::collections::HashMap::new();
 
         // 用户ID类型参数
         if let Some(ref user_id_type) = req.user_id_type {
@@ -1241,17 +1498,29 @@ impl DocxService {
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/docx/v1/chats/{}/announcement/blocks/{}/children", req.chat_id, req.block_id),
+            api_path: format!(
+                "/open-apis/docx/v1/chats/{}/announcement/blocks/{}/children",
+                req.chat_id, req.block_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
         };
 
-        let resp = Transport::<GetChatAnnouncementBlockChildrenResponse>::request(api_req, &self.config, None).await?;
+        let resp = Transport::<GetChatAnnouncementBlockChildrenResponse>::request(
+            api_req,
+            &self.config,
+            None,
+        )
+        .await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("群公告块子级获取完成: chat_id={}, block_id={}, child_count={:?}",
-                  req.chat_id, req.block_id, response.items.as_ref().map(|items| items.len()));
+        log::info!(
+            "群公告块子级获取完成: chat_id={}, block_id={}, child_count={:?}",
+            req.chat_id,
+            req.block_id,
+            response.items.as_ref().map(|items| items.len())
+        );
 
         Ok(response)
     }
@@ -1265,14 +1534,22 @@ impl DocxService {
     ///
     /// # 返回
     /// - `SDKResult<DeleteChatAnnouncementBlockChildrenResponse>`: 删除结果
-    pub async fn delete_chat_announcement_block_children(&self, req: &DeleteChatAnnouncementBlockChildrenRequest) -> SDKResult<DeleteChatAnnouncementBlockChildrenResponse> {
+    pub async fn delete_chat_announcement_block_children(
+        &self,
+        req: &DeleteChatAnnouncementBlockChildrenRequest,
+    ) -> SDKResult<DeleteChatAnnouncementBlockChildrenResponse> {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
-        log::debug!("开始删除群公告块子级: chat_id={}, block_id={}, child_count={}",
-                   req.chat_id, req.block_id, req.block_ids.len());
+        log::debug!(
+            "开始删除群公告块子级: chat_id={}, block_id={}, child_count={}",
+            req.chat_id,
+            req.block_id,
+            req.block_ids.len()
+        );
 
-        let mut query_params: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
+        let mut query_params: std::collections::HashMap<&str, String> =
+            std::collections::HashMap::new();
 
         // 用户ID类型参数
         if let Some(ref user_id_type) = req.user_id_type {
@@ -1281,23 +1558,41 @@ impl DocxService {
 
         // 构建请求体
         let mut body: HashMap<String, serde_json::Value> = HashMap::new();
-        body.insert("block_id".to_string(), serde_json::Value::String(req.block_id.clone()));
-        body.insert("block_ids".to_string(), serde_json::to_value(&req.block_ids)?);
+        body.insert(
+            "block_id".to_string(),
+            serde_json::Value::String(req.block_id.clone()),
+        );
+        body.insert(
+            "block_ids".to_string(),
+            serde_json::to_value(&req.block_ids)?,
+        );
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
-            api_path: format!("/open-apis/docx/v1/chats/{}/announcement/blocks/batch_delete", req.chat_id),
+            api_path: format!(
+                "/open-apis/docx/v1/chats/{}/announcement/blocks/batch_delete",
+                req.chat_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
             query_params,
             ..Default::default()
         };
 
-        let resp = Transport::<DeleteChatAnnouncementBlockChildrenResponse>::request(api_req, &self.config, None).await?;
+        let resp = Transport::<DeleteChatAnnouncementBlockChildrenResponse>::request(
+            api_req,
+            &self.config,
+            None,
+        )
+        .await?;
         let response = resp.data.unwrap_or_default();
 
-        log::info!("群公告块子级删除完成: chat_id={}, block_id={}, deleted_count={:?}",
-                  req.chat_id, req.block_id, response.deleted_block_ids.as_ref().map(|ids| ids.len()));
+        log::info!(
+            "群公告块子级删除完成: chat_id={}, block_id={}, deleted_count={:?}",
+            req.chat_id,
+            req.block_id,
+            response.deleted_block_ids.as_ref().map(|ids| ids.len())
+        );
 
         Ok(response)
     }
