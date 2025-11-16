@@ -13,6 +13,9 @@
 #[macro_use]
 mod macros;
 
+// 导入端点模块
+pub mod endpoints;
+
 // Prelude module with common imports
 pub mod prelude;
 
@@ -31,6 +34,9 @@ pub mod cardkit;
 // Reporting and analytics
 #[cfg(feature = "report")]
 pub mod report;
+
+// Re-export endpoints for convenience
+pub use endpoints::*;
 
 // Re-export service types for convenience
 #[cfg(any(feature = "base", feature = "bitable"))]
