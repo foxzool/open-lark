@@ -1,87 +1,58 @@
-//! API端点常量定义模块
+//! API端点常量定义模块 (重构版)
 //!
-//! 本模块集中定义飞书开放平台的所有API端点路径常量，旨在：
-//! 1. 减少字符串分配 - 避免每次API调用时重新创建路径字符串
-//! 2. 防止拼写错误 - 统一管理所有API路径，编译期检查
-//! 3. 便于维护升级 - 集中管理，方便API版本升级和路径变更
+//! 本模块包含飞书开放平台的核心API端点常量。重构后采用分层架构：
+//! - 核心端点保留在 openlark-core 中
+//! - 业务服务端点迁移到对应的 service crate 中
 //!
-//! # 性能优化
+//! # 核心设计原则
 //!
-//! 使用静态字符串常量可以显著减少内存分配：
-//! ```rust
-//! use open_lark::core::endpoints::Endpoints;
+//! 1. **单一职责**: openlark-core 只包含基础设施相关的端点
+//! 2. **模块化**: 业务端点按服务域分离到对应 crate
+//! 3. **向后兼容**: 通过重新导出保持 API 兼容性
+//! 4. **功能标志**: 支持按需编译和服务组合
 //!
-//! // 优化前：每次调用时动态分配字符串
-//! let dynamic = "/open-apis/workplace/v1/workplace_access_data/search".to_string();
+//! # 核心端点保留原则
 //!
-//! // 优化后：使用静态常量，必要时再转换为 String
-//! let optimized = Endpoints::WORKPLACE_ACCESS_DATA_SEARCH;
-//! assert_eq!(optimized, dynamic.as_str());
-//! ```
+//! 以下类型的端点保留在 core 中：
+//! - 基础认证和授权 (auth)
+//! - 应用管理 (application)
+//! - 平台集成 (platform_integration)
+//! - 通用基础设施 (apass)
 //!
-//! # 组织结构
+//! # 迁移说明
 //!
-//! API端点按服务模块分组：
-//! - `workplace` - 工作台相关API
-//! - `vc` - 视频会议相关API
-//! - `im` - 即时消息相关API
-//! - `drive` - 云盘相关API
-//! - 等等...
+//! 业务服务端点已迁移到对应 crate：
+//! - `openlark-admin`: admin, acs, mdm, tenant, workplace 等
+//! - `openlark-ai`: ai, aily, ai_embedding, ai_workflow 等
+//! - `openlark-comm`: im, mail, vc 等
+//! - `openlark-docs`: cloud_docs, drive, cardkit 等
+//! - 其他服务以此类推
 
-// 注意：endpoints_original 现在在 core/mod.rs 中导入，无需重复导入
-
-// 按服务域拆分的模块
-pub mod acs;
-pub mod admin;
-pub mod ai;
-pub mod ai_embedding;
-pub mod ai_workflow;
-pub mod aily;
-pub mod analytics;
-pub mod apass;
-pub mod application;
-pub mod approval;
-pub mod attendance;
+// 核心基础端点模块（仅保留基础设施相关的端点）
 pub mod auth;
-pub mod calendar;
-pub mod cardkit;
-pub mod cloud_docs;
-pub mod contact;
-pub mod corehr;
-pub mod directory;
-pub mod drive;
-pub mod elearning;
-pub mod helpdesk;
-pub mod hire;
-pub mod im;
-pub mod lingo;
-pub mod mail;
-pub mod mdm;
-pub mod minutes;
-pub mod okr;
-pub mod payroll;
-pub mod performance;
-pub mod personal_settings;
+pub mod application;
+pub mod apass;
 pub mod platform_integration;
-pub mod report;
-pub mod search;
-pub mod security_and_compliance;
-pub mod task;
-pub mod tenant;
-pub mod tenant_tag;
-pub mod trust_party;
-pub mod vc;
-pub mod verification;
-pub mod workplace;
-pub mod zero_trust;
 
-// 重新导出原始端点文件中的所有常量，确保向后兼容性
-// 这是一个临时措施，在完成所有域模块迁移后将移除
+// 已迁移到对应 service crate 的端点：
+// - approval -> openlark-approval
+// - ai, aily -> openlark-ai
+// - im, mail, vc -> openlark-comm
+// - contact, directory -> openlark-people
+// - attendance, corehr -> openlark-hr
+// - cloud_docs, drive -> openlark-docs
+// - 等等...
+
+// 向后兼容性支持
 pub use super::endpoints_original::Endpoints;
-
-// 同时导出 EndpointBuilder (从原始文件)
 pub use super::endpoints_original::EndpointBuilder;
 
-// 重新导出各个域模块的常量
-pub use hire::*;
-pub use lingo::*;
+// 导出核心端点常量
+pub use auth::*;
+pub use application::*;
+pub use apass::*;
+pub use platform_integration::*;
+
+// 功能标志导出（按需启用）
+#[cfg(feature = "admin")]
+pub use crate::endpoints_original::admin::*;
