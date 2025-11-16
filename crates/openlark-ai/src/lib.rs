@@ -17,11 +17,11 @@
 //!
 //! // 使用端点常量
 //! let resume_endpoint = DOCUMENT_AI_RESUME_PARSE;
-//! let session_endpoint = AILY_V1_SESSIONS;
-//! let embedding_endpoint = AI_EMBEDDING_V1_TEXT_EMBEDDING;
+//! let ocr_endpoint = OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE;
+//! let translate_endpoint = TRANSLATION_V1_TEXT_TRANSLATE;
 //! println!("简历解析端点: {}", resume_endpoint);
-//! println!("Aily会话端点: {}", session_endpoint);
-//! println!("文本嵌入端点: {}", embedding_endpoint);
+//! println!("OCR识别端点: {}", ocr_endpoint);
+//! println!("文本翻译端点: {}", translate_endpoint);
 //! ```
 //!
 //! ## 端点组织
