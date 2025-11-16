@@ -18,7 +18,7 @@ use serde_json::Value;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use openlark_core::endpoints_original::Endpoints;
+use openlark_core::endpoints::Endpoints;
 use openlark_core::impl_executable_builder_owned;
 use openlark_core::{
     api_req::ApiRequest,

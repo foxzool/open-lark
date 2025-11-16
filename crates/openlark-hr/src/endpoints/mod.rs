@@ -29,7 +29,6 @@
 
 // 导入核心端点（auth, application等基础端点）
 pub use openlark_core::endpoints::{auth, application, apass, platform_integration};
-pub use openlark_core::endpoints::{Endpoints, EndpointBuilder};
 
 // ===== 考勤管理端点 (Attendance) =====
 
@@ -236,4 +235,4 @@ mod tests {
         assert_eq!(SALARY_GROUPS, PAYROLL_V1_SALARY_GROUPS);
         assert_eq!(APPRAISALS, PERFORMANCE_V1_APPRAISALS);
     }
-}
+}// Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints

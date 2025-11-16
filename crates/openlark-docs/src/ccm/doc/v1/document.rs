@@ -1033,7 +1033,7 @@ impl DocumentService {
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: openlark_core::endpoints_original::Endpoints::DOCX_V1_DOCUMENTS.to_string(),
+            api_path: openlark_core::endpoints::Endpoints::DOCX_V1_DOCUMENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -1170,7 +1170,7 @@ impl DocumentService {
         log::debug!("开始获取文档信息: document_id={}", req.document_id);
 
         // 构建动态端点路径
-        let endpoint = openlark_core::endpoints_original::Endpoints::DOCX_V1_DOCUMENT_GET
+        let endpoint = openlark_core::endpoints::Endpoints::DOCX_V1_DOCUMENT_GET
             .replace("{}", &req.document_id);
 
         let api_req = ApiRequest {
@@ -1225,7 +1225,7 @@ impl DocumentService {
         log::debug!("开始获取文档纯文本内容: document_id={}", req.document_id);
 
         // 构建动态端点路径
-        let endpoint = openlark_core::endpoints_original::Endpoints::DOCX_V1_DOCUMENT_RAW_CONTENT
+        let endpoint = openlark_core::endpoints::Endpoints::DOCX_V1_DOCUMENT_RAW_CONTENT
             .replace("{}", &req.document_id);
 
         let api_req = ApiRequest {
@@ -1282,7 +1282,7 @@ impl DocumentService {
         log::debug!("开始获取文档块: document_id={}", req.document_id);
 
         // 构建动态端点路径
-        let endpoint = openlark_core::endpoints_original::Endpoints::DOCX_V1_DOCUMENT_BLOCKS
+        let endpoint = openlark_core::endpoints::Endpoints::DOCX_V1_DOCUMENT_BLOCKS
             .replace("{}", &req.document_id);
 
         let api_req = ApiRequest {
@@ -1342,7 +1342,7 @@ impl DocumentService {
 
         // 构建动态端点路径
         let endpoint =
-            openlark_core::endpoints_original::Endpoints::DOCX_V1_DOCUMENT_BLOCK_CHILDREN
+            openlark_core::endpoints::Endpoints::DOCX_V1_DOCUMENT_BLOCK_CHILDREN
                 .replace("{}", &req.document_id)
                 .replace("{}", &req.block_id.to_string());
 
@@ -1633,7 +1633,7 @@ impl DocumentService {
         log::debug!("开始删除文档: document_id={}", req.document_id);
 
         // 构建动态端点路径
-        let endpoint = openlark_core::endpoints_original::Endpoints::DOCX_V1_DOCUMENT_GET
+        let endpoint = openlark_core::endpoints::Endpoints::DOCX_V1_DOCUMENT_GET
             .replace("{}", &req.document_id);
 
         let api_req = ApiRequest {
@@ -2493,7 +2493,7 @@ mod tests {
     fn test_endpoint_constant() {
         // Test that the endpoint constant is properly defined
         assert_eq!(
-            openlark_core::endpoints_original::Endpoints::DOCX_V1_DOCUMENTS,
+            openlark_core::endpoints::Endpoints::DOCX_V1_DOCUMENTS,
             "/open-apis/docx/v1/documents"
         );
     }
@@ -2738,7 +2738,7 @@ mod tests {
     fn test_get_document_endpoint_constant() {
         // 测试端点常量是否正确定义
         assert_eq!(
-            openlark_core::endpoints_original::Endpoints::DOCX_V1_DOCUMENT_GET,
+            openlark_core::endpoints::Endpoints::DOCX_V1_DOCUMENT_GET,
             "/open-apis/docx/v1/documents/{}"
         );
     }

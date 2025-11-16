@@ -606,7 +606,7 @@ mod tests {
         let spreadsheet_token = "test_spreadsheet_789";
         let expected_base_url = format!(
             "{}/sheets_batch_update",
-            openlark_core::endpoints_original::Endpoints::SHEETS_V2_SPREADSHEETS
+            openlark_core::endpoints::Endpoints::SHEETS_V2_SPREADSHEETS
         );
 
         // 验证URL格式
