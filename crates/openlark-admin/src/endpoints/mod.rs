@@ -38,7 +38,6 @@
 
 // 导入核心端点（auth, application等基础端点）
 pub use openlark_core::endpoints::{auth, application, apass, platform_integration};
-pub use openlark_core::endpoints::{Endpoints, EndpointBuilder};
 
 // ==================== ACS (Access Control System) v1 ====================
 // ACS门禁控制系统 - 访问控制、设备管理、访客管理
@@ -596,4 +595,4 @@ mod tests {
             assert!(endpoint.contains("/v1/"), "{} 应该包含 /v1/", endpoint);
         }
     }
-}
+}// Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints

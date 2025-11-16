@@ -39,7 +39,6 @@
 
 // 导入核心端点（auth, application等基础端点）
 pub use openlark_core::endpoints::{auth, application, apass, platform_integration};
-pub use openlark_core::endpoints::{Endpoints, EndpointBuilder};
 
 // ==================== Bitable (多维表格) v1 ====================
 
@@ -473,4 +472,4 @@ mod tests {
         assert!(DRIVE_V1_FILE_GET.contains("{file_token}"));
         assert!(CARDKIT_V1_CARD_UPDATE.contains("{card_id}"));
     }
-}
+}// Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints

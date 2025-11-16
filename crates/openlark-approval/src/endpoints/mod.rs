@@ -5,7 +5,6 @@
 
 // 导入核心端点（auth, application等基础端点）
 pub use openlark_core::endpoints::{auth, application, apass, platform_integration};
-pub use openlark_core::endpoints::{Endpoints, EndpointBuilder};
 
 // ===== 审批管理端点 =====
 
@@ -178,4 +177,4 @@ mod tests {
         assert_eq!(TASKS, APPROVAL_V4_TASKS);
         assert_eq!(SEARCH, APPROVAL_V4_SEARCH);
     }
-}
+}// Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints

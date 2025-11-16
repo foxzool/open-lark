@@ -270,7 +270,7 @@ impl TaskService {
         log::debug!("开始获取任务结果: task_id={}", req.task_id);
 
         // 构建动态端点路径
-        let endpoint = openlark_core::endpoints_original::Endpoints::WIKI_V2_TASK_GET
+        let endpoint = openlark_core::endpoints::Endpoints::WIKI_V2_TASK_GET
             .replace("{}", &req.task_id);
 
         let api_req = ApiRequest {
@@ -707,7 +707,7 @@ mod tests {
     fn test_endpoint_constant() {
         // 测试端点常量是否正确定义
         assert_eq!(
-            openlark_core::endpoints_original::Endpoints::WIKI_V2_TASK_GET,
+            openlark_core::endpoints::Endpoints::WIKI_V2_TASK_GET,
             "/open-apis/wiki/v2/tasks/{}"
         );
     }

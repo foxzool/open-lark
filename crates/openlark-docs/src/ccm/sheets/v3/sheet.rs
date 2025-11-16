@@ -163,7 +163,7 @@ impl SheetService {
     ) -> SDKResult<BaseResponse<QuerySheetsResponse>> {
         let endpoint = format!(
             "{}/{}/sheets/query",
-            openlark_core::endpoints_original::Endpoints::SHEETS_V3_SPREADSHEETS,
+            openlark_core::endpoints::Endpoints::SHEETS_V3_SPREADSHEETS,
             spreadsheet_token
         );
 
@@ -198,7 +198,7 @@ impl SheetService {
     ) -> openlark_core::SDKResult<BaseResponse<GetSheetResponse>> {
         let endpoint = format!(
             "{}/{}/sheets/{}",
-            openlark_core::endpoints_original::Endpoints::SHEETS_V3_SPREADSHEETS,
+            openlark_core::endpoints::Endpoints::SHEETS_V3_SPREADSHEETS,
             spreadsheet_token,
             sheet_id
         );
@@ -314,7 +314,7 @@ impl SheetService {
     ) -> openlark_core::SDKResult<BaseResponse<FindCellsResponse>> {
         let endpoint = format!(
             "{}/{}/sheets/{}/find",
-            openlark_core::endpoints_original::Endpoints::SHEETS_V3_SPREADSHEETS,
+            openlark_core::endpoints::Endpoints::SHEETS_V3_SPREADSHEETS,
             spreadsheet_token,
             sheet_id
         );
@@ -642,7 +642,7 @@ mod tests {
         let spreadsheet_token = "test_spreadsheet_123";
         let expected_query_url = format!(
             "{}/{}/sheets/query",
-            openlark_core::endpoints_original::Endpoints::SHEETS_V3_SPREADSHEETS,
+            openlark_core::endpoints::Endpoints::SHEETS_V3_SPREADSHEETS,
             spreadsheet_token
         );
 
@@ -654,7 +654,7 @@ mod tests {
         let sheet_id = "test_sheet_456";
         let expected_get_url = format!(
             "{}/{}/sheets/{}",
-            openlark_core::endpoints_original::Endpoints::SHEETS_V3_SPREADSHEETS,
+            openlark_core::endpoints::Endpoints::SHEETS_V3_SPREADSHEETS,
             spreadsheet_token,
             sheet_id
         );
@@ -817,7 +817,7 @@ mod tests {
 
         let expected_endpoint = format!(
             "{}/{}/sheets/{}/find",
-            openlark_core::endpoints_original::Endpoints::SHEETS_V3_SPREADSHEETS,
+            openlark_core::endpoints::Endpoints::SHEETS_V3_SPREADSHEETS,
             spreadsheet_token,
             sheet_id
         );

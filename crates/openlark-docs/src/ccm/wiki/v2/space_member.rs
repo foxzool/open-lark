@@ -157,7 +157,7 @@ impl SpaceMemberService {
         );
 
         // 构建动态端点路径
-        let endpoint = openlark_core::endpoints_original::Endpoints::WIKI_V2_SPACE_MEMBER_DELETE
+        let endpoint = openlark_core::endpoints::Endpoints::WIKI_V2_SPACE_MEMBER_DELETE
             .replace("{}", &req.space_id)
             .replace("{}", &req.member_id);
 
@@ -452,7 +452,7 @@ mod tests {
     fn test_endpoint_constant() {
         // 测试端点常量是否正确定义
         assert_eq!(
-            openlark_core::endpoints_original::Endpoints::WIKI_V2_SPACE_MEMBER_DELETE,
+            openlark_core::endpoints::Endpoints::WIKI_V2_SPACE_MEMBER_DELETE,
             "/open-apis/wiki/v2/spaces/{}/members/{}"
         );
     }

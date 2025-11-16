@@ -1236,7 +1236,7 @@ impl FilesService {
         }
 
         // 构建API路径，替换task_id占位符
-        let api_path = openlark_core::endpoints_original::Endpoints::DRIVE_V1_TASK_GET
+        let api_path = openlark_core::endpoints::Endpoints::DRIVE_V1_TASK_GET
             .replace("{}", &req.task_id);
 
         let api_req = ApiRequest {
@@ -1350,7 +1350,7 @@ impl FilesService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: openlark_core::endpoints_original::Endpoints::DRIVE_V1_FILES_CREATE_SHORTCUT.to_string(),
+            api_path: openlark_core::endpoints::Endpoints::DRIVE_V1_FILES_CREATE_SHORTCUT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&body).unwrap_or_default(),
@@ -1403,7 +1403,7 @@ impl FilesService {
         debug!("开始删除文件: {}", req.file_token);
 
         // 构建API路径，替换file_token占位符
-        let api_path = openlark_core::endpoints_original::Endpoints::DRIVE_V1_FILES_DELETE
+        let api_path = openlark_core::endpoints::Endpoints::DRIVE_V1_FILES_DELETE
             .replace("{}", &req.file_token);
 
         let api_req = ApiRequest {
@@ -1788,7 +1788,7 @@ mod create_shortcut_tests {
     fn test_create_shortcut_endpoint_construction() {
         // 验证端点常量存在
         assert_eq!(
-            openlark_core::endpoints_original::Endpoints::DRIVE_V1_FILES_CREATE_SHORTCUT,
+            openlark_core::endpoints::Endpoints::DRIVE_V1_FILES_CREATE_SHORTCUT,
             "/open-apis/drive/v1/files/create_shortcut"
         );
     }
@@ -2065,12 +2065,12 @@ mod get_async_task_status_tests {
     fn test_get_async_task_status_endpoint_construction() {
         // 验证端点常量存在
         assert_eq!(
-            openlark_core::endpoints_original::Endpoints::DRIVE_V1_TASK_GET,
+            openlark_core::endpoints::Endpoints::DRIVE_V1_TASK_GET,
             "/open-apis/drive/v1/tasks/{}"
         );
 
         // 验证路径替换逻辑
-        let template = openlark_core::endpoints_original::Endpoints::DRIVE_V1_TASK_GET;
+        let template = openlark_core::endpoints::Endpoints::DRIVE_V1_TASK_GET;
         let final_path = template.replace("{}", "task_123456");
         assert_eq!(final_path, "/open-apis/drive/v1/tasks/task_123456");
     }
@@ -2617,7 +2617,7 @@ impl FilesService {
         }
 
         // 构建API路径，替换file_token占位符
-        let api_path = openlark_core::endpoints_original::Endpoints::DRIVE_V1_COPY
+        let api_path = openlark_core::endpoints::Endpoints::DRIVE_V1_COPY
             .replace("{file_token}", &req.file_token);
 
         let api_req = ApiRequest {
@@ -2905,12 +2905,12 @@ mod copy_file_tests {
     fn test_copy_file_endpoint_construction() {
         // 验证端点常量存在
         assert_eq!(
-            openlark_core::endpoints_original::Endpoints::DRIVE_V1_COPY,
+            openlark_core::endpoints::Endpoints::DRIVE_V1_COPY,
             "/open-apis/drive/v1/files/{file_token}/copy"
         );
 
         // 验证路径替换逻辑
-        let template = openlark_core::endpoints_original::Endpoints::DRIVE_V1_COPY;
+        let template = openlark_core::endpoints::Endpoints::DRIVE_V1_COPY;
         let final_path = template.replace("{file_token}", "source_file_123");
         assert_eq!(final_path, "/open-apis/drive/v1/files/source_file_123/copy");
     }

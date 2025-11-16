@@ -9,7 +9,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use openlark_core::endpoints_original::Endpoints;
+use openlark_core::endpoints::Endpoints;
 use openlark_core::{
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},

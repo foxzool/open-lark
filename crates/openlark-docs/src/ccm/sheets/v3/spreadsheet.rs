@@ -176,7 +176,7 @@ impl SpreadsheetService {
 
         let mut api_request = ApiRequest::with_method_and_path(
             Method::POST,
-            openlark_core::endpoints_original::Endpoints::SHEETS_V3_SPREADSHEETS,
+            openlark_core::endpoints::Endpoints::SHEETS_V3_SPREADSHEETS,
         );
         api_request.supported_access_token_types =
             vec![AccessTokenType::Tenant, AccessTokenType::User];
@@ -275,7 +275,7 @@ impl SpreadsheetService {
     ) -> SDKResult<BaseResponse<GetSpreadsheetResponse>> {
         let endpoint = format!(
             "{}/{}",
-            openlark_core::endpoints_original::Endpoints::SHEETS_V3_SPREADSHEETS,
+            openlark_core::endpoints::Endpoints::SHEETS_V3_SPREADSHEETS,
             spreadsheet_token
         );
 
@@ -313,7 +313,7 @@ impl SpreadsheetService {
     ) -> SDKResult<BaseResponse<UpdateSpreadsheetResponse>> {
         let endpoint = format!(
             "{}/{}",
-            openlark_core::endpoints_original::Endpoints::SHEETS_V3_SPREADSHEETS,
+            openlark_core::endpoints::Endpoints::SHEETS_V3_SPREADSHEETS,
             spreadsheet_token
         );
 
@@ -640,7 +640,7 @@ mod tests {
     fn test_endpoint_constant() {
         // Test that the endpoint constant is properly defined
         assert_eq!(
-            openlark_core::endpoints_original::Endpoints::SHEETS_V3_SPREADSHEETS,
+            openlark_core::endpoints::Endpoints::SHEETS_V3_SPREADSHEETS,
             "/open-apis/sheets/v3/spreadsheets"
         );
     }

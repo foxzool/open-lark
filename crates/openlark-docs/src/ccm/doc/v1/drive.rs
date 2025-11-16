@@ -588,7 +588,7 @@ impl DriveServiceV1 {
         api_req.set_http_method(Method::GET);
 
         // 设置API路径并替换路径参数
-        let api_path = openlark_core::endpoints_original::Endpoints::DRIVE_V1_TASK_GET
+        let api_path = openlark_core::endpoints::Endpoints::DRIVE_V1_TASK_GET
             .replace("{}", &request.task_id);
         api_req.set_api_path(api_path);
 
@@ -661,7 +661,7 @@ impl DriveServiceV1 {
         api_req.set_http_method(Method::DELETE);
 
         // 设置API路径并替换路径参数
-        let api_path = openlark_core::endpoints_original::Endpoints::DRIVE_V1_DELETE
+        let api_path = openlark_core::endpoints::Endpoints::DRIVE_V1_DELETE
             .replace("{file_token}", &request.file_token);
         api_req.set_api_path(api_path);
 
@@ -735,7 +735,7 @@ impl DriveServiceV1 {
         // 创建API请求
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: openlark_core::endpoints_original::Endpoints::DRIVE_V1_EXPORT_TASKS.to_string(),
+            api_path: openlark_core::endpoints::Endpoints::DRIVE_V1_EXPORT_TASKS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -2337,7 +2337,7 @@ mod tests {
     fn test_export_task_endpoint_constant() {
         // 测试端点常量是否正确定义
         assert_eq!(
-            openlark_core::endpoints_original::Endpoints::DRIVE_V1_EXPORT_TASKS,
+            openlark_core::endpoints::Endpoints::DRIVE_V1_EXPORT_TASKS,
             "/open-apis/drive/v1/export_tasks"
         );
     }
