@@ -6,6 +6,7 @@
 use crate::prelude::*;
 
 // Import submodules
+use export_tasks::ExportTasksService;
 pub mod ccm_sheet;
 pub mod doc;
 pub mod docx;
@@ -35,17 +36,20 @@ pub use drive::ExplorerService;
 /// Drive Permission service (included in ccm feature)
 pub use drive::PermissionService;
 
-#[cfg(feature = "ccm-sheets")]
-// pub use sheets::SheetsService; // 暂时注释掉
-#[cfg(feature = "ccm-wiki")]
-// pub use wiki::WikiService; // 暂时注释掉
+// 暂时注释掉的条件编译导入
+// #[cfg(feature = "ccm-sheets")]
+// pub use sheets::SheetsService;
+// #[cfg(feature = "ccm-wiki")]
+// pub use wiki::WikiService;
 
 /// Main CCM Service providing access to all content collaboration features
+#[cfg(feature = "ccm-core")]
 #[derive(Clone)]
 pub struct CcmService {
     client: std::sync::Arc<LarkClient>,
 }
 
+#[cfg(feature = "ccm-core")]
 impl CcmService {
     pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
         Self { client }
@@ -96,6 +100,7 @@ impl CcmService {
     }
 }
 
+#[cfg(feature = "ccm-core")]
 impl std::ops::Deref for CcmService {
     type Target = LarkClient;
 
