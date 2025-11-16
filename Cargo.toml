@@ -13,6 +13,7 @@ members = [
     "crates/openlark-admin",
     "crates/openlark-apass",
     "crates/openlark-calendar",
+    "crates/openlark-collab",
     "crates/openlark-helpdesk",
     "crates/openlark-hire",
     "crates/openlark-hr",
@@ -91,6 +92,7 @@ openlark-application = { path = "crates/openlark-application" }
 openlark-approval = { path = "crates/openlark-approval" }
 openlark-apass = { path = "crates/openlark-apass" }
 openlark-calendar = { path = "crates/openlark-calendar" }
+openlark-collab = { path = "crates/openlark-collab" }
 openlark-helpdesk = { path = "crates/openlark-helpdesk" }
 openlark-hire = { path = "crates/openlark-hire" }
 openlark-lingo = { path = "crates/openlark-lingo" }
