@@ -6,7 +6,11 @@
 #![allow(missing_docs)]
 
 // Core modules
+pub mod api;
+// Legacy modules (deprecated, will be removed in future versions)
+#[deprecated(note = "使用新的api模块替代")]
 pub mod api_req;
+#[deprecated(note = "使用新的api模块替代")]
 pub mod api_resp;
 pub mod app_ticket_manager;
 pub mod cache;
@@ -44,9 +48,12 @@ pub use error::SDKResult;
 
 /// Prelude module for convenient imports.
 pub mod prelude {
+    // Re-export new API module
+    pub use crate::api::prelude::*;
+
     // Re-export commonly used core modules directly
-    pub use crate::api_req::*;
-    pub use crate::api_resp::*;
+    pub use crate::api_req;
+    pub use crate::api_resp;
     pub use crate::constants::*;
     pub use crate::error::*;
     pub use crate::http::*;
