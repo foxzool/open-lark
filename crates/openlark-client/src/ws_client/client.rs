@@ -20,13 +20,16 @@ use tokio_tungstenite::{
 };
 use url::Url;
 
-use crate::{
+use openlark_core::{
     api_resp::BaseResponse,
     cache::QuickCache,
-    client::ws_client::{state_machine::StateMachineEvent, FrameHandler, WebSocketStateMachine},
+    config::Config,
     constants::FEISHU_BASE_URL,
     event::dispatcher::EventDispatcherHandler,
 };
+
+// 本地模块导入
+use super::{FrameHandler, WebSocketStateMachine, StateMachineEvent};
 
 const END_POINT_URL: &str = "/callback/ws/endpoint";
 const HEARTBEAT_TIMEOUT: Duration = Duration::from_secs(120);
@@ -229,7 +232,7 @@ impl LarkWsClient {
 
 /// 获取连接配置
 async fn get_conn_url(
-    config: &std::sync::Arc<crate::config::Config>,
+    config: &std::sync::Arc<Config>,
 ) -> WsClientResult<EndPointResponse> {
     let body = json!({
         "AppID": &config.app_id,
