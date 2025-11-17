@@ -34,6 +34,7 @@ pub mod utils;
 pub mod validation;
 
 // Directory modules
+#[deprecated(note = "请使用 openlark-client crate 中的 LarkClient。该模块将在未来版本中移除，详见迁移指南")]
 pub mod client;
 pub mod contact;
 pub mod endpoints;
