@@ -3,10 +3,11 @@ use log::{debug, error, trace};
 use serde::{Deserialize, Serialize};
 use std::time::Instant;
 
-use crate::{
-    client::ws_client::{ClientConfig, WsEvent},
-    event::dispatcher::EventDispatcherHandler,
-};
+// 本地模块类型
+use super::{WsEvent, ClientConfig};
+
+// 外部依赖
+use openlark_core::event::dispatcher::EventDispatcherHandler;
 
 /// Frame 类型
 #[derive(Debug, Clone, Copy, PartialEq)]
