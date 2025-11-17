@@ -15,6 +15,24 @@ async-trait = { workspace = true }
 tokio = { workspace = true }
 tracing = { workspace = true }
 
+# Additional dependencies for unified client
+chrono = { workspace = true }
+uuid = { workspace = true, features = ["v4"] }
+rand = { workspace = true }
+reqwest = { workspace = true }
+url = { workspace = true }
+prost = { workspace = true }
+
+# WebSocket dependencies
+# tokio-tungstenite = { workspace = true, optional = true }
+# futures-util = { workspace = true, optional = true }
+log = { workspace = true }
+thiserror = { workspace = true }
+# websocket = { workspace = true, optional = true }
+
+# Protocol buffer dependencies (removed temporarily)
+# lark-websocket-protobuf = { workspace = true, optional = true }
+
 # Optional service dependencies (conditionally included)
 openlark-docs = { workspace = true, optional = true }
 openlark-hr = { workspace = true, optional = true }
@@ -51,9 +69,13 @@ auth = ["openlark-auth"]
 all-services = ["docs", "sheets", "bitable", "wiki", "drive", "ccm", "hr", "ai", "auth"]
 base-services = ["docs", "sheets", "auth"]
 
+# WebSocket features (disabled temporarily)
+# websocket = ["tokio-tungstenite", "futures-util"]
+
 # Complete client features for easy selection
 client-docs = ["client", "docs"]
 client-hr = ["client", "hr"]
 client-ai = ["client", "ai"]
 client-auth = ["client", "auth"]
 client-all = ["client", "all-services"]
+# client-websocket = ["client", "websocket"]
