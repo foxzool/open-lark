@@ -347,6 +347,10 @@ impl TestAssertions {
             LarkAPIError::UrlParseError(_) => "UrlParseError",
             LarkAPIError::ApiError { .. } => "ApiError",
             LarkAPIError::MissingAccessToken => "MissingAccessToken",
+            LarkAPIError::AuthenticationError { .. } => "AuthenticationError",
+            LarkAPIError::ValidationError(_) => "ValidationError",
+            LarkAPIError::NetworkError { .. } => "NetworkError",
+            LarkAPIError::PermissionError { .. } => "PermissionError",
             LarkAPIError::BadRequest(_) => "BadRequest",
             LarkAPIError::DataError(_) => "DataError",
             LarkAPIError::APIError { .. } => "APIError", // Legacy format
