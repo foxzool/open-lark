@@ -22,6 +22,8 @@ serde = { workspace = true }
 serde_json = { workspace = true }
 anyhow = { workspace = true }
 futures = { workspace = true }
+env_logger = { workspace = true }
+log = { workspace = true }
 
 [features]
 default = ["communication", "client", "auth"]
@@ -31,10 +33,16 @@ hr = ["openlark-hr"]
 ai = ["openlark-ai"]
 auth = ["openlark-auth"]
 client = ["openlark-client"]
+websocket = ["openlark-protocol"]
 
 [[example]]
 name = "basic_introduction"
 path = "basic_introduction.rs"
+
+[[example]]
+name = "ws_client_example"
+path = "ws_client_example.rs"
+required-features = ["websocket"]
 
 [[example]]
 name = "im_messaging"
