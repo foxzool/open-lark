@@ -132,17 +132,14 @@ impl ServiceRegistry {
 
     /// 📝 注册服务
     ///
-    /// # 类型参数
-    /// - `T`: 服务类型，必须实现 Send + Sync + 'static
-    ///
     /// # 参数
     /// - `name`: 服务名称
-    /// - `service`: 服务实例
+    /// - `service`: 服务实例（动态类型）
     /// - `descriptor`: 服务描述符
-    pub fn register_service<T: Send + Sync + 'static>(
+    pub fn register_service(
         &self,
         name: &str,
-        service: Box<T>,
+        service: Box<dyn std::any::Any + Send + Sync>,
         descriptor: ServiceDescriptor,
     ) -> Result<()> {
         // 检查依赖是否已注册
@@ -154,7 +151,7 @@ impl ServiceRegistry {
             }
         }
 
-        let type_id = TypeId::of::<T>();
+        let type_id = service.type_id();
         let now = std::time::SystemTime::now();
 
         // 创建服务条目

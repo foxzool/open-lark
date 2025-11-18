@@ -2,17 +2,18 @@
 //!
 //! 飞书应用管理相关功能接口，包含应用创建、配置和管理等功能。
 
-use openlark_core::{client::LarkClient, SDKResult};
+use openlark_client::{LarkClient, legacy_client::LarkClient as LegacyLarkClient};
+use openlark_core::SDKResult;
 
 /// Application服务主入口
 #[allow(dead_code)]
 pub struct WorkplaceService {
-    client: std::sync::Arc<LarkClient>,
+    client: std::sync::Arc<LegacyLarkClient>,
 }
 
 impl WorkplaceService {
     /// 创建新的应用服务实例
-    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
+    pub fn new(client: std::sync::Arc<LegacyLarkClient>) -> Self {
         Self { client }
     }
 
