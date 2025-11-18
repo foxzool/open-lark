@@ -4,7 +4,7 @@ version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
-description = "Client module for OpenLark SDK - provides unified client interfaces and service aggregation"
+description = "现代化飞书开放平台 Rust SDK - 简化客户端，支持功能驱动的模块化编译"
 
 [dependencies]
 # Core dependencies
@@ -14,28 +14,22 @@ serde_json = { workspace = true }
 async-trait = { workspace = true }
 tokio = { workspace = true }
 tracing = { workspace = true }
+thiserror = { workspace = true }
 
 # Additional dependencies for unified client
-chrono = { workspace = true }
+chrono = { workspace = true, features = ["serde"] }
 uuid = { workspace = true, features = ["v4"] }
-rand = { workspace = true }
 reqwest = { workspace = true }
-url = { workspace = true }
-prost = { workspace = true }
 
 # WebSocket dependencies
-# tokio-tungstenite = { workspace = true, optional = true }
-# futures-util = { workspace = true, optional = true }
-log = { workspace = true }
-thiserror = { workspace = true }
-# websocket = { workspace = true, optional = true }
+tokio-tungstenite = { workspace = true, optional = true }
+futures-util = { workspace = true, optional = true }
+lark-websocket-protobuf = { workspace = true, optional = true }
 
-# Protocol buffer dependencies (removed temporarily)
-# lark-websocket-protobuf = { workspace = true, optional = true }
-
-# Optional service dependencies (conditionally included)
-openlark-docs = { workspace = true, optional = true }
+# Optional service dependencies (conditionally included based on feature flags)
+openlark-communication = { workspace = true, optional = true }
 openlark-hr = { workspace = true, optional = true }
+openlark-docs = { workspace = true, optional = true }
 openlark-ai = { workspace = true, optional = true }
 openlark-auth = { workspace = true, optional = true }
 
@@ -44,6 +38,9 @@ default = []
 
 # Core client feature
 client = []
+
+# WebSocket support
+websocket = ["tokio-tungstenite", "futures-util", "lark-websocket-protobuf"]
 
 # Feature flags for service inclusion
 # 与新的 openlark-docs feature 分类同步
@@ -61,6 +58,8 @@ ccm-sheets = ["openlark-docs/ccm-sheets"]
 ccm-wiki = ["openlark-docs/ccm-wiki"]
 ccm-drive = ["openlark-docs/ccm-drive"]
 
+# 独立服务特性
+communication = ["openlark-communication"]
 hr = ["openlark-hr"]
 ai = ["openlark-ai"]
 auth = ["openlark-auth"]

@@ -1,738 +1,345 @@
-//! Client functionality for OpenLark SDK
+//! OpenLark Client - 全新简化架构
 //!
-//! This module contains the main LarkClient and LarkClientBuilder structures
-//! that provide access to all Lark/Feishu Open API services with conditional
-//! compilation support for different service modules.
+//! 极简设计，1行代码创建客户端，类型安全的服务访问
 
 use std::sync::Arc;
-use std::time::Duration;
+use crate::{Config, ServiceRegistry, Result, traits::LarkClient};
 
-use openlark_core::{
-    config::{Config, ConfigBuilder},
-    constants::AppType,
-};
-
-// 条件导入服务
-#[cfg(feature = "acs")]
-use openlark_core::service::AcsService;
-#[cfg(feature = "admin")]
-use openlark_core::service::AdminService;
-#[cfg(feature = "ai")]
-use openlark_core::service::AiService;
-#[cfg(feature = "aily")]
-use openlark_core::service::AilyService;
-#[cfg(feature = "apass")]
-use openlark_core::service::ApassService;
-#[cfg(feature = "application")]
-use openlark_core::service::ApplicationService;
-#[cfg(feature = "approval")]
-use openlark_core::service::ApprovalService;
-#[cfg(feature = "attendance")]
-use openlark_core::service::AttendanceService;
-#[cfg(feature = "authentication")]
-use openlark_core::service::AuthenService;
-#[cfg(feature = "bot")]
-use openlark_core::service::BotService;
-#[cfg(feature = "calendar")]
-use openlark_core::service::CalendarService;
-#[cfg(feature = "cardkit")]
-use openlark_core::service::CardkitService;
-#[cfg(feature = "cloud-docs")]
-use openlark_core::service::CloudDocsService;
-#[cfg(feature = "contact")]
-use openlark_core::service::ContactService;
-#[cfg(feature = "corehr")]
-use openlark_core::service::CoreHRService;
-#[cfg(feature = "directory")]
-use openlark_core::service::DirectoryService;
-#[cfg(feature = "elearning")]
-use openlark_core::service::ELearningService;
-#[cfg(feature = "ehr")]
-use openlark_core::service::EhrService;
-#[cfg(feature = "group")]
-use openlark_core::service::GroupService;
-#[cfg(feature = "helpdesk")]
-use openlark_core::service::HelpdeskService;
-#[cfg(feature = "hire")]
-use openlark_core::service::HireService;
-#[cfg(feature = "human-authentication")]
-use openlark_core::service::HumanAuthenticationService;
-#[cfg(feature = "im")]
-use openlark_core::service::ImService;
-#[cfg(feature = "lingo")]
-use openlark_core::service::LingoService;
-#[cfg(feature = "mail")]
-use openlark_core::service::MailService;
-#[cfg(feature = "mdm")]
-use openlark_core::service::MdmService;
-#[cfg(feature = "minutes")]
-use openlark_core::service::MinutesService;
-#[cfg(feature = "moments")]
-use openlark_core::service::MomentsService;
-#[cfg(feature = "okr")]
-use openlark_core::service::OkrService;
-#[cfg(feature = "payroll")]
-use openlark_core::service::PayrollService;
-#[cfg(feature = "performance")]
-use openlark_core::service::PerformanceService;
-#[cfg(feature = "personal-settings")]
-use openlark_core::service::PersonalSettingsService;
-#[cfg(feature = "report")]
-use openlark_core::service::ReportService;
-#[cfg(feature = "search")]
-use openlark_core::service::SearchService;
-#[cfg(feature = "security-and-compliance")]
-use openlark_core::service::SecurityAndComplianceService;
-#[cfg(feature = "task")]
-use openlark_core::service::TaskV2Service;
-#[cfg(feature = "tenant")]
-use openlark_core::service::TenantService;
-#[cfg(feature = "tenant-tag")]
-use openlark_core::service::TenantTagService;
-#[cfg(feature = "trust-party")]
-use openlark_core::service::TrustPartyService;
-#[cfg(feature = "vc")]
-use openlark_core::service::VcService;
-#[cfg(feature = "verification")]
-use openlark_core::service::VerificationService;
-#[cfg(feature = "workplace")]
-use openlark_core::service::WorkplaceService;
-
-// 向后兼容的导入
-#[cfg(feature = "cloud-docs")]
-use openlark_core::service::{
-    AssistantService, BitableService, BoardService, CommentsService, DocsService, DriveService,
-    PermissionService, SheetsService, WikiService,
-};
-
-use crate::traits::{ClientBuilder, LarkClientTrait};
-
-/// 飞书开放平台SDK主客户端
+/// 🚀 OpenLark客户端 - 极简设计
 ///
-/// 提供对所有飞书开放平台API的统一访问接口。支持自建应用和商店应用两种类型，
-/// 自动处理认证、令牌管理、请求重试等核心功能。
+/// # 特性
+/// - 零配置启动：`Client::from_env()`
+/// - 类型安全的服务访问
+/// - 编译时feature优化
+/// - 高性能异步
 ///
-/// # 主要功能
+/// # 示例
+/// ```rust,no_run
+/// use openlark_client::Client;
 ///
-/// - 🔐 自动令牌管理和刷新
-/// - 🚀 支持所有飞书开放平台API
-/// - 🔄 内置请求重试机制
-/// - 📡 WebSocket长连接支持（需开启websocket特性）
-/// - 🎯 类型安全的API调用
-pub struct LarkClient {
-    pub config: Config,
-    /// 共享配置（实验性）：单一 `Arc<Config>`，用于内部服务扇出以减少 clone
-    #[allow(dead_code)] // Used in constructor and tests
-    shared_config: Arc<Config>,
-    // 核心服务 - 使用条件编译
-    #[cfg(feature = "acs")]
-    pub acs: AcsService,
-    #[cfg(feature = "admin")]
-    pub admin: AdminService,
+/// #[tokio::main]
+/// async fn main() -> Result<()> {
+///     // 从环境变量创建客户端
+///     let client = Client::from_env()?;
+///
+///     // 发送消息（需要communication feature）
+///     #[cfg(feature = "communication")]
+///     {
+///         let result = client.communication()
+///             .send_text("user_id", "open_id", "Hello!")
+///             .await?;
+///         println!("消息发送成功: {}", result.message_id);
+///     }
+///
+///     Ok(())
+/// }
+/// ```
+#[derive(Debug, Clone)]
+pub struct Client {
+    /// 客户端配置
+    config: Arc<Config>,
+    /// 服务注册表
+    registry: Arc<ServiceRegistry>,
+}
+
+impl Client {
+    /// 🔥 从环境变量创建客户端
+    ///
+    /// # 环境变量
+    /// ```bash
+    /// export OPENLARK_APP_ID=your_app_id
+    /// export OPENLARK_APP_SECRET=your_app_secret
+    /// export OPENLARK_BASE_URL=https://open.feishu.cn  # 可选
+    /// ```
+    ///
+    /// # 返回值
+    /// 返回配置好的客户端实例或错误
+    ///
+    /// # 示例
+    /// ```rust,no_run
+    /// let client = Client::from_env()?;
+    /// ```
+    pub fn from_env() -> Result<Self> {
+        Self::builder().from_env().build()
+    }
+
+    /// 🏗️ 创建构建器
+    pub fn builder() -> ClientBuilder {
+        ClientBuilder::new()
+    }
+
+    /// 📡 访问通讯服务
+    ///
+    /// 需要 `communication` feature
+    #[cfg(feature = "communication")]
+    pub fn communication(&self) -> crate::services::CommunicationService<'_> {
+        crate::services::CommunicationService::new(&self.config, &self.registry)
+    }
+
+    /// 👥 访问HR服务
+    ///
+    /// 需要 `hr` feature
+    #[cfg(feature = "hr")]
+    pub fn hr(&self) -> crate::services::HRService<'_> {
+        crate::services::HRService::new(&self.config, &self.registry)
+    }
+
+    /// 📄 访问文档服务
+    ///
+    /// 需要 `docs` feature
+    #[cfg(feature = "docs")]
+    pub fn docs(&self) -> crate::services::DocsService<'_> {
+        crate::services::DocsService::new(&self.config, &self.registry)
+    }
+
+    /// 🤖 访问AI服务
+    ///
+    /// 需要 `ai` feature
     #[cfg(feature = "ai")]
-    pub ai: AiService,
-    #[cfg(feature = "aily")]
-    pub aily: AilyService,
-    #[cfg(feature = "apass")]
-    pub apass: ApassService,
-    #[cfg(feature = "application")]
-    pub application: ApplicationService,
-    #[cfg(feature = "approval")]
-    pub approval: ApprovalService,
-    #[cfg(feature = "attendance")]
-    pub attendance: AttendanceService,
-    #[cfg(feature = "authentication")]
-    pub auth: AuthenService,
-    #[cfg(feature = "bot")]
-    pub bot: BotService,
-    #[cfg(feature = "calendar")]
-    pub calendar: CalendarService,
-    #[cfg(feature = "cardkit")]
-    pub cardkit: CardkitService,
-    #[cfg(feature = "contact")]
-    pub contact: ContactService,
-    #[cfg(feature = "corehr")]
-    pub corehr: CoreHRService,
-    #[cfg(feature = "directory")]
-    pub directory: DirectoryService,
-    #[cfg(feature = "ehr")]
-    pub ehr: EhrService,
-    #[cfg(feature = "elearning")]
-    pub elearning: ELearningService,
-    #[cfg(feature = "group")]
-    pub group: GroupService,
-    #[cfg(feature = "helpdesk")]
-    pub helpdesk: HelpdeskService,
-    #[cfg(feature = "hire")]
-    pub hire: HireService,
-    #[cfg(feature = "human-authentication")]
-    pub human_authentication: HumanAuthenticationService,
-    #[cfg(feature = "im")]
-    pub im: ImService,
-    #[cfg(feature = "lingo")]
-    pub lingo: LingoService,
-    #[cfg(feature = "mail")]
-    pub mail: MailService,
-    #[cfg(feature = "mdm")]
-    pub mdm: MdmService,
-    #[cfg(feature = "minutes")]
-    pub minutes: MinutesService,
-    #[cfg(feature = "moments")]
-    pub moments: MomentsService,
-    #[cfg(feature = "okr")]
-    pub okr: OkrService,
-    #[cfg(feature = "payroll")]
-    pub payroll: PayrollService,
-    #[cfg(feature = "performance")]
-    pub performance: PerformanceService,
-    #[cfg(feature = "personal-settings")]
-    pub personal_settings: PersonalSettingsService,
-    #[cfg(feature = "report")]
-    pub report: ReportService,
-    #[cfg(feature = "search")]
-    pub search: SearchService,
-    #[cfg(feature = "security-and-compliance")]
-    pub security_and_compliance: SecurityAndComplianceService,
-    #[cfg(feature = "task")]
-    pub task: TaskV2Service,
-    #[cfg(feature = "tenant")]
-    pub tenant: TenantService,
-    #[cfg(feature = "tenant-tag")]
-    pub tenant_tag: TenantTagService,
-    #[cfg(feature = "trust-party")]
-    pub trust_party: TrustPartyService,
-    #[cfg(feature = "vc")]
-    pub vc: VcService,
-    #[cfg(feature = "verification")]
-    pub verification: VerificationService,
-    #[cfg(feature = "workplace")]
-    pub workplace: WorkplaceService,
-    // 云文档服务聚合
-    #[cfg(feature = "cloud-docs")]
-    pub cloud_docs: CloudDocsService,
-    // 向后兼容的字段
-    #[cfg(feature = "cloud-docs")]
-    pub assistant: AssistantService,
-    #[cfg(feature = "cloud-docs")]
-    pub docs: DocsService,
-    #[cfg(feature = "cloud-docs")]
-    pub drive: DriveService,
-    #[cfg(feature = "cloud-docs")]
-    pub sheets: SheetsService,
-    #[cfg(feature = "cloud-docs")]
-    pub bitable: BitableService,
-    #[cfg(feature = "cloud-docs")]
-    pub wiki: WikiService,
-    #[cfg(feature = "cloud-docs")]
-    pub comments: CommentsService,
-    #[cfg(feature = "cloud-docs")]
-    pub permission: PermissionService,
-    #[cfg(feature = "cloud-docs")]
-    pub board: BoardService,
-}
-
-/// 飞书客户端构建器
-///
-/// 使用构建器模式配置和创建LarkClient实例。支持链式调用配置各种选项。
-pub struct LarkClientBuilder {
-    config_builder: ConfigBuilder,
-}
-
-impl LarkClientBuilder {
-    /// 获取当前配置构建器（仅测试使用）
-    #[cfg(test)]
-    fn build_config(&self) -> Config {
-        self.config_builder.clone().build()
+    pub fn ai(&self) -> crate::services::AIService<'_> {
+        crate::services::AIService::new(&self.config, &self.registry)
     }
 
-    /// 设置应用类型
+    /// 🔐 访问认证服务
     ///
-    /// # 参数
-    /// - `app_type`: 应用类型，`AppType::SelfBuild`（自建应用）或`AppType::Marketplace`（商店应用）
-    pub fn with_app_type(mut self, app_type: AppType) -> Self {
-        self.config_builder = self.config_builder.app_type(app_type);
-        self
+    /// 需要 `auth` feature
+    #[cfg(feature = "auth")]
+    pub fn auth(&self) -> crate::services::AuthService<'_> {
+        crate::services::AuthService::new(&self.config)
     }
 
-    /// 设置为商店应用（等同于 `with_app_type(AppType::Marketplace)`）
-    pub fn with_marketplace_app(mut self) -> Self {
-        self.config_builder = self.config_builder.app_type(AppType::Marketplace);
-        self
+    /// 🔧 获取客户端配置
+    pub fn config(&self) -> &Config {
+        &self.config
     }
 
-    /// 设置自定义API基础URL
-    ///
-    /// # 参数
-    /// - `base_url`: 自定义的API基础URL，默认为官方地址
-    pub fn with_open_base_url(mut self, base_url: String) -> Self {
-        self.config_builder = self.config_builder.base_url(base_url);
-        self
+    /// 📋 获取服务注册表
+    pub fn registry(&self) -> &ServiceRegistry {
+        &self.registry
     }
 
-    /// 启用或禁用令牌缓存
-    ///
-    /// # 参数
-    /// - `enable`: 是否启用令牌缓存，建议启用以提高性能
-    pub fn with_enable_token_cache(mut self, enable: bool) -> Self {
-        self.config_builder = self.config_builder.enable_token_cache(enable);
-        self
+    /// ✅ 检查客户端是否已正确配置
+    pub fn is_configured(&self) -> bool {
+        !self.config.app_id.is_empty() && !self.config.app_secret.is_empty()
     }
 
-    /// 设置请求超时时间
-    ///
-    /// # 参数
-    /// - `timeout`: 超时时间（秒），None表示使用默认值
-    pub fn with_req_timeout(mut self, timeout: Option<f32>) -> Self {
-        if let Some(timeout) = timeout {
-            self.config_builder = self
-                .config_builder
-                .req_timeout(Duration::from_secs_f32(timeout));
-        }
-        self
-    }
+    /// 🆕 创建带有自定义配置的客户端
+    pub fn with_config(config: Config) -> Result<Self> {
+        config.validate()?;
+        let config = Arc::new(config);
+        let registry = Arc::new(ServiceRegistry::new(&config));
 
-    /// 构建LarkClient实例
-    ///
-    /// 根据配置的参数创建最终的客户端实例。
-    pub fn build(self) -> LarkClient {
-        let config = self.config_builder.build();
-        let shared_config = Arc::new(config.clone());
-        LarkClient {
-            config: config.clone(),
-            shared_config: shared_config.clone(),
-            // 核心服务 - 使用条件编译
-            #[cfg(feature = "acs")]
-            acs: AcsService::new(config.clone()),
-            #[cfg(feature = "admin")]
-            admin: AdminService::new(config.clone()),
-            #[cfg(feature = "ai")]
-            ai: AiService::new(config.clone()),
-            #[cfg(feature = "aily")]
-            aily: AilyService::new(config.clone()),
-            #[cfg(feature = "apass")]
-            apass: ApassService::new(config.clone()),
-            #[cfg(feature = "application")]
-            application: ApplicationService::new_from_shared(shared_config.clone()),
-            #[cfg(feature = "approval")]
-            approval: ApprovalService::new(config.clone()),
-            #[cfg(feature = "attendance")]
-            attendance: AttendanceService::new(config.clone()),
-            #[cfg(feature = "authentication")]
-            auth: AuthenService::new(config.clone()),
-            #[cfg(feature = "bot")]
-            bot: BotService::new(config.clone()),
-            #[cfg(feature = "calendar")]
-            calendar: CalendarService::new_from_shared(shared_config.clone()),
-            #[cfg(feature = "cardkit")]
-            cardkit: CardkitService::new(config.clone()),
-            #[cfg(feature = "contact")]
-            contact: ContactService::new_from_shared(shared_config.clone()),
-            #[cfg(feature = "corehr")]
-            corehr: CoreHRService::new(config.clone()),
-            #[cfg(feature = "directory")]
-            directory: DirectoryService::new_from_shared(shared_config.clone()),
-            #[cfg(feature = "ehr")]
-            ehr: EhrService::new_from_shared(shared_config.clone()),
-            #[cfg(feature = "elearning")]
-            elearning: ELearningService::new(config.clone()),
-            #[cfg(feature = "group")]
-            group: GroupService::new(config.clone()),
-            #[cfg(feature = "helpdesk")]
-            helpdesk: HelpdeskService::new(config.clone()),
-            #[cfg(feature = "hire")]
-            hire: HireService::new(config.clone()),
-            #[cfg(feature = "human-authentication")]
-            human_authentication: HumanAuthenticationService::new(config.clone()),
-            #[cfg(feature = "im")]
-            im: ImService::new_from_shared(shared_config.clone()),
-            #[cfg(feature = "lingo")]
-            lingo: LingoService::new(config.clone()),
-            #[cfg(feature = "mail")]
-            mail: MailService::new(config.clone()),
-            #[cfg(feature = "mdm")]
-            mdm: MdmService::new(config.clone()),
-            #[cfg(feature = "minutes")]
-            minutes: MinutesService::new(config.clone()),
-            #[cfg(feature = "moments")]
-            moments: MomentsService::new(config.clone()),
-            #[cfg(feature = "okr")]
-            okr: OkrService::new(config.clone()),
-            #[cfg(feature = "payroll")]
-            payroll: PayrollService::new(config.clone()),
-            #[cfg(feature = "performance")]
-            performance: PerformanceService::new(config.clone()),
-            #[cfg(feature = "personal-settings")]
-            personal_settings: PersonalSettingsService::new(config.clone()),
-            #[cfg(feature = "report")]
-            report: ReportService::new_from_shared(shared_config.clone()),
-            #[cfg(feature = "search")]
-            search: SearchService::new_from_shared(shared_config.clone()),
-            #[cfg(feature = "security-and-compliance")]
-            security_and_compliance: SecurityAndComplianceService::new_from_shared(
-                shared_config.clone(),
-            ),
-            #[cfg(feature = "task")]
-            task: TaskV2Service::new_from_shared(shared_config.clone()),
-            #[cfg(feature = "tenant")]
-            tenant: TenantService::new_from_shared(shared_config.clone()),
-            #[cfg(feature = "tenant-tag")]
-            tenant_tag: TenantTagService::new(config.clone()),
-            #[cfg(feature = "trust-party")]
-            trust_party: TrustPartyService::new(config.clone()),
-            #[cfg(feature = "vc")]
-            vc: VcService::new(config.clone()),
-            #[cfg(feature = "verification")]
-            verification: VerificationService::new(config.clone()),
-            #[cfg(feature = "workplace")]
-            workplace: WorkplaceService::new(config.clone()),
-            // 云文档服务聚合
-            #[cfg(feature = "cloud-docs")]
-            cloud_docs: CloudDocsService::new_from_shared(shared_config.clone()),
-            // 向后兼容的字段（重新创建实例）
-            #[cfg(feature = "cloud-docs")]
-            assistant: AssistantService::new_from_shared(shared_config.clone()),
-            #[cfg(feature = "cloud-docs")]
-            docs: DocsService::new(config.clone()),
-            #[cfg(feature = "cloud-docs")]
-            drive: DriveService::new_from_shared(shared_config.clone()),
-            #[cfg(feature = "cloud-docs")]
-            sheets: SheetsService::new_from_shared(shared_config.clone()),
-            #[cfg(feature = "cloud-docs")]
-            bitable: BitableService::new_from_shared(shared_config.clone()),
-            #[cfg(feature = "cloud-docs")]
-            wiki: WikiService::new_from_shared(shared_config.clone()),
-            #[cfg(feature = "cloud-docs")]
-            comments: CommentsService::new_from_shared(shared_config.clone()),
-            #[cfg(feature = "cloud-docs")]
-            permission: PermissionService::new_from_shared(shared_config.clone()),
-            #[cfg(feature = "cloud-docs")]
-            board: BoardService::new_from_shared(shared_config.clone()),
-        }
+        Ok(Client { config, registry })
     }
 }
 
-impl LarkClient {
-    /// 创建客户端构建器
-    ///
-    /// # 参数
-    /// - `app_id`: 应用ID，从飞书开放平台获取
-    /// - `app_secret`: 应用密钥，从飞书开放平台获取
-    pub fn builder(app_id: &str, app_secret: &str) -> LarkClientBuilder {
-        LarkClientBuilder {
-            config_builder: Config::builder().app_id(app_id).app_secret(app_secret),
-        }
-    }
-
-    /// 获取共享配置（用于内部服务扇出，减少 clone）
-    #[allow(dead_code)] // Used by services in constructor
-    pub(crate) fn shared_config(&self) -> Arc<Config> {
-        self.shared_config.clone()
-    }
-}
-
-impl LarkClientTrait for LarkClient {
+// 实现LarkClient trait
+impl LarkClient for Client {
     fn config(&self) -> &Config {
         &self.config
     }
 
-    fn new(config: Config) -> Self {
-        let shared_config = Arc::new(config.clone());
-        Self::new_from_shared(shared_config)
-    }
-
-    fn new_from_shared(shared_config: Arc<Config>) -> Self {
-        let config = shared_config.as_ref().clone();
-        LarkClient::builder(&config.app_id, &config.app_secret)
-            .with_app_type(config.app_type)
-            .with_enable_token_cache(config.enable_token_cache)
-            .with_req_timeout(config.req_timeout.map(|t| t.as_secs_f32()))
-            .with_open_base_url(config.base_url.clone())
-            .build()
+    fn is_configured(&self) -> bool {
+        self.is_configured()
     }
 }
 
-impl ClientBuilder for LarkClientBuilder {
-    type Output = LarkClient;
+/// 🏗️ 客户端构建器 - 流畅API
+///
+/// 提供链式调用的客户端构建方式
+///
+/// # 示例
+/// ```rust,no_run
+/// use openlark_client::Client;
+/// use std::time::Duration;
+///
+/// let client = Client::builder()
+///     .app_id("your_app_id")
+///     .app_secret("your_app_secret")
+///     .base_url("https://open.feishu.cn")
+///     .timeout(Duration::from_secs(30))
+///     .build()?;
+/// ```
+#[derive(Debug, Clone)]
+pub struct ClientBuilder {
+    config: Config,
+}
 
-    fn new() -> Self {
+impl ClientBuilder {
+    /// 🆕 创建新的构建器实例
+    pub fn new() -> Self {
         Self {
-            config_builder: Config::builder(),
+            config: Config::default(),
         }
     }
 
-    fn with_config(self, config: Config) -> Self {
-        let mut builder = Self::new();
-        builder.config_builder = Config::builder()
-            .app_id(&config.app_id)
-            .app_secret(&config.app_secret)
-            .app_type(config.app_type)
-            .base_url(config.base_url.clone())
-            .enable_token_cache(config.enable_token_cache);
-
-        // Only set req_timeout if it exists
-        if let Some(timeout) = config.req_timeout {
-            builder.config_builder = builder.config_builder.req_timeout(timeout);
-        }
-
-        builder
+    /// 🆔 设置应用ID
+    pub fn app_id<S: Into<String>>(mut self, app_id: S) -> Self {
+        self.config.app_id = app_id.into();
+        self
     }
 
-    fn build(self) -> Self::Output {
-        self.build()
+    /// 🔑 设置应用密钥
+    pub fn app_secret<S: Into<String>>(mut self, app_secret: S) -> Self {
+        self.config.app_secret = app_secret.into();
+        self
     }
 
-    fn build_with_shared_config(self, config: Arc<Config>) -> Self::Output {
-        self.with_config(config.as_ref().clone()).build()
+    /// 🌐 设置基础URL
+    pub fn base_url<S: Into<String>>(mut self, base_url: S) -> Self {
+        self.config.base_url = base_url.into();
+        self
+    }
+
+    /// ⏱️ 设置请求超时时间
+    pub fn timeout(mut self, timeout: std::time::Duration) -> Self {
+        self.config.timeout = timeout;
+        self
+    }
+
+    /// 🔄 设置重试次数
+    pub fn retry_count(mut self, retry_count: u32) -> Self {
+        self.config.retry_count = retry_count;
+        self
+    }
+
+    /// 📝 启用或禁用日志
+    pub fn enable_log(mut self, enable: bool) -> Self {
+        self.config.enable_log = enable;
+        self
+    }
+
+    /// 🌍 从环境变量加载配置
+    pub fn from_env(mut self) -> Self {
+        self.config.load_from_env();
+        self
+    }
+
+    /// 🔨 构建客户端实例
+    ///
+    /// # 返回值
+    /// 返回配置好的客户端实例或验证错误
+    ///
+    /// # 错误
+    /// 如果配置验证失败，会返回相应的错误信息
+    pub fn build(self) -> Result<Client> {
+        Client::with_config(self.config)
     }
 }
 
-impl Clone for LarkClient {
-    fn clone(&self) -> Self {
-        Self::new_from_shared(self.shared_config.clone())
+impl Default for ClientBuilder {
+    fn default() -> Self {
+        Self::new()
     }
 }
+
+/// Client的便利构造函数
+impl From<Config> for Result<Client> {
+    fn from(config: Config) -> Self {
+        Client::with_config(config)
+    }
+}
+
 
 #[cfg(test)]
 mod tests {
     use super::*;
     use std::time::Duration;
 
-    fn create_test_builder() -> LarkClientBuilder {
-        LarkClient::builder("test_app_id", "test_app_secret")
-    }
-
     #[test]
-    fn test_client_builder_creation() {
-        let client = LarkClient::builder("test_id", "test_secret").build();
-        assert_eq!(client.config.app_id, "test_id");
-        assert_eq!(client.config.app_secret, "test_secret");
-        assert_eq!(client.config.app_type, AppType::SelfBuild); // Default
-    }
-
-    #[test]
-    fn test_builder_with_app_type() {
-        let client = create_test_builder()
-            .with_app_type(AppType::Marketplace)
-            .build();
-        assert_eq!(client.config.app_type, AppType::Marketplace);
-    }
-
-    #[test]
-    fn test_builder_with_marketplace_app() {
-        let client = create_test_builder().with_marketplace_app().build();
-        assert_eq!(client.config.app_type, AppType::Marketplace);
-    }
-
-    #[test]
-    fn test_builder_with_custom_base_url() {
-        let custom_url = "https://custom.api.feishu.cn";
-        let client = create_test_builder()
-            .with_open_base_url(custom_url.to_string())
-            .build();
-        assert_eq!(client.config.base_url, custom_url);
-    }
-
-    #[test]
-    fn test_builder_with_enable_token_cache() {
-        let client_enabled = create_test_builder().with_enable_token_cache(true).build();
-        assert!(client_enabled.config.enable_token_cache);
-
-        let client_disabled = create_test_builder().with_enable_token_cache(false).build();
-        assert!(!client_disabled.config.enable_token_cache);
-    }
-
-    #[test]
-    fn test_builder_with_req_timeout() {
-        let timeout_seconds = 30.0;
-        let client = create_test_builder()
-            .with_req_timeout(Some(timeout_seconds))
+    fn test_client_builder() {
+        let client = Client::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .timeout(Duration::from_secs(30))
             .build();
 
-        let expected_duration = Duration::from_secs_f32(timeout_seconds);
-        assert_eq!(client.config.req_timeout, Some(expected_duration));
+        assert!(client.is_ok());
     }
 
     #[test]
-    fn test_builder_with_none_timeout() {
-        let client = create_test_builder().with_req_timeout(None).build();
-        assert_eq!(client.config.req_timeout, None);
+    fn test_client_config() {
+        let config = Config {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_app_secret".to_string(),
+            base_url: "https://open.feishu.cn".to_string(),
+            ..Default::default()
+        };
+
+        let client = Client::with_config(config).unwrap();
+        assert_eq!(client.config().app_id, "test_app_id");
+        assert_eq!(client.config().app_secret, "test_app_secret");
+        assert!(client.is_configured());
     }
 
     #[test]
-    fn test_builder_chaining() {
-        let client = create_test_builder()
-            .with_app_type(AppType::Marketplace)
-            .with_enable_token_cache(true)
-            .with_req_timeout(Some(45.0))
-            .with_open_base_url("https://test.api.feishu.cn".to_string())
-            .build();
+    fn test_client_not_configured() {
+        let config = Config {
+            app_id: String::new(),
+            app_secret: String::new(),
+            ..Default::default()
+        };
 
-        assert_eq!(client.config.app_type, AppType::Marketplace);
-        assert!(client.config.enable_token_cache);
-        assert_eq!(
-            client.config.req_timeout,
-            Some(Duration::from_secs_f32(45.0))
-        );
-        assert_eq!(client.config.base_url, "https://test.api.feishu.cn");
+        let client = Client::with_config(config).unwrap();
+        assert!(!client.is_configured());
     }
 
     #[test]
-    fn test_client_build() {
-        let client = create_test_builder().build();
+    fn test_client_clone() {
+        let client = Client::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
+            .unwrap();
 
-        assert_eq!(client.config.app_id, "test_app_id");
-        assert_eq!(client.config.app_secret, "test_app_secret");
-        assert_eq!(client.config.app_type, AppType::SelfBuild);
+        let cloned_client = client.clone();
+        assert_eq!(client.config().app_id, cloned_client.config().app_id);
     }
 
     #[test]
-    fn test_client_build_with_timeout() {
-        let client = create_test_builder().with_req_timeout(Some(60.0)).build();
+    fn test_from_env_missing_vars() {
+        // 清理环境变量
+        std::env::remove_var("OPENLARK_APP_ID");
+        std::env::remove_var("OPENLARK_APP_SECRET");
 
-        assert_eq!(
-            client.config.req_timeout,
-            Some(Duration::from_secs_f32(60.0))
-        );
+        let result = Client::from_env();
+        assert!(result.is_err());
     }
 
     #[test]
-    fn test_client_build_marketplace_app() {
-        let client = create_test_builder().with_marketplace_app().build();
+    fn test_from_app_id_string() {
+        std::env::set_var("OPENLARK_APP_SECRET", "test_secret");
 
-        assert_eq!(client.config.app_type, AppType::Marketplace);
+        let result: Result<Client> = "test_app_id".into();
+        assert!(result.is_ok());
+
+        if let Ok(client) = result {
+            assert_eq!(client.config().app_id, "test_app_id");
+            assert_eq!(client.config().app_secret, "test_secret");
+        }
+
+        // 清理环境变量
+        std::env::remove_var("OPENLARK_APP_SECRET");
     }
 
     #[test]
-    fn test_client_build_with_custom_config() {
-        let client = create_test_builder()
-            .with_app_type(AppType::Marketplace)
-            .with_enable_token_cache(false)
-            .with_open_base_url("https://custom.feishu.cn".to_string())
-            .with_req_timeout(Some(120.0))
-            .build();
-
-        assert_eq!(client.config.app_type, AppType::Marketplace);
-        assert!(!client.config.enable_token_cache);
-        assert_eq!(client.config.base_url, "https://custom.feishu.cn");
-        assert_eq!(
-            client.config.req_timeout,
-            Some(Duration::from_secs_f32(120.0))
-        );
+    fn test_builder_default() {
+        let builder = ClientBuilder::default();
+        assert!(builder.config.app_id.is_empty());
+        assert!(builder.config.app_secret.is_empty());
     }
 
+    #[cfg(feature = "communication")]
     #[test]
-    fn test_builder_empty_credentials() {
-        let builder = LarkClient::builder("", "");
-        let config = builder.build_config();
-        assert_eq!(config.app_id, "");
-        assert_eq!(config.app_secret, "");
-    }
+    fn test_communication_service_access() {
+        let client = Client::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
+            .unwrap();
 
-    #[test]
-    fn test_builder_unicode_credentials() {
-        let app_id = "测试_app_id_🔑";
-        let app_secret = "测试_secret_🔐";
-        let builder = LarkClient::builder(app_id, app_secret);
-        let config = builder.build_config();
-
-        assert_eq!(config.app_id, app_id);
-        assert_eq!(config.app_secret, app_secret);
-    }
-
-    #[test]
-    fn test_builder_very_long_credentials() {
-        let long_id = "a".repeat(1000);
-        let long_secret = "b".repeat(1000);
-        let builder = LarkClient::builder(&long_id, &long_secret);
-        let config = builder.build_config();
-
-        assert_eq!(config.app_id, long_id);
-        assert_eq!(config.app_secret, long_secret);
-    }
-
-    #[test]
-    fn test_builder_special_characters() {
-        let special_id = "app-id_123!@#$%^&*()";
-        let special_secret = "secret/\\?<>|:\"{}";
-        let builder = LarkClient::builder(special_id, special_secret);
-        let config = builder.build_config();
-
-        assert_eq!(config.app_id, special_id);
-        assert_eq!(config.app_secret, special_secret);
-    }
-
-    #[test]
-    fn test_builder_extreme_timeout_values() {
-        // Very small timeout
-        let small_timeout = create_test_builder().with_req_timeout(Some(0.001)).build();
-        assert_eq!(
-            small_timeout.config.req_timeout,
-            Some(Duration::from_secs_f32(0.001))
-        );
-
-        // Very large timeout
-        let large_timeout = create_test_builder()
-            .with_req_timeout(Some(3600.0)) // 1 hour
-            .build();
-        assert_eq!(
-            large_timeout.config.req_timeout,
-            Some(Duration::from_secs_f32(3600.0))
-        );
-    }
-
-    #[test]
-    fn test_config_independence() {
-        // Test that multiple builders don't interfere with each other
-        let builder1 = create_test_builder().with_app_type(AppType::Marketplace);
-
-        let builder2 = create_test_builder().with_app_type(AppType::SelfBuild);
-
-        assert_eq!(builder1.build_config().app_type, AppType::Marketplace);
-        assert_eq!(builder2.build_config().app_type, AppType::SelfBuild);
-    }
-
-    #[test]
-    fn test_builder_default_values() {
-        let builder = create_test_builder();
-        let config = builder.build_config();
-
-        // Verify default values match Config defaults
-        assert_eq!(config.app_type, AppType::SelfBuild);
-        assert!(config.enable_token_cache); // Default from Config
-        assert_eq!(config.req_timeout, None);
-        assert!(!config.base_url.is_empty()); // Should have default URL
-    }
-
-    #[cfg(feature = "cloud-docs")]
-    #[test]
-    fn test_client_cloud_docs_services() {
-        let client = create_test_builder().build();
-
-        // Verify cloud docs services are available when feature is enabled
-        // This is mainly to check that the struct is properly constructed
-        // We can't test much without actual functionality, but we can verify the services exist
-        let _assistant = &client.assistant;
-        let _drive = &client.drive;
-        let _sheets = &client.sheets;
-        let _bitable = &client.bitable;
-        let _wiki = &client.wiki;
-        let _docs = &client.docs;
-    }
-
-    #[test]
-    fn test_client_builder_multiple_configurations() {
-        // Test that the builder can be used to create multiple different clients
-        let client1 = create_test_builder().with_marketplace_app().build();
-
-        let client2 = LarkClient::builder("different_id", "different_secret")
-            .with_enable_token_cache(false)
-            .build();
-
-        assert_eq!(client1.config.app_type, AppType::Marketplace);
-        assert_eq!(client1.config.app_id, "test_app_id");
-
-        assert_eq!(client2.config.app_type, AppType::SelfBuild);
-        assert_eq!(client2.config.app_id, "different_id");
-        assert!(!client2.config.enable_token_cache);
+        // 这个测试只验证服务访问器可以正常创建
+        // 实际的API调用需要mock服务器
+        let _service = client.communication();
     }
 }
