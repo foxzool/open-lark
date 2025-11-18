@@ -27,7 +27,7 @@
 //! ```
 
 // 导入核心端点（auth, application等基础端点）
-pub use openlark_core::endpoints::{auth, application, apass, platform_integration};
+pub use openlark_core::endpoints::{apass, application, auth, platform_integration};
 
 // ==================== Contact (联系人管理) v1/v3 ====================
 // 联系人系统 - 用户查询、联系人管理、联系人搜索
@@ -44,15 +44,18 @@ pub const CONTACT_V3_USER_UPDATE: &str = "/open-apis/contact/v3/users/{user_id}"
 pub const CONTACT_V3_USER_GET: &str = "/open-apis/contact/v3/users/{user_id}";
 pub const CONTACT_V3_USER_SEARCH: &str = "/open-apis/contact/v3/users/search";
 pub const CONTACT_V3_USER_MOBILE_SEARCH: &str = "/open-apis/contact/v3/users/mobile_search";
-pub const CONTACT_V3_USER_CREATED_BY_APP_SEARCH: &str = "/open-apis/contact/v3/users/created_by_app/search";
+pub const CONTACT_V3_USER_CREATED_BY_APP_SEARCH: &str =
+    "/open-apis/contact/v3/users/created_by_app/search";
 pub const CONTACT_V3_DEPARTMENTS: &str = "/open-apis/contact/v3/departments";
 pub const CONTACT_V3_DEPARTMENT_DELETE: &str = "/open-apis/contact/v3/departments/{department_id}";
 pub const CONTACT_V3_DEPARTMENT_CREATE: &str = "/open-apis/contact/v3/departments";
 pub const CONTACT_V3_DEPARTMENT_UPDATE: &str = "/open-apis/contact/v3/departments/{department_id}";
 pub const CONTACT_V3_DEPARTMENT_GET: &str = "/open-apis/contact/v3/departments/{department_id}";
 pub const CONTACT_V3_DEPARTMENT_SEARCH: &str = "/open-apis/contact/v3/departments/search";
-pub const CONTACT_V3_DEPARTMENT_CHILD: &str = "/open-apis/contact/v3/departments/{department_id}/child";
-pub const CONTACT_V3_DEPARTMENT_USER: &str = "/open-apis/contact/v3/departments/{department_id}/user";
+pub const CONTACT_V3_DEPARTMENT_CHILD: &str =
+    "/open-apis/contact/v3/departments/{department_id}/child";
+pub const CONTACT_V3_DEPARTMENT_USER: &str =
+    "/open-apis/contact/v3/departments/{department_id}/user";
 pub const CONTACT_V3_ROLE_MANAGEMENT: &str = "/open-apis/contact/v3/role_management/permissions";
 pub const CONTACT_V3_USER_ROLE: &str = "/open-apis/contact/v3/user_role/list_user_roles";
 pub const CONTACT_V3_USER_ROLE_DELETE: &str = "/open-apis/contact/v3/user_role/delete_user_role";
@@ -62,10 +65,12 @@ pub const CONTACT_V3_USER_ROLE_DELETE: &str = "/open-apis/contact/v3/user_role/d
 pub const CONTACT_V1_USERS_SEARCH: &str = "/open-apis/contact/v1/users/search";
 pub const CONTACT_V1_USER_GET: &str = "/open-apis/contact/v1/users/{user_id}";
 pub const CONTACT_V1_BATCH_GET: &str = "/open-apis/contact/v1/users/batch/get";
-pub const CONTACT_V1_USER_CREATED_BY_APP_SEARCH: &str = "/open-apis/contact/v1/users/created_by_app/search";
+pub const CONTACT_V1_USER_CREATED_BY_APP_SEARCH: &str =
+    "/open-apis/contact/v1/users/created_by_app/search";
 pub const CONTACT_V1_DEPARTMENTS: &str = "/open-apis/contact/v1/departments";
 pub const CONTACT_V1_DEPARTMENT_GET: &str = "/open-apis/contact/v1/departments/{department_id}";
-pub const CONTACT_V1_DEPARTMENT_USER: &str = "/open-apis/contact/v1/departments/{department_id}/user";
+pub const CONTACT_V1_DEPARTMENT_USER: &str =
+    "/open-apis/contact/v1/departments/{department_id}/user";
 pub const CONTACT_V1_USER_TENANT: &str = "/open-apis/contact/v1/users/{user_id}/tenant";
 pub const CONTACT_V1_USER_INFO: &str = "/open-apis/contact/v1/users/{user_id}/info";
 pub const CONTACT_V1_CONTACT_USER: &str = "/open-apis/contact/v1/contact_user";
@@ -84,51 +89,75 @@ pub const DIRECTORY_V1_EMPLOYEE_QUERY: &str = "/open-apis/directory/v1/employees
 pub const DIRECTORY_V1_EMPLOYEE_CREATE: &str = "/open-apis/directory/v1/employees";
 pub const DIRECTORY_V1_EMPLOYEE_UPDATE: &str = "/open-apis/directory/v1/employees/{employee_id}";
 pub const DIRECTORY_V1_EMPLOYEE_DELETE: &str = "/open-apis/directory/v1/employees/{employee_id}";
-pub const DIRECTORY_V1_EMPLOYEE_BATCH_DELETE: &str = "/open-apis/directory/v1/employees/batch_delete";
-pub const DIRECTORY_V1_EMPLOYEE_BATCH_CREATE: &str = "/open-apis/directory/v1/employees/batch_create";
-pub const DIRECTORY_V1_EMPLOYEE_BATCH_UPDATE: &str = "/open-apis/directory/v1/employees/batch_update";
-pub const DIRECTORY_V1_EMPLOYEE_STATUS_UPDATE: &str = "/open-apis/directory/v1/employee/status/update";
-pub const DIRECTORY_V1_EMPLOYEE_DEPARTMENTS_GET: &str = "/open-apis/directory/v1/employees/{employee_id}/departments";
-pub const DIRECTORY_V1_EMPLOYEE_DEPARTMENTS_UPDATE: &str = "/open-apis/directory/v1/employees/{employee_id}/departments";
+pub const DIRECTORY_V1_EMPLOYEE_BATCH_DELETE: &str =
+    "/open-apis/directory/v1/employees/batch_delete";
+pub const DIRECTORY_V1_EMPLOYEE_BATCH_CREATE: &str =
+    "/open-apis/directory/v1/employees/batch_create";
+pub const DIRECTORY_V1_EMPLOYEE_BATCH_UPDATE: &str =
+    "/open-apis/directory/v1/employees/batch_update";
+pub const DIRECTORY_V1_EMPLOYEE_STATUS_UPDATE: &str =
+    "/open-apis/directory/v1/employee/status/update";
+pub const DIRECTORY_V1_EMPLOYEE_DEPARTMENTS_GET: &str =
+    "/open-apis/directory/v1/employees/{employee_id}/departments";
+pub const DIRECTORY_V1_EMPLOYEE_DEPARTMENTS_UPDATE: &str =
+    "/open-apis/directory/v1/employees/{employee_id}/departments";
 
 /// Directory部门管理 v1
 /// 部门和组织架构管理
 pub const DIRECTORY_V1_DEPARTMENTS: &str = "/open-apis/directory/v1/departments";
 pub const DIRECTORY_V1_DEPARTMENT_GET: &str = "/open-apis/directory/v1/departments/{department_id}";
 pub const DIRECTORY_V1_DEPARTMENT_CREATE: &str = "/open-apis/directory/v1/departments";
-pub const DIRECTORY_V1_DEPARTMENT_UPDATE: &str = "/open-apis/directory/v1/departments/{department_id}";
-pub const DIRECTORY_V1_DEPARTMENT_DELETE: &str = "/open-apis/directory/v1/departments/{department_id}";
-pub const DIRECTORY_V1_DEPARTMENT_PARENT_UPDATE: &str = "/open-apis/directory/v1/departments/{department_id}/parent";
-pub const DIRECTORY_V1_DEPARTMENT_MEMBER_ADD: &str = "/open-apis/directory/v1/departments/{department_id}/members/add";
-pub const DIRECTORY_V1_DEPARTMENT_MEMBER_REMOVE: &str = "/open-apis/directory/v1/departments/{department_id}/members/remove";
-pub const DIRECTORY_V1_DEPARTMENT_MEMBER_UPDATE: &str = "/open-apis/directory/v1/departments/{department_id}/members/{member_id}";
-pub const DIRECTORY_V1_DEPARTMENT_MEMBERS_GET: &str = "/open-apis/directory/v1/departments/{department_id}/members";
+pub const DIRECTORY_V1_DEPARTMENT_UPDATE: &str =
+    "/open-apis/directory/v1/departments/{department_id}";
+pub const DIRECTORY_V1_DEPARTMENT_DELETE: &str =
+    "/open-apis/directory/v1/departments/{department_id}";
+pub const DIRECTORY_V1_DEPARTMENT_PARENT_UPDATE: &str =
+    "/open-apis/directory/v1/departments/{department_id}/parent";
+pub const DIRECTORY_V1_DEPARTMENT_MEMBER_ADD: &str =
+    "/open-apis/directory/v1/departments/{department_id}/members/add";
+pub const DIRECTORY_V1_DEPARTMENT_MEMBER_REMOVE: &str =
+    "/open-apis/directory/v1/departments/{department_id}/members/remove";
+pub const DIRECTORY_V1_DEPARTMENT_MEMBER_UPDATE: &str =
+    "/open-apis/directory/v1/departments/{department_id}/members/{member_id}";
+pub const DIRECTORY_V1_DEPARTMENT_MEMBERS_GET: &str =
+    "/open-apis/directory/v1/departments/{department_id}/members";
 
 /// Directory员工扩展信息 v1
 /// 员工详细信息和扩展字段管理
 pub const DIRECTORY_V1_EMPLOYEE_EXTENDED: &str = "/open-apis/directory/v1/employee_extended";
-pub const DIRECTORY_V1_EMPLOYEE_FIELD_GET: &str = "/open-apis/directory/v1/employee_extended/{employee_id}";
+pub const DIRECTORY_V1_EMPLOYEE_FIELD_GET: &str =
+    "/open-apis/directory/v1/employee_extended/{employee_id}";
 pub const DIRECTORY_V1_EMPLOYEE_FIELD_CREATE: &str = "/open-apis/directory/v1/employee_extended";
-pub const DIRECTORY_V1_EMPLOYEE_FIELD_UPDATE: &str = "/open-apis/directory/v1/employee_extended/{employee_id}";
-pub const DIRECTORY_V1_EMPLOYEE_FIELD_DELETE: &str = "/open-apis/directory/v1/employee_extended/{employee_id}";
-pub const DIRECTORY_V1_EMPLOYEE_FIELD_BATCH_CREATE: &str = "/open-apis/directory/v1/employee_extended/batch_create";
-pub const DIRECTORY_V1_EMPLOYEE_FIELD_BATCH_UPDATE: &str = "/open-apis/directory/v1/employee_extended/batch_update";
-pub const DIRECTORY_V1_EMPLOYEE_FIELD_BATCH_DELETE: &str = "/open-apis/directory/v1/employee_extended/batch_delete";
+pub const DIRECTORY_V1_EMPLOYEE_FIELD_UPDATE: &str =
+    "/open-apis/directory/v1/employee_extended/{employee_id}";
+pub const DIRECTORY_V1_EMPLOYEE_FIELD_DELETE: &str =
+    "/open-apis/directory/v1/employee_extended/{employee_id}";
+pub const DIRECTORY_V1_EMPLOYEE_FIELD_BATCH_CREATE: &str =
+    "/open-apis/directory/v1/employee_extended/batch_create";
+pub const DIRECTORY_V1_EMPLOYEE_FIELD_BATCH_UPDATE: &str =
+    "/open-apis/directory/v1/employee_extended/batch_update";
+pub const DIRECTORY_V1_EMPLOYEE_FIELD_BATCH_DELETE: &str =
+    "/open-apis/directory/v1/employee_extended/batch_delete";
 
 /// Directory部门扩展信息 v1
 /// 部门详细信息和扩展字段管理
 pub const DIRECTORY_V1_DEPARTMENT_EXTENDED: &str = "/open-apis/directory/v1/department_extended";
-pub const DIRECTORY_V1_DEPARTMENT_FIELD_GET: &str = "/open-apis/directory/v1/department_extended/{department_id}";
-pub const DIRECTORY_V1_DEPARTMENT_FIELD_CREATE: &str = "/open-apis/directory/v1/department_extended";
-pub const DIRECTORY_V1_DEPARTMENT_FIELD_UPDATE: &str = "/open-apis/directory/v1/department_extended/{department_id}";
-pub const DIRECTORY_V1_DEPARTMENT_FIELD_DELETE: &str = "/open-apis/directory/v1/department_extended/{department_id}";
+pub const DIRECTORY_V1_DEPARTMENT_FIELD_GET: &str =
+    "/open-apis/directory/v1/department_extended/{department_id}";
+pub const DIRECTORY_V1_DEPARTMENT_FIELD_CREATE: &str =
+    "/open-apis/directory/v1/department_extended";
+pub const DIRECTORY_V1_DEPARTMENT_FIELD_UPDATE: &str =
+    "/open-apis/directory/v1/department_extended/{department_id}";
+pub const DIRECTORY_V1_DEPARTMENT_FIELD_DELETE: &str =
+    "/open-apis/directory/v1/department_extended/{department_id}";
 
 // ==================== Personal Settings (个人设置) v1 ====================
 // 个人设置系统 - 用户偏好、个人资料、隐私设置
 
 /// Personal Settings个人设置 v1
 /// 用户个人偏好和设置管理
-pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUS: &str = "/open-apis/personal_settings/v1/system_status";
+pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUS: &str =
+    "/open-apis/personal_settings/v1/system_status";
 pub const PERSONAL_SETTINGS_V1_USER_STATUS: &str = "/open-apis/personal_settings/v1/user_status";
 
 // ==================== 兼容性别名 ====================
@@ -226,33 +255,64 @@ mod tests {
     #[test]
     fn test_service_grouping() {
         // 测试服务分组的正确性
-        let contact_endpoints = [CONTACT_V3_USERS, CONTACT_V1_USERS_SEARCH, CONTACT_V3_DEPARTMENTS];
+        let contact_endpoints = [
+            CONTACT_V3_USERS,
+            CONTACT_V1_USERS_SEARCH,
+            CONTACT_V3_DEPARTMENTS,
+        ];
         for endpoint in contact_endpoints {
-            assert!(endpoint.contains("/contact/"), "{} 应该包含 /contact/", endpoint);
+            assert!(
+                endpoint.contains("/contact/"),
+                "{} 应该包含 /contact/",
+                endpoint
+            );
         }
 
-        let directory_endpoints = [DIRECTORY_V1_EMPLOYEES, DIRECTORY_V1_DEPARTMENTS, DIRECTORY_V1_EMPLOYEE_EXTENDED];
+        let directory_endpoints = [
+            DIRECTORY_V1_EMPLOYEES,
+            DIRECTORY_V1_DEPARTMENTS,
+            DIRECTORY_V1_EMPLOYEE_EXTENDED,
+        ];
         for endpoint in directory_endpoints {
-            assert!(endpoint.contains("/directory/"), "{} 应该包含 /directory/", endpoint);
+            assert!(
+                endpoint.contains("/directory/"),
+                "{} 应该包含 /directory/",
+                endpoint
+            );
         }
 
-        let personal_settings_endpoints = [PERSONAL_SETTINGS_V1_SYSTEM_STATUS, PERSONAL_SETTINGS_V1_USER_STATUS];
+        let personal_settings_endpoints = [
+            PERSONAL_SETTINGS_V1_SYSTEM_STATUS,
+            PERSONAL_SETTINGS_V1_USER_STATUS,
+        ];
         for endpoint in personal_settings_endpoints {
-            assert!(endpoint.contains("/personal_settings/"), "{} 应该包含 /personal_settings/", endpoint);
+            assert!(
+                endpoint.contains("/personal_settings/"),
+                "{} 应该包含 /personal_settings/",
+                endpoint
+            );
         }
     }
 
     #[test]
     fn test_version_consistency() {
         // 测试版本一致性
-        let v3_endpoints = [CONTACT_V3_USERS, CONTACT_V3_DEPARTMENTS, CONTACT_V3_USER_DELETE];
+        let v3_endpoints = [
+            CONTACT_V3_USERS,
+            CONTACT_V3_DEPARTMENTS,
+            CONTACT_V3_USER_DELETE,
+        ];
         for endpoint in v3_endpoints {
             assert!(endpoint.contains("/v3/"), "{} 应该包含 /v3/", endpoint);
         }
 
-        let v1_endpoints = [CONTACT_V1_USERS_SEARCH, DIRECTORY_V1_EMPLOYEES, PERSONAL_SETTINGS_V1_SYSTEM_STATUS];
+        let v1_endpoints = [
+            CONTACT_V1_USERS_SEARCH,
+            DIRECTORY_V1_EMPLOYEES,
+            PERSONAL_SETTINGS_V1_SYSTEM_STATUS,
+        ];
         for endpoint in v1_endpoints {
             assert!(endpoint.contains("/v1/"), "{} 应该包含 /v1/", endpoint);
         }
     }
-}// Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints
+} // Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints

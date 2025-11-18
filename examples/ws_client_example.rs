@@ -9,17 +9,11 @@
 //! OPENLARK_APP_SECRET=your_app_secret
 //! ```
 
-use std::sync::Arc;
 use dotenvy::dotenv;
 use log::{debug, error, info, warn};
-use openlark_client::{
-    ws_client::LarkWsClient,
-    ws_client::WsClientError,
-};
-use openlark_core::{
-    config::Config,
-    event::dispatcher::EventDispatcherHandler,
-};
+use openlark_client::{ws_client::LarkWsClient, ws_client::WsClientError};
+use openlark_core::{config::Config, event::dispatcher::EventDispatcherHandler};
+use std::sync::Arc;
 use tokio::time::Duration;
 
 #[tokio::main]
@@ -35,13 +29,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // 读取环境变量配置
-    let app_id = std::env::var("OPENLARK_APP_ID")
-        .map_err(|_| "请设置 OPENLARK_APP_ID 环境变量")?;
-    let app_secret = std::env::var("OPENLARK_APP_SECRET")
-        .map_err(|_| "请设置 OPENLARK_APP_SECRET 环境变量")?;
+    let app_id = std::env::var("OPENLARK_APP_ID").map_err(|_| "请设置 OPENLARK_APP_ID 环境变量")?;
+    let app_secret =
+        std::env::var("OPENLARK_APP_SECRET").map_err(|_| "请设置 OPENLARK_APP_SECRET 环境变量")?;
 
     info!("📱 App ID: {}", &app_id[..std::cmp::min(8, app_id.len())]);
-    info!("🔑 App Secret: {}***", &app_secret[..std::cmp::min(6, app_secret.len())]);
+    info!(
+        "🔑 App Secret: {}***",
+        &app_secret[..std::cmp::min(6, app_secret.len())]
+    );
 
     // 创建配置
     let config_builder = Config::builder()
@@ -110,7 +106,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     info!("👋 示例程序结束");
     Ok(())
 }
-
 
 /// 显示连接状态信息
 fn display_connection_info() {

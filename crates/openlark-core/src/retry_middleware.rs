@@ -10,7 +10,7 @@ use std::sync::Arc;
 use std::time::Duration;
 use tokio::time::{sleep, Instant};
 
-use crate::{error::LarkAPIError, error::handler::RetryStrategy, SDKResult};
+use crate::{error::handler::RetryStrategy, error::LarkAPIError, SDKResult};
 
 /// 重试中间件配置
 #[derive(Clone)]

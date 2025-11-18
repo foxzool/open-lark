@@ -4,7 +4,7 @@
 //! 定义了审批实例、任务、外部审批、评论和消息等完整功能。
 
 // 导入核心端点（auth, application等基础端点）
-pub use openlark_core::endpoints::{auth, application, apass, platform_integration};
+pub use openlark_core::endpoints::{apass, application, auth, platform_integration};
 
 // ===== 审批管理端点 =====
 
@@ -23,13 +23,15 @@ pub const APPROVAL_V4_APPROVALS_SEARCH: &str = "/open-apis/approval/v4/approvals
 pub const APPROVAL_V4_EXTERNAL_APPROVALS: &str = "/open-apis/approval/v4/external_approvals";
 
 /// 外部审批详情
-pub const APPROVAL_V4_EXTERNAL_APPROVAL_GET: &str = "/open-apis/approval/v4/external_approvals/{approval_id}";
+pub const APPROVAL_V4_EXTERNAL_APPROVAL_GET: &str =
+    "/open-apis/approval/v4/external_approvals/{approval_id}";
 
 /// 外部实例列表
 pub const APPROVAL_V4_EXTERNAL_INSTANCES: &str = "/open-apis/approval/v4/external_instances";
 
 /// 外部实例检查
-pub const APPROVAL_V4_EXTERNAL_INSTANCE_CHECK: &str = "/open-apis/approval/v4/external_instances/{instance_id}/check";
+pub const APPROVAL_V4_EXTERNAL_INSTANCE_CHECK: &str =
+    "/open-apis/approval/v4/external_instances/{instance_id}/check";
 
 /// 外部任务列表
 pub const APPROVAL_V4_EXTERNAL_TASKS: &str = "/open-apis/approval/v4/external_tasks";
@@ -49,7 +51,8 @@ pub const APPROVAL_V4_INSTANCES_SEARCH: &str = "/open-apis/approval/v4/instances
 pub const APPROVAL_V4_INSTANCES_SEARCH_CC: &str = "/open-apis/approval/v4/instances/search_cc";
 
 /// 审批实例取消
-pub const APPROVAL_V4_INSTANCE_CANCEL: &str = "/open-apis/approval/v4/instances/{instance_id}/cancel";
+pub const APPROVAL_V4_INSTANCE_CANCEL: &str =
+    "/open-apis/approval/v4/instances/{instance_id}/cancel";
 
 /// 审批实例抄送
 pub const APPROVAL_V4_INSTANCE_CC: &str = "/open-apis/approval/v4/instances/{instance_id}/cc";
@@ -63,22 +66,28 @@ pub const APPROVAL_V4_INSTANCE_GET: &str = "/open-apis/approval/v4/instances/{in
 // ===== 审批实例评论端点 =====
 
 /// 审批实例评论列表
-pub const APPROVAL_V4_INSTANCE_COMMENTS: &str = "/open-apis/approval/v4/instances/{instance_id}/comments";
+pub const APPROVAL_V4_INSTANCE_COMMENTS: &str =
+    "/open-apis/approval/v4/instances/{instance_id}/comments";
 
 /// 审批实例评论创建
-pub const APPROVAL_V4_INSTANCE_COMMENTS_CREATE: &str = "/open-apis/approval/v4/instances/{instance_id}/comments/create";
+pub const APPROVAL_V4_INSTANCE_COMMENTS_CREATE: &str =
+    "/open-apis/approval/v4/instances/{instance_id}/comments/create";
 
 /// 审批实例评论列表查询
-pub const APPROVAL_V4_INSTANCE_COMMENTS_LIST: &str = "/open-apis/approval/v4/instances/{instance_id}/comments/list";
+pub const APPROVAL_V4_INSTANCE_COMMENTS_LIST: &str =
+    "/open-apis/approval/v4/instances/{instance_id}/comments/list";
 
 /// 审批实例评论回复
-pub const APPROVAL_V4_INSTANCE_COMMENTS_REPLY: &str = "/open-apis/approval/v4/instances/{instance_id}/comments/reply";
+pub const APPROVAL_V4_INSTANCE_COMMENTS_REPLY: &str =
+    "/open-apis/approval/v4/instances/{instance_id}/comments/reply";
 
 /// 审批实例评论删除
-pub const APPROVAL_V4_INSTANCE_COMMENT_DELETE: &str = "/open-apis/approval/v4/instances/{instance_id}/comments/{comment_id}/delete";
+pub const APPROVAL_V4_INSTANCE_COMMENT_DELETE: &str =
+    "/open-apis/approval/v4/instances/{instance_id}/comments/{comment_id}/delete";
 
 /// 审批实例评论操作
-pub const APPROVAL_V4_INSTANCE_COMMENT_OPERATION: &str = "/open-apis/approval/v4/instances/{instance_id}/comments/{comment_id}";
+pub const APPROVAL_V4_INSTANCE_COMMENT_OPERATION: &str =
+    "/open-apis/approval/v4/instances/{instance_id}/comments/{comment_id}";
 
 // ===== 审批任务端点 =====
 
@@ -104,7 +113,8 @@ pub const APPROVAL_V4_TASK_REJECT: &str = "/open-apis/approval/v4/tasks/{task_id
 pub const APPROVAL_V4_TASK_TRANSFER: &str = "/open-apis/approval/v4/tasks/{task_id}/transfer";
 
 /// 审批任务指定回退
-pub const APPROVAL_V4_TASK_SPECIFIED_ROLLBACK: &str = "/open-apis/approval/v4/tasks/{task_id}/specified_rollback";
+pub const APPROVAL_V4_TASK_SPECIFIED_ROLLBACK: &str =
+    "/open-apis/approval/v4/tasks/{task_id}/specified_rollback";
 
 /// 审批任务回退
 pub const APPROVAL_V4_TASK_ROLLBACK: &str = "/open-apis/approval/v4/tasks/{task_id}/rollback";
@@ -177,4 +187,4 @@ mod tests {
         assert_eq!(TASKS, APPROVAL_V4_TASKS);
         assert_eq!(SEARCH, APPROVAL_V4_SEARCH);
     }
-}// Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints
+} // Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints

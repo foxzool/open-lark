@@ -21,17 +21,17 @@
 //! ```
 
 // 核心模块
-pub mod types;
 pub mod handler;
 pub mod observability;
+pub mod types;
 
 // 便利导入
 pub mod prelude;
 
 // 重新导出核心类型，方便直接使用
-pub use types::*;
 pub use handler::*;
 pub use observability::*;
+pub use types::*;
 
 /// 当前模块版本
 pub const ERROR_MODULE_VERSION: &str = "1.0.0";
@@ -47,8 +47,7 @@ pub mod config {
     pub const DEFAULT_TIMEOUT_SECONDS: u64 = 30;
 
     /// 默认日志级别
-    pub const DEFAULT_LOG_LEVEL: LogLevel =
-        LogLevel::Error;
+    pub const DEFAULT_LOG_LEVEL: LogLevel = LogLevel::Error;
 }
 
 #[cfg(test)]

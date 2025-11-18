@@ -4,30 +4,26 @@
 
 // 重新导出核心错误类型
 pub use super::types::{
-    LarkAPIError, LarkErrorCode, ErrorCategory, ErrorHandlingCategory,
-    ApiResponseError, NetworkError, AuthenticationError, ValidationError,
+    ApiResponseError, AuthenticationError, ErrorCategory, ErrorHandlingCategory, LarkAPIError,
+    LarkErrorCode, NetworkError, ValidationError,
 };
 
 // 重新导出错误处理助手
 pub use super::handler::{
-    ErrorHelper, ErrorHandlingAdvice, ErrorRecoveryStrategy,
-    is_retryable_error, is_permission_error, is_authentication_error,
+    is_authentication_error, is_permission_error, is_retryable_error, ErrorHandlingAdvice,
+    ErrorHelper, ErrorRecoveryStrategy,
 };
 
 // 重新导出观测性功能
 pub use super::observability::{
-    ErrorLogger, ErrorMonitor, ErrorEvent, log_error, record_error, get_error_stats,
+    get_error_stats, log_error, record_error, ErrorEvent, ErrorLogger, ErrorMonitor,
 };
 
 // 重新导出类型定义
-pub use super::types::{
-    ErrorSeverity, NetworkErrorKind, PermissionType,
-};
+pub use super::types::{ErrorSeverity, NetworkErrorKind, PermissionType};
 
 // 重新导出特征
-pub use super::types::{
-    ErrorDisplay, ErrorRecovery, ErrorClassification,
-};
+pub use super::types::{ErrorClassification, ErrorDisplay, ErrorRecovery};
 
 // 重新导出常用结果类型
 pub type SDKResult<T> = Result<T, LarkAPIError>;
@@ -69,13 +65,11 @@ pub mod macros {
     /// 记录错误的便利宏
     #[macro_export]
     macro_rules! log_and_return {
-        ($error:expr) => {
-            {
-                let error = $error;
-                $crate::error::prelude::log_error(&error, $crate::error::prelude::LogLevel::Error);
-                return Err(error);
-            }
-        };
+        ($error:expr) => {{
+            let error = $error;
+            $crate::error::prelude::log_error(&error, $crate::error::prelude::LogLevel::Error);
+            return Err(error);
+        }};
     }
 }
 

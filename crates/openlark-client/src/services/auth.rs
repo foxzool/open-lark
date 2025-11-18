@@ -1,11 +1,10 @@
+use crate::{Config, Error, Result};
 /**
  * 认证服务
  *
  * 提供认证相关的API接口，包括令牌管理、OAuth认证等
  */
-
 use std::sync::Arc;
-use crate::{Config, Error, Result};
 
 /// 认证服务
 pub struct AuthService<'a> {
@@ -63,8 +62,10 @@ impl<'a> AuthService<'a> {
 
     /// 验证令牌
     pub async fn verify_token(&self, access_token: &str) -> Result<TokenVerificationResponse> {
-        tracing::info!("验证令牌: token_prefix={}",
-                     access_token.chars().take(8).collect::<String>());
+        tracing::info!(
+            "验证令牌: token_prefix={}",
+            access_token.chars().take(8).collect::<String>()
+        );
 
         // TODO: 实际API调用
         // 模拟令牌验证
@@ -400,7 +401,7 @@ mod tests {
         let url = service.generate_oauth_url(
             "https://example.com/callback",
             "user:info docs:read",
-            "test_state"
+            "test_state",
         );
 
         assert!(url.contains("app_id=test_app_id"));

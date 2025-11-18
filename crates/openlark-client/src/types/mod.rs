@@ -13,7 +13,6 @@ pub mod auth;
 /// 📦 预导出常用类型
 pub mod prelude {
     pub use super::{
-        RequestOptions, ApiResponseData, PaginatedResponse,
-        ApiResponse as ApiResponseTrait,
+        ApiResponse as ApiResponseTrait, ApiResponseData, PaginatedResponse, RequestOptions,
     };
 }

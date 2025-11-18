@@ -31,15 +31,15 @@
 //! - 其他服务以此类推
 
 // 核心基础端点模块（仅保留基础设施相关的端点）
-pub mod auth;
-pub mod application;
 pub mod apass;
+pub mod application;
+pub mod auth;
 pub mod platform_integration;
 
 // 导出核心端点常量
-pub use auth::*;
-pub use application::*;
 pub use apass::*;
+pub use application::*;
+pub use auth::*;
 pub use platform_integration::*;
 
 // ==================== 端点构建器和类型定义 ====================
@@ -114,7 +114,8 @@ impl EndpointBuilder {
 
         if !self.query_params.is_empty() {
             url.push('?');
-            let params: Vec<String> = self.query_params
+            let params: Vec<String> = self
+                .query_params
                 .iter()
                 .map(|(k, v)| format!("{}={}", k, v))
                 .collect();

@@ -13,10 +13,10 @@ use lark_websocket_protobuf::pbbp2::{Frame, Header};
 use log::{debug, error, info, trace};
 use prost::{Message as ProstMessage, Message as ProstTrait};
 use reqwest::Client;
-use tokio_tungstenite::tungstenite::protocol::Message as WsMessage;
 use serde::Deserialize;
 use serde_json::json;
 use tokio::{net::TcpStream, sync::mpsc, time::Interval};
+use tokio_tungstenite::tungstenite::protocol::Message as WsMessage;
 use tokio_tungstenite::{
     connect_async,
     tungstenite::protocol::{frame::coding::CloseCode, Message},
@@ -24,13 +24,11 @@ use tokio_tungstenite::{
 };
 use url::Url;
 
+use super::{state_machine::StateMachineEvent, FrameHandler, WebSocketStateMachine};
 use openlark_core::{
-    api_resp::BaseResponse,
-    cache::QuickCache,
-    constants::FEISHU_BASE_URL,
+    api_resp::BaseResponse, cache::QuickCache, constants::FEISHU_BASE_URL,
     event::dispatcher::EventDispatcherHandler,
 };
-use super::{state_machine::StateMachineEvent, FrameHandler, WebSocketStateMachine};
 
 const END_POINT_URL: &str = "/callback/ws/endpoint";
 const HEARTBEAT_TIMEOUT: Duration = Duration::from_secs(120);
@@ -240,9 +238,7 @@ async fn get_conn_url(
         "AppSecret": &config.app_secret
     });
 
-    let http_client = Client::builder()
-        .timeout(config.timeout)
-        .build()?;
+    let http_client = Client::builder().timeout(config.timeout).build()?;
 
     let req = http_client
         .post(format!("{FEISHU_BASE_URL}/{END_POINT_URL}"))

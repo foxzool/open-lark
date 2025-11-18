@@ -2,8 +2,8 @@
 //!
 //! 根据feature标志动态加载和配置服务
 
+use crate::{registry::ServiceDescriptor, Config, Result, ServiceRegistry};
 use std::sync::Arc;
-use crate::{Config, ServiceRegistry, Result, registry::ServiceDescriptor};
 
 /// 🔥 功能加载器 - 编译时feature驱动加载
 ///
@@ -356,7 +356,8 @@ impl FeatureSet {
     /// 🔗 检查功能依赖
     pub fn check_dependencies(&self, feature_name: &str) -> Vec<&Feature> {
         if let Some(feature) = self.find_feature(feature_name) {
-            feature.dependencies
+            feature
+                .dependencies
                 .iter()
                 .filter_map(|dep| self.find_feature(dep))
                 .collect()
@@ -406,18 +407,9 @@ mod tests {
             FeatureLoader::is_feature_enabled("hr"),
             cfg!(feature = "hr")
         );
-        assert_eq!(
-            FeatureLoader::is_enabled("docs"),
-            cfg!(feature = "docs")
-        );
-        assert_eq!(
-            FeatureLoader::is_enabled("ai"),
-            cfg!(feature = "ai")
-        );
-        assert_eq!(
-            FeatureLoader::is_enabled("auth"),
-            cfg!(feature = "auth")
-        );
+        assert_eq!(FeatureLoader::is_enabled("docs"), cfg!(feature = "docs"));
+        assert_eq!(FeatureLoader::is_enabled("ai"), cfg!(feature = "ai"));
+        assert_eq!(FeatureLoader::is_enabled("auth"), cfg!(feature = "auth"));
     }
 
     #[test]

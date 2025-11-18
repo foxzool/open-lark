@@ -32,7 +32,7 @@
 //! ```
 
 // 导入核心端点（auth, application等基础端点）
-pub use openlark_core::endpoints::{auth, application, apass, platform_integration};
+pub use openlark_core::endpoints::{apass, application, auth, platform_integration};
 
 // ==================== IM (即时通讯) v1/v2 ====================
 // 即时通讯系统 - 消息发送、聊天管理、批量消息处理
@@ -67,9 +67,12 @@ pub const MAIL_V1_MAILGROUP: &str = "/open-apis/mail/v1/mailgroups/{mailgroup_id
 
 /// Mail邮件组管理员
 /// 邮件组管理员权限管理
-pub const MAIL_V1_MAILGROUP_MANAGERS_BATCH_CREATE: &str = "/open-apis/mail/v1/mailgroups/{mailgroup_id}/managers/batch_create";
-pub const MAIL_V1_MAILGROUP_MANAGERS_BATCH_DELETE: &str = "/open-apis/mail/v1/mailgroups/{mailgroup_id}/managers/batch_delete";
-pub const MAIL_V1_MAILGROUP_MANAGERS: &str = "/open-apis/mail/v1/mailgroups/{mailgroup_id}/managers";
+pub const MAIL_V1_MAILGROUP_MANAGERS_BATCH_CREATE: &str =
+    "/open-apis/mail/v1/mailgroups/{mailgroup_id}/managers/batch_create";
+pub const MAIL_V1_MAILGROUP_MANAGERS_BATCH_DELETE: &str =
+    "/open-apis/mail/v1/mailgroups/{mailgroup_id}/managers/batch_delete";
+pub const MAIL_V1_MAILGROUP_MANAGERS: &str =
+    "/open-apis/mail/v1/mailgroups/{mailgroup_id}/managers";
 
 /// Mail用户邮箱
 /// 用户邮箱的基础管理
@@ -77,31 +80,44 @@ pub const MAIL_V1_USER_MAILBOXES: &str = "/open-apis/mail/v1/user_mailboxes";
 
 /// Mail用户邮箱事件
 /// 邮箱事件的订阅和管理
-pub const MAIL_V1_USER_MAILBOX_EVENTS_SUBSCRIBE: &str = "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/events/subscribe";
-pub const MAIL_V1_USER_MAILBOX_EVENTS_SUBSCRIPTION: &str = "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/events/subscription";
-pub const MAIL_V1_USER_MAILBOX_EVENTS_UNSUBSCRIBE: &str = "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/events/unsubscribe";
+pub const MAIL_V1_USER_MAILBOX_EVENTS_SUBSCRIBE: &str =
+    "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/events/subscribe";
+pub const MAIL_V1_USER_MAILBOX_EVENTS_SUBSCRIPTION: &str =
+    "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/events/subscription";
+pub const MAIL_V1_USER_MAILBOX_EVENTS_UNSUBSCRIBE: &str =
+    "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/events/unsubscribe";
 
 /// Mail用户邮箱文件夹
 /// 邮件文件夹组织管理
-pub const MAIL_V1_USER_MAILBOX_FOLDERS: &str = "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/folders";
-pub const MAIL_V1_USER_MAILBOX_FOLDER: &str = "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/folders/{folder_id}";
+pub const MAIL_V1_USER_MAILBOX_FOLDERS: &str =
+    "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/folders";
+pub const MAIL_V1_USER_MAILBOX_FOLDER: &str =
+    "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/folders/{folder_id}";
 
 /// Mail用户邮箱消息
 /// 邮件消息的处理和管理
-pub const MAIL_V1_USER_MAILBOX_MESSAGES: &str = "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages";
-pub const MAIL_V1_USER_MAILBOX_MESSAGE: &str = "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages/{message_id}";
-pub const MAIL_V1_USER_MAILBOX_MESSAGES_GET_BY_CARD: &str = "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages/get_by_card";
+pub const MAIL_V1_USER_MAILBOX_MESSAGES: &str =
+    "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages";
+pub const MAIL_V1_USER_MAILBOX_MESSAGE: &str =
+    "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages/{message_id}";
+pub const MAIL_V1_USER_MAILBOX_MESSAGES_GET_BY_CARD: &str =
+    "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages/get_by_card";
 
 /// Mail用户邮箱规则
 /// 邮件处理规则和过滤设置
-pub const MAIL_V1_USER_MAILBOX_RULES: &str = "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/rules";
-pub const MAIL_V1_USER_MAILBOX_RULE: &str = "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/rules/{rule_id}";
-pub const MAIL_V1_USER_MAILBOX_RULES_REORDER: &str = "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/rules/reorder";
+pub const MAIL_V1_USER_MAILBOX_RULES: &str =
+    "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/rules";
+pub const MAIL_V1_USER_MAILBOX_RULE: &str =
+    "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/rules/{rule_id}";
+pub const MAIL_V1_USER_MAILBOX_RULES_REORDER: &str =
+    "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/rules/reorder";
 
 /// Mail用户邮箱联系人
 /// 邮件联系人管理
-pub const MAIL_V1_USER_MAILBOX_MAIL_CONTACTS: &str = "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/mail_contacts";
-pub const MAIL_V1_USER_MAILBOX_MAIL_CONTACT: &str = "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/mail_contacts/{contact_id}";
+pub const MAIL_V1_USER_MAILBOX_MAIL_CONTACTS: &str =
+    "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/mail_contacts";
+pub const MAIL_V1_USER_MAILBOX_MAIL_CONTACT: &str =
+    "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/mail_contacts/{contact_id}";
 
 /// Mail用户邮箱附件
 /// 邮件附件下载和管理
@@ -139,8 +155,10 @@ pub const VC_V1_MEETING_SET_HOST: &str = "/open-apis/vc/v1/meetings/{meeting_id}
 pub const EVENT_V1_SUBSCRIPTIONS: &str = "/open-apis/event/v1/subscriptions";
 pub const EVENT_V1_SUBSCRIPTION_CREATE: &str = "/open-apis/event/v1/subscriptions/create";
 pub const EVENT_V1_SUBSCRIPTION_GET: &str = "/open-apis/event/v1/subscriptions/{subscription_id}";
-pub const EVENT_V1_SUBSCRIPTION_DELETE: &str = "/open-apis/event/v1/subscriptions/{subscription_id}";
-pub const EVENT_V1_SUBSCRIPTION_UPDATE: &str = "/open-apis/event/v1/subscriptions/{subscription_id}";
+pub const EVENT_V1_SUBSCRIPTION_DELETE: &str =
+    "/open-apis/event/v1/subscriptions/{subscription_id}";
+pub const EVENT_V1_SUBSCRIPTION_UPDATE: &str =
+    "/open-apis/event/v1/subscriptions/{subscription_id}";
 
 /// Event事件历史
 /// 历史事件查询和重放
@@ -311,14 +329,26 @@ mod tests {
             assert!(endpoint.contains("/vc/"), "{} 应该包含 /vc/", endpoint);
         }
 
-        let event_endpoints = [EVENT_V1_SUBSCRIPTIONS, EVENT_V1_HISTORY, EVENT_V1_DISPATCHER];
+        let event_endpoints = [
+            EVENT_V1_SUBSCRIPTIONS,
+            EVENT_V1_HISTORY,
+            EVENT_V1_DISPATCHER,
+        ];
         for endpoint in event_endpoints {
-            assert!(endpoint.contains("/event/"), "{} 应该包含 /event/", endpoint);
+            assert!(
+                endpoint.contains("/event/"),
+                "{} 应该包含 /event/",
+                endpoint
+            );
         }
 
         let moments_endpoints = [MOMENTS_V1_POSTS, MOMENTS_V1_SHARES, MOMENTS_V1_INTERACTIONS];
         for endpoint in moments_endpoints {
-            assert!(endpoint.contains("/moments/"), "{} 应该包含 /moments/", endpoint);
+            assert!(
+                endpoint.contains("/moments/"),
+                "{} 应该包含 /moments/",
+                endpoint
+            );
         }
     }
-}// Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints
+} // Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints

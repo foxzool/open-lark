@@ -1341,10 +1341,9 @@ impl DocumentService {
         );
 
         // 构建动态端点路径
-        let endpoint =
-            openlark_core::endpoints::Endpoints::DOCX_V1_DOCUMENT_BLOCK_CHILDREN
-                .replace("{}", &req.document_id)
-                .replace("{}", &req.block_id.to_string());
+        let endpoint = openlark_core::endpoints::Endpoints::DOCX_V1_DOCUMENT_BLOCK_CHILDREN
+            .replace("{}", &req.document_id)
+            .replace("{}", &req.block_id.to_string());
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,

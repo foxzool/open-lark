@@ -5,8 +5,8 @@ use log::{debug, error, trace};
 use serde::{Deserialize, Serialize};
 use std::time::Instant;
 
-use openlark_core::event::dispatcher::EventDispatcherHandler;
 use super::{ClientConfig, WsEvent};
+use openlark_core::event::dispatcher::EventDispatcherHandler;
 
 /// Frame 类型
 #[derive(Debug, Clone, Copy, PartialEq)]

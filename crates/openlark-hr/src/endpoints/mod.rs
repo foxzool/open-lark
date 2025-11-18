@@ -28,7 +28,7 @@
 //! ```
 
 // 导入核心端点（auth, application等基础端点）
-pub use openlark_core::endpoints::{auth, application, apass, platform_integration};
+pub use openlark_core::endpoints::{apass, application, auth, platform_integration};
 
 // ===== 考勤管理端点 (Attendance) =====
 
@@ -46,36 +46,53 @@ pub const ATTENDANCE_V1_SHIFT_DELETE: &str = "/open-apis/attendance/v1/shifts/{s
 pub const ATTENDANCE_V1_SHIFTS_QUERY: &str = "/open-apis/attendance/v1/shifts/query";
 
 /// 用户任务管理
-pub const ATTENDANCE_V1_USER_TASKS_BATCH_CREATE: &str = "/open-apis/attendance/v1/user_tasks/batch_create";
+pub const ATTENDANCE_V1_USER_TASKS_BATCH_CREATE: &str =
+    "/open-apis/attendance/v1/user_tasks/batch_create";
 pub const ATTENDANCE_V1_USER_TASKS_QUERY: &str = "/open-apis/attendance/v1/user_tasks/query";
-pub const ATTENDANCE_V1_USER_TASKS_BATCH_DELETE: &str = "/open-apis/attendance/v1/user_tasks/batch_del";
+pub const ATTENDANCE_V1_USER_TASKS_BATCH_DELETE: &str =
+    "/open-apis/attendance/v1/user_tasks/batch_del";
 pub const ATTENDANCE_V1_USER_TASK_GET: &str = "/open-apis/attendance/v1/user_tasks/{user_task_id}";
-pub const ATTENDANCE_V1_USER_TASK_RESULTS_QUERY: &str = "/open-apis/attendance/v1/user_task_results/query";
+pub const ATTENDANCE_V1_USER_TASK_RESULTS_QUERY: &str =
+    "/open-apis/attendance/v1/user_task_results/query";
 
 /// 用户补卡
 pub const ATTENDANCE_V1_USER_TASK_REMEDYS: &str = "/open-apis/attendance/v1/user_task_remedys";
-pub const ATTENDANCE_V1_USER_TASK_REMEDYS_QUERY_USER_ALLOWED_REMEDYS: &str = "/open-apis/attendance/v1/user_task_remedys/query_user_allowed_remedys";
+pub const ATTENDANCE_V1_USER_TASK_REMEDYS_QUERY_USER_ALLOWED_REMEDYS: &str =
+    "/open-apis/attendance/v1/user_task_remedys/query_user_allowed_remedys";
 
 /// 日常班次
-pub const ATTENDANCE_V1_USER_DAILY_SHIFTS_QUERY: &str = "/open-apis/attendance/v1/user_daily_shifts/query";
-pub const ATTENDANCE_V1_USER_DAILY_SHIFTS_BATCH_CREATE: &str = "/open-apis/attendance/v1/user_daily_shifts/batch_create";
-pub const ATTENDANCE_V1_USER_DAILY_SHIFTS_BATCH_CREATE_TEMP: &str = "/open-apis/attendance/v1/user_daily_shifts/batch_create_temp";
+pub const ATTENDANCE_V1_USER_DAILY_SHIFTS_QUERY: &str =
+    "/open-apis/attendance/v1/user_daily_shifts/query";
+pub const ATTENDANCE_V1_USER_DAILY_SHIFTS_BATCH_CREATE: &str =
+    "/open-apis/attendance/v1/user_daily_shifts/batch_create";
+pub const ATTENDANCE_V1_USER_DAILY_SHIFTS_BATCH_CREATE_TEMP: &str =
+    "/open-apis/attendance/v1/user_daily_shifts/batch_create_temp";
 
 /// 统计数据
-pub const ATTENDANCE_V1_USER_STATS_DATAS_QUERY: &str = "/open-apis/attendance/v1/user_stats_datas/query";
-pub const ATTENDANCE_V1_USER_STATS_DATAS_UPDATE: &str = "/open-apis/attendance/v1/user_stats_datas/update";
+pub const ATTENDANCE_V1_USER_STATS_DATAS_QUERY: &str =
+    "/open-apis/attendance/v1/user_stats_datas/query";
+pub const ATTENDANCE_V1_USER_STATS_DATAS_UPDATE: &str =
+    "/open-apis/attendance/v1/user_stats_datas/update";
 
 /// 设置和配置
-pub const ATTENDANCE_V1_SETTINGS_APPROVAL_CHAINS: &str = "/open-apis/attendance/v1/settings/approval_chains";
-pub const ATTENDANCE_V1_SETTINGS_FIELD_APPROVALS: &str = "/open-apis/attendance/v1/settings/field_approvals";
-pub const ATTENDANCE_V1_SETTINGS_HOLIDAY_POLICIES: &str = "/open-apis/attendance/v1/settings/holiday_policies";
-pub const ATTENDANCE_V1_SETTINGS_LEAVE_POLICIES: &str = "/open-apis/attendance/v1/settings/leave_policies";
+pub const ATTENDANCE_V1_SETTINGS_APPROVAL_CHAINS: &str =
+    "/open-apis/attendance/v1/settings/approval_chains";
+pub const ATTENDANCE_V1_SETTINGS_FIELD_APPROVALS: &str =
+    "/open-apis/attendance/v1/settings/field_approvals";
+pub const ATTENDANCE_V1_SETTINGS_HOLIDAY_POLICIES: &str =
+    "/open-apis/attendance/v1/settings/holiday_policies";
+pub const ATTENDANCE_V1_SETTINGS_LEAVE_POLICIES: &str =
+    "/open-apis/attendance/v1/settings/leave_policies";
 
 /// 考勤报告
-pub const ATTENDANCE_V1_REPORTS_DAILY_RECORD: &str = "/open-apis/attendance/v1/reports/daily_record";
-pub const ATTENDANCE_V1_REPORTS_USER_LEAVE_QUOTA: &str = "/open-apis/attendance/v1/reports/user_leave_quota";
-pub const ATTENDANCE_V1_REPORTS_LEAVE_RECORD: &str = "/open-apis/attendance/v1/reports/leave_record";
-pub const ATTENDANCE_V1_REPORTS_OVERTIME_RECORD: &str = "/open-apis/attendance/v1/reports/overtime_record";
+pub const ATTENDANCE_V1_REPORTS_DAILY_RECORD: &str =
+    "/open-apis/attendance/v1/reports/daily_record";
+pub const ATTENDANCE_V1_REPORTS_USER_LEAVE_QUOTA: &str =
+    "/open-apis/attendance/v1/reports/user_leave_quota";
+pub const ATTENDANCE_V1_REPORTS_LEAVE_RECORD: &str =
+    "/open-apis/attendance/v1/reports/leave_record";
+pub const ATTENDANCE_V1_REPORTS_OVERTIME_RECORD: &str =
+    "/open-apis/attendance/v1/reports/overtime_record";
 
 // ===== 核心人力资源端点 (CoreHR) =====
 
@@ -83,7 +100,8 @@ pub const ATTENDANCE_V1_REPORTS_OVERTIME_RECORD: &str = "/open-apis/attendance/v
 pub const COREHR_V1_EMPLOYEES: &str = "/open-apis/corehr/v1/employees";
 pub const COREHR_V1_EMPLOYEE_GET: &str = "/open-apis/corehr/v1/employees/{employee_id}";
 pub const COREHR_V1_EMPLOYEES_SEARCH: &str = "/open-apis/corehr/v1/employees/search";
-pub const COREHR_V1_EMPLOYEES_ADVANCED_SEARCH: &str = "/open-apis/corehr/v1/employees/advanced_search";
+pub const COREHR_V1_EMPLOYEES_ADVANCED_SEARCH: &str =
+    "/open-apis/corehr/v1/employees/advanced_search";
 
 /// 岗位管理
 pub const COREHR_V1_JOBS: &str = "/open-apis/corehr/v1/jobs";
@@ -97,11 +115,13 @@ pub const COREHR_V1_DEPARTMENTS_SEARCH: &str = "/open-apis/corehr/v1/departments
 
 /// 雇佣合同
 pub const COREHR_V1_EMPLOYMENT_CONTRACTS: &str = "/open-apis/corehr/v1/employment_contracts";
-pub const COREHR_V1_EMPLOYMENT_CONTRACT_GET: &str = "/open-apis/corehr/v1/employment_contracts/{contract_id}";
+pub const COREHR_V1_EMPLOYMENT_CONTRACT_GET: &str =
+    "/open-apis/corehr/v1/employment_contracts/{contract_id}";
 
 /// 工作地点
 pub const COREHR_V1_WORK_LOCATIONS: &str = "/open-apis/corehr/v1/work_locations";
-pub const COREHR_V1_WORK_LOCATION_GET: &str = "/open-apis/corehr/v1/work_locations/{work_location_id}";
+pub const COREHR_V1_WORK_LOCATION_GET: &str =
+    "/open-apis/corehr/v1/work_locations/{work_location_id}";
 
 // ===== OKR 端点 =====
 
@@ -129,13 +149,16 @@ pub const OKR_V1_PROGRESS_BATCH_UPDATE: &str = "/open-apis/okr/v1/progress/batch
 
 /// 薪资组管理
 pub const PAYROLL_V1_SALARY_GROUPS: &str = "/open-apis/payroll/v1/salary_groups";
-pub const PAYROLL_V1_SALARY_GROUP_GET: &str = "/open-apis/payroll/v1/salary_groups/{salary_group_id}";
+pub const PAYROLL_V1_SALARY_GROUP_GET: &str =
+    "/open-apis/payroll/v1/salary_groups/{salary_group_id}";
 pub const PAYROLL_V1_SALARY_GROUPS_SEARCH: &str = "/open-apis/payroll/v1/salary_groups/search";
 
 /// 薪资调整
 pub const PAYROLL_V1_SALARY_ADJUSTMENTS: &str = "/open-apis/payroll/v1/salary_adjustments";
-pub const PAYROLL_V1_SALARY_ADJUSTMENT_GET: &str = "/open-apis/payroll/v1/salary_adjustments/{adjustment_id}";
-pub const PAYROLL_V1_SALARY_ADJUSTMENTS_SEARCH: &str = "/open-apis/payroll/v1/salary_adjustments/search";
+pub const PAYROLL_V1_SALARY_ADJUSTMENT_GET: &str =
+    "/open-apis/payroll/v1/salary_adjustments/{adjustment_id}";
+pub const PAYROLL_V1_SALARY_ADJUSTMENTS_SEARCH: &str =
+    "/open-apis/payroll/v1/salary_adjustments/search";
 
 /// 工资单
 pub const PAYROLL_V1_PAYROLLS: &str = "/open-apis/payroll/v1/payrolls";
@@ -156,7 +179,8 @@ pub const PERFORMANCE_V1_PERIODS_SEARCH: &str = "/open-apis/performance/v1/perio
 
 /// 绩效评估
 pub const PERFORMANCE_V1_APPRAISALS: &str = "/open-apis/performance/v1/appraisals";
-pub const PERFORMANCE_V1_APPRAISAL_GET: &str = "/open-apis/performance/v1/appraisals/{appraisal_id}";
+pub const PERFORMANCE_V1_APPRAISAL_GET: &str =
+    "/open-apis/performance/v1/appraisals/{appraisal_id}";
 pub const PERFORMANCE_V1_APPRAISALS_SEARCH: &str = "/open-apis/performance/v1/appraisals/search";
 
 /// 绩效反馈
@@ -235,4 +259,4 @@ mod tests {
         assert_eq!(SALARY_GROUPS, PAYROLL_V1_SALARY_GROUPS);
         assert_eq!(APPRAISALS, PERFORMANCE_V1_APPRAISALS);
     }
-}// Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints
+} // Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints

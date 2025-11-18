@@ -2,8 +2,8 @@
 //!
 //! 提供灵活的配置系统，支持环境变量、验证和默认值
 
-use std::time::Duration;
 use crate::Result;
+use std::time::Duration;
 
 /// 🔧 OpenLark客户端配置
 ///
@@ -147,7 +147,9 @@ impl Config {
 
         // 验证URL格式
         if !self.base_url.starts_with("http://") && !self.base_url.starts_with("https://") {
-            return Err(crate::Error::InvalidConfig("base_url必须以http://或https://开头"));
+            return Err(crate::Error::InvalidConfig(
+                "base_url必须以http://或https://开头",
+            ));
         }
 
         // 验证超时时间
@@ -508,7 +510,10 @@ mod tests {
         // 添加header
         config.add_header("X-Custom-Header", "custom-value");
         assert_eq!(config.headers.len(), 1);
-        assert_eq!(config.headers.get("X-Custom-Header"), Some(&"custom-value".to_string()));
+        assert_eq!(
+            config.headers.get("X-Custom-Header"),
+            Some(&"custom-value".to_string())
+        );
 
         // 清除headers
         config.clear_headers();

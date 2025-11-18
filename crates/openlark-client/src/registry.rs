@@ -2,10 +2,10 @@
 //!
 //! 提供动态服务注册、发现和管理功能
 
+use crate::{Config, Error, Result};
 use std::any::{Any, TypeId};
 use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
-use crate::{Config, Result, Error};
 
 /// 📋 服务注册表 - 动态服务管理
 ///
@@ -146,7 +146,8 @@ impl ServiceRegistry {
         for dependency in &descriptor.dependencies {
             if !self.has_service(dependency) {
                 return Err(Error::ServiceUnavailable(format!(
-                    "依赖服务 '{}' 未注册", dependency
+                    "依赖服务 '{}' 未注册",
+                    dependency
                 )));
             }
         }
@@ -257,9 +258,7 @@ impl ServiceRegistry {
             );
             Ok(())
         } else {
-            Err(Error::ServiceUnavailable(format!(
-                "服务 '{}' 不存在", name
-            )))
+            Err(Error::ServiceUnavailable(format!("服务 '{}' 不存在", name)))
         }
     }
 
@@ -422,9 +421,7 @@ mod tests {
     #[test]
     fn test_registry_builder() {
         let config = Arc::new(Config::default());
-        let registry = ServiceRegistryBuilder::new()
-            .config(config.clone())
-            .build();
+        let registry = ServiceRegistryBuilder::new().config(config.clone()).build();
 
         let stats = registry.get_stats();
         assert_eq!(stats.total_services, 0);

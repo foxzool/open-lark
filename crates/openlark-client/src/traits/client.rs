@@ -2,9 +2,9 @@
 //!
 //! 定义客户端的统一接口和行为
 
+use crate::{Config, Result};
 use async_trait::async_trait;
 use std::time::Duration;
-use crate::{Config, Result};
 
 /// 🚀 OpenLark客户端核心特征
 ///
@@ -88,7 +88,6 @@ pub trait RequestClient: LarkClient {
         R: serde::Serialize + Send + Sync,
         Resp: for<'de> serde::Deserialize<'de> + Send + 'static;
 
-    
     /// 📡 发送GET请求
     async fn get<Resp>(&self, endpoint: &str) -> Result<Resp>
     where

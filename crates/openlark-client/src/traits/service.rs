@@ -2,9 +2,9 @@
 //!
 //! 定义服务的统一接口和行为
 
+use crate::Result;
 use async_trait::async_trait;
 use std::time::SystemTime;
-use crate::Result;
 
 /// 🌐 服务基础特征
 ///
@@ -199,7 +199,9 @@ impl ServiceMetadata {
 
     /// ⏰ 获取距离上次健康检查的时间
     pub fn time_since_last_health_check(&self) -> Option<std::time::Duration> {
-        self.last_health_check?.duration_since(SystemTime::now()).ok()
+        self.last_health_check?
+            .duration_since(SystemTime::now())
+            .ok()
     }
 }
 
@@ -291,7 +293,10 @@ pub enum ServiceStatus {
 impl ServiceStatus {
     /// 🔍 检查是否为活跃状态
     pub fn is_active(&self) -> bool {
-        matches!(self, ServiceStatus::Running | ServiceStatus::Starting | ServiceStatus::Stopping)
+        matches!(
+            self,
+            ServiceStatus::Running | ServiceStatus::Starting | ServiceStatus::Stopping
+        )
     }
 
     /// 🔍 检查是否为健康状态
@@ -489,7 +494,9 @@ mod tests {
 
     #[tokio::test]
     async fn test_service_trait() {
-        let service = TestService { name: "test_service" };
+        let service = TestService {
+            name: "test_service",
+        };
 
         assert_eq!(service.name(), "test_service");
         assert_eq!(service.version(), "1.0.0");

@@ -2,8 +2,8 @@
 //!
 //! 包含应用认证、用户认证相关的请求和响应数据结构。
 
-use serde::{Deserialize, Serialize};
 use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
 
 /// 应用访问令牌响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -223,7 +223,7 @@ mod tests {
             "user_access_token".to_string(),
             "refresh_token".to_string(),
             "Bearer".to_string(),
-            7200,  // 访问令牌2小时
+            7200,    // 访问令牌2小时
             2592000, // 刷新令牌30天
             "scope1 scope2".to_string(),
         );
@@ -262,8 +262,8 @@ mod tests {
             "test_user_token".to_string(),
             "refresh_token".to_string(),
             "Bearer".to_string(),
-            3600,    // 访问令牌1小时
-            7200,    // 刷新令牌2小时
+            3600, // 访问令牌1小时
+            7200, // 刷新令牌2小时
             "scope".to_string(),
         );
 
@@ -306,7 +306,10 @@ mod tests {
         assert_eq!(user_info.name, "张三");
         assert_eq!(user_info.email, Some("zhangsan@example.com".to_string()));
         assert_eq!(user_info.mobile, Some("+86 138 0013 8000".to_string()));
-        assert_eq!(user_info.avatar, Some("https://example.com/avatar.jpg".to_string()));
+        assert_eq!(
+            user_info.avatar,
+            Some("https://example.com/avatar.jpg".to_string())
+        );
         assert_eq!(user_info.department_ids, Some(departments));
 
         // 验证时间戳是最近的
@@ -336,11 +339,7 @@ mod tests {
 
     #[test]
     fn test_token_serialization() {
-        let token = AccessToken::new(
-            "test_token".to_string(),
-            "Bearer".to_string(),
-            3600,
-        );
+        let token = AccessToken::new("test_token".to_string(), "Bearer".to_string(), 3600);
 
         // 测试序列化
         let json_str = serde_json::to_string(&token).unwrap();
@@ -385,21 +384,14 @@ mod tests {
         assert!(token.is_expired());
 
         // 测试负数过期时间（不应该发生，但要确保代码能处理）
-        let negative_token = AccessToken::new(
-            "negative_token".to_string(),
-            "Bearer".to_string(),
-            0,
-        );
+        let negative_token =
+            AccessToken::new("negative_token".to_string(), "Bearer".to_string(), 0);
         assert!(negative_token.is_expired());
     }
 
     #[test]
     fn test_debug_formatting() {
-        let token = AccessToken::new(
-            "debug_token".to_string(),
-            "Bearer".to_string(),
-            3600,
-        );
+        let token = AccessToken::new("debug_token".to_string(), "Bearer".to_string(), 3600);
 
         let debug_str = format!("{:?}", token);
         assert!(debug_str.contains("AccessToken"));
@@ -434,7 +426,13 @@ mod tests {
         );
 
         let cloned_user_token = original_user_token.clone();
-        assert_eq!(original_user_token.access_token, cloned_user_token.access_token);
-        assert_eq!(original_user_token.refresh_token, cloned_user_token.refresh_token);
+        assert_eq!(
+            original_user_token.access_token,
+            cloned_user_token.access_token
+        );
+        assert_eq!(
+            original_user_token.refresh_token,
+            cloned_user_token.refresh_token
+        );
     }
 }
