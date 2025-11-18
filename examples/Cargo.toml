@@ -1,0 +1,42 @@
+[package]
+name = "openlark-examples"
+version.workspace = true
+edition.workspace = true
+publish = false
+
+[dependencies]
+# 使用workspace依赖，继承统一版本管理
+openlark-core = { workspace = true }
+openlark-client = { workspace = true, optional = true }
+openlark-communication = { workspace = true, optional = true }
+openlark-docs = { workspace = true, optional = true }
+openlark-hr = { workspace = true, optional = true }
+openlark-ai = { workspace = true, optional = true }
+openlark-auth = { workspace = true, optional = true }
+openlark-protocol = { workspace = true, optional = true }
+
+# 外部依赖继承workspace版本
+dotenvy = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+futures = { workspace = true }
+
+[features]
+default = ["communication", "client", "auth"]
+communication = ["openlark-communication"]
+docs = ["openlark-docs"]
+hr = ["openlark-hr"]
+ai = ["openlark-ai"]
+auth = ["openlark-auth"]
+client = ["openlark-client"]
+
+[[example]]
+name = "basic_introduction"
+path = "basic_introduction.rs"
+
+[[example]]
+name = "im_messaging"
+path = "services/communication/im_messaging.rs"
+required-features = ["communication"]
