@@ -2,8 +2,8 @@
 //!
 //! 包含客户端相关的核心类型
 
-use std::time::Duration;
 use serde::{Deserialize, Serialize};
+use std::time::Duration;
 
 /// 📄 API响应特征
 ///
@@ -202,9 +202,13 @@ mod tests {
         assert!(response.is_success());
         assert_eq!(response.into_result().unwrap(), "test data");
 
-        let error_response: ApiResponseData<String> = ApiResponseData::error("测试错误".to_string());
+        let error_response: ApiResponseData<String> =
+            ApiResponseData::error("测试错误".to_string());
         assert!(!error_response.is_success());
-        assert_eq!(error_response.error_message(), Some(&"测试错误".to_string()));
+        assert_eq!(
+            error_response.error_message(),
+            Some(&"测试错误".to_string())
+        );
     }
 
     #[test]
@@ -216,11 +220,8 @@ mod tests {
         assert!(!response.has_more);
         assert!(response.page_token.is_none());
 
-        let paginated = PaginatedResponse::with_pagination(
-            items.clone(),
-            true,
-            Some("next_token".to_string()),
-        );
+        let paginated =
+            PaginatedResponse::with_pagination(items.clone(), true, Some("next_token".to_string()));
         assert!(paginated.has_more);
         assert_eq!(paginated.page_token, Some("next_token".to_string()));
     }

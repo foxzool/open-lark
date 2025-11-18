@@ -37,7 +37,7 @@
 //! ```
 
 // 导入核心端点（auth, application等基础端点）
-pub use openlark_core::endpoints::{auth, application, apass, platform_integration};
+pub use openlark_core::endpoints::{apass, application, auth, platform_integration};
 
 // ==================== ACS (Access Control System) v1 ====================
 // ACS门禁控制系统 - 访问控制、设备管理、访客管理
@@ -56,13 +56,15 @@ pub const ACS_V1_VISITOR_GET: &str = "/open-apis/acs/v1/visitors/{visitor_id}";
 /// 门禁访问记录和事件日志
 pub const ACS_V1_ACCESS_RECORDS: &str = "/open-apis/acs/v1/access_records";
 /// 获取门禁记录人脸照片
-pub const ACS_V1_ACCESS_RECORD_FACE_IMAGE: &str = "/open-apis/acs/v1/access_records/{access_record_id}/face_image";
+pub const ACS_V1_ACCESS_RECORD_FACE_IMAGE: &str =
+    "/open-apis/acs/v1/access_records/{access_record_id}/face_image";
 
 /// ACS门禁规则
 /// 访问控制规则和策略管理
 pub const ACS_V1_RULE_EXTERNAL: &str = "/open-apis/acs/v1/rule_external";
 pub const ACS_V1_RULE_EXTERNAL_OPERATION: &str = "/open-apis/acs/v1/rule_external/{rule_id}";
-pub const ACS_V1_RULE_EXTERNAL_DEVICE_BIND: &str = "/open-apis/acs/v1/rule_external/{rule_id}/device_bind";
+pub const ACS_V1_RULE_EXTERNAL_DEVICE_BIND: &str =
+    "/open-apis/acs/v1/rule_external/{rule_id}/device_bind";
 
 /// ACS用户管理
 /// 门禁系统用户的认证和权限管理
@@ -105,19 +107,23 @@ pub const MDM_V1_COUNTRY_REGIONS_BATCH_GET: &str = "/open-apis/mdm/v1/country_re
 
 /// MDM用户认证数据关系管理
 /// 用户认证数据与其他业务数据的关联管理
-pub const MDM_V1_USER_AUTH_DATA_RELATIONS_BIND: &str = "/open-apis/mdm/v1/user_auth_data_relations/bind";
-pub const MDM_V1_USER_AUTH_DATA_RELATIONS_UNBIND: &str = "/open-apis/mdm/v1/user_auth_data_relations/unbind";
+pub const MDM_V1_USER_AUTH_DATA_RELATIONS_BIND: &str =
+    "/open-apis/mdm/v1/user_auth_data_relations/bind";
+pub const MDM_V1_USER_AUTH_DATA_RELATIONS_UNBIND: &str =
+    "/open-apis/mdm/v1/user_auth_data_relations/unbind";
 
 // ==================== Security & Compliance (安全合规) v1 ====================
 // 安全合规管理 - 审计、日志、合规监控
 
 /// Security合规审计数据
 /// 企业安全审计数据的查询和管理
-pub const SECURITY_AND_COMPLIANCE_V1_AUDIT_DATAS: &str = "/open-apis/security_and_compliance/v1/audit_datas";
+pub const SECURITY_AND_COMPLIANCE_V1_AUDIT_DATAS: &str =
+    "/open-apis/security_and_compliance/v1/audit_datas";
 
 /// Security开放接口日志
 /// 开放平台API访问日志和监控数据
-pub const SECURITY_AND_COMPLIANCE_V1_OPENAPI_LOGS_LIST_DATA: &str = "/open-apis/security_and_compliance/v1/openapi_logs/list_data";
+pub const SECURITY_AND_COMPLIANCE_V1_OPENAPI_LOGS_LIST_DATA: &str =
+    "/open-apis/security_and_compliance/v1/openapi_logs/list_data";
 
 // ==================== Tenant (租户管理) v2 ====================
 // 租户管理 - 企业信息、产品分配、配置管理
@@ -128,39 +134,54 @@ pub const TENANT_V2_QUERY: &str = "/open-apis/tenant/v2/tenant/query";
 
 /// Tenant产品分配信息查询
 /// 租户产品授权和使用情况查询
-pub const TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY: &str = "/open-apis/tenant/v2/tenant_product_assign_info/query";
+pub const TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY: &str =
+    "/open-apis/tenant/v2/tenant_product_assign_info/query";
 
 // ==================== Trust Party (可信第三方) v1 ====================
 // 可信第三方管理 - 协作组织管理和可见性规则
 
 /// Trust Party协作组织管理
 /// 跨组织协作和关联组织管理
-pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATIONS: &str = "/open-apis/trust_party/v1/collaboration_organizations";
-pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_VISIBLE: &str = "/open-apis/trust_party/v1/collaboration_organizations/{org_id}/visible_organization";
-pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_GET: &str = "/open-apis/trust_party/v1/collaboration_organizations/{org_id}";
-pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_USER_GET: &str = "/open-apis/trust_party/v1/collaboration_organizations/{org_id}/users/{user_id}";
-pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_DEPARTMENT_GET: &str = "/open-apis/trust_party/v1/collaboration_organizations/{org_id}/departments/{department_id}";
-pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_SHARED_MEMBER_SCOPES: &str = "/open-apis/trust_party/v1/collaboration_organizations/{org_id}/shared_member_scopes";
-pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATIONS_ADMIN: &str = "/open-apis/trust_party/v1/collaboration_organizations/admin";
+pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATIONS: &str =
+    "/open-apis/trust_party/v1/collaboration_organizations";
+pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_VISIBLE: &str =
+    "/open-apis/trust_party/v1/collaboration_organizations/{org_id}/visible_organization";
+pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_GET: &str =
+    "/open-apis/trust_party/v1/collaboration_organizations/{org_id}";
+pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_USER_GET: &str =
+    "/open-apis/trust_party/v1/collaboration_organizations/{org_id}/users/{user_id}";
+pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_DEPARTMENT_GET: &str =
+    "/open-apis/trust_party/v1/collaboration_organizations/{org_id}/departments/{department_id}";
+pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_SHARED_MEMBER_SCOPES: &str =
+    "/open-apis/trust_party/v1/collaboration_organizations/{org_id}/shared_member_scopes";
+pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATIONS_ADMIN: &str =
+    "/open-apis/trust_party/v1/collaboration_organizations/admin";
 
 /// Trust Party可搜可见规则管理
 /// 跨组织搜索和可见性控制规则
-pub const TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULES: &str = "/open-apis/trust_party/v1/searchable_visible_rules";
-pub const TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULE_OPERATION: &str = "/open-apis/trust_party/v1/searchable_visible_rules/{rule_id}";
+pub const TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULES: &str =
+    "/open-apis/trust_party/v1/searchable_visible_rules";
+pub const TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULE_OPERATION: &str =
+    "/open-apis/trust_party/v1/searchable_visible_rules/{rule_id}";
 
 // ==================== Workplace (工作台管理) v1 ====================
 // 工作台管理 - 配置、应用推荐、数据分析
 
 /// Workplace访问数据搜索
 /// 工作台使用数据的查询和分析
-pub const WORKPLACE_ACCESS_DATA_SEARCH: &str = "/open-apis/workplace/v1/workplace_access_data/search";
-pub const WORKPLACE_CUSTOM_ACCESS_DATA_SEARCH: &str = "/open-apis/workplace/v1/custom_workplace_access_data/search";
-pub const WORKPLACE_WIDGET_ACCESS_DATA_SEARCH: &str = "/open-apis/workplace/v1/custom_workplace_widget_access_data/search";
+pub const WORKPLACE_ACCESS_DATA_SEARCH: &str =
+    "/open-apis/workplace/v1/workplace_access_data/search";
+pub const WORKPLACE_CUSTOM_ACCESS_DATA_SEARCH: &str =
+    "/open-apis/workplace/v1/custom_workplace_access_data/search";
+pub const WORKPLACE_WIDGET_ACCESS_DATA_SEARCH: &str =
+    "/open-apis/workplace/v1/custom_workplace_widget_access_data/search";
 
 /// Workplace应用推荐规则
 /// 工作台应用推荐策略和规则管理
-pub const WORKPLACE_APP_RECOMMEND_FAVOURITE: &str = "/open-apis/workplace/v1/app_recommend_rule/favourite";
-pub const WORKPLACE_APP_RECOMMEND_RECOMMEND: &str = "/open-apis/workplace/v1/app_recommend_rule/recommend";
+pub const WORKPLACE_APP_RECOMMEND_FAVOURITE: &str =
+    "/open-apis/workplace/v1/app_recommend_rule/favourite";
+pub const WORKPLACE_APP_RECOMMEND_RECOMMEND: &str =
+    "/open-apis/workplace/v1/app_recommend_rule/recommend";
 pub const WORKPLACE_APP_RECOMMEND_LIST: &str = "/open-apis/workplace/v1/app_recommend_rule/list";
 
 /// Workplace基础信息
@@ -193,10 +214,12 @@ pub const WORKPLACE_RECOMMEND: &str = WORKPLACE_APP_RECOMMEND_LIST;
 pub const DEVICE_TRUST_ASSESSMENT: &str = "/open-apis/zero_trust/v1/device/trust/assess";
 
 /// 用户身份增强验证
-pub const ENHANCED_IDENTITY_VERIFICATION: &str = "/open-apis/zero_trust/v1/identity/enhanced_verify";
+pub const ENHANCED_IDENTITY_VERIFICATION: &str =
+    "/open-apis/zero_trust/v1/identity/enhanced_verify";
 
 /// 持续身份验证
-pub const CONTINUOUS_IDENTITY_VERIFICATION: &str = "/open-apis/zero_trust/v1/identity/continuous_verify";
+pub const CONTINUOUS_IDENTITY_VERIFICATION: &str =
+    "/open-apis/zero_trust/v1/identity/continuous_verify";
 
 /// 微分段访问控制
 pub const MICRO_SEGMENTATION_ACCESS: &str = "/open-apis/zero_trust/v1/access/micro_segment";
@@ -253,7 +276,8 @@ pub const ZERO_TRUST_NETWORK_GATEWAY: &str = "/open-apis/zero_trust/v1/network/g
 pub const SECURE_ACCESS_TUNNEL: &str = "/open-apis/zero_trust/v1/network/tunnel";
 
 /// 细粒度权限控制
-pub const FINE_GRAINED_PERMISSION_CONTROL: &str = "/open-apis/zero_trust/v1/permission/fine_grained";
+pub const FINE_GRAINED_PERMISSION_CONTROL: &str =
+    "/open-apis/zero_trust/v1/permission/fine_grained";
 
 /// 动态权限调整
 pub const DYNAMIC_PERMISSION_ADJUSTMENT: &str = "/open-apis/zero_trust/v1/permission/dynamic";
@@ -398,7 +422,8 @@ mod tests {
     #[test]
     fn test_security_compliance_endpoints() {
         // 验证安全合规端点
-        assert!(SECURITY_AND_COMPLIANCE_V1_AUDIT_DATAS.starts_with("/open-apis/security_and_compliance/v1/"));
+        assert!(SECURITY_AND_COMPLIANCE_V1_AUDIT_DATAS
+            .starts_with("/open-apis/security_and_compliance/v1/"));
         assert!(SECURITY_AND_COMPLIANCE_V1_AUDIT_DATAS.contains("audit_datas"));
         assert!(SECURITY_AND_COMPLIANCE_V1_OPENAPI_LOGS_LIST_DATA.contains("openapi_logs"));
     }
@@ -423,7 +448,9 @@ mod tests {
     #[test]
     fn test_trust_party_endpoints() {
         // 验证Trust Party端点
-        assert!(TRUST_PARTY_V1_COLLABORATION_ORGANIZATIONS.starts_with("/open-apis/trust_party/v1/"));
+        assert!(
+            TRUST_PARTY_V1_COLLABORATION_ORGANIZATIONS.starts_with("/open-apis/trust_party/v1/")
+        );
         assert!(TRUST_PARTY_V1_COLLABORATION_ORGANIZATIONS.contains("collaboration_organizations"));
         assert!(TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_VISIBLE.contains("visible_organization"));
         assert!(TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULES.contains("searchable_visible_rules"));
@@ -453,8 +480,12 @@ mod tests {
         assert!(TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_USER_GET.contains("{org_id}"));
         assert!(TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_USER_GET.contains("{user_id}"));
         assert!(TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_DEPARTMENT_GET.contains("{org_id}"));
-        assert!(TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_DEPARTMENT_GET.contains("{department_id}"));
-        assert!(TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_SHARED_MEMBER_SCOPES.contains("{org_id}"));
+        assert!(
+            TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_DEPARTMENT_GET.contains("{department_id}")
+        );
+        assert!(
+            TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_SHARED_MEMBER_SCOPES.contains("{org_id}")
+        );
         assert!(TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULE_OPERATION.contains("{rule_id}"));
     }
 
@@ -468,7 +499,11 @@ mod tests {
 
         let admin_endpoints = [ADMIN_V1_PASSWORD_RESET, ADMIN_V1_BADGES_LIST];
         for endpoint in admin_endpoints {
-            assert!(endpoint.contains("/admin/"), "{} 应该包含 /admin/", endpoint);
+            assert!(
+                endpoint.contains("/admin/"),
+                "{} 应该包含 /admin/",
+                endpoint
+            );
         }
 
         let mdm_endpoints = [MDM_V1_COUNTRY_REGIONS, MDM_V1_USER_AUTH_DATA_RELATIONS_BIND];
@@ -478,22 +513,41 @@ mod tests {
 
         let security_endpoints = [SECURITY_AND_COMPLIANCE_V1_AUDIT_DATAS];
         for endpoint in security_endpoints {
-            assert!(endpoint.contains("/security_and_compliance/"), "{} 应该包含 /security_and_compliance/", endpoint);
+            assert!(
+                endpoint.contains("/security_and_compliance/"),
+                "{} 应该包含 /security_and_compliance/",
+                endpoint
+            );
         }
 
         let tenant_endpoints = [TENANT_V2_QUERY];
         for endpoint in tenant_endpoints {
-            assert!(endpoint.contains("/tenant/"), "{} 应该包含 /tenant/", endpoint);
+            assert!(
+                endpoint.contains("/tenant/"),
+                "{} 应该包含 /tenant/",
+                endpoint
+            );
         }
 
         let workplace_endpoints = [WORKPLACE_ACCESS_DATA_SEARCH, WORKPLACE_APP_RECOMMEND_LIST];
         for endpoint in workplace_endpoints {
-            assert!(endpoint.contains("/workplace/"), "{} 应该包含 /workplace/", endpoint);
+            assert!(
+                endpoint.contains("/workplace/"),
+                "{} 应该包含 /workplace/",
+                endpoint
+            );
         }
 
-        let trust_party_endpoints = [TRUST_PARTY_V1_COLLABORATION_ORGANIZATIONS, TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULES];
+        let trust_party_endpoints = [
+            TRUST_PARTY_V1_COLLABORATION_ORGANIZATIONS,
+            TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULES,
+        ];
         for endpoint in trust_party_endpoints {
-            assert!(endpoint.contains("/trust_party/"), "{} 应该包含 /trust_party/", endpoint);
+            assert!(
+                endpoint.contains("/trust_party/"),
+                "{} 应该包含 /trust_party/",
+                endpoint
+            );
         }
     }
 
@@ -551,7 +605,11 @@ mod tests {
             MICRO_SEGMENTATION_ACCESS,
         ];
         for endpoint in zero_trust_endpoints {
-            assert!(endpoint.contains("/zero_trust/"), "{} 应该包含 /zero_trust/", endpoint);
+            assert!(
+                endpoint.contains("/zero_trust/"),
+                "{} 应该包含 /zero_trust/",
+                endpoint
+            );
         }
 
         let analytics_endpoints = [
@@ -560,7 +618,11 @@ mod tests {
             BUSINESS_DATA_INSIGHTS,
         ];
         for endpoint in analytics_endpoints {
-            assert!(endpoint.contains("/analytics/"), "{} 应该包含 /analytics/", endpoint);
+            assert!(
+                endpoint.contains("/analytics/"),
+                "{} 应该包含 /analytics/",
+                endpoint
+            );
         }
 
         let tenant_tag_endpoints = [
@@ -569,7 +631,11 @@ mod tests {
             TENANT_TAG_V1_TAGS_SEARCH,
         ];
         for endpoint in tenant_tag_endpoints {
-            assert!(endpoint.contains("/tenant_tag/"), "{} 应该包含 /tenant_tag/", endpoint);
+            assert!(
+                endpoint.contains("/tenant_tag/"),
+                "{} 应该包含 /tenant_tag/",
+                endpoint
+            );
         }
     }
 
@@ -595,4 +661,4 @@ mod tests {
             assert!(endpoint.contains("/v1/"), "{} 应该包含 /v1/", endpoint);
         }
     }
-}// Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints
+} // Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints

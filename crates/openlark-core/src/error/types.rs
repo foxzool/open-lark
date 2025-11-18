@@ -739,7 +739,10 @@ impl LarkAPIError {
     }
 
     /// 创建认证错误（带详细信息）
-    pub fn auth_error_with_details<M: Into<String>, D: Into<String>>(message: M, details: D) -> Self {
+    pub fn auth_error_with_details<M: Into<String>, D: Into<String>>(
+        message: M,
+        details: D,
+    ) -> Self {
         Self::AuthenticationError {
             message: message.into(),
             details: Some(details.into()),
@@ -766,9 +769,10 @@ impl LarkAPIError {
     pub fn is_permission_error(&self) -> bool {
         match self {
             Self::ApiError { code, .. } => {
-                *code == 403 || LarkErrorCode::from_code(*code)
-                    .map(|ec| ec.is_permission_error())
-                    .unwrap_or(false)
+                *code == 403
+                    || LarkErrorCode::from_code(*code)
+                        .map(|ec| ec.is_permission_error())
+                        .unwrap_or(false)
             }
             Self::PermissionError { .. } => true,
             _ => false,
@@ -778,11 +782,9 @@ impl LarkAPIError {
     /// 检查错误是否可以重试
     pub fn is_retryable(&self) -> bool {
         match self {
-            Self::ApiError { code, .. } => {
-                LarkErrorCode::from_code(*code)
-                    .map(|ec| ec.is_retryable())
-                    .unwrap_or(false)
-            }
+            Self::ApiError { code, .. } => LarkErrorCode::from_code(*code)
+                .map(|ec| ec.is_retryable())
+                .unwrap_or(false),
             Self::NetworkError { kind, .. } => {
                 matches!(
                     kind,
@@ -804,11 +806,9 @@ impl LarkAPIError {
     /// 检查是否为认证相关错误
     pub fn is_authentication_error(&self) -> bool {
         match self {
-            Self::ApiError { code, .. } => {
-                LarkErrorCode::from_code(*code)
-                    .map(|ec| ec.is_auth_error())
-                    .unwrap_or(false)
-            }
+            Self::ApiError { code, .. } => LarkErrorCode::from_code(*code)
+                .map(|ec| ec.is_auth_error())
+                .unwrap_or(false),
             Self::AuthenticationError { .. } | Self::MissingAccessToken => true,
             _ => false,
         }
@@ -842,15 +842,13 @@ impl LarkAPIError {
                     format!("网络请求失败: {req_err}")
                 }
             }
-            Self::NetworkError { message, kind } => {
-                match kind {
-                    NetworkErrorKind::Timeout => "网络超时，请检查网络设置".to_string(),
-                    NetworkErrorKind::ConnectionRefused => "连接被拒绝，请检查服务状态".to_string(),
-                    NetworkErrorKind::DnsResolutionFailed => "DNS解析失败，请检查网络设置".to_string(),
-                    NetworkErrorKind::SslError => "SSL证书错误，请检查安全设置".to_string(),
-                    NetworkErrorKind::Other => format!("网络错误: {message}"),
-                }
-            }
+            Self::NetworkError { message, kind } => match kind {
+                NetworkErrorKind::Timeout => "网络超时，请检查网络设置".to_string(),
+                NetworkErrorKind::ConnectionRefused => "连接被拒绝，请检查服务状态".to_string(),
+                NetworkErrorKind::DnsResolutionFailed => "DNS解析失败，请检查网络设置".to_string(),
+                NetworkErrorKind::SslError => "SSL证书错误，请检查安全设置".to_string(),
+                NetworkErrorKind::Other => format!("网络错误: {message}"),
+            },
             _ => self.to_string(),
         }
     }
@@ -876,7 +874,9 @@ impl LarkAPIError {
                 }
             }
             Self::NetworkError { .. } | Self::RequestError(_) => ErrorHandlingCategory::Retryable,
-            Self::AuthenticationError { .. } | Self::MissingAccessToken => ErrorHandlingCategory::Authentication,
+            Self::AuthenticationError { .. } | Self::MissingAccessToken => {
+                ErrorHandlingCategory::Authentication
+            }
             Self::PermissionError { .. } => ErrorHandlingCategory::Permission,
             Self::IllegalParamError(_) | Self::ValidationError(_) | Self::BadRequest(_) => {
                 ErrorHandlingCategory::Parameter
@@ -892,17 +892,13 @@ impl LarkAPIError {
     /// 获取建议的重试延迟时间（秒）
     pub fn suggested_retry_delay(&self) -> Option<u64> {
         match self {
-            Self::ApiError { code, .. } => {
-                LarkErrorCode::from_code(*code)?.suggested_retry_delay()
-            }
-            Self::NetworkError { kind, .. } => {
-                match kind {
-                    NetworkErrorKind::Timeout => Some(3),
-                    NetworkErrorKind::ConnectionRefused => Some(5),
-                    NetworkErrorKind::DnsResolutionFailed => Some(10),
-                    _ => None,
-                }
-            }
+            Self::ApiError { code, .. } => LarkErrorCode::from_code(*code)?.suggested_retry_delay(),
+            Self::NetworkError { kind, .. } => match kind {
+                NetworkErrorKind::Timeout => Some(3),
+                NetworkErrorKind::ConnectionRefused => Some(5),
+                NetworkErrorKind::DnsResolutionFailed => Some(10),
+                _ => None,
+            },
             Self::RequestError(req_err) => {
                 if req_err.contains("timeout") || req_err.contains("timed out") {
                     Some(3)
@@ -919,11 +915,9 @@ impl LarkAPIError {
     /// 获取错误的严重程度
     pub fn severity(&self) -> ErrorSeverity {
         match self {
-            Self::ApiError { code, .. } => {
-                LarkErrorCode::from_code(*code)
-                    .map(|ec| ec.severity())
-                    .unwrap_or(ErrorSeverity::Error)
-            }
+            Self::ApiError { code, .. } => LarkErrorCode::from_code(*code)
+                .map(|ec| ec.severity())
+                .unwrap_or(ErrorSeverity::Error),
             Self::NetworkError { .. } | Self::RequestError(_) => ErrorSeverity::Error,
             Self::AuthenticationError { .. } | Self::MissingAccessToken => ErrorSeverity::Error,
             Self::PermissionError { .. } => ErrorSeverity::Error,
@@ -1054,13 +1048,20 @@ mod tests {
     #[test]
     fn test_new_error_types() {
         let auth_error = LarkAPIError::auth_error("Invalid credentials");
-        assert!(matches!(auth_error, LarkAPIError::AuthenticationError { .. }));
+        assert!(matches!(
+            auth_error,
+            LarkAPIError::AuthenticationError { .. }
+        ));
 
         let validation_error = LarkAPIError::validation_error("Invalid format");
         assert!(matches!(validation_error, LarkAPIError::ValidationError(_)));
 
-        let permission_error = LarkAPIError::permission_error("Access denied", PermissionType::Application);
-        assert!(matches!(permission_error, LarkAPIError::PermissionError { .. }));
+        let permission_error =
+            LarkAPIError::permission_error("Access denied", PermissionType::Application);
+        assert!(matches!(
+            permission_error,
+            LarkAPIError::PermissionError { .. }
+        ));
 
         let network_error = LarkAPIError::network_error("Timeout", NetworkErrorKind::Timeout);
         assert!(matches!(network_error, LarkAPIError::NetworkError { .. }));
@@ -1069,16 +1070,28 @@ mod tests {
     #[test]
     fn test_error_classification() {
         let auth_error = LarkAPIError::MissingAccessToken;
-        assert_eq!(auth_error.handling_category(), ErrorHandlingCategory::Authentication);
+        assert_eq!(
+            auth_error.handling_category(),
+            ErrorHandlingCategory::Authentication
+        );
 
         let permission_error = LarkAPIError::permission_error("Denied", PermissionType::User);
-        assert_eq!(permission_error.handling_category(), ErrorHandlingCategory::Permission);
+        assert_eq!(
+            permission_error.handling_category(),
+            ErrorHandlingCategory::Permission
+        );
 
         let network_error = LarkAPIError::network_error("Failed", NetworkErrorKind::Timeout);
-        assert_eq!(network_error.handling_category(), ErrorHandlingCategory::Retryable);
+        assert_eq!(
+            network_error.handling_category(),
+            ErrorHandlingCategory::Retryable
+        );
 
         let validation_error = LarkAPIError::validation_error("Invalid data");
-        assert_eq!(validation_error.handling_category(), ErrorHandlingCategory::Parameter);
+        assert_eq!(
+            validation_error.handling_category(),
+            ErrorHandlingCategory::Parameter
+        );
     }
 
     #[test]
