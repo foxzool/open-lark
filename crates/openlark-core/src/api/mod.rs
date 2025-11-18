@@ -7,8 +7,8 @@
 // 核心类型定义
 // ============================================================================
 
-use std::{collections::HashMap, time::Duration};
 use crate::api_resp::RawResponse;
+use std::{collections::HashMap, time::Duration};
 
 /// HTTP方法枚举
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
