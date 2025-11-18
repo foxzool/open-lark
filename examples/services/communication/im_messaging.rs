@@ -1,3 +1,4 @@
+use openlark_client::LarkClient;
 /**
  * OpenLark SDK IM消息服务示例
  *
@@ -11,11 +12,9 @@
  * 运行方法：
  * cargo run --example im_messaging --features communication
  */
-
 use openlark_core::config::ConfigBuilder;
 use openlark_core::constants::AppType;
 use openlark_core::prelude::*;
-use openlark_client::LarkClient;
 use serde_json::json;
 
 #[tokio::main]
@@ -28,10 +27,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!();
 
     // 创建客户端
-    let app_id = std::env::var("OPENLARK_APP_ID")
-        .expect("请设置环境变量 OPENLARK_APP_ID");
-    let app_secret = std::env::var("OPENLARK_APP_SECRET")
-        .expect("请设置环境变量 OPENLARK_APP_SECRET");
+    let app_id = std::env::var("OPENLARK_APP_ID").expect("请设置环境变量 OPENLARK_APP_ID");
+    let app_secret =
+        std::env::var("OPENLARK_APP_SECRET").expect("请设置环境变量 OPENLARK_APP_SECRET");
 
     let client = create_client(&app_id, &app_secret)?;
 
@@ -152,7 +150,10 @@ fn create_client(app_id: &str, app_secret: &str) -> Result<LarkClient, Box<dyn s
 /**
  * 发送文本消息
  */
-async fn demo_send_text_message(client: &LarkClient, user_id: &str) -> Result<(), Box<dyn std::error::Error>> {
+async fn demo_send_text_message(
+    client: &LarkClient,
+    user_id: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("📝 发送文本消息给用户: {}", user_id);
 
     // 构建文本消息请求
@@ -162,7 +163,8 @@ async fn demo_send_text_message(client: &LarkClient, user_id: &str) -> Result<()
         msg_type: "text".to_string(),
         content: json!({
             "text": "Hello from OpenLark SDK! 🚀\n\n这是一条通过SDK发送的测试消息。"
-        }).to_string(),
+        })
+        .to_string(),
         ..Default::default()
     };
 
@@ -194,7 +196,10 @@ async fn demo_send_text_message(client: &LarkClient, user_id: &str) -> Result<()
 /**
  * 发送富文本消息
  */
-async fn demo_send_rich_text_message(client: &LarkClient, user_id: &str) -> Result<(), Box<dyn std::error::Error>> {
+async fn demo_send_rich_text_message(
+    client: &LarkClient,
+    user_id: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("🎨 发送富文本消息给用户: {}", user_id);
 
     // 构建富文本内容
@@ -288,7 +293,10 @@ async fn demo_send_rich_text_message(client: &LarkClient, user_id: &str) -> Resu
 /**
  * 发送图片消息
  */
-async fn demo_send_image_message(client: &LarkClient, user_id: &str) -> Result<(), Box<dyn std::error::Error>> {
+async fn demo_send_image_message(
+    client: &LarkClient,
+    user_id: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("🖼️ 发送图片消息给用户: {}", user_id);
 
     // 注意：实际使用时需要先上传图片获取image_key
@@ -321,7 +329,10 @@ async fn demo_send_image_message(client: &LarkClient, user_id: &str) -> Result<(
 /**
  * 发送文件消息
  */
-async fn demo_send_file_message(client: &LarkClient, user_id: &str) -> Result<(), Box<dyn std::error::Error>> {
+async fn demo_send_file_message(
+    client: &LarkClient,
+    user_id: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("📎 发送文件消息给用户: {}", user_id);
 
     // 注意：实际使用时需要先上传文件获取file_key
@@ -353,7 +364,10 @@ async fn demo_send_file_message(client: &LarkClient, user_id: &str) -> Result<()
 /**
  * 发送卡片消息
  */
-async fn demo_send_card_message(client: &LarkClient, group_id: &str) -> Result<(), Box<dyn std::error::Error>> {
+async fn demo_send_card_message(
+    client: &LarkClient,
+    group_id: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("🎴 发送卡片消息到群聊: {}", group_id);
 
     // 构建交互式卡片
@@ -446,7 +460,10 @@ async fn demo_send_card_message(client: &LarkClient, group_id: &str) -> Result<(
 /**
  * 群聊消息处理
  */
-async fn demo_group_messaging(client: &LarkClient, group_id: &str) -> Result<(), Box<dyn std::error::Error>> {
+async fn demo_group_messaging(
+    client: &LarkClient,
+    group_id: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("👥 群聊消息处理演示");
 
     // 获取群聊信息
@@ -517,14 +534,13 @@ async fn demo_message_reply(client: &LarkClient) -> Result<(), Box<dyn std::erro
 /**
  * 批量消息处理
  */
-async fn demo_batch_messaging(client: &LarkClient, user_id: &str) -> Result<(), Box<dyn std::error::Error>> {
+async fn demo_batch_messaging(
+    client: &LarkClient,
+    user_id: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("📦 批量消息处理演示");
 
-    let messages = vec![
-        "📋 批量消息 1/3",
-        "📋 批量消息 2/3",
-        "📋 批量消息 3/3",
-    ];
+    let messages = vec!["📋 批量消息 1/3", "📋 批量消息 2/3", "📋 批量消息 3/3"];
 
     println!("🔄 并发发送消息...");
     let start_time = std::time::Instant::now();
@@ -532,24 +548,29 @@ async fn demo_batch_messaging(client: &LarkClient, user_id: &str) -> Result<(), 
     // 使用 futures 进行并发发送
     use futures::stream::{self, StreamExt};
 
-    let futures: Vec<_> = messages.into_iter().enumerate().map(|(i, msg)| {
-        let client = client.clone();
-        let user_id = user_id.to_string();
+    let futures: Vec<_> = messages
+        .into_iter()
+        .enumerate()
+        .map(|(i, msg)| {
+            let client = client.clone();
+            let user_id = user_id.to_string();
 
-        async move {
-            let request = open_lark::service::im::v1::models::MessageSendRequest {
-                receive_id_type: Some("user_id".to_string()),
-                receive_id: user_id,
-                msg_type: "text".to_string(),
-                content: json!({
-                    "text": format!("{} (消息 {})", msg, i + 1)
-                }).to_string(),
-                ..Default::default()
-            };
+            async move {
+                let request = open_lark::service::im::v1::models::MessageSendRequest {
+                    receive_id_type: Some("user_id".to_string()),
+                    receive_id: user_id,
+                    msg_type: "text".to_string(),
+                    content: json!({
+                        "text": format!("{} (消息 {})", msg, i + 1)
+                    })
+                    .to_string(),
+                    ..Default::default()
+                };
 
-            client.im.v1.message.send(&request).await
-        }
-    }).collect();
+                client.im.v1.message.send(&request).await
+            }
+        })
+        .collect();
 
     let results: Vec<_> = stream::iter(futures)
         .buffer_unordered(3) // 最多3个并发
@@ -557,9 +578,10 @@ async fn demo_batch_messaging(client: &LarkClient, user_id: &str) -> Result<(), 
         .await;
 
     let elapsed = start_time.elapsed();
-    let success_count = results.iter().filter(|r: &&Result<_, _>| {
-        r.as_ref().map_or(false, |resp| resp.success())
-    }).count();
+    let success_count = results
+        .iter()
+        .filter(|r: &&Result<_, _>| r.as_ref().map_or(false, |resp| resp.success()))
+        .count();
 
     println!("📊 批量发送结果:");
     println!("   • 成功: {}/{}", success_count, results.len());

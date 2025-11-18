@@ -33,7 +33,7 @@
 //! ```
 
 // 导入核心端点（auth, application等基础端点）
-pub use openlark_core::endpoints::{auth, application, apass, platform_integration};
+pub use openlark_core::endpoints::{apass, application, auth, platform_integration};
 
 // ==================== Board (项目看板) v1 ====================
 // 看板系统 - 看板管理、任务卡片、工作流
@@ -75,8 +75,10 @@ pub const CALENDAR_V4_CALENDAR_CREATE: &str = "/open-apis/calendar/v4/calendars"
 pub const CALENDAR_V4_CALENDAR_UPDATE: &str = "/open-apis/calendar/v4/calendars/{calendar_id}";
 pub const CALENDAR_V4_CALENDAR_DELETE: &str = "/open-apis/calendar/v4/calendars/{calendar_id}";
 pub const CALENDAR_V4_CALENDAR_SEARCH: &str = "/open-apis/calendar/v4/calendars/search";
-pub const CALENDAR_V4_CALENDAR_SUBSCRIBE: &str = "/open-apis/calendar/v4/calendars/{calendar_id}/subscribe";
-pub const CALENDAR_V4_CALENDAR_UNSUBSCRIBE: &str = "/open-apis/calendar/v4/calendars/{calendar_id}/unsubscribe";
+pub const CALENDAR_V4_CALENDAR_SUBSCRIBE: &str =
+    "/open-apis/calendar/v4/calendars/{calendar_id}/subscribe";
+pub const CALENDAR_V4_CALENDAR_UNSUBSCRIBE: &str =
+    "/open-apis/calendar/v4/calendars/{calendar_id}/unsubscribe";
 
 /// Calendar事件管理 v4
 /// 日程事件和会议安排
@@ -133,8 +135,10 @@ pub const MINUTES_V1_MINUTE_SEARCH: &str = "/open-apis/minutes/v1/minutes/search
 pub const MINUTES_V1_ACTION_ITEMS: &str = "/open-apis/minutes/v1/action_items";
 pub const MINUTES_V1_ACTION_ITEM_GET: &str = "/open-apis/minutes/v1/action_items/{action_item_id}";
 pub const MINUTES_V1_ACTION_ITEM_CREATE: &str = "/open-apis/minutes/v1/action_items";
-pub const MINUTES_V1_ACTION_ITEM_UPDATE: &str = "/open-apis/minutes/v1/action_items/{action_item_id}";
-pub const MINUTES_V1_ACTION_ITEM_DELETE: &str = "/open-apis/minutes/v1/action_items/{action_item_id}";
+pub const MINUTES_V1_ACTION_ITEM_UPDATE: &str =
+    "/open-apis/minutes/v1/action_items/{action_item_id}";
+pub const MINUTES_V1_ACTION_ITEM_DELETE: &str =
+    "/open-apis/minutes/v1/action_items/{action_item_id}";
 
 /// Minutes模板管理 v1
 /// 会议纪要模板管理
@@ -316,22 +320,46 @@ mod tests {
         // 测试服务分组的正确性
         let board_endpoints = [BOARD_V1_BOARDS, BOARD_V1_CARDS, BOARD_V1_LISTS];
         for endpoint in board_endpoints {
-            assert!(endpoint.contains("/board/"), "{} 应该包含 /board/", endpoint);
+            assert!(
+                endpoint.contains("/board/"),
+                "{} 应该包含 /board/",
+                endpoint
+            );
         }
 
-        let calendar_endpoints = [CALENDAR_V4_CALENDARS, CALENDAR_V4_EVENTS, CALENDAR_V4_FREEBUSY];
+        let calendar_endpoints = [
+            CALENDAR_V4_CALENDARS,
+            CALENDAR_V4_EVENTS,
+            CALENDAR_V4_FREEBUSY,
+        ];
         for endpoint in calendar_endpoints {
-            assert!(endpoint.contains("/calendar/"), "{} 应该包含 /calendar/", endpoint);
+            assert!(
+                endpoint.contains("/calendar/"),
+                "{} 应该包含 /calendar/",
+                endpoint
+            );
         }
 
         let meeting_room_endpoints = [MEETING_ROOM_V1_ROOMS, MEETING_ROOM_V1_BOOKINGS];
         for endpoint in meeting_room_endpoints {
-            assert!(endpoint.contains("/meeting_room/"), "{} 应该包含 /meeting_room/", endpoint);
+            assert!(
+                endpoint.contains("/meeting_room/"),
+                "{} 应该包含 /meeting_room/",
+                endpoint
+            );
         }
 
-        let minutes_endpoints = [MINUTES_V1_MINUTES, MINUTES_V1_ACTION_ITEMS, MINUTES_V1_TEMPLATES];
+        let minutes_endpoints = [
+            MINUTES_V1_MINUTES,
+            MINUTES_V1_ACTION_ITEMS,
+            MINUTES_V1_TEMPLATES,
+        ];
         for endpoint in minutes_endpoints {
-            assert!(endpoint.contains("/minutes/"), "{} 应该包含 /minutes/", endpoint);
+            assert!(
+                endpoint.contains("/minutes/"),
+                "{} 应该包含 /minutes/",
+                endpoint
+            );
         }
 
         let task_endpoints = [TASK_V1_TASKS, TASK_V1_TASK_LISTS, TASK_V1_TASK_ASSIGNEES];
@@ -348,9 +376,14 @@ mod tests {
             assert!(endpoint.contains("/v4/"), "{} 应该包含 /v4/", endpoint);
         }
 
-        let v1_endpoints = [BOARD_V1_BOARDS, MEETING_ROOM_V1_ROOMS, MINUTES_V1_MINUTES, TASK_V1_TASKS];
+        let v1_endpoints = [
+            BOARD_V1_BOARDS,
+            MEETING_ROOM_V1_ROOMS,
+            MINUTES_V1_MINUTES,
+            TASK_V1_TASKS,
+        ];
         for endpoint in v1_endpoints {
             assert!(endpoint.contains("/v1/"), "{} 应该包含 /v1/", endpoint);
         }
     }
-}// Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints
+} // Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints

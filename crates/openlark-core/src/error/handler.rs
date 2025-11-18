@@ -30,7 +30,9 @@ use std::time::Duration;
 
 use crate::{
     api_resp::BaseResponse,
-    error::types::{ErrorHandlingCategory, ErrorSeverity, LarkAPIError, LarkErrorCode, NetworkErrorKind},
+    error::types::{
+        ErrorHandlingCategory, ErrorSeverity, LarkAPIError, LarkErrorCode, NetworkErrorKind,
+    },
 };
 
 /// 错误处理助手工具
@@ -88,7 +90,9 @@ impl ErrorHelper {
                 ]);
                 advice.is_recoverable = true;
             }
-            LarkAPIError::PermissionError { permission_type, .. } => {
+            LarkAPIError::PermissionError {
+                permission_type, ..
+            } => {
                 advice.message = format!("权限不足: {:?} 权限错误", permission_type);
                 advice.category = ErrorHandlingCategory::Permission;
                 advice.actions.extend(vec![
@@ -201,27 +205,24 @@ impl ErrorHelper {
                 advice.message = "连接被拒绝".to_string();
                 advice.is_retryable = true;
                 advice.retry_delay = Some(10);
-                advice.actions.extend(vec![
-                    "检查服务状态".to_string(),
-                    "确认网络连接".to_string(),
-                ]);
+                advice
+                    .actions
+                    .extend(vec!["检查服务状态".to_string(), "确认网络连接".to_string()]);
             }
             NetworkErrorKind::DnsResolutionFailed => {
                 advice.message = "DNS解析失败".to_string();
                 advice.is_retryable = true;
                 advice.retry_delay = Some(10);
-                advice.actions.extend(vec![
-                    "检查DNS设置".to_string(),
-                    "确认网络配置".to_string(),
-                ]);
+                advice
+                    .actions
+                    .extend(vec!["检查DNS设置".to_string(), "确认网络配置".to_string()]);
             }
             NetworkErrorKind::SslError => {
                 advice.message = "SSL证书错误".to_string();
                 advice.is_retryable = false;
-                advice.actions.extend(vec![
-                    "检查证书配置".to_string(),
-                    "更新系统时间".to_string(),
-                ]);
+                advice
+                    .actions
+                    .extend(vec!["检查证书配置".to_string(), "更新系统时间".to_string()]);
             }
             NetworkErrorKind::Other => {
                 advice.message = format!("网络错误: {message}");
@@ -321,26 +322,24 @@ impl ErrorHelper {
                         Duration::from_secs(error_code.suggested_retry_delay().unwrap_or(5));
                 }
             }
-            LarkAPIError::NetworkError { kind, .. } => {
-                match kind {
-                    NetworkErrorKind::Timeout => {
-                        strategy.max_attempts = 3;
-                        strategy.base_delay = Duration::from_secs(5);
-                    }
-                    NetworkErrorKind::ConnectionRefused => {
-                        strategy.max_attempts = 5;
-                        strategy.base_delay = Duration::from_secs(10);
-                    }
-                    NetworkErrorKind::DnsResolutionFailed => {
-                        strategy.max_attempts = 3;
-                        strategy.base_delay = Duration::from_secs(10);
-                    }
-                    _ => {
-                        strategy.max_attempts = 3;
-                        strategy.base_delay = Duration::from_secs(5);
-                    }
+            LarkAPIError::NetworkError { kind, .. } => match kind {
+                NetworkErrorKind::Timeout => {
+                    strategy.max_attempts = 3;
+                    strategy.base_delay = Duration::from_secs(5);
                 }
-            }
+                NetworkErrorKind::ConnectionRefused => {
+                    strategy.max_attempts = 5;
+                    strategy.base_delay = Duration::from_secs(10);
+                }
+                NetworkErrorKind::DnsResolutionFailed => {
+                    strategy.max_attempts = 3;
+                    strategy.base_delay = Duration::from_secs(10);
+                }
+                _ => {
+                    strategy.max_attempts = 3;
+                    strategy.base_delay = Duration::from_secs(5);
+                }
+            },
             LarkAPIError::RequestError(req_err) => {
                 if req_err.contains("timeout") || req_err.contains("timed out") {
                     strategy.max_attempts = 3;
@@ -655,7 +654,11 @@ impl ErrorContext {
             self.user_friendly_message,
             self.category,
             self.severity,
-            if self.is_retryable { "retryable" } else { "not retryable" },
+            if self.is_retryable {
+                "retryable"
+            } else {
+                "not retryable"
+            },
             self.suggested_actions.len()
         )
     }
@@ -741,8 +744,10 @@ mod tests {
         let strategy = ErrorHelper::generate_recovery_strategy(&auth_error);
         assert_eq!(strategy, ErrorRecoveryStrategy::Reauthenticate);
 
-        let permission_error = LarkAPIError::permission_error("Denied",
-            crate::error::types::PermissionType::Application);
+        let permission_error = LarkAPIError::permission_error(
+            "Denied",
+            crate::error::types::PermissionType::Application,
+        );
         let strategy = ErrorHelper::generate_recovery_strategy(&permission_error);
         assert_eq!(strategy, ErrorRecoveryStrategy::RequestPermission);
 
@@ -818,8 +823,10 @@ mod tests {
 
     #[test]
     fn test_permission_error_handling() {
-        let perm_error = LarkAPIError::permission_error("Access denied",
-            crate::error::types::PermissionType::Document);
+        let perm_error = LarkAPIError::permission_error(
+            "Access denied",
+            crate::error::types::PermissionType::Document,
+        );
         let advice = ErrorHelper::handle_error(&perm_error);
 
         assert_eq!(advice.category, ErrorHandlingCategory::Permission);

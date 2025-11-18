@@ -34,9 +34,7 @@ use std::{
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
 
-use crate::{
-    error::types::{ErrorHandlingCategory, ErrorSeverity, LarkAPIError, LarkErrorCode},
-};
+use crate::error::types::{ErrorHandlingCategory, ErrorSeverity, LarkAPIError, LarkErrorCode};
 
 // ============================================================================
 // 日志记录功能
@@ -173,18 +171,15 @@ impl LogEntry {
   "category": {:?},
   "error_code": {:?}
 }}"#,
-            self.level,
-            self.timestamp,
-            self.message,
-            self.category,
-            self.error_code
+            self.level, self.timestamp, self.message, self.category, self.error_code
         );
         Ok(json)
     }
 
     /// 格式化为控制台输出
     pub fn format_console(&self) -> String {
-        let timestamp = self.timestamp
+        let timestamp = self
+            .timestamp
             .duration_since(UNIX_EPOCH)
             .unwrap_or_default()
             .as_secs();
@@ -198,17 +193,12 @@ impl LogEntry {
 
         let mut output = format!(
             "{}[{}]{} {}{} {}{}",
-            color,
-            self.level,
-            reset,
-            time_str,
-            color,
-            self.message,
-            reset
+            color, self.level, reset, time_str, color, self.message, reset
         );
 
         if let Some(error) = &self.error {
-            output.push_str(&format!("{} - Error: {}{}",
+            output.push_str(&format!(
+                "{} - Error: {}{}",
                 color,
                 error.user_friendly_message(),
                 reset
@@ -302,7 +292,8 @@ impl ErrorLogger {
     /// 获取按级别过滤的日志条目
     pub fn get_entries_by_level(&self, level: LogLevel) -> Vec<LogEntry> {
         let cache = self.cache.lock().unwrap();
-        cache.iter()
+        cache
+            .iter()
             .filter(|entry| entry.level == level)
             .cloned()
             .collect()
@@ -311,7 +302,8 @@ impl ErrorLogger {
     /// 获取指定时间范围内的日志条目
     pub fn get_entries_by_time_range(&self, start: SystemTime, end: SystemTime) -> Vec<LogEntry> {
         let cache = self.cache.lock().unwrap();
-        cache.iter()
+        cache
+            .iter()
             .filter(|entry| entry.timestamp >= start && entry.timestamp <= end)
             .cloned()
             .collect()
@@ -470,8 +462,8 @@ pub struct AlertThresholds {
 impl Default for AlertThresholds {
     fn default() -> Self {
         Self {
-            error_rate_threshold: 5.0, // 5%
-            error_count_threshold_5m: 100, // 5分钟内100个错误
+            error_rate_threshold: 5.0,                          // 5%
+            error_count_threshold_5m: 100,                      // 5分钟内100个错误
             processing_time_threshold: Duration::from_secs(30), // 30秒
         }
     }
@@ -529,7 +521,10 @@ impl ErrorMonitor {
         *stats.errors_by_category.entry(event.category).or_insert(0) += 1;
 
         // 按严重级别统计
-        *stats.errors_by_severity.entry(event.severity_level()).or_insert(0) += 1;
+        *stats
+            .errors_by_severity
+            .entry(event.severity_level())
+            .or_insert(0) += 1;
 
         // 按错误码统计
         if let Some(error_code) = event.error_code {
@@ -546,7 +541,8 @@ impl ErrorMonitor {
         // 更新平均处理时间
         if let Some(processing_time) = event.processing_time {
             if let Some(current_avg) = stats.average_processing_time {
-                let new_avg_nanos = (current_avg.as_nanos() * (stats.total_errors - 1) as u128 + processing_time.as_nanos())
+                let new_avg_nanos = (current_avg.as_nanos() * (stats.total_errors - 1) as u128
+                    + processing_time.as_nanos())
                     / stats.total_errors as u128;
                 // 安全转换为 u64，如果溢出则使用最大值
                 let new_avg = Duration::from_nanos(new_avg_nanos.try_into().unwrap_or(u64::MAX));
@@ -603,10 +599,9 @@ impl ErrorMonitor {
         let now = SystemTime::now();
         let events = self.events.lock().unwrap();
 
-        events.iter()
-            .filter(|event| {
-                now.duration_since(event.timestamp).unwrap_or_default() <= duration
-            })
+        events
+            .iter()
+            .filter(|event| now.duration_since(event.timestamp).unwrap_or_default() <= duration)
             .cloned()
             .collect()
     }
@@ -642,14 +637,16 @@ impl ErrorMonitor {
         let recent_window = Duration::from_secs(300); // 5分钟窗口
         let now = SystemTime::now();
 
-        let recent_count = events.iter()
+        let recent_count = events
+            .iter()
             .filter(|event| {
                 now.duration_since(event.timestamp).unwrap_or_default() <= recent_window
             })
             .count();
 
         let _previous_window_start = now - recent_window - recent_window;
-        let previous_count = events.iter()
+        let previous_count = events
+            .iter()
             .filter(|event| {
                 let elapsed = now.duration_since(event.timestamp).unwrap_or_default();
                 elapsed > recent_window && elapsed <= recent_window * 2
@@ -670,10 +667,7 @@ impl ErrorMonitor {
 #[derive(Debug, Clone)]
 pub enum ErrorAlert {
     /// 高错误率告警
-    HighErrorRate {
-        current_rate: f64,
-        threshold: f64,
-    },
+    HighErrorRate { current_rate: f64, threshold: f64 },
     /// 高错误数告警
     HighErrorCount {
         count: u64,
@@ -686,10 +680,7 @@ pub enum ErrorAlert {
         threshold: Duration,
     },
     /// 新错误类型告警
-    NewErrorType {
-        error_type: String,
-        count: u64,
-    },
+    NewErrorType { error_type: String, count: u64 },
 }
 
 // ============================================================================
@@ -716,8 +707,7 @@ fn get_error_monitor() -> &'static ErrorMonitor {
 /// - `error`: 要记录的错误
 /// - `level`: 日志级别
 pub fn log_error(error: &LarkAPIError, level: LogLevel) {
-    let entry = LogEntry::new(level, "Error occurred")
-        .with_error(error.clone());
+    let entry = LogEntry::new(level, "Error occurred").with_error(error.clone());
 
     get_error_logger().log(entry);
 }
@@ -769,7 +759,10 @@ mod tests {
     #[test]
     fn test_log_levels() {
         assert!(LogLevel::Error > LogLevel::Info);
-        assert_eq!(LogLevel::from_error_severity(ErrorSeverity::Critical), LogLevel::Critical);
+        assert_eq!(
+            LogLevel::from_error_severity(ErrorSeverity::Critical),
+            LogLevel::Critical
+        );
         assert_eq!(LogLevel::Debug.label(), "DEBUG");
     }
 
@@ -792,8 +785,7 @@ mod tests {
         let logger = ErrorLogger::new(LogLevel::Warn);
         let error = LarkAPIError::MissingAccessToken;
 
-        let entry = LogEntry::new(LogLevel::Error, "Test error")
-            .with_error(error.clone());
+        let entry = LogEntry::new(LogLevel::Error, "Test error").with_error(error.clone());
 
         logger.log(entry);
 
@@ -854,7 +846,10 @@ mod tests {
         let thresholds = AlertThresholds::default();
         assert_eq!(thresholds.error_rate_threshold, 5.0);
         assert_eq!(thresholds.error_count_threshold_5m, 100);
-        assert_eq!(thresholds.processing_time_threshold, Duration::from_secs(30));
+        assert_eq!(
+            thresholds.processing_time_threshold,
+            Duration::from_secs(30)
+        );
     }
 
     #[test]

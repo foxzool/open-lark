@@ -1,3 +1,4 @@
+use openlark_client::Result;
 /**
  * OpenLark SDK 基础入门完整教程
  *
@@ -22,9 +23,7 @@
  * 2. 在 .env 中配置真实的 APP_ID 和 APP_SECRET
  * 3. 可选配置 USER_ACCESS_TOKEN 用于用户级API
  */
-
-use openlark_client::{Client, prelude::*};
-use openlark_client::Result;
+use openlark_client::{prelude::*, Client};
 use std::env;
 
 #[tokio::main]
@@ -169,8 +168,10 @@ async fn chapter_2_client_setup() -> openlark_client::Result<()> {
     match Client::from_env() {
         Ok(client) => {
             println!("✅ 从环境变量创建成功");
-            println!("   • App ID: {}...",
-                     &client.config().app_id[..client.config().app_id.len().min(8)]);
+            println!(
+                "   • App ID: {}...",
+                &client.config().app_id[..client.config().app_id.len().min(8)]
+            );
             println!("   • Base URL: {}", client.config().base_url);
             println!("   • 令牌缓存: 启用 (SDK自动管理)");
 
@@ -208,7 +209,8 @@ async fn demo_client_features(client: &Client) -> openlark_client::Result<()> {
     let services = registry.list_services();
 
     println!("   • 已注册服务: {} 个", services.len());
-    for service in services.iter().take(5) { // 最多显示5个
+    for service in services.iter().take(5) {
+        // 最多显示5个
         println!("     - {}", service.name);
     }
 
@@ -245,8 +247,10 @@ async fn chapter_3_authentication() -> openlark_client::Result<()> {
         match client.auth().get_app_access_token().await {
             Ok(token_info) => {
                 println!("✅ 应用级认证成功");
-                println!("   • 访问令牌: {}...",
-                         &token_info.access_token[..token_info.access_token.len().min(20)]);
+                println!(
+                    "   • 访问令牌: {}...",
+                    &token_info.access_token[..token_info.access_token.len().min(20)]
+                );
                 println!("   • 令牌类型: {}", token_info.token_type);
                 println!("   • 过期时间: {} 秒", token_info.expires_in);
 
@@ -355,8 +359,10 @@ async fn chapter_4_first_api_call() -> openlark_client::Result<()> {
                 println!("   • scope: Option<String> (权限范围)");
                 println!();
                 println!("💡 数据访问示例:");
-                println!("   • 访问令牌: {}...",
-                         &token_info.access_token[..token_info.access_token.len().min(20)]);
+                println!(
+                    "   • 访问令牌: {}...",
+                    &token_info.access_token[..token_info.access_token.len().min(20)]
+                );
                 println!("   • 令牌类型: {}", token_info.token_type);
                 println!("   • 过期时间: {} 秒", token_info.expires_in);
             }
@@ -531,7 +537,12 @@ async fn chapter_5_services_modules() -> openlark_client::Result<()> {
 /**
  * 检查服务状态
  */
-fn check_service_status(registry: &openlark_client::ServiceRegistry, service_name: &str, display_name: &str, description: &str) {
+fn check_service_status(
+    registry: &openlark_client::ServiceRegistry,
+    service_name: &str,
+    display_name: &str,
+    description: &str,
+) {
     println!("   📋 {} ({})", display_name, service_name);
 
     #[cfg(feature = "auth")]
@@ -585,7 +596,10 @@ fn check_service_status(registry: &openlark_client::ServiceRegistry, service_nam
     }
 
     // 如果对应功能未启用
-    println!("       ⚪️  功能未启用 - {} (使用 --features {} 启用)", description, service_name);
+    println!(
+        "       ⚪️  功能未启用 - {} (使用 --features {} 启用)",
+        description, service_name
+    );
 }
 
 /**
@@ -606,11 +620,7 @@ async fn chapter_6_error_handling() -> openlark_client::Result<()> {
 
     // 策略1: 立即失败 - 配置错误
     println!("   1️⃣ 立即失败策略（配置错误）:");
-    match Client::builder()
-        .app_id("")
-        .app_secret("")
-        .build()
-    {
+    match Client::builder().app_id("").app_secret("").build() {
         Ok(_) => println!("       ⚠️  意外成功"),
         Err(e) => {
             println!("       ✅ 正确识别配置错误");
@@ -732,23 +742,17 @@ fn user_friendly_error_message(error: &openlark_client::Error) -> String {
         openlark_client::Error::InvalidConfig(_) => {
             "应用配置有误，请检查App ID和App Secret是否正确".to_string()
         }
-        openlark_client::Error::NetworkError(_) => {
-            "网络连接失败，请检查网络连接后重试".to_string()
-        }
-        openlark_client::Error::APIError { code, .. } => {
-            match code.as_str() {
-                "99991663" => "应用ID或密钥无效，请联系管理员".to_string(),
-                "99991403" => "权限不足，请联系管理员配置应用权限".to_string(),
-                "429" => "请求过于频繁，请稍后重试".to_string(),
-                _ => "系统繁忙，请稍后重试".to_string(),
-            }
-        }
+        openlark_client::Error::NetworkError(_) => "网络连接失败，请检查网络连接后重试".to_string(),
+        openlark_client::Error::APIError { code, .. } => match code.as_str() {
+            "99991663" => "应用ID或密钥无效，请联系管理员".to_string(),
+            "99991403" => "权限不足，请联系管理员配置应用权限".to_string(),
+            "429" => "请求过于频繁，请稍后重试".to_string(),
+            _ => "系统繁忙，请稍后重试".to_string(),
+        },
         openlark_client::Error::InvalidParameter(msg) => {
             format!("参数错误: {}", msg)
         }
-        _ => {
-            "系统错误，请稍后重试".to_string()
-        }
+        _ => "系统错误，请稍后重试".to_string(),
     }
 }
 
@@ -788,10 +792,7 @@ mod tests {
     #[test]
     fn test_error_handling() {
         // 测试配置错误处理
-        let result = Client::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let result = Client::builder().app_id("").app_secret("").build();
 
         assert!(result.is_err(), "空配置应该返回错误");
 

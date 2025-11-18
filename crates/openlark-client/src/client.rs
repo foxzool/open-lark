@@ -2,8 +2,8 @@
 //!
 //! 极简设计，1行代码创建客户端，类型安全的服务访问
 
+use crate::{traits::LarkClient, Config, Result, ServiceRegistry};
 use std::sync::Arc;
-use crate::{Config, ServiceRegistry, Result, traits::LarkClient};
 
 /// 🚀 OpenLark客户端 - 极简设计
 ///
@@ -239,7 +239,6 @@ impl From<Config> for Result<Client> {
         Client::with_config(config)
     }
 }
-
 
 #[cfg(test)]
 mod tests {

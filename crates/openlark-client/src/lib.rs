@@ -211,7 +211,7 @@ pub use client::{Client, ClientBuilder};
 pub use config::Config;
 pub use error::{Error, Result};
 pub use features::{FeatureLoader, FeatureSet, FeatureStats};
-pub use registry::{ServiceRegistry, ServiceDescriptor};
+pub use registry::{ServiceDescriptor, ServiceRegistry};
 pub use traits::*;
 
 // 重新导出传统LarkClient（从openlark-core迁移）
@@ -234,10 +234,7 @@ pub use services::AIService;
 pub use services::AuthService;
 
 // 重新导出 openlark-core 核心类型
-pub use openlark_core::{
-    SDKResult as CoreResult,
-    config::Config as CoreConfig,
-};
+pub use openlark_core::{config::Config as CoreConfig, SDKResult as CoreResult};
 
 /// 🚀 预导出模块 - 包含最常用的类型和特征
 ///
@@ -253,10 +250,10 @@ pub mod prelude {
     pub use crate::{Client, ClientBuilder, Config, Error, Result};
 
     // 服务特征
-    pub use crate::traits::{LarkClient, ServiceTrait, ServiceLifecycle};
+    pub use crate::traits::{LarkClient, ServiceLifecycle, ServiceTrait};
 
     // 服务注册
-    pub use crate::{ServiceRegistry, ServiceDescriptor};
+    pub use crate::{ServiceDescriptor, ServiceRegistry};
 
     // 服务类型
     #[cfg(feature = "communication")]
@@ -325,9 +322,8 @@ pub mod utils {
 
     /// 验证功能依赖
     pub fn validate_feature_dependencies() -> Result<Vec<crate::features::DependencyIssue>> {
-        FeatureLoader::validate_feature_dependencies().map_err(|e| {
-            Error::InvalidConfig("功能依赖验证失败")
-        })
+        FeatureLoader::validate_feature_dependencies()
+            .map_err(|e| Error::InvalidConfig("功能依赖验证失败"))
     }
 }
 
@@ -358,9 +354,6 @@ mod tests {
         let _builder: ClientBuilder = ClientBuilder::new();
 
         // 测试配置创建
-        let _config = Config::builder()
-            .app_id("test")
-            .app_secret("test")
-            .build();
+        let _config = Config::builder().app_id("test").app_secret("test").build();
     }
 }
