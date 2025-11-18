@@ -7,7 +7,7 @@ license.workspace = true
 description = "Core infrastructure for OpenLark SDK"
 
 [dependencies]
-rstest = "0.19"
+rstest = { workspace = true }
 tracing-test = { workspace = true }
 tokio = { workspace = true }
 serde = { workspace = true }
