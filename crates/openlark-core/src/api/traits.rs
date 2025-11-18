@@ -1,7 +1,7 @@
 //! API特征定义 - 简化版本
 
-use async_trait::async_trait;
 use crate::{api_resp::RawResponse, error::SDKResult};
+use async_trait::async_trait;
 
 use super::ApiRequest;
 
