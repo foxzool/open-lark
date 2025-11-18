@@ -1,156 +1,356 @@
 //! OpenLark Client Library
 //!
-//! 高级客户端库，提供全新的统一客户端接口，让所有飞书服务都有一致的调用体验。
+//! 🚀 现代化的飞书开放平台 Rust SDK，提供简洁、类型安全的 API 访问
 //!
-//! ## 主要功能
+//! ## 核心特性
 //!
-//! - **统一API接口**: 所有服务使用相同的调用模式
-//! - **类型安全**: 编译时验证的API调用和配置
-//! - **异步支持**: 完全异步的客户端实现
-//! - **构建器模式**: 现代化的客户端构建方式
-//! - **批量操作**: 支持批量API调用以提高效率
-//! - **中间件支持**: 可插拔的中间件系统
+//! - **Feature-driven**: 基于编译时功能标志的模块化设计
+//! - **零配置**: 支持从环境变量自动配置客户端
+//! - **类型安全**: 完全编译时验证的 API 调用
+//! - **异步优先**: 完全异步的客户端实现
+//! - **现代构建器**: 流畅的构建器模式 API
+//! - **服务发现**: 动态服务注册和管理
+//! - **企业级**: 高级错误处理、重试和监控支持
 //!
 //! ## 快速开始
 //!
-//! ### 使用高级统一API（推荐）
+//! ### 基础用法
 //!
-//! ```rust
+//! ```rust,no_run
 //! use openlark_client::prelude::*;
 //!
 //! #[tokio::main]
-//! async fn main() -> UnifiedResult<()> {
-//!     // 从环境变量创建客户端
-//!     let client = OpenLarkClient::from_env().await?;
+//! async fn main() -> Result<()> {
+//!     // 从环境变量创建客户端（推荐）
+//!     let client = Client::from_env()?;
 //!
-//!     // 发送文本消息
-//!     let result = client.send_text_message(
-//!         "user_open_id",
-//!         "open_id",
-//!         "Hello from OpenLark!"
-//!     ).await?;
-//!     println!("消息发送成功: {}", result.message_id);
-//!
-//!     // 获取员工列表
-//!     let employees = client.list_employees(Some("open_id"), Some(50), None).await?;
-//!     for employee in employees.employees {
-//!         println!("员工: {} ({})", employee.name, employee.user_id);
+//!     // 发送文本消息（需要 communication feature）
+//!     #[cfg(feature = "communication")]
+//!     {
+//!         let result = client.communication()
+//!             .send_text_message("user_open_id", "open_id", "Hello!")
+//!             .await?;
+//!         println!("消息发送成功: {}", result.message_id);
 //!     }
 //!
-//!     // 创建电子表格
-//!     let spreadsheet = client.create_spreadsheet("我的新表格", None).await?;
-//!     println!("表格创建成功: {}", spreadsheet.url);
+//!     // 获取员工列表（需要 hr feature）
+//!     #[cfg(feature = "hr")]
+//!     {
+//!         let employees = client.hr()
+//!             .list_employees(Some("open_id"), Some(50), None)
+//!             .await?;
+//!         for employee in employees.employees {
+//!             println!("员工: {} ({})", employee.name, employee.user_id);
+//!         }
+//!     }
 //!
 //!     Ok(())
 //! }
 //! ```
 //!
-//! ### 使用构建器模式
+//! ### 构建器模式
 //!
-//! ```rust
+//! ```rust,no_run
 //! use openlark_client::prelude::*;
+//! use std::time::Duration;
 //!
-//! let client = OpenLarkClientBuilder::new()
-//!     .from_env()?
+//! let client = Client::builder()
+//!     .app_id("your_app_id")
+//!     .app_secret("your_app_secret")
+//!     .base_url("https://open.feishu.cn")
 //!     .timeout(Duration::from_secs(30))
-//!     .retries(3)
-//!     .build()
-//!     .await?;
+//!     .enable_log(true)
+//!     .build()?;
 //! ```
 //!
-//! ### 服务特定API
+//! ### 环境变量配置
 //!
-//! ```rust
-//! use openlark_client::prelude::*;
+//! 设置以下环境变量：
 //!
-//! let client = OpenLarkClient::from_env().await?;
-//!
-//! // 获取通信服务API
-//! let comm = client.communication()?;
-//! let result = comm.send_text_message("user_id", "open_id", "Hello").await?;
-//!
-//! // 获取HR服务API
-//! let hr = client.hr()?;
-//! let employees = hr.list_employees(Some("open_id"), Some(20), None).await?;
-//!
-//! // 获取文档服务API
-//! let docs = client.docs()?;
-//! let sheet = docs.create_spreadsheet("新表格", None).await?;
-//!
-//! // 获取AI服务API
-//! let ai = client.ai()?;
-//! let text = ai.generate_text("写一首诗", None, Some(0.7), Some(100)).await?;
-//!
-//! // 获取认证服务API
-//! let auth = client.auth()?;
-//! let token = auth.get_app_access_token().await?;
+//! ```bash
+//! export OPENLARK_APP_ID="your_app_id"
+//! export OPENLARK_APP_SECRET="your_app_secret"
+//! export OPENLARK_BASE_URL="https://open.feishu.cn"  # 可选
+//! export OPENLARK_TIMEOUT="30"  # 可选，秒
+//! export OPENLARK_ENABLE_LOG="true"  # 可选
 //! ```
 //!
-//! ## 批量操作
+//! ## 功能标志
 //!
-//! ```rust
+//! 客户端使用 Rust 功能标志进行模块化编译：
+//!
+//! ```toml
+//! [dependencies]
+//! openlark-client = { version = "0.1", features = [
+//!     "communication",  # 通讯服务
+//!     "hr",           # 人力资源服务
+//!     "docs",         # 文档服务
+//!     "ai",           # AI 服务
+//!     "auth",         # 认证服务
+//!     "websocket",    # WebSocket 支持
+//! ]}
+//! ```
+//!
+//! ## 服务访问
+//!
+//! 每个启用功能都提供对应的服务访问器：
+//!
+//! ```rust,no_run
+//! let client = Client::from_env()?;
+//!
+//! // 通讯服务（communication feature）
+//! #[cfg(feature = "communication")]
+//! let comm = client.communication();
+//!
+//! // HR 服务（hr feature）
+//! #[cfg(feature = "hr")]
+//! let hr = client.hr();
+//!
+//! // 文档服务（docs feature）
+//! #[cfg(feature = "docs")]
+//! let docs = client.docs();
+//!
+//! // AI 服务（ai feature）
+//! #[cfg(feature = "ai")]
+//! let ai = client.ai();
+//!
+//! // 认证服务（auth feature）
+//! #[cfg(feature = "auth")]
+//! let auth = client.auth();
+//! ```
+//!
+//! ## 高级用法
+//!
+//! ### 服务注册和管理
+//!
+//! ```rust,no_run
 //! use openlark_client::prelude::*;
 //!
-//! let client = OpenLarkClient::from_env().await?;
+//! let client = Client::from_env()?;
+//! let registry = client.registry();
 //!
-//! // 批量发送消息
-//! let messages = vec![
-//!     ("user1".to_string(), "open_id".to_string(), "Hello 1".to_string()),
-//!     ("user2".to_string(), "open_id".to_string(), "Hello 2".to_string()),
-//! ];
-//! let results = client.batch_send_text_messages(messages).await?;
+//! // 检查可用服务
+//! println!("可用服务: {:?}", registry.list_services());
 //!
-//! // 批量获取员工信息
-//! let user_ids = vec!["user1".to_string(), "user2".to_string()];
-//! let employees = client.batch_get_employees(user_ids, Some("open_id")).await?;
+//! // 检查特定服务是否可用
+//! if registry.has_service("communication") {
+//!     println!("通讯服务可用");
+//! }
+//! ```
+//!
+//! ### 自定义配置
+//!
+//! ```rust,no_run
+//! use openlark_client::prelude::*;
+//! use std::collections::HashMap;
+//! use std::time::Duration;
+//!
+//! let mut headers = HashMap::new();
+//! headers.insert("User-Agent".to_string(), "MyApp/1.0".to_string());
+//!
+//! let client = Client::builder()
+//!     .app_id("app_id")
+//!     .app_secret("app_secret")
+//!     .timeout(Duration::from_secs(60))
+//!     .retry_count(3)
+//!     .headers(headers)
+//!     .build()?;
+//! ```
+//!
+//! ## 错误处理
+//!
+//! 客户端提供统一的错误处理：
+//!
+//! ```rust,no_run
+//! use openlark_client::prelude::*;
+//!
+//! match Client::from_env() {
+//!     Ok(client) => {
+//!         println!("客户端创建成功");
+//!         // 使用客户端...
+//!     },
+//!     Err(Error::InvalidConfig(msg)) => {
+//!         eprintln!("配置错误: {}", msg);
+//!     },
+//!     Err(error) => {
+//!         eprintln!("其他错误: {}", error);
+//!     }
+//! }
 //! ```
 
-#![allow(missing_docs)]
+#![deny(missing_docs)]
+#![warn(clippy::all)]
 #![warn(missing_copy_implementations)]
 #![warn(missing_debug_implementations)]
 
-// Include macros first
-#[macro_use]
-mod macros;
-
-// New unified client architecture (recommended)
-pub mod unified;
-
-// Legacy modules (for backward compatibility)
-pub mod accessors;
-pub mod services;
-pub mod ws_client;
-
-// Internal legacy modules
-mod client;
-mod prelude;
+// 核心模块
+pub mod client;
+pub mod config;
+pub mod error;
+pub mod features;
 pub mod registry;
 pub mod traits;
+pub mod types;
 
-// Re-export OpenLark client as the main interface (recommended)
-pub use unified::{
-    OpenLarkClient, OpenLarkClientBuilder,
-    UnifiedClient, UnifiedClientBuilder, UnifiedConfig, ConfigBuilder,
-    UnifiedService, UnifiedError, UnifiedResult, ServiceRegistry,
-    TransportLayer, Middleware, MiddlewareChain, APICall, ServiceLifecycle,
-    APIRequest, APIResponse, UnifiedAPIClient,
-    CommunicationAPI, HRAPI, DocsAPI, AIAPI, AuthAPI,
+// 服务访问层
+pub mod services;
+
+// WebSocket 模块（条件编译）
+#[cfg(feature = "websocket")]
+pub mod ws_client;
+
+// 重新导出核心类型
+pub use client::{Client, ClientBuilder};
+pub use config::Config;
+pub use error::{Error, Result};
+pub use features::{FeatureLoader, FeatureSet, FeatureStats};
+pub use registry::{ServiceRegistry, ServiceDescriptor};
+pub use traits::*;
+
+// 重新导出服务类型
+#[cfg(feature = "communication")]
+pub use services::CommunicationService;
+
+#[cfg(feature = "hr")]
+pub use services::HRService;
+
+#[cfg(feature = "docs")]
+pub use services::DocsService;
+
+#[cfg(feature = "ai")]
+pub use services::AIService;
+
+#[cfg(feature = "auth")]
+pub use services::AuthService;
+
+// 重新导出 openlark-core 核心类型
+pub use openlark_core::{
+    SDKResult as CoreResult,
+    config::Config as CoreConfig,
 };
 
-// Re-export legacy client for backward compatibility
-pub use client::{LarkClient, LarkClientBuilder};
+/// 🚀 预导出模块 - 包含最常用的类型和特征
+///
+/// 使用预导出可以简化导入：
+///
+/// ```rust,no_run
+/// use openlark_client::prelude::*;
+///
+/// let client = Client::from_env()?;
+/// ```
+pub mod prelude {
+    // 核心类型
+    pub use crate::{Client, ClientBuilder, Config, Error, Result};
 
-// Type alias for backward compatibility
-/// Default LarkClient type for backward compatibility
-pub type DefaultLarkClient = LarkClient;
+    // 服务特征
+    pub use crate::traits::{LarkClient, ServiceTrait, ServiceLifecycle};
 
-/// 为服务crate提供便利的重新导出，与openlark_core::client保持兼容
-pub mod compatibility {
-    pub use super::{LarkClient, LarkClientBuilder, DefaultLarkClient};
+    // 服务注册
+    pub use crate::{ServiceRegistry, ServiceDescriptor};
 
-    // 重新导出常用的相关类型，确保服务crate迁移时无需修改import
-    pub use openlark_core::{SDKResult, config::Config, constants::AppType};
+    // 服务类型
+    #[cfg(feature = "communication")]
+    pub use crate::services::CommunicationService;
+
+    #[cfg(feature = "hr")]
+    pub use crate::services::HRService;
+
+    #[cfg(feature = "docs")]
+    pub use crate::services::DocsService;
+
+    #[cfg(feature = "ai")]
+    pub use crate::services::AIService;
+
+    #[cfg(feature = "auth")]
+    pub use crate::services::AuthService;
+
+    // 功能管理
+    pub use crate::{FeatureLoader, FeatureSet};
+
+    // 便利类型别名
+    /// 📦 客户端结果类型别名
+    pub type ClientResult<T> = Result<T>;
 }
 
-// Re-export core types
-pub use openlark_core::{SDKResult, config::Config as CoreConfig};
+/// 🏷️ 库信息
+pub mod info {
+    /// 库名称
+    pub const NAME: &str = "OpenLark Client";
+    /// 库版本
+    pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+    /// 库描述
+    pub const DESCRIPTION: &str = env!("CARGO_PKG_DESCRIPTION");
+    /// 仓库地址
+    pub const REPOSITORY: &str = env!("CARGO_PKG_REPOSITORY");
+}
+
+/// 🔧 实用工具函数
+pub mod utils {
+    use super::*;
+    use std::env;
+
+    /// 检查环境变量配置
+    pub fn check_env_config() -> Result<()> {
+        let app_id = env::var("OPENLARK_APP_ID")
+            .map_err(|_| Error::InvalidConfig("OPENLARK_APP_ID 环境变量未设置"))?;
+
+        let app_secret = env::var("OPENLARK_APP_SECRET")
+            .map_err(|_| Error::InvalidConfig("OPENLARK_APP_SECRET 环境变量未设置"))?;
+
+        if app_id.is_empty() {
+            return Err(Error::InvalidConfig("OPENLARK_APP_ID 不能为空"));
+        }
+
+        if app_secret.is_empty() {
+            return Err(Error::InvalidConfig("OPENLARK_APP_SECRET 不能为空"));
+        }
+
+        Ok(())
+    }
+
+    /// 获取启用的功能列表
+    pub fn get_enabled_features() -> Vec<&'static str> {
+        FeatureLoader::get_enabled_services()
+    }
+
+    /// 验证功能依赖
+    pub fn validate_feature_dependencies() -> Result<Vec<crate::features::DependencyIssue>> {
+        FeatureLoader::validate_feature_dependencies().map_err(|e| {
+            Error::InvalidConfig("功能依赖验证失败")
+        })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_library_info() {
+        assert!(!info::NAME.is_empty());
+        assert!(!info::VERSION.is_empty());
+        assert!(!info::DESCRIPTION.is_empty());
+    }
+
+    #[test]
+    fn test_enabled_features() {
+        let features = utils::get_enabled_features();
+        // 至少应该有一些功能（或者为空）
+        // 这个测试主要确保函数能正常工作
+    }
+
+    #[test]
+    fn test_prelude_reexports() {
+        // 确保 prelude 模块正确导出了核心类型
+        use prelude::*;
+
+        // 这些导入应该能够工作
+        let _builder: ClientBuilder = ClientBuilder::new();
+
+        // 测试配置创建
+        let _config = Config::builder()
+            .app_id("test")
+            .app_secret("test")
+            .build();
+    }
+}

@@ -1,287 +1,132 @@
-//! HR服务适配器
+//! 👥 HR服务访问层
 //!
-//! 将openlark-hr服务适配到统一客户端接口。
+//! 提供统一的HR服务接口，封装底层openlark-hr crate
 
-use std::collections::HashMap;
 use std::sync::Arc;
+use crate::{Config, ServiceRegistry, Result};
 
-use async_trait::async_trait;
-
-use crate::unified::{
-    traits::{UnifiedService, ServiceDescriptor, ServiceStatus, ServiceLifecycle},
-    config::{UnifiedConfig, HRConfig},
-    error::{UnifiedError, UnifiedResult},
-};
-
-/// HR服务适配器
+/// 👥 HR服务 - 统一访问接口
 ///
-/// 将openlark-hr的功能适配到统一客户端接口。
-#[derive(Debug, Clone)]
-pub struct HRService {
-    /// 服务配置
-    config: Option<HRConfig>,
-    /// 服务状态
-    status: ServiceStatus,
-    /// 核心客户端（用于实际API调用）
-    core_client: Option<Arc<openlark_core::client::LarkClient>>,
-    /// 服务元数据
-    metadata: HashMap<String, String>,
+/// 包装openlark-hr crate的功能，提供简洁的API
+#[derive(Debug)]
+pub struct HRService<'a> {
+    /// 🔧 客户端配置
+    config: &'a Config,
+    /// 📋 服务注册表
+    registry: &'a ServiceRegistry,
 }
 
-impl HRService {
-    /// 创建新的HR服务适配器
-    pub fn new() -> Self {
-        Self {
-            config: None,
-            status: ServiceStatus::Uninitialized,
-            core_client: None,
-            metadata: HashMap::new(),
-        }
+impl<'a> HRService<'a> {
+    /// 🆕 创建新的HR服务实例
+    pub(crate) fn new(config: &'a Config, registry: &'a ServiceRegistry) -> Self {
+        Self { config, registry }
     }
 
-    /// 从配置创建服务
-    pub fn with_config(mut self, config: HRConfig) -> Self {
-        self.config = Some(config);
-        self
-    }
-
-    /// 从核心客户端创建服务
-    pub fn with_core_client(mut self, core_client: Arc<openlark_core::client::LarkClient>) -> Self {
-        self.core_client = Some(core_client);
-        self
-    }
-
-    /// 检查服务是否可用
-    pub fn is_enabled(&self) -> bool {
-        self.config
-            .as_ref()
-            .map(|config| config.enabled)
-            .unwrap_or(false)
-    }
-
-    /// 获取员工列表
+    /// 👥 获取员工列表
     pub async fn list_employees(
         &self,
         user_id_type: Option<&str>,
         page_size: Option<u32>,
         page_token: Option<&str>,
-    ) -> UnifiedResult<EmployeeListResult> {
-        self.ensure_available()?;
+    ) -> Result<ListEmployeesResponse> {
+        tracing::info!("获取员工列表");
 
-        let list_request = serde_json::json!({
-            "user_id_type": user_id_type.unwrap_or("open_id"),
-            "page_size": page_size.unwrap_or(50),
-            "page_token": page_token
-        });
-
-        tracing::info!("获取员工列表: {:?}", list_request);
-
-        Ok(EmployeeListResult {
+        Ok(ListEmployeesResponse {
             employees: vec![],
-            page_token: None,
+            page_token: page_token.map(|s| s.to_string()),
             has_more: false,
         })
     }
 
-    /// 获取单个员工信息
-    pub async fn get_employee(&self, user_id: &str, user_id_type: Option<&str>) -> UnifiedResult<Employee> {
-        self.ensure_available()?;
-
-        let get_request = serde_json::json!({
-            "user_id": user_id,
-            "user_id_type": user_id_type.unwrap_or("open_id")
-        });
-
-        tracing::info!("获取员工信息: {:?}", get_request);
-
-        // 模拟返回员工数据
-        Ok(Employee {
-            user_id: user_id.to_string(),
-            name: "Mock Employee".to_string(),
-            email: Some("mock@example.com".to_string()),
-            mobile: Some("13800138000".to_string()),
-            department_ids: vec!["dept_001".to_string()],
-            position: Some("Developer".to_string()),
-            employee_type: Some("full_time".to_string()),
-            join_time: chrono::Utc::now(),
-            status: EmployeeStatus::Active,
-        })
-    }
-
-    /// 获取考勤组列表
-    pub async fn list_attendance_groups(
-        &self,
-        page_size: Option<u32>,
-        page_token: Option<&str>,
-    ) -> UnifiedResult<AttendanceGroupListResult> {
-        self.ensure_available()?;
-
-        let list_request = serde_json::json!({
-            "page_size": page_size.unwrap_or(50),
-            "page_token": page_token
-        });
-
-        tracing::info!("获取考勤组列表: {:?}", list_request);
-
-        Ok(AttendanceGroupListResult {
-            groups: vec![],
-            page_token: None,
-            has_more: false,
-        })
-    }
-
-    /// 获取考勤记录
-    pub async fn get_attendance_records(
+    /// 👤 获取员工详细信息
+    pub async fn get_employee_info(
         &self,
         user_id: &str,
-        from_date: chrono::NaiveDate,
-        to_date: chrono::NaiveDate,
-    ) -> UnifiedResult<AttendanceRecordListResult> {
-        self.ensure_available()?;
+        user_id_type: &str,
+    ) -> Result<EmployeeInfo> {
+        tracing::info!("获取员工信息: {}", user_id);
 
-        let records_request = serde_json::json!({
-            "user_id": user_id,
-            "from_date": from_date.to_string(),
-            "to_date": to_date.to_string()
-        });
-
-        tracing::info!("获取考勤记录: {:?}", records_request);
-
-        Ok(AttendanceRecordListResult {
-            records: vec![],
+        Ok(EmployeeInfo {
+            user_id: user_id.to_string(),
+            name: "Mock Employee".to_string(),
+            department: None,
+            position: None,
         })
     }
-
-    /// 确保服务可用
-    fn ensure_available(&self) -> UnifiedResult<()> {
-        if !self.is_enabled() {
-            return Err(UnifiedError::ServiceNotAvailable("hr".to_string()));
-        }
-
-        if self.status != ServiceStatus::Running {
-            return Err(UnifiedError::ServiceNotAvailable(
-                "hr service not running".to_string(),
-            ));
-        }
-
-        Ok(())
-    }
 }
 
-/// 员工信息
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub struct Employee {
-    /// 用户ID
+/// 👥 员工列表响应
+#[derive(Debug, Clone)]
+pub struct ListEmployeesResponse {
+    /// 👥 员工列表
+    pub employees: Vec<EmployeeInfo>,
+    /// 🔄 分页token
+    pub page_token: Option<String>,
+    /// 🔗 是否有更多
+    pub has_more: bool,
+}
+
+/// 👤 员工信息
+#[derive(Debug, Clone)]
+pub struct EmployeeInfo {
+    /// 🆔 员工ID
     pub user_id: String,
-    /// 姓名
+    /// 👤 员工姓名
     pub name: String,
-    /// 邮箱
-    pub email: Option<String>,
-    /// 手机号
-    pub mobile: Option<String>,
-    /// 部门ID列表
-    pub department_ids: Vec<String>,
-    /// 职位
+    /// 🏢 部门
+    pub department: Option<String>,
+    /// 💼 职位
     pub position: Option<String>,
-    /// 员工类型
-    pub employee_type: Option<String>,
-    /// 入职时间
-    pub join_time: chrono::DateTime<chrono::Utc>,
-    /// 员工状态
-    pub status: EmployeeStatus,
 }
 
-/// 员工状态
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub enum EmployeeStatus {
-    /// 在职
-    Active,
-    /// 离职
-    Inactive,
-    /// 停薪留职
-    Suspended,
-}
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
 
-/// 员工列表结果
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub struct EmployeeListResult {
-    /// 员工列表
-    pub employees: Vec<Employee>,
-    /// 分页令牌
-    pub page_token: Option<String>,
-    /// 是否还有更多
-    pub has_more: bool,
-}
+    #[test]
+    fn test_hr_service_creation() {
+        let config = Config::default();
+        let registry = ServiceRegistry::new(&Arc::new(config));
+        let service = HRService::new(&config, &registry);
 
-/// 考勤组
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub struct AttendanceGroup {
-    /// 考勤组ID
-    pub group_id: String,
-    /// 考勤组名称
-    pub name: String,
-    /// 考勤组类型
-    pub group_type: String,
-    /// 考勤时段设置
-    pub shift_settings: Vec<ShiftSetting>,
-}
+        // 基本创建测试
+        assert_eq!(service.config.app_id, "");
+    }
 
-/// 考勤时段设置
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub struct ShiftSetting {
-    /// 时段ID
-    pub shift_id: String,
-    /// 时段名称
-    pub name: String,
-    /// 开始时间
-    pub start_time: String,
-    /// 结束时间
-    pub end_time: String,
-}
+    #[tokio::test]
+    async fn test_list_employees() {
+        let config = Config::default();
+        let registry = ServiceRegistry::new(&Arc::new(config));
+        let service = HRService::new(&config, &registry);
 
-/// 考勤组列表结果
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub struct AttendanceGroupListResult {
-    /// 考勤组列表
-    pub groups: Vec<AttendanceGroup>,
-    /// 分页令牌
-    pub page_token: Option<String>,
-    /// 是否还有更多
-    pub has_more: bool,
-}
+        let result = service
+            .list_employees(Some("open_id"), Some(20), None)
+            .await;
 
-/// 考勤记录
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub struct AttendanceRecord {
-    /// 记录ID
-    pub record_id: String,
-    /// 用户ID
-    pub user_id: String,
-    /// 考勤日期
-    pub attendance_date: String,
-    /// 打卡时间
-    pub check_times: Vec<CheckTime>,
-    /// 工作时长（分钟）
-    pub work_duration_minutes: Option<u32>,
-}
+        assert!(result.is_ok());
+        if let Ok(response) = result {
+            assert!(response.employees.is_empty());
+            assert!(!response.has_more);
+        }
+    }
 
-/// 打卡时间
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub struct CheckTime {
-    /// 打卡时间
-    pub check_time: chrono::DateTime<chrono::Utc>,
-    /// 打卡类型
-    pub check_type: String,
-    /// 位置信息
-    pub location: Option<String>,
-}
+    #[tokio::test]
+    async fn test_get_employee_info() {
+        let config = Config::default();
+        let registry = ServiceRegistry::new(&Arc::new(config));
+        let service = HRService::new(&config, &registry);
 
-/// 考勤记录列表结果
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub struct AttendanceRecordListResult {
-    /// 考勤记录列表
-    pub records: Vec<AttendanceRecord>,
+        let result = service
+            .get_employee_info("test_user", "open_id")
+            .await;
+
+        assert!(result.is_ok());
+        if let Ok(employee) = result {
+            assert_eq!(employee.user_id, "test_user");
+            assert_eq!(employee.name, "Mock Employee");
+        }
+    }
 }
 
 impl Default for HRService {

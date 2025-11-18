@@ -1,62 +1,19 @@
-//! AI服务适配器
-//!
-//! 将openlark-ai服务适配到统一客户端接口。
+AI服务
 
-use std::collections::HashMap;
+提供AI相关的API接口，包括文本生成、对话完成、文本嵌入等
+
 use std::sync::Arc;
+use crate::{Config, Error, Result};
 
-use async_trait::async_trait;
-
-use crate::unified::{
-    traits::{UnifiedService, ServiceDescriptor, ServiceStatus, ServiceLifecycle},
-    config::{UnifiedConfig, AIConfig},
-    error::{UnifiedError, UnifiedResult},
-};
-
-/// AI服务适配器
-///
-/// 将openlark-ai的功能适配到统一客户端接口。
-#[derive(Debug, Clone)]
-pub struct AIService {
-    /// 服务配置
-    config: Option<AIConfig>,
-    /// 服务状态
-    status: ServiceStatus,
-    /// 核心客户端（用于实际API调用）
-    core_client: Option<Arc<openlark_core::client::LarkClient>>,
-    /// 服务元数据
-    metadata: HashMap<String, String>,
+/// AI服务
+pub struct AIService<'a> {
+    config: &'a Config,
 }
 
-impl AIService {
-    /// 创建新的AI服务适配器
-    pub fn new() -> Self {
-        Self {
-            config: None,
-            status: ServiceStatus::Uninitialized,
-            core_client: None,
-            metadata: HashMap::new(),
-        }
-    }
-
-    /// 从配置创建服务
-    pub fn with_config(mut self, config: AIConfig) -> Self {
-        self.config = Some(config);
-        self
-    }
-
-    /// 从核心客户端创建服务
-    pub fn with_core_client(mut self, core_client: Arc<openlark_core::client::LarkClient>) -> Self {
-        self.core_client = Some(core_client);
-        self
-    }
-
-    /// 检查服务是否可用
-    pub fn is_enabled(&self) -> bool {
-        self.config
-            .as_ref()
-            .map(|config| config.enabled)
-            .unwrap_or(false)
+impl<'a> AIService<'a> {
+    /// 创建新的AI服务实例
+    pub fn new(config: &'a Config) -> Self {
+        Self { config }
     }
 
     /// AI文本生成
@@ -66,60 +23,57 @@ impl AIService {
         model: Option<&str>,
         temperature: Option<f32>,
         max_tokens: Option<u32>,
-    ) -> UnifiedResult<TextGenerationResult> {
-        self.ensure_available()?;
+    ) -> Result<TextGenerationResponse> {
+        let model = model.unwrap_or("gpt-3.5-turbo");
+        let temperature = temperature.unwrap_or(0.7);
+        let max_tokens = max_tokens.unwrap_or(1000);
 
-        let generation_request = serde_json::json!({
-            "prompt": prompt,
-            "model": model.unwrap_or("gpt-3.5-turbo"),
-            "temperature": temperature.unwrap_or(0.7),
-            "max_tokens": max_tokens.unwrap_or(1000)
-        });
+        tracing::info!("AI文本生成: prompt={}, model={}, temperature={}, max_tokens={}",
+                     prompt, model, temperature, max_tokens);
 
-        tracing::info!("AI文本生成: {:?}", generation_request);
-
-        Ok(TextGenerationResult {
-            text: "Mock generated text".to_string(),
-            model: model.unwrap_or("gpt-3.5-turbo").to_string(),
+        // TODO: 实际API调用
+        Ok(TextGenerationResponse {
+            text: "Mock generated text based on: ".to_string() + prompt,
+            model: model.to_string(),
             usage: TokenUsage {
-                prompt_tokens: 100,
-                completion_tokens: 200,
-                total_tokens: 300,
+                prompt_tokens: prompt.len() as u32,
+                completion_tokens: 50,
+                total_tokens: prompt.len() as u32 + 50,
             },
             finish_reason: "stop".to_string(),
-            created_at: chrono::Utc::now(),
+            created_at: chrono::Utc::now().timestamp(),
         })
     }
 
-    /// AI对话
+    /// AI对话完成
     pub async fn chat_completion(
         &self,
         messages: Vec<ChatMessage>,
         model: Option<&str>,
         temperature: Option<f32>,
         max_tokens: Option<u32>,
-    ) -> UnifiedResult<ChatCompletionResult> {
-        self.ensure_available()?;
+    ) -> Result<ChatCompletionResponse> {
+        let model = model.unwrap_or("gpt-3.5-turbo");
+        let temperature = temperature.unwrap_or(0.7);
+        let max_tokens = max_tokens.unwrap_or(1000);
 
-        let chat_request = serde_json::json!({
-            "messages": messages,
-            "model": model.unwrap_or("gpt-3.5-turbo"),
-            "temperature": temperature.unwrap_or(0.7),
-            "max_tokens": max_tokens.unwrap_or(1000)
-        });
+        tracing::info!("AI对话完成: messages_count={}, model={}", messages.len(), model);
 
-        tracing::info!("AI对话完成: {:?}", chat_request);
+        // TODO: 实际API调用
+        let last_message = messages.last()
+            .map(|msg| format!("Mock response to: {}", msg.content))
+            .unwrap_or_else(|| "Mock assistant response".to_string());
 
-        Ok(ChatCompletionResult {
-            id: "mock_chat_id".to_string(),
+        Ok(ChatCompletionResponse {
+            id: "mock_chat_completion_id".to_string(),
             object: "chat.completion".to_string(),
             created: chrono::Utc::now().timestamp() as u64,
-            model: model.unwrap_or("gpt-3.5-turbo").to_string(),
+            model: model.to_string(),
             choices: vec![ChatChoice {
                 index: 0,
                 message: ChatMessage {
                     role: "assistant".to_string(),
-                    content: "Mock assistant response".to_string(),
+                    content: last_message,
                 },
                 finish_reason: Some("stop".to_string()),
             }],
@@ -136,24 +90,20 @@ impl AIService {
         &self,
         input: &str,
         model: Option<&str>,
-    ) -> UnifiedResult<EmbeddingResult> {
-        self.ensure_available()?;
+    ) -> Result<EmbeddingResponse> {
+        let model = model.unwrap_or("text-embedding-ada-002");
 
-        let embedding_request = serde_json::json!({
-            "input": input,
-            "model": model.unwrap_or("text-embedding-ada-002")
-        });
+        tracing::info!("创建文本嵌入: input_length={}, model={}", input.len(), model);
 
-        tracing::info!("创建文本嵌入: {:?}", embedding_request);
-
-        Ok(EmbeddingResult {
+        // TODO: 实际API调用
+        Ok(EmbeddingResponse {
             object: "embedding".to_string(),
-            model: model.unwrap_or("text-embedding-ada-002").to_string(),
+            model: model.to_string(),
             embedding: vec![0.1; 1536], // Mock 1536-dimensional vector
             usage: TokenUsage {
-                prompt_tokens: 10,
+                prompt_tokens: input.len() as u32,
                 completion_tokens: 0,
-                total_tokens: 10,
+                total_tokens: input.len() as u32,
             },
         })
     }
@@ -164,78 +114,63 @@ impl AIService {
         prompt: &str,
         size: Option<&str>,
         quality: Option<&str>,
-    ) -> UnifiedResult<ImageGenerationResult> {
-        self.ensure_available()?;
+    ) -> Result<ImageGenerationResponse> {
+        let size = size.unwrap_or("1024x1024");
+        let quality = quality.unwrap_or("standard");
 
-        let image_request = serde_json::json!({
-            "prompt": prompt,
-            "size": size.unwrap_or("1024x1024"),
-            "quality": quality.unwrap_or("standard"),
-            "n": 1
-        });
+        tracing::info!("AI图像生成: prompt={}, size={}, quality={}", prompt, size, quality);
 
-        tracing::info!("AI图像生成: {:?}", image_request);
-
-        Ok(ImageGenerationResult {
+        // TODO: 实际API调用
+        Ok(ImageGenerationResponse {
             id: "mock_image_id".to_string(),
             object: "image".to_string(),
             created: chrono::Utc::now().timestamp() as u64,
-            url: "https://example.com/mock-image.png".to_string(),
-            size: size.unwrap_or("1024x1024").to_string(),
+            url: format!("https://example.com/mock-image-{}.png",
+                        uuid::Uuid::new_v4().to_string()[..8].to_string()),
+            size: size.to_string(),
+            revised_prompt: Some(prompt.to_string()),
         })
     }
 
-    /// 检查模型可用性
-    pub async fn list_models(&self) -> UnifiedResult<Vec<ModelInfo>> {
-        self.ensure_available()?;
-
+    /// 获取可用模型列表
+    pub async fn list_models(&self) -> Result<Vec<ModelInfo>> {
         tracing::info!("获取AI模型列表");
 
+        // TODO: 实际API调用
         Ok(vec![
             ModelInfo {
                 id: "gpt-3.5-turbo".to_string(),
                 object: "model".to_string(),
-                created: chrono::Utc::now().timestamp() as u64,
+                created: 1677610602,
                 owned_by: "openai".to_string(),
             },
             ModelInfo {
                 id: "gpt-4".to_string(),
                 object: "model".to_string(),
-                created: chrono::Utc::now().timestamp() as u64,
+                created: 1687882411,
+                owned_by: "openai".to_string(),
+            },
+            ModelInfo {
+                id: "text-embedding-ada-002".to_string(),
+                object: "model".to_string(),
+                created: 1671217299,
                 owned_by: "openai".to_string(),
             },
         ])
     }
 
-    /// 确保服务可用
-    fn ensure_available(&self) -> UnifiedResult<()> {
-        if !self.is_enabled() {
-            return Err(UnifiedError::ServiceNotAvailable("ai".to_string()));
-        }
+    /// 检查模型可用性
+    pub async fn check_model(&self, model_id: &str) -> Result<ModelInfo> {
+        tracing::info!("检查模型可用性: {}", model_id);
 
-        if self.status != ServiceStatus::Running {
-            return Err(UnifiedError::ServiceNotAvailable(
-                "ai service not running".to_string(),
-            ));
-        }
-
-        Ok(())
+        // TODO: 实际API调用
+        Ok(ModelInfo {
+            id: model_id.to_string(),
+            object: "model".to_string(),
+            created: chrono::Utc::now().timestamp() as u64,
+            owned_by: "openai".to_string(),
+        })
     }
-}
-
-/// 文本生成结果
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub struct TextGenerationResult {
-    /// 生成的文本
-    pub text: String,
-    /// 使用的模型
-    pub model: String,
-    /// Token使用情况
-    pub usage: TokenUsage,
-    /// 完成原因
-    pub finish_reason: String,
-    /// 创建时间
-    pub created_at: chrono::DateTime<chrono::Utc>,
 }
 
 /// 对话消息
@@ -247,9 +182,50 @@ pub struct ChatMessage {
     pub content: String,
 }
 
-/// 对话完成结果
+impl ChatMessage {
+    /// 创建新的用户消息
+    pub fn user(content: &str) -> Self {
+        Self {
+            role: "user".to_string(),
+            content: content.to_string(),
+        }
+    }
+
+    /// 创建新的助手消息
+    pub fn assistant(content: &str) -> Self {
+        Self {
+            role: "assistant".to_string(),
+            content: content.to_string(),
+        }
+    }
+
+    /// 创建新的系统消息
+    pub fn system(content: &str) -> Self {
+        Self {
+            role: "system".to_string(),
+            content: content.to_string(),
+        }
+    }
+}
+
+/// 文本生成响应
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub struct ChatCompletionResult {
+pub struct TextGenerationResponse {
+    /// 生成的文本
+    pub text: String,
+    /// 使用的模型
+    pub model: String,
+    /// Token使用情况
+    pub usage: TokenUsage,
+    /// 完成原因
+    pub finish_reason: String,
+    /// 创建时间
+    pub created_at: i64,
+}
+
+/// 对话完成响应
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct ChatCompletionResponse {
     /// 对话ID
     pub id: String,
     /// 对象类型
@@ -275,9 +251,9 @@ pub struct ChatChoice {
     pub finish_reason: Option<String>,
 }
 
-/// 嵌入结果
+/// 文本嵌入响应
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub struct EmbeddingResult {
+pub struct EmbeddingResponse {
     /// 对象类型
     pub object: String,
     /// 使用的模型
@@ -288,9 +264,9 @@ pub struct EmbeddingResult {
     pub usage: TokenUsage,
 }
 
-/// 图像生成结果
+/// 图像生成响应
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub struct ImageGenerationResult {
+pub struct ImageGenerationResponse {
     /// 图像ID
     pub id: String,
     /// 对象类型
@@ -301,6 +277,8 @@ pub struct ImageGenerationResult {
     pub url: String,
     /// 图像尺寸
     pub size: String,
+    /// 修正后的提示词
+    pub revised_prompt: Option<String>,
 }
 
 /// 模型信息
@@ -327,253 +305,102 @@ pub struct TokenUsage {
     pub total_tokens: u32,
 }
 
-impl Default for AIService {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-#[async_trait]
-impl UnifiedService for AIService {
-    type Config = AIConfig;
-    type Error = UnifiedError;
-
-    fn name(&self) -> &'static str {
-        "ai"
-    }
-
-    fn version(&self) -> &'static str {
-        "1.0.0"
-    }
-
-    async fn configure(&mut self, config: Self::Config) -> UnifiedResult<()> {
-        if !config.enabled {
-            self.status = ServiceStatus::Stopped;
-            return Ok(());
-        }
-
-        self.config = Some(config);
-
-        // 创建核心客户端
-        let core_config = self.config.as_ref().map(|config| {
-            openlark_core::config::ConfigBuilder::new()
-                .base_url(&config.api_url)
-                .build()
-                .unwrap_or_else(|_| openlark_core::config::Config::default())
-        });
-
-        if let Some(core_config) = core_config {
-            match openlark_core::client::LarkClient::new(
-                core_config.app_id.clone(),
-                core_config.app_secret.clone(),
-            ) {
-                Ok(client) => {
-                    self.core_client = Some(Arc::new(client));
-                    self.status = ServiceStatus::Running;
-                    tracing::info!("AI服务配置成功");
-                    Ok(())
-                }
-                Err(e) => {
-                    self.status = ServiceStatus::Error;
-                    Err(UnifiedError::ConfigurationError(
-                        format!("创建核心客户端失败: {}", e),
-                    ))
-                }
-            }
-        } else {
-            self.status = ServiceStatus::Error;
-            Err(UnifiedError::ConfigurationError("AI配置无效".to_string()))
-        }
-    }
-
-    fn is_available(&self) -> bool {
-        self.is_enabled() && self.status == ServiceStatus::Running && self.core_client.is_some()
-    }
-
-    fn status(&self) -> ServiceStatus {
-        self.status
-    }
-
-    fn descriptor(&self) -> ServiceDescriptor {
-        let mut descriptor = ServiceDescriptor::new(
-            "ai",
-            "1.0.0",
-            "飞书AI服务，提供智能助手、文本生成、图像识别等功能",
-        )
-        .with_tag("ai")
-        .with_tag("intelligence")
-        .with_dependency("openlark-core");
-
-        if let Some(config) = &self.config {
-            descriptor = descriptor
-                .with_metadata("api_url", config.api_url.clone())
-                .with_metadata("enabled", config.enabled.to_string())
-                .with_metadata(
-                    "default_model",
-                    config.models.default_model.clone(),
-                )
-                .with_metadata(
-                    "requests_per_minute",
-                    config.rate_limit.requests_per_minute.to_string(),
-                );
-        }
-
-        descriptor
-    }
-}
-
-#[async_trait]
-impl ServiceLifecycle for AIService {
-    async fn start(&mut self) -> SDKResult<()> {
-        if let Some(config) = self.config.clone() {
-            self.configure(config).await?;
-        } else {
-            tracing::warn!("AI服务配置未设置，服务将处于未初始化状态");
-        }
-        Ok(())
-    }
-
-    async fn stop(&mut self) -> SDKResult<()> {
-        self.status = ServiceStatus::Stopped;
-        self.core_client = None;
-        tracing::info!("AI服务已停止");
-        Ok(())
-    }
-
-    async fn health_check(&self) -> SDKResult<bool> {
-        Ok(self.is_available())
-    }
-}
-
-/// AI服务构建器
-pub struct AIServiceBuilder {
-    config: Option<AIConfig>,
-    core_client: Option<Arc<openlark_core::client::LarkClient>>,
-}
-
-impl AIServiceBuilder {
-    /// 创建新的构建器
-    pub fn new() -> Self {
-        Self {
-            config: None,
-            core_client: None,
-        }
-    }
-
-    /// 设置配置
-    pub fn config(mut self, config: AIConfig) -> Self {
-        self.config = Some(config);
-        self
-    }
-
-    /// 设置核心客户端
-    pub fn core_client(mut self, core_client: Arc<openlark_core::client::LarkClient>) -> Self {
-        self.core_client = Some(core_client);
-        self
-    }
-
-    /// 构建服务
-    pub fn build(self) -> UnifiedResult<AIService> {
-        let mut service = AIService::new();
-
-        if let Some(config) = self.config {
-            service = service.with_config(config);
-        }
-
-        if let Some(core_client) = self.core_client {
-            service = service.with_core_client(core_client);
-        }
-
-        Ok(service)
-    }
-}
-
-impl Default for AIServiceBuilder {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn test_ai_service_creation() {
-        let service = AIService::new();
-        assert_eq!(service.name(), "ai");
-        assert_eq!(service.version(), "1.0.0");
-    }
-
-    #[test]
-    fn test_ai_service_builder() {
-        let config = AIConfig::default();
-        let service = AIServiceBuilder::new()
-            .config(config)
+        let config = Config::builder()
+            .app_id("test")
+            .app_secret("test")
             .build()
             .unwrap();
 
-        assert!(service.is_enabled());
+        let service = AIService::new(&config);
+        assert_eq!(service.config.app_id, "test");
     }
 
-    #[tokio::test]
-    async fn test_service_lifecycle() {
-        let mut service = AIService::new();
+    #[test]
+    fn test_chat_message_creation() {
+        let user_msg = ChatMessage::user("Hello");
+        assert_eq!(user_msg.role, "user");
+        assert_eq!(user_msg.content, "Hello");
 
-        // 测试启动
-        service.start().await.unwrap();
-        // 由于没有配置，服务应该是未初始化状态
-        assert_eq!(service.status(), ServiceStatus::Stopped);
+        let assistant_msg = ChatMessage::assistant("Hi there!");
+        assert_eq!(assistant_msg.role, "assistant");
+        assert_eq!(assistant_msg.content, "Hi there!");
 
-        // 测试停止
-        service.stop().await.unwrap();
-        assert_eq!(service.status(), ServiceStatus::Stopped);
+        let system_msg = ChatMessage::system("You are a helpful assistant");
+        assert_eq!(system_msg.role, "system");
     }
 
     #[tokio::test]
     async fn test_ai_operations() {
-        let service = AIService::new();
+        let config = Config::builder()
+            .app_id("test")
+            .app_secret("test")
+            .build()
+            .unwrap();
+
+        let service = AIService::new(&config);
 
         // 测试文本生成
-        let result = service
-            .generate_text("Generate text about AI", Some("gpt-3.5-turbo"), None, None)
-            .await;
+        let result = service.generate_text("Write a story", Some("gpt-3.5-turbo"), None, None).await;
         assert!(result.is_ok());
+        let text_result = result.unwrap();
+        assert!(!text_result.text.is_empty());
+        assert_eq!(text_result.model, "gpt-3.5-turbo");
 
         // 测试对话完成
         let messages = vec![
-            ChatMessage {
-                role: "user".to_string(),
-                content: "Hello, AI!".to_string(),
-            },
+            ChatMessage::user("Hello, AI!"),
         ];
-        let result = service
-            .chat_completion(messages, Some("gpt-3.5-turbo"), None, None)
-            .await;
+        let result = service.chat_completion(messages, Some("gpt-3.5-turbo"), None, None).await;
         assert!(result.is_ok());
+        let chat_result = result.unwrap();
+        assert_eq!(chat_result.object, "chat.completion");
+        assert_eq!(chat_result.choices.len(), 1);
+        assert_eq!(chat_result.choices[0].message.role, "assistant");
 
         // 测试文本嵌入
         let result = service.create_embedding("Hello world", None).await;
         assert!(result.is_ok());
+        let embedding_result = result.unwrap();
+        assert_eq!(embedding_result.object, "embedding");
+        assert_eq!(embedding_result.embedding.len(), 1536);
 
         // 测试图像生成
-        let result = service
-            .generate_image("A beautiful sunset", Some("1024x1024"), None)
-            .await;
+        let result = service.generate_image("A beautiful sunset", Some("1024x1024"), None).await;
         assert!(result.is_ok());
+        let image_result = result.unwrap();
+        assert_eq!(image_result.object, "image");
+        assert_eq!(image_result.size, "1024x1024");
 
         // 测试模型列表
         let result = service.list_models().await;
         assert!(result.is_ok());
+        let models = result.unwrap();
+        assert!(!models.is_empty());
+        assert!(models.iter().any(|m| m.id.contains("gpt")));
+
+        // 测试模型检查
+        let result = service.check_model("gpt-3.5-turbo").await;
+        assert!(result.is_ok());
+        let model = result.unwrap();
+        assert_eq!(model.id, "gpt-3.5-turbo");
     }
 
     #[test]
-    fn test_service_descriptors() {
-        let service = AIService::new();
-        let descriptor = service.descriptor();
+    fn test_token_usage() {
+        let usage = TokenUsage {
+            prompt_tokens: 100,
+            completion_tokens: 50,
+            total_tokens: 150,
+        };
 
-        assert_eq!(descriptor.name, "ai");
-        assert_eq!(descriptor.version, "1.0.0");
-        assert!(descriptor.tags.contains(&"ai".to_string()));
+        assert_eq!(usage.prompt_tokens, 100);
+        assert_eq!(usage.completion_tokens, 50);
+        assert_eq!(usage.total_tokens, 150);
     }
 }
