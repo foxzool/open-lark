@@ -1,9 +1,9 @@
-文档服务
+//! 文档服务
+//!
+//! 提供文档相关的API接口，包括表格、文档等操作
 
-提供文档相关的API接口，包括表格、文档等操作
-
-use std::sync::Arc;
 use crate::{Config, Error, Result};
+use std::sync::Arc;
 
 /// 文档服务
 pub struct DocsService<'a> {
@@ -72,7 +72,13 @@ impl<'a> DocsService<'a> {
         range: &str,
         values: Vec<Vec<String>>,
     ) -> Result<RangeWriteResponse> {
-        tracing::info!("写入表格范围: {} {} ({}x{})", spreadsheet_token, range, values.len(), values.first().map_or(0, |row| row.len()));
+        tracing::info!(
+            "写入表格范围: {} {} ({}x{})",
+            spreadsheet_token,
+            range,
+            values.len(),
+            values.first().map_or(0, |row| row.len())
+        );
 
         // TODO: 实际API调用
         Ok(RangeWriteResponse {

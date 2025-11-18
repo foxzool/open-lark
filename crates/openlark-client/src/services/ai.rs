@@ -1,9 +1,9 @@
-AI服务
+//! AI服务
+//!
+//! 提供AI相关的API接口，包括文本生成、对话完成、文本嵌入等
 
-提供AI相关的API接口，包括文本生成、对话完成、文本嵌入等
-
-use std::sync::Arc;
 use crate::{Config, Error, Result};
+use std::sync::Arc;
 
 /// AI服务
 pub struct AIService<'a> {
@@ -28,8 +28,13 @@ impl<'a> AIService<'a> {
         let temperature = temperature.unwrap_or(0.7);
         let max_tokens = max_tokens.unwrap_or(1000);
 
-        tracing::info!("AI文本生成: prompt={}, model={}, temperature={}, max_tokens={}",
-                     prompt, model, temperature, max_tokens);
+        tracing::info!(
+            "AI文本生成: prompt={}, model={}, temperature={}, max_tokens={}",
+            prompt,
+            model,
+            temperature,
+            max_tokens
+        );
 
         // TODO: 实际API调用
         Ok(TextGenerationResponse {
@@ -57,10 +62,15 @@ impl<'a> AIService<'a> {
         let temperature = temperature.unwrap_or(0.7);
         let max_tokens = max_tokens.unwrap_or(1000);
 
-        tracing::info!("AI对话完成: messages_count={}, model={}", messages.len(), model);
+        tracing::info!(
+            "AI对话完成: messages_count={}, model={}",
+            messages.len(),
+            model
+        );
 
         // TODO: 实际API调用
-        let last_message = messages.last()
+        let last_message = messages
+            .last()
             .map(|msg| format!("Mock response to: {}", msg.content))
             .unwrap_or_else(|| "Mock assistant response".to_string());
 
@@ -93,7 +103,11 @@ impl<'a> AIService<'a> {
     ) -> Result<EmbeddingResponse> {
         let model = model.unwrap_or("text-embedding-ada-002");
 
-        tracing::info!("创建文本嵌入: input_length={}, model={}", input.len(), model);
+        tracing::info!(
+            "创建文本嵌入: input_length={}, model={}",
+            input.len(),
+            model
+        );
 
         // TODO: 实际API调用
         Ok(EmbeddingResponse {
@@ -118,15 +132,22 @@ impl<'a> AIService<'a> {
         let size = size.unwrap_or("1024x1024");
         let quality = quality.unwrap_or("standard");
 
-        tracing::info!("AI图像生成: prompt={}, size={}, quality={}", prompt, size, quality);
+        tracing::info!(
+            "AI图像生成: prompt={}, size={}, quality={}",
+            prompt,
+            size,
+            quality
+        );
 
         // TODO: 实际API调用
         Ok(ImageGenerationResponse {
             id: "mock_image_id".to_string(),
             object: "image".to_string(),
             created: chrono::Utc::now().timestamp() as u64,
-            url: format!("https://example.com/mock-image-{}.png",
-                        uuid::Uuid::new_v4().to_string()[..8].to_string()),
+            url: format!(
+                "https://example.com/mock-image-{}.png",
+                uuid::Uuid::new_v4().to_string()[..8].to_string()
+            ),
             size: size.to_string(),
             revised_prompt: Some(prompt.to_string()),
         })
@@ -346,17 +367,19 @@ mod tests {
         let service = AIService::new(&config);
 
         // 测试文本生成
-        let result = service.generate_text("Write a story", Some("gpt-3.5-turbo"), None, None).await;
+        let result = service
+            .generate_text("Write a story", Some("gpt-3.5-turbo"), None, None)
+            .await;
         assert!(result.is_ok());
         let text_result = result.unwrap();
         assert!(!text_result.text.is_empty());
         assert_eq!(text_result.model, "gpt-3.5-turbo");
 
         // 测试对话完成
-        let messages = vec![
-            ChatMessage::user("Hello, AI!"),
-        ];
-        let result = service.chat_completion(messages, Some("gpt-3.5-turbo"), None, None).await;
+        let messages = vec![ChatMessage::user("Hello, AI!")];
+        let result = service
+            .chat_completion(messages, Some("gpt-3.5-turbo"), None, None)
+            .await;
         assert!(result.is_ok());
         let chat_result = result.unwrap();
         assert_eq!(chat_result.object, "chat.completion");
@@ -371,7 +394,9 @@ mod tests {
         assert_eq!(embedding_result.embedding.len(), 1536);
 
         // 测试图像生成
-        let result = service.generate_image("A beautiful sunset", Some("1024x1024"), None).await;
+        let result = service
+            .generate_image("A beautiful sunset", Some("1024x1024"), None)
+            .await;
         assert!(result.is_ok());
         let image_result = result.unwrap();
         assert_eq!(image_result.object, "image");
