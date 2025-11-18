@@ -13,14 +13,13 @@
 //!
 //! ```rust
 //! use openlark_approval::endpoints::*;
-//! use openlark_core::client::LarkClient;
 //!
 //! // 使用端点常量
 //! let endpoint = APPROVAL_V4_INSTANCES_LIST;
 //! println!("审批实例端点: {}", endpoint);
 //! ```
 
-use openlark_core::client::LarkClient;
+use openlark_client::legacy_client::LarkClient;
 use openlark_core::SDKResult;
 
 // 导入端点模块

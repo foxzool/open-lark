@@ -14,7 +14,6 @@
 //!
 //! ```rust
 //! use openlark_hr::endpoints::*;
-//! use openlark_core::client::LarkClient;
 //!
 //! // 使用端点常量
 //! let employees_endpoint = COREHR_V1_EMPLOYEES;
@@ -51,7 +50,6 @@ pub mod prelude {
     pub use crate::compensation_management::*;
     #[allow(ambiguous_glob_reexports)]
     pub use crate::hire::*;
-    pub use openlark_core::client::LarkClient;
     pub use openlark_core::SDKResult;
 }
 

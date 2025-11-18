@@ -14,4 +14,3 @@ pub use serde::{Deserialize, Serialize};
 pub use std::collections::HashMap;
 pub use std::sync::Arc;
 
-pub type LarkClient = openlark_core::client::LarkClient;

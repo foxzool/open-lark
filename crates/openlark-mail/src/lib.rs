@@ -2,7 +2,7 @@
 //!
 //! 飞书相关功能接口。
 
-use openlark_core::client::LarkClient;
+use openlark_client::legacy_client::LarkClient;
 use openlark_core::SDKResult;
 
 /// 服务主入口

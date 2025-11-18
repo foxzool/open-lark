@@ -1,4 +1,4 @@
-use crate::client::ws_client::LarkWsClient;
+use super::LarkWsClient;
 use lark_websocket_protobuf::pbbp2::{Frame, Header};
 
 #[tokio::test]
