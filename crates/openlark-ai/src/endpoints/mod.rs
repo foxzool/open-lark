@@ -33,7 +33,7 @@
 //! ```
 
 // 导入核心端点（auth, application等基础端点）
-pub use openlark_core::endpoints::{auth, application, apass, platform_integration};
+pub use openlark_core::endpoints::{apass, application, auth, platform_integration};
 
 // ==================== Document AI (文档AI识别) ====================
 // 文档AI识别服务 - 支持各种证件和文档的智能识别
@@ -48,7 +48,8 @@ pub const DOCUMENT_AI_ID_CARD_RECOGNIZE: &str = "/open-apis/document_ai/v1/id_ca
 
 /// Document AI - 驾驶证识别
 /// 识别驾驶证中的关键信息
-pub const DOCUMENT_AI_DRIVING_LICENSE_RECOGNIZE: &str = "/open-apis/document_ai/v1/driving_license_recognize";
+pub const DOCUMENT_AI_DRIVING_LICENSE_RECOGNIZE: &str =
+    "/open-apis/document_ai/v1/driving_license_recognize";
 
 /// Document AI - 银行卡识别
 /// 识别银行卡中的关键信息
@@ -56,70 +57,86 @@ pub const DOCUMENT_AI_BANK_CARD_RECOGNIZE: &str = "/open-apis/document_ai/v1/ban
 
 /// Document AI - 名片识别
 /// 智能识别名片中的联系信息
-pub const DOCUMENT_AI_BUSINESS_CARD_RECOGNIZE: &str = "/open-apis/document_ai/v1/business_card_recognize";
+pub const DOCUMENT_AI_BUSINESS_CARD_RECOGNIZE: &str =
+    "/open-apis/document_ai/v1/business_card_recognize";
 
 /// Document AI - 营业执照识别
 /// 识别营业执照中的企业信息
-pub const DOCUMENT_AI_BUSINESS_LICENSE_RECOGNIZE: &str = "/open-apis/document_ai/v1/business_license_recognize";
+pub const DOCUMENT_AI_BUSINESS_LICENSE_RECOGNIZE: &str =
+    "/open-apis/document_ai/v1/business_license_recognize";
 
 /// Document AI - 中国护照识别
 /// 识别中国护照中的关键信息
-pub const DOCUMENT_AI_CHINESE_PASSPORT_RECOGNIZE: &str = "/open-apis/document_ai/v1/chinese_passport_recognize";
+pub const DOCUMENT_AI_CHINESE_PASSPORT_RECOGNIZE: &str =
+    "/open-apis/document_ai/v1/chinese_passport_recognize";
 
 /// Document AI - 合同字段提取
 /// 智能提取合同中的关键字段
-pub const DOCUMENT_AI_CONTRACT_FIELD_EXTRACTION: &str = "/open-apis/document_ai/v1/contract_field_extraction";
+pub const DOCUMENT_AI_CONTRACT_FIELD_EXTRACTION: &str =
+    "/open-apis/document_ai/v1/contract_field_extraction";
 
 /// Document AI - 食品经营许可证识别
 /// 识别食品经营许可证信息
-pub const DOCUMENT_AI_FOOD_MANAGE_LICENSE_RECOGNIZE: &str = "/open-apis/document_ai/v1/food_manage_license_recognize";
+pub const DOCUMENT_AI_FOOD_MANAGE_LICENSE_RECOGNIZE: &str =
+    "/open-apis/document_ai/v1/food_manage_license_recognize";
 
 /// Document AI - 食品生产许可证识别
 /// 识别食品生产许可证信息
-pub const DOCUMENT_AI_FOOD_PRODUCE_LICENSE_RECOGNIZE: &str = "/open-apis/document_ai/v1/food_produce_license_recognize";
+pub const DOCUMENT_AI_FOOD_PRODUCE_LICENSE_RECOGNIZE: &str =
+    "/open-apis/document_ai/v1/food_produce_license_recognize";
 
 /// Document AI - 健康证识别
 /// 识别健康证信息
-pub const DOCUMENT_AI_HEALTH_CERTIFICATE_RECOGNIZE: &str = "/open-apis/document_ai/v1/health_certificate_recognize";
+pub const DOCUMENT_AI_HEALTH_CERTIFICATE_RECOGNIZE: &str =
+    "/open-apis/document_ai/v1/health_certificate_recognize";
 
 /// Document AI - 港澳通行证识别
 /// 识别港澳通行证信息
-pub const DOCUMENT_AI_HKM_MAINLAND_TRAVEL_PERMIT_RECOGNIZE: &str = "/open-apis/document_ai/v1/hkm_mainland_travel_permit_recognize";
+pub const DOCUMENT_AI_HKM_MAINLAND_TRAVEL_PERMIT_RECOGNIZE: &str =
+    "/open-apis/document_ai/v1/hkm_mainland_travel_permit_recognize";
 
 /// Document AI - 出租车发票识别
 /// 识别出租车发票信息
-pub const DOCUMENT_AI_TAXI_INVOICE_RECOGNIZE: &str = "/open-apis/document_ai/v1/taxi_invoice_recognize";
+pub const DOCUMENT_AI_TAXI_INVOICE_RECOGNIZE: &str =
+    "/open-apis/document_ai/v1/taxi_invoice_recognize";
 
 /// Document AI - 火车票识别
 /// 识别火车票信息
-pub const DOCUMENT_AI_TRAIN_INVOICE_RECOGNIZE: &str = "/open-apis/document_ai/v1/train_invoice_recognize";
+pub const DOCUMENT_AI_TRAIN_INVOICE_RECOGNIZE: &str =
+    "/open-apis/document_ai/v1/train_invoice_recognize";
 
 /// Document AI - 台湾通行证识别
 /// 识别台湾通行证信息
-pub const DOCUMENT_AI_TW_MAINLAND_TRAVEL_PERMIT_RECOGNIZE: &str = "/open-apis/document_ai/v1/tw_mainland_travel_permit_recognize";
+pub const DOCUMENT_AI_TW_MAINLAND_TRAVEL_PERMIT_RECOGNIZE: &str =
+    "/open-apis/document_ai/v1/tw_mainland_travel_permit_recognize";
 
 /// Document AI - 增值税发票识别
 /// 识别增值税发票信息
-pub const DOCUMENT_AI_VAT_INVOICE_RECOGNIZE: &str = "/open-apis/document_ai/v1/vat_invoice_recognize";
+pub const DOCUMENT_AI_VAT_INVOICE_RECOGNIZE: &str =
+    "/open-apis/document_ai/v1/vat_invoice_recognize";
 
 /// Document AI - 机动车发票识别
 /// 识别机动车发票信息
-pub const DOCUMENT_AI_VEHICLE_INVOICE_RECOGNIZE: &str = "/open-apis/document_ai/v1/vehicle_invoice_recognize";
+pub const DOCUMENT_AI_VEHICLE_INVOICE_RECOGNIZE: &str =
+    "/open-apis/document_ai/v1/vehicle_invoice_recognize";
 
 /// Document AI - 行驶证识别
 /// 识别行驶证信息
-pub const DOCUMENT_AI_VEHICLE_LICENSE_RECOGNIZE: &str = "/open-apis/document_ai/v1/vehicle_license_recognize";
+pub const DOCUMENT_AI_VEHICLE_LICENSE_RECOGNIZE: &str =
+    "/open-apis/document_ai/v1/vehicle_license_recognize";
 
 // ==================== OCR (光学字符识别) ====================
 // 光学字符识别服务 - 将图片中的文字转换为可编辑文本
 
 /// OCR光学字符识别 - 基础识别
 /// 基础的OCR文字识别服务
-pub const OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE: &str = "/open-apis/optical_char_recognition/v1/basic_recognize";
+pub const OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE: &str =
+    "/open-apis/optical_char_recognition/v1/basic_recognize";
 
 /// OCR光学字符识别 - 图片基础识别
 /// 专门针对图片的基础OCR识别
-pub const OPTICAL_CHAR_RECOGNITION_V1_IMAGE_BASIC_RECOGNIZE: &str = "/open-apis/optical_char_recognition/v1/image/basic_recognize";
+pub const OPTICAL_CHAR_RECOGNITION_V1_IMAGE_BASIC_RECOGNIZE: &str =
+    "/open-apis/optical_char_recognition/v1/image/basic_recognize";
 
 // ==================== Speech to Text (语音转文字) ====================
 // 语音转文字服务 - 将语音转换为文本
@@ -130,11 +147,13 @@ pub const SPEECH_TO_TEXT_V1_FILE_RECOGNIZE: &str = "/open-apis/speech_to_text/v1
 
 /// 语音转文字 - 流式识别
 /// 实时流式语音识别
-pub const SPEECH_TO_TEXT_V1_STREAM_RECOGNIZE: &str = "/open-apis/speech_to_text/v1/stream/recognize";
+pub const SPEECH_TO_TEXT_V1_STREAM_RECOGNIZE: &str =
+    "/open-apis/speech_to_text/v1/stream/recognize";
 
 /// 语音转文字 - 语音识别
 /// 通用语音识别服务
-pub const SPEECH_TO_TEXT_V1_SPEECH_RECOGNIZE: &str = "/open-apis/speech_to_text/v1/speech/recognize";
+pub const SPEECH_TO_TEXT_V1_SPEECH_RECOGNIZE: &str =
+    "/open-apis/speech_to_text/v1/speech/recognize";
 
 // ==================== Translation (翻译服务) ====================
 // 翻译服务 - 文本翻译和语言检测
@@ -187,7 +206,8 @@ mod tests {
     #[test]
     fn test_ocr_endpoints() {
         // 验证OCR端点
-        assert!(OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE.starts_with("/open-apis/optical_char_recognition/"));
+        assert!(OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE
+            .starts_with("/open-apis/optical_char_recognition/"));
         assert!(OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE.contains("recognize"));
         assert!(OPTICAL_CHAR_RECOGNITION_V1_IMAGE_BASIC_RECOGNIZE.contains("image"));
     }
@@ -218,7 +238,11 @@ mod tests {
             DOCUMENT_AI_BANK_CARD_RECOGNIZE,
         ];
         for endpoint in document_ai_endpoints {
-            assert!(endpoint.contains("/document_ai/"), "{} 应该包含 /document_ai/", endpoint);
+            assert!(
+                endpoint.contains("/document_ai/"),
+                "{} 应该包含 /document_ai/",
+                endpoint
+            );
         }
 
         let ocr_endpoints = [
@@ -226,7 +250,11 @@ mod tests {
             OPTICAL_CHAR_RECOGNITION_V1_IMAGE_BASIC_RECOGNIZE,
         ];
         for endpoint in ocr_endpoints {
-            assert!(endpoint.contains("/optical_char_recognition/"), "{} 应该包含 /optical_char_recognition/", endpoint);
+            assert!(
+                endpoint.contains("/optical_char_recognition/"),
+                "{} 应该包含 /optical_char_recognition/",
+                endpoint
+            );
         }
 
         let speech_endpoints = [
@@ -235,12 +263,20 @@ mod tests {
             SPEECH_TO_TEXT_V1_SPEECH_RECOGNIZE,
         ];
         for endpoint in speech_endpoints {
-            assert!(endpoint.contains("/speech_to_text/"), "{} 应该包含 /speech_to_text/", endpoint);
+            assert!(
+                endpoint.contains("/speech_to_text/"),
+                "{} 应该包含 /speech_to_text/",
+                endpoint
+            );
         }
 
         let translation_endpoints = [TRANSLATION_V1_TEXT_DETECT, TRANSLATION_V1_TEXT_TRANSLATE];
         for endpoint in translation_endpoints {
-            assert!(endpoint.contains("/translation/"), "{} 应该包含 /translation/", endpoint);
+            assert!(
+                endpoint.contains("/translation/"),
+                "{} 应该包含 /translation/",
+                endpoint
+            );
         }
     }
 
@@ -250,7 +286,10 @@ mod tests {
         assert_eq!(RESUME_PARSE, DOCUMENT_AI_RESUME_PARSE);
         assert_eq!(ID_CARD_RECOGNIZE, DOCUMENT_AI_ID_CARD_RECOGNIZE);
         assert_eq!(BANK_CARD_RECOGNIZE, DOCUMENT_AI_BANK_CARD_RECOGNIZE);
-        assert_eq!(OCR_BASIC_RECOGNIZE, OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE);
+        assert_eq!(
+            OCR_BASIC_RECOGNIZE,
+            OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE
+        );
         assert_eq!(SPEECH_RECOGNIZE, SPEECH_TO_TEXT_V1_SPEECH_RECOGNIZE);
         assert_eq!(TEXT_TRANSLATE, TRANSLATION_V1_TEXT_TRANSLATE);
         assert_eq!(TEXT_DETECT, TRANSLATION_V1_TEXT_DETECT);
@@ -268,4 +307,4 @@ mod tests {
             assert!(endpoint.contains("/v1/"), "{} 应该包含 /v1/", endpoint);
         }
     }
-}// Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints
+} // Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints

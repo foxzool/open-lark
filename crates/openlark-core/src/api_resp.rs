@@ -2,7 +2,7 @@ use std::fmt::{Debug, Display, Formatter};
 
 use serde::{Deserialize, Serialize};
 
-use crate::{error::LarkAPIError, error::types::LarkErrorCode, SDKResult};
+use crate::{error::types::LarkErrorCode, error::LarkAPIError, SDKResult};
 
 /// 业务返回值
 #[derive(Debug, Serialize, Deserialize)]
