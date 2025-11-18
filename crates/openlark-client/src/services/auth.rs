@@ -1,184 +1,167 @@
-//! 认证服务适配器
-//!
-//! 将openlark-auth服务适配到统一客户端接口。
+/**
+ * 认证服务
+ *
+ * 提供认证相关的API接口，包括令牌管理、OAuth认证等
+ */
 
-use std::collections::HashMap;
 use std::sync::Arc;
+use crate::{Config, Error, Result};
 
-use async_trait::async_trait;
-
-use crate::unified::{
-    traits::{UnifiedService, ServiceDescriptor, ServiceStatus, ServiceLifecycle},
-    config::{UnifiedConfig, AuthConfig},
-    error::{UnifiedError, UnifiedResult},
-};
-
-/// 认证服务适配器
-///
-/// 将openlark-auth的功能适配到统一客户端接口。
-#[derive(Debug, Clone)]
-pub struct AuthService {
-    /// 服务配置
-    config: Option<AuthConfig>,
-    /// 服务状态
-    status: ServiceStatus,
-    /// 核心客户端（用于实际API调用）
-    core_client: Option<Arc<openlark_core::client::LarkClient>>,
-    /// 令牌管理器
-    token_manager: Option<Arc<openlark_core::token_manager::TokenManager>>,
-    /// 服务元数据
-    metadata: HashMap<String, String>,
+/// 认证服务
+pub struct AuthService<'a> {
+    config: &'a Config,
 }
 
-impl AuthService {
-    /// 创建新的认证服务适配器
-    pub fn new() -> Self {
-        Self {
-            config: None,
-            status: ServiceStatus::Uninitialized,
-            core_client: None,
-            token_manager: None,
-            metadata: HashMap::new(),
-        }
-    }
-
-    /// 从配置创建服务
-    pub fn with_config(mut self, config: AuthConfig) -> Self {
-        self.config = Some(config);
-        self
-    }
-
-    /// 从核心客户端创建服务
-    pub fn with_core_client(mut self, core_client: Arc<openlark_core::client::LarkClient>) -> Self {
-        self.core_client = Some(core_client);
-        self
-    }
-
-    /// 设置令牌管理器
-    pub fn with_token_manager(
-        mut self,
-        token_manager: Arc<openlark_core::token_manager::TokenManager>,
-    ) -> Self {
-        self.token_manager = Some(token_manager);
-        self
-    }
-
-    /// 检查服务是否可用
-    pub fn is_enabled(&self) -> bool {
-        self.config
-            .as_ref()
-            .map(|config| config.enabled)
-            .unwrap_or(false)
+impl<'a> AuthService<'a> {
+    /// 创建新的认证服务实例
+    pub fn new(config: &'a Config) -> Self {
+        Self { config }
     }
 
     /// 获取应用访问令牌
-    pub async fn get_app_access_token(&self) -> UnifiedResult<TokenInfo> {
-        self.ensure_available()?;
+    pub async fn get_app_access_token(&self) -> Result<TokenInfo> {
+        tracing::info!("获取应用访问令牌: app_id={}", self.config.app_id);
 
-        tracing::info!("获取应用访问令牌");
-
-        // 模拟令牌信息
+        // TODO: 实际API调用
+        // 模拟调用飞书API获取应用访问令牌
         Ok(TokenInfo {
-            access_token: "mock_access_token".to_string(),
-            refresh_token: Some("mock_refresh_token".to_string()),
-            expires_at: chrono::Utc::now() + chrono::Duration::hours(2),
+            access_token: format!("mock_app_token_{}", &uuid::Uuid::new_v4().to_string()[..8]),
             token_type: "Bearer".to_string(),
+            expires_in: 7200, // 2小时
+            expires_at: chrono::Utc::now() + chrono::Duration::hours(2),
+            scope: Some("app:all".to_string()),
         })
     }
 
-    /// 获取用户访问令牌
-    pub async fn get_user_access_token(&self, code: &str) -> UnifiedResult<TokenInfo> {
-        self.ensure_available()?;
+    /// 使用授权码获取用户访问令牌
+    pub async fn get_user_access_token(&self, code: &str) -> Result<TokenInfo> {
+        tracing::info!("使用授权码获取用户访问令牌: code={}", code);
 
-        tracing::info!("使用授权码获取用户访问令牌: {}", code);
-
-        // 模拟令牌交换
+        // TODO: 实际API调用
         Ok(TokenInfo {
-            access_token: "mock_user_access_token".to_string(),
-            refresh_token: Some("mock_user_refresh_token".to_string()),
-            expires_at: chrono::Utc::now() + chrono::Duration::hours(2),
+            access_token: format!("mock_user_token_{}", &uuid::Uuid::new_v4().to_string()[..8]),
             token_type: "Bearer".to_string(),
+            expires_in: 7200, // 2小时
+            expires_at: chrono::Utc::now() + chrono::Duration::hours(2),
+            scope: Some("user:info docs:read".to_string()),
         })
     }
 
     /// 刷新访问令牌
-    pub async fn refresh_access_token(&self, refresh_token: &str) -> UnifiedResult<TokenInfo> {
-        self.ensure_available()?;
-
+    pub async fn refresh_access_token(&self, refresh_token: &str) -> Result<TokenInfo> {
         tracing::info!("刷新访问令牌");
 
-        // 模拟令牌刷新
+        // TODO: 实际API调用
         Ok(TokenInfo {
-            access_token: "refreshed_access_token".to_string(),
-            refresh_token: Some(refresh_token.to_string()),
-            expires_at: chrono::Utc::now() + chrono::Duration::hours(2),
+            access_token: format!("refreshed_token_{}", &uuid::Uuid::new_v4().to_string()[..8]),
             token_type: "Bearer".to_string(),
+            expires_in: 7200, // 2小时
+            expires_at: chrono::Utc::now() + chrono::Duration::hours(2),
+            scope: Some("user:info docs:read".to_string()),
         })
     }
 
     /// 验证令牌
-    pub async fn verify_token(&self, token: &str) -> UnifiedResult<TokenVerificationResult> {
-        self.ensure_available()?;
+    pub async fn verify_token(&self, access_token: &str) -> Result<TokenVerificationResponse> {
+        tracing::info!("验证令牌: token_prefix={}",
+                     access_token.chars().take(8).collect::<String>());
 
-        tracing::info!("验证令牌");
-
+        // TODO: 实际API调用
         // 模拟令牌验证
-        Ok(TokenVerificationResult {
-            valid: !token.is_empty(),
-            user_id: Some("mock_user_id".to_string()),
-            expires_at: Some(chrono::Utc::now() + chrono::Duration::hours(2)),
-            scopes: vec!["user:info", "docs:read".to_string()],
+        let is_valid = !access_token.is_empty() && access_token.len() > 10;
+
+        if is_valid {
+            Ok(TokenVerificationResponse {
+                valid: true,
+                user_id: Some("mock_user_123".to_string()),
+                tenant_key: Some("mock_tenant_456".to_string()),
+                expires_at: Some(chrono::Utc::now() + chrono::Duration::hours(2)),
+                scope: vec!["user:info".to_string(), "docs:read".to_string()],
+            })
+        } else {
+            Ok(TokenVerificationResponse {
+                valid: false,
+                user_id: None,
+                tenant_key: None,
+                expires_at: None,
+                scope: vec![],
+            })
+        }
+    }
+
+    /// 获取用户信息
+    pub async fn get_user_info(&self, access_token: &str) -> Result<UserInfo> {
+        tracing::info!("获取用户信息");
+
+        // TODO: 实际API调用
+        Ok(UserInfo {
+            user_id: "mock_user_123".to_string(),
+            open_id: "mock_open_id_789".to_string(),
+            union_id: Some("mock_union_id_101".to_string()),
+            name: "Mock User".to_string(),
+            en_name: Some("Mock User EN".to_string()),
+            email: Some("mock@example.com".to_string()),
+            mobile: Some("+86 13800138000".to_string()),
+            avatar: Some("https://example.com/avatar.jpg".to_string()),
+            avatar_thumb: Some("https://example.com/avatar_thumb.jpg".to_string()),
+            avatar_middle: Some("https://example.com/avatar_middle.jpg".to_string()),
+            avatar_big: Some("https://example.com/avatar_big.jpg".to_string()),
+            status: UserStatus::Active,
+            tenant_key: "mock_tenant_456".to_string(),
         })
     }
 
-    /// OAuth授权URL
-    pub fn get_oauth_url(&self, client_id: &str, redirect_uri: &str, scopes: &[&str]) -> String {
-        let config = self.config.as_ref().unwrap_or(&AuthConfig::default());
-
-        if let Some(oauth_config) = &config.oauth {
-            format!(
-                "{}?client_id={}&redirect_uri={}&scope={}",
-                oauth_config.auth_url,
-                client_id,
-                redirect_uri,
-                scopes.join(" ")
-            )
-        } else {
-            // 默认OAuth URL
-            format!(
-                "https://open.feishu.cn/open-apis/authen/v1/authorize?client_id={}&redirect_uri={}&scope={}",
-                client_id,
-                redirect_uri,
-                scopes.join(" ")
-            )
-        }
+    /// 生成OAuth授权URL
+    pub fn generate_oauth_url(&self, redirect_uri: &str, scope: &str, state: &str) -> String {
+        format!(
+            "https://open.feishu.cn/open-apis/authen/v1/authorize?app_id={}&redirect_uri={}&scope={}&state={}",
+            self.config.app_id, redirect_uri, scope, state
+        )
     }
 
-    /// 应用访问令牌URL
-    fn get_app_access_token_url(&self) -> String {
-        let config = self.config.as_ref().unwrap_or(&AuthConfig::default());
+    /// 撤销应用访问令牌
+    pub async fn revoke_app_access_token(&self, access_token: &str) -> Result<()> {
+        tracing::info!("撤销应用访问令牌");
 
-        config
-            .token
-            .cache
-            .enabled
-            .then(|| "https://open.feishu.cn/open-apis/authen/v3/app_access_token/internal".to_string())
-            .unwrap_or_else(|| "https://open.feishu.cn/open-apis/authen/v3/app_access_token/internal".to_string())
-    }
-
-    /// 确保服务可用
-    fn ensure_available(&self) -> UnifiedResult<()> {
-        if !self.is_enabled() {
-            return Err(UnifiedError::ServiceNotAvailable("auth".to_string()));
+        // TODO: 实际API调用
+        if access_token.is_empty() {
+            return Err(Error::InvalidParameter("访问令牌不能为空".to_string()));
         }
 
-        if self.status != ServiceStatus::Running {
-            return Err(UnifiedError::ServiceNotAvailable(
-                "auth service not running".to_string(),
-            ));
-        }
-
+        // 模拟API调用成功
         Ok(())
+    }
+
+    /// 撤销用户访问令牌
+    pub async fn revoke_user_access_token(&self, access_token: &str) -> Result<()> {
+        tracing::info!("撤销用户访问令牌");
+
+        // TODO: 实际API调用
+        if access_token.is_empty() {
+            return Err(Error::InvalidParameter("访问令牌不能为空".to_string()));
+        }
+
+        // 模拟API调用成功
+        Ok(())
+    }
+
+    /// 获取应用信息
+    pub async fn get_app_info(&self, access_token: &str) -> Result<AppInfo> {
+        tracing::info!("获取应用信息");
+
+        // TODO: 实际API调用
+        Ok(AppInfo {
+            app_id: self.config.app_id.clone(),
+            app_name: "Mock Application".to_string(),
+            app_description: Some("Mock application description".to_string()),
+            app_type: AppType::SelfBuilt,
+            logo: Some("https://example.com/logo.png".to_string()),
+            website: Some("https://example.com".to_string()),
+            privacy_policy: Some("https://example.com/privacy".to_string()),
+            user_agreement: Some("https://example.com/agreement".to_string()),
+            status: AppStatus::Enabled,
+            is_callback_verified: true,
+        })
     }
 }
 
@@ -187,228 +170,142 @@ impl AuthService {
 pub struct TokenInfo {
     /// 访问令牌
     pub access_token: String,
-    /// 刷新令牌
-    pub refresh_token: Option<String>,
-    /// 过期时间
-    pub expires_at: chrono::DateTime<chrono::Utc>,
     /// 令牌类型
     pub token_type: String,
+    /// 过期时间（秒）
+    pub expires_in: u64,
+    /// 过期时间戳
+    pub expires_at: chrono::DateTime<chrono::Utc>,
+    /// 权限范围
+    pub scope: Option<String>,
 }
 
 impl TokenInfo {
-    /// 检查令牌是否过期
+    /// 检查令牌是否已过期
     pub fn is_expired(&self) -> bool {
         chrono::Utc::now() >= self.expires_at
     }
 
-    /// 检查令牌是否需要刷新
-    pub fn needs_refresh(&self, buffer_minutes: u64) -> bool {
+    /// 检查令牌是否需要刷新（提前N分钟）
+    pub fn needs_refresh(&self, buffer_minutes: i64) -> bool {
         let buffer = chrono::Duration::minutes(buffer_minutes);
         chrono::Utc::now() + buffer >= self.expires_at
     }
+
+    /// 获取剩余有效时间（秒）
+    pub fn remaining_seconds(&self) -> i64 {
+        (self.expires_at - chrono::Utc::now()).num_seconds().max(0)
+    }
 }
 
-/// 令牌验证结果
+/// 令牌验证响应
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub struct TokenVerificationResult {
+pub struct TokenVerificationResponse {
     /// 是否有效
     pub valid: bool,
     /// 用户ID
     pub user_id: Option<String>,
+    /// 租户Key
+    pub tenant_key: Option<String>,
     /// 过期时间
     pub expires_at: Option<chrono::DateTime<chrono::Utc>>,
     /// 权限范围
-    pub scopes: Vec<String>,
+    pub scope: Vec<String>,
 }
 
-impl Default for AuthService {
-    fn default() -> Self {
-        Self::new()
-    }
+/// 用户信息
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct UserInfo {
+    /// 用户ID
+    pub user_id: String,
+    /// Open ID
+    pub open_id: String,
+    /// Union ID（可选）
+    pub union_id: Option<String>,
+    /// 用户名
+    pub name: String,
+    /// 英文名（可选）
+    pub en_name: Option<String>,
+    /// 邮箱（可选）
+    pub email: Option<String>,
+    /// 手机号（可选）
+    pub mobile: Option<String>,
+    /// 头像（可选）
+    pub avatar: Option<String>,
+    /// 头像缩略图（可选）
+    pub avatar_thumb: Option<String>,
+    /// 头像中等尺寸（可选）
+    pub avatar_middle: Option<String>,
+    /// 头像大图（可选）
+    pub avatar_big: Option<String>,
+    /// 用户状态
+    pub status: UserStatus,
+    /// 租户Key
+    pub tenant_key: String,
 }
 
-#[async_trait]
-impl UnifiedService for AuthService {
-    type Config = AuthConfig;
-    type Error = UnifiedError;
-
-    fn name(&self) -> &'static str {
-        "auth"
-    }
-
-    fn version(&self) -> &'static str {
-        "1.0.0"
-    }
-
-    async fn configure(&mut self, config: Self::Config) -> UnifiedResult<()> {
-        if !config.enabled {
-            self.status = ServiceStatus::Stopped;
-            return Ok(());
-        }
-
-        self.config = Some(config);
-
-        // 创建核心客户端
-        let core_config = self.config.as_ref().map(|config| {
-            openlark_core::config::ConfigBuilder::new()
-                .build()
-                .unwrap_or_else(|_| openlark_core::config::Config::default())
-        });
-
-        if let Some(core_config) = core_config {
-            match openlark_core::client::LarkClient::new(
-                core_config.app_id.clone(),
-                core_config.app_secret.clone(),
-            ) {
-                Ok(client) => {
-                    self.core_client = Some(Arc::new(client));
-
-                    // 创建令牌管理器
-                    let token_cache = openlark_core::cache::MemoryTokenCache::default();
-                    let refresh_handler = openlark_core::token_manager::DefaultTokenRefreshHandler::new();
-                    let token_manager = openlark_core::token_manager::TokenManager::new(
-                        token_cache,
-                        refresh_handler,
-                    );
-
-                    self.token_manager = Some(Arc::new(token_manager));
-                    self.status = ServiceStatus::Running;
-
-                    tracing::info!("认证服务配置成功");
-                    Ok(())
-                }
-                Err(e) => {
-                    self.status = ServiceStatus::Error;
-                    Err(UnifiedError::ConfigurationError(
-                        format!("创建核心客户端失败: {}", e),
-                    ))
-                }
-            }
-        } else {
-            self.status = ServiceStatus::Error;
-            Err(UnifiedError::ConfigurationError("认证配置无效".to_string()))
-        }
-    }
-
-    fn is_available(&self) -> bool {
-        self.is_enabled() && self.status == ServiceStatus::Running && self.core_client.is_some()
-    }
-
-    fn status(&self) -> ServiceStatus {
-        self.status
-    }
-
-    fn descriptor(&self) -> ServiceDescriptor {
-        let mut descriptor = ServiceDescriptor::new(
-            "auth",
-            "1.0.0",
-            "飞书认证服务，提供令牌管理、OAuth认证、权限控制等功能",
-        )
-        .with_tag("authentication")
-        .with_tag("security")
-        .with_dependency("openlark-core");
-
-        if let Some(config) = &self.config {
-            descriptor = descriptor
-                .with_metadata("enabled", config.enabled.to_string())
-                .with_metadata(
-                    "access_token_ttl",
-                    config.token.access_token_ttl.to_string(),
-                )
-                .with_metadata(
-                    "refresh_token_ttl",
-                    config.token.refresh_token_ttl.to_string(),
-                )
-                .with_metadata("cache_enabled", config.token.cache.enabled.to_string());
-        }
-
-        descriptor
-    }
+/// 用户状态
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub enum UserStatus {
+    /// 已激活
+    #[serde(rename = "activated")]
+    Active,
+    /// 未激活
+    #[serde(rename = "not_activated")]
+    Inactive,
+    /// 已禁用
+    #[serde(rename = "disabled")]
+    Disabled,
 }
 
-#[async_trait]
-impl ServiceLifecycle for AuthService {
-    async fn start(&mut self) -> SDKResult<()> {
-        if let Some(config) = self.config.clone() {
-            self.configure(config).await?;
-        } else {
-            tracing::warn!("认证服务配置未设置，服务将处于未初始化状态");
-        }
-        Ok(())
-    }
-
-    async fn stop(&mut self) -> SDKResult<()> {
-        self.status = ServiceStatus::Stopped;
-        self.core_client = None;
-        self.token_manager = None;
-        tracing::info!("认证服务已停止");
-        Ok(())
-    }
-
-    async fn health_check(&self) -> SDKResult<bool> {
-        Ok(self.is_available())
-    }
+/// 应用信息
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct AppInfo {
+    /// 应用ID
+    pub app_id: String,
+    /// 应用名称
+    pub app_name: String,
+    /// 应用描述（可选）
+    pub app_description: Option<String>,
+    /// 应用类型
+    pub app_type: AppType,
+    /// 应用Logo（可选）
+    pub logo: Option<String>,
+    /// 官网地址（可选）
+    pub website: Option<String>,
+    /// 隐私政策（可选）
+    pub privacy_policy: Option<String>,
+    /// 用户协议（可选）
+    pub user_agreement: Option<String>,
+    /// 应用状态
+    pub status: AppStatus,
+    /// 是否已验证回调地址
+    pub is_callback_verified: bool,
 }
 
-/// 认证服务构建器
-pub struct AuthServiceBuilder {
-    config: Option<AuthConfig>,
-    core_client: Option<Arc<openlark_core::client::LarkClient>>,
+/// 应用类型
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub enum AppType {
+    /// 自建应用
+    #[serde(rename = "self_build")]
+    SelfBuilt,
+    /// 企业自建应用
+    #[serde(rename = "corp_self_build")]
+    CorpSelfBuilt,
+    /// 第三方应用
+    #[serde(rename = "third_party")]
+    ThirdParty,
 }
 
-impl AuthServiceBuilder {
-    /// 创建新的构建器
-    pub fn new() -> Self {
-        Self {
-            config: None,
-            core_client: None,
-        }
-    }
-
-    /// 设置配置
-    pub fn config(mut self, config: AuthConfig) -> Self {
-        self.config = Some(config);
-        self
-    }
-
-    /// 设置核心客户端
-    pub fn core_client(mut self, core_client: Arc<openlark_core::client::LarkClient>) -> Self {
-        self.core_client = Some(core_client);
-        self
-    }
-
-    /// 构建服务
-    pub fn build(self) -> UnifiedResult<AuthService> {
-        let mut service = AuthService::new();
-
-        if let Some(config) = self.config {
-            service = service.with_config(config);
-        }
-
-        if let Some(core_client) = self.core_client {
-            service = service.with_core_client(core_client);
-        }
-
-        // 创建令牌管理器
-        if service.core_client.is_some() {
-            let token_cache = openlark_core::cache::MemoryTokenCache::default();
-            let refresh_handler = openlark_core::token_manager::DefaultTokenRefreshHandler::new();
-            let token_manager = openlark_core::token_manager::TokenManager::new(
-                token_cache,
-                refresh_handler,
-            );
-
-            service = service.with_token_manager(Arc::new(token_manager));
-        }
-
-        Ok(service)
-    }
-}
-
-impl Default for AuthServiceBuilder {
-    fn default() -> Self {
-        Self::new()
-    }
+/// 应用状态
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub enum AppStatus {
+    /// 已启用
+    #[serde(rename = "enabled")]
+    Enabled,
+    /// 已禁用
+    #[serde(rename = "disabled")]
+    Disabled,
 }
 
 #[cfg(test)]
@@ -417,92 +314,137 @@ mod tests {
 
     #[test]
     fn test_auth_service_creation() {
-        let service = AuthService::new();
-        assert_eq!(service.name(), "auth");
-        assert_eq!(service.version(), "1.0.0");
-    }
-
-    #[test]
-    fn test_auth_service_builder() {
-        let config = AuthConfig::default();
-        let service = AuthServiceBuilder::new()
-            .config(config)
+        let config = Config::builder()
+            .app_id("test")
+            .app_secret("test")
             .build()
             .unwrap();
 
-        assert!(service.is_enabled());
-    }
-
-    #[test]
-    fn test_token_info() {
-        let expires_at = chrono::Utc::now() + chrono::Duration::hours(2);
-        let token_info = TokenInfo {
-            access_token: "test_token".to_string(),
-            refresh_token: None,
-            expires_at,
-            token_type: "Bearer".to_string(),
-        };
-
-        assert!(!token_info.is_expired());
-        assert!(!token_info.needs_refresh(30));
-    }
-
-    #[test]
-    fn test_oauth_url() {
-        let service = AuthService::new();
-        let url = service.get_oauth_url(
-            "test_client_id",
-            "https://example.com/callback",
-            &["user:info", "docs:read"],
-        );
-
-        assert!(url.contains("client_id=test_client_id"));
-        assert!(url.contains("redirect_uri=https://example.com/callback"));
-        assert!(url.contains("scope=user:info docs:read"));
-    }
-
-    #[test]
-    fn test_service_descriptors() {
-        let service = AuthService::new();
-        let descriptor = service.descriptor();
-
-        assert_eq!(descriptor.name, "auth");
-        assert_eq!(descriptor.version, "1.0.0");
-        assert!(descriptor.tags.contains(&"authentication".to_string()));
+        let service = AuthService::new(&config);
+        assert_eq!(service.config.app_id, "test");
     }
 
     #[tokio::test]
-    async fn test_service_lifecycle() {
-        let mut service = AuthService::new();
+    async fn test_token_operations() {
+        let config = Config::builder()
+            .app_id("test")
+            .app_secret("test")
+            .build()
+            .unwrap();
 
-        // 测试启动
-        service.start().await.unwrap();
-        // 由于没有配置，服务应该是未初始化状态
-        assert_eq!(service.status(), ServiceStatus::Stopped);
-
-        // 测试停止
-        service.stop().await.unwrap();
-        assert_eq!(service.status(), ServiceStatus::Stopped);
-    }
-
-    #[tokio::test]
-    async fn test_auth_operations() {
-        let service = AuthService::new();
+        let service = AuthService::new(&config);
 
         // 测试获取应用访问令牌
         let result = service.get_app_access_token().await;
         assert!(result.is_ok());
+        let token = result.unwrap();
+        assert_eq!(token.token_type, "Bearer");
+        assert!(!token.access_token.is_empty());
+        assert!(!token.is_expired());
 
         // 测试获取用户访问令牌
         let result = service.get_user_access_token("test_code").await;
         assert!(result.is_ok());
+        let user_token = result.unwrap();
+        assert_eq!(user_token.token_type, "Bearer");
+        assert!(!user_token.access_token.is_empty());
 
         // 测试刷新令牌
-        let result = service.refresh_access_token("test_refresh_token").await;
+        let result = service.refresh_access_token("refresh_token").await;
         assert!(result.is_ok());
+        let refreshed_token = result.unwrap();
+        assert!(refreshed_token.access_token.starts_with("refreshed_token_"));
 
         // 测试验证令牌
-        let result = service.verify_token("test_token").await;
+        let result = service.verify_token("valid_token").await;
         assert!(result.is_ok());
+        let verification = result.unwrap();
+        assert!(verification.valid);
+
+        // 测试验证无效令牌
+        let result = service.verify_token("").await;
+        assert!(result.is_ok());
+        let verification = result.unwrap();
+        assert!(!verification.valid);
+
+        // 测试TokenInfo方法
+        let mut token_info = TokenInfo {
+            access_token: "test_token".to_string(),
+            token_type: "Bearer".to_string(),
+            expires_in: 7200,
+            expires_at: chrono::Utc::now() + chrono::Duration::hours(2),
+            scope: Some("test".to_string()),
+        };
+
+        assert!(!token_info.is_expired());
+        assert!(!token_info.needs_refresh(30));
+        assert!(token_info.remaining_seconds() > 0);
+
+        // 测试过期令牌
+        token_info.expires_at = chrono::Utc::now() - chrono::Duration::minutes(1);
+        assert!(token_info.is_expired());
+        assert!(token_info.needs_refresh(30));
+        assert_eq!(token_info.remaining_seconds(), 0);
+    }
+
+    #[test]
+    fn test_oauth_url_generation() {
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test")
+            .build()
+            .unwrap();
+
+        let service = AuthService::new(&config);
+
+        let url = service.generate_oauth_url(
+            "https://example.com/callback",
+            "user:info docs:read",
+            "test_state"
+        );
+
+        assert!(url.contains("app_id=test_app_id"));
+        assert!(url.contains("redirect_uri=https://example.com/callback"));
+        assert!(url.contains("scope=user:info docs:read"));
+        assert!(url.contains("state=test_state"));
+    }
+
+    #[tokio::test]
+    async fn test_user_and_app_info() {
+        let config = Config::builder()
+            .app_id("test")
+            .app_secret("test")
+            .build()
+            .unwrap();
+
+        let service = AuthService::new(&config);
+
+        // 测试获取用户信息
+        let result = service.get_user_info("mock_token").await;
+        assert!(result.is_ok());
+        let user_info = result.unwrap();
+        assert_eq!(user_info.user_id, "mock_user_123");
+        assert_eq!(user_info.name, "Mock User");
+
+        // 测试获取应用信息
+        let result = service.get_app_info("mock_token").await;
+        assert!(result.is_ok());
+        let app_info = result.unwrap();
+        assert_eq!(app_info.app_id, "test");
+        assert_eq!(app_info.app_name, "Mock Application");
+
+        // 测试撤销令牌
+        let result = service.revoke_app_access_token("mock_token").await;
+        assert!(result.is_ok());
+
+        let result = service.revoke_user_access_token("mock_token").await;
+        assert!(result.is_ok());
+
+        // 测试撤销空令牌
+        let result = service.revoke_app_access_token("").await;
+        assert!(result.is_err());
+
+        let result = service.revoke_user_access_token("").await;
+        assert!(result.is_err());
     }
 }
