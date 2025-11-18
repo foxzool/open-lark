@@ -16,7 +16,6 @@
 //!
 //! ```rust
 //! use openlark_admin::endpoints::*;
-//! use openlark_core::client::LarkClient;
 //!
 //! // 使用端点常量
 //! let devices_endpoint = ACS_V1_DEVICES;
@@ -50,6 +49,5 @@ pub use endpoints::*;
 
 /// Re-exports from openlark-core for convenience.
 pub mod prelude {
-    pub use openlark_core::client::LarkClient;
     pub use openlark_core::SDKResult;
 }

@@ -8,7 +8,7 @@ description = "openlark-calendar module for OpenLark SDK"
 
 [dependencies]
 openlark-core = { workspace = true }
-# openlark-client = { workspace = true }
+openlark-client = { workspace = true }
     tokio = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }

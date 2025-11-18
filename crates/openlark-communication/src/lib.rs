@@ -14,7 +14,6 @@
 //!
 //! ```rust
 //! use openlark_communication::endpoints::*;
-//! use openlark_core::client::LarkClient;
 //!
 //! // 使用端点常量
 //! let messages_endpoint = IM_V1_MESSAGES;
@@ -47,6 +46,5 @@ pub use endpoints::*;
 
 /// Re-exports from openlark-core for convenience.
 pub mod prelude {
-    pub use openlark_core::client::LarkClient;
     pub use openlark_core::SDKResult;
 }

@@ -166,7 +166,6 @@ impl UnifiedService for HRService {
         });
 
         if let Some(core_config) = core_config {
-            match openlark_core::client::LarkClient::new(
                 core_config.app_id.clone(),
                 core_config.app_secret.clone(),
             ) {
@@ -246,7 +245,6 @@ impl ServiceLifecycle for HRService {
 /// HR服务构建器
 pub struct HRServiceBuilder {
     config: Option<HRConfig>,
-    core_client: Option<Arc<openlark_core::client::LarkClient>>,
 }
 
 impl HRServiceBuilder {
@@ -265,7 +263,6 @@ impl HRServiceBuilder {
     }
 
     /// 设置核心客户端
-    pub fn core_client(mut self, core_client: Arc<openlark_core::client::LarkClient>) -> Self {
         self.core_client = Some(core_client);
         self
     }

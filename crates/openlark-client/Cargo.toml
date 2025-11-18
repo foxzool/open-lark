@@ -19,12 +19,15 @@ thiserror = { workspace = true }
 # Additional dependencies for unified client
 chrono = { workspace = true, features = ["serde"] }
 uuid = { workspace = true, features = ["v4"] }
-reqwest = { workspace = true }
 
 # WebSocket dependencies
 tokio-tungstenite = { workspace = true, optional = true }
 futures-util = { workspace = true, optional = true }
 lark-websocket-protobuf = { workspace = true, optional = true }
+url = { workspace = true, optional = true }
+prost = { workspace = true, optional = true }
+reqwest = { workspace = true, optional = true }
+log = { workspace = true, optional = true }
 
 # Optional service dependencies (conditionally included based on feature flags)
 openlark-communication = { workspace = true, optional = true }
@@ -40,7 +43,7 @@ default = []
 client = []
 
 # WebSocket support
-websocket = ["tokio-tungstenite", "futures-util", "lark-websocket-protobuf"]
+websocket = ["tokio-tungstenite", "futures-util", "lark-websocket-protobuf", "url", "prost", "reqwest", "log"]
 
 # Feature flags for service inclusion
 # 与新的 openlark-docs feature 分类同步

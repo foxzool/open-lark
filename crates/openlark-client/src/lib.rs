@@ -192,6 +192,9 @@ pub mod registry;
 pub mod traits;
 pub mod types;
 
+// 传统Client模块（从openlark-core迁移）
+pub mod legacy_client;
+
 // 服务访问层
 pub mod services;
 
@@ -210,6 +213,9 @@ pub use error::{Error, Result};
 pub use features::{FeatureLoader, FeatureSet, FeatureStats};
 pub use registry::{ServiceRegistry, ServiceDescriptor};
 pub use traits::*;
+
+// 重新导出传统LarkClient（从openlark-core迁移）
+pub use legacy_client::{LarkClient, LarkClientBuilder};
 
 // 重新导出服务类型
 #[cfg(feature = "communication")]

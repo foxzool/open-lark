@@ -12,7 +12,6 @@
 //!
 //! ```rust
 //! use openlark_people::endpoints::*;
-//! use openlark_core::client::LarkClient;
 //!
 //! // 使用端点常量
 //! let contacts_endpoint = CONTACT_V3_USERS;
@@ -43,6 +42,5 @@ pub use endpoints::*;
 
 /// Re-exports from openlark-core for convenience.
 pub mod prelude {
-    pub use openlark_core::client::LarkClient;
     pub use openlark_core::SDKResult;
 }
