@@ -13,7 +13,6 @@
 //!
 //! ```rust
 //! use openlark_collab::endpoints::*;
-//! use openlark_core::client::LarkClient;
 //!
 //! // 使用端点常量
 //! let boards_endpoint = BOARD_V1_BOARDS;
@@ -46,6 +45,5 @@ pub use endpoints::*;
 
 /// Re-exports from openlark-core for convenience.
 pub mod prelude {
-    pub use openlark_core::client::LarkClient;
     pub use openlark_core::SDKResult;
 }

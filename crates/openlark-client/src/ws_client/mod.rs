@@ -1,15 +1,16 @@
 // WebSocket 客户端模块
 //
-// 重新导出openlark-core的WebSocket核心实现
+// 提供WebSocket连接和事件处理功能
+
+mod client;
+mod frame_handler;
+mod state_machine;
 
 #[cfg(feature = "websocket")]
-pub use openlark_core::client::ws_client::LarkWsClient;
+pub use client::*;
 
-#[cfg(feature = "websocket")]
-pub use openlark_core::client::ws_client::{
-    ClientConfig, WsEvent, WsCloseReason, EndPointResponse, WsClientError,
-    FrameHandler, WebSocketStateMachine, ConnectionState
-};
+pub use frame_handler::{FrameHandler, FrameType};
+pub use state_machine::{ConnectionState, WebSocketStateMachine};
 
 #[cfg(test)]
 mod tests;
