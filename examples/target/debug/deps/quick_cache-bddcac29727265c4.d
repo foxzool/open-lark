@@ -1,0 +1,13 @@
+/Users/zool/RustroverProjects/open-lark/examples/target/debug/deps/quick_cache-bddcac29727265c4.d: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/linked_slab.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/options.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/rw_lock.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/shard.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/shim.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/sync.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/sync_placeholder.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/unsync.rs
+
+/Users/zool/RustroverProjects/open-lark/examples/target/debug/deps/libquick_cache-bddcac29727265c4.rmeta: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/linked_slab.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/options.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/rw_lock.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/shard.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/shim.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/sync.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/sync_placeholder.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/unsync.rs
+
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/lib.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/linked_slab.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/options.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/rw_lock.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/shard.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/shim.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/sync.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/sync_placeholder.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/unsync.rs:

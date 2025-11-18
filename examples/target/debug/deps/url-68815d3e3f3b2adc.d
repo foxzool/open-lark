@@ -1,0 +1,11 @@
+/Users/zool/RustroverProjects/open-lark/examples/target/debug/deps/url-68815d3e3f3b2adc.d: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/host.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/origin.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/parser.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/path_segments.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/slicing.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/quirks.rs
+
+/Users/zool/RustroverProjects/open-lark/examples/target/debug/deps/liburl-68815d3e3f3b2adc.rmeta: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/host.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/origin.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/parser.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/path_segments.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/slicing.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/quirks.rs
+
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/lib.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/host.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/origin.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/parser.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/path_segments.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/slicing.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/quirks.rs:
