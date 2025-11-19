@@ -1,0 +1,18 @@
+[package]
+name = "openlark-hr"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "open-lark-hr-suite module for OpenLark SDK"
+
+[dependencies]
+openlark-core = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+async-trait = { workspace = true }
+reqwest = { workspace = true }
+log = { workspace = true }

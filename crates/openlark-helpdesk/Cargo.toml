@@ -1,0 +1,16 @@
+[package]
+name = "openlark-helpdesk"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "openlark-helpdesk module for OpenLark SDK"
+
+[dependencies]
+openlark-core = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+async-trait = { workspace = true }

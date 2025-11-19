@@ -828,7 +828,7 @@ fn test_request_builder_patterns() {
 
     // 1. 传统构造函数模式
     let traditional_request = CreateMessageRequest {
-        api_req: open_lark_core::core::api_req::ApiRequest {
+        api_req: open_lark_core::core::api::ApiRequest {
             http_method: reqwest::Method::POST,
             api_path: "/open-apis/im/v1/messages".to_string(),
             body: serde_json::to_vec(&json!({
