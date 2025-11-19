@@ -1,4 +1,3 @@
-use openlark_client::Result;
 /**
  * OpenLark SDK 基础入门完整教程
  *
@@ -24,6 +23,7 @@ use openlark_client::Result;
  * 3. 可选配置 USER_ACCESS_TOKEN 用于用户级API
  */
 use openlark_client::prelude::*;
+use openlark_client::Result;
 use std::env;
 
 #[tokio::main]
@@ -565,7 +565,7 @@ fn check_service_status(
         return;
     }
 
-      // #[cfg(feature = "docs")]
+    // #[cfg(feature = "docs")]
     // if service_name == "docs" {
     //     if registry.has_service(service_name) {
     //         println!("       ✅ 已启用 - {}", description);

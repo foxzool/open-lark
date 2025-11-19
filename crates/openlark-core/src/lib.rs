@@ -5,7 +5,11 @@
 
 #![allow(missing_docs)]
 
-// Core modules
+// New modular structure
+pub mod auth;
+pub mod validation;
+
+// Legacy modules (to be refactored)
 pub mod api;
 pub mod app_ticket_manager;
 pub mod cache;
@@ -16,28 +20,23 @@ pub mod http;
 pub mod improved_response_handler;
 pub mod migration_guide;
 pub mod observability;
+pub mod performance;
 pub mod query_params;
 pub mod req_option;
 pub mod req_translator;
+pub mod request_builder;
 pub mod request_executor;
 pub mod request_executor_example;
 pub mod retry_middleware;
 pub mod standard_response;
 pub mod test_utils;
 pub mod token_manager;
+pub mod trait_system;
 pub mod utils;
-pub mod validation;
 
-// Directory modules
-// Client module has been migrated to openlark-client crate
-// See migration guide for details
+// Business modules (should be moved to separate crates)
 pub mod contact;
 pub mod endpoints;
-pub mod event;
-pub mod pagination;
-pub mod performance;
-pub mod request_builder;
-pub mod trait_system;
 
 // Re-export commonly used types from crate root
 pub use error::SDKResult;

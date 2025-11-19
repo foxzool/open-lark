@@ -90,7 +90,9 @@ mod tests {
             raw_response: RawResponse {
                 code: 0,
                 msg: "success".to_string(),
-                err: None,
+                request_id: None,
+                data: None,
+                error: None,
             },
             data: Some(TestData {
                 value: "test".to_string(),
@@ -108,7 +110,9 @@ mod tests {
             raw_response: RawResponse {
                 code: 0,
                 msg: "success".to_string(),
-                err: None,
+                request_id: None,
+                data: None,
+                error: None,
             },
             data: None,
         };
@@ -128,7 +132,7 @@ mod tests {
             raw_response: RawResponse {
                 code: -1,
                 msg: "error".to_string(),
-                err: None,
+                error: None,
             },
             data: None,
         };
@@ -143,7 +147,9 @@ mod tests {
             raw_response: RawResponse {
                 code: 0,
                 msg: "success".to_string(),
-                err: None,
+                request_id: None,
+                data: None,
+                error: None,
             },
             data: Some(TestData {
                 value: "test".to_string(),
@@ -160,7 +166,9 @@ mod tests {
             raw_response: RawResponse {
                 code: 0,
                 msg: "success".to_string(),
-                err: None,
+                request_id: None,
+                data: None,
+                error: None,
             },
             data: None,
         };
@@ -175,7 +183,7 @@ mod tests {
             raw_response: RawResponse {
                 code: -1,
                 msg: "error".to_string(),
-                err: None,
+                error: None,
             },
             data: None,
         };

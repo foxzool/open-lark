@@ -191,7 +191,7 @@ mod tests {
     #[test]
     fn test_access_token_expiry() {
         // 创建一个已过期的令牌
-        let mut token = AccessToken::new(
+        let token = AccessToken::new(
             "expired_token".to_string(),
             "Bearer".to_string(),
             1, // 1秒后过期
@@ -240,7 +240,7 @@ mod tests {
 
     #[test]
     fn test_user_access_token_expiry() {
-        let mut user_token = UserAccessToken::new(
+        let user_token = UserAccessToken::new(
             "expired_user_token".to_string(),
             "refresh_token".to_string(),
             "Bearer".to_string(),
