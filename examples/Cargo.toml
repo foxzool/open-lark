@@ -9,7 +9,7 @@ publish = false
 openlark-core = { workspace = true }
 openlark-client = { workspace = true, optional = true }
 openlark-communication = { workspace = true, optional = true }
-openlark-docs = { workspace = true, optional = true }
+# openlark-docs = { workspace = true, optional = true } # 暂时移除 - 需要完成 legacy_client 迁移
 openlark-hr = { workspace = true, optional = true }
 openlark-ai = { workspace = true, optional = true }
 openlark-auth = { workspace = true, optional = true }
@@ -28,7 +28,7 @@ log = { workspace = true }
 [features]
 default = ["communication", "client", "auth"]
 communication = ["openlark-communication"]
-docs = ["openlark-docs"]
+# docs = ["openlark-docs"] # 暂时移除 - 需要完成 legacy_client 迁移
 hr = ["openlark-hr"]
 ai = ["openlark-ai"]
 auth = ["openlark-auth"]
