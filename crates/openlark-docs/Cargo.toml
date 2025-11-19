@@ -1,0 +1,74 @@
+[package]
+name = "openlark-docs"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "openlark-docs module for OpenLark SDK"
+
+[dependencies]
+openlark-core = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+reqwest = { workspace = true }
+chrono = { workspace = true }
+tokio = { workspace = true }
+async-trait = { workspace = true }
+rand = { workspace = true }
+serde_repr = { workspace = true }
+log = { workspace = true }
+anyhow = { workspace = true }
+urlencoding = "2.1"
+futures = "0.3"
+regex = "1.0"
+
+[features]
+default = []
+
+# ---------------------------------
+# 基础域（Base / Bitable）
+# ---------------------------------
+bitable = []
+base = ["bitable"]
+
+# ---------------------------------
+# 内容协同域（CCM）
+# - ccm-core：公共类型和 CcmService
+# - 其余 feature 以产品线拆分，可单独启用
+# ---------------------------------
+ccm-core = []
+ccm-doc = ["ccm-core"]
+ccm-docx = ["ccm-core"]
+ccm-drive = ["ccm-core"]
+ccm-sheets-v2 = ["ccm-core"]
+ccm-sheets-v3 = ["ccm-core"]
+ccm-sheets = ["ccm-core", "ccm-sheets-v3"]
+ccm-wiki = ["ccm-core"]
+ccm = [
+    "ccm-core",
+    "ccm-doc",
+    "ccm-docx",
+    "ccm-drive",
+    "ccm-sheets",
+    "ccm-wiki",
+]
+
+# ---------------------------------
+# 其他功能域
+# ---------------------------------
+cardkit = []
+report = []
+
+# ---------------------------------
+# 聚合 feature，方便上层直接启用
+# ---------------------------------
+cloud-docs = ["base", "ccm"]
+all-cloud-docs = ["cloud-docs", "cardkit", "report"]
+
+
+[[example]]
+name = "cardkit_example"
+path = "../../examples/api/cardkit_example.rs"
+required-features = ["cardkit"]
+
+
