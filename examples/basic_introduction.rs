@@ -13,17 +13,17 @@ use openlark_client::Result;
  *
  * 运行方法：
  * # 基础运行（仅包含核心功能）
- * cargo run --example basic_introduction
+ * cargo run --example basic_introduction --features "communication,auth"
  *
  * # 完整功能运行（推荐）
- * cargo run --example basic_introduction --features "client,auth,communication,docs,ai,hr"
+ * cargo run --example basic_introduction --features "communication,auth,ai,hr"
  *
  * 环境配置：
  * 1. 复制 .env-example 到 .env
  * 2. 在 .env 中配置真实的 APP_ID 和 APP_SECRET
  * 3. 可选配置 USER_ACCESS_TOKEN 用于用户级API
  */
-use openlark_client::{prelude::*, Client};
+use openlark_client::prelude::*;
 use std::env;
 
 #[tokio::main]
@@ -122,7 +122,7 @@ async fn chapter_1_introduction() {
     println!();
     println!("📋 支持的服务模块:");
     println!("   • communication - 即时消息、联系人管理");
-    println!("   • docs - 云文档、表格、知识库");
+    println!("   • 更多功能 - 持续开发中...");
     println!("   • hr - 人力资源、考勤管理");
     println!("   • ai - AI智能服务");
     println!("   • auth - 认证和权限管理");
@@ -407,9 +407,9 @@ fn show_api_call_examples() {
     println!("let response = client.communication()");
     println!("    .send_text(\"user_id\", \"Hello World!\").await?;");
     println!();
-    println!("// 文档API调用（需要 docs 功能）");
-    println!("#[cfg(feature = \"docs\")]");
-    println!("let spreadsheet = client.docs()");
+    println!("// 文档API调用（开发中）");
+    // println!("#[cfg(feature = \"docs\")]");
+    // println!("let spreadsheet = client.docs()");
     println!("    .create_spreadsheet(\"My Sheet\", None).await?;");
     println!();
     println!("// AI API调用（需要 ai 功能）");
@@ -468,7 +468,7 @@ async fn chapter_5_services_modules() -> openlark_client::Result<()> {
     // 检查各个服务模块的启用状态
     check_service_status(registry, "auth", "认证服务", "应用认证、令牌管理");
     check_service_status(registry, "communication", "通讯服务", "IM消息、联系人管理");
-    check_service_status(registry, "docs", "文档服务", "云文档、表格、知识库");
+    // check_service_status(registry, "docs", "文档服务", "云文档、表格、知识库");
     check_service_status(registry, "hr", "人力资源服务", "考勤管理、CoreHR");
     check_service_status(registry, "ai", "AI智能服务", "AI对话、智能分析");
 
@@ -481,7 +481,7 @@ async fn chapter_5_services_modules() -> openlark_client::Result<()> {
     println!("    \"client\",        # 统一客户端");
     println!("    \"auth\",          # 认证服务");
     println!("    \"communication\", # 通讯服务");
-    println!("    \"docs\",          # 文档服务");
+    // println!("    \"docs\",          # 文档服务");
     println!("] }}");
     println!("```");
     println!();
@@ -506,11 +506,11 @@ async fn chapter_5_services_modules() -> openlark_client::Result<()> {
         println!("       client.communication().send_text(user_id, message).await");
     }
 
-    #[cfg(feature = "docs")]
-    {
-        println!("   ✅ 文档服务API示例:");
-        println!("       client.docs().create_spreadsheet(title, None).await");
-    }
+    // #[cfg(feature = "docs")]
+    // {
+    //     println!("   ✅ 文档服务API示例:");
+    //     println!("       client.docs().create_spreadsheet(title, None).await");
+    // }
 
     #[cfg(feature = "ai")]
     {
@@ -565,15 +565,15 @@ fn check_service_status(
         return;
     }
 
-    #[cfg(feature = "docs")]
-    if service_name == "docs" {
-        if registry.has_service(service_name) {
-            println!("       ✅ 已启用 - {}", description);
-        } else {
-            println!("       ❌ 未注册 - {}", description);
-        }
-        return;
-    }
+      // #[cfg(feature = "docs")]
+    // if service_name == "docs" {
+    //     if registry.has_service(service_name) {
+    //         println!("       ✅ 已启用 - {}", description);
+    //     } else {
+    //         println!("       ❌ 未注册 - {}", description);
+    //     }
+    //     return;
+    // }
 
     #[cfg(feature = "hr")]
     if service_name == "hr" {
