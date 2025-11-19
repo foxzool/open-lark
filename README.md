@@ -4,32 +4,48 @@
 [![Documentation](https://docs.rs/open-lark/badge.svg)](https://docs.rs/open-lark)
 ![Discord Shield](https://discord.com/api/guilds/1319490473060073532/widget.png?style=shield)
 
-# 飞书开放平台非官方SDK, 重构中, 请谨慎使用
+# 飞书开放平台非官方SDK - 企业级高覆盖率Rust实现
 
-> 🚧 **架构重构中**
+> ✅ **架构迁移完成**
 >
-> 本项目正在从 monorepo 重构为模块化 crates 架构，当前处于过渡期。
-> 现有功能正常使用，新项目建议关注 crates 架构。
+> 项目已成功从单体架构迁移到现代化 crates 架构，提供更好的模块化、性能和维护性。
+> 🏗️ 22个专业模块，1,134+个API，企业级质量和完整文档支持。
 
 支持自定义机器人、长连接机器人、云文档、飞书卡片、消息、群组、招聘管理等API调用。
 
-## ✨ 项目状态 (2025-11-04更新)
+## ✨ 项目状态 (2025-11-19更新)
 
 ### 🎯 高覆盖率企业级SDK
 
 - **✅ 高API覆盖**: 实现1,134个飞书平台API，86.3%覆盖率
-- **🏗️ 企业级架构**: 51个服务模块，支持条件编译和模块化设计
+- **🏗️ 现代化架构**: 22个专业crate模块，现代化模块化设计
 - **🛡️ 类型安全**: 完整的Rust类型系统和错误处理机制
 - **⚡ 高性能**: 原生async/await支持，优化的HTTP客户端和内存管理
+- **🔧 企业级**: 令牌自动管理、重试机制、监控和可观测性
 
 ### 📊 核心统计
 
-- **服务模块**: 51个主服务模块
+- **🏗️ Crate模块**: 22个专业crate模块
 - **API方法**: 1,134个已实现的公共API方法
 - **完整实现模块**: 4个（50+ APIs each）
-- **基本实现模块**: 22个（10-49 APIs each）
+- **基本实现模块**: 18个（10-49 APIs each）
 - **编译状态**: ✅ 零警告全功能编译
-- **测试覆盖**: 关键模块100%测试通过
+- **测试覆盖**: 核心模块全面测试覆盖
+
+### 🏗️ Crate架构概览
+
+| Crate | 功能描述 | 状态 |
+|-------|---------|------|
+| `openlark-core` | 核心基础设施（HTTP、配置、错误处理） | ✅ 生产就绪 |
+| `openlark-client` | 高级客户端封装和服务注册 | ✅ 生产就绪 |
+| `openlark-protocol` | WebSocket协议定义 | ✅ 生产就绪 |
+| `openlark-communication` | IM消息、联系人、群组管理 | ✅ 生产就绪 |
+| `openlark-hr` | 人力资源（考勤、招聘、CoreHR） | ✅ 生产就绪 |
+| `openlark-auth` | 认证服务和令牌管理 | ✅ 生产就绪 |
+| `openlark-ai` | AI服务和智能助手 | 🟡 开发中 |
+| `openlark-docs` | 云文档服务 | 🟡 开发中 |
+| `openlark-admin` | 管理员功能 | 🟡 开发中 |
+| `openlark-application` | 应用管理 | 🟡 开发中 |
 
 ### 🚀 新增高级功能模块
 
@@ -50,58 +66,126 @@
 
 ### 📚 快速开始
 
-#### 🚀 SharedConfig 方式 (推荐)
+#### 🚀 现代化Crate架构方式 (推荐)
+
+```toml
+[dependencies]
+openlark-client = { version = "0.15", features = ["communication", "auth", "hr"] }
+tokio = { version = "1", features = ["full"] }
+```
 
 ```rust
-use open_lark::prelude::*;
-use open_lark::service_registry::{SharedConfig, SharedConfigFactory};
-use open_lark::core::{constants::AppType, config::ConfigBuilder};
+use openlark_client::prelude::*;
+use openlark_client::{LarkClient, ClientBuilder};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // 创建共享配置 - 优化内存使用
-    let shared_config = SharedConfigFactory::create_shared(
-        ConfigBuilder::default()
-            .app_id("your_app_id")
-            .app_secret("your_app_secret")
-            .app_type(AppType::SelfBuild)
-            .enable_token_cache(true)
-            .build()
-    );
+    // 使用现代化构建器创建客户端
+    let client = LarkClient::builder()
+        .app_id("your_app_id")
+        .app_secret("your_app_secret")
+        .base_url("https://open.feishu.cn")
+        .enable_feature("communication")
+        .enable_feature("auth")
+        .build()?;
 
-    // 创建客户端
-    let client = LarkClient::new(shared_config.config().clone());
+    // 使用通讯服务
+    if let Some(communication) = client.communication() {
+        let message = communication.im.v1.message.create_message_builder()
+            .receive_id("user_open_id")
+            .receive_id_type("open_id")
+            .content(r#"{"text":"Hello from OpenLark!"}"#)
+            .msg_type("text")
+            .execute(communication.im.v1.message)
+            .await?;
 
-    println!("配置引用计数: {}", shared_config.ref_count());
+        println!("消息发送成功: {}", message.message_id.unwrap_or_default());
+    }
 
-    // 多客户端共享同一配置
-    let client2 = LarkClient::new(shared_config.config().clone());
-    let client3 = LarkClient::new(shared_config.config().clone());
+    // 使用认证服务
+    if let Some(auth) = client.auth() {
+        let token_info = auth.get_app_access_token().await?;
+        println!("获取访问令牌成功");
+    }
 
-    // 3个客户端共享1个配置实例，节省内存
     Ok(())
 }
 ```
 
-#### 📖 传统方式 (仍支持)
+#### 🔧 高级配置方式
 
 ```rust
-use open_lark::prelude::*;
+use openlark_client::prelude::*;
+use openlark_core::{Config, ConfigBuilder};
+use std::time::Duration;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // 传统客户端创建
-    let client = LarkClient::builder("your_app_id", "your_app_secret")
-        .with_app_type(AppType::SelfBuild)
-        .with_enable_token_cache(true)
-        .build();
+    // 创建详细配置
+    let config = ConfigBuilder::new()
+        .app_id("your_app_id")
+        .app_secret("your_app_secret")
+        .base_url("https://open.feishu.cn")
+        .timeout(Duration::from_secs(30))
+        .enable_debug_mode(true)
+        .build()?;
 
-    // 使用客户端...
+    // 基于配置创建客户端
+    let client = LarkClient::new(config);
+
+    // 使用客户端进行业务逻辑...
     Ok(())
 }
+```
+
+#### 📦 按需选择功能模块
+
+```toml
+[dependencies]
+openlark-client = { version = "0.15", default-features = false, features = [
+    "client",
+    "communication",  # IM消息、联系人、群组
+    "auth",          # 认证服务
+    "hr",            # 人力资源管理
+] }
 ```
 
 ## 🎉 最新更新
+
+### v0.15.0 🚀 Crate架构迁移完成 (2025-11-19)
+
+#### ✨ 重大架构升级
+
+- **🏗️ Crate架构**: 成功从单体架构迁移到现代化22-crate模块化架构
+- **🔧 客户端重构**: 全新的LarkClient构建器模式，支持按需功能选择
+- **📦 模块化设计**: 支持条件编译，最小化二进制文件大小
+- **🚀 性能优化**: 优化的配置共享和内存管理机制
+- **🛡️ 企业级特性**: 完整的错误处理、重试机制和可观测性支持
+
+#### 🔧 核心改进
+
+- **openlark-core**: 核心基础设施，HTTP客户端、配置管理、错误处理
+- **openlark-client**: 高级客户端封装，服务注册和管理
+- **openlark-communication**: IM消息、联系人、群组管理
+- **openlark-hr**: 人力资源管理（考勤、招聘、CoreHR）
+- **openlark-auth**: 认证服务和令牌管理
+- **openlark-ai**: AI服务和智能助手
+- **openlark-docs**: 云文档服务
+
+#### 📦 新的使用方式
+
+```toml
+[dependencies]
+openlark-client = { version = "0.15", features = ["communication", "auth"] }
+```
+
+```rust
+let client = LarkClient::builder()
+    .app_id("your_app_id")
+    .app_secret("your_app_secret")
+    .enable_feature("communication")
+    .build()?;
+```
 
 ### v0.13.1 WebSocket 关键修复 🔧
 
