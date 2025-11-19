@@ -250,7 +250,7 @@ async fn get_conn_url(
     let resp = req.json::<Response<EndPointResponse>>().await?;
     debug!("{:?}", resp.data);
 
-    if !resp.success() {
+    if !resp.is_success() {
         return match resp.raw_response.code {
             1 => Err(WsClientError::ServerError {
                 code: resp.raw_response.code,

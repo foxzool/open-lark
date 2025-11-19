@@ -192,9 +192,6 @@ pub mod registry;
 pub mod traits;
 pub mod types;
 
-// 传统Client模块（从openlark-core迁移）
-pub mod legacy_client;
-
 // 服务访问层
 pub mod services;
 
@@ -214,8 +211,9 @@ pub use features::{FeatureLoader, FeatureSet, FeatureStats};
 pub use registry::{ServiceDescriptor, ServiceRegistry};
 pub use traits::*;
 
-// 重新导出传统LarkClient（从openlark-core迁移）
-pub use legacy_client::{LarkClient, LarkClientBuilder};
+// 注意：legacy_client 已在 v0.15.0 中移除
+// 请使用新的 DefaultLarkClient 和 ClientBuilder
+// 迁移指南：https://github.com/foxzool/open-lark/blob/main/docs/migration-guide.md
 
 // 重新导出服务类型
 #[cfg(feature = "communication")]
@@ -323,7 +321,7 @@ pub mod utils {
     /// 验证功能依赖
     pub fn validate_feature_dependencies() -> Result<Vec<crate::features::DependencyIssue>> {
         FeatureLoader::validate_feature_dependencies()
-            .map_err(|e| Error::InvalidConfig("功能依赖验证失败"))
+            .map_err(|_e| Error::InvalidConfig("功能依赖验证失败"))
     }
 }
 
