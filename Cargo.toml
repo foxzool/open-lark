@@ -93,6 +93,9 @@ openlark-hr = { path = "crates/openlark-hr" }
 openlark-ai = { path = "crates/openlark-ai" }
 openlark-communication = { path = "crates/openlark-communication" }
 openlark-protocol = { path = "crates/openlark-protocol" }
+
+# Additional service crates
+openlark-admin = { path = "crates/openlark-admin" }
 openlark-application = { path = "crates/openlark-application" }
 openlark-approval = { path = "crates/openlark-approval" }
 openlark-apass = { path = "crates/openlark-apass" }

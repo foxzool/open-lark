@@ -70,7 +70,7 @@
 
 ```toml
 [dependencies]
-openlark-client = { version = "0.15", features = ["communication", "auth", "hr"] }
+openlark-client = { version = "0.15", features = ["communication", "hr"] }  # auth 现在默认启用
 tokio = { version = "1", features = ["full"] }
 ```
 
@@ -85,8 +85,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .app_id("your_app_id")
         .app_secret("your_app_secret")
         .base_url("https://open.feishu.cn")
-        .enable_feature("communication")
-        .enable_feature("auth")
+        .enable_feature("communication")  // auth 现在默认启用，无需显式指定
         .build()?;
 
     // 使用通讯服务
@@ -145,7 +144,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 openlark-client = { version = "0.15", default-features = false, features = [
     "client",
     "communication",  # IM消息、联系人、群组
-    "auth",          # 认证服务
+    # "auth",         # 认证服务（默认启用，禁用时才需要显式指定）
     "hr",            # 人力资源管理
 ] }
 ```
@@ -165,12 +164,18 @@ openlark-client = { version = "0.15", default-features = false, features = [
 #### 🔧 核心改进
 
 - **openlark-core**: 核心基础设施，HTTP客户端、配置管理、错误处理
-- **openlark-client**: 高级客户端封装，服务注册和管理
+- **openlark-client**: 高级客户端封装，服务注册和管理，**auth 现在默认启用**
 - **openlark-communication**: IM消息、联系人、群组管理
 - **openlark-hr**: 人力资源管理（考勤、招聘、CoreHR）
-- **openlark-auth**: 认证服务和令牌管理
+- **openlark-auth**: 认证服务和令牌管理（默认启用）
 - **openlark-ai**: AI服务和智能助手
 - **openlark-docs**: 云文档服务
+
+#### 🎨 用户体验提升
+
+- **🔓 Auth 默认启用**: 认证服务现在默认开启，新用户无需配置即可使用
+- **📝 简化示例代码**: 移除了大量条件编译，示例更加清晰易懂
+- **⚙️ 灵活配置**: 用户仍可通过 `default-features = false` 完全控制功能选择
 
 #### 📦 新的使用方式
 

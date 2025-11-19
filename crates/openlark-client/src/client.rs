@@ -68,6 +68,38 @@ impl Client {
         ClientBuilder::new()
     }
 
+    // /// 🏢 访问管理服务
+  // ///
+  // /// 需要 `admin` feature
+  // #[cfg(feature = "admin")]
+  // pub fn admin(&self) -> crate::services::AdminService<'_> {
+  //     crate::services::AdminService::new(&self.config)
+  // }
+
+  // /// ✅ 访问审批服务
+  // ///
+  // /// 需要 `approval` feature
+  // #[cfg(feature = "approval")]
+  // pub fn approval(&self) -> crate::services::ApprovalService<'_> {
+  //     crate::services::ApprovalService::new(&self.config)
+  // }
+
+  /// 🔐 访问认证服务
+  ///
+  /// 需要 `auth` feature
+  #[cfg(feature = "auth")]
+  pub fn auth(&self) -> crate::services::AuthService<'_> {
+        crate::services::AuthService::new(&self.config)
+  }
+
+  // /// 🤝 访问协作服务
+  // ///
+  // /// 需要 `collab` feature
+  // #[cfg(feature = "collab")]
+  // pub fn collab(&self) -> crate::services::CollabService<'_> {
+  //     crate::services::CollabService::new(&self.config)
+  // }
+
     /// 📡 访问通讯服务
     ///
     /// 需要 `communication` feature
@@ -76,20 +108,36 @@ impl Client {
         crate::services::CommunicationService::new(&self.config, &self.registry)
     }
 
+    // /// 📄 访问文档服务
+  // ///
+  // /// 需要 `docs` feature
+  // #[cfg(feature = "docs")]
+  // pub fn docs(&self) -> crate::services::DocsService<'_> {
+  //     crate::services::DocsService::new(&self.config)
+  // }
+
+  // /// 💬 访问帮助台服务
+  // ///
+  // /// 需要 `helpdesk` feature
+  // #[cfg(feature = "helpdesk")]
+  // pub fn helpdesk(&self) -> crate::services::HelpdeskService<'_> {
+  //     crate::services::HelpdeskService::new(&self.config)
+  // }
+
+  // /// 💼 访问招聘服务
+  // ///
+  // /// 需要 `hire` feature
+  // #[cfg(feature = "hire")]
+  // pub fn hire(&self) -> crate::services::HireService<'_> {
+  //     crate::services::HireService::new(&self.config)
+  // }
+
     /// 👥 访问HR服务
     ///
     /// 需要 `hr` feature
     #[cfg(feature = "hr")]
     pub fn hr(&self) -> crate::services::HRService<'_> {
         crate::services::HRService::new(&self.config, &self.registry)
-    }
-
-    /// 📄 访问文档服务
-    ///
-    /// 需要 `docs` feature
-    #[cfg(feature = "docs")]
-    pub fn docs(&self) -> crate::services::DocsService<'_> {
-        crate::services::DocsService::new(&self.config, &self.registry)
     }
 
     /// 🤖 访问AI服务
@@ -100,13 +148,13 @@ impl Client {
         crate::services::AIService::new(&self.config)
     }
 
-    /// 🔐 访问认证服务
-    ///
-    /// 需要 `auth` feature
-    #[cfg(feature = "auth")]
-    pub fn auth(&self) -> crate::services::AuthService<'_> {
-        crate::services::AuthService::new(&self.config)
-    }
+    // /// 👤 访问人员服务
+  // ///
+  // /// 需要 `people` feature
+  // #[cfg(feature = "people")]
+  // pub fn people(&self) -> crate::services::PeopleService<'_> {
+  //     crate::services::PeopleService::new(&self.config)
+  // }
 
     /// 🔧 获取客户端配置
     pub fn config(&self) -> &Config {
@@ -127,10 +175,84 @@ impl Client {
     pub fn with_config(config: Config) -> Result<Self> {
         config.validate()?;
         let config = Arc::new(config);
-        let registry = Arc::new(ServiceRegistry::new(&config));
+        let mut registry = ServiceRegistry::new(&config);
 
+        // 加载启用的服务
+        load_enabled_services(&config, &mut registry)?;
+
+        let registry = Arc::new(registry);
         Ok(Client { config, registry })
     }
+}
+
+/// 🔥 加载启用的服务
+fn load_enabled_services(_config: &Config, registry: &mut ServiceRegistry) -> Result<()> {
+    // 只加载实际可用的服务（无循环依赖）
+
+    #[cfg(feature = "auth")]
+    {
+        tracing::debug!("加载认证服务");
+        let descriptor = crate::ServiceDescriptor::new("auth", "AuthService")
+            .description("飞书认证服务，提供令牌管理、身份验证等功能")
+            .version("1.0.0")
+            .add_tag("auth")
+            .add_tag("security");
+
+        let service: Box<String> = Box::new("auth_placeholder".to_string());
+        registry.register_service("auth", service, descriptor)?;
+    }
+
+    #[cfg(feature = "communication")]
+    {
+        tracing::debug!("加载通讯服务");
+        let descriptor = crate::ServiceDescriptor::new("communication", "CommunicationService")
+            .description("飞书通讯服务，提供消息、联系人、群组等功能")
+            .version("1.0.0")
+            .add_tag("messaging")
+            .add_tag("real-time");
+
+        let service = Box::new("communication_placeholder") as Box<dyn std::any::Any + Send + Sync>;
+        registry.register_service("communication", service, descriptor)?;
+    }
+
+    #[cfg(feature = "hr")]
+    {
+        tracing::debug!("加载HR服务");
+        let descriptor = crate::ServiceDescriptor::new("hr", "HRService")
+            .description("飞书人力资源服务，提供员工、考勤、薪酬等功能")
+            .version("1.0.0")
+            .add_tag("hr")
+            .add_tag("management");
+
+        let service = Box::new("hr_placeholder") as Box<dyn std::any::Any + Send + Sync>;
+        registry.register_service("hr", service, descriptor)?;
+    }
+
+    #[cfg(feature = "ai")]
+    {
+        tracing::debug!("加载AI服务");
+        let descriptor = crate::ServiceDescriptor::new("ai", "AIService")
+            .description("飞书AI服务，提供智能助手、AI功能")
+            .version("1.0.0")
+            .add_tag("ai")
+            .add_tag("intelligence");
+
+        let service = Box::new("ai_placeholder") as Box<dyn std::any::Any + Send + Sync>;
+        registry.register_service("ai", service, descriptor)?;
+    }
+
+    // 临时禁用的服务（由于循环依赖）：
+    // - admin (管理服务)
+    // - approval (审批服务)
+    // - collab (协作服务)
+    // - docs (文档服务)
+    // - helpdesk (帮助台服务)
+    // - hire (招聘服务)
+    // - people (人员服务)
+    // 这些服务将在解决循环依赖问题后重新启用
+
+    tracing::info!("已启用的服务加载完成");
+    Ok(())
 }
 
 // 实现LarkClient trait
