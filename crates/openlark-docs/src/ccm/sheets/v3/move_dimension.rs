@@ -7,8 +7,8 @@
 //! - 移动操作状态跟踪
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     error::LarkAPIError,
     http::Transport,
 };
@@ -336,7 +336,7 @@ impl MoveDimensionService {
     pub async fn move_dimension(
         &self,
         request: &MoveDimensionRequest,
-    ) -> openlark_core::error::SDKResult<BaseResponse<MoveDimensionResponse>> {
+    ) -> openlark_core::error::SDKResult<Response<MoveDimensionResponse>> {
         let url = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/move_dimension",
             self.config.base_url,
@@ -471,9 +471,7 @@ impl<'a> MoveDimensionServiceBuilder<'a> {
     }
 
     /// 执行移动操作
-    pub async fn execute(
-        self,
-    ) -> openlark_core::error::SDKResult<BaseResponse<MoveDimensionResponse>> {
+    pub async fn execute(self) -> openlark_core::error::SDKResult<Response<MoveDimensionResponse>> {
         match (
             self.spreadsheet_token,
             self.sheet_id,

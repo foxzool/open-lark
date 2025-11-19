@@ -1,9 +1,9 @@
-//! API特征定义 - 简化版本
+//! API特征定义 - 独立版本
 
-use crate::{api_resp::RawResponse, error::SDKResult};
-use async_trait::async_trait;
-
+pub use super::responses::RawResponse;
 use super::ApiRequest;
+use crate::error::SDKResult;
+use async_trait::async_trait;
 
 /// 异步API客户端特征
 #[async_trait]

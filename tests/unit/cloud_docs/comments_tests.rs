@@ -31,7 +31,7 @@ use open_lark::{
         delete_reply::{DeleteCommentReplyRequest, DeleteCommentReplyResponseData},
         batch_query::{BatchQueryCommentsRequest, BatchQueryCommentsResponseData},
     },
-    core::api_resp::BaseResponse,
+    core::api::Response,
 };
 
 /// 测试配置夹具

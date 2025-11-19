@@ -5,14 +5,14 @@
 #![allow(unused_variables)]
 #![allow(unused_mut)]
 use SDKResult;use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use openlark_core::,
 {
     core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -70,7 +70,7 @@ crate::impl_executable_builder_owned!(
     BatchGetRecordRequestBuilder,
     super::AppTableRecordService,
     BatchGetRecordRequest,
-    BaseResponse<BatchGetRecordResponse>,
+    Response<BatchGetRecordResponse>,
     batch_get,
 );
 /// 批量获取记录响应
@@ -89,7 +89,7 @@ pub async fn batch_get_record(
     request: BatchGetRecordRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<BatchGetRecordResponse>> {,
+) -> SDKResult<Response<BatchGetRecordResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::POST);
 api_req.api_path = BITABLE_V1_RECORDS_BATCH_GET,

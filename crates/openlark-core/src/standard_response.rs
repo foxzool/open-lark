@@ -2,7 +2,7 @@
 ///
 /// 为了解决项目中错误处理方式不统一的问题，提供统一的响应处理接口。
 /// 这个特征允许不同的响应类型以一致的方式处理成功和错误情况。
-use crate::{api_resp::BaseResponse, error::LarkAPIError, SDKResult};
+use crate::{api::Response, error::LarkAPIError, SDKResult};
 
 /// 标准响应处理特征
 ///
@@ -24,9 +24,9 @@ pub trait StandardResponse<T> {
         T: Default;
 }
 
-impl<T> StandardResponse<T> for BaseResponse<T> {
+impl<T> StandardResponse<T> for Response<T> {
     fn into_result(self) -> SDKResult<T> {
-        if self.success() {
+        if self.is_success() {
             match self.data {
                 Some(data) => Ok(data),
                 None => Err(LarkAPIError::DataError(
@@ -34,10 +34,10 @@ impl<T> StandardResponse<T> for BaseResponse<T> {
                 )),
             }
         } else {
-            Err(LarkAPIError::APIError {
+            Err(LarkAPIError::ApiError {
                 code: self.code(),
-                msg: self.msg().to_string(),
-                error: self.err().map(|e| format!("{e:?}")),
+                message: self.message().to_string(),
+                request_id: self.raw().request_id.clone(),
             })
         }
     }
@@ -46,7 +46,7 @@ impl<T> StandardResponse<T> for BaseResponse<T> {
     where
         T: Default,
     {
-        if self.success() {
+        if self.is_success() {
             self.data.unwrap_or_default()
         } else {
             T::default()
@@ -54,7 +54,7 @@ impl<T> StandardResponse<T> for BaseResponse<T> {
     }
 }
 
-impl<T> StandardResponse<T> for SDKResult<BaseResponse<T>> {
+impl<T> StandardResponse<T> for SDKResult<Response<T>> {
     fn into_result(self) -> SDKResult<T> {
         match self {
             Ok(response) => response.into_result(),
@@ -76,7 +76,7 @@ impl<T> StandardResponse<T> for SDKResult<BaseResponse<T>> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::api_resp::{BaseResponse, RawResponse};
+    use crate::api::{BaseResponse, RawResponse};
     use serde::{Deserialize, Serialize};
 
     #[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq)]
@@ -104,7 +104,7 @@ mod tests {
 
     #[test]
     fn test_successful_response_without_data() {
-        let response: BaseResponse<TestData> = BaseResponse {
+        let response: Response<TestData> = BaseResponse {
             raw_response: RawResponse {
                 code: 0,
                 msg: "success".to_string(),
@@ -124,7 +124,7 @@ mod tests {
 
     #[test]
     fn test_failed_response() {
-        let response: BaseResponse<TestData> = BaseResponse {
+        let response: Response<TestData> = BaseResponse {
             raw_response: RawResponse {
                 code: -1,
                 msg: "error".to_string(),
@@ -156,7 +156,7 @@ mod tests {
 
     #[test]
     fn test_data_or_default_no_data() {
-        let response: BaseResponse<TestData> = BaseResponse {
+        let response: Response<TestData> = BaseResponse {
             raw_response: RawResponse {
                 code: 0,
                 msg: "success".to_string(),
@@ -171,7 +171,7 @@ mod tests {
 
     #[test]
     fn test_data_or_default_failure() {
-        let response: BaseResponse<TestData> = BaseResponse {
+        let response: Response<TestData> = BaseResponse {
             raw_response: RawResponse {
                 code: -1,
                 msg: "error".to_string(),

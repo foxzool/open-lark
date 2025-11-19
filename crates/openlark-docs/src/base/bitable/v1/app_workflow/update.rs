@@ -5,14 +5,14 @@
 #![allow(unused_variables)]
 #![allow(unused_mut)]
 use SDKResult;use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use openlark_core::,
 {
     core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -47,7 +47,7 @@ impl UpdateWorkflowRequestBuilder {
 }impl_executable_builder_config!(,
     UpdateWorkflowRequestBuilder,
     UpdateWorkflowRequest,
-    BaseResponse<UpdateWorkflowResponse>,
+    Response<UpdateWorkflowResponse>,
     update_workflow,
 );
 /// 更新自动化流程状态响应
@@ -70,7 +70,7 @@ pub async fn update_workflow(
     request: UpdateWorkflowRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<UpdateWorkflowResponse>> {,
+) -> SDKResult<Response<UpdateWorkflowResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::PATCH);
 api_req.api_path = BITABLE_V1_WORKFLOW_UPDATE,

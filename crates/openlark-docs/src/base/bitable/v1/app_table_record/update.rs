@@ -5,14 +5,14 @@
 #![allow(unused_variables)]
 #![allow(unused_mut)]
 use SDKResult;use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use openlark_core::,
 {,
     core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -65,7 +65,7 @@ crate::impl_executable_builder_owned!(
     UpdateRecordRequestBuilder,
     super::AppTableRecordService,
     UpdateRecordRequest,
-    BaseResponse<UpdateRecordResponse>,
+    Response<UpdateRecordResponse>,
     update,
 );
 /// 更新记录响应
@@ -84,7 +84,7 @@ pub async fn update_record(
     request: UpdateRecordRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<UpdateRecordResponse>> {,
+) -> SDKResult<Response<UpdateRecordResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::PUT);
 api_req.api_path = BITABLE_V1_RECORD_UPDATE,

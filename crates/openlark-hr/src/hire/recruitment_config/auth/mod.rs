@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints::hire::*,
@@ -86,7 +86,7 @@ impl AuthService {
         &self,
         role_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<RoleDetailResponse>> {
+    ) -> SDKResult<Response<RoleDetailResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_ROLE_GET, "role_id", role_id));
@@ -120,7 +120,7 @@ impl AuthService {
         &self,
         request: RoleListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<RoleListResponse>> {
+    ) -> SDKResult<Response<RoleListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_ROLES.to_string());
@@ -159,7 +159,7 @@ impl AuthService {
         &self,
         user_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<UserRoleListResponse>> {
+    ) -> SDKResult<Response<UserRoleListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_USER_ROLES, "user_id", user_id));

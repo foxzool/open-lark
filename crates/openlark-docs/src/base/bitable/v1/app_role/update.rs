@@ -5,7 +5,7 @@
 #![allow(unused_variables)]
 #![allow(unused_mut)]
 use SDKResult;use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use super::AppRoleService;
 use openlark_core::,
 {,
@@ -13,7 +13,7 @@ use openlark_core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -57,7 +57,7 @@ impl UpdateAppRoleRequestBuilder {
     UpdateAppRoleRequestBuilder,
     AppRoleService,
     UpdateAppRoleRequest,
-    BaseResponse<UpdateAppRoleResponse>,
+    Response<UpdateAppRoleResponse>,
     update,
 );
 /// 更新自定义角色响应
@@ -76,7 +76,7 @@ pub async fn update_app_role(
     request: UpdateAppRoleRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<UpdateAppRoleResponse>> {,
+) -> SDKResult<Response<UpdateAppRoleResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::PUT);
 api_req.api_path = BITABLE_V1_ROLE_UPDATE,

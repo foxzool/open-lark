@@ -8,8 +8,8 @@
 use std::collections::HashMap;
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, ResponseFormat},
     error::LarkAPIError,
     http::Transport,
 };
@@ -772,9 +772,7 @@ impl ChartService {
         &self,
         request: &CreateChartRequest,
     ) -> openlark_core::error::SDKResult<CreateChartResponse> {
-        use openlark_core::{
-            api_req::ApiRequest, api_resp::BaseResponse, error::LarkAPIError, http::Transport,
-        };
+        use openlark_core::{api::ApiRequest, api::Response, error::LarkAPIError, http::Transport};
 
         let endpoint = format!(
             "/open-apis/sheets/v3/spreadsheets/{}/charts",
@@ -784,7 +782,7 @@ impl ChartService {
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let response: BaseResponse<CreateChartResponse> =
+        let response: Response<CreateChartResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
@@ -831,9 +829,7 @@ impl ChartService {
         &self,
         request: &DeleteChartRequest,
     ) -> openlark_core::error::SDKResult<DeleteChartResponse> {
-        use openlark_core::{
-            api_req::ApiRequest, api_resp::BaseResponse, error::LarkAPIError, http::Transport,
-        };
+        use openlark_core::{api::ApiRequest, api::Response, error::LarkAPIError, http::Transport};
 
         let endpoint = format!(
             "/open-apis/sheets/v3/spreadsheets/{}/charts/{}",
@@ -842,7 +838,7 @@ impl ChartService {
 
         let api_request = ApiRequest::with_method_and_path(Method::DELETE, &endpoint);
 
-        let response: BaseResponse<DeleteChartResponse> =
+        let response: Response<DeleteChartResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {

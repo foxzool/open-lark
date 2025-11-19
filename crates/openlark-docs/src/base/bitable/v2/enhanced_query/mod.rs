@@ -8,8 +8,8 @@
 use std::collections::HashMap;
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,

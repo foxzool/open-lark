@@ -22,7 +22,7 @@ impl SpaceSettingService {
         &self,
         request: UpdateSpaceSettingRequest,
         option: Option<openlark_core::req_option::RequestOption>,
-    ) -> openlark_core::SDKResult<openlark_core::api_resp::BaseResponse<UpdateSpaceSettingResponse>>,
+    ) -> openlark_core::SDKResult<openlark_core::api::Response<UpdateSpaceSettingResponse>>,
 {,
         update_space_setting(request, &self.config, option).await,
 }

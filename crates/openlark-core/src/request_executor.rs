@@ -4,8 +4,8 @@ use reqwest::Method;
 use serde::Serialize;
 
 use crate::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse},
+    api::ApiRequest,
+    api::{ApiResponseTrait, Response},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
@@ -19,13 +19,13 @@ pub struct RequestExecutor;
 
 impl RequestExecutor {
     /// 执行GET请求
-    pub async fn get<T: ApiResponseTrait>(
+    pub async fn get<T: ApiResponseTrait + std::fmt::Debug + for<'de> serde::Deserialize<'de>>(
         config: &Config,
         path: &str,
         supported_tokens: Vec<AccessTokenType>,
         query_params: Option<HashMap<&'static str, String>>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<T>> {
+    ) -> SDKResult<Response<T>> {
         Self::execute(
             config,
             Method::GET,
@@ -39,13 +39,16 @@ impl RequestExecutor {
     }
 
     /// 执行POST请求
-    pub async fn post<T: ApiResponseTrait, B: Serialize>(
+    pub async fn post<
+        T: ApiResponseTrait + std::fmt::Debug + for<'de> serde::Deserialize<'de>,
+        B: Serialize,
+    >(
         config: &Config,
         path: &str,
         supported_tokens: Vec<AccessTokenType>,
         body: Option<B>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<T>> {
+    ) -> SDKResult<Response<T>> {
         Self::execute(
             config,
             Method::POST,
@@ -59,13 +62,16 @@ impl RequestExecutor {
     }
 
     /// 执行PUT请求
-    pub async fn put<T: ApiResponseTrait, B: Serialize>(
+    pub async fn put<
+        T: ApiResponseTrait + std::fmt::Debug + for<'de> serde::Deserialize<'de>,
+        B: Serialize,
+    >(
         config: &Config,
         path: &str,
         supported_tokens: Vec<AccessTokenType>,
         body: Option<B>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<T>> {
+    ) -> SDKResult<Response<T>> {
         Self::execute(
             config,
             Method::PUT,
@@ -79,12 +85,14 @@ impl RequestExecutor {
     }
 
     /// 执行DELETE请求
-    pub async fn delete<T: ApiResponseTrait>(
+    pub async fn delete<
+        T: ApiResponseTrait + std::fmt::Debug + for<'de> serde::Deserialize<'de>,
+    >(
         config: &Config,
         path: &str,
         supported_tokens: Vec<AccessTokenType>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<T>> {
+    ) -> SDKResult<Response<T>> {
         Self::execute(
             config,
             Method::DELETE,
@@ -98,13 +106,16 @@ impl RequestExecutor {
     }
 
     /// 执行PATCH请求
-    pub async fn patch<T: ApiResponseTrait, B: Serialize>(
+    pub async fn patch<
+        T: ApiResponseTrait + std::fmt::Debug + for<'de> serde::Deserialize<'de>,
+        B: Serialize,
+    >(
         config: &Config,
         path: &str,
         supported_tokens: Vec<AccessTokenType>,
         body: Option<B>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<T>> {
+    ) -> SDKResult<Response<T>> {
         Self::execute(
             config,
             Method::PATCH,
@@ -129,12 +140,12 @@ impl RequestExecutor {
     /// - `option`: 请求选项（可选）
     ///
     /// # 返回值
-    /// 返回标准的`BaseResponse<T>`格式响应
+    /// 返回标准的`Response<T>`格式响应
     ///
     /// # 示例
     /// ```rust,ignore
     /// // GET请求
-    /// let response: BaseResponse<MessageList> = RequestExecutor::execute(
+    /// let response: Response<MessageList> = RequestExecutor::execute(
     ///     &config,
     ///     Method::GET,
     ///     "/open-apis/im/v1/messages",
@@ -145,7 +156,7 @@ impl RequestExecutor {
     /// ).await?;
     ///
     /// // POST请求
-    /// let response: BaseResponse<Message> = RequestExecutor::execute(
+    /// let response: Response<Message> = RequestExecutor::execute(
     ///     &config,
     ///     Method::POST,
     ///     "/open-apis/im/v1/messages",
@@ -155,31 +166,44 @@ impl RequestExecutor {
     ///     None,
     /// ).await?;
     /// ```
-    pub async fn execute<T: ApiResponseTrait, B: Serialize>(
+    pub async fn execute<
+        T: ApiResponseTrait + std::fmt::Debug + for<'de> serde::Deserialize<'de>,
+        B: Serialize,
+    >(
         config: &Config,
         method: Method,
         path: &str,
-        supported_tokens: Vec<AccessTokenType>,
+        _supported_tokens: Vec<AccessTokenType>,
         query_params: Option<HashMap<&'static str, String>>,
         body: Option<B>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<T>> {
-        let mut api_req = ApiRequest {
-            http_method: method,
-            api_path: path.to_string(),
-            supported_access_token_types: supported_tokens,
-            ..Default::default()
+    ) -> SDKResult<Response<T>> {
+        // 构建基础URL
+        let base_url = &config.base_url;
+
+        let full_url = format!("{}{}", base_url, path);
+
+        // 根据HTTP方法创建请求
+        let mut api_req = match method {
+            Method::GET => ApiRequest::<()>::get(full_url),
+            Method::POST => ApiRequest::<()>::post(full_url),
+            Method::PUT => ApiRequest::<()>::put(full_url),
+            Method::DELETE => ApiRequest::<()>::delete(full_url),
+            _ => ApiRequest::<()>::post(full_url),
         };
 
         // 设置查询参数
         if let Some(params) = query_params {
-            api_req.query_params = params;
+            for (key, value) in params {
+                api_req = api_req.query(key, value);
+            }
         }
 
         // 序列化请求体
         if let Some(body_data) = body {
-            api_req.body = serde_json::to_vec(&body_data)
+            let json_value = serde_json::to_value(body_data)
                 .map_err(|e| crate::error::LarkAPIError::DeserializeError(e.to_string()))?;
+            api_req = api_req.body(json_value);
         }
 
         // 执行请求
@@ -209,7 +233,10 @@ impl RequestExecutor {
     /// ).await?;
     /// ```
     #[allow(clippy::too_many_arguments)]
-    pub async fn execute_with_path_params<T: ApiResponseTrait, B: Serialize>(
+    pub async fn execute_with_path_params<
+        T: ApiResponseTrait + std::fmt::Debug + for<'de> serde::Deserialize<'de>,
+        B: Serialize,
+    >(
         config: &Config,
         method: Method,
         path_template: &str,
@@ -218,7 +245,7 @@ impl RequestExecutor {
         query_params: Option<HashMap<&'static str, String>>,
         body: Option<B>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<T>> {
+    ) -> SDKResult<Response<T>> {
         // 替换路径参数
         let mut path = path_template.to_string();
         for (key, value) in path_params {
@@ -251,13 +278,16 @@ impl RequestExecutor {
     ///     None,
     /// ).await?;
     /// ```
-    pub async fn json_request<T: ApiResponseTrait, B: Serialize>(
+    pub async fn json_request<
+        T: ApiResponseTrait + std::fmt::Debug + for<'de> serde::Deserialize<'de>,
+        B: Serialize,
+    >(
         config: &Config,
         method: Method,
         path: &str,
         body: &B,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<T>> {
+    ) -> SDKResult<Response<T>> {
         Self::execute(
             config,
             method,
@@ -285,12 +315,14 @@ impl RequestExecutor {
     ///     None,
     /// ).await?;
     /// ```
-    pub async fn query_request<T: ApiResponseTrait>(
+    pub async fn query_request<
+        T: ApiResponseTrait + std::fmt::Debug + for<'de> serde::Deserialize<'de>,
+    >(
         config: &Config,
         path: &str,
         query_params: Option<HashMap<&'static str, String>>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<T>> {
+    ) -> SDKResult<Response<T>> {
         Self::get(
             config,
             path,
@@ -305,7 +337,7 @@ impl RequestExecutor {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::api_resp::ResponseFormat;
+    use crate::api::ResponseFormat;
     use serde::{Deserialize, Serialize};
 
     #[derive(Debug, Serialize, Deserialize)]
@@ -658,20 +690,20 @@ mod tests {
 
     #[test]
     fn test_request_executor_api_request_construction() {
-        use crate::api_req::ApiRequest;
+        use crate::api::ApiRequest;
         use crate::constants::AccessTokenType;
         use reqwest::Method;
         use std::collections::HashMap;
 
         // Test ApiRequest construction (similar to what execute() does)
         let mut api_req = ApiRequest {
-            http_method: Method::POST,
+            method: Method::POST,
             api_path: "/test/path".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             ..Default::default()
         };
 
-        assert_eq!(api_req.http_method, Method::POST);
+        assert_eq!(api_req.method, Method::POST);
         assert_eq!(api_req.api_path, "/test/path");
         assert_eq!(api_req.supported_access_token_types.len(), 1);
         assert_eq!(
@@ -1099,7 +1131,7 @@ mod tests {
     // Type system and generic tests
     #[test]
     fn test_request_executor_type_system() {
-        use crate::api_resp::ResponseFormat;
+        use crate::api::ResponseFormat;
 
         // Test different response types
         #[derive(Debug, Serialize, Deserialize)]
@@ -1148,14 +1180,14 @@ mod tests {
     // API request building edge cases
     #[test]
     fn test_request_executor_api_request_building_edge_cases() {
-        use crate::api_req::ApiRequest;
+        use crate::api::ApiRequest;
         use crate::constants::AccessTokenType;
         use reqwest::Method;
 
         // Test with very long path
         let long_path = "/".to_string() + &"a".repeat(1000);
         let api_req_long = ApiRequest {
-            http_method: Method::GET,
+            method: Method::GET,
             api_path: long_path.clone(),
             supported_access_token_types: vec![AccessTokenType::User],
             ..Default::default()
@@ -1166,7 +1198,7 @@ mod tests {
 
         // Test with empty supported tokens
         let api_req_empty_tokens = ApiRequest {
-            http_method: Method::POST,
+            method: Method::POST,
             api_path: "/test".to_string(),
             supported_access_token_types: vec![],
             ..Default::default()
@@ -1176,7 +1208,7 @@ mod tests {
 
         // Test with many supported tokens
         let api_req_many_tokens = ApiRequest {
-            http_method: Method::PUT,
+            method: Method::PUT,
             api_path: "/test".to_string(),
             supported_access_token_types: vec![
                 AccessTokenType::Tenant,

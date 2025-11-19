@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints::hire::*,
@@ -231,7 +231,7 @@ impl InterviewSettingsService {
         &self,
         request: InterviewSettingsCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<InterviewSettingsOperationResponse>> {
+    ) -> SDKResult<Response<InterviewSettingsOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_INTERVIEW_SETTINGS.to_string());
@@ -276,7 +276,7 @@ impl InterviewSettingsService {
         &self,
         settings_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<InterviewSettingsDetailResponse>> {
+    ) -> SDKResult<Response<InterviewSettingsDetailResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_INTERVIEW_SETTING_GET.to_string());
@@ -330,7 +330,7 @@ impl InterviewSettingsService {
         &self,
         request: InterviewSettingsListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<InterviewSettingsListResponse>> {
+    ) -> SDKResult<Response<InterviewSettingsListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_INTERVIEW_SETTINGS.to_string());
@@ -399,7 +399,7 @@ impl InterviewSettingsService {
         settings_id: &str,
         request: InterviewSettingsCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<InterviewSettingsOperationResponse>> {
+    ) -> SDKResult<Response<InterviewSettingsOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -431,7 +431,7 @@ impl InterviewSettingsService {
         &self,
         settings_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<InterviewSettingsOperationResponse>> {
+    ) -> SDKResult<Response<InterviewSettingsOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::DELETE);
         api_req.set_api_path(EndpointBuilder::replace_param(

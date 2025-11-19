@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints::hire::*,
@@ -249,7 +249,7 @@ impl OfferSettingsService {
         &self,
         request: OfferSettingsCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<OfferSettingsOperationResponse>> {
+    ) -> SDKResult<Response<OfferSettingsOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_OFFER_SETTINGS.to_string());
@@ -295,7 +295,7 @@ impl OfferSettingsService {
         &self,
         settings_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<OfferSettingsDetailResponse>> {
+    ) -> SDKResult<Response<OfferSettingsDetailResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_OFFER_SETTING_GET.to_string());
@@ -349,7 +349,7 @@ impl OfferSettingsService {
         &self,
         request: OfferSettingsListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<OfferSettingsListResponse>> {
+    ) -> SDKResult<Response<OfferSettingsListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_OFFER_SETTINGS.to_string());
@@ -415,7 +415,7 @@ impl OfferSettingsService {
         settings_id: &str,
         request: OfferSettingsCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<OfferSettingsOperationResponse>> {
+    ) -> SDKResult<Response<OfferSettingsOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -447,7 +447,7 @@ impl OfferSettingsService {
         &self,
         settings_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<OfferSettingsOperationResponse>> {
+    ) -> SDKResult<Response<OfferSettingsOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::DELETE);
         api_req.set_api_path(EndpointBuilder::replace_param(

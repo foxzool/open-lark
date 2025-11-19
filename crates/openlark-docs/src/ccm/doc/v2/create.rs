@@ -3,7 +3,7 @@
 //! 提供创建和初始化旧版文档的功能。
 
 use openlark_core::{
-    api_req::ApiRequest, config::Config, constants::AccessTokenType, http::Transport, SDKResult,
+    api::ApiRequest, config::Config, constants::AccessTokenType, http::Transport, SDKResult,
 };
 
 use super::{models::DocType, requests::CreateDocV2Request, responses::CreateDocV2Response};

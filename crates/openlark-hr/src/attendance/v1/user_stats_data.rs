@@ -3,7 +3,7 @@ use serde_json::json;
 
 use crate::{
     core::{
-        api_resp::BaseResponse, config::Config, constants::AccessTokenType,
+        api::Response, config::Config, constants::AccessTokenType,
         endpoints::attendance::*, http::Transport, req_option::RequestOption,
         trait_system::Service, SDKResult,
     },
@@ -33,7 +33,7 @@ impl UserStatsDataService {
         &self,
         request: UpdateUserStatsDataRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<UpdateUserStatsDataRespData>> {
+    ) -> SDKResult<Response<UpdateUserStatsDataRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(ATTENDANCE_V1_USER_STATS_DATAS_UPDATE.to_string());
@@ -66,7 +66,7 @@ impl UserStatsDataService {
         &self,
         request: QueryStatsSettingsRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<QueryStatsSettingsRespData>> {
+    ) -> SDKResult<Response<QueryStatsSettingsRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(ATTENDANCE_V1_USER_STATS_DATAS_QUERY.to_string());
@@ -92,7 +92,7 @@ impl UserStatsDataService {
         &self,
         request: QueryStatsFieldsRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<QueryStatsFieldsRespData>> {
+    ) -> SDKResult<Response<QueryStatsFieldsRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(ATTENDANCE_V1_USER_STATS_DATAS_QUERY_FIELDS.to_string());
@@ -122,7 +122,7 @@ impl UserStatsDataService {
         &self,
         request: QueryUserStatsDataRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<QueryUserStatsDataRespData>> {
+    ) -> SDKResult<Response<QueryUserStatsDataRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(ATTENDANCE_V1_USER_STATS_DATAS_QUERY_DATA.to_string());
@@ -171,7 +171,7 @@ impl_executable_builder_owned!(
     UpdateUserStatsDataRequest,
     UserStatsDataService,
     UpdateUserStatsDataRequest,
-    BaseResponse<UpdateUserStatsDataRespData>,
+    Response<UpdateUserStatsDataRespData>,
     update
 );
 
@@ -179,7 +179,7 @@ impl_executable_builder_owned!(
     QueryStatsSettingsRequest,
     UserStatsDataService,
     QueryStatsSettingsRequest,
-    BaseResponse<QueryStatsSettingsRespData>,
+    Response<QueryStatsSettingsRespData>,
     query_settings
 );
 
@@ -187,7 +187,7 @@ impl_executable_builder_owned!(
     QueryStatsFieldsRequest,
     UserStatsDataService,
     QueryStatsFieldsRequest,
-    BaseResponse<QueryStatsFieldsRespData>,
+    Response<QueryStatsFieldsRespData>,
     query_fields
 );
 
@@ -195,7 +195,7 @@ impl_executable_builder_owned!(
     QueryUserStatsDataRequest,
     UserStatsDataService,
     QueryUserStatsDataRequest,
-    BaseResponse<QueryUserStatsDataRespData>,
+    Response<QueryUserStatsDataRespData>,
     query_data
 );
 
@@ -203,7 +203,7 @@ impl_executable_builder_owned!(
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-    use openlark_core::{api_req::ApiRequest, config::Config};
+    use openlark_core::{api::ApiRequest, config::Config};
     use crate::service::attendance::v1::models::StatsSettings;
 
     fn create_test_config() -> Config {

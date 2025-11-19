@@ -6,8 +6,8 @@
 //! - 工作表属性管理和操作
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -160,7 +160,7 @@ impl SheetService {
     pub async fn query_sheets(
         &self,
         spreadsheet_token: &str,
-    ) -> SDKResult<BaseResponse<QuerySheetsResponse>> {
+    ) -> SDKResult<Response<QuerySheetsResponse>> {
         let endpoint = format!(
             "{}/{}/sheets/query",
             openlark_core::endpoints::Endpoints::SHEETS_V3_SPREADSHEETS,
@@ -195,7 +195,7 @@ impl SheetService {
         &self,
         spreadsheet_token: &str,
         sheet_id: &str,
-    ) -> openlark_core::SDKResult<BaseResponse<GetSheetResponse>> {
+    ) -> openlark_core::SDKResult<Response<GetSheetResponse>> {
         let endpoint = format!(
             "{}/{}/sheets/{}",
             openlark_core::endpoints::Endpoints::SHEETS_V3_SPREADSHEETS,
@@ -239,7 +239,7 @@ impl QuerySheetsBuilder {
     }
 
     /// 执行查询请求
-    pub async fn execute(self) -> SDKResult<BaseResponse<QuerySheetsResponse>> {
+    pub async fn execute(self) -> SDKResult<Response<QuerySheetsResponse>> {
         self.service.query_sheets(&self.spreadsheet_token).await
     }
 }
@@ -254,7 +254,7 @@ pub struct GetSheetBuilder {
 
 impl GetSheetBuilder {
     /// 执行获取请求
-    pub async fn execute(self) -> openlark_core::SDKResult<BaseResponse<GetSheetResponse>> {
+    pub async fn execute(self) -> openlark_core::SDKResult<Response<GetSheetResponse>> {
         Ok(self
             .service
             .get_sheet(&self.spreadsheet_token, &self.sheet_id)
@@ -311,7 +311,7 @@ impl SheetService {
         spreadsheet_token: &str,
         sheet_id: &str,
         request: &FindCellsRequest,
-    ) -> openlark_core::SDKResult<BaseResponse<FindCellsResponse>> {
+    ) -> openlark_core::SDKResult<Response<FindCellsResponse>> {
         let endpoint = format!(
             "{}/{}/sheets/{}/find",
             openlark_core::endpoints::Endpoints::SHEETS_V3_SPREADSHEETS,
@@ -518,7 +518,7 @@ impl FindCellsBuilder {
     }
 
     /// 执行查找请求
-    pub async fn execute(self) -> openlark_core::SDKResult<BaseResponse<FindCellsResponse>> {
+    pub async fn execute(self) -> openlark_core::SDKResult<Response<FindCellsResponse>> {
         self.request
             .validate()
             .map_err(|msg| LarkAPIError::IllegalParamError(msg))?;

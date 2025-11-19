@@ -1,4 +1,4 @@
-use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 
 /// OpenAPI 审计日志请求参数

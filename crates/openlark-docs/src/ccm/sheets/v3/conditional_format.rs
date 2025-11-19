@@ -7,8 +7,8 @@
 //! - 条件格式优先级管理
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, ResponseFormat},
     error::LarkAPIError,
     http::Transport,
 };
@@ -882,15 +882,14 @@ impl ConditionalFormatService {
             .await
             .map_err(|e| LarkAPIError::RequestError(e.to_string()))?;
 
-        let delete_response: openlark_core::api_resp::BaseResponse<
-            DeleteConditionalFormatResponse,
-        > = serde_json::from_str(
-            &response
-                .text()
-                .await
-                .map_err(|e| LarkAPIError::RequestError(e.to_string()))?,
-        )
-        .map_err(|e| LarkAPIError::DeserializeError(e.to_string()))?;
+        let delete_response: openlark_core::api::Response<DeleteConditionalFormatResponse> =
+            serde_json::from_str(
+                &response
+                    .text()
+                    .await
+                    .map_err(|e| LarkAPIError::RequestError(e.to_string()))?,
+            )
+            .map_err(|e| LarkAPIError::DeserializeError(e.to_string()))?;
 
         if delete_response.code() != 0 {
             return Err(LarkAPIError::APIError {

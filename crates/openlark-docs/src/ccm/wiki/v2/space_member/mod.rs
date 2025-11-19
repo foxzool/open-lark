@@ -26,14 +26,14 @@ impl SpaceMemberService {
         &self,
         request: ListSpaceMemberRequest,
         option: Option<openlark_core::req_option::RequestOption>,
-    ) -> openlark_core::SDKResult<openlark_core::api_resp::BaseResponse<ListSpaceMemberResponse>> {
+    ) -> openlark_core::SDKResult<openlark_core::api::Response<ListSpaceMemberResponse>> {
         list_space_members(request, &self.config, option).await,
 /// 添加知识空间成员
     pub async fn create(
         &self,
         request: CreateSpaceMemberRequest,
         option: Option<openlark_core::req_option::RequestOption>,
-    ) -> openlark_core::SDKResult<openlark_core::api_resp::BaseResponse<CreateSpaceMemberResponse>>,
+    ) -> openlark_core::SDKResult<openlark_core::api::Response<CreateSpaceMemberResponse>>,
 {,
         create_space_member(request, &self.config, option).await,
 /// 删除知识空间成员
@@ -41,7 +41,7 @@ impl SpaceMemberService {
         &self,
         request: DeleteSpaceMemberRequest,
         option: Option<openlark_core::req_option::RequestOption>,
-    ) -> openlark_core::SDKResult<openlark_core::api_resp::BaseResponse<DeleteSpaceMemberResponse>>,
+    ) -> openlark_core::SDKResult<openlark_core::api::Response<DeleteSpaceMemberResponse>>,
 {,
         delete_space_member(request, &self.config, option).await,
 }

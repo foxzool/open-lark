@@ -7,8 +7,8 @@
 //! - 电子表格权限管理
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -272,7 +272,7 @@ impl SpreadsheetService {
     pub async fn get(
         &self,
         spreadsheet_token: &str,
-    ) -> SDKResult<BaseResponse<GetSpreadsheetResponse>> {
+    ) -> SDKResult<Response<GetSpreadsheetResponse>> {
         let endpoint = format!(
             "{}/{}",
             openlark_core::endpoints::Endpoints::SHEETS_V3_SPREADSHEETS,
@@ -310,7 +310,7 @@ impl SpreadsheetService {
         &self,
         spreadsheet_token: &str,
         request: &UpdateSpreadsheetRequest,
-    ) -> SDKResult<BaseResponse<UpdateSpreadsheetResponse>> {
+    ) -> SDKResult<Response<UpdateSpreadsheetResponse>> {
         let endpoint = format!(
             "{}/{}",
             openlark_core::endpoints::Endpoints::SHEETS_V3_SPREADSHEETS,
@@ -467,7 +467,7 @@ impl UpdateSpreadsheetBuilder {
         self,
         service: &SpreadsheetService,
         spreadsheet_token: &str,
-    ) -> SDKResult<BaseResponse<UpdateSpreadsheetResponse>> {
+    ) -> SDKResult<Response<UpdateSpreadsheetResponse>> {
         self.request
             .validate()
             .map_err(|msg| LarkAPIError::IllegalParamError(msg))?;

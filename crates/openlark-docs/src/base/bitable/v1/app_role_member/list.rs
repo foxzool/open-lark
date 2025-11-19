@@ -12,14 +12,14 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 use SDKResult;use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use openlark_core::,
 {
     core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -78,7 +78,7 @@ impl_executable_builder_owned!(,
     ListRoleMemberRequestBuilder,
     AppRoleMemberService,
     ListRoleMemberRequest,
-    BaseResponse<ListRoleMemberResponse>,
+    Response<ListRoleMemberResponse>,
     list,
 );
 /// 列出协作者响应

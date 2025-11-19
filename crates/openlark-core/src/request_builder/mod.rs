@@ -7,7 +7,10 @@ pub use header_builder::HeaderBuilder;
 pub use multipart_builder::MultipartBuilder;
 
 use crate::{
-    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    api::{ApiRequest, RequestData},
+    config::Config,
+    constants::AccessTokenType,
+    error::LarkAPIError,
     req_option::RequestOption,
 };
 use reqwest::RequestBuilder;
@@ -18,7 +21,7 @@ pub struct UnifiedRequestBuilder;
 
 impl UnifiedRequestBuilder {
     pub fn build<'a>(
-        req: &'a mut ApiRequest,
+        req: &'a mut ApiRequest<()>,
         access_token_type: AccessTokenType,
         config: &'a Config,
         option: &'a RequestOption,
@@ -26,9 +29,18 @@ impl UnifiedRequestBuilder {
         Box::pin(async move {
             // 1. 构建基础请求
             let url = Self::build_url(config, req)?;
-            let mut req_builder = config
-                .http_client
-                .request(req.http_method.clone(), url.as_ref());
+            // 将HttpMethod转换为reqwest::Method
+            let reqwest_method = match req.method() {
+                crate::api::HttpMethod::Get => reqwest::Method::GET,
+                crate::api::HttpMethod::Post => reqwest::Method::POST,
+                crate::api::HttpMethod::Put => reqwest::Method::PUT,
+                crate::api::HttpMethod::Delete => reqwest::Method::DELETE,
+                crate::api::HttpMethod::Patch => reqwest::Method::PATCH,
+                crate::api::HttpMethod::Head => reqwest::Method::HEAD,
+                crate::api::HttpMethod::Options => reqwest::Method::OPTIONS,
+            };
+
+            let mut req_builder = config.http_client.request(reqwest_method, url.as_ref());
 
             // 2. 构建请求头
             req_builder = HeaderBuilder::build_headers(req_builder, config, option);
@@ -38,37 +50,55 @@ impl UnifiedRequestBuilder {
                 AuthHandler::apply_auth(req_builder, access_token_type, config, option).await?;
 
             // 4. 处理请求体
-            if !req.file.is_empty() {
-                req_builder = MultipartBuilder::build_multipart(req_builder, &req.body, &req.file)?;
-            } else if !req.body.is_empty() {
-                req_builder = req_builder.body(req.body.clone());
-                req_builder = req_builder.header(
-                    crate::constants::CONTENT_TYPE_HEADER,
-                    crate::constants::DEFAULT_CONTENT_TYPE,
-                );
+            if !req.file().is_empty() {
+                if let Some(_body_data) = &req.body {
+                    req_builder = MultipartBuilder::build_multipart(
+                        req_builder,
+                        &req.to_bytes(),
+                        &req.file(),
+                    )?;
+                }
+            } else if let Some(body_data) = &req.body {
+                match body_data {
+                    RequestData::Binary(data) if !data.is_empty() => {
+                        req_builder = req_builder.body(data.clone());
+                        req_builder = req_builder.header(
+                            crate::constants::CONTENT_TYPE_HEADER,
+                            crate::constants::DEFAULT_CONTENT_TYPE,
+                        );
+                    }
+                    RequestData::Json(json) => {
+                        let json_bytes = serde_json::to_vec(json).unwrap_or_default();
+                        req_builder = req_builder.body(json_bytes);
+                        req_builder = req_builder.header(
+                            crate::constants::CONTENT_TYPE_HEADER,
+                            crate::constants::DEFAULT_CONTENT_TYPE,
+                        );
+                    }
+                    _ => {}
+                }
             }
 
             Ok(req_builder)
         })
     }
 
-    fn build_url(config: &Config, req: &ApiRequest) -> Result<url::Url, LarkAPIError> {
-        let path = format!("{}{}", config.base_url, req.api_path);
-        let query_params = req
-            .query_params
+    fn build_url(config: &Config, req: &ApiRequest<()>) -> Result<url::Url, LarkAPIError> {
+        let path = format!("{}{}", config.base_url, req.api_path());
+        let query = req
+            .query
             .iter()
-            .map(|(k, v)| (*k, v.as_str()))
+            .map(|(k, v)| (k.as_str(), v.as_str()))
             .collect::<Vec<_>>();
-        Ok(url::Url::parse_with_params(&path, query_params)?)
+        Ok(url::Url::parse_with_params(&path, query)?)
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{api_req::ApiRequest, constants::AppType};
+    use crate::{api::ApiRequest, constants::AppType};
     use reqwest::Method;
-    use std::collections::HashMap;
 
     fn create_test_config() -> Config {
         Config::builder()
@@ -79,15 +109,8 @@ mod tests {
             .build()
     }
 
-    fn create_test_api_request() -> ApiRequest {
-        ApiRequest {
-            http_method: Method::GET,
-            api_path: "/open-apis/test".to_string(),
-            body: vec![],
-            file: vec![],
-            query_params: HashMap::new(),
-            ..Default::default()
-        }
+    fn create_test_api_request() -> ApiRequest<()> {
+        ApiRequest::get("https://open.feishu.cn/open-apis/test")
     }
 
     #[test]
@@ -111,9 +134,9 @@ mod tests {
 
     #[tokio::test]
     async fn test_build_request_with_body() {
-        let mut api_req = create_test_api_request();
-        api_req.set_http_method(Method::POST);
-        api_req.body = b"{\"test\": \"data\"}".to_vec();
+        let mut api_req = ApiRequest::post("https://open.feishu.cn/open-apis/test").body(
+            crate::api::RequestData::Text("{\"test\": \"data\"}".to_string()),
+        );
 
         let config = create_test_config();
         let option = RequestOption::default();
@@ -127,11 +150,8 @@ mod tests {
 
     #[tokio::test]
     async fn test_build_request_with_files() {
-        let mut api_req = create_test_api_request();
-        api_req.set_http_method(Method::POST);
-
-        // Add a file to the request
-        api_req.file = b"file content".to_vec();
+        let mut api_req = ApiRequest::post("https://open.feishu.cn/open-apis/test")
+            .body(crate::api::RequestData::Text("file content".to_string()));
 
         let config = create_test_config();
         let option = RequestOption::default();
@@ -145,10 +165,10 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_build_request_with_query_params() {
+    async fn test_build_request_with_query() {
         let mut api_req = create_test_api_request();
-        api_req.query_params.insert("page", "1".to_string());
-        api_req.query_params.insert("limit", "10".to_string());
+        api_req.query.insert("page".to_string(), "1".to_string());
+        api_req.query.insert("limit".to_string(), "10".to_string());
 
         let config = create_test_config();
         let option = RequestOption::default();
@@ -222,8 +242,14 @@ mod tests {
         ];
 
         for method in methods.iter() {
-            let mut api_req = create_test_api_request();
-            api_req.set_http_method(method.clone());
+            let mut api_req = match &*method {
+                Method::GET => ApiRequest::get("https://open.feishu.cn/open-apis/test"),
+                Method::POST => ApiRequest::post("https://open.feishu.cn/open-apis/test"),
+                Method::PUT => ApiRequest::put("https://open.feishu.cn/open-apis/test"),
+                Method::DELETE => ApiRequest::delete("https://open.feishu.cn/open-apis/test"),
+                Method::PATCH => ApiRequest::get("https://open.feishu.cn/open-apis/test"), // PATCH not supported, fallback to GET
+                _ => ApiRequest::get("https://open.feishu.cn/open-apis/test"),
+            };
 
             let result =
                 UnifiedRequestBuilder::build(&mut api_req, AccessTokenType::None, &config, &option)
@@ -249,11 +275,11 @@ mod tests {
     }
 
     #[test]
-    fn test_build_url_with_query_params() {
+    fn test_build_url_with_query() {
         let config = create_test_config();
         let mut api_req = create_test_api_request();
-        api_req.query_params.insert("page", "1".to_string());
-        api_req.query_params.insert("size", "20".to_string());
+        api_req.query.insert("page".to_string(), "1".to_string());
+        api_req.query.insert("size".to_string(), "20".to_string());
 
         let result = UnifiedRequestBuilder::build_url(&config, &api_req);
 
@@ -270,11 +296,11 @@ mod tests {
         let config = create_test_config();
         let mut api_req = create_test_api_request();
         api_req
-            .query_params
-            .insert("query", "test with spaces".to_string());
+            .query
+            .insert("query".to_string(), "test with spaces".to_string());
         api_req
-            .query_params
-            .insert("filter", "key=value&other=data".to_string());
+            .query
+            .insert("filter".to_string(), "key=value&other=data".to_string());
 
         let result = UnifiedRequestBuilder::build_url(&config, &api_req);
 
@@ -286,10 +312,10 @@ mod tests {
     }
 
     #[test]
-    fn test_build_url_with_empty_query_params() {
+    fn test_build_url_with_empty_query() {
         let config = create_test_config();
         let mut api_req = create_test_api_request();
-        api_req.query_params.insert("empty", "".to_string());
+        api_req.query.insert("empty".to_string(), "".to_string());
 
         let result = UnifiedRequestBuilder::build_url(&config, &api_req);
 
@@ -335,16 +361,12 @@ mod tests {
 
     #[tokio::test]
     async fn test_build_request_complex_scenario() {
-        let mut api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: "/open-apis/complex/test".to_string(),
-            body: b"{\"complex\": \"data\", \"nested\": {\"value\": 123}}".to_vec(),
-            file: vec![],
-            query_params: HashMap::new(),
-            ..Default::default()
-        };
-        api_req.query_params.insert("version", "v1".to_string());
-        api_req.query_params.insert("format", "json".to_string());
+        let mut api_req = ApiRequest::post("https://open.feishu.cn/open-apis/complex/test")
+            .body(crate::api::RequestData::Text(
+                "{\"complex\": \"data\", \"nested\": {\"value\": 123}}".to_string(),
+            ))
+            .query("version", "v1")
+            .query("format", "json");
 
         let config = create_test_config();
         let option = RequestOption {
@@ -372,12 +394,9 @@ mod tests {
 
     #[tokio::test]
     async fn test_build_request_with_body_and_files_edge_case() {
-        let mut api_req = create_test_api_request();
-        api_req.set_http_method(Method::POST);
-        api_req.body = b"regular body".to_vec();
-
-        // Add files - this should take precedence over body
-        api_req.file = b"file content combined".to_vec();
+        let mut api_req = ApiRequest::post("https://open.feishu.cn/open-apis/test").body(
+            crate::api::RequestData::Text("file content combined".to_string()),
+        );
 
         let config = create_test_config();
         let option = RequestOption::default();
@@ -393,8 +412,7 @@ mod tests {
     #[test]
     fn test_build_url_with_path_segments() {
         let config = create_test_config();
-        let mut api_req = create_test_api_request();
-        api_req.set_api_path("/open-apis/v1/users/123/messages".to_string());
+        let api_req = ApiRequest::get("https://open.feishu.cn/open-apis/v1/users/123/messages");
 
         let result = UnifiedRequestBuilder::build_url(&config, &api_req);
 

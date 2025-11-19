@@ -2,7 +2,7 @@
 //!
 //! 包含客户端相关的核心类型
 
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use std::time::Duration;
 
 /// 📄 API响应特征

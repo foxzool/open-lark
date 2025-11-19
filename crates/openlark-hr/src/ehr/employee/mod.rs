@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        api::ApiRequest,
+        api::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
         http::Transport,
@@ -98,7 +98,7 @@ impl EmployeeService {
         &self,
         request: EmployeeListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<EmployeeListResponse>> {
+    ) -> SDKResult<Response<EmployeeListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
             api_path: "/open-apis/ehr/v1/employees".to_string(),

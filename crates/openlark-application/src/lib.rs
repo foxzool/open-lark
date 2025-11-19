@@ -2,7 +2,7 @@
 //!
 //! 飞书应用管理相关功能接口，包含应用创建、配置和管理等功能。
 
-use openlark_client::{legacy_client::LarkClient as LegacyLarkClient, LarkClient};
+use openlark_client::legacy_client::LarkClient as LegacyLarkClient;
 use openlark_core::SDKResult;
 
 /// Application服务主入口

@@ -7,7 +7,7 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 use SDKResult;use std::fmt::Debug;
-use openlark_core::api_req::ApiRequest;
+use openlark_core::api::ApiRequest;
 use log::error;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
@@ -17,7 +17,7 @@ use crate::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -38,7 +38,7 @@ impl ExplorerService {
     pub async fn root_folder_meta(
         &self,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ExplorerRootMeta>> {,
+    ) -> SDKResult<Response<ExplorerRootMeta>> {,
 let api_req = ApiRequest {,
             http_http_http_method: Method::GET,
             api_path: DRIVE_EXPLORER_V2_ROOT_FOLDER_META.to_string(),
@@ -55,7 +55,7 @@ Ok(api_resp),
         &self,
         folder_token: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ExplorerFolderMeta>> {,
+    ) -> SDKResult<Response<ExplorerFolderMeta>> {,
 let api_req = ApiRequest {,
             http_http_http_method: Method::GET,
             api_path: DRIVE_EXPLORER_V2_FOLDER_META.replace("{folder_token}", folder_token),
@@ -72,7 +72,7 @@ pub async fn create_folder(,
         &self,
         create_folder_request: CreateFolderRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<CreateFolderResponse>> {,
+    ) -> SDKResult<Response<CreateFolderResponse>> {,
 let mut api_req = create_folder_request.api_req;
         api_req.set_http_method(Method::POST);
 api_req.set_api_path(DRIVE_V1_FILES_CREATE_FOLDER.to_string());
@@ -88,7 +88,7 @@ Ok(api_resp)}
         &self,
         list_folder_request: ListFolderRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ListFolderResponse>> {,
+    ) -> SDKResult<Response<ListFolderResponse>> {,
 let mut api_req = list_folder_request.api_req;
         api_req.set_http_method(Method::GET);
 api_req.set_api_path(DRIVE_V1_FILES.to_string());
@@ -316,13 +316,13 @@ impl_executable_builder_owned!(,
     CreateFolderRequestBuilder,
     ExplorerService,
     CreateFolderRequest,
-    BaseResponse<CreateFolderResponse>,
+    Response<CreateFolderResponse>,
     create_folder,
 );
 impl_executable_builder_owned!(
     ListFolderRequestBuilder,
     ExplorerService,
     ListFolderRequest,
-    BaseResponse<ListFolderResponse>,
+    Response<ListFolderResponse>,
     list_folder,
 );

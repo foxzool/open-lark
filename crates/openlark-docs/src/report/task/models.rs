@@ -6,7 +6,7 @@
 //! - 任务执行历史和结果信息
 //! - 完整的序列化和验证支持
 
-use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 
 /// 查询报告任务请求

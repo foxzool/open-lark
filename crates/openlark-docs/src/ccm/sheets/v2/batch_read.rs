@@ -21,8 +21,8 @@ use serde_json::Value;
 use openlark_core::endpoints::Endpoints;
 use openlark_core::impl_executable_builder_owned;
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -343,7 +343,7 @@ impl BatchReadService {
         &self,
         request: ReadMultipleRangesRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReadMultipleRangesResponseData>> {
+    ) -> SDKResult<Response<ReadMultipleRangesResponseData>> {
         // 验证请求参数
         request.validate()?;
 
@@ -380,7 +380,7 @@ impl BatchReadService {
         }
 
         // 暂时返回模拟数据，直到Transport问题解决
-        use openlark_core::api_resp::RawResponse;
+        use openlark_core::api::RawResponse;
         Ok(BaseResponse {
             raw_response: RawResponse {
                 code: 0,
@@ -412,7 +412,7 @@ impl BatchReadService {
         spreadsheet_token: impl Into<String>,
         range: impl Into<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReadMultipleRangesResponseData>> {
+    ) -> SDKResult<Response<ReadMultipleRangesResponseData>> {
         let request = ReadMultipleRangesRequest::new(spreadsheet_token, range);
         self.read_multiple_ranges(request, option).await
     }
@@ -433,7 +433,7 @@ impl BatchReadService {
         spreadsheet_token: impl Into<String>,
         ranges: Vec<impl Into<String>>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReadMultipleRangesResponseData>> {
+    ) -> SDKResult<Response<ReadMultipleRangesResponseData>> {
         let ranges_str = ranges
             .into_iter()
             .map(|r| r.into())
@@ -450,7 +450,7 @@ impl_executable_builder_owned!(
     ReadMultipleRangesRequestBuilder,
     BatchReadService,
     ReadMultipleRangesRequest,
-    BaseResponse<ReadMultipleRangesResponseData>,
+    Response<ReadMultipleRangesResponseData>,
     read_multiple_ranges
 );
 

@@ -8,8 +8,8 @@
 //! - 数字格式设置
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -554,7 +554,7 @@ impl StyleOperationsService {
         &self,
         request: BatchUpdateStylesRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<BatchUpdateStylesResponse>> {
+    ) -> SDKResult<Response<BatchUpdateStylesResponse>> {
         if let Err(err) = request.validate() {
             return Err(LarkAPIError::InvalidParameter(err));
         }
@@ -619,7 +619,7 @@ impl BatchUpdateStylesBuilder {
     }
 
     /// 执行批量更新请求
-    pub async fn execute(self) -> SDKResult<BaseResponse<BatchUpdateStylesResponse>> {
+    pub async fn execute(self) -> SDKResult<Response<BatchUpdateStylesResponse>> {
         let request = BatchUpdateStylesRequest::new(self.spreadsheet_token).add_styles(self.styles);
 
         let service = StyleOperationsService {

@@ -1,13 +1,13 @@
 #![allow(unused_variables, unused_unsafe)]
 use SDKResult;use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 ,
 {
     core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::{cloud_docs::*, EndpointBuilder};
@@ -44,7 +44,7 @@ impl CreateSpaceMemberRequestBuilder {
     CreateSpaceMemberRequestBuilder,
     super::cloud_docs::wiki::v2::space_member::SpaceMemberService,
     CreateSpaceMemberRequest,
-    BaseResponse<CreateSpaceMemberResponse>,
+    Response<CreateSpaceMemberResponse>,
     create,
 );
 /// 添加的成员信息
@@ -72,7 +72,7 @@ pub async fn create_space_member(
     request: CreateSpaceMemberRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<CreateSpaceMemberResponse>> {,
+) -> SDKResult<Response<CreateSpaceMemberResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::POST);
 api_req.set_api_path(EndpointBuilder::replace_param(,

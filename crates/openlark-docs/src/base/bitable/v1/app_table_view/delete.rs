@@ -12,14 +12,14 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 use SDKResult;use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::Deserialize;
+use openlark_core::api::ApiRequest;use serde::Deserialize;
 use openlark_core::,
 {,
     core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -38,7 +38,7 @@ pub async fn delete_view(
     request: DeleteViewRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<DeleteViewResponse>> {,
+) -> SDKResult<Response<DeleteViewResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::DELETE);
 api_req.api_path = BITABLE_V1_VIEW_DELETE,
@@ -72,7 +72,7 @@ impl DeleteViewRequestBuilder {
 }impl_executable_builder_config!(,
     DeleteViewRequestBuilder,
     DeleteViewRequest,
-    BaseResponse<DeleteViewResponse>,
+    Response<DeleteViewResponse>,
     delete_view,
 );
 #[derive(Clone)]

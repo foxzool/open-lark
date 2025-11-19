@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        api::ApiRequest,
+        api::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
@@ -248,7 +248,7 @@ impl ReferralService {
         &self,
         request: ReferralCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReferralOperationResponse>> {
+    ) -> SDKResult<Response<ReferralOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_REFERRALS.to_string());
@@ -292,7 +292,7 @@ impl ReferralService {
         &self,
         referral_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReferralDetailResponse>> {
+    ) -> SDKResult<Response<ReferralDetailResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
                 api_req.set_api_path(EndpointBuilder::replace_param(
@@ -356,7 +356,7 @@ impl ReferralService {
         &self,
         request: ReferralListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReferralListResponse>> {
+    ) -> SDKResult<Response<ReferralListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_REFERRALS.to_string());
@@ -432,7 +432,7 @@ impl ReferralService {
         &self,
         request: ReferralAccountCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReferralOperationResponse>> {
+    ) -> SDKResult<Response<ReferralOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_REFERRAL_ACCOUNTS.to_string());
@@ -475,7 +475,7 @@ impl ReferralService {
         &self,
         user_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReferralAccountDetailResponse>> {
+    ) -> SDKResult<Response<ReferralAccountDetailResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
                 api_req.set_api_path(EndpointBuilder::replace_param(
@@ -518,7 +518,7 @@ impl ReferralService {
         reward_amount: &str,
         remark: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReferralOperationResponse>> {
+    ) -> SDKResult<Response<ReferralOperationResponse>> {
         #[derive(Serialize)]
         struct GrantRewardRequest {
             reward_amount: String,
@@ -567,7 +567,7 @@ impl ReferralService {
         &self,
         request: ReferralRewardSettingsCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReferralOperationResponse>> {
+    ) -> SDKResult<Response<ReferralOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_REFERRAL_REWARD_SETTINGS.to_string());
@@ -609,7 +609,7 @@ impl ReferralService {
         page_size: Option<u32>,
         page_token: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReferralRewardSettingsListResponse>> {
+    ) -> SDKResult<Response<ReferralRewardSettingsListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_REFERRAL_REWARD_SETTINGS.to_string());

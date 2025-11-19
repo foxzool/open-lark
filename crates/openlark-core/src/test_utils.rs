@@ -3,7 +3,7 @@
 /// This module provides common testing patterns, mock objects, and helper functions
 /// to reduce code duplication across tests and ensure consistent testing practices.
 use crate::{
-    api_resp::{ApiResponseTrait, BaseResponse, ErrorInfo, RawResponse, ResponseFormat},
+    api::{ApiResponseTrait, BaseResponse, ErrorInfo, RawResponse, Response, ResponseFormat},
     error::LarkAPIError,
 };
 use serde::{Deserialize, Serialize};
@@ -51,13 +51,15 @@ impl ApiResponseTrait for MockBinaryData {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Binary
     }
+}
 
-    fn from_binary(file_name: String, body: Vec<u8>) -> Option<Self> {
-        Some(MockBinaryData {
+impl MockBinaryData {
+    pub fn from_binary(file_name: String, body: Vec<u8>) -> Self {
+        MockBinaryData {
             file_name,
             content: body,
             content_type: Some("application/octet-stream".to_string()),
-        })
+        }
     }
 }
 
@@ -88,10 +90,9 @@ impl<T> MockResponseBuilder<T> {
             code,
             msg: msg.to_string(),
             err: Some(ErrorInfo {
-                log_id: None,
-                details: vec![],
-                permission_violations: vec![],
-                field_violations: vec![],
+                code,
+                message: msg.to_string(),
+                details: None,
             }),
             data: None,
         }
@@ -107,12 +108,11 @@ impl<T> MockResponseBuilder<T> {
         self
     }
 
-    pub fn with_error(mut self, log_id: Option<String>) -> Self {
+    pub fn with_error(mut self, error_code: i32, error_msg: &str) -> Self {
         self.err = Some(ErrorInfo {
-            log_id,
-            details: vec![],
-            permission_violations: vec![],
-            field_violations: vec![],
+            code: error_code,
+            message: error_msg.to_string(),
+            details: None,
         });
         self
     }
@@ -122,12 +122,14 @@ impl<T> MockResponseBuilder<T> {
         self
     }
 
-    pub fn build(self) -> BaseResponse<T> {
+    pub fn build(self) -> Response<T> {
         BaseResponse {
             raw_response: RawResponse {
                 code: self.code,
                 msg: self.msg,
-                err: self.err,
+                request_id: None,
+                data: None,
+                error: self.err,
             },
             data: self.data,
         }
@@ -309,7 +311,7 @@ pub struct TestAssertions;
 
 impl TestAssertions {
     /// Assert that a BaseResponse is successful
-    pub fn assert_success<T>(response: &BaseResponse<T>) {
+    pub fn assert_success<T>(response: &Response<T>) {
         assert_eq!(
             response.raw_response.code, 0,
             "Response should be successful"
@@ -322,7 +324,7 @@ impl TestAssertions {
     }
 
     /// Assert that a BaseResponse is an error
-    pub fn assert_error<T>(response: &BaseResponse<T>, expected_code: i32) {
+    pub fn assert_error<T>(response: &Response<T>, expected_code: i32) {
         assert_eq!(
             response.raw_response.code, expected_code,
             "Response should have expected error code"
@@ -428,7 +430,7 @@ mod tests {
 
     #[test]
     fn test_error_response_builder() {
-        let response: BaseResponse<MockApiData> =
+        let response: Response<MockApiData> =
             MockResponseBuilder::error(400, "Bad Request").build();
         TestAssertions::assert_error(&response, 400);
     }

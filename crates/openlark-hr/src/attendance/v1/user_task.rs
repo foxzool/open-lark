@@ -2,7 +2,7 @@ use reqwest::Method;
 use serde_json::json;
 
 use openlark_core::{
-    api_resp::BaseResponse,
+    api::Response,
     config::Config,
     constants::AccessTokenType,
     endpoints::{attendance::*, EndpointBuilder},
@@ -35,7 +35,7 @@ impl UserTaskService {
         &self,
         request: BatchCreateUserTaskRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<BatchCreateUserTaskRespData>> {
+    ) -> SDKResult<Response<BatchCreateUserTaskRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(ATTENDANCE_V1_USER_TASKS_BATCH_CREATE.to_string());
@@ -68,7 +68,7 @@ impl UserTaskService {
         &self,
         request: GetUserTaskRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<GetUserTaskRespData>> {
+    ) -> SDKResult<Response<GetUserTaskRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -101,7 +101,7 @@ impl UserTaskService {
         &self,
         request: QueryUserTaskRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<QueryUserTaskRespData>> {
+    ) -> SDKResult<Response<QueryUserTaskRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(ATTENDANCE_V1_USER_TASKS_QUERY.to_string());
@@ -157,7 +157,7 @@ impl UserTaskService {
         &self,
         request: BatchDelUserTaskRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<BatchDelUserTaskRespData>> {
+    ) -> SDKResult<Response<BatchDelUserTaskRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(ATTENDANCE_V1_USER_TASKS_BATCH_DELETE.to_string());
@@ -190,7 +190,7 @@ impl UserTaskService {
         &self,
         request: QueryUserTaskResultRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<QueryUserTaskResultRespData>> {
+    ) -> SDKResult<Response<QueryUserTaskResultRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(ATTENDANCE_V1_USER_TASK_RESULTS_QUERY.to_string());

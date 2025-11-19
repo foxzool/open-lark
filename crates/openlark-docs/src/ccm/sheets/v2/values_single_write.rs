@@ -11,8 +11,8 @@ use serde_json::Value;
 use std::collections::HashMap;
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints_original::Endpoints,
@@ -381,7 +381,7 @@ impl ValuesSingleWriteService {
 
         // 处理响应
         if response.status().is_success() {
-            let base_response: BaseResponse<ValuesSingleWriteResponseBody> = response
+            let base_response: Response<ValuesSingleWriteResponseBody> = response
                 .json()
                 .await
                 .map_err(|e| LarkAPIError::JsonParseError(format!("响应解析失败: {}", e)))?;

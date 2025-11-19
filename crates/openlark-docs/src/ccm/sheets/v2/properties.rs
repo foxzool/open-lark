@@ -7,8 +7,8 @@
 //! - 属性变更同步
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -140,7 +140,7 @@ impl PropertiesService {
         &self,
         request: &UpdatePropertiesRequest,
     ) -> SDKResult<UpdatePropertiesResponse> {
-        use openlark_core::{api_req::ApiRequest, http::Transport};
+        use openlark_core::{api::ApiRequest, http::Transport};
         use reqwest::Method;
 
         let endpoint = format!(

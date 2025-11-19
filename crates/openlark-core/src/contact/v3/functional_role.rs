@@ -1,5 +1,5 @@
 use crate::{
-    api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config, constants::AccessTokenType,
+    api::ApiRequest, api::ApiResponseTrait, config::Config, constants::AccessTokenType,
     endpoints::EndpointBuilder, http::Transport,
 };
 use serde::{Deserialize, Serialize};
@@ -20,7 +20,7 @@ impl FunctionalRoleService {
         req: &CreateFunctionalRoleRequest,
     ) -> crate::SDKResult<CreateFunctionalRoleResponse> {
         let mut api_req = ApiRequest::default();
-        api_req.set_http_method(reqwest::Method::POST);
+        api_req.set_method(reqwest::Method::POST);
         api_req.set_api_path(crate::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLES.to_string());
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         api_req.body = serde_json::to_vec(req)?;
@@ -36,7 +36,7 @@ impl FunctionalRoleService {
         req: &UpdateFunctionalRoleRequest,
     ) -> crate::SDKResult<UpdateFunctionalRoleResponse> {
         let mut api_req = ApiRequest::default();
-        api_req.set_http_method(reqwest::Method::PUT);
+        api_req.set_method(reqwest::Method::PUT);
         api_req.set_api_path(EndpointBuilder::replace_param(
                 crate::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_GET,
                 "role_id",
@@ -56,7 +56,7 @@ impl FunctionalRoleService {
     /// 获取单个角色信息
     pub async fn get(&self, role_id: &str) -> crate::SDKResult<GetFunctionalRoleResponse> {
         let mut api_req = ApiRequest::default();
-        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_method(reqwest::Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(
                 crate::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_GET,
                 "role_id",
@@ -74,7 +74,7 @@ impl FunctionalRoleService {
         req: &ListFunctionalRolesRequest,
     ) -> crate::SDKResult<ListFunctionalRolesResponse> {
         let mut api_req = ApiRequest::default();
-        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_method(reqwest::Method::GET);
         api_req.set_api_path(crate::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLES.to_string());
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         api_req.query_params = std::collections::HashMap::new();
@@ -100,7 +100,7 @@ impl FunctionalRoleService {
         role_id: &str,
     ) -> crate::SDKResult<DeleteFunctionalRoleResponse> {
         let mut api_req = ApiRequest::default();
-        api_req.set_http_method(reqwest::Method::DELETE);
+        api_req.set_method(reqwest::Method::DELETE);
         api_req.set_api_path(EndpointBuilder::replace_param(
                 crate::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_GET,
                 "role_id",
@@ -124,8 +124,8 @@ pub struct CreateFunctionalRoleResponse {
 }
 
 impl ApiResponseTrait for CreateFunctionalRoleResponse {
-    fn data_format() -> crate::api_resp::ResponseFormat {
-        crate::api_resp::ResponseFormat::Data
+    fn data_format() -> crate::api::ResponseFormat {
+        crate::api::ResponseFormat::Data
     }
 }
 
@@ -138,8 +138,8 @@ pub struct UpdateFunctionalRoleRequest {
 pub struct UpdateFunctionalRoleResponse {}
 
 impl ApiResponseTrait for UpdateFunctionalRoleResponse {
-    fn data_format() -> crate::api_resp::ResponseFormat {
-        crate::api_resp::ResponseFormat::Data
+    fn data_format() -> crate::api::ResponseFormat {
+        crate::api::ResponseFormat::Data
     }
 }
 
@@ -149,8 +149,8 @@ pub struct GetFunctionalRoleResponse {
 }
 
 impl ApiResponseTrait for GetFunctionalRoleResponse {
-    fn data_format() -> crate::api_resp::ResponseFormat {
-        crate::api_resp::ResponseFormat::Data
+    fn data_format() -> crate::api::ResponseFormat {
+        crate::api::ResponseFormat::Data
     }
 }
 
@@ -174,8 +174,8 @@ pub struct ListFunctionalRolesResponse {
 }
 
 impl ApiResponseTrait for ListFunctionalRolesResponse {
-    fn data_format() -> crate::api_resp::ResponseFormat {
-        crate::api_resp::ResponseFormat::Data
+    fn data_format() -> crate::api::ResponseFormat {
+        crate::api::ResponseFormat::Data
     }
 }
 
@@ -193,8 +193,8 @@ pub struct FunctionalRole {
 pub struct DeleteFunctionalRoleResponse {}
 
 impl ApiResponseTrait for DeleteFunctionalRoleResponse {
-    fn data_format() -> crate::api_resp::ResponseFormat {
-        crate::api_resp::ResponseFormat::Data
+    fn data_format() -> crate::api::ResponseFormat {
+        crate::api::ResponseFormat::Data
     }
 }
 
@@ -264,7 +264,7 @@ mod tests {
     fn test_create_functional_role_response_data_format() {
         assert_eq!(
             CreateFunctionalRoleResponse::data_format(),
-            crate::api_resp::ResponseFormat::Data
+            crate::api::ResponseFormat::Data
         );
     }
 
@@ -304,7 +304,7 @@ mod tests {
     fn test_update_functional_role_response_data_format() {
         assert_eq!(
             UpdateFunctionalRoleResponse::data_format(),
-            crate::api_resp::ResponseFormat::Data
+            crate::api::ResponseFormat::Data
         );
     }
 
@@ -330,7 +330,7 @@ mod tests {
     fn test_get_functional_role_response_data_format() {
         assert_eq!(
             GetFunctionalRoleResponse::data_format(),
-            crate::api_resp::ResponseFormat::Data
+            crate::api::ResponseFormat::Data
         );
     }
 
@@ -453,7 +453,7 @@ mod tests {
     fn test_list_functional_roles_response_data_format() {
         assert_eq!(
             ListFunctionalRolesResponse::data_format(),
-            crate::api_resp::ResponseFormat::Data
+            crate::api::ResponseFormat::Data
         );
     }
 
@@ -522,7 +522,7 @@ mod tests {
     fn test_delete_functional_role_response_data_format() {
         assert_eq!(
             DeleteFunctionalRoleResponse::data_format(),
-            crate::api_resp::ResponseFormat::Data
+            crate::api::ResponseFormat::Data
         );
     }
 

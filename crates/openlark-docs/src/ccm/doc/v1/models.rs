@@ -728,7 +728,7 @@ pub struct PageResponse<T> {
 
 /// 基础响应结构
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BaseResponse<T> {
+pub struct Response<T> {
     /// 状态码
     pub code: i32,
     /// 消息
@@ -738,28 +738,28 @@ pub struct BaseResponse<T> {
 }
 
 /// 文档列表响应
-pub type DocumentListResponse = BaseResponse<PageResponse<Document>>;
+pub type DocumentListResponse = Response<PageResponse<Document>>;
 
 /// 文档详情响应
-pub type DocumentResponse = BaseResponse<Document>;
+pub type DocumentResponse = Response<Document>;
 
 /// 文件夹列表响应
-pub type FolderListResponse = BaseResponse<PageResponse<Folder>>;
+pub type FolderListResponse = Response<PageResponse<Folder>>;
 
 /// 评论列表响应
-pub type CommentListResponse = BaseResponse<PageResponse<Comment>>;
+pub type CommentListResponse = Response<PageResponse<Comment>>;
 
 /// 搜索结果响应
-pub type SearchResponse = BaseResponse<PageResponse<DocumentSearchResult>>;
+pub type SearchResponse = Response<PageResponse<DocumentSearchResult>>;
 
 /// 推荐文档响应
-pub type RecommendResponse = BaseResponse<Vec<DocumentRecommendation>>;
+pub type RecommendResponse = Response<Vec<DocumentRecommendation>>;
 
 /// 文档版本列表响应
-pub type VersionListResponse = BaseResponse<PageResponse<DocumentVersion>>;
+pub type VersionListResponse = Response<PageResponse<DocumentVersion>>;
 
 /// 模板列表响应
-pub type TemplateListResponse = BaseResponse<PageResponse<DocumentTemplate>>;
+pub type TemplateListResponse = Response<PageResponse<DocumentTemplate>>;
 
 /// 空响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -982,7 +982,7 @@ impl Default for PageResponse<DocumentSearchResult> {
     }
 }
 
-impl Default for BaseResponse<Document> {
+impl Default for Response<Document> {
     fn default() -> Self {
         Self {
             code: 0,
@@ -992,7 +992,7 @@ impl Default for BaseResponse<Document> {
     }
 }
 
-impl Default for BaseResponse<EmptyResponse> {
+impl Default for Response<EmptyResponse> {
     fn default() -> Self {
         Self {
             code: 0,

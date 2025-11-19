@@ -5,14 +5,14 @@
 #![allow(unused_variables)]
 #![allow(unused_mut)]
 use SDKResult;use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use openlark_core::,
 {
     core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -57,7 +57,7 @@ crate::impl_executable_builder_owned!(
     ListAppRoleRequestBuilder,
     super::AppRoleService,
     ListAppRoleRequest,
-    BaseResponse<ListAppRoleResponse>,
+    Response<ListAppRoleResponse>,
     list,
 );
 /// 列出自定义角色响应
@@ -82,7 +82,7 @@ pub async fn list_app_roles(
     request: ListAppRoleRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<ListAppRoleResponse>> {,
+) -> SDKResult<Response<ListAppRoleResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::GET);
     api_req.set_api_path(BITABLE_V1_ROLES.replace("{app_token}", &request.app_token));

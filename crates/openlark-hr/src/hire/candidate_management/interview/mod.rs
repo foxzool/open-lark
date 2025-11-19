@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        api::ApiRequest,
+        api::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
@@ -309,7 +309,7 @@ impl InterviewService {
         &self,
         request: InterviewCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<InterviewOperationResponse>> {
+    ) -> SDKResult<Response<InterviewOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_INTERVIEWS.to_string());
@@ -353,7 +353,7 @@ impl InterviewService {
         &self,
         interview_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<InterviewDetailResponse>> {
+    ) -> SDKResult<Response<InterviewDetailResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
                 api_req.set_api_path(HIRE_V1_INTERVIEW_CANCEL.to_string());
@@ -413,7 +413,7 @@ impl InterviewService {
         &self,
         request: InterviewListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<InterviewListResponse>> {
+    ) -> SDKResult<Response<InterviewListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_INTERVIEWS.to_string());
@@ -495,7 +495,7 @@ impl InterviewService {
         &self,
         request: InterviewArrangementRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<InterviewOperationResponse>> {
+    ) -> SDKResult<Response<InterviewOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_INTERVIEW_ARRANGEMENTS.to_string());
@@ -546,7 +546,7 @@ impl InterviewService {
         &self,
         request: InterviewEvaluationRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<InterviewOperationResponse>> {
+    ) -> SDKResult<Response<InterviewOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_INTERVIEW_EVALUATIONS.to_string());
@@ -583,7 +583,7 @@ impl InterviewService {
         page_size: Option<u32>,
         page_token: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<InterviewEvaluationListResponse>> {
+    ) -> SDKResult<Response<InterviewEvaluationListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -634,7 +634,7 @@ impl InterviewService {
         interview_id: &str,
         reason: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<InterviewOperationResponse>> {
+    ) -> SDKResult<Response<InterviewOperationResponse>> {
         #[derive(Serialize)]
         struct CancelRequest {
             reason: String,
@@ -684,7 +684,7 @@ impl InterviewService {
         new_time: &str,
         new_interviewers: Option<Vec<String>>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<InterviewOperationResponse>> {
+    ) -> SDKResult<Response<InterviewOperationResponse>> {
         #[derive(Serialize)]
         struct RescheduleRequest {
             new_time: String,

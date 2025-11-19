@@ -6,7 +6,7 @@
 #![allow(unused_mut)]
 use std::collections::HashMap;
 use SDKResult;use log::error;
-use openlark_core::api_req::ApiRequest;use reqwest::Method;
+use openlark_core::api::ApiRequest;use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use openlark_core::,
 {,
@@ -14,7 +14,7 @@ use openlark_core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -104,7 +104,7 @@ api_req.api_path = BITABLE_V1_RECORDS,
         .replace("{app_token}", &request.app_token)
         .replace("{table_id}", &request.table_id);
     api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-let api_resp: BaseResponse<CreateRecordResponse> =,
+let api_resp: Response<CreateRecordResponse> =,
         Transport::request(api_req, config, option).await?;
 api_resp.into_result(),
 

@@ -4,7 +4,7 @@
 //! 行列数量等。
 
 use crate::prelude::*;
-use openlark_core::{api_req::ApiRequest, constants::AccessTokenType, http::Transport, SDKResult};
+use openlark_core::{api::ApiRequest, constants::AccessTokenType, http::Transport, SDKResult};
 
 use super::{requests::GetDocSheetMetaV2Request, responses::GetDocSheetMetaV2Response};
 

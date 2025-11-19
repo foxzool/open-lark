@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints::hire::*,
@@ -240,7 +240,7 @@ impl JobProcessService {
         &self,
         request: JobProcessCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<JobProcessOperationResponse>> {
+    ) -> SDKResult<Response<JobProcessOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_JOB_PROCESSES.to_string());
@@ -283,7 +283,7 @@ impl JobProcessService {
         &self,
         process_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<JobProcessDetailResponse>> {
+    ) -> SDKResult<Response<JobProcessDetailResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_JOB_PROCESS_GET.to_string());
@@ -337,7 +337,7 @@ impl JobProcessService {
         &self,
         request: JobProcessListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<JobProcessListResponse>> {
+    ) -> SDKResult<Response<JobProcessListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_JOB_PROCESSES.to_string());
@@ -402,7 +402,7 @@ impl JobProcessService {
         process_id: &str,
         request: JobProcessCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<JobProcessOperationResponse>> {
+    ) -> SDKResult<Response<JobProcessOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -434,7 +434,7 @@ impl JobProcessService {
         &self,
         process_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<JobProcessOperationResponse>> {
+    ) -> SDKResult<Response<JobProcessOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::DELETE);
         api_req.set_api_path(EndpointBuilder::replace_param(

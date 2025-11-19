@@ -3,7 +3,7 @@ use openlark_core::error::SDKError;
 use crate::response::SDKResult;
 use crate::service_trait::Service;
 use crate::transport::Transport;
-use openlark_core::api_req::ApiRequest;
+use openlark_core::api::ApiRequest;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -748,7 +748,7 @@ impl GetFileVersionBuilder {
         ]);
 
         // 发送HTTP GET请求
-        let api_resp: api_resp::BaseResponse<GetFileVersionResponse> =
+        let api_resp: api::Response<GetFileVersionResponse> =
             self.service.transport().request(api_req, self.service.config(), None).await?;
 
         // 解析响应
@@ -843,7 +843,7 @@ impl DeleteFileVersionBuilder {
         ]);
 
         // 发送HTTP DELETE请求
-        let api_resp: api_resp::BaseResponse<DeleteFileVersionResponse> =
+        let api_resp: api::Response<DeleteFileVersionResponse> =
             self.service.transport().request(api_req, self.service.config(), None).await?;
 
         // 解析响应

@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        api::ApiRequest,
+        api::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
         endpoints::corehr::*,
@@ -102,7 +102,7 @@ impl EmployeeService {
         &self,
         request: EmployeeBatchGetRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<EmployeeBatchGetResponse>> {
+    ) -> SDKResult<Response<EmployeeBatchGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: COREHR_EMPLOYEES_BATCH_GET.to_string(),
@@ -166,7 +166,7 @@ impl EmployeeService {
         &self,
         request: EmployeeSearchRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<EmployeeSearchResponse>> {
+    ) -> SDKResult<Response<EmployeeSearchResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: COREHR_EMPLOYEES_SEARCH.to_string(),

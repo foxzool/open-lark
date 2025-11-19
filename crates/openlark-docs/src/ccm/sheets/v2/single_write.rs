@@ -23,8 +23,8 @@ use serde::{Deserialize, Serialize};
 
 use openlark_core::endpoints::Endpoints;
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -271,7 +271,7 @@ impl SingleWriteService {
     pub async fn write_range(
         &self,
         request: &SingleWriteRequest,
-    ) -> SDKResult<BaseResponse<SingleWriteResponse>> {
+    ) -> SDKResult<Response<SingleWriteResponse>> {
         // 验证请求参数
         request.validate()?;
 
@@ -388,7 +388,7 @@ impl SingleWriteService {
         spreadsheet_token: &str,
         cell_range: &str,
         value: serde_json::Value,
-    ) -> SDKResult<BaseResponse<SingleWriteResponse>> {
+    ) -> SDKResult<Response<SingleWriteResponse>> {
         let request = SingleWriteRequest::builder()
             .spreadsheet_token(spreadsheet_token.to_string())
             .range(cell_range.to_string())
@@ -404,7 +404,7 @@ impl SingleWriteService {
         spreadsheet_token: &str,
         range: &str,
         row_data: Vec<serde_json::Value>,
-    ) -> SDKResult<BaseResponse<SingleWriteResponse>> {
+    ) -> SDKResult<Response<SingleWriteResponse>> {
         let request = SingleWriteRequest::builder()
             .spreadsheet_token(spreadsheet_token.to_string())
             .range(range.to_string())
@@ -486,7 +486,7 @@ impl<'a> SingleWriteServiceRequestBuilder<'a> {
     }
 
     /// 执行请求
-    pub async fn execute(self) -> SDKResult<BaseResponse<SingleWriteResponse>> {
+    pub async fn execute(self) -> SDKResult<Response<SingleWriteResponse>> {
         let request = SingleWriteRequest {
             spreadsheet_token: self
                 .spreadsheet_token

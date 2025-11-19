@@ -1,9 +1,9 @@
 #![allow(unused_variables, unused_unsafe)]
 use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use openlark_core::{,
-use SDKResult;    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+use SDKResult;    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints::{cloud_docs::*, EndpointBuilder}
@@ -70,7 +70,7 @@ pub async fn move_space_node(
     request: MoveSpaceNodeRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<MoveSpaceNodeResponse>> {,
+) -> SDKResult<Response<MoveSpaceNodeResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::POST);
 api_req.api_path = {,

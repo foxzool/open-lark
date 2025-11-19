@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints::hire::*,
@@ -321,7 +321,7 @@ impl ReferralAccountService {
         &self,
         request: ReferralAccountCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReferralAccountOperationResponse>> {
+    ) -> SDKResult<Response<ReferralAccountOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_REFERRAL_ACCOUNTS.to_string());
@@ -376,7 +376,7 @@ impl ReferralAccountService {
         &self,
         request: ReferralAccountListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReferralAccountListResponse>> {
+    ) -> SDKResult<Response<ReferralAccountListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_REFERRAL_ACCOUNTS.to_string());
@@ -439,7 +439,7 @@ impl ReferralAccountService {
         &self,
         user_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReferralAccountBalanceResponse>> {
+    ) -> SDKResult<Response<ReferralAccountBalanceResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
                 api_req.set_api_path(HIRE_REFERRAL_ACCOUNT_BALANCE.to_string());
@@ -497,7 +497,7 @@ impl ReferralAccountService {
         &self,
         request: IncomeRecordListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<IncomeRecordListResponse>> {
+    ) -> SDKResult<Response<IncomeRecordListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_REFERRAL_INCOME_RECORDS.to_string());
@@ -588,7 +588,7 @@ impl ReferralAccountService {
         &self,
         request: WithdrawalApplicationRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReferralAccountOperationResponse>> {
+    ) -> SDKResult<Response<ReferralAccountOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_REFERRAL_WITHDRAWALS.to_string());
@@ -647,7 +647,7 @@ impl ReferralAccountService {
         &self,
         request: WithdrawalRecordListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<WithdrawalRecordListResponse>> {
+    ) -> SDKResult<Response<WithdrawalRecordListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_REFERRAL_WITHDRAWALS.to_string());
@@ -718,7 +718,7 @@ impl ReferralAccountService {
         approved: bool,
         remark: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReferralAccountOperationResponse>> {
+    ) -> SDKResult<Response<ReferralAccountOperationResponse>> {
         #[derive(Serialize)]
         struct ApprovalRequest {
             approved: bool,
@@ -755,7 +755,7 @@ impl ReferralAccountService {
         &self,
         user_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReferralAccountOperationResponse>> {
+    ) -> SDKResult<Response<ReferralAccountOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
                 api_req.set_api_path(HIRE_REFERRAL_ACCOUNT_BALANCE.to_string());
@@ -787,7 +787,7 @@ impl ReferralAccountService {
         user_id: &str,
         reason: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReferralAccountOperationResponse>> {
+    ) -> SDKResult<Response<ReferralAccountOperationResponse>> {
         #[derive(Serialize)]
         struct DisableRequest {
             reason: String,
@@ -833,7 +833,7 @@ impl ReferralAccountService {
         start_date: Option<String>,
         end_date: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<serde_json::Value>> {
+    ) -> SDKResult<Response<serde_json::Value>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_REFERRAL_STATISTICS.to_string());

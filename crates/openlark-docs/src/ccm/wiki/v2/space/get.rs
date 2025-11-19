@@ -1,6 +1,6 @@
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints_original::WIKI_V2_SPACE_GET,
@@ -218,7 +218,7 @@ pub async fn get_space_info(
     request: GetSpaceInfoRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<GetSpaceInfoResponse>> {
+) -> SDKResult<Response<GetSpaceInfoResponse>> {
     // 创建API请求
     let mut api_req = request.api_req;
     api_req.set_http_method(Method::GET);
@@ -285,7 +285,7 @@ impl GetSpaceInfoBuilder {
     /// * 知识空间ID无效时返回验证错误
     /// * 权限不足时返回授权错误
     /// * 网络错误时返回连接错误
-    pub async fn execute(self) -> SDKResult<BaseResponse<GetSpaceInfoResponse>> {
+    pub async fn execute(self) -> SDKResult<Response<GetSpaceInfoResponse>> {
         // 验证请求参数
         self.request.build()?;
 

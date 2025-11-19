@@ -13,7 +13,7 @@
 #![allow(clippy::module_inception)]
 use serde::{Deserialize, Serialize};
 use openlark_core::config::Config;
-use api_resp::{ApiResponseTrait, ResponseFormat};
+use api::{ApiResponseTrait, ResponseFormat};
 /// 简化的服务结构体
 #[derive(Clone)]
 pub struct SimpleService {

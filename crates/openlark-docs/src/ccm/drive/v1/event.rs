@@ -7,14 +7,14 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 use SDKResult;use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::,
 {
     core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -41,7 +41,7 @@ impl EventService {
         &self,
         request: SubscribeFileEventsRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<SubscribeFileEventsRespData>> {,
+    ) -> SDKResult<Response<SubscribeFileEventsRespData>> {,
 let api_req = ApiRequest {,
             http_http_http_method: Method::POST,
             api_path: DRIVE_V1_FILES_SUBSCRIBE.to_string(),
@@ -63,7 +63,7 @@ Ok(api_resp),
         &self,
         request: GetFileSubscriptionRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<GetFileSubscriptionRespData>> {,
+    ) -> SDKResult<Response<GetFileSubscriptionRespData>> {,
 let mut api_req = ApiRequest {,
             http_http_http_method: Method::GET,
             api_path: DRIVE_V1_FILE_SUBSCRIPTIONS
@@ -88,7 +88,7 @@ Ok(api_resp),
         &self,
         request: UnsubscribeFileEventsRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<UnsubscribeFileEventsRespData>> {,
+    ) -> SDKResult<Response<UnsubscribeFileEventsRespData>> {,
 let mut api_req = ApiRequest {,
             http_http_http_method: Method::DELETE,
             api_path: DRIVE_V1_FILE_SUBSCRIPTIONS
@@ -125,7 +125,7 @@ impl SubscribeFileEventsRequestBuilder {
     SubscribeFileEventsRequestBuilder,
     EventService,
     SubscribeFileEventsRequest,
-    BaseResponse<SubscribeFileEventsRespData>,
+    Response<SubscribeFileEventsRespData>,
     subscribe_file_events,
 );
 /// 订阅云文档事件响应数据
@@ -162,7 +162,7 @@ impl GetFileSubscriptionRequestBuilder {
     GetFileSubscriptionRequestBuilder,
     EventService,
     GetFileSubscriptionRequest,
-    BaseResponse<GetFileSubscriptionRespData>,
+    Response<GetFileSubscriptionRespData>,
     get_file_subscription,
 );
 /// 查询云文档事件订阅状态响应数据
@@ -210,7 +210,7 @@ impl UnsubscribeFileEventsRequestBuilder {
     UnsubscribeFileEventsRequestBuilder,
     EventService,
     UnsubscribeFileEventsRequest,
-    BaseResponse<UnsubscribeFileEventsRespData>,
+    Response<UnsubscribeFileEventsRespData>,
     unsubscribe_file_events,
 );
 /// 取消云文档事件订阅响应数据

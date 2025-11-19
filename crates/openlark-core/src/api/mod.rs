@@ -1,13 +1,13 @@
-//! API处理模块 - 简化版本
+//! API处理模块 - 独立版本
 //!
 //! 现代化、类型安全的API请求和响应处理系统。
-//! 这个版本专注于核心功能，避免复杂的依赖关系。
+//! 完全独立，不依赖已弃用的api_req/api_resp模块。
 
 // ============================================================================
 // 核心类型定义
 // ============================================================================
 
-use crate::api_resp::RawResponse;
+pub use responses::RawResponse;
 use std::{collections::HashMap, time::Duration};
 
 /// HTTP方法枚举
@@ -36,12 +36,19 @@ impl HttpMethod {
     }
 }
 
+impl std::fmt::Display for HttpMethod {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
 /// 请求数据枚举
 #[derive(Debug, Clone)]
 pub enum RequestData {
     Json(serde_json::Value),
     Text(String),
     Binary(Vec<u8>),
+    Form(std::collections::HashMap<String, String>),
     Empty,
 }
 
@@ -63,28 +70,8 @@ impl From<&str> for RequestData {
     }
 }
 
-/// API响应特征
-pub trait ApiResponseTrait: Send + Sync + 'static {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 响应格式枚举
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum ResponseFormat {
-    Data,
-    Flatten,
-    Binary,
-    Text,
-    Custom,
-}
-
-// 为常见类型实现ApiResponseTrait
-impl ApiResponseTrait for serde_json::Value {}
-impl ApiResponseTrait for String {}
-impl ApiResponseTrait for Vec<u8> {}
-impl ApiResponseTrait for () {}
+// 重新导出响应类型
+pub use responses::{ApiResponseTrait, BaseResponse, ErrorInfo, Response, ResponseFormat};
 
 /// 简化的API请求结构
 #[derive(Debug, Clone)]
@@ -114,6 +101,30 @@ impl<R> ApiRequest<R> {
     pub fn post(url: impl Into<String>) -> Self {
         Self {
             method: HttpMethod::Post,
+            url: url.into(),
+            headers: HashMap::new(),
+            query: HashMap::new(),
+            body: None,
+            timeout: None,
+            _phantom: std::marker::PhantomData,
+        }
+    }
+
+    pub fn put(url: impl Into<String>) -> Self {
+        Self {
+            method: HttpMethod::Put,
+            url: url.into(),
+            headers: HashMap::new(),
+            query: HashMap::new(),
+            body: None,
+            timeout: None,
+            _phantom: std::marker::PhantomData,
+        }
+    }
+
+    pub fn delete(url: impl Into<String>) -> Self {
+        Self {
+            method: HttpMethod::Delete,
             url: url.into(),
             headers: HashMap::new(),
             query: HashMap::new(),
@@ -164,42 +175,60 @@ impl<R> ApiRequest<R> {
             format!("{}?{}", self.url, query_string)
         }
     }
+
+    // 兼容性字段和方法，用于与现有http.rs代码兼容
+    pub fn method(&self) -> &HttpMethod {
+        &self.method
+    }
+
+    pub fn api_path(&self) -> &str {
+        // 从URL中提取路径部分
+        if let Some(start) = self.url.find("/open-apis/") {
+            &self.url[start..]
+        } else {
+            &self.url
+        }
+    }
+
+    pub fn supported_access_token_types(&self) -> Vec<crate::constants::AccessTokenType> {
+        // 默认返回用户和租户令牌类型
+        vec![
+            crate::constants::AccessTokenType::User,
+            crate::constants::AccessTokenType::Tenant,
+        ]
+    }
+
+    pub fn to_bytes(&self) -> Vec<u8> {
+        match &self.body {
+            Some(RequestData::Json(data)) => serde_json::to_vec(data).unwrap_or_default(),
+            Some(RequestData::Binary(data)) => data.clone(),
+            Some(RequestData::Form(data)) => data
+                .iter()
+                .map(|(k, v)| format!("{}={}", urlencoding::encode(k), urlencoding::encode(v)))
+                .collect::<Vec<_>>()
+                .join("&")
+                .into_bytes(),
+            Some(RequestData::Text(text)) => text.clone().into_bytes(),
+            Some(RequestData::Empty) => vec![],
+            None => vec![],
+        }
+    }
+
+    pub fn file(&self) -> Vec<u8> {
+        // 默认返回空，因为新结构不直接支持文件上传
+        vec![]
+    }
 }
 
-/// API响应结构
-#[derive(Debug, Clone)]
-pub struct ApiResponse<R> {
-    pub data: Option<R>,
-    pub raw_response: RawResponse,
-}
-
-impl<R> ApiResponse<R> {
-    pub fn new(data: Option<R>, raw_response: RawResponse) -> Self {
-        Self { data, raw_response }
-    }
-
-    pub fn is_success(&self) -> bool {
-        self.raw_response.code == 0
-    }
-
-    pub fn code(&self) -> i32 {
-        self.raw_response.code
-    }
-
-    pub fn message(&self) -> &str {
-        &self.raw_response.msg
-    }
-
-    pub fn data(&self) -> Option<&R> {
-        self.data.as_ref()
-    }
-}
+// 类型别名，保持兼容性
+pub type ApiResponse<R> = Response<R>;
 
 // ============================================================================
 // 子模块
 // ============================================================================
 
 pub mod prelude;
+pub mod responses;
 pub mod traits;
 
 // ============================================================================

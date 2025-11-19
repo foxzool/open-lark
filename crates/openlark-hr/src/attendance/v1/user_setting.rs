@@ -2,7 +2,7 @@ use reqwest::Method;
 use serde_json::json;
 
 use openlark_core::{
-    api_resp::{BaseResponse, EmptyResponse},
+    api::{BaseResponse, EmptyResponse},
     config::Config,
     constants::AccessTokenType,
     endpoints::{attendance::*, EndpointBuilder},
@@ -35,7 +35,7 @@ impl UserSettingService {
         &self,
         request: ModifyUserSettingRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ModifyUserSettingRespData>> {
+    ) -> SDKResult<Response<ModifyUserSettingRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -83,7 +83,7 @@ impl UserSettingService {
         &self,
         request: QueryUserSettingRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<QueryUserSettingRespData>> {
+    ) -> SDKResult<Response<QueryUserSettingRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(ATTENDANCE_V1_USER_SETTINGS_QUERY.to_string());
@@ -116,7 +116,7 @@ impl UserSettingService {
         &self,
         request: UploadUserPhotoRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<UploadUserPhotoRespData>> {
+    ) -> SDKResult<Response<UploadUserPhotoRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -183,7 +183,7 @@ impl UserSettingService {
 
         // 对于文件下载，我们需要直接获取响应体字节数据
         // 这里暂时返回一个模拟的照片数据，实际实现时需要从 HTTP 响应中获取
-        let _api_resp: BaseResponse<EmptyResponse> =
+        let _api_resp: Response<EmptyResponse> =
             Transport::request(api_req, &self.config, option).await?;
 
         // 返回模拟的照片数据（实际实现时应该从响应体中获取）
@@ -211,7 +211,7 @@ impl Service for UserSettingService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use openlark_core::{api_req::ApiRequest, config::Config};
+    use openlark_core::{api::ApiRequest, config::Config};
 
     #[test]
     fn test_user_setting_service_creation() {

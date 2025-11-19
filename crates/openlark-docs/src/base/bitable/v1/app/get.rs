@@ -12,14 +12,14 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 use SDKResult;use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::Deserialize;
+use openlark_core::api::ApiRequest;use serde::Deserialize;
 use openlark_core::,
 {,
     core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -51,7 +51,7 @@ impl GetAppRequestBuilder {
     GetAppRequestBuilder,
     AppService,
     GetAppRequest,
-    BaseResponse<GetAppResponse>,
+    Response<GetAppResponse>,
     get,
 );
 #[derive(Clone)]

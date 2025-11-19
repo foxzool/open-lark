@@ -17,7 +17,7 @@
 #![allow(clippy::module_inception)]
 
 use openlark_core::{
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
@@ -577,7 +577,7 @@ impl DriveServiceV1 {
         &self,
         request: GetTaskStatusRequest,
         option: Option<openlark_core::req_option::RequestOption>,
-    ) -> SDKResult<BaseResponse<GetTaskStatusResponse>> {
+    ) -> SDKResult<Response<GetTaskStatusResponse>> {
         // 验证请求参数
         request.validate().map_err(|e| {
             openlark_core::error::LarkAPIError::IllegalParamError(format!("参数验证失败: {}", e))
@@ -650,7 +650,7 @@ impl DriveServiceV1 {
         &self,
         request: DeleteFileRequest,
         option: Option<openlark_core::req_option::RequestOption>,
-    ) -> SDKResult<BaseResponse<DeleteFileResponse>> {
+    ) -> SDKResult<Response<DeleteFileResponse>> {
         // 验证请求参数
         request.validate().map_err(|e| {
             openlark_core::error::LarkAPIError::IllegalParamError(format!("参数验证失败: {}", e))
@@ -726,7 +726,7 @@ impl DriveServiceV1 {
         &self,
         request: ExportTaskRequest,
         option: Option<openlark_core::req_option::RequestOption>,
-    ) -> SDKResult<BaseResponse<ExportTaskResponse>> {
+    ) -> SDKResult<Response<ExportTaskResponse>> {
         // 验证请求参数
         request.validate().map_err(|e| {
             openlark_core::error::LarkAPIError::IllegalParamError(format!("参数验证失败: {}", e))
@@ -828,7 +828,7 @@ impl GetTaskStatusBuilder {
     ///     .execute()
     ///     .await?;
     /// ```
-    pub async fn execute(self) -> SDKResult<BaseResponse<GetTaskStatusResponse>> {
+    pub async fn execute(self) -> SDKResult<Response<GetTaskStatusResponse>> {
         // 验证请求参数
         self.request.validate().map_err(|e| {
             openlark_core::error::LarkAPIError::IllegalParamError(format!("参数验证失败: {}", e))
@@ -888,7 +888,7 @@ impl DeleteFileBuilder {
     ///     .execute()
     ///     .await?;
     /// ```
-    pub async fn execute(self) -> SDKResult<BaseResponse<DeleteFileResponse>> {
+    pub async fn execute(self) -> SDKResult<Response<DeleteFileResponse>> {
         // 验证请求参数
         self.request.validate().map_err(|e| {
             openlark_core::error::LarkAPIError::IllegalParamError(format!("参数验证失败: {}", e))
@@ -1085,7 +1085,7 @@ impl CreateExportTaskBuilder {
     /// println!("任务ID: {}", response.task_id);
     /// println!("任务状态: {}", response.task_status);
     /// ```
-    pub async fn execute(self) -> SDKResult<BaseResponse<ExportTaskResponse>> {
+    pub async fn execute(self) -> SDKResult<Response<ExportTaskResponse>> {
         // 验证请求参数
         self.request.validate().map_err(|e| {
             openlark_core::error::LarkAPIError::IllegalParamError(format!("参数验证失败: {}", e))

@@ -1,6 +1,6 @@
 use crate::{
     constants::AccessTokenType, http::Transport,
-    api_req::ApiRequest, api_resp::{ApiResponseTrait, BaseResponse}, config::Config,
+    api::ApiRequest, api::{ApiResponseTrait, BaseResponse}, config::Config,
 };
 use serde::{Deserialize, Serialize};
 
@@ -19,9 +19,9 @@ impl CustomAttrService {
         &self,
         request: openlark_core::contact::v3::v3::custom_attr::ListCustomAttrRequest,
         option: Option<crate::req_option::RequestOption>,
-    ) -> crate::SDKResult<crate::api_resp::BaseResponse<openlark_core::contact::v3::v3::custom_attr::ListCustomAttrResponse>> {
+    ) -> crate::SDKResult<crate::api::Response<openlark_core::contact::v3::v3::custom_attr::ListCustomAttrResponse>> {
         let mut api_req = ApiRequest::default();
-        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_method(reqwest::Method::GET);
         api_req.set_api_path(
             crate::endpoints::contact::CONTACT_V3_CUSTOM_ATTRS.to_string()
         );

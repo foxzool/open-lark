@@ -6,7 +6,7 @@
 //! - 节点权限信息获取
 
 use openlark_core::{
-    api_resp::{ApiResponseTrait, ResponseFormat},
+    api::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,

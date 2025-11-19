@@ -7,8 +7,8 @@
 //! - 过滤器状态管理
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, ResponseFormat},
     error::LarkAPIError,
     http::Transport,
 };

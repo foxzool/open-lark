@@ -5,10 +5,10 @@
 #![allow(unused_variables)]
 #![allow(unused_mut)]
 use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use openlark_core::{,
-use SDKResult;    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+use SDKResult;    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints::cloud_docs::*,
@@ -54,7 +54,7 @@ crate::impl_executable_builder_owned!(
     ListFormQuestionRequestBuilder,
     super::FormService,
     ListFormQuestionRequest,
-    BaseResponse<ListFormQuestionResponse>,
+    Response<ListFormQuestionResponse>,
     list,
 );
 /// 表单问题信息
@@ -98,7 +98,7 @@ pub async fn list_form_questions(
     request: ListFormQuestionRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<ListFormQuestionResponse>> {,
+) -> SDKResult<Response<ListFormQuestionResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::GET);
 api_req.api_path = BITABLE_V1_FORM_QUESTION,

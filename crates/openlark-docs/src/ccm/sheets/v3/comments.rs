@@ -472,9 +472,9 @@ pub struct CreateCommentResponse {
     pub comment: Comment,
 }
 
-impl openlark_core::api_resp::ApiResponseTrait for CreateCommentResponse {
-    fn data_format() -> openlark_core::api_resp::ResponseFormat {
-        openlark_core::api_resp::ResponseFormat::Data
+impl openlark_core::api::ApiResponseTrait for CreateCommentResponse {
+    fn data_format() -> openlark_core::api::ResponseFormat {
+        openlark_core::api::ResponseFormat::Data
     }
 }
 
@@ -661,9 +661,9 @@ pub struct GetCommentsResponse {
     pub has_more: bool,
 }
 
-impl openlark_core::api_resp::ApiResponseTrait for GetCommentsResponse {
-    fn data_format() -> openlark_core::api_resp::ResponseFormat {
-        openlark_core::api_resp::ResponseFormat::Data
+impl openlark_core::api::ApiResponseTrait for GetCommentsResponse {
+    fn data_format() -> openlark_core::api::ResponseFormat {
+        openlark_core::api::ResponseFormat::Data
     }
 }
 
@@ -754,9 +754,9 @@ pub struct DeleteCommentResponse {
     pub success: bool,
 }
 
-impl openlark_core::api_resp::ApiResponseTrait for DeleteCommentResponse {
-    fn data_format() -> openlark_core::api_resp::ResponseFormat {
-        openlark_core::api_resp::ResponseFormat::Data
+impl openlark_core::api::ApiResponseTrait for DeleteCommentResponse {
+    fn data_format() -> openlark_core::api::ResponseFormat {
+        openlark_core::api::ResponseFormat::Data
     }
 }
 
@@ -808,9 +808,7 @@ impl CommentService {
         &self,
         request: &CreateCommentRequest,
     ) -> openlark_core::error::SDKResult<CreateCommentResponse> {
-        use openlark_core::{
-            api_req::ApiRequest, api_resp::BaseResponse, error::LarkAPIError, http::Transport,
-        };
+        use openlark_core::{api::ApiRequest, api::Response, error::LarkAPIError, http::Transport};
 
         let endpoint = format!(
             "/open-apis/sheets/v3/spreadsheets/{}/comments",
@@ -820,7 +818,7 @@ impl CommentService {
         let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::POST, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let response: BaseResponse<CreateCommentResponse> =
+        let response: Response<CreateCommentResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
@@ -870,9 +868,7 @@ impl CommentService {
         &self,
         request: &GetCommentsRequest,
     ) -> openlark_core::error::SDKResult<GetCommentsResponse> {
-        use openlark_core::{
-            api_req::ApiRequest, api_resp::BaseResponse, error::LarkAPIError, http::Transport,
-        };
+        use openlark_core::{api::ApiRequest, api::Response, error::LarkAPIError, http::Transport};
 
         let endpoint = format!(
             "/open-apis/sheets/v3/spreadsheets/{}/comments",
@@ -901,7 +897,7 @@ impl CommentService {
         let api_request =
             ApiRequest::with_method_and_path(reqwest::Method::GET, &endpoint_with_params);
 
-        let response: BaseResponse<GetCommentsResponse> =
+        let response: Response<GetCommentsResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
@@ -948,9 +944,7 @@ impl CommentService {
         &self,
         request: &DeleteCommentRequest,
     ) -> openlark_core::error::SDKResult<DeleteCommentResponse> {
-        use openlark_core::{
-            api_req::ApiRequest, api_resp::BaseResponse, error::LarkAPIError, http::Transport,
-        };
+        use openlark_core::{api::ApiRequest, api::Response, error::LarkAPIError, http::Transport};
 
         let endpoint = format!(
             "/open-apis/sheets/v3/spreadsheets/{}/comments/{}",
@@ -959,7 +953,7 @@ impl CommentService {
 
         let api_request = ApiRequest::with_method_and_path(reqwest::Method::DELETE, &endpoint);
 
-        let response: BaseResponse<DeleteCommentResponse> =
+        let response: Response<DeleteCommentResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {

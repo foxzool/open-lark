@@ -22,8 +22,8 @@ use serde::{Deserialize, Serialize};
 use openlark_core::endpoints::Endpoints;
 use openlark_core::impl_executable_builder_owned;
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, RawResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, RawResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -1489,7 +1489,7 @@ impl ImageWriteService {
         spreadsheet_token: &str,
         image_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<()>> {
+    ) -> SDKResult<Response<()>> {
         // TODO: 实现实际的删除API调用
         // 暂时返回模拟数据
         let mock_response = BaseResponse {

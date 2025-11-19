@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints::hire::*,
@@ -167,7 +167,7 @@ impl ApplicationService {
         &self,
         request: ApplicationCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ApplicationOperationResponse>> {
+    ) -> SDKResult<Response<ApplicationOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_APPLICATIONS.to_string());
@@ -212,7 +212,7 @@ impl ApplicationService {
         &self,
         application_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ApplicationDetailResponse>> {
+    ) -> SDKResult<Response<ApplicationDetailResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
                 api_req.set_api_path(HIRE_V1_APPLICATION_GET.to_string());
@@ -273,7 +273,7 @@ impl ApplicationService {
         &self,
         request: ApplicationListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ApplicationListResponse>> {
+    ) -> SDKResult<Response<ApplicationListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_APPLICATIONS.to_string());
@@ -349,7 +349,7 @@ impl ApplicationService {
         &self,
         request: ApplicationAdvanceRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ApplicationOperationResponse>> {
+    ) -> SDKResult<Response<ApplicationOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
                 api_req.set_api_path(HIRE_V1_APPLICATION_GET.to_string());
@@ -390,7 +390,7 @@ impl ApplicationService {
         reason: &str,
         remark: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ApplicationOperationResponse>> {
+    ) -> SDKResult<Response<ApplicationOperationResponse>> {
         #[derive(Serialize)]
         struct RejectRequest {
             reason: String,
@@ -452,7 +452,7 @@ impl ApplicationService {
         page_size: Option<u32>,
         page_token: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<InterviewListResponse>> {
+    ) -> SDKResult<Response<InterviewListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -507,7 +507,7 @@ impl ApplicationService {
         &self,
         request: OfferCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ApplicationOperationResponse>> {
+    ) -> SDKResult<Response<ApplicationOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_OFFERS.to_string());
@@ -549,7 +549,7 @@ impl ApplicationService {
         &self,
         application_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<OfferDetailResponse>> {
+    ) -> SDKResult<Response<OfferDetailResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
                 api_req.set_api_path(HIRE_V1_APPLICATION_GET.to_string());
@@ -586,7 +586,7 @@ impl ApplicationService {
         &self,
         request: ApplicationEvaluationRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ApplicationOperationResponse>> {
+    ) -> SDKResult<Response<ApplicationOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
                 api_req.set_api_path(HIRE_V1_APPLICATION_GET.to_string());

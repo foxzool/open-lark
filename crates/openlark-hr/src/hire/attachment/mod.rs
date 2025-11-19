@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints::hire::*,
@@ -259,7 +259,7 @@ impl AttachmentService {
         &self,
         request: AttachmentUploadRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<AttachmentUploadResponse>> {
+    ) -> SDKResult<Response<AttachmentUploadResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_ATTACHMENT_UPLOAD.to_string());
@@ -303,7 +303,7 @@ impl AttachmentService {
         &self,
         attachment_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<AttachmentDetailResponse>> {
+    ) -> SDKResult<Response<AttachmentDetailResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -368,7 +368,7 @@ impl AttachmentService {
         &self,
         request: AttachmentListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<AttachmentListResponse>> {
+    ) -> SDKResult<Response<AttachmentListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_ATTACHMENTS.to_string());
@@ -449,7 +449,7 @@ impl AttachmentService {
         attachment_id: &str,
         request: AttachmentUpdateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<AttachmentOperationResponse>> {
+    ) -> SDKResult<Response<AttachmentOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -482,7 +482,7 @@ impl AttachmentService {
         &self,
         attachment_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<AttachmentOperationResponse>> {
+    ) -> SDKResult<Response<AttachmentOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::DELETE);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -514,7 +514,7 @@ impl AttachmentService {
         &self,
         attachment_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<serde_json::Value>> {
+    ) -> SDKResult<Response<serde_json::Value>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -547,7 +547,7 @@ impl AttachmentService {
         &self,
         attachment_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<serde_json::Value>> {
+    ) -> SDKResult<Response<serde_json::Value>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -602,7 +602,7 @@ impl AttachmentService {
         &self,
         request: BatchDownloadRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<BatchDownloadResponse>> {
+    ) -> SDKResult<Response<BatchDownloadResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_ATTACHMENTS_BATCH_DOWNLOAD.to_string());
@@ -637,7 +637,7 @@ impl AttachmentService {
         &self,
         attachment_ids: Vec<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<AttachmentOperationResponse>> {
+    ) -> SDKResult<Response<AttachmentOperationResponse>> {
         #[derive(Serialize)]
         struct BatchDeleteRequest {
             attachment_ids: Vec<String>,
@@ -686,7 +686,7 @@ impl AttachmentService {
         start_date: Option<String>,
         end_date: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<serde_json::Value>> {
+    ) -> SDKResult<Response<serde_json::Value>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_ATTACHMENT_STATISTICS.to_string());

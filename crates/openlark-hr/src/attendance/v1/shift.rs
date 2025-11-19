@@ -3,8 +3,8 @@ use serde_json::json;
 
 use crate::{
     core::{
-        api_req::ApiRequest,
-        api_resp::BaseResponse,
+        api::ApiRequest,
+        api::Response,
         config::Config,
         constants::AccessTokenType,
         endpoints::{attendance::*, EndpointBuilder},
@@ -37,7 +37,7 @@ impl ShiftService {
         &self,
         request: CreateShiftRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<CreateShiftRespData>> {
+    ) -> SDKResult<Response<CreateShiftRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(ATTENDANCE_V1_SHIFTS.to_string());
@@ -121,7 +121,7 @@ impl ShiftService {
         &self,
         request: DeleteShiftRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<EmptyResponse>> {
+    ) -> SDKResult<Response<EmptyResponse>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::DELETE);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -146,7 +146,7 @@ impl ShiftService {
         &self,
         request: GetShiftRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<Shift>> {
+    ) -> SDKResult<Response<Shift>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(ATTENDANCE_V1_SHIFT_GET, "shift_id", &request.shift_id));
@@ -167,7 +167,7 @@ impl ShiftService {
         &self,
         request: QueryShiftRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<Shift>> {
+    ) -> SDKResult<Response<Shift>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(ATTENDANCE_V1_SHIFTS_QUERY.to_string());
@@ -215,7 +215,7 @@ impl ShiftService {
         &self,
         request: ListShiftRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ShiftListData>> {
+    ) -> SDKResult<Response<ShiftListData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(ATTENDANCE_V1_SHIFTS.to_string());
@@ -371,7 +371,7 @@ impl_executable_builder_owned!(
     CreateShiftRequestBuilder,
     ShiftService,
     CreateShiftRequest,
-    BaseResponse<CreateShiftRespData>,
+    Response<CreateShiftRespData>,
     create
 );
 

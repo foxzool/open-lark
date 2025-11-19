@@ -6,8 +6,8 @@
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
@@ -92,7 +92,7 @@ impl SpreadsheetInfoService {
     pub async fn get_spreadsheet_info(
         &self,
         request: SpreadsheetInfoRequest,
-    ) -> SDKResult<BaseResponse<SpreadsheetInfoResponse>> {
+    ) -> SDKResult<Response<SpreadsheetInfoResponse>> {
         // 验证请求参数
         request.validate()?;
 
@@ -174,7 +174,7 @@ impl GetSpreadsheetInfoBuilder {
     }
 
     /// 执行操作
-    pub async fn execute(self) -> SDKResult<BaseResponse<SpreadsheetInfoResponse>> {
+    pub async fn execute(self) -> SDKResult<Response<SpreadsheetInfoResponse>> {
         let request = SpreadsheetInfoRequest::new(/* 参数 */);
 
         // 设置请求字段

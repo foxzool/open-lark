@@ -7,14 +7,14 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::,
 {
     core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -34,7 +34,7 @@ impl PermissionsService {
         &self,
         request: GetPermissionRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<GetPermissionResponse>> {,
+    ) -> SDKResult<Response<GetPermissionResponse>> {,
 let mut api_req = request.api_request;
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(DRIVE_V2_PERMISSIONS_PUBLIC.replace("{}", &request.token));
@@ -49,7 +49,7 @@ Ok(api_resp),
         &self,
         request: PatchPermissionRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<GetPermissionResponse>> {,
+    ) -> SDKResult<Response<GetPermissionResponse>> {,
 let mut api_req = request.api_request;
         api_req.set_http_method(Method::PATCH);
         api_req.set_api_path(DRIVE_V2_PERMISSIONS_PUBLIC.replace("{}", &request.token));
@@ -98,8 +98,8 @@ pub struct GetPermissionResponse {
 impl ApiResponseTrait for.* {
     pub fn new(config: Config) -> Self {
         Self { config }
-}    fn data_format() -> api_resp::ResponseFormat {,
-api_resp::ResponseFormat::Data
+}    fn data_format() -> api::ResponseFormat {,
+api::ResponseFormat::Data
     }
 
 #[derive(Clone)]
@@ -258,20 +258,20 @@ impl PatchPermissionRequestBuilder {
     GetPermissionRequestBuilder,
     PermissionsService,
     GetPermissionRequest,
-    BaseResponse<GetPermissionResponse>,
+    Response<GetPermissionResponse>,
     get,
 );
 impl_executable_builder_owned!(
     PatchPermissionRequestBuilder,
     PermissionsService,
     PatchPermissionRequest,
-    BaseResponse<GetPermissionResponse>,
+    Response<GetPermissionResponse>,
     patch,
 );
 #[cfg(test)]
 mod tests {
 use super::*;
-    use api_resp::ResponseFormat;
+    use api::ResponseFormat;
 use SDKResult;use rstest::rstest;
     // === Helper Functions ===,
 fn create_test_config() -> Config {,

@@ -1,13 +1,13 @@
 #![allow(unused_variables, unused_unsafe)]
 use SDKResult;use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 ,
 {
     core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -40,7 +40,7 @@ impl CreateSpaceRequestBuilder {
     CreateSpaceRequestBuilder,
     super::cloud_docs::wiki::v2::space::SpaceService,
     CreateSpaceRequest,
-    BaseResponse<CreateSpaceResponse>,
+    Response<CreateSpaceResponse>,
     create,
 );
 /// 创建的知识空间信息
@@ -73,7 +73,7 @@ pub async fn create_space(
     request: CreateSpaceRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<CreateSpaceResponse>> {,
+) -> SDKResult<Response<CreateSpaceResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::POST);
 api_req.set_api_path(WIKI_V2_SPACES.to_string());

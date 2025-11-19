@@ -7,14 +7,14 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 use SDKResult;use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::,
 {
     core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -41,7 +41,7 @@ impl LikeService {
         &self,
         request: ListFileLikesRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ListFileLikesRespData>> {,
+    ) -> SDKResult<Response<ListFileLikesRespData>> {,
 let mut api_req = ApiRequest {,
             http_http_http_method: Method::GET,
             api_path: DRIVE_V1_FILE_LIKE_RECORDS.replace("{}", &request.file_token),
@@ -92,7 +92,7 @@ impl ListFileLikesRequestBuilder {
     ListFileLikesRequestBuilder,
     LikeService,
     ListFileLikesRequest,
-    BaseResponse<ListFileLikesRespData>,
+    Response<ListFileLikesRespData>,
     list_file_likes,
 );
 /// 获取云文档的点赞者列表响应数据

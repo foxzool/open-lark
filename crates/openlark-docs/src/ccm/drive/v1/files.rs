@@ -17,7 +17,7 @@ use std::collections::HashMap;
 //! - 版本控制：文件版本历史和管理
 
 use log::{debug, error, info, warn};
-use openlark_core::api_req::ApiRequest;
+use openlark_core::api::ApiRequest;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
@@ -25,7 +25,7 @@ use SDKResult;
 
 use openlark_core::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        api::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::{DRIVE_V1_FILE_DOWNLOAD, DRIVE_V1_FILES_UPLOAD_ALL},
@@ -155,7 +155,7 @@ impl FilesService {
             AccessTokenType::User,
         ]);
 
-        let api_resp: BaseResponse<UploadFileResponse> =
+        let api_resp: Response<UploadFileResponse> =
             Transport::request(api_req, &self.config, option).await?;
 
         match api_resp.into_result() {
@@ -206,7 +206,7 @@ impl FilesService {
             AccessTokenType::User,
         ]);
 
-        let api_resp: BaseResponse<DownloadFileResponse> =
+        let api_resp: Response<DownloadFileResponse> =
             Transport::request(api_req, &self.config, option).await?;
 
         match api_resp.into_result() {
@@ -398,8 +398,8 @@ pub struct UploadFileResponse {
 }
 
 impl ApiResponseTrait for UploadFileResponse {
-    fn data_format() -> api_resp::ResponseFormat {
-        api_resp::ResponseFormat::Data
+    fn data_format() -> api::ResponseFormat {
+        api::ResponseFormat::Data
     }
 }
 
@@ -464,8 +464,8 @@ pub struct DownloadFileResponse {
 }
 
 impl ApiResponseTrait for DownloadFileResponse {
-    fn data_format() -> api_resp::ResponseFormat {
-        api_resp::ResponseFormat::Binary
+    fn data_format() -> api::ResponseFormat {
+        api::ResponseFormat::Binary
     }
 }
 

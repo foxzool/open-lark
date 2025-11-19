@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 use crate::{
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::{ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     req_option::RequestOption,
@@ -30,7 +30,7 @@ impl ModernMessageService {
         receive_id_type: &str,
         body: CreateMessageRequestBody,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<Message>> {
+    ) -> SDKResult<Response<Message>> {
         // 构建查询参数
         let mut query_params = HashMap::new();
         query_params.insert("receive_id_type", receive_id_type.to_string());
@@ -55,7 +55,7 @@ impl ModernMessageService {
         receive_id_type: &str,
         body: CreateMessageRequestBody,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<Message>> {
+    ) -> SDKResult<Response<Message>> {
         // 使用带查询参数的路径
         let path = format!(
             "/open-apis/im/v1/messages?receive_id_type={}",
@@ -77,7 +77,7 @@ impl ModernMessageService {
         page_token: Option<&str>,
         page_size: Option<i32>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ListMessageRespData>> {
+    ) -> SDKResult<Response<ListMessageRespData>> {
         // 构建查询参数
         let mut query_params = HashMap::new();
         query_params.insert("container_id", container_id.to_string());
@@ -111,7 +111,7 @@ impl ModernMessageService {
         &self,
         message_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<Message>> {
+    ) -> SDKResult<Response<Message>> {
         let path_params = HashMap::from([("message_id", message_id)]);
 
         RequestExecutor::execute_with_path_params(
@@ -132,7 +132,7 @@ impl ModernMessageService {
         &self,
         message_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<EmptyResponse>> {
+    ) -> SDKResult<Response<EmptyResponse>> {
         let path_params = HashMap::from([("message_id", message_id)]);
 
         RequestExecutor::execute_with_path_params(
@@ -154,7 +154,7 @@ impl ModernMessageService {
         message_id: &str,
         body: UpdateMessageRequestBody,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<Message>> {
+    ) -> SDKResult<Response<Message>> {
         let path_params = HashMap::from([("message_id", message_id)]);
 
         RequestExecutor::execute_with_path_params(
@@ -290,7 +290,7 @@ impl BulkMessageOperations {
         config: &Config,
         messages: Vec<(String, CreateMessageRequestBody)>, // (receive_id_type, body)
         option: Option<RequestOption>,
-    ) -> Vec<SDKResult<BaseResponse<Message>>> {
+    ) -> Vec<SDKResult<Response<Message>>> {
         let mut results = Vec::new();
 
         for (receive_id_type, body) in messages {
@@ -318,7 +318,7 @@ impl BulkMessageOperations {
 /// 总结：RequestExecutor的优势
 ///
 /// 1. **消除重复代码**：
-///    - 原始方法：每个API都需要手动设置http_method、api_path、supported_access_token_types
+///    - 原始方法：每个API都需要手动设置method、api_path、supported_access_token_types
 ///    - 新方法：这些设置被抽象到RequestExecutor中
 ///
 /// 2. **统一错误处理**：

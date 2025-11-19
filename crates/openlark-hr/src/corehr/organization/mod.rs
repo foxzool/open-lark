@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        api::ApiRequest,
+        api::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
         endpoints::corehr::*,
@@ -141,7 +141,7 @@ impl OrganizationService {
         &self,
         request: DepartmentCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<DepartmentCreateResponse>> {
+    ) -> SDKResult<Response<DepartmentCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: COREHR_DEPARTMENTS.to_string(),
@@ -182,7 +182,7 @@ impl OrganizationService {
         &self,
         department_ids: Vec<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<DepartmentBatchGetResponse>> {
+    ) -> SDKResult<Response<DepartmentBatchGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: COREHR_DEPARTMENTS_BATCH_GET.to_string(),
@@ -232,7 +232,7 @@ impl OrganizationService {
         &self,
         effective_date: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<DepartmentTreeResponse>> {
+    ) -> SDKResult<Response<DepartmentTreeResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::POST,
             api_path: COREHR_DEPARTMENTS_TREE.to_string(),
@@ -293,7 +293,7 @@ impl OrganizationService {
         &self,
         request: CompanyCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<CompanyCreateResponse>> {
+    ) -> SDKResult<Response<CompanyCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: COREHR_COMPANIES.to_string(),
@@ -343,7 +343,7 @@ impl OrganizationService {
         page_size: Option<i32>,
         page_token: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<CompanyListResponse>> {
+    ) -> SDKResult<Response<CompanyListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
             api_path: COREHR_COMPANIES.to_string(),

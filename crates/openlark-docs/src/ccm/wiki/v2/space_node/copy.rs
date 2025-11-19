@@ -1,13 +1,13 @@
 #![allow(unused_variables, unused_unsafe)]
 use SDKResult;use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 ,
 {
     core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::{cloud_docs::*, EndpointBuilder};
@@ -86,7 +86,7 @@ pub async fn copy_space_node(
     request: CopySpaceNodeRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<CopySpaceNodeResponse>> {,
+) -> SDKResult<Response<CopySpaceNodeResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::POST);
 api_req.api_path = {,

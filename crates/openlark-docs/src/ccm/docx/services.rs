@@ -5,7 +5,7 @@
 //! - docx: 新版文档操作、块操作、群公告等 (新增)
 
 use crate::prelude::*;
-use openlark_core::{api_req::ApiRequest, constants::AccessTokenType, http::Transport, SDKResult};
+use openlark_core::{api::ApiRequest, constants::AccessTokenType, http::Transport, SDKResult};
 
 // 导入ccm_docs API (已实现)
 use super::models::{GetDocMetaRequest, GetDocMetaResponse, SearchDocsRequest, SearchDocsResponse};

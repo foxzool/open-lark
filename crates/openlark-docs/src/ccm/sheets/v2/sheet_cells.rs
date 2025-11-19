@@ -22,8 +22,8 @@ use serde::{Deserialize, Serialize};
 use openlark_core::endpoints::Endpoints;
 use openlark_core::impl_executable_builder_owned;
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -428,7 +428,7 @@ impl SheetCellsService {
         &self,
         request: UpdateCellRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<UpdateCellResponseData>> {
+    ) -> SDKResult<Response<UpdateCellResponseData>> {
         // 验证请求参数
         request.validate()?;
 
@@ -470,7 +470,7 @@ impl SheetCellsService {
         }
 
         // 暂时返回模拟数据，直到Transport问题解决
-        use openlark_core::api_resp::RawResponse;
+        use openlark_core::api::RawResponse;
         Ok(BaseResponse {
             raw_response: RawResponse {
                 code: 0,
@@ -494,7 +494,7 @@ impl_executable_builder_owned!(
     UpdateCellRequestBuilder,
     SheetCellsService,
     UpdateCellRequest,
-    BaseResponse<UpdateCellResponseData>,
+    Response<UpdateCellResponseData>,
     update_cell
 );
 

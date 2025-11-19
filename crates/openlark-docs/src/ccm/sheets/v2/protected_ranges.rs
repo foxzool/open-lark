@@ -8,8 +8,8 @@
 //! - 权限验证和安全机制
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -251,7 +251,7 @@ impl ProtectedRangesService {
         &self,
         request: &CreateProtectedRangesRequest,
     ) -> SDKResult<CreateProtectedRangesResponse> {
-        use openlark_core::{api_req::ApiRequest, http::Transport};
+        use openlark_core::{api::ApiRequest, http::Transport};
         use reqwest::Method;
 
         let endpoint = format!(
@@ -279,7 +279,7 @@ impl ProtectedRangesService {
         &self,
         request: &UpdateProtectedRangesRequest,
     ) -> SDKResult<UpdateProtectedRangesResponse> {
-        use openlark_core::{api_req::ApiRequest, http::Transport};
+        use openlark_core::{api::ApiRequest, http::Transport};
         use reqwest::Method;
 
         let endpoint = format!(
@@ -307,7 +307,7 @@ impl ProtectedRangesService {
         &self,
         request: &GetProtectedRangesRequest,
     ) -> SDKResult<GetProtectedRangesResponse> {
-        use openlark_core::{api_req::ApiRequest, http::Transport};
+        use openlark_core::{api::ApiRequest, http::Transport};
         use reqwest::Method;
 
         let endpoint = format!(
@@ -334,7 +334,7 @@ impl ProtectedRangesService {
         &self,
         request: &DeleteProtectedRangesRequest,
     ) -> SDKResult<DeleteProtectedRangesResponse> {
-        use openlark_core::{api_req::ApiRequest, http::Transport};
+        use openlark_core::{api::ApiRequest, http::Transport};
         use reqwest::Method;
 
         let endpoint = format!(

@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 use crate::{
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::{ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -26,10 +26,10 @@ impl MigrationExamples {
         _receive_id_type: &str,
         _body: CreateMessageBody,
         _option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<MessageData>> {
+    ) -> SDKResult<Response<MessageData>> {
         // 这是原始的实现方式 - 需要手动构建 ApiRequest
         // 大量重复代码：
-        // 1. 手动设置 http_method
+        // 1. 手动设置 method
         // 2. 手动设置 api_path
         // 3. 手动设置 supported_access_token_types
         // 4. 手动处理查询参数
@@ -45,7 +45,7 @@ impl MigrationExamples {
         receive_id_type: &str,
         body: CreateMessageBody,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<MessageData>> {
+    ) -> SDKResult<Response<MessageData>> {
         let mut query_params = HashMap::new();
         query_params.insert("receive_id_type", receive_id_type.to_string());
 
@@ -68,7 +68,7 @@ impl MigrationExamples {
         _receive_id_type: &str,
         _body: CreateMessageBody,
         _option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<MessageData>> {
+    ) -> SDKResult<Response<MessageData>> {
         // 注意：这需要 RequestExecutor 支持 OptimizedBaseResponse
         // 目前作为概念演示，返回一个占位符响应
         Err(LarkAPIError::IllegalParamError(
@@ -89,12 +89,12 @@ impl PerformanceComparison {
     /// 3. 额外的内存分配和序列化开销
     pub async fn old_parsing_approach(
         json_response: &str,
-    ) -> Result<BaseResponse<MessageData>, serde_json::Error> {
+    ) -> Result<Response<MessageData>, serde_json::Error> {
         // 第一次解析：String -> Value
         let raw_value: serde_json::Value = serde_json::from_str(json_response)?;
 
-        // 第二次解析：Value -> BaseResponse<T>
-        let base_response: BaseResponse<MessageData> = serde_json::from_value(raw_value)?;
+        // 第二次解析：Value -> Response<T>
+        let base_response: Response<MessageData> = serde_json::from_value(raw_value)?;
 
         Ok(base_response)
     }
@@ -107,9 +107,9 @@ impl PerformanceComparison {
     /// 3. 更好的性能
     pub async fn new_parsing_approach(
         json_response: &str,
-    ) -> Result<BaseResponse<MessageData>, serde_json::Error> {
-        // 单次解析：String -> BaseResponse<T>
-        let base_response: BaseResponse<MessageData> = serde_json::from_str(json_response)?;
+    ) -> Result<Response<MessageData>, serde_json::Error> {
+        // 单次解析：String -> Response<T>
+        let base_response: Response<MessageData> = serde_json::from_str(json_response)?;
 
         Ok(base_response)
     }
@@ -123,14 +123,14 @@ impl PerformanceComparison {
         let start = std::time::Instant::now();
         for _ in 0..1000 {
             let _value: serde_json::Value = serde_json::from_str(json_data).unwrap();
-            let _result: Result<BaseResponse<MessageData>, _> = serde_json::from_value(_value);
+            let _result: Result<Response<MessageData>, _> = serde_json::from_value(_value);
         }
         let old_duration = start.elapsed();
 
         // 测试新方法
         let start = std::time::Instant::now();
         for _ in 0..1000 {
-            let _result: Result<BaseResponse<MessageData>, _> = serde_json::from_str(json_data);
+            let _result: Result<Response<MessageData>, _> = serde_json::from_str(json_data);
         }
         let new_duration = start.elapsed();
 
@@ -150,7 +150,7 @@ pub struct ErrorHandlingImprovements;
 
 impl ErrorHandlingImprovements {
     /// 原始错误处理 - 手动检查和构建错误响应
-    pub fn old_error_handling(response_json: &str) -> SDKResult<BaseResponse<MessageData>> {
+    pub fn old_error_handling(response_json: &str) -> SDKResult<Response<MessageData>> {
         let raw_value: serde_json::Value = serde_json::from_str(response_json)?;
 
         if raw_value["code"].as_i64() == Some(0) {
@@ -165,7 +165,7 @@ impl ErrorHandlingImprovements {
     /// 新的错误处理 - 自动化处理
     pub async fn new_error_handling(
         response: reqwest::Response,
-    ) -> SDKResult<BaseResponse<MessageData>> {
+    ) -> SDKResult<Response<MessageData>> {
         // 使用 ImprovedResponseHandler 自动处理所有情况
         ImprovedResponseHandler::handle_response(response).await
     }
@@ -178,7 +178,7 @@ impl CodeReuseComparison {
     /// 统计：通过 RequestExecutor 减少的代码行数
     ///
     /// 原始实现（每个API方法）：~15行重复代码
-    /// - 设置 http_method: 1行
+    /// - 设置 method: 1行
     /// - 设置 api_path: 1行  
     /// - 设置 supported_access_token_types: 1行
     /// - 处理查询参数: 3-5行
@@ -259,12 +259,12 @@ mod tests {
         // 双重解析
         let start = std::time::Instant::now();
         let _value: serde_json::Value = serde_json::from_str(json_data).unwrap();
-        let _result: Result<BaseResponse<MessageData>, _> = serde_json::from_value(_value);
+        let _result: Result<Response<MessageData>, _> = serde_json::from_value(_value);
         let double_parse_time = start.elapsed();
 
         // 单次解析
         let start = std::time::Instant::now();
-        let _result: Result<BaseResponse<MessageData>, _> = serde_json::from_str(json_data);
+        let _result: Result<Response<MessageData>, _> = serde_json::from_str(json_data);
         let single_parse_time = start.elapsed();
 
         println!("双重解析时间: {:?}", double_parse_time);

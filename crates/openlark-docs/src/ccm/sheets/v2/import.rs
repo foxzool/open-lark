@@ -7,8 +7,8 @@
 //! - 错误处理和结果查询
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -140,7 +140,7 @@ impl ImportService {
     /// let result = service.import(&request);
     /// ```
     pub async fn import(&self, request: &ImportRequest) -> SDKResult<ImportResponse> {
-        use openlark_core::{api_req::ApiRequest, http::Transport};
+        use openlark_core::{api::ApiRequest, http::Transport};
         use reqwest::Method;
 
         let endpoint = "/open-apis/sheets/v2/import";

@@ -109,6 +109,7 @@ impl Error {
 }
 
 // 从标准错误类型转换
+#[cfg(feature = "reqwest")]
 impl From<reqwest::Error> for Error {
     fn from(err: reqwest::Error) -> Self {
         if err.is_timeout() {

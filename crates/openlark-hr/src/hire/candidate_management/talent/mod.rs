@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        api::ApiRequest,
+        api::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
@@ -177,7 +177,7 @@ impl TalentService {
         &self,
         request: TalentCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<TalentOperationResponse>> {
+    ) -> SDKResult<Response<TalentOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_TALENTS.to_string());
@@ -227,7 +227,7 @@ impl TalentService {
         &self,
         talent_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<TalentDetailResponse>> {
+    ) -> SDKResult<Response<TalentDetailResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_TALENT_GET, "talent_id", talent_id));
@@ -294,7 +294,7 @@ impl TalentService {
         &self,
         request: TalentListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<TalentListResponse>> {
+    ) -> SDKResult<Response<TalentListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_TALENTS.to_string());
@@ -390,7 +390,7 @@ impl TalentService {
         talent_id: &str,
         request: TalentCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<TalentOperationResponse>> {
+    ) -> SDKResult<Response<TalentOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_TALENT_GET, "talent_id", talent_id));
@@ -422,7 +422,7 @@ impl TalentService {
         &self,
         talent_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<TalentOperationResponse>> {
+    ) -> SDKResult<Response<TalentOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::DELETE);
         api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_TALENT_GET, "talent_id", talent_id));
@@ -476,7 +476,7 @@ impl TalentService {
         page_size: Option<u32>,
         page_token: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<TalentApplicationHistoryResponse>> {
+    ) -> SDKResult<Response<TalentApplicationHistoryResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -535,7 +535,7 @@ impl TalentService {
         &self,
         talents: Vec<TalentCreateRequest>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<TalentOperationResponse>> {
+    ) -> SDKResult<Response<TalentOperationResponse>> {
         #[derive(Serialize)]
         struct BatchImportRequest {
             talents: Vec<TalentCreateRequest>,
@@ -583,7 +583,7 @@ impl TalentService {
         &self,
         builder_result: SDKResult<TalentCreateRequest>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<TalentOperationResponse>> {
+    ) -> SDKResult<Response<TalentOperationResponse>> {
         let request = builder_result?;
         self.create_talent(request, option).await
     }
@@ -620,7 +620,7 @@ impl TalentService {
         talent_id: &str,
         builder_result: SDKResult<TalentCreateRequest>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<TalentOperationResponse>> {
+    ) -> SDKResult<Response<TalentOperationResponse>> {
         let request = builder_result?;
         self.update_talent(talent_id, request, option).await
     }
@@ -657,7 +657,7 @@ impl TalentService {
         &self,
         builder_results: Result<Vec<TalentCreateRequest>, LarkAPIError>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<TalentOperationResponse>> {
+    ) -> SDKResult<Response<TalentOperationResponse>> {
         let talents = builder_results?;
         self.batch_import_talents(talents, option).await
     }
@@ -742,7 +742,7 @@ impl TalentService {
         &self,
         request: TalentListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<TalentListResponse>> {
+    ) -> SDKResult<Response<TalentListResponse>> {
         self.list_talents(request, option).await
     }
 
@@ -780,7 +780,7 @@ impl TalentService {
         &self,
         builder_results: Vec<SDKResult<TalentCreateRequest>>,
         option: Option<RequestOption>,
-    ) -> Vec<SDKResult<BaseResponse<TalentOperationResponse>>> {
+    ) -> Vec<SDKResult<Response<TalentOperationResponse>>> {
         let mut results = Vec::new();
 
         for builder_result in builder_results {

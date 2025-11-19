@@ -8,8 +8,8 @@
 //! - 支持多种验证类型和条件
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -743,7 +743,7 @@ impl DataValidationService {
         &self,
         request: SetDataValidationRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<SetDataValidationResponse>> {
+    ) -> SDKResult<Response<SetDataValidationResponse>> {
         if let Err(err) = request.validate() {
             return Err(LarkAPIError::InvalidParameter(err));
         }
@@ -803,7 +803,7 @@ impl DataValidationService {
         &self,
         request: UpdateDataValidationRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<UpdateDataValidationResponse>> {
+    ) -> SDKResult<Response<UpdateDataValidationResponse>> {
         if let Err(err) = request.validate() {
             return Err(LarkAPIError::InvalidParameter(err));
         }
@@ -855,7 +855,7 @@ impl DataValidationService {
         &self,
         request: GetDataValidationRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<GetDataValidationResponse>> {
+    ) -> SDKResult<Response<GetDataValidationResponse>> {
         if let Err(err) = request.validate() {
             return Err(LarkAPIError::InvalidParameter(err));
         }
@@ -911,7 +911,7 @@ impl DataValidationService {
         &self,
         request: DeleteDataValidationRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<DeleteDataValidationResponse>> {
+    ) -> SDKResult<Response<DeleteDataValidationResponse>> {
         if let Err(err) = request.validate() {
             return Err(LarkAPIError::InvalidParameter(err));
         }
@@ -1055,7 +1055,7 @@ impl DropdownValidationBuilder {
     }
 
     /// 执行设置请求
-    pub async fn execute(self) -> SDKResult<BaseResponse<SetDataValidationResponse>> {
+    pub async fn execute(self) -> SDKResult<Response<SetDataValidationResponse>> {
         let data_validation =
             DataValidation::new(self.sheet_id, self.range, ValidationType::Dropdown)
                 .dropdown_source(DropdownSource::Values(self.values))
@@ -1145,7 +1145,7 @@ impl NumberRangeValidationBuilder {
     }
 
     /// 执行设置请求
-    pub async fn execute(self) -> SDKResult<BaseResponse<SetDataValidationResponse>> {
+    pub async fn execute(self) -> SDKResult<Response<SetDataValidationResponse>> {
         let condition = ValidationCondition::new(self.operator)
             .value1(self.value1.unwrap_or_else(|| "0".to_string()))
             .value2(self.value2);

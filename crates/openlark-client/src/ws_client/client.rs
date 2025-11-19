@@ -26,7 +26,7 @@ use url::Url;
 
 use super::{state_machine::StateMachineEvent, FrameHandler, WebSocketStateMachine};
 use openlark_core::{
-    api_resp::BaseResponse, cache::QuickCache, constants::FEISHU_BASE_URL,
+    api::Response, cache::QuickCache, constants::FEISHU_BASE_URL,
     event::dispatcher::EventDispatcherHandler,
 };
 
@@ -247,7 +247,7 @@ async fn get_conn_url(
         .send()
         .await?;
 
-    let resp = req.json::<BaseResponse<EndPointResponse>>().await?;
+    let resp = req.json::<Response<EndPointResponse>>().await?;
     debug!("{:?}", resp.data);
 
     if !resp.success() {

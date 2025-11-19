@@ -2,7 +2,7 @@ use reqwest::Method;
 use serde_json::json;
 
 use openlark_core::{
-    api_resp::BaseResponse,
+    api::Response,
     config::Config,
     constants::AccessTokenType,
     endpoints::{attendance::*, EndpointBuilder},
@@ -35,7 +35,7 @@ impl GroupService {
         &self,
         request: ListGroupUserRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ListGroupUserRespData>> {
+    ) -> SDKResult<Response<ListGroupUserRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -81,7 +81,7 @@ impl GroupService {
         &self,
         request: CreateGroupRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<CreateGroupRespData>> {
+    ) -> SDKResult<Response<CreateGroupRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(ATTENDANCE_V1_GROUPS.to_string());
@@ -149,7 +149,7 @@ impl GroupService {
         &self,
         request: DeleteGroupRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<EmptyResponse>> {
+    ) -> SDKResult<Response<EmptyResponse>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::DELETE);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -174,7 +174,7 @@ impl GroupService {
         &self,
         request: GetGroupRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<Group>> {
+    ) -> SDKResult<Response<Group>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -208,7 +208,7 @@ impl GroupService {
         &self,
         request: SearchGroupRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<SearchGroupRespData>> {
+    ) -> SDKResult<Response<SearchGroupRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(ATTENDANCE_V1_GROUPS_SEARCH.to_string());
@@ -245,7 +245,7 @@ impl GroupService {
         &self,
         request: ListGroupRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ListGroupRespData>> {
+    ) -> SDKResult<Response<ListGroupRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(ATTENDANCE_V1_GROUPS.to_string());
@@ -292,7 +292,7 @@ impl Service for GroupService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use openlark_core::{api_req::ApiRequest, config::Config};
+    use openlark_core::{api::ApiRequest, config::Config};
     use crate::service::attendance::v1::models::{
         ExceptDateRule, MemberRule, ShiftRule, WorkDayRule,
     };

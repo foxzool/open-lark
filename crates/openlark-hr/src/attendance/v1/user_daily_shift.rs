@@ -2,7 +2,7 @@ use reqwest::Method;
 use serde_json::json;
 
 use openlark_core::{
-    api_resp::BaseResponse, config::Config, constants::AccessTokenType, endpoints::attendance::*,
+    api::Response, config::Config, constants::AccessTokenType, endpoints::attendance::*,
     http::Transport, req_option::RequestOption, trait_system::Service, SDKResult,
 };
 
@@ -31,7 +31,7 @@ impl UserDailyShiftService {
         &self,
         request: BatchCreateUserDailyShiftRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<BatchCreateUserDailyShiftRespData>> {
+    ) -> SDKResult<Response<BatchCreateUserDailyShiftRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(ATTENDANCE_V1_USER_DAILY_SHIFTS_BATCH_CREATE.to_string());
@@ -64,7 +64,7 @@ impl UserDailyShiftService {
         &self,
         request: QueryUserDailyShiftRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<QueryUserDailyShiftRespData>> {
+    ) -> SDKResult<Response<QueryUserDailyShiftRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(ATTENDANCE_V1_USER_DAILY_SHIFTS_QUERY.to_string());
@@ -100,7 +100,7 @@ impl UserDailyShiftService {
         &self,
         request: BatchCreateTempUserDailyShiftRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<BatchCreateTempUserDailyShiftRespData>> {
+    ) -> SDKResult<Response<BatchCreateTempUserDailyShiftRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(ATTENDANCE_V1_USER_DAILY_SHIFTS_BATCH_CREATE_TEMP.to_string());
