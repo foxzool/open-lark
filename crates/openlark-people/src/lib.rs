@@ -11,22 +11,21 @@
 //! ## 使用示例
 //!
 //! ```rust
-//! use openlark_people::endpoints::*;
+//! use openlark_people::*;
 //!
 //! // 使用端点常量
 //! let contacts_endpoint = CONTACT_V3_USERS;
 //! let directory_endpoint = DIRECTORY_V1_DEPARTMENTS;
-//! let settings_endpoint = PERSONAL_SETTINGS_V1_SYSTEM_STATUS;
 //! println!("联系人端点: {}", contacts_endpoint);
 //! println!("通讯录端点: {}", directory_endpoint);
-//! println!("个人设置端点: {}", settings_endpoint);
 //! ```
 //!
-//! ## 端点组织
+//! ## 模块组织
 //!
-//! - `contact`: 联系人管理端点
-//! - `directory`: 通讯录管理端点
-//! - `personal_settings`: 个人设置端点
+//! - **endpoints**: API端点常量定义
+//! - **models**: 数据模型和类型定义 (计划中)
+//! - **v3**: V3 API服务占位符 (计划中)
+//! - **prelude**: 常用类型和特征导入
 
 #![allow(missing_docs)]
 
@@ -34,13 +33,17 @@
 #[macro_use]
 mod macros;
 
-// 导入端点模块
+// 导入核心模块
 pub mod endpoints;
+pub mod models;
+pub mod v3;
 
-// 重新导出端点常量，方便外部使用
+// 重新导出端点常量和主要类型，方便外部使用
 pub use endpoints::*;
+// pub use models::*;  // 暂时注释，models 模块还没有实现
+pub use v3::*;
 
 /// Re-exports from openlark-core for convenience.
 pub mod prelude {
-    pub use openlark_core::SDKResult;
+    pub use openlark_core::{config::Config, SDKResult};
 }
