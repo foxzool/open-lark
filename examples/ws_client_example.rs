@@ -10,11 +10,7 @@
 //! ```
 
 use dotenvy::dotenv;
-use log::{debug, error, info, warn};
-use openlark_client::{ws_client::LarkWsClient, ws_client::WsClientError};
-use openlark_core::{config::Config, event::dispatcher::EventDispatcherHandler};
-use std::sync::Arc;
-use tokio::time::Duration;
+use log::{info, warn};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -29,9 +25,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // 读取环境变量配置
-    let app_id = std::env::var("OPENLARK_APP_ID").map_err(|_| "请设置 OPENLARK_APP_ID 环境变量")?;
-    let app_secret =
-        std::env::var("OPENLARK_APP_SECRET").map_err(|_| "请设置 OPENLARK_APP_SECRET 环境变量")?;
+    let app_id = match std::env::var("OPENLARK_APP_ID") {
+        Ok(id) => id,
+        Err(_) => return Err("请设置 OPENLARK_APP_ID 环境变量".into()),
+    };
+    let app_secret = match std::env::var("OPENLARK_APP_SECRET") {
+        Ok(secret) => secret,
+        Err(_) => return Err("请设置 OPENLARK_APP_SECRET 环境变量".into()),
+    };
 
     info!("📱 App ID: {}", &app_id[..std::cmp::min(8, app_id.len())]);
     info!(
@@ -39,69 +40,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         &app_secret[..std::cmp::min(6, app_secret.len())]
     );
 
-    // 创建配置
-    let config_builder = Config::builder()
-        .app_id(app_id)
-        .app_secret(app_secret)
-        .base_url("https://open.feishu.cn")
-        .req_timeout(Duration::from_secs(30));
+    // 注意：此示例当前为基础框架
+    // WebSocket客户端功能正在适配新的架构中
+    println!("📝 WebSocket 客户端示例");
+    println!("⚠️  注意：此功能正在适配新的客户端架构");
+    println!("🔧 当前展示基础的环境配置和连接准备");
 
-    let config = Arc::new(config_builder.build());
-    info!("⚙️ 配置创建完成");
-
-    // 创建事件处理器
-    let event_handler = EventDispatcherHandler::builder().build();
-    info!("📡 事件处理器创建完成");
-
-    // 显示连接提示
-    println!("\n🔌 正在连接到飞书 WebSocket 服务...");
-    println!("📊 连接成功后将显示实时事件统计");
-    println!("⏹️  按 Ctrl+C 停止连接");
-    println!();
-
-    // 建立WebSocket连接
-    match openlark_client::ws_client::LarkWsClient::open(config.clone(), event_handler).await {
-        Ok(_) => {
-            info!("✅ WebSocket 连接已正常关闭");
-        }
-        Err(e) => {
-            error!("❌ WebSocket 连接失败: {}", e);
-
-            // 提供详细的错误信息和建议
-            match &e {
-                openlark_client::ws_client::WsClientError::ServerError { code, message } => {
-                    error!("📋 服务器错误 - Code: {}, Message: {}", code, message);
-
-                    match code {
-                        1 => {
-                            error!("💡 可能的原因: App ID 或 App Secret 不正确");
-                            error!("💡 解决方案: 请检查 .env 文件中的凭据是否正确");
-                        }
-                        1000040343 => {
-                            error!("💡 可能的原因: 应用未启用 WebSocket 权限");
-                            error!("💡 解决方案: 请在飞书开发者后台启用 WebSocket 回调权限");
-                        }
-                        _ => {
-                            error!("💡 请检查网络连接和凭据配置");
-                        }
-                    }
-                }
-                openlark_client::ws_client::WsClientError::RequestError(_) => {
-                    error!("💡 可能的原因: 网络连接问题或服务器不可达");
-                    error!("💡 解决方案: 请检查网络连接和防火墙设置");
-                }
-                openlark_client::ws_client::WsClientError::UnexpectedResponse => {
-                    error!("💡 可能的原因: 服务器返回了意外的响应格式");
-                    error!("💡 解决方案: 请检查 API 端点是否正确");
-                }
-                _ => {
-                    error!("💡 请检查配置和网络连接");
-                }
-            }
-
-            return Err(e.into());
-        }
-    }
+    display_connection_info();
 
     info!("👋 示例程序结束");
     Ok(())
@@ -112,17 +57,37 @@ fn display_connection_info() {
     println!("\n📋 连接状态信息:");
     println!("🔗 WebSocket 端点: wss://open.feishu.cn/callback/ws/endpoint");
     println!("💓 心跳间隔: 30秒 (可动态调整)");
-    println!("🔄 重连机制: 自动重连 (可配置次数和间隔)");
-    println!("📦 数据协议: Protobuf (lark-websocket-protobuf)");
+    println!("🔄 重连机制: 指数退避，最大重试5次");
+    println!("📊 事件类型: 消息接收、用户状态变更、群组变更等");
+    println!();
+
+    println!("🎯 下一步开发计划:");
+    println!("  • 完成新客户端架构适配");
+    println!("  • 实现自动事件分发");
+    println!("  • 添加连接状态监控");
+    println!("  • 集成错误恢复机制");
     println!();
 }
 
-/// 显示使用提示
-fn display_usage_tips() {
-    println!("💡 使用提示:");
-    println!("   1. 确保在飞书开发者后台启用 WebSocket 权限");
-    println!("   2. 配置正确的回调地址");
-    println!("   3. 应用需要发布到生产环境或设置测试环境");
-    println!("   4. 网络需要能够访问飞书服务器");
+/// 显示使用示例
+fn show_usage_examples() {
+    println!("📚 使用示例:");
     println!();
+    println!("```rust");
+    println!("use openlark_client::prelude::*;");
+    println!();
+    println!("// 创建客户端");
+    println!("let client = Client::builder()");
+    println!("    .app_id(\"your_app_id\")");
+    println!("    .app_secret(\"your_app_secret\")");
+    println!("    .build()?;");
+    println!();
+    println!("// 启用WebSocket连接");
+    println!("let ws_client = client.websocket().connect().await?;");
+    println!();
+    println!("// 注册事件处理器");
+    println!("ws_client.on_message(|event| {{");
+    println!("    println!(\"收到事件: {{:?}}\", event);");
+    println!("}});");
+    println!("```");
 }
