@@ -2,7 +2,7 @@
 //!
 //! 提供资源浏览器相关的数据结构，支持文件夹和文件的基本操作。
 
-use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 
 /// 获取我的空间（根文件夹）元数据响应

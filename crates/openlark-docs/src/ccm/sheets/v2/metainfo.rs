@@ -11,8 +11,8 @@ use serde::{Deserialize, Serialize};
 
 use openlark_core::endpoints::Endpoints;
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -300,7 +300,7 @@ impl SpreadsheetMetaService {
     pub async fn get_spreadsheet_meta(
         &self,
         request: GetSpreadsheetMetaRequest,
-    ) -> SDKResult<BaseResponse<SpreadsheetMetaInfo>> {
+    ) -> SDKResult<Response<SpreadsheetMetaInfo>> {
         // 验证请求参数
         request.validate()?;
 
@@ -347,7 +347,7 @@ impl SpreadsheetMetaService {
     pub async fn get_basic_meta(
         &self,
         spreadsheet_token: impl Into<String>,
-    ) -> SDKResult<BaseResponse<SpreadsheetMetaInfo>> {
+    ) -> SDKResult<Response<SpreadsheetMetaInfo>> {
         let request = GetSpreadsheetMetaRequest::new(spreadsheet_token)
             .include_permissions(false)
             .include_custom_properties(false);
@@ -365,7 +365,7 @@ impl SpreadsheetMetaService {
     pub async fn get_full_meta(
         &self,
         spreadsheet_token: impl Into<String>,
-    ) -> SDKResult<BaseResponse<SpreadsheetMetaInfo>> {
+    ) -> SDKResult<Response<SpreadsheetMetaInfo>> {
         let request = GetSpreadsheetMetaRequest::new(spreadsheet_token)
             .include_permissions(true)
             .include_custom_properties(true);
@@ -427,7 +427,7 @@ impl SpreadsheetMetaBuilder {
     }
 
     /// 执行获取操作
-    pub async fn execute(self) -> SDKResult<BaseResponse<SpreadsheetMetaInfo>> {
+    pub async fn execute(self) -> SDKResult<Response<SpreadsheetMetaInfo>> {
         let mut request = GetSpreadsheetMetaRequest::new(self.spreadsheet_token);
 
         if let Some(include_permissions) = self.include_permissions {

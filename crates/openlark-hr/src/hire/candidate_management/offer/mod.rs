@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        api::ApiRequest,
+        api::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
@@ -339,7 +339,7 @@ impl OfferService {
         &self,
         request: OfferCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<OfferOperationResponse>> {
+    ) -> SDKResult<Response<OfferOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_OFFERS.to_string());
@@ -382,7 +382,7 @@ impl OfferService {
         &self,
         offer_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<OfferDetailResponse>> {
+    ) -> SDKResult<Response<OfferDetailResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_OFFER_GET, "offer_id", offer_id));
@@ -442,7 +442,7 @@ impl OfferService {
         &self,
         request: OfferListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<OfferListResponse>> {
+    ) -> SDKResult<Response<OfferListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_OFFERS.to_string());
@@ -529,7 +529,7 @@ impl OfferService {
         offer_id: &str,
         request: OfferUpdateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<OfferOperationResponse>> {
+    ) -> SDKResult<Response<OfferOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_OFFER_GET, "offer_id", offer_id));
@@ -570,7 +570,7 @@ impl OfferService {
         send_method: &str,
         message: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<OfferOperationResponse>> {
+    ) -> SDKResult<Response<OfferOperationResponse>> {
         #[derive(Serialize)]
         struct SendOfferRequest {
             send_method: String,
@@ -613,7 +613,7 @@ impl OfferService {
         offer_id: &str,
         reason: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<OfferOperationResponse>> {
+    ) -> SDKResult<Response<OfferOperationResponse>> {
         #[derive(Serialize)]
         struct WithdrawRequest {
             reason: String,
@@ -663,7 +663,7 @@ impl OfferService {
         &self,
         request: OnboardingCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<OfferOperationResponse>> {
+    ) -> SDKResult<Response<OfferOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_ONBOARDINGS.to_string());
@@ -703,7 +703,7 @@ impl OfferService {
         status: Option<String>,
         department: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<OnboardingListResponse>> {
+    ) -> SDKResult<Response<OnboardingListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_ONBOARDINGS.to_string());
@@ -766,7 +766,7 @@ impl OfferService {
         completed: bool,
         remark: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<OfferOperationResponse>> {
+    ) -> SDKResult<Response<OfferOperationResponse>> {
         #[derive(Serialize)]
         struct UpdateProgressRequest {
             completed: bool,

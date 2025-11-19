@@ -2,7 +2,7 @@ use reqwest::Method;
 use serde_json::json;
 
 use openlark_core::{
-    api_resp::BaseResponse,
+    api::Response,
     config::Config,
     constants::AccessTokenType,
     endpoints::{attendance::*, EndpointBuilder},
@@ -34,7 +34,7 @@ impl UserApprovalService {
         &self,
         request: QueryUserApprovalRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<QueryUserApprovalRespData>> {
+    ) -> SDKResult<Response<QueryUserApprovalRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(ATTENDANCE_V1_USER_APPROVALS.to_string());
@@ -86,7 +86,7 @@ impl UserApprovalService {
         &self,
         request: CreateUserApprovalRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<CreateUserApprovalRespData>> {
+    ) -> SDKResult<Response<CreateUserApprovalRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(ATTENDANCE_V1_USER_APPROVALS.to_string());
@@ -124,7 +124,7 @@ impl UserApprovalService {
         &self,
         request: ProcessUserApprovalRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ProcessUserApprovalRespData>> {
+    ) -> SDKResult<Response<ProcessUserApprovalRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -172,7 +172,7 @@ impl Service for UserApprovalService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use openlark_core::{api_req::ApiRequest, config::Config};
+    use openlark_core::{api::ApiRequest, config::Config};
 
     #[test]
     fn test_user_approval_service_creation() {

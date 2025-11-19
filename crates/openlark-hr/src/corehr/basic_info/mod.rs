@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        api::ApiRequest,
+        api::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
         endpoints::corehr::*,
@@ -118,7 +118,7 @@ impl BasicInfoService {
         &self,
         request: EnumSearchRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<EnumSearchResponse>> {
+    ) -> SDKResult<Response<EnumSearchResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: COREHR_BASIC_INFO_ENUM_SEARCH.to_string(),
@@ -165,7 +165,7 @@ impl BasicInfoService {
         &self,
         request: CountryRegionSearchRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<CountryRegionSearchResponse>> {
+    ) -> SDKResult<Response<CountryRegionSearchResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: COREHR_BASIC_INFO_LOCATION_SEARCH.to_string(),
@@ -211,7 +211,7 @@ impl BasicInfoService {
         &self,
         request: NationalitySearchRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<NationalitySearchResponse>> {
+    ) -> SDKResult<Response<NationalitySearchResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: COREHR_BASIC_INFO_NATIONALITY_SEARCH.to_string(),
@@ -258,7 +258,7 @@ impl BasicInfoService {
         &self,
         request: IdConvertRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<IdConvertResponse>> {
+    ) -> SDKResult<Response<IdConvertResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: COREHR_COMMON_DATA_ID_CONVERT.to_string(),

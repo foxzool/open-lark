@@ -7,7 +7,7 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 use SDKResult;use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::,
 {
     core::,
@@ -15,7 +15,7 @@ use crate::,
         BaseResponse,
         BinaryResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -41,7 +41,7 @@ UploadMediaRequestBuilder::default()}
         &self,
         builder_result: SDKResult<UploadMediaRequest>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<UploadMediaRespData>> {,
+    ) -> SDKResult<Response<UploadMediaRespData>> {,
 let request = builder_result?;
         self.upload_all(request, option).await}
 /// 上传素材,
@@ -56,7 +56,7 @@ pub async fn upload_all(,
         &self,
         request: UploadMediaRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<UploadMediaRespData>> {,
+    ) -> SDKResult<Response<UploadMediaRespData>> {,
 let mut api_req = request.api_req;
         api_req.set_http_method(Method::POST);
 api_req.set_api_path(DRIVE_V1_MEDIAS_UPLOAD_ALL.to_string());
@@ -77,7 +77,7 @@ pub async fn upload_prepare(,
         &self,
         request: UploadPrepareRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<UploadPrepareRespData>> {,
+    ) -> SDKResult<Response<UploadPrepareRespData>> {,
 let api_req = ApiRequest {,
             http_http_http_method: Method::POST,
             api_path: DRIVE_V1_MEDIAS_UPLOAD_PREPARE.to_string(),
@@ -100,7 +100,7 @@ pub async fn upload_part(,
         &self,
         request: UploadPartRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<UploadPartRespData>> {,
+    ) -> SDKResult<Response<UploadPartRespData>> {,
 let mut api_req = request.api_req;
         api_req.set_http_method(Method::POST);
 api_req.set_api_path(DRIVE_V1_MEDIAS_UPLOAD_PART.to_string());
@@ -121,7 +121,7 @@ pub async fn upload_finish(,
         &self,
         request: UploadFinishRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<UploadFinishRespData>> {,
+    ) -> SDKResult<Response<UploadFinishRespData>> {,
 let api_req = ApiRequest {,
             http_http_http_method: Method::POST,
             api_path: DRIVE_V1_MEDIAS_UPLOAD_FINISH.to_string(),
@@ -144,7 +144,7 @@ pub async fn download(,
         &self,
         request: DownloadMediaRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<BinaryResponse>> {,
+    ) -> SDKResult<Response<BinaryResponse>> {,
 let api_req = ApiRequest {,
             http_http_http_method: Method::GET,
             api_path: DRIVE_V1_MEDIAS_DOWNLOAD.replace("{}", &request.file_token),
@@ -167,7 +167,7 @@ pub async fn batch_get_tmp_download_url(,
         &self,
         request: BatchGetTmpDownloadUrlRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<BatchGetTmpDownloadUrlRespData>> {,
+    ) -> SDKResult<Response<BatchGetTmpDownloadUrlRespData>> {,
 let mut api_req = ApiRequest {,
             http_http_http_method: Method::GET,
             api_path: DRIVE_V1_MEDIAS_BATCH_GET_TMP_DOWNLOAD_URL.to_string(),
@@ -425,14 +425,14 @@ impl_executable_builder_owned!(
     UploadMediaRequestBuilder,
     MediaService,
     UploadMediaRequest,
-    BaseResponse<UploadMediaRespData>,
+    Response<UploadMediaRespData>,
     upload_all,
 );
 impl_executable_builder_owned!(
     UploadPartRequestBuilder,
     MediaService,
     UploadPartRequest,
-    BaseResponse<UploadPartRespData>,
+    Response<UploadPartRespData>,
     upload_part,
 );
 #[cfg(test)]

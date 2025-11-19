@@ -33,7 +33,7 @@ pub mod values_single_write;
 // 模块中的服务可以直接通过完整路径访问
 
 use openlark_core::{
-    api_req::ApiRequest, config::Config, constants::AccessTokenType, http::Transport, SDKResult,
+    api::ApiRequest, config::Config, constants::AccessTokenType, http::Transport, SDKResult,
 };
 
 /// Sheets电子表格服务 v2版本

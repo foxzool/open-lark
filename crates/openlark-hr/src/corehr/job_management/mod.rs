@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        api::ApiRequest,
+        api::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
         endpoints::corehr::*,
@@ -178,7 +178,7 @@ impl JobManagementService {
         &self,
         request: JobFamilyCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<JobFamilyCreateResponse>> {
+    ) -> SDKResult<Response<JobFamilyCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: COREHR_JOB_FAMILIES.to_string(),
@@ -221,7 +221,7 @@ impl JobManagementService {
         page_size: Option<i32>,
         page_token: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<JobFamilyListResponse>> {
+    ) -> SDKResult<Response<JobFamilyListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
             api_path: COREHR_JOB_FAMILIES.to_string(),
@@ -285,7 +285,7 @@ impl JobManagementService {
         &self,
         request: JobLevelCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<JobLevelCreateResponse>> {
+    ) -> SDKResult<Response<JobLevelCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: COREHR_JOB_LEVELS.to_string(),
@@ -328,7 +328,7 @@ impl JobManagementService {
         page_size: Option<i32>,
         page_token: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<JobLevelListResponse>> {
+    ) -> SDKResult<Response<JobLevelListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
             api_path: COREHR_JOB_LEVELS.to_string(),
@@ -392,7 +392,7 @@ impl JobManagementService {
         &self,
         request: JobGradeCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<JobGradeCreateResponse>> {
+    ) -> SDKResult<Response<JobGradeCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: COREHR_JOB_GRADES.to_string(),
@@ -434,7 +434,7 @@ impl JobManagementService {
         &self,
         job_family_id: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<JobGradeQueryResponse>> {
+    ) -> SDKResult<Response<JobGradeQueryResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::POST,
             api_path: COREHR_JOB_GRADES_QUERY.to_string(),
@@ -494,7 +494,7 @@ impl JobManagementService {
         &self,
         request: JobCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<JobCreateResponse>> {
+    ) -> SDKResult<Response<JobCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: COREHR_JOBS.to_string(),
@@ -536,7 +536,7 @@ impl JobManagementService {
         page_size: Option<i32>,
         page_token: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<JobListResponse>> {
+    ) -> SDKResult<Response<JobListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
             api_path: COREHR_JOBS.to_string(),

@@ -10,8 +10,8 @@
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     constants::AccessTokenType,
     error::LarkAPIError,
     http::Transport,
@@ -986,7 +986,7 @@ impl FloatImagesService {
     pub async fn create(
         &self,
         request: &CreateFloatImageRequest,
-    ) -> openlark_core::error::SDKResult<BaseResponse<CreateFloatImageResponse>> {
+    ) -> openlark_core::error::SDKResult<Response<CreateFloatImageResponse>> {
         let url = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images",
             self.config.base_url,
@@ -1057,7 +1057,7 @@ impl FloatImagesService {
     pub async fn update(
         &self,
         request: &UpdateFloatImageRequest,
-    ) -> openlark_core::error::SDKResult<BaseResponse<UpdateFloatImageResponse>> {
+    ) -> openlark_core::error::SDKResult<Response<UpdateFloatImageResponse>> {
         let url = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images/{}",
             self.config.base_url,
@@ -1123,7 +1123,7 @@ impl FloatImagesService {
     pub async fn query(
         &self,
         request: &QueryFloatImagesRequest,
-    ) -> openlark_core::error::SDKResult<BaseResponse<QueryFloatImagesResponse>> {
+    ) -> openlark_core::error::SDKResult<Response<QueryFloatImagesResponse>> {
         let mut url = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images/query",
             self.config.base_url,
@@ -1208,7 +1208,7 @@ impl FloatImagesService {
     pub async fn get(
         &self,
         request: &GetFloatImageRequest,
-    ) -> SDKResult<BaseResponse<GetFloatImageResponse>> {
+    ) -> SDKResult<Response<GetFloatImageResponse>> {
         let endpoint = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images/{}",
             self.config.base_url,
@@ -1259,7 +1259,7 @@ impl FloatImagesService {
     pub async fn delete(
         &self,
         request: &DeleteFloatImageRequest,
-    ) -> openlark_core::error::SDKResult<BaseResponse<DeleteFloatImageResponse>> {
+    ) -> openlark_core::error::SDKResult<Response<DeleteFloatImageResponse>> {
         let url = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images/{}",
             self.config.base_url,

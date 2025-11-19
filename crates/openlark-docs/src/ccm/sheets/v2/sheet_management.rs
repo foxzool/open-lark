@@ -7,8 +7,8 @@
 //! - 工作表索引调整
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -271,7 +271,7 @@ impl SheetManagementService {
         &self,
         spreadsheet_token: &str,
         request: &BatchUpdateSheetsRequest,
-    ) -> SDKResult<BaseResponse<UpdateSheetsResponse>> {
+    ) -> SDKResult<Response<UpdateSheetsResponse>> {
         if let Err(err) = request.validate() {
             return Err(LarkAPIError::InvalidParameter(err));
         }
@@ -362,7 +362,7 @@ impl UpdateSheetBuilder {
     pub async fn execute(
         self,
         spreadsheet_token: &str,
-    ) -> SDKResult<BaseResponse<UpdateSheetsResponse>> {
+    ) -> SDKResult<Response<UpdateSheetsResponse>> {
         self.request.validate()?;
 
         let batch_request = BatchUpdateSheetsRequest::new().add_request(self.request);
@@ -407,7 +407,7 @@ impl BatchUpdateSheetsBuilder {
     }
 
     /// 执行批量更新请求
-    pub async fn execute(self) -> SDKResult<BaseResponse<UpdateSheetsResponse>> {
+    pub async fn execute(self) -> SDKResult<Response<UpdateSheetsResponse>> {
         self.batch_request.validate()?;
         let service = SheetManagementService {
             config: self.config,

@@ -3,7 +3,7 @@ use serde_json::json;
 
 use crate::{
     core::{
-        api_resp::BaseResponse,
+        api::Response,
         config::Config,
         constants::AccessTokenType,
         endpoints::{attendance::*, EndpointBuilder},
@@ -38,7 +38,7 @@ impl ArchiveRuleService {
         &self,
         request: QueryArchiveStatsFieldsRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<QueryArchiveStatsFieldsRespData>> {
+    ) -> SDKResult<Response<QueryArchiveStatsFieldsRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -68,7 +68,7 @@ impl ArchiveRuleService {
         &self,
         request: UploadArchiveReportRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<UploadArchiveReportRespData>> {
+    ) -> SDKResult<Response<UploadArchiveReportRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -105,7 +105,7 @@ impl ArchiveRuleService {
         &self,
         request: DelArchiveReportRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<DelArchiveReportRespData>> {
+    ) -> SDKResult<Response<DelArchiveReportRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -142,7 +142,7 @@ impl ArchiveRuleService {
         &self,
         request: ListArchiveRulesRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ListArchiveRulesRespData>> {
+    ) -> SDKResult<Response<ListArchiveRulesRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(ATTENDANCE_V1_ARCHIVE_RULES.to_string());
@@ -173,7 +173,7 @@ impl_executable_builder_owned!(
     QueryArchiveStatsFieldsRequest,
     ArchiveRuleService,
     QueryArchiveStatsFieldsRequest,
-    BaseResponse<QueryArchiveStatsFieldsRespData>,
+    Response<QueryArchiveStatsFieldsRespData>,
     query_user_stats_fields
 );
 
@@ -181,7 +181,7 @@ impl_executable_builder_owned!(
     UploadArchiveReportRequest,
     ArchiveRuleService,
     UploadArchiveReportRequest,
-    BaseResponse<UploadArchiveReportRespData>,
+    Response<UploadArchiveReportRespData>,
     upload_report
 );
 
@@ -189,7 +189,7 @@ impl_executable_builder_owned!(
     DelArchiveReportRequest,
     ArchiveRuleService,
     DelArchiveReportRequest,
-    BaseResponse<DelArchiveReportRespData>,
+    Response<DelArchiveReportRespData>,
     del_report
 );
 
@@ -197,7 +197,7 @@ impl_executable_builder_owned!(
     ListArchiveRulesRequest,
     ArchiveRuleService,
     ListArchiveRulesRequest,
-    BaseResponse<ListArchiveRulesRespData>,
+    Response<ListArchiveRulesRespData>,
     list
 );
 
@@ -218,7 +218,7 @@ impl Service for ArchiveRuleService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use openlark_core::{api_req::ApiRequest, config::Config};
+    use openlark_core::{api::ApiRequest, config::Config};
     use crate::service::attendance::v1::models::ArchiveReportRecord;
 
     #[test]

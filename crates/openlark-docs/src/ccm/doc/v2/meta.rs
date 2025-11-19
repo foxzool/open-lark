@@ -3,7 +3,7 @@
 //! 提供获取旧版文档元数据的功能。
 
 use openlark_core::{
-    api_req::ApiRequest, config::Config, constants::AccessTokenType, http::Transport, SDKResult,
+    api::ApiRequest, config::Config, constants::AccessTokenType, http::Transport, SDKResult,
 };
 use std::collections::HashMap;
 

@@ -6,7 +6,7 @@
 //! - 成员信息查询
 
 use openlark_core::{
-    api_resp::{ApiResponseTrait, ResponseFormat},
+    api::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,

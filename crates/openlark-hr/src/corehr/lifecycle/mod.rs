@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        api::ApiRequest,
+        api::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
         endpoints::corehr::*,
@@ -164,7 +164,7 @@ impl LifecycleService {
         &self,
         request: PreHireCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<PreHireCreateResponse>> {
+    ) -> SDKResult<Response<PreHireCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: COREHR_PRE_HIRES.to_string(),
@@ -216,7 +216,7 @@ impl LifecycleService {
         &self,
         request: PreHireSearchRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<PreHireSearchResponse>> {
+    ) -> SDKResult<Response<PreHireSearchResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: COREHR_PRE_HIRES_SEARCH.to_string(),
@@ -273,7 +273,7 @@ impl LifecycleService {
         &self,
         request: JobChangeCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<JobChangeCreateResponse>> {
+    ) -> SDKResult<Response<JobChangeCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: COREHR_JOB_CHANGES.to_string(),
@@ -326,7 +326,7 @@ impl LifecycleService {
         &self,
         request: JobChangeSearchRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<JobChangeSearchResponse>> {
+    ) -> SDKResult<Response<JobChangeSearchResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: COREHR_JOB_CHANGES_SEARCH.to_string(),
@@ -377,7 +377,7 @@ impl LifecycleService {
         &self,
         request: OffboardingCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<OffboardingCreateResponse>> {
+    ) -> SDKResult<Response<OffboardingCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: COREHR_OFFBOARDINGS.to_string(),
@@ -430,7 +430,7 @@ impl LifecycleService {
         &self,
         request: OffboardingSearchRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<OffboardingSearchResponse>> {
+    ) -> SDKResult<Response<OffboardingSearchResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: COREHR_OFFBOARDINGS_SEARCH.to_string(),

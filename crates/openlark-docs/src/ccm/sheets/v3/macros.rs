@@ -441,9 +441,9 @@ pub struct ExecuteMacroResponse {
     pub logs: Option<Vec<String>>,
 }
 
-impl openlark_core::api_resp::ApiResponseTrait for ExecuteMacroResponse {
-    fn data_format() -> openlark_core::api_resp::ResponseFormat {
-        openlark_core::api_resp::ResponseFormat::Data
+impl openlark_core::api::ApiResponseTrait for ExecuteMacroResponse {
+    fn data_format() -> openlark_core::api::ResponseFormat {
+        openlark_core::api::ResponseFormat::Data
     }
 }
 
@@ -554,9 +554,9 @@ pub struct CreateMacroResponse {
     pub macro_script: MacroScript,
 }
 
-impl openlark_core::api_resp::ApiResponseTrait for CreateMacroResponse {
-    fn data_format() -> openlark_core::api_resp::ResponseFormat {
-        openlark_core::api_resp::ResponseFormat::Data
+impl openlark_core::api::ApiResponseTrait for CreateMacroResponse {
+    fn data_format() -> openlark_core::api::ResponseFormat {
+        openlark_core::api::ResponseFormat::Data
     }
 }
 
@@ -647,9 +647,9 @@ pub struct GetMacroStatusResponse {
     pub execution: ExecuteMacroResponse,
 }
 
-impl openlark_core::api_resp::ApiResponseTrait for GetMacroStatusResponse {
-    fn data_format() -> openlark_core::api_resp::ResponseFormat {
-        openlark_core::api_resp::ResponseFormat::Data
+impl openlark_core::api::ApiResponseTrait for GetMacroStatusResponse {
+    fn data_format() -> openlark_core::api::ResponseFormat {
+        openlark_core::api::ResponseFormat::Data
     }
 }
 
@@ -703,7 +703,7 @@ impl MacroService {
         &self,
         request: &ExecuteMacroRequest,
     ) -> openlark_core::error::SDKResult<ExecuteMacroResponse> {
-        use openlark_core::{api_req::ApiRequest, api_resp::BaseResponse, http::Transport};
+        use openlark_core::{api::ApiRequest, api::Response, http::Transport};
 
         let endpoint = format!(
             "/open-apis/sheets/v3/spreadsheets/{}/macros/execute",
@@ -713,7 +713,7 @@ impl MacroService {
         let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::POST, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let response: BaseResponse<ExecuteMacroResponse> =
+        let response: Response<ExecuteMacroResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
@@ -768,7 +768,7 @@ impl MacroService {
         &self,
         request: &CreateMacroRequest,
     ) -> openlark_core::error::SDKResult<CreateMacroResponse> {
-        use openlark_core::{api_req::ApiRequest, api_resp::BaseResponse, http::Transport};
+        use openlark_core::{api::ApiRequest, api::Response, http::Transport};
 
         let endpoint = format!(
             "/open-apis/sheets/v3/spreadsheets/{}/macros",
@@ -778,7 +778,7 @@ impl MacroService {
         let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::POST, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let response: BaseResponse<CreateMacroResponse> =
+        let response: Response<CreateMacroResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
@@ -824,7 +824,7 @@ impl MacroService {
         &self,
         request: &GetMacroStatusRequest,
     ) -> openlark_core::error::SDKResult<GetMacroStatusResponse> {
-        use openlark_core::{api_req::ApiRequest, api_resp::BaseResponse, http::Transport};
+        use openlark_core::{api::ApiRequest, api::Response, http::Transport};
 
         let endpoint = format!(
             "/open-apis/sheets/v3/spreadsheets/{}/macros/status/{}",
@@ -833,7 +833,7 @@ impl MacroService {
 
         let api_request = ApiRequest::with_method_and_path(reqwest::Method::GET, &endpoint);
 
-        let response: BaseResponse<GetMacroStatusResponse> =
+        let response: Response<GetMacroStatusResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {

@@ -14,7 +14,7 @@ use tokio::{
 use tracing::{info_span, Instrument};
 
 use crate::{
-    api_resp::{ApiResponseTrait, RawResponse, ResponseFormat},
+    api::{ApiResponseTrait, RawResponse, ResponseFormat},
     app_ticket_manager::AppTicketManager,
     cache::QuickCache,
     config::Config,
@@ -1222,7 +1222,7 @@ mod tests {
 
     #[test]
     fn test_app_access_token_response() {
-        use crate::api_resp::{RawResponse, ResponseFormat};
+        use crate::api::{RawResponse, ResponseFormat};
 
         // 测试ResponseFormat
         assert!(matches!(
@@ -1250,7 +1250,7 @@ mod tests {
 
     #[test]
     fn test_tenant_access_token_response() {
-        use crate::api_resp::{RawResponse, ResponseFormat};
+        use crate::api::{RawResponse, ResponseFormat};
 
         // 测试ResponseFormat
         assert!(matches!(
@@ -1381,7 +1381,7 @@ mod tests {
 
     #[test]
     fn test_token_response_debug() {
-        use crate::api_resp::RawResponse;
+        use crate::api::RawResponse;
 
         let raw_resp = RawResponse {
             code: 0,
@@ -1456,7 +1456,7 @@ mod tests {
         let manager = TokenManager::new();
 
         let successful_resp = AppAccessTokenResp {
-            raw_response: crate::api_resp::RawResponse {
+            raw_response: crate::api::RawResponse {
                 code: 0,
                 msg: "success".to_string(),
                 err: None,
@@ -1482,7 +1482,7 @@ mod tests {
         let manager = TokenManager::new();
 
         let error_resp = AppAccessTokenResp {
-            raw_response: crate::api_resp::RawResponse {
+            raw_response: crate::api::RawResponse {
                 code: 40001,
                 msg: "invalid app_id".to_string(),
                 err: None,
@@ -1506,7 +1506,7 @@ mod tests {
         let manager = TokenManager::new();
 
         let successful_resp = TenantAccessTokenResp {
-            raw_response: crate::api_resp::RawResponse {
+            raw_response: crate::api::RawResponse {
                 code: 0,
                 msg: "success".to_string(),
                 err: None,
@@ -1532,7 +1532,7 @@ mod tests {
         let manager = TokenManager::new();
 
         let error_resp = TenantAccessTokenResp {
-            raw_response: crate::api_resp::RawResponse {
+            raw_response: crate::api::RawResponse {
                 code: 40002,
                 msg: "invalid tenant_key".to_string(),
                 err: None,
@@ -2157,7 +2157,7 @@ mod tests {
 
         // 测试使用EXPIRY_DELTA的正确性
         let successful_resp = AppAccessTokenResp {
-            raw_response: crate::api_resp::RawResponse {
+            raw_response: crate::api::RawResponse {
                 code: 0,
                 msg: "success".to_string(),
                 err: None,

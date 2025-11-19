@@ -1,13 +1,13 @@
 #![allow(unused_variables, unused_unsafe)]
 use SDKResult;use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 ,
 {
     core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -103,7 +103,7 @@ pub async fn search_wiki(
     request: SearchWikiRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<SearchWikiResponse>> {,
+) -> SDKResult<Response<SearchWikiResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::POST);
 api_req.set_api_path(WIKI_V2_SEARCH.to_string());

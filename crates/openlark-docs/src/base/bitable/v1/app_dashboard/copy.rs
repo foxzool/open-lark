@@ -5,14 +5,14 @@
 #![allow(unused_variables)]
 #![allow(unused_mut)]
 use SDKResult;use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use openlark_core::,
 {
     core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -48,7 +48,7 @@ impl CopyDashboardRequestBuilder {
 }impl_executable_builder_config!(,
     CopyDashboardRequestBuilder,
     CopyDashboardRequest,
-    BaseResponse<CopyDashboardResponse>,
+    Response<CopyDashboardResponse>,
     copy_dashboard,
 );
 /// 仪表盘信息
@@ -74,7 +74,7 @@ pub async fn copy_dashboard(
     request: CopyDashboardRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<CopyDashboardResponse>> {,
+) -> SDKResult<Response<CopyDashboardResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::POST);
 api_req.api_path = BITABLE_V1_DASHBOARD_COPY,

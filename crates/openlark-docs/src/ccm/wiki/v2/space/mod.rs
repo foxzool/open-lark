@@ -63,7 +63,7 @@ impl SpaceService {
         &self,
         request: ListSpaceRequest,
         option: Option<openlark_core::req_option::RequestOption>,
-    ) -> openlark_core::SDKResult<openlark_core::api_resp::BaseResponse<ListSpaceResponse>> {
+    ) -> openlark_core::SDKResult<openlark_core::api::Response<ListSpaceResponse>> {
         list_spaces(request, &self.config, option).await
     }
 
@@ -96,7 +96,7 @@ impl SpaceService {
         &self,
         request: GetSpaceInfoRequest,
         option: Option<openlark_core::req_option::RequestOption>,
-    ) -> openlark_core::SDKResult<openlark_core::api_resp::BaseResponse<GetSpaceInfoResponse>> {
+    ) -> openlark_core::SDKResult<openlark_core::api::Response<GetSpaceInfoResponse>> {
         get_space_info(request, &self.config, option).await
     }
 
@@ -129,7 +129,7 @@ impl SpaceService {
         &self,
         request: CreateSpaceRequest,
         option: Option<openlark_core::req_option::RequestOption>,
-    ) -> openlark_core::SDKResult<openlark_core::api_resp::BaseResponse<CreateSpaceResponse>> {
+    ) -> openlark_core::SDKResult<openlark_core::api::Response<CreateSpaceResponse>> {
         create_space(request, &self.config, option).await
     }
 

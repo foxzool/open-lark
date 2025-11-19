@@ -1,5 +1,5 @@
 use crate::{
-    api_resp::ApiResponseTrait, config::Config,
+    api::ApiResponseTrait, config::Config,
 };
 use serde::{Deserialize, Serialize};
 
@@ -15,7 +15,7 @@ pub struct UcontactUuserUdeletedUv3Event {
 }
 
 impl ApiResponseTrait for UcontactUuserUdeletedUv3Event {
-    fn data_format() -> crate::api_resp::ResponseFormat {
-        crate::api_resp::ResponseFormat::Data
+    fn data_format() -> crate::api::ResponseFormat {
+        crate::api::ResponseFormat::Data
     }
 }

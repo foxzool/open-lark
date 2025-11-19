@@ -29,7 +29,7 @@
 use std::time::Duration;
 
 use crate::{
-    api_resp::BaseResponse,
+    api::Response,
     error::types::{
         ErrorHandlingCategory, ErrorSeverity, LarkAPIError, LarkErrorCode, NetworkErrorKind,
     },
@@ -277,18 +277,31 @@ impl ErrorHelper {
     ///
     /// # 返回值
     /// 如果响应包含错误，返回相应的处理建议；否则返回None
-    pub fn analyze_response<T>(response: &BaseResponse<T>) -> Option<ErrorHandlingAdvice> {
-        if response.success() {
+    pub fn analyze_response<T>(response: &Response<T>) -> Option<ErrorHandlingAdvice> {
+        if response.is_success() {
             return None;
         }
 
         let mut advice = ErrorHandlingAdvice::default();
 
-        if let Some(error_code) = response.error_code() {
-            advice = Self::handle_api_error(error_code, response.msg());
+        // 直接使用响应代码进行错误处理
+        if !response.is_success() {
+            // 将i32错误码转换为LarkErrorCode
+            let error_code = match response.code() {
+                0 => crate::error::LarkErrorCode::Success,
+                10012 => crate::error::LarkErrorCode::AppTicketInvalid,
+                99991671 => crate::error::LarkErrorCode::AccessTokenInvalid,
+                99991664 => crate::error::LarkErrorCode::AppAccessTokenInvalid,
+                99991663 => crate::error::LarkErrorCode::TenantAccessTokenInvalid,
+                code => {
+                    tracing::warn!("未知错误码: {}, 使用NetworkConnectionFailed处理", code);
+                    crate::error::LarkErrorCode::NetworkConnectionFailed
+                }
+            };
+            advice = Self::handle_api_error(error_code, response.message());
         } else {
-            advice.message = format!("{} (错误码: {})", response.msg(), response.code());
-            advice.category = ErrorHandlingCategory::Unknown;
+            advice.message = format!("成功响应 (代码: {})", response.code());
+            advice.category = ErrorHandlingCategory::Unknown; // 成功情况下使用Unknown
         }
 
         Some(advice)

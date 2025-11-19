@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        api::ApiRequest,
+        api::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
@@ -289,7 +289,7 @@ impl WebsiteService {
         job_type: Option<String>,
         location: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<WebsiteJobListResponse>> {
+    ) -> SDKResult<Response<WebsiteJobListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_WEBSITE_JOBS.to_string());
@@ -365,7 +365,7 @@ impl WebsiteService {
         &self,
         request: WebsiteJobPublishRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<WebsiteOperationResponse>> {
+    ) -> SDKResult<Response<WebsiteOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_WEBSITE_JOBS_PUBLISH.to_string());
@@ -393,7 +393,7 @@ impl WebsiteService {
         &self,
         job_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<WebsiteOperationResponse>> {
+    ) -> SDKResult<Response<WebsiteOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
                 api_req.set_api_path(EndpointBuilder::replace_param(
@@ -458,7 +458,7 @@ impl WebsiteService {
         &self,
         request: WebsiteApplicationListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<WebsiteApplicationListResponse>> {
+    ) -> SDKResult<Response<WebsiteApplicationListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_WEBSITE_APPLICATIONS.to_string());
@@ -542,7 +542,7 @@ impl WebsiteService {
     pub async fn get_website_configuration(
         &self,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<WebsiteConfigurationResponse>> {
+    ) -> SDKResult<Response<WebsiteConfigurationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_WEBSITE_CONFIGURATION.to_string());
@@ -606,7 +606,7 @@ impl WebsiteService {
         &self,
         request: WebsiteConfigurationUpdateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<WebsiteOperationResponse>> {
+    ) -> SDKResult<Response<WebsiteOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_WEBSITE_CONFIGURATION.to_string());
@@ -635,7 +635,7 @@ impl WebsiteService {
         &self,
         website_application_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<WebsiteOperationResponse>> {
+    ) -> SDKResult<Response<WebsiteOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
                 api_req.set_api_path(EndpointBuilder::replace_param(
@@ -679,7 +679,7 @@ impl WebsiteService {
         start_date: Option<String>,
         end_date: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<serde_json::Value>> {
+    ) -> SDKResult<Response<serde_json::Value>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_WEBSITE_STATISTICS.to_string());

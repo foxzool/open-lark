@@ -8,8 +8,8 @@
 //! - 多种条件格式类型（数据条、色阶、图标集等）
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -368,7 +368,7 @@ impl ConditionalFormatsService {
         &self,
         request: &CreateConditionalFormatsRequest,
     ) -> SDKResult<CreateConditionalFormatsResponse> {
-        use openlark_core::{api_req::ApiRequest, http::Transport};
+        use openlark_core::{api::ApiRequest, http::Transport};
         use reqwest::Method;
 
         let endpoint = format!(
@@ -396,7 +396,7 @@ impl ConditionalFormatsService {
         &self,
         request: &UpdateConditionalFormatsRequest,
     ) -> SDKResult<UpdateConditionalFormatsResponse> {
-        use openlark_core::{api_req::ApiRequest, http::Transport};
+        use openlark_core::{api::ApiRequest, http::Transport};
         use reqwest::Method;
 
         let endpoint = format!(
@@ -424,7 +424,7 @@ impl ConditionalFormatsService {
         &self,
         request: &GetConditionalFormatsRequest,
     ) -> SDKResult<GetConditionalFormatsResponse> {
-        use openlark_core::{api_req::ApiRequest, http::Transport};
+        use openlark_core::{api::ApiRequest, http::Transport};
         use reqwest::Method;
 
         let endpoint = format!(
@@ -451,7 +451,7 @@ impl ConditionalFormatsService {
         &self,
         request: &DeleteConditionalFormatsRequest,
     ) -> SDKResult<DeleteConditionalFormatsResponse> {
-        use openlark_core::{api_req::ApiRequest, http::Transport};
+        use openlark_core::{api::ApiRequest, http::Transport};
         use reqwest::Method;
 
         let endpoint = format!(

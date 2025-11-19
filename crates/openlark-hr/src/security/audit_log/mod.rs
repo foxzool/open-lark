@@ -2,7 +2,7 @@ use reqwest::Method;
 
 use crate::{
     core::{
-        api_req::ApiRequest, api_resp::BaseResponse, config::Config, constants::AccessTokenType,
+        api::ApiRequest, api::Response, config::Config, constants::AccessTokenType,
         endpoints::security_and_compliance::*, http::Transport, req_option::RequestOption,
         trait_system::Service, SDKResult,
     },
@@ -34,7 +34,7 @@ impl AuditLogService {
         &self,
         request: AuditLogGetRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<AuditLogGetResponse>> {
+    ) -> SDKResult<Response<AuditLogGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: SECURITY_AND_COMPLIANCE_V1_AUDIT_DATAS.to_string(),
