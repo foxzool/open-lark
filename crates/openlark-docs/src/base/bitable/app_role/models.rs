@@ -3,7 +3,7 @@
 //! 提供多维表格角色权限管理相关的数据结构，支持角色的创建、
 //! 查询、更新、删除等操作。
 
-use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 
 /// 创建角色请求

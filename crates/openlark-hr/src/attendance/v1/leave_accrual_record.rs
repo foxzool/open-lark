@@ -3,7 +3,7 @@ use serde_json::json;
 
 use crate::{
     core::{
-        api_resp::BaseResponse,
+        api::Response,
         config::Config,
         constants::AccessTokenType,
         endpoints::{attendance::*, EndpointBuilder},
@@ -35,7 +35,7 @@ impl LeaveAccrualRecordService {
         &self,
         request: PatchLeaveAccrualRecordRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<PatchLeaveAccrualRecordRespData>> {
+    ) -> SDKResult<Response<PatchLeaveAccrualRecordRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::PATCH);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -67,7 +67,7 @@ impl_executable_builder_owned!(
     PatchLeaveAccrualRecordRequest,
     LeaveAccrualRecordService,
     PatchLeaveAccrualRecordRequest,
-    BaseResponse<PatchLeaveAccrualRecordRespData>,
+    Response<PatchLeaveAccrualRecordRespData>,
     patch
 );
 
@@ -89,7 +89,7 @@ impl Service for LeaveAccrualRecordService {
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-    use openlark_core::{api_req::ApiRequest, config::Config};
+    use openlark_core::{api::ApiRequest, config::Config};
     use crate::service::attendance::v1::models::LeaveAccrualRecordPatch;
 
     fn create_test_config() -> Config {

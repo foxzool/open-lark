@@ -5,7 +5,7 @@
 #![allow(unused_variables)]
 #![allow(unused_mut)]
 use SDKResult;use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use super::FormService;
 use openlark_core::,
 {,
@@ -13,7 +13,7 @@ use openlark_core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -66,7 +66,7 @@ impl PatchFormQuestionRequestBuilder {
     PatchFormQuestionRequestBuilder,
     FormService,
     PatchFormQuestionRequest,
-    BaseResponse<PatchFormQuestionResponse>,
+    Response<PatchFormQuestionResponse>,
     patch,
 );
 /// 更新表单问题响应
@@ -85,7 +85,7 @@ pub async fn patch_form_question(
     request: PatchFormQuestionRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<PatchFormQuestionResponse>> {,
+) -> SDKResult<Response<PatchFormQuestionResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::PATCH);
 api_req.api_path = BITABLE_V1_FORM_PATCH,

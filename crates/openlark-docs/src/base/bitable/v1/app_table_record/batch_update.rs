@@ -5,14 +5,14 @@
 #![allow(unused_variables)]
 #![allow(unused_mut)]
 use SDKResult;use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use openlark_core::,
 {,
     core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -61,7 +61,7 @@ crate::impl_executable_builder_owned!(
     BatchUpdateRecordRequestBuilder,
     super::AppTableRecordService,
     BatchUpdateRecordRequest,
-    BaseResponse<BatchUpdateRecordResponse>,
+    Response<BatchUpdateRecordResponse>,
     batch_update,
 );
 /// 批量更新记录响应
@@ -80,7 +80,7 @@ pub async fn batch_update_record(
     request: BatchUpdateRecordRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<BatchUpdateRecordResponse>> {,
+) -> SDKResult<Response<BatchUpdateRecordResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::POST);
 api_req.api_path = BITABLE_V1_RECORDS_BATCH_UPDATE,

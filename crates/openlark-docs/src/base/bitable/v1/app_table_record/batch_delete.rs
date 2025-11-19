@@ -5,10 +5,10 @@
 #![allow(unused_variables)]
 #![allow(unused_mut)]
 use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use openlark_core::{,
-use SDKResult;    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+use SDKResult;    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints::cloud_docs::*,
@@ -43,7 +43,7 @@ crate::impl_executable_builder_owned!(
     BatchDeleteRecordRequestBuilder,
     super::AppTableRecordService,
     BatchDeleteRecordRequest,
-    BaseResponse<BatchDeleteRecordResponse>,
+    Response<BatchDeleteRecordResponse>,
     batch_delete,
 );
 /// 批量删除记录响应
@@ -69,7 +69,7 @@ pub async fn batch_delete_record(
     request: BatchDeleteRecordRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<BatchDeleteRecordResponse>> {,
+) -> SDKResult<Response<BatchDeleteRecordResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::POST);
 api_req.api_path = BITABLE_V1_RECORDS_BATCH_DELETE,

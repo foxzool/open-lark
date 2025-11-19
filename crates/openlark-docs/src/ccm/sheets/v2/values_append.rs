@@ -7,8 +7,8 @@
 //! - 自动行检测和智能追加
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints_original::Endpoints,
@@ -457,7 +457,7 @@ impl ValuesAppendService {
     pub async fn append(
         &self,
         request: &ValuesAppendRequest,
-    ) -> openlark_core::error::SDKResult<BaseResponse<ValuesAppendResponse>> {
+    ) -> openlark_core::error::SDKResult<Response<ValuesAppendResponse>> {
         let url = format!(
             "{}/open-apis/sheets/v2/spreadsheets/{}/values_append",
             self.config.base_url,
@@ -472,7 +472,7 @@ impl ValuesAppendService {
             .send()
             .await?;
 
-        let base_resp: BaseResponse<ValuesAppendResponse> = response.json().await?;
+        let base_resp: Response<ValuesAppendResponse> = response.json().await?;
 
         if let Some(err) = &base_resp.error {
             return Err(openlark_core::error::LarkAPIError::LarkAPIError(

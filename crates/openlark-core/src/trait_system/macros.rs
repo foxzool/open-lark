@@ -21,7 +21,7 @@
 ///     UploadMediaRequestBuilder,
 ///     MediaService,
 ///     UploadMediaRequest,
-///     BaseResponse<UploadMediaRespData>,
+///     Response<UploadMediaRespData>,
 ///     upload_all
 /// );
 /// ```
@@ -232,7 +232,7 @@ macro_rules! impl_service_constructor {
 #[cfg(test)]
 mod tests {
     use crate::{
-        api_resp::{ApiResponseTrait, BaseResponse, RawResponse, ResponseFormat},
+        api::{ApiResponseTrait, RawResponse, Response, ResponseFormat},
         config::Config,
         req_option::RequestOption,
         trait_system::ExecutableBuilder,
@@ -265,12 +265,14 @@ mod tests {
             &self,
             request: &MockRequest,
             _option: Option<RequestOption>,
-        ) -> SDKResult<BaseResponse<MockResponse>> {
-            Ok(BaseResponse {
+        ) -> SDKResult<Response<MockResponse>> {
+            Ok(Response {
                 raw_response: RawResponse {
                     code: 0,
                     msg: "success".to_string(),
-                    err: None,
+                    request_id: None,
+                    data: None,
+                    error: None,
                 },
                 data: Some(MockResponse {
                     result: format!("processed: {}", request.data),
@@ -282,12 +284,14 @@ mod tests {
             &self,
             request: MockRequest,
             _option: Option<RequestOption>,
-        ) -> SDKResult<BaseResponse<MockResponse>> {
-            Ok(BaseResponse {
+        ) -> SDKResult<Response<MockResponse>> {
+            Ok(Response {
                 raw_response: RawResponse {
                     code: 0,
                     msg: "success".to_string(),
-                    err: None,
+                    request_id: None,
+                    data: None,
+                    error: None,
                 },
                 data: Some(MockResponse {
                     result: format!("owned: {}", request.data),
@@ -333,7 +337,7 @@ mod tests {
         MockRequestBuilder,
         MockService,
         MockRequest,
-        BaseResponse<MockResponse>,
+        Response<MockResponse>,
         test_method
     );
 
@@ -341,7 +345,7 @@ mod tests {
         MockRequestBuilderOwned,
         MockService,
         MockRequest,
-        BaseResponse<MockResponse>,
+        Response<MockResponse>,
         test_method_owned
     );
 
@@ -349,12 +353,14 @@ mod tests {
         request: MockRequest,
         _config: &Config,
         _option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<MockResponse>> {
-        Ok(BaseResponse {
+    ) -> SDKResult<Response<MockResponse>> {
+        Ok(Response {
             raw_response: RawResponse {
+                data: None,
+                request_id: None,
+                error: None,
                 code: 0,
                 msg: "success".to_string(),
-                err: None,
             },
             data: Some(MockResponse {
                 result: format!("config: {}", request.data),
@@ -381,7 +387,7 @@ mod tests {
     crate::impl_executable_builder_config!(
         MockConfigBuilder,
         MockRequest,
-        BaseResponse<MockResponse>,
+        Response<MockResponse>,
         mock_config_function
     );
 

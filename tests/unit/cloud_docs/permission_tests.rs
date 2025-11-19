@@ -43,7 +43,7 @@ use open_lark::{
             get::{GetPublicPermissionV2Request, GetPublicPermissionV2ResponseData},
         },
     },
-    core::api_resp::BaseResponse,
+    core::api::Response,
 };
 
 /// 测试配置夹具

@@ -3,7 +3,7 @@
 //! 提供多维表格视图管理相关的数据结构，支持视图的创建、
 //! 查询、更新、删除等操作。
 
-use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 
 /// 创建视图请求

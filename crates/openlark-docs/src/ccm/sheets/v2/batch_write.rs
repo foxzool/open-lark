@@ -23,8 +23,8 @@ use serde::{Deserialize, Serialize};
 use openlark_core::endpoints::Endpoints;
 use openlark_core::impl_executable_builder_owned;
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -478,7 +478,7 @@ impl BatchWriteService {
         &self,
         request: WriteMultipleRangesRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<WriteMultipleRangesResponseData>> {
+    ) -> SDKResult<Response<WriteMultipleRangesResponseData>> {
         // 验证请求参数
         request.validate()?;
 
@@ -563,7 +563,7 @@ impl BatchWriteService {
         }
 
         // 暂时返回模拟数据，直到Transport问题解决
-        use openlark_core::api_resp::RawResponse;
+        use openlark_core::api::RawResponse;
         let updated_ranges = vec![]; // 这里应该是实际的更新结果
         let total_updated_cells: usize = updated_ranges
             .iter()
@@ -616,7 +616,7 @@ impl BatchWriteService {
         range: impl Into<String>,
         values: Vec<Vec<CellValue>>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<WriteMultipleRangesResponseData>> {
+    ) -> SDKResult<Response<WriteMultipleRangesResponseData>> {
         let write_range = WriteRange::new(range, values);
         let request = WriteMultipleRangesRequest::new(spreadsheet_token, vec![write_range]);
 
@@ -656,7 +656,7 @@ impl BatchWriteService {
         spreadsheet_token: T,
         ranges_and_data: Vec<(U, Vec<Vec<CellValue>>)>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<WriteMultipleRangesResponseData>> {
+    ) -> SDKResult<Response<WriteMultipleRangesResponseData>> {
         let write_ranges: Vec<WriteRange> = ranges_and_data
             .into_iter()
             .map(|(range, values)| WriteRange::new(range, values))
@@ -672,7 +672,7 @@ impl_executable_builder_owned!(
     WriteMultipleRangesRequestBuilder,
     BatchWriteService,
     WriteMultipleRangesRequest,
-    BaseResponse<WriteMultipleRangesResponseData>,
+    Response<WriteMultipleRangesResponseData>,
     write_multiple_ranges
 );
 

@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        api::ApiRequest,
+        api::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
         http::Transport,
@@ -90,7 +90,7 @@ impl AttachmentService {
         &self,
         request: EmployeeAttachmentRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<EmployeeAttachmentDownloadResponse>> {
+    ) -> SDKResult<Response<EmployeeAttachmentDownloadResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(

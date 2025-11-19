@@ -1,6 +1,6 @@
 use openlark_core::{
     core::{
-        api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
+        api::ApiRequest, api::ApiResponseTrait, config::Config,
         constants::AccessTokenType, endpoints::EndpointBuilder, http::Transport,
     },
 };
@@ -21,7 +21,7 @@ impl EmployeeTypeEnumService {
         req: &CreateEmployeeTypeRequest,
     ) -> crate::SDKResult<CreateEmployeeTypeResponse> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            method: reqwest::Method::POST,
             api_path: crate::endpoints::contact::CONTACT_V3_EMPLOYEE_TYPE_ENUMS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
@@ -40,7 +40,7 @@ impl EmployeeTypeEnumService {
         req: &UpdateEmployeeTypeRequest,
     ) -> crate::SDKResult<UpdateEmployeeTypeResponse> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::PUT,
+            method: reqwest::Method::PUT,
             api_path: EndpointBuilder::replace_param(
                 crate::endpoints::contact::CONTACT_V3_EMPLOYEE_TYPE_ENUM_GET,
                 "enum_id",
@@ -62,7 +62,7 @@ impl EmployeeTypeEnumService {
         _req: &ListEmployeeTypesRequest,
     ) -> crate::SDKResult<ListEmployeeTypesResponse> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
+            method: reqwest::Method::GET,
             api_path: crate::endpoints::contact::CONTACT_V3_EMPLOYEE_TYPE_ENUMS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -81,7 +81,7 @@ impl EmployeeTypeEnumService {
         enum_id: &str,
     ) -> crate::SDKResult<DeleteEmployeeTypeResponse> {
         let api_req = ApiRequest {
-            http_method: reqwest::Method::DELETE,
+            method: reqwest::Method::DELETE,
             api_path: EndpointBuilder::replace_param(
                 crate::endpoints::contact::CONTACT_V3_EMPLOYEE_TYPE_ENUM_GET,
                 "enum_id",
@@ -109,8 +109,8 @@ pub struct CreateEmployeeTypeResponse {
 }
 
 impl ApiResponseTrait for CreateEmployeeTypeResponse {
-    fn data_format() -> crate::api_resp::ResponseFormat {
-        crate::api_resp::ResponseFormat::Data
+    fn data_format() -> crate::api::ResponseFormat {
+        crate::api::ResponseFormat::Data
     }
 }
 
@@ -125,8 +125,8 @@ pub struct UpdateEmployeeTypeResponse {
 }
 
 impl ApiResponseTrait for UpdateEmployeeTypeResponse {
-    fn data_format() -> crate::api_resp::ResponseFormat {
-        crate::api_resp::ResponseFormat::Data
+    fn data_format() -> crate::api::ResponseFormat {
+        crate::api::ResponseFormat::Data
     }
 }
 
@@ -148,8 +148,8 @@ pub struct ListEmployeeTypesResponse {
 }
 
 impl ApiResponseTrait for ListEmployeeTypesResponse {
-    fn data_format() -> crate::api_resp::ResponseFormat {
-        crate::api_resp::ResponseFormat::Data
+    fn data_format() -> crate::api::ResponseFormat {
+        crate::api::ResponseFormat::Data
     }
 }
 
@@ -157,7 +157,7 @@ impl ApiResponseTrait for ListEmployeeTypesResponse {
 pub struct DeleteEmployeeTypeResponse {}
 
 impl ApiResponseTrait for DeleteEmployeeTypeResponse {
-    fn data_format() -> crate::api_resp::ResponseFormat {
-        crate::api_resp::ResponseFormat::Data
+    fn data_format() -> crate::api::ResponseFormat {
+        crate::api::ResponseFormat::Data
     }
 }

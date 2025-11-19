@@ -374,9 +374,9 @@ pub struct FindResponse {
     pub total_matches: u32,
 }
 
-impl openlark_core::api_resp::ApiResponseTrait for FindResponse {
-    fn data_format() -> openlark_core::api_resp::ResponseFormat {
-        openlark_core::api_resp::ResponseFormat::Data
+impl openlark_core::api::ApiResponseTrait for FindResponse {
+    fn data_format() -> openlark_core::api::ResponseFormat {
+        openlark_core::api::ResponseFormat::Data
     }
 }
 
@@ -600,9 +600,9 @@ pub struct ReplaceResponse {
     pub success: bool,
 }
 
-impl openlark_core::api_resp::ApiResponseTrait for ReplaceResponse {
-    fn data_format() -> openlark_core::api_resp::ResponseFormat {
-        openlark_core::api_resp::ResponseFormat::Data
+impl openlark_core::api::ApiResponseTrait for ReplaceResponse {
+    fn data_format() -> openlark_core::api::ResponseFormat {
+        openlark_core::api::ResponseFormat::Data
     }
 }
 
@@ -654,9 +654,7 @@ impl FindReplaceService {
         &self,
         request: &FindRequest,
     ) -> openlark_core::error::SDKResult<FindResponse> {
-        use openlark_core::{
-            api_req::ApiRequest, api_resp::BaseResponse, error::LarkAPIError, http::Transport,
-        };
+        use openlark_core::{api::ApiRequest, api::Response, error::LarkAPIError, http::Transport};
         use reqwest::Method;
 
         let endpoint = format!(
@@ -667,7 +665,7 @@ impl FindReplaceService {
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let response: BaseResponse<FindResponse> =
+        let response: Response<FindResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
@@ -722,9 +720,7 @@ impl FindReplaceService {
         &self,
         request: &ReplaceRequest,
     ) -> openlark_core::error::SDKResult<ReplaceResponse> {
-        use openlark_core::{
-            api_req::ApiRequest, api_resp::BaseResponse, error::LarkAPIError, http::Transport,
-        };
+        use openlark_core::{api::ApiRequest, api::Response, error::LarkAPIError, http::Transport};
         use reqwest::Method;
 
         let endpoint = format!(
@@ -735,7 +731,7 @@ impl FindReplaceService {
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let response: BaseResponse<ReplaceResponse> =
+        let response: Response<ReplaceResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {

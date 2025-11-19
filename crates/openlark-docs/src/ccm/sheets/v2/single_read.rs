@@ -21,8 +21,8 @@ use serde::{Deserialize, Serialize};
 use openlark_core::endpoints::Endpoints;
 use openlark_core::impl_executable_builder_owned;
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -321,7 +321,7 @@ impl SingleReadService {
         &self,
         request: ReadSingleRangeRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReadSingleRangeResponseData>> {
+    ) -> SDKResult<Response<ReadSingleRangeResponseData>> {
         // 验证请求参数
         request.validate()?;
 
@@ -357,7 +357,7 @@ impl SingleReadService {
         }
 
         // 暂时返回模拟数据，直到Transport问题解决
-        use openlark_core::api_resp::RawResponse;
+        use openlark_core::api::RawResponse;
         Ok(BaseResponse {
             raw_response: RawResponse {
                 code: 0,
@@ -395,7 +395,7 @@ impl SingleReadService {
         sheet_name: impl Into<String>,
         cell: impl Into<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReadSingleRangeResponseData>> {
+    ) -> SDKResult<Response<ReadSingleRangeResponseData>> {
         let range = format!("{}!{}", sheet_name.into(), cell.into());
         let request = ReadSingleRangeRequest::new(spreadsheet_token, range);
         self.read_single_range(request, option).await
@@ -421,7 +421,7 @@ impl SingleReadService {
         start_cell: impl Into<String>,
         end_cell: impl Into<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReadSingleRangeResponseData>> {
+    ) -> SDKResult<Response<ReadSingleRangeResponseData>> {
         let range = format!(
             "{}!{}:{}",
             sheet_name.into(),
@@ -450,7 +450,7 @@ impl SingleReadService {
         sheet_name: impl Into<String>,
         row_number: u32,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReadSingleRangeResponseData>> {
+    ) -> SDKResult<Response<ReadSingleRangeResponseData>> {
         let range = format!("{}!{}:{}", sheet_name.into(), row_number, row_number);
         let request = ReadSingleRangeRequest::new(spreadsheet_token, range);
         self.read_single_range(request, option).await
@@ -474,7 +474,7 @@ impl SingleReadService {
         sheet_name: impl Into<String>,
         column_letter: impl Into<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReadSingleRangeResponseData>> {
+    ) -> SDKResult<Response<ReadSingleRangeResponseData>> {
         let range = format!(
             "{}!{}:{}",
             sheet_name.into(),
@@ -491,7 +491,7 @@ impl_executable_builder_owned!(
     ReadSingleRangeRequestBuilder,
     SingleReadService,
     ReadSingleRangeRequest,
-    BaseResponse<ReadSingleRangeResponseData>,
+    Response<ReadSingleRangeResponseData>,
     read_single_range
 );
 

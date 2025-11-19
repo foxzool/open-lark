@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints::hire::*,
@@ -203,7 +203,7 @@ impl SubjectService {
         &self,
         request: SubjectCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<SubjectOperationResponse>> {
+    ) -> SDKResult<Response<SubjectOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_SUBJECTS.to_string());
@@ -247,7 +247,7 @@ impl SubjectService {
         &self,
         subject_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<SubjectDetailResponse>> {
+    ) -> SDKResult<Response<SubjectDetailResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_SUBJECT_GET, "subject_id", subject_id));
@@ -303,7 +303,7 @@ impl SubjectService {
         &self,
         request: SubjectListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<SubjectListResponse>> {
+    ) -> SDKResult<Response<SubjectListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_SUBJECTS.to_string());
@@ -371,7 +371,7 @@ impl SubjectService {
         subject_id: &str,
         request: SubjectCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<SubjectOperationResponse>> {
+    ) -> SDKResult<Response<SubjectOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_SUBJECT_GET, "subject_id", subject_id));
@@ -399,7 +399,7 @@ impl SubjectService {
         &self,
         subject_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<SubjectOperationResponse>> {
+    ) -> SDKResult<Response<SubjectOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::DELETE);
         api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_SUBJECT_GET, "subject_id", subject_id));
@@ -427,7 +427,7 @@ impl SubjectService {
         &self,
         subject_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<SubjectOperationResponse>> {
+    ) -> SDKResult<Response<SubjectOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_SUBJECT_ENABLE.to_string());
@@ -455,7 +455,7 @@ impl SubjectService {
         &self,
         subject_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<SubjectOperationResponse>> {
+    ) -> SDKResult<Response<SubjectOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_SUBJECT_DISABLE.to_string());

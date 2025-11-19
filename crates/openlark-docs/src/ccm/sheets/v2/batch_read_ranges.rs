@@ -8,8 +8,8 @@
 //! - 支持数值格式、日期渲染等选项
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints_original::Endpoints,
@@ -327,7 +327,7 @@ impl BatchReadRangesService {
 
         // 处理响应
         if response.status().is_success() {
-            let base_response: BaseResponse<BatchReadRangesResponseBody> = response
+            let base_response: Response<BatchReadRangesResponseBody> = response
                 .json()
                 .await
                 .map_err(|e| LarkAPIError::JsonParseError(format!("响应解析失败: {}", e)))?;

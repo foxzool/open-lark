@@ -3,7 +3,7 @@
 //! 定义所有旧版文档API的响应数据结构。
 
 use super::models::{DocumentContent, DocumentInfo, SheetMeta};
-use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 
 /// 创建旧版文档响应

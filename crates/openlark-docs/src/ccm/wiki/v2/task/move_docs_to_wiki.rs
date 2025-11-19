@@ -1,9 +1,9 @@
 #![allow(unused_variables, unused_unsafe)]
 use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use openlark_core::{,
-use SDKResult;    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+use SDKResult;    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints::cloud_docs::*,
@@ -68,7 +68,7 @@ pub async fn move_docs_to_wiki(
     request: MoveDocsToWikiRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<MoveDocsToWikiResponse>> {,
+) -> SDKResult<Response<MoveDocsToWikiResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::POST);
 api_req.set_api_path(WIKI_V2_TASKS_MOVE_DOCS_TO_WIKI.to_string());

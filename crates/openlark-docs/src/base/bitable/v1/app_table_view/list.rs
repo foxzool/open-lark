@@ -12,10 +12,10 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::Deserialize;
+use openlark_core::api::ApiRequest;use serde::Deserialize;
 use openlark_core::{
-use SDKResult;    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+use SDKResult;    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     constants::AccessTokenType,
     endpoints::cloud_docs::*,
     http::Transport,
@@ -60,7 +60,7 @@ crate::impl_executable_builder_owned!(
     ListViewsRequestBuilder,
     super::AppTableViewService,
     ListViewsRequest,
-    BaseResponse<ListViewsResponse>,
+    Response<ListViewsResponse>,
     list,
 );
 #[derive(Clone)]

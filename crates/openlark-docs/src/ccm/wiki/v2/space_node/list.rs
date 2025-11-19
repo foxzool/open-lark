@@ -1,13 +1,13 @@
 #![allow(unused_variables, unused_unsafe)]
 use SDKResult;use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 ,
 {
     core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::{cloud_docs::*, EndpointBuilder};
@@ -97,7 +97,7 @@ pub async fn list_space_node(
     request: ListSpaceNodeRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<ListSpaceNodeResponse>> {,
+) -> SDKResult<Response<ListSpaceNodeResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::GET);
 api_req.set_api_path(EndpointBuilder::replace_param(,

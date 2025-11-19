@@ -1,8 +1,8 @@
 #![cfg(feature = "benchmarks")]
 use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion, Throughput};
 use open_lark::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AppType,
     req_option::RequestOption,

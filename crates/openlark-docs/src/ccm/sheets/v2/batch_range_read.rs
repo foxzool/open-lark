@@ -10,8 +10,8 @@ use serde_json::Value;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints_original::Endpoints,
@@ -339,7 +339,7 @@ impl BatchRangeReadService {
     pub async fn read_ranges(
         &self,
         request: BatchRangeReadRequest,
-    ) -> SDKResult<BaseResponse<BatchRangeReadResponse>> {
+    ) -> SDKResult<Response<BatchRangeReadResponse>> {
         // 验证请求参数
         request.validate()?;
 
@@ -386,7 +386,7 @@ impl BatchRangeReadService {
         &self,
         spreadsheet_token: T,
         ranges: Vec<R>,
-    ) -> SDKResult<BaseResponse<BatchRangeReadResponse>> {
+    ) -> SDKResult<Response<BatchRangeReadResponse>> {
         let request = BatchRangeReadRequest::new(spreadsheet_token, ranges);
         self.read_ranges(request).await
     }
@@ -448,7 +448,7 @@ impl BatchRangeReadBuilder {
     }
 
     /// 执行读取操作
-    pub async fn execute(self) -> SDKResult<BaseResponse<BatchRangeReadResponse>> {
+    pub async fn execute(self) -> SDKResult<Response<BatchRangeReadResponse>> {
         let mut request = BatchRangeReadRequest::new(self.spreadsheet_token, self.ranges);
 
         if let Some(option) = self.value_render_option {

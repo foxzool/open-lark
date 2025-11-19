@@ -5,8 +5,8 @@ use reqwest::RequestBuilder;
 use tracing::{info_span, Instrument};
 
 use crate::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse},
+    api::ApiResponseTrait,
+    api::{ApiRequest, Response},
     app_ticket_manager::apply_app_ticket,
     config::Config,
     constants::*,
@@ -35,17 +35,17 @@ impl<T> Transport<T> {
     }
 }
 
-impl<T: ApiResponseTrait> Transport<T> {
+impl<T: ApiResponseTrait + std::fmt::Debug + for<'de> serde::Deserialize<'de>> Transport<T> {
     pub async fn request(
-        mut req: ApiRequest,
+        req: ApiRequest<()>,
         config: &Config,
         option: Option<RequestOption>,
-    ) -> Result<BaseResponse<T>, LarkAPIError> {
+    ) -> Result<Response<T>, LarkAPIError> {
         // Create span for HTTP request tracing
         let span = info_span!(
             "http_request",
-            method = %req.http_method,
-            path = %req.api_path,
+            method = %req.method(),
+            path = %req.api_path(),
             app_id = %config.app_id,
             duration_ms = tracing::field::Empty,
             status = tracing::field::Empty,
@@ -55,17 +55,15 @@ impl<T: ApiResponseTrait> Transport<T> {
             let start_time = std::time::Instant::now();
             let option = option.unwrap_or_default();
 
-            if req.supported_access_token_types.is_empty() {
-                req.supported_access_token_types = vec![AccessTokenType::None];
+            let mut token_types = req.supported_access_token_types();
+            if token_types.is_empty() {
+                token_types = vec![AccessTokenType::None];
             }
 
             let result: Result<_, _> = async {
-                validate_token_type(&req.supported_access_token_types, &option)?;
-                let access_token_type = determine_token_type(
-                    &req.supported_access_token_types,
-                    &option,
-                    config.enable_token_cache,
-                );
+                validate_token_type(&token_types, &option)?;
+                let access_token_type =
+                    determine_token_type(&token_types, &option, config.enable_token_cache);
                 validate(config, &option, access_token_type)?;
 
                 Self::do_request(req, access_token_type, config, option).await
@@ -81,7 +79,7 @@ impl<T: ApiResponseTrait> Transport<T> {
                 Ok(response) => {
                     current_span.record(
                         "status",
-                        if response.success() {
+                        if response.is_success() {
                             "success"
                         } else {
                             "api_error"
@@ -100,18 +98,18 @@ impl<T: ApiResponseTrait> Transport<T> {
     }
 
     async fn do_request(
-        mut http_req: ApiRequest,
+        mut http_req: ApiRequest<()>,
         access_token_type: AccessTokenType,
         config: &Config,
         option: RequestOption,
-    ) -> SDKResult<BaseResponse<T>> {
+    ) -> SDKResult<Response<T>> {
         let req =
             ReqTranslator::translate(&mut http_req, access_token_type, config, &option).await?;
         debug!("Req:{req:?}");
-        let resp = Self::do_send(req, http_req.body, !http_req.file.is_empty()).await?;
+        let resp = Self::do_send(req, http_req.to_bytes(), !http_req.file().is_empty()).await?;
         debug!("Res:{resp:?}");
 
-        if !resp.success() && resp.raw_response.code == ERR_CODE_APP_TICKET_INVALID {
+        if !resp.is_success() && resp.raw_response.code == ERR_CODE_APP_TICKET_INVALID {
             apply_app_ticket(config).await?;
         }
 
@@ -122,7 +120,7 @@ impl<T: ApiResponseTrait> Transport<T> {
         raw_request: RequestBuilder,
         body: Vec<u8>,
         multi_part: bool,
-    ) -> SDKResult<BaseResponse<T>> {
+    ) -> SDKResult<Response<T>> {
         // Create span for network request tracing
         let span = info_span!(
             "http_send",

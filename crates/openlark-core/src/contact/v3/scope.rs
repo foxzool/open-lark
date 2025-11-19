@@ -1,5 +1,5 @@
 use crate::{
-    api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
+    api::ApiRequest, api::ApiResponseTrait, config::Config,
     constants::AccessTokenType, http::Transport,
 };
 use serde::{Deserialize, Serialize};
@@ -27,7 +27,7 @@ impl ScopeService {
     /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/scope/listscope/listscope/list
     pub async fn list(&self, _req: &GetScopeRequest) -> crate::SDKResult<GetScopeResponse> {
         let mut api_req = ApiRequest::default();
-        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_method(reqwest::Method::GET);
         api_req.set_api_path(crate::endpoints::contact::CONTACT_V3_SCOPES.to_string());
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
@@ -43,7 +43,7 @@ impl ScopeService {
         req: &GetScopeAuthorityRequest,
     ) -> crate::SDKResult<GetScopeAuthorityResponse> {
         let mut api_req = ApiRequest::default();
-        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_method(reqwest::Method::GET);
         api_req.set_api_path(crate::endpoints::contact::CONTACT_V3_SCOPES.to_string());
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 

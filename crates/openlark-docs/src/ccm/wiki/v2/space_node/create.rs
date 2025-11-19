@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 
 use openlark_core::{
     core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        api::ApiRequest,
+        api::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
         endpoints::{cloud_docs::*, EndpointBuilder},
@@ -276,7 +276,7 @@ pub async fn create_space_node(
     request: CreateSpaceNodeRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<CreateSpaceNodeResponse>> {
+) -> SDKResult<Response<CreateSpaceNodeResponse>> {
     let mut api_req = request.api_request;
 
     // 设置HTTP方法和路径

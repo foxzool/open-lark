@@ -11,7 +11,7 @@ use serde_json::Value;
 use std::collections::HashMap;
 
 use openlark_core::{
-    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    api::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
     http::Transport, SDKResult,
 };
 

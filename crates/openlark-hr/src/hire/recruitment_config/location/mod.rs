@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints::hire::*,
@@ -70,7 +70,7 @@ impl LocationService {
         &self,
         request: LocationQueryRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<LocationListResponse>> {
+    ) -> SDKResult<Response<LocationListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_LOCATIONS_QUERY.to_string());
@@ -115,7 +115,7 @@ impl LocationService {
     pub async fn list_locations(
         &self,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<LocationListResponse>> {
+    ) -> SDKResult<Response<LocationListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_LOCATIONS.to_string());

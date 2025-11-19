@@ -5,7 +5,7 @@
 #![allow(unused_variables)]
 #![allow(unused_mut)]
 use SDKResult;use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use super::AppTableFieldService;
 use openlark_core::,
 {,
@@ -13,7 +13,7 @@ use openlark_core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -75,7 +75,7 @@ impl_executable_builder_owned!(,
     CreateFieldRequestBuilder,
     AppTableFieldService,
     CreateFieldRequest,
-    BaseResponse<CreateFieldResponse>,
+    Response<CreateFieldResponse>,
     create,
 );
 /// 新增字段响应
@@ -94,7 +94,7 @@ pub async fn create_field(
     request: CreateFieldRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<CreateFieldResponse>> {,
+) -> SDKResult<Response<CreateFieldResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::POST);
 api_req.api_path = BITABLE_V1_FIELDS,

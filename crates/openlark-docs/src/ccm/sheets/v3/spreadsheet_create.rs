@@ -10,8 +10,8 @@ use serde_json::Value;
 use std::collections::HashMap;
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, ResponseFormat},
     config::Config,
     error::LarkAPIError,
     http::Transport,
@@ -315,7 +315,7 @@ pub struct CreateSpreadsheetResponseBody {
 }
 
 /// 基础API响应
-// 使用openlark_core::api_resp::BaseResponse，避免重复定义
+// 使用openlark_core::api::Response，避免重复定义
 
 /// 电子表格创建服务
 #[derive(Clone)]

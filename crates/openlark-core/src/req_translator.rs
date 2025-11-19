@@ -3,7 +3,7 @@ use std::{future::Future, pin::Pin};
 use reqwest::RequestBuilder;
 
 use crate::{
-    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    api::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
     req_option::RequestOption, request_builder::UnifiedRequestBuilder,
 };
 
@@ -11,7 +11,7 @@ pub struct ReqTranslator;
 
 impl ReqTranslator {
     pub fn translate<'a>(
-        req: &'a mut ApiRequest,
+        req: &'a mut ApiRequest<()>,
         access_token_type: AccessTokenType,
         config: &'a Config,
         option: &'a RequestOption,
@@ -24,7 +24,7 @@ impl ReqTranslator {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{api_req::ApiRequest, constants::AppType};
+    use crate::{api::ApiRequest, constants::AppType};
     use reqwest::Method;
 
     #[test]
@@ -36,11 +36,7 @@ mod tests {
     #[tokio::test]
     async fn test_req_translator_translate_delegation() {
         // Create test data
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: "/test".to_string(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::get("https://open.feishu.cn/test");
 
         let config = Config::builder()
             .app_id("test_app_id")
@@ -63,12 +59,9 @@ mod tests {
 
     #[tokio::test]
     async fn test_req_translator_with_different_token_types() {
-        let mut api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: "/open-apis/test".to_string(),
-            body: b"test body".to_vec(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::post("https://open.feishu.cn/open-apis/test").body(
+            crate::api::RequestData::Json(serde_json::json!({"test": "body"})),
+        );
 
         let config = Config::builder()
             .app_id("test_app")
@@ -115,10 +108,13 @@ mod tests {
         ];
 
         for method in methods.iter() {
-            let mut api_req = ApiRequest {
-                http_method: method.clone(),
-                api_path: "/test/path".to_string(),
-                ..Default::default()
+            let mut api_req = match &*method {
+                Method::GET => ApiRequest::get("https://open.feishu.cn/test/path"),
+                Method::POST => ApiRequest::post("https://open.feishu.cn/test/path"),
+                Method::PUT => ApiRequest::put("https://open.feishu.cn/test/path"),
+                Method::DELETE => ApiRequest::delete("https://open.feishu.cn/test/path"),
+                Method::PATCH => ApiRequest::get("https://open.feishu.cn/test/path"), // 使用GET作为fallback
+                _ => ApiRequest::get("https://open.feishu.cn/test/path"),
             };
 
             let result =
@@ -142,11 +138,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_req_translator_with_marketplace_app() {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: "/open-apis/marketplace/test".to_string(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::get("https://open.feishu.cn/open-apis/marketplace/test");
 
         let config = Config::builder()
             .app_id("marketplace_app")

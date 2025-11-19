@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        api::ApiRequest,
+        api::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
@@ -345,7 +345,7 @@ impl ExamService {
         &self,
         request: ExamPaperListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ExamPaperListResponse>> {
+    ) -> SDKResult<Response<ExamPaperListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_EXAM_PAPERS.to_string());
@@ -431,7 +431,7 @@ impl ExamService {
         &self,
         request: ExamArrangementRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ExamOperationResponse>> {
+    ) -> SDKResult<Response<ExamOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_EXAM_ARRANGEMENTS.to_string());
@@ -474,7 +474,7 @@ impl ExamService {
         &self,
         record_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ExamRecordDetailResponse>> {
+    ) -> SDKResult<Response<ExamRecordDetailResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_EXAM_RECORD_GET.to_string());
@@ -534,7 +534,7 @@ impl ExamService {
         &self,
         request: ExamRecordListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ExamRecordListResponse>> {
+    ) -> SDKResult<Response<ExamRecordListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_EXAM_RECORDS.to_string());
@@ -614,7 +614,7 @@ impl ExamService {
         &self,
         request: ExamSubmissionRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ExamOperationResponse>> {
+    ) -> SDKResult<Response<ExamOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_EXAM_SUBMISSIONS.to_string());
@@ -646,7 +646,7 @@ impl ExamService {
         record_id: &str,
         reason: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ExamOperationResponse>> {
+    ) -> SDKResult<Response<ExamOperationResponse>> {
         #[derive(Serialize)]
         struct CancelExamRequest {
             reason: String,
@@ -695,7 +695,7 @@ impl ExamService {
         new_start_time: &str,
         new_end_time: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ExamOperationResponse>> {
+    ) -> SDKResult<Response<ExamOperationResponse>> {
         #[derive(Serialize)]
         struct RescheduleExamRequest {
             new_start_time: String,
@@ -747,7 +747,7 @@ impl ExamService {
         start_date: Option<String>,
         end_date: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<serde_json::Value>> {
+    ) -> SDKResult<Response<serde_json::Value>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_EXAM_STATISTICS.to_string());

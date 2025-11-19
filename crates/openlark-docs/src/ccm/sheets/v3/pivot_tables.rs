@@ -736,7 +736,7 @@ impl PivotTableService {
             .map_err(|e| LarkAPIError::RequestError(e.to_string()))?;
 
         // 解析响应
-        let create_response: openlark_core::api_resp::BaseResponse<CreatePivotTableResponse> =
+        let create_response: openlark_core::api::Response<CreatePivotTableResponse> =
             serde_json::from_str(
                 &response
                     .text()
@@ -803,7 +803,7 @@ impl PivotTableService {
             .map_err(|e| LarkAPIError::RequestError(e.to_string()))?;
 
         // 解析响应
-        let delete_response: openlark_core::api_resp::BaseResponse<DeletePivotTableResponse> =
+        let delete_response: openlark_core::api::Response<DeletePivotTableResponse> =
             serde_json::from_str(
                 &response
                     .text()

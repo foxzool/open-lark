@@ -7,8 +7,8 @@
 //! - 筛选状态和数据同步
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -692,7 +692,7 @@ impl FilterViewsService {
         &self,
         request: CreateFilterViewRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<CreateFilterViewResponse>> {
+    ) -> SDKResult<Response<CreateFilterViewResponse>> {
         if let Err(err) = request.validate() {
             return Err(LarkAPIError::IllegalParamError(err));
         }
@@ -743,7 +743,7 @@ impl FilterViewsService {
         &self,
         request: GetFilterViewRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<GetFilterViewResponse>> {
+    ) -> SDKResult<Response<GetFilterViewResponse>> {
         if let Err(err) = request.validate() {
             return Err(LarkAPIError::IllegalParamError(err));
         }
@@ -798,7 +798,7 @@ impl FilterViewsService {
         &self,
         request: UpdateFilterViewRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<UpdateFilterViewResponse>> {
+    ) -> SDKResult<Response<UpdateFilterViewResponse>> {
         if let Err(err) = request.validate() {
             return Err(LarkAPIError::IllegalParamError(err));
         }
@@ -848,7 +848,7 @@ impl FilterViewsService {
         &self,
         request: DeleteFilterViewRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<DeleteFilterViewResponse>> {
+    ) -> SDKResult<Response<DeleteFilterViewResponse>> {
         if let Err(err) = request.validate() {
             return Err(LarkAPIError::IllegalParamError(err));
         }
@@ -945,7 +945,7 @@ impl CreateFilterViewBuilder {
     }
 
     /// 执行创建请求
-    pub async fn execute(self) -> SDKResult<BaseResponse<CreateFilterViewResponse>> {
+    pub async fn execute(self) -> SDKResult<Response<CreateFilterViewResponse>> {
         let request =
             CreateFilterViewRequest::new(self.spreadsheet_token, self.sheet_id, self.filter_view);
 
@@ -1016,7 +1016,7 @@ impl UpdateFilterViewBuilder {
     }
 
     /// 执行更新请求
-    pub async fn execute(self) -> SDKResult<BaseResponse<UpdateFilterViewResponse>> {
+    pub async fn execute(self) -> SDKResult<Response<UpdateFilterViewResponse>> {
         let request = UpdateFilterViewRequest::new(
             self.spreadsheet_token,
             self.sheet_id,
@@ -1497,7 +1497,7 @@ mod tests {
         let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::POST, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let response: BaseResponse<QueryFilterViewsResponse> =
+        let response: Response<QueryFilterViewsResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
@@ -1536,7 +1536,7 @@ mod tests {
         let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::POST, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let response: BaseResponse<CreateFilterViewConditionResponse> =
+        let response: Response<CreateFilterViewConditionResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
@@ -1575,7 +1575,7 @@ mod tests {
         let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::PUT, &endpoint);
         api_request.body = serde_json::to_vec(request)?;
 
-        let response: BaseResponse<UpdateFilterViewConditionResponse> =
+        let response: Response<UpdateFilterViewConditionResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
@@ -1613,7 +1613,7 @@ mod tests {
 
         let api_request = ApiRequest::with_method_and_path(reqwest::Method::DELETE, &endpoint);
 
-        let response: BaseResponse<DeleteFilterViewConditionResponse> =
+        let response: Response<DeleteFilterViewConditionResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if response.code() != 0 {
@@ -1665,9 +1665,9 @@ pub struct QueryFilterViewsResponse {
     pub page_token: Option<String>,
 }
 
-impl openlark_core::api_resp::ApiResponseTrait for QueryFilterViewsResponse {
-    fn data_format() -> openlark_core::api_resp::ResponseFormat {
-        openlark_core::api_resp::ResponseFormat::Data
+impl openlark_core::api::ApiResponseTrait for QueryFilterViewsResponse {
+    fn data_format() -> openlark_core::api::ResponseFormat {
+        openlark_core::api::ResponseFormat::Data
     }
 }
 
@@ -1696,9 +1696,9 @@ pub struct CreateFilterViewConditionResponse {
     pub condition: FilterCondition,
 }
 
-impl openlark_core::api_resp::ApiResponseTrait for CreateFilterViewConditionResponse {
-    fn data_format() -> openlark_core::api_resp::ResponseFormat {
-        openlark_core::api_resp::ResponseFormat::Data
+impl openlark_core::api::ApiResponseTrait for CreateFilterViewConditionResponse {
+    fn data_format() -> openlark_core::api::ResponseFormat {
+        openlark_core::api::ResponseFormat::Data
     }
 }
 
@@ -1730,9 +1730,9 @@ pub struct UpdateFilterViewConditionResponse {
     pub condition: FilterCondition,
 }
 
-impl openlark_core::api_resp::ApiResponseTrait for UpdateFilterViewConditionResponse {
-    fn data_format() -> openlark_core::api_resp::ResponseFormat {
-        openlark_core::api_resp::ResponseFormat::Data
+impl openlark_core::api::ApiResponseTrait for UpdateFilterViewConditionResponse {
+    fn data_format() -> openlark_core::api::ResponseFormat {
+        openlark_core::api::ResponseFormat::Data
     }
 }
 
@@ -1758,8 +1758,8 @@ pub struct DeleteFilterViewConditionResponse {
     pub success: bool,
 }
 
-impl openlark_core::api_resp::ApiResponseTrait for DeleteFilterViewConditionResponse {
-    fn data_format() -> openlark_core::api_resp::ResponseFormat {
-        openlark_core::api_resp::ResponseFormat::Data
+impl openlark_core::api::ApiResponseTrait for DeleteFilterViewConditionResponse {
+    fn data_format() -> openlark_core::api::ResponseFormat {
+        openlark_core::api::ResponseFormat::Data
     }
 }
