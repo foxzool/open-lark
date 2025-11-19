@@ -7,8 +7,8 @@
 //! - 支持水平、垂直和矩形区域合并
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -309,7 +309,7 @@ impl MergeCellsService {
         &self,
         request: MergeCellsRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<MergeCellsResponse>> {
+    ) -> SDKResult<Response<MergeCellsResponse>> {
         if let Err(err) = request.validate() {
             return Err(LarkAPIError::InvalidParameter(err));
         }
@@ -359,7 +359,7 @@ impl MergeCellsService {
         &self,
         request: UnmergeCellsRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<UnmergeCellsResponse>> {
+    ) -> SDKResult<Response<UnmergeCellsResponse>> {
         if let Err(err) = request.validate() {
             return Err(LarkAPIError::InvalidParameter(err));
         }
@@ -446,7 +446,7 @@ impl MergeCellsBuilder {
     }
 
     /// 执行合并请求
-    pub async fn execute(self) -> SDKResult<BaseResponse<MergeCellsResponse>> {
+    pub async fn execute(self) -> SDKResult<Response<MergeCellsResponse>> {
         let request = MergeCellsRequest::new(
             self.spreadsheet_token,
             self.sheet_id,

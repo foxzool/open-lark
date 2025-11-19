@@ -4,7 +4,7 @@
 //! 范围删除、插入内容等操作。
 
 use crate::prelude::*;
-use openlark_core::{api_req::ApiRequest, constants::AccessTokenType, http::Transport, SDKResult};
+use openlark_core::{api::ApiRequest, constants::AccessTokenType, http::Transport, SDKResult};
 
 use super::{
     models::{BatchUpdateOperation, BatchUpdateOperationType},

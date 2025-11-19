@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        api::ApiRequest,
+        api::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
@@ -338,7 +338,7 @@ impl BackgroundCheckService {
         &self,
         request: BackgroundCheckPackageListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<BackgroundCheckPackageListResponse>> {
+    ) -> SDKResult<Response<BackgroundCheckPackageListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_BACKGROUND_CHECK_PACKAGES.to_string());
@@ -434,7 +434,7 @@ impl BackgroundCheckService {
         &self,
         request: BackgroundCheckOrderCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<BackgroundCheckOperationResponse>> {
+    ) -> SDKResult<Response<BackgroundCheckOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_BACKGROUND_CHECK_ORDERS.to_string());
@@ -477,7 +477,7 @@ impl BackgroundCheckService {
         &self,
         order_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<BackgroundCheckOrderDetailResponse>> {
+    ) -> SDKResult<Response<BackgroundCheckOrderDetailResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_BACKGROUND_CHECK_ORDER_GET.to_string());
@@ -535,7 +535,7 @@ impl BackgroundCheckService {
         &self,
         request: BackgroundCheckOrderListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<BackgroundCheckOrderListResponse>> {
+    ) -> SDKResult<Response<BackgroundCheckOrderListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_BACKGROUND_CHECK_ORDERS.to_string());
@@ -598,7 +598,7 @@ impl BackgroundCheckService {
         order_id: &str,
         reason: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<BackgroundCheckOperationResponse>> {
+    ) -> SDKResult<Response<BackgroundCheckOperationResponse>> {
         #[derive(Serialize)]
         struct CancelOrderRequest {
             reason: String,
@@ -636,7 +636,7 @@ impl BackgroundCheckService {
         &self,
         order_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<serde_json::Value>> {
+    ) -> SDKResult<Response<serde_json::Value>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_BACKGROUND_CHECK_ORDER_REPORT.to_string());
@@ -675,7 +675,7 @@ impl BackgroundCheckService {
         &self,
         orders: Vec<BackgroundCheckOrderCreateRequest>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<BackgroundCheckOperationResponse>> {
+    ) -> SDKResult<Response<BackgroundCheckOperationResponse>> {
         #[derive(Serialize)]
         struct BatchCreateRequest {
             orders: Vec<BackgroundCheckOrderCreateRequest>,

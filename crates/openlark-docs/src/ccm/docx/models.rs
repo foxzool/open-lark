@@ -3,7 +3,7 @@
 //! 定义云文档搜索和元数据API的数据结构。
 
 use crate::prelude::*;
-use openlark_core::api_resp::{ApiResponseTrait, ResponseFormat};
+use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 
 /// 搜索云文档的请求参数

@@ -19,7 +19,7 @@ use serde::{Deserialize, Serialize};
 
 use openlark_core::{
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        api::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -86,7 +86,7 @@ impl FolderService {
     pub async fn get_root_folder_meta(
         &self,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<GetRootFolderMetaRespData>> {
+    ) -> SDKResult<Response<GetRootFolderMetaRespData>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(DRIVE_V1_FOLDERS_ROOT_FOLDER_META.to_string());
@@ -134,7 +134,7 @@ impl FolderService {
         &self,
         request: ListFilesRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ListFilesRespData>> {
+    ) -> SDKResult<Response<ListFilesRespData>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(DRIVE_V1_FOLDER_CHILDREN.to_string());
@@ -193,7 +193,7 @@ impl FolderService {
         &self,
         request: GetFolderMetaRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<GetFolderMetaRespData>> {
+    ) -> SDKResult<Response<GetFolderMetaRespData>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(DRIVE_V1_FOLDER_GET.to_string().replace("{}", &request.folder_token));
@@ -238,7 +238,7 @@ impl FolderService {
         &self,
         request: CreateFolderRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<CreateFolderRespData>> {
+    ) -> SDKResult<Response<CreateFolderRespData>> {
         let api_req = request.api_req;
         Transport::request(api_req, &self.config, option).await
     }
@@ -278,7 +278,7 @@ impl FolderService {
         &self,
         request: UpdateFolderRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<UpdateFolderRespData>> {
+    ) -> SDKResult<Response<UpdateFolderRespData>> {
         let api_req = request.api_req;
         Transport::request(api_req, &self.config, option).await
     }
@@ -317,7 +317,7 @@ impl FolderService {
         &self,
         request: DeleteFolderRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<DeleteFolderRespData>> {
+    ) -> SDKResult<Response<DeleteFolderRespData>> {
         let api_req = request.api_req;
         Transport::request(api_req, &self.config, option).await
     }
@@ -677,7 +677,7 @@ crate::impl_executable_builder_owned!(
     CreateFolderRequestBuilder,
     FolderService,
     CreateFolderRequest,
-    BaseResponse<CreateFolderRespData>,
+    Response<CreateFolderRespData>,
     create_folder
 );
 
@@ -724,7 +724,7 @@ crate::impl_executable_builder_owned!(
     UpdateFolderRequestBuilder,
     FolderService,
     UpdateFolderRequest,
-    BaseResponse<UpdateFolderRespData>,
+    Response<UpdateFolderRespData>,
     update_folder
 );
 
@@ -759,7 +759,7 @@ crate::impl_executable_builder_owned!(
     DeleteFolderRequestBuilder,
     FolderService,
     DeleteFolderRequest,
-    BaseResponse<DeleteFolderRespData>,
+    Response<DeleteFolderRespData>,
     delete_folder
 );
 
@@ -794,7 +794,7 @@ crate::impl_executable_builder_owned!(
     GetFolderMetaRequestBuilder,
     FolderService,
     GetFolderMetaRequest,
-    BaseResponse<GetFolderMetaRespData>,
+    Response<GetFolderMetaRespData>,
     get_folder_meta
 );
 
@@ -853,7 +853,7 @@ crate::impl_executable_builder_owned!(
     ListFilesRequestBuilder,
     FolderService,
     ListFilesRequest,
-    BaseResponse<ListFilesRespData>,
+    Response<ListFilesRespData>,
     list_files
 );
 

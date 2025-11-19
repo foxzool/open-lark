@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        api::ApiRequest,
+        api::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
@@ -292,7 +292,7 @@ impl ExternalSystemService {
         &self,
         request: ExternalSystemConfigCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
+    ) -> SDKResult<Response<ExternalSystemOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_EXTERNAL_SYSTEMS.to_string());
@@ -347,7 +347,7 @@ impl ExternalSystemService {
         system_type: Option<String>,
         enabled: Option<bool>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ExternalSystemConfigListResponse>> {
+    ) -> SDKResult<Response<ExternalSystemConfigListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_EXTERNAL_SYSTEMS.to_string());
@@ -408,7 +408,7 @@ impl ExternalSystemService {
         &self,
         request: SyncTaskCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
+    ) -> SDKResult<Response<ExternalSystemOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_EXTERNAL_SYSTEMS_SYNC_TASKS.to_string());
@@ -467,7 +467,7 @@ impl ExternalSystemService {
         page_size: Option<u32>,
         page_token: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ExternalSystemSyncRecordListResponse>> {
+    ) -> SDKResult<Response<ExternalSystemSyncRecordListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_EXTERNAL_SYSTEMS_SYNC_RECORDS.to_string());
@@ -544,7 +544,7 @@ impl ExternalSystemService {
         &self,
         request: ExternalCandidateImportRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
+    ) -> SDKResult<Response<ExternalSystemOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES_IMPORT.to_string());
@@ -602,7 +602,7 @@ impl ExternalSystemService {
         page_size: Option<u32>,
         page_token: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ExternalCandidateListResponse>> {
+    ) -> SDKResult<Response<ExternalCandidateListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES.to_string());
@@ -658,7 +658,7 @@ impl ExternalSystemService {
         &self,
         external_candidate_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
+    ) -> SDKResult<Response<ExternalSystemOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
                 api_req.set_api_path(HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES_CONVERT.to_string());
@@ -689,7 +689,7 @@ impl ExternalSystemService {
         &self,
         system_config_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
+    ) -> SDKResult<Response<ExternalSystemOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
                 api_req.set_api_path(HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES_CONVERT.to_string());

@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints::hire::*,
@@ -119,7 +119,7 @@ impl JobService {
         &self,
         request: JobCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<JobOperationResponse>> {
+    ) -> SDKResult<Response<JobOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_JOB_COMBINED_CREATE.to_string());
@@ -165,7 +165,7 @@ impl JobService {
         &self,
         request: JobUpdateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<JobOperationResponse>> {
+    ) -> SDKResult<Response<JobOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_JOB_COMBINED_UPDATE.to_string());
@@ -210,7 +210,7 @@ impl JobService {
         &self,
         job_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<JobDetailResponse>> {
+    ) -> SDKResult<Response<JobDetailResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_JOB_GET_DETAIL, "job_id", job_id));
@@ -269,7 +269,7 @@ impl JobService {
         &self,
         request: JobListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<JobListResponse>> {
+    ) -> SDKResult<Response<JobListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_JOBS.to_string());
@@ -332,7 +332,7 @@ impl JobService {
         &self,
         job_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<JobOperationResponse>> {
+    ) -> SDKResult<Response<JobOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_JOB_CLOSE, "job_id", job_id));
@@ -360,7 +360,7 @@ impl JobService {
         &self,
         job_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<JobOperationResponse>> {
+    ) -> SDKResult<Response<JobOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_JOB_OPEN, "job_id", job_id));

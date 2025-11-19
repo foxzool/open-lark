@@ -10,8 +10,8 @@ use serde_json::Value;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints_original::Endpoints,
@@ -284,7 +284,7 @@ impl SingleRangeReadService {
     pub async fn read_range(
         &self,
         request: SingleRangeReadRequest,
-    ) -> SDKResult<BaseResponse<SingleRangeReadResponse>> {
+    ) -> SDKResult<Response<SingleRangeReadResponse>> {
         // 验证请求参数
         request.validate()?;
 
@@ -332,7 +332,7 @@ impl SingleRangeReadService {
         &self,
         spreadsheet_token: impl Into<String>,
         range: impl Into<String>,
-    ) -> SDKResult<BaseResponse<SingleRangeReadResponse>> {
+    ) -> SDKResult<Response<SingleRangeReadResponse>> {
         let request = SingleRangeReadRequest::new(spreadsheet_token, range);
         self.read_range(request).await
     }
@@ -381,7 +381,7 @@ impl SingleRangeReadBuilder {
     pub async fn execute(
         self,
         range: impl Into<String>,
-    ) -> SDKResult<BaseResponse<SingleRangeReadResponse>> {
+    ) -> SDKResult<Response<SingleRangeReadResponse>> {
         let mut request = SingleRangeReadRequest::new(self.spreadsheet_token, range);
 
         if let Some(option) = self.value_render_option {

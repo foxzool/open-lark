@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        api::ApiRequest,
+        api::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
@@ -227,7 +227,7 @@ impl TalentPoolService {
         &self,
         request: TalentPoolCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<TalentPoolOperationResponse>> {
+    ) -> SDKResult<Response<TalentPoolOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_TALENT_POOLS.to_string());
@@ -271,7 +271,7 @@ impl TalentPoolService {
         &self,
         pool_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<TalentPoolDetailResponse>> {
+    ) -> SDKResult<Response<TalentPoolDetailResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_TALENT_POOL_GET, "pool_id", pool_id));
@@ -327,7 +327,7 @@ impl TalentPoolService {
         &self,
         request: TalentPoolListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<TalentPoolListResponse>> {
+    ) -> SDKResult<Response<TalentPoolListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_TALENT_POOLS.to_string());
@@ -410,7 +410,7 @@ impl TalentPoolService {
         pool_id: &str,
         request: TalentPoolTalentListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<TalentPoolTalentListResponse>> {
+    ) -> SDKResult<Response<TalentPoolTalentListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -470,7 +470,7 @@ impl TalentPoolService {
         pool_id: &str,
         talent_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<TalentPoolOperationResponse>> {
+    ) -> SDKResult<Response<TalentPoolOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -505,7 +505,7 @@ impl TalentPoolService {
         pool_id: &str,
         talent_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<TalentPoolOperationResponse>> {
+    ) -> SDKResult<Response<TalentPoolOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::DELETE);
         api_req.set_api_path(EndpointBuilder::replace_params(
@@ -554,7 +554,7 @@ impl TalentPoolService {
         pool_id: &str,
         request: TalentPoolCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<TalentPoolOperationResponse>> {
+    ) -> SDKResult<Response<TalentPoolOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_TALENT_POOL_GET, "pool_id", pool_id));
@@ -583,7 +583,7 @@ impl TalentPoolService {
         &self,
         pool_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<TalentPoolOperationResponse>> {
+    ) -> SDKResult<Response<TalentPoolOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::DELETE);
         api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_TALENT_POOL_GET, "pool_id", pool_id));

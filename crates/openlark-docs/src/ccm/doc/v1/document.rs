@@ -7,8 +7,8 @@
 //! - 文档权限管理
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,

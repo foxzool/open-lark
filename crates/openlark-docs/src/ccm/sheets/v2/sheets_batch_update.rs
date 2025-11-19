@@ -9,8 +9,8 @@
 use serde_json::Value;
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints_original::Endpoints,
@@ -476,7 +476,7 @@ impl SheetsBatchUpdateService {
 
         // 处理响应
         if response.status().is_success() {
-            let base_response: BaseResponse<SheetsBatchUpdateResponseBody> = response
+            let base_response: Response<SheetsBatchUpdateResponseBody> = response
                 .json()
                 .await
                 .map_err(|e| LarkAPIError::JsonParseError(format!("响应解析失败: {}", e)))?;

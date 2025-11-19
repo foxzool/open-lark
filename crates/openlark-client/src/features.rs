@@ -2,8 +2,7 @@
 //!
 //! 根据feature标志动态加载和配置服务
 
-use crate::{registry::ServiceDescriptor, Config, Result, ServiceRegistry};
-use std::sync::Arc;
+use crate::{Config, Result, ServiceRegistry};
 
 /// 🔥 功能加载器 - 编译时feature驱动加载
 ///

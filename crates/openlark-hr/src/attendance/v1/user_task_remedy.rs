@@ -4,7 +4,7 @@ use serde_json::json;
 use openlark_core::{
     impl_executable_builder_owned,
     openlark_core::{
-        api_resp::BaseResponse, config::Config, constants::AccessTokenType,
+        api::Response, config::Config, constants::AccessTokenType,
         endpoints::attendance::*, http::Transport, req_option::RequestOption,
         trait_system::Service, SDKResult,
     },
@@ -32,7 +32,7 @@ impl UserTaskRemedyService {
         &self,
         request: CreateUserTaskRemedyRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<CreateUserTaskRemedyRespData>> {
+    ) -> SDKResult<Response<CreateUserTaskRemedyRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(ATTENDANCE_V1_USER_TASK_REMEDYS.to_string());
@@ -70,7 +70,7 @@ impl UserTaskRemedyService {
         &self,
         request: QueryUserAllowedRemedysRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<QueryUserAllowedRemedysRespData>> {
+    ) -> SDKResult<Response<QueryUserAllowedRemedysRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(ATTENDANCE_V1_USER_TASK_REMEDYS_QUERY_USER_ALLOWED_REMEDYS.to_string());
@@ -105,7 +105,7 @@ impl UserTaskRemedyService {
         &self,
         request: QueryUserTaskRemedyRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<QueryUserTaskRemedyRespData>> {
+    ) -> SDKResult<Response<QueryUserTaskRemedyRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(ATTENDANCE_V1_USER_TASK_REMEDYS.to_string());
@@ -166,7 +166,7 @@ impl_executable_builder_owned!(
     CreateUserTaskRemedyRequest,
     UserTaskRemedyService,
     CreateUserTaskRemedyRequest,
-    BaseResponse<CreateUserTaskRemedyRespData>,
+    Response<CreateUserTaskRemedyRespData>,
     create
 );
 
@@ -174,7 +174,7 @@ impl_executable_builder_owned!(
     QueryUserAllowedRemedysRequest,
     UserTaskRemedyService,
     QueryUserAllowedRemedysRequest,
-    BaseResponse<QueryUserAllowedRemedysRespData>,
+    Response<QueryUserAllowedRemedysRespData>,
     query_user_allowed_remedys
 );
 
@@ -182,14 +182,14 @@ impl_executable_builder_owned!(
     QueryUserTaskRemedyRequest,
     UserTaskRemedyService,
     QueryUserTaskRemedyRequest,
-    BaseResponse<QueryUserTaskRemedyRespData>,
+    Response<QueryUserTaskRemedyRespData>,
     query
 );
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use openlark_core::{api_req::ApiRequest, config::Config};
+    use openlark_core::{api::ApiRequest, config::Config};
     use crate::attendance::v1::models::UserTaskRemedyApplication;
 
     #[test]

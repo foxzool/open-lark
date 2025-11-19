@@ -4,7 +4,7 @@
 
 pub use openlark_core::prelude::{ApiResponseTrait, ResponseFormat, StandardResponse};
 pub use openlark_core::{
-    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    api::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
     http::Transport, SDKResult,
 };
 

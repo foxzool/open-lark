@@ -1,9 +1,9 @@
 #![allow(unused_variables, unused_unsafe)]
 use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use openlark_core::{,
-use SDKResult;    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+use SDKResult;    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints::{cloud_docs::*, EndpointBuilder}
@@ -54,7 +54,7 @@ pub async fn delete_space_member(
     request: DeleteSpaceMemberRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<DeleteSpaceMemberResponse>> {,
+) -> SDKResult<Response<DeleteSpaceMemberResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::DELETE);
 api_req.api_path = {,

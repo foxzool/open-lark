@@ -11,7 +11,7 @@
 #![allow(unused_mut)]
 
 use openlark_core::{
-    api_resp::{ApiResponseTrait, ResponseFormat},
+    api::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,

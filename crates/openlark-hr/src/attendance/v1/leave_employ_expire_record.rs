@@ -1,6 +1,6 @@
 use crate::{
     core::{
-        api_resp::BaseResponse, config::Config, constants::AccessTokenType,
+        api::Response, config::Config, constants::AccessTokenType,
         endpoints::attendance::*, http::Transport, req_option::RequestOption,
         trait_system::Service, SDKResult,
     },
@@ -29,7 +29,7 @@ impl LeaveEmployExpireRecordService {
         &self,
         request: GetLeaveEmployExpireRecordRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<GetLeaveEmployExpireRecordRespData>> {
+    ) -> SDKResult<Response<GetLeaveEmployExpireRecordRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(ATTENDANCE_V1_LEAVE_EMPLOY_EXPIRE_RECORDS.to_string());
@@ -66,7 +66,7 @@ impl_executable_builder_owned!(
     GetLeaveEmployExpireRecordRequest,
     LeaveEmployExpireRecordService,
     GetLeaveEmployExpireRecordRequest,
-    BaseResponse<GetLeaveEmployExpireRecordRespData>,
+    Response<GetLeaveEmployExpireRecordRespData>,
     get
 );
 

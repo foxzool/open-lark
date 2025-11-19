@@ -5,10 +5,10 @@
 #![allow(unused_variables)]
 #![allow(unused_mut)]
 use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use openlark_core::{,
-use SDKResult;    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+use SDKResult;    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints::cloud_docs::*,
@@ -44,7 +44,7 @@ crate::impl_executable_builder_owned!(
     DeleteRecordRequestBuilder,
     super::AppTableRecordService,
     DeleteRecordRequest,
-    BaseResponse<DeleteRecordResponse>,
+    Response<DeleteRecordResponse>,
     delete,
 );
 /// 删除记录响应
@@ -65,7 +65,7 @@ pub async fn delete_record(
     request: DeleteRecordRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<DeleteRecordResponse>> {,
+) -> SDKResult<Response<DeleteRecordResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::DELETE);
 api_req.api_path = BITABLE_V1_RECORD_DELETE,

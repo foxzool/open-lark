@@ -1,7 +1,7 @@
 use std::marker::PhantomData;
 
 use crate::{
-    api_req::ApiRequest,
+    api::ApiRequest,
     error::LarkAPIError,
     validation::{self, ValidateBuilder, ValidationResult},
     SDKResult,
@@ -163,10 +163,10 @@ impl<T> PaginationRequestBuilder<T> {
     }
 
     /// 构建分页请求参数并添加到现有的 ApiRequest
-    pub fn build_to_api_request(self, mut api_req: ApiRequest) -> SDKResult<ApiRequest> {
+    pub fn build_to_api_request<R>(self, mut api_req: ApiRequest<R>) -> SDKResult<ApiRequest<R>> {
         let params = self.build()?;
         for (key, value) in params {
-            api_req.query_params.insert(key, value);
+            api_req.query.insert(key.to_string(), value);
         }
         Ok(api_req)
     }

@@ -8,7 +8,7 @@ use serde_json::Value;
 use std::collections::HashMap;
 
 use openlark_core::{
-    api_resp::{ApiResponseTrait, ResponseFormat},
+    api::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,

@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        api::ApiRequest,
+        api::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
         endpoints::hire::*,
@@ -355,7 +355,7 @@ impl AgencyService {
         &self,
         request: AgencyCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<AgencyOperationResponse>> {
+    ) -> SDKResult<Response<AgencyOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_AGENCIES.to_string());
@@ -414,7 +414,7 @@ impl AgencyService {
         &self,
         request: AgencyListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<AgencyListResponse>> {
+    ) -> SDKResult<Response<AgencyListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_AGENCIES.to_string());
@@ -489,7 +489,7 @@ impl AgencyService {
         &self,
         request: AgencyRecommendationCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<AgencyOperationResponse>> {
+    ) -> SDKResult<Response<AgencyOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_AGENCY_RECOMMENDATIONS.to_string());
@@ -529,7 +529,7 @@ impl AgencyService {
         &self,
         request: AgencyRecommendationListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<AgencyRecommendationListResponse>> {
+    ) -> SDKResult<Response<AgencyRecommendationListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_AGENCY_RECOMMENDATIONS.to_string());
@@ -604,7 +604,7 @@ impl AgencyService {
         &self,
         request: AgencyConsultantCreateRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<AgencyOperationResponse>> {
+    ) -> SDKResult<Response<AgencyOperationResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(HIRE_V1_AGENCY_CONSULTANTS.to_string());
@@ -637,7 +637,7 @@ impl AgencyService {
         page_size: Option<u32>,
         page_token: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<AgencyConsultantListResponse>> {
+    ) -> SDKResult<Response<AgencyConsultantListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(EndpointBuilder::replace_param(
@@ -688,7 +688,7 @@ impl AgencyService {
         recommendation_id: &str,
         remark: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<AgencyOperationResponse>> {
+    ) -> SDKResult<Response<AgencyOperationResponse>> {
         #[derive(Serialize)]
         struct ConfirmRequest {
             remark: Option<String>,
@@ -736,7 +736,7 @@ impl AgencyService {
         reason: &str,
         feedback: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<AgencyOperationResponse>> {
+    ) -> SDKResult<Response<AgencyOperationResponse>> {
         #[derive(Serialize)]
         struct RejectRequest {
             reason: String,

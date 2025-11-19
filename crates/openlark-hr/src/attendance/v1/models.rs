@@ -1,6 +1,6 @@
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, ResponseFormat},
 },
 use serde::{Deserialize, Serialize },
 

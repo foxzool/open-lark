@@ -7,8 +7,8 @@
 //! - 查询和更新工作表保护状态
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     http::Transport,
 };
 
@@ -965,7 +965,7 @@ impl SheetProtectionService {
     pub async fn create(
         &self,
         request: &CreateSheetProtectionRequest,
-    ) -> openlark_core::error::SDKResult<BaseResponse<CreateSheetProtectionResponse>> {
+    ) -> openlark_core::error::SDKResult<Response<CreateSheetProtectionResponse>> {
         let url = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/protections",
             self.config.base_url,
@@ -1021,7 +1021,7 @@ impl SheetProtectionService {
     pub async fn query(
         &self,
         request: &QuerySheetProtectionRequest,
-    ) -> openlark_core::error::SDKResult<BaseResponse<QuerySheetProtectionResponse>> {
+    ) -> openlark_core::error::SDKResult<Response<QuerySheetProtectionResponse>> {
         let mut url = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/protections/query",
             self.config.base_url,
@@ -1103,7 +1103,7 @@ impl SheetProtectionService {
     pub async fn update(
         &self,
         request: &UpdateSheetProtectionRequest,
-    ) -> openlark_core::error::SDKResult<BaseResponse<UpdateSheetProtectionResponse>> {
+    ) -> openlark_core::error::SDKResult<Response<UpdateSheetProtectionResponse>> {
         let url = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/protections/{}",
             self.config.base_url,
@@ -1157,7 +1157,7 @@ impl SheetProtectionService {
     pub async fn delete(
         &self,
         request: &DeleteSheetProtectionRequest,
-    ) -> openlark_core::error::SDKResult<BaseResponse<DeleteSheetProtectionResponse>> {
+    ) -> openlark_core::error::SDKResult<Response<DeleteSheetProtectionResponse>> {
         let url = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/protections/{}",
             self.config.base_url,
@@ -1279,7 +1279,7 @@ impl<'a> SheetProtectionServiceBuilder<'a> {
     /// 执行创建操作
     pub async fn execute(
         self,
-    ) -> openlark_core::error::SDKResult<BaseResponse<CreateSheetProtectionResponse>> {
+    ) -> openlark_core::error::SDKResult<Response<CreateSheetProtectionResponse>> {
         match (self.spreadsheet_token, self.sheet_id) {
             (Some(spreadsheet_token), Some(sheet_id)) => {
                 let mut editors = Vec::new();

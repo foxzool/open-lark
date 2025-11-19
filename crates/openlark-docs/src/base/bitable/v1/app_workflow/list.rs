@@ -5,10 +5,10 @@
 #![allow(unused_variables)]
 #![allow(unused_mut)]
 use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use openlark_core::{,
-use SDKResult;    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+use SDKResult;    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints::cloud_docs::*,
@@ -51,7 +51,7 @@ crate::impl_executable_builder_owned!(
     ListWorkflowRequestBuilder,
     super::AppWorkflowService,
     ListWorkflowRequest,
-    BaseResponse<ListWorkflowResponse>,
+    Response<ListWorkflowResponse>,
     list,
 );
 /// 自动化流程信息
@@ -99,7 +99,7 @@ pub async fn list_workflows(
     request: ListWorkflowRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<ListWorkflowResponse>> {,
+) -> SDKResult<Response<ListWorkflowResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::GET);
     api_req.set_api_path(BITABLE_V1_WORKFLOWS.replace("{app_token}", &request.app_token));

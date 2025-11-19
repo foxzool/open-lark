@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints::hire::*,
@@ -71,7 +71,7 @@ impl ApplicationConfigService {
         &self,
         request: TalentTagListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<TalentTagListResponse>> {
+    ) -> SDKResult<Response<TalentTagListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_TALENT_TAGS.to_string());
@@ -112,7 +112,7 @@ impl ApplicationConfigService {
         &self,
         request: RegistrationFormListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<RegistrationFormListResponse>> {
+    ) -> SDKResult<Response<RegistrationFormListResponse>> {
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(HIRE_V1_REGISTRATION_FORMS.to_string());

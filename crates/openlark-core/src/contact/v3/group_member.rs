@@ -1,5 +1,5 @@
 use crate::{
-    api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
+    api::ApiRequest, api::ApiResponseTrait, config::Config,
     constants::AccessTokenType, http::Transport,
 };
 use serde::{Deserialize, Serialize};

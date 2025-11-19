@@ -8,8 +8,8 @@
 //! - 移动行列位置
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -563,7 +563,7 @@ impl DimensionOperationsService {
         &self,
         request: InsertDimensionRangeRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<InsertDimensionRangeResponse>> {
+    ) -> SDKResult<Response<InsertDimensionRangeResponse>> {
         if let Err(err) = request.validate() {
             return Err(LarkAPIError::InvalidParameter(err));
         }
@@ -617,7 +617,7 @@ impl DimensionOperationsService {
         &self,
         request: DeleteDimensionRangeRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<DeleteDimensionRangeResponse>> {
+    ) -> SDKResult<Response<DeleteDimensionRangeResponse>> {
         if let Err(err) = request.validate() {
             return Err(LarkAPIError::InvalidParameter(err));
         }
@@ -677,7 +677,7 @@ impl DimensionOperationsService {
         &self,
         request: AddDimensionRangeRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<AddDimensionRangeResponse>> {
+    ) -> SDKResult<Response<AddDimensionRangeResponse>> {
         if let Err(err) = request.validate() {
             return Err(LarkAPIError::InvalidParameter(err));
         }
@@ -736,7 +736,7 @@ impl DimensionOperationsService {
         &self,
         request: UpdateDimensionRangeRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<UpdateDimensionRangeResponse>> {
+    ) -> SDKResult<Response<UpdateDimensionRangeResponse>> {
         if let Err(err) = request.validate() {
             return Err(LarkAPIError::InvalidParameter(err));
         }
@@ -953,7 +953,7 @@ impl InsertDimensionRangeBuilder {
     }
 
     /// 执行插入请求
-    pub async fn execute(self) -> SDKResult<BaseResponse<InsertDimensionRangeResponse>> {
+    pub async fn execute(self) -> SDKResult<Response<InsertDimensionRangeResponse>> {
         let request = InsertDimensionRangeRequest::new(
             self.spreadsheet_token,
             self.sheet_id,
@@ -1009,7 +1009,7 @@ impl DeleteDimensionRangeBuilder {
     }
 
     /// 执行删除请求
-    pub async fn execute(self) -> SDKResult<BaseResponse<DeleteDimensionRangeResponse>> {
+    pub async fn execute(self) -> SDKResult<Response<DeleteDimensionRangeResponse>> {
         let request = DeleteDimensionRangeRequest::new(
             self.spreadsheet_token,
             self.sheet_id,
@@ -1071,7 +1071,7 @@ impl AddDimensionRangeBuilder {
     }
 
     /// 执行增加请求
-    pub async fn execute(self) -> SDKResult<BaseResponse<AddDimensionRangeResponse>> {
+    pub async fn execute(self) -> SDKResult<Response<AddDimensionRangeResponse>> {
         let mut request = AddDimensionRangeRequest::new(
             self.spreadsheet_token,
             self.sheet_id,
@@ -1161,7 +1161,7 @@ impl UpdateDimensionRangeBuilder {
     }
 
     /// 执行更新请求
-    pub async fn execute(self) -> SDKResult<BaseResponse<UpdateDimensionRangeResponse>> {
+    pub async fn execute(self) -> SDKResult<Response<UpdateDimensionRangeResponse>> {
         let request = UpdateDimensionRangeRequest::new(
             self.spreadsheet_token,
             self.sheet_id,

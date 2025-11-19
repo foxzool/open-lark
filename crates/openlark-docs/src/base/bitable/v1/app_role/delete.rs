@@ -5,7 +5,7 @@
 #![allow(unused_variables)]
 #![allow(unused_mut)]
 use SDKResult;use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use super::AppRoleService;
 use openlark_core::,
 {,
@@ -13,7 +13,7 @@ use openlark_core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -47,7 +47,7 @@ impl DeleteAppRoleRequestBuilder {
     DeleteAppRoleRequestBuilder,
     AppRoleService,
     DeleteAppRoleRequest,
-    BaseResponse<DeleteAppRoleResponse>,
+    Response<DeleteAppRoleResponse>,
     delete,
 );
 /// 删除自定义角色响应
@@ -68,7 +68,7 @@ pub async fn delete_app_role(
     request: DeleteAppRoleRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<DeleteAppRoleResponse>> {,
+) -> SDKResult<Response<DeleteAppRoleResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::DELETE);
 api_req.api_path = BITABLE_V1_ROLE_DELETE,

@@ -7,8 +7,8 @@
 //! - 进度跟踪
 
 use openlark_core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::ApiRequest,
+    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
@@ -130,7 +130,7 @@ impl ImportResultService {
         &self,
         request: &ImportResultRequest,
     ) -> SDKResult<ImportResultResponse> {
-        use openlark_core::{api_req::ApiRequest, http::Transport};
+        use openlark_core::{api::ApiRequest, http::Transport};
         use reqwest::Method;
 
         let endpoint = format!(

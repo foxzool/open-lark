@@ -5,7 +5,7 @@
 #![allow(unused_variables)]
 #![allow(unused_mut)]
 use SDKResult;use reqwest::Method;
-use openlark_core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use super::AppRoleMemberService;
 use openlark_core::,
 {,
@@ -13,7 +13,7 @@ use openlark_core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait}
+        api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -54,7 +54,7 @@ impl_executable_builder_owned!(,
     BatchDeleteRoleMemberRequestBuilder,
     AppRoleMemberService,
     BatchDeleteRoleMemberRequest,
-    BaseResponse<BatchDeleteRoleMemberResponse>,
+    Response<BatchDeleteRoleMemberResponse>,
     batch_delete,
 );
 /// 删除结果
@@ -80,7 +80,7 @@ pub async fn batch_delete_role_members(
     request: BatchDeleteRoleMemberRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<BatchDeleteRoleMemberResponse>> {,
+) -> SDKResult<Response<BatchDeleteRoleMemberResponse>> {,
 let mut api_req = request.api_request;
     api_req.set_http_method(Method::DELETE);
 api_req.api_path = BITABLE_V1_ROLE_MEMBERS_BATCH_DELETE,
