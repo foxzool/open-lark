@@ -2,7 +2,7 @@
 //!
 //! 根据feature标志动态加载和配置服务
 
-use crate::{Config, Result, ServiceRegistry};
+use crate::{Config, Result, ServiceRegistry, ServiceDescriptor};
 
 /// 🔥 功能加载器 - 编译时feature驱动加载
 ///
