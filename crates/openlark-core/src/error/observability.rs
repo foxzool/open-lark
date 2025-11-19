@@ -232,6 +232,12 @@ pub struct ErrorLogger {
     pub max_cache_entries: usize,
 }
 
+impl Default for ErrorLogger {
+    fn default() -> Self {
+        Self::new(LogLevel::Info)
+    }
+}
+
 impl ErrorLogger {
     /// 创建新的错误日志记录器
     pub fn new(min_level: LogLevel) -> Self {
@@ -244,11 +250,7 @@ impl ErrorLogger {
         }
     }
 
-    /// 创建默认配置的日志记录器
-    pub fn default() -> Self {
-        Self::new(LogLevel::Info)
-    }
-
+  
     /// 记录日志条目
     pub fn log(&self, entry: LogEntry) {
         if entry.level < self.min_level {
@@ -469,6 +471,12 @@ impl Default for AlertThresholds {
     }
 }
 
+impl Default for ErrorMonitor {
+    fn default() -> Self {
+        Self::new(10000)
+    }
+}
+
 impl ErrorMonitor {
     /// 创建新的错误监控器
     pub fn new(max_events: usize) -> Self {
@@ -480,11 +488,7 @@ impl ErrorMonitor {
         }
     }
 
-    /// 创建默认配置的监控器
-    pub fn default() -> Self {
-        Self::new(10000)
-    }
-
+    
     /// 记录错误事件
     pub fn record_error(&self, error: &LarkAPIError, context: Option<&str>) {
         let mut event = ErrorEvent::from_error(error.clone());
@@ -691,14 +695,14 @@ pub enum ErrorAlert {
 fn get_error_logger() -> &'static ErrorLogger {
     use std::sync::OnceLock;
     static LOGGER: OnceLock<ErrorLogger> = OnceLock::new();
-    LOGGER.get_or_init(|| ErrorLogger::default())
+    LOGGER.get_or_init(ErrorLogger::default)
 }
 
 /// 获取全局错误监控器
 fn get_error_monitor() -> &'static ErrorMonitor {
     use std::sync::OnceLock;
     static MONITOR: OnceLock<ErrorMonitor> = OnceLock::new();
-    MONITOR.get_or_init(|| ErrorMonitor::default())
+    MONITOR.get_or_init(ErrorMonitor::default)
 }
 
 /// 记录错误日志
