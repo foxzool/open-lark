@@ -42,7 +42,7 @@ pub struct WorkplaceWorkplaceService {
 impl WorkplaceWorkplaceService {
     /// 创建新的服务实例
     pub fn new() -> Self {
-        Self { }
+        Self {}
     }
 
     /// TODO: 实现核心接口
