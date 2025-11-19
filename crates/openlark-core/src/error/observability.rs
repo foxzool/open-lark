@@ -250,7 +250,6 @@ impl ErrorLogger {
         }
     }
 
-  
     /// 记录日志条目
     pub fn log(&self, entry: LogEntry) {
         if entry.level < self.min_level {
@@ -488,7 +487,6 @@ impl ErrorMonitor {
         }
     }
 
-    
     /// 记录错误事件
     pub fn record_error(&self, error: &LarkAPIError, context: Option<&str>) {
         let mut event = ErrorEvent::from_error(error.clone());

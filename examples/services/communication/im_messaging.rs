@@ -97,4 +97,3 @@ fn display_message_types() {
     println!("share_chat - 分享聊天卡片");
     println!("share_user - 分享用户卡片");
 }
-

@@ -10,6 +10,22 @@ pub enum AppType {
     Marketplace,
 }
 
+impl AppType {
+    /// 获取应用类型字符串
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            AppType::SelfBuild => "self_build",
+            AppType::Marketplace => "marketplace",
+        }
+    }
+}
+
+impl Display for AppType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
 pub const APP_ACCESS_TOKEN_INTERNAL_URL_PATH: &str = "/open-apis/auth/v3/app_access_token/internal";
 pub const APP_ACCESS_TOKEN_URL_PATH: &str = "/open-apis/auth/v3/app_access_token";
 pub const TENANT_ACCESS_TOKEN_INTERNAL_URL_PATH: &str =

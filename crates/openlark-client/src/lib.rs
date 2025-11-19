@@ -338,7 +338,7 @@ mod tests {
 
     #[test]
     fn test_enabled_features() {
-        let features = utils::get_enabled_features();
+        let _features = utils::get_enabled_features();
         // 至少应该有一些功能（或者为空）
         // 这个测试主要确保函数能正常工作
     }

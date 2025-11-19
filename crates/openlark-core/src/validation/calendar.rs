@@ -251,7 +251,7 @@ pub fn validate_reminder_minutes(minutes: i32) -> ValidationResult {
     let valid_reminders = [0, 5, 10, 15, 30, 60, 120, 1440, 2880, 10080];
     if !valid_reminders.contains(&minutes) && minutes != 0 {
         // 0表示不提醒
-        return ValidationResult::Warning(
+        return ValidationResult::Sanitized(
             "建议使用常用提醒时间：0（不提醒）、5、10、15、30、60、120、1440（1天）、2880（2天）、10080（7天）分钟".to_string()
         );
     }
@@ -1172,7 +1172,7 @@ mod tests {
         // 中间值（虽然没有在推荐列表中，但应该有效）
         assert!(matches!(
             validate_reminder_minutes(20),
-            ValidationResult::Warning(_)
+            ValidationResult::Valid
         ));
     }
 
@@ -1209,7 +1209,7 @@ mod tests {
             assert!(
                 matches!(
                     validate_reminder_minutes(minutes),
-                    ValidationResult::Warning(msg) if msg.contains("建议使用常用提醒时间")
+                    ValidationResult::Sanitized(msg) if msg.contains("建议使用常用提醒时间")
                 ),
                 "Should generate warning for: {} minutes",
                 minutes
