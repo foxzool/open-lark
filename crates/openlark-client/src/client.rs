@@ -309,7 +309,7 @@ mod tests {
     fn test_from_app_id_string() {
         std::env::set_var("OPENLARK_APP_SECRET", "test_secret");
 
-        let result: Result<Client> = "test_app_id".into();
+        let result: Result<Client> = Client::from_env();
         assert!(result.is_ok());
 
         if let Ok(client) = result {

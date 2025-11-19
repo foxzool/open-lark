@@ -1234,7 +1234,9 @@ mod tests {
         let raw_resp = RawResponse {
             code: 0,
             msg: "success".to_string(),
-            err: None,
+            request_id: None,
+            data: None,
+            error: None,
         };
 
         let resp = AppAccessTokenResp {
@@ -1262,7 +1264,9 @@ mod tests {
         let raw_resp = RawResponse {
             code: 0,
             msg: "success".to_string(),
-            err: None,
+            request_id: None,
+            data: None,
+            error: None,
         };
 
         let resp = TenantAccessTokenResp {
@@ -1386,7 +1390,9 @@ mod tests {
         let raw_resp = RawResponse {
             code: 0,
             msg: "success".to_string(),
-            err: None,
+            request_id: None,
+            data: None,
+            error: None,
         };
 
         let app_resp = AppAccessTokenResp {
@@ -1459,7 +1465,9 @@ mod tests {
             raw_response: crate::api::RawResponse {
                 code: 0,
                 msg: "success".to_string(),
-                err: None,
+                request_id: None,
+                data: None,
+                error: None,
             },
             expire: 3600,
             app_access_token: "test_success_token".to_string(),
@@ -1485,7 +1493,7 @@ mod tests {
             raw_response: crate::api::RawResponse {
                 code: 40001,
                 msg: "invalid app_id".to_string(),
-                err: None,
+                error: None,
             },
             expire: 0,
             app_access_token: "".to_string(),
@@ -1509,7 +1517,9 @@ mod tests {
             raw_response: crate::api::RawResponse {
                 code: 0,
                 msg: "success".to_string(),
-                err: None,
+                request_id: None,
+                data: None,
+                error: None,
             },
             expire: 7200,
             tenant_access_token: "test_tenant_token".to_string(),
@@ -1535,7 +1545,7 @@ mod tests {
             raw_response: crate::api::RawResponse {
                 code: 40002,
                 msg: "invalid tenant_key".to_string(),
-                err: None,
+                error: None,
             },
             expire: 0,
             tenant_access_token: "".to_string(),
@@ -2160,7 +2170,9 @@ mod tests {
             raw_response: crate::api::RawResponse {
                 code: 0,
                 msg: "success".to_string(),
-                err: None,
+                request_id: None,
+                data: None,
+                error: None,
             },
             expire: 3600,
             app_access_token: "expiry_test_token".to_string(),

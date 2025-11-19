@@ -87,8 +87,9 @@ mod tests {
     #[test]
     fn test_hr_service_creation() {
         let config = Config::default();
-        let registry = ServiceRegistry::new(&Arc::new(config));
-        let service = HRService::new(&config, &registry);
+        let config_arc = Arc::new(config);
+        let registry = ServiceRegistry::new(&config_arc);
+        let service = HRService::new(&config_arc, &registry);
 
         // 基本创建测试
         assert_eq!(service.config.app_id, "");
@@ -97,8 +98,9 @@ mod tests {
     #[tokio::test]
     async fn test_list_employees() {
         let config = Config::default();
-        let registry = ServiceRegistry::new(&Arc::new(config));
-        let service = HRService::new(&config, &registry);
+        let config_arc = Arc::new(config);
+        let registry = ServiceRegistry::new(&config_arc);
+        let service = HRService::new(&config_arc, &registry);
 
         let result = service
             .list_employees(Some("open_id"), Some(20), None)
@@ -114,8 +116,9 @@ mod tests {
     #[tokio::test]
     async fn test_get_employee_info() {
         let config = Config::default();
-        let registry = ServiceRegistry::new(&Arc::new(config));
-        let service = HRService::new(&config, &registry);
+        let config_arc = Arc::new(config);
+        let registry = ServiceRegistry::new(&config_arc);
+        let service = HRService::new(&config_arc, &registry);
 
         let result = service.get_employee_info("test_user", "open_id").await;
 

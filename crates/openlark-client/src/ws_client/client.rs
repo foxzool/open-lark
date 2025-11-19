@@ -11,7 +11,7 @@ use futures_util::{
 };
 use lark_websocket_protobuf::pbbp2::{Frame, Header};
 use log::{debug, error, info, trace};
-use prost::{Message as ProstMessage, Message as ProstTrait};
+use prost::Message as ProstMessage;
 use reqwest::Client;
 use serde::Deserialize;
 use serde_json::json;
@@ -26,9 +26,30 @@ use url::Url;
 
 use super::{state_machine::StateMachineEvent, FrameHandler, WebSocketStateMachine};
 use openlark_core::{
-    api::Response, cache::QuickCache, constants::FEISHU_BASE_URL,
-    event::dispatcher::EventDispatcherHandler,
+    api::Response,
+    cache::QuickCache,
+    constants::FEISHU_BASE_URL,
+    // event::dispatcher::EventDispatcherHandler, // TODO: 需要实现 event 模块
 };
+
+// 临时类型占位符，等待 event 模块实现
+#[derive(Debug, Clone)]
+pub struct EventDispatcherHandler;
+
+impl EventDispatcherHandler {
+    pub fn builder() -> Self {
+        Self
+    }
+
+    pub fn build(self) -> Self {
+        self
+    }
+
+    pub fn do_without_validation(&self, _payload: &[u8]) -> Result<(), String> {
+        // 临时实现，等待实际的 event 模块实现
+        Ok(())
+    }
+}
 
 const END_POINT_URL: &str = "/callback/ws/endpoint";
 const HEARTBEAT_TIMEOUT: Duration = Duration::from_secs(120);

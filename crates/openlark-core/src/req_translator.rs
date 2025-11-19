@@ -108,12 +108,12 @@ mod tests {
         ];
 
         for method in methods.iter() {
-            let mut api_req = match &*method {
-                Method::GET => ApiRequest::get("https://open.feishu.cn/test/path"),
-                Method::POST => ApiRequest::post("https://open.feishu.cn/test/path"),
-                Method::PUT => ApiRequest::put("https://open.feishu.cn/test/path"),
-                Method::DELETE => ApiRequest::delete("https://open.feishu.cn/test/path"),
-                Method::PATCH => ApiRequest::get("https://open.feishu.cn/test/path"), // 使用GET作为fallback
+            let mut api_req = match *method {
+                reqwest::Method::GET => ApiRequest::get("https://open.feishu.cn/test/path"),
+                reqwest::Method::POST => ApiRequest::post("https://open.feishu.cn/test/path"),
+                reqwest::Method::PUT => ApiRequest::put("https://open.feishu.cn/test/path"),
+                reqwest::Method::DELETE => ApiRequest::delete("https://open.feishu.cn/test/path"),
+                reqwest::Method::PATCH => ApiRequest::get("https://open.feishu.cn/test/path"), // 使用GET作为fallback
                 _ => ApiRequest::get("https://open.feishu.cn/test/path"),
             };
 

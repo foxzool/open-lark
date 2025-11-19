@@ -161,7 +161,7 @@ mod tests {
         assert!(auth_error.is_auth_error());
         assert!(!auth_error.is_retryable());
 
-        let config_error = Error::InvalidConfig("配置缺失".to_string());
+        let config_error = Error::InvalidConfig("配置缺失");
         assert!(config_error.is_config_error());
         assert!(!config_error.is_retryable());
     }

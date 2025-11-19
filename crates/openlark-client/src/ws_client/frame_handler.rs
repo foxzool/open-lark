@@ -6,7 +6,10 @@ use serde::{Deserialize, Serialize};
 use std::time::Instant;
 
 use super::{ClientConfig, WsEvent};
-use openlark_core::event::dispatcher::EventDispatcherHandler;
+// use openlark_core::event::dispatcher::EventDispatcherHandler; // TODO: 需要实现 event 模块
+
+// 导入 client.rs 中的 EventDispatcherHandler
+use super::client::EventDispatcherHandler;
 
 /// Frame 类型
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -124,12 +127,12 @@ impl FrameHandler {
 
     /// 处理事件
     async fn process_event(
-        payload: Vec<u8>,
+        _payload: Vec<u8>,
         event_handler: &EventDispatcherHandler,
     ) -> NewWsResponse {
         let start = Instant::now();
 
-        let result = event_handler.do_without_validation(payload);
+        let result = event_handler.do_without_validation(&_payload);
         let elapsed = start.elapsed().as_millis();
 
         match result {
@@ -222,7 +225,7 @@ impl NewWsResponse {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::event::dispatcher::EventDispatcherHandler;
+    // use crate::event::dispatcher::EventDispatcherHandler; // TODO: 需要实现 event 模块
     use lark_websocket_protobuf::pbbp2::Header;
     use tokio::sync::mpsc;
 

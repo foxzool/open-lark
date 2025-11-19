@@ -2,42 +2,43 @@
 //!
 //! 根据feature标志动态加载和配置服务
 
-use crate::{Config, Result, ServiceRegistry, ServiceDescriptor};
+use crate::{Config, Result, ServiceDescriptor, ServiceRegistry};
 
 /// 🔥 功能加载器 - 编译时feature驱动加载
 ///
 /// 根据feature标志动态加载crates，提供类型安全的服务发现
+#[derive(Debug, Clone, Copy)]
 pub struct FeatureLoader;
 
 impl FeatureLoader {
     /// 🚀 加载所有启用的服务
-    pub async fn load_services(config: &Config, registry: &ServiceRegistry) -> Result<()> {
+    pub async fn load_services(_config: &Config, registry: &ServiceRegistry) -> Result<()> {
         tracing::debug!("开始加载启用的服务");
 
         // 根据feature标志加载对应的服务
         #[cfg(feature = "communication")]
         {
-            Self::load_communication_service(config, registry).await?;
+            Self::load_communication_service(_config, registry).await?;
         }
 
         #[cfg(feature = "hr")]
         {
-            Self::load_hr_service(config, registry).await?;
+            Self::load_hr_service(_config, registry).await?;
         }
 
         #[cfg(feature = "docs")]
         {
-            Self::load_docs_service(config, registry).await?;
+            Self::load_docs_service(_config, registry).await?;
         }
 
         #[cfg(feature = "ai")]
         {
-            Self::load_ai_service(config, registry).await?;
+            Self::load_ai_service(_config, registry).await?;
         }
 
         #[cfg(feature = "auth")]
         {
-            Self::load_auth_service(config, registry).await?;
+            Self::load_auth_service(_config, registry).await?;
         }
 
         tracing::info!("所有启用的服务加载完成");
@@ -46,7 +47,7 @@ impl FeatureLoader {
 
     /// 📡 加载通讯服务
     #[cfg(feature = "communication")]
-    async fn load_communication_service(config: &Config, registry: &ServiceRegistry) -> Result<()> {
+    async fn load_communication_service(_config: &Config, registry: &ServiceRegistry) -> Result<()> {
         tracing::debug!("加载通讯服务");
 
         // 创建服务描述符
@@ -66,7 +67,7 @@ impl FeatureLoader {
 
     /// 👥 加载HR服务
     #[cfg(feature = "hr")]
-    async fn load_hr_service(config: &Config, registry: &ServiceRegistry) -> Result<()> {
+    async fn load_hr_service(_config: &Config, registry: &ServiceRegistry) -> Result<()> {
         tracing::debug!("加载HR服务");
 
         let descriptor = ServiceDescriptor::new("hr", "HRService")
@@ -83,7 +84,7 @@ impl FeatureLoader {
 
     /// 📄 加载文档服务
     #[cfg(feature = "docs")]
-    async fn load_docs_service(config: &Config, registry: &ServiceRegistry) -> Result<()> {
+    async fn load_docs_service(_config: &Config, registry: &ServiceRegistry) -> Result<()> {
         tracing::debug!("加载文档服务");
 
         let descriptor = ServiceDescriptor::new("docs", "DocsService")
@@ -100,7 +101,7 @@ impl FeatureLoader {
 
     /// 🤖 加载AI服务
     #[cfg(feature = "ai")]
-    async fn load_ai_service(config: &Config, registry: &ServiceRegistry) -> Result<()> {
+    async fn load_ai_service(_config: &Config, registry: &ServiceRegistry) -> Result<()> {
         tracing::debug!("加载AI服务");
 
         let descriptor = ServiceDescriptor::new("ai", "AIService")
@@ -117,7 +118,7 @@ impl FeatureLoader {
 
     /// 🔐 加载认证服务
     #[cfg(feature = "auth")]
-    async fn load_auth_service(config: &Config, registry: &ServiceRegistry) -> Result<()> {
+    async fn load_auth_service(_config: &Config, registry: &ServiceRegistry) -> Result<()> {
         tracing::debug!("加载认证服务");
 
         let descriptor = ServiceDescriptor::new("auth", "AuthService")
@@ -248,7 +249,7 @@ pub struct DependencyIssue {
 }
 
 /// 🔍 问题严重程度
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub enum DependencySeverity {
     /// ⚠️ 警告
     Warning,
@@ -406,9 +407,18 @@ mod tests {
             FeatureLoader::is_feature_enabled("hr"),
             cfg!(feature = "hr")
         );
-        assert_eq!(FeatureLoader::is_enabled("docs"), cfg!(feature = "docs"));
-        assert_eq!(FeatureLoader::is_enabled("ai"), cfg!(feature = "ai"));
-        assert_eq!(FeatureLoader::is_enabled("auth"), cfg!(feature = "auth"));
+        assert_eq!(
+            FeatureLoader::is_feature_enabled("docs"),
+            cfg!(feature = "docs")
+        );
+        assert_eq!(
+            FeatureLoader::is_feature_enabled("ai"),
+            cfg!(feature = "ai")
+        );
+        assert_eq!(
+            FeatureLoader::is_feature_enabled("auth"),
+            cfg!(feature = "auth")
+        );
     }
 
     #[test]
