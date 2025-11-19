@@ -1,44 +1,50 @@
 [workspace]
 resolver = "2"
 members = [
-    "crates/open-lark-core",
-    "crates/open-lark-communication",
-    "crates/open-lark-collaboration",
-    "crates/open-lark-hr-suite",
-    "crates/open-lark-ai-platform",
-    "crates/open-lark-enterprise",
-    "crates/open-lark-integrations",
-    "crates/open-lark-extensions",
-    "crates/protobuf",
-    "tools",
+    "crates/openlark-core",
+    # "crates/openlark-docs", # 暂时移除 - 需要完成 legacy_client 迁移
+    "crates/openlark-auth",
+    "crates/openlark-client",
+    "crates/openlark-ai",
+    "crates/openlark-communication",
+    "crates/openlark-protocol",
+    "crates/openlark-application",
+    "crates/openlark-approval",
+    "crates/openlark-admin",
+    "crates/openlark-apass",
+    "crates/openlark-calendar",
+    "crates/openlark-collab",
+    "crates/openlark-helpdesk",
+    "crates/openlark-hire",
+    "crates/openlark-hr",
+    "crates/openlark-lingo",
+    "crates/openlark-mail",
+    "crates/openlark-meeting",
+    "crates/openlark-people",
+    "crates/openlark-task",
+    "examples",
 ]
 
 [workspace.package]
 version = "0.15.0-dev"
 edition = "2021"
+rust-version = "1.75"
 authors = ["ZoOL <zhooul@gmail.com>"]
 license = "Apache-2.0"
 repository = "https://github.com/foxzool/open-lark"
 homepage = "https://github.com/foxzool/open-lark"
 documentation = "https://docs.rs/open-lark"
+description = "飞书开放平台 Rust SDK - 企业级 API 客户端"
+keywords = ["feishu", "lark", "api", "sdk", "rust"]
+categories = ["api-bindings", "web-programming", "development-tools"]
 
 [workspace.dependencies]
-# Internal dependencies (shared version management)
-open-lark-core = { path = "crates/open-lark-core", version = "0.15.0-dev" }
-open-lark-communication = { path = "crates/open-lark-communication", version = "0.15.0-dev" }
-open-lark-collaboration = { path = "crates/open-lark-collaboration", version = "0.15.0-dev" }
-open-lark-hr-suite = { path = "crates/open-lark-hr-suite", version = "0.15.0-dev" }
-open-lark-ai-platform = { path = "crates/open-lark-ai-platform", version = "0.15.0-dev" }
-open-lark-enterprise = { path = "crates/open-lark-enterprise", version = "0.15.0-dev" }
-open-lark-integrations = { path = "crates/open-lark-integrations", version = "0.15.0-dev" }
-open-lark-extensions = { path = "crates/open-lark-extensions", version = "0.15.0-dev" }
-lark-websocket-protobuf = { path = "crates/protobuf", version = "0.1.1" }
-
 # External dependencies (shared version management)
 anyhow = "1.0.86"
 async-trait = "0.1.83"
 base64 = "0.22.1"
 chrono = { version = "0.4.38", features = ["serde"] }
+futures = "0.3.30"
 futures-util = { version = "0.3.30", default-features = false, features = [
     "sink",
     "std",
@@ -75,731 +81,771 @@ tokio-tungstenite = { version = "0.23", features = [
 ] }
 walkdir = "2.4"
 regex = "1.10"
+uuid = { version = "1.6", features = ["v4", "serde"] }
+lark-websocket-protobuf = "0.1"
 
-# Dev dependencies
-dotenvy = "0.15.7"
-env_logger = "0.11.3"
-uuid = { version = "1.8.0", features = ["v4"] }
-criterion = { version = "0.5", features = ["html_reports", "async_tokio"] }
-rstest = "0.18"
-proptest = "1"
-serial_test = "3"
-tempfile = "3"
-test-log = { version = "0.2", features = ["trace"] }
+# Internal workspace dependencies
+openlark-core = { path = "crates/openlark-core" }
+openlark-auth = { path = "crates/openlark-auth" }
+openlark-client = { path = "crates/openlark-client" }
+# openlark-docs = { path = "crates/openlark-docs" } # 暂时移除 - 需要完成 legacy_client 迁移
+openlark-hr = { path = "crates/openlark-hr" }
+openlark-ai = { path = "crates/openlark-ai" }
+openlark-communication = { path = "crates/openlark-communication" }
+openlark-protocol = { path = "crates/openlark-protocol" }
+openlark-application = { path = "crates/openlark-application" }
+openlark-approval = { path = "crates/openlark-approval" }
+openlark-apass = { path = "crates/openlark-apass" }
+openlark-calendar = { path = "crates/openlark-calendar" }
+openlark-collab = { path = "crates/openlark-collab" }
+openlark-helpdesk = { path = "crates/openlark-helpdesk" }
+openlark-hire = { path = "crates/openlark-hire" }
+openlark-lingo = { path = "crates/openlark-lingo" }
+openlark-mail = { path = "crates/openlark-mail" }
+openlark-meeting = { path = "crates/openlark-meeting" }
+openlark-people = { path = "crates/openlark-people" }
+openlark-task = { path = "crates/openlark-task" }
+# Test dependencies shared across workspace
+rstest = "0.19"
+proptest = "1.0"
+serial_test = "3.0"
+tempfile = "3.8"
+test-log = "0.2"
 tracing-test = "0.2"
 wiremock = "0.6"
 once_cell = "1.19"
 mockall = "0.12"
 
-# Legacy package configuration for backward compatibility
-[package]
-name = "open-lark"
-version.workspace = true
-edition.workspace = true
-authors.workspace = true
-readme = "README.md"
-description = "Enterprise-grade Lark/Feishu Open API SDK with comprehensive Chinese documentation and advanced error handling"
-keywords = ["sdk", "feishu", "lark", "api"]
-categories = ["api-bindings"]
-documentation.workspace = true
-repository.workspace = true
-homepage.workspace = true
-license.workspace = true
-
-[features]
-default = ["communication"]
-benchmarks = []
-dev-tests = []
-integration-tests = []
-
-# New feature system based on crate groups
-communication = ["open-lark-communication"]
-collaboration = ["communication", "open-lark-collaboration"]
-hr-suite = ["communication", "open-lark-hr-suite"]
-ai-platform = ["communication", "open-lark-ai-platform"]
-enterprise = ["communication", "open-lark-enterprise"]
-extensions = ["open-lark-extensions"]
-event = []
-integrations = ["open-lark-integrations"]
-complete = ["communication", "collaboration", "hr-suite", "ai-platform", "enterprise", "extensions", "integrations"]
-
-# Legacy feature mapping for backward compatibility
-im = ["communication"]
-cloud-docs = ["collaboration"]
-docx = ["cloud-docs"]  # 向后兼容：docx映射到cloud-docs
-drive = ["cloud-docs"]  # 向后兼容：drive映射到cloud-docs
-contact = ["communication"]
-group = ["communication"]
-authentication = ["communication"]
-search = ["communication"]
-acs = ["open-lark-extensions"]
-admin = ["enterprise"]
-analytics = ["enterprise"]
-apaas = ["enterprise"]
-auth = ["enterprise"]
-authen = ["auth"]  # 向后兼容：authen映射到auth
-ai = ["ai-platform"]
-aily = ["ai-platform"]
-app_engine = ["enterprise"]
-baike = ["ai-platform"]
-apass = ["open-lark-extensions"]
-application = ["open-lark-integrations"]
-base = ["collaboration"]
-board = ["open-lark-extensions"]
-approval = ["collaboration"]
-attendance = ["hr-suite"]
-bot = ["open-lark-integrations"]
-calendar = ["collaboration"]
-cardkit = ["open-lark-integrations"]
-ccm = ["collaboration"]
-corehr = ["hr-suite"]
-compensation-management = ["hr-suite"]
-directory = ["enterprise"]
-ehr = ["hr-suite"]
-elearning = ["open-lark-extensions"]
-feishu_people = ["hr-suite"]
-helpdesk = ["open-lark-extensions"]
-hire = ["hr-suite"]
-human-authentication = ["open-lark-extensions"]
-lingo = ["ai-platform"]
-mail = ["open-lark-integrations"]
-mdm = ["open-lark-extensions"]
-meeting_room = ["collaboration"]
-minutes = ["collaboration"]
-moments = ["open-lark-extensions"]
-okr = ["hr-suite"]
-passport = ["communication"]
-payroll = ["hr-suite"]
-performance = ["hr-suite"]
-personal-settings = ["open-lark-extensions"]
-report = ["open-lark-extensions"]
-security-and-compliance = ["enterprise"]
-security_and_compliance = ["enterprise"]
-task = ["collaboration"]
-tenant = ["enterprise"]
-tenant-tag = ["enterprise"]
-trust-party = ["open-lark-extensions"]
-vc = ["open-lark-integrations"]
-verification = ["open-lark-extensions"]
-workplace = ["open-lark-extensions"]
-
-# WebSocket support
-websocket = ["tokio-tungstenite", "prost"]
-
-# OpenTelemetry support
-otel = ["opentelemetry", "opentelemetry_sdk", "opentelemetry-otlp", "tracing-opentelemetry"]
-
-[dependencies]
-open-lark-core = { workspace = true }
-open-lark-communication = { workspace = true, optional = true }
-open-lark-collaboration = { workspace = true, optional = true }
-open-lark-hr-suite = { workspace = true, optional = true }
-open-lark-ai-platform = { workspace = true, optional = true }
-open-lark-enterprise = { workspace = true, optional = true }
-open-lark-integrations = { workspace = true, optional = true }
-open-lark-extensions = { workspace = true, optional = true }
-
-# Re-export workspace dependencies for compatibility
-anyhow = { workspace = true }
-async-trait = { workspace = true }
-base64 = { workspace = true }
-chrono = { workspace = true }
-futures-util = { workspace = true }
-hmac = { workspace = true }
-log = { workspace = true }
-tracing = { workspace = true }
-tracing-subscriber = { workspace = true }
-opentelemetry = { workspace = true, optional = true }
-opentelemetry_sdk = { workspace = true, optional = true }
-opentelemetry-otlp = { workspace = true, optional = true }
-tracing-opentelemetry = { workspace = true, optional = true }
-prost = { workspace = true, optional = true }
-quick_cache = { workspace = true }
-reqwest = { workspace = true }
-rand = { workspace = true }
-simd-adler32 = { workspace = true }
-serde_repr = { workspace = true }
-serde = { workspace = true }
-serde_json = { workspace = true }
-sha2 = { workspace = true }
-urlencoding = { workspace = true }
-strum = { workspace = true }
-strum_macros = { workspace = true }
-thiserror = { workspace = true }
-tokio = { workspace = true }
-url = { workspace = true }
-tokio-tungstenite = { workspace = true, optional = true }
-walkdir = { workspace = true }
-regex = { workspace = true }
-
-[dev-dependencies]
-dotenvy = { workspace = true }
-env_logger = { workspace = true }
-uuid = { workspace = true }
-criterion = { workspace = true }
-rstest = { workspace = true }
-proptest = { workspace = true }
-serial_test = { workspace = true }
-tempfile = { workspace = true }
-test-log = { workspace = true }
-tracing-test = { workspace = true }
-wiremock = { workspace = true }
-once_cell = { workspace = true }
-mockall = { workspace = true }
-
-# -------------------------------------------
-# Benches
-# -------------------------------------------
-
-[[bench]]
-name = "json_parsing_bench"
-harness = false
-required-features = ["benchmarks"]
-
-[[bench]]
-name = "websocket_frame_bench"
-harness = false
-required-features = ["benchmarks", "websocket"]
-
-[[bench]]
-name = "token_performance_bench"
-harness = false
-required-features = ["benchmarks"]
-
-[[bench]]
-name = "api_throughput_bench"
-harness = false
-required-features = ["benchmarks"]
-
-# ===========================================
-# Tools
-# ===========================================
-
-[[bin]]
-name = "api_consistency_checker"
-path = "tools/api_consistency_checker.rs"
-
-[[bin]]
-name = "enhanced_api_checker"
-path = "tools/enhanced_api_checker.rs"
-[[bin]]
-name = "api_compatibility_tester"
-path = "tools/api_compatibility_tester.rs"
-
-[[bin]]
-name = "service_template_generator"
-path = "tools/service_template_generator.rs"
-
-[[bin]]
-name = "simple_template_generator"
-path = "tools/simple_template_generator.rs"
-
-# ===========================================
-# Examples
-# ===========================================
-
-[[example]]
-name = "client_setup"
-path = "examples/basic/client_setup.rs"
-
-[[example]]
-name = "event_handler"
-path = "examples/basic/event_handler.rs"
-required-features = ["websocket", "im", "contact", "cloud-docs", "calendar", "vc", "approval"]
-
-[[example]]
-name = "acs_example"
-path = "examples/api/acs_example.rs"
-required-features = ["acs"]
-
-[[example]]
-name = "auth_example"
-path = "examples/api/auth_example.rs"
-required-features = ["auth"]
-
-[[example]]
-name = "apass_example"
-path = "examples/api/apass_example.rs"
-required-features = ["apass"]
-
-[[example]]
-name = "websocket_client"
-path = "examples/basic/websocket_client.rs"
-required-features = ["websocket", "im"]
-
-[[example]]
-name = "enhanced_drive_operations"
-path = "examples/api/enhanced_drive_operations.rs"
-required-features = ["cloud-docs"]
-
-[[example]]
-name = "drive_builder_execute_demo"
-path = "examples/api/drive_builder_execute_demo.rs"
-required-features = ["cloud-docs"]
-
-[[example]]
-name = "cloud_docs_unified_example"
-path = "examples/api/cloud_docs_unified_example.rs"
-required-features = ["cloud-docs"]
-
-[[example]]
-name = "feature_flag_examples"
-path = "examples/api/feature_flag_examples.rs"
-required-features = ["auth", "im", "contact", "cloud-docs"]
-
-[[example]]
-name = "enterprise_scenario_with_enhanced_builder"
-path = "examples/api/enterprise_scenario_with_enhanced_builder.rs"
-required-features = ["cloud-docs"]
-
-[[example]]
-name = "multi_service_integration_enhanced"
-path = "examples/api/multi_service_integration_enhanced.rs"
-required-features = ["cloud-docs", "im", "contact"]
-
-[[example]]
-name = "enhanced_error_handling"
-path = "examples/api/enhanced_error_handling.rs"
-required-features = ["im"]
-
-# Core API Examples
-[[example]]
-name = "core_get_chat_history"
-path = "examples/core/get_chat_history.rs"
-required-features = ["im"]
-
-[[example]]
-name = "core_download_file"
-path = "examples/core/download_file.rs"
-required-features = ["cloud-docs"]
-
-[[example]]
-name = "core_list_folder"
-path = "examples/core/list_folder.rs"
-required-features = ["cloud-docs"]
-
-[[example]]
-name = "core_query_records"
-path = "examples/core/query_records.rs"
-required-features = ["cloud-docs"]
-
-[[example]]
-name = "core_create_record"
-path = "examples/core/create_record.rs"
-required-features = ["cloud-docs"]
-
-[[example]]
-name = "core_read_write_sheet"
-path = "examples/core/read_write_sheet.rs"
-required-features = ["cloud-docs"]
-
-[[example]]
-name = "core_create_sheet"
-path = "examples/core/create_sheet.rs"
-required-features = ["cloud-docs"]
-
-[[example]]
-name = "sheets_v3_basic_example"
-path = "examples/api/sheets_v3_basic_example.rs"
-required-features = ["cloud-docs"]
-
-[[example]]
-name = "sheets_v2_update_cell"
-path = "examples/api/sheets_v2_update_cell.rs"
-required-features = ["cloud-docs"]
-
-[[example]]
-name = "batch_range_read_example"
-path = "examples/api/sheets/batch_range_read_example.rs"
-required-features = ["cloud-docs"]
-
-[[example]]
-name = "spreadsheet_info_example"
-path = "examples/api/sheets/spreadsheet_info_example.rs"
-required-features = ["cloud-docs"]
-
-[[example]]
-name = "sheets_v2_batch_read"
-path = "examples/api/sheets_v2_batch_read.rs"
-required-features = ["cloud-docs"]
-
-[[example]]
-name = "sheets_v2_batch_write"
-path = "examples/api/sheets_v2_batch_write.rs"
-required-features = ["cloud-docs"]
-
-[[example]]
-name = "sheets_v2_image_write"
-path = "examples/api/sheets_v2_image_write.rs"
-required-features = ["cloud-docs"]
-
-[[example]]
-name = "sheets_v2_single_write"
-path = "examples/api/sheets_v2_single_write.rs"
-required-features = ["cloud-docs"]
-
-[[example]]
-name = "core_query_attendance"
-path = "examples/core/query_attendance.rs"
-required-features = ["attendance"]
-
-[[example]]
-name = "core_process_leave_approval"
-path = "examples/core/process_leave_approval.rs"
-required-features = ["attendance"]
-
-[[example]]
-name = "core_search_user"
-path = "examples/core/search_user.rs"
-required-features = ["search"]
-
-[[example]]
-name = "search_v1_user_demo"
-path = "examples/api/search_v1_user_demo.rs"
-required-features = ["search"]
-
-[[example]]
-name = "core_refresh_token"
-path = "examples/core/refresh_token.rs"
-required-features = ["authentication"]
-
-[[example]]
-name = "permission_owned_demo"
-path = "examples/api/permission_owned_demo.rs"
-required-features = ["cloud-docs"]
-
-[[example]]
-name = "calendar_demo"
-path = "examples/api/calendar_demo.rs"
-required-features = ["calendar"]
-
-[[example]]
-name = "calendar_comprehensive_example"
-path = "examples/api/calendar_comprehensive_example.rs"
-required-features = ["calendar"]
-
-[[example]]
-name = "cardkit_demo"
-path = "examples/api/cardkit_demo.rs"
-required-features = ["cardkit"]
-
-[[example]]
-name = "directory_demo"
-path = "examples/api/directory_demo.rs"
-required-features = ["directory"]
-
-[[example]]
-name = "directory_v1_employee_extended"
-path = "examples/api/directory_v1_employee_extended.rs"
-required-features = ["directory"]
-
-[[example]]
-name = "directory_v1_department_extended"
-path = "examples/api/directory_v1_department_extended.rs"
-required-features = ["directory"]
-
-[[example]]
-name = "group_demo"
-path = "examples/api/group_demo.rs"
-required-features = ["group"]
-
-[[example]]
-name = "im_v1_demo"
-path = "examples/api/im_v1_demo.rs"
-required-features = ["im"]
-
-[[example]]
-name = "im_v2_demo"
-path = "examples/api/im_v2_demo.rs"
-required-features = ["im"]
-
-[[example]]
-name = "tenant_tag_demo"
-path = "examples/api/tenant_tag_demo.rs"
-required-features = ["tenant-tag"]
-
-[[example]]
-name = "tenant_v2_query"
-path = "examples/api/tenant_v2_query.rs"
-required-features = ["tenant"]
-
-[[example]]
-name = "verification_v1_get"
-path = "examples/api/verification_v1_get.rs"
-required-features = ["verification"]
-
-[[example]]
-name = "personal_settings_v1_system_status"
-path = "examples/api/personal_settings_v1_system_status.rs"
-required-features = ["personal-settings"]
-
-[[example]]
-name = "search_v2_comprehensive"
-path = "examples/api/search_v2_comprehensive.rs"
-required-features = ["search"]
-
-[[example]]
-name = "vc_v1"
-path = "examples/api/vc_v1.rs"
-required-features = ["vc"]
-
-[[example]]
-name = "minutes_v1"
-path = "examples/api/minutes_v1.rs"
-required-features = ["minutes"]
-
-[[example]]
-name = "approval_demo"
-path = "examples/api/approval_demo.rs"
-required-features = ["approval"]
-
-[[example]]
-name = "bot_demo"
-path = "examples/api/bot_demo.rs"
-required-features = ["bot"]
-
-[[example]]
-name = "board_example"
-path = "examples/api/board_example.rs"
-required-features = ["board"]
-
-[[example]]
-name = "event_example"
-path = "examples/api/event_example.rs"
-required-features = ["event"]
-
-[[example]]
-name = "get_outbound_ip"
-path = "examples/api/get_outbound_ip.rs"
-required-features = ["event"]
-
-[[example]]
-name = "helpdesk_demo"
-path = "examples/api/helpdesk_demo.rs"
-required-features = ["helpdesk"]
-
-[[example]]
-name = "task_demo"
-path = "examples/api/task_demo.rs"
-required-features = ["task"]
-
-[[example]]
-name = "mail_demo"
-path = "examples/api/mail_demo.rs"
-required-features = ["mail"]
-
-[[example]]
-name = "application_demo"
-path = "examples/api/application_demo.rs"
-required-features = ["application"]
-
-[[example]]
-name = "ai_comprehensive"
-path = "examples/api/ai_comprehensive.rs"
-required-features = ["ai"]
-
-[[example]]
-name = "aily_v1_example"
-path = "examples/api/aily_v1_example.rs"
-required-features = ["aily"]
-
-[[example]]
-name = "admin_demo"
-path = "examples/api/admin_demo.rs"
-required-features = ["admin"]
-
-[[example]]
-name = "moments_demo"
-path = "examples/api/moments_demo.rs"
-required-features = ["moments"]
-
-[[example]]
-name = "ehr_v1_demo"
-path = "examples/api/ehr_v1_demo.rs"
-required-features = ["ehr"]
-
-[[example]]
-name = "corehr_demo"
-path = "examples/api/corehr_demo.rs"
-required-features = ["corehr"]
-
-[[example]]
-name = "payroll_demo"
-path = "examples/api/payroll_demo.rs"
-required-features = ["payroll"]
-
-[[example]]
-name = "hire_v1_example"
-path = "examples/api/hire_v1_example.rs"
-required-features = ["hire"]
-
-[[example]]
-name = "human_authentication_example"
-path = "examples/api/human_authentication_example.rs"
-required-features = ["human-authentication"]
-
-[[example]]
-name = "lingo_classification_repo"
-path = "examples/api/lingo_classification_repo.rs"
-required-features = ["lingo"]
-
-[[example]]
-name = "lingo_draft"
-path = "examples/api/lingo_draft.rs"
-required-features = ["lingo"]
-
-[[example]]
-name = "lingo_entity"
-path = "examples/api/lingo_entity.rs"
-required-features = ["lingo"]
-
-[[example]]
-name = "okr_example"
-path = "examples/api/okr_example.rs"
-required-features = ["okr"]
-
-[[example]]
-name = "performance_example"
-path = "examples/api/performance_example.rs"
-required-features = ["performance"]
-
-[[example]]
-name = "trust_party_organization"
-path = "examples/api/trust_party_organization.rs"
-required-features = ["trust-party"]
-
-[[example]]
-name = "trust_party_rules"
-path = "examples/api/trust_party_rules.rs"
-required-features = ["trust-party"]
-
-[[example]]
-name = "workplace_access_data"
-path = "examples/api/workplace_access_data.rs"
-required-features = ["workplace"]
-
-[[example]]
-name = "workplace_app_recommend"
-path = "examples/api/workplace_app_recommend.rs"
-required-features = ["workplace"]
-
-[[example]]
-name = "mdm_country_region"
-path = "examples/api/mdm_country_region.rs"
-required-features = ["mdm"]
-
-[[example]]
-name = "mdm_user_data_relation"
-path = "examples/api/mdm_user_data_relation.rs"
-required-features = ["mdm"]
-
-[[example]]
-name = "report_v1_query_rules"
-path = "examples/api/report_v1_query_rules.rs"
-required-features = ["report"]
-
-[[example]]
-name = "report_v1_query_tasks"
-path = "examples/api/report_v1_query_tasks.rs"
-required-features = ["report"]
-
-[[example]]
-name = "report_v1_remove_rule_view"
-path = "examples/api/report_v1_remove_rule_view.rs"
-required-features = ["report"]
-
-[[example]]
-name = "elearning_v2_course_registration"
-path = "examples/api/elearning_v2_course_registration.rs"
-required-features = ["elearning"]
-
-[[example]]
-name = "elearning_v2_management"
-path = "examples/api/elearning_v2_management.rs"
-required-features = ["elearning"]
-
-[[example]]
-name = "security_and_compliance_openapi_log"
-path = "examples/api/security_and_compliance_openapi_log.rs"
-required-features = ["security-and-compliance"]
-
-[[example]]
-name = "security_and_compliance_audit_log"
-path = "examples/api/security_and_compliance_audit_log.rs"
-required-features = ["security-and-compliance"]
-
-[[example]]
-name = "security_and_compliance_v1_demo"
-path = "examples/api/security_and_compliance_v1_demo.rs"
-required-features = ["security_and_compliance"]
-
-[[example]]
-name = "contact_v3_role_management"
-path = "examples/api/contact_v3_role_management.rs"
-required-features = ["contact"]
-
-[[example]]
-name = "unified_builder_pattern"
-path = "examples/api/unified_builder_pattern.rs"
-required-features = ["contact"]
-
-[[example]]
-name = "service_observability_demo"
-path = "examples/tracing/service_observability_demo.rs"
-required-features = ["lingo"]
-
-[[example]]
-name = "opentelemetry_demo"
-path = "examples/tracing/opentelemetry_demo.rs"
-required-features = ["otel"]
-
-[[example]]
-name = "drive_builder_pattern"
-path = "examples/api/drive_builder_pattern.rs"
-required-features = ["cloud-docs"]
-
-[[example]]
-name = "im_modern_builder_pattern"
-path = "examples/api/im_modern_builder_pattern.rs"
-required-features = ["im"]
-
-[[example]]
-name = "im_file_image_builder_pattern"
-path = "examples/api/im_file_image_builder_pattern.rs"
-required-features = ["im"]
-
-[[example]]
-name = "attendance_demo"
-path = "examples/api/attendance_demo.rs"
-required-features = ["attendance"]
-
-[[example]]
-name = "shared_config_demo"
-path = "examples/shared_config_demo.rs"
-
-[[example]]
-name = "shared_config_performance"
-path = "examples/shared_config_performance.rs"
-
-[[example]]
-name = "performance_benchmark"
-path = "examples/performance/performance_benchmark.rs"
+# Examples需要的依赖
+dotenvy = "0.15"
+env_logger = "0.10"
+criterion = "0.5"
+
+# Dev dependencies
+#
+## Legacy package configuration for backward compatibility
+#[package]
+#name = "open-lark"
+#version.workspace = true
+#edition.workspace = true
+#authors.workspace = true
+#readme = "README.md"
+#description = "Enterprise-grade Lark/Feishu Open API SDK with comprehensive Chinese documentation and advanced error handling"
+#keywords = ["sdk", "feishu", "lark", "api"]
+#categories = ["api-bindings"]
+#documentation.workspace = true
+#repository.workspace = true
+#homepage.workspace = true
+#license.workspace = true
+#
+#[features]
+#default = ["openlark-communication"]
+#benchmarks = []
+#dev-tests = []
+#integration-tests = []
+#
+## New feature system based on crate groups
+#communication = ["openlark-communication"]
+#collaboration = ["openlark-communication", "openlark-docs"]
+#hr-suite = ["openlark-communication", "openlark-hr"]
+#ai-platform = ["openlark-communication", "openlark-ai"]
+## enterprise = ["openlark-communication", "openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+## extensions = []  # 移除空feature
+## event = []  # 移除空feature
+## integrations = []  # 移除空feature
+#auth = ["openlark-auth"]
+## complete = ["openlark-communication", "openlark-docs", "openlark-hr", "openlark-ai", "openlark-enterprise", "auth"]  # 暂时注释，等enterprise crate实现完成后再启用
+#
+## Legacy feature mapping for backward compatibility
+#im = ["openlark-communication"]
+#cloud-docs = ["openlark-docs/all-cloud-docs"]
+## 具体云文档功能映射
+#docs = ["openlark-docs/docs"]
+#sheets = ["openlark-docs/sheets"]
+#bitable = ["openlark-docs/bitable"]
+#wiki = ["openlark-docs/wiki"]
+#drive = ["openlark-docs/drive"]
+#ccm = ["openlark-docs/ccm"]
+## 向后兼容
+#docx = ["docs"]  # 向后兼容：docx映射到docs
+#sheet = ["sheets"]  # 向后兼容：sheet映射到sheets
+#contact = ["openlark-communication"]
+#group = ["openlark-communication"]
+#authentication = ["openlark-communication"]
+#search = ["openlark-communication"]
+#
+## New client-based features
+#client-v2 = ["openlark-client/client"]
+#client-v2-docs = ["openlark-client/client", "openlark-client/docs"]
+#client-v2-communication = ["openlark-client/client", "openlark-client/communication"]
+#client-v2-all = ["openlark-client/client", "openlark-client/all-services"]
+## admin = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+## analytics = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+## apaas = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+## auth已经移动到新的feature系统
+#authen = ["auth"]  # 向后兼容：authen映射到auth
+#ai = ["openlark-ai"]
+#aily = ["openlark-ai"]
+## app_engine = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+#baike = ["openlark-ai"]
+## apass = []  # 移除空feature
+## application = []  # 移除空feature
+#base = ["bitable"]  # 改为具体的 bitable 功能
+## board = []  # 移除空feature
+#approval = ["openlark-docs/all-cloud-docs"]
+#attendance = ["openlark-hr"]
+#bot = ["openlark-communication"]
+#calendar = ["openlark-docs/all-cloud-docs"]
+#cardkit = ["openlark-communication"]
+## ccm = ["openlark-docs/ccm"]  # 使用具体的 ccm 功能（上面已经定义过了）
+#corehr = ["openlark-hr"]
+#compensation-management = ["openlark-hr"]
+## directory = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+#ehr = ["openlark-hr"]
+## elearning = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+#feishu_people = ["openlark-hr"]
+## helpdesk = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+#hire = ["openlark-hr"]
+## human-authentication = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+#lingo = ["openlark-ai"]
+#mail = ["openlark-communication"]
+## mdm = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+#meeting_room = ["openlark-docs/all-cloud-docs"]
+#minutes = ["openlark-docs/all-cloud-docs"]
+## moments = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+#okr = ["openlark-hr"]
+#passport = ["openlark-communication"]
+#payroll = ["openlark-hr"]
+#performance = ["openlark-hr"]
+## personal-settings = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+## report = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+## security-and-compliance = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+## security_and_compliance = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+#task = ["openlark-docs/all-cloud-docs"]
+## tenant = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+## tenant-tag = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+## trust-party = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+#vc = ["openlark-communication"]
+## verification = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+## workplace = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
+#
+## WebSocket support
+#websocket = ["tokio-tungstenite", "prost"]
+#
+## OpenTelemetry support
+#otel = ["opentelemetry", "opentelemetry_sdk", "opentelemetry-otlp", "tracing-opentelemetry"]
+#
+#[dependencies]
+#openlark-core = { workspace = true }
+#openlark-auth = { workspace = true, optional = true }
+#openlark-client = { workspace = true, optional = true }
+#openlark-communication = { workspace = true, optional = true }
+#openlark-docs = { workspace = true, optional = true }
+#openlark-hr = { workspace = true, optional = true }
+#openlark-ai = { workspace = true, optional = true }
+#openlark-enterprise = { workspace = true, optional = true }
+#
+## Re-export workspace dependencies for compatibility
+#anyhow = { workspace = true }
+#async-trait = { workspace = true }
+#base64 = { workspace = true }
+#chrono = { workspace = true }
+#futures-util = { workspace = true }
+#hmac = { workspace = true }
+#log = { workspace = true }
+#tracing = { workspace = true }
+#tracing-subscriber = { workspace = true }
+#opentelemetry = { workspace = true, optional = true }
+#opentelemetry_sdk = { workspace = true, optional = true }
+#opentelemetry-otlp = { workspace = true, optional = true }
+#tracing-opentelemetry = { workspace = true, optional = true }
+#prost = { workspace = true, optional = true }
+#quick_cache = { workspace = true }
+#reqwest = { workspace = true }
+#rand = { workspace = true }
+#simd-adler32 = { workspace = true }
+#serde_repr = { workspace = true }
+#serde = { workspace = true }
+#serde_json = { workspace = true }
+#sha2 = { workspace = true }
+#urlencoding = { workspace = true }
+#strum = { workspace = true }
+#strum_macros = { workspace = true }
+#thiserror = { workspace = true }
+#tokio = { workspace = true }
+#url = { workspace = true }
+#tokio-tungstenite = { workspace = true, optional = true }
+#walkdir = { workspace = true }
+#regex = { workspace = true }
+#
+#[dev-dependencies]
+#dotenvy = { workspace = true }
+#env_logger = { workspace = true }
+#uuid = { workspace = true }
+#criterion = { workspace = true }
+#rstest = { workspace = true }
+#proptest = { workspace = true }
+#serial_test = { workspace = true }
+#tempfile = { workspace = true }
+#test-log = { workspace = true }
+#tracing-test = { workspace = true }
+#wiremock = { workspace = true }
+#once_cell = { workspace = true }
+#mockall = { workspace = true }
+#
+## -------------------------------------------
+## Benches
+## -------------------------------------------
+#
+#[[bench]]
+#name = "json_parsing_bench"
+#harness = false
+#required-features = ["benchmarks"]
+#
+#[[bench]]
+#name = "websocket_frame_bench"
+#harness = false
+#required-features = ["benchmarks", "websocket"]
+#
+#[[bench]]
+#name = "token_performance_bench"
+#harness = false
+#required-features = ["benchmarks"]
+#
+#[[bench]]
+#name = "api_throughput_bench"
+#harness = false
+#required-features = ["benchmarks"]
+#
+## ===========================================
+## Tools
+## ===========================================
+#
+#[[bin]]
+#name = "api_consistency_checker"
+#path = "tools/api_consistency_checker.rs"
+#
+#[[bin]]
+#name = "enhanced_api_checker"
+#path = "tools/enhanced_api_checker.rs"
+#[[bin]]
+#name = "api_compatibility_tester"
+#path = "tools/api_compatibility_tester.rs"
+#
+#[[bin]]
+#name = "service_template_generator"
+#path = "tools/service_template_generator.rs"
+#
+#[[bin]]
+#name = "simple_template_generator"
+#path = "tools/simple_template_generator.rs"
+#
+## ===========================================
+## Examples
+## ===========================================
+#
+#[[example]]
+#name = "client_setup"
+#path = "examples/basic/client_setup.rs"
+#
+#[[example]]
+#name = "event_handler"
+#path = "examples/basic/event_handler.rs"
+#required-features = ["websocket", "im", "contact", "cloud-docs", "calendar", "vc", "approval"]
+#
+#[[example]]
+#name = "acs_example"
+#path = "examples/api/acs_example.rs"
+#required-features = ["acs"]
+#
+#[[example]]
+#name = "auth_example"
+#path = "examples/api/auth_example.rs"
+#required-features = ["auth"]
+#
+#[[example]]
+#name = "apass_example"
+#path = "examples/api/apass_example.rs"
+#required-features = ["apass"]
+#
+#[[example]]
+#name = "websocket_client"
+#path = "examples/basic/websocket_client.rs"
+#required-features = ["websocket", "im"]
+#
+#[[example]]
+#name = "enhanced_drive_operations"
+#path = "examples/api/enhanced_drive_operations.rs"
+#required-features = ["cloud-docs"]
+#
+#[[example]]
+#name = "drive_builder_execute_demo"
+#path = "examples/api/drive_builder_execute_demo.rs"
+#required-features = ["cloud-docs"]
+#
+#[[example]]
+#name = "cloud_docs_unified_example"
+#path = "examples/api/cloud_docs_unified_example.rs"
+#required-features = ["cloud-docs"]
+#
+#[[example]]
+#name = "feature_flag_examples"
+#path = "examples/api/feature_flag_examples.rs"
+#required-features = ["auth", "im", "contact", "cloud-docs"]
+#
+#[[example]]
+#name = "enterprise_scenario_with_enhanced_builder"
+#path = "examples/api/enterprise_scenario_with_enhanced_builder.rs"
+#required-features = ["cloud-docs"]
+#
+#[[example]]
+#name = "multi_service_integration_enhanced"
+#path = "examples/api/multi_service_integration_enhanced.rs"
+#required-features = ["cloud-docs", "im", "contact"]
+#
+#[[example]]
+#name = "enhanced_error_handling"
+#path = "examples/api/enhanced_error_handling.rs"
+#required-features = ["im"]
+#
+## Core API Examples
+#[[example]]
+#name = "core_get_chat_history"
+#path = "examples/core/get_chat_history.rs"
+#required-features = ["im"]
+#
+#[[example]]
+#name = "core_download_file"
+#path = "examples/core/download_file.rs"
+#required-features = ["cloud-docs"]
+#
+#[[example]]
+#name = "core_list_folder"
+#path = "examples/core/list_folder.rs"
+#required-features = ["cloud-docs"]
+#
+#[[example]]
+#name = "core_query_records"
+#path = "examples/core/query_records.rs"
+#required-features = ["cloud-docs"]
+#
+#[[example]]
+#name = "core_create_record"
+#path = "examples/core/create_record.rs"
+#required-features = ["cloud-docs"]
+#
+#[[example]]
+#name = "core_read_write_sheet"
+#path = "examples/core/read_write_sheet.rs"
+#required-features = ["cloud-docs"]
+#
+#[[example]]
+#name = "core_create_sheet"
+#path = "examples/core/create_sheet.rs"
+#required-features = ["cloud-docs"]
+#
+#[[example]]
+#name = "sheets_v3_basic_example"
+#path = "examples/api/sheets_v3_basic_example.rs"
+#required-features = ["cloud-docs"]
+#
+#[[example]]
+#name = "sheets_v2_update_cell"
+#path = "examples/api/sheets_v2_update_cell.rs"
+#required-features = ["cloud-docs"]
+#
+#[[example]]
+#name = "batch_range_read_example"
+#path = "examples/api/sheets/batch_range_read_example.rs"
+#required-features = ["cloud-docs"]
+#
+#[[example]]
+#name = "spreadsheet_info_example"
+#path = "examples/api/sheets/spreadsheet_info_example.rs"
+#required-features = ["cloud-docs"]
+#
+#[[example]]
+#name = "sheets_v2_batch_read"
+#path = "examples/api/sheets_v2_batch_read.rs"
+#required-features = ["cloud-docs"]
+#
+#[[example]]
+#name = "sheets_v2_batch_write"
+#path = "examples/api/sheets_v2_batch_write.rs"
+#required-features = ["cloud-docs"]
+#
+#[[example]]
+#name = "sheets_v2_image_write"
+#path = "examples/api/sheets_v2_image_write.rs"
+#required-features = ["cloud-docs"]
+#
+#[[example]]
+#name = "sheets_v2_single_write"
+#path = "examples/api/sheets_v2_single_write.rs"
+#required-features = ["cloud-docs"]
+#
+#[[example]]
+#name = "core_query_attendance"
+#path = "examples/core/query_attendance.rs"
+#required-features = ["attendance"]
+#
+#[[example]]
+#name = "core_process_leave_approval"
+#path = "examples/core/process_leave_approval.rs"
+#required-features = ["attendance"]
+#
+#[[example]]
+#name = "core_search_user"
+#path = "examples/core/search_user.rs"
+#required-features = ["search"]
+#
+#[[example]]
+#name = "search_v1_user_demo"
+#path = "examples/api/search_v1_user_demo.rs"
+#required-features = ["search"]
+#
+#[[example]]
+#name = "core_refresh_token"
+#path = "examples/core/refresh_token.rs"
+#required-features = ["authentication"]
+#
+#[[example]]
+#name = "permission_owned_demo"
+#path = "examples/api/permission_owned_demo.rs"
+#required-features = ["cloud-docs"]
+#
+#[[example]]
+#name = "calendar_demo"
+#path = "examples/api/calendar_demo.rs"
+#required-features = ["calendar"]
+#
+#[[example]]
+#name = "calendar_comprehensive_example"
+#path = "examples/api/calendar_comprehensive_example.rs"
+#required-features = ["calendar"]
+#
+#[[example]]
+#name = "cardkit_demo"
+#path = "examples/api/cardkit_demo.rs"
+#required-features = ["cardkit"]
+#
+#[[example]]
+#name = "directory_demo"
+#path = "examples/api/directory_demo.rs"
+#required-features = ["directory"]
+#
+#[[example]]
+#name = "directory_v1_employee_extended"
+#path = "examples/api/directory_v1_employee_extended.rs"
+#required-features = ["directory"]
+#
+#[[example]]
+#name = "directory_v1_department_extended"
+#path = "examples/api/directory_v1_department_extended.rs"
+#required-features = ["directory"]
+#
+#[[example]]
+#name = "group_demo"
+#path = "examples/api/group_demo.rs"
+#required-features = ["group"]
+#
+#[[example]]
+#name = "im_v1_demo"
+#path = "examples/api/im_v1_demo.rs"
+#required-features = ["im"]
+#
+#[[example]]
+#name = "im_v2_demo"
+#path = "examples/api/im_v2_demo.rs"
+#required-features = ["im"]
+#
+#[[example]]
+#name = "tenant_tag_demo"
+#path = "examples/api/tenant_tag_demo.rs"
+#required-features = ["tenant-tag"]
+#
+#[[example]]
+#name = "tenant_v2_query"
+#path = "examples/api/tenant_v2_query.rs"
+#required-features = ["tenant"]
+#
+#[[example]]
+#name = "verification_v1_get"
+#path = "examples/api/verification_v1_get.rs"
+#required-features = ["verification"]
+#
+#[[example]]
+#name = "personal_settings_v1_system_status"
+#path = "examples/api/personal_settings_v1_system_status.rs"
+#required-features = ["personal-settings"]
+#
+#[[example]]
+#name = "search_v2_comprehensive"
+#path = "examples/api/search_v2_comprehensive.rs"
+#required-features = ["search"]
+#
+#[[example]]
+#name = "vc_v1"
+#path = "examples/api/vc_v1.rs"
+#required-features = ["vc"]
+#
+#[[example]]
+#name = "minutes_v1"
+#path = "examples/api/minutes_v1.rs"
+#required-features = ["minutes"]
+#
+#[[example]]
+#name = "approval_demo"
+#path = "examples/api/approval_demo.rs"
+#required-features = ["approval"]
+#
+#[[example]]
+#name = "bot_demo"
+#path = "examples/api/bot_demo.rs"
+#required-features = ["bot"]
+#
+#[[example]]
+#name = "board_example"
+#path = "examples/api/board_example.rs"
+#required-features = ["board"]
+#
+#[[example]]
+#name = "event_example"
+#path = "examples/api/event_example.rs"
+#required-features = ["event"]
+#
+#[[example]]
+#name = "get_outbound_ip"
+#path = "examples/api/get_outbound_ip.rs"
+#required-features = ["event"]
+#
+#[[example]]
+#name = "helpdesk_demo"
+#path = "examples/api/helpdesk_demo.rs"
+#required-features = ["helpdesk"]
+#
+#[[example]]
+#name = "task_demo"
+#path = "examples/api/task_demo.rs"
+#required-features = ["task"]
+#
+#[[example]]
+#name = "mail_demo"
+#path = "examples/api/mail_demo.rs"
+#required-features = ["mail"]
+#
+#[[example]]
+#name = "application_demo"
+#path = "examples/api/application_demo.rs"
+#required-features = ["application"]
+#
+#[[example]]
+#name = "ai_comprehensive"
+#path = "examples/api/ai_comprehensive.rs"
+#required-features = ["ai"]
+#
+#[[example]]
+#name = "aily_v1_example"
+#path = "examples/api/aily_v1_example.rs"
+#required-features = ["aily"]
+#
+#[[example]]
+#name = "admin_demo"
+#path = "examples/api/admin_demo.rs"
+#required-features = ["admin"]
+#
+#[[example]]
+#name = "moments_demo"
+#path = "examples/api/moments_demo.rs"
+#required-features = ["moments"]
+#
+#[[example]]
+#name = "ehr_v1_demo"
+#path = "examples/api/ehr_v1_demo.rs"
+#required-features = ["ehr"]
+#
+#[[example]]
+#name = "corehr_demo"
+#path = "examples/api/corehr_demo.rs"
+#required-features = ["corehr"]
+#
+#[[example]]
+#name = "payroll_demo"
+#path = "examples/api/payroll_demo.rs"
+#required-features = ["payroll"]
+#
+#[[example]]
+#name = "hire_v1_example"
+#path = "examples/api/hire_v1_example.rs"
+#required-features = ["hire"]
+#
+#[[example]]
+#name = "human_authentication_example"
+#path = "examples/api/human_authentication_example.rs"
+#required-features = ["human-authentication"]
+#
+#[[example]]
+#name = "lingo_classification_repo"
+#path = "examples/api/lingo_classification_repo.rs"
+#required-features = ["lingo"]
+#
+#[[example]]
+#name = "lingo_draft"
+#path = "examples/api/lingo_draft.rs"
+#required-features = ["lingo"]
+#
+#[[example]]
+#name = "lingo_entity"
+#path = "examples/api/lingo_entity.rs"
+#required-features = ["lingo"]
+#
+#[[example]]
+#name = "okr_example"
+#path = "examples/api/okr_example.rs"
+#required-features = ["okr"]
+#
+#[[example]]
+#name = "performance_example"
+#path = "examples/api/performance_example.rs"
+#required-features = ["performance"]
+#
+#[[example]]
+#name = "trust_party_organization"
+#path = "examples/api/trust_party_organization.rs"
+#required-features = ["trust-party"]
+#
+#[[example]]
+#name = "trust_party_rules"
+#path = "examples/api/trust_party_rules.rs"
+#required-features = ["trust-party"]
+#
+#[[example]]
+#name = "workplace_access_data"
+#path = "examples/api/workplace_access_data.rs"
+#required-features = ["workplace"]
+#
+#[[example]]
+#name = "workplace_app_recommend"
+#path = "examples/api/workplace_app_recommend.rs"
+#required-features = ["workplace"]
+#
+#[[example]]
+#name = "mdm_country_region"
+#path = "examples/api/mdm_country_region.rs"
+#required-features = ["mdm"]
+#
+#[[example]]
+#name = "mdm_user_data_relation"
+#path = "examples/api/mdm_user_data_relation.rs"
+#required-features = ["mdm"]
+#
+#[[example]]
+#name = "report_v1_query_rules"
+#path = "examples/api/report_v1_query_rules.rs"
+#required-features = ["report"]
+#
+#[[example]]
+#name = "report_v1_query_tasks"
+#path = "examples/api/report_v1_query_tasks.rs"
+#required-features = ["report"]
+#
+#[[example]]
+#name = "report_v1_remove_rule_view"
+#path = "examples/api/report_v1_remove_rule_view.rs"
+#required-features = ["report"]
+#
+#[[example]]
+#name = "elearning_v2_course_registration"
+#path = "examples/api/elearning_v2_course_registration.rs"
+#required-features = ["elearning"]
+#
+#[[example]]
+#name = "elearning_v2_management"
+#path = "examples/api/elearning_v2_management.rs"
+#required-features = ["elearning"]
+#
+#[[example]]
+#name = "security_and_compliance_openapi_log"
+#path = "examples/api/security_and_compliance_openapi_log.rs"
+#required-features = ["security-and-compliance"]
+#
+#[[example]]
+#name = "security_and_compliance_audit_log"
+#path = "examples/api/security_and_compliance_audit_log.rs"
+#required-features = ["security-and-compliance"]
+#
+#[[example]]
+#name = "security_and_compliance_v1_demo"
+#path = "examples/api/security_and_compliance_v1_demo.rs"
+#required-features = ["security_and_compliance"]
+#
+#[[example]]
+#name = "contact_v3_role_management"
+#path = "examples/api/contact_v3_role_management.rs"
+#required-features = ["contact"]
+#
+#[[example]]
+#name = "unified_builder_pattern"
+#path = "examples/api/unified_builder_pattern.rs"
+#required-features = ["contact"]
+#
+#[[example]]
+#name = "service_observability_demo"
+#path = "examples/tracing/service_observability_demo.rs"
+#required-features = ["lingo"]
+#
+#[[example]]
+#name = "opentelemetry_demo"
+#path = "examples/tracing/opentelemetry_demo.rs"
+#required-features = ["otel"]
+#
+#[[example]]
+#name = "drive_builder_pattern"
+#path = "examples/api/drive_builder_pattern.rs"
+#required-features = ["cloud-docs"]
+#
+#[[example]]
+#name = "im_modern_builder_pattern"
+#path = "examples/api/im_modern_builder_pattern.rs"
+#required-features = ["im"]
+#
+#[[example]]
+#name = "im_file_image_builder_pattern"
+#path = "examples/api/im_file_image_builder_pattern.rs"
+#required-features = ["im"]
+#
+#[[example]]
+#name = "attendance_demo"
+#path = "examples/api/attendance_demo.rs"
+#required-features = ["attendance"]
+#
+#[[example]]
+#name = "shared_config_demo"
+#path = "examples/shared_config_demo.rs"
+#
+#[[example]]
+#name = "shared_config_performance"
+#path = "examples/shared_config_performance.rs"
+#
+#[[example]]
+#name = "performance_benchmark"
+#path = "examples/performance/performance_benchmark.rs"
 
 # ===========================================
 # Benchmarks
 # ===========================================
 # (Benchmarks removed due to missing implementation files)
-[lints.rust]
-dead_code = "allow"
-unused_variables = "allow"
-unused_imports = "allow"
-elided_lifetimes_in_paths = "allow"
-unused_mut = "allow"
-mismatched_lifetime_syntaxes = "allow"
-
-[lints.clippy]
-all = "allow"
-derivable_impls = "allow"
-needless_lifetimes = "allow"
-too_many_arguments = "allow"
-module_inception = "allow"
+#[lints.rust]
+#dead_code = "allow"
+#unused_variables = "allow"
+#unused_imports = "allow"
+#elided_lifetimes_in_paths = "allow"
+#unused_mut = "allow"
+#mismatched_lifetime_syntaxes = "allow"
+#
+#[lints.clippy]
+#all = "allow"
+#derivable_impls = "allow"
+#needless_lifetimes = "allow"
+#too_many_arguments = "allow"
+#module_inception = "allow"

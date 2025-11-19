@@ -106,3 +106,17 @@ Thumbs.db
 # Additional Rust backup and temp files
 **/*.rs.bk
 Cargo.lock
+
+# ============================================================================
+# Claude Code Assistant - Personal Configuration
+# ============================================================================
+
+# Personal settings (never share)
+.claude/settings.local.json
+
+# Personal work plans and temporary files
+.claude/plan/
+.claude/index.json
+
+# Command execution artifacts
+.claude/commands/

@@ -1,0 +1,20 @@
+[package]
+name = "openlark-auth"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+documentation.workspace = true
+description = "Authentication module for Open-Lark SDK"
+
+[dependencies]
+openlark-core = { workspace = true }
+serde = { workspace = true }
+tokio = { workspace = true }
+serde_json = { workspace = true }
+
+[features]
+default = []
+
+# 根据ChatGPT表格，auth模块没有子模块features
