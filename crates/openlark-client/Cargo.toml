@@ -32,7 +32,7 @@ log = { workspace = true, optional = true }
 # Optional service dependencies (conditionally included based on feature flags)
 openlark-communication = { workspace = true, optional = true }
 openlark-hr = { workspace = true, optional = true }
-openlark-docs = { workspace = true, optional = true }
+# openlark-docs = { workspace = true, optional = true } # 暂时移除 - 需要完成 legacy_client 迁移
 openlark-ai = { workspace = true, optional = true }
 openlark-auth = { workspace = true, optional = true }
 
@@ -47,19 +47,19 @@ websocket = ["tokio-tungstenite", "futures-util", "lark-websocket-protobuf", "ur
 
 # Feature flags for service inclusion
 # 与新的 openlark-docs feature 分类同步
-docs = ["openlark-docs/ccm-doc"]
-sheets = ["openlark-docs/ccm-sheets"]
-bitable = ["openlark-docs/bitable"]
-wiki = ["openlark-docs/ccm-wiki"]
-drive = ["openlark-docs/ccm-drive"]
-ccm = ["openlark-docs/ccm"]
-cloud-docs = ["openlark-docs/cloud-docs"]
+# docs = ["openlark-docs/ccm-doc"] # 暂时移除 - 需要完成 legacy_client 迁移
+# sheets = ["openlark-docs/ccm-sheets"] # 暂时移除 - 需要完成 legacy_client 迁移
+# bitable = ["openlark-docs/bitable"] # 暂时移除 - 需要完成 legacy_client 迁移
+# wiki = ["openlark-docs/ccm-wiki"] # 暂时移除 - 需要完成 legacy_client 迁移
+# drive = ["openlark-docs/ccm-drive"] # 暂时移除 - 需要完成 legacy_client 迁移
+# ccm = ["openlark-docs/ccm"] # 暂时移除 - 需要完成 legacy_client 迁移
+# cloud-docs = ["openlark-docs/cloud-docs"] # 暂时移除 - 需要完成 legacy_client 迁移
 
 # 新的标准化特性名
-ccm-doc = ["openlark-docs/ccm-doc"]
-ccm-sheets = ["openlark-docs/ccm-sheets"]
-ccm-wiki = ["openlark-docs/ccm-wiki"]
-ccm-drive = ["openlark-docs/ccm-drive"]
+# ccm-doc = ["openlark-docs/ccm-doc"] # 暂时移除 - 需要完成 legacy_client 迁移
+# ccm-sheets = ["openlark-docs/ccm-sheets"] # 暂时移除 - 需要完成 legacy_client 迁移
+# ccm-wiki = ["openlark-docs/ccm-wiki"] # 暂时移除 - 需要完成 legacy_client 迁移
+# ccm-drive = ["openlark-docs/ccm-drive"] # 暂时移除 - 需要完成 legacy_client 迁移
 
 # 独立服务特性
 communication = ["openlark-communication"]
@@ -68,14 +68,14 @@ ai = ["openlark-ai"]
 auth = ["openlark-auth"]
 
 # Convenience features
-all-services = ["docs", "sheets", "bitable", "wiki", "drive", "ccm", "hr", "ai", "auth"]
-base-services = ["docs", "sheets", "auth"]
+all-services = ["hr", "ai", "auth"] # 暂时移除 docs 相关功能 - 需要完成 legacy_client 迁移
+base-services = ["auth"] # 暂时移除 docs, sheets - 需要完成 legacy_client 迁移
 
 # WebSocket features (disabled temporarily)
 # websocket = ["tokio-tungstenite", "futures-util"]
 
 # Complete client features for easy selection
-client-docs = ["client", "docs"]
+# client-docs = ["client", "docs"] # 暂时移除 - 需要完成 legacy_client 迁移
 client-hr = ["client", "hr"]
 client-ai = ["client", "ai"]
 client-auth = ["client", "auth"]
