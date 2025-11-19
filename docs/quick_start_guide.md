@@ -42,7 +42,7 @@ serde = { version = "1.0", features = ["derive"] }
 version = "0.1.0"
 default-features = false
 features = [
-    "auth",           # 认证服务（必需）
+    # "auth",         # 认证服务（现在默认启用，禁用时才需要显式指定）
     "im",             # 即时消息
     "contact",        # 联系人管理
     "cloud-docs",     # 云文档
