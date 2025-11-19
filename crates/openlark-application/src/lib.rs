@@ -19,7 +19,7 @@ pub struct WorkplaceService {
 impl WorkplaceService {
     /// 创建新的应用服务实例
     pub fn new() -> Self {
-        Self { }
+        Self {}
     }
 
     /// TODO: 实现应用创建接口

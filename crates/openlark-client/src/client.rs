@@ -97,7 +97,7 @@ impl Client {
     /// 需要 `ai` feature
     #[cfg(feature = "ai")]
     pub fn ai(&self) -> crate::services::AIService<'_> {
-        crate::services::AIService::new(&self.config, &self.registry)
+        crate::services::AIService::new(&self.config)
     }
 
     /// 🔐 访问认证服务
