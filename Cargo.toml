@@ -22,7 +22,6 @@ members = [
     "crates/openlark-meeting",
     "crates/openlark-people",
     "crates/openlark-task",
-    "examples",
 ]
 
 [workspace.package]
