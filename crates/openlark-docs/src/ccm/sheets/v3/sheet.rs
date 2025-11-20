@@ -5,6 +5,7 @@
 //! - 查询特定工作表的属性信息
 //! - 工作表属性管理和操作
 
+use serde_json::Value;
 use openlark_core::{
     api::ApiRequest,
     api::{ApiResponseTrait, BaseResponse, ResponseFormat},
@@ -130,7 +131,7 @@ impl ApiResponseTrait for GetSheetResponse {
 }
 
 /// 工作表管理服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SheetService {
     config: Config,
 }
@@ -223,7 +224,7 @@ impl SheetService {
 }
 
 /// 工作表查询构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct QuerySheetsBuilder {
     service: SheetService,
     spreadsheet_token: String,
@@ -245,7 +246,7 @@ impl QuerySheetsBuilder {
 }
 
 /// 工作表获取构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct GetSheetBuilder {
     service: SheetService,
     spreadsheet_token: String,
@@ -267,7 +268,7 @@ impl SheetService {
     pub fn query_sheets_builder(&self, spreadsheet_token: &str) -> QuerySheetsBuilder {
         QuerySheetsBuilder {
             service: SheetService {
-                config: self.config.clone(),
+                config: self.config.clone()
             },
             spreadsheet_token: spreadsheet_token.to_string(),
         }
@@ -277,7 +278,7 @@ impl SheetService {
     pub fn get_sheet_builder(&self, spreadsheet_token: &str, sheet_id: &str) -> GetSheetBuilder {
         GetSheetBuilder {
             service: SheetService {
-                config: self.config.clone(),
+                config: self.config.clone()
             },
             spreadsheet_token: spreadsheet_token.to_string(),
             sheet_id: sheet_id.to_string(),
@@ -320,7 +321,7 @@ impl SheetService {
         );
 
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
-        api_request.body = serde_json::to_vec(request)?;
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let response =
             Transport::<FindCellsResponse>::request(api_request, &self.config, None).await?;
@@ -340,7 +341,7 @@ impl SheetService {
     pub fn find_cells_builder(&self, spreadsheet_token: &str, sheet_id: &str) -> FindCellsBuilder {
         FindCellsBuilder {
             service: SheetService {
-                config: self.config.clone(),
+                config: self.config.clone()
             },
             spreadsheet_token: spreadsheet_token.to_string(),
             sheet_id: sheet_id.to_string(),
@@ -468,7 +469,7 @@ impl ApiResponseTrait for FindCellsResponse {
 }
 
 /// 查找单元格构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct FindCellsBuilder {
     request: FindCellsRequest,
     service: SheetService,
@@ -563,7 +564,7 @@ mod tests {
             hidden: Some(false),
             row_count: Some(1000),
             column_count: Some(26),
-            ..Default::default()
+            
         };
 
         assert_eq!(sheet.sheet_id, Some("sheet_001".to_string()));
@@ -587,7 +588,7 @@ mod tests {
             sheet_id: Some("sheet_002".to_string()),
             title: Some("财务数据".to_string()),
             index: Some(1),
-            ..Default::default()
+            
         };
 
         let response = QuerySheetsResponse {
@@ -623,7 +624,7 @@ mod tests {
             index: Some(0),
             row_count: Some(500),
             column_count: Some(20),
-            ..Default::default()
+            
         };
 
         let serialized = serde_json::to_string(&original_sheet).unwrap();

@@ -201,7 +201,7 @@ impl ApiResponseTrait for GetSpaceNodeResponse {
 }
 
 /// 知识空间节点管理服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SpaceNodeService {
     config: Config,
 }
@@ -263,11 +263,11 @@ impl SpaceNodeService {
             .replace("{}", &req.node_id);
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: endpoint,
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(), // GET请求无body
-            ..Default::default()
+            method: openlark_core::api::HttpMethod::Get,
+            url: endpoint,
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: None, // GET请求无body
+            
         };
 
         let resp = Transport::<GetSpaceNodeResponse>::request(api_req, &self.config, None).await?;
@@ -287,7 +287,7 @@ impl SpaceNodeService {
 // ==================== 构建器模式 ====================
 
 /// 获取知识空间节点构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct GetSpaceNodeBuilder {
     request: GetSpaceNodeRequest,
 }
@@ -565,7 +565,7 @@ mod tests {
             node_id: Some("node_abc".to_string()),
             title: Some("测试文档".to_string()),
             node_type: Some("doc".to_string()),
-            ..Default::default()
+            
         };
 
         assert_eq!(response.node.node_id, Some("node_abc".to_string()));
@@ -596,7 +596,7 @@ mod tests {
             node_id: Some("node_abc".to_string()),
             title: Some("序列化测试".to_string()),
             node_type: Some("doc".to_string()),
-            ..Default::default()
+            
         };
 
         let serialized = serde_json::to_string(&response).unwrap();
@@ -613,19 +613,19 @@ mod tests {
         let doc_node = NodeInfo {
             node_type: Some("doc".to_string()),
             title: Some("文档节点".to_string()),
-            ..Default::default()
+            
         };
 
         let sheet_node = NodeInfo {
             node_type: Some("sheet".to_string()),
             title: Some("表格节点".to_string()),
-            ..Default::default()
+            
         };
 
         let mindnote_node = NodeInfo {
             node_type: Some("mindnote".to_string()),
             title: Some("思维导图节点".to_string()),
-            ..Default::default()
+            
         };
 
         assert_eq!(doc_node.node_type, Some("doc".to_string()));

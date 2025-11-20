@@ -43,11 +43,11 @@ impl EventService {
         option: Option<RequestOption>,
     ) -> SDKResult<Response<SubscribeFileEventsRespData>> {,
 let api_req = ApiRequest {,
-            http_http_http_method: Method::POST,
-            api_path: DRIVE_V1_FILES_SUBSCRIBE.to_string(),
-            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()};
+            http_http_method: Method::POST,
+            url: DRIVE_V1_FILES_SUBSCRIBE.to_string(),
+            // supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
+            body: Some(openlark_core::api::RequestData::Json(&request))?,
+            };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
@@ -65,11 +65,11 @@ Ok(api_resp),
         option: Option<RequestOption>,
     ) -> SDKResult<Response<GetFileSubscriptionRespData>> {,
 let mut api_req = ApiRequest {,
-            http_http_http_method: Method::GET,
-            api_path: DRIVE_V1_FILE_SUBSCRIPTIONS
+            http_http_method: Method::GET,
+            url: DRIVE_V1_FILE_SUBSCRIPTIONS
                 .replace("{}", &request.file_token)
                 .replace()
-            ..Default::default()
+            
 };
 api_req
             .set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
@@ -90,11 +90,11 @@ Ok(api_resp),
         option: Option<RequestOption>,
     ) -> SDKResult<Response<UnsubscribeFileEventsRespData>> {,
 let mut api_req = ApiRequest {,
-            http_http_http_method: Method::DELETE,
-            api_path: DRIVE_V1_FILE_SUBSCRIPTIONS
+            http_http_method: Method::DELETE,
+            url: DRIVE_V1_FILE_SUBSCRIPTIONS
                 .replace("{}", &request.file_token)
                 .replace()
-            ..Default::default()
+            
 };
 api_req
             .set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
@@ -103,7 +103,7 @@ api_req
 Ok(api_resp),
     }
 /// 订阅云文档事件请求参数,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SubscribeFileEventsRequest {
     /// 文件token
     pub file_token: String,
@@ -129,7 +129,7 @@ impl SubscribeFileEventsRequestBuilder {
     subscribe_file_events,
 );
 /// 订阅云文档事件响应数据
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SubscribeFileEventsRespData {
     /// 订阅ID
     pub subscription_id: String,
@@ -142,7 +142,7 @@ impl ApiResponseTrait for.* {
 ResponseFormat::Data
     }
 /// 查询云文档事件订阅状态请求参数,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct GetFileSubscriptionRequest {
     /// 文件token
     pub file_token: String,
@@ -166,12 +166,12 @@ impl GetFileSubscriptionRequestBuilder {
     get_file_subscription,
 );
 /// 查询云文档事件订阅状态响应数据
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct GetFileSubscriptionRespData {
     /// 订阅信息
     pub subscription: FileSubscription,
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct FileSubscription {
     /// 订阅ID
     pub subscription_id: String,
@@ -190,7 +190,7 @@ impl ApiResponseTrait for.* {
 ResponseFormat::Data
     }
 /// 取消云文档事件订阅请求参数,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct UnsubscribeFileEventsRequest {
     /// 文件token
     pub file_token: String,
@@ -214,7 +214,7 @@ impl UnsubscribeFileEventsRequestBuilder {
     unsubscribe_file_events,
 );
 /// 取消云文档事件订阅响应数据
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct UnsubscribeFileEventsRespData {
     /// 操作结果
     pub result: bool,

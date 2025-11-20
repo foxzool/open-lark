@@ -271,7 +271,7 @@ impl ApiResponseTrait for UnmergeCellsResponse {
 }
 
 /// 单元格合并服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct MergeCellsService {
     config: Config,
 }
@@ -324,7 +324,7 @@ impl MergeCellsService {
         );
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-        api_req.body = serde_json::to_vec(&request)?;
+        api_req.body = Some(openlark_core::api::RequestData::Json(&request))?;
 
         // 发送请求
         let api_resp =
@@ -374,7 +374,7 @@ impl MergeCellsService {
         );
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-        api_req.body = serde_json::to_vec(&request)?;
+        api_req.body = Some(openlark_core::api::RequestData::Json(&request))?;
 
         // 发送请求
         let api_resp =
@@ -391,7 +391,7 @@ impl MergeCellsService {
         range: impl Into<String>,
     ) -> MergeCellsBuilder {
         MergeCellsBuilder::new(
-            self.config.clone(),
+            self.config.clone()
             spreadsheet_token.into(),
             sheet_id.into(),
             range.into(),
@@ -400,7 +400,7 @@ impl MergeCellsService {
 }
 
 /// 合并单元格构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct MergeCellsBuilder {
     config: Config,
     spreadsheet_token: String,
@@ -569,7 +569,7 @@ mod tests {
     fn test_merge_cells_builder() {
         let config = openlark_core::config::Config::default();
         let builder = MergeCellsBuilder::new(
-            config.clone(),
+            config.clone()
             "test_token".to_string(),
             "sheet1".to_string(),
             "A1:B2".to_string(),
@@ -635,7 +635,7 @@ mod tests {
         let config = openlark_core::config::Config::default();
 
         let all_merge_builder = MergeCellsBuilder::new(
-            config.clone(),
+            config.clone()
             "token".to_string(),
             "sheet".to_string(),
             "A1:A1".to_string(),
@@ -644,7 +644,7 @@ mod tests {
         assert_eq!(all_merge_builder.merge_type, MergeType::MergeAll);
 
         let rows_merge_builder = MergeCellsBuilder::new(
-            config.clone(),
+            config.clone()
             "token".to_string(),
             "sheet".to_string(),
             "A1:A1".to_string(),

@@ -386,7 +386,7 @@ impl Default for ExportTaskRequest {
         Self {
             api_req: ApiRequest::default(),
             file_type: String::new(),
-            file_tokens: Vec::new(),
+            file_tokens: vec![],
             export_settings: None,
         }
     }
@@ -409,7 +409,7 @@ impl ExportTaskRequest {
         Self {
             api_req: ApiRequest::default(),
             file_type: file_type.into(),
-            file_tokens: Vec::new(),
+            file_tokens: vec![],
             export_settings: None,
         }
     }
@@ -536,7 +536,7 @@ impl ApiResponseTrait for ExportTaskResponse {
 /// - 权限设置和访问控制
 /// - 文件分享和链接管理
 /// - 文件版本控制和历史记录
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DriveServiceV1 {
     pub config: Config,
 }
@@ -734,11 +734,11 @@ impl DriveServiceV1 {
 
         // 创建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: openlark_core::endpoints::Endpoints::DRIVE_V1_EXPORT_TASKS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
+            method: openlark_core::api::HttpMethod::Post,
+            url: openlark_core::endpoints::Endpoints::DRIVE_V1_EXPORT_TASKS.to_string(),
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: Some(openlark_core::api::RequestData::Json(&request))?,
+            
         };
 
         // 发送HTTP请求
@@ -766,7 +766,7 @@ impl DriveServiceV1 {
     ///     .export_settings(ExportSettings {
     ///         quality: Some("high".to_string()),
     ///         include_comments: Some(true),
-    ///         ..Default::default()
+    ///         
     ///     })
     ///     .execute()
     ///     .await?;
@@ -785,7 +785,7 @@ impl DriveServiceV1 {
 ///
 /// 提供流畅的API来构建查询任务状态的请求，支持链式调用
 /// 和完整的参数验证。
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct GetTaskStatusBuilder {
     service: std::sync::Arc<DriveServiceV1>,
     request: GetTaskStatusRequest,
@@ -845,7 +845,7 @@ impl GetTaskStatusBuilder {
 ///
 /// 提供流畅的API来构建删除文件的请求，支持链式调用
 /// 和完整的参数验证。
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DeleteFileBuilder {
     service: std::sync::Arc<DriveServiceV1>,
     request: DeleteFileRequest,
@@ -897,7 +897,7 @@ impl DeleteFileBuilder {
         // 执行请求
         self.service
             .as_ref()
-            .delete_file(self.request.clone(), None)
+            .delete_file(self.request.clone() None)
             .await
     }
 }
@@ -908,7 +908,7 @@ impl DeleteFileBuilder {
 ///
 /// 提供流畅的API来构建创建导出任务的请求，支持链式调用
 /// 和完整的参数验证。支持多种导出格式和高级配置选项。
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CreateExportTaskBuilder {
     service: std::sync::Arc<DriveServiceV1>,
     request: ExportTaskRequest,
@@ -981,7 +981,7 @@ impl CreateExportTaskBuilder {
     /// let settings = ExportSettings {
     ///     quality: Some("high".to_string()),
     ///     include_comments: Some(true),
-    ///     ..Default::default()
+    ///     
     /// };
     /// let builder = CreateExportTaskBuilder::new(service, request)
     ///     .export_settings(settings);
@@ -1094,7 +1094,7 @@ impl CreateExportTaskBuilder {
         // 执行请求
         self.service
             .as_ref()
-            .create_export_task(self.request.clone(), None)
+            .create_export_task(self.request.clone() None)
             .await
     }
 }
@@ -1629,7 +1629,7 @@ mod tests {
 
         for token in file_tokens {
             let request = DeleteFileRequest::new(token);
-            let builder = DeleteFileBuilder::new(service.clone(), request);
+            let builder = DeleteFileBuilder::new(service.clone() request);
 
             assert!(builder.request.validate().is_ok());
             assert_eq!(builder.request.file_token, token);
@@ -1717,8 +1717,8 @@ mod tests {
         let service = Arc::new(DriveServiceV1::new(config));
 
         // 创建多个构建器共享同一个服务
-        let builder1 = DeleteFileBuilder::new(service.clone(), DeleteFileRequest::new("token1"));
-        let builder2 = DeleteFileBuilder::new(service.clone(), DeleteFileRequest::new("token2"));
+        let builder1 = DeleteFileBuilder::new(service.clone() DeleteFileRequest::new("token1"));
+        let builder2 = DeleteFileBuilder::new(service.clone() DeleteFileRequest::new("token2"));
         let builder3 = DeleteFileBuilder::new(service, DeleteFileRequest::new("token3"));
 
         assert_eq!(builder1.request.file_token, "token1");
@@ -1827,7 +1827,7 @@ mod tests {
         let settings = ExportSettings {
             quality: Some("standard".to_string()),
             include_comments: Some(false),
-            ..Default::default()
+            
         };
 
         let request = ExportTaskRequest::new("pdf")
@@ -2009,7 +2009,7 @@ mod tests {
             task_status: "processing".to_string(),
             download_url: Some("https://example.com/file.pdf".to_string()),
             file_size: Some(500000),
-            ..Default::default()
+            
         };
 
         let serialized = serde_json::to_string(&response).unwrap();

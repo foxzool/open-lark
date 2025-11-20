@@ -42,7 +42,7 @@ use openlark_core::{
 ///
 /// 提供完整的文件生命周期管理功能，包括上传、下载、查询、更新、删除等操作。
 /// 支持多种文件格式，提供企业级的性能和安全性保障。
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct FilesService {
     config: Config,
 }
@@ -225,7 +225,7 @@ impl FilesService {
 // ==================== 请求和响应模型 ====================
 
 /// 上传文件请求
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct UploadFileRequest {
     /// 请求体
     #[serde(skip)]
@@ -262,7 +262,7 @@ impl Default for UploadFileRequest {
             parent_node: String::new(),
             size: 0,
             checksum: None,
-            file_data: Vec::new(),
+            file_data: vec![],
         }
     }
 }
@@ -359,7 +359,7 @@ impl UploadFileRequest {
         self.validate()?;
 
         // 设置请求体
-        match serde_json::to_vec(&self) {
+        match Some(openlark_core::api::RequestData::Json(serde_json::json!(&self))) {
             Ok(body) => {
                 self.api_req.body = body;
                 Ok(self)
@@ -404,7 +404,7 @@ impl ApiResponseTrait for UploadFileResponse {
 }
 
 /// 下载文件请求
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DownloadFileRequest {
     /// 请求体
     #[serde(skip)]
@@ -472,7 +472,7 @@ impl ApiResponseTrait for DownloadFileResponse {
 // ==================== Builder实现 ====================
 
 /// 上传文件请求构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct UploadFileRequestBuilder {
     request: UploadFileRequest,
 }
@@ -627,7 +627,7 @@ impl UploadFileRequestBuilder {
 }
 
 /// 下载文件请求构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DownloadFileRequestBuilder {
     request: DownloadFileRequest,
 }
@@ -875,7 +875,7 @@ mod tests {
 // ==================== 文件删除功能 ====================
 
 /// 删除文件请求
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DeleteFileRequest {
     /// 文件token，用于唯一标识文件
     pub file_token: String,
@@ -961,7 +961,7 @@ impl ApiResponseTrait for DeleteFileResponse {
 // ==================== 创建文件快捷方式 ====================
 
 /// 创建文件快捷方式请求
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CreateShortcutRequest {
     /// 源文件令牌
     pub source_file_token: String,
@@ -1083,7 +1083,7 @@ impl ApiResponseTrait for CreateShortcutResponse {
 // ==================== API #188 查询异步任务状态 ====================
 
 /// 查询异步任务状态请求
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct GetAsyncTaskStatusRequest {
     /// 任务ID，通过创建异步任务的API返回获取
     pub task_id: String,
@@ -1230,7 +1230,7 @@ impl FilesService {
         log::debug!("开始查询异步任务状态: task_id={}", req.task_id);
 
         // 构建查询参数
-        let mut query_params: HashMap<&str, String> = HashMap::new();
+        let mut query: HashMap<&str, String> = HashMap::new();
         if let Some(user_id_type) = &req.user_id_type {
             query_params.insert("user_id_type", user_id_type.clone());
         }
@@ -1240,12 +1240,12 @@ impl FilesService {
             .replace("{}", &req.task_id);
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
+            method: openlark_core::api::HttpMethod::Get,
             api_path,
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
-            body: Vec::new(), // GET请求不需要body
-            ..Default::default()
+            body: None, // GET请求不需要body
+            
         };
 
         let resp = Transport::<GetAsyncTaskStatusResponse>::request(api_req, &self.config, None).await?;
@@ -1270,7 +1270,7 @@ impl FilesService {
 // ==================== 构建器模式 ====================
 
 /// 查询异步任务状态构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct GetAsyncTaskStatusBuilder {
     request: GetAsyncTaskStatusRequest,
 }
@@ -1333,7 +1333,7 @@ impl FilesService {
                req.source_file_token, req.folder_token);
 
         // 构建查询参数
-        let mut query_params: HashMap<&str, String> = HashMap::new();
+        let mut query: HashMap<&str, String> = HashMap::new();
         if let Some(user_id_type) = &req.user_id_type {
             query_params.insert("user_id_type", user_id_type.clone());
         }
@@ -1349,12 +1349,12 @@ impl FilesService {
         }
 
         let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: openlark_core::endpoints::Endpoints::DRIVE_V1_FILES_CREATE_SHORTCUT.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            method: Method::POST,
+            url: openlark_core::endpoints::Endpoints::DRIVE_V1_FILES_CREATE_SHORTCUT.to_string(),
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
-            body: serde_json::to_vec(&body).unwrap_or_default(),
-            ..Default::default()
+            body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body))).unwrap_or_default(),
+            
         };
 
         match Transport::request(api_req, &self.config, None).await {
@@ -1407,11 +1407,11 @@ impl FilesService {
             .replace("{}", &req.file_token);
 
         let api_req = ApiRequest {
-            http_method: Method::DELETE,
+            method: Method::DELETE,
             api_path,
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(), // DELETE请求不需要请求体
-            ..Default::default()
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: None, // DELETE请求不需要请求体
+            
         };
 
         match Transport::request(api_req, &self.config, None).await {
@@ -1726,13 +1726,13 @@ mod create_shortcut_tests {
         };
 
         let response_data = CreateShortcutResponseData {
-            shortcut: file_info.clone(),
+            shortcut: file_info.clone()
         };
 
         let response = CreateShortcutResponse {
             data: Some(response_data),
             success: true,
-            ..Default::default()
+            
         };
 
         assert!(response.success);
@@ -2010,7 +2010,7 @@ mod get_async_task_status_tests {
         let response = GetAsyncTaskStatusResponse {
             data: Some(response_data),
             success: true,
-            ..Default::default()
+            
         };
 
         assert!(response.success);
@@ -2115,7 +2115,7 @@ mod get_async_task_status_tests {
             let response = GetAsyncTaskStatusResponse {
                 data: Some(response_data),
                 success: true,
-                ..Default::default()
+                
             };
 
             assert_eq!(response.data.unwrap().task.status, status);
@@ -2221,7 +2221,7 @@ mod get_async_task_status_tests {
         let response = GetAsyncTaskStatusResponse {
             data: Some(response_data),
             success: true,
-            ..Default::default()
+            
         };
 
         let task_info = response.data.unwrap().task;
@@ -2382,7 +2382,7 @@ mod delete_file_tests {
         let response = DeleteFileResponse {
             data: Some(response_data),
             success: true,
-            ..Default::default()
+            
         };
 
         assert!(response.success);
@@ -2438,7 +2438,7 @@ mod delete_file_tests {
 // ==================== API #197 复制文件 ====================
 
 /// 复制文件请求
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CopyFileRequest {
     /// 源文件令牌
     pub file_token: String,
@@ -2602,7 +2602,7 @@ impl FilesService {
             req.file_token, req.parent_folder_token);
 
         // 构建查询参数
-        let mut query_params: HashMap<&str, String> = HashMap::new();
+        let mut query: HashMap<&str, String> = HashMap::new();
         if let Some(user_id_type) = &req.user_id_type {
             query_params.insert("user_id_type", user_id_type.clone());
         }
@@ -2621,12 +2621,12 @@ impl FilesService {
             .replace("{file_token}", &req.file_token);
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
+            method: openlark_core::api::HttpMethod::Post,
             api_path,
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
-            body: serde_json::to_vec(&body).unwrap_or_default(),
-            ..Default::default()
+            body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body))).unwrap_or_default(),
+            
         };
 
         let resp = Transport::<CopyFileResponse>::request(api_req, &self.config, None).await?;
@@ -2647,7 +2647,7 @@ impl FilesService {
 // ==================== 构建器模式 ====================
 
 /// 复制文件构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CopyFileBuilder {
     request: CopyFileRequest,
 }
@@ -2842,7 +2842,7 @@ mod copy_file_tests {
         let response = CopyFileResponse {
             data: Some(response_data),
             success: true,
-            ..Default::default()
+            
         };
 
         assert!(response.success);
@@ -2992,7 +2992,7 @@ mod copy_file_tests {
         let response = CopyFileResponse {
             data: Some(response_data),
             success: true,
-            ..Default::default()
+            
         };
 
         assert!(response.success);
@@ -3033,7 +3033,7 @@ mod copy_file_tests {
             let response = CopyFileResponse {
                 data: Some(response_data),
                 success: true,
-                ..Default::default()
+                
             };
 
             assert!(response.success);

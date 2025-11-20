@@ -21,7 +21,7 @@ mod list;
 ///
 /// 提供知识空间的完整管理功能，包括创建、查询、列表管理等。
 /// 支持个人和团队知识空间的操作，具备完整的权限控制。
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SpaceService {
     config: Config,
 }

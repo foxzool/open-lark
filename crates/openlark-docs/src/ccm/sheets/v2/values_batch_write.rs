@@ -98,7 +98,7 @@ impl WriteRange {
 }
 
 /// 批量范围写入请求
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ValuesBatchWriteRequest {
     /// 电子表格token
     pub spreadsheet_token: String,
@@ -167,7 +167,7 @@ impl Default for ValuesBatchWriteRequest {
     fn default() -> Self {
         Self {
             spreadsheet_token: String::new(),
-            ranges: Vec::new(),
+            ranges: vec![],
             value_input_option: None,
             data_parse_option: None,
             include_values_in_response: None,
@@ -182,7 +182,7 @@ impl ValuesBatchWriteRequest {
     pub fn new(spreadsheet_token: impl Into<String>) -> Self {
         Self {
             spreadsheet_token: spreadsheet_token.into(),
-            ..Default::default()
+            
         }
     }
 
@@ -381,7 +381,7 @@ pub struct ValuesBatchWriteResponseBody {
 // 移除重复的BaseResponse定义，使用openlark_core中的版本
 
 /// 批量范围写入服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ValuesBatchWriteService {
     config: Config,
 }
@@ -491,7 +491,7 @@ impl ValuesBatchWriteService {
         spreadsheet_token: impl Into<String>,
         ranges_data: HashMap<String, Vec<Vec<Value>>>,
     ) -> SDKResult<ValuesBatchWriteResponse> {
-        let mut ranges = Vec::new();
+        let mut ranges = vec![];
         for (range, values) in ranges_data {
             ranges.push(WriteRange::new(range, values));
         }
@@ -515,7 +515,7 @@ impl ValuesBatchWriteService {
         spreadsheet_token: impl Into<String>,
         csv_mappings: HashMap<String, (String, char)>, // 键为CSV数据，值为(范围, 分隔符)
     ) -> SDKResult<ValuesBatchWriteResponse> {
-        let mut ranges = Vec::new();
+        let mut ranges = vec![];
 
         for (csv_data, (range, delimiter)) in csv_mappings {
             let values = Self::parse_csv_to_values(&csv_data, delimiter)?;
@@ -543,7 +543,7 @@ impl ValuesBatchWriteService {
         spreadsheet_token: impl Into<String>,
         hashmap_mappings: HashMap<String, (HashMap<String, Vec<Value>>, bool)>, // 键为范围，值为(数据, 是否包含表头)
     ) -> SDKResult<ValuesBatchWriteResponse> {
-        let mut ranges = Vec::new();
+        let mut ranges = vec![];
 
         for (range, (data, include_headers)) in hashmap_mappings {
             let values = Self::hashmap_to_values(data, include_headers)?;
@@ -559,7 +559,7 @@ impl ValuesBatchWriteService {
 
     /// 将CSV数据解析为值数组
     fn parse_csv_to_values(csv_data: &str, delimiter: char) -> SDKResult<Vec<Vec<Value>>> {
-        let mut result = Vec::new();
+        let mut result = vec![];
 
         for line in csv_data.lines() {
             let row = Self::parse_csv_line(line, delimiter)?
@@ -578,7 +578,7 @@ impl ValuesBatchWriteService {
 
     /// 解析CSV行
     fn parse_csv_line(line: &str, delimiter: char) -> SDKResult<Vec<String>> {
-        let mut result = Vec::new();
+        let mut result = vec![];
         let mut current = String::new();
         let mut in_quotes = false;
         let mut chars = line.chars().peekable();
@@ -644,7 +644,7 @@ impl ValuesBatchWriteService {
             }
         }
 
-        let mut result = Vec::new();
+        let mut result = vec![];
 
         // 添加表头（如果需要）
         if include_headers {
@@ -654,7 +654,7 @@ impl ValuesBatchWriteService {
 
         // 添加数据行
         for row_index in 0..row_count {
-            let mut row = Vec::new();
+            let mut row = vec![];
             for key in &keys {
                 if let Some(values) = data.get(key) {
                     row.push(values[row_index].clone());
@@ -698,7 +698,7 @@ impl ValuesBatchWriteBuilder {
         Self {
             service,
             spreadsheet_token: None,
-            ranges: Vec::new(),
+            ranges: vec![],
             value_input_option: None,
             data_parse_option: None,
             include_values_in_response: None,
@@ -924,7 +924,7 @@ mod tests {
         data.insert("年龄".to_string(), vec![json!(25), json!(30)]);
 
         // 测试包含表头
-        let values = ValuesBatchWriteService::hashmap_to_values(data.clone(), true).unwrap();
+        let values = ValuesBatchWriteService::hashmap_to_values(data.clone() true).unwrap();
         assert_eq!(values.len(), 3);
         assert_eq!(values[0][0], json!("姓名"));
         assert_eq!(values[0][1], json!("年龄"));

@@ -654,7 +654,7 @@ impl openlark_core::api::ApiResponseTrait for GetMacroStatusResponse {
 }
 
 /// Sheets电子表格宏服务 v3
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct MacroService {
     config: openlark_core::config::Config,
 }
@@ -710,8 +710,8 @@ impl MacroService {
             request.spreadsheet_token
         );
 
-        let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::POST, &endpoint);
-        api_request.body = serde_json::to_vec(request)?;
+        let mut api_request = ApiRequest::with_method_and_path(openlark_core::api::HttpMethod::Post, &endpoint);
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let response: Response<ExecuteMacroResponse> =
             Transport::request(api_request, &self.config, None).await?;
@@ -775,8 +775,8 @@ impl MacroService {
             request.spreadsheet_token
         );
 
-        let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::POST, &endpoint);
-        api_request.body = serde_json::to_vec(request)?;
+        let mut api_request = ApiRequest::with_method_and_path(openlark_core::api::HttpMethod::Post, &endpoint);
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let response: Response<CreateMacroResponse> =
             Transport::request(api_request, &self.config, None).await?;
@@ -831,7 +831,7 @@ impl MacroService {
             request.spreadsheet_token, request.execution_id
         );
 
-        let api_request = ApiRequest::with_method_and_path(reqwest::Method::GET, &endpoint);
+        let api_request = ApiRequest::with_method_and_path(openlark_core::api::HttpMethod::Get, &endpoint);
 
         let response: Response<GetMacroStatusResponse> =
             Transport::request(api_request, &self.config, None).await?;

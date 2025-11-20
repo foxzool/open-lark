@@ -31,7 +31,7 @@ pub use explorer::ExplorerService;
 pub use permission::PermissionService;
 
 /// 云空间文件管理服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DriveService {
     client: std::sync::Arc<LarkClient>,
     /// V1版本API服务
@@ -43,7 +43,7 @@ pub struct DriveService {
 impl DriveService {
     pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
         Self {
-            client: client.clone(),
+            client: client.clone()
             v1: v1::DriveV1Service::new(client.clone()),
             v2: v2::DriveV2Service::new(client),
         }

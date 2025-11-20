@@ -206,7 +206,7 @@ impl ApiResponseTrait for DeleteProtectedRangesResponse {
 }
 
 /// 保护范围管理服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ProtectedRangesService {
     config: Config,
 }
@@ -260,7 +260,7 @@ impl ProtectedRangesService {
         );
 
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
-        api_request.body = serde_json::to_vec(request)?;
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let create_response: StandardResponse<CreateProtectedRangesResponse> =
             Transport::request(api_request, &self.config, None).await?;
@@ -288,7 +288,7 @@ impl ProtectedRangesService {
         );
 
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
-        api_request.body = serde_json::to_vec(request)?;
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let update_response: StandardResponse<UpdateProtectedRangesResponse> =
             Transport::request(api_request, &self.config, None).await?;
@@ -343,7 +343,7 @@ impl ProtectedRangesService {
         );
 
         let mut api_request = ApiRequest::with_method_and_path(Method::DELETE, &endpoint);
-        api_request.body = serde_json::to_vec(request)?;
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let delete_response: StandardResponse<DeleteProtectedRangesResponse> =
             Transport::request(api_request, &self.config, None).await?;

@@ -340,7 +340,7 @@ impl CreateImportTaskResponse {
 /// 创建导入任务构建器
 ///
 /// 提供流畅的API来创建导入任务，支持方法链调用和完整的错误处理
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CreateImportTaskBuilder {
     service: Arc<DriveServiceV1>,
     request: CreateImportTaskRequest,

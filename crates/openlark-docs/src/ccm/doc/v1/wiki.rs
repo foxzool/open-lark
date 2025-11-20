@@ -14,7 +14,7 @@
 use openlark_core::config::Config;
 
 /// 知识库服务 v2（通过v1接口访问）
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct WikiService {
     pub config: Config,
 }

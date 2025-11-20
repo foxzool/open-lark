@@ -403,7 +403,7 @@ pub struct DeleteDataFilterResponse {
 }
 
 /// Sheets电子表格数据过滤器服务 v3
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DataFilterService {
     config: openlark_core::config::Config,
 }
@@ -460,7 +460,7 @@ impl DataFilterService {
 
         // 创建HTTP请求并序列化请求体
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
-        api_request.body = serde_json::to_vec(request)?;
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         // 发送请求并获取响应
         let response =

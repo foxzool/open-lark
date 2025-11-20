@@ -15,7 +15,7 @@ pub mod block;
 pub mod comment;
 
 /// Document v1 Service
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DocxV1Service {
     client: std::sync::Arc<LarkClient>,
 }

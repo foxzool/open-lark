@@ -79,12 +79,12 @@ impl PermissionService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: "/open-apis/drive/permission/member/permitted".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&body)?,
-            query_params: HashMap::new(),
-            ..Default::default()
+            method: openlark_core::api::HttpMethod::Post,
+            url: "/open-apis/drive/permission/member/permitted".to_string(),
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?,
+            query: HashMap::new(),
+            
         };
 
         // 发送请求
@@ -150,12 +150,12 @@ impl PermissionService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: "/open-apis/drive/permission/member/transfer".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&body)?,
-            query_params: HashMap::new(),
-            ..Default::default()
+            method: openlark_core::api::HttpMethod::Post,
+            url: "/open-apis/drive/permission/member/transfer".to_string(),
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?,
+            query: HashMap::new(),
+            
         };
 
         // 发送请求
@@ -209,12 +209,12 @@ impl PermissionService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: "/open-apis/drive/permission/v2/public/".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&body)?,
-            query_params: HashMap::new(),
-            ..Default::default()
+            method: openlark_core::api::HttpMethod::Post,
+            url: "/open-apis/drive/permission/v2/public/".to_string(),
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?,
+            query: HashMap::new(),
+            
         };
 
         // 发送请求

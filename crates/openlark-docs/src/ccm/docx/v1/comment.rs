@@ -6,7 +6,7 @@
 use crate::prelude::*;
 
 /// Comment operation service
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CommentService {
     client: std::sync::Arc<LarkClient>,
 }

@@ -384,7 +384,7 @@ impl Default for WriteMultipleRangesResponseData {
             spreadsheet_token: String::new(),
             total_updated_ranges: 0,
             total_updated_cells: 0,
-            updated_ranges: Vec::new(),
+            updated_ranges: vec![],
             revision: 0,
         }
     }
@@ -417,7 +417,7 @@ impl ApiResponseTrait for WriteMultipleRangesResponse {
 /// 批量写入范围服务
 ///
 /// 提供飞书电子表格v2版本的批量范围写入功能。
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct BatchWriteService {
     config: Config,
 }
@@ -551,7 +551,7 @@ impl BatchWriteService {
             Endpoints::SHEETS_V2_SPREADSHEET_VALUES_BATCH_UPDATE
                 .replace("{spreadsheet_token}", &request.spreadsheet_token),
         );
-        api_req.set_body(serde_json::to_vec(&body)?);
+        api_req.set_body(Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?);
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
@@ -577,7 +577,7 @@ impl BatchWriteService {
                 err: None,
             },
             data: Some(WriteMultipleRangesResponseData {
-                spreadsheet_token: request.spreadsheet_token.clone(),
+                spreadsheet_token: request.spreadsheet_token.clone()
                 total_updated_ranges: updated_ranges.len() as u32,
                 total_updated_cells: total_updated_cells as u32,
                 updated_ranges,
@@ -1212,9 +1212,9 @@ mod tests {
     #[test]
     fn test_large_data_handling() {
         // 测试大数据量处理
-        let mut large_data = Vec::new();
+        let mut large_data = vec![];
         for row in 0..100 {
-            let mut row_data = Vec::new();
+            let mut row_data = vec![];
             for col in 0..20 {
                 row_data.push(CellValue::text(format!("R{}C{}", row + 1, col + 1)));
             }

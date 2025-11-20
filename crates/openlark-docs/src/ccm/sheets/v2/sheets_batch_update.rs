@@ -279,7 +279,7 @@ impl UpdateSheetRequest {
 }
 
 /// 工作表批量更新请求
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SheetsBatchUpdateRequest {
     /// 电子表格令牌
     pub spreadsheet_token: String,
@@ -292,7 +292,7 @@ impl SheetsBatchUpdateRequest {
     pub fn new(spreadsheet_token: impl Into<String>) -> Self {
         Self {
             spreadsheet_token: spreadsheet_token.into(),
-            requests: Vec::new(),
+            requests: vec![],
         }
     }
 
@@ -412,7 +412,7 @@ pub struct SheetsBatchUpdateResponseBody {
 // 移除重复的BaseResponse定义，使用openlark_core中的版本
 
 /// 工作表批量更新服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SheetsBatchUpdateService {
     config: Config,
 }
@@ -499,7 +499,7 @@ impl SheetsBatchUpdateService {
 
     /// 创建工作表批量更新构建器
     pub fn batch_update_builder(&self, spreadsheet_token: &str) -> SheetsBatchUpdateBuilder {
-        SheetsBatchUpdateBuilder::new(self.clone(), spreadsheet_token)
+        SheetsBatchUpdateBuilder::new(self.clone() spreadsheet_token)
     }
 }
 
@@ -529,7 +529,7 @@ impl SheetsBatchUpdateBuilder {
         Self {
             service,
             spreadsheet_token: spreadsheet_token.to_string(),
-            requests: Vec::new(),
+            requests: vec![],
         }
     }
 

@@ -2,6 +2,7 @@
 //!
 //! 提供飞书电子表格v2版本的数据前置插入功能。
 
+use serde_json::Value;
 use openlark_core::{
     api::ApiRequest,
     api::{ApiResponseTrait, BaseResponse, ResponseFormat},
@@ -36,7 +37,7 @@ pub struct ValuesData {
 }
 
 /// 数据前置插入服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ValuesPrependService {
     // 占位符实现
 }

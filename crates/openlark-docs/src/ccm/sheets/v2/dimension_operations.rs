@@ -7,6 +7,7 @@
 //! - 更新行列属性
 //! - 移动行列位置
 
+use serde_json::Value;
 use openlark_core::{
     api::ApiRequest,
     api::{ApiResponseTrait, BaseResponse, ResponseFormat},
@@ -523,7 +524,7 @@ impl ApiResponseTrait for DeleteDimensionRangeResponse {
 }
 
 /// 行列操作服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DimensionOperationsService {
     config: Config,
 }
@@ -578,7 +579,7 @@ impl DimensionOperationsService {
         );
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-        api_req.body = serde_json::to_vec(&request)?;
+        api_req.body = Some(openlark_core::api::RequestData::Json(&request))?;
 
         // 发送请求
         let api_resp =
@@ -632,7 +633,7 @@ impl DimensionOperationsService {
         );
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-        api_req.body = serde_json::to_vec(&request)?;
+        api_req.body = Some(openlark_core::api::RequestData::Json(&request))?;
 
         // 发送请求
         let api_resp =
@@ -692,7 +693,7 @@ impl DimensionOperationsService {
         );
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-        api_req.body = serde_json::to_vec(&request)?;
+        api_req.body = Some(openlark_core::api::RequestData::Json(&request))?;
 
         // 发送请求
         let api_resp =
@@ -751,7 +752,7 @@ impl DimensionOperationsService {
         );
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-        api_req.body = serde_json::to_vec(&request)?;
+        api_req.body = Some(openlark_core::api::RequestData::Json(&request))?;
 
         // 发送请求
         let api_resp =
@@ -770,7 +771,7 @@ impl DimensionOperationsService {
         count: i32,
     ) -> AddDimensionRangeBuilder {
         AddDimensionRangeBuilder::new(
-            self.config.clone(),
+            self.config.clone()
             spreadsheet_token.into(),
             sheet_id.into(),
             Dimension::Rows,
@@ -788,7 +789,7 @@ impl DimensionOperationsService {
         count: i32,
     ) -> AddDimensionRangeBuilder {
         AddDimensionRangeBuilder::new(
-            self.config.clone(),
+            self.config.clone()
             spreadsheet_token.into(),
             sheet_id.into(),
             Dimension::Columns,
@@ -806,7 +807,7 @@ impl DimensionOperationsService {
         end_index: i32,
     ) -> UpdateDimensionRangeBuilder {
         UpdateDimensionRangeBuilder::new(
-            self.config.clone(),
+            self.config.clone()
             spreadsheet_token.into(),
             sheet_id.into(),
             Dimension::Rows,
@@ -824,7 +825,7 @@ impl DimensionOperationsService {
         end_index: i32,
     ) -> UpdateDimensionRangeBuilder {
         UpdateDimensionRangeBuilder::new(
-            self.config.clone(),
+            self.config.clone()
             spreadsheet_token.into(),
             sheet_id.into(),
             Dimension::Columns,
@@ -842,7 +843,7 @@ impl DimensionOperationsService {
         count: i32,
     ) -> InsertDimensionRangeBuilder {
         InsertDimensionRangeBuilder::new(
-            self.config.clone(),
+            self.config.clone()
             spreadsheet_token.into(),
             sheet_id.into(),
             Dimension::Rows,
@@ -860,7 +861,7 @@ impl DimensionOperationsService {
         count: i32,
     ) -> InsertDimensionRangeBuilder {
         InsertDimensionRangeBuilder::new(
-            self.config.clone(),
+            self.config.clone()
             spreadsheet_token.into(),
             sheet_id.into(),
             Dimension::Columns,
@@ -878,7 +879,7 @@ impl DimensionOperationsService {
         count: i32,
     ) -> DeleteDimensionRangeBuilder {
         DeleteDimensionRangeBuilder::new(
-            self.config.clone(),
+            self.config.clone()
             spreadsheet_token.into(),
             sheet_id.into(),
             Dimension::Rows,
@@ -896,7 +897,7 @@ impl DimensionOperationsService {
         count: i32,
     ) -> DeleteDimensionRangeBuilder {
         DeleteDimensionRangeBuilder::new(
-            self.config.clone(),
+            self.config.clone()
             spreadsheet_token.into(),
             sheet_id.into(),
             Dimension::Columns,
@@ -907,7 +908,7 @@ impl DimensionOperationsService {
 }
 
 /// 插入行列构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct InsertDimensionRangeBuilder {
     config: Config,
     spreadsheet_token: String,
@@ -971,7 +972,7 @@ impl InsertDimensionRangeBuilder {
 }
 
 /// 删除行列构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DeleteDimensionRangeBuilder {
     config: Config,
     spreadsheet_token: String,
@@ -1254,7 +1255,7 @@ mod tests {
     fn test_insert_dimension_range_builder() {
         let config = openlark_core::config::Config::default();
         let builder = InsertDimensionRangeBuilder::new(
-            config.clone(),
+            config.clone()
             "test_token".to_string(),
             "sheet1".to_string(),
             Dimension::Rows,
@@ -1276,7 +1277,7 @@ mod tests {
     fn test_delete_dimension_range_builder() {
         let config = openlark_core::config::Config::default();
         let builder = DeleteDimensionRangeBuilder::new(
-            config.clone(),
+            config.clone()
             "test_token".to_string(),
             "sheet1".to_string(),
             Dimension::Columns,
@@ -1508,7 +1509,7 @@ mod tests {
     fn test_add_dimension_range_builder() {
         let config = openlark_core::config::Config::default();
         let builder = AddDimensionRangeBuilder::new(
-            config.clone(),
+            config.clone()
             "test_token".to_string(),
             "sheet1".to_string(),
             Dimension::Rows,
@@ -1534,7 +1535,7 @@ mod tests {
     fn test_update_dimension_range_builder() {
         let config = openlark_core::config::Config::default();
         let builder = UpdateDimensionRangeBuilder::new(
-            config.clone(),
+            config.clone()
             "test_token".to_string(),
             "sheet1".to_string(),
             Dimension::Columns,
@@ -1572,7 +1573,7 @@ mod tests {
         };
 
         let builder = UpdateDimensionRangeBuilder::new(
-            config.clone(),
+            config.clone()
             "test_token".to_string(),
             "sheet1".to_string(),
             Dimension::Rows,

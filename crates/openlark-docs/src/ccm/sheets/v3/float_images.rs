@@ -82,7 +82,7 @@ pub type SheetPagedResponse<T> = Vec<T>;
 ///
 /// let updated_image = service.update(&update_request).await?;
 /// ```
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct FloatImagesService {
     config: openlark_core::config::Config,
 }
@@ -348,8 +348,8 @@ impl CreateFloatImageRequestBuilder {
                 Ok(CreateFloatImageRequest {
                     spreadsheet_token: self.spreadsheet_token.unwrap(),
                     sheet_id: self.sheet_id.unwrap(),
-                    float_image_token: float_image_token.clone(),
-                    range: range.clone(),
+                    float_image_token: float_image_token.clone()
+                    range: range.clone()
                     float_image_id: self.float_image_id,
                     width: self.width,
                     height: self.height,
@@ -431,7 +431,7 @@ impl UpdateFloatImageRequestBuilder {
             spreadsheet_token: None,
             sheet_id: None,
             float_image_id: None,
-            fields: Vec::new(),
+            fields: vec![],
             range: None,
             width: None,
             height: None,
@@ -588,7 +588,7 @@ impl UpdateFloatImageRequestBuilder {
                 Ok(UpdateFloatImageRequest {
                     spreadsheet_token: self.spreadsheet_token.unwrap(),
                     sheet_id: self.sheet_id.unwrap(),
-                    float_image_id: float_image_id.clone(),
+                    float_image_id: float_image_id.clone()
                     fields: self.fields,
                     range: self.range,
                     width: self.width,
@@ -655,7 +655,7 @@ impl QueryFloatImagesRequestBuilder {
         Self {
             spreadsheet_token: None,
             sheet_id: None,
-            float_image_ids: Vec::new(),
+            float_image_ids: vec![],
             page_size: None,
             page_token: None,
         }
@@ -819,7 +819,7 @@ impl GetFloatImageRequestBuilder {
                 Ok(GetFloatImageRequest {
                     spreadsheet_token: self.spreadsheet_token.unwrap(),
                     sheet_id: self.sheet_id.unwrap(),
-                    float_image_id: float_image_id.clone(),
+                    float_image_id: float_image_id.clone()
                 })
             }
             _ => Err(openlark_core::error::LarkAPIError::IllegalParamError(
@@ -917,7 +917,7 @@ impl DeleteFloatImageRequestBuilder {
                 Ok(DeleteFloatImageRequest {
                     spreadsheet_token: self.spreadsheet_token.unwrap(),
                     sheet_id: self.sheet_id.unwrap(),
-                    float_image_id: float_image_id.clone(),
+                    float_image_id: float_image_id.clone()
                 })
             }
             _ => Err(openlark_core::error::LarkAPIError::IllegalParamError(
@@ -995,7 +995,7 @@ impl FloatImagesService {
         );
 
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &url);
-        api_request.body = serde_json::to_vec(request)?;
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let response =
             Transport::<CreateFloatImageResponse>::request(api_request, &self.config, None).await?;
@@ -1067,7 +1067,7 @@ impl FloatImagesService {
         );
 
         let mut api_request = ApiRequest::with_method_and_path(Method::PATCH, &url);
-        api_request.body = serde_json::to_vec(request)?;
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let response =
             Transport::<UpdateFloatImageResponse>::request(api_request, &self.config, None).await?;
@@ -1132,7 +1132,7 @@ impl FloatImagesService {
         );
 
         // 构建查询参数
-        let mut params = Vec::new();
+        let mut params = vec![];
 
         if !request.float_image_ids.is_empty() {
             params.push(format!(
@@ -1323,8 +1323,8 @@ impl FloatImagesService {
             height: None,
             offset_x: None,
             offset_y: None,
-            fields: Vec::new(),
-            float_image_ids: Vec::new(),
+            fields: vec![],
+            float_image_ids: vec![],
             page_size: None,
             page_token: None,
         }
@@ -1367,8 +1367,8 @@ impl FloatImagesService {
             height: None,
             offset_x: None,
             offset_y: None,
-            fields: Vec::new(),
-            float_image_ids: Vec::new(),
+            fields: vec![],
+            float_image_ids: vec![],
             page_size: None,
             page_token: None,
         }

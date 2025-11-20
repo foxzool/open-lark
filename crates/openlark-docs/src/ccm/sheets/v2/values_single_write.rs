@@ -29,7 +29,7 @@ use openlark_core::trait_system::Service;
 // use openlark_core::SDKResult;
 
 /// 单个范围写入请求
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ValuesSingleWriteRequest {
     /// 电子表格token
     pub spreadsheet_token: String,
@@ -101,7 +101,7 @@ impl Default for ValuesSingleWriteRequest {
         Self {
             spreadsheet_token: String::new(),
             range: String::new(),
-            values: Vec::new(),
+            values: vec![],
             value_input_option: None,
             data_parse_option: None,
             include_values_in_response: None,
@@ -122,7 +122,7 @@ impl ValuesSingleWriteRequest {
             spreadsheet_token: spreadsheet_token.into(),
             range: range.into(),
             values,
-            ..Default::default()
+            
         }
     }
 
@@ -308,7 +308,7 @@ pub struct ValuesSingleWriteResponseBody {
 // 移除重复的BaseResponse定义，使用openlark_core中的版本
 
 /// 单个范围写入服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ValuesSingleWriteService {
     config: Config,
 }
@@ -474,7 +474,7 @@ impl ValuesSingleWriteService {
 
     /// 将CSV数据解析为值数组
     fn parse_csv_to_values(csv_data: &str, delimiter: char) -> SDKResult<Vec<Vec<Value>>> {
-        let mut result = Vec::new();
+        let mut result = vec![];
 
         for line in csv_data.lines() {
             let row = Self::parse_csv_line(line, delimiter)?
@@ -493,7 +493,7 @@ impl ValuesSingleWriteService {
 
     /// 解析CSV行
     fn parse_csv_line(line: &str, delimiter: char) -> SDKResult<Vec<String>> {
-        let mut result = Vec::new();
+        let mut result = vec![];
         let mut current = String::new();
         let mut in_quotes = false;
         let mut chars = line.chars().peekable();
@@ -559,7 +559,7 @@ impl ValuesSingleWriteService {
             }
         }
 
-        let mut result = Vec::new();
+        let mut result = vec![];
 
         // 添加表头（如果需要）
         if include_headers {
@@ -569,7 +569,7 @@ impl ValuesSingleWriteService {
 
         // 添加数据行
         for row_index in 0..row_count {
-            let mut row = Vec::new();
+            let mut row = vec![];
             for key in &keys {
                 if let Some(values) = data.get(key) {
                     row.push(values[row_index].clone());
@@ -819,7 +819,7 @@ mod tests {
         data.insert("年龄".to_string(), vec![json!(25), json!(30)]);
 
         // 测试包含表头
-        let values = ValuesSingleWriteService::hashmap_to_values(data.clone(), true).unwrap();
+        let values = ValuesSingleWriteService::hashmap_to_values(data.clone() true).unwrap();
         assert_eq!(values.len(), 3);
         assert_eq!(values[0][0], json!("姓名"));
         assert_eq!(values[0][1], json!("年龄"));

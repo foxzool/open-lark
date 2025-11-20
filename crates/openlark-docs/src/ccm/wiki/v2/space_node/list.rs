@@ -18,7 +18,7 @@ use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
     impl_executable_builder_owned,
 };
 /// 获取知识空间子节点列表请求,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ListSpaceNodeRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -37,7 +37,7 @@ pub struct ListSpaceNodeRequest {
 impl ListSpaceNodeRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone)]
+}#[derive(Clone, Debug)]
 pub struct ListSpaceNodeRequestBuilder {
     request: ListSpaceNodeRequest}
 impl ListSpaceNodeRequestBuilder {
@@ -51,7 +51,7 @@ impl ListSpaceNodeRequestBuilder {
     list,
 );
 /// 知识空间节点信息
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct NodeItem {
     /// 知识空间id
     pub space_id: String,
@@ -78,7 +78,7 @@ pub struct NodeItem {
     /// 是否有子节点
     pub has_child: Option<bool>}
 /// 获取知识空间子节点列表响应,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ListSpaceNodeResponse {
     /// 是否还有更多项
     pub has_more: bool,
@@ -106,7 +106,7 @@ api_req.set_api_path(EndpointBuilder::replace_param(,
         &request.space_id,
     ));
 // 构建查询参数,
-    let mut query_params = Vec::new();
+    let mut query_params = vec![];
 if let Some(page_size) = request.page_size {,
         query_params.push(format!("page_size={page_size}"));
 if let Some(page_token) = request.page_token {,

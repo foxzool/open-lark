@@ -2,7 +2,7 @@
 resolver = "2"
 members = [
     "crates/openlark-core",
-    # "crates/openlark-docs", # 暂时移除 - 需要完成 legacy_client 迁移
+    "crates/openlark-docs",
     "crates/openlark-auth",
     "crates/openlark-client",
     "crates/openlark-ai",
@@ -88,7 +88,7 @@ lark-websocket-protobuf = "0.1"
 openlark-core = { path = "crates/openlark-core" }
 openlark-auth = { path = "crates/openlark-auth" }
 openlark-client = { path = "crates/openlark-client" }
-# openlark-docs = { path = "crates/openlark-docs" } # 暂时移除 - 需要完成 legacy_client 迁移
+openlark-docs = { path = "crates/openlark-docs" }
 openlark-hr = { path = "crates/openlark-hr" }
 openlark-ai = { path = "crates/openlark-ai" }
 openlark-communication = { path = "crates/openlark-communication" }

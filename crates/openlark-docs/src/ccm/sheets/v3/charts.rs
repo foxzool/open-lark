@@ -710,7 +710,7 @@ impl ApiResponseTrait for DeleteChartResponse {
 }
 
 /// Sheets电子表格图表服务 v3
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ChartService {
     config: openlark_core::config::Config,
 }
@@ -780,7 +780,7 @@ impl ChartService {
         );
 
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
-        api_request.body = serde_json::to_vec(request)?;
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let response: Response<CreateChartResponse> =
             Transport::request(api_request, &self.config, None).await?;

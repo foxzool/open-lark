@@ -34,7 +34,7 @@ use openlark_core::{
 ///
 /// 提供企业级文件夹管理功能，支持文件夹的完整生命周期管理。
 /// 专为企业文档管理设计，具备完善的错误处理和性能优化。
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct FolderService {
     pub config: Config,
 }

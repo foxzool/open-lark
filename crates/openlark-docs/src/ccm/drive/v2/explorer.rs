@@ -40,10 +40,10 @@ impl ExplorerService {
         option: Option<RequestOption>,
     ) -> SDKResult<Response<ExplorerRootMeta>> {,
 let api_req = ApiRequest {,
-            http_http_http_method: Method::GET,
-            api_path: DRIVE_EXPLORER_V2_ROOT_FOLDER_META.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-            ..Default::default()};
+            http_http_method: Method::GET,
+            url: DRIVE_EXPLORER_V2_ROOT_FOLDER_META.to_string(),
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
+            };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
@@ -57,10 +57,10 @@ Ok(api_resp),
         option: Option<RequestOption>,
     ) -> SDKResult<Response<ExplorerFolderMeta>> {,
 let api_req = ApiRequest {,
-            http_http_http_method: Method::GET,
-            api_path: DRIVE_EXPLORER_V2_FOLDER_META.replace("{folder_token}", folder_token),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-            ..Default::default()
+            http_http_method: Method::GET,
+            url: DRIVE_EXPLORER_V2_FOLDER_META.replace("{folder_token}", folder_token),
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
+            
 };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -122,7 +122,7 @@ return None;
         }
 match self,
             .explorer_service
-            .list_folder(self.req.clone(), self.option.clone()),
+            .list_folder(self.req.clone() self.option.clone()),
 .await,
         {,
 Ok(resp) => match resp.data {,
@@ -143,7 +143,7 @@ Some(data.files)}
 None,
 }
 /// 我的空间（root folder）元信息,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ExplorerRootMeta {
     /// 文件夹的 token
     pub token: String,
@@ -158,7 +158,7 @@ impl ApiResponseTrait for.* {
 ResponseFormat::Data
     }
 /// 文件夹元信息,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ExplorerFolderMeta {
     /// 文件夹的 id
     pub id: String,
@@ -185,7 +185,7 @@ impl ApiResponseTrait for.* {
 ResponseFormat::Data
     }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CreateFolderRequest {
     /// 请求体,
 #[serde(skip)]
@@ -199,7 +199,7 @@ pub struct CreateFolderRequest {
 impl CreateFolderRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone)]
+}#[derive(Clone, Debug)]
 /// 创建文件夹请求体,
 pub struct CreateFolderRequestBuilder {
     request: CreateFolderRequest}
@@ -207,12 +207,12 @@ impl CreateFolderRequestBuilder {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 创建文件夹响应体,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CreateFolderResponse {
     /// 创建文件夹的token
     pub token: String,
     /// 创建文件夹的访问url
-    pub api_path: String,
+    pub url: String,
 impl ApiResponseTrait for.* {
     pub fn new(config: Config) -> Self {
         Self { config }
@@ -227,7 +227,7 @@ impl ListFolderRequestBuilder {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 列出文件夹查询参数,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ListFolderRequest {
     /// 请求体,
 #[serde(skip)]
@@ -236,7 +236,7 @@ impl ListFolderRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
 }
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ListFolderResponse {
     /// 文件夹列表
     pub files: Vec<FileInFolder>,
@@ -246,7 +246,7 @@ pub struct ListFolderResponse {
     /// 是否还有更多项
     pub has_more: bool,
 /// 文件夹清单列表,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct FileInFolder {
     /// 文件标识
     pub token: String,
@@ -275,7 +275,7 @@ pub struct FileInFolder {
     /// 父文件夹标识
     pub parent_token: String,
     /// 在浏览器中查看的链接
-    pub api_path: String,
+    pub url: String,
     /// 快捷方式文件信息,
 #[serde(skip_serializing_if = "Option::is_none")]
     pub shortcut_info: Option<ShortcutInfo>,
@@ -286,7 +286,7 @@ pub struct FileInFolder {
     /// 文件所有者
     pub owner_id: String,
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ShortcutInfo {
     /// 快捷方式指向的原文件类型,
 ///,

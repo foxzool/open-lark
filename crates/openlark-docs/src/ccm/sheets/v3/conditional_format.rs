@@ -758,7 +758,7 @@ impl ApiResponseTrait for DeleteConditionalFormatResponse {
 }
 
 /// Sheets电子表格条件格式服务 v3
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ConditionalFormatService {
     config: openlark_core::config::Config,
 }

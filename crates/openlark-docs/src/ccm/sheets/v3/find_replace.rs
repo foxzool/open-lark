@@ -6,6 +6,7 @@
 //! - 范围限制和匹配选项
 //! - 批量查找替换操作
 
+use serde_json::Value;
 use openlark_core::error::LarkAPIError;
 
 // 使用统一类型定义
@@ -607,7 +608,7 @@ impl openlark_core::api::ApiResponseTrait for ReplaceResponse {
 }
 
 /// Sheets电子表格查找和替换服务 v3
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct FindReplaceService {
     config: openlark_core::config::Config,
 }
@@ -663,7 +664,7 @@ impl FindReplaceService {
         );
 
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
-        api_request.body = serde_json::to_vec(request)?;
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let response: Response<FindResponse> =
             Transport::request(api_request, &self.config, None).await?;
@@ -729,7 +730,7 @@ impl FindReplaceService {
         );
 
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
-        api_request.body = serde_json::to_vec(request)?;
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let response: Response<ReplaceResponse> =
             Transport::request(api_request, &self.config, None).await?;

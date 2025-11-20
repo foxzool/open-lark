@@ -18,7 +18,7 @@ pub const ENDPOINT_DELETE_FILE_VERSION: &str = "/open-apis/drive/v1/files/{}/ver
 ///
 /// 用于获取文件特定版本的详细信息，包括版本元数据、创建者信息、
 /// 修改时间、文件大小等关键信息
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct GetFileVersionRequest {
     /// 请求体
     #[serde(skip)]
@@ -208,7 +208,7 @@ impl UserInfo {
 /// 用于删除文件的指定版本。删除操作不可逆，请谨慎使用。
 /// 删除版本不会影响文件的其他版本，如果删除的是当前版本，
 /// 系统会自动将最新版本设为当前版本。
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DeleteFileVersionRequest {
     /// 请求体
     #[serde(skip)]
@@ -675,7 +675,7 @@ impl GetFileVersionResponse {
 /// 获取文档版本信息构建器
 ///
 /// 提供流畅的API来获取文档版本信息，支持方法链调用和完整的错误处理
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct GetFileVersionBuilder {
     service: Arc<DriveServiceV1>,
     request: GetFileVersionRequest,
@@ -763,7 +763,7 @@ impl GetFileVersionBuilder {
 ///
 /// 提供流畅的API来删除文档版本，支持方法链调用和完整的错误处理
 /// 包含额外的安全验证措施防止误删除
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DeleteFileVersionBuilder {
     service: Arc<DriveServiceV1>,
     request: DeleteFileVersionRequest,

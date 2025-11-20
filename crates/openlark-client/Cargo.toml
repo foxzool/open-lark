@@ -32,7 +32,7 @@ log = { workspace = true, optional = true }
 # Optional service dependencies (conditionally included based on feature flags)
 openlark-communication = { workspace = true, optional = true }
 openlark-hr = { workspace = true, optional = true }
-# openlark-docs = { workspace = true, optional = true } # 暂时移除 - 需要完成 legacy_client 迁移
+openlark-docs = { workspace = true, optional = true }
 openlark-ai = { workspace = true, optional = true }
 openlark-auth = { workspace = true, optional = true }
 
@@ -65,14 +65,12 @@ hr = ["openlark-hr"]                          # 人力资源
 ai = ["openlark-ai"]                          # AI 和智能服务
 # people = ["openlark-people"]                  # 人员和联系人管理 (暂时禁用 - 循环依赖)
 
-# 注释：docs 功能暂时禁用，等待 legacy_client 迁移完成
-# docs = ["openlark-docs"]                    # 文档和知识库
+docs = ["openlark-docs"]                    # 文档和知识库
 
 # Convenience features - 基础功能组合 (只包含无循环依赖的服务)
 all-services = [
-    "auth", "communication", "hr", "ai"
+    "auth", "communication", "hr", "ai", "docs"
     # 暂时不包含有循环依赖的服务: admin, approval, collab, helpdesk, hire, people
-    # 暂时不包含 docs 功能
 ]
 
 # Complete client features for easy selection (只包含无循环依赖的服务)
