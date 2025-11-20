@@ -1,43 +1,67 @@
-/target
-/.idea
-.env
-/tmp
-crates/*/target
-**/*.rs.bk
-Cargo.lock
+# ============================================================================
+# Core Rust and Build Files
+# ============================================================================
 
-# Local configs (do not commit)
+# Rust build artifacts
+/target/
+crates/*/target/
+examples/target/
+tests/target/
+tools/*/target/
+
+# Rust lock file (keep workspace lock, ignore individual crates)
+Cargo.lock
+examples/Cargo.lock
+
+# Rust backup files
+**/*.rs.bk
+*.rs.bk
+
+# ============================================================================
+# Environment and Configuration
+# ============================================================================
+
+# Environment variables (never commit)
+.env
+.env.local
+.env.production
+
+# Local configurations
 /.config/
 /.test-config.toml
+.claude/settings.local.json
 
-# Generated reports (CI/local analysis artifacts)
-/reports/
-/tests/compatibility/
-api_check_output.txt
+# ============================================================================
+# Development and Analysis Artifacts
+# ============================================================================
 
 # Code coverage files
 *.lcov
 coverage.lcov
-**/coverage.lcov
 lcov.info
-coverage-html
+coverage-html/
 
+# Build and analysis outputs
+/reports/
+/results/
+api_check_output.txt
 *.changeset
 
-# POC and experimental files (next phase development)
+# Temporary development files
+/tmp/
+/temp/
+
+# POC and experimental files
 *_poc.toml
 poc_*.toml
 *_poc.rs
 poc_service_registry
 
-# Zen precommit temporary files
-zen_precommit.changeset
-
 # ============================================================================
-# Python Development Files
+# Python Development (if needed)
 # ============================================================================
 
-# Python cache and compiled files
+# Python cache
 __pycache__/
 *.py[cod]
 *$py.class
@@ -58,65 +82,37 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-MANIFEST
-
-# ============================================================================
-# Project-Specific Temporary Files
-# ============================================================================
-
-# Project analysis reports and data files
-*_analysis.md
-*_report.md
-api_implementation_data*.json
-complete_all_api_implementation_map*.md
-sheets_api_*_report.md
-FINAL_API_ANALYSIS_REPORT.md
-
-# Build tools output
-tools/*/target/
-tools/*/*.exe
-tools/*/*.json
-results/
 
 # ============================================================================
 # System and Editor Files
 # ============================================================================
 
-# macOS system files
+# macOS
 .DS_Store
 .DS_Store?
 ._*
 .Spotlight-V100
 .Trashes
 
-# Windows system files
+# Windows
 ehthumbs.db
 Thumbs.db
 
-# Editor files
+# Editors
 .vscode/
+.idea/
 *.swp
 *.swo
 *~
 
 # ============================================================================
-# Additional Rust Files
+# Claude Code Assistant
 # ============================================================================
 
-# Additional Rust backup and temp files
-**/*.rs.bk
-Cargo.lock
-
-# ============================================================================
-# Claude Code Assistant - Personal Configuration
-# ============================================================================
-
-# Personal settings (never share)
-.claude/settings.local.json
-
-# Personal work plans and temporary files
+# Personal work plans and artifacts
 .claude/plan/
 .claude/index.json
-
-# Command execution artifacts
 .claude/commands/
+
+# Temporary command files
+zen_precommit.changeset
