@@ -1,0 +1,599 @@
+{
+  "matches": [
+    {
+      "api_info": {
+        "api_id": "",
+        "name": "",
+        "method": "POST",
+        "path": "/",
+        "original_path": "",
+        "description": "",
+        "self_build": "",
+        "store_app": "",
+        "doc_link": "",
+        "service": "unknown",
+        "version": "unknown",
+        "implemented": false
+      },
+      "implementation": null,
+      "status": "not_found",
+      "match_confidence": 0.0,
+      "implementation_preview": "-"
+    }
+  ],
+  "stats": {
+    "total_apis": 1,
+    "matched_count": 0,
+    "match_rate": 0.0,
+    "unmatched_code_urls": 20,
+    "total_code_urls": 20
+  },
+  "unmatched_code_urls": [
+    {
+      "url_def": {
+        "url": "/open-apis/sheets/v2/spreadsheets/:/merge_cells",
+        "line_start": 319,
+        "line_end": 322,
+        "raw_format": "format!( \"/open-apis/sheets/v2/spreadsheets/{}/merge_cells\", &request.spreadsheet_token )",
+        "variables": [
+          "spreadsheet_token"
+        ],
+        "type": "multiline",
+        "file_path": "src/service/sheets/v2/merge_cells.rs",
+        "method_detection": {
+          "method": "POST",
+          "confidence": 0.95,
+          "source": "enum_values",
+          "evidence": "Method::POST",
+          "line_number": 318
+        },
+        "function_info": {
+          "function_name": "merge_cells",
+          "line_number": 307,
+          "signature": "pub async fn merge_cells(",
+          "type": "pub_async",
+          "search_distance": 12
+        }
+      },
+      "possible_reason": "Not in API list"
+    },
+    {
+      "url_def": {
+        "url": "/open-apis/sheets/v2/spreadsheets/:/unmerge_cells",
+        "line_start": 370,
+        "line_end": 373,
+        "raw_format": "format!( \"/open-apis/sheets/v2/spreadsheets/{}/unmerge_cells\", &request.spreadsheet_token )",
+        "variables": [
+          "spreadsheet_token"
+        ],
+        "type": "multiline",
+        "file_path": "src/service/sheets/v2/merge_cells.rs",
+        "method_detection": {
+          "method": "POST",
+          "confidence": 0.95,
+          "source": "enum_values",
+          "evidence": "Method::POST",
+          "line_number": 369
+        },
+        "function_info": {
+          "function_name": "unmerge_cells",
+          "line_number": 358,
+          "signature": "pub async fn unmerge_cells(",
+          "type": "pub_async",
+          "search_distance": 12
+        }
+      },
+      "possible_reason": "Not in API list"
+    },
+    {
+      "url_def": {
+        "url": "/open-apis/sheets/v2/spreadsheets/:/sheets_batch_update",
+        "line_start": 283,
+        "line_end": 283,
+        "raw_format": "format!(\"/open-apis/sheets/v2/spreadsheets/{}/sheets_batch_update\", spreadsheet_token)",
+        "variables": [],
+        "type": "single_line",
+        "file_path": "src/service/sheets/v2/sheet_management.rs",
+        "method_detection": {
+          "method": "POST",
+          "confidence": 0.95,
+          "source": "enum_values",
+          "evidence": "Method::POST",
+          "line_number": 282
+        },
+        "function_info": {
+          "function_name": "batch_update_sheets",
+          "line_number": 271,
+          "signature": "pub async fn batch_update_sheets(",
+          "type": "pub_async",
+          "search_distance": 12
+        }
+      },
+      "possible_reason": "Not in API list"
+    },
+    {
+      "url_def": {
+        "url": "/open-apis/sheets/v2/spreadsheets/:/metainfo",
+        "line_start": 298,
+        "line_end": 301,
+        "raw_format": "format!( \"{}/open-apis/sheets/v2/spreadsheets/{}/metainfo\", self.config.base_url, request.spreadsheet_token )",
+        "variables": [
+          "spreadsheet_token"
+        ],
+        "type": "multiline",
+        "file_path": "src/service/sheets/v2/metainfo.rs",
+        "method_detection": {
+          "method": "POST",
+          "confidence": 0.3,
+          "source": "default",
+          "evidence": "No explicit method found, using default",
+          "line_number": 297
+        },
+        "function_info": {
+          "function_name": "get_spreadsheet_meta",
+          "line_number": 289,
+          "signature": "pub async fn get_spreadsheet_meta(&self, request: GetSpreadsheetMetaRequest) -> SDKResult<SpreadsheetMetaInfo> {",
+          "type": "pub_async",
+          "search_distance": 9
+        }
+      },
+      "possible_reason": "Not in API list"
+    },
+    {
+      "url_def": {
+        "url": "/open-apis/sheets/v2/spreadsheets/:/metainfo?:",
+        "line_start": 303,
+        "line_end": 306,
+        "raw_format": "format!( \"{}/open-apis/sheets/v2/spreadsheets/{}/metainfo?{}\", self.config.base_url, request.spreadsheet_token, query_params )",
+        "variables": [
+          "spreadsheet_token"
+        ],
+        "type": "multiline",
+        "file_path": "src/service/sheets/v2/metainfo.rs",
+        "method_detection": {
+          "method": "GET",
+          "confidence": 1.0,
+          "source": "chain_calls",
+          "evidence": ".get(",
+          "line_number": 312
+        },
+        "function_info": {
+          "function_name": "get_spreadsheet_meta",
+          "line_number": 289,
+          "signature": "pub async fn get_spreadsheet_meta(&self, request: GetSpreadsheetMetaRequest) -> SDKResult<SpreadsheetMetaInfo> {",
+          "type": "pub_async",
+          "search_distance": 14
+        }
+      },
+      "possible_reason": "Not in API list"
+    },
+    {
+      "url_def": {
+        "url": "/open-apis/sheets/v2/spreadsheets/:/insert_dimension_range",
+        "line_start": 573,
+        "line_end": 576,
+        "raw_format": "format!( \"/open-apis/sheets/v2/spreadsheets/{}/insert_dimension_range\", &request.spreadsheet_token )",
+        "variables": [
+          "spreadsheet_token"
+        ],
+        "type": "multiline",
+        "file_path": "src/service/sheets/v2/dimension_operations.rs",
+        "method_detection": {
+          "method": "POST",
+          "confidence": 0.95,
+          "source": "enum_values",
+          "evidence": "Method::POST",
+          "line_number": 572
+        },
+        "function_info": {
+          "function_name": "insert_dimension_range",
+          "line_number": 561,
+          "signature": "pub async fn insert_dimension_range(",
+          "type": "pub_async",
+          "search_distance": 12
+        }
+      },
+      "possible_reason": "Not in API list"
+    },
+    {
+      "url_def": {
+        "url": "/open-apis/sheets/v2/spreadsheets/:/dimension_range",
+        "line_start": 627,
+        "line_end": 630,
+        "raw_format": "format!( \"/open-apis/sheets/v2/spreadsheets/{}/dimension_range\", &request.spreadsheet_token )",
+        "variables": [
+          "spreadsheet_token"
+        ],
+        "type": "multiline",
+        "file_path": "src/service/sheets/v2/dimension_operations.rs",
+        "method_detection": {
+          "method": "DELETE",
+          "confidence": 0.95,
+          "source": "enum_values",
+          "evidence": "Method::DELETE",
+          "line_number": 626
+        },
+        "function_info": {
+          "function_name": "delete_dimension_range",
+          "line_number": 615,
+          "signature": "pub async fn delete_dimension_range(",
+          "type": "pub_async",
+          "search_distance": 12
+        }
+      },
+      "possible_reason": "Not in API list"
+    },
+    {
+      "url_def": {
+        "url": "/open-apis/sheets/v2/spreadsheets/:/dimension_range",
+        "line_start": 687,
+        "line_end": 690,
+        "raw_format": "format!( \"/open-apis/sheets/v2/spreadsheets/{}/dimension_range\", &request.spreadsheet_token )",
+        "variables": [
+          "spreadsheet_token"
+        ],
+        "type": "multiline",
+        "file_path": "src/service/sheets/v2/dimension_operations.rs",
+        "method_detection": {
+          "method": "POST",
+          "confidence": 0.95,
+          "source": "enum_values",
+          "evidence": "Method::POST",
+          "line_number": 686
+        },
+        "function_info": {
+          "function_name": "add_dimension_range",
+          "line_number": 675,
+          "signature": "pub async fn add_dimension_range(",
+          "type": "pub_async",
+          "search_distance": 12
+        }
+      },
+      "possible_reason": "Not in API list"
+    },
+    {
+      "url_def": {
+        "url": "/open-apis/sheets/v2/spreadsheets/:/dimension_range",
+        "line_start": 747,
+        "line_end": 750,
+        "raw_format": "format!( \"/open-apis/sheets/v2/spreadsheets/{}/dimension_range\", &request.spreadsheet_token )",
+        "variables": [
+          "spreadsheet_token"
+        ],
+        "type": "multiline",
+        "file_path": "src/service/sheets/v2/dimension_operations.rs",
+        "method_detection": {
+          "method": "PUT",
+          "confidence": 0.95,
+          "source": "enum_values",
+          "evidence": "Method::PUT",
+          "line_number": 746
+        },
+        "function_info": {
+          "function_name": "update_dimension_range",
+          "line_number": 735,
+          "signature": "pub async fn update_dimension_range(",
+          "type": "pub_async",
+          "search_distance": 12
+        }
+      },
+      "possible_reason": "Not in API list"
+    },
+    {
+      "url_def": {
+        "url": "/open-apis/sheets/v2/spreadsheets/:/styles_batch_update",
+        "line_start": 552,
+        "line_end": 555,
+        "raw_format": "format!( \"/open-apis/sheets/v2/spreadsheets/{}/styles_batch_update\", &request.spreadsheet_token )",
+        "variables": [
+          "spreadsheet_token"
+        ],
+        "type": "multiline",
+        "file_path": "src/service/sheets/v2/style_operations.rs",
+        "method_detection": {
+          "method": "PUT",
+          "confidence": 0.95,
+          "source": "enum_values",
+          "evidence": "Method::PUT",
+          "line_number": 551
+        },
+        "function_info": {
+          "function_name": "batch_update_styles",
+          "line_number": 540,
+          "signature": "pub async fn batch_update_styles(",
+          "type": "pub_async",
+          "search_distance": 12
+        }
+      },
+      "possible_reason": "Not in API list"
+    },
+    {
+      "url_def": {
+        "url": "/open-apis/sheets/v2/spreadsheets/:/images",
+        "line_start": 1265,
+        "line_end": 1265,
+        "raw_format": "format!(\"/open-apis/sheets/v2/spreadsheets/{}/images\", &request.spreadsheet_token)",
+        "variables": [],
+        "type": "single_line",
+        "file_path": "src/service/sheets/v2/image_write.rs",
+        "method_detection": {
+          "method": "POST",
+          "confidence": 0.95,
+          "source": "enum_values",
+          "evidence": "Method::POST",
+          "line_number": 1264
+        },
+        "function_info": {
+          "function_name": "write_image",
+          "line_number": 1254,
+          "signature": "pub async fn write_image(",
+          "type": "pub_async",
+          "search_distance": 11
+        }
+      },
+      "possible_reason": "Not in API list"
+    },
+    {
+      "url_def": {
+        "url": "/open-apis/sheets/v2/spreadsheets/:/values_batch_get",
+        "line_start": 290,
+        "line_end": 290,
+        "raw_format": "format!(\"{}/open-apis/sheets/v2/spreadsheets/{}/values_batch_get\",",
+        "variables": [],
+        "type": "single_line",
+        "file_path": "src/service/sheets/v2/batch_read_ranges.rs",
+        "method_detection": {
+          "method": "POST",
+          "confidence": 0.3,
+          "source": "default",
+          "evidence": "No explicit method found, using default",
+          "line_number": 289
+        },
+        "function_info": {
+          "function_name": "batch_read",
+          "line_number": 281,
+          "signature": "pub async fn batch_read(&self, request: BatchReadRangesRequest) -> SDKResult<BatchReadRangesResponse> {",
+          "type": "pub_async",
+          "search_distance": 9
+        }
+      },
+      "possible_reason": "Not in API list"
+    },
+    {
+      "url_def": {
+        "url": "/open-apis/sheets/v2/spreadsheets/:/values_batch_get?:",
+        "line_start": 293,
+        "line_end": 293,
+        "raw_format": "format!(\"{}/open-apis/sheets/v2/spreadsheets/{}/values_batch_get?{}\",",
+        "variables": [],
+        "type": "single_line",
+        "file_path": "src/service/sheets/v2/batch_read_ranges.rs",
+        "method_detection": {
+          "method": "GET",
+          "confidence": 1.0,
+          "source": "chain_calls",
+          "evidence": ".get(",
+          "line_number": 300
+        },
+        "function_info": {
+          "function_name": "batch_read",
+          "line_number": 281,
+          "signature": "pub async fn batch_read(&self, request: BatchReadRangesRequest) -> SDKResult<BatchReadRangesResponse> {",
+          "type": "pub_async",
+          "search_distance": 12
+        }
+      },
+      "possible_reason": "Not in API list"
+    },
+    {
+      "url_def": {
+        "url": "/open-apis/sheets/v2/spreadsheets/:/dataValidation",
+        "line_start": 600,
+        "line_end": 603,
+        "raw_format": "format!( \"/open-apis/sheets/v2/spreadsheets/{}/dataValidation\", &request.spreadsheet_token )",
+        "variables": [
+          "spreadsheet_token"
+        ],
+        "type": "multiline",
+        "file_path": "src/service/sheets/v2/data_validation.rs",
+        "method_detection": {
+          "method": "POST",
+          "confidence": 0.95,
+          "source": "enum_values",
+          "evidence": "Method::POST",
+          "line_number": 599
+        },
+        "function_info": {
+          "function_name": "set_data_validation",
+          "line_number": 588,
+          "signature": "pub async fn set_data_validation(",
+          "type": "pub_async",
+          "search_distance": 12
+        }
+      },
+      "possible_reason": "Not in API list"
+    },
+    {
+      "url_def": {
+        "url": "/open-apis/sheets/v2/spreadsheets/:/dataValidation/:/:",
+        "line_start": 661,
+        "line_end": 666,
+        "raw_format": "format!( \"/open-apis/sheets/v2/spreadsheets/{}/dataValidation/{}/{}\", &request.spreadsheet_token, &request.sheet_id, &request.data_validation_id )",
+        "variables": [
+          "spreadsheet_token",
+          "sheet_id",
+          "data_validation_id"
+        ],
+        "type": "multiline",
+        "file_path": "src/service/sheets/v2/data_validation.rs",
+        "method_detection": {
+          "method": "PUT",
+          "confidence": 0.95,
+          "source": "enum_values",
+          "evidence": "Method::PUT",
+          "line_number": 660
+        },
+        "function_info": {
+          "function_name": "update_data_validation",
+          "line_number": 649,
+          "signature": "pub async fn update_data_validation(",
+          "type": "pub_async",
+          "search_distance": 12
+        }
+      },
+      "possible_reason": "Not in API list"
+    },
+    {
+      "url_def": {
+        "url": "/open-apis/sheets/v3/spreadsheets/:/sheets/:/filter_views",
+        "line_start": 701,
+        "line_end": 705,
+        "raw_format": "format!( \"/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views\", &request.spreadsheet_token, &request.sheet_id )",
+        "variables": [
+          "spreadsheet_token",
+          "sheet_id"
+        ],
+        "type": "multiline",
+        "file_path": "src/service/sheets/v3/filter_views.rs",
+        "method_detection": {
+          "method": "POST",
+          "confidence": 0.95,
+          "source": "enum_values",
+          "evidence": "Method::POST",
+          "line_number": 700
+        },
+        "function_info": {
+          "function_name": "create_filter_view",
+          "line_number": 689,
+          "signature": "pub async fn create_filter_view(",
+          "type": "pub_async",
+          "search_distance": 12
+        }
+      },
+      "possible_reason": "Not in API list"
+    },
+    {
+      "url_def": {
+        "url": "/open-apis/sheets/v3/spreadsheets/:/sheets/:/filter_views/:",
+        "line_start": 754,
+        "line_end": 759,
+        "raw_format": "format!( \"/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}\", &request.spreadsheet_token, &request.sheet_id, &request.filter_view_id )",
+        "variables": [
+          "spreadsheet_token",
+          "sheet_id",
+          "filter_view_id"
+        ],
+        "type": "multiline",
+        "file_path": "src/service/sheets/v3/filter_views.rs",
+        "method_detection": {
+          "method": "GET",
+          "confidence": 0.95,
+          "source": "enum_values",
+          "evidence": "Method::GET",
+          "line_number": 753
+        },
+        "function_info": {
+          "function_name": "get_filter_view",
+          "line_number": 742,
+          "signature": "pub async fn get_filter_view(",
+          "type": "pub_async",
+          "search_distance": 12
+        }
+      },
+      "possible_reason": "Not in API list"
+    },
+    {
+      "url_def": {
+        "url": "/open-apis/sheets/v3/spreadsheets/:/sheets/:/filter_views/:",
+        "line_start": 812,
+        "line_end": 817,
+        "raw_format": "format!( \"/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}\", &request.spreadsheet_token, &request.sheet_id, &request.filter_view_id )",
+        "variables": [
+          "spreadsheet_token",
+          "sheet_id",
+          "filter_view_id"
+        ],
+        "type": "multiline",
+        "file_path": "src/service/sheets/v3/filter_views.rs",
+        "method_detection": {
+          "method": "PATCH",
+          "confidence": 0.95,
+          "source": "enum_values",
+          "evidence": "Method::PATCH",
+          "line_number": 811
+        },
+        "function_info": {
+          "function_name": "update_filter_view",
+          "line_number": 800,
+          "signature": "pub async fn update_filter_view(",
+          "type": "pub_async",
+          "search_distance": 12
+        }
+      },
+      "possible_reason": "Not in API list"
+    },
+    {
+      "url_def": {
+        "url": "/open-apis/sheets/v3/spreadsheets/:/sheets/:/filter_views/:",
+        "line_start": 865,
+        "line_end": 870,
+        "raw_format": "format!( \"/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}\", &request.spreadsheet_token, &request.sheet_id, &request.filter_view_id )",
+        "variables": [
+          "spreadsheet_token",
+          "sheet_id",
+          "filter_view_id"
+        ],
+        "type": "multiline",
+        "file_path": "src/service/sheets/v3/filter_views.rs",
+        "method_detection": {
+          "method": "DELETE",
+          "confidence": 0.95,
+          "source": "enum_values",
+          "evidence": "Method::DELETE",
+          "line_number": 864
+        },
+        "function_info": {
+          "function_name": "delete_filter_view",
+          "line_number": 853,
+          "signature": "pub async fn delete_filter_view(",
+          "type": "pub_async",
+          "search_distance": 12
+        }
+      },
+      "possible_reason": "Not in API list"
+    },
+    {
+      "url_def": {
+        "url": "/open-apis/sheets/v3/spreadsheets",
+        "line_start": 349,
+        "line_end": 349,
+        "raw_format": "let url = format!(\"{}/open-apis/sheets/v3/spreadsheets\", self.config.base_url);",
+        "variables": [],
+        "type": "single_line",
+        "file_path": "src/service/sheets/v3/spreadsheet_create.rs",
+        "method_detection": {
+          "method": "POST",
+          "confidence": 1.0,
+          "source": "chain_calls",
+          "evidence": ".post(",
+          "line_number": 353
+        },
+        "function_info": {
+          "function_name": "create",
+          "line_number": 341,
+          "signature": "pub async fn create(&self, request: CreateSpreadsheetRequest) -> SDKResult<CreateSpreadsheetResponse> {",
+          "type": "pub_async",
+          "search_distance": 8
+        }
+      },
+      "possible_reason": "Not in API list"
+    }
+  ],
+  "service_summary": {
+    "unknown": {
+      "total": 1,
+      "matched": 0,
+      "not_matched": 1
+    }
+  }
+}

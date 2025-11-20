@@ -1,0 +1,39 @@
+{
+  "matches": [
+    {
+      "api_info": {
+        "api_id": "",
+        "name": "",
+        "method": "POST",
+        "path": "/",
+        "original_path": "",
+        "description": "",
+        "self_build": "",
+        "store_app": "",
+        "doc_link": "",
+        "service": "unknown",
+        "version": "unknown",
+        "implemented": false
+      },
+      "implementation": null,
+      "status": "not_found",
+      "match_confidence": 0.0,
+      "implementation_preview": "-"
+    }
+  ],
+  "stats": {
+    "total_apis": 1,
+    "matched_count": 0,
+    "match_rate": 0.0,
+    "unmatched_code_urls": 0,
+    "total_code_urls": 0
+  },
+  "unmatched_code_urls": [],
+  "service_summary": {
+    "unknown": {
+      "total": 1,
+      "matched": 0,
+      "not_matched": 1
+    }
+  }
+}
