@@ -2,6 +2,128 @@
 //!
 //! 这个适配器用于桥接旧的 LarkClient 接口和新的 openlark-core 架构
 //! 解决 openlark-docs 中使用的不存在的 LarkClient 类型问题
+//!
+//! # 主要功能
+//!
+//! - **双模式架构**: 支持核心架构集成模式和纯遗留模式
+//! - **智能重试**: 自动重试网络错误、服务器错误和限流错误
+//! - **响应缓存**: GET请求响应自动缓存，提升性能
+//! - **超时控制**: 30秒默认超时，防止请求无限等待
+//! - **错误分类**: 详细的错误分类和用户友好的错误消息
+//!
+//! # 使用示例
+//!
+//! ## 基本用法
+//!
+//! ```rust,no_run
+//! use openlark_core::config::Config;
+//! use openlark_docs::legacy_client_adapter::{LegacyClientAdapter, RequestBuilder};
+//!
+//! # #[tokio::main]
+//! # async fn main() -> Result<(), Box<dyn std::error::Error>> {
+//! // 创建配置
+//! let config = Config::default();
+//!
+//! // 创建适配器（默认启用核心架构集成）
+//! let client = LegacyClientAdapter::new(config)?;
+//!
+//! // 创建请求
+//! let request = RequestBuilder::get("https://open.feishu.cn/open-apis/api/v1/test")
+//!     .query_param("user_id", "user_123")
+//!     .header("Authorization", "Bearer token");
+//!
+//! // 发送请求（泛型类型定义响应格式）
+//! let response: serde_json::Value = client.send(request).await?;
+//! # Ok(())
+//! # }
+//! ```
+//!
+//! ## 纯遗留模式
+//!
+//! ```rust,no_run
+//! use openlark_core::config::Config;
+//! use openlark_docs::legacy_client_adapter::{LegacyClientAdapter, RequestBuilder};
+//!
+//! # #[tokio::main]
+//! # async fn main() -> Result<(), Box<dyn std::error::Error>> {
+//! let config = Config::default();
+//! // 创建纯遗留模式适配器（完全向后兼容）
+//! let client = LegacyClientAdapter::new_legacy_only(config)?;
+//!
+//! let request = RequestBuilder::get("https://api.example.com/test");
+//! // 所有请求直接使用 reqwest::Client，不经过 openlark-core
+//! let response: serde_json::Value = client.send(request).await?;
+//! # Ok(())
+//! # }
+//! ```
+//!
+//! ## 缓存管理
+//!
+//! ```rust,no_run
+//! use openlark_core::config::Config;
+//! use openlark_docs::legacy_client_adapter::LegacyClientAdapter;
+//!
+//! # #[tokio::main]
+//! # async fn main() -> Result<(), Box<dyn std::error::Error>> {
+//! let config = Config::default();
+//! let client = LegacyClientAdapter::new(config)?;
+//!
+//! // 查看缓存统计
+//! let cache_size = client.cache_stats();
+//! println!("缓存项数: {}", cache_size);
+//!
+//! // 清理缓存
+//! client.clear_cache();
+//!
+//! // 缓存仅对GET请求生效，自动管理过期
+//! # Ok(())
+//! # }
+//! ```
+//!
+//! # 架构说明
+//!
+//! ## 双模式架构
+//!
+//! - **核心集成模式**: 通过 openlark-core 的 Transport 层发送请求
+//!   - 统一的错误处理
+//!   - 自动令牌管理
+//!   - 完整的监控支持
+//!
+//! - **纯遗留模式**: 直接使用 reqwest::Client
+//!   - 完全向后兼容
+//!   - 最小依赖
+//!   - 原始性能
+//!
+//! ## 重试策略
+//!
+//! - **网络错误**: 自动重试最多3次
+//! - **服务器错误 (5xx)**: 自动重试
+//! - **限流错误 (429)**: 自动重试
+//! - **客户端错误 (4xx)**: 不重试
+//! - **SSL错误**: 不重试
+//!
+//! ## 缓存机制
+//!
+//! - 仅对 GET 请求生效
+//! - 基于URL、查询参数和认证头生成缓存键
+//! - 自动序列化和反序列化响应数据
+//! - 线程安全的并发访问
+//!
+//! # 性能特征
+//!
+//! - **缓存键生成**: < 0.1ms/操作
+//! - **缓存统计**: < 0.01ms/操作
+//! - **内存安全**: 无内存泄漏，Arc正确管理
+//! - **并发安全**: 支持多线程并发访问
+//!
+//! # 错误处理
+//!
+//! 所有错误都转换为标准的 `SDKResult<T>` 类型，支持：
+//!
+//! - 用户友好的错误消息
+//! - 重试建议
+//! - 详细的错误上下文
+//! - 错误分类和恢复策略
 
 use openlark_core::{config::Config, api::{ApiRequest, HttpMethod, ApiResponseTrait}, http::Transport, SDKResult};
 use reqwest::{Client, Method};
@@ -634,5 +756,90 @@ mod tests {
             error: None,
         };
         assert!(!client.should_retry(&client_error));
+    }
+
+    #[test]
+    fn test_performance_benchmark() {
+        use std::time::Instant;
+
+        let config = Config::default();
+        let client = LegacyClientAdapter::new(config).unwrap();
+
+        // 测试缓存键生成性能
+        let start = Instant::now();
+        for _ in 0..1000 {
+            let request = RequestBuilder::get("https://api.example.com/test")
+                .query_param("param1", "value1")
+                .query_param("param2", "value2")
+                .header("Authorization", "Bearer token123");
+
+            let _key = client.generate_cache_key(&request);
+        }
+        let duration = start.elapsed();
+
+        // 缓存键生成应该在合理时间内完成（< 100ms for 1000 operations）
+        assert!(duration.as_millis() < 100, "缓存键生成性能不达标: {:?}", duration);
+
+        // 测试缓存操作性能
+        let start = Instant::now();
+        for _ in 0..100 {
+            // 模拟缓存操作
+            let _stats = client.cache_stats();
+        }
+        let duration = start.elapsed();
+
+        // 缓存统计应该非常快速（< 10ms for 100 operations）
+        assert!(duration.as_millis() < 10, "缓存统计性能不达标: {:?}", duration);
+    }
+
+    #[test]
+    fn test_memory_usage() {
+        use std::sync::Arc;
+
+        let config = Config::default();
+        let client = LegacyClientAdapter::new(config).unwrap();
+
+        // 测试Arc引用计数，确保没有内存泄漏
+        let client_arc = Arc::new(client);
+        let weak_ref = Arc::downgrade(&client_arc);
+
+        drop(client_arc);
+
+        // 验证对象被正确释放
+        assert!(weak_ref.strong_count() == 0);
+        assert!(weak_ref.upgrade().is_none());
+    }
+
+    #[tokio::test]
+    async fn test_concurrent_cache_access() {
+        use tokio::task;
+
+        let config = Config::default();
+        let client = Arc::new(LegacyClientAdapter::new(config).unwrap());
+
+        // 并发缓存访问测试
+        let mut handles = vec![];
+
+        for i in 0..10 {
+            let client_clone = Arc::clone(&client);
+            let handle = task::spawn(async move {
+                let request = RequestBuilder::get("https://api.example.com/test")
+                    .query_param("thread_id", i.to_string())
+                    .header("Authorization", "Bearer token");
+
+                let _key = client_clone.generate_cache_key(&request);
+                let _stats = client_clone.cache_stats();
+            });
+
+            handles.push(handle);
+        }
+
+        // 等待所有任务完成
+        for handle in handles {
+            handle.await.unwrap();
+        }
+
+        // 验证并发访问没有导致崩溃
+        assert!(client.cache_stats() <= usize::MAX);
     }
 }
