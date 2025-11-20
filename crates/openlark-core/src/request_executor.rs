@@ -694,28 +694,30 @@ mod tests {
         use std::collections::HashMap;
 
         // Test ApiRequest construction (simplified for current structure)
-        let mut api_req = ApiRequest::post("https://open.feishu.cn/test/path");
+        let mut api_req: ApiRequest<String> = ApiRequest::post("https://open.feishu.cn/test/path");
 
         // Verify the request was created successfully
         assert!(api_req.url.to_string().contains("test/path"));
 
         // Test setting query params
         let mut query_params = HashMap::new();
-        query_params.insert("key", "value".to_string());
-        api_req.query_params = query_params;
+        query_params.insert("key".to_string(), "value".to_string());
+        api_req.query = query_params;
 
-        assert_eq!(api_req.query_params.len(), 1);
-        assert_eq!(api_req.query_params.get("key"), Some(&"value".to_string()));
+        assert_eq!(api_req.query.len(), 1);
+        assert_eq!(api_req.query.get("key"), Some(&"value".to_string()));
 
         // Test setting body
         let body_data = TestRequest {
             message: "test".to_string(),
         };
-        api_req.body = serde_json::to_vec(&body_data).unwrap();
+        api_req.body = Some(crate::api::RequestData::Json(serde_json::to_value(&body_data).unwrap()));
 
-        assert!(!api_req.body.is_empty());
-        let deserialized: TestRequest = serde_json::from_slice(&api_req.body).unwrap();
-        assert_eq!(deserialized.message, "test");
+        assert!(api_req.body.is_some());
+        if let Some(crate::api::RequestData::Json(json_body)) = &api_req.body {
+            let deserialized: TestRequest = serde_json::from_value(json_body.clone()).unwrap();
+            assert_eq!(deserialized.message, "test");
+        }
     }
 
     #[test]
@@ -1168,47 +1170,52 @@ mod tests {
     // API request building edge cases
     #[test]
     fn test_request_executor_api_request_building_edge_cases() {
-        use crate::api::ApiRequest;
-        use crate::constants::AccessTokenType;
-        use reqwest::Method;
+        use crate::api::{ApiRequest, HttpMethod};
 
         // Test with very long path
         let long_path = "/".to_string() + &"a".repeat(1000);
-        let api_req_long = ApiRequest {
-            method: Method::GET,
-            api_path: long_path.clone(),
-            supported_access_token_types: vec![AccessTokenType::User],
-            ..Default::default()
+        let api_req_long: ApiRequest<String> = ApiRequest {
+            method: HttpMethod::Get,
+            url: format!("https://open.feishu.cn/open-apis{}", long_path),
+            headers: std::collections::HashMap::new(),
+            query: std::collections::HashMap::new(),
+            body: None,
+            timeout: None,
+            _phantom: std::marker::PhantomData,
         };
 
-        assert_eq!(api_req_long.api_path, long_path);
-        assert_eq!(api_req_long.api_path.len(), 1001);
+        assert_eq!(api_req_long.url.len(), 1001 + 32); // 32 chars for base URL
 
-        // Test with empty supported tokens
-        let api_req_empty_tokens = ApiRequest {
-            method: Method::POST,
-            api_path: "/test".to_string(),
-            supported_access_token_types: vec![],
-            ..Default::default()
+        // Test with empty request
+        let api_req_empty: ApiRequest<String> = ApiRequest {
+            method: HttpMethod::Post,
+            url: "https://open.feishu.cn/open-apis/test".to_string(),
+            headers: std::collections::HashMap::new(),
+            query: std::collections::HashMap::new(),
+            body: None,
+            timeout: None,
+            _phantom: std::marker::PhantomData,
         };
 
-        assert!(api_req_empty_tokens.supported_access_token_types.is_empty());
+        assert!(api_req_empty.headers.is_empty());
 
-        // Test with many supported tokens
-        let api_req_many_tokens = ApiRequest {
-            method: Method::PUT,
-            api_path: "/test".to_string(),
-            supported_access_token_types: vec![
-                AccessTokenType::Tenant,
-                AccessTokenType::User,
-                AccessTokenType::App,
-                AccessTokenType::Tenant, // duplicate
-                AccessTokenType::User,   // duplicate
-            ],
-            ..Default::default()
+        // Test with query parameters
+        let mut query_params = std::collections::HashMap::new();
+        query_params.insert("tenant".to_string(), "test".to_string());
+        query_params.insert("user".to_string(), "test".to_string());
+        query_params.insert("app".to_string(), "test".to_string());
+
+        let api_req_with_query: ApiRequest<String> = ApiRequest {
+            method: HttpMethod::Put,
+            url: "https://open.feishu.cn/open-apis/test".to_string(),
+            headers: std::collections::HashMap::new(),
+            query: query_params,
+            body: None,
+            timeout: None,
+            _phantom: std::marker::PhantomData,
         };
 
-        assert_eq!(api_req_many_tokens.supported_access_token_types.len(), 5);
+        assert_eq!(api_req_with_query.query.len(), 3);
     }
 
     // Method chaining and composition tests

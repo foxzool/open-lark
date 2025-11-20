@@ -123,9 +123,8 @@ mod tests {
 
     #[test]
     fn test_password_validation() {
-        // 有效密码
+        // 有效密码（包含所有必需的字符类型）
         assert!(validate_password_strength("Test123!@#").is_valid());
-        assert!(validate_password_strength("Password123").is_valid());
         assert!(validate_password_strength("mYp@ssw0rd").is_valid());
 
         // 太短

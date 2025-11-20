@@ -138,7 +138,7 @@ pub trait ClientBuilder: Sized {
     fn retry_count(self, count: u32) -> Self;
 
     /// 🌍 从环境变量加载配置
-    fn from_env(self) -> Self;
+    fn with_env(self) -> Self;
 
     /// 🔨 构建客户端实例
     fn build(self) -> Result<Self::Output>;
@@ -160,7 +160,7 @@ pub trait MonitorableClient: LarkClient {
 }
 
 /// 📊 客户端统计信息
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct ClientStats {
     /// 📡 总请求数
     pub total_requests: u64,
