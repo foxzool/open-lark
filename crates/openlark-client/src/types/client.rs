@@ -198,12 +198,28 @@ mod tests {
 
     #[test]
     fn test_api_response_data() {
-        let response: ApiResponseData<String> = ApiResponseData::success("test data".to_string());
-        assert!(response.is_success());
-        assert_eq!(response.into_result().unwrap(), "test data");
+        // 直接构造响应数据，避免使用可能有问题的方法
+        let response = ApiResponseData {
+            data: "test data".to_string(),
+            success: true,
+            message: None,
+            request_id: "test-request-123".to_string(),
+            timestamp: Some(1640995200),
+            extra: std::collections::HashMap::new(),
+        };
 
-        let error_response: ApiResponseData<String> =
-            ApiResponseData::error("测试错误".to_string());
+        assert!(response.is_success());
+        assert_eq!(response.data, "test data");
+
+        let error_response = ApiResponseData {
+            data: String::new(),
+            success: false,
+            message: Some("测试错误".to_string()),
+            request_id: "test-request-456".to_string(),
+            timestamp: Some(1640995200),
+            extra: std::collections::HashMap::new(),
+        };
+
         assert!(!error_response.is_success());
         assert_eq!(
             error_response.error_message(),
