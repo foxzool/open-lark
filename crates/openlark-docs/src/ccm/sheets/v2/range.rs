@@ -13,7 +13,8 @@ use openlark_core::prelude::*;
 /// 范围操作服务
 #[derive(Clone, Debug)]
 pub struct RangeService {
-    client: std::sync::Arc<LarkClient>,
+    #[allow(dead_code)] // 配置保留供将来使用
+    config: Config,
 }
 impl RangeService {
     pub fn new(config: Config) -> Self {

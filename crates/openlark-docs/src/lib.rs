@@ -16,8 +16,8 @@ mod macros;
 // 导入端点模块
 pub mod endpoints;
 
-// Legacy client adapter module
-pub mod legacy_client_adapter;
+// Legacy client adapter module has been removed
+// All services now use Config-based architecture directly
 
 // Services module
 pub mod services;

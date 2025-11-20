@@ -20,7 +20,8 @@ use serde::{Deserialize, Serialize};
 /// 表格操作服务,
 #[derive(Clone, Debug)]
 pub struct SpreadsheetService {
-    client: std::sync::Arc<LarkClient>,
+    #[allow(dead_code)]
+    config: Config,,
 impl SpreadsheetService {
     pub fn new(config: Config) -> Self {
         Self { config }
