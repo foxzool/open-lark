@@ -858,16 +858,25 @@ impl LarkAPIError {
         match self {
             Self::ApiError { code, .. } => {
                 if let Some(error_code) = LarkErrorCode::from_code(*code) {
-                    if error_code.is_retryable() {
-                        ErrorHandlingCategory::Retryable
-                    } else if error_code.is_auth_error() {
-                        ErrorHandlingCategory::Authentication
-                    } else if error_code.is_permission_error() {
-                        ErrorHandlingCategory::Permission
-                    } else if error_code.is_client_error() {
-                        ErrorHandlingCategory::Parameter
-                    } else {
-                        ErrorHandlingCategory::Business
+                    // 优先检查服务器错误
+                    match error_code {
+                        LarkErrorCode::InternalServerError
+                        | LarkErrorCode::BadGateway
+                        | LarkErrorCode::ServiceUnavailable
+                        | LarkErrorCode::GatewayTimeout => ErrorHandlingCategory::Server,
+                        _ => {
+                            if error_code.is_retryable() {
+                                ErrorHandlingCategory::Retryable
+                            } else if error_code.is_auth_error() {
+                                ErrorHandlingCategory::Authentication
+                            } else if error_code.is_permission_error() {
+                                ErrorHandlingCategory::Permission
+                            } else if error_code.is_client_error() {
+                                ErrorHandlingCategory::Parameter
+                            } else {
+                                ErrorHandlingCategory::Business
+                            }
+                        }
                     }
                 } else {
                     ErrorHandlingCategory::Unknown
@@ -918,7 +927,7 @@ impl LarkAPIError {
             Self::ApiError { code, .. } => LarkErrorCode::from_code(*code)
                 .map(|ec| ec.severity())
                 .unwrap_or(ErrorSeverity::Error),
-            Self::NetworkError { .. } | Self::RequestError(_) => ErrorSeverity::Error,
+            Self::NetworkError { .. } | Self::RequestError(_) | Self::BadRequest(_) => ErrorSeverity::Error,
             Self::AuthenticationError { .. } | Self::MissingAccessToken => ErrorSeverity::Error,
             Self::PermissionError { .. } => ErrorSeverity::Error,
             Self::IOErr(_) | Self::DeserializeError(_) => ErrorSeverity::Critical,
