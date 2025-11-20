@@ -13,7 +13,8 @@ use openlark_core::{config::Config, trait_system::Service};
 /// 统计服务
 #[derive(Clone, Debug)]
 pub struct StatisticsService {
-    client: std::sync::Arc<LarkClient>,
+    #[allow(dead_code)]
+    config: Config,,
 }
 impl StatisticsService {
     pub fn new(config: Config) -> Self {

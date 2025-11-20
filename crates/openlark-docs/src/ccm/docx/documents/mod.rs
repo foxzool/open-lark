@@ -3,25 +3,18 @@
 //! This module provides comprehensive document operations functionality,
 //! including document creation, reading, updating, and deletion.
 
-use crate::prelude::*;
+use openlark_core::config::Config;
 
 /// Documents operation service
 #[derive(Clone, Debug)]
 pub struct DocumentsService {
-    client: std::sync::Arc<LarkClient>,
+    #[allow(dead_code)] // 配置保留供将来使用
+    config: Config,
 }
 
 impl DocumentsService {
-    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
-        Self { client }
-    }
-}
-
-impl std::ops::Deref for DocumentsService {
-    type Target = LarkClient;
-
-    fn deref(&self) -> &Self::Target {
-        &self.client
+    pub fn new(config: Config) -> Self {
+        Self { config }
     }
 }
 
