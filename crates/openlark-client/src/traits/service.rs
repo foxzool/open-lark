@@ -206,7 +206,7 @@ impl ServiceMetadata {
 }
 
 /// 📊 服务统计信息
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Copy, Default)]
 pub struct ServiceStats {
     /// 📡 请求总数
     pub requests_count: u64,

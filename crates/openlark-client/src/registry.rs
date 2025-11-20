@@ -17,6 +17,7 @@ use std::sync::{Arc, RwLock};
 /// - 线程安全的并发访问
 /// - 服务生命周期管理
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct ServiceRegistry {
     /// 🔐 服务存储
     services: RwLock<HashMap<String, ServiceEntry>>,
@@ -30,6 +31,7 @@ pub struct ServiceRegistry {
 
 /// 🏷️ 服务条目
 #[derive(Debug)]
+#[allow(dead_code)]
 struct ServiceEntry {
     /// 📦 服务实例
     service: Box<dyn Any + Send + Sync>,
@@ -152,7 +154,7 @@ impl ServiceRegistry {
             }
         }
 
-        let type_id = service.type_id();
+        let type_id = (*service).type_id();
         let now = std::time::SystemTime::now();
 
         // 创建服务条目
@@ -295,7 +297,7 @@ impl ServiceRegistry {
 }
 
 /// 📊 服务注册表统计信息
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy, Default)]
 pub struct ServiceRegistryStats {
     /// 📊 总服务数
     pub total_services: usize,
@@ -309,19 +311,8 @@ pub struct ServiceRegistryStats {
     pub last_access: Option<std::time::SystemTime>,
 }
 
-impl Default for ServiceRegistryStats {
-    fn default() -> Self {
-        Self {
-            total_services: 0,
-            enabled_services: 0,
-            total_registrations: 0,
-            total_accesses: 0,
-            last_access: None,
-        }
-    }
-}
-
 /// 🔧 服务注册器构建器
+#[derive(Debug)]
 pub struct ServiceRegistryBuilder {
     config: Option<Arc<Config>>,
 }
