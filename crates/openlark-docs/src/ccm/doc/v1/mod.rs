@@ -20,7 +20,7 @@ use openlark_core::config::Config;
 ///
 /// 提供飞书文档v1版本的统一入口，支持现代化的文档管理。
 /// 包括创建、编辑、格式化、协作等企业级功能。
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DocsServiceV1 {
     config: Config,
     /// 文档管理服务
@@ -44,7 +44,7 @@ impl DocsServiceV1 {
     /// ```
     pub fn new(config: Config) -> Self {
         Self {
-            config: config.clone(),
+            config: config.clone()
             document: DocumentService::new(config),
         }
     }

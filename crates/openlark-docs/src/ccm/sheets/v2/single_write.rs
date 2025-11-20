@@ -62,7 +62,7 @@ impl Default for SingleWriteRequest {
         Self {
             spreadsheet_token: String::new(),
             range: String::new(),
-            values: Vec::new(),
+            values: vec![],
             value_input_option: Some("USER_ENTERED".to_string()),
             include_values_in_response: Some(false),
             response_value_render_option: None,
@@ -246,7 +246,7 @@ impl ApiResponseTrait for SingleWriteResponse {
 }
 
 /// 单范围写入服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SingleWriteService {
     config: Config,
 }
@@ -589,7 +589,7 @@ mod tests {
 
         // 空数据应该失败
         request.range = "Sheet1!A1:C3".to_string();
-        request.values = Vec::new();
+        request.values = vec![];
         assert!(request.validate().is_err());
     }
 

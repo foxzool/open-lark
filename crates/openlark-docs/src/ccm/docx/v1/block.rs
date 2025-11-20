@@ -6,7 +6,7 @@
 use crate::prelude::*;
 
 /// Block operation service
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct BlockService {
     client: std::sync::Arc<LarkClient>,
 }

@@ -19,7 +19,7 @@ pub const ENDPOINT_DELETE_FILE_SUBSCRIBE: &str = "/open-apis/drive/v1/files/{}/d
 ///
 /// 用于查询指定文件的文档事件订阅状态，包括订阅类型、订阅者信息、
 /// 订阅时间等详细状态信息
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct GetFileSubscriptionRequest {
     /// 请求体
     #[serde(skip)]
@@ -261,7 +261,7 @@ pub enum SubscriptionStatus {
 /// 查询云文档事件订阅状态构建器
 ///
 /// 提供流畅的API来执行查询操作，支持方法链调用
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct GetFileSubscriptionBuilder {
     service: Arc<super::cloud_docs::drive::v1::DriveServiceV1>,
     request: GetFileSubscriptionRequest,
@@ -342,7 +342,7 @@ impl GetFileSubscriptionBuilder {
 ///
 /// 用于取消指定文件的文档事件订阅，支持取消特定类型的订阅或全部订阅
 /// 包含安全确认机制，防止误操作
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DeleteFileSubscriptionRequest {
     /// 请求体
     #[serde(skip)]
@@ -532,7 +532,7 @@ pub struct DeleteSubscriptionResultData {
 /// 取消云文档事件订阅状态构建器
 ///
 /// 提供流畅的API来执行取消订阅操作，支持方法链调用
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DeleteFileSubscriptionBuilder {
     service: Arc<super::cloud_docs::drive::v1::DriveServiceV1>,
     request: DeleteFileSubscriptionRequest,

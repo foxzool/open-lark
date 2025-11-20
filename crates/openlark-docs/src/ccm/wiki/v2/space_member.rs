@@ -95,7 +95,7 @@ impl ApiResponseTrait for DeleteSpaceMemberResponse {
 }
 
 /// 知识空间成员管理服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SpaceMemberService {
     config: Config,
 }
@@ -162,11 +162,11 @@ impl SpaceMemberService {
             .replace("{}", &req.member_id);
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::DELETE,
-            api_path: endpoint,
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(), // DELETE请求无body
-            ..Default::default()
+            method: openlark_core::api::HttpMethod::Delete,
+            url: endpoint,
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: None, // DELETE请求无body
+            
         };
 
         let resp =
@@ -187,7 +187,7 @@ impl SpaceMemberService {
 // ==================== 构建器模式 ====================
 
 /// 删除知识空间成员构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DeleteSpaceMemberBuilder {
     request: DeleteSpaceMemberRequest,
 }

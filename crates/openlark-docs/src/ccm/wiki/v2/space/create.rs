@@ -18,7 +18,7 @@ use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
     impl_executable_builder_owned,
 };
 /// 创建知识空间请求,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CreateSpaceRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -30,7 +30,7 @@ pub struct CreateSpaceRequest {
 impl CreateSpaceRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone)]
+}#[derive(Clone, Debug)]
 pub struct CreateSpaceRequestBuilder {
     request: CreateSpaceRequest}
 impl CreateSpaceRequestBuilder {
@@ -44,7 +44,7 @@ impl CreateSpaceRequestBuilder {
     create,
 );
 /// 创建的知识空间信息
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CreatedSpace {
     /// 知识空间id
     pub space_id: String,
@@ -58,7 +58,7 @@ pub struct CreatedSpace {
     /// 知识空间可见性
     pub visibility: Option<String>}
 /// 创建知识空间响应,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CreateSpaceResponse {
     /// 创建的知识空间信息
     pub space: CreatedSpace,

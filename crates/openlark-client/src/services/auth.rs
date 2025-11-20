@@ -4,7 +4,6 @@ use crate::{Config, Error, Result};
  *
  * 提供认证相关的API接口，包括令牌管理、OAuth认证等
  */
-use std::sync::Arc;
 
 /// 认证服务
 pub struct AuthService<'a> {

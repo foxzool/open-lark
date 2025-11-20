@@ -60,7 +60,7 @@ api_req
 Ok(api_resp),
     }
 /// 获取云文档权限设置,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct GetPermissionRequest {
     api_request: ApiRequest,
     /// 文件的 token
@@ -84,14 +84,14 @@ pub struct GetPermissionRequest {
 impl GetPermissionRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone)]
+}#[derive(Clone, Debug)]
 pub struct GetPermissionRequestBuilder {
     request: GetPermissionRequest}
 impl GetPermissionRequestBuilder {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 返回的文档公共设置,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct GetPermissionResponse {
     /// 返回的文档公共设置
     pub permission_public: PermissionPublic,
@@ -102,7 +102,7 @@ impl ApiResponseTrait for.* {
 api::ResponseFormat::Data
     }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 /// 返回的文档公共设置,
 pub struct PermissionPublic {
 /// 允许内容被分享到组织外,
@@ -166,7 +166,7 @@ pub struct PermissionPublic {
     /// 节点是否已加锁，加锁之后不再继承父级页面的权限
     pub lock_switch: Option<bool>}
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct PatchPermissionRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -248,7 +248,7 @@ pub struct PatchPermissionRequest {
 impl PatchPermissionRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone)]
+}#[derive(Clone, Debug)]
 pub struct PatchPermissionRequestBuilder {
     request: PatchPermissionRequest}
 impl PatchPermissionRequestBuilder {

@@ -225,7 +225,7 @@ impl ApiResponseTrait for UpdateSheetsResponse {
 }
 
 /// 工作表管理服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SheetManagementService {
     config: Config,
 }
@@ -286,7 +286,7 @@ impl SheetManagementService {
         );
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-        api_req.body = serde_json::to_vec(request)?;
+        api_req.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         // 发送请求
         let api_resp =
@@ -302,12 +302,12 @@ impl SheetManagementService {
 
     /// 创建批量更新构建器
     pub fn batch_update_builder(&self, spreadsheet_token: &str) -> BatchUpdateSheetsBuilder {
-        BatchUpdateSheetsBuilder::new(self.config.clone(), spreadsheet_token)
+        BatchUpdateSheetsBuilder::new(self.config.clone() spreadsheet_token)
     }
 }
 
 /// 工作表更新构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct UpdateSheetBuilder {
     request: UpdateSheetRequest,
     config: Config,
@@ -377,7 +377,7 @@ impl UpdateSheetBuilder {
 }
 
 /// 批量更新工作表构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct BatchUpdateSheetsBuilder {
     batch_request: BatchUpdateSheetsRequest,
     config: Config,

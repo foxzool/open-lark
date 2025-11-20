@@ -941,7 +941,7 @@ impl Default for QueryCommentsRequest {
 impl Default for PageResponse<Document> {
     fn default() -> Self {
         Self {
-            items: Vec::new(),
+            items: vec![],
             page_token: None,
             has_more: Some(false),
             total: Some(0),
@@ -952,7 +952,7 @@ impl Default for PageResponse<Document> {
 impl Default for PageResponse<Folder> {
     fn default() -> Self {
         Self {
-            items: Vec::new(),
+            items: vec![],
             page_token: None,
             has_more: Some(false),
             total: Some(0),
@@ -963,7 +963,7 @@ impl Default for PageResponse<Folder> {
 impl Default for PageResponse<Comment> {
     fn default() -> Self {
         Self {
-            items: Vec::new(),
+            items: vec![],
             page_token: None,
             has_more: Some(false),
             total: Some(0),
@@ -974,7 +974,7 @@ impl Default for PageResponse<Comment> {
 impl Default for PageResponse<DocumentSearchResult> {
     fn default() -> Self {
         Self {
-            items: Vec::new(),
+            items: vec![],
             page_token: None,
             has_more: Some(false),
             total: Some(0),

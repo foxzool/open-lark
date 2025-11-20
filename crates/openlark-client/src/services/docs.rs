@@ -2,8 +2,7 @@
 //!
 //! 提供文档相关的API接口，包括表格、文档等操作
 
-use crate::{Config, Error, Result};
-use std::sync::Arc;
+use crate::{Config, Result};
 
 /// 文档服务
 pub struct DocsService<'a> {

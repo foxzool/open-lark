@@ -210,7 +210,7 @@ impl ApiResponseTrait for GetTaskResultResponse {
 }
 
 /// 任务管理服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct TaskService {
     config: Config,
 }
@@ -274,11 +274,11 @@ impl TaskService {
             .replace("{}", &req.task_id);
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: endpoint,
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(), // GET请求无body
-            ..Default::default()
+            method: openlark_core::api::HttpMethod::Get,
+            url: endpoint,
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: None, // GET请求无body
+            
         };
 
         let resp = Transport::<GetTaskResultResponse>::request(api_req, &self.config, None).await?;
@@ -297,7 +297,7 @@ impl TaskService {
 // ==================== 构建器模式 ====================
 
 /// 获取任务结果构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct GetTaskResultBuilder {
     request: GetTaskResultRequest,
 }
@@ -468,7 +468,7 @@ mod tests {
         let error = TaskError {
             code: Some("ERROR".to_string()),
             message: Some("Error message".to_string()),
-            ..Default::default()
+            
         };
         let error_result = TaskResult::Error(error);
         if let TaskResult::Error(err) = error_result {
@@ -594,7 +594,7 @@ mod tests {
         response.task = TaskInfo {
             task_id: Some("task_abc".to_string()),
             status: Some(TaskStatus::Success),
-            ..Default::default()
+            
         };
 
         assert_eq!(response.task.task_id, Some("task_abc".to_string()));
@@ -621,7 +621,7 @@ mod tests {
             task_id: Some("task_abc".to_string()),
             status: Some(TaskStatus::Success),
             progress: Some(100),
-            ..Default::default()
+            
         };
 
         let serialized = serde_json::to_string(&response).unwrap();
@@ -642,9 +642,9 @@ mod tests {
             error: Some(TaskError {
                 code: Some("TIMEOUT".to_string()),
                 message: Some("任务执行超时".to_string()),
-                ..Default::default()
+                
             }),
-            ..Default::default()
+            
         };
 
         assert_eq!(failed_task.task_id, Some("task_failed".to_string()));
@@ -658,7 +658,7 @@ mod tests {
             status: Some(TaskStatus::Running),
             progress: Some(45),
             task_type: Some("batch_export".to_string()),
-            ..Default::default()
+            
         };
 
         assert_eq!(running_task.status, Some(TaskStatus::Running));
@@ -671,7 +671,7 @@ mod tests {
             status: Some(TaskStatus::Cancelled),
             progress: Some(20),
             finish_time: Some("2023-01-01T00:02:00Z".to_string()),
-            ..Default::default()
+            
         };
 
         assert_eq!(cancelled_task.status, Some(TaskStatus::Cancelled));
@@ -751,7 +751,7 @@ mod tests {
             task_id: Some("task_complex".to_string()),
             status: Some(TaskStatus::Success),
             result: Some(TaskResult::Success(complex_result)),
-            ..Default::default()
+            
         };
 
         if let Some(TaskResult::Success(data)) = task_with_complex_result.result {

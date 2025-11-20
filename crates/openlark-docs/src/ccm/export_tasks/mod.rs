@@ -17,7 +17,7 @@
 //!     file_type: "doc".to_string(),
 //!     export_type: "pdf".to_string(),
 //!     export_name: Some("导出文档".to_string()),
-//!     ..Default::default()
+//!     
 //! };
 //!
 //! let response = service.create_export_task(&request).await?;
