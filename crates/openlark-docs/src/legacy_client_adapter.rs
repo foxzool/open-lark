@@ -43,26 +43,19 @@ pub type APIResult<T> = SDKResult<T>;
 impl LegacyClientAdapter {
     /// 创建新的适配器实例
     pub fn new(config: Config) -> SDKResult<Self> {
-        let client = config.http_client.clone();
-        let config = Arc::new(config);
-        let client = Arc::new(client);
         let cache = Arc::new(parking_lot::RwLock::new(HashMap::new()));
-
         Ok(Self {
-            client,
-            config,
+            client: Arc::new(config.http_client.clone()),
+            config: Arc::new(config),
             cache,
         })
     }
 
     /// 从 Arc<Config> 创建适配器
     pub fn from_config(config: Arc<Config>) -> SDKResult<Self> {
-        let client = config.http_client.clone();
-        let client = Arc::new(client);
         let cache = Arc::new(parking_lot::RwLock::new(HashMap::new()));
-
         Ok(Self {
-            client,
+            client: Arc::new(config.http_client.clone()),
             config,
             cache,
         })
@@ -73,23 +66,9 @@ impl LegacyClientAdapter {
     where
         T: for<'de> serde::Deserialize<'de> + Send + Sync,
     {
-        let url = if !request.query_params.is_empty() {
-            let mut url = request.url;
-            url.push('?');
-            let query_string = request.query_params
-                .iter()
-                .map(|(k, v)| format!("{}={}", k, urlencoding::encode(v)))
-                .collect::<Vec<_>>()
-                .join("&");
-            url.push_str(&query_string);
-            url
-        } else {
-            request.url
-        };
-
-        // 添加查询参数（需要手动添加到 URL）
+        // 构建最终URL，统一处理查询参数
         let final_url = if !request.query_params.is_empty() {
-            let mut url_parts = url::Url::parse(&url).map_err(|e|
+            let mut url_parts = url::Url::parse(&request.url).map_err(|e|
                 openlark_core::error::LarkAPIError::api_error(
                     400,
                     format!("解析URL失败: {}", e),
@@ -97,13 +76,13 @@ impl LegacyClientAdapter {
                 )
             )?;
 
-            for (key, value) in request.query_params {
-                url_parts.query_pairs_mut().append_pair(&key, &value);
+            for (key, value) in &request.query_params {
+                url_parts.query_pairs_mut().append_pair(key, value);
             }
 
             url_parts.to_string()
         } else {
-            url
+            request.url.clone()
         };
 
         let mut req = self.client.request(request.method, &final_url);
