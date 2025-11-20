@@ -215,21 +215,39 @@ pub use traits::*;
 // 请使用新的 DefaultLarkClient 和 ClientBuilder
 // 迁移指南：https://github.com/foxzool/open-lark/blob/main/docs/migration-guide.md
 
-// 重新导出服务类型
+// 重新导出服务类型（只导出实际可用的 features）
+// #[cfg(feature = "admin")]
+// pub use services::AdminService;
+
+// #[cfg(feature = "approval")]
+// pub use services::ApprovalService;
+
+#[cfg(feature = "auth")]
+pub use services::AuthService;
+
+// #[cfg(feature = "collab")]
+// pub use services::CollabService;
+
 #[cfg(feature = "communication")]
 pub use services::CommunicationService;
+
+// #[cfg(feature = "docs")]
+// pub use services::DocsService;
+
+// #[cfg(feature = "helpdesk")]
+// pub use services::HelpdeskService;
+
+// #[cfg(feature = "hire")]
+// pub use services::HireService;
 
 #[cfg(feature = "hr")]
 pub use services::HRService;
 
-#[cfg(feature = "docs")]
-pub use services::DocsService;
-
 #[cfg(feature = "ai")]
 pub use services::AIService;
 
-#[cfg(feature = "auth")]
-pub use services::AuthService;
+// #[cfg(feature = "people")]
+// pub use services::PeopleService;
 
 // 重新导出 openlark-core 核心类型
 pub use openlark_core::{config::Config as CoreConfig, SDKResult as CoreResult};
@@ -253,21 +271,39 @@ pub mod prelude {
     // 服务注册
     pub use crate::{ServiceDescriptor, ServiceRegistry};
 
-    // 服务类型
+    // 服务类型（只导出实际可用的 features）
+    // #[cfg(feature = "admin")]
+    // pub use crate::services::AdminService;
+
+    // #[cfg(feature = "approval")]
+    // pub use crate::services::ApprovalService;
+
+    #[cfg(feature = "auth")]
+    pub use crate::services::AuthService;
+
+    // #[cfg(feature = "collab")]
+    // pub use crate::services::CollabService;
+
     #[cfg(feature = "communication")]
     pub use crate::services::CommunicationService;
+
+    // #[cfg(feature = "docs")]
+    // pub use crate::services::DocsService;
+
+    // #[cfg(feature = "helpdesk")]
+    // pub use crate::services::HelpdeskService;
+
+    // #[cfg(feature = "hire")]
+    // pub use crate::services::HireService;
 
     #[cfg(feature = "hr")]
     pub use crate::services::HRService;
 
-    #[cfg(feature = "docs")]
-    pub use crate::services::DocsService;
-
     #[cfg(feature = "ai")]
     pub use crate::services::AIService;
 
-    #[cfg(feature = "auth")]
-    pub use crate::services::AuthService;
+    // #[cfg(feature = "people")]
+    // pub use crate::services::PeopleService;
 
     // 功能管理
     pub use crate::{FeatureLoader, FeatureSet};

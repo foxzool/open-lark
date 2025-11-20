@@ -7,6 +7,7 @@
 //! - 删除数据验证规则
 //! - 支持多种验证类型和条件
 
+use serde_json::Value;
 use openlark_core::{
     api::ApiRequest,
     api::{ApiResponseTrait, BaseResponse, ResponseFormat},
@@ -606,7 +607,7 @@ pub struct DeleteDataValidationResponse {
 impl Default for GetDataValidationResponse {
     fn default() -> Self {
         Self {
-            data_validation: Vec::new(),
+            data_validation: vec![],
         }
     }
 }
@@ -700,7 +701,7 @@ impl DeleteDataValidationRequest {
 }
 
 /// 数据验证操作服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DataValidationService {
     config: Config,
 }
@@ -758,7 +759,7 @@ impl DataValidationService {
         );
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-        api_req.body = serde_json::to_vec(&request)?;
+        api_req.body = Some(openlark_core::api::RequestData::Json(&request))?;
 
         // 发送请求
         let api_resp =
@@ -818,7 +819,7 @@ impl DataValidationService {
         );
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-        api_req.body = serde_json::to_vec(&request)?;
+        api_req.body = Some(openlark_core::api::RequestData::Json(&request))?;
 
         // 发送请求
         let api_resp =
@@ -963,7 +964,7 @@ impl DataValidationService {
         range: impl Into<String>,
     ) -> DropdownValidationBuilder {
         DropdownValidationBuilder::new(
-            self.config.clone(),
+            self.config.clone()
             spreadsheet_token.into(),
             sheet_id.into(),
             range.into(),
@@ -978,7 +979,7 @@ impl DataValidationService {
         range: impl Into<String>,
     ) -> NumberRangeValidationBuilder {
         NumberRangeValidationBuilder::new(
-            self.config.clone(),
+            self.config.clone()
             spreadsheet_token.into(),
             sheet_id.into(),
             range.into(),
@@ -987,7 +988,7 @@ impl DataValidationService {
 }
 
 /// 下拉列表验证构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DropdownValidationBuilder {
     config: Config,
     spreadsheet_token: String,
@@ -1008,7 +1009,7 @@ impl DropdownValidationBuilder {
             spreadsheet_token,
             sheet_id,
             range,
-            values: Vec::new(),
+            values: vec![],
             prompt_message: None,
             error_message: None,
             allow_empty: true,
@@ -1080,7 +1081,7 @@ impl DropdownValidationBuilder {
 }
 
 /// 数字范围验证构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct NumberRangeValidationBuilder {
     config: Config,
     spreadsheet_token: String,

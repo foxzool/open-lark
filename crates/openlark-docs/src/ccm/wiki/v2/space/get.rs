@@ -29,7 +29,7 @@ use std::sync::Arc;
 ///     .build()
 ///     .unwrap();
 /// ```
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct GetSpaceInfoRequest {
     /// 请求体
     #[serde(skip)]

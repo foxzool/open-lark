@@ -68,7 +68,7 @@ pub struct Locale {
 }
 
 /// 创建电子表格请求
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CreateSpreadsheetRequest {
     /// 电子表格标题
     pub title: String,
@@ -102,7 +102,7 @@ impl CreateSpreadsheetRequest {
     pub fn new(title: impl Into<String>) -> Self {
         Self {
             title: title.into(),
-            ..Default::default()
+            
         }
     }
 
@@ -318,7 +318,7 @@ pub struct CreateSpreadsheetResponseBody {
 // 使用openlark_core::api::Response，避免重复定义
 
 /// 电子表格创建服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SpreadsheetCreateService {
     config: Config,
 }
@@ -380,7 +380,7 @@ impl SpreadsheetCreateService {
         let url = format!("{}/open-apis/sheets/v3/spreadsheets", self.config.base_url);
 
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &url);
-        api_request.body = serde_json::to_vec(&body)?;
+        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?;
 
         let base_response =
             Transport::<CreateSpreadsheetResponseBody>::request(api_request, &self.config, None)
@@ -441,7 +441,7 @@ impl CreateSpreadsheetBuilder {
         Self {
             service,
             title: None,
-            sheets: Vec::new(),
+            sheets: vec![],
             time_zone: None,
             locale: None,
             folder_path: None,

@@ -2,6 +2,7 @@
 //!
 //! 提供卡片实体管理相关的数据结构，支持卡片的创建、更新、配置等操作。
 
+use serde_json::Value;
 use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 

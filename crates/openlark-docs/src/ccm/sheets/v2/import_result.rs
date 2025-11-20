@@ -95,7 +95,7 @@ impl ApiResponseTrait for ImportResultResponse {
 }
 
 /// 导入结果查询服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ImportResultService {
     config: Config,
 }

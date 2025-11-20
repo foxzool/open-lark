@@ -353,10 +353,10 @@ pub struct ConfigSummary {
     pub header_count: usize,
 }
 
-impl ConfigSummary {
-    /// 📄 格式化为字符串
-    pub fn to_string(&self) -> String {
-        format!(
+impl std::fmt::Display for ConfigSummary {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
             "Config {{ app_id: {}, app_secret_set: {}, base_url: {}, timeout: {:?}, retry_count: {}, enable_log: {}, header_count: {} }}",
             self.app_id,
             self.app_secret_set,

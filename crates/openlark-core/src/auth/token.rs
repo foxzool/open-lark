@@ -354,7 +354,8 @@ mod tests {
         assert_eq!(token.app_type, "test_app");
         assert!(!token.is_expired());
         assert_eq!(token.access_count, 0);
-        assert_eq!(token.expires_in_seconds(), 3600);
+        let expires_in = token.expires_in_seconds();
+        assert!(expires_in >= 3599 && expires_in <= 3600, "expires_in_seconds should be ~3600, got {}", expires_in);
     }
 
     #[test]

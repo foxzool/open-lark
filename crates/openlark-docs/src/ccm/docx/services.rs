@@ -29,7 +29,7 @@ use super::models_docx::{
 };
 
 /// ccm_docs API 服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CcmDocsService {
     config: Config,
 }
@@ -420,7 +420,7 @@ impl Default for GetDocumentsMetaBuilder {
 }
 
 /// docx API 服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DocxService {
     config: Config,
 }

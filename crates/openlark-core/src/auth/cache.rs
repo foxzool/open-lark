@@ -346,34 +346,33 @@ impl MemoryTokenCache {
         let stats = self.stats.clone();
         let key_owned = key.to_string();
 
-        tokio::spawn(async move {
-            let mut cache_guard = cache.write().unwrap();
-            let ttl = Duration::from_secs(token.expires_in_seconds());
+        // 直接执行而不是spawn，确保操作立即完成（修复测试问题）
+        let mut cache_guard = cache.write().unwrap();
+        let ttl = Duration::from_secs(token.expires_in_seconds());
 
-            let entry = CacheEntry::new(token, ttl);
+        let entry = CacheEntry::new(token, ttl);
 
-            // 检查缓存容量限制
-            if cache_guard.len() >= 1000 {
-                // 可配置的最大容量
-                // 使用LRU策略：移除最旧的条目
-                if let Some(oldest_key) = cache_guard
-                    .iter()
-                    .min_by_key(|(_, entry)| entry.created_at)
-                    .map(|(k, _)| k.clone())
-                {
-                    cache_guard.remove(&oldest_key);
-                }
+        // 检查缓存容量限制
+        if cache_guard.len() >= 1000 {
+            // 可配置的最大容量
+            // 使用LRU策略：移除最旧的条目
+            if let Some(oldest_key) = cache_guard
+                .iter()
+                .min_by_key(|(_, entry)| entry.created_at)
+                .map(|(k, _)| k.clone())
+            {
+                cache_guard.remove(&oldest_key);
             }
+        }
 
-            cache_guard.insert(key_owned, entry);
+        cache_guard.insert(key_owned, entry);
 
-            // 更新统计信息（避免锁竞争）
-            if let Ok(mut stats_guard) = stats.try_write() {
-                stats_guard.current_size = cache_guard.len();
-            }
+        // 更新统计信息（避免锁竞争）
+        if let Ok(mut stats_guard) = stats.try_write() {
+            stats_guard.current_size = cache_guard.len();
+        }
 
-            debug!("Cached token for key");
-        });
+        debug!("Cached token for key");
     }
 
     /// 从缓存获取令牌
@@ -385,14 +384,10 @@ impl MemoryTokenCache {
             let cache_guard = cache.read().unwrap();
             if let Some(entry) = cache_guard.get(key) {
                 if entry.is_expired() {
-                    // 缓存过期，释放读锁后异步清理
+                    // 缓存过期，直接清理（修复测试问题）
                     drop(cache_guard);
-                    let cache_clone = cache.clone();
-                    let key_owned = key.to_string();
-                    tokio::spawn(async move {
-                        let mut cache_guard = cache_clone.write().unwrap();
-                        cache_guard.remove(&key_owned);
-                    });
+                    let mut cache_guard = cache.write().unwrap();
+                    cache_guard.remove(key);
                     return None;
                 } else {
                     // 快速路径：直接返回克隆的令牌
