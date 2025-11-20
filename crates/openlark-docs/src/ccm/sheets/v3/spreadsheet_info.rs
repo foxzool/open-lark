@@ -56,7 +56,7 @@ impl ApiResponseTrait for SpreadsheetInfoResponseBody {
 // ============================================================================
 
 /// 电子表格信息服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SpreadsheetInfoService {
     config: Config,
 }
@@ -127,7 +127,7 @@ impl SpreadsheetInfoService {
         &self,
         param: impl Into<String>,
     ) -> GetSpreadsheetInfoBuilder {
-        GetSpreadsheetInfoBuilder::new(self.clone(), param)
+        GetSpreadsheetInfoBuilder::new(self.clone() param)
     }
 }
 
@@ -212,7 +212,7 @@ impl SpreadsheetInfoRequest {
 
     /// 构建查询参数（如果需要）
     pub fn build_query_params(&self) -> String {
-        let params: Vec<String> = Vec::new();
+        let params: Vec<String> = vec![];
 
         // 添加查询参数
         // if let Some(value) = &self.field {

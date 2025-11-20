@@ -43,7 +43,7 @@ impl Default for ValueRange {
         Self {
             major_dimension: "ROWS".to_string(),
             range: String::new(),
-            values: Value::Array(Vec::new()),
+            values: Value::Array(vec![]),
             revision: 0,
         }
     }
@@ -262,7 +262,7 @@ impl BatchRangeReadRequest {
 
     /// 构建查询参数
     pub fn build_query_params(&self) -> String {
-        let mut params = Vec::new();
+        let mut params = vec![];
 
         // 添加范围参数（JSON数组格式）
         if let Some(ranges) = &self.ranges {
@@ -290,7 +290,7 @@ impl BatchRangeReadRequest {
 }
 
 /// 多个范围读取服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct BatchRangeReadService {
     config: Config,
 }
@@ -344,7 +344,7 @@ impl BatchRangeReadService {
         request.validate()?;
 
         // 构建API请求
-        let mut api_req = ApiRequest::with_method(reqwest::Method::GET);
+        let mut api_req = ApiRequest::with_method(openlark_core::api::HttpMethod::Get);
         api_req.set_api_path(
             Endpoints::SHEETS_V2_SPREADSHEET_VALUES_BATCH_GET
                 .replace("{spreadsheet_token}", &request.spreadsheet_token),
@@ -371,7 +371,7 @@ impl BatchRangeReadService {
         &self,
         spreadsheet_token: impl Into<String>,
     ) -> BatchRangeReadBuilder {
-        BatchRangeReadBuilder::new(self.clone(), spreadsheet_token)
+        BatchRangeReadBuilder::new(self.clone() spreadsheet_token)
     }
 
     /// 快速批量读取范围数据（使用默认选项）
@@ -408,7 +408,7 @@ impl BatchRangeReadBuilder {
         Self {
             service,
             spreadsheet_token: spreadsheet_token.into(),
-            ranges: Vec::new(),
+            ranges: vec![],
             value_render_option: None,
             date_time_render_option: None,
             user_id_type: None,

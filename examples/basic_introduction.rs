@@ -11,11 +11,11 @@
  * 第6章：错误处理与最佳实践
  *
  * 运行方法：
- * # 基础运行（仅包含核心功能）
- * cargo run --example basic_introduction --features "communication,auth"
+ * # 基础运行（auth 现在是默认功能）
+ * cargo run --example basic_introduction --features "communication"
  *
  * # 完整功能运行（推荐）
- * cargo run --example basic_introduction --features "communication,auth,ai,hr"
+ * cargo run --example basic_introduction --features "communication,ai,hr"
  *
  * 环境配置：
  * 1. 复制 .env-example 到 .env
@@ -240,49 +240,39 @@ async fn chapter_3_authentication() -> openlark_client::Result<()> {
         }
     };
 
-    #[cfg(feature = "auth")]
-    {
-        println!("🔑 实际认证演示:");
+    println!("🔑 实际认证演示:");
 
-        match client.auth().get_app_access_token().await {
-            Ok(token_info) => {
-                println!("✅ 应用级认证成功");
-                println!(
-                    "   • 访问令牌: {}...",
-                    &token_info.access_token[..token_info.access_token.len().min(20)]
-                );
-                println!("   • 令牌类型: {}", token_info.token_type);
-                println!("   • 过期时间: {} 秒", token_info.expires_in);
+    match client.auth().get_app_access_token().await {
+        Ok(token_info) => {
+            println!("✅ 应用级认证成功");
+            println!(
+                "   • 访问令牌: {}...",
+                &token_info.access_token[..token_info.access_token.len().min(20)]
+            );
+            println!("   • 令牌类型: {}", token_info.token_type);
+            println!("   • 过期时间: {} 秒", token_info.expires_in);
 
-                // 验证令牌
-                match client.auth().verify_token(&token_info.access_token).await {
-                    Ok(verification) => {
-                        if verification.valid {
-                            println!("   ✅ 令牌验证成功");
-                        } else {
-                            println!("   ❌ 令牌验证失败");
-                        }
-                    }
-                    Err(e) => {
-                        println!("   ⚠️  令牌验证失败: {}", e);
+            // 验证令牌
+            match client.auth().verify_token(&token_info.access_token).await {
+                Ok(verification) => {
+                    if verification.valid {
+                        println!("   ✅ 令牌验证成功");
+                    } else {
+                        println!("   ❌ 令牌验证失败");
                     }
                 }
-            }
-            Err(e) => {
-                println!("❌ 应用级认证失败: {}", e);
-                println!("💡 可能的原因:");
-                println!("   • App ID 或 App Secret 错误");
-                println!("   • 网络连接问题");
-                println!("   • 应用权限配置错误");
+                Err(e) => {
+                    println!("   ⚠️  令牌验证失败: {}", e);
+                }
             }
         }
-    }
-
-    #[cfg(not(feature = "auth"))]
-    {
-        println!("ℹ️  认证功能未启用");
-        println!("💡 请启用 auth 功能标志: --features auth");
-        show_authentication_examples();
+        Err(e) => {
+            println!("❌ 应用级认证失败: {}", e);
+            println!("💡 可能的原因:");
+            println!("   • App ID 或 App Secret 错误");
+            println!("   • 网络连接问题");
+            println!("   • 应用权限配置错误");
+        }
     }
 
     println!();
@@ -344,39 +334,30 @@ async fn chapter_4_first_api_call() -> openlark_client::Result<()> {
         }
     };
 
-    #[cfg(feature = "auth")]
-    {
-        println!("📞 实际API调用演示:");
+    println!("📞 实际API调用演示:");
 
-        match client.auth().get_app_access_token().await {
-            Ok(token_info) => {
-                println!("✅ API调用成功");
-                println!("📱 响应数据结构:");
-                println!("   • access_token: String (访问令牌)");
-                println!("   • token_type: String (令牌类型)");
-                println!("   • expires_in: u32 (过期时间，秒)");
-                println!("   • refresh_token: Option<String> (刷新令牌)");
-                println!("   • scope: Option<String> (权限范围)");
-                println!();
-                println!("💡 数据访问示例:");
-                println!(
-                    "   • 访问令牌: {}...",
-                    &token_info.access_token[..token_info.access_token.len().min(20)]
-                );
-                println!("   • 令牌类型: {}", token_info.token_type);
-                println!("   • 过期时间: {} 秒", token_info.expires_in);
-            }
-            Err(e) => {
-                println!("❌ API调用失败: {}", e);
-                analyze_api_error(&e);
-            }
+    match client.auth().get_app_access_token().await {
+        Ok(token_info) => {
+            println!("✅ API调用成功");
+            println!("📱 响应数据结构:");
+            println!("   • access_token: String (访问令牌)");
+            println!("   • token_type: String (令牌类型)");
+            println!("   • expires_in: u32 (过期时间，秒)");
+            println!("   • refresh_token: Option<String> (刷新令牌)");
+            println!("   • scope: Option<String> (权限范围)");
+            println!();
+            println!("💡 数据访问示例:");
+            println!(
+                "   • 访问令牌: {}...",
+                &token_info.access_token[..token_info.access_token.len().min(20)]
+            );
+            println!("   • 令牌类型: {}", token_info.token_type);
+            println!("   • 过期时间: {} 秒", token_info.expires_in);
         }
-    }
-
-    #[cfg(not(feature = "auth"))]
-    {
-        println!("ℹ️  认证功能未启用，无法进行实际API调用");
-        show_api_call_examples();
+        Err(e) => {
+            println!("❌ API调用失败: {}", e);
+            analyze_api_error(&e);
+        }
     }
 
     println!();
@@ -479,7 +460,7 @@ async fn chapter_5_services_modules() -> openlark_client::Result<()> {
     println!("[dependencies]");
     println!("open-lark = {{ version = \"0.13.2\", features = [");
     println!("    \"client\",        # 统一客户端");
-    println!("    \"auth\",          # 认证服务");
+    println!("    # \"auth\",          # 认证服务（现在默认启用）");
     println!("    \"communication\", # 通讯服务");
     // println!("    \"docs\",          # 文档服务");
     println!("] }}");
@@ -487,18 +468,15 @@ async fn chapter_5_services_modules() -> openlark_client::Result<()> {
     println!();
     println!("💡 运行时指定功能:");
     println!("```bash");
-    println!("cargo run --example basic_introduction --features \"client,auth,communication\"");
+    println!("cargo run --example basic_introduction --features \"client,communication\"  # auth 现在默认启用");
     println!("```");
 
     println!();
     println!("🚀 服务模块演示:");
 
-    // 根据启用的功能显示相应的API示例
-    #[cfg(feature = "auth")]
-    {
-        println!("   ✅ 认证服务API示例:");
-        println!("       client.auth().get_app_access_token().await");
-    }
+    // 显示认证服务API示例（auth 现在是默认功能）
+    println!("   ✅ 认证服务API示例:");
+    println!("       client.auth().get_app_access_token().await");
 
     #[cfg(feature = "communication")]
     {
@@ -545,7 +523,6 @@ fn check_service_status(
 ) {
     println!("   📋 {} ({})", display_name, service_name);
 
-    #[cfg(feature = "auth")]
     if service_name == "auth" {
         if registry.has_service(service_name) {
             println!("       ✅ 已启用 - {}", description);
@@ -634,15 +611,12 @@ async fn chapter_6_error_handling() -> openlark_client::Result<()> {
         Ok(client) => {
             println!("       ✅ 环境变量配置正确");
 
-            #[cfg(feature = "auth")]
-            {
-                // 尝试实际API调用
-                match client.auth().get_app_access_token().await {
-                    Ok(_) => println!("       ✅ API调用成功"),
-                    Err(e) => {
-                        println!("       ⚠️  API调用失败");
-                        handle_api_error(&e);
-                    }
+            // 尝试实际API调用（auth 现在是默认功能）
+            match client.auth().get_app_access_token().await {
+                Ok(_) => println!("       ✅ API调用成功"),
+                Err(e) => {
+                    println!("       ⚠️  API调用失败");
+                    handle_api_error(&e);
                 }
             }
         }
@@ -700,7 +674,6 @@ fn handle_configuration_error(error: &openlark_client::Error) {
 /**
  * 处理API错误
  */
-#[cfg(feature = "auth")]
 fn handle_api_error(error: &openlark_client::Error) {
     match error {
         openlark_client::Error::APIError { code, message } => {

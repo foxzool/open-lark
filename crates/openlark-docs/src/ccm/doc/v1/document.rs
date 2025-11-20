@@ -512,7 +512,7 @@ impl CreateDocumentBlockRequest {
             document_id: document_id.into(),
             block_id,
             index,
-            children: Vec::new(),
+            children: vec![],
         }
     }
 
@@ -883,7 +883,7 @@ impl ApiResponseTrait for GetAnnouncementBlockContentResponse {
 /// 获取群公告块内容构建器
 ///
 /// 提供流式API来构建获取群公告块内容的请求。
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct GetAnnouncementBlockContentBuilder {
     request: GetAnnouncementBlockContentRequest,
 }
@@ -993,7 +993,7 @@ impl Default for GetAnnouncementBlockContentBuilder {
 }
 
 /// 文档管理服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DocumentService {
     config: Config,
 }
@@ -1032,11 +1032,11 @@ impl DocumentService {
         log::debug!("开始创建文档: title={:?}", req.title);
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: openlark_core::endpoints::Endpoints::DOCX_V1_DOCUMENTS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
+            method: openlark_core::api::HttpMethod::Post,
+            url: openlark_core::endpoints::Endpoints::DOCX_V1_DOCUMENTS.to_string(),
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: Some(openlark_core::api::RequestData::Json(req))?,
+            
         };
 
         let resp =
@@ -1092,11 +1092,11 @@ impl DocumentService {
         );
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: endpoint,
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(), // GET请求没有请求体
-            ..Default::default()
+            method: openlark_core::api::HttpMethod::Get,
+            url: endpoint,
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: None, // GET请求没有请求体
+            
         };
 
         let resp =
@@ -1174,11 +1174,11 @@ impl DocumentService {
             .replace("{}", &req.document_id);
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: endpoint,
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(), // GET请求无body
-            ..Default::default()
+            method: openlark_core::api::HttpMethod::Get,
+            url: endpoint,
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: None, // GET请求无body
+            
         };
 
         let resp = Transport::<GetDocumentResponse>::request(api_req, &self.config, None).await?;
@@ -1229,11 +1229,11 @@ impl DocumentService {
             .replace("{}", &req.document_id);
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: endpoint,
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(), // GET请求无body
-            ..Default::default()
+            method: openlark_core::api::HttpMethod::Get,
+            url: endpoint,
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: None, // GET请求无body
+            
         };
 
         let resp = Transport::<GetDocumentRawContentResponse>::request(api_req, &self.config, None)
@@ -1286,11 +1286,11 @@ impl DocumentService {
             .replace("{}", &req.document_id);
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: endpoint,
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(), // GET请求无body
-            ..Default::default()
+            method: openlark_core::api::HttpMethod::Get,
+            url: endpoint,
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: None, // GET请求无body
+            
         };
 
         let resp =
@@ -1346,11 +1346,11 @@ impl DocumentService {
             .replace("{}", &req.block_id.to_string());
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: endpoint,
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
+            method: openlark_core::api::HttpMethod::Post,
+            url: endpoint,
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: Some(openlark_core::api::RequestData::Json(req))?,
+            
         };
 
         let resp =
@@ -1409,11 +1409,11 @@ impl DocumentService {
         );
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::PATCH,
-            api_path: endpoint,
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
+            method: openlark_core::api::HttpMethod::Patch,
+            url: endpoint,
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: Some(openlark_core::api::RequestData::Json(req))?,
+            
         };
 
         let resp =
@@ -1472,11 +1472,11 @@ impl DocumentService {
         );
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::DELETE,
-            api_path: endpoint,
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
+            method: openlark_core::api::HttpMethod::Delete,
+            url: endpoint,
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: Some(openlark_core::api::RequestData::Json(req))?,
+            
         };
 
         let resp =
@@ -1529,7 +1529,7 @@ impl DocumentService {
         );
 
         // 构建查询参数
-        let mut query_params = Vec::new();
+        let mut query_params = vec![];
 
         if let Some(folder_id) = &req.folder_id {
             query_params.push(("folder_id".to_string(), folder_id.clone()));
@@ -1584,11 +1584,11 @@ impl DocumentService {
         let endpoint = format!("/open-apis/docx/v1/documents{}", query_string);
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: endpoint,
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(), // GET请求无body
-            ..Default::default()
+            method: openlark_core::api::HttpMethod::Get,
+            url: endpoint,
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: None, // GET请求无body
+            
         };
 
         let resp = Transport::<DocumentListResponse>::request(api_req, &self.config, None).await?;
@@ -1636,11 +1636,11 @@ impl DocumentService {
             .replace("{}", &req.document_id);
 
         let api_req = ApiRequest {
-            http_method: reqwest::Method::DELETE,
-            api_path: endpoint,
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(), // DELETE请求无body
-            ..Default::default()
+            method: openlark_core::api::HttpMethod::Delete,
+            url: endpoint,
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: None, // DELETE请求无body
+            
         };
 
         let resp =
@@ -1660,7 +1660,7 @@ impl DocumentService {
 // ==================== 构建器模式 ====================
 
 /// 创建文档构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CreateDocumentBuilder {
     request: CreateDocumentRequest,
 }
@@ -1701,7 +1701,7 @@ impl CreateDocumentBuilder {
 }
 
 /// 获取文档构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct GetDocumentBuilder {
     request: GetDocumentRequest,
 }
@@ -1765,7 +1765,7 @@ impl GetDocumentBuilder {
 }
 
 /// 删除文档构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DeleteDocumentBuilder {
     request: DeleteDocumentRequest,
 }
@@ -1814,7 +1814,7 @@ impl DeleteDocumentBuilder {
 }
 
 /// 获取文档块构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct GetDocumentBlocksBuilder {
     request: GetDocumentBlocksRequest,
 }
@@ -1882,7 +1882,7 @@ impl GetDocumentBlocksBuilder {
 }
 
 /// 创建文档块构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CreateDocumentBlockBuilder {
     request: CreateDocumentBlockRequest,
 }
@@ -1944,7 +1944,7 @@ impl CreateDocumentBlockBuilder {
 }
 
 /// 更新文档块构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct UpdateDocumentBlockBuilder {
     request: UpdateDocumentBlockRequest,
 }
@@ -2007,13 +2007,13 @@ impl UpdateDocumentBlockBuilder {
 }
 
 /// 删除文档块构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DeleteDocumentBlockBuilder {
     request: DeleteDocumentBlockRequest,
 }
 
 /// 文档列表查询构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ListDocumentsBuilder {
     request: ListDocumentsRequest,
 }
@@ -2465,7 +2465,7 @@ mod tests {
         response.document = Document {
             document_id: Some("doc_abc".to_string()),
             title: Some("响应测试".to_string()),
-            ..Default::default()
+            
         };
 
         assert_eq!(response.document.document_id, Some("doc_abc".to_string()));
@@ -2502,17 +2502,17 @@ mod tests {
         // Test different document titles
         let project_doc = Document {
             title: Some("项目计划文档".to_string()),
-            ..Default::default()
+            
         };
 
         let meeting_doc = Document {
             title: Some("会议纪要".to_string()),
-            ..Default::default()
+            
         };
 
         let report_doc = Document {
             title: Some("月度报告".to_string()),
-            ..Default::default()
+            
         };
 
         assert_eq!(project_doc.title, Some("项目计划文档".to_string()));
@@ -2599,7 +2599,7 @@ mod tests {
             document_id: Some("doc_versioned".to_string()),
             title: Some("版本化文档".to_string()),
             version: Some(5),
-            ..Default::default()
+            
         };
 
         assert_eq!(versioned_doc.version, Some(5));
@@ -2608,7 +2608,7 @@ mod tests {
             document_id: Some("doc_unversioned".to_string()),
             title: Some("无版本文档".to_string()),
             version: None,
-            ..Default::default()
+            
         };
 
         assert_eq!(unversioned_doc.version, None);
@@ -2668,7 +2668,7 @@ mod tests {
         response.document = Document {
             document_id: Some("doc_abc".to_string()),
             title: Some("获取测试文档".to_string()),
-            ..Default::default()
+            
         };
 
         assert_eq!(response.document.document_id, Some("doc_abc".to_string()));
@@ -2695,7 +2695,7 @@ mod tests {
             document_id: Some("doc_xyz".to_string()),
             title: Some("序列化测试".to_string()),
             version: Some(2),
-            ..Default::default()
+            
         };
 
         let serialized = serde_json::to_string(&response).unwrap();

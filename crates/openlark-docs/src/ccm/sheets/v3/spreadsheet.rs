@@ -133,7 +133,7 @@ impl ApiResponseTrait for CreateSpreadsheetResponse {
 }
 
 /// 电子表格管理服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SpreadsheetService {
     config: Config,
 }
@@ -180,7 +180,7 @@ impl SpreadsheetService {
         );
         api_request.supported_access_token_types =
             vec![AccessTokenType::Tenant, AccessTokenType::User];
-        api_request.body = serde_json::to_vec(req)?;
+        api_request.body = Some(openlark_core::api::RequestData::Json(req))?;
 
         let resp = Transport::<CreateSpreadsheetResponse>::request(api_request, &self.config, None)
             .await?;
@@ -199,7 +199,7 @@ impl SpreadsheetService {
 // ==================== 构建器模式 ====================
 
 /// 创建电子表格构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CreateSpreadsheetBuilder {
     request: CreateSpreadsheetRequest,
 }
@@ -320,7 +320,7 @@ impl SpreadsheetService {
         let mut api_request = ApiRequest::with_method_and_path(Method::PATCH, &endpoint);
         api_request.supported_access_token_types =
             vec![AccessTokenType::Tenant, AccessTokenType::User];
-        api_request.body = serde_json::to_vec(request)?;
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         Transport::<UpdateSpreadsheetResponse>::request(api_request, &self.config, None).await
     }
@@ -435,7 +435,7 @@ pub struct UpdateSpreadsheetBuilder {
 impl Clone for UpdateSpreadsheetBuilder {
     fn clone(&self) -> Self {
         Self {
-            request: self.request.clone(),
+            request: self.request.clone()
             transport: Transport::new(), // 创建新的Transport实例
         }
     }
@@ -607,7 +607,7 @@ mod tests {
         response.spreadsheet = Spreadsheet {
             spreadsheet_id: Some("sheet_abc".to_string()),
             title: Some("响应测试".to_string()),
-            ..Default::default()
+            
         };
 
         assert_eq!(
@@ -650,17 +650,17 @@ mod tests {
         // Test different spreadsheet titles
         let finance_sheet = Spreadsheet {
             title: Some("财务报表".to_string()),
-            ..Default::default()
+            
         };
 
         let hr_sheet = Spreadsheet {
             title: Some("人力资源表".to_string()),
-            ..Default::default()
+            
         };
 
         let project_sheet = Spreadsheet {
             title: Some("项目管理表".to_string()),
-            ..Default::default()
+            
         };
 
         assert_eq!(finance_sheet.title, Some("财务报表".to_string()));

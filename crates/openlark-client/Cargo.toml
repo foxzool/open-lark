@@ -32,12 +32,20 @@ log = { workspace = true, optional = true }
 # Optional service dependencies (conditionally included based on feature flags)
 openlark-communication = { workspace = true, optional = true }
 openlark-hr = { workspace = true, optional = true }
-# openlark-docs = { workspace = true, optional = true } # 暂时移除 - 需要完成 legacy_client 迁移
+openlark-docs = { workspace = true, optional = true }
 openlark-ai = { workspace = true, optional = true }
 openlark-auth = { workspace = true, optional = true }
 
+# Additional service crates - 暂时移除有循环依赖的 crates
+# openlark-admin = { workspace = true, optional = true }
+# openlark-approval = { workspace = true, optional = true }
+# openlark-collab = { workspace = true, optional = true }
+# openlark-helpdesk = { workspace = true, optional = true }
+# openlark-hire = { workspace = true, optional = true }
+# openlark-people = { workspace = true, optional = true }
+
 [features]
-default = []
+default = ["auth"]
 
 # Core client feature
 client = []
@@ -45,39 +53,35 @@ client = []
 # WebSocket support
 websocket = ["tokio-tungstenite", "futures-util", "lark-websocket-protobuf", "url", "prost", "reqwest", "log"]
 
-# Feature flags for service inclusion
-# 与新的 openlark-docs feature 分类同步
-# docs = ["openlark-docs/ccm-doc"] # 暂时移除 - 需要完成 legacy_client 迁移
-# sheets = ["openlark-docs/ccm-sheets"] # 暂时移除 - 需要完成 legacy_client 迁移
-# bitable = ["openlark-docs/bitable"] # 暂时移除 - 需要完成 legacy_client 迁移
-# wiki = ["openlark-docs/ccm-wiki"] # 暂时移除 - 需要完成 legacy_client 迁移
-# drive = ["openlark-docs/ccm-drive"] # 暂时移除 - 需要完成 legacy_client 迁移
-# ccm = ["openlark-docs/ccm"] # 暂时移除 - 需要完成 legacy_client 迁移
-# cloud-docs = ["openlark-docs/cloud-docs"] # 暂时移除 - 需要完成 legacy_client 迁移
+# Business service features - 基于 crates.md 中的真实 crates
+# admin = ["openlark-admin"]                    # 管理和行政功能 (暂时禁用 - 循环依赖)
+# approval = ["openlark-approval"]              # 审批流程 (暂时禁用 - 循环依赖)
+auth = ["openlark-auth"]                      # 认证和授权（默认启用）
+# collab = ["openlark-collab"]                  # 协作功能（日历、会议、任务等）(暂时禁用 - 循环依赖)
+communication = ["openlark-communication"]    # 通讯和消息
+# helpdesk = ["openlark-helpdesk"]              # 帮助台和搜索 (暂时禁用 - 循环依赖)
+# hire = ["openlark-hire"]                      # 招聘管理 (暂时禁用 - 循环依赖)
+hr = ["openlark-hr"]                          # 人力资源
+ai = ["openlark-ai"]                          # AI 和智能服务
+# people = ["openlark-people"]                  # 人员和联系人管理 (暂时禁用 - 循环依赖)
 
-# 新的标准化特性名
-# ccm-doc = ["openlark-docs/ccm-doc"] # 暂时移除 - 需要完成 legacy_client 迁移
-# ccm-sheets = ["openlark-docs/ccm-sheets"] # 暂时移除 - 需要完成 legacy_client 迁移
-# ccm-wiki = ["openlark-docs/ccm-wiki"] # 暂时移除 - 需要完成 legacy_client 迁移
-# ccm-drive = ["openlark-docs/ccm-drive"] # 暂时移除 - 需要完成 legacy_client 迁移
+docs = ["openlark-docs"]                    # 文档和知识库
 
-# 独立服务特性
-communication = ["openlark-communication"]
-hr = ["openlark-hr"]
-ai = ["openlark-ai"]
-auth = ["openlark-auth"]
+# Convenience features - 基础功能组合 (只包含无循环依赖的服务)
+all-services = [
+    "auth", "communication", "hr", "ai", "docs"
+    # 暂时不包含有循环依赖的服务: admin, approval, collab, helpdesk, hire, people
+]
 
-# Convenience features
-all-services = ["hr", "ai", "auth"] # 暂时移除 docs 相关功能 - 需要完成 legacy_client 迁移
-base-services = ["auth"] # 暂时移除 docs, sheets - 需要完成 legacy_client 迁移
-
-# WebSocket features (disabled temporarily)
-# websocket = ["tokio-tungstenite", "futures-util"]
-
-# Complete client features for easy selection
-# client-docs = ["client", "docs"] # 暂时移除 - 需要完成 legacy_client 迁移
+# Complete client features for easy selection (只包含无循环依赖的服务)
+# client-admin = ["client", "admin"]
+# client-approval = ["client", "approval"]
+client-auth = ["client", "auth"]
+# client-collab = ["client", "collab"]
+client-communication = ["client", "communication"]
+# client-helpdesk = ["client", "helpdesk"]
+# client-hire = ["client", "hire"]
 client-hr = ["client", "hr"]
 client-ai = ["client", "ai"]
-client-auth = ["client", "auth"]
+# client-people = ["client", "people"]
 client-all = ["client", "all-services"]
-# client-websocket = ["client", "websocket"]

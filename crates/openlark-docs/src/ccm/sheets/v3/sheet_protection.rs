@@ -6,6 +6,7 @@
 //! - 管理保护条件和编辑权限
 //! - 查询和更新工作表保护状态
 
+use std::collections::HashMap;
 use openlark_core::{
     api::ApiRequest,
     api::{ApiResponseTrait, BaseResponse, ResponseFormat},
@@ -93,7 +94,7 @@ pub type SheetPagedResponse<T> = Vec<T>;
 ///
 /// let protection = service.create(&request).await?;
 /// ```
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SheetProtectionService {
     config: openlark_core::config::Config,
 }
@@ -450,8 +451,8 @@ impl CreateSheetProtectionRequestBuilder {
             spreadsheet_token: None,
             sheet_id: None,
             description: None,
-            ranges: Vec::new(),
-            conditions: Vec::new(),
+            ranges: vec![],
+            conditions: vec![],
             permissions: None,
             protection_type: None,
             warning_only: None,
@@ -511,7 +512,7 @@ impl CreateSheetProtectionRequestBuilder {
         let permissions = self
             .permissions
             .get_or_insert_with(|| SheetProtectionPermissions {
-                editors: Vec::new(),
+                editors: vec![],
                 allow_all_users: false,
                 allow_comments: false,
             });
@@ -533,7 +534,7 @@ impl CreateSheetProtectionRequestBuilder {
                 let permissions = self
                     .permissions
                     .unwrap_or_else(|| SheetProtectionPermissions {
-                        editors: Vec::new(),
+                        editors: vec![],
                         allow_all_users: false,
                         allow_comments: false,
                     });
@@ -607,7 +608,7 @@ impl QuerySheetProtectionRequestBuilder {
         Self {
             spreadsheet_token: None,
             sheet_id: None,
-            protection_ids: Vec::new(),
+            protection_ids: vec![],
             page_size: None,
             page_token: None,
         }
@@ -733,7 +734,7 @@ impl UpdateSheetProtectionRequestBuilder {
             spreadsheet_token: None,
             sheet_id: None,
             protection_id: None,
-            fields: Vec::new(),
+            fields: vec![],
             description: None,
             ranges: None,
             conditions: None,
@@ -974,7 +975,7 @@ impl SheetProtectionService {
         );
 
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &url);
-        api_request.body = serde_json::to_vec(request)?;
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let base_resp =
             Transport::<CreateSheetProtectionResponse>::request(api_request, &self.config, None)
@@ -1030,7 +1031,7 @@ impl SheetProtectionService {
         );
 
         // 构建查询参数
-        let mut params = Vec::new();
+        let mut params = vec![];
 
         if !request.protection_ids.is_empty() {
             params.push(format!(
@@ -1113,7 +1114,7 @@ impl SheetProtectionService {
         );
 
         let mut api_request = ApiRequest::with_method_and_path(Method::PATCH, &url);
-        api_request.body = serde_json::to_vec(request)?;
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let base_resp =
             Transport::<UpdateSheetProtectionResponse>::request(api_request, &self.config, None)
@@ -1202,9 +1203,9 @@ impl SheetProtectionService {
             spreadsheet_token: None,
             sheet_id: None,
             description: None,
-            ranges: Vec::new(),
-            conditions: Vec::new(),
-            editors: Vec::new(),
+            ranges: vec![],
+            conditions: vec![],
+            editors: vec![],
             protection_type: None,
             warning_only: None,
         }
@@ -1282,7 +1283,7 @@ impl<'a> SheetProtectionServiceBuilder<'a> {
     ) -> openlark_core::error::SDKResult<Response<CreateSheetProtectionResponse>> {
         match (self.spreadsheet_token, self.sheet_id) {
             (Some(spreadsheet_token), Some(sheet_id)) => {
-                let mut editors = Vec::new();
+                let mut editors = vec![];
                 for (user_id, user_type) in self.editors {
                     editors.push(SheetProtectionEditor {
                         user_id,

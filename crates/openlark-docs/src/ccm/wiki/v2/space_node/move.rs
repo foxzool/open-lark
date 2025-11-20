@@ -12,7 +12,7 @@ use SDKResult;    api::ApiRequest,
     SDKResult,
 };
 /// 移动知识空间节点请求,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct MoveSpaceNodeRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -31,14 +31,14 @@ pub struct MoveSpaceNodeRequest {
 impl MoveSpaceNodeRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone)]
+}#[derive(Clone, Debug)]
 pub struct MoveSpaceNodeRequestBuilder {
     request: MoveSpaceNodeRequest}
 impl MoveSpaceNodeRequestBuilder {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 移动后的节点信息,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct MovedNode {
     /// 知识空间id
     pub space_id: String,
@@ -55,7 +55,7 @@ pub struct MovedNode {
     /// 文档标题
     pub title: Option<String>}
 /// 移动知识空间节点响应,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct MoveSpaceNodeResponse {
     /// 移动后的节点信息
     pub node: MovedNode,

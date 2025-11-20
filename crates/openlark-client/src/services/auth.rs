@@ -4,9 +4,8 @@ use crate::{Config, Error, Result};
  *
  * 提供认证相关的API接口，包括令牌管理、OAuth认证等
  */
-use std::sync::Arc;
-
 /// 认证服务
+#[derive(Debug)]
 pub struct AuthService<'a> {
     config: &'a Config,
 }
@@ -47,7 +46,7 @@ impl<'a> AuthService<'a> {
     }
 
     /// 刷新访问令牌
-    pub async fn refresh_access_token(&self, refresh_token: &str) -> Result<TokenInfo> {
+    pub async fn refresh_access_token(&self, _refresh_token: &str) -> Result<TokenInfo> {
         tracing::info!("刷新访问令牌");
 
         // TODO: 实际API调用
@@ -91,7 +90,7 @@ impl<'a> AuthService<'a> {
     }
 
     /// 获取用户信息
-    pub async fn get_user_info(&self, access_token: &str) -> Result<UserInfo> {
+    pub async fn get_user_info(&self, _access_token: &str) -> Result<UserInfo> {
         tracing::info!("获取用户信息");
 
         // TODO: 实际API调用
@@ -147,7 +146,7 @@ impl<'a> AuthService<'a> {
     }
 
     /// 获取应用信息
-    pub async fn get_app_info(&self, access_token: &str) -> Result<AppInfo> {
+    pub async fn get_app_info(&self, _access_token: &str) -> Result<AppInfo> {
         tracing::info!("获取应用信息");
 
         // TODO: 实际API调用
@@ -246,7 +245,7 @@ pub struct UserInfo {
 }
 
 /// 用户状态
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, Copy, serde::Serialize, serde::Deserialize)]
 pub enum UserStatus {
     /// 已激活
     #[serde(rename = "activated")]
@@ -285,7 +284,7 @@ pub struct AppInfo {
 }
 
 /// 应用类型
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, Copy, serde::Serialize, serde::Deserialize)]
 pub enum AppType {
     /// 自建应用
     #[serde(rename = "self_build")]
@@ -299,7 +298,7 @@ pub enum AppType {
 }
 
 /// 应用状态
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, Copy, serde::Serialize, serde::Deserialize)]
 pub enum AppStatus {
     /// 已启用
     #[serde(rename = "enabled")]

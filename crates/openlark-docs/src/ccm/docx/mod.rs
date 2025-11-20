@@ -34,7 +34,7 @@ pub mod v1;
 pub mod documents;
 
 /// Document (DOCX) Service
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DocxService {
     client: std::sync::Arc<LarkClient>,
     /// ccm_docs API服务
@@ -48,7 +48,7 @@ pub struct DocxService {
 impl DocxService {
     pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
         Self {
-            client: client.clone(),
+            client: client.clone()
             #[cfg(feature = "ccm-docx")]
             ccm_docs: services::CcmDocsService::new(openlark_core::config::Config::default()),
             #[cfg(feature = "ccm-docx")]
