@@ -13,7 +13,8 @@ use openlark_core::{config::Config, trait_system::Service};
 /// 访问记录服务
 #[derive(Clone, Debug)]
 pub struct ViewRecordService {
-    client: std::sync::Arc<LarkClient>,
+    #[allow(dead_code)]
+    config: Config,,
 }
 impl ViewRecordService {
     pub fn new(config: Config) -> Self {

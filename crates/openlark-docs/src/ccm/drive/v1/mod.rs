@@ -2,27 +2,19 @@
 //!
 //! 提供Drive V1版本的API功能框架
 
-use crate::prelude::*;
+use openlark_core::config::Config;
 
 /// Drive V1 API服务
 #[derive(Clone, Debug)]
 pub struct DriveV1Service {
-    client: std::sync::Arc<LarkClient>,
+    #[allow(dead_code)] // 配置保留供将来使用
+    config: Config,
 }
 
 impl DriveV1Service {
-    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
-        Self { client }
+    pub fn new(config: Config) -> Self {
+        Self { config }
     }
-}
-
-impl std::ops::Deref for DriveV1Service {
-    type Target = LarkClient;
-
-    fn deref(&self) -> &Self::Target {
-        &self.client
-    }
-}
 
 // 注意：子模块暂时被禁用，因为存在语法错误
 // 需要后续修复以下模块：

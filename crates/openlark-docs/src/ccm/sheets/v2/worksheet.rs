@@ -13,7 +13,8 @@ use openlark_core::prelude::*;
 /// 工作表操作服务
 #[derive(Clone, Debug)]
 pub struct WorksheetService {
-    client: std::sync::Arc<LarkClient>,
+    #[allow(dead_code)]
+    config: Config,,
 }
 impl WorksheetService {
     pub fn new(config: Config) -> Self {

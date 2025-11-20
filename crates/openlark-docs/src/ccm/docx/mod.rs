@@ -36,7 +36,8 @@ pub mod documents;
 /// Document (DOCX) Service
 #[derive(Clone, Debug)]
 pub struct DocxService {
-    client: std::sync::Arc<LarkClient>,
+    #[allow(dead_code)] // 配置保留供将来使用
+    config: Config,
     /// ccm_docs API服务
     #[cfg(feature = "ccm-docx")]
     pub ccm_docs: services::CcmDocsService,
@@ -46,18 +47,16 @@ pub struct DocxService {
 }
 
 impl DocxService {
-    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
+    pub fn new(config: Config) -> Self {
         Self {
-            client: client.clone()
+            config: config.clone(),
             #[cfg(feature = "ccm-docx")]
-            ccm_docs: services::CcmDocsService::new(openlark_core::config::Config::default()),
+            ccm_docs: services::CcmDocsService::new(config.clone()),
             #[cfg(feature = "ccm-docx")]
-            docx: services::DocxService::new(openlark_core::config::Config::default()),
+            docx: services::DocxService::new(config.clone()),
         }
     }
 }
-
-impl std::ops::Deref for DocxService {
     type Target = LarkClient;
 
     fn deref(&self) -> &Self::Target {

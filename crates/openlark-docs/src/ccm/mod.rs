@@ -40,13 +40,14 @@ pub mod models;
 #[cfg(feature = "ccm-core")]
 #[derive(Clone, Debug)]
 pub struct CcmService {
-    client: std::sync::Arc<LarkClient>,
+    #[allow(dead_code)] // 配置保留供将来使用
+    config: Config,
 }
 
 #[cfg(feature = "ccm-core")]
 impl CcmService {
-    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
-        Self { client }
+    pub fn new(config: Config) -> Self {
+        Self { config }
     }
 
     /// 获取文档服务（支持创建、查询、编辑等完整功能）

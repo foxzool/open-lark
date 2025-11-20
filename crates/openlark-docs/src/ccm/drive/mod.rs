@@ -33,7 +33,8 @@ pub use permission::PermissionService;
 /// 云空间文件管理服务
 #[derive(Clone, Debug)]
 pub struct DriveService {
-    client: std::sync::Arc<LarkClient>,
+    #[allow(dead_code)] // 配置保留供将来使用
+    config: Config,
     /// V1版本API服务
     pub v1: v1::DriveV1Service,
     /// V2版本API服务
@@ -41,11 +42,11 @@ pub struct DriveService {
 }
 
 impl DriveService {
-    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
+    pub fn new(config: Config) -> Self {
         Self {
-            client: client.clone()
-            v1: v1::DriveV1Service::new(client.clone()),
-            v2: v2::DriveV2Service::new(client),
+            config: config.clone(),
+            v1: v1::DriveV1Service::new(config.clone()),
+            v2: v2::DriveV2Service::new(config),
         }
     }
 }

@@ -13,7 +13,8 @@ use openlark_core::prelude::*;
 /// 知识库v1版本服务
 #[derive(Clone, Debug)]
 pub struct WikiV1Service {
-    client: std::sync::Arc<LarkClient>,
+    #[allow(dead_code)] // 配置保留供将来使用
+    config: Config,
 }
 impl WikiV1Service {
     pub fn new(config: Config) -> Self {
