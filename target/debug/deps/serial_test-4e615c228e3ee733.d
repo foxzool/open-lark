@@ -1,0 +1,11 @@
+/Users/zool/RustroverProjects/open-lark/target/debug/deps/serial_test-4e615c228e3ee733.d: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/serial_test-3.2.0/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/serial_test-3.2.0/src/code_lock.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/serial_test-3.2.0/src/parallel_code_lock.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/serial_test-3.2.0/src/rwlock.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/serial_test-3.2.0/src/serial_code_lock.rs
+
+/Users/zool/RustroverProjects/open-lark/target/debug/deps/libserial_test-4e615c228e3ee733.rlib: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/serial_test-3.2.0/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/serial_test-3.2.0/src/code_lock.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/serial_test-3.2.0/src/parallel_code_lock.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/serial_test-3.2.0/src/rwlock.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/serial_test-3.2.0/src/serial_code_lock.rs
+
+/Users/zool/RustroverProjects/open-lark/target/debug/deps/libserial_test-4e615c228e3ee733.rmeta: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/serial_test-3.2.0/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/serial_test-3.2.0/src/code_lock.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/serial_test-3.2.0/src/parallel_code_lock.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/serial_test-3.2.0/src/rwlock.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/serial_test-3.2.0/src/serial_code_lock.rs
+
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/serial_test-3.2.0/src/lib.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/serial_test-3.2.0/src/code_lock.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/serial_test-3.2.0/src/parallel_code_lock.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/serial_test-3.2.0/src/rwlock.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/serial_test-3.2.0/src/serial_code_lock.rs:

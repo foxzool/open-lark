@@ -1,0 +1,11 @@
+/Users/zool/RustroverProjects/open-lark/target/debug/deps/futures_core-6ec61aba6afcb5ef.d: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/futures-core-0.3.31/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/futures-core-0.3.31/src/future.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/futures-core-0.3.31/src/stream.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/futures-core-0.3.31/src/task/mod.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/futures-core-0.3.31/src/task/poll.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/futures-core-0.3.31/src/task/__internal/mod.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/futures-core-0.3.31/src/task/__internal/atomic_waker.rs
+
+/Users/zool/RustroverProjects/open-lark/target/debug/deps/libfutures_core-6ec61aba6afcb5ef.rmeta: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/futures-core-0.3.31/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/futures-core-0.3.31/src/future.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/futures-core-0.3.31/src/stream.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/futures-core-0.3.31/src/task/mod.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/futures-core-0.3.31/src/task/poll.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/futures-core-0.3.31/src/task/__internal/mod.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/futures-core-0.3.31/src/task/__internal/atomic_waker.rs
+
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/futures-core-0.3.31/src/lib.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/futures-core-0.3.31/src/future.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/futures-core-0.3.31/src/stream.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/futures-core-0.3.31/src/task/mod.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/futures-core-0.3.31/src/task/poll.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/futures-core-0.3.31/src/task/__internal/mod.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/futures-core-0.3.31/src/task/__internal/atomic_waker.rs:

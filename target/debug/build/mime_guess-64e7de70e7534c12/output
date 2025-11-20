@@ -1,0 +1,1 @@
+cargo:rustc-env=MIME_TYPES_GENERATED_PATH=/Users/zool/RustroverProjects/open-lark/target/debug/build/mime_guess-64e7de70e7534c12/out/mime_types_generated.rs

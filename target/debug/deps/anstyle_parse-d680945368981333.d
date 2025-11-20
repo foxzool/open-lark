@@ -1,0 +1,11 @@
+/Users/zool/RustroverProjects/open-lark/target/debug/deps/anstyle_parse-d680945368981333.d: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/anstyle-parse-0.2.7/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/anstyle-parse-0.2.7/src/params.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/anstyle-parse-0.2.7/src/state/mod.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/anstyle-parse-0.2.7/src/state/definitions.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/anstyle-parse-0.2.7/src/state/table.rs
+
+/Users/zool/RustroverProjects/open-lark/target/debug/deps/libanstyle_parse-d680945368981333.rlib: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/anstyle-parse-0.2.7/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/anstyle-parse-0.2.7/src/params.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/anstyle-parse-0.2.7/src/state/mod.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/anstyle-parse-0.2.7/src/state/definitions.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/anstyle-parse-0.2.7/src/state/table.rs
+
+/Users/zool/RustroverProjects/open-lark/target/debug/deps/libanstyle_parse-d680945368981333.rmeta: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/anstyle-parse-0.2.7/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/anstyle-parse-0.2.7/src/params.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/anstyle-parse-0.2.7/src/state/mod.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/anstyle-parse-0.2.7/src/state/definitions.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/anstyle-parse-0.2.7/src/state/table.rs
+
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/anstyle-parse-0.2.7/src/lib.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/anstyle-parse-0.2.7/src/params.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/anstyle-parse-0.2.7/src/state/mod.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/anstyle-parse-0.2.7/src/state/definitions.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/anstyle-parse-0.2.7/src/state/table.rs:

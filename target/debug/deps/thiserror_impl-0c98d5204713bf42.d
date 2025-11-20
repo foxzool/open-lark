@@ -1,0 +1,17 @@
+/Users/zool/RustroverProjects/open-lark/target/debug/deps/thiserror_impl-0c98d5204713bf42.d: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/ast.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/attr.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/expand.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/fallback.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/fmt.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/generics.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/prop.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/scan_expr.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/unraw.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/valid.rs
+
+/Users/zool/RustroverProjects/open-lark/target/debug/deps/libthiserror_impl-0c98d5204713bf42.dylib: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/ast.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/attr.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/expand.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/fallback.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/fmt.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/generics.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/prop.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/scan_expr.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/unraw.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/valid.rs
+
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/lib.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/ast.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/attr.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/expand.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/fallback.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/fmt.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/generics.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/prop.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/scan_expr.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/unraw.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/thiserror-impl-2.0.17/src/valid.rs:
+
+# env-dep:CARGO_PKG_VERSION_PATCH=17

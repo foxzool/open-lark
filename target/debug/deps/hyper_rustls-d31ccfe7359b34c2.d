@@ -1,0 +1,11 @@
+/Users/zool/RustroverProjects/open-lark/target/debug/deps/hyper_rustls-d31ccfe7359b34c2.d: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-rustls-0.27.7/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-rustls-0.27.7/src/config.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-rustls-0.27.7/src/connector.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-rustls-0.27.7/src/connector/builder.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-rustls-0.27.7/src/stream.rs
+
+/Users/zool/RustroverProjects/open-lark/target/debug/deps/libhyper_rustls-d31ccfe7359b34c2.rlib: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-rustls-0.27.7/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-rustls-0.27.7/src/config.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-rustls-0.27.7/src/connector.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-rustls-0.27.7/src/connector/builder.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-rustls-0.27.7/src/stream.rs
+
+/Users/zool/RustroverProjects/open-lark/target/debug/deps/libhyper_rustls-d31ccfe7359b34c2.rmeta: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-rustls-0.27.7/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-rustls-0.27.7/src/config.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-rustls-0.27.7/src/connector.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-rustls-0.27.7/src/connector/builder.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-rustls-0.27.7/src/stream.rs
+
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-rustls-0.27.7/src/lib.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-rustls-0.27.7/src/config.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-rustls-0.27.7/src/connector.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-rustls-0.27.7/src/connector/builder.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-rustls-0.27.7/src/stream.rs:

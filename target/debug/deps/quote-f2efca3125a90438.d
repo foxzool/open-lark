@@ -1,0 +1,13 @@
+/Users/zool/RustroverProjects/open-lark/target/debug/deps/quote-f2efca3125a90438.d: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/ext.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/format.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/ident_fragment.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/to_tokens.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/runtime.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/spanned.rs
+
+/Users/zool/RustroverProjects/open-lark/target/debug/deps/libquote-f2efca3125a90438.rlib: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/ext.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/format.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/ident_fragment.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/to_tokens.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/runtime.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/spanned.rs
+
+/Users/zool/RustroverProjects/open-lark/target/debug/deps/libquote-f2efca3125a90438.rmeta: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/ext.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/format.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/ident_fragment.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/to_tokens.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/runtime.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/spanned.rs
+
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/lib.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/ext.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/format.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/ident_fragment.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/to_tokens.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/runtime.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quote-1.0.42/src/spanned.rs:

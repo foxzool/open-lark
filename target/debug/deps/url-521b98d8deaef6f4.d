@@ -1,0 +1,13 @@
+/Users/zool/RustroverProjects/open-lark/target/debug/deps/url-521b98d8deaef6f4.d: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/host.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/origin.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/parser.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/path_segments.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/slicing.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/quirks.rs
+
+/Users/zool/RustroverProjects/open-lark/target/debug/deps/liburl-521b98d8deaef6f4.rlib: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/host.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/origin.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/parser.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/path_segments.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/slicing.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/quirks.rs
+
+/Users/zool/RustroverProjects/open-lark/target/debug/deps/liburl-521b98d8deaef6f4.rmeta: /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/lib.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/host.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/origin.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/parser.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/path_segments.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/slicing.rs /Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/quirks.rs
+
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/lib.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/host.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/origin.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/parser.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/path_segments.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/slicing.rs:
+/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/quirks.rs:
