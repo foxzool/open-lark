@@ -153,7 +153,7 @@ use openlark_core::config::Config;
 /// Sheets电子表格服务
 ///
 /// 基础服务架构，具体功能在后续版本中实现。
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SheetsService {
     config: Config,
 }

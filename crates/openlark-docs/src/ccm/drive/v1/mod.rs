@@ -5,7 +5,7 @@
 use crate::prelude::*;
 
 /// Drive V1 API服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DriveV1Service {
     client: std::sync::Arc<LarkClient>,
 }

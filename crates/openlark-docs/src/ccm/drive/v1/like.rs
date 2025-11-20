@@ -43,10 +43,10 @@ impl LikeService {
         option: Option<RequestOption>,
     ) -> SDKResult<Response<ListFileLikesRespData>> {,
 let mut api_req = ApiRequest {,
-            http_http_http_method: Method::GET,
-            api_path: DRIVE_V1_FILE_LIKE_RECORDS.replace("{}", &request.file_token),
-            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
-            ..Default::default()
+            http_http_method: Method::GET,
+            url: DRIVE_V1_FILE_LIKE_RECORDS.replace("{}", &request.file_token),
+            // supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
+            
 };
 // 添加查询参数,
         if let Some(page_token) = request.page_token {
@@ -60,7 +60,7 @@ if let Some(page_size) = request.page_size {,
 Ok(api_resp),
     }
 /// 获取云文档的点赞者列表请求参数,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ListFileLikesRequest {
     /// 文件token
     pub file_token: String,
@@ -96,7 +96,7 @@ impl ListFileLikesRequestBuilder {
     list_file_likes,
 );
 /// 获取云文档的点赞者列表响应数据
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ListFileLikesRespData {
     /// 是否还有更多数据
     pub has_more: bool,
@@ -105,7 +105,7 @@ pub struct ListFileLikesRespData {
     /// 点赞记录列表
     pub items: Vec<FileLikeRecord>}
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct FileLikeRecord {
     /// 点赞者ID
     pub user_id: String,
@@ -114,7 +114,7 @@ pub struct FileLikeRecord {
     /// 点赞时间（时间戳，单位：秒）
     pub like_time: String,
     /// 点赞者头像
-    pub avatar_api_path: Option<String>}
+    pub avatar_url: Option<String>}
 impl ApiResponseTrait for.* {
     pub fn new(config: Config) -> Self {
         Self { config }

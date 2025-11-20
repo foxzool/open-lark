@@ -179,7 +179,7 @@ pub enum ImageSourceType {
 }
 
 /// 图片数据源
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ImageSource {
     /// 来源类型
     pub r#type: ImageSourceType,
@@ -351,7 +351,7 @@ impl ImageWriteOptions {
 }
 
 /// 图片写入请求
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ImageWriteEnhancedRequest {
     /// 电子表格token
     pub spreadsheet_token: String,
@@ -379,7 +379,7 @@ impl ImageWriteEnhancedRequest {
     pub fn new(spreadsheet_token: impl Into<String>) -> Self {
         Self {
             spreadsheet_token: spreadsheet_token.into(),
-            ..Default::default()
+            
         }
     }
 
@@ -495,7 +495,7 @@ pub struct ImageWriteEnhancedResponseBody {
 // 移除重复的BaseResponse定义，使用openlark_core中的版本
 
 /// 增强图片写入服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ImageWriteEnhancedService {
     config: Config,
 }
@@ -648,7 +648,7 @@ impl ImageWriteEnhancedService {
         spreadsheet_token: impl Into<String>,
         images: Vec<(ImageAnchor, ImageSource)>,
     ) -> SDKResult<Vec<ImageWriteEnhancedResponse>> {
-        let mut results = Vec::new();
+        let mut results = vec![];
 
         for (anchor, image_source) in images {
             let request = ImageWriteEnhancedRequest::new(&spreadsheet_token)
