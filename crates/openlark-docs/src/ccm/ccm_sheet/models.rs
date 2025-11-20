@@ -157,7 +157,7 @@ impl<'de> Deserialize<'de> for ReadMultipleRangesResponse {
             .get("value_ranges")
             .and_then(|vals| vals.as_array())
             .map(|arr| {
-                let mut ranges = Vec::new();
+                let mut ranges = vec![];
                 for v in arr {
                     // 手动解析每个 ValueRange
                     let range = v

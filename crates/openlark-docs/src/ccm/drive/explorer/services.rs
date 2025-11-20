@@ -37,28 +37,28 @@ impl ExplorerService {
     /// ```rust
     /// let response = service.get_root_folder_meta().await?;
     /// if let Some(folder) = response.folder {
-    ///     println!("根文件夹: {:?}", folder.name);
+    ///     println!("根文件夹: {:?}", folder.name,
     /// }
     /// ```
     pub async fn get_root_folder_meta(&self) -> SDKResult<GetRootFolderMetaResponse> {
-        log::info!("获取我的空间（根文件夹）元数据");
+        log::info!("获取我的空间（根文件夹）元数据",
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: "/open-apis/drive/explorer/v2/root_folder/meta".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(),
-            query_params: HashMap::new(),
-            ..Default::default()
+            method: openlark_core::api::HttpMethod::Get,
+            url: "/open-apis/drive/explorer/v2/root_folder/meta".to_string(),
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: None,
+            query: HashMap::new(),
+            
         };
 
         // 发送请求
         let resp =
             Transport::<GetRootFolderMetaResponse>::request(api_req, &self.config, None).await?;
-        let response = resp.data.unwrap_or_default();
+        let response = resp.data.unwrap_or_default(,
 
-        log::info!("获取我的空间元数据完成");
+        log::info!("获取我的空间元数据完成",
 
         Ok(response)
     }
@@ -81,29 +81,29 @@ impl ExplorerService {
             .validate()
             .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
 
-        log::info!("获取文件夹元数据: folder_token={}", request.folder_token);
+        log::info!("获取文件夹元数据: folder_token={}", request.folder_token,
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: format!(
+            method: openlark_core::api::HttpMethod::Get,
+            url: format!(
                 "/open-apis/drive/explorer/v2/folder/{}/meta",
                 request.folder_token
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(),
-            query_params: HashMap::new(),
-            ..Default::default()
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: None,
+            query: HashMap::new(),
+            
         };
 
         // 发送请求
         let resp = Transport::<GetFolderMetaResponse>::request(api_req, &self.config, None).await?;
-        let response = resp.data.unwrap_or_default();
+        let response = resp.data.unwrap_or_default(,
 
         log::info!(
             "获取文件夹元数据完成: folder_token={}",
             request.folder_token
-        );
+        ,
 
         Ok(response)
     }
@@ -128,36 +128,36 @@ impl ExplorerService {
             request.folder_token,
             request.file_type,
             request.file_name
-        );
+        ,
 
         // 构建请求体
-        let mut body = HashMap::new();
-        body.insert("file_type", Value::String(request.file_type.clone()));
-        body.insert("file_name", Value::String(request.file_name.clone()));
+        let mut body = HashMap::new(,
+        body.insert("file_type", Value::String(request.file_type.clone()),
+        body.insert("file_name", Value::String(request.file_name.clone()),
 
         if let Some(ref content) = request.content {
-            body.insert("content", Value::String(content.clone()));
+            body.insert("content", Value::String(content.clone()),
         }
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/drive/explorer/v2/file/{}", request.folder_token),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&body)?,
-            query_params: HashMap::new(),
-            ..Default::default()
+            method: openlark_core::api::HttpMethod::Post,
+            url: format!("/open-apis/drive/explorer/v2/file/{}", request.folder_token),
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?,
+            query: HashMap::new(),
+            
         };
 
         // 发送请求
         let resp = Transport::<CreateFileResponse>::request(api_req, &self.config, None).await?;
-        let response = resp.data.unwrap_or_default();
+        let response = resp.data.unwrap_or_default(,
 
         log::info!(
             "新建文件完成: folder_token={}, file_name={}",
             request.folder_token,
             request.file_name
-        );
+        ,
 
         Ok(response)
     }
@@ -184,34 +184,34 @@ impl ExplorerService {
             "新建文件夹: folder_token={}, folder_name={}",
             request.folder_token,
             request.folder_name
-        );
+        ,
 
         // 构建请求体
-        let mut body = HashMap::new();
-        body.insert("folder_name", Value::String(request.folder_name.clone()));
+        let mut body = HashMap::new(,
+        body.insert("folder_name", Value::String(request.folder_name.clone()),
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: format!(
+            method: openlark_core::api::HttpMethod::Post,
+            url: format!(
                 "/open-apis/drive/explorer/v2/folder/{}",
                 request.folder_token
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&body)?,
-            query_params: HashMap::new(),
-            ..Default::default()
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?,
+            query: HashMap::new(),
+            
         };
 
         // 发送请求
         let resp = Transport::<CreateFolderResponse>::request(api_req, &self.config, None).await?;
-        let response = resp.data.unwrap_or_default();
+        let response = resp.data.unwrap_or_default(,
 
         log::info!(
             "新建文件夹完成: folder_token={}, folder_name={}",
             request.folder_token,
             request.folder_name
-        );
+        ,
 
         Ok(response)
     }
@@ -237,50 +237,50 @@ impl ExplorerService {
         log::info!(
             "获取文件夹下的文档清单: folder_token={}",
             request.folder_token
-        );
+        ,
 
         // 构建查询参数
-        let mut query_params = HashMap::new();
+        // query_params 将通过链式调用处理
 
         if let Some(page_size) = request.page_size {
-            query_params.insert("page_size", page_size.to_string());
+            .query(insert("page_size", page_size.to_string(),
         }
         if let Some(ref page_token) = request.page_token {
-            query_params.insert("page_token", page_token.clone());
+            .query(insert("page_token", page_token.clone()
         }
         if let Some(ref file_type) = request.file_type {
-            query_params.insert("file_type", file_type.clone());
+            .query(insert("file_type", file_type.clone()
         }
         if let Some(ref order_by) = request.order_by {
-            query_params.insert("order_by", order_by.clone());
+            .query(insert("order_by", order_by.clone()
         }
         if let Some(ref direction) = request.direction {
-            query_params.insert("direction", direction.clone());
+            .query(insert("direction", direction.clone()
         }
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: format!(
+            method: openlark_core::api::HttpMethod::Get,
+            url: format!(
                 "/open-apis/drive/explorer/v2/folder/{}/children",
                 request.folder_token
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(),
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: None,
             query_params,
-            ..Default::default()
+            
         };
 
         // 发送请求
         let resp =
             Transport::<GetFolderChildrenResponse>::request(api_req, &self.config, None).await?;
-        let response = resp.data.unwrap_or_default();
+        let response = resp.data.unwrap_or_default(,
 
         log::info!(
             "获取文件夹下的文档清单完成: folder_token={}, item_count={}",
             request.folder_token,
             response.items.as_ref().map(|i| i.len()).unwrap_or(0)
-        );
+        ,
 
         Ok(response)
     }
@@ -304,40 +304,40 @@ impl ExplorerService {
             "复制文档: file_token={}, dest_folder_token={}",
             request.file_token,
             request.dest_folder_token
-        );
+        ,
 
         // 构建请求体
-        let mut body = HashMap::new();
+        let mut body = HashMap::new(,
         body.insert(
             "dest_folder_token",
             Value::String(request.dest_folder_token.clone()),
-        );
+        ,
 
         if let Some(ref name) = request.name {
-            body.insert("name", Value::String(name.clone()));
+            body.insert("name", Value::String(name.clone()),
         }
         if let Some(ref r#type) = request.r#type {
-            body.insert("type", Value::String(r#type.clone()));
+            body.insert("type", Value::String(r#type.clone()),
         }
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: format!(
+            method: openlark_core::api::HttpMethod::Post,
+            url: format!(
                 "/open-apis/drive/explorer/v2/file/copy/files/{}",
                 request.file_token
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&body)?,
-            query_params: HashMap::new(),
-            ..Default::default()
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?,
+            query: HashMap::new(),
+            
         };
 
         // 发送请求
         let resp = Transport::<CopyFileResponse>::request(api_req, &self.config, None).await?;
-        let response = resp.data.unwrap_or_default();
+        let response = resp.data.unwrap_or_default(,
 
-        log::info!("复制文档完成: file_token={}", request.file_token);
+        log::info!("复制文档完成: file_token={}", request.file_token,
 
         Ok(response)
     }
@@ -353,29 +353,29 @@ impl ExplorerService {
     /// 返回删除操作的结果
     pub async fn delete_sheet(&self, file_token: &str) -> SDKResult<DeleteFileResponse> {
         if file_token.trim().is_empty() {
-            return Err(LarkAPIError::illegal_param("文件token不能为空".to_string()));
+            return Err(LarkAPIError::illegal_param("文件token不能为空".to_string()),
         }
 
-        log::info!("删除Sheet: file_token={}", file_token);
+        log::info!("删除Sheet: file_token={}", file_token,
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::DELETE,
-            api_path: format!(
+            method: openlark_core::api::HttpMethod::Delete,
+            url: format!(
                 "/open-apis/drive/explorer/v2/file/spreadsheets/{}",
                 file_token
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(),
-            query_params: HashMap::new(),
-            ..Default::default()
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: None,
+            query: HashMap::new(),
+            
         };
 
         // 发送请求
         let resp = Transport::<DeleteFileResponse>::request(api_req, &self.config, None).await?;
-        let response = resp.data.unwrap_or_default();
+        let response = resp.data.unwrap_or_default(,
 
-        log::info!("删除Sheet完成: file_token={}", file_token);
+        log::info!("删除Sheet完成: file_token={}", file_token,
 
         Ok(response)
     }
@@ -391,26 +391,26 @@ impl ExplorerService {
     /// 返回删除操作的结果
     pub async fn delete_doc(&self, file_token: &str) -> SDKResult<DeleteFileResponse> {
         if file_token.trim().is_empty() {
-            return Err(LarkAPIError::illegal_param("文件token不能为空".to_string()));
+            return Err(LarkAPIError::illegal_param("文件token不能为空".to_string()),
         }
 
-        log::info!("删除Doc: file_token={}", file_token);
+        log::info!("删除Doc: file_token={}", file_token,
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::DELETE,
-            api_path: format!("/open-apis/drive/explorer/v2/file/docs/{}", file_token),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(),
-            query_params: HashMap::new(),
-            ..Default::default()
+            method: openlark_core::api::HttpMethod::Delete,
+            url: format!("/open-apis/drive/explorer/v2/file/docs/{}", file_token),
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: None,
+            query: HashMap::new(),
+            
         };
 
         // 发送请求
         let resp = Transport::<DeleteFileResponse>::request(api_req, &self.config, None).await?;
-        let response = resp.data.unwrap_or_default();
+        let response = resp.data.unwrap_or_default(,
 
-        log::info!("删除Doc完成: file_token={}", file_token);
+        log::info!("删除Doc完成: file_token={}", file_token,
 
         Ok(response)
     }
@@ -431,7 +431,7 @@ impl GetFolderMetaRequestBuilder {
     }
 
     pub fn folder_token(mut self, folder_token: impl Into<String>) -> Self {
-        self.request.folder_token = folder_token.into();
+        self.request.folder_token = folder_token.into(,
         self
     }
 
@@ -457,22 +457,22 @@ impl CreateFileRequestBuilder {
     }
 
     pub fn folder_token(mut self, folder_token: impl Into<String>) -> Self {
-        self.request.folder_token = folder_token.into();
+        self.request.folder_token = folder_token.into(,
         self
     }
 
     pub fn file_type(mut self, file_type: impl Into<String>) -> Self {
-        self.request.file_type = file_type.into();
+        self.request.file_type = file_type.into(,
         self
     }
 
     pub fn file_name(mut self, file_name: impl Into<String>) -> Self {
-        self.request.file_name = file_name.into();
+        self.request.file_name = file_name.into(,
         self
     }
 
     pub fn content(mut self, content: impl Into<String>) -> Self {
-        self.request.content = Some(content.into());
+        self.request.content = Some(content.into(),
         self
     }
 

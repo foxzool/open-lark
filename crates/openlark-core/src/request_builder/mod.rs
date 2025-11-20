@@ -242,12 +242,12 @@ mod tests {
         ];
 
         for method in methods.iter() {
-            let mut api_req = match &*method {
-                Method::GET => ApiRequest::get("https://open.feishu.cn/open-apis/test"),
-                Method::POST => ApiRequest::post("https://open.feishu.cn/open-apis/test"),
-                Method::PUT => ApiRequest::put("https://open.feishu.cn/open-apis/test"),
-                Method::DELETE => ApiRequest::delete("https://open.feishu.cn/open-apis/test"),
-                Method::PATCH => ApiRequest::get("https://open.feishu.cn/open-apis/test"), // PATCH not supported, fallback to GET
+            let mut api_req = match method.as_str() {
+                "GET" => ApiRequest::get("https://open.feishu.cn/open-apis/test"),
+                "POST" => ApiRequest::post("https://open.feishu.cn/open-apis/test"),
+                "PUT" => ApiRequest::put("https://open.feishu.cn/open-apis/test"),
+                "DELETE" => ApiRequest::delete("https://open.feishu.cn/open-apis/test"),
+                "PATCH" => ApiRequest::get("https://open.feishu.cn/open-apis/test"), // PATCH not supported, fallback to GET
                 _ => ApiRequest::get("https://open.feishu.cn/open-apis/test"),
             };
 

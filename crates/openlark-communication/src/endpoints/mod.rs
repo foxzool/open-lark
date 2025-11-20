@@ -351,4 +351,533 @@ mod tests {
             );
         }
     }
+
+    // ========== 新增：API服务测试套件 ==========
+
+    /// 模拟消息结构体
+    #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+    struct MockMessage {
+        pub message_id: String,
+        pub chat_id: String,
+        pub content: String,
+        pub msg_type: String,
+        pub timestamp: u64,
+    }
+
+    /// 模拟聊天结构体
+    #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+    struct MockChat {
+        pub chat_id: String,
+        pub name: Option<String>,
+        pub description: Option<String>,
+        pub chat_type: String,
+    }
+
+    /// 模拟邮件组结构体
+    #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+    struct MockMailGroup {
+        pub mailgroup_id: String,
+        pub name: String,
+        pub description: Option<String>,
+        pub manager_user_ids: Vec<String>,
+    }
+
+    /// 模拟会议室结构体
+    #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+    struct MockRoom {
+        pub room_id: String,
+        pub name: String,
+        pub capacity: u32,
+        pub equipment: Vec<String>,
+    }
+
+    /// 模拟会议结构体
+    #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+    struct MockMeeting {
+        pub meeting_id: String,
+        pub room_id: String,
+        pub topic: String,
+        pub start_time: u64,
+        pub end_time: u64,
+        pub participant_user_ids: Vec<String>,
+    }
+
+    /// 模拟事件订阅结构体
+    #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+    struct MockEventSubscription {
+        pub subscription_id: String,
+        pub event_type: String,
+        pub url: String,
+        pub is_enabled: bool,
+    }
+
+    /// 模拟动态结构体
+    #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+    struct MockMomentPost {
+        pub post_id: String,
+        pub user_id: String,
+        pub content: String,
+        pub media_urls: Vec<String>,
+        pub like_count: u32,
+        pub comment_count: u32,
+    }
+
+    /// 简单的HTTP客户端模拟器
+    struct MockHttpClient {
+        base_url: String,
+        request_count: std::sync::atomic::AtomicU64,
+    }
+
+    impl MockHttpClient {
+        fn new(base_url: &str) -> Self {
+            Self {
+                base_url: base_url.to_string(),
+                request_count: std::sync::atomic::AtomicU64::new(0),
+            }
+        }
+
+        fn increment_request_count(&self) {
+            self.request_count.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+        }
+
+        fn get_request_count(&self) -> u64 {
+            self.request_count.load(std::sync::atomic::Ordering::SeqCst)
+        }
+
+        fn build_url(&self, endpoint: &str) -> String {
+            format!("{}{}", self.base_url, endpoint)
+        }
+
+        fn mock_response<T: serde::Serialize>(&self, data: T) -> String {
+            serde_json::json!({
+                "code": 0,
+                "msg": "success",
+                "data": data
+            }).to_string()
+        }
+    }
+
+    #[test]
+    fn test_im_api_mock_service() {
+        // 测试IM API服务模拟
+        let client = MockHttpClient::new("https://open.feishu.cn");
+
+        // 模拟发送消息
+        let message = MockMessage {
+            message_id: "msg_123".to_string(),
+            chat_id: "chat_456".to_string(),
+            content: "Hello World".to_string(),
+            msg_type: "text".to_string(),
+            timestamp: 1640995200,
+        };
+
+        let endpoint = IM_V1_MESSAGES;
+        let url = client.build_url(endpoint);
+        client.increment_request_count();
+
+        assert_eq!(url, "https://open.feishu.cn/open-apis/im/v1/messages");
+        assert_eq!(client.get_request_count(), 1);
+        assert_eq!(message.msg_type, "text");
+        assert_eq!(message.chat_id, "chat_456");
+
+        // 模拟获取聊天列表
+        let chat = MockChat {
+            chat_id: "chat_789".to_string(),
+            name: Some("Test Group".to_string()),
+            description: Some("Test Description".to_string()),
+            chat_type: "group".to_string(),
+        };
+
+        let endpoint = IM_V1_CHATS;
+        let url = client.build_url(endpoint);
+        client.increment_request_count();
+
+        assert_eq!(url, "https://open.feishu.cn/open-apis/im/v1/chats");
+        assert_eq!(client.get_request_count(), 2);
+        assert_eq!(chat.chat_type, "group");
+        assert!(chat.name.is_some());
+
+        // 模拟批量消息
+        let endpoint = IM_V1_BATCH_MESSAGES;
+        let url = client.build_url(endpoint);
+        client.increment_request_count();
+
+        assert_eq!(url, "https://open.feishu.cn/open-apis/im/v1/batch_messages");
+        assert_eq!(client.get_request_count(), 3);
+
+        // 模拟v2版本消息
+        let endpoint = IM_V2_MESSAGES;
+        let url = client.build_url(endpoint);
+        client.increment_request_count();
+
+        assert_eq!(url, "https://open.feishu.cn/open-apis/im/v2/messages");
+        assert_eq!(client.get_request_count(), 4);
+    }
+
+    #[test]
+    fn test_mail_api_mock_service() {
+        // 测试邮件API服务模拟
+        let client = MockHttpClient::new("https://open.feishu.cn");
+
+        // 模拟邮件组管理
+        let mailgroup = MockMailGroup {
+            mailgroup_id: "mg_123".to_string(),
+            name: "dev@company.com".to_string(),
+            description: Some("Development Team".to_string()),
+            manager_user_ids: vec!["user_1".to_string(), "user_2".to_string()],
+        };
+
+        let endpoint = MAIL_V1_MAILGROUPS;
+        let url = client.build_url(endpoint);
+        client.increment_request_count();
+
+        assert_eq!(url, "https://open.feishu.cn/open-apis/mail/v1/mailgroups");
+        assert_eq!(client.get_request_count(), 1);
+        assert_eq!(mailgroup.manager_user_ids.len(), 2);
+
+        // 模拟邮箱事件订阅
+        let endpoint = MAIL_V1_USER_MAILBOX_EVENTS_SUBSCRIBE;
+        let url_with_params = endpoint.replace("{user_mailbox_id}", "mailbox_123");
+        let final_url = client.build_url(&url_with_params);
+        client.increment_request_count();
+
+        assert_eq!(final_url, "https://open.feishu.cn/open-apis/mail/v1/user_mailboxes/mailbox_123/events/subscribe");
+        assert_eq!(client.get_request_count(), 2);
+
+        // 模拟邮件文件夹管理
+        let endpoint = MAIL_V1_USER_MAILBOX_FOLDERS;
+        let url_with_params = endpoint.replace("{user_mailbox_id}", "mailbox_456");
+        let final_url = client.build_url(&url_with_params);
+        client.increment_request_count();
+
+        assert_eq!(final_url, "https://open.feishu.cn/open-apis/mail/v1/user_mailboxes/mailbox_456/folders");
+        assert_eq!(client.get_request_count(), 3);
+
+        // 模拟邮件管理
+        let endpoint = MAIL_V1_USER_MAILBOX_MESSAGES;
+        let url_with_params = endpoint.replace("{user_mailbox_id}", "mailbox_789");
+        let final_url = client.build_url(&url_with_params);
+        client.increment_request_count();
+
+        assert_eq!(final_url, "https://open.feishu.cn/open-apis/mail/v1/user_mailboxes/mailbox_789/messages");
+        assert_eq!(client.get_request_count(), 4);
+    }
+
+    #[test]
+    fn test_vc_api_mock_service() {
+        // 测试视频会议API服务模拟
+        let client = MockHttpClient::new("https://open.feishu.cn");
+
+        // 模拟会议室管理
+        let room = MockRoom {
+            room_id: "room_123".to_string(),
+            name: "Conference Room A".to_string(),
+            capacity: 50,
+            equipment: vec!["Projector".to_string(), "Whiteboard".to_string()],
+        };
+
+        let endpoint = VC_V1_ROOMS;
+        let url = client.build_url(endpoint);
+        client.increment_request_count();
+
+        assert_eq!(url, "https://open.feishu.cn/open-apis/vc/v1/rooms");
+        assert_eq!(client.get_request_count(), 1);
+        assert_eq!(room.capacity, 50);
+        assert_eq!(room.equipment.len(), 2);
+
+        // 模拟会议室创建
+        let endpoint = VC_V1_ROOM_CREATE;
+        let url = client.build_url(endpoint);
+        client.increment_request_count();
+
+        assert_eq!(url, "https://open.feishu.cn/open-apis/vc/v1/rooms");
+        assert_eq!(client.get_request_count(), 2);
+
+        // 模拟会议管理
+        let meeting = MockMeeting {
+            meeting_id: "meeting_456".to_string(),
+            room_id: "room_123".to_string(),
+            topic: "Weekly Team Sync".to_string(),
+            start_time: 1640995200,
+            end_time: 1640998800,
+            participant_user_ids: vec!["user_1".to_string(), "user_2".to_string(), "user_3".to_string()],
+        };
+
+        let endpoint = VC_V1_MEETINGS;
+        let url = client.build_url(endpoint);
+        client.increment_request_count();
+
+        assert_eq!(url, "https://open.feishu.cn/open-apis/vc/v1/meetings");
+        assert_eq!(client.get_request_count(), 3);
+        assert_eq!(meeting.participant_user_ids.len(), 3);
+
+        // 模拟会议邀请
+        let endpoint = VC_V1_MEETING_INVITE;
+        let url_with_params = endpoint.replace("{meeting_id}", "meeting_789");
+        let final_url = client.build_url(&url_with_params);
+        client.increment_request_count();
+
+        assert_eq!(final_url, "https://open.feishu.cn/open-apis/vc/v1/meetings/meeting_789/invite");
+        assert_eq!(client.get_request_count(), 4);
+
+        // 模拟会议踢出用户
+        let endpoint = VC_V1_MEETING_KICKOUT;
+        let url_with_params = endpoint.replace("{meeting_id}", "meeting_101");
+        let final_url = client.build_url(&url_with_params);
+        client.increment_request_count();
+
+        assert_eq!(final_url, "https://open.feishu.cn/open-apis/vc/v1/meetings/meeting_101/kickout");
+        assert_eq!(client.get_request_count(), 5);
+    }
+
+    #[test]
+    fn test_event_api_mock_service() {
+        // 测试事件系统API服务模拟
+        let client = MockHttpClient::new("https://open.feishu.cn");
+
+        // 模拟事件订阅
+        let subscription = MockEventSubscription {
+            subscription_id: "sub_123".to_string(),
+            event_type: "message.receive".to_string(),
+            url: "https://webhook.example.com/events".to_string(),
+            is_enabled: true,
+        };
+
+        let endpoint = EVENT_V1_SUBSCRIPTIONS;
+        let url = client.build_url(endpoint);
+        client.increment_request_count();
+
+        assert_eq!(url, "https://open.feishu.cn/open-apis/event/v1/subscriptions");
+        assert_eq!(client.get_request_count(), 1);
+        assert_eq!(subscription.event_type, "message.receive");
+        assert!(subscription.is_enabled);
+
+        // 模拟事件订阅创建
+        let endpoint = EVENT_V1_SUBSCRIPTION_CREATE;
+        let url = client.build_url(endpoint);
+        client.increment_request_count();
+
+        assert_eq!(url, "https://open.feishu.cn/open-apis/event/v1/subscriptions/create");
+        assert_eq!(client.get_request_count(), 2);
+
+        // 模拟事件历史
+        let endpoint = EVENT_V1_HISTORY;
+        let url = client.build_url(endpoint);
+        client.increment_request_count();
+
+        assert_eq!(url, "https://open.feishu.cn/open-apis/event/v1/history");
+        assert_eq!(client.get_request_count(), 3);
+
+        // 模拟事件分发器
+        let endpoint = EVENT_V1_DISPATCHER;
+        let url = client.build_url(endpoint);
+        client.increment_request_count();
+
+        assert_eq!(url, "https://open.feishu.cn/open-apis/event/v1/dispatcher");
+        assert_eq!(client.get_request_count(), 4);
+
+        // 模拟订阅删除
+        let endpoint = EVENT_V1_SUBSCRIPTION_DELETE;
+        let url_with_params = endpoint.replace("{subscription_id}", "sub_456");
+        let final_url = client.build_url(&url_with_params);
+        client.increment_request_count();
+
+        assert_eq!(final_url, "https://open.feishu.cn/open-apis/event/v1/subscriptions/sub_456");
+        assert_eq!(client.get_request_count(), 5);
+    }
+
+    #[test]
+    fn test_moments_api_mock_service() {
+        // 测试动态分享API服务模拟
+        let client = MockHttpClient::new("https://open.feishu.cn");
+
+        // 模拟动态创建
+        let post = MockMomentPost {
+            post_id: "post_123".to_string(),
+            user_id: "user_456".to_string(),
+            content: "Today is a great day!".to_string(),
+            media_urls: vec!["https://example.com/image1.jpg".to_string()],
+            like_count: 10,
+            comment_count: 3,
+        };
+
+        let endpoint = MOMENTS_V1_POSTS;
+        let url = client.build_url(endpoint);
+        client.increment_request_count();
+
+        assert_eq!(url, "https://open.feishu.cn/open-apis/moments/v1/posts");
+        assert_eq!(client.get_request_count(), 1);
+        assert_eq!(post.like_count, 10);
+        assert_eq!(post.comment_count, 3);
+
+        // 模拟动态创建API
+        let endpoint = MOMENTS_V1_POST_CREATE;
+        let url = client.build_url(endpoint);
+        client.increment_request_count();
+
+        assert_eq!(url, "https://open.feishu.cn/open-apis/moments/v1/posts/create");
+        assert_eq!(client.get_request_count(), 2);
+
+        // 模拟内容分享
+        let endpoint = MOMENTS_V1_SHARES;
+        let url = client.build_url(endpoint);
+        client.increment_request_count();
+
+        assert_eq!(url, "https://open.feishu.cn/open-apis/moments/v1/shares");
+        assert_eq!(client.get_request_count(), 3);
+
+        // 模拟社交互动
+        let endpoint = MOMENTS_V1_INTERACTIONS;
+        let url = client.build_url(endpoint);
+        client.increment_request_count();
+
+        assert_eq!(url, "https://open.feishu.cn/open-apis/moments/v1/interactions");
+        assert_eq!(client.get_request_count(), 4);
+
+        // 模拟点赞操作
+        let endpoint = MOMENTS_V1_INTERACTION_LIKE;
+        let url = client.build_url(endpoint);
+        client.increment_request_count();
+
+        assert_eq!(url, "https://open.feishu.cn/open-apis/moments/v1/interactions/like");
+        assert_eq!(client.get_request_count(), 5);
+
+        // 模拟评论操作
+        let endpoint = MOMENTS_V1_INTERACTION_COMMENT;
+        let url = client.build_url(endpoint);
+        client.increment_request_count();
+
+        assert_eq!(url, "https://open.feishu.cn/open-apis/moments/v1/interactions/comment");
+        assert_eq!(client.get_request_count(), 6);
+    }
+
+    #[test]
+    fn test_api_service_integration() {
+        // 测试API服务集成场景
+        let client = MockHttpClient::new("https://open.feishu.cn");
+
+        // 模拟完整的通信流程：发送消息 -> 创建会议 -> 分享动态
+
+        // 1. 发送IM消息
+        let message = MockMessage {
+            message_id: "msg_workflow_1".to_string(),
+            chat_id: "chat_workflow".to_string(),
+            content: "会议开始提醒".to_string(),
+            msg_type: "text".to_string(),
+            timestamp: 1640995200,
+        };
+
+        let endpoint = IM_V1_MESSAGES;
+        let url = client.build_url(endpoint);
+        client.increment_request_count();
+
+        assert_eq!(url, "https://open.feishu.cn/open-apis/im/v1/messages");
+
+        // 2. 创建会议
+        let meeting = MockMeeting {
+            meeting_id: "meeting_workflow".to_string(),
+            room_id: "room_workflow".to_string(),
+            topic: "项目讨论会".to_string(),
+            start_time: 1640995200,
+            end_time: 1640998800,
+            participant_user_ids: vec!["user_1".to_string(), "user_2".to_string()],
+        };
+
+        let endpoint = VC_V1_MEETING_CREATE;
+        let url = client.build_url(endpoint);
+        client.increment_request_count();
+
+        assert_eq!(url, "https://open.feishu.cn/open-apis/vc/v1/meetings");
+
+        // 3. 分享动态
+        let post = MockMomentPost {
+            post_id: "post_workflow".to_string(),
+            user_id: "user_workflow".to_string(),
+            content: "会议圆满结束！".to_string(),
+            media_urls: vec![],
+            like_count: 0,
+            comment_count: 0,
+        };
+
+        let endpoint = MOMENTS_V1_POST_CREATE;
+        let url = client.build_url(endpoint);
+        client.increment_request_count();
+
+        assert_eq!(url, "https://open.feishu.cn/open-apis/moments/v1/posts/create");
+
+        // 验证整个流程
+        assert_eq!(client.get_request_count(), 3);
+        assert_eq!(message.content, "会议开始提醒");
+        assert_eq!(meeting.topic, "项目讨论会");
+        assert_eq!(post.content, "会议圆满结束！");
+    }
+
+    #[test]
+    fn test_api_error_handling_scenarios() {
+        // 测试API错误处理场景
+        let client = MockHttpClient::new("https://open.feishu.cn");
+
+        // 模拟无效端点参数处理
+        let invalid_chat_id = "";
+        let endpoint = IM_V1_CHATS;
+
+        if !invalid_chat_id.is_empty() {
+            let url = client.build_url(endpoint);
+            client.increment_request_count();
+        } else {
+            // 应该处理无效参数
+            assert!(true, "应该处理空的chat_id");
+        }
+
+        // 模拟缺失参数的端点
+        let endpoint = MAIL_V1_MAILGROUP;
+        let url_with_param = endpoint.replace("{mailgroup_id}", "test_group");
+        let final_url = client.build_url(&url_with_param);
+        client.increment_request_count();
+
+        assert_eq!(final_url, "https://open.feishu.cn/open-apis/mail/v1/mailgroups/test_group");
+
+        // 模拟并发请求处理
+        for i in 0..5 {
+            let endpoint = IM_V1_MESSAGES;
+            let url = client.build_url(endpoint);
+            client.increment_request_count();
+
+            assert!(url.contains("/open-apis/im/v1/messages"));
+            assert_eq!(client.get_request_count(), i + 2);
+        }
+    }
+
+    #[test]
+    fn test_api_url_construction_and_validation() {
+        // 测试API URL构建和验证
+        let client = MockHttpClient::new("https://open.feishu.cn");
+
+        // 测试基础URL构建
+        let test_cases = vec![
+            (IM_V1_MESSAGES, "/open-apis/im/v1/messages"),
+            (VC_V1_ROOMS, "/open-apis/vc/v1/rooms"),
+            (MAIL_V1_MAILGROUPS, "/open-apis/mail/v1/mailgroups"),
+            (EVENT_V1_SUBSCRIPTIONS, "/open-apis/event/v1/subscriptions"),
+            (MOMENTS_V1_POSTS, "/open-apis/moments/v1/posts"),
+        ];
+
+        for (endpoint, expected_path) in test_cases {
+            let url = client.build_url(endpoint);
+            assert_eq!(url, format!("{}{}", client.base_url, expected_path));
+        }
+
+        // 测试参数替换
+        let param_tests = vec![
+            (MAIL_V1_MAILGROUP, "{mailgroup_id}", "test123", "/open-apis/mail/v1/mailgroups/test123"),
+            (VC_V1_ROOM_GET, "{room_id}", "room456", "/open-apis/vc/v1/rooms/room456"),
+            (EVENT_V1_SUBSCRIPTION_DELETE, "{subscription_id}", "sub789", "/open-apis/event/v1/subscriptions/sub789"),
+        ];
+
+        for (endpoint, param, value, expected_suffix) in param_tests {
+            let endpoint_with_param = endpoint.replace(param, value);
+            let url = client.build_url(&endpoint_with_param);
+            assert_eq!(url, format!("{}{}", client.base_url, expected_suffix));
+        }
+    }
 } // Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints

@@ -11,7 +11,7 @@
 // 包含知识库的基础功能
 use openlark_core::prelude::*;
 /// 知识库v1版本服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct WikiV1Service {
     client: std::sync::Arc<LarkClient>,
 }

@@ -44,17 +44,17 @@
 //!     .await?;
 //! ```
 
-pub mod v1;
+// pub mod v1;  // 暂时禁用，待修复
 pub mod v2;
 
 // 重新导出所有服务类型，避免名称冲突
-pub use v1::{DocsServiceV1, DocumentService};
+// pub use v1::{DocsServiceV1, DocumentService};
 
 pub use v2::{CreateDocBuilder, CreateDocService, DocV2Service};
 
 // 为向后兼容性提供DocxService别名
-#[cfg(feature = "ccm-doc")]
-pub use v1::DocsServiceV1 as DocxService;
+// #[cfg(feature = "ccm-doc")]
+// pub use v1::DocsServiceV1 as DocxService;
 
 use openlark_core::config::Config;
 
@@ -62,15 +62,15 @@ use openlark_core::config::Config;
 ///
 /// 提供飞书文档的统一入口，支持文档的全生命周期管理。
 /// 包括创建、编辑、分享、协作等企业级功能。
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DocsService {
     config: Config,
-    /// v1版本服务
-    #[cfg(feature = "ccm-doc")]
-    pub v1: v1::DocsServiceV1,
     /// v2版本服务（旧版文档）
     #[cfg(feature = "ccm-doc")]
     pub v2: v2::DocV2Service,
+    // v1版本服务暂时禁用，待修复
+    // #[cfg(feature = "ccm-doc")]
+    // pub v1: v1::DocsServiceV1,
 }
 
 impl DocsService {
@@ -92,9 +92,8 @@ impl DocsService {
         Self {
             config: config.clone(),
             #[cfg(feature = "ccm-doc")]
-            v1: v1::DocsServiceV1::new(config.clone()),
-            #[cfg(feature = "ccm-doc")]
             v2: v2::DocV2Service::new(config),
+            // v1: v1::DocsServiceV1::new(config),  // 暂时禁用
         }
     }
 }
@@ -115,7 +114,7 @@ impl openlark_core::trait_system::Service for DocsService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use openlark_core::prelude::Service;
+    use openlark_core::trait_system::Service;
 
     #[test]
     fn test_docs_service_creation() {

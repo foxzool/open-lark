@@ -487,7 +487,7 @@ impl Default for EmptyResponse {
 impl<T> Default for PageResponse<T> {
     fn default() -> Self {
         Self {
-            items: Vec::new(),
+            items: vec![],
             page_token: None,
             has_more: Some(false),
             total: Some(0),

@@ -18,7 +18,7 @@ use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
     impl_executable_builder_owned,
 };
 /// 添加知识空间成员请求,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CreateSpaceMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -34,7 +34,7 @@ pub struct CreateSpaceMemberRequest {
 impl CreateSpaceMemberRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone)]
+}#[derive(Clone, Debug)]
 pub struct CreateSpaceMemberRequestBuilder {
     request: CreateSpaceMemberRequest}
 impl CreateSpaceMemberRequestBuilder {
@@ -48,7 +48,7 @@ impl CreateSpaceMemberRequestBuilder {
     create,
 );
 /// 添加的成员信息
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CreatedMember {
     /// 成员类型：user
     pub member_type: String,
@@ -57,7 +57,7 @@ pub struct CreatedMember {
     /// 成员权限角色
     pub role: String,
 /// 添加知识空间成员响应,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CreateSpaceMemberResponse {
     /// 添加的成员信息
     pub member: CreatedMember,

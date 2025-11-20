@@ -18,7 +18,7 @@ use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
     impl_executable_builder_owned,
 };
 /// 复制知识空间节点请求,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CopySpaceNodeRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -40,7 +40,7 @@ pub struct CopySpaceNodeRequest {
 impl CopySpaceNodeRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone)]
+}#[derive(Clone, Debug)]
 pub struct CopySpaceNodeRequestBuilder {
     request: CopySpaceNodeRequest}
 impl CopySpaceNodeRequestBuilder {
@@ -54,7 +54,7 @@ impl CopySpaceNodeRequestBuilder {
     copy,
 );
 /// 复制后的节点信息
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CopiedNode {
     /// 知识空间id
     pub space_id: String,
@@ -71,7 +71,7 @@ pub struct CopiedNode {
     /// 文档标题
     pub title: Option<String>}
 /// 复制知识空间节点响应,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CopySpaceNodeResponse {
     /// 复制后的节点信息
     pub node: CopiedNode,

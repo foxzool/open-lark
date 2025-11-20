@@ -9,7 +9,7 @@ use openlark_core::{api::ApiRequest, constants::AccessTokenType, http::Transport
 use super::{requests::GetDocSheetMetaV2Request, responses::GetDocSheetMetaV2Response};
 
 /// 电子表格元数据服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SheetMetaDocService {
     config: Config,
 }
@@ -39,8 +39,8 @@ impl SheetMetaDocService {
     ///
     /// #[tokio::main]
     /// async fn main() -> SDKResult<()> {
-    ///     let config = Config::new("app_id", "app_secret");
-    ///     let service = DocV2Service::new(config);
+    ///     let config = Config::new("app_id", "app_secret",
+    ///     let service = DocV2Service::new(config,
     ///
     ///     let request = GetDocSheetMetaV2Request {
     ///         doc_token: "doc_token_123".to_string(),
@@ -49,13 +49,13 @@ impl SheetMetaDocService {
     ///
     ///     let response = service.sheet_meta.get(&request).await?;
     ///     if let Some(sheet_meta) = response.sheet_meta {
-    ///         println!("工作表数量: {:?}", sheet_meta.sheet_count);
+    ///         println!("工作表数量: {:?}", sheet_meta.sheet_count,
     ///         if let Some(sheets) = &sheet_meta.sheets {
     ///             for sheet in sheets {
-    ///                 println!("工作表: {:?}", sheet.title);
+    ///                 println!("工作表: {:?}", sheet.title,
     ///                 println!("行列数: {} x {}",
     ///                     sheet.row_count.unwrap_or(0),
-    ///                     sheet.col_count.unwrap_or(0));
+    ///                     sheet.col_count.unwrap_or(0),
     ///             }
     ///         }
     ///     }
@@ -69,33 +69,36 @@ impl SheetMetaDocService {
         req.validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
 
-        log::debug!("开始获取电子表格元数据: doc_token={}", req.doc_token);
+        log::debug!("开始获取电子表格元数据: doc_token={}", req.doc_token,
 
         // 构建动态端点路径，替换doc_token参数
-        let endpoint = format!("/open-apis/doc/v2/{}/sheet_meta", req.doc_token);
+        let endpoint = format!("/open-apis/doc/v2/{}/sheet_meta", req.doc_token,
 
-        let mut query_params = std::collections::HashMap::new();
+        let mut query = std::collections::HashMap::new(,
         if let Some(user_id_type) = &req.user_id_type {
-            query_params.insert("user_id_type", user_id_type.clone());
+            .query(insert("user_id_type", user_id_type.clone()
         }
 
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: endpoint,
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params,
-            ..Default::default()
+        
+            query: std::collections::HashMap::new(),
+            timeout: None,
+            _phantom: std::marker::PhantomData,
+            method: openlark_core::api::HttpMethod::Get,
+            url: endpoint,
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query,
+            
         };
 
         let resp =
             Transport::<GetDocSheetMetaV2Response>::request(api_req, &self.config, None).await?;
-        let response = resp.data.unwrap_or_default();
+        let response = resp.data.unwrap_or_default(,
 
         log::info!(
             "电子表格元数据获取成功: doc_token={}, sheet_count={:?}",
             req.doc_token,
             response.sheet_meta.as_ref().and_then(|s| s.sheet_count)
-        );
+        ,
 
         Ok(response)
     }
@@ -118,8 +121,8 @@ impl SheetMetaDocService {
     ///
     /// #[tokio::main]
     /// async fn main() -> SDKResult<()> {
-    ///     let config = Config::new("app_id", "app_secret");
-    ///     let service = DocV2Service::new(config);
+    ///     let config = Config::new("app_id", "app_secret",
+    ///     let service = DocV2Service::new(config,
     ///
     ///     let response = service.sheet_meta
     ///         .get_sheet_meta_builder("doc_token_123")
@@ -128,10 +131,10 @@ impl SheetMetaDocService {
     ///         .await?;
     ///
     ///     if let Some(sheet_meta) = response.sheet_meta {
-    ///         println!("工作表数量: {:?}", sheet_meta.sheet_count);
+    ///         println!("工作表数量: {:?}", sheet_meta.sheet_count,
     ///         if let Some(sheets) = &sheet_meta.sheets {
     ///             for sheet in sheets {
-    ///                 println!("工作表: {:?}", sheet.title);
+    ///                 println!("工作表: {:?}", sheet.title,
     ///             }
     ///         }
     ///     }
@@ -169,7 +172,7 @@ impl GetDocSheetMetaBuilder {
     /// # 参数
     /// - `user_id_type`: 用户ID类型，如 "open_id", "user_id", "union_id"
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
-        self.user_id_type = Some(user_id_type.into());
+        self.user_id_type = Some(user_id_type.into(),
         self
     }
 

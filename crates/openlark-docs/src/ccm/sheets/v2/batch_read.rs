@@ -53,7 +53,7 @@ impl Default for ValueRange {
         Self {
             major_dimension: "ROWS".to_string(),
             range: String::new(),
-            values: Value::Array(Vec::new()),
+            values: Value::Array(vec![]),
             revision: 0,
         }
     }
@@ -244,7 +244,7 @@ impl ReadMultipleRangesRequest {
     /// 获取范围列表
     pub fn get_ranges(&self) -> Vec<&str> {
         if self.ranges.is_empty() {
-            Vec::new()
+            vec![]
         } else {
             self.ranges.split(',').map(|s| s.trim()).collect()
         }
@@ -273,7 +273,7 @@ impl Default for ReadMultipleRangesResponseData {
             revision: 0,
             spreadsheet_token: String::new(),
             total_cells: 0,
-            value_ranges: Vec::new(),
+            value_ranges: vec![],
         }
     }
 }
@@ -303,7 +303,7 @@ impl ApiResponseTrait for ReadMultipleRangesResponse {
 }
 
 /// 批量范围读取服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct BatchReadService {
     config: Config,
 }
@@ -389,7 +389,7 @@ impl BatchReadService {
             },
             data: Some(ReadMultipleRangesResponseData {
                 revision: 123456,
-                spreadsheet_token: request.spreadsheet_token.clone(),
+                spreadsheet_token: request.spreadsheet_token.clone()
                 total_cells: 0,
                 value_ranges: vec![],
             }),

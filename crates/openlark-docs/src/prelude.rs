@@ -8,6 +8,9 @@ pub use openlark_core::{
     http::Transport, SDKResult,
 };
 
+// 导出兼容性适配器
+pub use crate::legacy_client_adapter::{LarkClient, LegacyClientAdapter, RequestBuilder, APIResult};
+
 pub use serde::{Deserialize, Serialize};
 pub use std::collections::HashMap;
 pub use std::sync::Arc;

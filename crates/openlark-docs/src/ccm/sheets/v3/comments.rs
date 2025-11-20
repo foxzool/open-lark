@@ -89,7 +89,7 @@ impl CommentContent {
     pub fn new(text: String) -> Self {
         Self {
             text,
-            mentions: Vec::new(),
+            mentions: vec![],
         }
     }
 
@@ -223,7 +223,7 @@ impl Comment {
             status: CommentStatus::Active,
             created_time: String::new(),
             modified_time: None,
-            replies: Vec::new(),
+            replies: vec![],
             like_count: 0,
             is_liked: false,
         }
@@ -761,7 +761,7 @@ impl openlark_core::api::ApiResponseTrait for DeleteCommentResponse {
 }
 
 /// Sheets电子表格评论服务 v3
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CommentService {
     config: openlark_core::config::Config,
 }
@@ -815,8 +815,8 @@ impl CommentService {
             request.spreadsheet_token
         );
 
-        let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::POST, &endpoint);
-        api_request.body = serde_json::to_vec(request)?;
+        let mut api_request = ApiRequest::with_method_and_path(openlark_core::api::HttpMethod::Post, &endpoint);
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let response: Response<CreateCommentResponse> =
             Transport::request(api_request, &self.config, None).await?;
@@ -876,7 +876,7 @@ impl CommentService {
         );
 
         // 构建查询参数
-        let mut query_params = Vec::new();
+        let mut query_params = vec![];
         query_params.push(format!("sheet_id={}", &request.sheet_id));
         if let Some(page_size) = request.page_size {
             query_params.push(format!("page_size={}", page_size));
@@ -895,7 +895,7 @@ impl CommentService {
         };
 
         let api_request =
-            ApiRequest::with_method_and_path(reqwest::Method::GET, &endpoint_with_params);
+            ApiRequest::with_method_and_path(openlark_core::api::HttpMethod::Get, &endpoint_with_params);
 
         let response: Response<GetCommentsResponse> =
             Transport::request(api_request, &self.config, None).await?;
@@ -951,7 +951,7 @@ impl CommentService {
             request.spreadsheet_token, request.comment_id
         );
 
-        let api_request = ApiRequest::with_method_and_path(reqwest::Method::DELETE, &endpoint);
+        let api_request = ApiRequest::with_method_and_path(openlark_core::api::HttpMethod::Delete, &endpoint);
 
         let response: Response<DeleteCommentResponse> =
             Transport::request(api_request, &self.config, None).await?;
@@ -1058,8 +1058,8 @@ mod tests {
             "comment123".to_string(),
             "sheet123".to_string(),
             CommentType::Cell,
-            content.clone(),
-            author.clone(),
+            content.clone()
+            author.clone()
         )
         .cell_reference("A1".to_string());
         assert!(valid_cell_comment.validate().is_ok());
@@ -1070,8 +1070,8 @@ mod tests {
             "comment124".to_string(),
             "sheet123".to_string(),
             CommentType::Range,
-            content.clone(),
-            author.clone(),
+            content.clone()
+            author.clone()
         )
         .range(Range::from("A1".to_string(), "C3".to_string()));
         assert!(valid_range_comment.validate().is_ok());
@@ -1081,8 +1081,8 @@ mod tests {
             "comment125".to_string(),
             "sheet123".to_string(),
             CommentType::Cell,
-            content.clone(),
-            author.clone(),
+            content.clone()
+            author.clone()
         );
         assert!(invalid_cell_comment.validate().is_err());
 
@@ -1091,8 +1091,8 @@ mod tests {
             "comment126".to_string(),
             "sheet123".to_string(),
             CommentType::Range,
-            content.clone(),
-            author.clone(),
+            content.clone()
+            author.clone()
         );
         assert!(invalid_range_comment.validate().is_err());
     }

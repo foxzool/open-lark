@@ -7,6 +7,8 @@
 //! - 查询创建和修改时间
 //! - 获取电子表格版本和状态信息
 
+use std::collections::HashMap;
+use serde_json::Value;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::endpoints::Endpoints;
@@ -145,7 +147,7 @@ pub struct AppInfo {
 }
 
 /// 获取表格元数据请求
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct GetSpreadsheetMetaRequest {
     /// 电子表格token
     pub spreadsheet_token: String,
@@ -173,7 +175,7 @@ impl GetSpreadsheetMetaRequest {
     pub fn new(spreadsheet_token: impl Into<String>) -> Self {
         Self {
             spreadsheet_token: spreadsheet_token.into(),
-            ..Default::default()
+            
         }
     }
 
@@ -218,7 +220,7 @@ impl GetSpreadsheetMetaRequest {
 
     /// 构建查询参数
     pub fn build_query_params(&self) -> String {
-        let mut params = Vec::new();
+        let mut params = vec![];
 
         if let Some(include_permissions) = self.include_permissions {
             params.push(format!("include_permissions={}", include_permissions));
@@ -259,7 +261,7 @@ impl ApiResponseTrait for SpreadsheetMetaResponseBody {
 }
 
 /// 表格元数据服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SpreadsheetMetaService {
     config: Config,
 }
@@ -310,7 +312,7 @@ impl SpreadsheetMetaService {
             self.config.base_url, request.spreadsheet_token
         );
 
-        let mut api_req = ApiRequest::with_method(reqwest::Method::GET);
+        let mut api_req = ApiRequest::with_method(openlark_core::api::HttpMethod::Get);
         api_req.set_api_path(endpoint);
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
@@ -334,7 +336,7 @@ impl SpreadsheetMetaService {
         &self,
         spreadsheet_token: impl Into<String>,
     ) -> SpreadsheetMetaBuilder {
-        SpreadsheetMetaBuilder::new(self.clone(), spreadsheet_token)
+        SpreadsheetMetaBuilder::new(self.clone() spreadsheet_token)
     }
 
     /// 快速获取表格基本信息

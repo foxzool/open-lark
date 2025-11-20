@@ -134,6 +134,7 @@ impl FeatureLoader {
     }
 
     /// 📋 获取所有启用的服务名称
+    #[allow(clippy::vec_init_then_push)]
     pub fn get_enabled_services() -> Vec<&'static str> {
         let mut services = Vec::new();
 
@@ -214,11 +215,7 @@ impl FeatureLoader {
             });
         }
 
-        if issues.is_empty() {
-            Ok(issues)
-        } else {
-            Ok(issues)
-        }
+        Ok(issues)
     }
 }
 

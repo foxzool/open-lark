@@ -43,7 +43,7 @@ impl Default for ValueRange {
         Self {
             major_dimension: "ROWS".to_string(),
             range: String::new(),
-            values: Value::Array(Vec::new()),
+            values: Value::Array(vec![]),
             revision: 0,
         }
     }
@@ -219,7 +219,7 @@ impl SingleRangeReadRequest {
 
     /// 构建查询参数
     pub fn build_query_params(&self) -> String {
-        let mut params = Vec::new();
+        let mut params = vec![];
 
         if let Some(option) = &self.value_render_option {
             params.push(format!("valueRenderOption={}", urlencoding::encode(option)));
@@ -241,7 +241,7 @@ impl SingleRangeReadRequest {
 }
 
 /// 单个范围读取服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SingleRangeReadService {
     config: Config,
 }
@@ -289,7 +289,7 @@ impl SingleRangeReadService {
         request.validate()?;
 
         // 构建API请求
-        let mut api_req = ApiRequest::with_method(reqwest::Method::GET);
+        let mut api_req = ApiRequest::with_method(openlark_core::api::HttpMethod::Get);
         api_req.set_api_path(
             Endpoints::SHEETS_V2_SPREADSHEET_VALUES_GET
                 .replace("{spreadsheet_token}", &request.spreadsheet_token)
@@ -317,7 +317,7 @@ impl SingleRangeReadService {
         &self,
         spreadsheet_token: impl Into<String>,
     ) -> SingleRangeReadBuilder {
-        SingleRangeReadBuilder::new(self.clone(), spreadsheet_token)
+        SingleRangeReadBuilder::new(self.clone() spreadsheet_token)
     }
 
     /// 快速读取范围数据（使用默认选项）

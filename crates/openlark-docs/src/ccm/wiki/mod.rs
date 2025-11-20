@@ -7,7 +7,7 @@ use openlark_core::{config::Config, trait_system::Service};
 /// 知识库服务
 ///
 /// 基础服务架构，具体功能在后续版本中实现。
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct WikiService {
     config: Config,
 }

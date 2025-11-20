@@ -452,7 +452,7 @@ impl Default for GetFilterViewResponse {
                     create_time: String::new(),
                     update_time: String::new(),
                 },
-                conditions: Vec::new(),
+                conditions: vec![],
             },
         }
     }
@@ -643,7 +643,7 @@ impl ApiResponseTrait for DeleteFilterViewResponse {
 }
 
 /// 筛选视图服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct FilterViewsService {
     config: Config,
 }
@@ -707,7 +707,7 @@ impl FilterViewsService {
         );
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-        api_req.body = serde_json::to_vec(&request)?;
+        api_req.body = Some(openlark_core::api::RequestData::Json(&request))?;
 
         // 发送请求
         let api_resp =
@@ -813,7 +813,7 @@ impl FilterViewsService {
         );
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-        api_req.body = serde_json::to_vec(&request)?;
+        api_req.body = Some(openlark_core::api::RequestData::Json(&request))?;
 
         // 发送请求
         let api_resp =
@@ -878,7 +878,7 @@ impl FilterViewsService {
         sheet_id: impl Into<String>,
     ) -> CreateFilterViewBuilder {
         CreateFilterViewBuilder::new(
-            self.config.clone(),
+            self.config.clone()
             spreadsheet_token.into(),
             sheet_id.into(),
         )
@@ -892,7 +892,7 @@ impl FilterViewsService {
         filter_view_id: impl Into<String>,
     ) -> UpdateFilterViewBuilder {
         UpdateFilterViewBuilder::new(
-            self.config.clone(),
+            self.config.clone()
             spreadsheet_token.into(),
             sheet_id.into(),
             filter_view_id.into(),
@@ -901,7 +901,7 @@ impl FilterViewsService {
 }
 
 /// 创建筛选视图构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CreateFilterViewBuilder {
     config: Config,
     spreadsheet_token: String,
@@ -957,7 +957,7 @@ impl CreateFilterViewBuilder {
 }
 
 /// 更新筛选视图构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct UpdateFilterViewBuilder {
     config: Config,
     spreadsheet_token: String,
@@ -1494,8 +1494,8 @@ mod tests {
             request.spreadsheet_token, request.sheet_id
         );
 
-        let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::POST, &endpoint);
-        api_request.body = serde_json::to_vec(request)?;
+        let mut api_request = ApiRequest::with_method_and_path(openlark_core::api::HttpMethod::Post, &endpoint);
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let response: Response<QueryFilterViewsResponse> =
             Transport::request(api_request, &self.config, None).await?;
@@ -1533,8 +1533,8 @@ mod tests {
             request.spreadsheet_token, request.filter_view_id
         );
 
-        let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::POST, &endpoint);
-        api_request.body = serde_json::to_vec(request)?;
+        let mut api_request = ApiRequest::with_method_and_path(openlark_core::api::HttpMethod::Post, &endpoint);
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let response: Response<CreateFilterViewConditionResponse> =
             Transport::request(api_request, &self.config, None).await?;
@@ -1572,8 +1572,8 @@ mod tests {
             request.spreadsheet_token, request.filter_view_id, request.condition_id
         );
 
-        let mut api_request = ApiRequest::with_method_and_path(reqwest::Method::PUT, &endpoint);
-        api_request.body = serde_json::to_vec(request)?;
+        let mut api_request = ApiRequest::with_method_and_path(openlark_core::api::HttpMethod::Put, &endpoint);
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let response: Response<UpdateFilterViewConditionResponse> =
             Transport::request(api_request, &self.config, None).await?;
@@ -1611,7 +1611,7 @@ mod tests {
             request.spreadsheet_token, request.filter_view_id, request.condition_id
         );
 
-        let api_request = ApiRequest::with_method_and_path(reqwest::Method::DELETE, &endpoint);
+        let api_request = ApiRequest::with_method_and_path(openlark_core::api::HttpMethod::Delete, &endpoint);
 
         let response: Response<DeleteFilterViewConditionResponse> =
             Transport::request(api_request, &self.config, None).await?;

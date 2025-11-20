@@ -11,7 +11,7 @@
 // 提供文件访问记录相关的功能,
 use openlark_core::{config::Config, trait_system::Service};
 /// 访问记录服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ViewRecordService {
     client: std::sync::Arc<LarkClient>,
 }

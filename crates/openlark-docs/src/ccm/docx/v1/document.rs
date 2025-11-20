@@ -6,7 +6,7 @@
 use crate::prelude::*;
 
 /// Document operation service
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DocumentService {
     client: std::sync::Arc<LarkClient>,
 }

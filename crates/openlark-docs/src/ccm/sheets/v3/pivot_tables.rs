@@ -6,6 +6,7 @@
 //! - 值字段汇总方式
 //! - 筛选器和布局设置
 
+use serde_json::Value;
 use openlark_core::error::LarkAPIError;
 
 // 使用统一类型定义
@@ -323,10 +324,10 @@ impl PivotTableConfig {
             sheet_id,
             source_range,
             position,
-            row_fields: Vec::new(),
-            column_fields: Vec::new(),
-            value_fields: Vec::new(),
-            filter_fields: Vec::new(),
+            row_fields: vec![],
+            column_fields: vec![],
+            value_fields: vec![],
+            filter_fields: vec![],
             layout: None,
         }
     }
@@ -655,7 +656,7 @@ pub struct DeletePivotTableResponse {
 }
 
 /// Sheets电子表格数据透视表服务 v3
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct PivotTableService {
     config: openlark_core::config::Config,
 }

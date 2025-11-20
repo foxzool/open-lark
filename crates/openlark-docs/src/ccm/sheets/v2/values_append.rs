@@ -6,6 +6,7 @@
 //! - 大数据量的高效追加操作
 //! - 自动行检测和智能追加
 
+use serde_json::Value;
 use openlark_core::{
     api::ApiRequest,
     api::{ApiResponseTrait, BaseResponse, ResponseFormat},
@@ -80,7 +81,7 @@ use openlark_core::trait_system::Service;
 ///
 /// let log_response = service.append(&log_request).await?;
 /// ```
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ValuesAppendService {
     config: openlark_core::config::Config,
 }
@@ -119,7 +120,7 @@ impl ValuesAppendRequestBuilder {
         Self {
             spreadsheet_token: None,
             range: None,
-            values: Vec::new(),
+            values: vec![],
         }
     }
 
@@ -170,7 +171,7 @@ impl ValuesAppendRequestBuilder {
         // 确定行数（以最长的列为准）
         let max_rows = columns
             .iter()
-            .map(|col| data.get(col).map_or(&Vec::new(), |v| v.len()))
+            .map(|col| data.get(col).map_or(&vec![], |v| v.len()))
             .max()
             .unwrap_or(0);
 
@@ -180,9 +181,9 @@ impl ValuesAppendRequestBuilder {
 
         // 构建数据矩阵
         for row_index in 0..max_rows {
-            let mut row = Vec::new();
+            let mut row = vec![];
             for column in &columns {
-                let column_data = data.get(column).unwrap_or(&Vec::new());
+                let column_data = data.get(column).unwrap_or(&vec![]);
                 if row_index < column_data.len() {
                     row.push(column_data[row_index].clone());
                 } else {
@@ -476,7 +477,7 @@ impl ValuesAppendService {
 
         if let Some(err) = &base_resp.error {
             return Err(openlark_core::error::LarkAPIError::LarkAPIError(
-                err.clone(),
+                err.clone()
             ));
         }
 
@@ -510,7 +511,7 @@ impl ValuesAppendService {
             service: self,
             spreadsheet_token: None,
             range: None,
-            values: Vec::new(),
+            values: vec![],
         }
     }
 
@@ -545,7 +546,7 @@ impl ValuesAppendService {
             service: self,
             spreadsheet_token: None,
             range: None,
-            values: Vec::new(),
+            values: vec![],
         }
     }
 
@@ -577,7 +578,7 @@ impl ValuesAppendService {
             service: self,
             spreadsheet_token: None,
             range: None,
-            values: Vec::new(),
+            values: vec![],
         }
     }
 }
@@ -644,7 +645,7 @@ impl<'a> ValuesAppendServiceBuilder<'a> {
         // 确定行数（以最长的列为准）
         let max_rows = columns
             .iter()
-            .map(|col| data.get(col).map_or(&Vec::new(), |v| v.len()))
+            .map(|col| data.get(col).map_or(&vec![], |v| v.len()))
             .max()
             .unwrap_or(0);
 
@@ -654,9 +655,9 @@ impl<'a> ValuesAppendServiceBuilder<'a> {
 
         // 构建数据矩阵
         for row_index in 0..max_rows {
-            let mut row = Vec::new();
+            let mut row = vec![];
             for column in &columns {
-                let column_data = data.get(column).unwrap_or(&Vec::new());
+                let column_data = data.get(column).unwrap_or(&vec![]);
                 if row_index < column_data.len() {
                     row.push(column_data[row_index].clone());
                 } else {
@@ -1012,7 +1013,7 @@ mod tests {
         assert_eq!(csv_request.values.len(), 2); // 2行数据（跳过标题行）
 
         // 场景4: 性能测试 - 大量数据
-        let mut large_data = Vec::new();
+        let mut large_data = vec![];
         for i in 0..1000 {
             large_data.push(vec![
                 format!("行{}", i + 1),

@@ -21,6 +21,8 @@ anyhow = { workspace = true }
 urlencoding = "2.1"
 futures = "0.3"
 regex = "1.0"
+parking_lot = "0.12"
+url = "2.0"
 
 [features]
 default = []

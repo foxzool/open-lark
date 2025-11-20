@@ -96,7 +96,7 @@ impl CreateSpaceNodeRequest {
         Self {
             space_id: space_id.to_string(),
             obj_type: obj_type.to_string(),
-            ..Default::default()
+            
         }
     }
 }
@@ -205,7 +205,7 @@ impl CreateSpaceNodeRequestBuilder {
         }
 
         // 序列化请求体
-        self.request.api_request.body = serde_json::to_vec(&self.request)
+        self.request.api_request.body = Some(openlark_core::api::RequestData::Json(&self.request))
             .unwrap_or_default();
 
         self.request

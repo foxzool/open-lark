@@ -79,11 +79,11 @@ pub async fn upload_prepare(,
         option: Option<RequestOption>,
     ) -> SDKResult<Response<UploadPrepareRespData>> {,
 let api_req = ApiRequest {,
-            http_http_http_method: Method::POST,
-            api_path: DRIVE_V1_MEDIAS_UPLOAD_PREPARE.to_string(),
-            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()};
+            http_http_method: Method::POST,
+            url: DRIVE_V1_MEDIAS_UPLOAD_PREPARE.to_string(),
+            // supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
+            body: Some(openlark_core::api::RequestData::Json(&request))?,
+            };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
@@ -123,11 +123,11 @@ pub async fn upload_finish(,
         option: Option<RequestOption>,
     ) -> SDKResult<Response<UploadFinishRespData>> {,
 let api_req = ApiRequest {,
-            http_http_http_method: Method::POST,
-            api_path: DRIVE_V1_MEDIAS_UPLOAD_FINISH.to_string(),
-            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()};
+            http_http_method: Method::POST,
+            url: DRIVE_V1_MEDIAS_UPLOAD_FINISH.to_string(),
+            // supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
+            body: Some(openlark_core::api::RequestData::Json(&request))?,
+            };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
@@ -146,10 +146,10 @@ pub async fn download(,
         option: Option<RequestOption>,
     ) -> SDKResult<Response<BinaryResponse>> {,
 let api_req = ApiRequest {,
-            http_http_http_method: Method::GET,
-            api_path: DRIVE_V1_MEDIAS_DOWNLOAD.replace("{}", &request.file_token),
-            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
-            ..Default::default()
+            http_http_method: Method::GET,
+            url: DRIVE_V1_MEDIAS_DOWNLOAD.replace("{}", &request.file_token),
+            // supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
+            
 };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -169,10 +169,10 @@ pub async fn batch_get_tmp_download_url(,
         option: Option<RequestOption>,
     ) -> SDKResult<Response<BatchGetTmpDownloadUrlRespData>> {,
 let mut api_req = ApiRequest {,
-            http_http_http_method: Method::GET,
-            api_path: DRIVE_V1_MEDIAS_BATCH_GET_TMP_DOWNLOAD_URL.to_string(),
-            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
-            ..Default::default()};
+            http_http_method: Method::GET,
+            url: DRIVE_V1_MEDIAS_BATCH_GET_TMP_DOWNLOAD_URL.to_string(),
+            // supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
+            };
 // 添加查询参数,
         let file_tokens = request.file_tokens.join(",");
         api_req.query_params.insert("file_tokens", file_tokens);
@@ -182,7 +182,7 @@ Ok(api_resp),
     }
 // === 数据结构定义 ===,
 /// 上传素材请求参数
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct UploadMediaRequest {
     /// 请求体,
 #[serde(skip)]
@@ -209,16 +209,16 @@ impl UploadMediaRequestBuilder {
             log::error!("parent_token is required for media upload");
 return UploadMediaRequest {,
                 api_req: ApiRequest {
-                    body: Vec::new(),
-                    ..Default::default()}
+                    body: None,
+                    }
                 ..self.request,
 };
 if self.request.size <= 0 {,
             log::error!("file size must be greater than 0");
 return UploadMediaRequest {,
                 api_req: ApiRequest {
-                    body: Vec::new(),
-                    ..Default::default()}
+                    body: None,
+                    }
                 ..self.request,
 };
 // 验证文件名,
@@ -230,8 +230,8 @@ if !name_result.is_valid() {,
 );
             return UploadMediaRequest {,
 api_req: ApiRequest {,
-                    body: Vec::new(),
-                    ..Default::default()}
+                    body: None,
+                    }
                 ..self.request,
 };
 // 验证文件数据（如果有）,
@@ -245,19 +245,19 @@ if !upload_result.is_valid() {,
 );
                 return UploadMediaRequest {,
 api_req: ApiRequest {,
-                        body: Vec::new(),
-                        ..Default::default()}
+                        body: None,
+                        }
                     ..self.request,
 };
         }
-self.request.api_req.body = match serde_json::to_vec(&self.request) {,
+self.request.api_req.body = match Some(openlark_core::api::RequestData::Json(&self.request)) {,
             Ok(body) => body,
             Err(e) => {
                 log::error!("Failed to serialize upload media request: {}", e);
 return UploadMediaRequest {,
                     api_req: ApiRequest {
-                        body: Vec::new(),
-                        ..Default::default()}
+                        body: None,
+                        }
                     ..self.request,
 };
         };
@@ -282,7 +282,7 @@ if !name_result.is_valid() {,
             validate_upload_file(&self.request.api_req.file, &self.request.file_name, false)} else {,
 ValidationResult::Valid}
 /// 上传素材响应数据,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct UploadMediaRespData {
     /// 素材token
     pub file_token: String,
@@ -293,7 +293,7 @@ impl ApiResponseTrait for.* {
 ResponseFormat::Data
     }
 /// 分片上传预上传请求参数,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct UploadPrepareRequest {
     /// 文件名称
     pub file_name: String,
@@ -309,7 +309,7 @@ impl UploadPrepareRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 分片上传预上传响应数据,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct UploadPrepareRespData {
     /// 上传事务ID
     pub upload_id: String,
@@ -324,7 +324,7 @@ impl ApiResponseTrait for.* {
 ResponseFormat::Data
     }
 /// 上传分片请求参数,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct UploadPartRequest {
     /// 请求体,
 #[serde(skip)]
@@ -348,7 +348,7 @@ impl UploadPartRequestBuilder {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 上传分片响应数据,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct UploadPartRespData {
     /// 分片ETag
     pub etag: String,
@@ -359,14 +359,14 @@ impl ApiResponseTrait for.* {
 ResponseFormat::Data
     }
 /// 完成上传请求参数,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct UploadFinishRequest {
     /// 上传事务ID
     pub upload_id: String,
     /// 分片信息列表
     pub block_infos: Vec<BlockInfo>}
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct BlockInfo {
     /// 分片ETag
     pub etag: String,
@@ -376,7 +376,7 @@ impl UploadFinishRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 完成上传响应数据,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct UploadFinishRespData {
     /// 素材token
     pub file_token: String,
@@ -387,7 +387,7 @@ impl ApiResponseTrait for.* {
 ResponseFormat::Data
     }
 /// 下载素材请求参数,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct DownloadMediaRequest {
     /// 素材token
     pub file_token: String,
@@ -395,7 +395,7 @@ impl DownloadMediaRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 批量获取临时下载链接请求参数,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct BatchGetTmpDownloadUrlRequest {
     /// 素材token列表
     pub file_tokens: Vec<String>}
@@ -403,17 +403,17 @@ impl BatchGetTmpDownloadUrlRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 批量获取临时下载链接响应数据,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct BatchGetTmpDownloadUrlRespData {
     /// 临时下载链接信息
     pub tmp_download_urls: Vec<TmpDownloadUrl>}
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct TmpDownloadUrl {
     /// 素材token
     pub file_token: String,
     /// 临时下载链接
-    pub tmp_download_api_path: String,
+    pub tmp_download_url: String,
 impl ApiResponseTrait for.* {
     pub fn new(config: Config) -> Self {
         Self { config }
@@ -653,7 +653,7 @@ let data = UploadFinishRespData {,
 let data = BatchGetTmpDownloadUrlRespData {,
             tmp_download_urls: vec![TmpDownloadUrl {
                 file_token: "token123".to_string(),
-                tmp_download_api_path: "https://temp.example.com/download/abc123".to_string()}],
+                tmp_download_url: "https://temp.example.com/download/abc123".to_string()}],
         };
 assert_eq!(,
             data.tmp_download_urls[0].tmp_download_url,
@@ -772,7 +772,7 @@ let json = serde_json::to_string(&original).unwrap();
                 let original = BatchGetTmpDownloadUrlRespData {,
 tmp_download_urls: vec![TmpDownloadUrl {,
                         file_token: "token123".to_string(),
-                        tmp_download_api_path: "https://example.com/temp".to_string()}],
+                        tmp_download_url: "https://example.com/temp".to_string()}],
                 };
 let json = serde_json::to_string(&original).unwrap();
                 let deserialized: BatchGetTmpDownloadUrlRespData =,
@@ -901,7 +901,7 @@ let long_token = "a".repeat(1000);
 let data = BatchGetTmpDownloadUrlRespData {,
             tmp_download_urls: vec![TmpDownloadUrl {
                 file_token: "token123".to_string(),
-                tmp_download_api_path: long_url.clone()}],
+                tmp_download_url: long_url.clone()}],
         };
         assert_eq!(data.tmp_download_urls[0].tmp_download_url, long_url);
 // === Clone and Debug Tests ===,

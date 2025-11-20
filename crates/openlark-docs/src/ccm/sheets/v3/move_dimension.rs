@@ -75,7 +75,7 @@ pub type SheetPagedResponse<T> = Vec<T>;
 ///
 /// let response = service.move_dimension(&request).await?;
 /// ```
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct MoveDimensionService {
     config: openlark_core::config::Config,
 }
@@ -237,7 +237,7 @@ impl MoveDimensionRequestBuilder {
                 Ok(MoveDimensionRequest {
                     spreadsheet_token: self.spreadsheet_token.unwrap(),
                     sheet_id: self.sheet_id.unwrap(),
-                    dimension: dimension.clone(),
+                    dimension: dimension.clone()
                     source_start_index: source_start,
                     source_end_index: source_end,
                     destination_index: dest_index,
@@ -346,7 +346,7 @@ impl MoveDimensionService {
 
         // 创建HTTP请求并序列化请求体
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &url);
-        api_request.body = serde_json::to_vec(request)?;
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         // 发送请求并获取响应
         let response =

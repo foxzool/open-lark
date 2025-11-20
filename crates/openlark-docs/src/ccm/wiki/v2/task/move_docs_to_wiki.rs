@@ -12,7 +12,7 @@ use SDKResult;    api::ApiRequest,
     SDKResult,
 };
 /// 移动云空间文档至知识空间请求,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct MoveDocsToWikiRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -26,7 +26,7 @@ pub struct MoveDocsToWikiRequest {
 impl MoveDocsToWikiRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone)]
+}#[derive(Clone, Debug)]
 pub struct MoveDocsToWikiRequestBuilder {
     request: MoveDocsToWikiRequest}
 impl MoveDocsToWikiRequestBuilder {
@@ -45,15 +45,15 @@ impl MoveDocsToWikiRequestBuilder {
 self.request.parent_node_token = None;
         self}
 pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
+        self.request.api_request.body = Some(openlark_core::api::RequestData::Json(&self.request)).unwrap();
 self.request}
 /// 移动任务信息,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct MoveTask {
     /// 任务id
     pub task_id: String,
 /// 移动云空间文档至知识空间响应,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct MoveDocsToWikiResponse {
     /// 任务信息
     pub task: MoveTask,

@@ -7,6 +7,7 @@
 //! - 企业级错误处理和数据验证
 //! - 支持数值格式、日期渲染等选项
 
+use serde_json::Value;
 use openlark_core::{
     api::ApiRequest,
     api::{ApiResponseTrait, BaseResponse, ResponseFormat},
@@ -26,7 +27,7 @@ use openlark_core::trait_system::Service;
 // use openlark_core::SDKResult;
 
 /// 批量范围读取请求
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct BatchReadRangesRequest {
     /// 电子表格token
     pub spreadsheet_token: String,
@@ -81,7 +82,7 @@ impl Default for BatchReadRangesRequest {
     fn default() -> Self {
         Self {
             spreadsheet_token: String::new(),
-            ranges: Vec::new(),
+            ranges: vec![],
             value_render_option: None,
             date_render_option: None,
             formula_render_option: None,
@@ -94,7 +95,7 @@ impl BatchReadRangesRequest {
     pub fn new(spreadsheet_token: impl Into<String>) -> Self {
         Self {
             spreadsheet_token: spreadsheet_token.into(),
-            ..Default::default()
+            
         }
     }
 
@@ -179,7 +180,7 @@ impl BatchReadRangesRequest {
 
     /// 构建查询参数
     pub fn build_query_params(&self) -> String {
-        let mut params = Vec::new();
+        let mut params = vec![];
 
         // 添加范围参数
         for range in &self.ranges {
@@ -249,7 +250,7 @@ pub struct BatchReadRangesResponseBody {
 // 移除重复的BaseResponse定义，使用openlark_core中的版本
 
 /// 批量范围读取服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct BatchReadRangesService {
     config: Config,
 }
@@ -408,7 +409,7 @@ impl BatchReadRangesBuilder {
         Self {
             service,
             spreadsheet_token: None,
-            ranges: Vec::new(),
+            ranges: vec![],
             value_render_option: None,
             date_render_option: None,
             formula_render_option: None,

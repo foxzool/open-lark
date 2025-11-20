@@ -18,7 +18,7 @@ use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
     impl_executable_builder_owned,
 };
 /// 搜索Wiki请求,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SearchWikiRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -36,7 +36,7 @@ pub struct SearchWikiRequest {
 impl SearchWikiRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone)]
+}#[derive(Clone, Debug)]
 pub struct SearchWikiRequestBuilder {
     request: SearchWikiRequest}
 impl SearchWikiRequestBuilder {
@@ -51,7 +51,7 @@ self,
 self.request.space_ids = None;
         self}
 pub fn w+.*{
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
+        self.request.api_request.body = Some(openlark_core::api::RequestData::Json(&self.request)).unwrap();
 self.request}
 impl_executable_builder_owned!(,
     SearchWikiRequestBuilder,
@@ -61,7 +61,7 @@ impl_executable_builder_owned!(,
     search_wiki,
 );
 /// 搜索结果项
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct WikiSearchItem {
     /// 节点token
     pub node_token: String,
@@ -84,7 +84,7 @@ pub struct WikiSearchItem {
     /// 最后编辑者
     pub obj_edit_user: Option<String>}
 /// 搜索Wiki响应,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SearchWikiResponse {
     /// 是否还有更多项
     pub has_more: bool,

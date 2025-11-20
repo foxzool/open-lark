@@ -95,7 +95,7 @@ impl ApiResponseTrait for UpdatePropertiesResponse {
 }
 
 /// 表格属性管理服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct PropertiesService {
     config: Config,
 }
@@ -149,7 +149,7 @@ impl PropertiesService {
         );
 
         let mut api_request = ApiRequest::with_method_and_path(Method::PUT, &endpoint);
-        api_request.body = serde_json::to_vec(request)?;
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let update_response: StandardResponse<UpdatePropertiesResponse> =
             Transport::request(api_request, &self.config, None).await?;

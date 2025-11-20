@@ -18,7 +18,7 @@ use openlark_core::{APIResult, LarkClient, RequestBuilder};
 use super::ccm::models::CcmResponse;
 use serde::{Deserialize, Serialize};
 /// 表格操作服务,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SpreadsheetService {
     client: std::sync::Arc<LarkClient>,
 impl SpreadsheetService {
@@ -134,7 +134,7 @@ self.client.send(request).await,
     }
 // 数据结构,
 /// 表格元数据
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SpreadsheetMetadata {
     /// 表格token,
 #[serde(rename = "spreadsheet_token")]
@@ -152,7 +152,7 @@ pub struct SpreadsheetMetadata {
     /// 是否已删除
     pub deleted: bool,
 /// 创建者信息,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CreatorInfo {
     /// 用户ID,
 #[serde(rename = "user_id")]
@@ -163,12 +163,12 @@ pub struct CreatorInfo {
     /// 用户名
     pub name: Option<String>,
 /// 工作表列表响应,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SheetListResponse {
     /// 工作表列表
     pub sheets: Vec<SheetInfo>,
 /// 工作表信息,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SheetInfo {
     /// 工作表ID,
 #[serde(rename = "sheet_id")]
@@ -187,11 +187,11 @@ pub struct SheetInfo {
     /// 是否已删除
     pub deleted: bool,
 // 请求结构体,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct UpdateSpreadsheetRequest {
     pub title: String,
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CreateSpreadsheetRequest {
     pub title: String,
     #[serde(rename = "folder_token")]

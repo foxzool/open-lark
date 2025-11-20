@@ -16,6 +16,12 @@ mod macros;
 // 导入端点模块
 pub mod endpoints;
 
+// Legacy client adapter module
+pub mod legacy_client_adapter;
+
+// Services module
+pub mod services;
+
 // Prelude module with common imports
 pub mod prelude;
 

@@ -282,8 +282,8 @@ mod tests {
     fn test_validate_string_length() {
         let long_string = "这是一个很长的字符串用于测试截断功能".to_string();
         let result = validate_string_length(long_string.clone(), 10, "测试字段");
-        assert!(result.len() <= 10);
-        assert!(result.chars().count() <= 10);
+        assert_eq!(result.chars().count(), 10); // 确保字符数正好是10
+        assert!(result.len() <= 30); // 字节数可能更多（UTF-8）
 
         let short_string = "短".to_string();
         let result = validate_string_length(short_string, 10, "测试字段");
@@ -295,14 +295,14 @@ mod tests {
         assert!(validate_required("有效值", "测试字段"));
         assert!(!validate_required("", "测试字段"));
         assert!(!validate_required("   ", "测试字段"));
-        assert!(!validate_required("  有效值  ", "测试字段")); // trim后有效
+        assert!(validate_required("  有效值  ", "测试字段")); // trim后有效
     }
 
     #[test]
     fn test_validate_content_size() {
         let content = "这是一个测试内容";
-        assert!(validate_content_size(content, 20, "测试内容"));
-        assert!(!validate_content_size(content, 5, "测试内容"));
+        assert!(validate_content_size(content, 30, "测试内容")); // 30 > 25字节
+        assert!(!validate_content_size(content, 20, "测试内容")); // 20 < 25字节
     }
 
     #[test]

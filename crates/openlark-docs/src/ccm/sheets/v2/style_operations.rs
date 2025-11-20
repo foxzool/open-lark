@@ -421,7 +421,7 @@ impl BatchUpdateStylesRequest {
     pub fn new(spreadsheet_token: impl Into<String>) -> Self {
         Self {
             spreadsheet_token: spreadsheet_token.into(),
-            styles: Vec::new(),
+            styles: vec![],
         }
     }
 
@@ -495,7 +495,7 @@ impl Default for BatchUpdateStylesResponse {
         Self {
             data: BatchUpdateStylesData {
                 spreadsheet_token: String::new(),
-                style_updates: Vec::new(),
+                style_updates: vec![],
             },
         }
     }
@@ -508,7 +508,7 @@ impl ApiResponseTrait for BatchUpdateStylesResponse {
 }
 
 /// 单元格样式操作服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct StyleOperationsService {
     config: Config,
 }
@@ -569,7 +569,7 @@ impl StyleOperationsService {
         );
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-        api_req.body = serde_json::to_vec(&request)?;
+        api_req.body = Some(openlark_core::api::RequestData::Json(&request))?;
 
         // 发送请求
         let api_resp =
@@ -583,12 +583,12 @@ impl StyleOperationsService {
         &self,
         spreadsheet_token: impl Into<String>,
     ) -> BatchUpdateStylesBuilder {
-        BatchUpdateStylesBuilder::new(self.config.clone(), spreadsheet_token.into())
+        BatchUpdateStylesBuilder::new(self.config.clone() spreadsheet_token.into())
     }
 }
 
 /// 批量样式更新构建器
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct BatchUpdateStylesBuilder {
     config: Config,
     spreadsheet_token: String,
@@ -601,7 +601,7 @@ impl BatchUpdateStylesBuilder {
         Self {
             config,
             spreadsheet_token,
-            styles: Vec::new(),
+            styles: vec![],
         }
     }
 
