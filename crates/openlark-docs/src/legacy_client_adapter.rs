@@ -38,7 +38,7 @@
 //! # }
 //! ```
 //!
-//! ## 纯遗留模式
+//! ## 基本使用
 //!
 //! ```rust,no_run
 //! use openlark_core::config::Config;
@@ -47,11 +47,14 @@
 //! # #[tokio::main]
 //! # async fn main() -> Result<(), Box<dyn std::error::Error>> {
 //! let config = Config::default();
-//! // 创建纯遗留模式适配器（完全向后兼容）
-//! let client = LegacyClientAdapter::new_legacy_only(config)?;
+//! // 创建适配器（基于 openlark-core Transport 层）
+//! let client = LegacyClientAdapter::new(config)?;
 //!
-//! let request = RequestBuilder::get("https://api.example.com/test");
-//! // 所有请求直接使用 reqwest::Client，不经过 openlark-core
+//! let request = RequestBuilder::get("https://open.feishu.cn/open-apis/api/v1/test")
+//!     .query_param("user_id", "user_123")
+//!     .header("Authorization", "Bearer token");
+//!
+//! // 所有请求通过 openlark-core Transport 层发送
 //! let response: serde_json::Value = client.send(request).await?;
 //! # Ok(())
 //! # }
@@ -126,26 +129,21 @@
 //! - 错误分类和恢复策略
 
 use openlark_core::{config::Config, api::{ApiRequest, HttpMethod, ApiResponseTrait}, http::Transport, SDKResult};
-use reqwest::{Client, Method};
+use reqwest::Method;
 use std::collections::HashMap;
 use std::sync::Arc;
 
 /// 传统的 LarkClient 接口适配器
 ///
 /// 这个结构体实现了旧代码中期望的 LarkClient 接口，
-/// 内部使用 reqwest::Client 来处理实际的 HTTP 请求，
-/// 但集成了 openlark-core 的配置、令牌管理和错误处理
+/// 基于重构后的架构，使用 openlark-core Transport 层和内置功能
+/// 保持向后兼容的同时，提供现代化的错误处理和性能优化
 #[derive(Debug, Clone)]
 pub struct LegacyClientAdapter {
-    /// HTTP 客户端（用于向后兼容）
-    client: Arc<Client>,
     /// 客户端配置（openlark-core 配置）
     config: Arc<Config>,
-    /// 请求缓存（可选，预留用于阶段3功能增强）
-    #[allow(dead_code)]
+    /// 请求缓存（GET请求专用）
     cache: Arc<parking_lot::RwLock<HashMap<String, serde_json::Value>>>,
-    /// 是否启用核心架构集成
-    enable_core_integration: bool,
 }
 
 /// API 请求构建器（兼容旧接口）
@@ -171,10 +169,8 @@ impl LegacyClientAdapter {
     pub fn new(config: Config) -> SDKResult<Self> {
         let cache = Arc::new(parking_lot::RwLock::new(HashMap::new()));
         Ok(Self {
-            client: Arc::new(config.http_client.clone()),
             config: Arc::new(config),
             cache,
-            enable_core_integration: true,
         })
     }
 
@@ -182,21 +178,8 @@ impl LegacyClientAdapter {
     pub fn from_config(config: Arc<Config>) -> SDKResult<Self> {
         let cache = Arc::new(parking_lot::RwLock::new(HashMap::new()));
         Ok(Self {
-            client: Arc::new(config.http_client.clone()),
             config,
             cache,
-            enable_core_integration: true,
-        })
-    }
-
-    /// 创建禁用核心架构集成的适配器（完全向后兼容模式）
-    pub fn new_legacy_only(config: Config) -> SDKResult<Self> {
-        let cache = Arc::new(parking_lot::RwLock::new(HashMap::new()));
-        Ok(Self {
-            client: Arc::new(config.http_client.clone()),
-            config: Arc::new(config),
-            cache,
-            enable_core_integration: false,
         })
     }
 
@@ -205,28 +188,21 @@ impl LegacyClientAdapter {
     where
         T: for<'de> serde::Deserialize<'de> + Send + Sync + ApiResponseTrait + std::fmt::Debug + serde::Serialize,
     {
-        if self.enable_core_integration {
-            self.send_with_core_integration::<T>(request).await
-        } else {
-            self.send_legacy_mode::<T>(request).await
-        }
-    }
-
-    /// 使用 openlark-core 架构发送请求
-    async fn send_with_core_integration<T>(&self, request: RequestBuilder) -> SDKResult<T>
-    where
-        T: for<'de> serde::Deserialize<'de> + Send + Sync + ApiResponseTrait + std::fmt::Debug + serde::Serialize,
-    {
         // 检查缓存（仅对GET请求）
-        if request.method == reqwest::Method::GET {
-            let cache_key = self.generate_cache_key(&request);
-            if let Some(cached_result) = self.get_cached_response::<T>(&cache_key) {
+        let cache_key = if request.method == reqwest::Method::GET {
+            Some(self.generate_cache_key(&request))
+        } else {
+            None
+        };
+
+        if let Some(ref cache_key) = cache_key {
+            if let Some(cached_result) = self.get_cached_response::<T>(cache_key) {
                 return cached_result;
             }
         }
 
         // 转换为 openlark-core 的 ApiRequest 格式
-        let api_request = self.convert_to_api_request(request.clone())?;
+        let api_request = self.convert_to_api_request(request)?;
 
         // 使用 Transport 层发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
@@ -235,132 +211,11 @@ impl LegacyClientAdapter {
         let result = self.convert_response::<T>(response)?;
 
         // 缓存GET请求的响应
-        if request.method == reqwest::Method::GET {
-            let cache_key = self.generate_cache_key(&request);
+        if let Some(cache_key) = cache_key {
             self.cache_response(cache_key, &result).ok();
         }
 
         Ok(result)
-    }
-
-    /// 传统模式发送请求（向后兼容），支持重试机制
-    async fn send_legacy_mode<T>(&self, request: RequestBuilder) -> SDKResult<T>
-    where
-        T: for<'de> serde::Deserialize<'de> + Send + Sync,
-    {
-        let mut retries = 3; // 最大重试次数
-
-        loop {
-            match self.send_legacy_mode_once::<T>(request.clone()).await {
-                Ok(result) => return Ok(result),
-                Err(error) => {
-                    if retries > 0 && self.should_retry(&error) {
-                        retries -= 1;
-                        tokio::time::sleep(tokio::time::Duration::from_millis(1000)).await;
-                        continue;
-                    }
-                    return Err(error);
-                }
-            }
-        }
-    }
-
-    /// 传统模式单次发送请求
-    async fn send_legacy_mode_once<T>(&self, request: RequestBuilder) -> SDKResult<T>
-    where
-        T: for<'de> serde::Deserialize<'de> + Send + Sync,
-    {
-        // 构建最终URL，统一处理查询参数
-        let final_url = if !request.query_params.is_empty() {
-            let mut url_parts = url::Url::parse(&request.url).map_err(|e|
-                openlark_core::error::LarkAPIError::api_error(
-                    400,
-                    format!("解析URL失败: {}", e),
-                    None
-                )
-            )?;
-
-            for (key, value) in &request.query_params {
-                url_parts.query_pairs_mut().append_pair(key, value);
-            }
-
-            url_parts.to_string()
-        } else {
-            request.url.clone()
-        };
-
-        let mut req = self.client.request(request.method, &final_url);
-
-        // 添加请求头
-        for (key, value) in request.headers {
-            req = req.header(&key, &value);
-        }
-
-        // 添加请求体
-        if let Some(body) = request.body {
-            req = req.json(&body);
-        }
-
-        // 设置超时
-        req = req.timeout(tokio::time::Duration::from_secs(30));
-
-        // 执行请求
-        let response = req.send().await.map_err(|e| {
-            use openlark_core::error::NetworkErrorKind;
-            if e.is_timeout() {
-                openlark_core::error::LarkAPIError::network_error(
-                    format!("请求超时: {}", e),
-                    NetworkErrorKind::Timeout
-                )
-            } else if e.is_connect() {
-                openlark_core::error::LarkAPIError::network_error(
-                    format!("连接失败: {}", e),
-                    NetworkErrorKind::ConnectionRefused
-                )
-            } else {
-                openlark_core::error::LarkAPIError::network_error(
-                    format!("网络请求失败: {}", e),
-                    NetworkErrorKind::Other
-                )
-            }
-        })?;
-
-        // 检查HTTP状态码
-        let status = response.status();
-        if !status.is_success() {
-            return Err(openlark_core::error::LarkAPIError::api_error(
-                status.as_u16() as i32,
-                format!("HTTP错误: {}", status),
-                None
-            ));
-        }
-
-        // 解析响应
-        response.json::<T>().await.map_err(|e|
-            openlark_core::error::LarkAPIError::api_error(
-                500,
-                format!("解析响应失败: {}", e),
-                None
-            )
-        )
-    }
-
-    /// 判断是否应该重试
-    fn should_retry(&self, error: &openlark_core::error::LarkAPIError) -> bool {
-        match error {
-            openlark_core::error::LarkAPIError::NetworkError { kind, .. } => {
-                match kind {
-                    openlark_core::error::NetworkErrorKind::Timeout => true,
-                    openlark_core::error::NetworkErrorKind::ConnectionRefused => true,
-                    openlark_core::error::NetworkErrorKind::DnsResolutionFailed => true,
-                    openlark_core::error::NetworkErrorKind::Other => true,
-                    openlark_core::error::NetworkErrorKind::SslError => false, // SSL错误通常不重试
-                }
-            },
-            openlark_core::error::LarkAPIError::APIError { code, .. } if *code >= 500 => true,
-            openlark_core::error::LarkAPIError::APIError { code, .. } if *code == 429 => true, // 限流
-            _ => false,
-        }
     }
 
     /// 将 RequestBuilder 转换为 ApiRequest
@@ -419,8 +274,9 @@ impl LegacyClientAdapter {
     }
 
     /// 获取内部 Client（用于高级用法）
-    pub fn client(&self) -> &Client {
-        &self.client
+    /// 注意：此方法现在返回 openlark-core 的内部客户端
+    pub fn client(&self) -> &reqwest::Client {
+        &self.config.http_client
     }
 
     /// 生成缓存键
@@ -651,16 +507,18 @@ mod tests {
     }
 
     #[test]
-    fn test_dual_mode_configuration() {
+    fn test_basic_configuration() {
+        // 使用默认配置进行测试（默认配置可能未配置app_id/app_secret）
         let config = Config::default();
 
-        // 测试默认模式（启用核心集成）
-        let client_default = LegacyClientAdapter::new(config.clone()).unwrap();
-        assert!(client_default.enable_core_integration);
+        // 测试基本创建
+        let client = LegacyClientAdapter::new(config.clone()).unwrap();
+        // 不要求is_configured()为true，因为默认配置可能未设置
+        let client_arc = LegacyClientAdapter::from_config(Arc::new(config)).unwrap();
 
-        // 测试纯遗留模式
-        let client_legacy = LegacyClientAdapter::new_legacy_only(config).unwrap();
-        assert!(!client_legacy.enable_core_integration);
+        // 测试配置访问
+        assert_eq!(client_arc.config.app_id, client.config.app_id);
+        assert_eq!(client_arc.config.app_secret, client.config.app_secret);
     }
 
     #[tokio::test]
@@ -722,40 +580,22 @@ mod tests {
     }
 
     #[test]
-    fn test_retry_logic() {
+    fn test_transport_integration() {
         let config = Config::default();
         let client = LegacyClientAdapter::new(config).unwrap();
 
-        // 测试网络错误应该重试
-        let network_error = openlark_core::error::LarkAPIError::network_error(
-            "网络连接失败".to_string(),
-            openlark_core::error::NetworkErrorKind::ConnectionRefused
-        );
-        assert!(client.should_retry(&network_error));
+        // 测试Transport集成 - 验证可以创建ApiRequest
+        let request = RequestBuilder::get("https://open.feishu.cn/open-apis/test")
+            .query_param("param1", "value1")
+            .header("Authorization", "Bearer token");
 
-        // 测试服务器错误应该重试
-        let server_error = openlark_core::error::LarkAPIError::APIError {
-            code: 500,
-            msg: "服务器内部错误".to_string(),
-            error: None,
-        };
-        assert!(client.should_retry(&server_error));
+        // 测试请求转换（不发送实际请求）
+        let api_request = client.convert_to_api_request(request);
+        assert!(api_request.is_ok());
 
-        // 测试限流错误应该重试
-        let rate_limit_error = openlark_core::error::LarkAPIError::APIError {
-            code: 429,
-            msg: "请求过于频繁".to_string(),
-            error: None,
-        };
-        assert!(client.should_retry(&rate_limit_error));
-
-        // 测试客户端错误不应该重试
-        let client_error = openlark_core::error::LarkAPIError::APIError {
-            code: 400,
-            msg: "请求参数错误".to_string(),
-            error: None,
-        };
-        assert!(!client.should_retry(&client_error));
+        let api_request = api_request.unwrap();
+        assert_eq!(api_request.method, openlark_core::api::HttpMethod::Get);
+        assert!(api_request.url.contains("open.feishu.cn"));
     }
 
     #[test]
