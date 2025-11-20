@@ -17,17 +17,14 @@ pub mod comment;
 /// Document v1 Service
 #[derive(Clone, Debug)]
 pub struct DocxV1Service {
-    client: std::sync::Arc<LarkClient>,
+    #[allow(dead_code)] // 配置保留供将来使用
+    config: Config,
 }
 
 impl DocxV1Service {
-    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
-        Self { client }
+    pub fn new(config: Config) -> Self {
+        Self { config }
     }
-}
-
-impl std::ops::Deref for DocxV1Service {
-    type Target = LarkClient;
 
     fn deref(&self) -> &Self::Target {
         &self.client

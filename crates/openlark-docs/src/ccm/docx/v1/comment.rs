@@ -3,17 +3,19 @@
 //! This module provides document comment operations for documents,
 //! including creating, reading, updating, and deleting comments.
 
-use crate::prelude::*;
+use openlark_core::config::Config;
 
 /// Comment operation service
 #[derive(Clone, Debug)]
 pub struct CommentService {
-    client: std::sync::Arc<LarkClient>,
+    #[allow(dead_code)]
+    config: Config,,
 }
 
 impl CommentService {
-    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
-        Self { client }
+    pub fn new(#[allow(dead_code)]
+    config: Config,) -> Self {
+        Self { config }
     }
 }
 

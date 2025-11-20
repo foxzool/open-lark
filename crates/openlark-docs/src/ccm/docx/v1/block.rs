@@ -3,17 +3,19 @@
 //! This module provides document block operations for documents,
 //! including text blocks, image blocks, table blocks, etc.
 
-use crate::prelude::*;
+use openlark_core::config::Config;
 
 /// Block operation service
 #[derive(Clone, Debug)]
 pub struct BlockService {
-    client: std::sync::Arc<LarkClient>,
+    #[allow(dead_code)]
+    config: Config,,
 }
 
 impl BlockService {
-    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
-        Self { client }
+    pub fn new(#[allow(dead_code)]
+    config: Config,) -> Self {
+        Self { config }
     }
 }
 

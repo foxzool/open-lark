@@ -13,7 +13,8 @@ use openlark_core::{config::Config, trait_system::Service};
 /// 元数据服务
 #[derive(Clone, Debug)]
 pub struct MetaService {
-    client: std::sync::Arc<LarkClient>,
+    #[allow(dead_code)]
+    config: Config,,
 }
 impl MetaService {
     pub fn new(config: Config) -> Self {
