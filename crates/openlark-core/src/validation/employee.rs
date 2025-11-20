@@ -520,7 +520,8 @@ mod tests {
             "".to_string(),
         ];
         let sanitized = sanitize_tags(&tags);
-        assert_eq!(sanitized, vec!["技术", "Python-123"]);
+        // @ 符号被过滤，所以 "管理@" 变成 "管理"
+        assert_eq!(sanitized, vec!["技术", "管理", "Python-123"]);
     }
 
     #[test]

@@ -1493,6 +1493,8 @@ mod tests {
             raw_response: crate::api::RawResponse {
                 code: 40001,
                 msg: "invalid app_id".to_string(),
+                request_id: None,
+                data: None,
                 error: None,
             },
             expire: 0,
@@ -1545,6 +1547,8 @@ mod tests {
             raw_response: crate::api::RawResponse {
                 code: 40002,
                 msg: "invalid tenant_key".to_string(),
+                request_id: None,
+                data: None,
                 error: None,
             },
             expire: 0,

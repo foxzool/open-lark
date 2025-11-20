@@ -1169,10 +1169,10 @@ mod tests {
             ValidationResult::Valid
         ));
 
-        // 中间值（虽然没有在推荐列表中，但应该有效）
+        // 中间值（不在推荐列表中，但应该被清理为建议值）
         assert!(matches!(
             validate_reminder_minutes(20),
-            ValidationResult::Valid
+            ValidationResult::Sanitized(msg) if msg.contains("建议使用常用提醒时间")
         ));
     }
 
