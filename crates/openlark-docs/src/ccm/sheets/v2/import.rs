@@ -96,7 +96,7 @@ impl ApiResponseTrait for ImportResponse {
 }
 
 /// 导入服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ImportService {
     config: Config,
 }
@@ -146,7 +146,7 @@ impl ImportService {
         let endpoint = "/open-apis/sheets/v2/import";
 
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, endpoint);
-        api_request.body = serde_json::to_vec(request)?;
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let import_response: StandardResponse<ImportResponse> =
             Transport::request(api_request, &self.config, None).await?;

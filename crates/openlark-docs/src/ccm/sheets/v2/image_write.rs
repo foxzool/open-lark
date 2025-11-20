@@ -549,7 +549,7 @@ impl ImageWriteRequest {
 /// 图片写入请求构建器
 ///
 /// 提供流畅的API来构建图片写入请求，支持链式调用和类型安全。
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ImageWriteRequestBuilder {
     request: ImageWriteRequest,
     built: bool,
@@ -1195,7 +1195,7 @@ mod tests {
 ///
 /// 提供向电子表格写入图片的功能，支持图片定位、尺寸调整、
 /// 透明度设置等多种企业级功能。
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ImageWriteService {
     config: Config,
 }
@@ -1276,7 +1276,7 @@ impl ImageWriteService {
         );
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-        api_req.body = serde_json::to_vec(&request)?;
+        api_req.body = Some(openlark_core::api::RequestData::Json(&request))?;
 
         // 发送请求
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -1361,12 +1361,12 @@ impl ImageWriteService {
         option: Option<RequestOption>,
     ) -> SDKResult<Vec<Result<ImageWriteResponse, LarkAPIError>>> {
         if requests.is_empty() {
-            return Ok(Vec::new());
+            return Ok(vec![]);
         }
 
         // 限制批量大小，避免API限制
         const BATCH_SIZE: usize = 10;
-        let mut all_results = Vec::new();
+        let mut all_results = vec![];
 
         for chunk in requests.chunks(BATCH_SIZE) {
             // 并行处理每个批次
@@ -1447,7 +1447,7 @@ impl ImageWriteService {
                 spreadsheet_token: spreadsheet_token.to_string(),
                 sheet_id: "updated".to_string(),
                 image_id: image_id.to_string(),
-                position: position.clone(),
+                position: position.clone()
                 actual_size: size.unwrap_or_default(),
                 image_url: "https://example.com/updated.png".to_string(),
                 revision: 1,

@@ -53,7 +53,7 @@ impl Default for ValueRange {
         Self {
             major_dimension: "ROWS".to_string(),
             range: String::new(),
-            values: Value::Array(Vec::new()),
+            values: Value::Array(vec![]),
             revision: 0,
         }
     }
@@ -281,7 +281,7 @@ impl ApiResponseTrait for ReadSingleRangeResponse {
 }
 
 /// 单个范围读取服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SingleReadService {
     config: Config,
 }
@@ -366,10 +366,10 @@ impl SingleReadService {
             },
             data: Some(ReadSingleRangeResponseData {
                 revision: 123456,
-                spreadsheet_token: request.spreadsheet_token.clone(),
+                spreadsheet_token: request.spreadsheet_token.clone()
                 value_range: ValueRange {
                     major_dimension: "ROWS".to_string(),
-                    range: request.range.clone(),
+                    range: request.range.clone()
                     values: Value::Array(vec![]),
                     revision: 123456,
                 },

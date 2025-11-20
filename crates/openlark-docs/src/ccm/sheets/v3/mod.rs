@@ -52,7 +52,7 @@ pub use spreadsheet_create::*;
 pub use spreadsheet_info::*;
 
 /// Sheets v3 服务主结构
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SheetsV3Service {
     /// 配置信息
     config: Config,

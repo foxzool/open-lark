@@ -11,7 +11,7 @@
 // 实现单元格范围的操作,
 use openlark_core::prelude::*;
 /// 范围操作服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct RangeService {
     client: std::sync::Arc<LarkClient>,
 }

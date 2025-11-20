@@ -21,7 +21,7 @@ use openlark_core::config::Config;
 /// - 协作编辑和实时同步
 /// - 白板分享和权限控制
 /// - 白板导出和备份
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct BoardServiceV1 {
     pub config: Config,
 }
