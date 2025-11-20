@@ -312,7 +312,7 @@ impl ApiResponseTrait for DeleteConditionalFormatsResponse {
 }
 
 /// 条件格式管理服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ConditionalFormatsService {
     config: Config,
 }
@@ -350,7 +350,7 @@ impl ConditionalFormatsService {
     ///     format: Some(CellFormat {
     ///         background_color: Some("#FF0000".to_string()),
     ///         bold: Some(true),
-    ///         ..Default::default()
+    ///         
     ///     }),
     ///     data_bar_format: None,
     ///     color_scale_format: None,
@@ -377,7 +377,7 @@ impl ConditionalFormatsService {
         );
 
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
-        api_request.body = serde_json::to_vec(request)?;
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let create_response: StandardResponse<CreateConditionalFormatsResponse> =
             Transport::request(api_request, &self.config, None).await?;
@@ -405,7 +405,7 @@ impl ConditionalFormatsService {
         );
 
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
-        api_request.body = serde_json::to_vec(request)?;
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let update_response: StandardResponse<UpdateConditionalFormatsResponse> =
             Transport::request(api_request, &self.config, None).await?;
@@ -460,7 +460,7 @@ impl ConditionalFormatsService {
         );
 
         let mut api_request = ApiRequest::with_method_and_path(Method::DELETE, &endpoint);
-        api_request.body = serde_json::to_vec(request)?;
+        api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let delete_response: StandardResponse<DeleteConditionalFormatsResponse> =
             Transport::request(api_request, &self.config, None).await?;
@@ -560,7 +560,7 @@ mod tests {
             format: Some(CellFormat {
                 background_color: Some("#FF0000".to_string()),
                 bold: Some(true),
-                ..Default::default()
+                
             }),
             data_bar_format: None,
             color_scale_format: None,

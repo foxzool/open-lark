@@ -98,12 +98,12 @@ impl CellValue {
     /// 获取值的字符串表示
     pub fn as_string(&self) -> String {
         match self {
-            CellValue::Text(s) => s.clone(),
+            CellValue::Text(s) => s.clone()
             CellValue::Number(n) => n.to_string(),
             CellValue::Boolean(b) => b.to_string(),
-            CellValue::Formula(f) => f.clone(),
+            CellValue::Formula(f) => f.clone()
             CellValue::Blank => String::new(),
-            CellValue::Error(e) => e.clone(),
+            CellValue::Error(e) => e.clone()
         }
     }
 }
@@ -387,7 +387,7 @@ impl ApiResponseTrait for UpdateCellResponse {
 }
 
 /// 单元格更新服务
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SheetCellsService {
     config: Config,
 }
@@ -458,7 +458,7 @@ impl SheetCellsService {
                 .replace("{spreadsheet_token}", &request.spreadsheet_token)
                 .replace("{range}", &format!("{}!{}", request.sheet_id, request.cell)),
         );
-        api_req.set_body(serde_json::to_vec(&body)?);
+        api_req.set_body(Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?);
         api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
@@ -478,7 +478,7 @@ impl SheetCellsService {
                 err: None,
             },
             data: Some(UpdateCellResponseData {
-                spreadsheet_token: request.spreadsheet_token.clone(),
+                spreadsheet_token: request.spreadsheet_token.clone()
                 updated_range: format!("{}!{}", request.sheet_id, request.cell),
                 updated_rows: 1,
                 updated_columns: 1,

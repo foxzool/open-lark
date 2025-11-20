@@ -12,7 +12,7 @@ use SDKResult;    api::ApiRequest,
     SDKResult,
 };
 /// 获取知识空间列表请求,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ListSpaceRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -25,7 +25,7 @@ pub struct ListSpaceRequest {
 impl ListSpaceRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone)]
+}#[derive(Clone, Debug)]
 pub struct ListSpaceRequestBuilder {
     request: ListSpaceRequest}
 impl ListSpaceRequestBuilder {
@@ -39,7 +39,7 @@ impl ListSpaceRequestBuilder {
 self.request,
     }
 /// 知识空间信息,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Space {
     /// 知识空间id
     pub space_id: String,
@@ -53,7 +53,7 @@ pub struct Space {
     /// 知识空间可见性
     pub visibility: Option<String>}
 /// 获取知识空间列表响应,
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ListSpaceResponse {
     /// 知识空间列表
     pub items: Vec<Space>,

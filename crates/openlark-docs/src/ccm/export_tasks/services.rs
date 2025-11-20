@@ -72,12 +72,12 @@ impl ExportTasksService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: "/open-apis/drive/v1/export_tasks".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&body)?,
-            query_params: HashMap::new(),
-            ..Default::default()
+            method: openlark_core::api::HttpMethod::Post,
+            url: "/open-apis/drive/v1/export_tasks".to_string(),
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?,
+            query: HashMap::new(),
+            
         };
 
         // 发送请求
@@ -111,12 +111,12 @@ impl ExportTasksService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/drive/v1/export_tasks/{}", request.ticket),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(),
+            method: openlark_core::api::HttpMethod::Get,
+            url: format!("/open-apis/drive/v1/export_tasks/{}", request.ticket),
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: None,
             query_params,
-            ..Default::default()
+            
         };
 
         // 发送请求
@@ -149,15 +149,15 @@ impl ExportTasksService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: format!(
+            method: openlark_core::api::HttpMethod::Get,
+            url: format!(
                 "/open-apis/drive/export_tasks/file/{}/download",
                 request.file_token
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(),
+            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: None,
             query_params,
-            ..Default::default()
+            
         };
 
         // 发送请求

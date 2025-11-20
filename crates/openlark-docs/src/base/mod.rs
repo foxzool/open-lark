@@ -2,14 +2,8 @@
 //!
 //! This module provides base functionality for document operations,
 //! including fundamental document types and shared utilities.
-//!
-//! Base模块包含：
-//! - bitable：多维表格核心功能（49个API）
-//! - 基础文档类型和共享工具
 
 use crate::prelude::*;
-
-pub mod bitable;
 
 /// Base服务
 pub struct BaseService {
@@ -22,8 +16,9 @@ impl BaseService {
     }
 
     /// 获取多维表格服务
-    pub fn bitable(&self) -> bitable::BitableService {
-        bitable::BitableService::new(openlark_core::config::Config::default())
+    pub fn bitable(&self) -> crate::services::BitableService {
+        // 使用默认配置创建简单服务
+        crate::services::BitableService::new()
     }
 }
 
@@ -39,19 +34,30 @@ impl std::ops::Deref for BaseService {
 mod tests {
     #[test]
     fn test_base_service_creation() {
-        // This is a placeholder test
-        // In a real implementation, you would create a mock client
-        // and test the BaseService functionality
-    }
+        // 创建测试配置
+        let config = openlark_core::config::Config {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_app_secret".to_string(),
+            base_url: "https://open.feishu.cn".to_string(),
+            ..Default::default()
+        };
 
-    #[test]
-    fn test_bitable_service_access() {
-        use openlark_core::config::Config;
-        let config = Config::default();
+        // 创建适配器客户端
         let client = std::sync::Arc::new(LarkClient::new(config));
         let base_service = BaseService::new(client);
 
-        // 测试可以访问bitable服务
+        // 测试服务访问
         let _bitable_service = base_service.bitable();
+        println!("BaseService 测试通过");
+    }
+
+    #[test]
+    fn test_deref_functionality() {
+        let config = openlark_core::config::Config::default();
+        let client = std::sync::Arc::new(LarkClient::new(config));
+        let base_service = BaseService::new(client);
+
+        // 测试 deref 功能
+        assert!(base_service.is_configured() == false); // 默认配置应该是未配置状态
     }
 }
