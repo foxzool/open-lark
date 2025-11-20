@@ -126,175 +126,156 @@ criterion = "0.5"
 
 # Dev dependencies
 #
-## Legacy package configuration for backward compatibility
-#[package]
-#name = "open-lark"
-#version.workspace = true
-#edition.workspace = true
-#authors.workspace = true
-#readme = "README.md"
-#description = "Enterprise-grade Lark/Feishu Open API SDK with comprehensive Chinese documentation and advanced error handling"
-#keywords = ["sdk", "feishu", "lark", "api"]
-#categories = ["api-bindings"]
-#documentation.workspace = true
-#repository.workspace = true
-#homepage.workspace = true
-#license.workspace = true
+## Convenience package configuration for unified publishing
+[package]
+name = "open-lark"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+readme = "README.md"
+description = "飞书开放平台 Rust SDK - 企业级高覆盖率 API 客户端，极简依赖一条命令"
+keywords = ["feishu", "lark", "api", "sdk", "rust"]
+categories = ["api-bindings", "web-programming", "development-tools"]
+documentation.workspace = true
+repository.workspace = true
+homepage.workspace = true
+license.workspace = true
 #
-#[features]
-#default = ["openlark-communication"]
-#benchmarks = []
-#dev-tests = []
-#integration-tests = []
-#
-## New feature system based on crate groups
-#communication = ["openlark-communication"]
-#collaboration = ["openlark-communication", "openlark-docs"]
-#hr-suite = ["openlark-communication", "openlark-hr"]
-#ai-platform = ["openlark-communication", "openlark-ai"]
-## enterprise = ["openlark-communication", "openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-## extensions = []  # 移除空feature
-## event = []  # 移除空feature
-## integrations = []  # 移除空feature
-#auth = ["openlark-auth"]
-## complete = ["openlark-communication", "openlark-docs", "openlark-hr", "openlark-ai", "openlark-enterprise", "auth"]  # 暂时注释，等enterprise crate实现完成后再启用
-#
-## Legacy feature mapping for backward compatibility
-#im = ["openlark-communication"]
-#cloud-docs = ["openlark-docs/all-cloud-docs"]
-## 具体云文档功能映射
-#docs = ["openlark-docs/docs"]
-#sheets = ["openlark-docs/sheets"]
-#bitable = ["openlark-docs/bitable"]
-#wiki = ["openlark-docs/wiki"]
-#drive = ["openlark-docs/drive"]
-#ccm = ["openlark-docs/ccm"]
-## 向后兼容
-#docx = ["docs"]  # 向后兼容：docx映射到docs
-#sheet = ["sheets"]  # 向后兼容：sheet映射到sheets
-#contact = ["openlark-communication"]
-#group = ["openlark-communication"]
-#authentication = ["openlark-communication"]
-#search = ["openlark-communication"]
-#
-## New client-based features
-#client-v2 = ["openlark-client/client"]
-#client-v2-docs = ["openlark-client/client", "openlark-client/docs"]
-#client-v2-communication = ["openlark-client/client", "openlark-client/communication"]
-#client-v2-all = ["openlark-client/client", "openlark-client/all-services"]
-## admin = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-## analytics = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-## apaas = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-## auth已经移动到新的feature系统
-#authen = ["auth"]  # 向后兼容：authen映射到auth
-#ai = ["openlark-ai"]
-#aily = ["openlark-ai"]
-## app_engine = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-#baike = ["openlark-ai"]
-## apass = []  # 移除空feature
-## application = []  # 移除空feature
-#base = ["bitable"]  # 改为具体的 bitable 功能
-## board = []  # 移除空feature
-#approval = ["openlark-docs/all-cloud-docs"]
-#attendance = ["openlark-hr"]
-#bot = ["openlark-communication"]
-#calendar = ["openlark-docs/all-cloud-docs"]
-#cardkit = ["openlark-communication"]
-## ccm = ["openlark-docs/ccm"]  # 使用具体的 ccm 功能（上面已经定义过了）
-#corehr = ["openlark-hr"]
-#compensation-management = ["openlark-hr"]
-## directory = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-#ehr = ["openlark-hr"]
-## elearning = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-#feishu_people = ["openlark-hr"]
-## helpdesk = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-#hire = ["openlark-hr"]
-## human-authentication = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-#lingo = ["openlark-ai"]
-#mail = ["openlark-communication"]
-## mdm = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-#meeting_room = ["openlark-docs/all-cloud-docs"]
-#minutes = ["openlark-docs/all-cloud-docs"]
-## moments = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-#okr = ["openlark-hr"]
-#passport = ["openlark-communication"]
-#payroll = ["openlark-hr"]
-#performance = ["openlark-hr"]
-## personal-settings = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-## report = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-## security-and-compliance = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-## security_and_compliance = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-#task = ["openlark-docs/all-cloud-docs"]
-## tenant = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-## tenant-tag = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-## trust-party = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-#vc = ["openlark-communication"]
-## verification = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-## workplace = ["openlark-enterprise"]  # 暂时注释，等enterprise crate实现完成后再启用
-#
-## WebSocket support
-#websocket = ["tokio-tungstenite", "prost"]
-#
-## OpenTelemetry support
-#otel = ["opentelemetry", "opentelemetry_sdk", "opentelemetry-otlp", "tracing-opentelemetry"]
-#
-#[dependencies]
-#openlark-core = { workspace = true }
-#openlark-auth = { workspace = true, optional = true }
-#openlark-client = { workspace = true, optional = true }
-#openlark-communication = { workspace = true, optional = true }
-#openlark-docs = { workspace = true, optional = true }
-#openlark-hr = { workspace = true, optional = true }
-#openlark-ai = { workspace = true, optional = true }
-#openlark-enterprise = { workspace = true, optional = true }
-#
-## Re-export workspace dependencies for compatibility
-#anyhow = { workspace = true }
-#async-trait = { workspace = true }
-#base64 = { workspace = true }
-#chrono = { workspace = true }
-#futures-util = { workspace = true }
-#hmac = { workspace = true }
-#log = { workspace = true }
-#tracing = { workspace = true }
-#tracing-subscriber = { workspace = true }
-#opentelemetry = { workspace = true, optional = true }
-#opentelemetry_sdk = { workspace = true, optional = true }
-#opentelemetry-otlp = { workspace = true, optional = true }
-#tracing-opentelemetry = { workspace = true, optional = true }
-#prost = { workspace = true, optional = true }
-#quick_cache = { workspace = true }
-#reqwest = { workspace = true }
-#rand = { workspace = true }
-#simd-adler32 = { workspace = true }
-#serde_repr = { workspace = true }
-#serde = { workspace = true }
-#serde_json = { workspace = true }
-#sha2 = { workspace = true }
-#urlencoding = { workspace = true }
-#strum = { workspace = true }
-#strum_macros = { workspace = true }
-#thiserror = { workspace = true }
-#tokio = { workspace = true }
-#url = { workspace = true }
-#tokio-tungstenite = { workspace = true, optional = true }
-#walkdir = { workspace = true }
-#regex = { workspace = true }
-#
-#[dev-dependencies]
-#dotenvy = { workspace = true }
-#env_logger = { workspace = true }
-#uuid = { workspace = true }
-#criterion = { workspace = true }
-#rstest = { workspace = true }
-#proptest = { workspace = true }
-#serial_test = { workspace = true }
-#tempfile = { workspace = true }
-#test-log = { workspace = true }
-#tracing-test = { workspace = true }
-#wiremock = { workspace = true }
-#once_cell = { workspace = true }
-#mockall = { workspace = true }
+[features]
+default = ["docs-collaboration"]
+
+# === 分层功能系统 ===
+# 文档协作层：满足60%用户的文档协作需求
+docs-collaboration = ["openlark-communication", "openlark-docs", "auth"]
+
+# IM通讯层：纯通讯功能（传统核心）
+communication-core = ["openlark-communication"]
+
+# 专业层：企业协作套件
+professional-suite = ["docs-collaboration"]
+
+# 企业层：完整企业功能
+enterprise-suite = ["professional-suite", "hr-suite", "ai-suite"]
+
+# 完整层：所有可用功能
+full-suite = ["enterprise-suite", "admin-suite"]
+
+# === 场景化功能组合 ===
+# IM通讯套件：消息、联系人、群组
+im-suite = ["openlark-communication"]
+contact-suite = ["openlark-communication"]
+group-suite = ["openlark-communication"]
+
+# 文档协作套件：云文档、表格、知识库
+docs-suite = ["openlark-docs"]
+sheets-suite = ["openlark-docs"]
+wiki-suite = ["openlark-docs"]
+
+# 人力资源套件：考勤、招聘、CoreHR
+hr-suite = ["openlark-hr"]
+attendance-suite = ["openlark-hr"]
+hire-suite = ["openlark-hr"]
+
+# AI智能套件：AI助手、智能分析
+ai-suite = ["openlark-ai"]
+lingo-suite = ["openlark-ai"]
+
+# 管理功能套件
+admin-suite = ["openlark-admin"]
+approval-suite = ["openlark-approval"]
+
+# === 技术支持功能 ===
+# WebSocket支持
+websocket = ["openlark-protocol"]
+
+# OpenTelemetry可观测性
+otel = ["opentelemetry", "opentelemetry_sdk", "opentelemetry-otlp", "tracing-opentelemetry"]
+
+# === 单独功能模块（向后兼容）===
+# 基础设施
+auth = ["openlark-auth"]
+
+# 传统功能名称（向后兼容）
+communication = ["im-suite"]
+cloud-docs = ["docs-suite"]
+ai = ["ai-suite"]
+hr = ["hr-suite"]
+[dependencies]
+# 核心基础设施（始终包含）
+openlark-core = { workspace = true }
+
+# 功能模块（通过 feature flag 控制）
+openlark-auth = { workspace = true, optional = true }
+openlark-client = { workspace = true, optional = true }
+openlark-communication = { workspace = true, optional = true }
+openlark-docs = { workspace = true, optional = true }
+openlark-hr = { workspace = true, optional = true }
+openlark-ai = { workspace = true, optional = true }
+openlark-admin = { workspace = true, optional = true }
+openlark-approval = { workspace = true, optional = true }
+openlark-application = { workspace = true, optional = true }
+openlark-apass = { workspace = true, optional = true }
+openlark-calendar = { workspace = true, optional = true }
+openlark-collab = { workspace = true, optional = true }
+openlark-helpdesk = { workspace = true, optional = true }
+openlark-hire = { workspace = true, optional = true }
+openlark-lingo = { workspace = true, optional = true }
+openlark-mail = { workspace = true, optional = true }
+openlark-meeting = { workspace = true, optional = true }
+openlark-people = { workspace = true, optional = true }
+openlark-task = { workspace = true, optional = true }
+openlark-protocol = { workspace = true, optional = true }
+
+# 重新导出工作空间依赖，为用户提供便利访问
+anyhow = { workspace = true }
+async-trait = { workspace = true }
+base64 = { workspace = true }
+chrono = { workspace = true }
+futures-util = { workspace = true }
+hmac = { workspace = true }
+log = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+quick_cache = { workspace = true }
+reqwest = { workspace = true }
+rand = { workspace = true }
+serde_repr = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+sha2 = { workspace = true }
+urlencoding = { workspace = true }
+strum = { workspace = true }
+strum_macros = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+url = { workspace = true }
+walkdir = { workspace = true }
+regex = { workspace = true }
+uuid = { workspace = true }
+
+# 可选技术支持依赖
+opentelemetry = { workspace = true, optional = true }
+opentelemetry_sdk = { workspace = true, optional = true }
+opentelemetry-otlp = { workspace = true, optional = true }
+tracing-opentelemetry = { workspace = true, optional = true }
+prost = { workspace = true, optional = true }
+[dev-dependencies]
+dotenvy = { workspace = true }
+env_logger = { workspace = true }
+criterion = { workspace = true }
+rstest = { workspace = true }
+proptest = { workspace = true }
+serial_test = { workspace = true }
+tempfile = { workspace = true }
+test-log = { workspace = true }
+tracing-test = { workspace = true }
+wiremock = { workspace = true }
+once_cell = { workspace = true }
+mockall = { workspace = true }
+
+[lib]
+name = "open_lark"
+path = "src/lib.rs"
 #
 ## -------------------------------------------
 ## Benches
