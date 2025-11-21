@@ -1,111 +1,88 @@
 #![allow(unused_variables, unused_unsafe)]
-
 #![allow(dead_code)]
 #![allow(unused_imports)]
 #![allow(unused_variables)]
 #![allow(unused_mut)]
-use SDKResult;use reqwest::Method;
-use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
-use super::AppRoleMemberService;
-use openlark_core::,
-{,
-    core::,
-{,
-        BaseResponse,
-        ResponseFormat,
-        api::{ApiResponseTrait}
+
+use openlark_core::{
+    api::ApiRequest,
+    core::{BaseResponse, ResponseFormat, api::ApiResponseTrait},
     config::Config,
-        constants::AccessTokenType,
-        endpoints::cloud_docs::*,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
-};
-    impl_executable_builder_owned,
+    constants::AccessTokenType,
+    endpoints::cloud_docs::*,
+    http::Transport,
+    reqwest::Method,
+    req_option::RequestOption,
     service::bitable::v1::app_role_member::RoleMember,
+    SDKResult,
 };
-/// 批量新增协作者请求,
+use serde::{Deserialize, Serialize};
+
+use super::AppRoleMemberService;
+
+/// 批量新增协作者请求
 #[derive(Clone)]
 pub struct BatchCreateRoleMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
-    /// 多维表格的唯一标识符,
-#[serde(skip)]
+    /// 多维表格的 app_token
+    #[serde(skip)]
     app_token: String,
-    /// 自定义角色的id,
-#[serde(skip)]
+    /// 角色 ID
+    #[serde(skip)]
     role_id: String,
-    /// 用户id类型,
-#[serde(skip)]
+    /// 用户 ID 类型
+    #[serde(skip)]
     user_id_type: Option<String>,
-    /// 成员列表
-    members: Vec<MemberInfo>}
-/// 成员信息,
-#[derive(Clone)]
-pub struct MemberInfo {
-    /// 成员id
-    pub member_id: String,
-    /// 成员类型: user, chat, department, open_department_id
-    pub member_type: String,
+    /// 格式为标准的 uuidv4，操作的唯一标识，用于幂等的进行更新操作
+    #[serde(skip)]
+    client_token: Option<String>,
+    /// 协作者列表
+    pub members: Vec<RoleMember>,
+}
+
 impl BatchCreateRoleMemberRequest {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}#[derive(Clone)]
-pub struct BatchCreateRoleMemberRequestBuilder {
-    request: BatchCreateRoleMemberRequest}
-impl BatchCreateRoleMemberRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        self.request,
-impl_executable_builder_owned!(,
-    BatchCreateRoleMemberRequestBuilder,
-    AppRoleMemberService,
-    BatchCreateRoleMemberRequest,
-    Response<BatchCreateRoleMemberResponse>,
-    batch_create,
-);
-/// 批量新增协作者响应
-#[derive(Clone)]
-pub struct BatchCreateRoleMemberResponse {
-    /// 新增的协作者信息列表
-    pub members: Vec<RoleMember>}
-impl ApiResponseTrait for.* {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
+    /// 创建批量新增协作者请求
+    pub fn new(app_token: String, role_id: String, members: Vec<RoleMember>) -> Self {
+        Self {
+            api_request: ApiRequest::new()
+                .method(reqwest::Method::POST)
+                .path("/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members/batch_create"),
+            app_token,
+            role_id,
+            user_id_type: None,
+            client_token: None,
+            members,
+        }
     }
-/// 批量新增协作者,
-pub async fn batch_create_role_members(
-    request: BatchCreateRoleMemberRequest,
-    config: &Config,
-    option: Option<RequestOption>,
-) -> SDKResult<Response<BatchCreateRoleMemberResponse>> {,
-let mut api_req = request.api_request;
-    api_req.set_http_method(Method::POST);
-api_req.api_path = BITABLE_V1_ROLE_MEMBERS_BATCH_CREATE,
-        .replace("{app_token}", &request.app_token)
-        .replace("{role_id}", &request.role_id);
-    api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
-    let api_resp = Transport::request(api_req, config, option).await?;
-Ok(api_resp),
+    /// 设置用户 ID 类型
+    pub fn user_id_type(mut self, user_id_type: String) -> Self {
+        self.user_id_type = Some(user_id_type);
+        self
+    }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-#[test]
-    fn test_batch_create_role_member_request_builder() {
-let request = BatchCreateRoleMemberRequest::builder(),
-            .app_token()
-.role_id()
-            .add_member("ou_xxxxxx", "user")
-            .add_member()
-.user_id_type()
-            .build();
+    /// 设置客户端令牌
+    pub fn client_token(mut self, client_token: String) -> Self {
+        self.client_token = Some(client_token);
+        self
+    }
 
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.role_id, "rolxxxxxx");
-        assert_eq!(request.members.len(), 2);
-        assert_eq!(request.user_id_type, Some("open_id".to_string()));
+    /// 执行批量新增协作者请求
+    pub async fn execute(&self, transport: &Transport) -> SDKResult<serde_json::Value> {
+        let path = self.api_request.path()
+            .replace(":app_token", &self.app_token)
+            .replace(":role_id", &self.role_id);
+
+        let mut api_request = self.api_request.clone();
+        api_request = api_request.path(&path);
+
+        transport.execute(&api_request).await
+    }
+}
+
+impl AppRoleMemberService {
+    pub fn batch_create_builder(&self, role_id: String, members: Vec<RoleMember>) -> BatchCreateRoleMemberRequest {
+        BatchCreateRoleMemberRequest::new(self.app_token.clone(), role_id, members)
+    }
+}

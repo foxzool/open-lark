@@ -13,11 +13,20 @@ use openlark_core::config::Config;
 pub mod advanced_search;
 pub mod batch_operations;
 pub mod enhanced_query;
+pub mod role_management;
+pub mod role_builders;
 
 // 重新导出主要类型
 pub use advanced_search::{AdvancedSearchRequestBuilder, AdvancedSearchService};
 pub use batch_operations::{BatchOperationsService, BulkOperationRequestBuilder};
 pub use enhanced_query::{EnhancedQueryService, SmartQueryRequestBuilder};
+pub use role_management::{
+    CreateRoleV2Request, CreateRoleV2Response, ListRolesV2Response, RoleManagementV2Service,
+    RoleV2, UpdateRoleV2Request, UpdateRoleV2Response,
+};
+pub use role_builders::{
+    CreateRoleV2RequestBuilder, ListRolesV2RequestBuilder, UpdateRoleV2RequestBuilder,
+};
 
 /// Bitable V2 服务
 #[derive(Debug, Clone)]
@@ -45,6 +54,11 @@ impl BitableV2Service {
     pub fn enhanced_query(&self) -> enhanced_query::EnhancedQueryService {
         enhanced_query::EnhancedQueryService::new(self.config.clone())
     }
+
+    /// 获取角色管理 V2 服务
+    pub fn role_management(&self) -> role_management::RoleManagementV2Service {
+        role_management::RoleManagementV2Service::new(self.config.clone())
+    }
 }
 
 #[cfg(test)]
@@ -67,5 +81,60 @@ mod tests {
         let _search_service = service.advanced_search();
         let _batch_service = service.batch_operations();
         let _query_service = service.enhanced_query();
+        let _role_service = service.role_management();
+    }
+
+    #[test]
+    fn test_role_v2_creation() {
+        let role = RoleV2 {
+            role_id: "role_123".to_string(),
+            name: "测试角色".to_string(),
+            description: Some("这是一个测试角色".to_string()),
+            permissions: vec!["read".to_string(), "write".to_string()],
+            create_time: Some(1234567890),
+            update_time: Some(1234567891),
+        };
+
+        assert_eq!(role.role_id, "role_123");
+        assert_eq!(role.name, "测试角色");
+        assert_eq!(role.permissions.len(), 2);
+    }
+
+    #[test]
+    fn test_create_role_v2_request_validation() {
+        let valid_request = CreateRoleV2Request {
+            name: "编辑者".to_string(),
+            description: Some("可以编辑数据的角色".to_string()),
+            permissions: vec!["table:read".to_string(), "table:write".to_string()],
+        };
+
+        assert!(valid_request.validate().is_ok());
+
+        let invalid_request = CreateRoleV2Request {
+            name: "".to_string(),
+            description: None,
+            permissions: vec![],
+        };
+
+        assert!(invalid_request.validate().is_err());
+    }
+
+    #[test]
+    fn test_update_role_v2_request_validation() {
+        let valid_request = UpdateRoleV2Request {
+            name: Some("高级编辑者".to_string()),
+            description: Some("具有高级权限".to_string()),
+            permissions: vec!["table:read".to_string(), "table:write".to_string(), "table:delete".to_string()],
+        };
+
+        assert!(valid_request.validate().is_ok());
+
+        let invalid_request = UpdateRoleV2Request {
+            name: Some("".to_string()),
+            description: None,
+            permissions: vec![],
+        };
+
+        assert!(invalid_request.validate().is_err());
     }
 }
