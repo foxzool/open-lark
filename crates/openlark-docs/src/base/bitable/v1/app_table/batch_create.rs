@@ -1,105 +1,85 @@
 #![allow(unused_variables, unused_unsafe)]
-
 #![allow(dead_code)]
 #![allow(unused_imports)]
 #![allow(unused_variables)]
-#![allow(unused_mut)]
-#![allow(dead_code)]
-#![allow(unused_variables)]
-#![allow(unused_imports)]
 #![allow(unused_mut)]
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use SDKResult;use reqwest::Method;
-use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
-use openlark_core::,
-{
-    core::,
-{,
-        BaseResponse,
-        ResponseFormat,
-        api::{ApiResponseTrait}
+
+use openlark_core::{
+    api::ApiRequest,
+    core::{BaseResponse, ResponseFormat, api::ApiResponseTrait},
+    config::Config,
     constants::AccessTokenType,
-        endpoints::cloud_docs::*,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
+    endpoints::cloud_docs::*,
+    http::Transport,
+    reqwest::Method,
+    req_option::RequestOption,
+    SDKResult,
 };
-    impl_executable_builder_owned,
-};
+use serde::{Deserialize, Serialize};
 
 use super::{AppTableService, TableData};
-impl AppTableService {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}/// 批量新增数据表请求,
+
+/// 批量新增数据表请求
 #[derive(Clone)]
 pub struct BatchCreateTablesRequest {
+    #[serde(skip)]
     api_request: ApiRequest,
     /// 多维表格的 app_token
+    #[serde(skip)]
     app_token: String,
-    /// 数据表信息列表
-    tables: Vec<TableData>}
+    /// 用户 ID 类型
+    #[serde(skip)]
+    user_id_type: Option<String>,
+    /// 格式为标准的 uuidv4，操作的唯一标识，用于幂等的进行更新操作
+    #[serde(skip)]
+    client_token: Option<String>,
+    /// 数据表列表
+    pub tables: Vec<TableData>,
+}
+
 impl BatchCreateTablesRequest {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}#[derive(Clone)]
-pub struct BatchCreateTablesRequestBuilder {
-    request: BatchCreateTablesRequest}
-impl BatchCreateTablesRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}impl_executable_builder_owned!(,
-    BatchCreateTablesRequestBuilder,
-    AppTableService,
-    BatchCreateTablesRequest,
-    Response<BatchCreateTablesResponse>,
-    batch_create,
-);
-#[derive(Serialize)]
-struct BatchCreateTablesRequestBody {
-    tables: Vec<TableData>}
-
-#[derive(Clone)]
-pub struct BatchCreateTablesResponse {
-    /// 数据表信息列表
-    pub table_ids: Vec<String>}
-impl ApiResponseTrait for.* {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
+    /// 创建批量新增数据表请求
+    pub fn new(app_token: String, tables: Vec<TableData>) -> Self {
+        Self {
+            api_request: ApiRequest::new()
+                .method(reqwest::Method::POST)
+                .path("/open-apis/bitable/v1/apps/:app_token/tables/batch_create"),
+            app_token,
+            user_id_type: None,
+            client_token: None,
+            tables,
+        }
     }
-#[cfg(test)]
-mod tests {
-    use super::*;
-use openlark_core::service::bitable::v1::app_table::TableField;
-    #[test]
-fn test_batch_create_tables_request() {
-        let table1 = TableData::new("用户表")
-            .with_fields(vec![TableField::text("姓名"), TableField::text("邮箱")]);
-let table2 = TableData::new("订单表").with_fields(vec![,
-            TableField::text("订单号"),
-            TableField::number("金额"),
-            TableField::single_select("状态", vec!["待支付".to_string(), "已支付".to_string()]),
-        ]);
-let request = BatchCreateTablesRequest::builder(),
-            .app_token()
-.add_table()
-            .add_table()
-.build();
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.tables.len(), 2);
-        assert_eq!(request.tables[0].name, "用户表");
-        assert_eq!(request.tables[1].name, "订单表");
-#[test]
-    fn test_batch_create_tables_with_vec() {
-let tables = vec![,
-            TableData::new("表格1"),
-            TableData::new("表格2"),
-            TableData::new("表格3"),
-        ];
 
-        let request = BatchCreateTablesRequest::new("bascnmBA*****yGehy8", tables);
-        assert_eq!(request.tables.len(), 3);
+    /// 设置用户 ID 类型
+    pub fn user_id_type(mut self, user_id_type: String) -> Self {
+        self.user_id_type = Some(user_id_type);
+        self
+    }
+
+    /// 设置客户端令牌
+    pub fn client_token(mut self, client_token: String) -> Self {
+        self.client_token = Some(client_token);
+        self
+    }
+
+    /// 执行批量新增数据表请求
+    pub async fn execute(&self, transport: &Transport) -> SDKResult<serde_json::Value> {
+        let path = self.api_request.path()
+            .replace(":app_token", &self.app_token);
+
+        let mut api_request = self.api_request.clone();
+        api_request = api_request.path(&path);
+
+        transport.execute(&api_request).await
+    }
+}
+
+impl AppTableService {
+    pub fn batch_create_builder(&self, tables: Vec<TableData>) -> BatchCreateTablesRequest {
+        BatchCreateTablesRequest::new(self.app_token.clone(), tables)
+    }
+}

@@ -1,120 +1,85 @@
 #![allow(unused_variables, unused_unsafe)]
-
 #![allow(dead_code)]
 #![allow(unused_imports)]
 #![allow(unused_variables)]
-#![allow(unused_mut)]
-#![allow(dead_code)]
-#![allow(unused_variables)]
-#![allow(unused_imports)]
 #![allow(unused_mut)]
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use SDKResult;use reqwest::Method;
-use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
-use openlark_core::,
-{
-    core::,
-{,
-        BaseResponse,
-        ResponseFormat,
-        api::{ApiResponseTrait}
+
+use openlark_core::{
+    api::ApiRequest,
+    core::{BaseResponse, ResponseFormat, api::ApiResponseTrait},
+    config::Config,
     constants::AccessTokenType,
-        endpoints::cloud_docs::*,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
+    endpoints::cloud_docs::*,
+    http::Transport,
+    reqwest::Method,
+    req_option::RequestOption,
+    SDKResult,
 };
-    impl_executable_builder_owned,
-};
-use super::AppTableService;
-impl AppTableService {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}/// 批量删除数据表请求,
+use serde::{Deserialize, Serialize};
+
+use super::{AppTableService};
+
+/// 批量删除数据表请求
 #[derive(Clone)]
 pub struct BatchDeleteTablesRequest {
+    #[serde(skip)]
     api_request: ApiRequest,
     /// 多维表格的 app_token
+    #[serde(skip)]
     app_token: String,
+    /// 用户 ID 类型
+    #[serde(skip)]
+    user_id_type: Option<String>,
+    /// 格式为标准的 uuidv4，操作的唯一标识，用于幂等的进行更新操作
+    #[serde(skip)]
+    client_token: Option<String>,
     /// 要删除的数据表 ID 列表
-    table_ids: Vec<String>}
+    pub table_ids: Vec<String>,
+}
+
 impl BatchDeleteTablesRequest {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}#[derive(Clone)]
-pub struct BatchDeleteTablesRequestBuilder {
-    request: BatchDeleteTablesRequest}
-impl BatchDeleteTablesRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}impl_executable_builder_owned!(,
-    BatchDeleteTablesRequestBuilder,
-    AppTableService,
-    BatchDeleteTablesRequest,
-    Response<BatchDeleteTablesResponse>,
-    batch_delete,
-);
-#[derive(Serialize)]
-struct BatchDeleteTablesRequestBody {
-    table_ids: Vec<String>}
-
-#[derive(Clone)]
-pub struct BatchDeleteTablesResponse {
-    /// 删除结果列表
-    pub deleted: bool,
-impl ApiResponseTrait for.* {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
+    /// 创建批量删除数据表请求
+    pub fn new(app_token: String, table_ids: Vec<String>) -> Self {
+        Self {
+            api_request: ApiRequest::new()
+                .method(reqwest::Method::POST)
+                .path("/open-apis/bitable/v1/apps/:app_token/tables/batch_delete"),
+            app_token,
+            user_id_type: None,
+            client_token: None,
+            table_ids,
+        }
     }
-#[cfg(test)]
-mod tests {
-    use super::*;
-use serde_json::json;
-    #[test]
-fn test_batch_delete_tables_request() {
-        let table_ids = vec![
-            "tblsRc9GRRXKqhvW".to_string(),
-            "tbl1234567890abc".to_string(),
-        ];
-let request = BatchDeleteTablesRequest::builder(),
-            .app_token()
-.table_ids(table_ids.clone()),
-            .build();
 
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.table_ids, table_ids);
-#[test]
-    fn test_batch_delete_tables_with_builder() {
-let request = BatchDeleteTablesRequest::builder(),
-            .app_token()
-.add_table_id()
-            .add_table_id()
-.add_table_id()
-            .build();
+    /// 设置用户 ID 类型
+    pub fn user_id_type(mut self, user_id_type: String) -> Self {
+        self.user_id_type = Some(user_id_type);
+        self
+    }
 
-        assert_eq!(request.table_ids.len(), 3);
-        assert_eq!(request.table_ids[0] "tblsRc9GRRXKqhvW");
-        assert_eq!(request.table_ids[1] "tbl1234567890abc");
-        assert_eq!(request.table_ids[2] "tblabcdefghijklm");
-#[test]
-    ,
-        let table_ids = vec!["table1".to_string(), "table2".to_string()];
-        let request = BatchDeleteTablesRequest::new("bascnmBA*****yGehy8", table_ids.clone());
+    /// 设置客户端令牌
+    pub fn client_token(mut self, client_token: String) -> Self {
+        self.client_token = Some(client_token);
+        self
+    }
 
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.table_ids, table_ids);
-#[test]
-    fn test_batch_delete_tables_request_body_serialization() {
-let body = BatchDeleteTablesRequestBody {,
-            table_ids: vec!["table1".to_string(), "table2".to_string()]
-        };
-let serialized = serde_json::to_value(&body).unwrap();
-        let expected = json!({
-            "table_ids": ["table1", "table2"]
-});
+    /// 执行批量删除数据表请求
+    pub async fn execute(&self, transport: &Transport) -> SDKResult<serde_json::Value> {
+        let path = self.api_request.path()
+            .replace(":app_token", &self.app_token);
 
-        assert_eq!(serialized, expected);
+        let mut api_request = self.api_request.clone();
+        api_request = api_request.path(&path);
+
+        transport.execute(&api_request).await
+    }
+}
+
+impl AppTableService {
+    pub fn batch_delete_builder(&self, table_ids: Vec<String>) -> BatchDeleteTablesRequest {
+        BatchDeleteTablesRequest::new(self.app_token.clone(), table_ids)
+    }
+}

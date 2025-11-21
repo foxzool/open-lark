@@ -5,6 +5,9 @@
 
 use crate::prelude::*;
 
+// Re-export bitable module
+pub mod bitable;
+
 /// Base服务
 pub struct BaseService {
     #[allow(dead_code)] // 配置保留供将来使用
@@ -27,13 +30,8 @@ impl BaseService {
 mod tests {
     #[test]
     fn test_base_service_creation() {
-        // 创建测试配置
-        let config = openlark_core::config::Config {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_app_secret".to_string(),
-            base_url: "https://open.feishu.cn".to_string(),
-            ..Default::default()
-        };
+        // 使用默认配置创建BaseService
+        let config = openlark_core::config::Config::default();
 
         // 创建BaseService
         let base_service = BaseService::new(config.clone());
