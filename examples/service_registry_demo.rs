@@ -111,8 +111,9 @@ fn register_core_services(registry: &mut DefaultServiceRegistry) -> Result<()> {
     ];
 
     for metadata in core_services {
+        let name = metadata.name.clone();
         registry.register_service(metadata)?;
-        println!("   ✅ 注册核心服务: {}", metadata.name);
+        println!("   ✅ 注册核心服务: {}", name);
     }
 
     Ok(())
@@ -151,8 +152,9 @@ fn register_professional_services(registry: &mut DefaultServiceRegistry) -> Resu
     ];
 
     for metadata in professional_services {
+        let name = metadata.name.clone();
         registry.register_service(metadata)?;
-        println!("   ✅ 注册专业服务: {}", metadata.name);
+        println!("   ✅ 注册专业服务: {}", name);
     }
 
     Ok(())
@@ -191,8 +193,9 @@ fn register_enterprise_services(registry: &mut DefaultServiceRegistry) -> Result
     ];
 
     for metadata in enterprise_services {
+        let name = metadata.name.clone();
         registry.register_service(metadata)?;
-        println!("   ✅ 注册企业服务: {}", metadata.name);
+        println!("   ✅ 注册企业服务: {}", name);
     }
 
     Ok(())
