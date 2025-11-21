@@ -1,27 +1,22 @@
 #![allow(unused_variables, unused_unsafe)]
-
 #![allow(dead_code)]
 #![allow(unused_imports)]
 #![allow(unused_variables)]
 #![allow(unused_mut)]
-use SDKResult;use reqwest::Method;
-use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
-use openlark_core::,
-{
-    core::,
-{,
-        BaseResponse,
-        ResponseFormat,
-        api::{ApiResponseTrait}
+
+use openlark_core::{
+    api::ApiRequest,
+    core::{BaseResponse, ResponseFormat, api::ApiResponseTrait},
     config::Config,
-        constants::AccessTokenType,
-        endpoints::cloud_docs::*,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
-};
+    constants::AccessTokenType,
+    endpoints::cloud_docs::*,
+    http::Transport,
+    reqwest::Method,
+    req_option::RequestOption,
     service::bitable::v1::Record,
+    SDKResult,
 };
+use serde::{Deserialize, Serialize};
 /// 批量获取记录请求,
 #[derive(Clone)]
 pub struct BatchGetRecordRequest {

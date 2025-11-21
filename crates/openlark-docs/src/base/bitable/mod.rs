@@ -69,7 +69,15 @@ pub use app_workflow::{
 };
 pub use v2::{
     AdvancedSearchRequestBuilder, BitableV2Service, BulkOperationRequestBuilder,
-    SmartQueryRequestBuilder,
+    CreateRoleV2Request, CreateRoleV2Response, ListRolesV2Response, RoleManagementV2Service,
+    RoleV2, SmartQueryRequestBuilder, UpdateRoleV2Request, UpdateRoleV2Response,
+};
+
+// Re-export role management builders
+pub use v2::{
+    CreateRoleV2RequestBuilder as RoleV2CreateBuilder,
+    ListRolesV2RequestBuilder as RoleV2ListBuilder,
+    UpdateRoleV2RequestBuilder as RoleV2UpdateBuilder,
 };
 
 /// 多维表格服务
