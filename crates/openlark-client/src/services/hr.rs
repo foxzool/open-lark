@@ -2,7 +2,7 @@
 //!
 //! 提供统一的HR服务接口，封装底层openlark-hr crate
 
-use crate::{Config, Result, ServiceRegistry};
+use crate::{Config, Result, ServiceRegistry, DefaultServiceRegistry};
 use std::sync::Arc;
 
 /// 👥 HR服务 - 统一访问接口
@@ -13,12 +13,12 @@ pub struct HRService<'a> {
     /// 🔧 客户端配置
     config: &'a Config,
     /// 📋 服务注册表
-    registry: &'a ServiceRegistry,
+    registry: &'a DefaultServiceRegistry,
 }
 
 impl<'a> HRService<'a> {
     /// 🆕 创建新的HR服务实例
-    pub(crate) fn new(config: &'a Config, registry: &'a ServiceRegistry) -> Self {
+    pub(crate) fn new(config: &'a Config, registry: &'a DefaultServiceRegistry) -> Self {
         Self { config, registry }
     }
 
@@ -88,7 +88,7 @@ mod tests {
     fn test_hr_service_creation() {
         let config = Config::default();
         let config_arc = Arc::new(config);
-        let registry = ServiceRegistry::new(&config_arc);
+        let registry = DefaultServiceRegistry::new();
         let service = HRService::new(&config_arc, &registry);
 
         // 基本创建测试
@@ -99,7 +99,7 @@ mod tests {
     async fn test_list_employees() {
         let config = Config::default();
         let config_arc = Arc::new(config);
-        let registry = ServiceRegistry::new(&config_arc);
+        let registry = DefaultServiceRegistry::new();
         let service = HRService::new(&config_arc, &registry);
 
         let result = service
@@ -117,7 +117,7 @@ mod tests {
     async fn test_get_employee_info() {
         let config = Config::default();
         let config_arc = Arc::new(config);
-        let registry = ServiceRegistry::new(&config_arc);
+        let registry = DefaultServiceRegistry::new();
         let service = HRService::new(&config_arc, &registry);
 
         let result = service.get_employee_info("test_user", "open_id").await;
