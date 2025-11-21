@@ -140,6 +140,7 @@ documentation.workspace = true
 repository.workspace = true
 homepage.workspace = true
 license.workspace = true
+publish = true  # 主包可以发布
 #
 [features]
 default = ["docs-collaboration"]
@@ -154,11 +155,11 @@ communication-core = ["openlark-communication"]
 # 专业层：企业协作套件
 professional-suite = ["docs-collaboration"]
 
-# 企业层：完整企业功能
+# 企业层：完整企业功能（仅包含已实现的模块）
 enterprise-suite = ["professional-suite", "hr-suite", "ai-suite"]
 
-# 完整层：所有可用功能
-full-suite = ["enterprise-suite", "admin-suite"]
+# 完整层：所有当前可用功能
+full-suite = ["enterprise-suite"]
 
 # === 场景化功能组合 ===
 # IM通讯套件：消息、联系人、群组
@@ -180,10 +181,6 @@ hire-suite = ["openlark-hr"]
 ai-suite = ["openlark-ai"]
 lingo-suite = ["openlark-ai"]
 
-# 管理功能套件
-admin-suite = ["openlark-admin"]
-approval-suite = ["openlark-approval"]
-
 # === 技术支持功能 ===
 # WebSocket支持
 websocket = ["openlark-protocol"]
@@ -201,31 +198,27 @@ cloud-docs = ["docs-suite"]
 ai = ["ai-suite"]
 hr = ["hr-suite"]
 
+# 注意：以下功能暂时禁用，等待相关模块完全开发完成
+# admin-suite, approval-suite, calendar-suite, collab-suite, helpdesk-suite
+# hire-suite, lingo-suite, mail-suite, meeting-suite, people-suite, task-suite
+
 [dependencies]
-# 核心基础设施（始终包含）
+# 核心基础设施（始终包含）- 使用本地路径，因为这是monorepo发布模式
 openlark-core = { workspace = true }
 
-# 功能模块（通过 feature flag 控制）
+# 功能模块（通过 feature flag 控制）- 仅包含生产就绪的模块
 openlark-auth = { workspace = true, optional = true }
 openlark-client = { workspace = true, optional = true }
 openlark-communication = { workspace = true, optional = true }
 openlark-docs = { workspace = true, optional = true }
 openlark-hr = { workspace = true, optional = true }
 openlark-ai = { workspace = true, optional = true }
-openlark-admin = { workspace = true, optional = true }
-openlark-approval = { workspace = true, optional = true }
-openlark-application = { workspace = true, optional = true }
-openlark-apass = { workspace = true, optional = true }
-openlark-calendar = { workspace = true, optional = true }
-openlark-collab = { workspace = true, optional = true }
-openlark-helpdesk = { workspace = true, optional = true }
-openlark-hire = { workspace = true, optional = true }
-openlark-lingo = { workspace = true, optional = true }
-openlark-mail = { workspace = true, optional = true }
-openlark-meeting = { workspace = true, optional = true }
-openlark-people = { workspace = true, optional = true }
-openlark-task = { workspace = true, optional = true }
 openlark-protocol = { workspace = true, optional = true }
+
+# 注意：以下模块尚未完全开发完成，暂不包含在发布包中
+# openlark-admin, openlark-approval, openlark-application, openlark-apass,
+# openlark-calendar, openlark-collab, openlark-helpdesk, openlark-hire,
+# openlark-lingo, openlark-mail, openlark-meeting, openlark-people, openlark-task
 
 # 重新导出工作空间依赖，为用户提供便利访问
 anyhow = { workspace = true }

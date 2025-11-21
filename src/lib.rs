@@ -179,66 +179,72 @@ pub use openlark_hr;
 #[cfg(feature = "openlark-ai")]
 pub use openlark_ai;
 
-#[cfg(feature = "openlark-admin")]
-pub use openlark_admin;
-
-#[cfg(feature = "openlark-approval")]
-pub use openlark_approval;
-
-#[cfg(feature = "openlark-application")]
-pub use openlark_application;
-
-#[cfg(feature = "openlark-apass")]
-pub use openlark_apass;
-
-#[cfg(feature = "openlark-calendar")]
-pub use openlark_calendar;
-
-#[cfg(feature = "openlark-collab")]
-pub use openlark_collab;
-
-#[cfg(feature = "openlark-helpdesk")]
-pub use openlark_helpdesk;
-
-#[cfg(feature = "openlark-hire")]
-pub use openlark_hire;
-
-#[cfg(feature = "openlark-lingo")]
-pub use openlark_lingo;
-
-#[cfg(feature = "openlark-mail")]
-pub use openlark_mail;
-
-#[cfg(feature = "openlark-meeting")]
-pub use openlark_meeting;
-
-#[cfg(feature = "openlark-people")]
-pub use openlark_people;
-
-#[cfg(feature = "openlark-task")]
-pub use openlark_task;
+// 注意：以下模块暂未包含在发布包中，等待完全开发完成
+// #[cfg(feature = "openlark-admin")]
+// pub use openlark_admin;
+//
+// #[cfg(feature = "openlark-approval")]
+// pub use openlark_approval;
+//
+// #[cfg(feature = "openlark-application")]
+// pub use openlark_application;
+//
+// #[cfg(feature = "openlark-apass")]
+// pub use openlark_apass;
+//
+// #[cfg(feature = "openlark-calendar")]
+// pub use openlark_calendar;
+//
+// #[cfg(feature = "openlark-collab")]
+// pub use openlark_collab;
+//
+// #[cfg(feature = "openlark-helpdesk")]
+// pub use openlark_helpdesk;
+//
+// #[cfg(feature = "openlark-hire")]
+// pub use openlark_hire;
+//
+// #[cfg(feature = "openlark-lingo")]
+// pub use openlark_lingo;
+//
+// #[cfg(feature = "openlark-mail")]
+// pub use openlark_mail;
+//
+// #[cfg(feature = "openlark-meeting")]
+// pub use openlark_meeting;
+//
+// #[cfg(feature = "openlark-people")]
+// pub use openlark_people;
+//
+// #[cfg(feature = "openlark-task")]
+// pub use openlark_task;
 
 #[cfg(feature = "openlark-protocol")]
 pub use openlark_protocol;
 
 /// 预导出模块，提供最常用的类型和功能
 pub mod prelude {
+    // 重新导出核心模块，包含基础类型如SDKResult
     pub use openlark_core::prelude::*;
 
+    // 简化的模块重新导出，避免glob冲突
     #[cfg(feature = "auth")]
-    pub use openlark_auth::*;
+    pub use openlark_auth;
 
     #[cfg(feature = "openlark-communication")]
-    pub use openlark_communication::prelude::*;
+    pub use openlark_communication;
 
     #[cfg(feature = "openlark-docs")]
-    pub use openlark_docs::prelude::*;
+    pub use openlark_docs;
 
     #[cfg(feature = "openlark-hr")]
-    pub use openlark_hr::prelude::*;
+    pub use openlark_hr;
 
     #[cfg(feature = "openlark-ai")]
-    pub use openlark_ai::prelude::*;
+    pub use openlark_ai;
+
+    #[cfg(feature = "openlark-protocol")]
+    pub use openlark_protocol;
 }
 
 /// 便捷的客户端类型别名
