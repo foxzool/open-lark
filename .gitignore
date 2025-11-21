@@ -106,13 +106,36 @@ Thumbs.db
 *~
 
 # ============================================================================
-# Claude Code Assistant
+# Claude Code Assistant and AI Analysis
 # ============================================================================
 
-# Personal work plans and artifacts
+# AI assistant work files and memories
+.claude/memories/
 .claude/plan/
 .claude/index.json
 .claude/commands/
 
-# Temporary command files
+# Temporary command and analysis files
 zen_precommit.changeset
+zen_precommit_validation_report.md
+zen_precommit.*.changeset
+*_validation_report.md
+*_analysis_report.md
+feature_architecture_analysis.md
+
+# ============================================================================
+# Backup and Temporary Files
+# ============================================================================
+
+# Backup files
+*.backup
+*.bak
+*~
+*.orig
+*.rej
+
+# Temporary files
+*.tmp
+*.temp
+/temp/
+/tmp/
