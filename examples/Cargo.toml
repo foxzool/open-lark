@@ -50,3 +50,26 @@ required-features = ["websocket"]
 name = "im_messaging"
 path = "services/communication/im_messaging.rs"
 required-features = ["communication"]
+
+# [[example]]
+# name = "cardkit_example"
+# path = "services/communication/cardkit_example.rs"
+# required-features = ["communication"]
+# TODO: 修复导入问题后重新启用
+
+[[example]]
+name = "quick_start"
+path = "quick_start.rs"
+
+[[example]]
+name = "feature_demo"
+path = "feature_demo.rs"
+
+[[example]]
+name = "service_registry_demo"
+path = "service_registry_demo.rs"
+required-features = ["client"]
+
+[[example]]
+name = "feature_combination_examples"
+path = "feature_combination_examples.rs"
