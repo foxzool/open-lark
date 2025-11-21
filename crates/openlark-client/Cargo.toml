@@ -36,13 +36,13 @@ openlark-docs = { workspace = true, optional = true }
 openlark-ai = { workspace = true, optional = true }
 openlark-auth = { workspace = true, optional = true }
 
-# Additional service crates - 暂时移除有循环依赖的 crates
-# openlark-admin = { workspace = true, optional = true }
-# openlark-approval = { workspace = true, optional = true }
-# openlark-collab = { workspace = true, optional = true }
-# openlark-helpdesk = { workspace = true, optional = true }
-# openlark-hire = { workspace = true, optional = true }
-# openlark-people = { workspace = true, optional = true }
+# Additional service crates - 循环依赖已修复
+openlark-admin = { workspace = true, optional = true }
+openlark-approval = { workspace = true, optional = true }
+openlark-helpdesk = { workspace = true, optional = true }
+openlark-calendar = { workspace = true, optional = true }
+openlark-application = { workspace = true, optional = true }
+openlark-mail = { workspace = true, optional = true }
 
 [features]
 default = ["auth"]
@@ -53,35 +53,61 @@ client = []
 # WebSocket support
 websocket = ["tokio-tungstenite", "futures-util", "lark-websocket-protobuf", "url", "prost", "reqwest", "log"]
 
-# Business service features - 基于 crates.md 中的真实 crates
-# admin = ["openlark-admin"]                    # 管理和行政功能 (暂时禁用 - 循环依赖)
-# approval = ["openlark-approval"]              # 审批流程 (暂时禁用 - 循环依赖)
+# Business service features
+admin = ["openlark-admin"]                    # 管理和行政功能
+approval = ["openlark-approval"]              # 审批流程
 auth = ["openlark-auth"]                      # 认证和授权（默认启用）
-# collab = ["openlark-collab"]                  # 协作功能（日历、会议、任务等）(暂时禁用 - 循环依赖)
 communication = ["openlark-communication"]    # 通讯和消息
-# helpdesk = ["openlark-helpdesk"]              # 帮助台和搜索 (暂时禁用 - 循环依赖)
-# hire = ["openlark-hire"]                      # 招聘管理 (暂时禁用 - 循环依赖)
+helpdesk = ["openlark-helpdesk"]              # 帮助台和搜索
 hr = ["openlark-hr"]                          # 人力资源
 ai = ["openlark-ai"]                          # AI 和智能服务
-# people = ["openlark-people"]                  # 人员和联系人管理 (暂时禁用 - 循环依赖)
+calendar = ["openlark-calendar"]              # 日历和会议
+application = ["openlark-application"]        # 应用管理
+mail = ["openlark-mail"]                      # 邮件服务
 
 docs = ["openlark-docs"]                    # 文档和知识库
 
-# Convenience features - 基础功能组合 (只包含无循环依赖的服务)
-all-services = [
-    "auth", "communication", "hr", "ai", "docs"
-    # 暂时不包含有循环依赖的服务: admin, approval, collab, helpdesk, hire, people
+# 3-layer architecture features
+core-layer = [
+    "communication",  # IM、消息、联系人管理
+    "docs",           # 云文档、表格、知识库
+    "auth"            # 认证、授权、令牌管理
 ]
 
-# Complete client features for easy selection (只包含无循环依赖的服务)
-# client-admin = ["client", "admin"]
-# client-approval = ["client", "approval"]
+professional-layer = [
+    "core-layer",
+    "hr",             # 人力资源、考勤、招聘
+    "ai",             # AI服务、智能分析
+    "calendar"        # 日历、会议安排、日程管理
+]
+
+enterprise-layer = [
+    "professional-layer",
+    "admin",          # 管理功能、行政服务
+    "approval",       # 审批流程、工作流
+    "helpdesk"        # 帮助台、客服管理、工单系统
+]
+
+# Convenience features - 基础功能组合
+all-services = [
+    "auth", "communication", "hr", "ai", "docs", "calendar", "admin",
+    "approval", "helpdesk", "application", "mail"
+]
+
+# Complete client features for easy selection
+client-admin = ["client", "admin"]
+client-approval = ["client", "approval"]
 client-auth = ["client", "auth"]
-# client-collab = ["client", "collab"]
 client-communication = ["client", "communication"]
-# client-helpdesk = ["client", "helpdesk"]
-# client-hire = ["client", "hire"]
+client-helpdesk = ["client", "helpdesk"]
 client-hr = ["client", "hr"]
 client-ai = ["client", "ai"]
-# client-people = ["client", "people"]
+client-calendar = ["client", "calendar"]
+client-application = ["client", "application"]
+client-mail = ["client", "mail"]
 client-all = ["client", "all-services"]
+
+[[example]]
+name = "service_registry_demo"
+path = "../../examples/service_registry_demo.rs"
+required-features = ["communication"]

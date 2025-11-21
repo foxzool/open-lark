@@ -2,7 +2,8 @@
 //!
 //! 极简设计，1行代码创建客户端，类型安全的服务访问
 
-use crate::{traits::LarkClient, Config, Result, ServiceRegistry};
+use crate::{traits::LarkClient, Config, Result, DefaultServiceRegistry, ServiceMetadata, ServiceStatus};
+use crate::registry::ServiceRegistry;
 use std::sync::Arc;
 
 /// 🚀 OpenLark客户端 - 极简设计
@@ -39,7 +40,7 @@ pub struct Client {
     /// 客户端配置
     config: Arc<Config>,
     /// 服务注册表
-    registry: Arc<ServiceRegistry>,
+    registry: Arc<DefaultServiceRegistry>,
 }
 
 impl Client {
@@ -162,7 +163,7 @@ impl Client {
     }
 
     /// 📋 获取服务注册表
-    pub fn registry(&self) -> &ServiceRegistry {
+    pub fn registry(&self) -> &DefaultServiceRegistry {
         &self.registry
     }
 
@@ -175,7 +176,7 @@ impl Client {
     pub fn with_config(config: Config) -> Result<Self> {
         config.validate()?;
         let config = Arc::new(config);
-        let mut registry = ServiceRegistry::new(&config);
+        let mut registry = DefaultServiceRegistry::new();
 
         // 加载启用的服务
         load_enabled_services(&config, &mut registry)?;
@@ -186,72 +187,166 @@ impl Client {
 }
 
 /// 🔥 加载启用的服务
-fn load_enabled_services(_config: &Config, registry: &mut ServiceRegistry) -> Result<()> {
-    // 只加载实际可用的服务（无循环依赖）
+fn load_enabled_services(_config: &Config, registry: &mut DefaultServiceRegistry) -> Result<()> {
+    // 注册核心层服务
+    register_core_services(registry)?;
 
+    // 注册专业层服务
+    register_professional_services(registry)?;
+
+    // 注册企业层服务
+    register_enterprise_services(registry)?;
+
+    Ok(())
+}
+
+/// 注册核心层服务
+fn register_core_services(registry: &mut DefaultServiceRegistry) -> Result<()> {
     #[cfg(feature = "auth")]
     {
-        tracing::debug!("加载认证服务");
-        let descriptor = crate::ServiceDescriptor::new("auth", "AuthService")
-            .description("飞书认证服务，提供令牌管理、身份验证等功能")
-            .version("1.0.0")
-            .add_tag("auth")
-            .add_tag("security");
-
-        let service: Box<String> = Box::new("auth_placeholder".to_string());
-        registry.register_service("auth", service, descriptor)?;
+        tracing::debug!("注册认证服务");
+        let metadata = ServiceMetadata {
+            name: "auth".to_string(),
+            version: "1.0.0".to_string(),
+            description: Some("飞书认证服务，提供令牌管理、身份验证等功能".to_string()),
+            dependencies: vec![],
+            provides: vec!["token-management".to_string(), "permission-control".to_string()],
+            status: ServiceStatus::Uninitialized,
+            priority: 1,
+        };
+        registry.register_service(metadata)?;
     }
 
     #[cfg(feature = "communication")]
     {
-        tracing::debug!("加载通讯服务");
-        let descriptor = crate::ServiceDescriptor::new("communication", "CommunicationService")
-            .description("飞书通讯服务，提供消息、联系人、群组等功能")
-            .version("1.0.0")
-            .add_tag("messaging")
-            .add_tag("real-time");
-
-        let service = Box::new("communication_placeholder") as Box<dyn std::any::Any + Send + Sync>;
-        registry.register_service("communication", service, descriptor)?;
+        tracing::debug!("注册通讯服务");
+        let metadata = ServiceMetadata {
+            name: "communication".to_string(),
+            version: "1.0.0".to_string(),
+            description: Some("飞书通讯服务，提供消息、联系人、群组等功能".to_string()),
+            dependencies: vec!["auth".to_string()],
+            provides: vec!["im".to_string(), "contacts".to_string(), "groups".to_string()],
+            status: ServiceStatus::Uninitialized,
+            priority: 2,
+        };
+        registry.register_service(metadata)?;
     }
 
+    #[cfg(feature = "docs")]
+    {
+        tracing::debug!("注册文档服务");
+        let metadata = ServiceMetadata {
+            name: "docs".to_string(),
+            version: "1.0.0".to_string(),
+            description: Some("飞书文档服务，提供云文档、表格、知识库等功能".to_string()),
+            dependencies: vec!["auth".to_string()],
+            provides: vec!["cloud-docs".to_string(), "sheets".to_string(), "wiki".to_string()],
+            status: ServiceStatus::Uninitialized,
+            priority: 2,
+        };
+        registry.register_service(metadata)?;
+    }
+
+    Ok(())
+}
+
+/// 注册专业层服务
+fn register_professional_services(registry: &mut DefaultServiceRegistry) -> Result<()> {
     #[cfg(feature = "hr")]
     {
-        tracing::debug!("加载HR服务");
-        let descriptor = crate::ServiceDescriptor::new("hr", "HRService")
-            .description("飞书人力资源服务，提供员工、考勤、薪酬等功能")
-            .version("1.0.0")
-            .add_tag("hr")
-            .add_tag("management");
-
-        let service = Box::new("hr_placeholder") as Box<dyn std::any::Any + Send + Sync>;
-        registry.register_service("hr", service, descriptor)?;
+        tracing::debug!("注册人力资源服务");
+        let metadata = ServiceMetadata {
+            name: "hr".to_string(),
+            version: "1.0.0".to_string(),
+            description: Some("飞书人力资源服务，提供员工、考勤、薪酬等功能".to_string()),
+            dependencies: vec!["auth".to_string()],
+            provides: vec!["attendance".to_string(), "corehr".to_string(), "ehr".to_string()],
+            status: ServiceStatus::Uninitialized,
+            priority: 3,
+        };
+        registry.register_service(metadata)?;
     }
 
     #[cfg(feature = "ai")]
     {
-        tracing::debug!("加载AI服务");
-        let descriptor = crate::ServiceDescriptor::new("ai", "AIService")
-            .description("飞书AI服务，提供智能助手、AI功能")
-            .version("1.0.0")
-            .add_tag("ai")
-            .add_tag("intelligence");
-
-        let service = Box::new("ai_placeholder") as Box<dyn std::any::Any + Send + Sync>;
-        registry.register_service("ai", service, descriptor)?;
+        tracing::debug!("注册AI服务");
+        let metadata = ServiceMetadata {
+            name: "ai".to_string(),
+            version: "1.0.0".to_string(),
+            description: Some("飞书AI服务，提供智能助手、AI分析等功能".to_string()),
+            dependencies: vec!["auth".to_string(), "communication".to_string()],
+            provides: vec!["chatbot".to_string(), "smart-analysis".to_string()],
+            status: ServiceStatus::Uninitialized,
+            priority: 4,
+        };
+        registry.register_service(metadata)?;
     }
 
-    // 临时禁用的服务（由于循环依赖）：
-    // - admin (管理服务)
-    // - approval (审批服务)
-    // - collab (协作服务)
-    // - docs (文档服务)
-    // - helpdesk (帮助台服务)
-    // - hire (招聘服务)
-    // - people (人员服务)
-    // 这些服务将在解决循环依赖问题后重新启用
+    #[cfg(feature = "calendar")]
+    {
+        tracing::debug!("注册日历服务");
+        let metadata = ServiceMetadata {
+            name: "calendar".to_string(),
+            version: "1.0.0".to_string(),
+            description: Some("飞书日历服务，提供日程管理、会议安排等功能".to_string()),
+            dependencies: vec!["auth".to_string(), "communication".to_string()],
+            provides: vec!["schedule".to_string(), "meetings".to_string()],
+            status: ServiceStatus::Uninitialized,
+            priority: 4,
+        };
+        registry.register_service(metadata)?;
+    }
 
-    tracing::info!("已启用的服务加载完成");
+    Ok(())
+}
+
+/// 注册企业层服务
+fn register_enterprise_services(registry: &mut DefaultServiceRegistry) -> Result<()> {
+    #[cfg(feature = "admin")]
+    {
+        tracing::debug!("注册管理服务");
+        let metadata = ServiceMetadata {
+            name: "admin".to_string(),
+            version: "1.0.0".to_string(),
+            description: Some("飞书管理服务，提供用户管理、系统配置等功能".to_string()),
+            dependencies: vec!["auth".to_string(), "hr".to_string()],
+            provides: vec!["user-management".to_string(), "system-config".to_string()],
+            status: ServiceStatus::Uninitialized,
+            priority: 5,
+        };
+        registry.register_service(metadata)?;
+    }
+
+    #[cfg(feature = "approval")]
+    {
+        tracing::debug!("注册审批服务");
+        let metadata = ServiceMetadata {
+            name: "approval".to_string(),
+            version: "1.0.0".to_string(),
+            description: Some("飞书审批服务，提供审批流程、模板管理等功能".to_string()),
+            dependencies: vec!["auth".to_string(), "communication".to_string()],
+            provides: vec!["workflow".to_string(), "template".to_string()],
+            status: ServiceStatus::Uninitialized,
+            priority: 5,
+        };
+        registry.register_service(metadata)?;
+    }
+
+    #[cfg(feature = "helpdesk")]
+    {
+        tracing::debug!("注册帮助台服务");
+        let metadata = ServiceMetadata {
+            name: "helpdesk".to_string(),
+            version: "1.0.0".to_string(),
+            description: Some("飞书帮助台服务，提供工单管理、知识库等功能".to_string()),
+            dependencies: vec!["auth".to_string(), "communication".to_string(), "ai".to_string()],
+            provides: vec!["ticket".to_string(), "knowledge-base".to_string()],
+            status: ServiceStatus::Uninitialized,
+            priority: 6,
+        };
+        registry.register_service(metadata)?;
+    }
+
     Ok(())
 }
 

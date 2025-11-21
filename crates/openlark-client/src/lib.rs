@@ -208,7 +208,7 @@ pub use client::{Client, ClientBuilder};
 pub use config::Config;
 pub use error::{Error, Result};
 pub use features::{FeatureLoader, FeatureSet, FeatureStats};
-pub use registry::{ServiceDescriptor, ServiceRegistry};
+pub use registry::{ServiceRegistry, DefaultServiceRegistry, ServiceMetadata, ServiceStatus, ServiceEntry};
 pub use traits::*;
 
 // 注意：legacy_client 已在 v0.15.0 中移除
@@ -269,7 +269,7 @@ pub mod prelude {
     pub use crate::traits::{LarkClient, ServiceLifecycle, ServiceTrait};
 
     // 服务注册
-    pub use crate::{ServiceDescriptor, ServiceRegistry};
+    pub use crate::ServiceRegistry;
 
     // 服务类型（只导出实际可用的 features）
     // #[cfg(feature = "admin")]
@@ -351,13 +351,71 @@ pub mod utils {
 
     /// 获取启用的功能列表
     pub fn get_enabled_features() -> Vec<&'static str> {
-        FeatureLoader::get_enabled_services()
+        // 根据编译时的 feature 标志返回启用的功能
+        let mut features = Vec::new();
+
+        #[cfg(feature = "auth")]
+        features.push("auth");
+
+        #[cfg(feature = "communication")]
+        features.push("communication");
+
+        #[cfg(feature = "docs")]
+        features.push("docs");
+
+        #[cfg(feature = "hr")]
+        features.push("hr");
+
+        #[cfg(feature = "ai")]
+        features.push("ai");
+
+        #[cfg(feature = "calendar")]
+        features.push("calendar");
+
+        #[cfg(feature = "admin")]
+        features.push("admin");
+
+        #[cfg(feature = "approval")]
+        features.push("approval");
+
+        #[cfg(feature = "helpdesk")]
+        features.push("helpdesk");
+
+        #[cfg(feature = "mail")]
+        features.push("mail");
+
+        #[cfg(feature = "application")]
+        features.push("application");
+
+        features
     }
 
     /// 验证功能依赖
-    pub fn validate_feature_dependencies() -> Result<Vec<crate::features::DependencyIssue>> {
-        FeatureLoader::validate_feature_dependencies()
-            .map_err(|_e| Error::InvalidConfig("功能依赖验证失败"))
+    pub fn validate_feature_dependencies() -> Result<Vec<String>> {
+        // 简化的依赖验证逻辑
+        let mut issues = Vec::new();
+
+        // 检查专业层功能是否依赖于核心层功能
+        #[cfg(any(feature = "hr", feature = "ai", feature = "calendar"))]
+        {
+            #[cfg(not(feature = "auth"))]
+            issues.push("专业层功能 (hr, ai, calendar) 需要启用核心功能 (auth)".to_string());
+        }
+
+        // 检查企业层功能是否依赖于相应的专业层功能
+        #[cfg(feature = "admin")]
+        #[cfg(not(feature = "hr"))]
+        issues.push("管理功能 (admin) 需要启用人力资源功能 (hr)".to_string());
+
+        #[cfg(feature = "helpdesk")]
+        #[cfg(not(any(feature = "communication", feature = "ai")))]
+        issues.push("帮助台功能 (helpdesk) 需要启用通讯或AI功能".to_string());
+
+        if issues.is_empty() {
+            Ok(issues)
+        } else {
+            Err(Error::InvalidConfig("功能依赖验证失败"))
+        }
     }
 }
 

@@ -2,7 +2,7 @@
 //!
 //! 提供统一的通讯服务接口，封装底层openlark-communication crate
 
-use crate::{Config, Result, ServiceRegistry};
+use crate::{Config, Result, DefaultServiceRegistry};
 use std::sync::Arc;
 
 /// 📡 通讯服务 - 统一访问接口
@@ -13,12 +13,12 @@ pub struct CommunicationService<'a> {
     /// 🔧 客户端配置
     config: &'a Config,
     /// 📋 服务注册表
-    registry: &'a ServiceRegistry,
+    registry: &'a DefaultServiceRegistry,
 }
 
 impl<'a> CommunicationService<'a> {
     /// 🆕 创建新的通讯服务实例
-    pub(crate) fn new(config: &'a Config, registry: &'a ServiceRegistry) -> Self {
+    pub(crate) fn new(config: &'a Config, registry: &'a DefaultServiceRegistry) -> Self {
         Self { config, registry }
     }
 
@@ -60,7 +60,7 @@ mod tests {
     fn test_communication_service_creation() {
         let config = Config::default();
         let config_arc = Arc::new(config);
-        let registry = ServiceRegistry::new(&config_arc);
+        let registry = DefaultServiceRegistry::new();
         let service = CommunicationService::new(&config_arc, &registry);
 
         // 基本创建测试
@@ -71,7 +71,7 @@ mod tests {
     async fn test_send_text_message() {
         let config = Config::default();
         let config_arc = Arc::new(config);
-        let registry = ServiceRegistry::new(&config_arc);
+        let registry = DefaultServiceRegistry::new();
         let service = CommunicationService::new(&config_arc, &registry);
 
         let result = service
