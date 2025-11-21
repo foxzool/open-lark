@@ -1,54 +1,29 @@
 # OpenLark SDK 示例代码库
 
-本示例代码库展示了如何使用 OpenLark SDK 与飞书开放平台进行交互。示例按照混合架构组织，既提供循序渐进的学习路径，也方便快速查找特定功能。
+本示例代码库展示了如何使用 OpenLark SDK 与飞书开放平台进行交互。示例按照功能和使用场景组织，既提供循序渐进的学习路径，也方便快速查找特定功能。
 
 ## 📚 目录结构
 
-### 🚀 [基础入门](./basic/)
+### 🚀 基础入门
 适合新用户的完整学习路径，从客户端创建到基础API调用：
 
-- **[basic_introduction.rs](./basic_introduction.rs)** - 完整基础教程（推荐入门，整合6章内容）
-- **[00_client_setup.rs](./basic/00_client_setup.rs)** - 客户端建立（支持传统方式和SharedConfig）
-- **[01_authentication.rs](./basic/01_authentication.rs)** - 认证机制和权限管理
-- **[02_first_api_call.rs](./basic/02_first_api_call.rs)** - 第一个API调用示例
-- **[03_error_handling.rs](./basic/03_error_handling.rs)** - 错误处理和异常管理
+- **[basic_introduction.rs](./basic_introduction.rs)** - 完整基础教程（推荐入门，展示SDK核心功能）
+- **[quick_start.rs](./quick_start.rs)** - 快速开始示例，简洁的客户端设置和API调用
+- **[feature_demo.rs](./feature_demo.rs)** - 功能标志演示，展示模块化编译特性
+- **[ws_client_example.rs](./ws_client_example.rs)** - WebSocket客户端连接和事件处理示例
 
 ### 🛠️ [服务模块](./services/)
 按飞书服务模块组织，方便快速查找特定功能：
 
 #### 通讯协作 ([communication](./services/communication/))
-- **IM消息** - 发送文本、图片、文件等各类消息
-- **联系人管理** - 用户信息获取和管理
-- **群组管理** - 群聊创建、成员管理等
+- **[im_messaging.rs](./services/communication/im_messaging.rs)** - IM消息发送（文本、图片、文件等）
+- ~~cardkit_example.rs~~ - CardKit消息卡片创建和发送（暂时禁用，修复中）
 
-#### 文档管理 ([documents](./services/documents/))
-- **文件操作** - 文件上传、下载、分享
-- **电子表格** - 表格数据读写和格式化
-- **知识库** - Wiki文档创建和协作
+### 🎯 高级功能
+展示SDK的高级特性和最佳实践：
 
-#### 人力资源 ([hr](./services/hr/))
-- **考勤跟踪** - 打卡记录、考勤统计
-- **招聘管理** - 职位发布、候选人管理
-- **组织架构** - 部门、员工信息管理
-
-#### 智能服务 ([ai](./services/ai/))
-- **AI助手** - 智能对话和分析
-- **文档分析** - OCR、翻译、内容提取
-
-### 🎯 [常用模式](./patterns/)
-开发中的常用模式和最佳实践：
-
-- **[builder_pattern.rs](./patterns/builder_pattern.rs)** - 构建器模式使用
-- **[async_operations.rs](./patterns/async_operations.rs)** - 异步操作最佳实践
-- **[batch_processing.rs](./patterns/batch_processing.rs)** - 批量数据处理
-- **[websocket_events.rs](./patterns/websocket_events.rs)** - WebSocket事件处理
-
-### 🏢 [企业级场景](./enterprise/)
-企业级应用的部署和集成示例：
-
-- **[multi_tenant_setup.rs](./enterprise/multi_tenant_setup.rs)** - 多租户配置
-- **[service_integration.rs](./enterprise/service_integration.rs)** - 多服务集成
-- **[production_deployment.rs](./enterprise/production_deployment.rs)** - 生产环境部署
+- **[service_registry_demo.rs](./service_registry_demo.rs)** - 服务注册和使用演示
+- **[feature_combination_examples.rs](./feature_combination_examples.rs)** - 多功能组合使用示例
 
 ## 🚀 快速开始
 
@@ -77,11 +52,14 @@ USER_ACCESS_TOKEN=your_user_access_token  # 可选，用于用户相关API
 # 完整基础教程（推荐新用户）
 cargo run --example basic_introduction
 
-# 客户端建立示例
-cargo run --example 00_client_setup
+# 快速开始示例
+cargo run --example quick_start
 
-# 第一个API调用
-cargo run --example 02_first_api_call
+# 功能标志演示
+cargo run --example feature_demo
+
+# WebSocket客户端
+cargo run --example ws_client_example --features websocket
 ```
 
 运行服务特定示例（需要启用对应功能标志）：
@@ -90,11 +68,14 @@ cargo run --example 02_first_api_call
 # IM消息示例
 cargo run --example im_messaging --features communication
 
-# 文档操作示例
-cargo run --example file_operations --features cloud-docs
+# CardKit消息卡片示例（暂时禁用，修复中）
+# cargo run --example cardkit_example --features communication
 
-# AI服务示例
-cargo run --example intelligent_services --features ai
+# 服务注册演示
+cargo run --example service_registry_demo --features client
+
+# 多功能组合示例
+cargo run --example feature_combination_examples --features "communication,client,auth"
 ```
 
 ### 3. 功能标志
