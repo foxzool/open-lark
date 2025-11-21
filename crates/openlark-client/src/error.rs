@@ -3,6 +3,7 @@
 //! 统一的错误处理系统，提供类型安全的错误管理
 
 use std::fmt;
+use crate::registry::RegistryError;
 
 /// 🚨 OpenLark 客户端错误类型
 ///
@@ -43,6 +44,9 @@ pub enum Error {
 
     /// ⚠️ 无效参数
     InvalidParameter(String),
+
+    /// 🔧 服务注册表错误
+    RegistryError(RegistryError),
 }
 
 impl fmt::Display for Error {
@@ -58,6 +62,7 @@ impl fmt::Display for Error {
             Error::Unknown(msg) => write!(f, "未知错误: {}", msg),
             Error::ServiceUnavailable(service) => write!(f, "服务不可用: {}", service),
             Error::InvalidParameter(msg) => write!(f, "参数错误: {}", msg),
+            Error::RegistryError(err) => write!(f, "注册表错误: {}", err),
         }
     }
 }
@@ -78,11 +83,36 @@ impl Error {
         matches!(self, Error::AuthenticationError(_))
     }
 
+    /// 🔍 判断是否为注册表错误
+    pub fn is_registry_error(&self) -> bool {
+        matches!(self, Error::RegistryError(_))
+    }
+
     /// 🔍 判断是否为配置错误
     pub fn is_config_error(&self) -> bool {
         matches!(self, Error::InvalidConfig(_))
     }
+}
 
+impl From<RegistryError> for Error {
+    fn from(err: RegistryError) -> Self {
+        Error::RegistryError(err)
+    }
+}
+
+impl From<crate::registry::feature_flags::FeatureFlagError> for Error {
+    fn from(err: crate::registry::feature_flags::FeatureFlagError) -> Self {
+        Error::RegistryError(RegistryError::FeatureFlagError(err))
+    }
+}
+
+impl From<crate::registry::dependency_resolver::DependencyError> for Error {
+    fn from(err: crate::registry::dependency_resolver::DependencyError) -> Self {
+        Error::RegistryError(RegistryError::DependencyError(err))
+    }
+}
+
+impl Error {
     /// 🔍 判断是否可重试
     pub fn is_retryable(&self) -> bool {
         matches!(
@@ -104,6 +134,7 @@ impl Error {
             Error::Unknown(_) => "发生未知错误，请联系技术支持".to_string(),
             Error::ServiceUnavailable(service) => format!("{}服务当前不可用，请稍后重试", service),
             Error::InvalidParameter(msg) => format!("参数错误: {}", msg),
+            Error::RegistryError(err) => format!("服务注册表错误: {}", err),
         }
     }
 }
