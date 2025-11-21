@@ -123,3 +123,158 @@ mockall = "0.12"
 dotenvy = "0.15"
 env_logger = "0.10"
 criterion = "0.5"
+
+# Dev dependencies
+#
+## Convenience package configuration for unified publishing
+[package]
+name = "open-lark"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+readme = "README.md"
+description = "飞书开放平台 Rust SDK - 企业级高覆盖率 API 客户端，极简依赖一条命令"
+keywords = ["feishu", "lark", "api", "sdk", "rust"]
+categories = ["api-bindings", "web-programming", "development-tools"]
+documentation.workspace = true
+repository.workspace = true
+homepage.workspace = true
+license.workspace = true
+#
+[features]
+default = ["docs-collaboration"]
+
+# === 分层功能系统 ===
+# 文档协作层：满足60%用户的文档协作需求
+docs-collaboration = ["openlark-communication", "openlark-docs", "auth"]
+
+# IM通讯层：纯通讯功能（传统核心）
+communication-core = ["openlark-communication"]
+
+# 专业层：企业协作套件
+professional-suite = ["docs-collaboration"]
+
+# 企业层：完整企业功能
+enterprise-suite = ["professional-suite", "hr-suite", "ai-suite"]
+
+# 完整层：所有可用功能
+full-suite = ["enterprise-suite", "admin-suite"]
+
+# === 场景化功能组合 ===
+# IM通讯套件：消息、联系人、群组
+im-suite = ["openlark-communication"]
+contact-suite = ["openlark-communication"]
+group-suite = ["openlark-communication"]
+
+# 文档协作套件：云文档、表格、知识库
+docs-suite = ["openlark-docs"]
+sheets-suite = ["openlark-docs"]
+wiki-suite = ["openlark-docs"]
+
+# 人力资源套件：考勤、招聘、CoreHR
+hr-suite = ["openlark-hr"]
+attendance-suite = ["openlark-hr"]
+hire-suite = ["openlark-hr"]
+
+# AI智能套件：AI助手、智能分析
+ai-suite = ["openlark-ai"]
+lingo-suite = ["openlark-ai"]
+
+# 管理功能套件
+admin-suite = ["openlark-admin"]
+approval-suite = ["openlark-approval"]
+
+# === 技术支持功能 ===
+# WebSocket支持
+websocket = ["openlark-protocol"]
+
+# OpenTelemetry可观测性
+otel = ["opentelemetry", "opentelemetry_sdk", "opentelemetry-otlp", "tracing-opentelemetry"]
+
+# === 单独功能模块（向后兼容）===
+# 基础设施
+auth = ["openlark-auth"]
+
+# 传统功能名称（向后兼容）
+communication = ["im-suite"]
+cloud-docs = ["docs-suite"]
+ai = ["ai-suite"]
+hr = ["hr-suite"]
+
+[dependencies]
+# 核心基础设施（始终包含）
+openlark-core = { workspace = true }
+
+# 功能模块（通过 feature flag 控制）
+openlark-auth = { workspace = true, optional = true }
+openlark-client = { workspace = true, optional = true }
+openlark-communication = { workspace = true, optional = true }
+openlark-docs = { workspace = true, optional = true }
+openlark-hr = { workspace = true, optional = true }
+openlark-ai = { workspace = true, optional = true }
+openlark-admin = { workspace = true, optional = true }
+openlark-approval = { workspace = true, optional = true }
+openlark-application = { workspace = true, optional = true }
+openlark-apass = { workspace = true, optional = true }
+openlark-calendar = { workspace = true, optional = true }
+openlark-collab = { workspace = true, optional = true }
+openlark-helpdesk = { workspace = true, optional = true }
+openlark-hire = { workspace = true, optional = true }
+openlark-lingo = { workspace = true, optional = true }
+openlark-mail = { workspace = true, optional = true }
+openlark-meeting = { workspace = true, optional = true }
+openlark-people = { workspace = true, optional = true }
+openlark-task = { workspace = true, optional = true }
+openlark-protocol = { workspace = true, optional = true }
+
+# 重新导出工作空间依赖，为用户提供便利访问
+anyhow = { workspace = true }
+async-trait = { workspace = true }
+base64 = { workspace = true }
+chrono = { workspace = true }
+futures-util = { workspace = true }
+hmac = { workspace = true }
+log = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+quick_cache = { workspace = true }
+reqwest = { workspace = true }
+rand = { workspace = true }
+serde_repr = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+sha2 = { workspace = true }
+urlencoding = { workspace = true }
+strum = { workspace = true }
+strum_macros = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+url = { workspace = true }
+walkdir = { workspace = true }
+regex = { workspace = true }
+uuid = { workspace = true }
+
+# 可选技术支持依赖
+opentelemetry = { workspace = true, optional = true }
+opentelemetry_sdk = { workspace = true, optional = true }
+opentelemetry-otlp = { workspace = true, optional = true }
+tracing-opentelemetry = { workspace = true, optional = true }
+prost = { workspace = true, optional = true }
+
+[dev-dependencies]
+dotenvy = { workspace = true }
+env_logger = { workspace = true }
+criterion = { workspace = true }
+rstest = { workspace = true }
+proptest = { workspace = true }
+serial_test = { workspace = true }
+tempfile = { workspace = true }
+test-log = { workspace = true }
+tracing-test = { workspace = true }
+wiremock = { workspace = true }
+once_cell = { workspace = true }
+mockall = { workspace = true }
+
+[lib]
+name = "open_lark"
+path = "src/lib.rs"
