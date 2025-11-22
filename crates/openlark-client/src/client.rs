@@ -111,13 +111,21 @@ impl Client {
         crate::services::CommunicationService::new(&self.config, &self.registry)
     }
 
-    // /// 📄 访问文档服务
-    // ///
-    // /// 需要 `docs` feature
-    // #[cfg(feature = "docs")]
-    // pub fn docs(&self) -> crate::services::DocsService<'_> {
-    //     crate::services::DocsService::new(&self.config)
-    // }
+    /// 📄 访问文档服务
+    ///
+    /// 需要 `docs` feature
+    #[cfg(feature = "docs")]
+    pub fn docs(&self) -> crate::services::DocsService<'_> {
+        crate::services::DocsService::new(&self.config)
+    }
+
+    /// 📊 访问多维表格服务
+    ///
+    /// 需要 `bitable` feature
+    #[cfg(feature = "bitable")]
+    pub fn bitable(&self) -> crate::services::BitableService<'_> {
+        crate::services::BitableService::new(&self.config)
+    }
 
     // /// 💬 访问帮助台服务
     // ///
