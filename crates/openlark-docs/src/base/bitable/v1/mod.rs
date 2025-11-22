@@ -31,3 +31,14 @@ impl V1 {
     pub fn new(config: Config) -> Self {
         Self { config }
 }
+// 导入优化模块
+pub mod batch_operations_common;
+pub mod typed_ids;
+
+// 重新导出优化类型
+pub use batch_operations_common::{
+    BatchCommonParams, BatchCommonBody, BatchOperationResult, StandardBatchResponse
+};
+pub use typed_ids::{
+    AppToken, TableId, RecordId, UserIdType, validation
+};
