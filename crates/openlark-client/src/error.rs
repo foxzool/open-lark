@@ -2,8 +2,8 @@
 //!
 //! 统一的错误处理系统，提供类型安全的错误管理
 
-use std::fmt;
 use crate::registry::RegistryError;
+use std::fmt;
 
 /// 🚨 OpenLark 客户端错误类型
 ///

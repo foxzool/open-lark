@@ -2,7 +2,7 @@
 //!
 //! 提供统一的HR服务接口，封装底层openlark-hr crate
 
-use crate::{Config, Result, ServiceRegistry, DefaultServiceRegistry};
+use crate::{Config, DefaultServiceRegistry, Result, ServiceRegistry};
 use std::sync::Arc;
 
 /// 👥 HR服务 - 统一访问接口

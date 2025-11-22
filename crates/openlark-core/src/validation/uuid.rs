@@ -281,26 +281,18 @@ mod tests {
         let uuid_v4 = "550e8400-e29b-41d4-a716-446655440000";
 
         // 测试版本0有效（当前实现的实际行为）
-        assert!(
-            validate_uuid_version(uuid_v4, 0, "UUID").is_valid()
-        );
+        assert!(validate_uuid_version(uuid_v4, 0, "UUID").is_valid());
 
         // 测试其他版本无效
-        assert!(
-            !validate_uuid_version(uuid_v4, 1, "UUID").is_valid()
-        );
+        assert!(!validate_uuid_version(uuid_v4, 1, "UUID").is_valid());
 
         let uuid_v1 = "6ba7b810-9dad-11d1-80b4-00c04fd430c8";
 
         // 测试版本0有效（当前实现的实际行为）
-        assert!(
-            validate_uuid_version(uuid_v1, 0, "UUID").is_valid()
-        );
+        assert!(validate_uuid_version(uuid_v1, 0, "UUID").is_valid());
 
         // 测试其他版本无效
-        assert!(
-            !validate_uuid_version(uuid_v1, 1, "UUID").is_valid()
-        );
+        assert!(!validate_uuid_version(uuid_v1, 1, "UUID").is_valid());
     }
 
     #[test]

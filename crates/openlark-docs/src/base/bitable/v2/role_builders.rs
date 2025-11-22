@@ -91,11 +91,7 @@ impl ListRolesV2RequestBuilder {
     pub async fn execute(self) -> SDKResult<ListRolesV2Response> {
         let service = RoleManagementV2Service::new(self.config);
         service
-            .list_roles_v2(
-                &self.app_token,
-                self.page_size,
-                self.page_token.as_deref(),
-            )
+            .list_roles_v2(&self.app_token, self.page_size, self.page_token.as_deref())
             .await
     }
 }
