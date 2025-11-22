@@ -5,9 +5,6 @@
 
 use crate::prelude::*;
 
-// Re-export bitable module
-pub mod bitable;
-
 /// Base服务
 pub struct BaseService {
     #[allow(dead_code)] // 配置保留供将来使用
@@ -19,10 +16,9 @@ impl BaseService {
         Self { config }
     }
 
-    /// 获取多维表格服务
-    pub fn bitable(&self) -> crate::services::BitableService {
-        // 使用默认配置创建简单服务
-        crate::services::BitableService::new()
+    /// 获取基础配置
+    pub fn config(&self) -> &Config {
+        &self.config
     }
 }
 
@@ -36,8 +32,8 @@ mod tests {
         // 创建BaseService
         let base_service = BaseService::new(config.clone());
 
-        // 测试服务访问
-        let _bitable_service = base_service.bitable();
+        // 测试基础功能
+        assert_eq!(base_service.config().app_id, config.app_id);
         println!("BaseService 测试通过");
     }
 
@@ -47,7 +43,7 @@ mod tests {
         let base_service = BaseService::new(config);
 
         // 测试基础功能
-        let _bitable_service = base_service.bitable();
-        assert!(true); // 基本创建测试
+        assert!(!base_service.config().app_id.is_empty());
+        println!("BaseService 功能测试通过");
     }
 }

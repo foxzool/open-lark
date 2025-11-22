@@ -25,9 +25,13 @@ pub mod services;
 // Prelude module with common imports
 pub mod prelude;
 
-// Base modules - base and bitable projects
-#[cfg(any(feature = "base", feature = "bitable"))]
+// Base modules - base project
+#[cfg(feature = "base")]
 pub mod base;
+
+// Bitable modules - bitable project (now top-level)
+#[cfg(feature = "bitable")]
+pub mod bitable;
 
 // Content Collaboration Management (CCM) modules
 #[cfg(feature = "ccm-core")]
@@ -45,8 +49,11 @@ pub mod report;
 pub use endpoints::*;
 
 // Re-export service types for convenience
-#[cfg(any(feature = "base", feature = "bitable"))]
+#[cfg(feature = "base")]
 pub use base::BaseService;
+
+#[cfg(feature = "bitable")]
+pub use bitable::BitableService;
 
 #[cfg(feature = "ccm-core")]
 pub use ccm::CcmService;
