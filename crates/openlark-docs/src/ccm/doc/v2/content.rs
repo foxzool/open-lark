@@ -6,8 +6,8 @@ use crate::prelude::*;
 use openlark_core::{api::ApiRequest, http::Transport, SDKResult};
 
 use super::{
-    requests::{GetDocRawContentV2Request, GetDocContentV2Request},
-    responses::{GetDocRawContentV2Response, GetDocContentV2Response},
+    requests::{GetDocContentV2Request, GetDocRawContentV2Request},
+    responses::{GetDocContentV2Response, GetDocRawContentV2Response},
 };
 
 /// 文档内容服务
@@ -23,7 +23,10 @@ impl ContentDocService {
     }
 
     /// 获取文档纯文本内容
-    pub async fn get_raw_content(&self, req: &GetDocRawContentV2Request) -> SDKResult<GetDocRawContentV2Response> {
+    pub async fn get_raw_content(
+        &self,
+        req: &GetDocRawContentV2Request,
+    ) -> SDKResult<GetDocRawContentV2Response> {
         log::debug!("获取文档纯文本内容: doc_token={}", req.doc_token);
 
         // 构建动态端点路径
@@ -44,7 +47,8 @@ impl ContentDocService {
             _phantom: std::marker::PhantomData,
         };
 
-        let resp = Transport::<GetDocRawContentV2Response>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<GetDocRawContentV2Response>::request(api_req, &self.config, None).await?;
         log::info!("获取文档纯文本内容完成: doc_token={}", req.doc_token);
 
         Ok(resp.data.unwrap_or_default())
@@ -72,7 +76,8 @@ impl ContentDocService {
             _phantom: std::marker::PhantomData,
         };
 
-        let resp = Transport::<GetDocContentV2Response>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<GetDocContentV2Response>::request(api_req, &self.config, None).await?;
         log::info!("获取文档富文本内容完成: doc_token={}", req.doc_token);
 
         Ok(resp.data.unwrap_or_default())

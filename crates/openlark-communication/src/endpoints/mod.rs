@@ -437,7 +437,8 @@ mod tests {
         }
 
         fn increment_request_count(&self) {
-            self.request_count.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+            self.request_count
+                .fetch_add(1, std::sync::atomic::Ordering::SeqCst);
         }
 
         fn get_request_count(&self) -> u64 {
@@ -448,12 +449,14 @@ mod tests {
             format!("{}{}", self.base_url, endpoint)
         }
 
+        #[allow(dead_code)]
         fn mock_response<T: serde::Serialize>(&self, data: T) -> String {
             serde_json::json!({
                 "code": 0,
                 "msg": "success",
                 "data": data
-            }).to_string()
+            })
+            .to_string()
         }
     }
 
@@ -541,7 +544,10 @@ mod tests {
         let final_url = client.build_url(&url_with_params);
         client.increment_request_count();
 
-        assert_eq!(final_url, "https://open.feishu.cn/open-apis/mail/v1/user_mailboxes/mailbox_123/events/subscribe");
+        assert_eq!(
+            final_url,
+            "https://open.feishu.cn/open-apis/mail/v1/user_mailboxes/mailbox_123/events/subscribe"
+        );
         assert_eq!(client.get_request_count(), 2);
 
         // 模拟邮件文件夹管理
@@ -550,7 +556,10 @@ mod tests {
         let final_url = client.build_url(&url_with_params);
         client.increment_request_count();
 
-        assert_eq!(final_url, "https://open.feishu.cn/open-apis/mail/v1/user_mailboxes/mailbox_456/folders");
+        assert_eq!(
+            final_url,
+            "https://open.feishu.cn/open-apis/mail/v1/user_mailboxes/mailbox_456/folders"
+        );
         assert_eq!(client.get_request_count(), 3);
 
         // 模拟邮件管理
@@ -559,7 +568,10 @@ mod tests {
         let final_url = client.build_url(&url_with_params);
         client.increment_request_count();
 
-        assert_eq!(final_url, "https://open.feishu.cn/open-apis/mail/v1/user_mailboxes/mailbox_789/messages");
+        assert_eq!(
+            final_url,
+            "https://open.feishu.cn/open-apis/mail/v1/user_mailboxes/mailbox_789/messages"
+        );
         assert_eq!(client.get_request_count(), 4);
     }
 
@@ -600,7 +612,11 @@ mod tests {
             topic: "Weekly Team Sync".to_string(),
             start_time: 1640995200,
             end_time: 1640998800,
-            participant_user_ids: vec!["user_1".to_string(), "user_2".to_string(), "user_3".to_string()],
+            participant_user_ids: vec![
+                "user_1".to_string(),
+                "user_2".to_string(),
+                "user_3".to_string(),
+            ],
         };
 
         let endpoint = VC_V1_MEETINGS;
@@ -617,7 +633,10 @@ mod tests {
         let final_url = client.build_url(&url_with_params);
         client.increment_request_count();
 
-        assert_eq!(final_url, "https://open.feishu.cn/open-apis/vc/v1/meetings/meeting_789/invite");
+        assert_eq!(
+            final_url,
+            "https://open.feishu.cn/open-apis/vc/v1/meetings/meeting_789/invite"
+        );
         assert_eq!(client.get_request_count(), 4);
 
         // 模拟会议踢出用户
@@ -626,7 +645,10 @@ mod tests {
         let final_url = client.build_url(&url_with_params);
         client.increment_request_count();
 
-        assert_eq!(final_url, "https://open.feishu.cn/open-apis/vc/v1/meetings/meeting_101/kickout");
+        assert_eq!(
+            final_url,
+            "https://open.feishu.cn/open-apis/vc/v1/meetings/meeting_101/kickout"
+        );
         assert_eq!(client.get_request_count(), 5);
     }
 
@@ -647,7 +669,10 @@ mod tests {
         let url = client.build_url(endpoint);
         client.increment_request_count();
 
-        assert_eq!(url, "https://open.feishu.cn/open-apis/event/v1/subscriptions");
+        assert_eq!(
+            url,
+            "https://open.feishu.cn/open-apis/event/v1/subscriptions"
+        );
         assert_eq!(client.get_request_count(), 1);
         assert_eq!(subscription.event_type, "message.receive");
         assert!(subscription.is_enabled);
@@ -657,7 +682,10 @@ mod tests {
         let url = client.build_url(endpoint);
         client.increment_request_count();
 
-        assert_eq!(url, "https://open.feishu.cn/open-apis/event/v1/subscriptions/create");
+        assert_eq!(
+            url,
+            "https://open.feishu.cn/open-apis/event/v1/subscriptions/create"
+        );
         assert_eq!(client.get_request_count(), 2);
 
         // 模拟事件历史
@@ -682,7 +710,10 @@ mod tests {
         let final_url = client.build_url(&url_with_params);
         client.increment_request_count();
 
-        assert_eq!(final_url, "https://open.feishu.cn/open-apis/event/v1/subscriptions/sub_456");
+        assert_eq!(
+            final_url,
+            "https://open.feishu.cn/open-apis/event/v1/subscriptions/sub_456"
+        );
         assert_eq!(client.get_request_count(), 5);
     }
 
@@ -715,7 +746,10 @@ mod tests {
         let url = client.build_url(endpoint);
         client.increment_request_count();
 
-        assert_eq!(url, "https://open.feishu.cn/open-apis/moments/v1/posts/create");
+        assert_eq!(
+            url,
+            "https://open.feishu.cn/open-apis/moments/v1/posts/create"
+        );
         assert_eq!(client.get_request_count(), 2);
 
         // 模拟内容分享
@@ -731,7 +765,10 @@ mod tests {
         let url = client.build_url(endpoint);
         client.increment_request_count();
 
-        assert_eq!(url, "https://open.feishu.cn/open-apis/moments/v1/interactions");
+        assert_eq!(
+            url,
+            "https://open.feishu.cn/open-apis/moments/v1/interactions"
+        );
         assert_eq!(client.get_request_count(), 4);
 
         // 模拟点赞操作
@@ -739,7 +776,10 @@ mod tests {
         let url = client.build_url(endpoint);
         client.increment_request_count();
 
-        assert_eq!(url, "https://open.feishu.cn/open-apis/moments/v1/interactions/like");
+        assert_eq!(
+            url,
+            "https://open.feishu.cn/open-apis/moments/v1/interactions/like"
+        );
         assert_eq!(client.get_request_count(), 5);
 
         // 模拟评论操作
@@ -747,7 +787,10 @@ mod tests {
         let url = client.build_url(endpoint);
         client.increment_request_count();
 
-        assert_eq!(url, "https://open.feishu.cn/open-apis/moments/v1/interactions/comment");
+        assert_eq!(
+            url,
+            "https://open.feishu.cn/open-apis/moments/v1/interactions/comment"
+        );
         assert_eq!(client.get_request_count(), 6);
     }
 
@@ -803,7 +846,10 @@ mod tests {
         let url = client.build_url(endpoint);
         client.increment_request_count();
 
-        assert_eq!(url, "https://open.feishu.cn/open-apis/moments/v1/posts/create");
+        assert_eq!(
+            url,
+            "https://open.feishu.cn/open-apis/moments/v1/posts/create"
+        );
 
         // 验证整个流程
         assert_eq!(client.get_request_count(), 3);
@@ -822,11 +868,11 @@ mod tests {
         let endpoint = IM_V1_CHATS;
 
         if !invalid_chat_id.is_empty() {
-            let url = client.build_url(endpoint);
+            let _url = client.build_url(endpoint);
             client.increment_request_count();
         } else {
             // 应该处理无效参数
-            assert!(true, "应该处理空的chat_id");
+            // 处理空的chat_id的情况
         }
 
         // 模拟缺失参数的端点
@@ -835,7 +881,10 @@ mod tests {
         let final_url = client.build_url(&url_with_param);
         client.increment_request_count();
 
-        assert_eq!(final_url, "https://open.feishu.cn/open-apis/mail/v1/mailgroups/test_group");
+        assert_eq!(
+            final_url,
+            "https://open.feishu.cn/open-apis/mail/v1/mailgroups/test_group"
+        );
 
         // 模拟并发请求处理
         for i in 0..5 {
@@ -869,9 +918,24 @@ mod tests {
 
         // 测试参数替换
         let param_tests = vec![
-            (MAIL_V1_MAILGROUP, "{mailgroup_id}", "test123", "/open-apis/mail/v1/mailgroups/test123"),
-            (VC_V1_ROOM_GET, "{room_id}", "room456", "/open-apis/vc/v1/rooms/room456"),
-            (EVENT_V1_SUBSCRIPTION_DELETE, "{subscription_id}", "sub789", "/open-apis/event/v1/subscriptions/sub789"),
+            (
+                MAIL_V1_MAILGROUP,
+                "{mailgroup_id}",
+                "test123",
+                "/open-apis/mail/v1/mailgroups/test123",
+            ),
+            (
+                VC_V1_ROOM_GET,
+                "{room_id}",
+                "room456",
+                "/open-apis/vc/v1/rooms/room456",
+            ),
+            (
+                EVENT_V1_SUBSCRIPTION_DELETE,
+                "{subscription_id}",
+                "sub789",
+                "/open-apis/event/v1/subscriptions/sub789",
+            ),
         ];
 
         for (endpoint, param, value, expected_suffix) in param_tests {

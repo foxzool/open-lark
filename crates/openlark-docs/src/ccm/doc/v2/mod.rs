@@ -12,10 +12,10 @@
 //! - 获取电子表格元数据
 
 // 重新启用已修复的模块
-pub mod batch_update;  // ✅ 已修复
-pub mod content;       // ✅ 已修复
-pub mod meta;          // ✅ 已修复
-// pub mod sheet_meta;    // 仍然有语法错误，暂时禁用
+pub mod batch_update; // ✅ 已修复
+pub mod content; // ✅ 已修复
+pub mod meta; // ✅ 已修复
+              // pub mod sheet_meta;    // 仍然有语法错误，暂时禁用
 pub mod create;
 pub mod models;
 pub mod requests;
@@ -24,8 +24,8 @@ pub mod responses;
 // 重新导出所有服务类型
 pub use batch_update::*;
 pub use content::*;
-pub use meta::*;
 pub use create::*;
+pub use meta::*;
 // pub use sheet_meta::*;    // 仍然有语法错误，暂时禁用
 
 use openlark_core::config::Config;

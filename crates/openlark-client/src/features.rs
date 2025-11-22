@@ -2,8 +2,8 @@
 //!
 //! 根据feature标志动态加载和配置服务
 
-use crate::{Config, Result, DefaultServiceRegistry, ServiceMetadata, ServiceStatus};
 use crate::registry::ServiceRegistry;
+use crate::{Config, DefaultServiceRegistry, Result, ServiceMetadata, ServiceStatus};
 
 /// 🔥 功能加载器 - 编译时feature驱动加载
 ///
@@ -13,7 +13,11 @@ pub struct FeatureLoader;
 
 impl FeatureLoader {
     /// 🚀 加载所有启用的服务
-    pub async fn load_services(&self, _config: &Config, registry: &mut DefaultServiceRegistry) -> Result<()> {
+    pub async fn load_services(
+        &self,
+        _config: &Config,
+        registry: &mut DefaultServiceRegistry,
+    ) -> Result<()> {
         tracing::debug!("开始加载启用的服务");
 
         // 注册核心层服务

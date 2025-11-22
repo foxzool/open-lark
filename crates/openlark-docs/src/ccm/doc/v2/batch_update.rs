@@ -51,12 +51,15 @@ impl BatchUpdateDocService {
             url: endpoint,
             headers: std::collections::HashMap::new(),
             query,
-            body: Some(openlark_core::api::RequestData::Json(serde_json::to_value(req)?)),
+            body: Some(openlark_core::api::RequestData::Json(serde_json::to_value(
+                req,
+            )?)),
             timeout: None,
             _phantom: std::marker::PhantomData,
         };
 
-        let resp = Transport::<UpdateDocBatchV2Response>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<UpdateDocBatchV2Response>::request(api_req, &self.config, None).await?;
 
         log::info!(
             "批量更新文档完成: doc_token={}, 操作数量={}",

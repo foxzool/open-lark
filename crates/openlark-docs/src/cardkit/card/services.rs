@@ -68,11 +68,12 @@ impl CardService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: "/open-apis/cardkit/v1/cards".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&body)?,
-            query_params: HashMap::new(),
+            method: reqwest::Method::POST,
+            url: "/open-apis/cardkit/v1/cards".to_string(),
+            body: Some(openlark_core::api::RequestData::Json(serde_json::json!(
+                &body
+            ))),
+            query: HashMap::new(),
             ..Default::default()
         };
 
@@ -118,11 +119,12 @@ impl CardService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::PUT,
-            api_path: format!("/open-apis/cardkit/v1/cards/{}", request.card_id),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&body)?,
-            query_params: HashMap::new(),
+            method: reqwest::Method::PUT,
+            url: format!("/open-apis/cardkit/v1/cards/{}", request.card_id),
+            body: Some(openlark_core::api::RequestData::Json(serde_json::json!(
+                &body
+            ))),
+            query: HashMap::new(),
             ..Default::default()
         };
 
@@ -168,14 +170,15 @@ impl CardService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: format!(
+            method: reqwest::Method::POST,
+            url: format!(
                 "/open-apis/cardkit/v1/cards/{}/batch_update",
                 request.card_id
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&body)?,
-            query_params: HashMap::new(),
+            body: Some(openlark_core::api::RequestData::Json(serde_json::json!(
+                &body
+            ))),
+            query: HashMap::new(),
             ..Default::default()
         };
 
@@ -214,11 +217,12 @@ impl CardService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::PATCH,
-            api_path: format!("/open-apis/cardkit/v1/cards/{}/settings", request.card_id),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&body)?,
-            query_params: HashMap::new(),
+            method: reqwest::Method::PATCH,
+            url: format!("/open-apis/cardkit/v1/cards/{}/settings", request.card_id),
+            body: Some(openlark_core::api::RequestData::Json(serde_json::json!(
+                &body
+            ))),
+            query: HashMap::new(),
             ..Default::default()
         };
 
@@ -262,11 +266,12 @@ impl CardService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: "/open-apis/cardkit/v1/cards/id_convert".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&body)?,
-            query_params: HashMap::new(),
+            method: reqwest::Method::POST,
+            url: "/open-apis/cardkit/v1/cards/id_convert".to_string(),
+            body: Some(openlark_core::api::RequestData::Json(serde_json::json!(
+                &body
+            ))),
+            query: HashMap::new(),
             ..Default::default()
         };
 

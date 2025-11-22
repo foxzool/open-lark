@@ -3,24 +3,25 @@
 //! 本示例展示如何使用新的3层架构feature系统
 //!
 //! 运行方式:
+//!
 //! ```bash
-# 基础功能示例
-cargo run --example feature_combination_examples --features "core-layer"
-
-# 专业功能示例
-cargo run --example feature_combination_examples --features "professional-layer"
-
-# 企业功能示例
-cargo run --example feature_combination_examples --features "enterprise-layer"
-
-# 完整功能示例
-cargo run --example feature_combination_examples --features "enterprise-layer,websocket,otel"
+//! # 基础功能示例
+//! cargo run --example feature_combination_examples --features "core-layer"
+//!
+//! # 专业功能示例
+//! cargo run --example feature_combination_examples --features "professional-layer"
+//!
+//! # 企业功能示例
+//! cargo run --example feature_combination_examples --features "enterprise-layer"
+//!
+//! # 完整功能示例
+//! cargo run --example feature_combination_examples --features "enterprise-layer,websocket,otel"
 //! ```
 
 #[cfg(feature = "core-layer")]
 mod core_layer_examples {
-    use std::env;
     use dotenvy::dotenv;
+    use std::env;
 
     #[cfg(feature = "communication")]
     async fn basic_communication_example() -> Result<(), Box<dyn std::error::Error>> {
@@ -248,11 +249,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     {
         professional_layer_examples::run_professional_examples().await?;
     }
-    #[cfg(all(feature = "core-layer", not(feature = "professional-layer"), not(feature = "enterprise-layer")))]
+    #[cfg(all(
+        feature = "core-layer",
+        not(feature = "professional-layer"),
+        not(feature = "enterprise-layer")
+    ))]
     {
         core_layer_examples::run_core_examples().await?;
     }
-    #[cfg(not(any(feature = "core-layer", feature = "professional-layer", feature = "enterprise-layer")))]
+    #[cfg(not(any(
+        feature = "core-layer",
+        feature = "professional-layer",
+        feature = "enterprise-layer"
+    )))]
     {
         println!("❌ 请至少启用一个功能层:");
         println!("   --features \"core-layer\"");
@@ -286,7 +295,9 @@ mod tests {
     #[cfg(feature = "core-layer")]
     async fn test_core_layer_features() {
         // 测试核心层功能是否正确启用
-        assert!(cfg!(feature = "auth") || cfg!(feature = "communication") || cfg!(feature = "docs"));
+        assert!(
+            cfg!(feature = "auth") || cfg!(feature = "communication") || cfg!(feature = "docs")
+        );
     }
 
     #[tokio::test]
@@ -302,7 +313,9 @@ mod tests {
     async fn test_enterprise_layer_features() {
         // 测试企业层功能是否正确启用
         assert!(cfg!(feature = "professional-layer"));
-        assert!(cfg!(feature = "admin") || cfg!(feature = "approval") || cfg!(feature = "helpdesk"));
+        assert!(
+            cfg!(feature = "admin") || cfg!(feature = "approval") || cfg!(feature = "helpdesk")
+        );
     }
 
     #[tokio::test]

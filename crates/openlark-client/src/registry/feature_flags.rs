@@ -2,9 +2,9 @@
 //!
 //! 提供动态功能控制、A/B测试和渐进式功能发布功能
 
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::sync::RwLock;
-use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 /// 功能标志错误
@@ -16,7 +16,7 @@ pub enum FeatureFlagError {
     #[error("功能标志 '{name}' 不存在")]
     FlagNotFound {
         /// 不存在的功能标志名称
-        name: String
+        name: String,
     },
 
     /// 无效功能标志值错误
@@ -25,7 +25,7 @@ pub enum FeatureFlagError {
     #[error("无效的功能标志值: {value}")]
     InvalidValue {
         /// 无效的功能标志值
-        value: String
+        value: String,
     },
 
     /// 功能标志被锁定错误
@@ -34,7 +34,7 @@ pub enum FeatureFlagError {
     #[error("功能标志 '{name}' 已被锁定")]
     FlagLocked {
         /// 被锁定的功能标志名称
-        name: String
+        name: String,
     },
 }
 
@@ -82,7 +82,13 @@ impl FlagValue {
     /// 转换为整数
     pub fn as_integer(&self) -> i64 {
         match self {
-            FlagValue::Bool(b) => if *b { 1 } else { 0 },
+            FlagValue::Bool(b) => {
+                if *b {
+                    1
+                } else {
+                    0
+                }
+            }
             FlagValue::String(_) => 0,
             FlagValue::Integer(i) => *i,
             FlagValue::Float(f) => *f as i64,
@@ -93,7 +99,13 @@ impl FlagValue {
     /// 转换为浮点数
     pub fn as_float(&self) -> f64 {
         match self {
-            FlagValue::Bool(b) => if *b { 1.0 } else { 0.0 },
+            FlagValue::Bool(b) => {
+                if *b {
+                    1.0
+                } else {
+                    0.0
+                }
+            }
             FlagValue::String(_) => 0.0,
             FlagValue::Integer(i) => *i as f64,
             FlagValue::Float(f) => *f,
@@ -166,7 +178,7 @@ pub enum SegmentCondition {
         /// 自定义属性键名
         key: String,
         /// 自定义属性值
-        value: String
+        value: String,
     },
     /// 随机比例
     RandomPercentage(f64),
@@ -191,14 +203,15 @@ impl FeatureFlagManager {
     /// 设置功能标志值
     pub fn set_flag(&self, name: &str, value: FlagValue) -> FeatureResult<()> {
         let mut flags = self.flags.write().unwrap();
-        let flag = flags.get_mut(name)
+        let flag = flags
+            .get_mut(name)
             .ok_or_else(|| FeatureFlagError::FlagNotFound {
-                name: name.to_string()
+                name: name.to_string(),
             })?;
 
         if flag.locked {
             return Err(FeatureFlagError::FlagLocked {
-                name: name.to_string()
+                name: name.to_string(),
             });
         }
 
@@ -227,7 +240,7 @@ impl FeatureFlagManager {
     pub fn set_percentage_flag(&self, name: &str, value: f64) -> FeatureResult<()> {
         if value < 0.0 || value > 1.0 {
             return Err(FeatureFlagError::InvalidValue {
-                value: value.to_string()
+                value: value.to_string(),
             });
         }
         self.set_flag(name, FlagValue::Percentage(value))
@@ -236,9 +249,10 @@ impl FeatureFlagManager {
     /// 获取功能标志值
     pub fn get_flag(&self, name: &str) -> FeatureResult<FlagValue> {
         let flags = self.flags.read().unwrap();
-        let flag = flags.get(name)
+        let flag = flags
+            .get(name)
             .ok_or_else(|| FeatureFlagError::FlagNotFound {
-                name: name.to_string()
+                name: name.to_string(),
             })?;
 
         Ok(flag.current_value.clone())
@@ -251,9 +265,7 @@ impl FeatureFlagManager {
 
     /// 检查功能标志是否对特定用户启用
     pub fn is_enabled_for_user(&self, name: &str, user_id: &str) -> bool {
-        let base_value = self.get_flag(name)
-            .map(|v| v.as_bool())
-            .unwrap_or(false);
+        let base_value = self.get_flag(name).map(|v| v.as_bool()).unwrap_or(false);
 
         if !base_value {
             return false;
@@ -270,7 +282,8 @@ impl FeatureFlagManager {
 
         // 默认行为：使用用户ID哈希来决定
         let hash = self.hash_string(user_id);
-        let threshold = self.get_flag(name)
+        let threshold = self
+            .get_flag(name)
             .and_then(|v| {
                 if let FlagValue::Percentage(p) = v {
                     Ok(p)
@@ -302,9 +315,10 @@ impl FeatureFlagManager {
     /// 锁定功能标志
     pub fn lock_flag(&self, name: &str) -> FeatureResult<()> {
         let mut flags = self.flags.write().unwrap();
-        let flag = flags.get_mut(name)
+        let flag = flags
+            .get_mut(name)
             .ok_or_else(|| FeatureFlagError::FlagNotFound {
-                name: name.to_string()
+                name: name.to_string(),
             })?;
 
         flag.locked = true;
@@ -314,9 +328,10 @@ impl FeatureFlagManager {
     /// 解锁功能标志
     pub fn unlock_flag(&self, name: &str) -> FeatureResult<()> {
         let mut flags = self.flags.write().unwrap();
-        let flag = flags.get_mut(name)
+        let flag = flags
+            .get_mut(name)
             .ok_or_else(|| FeatureFlagError::FlagNotFound {
-                name: name.to_string()
+                name: name.to_string(),
             })?;
 
         flag.locked = false;
@@ -362,7 +377,11 @@ impl FeatureFlagManager {
                 locked: true,
                 created_at: chrono::Utc::now(),
                 updated_at: chrono::Utc::now(),
-                tags: vec!["core".to_string(), "service".to_string(), "required".to_string()],
+                tags: vec![
+                    "core".to_string(),
+                    "service".to_string(),
+                    "required".to_string(),
+                ],
                 group: Some("core-layer".to_string()),
             },
             FlagMetadata {

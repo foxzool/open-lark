@@ -14,7 +14,7 @@ pub enum DependencyError {
     #[error("检测到循环依赖: {chain}")]
     CircularDependency {
         /// 循环依赖链
-        chain: String
+        chain: String,
     },
 
     /// 缺少依赖错误
@@ -23,7 +23,7 @@ pub enum DependencyError {
     #[error("缺少依赖: {missing_dependencies:?}")]
     MissingDependencies {
         /// 缺失的依赖服务列表
-        missing_dependencies: Vec<String>
+        missing_dependencies: Vec<String>,
     },
 
     /// 服务不存在错误
@@ -32,7 +32,7 @@ pub enum DependencyError {
     #[error("服务 '{service}' 不存在")]
     ServiceNotFound {
         /// 不存在的服务名称
-        service: String
+        service: String,
     },
 }
 
@@ -108,19 +108,17 @@ impl DependencyResolver {
         if let Some(dependencies) = dependency_graph.get(service) {
             for dep in dependencies {
                 if !visited.contains(dep) {
-                    if let Err(chain) = self.dfs_detect_cycle(
-                        dep,
-                        dependency_graph,
-                        visited,
-                        rec_stack,
-                        path,
-                    ) {
+                    if let Err(chain) =
+                        self.dfs_detect_cycle(dep, dependency_graph, visited, rec_stack, path)
+                    {
                         return Err(chain);
                     }
                 } else if rec_stack.contains(dep) {
                     // 找到循环依赖
                     let cycle_start = path.iter().position(|s| s == dep).unwrap();
-                    let cycle_path = path[cycle_start..].iter().chain(std::iter::once(dep))
+                    let cycle_path = path[cycle_start..]
+                        .iter()
+                        .chain(std::iter::once(dep))
                         .cloned()
                         .collect::<Vec<_>>()
                         .join(" -> ");
@@ -295,12 +293,15 @@ impl DependencyResolver {
             let direct_deps = self.get_direct_dependencies(service, dependency_graph)?;
             let all_deps = self.get_all_dependencies(service, dependency_graph)?;
 
-            service_details.insert(service.clone(), ServiceDependencyDetail {
-                name: service.clone(),
-                direct_dependencies: direct_deps,
-                all_dependencies: all_deps.into_iter().collect(),
-                priority: priorities.get(service).copied().unwrap_or(0),
-            });
+            service_details.insert(
+                service.clone(),
+                ServiceDependencyDetail {
+                    name: service.clone(),
+                    direct_dependencies: direct_deps,
+                    all_dependencies: all_deps.into_iter().collect(),
+                    priority: priorities.get(service).copied().unwrap_or(0),
+                },
+            );
         }
 
         Ok(DependencyReport {
@@ -351,8 +352,14 @@ impl DependencyReport {
 
         report.push_str("# 依赖关系分析报告\n\n");
         report.push_str(&format!("📊 **总服务数**: {}\n", self.total_services));
-        report.push_str(&format!("🔄 **循环依赖**: {}\n\n",
-            if self.has_circular_dependencies { "是" } else { "否" }));
+        report.push_str(&format!(
+            "🔄 **循环依赖**: {}\n\n",
+            if self.has_circular_dependencies {
+                "是"
+            } else {
+                "否"
+            }
+        ));
 
         report.push_str("## 📋 服务启动顺序\n\n");
         for (index, service) in self.sorted_services.iter().enumerate() {
@@ -377,18 +384,22 @@ impl DependencyReport {
         report.push_str("## 🔍 详细依赖关系\n\n");
         for (_, detail) in &self.service_details {
             report.push_str(&format!("### {}\n", detail.name));
-            report.push_str(&format!("- 直接依赖: {}\n",
+            report.push_str(&format!(
+                "- 直接依赖: {}\n",
                 if detail.direct_dependencies.is_empty() {
                     "无".to_string()
                 } else {
                     detail.direct_dependencies.join(", ")
-                }));
-            report.push_str(&format!("- 全部依赖: {}\n",
+                }
+            ));
+            report.push_str(&format!(
+                "- 全部依赖: {}\n",
                 if detail.all_dependencies.is_empty() {
                     "无".to_string()
                 } else {
                     detail.all_dependencies.join(", ")
-                }));
+                }
+            ));
             report.push_str(&format!("- 启动优先级: {}\n\n", detail.priority));
         }
 
@@ -429,7 +440,10 @@ mod tests {
 
         let result = resolver.resolve_dependencies(graph);
         assert!(result.is_err());
-        assert!(matches!(result, Err(DependencyError::CircularDependency { .. })));
+        assert!(matches!(
+            result,
+            Err(DependencyError::CircularDependency { .. })
+        ));
     }
 
     #[test]
@@ -440,7 +454,10 @@ mod tests {
         graph.insert("database".to_string(), vec![]);
         graph.insert("cache".to_string(), vec![]);
         graph.insert("auth".to_string(), vec!["database".to_string()]);
-        graph.insert("api".to_string(), vec!["auth".to_string(), "cache".to_string()]);
+        graph.insert(
+            "api".to_string(),
+            vec!["auth".to_string(), "cache".to_string()],
+        );
 
         let report = resolver.generate_dependency_report(&graph);
         assert!(report.is_ok());
@@ -450,9 +467,7 @@ mod tests {
         assert!(!report.has_circular_dependencies);
 
         // 验证启动顺序
-        let first_services: HashSet<_> = report.sorted_services.iter()
-            .take(2)
-            .collect();
+        let first_services: HashSet<_> = report.sorted_services.iter().take(2).collect();
         assert!(first_services.contains(&"database".to_string()));
         assert!(first_services.contains(&"cache".to_string()));
     }

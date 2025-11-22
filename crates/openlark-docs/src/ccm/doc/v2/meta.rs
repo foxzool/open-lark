@@ -6,10 +6,7 @@
 use crate::prelude::*;
 use openlark_core::{api::ApiRequest, constants::AccessTokenType, http::Transport, SDKResult};
 
-use super::{
-    requests::GetDocMetaV2Request,
-    responses::GetDocMetaV2Response,
-};
+use super::{requests::GetDocMetaV2Request, responses::GetDocMetaV2Response};
 
 /// 文档元信息服务
 #[derive(Clone, Debug)]

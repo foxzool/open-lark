@@ -2,7 +2,7 @@
 //!
 //! 提供统一的通讯服务接口，封装底层openlark-communication crate
 
-use crate::{Config, Result, DefaultServiceRegistry};
+use crate::{Config, DefaultServiceRegistry, Result};
 use std::sync::Arc;
 
 /// 📡 通讯服务 - 统一访问接口

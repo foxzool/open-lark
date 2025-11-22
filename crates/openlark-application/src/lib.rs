@@ -16,6 +16,12 @@ pub struct WorkplaceService {
     // client: std::sync::Arc<DefaultLarkClient>,
 }
 
+impl Default for WorkplaceService {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl WorkplaceService {
     /// 创建新的应用服务实例
     pub fn new() -> Self {

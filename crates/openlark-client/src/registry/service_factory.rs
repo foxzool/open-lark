@@ -2,13 +2,13 @@
 //!
 //! 负责创建和管理服务实例，支持延迟初始化和单例模式
 
-use std::collections::HashMap;
-use std::sync::{Arc, RwLock};
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+use std::sync::{Arc, RwLock};
 use thiserror::Error;
 
-use super::{ServiceMetadata, ServiceStatus, RegistryResult};
+use super::{RegistryResult, ServiceMetadata, ServiceStatus};
 use crate::Config;
 
 /// 服务工厂错误
@@ -22,7 +22,7 @@ pub enum FactoryError {
         /// 创建失败的服务名称
         name: String,
         /// 失败原因
-        reason: String
+        reason: String,
     },
 
     /// 不支持的服务错误
@@ -31,7 +31,7 @@ pub enum FactoryError {
     #[error("服务 '{name}' 不支持")]
     UnsupportedService {
         /// 不支持的服务名称
-        name: String
+        name: String,
     },
 
     /// 无效配置错误
@@ -40,7 +40,7 @@ pub enum FactoryError {
     #[error("配置无效: {reason}")]
     InvalidConfig {
         /// 配置无效的原因
-        reason: String
+        reason: String,
     },
 
     /// 依赖服务未就绪错误
@@ -49,7 +49,7 @@ pub enum FactoryError {
     #[error("依赖服务未就绪: {dependencies:?}")]
     DependenciesNotReady {
         /// 未就绪的依赖服务列表
-        dependencies: Vec<String>
+        dependencies: Vec<String>,
     },
 }
 
@@ -158,10 +158,12 @@ impl ServiceInstanceManager {
         dependencies: &HashMap<String, Box<dyn std::any::Any + Send + Sync>>,
     ) -> FactoryResult<Box<dyn std::any::Any + Send + Sync>> {
         let factories = self.factories.read().unwrap();
-        let factory = factories.get(&metadata.name)
-            .ok_or_else(|| FactoryError::UnsupportedService {
-                name: metadata.name.clone(),
-            })?;
+        let factory =
+            factories
+                .get(&metadata.name)
+                .ok_or_else(|| FactoryError::UnsupportedService {
+                    name: metadata.name.clone(),
+                })?;
 
         // 验证配置
         factory.validate_config(metadata, &self.config)?;
@@ -170,7 +172,9 @@ impl ServiceInstanceManager {
         factory.check_dependencies(metadata, dependencies)?;
 
         // 创建实例
-        let instance = factory.create_service(metadata, &self.config, dependencies).await?;
+        let instance = factory
+            .create_service(metadata, &self.config, dependencies)
+            .await?;
 
         // 存储实例（如果需要）
         if metadata.status == ServiceStatus::Running {
@@ -198,7 +202,10 @@ impl ServiceInstanceManager {
     }
 
     /// 简化的Any克隆
-    fn clone_any(&self, _any: &Box<dyn std::any::Any + Send + Sync>) -> Box<dyn std::any::Any + Send + Sync> {
+    fn clone_any(
+        &self,
+        _any: &Box<dyn std::any::Any + Send + Sync>,
+    ) -> Box<dyn std::any::Any + Send + Sync> {
         // 这是一个简化实现，实际应该根据具体类型进行克隆
         // 或者使用 Arc 包装来实现共享
         Box::new(())
@@ -227,9 +234,7 @@ impl ServiceInstanceManager {
         let mut instances = self.instances.write().unwrap();
         let cutoff_time = chrono::Utc::now() - chrono::Duration::seconds(timeout_seconds as i64);
 
-        instances.retain(|_, instance| {
-            instance.last_accessed > cutoff_time || instance.singleton
-        });
+        instances.retain(|_, instance| instance.last_accessed > cutoff_time || instance.singleton);
     }
 }
 
@@ -267,47 +272,47 @@ impl ServiceFactory for DefaultServiceFactory {
                 // 创建通讯服务实例
                 let service = PlaceholderService::new(&metadata.name);
                 Ok(Box::new(service))
-            },
+            }
             "docs" => {
                 // 创建文档服务实例
                 let service = PlaceholderService::new(&metadata.name);
                 Ok(Box::new(service))
-            },
+            }
             "auth" => {
                 // 创建认证服务实例
                 let service = PlaceholderService::new(&metadata.name);
                 Ok(Box::new(service))
-            },
+            }
             "hr" => {
                 // 创建人力资源服务实例
                 let service = PlaceholderService::new(&metadata.name);
                 Ok(Box::new(service))
-            },
+            }
             "ai" => {
                 // 创建AI服务实例
                 let service = PlaceholderService::new(&metadata.name);
                 Ok(Box::new(service))
-            },
+            }
             "calendar" => {
                 // 创建日历服务实例
                 let service = PlaceholderService::new(&metadata.name);
                 Ok(Box::new(service))
-            },
+            }
             "admin" => {
                 // 创建管理服务实例
                 let service = PlaceholderService::new(&metadata.name);
                 Ok(Box::new(service))
-            },
+            }
             "approval" => {
                 // 创建审批服务实例
                 let service = PlaceholderService::new(&metadata.name);
                 Ok(Box::new(service))
-            },
+            }
             "helpdesk" => {
                 // 创建帮助台服务实例
                 let service = PlaceholderService::new(&metadata.name);
                 Ok(Box::new(service))
-            },
+            }
             _ => Err(FactoryError::UnsupportedService {
                 name: metadata.name.clone(),
             }),
@@ -337,7 +342,7 @@ impl ServiceFactory for DefaultServiceFactory {
                         reason: "base_url 不能为空".to_string(),
                     });
                 }
-            },
+            }
             _ => {
                 // 其他服务的特定验证
             }
@@ -505,7 +510,9 @@ mod tests {
 
         let dependencies = HashMap::new();
 
-        let result = factory.create_service(&metadata, &config, &dependencies).await;
+        let result = factory
+            .create_service(&metadata, &config, &dependencies)
+            .await;
         // 目前会返回错误，因为 test-service 不在支持的列表中
         assert!(result.is_err());
     }

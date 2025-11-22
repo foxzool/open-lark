@@ -221,14 +221,26 @@ async fn test_batch_operations() {
 
     // 这里主要测试批量操作的接口定义
     let messages = vec![
-        ("user1".to_string(), "open_id".to_string(), "批量消息1".to_string()),
-        ("user2".to_string(), "open_id".to_string(), "批量消息2".to_string()),
+        (
+            "user1".to_string(),
+            "open_id".to_string(),
+            "批量消息1".to_string(),
+        ),
+        (
+            "user2".to_string(),
+            "open_id".to_string(),
+            "批量消息2".to_string(),
+        ),
     ];
 
     assert_eq!(messages.len(), 2);
     println!("  📦 批量消息结构: {} 条", messages.len());
 
-    let user_ids = vec!["user1".to_string(), "user2".to_string(), "user3".to_string()];
+    let user_ids = vec![
+        "user1".to_string(),
+        "user2".to_string(),
+        "user3".to_string(),
+    ];
     assert_eq!(user_ids.len(), 3);
     println!("  👤 批量用户结构: {} 个", user_ids.len());
 

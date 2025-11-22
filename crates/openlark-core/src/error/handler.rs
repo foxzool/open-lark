@@ -417,9 +417,9 @@ impl ErrorHelper {
             ErrorHandlingCategory::Authentication => ErrorRecoveryStrategy::Reauthenticate,
             ErrorHandlingCategory::Permission => ErrorRecoveryStrategy::RequestPermission,
             ErrorHandlingCategory::Parameter => ErrorRecoveryStrategy::ValidateAndRetry,
-            ErrorHandlingCategory::Network | ErrorHandlingCategory::RateLimit | ErrorHandlingCategory::Retryable => {
-                ErrorRecoveryStrategy::RetryWithBackoff
-            }
+            ErrorHandlingCategory::Network
+            | ErrorHandlingCategory::RateLimit
+            | ErrorHandlingCategory::Retryable => ErrorRecoveryStrategy::RetryWithBackoff,
             ErrorHandlingCategory::Server => ErrorRecoveryStrategy::RetryWithDelay,
             _ => ErrorRecoveryStrategy::ManualIntervention,
         }

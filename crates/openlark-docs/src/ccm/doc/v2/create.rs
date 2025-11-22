@@ -5,10 +5,7 @@
 use crate::prelude::*;
 use openlark_core::{api::ApiRequest, http::Transport, SDKResult};
 
-use super::{
-    requests::CreateDocV2Request,
-    responses::CreateDocV2Response,
-};
+use super::{requests::CreateDocV2Request, responses::CreateDocV2Response};
 
 /// 文档创建服务
 #[derive(Clone, Debug)]
@@ -36,7 +33,9 @@ impl CreateDocService {
             url: endpoint,
             headers: std::collections::HashMap::new(),
             query: std::collections::HashMap::new(),
-            body: Some(openlark_core::api::RequestData::Json(serde_json::to_value(req)?)),
+            body: Some(openlark_core::api::RequestData::Json(serde_json::to_value(
+                req,
+            )?)),
             timeout: None,
             _phantom: std::marker::PhantomData,
         };
@@ -88,7 +87,8 @@ impl CreateDocBuilder {
 
     /// 构建请求
     pub fn build(self) -> SDKResult<CreateDocV2Request> {
-        self.request.validate()
+        self.request
+            .validate()
             .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
         Ok(self.request)
     }

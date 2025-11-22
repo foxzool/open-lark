@@ -16,7 +16,9 @@ async fn test_real_api_workflow() {
 
     // 1. 创建客户端
     println!("📝 步骤1: 创建客户端");
-    let client = OpenLarkClient::from_env().await.expect("无法创建客户端，请检查环境配置");
+    let client = OpenLarkClient::from_env()
+        .await
+        .expect("无法创建客户端，请检查环境配置");
     println!("✅ 客户端创建成功");
 
     // 2. 检查服务可用性
@@ -38,7 +40,10 @@ async fn test_real_api_workflow() {
                 println!("✅ 应用访问令牌获取成功");
                 println!("  类型: {}", token.token_type);
                 println!("  过期时间: {}", token.expires_at);
-                println!("  令牌前缀: {}...", &token.access_token[..std::cmp::min(10, token.access_token.len())]);
+                println!(
+                    "  令牌前缀: {}...",
+                    &token.access_token[..std::cmp::min(10, token.access_token.len())]
+                );
             }
             Err(e) => {
                 println!("❌ 应用访问令牌获取失败: {}", e);
@@ -51,7 +56,10 @@ async fn test_real_api_workflow() {
     if client.is_service_available("communication") {
         // 发送测试消息
         let test_message = format!("测试消息 - {}", chrono::Utc::now());
-        match client.send_text_message("test_user", "open_id", &test_message).await {
+        match client
+            .send_text_message("test_user", "open_id", &test_message)
+            .await
+        {
             Ok(result) => {
                 println!("✅ 测试消息发送成功");
                 println!("  消息ID: {}", result.message_id);
@@ -63,7 +71,10 @@ async fn test_real_api_workflow() {
         }
 
         // 获取消息列表
-        match client.list_messages("test_chat", "chat_id", Some(10), None).await {
+        match client
+            .list_messages("test_chat", "chat_id", Some(10), None)
+            .await
+        {
             Ok(result) => {
                 println!("✅ 消息列表获取成功");
                 println!("  消息数量: {}", result.messages.len());
@@ -121,7 +132,10 @@ async fn test_real_api_workflow() {
     if client.is_service_available("ai") {
         // AI文本生成
         let test_prompt = "请写一首关于春天的简短诗歌";
-        match client.generate_text(test_prompt, None, Some(0.7), Some(100)).await {
+        match client
+            .generate_text(test_prompt, None, Some(0.7), Some(100))
+            .await
+        {
             Ok(result) => {
                 println!("✅ AI文本生成成功");
                 println!("  生成的文本: {}", result.text);
@@ -139,8 +153,16 @@ async fn test_real_api_workflow() {
 
     // 批量发送消息
     let batch_messages = vec![
-        ("batch_user1".to_string(), "open_id".to_string(), "批量测试消息1".to_string()),
-        ("batch_user2".to_string(), "open_id".to_string(), "批量测试消息2".to_string()),
+        (
+            "batch_user1".to_string(),
+            "open_id".to_string(),
+            "批量测试消息1".to_string(),
+        ),
+        (
+            "batch_user2".to_string(),
+            "open_id".to_string(),
+            "批量测试消息2".to_string(),
+        ),
     ];
 
     match client.batch_send_text_messages(batch_messages).await {
@@ -191,7 +213,12 @@ async fn test_mock_workflow() {
     // 验证服务适配器
     for service_name in adapter_services {
         if let Some(adapter) = dispatcher.get_adapter(service_name) {
-            println!("  ✅ {}: {} (v{})", service_name, adapter.name(), adapter.version());
+            println!(
+                "  ✅ {}: {} (v{})",
+                service_name,
+                adapter.name(),
+                adapter.version()
+            );
 
             let health = adapter.health_check().await.unwrap_or(false);
             println!("    状态: {}", if health { "健康" } else { "异常" });
@@ -285,9 +312,15 @@ async fn test_performance_metrics() {
 
     // 性能断言
     assert!(creation_time < Duration::from_secs(1), "客户端创建时间过长");
-    assert!(discovery_time < Duration::from_millis(100), "服务发现时间过长");
+    assert!(
+        discovery_time < Duration::from_millis(100),
+        "服务发现时间过长"
+    );
     assert!(health_time < Duration::from_millis(500), "健康检查时间过长");
-    assert!(dispatcher_time < Duration::from_millis(50), "分发器列表时间过长");
+    assert!(
+        dispatcher_time < Duration::from_millis(50),
+        "分发器列表时间过长"
+    );
 
     println!("✅ 性能指标测试通过！");
 }
@@ -301,7 +334,11 @@ mod e2e_utils {
 
     /// 创建测试用的消息内容
     pub fn create_test_message(prefix: &str) -> String {
-        format!("{} - 测试消息 - {}", prefix, chrono::Utc::now().format("%Y-%m-%d %H:%M:%S"))
+        format!(
+            "{} - 测试消息 - {}",
+            prefix,
+            chrono::Utc::now().format("%Y-%m-%d %H:%M:%S")
+        )
     }
 
     /// 验证API响应格式

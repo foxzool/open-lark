@@ -13,19 +13,19 @@ use openlark_core::config::Config;
 pub mod advanced_search;
 pub mod batch_operations;
 pub mod enhanced_query;
-pub mod role_management;
 pub mod role_builders;
+pub mod role_management;
 
 // 重新导出主要类型
 pub use advanced_search::{AdvancedSearchRequestBuilder, AdvancedSearchService};
 pub use batch_operations::{BatchOperationsService, BulkOperationRequestBuilder};
 pub use enhanced_query::{EnhancedQueryService, SmartQueryRequestBuilder};
+pub use role_builders::{
+    CreateRoleV2RequestBuilder, ListRolesV2RequestBuilder, UpdateRoleV2RequestBuilder,
+};
 pub use role_management::{
     CreateRoleV2Request, CreateRoleV2Response, ListRolesV2Response, RoleManagementV2Service,
     RoleV2, UpdateRoleV2Request, UpdateRoleV2Response,
-};
-pub use role_builders::{
-    CreateRoleV2RequestBuilder, ListRolesV2RequestBuilder, UpdateRoleV2RequestBuilder,
 };
 
 /// Bitable V2 服务
@@ -124,7 +124,11 @@ mod tests {
         let valid_request = UpdateRoleV2Request {
             name: Some("高级编辑者".to_string()),
             description: Some("具有高级权限".to_string()),
-            permissions: vec!["table:read".to_string(), "table:write".to_string(), "table:delete".to_string()],
+            permissions: vec![
+                "table:read".to_string(),
+                "table:write".to_string(),
+                "table:delete".to_string(),
+            ],
         };
 
         assert!(valid_request.validate().is_ok());

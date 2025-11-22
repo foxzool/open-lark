@@ -2,8 +2,10 @@
 //!
 //! 极简设计，1行代码创建客户端，类型安全的服务访问
 
-use crate::{traits::LarkClient, Config, Result, DefaultServiceRegistry, ServiceMetadata, ServiceStatus};
 use crate::registry::ServiceRegistry;
+use crate::{
+    traits::LarkClient, Config, DefaultServiceRegistry, Result, ServiceMetadata, ServiceStatus,
+};
 use std::sync::Arc;
 
 /// 🚀 OpenLark客户端 - 极简设计
@@ -70,36 +72,36 @@ impl Client {
     }
 
     // /// 🏢 访问管理服务
-  // ///
-  // /// 需要 `admin` feature
-  // #[cfg(feature = "admin")]
-  // pub fn admin(&self) -> crate::services::AdminService<'_> {
-  //     crate::services::AdminService::new(&self.config)
-  // }
+    // ///
+    // /// 需要 `admin` feature
+    // #[cfg(feature = "admin")]
+    // pub fn admin(&self) -> crate::services::AdminService<'_> {
+    //     crate::services::AdminService::new(&self.config)
+    // }
 
-  // /// ✅ 访问审批服务
-  // ///
-  // /// 需要 `approval` feature
-  // #[cfg(feature = "approval")]
-  // pub fn approval(&self) -> crate::services::ApprovalService<'_> {
-  //     crate::services::ApprovalService::new(&self.config)
-  // }
+    // /// ✅ 访问审批服务
+    // ///
+    // /// 需要 `approval` feature
+    // #[cfg(feature = "approval")]
+    // pub fn approval(&self) -> crate::services::ApprovalService<'_> {
+    //     crate::services::ApprovalService::new(&self.config)
+    // }
 
-  /// 🔐 访问认证服务
-  ///
-  /// 需要 `auth` feature
-  #[cfg(feature = "auth")]
-  pub fn auth(&self) -> crate::services::AuthService<'_> {
+    /// 🔐 访问认证服务
+    ///
+    /// 需要 `auth` feature
+    #[cfg(feature = "auth")]
+    pub fn auth(&self) -> crate::services::AuthService<'_> {
         crate::services::AuthService::new(&self.config)
-  }
+    }
 
-  // /// 🤝 访问协作服务
-  // ///
-  // /// 需要 `collab` feature
-  // #[cfg(feature = "collab")]
-  // pub fn collab(&self) -> crate::services::CollabService<'_> {
-  //     crate::services::CollabService::new(&self.config)
-  // }
+    // /// 🤝 访问协作服务
+    // ///
+    // /// 需要 `collab` feature
+    // #[cfg(feature = "collab")]
+    // pub fn collab(&self) -> crate::services::CollabService<'_> {
+    //     crate::services::CollabService::new(&self.config)
+    // }
 
     /// 📡 访问通讯服务
     ///
@@ -110,28 +112,28 @@ impl Client {
     }
 
     // /// 📄 访问文档服务
-  // ///
-  // /// 需要 `docs` feature
-  // #[cfg(feature = "docs")]
-  // pub fn docs(&self) -> crate::services::DocsService<'_> {
-  //     crate::services::DocsService::new(&self.config)
-  // }
+    // ///
+    // /// 需要 `docs` feature
+    // #[cfg(feature = "docs")]
+    // pub fn docs(&self) -> crate::services::DocsService<'_> {
+    //     crate::services::DocsService::new(&self.config)
+    // }
 
-  // /// 💬 访问帮助台服务
-  // ///
-  // /// 需要 `helpdesk` feature
-  // #[cfg(feature = "helpdesk")]
-  // pub fn helpdesk(&self) -> crate::services::HelpdeskService<'_> {
-  //     crate::services::HelpdeskService::new(&self.config)
-  // }
+    // /// 💬 访问帮助台服务
+    // ///
+    // /// 需要 `helpdesk` feature
+    // #[cfg(feature = "helpdesk")]
+    // pub fn helpdesk(&self) -> crate::services::HelpdeskService<'_> {
+    //     crate::services::HelpdeskService::new(&self.config)
+    // }
 
-  // /// 💼 访问招聘服务
-  // ///
-  // /// 需要 `hire` feature
-  // #[cfg(feature = "hire")]
-  // pub fn hire(&self) -> crate::services::HireService<'_> {
-  //     crate::services::HireService::new(&self.config)
-  // }
+    // /// 💼 访问招聘服务
+    // ///
+    // /// 需要 `hire` feature
+    // #[cfg(feature = "hire")]
+    // pub fn hire(&self) -> crate::services::HireService<'_> {
+    //     crate::services::HireService::new(&self.config)
+    // }
 
     /// 👥 访问HR服务
     ///
@@ -150,12 +152,12 @@ impl Client {
     }
 
     // /// 👤 访问人员服务
-  // ///
-  // /// 需要 `people` feature
-  // #[cfg(feature = "people")]
-  // pub fn people(&self) -> crate::services::PeopleService<'_> {
-  //     crate::services::PeopleService::new(&self.config)
-  // }
+    // ///
+    // /// 需要 `people` feature
+    // #[cfg(feature = "people")]
+    // pub fn people(&self) -> crate::services::PeopleService<'_> {
+    //     crate::services::PeopleService::new(&self.config)
+    // }
 
     /// 🔧 获取客户端配置
     pub fn config(&self) -> &Config {
@@ -210,7 +212,10 @@ fn register_core_services(registry: &mut DefaultServiceRegistry) -> Result<()> {
             version: "1.0.0".to_string(),
             description: Some("飞书认证服务，提供令牌管理、身份验证等功能".to_string()),
             dependencies: vec![],
-            provides: vec!["token-management".to_string(), "permission-control".to_string()],
+            provides: vec![
+                "token-management".to_string(),
+                "permission-control".to_string(),
+            ],
             status: ServiceStatus::Uninitialized,
             priority: 1,
         };
@@ -225,7 +230,11 @@ fn register_core_services(registry: &mut DefaultServiceRegistry) -> Result<()> {
             version: "1.0.0".to_string(),
             description: Some("飞书通讯服务，提供消息、联系人、群组等功能".to_string()),
             dependencies: vec!["auth".to_string()],
-            provides: vec!["im".to_string(), "contacts".to_string(), "groups".to_string()],
+            provides: vec![
+                "im".to_string(),
+                "contacts".to_string(),
+                "groups".to_string(),
+            ],
             status: ServiceStatus::Uninitialized,
             priority: 2,
         };
@@ -240,7 +249,11 @@ fn register_core_services(registry: &mut DefaultServiceRegistry) -> Result<()> {
             version: "1.0.0".to_string(),
             description: Some("飞书文档服务，提供云文档、表格、知识库等功能".to_string()),
             dependencies: vec!["auth".to_string()],
-            provides: vec!["cloud-docs".to_string(), "sheets".to_string(), "wiki".to_string()],
+            provides: vec![
+                "cloud-docs".to_string(),
+                "sheets".to_string(),
+                "wiki".to_string(),
+            ],
             status: ServiceStatus::Uninitialized,
             priority: 2,
         };
@@ -260,7 +273,11 @@ fn register_professional_services(registry: &mut DefaultServiceRegistry) -> Resu
             version: "1.0.0".to_string(),
             description: Some("飞书人力资源服务，提供员工、考勤、薪酬等功能".to_string()),
             dependencies: vec!["auth".to_string()],
-            provides: vec!["attendance".to_string(), "corehr".to_string(), "ehr".to_string()],
+            provides: vec![
+                "attendance".to_string(),
+                "corehr".to_string(),
+                "ehr".to_string(),
+            ],
             status: ServiceStatus::Uninitialized,
             priority: 3,
         };
@@ -339,7 +356,11 @@ fn register_enterprise_services(registry: &mut DefaultServiceRegistry) -> Result
             name: "helpdesk".to_string(),
             version: "1.0.0".to_string(),
             description: Some("飞书帮助台服务，提供工单管理、知识库等功能".to_string()),
-            dependencies: vec!["auth".to_string(), "communication".to_string(), "ai".to_string()],
+            dependencies: vec![
+                "auth".to_string(),
+                "communication".to_string(),
+                "ai".to_string(),
+            ],
             provides: vec!["ticket".to_string(), "knowledge-base".to_string()],
             status: ServiceStatus::Uninitialized,
             priority: 6,
@@ -582,7 +603,8 @@ mod tests {
         }
 
         fn increment_request_count(&self) {
-            self.request_count.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+            self.request_count
+                .fetch_add(1, std::sync::atomic::Ordering::SeqCst);
         }
 
         fn get_request_count(&self) -> u64 {
@@ -642,7 +664,8 @@ mod tests {
         }
 
         async fn post(&self, endpoint: &str, data: &str) -> crate::Result<String> {
-            self.send_request(&format!("POST {} {}", endpoint, data)).await
+            self.send_request(&format!("POST {} {}", endpoint, data))
+                .await
         }
     }
 
@@ -680,7 +703,10 @@ mod tests {
         // 测试配置错误时的认证操作
         let refresh_result = client.refresh_token().await;
         assert!(refresh_result.is_err());
-        assert!(matches!(refresh_result.unwrap_err(), Error::InvalidConfig(_)));
+        assert!(matches!(
+            refresh_result.unwrap_err(),
+            Error::InvalidConfig(_)
+        ));
     }
 
     #[tokio::test]
@@ -714,14 +740,13 @@ mod tests {
     async fn test_async_concurrent_operations() {
         use tokio::task::JoinSet;
 
-        let client = std::sync::Arc::new(MockAsyncClient::new("concurrent_app", "concurrent_secret"));
+        let client =
+            std::sync::Arc::new(MockAsyncClient::new("concurrent_app", "concurrent_secret"));
         let mut join_set: JoinSet<crate::Result<String>> = JoinSet::new();
 
         // 并发执行多个认证操作（转换为String返回）
         let client_clone = client.clone();
-        join_set.spawn(async move {
-            client_clone.get_access_token().await
-        });
+        join_set.spawn(async move { client_clone.get_access_token().await });
 
         let client_clone = client.clone();
         join_set.spawn(async move {
@@ -742,9 +767,7 @@ mod tests {
         // 并发执行多个请求操作
         for i in 0..3 {
             let client_clone = client.clone();
-            join_set.spawn(async move {
-                client_clone.get(&format!("endpoint/{}", i)).await
-            });
+            join_set.spawn(async move { client_clone.get(&format!("endpoint/{}", i)).await });
         }
 
         // 等待所有操作完成

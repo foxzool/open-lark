@@ -8,10 +8,9 @@
 //! V2 角色管理 API 提供了更强大的权限控制功能和更灵活的角色配置选项。
 
 use openlark_core::{
-    api::ApiRequest,
+    api::{ApiRequest, HttpMethod},
     config::Config,
     http::Transport,
-    reqwest::Method,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -241,7 +240,10 @@ impl RoleManagementV2Service {
 
         let api_request = ApiRequest::new()
             .method(reqwest::Method::PUT)
-            .path(&format!("/open-apis/base/v2/apps/{}/roles/{}", app_token, role_id))
+            .path(&format!(
+                "/open-apis/base/v2/apps/{}/roles/{}",
+                app_token, role_id
+            ))
             .body(serde_json::to_value(request)?);
 
         let transport = Transport::new(&self.config);

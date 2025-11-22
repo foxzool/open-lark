@@ -711,7 +711,9 @@ mod tests {
         let body_data = TestRequest {
             message: "test".to_string(),
         };
-        api_req.body = Some(crate::api::RequestData::Json(serde_json::to_value(&body_data).unwrap()));
+        api_req.body = Some(crate::api::RequestData::Json(
+            serde_json::to_value(&body_data).unwrap(),
+        ));
 
         assert!(api_req.body.is_some());
         if let Some(crate::api::RequestData::Json(json_body)) = &api_req.body {

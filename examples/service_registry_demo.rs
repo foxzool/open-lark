@@ -2,9 +2,9 @@
 //!
 //! 展示如何使用新的服务注册表、功能标志和依赖解析功能
 
-use std::collections::HashMap;
 use openlark_client::prelude::*;
 use openlark_client::registry::*;
+use std::collections::HashMap;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -44,13 +44,14 @@ async fn main() -> Result<()> {
             println!("✅ 服务启动顺序:");
             for (index, service) in sorted_services.iter().enumerate() {
                 let entry = registry.get_service(service)?;
-                println!("   {}. {} (优先级: {})",
+                println!(
+                    "   {}. {} (优先级: {})",
                     index + 1,
                     entry.metadata.name,
                     entry.metadata.priority
                 );
             }
-        },
+        }
         Err(e) => {
             println!("❌ 依赖解析失败: {}", e);
             return Err(e.into());
@@ -86,7 +87,10 @@ fn register_core_services(registry: &mut DefaultServiceRegistry) -> Result<()> {
             version: "1.0.0".to_string(),
             description: Some("认证和授权服务".to_string()),
             dependencies: vec![],
-            provides: vec!["token-management".to_string(), "permission-control".to_string()],
+            provides: vec![
+                "token-management".to_string(),
+                "permission-control".to_string(),
+            ],
             status: ServiceStatus::Uninitialized,
             priority: 1,
         },
@@ -95,7 +99,11 @@ fn register_core_services(registry: &mut DefaultServiceRegistry) -> Result<()> {
             version: "1.0.0".to_string(),
             description: Some("通讯和消息服务".to_string()),
             dependencies: vec!["auth".to_string()],
-            provides: vec!["im".to_string(), "contacts".to_string(), "groups".to_string()],
+            provides: vec![
+                "im".to_string(),
+                "contacts".to_string(),
+                "groups".to_string(),
+            ],
             status: ServiceStatus::Uninitialized,
             priority: 2,
         },
@@ -104,7 +112,11 @@ fn register_core_services(registry: &mut DefaultServiceRegistry) -> Result<()> {
             version: "1.0.0".to_string(),
             description: Some("文档和知识库服务".to_string()),
             dependencies: vec!["auth".to_string()],
-            provides: vec!["cloud-docs".to_string(), "sheets".to_string(), "wiki".to_string()],
+            provides: vec![
+                "cloud-docs".to_string(),
+                "sheets".to_string(),
+                "wiki".to_string(),
+            ],
             status: ServiceStatus::Uninitialized,
             priority: 2,
         },
@@ -127,7 +139,11 @@ fn register_professional_services(registry: &mut DefaultServiceRegistry) -> Resu
             version: "1.0.0".to_string(),
             description: Some("人力资源服务".to_string()),
             dependencies: vec!["auth".to_string()],
-            provides: vec!["attendance".to_string(), "corehr".to_string(), "ehr".to_string()],
+            provides: vec![
+                "attendance".to_string(),
+                "corehr".to_string(),
+                "ehr".to_string(),
+            ],
             status: ServiceStatus::Uninitialized,
             priority: 3,
         },
@@ -185,7 +201,11 @@ fn register_enterprise_services(registry: &mut DefaultServiceRegistry) -> Result
             name: "helpdesk".to_string(),
             version: "1.0.0".to_string(),
             description: Some("帮助台服务".to_string()),
-            dependencies: vec!["auth".to_string(), "communication".to_string(), "ai".to_string()],
+            dependencies: vec![
+                "auth".to_string(),
+                "communication".to_string(),
+                "ai".to_string(),
+            ],
             provides: vec!["ticket".to_string(), "knowledge-base".to_string()],
             status: ServiceStatus::Uninitialized,
             priority: 6,
@@ -209,8 +229,13 @@ fn demonstrate_feature_flags(registry: &DefaultServiceRegistry) -> Result<()> {
     println!("   📋 默认功能标志状态:");
     let flags = flag_manager.list_flags();
     for flag in &flags {
-        let status = if flag.current_value.as_bool() { "✅ 启用" } else { "❌ 禁用" };
-        println!("      - {}: {} ({})",
+        let status = if flag.current_value.as_bool() {
+            "✅ 启用"
+        } else {
+            "❌ 禁用"
+        };
+        println!(
+            "      - {}: {} ({})",
             flag.name,
             status,
             flag.description.as_deref().unwrap_or("无描述")
@@ -229,7 +254,11 @@ fn demonstrate_feature_flags(registry: &DefaultServiceRegistry) -> Result<()> {
     let test_users = vec!["user_001", "user_002", "user_003"];
     for user in test_users {
         let enabled = flag_manager.is_enabled_for_user("ai", user);
-        println!("      - AI功能对用户 {}: {}", user, if enabled { "启用" } else { "禁用" });
+        println!(
+            "      - AI功能对用户 {}: {}",
+            user,
+            if enabled { "启用" } else { "禁用" }
+        );
     }
 
     Ok(())
@@ -243,9 +272,9 @@ async fn demonstrate_service_lifecycle(registry: &mut DefaultServiceRegistry) ->
     println!("   ✅ 服务初始化完成，当前状态:");
     let services = registry.list_services();
     for service in services {
-        println!("      - {}: {:?}",
-            service.metadata.name,
-            service.metadata.status
+        println!(
+            "      - {}: {:?}",
+            service.metadata.name, service.metadata.status
         );
     }
 
@@ -255,9 +284,9 @@ async fn demonstrate_service_lifecycle(registry: &mut DefaultServiceRegistry) ->
     println!("   ✅ 服务启动完成，当前状态:");
     let services = registry.list_services();
     for service in services {
-        println!("      - {}: {:?}",
-            service.metadata.name,
-            service.metadata.status
+        println!(
+            "      - {}: {:?}",
+            service.metadata.name, service.metadata.status
         );
     }
 
