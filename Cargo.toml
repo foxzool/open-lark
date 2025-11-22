@@ -1,27 +1,30 @@
 [workspace]
 resolver = "2"
 members = [
+    # 核心基础设施模块
     "crates/openlark-core",
-    "crates/openlark-docs",
-    "crates/openlark-auth",
     "crates/openlark-client",
-    "crates/openlark-ai",
-    "crates/openlark-communication",
     "crates/openlark-protocol",
-    "crates/openlark-application",
-    "crates/openlark-approval",
-    "crates/openlark-admin",
-    "crates/openlark-apass",
-    "crates/openlark-calendar",
-    "crates/openlark-collab",
-    "crates/openlark-helpdesk",
-    "crates/openlark-hire",
-    "crates/openlark-hr",
-    "crates/openlark-lingo",
-    "crates/openlark-mail",
-    "crates/openlark-meeting",
-    "crates/openlark-people",
-    "crates/openlark-task",
+
+    # 主要业务模块 - Phase 1 (P0优先级)
+    "crates/openlark-communication",         # 通讯协作 (153 APIs)
+    "crates/openlark-docs",                  # 文档协作 (254 APIs)
+    "crates/openlark-security",              # 安全认证 (44 APIs)
+
+    # 业务流程模块 - Phase 1 (P1优先级)
+    "crates/openlark-workflow",              # 任务审批 (134 APIs)
+    "crates/openlark-meeting",               # 会议日程 (117 APIs)
+
+    # 辅助功能模块 - Phase 2 (P2优先级)
+    "crates/openlark-hr",                    # HR人力管理 (484 APIs)
+    "crates/openlark-mail",                  # 邮件服务 (67 APIs)
+    "crates/openlark-platform",              # 应用管理 (86 APIs)
+
+    # 扩展功能模块 - Phase 3 (P3优先级)
+    "crates/openlark-ai",                    # AI智能 (23 APIs)
+    "crates/openlark-analytics",             # 数据分析 (38 APIs)
+    "crates/openlark-helpdesk",              # 帮助台 (50 APIs)
+    "crates/openlark-user",                  # 个人设置 (21 APIs)
 ]
 
 [workspace.package]
@@ -83,15 +86,30 @@ regex = "1.10"
 uuid = { version = "1.6", features = ["v4", "serde"] }
 lark-websocket-protobuf = "0.1"
 
-# Internal workspace dependencies
-openlark-core = { path = "crates/openlark-core" }
-openlark-auth = { path = "crates/openlark-auth" }
-openlark-client = { path = "crates/openlark-client" }
-openlark-docs = { path = "crates/openlark-docs" }
-openlark-hr = { path = "crates/openlark-hr" }
-openlark-ai = { path = "crates/openlark-ai" }
-openlark-communication = { path = "crates/openlark-communication" }
-openlark-protocol = { path = "crates/openlark-protocol" }
+# Internal workspace dependencies - 核心模块
+openlark-core = { path = "crates/openlark-core", optional = true }
+openlark-client = { path = "crates/openlark-client", optional = true }
+openlark-protocol = { path = "crates/openlark-protocol", optional = true }
+
+# 业务模块 - Phase 1 (P0优先级)
+openlark-communication = { path = "crates/openlark-communication", optional = true }
+openlark-docs = { path = "crates/openlark-docs", optional = true }
+openlark-security = { path = "crates/openlark-security", optional = true }
+
+# 业务流程模块 - Phase 1 (P1优先级)
+openlark-workflow = { path = "crates/openlark-workflow", optional = true }
+openlark-meeting = { path = "crates/openlark-meeting", optional = true }
+
+# 辅助功能模块 - Phase 2 (P2优先级)
+openlark-hr = { path = "crates/openlark-hr", optional = true }
+openlark-mail = { path = "crates/openlark-mail", optional = true }
+openlark-platform = { path = "crates/openlark-platform", optional = true }
+
+# 扩展功能模块 - Phase 3 (P3优先级)
+openlark-ai = { path = "crates/openlark-ai", optional = true }
+openlark-analytics = { path = "crates/openlark-analytics", optional = true }
+openlark-helpdesk = { path = "crates/openlark-helpdesk", optional = true }
+openlark-user = { path = "crates/openlark-user", optional = true }
 
 # Additional service crates
 openlark-admin = { path = "crates/openlark-admin" }
@@ -143,82 +161,124 @@ license.workspace = true
 publish = true  # 主包可以发布
 #
 [features]
-default = ["docs-collaboration"]
+# 默认配置 - 平衡功能和编译时间
+default = ["core", "communication", "docs", "security"]
 
-# === 分层功能系统 ===
-# 文档协作层：满足60%用户的文档协作需求
-docs-collaboration = ["openlark-communication", "openlark-docs", "auth"]
+# 最小配置 - 仅核心功能
+minimal = ["core", "security"]
 
-# IM通讯层：纯通讯功能（传统核心）
-communication-core = ["openlark-communication"]
+# 完整配置 - 所有业务功能
+full = [
+    "core", "client", "protocol",
+    "communication", "docs", "hr", "workflow",
+    "meeting", "mail", "platform", "ai",
+    "security", "analytics", "helpdesk", "user"
+]
 
-# 专业层：企业协作套件
-professional-suite = ["docs-collaboration"]
+# === 核心功能组 ===
+core = ["openlark-core"]
+client = ["openlark-client"]
+protocol = ["openlark-protocol"]
 
-# 企业层：完整企业功能（仅包含已实现的模块）
-enterprise-suite = ["professional-suite", "hr-suite", "ai-suite"]
+# === 业务模块功能组 ===
+# Phase 1: 核心业务模块 (P0优先级) - 细粒度features
+communication = ["openlark-communication"]
+communication-im = ["openlark-communication/im"]
+communication-contact = ["openlark-communication/contact"]
+docs = ["openlark-docs"]
+docs-ccm = ["openlark-docs/ccm"]
+docs-wiki = ["openlark-docs/wiki"]
+security = ["openlark-security"]
+security-auth = ["openlark-security/auth"]
+security-acs = ["openlark-security/acs"]
 
-# 完整层：所有当前可用功能
-full-suite = ["enterprise-suite"]
+# Phase 1: 业务流程模块 (P1优先级)
+workflow = ["openlark-workflow"]
+workflow-task = ["openlark-workflow/task"]
+workflow-approval = ["openlark-workflow/approval"]
+meeting = ["openlark-meeting"]
+meeting-calendar = ["openlark-meeting/calendar"]
+meeting-vc = ["openlark-meeting/vc"]
+
+# Phase 2: 辅助功能模块 (P2优先级)
+hr = ["openlark-hr"]
+hr-core = ["openlark-hr/corehr"]
+hr-hire = ["openlark-hr/hire"]
+hr-attendance = ["openlark-hr/attendance"]
+mail = ["openlark-mail"]
+platform = ["openlark-platform"]
+
+# Phase 3: 扩展功能模块 (P3优先级)
+ai = ["openlark-ai"]
+analytics = ["openlark-analytics"]
+helpdesk = ["openlark-helpdesk"]
+user = ["openlark-user"]
 
 # === 场景化功能组合 ===
-# IM通讯套件：消息、联系人、群组
-im-suite = ["openlark-communication"]
-contact-suite = ["openlark-communication"]
-group-suite = ["openlark-communication"]
+# 基础协作套件 - 适合中小团队
+basic-suite = ["core", "communication", "docs"]
 
-# 文档协作套件：云文档、表格、知识库
-docs-suite = ["openlark-docs"]
-sheets-suite = ["openlark-docs"]
-wiki-suite = ["openlark-docs"]
+# 企业协作套件 - 适合中大型企业
+enterprise-suite = ["basic-suite", "hr", "workflow", "meeting"]
 
-# 人力资源套件：考勤、招聘、CoreHR
-hr-suite = ["openlark-hr"]
-attendance-suite = ["openlark-hr"]
-hire-suite = ["openlark-hr"]
+# 智能企业套件 - 包含AI功能
+smart-enterprise = ["enterprise-suite", "ai", "analytics"]
 
-# AI智能套件：AI助手、智能分析
-ai-suite = ["openlark-ai"]
-lingo-suite = ["openlark-ai"]
+# 完整平台套件 - 所有功能
+complete-suite = ["full"]
+
+# === 开发和测试配置 ===
+# 开发模式 - 包含常用的调试功能
+dev = ["core", "client", "communication", "docs", "security"]
+
+# 测试模式 - 包含测试需要的模块
+test = ["dev"]
 
 # === 技术支持功能 ===
 # WebSocket支持
-websocket = ["openlark-protocol"]
+websocket = ["protocol"]
 
 # OpenTelemetry可观测性
 otel = ["opentelemetry", "opentelemetry_sdk", "opentelemetry-otlp", "tracing-opentelemetry"]
 
-# === 单独功能模块（向后兼容）===
-# 基础设施
-auth = ["openlark-auth"]
-
-# 传统功能名称（向后兼容）
-communication = ["im-suite"]
-cloud-docs = ["docs-suite"]
-ai = ["ai-suite"]
-hr = ["hr-suite"]
+# === 向后兼容性支持 ===
+# 保留旧的功能名称以确保兼容性
+auth = ["security"]
+im = ["communication"]
+cloud-docs = ["docs"]
+hire = ["hr"]
 
 # 注意：以下功能暂时禁用，等待相关模块完全开发完成
 # admin-suite, approval-suite, calendar-suite, collab-suite, helpdesk-suite
 # hire-suite, lingo-suite, mail-suite, meeting-suite, people-suite, task-suite
 
 [dependencies]
-# 核心基础设施（始终包含）- 使用本地路径，因为这是monorepo发布模式
+# 核心基础设施（始终包含）
 openlark-core = { workspace = true }
 
-# 功能模块（通过 feature flag 控制）- 仅包含生产就绪的模块
-openlark-auth = { workspace = true, optional = true }
+# 功能模块（通过 feature flag 控制）
 openlark-client = { workspace = true, optional = true }
-openlark-communication = { workspace = true, optional = true }
-openlark-docs = { workspace = true, optional = true }
-openlark-hr = { workspace = true, optional = true }
-openlark-ai = { workspace = true, optional = true }
 openlark-protocol = { workspace = true, optional = true }
 
-# 注意：以下模块尚未完全开发完成，暂不包含在发布包中
-# openlark-admin, openlark-approval, openlark-application, openlark-apass,
-# openlark-calendar, openlark-collab, openlark-helpdesk, openlark-hire,
-# openlark-lingo, openlark-mail, openlark-meeting, openlark-people, openlark-task
+# Phase 1: 核心业务模块 (P0优先级)
+openlark-communication = { workspace = true, optional = true }
+openlark-docs = { workspace = true, optional = true }
+openlark-security = { workspace = true, optional = true }
+
+# Phase 1: 业务流程模块 (P1优先级)
+openlark-workflow = { workspace = true, optional = true }
+openlark-meeting = { workspace = true, optional = true }
+
+# Phase 2: 辅助功能模块 (P2优先级)
+openlark-hr = { workspace = true, optional = true }
+openlark-mail = { workspace = true, optional = true }
+openlark-platform = { workspace = true, optional = true }
+
+# Phase 3: 扩展功能模块 (P3优先级)
+openlark-ai = { workspace = true, optional = true }
+openlark-analytics = { workspace = true, optional = true }
+openlark-helpdesk = { workspace = true, optional = true }
+openlark-user = { workspace = true, optional = true }
 
 # 重新导出工作空间依赖，为用户提供便利访问
 anyhow = { workspace = true }
