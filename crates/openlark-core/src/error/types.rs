@@ -927,7 +927,9 @@ impl LarkAPIError {
             Self::ApiError { code, .. } => LarkErrorCode::from_code(*code)
                 .map(|ec| ec.severity())
                 .unwrap_or(ErrorSeverity::Error),
-            Self::NetworkError { .. } | Self::RequestError(_) | Self::BadRequest(_) => ErrorSeverity::Error,
+            Self::NetworkError { .. } | Self::RequestError(_) | Self::BadRequest(_) => {
+                ErrorSeverity::Error
+            }
             Self::AuthenticationError { .. } | Self::MissingAccessToken => ErrorSeverity::Error,
             Self::PermissionError { .. } => ErrorSeverity::Error,
             Self::IOErr(_) | Self::DeserializeError(_) => ErrorSeverity::Critical,

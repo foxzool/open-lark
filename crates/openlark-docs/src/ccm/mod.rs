@@ -7,10 +7,10 @@ use crate::prelude::*;
 
 // 重新启用已修复的模块
 // pub mod ccm_sheet;  // 语法错误，待修复
-pub mod doc;        // ✅ 已修复（v2已修复，v1仍有问题）
-// pub mod docx;       // 语法错误，待修复
-// pub mod drive;      // 语法错误，待修复
-// pub mod export_tasks;  // 语法错误，待修复
+pub mod doc; // ✅ 已修复（v2已修复，v1仍有问题）
+             // pub mod docx;       // 语法错误，待修复
+             // pub mod drive;      // 语法错误，待修复
+             // pub mod export_tasks;  // 语法错误，待修复
 pub mod models;
 // pub mod sheets;    // 语法错误，待修复
 // pub mod wiki;      // 语法错误，待修复

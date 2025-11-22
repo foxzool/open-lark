@@ -5,6 +5,7 @@
 
 use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 
 /// 新增字段请求
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

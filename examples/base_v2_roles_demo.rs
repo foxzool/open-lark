@@ -6,8 +6,11 @@
 //! - 更新角色信息
 
 use openlark_core::config::Config;
-use openlark_docs::{
-    base::bitable::{BitableService, v2::{CreateRoleV2RequestBuilder, ListRolesV2RequestBuilder, RoleV2, UpdateRoleV2RequestBuilder}},
+use openlark_docs::base::bitable::{
+    v2::{
+        CreateRoleV2RequestBuilder, ListRolesV2RequestBuilder, RoleV2, UpdateRoleV2RequestBuilder,
+    },
+    BitableService,
 };
 
 #[tokio::main]
@@ -55,13 +58,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 示例2: 列出自定义角色
     println!("\n=== 列出自定义角色 V2 ===");
 
-    let list_response = ListRolesV2RequestBuilder::new(
-        config.clone(),
-        "app_token_xxx".to_string(),
-    )
-    .page_size(20)
-    .execute()
-    .await;
+    let list_response = ListRolesV2RequestBuilder::new(config.clone(), "app_token_xxx".to_string())
+        .page_size(20)
+        .execute()
+        .await;
 
     match list_response {
         Ok(response) => {
@@ -167,7 +167,10 @@ mod tests {
 
         // 验证构建器创建成功
         assert_eq!(builder.request.name, "测试角色");
-        assert_eq!(builder.request.description, Some("这是一个测试角色".to_string()));
+        assert_eq!(
+            builder.request.description,
+            Some("这是一个测试角色".to_string())
+        );
         assert_eq!(builder.request.permissions.len(), 2);
     }
 
@@ -176,12 +179,9 @@ mod tests {
         let config = Config::default();
 
         // 测试列表构建器
-        let builder = ListRolesV2RequestBuilder::new(
-            config,
-            "test_app_token".to_string(),
-        )
-        .page_size(10)
-        .page_token("token_123".to_string());
+        let builder = ListRolesV2RequestBuilder::new(config, "test_app_token".to_string())
+            .page_size(10)
+            .page_token("token_123".to_string());
 
         // 验证参数设置正确
         assert_eq!(builder.page_size, Some(10));

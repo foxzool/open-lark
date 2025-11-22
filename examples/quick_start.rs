@@ -29,7 +29,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         demonstrate_docs_features().await?;
     }
 
-
     #[cfg(feature = "hr-suite")]
     {
         println!("✅ 人力资源功能已启用");

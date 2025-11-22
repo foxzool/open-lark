@@ -208,7 +208,9 @@ pub use client::{Client, ClientBuilder};
 pub use config::Config;
 pub use error::{Error, Result};
 pub use features::{FeatureLoader, FeatureSet, FeatureStats};
-pub use registry::{ServiceRegistry, DefaultServiceRegistry, ServiceMetadata, ServiceStatus, ServiceEntry};
+pub use registry::{
+    DefaultServiceRegistry, ServiceEntry, ServiceMetadata, ServiceRegistry, ServiceStatus,
+};
 pub use traits::*;
 
 // 注意：legacy_client 已在 v0.15.0 中移除

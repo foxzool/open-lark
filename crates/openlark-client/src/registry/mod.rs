@@ -2,18 +2,20 @@
 //!
 //! 提供动态服务管理、功能标志控制和依赖解析功能
 
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
-use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
-pub mod service_factory;
-pub mod feature_flags;
 pub mod dependency_resolver;
+pub mod feature_flags;
+pub mod service_factory;
 
-pub use service_factory::*;
-pub use feature_flags::{FeatureFlagManager, FlagValue, FlagMetadata, UserSegment, SegmentCondition};
 pub use dependency_resolver::*;
+pub use feature_flags::{
+    FeatureFlagManager, FlagMetadata, FlagValue, SegmentCondition, UserSegment,
+};
+pub use service_factory::*;
 
 /// 服务注册和发现错误
 #[derive(Error, Debug, Clone)]
@@ -24,7 +26,7 @@ pub enum RegistryError {
     #[error("服务 '{name}' 已存在")]
     ServiceAlreadyExists {
         /// 已存在的服务名称
-        name: String
+        name: String,
     },
 
     /// 服务不存在错误
@@ -33,7 +35,7 @@ pub enum RegistryError {
     #[error("服务 '{name}' 不存在")]
     ServiceNotFound {
         /// 不存在的服务名称
-        name: String
+        name: String,
     },
 
     /// 循环依赖错误
@@ -42,7 +44,7 @@ pub enum RegistryError {
     #[error("循环依赖检测: {dependency_chain}")]
     CircularDependency {
         /// 循环依赖链
-        dependency_chain: String
+        dependency_chain: String,
     },
 
     /// 缺少依赖服务错误
@@ -51,7 +53,7 @@ pub enum RegistryError {
     #[error("缺少依赖服务: {missing_dependencies:?}")]
     MissingDependencies {
         /// 缺失的依赖服务列表
-        missing_dependencies: Vec<String>
+        missing_dependencies: Vec<String>,
     },
 
     /// 无效功能标志错误
@@ -60,7 +62,7 @@ pub enum RegistryError {
     #[error("功能标志 '{flag}' 无效")]
     InvalidFeatureFlag {
         /// 无效的功能标志名称
-        flag: String
+        flag: String,
     },
 
     /// 依赖解析错误
@@ -196,7 +198,8 @@ impl DefaultServiceRegistry {
     /// 初始化所有服务
     pub fn initialize_services(&mut self) -> RegistryResult<()> {
         // 按依赖顺序排序服务
-        let sorted_services = self.dependency_resolver
+        let sorted_services = self
+            .dependency_resolver
             .resolve_dependencies(self.get_dependency_graph())?;
 
         // 按顺序初始化服务
@@ -217,7 +220,8 @@ impl DefaultServiceRegistry {
 
     /// 启动所有就绪的服务
     pub fn start_services(&mut self) -> RegistryResult<()> {
-        let ready_services: Vec<String> = self.services
+        let ready_services: Vec<String> = self
+            .services
             .iter()
             .filter(|(_, entry)| entry.metadata.status == ServiceStatus::Ready)
             .map(|(name, _)| name.clone())
@@ -236,7 +240,7 @@ impl ServiceRegistry for DefaultServiceRegistry {
         // 检查服务是否已存在
         if self.services.contains_key(&metadata.name) {
             return Err(RegistryError::ServiceAlreadyExists {
-                name: metadata.name
+                name: metadata.name,
             });
         }
 
@@ -257,7 +261,7 @@ impl ServiceRegistry for DefaultServiceRegistry {
     fn unregister_service(&mut self, name: &str) -> RegistryResult<()> {
         if !self.services.contains_key(name) {
             return Err(RegistryError::ServiceNotFound {
-                name: name.to_string()
+                name: name.to_string(),
             });
         }
 
@@ -266,9 +270,10 @@ impl ServiceRegistry for DefaultServiceRegistry {
     }
 
     fn get_service(&self, name: &str) -> RegistryResult<&ServiceEntry> {
-        self.services.get(name)
+        self.services
+            .get(name)
             .ok_or_else(|| RegistryError::ServiceNotFound {
-                name: name.to_string()
+                name: name.to_string(),
             })
     }
 
@@ -278,11 +283,12 @@ impl ServiceRegistry for DefaultServiceRegistry {
     {
         let entry = self.get_service(name)?;
 
-        entry.instance
+        entry
+            .instance
             .as_ref()
             .and_then(|instance| instance.downcast_ref::<T>())
             .ok_or_else(|| RegistryError::ServiceNotFound {
-                name: format!("类型转换失败: {}", name)
+                name: format!("类型转换失败: {}", name),
             })
     }
 
@@ -295,9 +301,11 @@ impl ServiceRegistry for DefaultServiceRegistry {
     }
 
     fn update_service_status(&mut self, name: &str, status: ServiceStatus) -> RegistryResult<()> {
-        let entry = self.services.get_mut(name)
+        let entry = self
+            .services
+            .get_mut(name)
             .ok_or_else(|| RegistryError::ServiceNotFound {
-                name: name.to_string()
+                name: name.to_string(),
             })?;
 
         entry.metadata.status = status.clone();
@@ -392,6 +400,9 @@ mod tests {
         registry.register_service(metadata.clone()).unwrap();
 
         let result = registry.register_service(metadata);
-        assert!(matches!(result, Err(RegistryError::ServiceAlreadyExists { .. })));
+        assert!(matches!(
+            result,
+            Err(RegistryError::ServiceAlreadyExists { .. })
+        ));
     }
 }

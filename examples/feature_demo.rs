@@ -73,11 +73,19 @@ fn main() {
         demo_professional_layer();
         demo_core_layer();
     }
-    #[cfg(all(feature = "core-layer", not(feature = "professional-layer"), not(feature = "enterprise-layer")))]
+    #[cfg(all(
+        feature = "core-layer",
+        not(feature = "professional-layer"),
+        not(feature = "enterprise-layer")
+    ))]
     {
         demo_core_layer();
     }
-    #[cfg(not(any(feature = "core-layer", feature = "professional-layer", feature = "enterprise-layer")))]
+    #[cfg(not(any(
+        feature = "core-layer",
+        feature = "professional-layer",
+        feature = "enterprise-layer"
+    )))]
     {
         println!("❌ 请至少启用一个功能层");
         println!("   --features \"core-layer\"");
