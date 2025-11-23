@@ -4,48 +4,29 @@ version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
-description = "openlark-docs module for OpenLark SDK"
-
-[dependencies]
-openlark-core = { workspace = true }
-serde = { workspace = true }
-serde_json = { workspace = true }
-reqwest = { workspace = true }
-chrono = { workspace = true }
-tokio = { workspace = true }
-async-trait = { workspace = true }
-rand = { workspace = true }
-serde_repr = { workspace = true }
-log = { workspace = true }
-anyhow = { workspace = true }
-urlencoding = "2.1"
-futures = "0.3"
-regex = "1.0"
-parking_lot = "0.12"
-url = "2.0"
+repository.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+description = "飞书开放平台云文档服务模块 - 文档、表格、知识库API (254 APIs)"
+keywords = ["feishu", "lark", "docs", "api", "cloud-docs", "sheets"]
+categories = ["api-bindings", "web-programming"]
 
 [features]
-default = []
+default = ["ccm", "bitable", "base"]
 
-# ---------------------------------
-# 基础域（Base / Bitable）
-# ---------------------------------
-bitable = []
-base = ["bitable"]
+# === 核心功能模块 ===
+core = []
 
-# ---------------------------------
-# 内容协同域（CCM）
-# - ccm-core：公共类型和 CcmService
-# - 其余 feature 以产品线拆分，可单独启用
-# ---------------------------------
+# === 业务域功能 ===
+# 云文档协同 (174 APIs)
 ccm-core = []
-ccm-doc = ["ccm-core"]
-ccm-docx = ["ccm-core"]
-ccm-drive = ["ccm-core"]
-ccm-sheets-v2 = ["ccm-core"]
-ccm-sheets-v3 = ["ccm-core"]
-ccm-sheets = ["ccm-core", "ccm-sheets-v3"]
-ccm-wiki = ["ccm-core"]
+ccm-doc = ["ccm-core"]           # 文档处理
+ccm-docx = ["ccm-core"]          # DOCX文档
+ccm-drive = ["ccm-core"]         # 云盘文件
+ccm-sheets-v2 = ["ccm-core"]     # 表格 v2
+ccm-sheets-v3 = ["ccm-core"]     # 表格 v3
+ccm-sheets = ["ccm-sheets-v3"]   # 表格 (默认v3)
+ccm-wiki = ["ccm-core"]          # 知识库
 ccm = [
     "ccm-core",
     "ccm-doc",
@@ -55,16 +36,63 @@ ccm = [
     "ccm-wiki",
 ]
 
-# ---------------------------------
-# 其他功能域
-# ---------------------------------
-cardkit = []
-report = []
+# 多维表格 (49 APIs)
+bitable = ["core"]
 
-# ---------------------------------
-# 聚合 feature，方便上层直接启用
-# ---------------------------------
-cloud-docs = ["base", "ccm"]
-all-cloud-docs = ["cloud-docs", "cardkit", "report"]
+# 基础服务 (0 APIs)
+base = ["core"]
+
+# 知识库 (27 APIs)
+baike = ["ccm-wiki"]
+wiki = ["baike"]
+
+# 会议纪要 (4 APIs)
+minutes = ["core"]
+
+# === API版本支持 ===
+v1 = ["core"]
+v2 = ["v1"]
+v3 = ["v2"]
+v4 = ["v3"]
+
+# === 功能组合 ===
+# 完整云文档功能
+full = ["ccm", "bitable", "base", "baike", "minutes", "v4"]
+
+# 向后兼容别名
+cloud-docs = ["ccm", "bitable", "base"]
+all-cloud-docs = ["full"]
+
+[dependencies]
+# 核心依赖
+openlark-core = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+reqwest = { workspace = true }
+chrono = { workspace = true }
+tokio = { workspace = true }
+async-trait = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+
+# 工具依赖
+uuid = { workspace = true }
+url = { workspace = true }
+urlencoding = { workspace = true }
+futures = { workspace = true }
+regex = { workspace = true }
+rand = { workspace = true }
+serde_repr = { workspace = true }
+log = { workspace = true }
+
+# 可选依赖
+parking_lot = { version = "0.12", optional = true }
+
+[dev-dependencies]
+tokio-test = "0.4"
+wiremock = { workspace = true }
+rstest = { workspace = true }
+tempfile = { workspace = true }
+mockall = { workspace = true }
 
 

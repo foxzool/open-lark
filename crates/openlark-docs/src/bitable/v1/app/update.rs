@@ -1,75 +1,96 @@
-#![allow(unused_variables, unused_unsafe)]
+//! 更新应用模块
 
-#![allow(dead_code)]
-#![allow(unused_imports)]
-#![allow(unused_variables)]
-#![allow(unused_mut)]
-#![allow(dead_code)]
-#![allow(unused_variables)]
-#![allow(unused_imports)]
-#![allow(unused_mut)]
-#![allow(non_snake_case)]
-#![allow(clippy::too_many_arguments)]
-#![allow(clippy::module_inception)]
-use SDKResult;use reqwest::Method;
-use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
-use openlark_core::,
-{
-    core::,
-{,
+use openlark_core::{
+    core::{
         BaseResponse,
         ResponseFormat,
-        api::{ApiResponseTrait}
+        api::ApiResponseTrait,
+    },
     constants::AccessTokenType,
-        endpoints::cloud_docs::*,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
+    endpoints::cloud_docs::*,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
 };
-    impl_executable_builder_owned,
-};
-use super::AppService;
-impl AppService {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}/// 更新多维表格元数据请求,
+use serde::{Deserialize, Serialize};
+
+/// 更新应用请求
 #[derive(Clone)]
 pub struct UpdateAppRequest {
-    api_request: ApiRequest,
+    api_request: openlark_core::api::ApiRequest,
     /// 多维表格的 app_token
-    app_token: String,
+    pub app_token: String,
     /// 多维表格的名字
-    name: Option<String>,
-    /// 多维表格是否开启高级权限
-    is_advanced: Option<bool>}
+    pub name: Option<String>,
+    /// 时区
+    pub time_zone: Option<String>,
+}
+
 impl UpdateAppRequest {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}#[derive(Clone)]
+    pub fn new(config: openlark_core::Config) -> Self {
+        Self {
+            api_request: openlark_core::api::ApiRequest::new(
+                config,
+                reqwest::Method::PUT,
+                UPDATE_APP.to_string(),
+            ),
+            app_token: String::new(),
+            name: None,
+            time_zone: None,
+        }
+    }
+
+    pub fn builder() -> UpdateAppRequestBuilder {
+        UpdateAppRequestBuilder::default()
+    }
+}
+
+#[derive(Default)]
 pub struct UpdateAppRequestBuilder {
-    request: UpdateAppRequest}
+    request: UpdateAppRequest,
+}
+
 impl UpdateAppRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}impl_executable_builder_owned!(,
-    UpdateAppRequestBuilder,
-    AppService,
-    UpdateAppRequest,
-    Response<UpdateAppResponse>,
-    update,
-);
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
+        self.request.app_token = app_token.into();
+        self
+    }
+
+    pub fn name(mut self, name: impl Into<String>) -> Self {
+        self.request.name = Some(name.into());
+        self
+    }
+
+    pub fn time_zone(mut self, time_zone: impl Into<String>) -> Self {
+        self.request.time_zone = Some(time_zone.into());
+        self
+    }
+
+    pub fn build(self) -> UpdateAppRequest {
+        self.request
+    }
+}
+
 #[derive(Serialize)]
-struct UpdateAppRequestBody {,
-#[serde(skip_serializing_if = "Option::is_none")]
+struct UpdateAppRequestBody {
+    #[serde(skip_serializing_if = "Option::is_none")]
     name: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    is_advanced: Option<bool>}
+    time_zone: Option<String>,
+}
 
+/// 更新应用响应
 #[derive(Clone)]
 pub struct UpdateAppResponse {
-    /// 多维表格的 app 信息
+    /// 更新的应用信息
     pub app: UpdateAppResponseData,
+}
 
+/// 更新应用响应数据
 #[derive(Clone)]
 pub struct UpdateAppResponseData {
     /// 多维表格的 app_token
@@ -78,43 +99,46 @@ pub struct UpdateAppResponseData {
     pub name: String,
     /// 多维表格的版本号
     pub revision: i32,
-    /// 多维表格是否开启了高级权限
-    pub is_advanced: bool,
-impl ApiResponseTrait for.* {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
+    /// 多维表格的链接
+    pub url: String,
+}
+
+impl ApiResponseTrait for UpdateAppResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
-use serde_json::json;
+
     #[test]
-fn test_update_app_request() {
-        let request = UpdateAppRequest::builder(),
-.app_token()
-            .name()
-.is_advanced()
+    fn test_update_app_request() {
+        let request = UpdateAppRequest::builder()
+            .app_token("bascnmBA*****yGehy8")
+            .name("更新的多维表格")
+            .time_zone("Asia/Shanghai")
             .build();
 
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.name, Some("新的表格名称".to_string()));
-        assert_eq!(request.is_advanced, Some(true));
-#[test]
-    fn test_update_app_request_new() {
-let request = UpdateAppRequest::new("bascnmBA*****yGehy8");
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.name, None);
-        assert_eq!(request.is_advanced, None);
-#[test]
+        assert_eq!(request.name, Some("更新的多维表格".to_string()));
+        assert_eq!(request.time_zone, Some("Asia/Shanghai".to_string()));
+    }
+
+    #[test]
     fn test_update_app_request_body_serialization() {
-let body = UpdateAppRequestBody {,
-            name: Some("新的表格名称".to_string()),
-            is_advanced: Some(true)};
-let serialized = serde_json::to_value(&body).unwrap();
-        let expected = json!({
-            "name": "新的表格名称",
-            "is_advanced": true});
+        let body = UpdateAppRequestBody {
+            name: Some("更新的多维表格".to_string()),
+            time_zone: Some("Asia/Shanghai".to_string()),
+        };
+
+        let serialized = serde_json::to_value(&body).unwrap();
+        let expected = serde_json::json!({
+            "name": "更新的多维表格",
+            "time_zone": "Asia/Shanghai"
+        });
 
         assert_eq!(serialized, expected);
+    }
+}

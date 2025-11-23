@@ -348,8 +348,8 @@ impl CreateFloatImageRequestBuilder {
                 Ok(CreateFloatImageRequest {
                     spreadsheet_token: self.spreadsheet_token.unwrap(),
                     sheet_id: self.sheet_id.unwrap(),
-                    float_image_token: float_image_token.clone()
-                    range: range.clone()
+                    float_image_token: float_image_token.clone(),
+                    range: range.clone(),
                     float_image_id: self.float_image_id,
                     width: self.width,
                     height: self.height,
@@ -588,7 +588,7 @@ impl UpdateFloatImageRequestBuilder {
                 Ok(UpdateFloatImageRequest {
                     spreadsheet_token: self.spreadsheet_token.unwrap(),
                     sheet_id: self.sheet_id.unwrap(),
-                    float_image_id: float_image_id.clone()
+                    float_image_id: float_image_id.clone(),
                     fields: self.fields,
                     range: self.range,
                     width: self.width,

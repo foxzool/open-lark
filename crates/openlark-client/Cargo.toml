@@ -29,23 +29,25 @@ prost = { workspace = true, optional = true }
 reqwest = { workspace = true, optional = true }
 log = { workspace = true, optional = true }
 
-# Optional service dependencies (conditionally included based on feature flags)
+# P0 Phase 1 业务模块依赖
 openlark-communication = { workspace = true, optional = true }
-openlark-hr = { workspace = true, optional = true }
 openlark-docs = { workspace = true, optional = true }
-openlark-ai = { workspace = true, optional = true }
-openlark-auth = { workspace = true, optional = true }
+openlark-security = { workspace = true, optional = true }
 
-# Additional service crates - 循环依赖已修复
-openlark-admin = { workspace = true, optional = true }
-openlark-approval = { workspace = true, optional = true }
-openlark-helpdesk = { workspace = true, optional = true }
-openlark-calendar = { workspace = true, optional = true }
-openlark-application = { workspace = true, optional = true }
-openlark-mail = { workspace = true, optional = true }
+# Phase 2+ 模块依赖（暂时注释）
+# openlark-hr = { workspace = true, optional = true }
+# openlark-admin = { workspace = true, optional = true }
+# openlark-approval = { workspace = true, optional = true }
+# openlark-helpdesk = { workspace = true, optional = true }
+# openlark-application = { workspace = true, optional = true }
+# openlark-mail = { workspace = true, optional = true }
+# openlark-apass = { workspace = true, optional = true }
+# openlark-hire = { workspace = true, optional = true }
+# openlark-lingo = { workspace = true, optional = true }
+# openlark-task = { workspace = true, optional = true }
 
 [features]
-default = ["auth"]
+default = ["communication"]
 
 # Core client feature
 client = []
@@ -53,61 +55,47 @@ client = []
 # WebSocket support
 websocket = ["tokio-tungstenite", "futures-util", "lark-websocket-protobuf", "url", "prost", "reqwest", "log"]
 
-# Business service features
-admin = ["openlark-admin"]                    # 管理和行政功能
-approval = ["openlark-approval"]              # 审批流程
-auth = ["openlark-auth"]                      # 认证和授权（默认启用）
+# P0 Phase 1 business service features
 communication = ["openlark-communication"]    # 通讯和消息
-helpdesk = ["openlark-helpdesk"]              # 帮助台和搜索
-hr = ["openlark-hr"]                          # 人力资源
-ai = ["openlark-ai"]                          # AI 和智能服务
-calendar = ["openlark-calendar"]              # 日历和会议
-application = ["openlark-application"]        # 应用管理
-mail = ["openlark-mail"]                      # 邮件服务
-
 docs = ["openlark-docs"]                    # 文档和知识库
+security = ["openlark-security"]              # 安全认证
 
-# 3-layer architecture features
+# P0 3-layer architecture features
 core-layer = [
     "communication",  # IM、消息、联系人管理
     "docs",           # 云文档、表格、知识库
-    "auth"            # 认证、授权、令牌管理
+    "security",       # 安全认证
 ]
 
-professional-layer = [
-    "core-layer",
-    "hr",             # 人力资源、考勤、招聘
-    "ai",             # AI服务、智能分析
-    "calendar"        # 日历、会议安排、日程管理
-]
-
-enterprise-layer = [
-    "professional-layer",
-    "admin",          # 管理功能、行政服务
-    "approval",       # 审批流程、工作流
-    "helpdesk"        # 帮助台、客服管理、工单系统
-]
-
-# Convenience features - 基础功能组合
-all-services = [
-    "auth", "communication", "hr", "ai", "docs", "calendar", "admin",
-    "approval", "helpdesk", "application", "mail"
+# Convenience features - P0模块组合
+p0-services = [
+    "communication", "docs", "security"
 ]
 
 # Complete client features for easy selection
-client-admin = ["client", "admin"]
-client-approval = ["client", "approval"]
-client-auth = ["client", "auth"]
 client-communication = ["client", "communication"]
-client-helpdesk = ["client", "helpdesk"]
-client-hr = ["client", "hr"]
-client-ai = ["client", "ai"]
-client-calendar = ["client", "calendar"]
-client-application = ["client", "application"]
-client-mail = ["client", "mail"]
-client-all = ["client", "all-services"]
+client-docs = ["client", "docs"]
+client-security = ["client", "security"]
+client-p0 = ["client", "p0-services"]
+
+[dev-dependencies]
+tokio-test = "0.4"
+wiremock = { workspace = true }
+rstest = { workspace = true }
+tempfile = { workspace = true }
+mockall = { workspace = true }
 
 [[example]]
 name = "service_registry_demo"
 path = "../../examples/service_registry_demo.rs"
 required-features = ["communication"]
+
+[[example]]
+name = "docs_service_demo"
+path = "../../examples/docs_service_demo.rs"
+required-features = ["docs"]
+
+[[example]]
+name = "security_service_demo"
+path = "../../examples/security_service_demo.rs"
+required-features = ["security"]
