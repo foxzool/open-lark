@@ -30,21 +30,14 @@ reqwest = { workspace = true, optional = true }
 log = { workspace = true, optional = true }
 
 # P0 Phase 1 业务模块依赖
+openlark-auth = { workspace = true, optional = true }
 openlark-communication = { workspace = true, optional = true }
 openlark-docs = { workspace = true, optional = true }
 openlark-security = { workspace = true, optional = true }
 
-# Phase 2+ 模块依赖（暂时注释）
+# Phase 2+ 模块依赖（暂时只保留存在的）
 # openlark-hr = { workspace = true, optional = true }
-# openlark-admin = { workspace = true, optional = true }
-# openlark-approval = { workspace = true, optional = true }
-# openlark-helpdesk = { workspace = true, optional = true }
-# openlark-application = { workspace = true, optional = true }
-# openlark-mail = { workspace = true, optional = true }
-# openlark-apass = { workspace = true, optional = true }
-# openlark-hire = { workspace = true, optional = true }
-# openlark-lingo = { workspace = true, optional = true }
-# openlark-task = { workspace = true, optional = true }
+# openlark-ai = { workspace = true, optional = true }
 
 [features]
 default = ["communication"]
@@ -56,9 +49,23 @@ client = []
 websocket = ["tokio-tungstenite", "futures-util", "lark-websocket-protobuf", "url", "prost", "reqwest", "log"]
 
 # P0 Phase 1 business service features
+auth = ["openlark-auth"]                      # 身份认证
 communication = ["openlark-communication"]    # 通讯和消息
 docs = ["openlark-docs"]                    # 文档和知识库
 security = ["openlark-security"]              # 安全认证
+
+# P0.5 Phase 2 business service features（暂时注释，等crate存在后启用）
+hr = []                                # 人力资源（crate暂未实现）
+ai = []                                # AI服务（crate暂未实现）
+
+# Additional business services（暂时注释，等crate存在后启用）
+bitable = []                           # 多维表格（crate暂未实现）
+calendar = []                          # 日历会议（crate暂未实现）
+admin = []                             # 管理功能（crate暂未实现）
+approval = []                          # 审批流程（crate暂未实现）
+helpdesk = []                          # 帮助台（crate暂未实现）
+mail = []                              # 邮件服务（crate暂未实现）
+application = []                       # 应用管理（crate暂未实现）
 
 # P0 3-layer architecture features
 core-layer = [

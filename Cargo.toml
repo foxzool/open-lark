@@ -9,6 +9,7 @@ members = [
     # Phase 1: P0 核心业务模块
     "crates/openlark-docs",
     "crates/openlark-security",
+    "crates/openlark-auth",
 
     # 已存在的业务模块
     "crates/openlark-communication",
@@ -90,6 +91,7 @@ openlark-protocol = { path = "crates/openlark-protocol" }
 # Phase 1: P0 核心业务模块
 openlark-docs = { path = "crates/openlark-docs" }
 openlark-security = { path = "crates/openlark-security" }
+openlark-auth = { path = "crates/openlark-auth" }
 openlark-communication = { path = "crates/openlark-communication" }
 
 # Phase 2+ 模块（暂时注释以解决依赖冲突）
