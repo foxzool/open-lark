@@ -1058,7 +1058,7 @@ mod tests {
             "comment123".to_string(),
             "sheet123".to_string(),
             CommentType::Cell,
-            content.clone()
+            content.clone(),
             author.clone()
         )
         .cell_reference("A1".to_string());
@@ -1070,7 +1070,7 @@ mod tests {
             "comment124".to_string(),
             "sheet123".to_string(),
             CommentType::Range,
-            content.clone()
+            content.clone(),
             author.clone()
         )
         .range(Range::from("A1".to_string(), "C3".to_string()));
@@ -1081,7 +1081,7 @@ mod tests {
             "comment125".to_string(),
             "sheet123".to_string(),
             CommentType::Cell,
-            content.clone()
+            content.clone(),
             author.clone()
         );
         assert!(invalid_cell_comment.validate().is_err());
@@ -1091,7 +1091,7 @@ mod tests {
             "comment126".to_string(),
             "sheet123".to_string(),
             CommentType::Range,
-            content.clone()
+            content.clone(),
             author.clone()
         );
         assert!(invalid_range_comment.validate().is_err());

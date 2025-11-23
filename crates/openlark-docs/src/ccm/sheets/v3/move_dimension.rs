@@ -237,7 +237,7 @@ impl MoveDimensionRequestBuilder {
                 Ok(MoveDimensionRequest {
                     spreadsheet_token: self.spreadsheet_token.unwrap(),
                     sheet_id: self.sheet_id.unwrap(),
-                    dimension: dimension.clone()
+                    dimension: dimension.clone(),
                     source_start_index: source_start,
                     source_end_index: source_end,
                     destination_index: dest_index,

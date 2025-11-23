@@ -1,105 +1,187 @@
-#![allow(unused_variables, unused_unsafe)]
+//! 更新数据表模块 (Patch 方式)
+//!
+//! 提供数据表的增量更新功能，使用 JSON Patch 格式进行部分字段更新。
 
-#![allow(dead_code)]
-#![allow(unused_imports)]
-#![allow(unused_variables)]
-#![allow(unused_mut)]
-#![allow(dead_code)]
-#![allow(unused_variables)]
-#![allow(unused_imports)]
-#![allow(unused_mut)]
-#![allow(non_snake_case)]
-#![allow(clippy::too_many_arguments)]
-#![allow(clippy::module_inception)]
-use SDKResult;use reqwest::Method;
-use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
-use openlark_core::,
-{
-    core::,
-{,
-        BaseResponse,
-        ResponseFormat,
-        api::{ApiResponseTrait}
+use openlark_core::{
+    api::ApiRequest,
+    core::{BaseResponse, ResponseFormat, api::ApiResponseTrait},
+    config::Config,
     constants::AccessTokenType,
-        endpoints::cloud_docs::*,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
+    endpoints::cloud_docs::*,
+    http::Transport,
+    reqwest::Method,
+    req_option::RequestOption,
+    service::bitable::v1::{TableData, TableField},
+    SDKResult,
 };
-    impl_executable_builder_owned,
-};
-use super::AppTableService;
-impl AppTableService {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}/// 更新数据表请求,
+use serde::{Deserialize, Serialize};
+
+/// 更新数据表请求 (Patch)
 #[derive(Clone)]
 pub struct PatchTableRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token
-    app_token: String,
+    pub app_token: String,
     /// 数据表的 table_id
-    table_id: String,
-    /// 数据表的新名称
-    name: Option<String>}
-impl PatchTableRequest {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}#[derive(Clone)]
-pub struct PatchTableRequestBuilder {
-    request: PatchTableRequest}
-impl PatchTableRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}impl_executable_builder_owned!(,
-    PatchTableRequestBuilder,
-    AppTableService,
-    PatchTableRequest,
-    Response<PatchTableResponse>,
-    patch,
-);
-#[derive(Serialize)]
-struct PatchTableRequestBody {,
-#[serde(skip_serializing_if = "Option::is_none")]
-    name: Option<String>}
+    pub table_id: String,
+    /// 表名
+    pub name: Option<String>,
+    /// 表字段
+    pub fields: Option<Vec<TableField>>,
+}
 
+impl PatchTableRequest {
+    /// 创建新的更新请求
+    pub fn new(config: Config) -> Self {
+        Self {
+            api_request: ApiRequest::new(config, Method::PATCH, UPDATE_TABLE.to_string()),
+            app_token: String::new(),
+            table_id: String::new(),
+            name: None,
+            fields: None,
+        }
+    }
+
+    /// 创建构建器
+    pub fn builder() -> PatchTableRequestBuilder {
+        PatchTableRequestBuilder::default()
+    }
+}
+
+/// 更新数据表请求构建器
+#[derive(Default)]
+pub struct PatchTableRequestBuilder {
+    request: PatchTableRequest,
+}
+
+impl PatchTableRequestBuilder {
+    /// 创建新的构建器
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 设置应用 token
+    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
+        self.request.app_token = app_token.into();
+        self
+    }
+
+    /// 设置表格 ID
+    pub fn table_id(mut self, table_id: impl Into<String>) -> Self {
+        self.request.table_id = table_id.into();
+        self
+    }
+
+    /// 设置表名
+    pub fn name(mut self, name: impl Into<String>) -> Self {
+        self.request.name = Some(name.into());
+        self
+    }
+
+    /// 设置字段
+    pub fn fields(mut self, fields: Vec<TableField>) -> Self {
+        self.request.fields = Some(fields);
+        self
+    }
+
+    /// 构建请求
+    pub fn build(self) -> PatchTableRequest {
+        self.request
+    }
+}
+
+/// 更新数据表请求体
+#[derive(Serialize)]
+struct PatchTableRequestBody {
+    /// 表名
+    #[serde(skip_serializing_if = "Option::is_none")]
+    name: Option<String>,
+    /// 表字段
+    #[serde(skip_serializing_if = "Option::is_none")]
+    fields: Option<Vec<TableField>>,
+}
+
+/// 更新数据表响应
 #[derive(Clone)]
 pub struct PatchTableResponse {
-    /// 数据表的名称
+    /// 更新的数据表信息
+    pub table: PatchTableResponseData,
+}
+
+/// 更新数据表响应数据
+#[derive(Clone)]
+pub struct PatchTableResponseData {
+    /// 数据表的 table_id
+    pub table_id: String,
+    /// 数据表的名字
     pub name: String,
-impl ApiResponseTrait for.* {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}    fn data_format() -> ResponseFormat {,
-ResponseFormat::Data
+    /// 数据表的版本号
+    pub revision: i32,
+    /// 数据表字段列表
+    pub fields: Vec<TableField>,
+    /// 数据表记录数量
+    pub record_count: i32,
+}
+
+impl ApiResponseTrait for PatchTableResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
-use serde_json::json;
+
     #[test]
-fn test_patch_table_request() {
-        let request = PatchTableRequest::builder(),
-.app_token()
-            .table_id()
-.name()
+    fn test_patch_table_request_builder() {
+        let fields = vec![
+            TableField {
+                field_name: "name".to_string(),
+                field_type: "text".to_string(),
+                ..Default::default()
+            }
+        ];
+
+        let request = PatchTableRequest::builder()
+            .app_token("bascnxxxxxxxxxxxxxxx")
+            .table_id("tblxxxxxxxxxxxxxxx")
+            .name("更新的表格")
+            .fields(fields)
             .build();
 
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.table_id, "tblsRc9GRRXKqhvW");
-        assert_eq!(request.name, Some("更新后的表名".to_string()));
-#[test]
-    ,
-        let request = PatchTableRequest::new("bascnmBA*****yGehy8", "tblsRc9GRRXKqhvW");
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.table_id, "tblsRc9GRRXKqhvW");
-        assert_eq!(request.name, None);
-#[test]
+        assert_eq!(request.app_token, "bascnxxxxxxxxxxxxxxx");
+        assert_eq!(request.table_id, "tblxxxxxxxxxxxxxxx");
+        assert_eq!(request.name, Some("更新的表格".to_string()));
+        assert!(request.fields.is_some());
+    }
+
+    #[test]
     fn test_patch_table_request_body_serialization() {
-let body = PatchTableRequestBody {,
-            name: Some("新表名".to_string())};
-let serialized = serde_json::to_value(&body).unwrap();
-        let expected = json!({,
-"name": "新表名"});
+        let fields = vec![
+            TableField {
+                field_name: "name".to_string(),
+                field_type: "text".to_string(),
+                ..Default::default()
+            }
+        ];
+
+        let body = PatchTableRequestBody {
+            name: Some("更新的表格".to_string()),
+            fields: Some(fields),
+        };
+
+        let serialized = serde_json::to_value(&body).unwrap();
+        let expected = serde_json::json!({
+            "name": "更新的表格",
+            "fields": [
+                {
+                    "field_name": "name",
+                    "field_type": "text"
+                }
+            ]
+        });
 
         assert_eq!(serialized, expected);
+    }
+}

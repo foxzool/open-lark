@@ -14,7 +14,7 @@
 use crate::prelude::*;
 
 // 导入子模块
-pub mod explorer;
+// pub mod explorer; // 暂时禁用，修复编译错误
 pub mod permission;
 
 // 版本化API
@@ -26,8 +26,8 @@ pub mod v2;
 
 // pub use v2::{}; // 暂时注释掉，避免未定义的导入
 
-// 重新导出explorer和permission模块，避免名称冲突
-pub use explorer::ExplorerService;
+// 重新导出permission模块，避免名称冲突
+// pub use explorer::ExplorerService; // 暂时禁用
 pub use permission::PermissionService;
 
 /// 云空间文件管理服务

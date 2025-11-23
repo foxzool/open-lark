@@ -9,7 +9,7 @@ use openlark_core::config::Config;
 #[derive(Clone, Debug)]
 pub struct DocumentService {
     #[allow(dead_code)]
-    config: Config,,
+    config: Config,
 }
 
 impl DocumentService {

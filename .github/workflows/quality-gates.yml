@@ -1,0 +1,142 @@
+name: 质量门禁
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build-and-test:
+    name: 构建和测试
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+
+    - name: 安装 Rust
+      uses: dtolnay/rust-toolchain@master
+      with:
+        toolchain: stable
+        components: rustfmt, clippy
+
+    - name: 缓存依赖
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-
+
+    - name: 检查代码格式
+      run: cargo fmt --all -- --check
+
+    - name: 运行 Clippy
+      run: cargo clippy --all-targets --all-features -- -D warnings
+
+    - name: 构建项目
+      run: cargo build --all-features --verbose
+
+    - name: 运行测试
+      run: cargo test --all-features --verbose
+
+    - name: 检查文档
+      run: cargo doc --all-features --no-deps --document-private-items
+
+  performance-tests:
+    name: 性能测试
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+
+    - name: 安装 Rust
+      uses: dtolnay/rust-toolchain@master
+      with:
+        toolchain: stable
+
+    - name: 缓存依赖
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-
+
+    - name: 运行性能基准测试
+      run: |
+        cargo install criterion
+        cargo bench --bench config_performance
+
+  coverage:
+    name: 测试覆盖率
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+
+    - name: 安装 Rust
+      uses: dtolnay/rust-toolchain@master
+      with:
+        toolchain: stable
+        components: llvm-tools-preview
+
+    - name: 安装 cargo-llvm-cov
+      uses: taiki-e/install-action@cargo-llvm-cov
+
+    - name: 缓存依赖
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-
+
+    - name: 生成覆盖率报告
+      run: cargo llvm-cov --all-features --lcov --output-path lcov.info
+
+    - name: 上传覆盖率到 Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: lcov.info
+        fail_ci_if_error: true
+
+  security-audit:
+    name: 安全审计
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+
+    - name: 安装 Rust
+      uses: dtolnay/rust-toolchain@master
+      with:
+        toolchain: stable
+
+    - name: 安装 cargo-audit
+      run: cargo install cargo-audit
+
+    - name: 运行安全审计
+      run: cargo audit
+
+    - name: 安装 cargo-deny
+      run: cargo install cargo-deny
+
+    - name: 检查许可证和依赖
+      run: cargo deny check

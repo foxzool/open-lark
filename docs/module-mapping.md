@@ -6,13 +6,101 @@
 
 ## API数据总览
 
-基于分析结果，总共有1,688个API，分布在以下业务领域：
+基于 `analysis/data/api_list_export.csv` 分析结果，总共有1,688个API，分布在以下业务领域：
 
 | 总体统计 | 数量 | 占比 |
 |---------|------|------|
 | **总API数量** | **1,688** | **100%** |
-| **业务模块数量** | **12** | - |
+| **业务模块数量** | **28** | - |
 | **保留核心模块** | **3** | - |
+
+## 按bizTag统计的业务领域分布
+
+| bizTag | API数量 | 占比 | 主要功能描述 | 所属模块 |
+|--------|---------|------|-------------|----------|
+| hire | 182 | 10.8% | 招聘管理、Offer、候选人跟踪 | openlark-hr |
+| ccm | 174 | 10.3% | 云文档协同、文档、表格、知识库 | openlark-docs |
+| corehr | 144 | 8.5% | 核心HR、员工管理、组织架构 | openlark-hr |
+| feishu_people | 105 | 6.2% | 人员信息、档案管理 | openlark-hr |
+| contact | 77 | 4.6% | 通讯录、用户信息、部门管理 | openlark-communication |
+| task | 75 | 4.4% | 任务管理、任务分配、跟踪 | openlark-workflow |
+| im | 75 | 4.4% | 即时消息、消息发送、群聊 | openlark-communication |
+| mail | 67 | 4.0% | 邮件发送、接收、管理 | openlark-mail |
+| vc | 56 | 3.3% | 视频会议、会议室管理 | openlark-meeting |
+| approval | 53 | 3.1% | 审批流程、审批定义、管理 | openlark-workflow |
+| helpdesk | 50 | 3.0% | 客服管理、工单系统 | openlark-helpdesk |
+| **base** | **49** | **2.9%** | **多维表格应用、数据表管理** | **openlark-docs** |
+| calendar | 44 | 2.6% | 日历管理、日程安排 | openlark-meeting |
+| attendance | 39 | 2.3% | 考勤记录、请假审批 | openlark-hr |
+| app_engine | 37 | 2.2% | 应用引擎、应用管理 | openlark-platform |
+| application | 35 | 2.1% | 应用管理、配置、部署 | openlark-application |
+| **baike** | **27** | **1.6%** | **企业知识库、Wiki管理** | **openlark-docs** |
+| ai | 23 | 1.4% | AI服务、智能分析 | openlark-ai |
+| directory | 21 | 1.2% | 目录服务、用户搜索 | openlark-platform |
+| compensation_management | 21 | 1.2% | 薪酬管理、薪资计算 | openlark-hr |
+| aily | 21 | 1.2% | 爱力友相关服务 | openlark-communication |
+| performance | 20 | 1.2% | 绩效管理、考核评估 | openlark-hr |
+| meeting_room | 17 | 1.0% | 会议室预订、管理 | openlark-meeting |
+| search | 14 | 0.8% | 搜索服务、内容检索 | openlark-analytics |
+| admin | 14 | 0.8% | 管理功能、系统管理 | openlark-platform |
+| acs | 14 | 0.8% | 访问控制、权限管理 | openlark-security |
+| payroll | 12 | 0.7% | 薪资计算、发放管理 | openlark-hr |
+| okr | 12 | 0.7% | OKR目标管理、绩效跟踪 | openlark-hr |
+| auth | 11 | 0.7% | 身份认证、令牌管理 | openlark-security |
+| security_and_compliance | 8 | 0.5% | 安全合规、安全审计 | openlark-security |
+| **minutes** | **4** | **0.2%** | **会议记录管理** | **openlark-docs** |
+| 其他 | 54 | 3.2% | 其他辅助功能 | 多个模块 |
+
+## 按Project统计的API分布
+
+| Project | API数量 | 占比 | 主要功能 | 相关bizTag |
+|---------|---------|------|---------|-------------|
+| create | 75 | 4.4% | 资源创建操作 | ccm, base, baike, hire, etc. |
+| delete | 61 | 3.6% | 资源删除操作 | ccm, base, baike, hire, etc. |
+| list | 58 | 3.4% | 资源列表查询 | ccm, contact, task, etc. |
+| update | 26 | 1.5% | 资源更新操作 | 多个bizTag |
+| get | 27 | 1.6% | 资源详情获取 | 多个bizTag |
+| batch_create | 8 | 0.5% | 批量创建操作 | base, im, etc. |
+| search | 5 | 0.3% | 搜索功能 | ccm, directory |
+| upload | 4 | 0.2% | 文件上传 | ccm |
+| download | 4 | 0.2% | 文件下载 | ccm |
+| v1 | 10 | 0.6% | v1版本API | 多个bizTag |
+| v2 | 3 | 0.2% | v2版本API | ccm, contact |
+| v3 | 3 | 0.2% | v3版本API | contact, etc. |
+| 其他operations | 1,407 | 83.3% | 其他专用操作 | 多个bizTag |
+
+## 业务域组织架构
+
+### Project-Version-Resource 设计原则
+
+1. **Project层**: 表示具体的业务项目或功能域
+   - `create`, `delete`, `update`, `get` - 标准CRUD操作
+   - `search`, `list` - 查询和搜索功能
+   - `upload`, `download` - 文件传输功能
+
+2. **Version层**: API版本管理
+   - `v1`, `v2`, `v3`, `v4` - 不同版本的API实现
+   - 向后兼容性支持
+   - 渐进式版本升级
+
+3. **Resource层**: 具体的资源类型
+   - `docx`, `drive`, `sheets`, `wiki` - 文档相关资源
+   - `app`, `table`, `view`, `record` - 多维表格资源
+   - `space`, `node`, `entity` - 知识库资源
+   - `employee`, `department`, `offer` - HR相关资源
+
+### 资源命名规范
+
+```rust
+// 标准API路径格式: /open-apis/{project}/{version}/{resource}
+// 示例:
+POST /open-apis/base/v1/apps              // 创建多维表格应用
+GET  /open-apis/base/v1/apps/{app_token}  // 获取应用信息
+POST /open-apis/base/v1/apps/{app_token}/tables  // 创建数据表
+GET  /open-apis/ccm/v1/files               // 获取文件列表
+POST /open-apis/ccm/v1/files/upload_all    // 上传文件
+GET  /open-apis/baike/v1/spaces             // 获取知识库空间
+```
 
 ## 详细模块映射
 
@@ -22,16 +110,19 @@
 **API总数**: 484个 (28.7%)
 **业务价值**: 高 (企业核心业务)
 
-#### 子模块分布
+#### 按bizTag的子模块分布
 
-| 子模块 | bizTag | API数量 | 主要功能 |
-|--------|--------|---------|---------|
-| 招聘管理 | hire | 182 | Offer管理、候选人跟踪、面试安排 |
-| 核心HR | corehr | 144 | 员工管理、组织架构、基础HR |
-| 人员管理 | feishu_people | 105 | 人员信息、档案管理 |
-| 考勤管理 | attendance | 39 | 考勤记录、请假审批 |
-| 薪酬管理 | payroll | 12 | 薪资计算、发放管理 |
-| 电子HR | ehr | 2 | 电子化人力资源 |
+| 子模块 | bizTag | API数量 | 主要功能 | 资源类型 |
+|--------|--------|---------|---------|----------|
+| 招聘管理 | hire | 182 | Offer管理、候选人跟踪、面试安排 | offer, candidate, interview |
+| 核心HR | corehr | 144 | 员工管理、组织架构、基础HR | employee, department |
+| 人员管理 | feishu_people | 105 | 人员信息、档案管理 | profile, contact |
+| 考勤管理 | attendance | 39 | 考勤记录、请假审批 | record, leave |
+| 薪酬管理 | payroll | 12 | 薪资计算、发放管理 | salary, payslip |
+| 绩效管理 | performance | 20 | 绩效管理、考核评估 | review, goal |
+| OKR管理 | okr | 12 | OKR目标管理、绩效跟踪 | objective, key_result |
+| 薪酬补偿 | compensation_management | 21 | 薪酬管理、薪资计算 | compensation, bonus |
+| 电子HR | ehr | 2 | 电子化人力资源 | attachment, record |
 
 #### 关键API示例
 
@@ -164,32 +255,142 @@ crates/openlark-communication/src/
 **API总数**: 254个 (15.0%)
 **业务价值**: 高 (知识管理核心)
 
-#### 子模块分布
+#### 按bizTag的子模块分布
 
-| 子模块 | bizTag | API数量 | 主要功能 |
-|--------|--------|---------|---------|
-| 云文档 | ccm | 174 | 文档创建、编辑、共享、协作 |
-| 基础服务 | base | 49 | 文件存储、基础操作 |
-| 知识库 | baike | 27 | 企业知识库、Wiki管理 |
-| 会议纪要 | minutes | 4 | 会议记录管理 |
+| 子模块 | bizTag | API数量 | 主要功能 | 资源类型 |
+|--------|--------|---------|---------|----------|
+| 云文档协同 | ccm | 174 | 文档、表格、知识库、云盘、协作 | docx, drive, sheets, wiki |
+| 多维表格 | base | 49 | 多维表格应用、数据表、视图、记录 | app, table, view, record |
+| 知识库 | baike | 27 | 企业知识库、Wiki管理、实体管理 | space, node, entity, draft |
+| 会议纪要 | minutes | 4 | 会议记录管理、转录服务 | transcript |
 
 #### 关键API示例
 
 ```rust
-// 云文档 (ccm)
-document_create_v1()       // 创建文档
-document_read_v1()        // 读取文档
-document_share_v1()       // 共享文档
-document_comment_add_v1() // 添加评论
+// 云文档协同 (ccm)
+// DOCX文档管理
+docx_chat_announcement_get_v1()              // 获取群公告
+docx_chat_announcement_block_create_v1()    // 创建群公告块
+docx_chat_announcement_block_batch_update_v1() // 批量更新块
+// 云盘文件管理
+drive_file_list_v1()                         // 获取文件列表
+drive_file_create_folder_v1()               // 创建文件夹
+drive_file_upload_all_v1()                   // 上传文件
+drive_file_download_v1()                     // 下载文件
+drive_file_copy_v1()                         // 复制文件
+drive_file_move_v1()                         // 移动文件
 
-// 基础服务 (base)
-file_upload_v1()          // 上传文件
-file_download_v1()        // 下载文件
-drive_space_list_v1()     // 获取云盘空间
+// 多维表格 (base)
+bitable_app_create_v1()                      // 创建多维表格应用
+bitable_app_update_v1()                      // 更新应用信息
+bitable_table_create_v1()                    // 创建数据表
+bitable_table_list_v1()                      // 获取数据表列表
+bitable_view_create_v1()                     // 创建视图
+bitable_record_create_v1()                   // 创建记录
+bitable_record_batch_create_v1()             // 批量创建记录
+bitable_record_search_v1()                   // 搜索记录
 
 // 知识库 (baike)
-wiki_node_create_v2()     // 创建Wiki节点
-wiki_space_list_v2()      // 获取Wiki空间
+baike_space_list_v2()                        // 获取知识库空间列表
+baike_space_node_list_v2()                   // 获取空间节点
+baike_entity_update_v1()                     // 更新实体
+baike_draft_create_v1()                      // 创建草稿
+baike_classification_list_v1()                // 获取分类列表
+```
+
+#### 按Project-Version-Resource组织架构
+
+**组织原则**: 业务目录按照 project-version-resource 三层结构组织
+
+```
+openlark-docs/src/
+├── lib.rs                           # 模块入口
+├── models/                          # 共享数据模型
+│   ├── mod.rs
+│   ├── document.rs                  # 文档基础模型
+│   ├── collaboration.rs             # 协作模型
+│   └── permissions.rs               # 权限模型
+├── ccm/                             # 云文档协同 (174 APIs)
+│   ├── lib.rs                       # ccm模块入口
+│   ├── docx/                        # DOCX文档处理
+│   │   ├── v1/                      # API版本v1
+│   │   │   ├── mod.rs
+│   │   │   ├── chat_announcement.rs  # 群公告API
+│   │   │   ├── block.rs             # 文档块API
+│   │   │   └── comment.rs           # 评论API
+│   │   └── models/
+│   ├── drive/                       # 云盘文件管理
+│   │   ├── v1/                      # API版本v1
+│   │   │   ├── mod.rs
+│   │   │   ├── file.rs              # 文件操作API
+│   │   │   ├── folder.rs            # 文件夹API
+│   │   │   └── upload.rs            # 上传API
+│   │   └── models/
+│   ├── sheets/                      # 电子表格
+│   │   ├── v2/                      # API版本v2
+│   │   │   ├── mod.rs
+│   │   │   ├── spreadsheet.rs       # 表格API
+│   │   │   ├── range.rs             # 范围API
+│   │   │   └── style.rs             # 样式API
+│   │   └── models/
+│   └── wiki/                        # 知识库
+│       ├── v2/                      # API版本v2
+│       │   ├── mod.rs
+│       │   ├── space.rs             # 空间API
+│       │   └── node.rs              # 节点API
+│       └── models/
+├── bitable/                         # 多维表格 (49 APIs)
+│   ├── lib.rs                       # bitable模块入口
+│   ├── v1/                          # API版本v1
+│   │   ├── mod.rs
+│   │   ├── app.rs                   # 应用管理API
+│   │   │   ├── create_app()         // 创建应用
+│   │   │   ├── get_app()            // 获取应用
+│   │   │   ├── update_app()         // 更新应用
+│   │   │   └── delete_app()         // 删除应用
+│   │   ├── table.rs                 # 数据表API
+│   │   │   ├── create_table()       // 创建表
+│   │   │   ├── list_tables()        // 获取表列表
+│   │   │   ├── update_table()       // 更新表
+│   │   │   └── delete_table()       // 删除表
+│   │   ├── view.rs                  # 视图API
+│   │   │   ├── create_view()        // 创建视图
+│   │   │   ├── list_views()         // 获取视图列表
+│   │   │   ├── update_view()        // 更新视图
+│   │   │   └── delete_view()        // 删除视图
+│   │   ├── record.rs                # 记录API
+│   │   │   ├── create_record()      // 创建记录
+│   │   │   ├── batch_create_records() // 批量创建
+│   │   │   ├── update_record()      // 更新记录
+│   │   │   ├── search_records()     // 搜索记录
+│   │   │   └── delete_record()      // 删除记录
+│   │   └── field.rs                 # 字段API
+│   │       ├── create_field()       // 创建字段
+│   │       ├── update_field()       // 更新字段
+│   │       └── delete_field()       // 删除字段
+│   └── models/                      # 数据模型
+│       ├── app.rs                   # 应用模型
+│       ├── table.rs                 # 表格模型
+│       ├── view.rs                  # 视图模型
+│       ├── record.rs                # 记录模型
+│       └── field.rs                 # 字段模型
+├── baike/                           # 知识库 (27 APIs)
+│   ├── lib.rs                       # baike模块入口
+│   ├── v1/                          # API版本v1
+│   │   ├── mod.rs
+│   │   ├── space.rs                 // 知识库空间
+│   │   ├── node.rs                  // 知识库节点
+│   │   ├── entity.rs                // 实体管理
+│   │   ├── draft.rs                 // 草稿管理
+│   │   └── classification.rs        // 分类管理
+│   └── models/
+└── minutes/                         # 会议纪要 (4 APIs)
+    ├── lib.rs                       # minutes模块入口
+    ├── v1/                          # API版本v1
+    │   ├── mod.rs
+    │   ├── transcript.rs            // 转录服务
+    │   └── meeting.rs               // 会议管理
+    └── models/
 ```
 
 ### 4. 任务审批模块 (openlark-workflow)

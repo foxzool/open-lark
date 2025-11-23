@@ -435,7 +435,7 @@ pub struct UpdateSpreadsheetBuilder {
 impl Clone for UpdateSpreadsheetBuilder {
     fn clone(&self) -> Self {
         Self {
-            request: self.request.clone()
+            request: self.request.clone(),
             transport: Transport::new(), // 创建新的Transport实例
         }
     }

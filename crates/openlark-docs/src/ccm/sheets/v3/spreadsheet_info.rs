@@ -127,7 +127,7 @@ impl SpreadsheetInfoService {
         &self,
         param: impl Into<String>,
     ) -> GetSpreadsheetInfoBuilder {
-        GetSpreadsheetInfoBuilder::new(self.clone() param)
+        GetSpreadsheetInfoBuilder::new(self.clone(), param)
     }
 }
 

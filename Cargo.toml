@@ -6,25 +6,22 @@ members = [
     "crates/openlark-client",
     "crates/openlark-protocol",
 
-    # 主要业务模块 - Phase 1 (P0优先级)
-    "crates/openlark-communication",         # 通讯协作 (153 APIs)
-    "crates/openlark-docs",                  # 文档协作 (254 APIs)
-    "crates/openlark-security",              # 安全认证 (44 APIs)
+    # Phase 1: P0 核心业务模块
+    "crates/openlark-docs",
+    "crates/openlark-security",
 
-    # 业务流程模块 - Phase 1 (P1优先级)
-    "crates/openlark-workflow",              # 任务审批 (134 APIs)
-    "crates/openlark-meeting",               # 会议日程 (117 APIs)
-
-    # 辅助功能模块 - Phase 2 (P2优先级)
-    "crates/openlark-hr",                    # HR人力管理 (484 APIs)
-    "crates/openlark-mail",                  # 邮件服务 (67 APIs)
-    "crates/openlark-platform",              # 应用管理 (86 APIs)
-
-    # 扩展功能模块 - Phase 3 (P3优先级)
-    "crates/openlark-ai",                    # AI智能 (23 APIs)
-    "crates/openlark-analytics",             # 数据分析 (38 APIs)
-    "crates/openlark-helpdesk",              # 帮助台 (50 APIs)
-    "crates/openlark-user",                  # 个人设置 (21 APIs)
+    # 已存在的业务模块
+    "crates/openlark-communication",
+    # 暂时移除有依赖问题的模块
+    # "crates/openlark-admin",
+    # "crates/openlark-application",
+    # "crates/openlark-approval",
+    # "crates/openlark-apass",
+    # "crates/openlark-hire",
+    # "crates/openlark-lingo",
+    # "crates/openlark-mail",
+    # "crates/openlark-helpdesk",
+    # "crates/openlark-task",
 ]
 
 [workspace.package]
@@ -55,19 +52,12 @@ hmac = "0.12.1"
 log = "0.4.21"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
-opentelemetry = { version = "0.24" }
-opentelemetry_sdk = { version = "0.24", features = ["rt-tokio"] }
-opentelemetry-otlp = { version = "0.17" }
-tracing-opentelemetry = { version = "0.25" }
-prost = { version = "0.13" }
-quick_cache = { version = "0.6.3", features = [] }
 reqwest = { version = "0.12.7", default-features = false, features = [
     "json",
     "multipart",
     "rustls-tls",
 ] }
 rand = "0.8"
-simd-adler32 = "0.3.7"
 serde_repr = "0.1.19"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
@@ -78,58 +68,44 @@ strum_macros = "0.27"
 thiserror = "2.0"
 tokio = { version = "1.38", features = ["rt", "rt-multi-thread", "macros"] }
 url = { version = "2.5.0", features = ["serde"] }
+uuid = { version = "1.6", features = ["v4", "serde"] }
+lark-websocket-protobuf = "0.1"
+opentelemetry = { version = "0.24" }
+opentelemetry_sdk = { version = "0.24", features = ["rt-tokio"] }
+opentelemetry-otlp = { version = "0.17" }
+tracing-opentelemetry = { version = "0.25" }
+prost = { version = "0.13" }
+quick_cache = { version = "0.6.3", features = [] }
 tokio-tungstenite = { version = "0.23", features = [
     "rustls-tls-native-roots",
 ] }
 walkdir = "2.4"
 regex = "1.10"
-uuid = { version = "1.6", features = ["v4", "serde"] }
-lark-websocket-protobuf = "0.1"
 
-# Internal workspace dependencies - 核心模块
-openlark-core = { path = "crates/openlark-core", optional = true }
-openlark-client = { path = "crates/openlark-client", optional = true }
-openlark-protocol = { path = "crates/openlark-protocol", optional = true }
+# Internal workspace dependencies
+openlark-core = { path = "crates/openlark-core" }
+openlark-client = { path = "crates/openlark-client" }
+openlark-protocol = { path = "crates/openlark-protocol" }
 
-# 业务模块 - Phase 1 (P0优先级)
-openlark-communication = { path = "crates/openlark-communication", optional = true }
-openlark-docs = { path = "crates/openlark-docs", optional = true }
-openlark-security = { path = "crates/openlark-security", optional = true }
+# Phase 1: P0 核心业务模块
+openlark-docs = { path = "crates/openlark-docs" }
+openlark-security = { path = "crates/openlark-security" }
+openlark-communication = { path = "crates/openlark-communication" }
 
-# 业务流程模块 - Phase 1 (P1优先级)
-openlark-workflow = { path = "crates/openlark-workflow", optional = true }
-openlark-meeting = { path = "crates/openlark-meeting", optional = true }
-
-# 辅助功能模块 - Phase 2 (P2优先级)
-openlark-hr = { path = "crates/openlark-hr", optional = true }
-openlark-mail = { path = "crates/openlark-mail", optional = true }
-openlark-platform = { path = "crates/openlark-platform", optional = true }
-
-# 扩展功能模块 - Phase 3 (P3优先级)
-openlark-ai = { path = "crates/openlark-ai", optional = true }
-openlark-analytics = { path = "crates/openlark-analytics", optional = true }
-openlark-helpdesk = { path = "crates/openlark-helpdesk", optional = true }
-openlark-user = { path = "crates/openlark-user", optional = true }
-
-# Additional service crates
-openlark-admin = { path = "crates/openlark-admin" }
-openlark-application = { path = "crates/openlark-application" }
-openlark-approval = { path = "crates/openlark-approval" }
-openlark-apass = { path = "crates/openlark-apass" }
-openlark-calendar = { path = "crates/openlark-calendar" }
-openlark-collab = { path = "crates/openlark-collab" }
-openlark-helpdesk = { path = "crates/openlark-helpdesk" }
-openlark-hire = { path = "crates/openlark-hire" }
-openlark-lingo = { path = "crates/openlark-lingo" }
-openlark-mail = { path = "crates/openlark-mail" }
-openlark-meeting = { path = "crates/openlark-meeting" }
-openlark-people = { path = "crates/openlark-people" }
-openlark-task = { path = "crates/openlark-task" }
+# Phase 2+ 模块（暂时注释以解决依赖冲突）
+# openlark-admin = { path = "crates/openlark-admin" }
+# openlark-application = { path = "crates/openlark-application" }
+# openlark-approval = { path = "crates/openlark-approval" }
+# openlark-apass = { path = "crates/openlark-apass" }
+# openlark-hire = { path = "crates/openlark-hire" }
+# openlark-lingo = { path = "crates/openlark-lingo" }
+# openlark-mail = { path = "crates/openlark-mail" }
+# openlark-helpdesk = { path = "crates/openlark-helpdesk" }
+# openlark-task = { path = "crates/openlark-task" }
 
 # Test dependencies shared across workspace
 rstest = "0.19"
 proptest = "1.0"
-serial_test = "3.0"
 tempfile = "3.8"
 test-log = "0.2"
 tracing-test = "0.2"
@@ -142,8 +118,6 @@ dotenvy = "0.15"
 env_logger = "0.10"
 criterion = "0.5"
 
-# Dev dependencies
-#
 ## Convenience package configuration for unified publishing
 [package]
 name = "open-lark"
@@ -158,127 +132,16 @@ documentation.workspace = true
 repository.workspace = true
 homepage.workspace = true
 license.workspace = true
-publish = true  # 主包可以发布
-#
-[features]
-# 默认配置 - 平衡功能和编译时间
-default = ["core", "communication", "docs", "security"]
-
-# 最小配置 - 仅核心功能
-minimal = ["core", "security"]
-
-# 完整配置 - 所有业务功能
-full = [
-    "core", "client", "protocol",
-    "communication", "docs", "hr", "workflow",
-    "meeting", "mail", "platform", "ai",
-    "security", "analytics", "helpdesk", "user"
-]
-
-# === 核心功能组 ===
-core = ["openlark-core"]
-client = ["openlark-client"]
-protocol = ["openlark-protocol"]
-
-# === 业务模块功能组 ===
-# Phase 1: 核心业务模块 (P0优先级) - 细粒度features
-communication = ["openlark-communication"]
-communication-im = ["openlark-communication/im"]
-communication-contact = ["openlark-communication/contact"]
-docs = ["openlark-docs"]
-docs-ccm = ["openlark-docs/ccm"]
-docs-wiki = ["openlark-docs/wiki"]
-security = ["openlark-security"]
-security-auth = ["openlark-security/auth"]
-security-acs = ["openlark-security/acs"]
-
-# Phase 1: 业务流程模块 (P1优先级)
-workflow = ["openlark-workflow"]
-workflow-task = ["openlark-workflow/task"]
-workflow-approval = ["openlark-workflow/approval"]
-meeting = ["openlark-meeting"]
-meeting-calendar = ["openlark-meeting/calendar"]
-meeting-vc = ["openlark-meeting/vc"]
-
-# Phase 2: 辅助功能模块 (P2优先级)
-hr = ["openlark-hr"]
-hr-core = ["openlark-hr/corehr"]
-hr-hire = ["openlark-hr/hire"]
-hr-attendance = ["openlark-hr/attendance"]
-mail = ["openlark-mail"]
-platform = ["openlark-platform"]
-
-# Phase 3: 扩展功能模块 (P3优先级)
-ai = ["openlark-ai"]
-analytics = ["openlark-analytics"]
-helpdesk = ["openlark-helpdesk"]
-user = ["openlark-user"]
-
-# === 场景化功能组合 ===
-# 基础协作套件 - 适合中小团队
-basic-suite = ["core", "communication", "docs"]
-
-# 企业协作套件 - 适合中大型企业
-enterprise-suite = ["basic-suite", "hr", "workflow", "meeting"]
-
-# 智能企业套件 - 包含AI功能
-smart-enterprise = ["enterprise-suite", "ai", "analytics"]
-
-# 完整平台套件 - 所有功能
-complete-suite = ["full"]
-
-# === 开发和测试配置 ===
-# 开发模式 - 包含常用的调试功能
-dev = ["core", "client", "communication", "docs", "security"]
-
-# 测试模式 - 包含测试需要的模块
-test = ["dev"]
-
-# === 技术支持功能 ===
-# WebSocket支持
-websocket = ["protocol"]
-
-# OpenTelemetry可观测性
-otel = ["opentelemetry", "opentelemetry_sdk", "opentelemetry-otlp", "tracing-opentelemetry"]
-
-# === 向后兼容性支持 ===
-# 保留旧的功能名称以确保兼容性
-auth = ["security"]
-im = ["communication"]
-cloud-docs = ["docs"]
-hire = ["hr"]
-
-# 注意：以下功能暂时禁用，等待相关模块完全开发完成
-# admin-suite, approval-suite, calendar-suite, collab-suite, helpdesk-suite
-# hire-suite, lingo-suite, mail-suite, meeting-suite, people-suite, task-suite
+publish = true
 
 [dependencies]
 # 核心基础设施（始终包含）
 openlark-core = { workspace = true }
 
-# 功能模块（通过 feature flag 控制）
-openlark-client = { workspace = true, optional = true }
-openlark-protocol = { workspace = true, optional = true }
-
-# Phase 1: 核心业务模块 (P0优先级)
-openlark-communication = { workspace = true, optional = true }
-openlark-docs = { workspace = true, optional = true }
-openlark-security = { workspace = true, optional = true }
-
-# Phase 1: 业务流程模块 (P1优先级)
-openlark-workflow = { workspace = true, optional = true }
-openlark-meeting = { workspace = true, optional = true }
-
-# Phase 2: 辅助功能模块 (P2优先级)
-openlark-hr = { workspace = true, optional = true }
-openlark-mail = { workspace = true, optional = true }
-openlark-platform = { workspace = true, optional = true }
-
-# Phase 3: 扩展功能模块 (P3优先级)
-openlark-ai = { workspace = true, optional = true }
-openlark-analytics = { workspace = true, optional = true }
-openlark-helpdesk = { workspace = true, optional = true }
-openlark-user = { workspace = true, optional = true }
+# 功能模块
+openlark-client = { workspace = true }
+openlark-protocol = { workspace = true }
+openlark-communication = { workspace = true }
 
 # 重新导出工作空间依赖，为用户提供便利访问
 anyhow = { workspace = true }
@@ -290,7 +153,6 @@ hmac = { workspace = true }
 log = { workspace = true }
 tracing = { workspace = true }
 tracing-subscriber = { workspace = true }
-quick_cache = { workspace = true }
 reqwest = { workspace = true }
 rand = { workspace = true }
 serde_repr = { workspace = true }
@@ -303,16 +165,8 @@ strum_macros = { workspace = true }
 thiserror = { workspace = true }
 tokio = { workspace = true }
 url = { workspace = true }
-walkdir = { workspace = true }
-regex = { workspace = true }
 uuid = { workspace = true }
-
-# 可选技术支持依赖
-opentelemetry = { workspace = true, optional = true }
-opentelemetry_sdk = { workspace = true, optional = true }
-opentelemetry-otlp = { workspace = true, optional = true }
-tracing-opentelemetry = { workspace = true, optional = true }
-prost = { workspace = true, optional = true }
+lark-websocket-protobuf = { workspace = true }
 
 [dev-dependencies]
 dotenvy = { workspace = true }
@@ -320,7 +174,6 @@ env_logger = { workspace = true }
 criterion = { workspace = true }
 rstest = { workspace = true }
 proptest = { workspace = true }
-serial_test = { workspace = true }
 tempfile = { workspace = true }
 test-log = { workspace = true }
 tracing-test = { workspace = true }
@@ -331,3 +184,7 @@ mockall = { workspace = true }
 [lib]
 name = "open_lark"
 path = "src/lib.rs"
+
+[[bench]]
+name = "config_performance"
+harness = false

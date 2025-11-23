@@ -15,6 +15,7 @@ impl DriveV2Service {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
+}
 
 // 注意：子模块暂时被禁用，因为需要进一步开发
 // - explorer: 文件浏览器功能

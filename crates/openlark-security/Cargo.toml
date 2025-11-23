@@ -1,0 +1,77 @@
+[package]
+name = "openlark-security"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+description = "飞书开放平台安全认证服务模块 - 身份认证、权限管理、安全审计 (44 APIs)"
+keywords = ["feishu", "lark", "security", "api", "auth", "acs"]
+categories = ["api-bindings", "web-programming", "authentication"]
+
+[features]
+default = ["auth", "acs"]
+
+# === 核心功能模块 ===
+core = []
+
+# === 安全域功能 ===
+# 身份认证 (44 APIs中的主要部分)
+auth = ["core"]
+
+# 访问控制
+acs = ["auth"]
+
+# 安全审计
+audit = ["core"]
+
+# 令牌管理
+token = ["auth"]
+
+# === API版本支持 ===
+v1 = ["core"]
+v2 = ["v1"]
+v3 = ["v2"]
+
+# === 功能组合 ===
+# 完整安全功能
+full = ["auth", "acs", "audit", "token", "v3"]
+
+# 向后兼容别名
+security = ["full"]
+
+[dependencies]
+# 核心依赖
+openlark-core = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+reqwest = { workspace = true }
+chrono = { workspace = true }
+tokio = { workspace = true }
+async-trait = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+
+# 工具依赖
+uuid = { workspace = true }
+url = { workspace = true }
+urlencoding = { workspace = true }
+hmac = { workspace = true }
+sha2 = { workspace = true }
+base64 = { workspace = true }
+rand = { workspace = true }
+serde_repr = { workspace = true }
+log = { workspace = true }
+tracing = { workspace = true }
+
+# 可选依赖
+parking_lot = { version = "0.12", optional = true }
+
+[dev-dependencies]
+tokio-test = "0.4"
+wiremock = { workspace = true }
+rstest = { workspace = true }
+tempfile = { workspace = true }
+mockall = { workspace = true }

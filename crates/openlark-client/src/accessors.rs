@@ -32,7 +32,7 @@ pub trait ServiceAccessorsExt {
     #[cfg(feature = "ccm-sheets")]
     fn sheet_ext(&self) -> Option<&CcmService>;
 
-    #[cfg(feature = "bitable")]
+    #[cfg(feature = "docs")]  // bitable 功能包含在 docs 模块中
     fn bitable_ext(&self) -> Option<&BaseService>;
 
     #[cfg(feature = "ccm-wiki")]
@@ -61,7 +61,7 @@ impl ServiceAccessorsExt for crate::registry::DefaultServiceRegistry {
         self.get_service("sheet")
     }
 
-    #[cfg(feature = "bitable")]
+    #[cfg(feature = "docs")]  // bitable 功能包含在 docs 模块中
     fn bitable_ext(&self) -> Option<&BaseService> {
         self.get_service("bitable")
     }
