@@ -472,10 +472,17 @@ meeting_room_list_v1()    // 获取会议室列表
 - **主要功能**: AI服务、智能分析
 - **关键API**: ai_chat_v1(), ai_summary_v1(), ai_translate_v1()
 
-#### 安全认证模块 (openlark-security)
-- **API数量**: 44个 (2.6%)
-- **主要功能**: 身份认证、安全管理
-- **关键API**: auth_login_v1(), auth_logout_v1(), security_audit_log_list_v1()
+#### 认证服务模块 (openlark-auth)
+- **API数量**: 9个 (0.5%)
+- **主要功能**: 身份认证、令牌管理、OAuth授权
+- **关键API**: tenant_access_token_internal(), app_access_token(), get_user_info(), create_oidc_access_token()
+- **详细文档**: [查看完整auth模块映射](./module-mapping-auth.md)
+
+#### 安全服务模块 (openlark-security)
+- **API数量**: 20个 (1.2%)
+- **主要功能**: 访问控制、安全合规、设备管理、审计日志
+- **关键API**: get_user(), upload_user_face(), create_rule_external(), approve_device_apply_record()
+- **详细文档**: [查看完整security模块映射](./module-mapping-security.md)
 
 #### 数据分析模块 (openlark-analytics)
 - **API数量**: 38个 (2.2%)
@@ -495,10 +502,11 @@ meeting_room_list_v1()    // 获取会议室列表
 |------|-----------|---------|--------|-----------|
 | openlark-communication | 🔴 极高 | 153 | 🟡 中 | **P0 - 最高** |
 | openlark-docs | 🔴 极高 | 254 | 🔴 高 | **P0 - 最高** |
-| openlark-security | 🟡 高 | 44 | 🟢 低 | **P0 - 最高** |
+| openlark-auth | 🔴 极高 | 9 | 🟢 低 | **P0 - 最高** |
+| openlark-security | 🟡 高 | 20 | 🟡 中 | **P0 - 最高** |
 | openlark-workflow | 🟡 高 | 134 | 🟡 中 | **P1 - 高** |
 | openlark-meeting | 🟡 高 | 117 | 🟡 中 | **P1 - 高** |
-| openlark-hr | 🟡 高 | 484 | 🔴 高 | **P2 - 中** |
+| openlark-hr | 🟡 高 | 428+ | 🔴 高 | **P2 - 中** |
 | openlark-mail | 🟢 中 | 67 | 🟢 低 | **P2 - 中** |
 | openlark-platform | 🟢 中 | 86 | 🟡 中 | **P2 - 中** |
 | openlark-ai | 🟢 中 | 23 | 🟢 低 | **P3 - 低** |
@@ -510,13 +518,14 @@ meeting_room_list_v1()    // 获取会议室列表
 
 #### Phase 1: 核心模块 (P0)
 **目标**: 完成最高优先级模块迁移
-**模块**: openlark-communication, openlark-docs, openlark-security
+**模块**: openlark-communication, openlark-docs, openlark-auth, openlark-security
 **预期时间**: 4-6周
 **里程碑**:
 - ✅ 完成模块设计和结构创建
 - ✅ 实现核心API (前50%)
 - ✅ 完成基础测试
 - ✅ 提供示例代码
+- ✅ 更新模块映射文档
 
 #### Phase 2: 业务流程模块 (P1)
 **目标**: 完成业务流程相关模块
