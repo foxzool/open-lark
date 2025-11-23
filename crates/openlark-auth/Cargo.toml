@@ -1,20 +1,80 @@
 [package]
 name = "openlark-auth"
-version.workspace = true
+version = "0.1.0-dev"
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
 repository.workspace = true
 documentation.workspace = true
-description = "Authentication module for Open-Lark SDK"
+description = "OpenLark 认证模块 - 提供令牌管理、缓存、验证和刷新功能"
 
 [dependencies]
-openlark-core = { workspace = true }
+# 核心基础设施
+openlark-core = { workspace = true, default-features = false }
+
+# 序列化
 serde = { workspace = true }
-tokio = { workspace = true }
 serde_json = { workspace = true }
 
-[features]
-default = []
+# 异步运行时
+tokio = { workspace = true, features = ["full"] }
+async-trait = { workspace = true }
 
-# 根据ChatGPT表格，auth模块没有子模块features
+# 时间处理
+chrono = { workspace = true, features = ["serde"] }
+
+# 错误处理
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# 日志记录
+tracing = { workspace = true }
+
+# UUID
+uuid = { workspace = true, features = ["v4", "serde"] }
+
+# 加密和安全 (可选)
+ring = { version = "0.17", optional = true }
+sha2 = { version = "0.10", optional = true }
+hmac = { version = "0.12", optional = true }
+pbkdf2 = { version = "0.12", optional = true }
+
+# HTTP客户端 (OAuth需要)
+reqwest = { workspace = true, optional = true }
+url = { workspace = true, optional = true }
+
+# 验证工具
+regex = "1.10"
+base64 = "0.22"
+hex = "0.4"
+rand = "0.8"
+urlencoding = "2.1"
+
+[dev-dependencies]
+tokio-test = "0.4"
+mockall = "0.12"
+rstest = "0.18"
+
+# 性能基准测试的依赖（可选）
+[dependencies.criterion]
+version = "0.5"
+features = ["html_reports"]
+optional = true
+
+[features]
+default = ["token-management", "cache", "encryption", "oauth"]
+
+# 核心功能模块
+token-management = []
+cache = ["token-management"]
+oauth = ["reqwest", "url"]
+encryption = ["ring", "sha2", "hmac", "pbkdf2"]
+
+# 高级功能
+advanced-cache = ["cache", "encryption"]
+monitoring = []
+performance = ["criterion"]
+
+# 开发和测试
+dev = ["token-management", "cache", "oauth", "encryption"]
+benchmarks = ["performance"]
