@@ -8,7 +8,7 @@ use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
 use thiserror::Error;
 
-use super::{RegistryResult, ServiceMetadata, ServiceStatus};
+use super::{ServiceMetadata, ServiceStatus}; // 移除未使用的 RegistryResult
 use crate::Config;
 
 /// 服务工厂错误

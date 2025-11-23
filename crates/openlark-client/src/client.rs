@@ -90,10 +90,10 @@ impl Client {
     /// 🔐 访问认证服务
     ///
     /// 需要 `auth` feature
-    #[cfg(feature = "auth")]
-    pub fn auth(&self) -> crate::services::AuthService<'_> {
-        crate::services::AuthService::new(&self.config)
-    }
+    // #[cfg(feature = "auth")]  // auth 功能暂未启用
+    // pub fn auth(&self) -> crate::services::AuthService<'_> {
+    //     crate::services::AuthService::new(&self.config)
+    // }
 
     // /// 🤝 访问协作服务
     // ///
@@ -121,8 +121,8 @@ impl Client {
 
     /// 📊 访问多维表格服务
     ///
-    /// 需要 `bitable` feature
-    #[cfg(feature = "bitable")]
+    /// 需要 `bitable` feature (docs 模块包含 bitable 功能)
+    #[cfg(feature = "docs")]
     pub fn bitable(&self) -> crate::services::BitableService<'_> {
         crate::services::BitableService::new(&self.config)
     }
@@ -146,18 +146,18 @@ impl Client {
     /// 👥 访问HR服务
     ///
     /// 需要 `hr` feature
-    #[cfg(feature = "hr")]
-    pub fn hr(&self) -> crate::services::HRService<'_> {
-        crate::services::HRService::new(&self.config, &self.registry)
-    }
+    // #[cfg(feature = "hr")]  // hr 功能暂未启用
+    // pub fn hr(&self) -> crate::services::HRService<'_> {
+    //     crate::services::HRService::new(&self.config, &self.registry)
+    // }
 
     /// 🤖 访问AI服务
     ///
     /// 需要 `ai` feature
-    #[cfg(feature = "ai")]
-    pub fn ai(&self) -> crate::services::AIService<'_> {
-        crate::services::AIService::new(&self.config)
-    }
+    // #[cfg(feature = "ai")]  // ai 功能暂未启用
+    // pub fn ai(&self) -> crate::services::AIService<'_> {
+    //     crate::services::AIService::new(&self.config)
+    // }
 
     // /// 👤 访问人员服务
     // ///
@@ -212,23 +212,23 @@ fn load_enabled_services(_config: &Config, registry: &mut DefaultServiceRegistry
 
 /// 注册核心层服务
 fn register_core_services(registry: &mut DefaultServiceRegistry) -> Result<()> {
-    #[cfg(feature = "auth")]
-    {
-        tracing::debug!("注册认证服务");
-        let metadata = ServiceMetadata {
-            name: "auth".to_string(),
-            version: "1.0.0".to_string(),
-            description: Some("飞书认证服务，提供令牌管理、身份验证等功能".to_string()),
-            dependencies: vec![],
-            provides: vec![
-                "token-management".to_string(),
-                "permission-control".to_string(),
-            ],
-            status: ServiceStatus::Uninitialized,
-            priority: 1,
-        };
-        registry.register_service(metadata)?;
-    }
+    // #[cfg(feature = "auth")]  // auth 功能暂未启用
+    // {
+    //     tracing::debug!("注册认证服务");
+    //     let metadata = ServiceMetadata {
+    //         name: "auth".to_string(),
+    //         version: "1.0.0".to_string(),
+    //         description: Some("飞书认证服务，提供令牌管理、身份验证等功能".to_string()),
+    //         dependencies: vec![],
+    //         provides: vec![
+    //             "token-management".to_string(),
+    //             "permission-control".to_string(),
+    //         ],
+    //         status: ServiceStatus::Uninitialized,
+    //         priority: 1,
+    //     };
+    //     registry.register_service(metadata)?;
+    // }
 
     #[cfg(feature = "communication")]
     {
@@ -273,108 +273,108 @@ fn register_core_services(registry: &mut DefaultServiceRegistry) -> Result<()> {
 
 /// 注册专业层服务
 fn register_professional_services(registry: &mut DefaultServiceRegistry) -> Result<()> {
-    #[cfg(feature = "hr")]
-    {
-        tracing::debug!("注册人力资源服务");
-        let metadata = ServiceMetadata {
-            name: "hr".to_string(),
-            version: "1.0.0".to_string(),
-            description: Some("飞书人力资源服务，提供员工、考勤、薪酬等功能".to_string()),
-            dependencies: vec!["auth".to_string()],
-            provides: vec![
-                "attendance".to_string(),
-                "corehr".to_string(),
-                "ehr".to_string(),
-            ],
-            status: ServiceStatus::Uninitialized,
-            priority: 3,
-        };
-        registry.register_service(metadata)?;
-    }
+    // #[cfg(feature = "hr")]  // hr 功能暂未启用
+    // {
+    //     tracing::debug!("注册人力资源服务");
+    //     let metadata = ServiceMetadata {
+    //         name: "hr".to_string(),
+    //         version: "1.0.0".to_string(),
+    //         description: Some("飞书人力资源服务，提供员工、考勤、薪酬等功能".to_string()),
+    //         dependencies: vec!["auth".to_string()],
+    //         provides: vec![
+    //             "attendance".to_string(),
+    //             "corehr".to_string(),
+    //             "ehr".to_string(),
+    //         ],
+    //         status: ServiceStatus::Uninitialized,
+    //         priority: 3,
+    //     };
+    //     registry.register_service(metadata)?;
+    // }
 
-    #[cfg(feature = "ai")]
-    {
-        tracing::debug!("注册AI服务");
-        let metadata = ServiceMetadata {
-            name: "ai".to_string(),
-            version: "1.0.0".to_string(),
-            description: Some("飞书AI服务，提供智能助手、AI分析等功能".to_string()),
-            dependencies: vec!["auth".to_string(), "communication".to_string()],
-            provides: vec!["chatbot".to_string(), "smart-analysis".to_string()],
-            status: ServiceStatus::Uninitialized,
-            priority: 4,
-        };
-        registry.register_service(metadata)?;
-    }
+    // #[cfg(feature = "ai")]  // ai 功能暂未启用
+    // {
+    //     tracing::debug!("注册AI服务");
+    //     let metadata = ServiceMetadata {
+    //         name: "ai".to_string(),
+    //         version: "1.0.0".to_string(),
+    //         description: Some("飞书AI服务，提供智能助手、AI分析等功能".to_string()),
+    //         dependencies: vec!["auth".to_string(), "communication".to_string()],
+    //         provides: vec!["chatbot".to_string(), "smart-analysis".to_string()],
+    //         status: ServiceStatus::Uninitialized,
+    //         priority: 4,
+    //     };
+    //     registry.register_service(metadata)?;
+    // }
 
-    #[cfg(feature = "calendar")]
-    {
-        tracing::debug!("注册日历服务");
-        let metadata = ServiceMetadata {
-            name: "calendar".to_string(),
-            version: "1.0.0".to_string(),
-            description: Some("飞书日历服务，提供日程管理、会议安排等功能".to_string()),
-            dependencies: vec!["auth".to_string(), "communication".to_string()],
-            provides: vec!["schedule".to_string(), "meetings".to_string()],
-            status: ServiceStatus::Uninitialized,
-            priority: 4,
-        };
-        registry.register_service(metadata)?;
-    }
+    // #[cfg(feature = "calendar")]  // calendar 功能暂未启用
+    // {
+    //     tracing::debug!("注册日历服务");
+    //     let metadata = ServiceMetadata {
+    //         name: "calendar".to_string(),
+    //         version: "1.0.0".to_string(),
+    //         description: Some("飞书日历服务，提供日程管理、会议安排等功能".to_string()),
+    //         dependencies: vec!["auth".to_string(), "communication".to_string()],
+    //         provides: vec!["schedule".to_string(), "meetings".to_string()],
+    //         status: ServiceStatus::Uninitialized,
+    //         priority: 4,
+    //     };
+    //     registry.register_service(metadata)?;
+    // }
 
     Ok(())
 }
 
 /// 注册企业层服务
 fn register_enterprise_services(registry: &mut DefaultServiceRegistry) -> Result<()> {
-    #[cfg(feature = "admin")]
-    {
-        tracing::debug!("注册管理服务");
-        let metadata = ServiceMetadata {
-            name: "admin".to_string(),
-            version: "1.0.0".to_string(),
-            description: Some("飞书管理服务，提供用户管理、系统配置等功能".to_string()),
-            dependencies: vec!["auth".to_string(), "hr".to_string()],
-            provides: vec!["user-management".to_string(), "system-config".to_string()],
-            status: ServiceStatus::Uninitialized,
-            priority: 5,
-        };
-        registry.register_service(metadata)?;
-    }
+    // #[cfg(feature = "admin")]  // admin 功能暂未启用
+    // {
+    //     tracing::debug!("注册管理服务");
+    //     let metadata = ServiceMetadata {
+    //         name: "admin".to_string(),
+    //         version: "1.0.0".to_string(),
+    //         description: Some("飞书管理服务，提供用户管理、系统配置等功能".to_string()),
+    //         dependencies: vec!["auth".to_string(), "hr".to_string()],
+    //         provides: vec!["user-management".to_string(), "system-config".to_string()],
+    //         status: ServiceStatus::Uninitialized,
+    //         priority: 5,
+    //     };
+    //     registry.register_service(metadata)?;
+    // }
 
-    #[cfg(feature = "approval")]
-    {
-        tracing::debug!("注册审批服务");
-        let metadata = ServiceMetadata {
-            name: "approval".to_string(),
-            version: "1.0.0".to_string(),
-            description: Some("飞书审批服务，提供审批流程、模板管理等功能".to_string()),
-            dependencies: vec!["auth".to_string(), "communication".to_string()],
-            provides: vec!["workflow".to_string(), "template".to_string()],
-            status: ServiceStatus::Uninitialized,
-            priority: 5,
-        };
-        registry.register_service(metadata)?;
-    }
+    // #[cfg(feature = "approval")]  // approval 功能暂未启用
+    // {
+    //     tracing::debug!("注册审批服务");
+    //     let metadata = ServiceMetadata {
+    //         name: "approval".to_string(),
+    //         version: "1.0.0".to_string(),
+    //         description: Some("飞书审批服务，提供审批流程、模板管理等功能".to_string()),
+    //         dependencies: vec!["auth".to_string(), "communication".to_string()],
+    //         provides: vec!["workflow".to_string(), "template".to_string()],
+    //         status: ServiceStatus::Uninitialized,
+    //         priority: 5,
+    //     };
+    //     registry.register_service(metadata)?;
+    // }
 
-    #[cfg(feature = "helpdesk")]
-    {
-        tracing::debug!("注册帮助台服务");
-        let metadata = ServiceMetadata {
-            name: "helpdesk".to_string(),
-            version: "1.0.0".to_string(),
-            description: Some("飞书帮助台服务，提供工单管理、知识库等功能".to_string()),
-            dependencies: vec![
-                "auth".to_string(),
-                "communication".to_string(),
-                "ai".to_string(),
-            ],
-            provides: vec!["ticket".to_string(), "knowledge-base".to_string()],
-            status: ServiceStatus::Uninitialized,
-            priority: 6,
-        };
-        registry.register_service(metadata)?;
-    }
+    // #[cfg(feature = "helpdesk")]  // helpdesk 功能暂未启用
+    // {
+    //     tracing::debug!("注册帮助台服务");
+    //     let metadata = ServiceMetadata {
+    //         name: "helpdesk".to_string(),
+    //         version: "1.0.0".to_string(),
+    //         description: Some("飞书帮助台服务，提供工单管理、知识库等功能".to_string()),
+    //         dependencies: vec![
+    //             "auth".to_string(),
+    //             "communication".to_string(),
+    //             "ai".to_string(),
+    //         ],
+    //         provides: vec!["ticket".to_string(), "knowledge-base".to_string()],
+    //         status: ServiceStatus::Uninitialized,
+    //         priority: 6,
+    //     };
+    //     registry.register_service(metadata)?;
+    // }
 
     Ok(())
 }

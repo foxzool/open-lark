@@ -57,12 +57,6 @@ impl DocxService {
         }
     }
 }
-    type Target = LarkClient;
-
-    fn deref(&self) -> &Self::Target {
-        &self.client
-    }
-}
 
 #[cfg(test)]
 mod tests {

@@ -15,6 +15,7 @@ impl DriveV1Service {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
+}
 
 // 注意：子模块暂时被禁用，因为存在语法错误
 // 需要后续修复以下模块：

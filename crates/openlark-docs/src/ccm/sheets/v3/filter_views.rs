@@ -878,7 +878,7 @@ impl FilterViewsService {
         sheet_id: impl Into<String>,
     ) -> CreateFilterViewBuilder {
         CreateFilterViewBuilder::new(
-            self.config.clone()
+            self.config.clone(),
             spreadsheet_token.into(),
             sheet_id.into(),
         )
@@ -892,7 +892,7 @@ impl FilterViewsService {
         filter_view_id: impl Into<String>,
     ) -> UpdateFilterViewBuilder {
         UpdateFilterViewBuilder::new(
-            self.config.clone()
+            self.config.clone(),
             spreadsheet_token.into(),
             sheet_id.into(),
             filter_view_id.into(),

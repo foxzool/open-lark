@@ -22,12 +22,13 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-// 导入子模块
-pub mod batch_create;
-pub mod batch_delete;
+// 导入子模块 - 暂时只包含稳定的模块
 pub mod create;
 pub mod delete;
 pub mod list;
+// 重新启用已修复的模块
+pub mod batch_create;
+pub mod batch_delete;
 pub mod patch;
 
 // 重新导出主要类型
@@ -35,6 +36,11 @@ pub use create::{
     CreateTableRequest, CreateTableRequestBuilder, CreateTableResponse,
     TableData, TableField
 };
+pub use delete::DeleteTableRequest;
+pub use list::{
+    ListTablesRequest, ListTablesRequestBuilder, ListTablesResponse, TableInfo
+};
+// 重新启用已修复的模块导出
 pub use batch_create::{
     BatchCreateTableRequest, BatchCreateTableRequestBuilder, BatchCreateTableResponse,
     BatchCreateTableResult
@@ -43,8 +49,6 @@ pub use batch_delete::{
     BatchDeleteTableRequest, BatchDeleteTableRequestBuilder, BatchDeleteTableResponse,
     BatchDeleteTableResult
 };
-pub use delete::DeleteTableRequest;
-pub use list::ListTableRequest;
 pub use patch::PatchTableRequest;
 
 /// 数据表服务

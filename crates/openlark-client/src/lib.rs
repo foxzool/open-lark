@@ -224,8 +224,8 @@ pub use traits::*;
 // #[cfg(feature = "approval")]
 // pub use services::ApprovalService;
 
-#[cfg(feature = "auth")]
-pub use services::AuthService;
+// #[cfg(feature = "auth")]  // auth 功能暂未启用
+// pub use services::AuthService;
 
 // #[cfg(feature = "collab")]
 // pub use services::CollabService;
@@ -233,7 +233,7 @@ pub use services::AuthService;
 #[cfg(feature = "communication")]
 pub use services::CommunicationService;
 
-// #[cfg(feature = "docs")]
+// #[cfg(feature = "docs")]  // docs 功能模块存在但客户端层暂未集成
 // pub use services::DocsService;
 
 // #[cfg(feature = "helpdesk")]
@@ -242,11 +242,11 @@ pub use services::CommunicationService;
 // #[cfg(feature = "hire")]
 // pub use services::HireService;
 
-#[cfg(feature = "hr")]
-pub use services::HRService;
+// #[cfg(feature = "hr")]  // hr 功能暂未启用
+// pub use services::HRService;
 
-#[cfg(feature = "ai")]
-pub use services::AIService;
+// #[cfg(feature = "ai")]  // ai 功能暂未启用
+// pub use services::AIService;
 
 // #[cfg(feature = "people")]
 // pub use services::PeopleService;
@@ -280,8 +280,8 @@ pub mod prelude {
     // #[cfg(feature = "approval")]
     // pub use crate::services::ApprovalService;
 
-    #[cfg(feature = "auth")]
-    pub use crate::services::AuthService;
+    // #[cfg(feature = "auth")]  // auth 功能暂未启用
+    // pub use crate::services::AuthService;
 
     // #[cfg(feature = "collab")]
     // pub use crate::services::CollabService;
@@ -289,7 +289,7 @@ pub mod prelude {
     #[cfg(feature = "communication")]
     pub use crate::services::CommunicationService;
 
-    // #[cfg(feature = "docs")]
+    // #[cfg(feature = "docs")]  // docs 功能模块存在但客户端层暂未集成
     // pub use crate::services::DocsService;
 
     // #[cfg(feature = "helpdesk")]
@@ -298,11 +298,11 @@ pub mod prelude {
     // #[cfg(feature = "hire")]
     // pub use crate::services::HireService;
 
-    #[cfg(feature = "hr")]
-    pub use crate::services::HRService;
+    // #[cfg(feature = "hr")]  // hr 功能暂未启用
+    // pub use crate::services::HRService;
 
-    #[cfg(feature = "ai")]
-    pub use crate::services::AIService;
+    // #[cfg(feature = "ai")]  // ai 功能暂未启用
+    // pub use crate::services::AIService;
 
     // #[cfg(feature = "people")]
     // pub use crate::services::PeopleService;
@@ -356,8 +356,8 @@ pub mod utils {
         // 根据编译时的 feature 标志返回启用的功能
         let mut features = Vec::new();
 
-        #[cfg(feature = "auth")]
-        features.push("auth");
+        // #[cfg(feature = "auth")]  // auth 功能暂未启用
+        // features.push("auth");
 
         #[cfg(feature = "communication")]
         features.push("communication");
@@ -365,29 +365,32 @@ pub mod utils {
         #[cfg(feature = "docs")]
         features.push("docs");
 
-        #[cfg(feature = "hr")]
-        features.push("hr");
+        #[cfg(feature = "security")]
+        features.push("security");
 
-        #[cfg(feature = "ai")]
-        features.push("ai");
+        // #[cfg(feature = "hr")]  // hr 功能暂未启用
+        // features.push("hr");
 
-        #[cfg(feature = "calendar")]
-        features.push("calendar");
+        // #[cfg(feature = "ai")]  // ai 功能暂未启用
+        // features.push("ai");
 
-        #[cfg(feature = "admin")]
-        features.push("admin");
+        // #[cfg(feature = "calendar")]  // calendar 功能暂未启用
+        // features.push("calendar");
 
-        #[cfg(feature = "approval")]
-        features.push("approval");
+        // #[cfg(feature = "admin")]  // admin 功能暂未启用
+        // features.push("admin");
 
-        #[cfg(feature = "helpdesk")]
-        features.push("helpdesk");
+        // #[cfg(feature = "approval")]  // approval 功能暂未启用
+        // features.push("approval");
 
-        #[cfg(feature = "mail")]
-        features.push("mail");
+        // #[cfg(feature = "helpdesk")]  // helpdesk 功能暂未启用
+        // features.push("helpdesk");
 
-        #[cfg(feature = "application")]
-        features.push("application");
+        // #[cfg(feature = "mail")]  // mail 功能暂未启用
+        // features.push("mail");
+
+        // #[cfg(feature = "application")]  // application 功能暂未启用
+        // features.push("application");
 
         features
     }
@@ -398,20 +401,19 @@ pub mod utils {
         let mut issues = Vec::new();
 
         // 检查专业层功能是否依赖于核心层功能
-        #[cfg(any(feature = "hr", feature = "ai", feature = "calendar"))]
-        {
-            #[cfg(not(feature = "auth"))]
-            issues.push("专业层功能 (hr, ai, calendar) 需要启用核心功能 (auth)".to_string());
-        }
+        // #[cfg(any(feature = "hr", feature = "ai", feature = "calendar"))]  // 这些功能暂未启用
+        // }
+        // 注释：由于当前暂未启用专业层和企业层功能，暂时跳过依赖验证
+        // TODO: 未来启用相应功能时，取消以下代码的注释
 
         // 检查企业层功能是否依赖于相应的专业层功能
-        #[cfg(feature = "admin")]
-        #[cfg(not(feature = "hr"))]
-        issues.push("管理功能 (admin) 需要启用人力资源功能 (hr)".to_string());
+        // #[cfg(feature = "admin")]  // admin 功能暂未启用
+        // #[cfg(not(feature = "hr"))]  // hr 功能也暂未启用
+        // issues.push("管理功能 (admin) 需要启用人力资源功能 (hr)".to_string());
 
-        #[cfg(feature = "helpdesk")]
-        #[cfg(not(any(feature = "communication", feature = "ai")))]
-        issues.push("帮助台功能 (helpdesk) 需要启用通讯或AI功能".to_string());
+        // #[cfg(feature = "helpdesk")]  // helpdesk 功能暂未启用
+        // #[cfg(not(any(feature = "communication", feature = "ai")))]  // ai 功能也暂未启用
+        // issues.push("帮助台功能 (helpdesk) 需要启用通讯或AI功能".to_string());
 
         if issues.is_empty() {
             Ok(issues)

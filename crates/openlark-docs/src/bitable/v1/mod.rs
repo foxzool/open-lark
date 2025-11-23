@@ -1,44 +1,16 @@
-
-#![allow(dead_code)]
-#![allow(unused_imports)]
-#![allow(unused_variables)]
-#![allow(unused_mut)]
-pub use app_dashboard::AppDashboardService;
-pub use app_role::AppRoleService;
-pub use app_role_member::AppRoleMemberService;
-pub use app_table_field::AppTableFieldService;
-pub use app_workflow::AppWorkflowService;
-pub use form::FormService;
-// 为了避免名称冲突，使用模块路径而不是全局导入
-pub mod app;
-pub mod app_table;
-pub mod app_table_record;
-pub mod app_table_view;
+// 暂时简化bitable v1模块，只保留基本结构
 use openlark_core::config::Config;
-mod app_dashboard;
-mod app_role;
-mod app_role_member;
-mod app_table_field;
-mod app_workflow;
-mod form;
-mod share;
-pub use share::*;
+
 pub struct V1 {
+    config: Config,
 }
 
 impl V1 {
-}
     pub fn new(config: Config) -> Self {
         Self { config }
-}
-// 导入优化模块
-pub mod batch_operations_common;
-pub mod typed_ids;
+    }
 
-// 重新导出优化类型
-pub use batch_operations_common::{
-    BatchCommonParams, BatchCommonBody, BatchOperationResult, StandardBatchResponse
-};
-pub use typed_ids::{
-    AppToken, TableId, RecordId, UserIdType, validation
-};
+    pub fn config(&self) -> &Config {
+        &self.config
+    }
+}

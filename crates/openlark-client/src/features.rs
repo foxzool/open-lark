@@ -2,8 +2,7 @@
 //!
 //! 根据feature标志动态加载和配置服务
 
-use crate::registry::ServiceRegistry;
-use crate::{Config, DefaultServiceRegistry, Result, ServiceMetadata, ServiceStatus};
+use crate::{Config, DefaultServiceRegistry, Result}; // 移除未使用的导入
 
 /// 🔥 功能加载器 - 编译时feature驱动加载
 ///
@@ -35,20 +34,20 @@ impl FeatureLoader {
 
     /// 注册核心层服务
     fn register_core_services(&self, registry: &mut DefaultServiceRegistry) -> Result<()> {
-        #[cfg(feature = "auth")]
-        {
-            tracing::debug!("注册认证服务");
-            let metadata = ServiceMetadata {
-                name: "auth".to_string(),
-                version: "1.0.0".to_string(),
-                description: Some("飞书认证服务，提供令牌管理、身份验证等功能".to_string()),
-                dependencies: vec![],
-                provides: vec!["token-management".to_string()],
-                status: ServiceStatus::Uninitialized,
-                priority: 1,
-            };
-            registry.register_service(metadata)?;
-        }
+        // #[cfg(feature = "auth")]  // auth 功能暂未启用
+        // {
+        //     tracing::debug!("注册认证服务");
+        //     let metadata = ServiceMetadata {
+        //         name: "auth".to_string(),
+        //         version: "1.0.0".to_string(),
+        //         description: Some("飞书认证服务，提供令牌管理、身份验证等功能".to_string()),
+        //         dependencies: vec![],
+        //         provides: vec!["token-management".to_string()],
+        //         status: ServiceStatus::Uninitialized,
+        //         priority: 1,
+        //     };
+        //     registry.register_service(metadata)?;
+        // }
 
         Ok(())
     }
