@@ -302,10 +302,36 @@ impl MemoryTokenCache {
         cache_guard.contains_key(key)
     }
 
+    /// 获取所有缓存键
+    pub async fn keys(&self) -> Vec<String> {
+        let cache = self.cache.read().await;
+        cache.keys().cloned().collect()
+    }
+
     /// 获取缓存统计信息
     pub async fn stats(&self) -> CacheStats {
         let stats = self.stats.read().await;
         stats.clone()
+    }
+
+    /// 清理过期条目
+    pub async fn cleanup_expired(&self) -> usize {
+        let mut cache_guard = self.cache.write().await;
+        let before_size = cache_guard.len();
+
+        // 移除过期条目
+        let expired_keys: Vec<String> = cache_guard
+            .iter()
+            .filter(|(_, entry)| entry.is_expired())
+            .map(|(k, _)| k.clone())
+            .collect();
+
+        for key in expired_keys {
+            cache_guard.remove(&key);
+        }
+
+        let after_size = cache_guard.len();
+        before_size - after_size
     }
 
     /// 验证缓存一致性

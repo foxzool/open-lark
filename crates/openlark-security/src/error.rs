@@ -92,6 +92,25 @@ pub enum SecurityError {
     /// 其他错误
     #[error("Other error: {message}")]
     Other { message: String },
+
+    /// 参数缺失
+    #[error("Missing required parameter: {parameter}")]
+    MissingParameter { parameter: String, message: String },
+
+    /// 认证错误（通用）
+    #[error("Authentication error: {message}")]
+    AuthenticationError {
+        message: String,
+        error_code: Option<String>,
+    },
+
+    /// 权限拒绝
+    #[error("Permission denied: {resource} - {action}")]
+    PermissionDenied {
+        resource: String,
+        action: String,
+        message: String,
+    },
 }
 
 // 重新导出models中的TokenType
@@ -179,6 +198,22 @@ impl SecurityError {
             SecurityError::Other { message } => {
                 format!("安全错误: {}", message)
             }
+
+            SecurityError::MissingParameter { parameter, message } => {
+                format!("缺少必需参数: {} - {}", parameter, message)
+            }
+
+            SecurityError::AuthenticationError { message, .. } => {
+                format!("认证失败: {}", message)
+            }
+
+            SecurityError::PermissionDenied {
+                resource,
+                action,
+                message,
+            } => {
+                format!("权限被拒绝: 无法{} {} - {}", action, resource, message)
+            }
         }
     }
 
@@ -212,6 +247,9 @@ impl SecurityError {
             SecurityError::SessionExpired { .. } => true,
             SecurityError::AccountLocked { .. } => true,
             SecurityError::PasswordError { .. } => true,
+            SecurityError::MissingParameter { .. } => true,
+            SecurityError::AuthenticationError { .. } => true,
+            SecurityError::PermissionDenied { .. } => true,
             _ => false,
         }
     }

@@ -143,6 +143,7 @@ pub struct AccessToken {
 }
 
 impl AccessToken {
+    /// 创建新的访问令牌
     pub fn new(token: String) -> Self {
         Self {
             access_token: token,
@@ -166,6 +167,7 @@ pub struct RefreshToken {
 }
 
 impl RefreshToken {
+    /// 创建新的刷新令牌
     pub fn new(token: String) -> Self {
         Self {
             refresh_token: token,

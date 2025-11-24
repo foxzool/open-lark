@@ -32,9 +32,7 @@ impl RefreshManager {
         let token_info = self.refresher.refresh_app_token().await?;
 
         // 更新缓存
-        self.cache
-            .put("app_access_token", token_info.clone())
-            .await?;
+        self.cache.put("app_access_token", token_info.clone()).await;
 
         info!("App access token refreshed successfully");
         Ok(token_info)
@@ -48,7 +46,7 @@ impl RefreshManager {
 
         // 更新缓存
         let cache_key = format!("tenant_access_token:{}", tenant_key);
-        self.cache.put(&cache_key, token_info.clone()).await?;
+        self.cache.put(&cache_key, token_info.clone()).await;
 
         info!(
             "Tenant access token refreshed successfully for: {}",
@@ -68,7 +66,7 @@ impl RefreshManager {
 
         // 更新缓存
         let cache_key = format!("user_access_token:{}", refresh_token);
-        self.cache.put(&cache_key, token_info.clone()).await?;
+        self.cache.put(&cache_key, token_info.clone()).await;
 
         info!("Token refreshed successfully with refresh token");
         Ok(token_info)
@@ -123,7 +121,7 @@ impl RefreshManager {
         debug!("Smart refreshing token: {}", key);
 
         // 尝试从缓存获取
-        if let Some(token_info) = self.cache.get(key).await? {
+        if let Some(token_info) = self.cache.get(key).await {
             // 检查是否需要刷新
             if self.refresher.should_refresh(&token_info).await {
                 debug!("Token needs refresh: {}", key);
@@ -186,7 +184,7 @@ impl RefreshManager {
     pub async fn should_refresh_token(&self, key: &str) -> AuthResult<bool> {
         debug!("Checking if token needs refresh: {}", key);
 
-        if let Some(token_info) = self.cache.get(key).await? {
+        if let Some(token_info) = self.cache.get(key).await {
             let should_refresh = self.refresher.should_refresh(&token_info).await;
             debug!("Token {} needs refresh: {}", key, should_refresh);
             Ok(should_refresh)
@@ -206,7 +204,7 @@ impl RefreshManager {
         let cache_keys = self.cache.keys().await;
 
         for key in cache_keys {
-            if let Ok(Some(token_info)) = self.cache.get(&key).await {
+            if let Some(token_info) = self.cache.get(&key).await {
                 if self.refresher.should_refresh(&token_info).await {
                     debug!("Scheduled refresh for token: {}", key);
 
@@ -278,7 +276,7 @@ impl RefreshManager {
         let mut stats = RefreshStats::default();
 
         for key in cache_keys {
-            if let Ok(Some(token_info)) = self.cache.get(&key).await {
+            if let Some(token_info) = self.cache.get(&key).await {
                 stats.total_tokens += 1;
 
                 if self.refresher.should_refresh(&token_info).await {

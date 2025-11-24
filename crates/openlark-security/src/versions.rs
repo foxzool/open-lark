@@ -67,7 +67,10 @@ impl VersionService for DefaultVersionService {
                 ApiVersion {
                     version: "v2".to_string(),
                     status: VersionStatus::Stable,
-                    release_date: chrono::Utc.ymd(2023, 6, 1).and_hms(0, 0, 0),
+                    release_date: chrono::NaiveDate::from_ymd_opt(2023, 6, 1)
+                        .and_hms_opt(0, 0, 0)
+                        .map(|ndt| chrono::DateTime::from_naive_utc_and_offset(ndt, chrono::Utc))
+                        .unwrap_or_else(|| chrono::Utc::now()),
                     deprecation_date: None,
                     sunset_date: None,
                     description: Some("增强认证API版本，支持更多认证方式".to_string()),
@@ -437,7 +440,10 @@ impl DefaultVersionService {
             ("auth", "v2") => vec![
                 ChangelogEntry {
                     version: "2.0.0".to_string(),
-                    date: chrono::Utc.ymd(2023, 6, 1).and_hms(0, 0, 0),
+                    date: chrono::NaiveDate::from_ymd_opt(2023, 6, 1)
+                        .and_hms_opt(0, 0, 0)
+                        .map(|ndt| chrono::DateTime::from_naive_utc_and_offset(ndt, chrono::Utc))
+                        .unwrap_or_else(|| chrono::Utc::now()),
                     changes: vec![
                         Change {
                             type_: ChangeType::Added,
@@ -453,7 +459,10 @@ impl DefaultVersionService {
                 },
                 ChangelogEntry {
                     version: "2.1.0".to_string(),
-                    date: chrono::Utc.ymd(2023, 8, 15).and_hms(0, 0, 0),
+                    date: chrono::NaiveDate::from_ymd_opt(2023, 8, 15)
+                        .and_hms_opt(0, 0, 0)
+                        .map(|ndt| chrono::DateTime::from_naive_utc_and_offset(ndt, chrono::Utc))
+                        .unwrap_or_else(|| chrono::Utc::now()),
                     changes: vec![Change {
                         type_: ChangeType::Fixed,
                         description: "修复令牌刷新问题".to_string(),

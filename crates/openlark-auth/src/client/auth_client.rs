@@ -120,9 +120,7 @@ impl AuthClient {
         match token_type {
             TokenType::AppAccessToken => {
                 let token_info = self.refresher.refresh_app_token().await?;
-                self.cache
-                    .put("app_access_token", token_info.clone())
-                    .await?;
+                self.cache.put("app_access_token", token_info.clone()).await;
                 Ok(token_info)
             }
             TokenType::TenantAccessToken => {
@@ -133,7 +131,7 @@ impl AuthClient {
                 })?;
                 let token_info = self.refresher.refresh_tenant_token(tenant_key).await?;
                 let cache_key = format!("tenant_access_token:{}", tenant_key);
-                self.cache.put(&cache_key, token_info.clone()).await?;
+                self.cache.put(&cache_key, token_info.clone()).await;
                 Ok(token_info)
             }
             TokenType::UserAccessToken => Err(AuthError::TokenError(
@@ -144,13 +142,13 @@ impl AuthClient {
 
     /// 获取缓存统计信息
     pub async fn get_cache_stats(&self) -> crate::auth::cache::CacheStats {
-        self.cache.get_stats().await
+        self.cache.stats().await
     }
 
     /// 清空缓存
     pub async fn clear_cache(&self) -> AuthResult<()> {
         debug!("Clearing all token cache");
-        self.cache.clear().await?;
+        self.cache.clear().await;
         info!("Token cache cleared successfully");
         Ok(())
     }

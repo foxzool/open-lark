@@ -27,13 +27,14 @@ impl CacheManager {
     /// 获取缓存的令牌
     pub async fn get_token(&self, key: &str) -> AuthResult<Option<TokenInfo>> {
         debug!("Getting token from cache: {}", key);
-        self.cache.get(key).await
+        Ok(self.cache.get(key).await)
     }
 
     /// 缓存令牌
     pub async fn put_token(&self, key: &str, token: TokenInfo) -> AuthResult<()> {
         debug!("Putting token into cache: {}", key);
-        self.cache.put(key, token).await
+        self.cache.put(key, token).await;
+        Ok(())
     }
 
     /// 缓存令牌带TTL
@@ -48,13 +49,15 @@ impl CacheManager {
             ttl.as_secs(),
             key
         );
-        self.cache.put_with_ttl(key, token, ttl).await
+        self.cache.put_with_ttl(key, token, ttl).await;
+        Ok(())
     }
 
     /// 移除缓存的令牌
     pub async fn remove_token(&self, key: &str) -> AuthResult<()> {
         debug!("Removing token from cache: {}", key);
-        self.cache.remove(key).await
+        self.cache.remove(key).await;
+        Ok(())
     }
 
     /// 检查令牌是否存在于缓存中
@@ -66,20 +69,20 @@ impl CacheManager {
     /// 清空所有缓存
     pub async fn clear_cache(&self) -> AuthResult<()> {
         debug!("Clearing all cache");
-        self.cache.clear().await?;
+        self.cache.clear().await;
         info!("All cache cleared successfully");
         Ok(())
     }
 
     /// 获取缓存统计信息
     pub async fn get_cache_stats(&self) -> CacheStats {
-        self.cache.get_stats().await
+        self.cache.stats().await
     }
 
     /// 清理过期令牌
     pub async fn cleanup_expired_tokens(&self) -> AuthResult<usize> {
         debug!("Cleaning up expired tokens");
-        let count = self.cache.cleanup_expired().await?;
+        let count = self.cache.cleanup_expired().await;
         info!("Cleaned up {} expired tokens", count);
         Ok(count)
     }
@@ -101,7 +104,7 @@ impl CacheManager {
 
         for key in keys {
             let result = self.cache.get(key).await;
-            results.push(result);
+            results.push(Ok(result));
         }
 
         debug!(
@@ -118,9 +121,7 @@ impl CacheManager {
         debug!("Batch putting {} tokens into cache", token_pairs.len());
 
         for (key, token) in token_pairs {
-            if let Err(e) = self.cache.put(&key, token).await {
-                warn!("Failed to cache token {}: {}", key, e);
-            }
+            self.cache.put(&key, token).await;
         }
 
         info!("Batch put completed");
@@ -130,7 +131,11 @@ impl CacheManager {
     /// 获取缓存命中率
     pub async fn get_hit_rate(&self) -> f64 {
         let stats = self.get_cache_stats().await;
-        stats.hit_rate()
+        if stats.hits + stats.misses == 0 {
+            0.0
+        } else {
+            stats.hits as f64 / (stats.hits + stats.misses) as f64
+        }
     }
 
     /// 预热缓存
@@ -138,9 +143,7 @@ impl CacheManager {
         info!("Warming up cache with {} tokens", tokens.len());
 
         for (key, token) in tokens {
-            if let Err(e) = self.cache.put(&key, token).await {
-                warn!("Failed to warmup cache for token {}: {}", key, e);
-            }
+            self.cache.put(&key, token).await;
         }
 
         info!("Cache warmup completed");
@@ -169,9 +172,8 @@ impl CacheManager {
         let mut removed_count = 0;
 
         for key in keys {
-            if self.cache.remove(&key).await.is_ok() {
-                removed_count += 1;
-            }
+            self.cache.remove(&key).await;
+            removed_count += 1;
         }
 
         info!(
@@ -195,7 +197,7 @@ impl CacheManager {
         let mut cached_data = Vec::new();
 
         for key in keys {
-            if let Ok(Some(token)) = self.cache.get(&key).await {
+            if let Some(token) = self.cache.get(&key).await {
                 cached_data.push((key, token));
             }
         }
@@ -206,9 +208,7 @@ impl CacheManager {
 
         // 恢复缓存数据
         for (key, token) in cached_data {
-            if let Err(e) = self.cache.put(&key, token).await {
-                warn!("Failed to restore cache for token {}: {}", key, e);
-            }
+            self.cache.put(&key, token).await;
         }
 
         info!("Cache configuration updated successfully");
@@ -220,10 +220,10 @@ impl CacheManager {
         let stats = self.get_cache_stats().await;
 
         CachePerformanceMetrics {
-            total_items: stats.total_items,
-            hit_count: stats.hit_count,
-            miss_count: stats.miss_count,
-            hit_rate: stats.hit_rate(),
+            total_items: stats.current_size as u64,
+            hit_count: stats.hits,
+            miss_count: stats.misses,
+            hit_rate: self.get_hit_rate().await,
             memory_usage: self.get_memory_usage().await,
             oldest_token_age: self.get_oldest_token_age().await,
         }

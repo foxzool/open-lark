@@ -74,7 +74,7 @@ impl TokenClient {
         debug!("Getting app access token");
 
         // 尝试从缓存获取
-        if let Some(token_info) = self.cache.get("app_access_token").await? {
+        if let Some(token_info) = self.cache.get("app_access_token").await {
             if !self.validator.should_refresh(&token_info) {
                 debug!("Using cached app access token");
                 return Ok(AccessToken::new(token_info.access_token));
@@ -85,9 +85,7 @@ impl TokenClient {
         let token_info = self.refresher.refresh_app_token().await?;
 
         // 缓存新令牌
-        self.cache
-            .put("app_access_token", token_info.clone())
-            .await?;
+        self.cache.put("app_access_token", token_info.clone()).await;
 
         info!("Successfully obtained new app access token");
         Ok(AccessToken::new(token_info.access_token))
@@ -100,7 +98,7 @@ impl TokenClient {
         let cache_key = format!("tenant_access_token:{}", tenant_key);
 
         // 尝试从缓存获取
-        if let Some(token_info) = self.cache.get(&cache_key).await? {
+        if let Some(token_info) = self.cache.get(&cache_key).await {
             if !self.validator.should_refresh(&token_info) {
                 debug!("Using cached tenant access token");
                 return Ok(AccessToken::new(token_info.access_token));
@@ -111,7 +109,7 @@ impl TokenClient {
         let token_info = self.refresher.refresh_tenant_token(tenant_key).await?;
 
         // 缓存新令牌
-        self.cache.put(&cache_key, token_info.clone()).await?;
+        self.cache.put(&cache_key, token_info.clone()).await;
 
         info!(
             "Successfully obtained new tenant access token for tenant: {}",
@@ -132,7 +130,7 @@ impl TokenClient {
 
         // 缓存用户令牌（较短的TTL）
         let cache_key = format!("user_access_token:{}", refresh_token);
-        self.cache.put(&cache_key, token_info.clone()).await?;
+        self.cache.put(&cache_key, token_info.clone()).await;
 
         info!("Successfully obtained new user access token");
         Ok(AccessToken::new(token_info.access_token))
@@ -149,7 +147,7 @@ impl TokenClient {
 
         // 更新缓存
         let cache_key = format!("user_access_token:{}", refresh_token);
-        self.cache.put(&cache_key, token_info.clone()).await?;
+        self.cache.put(&cache_key, token_info.clone()).await;
 
         info!("Successfully refreshed access token");
         Ok(AccessToken::new(token_info.access_token))
@@ -188,7 +186,7 @@ impl TokenClient {
             if key_pattern.ends_with(':') {
                 // 对于用户令牌，需要更复杂的查找逻辑
                 continue;
-            } else if let Some(token_info) = self.cache.get(key_pattern).await? {
+            } else if let Some(token_info) = self.cache.get(key_pattern).await {
                 if token_info.access_token == token {
                     debug!("Found token info in cache");
                     return Ok(token_info);
@@ -218,9 +216,9 @@ impl TokenClient {
             if key_pattern.ends_with(':') {
                 continue;
             }
-            if let Some(token_info) = self.cache.get(key_pattern).await? {
+            if let Some(token_info) = self.cache.get(key_pattern).await {
                 if token_info.access_token == token {
-                    self.cache.remove(key_pattern).await?;
+                    self.cache.remove(key_pattern).await;
                     info!("Successfully revoked access token");
                     return Ok(());
                 }
@@ -256,13 +254,13 @@ impl TokenClient {
 
     /// 获取客户端统计信息
     pub async fn get_stats(&self) -> crate::auth::cache::CacheStats {
-        self.cache.get_stats().await
+        self.cache.stats().await
     }
 
     /// 清空所有令牌缓存
     pub async fn clear_cache(&self) -> AuthResult<()> {
         debug!("Clearing all token cache");
-        self.cache.clear().await?;
+        self.cache.clear().await;
         info!("Token cache cleared successfully");
         Ok(())
     }

@@ -4,10 +4,9 @@
 //!
 //! ## 功能模块
 //!
-//! - **auth**: 身份认证 (44 APIs中的主要部分) - 用户登录、令牌管理
-//! - **acs**: 访问控制 - 权限验证、角色管理
-//! - **audit**: 安全审计 - 操作日志、安全监控
-//! - **token**: 令牌管理 - 访问令牌、刷新令牌
+//! - **auth**: 身份认证 (11 APIs) - 用户登录、令牌管理
+//! - **acs**: 访问控制 (14 APIs) - 权限验证、角色管理
+//! - **compliance**: 合规审计 (8 APIs) - 审计日志、合规检查、风险评估
 //!
 //! ## 快速开始
 //!
@@ -28,7 +27,7 @@
 //!
 //! ## 特性
 //!
-//! - ✅ **44 APIs全覆盖** - 飞书安全认证服务完整实现
+//! - ✅ **33 APIs全覆盖** - 飞书安全认证服务完整实现 (auth: 11, acs: 14, compliance: 8)
 //! - ✅ **类型安全** - 强类型请求/响应结构
 //! - ✅ **异步支持** - 基于tokio的异步API
 //! - ✅ **版本化API** - 支持v1/v2/v3多版本API
@@ -52,11 +51,8 @@ pub mod auth;
 #[cfg(feature = "acs")]
 pub mod acs;
 
-#[cfg(feature = "audit")]
-pub mod audit;
-
-#[cfg(feature = "token")]
-pub mod token;
+#[cfg(feature = "compliance")]
+pub mod compliance;
 
 // API版本模块
 #[cfg(any(feature = "v1", feature = "v2", feature = "v3"))]
@@ -76,8 +72,5 @@ pub use auth::AuthService;
 #[cfg(feature = "acs")]
 pub use acs::AccessControlService;
 
-#[cfg(feature = "audit")]
-pub use audit::AuditService;
-
-#[cfg(feature = "token")]
-pub use token::TokenService;
+#[cfg(feature = "compliance")]
+pub use compliance::ComplianceService;
