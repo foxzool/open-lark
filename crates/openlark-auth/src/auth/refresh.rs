@@ -30,6 +30,7 @@ pub struct RefreshTokenResponse {
 }
 
 /// 令牌刷新器
+#[derive(Debug, Clone)]
 pub struct TokenRefresher {
     app_id: String,
     app_secret: String,

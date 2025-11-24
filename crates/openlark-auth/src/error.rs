@@ -8,6 +8,15 @@ use thiserror::Error;
 /// 认证模块专用错误类型
 #[derive(Debug, Error)]
 pub enum AuthError {
+    /// 参数错误
+    #[error("参数错误: {parameter} - {reason}")]
+    InvalidParameter {
+        /// 参数名
+        parameter: String,
+        /// 错误原因
+        reason: String,
+    },
+
     /// 令牌相关错误
     #[error("令牌错误: {0}")]
     TokenError(String),
