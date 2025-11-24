@@ -95,6 +95,14 @@ impl AuthService for DefaultAuthService {
                 email: format!("{}@example.com", request.username),
                 phone: Some("+86 138 0000 0000".to_string()),
                 avatar_url: Some("https://example.com/avatar.jpg".to_string()),
+                nickname: format!("用户{}", request.username),
+                avatar: "https://example.com/avatar.jpg".to_string(),
+                tenant_key: format!("tenant_{}", request.username),
+                department_ids: vec![format!("dept_{}", request.username)],
+                position: "用户".to_string(),
+                is_active: true,
+                is_admin: false,
+                updated_at: now,
                 user_type: UserType::User,
                 status: UserStatus::Active,
                 created_at: now - chrono::Duration::days(30),
@@ -246,6 +254,7 @@ impl AuthService for DefaultAuthService {
             session_count: 1,
             active_sessions: vec![ActiveSession {
                 session_id: format!("session_{}", uuid::Uuid::new_v4()),
+                device_id: "default_device".to_string(),
                 device_type: DeviceType::Desktop,
                 ip_address: "127.0.0.1".to_string(),
                 location: "本地".to_string(),
@@ -290,7 +299,7 @@ pub struct LoginRequest {
 }
 
 /// 登录类型
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum LoginType {
     /// 密码登录
     Password,
@@ -303,7 +312,7 @@ pub enum LoginType {
 }
 
 /// 客户端信息
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ClientInfo {
     /// 客户端类型
     pub client_type: ClientType,
@@ -318,7 +327,7 @@ pub struct ClientInfo {
 }
 
 /// 客户端类型
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum ClientType {
     /// Web
     Web,
@@ -464,10 +473,12 @@ pub struct LoginStatus {
 }
 
 /// 活跃会话
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ActiveSession {
     /// 会话ID
     pub session_id: String,
+    /// 设备ID
+    pub device_id: String,
     /// 设备类型
     pub device_type: DeviceType,
     /// IP地址

@@ -277,6 +277,14 @@ impl SecurityService for DefaultSecurityService {
             email: format!("{}@example.com", user_id),
             phone: Some("+86 138 0000 0000".to_string()),
             avatar_url: Some("https://example.com/avatar.jpg".to_string()),
+            nickname: "Mock User".to_string(),
+            avatar: "https://example.com/avatar.jpg".to_string(),
+            tenant_key: format!("tenant_{}", user_id),
+            department_ids: vec![format!("dept_{}", user_id)],
+            position: "用户".to_string(),
+            is_active: true,
+            is_admin: false,
+            updated_at: Utc::now(),
             user_type: UserType::User,
             status: UserStatus::Active,
             created_at: Utc::now() - chrono::Duration::days(30),
@@ -416,7 +424,7 @@ impl SecurityServiceManager {
             #[cfg(feature = "auth")]
             auth: crate::auth::DefaultAuthService::new(),
             #[cfg(feature = "acs")]
-            acs: crate::acs::DefaultAccessControlService::new(),
+            acs: crate::acs::DefaultAccessControlService::with_default_config(),
             #[cfg(feature = "token")]
             token: crate::token::DefaultTokenService::with_default_config(),
             #[cfg(feature = "audit")]
@@ -646,6 +654,22 @@ pub struct UserInfo {
     pub phone: Option<String>,
     /// 头像URL
     pub avatar_url: Option<String>,
+    /// 用户昵称
+    pub nickname: String,
+    /// 头像
+    pub avatar: String,
+    /// 租户标识
+    pub tenant_key: String,
+    /// 部门ID列表
+    pub department_ids: Vec<String>,
+    /// 职位
+    pub position: String,
+    /// 是否激活
+    pub is_active: bool,
+    /// 是否管理员
+    pub is_admin: bool,
+    /// 更新时间
+    pub updated_at: DateTime<Utc>,
     /// 用户类型
     pub user_type: UserType,
     /// 用户状态

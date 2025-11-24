@@ -292,7 +292,9 @@ impl TimeUtils {
 /// 时间范围
 #[derive(Debug, Clone)]
 pub struct TimeRange {
+    /// 开始时间戳
     pub start: u64,
+    /// 结束时间戳
     pub end: u64,
 }
 

@@ -15,20 +15,23 @@ pub use crate::service::{
 };
 
 // 重新导出认证服务
-pub use crate::auth::{
-    ActiveSession, AuthService, ClientInfo, ClientType, DefaultAuthService, LoginRequest,
-    LoginResponse, LoginStatus, LoginType, LogoutRequest, LogoutResponse, TokenRefreshResponse,
-    TokenValidationResponse, UserAuthInfo,
+pub use crate::auth::{AuthService, DefaultAuthService};
+
+// 重新导出认证服务（从service子模块）
+pub use crate::auth::service::{
+    ActiveSession, ClientInfo, ClientType, LoginRequest, LoginResponse, LoginStatus, LoginType,
+    LogoutRequest, LogoutResponse, TokenRefreshResponse, TokenValidationResponse, UserAuthInfo,
 };
 
 // 重新导出设备相关类型（从models模块）
 pub use crate::models::{DeviceInfo, DeviceType};
 
-// 重新导出访问控制系统
+// 重新导出访问控制系统（feature-gated）
+#[cfg(feature = "acs")]
 pub use crate::acs::{
     AccessControlService, CreatePolicyRequest, DefaultAccessControlService, DeletePolicyResponse,
     GrantPermissionRequest, GrantPermissionResponse, PolicyEvaluationRequest,
-    PolicyEvaluationResponse, PolicyFilters, RevokePermissionRequest, RevokePermissionResponse,
+    PolicyEvaluationResponse, RevokePermissionRequest, RevokePermissionResponse,
     UpdatePolicyRequest, UserPermission,
 };
 
