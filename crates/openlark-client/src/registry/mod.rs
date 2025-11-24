@@ -170,8 +170,7 @@ pub struct DefaultServiceRegistry {
     dependency_resolver: Arc<DependencyResolver>,
 }
 
-impl DefaultServiceRegistry {
-}
+impl DefaultServiceRegistry {}
 
 impl Default for DefaultServiceRegistry {
     fn default() -> Self {

@@ -112,3 +112,8 @@ required-features = ["docs"]
 name = "security_service_demo"
 path = "../../examples/security_service_demo.rs"
 required-features = ["security"]
+
+[[example]]
+name = "auth_service_demo"
+path = "examples/auth_service_demo.rs"
+required-features = ["auth"]
