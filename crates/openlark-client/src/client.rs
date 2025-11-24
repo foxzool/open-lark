@@ -87,10 +87,13 @@ impl Client {
     //     crate::services::ApprovalService::new(&self.config)
     // }
 
-    // #[cfg(feature = "auth")]  // auth 功能暂未启用
-    // pub fn auth(&self) -> crate::services::AuthService<'_> {
-    //     crate::services::AuthService::new(&self.config)
-    // }
+    /// 🔐 访问认证服务
+    ///
+    /// 需要 `auth` feature
+    #[cfg(feature = "auth")]
+    pub fn auth(&self) -> crate::services::AuthService {
+        crate::services::AuthService::new(&self.config)
+    }
 
     // #[cfg(feature = "collab")]
     // pub fn collab(&self) -> crate::services::CollabService<'_> {

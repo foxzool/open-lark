@@ -226,8 +226,8 @@ pub use traits::*;
 // #[cfg(feature = "approval")]
 // pub use services::ApprovalService;
 
-// #[cfg(feature = "auth")]  // auth 功能暂未启用
-// pub use services::AuthService;
+#[cfg(feature = "auth")]
+pub use services::AuthService;
 
 // #[cfg(feature = "collab")]
 // pub use services::CollabService;
@@ -282,8 +282,8 @@ pub mod prelude {
     // #[cfg(feature = "approval")]
     // pub use crate::services::ApprovalService;
 
-    // #[cfg(feature = "auth")]  // auth 功能暂未启用
-    // pub use crate::services::AuthService;
+    #[cfg(feature = "auth")]
+    pub use crate::services::AuthService;
 
     // #[cfg(feature = "collab")]
     // pub use crate::services::CollabService;
@@ -358,8 +358,8 @@ pub mod utils {
         // 根据编译时的 feature 标志返回启用的功能
         let mut features = vec![];
 
-        // #[cfg(feature = "auth")]  // auth 功能暂未启用
-        // features.push("auth");
+        #[cfg(feature = "auth")]
+        features.push("auth");
 
         #[cfg(feature = "communication")]
         features.push("communication");
