@@ -122,9 +122,14 @@ impl Client {
     /// 📊 访问多维表格服务
     ///
     /// 需要 `bitable` feature (docs 模块包含 bitable 功能)
+    // TODO: 实现 BitableService，暂时注释掉
+    // #[cfg(feature = "docs")]
+    // pub fn bitable(&self) -> crate::services::BitableService<'_> {
+    //     crate::services::BitableService::new(&self.config)
+    // }
     #[cfg(feature = "docs")]
-    pub fn bitable(&self) -> crate::services::BitableService<'_> {
-        crate::services::BitableService::new(&self.config)
+    pub fn bitable(&self) -> &'static str {
+        "BitableService 尚未实现"
     }
 
     // /// 💬 访问帮助台服务
