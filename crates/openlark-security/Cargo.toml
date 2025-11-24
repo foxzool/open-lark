@@ -18,7 +18,7 @@ default = ["auth", "acs"]
 core = []
 
 # === 安全域功能 ===
-# 身份认证 (44 APIs中的主要部分)
+# 身份认证 (33 APIs中的主要部分)
 auth = ["core"]
 
 # 访问控制
@@ -30,6 +30,9 @@ audit = ["core"]
 # 令牌管理
 token = ["auth"]
 
+# 合规审计
+compliance = ["auth"]
+
 # === API版本支持 ===
 v1 = ["core"]
 v2 = ["v1"]
@@ -37,7 +40,7 @@ v3 = ["v2"]
 
 # === 功能组合 ===
 # 完整安全功能
-full = ["auth", "acs", "audit", "token", "v3"]
+full = ["auth", "acs", "audit", "token", "compliance", "v3"]
 
 # 向后兼容别名
 security = ["full"]
