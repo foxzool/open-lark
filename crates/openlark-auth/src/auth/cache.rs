@@ -46,6 +46,35 @@ pub struct CacheStats {
     pub current_size: usize,
 }
 
+impl CacheStats {
+    /// 计算缓存命中率
+    pub fn hit_rate(&self) -> f64 {
+        if self.hits + self.misses == 0 {
+            0.0
+        } else {
+            self.hits as f64 / (self.hits + self.misses) as f64
+        }
+    }
+
+    /// 获取总缓存项数量（用于向后兼容）
+    #[deprecated(note = "使用 current_size 代替")]
+    pub fn total_items(&self) -> usize {
+        self.current_size
+    }
+
+    /// 获取命中次数（用于向后兼容）
+    #[deprecated(note = "使用 hits 代替")]
+    pub fn hit_count(&self) -> u64 {
+        self.hits
+    }
+
+    /// 获取未命中次数（用于向后兼容）
+    #[deprecated(note = "使用 misses 代替")]
+    pub fn miss_count(&self) -> u64 {
+        self.misses
+    }
+}
+
 /// 缓存条目
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
@@ -73,6 +102,7 @@ impl CacheEntry {
 }
 
 /// 内存令牌缓存
+#[derive(Debug)]
 pub struct MemoryTokenCache {
     config: CacheConfig,
     cache: Arc<RwLock<HashMap<String, CacheEntry>>>,

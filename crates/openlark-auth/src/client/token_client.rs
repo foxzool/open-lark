@@ -15,6 +15,7 @@ use crate::error::{AuthError, AuthResult};
 /// 令牌客户端
 ///
 /// 专门处理各种令牌的获取、刷新和管理操作
+#[derive(Debug, Clone)]
 pub struct TokenClient {
     config: AuthConfig,
     cache: Arc<MemoryTokenCache>,
@@ -270,6 +271,8 @@ impl TokenClient {
 mod tests {
     use super::*;
     use std::time::Duration;
+    use crate::client::config::AuthConfigBuilder;
+    use crate::auth::token::{AppType, GetTokenRequest};
 
     fn create_test_config() -> AuthConfig {
         AuthConfigBuilder::new()
@@ -291,11 +294,7 @@ mod tests {
         let config = create_test_config();
         let client = TokenClient::new(config).unwrap();
 
-        let request = GetTokenRequest {
-            token_type: TokenType::AppAccessToken,
-            tenant_key: None,
-            refresh_token: None,
-        };
+        let request = GetTokenRequest::self_build_app_access_token();
 
         // 由于这是模拟实现，应该能正常工作
         let result = client.get_access_token(request).await;
@@ -308,21 +307,41 @@ mod tests {
         let client = TokenClient::new(config).unwrap();
 
         let requests = vec![
-            GetTokenRequest {
-                token_type: TokenType::AppAccessToken,
-                tenant_key: None,
-                refresh_token: None,
-            },
-            GetTokenRequest {
-                token_type: TokenType::AppAccessToken,
-                tenant_key: None,
-                refresh_token: None,
-            },
+            GetTokenRequest::self_build_app_access_token(),
+            GetTokenRequest::self_build_app_access_token(),
         ];
 
         let results = client.batch_get_access_tokens(requests).await;
         assert_eq!(results.len(), 2);
         assert!(results.iter().all(|r| r.is_ok()));
+    }
+
+    #[tokio::test]
+    async fn test_app_type_distinction() {
+        let config = create_test_config();
+        let client = TokenClient::new(config).unwrap();
+
+        // 测试自建应用访问令牌请求
+        let self_build_request = GetTokenRequest::self_build_app_access_token();
+        assert_eq!(self_build_request.app_type, AppType::SelfBuild);
+        assert_eq!(self_build_request.token_type, TokenType::AppAccessToken);
+
+        // 测试商店应用访问令牌请求
+        let store_request = GetTokenRequest::store_app_access_token();
+        assert_eq!(store_request.app_type, AppType::Store);
+        assert_eq!(store_request.token_type, TokenType::AppAccessToken);
+
+        // 测试租户访问令牌请求
+        let tenant_key = "test_tenant".to_string();
+        let self_build_tenant_request = GetTokenRequest::self_build_tenant_access_token(tenant_key.clone());
+        assert_eq!(self_build_tenant_request.app_type, AppType::SelfBuild);
+        assert_eq!(self_build_tenant_request.token_type, TokenType::TenantAccessToken);
+        assert_eq!(self_build_tenant_request.tenant_key, Some(tenant_key));
+
+        // 测试带作用域的请求
+        let scoped_request = GetTokenRequest::self_build_app_access_token()
+            .with_scope("contact:base".to_string());
+        assert_eq!(scoped_request.scope, Some("contact:base".to_string()));
     }
 
     #[tokio::test]

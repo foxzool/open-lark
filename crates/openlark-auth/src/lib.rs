@@ -162,6 +162,7 @@ pub mod config;
 pub mod endpoints;
 pub mod error;
 pub mod managers;
+pub mod services;
 pub mod utils;
 
 // 错误处理
@@ -172,7 +173,7 @@ pub use auth::{
     cache::{CacheConfig, CacheStats, MemoryTokenCache, TokenCache, TokenStorage},
     refresh::{RefreshTokenResponse, TokenRefresher, TokenRefresherBuilder},
     token::{
-        AccessToken, GetTokenRequest, RefreshToken, TokenInfo, TokenRefreshConfig, TokenType,
+        AccessToken, AppType, GetTokenRequest, RefreshToken, TokenInfo, TokenRefreshConfig, TokenType,
         TokenValidationResult,
     },
     types::{
@@ -194,6 +195,9 @@ pub use config::{AuthConfig, AuthConfigBuilder};
 // 端点
 pub use endpoints::AuthEndpoints;
 
+// 服务层
+pub use services::AuthServices;
+
 /// 🔧 预导出模块
 ///
 /// 包含最常用的类型和特征，简化导入：
@@ -207,9 +211,9 @@ pub use endpoints::AuthEndpoints;
 pub mod prelude {
     // 核心类型
     pub use crate::{
-        AccessToken, AuthClient, AuthClientBuilder, AuthConfig, AuthResult, RefreshToken,
+        AccessToken, AppType, AuthClient, AuthClientBuilder, AuthConfig, AuthResult, RefreshToken,
         TokenCache, TokenInfo, TokenManager, TokenRefresher, TokenType, TokenValidationResult,
-        TokenValidator,
+        TokenValidator, AuthServices,
     };
 
     // 错误类型
@@ -316,11 +320,16 @@ mod tests {
     #[test]
     fn test_cache_stats_calculation() {
         let stats = CacheStats {
-            total_items: 100,
-            hit_count: 80,
-            miss_count: 20,
+            hits: 80,
+            misses: 20,
+            cleanups: 0,
+            current_size: 100,
         };
 
         assert_eq!(stats.hit_rate(), 0.8);
+        // 测试向后兼容性
+        assert_eq!(stats.hit_count(), 80);
+        assert_eq!(stats.miss_count(), 20);
+        assert_eq!(stats.total_items(), 100);
     }
 }
