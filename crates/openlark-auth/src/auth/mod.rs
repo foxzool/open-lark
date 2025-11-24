@@ -1,24 +1,53 @@
-//! 核心认证模块
+//! 企业应用认证 (Project: auth)
 //!
-//! 从 openlark-core/auth 迁移的核心认证功能，提供令牌管理、缓存、验证和刷新等基础功能。
+//! 提供企业应用的认证功能，包括应用访问令牌和租户访问令牌。
 
-pub mod cache;
-pub mod refresh;
-pub mod token;
-pub mod types;
-pub mod validator;
+use crate::models::AuthConfig;
+use std::sync::Arc;
 
-// 重新导出主要类型
-pub use cache::{CacheConfig, CacheStats, MemoryTokenCache, TokenCache, TokenStorage};
-pub use refresh::{RefreshTokenResponse, TokenRefresher, TokenRefresherBuilder};
-pub use token::{
-    AccessToken, GetTokenRequest, GetTokenResponse, RefreshToken, TokenInfo, TokenRefreshConfig,
-    TokenType, TokenValidationResult,
-};
-pub use types::{
-    AuthContext, AuthValidationDetails, AuthValidationRequest, CacheStrategy, OAuthConfig,
-    OAuthGrantType, OAuthRequest, OAuthResponse, PermissionScope, PreAuthCodeResponse,
-    RefreshStrategy, TenantInfo, TokenExchangeRequest, TokenExchangeResponse, TokenSecurityConfig,
-    TokenStorageLocation, UserInfo,
-};
-pub use validator::TokenValidator;
+// v3 API版本模块
+pub mod v3;
+
+/// 企业应用认证项目
+#[derive(Debug)]
+pub struct AuthProject {
+    config: Arc<AuthConfig>,
+}
+
+impl AuthProject {
+    pub fn new(config: Arc<AuthConfig>) -> Self {
+        Self { config }
+    }
+
+    /// 访问 v3 API
+    pub fn v3(&self) -> AuthV3Service {
+        AuthV3Service {
+            config: self.config.clone(),
+        }
+    }
+}
+
+/// v3 API 服务
+#[derive(Debug)]
+pub struct AuthV3Service {
+    config: Arc<AuthConfig>,
+}
+
+impl AuthV3Service {
+    /// 租户访问令牌服务
+    pub fn tenant_access_token(
+        &self,
+    ) -> crate::auth::v3::tenant_access_token::TenantAccessTokenService {
+        crate::auth::v3::tenant_access_token::TenantAccessTokenService::new(self.config.clone())
+    }
+
+    /// 应用访问令牌服务
+    pub fn app_access_token(&self) -> crate::auth::v3::app_access_token::AppAccessTokenService {
+        crate::auth::v3::app_access_token::AppAccessTokenService::new(self.config.clone())
+    }
+
+    /// 应用票据服务
+    pub fn app_ticket(&self) -> crate::auth::v3::app_ticket::AppTicketService {
+        crate::auth::v3::app_ticket::AppTicketService::new(self.config.clone())
+    }
+}
