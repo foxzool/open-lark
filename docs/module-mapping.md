@@ -264,38 +264,45 @@ crates/openlark-communication/src/
 | 知识库 | baike | 27 | 企业知识库、Wiki管理、实体管理 | space, node, entity, draft |
 | 会议纪要 | minutes | 4 | 会议记录管理、转录服务 | transcript |
 
+- **详细文档**: [查看完整docs模块映射](./module-mapping-docs.md)
+
 #### 关键API示例
 
 ```rust
-// 云文档协同 (ccm)
-// DOCX文档管理
-docx_chat_announcement_get_v1()              // 获取群公告
-docx_chat_announcement_block_create_v1()    // 创建群公告块
-docx_chat_announcement_block_batch_update_v1() // 批量更新块
-// 云盘文件管理
+// 云文档协作 (drive/v1)
 drive_file_list_v1()                         // 获取文件列表
-drive_file_create_folder_v1()               // 创建文件夹
 drive_file_upload_all_v1()                   // 上传文件
 drive_file_download_v1()                     // 下载文件
-drive_file_copy_v1()                         // 复制文件
-drive_file_move_v1()                         // 移动文件
+drive_permission_create_v1()                 // 创建权限
+drive_link_create_v1()                       // 创建分享链接
 
-// 多维表格 (base)
-bitable_app_create_v1()                      // 创建多维表格应用
-bitable_app_update_v1()                      // 更新应用信息
+// 多维表格 (bitable/v1)
+bitable_app_create_v1()                      // 创建应用
 bitable_table_create_v1()                    // 创建数据表
-bitable_table_list_v1()                      // 获取数据表列表
 bitable_view_create_v1()                     // 创建视图
 bitable_record_create_v1()                   // 创建记录
 bitable_record_batch_create_v1()             // 批量创建记录
 bitable_record_search_v1()                   // 搜索记录
 
-// 知识库 (baike)
-baike_space_list_v2()                        // 获取知识库空间列表
-baike_space_node_list_v2()                   // 获取空间节点
-baike_entity_update_v1()                     // 更新实体
-baike_draft_create_v1()                      // 创建草稿
-baike_classification_list_v1()                // 获取分类列表
+// 电子表格 (sheets/v3)
+sheets_spreadsheet_create_v3()               // 创建表格
+sheets_range_read_v3()                       // 读取范围数据
+sheets_range_write_v3()                      // 写入范围数据
+
+// 文档处理 (docx/v1)
+docx_document_create_v1()                    // 创建文档
+docx_block_create_v1()                       // 创建文档块
+docx_block_batch_create_v1()                 // 批量创建块
+docx_comment_create_v1()                     // 创建评论
+
+// 知识库 (wiki/v2)
+wiki_space_create_v2()                       // 创建知识库空间
+wiki_node_create_v2()                        // 创建知识节点
+wiki_entity_create_v2()                      // 创建实体
+
+// 会议纪要 (minutes/v1)
+minutes_transcript_create_v1()               // 创建转录
+minutes_transcript_get_v1()                  // 获取转录内容
 ```
 
 #### 按Project-Version-Resource组织架构
