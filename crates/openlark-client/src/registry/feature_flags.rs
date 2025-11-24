@@ -238,7 +238,7 @@ impl FeatureFlagManager {
 
     /// 设置百分比功能标志
     pub fn set_percentage_flag(&self, name: &str, value: f64) -> FeatureResult<()> {
-        if value < 0.0 || value > 1.0 {
+        if !(0.0..=1.0).contains(&value) {
             return Err(FeatureFlagError::InvalidValue {
                 value: value.to_string(),
             });
@@ -284,11 +284,13 @@ impl FeatureFlagManager {
         let hash = self.hash_string(user_id);
         let threshold = self
             .get_flag(name)
-            .and_then(|v| {
+            .map(|v| {
                 if let FlagValue::Percentage(p) = v {
-                    Ok(p)
+                    p
+                } else if v.as_bool() {
+                    1.0
                 } else {
-                    Ok(if v.as_bool() { 1.0 } else { 0.0 })
+                    0.0
                 }
             })
             .unwrap_or(1.0);
@@ -307,7 +309,7 @@ impl FeatureFlagManager {
         let flags = self.flags.read().unwrap();
         flags
             .values()
-            .filter(|flag| flag.group.as_ref().map_or(false, |g| g == group))
+            .filter(|flag| flag.group.as_ref().is_some_and(|g| g == group))
             .cloned()
             .collect()
     }

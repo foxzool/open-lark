@@ -4,9 +4,6 @@
 
 // 业务服务模块
 
-/// 认证服务模块
-///
-/// 提供飞书认证和授权功能，包括令牌管理、OAuth验证等
 // #[cfg(feature = "auth")]  // auth 功能暂未启用
 // pub mod auth;
 
@@ -22,15 +19,9 @@ pub mod communication;
 #[cfg(feature = "docs")]
 pub mod docs;
 
-/// 人力资源服务模块
-///
-/// 提供飞书人力资源功能，包括员工管理、考勤、薪酬等
 // #[cfg(feature = "hr")]  // hr 功能暂未启用
 // pub mod hr;
 
-/// AI服务模块
-///
-/// 提供飞书AI智能服务，包括智能助手、AI分析等
 // #[cfg(feature = "ai")]  // ai 功能暂未启用
 // pub mod ai;
 
