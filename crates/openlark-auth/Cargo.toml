@@ -54,6 +54,7 @@ urlencoding = "2.1"
 tokio-test = "0.4"
 mockall = "0.12"
 rstest = "0.18"
+wiremock = "0.6"
 
 # 性能基准测试的依赖（可选）
 [dependencies.criterion]
