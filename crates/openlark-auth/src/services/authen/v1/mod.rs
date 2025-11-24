@@ -4,8 +4,8 @@ use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 
 use crate::client::TokenClient;
-use crate::error::{AuthError, AuthResult};
 use crate::endpoints::AuthEndpoints;
+use crate::error::{AuthError, AuthResult};
 
 /// Authen v1 用户身份认证服务
 #[derive(Debug, Clone)]
@@ -48,7 +48,11 @@ impl AccessTokenService {
     }
 
     /// 获取用户访问令牌
-    pub async fn create(&self, grant_type: &str, code: &str) -> AuthResult<UserAccessTokenResponse> {
+    pub async fn create(
+        &self,
+        grant_type: &str,
+        code: &str,
+    ) -> AuthResult<UserAccessTokenResponse> {
         // TODO: 实现用户访问令牌获取逻辑
         todo!("Implement user access token creation")
     }
@@ -86,7 +90,11 @@ impl OidcAccessTokenService {
     }
 
     /// 获取OIDC访问令牌
-    pub async fn create(&self, grant_type: &str, code: &str) -> AuthResult<OidcAccessTokenResponse> {
+    pub async fn create(
+        &self,
+        grant_type: &str,
+        code: &str,
+    ) -> AuthResult<OidcAccessTokenResponse> {
         // TODO: 实现OIDC访问令牌获取逻辑
         todo!("Implement OIDC access token creation")
     }
@@ -245,16 +253,25 @@ mod tests {
         .unwrap();
 
         let authen_service = AuthenServiceV1::new(token_client);
-        assert!(authen_service.access_token().create("authorization_code", "test_code").await.is_err()); // 需要真实的环境才能执行
+        assert!(authen_service
+            .access_token()
+            .create("authorization_code", "test_code")
+            .await
+            .is_err()); // 需要真实的环境才能执行
     }
 
     #[test]
     fn test_service_client_creation() {
-        let client = DefaultAuthenV1ServiceClient::new("app_id".to_string(), "app_secret".to_string());
+        let client =
+            DefaultAuthenV1ServiceClient::new("app_id".to_string(), "app_secret".to_string());
         assert_eq!(client.base_url(), "https://open.feishu.cn");
 
-        let client_with_custom_url = DefaultAuthenV1ServiceClient::new("app_id".to_string(), "app_secret".to_string())
-            .with_base_url("https://open.larksuite.com".to_string());
-        assert_eq!(client_with_custom_url.base_url(), "https://open.larksuite.com");
+        let client_with_custom_url =
+            DefaultAuthenV1ServiceClient::new("app_id".to_string(), "app_secret".to_string())
+                .with_base_url("https://open.larksuite.com".to_string());
+        assert_eq!(
+            client_with_custom_url.base_url(),
+            "https://open.larksuite.com"
+        );
     }
 }

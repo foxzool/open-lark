@@ -49,7 +49,8 @@ impl AuthEndpoints {
     pub const OIDC_ACCESS_TOKEN: &'static str = "/open-apis/authen/v1/oidc/access_token";
 
     /// 刷新OIDC访问令牌
-    pub const OIDC_REFRESH_ACCESS_TOKEN: &'static str = "/open-apis/authen/v1/oidc/refresh_access_token";
+    pub const OIDC_REFRESH_ACCESS_TOKEN: &'static str =
+        "/open-apis/authen/v1/oidc/refresh_access_token";
 
     // === OAuth相关端点 ===
     /// 获取登录预授权码
@@ -97,10 +98,7 @@ mod tests {
             AuthEndpoints::USER_ACCESS_TOKEN,
             "/open-apis/authen/v1/access_token"
         );
-        assert_eq!(
-            AuthEndpoints::USER_INFO,
-            "/open-apis/authen/v1/user_info"
-        );
+        assert_eq!(AuthEndpoints::USER_INFO, "/open-apis/authen/v1/user_info");
 
         // OIDC端点
         assert_eq!(
@@ -113,9 +111,6 @@ mod tests {
         );
 
         // OAuth端点
-        assert_eq!(
-            AuthEndpoints::OAUTH_INDEX,
-            "/open-apis/authen/v1/index"
-        );
+        assert_eq!(AuthEndpoints::OAUTH_INDEX, "/open-apis/authen/v1/index");
     }
 }
