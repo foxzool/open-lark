@@ -33,7 +33,7 @@ impl FeatureLoader {
     }
 
     /// 注册核心层服务
-    fn register_core_services(&self, registry: &mut DefaultServiceRegistry) -> Result<()> {
+    fn register_core_services(&self, _registry: &mut DefaultServiceRegistry) -> Result<()> {
         // #[cfg(feature = "auth")]  // auth 功能暂未启用
         // {
         //     tracing::debug!("注册认证服务");
@@ -68,7 +68,7 @@ impl FeatureLoader {
 }
 
 /// 功能集统计信息
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct FeatureStats {
     /// 启用的功能数量
     pub enabled_features: usize,

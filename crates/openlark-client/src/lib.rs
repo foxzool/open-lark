@@ -356,7 +356,7 @@ pub mod utils {
     /// 获取启用的功能列表
     pub fn get_enabled_features() -> Vec<&'static str> {
         // 根据编译时的 feature 标志返回启用的功能
-        let mut features = Vec::new();
+        let mut features = vec![];
 
         // #[cfg(feature = "auth")]  // auth 功能暂未启用
         // features.push("auth");
@@ -400,7 +400,7 @@ pub mod utils {
     /// 验证功能依赖
     pub fn validate_feature_dependencies() -> Result<Vec<String>> {
         // 简化的依赖验证逻辑
-        let mut issues = Vec::new();
+        let issues = vec![];
 
         // 检查专业层功能是否依赖于核心层功能
         // #[cfg(any(feature = "hr", feature = "ai", feature = "calendar"))]  // 这些功能暂未启用

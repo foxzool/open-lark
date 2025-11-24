@@ -43,6 +43,7 @@ pub type DependencyResult<T> = Result<T, DependencyError>;
 #[derive(Debug)]
 pub struct DependencyResolver {
     /// 缓存已解析的依赖顺序
+    #[allow(dead_code)]
     resolved_orders: HashMap<String, Vec<String>>,
 }
 
@@ -93,6 +94,7 @@ impl DependencyResolver {
     }
 
     /// 深度优先搜索检测循环依赖
+    #[allow(clippy::only_used_in_recursion)]
     fn dfs_detect_cycle(
         &self,
         service: &str,
@@ -108,11 +110,7 @@ impl DependencyResolver {
         if let Some(dependencies) = dependency_graph.get(service) {
             for dep in dependencies {
                 if !visited.contains(dep) {
-                    if let Err(chain) =
-                        self.dfs_detect_cycle(dep, dependency_graph, visited, rec_stack, path)
-                    {
-                        return Err(chain);
-                    }
+                    self.dfs_detect_cycle(dep, dependency_graph, visited, rec_stack, path)?;
                 } else if rec_stack.contains(dep) {
                     // 找到循环依赖
                     let cycle_start = path.iter().position(|s| s == dep).unwrap();
@@ -382,7 +380,7 @@ impl DependencyReport {
         }
 
         report.push_str("## 🔍 详细依赖关系\n\n");
-        for (_, detail) in &self.service_details {
+        for detail in self.service_details.values() {
             report.push_str(&format!("### {}\n", detail.name));
             report.push_str(&format!(
                 "- 直接依赖: {}\n",

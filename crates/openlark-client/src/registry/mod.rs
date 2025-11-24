@@ -171,6 +171,15 @@ pub struct DefaultServiceRegistry {
 }
 
 impl DefaultServiceRegistry {
+}
+
+impl Default for DefaultServiceRegistry {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl DefaultServiceRegistry {
     /// 创建新的服务注册表
     pub fn new() -> Self {
         Self {
@@ -182,11 +191,11 @@ impl DefaultServiceRegistry {
 
     /// 从配置创建服务注册表
     pub fn from_config(config: RegistryConfig) -> Self {
-        let mut registry = Self::new();
+        let registry = Self::new();
 
         // 设置功能标志
         {
-            let mut flags = registry.feature_flags.write().unwrap();
+            let flags = registry.feature_flags.write().unwrap();
             for (flag, enabled) in config.feature_flags {
                 let _ = flags.set_flag(&flag, FlagValue::Bool(enabled));
             }
@@ -204,7 +213,7 @@ impl DefaultServiceRegistry {
 
         // 按顺序初始化服务
         for service_name in sorted_services {
-            if let Some(entry) = self.services.get_mut(&service_name) {
+            if let Some(_entry) = self.services.get_mut(&service_name) {
                 self.update_service_status(&service_name, ServiceStatus::Initializing)?;
 
                 // 这里应该调用服务的初始化逻辑

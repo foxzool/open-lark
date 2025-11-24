@@ -87,17 +87,11 @@ impl Client {
     //     crate::services::ApprovalService::new(&self.config)
     // }
 
-    /// 🔐 访问认证服务
-    ///
-    /// 需要 `auth` feature
     // #[cfg(feature = "auth")]  // auth 功能暂未启用
     // pub fn auth(&self) -> crate::services::AuthService<'_> {
     //     crate::services::AuthService::new(&self.config)
     // }
 
-    // /// 🤝 访问协作服务
-    // ///
-    // /// 需要 `collab` feature
     // #[cfg(feature = "collab")]
     // pub fn collab(&self) -> crate::services::CollabService<'_> {
     //     crate::services::CollabService::new(&self.config)
@@ -148,25 +142,16 @@ impl Client {
     //     crate::services::HireService::new(&self.config)
     // }
 
-    /// 👥 访问HR服务
-    ///
-    /// 需要 `hr` feature
     // #[cfg(feature = "hr")]  // hr 功能暂未启用
     // pub fn hr(&self) -> crate::services::HRService<'_> {
     //     crate::services::HRService::new(&self.config, &self.registry)
     // }
 
-    /// 🤖 访问AI服务
-    ///
-    /// 需要 `ai` feature
     // #[cfg(feature = "ai")]  // ai 功能暂未启用
     // pub fn ai(&self) -> crate::services::AIService<'_> {
     //     crate::services::AIService::new(&self.config)
     // }
 
-    // /// 👤 访问人员服务
-    // ///
-    // /// 需要 `people` feature
     // #[cfg(feature = "people")]
     // pub fn people(&self) -> crate::services::PeopleService<'_> {
     //     crate::services::PeopleService::new(&self.config)
@@ -277,7 +262,7 @@ fn register_core_services(registry: &mut DefaultServiceRegistry) -> Result<()> {
 }
 
 /// 注册专业层服务
-fn register_professional_services(registry: &mut DefaultServiceRegistry) -> Result<()> {
+fn register_professional_services(_registry: &mut DefaultServiceRegistry) -> Result<()> {
     // #[cfg(feature = "hr")]  // hr 功能暂未启用
     // {
     //     tracing::debug!("注册人力资源服务");
@@ -331,7 +316,7 @@ fn register_professional_services(registry: &mut DefaultServiceRegistry) -> Resu
 }
 
 /// 注册企业层服务
-fn register_enterprise_services(registry: &mut DefaultServiceRegistry) -> Result<()> {
+fn register_enterprise_services(_registry: &mut DefaultServiceRegistry) -> Result<()> {
     // #[cfg(feature = "admin")]  // admin 功能暂未启用
     // {
     //     tracing::debug!("注册管理服务");

@@ -10,8 +10,10 @@ use crate::{Config, DefaultServiceRegistry, Result}; // 移除未使用的 Arc �
 #[derive(Debug)]
 pub struct CommunicationService<'a> {
     /// 🔧 客户端配置
+    #[allow(dead_code)]
     config: &'a Config,
     /// 📋 服务注册表
+    #[allow(dead_code)]
     registry: &'a DefaultServiceRegistry,
 }
 
@@ -25,7 +27,7 @@ impl<'a> CommunicationService<'a> {
     pub async fn send_text_message(
         &self,
         receive_id: &str,
-        receive_id_type: &str,
+        _receive_id_type: &str,
         content: &str,
     ) -> Result<SendMessageResponse> {
         // TODO: 实现实际的消息发送

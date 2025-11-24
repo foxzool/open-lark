@@ -391,7 +391,6 @@ impl LogLevel {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::time::Duration;
 
     // 创建一个测试用的服务实现
     struct TestService {

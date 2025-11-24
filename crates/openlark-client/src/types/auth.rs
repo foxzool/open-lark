@@ -170,8 +170,6 @@ impl UserInfo {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use chrono::Duration;
-    use std::collections::HashMap;
 
     #[test]
     fn test_access_token_creation() {
