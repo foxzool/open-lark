@@ -270,9 +270,9 @@ impl TokenClient {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::time::Duration;
-    use crate::client::config::AuthConfigBuilder;
     use crate::auth::token::{AppType, GetTokenRequest};
+    use crate::client::config::AuthConfigBuilder;
+    use std::time::Duration;
 
     fn create_test_config() -> AuthConfig {
         AuthConfigBuilder::new()
@@ -333,14 +333,18 @@ mod tests {
 
         // 测试租户访问令牌请求
         let tenant_key = "test_tenant".to_string();
-        let self_build_tenant_request = GetTokenRequest::self_build_tenant_access_token(tenant_key.clone());
+        let self_build_tenant_request =
+            GetTokenRequest::self_build_tenant_access_token(tenant_key.clone());
         assert_eq!(self_build_tenant_request.app_type, AppType::SelfBuild);
-        assert_eq!(self_build_tenant_request.token_type, TokenType::TenantAccessToken);
+        assert_eq!(
+            self_build_tenant_request.token_type,
+            TokenType::TenantAccessToken
+        );
         assert_eq!(self_build_tenant_request.tenant_key, Some(tenant_key));
 
         // 测试带作用域的请求
-        let scoped_request = GetTokenRequest::self_build_app_access_token()
-            .with_scope("contact:base".to_string());
+        let scoped_request =
+            GetTokenRequest::self_build_app_access_token().with_scope("contact:base".to_string());
         assert_eq!(scoped_request.scope, Some("contact:base".to_string()));
     }
 

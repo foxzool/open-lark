@@ -4,8 +4,8 @@ use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 
 use crate::client::TokenClient;
-use crate::error::{AuthError, AuthResult};
 use crate::endpoints::AuthEndpoints;
+use crate::error::{AuthError, AuthResult};
 
 /// OAuth old 版本授权服务
 #[derive(Debug, Clone)]
@@ -38,13 +38,24 @@ impl IndexService {
     }
 
     /// 获取登录预授权码
-    pub async fn get(&self, app_id: &str, redirect_uri: &str, scope: &str) -> AuthResult<IndexResponse> {
+    pub async fn get(
+        &self,
+        app_id: &str,
+        redirect_uri: &str,
+        scope: &str,
+    ) -> AuthResult<IndexResponse> {
         // TODO: 实现登录预授权码获取逻辑
         todo!("Implement index pre-authorization code retrieval")
     }
 
     /// 构建授权URL
-    pub fn build_authorization_url(&self, app_id: &str, redirect_uri: &str, scope: &str, state: Option<&str>) -> String {
+    pub fn build_authorization_url(
+        &self,
+        app_id: &str,
+        redirect_uri: &str,
+        scope: &str,
+        state: Option<&str>,
+    ) -> String {
         let base_url = "https://open.feishu.cn/open-apis/authen/v1/index";
         let mut url = format!(
             "{}?app_id={}&redirect_uri={}&scope={}",
@@ -59,7 +70,11 @@ impl IndexService {
     }
 
     /// 处理OAuth回调
-    pub async fn handle_callback(&self, code: &str, state: Option<&str>) -> AuthResult<OAuthCallbackResponse> {
+    pub async fn handle_callback(
+        &self,
+        code: &str,
+        state: Option<&str>,
+    ) -> AuthResult<OAuthCallbackResponse> {
         // TODO: 实现OAuth回调处理逻辑
         todo!("Implement OAuth callback handling")
     }
@@ -170,7 +185,11 @@ mod tests {
         .unwrap();
 
         let oauth_service = OAuthServiceOld::new(token_client);
-        assert!(oauth_service.index().get("app_id", "redirect_uri", "scope").await.is_err()); // 需要真实的环境才能执行
+        assert!(oauth_service
+            .index()
+            .get("app_id", "redirect_uri", "scope")
+            .await
+            .is_err()); // 需要真实的环境才能执行
     }
 
     #[test]
@@ -187,24 +206,39 @@ mod tests {
         let index_service = IndexService::new(token_client);
 
         // 测试不带state的URL构建
-        let url = index_service.build_authorization_url("app_123", "https://example.com/callback", "contact:base", None);
+        let url = index_service.build_authorization_url(
+            "app_123",
+            "https://example.com/callback",
+            "contact:base",
+            None,
+        );
         assert!(url.contains("app_id=app_123"));
         assert!(url.contains("redirect_uri=https://example.com/callback"));
         assert!(url.contains("scope=contact:base"));
         assert!(!url.contains("state="));
 
         // 测试带state的URL构建
-        let url_with_state = index_service.build_authorization_url("app_123", "https://example.com/callback", "contact:base", Some("random_state_123"));
+        let url_with_state = index_service.build_authorization_url(
+            "app_123",
+            "https://example.com/callback",
+            "contact:base",
+            Some("random_state_123"),
+        );
         assert!(url_with_state.contains("state=random_state_123"));
     }
 
     #[test]
     fn test_service_client_creation() {
-        let client = DefaultOAuthOldServiceClient::new("app_id".to_string(), "app_secret".to_string());
+        let client =
+            DefaultOAuthOldServiceClient::new("app_id".to_string(), "app_secret".to_string());
         assert_eq!(client.base_url(), "https://open.feishu.cn");
 
-        let client_with_custom_url = DefaultOAuthOldServiceClient::new("app_id".to_string(), "app_secret".to_string())
-            .with_base_url("https://open.larksuite.com".to_string());
-        assert_eq!(client_with_custom_url.base_url(), "https://open.larksuite.com");
+        let client_with_custom_url =
+            DefaultOAuthOldServiceClient::new("app_id".to_string(), "app_secret".to_string())
+                .with_base_url("https://open.larksuite.com".to_string());
+        assert_eq!(
+            client_with_custom_url.base_url(),
+            "https://open.larksuite.com"
+        );
     }
 }
