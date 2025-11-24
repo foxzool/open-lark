@@ -142,7 +142,7 @@ impl ServiceInstanceManager {
             let instances = self.instances.read().unwrap();
             if metadata.status == ServiceStatus::Running {
                 if let Some(instance) = instances.get(&metadata.name) {
-                    return Ok(self.clone_instance(&instance));
+                    return Ok(self.clone_instance(instance));
                 }
             }
         }
@@ -157,6 +157,7 @@ impl ServiceInstanceManager {
         metadata: &ServiceMetadata,
         dependencies: &HashMap<String, Box<dyn std::any::Any + Send + Sync>>,
     ) -> FactoryResult<Box<dyn std::any::Any + Send + Sync>> {
+        #[allow(clippy::await_holding_lock)]
         let factories = self.factories.read().unwrap();
         let factory =
             factories
@@ -254,7 +255,7 @@ pub struct ServiceStats {
 }
 
 /// 默认服务工厂实现
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct DefaultServiceFactory;
 
 #[async_trait]
@@ -481,10 +482,10 @@ mod tests {
 
     #[test]
     fn test_service_factory_registry() {
-        let mut registry = ServiceFactoryRegistry::new();
+        let registry = ServiceFactoryRegistry::new();
 
         // 测试获取默认工厂
-        let factory = registry.get_factory("test-service");
+        let _factory = registry.get_factory("test-service");
         // 这里可以进一步测试工厂的功能
     }
 
