@@ -218,8 +218,8 @@ impl Default for AuthClientBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::time::Duration;
     use crate::client::config::AuthConfigBuilder;
+    use std::time::Duration;
 
     #[test]
     fn test_auth_client_builder() {

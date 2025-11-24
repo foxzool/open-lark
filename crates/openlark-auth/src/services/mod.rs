@@ -46,9 +46,7 @@ pub struct AuthServicesBuilder {
 impl AuthServicesBuilder {
     /// 创建新的构建器实例
     pub fn new() -> Self {
-        Self {
-            token_client: None,
-        }
+        Self { token_client: None }
     }
 
     /// 设置令牌客户端
@@ -59,12 +57,12 @@ impl AuthServicesBuilder {
 
     /// 构建服务客户端
     pub fn build(self) -> Result<AuthServices, crate::AuthError> {
-        let token_client = self.token_client.ok_or_else(|| {
-            crate::AuthError::InvalidParameter {
+        let token_client = self
+            .token_client
+            .ok_or_else(|| crate::AuthError::InvalidParameter {
                 parameter: "token_client".to_string(),
                 reason: "Token client is required".to_string(),
-            }
-        })?;
+            })?;
 
         Ok(AuthServices::new(token_client))
     }
@@ -95,7 +93,8 @@ mod tests {
                 .app_secret("test_secret")
                 .build()
                 .unwrap(),
-        ).unwrap();
+        )
+        .unwrap();
 
         let services = AuthServicesBuilder::new()
             .token_client(token_client)
@@ -104,7 +103,12 @@ mod tests {
 
         // 验证所有服务都已创建（只测试有实现的方法）
         assert!(services.auth.app_access_token().internal().await.is_ok()); // 有实现
-        assert!(services.auth.tenant_access_token().internal("test_tenant").await.is_ok()); // 有实现
+        assert!(services
+            .auth
+            .tenant_access_token()
+            .internal("test_tenant")
+            .await
+            .is_ok()); // 有实现
     }
 
     #[tokio::test]
@@ -115,13 +119,19 @@ mod tests {
                 .app_secret("test_secret")
                 .build()
                 .unwrap(),
-        ).unwrap();
+        )
+        .unwrap();
 
         let services = AuthServices::new(token_client);
 
         // 验证服务结构（只测试有实现的方法）
         assert!(services.auth.app_access_token().internal().await.is_ok());
-        assert!(services.auth.tenant_access_token().internal("test_tenant").await.is_ok());
+        assert!(services
+            .auth
+            .tenant_access_token()
+            .internal("test_tenant")
+            .await
+            .is_ok());
     }
 
     #[tokio::test]
@@ -132,7 +142,8 @@ mod tests {
                 .app_secret("test_secret")
                 .build()
                 .unwrap(),
-        ).unwrap();
+        )
+        .unwrap();
 
         let services = AuthServices::new(token_client);
 

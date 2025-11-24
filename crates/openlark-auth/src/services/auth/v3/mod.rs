@@ -5,8 +5,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::auth::token::{AppType, GetTokenRequest};
 use crate::client::TokenClient;
-use crate::error::{AuthError, AuthResult};
 use crate::endpoints::AuthEndpoints;
+use crate::error::{AuthError, AuthResult};
 
 /// Auth v3 企业应用认证服务
 #[derive(Debug, Clone)]
@@ -220,11 +220,16 @@ mod tests {
 
     #[test]
     fn test_service_client_creation() {
-        let client = DefaultAuthV3ServiceClient::new("app_id".to_string(), "app_secret".to_string());
+        let client =
+            DefaultAuthV3ServiceClient::new("app_id".to_string(), "app_secret".to_string());
         assert_eq!(client.base_url(), "https://open.feishu.cn");
 
-        let client_with_custom_url = DefaultAuthV3ServiceClient::new("app_id".to_string(), "app_secret".to_string())
-            .with_base_url("https://open.larksuite.com".to_string());
-        assert_eq!(client_with_custom_url.base_url(), "https://open.larksuite.com");
+        let client_with_custom_url =
+            DefaultAuthV3ServiceClient::new("app_id".to_string(), "app_secret".to_string())
+                .with_base_url("https://open.larksuite.com".to_string());
+        assert_eq!(
+            client_with_custom_url.base_url(),
+            "https://open.larksuite.com"
+        );
     }
 }

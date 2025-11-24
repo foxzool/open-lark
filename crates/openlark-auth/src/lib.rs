@@ -173,8 +173,8 @@ pub use auth::{
     cache::{CacheConfig, CacheStats, MemoryTokenCache, TokenCache, TokenStorage},
     refresh::{RefreshTokenResponse, TokenRefresher, TokenRefresherBuilder},
     token::{
-        AccessToken, AppType, GetTokenRequest, RefreshToken, TokenInfo, TokenRefreshConfig, TokenType,
-        TokenValidationResult,
+        AccessToken, AppType, GetTokenRequest, RefreshToken, TokenInfo, TokenRefreshConfig,
+        TokenType, TokenValidationResult,
     },
     types::{
         AuthContext, AuthValidationDetails, AuthValidationRequest, CacheStrategy, OAuthConfig,
@@ -211,9 +211,9 @@ pub use services::AuthServices;
 pub mod prelude {
     // 核心类型
     pub use crate::{
-        AccessToken, AppType, AuthClient, AuthClientBuilder, AuthConfig, AuthResult, RefreshToken,
-        TokenCache, TokenInfo, TokenManager, TokenRefresher, TokenType, TokenValidationResult,
-        TokenValidator, AuthServices,
+        AccessToken, AppType, AuthClient, AuthClientBuilder, AuthConfig, AuthResult, AuthServices,
+        RefreshToken, TokenCache, TokenInfo, TokenManager, TokenRefresher, TokenType,
+        TokenValidationResult, TokenValidator,
     };
 
     // 错误类型
