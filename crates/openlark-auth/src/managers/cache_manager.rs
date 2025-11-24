@@ -273,7 +273,7 @@ mod tests {
         let manager = CacheManager::new(config);
 
         let stats = manager.get_cache_stats().await;
-        assert_eq!(stats.total_items, 0);
+        assert_eq!(stats.current_size, 0);
     }
 
     #[tokio::test]

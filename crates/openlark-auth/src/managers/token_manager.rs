@@ -407,17 +407,13 @@ mod tests {
         let config = create_test_config();
         let manager = TokenManager::new(config).unwrap();
 
-        let request = GetTokenRequest {
-            token_type: TokenType::AppAccessToken,
-            tenant_key: None,
-            refresh_token: None,
-        };
+        let request = GetTokenRequest::self_build_app_access_token();
 
         let result = manager.get_access_token(request).await;
         assert!(result.is_ok());
 
         let response = result.unwrap();
-        assert!(!response.access_token.token().is_empty());
+        assert!(!response.app_access_token.is_empty());
         assert_eq!(response.token_type, TokenType::AppAccessToken);
     }
 
@@ -443,16 +439,8 @@ mod tests {
         let manager = TokenManager::new(config).unwrap();
 
         let requests = vec![
-            GetTokenRequest {
-                token_type: TokenType::AppAccessToken,
-                tenant_key: None,
-                refresh_token: None,
-            },
-            GetTokenRequest {
-                token_type: TokenType::AppAccessToken,
-                tenant_key: None,
-                refresh_token: None,
-            },
+            GetTokenRequest::self_build_app_access_token(),
+            GetTokenRequest::self_build_app_access_token(),
         ];
 
         let results = manager.batch_get_access_tokens(requests).await;
