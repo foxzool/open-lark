@@ -504,15 +504,21 @@ impl ValidatorUtils {
 /// 密码强度枚举
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PasswordStrength {
+    /// 弱密码
     Weak,
+    /// 中等强度
     Medium,
+    /// 强密码
     Strong,
 }
 
 /// 验证规则
 pub struct ValidationRule {
+    /// 规则名称
     pub name: String,
+    /// 是否必需
     pub required: bool,
+    /// 验证函数
     pub validator: Box<dyn Fn(&str) -> bool + Send + Sync>,
 }
 
