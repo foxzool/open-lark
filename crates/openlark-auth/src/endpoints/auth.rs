@@ -33,6 +33,27 @@ impl AuthEndpoints {
 
     /// 撤销令牌
     pub const REVOKE_TOKEN: &'static str = "/open-apis/auth/v3/revoke";
+
+    // === 商店应用API端点 ===
+    /// 商店应用获取应用访问令牌
+    pub const APP_ACCESS_TOKEN_STORE: &'static str = "/open-apis/auth/v3/app_access_token";
+
+    /// 商店应用获取租户访问令牌
+    pub const TENANT_ACCESS_TOKEN_STORE: &'static str = "/open-apis/auth/v3/tenant_access_token";
+
+    /// 重新推送应用票据
+    pub const APP_TICKET_RESEND: &'static str = "/open-apis/auth/v3/app_ticket/resend";
+
+    // === OIDC相关端点 ===
+    /// 获取OIDC访问令牌
+    pub const OIDC_ACCESS_TOKEN: &'static str = "/open-apis/authen/v1/oidc/access_token";
+
+    /// 刷新OIDC访问令牌
+    pub const OIDC_REFRESH_ACCESS_TOKEN: &'static str = "/open-apis/authen/v1/oidc/refresh_access_token";
+
+    // === OAuth相关端点 ===
+    /// 获取登录预授权码
+    pub const OAUTH_INDEX: &'static str = "/open-apis/authen/v1/index";
 }
 
 impl Default for AuthEndpoints {
@@ -47,6 +68,7 @@ mod tests {
 
     #[test]
     fn test_auth_endpoints() {
+        // 自建应用端点
         assert_eq!(
             AuthEndpoints::APP_ACCESS_TOKEN,
             "/open-apis/auth/v3/app_access_token/internal"
@@ -55,9 +77,45 @@ mod tests {
             AuthEndpoints::TENANT_ACCESS_TOKEN,
             "/open-apis/auth/v3/tenant_access_token/internal"
         );
+
+        // 商店应用端点
+        assert_eq!(
+            AuthEndpoints::APP_ACCESS_TOKEN_STORE,
+            "/open-apis/auth/v3/app_access_token"
+        );
+        assert_eq!(
+            AuthEndpoints::TENANT_ACCESS_TOKEN_STORE,
+            "/open-apis/auth/v3/tenant_access_token"
+        );
+        assert_eq!(
+            AuthEndpoints::APP_TICKET_RESEND,
+            "/open-apis/auth/v3/app_ticket/resend"
+        );
+
+        // 用户认证端点
         assert_eq!(
             AuthEndpoints::USER_ACCESS_TOKEN,
             "/open-apis/authen/v1/access_token"
+        );
+        assert_eq!(
+            AuthEndpoints::USER_INFO,
+            "/open-apis/authen/v1/user_info"
+        );
+
+        // OIDC端点
+        assert_eq!(
+            AuthEndpoints::OIDC_ACCESS_TOKEN,
+            "/open-apis/authen/v1/oidc/access_token"
+        );
+        assert_eq!(
+            AuthEndpoints::OIDC_REFRESH_ACCESS_TOKEN,
+            "/open-apis/authen/v1/oidc/refresh_access_token"
+        );
+
+        // OAuth端点
+        assert_eq!(
+            AuthEndpoints::OAUTH_INDEX,
+            "/open-apis/authen/v1/index"
         );
     }
 }

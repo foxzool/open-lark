@@ -8,6 +8,7 @@ use tracing::{debug, warn};
 use super::token::{TokenInfo, TokenType, TokenValidationResult};
 
 /// 令牌验证器
+#[derive(Debug, Clone)]
 pub struct TokenValidator {
     /// 提前过期时间（秒）
     expiry_threshold_seconds: u64,

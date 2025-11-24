@@ -219,6 +219,7 @@ impl Default for AuthClientBuilder {
 mod tests {
     use super::*;
     use std::time::Duration;
+    use crate::client::config::AuthConfigBuilder;
 
     #[test]
     fn test_auth_client_builder() {
@@ -258,8 +259,8 @@ mod tests {
 
         let client = AuthClient::new(config).unwrap();
         let stats = client.get_cache_stats().await;
-        assert_eq!(stats.total_items, 0);
-        assert_eq!(stats.hit_count, 0);
-        assert_eq!(stats.miss_count, 0);
+        assert_eq!(stats.current_size, 0);
+        assert_eq!(stats.hits, 0);
+        assert_eq!(stats.misses, 0);
     }
 }

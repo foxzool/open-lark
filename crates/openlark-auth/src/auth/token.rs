@@ -381,19 +381,97 @@ impl Default for TokenRefreshConfig {
     }
 }
 
+/// 应用类型
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub enum AppType {
+    /// 自建应用
+    #[serde(rename = "self_build")]
+    SelfBuild,
+    /// 商店应用
+    #[serde(rename = "store")]
+    Store,
+}
+
+impl Default for AppType {
+    fn default() -> Self {
+        AppType::SelfBuild
+    }
+}
+
+impl std::fmt::Display for AppType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            AppType::SelfBuild => write!(f, "self_build"),
+            AppType::Store => write!(f, "store"),
+        }
+    }
+}
+
 /// 获取令牌请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetTokenRequest {
     /// 令牌类型
     pub token_type: TokenType,
     /// 应用类型
-    pub app_type: String,
+    pub app_type: AppType,
     /// 租户密钥（租户令牌使用）
     pub tenant_key: Option<String>,
     /// 刷新令牌（用户令牌使用）
     pub refresh_token: Option<String>,
     /// 授权范围（可选）
     pub scope: Option<String>,
+}
+
+impl GetTokenRequest {
+    /// 创建自建应用访问令牌请求
+    pub fn self_build_app_access_token() -> Self {
+        Self {
+            token_type: TokenType::AppAccessToken,
+            app_type: AppType::SelfBuild,
+            tenant_key: None,
+            refresh_token: None,
+            scope: None,
+        }
+    }
+
+    /// 创建商店应用访问令牌请求
+    pub fn store_app_access_token() -> Self {
+        Self {
+            token_type: TokenType::AppAccessToken,
+            app_type: AppType::Store,
+            tenant_key: None,
+            refresh_token: None,
+            scope: None,
+        }
+    }
+
+    /// 创建自建应用租户访问令牌请求
+    pub fn self_build_tenant_access_token(tenant_key: String) -> Self {
+        Self {
+            token_type: TokenType::TenantAccessToken,
+            app_type: AppType::SelfBuild,
+            tenant_key: Some(tenant_key),
+            refresh_token: None,
+            scope: None,
+        }
+    }
+
+    /// 创建商店应用租户访问令牌请求
+    pub fn store_tenant_access_token(tenant_key: String) -> Self {
+        Self {
+            token_type: TokenType::TenantAccessToken,
+            app_type: AppType::Store,
+            tenant_key: Some(tenant_key),
+            refresh_token: None,
+            scope: None,
+        }
+    }
+
+    /// 设置授权范围
+    pub fn with_scope(mut self, scope: String) -> Self {
+        self.scope = Some(scope);
+        self
+    }
 }
 
 /// 获取令牌响应
