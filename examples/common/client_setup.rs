@@ -41,10 +41,8 @@ pub fn create_client() -> std::result::Result<Client, Error> {
 /// - `Err(Error)`: 配置错误信息
 pub fn create_test_client() -> std::result::Result<Client, Error> {
     // 尝试使用测试环境变量，如果不存在则使用默认值
-    let app_id = env::var("TEST_APP_ID")
-        .unwrap_or_else(|_| "test_app_id".to_string());
-    let app_secret = env::var("TEST_APP_SECRET")
-        .unwrap_or_else(|_| "test_app_secret".to_string());
+    let app_id = env::var("TEST_APP_ID").unwrap_or_else(|_| "test_app_id".to_string());
+    let app_secret = env::var("TEST_APP_SECRET").unwrap_or_else(|_| "test_app_secret".to_string());
 
     Client::builder()
         .app_id(app_id)
@@ -72,5 +70,3 @@ pub fn create_custom_client(
         .app_secret(app_secret)
         .build()
 }
-
-

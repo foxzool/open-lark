@@ -130,9 +130,7 @@ pub fn wait_for_confirmation(message: &str) -> bool {
     io::stdout().flush().unwrap();
 
     let mut input = String::new();
-    io::stdin()
-        .read_line(&mut input)
-        .expect("读取输入失败");
+    io::stdin().read_line(&mut input).expect("读取输入失败");
 
     let input = input.trim().to_lowercase();
     input == "y" || input == "yes"
@@ -268,7 +266,8 @@ pub fn check_env_vars_enhanced(
         total_required: var_names.len(),
         missing_vars,
         empty_vars,
-        present_vars: var_names.iter()
+        present_vars: var_names
+            .iter()
             .filter(|&&var| std::env::var(var).is_ok())
             .map(|&var| var.to_string())
             .collect(),
@@ -277,8 +276,11 @@ pub fn check_env_vars_enhanced(
     if result.is_complete() {
         print_success("✅ 所有必需的环境变量已正确设置");
     } else {
-        print_warning(&format!("⚠️  环境变量检查不完整: {} 个缺失, {} 个为空",
-            result.missing_vars.len(), result.empty_vars.len()));
+        print_warning(&format!(
+            "⚠️  环境变量检查不完整: {} 个缺失, {} 个为空",
+            result.missing_vars.len(),
+            result.empty_vars.len()
+        ));
     }
 
     Ok(result)
@@ -318,20 +320,33 @@ impl EnvCheckResult {
     pub fn print_detailed_result(&self) {
         println!();
         println!("📊 环境变量检查详细结果:");
-        println!("  📁 .env 文件: {} {}",
+        println!(
+            "  📁 .env 文件: {} {}",
             if self.env_file_found { "✅" } else { "❌" },
-            if self.env_file_found { "找到" } else { "未找到" }
+            if self.env_file_found {
+                "找到"
+            } else {
+                "未找到"
+            }
         );
 
         if self.env_file_found {
-            println!("  📖 .env 加载: {} {}",
+            println!(
+                "  📖 .env 加载: {} {}",
                 if self.env_file_loaded { "✅" } else { "❌" },
-                if self.env_file_loaded { "成功" } else { "失败" }
+                if self.env_file_loaded {
+                    "成功"
+                } else {
+                    "失败"
+                }
             );
         }
 
-        println!("  📋 检查进度: {}/{} 已配置",
-            self.present_vars.len(), self.total_required);
+        println!(
+            "  📋 检查进度: {}/{} 已配置",
+            self.present_vars.len(),
+            self.total_required
+        );
 
         if !self.present_vars.is_empty() {
             println!("  ✅ 已配置: {}", self.present_vars.join(", "));
@@ -360,19 +375,31 @@ impl EnvCheckResult {
         if !self.env_file_found {
             suggestions.push("创建 .env 文件并添加以下内容:".to_string());
             for var in &self.get_problematic_vars() {
-                suggestions.push(format!("{}=your_{}_here", var, var.to_lowercase().replace("openlark_", "")));
+                suggestions.push(format!(
+                    "{}=your_{}_here",
+                    var,
+                    var.to_lowercase().replace("openlark_", "")
+                ));
             }
         } else {
             suggestions.push("在现有的 .env 文件中添加以下变量:".to_string());
             for var in &self.get_problematic_vars() {
-                suggestions.push(format!("{}=your_{}_here", var, var.to_lowercase().replace("openlark_", "")));
+                suggestions.push(format!(
+                    "{}=your_{}_here",
+                    var,
+                    var.to_lowercase().replace("openlark_", "")
+                ));
             }
         }
 
         if !self.missing_vars.is_empty() {
             suggestions.push("或者设置系统环境变量:".to_string());
             for var in &self.missing_vars {
-                suggestions.push(format!("export {}=\"your_{}_here\"", var, var.to_lowercase().replace("openlark_", "")));
+                suggestions.push(format!(
+                    "export {}=\"your_{}_here\"",
+                    var,
+                    var.to_lowercase().replace("openlark_", "")
+                ));
             }
         }
 
@@ -410,4 +437,3 @@ pub fn print_example_footer(next_steps: Option<&str>) {
 
     print_separator(None);
 }
-
