@@ -141,9 +141,12 @@ publish = true
 openlark-core = { workspace = true }
 
 # 功能模块
-openlark-client = { workspace = true }
-openlark-protocol = { workspace = true }
-openlark-communication = { workspace = true }
+openlark-client = { workspace = true, optional = true }
+openlark-protocol = { workspace = true, optional = true }
+openlark-communication = { workspace = true, optional = true }
+openlark-auth = { workspace = true, optional = true }
+openlark-docs = { workspace = true, optional = true }
+openlark-security = { workspace = true, optional = true }
 
 # 重新导出工作空间依赖，为用户提供便利访问
 anyhow = { workspace = true }
@@ -190,3 +193,21 @@ path = "src/lib.rs"
 [[bench]]
 name = "config_performance"
 harness = false
+
+# 认证服务示例
+[[example]]
+name = "basic_login_demo"
+path = "examples/basic_login_demo.rs"
+required-features = ["auth"]
+
+[features]
+default = ["communication", "docs"]
+
+# 认证服务
+auth = ["openlark-auth"]
+communication = ["openlark-communication"]
+docs = ["openlark-docs"]
+security = ["openlark-security"]
+
+# 完整功能
+full = ["auth", "communication", "docs", "security"]
