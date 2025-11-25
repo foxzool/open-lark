@@ -25,7 +25,7 @@
 #[path = "../common/utils.rs"]
 mod utils;
 
-use utils::{print_success, print_error, print_step, print_example_header, print_example_footer};
+use utils::{print_error, print_example_footer, print_example_header, print_step, print_success};
 
 // 检查网络连接
 async fn check_network_connectivity() -> Result<(), Box<dyn std::error::Error>> {
@@ -76,9 +76,9 @@ async fn check_network_connectivity() -> Result<(), Box<dyn std::error::Error>> 
 fn load_env_file() {
     // 尝试从多个位置加载 .env 文件
     let env_paths = [
-        ".env",                          // 当前目录
-        "examples/.env",               // examples 目录
-        "01_getting_started/.env",     // 当前示例目录
+        ".env",                    // 当前目录
+        "examples/.env",           // examples 目录
+        "01_getting_started/.env", // 当前示例目录
     ];
 
     for path in &env_paths {
@@ -99,8 +99,8 @@ fn load_env_file() {
 }
 
 // 使用 openlark-client 的认证服务（现在默认可用）
-use openlark_client::{Client, LarkClient};
 use openlark_client::services::AuthService;
+use openlark_client::{Client, LarkClient};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -138,8 +138,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     print_success("✅ 环境变量验证通过");
-    println!("📱 应用ID: {}...", &app_id.chars().take(8).collect::<String>());
-    println!("🔑 应用密钥: {}...", &app_secret.chars().take(8).collect::<String>());
+    println!(
+        "📱 应用ID: {}...",
+        &app_id.chars().take(8).collect::<String>()
+    );
+    println!(
+        "🔑 应用密钥: {}...",
+        &app_secret.chars().take(8).collect::<String>()
+    );
 
     // 步骤3: 创建真实客户端和认证服务
     print_step(3, "创建真实客户端和认证服务");
@@ -164,8 +170,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     print_success("✅ 认证服务创建成功");
 
     // 显示应用信息（脱敏）
-    println!("📱 应用ID: {}...", &client.app_id().chars().take(8).collect::<String>());
-    println!("🔑 应用密钥: {}...", &client.app_secret().chars().take(8).collect::<String>());
+    println!(
+        "📱 应用ID: {}...",
+        &client.app_id().chars().take(8).collect::<String>()
+    );
+    println!(
+        "🔑 应用密钥: {}...",
+        &client.app_secret().chars().take(8).collect::<String>()
+    );
 
     // 步骤4: 获取真实应用访问令牌
     print_step(4, "获取真实应用访问令牌");
@@ -199,10 +211,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     print_step(5, "显示令牌信息并验证");
 
     println!("📋 令牌详细信息:");
-    println!("  🔑 访问令牌: {}...", token_info.access_token.chars().take(16).collect::<String>());
+    println!(
+        "  🔑 访问令牌: {}...",
+        token_info.access_token.chars().take(16).collect::<String>()
+    );
     println!("  🏷️  令牌类型: {}", token_info.token_type);
-    println!("  ⏰ 有效期限: {} 秒 ({} 小时)", token_info.expires_in, token_info.expires_in / 3600);
-    println!("  🎯 过期时间: {}", token_info.expires_at.format("%Y-%m-%d %H:%M:%S UTC"));
+    println!(
+        "  ⏰ 有效期限: {} 秒 ({} 小时)",
+        token_info.expires_in,
+        token_info.expires_in / 3600
+    );
+    println!(
+        "  🎯 过期时间: {}",
+        token_info.expires_at.format("%Y-%m-%d %H:%M:%S UTC")
+    );
     println!("  📜 权限范围: {:?}", token_info.scope);
     println!("  ⏳ 剩余时间: {} 秒", token_info.remaining_seconds());
 
@@ -244,8 +266,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     print_step(7, "令牌状态检查");
 
     println!("🔍 令牌状态检查:");
-    println!("  ✅ 是否过期: {}", if token_info.is_expired() { "是" } else { "否" });
-    println!("  ⚠️  需要刷新(提前30分钟): {}", if token_info.needs_refresh(30) { "是" } else { "否" });
+    println!(
+        "  ✅ 是否过期: {}",
+        if token_info.is_expired() {
+            "是"
+        } else {
+            "否"
+        }
+    );
+    println!(
+        "  ⚠️  需要刷新(提前30分钟): {}",
+        if token_info.needs_refresh(30) {
+            "是"
+        } else {
+            "否"
+        }
+    );
 
     if token_info.is_expired() {
         print_error("⚠️  令牌已过期，需要重新获取");
@@ -277,7 +313,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("🔍 模拟即将过期的令牌检查:");
     println!("  - 剩余时间: {} 秒", near_expiry_token.remaining_seconds());
-    println!("  - 需要刷新: {}", if near_expiry_token.needs_refresh(30) { "是" } else { "否" });
+    println!(
+        "  - 需要刷新: {}",
+        if near_expiry_token.needs_refresh(30) {
+            "是"
+        } else {
+            "否"
+        }
+    );
 
     // 步骤9: 最佳实践
     print_step(10, "认证最佳实践");

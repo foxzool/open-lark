@@ -30,7 +30,7 @@ reqwest = { workspace = true, optional = true }
 log = { workspace = true, optional = true }
 
 # P0 Phase 1 业务模块依赖
-openlark-auth = { workspace = true, optional = true }
+openlark-auth = { workspace = true }  # 认证服务设为默认依赖
 openlark-communication = { workspace = true, optional = true }
 openlark-docs = { workspace = true, optional = true }
 openlark-security = { workspace = true, optional = true }
@@ -41,16 +41,19 @@ openlark-security = { workspace = true, optional = true }
 # openlark-mail = { workspace = true, optional = true } # 暂时注释，未加入workspace
 
 [features]
-default = ["communication"]
+default = ["communication"]  # auth 始终启用，无需包含在默认功能中
 
 # Core client feature
 client = []
 
+# Auth service (always enabled, but kept for feature flag compatibility)
+auth = []
+
 # WebSocket support
 websocket = ["tokio-tungstenite", "futures-util", "lark-websocket-protobuf", "url", "prost", "reqwest", "log"]
 
-# P0 Phase 1 business service features
-auth = ["openlark-auth"]                      # 身份认证
+# P0 阶段 1 业务服务功能
+# auth 现在默认启用，不再需要功能标志
 communication = ["openlark-communication"]    # 通讯和消息
 docs = ["openlark-docs"]                    # 文档和知识库
 security = ["openlark-security"]              # 安全认证
@@ -97,23 +100,3 @@ wiremock = { workspace = true }
 rstest = { workspace = true }
 tempfile = { workspace = true }
 mockall = { workspace = true }
-
-[[example]]
-name = "service_registry_demo"
-path = "../../examples/service_registry_demo.rs"
-required-features = ["communication"]
-
-[[example]]
-name = "docs_service_demo"
-path = "../../examples/docs_service_demo.rs"
-required-features = ["docs"]
-
-[[example]]
-name = "security_service_demo"
-path = "../../examples/security_service_demo.rs"
-required-features = ["security"]
-
-[[example]]
-name = "auth_service_demo"
-path = "examples/auth_service_demo.rs"
-required-features = ["auth"]
