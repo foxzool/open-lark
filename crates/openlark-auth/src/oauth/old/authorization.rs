@@ -37,9 +37,9 @@ impl AuthorizationService {
 /// OAuth授权构建器
 #[derive(Debug)]
 pub struct AuthorizationBuilder {
-    #[allow(dead_code)]  // 保留用于未来扩展
+    #[allow(dead_code)] // 保留用于未来扩展
     config: Arc<AuthConfig>,
-    #[allow(dead_code)]  // 保留用于未来扩展
+    #[allow(dead_code)] // 保留用于未来扩展
     client: reqwest::Client,
     app_id: String,
     redirect_uri: String,
