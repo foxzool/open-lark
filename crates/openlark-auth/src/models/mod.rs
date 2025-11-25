@@ -65,6 +65,9 @@ pub use token::{
     AppAccessTokenResponse, AppTicketRequest, AppTicketResponse, TenantAccessTokenResponse,
 };
 
+// 导出用户访问令牌响应类型
+pub use crate::authen::v1::access_token::UserAccessTokenResponse;
+
 pub use user_info::{Gender, UserInfoResponse, UserStatus};
 
 // OAuth 相关响应类型 (暂时未使用，保留备用)
