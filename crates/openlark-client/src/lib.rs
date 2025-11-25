@@ -226,7 +226,6 @@ pub use traits::*;
 // #[cfg(feature = "approval")]
 // pub use services::ApprovalService;
 
-#[cfg(feature = "auth")]
 pub use services::AuthService;
 
 // #[cfg(feature = "collab")]
@@ -282,7 +281,6 @@ pub mod prelude {
     // #[cfg(feature = "approval")]
     // pub use crate::services::ApprovalService;
 
-    #[cfg(feature = "auth")]
     pub use crate::services::AuthService;
 
     // #[cfg(feature = "collab")]
@@ -358,7 +356,7 @@ pub mod utils {
         // 根据编译时的 feature 标志返回启用的功能
         let mut features = vec![];
 
-        #[cfg(feature = "auth")]
+        // 认证服务现在始终启用
         features.push("auth");
 
         #[cfg(feature = "communication")]

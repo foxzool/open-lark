@@ -249,8 +249,4 @@ pub mod prelude {
 
 /// 便捷的客户端类型别名
 #[cfg(feature = "openlark-client")]
-pub type LarkClient = openlark_client::LarkClient;
-
-/// 便捷的异步客户端类型别名
-#[cfg(feature = "openlark-client")]
-pub type AsyncLarkClient = openlark_client::AsyncLarkClient;
+pub type LarkClient = openlark_client::Client;
