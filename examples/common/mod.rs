@@ -5,16 +5,18 @@
 
 pub mod client_setup;
 // pub mod auth_helpers;  // 暂时注释掉，因为auth feature导入有问题
-pub mod utils;
 pub mod config;
+pub mod utils;
 
 // 重新导出常用功能，方便其他示例使用
 pub use client_setup::{create_client, create_test_client};
 // pub use auth_helpers::{setup_app_auth, create_auth_service};  // 暂时注释掉
-pub use utils::{print_success, print_error, print_info, handle_result, check_env_vars_enhanced, EnvCheckResult};
 pub use config::{
-    load_config_with_diagnostics, run_config_diagnostics, create_client_with_config,
-    generate_env_template, ConfigLoadResult, ConfigDiagnostics, ConfigError
+    create_client_with_config, generate_env_template, load_config_with_diagnostics,
+    run_config_diagnostics, ConfigDiagnostics, ConfigError, ConfigLoadResult,
+};
+pub use utils::{
+    check_env_vars_enhanced, handle_result, print_error, print_info, print_success, EnvCheckResult,
 };
 
 /// 示例程序的通用入口点宏
