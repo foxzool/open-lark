@@ -3,11 +3,11 @@
 //! 提供统一的环境变量配置加载、验证和管理功能。
 //! 支持 .env 文件加载，并提供详细的错误诊断。
 
-use std::env;
-use std::path::Path;
+use crate::utils::print_info;
 use openlark_client::Client;
 use openlark_client::Error;
-use crate::utils::print_info;
+use std::env;
+use std::path::Path;
 
 /// 配置加载结果
 #[derive(Debug, Clone)]
@@ -376,7 +376,10 @@ pub fn generate_env_template(output_path: &str, include_comments: bool) -> Resul
         writeln!(file, "# Open-Lark SDK 示例配置文件")?;
         writeln!(file, "#")?;
         writeln!(file, "# 请将此文件重命名为 .env 并填入您的真实配置信息")?;
-        writeln!(file, "# 注意：请勿将包含敏感信息的 .env 文件提交到版本控制系统")?;
+        writeln!(
+            file,
+            "# 注意：请勿将包含敏感信息的 .env 文件提交到版本控制系统"
+        )?;
         writeln!(file, "")?;
         writeln!(file, "# 飞书应用配置")?;
     }
@@ -443,4 +446,3 @@ pub fn validate_env_file(env_path: &str) -> Result<(), Vec<String>> {
         Err(errors)
     }
 }
-
