@@ -1,28 +1,46 @@
 [workspace]
 resolver = "2"
 members = [
-    # 核心基础设施模块
-    "crates/openlark-core",
-    "crates/openlark-client",
-    "crates/openlark-protocol",
+    # === 核心基础设施 (Core Infrastructure) ===
+    "crates/openlark-core",           # 核心 HTTP 客户端和错误处理
+    "crates/openlark-protocol",       # WebSocket 协议定义
+    "crates/openlark-client",         # 高级客户端接口
 
-    # Phase 1: P0 核心业务模块
-    "crates/openlark-docs",
-    "crates/openlark-security",
-    "crates/openlark-auth",
+    # === 生产就绪模块 (Production Ready) ===
+    # 认证与安全
+    "crates/openlark-auth",           # 认证服务
+    "crates/openlark-security",       # 安全服务
 
-    # 已存在的业务模块
-    "crates/openlark-communication",
-    # 暂时移除有依赖问题的模块
-    # "crates/openlark-admin",
-    # "crates/openlark-application",
-    # "crates/openlark-approval",
-    # "crates/openlark-apass",
-    # "crates/openlark-hire",
-    # "crates/openlark-lingo",
-    # "crates/openlark-mail",
-    # "crates/openlark-helpdesk",
-    # "crates/openlark-task",
+    # 通讯协作
+    "crates/openlark-communication",  # IM 消息和联系人管理
+
+    # 文档管理
+    "crates/openlark-docs",           # 云文档和表格服务
+
+    # 人力资源
+    "crates/openlark-hr",             # 考勤和 CoreHR
+
+    # === 开发中模块 (In Development) ===
+    # 智能服务
+    "crates/openlark-ai",             # AI 智能助手
+
+    # 企业管理
+    "crates/openlark-admin",          # 管理员工能
+    "crates/openlark-application",    # 应用管理
+    "crates/openlark-approval",       # 审批流程
+
+    # 协作工具
+    "crates/openlark-calendar",       # 日历会议
+    "crates/openlark-collab",         # 项目协作
+    "crates/openlark-meeting",        # 视频会议
+
+    # 专业服务
+    "crates/openlark-helpdesk",       # 帮助台
+    "crates/openlark-hire",           # 招聘管理
+    "crates/openlark-lingo",          # 语言服务
+    "crates/openlark-mail",           # 邮件服务
+    "crates/openlark-people",         # 人员管理
+    "crates/openlark-task",           # 任务管理
 ]
 
 [workspace.package]
@@ -39,71 +57,79 @@ keywords = ["feishu", "lark", "api", "sdk", "rust"]
 categories = ["api-bindings", "web-programming", "development-tools"]
 
 [workspace.dependencies]
-# External dependencies (shared version management)
-anyhow = "1.0.86"
+# === 核心运行时 (Core Runtime) ===
+tokio = { version = "1.38", features = ["rt", "rt-multi-thread", "macros"] }
 async-trait = "0.1.83"
-base64 = "0.22.1"
-chrono = { version = "0.4.38", features = ["serde"] }
 futures = "0.3.30"
-futures-util = { version = "0.3.30", default-features = false, features = [
-    "sink",
-    "std",
-] }
+futures-util = { version = "0.3.30", default-features = false, features = ["sink", "std"] }
+
+# === 序列化与数据处理 (Serialization & Data) ===
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_repr = "0.1.19"
+chrono = { version = "0.4.38", features = ["serde"] }
+uuid = { version = "1.6", features = ["v4", "serde"] }
+url = { version = "2.5.0", features = ["serde"] }
+prost = { version = "0.13" }
+
+# === 网络与HTTP (Networking & HTTP) ===
+reqwest = { version = "0.12.7", default-features = false, features = ["json", "multipart", "rustls-tls"] }
+tokio-tungstenite = { version = "0.23", features = ["rustls-tls-native-roots"] }
+lark-websocket-protobuf = "0.1"
+
+# === 加密与安全 (Cryptography & Security) ===
 hmac = "0.12.1"
+sha2 = "0.10.8"
+base64 = "0.22.1"
+
+# === 日志与追踪 (Logging & Tracing) ===
 log = "0.4.21"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
-reqwest = { version = "0.12.7", default-features = false, features = [
-    "json",
-    "multipart",
-    "rustls-tls",
-] }
-rand = "0.8"
-serde_repr = "0.1.19"
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-sha2 = "0.10.8"
-strum = "0.27"
-urlencoding = "2.1"
-strum_macros = "0.27"
-thiserror = "2.0"
-tokio = { version = "1.38", features = ["rt", "rt-multi-thread", "macros"] }
-url = { version = "2.5.0", features = ["serde"] }
-uuid = { version = "1.6", features = ["v4", "serde"] }
-lark-websocket-protobuf = "0.1"
+tracing-opentelemetry = { version = "0.25" }
 opentelemetry = { version = "0.24" }
 opentelemetry_sdk = { version = "0.24", features = ["rt-tokio"] }
 opentelemetry-otlp = { version = "0.17" }
-tracing-opentelemetry = { version = "0.25" }
-prost = { version = "0.13" }
-quick_cache = { version = "0.6.3", features = [] }
-tokio-tungstenite = { version = "0.23", features = [
-    "rustls-tls-native-roots",
-] }
-walkdir = "2.4"
+
+# === 工具库 (Utilities) ===
+anyhow = "1.0.86"
+thiserror = "2.0"
+rand = "0.8"
 regex = "1.10"
+strum = "0.27"
+strum_macros = "0.27"
+urlencoding = "2.1"
+quick_cache = { version = "0.6.3", features = [] }
+walkdir = "2.4"
 
-# Internal workspace dependencies
+# === 工作空间内部依赖 (Internal Workspace Dependencies) ===
+# 核心基础设施模块
 openlark-core = { path = "crates/openlark-core" }
-openlark-client = { path = "crates/openlark-client" }
 openlark-protocol = { path = "crates/openlark-protocol" }
+openlark-client = { path = "crates/openlark-client" }
 
-# Phase 1: P0 核心业务模块
-openlark-docs = { path = "crates/openlark-docs" }
-openlark-security = { path = "crates/openlark-security" }
+# 生产就绪服务模块
 openlark-auth = { path = "crates/openlark-auth" }
+openlark-security = { path = "crates/openlark-security" }
 openlark-communication = { path = "crates/openlark-communication" }
+openlark-docs = { path = "crates/openlark-docs" }
+openlark-hr = { path = "crates/openlark-hr" }
 
-# Phase 2+ 模块（暂时注释以解决依赖冲突）
-# openlark-admin = { path = "crates/openlark-admin" }
-# openlark-application = { path = "crates/openlark-application" }
-# openlark-approval = { path = "crates/openlark-approval" }
-# openlark-apass = { path = "crates/openlark-apass" }
-# openlark-hire = { path = "crates/openlark-hire" }
-# openlark-lingo = { path = "crates/openlark-lingo" }
-# openlark-mail = { path = "crates/openlark-mail" }
-# openlark-helpdesk = { path = "crates/openlark-helpdesk" }
-# openlark-task = { path = "crates/openlark-task" }
+# 开发中服务模块
+openlark-ai = { path = "crates/openlark-ai" }
+openlark-admin = { path = "crates/openlark-admin" }
+openlark-application = { path = "crates/openlark-application" }
+openlark-approval = { path = "crates/openlark-approval" }
+openlark-apass = { path = "crates/openlark-apass" }
+openlark-calendar = { path = "crates/openlark-calendar" }
+openlark-collab = { path = "crates/openlark-collab" }
+openlark-helpdesk = { path = "crates/openlark-helpdesk" }
+openlark-hire = { path = "crates/openlark-hire" }
+openlark-lingo = { path = "crates/openlark-lingo" }
+openlark-mail = { path = "crates/openlark-mail" }
+openlark-meeting = { path = "crates/openlark-meeting" }
+openlark-people = { path = "crates/openlark-people" }
+openlark-task = { path = "crates/openlark-task" }
 
 # Test dependencies shared across workspace
 rstest = "0.19"
@@ -173,6 +199,10 @@ url = { workspace = true }
 uuid = { workspace = true }
 lark-websocket-protobuf = { workspace = true }
 
+# Examples 专用依赖
+colored = "2.1"  # 用于彩色输出
+clap = { version = "4.4", features = ["derive"] }  # 命令行参数解析
+
 [dev-dependencies]
 dotenvy = { workspace = true }
 env_logger = { workspace = true }
@@ -190,24 +220,131 @@ mockall = { workspace = true }
 name = "open_lark"
 path = "src/lib.rs"
 
+# === 共享库 ===
+[[example]]
+name = "common"
+path = "examples/common/mod.rs"
+crate-type = ["lib"]
+
 [[bench]]
 name = "config_performance"
 harness = false
 
-# 认证服务示例
+# === 01_入门指南 (Getting Started) ===
+# 基础设置和认证
 [[example]]
-name = "basic_login_demo"
-path = "examples/basic_login_demo.rs"
-required-features = ["auth"]
+name = "client_setup"
+path = "examples/01_getting_started/client_setup.rs"
+required-features = ["client"]
+
+[[example]]
+name = "authentication"
+path = "examples/01_getting_started/authentication.rs"
+# 认证服务现在默认启用，无需功能标志
+
+# 第一个API调用
+[[example]]
+name = "first_api_call"
+path = "examples/01_getting_started/first_api_call.rs"
+required-features = ["communication"]
+
+# 错误处理和最佳实践
+[[example]]
+name = "error_handling"
+path = "examples/01_getting_started/error_handling.rs"
+required-features = ["communication"]
+
+# === 02_核心功能 (Core Features) ===
+# 通讯服务示例
+[[example]]
+name = "send_message"
+path = "examples/02_core_features/communication/send_message.rs"
+required-features = ["communication"]
+
+[[example]]
+name = "user_management"
+path = "examples/02_core_features/communication/user_management.rs"
+required-features = ["communication"]
+
+[[example]]
+name = "group_operations"
+path = "examples/02_core_features/communication/group_operations.rs"
+required-features = ["communication"]
+
+# 文档服务示例
+[[example]]
+name = "document_create"
+path = "examples/02_core_features/docs/document_create.rs"
+required-features = ["docs"]
+
+[[example]]
+name = "bitable_basic"
+path = "examples/02_core_features/docs/bitable_basic.rs"
+required-features = ["docs"]
+
+[[example]]
+name = "wiki_management"
+path = "examples/02_core_features/docs/wiki_management.rs"
+required-features = ["docs"]
+
+# 安全服务示例
+[[example]]
+name = "auth_setup"
+path = "examples/02_core_features/security/auth_setup.rs"
+required-features = ["security"]
+
+[[example]]
+name = "permission_check"
+path = "examples/02_core_features/security/permission_check.rs"
+required-features = ["security"]
+
+[[example]]
+name = "token_manager"
+path = "examples/02_core_features/security/token_manager.rs"
+required-features = ["security"]
 
 [features]
-default = ["communication", "docs"]
+default = ["core-services"]
 
-# 认证服务
-auth = ["openlark-auth"]
-communication = ["openlark-communication"]
-docs = ["openlark-docs"]
-security = ["openlark-security"]
+# === 基础层 (Foundation Layer) ===
+# std = ["openlark-core"]  # openlark-core 是必需依赖，不应作为功能标志
+client = ["openlark-client"]
+protocol = ["openlark-protocol"]
 
-# 完整功能
-full = ["auth", "communication", "docs", "security"]
+# === 核心服务模块 (Core Services) ===
+# 认证与安全
+auth = ["client", "openlark-auth"]
+security = ["client", "openlark-security"]
+
+# 通讯与协作
+communication = ["client", "openlark-communication"]
+
+# 文档管理
+docs = ["client", "openlark-docs"]
+
+# 人力资源
+# hr = ["client", "openlark-hr"]  # 暂时注释，待验证模块完整性
+
+# === 高级服务模块 (Advanced Services) ===
+# ai = ["client", "openlark-ai"]  # 暂时注释，待启用该模块
+# admin = ["client", "openlark-admin"]  # 暂时注释，待启用该模块
+# meeting = ["client", "openlark-meeting"]  # 暂时注释，待验证模块完整性
+# calendar = ["client", "openlark-calendar"]  # 暂时注释，待启用该模块
+# collab = ["client", "openlark-collab"]  # 暂时注释，待启用该模块
+
+# === 推荐功能组合 (Recommended Feature Sets) ===
+# 最小可用配置
+# minimal = ["std"]  # std不是功能标志，考虑重新定义
+
+# 核心业务功能
+core-services = ["auth", "communication", "docs"]
+
+# 企业级功能
+# enterprise = ["core-services", "security", "hr"]  # 暂时注释，待模块验证完成
+
+# 全功能（当前可用）
+# full = ["enterprise", "meeting"]  # 暂时注释，待模块验证完成
+
+# === 开发与调试 (Development & Debugging) ===
+dev-tools = []  # 开发工具
+websocket = ["protocol"]  # WebSocket 支持
