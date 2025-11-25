@@ -7,7 +7,6 @@
 /// 认证服务模块
 ///
 /// 提供飞书认证功能，包括令牌管理、OAuth认证、用户信息验证等
-#[cfg(feature = "auth")]
 pub mod auth;
 
 /// 通讯服务模块
@@ -30,7 +29,6 @@ pub mod docs;
 
 // 重新导出所有服务类型
 
-#[cfg(feature = "auth")]
 pub use auth::AuthService;
 
 #[cfg(feature = "communication")]
@@ -48,7 +46,6 @@ pub use docs::DocsService;
 /// 📦 服务访问层预导出
 pub mod prelude {
 
-    #[cfg(feature = "auth")]
     pub use super::AuthService;
 
     #[cfg(feature = "communication")]
