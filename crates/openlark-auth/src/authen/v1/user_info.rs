@@ -80,7 +80,7 @@ impl UserInfoGetBuilder {
 
 /// 用户信息获取响应（内部数据结构）
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[allow(dead_code)]  // 保留用于未来API响应解析
+#[allow(dead_code)] // 保留用于未来API响应解析
 struct UserInfoInternalResponse {
     /// 用户数据
     pub data: UserInfoResponse,
