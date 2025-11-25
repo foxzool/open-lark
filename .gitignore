@@ -139,3 +139,5 @@ feature_architecture_analysis.md
 *.temp
 /temp/
 /tmp/
+/.playwright-browsers/
+/.claude/
