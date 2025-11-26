@@ -1,5 +1,5 @@
 use crate::{Config, Error, Result};
-use openlark_auth::models::{AppTicketResponse, UserInfoResponse, UserStatus};
+use openlark_auth::models::{AppTicketResponse, UserInfoResponse};
 use openlark_auth::prelude::*;
 use openlark_auth::AuthServices;
 
@@ -233,13 +233,8 @@ impl AuthService {
                 message: format!("获取用户信息失败: {}", e),
             })?;
 
-        // 将响应中的用户状态字符串转换为枚举
-        let status = match response.status {
-            UserStatus::Activated => UserStatus::Activated,
-            UserStatus::Unactivated => UserStatus::Unactivated,
-            UserStatus::Disabled => UserStatus::Disabled,
-            UserStatus::Resigned => UserStatus::Resigned,
-        };
+        // 用户状态已经是正确的枚举类型
+        let status = response.status;
 
         Ok(UserInfo {
             user_id: response.user_id,

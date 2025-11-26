@@ -157,14 +157,16 @@ impl ServiceInstanceManager {
         metadata: &ServiceMetadata,
         dependencies: &HashMap<String, Box<dyn std::any::Any + Send + Sync>>,
     ) -> FactoryResult<Box<dyn std::any::Any + Send + Sync>> {
-        #[allow(clippy::await_holding_lock)]
-        let factories = self.factories.read().unwrap();
-        let factory =
+        // 在 async 调用前获取工厂，避免 await_holding_lock
+        let factory = {
+            let factories = self.factories.read().unwrap();
             factories
                 .get(&metadata.name)
                 .ok_or_else(|| FactoryError::UnsupportedService {
                     name: metadata.name.clone(),
-                })?;
+                })?
+                .clone()
+        };
 
         // 验证配置
         factory.validate_config(metadata, &self.config)?;

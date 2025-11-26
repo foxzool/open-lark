@@ -55,7 +55,7 @@ graph TD
 use openlark_auth::{AuthServices, AuthConfig};
 
 let config = AuthConfig::new("app_id", "app_secret")
-    .with_base_url("https://open.feishu.cn");
+.with_base_url("https://open.feishu.cn");
 
 let auth = AuthServices::new(config);
 
@@ -307,18 +307,18 @@ let mut join_set = JoinSet::new();
 
 // 并发获取多个令牌
 for i in 0..5 {
-    let auth_clone = auth.clone();
-    join_set.spawn(async move {
-        auth_clone.auth.v3().tenant_access_token().internal().send().await
-    });
+let auth_clone = auth.clone();
+join_set.spawn(async move {
+auth_clone.auth.v3().tenant_access_token().internal().send().await
+});
 }
 
 // 等待所有请求完成
 while let Some(result) = join_set.join_next().await {
-    match result {
-        Ok(token) => println!("令牌 {} 获取成功", i),
-        Err(e) => println!("令牌 {} 获取失败: {}", i, e),
-    }
+match result {
+Ok(token) => println ! ("令牌 {} 获取成功", i),
+Err(e) => println !("令牌 {} 获取失败: {}", i, e),
+}
 }
 ```
 
@@ -462,10 +462,10 @@ cargo llvm-cov --lib -p openlark-auth --html
 ## 版本历史
 
 - **v0.1.0-dev** (当前版本)
-  - ✅ 完成 PVR 架构重构
-  - ✅ 实现 9 个认证 API
-  - ✅ 完整测试覆盖
-  - ✅ 企业级代码质量
+    - ✅ 完成 PVR 架构重构
+    - ✅ 实现 9 个认证 API
+    - ✅ 完整测试覆盖
+    - ✅ 企业级代码质量
 
 ## 贡献指南
 

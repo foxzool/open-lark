@@ -384,9 +384,6 @@ pub struct TokenStats {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use std::time::Duration;
-
     fn create_test_config() -> AuthConfig {
         crate::client::AuthConfigBuilder::new()
             .app_id("test_app_id")

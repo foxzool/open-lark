@@ -76,8 +76,6 @@ impl Default for AuthServicesBuilder {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     #[tokio::test]
     async fn test_services_builder() {
         let builder = AuthServicesBuilder::new();

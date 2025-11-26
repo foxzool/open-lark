@@ -206,7 +206,7 @@ mod builder_validation_tests {
         let config = AuthConfig::new("test_app", "test_secret");
         let auth_services = AuthServices::new(config);
 
-        let builder = auth_services.auth.v3().tenant_access_token().internal();
+        let _builder = auth_services.auth.v3().tenant_access_token().internal();
 
         // 验证构建器字段设置正确
         // 注意：这些是内部字段，我们主要验证构建器可以创建
@@ -218,7 +218,7 @@ mod builder_validation_tests {
         let config = AuthConfig::new("test_app", "test_secret");
         let auth_services = AuthServices::new(config);
 
-        let builder = auth_services.auth.v3().app_access_token().internal();
+        let _builder = auth_services.auth.v3().app_access_token().internal();
 
         assert!(true);
     }
@@ -228,7 +228,7 @@ mod builder_validation_tests {
         let config = AuthConfig::new("test_app", "test_secret");
         let auth_services = AuthServices::new(config);
 
-        let builder = auth_services.authen.v1.user_info().get();
+        let _builder = auth_services.authen.v1.user_info().get();
 
         assert!(true);
     }

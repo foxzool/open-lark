@@ -91,10 +91,139 @@ struct UserInfoInternalResponse {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::AuthServices;
+    use serde_json::json;
+    use wiremock::{Mock, MockServer, ResponseTemplate};
+
+    /// 简单的断言宏
+    macro_rules! assert_ok {
+        ($result:expr) => {
+            match $result {
+                Ok(value) => value,
+                Err(e) => panic!("Expected Ok, got Err: {:?}", e),
+            }
+        };
+    }
+
+    macro_rules! assert_err {
+        ($result:expr) => {
+            match $result {
+                Ok(_) => panic!("Expected Err, got Ok"),
+                Err(_) => true,
+            }
+        };
+    }
+
+    /// 创建测试用的认证配置
+    fn create_test_auth_config(base_url: &str) -> crate::models::AuthConfig {
+        crate::models::AuthConfig::new("test_app_id", "test_app_secret").with_base_url(base_url)
+    }
+
+    /// 创建测试用的认证服务
+    fn create_test_auth_services(base_url: &str) -> AuthServices {
+        let config = create_test_auth_config(base_url);
+        AuthServices::new(config)
+    }
+
+    /// 简化的测试用HTTP Mock助手
+    struct SimpleMockHelper {
+        server: MockServer,
+    }
+
+    impl SimpleMockHelper {
+        async fn new() -> Self {
+            let server = MockServer::start().await;
+            Self { server }
+        }
+
+        fn base_url(&self) -> String {
+            self.server.uri()
+        }
+
+        /// 设置 user_info 成功响应
+        async fn setup_user_info_success(&self) {
+            self.server
+                .register(
+                    Mock::given(wiremock::matchers::method("GET"))
+                        .and(wiremock::matchers::path("/open-apis/authen/v1/user_info"))
+                        .and(wiremock::matchers::header(
+                            "Authorization",
+                            "Bearer test_user_access_token",
+                        ))
+                        .respond_with(ResponseTemplate::new(200).set_body_json(json!({
+                            "user_id": format!("user_{}", uuid::Uuid::new_v4()),
+                            "name": "测试用户",
+                            "open_id": format!("open_{}", uuid::Uuid::new_v4()),
+                            "union_id": format!("union_{}", uuid::Uuid::new_v4()),
+                            "en_name": "Test User",
+                            "email": "test@example.com",
+                            "mobile": "+86 138 0013 8000",
+                            "avatar_url": "https://example.com/avatar.jpg",
+                            "status": "activated",
+                            "department_ids": ["dept_001", "dept_002"],
+                            "position": "软件工程师",
+                            "employee_no": "EMP001",
+                            "nickname": "小测",
+                            "gender": "unknown"
+                        }))),
+                )
+                .await;
+        }
+
+        /// 设置 user_info 错误响应
+        async fn setup_user_info_error(&self, status_code: u16) {
+            self.server
+                .register(
+                    Mock::given(wiremock::matchers::method("GET"))
+                        .and(wiremock::matchers::path("/open-apis/authen/v1/user_info"))
+                        .and(wiremock::matchers::header(
+                            "Authorization",
+                            "Bearer test_user_access_token",
+                        ))
+                        .respond_with(ResponseTemplate::new(status_code)),
+                )
+                .await;
+        }
+
+        /// 设置无效令牌错误响应
+        async fn setup_invalid_token_error(&self) {
+            self.server
+                .register(
+                    Mock::given(wiremock::matchers::method("GET"))
+                        .and(wiremock::matchers::path("/open-apis/authen/v1/user_info"))
+                        .and(wiremock::matchers::header(
+                            "Authorization",
+                            "Bearer invalid_token",
+                        ))
+                        .respond_with(ResponseTemplate::new(401).set_body_json(json!({
+                            "code": 401,
+                            "msg": "invalid token"
+                        }))),
+                )
+                .await;
+        }
+
+        /// 设置网络错误响应
+        async fn setup_network_error(&self) {
+            self.server
+                .register(
+                    Mock::given(wiremock::matchers::method("GET"))
+                        .and(wiremock::matchers::path("/open-apis/authen/v1/user_info"))
+                        .and(wiremock::matchers::header(
+                            "Authorization",
+                            "Bearer test_user_access_token",
+                        ))
+                        .respond_with(ResponseTemplate::new(500).set_body_json(json!({
+                            "error": "Internal Server Error"
+                        }))),
+                )
+                .await;
+        }
+    }
 
     #[test]
     fn test_user_info_service_creation() {
-        let config = AuthConfig::new("test_app_id", "test_app_secret");
+        let config = crate::models::AuthConfig::new("test_app_id", "test_app_secret");
         let service = UserInfoService::new(std::sync::Arc::new(config));
 
         // 测试构建器创建
@@ -103,12 +232,334 @@ mod tests {
 
     #[test]
     fn test_user_info_get_builder() {
-        let config = AuthConfig::new("test_app_id", "test_app_secret");
+        let config = crate::models::AuthConfig::new("test_app_id", "test_app_secret");
         let service = UserInfoService::new(std::sync::Arc::new(config));
 
-        let builder = service.get().user_access_token("test_user_access_token");
+        let _builder = service.get().user_access_token("test_user_access_token");
 
         // 构建器应该正确设置参数
         // 注意：这里不实际发送请求，只测试构建器的设置
+    }
+
+    // ==================== 完整的HTTP请求/响应测试 ====================
+
+    #[tokio::test]
+    async fn test_user_info_get_successful_request() {
+        // Given: 设置Mock服务器
+        let mock_helper = SimpleMockHelper::new().await;
+        mock_helper.setup_user_info_success().await;
+
+        let auth_services = create_test_auth_services(&mock_helper.base_url());
+
+        // When: 发送用户信息获取请求
+        let result = auth_services
+            .authen
+            .v1
+            .user_info()
+            .get()
+            .user_access_token("test_user_access_token")
+            .send()
+            .await;
+
+        // Then: 验证成功响应
+        let user_info = assert_ok!(result);
+        assert!(!user_info.user_id.is_empty());
+        assert_eq!(user_info.name, "测试用户");
+        assert_eq!(user_info.email, "test@example.com");
+        assert_eq!(
+            user_info.status,
+            crate::models::user_info::UserStatus::Activated
+        );
+
+        println!(
+            "✅ 用户信息获取测试通过: {} ({})",
+            user_info.name, user_info.user_id
+        );
+    }
+
+    #[tokio::test]
+    async fn test_user_info_get_invalid_token() {
+        // Given: 设置Mock服务器返回无效令牌错误
+        let mock_helper = SimpleMockHelper::new().await;
+        mock_helper.setup_invalid_token_error().await;
+
+        let auth_services = create_test_auth_services(&mock_helper.base_url());
+
+        // When: 使用无效令牌发送请求
+        let result = auth_services
+            .authen
+            .v1
+            .user_info()
+            .get()
+            .user_access_token("invalid_token")
+            .send()
+            .await;
+
+        // Then: 验证返回错误
+        assert_err!(result);
+        println!("✅ 无效令牌错误处理测试通过");
+    }
+
+    #[tokio::test]
+    async fn test_user_info_get_unauthorized() {
+        // Given: 设置Mock服务器返回401错误
+        let mock_helper = SimpleMockHelper::new().await;
+        mock_helper.setup_user_info_error(401).await;
+
+        let auth_services = create_test_auth_services(&mock_helper.base_url());
+
+        // When: 发送未授权请求
+        let result = auth_services
+            .authen
+            .v1
+            .user_info()
+            .get()
+            .user_access_token("test_user_access_token")
+            .send()
+            .await;
+
+        // Then: 验证返回错误
+        assert_err!(result);
+        println!("✅ 未授权错误处理测试通过");
+    }
+
+    #[tokio::test]
+    async fn test_user_info_get_forbidden() {
+        // Given: 设置Mock服务器返回403错误
+        let mock_helper = SimpleMockHelper::new().await;
+        mock_helper.setup_user_info_error(403).await;
+
+        let auth_services = create_test_auth_services(&mock_helper.base_url());
+
+        // When: 发送禁止访问请求
+        let result = auth_services
+            .authen
+            .v1
+            .user_info()
+            .get()
+            .user_access_token("test_user_access_token")
+            .send()
+            .await;
+
+        // Then: 验证返回错误
+        assert_err!(result);
+        println!("✅ 禁止访问错误处理测试通过");
+    }
+
+    #[tokio::test]
+    async fn test_user_info_get_network_timeout() {
+        // Given: 设置Mock服务器返回网络错误
+        let mock_helper = SimpleMockHelper::new().await;
+        mock_helper.setup_network_error().await;
+
+        let auth_services = create_test_auth_services(&mock_helper.base_url());
+
+        // When: 发送请求遇到网络错误
+        let result = auth_services
+            .authen
+            .v1
+            .user_info()
+            .get()
+            .user_access_token("test_user_access_token")
+            .send()
+            .await;
+
+        // Then: 验证网络错误处理
+        assert_err!(result);
+        println!("✅ 网络错误处理测试通过");
+    }
+
+    #[tokio::test]
+    async fn test_user_info_get_concurrent_requests() {
+        // Given: 设置Mock服务器
+        let mock_helper = SimpleMockHelper::new().await;
+        mock_helper.setup_user_info_success().await;
+
+        let auth_services = std::sync::Arc::new(create_test_auth_services(&mock_helper.base_url()));
+
+        // When: 并发发送多个请求
+        let mut handles = vec![];
+        for _i in 0..5 {
+            let services = auth_services.clone();
+            let handle = tokio::spawn(async move {
+                services
+                    .authen
+                    .v1
+                    .user_info()
+                    .get()
+                    .user_access_token("test_user_access_token")
+                    .send()
+                    .await
+            });
+            handles.push(handle);
+        }
+
+        // Then: 验证所有请求都成功
+        let mut success_count = 0;
+        for handle in handles {
+            match handle.await.unwrap() {
+                Ok(_) => success_count += 1,
+                Err(_) => panic!("并发请求失败"),
+            }
+        }
+
+        assert_eq!(success_count, 5);
+        println!("✅ 并发请求测试通过，成功处理 {} 个请求", success_count);
+    }
+
+    #[tokio::test]
+    async fn test_user_info_get_custom_user_token() {
+        // Given: 设置Mock服务器
+        let mock_helper = SimpleMockHelper::new().await;
+        mock_helper
+            .server
+            .register(
+                Mock::given(wiremock::matchers::method("GET"))
+                    .and(wiremock::matchers::path("/open-apis/authen/v1/user_info"))
+                    .and(wiremock::matchers::header(
+                        "Authorization",
+                        "Bearer custom_user_token_123",
+                    ))
+                    .respond_with(ResponseTemplate::new(200).set_body_json(json!({
+                        "user_id": "user_custom_123",
+                        "name": "自定义用户",
+                        "open_id": "open_custom_123",
+                        "union_id": "union_custom_123",
+                        "en_name": "Custom User",
+                        "email": "custom@example.com",
+                        "mobile": "+86 139 0013 9000",
+                        "avatar_url": "https://example.com/custom-avatar.jpg",
+                        "status": "activated",
+                        "department_ids": ["dept_custom"],
+                        "position": "高级工程师",
+                        "employee_no": "CUSTOM123",
+                        "nickname": "小自",
+                        "gender": "male"
+                    }))),
+            )
+            .await;
+
+        let auth_services = create_test_auth_services(&mock_helper.base_url());
+
+        // When: 使用自定义用户令牌
+        let result = auth_services
+            .authen
+            .v1
+            .user_info()
+            .get()
+            .user_access_token("custom_user_token_123")
+            .send()
+            .await;
+
+        // Then: 验证请求成功
+        let user_info = assert_ok!(result);
+        assert_eq!(user_info.user_id, "user_custom_123");
+        assert_eq!(user_info.name, "自定义用户");
+        assert_eq!(user_info.email, "custom@example.com");
+
+        println!(
+            "✅ 自定义用户令牌测试通过: {} ({})",
+            user_info.name, user_info.user_id
+        );
+    }
+
+    #[tokio::test]
+    async fn test_user_info_get_response_structure() {
+        // Given: 设置Mock服务器返回特定结构的响应
+        let mock_helper = SimpleMockHelper::new().await;
+        mock_helper
+            .server
+            .register(
+                Mock::given(wiremock::matchers::method("GET"))
+                    .and(wiremock::matchers::path("/open-apis/authen/v1/user_info"))
+                    .and(wiremock::matchers::header(
+                        "Authorization",
+                        "Bearer test_token_456",
+                    ))
+                    .respond_with(ResponseTemplate::new(200).set_body_json(json!({
+                        "user_id": "user_specific_456",
+                        "name": "特定测试用户",
+                        "open_id": "open_specific_456",
+                        "union_id": "union_specific_456",
+                        "en_name": "Specific Test User",
+                        "email": "specific@test.com",
+                        "mobile": "+86 137 0013 7000",
+                        "avatar_url": "https://example.com/specific-avatar.jpg",
+                        "status": "activated",
+                        "department_ids": ["dept_specific_001", "dept_specific_002"],
+                        "position": "测试工程师",
+                        "employee_no": "SPEC456",
+                        "nickname": "小特",
+                        "gender": "female"
+                    }))),
+            )
+            .await;
+
+        let auth_services = create_test_auth_services(&mock_helper.base_url());
+
+        // When: 发送请求
+        let result = auth_services
+            .authen
+            .v1
+            .user_info()
+            .get()
+            .user_access_token("test_token_456")
+            .send()
+            .await;
+
+        // Then: 验证响应结构
+        let user_info = assert_ok!(result);
+        assert_eq!(user_info.user_id, "user_specific_456");
+        assert_eq!(user_info.name, "特定测试用户");
+        assert_eq!(user_info.email, "specific@test.com");
+        assert_eq!(user_info.position, "测试工程师");
+
+        println!("✅ 响应结构验证测试通过");
+    }
+
+    #[tokio::test]
+    async fn test_user_info_get_user_not_found() {
+        // Given: 设置Mock服务器返回404错误
+        let mock_helper = SimpleMockHelper::new().await;
+        mock_helper.setup_user_info_error(404).await;
+
+        let auth_services = create_test_auth_services(&mock_helper.base_url());
+
+        // When: 用户不存在
+        let result = auth_services
+            .authen
+            .v1
+            .user_info()
+            .get()
+            .user_access_token("test_user_access_token")
+            .send()
+            .await;
+
+        // Then: 验证用户不存在错误处理
+        assert_err!(result);
+        println!("✅ 用户不存在错误处理测试通过");
+    }
+
+    #[tokio::test]
+    async fn test_user_info_get_rate_limit_error() {
+        // Given: 设置Mock服务器返回频率限制错误
+        let mock_helper = SimpleMockHelper::new().await;
+        mock_helper.setup_user_info_error(429).await;
+
+        let auth_services = create_test_auth_services(&mock_helper.base_url());
+
+        // When: 发送请求超过频率限制
+        let result = auth_services
+            .authen
+            .v1
+            .user_info()
+            .get()
+            .user_access_token("test_user_access_token")
+            .send()
+            .await;
+
+        // Then: 验证频率限制错误处理
+        assert_err!(result);
+        println!("✅ 频率限制错误处理测试通过");
     }
 }
