@@ -174,6 +174,21 @@ openlark-auth = { workspace = true, optional = true }
 openlark-docs = { workspace = true, optional = true }
 openlark-security = { workspace = true, optional = true }
 
+# 其他服务模块
+openlark-hr = { workspace = true, optional = true }
+openlark-ai = { workspace = true, optional = true }
+openlark-admin = { workspace = true, optional = true }
+openlark-application = { workspace = true, optional = true }
+openlark-approval = { workspace = true, optional = true }
+openlark-calendar = { workspace = true, optional = true }
+openlark-collab = { workspace = true, optional = true }
+openlark-helpdesk = { workspace = true, optional = true }
+openlark-hire = { workspace = true, optional = true }
+openlark-mail = { workspace = true, optional = true }
+openlark-meeting = { workspace = true, optional = true }
+openlark-people = { workspace = true, optional = true }
+openlark-task = { workspace = true, optional = true }
+
 # 重新导出工作空间依赖，为用户提供便利访问
 anyhow = { workspace = true }
 async-trait = { workspace = true }
@@ -323,14 +338,22 @@ communication = ["client", "openlark-communication"]
 docs = ["client", "openlark-docs"]
 
 # 人力资源
-# hr = ["client", "openlark-hr"]  # 暂时注释，待验证模块完整性
+hr = ["client", "openlark-hr"]
 
 # === 高级服务模块 (Advanced Services) ===
-# ai = ["client", "openlark-ai"]  # 暂时注释，待启用该模块
-# admin = ["client", "openlark-admin"]  # 暂时注释，待启用该模块
-# meeting = ["client", "openlark-meeting"]  # 暂时注释，待验证模块完整性
-# calendar = ["client", "openlark-calendar"]  # 暂时注释，待启用该模块
-# collab = ["client", "openlark-collab"]  # 暂时注释，待启用该模块
+ai = ["client", "openlark-ai"]
+admin = []  # admin crate存在但未完善
+meeting = ["client", "openlark-meeting"]
+calendar = ["client", "openlark-calendar"]
+collab = ["client", "openlark-collab"]
+approval = ["client", "openlark-approval"]
+helpdesk = ["client", "openlark-helpdesk"]
+hire = ["client", "openlark-hire"]
+mail = []  # mail crate存在但未完善
+people = ["client", "openlark-people"]
+task = ["client", "openlark-task"]
+application = ["client", "openlark-application"]
+bitable = ["client", "openlark-docs"]
 
 # === 推荐功能组合 (Recommended Feature Sets) ===
 # 最小可用配置
