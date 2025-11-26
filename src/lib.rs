@@ -173,11 +173,11 @@ pub use openlark_communication;
 #[cfg(feature = "openlark-docs")]
 pub use openlark_docs;
 
-#[cfg(feature = "openlark-hr")]
-pub use openlark_hr;
+// #[cfg(feature = "openlark-hr")]
+// pub use openlark_hr;
 
-#[cfg(feature = "openlark-ai")]
-pub use openlark_ai;
+// #[cfg(feature = "openlark-ai")]
+// pub use openlark_ai;
 
 // 注意：以下模块暂未包含在发布包中，等待完全开发完成
 // #[cfg(feature = "openlark-admin")]
@@ -237,11 +237,11 @@ pub mod prelude {
     #[cfg(feature = "openlark-docs")]
     pub use openlark_docs;
 
-    #[cfg(feature = "openlark-hr")]
-    pub use openlark_hr;
+    // #[cfg(feature = "openlark-hr")]
+    // pub use openlark_hr;
 
-    #[cfg(feature = "openlark-ai")]
-    pub use openlark_ai;
+    // #[cfg(feature = "openlark-ai")]
+    // pub use openlark_ai;
 
     #[cfg(feature = "openlark-protocol")]
     pub use openlark_protocol;

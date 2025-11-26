@@ -335,7 +335,6 @@ pub struct RefreshStats {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use crate::auth::cache::CacheConfig;
 
     #[tokio::test]
