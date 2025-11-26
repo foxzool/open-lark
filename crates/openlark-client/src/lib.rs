@@ -354,10 +354,7 @@ pub mod utils {
     /// 获取启用的功能列表
     pub fn get_enabled_features() -> Vec<&'static str> {
         // 根据编译时的 feature 标志返回启用的功能
-        let mut features = vec![];
-
-        // 认证服务现在始终启用
-        features.push("auth");
+        let mut features = vec!["auth"];
 
         #[cfg(feature = "communication")]
         features.push("communication");
@@ -368,29 +365,29 @@ pub mod utils {
         #[cfg(feature = "security")]
         features.push("security");
 
-        // #[cfg(feature = "hr")]  // hr 功能暂未启用
-        // features.push("hr");
+        #[cfg(feature = "hr")]
+        features.push("hr");
 
-        // #[cfg(feature = "ai")]  // ai 功能暂未启用
-        // features.push("ai");
+        #[cfg(feature = "ai")]
+        features.push("ai");
 
-        // #[cfg(feature = "calendar")]  // calendar 功能暂未启用
-        // features.push("calendar");
+        #[cfg(feature = "calendar")]
+        features.push("calendar");
 
-        // #[cfg(feature = "admin")]  // admin 功能暂未启用
-        // features.push("admin");
+        #[cfg(feature = "admin")]
+        features.push("admin");
 
-        // #[cfg(feature = "approval")]  // approval 功能暂未启用
-        // features.push("approval");
+        #[cfg(feature = "approval")]
+        features.push("approval");
 
-        // #[cfg(feature = "helpdesk")]  // helpdesk 功能暂未启用
-        // features.push("helpdesk");
+        #[cfg(feature = "helpdesk")]
+        features.push("helpdesk");
 
-        // #[cfg(feature = "mail")]  // mail 功能暂未启用
-        // features.push("mail");
+        #[cfg(feature = "mail")]
+        features.push("mail");
 
-        // #[cfg(feature = "application")]  // application 功能暂未启用
-        // features.push("application");
+        #[cfg(feature = "application")]
+        features.push("application");
 
         features
     }
