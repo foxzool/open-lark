@@ -1,76 +1,152 @@
-//! # OpenLark 安全认证服务模块
+//! OpenLark 安全服务模块
 //!
-//! 飞书开放平台安全认证服务模块，提供身份认证、权限管理、安全审计等功能。
+//! 提供飞书开放平台的完整安全服务，包括访问控制(ACS)和安全合规管理。
 //!
-//! ## 功能模块
+//! ## 架构设计
 //!
-//! - **auth**: 身份认证 (11 APIs) - 用户登录、令牌管理
-//! - **acs**: 访问控制 (14 APIs) - 权限验证、角色管理
-//! - **compliance**: 合规审计 (8 APIs) - 审计日志、合规检查、风险评估
+//! 采用 Project-Version-Resource (PVR) 三层架构：
+//!
+//! ```text
+//! openlark-security/src/
+//! ├── models/           # 共享数据模型
+//! ├── acs/              # 访问控制系统 (Project)
+//! │   └── v1/          # API版本v1 (Version)
+//! └── security_and_compliance/  # 安全合规管理 (Project)
+//!     ├── v1/          # API版本v1 (Version) - 审计日志
+//!     └── v2/          # API版本v2 (Version) - 设备记录管理
+//! ```
 //!
 //! ## 快速开始
 //!
-//! ```rust,ignore
+//! ```rust,no_run
 //! use openlark_security::prelude::*;
 //!
-//! // 创建安全管理器
-//! let manager = SecurityServiceManager::new(config);
+//! #[tokio::main]
+//! async fn main() -> Result<(), Box<dyn std::error::Error>> {
+//!     let config = SecurityConfig::new("app_id", "app_secret");
+//!     let security = SecurityServices::new(config);
 //!
-//! // 检查服务健康状态
-//! let health = manager.health_check().await?;
-//! println!("Security service health: {:?}", health);
+//!     // 获取门禁用户列表
+//!     let users = security.acs.v1().users().list()
+//!         .page_size(20)
+//!         .send()
+//!         .await?;
 //!
-//! // 获取服务统计信息
-//! let stats = manager.get_statistics().await?;
-//! println!("Service statistics: {:?}", stats);
+//!     println!("用户数量: {}", users.data.len());
+//!     Ok(())
+//! }
 //! ```
 //!
-//! ## 特性
+//! ## API覆盖
 //!
-//! - ✅ **33 APIs全覆盖** - 飞书安全认证服务完整实现 (auth: 11, acs: 14, compliance: 8)
-//! - ✅ **类型安全** - 强类型请求/响应结构
-//! - ✅ **异步支持** - 基于tokio的异步API
-//! - ✅ **版本化API** - 支持v1/v2/v3多版本API
-//! - ✅ **构建器模式** - 流畅的API调用体验
-//! - ✅ **安全增强** - 支持多重认证、加密传输
+//! ### acs (v1) - 访问控制系统
+//! #### 用户管理 (user)
+//! - `users.get()` - 获取单个用户信息
+//! - `users.list()` - 获取用户列表
+//! - `users.patch()` - 修改用户部分信息
+//!
+//! #### 人脸识别 (user.face)
+//! - `user_faces.get()` - 下载人脸图片
+//! - `user_faces.update()` - 上传人脸图片
+//!
+//! #### 权限规则 (rule_external)
+//! - `rule_external.create()` - 创建或更新权限组
+//! - `rule_external.get()` - 获取权限组信息
+//! - `rule_external.delete()` - 删除权限组
+//! - `rule_external.device_bind()` - 设备绑定权限组
+//!
+//! #### 访客管理 (visitor)
+//! - `visitors.create()` - 添加访客
+//! - `visitors.delete()` - 删除访客
+//!
+//! #### 设备管理 (device)
+//! - `devices.list()` - 获取门禁设备列表
+//!
+//! ### security_and_compliance (v2/v1) - 安全合规管理
+//! #### 设备记录管理 (device_record - v2)
+//! - `device_records.mine()` - 获取客户端设备认证信息
+//! - `device_records.create()` - 新增设备
+//! - `device_records.list()` - 查询设备信息
+//! - `device_records.get()` - 获取设备信息
+//! - `device_records.update()` - 更新设备
+//! - `device_records.delete()` - 删除设备
+//!
+//! #### 设备申报审批 (device_apply_record - v2)
+//! - `device_apply_records.approve()` - 审批设备申报
+//!
+//! #### 审计日志管理 (openapi_log - v1)
+//! - `openapi_logs.list_data()` - 获取OpenAPI审计日志数据
 
-// #![deny(missing_docs)] // 暂时禁用，在开发阶段
+#![deny(missing_docs)]
 #![warn(clippy::all)]
+#![warn(missing_copy_implementations)]
+#![warn(missing_debug_implementations)]
 
-// Core modules
+// 错误处理模块
 pub mod error;
+
+// 共享数据模型
 pub mod models;
 
-// 主要服务模块
-pub mod service;
-
-// 功能模块按安全域组织
-#[cfg(feature = "auth")]
-pub mod auth;
-
-#[cfg(feature = "acs")]
+// Project: acs - 访问控制系统
 pub mod acs;
 
-#[cfg(feature = "compliance")]
-pub mod compliance;
-
-// API版本模块
-#[cfg(any(feature = "v1", feature = "v2", feature = "v3"))]
-pub mod versions;
-
-// Prelude模块 - 常用导入
-pub mod prelude;
+// Project: security_and_compliance - 安全合规管理
+pub mod security_and_compliance;
 
 // 重新导出主要类型
-pub use error::{SecurityError, SecurityResult};
-pub use service::SecurityService;
+pub use acs::{AcsProject, AcsV1Service};
+pub use security_and_compliance::{
+    SecurityAndComplianceProject, SecurityAndComplianceV1Service, SecurityAndComplianceV2Service,
+};
 
-// 重新导出各域服务
-#[cfg(feature = "auth")]
-pub use auth::AuthService;
+// 重新导出错误类型
+pub use crate::error::SecurityError;
 
-#[cfg(feature = "acs")]
-pub use acs::AccessControlService;
+/// 安全服务统一入口
+#[derive(Debug)]
+pub struct SecurityServices {
+    /// 安全配置
+    pub config: std::sync::Arc<crate::models::SecurityConfig>,
+    /// ACS门禁控制项目
+    pub acs: AcsProject,
+    /// 安全合规项目
+    pub security_and_compliance: SecurityAndComplianceProject,
+}
 
-#[cfg(feature = "compliance")]
-pub use compliance::ComplianceService;
+impl SecurityServices {
+    /// 创建新的安全服务实例
+    pub fn new(config: crate::models::SecurityConfig) -> Self {
+        let config = std::sync::Arc::new(config);
+
+        Self {
+            acs: AcsProject::new(config.clone()),
+            security_and_compliance: SecurityAndComplianceProject::new(config.clone()),
+            config,
+        }
+    }
+
+    /// 获取配置信息
+    pub fn config(&self) -> &crate::models::SecurityConfig {
+        &self.config
+    }
+}
+
+impl Default for SecurityServices {
+    fn default() -> Self {
+        Self::new(crate::models::SecurityConfig::default())
+    }
+}
+
+/// 结果类型别名
+pub type SecurityResult<T> = Result<T, crate::error::SecurityError>;
+
+/// 预导出模块
+pub mod prelude {
+    pub use super::{AcsProject, SecurityAndComplianceProject, SecurityResult, SecurityServices};
+
+    // 避免v1命名空间冲突，明确导出需要的类型
+    pub use super::acs::{AcsProject as Acs, AcsV1Service};
+    pub use super::security_and_compliance::{SecurityAndComplianceV1Service, SecurityAndComplianceV2Service};
+    pub use super::models::*;
+}

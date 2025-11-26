@@ -62,14 +62,15 @@ security = ["openlark-security"]              # 安全认证
 hr = ["openlark-hr"]                    # 人力资源
 ai = ["openlark-ai"]                     # AI服务
 
-# Additional business services（暂时注释，等crate存在后启用）
-bitable = []                           # 多维表格（crate暂未实现）
-calendar = []                          # 日历会议（crate暂未实现）
-admin = []                             # 管理功能（crate暂未实现）
-approval = []                          # 审批流程（crate暂未实现）
-helpdesk = []                          # 帮助台（crate暂未实现）
-mail = []                              # 邮件服务（crate存在但未加入workspace）
-application = []                       # 应用服务（crate暂未实现）
+# Additional business services
+bitable = ["openlark-docs"]            # 多维表格
+calendar = []                          # 日历会议
+admin = []                             # 管理功能
+approval = []                          # 审批流程
+helpdesk = []                          # 帮助台
+mail = []                              # 邮件服务
+application = []                       # 应用服务
+meeting = []                           # 会议服务
 
 # Legacy features for backward compatibility (暂时保留，用于解决代码中的cfg引用)
 collab = []                             # 协作功能（集成到其他模块中）

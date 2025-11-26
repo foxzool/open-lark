@@ -1,12 +1,9 @@
-//! 访问控制 V1 API 模块
-//!
-//! 提供飞书开放平台访问控制相关的V1版本API实现。
+//! ACS v1 API 版本实现
 
-pub mod permission;
-pub mod policy;
-pub mod role;
-
-// 重新导出所有v1 API
-pub use permission::*;
-pub use policy::*;
-pub use role::*;
+// 资源模块
+pub mod access_records;
+pub mod devices;
+pub mod rule_external;
+pub mod user_faces;
+pub mod users;
+pub mod visitors;

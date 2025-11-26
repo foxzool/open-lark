@@ -1,47 +1,92 @@
-//! 访问控制模块
+//! 访问控制系统 (ACS) - Project
 //!
-//! 提供基于角色的访问控制（RBAC）和基于属性的访问控制（ABAC）功能。
-//!
-//! ## 功能特性
-//!
-//! - 角色权限管理
-//! - 策略引擎评估
-//! - 权限检查与授权
-//! - 审计日志记录
-//! - 细粒度权限控制
+//! 智能门禁访问控制系统，提供用户、设备、权限和访客管理功能。
 
-pub mod service;
+use std::sync::Arc;
+
+/// ACS 项目服务
+#[derive(Debug)]
+pub struct AcsProject {
+    config: Arc<crate::models::SecurityConfig>,
+    v1: AcsV1Service,
+}
+
+impl AcsProject {
+    /// 创建新的 ACS 项目实例
+    pub fn new(config: Arc<crate::models::SecurityConfig>) -> Self {
+        Self {
+            v1: AcsV1Service::new(config.clone()),
+            config,
+        }
+    }
+
+    /// 获取 v1 版本服务
+    pub fn v1(&self) -> &AcsV1Service {
+        &self.v1
+    }
+
+    /// 获取配置信息
+    pub fn config(&self) -> &crate::models::SecurityConfig {
+        &self.config
+    }
+}
+
+/// ACS v1 版本服务
+#[derive(Debug)]
+pub struct AcsV1Service {
+    config: Arc<crate::models::SecurityConfig>,
+    users: crate::acs::v1::users::UsersService,
+    user_faces: crate::acs::v1::user_faces::UserFacesService,
+    rule_external: crate::acs::v1::rule_external::RuleExternalService,
+    visitors: crate::acs::v1::visitors::VisitorsService,
+    devices: crate::acs::v1::devices::DevicesService,
+    access_records: crate::acs::v1::access_records::AccessRecordsService,
+}
+
+impl AcsV1Service {
+    /// 创建新的 v1 服务实例
+    pub fn new(config: Arc<crate::models::SecurityConfig>) -> Self {
+        Self {
+            users: crate::acs::v1::users::UsersService::new(config.clone()),
+            user_faces: crate::acs::v1::user_faces::UserFacesService::new(config.clone()),
+            rule_external: crate::acs::v1::rule_external::RuleExternalService::new(config.clone()),
+            visitors: crate::acs::v1::visitors::VisitorsService::new(config.clone()),
+            devices: crate::acs::v1::devices::DevicesService::new(config.clone()),
+            access_records: crate::acs::v1::access_records::AccessRecordsService::new(config.clone()),
+            config,
+        }
+    }
+
+    /// 获取用户管理服务
+    pub fn users(&self) -> &crate::acs::v1::users::UsersService {
+        &self.users
+    }
+
+    /// 获取人脸识别管理服务
+    pub fn user_faces(&self) -> &crate::acs::v1::user_faces::UserFacesService {
+        &self.user_faces
+    }
+
+    /// 获取权限规则管理服务
+    pub fn rule_external(&self) -> &crate::acs::v1::rule_external::RuleExternalService {
+        &self.rule_external
+    }
+
+    /// 获取访客管理服务
+    pub fn visitors(&self) -> &crate::acs::v1::visitors::VisitorsService {
+        &self.visitors
+    }
+
+    /// 获取设备管理服务
+    pub fn devices(&self) -> &crate::acs::v1::devices::DevicesService {
+        &self.devices
+    }
+
+    /// 获取访问记录服务
+    pub fn access_records(&self) -> &crate::acs::v1::access_records::AccessRecordsService {
+        &self.access_records
+    }
+}
+
+// v1 模块
 pub mod v1;
-
-// 重新导出主要类型
-pub use service::{
-    AccessControlService, AssignRoleRequest, AssignRoleResponse, BatchPermissionCheckRequest,
-    BatchPermissionCheckResponse, CreatePolicyRequest, CreatePolicyResponse, CreateRoleRequest,
-    CreateRoleResponse, DefaultAccessControlService, DeletePolicyRequest, DeletePolicyResponse,
-    DeleteRoleRequest, DeleteRoleResponse, GrantPermissionRequest, GrantPermissionResponse,
-    ListRolesRequest, ListRolesResponse, PermissionCheckRequest, PermissionCheckResponse,
-    PolicyEffect, PolicyEvaluationRequest, PolicyEvaluationResponse, PolicyRule, PolicyType,
-    RevokePermissionRequest, RevokePermissionResponse, Role, RoleType, UpdatePolicyRequest,
-    UpdatePolicyResponse, UpdateRoleRequest, UpdateRoleResponse, UserPermission,
-    UserPermissionListRequest, UserPermissionListResponse,
-};
-
-// API版本导出
-#[cfg(feature = "v1")]
-pub use v1::{
-    create_assign_role_request, create_batch_permission_check_request,
-    create_create_policy_request, create_create_role_request, create_delete_policy_request,
-    create_delete_role_request, create_grant_permission_request, create_list_roles_request,
-    create_permission_check_request, create_policy_evaluation_request, create_policy_rule,
-    create_revoke_permission_request, create_update_policy_request, create_update_role_request,
-    create_user_permission_list_request, AssignRoleRequestBuilder,
-    BatchPermissionCheckRequestBuilder, CreatePolicyRequestBuilder, CreateRoleRequestBuilder,
-    DeletePolicyRequestBuilder, DeleteRoleRequestBuilder, GrantPermissionRequestBuilder,
-    ListRolesRequestBuilder, PermissionCheckRequestBuilder, PermissionV1API,
-    PolicyEvaluationRequestBuilder, PolicyRuleBuilder, PolicyV1API, RevokePermissionRequestBuilder,
-    RoleV1API, UpdatePolicyRequestBuilder, UpdateRoleRequestBuilder,
-    UserPermissionListRequestBuilder,
-};
-
-#[cfg(any(feature = "v2", feature = "v3"))]
-compile_error!("v2 and v3 API support not yet implemented");
