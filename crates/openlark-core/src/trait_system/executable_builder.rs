@@ -73,7 +73,7 @@ mod tests {
 
         async fn process_request(&self, request: TestRequest) -> crate::SDKResult<TestResponse> {
             if self.should_fail {
-                return Err(crate::error::validation_error_v3("simulation", "模拟失败"));
+                return Err(crate::error::validation_error("simulation", "模拟失败"));
             }
 
             let response = TestResponse {

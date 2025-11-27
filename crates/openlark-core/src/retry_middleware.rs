@@ -920,7 +920,7 @@ mod tests {
             .execute(|| {
                 call_count.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
                 async move {
-                    Err(crate::error::validation_error_v3(
+                    Err(crate::error::validation_error(
                         "token",
                         "Invalid auth token",
                     ))

@@ -974,7 +974,7 @@ mod tests {
 
         // Test with non-API error (no error code)
         let result = trace_auth_operation!("validate_token", "test_app", "user", async {
-            Err::<(String, bool), LarkAPIError>(crate::error::network_error_v3(
+            Err::<(String, bool), LarkAPIError>(crate::error::network_error(
                 "Network connection failed".to_string(),
             ))
         })

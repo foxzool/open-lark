@@ -1,4 +1,4 @@
-use crate::error::{validation_error_v3, LarkAPIError};
+use crate::error::{validation_error, LarkAPIError};
 use reqwest::{multipart, RequestBuilder};
 use serde_json::Value;
 
@@ -16,7 +16,7 @@ impl MultipartBuilder {
 
         let form_obj = json_value
             .as_object()
-            .ok_or_else(|| validation_error_v3("form", "Invalid form data"))?;
+            .ok_or_else(|| validation_error("form", "Invalid form data"))?;
 
         let mut form = multipart::Form::new();
 
@@ -41,7 +41,7 @@ impl MultipartBuilder {
         let file_name = form_obj
             .get("file_name")
             .and_then(|v| v.as_str())
-            .ok_or_else(|| validation_error_v3("file_name", "Missing file_name in form data"))?
+            .ok_or_else(|| validation_error("file_name", "Missing file_name in form data"))?
             .to_string();
 
         let file_part = multipart::Part::bytes(file_data.to_vec()).file_name(file_name);

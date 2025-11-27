@@ -2,7 +2,7 @@
 
 use std::time::Duration;
 
-/// 重试策略（供 CoreErrorV3 使用）
+/// 重试策略（供 CoreError 使用）
 #[derive(Debug, Clone)]
 pub struct RetryPolicy {
     pub max_retries: u32,
