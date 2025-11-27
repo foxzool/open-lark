@@ -590,7 +590,7 @@ impl TokenManager {
             Ok(resp.app_access_token)
         } else {
             warn!("app access token response error: {:#?}", resp.raw_response);
-            Err(crate::error::validation_error_v3(
+            Err(crate::error::validation_error(
                 "token",
                 resp.raw_response.msg.clone(),
             ))
@@ -606,7 +606,7 @@ impl TokenManager {
         if app_ticket.is_empty() {
             match app_ticket_manager.lock().await.get(config).await {
                 None => {
-                    return Err(crate::error::validation_error_v3(
+                    return Err(crate::error::validation_error(
                         "app_ticket",
                         "App ticket is empty",
                     ))
@@ -774,7 +774,7 @@ impl TokenManager {
                 "tenant access token response error: {:#?}",
                 resp.raw_response
             );
-            Err(crate::error::validation_error_v3(
+            Err(crate::error::validation_error(
                 "token",
                 resp.raw_response.msg.clone(),
             ))

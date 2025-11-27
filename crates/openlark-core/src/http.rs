@@ -148,7 +148,7 @@ impl<T: ApiResponseTrait + std::fmt::Debug + for<'de> serde::Deserialize<'de>> T
                 Err(err) => {
                     debug!("Request error: {err:?}");
                     tracing::Span::current().record("response_code", 0_u16); // Indicate network error
-                    Err(crate::error::network_error_v3(err.to_string()))
+                    Err(crate::error::network_error(err.to_string()))
                 }
             }
         }
@@ -168,14 +168,14 @@ fn validate_token_type(
     let access_token_type = access_token_types[0];
 
     if access_token_type == AccessTokenType::Tenant && !option.user_access_token.is_empty() {
-        return Err(crate::error::validation_error_v3(
+        return Err(crate::error::validation_error(
             "access_token_type",
             "tenant token type not match user access token",
         ));
     }
 
     if access_token_type == AccessTokenType::App && !option.tenant_access_token.is_empty() {
-        return Err(crate::error::validation_error_v3(
+        return Err(crate::error::validation_error(
             "access_token_type",
             "user token type not match tenant access token",
         ));
@@ -232,14 +232,14 @@ fn validate(
     access_token_type: AccessTokenType,
 ) -> Result<(), LarkAPIError> {
     if config.app_id.is_empty() {
-        return Err(crate::error::validation_error_v3(
+        return Err(crate::error::validation_error(
             "app_id",
             "AppId is empty",
         ));
     }
 
     if config.app_secret.is_empty() {
-        return Err(crate::error::validation_error_v3(
+        return Err(crate::error::validation_error(
             "app_secret",
             "AppSecret is empty",
         ));
@@ -253,7 +253,7 @@ fn validate(
             && option.tenant_access_token.is_empty()
             && option.app_access_token.is_empty()
         {
-            return Err(crate::error::validation_error_v3(
+            return Err(crate::error::validation_error(
                 "access_token",
                 "accessToken is empty",
             ));
@@ -264,27 +264,27 @@ fn validate(
         && access_token_type == AccessTokenType::Tenant
         && option.tenant_key.is_empty()
     {
-        return Err(crate::error::validation_error_v3(
+        return Err(crate::error::validation_error(
             "access_token",
             "accessToken is empty",
         ));
     }
 
     if access_token_type == AccessTokenType::User && option.user_access_token.is_empty() {
-        return Err(crate::error::validation_error_v3(
+        return Err(crate::error::validation_error(
             "user_access_token",
             "user access token is empty",
         ));
     }
 
     if option.header.contains_key(HTTP_HEADER_KEY_REQUEST_ID) {
-        return Err(crate::error::validation_error_v3(
+        return Err(crate::error::validation_error(
             "header",
             format!("use {HTTP_HEADER_KEY_REQUEST_ID} as header key is not allowed"),
         ));
     }
     if option.header.contains_key(HTTP_HEADER_REQUEST_ID) {
-        return Err(crate::error::validation_error_v3(
+        return Err(crate::error::validation_error(
             "header",
             format!("use {HTTP_HEADER_REQUEST_ID} as header key is not allowed"),
         ));

@@ -1,7 +1,7 @@
 use crate::{
     config::Config,
     constants::AccessTokenType,
-    error::{authentication_error_v3, LarkAPIError},
+    error::{authentication_error, LarkAPIError},
     req_option::RequestOption,
 };
 use reqwest::RequestBuilder;
@@ -39,7 +39,7 @@ impl AuthHandler {
                 .get_app_access_token(config, &option.app_ticket, &config.app_ticket_manager)
                 .await?
         } else {
-            return Err(authentication_error_v3("访问令牌缺失"));
+            return Err(authentication_error("访问令牌缺失"));
         };
 
         Ok(Self::add_auth_header(req_builder, &app_access_token))
@@ -64,7 +64,7 @@ impl AuthHandler {
                 )
                 .await?
         } else {
-            return Err(authentication_error_v3("访问令牌缺失"));
+            return Err(authentication_error("访问令牌缺失"));
         };
 
         Ok(Self::add_auth_header(req_builder, &tenant_access_token))
