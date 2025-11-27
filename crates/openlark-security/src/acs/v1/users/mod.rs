@@ -3,6 +3,7 @@
 //! 提供用户信息的增删改查功能。
 
 use std::sync::Arc;
+use openlark_core::error::{api_error};
 
 /// 用户管理服务
 #[derive(Debug)]
@@ -86,20 +87,23 @@ impl GetUserBuilder {
                 response.json().await?;
             match api_response.data {
                 Some(user) => Ok(user),
-                None => Err(crate::SecurityError::APIError {
-                    code: api_response.code,
-                    message: api_response.msg,
-                }),
+                None => Err(api_error(
+                    api_response.code as u16,
+                    "/acs/v1/users",
+                    &api_response.msg,
+                    None,
+                )),
             }
         } else {
-            Err(crate::SecurityError::APIError {
-                code: response.status().as_u16() as i32,
-                message: format!(
-                    "HTTP {}: {}",
-                    response.status(),
-                    response.text().await.unwrap_or_default()
+            Err(api_error(
+                response.status().as_u16(),
+                "/acs/v1/users",
+                &format!(
+                    "HTTP: {}",
+                    response.status()
                 ),
-            })
+                None,
+            ))
         }
     }
 }
@@ -179,20 +183,23 @@ impl ListUsersBuilder {
                 response.json().await?;
             match api_response.data {
                 Some(users) => Ok(users),
-                None => Err(crate::SecurityError::APIError {
-                    code: api_response.code,
-                    message: api_response.msg,
-                }),
+                None => Err(api_error(
+                    api_response.code as u16,
+                    "/acs/v1/users",
+                    &api_response.msg,
+                    None,
+                )),
             }
         } else {
-            Err(crate::SecurityError::APIError {
-                code: response.status().as_u16() as i32,
-                message: format!(
-                    "HTTP {}: {}",
-                    response.status(),
-                    response.text().await.unwrap_or_default()
+            Err(api_error(
+                response.status().as_u16(),
+                "/acs/v1/users",
+                &format!(
+                    "HTTP: {}",
+                    response.status()
                 ),
-            })
+                None,
+            ))
         }
     }
 }
@@ -316,20 +323,23 @@ impl PatchUserBuilder {
                 response.json().await?;
             match api_response.data {
                 Some(user) => Ok(user),
-                None => Err(crate::SecurityError::APIError {
-                    code: api_response.code,
-                    message: api_response.msg,
-                }),
+                None => Err(api_error(
+                    api_response.code as u16,
+                    "/acs/v1/users",
+                    &api_response.msg,
+                    None,
+                )),
             }
         } else {
-            Err(crate::SecurityError::APIError {
-                code: response.status().as_u16() as i32,
-                message: format!(
-                    "HTTP {}: {}",
-                    response.status(),
-                    response.text().await.unwrap_or_default()
+            Err(api_error(
+                response.status().as_u16(),
+                "/acs/v1/users",
+                &format!(
+                    "HTTP: {}",
+                    response.status()
                 ),
-            })
+                None,
+            ))
         }
     }
 }

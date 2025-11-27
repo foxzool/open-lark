@@ -4,6 +4,7 @@
 
 use std::sync::Arc;
 
+use openlark_core::error::{api_error};
 /// OpenAPI 审计日志服务
 #[derive(Debug)]
 pub struct OpenApiLogsService {
@@ -253,20 +254,23 @@ impl ListOpenApiLogsBuilder {
             > = response.json().await?;
             match api_response.data {
                 Some(logs) => Ok(logs),
-                None => Err(crate::SecurityError::APIError {
-                    code: api_response.code,
-                    message: api_response.msg,
-                }),
+                None => Err(api_error(
+                    api_response.code as u16,
+                    "/security_and_compliance/v1/openapi_logs",
+                    &api_response.msg,
+                    None,
+                )),
             }
         } else {
-            Err(crate::SecurityError::APIError {
-                code: response.status().as_u16() as i32,
-                message: format!(
-                    "HTTP {}: {}",
-                    response.status(),
-                    response.text().await.unwrap_or_default()
+            Err(api_error(
+                response.status().as_u16(),
+                "/security_and_compliance/v1/openapi_logs",
+                &format!(
+                    "HTTP: {}",
+                    response.status()
                 ),
-            })
+                None,
+            ))
         }
     }
 }

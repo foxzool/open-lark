@@ -4,6 +4,7 @@
 
 use std::sync::Arc;
 
+use openlark_core::error::{api_error, network_error_with_details, validation_error};
 /// 人脸识别管理服务
 #[derive(Debug)]
 pub struct UserFacesService {
@@ -71,20 +72,23 @@ impl GetUserFaceBuilder {
                 response.json().await?;
             match api_response.data {
                 Some(face_info) => Ok(face_info),
-                None => Err(crate::SecurityError::APIError {
-                    code: api_response.code,
-                    message: api_response.msg,
-                }),
+                None => Err(api_error(
+                    api_response.code as u16,
+                    "/acs/v1/user_faces",
+                    &api_response.msg,
+                    None,
+                )),
             }
         } else {
-            Err(crate::SecurityError::APIError {
-                code: response.status().as_u16() as i32,
-                message: format!(
-                    "HTTP {}: {}",
-                    response.status(),
-                    response.text().await.unwrap_or_default()
+            Err(api_error(
+                response.status().as_u16(),
+                "/acs/v1/user_faces",
+                &format!(
+                    "HTTP: {}",
+                    response.status()
                 ),
-            })
+                None,
+            ))
         }
     }
 }
@@ -124,7 +128,11 @@ impl UpdateUserFaceBuilder {
     ) -> crate::SecurityResult<Self> {
         use std::fs;
         let image_data = fs::read(file_path).map_err(|e| {
-            crate::SecurityError::DeviceError(format!("Failed to read image file: {}", e))
+            openlark_core::error::network_error_with_details(
+                "Failed to read image file",
+                None,
+                Some("image_file_read".to_string())
+            )
         })?;
         self.face_image = image_data;
         Ok(self)
@@ -144,7 +152,7 @@ impl UpdateUserFaceBuilder {
                 .file_name(format!("face_image.{}", self.image_format))
                 .mime_str(&format!("image/{}", self.image_format))
                 .map_err(|e| {
-                    crate::SecurityError::DeviceError(format!("Invalid mime type: {}", e))
+                    openlark_core::error::validation_error("mime_type", &format!("Invalid mime type: {}", e))
                 })?,
         );
 
@@ -163,20 +171,23 @@ impl UpdateUserFaceBuilder {
                 response.json().await?;
             match api_response.data {
                 Some(face_info) => Ok(face_info),
-                None => Err(crate::SecurityError::APIError {
-                    code: api_response.code,
-                    message: api_response.msg,
-                }),
+                None => Err(api_error(
+                    api_response.code as u16,
+                    "/acs/v1/user_faces",
+                    &api_response.msg,
+                    None,
+                )),
             }
         } else {
-            Err(crate::SecurityError::APIError {
-                code: response.status().as_u16() as i32,
-                message: format!(
-                    "HTTP {}: {}",
-                    response.status(),
-                    response.text().await.unwrap_or_default()
+            Err(api_error(
+                response.status().as_u16(),
+                "/acs/v1/user_faces",
+                &format!(
+                    "HTTP: {}",
+                    response.status()
                 ),
-            })
+                None,
+            ))
         }
     }
 }

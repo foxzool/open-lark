@@ -3,6 +3,7 @@
 //! 提供门禁访问记录的查询和人脸识别照片下载功能。
 
 use std::sync::Arc;
+use openlark_core::error::{api_error};
 
 /// 访问记录服务
 #[derive(Debug)]
@@ -215,20 +216,24 @@ impl ListAccessRecordsBuilder {
                 > = response.json().await?;
                 match api_response.data {
                     Some(records) => Ok(records),
-                    None => Err(crate::SecurityError::APIError {
-                        code: api_response.code,
-                        message: api_response.msg,
-                    }),
+                    None => Err(api_error(
+                        api_response.code as u16,
+                        "/acs/v1/access_records",
+                        &api_response.msg,
+                        None,
+                    )),
                 }
             } else {
-                Err(crate::SecurityError::APIError {
-                    code: response.status().as_u16() as i32,
-                    message: format!(
+                Err(api_error(
+                    response.status().as_u16(),
+                    "/acs/v1/access_records",
+                    &format!(
                         "HTTP {}: {}",
                         response.status(),
                         response.text().await.unwrap_or_default()
                     ),
-                })
+                    None,
+                ))
             }
         } else {
             let response = reqwest::Client::new()
@@ -247,20 +252,24 @@ impl ListAccessRecordsBuilder {
                 > = response.json().await?;
                 match api_response.data {
                     Some(records) => Ok(records),
-                    None => Err(crate::SecurityError::APIError {
-                        code: api_response.code,
-                        message: api_response.msg,
-                    }),
+                    None => Err(api_error(
+                        api_response.code as u16,
+                        "/acs/v1/access_records",
+                        &api_response.msg,
+                        None,
+                    )),
                 }
             } else {
-                Err(crate::SecurityError::APIError {
-                    code: response.status().as_u16() as i32,
-                    message: format!(
+                Err(api_error(
+                    response.status().as_u16(),
+                    "/acs/v1/access_records",
+                    &format!(
                         "HTTP {}: {}",
                         response.status(),
                         response.text().await.unwrap_or_default()
                     ),
-                })
+                    None,
+                ))
             }
         }
     }
@@ -300,14 +309,15 @@ impl GetAccessPhotoBuilder {
             let photo_data = response.bytes().await?;
             Ok(photo_data.to_vec())
         } else {
-            Err(crate::SecurityError::APIError {
-                code: response.status().as_u16() as i32,
-                message: format!(
-                    "HTTP {}: {}",
-                    response.status(),
-                    response.text().await.unwrap_or_default()
+            Err(api_error(
+                response.status().as_u16(),
+                "/acs/v1/access_records",
+                &format!(
+                    "HTTP: {}",
+                    response.status()
                 ),
-            })
+                None,
+            ))
         }
     }
 }
