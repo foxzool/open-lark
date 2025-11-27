@@ -80,10 +80,12 @@ impl<T> ApiResponseData<T> {
         if self.success {
             Ok(self.data)
         } else {
-            Err(crate::Error::APIError {
-                code: "RESPONSE_ERROR".to_string(),
-                message: self.message.unwrap_or_default(),
-            })
+            Err(crate::error::api_error(
+                500,
+                "response",
+                self.message.unwrap_or_default(),
+                None,
+            ))
         }
     }
 }
@@ -101,10 +103,12 @@ impl<T: serde::de::DeserializeOwned + Send + Sync + 'static> ApiResponse for Api
         if self.success {
             Ok(self)
         } else {
-            Err(crate::Error::APIError {
-                code: "RESPONSE_ERROR".to_string(),
-                message: self.message.unwrap_or_default(),
-            })
+            Err(crate::error::api_error(
+                500,
+                "response",
+                self.message.unwrap_or_default(),
+                None,
+            ))
         }
     }
 }

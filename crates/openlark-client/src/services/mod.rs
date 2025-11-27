@@ -4,7 +4,7 @@
 //! 集成 CoreErrorV3 错误处理系统，提供企业级服务管理
 
 use crate::{Config, DefaultServiceRegistry, Result};
-use crate::error::{ClientErrorExt, with_context, validation_error};
+use crate::error::{with_context, validation_error};
 
 // ============================================================================
 // 业务服务模块
@@ -125,12 +125,8 @@ impl ServiceFactory {
     pub fn create_auth_service(&self) -> Result<auth::AuthService> {
         tracing::debug!("创建认证服务");
 
-        auth::AuthService::new(&self.config)
-            .map_err(|e| with_context(
-                Err(e),
-                "service",
-                "auth"
-            ))
+        let service = auth::AuthService::new(&self.config);
+        Ok(service)
     }
 
     /// 📡 创建通讯服务
@@ -139,11 +135,6 @@ impl ServiceFactory {
         tracing::debug!("创建通讯服务");
 
         communication::CommunicationService::new(&self.config, &self.registry)
-            .map_err(|e| with_context(
-                Err(e),
-                "service",
-                "communication"
-            ))
     }
 
     /// 📄 创建文档服务
@@ -151,12 +142,8 @@ impl ServiceFactory {
     pub fn create_docs_service(&self) -> Result<docs::DocsService> {
         tracing::debug!("创建文档服务");
 
-        docs::DocsService::new(&self.config, &self.registry)
-            .map_err(|e| with_context(
-                Err(e),
-                "service",
-                "docs"
-            ))
+        let service = docs::DocsService::new();
+        Ok(service)
     }
 
     /// 👥 创建人力资源服务
@@ -164,12 +151,8 @@ impl ServiceFactory {
     pub fn create_hr_service(&self) -> Result<hr::HRService> {
         tracing::debug!("创建人力资源服务");
 
-        hr::HRService::new(&self.config, &self.registry)
-            .map_err(|e| with_context(
-                Err(e),
-                "service",
-                "hr"
-            ))
+        let service = hr::HRService::new();
+        Ok(service)
     }
 
     /// 🤖 创建AI服务
@@ -177,12 +160,8 @@ impl ServiceFactory {
     pub fn create_ai_service(&self) -> Result<ai::AIService> {
         tracing::debug!("创建AI服务");
 
-        ai::AIService::new(&self.config, &self.registry)
-            .map_err(|e| with_context(
-                Err(e),
-                "service",
-                "ai"
-            ))
+        let service = ai::AIService::new();
+        Ok(service)
     }
 
     /// 📋 创建任务管理服务
@@ -190,12 +169,8 @@ impl ServiceFactory {
     pub fn create_task_service(&self) -> Result<task::TaskService> {
         tracing::debug!("创建任务管理服务");
 
-        task::TaskService::new(&self.config, &self.registry)
-            .map_err(|e| with_context(
-                Err(e),
-                "service",
-                "task"
-            ))
+        let service = task::TaskService::new();
+        Ok(service)
     }
 
     /// 📅 创建日历会议服务
@@ -203,12 +178,8 @@ impl ServiceFactory {
     pub fn create_calendar_service(&self) -> Result<calendar::CalendarService> {
         tracing::debug!("创建日历会议服务");
 
-        calendar::CalendarService::new(&self.config, &self.registry)
-            .map_err(|e| with_context(
-                Err(e),
-                "service",
-                "calendar"
-            ))
+        let service = calendar::CalendarService::new();
+        Ok(service)
     }
 
     /// 🔧 创建管理员工能服务
@@ -216,12 +187,8 @@ impl ServiceFactory {
     pub fn create_admin_service(&self) -> Result<admin::AdminService> {
         tracing::debug!("创建管理员工能服务");
 
-        admin::AdminService::new(&self.config, &self.registry)
-            .map_err(|e| with_context(
-                Err(e),
-                "service",
-                "admin"
-            ))
+        let service = admin::AdminService::new();
+        Ok(service)
     }
 
     /// ✅ 创建审批流程服务
@@ -229,19 +196,15 @@ impl ServiceFactory {
     pub fn create_approval_service(&self) -> Result<approval::ApprovalService> {
         tracing::debug!("创建审批流程服务");
 
-        approval::ApprovalService::new(&self.config, &self.registry)
-            .map_err(|e| with_context(
-                Err(e),
-                "service",
-                "approval"
-            ))
+        let service = approval::ApprovalService::new();
+        Ok(service)
     }
 
     /// 📊 获取服务工厂统计信息
     pub fn get_stats(&self) -> ServiceFactoryStats {
         ServiceFactoryStats {
             total_services: self.count_available_services(),
-            enabled_features: self.get_enabled_features(),
+            enabled_features: self.get_enabled_features().into_iter().map(|s| s.to_string()).collect(),
         }
     }
 
@@ -314,7 +277,7 @@ pub struct ServiceFactoryStats {
     /// 🔢 可用服务总数
     pub total_services: usize,
     /// 🏷️ 已启用的功能列表
-    pub enabled_features: Vec<&'static str>,
+    pub enabled_features: Vec<String>,
 }
 
 // ============================================================================
@@ -480,7 +443,7 @@ mod tests {
 
         if let Err(error) = result {
             assert!(error.is_validation_error());
-            assert!(error.user_friendly_message().contains("应用ID不能为空"));
+            assert!(error.user_message().unwrap_or("未知错误").contains("应用ID不能为空"));
         }
     }
 

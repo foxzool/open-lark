@@ -61,6 +61,9 @@
 #![warn(missing_copy_implementations)]
 #![warn(missing_debug_implementations)]
 
+// 错误处理模块
+pub mod error;
+
 // 共享数据模型
 pub mod models;
 
@@ -112,12 +115,12 @@ impl Default for AuthServices {
     }
 }
 
-/// 结果类型别名
-pub type AuthResult<T> = Result<T, crate::models::AuthError>;
+// 结果类型别名现在通过 models::AuthResult 导出
 
 /// 预导出模块
 pub mod prelude {
-    pub use super::{AuthProject, AuthResult, AuthServices, AuthenProject, OauthProject};
+    pub use super::{AuthProject, AuthServices, AuthenProject, OauthProject};
+    pub use super::models::{AuthResult};
 
     pub use super::auth::*;
     pub use super::authen::*;

@@ -175,7 +175,7 @@
 //!     },
 //!     Err(error) => {
 //!         // 用户友好的错误消息（中文）
-//!         eprintln!("❌ {}", error.user_friendly_message());
+//!         eprintln!("❌ {}", error.user_message().unwrap_or("未知错误"));
 //!
 //!         // 获取错误恢复建议
 //!         eprintln!("💡 建议: {}", error.suggestion());
@@ -565,7 +565,7 @@ pub mod utils {
     /// match utils::check_env_config() {
     ///     Ok(()) => println!("环境变量配置正确"),
     ///     Err(error) => {
-    ///         eprintln!("❌ {}", error.user_friendly_message());
+    ///         eprintln!("❌ {}", error.user_message().unwrap_or("未知错误"));
     ///         for step in error.recovery_steps() {
     ///             eprintln!("• {}", step);
     ///         }
@@ -575,11 +575,7 @@ pub mod utils {
     pub fn check_env_config() -> Result<()> {
         // 检查 OPENLARK_APP_ID
         let app_id = env::var("OPENLARK_APP_ID")
-            .map_err(|_| with_context(
-                Err(configuration_error("环境变量检查失败")),
-                "variable",
-                "OPENLARK_APP_ID"
-            ))?;
+            .map_err(|_| configuration_error("环境变量检查失败 [variable: OPENLARK_APP_ID]"))?;
 
         if app_id.is_empty() {
             return with_context(
@@ -591,11 +587,7 @@ pub mod utils {
 
         // 检查 OPENLARK_APP_SECRET
         let app_secret = env::var("OPENLARK_APP_SECRET")
-            .map_err(|_| with_context(
-                Err(configuration_error("环境变量检查失败")),
-                "variable",
-                "OPENLARK_APP_SECRET"
-            ))?;
+            .map_err(|_| configuration_error("环境变量检查失败 [variable: OPENLARK_APP_SECRET]"))?;
 
         if app_secret.is_empty() {
             return with_context(
@@ -842,8 +834,8 @@ pub mod utils {
                 diagnostics.env_config_status = "✅ 正常".to_string();
             }
             Err(error) => {
-                diagnostics.env_config_status = format!("❌ {}", error.user_friendly_message());
-                diagnostics.add_issue("环境变量", &error.user_friendly_message());
+                diagnostics.env_config_status = format!("❌ {}", error.user_message().unwrap_or("未知错误"));
+                diagnostics.add_issue("环境变量", error.user_message().unwrap_or("未知错误"));
             }
         }
 
@@ -853,13 +845,13 @@ pub mod utils {
                 diagnostics.feature_deps_status = "✅ 正常".to_string();
             }
             Err(error) => {
-                diagnostics.feature_deps_status = format!("❌ {}", error.user_friendly_message());
-                diagnostics.add_issue("功能依赖", &error.user_friendly_message());
+                diagnostics.feature_deps_status = format!("❌ {}", error.user_message().unwrap_or("未知错误"));
+                diagnostics.add_issue("功能依赖", error.user_message().unwrap_or("未知错误"));
             }
         }
 
         // 列出启用的功能
-        diagnostics.enabled_features = get_enabled_features();
+        diagnostics.enabled_features = get_enabled_features().into_iter().map(|s| s.to_string()).collect();
 
         diagnostics
     }
@@ -872,7 +864,7 @@ pub mod utils {
         /// 🔗 功能依赖状态
         pub feature_deps_status: String,
         /// 🏷️ 启用的功能列表
-        pub enabled_features: Vec<&'static str>,
+        pub enabled_features: Vec<String>,
         /// ⚠️ 发现的问题列表
         pub issues: Vec<DiagnosticIssue>,
     }

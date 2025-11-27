@@ -1,404 +1,909 @@
 //! 认证服务错误处理模块
 //!
-//! 基于 thiserror 最佳实践的现代化错误处理系统
-//! 专注于认证场景的特定需求和用户体验
+//! 完全基于 CoreErrorV3 的现代化错误处理系统
+//! 直接集成统一错误体系，提供类型安全和可观测性
 
-use thiserror::Error;
-use openlark_core::error::CoreError;
+use std::time::Duration;
+use openlark_core::error::{
+    CoreErrorV3, ErrorCode, ErrorContext, ErrorTrait, ErrorType,
+    convenience_v3::*,
+};
 
-/// 认证服务专用错误类型
-///
-/// 设计原则：
-/// 1. 基于实际认证场景需求
-/// 2. 提供清晰的错误恢复策略
-/// 3. 支持自动重试和用户指导
-#[derive(Debug, Error)]
-pub enum AuthError {
-    /// 令牌已过期
-    ///
-    /// 这种错误通常可以通过自动刷新令牌来解决
-    #[error("访问令牌已过期")]
-    TokenExpired,
+// 导入内部结构体
+use openlark_core::error::core_v3::ApiError;
 
-    /// 令牌无效或格式错误
-    ///
-    /// 需要用户重新进行身份验证
-    #[error("访问令牌无效")]
-    TokenInvalid,
-
-    /// 刷新令牌无效或过期
-    ///
-    /// 用户需要完整重新登录流程
-    #[error("刷新令牌无效")]
-    RefreshTokenInvalid,
-
-    /// 应用凭证无效
-    ///
-    /// 应用配置错误，需要检查 app_id 和 app_secret
-    #[error("应用凭证无效: {reason}")]
-    InvalidCredentials {
-        /// 具体错误原因
-        reason: String,
-    },
-
-    /// 权限不足
-    ///
-    /// 应用缺少必要的权限范围
-    #[error("权限不足: 缺少 {required_permissions:?} 权限")]
-    PermissionDenied {
-        /// 需要的权限列表
-        required_permissions: Vec<String>,
-    },
-
-    /// 用户未授权应用
-    ///
-    /// 用户需要在授权页面确认应用访问权限
-    #[error("用户未授权应用访问")]
-    UserNotAuthorized,
-
-    /// 请求频率超限
-    ///
-    /// 触发 API 限流，需要等待后重试
-    #[error("请求频率过高，请 {wait_seconds}s 后重试")]
-    RateLimited {
-        /// 建议等待时间（秒）
-        wait_seconds: u32,
-    },
-
-    /// 参数验证失败
-    ///
-    /// 输入参数不符合 API 要求
-    #[error("参数验证失败: {field} - {message}")]
-    Validation {
-        /// 验证失败的字段名
-        field: String,
-        /// 错误描述
-        message: String,
-    },
-
-    /// 配置错误
-    ///
-    /// 认证服务配置不正确
-    #[error("配置错误: {message}")]
-    Configuration {
-        /// 错误描述
-        message: String,
-        /// 相关配置项（可选）
-        parameter: Option<String>,
-    },
-
-    /// 网络连接错误
-    ///
-    /// 无法连接到认证服务器
-    #[error("网络连接失败: {message}")]
-    Network {
-        /// 错误描述
-        message: String,
-        #[source]
-        source: Option<reqwest::Error>,
-    },
-
-    /// 服务暂时不可用
-    ///
-    /// 认证服务暂时不可用，可以稍后重试
-    #[error("认证服务暂时不可用: {service}")]
-    ServiceUnavailable {
-        /// 服务名称
-        service: String,
-        /// 建议重试时间（可选）
-        retry_after_seconds: Option<u32>,
-    },
-
-    /// 内部系统错误
-    ///
-    /// 未预期的内部错误
-    #[error("内部系统错误: {message}")]
-    Internal {
-        /// 错误描述
-        message: String,
-        #[source]
-        source: Option<anyhow::Error>,
-    },
-
-    /// 核心模块错误
-    ///
-    /// 来自底层核心模块的错误
-    #[error("核心模块错误: {0}")]
-    Core(#[from] CoreError),
-}
-
-impl AuthError {
-    /// 判断错误是否可以自动重试
-    ///
-    /// 返回 true 表示可以通过重试操作自动恢复
-    pub fn is_retryable(&self) -> bool {
-        match self {
-            // 网络问题通常可以重试
-            AuthError::Network { .. } => true,
-
-            // 令牌过期可以自动刷新
-            AuthError::TokenExpired => true,
-
-            // 限流错误可以等待后重试
-            AuthError::RateLimited { .. } => true,
-
-            // 服务暂时不可用可以重试
-            AuthError::ServiceUnavailable { .. } => true,
-
-            // 核心模块中的网络和超时错误可以重试
-            AuthError::Core(core) => core.is_retryable(),
-
-            // 其他错误需要用户干预
-            _ => false,
-        }
-    }
-
-    /// 判断错误是否需要用户操作
-    ///
-    /// 返回 true 表示需要用户进行某些操作才能解决
-    pub fn requires_user_action(&self) -> bool {
-        match self {
-            // 需要重新登录的错误
-            AuthError::TokenInvalid | AuthError::RefreshTokenInvalid => true,
-
-            // 需要用户授权的错误
-            AuthError::UserNotAuthorized | AuthError::PermissionDenied { .. } => true,
-
-            // 需要修复配置的错误
-            AuthError::InvalidCredentials { .. } | AuthError::Configuration { .. } => true,
-
-            // 需要修正输入的错误
-            AuthError::Validation { .. } => true,
-
-            // 其他错误通常不需要用户直接操作
-            _ => false,
-        }
-    }
-
-    /// 获取用户友好的错误消息
-    ///
-    /// 提供易于理解的错误描述和解决建议
-    pub fn user_friendly_message(&self) -> String {
-        match self {
-            AuthError::TokenExpired => {
-                "登录状态已过期，正在自动刷新...".to_string()
-            }
-            AuthError::TokenInvalid => {
-                "登录状态无效，请重新登录".to_string()
-            }
-            AuthError::RefreshTokenInvalid => {
-                "刷新令牌已失效，请完整重新登录".to_string()
-            }
-            AuthError::InvalidCredentials { reason } => {
-                format!("应用配置错误: {}，请检查 APP_ID 和 APP_SECRET", reason)
-            }
-            AuthError::PermissionDenied { required_permissions } => {
-                format!(
-                    "应用权限不足，需要申请以下权限: {}",
-                    required_permissions.join(", ")
-                )
-            }
-            AuthError::UserNotAuthorized => {
-                "您尚未授权此应用访问权限，请在授权页面确认".to_string()
-            }
-            AuthError::RateLimited { wait_seconds } => {
-                format!("请求过于频繁，请{}秒后重试", wait_seconds)
-            }
-            AuthError::Validation { field, message } => {
-                format!("输入参数错误: {} - {}", field, message)
-            }
-            AuthError::Configuration { message, .. } => {
-                format!("配置错误: {}", message)
-            }
-            AuthError::Network { .. } => {
-                "网络连接失败，请检查网络设置后重试".to_string()
-            }
-            AuthError::ServiceUnavailable { service, .. } => {
-                format!("{}服务暂时不可用，请稍后重试", service)
-            }
-            AuthError::Internal { .. } => {
-                "系统内部错误，请联系技术支持".to_string()
-            }
-            AuthError::Core(core) => {
-                core.user_friendly_message()
-            }
-        }
-    }
-
-    /// 获取错误恢复建议
-    ///
-    /// 为开发者或用户提供具体的解决方案
-    pub fn recovery_suggestion(&self) -> Option<String> {
-        match self {
-            AuthError::TokenExpired => {
-                Some("系统将自动刷新令牌，无需手动操作".to_string())
-            }
-            AuthError::TokenInvalid | AuthError::RefreshTokenInvalid => {
-                Some("请使用完整登录流程重新获取访问令牌".to_string())
-            }
-            AuthError::InvalidCredentials { .. } => {
-                Some("请检查应用配置中的 APP_ID 和 APP_SECRET 是否正确".to_string())
-            }
-            AuthError::PermissionDenied { required_permissions } => {
-                Some(format!(
-                    "请在开放平台申请以下权限: {}",
-                    required_permissions.join(", ")
-                ))
-            }
-            AuthError::UserNotAuthorized => {
-                Some("请引导用户到授权页面完成应用授权".to_string())
-            }
-            AuthError::RateLimited { wait_seconds } => {
-                Some(format!("请等待{}秒后自动重试，或升级到更高版本获得更高限额", wait_seconds))
-            }
-            AuthError::Validation { field, .. } => {
-                Some(format!("请检查输入的{}参数是否符合API要求", field))
-            }
-            AuthError::Configuration { parameter, .. } => {
-                match parameter {
-                    Some(param) => Some(format!("请检查配置项: {}", param)),
-                    None => Some("请检查认证服务相关配置".to_string()),
-                }
-            }
-            AuthError::Network { .. } => {
-                Some("请检查网络连接，确保可以访问飞书API服务器".to_string())
-            }
-            AuthError::ServiceUnavailable { retry_after_seconds, .. } => {
-                match retry_after_seconds {
-                    Some(seconds) => Some(format!("请{}秒后自动重试", seconds)),
-                    None => Some("请稍后重试，如问题持续请联系技术支持".to_string()),
-                }
-            }
-            AuthError::Internal { .. } => {
-                Some("这是系统内部错误，请记录错误详情并联系技术支持".to_string())
-            }
-            AuthError::Core(core) => {
-                core.recovery_suggestion()
-            }
-        }
-    }
-
-    /// 获取错误代码
-    ///
-    /// 返回标准化的错误代码，便于程序化处理
-    pub fn error_code(&self) -> &'static str {
-        match self {
-            AuthError::TokenExpired => "AUTH_TOKEN_EXPIRED",
-            AuthError::TokenInvalid => "AUTH_TOKEN_INVALID",
-            AuthError::RefreshTokenInvalid => "AUTH_REFRESH_TOKEN_INVALID",
-            AuthError::InvalidCredentials { .. } => "AUTH_INVALID_CREDENTIALS",
-            AuthError::PermissionDenied { .. } => "AUTH_PERMISSION_DENIED",
-            AuthError::UserNotAuthorized => "AUTH_USER_NOT_AUTHORIZED",
-            AuthError::RateLimited { .. } => "AUTH_RATE_LIMITED",
-            AuthError::Validation { .. } => "AUTH_VALIDATION_ERROR",
-            AuthError::Configuration { .. } => "AUTH_CONFIGURATION_ERROR",
-            AuthError::Network { .. } => "AUTH_NETWORK_ERROR",
-            AuthError::ServiceUnavailable { .. } => "AUTH_SERVICE_UNAVAILABLE",
-            AuthError::Internal { .. } => "AUTH_INTERNAL_ERROR",
-            AuthError::Core(_) => "AUTH_CORE_ERROR",
-        }
-    }
-
-    /// 创建令牌过期错误
-    pub fn token_expired() -> Self {
-        Self::TokenExpired
-    }
-
-    /// 创建令牌无效错误
-    pub fn token_invalid() -> Self {
-        Self::TokenInvalid
-    }
-
-    /// 创建权限不足错误
-    pub fn permission_denied(perms: Vec<String>) -> Self {
-        Self::PermissionDenied {
-            required_permissions: perms,
-        }
-    }
-
-    /// 创建参数验证错误
-    pub fn validation(field: impl Into<String>, message: impl Into<String>) -> Self {
-        Self::Validation {
-            field: field.into(),
-            message: message.into(),
-        }
-    }
-
-    /// 创建配置错误
-    pub fn configuration(message: impl Into<String>) -> Self {
-        Self::Configuration {
-            message: message.into(),
-            parameter: None,
-        }
-    }
-
-    /// 创建网络错误
-    pub fn network(message: impl Into<String>, source: Option<reqwest::Error>) -> Self {
-        Self::Network {
-            message: message.into(),
-            source,
-        }
-    }
-
-    /// 创建限流错误
-    pub fn rate_limited(wait_seconds: u32) -> Self {
-        Self::RateLimited { wait_seconds }
-    }
-
-    /// 创建服务不可用错误
-    pub fn service_unavailable(service: impl Into<String>, retry_after_seconds: Option<u32>) -> Self {
-        Self::ServiceUnavailable {
-            service: service.into(),
-            retry_after_seconds,
-        }
-    }
-}
+/// 认证服务错误类型 - 直接使用 CoreErrorV3 保持架构一致性
+pub type AuthError = CoreErrorV3;
 
 /// 认证服务结果类型
 pub type AuthResult<T> = Result<T, AuthError>;
 
-/// 为 CoreError 添加缺失的方法（如果不存在）
-pub trait CoreErrorExt {
-    fn is_retryable(&self) -> bool;
-    fn user_friendly_message(&self) -> String;
-    fn recovery_suggestion(&self) -> Option<String>;
+/// 认证错误构建器 - 专门用于认证场景的便利函数
+#[derive(Debug, Copy, Clone)]
+pub struct AuthErrorBuilder;
+
+impl AuthErrorBuilder {
+    /// 令牌已过期 - 可自动刷新
+    pub fn token_expired(detail: impl Into<String>) -> AuthError {
+        token_expired_error_v3(detail)
+    }
+
+    /// 令牌无效 - 需要重新认证
+    pub fn token_invalid(detail: impl Into<String>) -> AuthError {
+        token_invalid_error_v3(detail)
+    }
+
+    /// 缺少访问令牌
+    pub fn token_missing() -> AuthError {
+        authentication_error_v3("缺少访问令牌")
+    }
+
+    /// 刷新令牌无效 - 需要完整登录流程
+    pub fn refresh_token_invalid(detail: impl Into<String>) -> AuthError {
+        authentication_error_v3(format!("刷新令牌无效: {}", detail.into()))
+    }
+
+    /// 权限不足 - 缺少必要的权限范围
+    pub fn permission_denied(missing_scopes: &[impl AsRef<str>]) -> AuthError {
+        permission_missing_error_v3(missing_scopes)
+    }
+
+    /// 权限不足 - 详细的权限对比信息
+    pub fn scope_insufficient(
+        required: &[impl AsRef<str>],
+        current: &[impl AsRef<str>],
+    ) -> AuthError {
+        let mut ctx = ErrorContext::new();
+        ctx.add_context("required_scopes", required.iter().map(|s| s.as_ref()).collect::<Vec<_>>().join(","));
+        ctx.add_context("current_scopes", current.iter().map(|s| s.as_ref()).collect::<Vec<_>>().join(","));
+
+        CoreErrorV3::Authentication {
+            message: "权限范围不足".to_string(),
+            code: ErrorCode::PermissionMissing,
+            ctx,
+        }
+    }
+
+    /// 应用凭证无效
+    pub fn credentials_invalid(reason: impl Into<String>) -> AuthError {
+        authentication_error_v3(format!("应用凭证无效: {}", reason.into()))
+    }
+
+    /// 应用凭证错误 - 具体字段错误
+    pub fn app_credentials_error(
+        field: impl Into<String>,
+        value: impl Into<String>,
+        reason: impl Into<String>,
+    ) -> AuthError {
+        let mut ctx = ErrorContext::new();
+        ctx.add_context("credential_field", field.into());
+        ctx.add_context("provided_value", value.into());
+        ctx.add_context("error_reason", reason.into());
+
+        CoreErrorV3::Authentication {
+            message: "应用凭证错误".to_string(),
+            code: ErrorCode::AuthenticationFailed,
+            ctx,
+        }
+    }
+
+    /// 应用不存在或未安装
+    pub fn app_not_found(app_id: impl AsRef<str>) -> AuthError {
+        let mut ctx = ErrorContext::new();
+        ctx.add_context("app_id", app_id.as_ref());
+
+        CoreErrorV3::Api(ApiError {
+            status: 400,
+            endpoint: "auth".into(),
+            message: format!("应用不存在或未安装: {}", app_id.as_ref()),
+            source: None,
+            code: ErrorCode::AppNotInstalled,
+            ctx,
+        })
+    }
+
+    /// 用户未授权应用访问权限
+    pub fn user_not_authorized(user_id: impl AsRef<str>) -> AuthError {
+        let mut ctx = ErrorContext::new();
+        ctx.add_context("user_id", user_id.as_ref());
+
+        CoreErrorV3::Authentication {
+            message: "用户未授权应用访问权限".to_string(),
+            code: ErrorCode::UserSessionInvalid,
+            ctx,
+        }
+    }
+
+    /// 请求频率超限
+    pub fn rate_limited(
+        limit: u32,
+        window: Duration,
+        retry_after: Option<Duration>,
+    ) -> AuthError {
+        let mut ctx = ErrorContext::new();
+        ctx.add_context("limit", limit.to_string());
+        ctx.add_context("window_seconds", window.as_secs().to_string());
+
+        CoreErrorV3::RateLimit {
+            limit,
+            window,
+            reset_after: retry_after,
+            code: ErrorCode::TooManyRequests,
+            ctx,
+        }
+    }
+
+    /// 参数验证失败
+    pub fn validation_error(
+        field: impl Into<String>,
+        message: impl Into<String>,
+        value: Option<impl Into<String>>,
+    ) -> AuthError {
+        let mut ctx = ErrorContext::new();
+        if let Some(val) = value {
+            ctx.add_context("provided_value", val.into());
+        }
+
+        CoreErrorV3::Validation {
+            field: field.into().into(),
+            message: message.into(),
+            code: ErrorCode::ValidationError,
+            ctx,
+        }
+    }
+
+    /// 配置错误
+    pub fn configuration_error(
+        parameter: impl Into<String>,
+        message: impl Into<String>,
+    ) -> AuthError {
+        let mut ctx = ErrorContext::new();
+        ctx.add_context("config_parameter", parameter.into());
+
+        CoreErrorV3::Configuration {
+            message: message.into(),
+            code: ErrorCode::ConfigurationError,
+            ctx,
+        }
+    }
+
+    /// 网络连接错误
+    pub fn network_error(
+        message: impl Into<String>,
+        endpoint: Option<impl Into<String>>,
+    ) -> AuthError {
+        network_error_with_details_v3(message, None::<String>, endpoint)
+    }
+
+    /// 认证服务不可用
+    pub fn auth_service_unavailable(
+        service: impl Into<String>,
+        retry_after: Option<Duration>,
+    ) -> AuthError {
+        CoreErrorV3::ServiceUnavailable {
+            service: service.into().into(),
+            retry_after,
+            code: ErrorCode::ServiceUnavailable,
+            ctx: ErrorContext::new(),
+        }
+    }
+
+    /// 用户身份无效
+    pub fn user_identity_invalid(
+        id_type: impl Into<String>,
+        id_value: impl Into<String>,
+    ) -> AuthError {
+        user_identity_invalid_error_v3(format!("{}:{}", id_type.into(), id_value.into()))
+    }
+
+    /// SSO 令牌无效
+    pub fn sso_token_invalid(detail: impl Into<String>) -> AuthError {
+        sso_token_invalid_error_v3(detail)
+    }
+
+    /// 应用状态异常
+    pub fn app_status_exception(
+        app_id: impl AsRef<str>,
+        status: impl Into<String>,
+    ) -> AuthError {
+        let status_str = status.into();
+        let mut ctx = ErrorContext::new();
+        ctx.add_context("app_id", app_id.as_ref());
+        ctx.add_context("app_status", status_str.clone());
+
+        CoreErrorV3::Api(ApiError {
+            status: 400,
+            endpoint: "auth".into(),
+            message: format!("应用状态异常: {}", status_str),
+            source: None,
+            code: ErrorCode::AppStatusException,
+            ctx,
+        })
+    }
 }
 
-impl CoreErrorExt for CoreError {
-    fn is_retryable(&self) -> bool {
-        // 基于 CoreError 的具体实现判断是否可重试
-        // 这里需要根据实际的 CoreError 实现来调整
-        match self {
-            // 假设 CoreError 有相应的变体
-            CoreError::Network { .. } => true,
-            CoreError::Timeout { .. } => true,
-            CoreError::RateLimit { .. } => true,
-            CoreError::ServiceUnavailable { .. } => true,
-            _ => false,
+/// 飞书认证错误码智能映射
+pub fn map_feishu_auth_error(
+    feishu_code: i32,
+    message: &str,
+    request_id: Option<&str>,
+) -> AuthError {
+    let mut ctx = ErrorContext::new();
+    if let Some(req_id) = request_id {
+        ctx.set_request_id(req_id);
+    }
+    ctx.add_context("feishu_code", feishu_code.to_string());
+
+    // 优先使用飞书通用错误码映射
+    match ErrorCode::from_feishu_code(feishu_code) {
+        // 令牌相关错误
+        Some(ErrorCode::AccessTokenExpiredV2) => {
+            CoreErrorV3::Authentication {
+                message: message.to_string(),
+                code: ErrorCode::AccessTokenExpiredV2,
+                ctx,
+            }
+        },
+        Some(ErrorCode::AccessTokenInvalid | ErrorCode::AppAccessTokenInvalid | ErrorCode::TenantAccessTokenInvalid) => {
+            CoreErrorV3::Authentication {
+                message: message.to_string(),
+                code: ErrorCode::AccessTokenInvalid,
+                ctx,
+            }
+        },
+        Some(ErrorCode::SsoTokenInvalid) => {
+            CoreErrorV3::Authentication {
+                message: message.to_string(),
+                code: ErrorCode::SsoTokenInvalid,
+                ctx,
+            }
+        },
+
+        // 权限相关错误
+        Some(ErrorCode::PermissionMissing | ErrorCode::AccessTokenNoPermission) => {
+            CoreErrorV3::Authentication {
+                message: "权限不足".to_string(),
+                code: ErrorCode::PermissionMissing,
+                ctx,
+            }
+        },
+
+        // 用户身份相关错误
+        Some(ErrorCode::UserSessionInvalid | ErrorCode::UserSessionNotFound | ErrorCode::UserSessionTimeout) => {
+            CoreErrorV3::Authentication {
+                message: "用户会话无效".to_string(),
+                code: ErrorCode::UserSessionInvalid,
+                ctx,
+            }
+        },
+        Some(ErrorCode::UserIdentityInvalid) => {
+            CoreErrorV3::Authentication {
+                message: message.to_string(),
+                code: ErrorCode::UserIdentityInvalid,
+                ctx,
+            }
+        },
+        Some(ErrorCode::UserTypeNotSupportedV2 | ErrorCode::UserIdentityMismatch) => {
+            CoreErrorV3::Authentication {
+                message: "用户身份不匹配或类型不支持".to_string(),
+                code: ErrorCode::UserIdentityInvalid,
+                ctx,
+            }
+        },
+
+        // 应用相关错误
+        Some(ErrorCode::AppNotInstalled) => {
+            CoreErrorV3::Api(ApiError {
+                status: 400,
+                endpoint: "auth".into(),
+                message: message.to_string(),
+                source: None,
+                code: ErrorCode::AppNotInstalled,
+                ctx,
+            })
+        },
+        Some(ErrorCode::AppPermissionDenied) => {
+            CoreErrorV3::Authentication {
+                message: "应用权限不足".to_string(),
+                code: ErrorCode::PermissionMissing,
+                ctx,
+            }
+        },
+        Some(ErrorCode::AppStatusException) => {
+            CoreErrorV3::Api(ApiError {
+                status: 400,
+                endpoint: "auth".into(),
+                message: message.to_string(),
+                source: None,
+                code: ErrorCode::AppStatusException,
+                ctx,
+            })
+        },
+
+        // 其他飞书错误码
+        Some(mapped_code) => {
+            // 根据 HTTP 状态码分类处理
+            match mapped_code {
+                ErrorCode::BadRequest => validation_error_v3("", message),
+                ErrorCode::Unauthorized | ErrorCode::Forbidden => {
+                    CoreErrorV3::Authentication {
+                        message: message.to_string(),
+                        code: ErrorCode::AuthenticationFailed,
+                        ctx,
+                    }
+                },
+                ErrorCode::TooManyRequests => {
+                    CoreErrorV3::RateLimit {
+                        limit: 0,
+                        window: Duration::from_secs(60),
+                        reset_after: Some(Duration::from_secs(60)),
+                        code: mapped_code,
+                        ctx,
+                    }
+                },
+                ErrorCode::InternalServerError | ErrorCode::BadGateway | ErrorCode::GatewayTimeout | ErrorCode::ServiceUnavailable => {
+                    CoreErrorV3::ServiceUnavailable {
+                        service: "auth".into(),
+                        retry_after: Some(Duration::from_secs(30)),
+                        code: mapped_code,
+                        ctx,
+                    }
+                },
+                _ => {
+                    CoreErrorV3::Api(ApiError {
+                        status: 400,
+                        endpoint: "auth".into(),
+                        message: message.to_string(),
+                        source: None,
+                        code: mapped_code,
+                        ctx,
+                    })
+                }
+            }
+        },
+
+        // 未知错误码，根据数值范围推断类型
+        None => {
+            match feishu_code {
+                // HTTP 状态码范围
+                400..=499 => {
+                    match feishu_code {
+                        401 => CoreErrorV3::Authentication {
+                            message: "认证失败".to_string(),
+                            code: ErrorCode::AuthenticationFailed,
+                            ctx,
+                        },
+                        403 => CoreErrorV3::Authentication {
+                            message: "权限不足".to_string(),
+                            code: ErrorCode::PermissionMissing,
+                            ctx,
+                        },
+                        429 => {
+                            CoreErrorV3::RateLimit {
+                                limit: 0,
+                                window: Duration::from_secs(60),
+                                reset_after: Some(Duration::from_secs(60)),
+                                code: ErrorCode::TooManyRequests,
+                                ctx,
+                            }
+                        },
+                        _ => validation_error_v3("unknown", format!("请求错误 ({}): {}", feishu_code, message)),
+                    }
+                },
+                500..=599 => {
+                    CoreErrorV3::ServiceUnavailable {
+                        service: "auth".into(),
+                        retry_after: Some(Duration::from_secs(30)),
+                        code: ErrorCode::ServiceUnavailable,
+                        ctx,
+                    }
+                },
+                // 其他错误码
+                _ => {
+                    CoreErrorV3::Api(ApiError {
+                        status: 500,
+                        endpoint: "auth".into(),
+                        message: format!("未知认证错误 ({}): {}", feishu_code, message),
+                        source: None,
+                        code: ErrorCode::InternalError,
+                        ctx,
+                    })
+                }
+            }
+        }
+    }
+}
+
+/// 认证错误扩展特征 - 提供认证特定的错误分析能力
+pub trait AuthErrorExt {
+    /// 判断是否为令牌相关错误
+    fn is_token_error(&self) -> bool;
+    /// 判断是否为权限相关错误
+    fn is_permission_error(&self) -> bool;
+    /// 判断是否为凭证相关错误
+    fn is_credential_error(&self) -> bool;
+    /// 判断是否为用户身份相关错误
+    fn is_user_identity_error(&self) -> bool;
+    /// 判断是否为应用相关错误
+    fn is_application_error(&self) -> bool;
+
+    /// 判断是否应该自动刷新令牌
+    fn should_refresh_token(&self) -> bool;
+    /// 判断是否需要用户重新认证
+    fn requires_user_reauth(&self) -> bool;
+    /// 判断是否需要用户干预
+    fn requires_user_action(&self) -> bool;
+
+    /// 获取认证错误的具体类型
+    fn auth_error_type(&self) -> AuthErrorType;
+    /// 获取建议的恢复操作
+    fn recovery_actions(&self) -> Vec<RecoveryAction>;
+    /// 获取用于监控的错误指标
+    fn auth_metrics(&self) -> AuthMetrics;
+}
+
+/// 认证错误类型分类
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum AuthErrorType {
+    /// 令牌已过期
+    TokenExpired,
+    /// 令牌无效
+    TokenInvalid,
+    /// 权限不足
+    PermissionDenied,
+    /// 凭证无效
+    CredentialInvalid,
+    /// 用户身份问题
+    UserIdentityInvalid,
+    /// 应用问题
+    ApplicationError,
+    /// 配置错误
+    ConfigurationError,
+    /// 网络问题
+    NetworkError,
+    /// 服务不可用
+    ServiceUnavailable,
+    /// 请求限流
+    RateLimited,
+    /// 参数验证错误
+    ValidationError,
+    /// 未知错误
+    Unknown,
+}
+
+/// 恢复操作建议
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum RecoveryAction {
+    /// 自动刷新令牌
+    RefreshToken,
+    /// 用户重新认证
+    ReAuthenticate,
+    /// 检查权限配置
+    CheckPermissions,
+    /// 检查应用配置
+    CheckAppConfig,
+    /// 等待后重试
+    RetryLater(Duration),
+    /// 联系管理员
+    ContactAdmin,
+    /// 检查网络连接
+    CheckNetwork,
+    /// 修正输入参数
+    FixInput,
+}
+
+/// 认证错误监控指标
+#[derive(Debug, Clone)]
+pub struct AuthMetrics {
+    /// 错误代码
+    pub error_code: ErrorCode,
+    /// 错误类型
+    pub error_type: AuthErrorType,
+    /// 是否可重试
+    pub retryable: bool,
+    /// 错误严重程度
+    pub severity: String,
+    /// 请求追踪ID
+    pub request_id: Option<String>,
+    /// 操作名称
+    pub operation: Option<String>,
+    /// 飞书原始错误码
+    pub feishu_code: Option<i32>,
+}
+
+impl AuthErrorExt for AuthError {
+    fn is_token_error(&self) -> bool {
+        matches!(self.code(),
+            ErrorCode::AccessTokenExpiredV2 |
+            ErrorCode::AccessTokenInvalid |
+            ErrorCode::AccessTokenFormatInvalid |
+            ErrorCode::TenantAccessTokenInvalid |
+            ErrorCode::AppAccessTokenInvalid
+        )
+    }
+
+    fn is_permission_error(&self) -> bool {
+        matches!(self.code(),
+            ErrorCode::PermissionMissing |
+            ErrorCode::AccessTokenNoPermission |
+            ErrorCode::AppPermissionDenied |
+            ErrorCode::Forbidden
+        )
+    }
+
+    fn is_credential_error(&self) -> bool {
+        matches!(self.code(),
+            ErrorCode::AuthenticationFailed |
+            ErrorCode::InvalidSignature |
+            ErrorCode::AppTicketInvalid
+        )
+    }
+
+    fn is_user_identity_error(&self) -> bool {
+        matches!(self.code(),
+            ErrorCode::UserSessionInvalid |
+            ErrorCode::UserSessionNotFound |
+            ErrorCode::UserSessionTimeout |
+            ErrorCode::UserIdentityInvalid |
+            ErrorCode::UserIdInvalid |
+            ErrorCode::OpenIdInvalid |
+            ErrorCode::UnionIdInvalid |
+            ErrorCode::UserTypeNotSupportedV2 |
+            ErrorCode::UserIdentityMismatch
+        )
+    }
+
+    fn is_application_error(&self) -> bool {
+        matches!(self.code(),
+            ErrorCode::AppNotInstalled |
+            ErrorCode::AppStatusException
+        )
+    }
+
+    fn should_refresh_token(&self) -> bool {
+        matches!(self.code(),
+            ErrorCode::AccessTokenExpiredV2
+        ) && !self.is_credential_error()
+    }
+
+    fn requires_user_reauth(&self) -> bool {
+        self.is_token_error() && !self.should_refresh_token() ||
+        self.is_user_identity_error() ||
+        self.is_permission_error()
+    }
+
+    fn requires_user_action(&self) -> bool {
+        self.is_credential_error() ||
+        self.is_permission_error() ||
+        self.is_application_error() ||
+        self.error_type() == ErrorType::Validation
+    }
+
+    fn auth_error_type(&self) -> AuthErrorType {
+        match self.code() {
+            ErrorCode::AccessTokenExpiredV2 => {
+                AuthErrorType::TokenExpired
+            },
+            ErrorCode::AccessTokenInvalid | ErrorCode::TenantAccessTokenInvalid |
+            ErrorCode::AppAccessTokenInvalid | ErrorCode::AccessTokenFormatInvalid => {
+                AuthErrorType::TokenInvalid
+            },
+            ErrorCode::PermissionMissing | ErrorCode::AccessTokenNoPermission |
+            ErrorCode::AppPermissionDenied | ErrorCode::Forbidden => {
+                AuthErrorType::PermissionDenied
+            },
+            ErrorCode::AuthenticationFailed | ErrorCode::InvalidSignature |
+            ErrorCode::AppTicketInvalid => {
+                AuthErrorType::CredentialInvalid
+            },
+            ErrorCode::UserSessionInvalid | ErrorCode::UserSessionNotFound |
+            ErrorCode::UserSessionTimeout | ErrorCode::UserIdentityInvalid |
+            ErrorCode::SsoTokenInvalid => {
+                AuthErrorType::UserIdentityInvalid
+            },
+            ErrorCode::AppNotInstalled | ErrorCode::AppStatusException => {
+                AuthErrorType::ApplicationError
+            },
+            ErrorCode::ConfigurationError => AuthErrorType::ConfigurationError,
+            ErrorCode::TooManyRequests => AuthErrorType::RateLimited,
+            ErrorCode::ValidationError | ErrorCode::MissingRequiredParameter => {
+                AuthErrorType::ValidationError
+            },
+            ErrorCode::ServiceUnavailable | ErrorCode::BadGateway |
+            ErrorCode::GatewayTimeout | ErrorCode::InternalServerError => {
+                AuthErrorType::ServiceUnavailable
+            },
+            _ => {
+                match self {
+                    CoreErrorV3::Network { .. } => AuthErrorType::NetworkError,
+                    CoreErrorV3::Configuration { .. } => AuthErrorType::ConfigurationError,
+                    CoreErrorV3::ServiceUnavailable { .. } => AuthErrorType::ServiceUnavailable,
+                    CoreErrorV3::RateLimit { .. } => AuthErrorType::RateLimited,
+                    CoreErrorV3::Validation { .. } => AuthErrorType::ValidationError,
+                    _ => AuthErrorType::Unknown,
+                }
+            }
         }
     }
 
-    fn user_friendly_message(&self) -> String {
-        // 基于 CoreError 生成用户友好消息
-        match self {
-            CoreError::Network { .. } => "网络连接异常，请检查网络设置".to_string(),
-            CoreError::Authentication { .. } => "认证失败，请检查登录状态".to_string(),
-            CoreError::Api { .. } => "API请求失败，请稍后重试".to_string(),
-            CoreError::Validation { .. } => "输入参数有误，请检查后重试".to_string(),
-            CoreError::Business { .. } => "业务逻辑错误，请联系技术支持".to_string(),
-            CoreError::Internal { .. } => "系统内部错误，请联系技术支持".to_string(),
-            // 其他变体...
-            _ => "操作失败，请稍后重试".to_string(),
+    fn recovery_actions(&self) -> Vec<RecoveryAction> {
+        match self.auth_error_type() {
+            AuthErrorType::TokenExpired => {
+                vec![RecoveryAction::RefreshToken]
+            },
+            AuthErrorType::TokenInvalid | AuthErrorType::UserIdentityInvalid => {
+                vec![RecoveryAction::ReAuthenticate]
+            },
+            AuthErrorType::PermissionDenied => {
+                vec![
+                    RecoveryAction::CheckPermissions,
+                    RecoveryAction::ContactAdmin,
+                ]
+            },
+            AuthErrorType::CredentialInvalid => {
+                vec![RecoveryAction::CheckAppConfig]
+            },
+            AuthErrorType::ApplicationError => {
+                vec![
+                    RecoveryAction::CheckAppConfig,
+                    RecoveryAction::ContactAdmin,
+                ]
+            },
+            AuthErrorType::RateLimited => {
+                let retry_delay = self.retry_delay(0).unwrap_or(Duration::from_secs(60));
+                vec![RecoveryAction::RetryLater(retry_delay)]
+            },
+            AuthErrorType::NetworkError | AuthErrorType::ServiceUnavailable => {
+                vec![
+                    RecoveryAction::CheckNetwork,
+                    RecoveryAction::RetryLater(Duration::from_secs(5)),
+                ]
+            },
+            AuthErrorType::ValidationError => {
+                vec![RecoveryAction::FixInput]
+            },
+            AuthErrorType::ConfigurationError => {
+                vec![RecoveryAction::CheckAppConfig]
+            },
+            AuthErrorType::Unknown => {
+                vec![
+                    RecoveryAction::RetryLater(Duration::from_secs(10)),
+                    RecoveryAction::ContactAdmin,
+                ]
+            },
         }
     }
 
-    fn recovery_suggestion(&self) -> Option<String> {
-        match self {
-            CoreError::Network { .. } => Some("检查网络连接后重试".to_string()),
-            CoreError::Authentication { .. } => Some("重新登录可解决此问题".to_string()),
-            CoreError::Api { status, .. } if *status >= 500 => Some("服务器异常，请稍后重试".to_string()),
-            CoreError::RateLimit { .. } => Some("请求频率过高，请稍后重试".to_string()),
-            _ => None,
+    fn auth_metrics(&self) -> AuthMetrics {
+        AuthMetrics {
+            error_code: self.code(),
+            error_type: self.auth_error_type(),
+            retryable: self.is_retryable(),
+            severity: format!("{:?}", self.severity()),
+            request_id: self.context().request_id().map(|s| s.to_string()),
+            operation: self.context().operation().map(|s| s.to_string()),
+            feishu_code: self.context().get_context("feishu_code")
+                .and_then(|s| s.parse().ok()),
         }
+    }
+}
+
+/// 认证错误分析器 - 提供高级错误分析功能
+#[derive(Debug, Copy, Clone)]
+pub struct AuthErrorAnalyzer;
+
+impl AuthErrorAnalyzer {
+    /// 分析单个认证错误
+    pub fn analyze(error: &AuthError) -> AuthAnalysisReport {
+        AuthAnalysisReport {
+            error_type: error.auth_error_type(),
+            is_token_related: error.is_token_error(),
+            is_permission_related: error.is_permission_error(),
+            is_credential_related: error.is_credential_error(),
+            is_user_identity_related: error.is_user_identity_error(),
+            requires_reauth: error.requires_user_reauth(),
+            should_refresh: error.should_refresh_token(),
+            recovery_actions: error.recovery_actions(),
+            metrics: error.auth_metrics(),
+        }
+    }
+
+    /// 分析批量认证错误，检测模式
+    pub fn analyze_batch(errors: &[AuthError]) -> AuthBatchAnalysis {
+        let mut report = AuthBatchAnalysis {
+            total_errors: errors.len(),
+            error_types: std::collections::HashMap::new(),
+            token_errors: 0,
+            permission_errors: 0,
+            credential_errors: 0,
+            retryable_errors: 0,
+            user_action_required: 0,
+            most_common_error: None,
+        };
+
+        for error in errors {
+            let error_type = error.auth_error_type();
+            *report.error_types.entry(error_type.clone()).or_insert(0) += 1;
+
+            if error.is_token_error() {
+                report.token_errors += 1;
+            }
+            if error.is_permission_error() {
+                report.permission_errors += 1;
+            }
+            if error.is_credential_error() {
+                report.credential_errors += 1;
+            }
+            if error.is_retryable() {
+                report.retryable_errors += 1;
+            }
+            if error.requires_user_action() {
+                report.user_action_required += 1;
+            }
+        }
+
+        report.most_common_error = report.error_types
+            .iter()
+            .max_by_key(|(_, count)| *count)
+            .map(|(error_type, count)| (error_type.clone(), *count));
+
+        report
+    }
+
+    /// 检测潜在的安全问题
+    pub fn detect_security_patterns(errors: &[AuthError]) -> Option<SecurityPattern> {
+        let credential_errors = errors.iter()
+            .filter(|e| e.is_credential_error())
+            .count();
+
+        let permission_errors = errors.iter()
+            .filter(|e| e.is_permission_error())
+            .count();
+
+        let user_identity_errors = errors.iter()
+            .filter(|e| e.is_user_identity_error())
+            .count();
+
+        // 检测攻击模式
+        if credential_errors > errors.len() / 2 {
+            Some(SecurityPattern::CredentialStuffing {
+                attempts: credential_errors,
+                time_window: Duration::from_secs(300), // 5分钟窗口
+            })
+        } else if permission_errors > errors.len() / 3 {
+            Some(SecurityPattern::PrivilegeEscalation {
+                attempts: permission_errors,
+                affected_resources: permission_errors,
+            })
+        } else if user_identity_errors > 10 {
+            Some(SecurityPattern::IdentityAttacks {
+                attempts: user_identity_errors,
+            })
+        } else {
+            None
+        }
+    }
+}
+
+/// 单个认证错误分析报告
+#[derive(Debug, Clone)]
+pub struct AuthAnalysisReport {
+    pub error_type: AuthErrorType,
+    pub is_token_related: bool,
+    pub is_permission_related: bool,
+    pub is_credential_related: bool,
+    pub is_user_identity_related: bool,
+    pub requires_reauth: bool,
+    pub should_refresh: bool,
+    pub recovery_actions: Vec<RecoveryAction>,
+    pub metrics: AuthMetrics,
+}
+
+/// 批量认证错误分析报告
+#[derive(Debug, Clone)]
+pub struct AuthBatchAnalysis {
+    pub total_errors: usize,
+    pub error_types: std::collections::HashMap<AuthErrorType, usize>,
+    pub token_errors: usize,
+    pub permission_errors: usize,
+    pub credential_errors: usize,
+    pub retryable_errors: usize,
+    pub user_action_required: usize,
+    pub most_common_error: Option<(AuthErrorType, usize)>,
+}
+
+/// 安全攻击模式检测结果
+#[derive(Debug, Clone)]
+pub enum SecurityPattern {
+    /// 凭证填充攻击
+    CredentialStuffing {
+        attempts: usize,
+        time_window: Duration,
+    },
+    /// 权限提升攻击
+    PrivilegeEscalation {
+        attempts: usize,
+        affected_resources: usize,
+    },
+    /// 身份攻击
+    IdentityAttacks {
+        attempts: usize,
+    },
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_token_error_creation() {
+        let error = AuthErrorBuilder::token_expired("测试令牌过期");
+        assert!(error.is_token_error());
+        assert!(error.should_refresh_token());
+        assert!(!error.requires_user_reauth());
+        assert_eq!(error.auth_error_type(), AuthErrorType::TokenExpired);
+    }
+
+    #[test]
+    fn test_permission_error_creation() {
+        let missing_scopes = ["contacts:readonly", "messages:write"];
+        let error = AuthErrorBuilder::permission_denied(&missing_scopes);
+
+        assert!(error.is_permission_error());
+        assert!(error.requires_user_action());
+        assert_eq!(error.auth_error_type(), AuthErrorType::PermissionDenied);
+    }
+
+    #[test]
+    fn test_feishu_error_mapping() {
+        let error = map_feishu_auth_error(99991677, "令牌已过期", Some("req-123"));
+
+        assert!(error.is_token_error());
+        assert!(error.should_refresh_token());
+        assert_eq!(error.context().request_id(), Some("req-123"));
+    }
+
+    #[test]
+    fn test_auth_error_analysis() {
+        let error = AuthErrorBuilder::credentials_invalid("APP_SECRET错误");
+        let analysis = AuthErrorAnalyzer::analyze(&error);
+
+        assert!(analysis.is_credential_related);
+        assert!(analysis.requires_reauth);
+        assert!(!analysis.should_refresh);
+    }
+
+    #[test]
+    fn test_security_pattern_detection() {
+        let errors = vec![
+            AuthErrorBuilder::credentials_invalid("错误1"),
+            AuthErrorBuilder::credentials_invalid("错误2"),
+            AuthErrorBuilder::permission_denied(&["scope1"]),
+        ];
+
+        let pattern = AuthErrorAnalyzer::detect_security_patterns(&errors);
+        assert!(matches!(pattern, Some(SecurityPattern::CredentialStuffing { .. })));
+    }
+
+    #[test]
+    fn test_recovery_actions() {
+        let token_expired = AuthErrorBuilder::token_expired("过期");
+        let actions = token_expired.recovery_actions();
+        assert!(actions.contains(&RecoveryAction::RefreshToken));
+
+        let permission_denied = AuthErrorBuilder::permission_denied(&["scope1"]);
+        let actions = permission_denied.recovery_actions();
+        assert!(actions.contains(&RecoveryAction::CheckPermissions));
+    }
+
+    #[test]
+    fn test_auth_metrics() {
+        let error = map_feishu_auth_error(99991677, "令牌过期", Some("req-456"));
+        let metrics = error.auth_metrics();
+
+        assert_eq!(metrics.request_id, Some("req-456".to_string()));
+        assert_eq!(metrics.feishu_code, Some(99991677));
+        assert!(metrics.retryable);
+        assert_eq!(metrics.error_type, AuthErrorType::TokenExpired);
     }
 }
