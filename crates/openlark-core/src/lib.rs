@@ -37,7 +37,7 @@ pub mod contact;
 pub mod endpoints;
 
 // Re-export commonly used types from crate root
-pub use error::SDKResult;
+pub use error::{CoreError, SDKResult};
 
 /// Prelude module for convenient imports.
 pub mod prelude {
@@ -54,7 +54,7 @@ pub mod prelude {
     // Re-export commonly used dependencies
     pub use anyhow::Result;
 
-    /// Result type alias for convenience（已默认使用 CoreErrorV3）
+    /// Result type alias for convenience（已默认使用 CoreError）
     pub type SDKResult<T> = Result<T, LarkAPIError>;
     pub use serde::{Deserialize, Serialize};
     pub use serde_json::Value;

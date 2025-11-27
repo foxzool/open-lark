@@ -13,7 +13,7 @@ use super::{
     codes::{ErrorCode, ErrorCategory},
     core::ErrorSeverity,
     kinds::ErrorKind,
-    core_v3::ErrorRecord,
+    ErrorRecord,
 };
 
 /// 错误观测性系统
@@ -54,7 +54,7 @@ impl ErrorObservability {
         self.record_error_record(&error.as_error_record()).await;
     }
 
-    /// 基于 ErrorRecord 记录错误（配合 CoreErrorV3 使用）
+    /// 基于 ErrorRecord 记录错误（配合 CoreError 使用）
     pub async fn record_error_record(&self, record: &ErrorRecord) {
         let error_event = ErrorEvent::from_record(record);
 

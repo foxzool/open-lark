@@ -202,7 +202,7 @@ impl RequestExecutor {
         // 序列化请求体
         if let Some(body_data) = body {
             let json_value = serde_json::to_value(body_data)
-                .map_err(|e| crate::error::serialization_error_v3(e.to_string(), None))?;
+                .map_err(|e| crate::error::serialization_error("序列化失败", Some(e)))?;
             api_req = api_req.body(json_value);
         }
 

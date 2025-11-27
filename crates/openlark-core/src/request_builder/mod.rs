@@ -91,7 +91,7 @@ impl UnifiedRequestBuilder {
             .map(|(k, v)| (k.as_str(), v.as_str()))
             .collect::<Vec<_>>();
         Ok(url::Url::parse_with_params(&path, query)
-            .map_err(|e| crate::error::network_error_v3(format!("invalid url: {e}")))?)
+            .map_err(|e| crate::error::network_error(format!("invalid url: {e}")))?)
     }
 }
 

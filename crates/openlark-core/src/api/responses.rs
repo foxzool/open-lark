@@ -183,7 +183,7 @@ impl<T> Response<T> {
         if is_success {
             match self.data {
                 Some(data) => Ok(data),
-                None => Err(crate::error::api_error_v3(
+                None => Err(crate::error::api_error(
                     code as u16,
                     "response",
                     "响应数据为空",
@@ -191,7 +191,7 @@ impl<T> Response<T> {
                 )),
             }
         } else {
-            Err(crate::error::api_error_v3(
+            Err(crate::error::api_error(
                 code as u16,
                 "response",
                 self.raw_response.msg.clone(),

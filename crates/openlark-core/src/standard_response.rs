@@ -4,7 +4,7 @@
 /// 这个特征允许不同的响应类型以一致的方式处理成功和错误情况。
 use crate::{
     api::Response,
-    error::{api_error_v3, CoreErrorV3},
+    error::{api_error, CoreError},
     SDKResult,
 };
 
@@ -33,13 +33,13 @@ impl<T> StandardResponse<T> for Response<T> {
         if self.is_success() {
             match self.data {
                 Some(data) => Ok(data),
-                None => Err(CoreErrorV3::api_data_error(
+                None => Err(CoreError::api_data_error(
                     "Response succeeded but contains no data".to_string(),
                 )
                 .into()),
             }
         } else {
-            Err(api_error_v3(
+            Err(api_error(
                 self.code() as u16,
                 "unknown",
                 self.message().to_string(),

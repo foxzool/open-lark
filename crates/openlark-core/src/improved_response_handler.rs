@@ -5,7 +5,7 @@ use tracing::{info_span, Instrument};
 use crate::{
     api::{ApiResponseTrait, BaseResponse, RawResponse, Response, ResponseFormat},
     error::{
-        network_error_v3, validation_error_v3, ErrorCategory, ErrorCode, ErrorContext, LarkAPIError,
+        network_error, validation_error, ErrorCategory, ErrorCode, ErrorContext, LarkAPIError,
     },
     observability::ResponseTracker,
     SDKResult,
@@ -163,7 +163,7 @@ impl ImprovedResponseHandler {
                             direct_parse_err, fallback_err
                         );
                         tracker.error(&error_msg);
-                        Err(validation_error_v3("api_response", error_msg))
+                        Err(validation_error("api_response", error_msg))
                     }
                 }
             }
@@ -189,7 +189,7 @@ impl ImprovedResponseHandler {
             Err(e) => {
                 let error_msg = format!("Failed to parse JSON: {}", e);
                 tracker.error(&error_msg);
-                return Err(validation_error_v3("base_response", error_msg));
+                return Err(validation_error("base_response", error_msg));
             }
         };
 
@@ -199,7 +199,7 @@ impl ImprovedResponseHandler {
             Err(e) => {
                 let error_msg = format!("Failed to parse raw response: {}", e);
                 tracker.error(&error_msg);
-                return Err(validation_error_v3("response", error_msg));
+                return Err(validation_error("response", error_msg));
             }
         };
 
@@ -252,7 +252,7 @@ impl ImprovedResponseHandler {
             Err(e) => {
                 let error_msg = format!("Failed to read binary response: {}", e);
                 tracker.error(&error_msg);
-                return Err(network_error_v3(error_msg));
+                return Err(network_error(error_msg));
             }
         };
 
@@ -326,7 +326,7 @@ where
     pub fn into_data(self) -> Result<T, LarkAPIError> {
         if self.is_success() {
             self.data.ok_or_else(|| {
-                validation_error_v3("data", "Response is successful but data is missing")
+                validation_error("data", "Response is successful but data is missing")
             })
         } else {
             // 优先使用飞书通用错误码映射
@@ -355,7 +355,7 @@ where
                         _ => 500,
                     });
 
-            Err(LarkAPIError::Api(crate::error::core_v3::ApiError {
+            Err(LarkAPIError::Api(crate::error::ApiError {
                 status,
                 endpoint: "unknown_endpoint".into(),
                 message: self.msg,
