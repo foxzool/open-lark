@@ -37,7 +37,9 @@ impl Default for AuthConfig {
 }
 
 // 重新导出错误处理系统 - 使用新的统一错误架构
-pub use super::error::{AuthError, AuthResult, AuthErrorBuilder, AuthErrorExt, map_feishu_auth_error};
+pub use super::error::{
+    map_feishu_auth_error, AuthError, AuthErrorBuilder, AuthErrorExt, AuthResult,
+};
 
 // 子模块
 pub mod oauth;

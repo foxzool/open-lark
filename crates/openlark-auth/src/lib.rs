@@ -119,8 +119,8 @@ impl Default for AuthServices {
 
 /// 预导出模块
 pub mod prelude {
+    pub use super::models::AuthResult;
     pub use super::{AuthProject, AuthServices, AuthenProject, OauthProject};
-    pub use super::models::{AuthResult};
 
     pub use super::auth::*;
     pub use super::authen::*;
