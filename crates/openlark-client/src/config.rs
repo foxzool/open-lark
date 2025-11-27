@@ -138,26 +138,41 @@ impl Config {
         }
 
         if self.app_secret.is_empty() {
-            return Err(crate::error::validation_error("app_secret", "app_secret不能为空"));
+            return Err(crate::error::validation_error(
+                "app_secret",
+                "app_secret不能为空",
+            ));
         }
 
         if self.base_url.is_empty() {
-            return Err(crate::error::validation_error("base_url", "base_url不能为空"));
+            return Err(crate::error::validation_error(
+                "base_url",
+                "base_url不能为空",
+            ));
         }
 
         // 验证URL格式
         if !self.base_url.starts_with("http://") && !self.base_url.starts_with("https://") {
-            return Err(crate::error::validation_error("base_url", "base_url必须以http://或https://开头"));
+            return Err(crate::error::validation_error(
+                "base_url",
+                "base_url必须以http://或https://开头",
+            ));
         }
 
         // 验证超时时间
         if self.timeout.is_zero() {
-            return Err(crate::error::validation_error("timeout", "timeout必须大于0"));
+            return Err(crate::error::validation_error(
+                "timeout",
+                "timeout必须大于0",
+            ));
         }
 
         // 验证重试次数
         if self.retry_count > 10 {
-            return Err(crate::error::validation_error("retry_count", "retry_count不能超过10"));
+            return Err(crate::error::validation_error(
+                "retry_count",
+                "retry_count不能超过10",
+            ));
         }
 
         Ok(())

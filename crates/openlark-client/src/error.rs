@@ -131,7 +131,11 @@ pub fn timeout_error(operation: impl Into<String>) -> Error {
 /// 创建限流错误
 pub fn rate_limit_error(retry_after: Option<u64>) -> Error {
     use std::time::Duration;
-    rate_limit_error_v3(100, Duration::from_secs(60), retry_after.map(|s| Duration::from_secs(s)))
+    rate_limit_error_v3(
+        100,
+        Duration::from_secs(60),
+        retry_after.map(|s| Duration::from_secs(s)),
+    )
 }
 
 /// 创建服务不可用错误
