@@ -147,6 +147,8 @@ pub mod prelude {
 
     // 避免v1命名空间冲突，明确导出需要的类型
     pub use super::acs::{AcsProject as Acs, AcsV1Service};
-    pub use super::security_and_compliance::{SecurityAndComplianceV1Service, SecurityAndComplianceV2Service};
     pub use super::models::*;
+    pub use super::security_and_compliance::{
+        SecurityAndComplianceV1Service, SecurityAndComplianceV2Service,
+    };
 }
