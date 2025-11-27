@@ -1,4 +1,4 @@
-use crate::{Config, Error, Result};
+use crate::{Config, Result, error::{ClientErrorExt, with_context, with_operation_context}};
 use openlark_auth::models::{AppTicketResponse, UserInfoResponse};
 use openlark_auth::prelude::*;
 use openlark_auth::AuthServices;
@@ -51,17 +51,17 @@ impl AuthService {
             .app_access_token()
             .internal()
             .send()
-            .await
-            .map_err(|e| Error::APIError {
-                code: "AUTH_ERROR".to_string(),
-                message: format!("获取应用访问令牌失败: {}", e),
-            })?;
+            .await;
+
+        let result = with_operation_context(response, "get_internal_app_access_token", "AuthService")?;
+
+        tracing::debug!("成功获取自建应用访问令牌，过期时间: {}秒", result.expire);
 
         Ok(TokenInfo {
-            access_token: response.app_access_token,
+            access_token: result.app_access_token,
             token_type: "Bearer".to_string(),
-            expires_in: response.expire as u64,
-            expires_at: chrono::Utc::now() + chrono::Duration::seconds(response.expire as i64),
+            expires_in: result.expire as u64,
+            expires_at: chrono::Utc::now() + chrono::Duration::seconds(result.expire as i64),
             scope: Some("app:all".to_string()),
         })
     }
@@ -77,17 +77,17 @@ impl AuthService {
             .app_access_token()
             .store()
             .send()
-            .await
-            .map_err(|e| Error::APIError {
-                code: "AUTH_ERROR".to_string(),
-                message: format!("获取商店应用访问令牌失败: {}", e),
-            })?;
+            .await;
+
+        let result = with_operation_context(response, "get_store_app_access_token", "AuthService")?;
+
+        tracing::debug!("成功获取商店应用访问令牌，过期时间: {}秒", result.expire);
 
         Ok(TokenInfo {
-            access_token: response.app_access_token,
+            access_token: result.app_access_token,
             token_type: "Bearer".to_string(),
-            expires_in: response.expire as u64,
-            expires_at: chrono::Utc::now() + chrono::Duration::seconds(response.expire as i64),
+            expires_in: result.expire as u64,
+            expires_at: chrono::Utc::now() + chrono::Duration::seconds(result.expire as i64),
             scope: Some("app:all".to_string()),
         })
     }
@@ -105,11 +105,12 @@ impl AuthService {
             .grant_type("authorization_code")
             .code(code)
             .send()
-            .await
-            .map_err(|e| Error::APIError {
-                code: "AUTH_ERROR".to_string(),
-                message: format!("获取用户访问令牌失败: {}", e),
-            })?;
+            .await;
+
+        let result = with_operation_context(response, "get_user_access_token", "AuthService")?;
+
+        tracing::debug!("成功获取用户访问令牌，过期时间: {}秒，权限范围: {:?}",
+            result.expires_in, response.scope);
 
         Ok(TokenInfo {
             access_token: response.access_token,
@@ -132,11 +133,11 @@ impl AuthService {
             .create_refresh_access_token()
             .refresh_token(refresh_token)
             .send()
-            .await
-            .map_err(|e| Error::APIError {
-                code: "AUTH_ERROR".to_string(),
-                message: format!("刷新OIDC访问令牌失败: {}", e),
-            })?;
+            .await;
+
+        let result = with_operation_context(response, "refresh_oidc_access_token", "AuthService")?;
+
+        tracing::debug!("成功刷新OIDC访问令牌，过期时间: {}秒", result.expires_in);
 
         Ok(TokenInfo {
             access_token: response.access_token,
@@ -158,7 +159,6 @@ impl AuthService {
         // 因为它是应用级别的令牌，不是用户级别的令牌
 
         // 使用应用信息接口验证令牌有效性
-        // 调用应用相关的API来验证app_access_token
         let app_info_result = self
             .auth_services
             .auth
@@ -183,7 +183,7 @@ impl AuthService {
                 })
             }
             Err(e) => {
-                tracing::warn!("应用访问令牌验证失败: {}", e);
+                tracing::warn!("应用访问令牌验证失败: {}", e.user_friendly_message());
 
                 // 尝试通过获取令牌信息接口验证
                 // 如果能成功获取新令牌，说明当前令牌仍然有效
@@ -196,12 +196,12 @@ impl AuthService {
                             valid: true,
                             user_id: None,
                             tenant_key: Some("app_tenant".to_string()),
-                            expires_at: None,
+                            expires_at: Some(token_refresh_result.unwrap().expires_at),
                             scope: vec!["app:all".to_string()],
                         })
                     }
                     Err(refresh_err) => {
-                        tracing::warn!("应用访问令牌验证失败且无法刷新: {}", refresh_err);
+                        tracing::warn!("应用访问令牌验证失败且无法刷新: {}", refresh_err.user_friendly_message());
                         Ok(TokenVerificationResponse {
                             valid: false,
                             user_id: None,
@@ -227,30 +227,31 @@ impl AuthService {
             .get()
             .user_access_token(user_access_token)
             .send()
-            .await
-            .map_err(|e| Error::APIError {
-                code: "AUTH_ERROR".to_string(),
-                message: format!("获取用户信息失败: {}", e),
-            })?;
+            .await;
+
+        let result = with_operation_context(response, "get_user_info", "AuthService")?;
+
+        tracing::debug!("成功获取用户信息，用户ID: {}, 状态: {:?}",
+            result.user_id, result.status);
 
         // 用户状态已经是正确的枚举类型
-        let status = response.status;
+        let status = result.status;
 
         Ok(UserInfo {
-            user_id: response.user_id,
-            open_id: response.open_id,
-            union_id: response.union_id,
-            name: response.name,
-            en_name: response.en_name,
-            email: response.email,
-            mobile: response.mobile,
-            avatar_url: response.avatar_url,
+            user_id: result.user_id,
+            open_id: result.open_id,
+            union_id: result.union_id,
+            name: result.name,
+            en_name: result.en_name,
+            email: result.email,
+            mobile: result.mobile,
+            avatar_url: result.avatar_url,
             status,
-            department_ids: response.department_ids,
-            position: response.position,
-            employee_no: response.employee_no,
-            nickname: response.nickname,
-            gender: response.gender,
+            department_ids: result.department_ids,
+            position: result.position,
+            employee_no: result.employee_no,
+            nickname: result.nickname,
+            gender: result.gender,
         })
     }
 
@@ -266,20 +267,29 @@ impl AuthService {
     pub async fn resend_app_ticket(&self) -> Result<()> {
         tracing::info!("重新推送应用票据");
 
-        let _response = self
+        let response = self
             .auth_services
             .auth
             .v3()
             .app_ticket()
             .resend()
             .send()
-            .await
-            .map_err(|e| Error::APIError {
-                code: "AUTH_ERROR".to_string(),
-                message: format!("重新推送应用票据失败: {}", e),
-            })?;
+            .await;
+
+        with_operation_context(response, "resend_app_ticket", "AuthService")?;
+
+        tracing::info!("应用票据重新推送成功");
 
         Ok(())
+    }
+
+    /// 执行带有上下文的认证操作
+    pub async fn execute_with_context<F, T>(&self, operation: &str, f: F) -> Result<T>
+    where
+        F: std::future::Future<Output = Result<T>>,
+    {
+        let result = f.await;
+        with_operation_context(result, operation, "AuthService")
     }
 }
 
@@ -321,33 +331,101 @@ impl TokenInfo {
     pub fn remaining_seconds(&self) -> i64 {
         (self.expires_at - chrono::Utc::now()).num_seconds().max(0)
     }
+
+    /// 获取令牌状态的详细描述
+    pub fn status_description(&self) -> &'static str {
+        if self.is_expired() {
+            "令牌已过期"
+        } else if self.needs_refresh(5) {
+            "令牌即将过期，建议刷新"
+        } else {
+            "令牌有效"
+        }
+    }
+
+    /// 获取友好的过期时间描述
+    pub fn friendly_expires_at(&self) -> String {
+        let now = chrono::Utc::now();
+        let duration = self.expires_at - now;
+
+        if duration.num_seconds() < 0 {
+            "已过期".to_string()
+        } else if duration.num_hours() >= 1 {
+            format!("{}小时后过期", duration.num_hours())
+        } else if duration.num_minutes() >= 1 {
+            format!("{}分钟后过期", duration.num_minutes())
+        } else {
+            format!("{}秒后过期", duration.num_seconds())
+        }
+    }
+}
+
+/// 令牌管理扩展特征
+pub trait TokenManagement {
+    /// 自动刷新令牌（如果需要）
+    async fn auto_refresh_if_needed<F>(&self, token_info: &TokenInfo, refresh_func: F) -> Result<TokenInfo>
+    where
+        F: FnOnce(&TokenInfo) -> std::pin::Pin<Box<dyn std::future::Future<Output = Result<TokenInfo>> + Send>>;
+
+    /// 安全执行需要令牌的操作
+    async fn execute_with_valid_token<F, T>(&self, token_info: &TokenInfo, f: F) -> Result<T>
+    where
+        F: FnOnce(&str) -> std::pin::Pin<Box<dyn std::future::Future<Output = Result<T>> + Send>>;
+}
+
+impl TokenManagement for AuthService {
+    async fn auto_refresh_if_needed<F>(&self, token_info: &TokenInfo, refresh_func: F) -> Result<TokenInfo>
+    where
+        F: FnOnce(&TokenInfo) -> std::pin::Pin<Box<dyn std::future::Future<Output = Result<TokenInfo>> + Send>>,
+    {
+        if token_info.needs_refresh(10) {
+            tracing::info!("令牌需要刷新，执行自动刷新");
+            refresh_func(token_info).await
+        } else {
+            tracing::debug!("令牌仍然有效，无需刷新");
+            Ok(token_info.clone())
+        }
+    }
+
+    async fn execute_with_valid_token<F, T>(&self, token_info: &TokenInfo, f: F) -> Result<T>
+    where
+        F: FnOnce(&str) -> std::pin::Pin<Box<dyn std::future::Future<Output = Result<T>> + Send>>,
+    {
+        if token_info.is_expired() {
+            return Err(crate::error::authentication_error(
+                format!("令牌已过期，过期时间: {}", token_info.expires_at.format("%Y-%m-%d %H:%M:%S UTC"))
+            ));
+        }
+
+        tracing::debug!("令牌有效，执行操作，剩余时间: {}秒", token_info.remaining_seconds());
+        f(&token_info.access_token).await
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
+    fn create_test_config() -> Config {
+        Config {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_app_secret".to_string(),
+            base_url: "https://open.feishu.cn".to_string(),
+            ..Default::default()
+        }
+    }
+
     #[test]
     fn test_auth_service_creation() {
-        let config = Config::builder()
-            .app_id("test")
-            .app_secret("test")
-            .build()
-            .unwrap();
-
+        let config = create_test_config();
         let service = AuthService::new(&config);
         // 服务创建成功即测试通过
-        assert_eq!(service.auth_services.config.app_id, "test");
+        assert_eq!(service.auth_services.config.app_id, "test_app_id");
     }
 
     #[test]
     fn test_oauth_url_generation() {
-        let config = Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test")
-            .build()
-            .unwrap();
-
+        let config = create_test_config();
         let service = AuthService::new(&config);
 
         let url = service.generate_oauth_url(
@@ -375,11 +453,58 @@ mod tests {
         assert!(!token_info.is_expired());
         assert!(!token_info.needs_refresh(30));
         assert!(token_info.remaining_seconds() > 0);
+        assert_eq!(token_info.status_description(), "令牌有效");
+        assert!(token_info.friendly_expires_at().contains("小时后过期"));
 
         // 测试过期令牌
         token_info.expires_at = chrono::Utc::now() - chrono::Duration::minutes(1);
         assert!(token_info.is_expired());
         assert!(token_info.needs_refresh(30));
         assert_eq!(token_info.remaining_seconds(), 0);
+        assert_eq!(token_info.status_description(), "令牌已过期");
+        assert_eq!(token_info.friendly_expires_at(), "已过期");
+    }
+
+    #[test]
+    fn test_token_error_context() {
+        let config = create_test_config();
+        let service = AuthService::new(&config);
+
+        // 测试错误上下文（模拟）
+        let error = crate::error::authentication_error("测试错误");
+        let result = service.handle_error(
+            Err(error),
+            "test_operation"
+        );
+
+        assert!(result.is_err());
+        if let Err(err) = result {
+            assert!(err.has_context("operation"));
+            assert_eq!(err.get_context("operation"), Some("test_operation"));
+            assert_eq!(err.get_context("component"), Some("AuthService"));
+        }
+    }
+
+    #[test]
+    fn test_token_management() {
+        let config = create_test_config();
+        let service = AuthService::new(&config);
+
+        let token_info = TokenInfo {
+            access_token: "test_token".to_string(),
+            token_type: "Bearer".to_string(),
+            expires_in: 60,
+            expires_at: chrono::Utc::now() + chrono::Duration::seconds(60),
+            scope: Some("test".to_string()),
+        };
+
+        // 测试令牌验证功能
+        assert!(!token_info.is_expired());
+        assert!(!token_info.needs_refresh(10));
+        assert_eq!(token_info.status_description(), "令牌有效");
+        assert!(token_info.remaining_seconds() > 0);
+
+        // 测试状态描述
+        assert!(token_info.status_description().contains("有效"));
     }
 }
