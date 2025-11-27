@@ -64,6 +64,20 @@
 - 令牌自动管理
 - WebSocket支持
 
+**错误码对齐与优先级**
+- 优先级：`飞书通用 code` > `HTTP status` > `内部业务码`（同一响应仅选一层）。  
+- 核心映射：响应体含 `code` 时优先调用 `ErrorCode::from_feishu_code`；未命中再用 `status`；都缺省时使用内部业务码。  
+- 观测：`log_id` 写入 `ErrorContext.request_id`，`feishu_code` 写入上下文 `feishu_code` 键，便于链路与告警。  
+- 关键通用码（示例）：
+  - 99991661：AccessToken 格式/内容无效  
+  - 99991671：AccessToken 无效；99991677：AccessToken 过期  
+  - 99991663/64：Tenant/App AccessToken 无效；99991670：SSO Token 无效  
+  - 99991672：缺少权限；99991676：Token 权限不足  
+  - 99991641/42/45：用户会话失效/不存在/超时  
+  - 99991669：用户身份解析失败；99991674：用户类型不支持；99991675：身份不匹配  
+  - 99992351/52/53：UserID/OpenID/UnionID 非法  
+  - 429/5xx：HTTP 优先级次于通用码，用于回退。
+
 #### 2. openlark-client
 **职责**: 高级客户端封装
 - LarkClient主客户端
