@@ -1,7 +1,7 @@
 //! 🚀 OpenLark Client Library
 //!
 //! 现代化的飞书开放平台 Rust SDK，提供简洁、类型安全的 API 访问
-//! 集成 CoreErrorV3 企业级错误处理系统，提供全面的错误管理和恢复建议
+//! 集成 CoreError 企业级错误处理系统，提供全面的错误管理和恢复建议
 //!
 //! ## 核心特性
 
@@ -13,7 +13,7 @@
 //! - **🚀 异步优先**: 完全异步的客户端实现
 //! - **🏗️ 现代构建器**: 流畅的构建器模式 API
 //! - **🔍 服务发现**: 动态服务注册和管理
-//! - **🛡️ 企业级**: 基于 CoreErrorV3 的高级错误处理、重试和监控支持
+//! - **🛡️ 企业级**: 基于 CoreError 的高级错误处理、重试和监控支持
 //! - **🌐 中文优先**: 100% 中文错误消息和文档，专为中国开发者优化
 //!
 //! ## 快速开始
@@ -163,7 +163,7 @@
 //!
 //! ## 错误处理
 //!
-//! 客户端基于 CoreErrorV3 提供企业级错误处理，包含详细的错误分析、恢复建议和中文友好的错误消息：
+//! 客户端基于 CoreError 提供企业级错误处理，包含详细的错误分析、恢复建议和中文友好的错误消息：
 //!
 //! ```rust,no_run
 //! use openlark_client::prelude::*;
@@ -263,7 +263,7 @@ pub mod ws_client;
 pub use client::{Client, ClientBuilder};
 pub use config::Config;
 
-// 企业级错误处理系统 - 基于 CoreErrorV3
+// 企业级错误处理系统 - 基于 CoreError
 pub use error::{Error, Result};
 
 // 错误扩展功能
@@ -360,8 +360,7 @@ pub use openlark_core::{config::Config as CoreConfig, SDKResult as CoreResult};
 
 // 错误系统核心类型
 pub use openlark_core::{
-    error::convenience_v3::*,
-    error::{CoreErrorV3, ErrorCode, ErrorSeverity, ErrorTrait, ErrorType},
+    error::{CoreError, ErrorCode, ErrorSeverity, ErrorTrait, ErrorType},
 };
 
 // ============================================================================
@@ -430,7 +429,7 @@ pub mod prelude {
     };
 
     // Core 错误系统类型
-    pub use openlark_core::error::{CoreErrorV3, ErrorCode, ErrorSeverity, ErrorTrait, ErrorType};
+    pub use openlark_core::error::{CoreError, ErrorCode, ErrorSeverity, ErrorTrait, ErrorType};
 
     // ============================================================================
     // 客户端特征
