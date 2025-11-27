@@ -283,25 +283,35 @@ impl UserCreateBuilder {
 
 ### 错误处理
 
+- 核心错误类型采用 `thiserror` 驱动的 **CoreErrorV3**，所有分类（网络、认证、API、验证、序列化、业务、超时、限流、服务不可用、内部错误）都携带 `ErrorCode` 与 `ErrorContext`，保持单一信息源。
+- 观测统一：通过 `ErrorRecord::from(&CoreErrorV3)` 序列化到日志/指标，包含 severity / retryable / request_id / context。
+- 便利层：`convenience_v3::*` 提供轻量工厂（如 `api_error_v3(status, endpoint, msg, request_id)`、`validation_error_v3(field, msg)`）。旧入口 `convenience::*` 只是对 V3 的薄包装，后续可删除。
+- API 返回建议：`pub type SDKResult<T> = Result<T, CoreErrorV3>;`——调用侧可直接匹配枚举变体或使用 `ErrorTrait` 判别（`is_api_error / is_retryable`）。
+
 ```rust
-// 统一的错误类型
-#[derive(Debug, thiserror::Error)]
-pub enum SDKError {
-    #[error("Network error: {0}")]
-    Network(#[from] reqwest::Error),
+use openlark_core::error::{
+    CoreErrorV3, ErrorRecord, ErrorTrait, ErrorCode,
+    convenience_v3::{api_error_v3, validation_error_v3},
+};
 
-    #[error("API error: {code} - {message}")]
-    API { code: i32, message: String },
-
-    #[error("Authentication failed")]
-    Authentication,
-
-    #[error("Rate limited: retry after {retry_after} seconds")]
-    RateLimited { retry_after: u64 },
+// 在传输层创建错误
+fn to_error(status: u16, endpoint: &str, body: &str) -> CoreErrorV3 {
+    api_error_v3(status, endpoint, format!("resp={body}"), None)
 }
 
-// 统一返回类型
-pub type SDKResult<T> = Result<T, SDKError>;
+// 在业务层校验
+fn validate_email(email: &str) -> Result<(), CoreErrorV3> {
+    if !email.contains('@') {
+        return Err(validation_error_v3("email", "邮箱格式不合法"));
+    }
+    Ok(())
+}
+
+// 观测导出
+let err = to_error(503, "/ping", "down");
+let record: ErrorRecord = (&err).into();
+assert!(err.is_retryable());
+assert_eq!(record.code, ErrorCode::ServiceUnavailable);
 ```
 
 ## 编译优化策略
