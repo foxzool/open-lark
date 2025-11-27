@@ -88,7 +88,10 @@ impl SecurityError {
         match self {
             SecurityError::NetworkError(_) => true,
             SecurityError::DeviceError(msg) if msg.contains("temporary") => true,
-            SecurityError::APIError { code: 429 | 500..599, .. } => true,
+            SecurityError::APIError {
+                code: 429 | 500..599,
+                ..
+            } => true,
             _ => false,
         }
     }

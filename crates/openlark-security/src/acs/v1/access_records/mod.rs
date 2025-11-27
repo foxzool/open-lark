@@ -159,13 +159,8 @@ impl ListAccessRecordsBuilder {
     /// 发送请求获取访问记录列表
     pub async fn send(
         self,
-    ) -> crate::SecurityResult<
-        crate::models::PageResponse<crate::models::acs::AccessRecord>,
-    > {
-        let url = format!(
-            "{}/open-apis/acs/v1/access_records",
-            self.config.base_url
-        );
+    ) -> crate::SecurityResult<crate::models::PageResponse<crate::models::acs::AccessRecord>> {
+        let url = format!("{}/open-apis/acs/v1/access_records", self.config.base_url);
 
         let mut query_params = Vec::new();
 

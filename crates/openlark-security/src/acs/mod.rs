@@ -52,7 +52,9 @@ impl AcsV1Service {
             rule_external: crate::acs::v1::rule_external::RuleExternalService::new(config.clone()),
             visitors: crate::acs::v1::visitors::VisitorsService::new(config.clone()),
             devices: crate::acs::v1::devices::DevicesService::new(config.clone()),
-            access_records: crate::acs::v1::access_records::AccessRecordsService::new(config.clone()),
+            access_records: crate::acs::v1::access_records::AccessRecordsService::new(
+                config.clone(),
+            ),
             config,
         }
     }
