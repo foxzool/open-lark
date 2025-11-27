@@ -23,7 +23,6 @@ use crate::{
         APP_ACCESS_TOKEN_URL_PATH, EXPIRY_DELTA, TENANT_ACCESS_TOKEN_INTERNAL_URL_PATH,
         TENANT_ACCESS_TOKEN_URL_PATH,
     },
-    error::LarkAPIError,
     SDKResult,
 };
 
@@ -591,7 +590,10 @@ impl TokenManager {
             Ok(resp.app_access_token)
         } else {
             warn!("app access token response error: {:#?}", resp.raw_response);
-            Err(LarkAPIError::illegal_param(resp.raw_response.msg.clone()))
+            Err(crate::error::validation_error_v3(
+                "token",
+                resp.raw_response.msg.clone(),
+            ))
         }
     }
     async fn get_marketplace_app_access_token_then_cache(
@@ -603,7 +605,12 @@ impl TokenManager {
         let mut app_ticket = app_ticket.to_string();
         if app_ticket.is_empty() {
             match app_ticket_manager.lock().await.get(config).await {
-                None => return Err(LarkAPIError::illegal_param("App ticket is empty")),
+                None => {
+                    return Err(crate::error::validation_error_v3(
+                        "app_ticket",
+                        "App ticket is empty",
+                    ))
+                }
                 Some(ticket) => {
                     app_ticket = ticket;
                 }
@@ -767,7 +774,10 @@ impl TokenManager {
                 "tenant access token response error: {:#?}",
                 resp.raw_response
             );
-            Err(LarkAPIError::illegal_param(resp.raw_response.msg.clone()))
+            Err(crate::error::validation_error_v3(
+                "token",
+                resp.raw_response.msg.clone(),
+            ))
         }
     }
 

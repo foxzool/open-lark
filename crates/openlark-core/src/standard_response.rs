@@ -2,7 +2,11 @@
 ///
 /// 为了解决项目中错误处理方式不统一的问题，提供统一的响应处理接口。
 /// 这个特征允许不同的响应类型以一致的方式处理成功和错误情况。
-use crate::{api::Response, error::LarkAPIError, SDKResult};
+use crate::{
+    api::Response,
+    error::{api_error_v3, CoreErrorV3},
+    SDKResult,
+};
 
 /// 标准响应处理特征
 ///
@@ -29,16 +33,19 @@ impl<T> StandardResponse<T> for Response<T> {
         if self.is_success() {
             match self.data {
                 Some(data) => Ok(data),
-                None => Err(LarkAPIError::DataError(
+                None => Err(CoreErrorV3::api_data_error(
                     "Response succeeded but contains no data".to_string(),
-                )),
+                )
+                .into()),
             }
         } else {
-            Err(LarkAPIError::ApiError {
-                code: self.code(),
-                message: self.message().to_string(),
-                request_id: self.raw().request_id.clone(),
-            })
+            Err(api_error_v3(
+                self.code() as u16,
+                "unknown",
+                self.message().to_string(),
+                self.raw_response.request_id.clone(),
+            )
+            .into())
         }
     }
 
@@ -124,8 +131,14 @@ mod tests {
                 println!("Unexpected success: {:?}", data);
                 panic!("Expected an error, but got success");
             }
-            Err(LarkAPIError::DataError(msg)) => {
-                assert!(msg.contains("no data"));
+            Err(err) if err.is_api_error() => {
+                let msg = err.message();
+                println!("no-data message: {}", msg);
+                assert!(
+                    msg.to_lowercase().contains("no data")
+                        || msg.contains("无数据")
+                        || msg.contains("数据为空")
+                );
             }
             Err(other) => {
                 // 如果不是DataError，至少确保是某种错误

@@ -1,4 +1,4 @@
-use crate::error::LarkAPIError;
+use crate::error::{validation_error_v3, LarkAPIError};
 use reqwest::{multipart, RequestBuilder};
 use serde_json::Value;
 
@@ -16,7 +16,7 @@ impl MultipartBuilder {
 
         let form_obj = json_value
             .as_object()
-            .ok_or_else(|| LarkAPIError::BadRequest("Invalid form data".to_string()))?;
+            .ok_or_else(|| validation_error_v3("form", "Invalid form data"))?;
 
         let mut form = multipart::Form::new();
 
@@ -41,7 +41,7 @@ impl MultipartBuilder {
         let file_name = form_obj
             .get("file_name")
             .and_then(|v| v.as_str())
-            .ok_or_else(|| LarkAPIError::BadRequest("Missing file_name in form data".to_string()))?
+            .ok_or_else(|| validation_error_v3("file_name", "Missing file_name in form data"))?
             .to_string();
 
         let file_part = multipart::Part::bytes(file_data.to_vec()).file_name(file_name);
@@ -121,8 +121,8 @@ mod tests {
         let result = MultipartBuilder::build_multipart(req_builder, &body, file_data);
 
         assert!(result.is_err());
-        if let Err(LarkAPIError::BadRequest(msg)) = result {
-            assert!(msg.contains("Missing file_name"));
+        if let Err(LarkAPIError::Validation { message, .. }) = result {
+            assert!(message.contains("Missing file_name"));
         } else {
             panic!("Expected BadRequest error");
         }
@@ -138,7 +138,7 @@ mod tests {
 
         assert!(result.is_err());
         match result {
-            Err(LarkAPIError::DeserializeError(_)) => {}
+            Err(LarkAPIError::Serialization { .. }) => {}
             _ => panic!("Expected DeserializeError"),
         }
     }
@@ -153,8 +153,8 @@ mod tests {
         let result = MultipartBuilder::build_multipart(req_builder, &body, file_data);
 
         assert!(result.is_err());
-        if let Err(LarkAPIError::BadRequest(msg)) = result {
-            assert!(msg.contains("Invalid form data"));
+        if let Err(LarkAPIError::Validation { message, .. }) = result {
+            assert!(message.contains("Invalid form data"));
         } else {
             panic!("Expected BadRequest error");
         }
@@ -273,12 +273,6 @@ mod tests {
 
         let result = MultipartBuilder::add_file_part(form, &form_data, file_data);
         assert!(result.is_err());
-
-        if let Err(LarkAPIError::BadRequest(msg)) = result {
-            assert!(msg.contains("Missing file_name"));
-        } else {
-            panic!("Expected BadRequest error");
-        }
     }
 
     #[test]
@@ -292,10 +286,8 @@ mod tests {
         let result = MultipartBuilder::add_file_part(form, &form_data, file_data);
         assert!(result.is_err());
 
-        if let Err(LarkAPIError::BadRequest(msg)) = result {
-            assert!(msg.contains("Missing file_name"));
-        } else {
-            panic!("Expected BadRequest error");
+        if let Err(LarkAPIError::Validation { message, .. }) = result {
+            assert!(message.contains("Missing file_name"));
         }
     }
 

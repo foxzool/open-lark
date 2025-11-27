@@ -371,8 +371,8 @@ mod tests {
         match get_uuid_info("550e8400-e29b-41d4-a716-446655440000", "UUID") {
             Ok((version, variant)) => {
                 println!("UUID v4 - version: {}, variant: {}", version, variant);
-                assert!(version >= 0 && version <= 15); // 版本号范围
-                assert!(variant >= 0 && variant <= 3); // 变体号范围
+                assert!(version <= 15); // 版本号范围
+                assert!(variant <= 3); // 变体号范围
             }
             Err(e) => {
                 println!("Error: {:?}", e);
@@ -384,8 +384,8 @@ mod tests {
         match get_uuid_info("6ba7b810-9dad-11d1-80b4-00c04fd430c8", "UUID") {
             Ok((version, variant)) => {
                 println!("UUID v1 - version: {}, variant: {}", version, variant);
-                assert!(version >= 0 && version <= 15); // 版本号范围
-                assert!(variant >= 0 && variant <= 3); // 变体号范围
+                assert!(version <= 15); // 版本号范围
+                assert!(variant <= 3); // 变体号范围
             }
             Err(e) => {
                 println!("Error: {:?}", e);

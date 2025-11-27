@@ -148,7 +148,7 @@ impl<T: ApiResponseTrait + std::fmt::Debug + for<'de> serde::Deserialize<'de>> T
                 Err(err) => {
                     debug!("Request error: {err:?}");
                     tracing::Span::current().record("response_code", 0_u16); // Indicate network error
-                    Err(LarkAPIError::RequestError(err.to_string()))
+                    Err(crate::error::network_error_v3(err.to_string()))
                 }
             }
         }
@@ -168,14 +168,16 @@ fn validate_token_type(
     let access_token_type = access_token_types[0];
 
     if access_token_type == AccessTokenType::Tenant && !option.user_access_token.is_empty() {
-        return Err(LarkAPIError::IllegalParamError(
-            "tenant token type not match user access token".to_string(),
+        return Err(crate::error::validation_error_v3(
+            "access_token_type",
+            "tenant token type not match user access token",
         ));
     }
 
     if access_token_type == AccessTokenType::App && !option.tenant_access_token.is_empty() {
-        return Err(LarkAPIError::IllegalParamError(
-            "user token type not match tenant access token".to_string(),
+        return Err(crate::error::validation_error_v3(
+            "access_token_type",
+            "user token type not match tenant access token",
         ));
     }
 
@@ -230,14 +232,16 @@ fn validate(
     access_token_type: AccessTokenType,
 ) -> Result<(), LarkAPIError> {
     if config.app_id.is_empty() {
-        return Err(LarkAPIError::IllegalParamError(
-            "AppId is empty".to_string(),
+        return Err(crate::error::validation_error_v3(
+            "app_id",
+            "AppId is empty",
         ));
     }
 
     if config.app_secret.is_empty() {
-        return Err(LarkAPIError::IllegalParamError(
-            "AppSecret is empty".to_string(),
+        return Err(crate::error::validation_error_v3(
+            "app_secret",
+            "AppSecret is empty",
         ));
     }
 
@@ -249,8 +253,9 @@ fn validate(
             && option.tenant_access_token.is_empty()
             && option.app_access_token.is_empty()
         {
-            return Err(LarkAPIError::IllegalParamError(
-                "accessToken is empty".to_string(),
+            return Err(crate::error::validation_error_v3(
+                "access_token",
+                "accessToken is empty",
             ));
         }
     }
@@ -259,26 +264,30 @@ fn validate(
         && access_token_type == AccessTokenType::Tenant
         && option.tenant_key.is_empty()
     {
-        return Err(LarkAPIError::IllegalParamError(
-            "accessToken is empty".to_string(),
+        return Err(crate::error::validation_error_v3(
+            "access_token",
+            "accessToken is empty",
         ));
     }
 
     if access_token_type == AccessTokenType::User && option.user_access_token.is_empty() {
-        return Err(LarkAPIError::IllegalParamError(
-            "user access token is empty".to_string(),
+        return Err(crate::error::validation_error_v3(
+            "user_access_token",
+            "user access token is empty",
         ));
     }
 
     if option.header.contains_key(HTTP_HEADER_KEY_REQUEST_ID) {
-        return Err(LarkAPIError::IllegalParamError(format!(
-            "use {HTTP_HEADER_KEY_REQUEST_ID} as header key is not allowed"
-        )));
+        return Err(crate::error::validation_error_v3(
+            "header",
+            format!("use {HTTP_HEADER_KEY_REQUEST_ID} as header key is not allowed"),
+        ));
     }
     if option.header.contains_key(HTTP_HEADER_REQUEST_ID) {
-        return Err(LarkAPIError::IllegalParamError(format!(
-            "use {HTTP_HEADER_REQUEST_ID} as header key is not allowed"
-        )));
+        return Err(crate::error::validation_error_v3(
+            "header",
+            format!("use {HTTP_HEADER_REQUEST_ID} as header key is not allowed"),
+        ));
     }
 
     Ok(())
@@ -311,7 +320,6 @@ mod test {
     use crate::{
         config::Config,
         constants::{AccessTokenType, AppType, HTTP_HEADER_KEY_REQUEST_ID, HTTP_HEADER_REQUEST_ID},
-        error::LarkAPIError,
         http::{decode_file_name, determine_token_type, validate, validate_token_type},
         req_option::RequestOption,
     };
@@ -497,7 +505,10 @@ mod test {
         let option = RequestOption::default();
 
         let result = validate(&config, &option, AccessTokenType::None);
-        assert!(matches!(result, Err(LarkAPIError::IllegalParamError(_))));
+        assert!(matches!(
+            result,
+            Err(crate::error::LarkAPIError::Validation { .. })
+        ));
     }
 
     #[test]
@@ -506,7 +517,10 @@ mod test {
         let option = RequestOption::default();
 
         let result = validate(&config, &option, AccessTokenType::None);
-        assert!(matches!(result, Err(LarkAPIError::IllegalParamError(_))));
+        assert!(matches!(
+            result,
+            Err(crate::error::LarkAPIError::Validation { .. })
+        ));
     }
 
     #[test]
@@ -519,7 +533,10 @@ mod test {
         let option = RequestOption::default();
 
         let result = validate(&config, &option, AccessTokenType::User);
-        assert!(matches!(result, Err(LarkAPIError::IllegalParamError(_))));
+        assert!(matches!(
+            result,
+            Err(crate::error::LarkAPIError::Validation { .. })
+        ));
     }
 
     #[test]
@@ -542,7 +559,10 @@ mod test {
         let option = RequestOption::default();
 
         let result = validate(&config, &option, AccessTokenType::Tenant);
-        assert!(matches!(result, Err(LarkAPIError::IllegalParamError(_))));
+        assert!(matches!(
+            result,
+            Err(crate::error::LarkAPIError::Validation { .. })
+        ));
     }
 
     #[test]
@@ -561,7 +581,10 @@ mod test {
         let option = RequestOption::default();
 
         let result = validate(&config, &option, AccessTokenType::User);
-        assert!(matches!(result, Err(LarkAPIError::IllegalParamError(_))));
+        assert!(matches!(
+            result,
+            Err(crate::error::LarkAPIError::Validation { .. })
+        ));
     }
 
     #[test]
@@ -583,7 +606,10 @@ mod test {
         option.header = header;
 
         let result = validate(&config, &option, AccessTokenType::None);
-        assert!(matches!(result, Err(LarkAPIError::IllegalParamError(_))));
+        assert!(matches!(
+            result,
+            Err(crate::error::LarkAPIError::Validation { .. })
+        ));
     }
 
     #[test]
@@ -595,7 +621,10 @@ mod test {
         option.header = header;
 
         let result = validate(&config, &option, AccessTokenType::None);
-        assert!(matches!(result, Err(LarkAPIError::IllegalParamError(_))));
+        assert!(matches!(
+            result,
+            Err(crate::error::LarkAPIError::Validation { .. })
+        ));
     }
 
     #[test]
@@ -815,9 +844,12 @@ mod test {
 
         // Should fail when User token type but user_access_token is empty
         let result = validate(&config, &option, AccessTokenType::User);
-        assert!(matches!(result, Err(LarkAPIError::IllegalParamError(_))));
-        if let Err(LarkAPIError::IllegalParamError(msg)) = result {
-            assert!(msg.contains("user access token is empty"));
+        assert!(matches!(
+            result,
+            Err(crate::error::LarkAPIError::Validation { .. })
+        ));
+        if let Err(crate::error::LarkAPIError::Validation { message, .. }) = result {
+            assert!(message.contains("user access token is empty"));
         }
     }
 
@@ -831,7 +863,10 @@ mod test {
         option.header = header;
 
         let result = validate(&config, &option, AccessTokenType::None);
-        assert!(matches!(result, Err(LarkAPIError::IllegalParamError(_))));
+        assert!(matches!(
+            result,
+            Err(crate::error::LarkAPIError::Validation { .. })
+        ));
     }
 
     #[test]
@@ -843,7 +878,10 @@ mod test {
         option.header = header;
 
         let result = validate(&config, &option, AccessTokenType::None);
-        assert!(matches!(result, Err(LarkAPIError::IllegalParamError(_))));
+        assert!(matches!(
+            result,
+            Err(crate::error::LarkAPIError::Validation { .. })
+        ));
     }
 
     #[test]
@@ -994,18 +1032,18 @@ mod test {
         let option = RequestOption::default();
 
         // Test specific error messages
-        if let Err(LarkAPIError::IllegalParamError(msg)) =
+        if let Err(crate::error::LarkAPIError::Validation { message, .. }) =
             validate(&config_empty_id, &option, AccessTokenType::None)
         {
-            assert_eq!(msg, "AppId is empty");
+            assert_eq!(message, "AppId is empty");
         } else {
             panic!("Expected IllegalParamError for empty app_id");
         }
 
-        if let Err(LarkAPIError::IllegalParamError(msg)) =
+        if let Err(crate::error::LarkAPIError::Validation { message, .. }) =
             validate(&config_empty_secret, &option, AccessTokenType::None)
         {
-            assert_eq!(msg, "AppSecret is empty");
+            assert_eq!(message, "AppSecret is empty");
         } else {
             panic!("Expected IllegalParamError for empty app_secret");
         }

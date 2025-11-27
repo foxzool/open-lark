@@ -183,18 +183,20 @@ impl<T> Response<T> {
         if is_success {
             match self.data {
                 Some(data) => Ok(data),
-                None => Err(crate::error::LarkAPIError::ApiError {
-                    code,
-                    message: "响应数据为空".to_string(),
+                None => Err(crate::error::api_error_v3(
+                    code as u16,
+                    "response",
+                    "响应数据为空",
                     request_id,
-                }),
+                )),
             }
         } else {
-            Err(crate::error::LarkAPIError::ApiError {
-                code,
-                message: self.raw_response.msg,
+            Err(crate::error::api_error_v3(
+                code as u16,
+                "response",
+                self.raw_response.msg.clone(),
                 request_id,
-            })
+            ))
         }
     }
 }
