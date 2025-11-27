@@ -4,8 +4,10 @@
 
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
+use serde_json;
 
-use crate::models::{AuthConfig, AuthError, AuthResult, UserInfoResponse};
+use crate::models::{AuthConfig, AuthResult, UserInfoResponse};
+use crate::models::{AuthErrorBuilder, map_feishu_auth_error};
 
 /// 用户信息服务
 #[derive(Debug)]
@@ -68,12 +70,24 @@ impl UserInfoGetBuilder {
             let user_info: UserInfoResponse = response.json().await?;
             Ok(user_info)
         } else {
-            let status = response.status();
+            let status = response.status().as_u16() as i32;
             let error_text = response.text().await.unwrap_or_default();
-            Err(AuthError::APIError {
-                code: status.as_u16() as i32,
-                message: format!("HTTP {}: {}", status, error_text),
-            })
+
+            // 尝试解析飞书错误响应
+            if let Ok(feishu_response) = serde_json::from_str::<serde_json::Value>(&error_text) {
+                if let (Some(code), Some(message)) = (
+                    feishu_response.get("code").and_then(|v| v.as_i64()),
+                    feishu_response.get("msg").or_else(|| feishu_response.get("message")).and_then(|v| v.as_str())
+                ) {
+                    let request_id = feishu_response.get("log_id").and_then(|v| v.as_str());
+                    return Err(map_feishu_auth_error(code as i32, message, request_id));
+                }
+            }
+
+            // 回退到基于 HTTP 状态码的错误处理
+            Err(AuthErrorBuilder::credentials_invalid(
+                format!("HTTP {} 错误: {}", status, error_text)
+            ))
         }
     }
 }

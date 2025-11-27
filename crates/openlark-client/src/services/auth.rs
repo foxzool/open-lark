@@ -1,7 +1,8 @@
-use crate::{Config, Result, error::{ClientErrorExt, with_context, with_operation_context}};
+use crate::{Config, Result, error::{with_operation_context}};
 use openlark_auth::models::{AppTicketResponse, UserInfoResponse};
 use openlark_auth::prelude::*;
 use openlark_auth::AuthServices;
+use openlark_core::error::ErrorTrait;
 
 /// 令牌验证响应
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
@@ -107,10 +108,10 @@ impl AuthService {
             .send()
             .await;
 
-        let result = with_operation_context(response, "get_user_access_token", "AuthService")?;
+        let response = with_operation_context(response, "get_user_access_token", "AuthService")?;
 
         tracing::debug!("成功获取用户访问令牌，过期时间: {}秒，权限范围: {:?}",
-            result.expires_in, response.scope);
+            response.expires_in, response.scope);
 
         Ok(TokenInfo {
             access_token: response.access_token,
@@ -135,9 +136,9 @@ impl AuthService {
             .send()
             .await;
 
-        let result = with_operation_context(response, "refresh_oidc_access_token", "AuthService")?;
+        let response = with_operation_context(response, "refresh_oidc_access_token", "AuthService")?;
 
-        tracing::debug!("成功刷新OIDC访问令牌，过期时间: {}秒", result.expires_in);
+        tracing::debug!("成功刷新OIDC访问令牌，过期时间: {}秒", response.expires_in);
 
         Ok(TokenInfo {
             access_token: response.access_token,
@@ -183,7 +184,7 @@ impl AuthService {
                 })
             }
             Err(e) => {
-                tracing::warn!("应用访问令牌验证失败: {}", e.user_friendly_message());
+                tracing::warn!("应用访问令牌验证失败: {}", e.user_message().unwrap_or("未知错误"));
 
                 // 尝试通过获取令牌信息接口验证
                 // 如果能成功获取新令牌，说明当前令牌仍然有效
@@ -201,7 +202,7 @@ impl AuthService {
                         })
                     }
                     Err(refresh_err) => {
-                        tracing::warn!("应用访问令牌验证失败且无法刷新: {}", refresh_err.user_friendly_message());
+                        tracing::warn!("应用访问令牌验证失败且无法刷新: {}", refresh_err.user_message().unwrap_or("未知错误"));
                         Ok(TokenVerificationResponse {
                             valid: false,
                             user_id: None,
