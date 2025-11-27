@@ -1,18 +1,21 @@
 //! 认证服务错误处理模块
 //!
-//! 完全基于 CoreErrorV3 的现代化错误处理系统
+//! 完全基于 CoreError 的现代化错误处理系统
 //! 直接集成统一错误体系，提供类型安全和可观测性
 
 use openlark_core::error::{
-    convenience_v3::*, CoreErrorV3, ErrorCode, ErrorContext, ErrorTrait, ErrorType,
+    CoreError, ErrorCode, ErrorContext, ErrorTrait, ErrorType,
+    authentication_error, token_expired_error, token_invalid_error, permission_missing_error,
+    user_identity_invalid_error, sso_token_invalid_error, network_error_with_details,
+    validation_error,
 };
 use std::time::Duration;
 
 // 导入内部结构体
-use openlark_core::error::core_v3::ApiError;
+use openlark_core::error::ApiError;
 
-/// 认证服务错误类型 - 直接使用 CoreErrorV3 保持架构一致性
-pub type AuthError = CoreErrorV3;
+/// 认证服务错误类型 - 推荐使用 CoreError（CoreError为兼容性别名）
+pub type AuthError = CoreError;
 
 /// 认证服务结果类型
 pub type AuthResult<T> = Result<T, AuthError>;
@@ -24,27 +27,27 @@ pub struct AuthErrorBuilder;
 impl AuthErrorBuilder {
     /// 令牌已过期 - 可自动刷新
     pub fn token_expired(detail: impl Into<String>) -> AuthError {
-        token_expired_error_v3(detail)
+        token_expired_error(detail)
     }
 
     /// 令牌无效 - 需要重新认证
     pub fn token_invalid(detail: impl Into<String>) -> AuthError {
-        token_invalid_error_v3(detail)
+        token_invalid_error(detail)
     }
 
     /// 缺少访问令牌
     pub fn token_missing() -> AuthError {
-        authentication_error_v3("缺少访问令牌")
+        authentication_error("缺少访问令牌")
     }
 
     /// 刷新令牌无效 - 需要完整登录流程
     pub fn refresh_token_invalid(detail: impl Into<String>) -> AuthError {
-        authentication_error_v3(format!("刷新令牌无效: {}", detail.into()))
+        authentication_error(format!("刷新令牌无效: {}", detail.into()))
     }
 
     /// 权限不足 - 缺少必要的权限范围
     pub fn permission_denied(missing_scopes: &[impl AsRef<str>]) -> AuthError {
-        permission_missing_error_v3(missing_scopes)
+        permission_missing_error(missing_scopes)
     }
 
     /// 权限不足 - 详细的权限对比信息
@@ -70,7 +73,7 @@ impl AuthErrorBuilder {
                 .join(","),
         );
 
-        CoreErrorV3::Authentication {
+        CoreError::Authentication {
             message: "权限范围不足".to_string(),
             code: ErrorCode::PermissionMissing,
             ctx,
@@ -79,7 +82,7 @@ impl AuthErrorBuilder {
 
     /// 应用凭证无效
     pub fn credentials_invalid(reason: impl Into<String>) -> AuthError {
-        authentication_error_v3(format!("应用凭证无效: {}", reason.into()))
+        authentication_error(format!("应用凭证无效: {}", reason.into()))
     }
 
     /// 应用凭证错误 - 具体字段错误
@@ -93,7 +96,7 @@ impl AuthErrorBuilder {
         ctx.add_context("provided_value", value.into());
         ctx.add_context("error_reason", reason.into());
 
-        CoreErrorV3::Authentication {
+        CoreError::Authentication {
             message: "应用凭证错误".to_string(),
             code: ErrorCode::AuthenticationFailed,
             ctx,
@@ -105,7 +108,7 @@ impl AuthErrorBuilder {
         let mut ctx = ErrorContext::new();
         ctx.add_context("app_id", app_id.as_ref());
 
-        CoreErrorV3::Api(ApiError {
+        CoreError::Api(ApiError {
             status: 400,
             endpoint: "auth".into(),
             message: format!("应用不存在或未安装: {}", app_id.as_ref()),
@@ -120,7 +123,7 @@ impl AuthErrorBuilder {
         let mut ctx = ErrorContext::new();
         ctx.add_context("user_id", user_id.as_ref());
 
-        CoreErrorV3::Authentication {
+        CoreError::Authentication {
             message: "用户未授权应用访问权限".to_string(),
             code: ErrorCode::UserSessionInvalid,
             ctx,
@@ -133,7 +136,7 @@ impl AuthErrorBuilder {
         ctx.add_context("limit", limit.to_string());
         ctx.add_context("window_seconds", window.as_secs().to_string());
 
-        CoreErrorV3::RateLimit {
+        CoreError::RateLimit {
             limit,
             window,
             reset_after: retry_after,
@@ -153,7 +156,7 @@ impl AuthErrorBuilder {
             ctx.add_context("provided_value", val.into());
         }
 
-        CoreErrorV3::Validation {
+        CoreError::Validation {
             field: field.into().into(),
             message: message.into(),
             code: ErrorCode::ValidationError,
@@ -169,7 +172,7 @@ impl AuthErrorBuilder {
         let mut ctx = ErrorContext::new();
         ctx.add_context("config_parameter", parameter.into());
 
-        CoreErrorV3::Configuration {
+        CoreError::Configuration {
             message: message.into(),
             code: ErrorCode::ConfigurationError,
             ctx,
@@ -181,7 +184,7 @@ impl AuthErrorBuilder {
         message: impl Into<String>,
         endpoint: Option<impl Into<String>>,
     ) -> AuthError {
-        network_error_with_details_v3(message, None::<String>, endpoint)
+        network_error_with_details(message, None::<String>, endpoint.map(|e| e.into()))
     }
 
     /// 认证服务不可用
@@ -189,7 +192,7 @@ impl AuthErrorBuilder {
         service: impl Into<String>,
         retry_after: Option<Duration>,
     ) -> AuthError {
-        CoreErrorV3::ServiceUnavailable {
+        CoreError::ServiceUnavailable {
             service: service.into().into(),
             retry_after,
             code: ErrorCode::ServiceUnavailable,
@@ -202,12 +205,12 @@ impl AuthErrorBuilder {
         id_type: impl Into<String>,
         id_value: impl Into<String>,
     ) -> AuthError {
-        user_identity_invalid_error_v3(format!("{}:{}", id_type.into(), id_value.into()))
+        user_identity_invalid_error(format!("{}:{}", id_type.into(), id_value.into()))
     }
 
     /// SSO 令牌无效
     pub fn sso_token_invalid(detail: impl Into<String>) -> AuthError {
-        sso_token_invalid_error_v3(detail)
+        sso_token_invalid_error(detail)
     }
 
     /// 应用状态异常
@@ -217,7 +220,7 @@ impl AuthErrorBuilder {
         ctx.add_context("app_id", app_id.as_ref());
         ctx.add_context("app_status", status_str.clone());
 
-        CoreErrorV3::Api(ApiError {
+        CoreError::Api(ApiError {
             status: 400,
             endpoint: "auth".into(),
             message: format!("应用状态异常: {}", status_str),
@@ -243,7 +246,7 @@ pub fn map_feishu_auth_error(
     // 优先使用飞书通用错误码映射
     match ErrorCode::from_feishu_code(feishu_code) {
         // 令牌相关错误
-        Some(ErrorCode::AccessTokenExpiredV2) => CoreErrorV3::Authentication {
+        Some(ErrorCode::AccessTokenExpiredV2) => CoreError::Authentication {
             message: message.to_string(),
             code: ErrorCode::AccessTokenExpiredV2,
             ctx,
@@ -252,12 +255,12 @@ pub fn map_feishu_auth_error(
             ErrorCode::AccessTokenInvalid
             | ErrorCode::AppAccessTokenInvalid
             | ErrorCode::TenantAccessTokenInvalid,
-        ) => CoreErrorV3::Authentication {
+        ) => CoreError::Authentication {
             message: message.to_string(),
             code: ErrorCode::AccessTokenInvalid,
             ctx,
         },
-        Some(ErrorCode::SsoTokenInvalid) => CoreErrorV3::Authentication {
+        Some(ErrorCode::SsoTokenInvalid) => CoreError::Authentication {
             message: message.to_string(),
             code: ErrorCode::SsoTokenInvalid,
             ctx,
@@ -265,7 +268,7 @@ pub fn map_feishu_auth_error(
 
         // 权限相关错误
         Some(ErrorCode::PermissionMissing | ErrorCode::AccessTokenNoPermission) => {
-            CoreErrorV3::Authentication {
+            CoreError::Authentication {
                 message: "权限不足".to_string(),
                 code: ErrorCode::PermissionMissing,
                 ctx,
@@ -277,18 +280,18 @@ pub fn map_feishu_auth_error(
             ErrorCode::UserSessionInvalid
             | ErrorCode::UserSessionNotFound
             | ErrorCode::UserSessionTimeout,
-        ) => CoreErrorV3::Authentication {
+        ) => CoreError::Authentication {
             message: "用户会话无效".to_string(),
             code: ErrorCode::UserSessionInvalid,
             ctx,
         },
-        Some(ErrorCode::UserIdentityInvalid) => CoreErrorV3::Authentication {
+        Some(ErrorCode::UserIdentityInvalid) => CoreError::Authentication {
             message: message.to_string(),
             code: ErrorCode::UserIdentityInvalid,
             ctx,
         },
         Some(ErrorCode::UserTypeNotSupportedV2 | ErrorCode::UserIdentityMismatch) => {
-            CoreErrorV3::Authentication {
+            CoreError::Authentication {
                 message: "用户身份不匹配或类型不支持".to_string(),
                 code: ErrorCode::UserIdentityInvalid,
                 ctx,
@@ -296,7 +299,7 @@ pub fn map_feishu_auth_error(
         }
 
         // 应用相关错误
-        Some(ErrorCode::AppNotInstalled) => CoreErrorV3::Api(ApiError {
+        Some(ErrorCode::AppNotInstalled) => CoreError::Api(ApiError {
             status: 400,
             endpoint: "auth".into(),
             message: message.to_string(),
@@ -304,12 +307,12 @@ pub fn map_feishu_auth_error(
             code: ErrorCode::AppNotInstalled,
             ctx,
         }),
-        Some(ErrorCode::AppPermissionDenied) => CoreErrorV3::Authentication {
+        Some(ErrorCode::AppPermissionDenied) => CoreError::Authentication {
             message: "应用权限不足".to_string(),
             code: ErrorCode::PermissionMissing,
             ctx,
         },
-        Some(ErrorCode::AppStatusException) => CoreErrorV3::Api(ApiError {
+        Some(ErrorCode::AppStatusException) => CoreError::Api(ApiError {
             status: 400,
             endpoint: "auth".into(),
             message: message.to_string(),
@@ -322,13 +325,13 @@ pub fn map_feishu_auth_error(
         Some(mapped_code) => {
             // 根据 HTTP 状态码分类处理
             match mapped_code {
-                ErrorCode::BadRequest => validation_error_v3("", message),
-                ErrorCode::Unauthorized | ErrorCode::Forbidden => CoreErrorV3::Authentication {
+                ErrorCode::BadRequest => validation_error("", message),
+                ErrorCode::Unauthorized | ErrorCode::Forbidden => CoreError::Authentication {
                     message: message.to_string(),
                     code: ErrorCode::AuthenticationFailed,
                     ctx,
                 },
-                ErrorCode::TooManyRequests => CoreErrorV3::RateLimit {
+                ErrorCode::TooManyRequests => CoreError::RateLimit {
                     limit: 0,
                     window: Duration::from_secs(60),
                     reset_after: Some(Duration::from_secs(60)),
@@ -338,13 +341,13 @@ pub fn map_feishu_auth_error(
                 ErrorCode::InternalServerError
                 | ErrorCode::BadGateway
                 | ErrorCode::GatewayTimeout
-                | ErrorCode::ServiceUnavailable => CoreErrorV3::ServiceUnavailable {
+                | ErrorCode::ServiceUnavailable => CoreError::ServiceUnavailable {
                     service: "auth".into(),
                     retry_after: Some(Duration::from_secs(30)),
                     code: mapped_code,
                     ctx,
                 },
-                _ => CoreErrorV3::Api(ApiError {
+                _ => CoreError::Api(ApiError {
                     status: 400,
                     endpoint: "auth".into(),
                     message: message.to_string(),
@@ -360,36 +363,36 @@ pub fn map_feishu_auth_error(
             match feishu_code {
                 // HTTP 状态码范围
                 400..=499 => match feishu_code {
-                    401 => CoreErrorV3::Authentication {
+                    401 => CoreError::Authentication {
                         message: "认证失败".to_string(),
                         code: ErrorCode::AuthenticationFailed,
                         ctx,
                     },
-                    403 => CoreErrorV3::Authentication {
+                    403 => CoreError::Authentication {
                         message: "权限不足".to_string(),
                         code: ErrorCode::PermissionMissing,
                         ctx,
                     },
-                    429 => CoreErrorV3::RateLimit {
+                    429 => CoreError::RateLimit {
                         limit: 0,
                         window: Duration::from_secs(60),
                         reset_after: Some(Duration::from_secs(60)),
                         code: ErrorCode::TooManyRequests,
                         ctx,
                     },
-                    _ => validation_error_v3(
+                    _ => validation_error(
                         "unknown",
                         format!("请求错误 ({}): {}", feishu_code, message),
                     ),
                 },
-                500..=599 => CoreErrorV3::ServiceUnavailable {
+                500..=599 => CoreError::ServiceUnavailable {
                     service: "auth".into(),
                     retry_after: Some(Duration::from_secs(30)),
                     code: ErrorCode::ServiceUnavailable,
                     ctx,
                 },
                 // 其他错误码
-                _ => CoreErrorV3::Api(ApiError {
+                _ => CoreError::Api(ApiError {
                     status: 500,
                     endpoint: "auth".into(),
                     message: format!("未知认证错误 ({}): {}", feishu_code, message),
@@ -601,11 +604,11 @@ impl AuthErrorExt for AuthError {
             | ErrorCode::GatewayTimeout
             | ErrorCode::InternalServerError => AuthErrorType::ServiceUnavailable,
             _ => match self {
-                CoreErrorV3::Network { .. } => AuthErrorType::NetworkError,
-                CoreErrorV3::Configuration { .. } => AuthErrorType::ConfigurationError,
-                CoreErrorV3::ServiceUnavailable { .. } => AuthErrorType::ServiceUnavailable,
-                CoreErrorV3::RateLimit { .. } => AuthErrorType::RateLimited,
-                CoreErrorV3::Validation { .. } => AuthErrorType::ValidationError,
+                CoreError::Network { .. } => AuthErrorType::NetworkError,
+                CoreError::Configuration { .. } => AuthErrorType::ConfigurationError,
+                CoreError::ServiceUnavailable { .. } => AuthErrorType::ServiceUnavailable,
+                CoreError::RateLimit { .. } => AuthErrorType::RateLimited,
+                CoreError::Validation { .. } => AuthErrorType::ValidationError,
                 _ => AuthErrorType::Unknown,
             },
         }
