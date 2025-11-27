@@ -196,6 +196,79 @@ graph TD
     style B fill:#e8f5e8
 ```
 
+## openlark-client 服务层重构方案（crates/openlark-client/src/services）
+
+### 重构目标
+- 消除重复：统一 `services/` 与 `registry/` 的能力，避免双重工厂/注册逻辑。
+- 显式依赖：服务之间的依赖关系由拓扑图驱动，阻断隐式耦合。
+- 生命周期可观测：标准化 init → ready → running → stopped 状态，暴露健康检查与统计。
+- 可插拔：支持业务团队按需注册自定义服务或第三方实现，保持特性裁剪能力。
+- 配置收敛：全局 `Config` + 按服务覆盖（超时、重试、base_url、鉴权策略）。
+
+### 目标目录结构
+```
+crates/openlark-client/src/services/
+├── mod.rs                # Facade 与预导出
+├── service.rs            # Service / ServiceKind / Health / Lifecycle traits
+├── context.rs            # ServiceContext：Config、HTTP client、token provider、tracing
+├── graph.rs              # 依赖图 & 拓扑排序，包装 registry::DependencyResolver
+├── registry.rs           # TypedServiceRegistry，屏蔽 Any/Downcast
+├── loader.rs             # 按 feature 注册 provider；支持动态插件
+├── runtime.rs            # ServiceRuntime：init/start/stop/health 路径
+├── middleware/           # 横切：重试、限流、metrics、logging
+└── providers/            # 领域服务实现，按特性裁剪
+    ├── auth.rs
+    ├── communication.rs
+    ├── docs.rs
+    ├── hr.rs
+    ├── ...
+```
+
+### 核心接口（草案）
+```rust
+pub trait Service: Send + Sync + 'static {
+    fn kind(&self) -> ServiceKind;              // name + version
+    fn capabilities(&self) -> &'static [&'static str];
+    fn dependencies(&self) -> &'static [&'static str];
+    async fn init(&self, ctx: &ServiceContext) -> SDKResult<()>;
+    async fn start(&self, ctx: &ServiceContext) -> SDKResult<()>; // 连接池、预热
+    async fn stop(&self) -> SDKResult<()>;                       // 清理资源
+    fn health(&self) -> ServiceHealth;                           // ready / degraded
+}
+
+pub struct ServiceContext {
+    pub config: Config,
+    pub http: Arc<dyn HttpClient>,
+    pub token: Arc<dyn TokenProvider>,
+    pub tracer: Arc<dyn TracingExporter>,
+    pub metrics: Arc<dyn MetricsSink>,
+}
+```
+
+### 生命周期与依赖解算
+1. `loader` 按 feature 收集 `ServiceProvider` 列表。
+2. `graph` 将 `dependencies()` 构建成 DAG，循环依赖在启动前 fail fast。
+3. `runtime` 按拓扑序调用 `init → start`，失败将状态标记为 `Error(reason)` 并可重试。
+4. `registry` 维护 `ServiceHandle<T>`，暴露类型安全访问与健康查询，替换 `Box<dyn Any>`。
+
+### 配置与横切关注点
+- `ServiceConfig` 支持局部覆盖：`timeout`, `retry_policy`, `base_url`, `auth_strategy`。
+- `middleware/` 提供可插拔的重试、限流、日志、指标；通过 `ServiceContext` 注入。
+- 观测统一：所有 `Service` 方法返回 `CoreErrorV3`，自动附带 `component=service::<name>` 上下文。
+
+### 渐进式迁移路径
+1. 引入 `service.rs` 与 `context.rs` 基础抽象，`AuthService` 先落地为示例。
+2. 将 `ServiceFactory` 迁移到 `runtime` + `registry`，保留旧 API 但内部委托新实现。
+3. 逐个业务模块接入：communication → docs → hr → ...，每步补齐健康检查与配置覆盖。
+4. 删除遗留的 `services/mod.rs` 构造函数分支，转为 `loader` 自动注册。
+5. 更新集成测试，增加“服务图完整性”“生命周期幂等”两个维度的测试用例。
+
+### 预期收益
+- 代码可维护性：服务添加/删除仅需实现 `Service` + 注册，不再改动大工厂。
+- 运行稳定性：显式依赖 + 生命周期管理降低初始化竞态。
+- 可观测性：统一健康与指标输出，便于运维排障。
+- 生态扩展：第三方/实验性服务可独立发布，不污染核心依赖树。
+
 ## Feature配置策略
 
 ### 功能分组原则
