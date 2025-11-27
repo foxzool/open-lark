@@ -5,6 +5,7 @@
 use crate::registry::ServiceRegistry;
 use crate::{
     traits::LarkClient, Config, DefaultServiceRegistry, Result, ServiceMetadata, ServiceStatus,
+    error::{ClientErrorExt, with_context, with_operation_context},
 };
 use std::sync::Arc;
 
@@ -15,6 +16,7 @@ use std::sync::Arc;
 /// - 类型安全的服务访问
 /// - 编译时feature优化
 /// - 高性能异步
+/// - 现代化错误处理
 ///
 /// # 示例
 /// ```rust,no_run
@@ -177,34 +179,58 @@ impl Client {
 
     /// 🆕 创建带有自定义配置的客户端
     pub fn with_config(config: Config) -> Result<Self> {
-        config.validate()?;
+        let validation_result = config.validate();
+        if let Err(err) = validation_result {
+            return with_context(
+                Err(err),
+                "operation",
+                "Client::with_config"
+            );
+        }
+
         let config = Arc::new(config);
         let mut registry = DefaultServiceRegistry::new();
 
         // 加载启用的服务
-        load_enabled_services(&config, &mut registry)?;
+        let load_result = load_enabled_services(&config, &mut registry);
+        if let Err(err) = load_result {
+            return with_operation_context(
+                Err(err),
+                "Client::with_config",
+                "service_loading"
+            );
+        }
 
         let registry = Arc::new(registry);
         Ok(Client { config, registry })
     }
+
+    /// 🔧 执行带有错误上下文的操作
+    pub async fn execute_with_context<F, T>(&self, operation: &str, f: F) -> Result<T>
+    where
+        F: std::future::Future<Output = Result<T>>,
+    {
+        let result = f.await;
+        with_operation_context(result, operation, "Client")
+    }
 }
 
 /// 🔥 加载启用的服务
-fn load_enabled_services(_config: &Config, registry: &mut DefaultServiceRegistry) -> Result<()> {
+fn load_enabled_services(config: &Config, registry: &mut DefaultServiceRegistry) -> Result<()> {
     // 注册核心层服务
-    register_core_services(registry)?;
+    register_core_services(config, registry)?;
 
     // 注册专业层服务
-    register_professional_services(registry)?;
+    register_professional_services(config, registry)?;
 
     // 注册企业层服务
-    register_enterprise_services(registry)?;
+    register_enterprise_services(config, registry)?;
 
     Ok(())
 }
 
 /// 注册核心层服务
-fn register_core_services(registry: &mut DefaultServiceRegistry) -> Result<()> {
+fn register_core_services(config: &Config, registry: &mut DefaultServiceRegistry) -> Result<()> {
     // #[cfg(feature = "auth")]  // auth 功能暂未启用
     // {
     //     tracing::debug!("注册认证服务");
@@ -239,7 +265,9 @@ fn register_core_services(registry: &mut DefaultServiceRegistry) -> Result<()> {
             status: ServiceStatus::Uninitialized,
             priority: 2,
         };
-        registry.register_service(metadata)?;
+        registry.register_service(metadata).map_err(|e| {
+            crate::error::internal_error(format!("注册通讯服务失败: {}", e))
+        })?;
     }
 
     #[cfg(feature = "docs")]
@@ -258,14 +286,16 @@ fn register_core_services(registry: &mut DefaultServiceRegistry) -> Result<()> {
             status: ServiceStatus::Uninitialized,
             priority: 2,
         };
-        registry.register_service(metadata)?;
+        registry.register_service(metadata).map_err(|e| {
+            crate::error::internal_error(format!("注册文档服务失败: {}", e))
+        })?;
     }
 
     Ok(())
 }
 
 /// 注册专业层服务
-fn register_professional_services(_registry: &mut DefaultServiceRegistry) -> Result<()> {
+fn register_professional_services(config: &Config, registry: &mut DefaultServiceRegistry) -> Result<()> {
     // #[cfg(feature = "hr")]  // hr 功能暂未启用
     // {
     //     tracing::debug!("注册人力资源服务");
@@ -319,7 +349,7 @@ fn register_professional_services(_registry: &mut DefaultServiceRegistry) -> Res
 }
 
 /// 注册企业层服务
-fn register_enterprise_services(_registry: &mut DefaultServiceRegistry) -> Result<()> {
+fn register_enterprise_services(config: &Config, registry: &mut DefaultServiceRegistry) -> Result<()> {
     // #[cfg(feature = "admin")]  // admin 功能暂未启用
     // {
     //     tracing::debug!("注册管理服务");
@@ -460,9 +490,13 @@ impl ClientBuilder {
     /// 返回配置好的客户端实例或验证错误
     ///
     /// # 错误
-    /// 如果配置验证失败，会返回相应的错误信息
+    /// 如果配置验证失败，会返回相应的错误信息，包含用户友好的恢复建议
     pub fn build(self) -> Result<Client> {
-        Client::with_config(self.config)
+        let result = Client::with_config(self.config);
+        if let Err(ref error) = result {
+            tracing::error!("客户端构建失败: {}", error.user_friendly_with_suggestion());
+        }
+        result
     }
 }
 
@@ -479,10 +513,33 @@ impl From<Config> for Result<Client> {
     }
 }
 
+/// 客户端错误处理扩展特征
+pub trait ClientErrorHandling {
+    /// 处理错误并添加客户端上下文
+    fn handle_error<T>(&self, result: Result<T>, operation: &str) -> Result<T>;
+    /// 处理异步错误并添加客户端上下文
+    async fn handle_async_error<T, F>(&self, f: F, operation: &str) -> Result<T>
+    where
+        F: std::future::Future<Output = Result<T>>;
+}
+
+impl ClientErrorHandling for Client {
+    fn handle_error<T>(&self, result: Result<T>, operation: &str) -> Result<T> {
+        with_operation_context(result, operation, "Client")
+    }
+
+    async fn handle_async_error<T, F>(&self, f: F, operation: &str) -> Result<T>
+    where
+        F: std::future::Future<Output = Result<T>>,
+    {
+        let result = f.await;
+        with_operation_context(result, operation, "Client")
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::Error;
     use std::time::Duration;
 
     #[test]
@@ -520,7 +577,12 @@ mod tests {
         };
 
         let client_result = Client::with_config(config);
-        assert!(client_result.is_err()); // 应该失败，因为app_id为空
+        assert!(client_result.is_err());
+
+        if let Err(error) = client_result {
+            assert!(error.is_config_error());
+            assert!(!error.user_friendly_message().is_empty());
+        }
     }
 
     #[test]
@@ -533,6 +595,50 @@ mod tests {
 
         let cloned_client = client.clone();
         assert_eq!(client.config().app_id, cloned_client.config().app_id);
+    }
+
+    #[test]
+    fn test_client_error_handling() {
+        let client = Client::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
+            .unwrap();
+
+        // 测试错误上下文处理
+        let error_result: Result<i32> = Err(crate::error::validation_error("field", "validation failed"));
+        let result = client.handle_error(error_result, "test_operation");
+
+        assert!(result.is_err());
+        if let Err(error) = result {
+            assert!(error.has_context("operation"));
+            assert_eq!(error.get_context("operation"), Some("test_operation"));
+            assert_eq!(error.get_context("component"), Some("Client"));
+        }
+    }
+
+    #[tokio::test]
+    async fn test_async_error_handling() {
+        let client = Client::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
+            .unwrap();
+
+        // 测试异步错误上下文处理
+        let result = client.handle_async_error(
+            async {
+                Err(crate::error::network_error("async error"))
+            },
+            "async_test"
+        ).await;
+
+        assert!(result.is_err());
+        if let Err(error) = result {
+            assert!(error.has_context("operation"));
+            assert_eq!(error.get_context("operation"), Some("async_test"));
+            assert_eq!(error.get_context("component"), Some("Client"));
+        }
     }
 
     #[test]
@@ -638,7 +744,7 @@ mod tests {
             if !self.app_id.is_empty() && !self.app_secret.is_empty() {
                 Ok(())
             } else {
-                Err(Error::InvalidConfig("无效的配置"))
+                Err(crate::error::configuration_error("无效的配置"))
             }
         }
 
@@ -654,7 +760,7 @@ mod tests {
             tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
 
             if self.app_id == "error_app_id" {
-                Err(Error::NetworkError("模拟网络错误".to_string()))
+                Err(crate::error::network_error("模拟网络错误"))
             } else {
                 Ok(format!("Response from {}", endpoint))
             }
@@ -704,10 +810,8 @@ mod tests {
         // 测试配置错误时的认证操作
         let refresh_result = client.refresh_token().await;
         assert!(refresh_result.is_err());
-        assert!(matches!(
-            refresh_result.unwrap_err(),
-            Error::InvalidConfig(_)
-        ));
+        assert!(refresh_result.unwrap_err().is_config_error());
+        assert!(refresh_result.unwrap_err().is_validation_error() == false);
     }
 
     #[tokio::test]
@@ -734,7 +838,8 @@ mod tests {
         // 测试错误处理
         let error_result = client.get("error/endpoint").await;
         assert!(error_result.is_err());
-        assert!(matches!(error_result.unwrap_err(), Error::NetworkError(_)));
+        assert!(error_result.unwrap_err().is_network_error());
+        assert!(error_result.unwrap_err().is_retryable());
     }
 
     #[tokio::test]
