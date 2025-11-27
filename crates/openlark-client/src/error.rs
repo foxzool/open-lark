@@ -1,59 +1,59 @@
 //! OpenLark Client 错误类型定义
 //!
 //! 基于 openlark-core 的现代化错误处理系统
-//! 直接使用 CoreErrorV3，提供类型安全和用户友好的错误管理
+//! 直接使用 CoreError，提供类型安全和用户友好的错误管理
 
 use crate::registry::RegistryError;
 use openlark_core::error::{
-    convenience_v3::*, core_v3::ApiError, CoreErrorV3, ErrorCategory, ErrorCode, ErrorContext,
-    ErrorSeverity, ErrorTrait, ErrorType,
+    CoreError, ErrorCategory, ErrorCode, ErrorContext,
+    ErrorSeverity, ErrorTrait, ErrorType, ApiError,
 };
 
 /// 🚨 OpenLark 客户端错误类型
 ///
-/// 直接类型别名，充分利用 CoreErrorV3 的强大功能
-pub type Error = CoreErrorV3;
+/// 直接类型别名，充分利用 CoreError 的强大功能
+pub type Error = CoreError;
 
 /// 📦 客户端结果类型别名
 pub type Result<T> = std::result::Result<T, Error>;
 
 // ============================================================================
-// 便利错误创建函数
+// 便利错误创建函数（重新导出核心函数）
 // ============================================================================
 
 /// 创建网络错误
 pub fn network_error(message: impl Into<String>) -> Error {
-    network_error_v3(message)
+    openlark_core::error::network_error(message)
 }
 
 /// 创建认证错误
 pub fn authentication_error(message: impl Into<String>) -> Error {
-    authentication_error_v3(message)
+    openlark_core::error::authentication_error(message)
 }
 
 /// 创建访问令牌格式/内容无效错误
 pub fn token_invalid_error(detail: impl Into<String>) -> Error {
-    token_invalid_error_v3(detail)
+    openlark_core::error::token_invalid_error(detail)
 }
 
 /// 创建访问令牌过期错误（飞书通用码 99991677）
 pub fn token_expired_error(detail: impl Into<String>) -> Error {
-    token_expired_error_v3(detail)
+    openlark_core::error::token_expired_error(detail)
 }
 
 /// 创建缺少权限 scope 的错误
 pub fn permission_missing_error(scopes: &[impl AsRef<str>]) -> Error {
-    permission_missing_error_v3(scopes)
+    openlark_core::error::permission_missing_error(scopes)
 }
 
 /// 创建 SSO 令牌无效错误
 pub fn sso_token_invalid_error(detail: impl Into<String>) -> Error {
-    sso_token_invalid_error_v3(detail)
+    openlark_core::error::sso_token_invalid_error(detail)
 }
 
 /// 创建身份标识非法错误
 pub fn user_identity_invalid_error(desc: impl Into<String>) -> Error {
-    user_identity_invalid_error_v3(desc)
+    openlark_core::error::user_identity_invalid_error(desc)
 }
 
 /// 基于飞书通用 `code` 的统一错误映射（客户端自定义解析时可复用）
@@ -82,7 +82,7 @@ pub fn from_feishu_response(
             _ => 500,
         });
 
-    CoreErrorV3::Api(ApiError {
+    CoreError::Api(ApiError {
         status,
         endpoint: endpoint.into().into(),
         message: message.into(),
@@ -99,39 +99,39 @@ pub fn api_error(
     message: impl Into<String>,
     request_id: Option<String>,
 ) -> Error {
-    api_error_v3(status, endpoint, message, request_id)
+    openlark_core::error::api_error(status, endpoint, message, request_id)
 }
 
 /// 创建验证错误
 pub fn validation_error(field: impl Into<String>, message: impl Into<String>) -> Error {
-    validation_error_v3(field, message)
+    openlark_core::error::validation_error(field, message)
 }
 
 /// 创建配置错误
 pub fn configuration_error(message: impl Into<String>) -> Error {
-    configuration_error_v3(message)
+    openlark_core::error::configuration_error(message)
 }
 
 /// 创建序列化错误
 pub fn serialization_error(message: impl Into<String>) -> Error {
-    serialization_error_v3(message, None::<serde_json::Error>)
+    openlark_core::error::serialization_error(message, None::<serde_json::Error>)
 }
 
 /// 创建业务逻辑错误
 pub fn business_error(_code: impl Into<String>, message: impl Into<String>) -> Error {
-    business_error_v3(message)
+    openlark_core::error::business_error(message)
 }
 
 /// 创建超时错误
 pub fn timeout_error(operation: impl Into<String>) -> Error {
     use std::time::Duration;
-    timeout_error_v3(Duration::from_secs(30), Some(operation.into()))
+    openlark_core::error::timeout_error(Duration::from_secs(30), Some(operation.into()))
 }
 
 /// 创建限流错误
 pub fn rate_limit_error(retry_after: Option<u64>) -> Error {
     use std::time::Duration;
-    rate_limit_error_v3(
+    openlark_core::error::rate_limit_error(
         100,
         Duration::from_secs(60),
         retry_after.map(|s| Duration::from_secs(s)),
@@ -141,13 +141,12 @@ pub fn rate_limit_error(retry_after: Option<u64>) -> Error {
 /// 创建服务不可用错误
 pub fn service_unavailable_error(service: impl Into<String>) -> Error {
     use std::time::Duration;
-    service_unavailable_error_v3(service, Some(Duration::from_secs(60)))
+    openlark_core::error::service_unavailable_error(service, Some(Duration::from_secs(60)))
 }
 
 /// 创建内部错误
 pub fn internal_error(message: impl Into<String>) -> Error {
-    use openlark_core::error::api_error_v3;
-    api_error_v3(500, "internal", message, None::<String>)
+    openlark_core::error::api_error(500, "internal", message, None::<String>)
 }
 
 /// 创建注册表错误
@@ -316,23 +315,23 @@ impl ClientErrorExt for Error {
 impl From<reqwest::Error> for Error {
     fn from(err: reqwest::Error) -> Self {
         if err.is_timeout() {
-            timeout_error_v3("HTTP请求")
+            timeout_error("HTTP请求")
         } else if err.is_connect() {
-            network_error_v3(format!("连接失败: {}", err))
+            network_error(format!("连接失败: {}", err))
         } else if err.is_request() {
-            api_error_v3(
+            api_error(
                 err.status().map_or(0, |s| s.as_u16()),
                 err.url().map_or("", |u| u.as_str()),
                 format!("请求失败: {}", err),
                 None,
             )
         } else {
-            network_error_v3(format!("网络错误: {}", err))
+            network_error(format!("网络错误: {}", err))
         }
     }
 }
 
-// 注意: 不能为外部类型实现 From，因为这些类型由 CoreErrorV3 定义在 openlark-core 中
+// 注意: 不能为外部类型实现 From，因为这些类型由 CoreError 定义在 openlark-core 中
 // 请使用对应的函数来进行错误转换
 
 // 从注册表错误转换
@@ -360,7 +359,7 @@ impl From<crate::registry::dependency_resolver::DependencyError> for Error {
 
 /// 🔧 从 openlark-core SDKResult 转换为客户端 Result 的便利函数
 ///
-/// 这个函数现在只是类型转换，因为我们直接使用 CoreErrorV3
+/// 这个函数现在只是类型转换，因为我们直接使用 CoreError
 ///
 /// # 示例
 ///
@@ -381,26 +380,25 @@ pub fn with_context<T>(
     context_key: impl Into<String>,
     context_value: impl Into<String>,
 ) -> Result<T> {
-    // 由于 CoreErrorV3 只提供不可变访问，我们需要创建新的错误实例
+    // 由于 CoreError 只提供不可变访问，我们需要创建新的错误实例
     // 这里简化为只记录上下文信息到错误消息中
     result.map_err(|err| {
         let context_info = format!("{}: {}", context_key.into(), context_value.into());
         let message = format!("{} [{}]", err.to_string(), context_info);
 
         // 保持原有的错误类型，但更新消息
-        match err {
-            Error::Network(_) => network_error(message),
-            Error::Authentication { .. } => authentication_error(message),
-            Error::Api(_) => api_error(500, "internal", message, None),
-            Error::Validation { field, .. } => validation_error(field, message),
-            Error::Configuration { .. } => configuration_error(message),
-            Error::Serialization { .. } => serialization_error(message),
-            Error::Business { code, .. } => business_error(format!("{:?}", code), message),
-            Error::Timeout { .. } => timeout_error("操作"),
-            Error::RateLimit { .. } => rate_limit_error(None),
-            Error::ServiceUnavailable { .. } => service_unavailable_error("服务"),
-            Error::Internal { .. } => internal_error(message),
-            _ => internal_error(message), // 处理所有其他可能的变体
+        match err.error_type() {
+            ErrorType::Network => network_error(message),
+            ErrorType::Authentication => authentication_error(message),
+            ErrorType::Api => api_error(500, "internal", message, None),
+            ErrorType::Validation => validation_error("field", message),
+            ErrorType::Configuration => configuration_error(message),
+            ErrorType::Serialization => serialization_error(message),
+            ErrorType::Business => business_error("business", message),
+            ErrorType::Timeout => timeout_error("操作"),
+            ErrorType::RateLimit => rate_limit_error(None),
+            ErrorType::ServiceUnavailable => service_unavailable_error("服务"),
+            ErrorType::Internal => internal_error(message),
         }
     })
 }
@@ -418,19 +416,18 @@ pub fn with_operation_context<T>(
         let message = format!("{} [{}]", err.to_string(), context_info);
 
         // 保持原有的错误类型，但更新消息
-        match err {
-            Error::Network(_) => network_error(message),
-            Error::Authentication { .. } => authentication_error(message),
-            Error::Api(_) => api_error(500, "internal", message, None),
-            Error::Validation { field, .. } => validation_error(field, message),
-            Error::Configuration { .. } => configuration_error(message),
-            Error::Serialization { .. } => serialization_error(message),
-            Error::Business { code, .. } => business_error(format!("{:?}", code), message),
-            Error::Timeout { .. } => timeout_error(&operation_info),
-            Error::RateLimit { .. } => rate_limit_error(None),
-            Error::ServiceUnavailable { .. } => service_unavailable_error(&component_info),
-            Error::Internal { .. } => internal_error(message),
-            _ => internal_error(message), // 处理所有其他可能的变体
+        match err.error_type() {
+            ErrorType::Network => network_error(message),
+            ErrorType::Authentication => authentication_error(message),
+            ErrorType::Api => api_error(500, "internal", message, None),
+            ErrorType::Validation => validation_error("field", message),
+            ErrorType::Configuration => configuration_error(message),
+            ErrorType::Serialization => serialization_error(message),
+            ErrorType::Business => business_error("business", message),
+            ErrorType::Timeout => timeout_error(&operation_info),
+            ErrorType::RateLimit => rate_limit_error(None),
+            ErrorType::ServiceUnavailable => service_unavailable_error(&component_info),
+            ErrorType::Internal => internal_error(message),
         }
     })
 }
@@ -464,7 +461,7 @@ impl<'a> ErrorAnalyzer<'a> {
         report.push_str(&format!("  严重程度: {:?}\n", self.error.severity()));
         report.push_str(&format!("  可重试: {}\n", self.error.is_retryable()));
 
-        if let Some(request_id) = self.error.ctx().request_id() {
+        if let Some(request_id) = self.error.context().request_id() {
             report.push_str(&format!("  请求ID: {}\n", request_id));
         }
 
@@ -492,16 +489,16 @@ impl<'a> ErrorAnalyzer<'a> {
         report.push_str("\n");
 
         // 上下文信息
-        if self.error.ctx().context_len() > 0 {
+        if self.error.context().context_len() > 0 {
             report.push_str("📊 上下文信息:\n");
-            for (key, value) in self.error.ctx().all_context() {
+            for (key, value) in self.error.context().all_context() {
                 report.push_str(&format!("  {}: {}\n", key, value));
             }
             report.push_str("\n");
         }
 
         // 时间戳
-        if let Some(timestamp) = self.error.ctx().timestamp() {
+        if let Some(timestamp) = self.error.context().timestamp() {
             report.push_str(&format!(
                 "⏰ 发生时间: {}\n",
                 timestamp.format("%Y-%m-%d %H:%M:%S UTC")
@@ -543,7 +540,7 @@ impl<'a> ErrorAnalyzer<'a> {
     }
 }
 
-// 注意: 不能为外部类型 CoreErrorV3 定义 inherent impl
+// 注意: 不能为外部类型 CoreError 定义 inherent impl
 // 请使用 ClientErrorExt trait 来获得扩展功能
 
 // ============================================================================
@@ -641,7 +638,7 @@ mod tests {
         assert_eq!(client_result.unwrap(), "success");
 
         // 失败情况
-        let core_result: openlark_core::SDKResult<String> = Err(network_error_v3("网络错误"));
+        let core_result: openlark_core::SDKResult<String> = Err(network_error("网络错误"));
         let client_result: Result<String> = from_sdk_result(core_result);
         assert!(client_result.is_err());
         assert!(client_result.unwrap_err().is_network_error());

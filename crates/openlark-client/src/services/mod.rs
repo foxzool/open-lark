@@ -1,7 +1,7 @@
 //! 🏗️ OpenLark Client 服务访问层
 //!
 //! 提供统一的服务访问接口，作为底层crates的薄包装层
-//! 集成 CoreErrorV3 错误处理系统，提供企业级服务管理
+//! 集成 CoreError 错误处理系统，提供企业级服务管理
 
 use crate::error::{validation_error, with_context};
 use crate::{Config, DefaultServiceRegistry, Result};
