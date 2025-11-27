@@ -5,8 +5,8 @@
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
+use crate::models::{map_feishu_auth_error, AuthErrorBuilder};
 use crate::models::{AuthConfig, AuthResult, TenantAccessTokenResponse};
-use crate::models::{AuthErrorBuilder, map_feishu_auth_error};
 
 /// 租户访问令牌服务
 #[derive(Debug)]
@@ -99,7 +99,10 @@ impl TenantAccessTokenInternalBuilder {
             if let Ok(feishu_response) = serde_json::from_str::<serde_json::Value>(&error_text) {
                 if let (Some(code), Some(message)) = (
                     feishu_response.get("code").and_then(|v| v.as_i64()),
-                    feishu_response.get("msg").or_else(|| feishu_response.get("message")).and_then(|v| v.as_str())
+                    feishu_response
+                        .get("msg")
+                        .or_else(|| feishu_response.get("message"))
+                        .and_then(|v| v.as_str()),
                 ) {
                     let request_id = feishu_response.get("log_id").and_then(|v| v.as_str());
                     return Err(map_feishu_auth_error(code as i32, message, request_id));
@@ -107,9 +110,10 @@ impl TenantAccessTokenInternalBuilder {
             }
 
             // 回退到基于 HTTP 状态码的错误处理
-            Err(AuthErrorBuilder::credentials_invalid(
-                format!("HTTP {} 错误: {}", status, error_text)
-            ))
+            Err(AuthErrorBuilder::credentials_invalid(format!(
+                "HTTP {} 错误: {}",
+                status, error_text
+            )))
         }
     }
 }
@@ -173,7 +177,10 @@ impl TenantAccessTokenStoreBuilder {
             if let Ok(feishu_response) = serde_json::from_str::<serde_json::Value>(&error_text) {
                 if let (Some(code), Some(message)) = (
                     feishu_response.get("code").and_then(|v| v.as_i64()),
-                    feishu_response.get("msg").or_else(|| feishu_response.get("message")).and_then(|v| v.as_str())
+                    feishu_response
+                        .get("msg")
+                        .or_else(|| feishu_response.get("message"))
+                        .and_then(|v| v.as_str()),
                 ) {
                     let request_id = feishu_response.get("log_id").and_then(|v| v.as_str());
                     return Err(map_feishu_auth_error(code as i32, message, request_id));
@@ -181,9 +188,10 @@ impl TenantAccessTokenStoreBuilder {
             }
 
             // 回退到基于 HTTP 状态码的错误处理
-            Err(AuthErrorBuilder::credentials_invalid(
-                format!("HTTP {} 错误: {}", status, error_text)
-            ))
+            Err(AuthErrorBuilder::credentials_invalid(format!(
+                "HTTP {} 错误: {}",
+                status, error_text
+            )))
         }
     }
 }
