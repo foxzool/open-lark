@@ -5,10 +5,12 @@
 
 use crate::{
     Config, DefaultServiceRegistry, Result,
-    error::{ClientErrorExt, with_context, with_operation_context},
-    error::{network_error, validation_error, api_error, authentication_error}
+    error::{with_context, with_operation_context},
+    error::{validation_error, api_error}
 };
 use std::collections::HashMap;
+use openlark_core::error::ErrorTrait;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 /// 📡 通讯服务 - 统一访问接口
 ///
@@ -139,7 +141,7 @@ impl<'a> CommunicationService<'a> {
                 with_context(Ok(response), "operation", operation_name)
             }
             Err(e) => {
-                tracing::error!("文本消息发送失败: {}", e.user_friendly_message());
+                tracing::error!("文本消息发送失败: {}", e.user_message().unwrap_or("未知错误"));
                 with_context(Err(e), "operation", operation_name)
             }
         }
@@ -176,11 +178,7 @@ impl<'a> CommunicationService<'a> {
 
         // 序列化富文本内容
         let content_json = serde_json::to_string(rich_content)
-            .map_err(|e| with_context(
-                Err(crate::error::serialization_error(format!("富文本序列化失败: {}", e))),
-                "operation",
-                operation_name
-            ))?;
+            .map_err(|e| crate::error::serialization_error(format!("富文本序列化失败: {}", e)))?;
 
         // 模拟API调用
         let api_result = self.simulate_send_rich_text(receive_id, receive_id_type, &content_json).await;
@@ -191,7 +189,7 @@ impl<'a> CommunicationService<'a> {
                 with_context(Ok(response), "operation", operation_name)
             }
             Err(e) => {
-                tracing::error!("富文本消息发送失败: {}", e.user_friendly_message());
+                tracing::error!("富文本消息发送失败: {}", e.user_message().unwrap_or("未知错误"));
                 with_context(Err(e), "operation", operation_name)
             }
         }
@@ -261,7 +259,7 @@ impl<'a> CommunicationService<'a> {
                 with_context(Ok(response), "operation", operation_name)
             }
             Err(e) => {
-                tracing::error!("消息列表获取失败: {}", e.user_friendly_message());
+                tracing::error!("消息列表获取失败: {}", e.user_message().unwrap_or("未知错误"));
                 with_context(Err(e), "operation", operation_name)
             }
         }
@@ -312,7 +310,7 @@ impl<'a> CommunicationService<'a> {
                 with_context(Ok(response), "operation", operation_name)
             }
             Err(e) => {
-                tracing::error!("消息删除失败: {}", e.user_friendly_message());
+                tracing::error!("消息删除失败: {}", e.user_message().unwrap_or("未知错误"));
                 with_context(Err(e), "operation", operation_name)
             }
         }
@@ -343,11 +341,16 @@ impl<'a> CommunicationService<'a> {
         tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
 
         // 模拟可能的错误情况（5%失败率）
-        if fastrand::u64(0..100) < 5 {
+        // 使用系统时间戳作为简单的随机源
+    let timestamp = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_secs();
+    if timestamp % 100 < 5 {
             return with_operation_context(
                 Err(api_error(
                     500,
-                    self.endpoints.get("send_message").unwrap_or(&"/unknown"),
+                    self.endpoints.get("send_message").map_or("/unknown", |v| *v),
                     "模拟API调用失败",
                     Some("req_sim_001".to_string())
                 )),
@@ -424,8 +427,8 @@ impl<'a> CommunicationService<'a> {
     async fn simulate_delete_message(
         &self,
         message_id: &str,
-        receive_id_type: &str,
-        receive_id: &str,
+        _receive_id_type: &str,
+        _receive_id: &str,
     ) -> Result<DeleteMessageResponse> {
         // 模拟网络延迟
         tokio::time::sleep(tokio::time::Duration::from_millis(50)).await;
@@ -435,7 +438,7 @@ impl<'a> CommunicationService<'a> {
             return with_operation_context(
                 Err(api_error(
                     403,
-                    self.endpoints.get("delete_message").unwrap_or(&"/unknown"),
+                    self.endpoints.get("delete_message").map_or("/unknown", |v| *v),
                     "无权限删除该消息",
                     Some("req_sim_002".to_string())
                 )),
@@ -607,7 +610,7 @@ mod tests {
 
         if let Err(error) = result {
             assert!(error.is_validation_error());
-            assert!(error.user_friendly_message().contains("应用ID不能为空"));
+            assert!(error.user_message().unwrap_or("未知错误").contains("应用ID不能为空"));
         }
     }
 
@@ -623,7 +626,7 @@ mod tests {
 
         if let Err(error) = result {
             assert!(error.is_validation_error());
-            assert!(error.user_friendly_message().contains("应用密钥不能为空"));
+            assert!(error.user_message().unwrap_or("未知错误").contains("应用密钥不能为空"));
         }
     }
 
@@ -660,7 +663,7 @@ mod tests {
 
         if let Err(error) = result {
             assert!(error.is_validation_error());
-            assert!(error.user_friendly_message().contains("接收者ID不能为空"));
+            assert!(error.user_message().unwrap_or("未知错误").contains("接收者ID不能为空"));
         }
     }
 
@@ -678,7 +681,7 @@ mod tests {
 
         if let Err(error) = result {
             assert!(error.is_validation_error());
-            assert!(error.user_friendly_message().contains("消息内容不能为空"));
+            assert!(error.user_message().unwrap_or("未知错误").contains("消息内容不能为空"));
         }
     }
 
@@ -696,7 +699,7 @@ mod tests {
 
         if let Err(error) = result {
             assert!(error.is_validation_error());
-            assert!(error.user_friendly_message().contains("不支持的接收者ID类型"));
+            assert!(error.user_message().unwrap_or("未知错误").contains("不支持的接收者ID类型"));
         }
     }
 
@@ -715,7 +718,7 @@ mod tests {
 
         if let Err(error) = result {
             assert!(error.is_validation_error());
-            assert!(error.user_friendly_message().contains("消息内容过长"));
+            assert!(error.user_message().unwrap_or("未知错误").contains("消息内容过长"));
         }
     }
 
@@ -774,7 +777,7 @@ mod tests {
 
         if let Err(error) = result {
             assert!(error.is_validation_error());
-            assert!(error.user_friendly_message().contains("分页大小必须在1-200之间"));
+            assert!(error.user_message().unwrap_or("未知错误").contains("分页大小必须在1-200之间"));
         }
     }
 
@@ -810,8 +813,8 @@ mod tests {
 
         if let Err(error) = result {
             assert!(error.is_business_error() || error.is_api_error());
-            assert!(error.user_friendly_message().contains("无权限") ||
-                   error.user_friendly_message().contains("权限"));
+            assert!(error.user_message().unwrap_or("未知错误").contains("无权限") ||
+                   error.user_message().unwrap_or("未知错误").contains("权限"));
         }
     }
 

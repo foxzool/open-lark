@@ -36,24 +36,8 @@ impl Default for AuthConfig {
     }
 }
 
-/// 认证错误类型
-#[derive(Debug, thiserror::Error)]
-pub enum AuthError {
-    #[error("配置错误: {0}")]
-    ConfigError(String),
-
-    #[error("网络错误: {0}")]
-    NetworkError(#[from] reqwest::Error),
-
-    #[error("API错误: {code} - {message}")]
-    APIError { code: i32, message: String },
-
-    #[error("令牌错误: {0}")]
-    TokenError(String),
-}
-
-/// 认证结果类型
-pub type AuthResult<T> = Result<T, AuthError>;
+// 重新导出错误处理系统 - 使用新的统一错误架构
+pub use super::error::{AuthError, AuthResult, AuthErrorBuilder, AuthErrorExt, map_feishu_auth_error};
 
 // 子模块
 pub mod oauth;

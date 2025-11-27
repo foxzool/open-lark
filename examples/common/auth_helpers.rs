@@ -4,7 +4,7 @@
 
 // 仅在启用 auth 功能时导入相关类型
 #[cfg(feature = "auth")]
-pub use openlark_client::services::auth::{AuthService, TokenInfo};
+pub use openlark_client::services::{AuthService, TokenInfo};
 
 /// 设置应用认证
 ///

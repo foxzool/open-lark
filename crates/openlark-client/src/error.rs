@@ -114,37 +114,41 @@ pub fn configuration_error(message: impl Into<String>) -> Error {
 
 /// 创建序列化错误
 pub fn serialization_error(message: impl Into<String>) -> Error {
-    serialization_error_v3(message)
+    serialization_error_v3(message, None::<serde_json::Error>)
 }
 
 /// 创建业务逻辑错误
-pub fn business_error(code: impl Into<String>, message: impl Into<String>) -> Error {
-    business_error_v3(code, message)
+pub fn business_error(_code: impl Into<String>, message: impl Into<String>) -> Error {
+    business_error_v3(message)
 }
 
 /// 创建超时错误
 pub fn timeout_error(operation: impl Into<String>) -> Error {
-    timeout_error_v3(operation)
+    use std::time::Duration;
+    timeout_error_v3(Duration::from_secs(30), Some(operation.into()))
 }
 
 /// 创建限流错误
 pub fn rate_limit_error(retry_after: Option<u64>) -> Error {
-    rate_limit_error_v3(retry_after)
+    use std::time::Duration;
+    rate_limit_error_v3(100, Duration::from_secs(60), retry_after.map(|s| Duration::from_secs(s)))
 }
 
 /// 创建服务不可用错误
 pub fn service_unavailable_error(service: impl Into<String>) -> Error {
-    service_unavailable_error_v3(service)
+    use std::time::Duration;
+    service_unavailable_error_v3(service, Some(Duration::from_secs(60)))
 }
 
 /// 创建内部错误
 pub fn internal_error(message: impl Into<String>) -> Error {
-    internal_error_v3(message)
+    use openlark_core::error::api_error_v3;
+    api_error_v3(500, "internal", message, None::<String>)
 }
 
 /// 创建注册表错误
 pub fn registry_error(err: RegistryError) -> Error {
-    internal_error_v3(format!("服务注册表错误: {}", err))
+    internal_error(format!("服务注册表错误: {}", err))
 }
 
 // ============================================================================
@@ -192,7 +196,7 @@ impl ClientErrorExt for Error {
 
     fn is_registry_error(&self) -> bool {
         matches!(self.error_type(), ErrorType::Internal)
-            && self.user_friendly_message().contains("注册表")
+            && self.user_message().unwrap_or("未知错误").contains("注册表")
     }
 
     fn is_config_error(&self) -> bool {
@@ -324,23 +328,8 @@ impl From<reqwest::Error> for Error {
     }
 }
 
-impl From<serde_json::Error> for Error {
-    fn from(err: serde_json::Error) -> Self {
-        serialization_error_v3(format!("JSON解析失败: {}", err))
-    }
-}
-
-impl From<chrono::ParseError> for Error {
-    fn from(err: chrono::ParseError) -> Self {
-        validation_error_v3("时间格式", format!("时间解析失败: {}", err))
-    }
-}
-
-impl From<tokio::time::error::Elapsed> for Error {
-    fn from(_: tokio::time::error::Elapsed) -> Self {
-        timeout_error_v3("异步操作")
-    }
-}
+// 注意: 不能为外部类型实现 From，因为这些类型由 CoreErrorV3 定义在 openlark-core 中
+// 请使用对应的函数来进行错误转换
 
 // 从注册表错误转换
 impl From<RegistryError> for Error {
@@ -388,9 +377,27 @@ pub fn with_context<T>(
     context_key: impl Into<String>,
     context_value: impl Into<String>,
 ) -> Result<T> {
-    result.map_err(|mut err| {
-        err.add_context(context_key, context_value);
-        err
+    // 由于 CoreErrorV3 只提供不可变访问，我们需要创建新的错误实例
+    // 这里简化为只记录上下文信息到错误消息中
+    result.map_err(|err| {
+        let context_info = format!("{}: {}", context_key.into(), context_value.into());
+        let message = format!("{} [{}]", err.to_string(), context_info);
+
+        // 保持原有的错误类型，但更新消息
+        match err {
+            Error::Network(_) => network_error(message),
+            Error::Authentication { .. } => authentication_error(message),
+            Error::Api(_) => api_error(500, "internal", message, None),
+            Error::Validation { field, .. } => validation_error(field, message),
+            Error::Configuration { .. } => configuration_error(message),
+            Error::Serialization { .. } => serialization_error(message),
+            Error::Business { code, .. } => business_error(format!("{:?}", code), message),
+            Error::Timeout { .. } => timeout_error("操作"),
+            Error::RateLimit { .. } => rate_limit_error(None),
+            Error::ServiceUnavailable { .. } => service_unavailable_error("服务"),
+            Error::Internal { .. } => internal_error(message),
+            _ => internal_error(message), // 处理所有其他可能的变体
+        }
     })
 }
 
@@ -400,10 +407,27 @@ pub fn with_operation_context<T>(
     operation: impl Into<String>,
     component: impl Into<String>,
 ) -> Result<T> {
-    result.map_err(|mut err| {
-        err.set_operation(operation);
-        err.set_component(component);
-        err
+    result.map_err(|err| {
+        let operation_info = operation.into();
+        let component_info = component.into();
+        let context_info = format!("操作: {}, 组件: {}", operation_info, component_info);
+        let message = format!("{} [{}]", err.to_string(), context_info);
+
+        // 保持原有的错误类型，但更新消息
+        match err {
+            Error::Network(_) => network_error(message),
+            Error::Authentication { .. } => authentication_error(message),
+            Error::Api(_) => api_error(500, "internal", message, None),
+            Error::Validation { field, .. } => validation_error(field, message),
+            Error::Configuration { .. } => configuration_error(message),
+            Error::Serialization { .. } => serialization_error(message),
+            Error::Business { code, .. } => business_error(format!("{:?}", code), message),
+            Error::Timeout { .. } => timeout_error(&operation_info),
+            Error::RateLimit { .. } => rate_limit_error(None),
+            Error::ServiceUnavailable { .. } => service_unavailable_error(&component_info),
+            Error::Internal { .. } => internal_error(message),
+            _ => internal_error(message), // 处理所有其他可能的变体
+        }
     })
 }
 
@@ -436,7 +460,7 @@ impl<'a> ErrorAnalyzer<'a> {
         report.push_str(&format!("  严重程度: {:?}\n", self.error.severity()));
         report.push_str(&format!("  可重试: {}\n", self.error.is_retryable()));
 
-        if let Some(request_id) = self.error.request_id() {
+        if let Some(request_id) = self.error.ctx().request_id() {
             report.push_str(&format!("  请求ID: {}\n", request_id));
         }
 
@@ -447,7 +471,7 @@ impl<'a> ErrorAnalyzer<'a> {
         report.push_str(&format!("  技术消息: {}\n", self.error.to_string()));
         report.push_str(&format!(
             "  用户消息: {}\n",
-            self.error.user_friendly_message()
+            self.error.user_message().unwrap_or("未知错误")
         ));
 
         report.push_str("\n");
@@ -464,16 +488,16 @@ impl<'a> ErrorAnalyzer<'a> {
         report.push_str("\n");
 
         // 上下文信息
-        if self.error.context_len() > 0 {
+        if self.error.ctx().context_len() > 0 {
             report.push_str("📊 上下文信息:\n");
-            for (key, value) in self.error.all_context() {
+            for (key, value) in self.error.ctx().all_context() {
                 report.push_str(&format!("  {}: {}\n", key, value));
             }
             report.push_str("\n");
         }
 
         // 时间戳
-        if let Some(timestamp) = self.error.timestamp() {
+        if let Some(timestamp) = self.error.ctx().timestamp() {
             report.push_str(&format!(
                 "⏰ 发生时间: {}\n",
                 timestamp.format("%Y-%m-%d %H:%M:%S UTC")
@@ -489,7 +513,7 @@ impl<'a> ErrorAnalyzer<'a> {
             "Error[{:?}:{:?}] {} - {}",
             self.error.error_type(),
             self.error.error_code(),
-            self.error.user_friendly_message(),
+            self.error.user_message().unwrap_or("未知错误"),
             if self.error.is_retryable() {
                 "(可重试)"
             } else {
@@ -502,7 +526,7 @@ impl<'a> ErrorAnalyzer<'a> {
     pub fn user_friendly_with_suggestion(&self) -> String {
         format!(
             "{}\n\n💡 建议: {}\n\n🔧 可以尝试:\n{}",
-            self.error.user_friendly_message(),
+            self.error.user_message().unwrap_or("未知错误"),
             self.error.suggestion(),
             self.error
                 .recovery_steps()
@@ -515,28 +539,8 @@ impl<'a> ErrorAnalyzer<'a> {
     }
 }
 
-/// 为 Error 添加分析器方法
-impl Error {
-    /// 创建错误分析器
-    pub fn analyze(&self) -> ErrorAnalyzer {
-        ErrorAnalyzer::new(self)
-    }
-
-    /// 获取详细错误报告
-    pub fn detailed_report(&self) -> String {
-        self.analyze().detailed_report()
-    }
-
-    /// 获取日志摘要
-    pub fn log_summary(&self) -> String {
-        self.analyze().log_summary()
-    }
-
-    /// 获取用户友好的错误消息（包含建议）
-    pub fn user_friendly_with_suggestion(&self) -> String {
-        self.analyze().user_friendly_with_suggestion()
-    }
-}
+// 注意: 不能为外部类型 CoreErrorV3 定义 inherent impl
+// 请使用 ClientErrorExt trait 来获得扩展功能
 
 // ============================================================================
 // 测试
@@ -564,7 +568,7 @@ mod tests {
     #[test]
     fn test_error_analyzer() {
         let error = api_error(404, "/users", "用户不存在", Some("req-123"));
-        let analyzer = error.analyze();
+        let analyzer = ErrorAnalyzer::new(&error);
 
         let report = analyzer.detailed_report();
         assert!(report.contains("错误分析报告"));
@@ -619,8 +623,9 @@ mod tests {
         assert!(contextual_result.is_err());
 
         let error = contextual_result.unwrap_err();
-        assert!(error.has_context("user_id"));
-        assert_eq!(error.get_context("user_id"), Some("12345"));
+        // 注意：由于我们的 with_context 实现将上下文信息嵌入到错误消息中，
+        // 我们无法直接访问原始的上下文信息，这里只验证错误发生
+        assert!(error.to_string().contains("user_id: 12345"));
     }
 
     #[test]

@@ -3,9 +3,10 @@
 //! 极简设计，1行代码创建客户端，类型安全的服务访问
 
 use crate::registry::ServiceRegistry;
+use openlark_core::error::ErrorTrait;
 use crate::{
     traits::LarkClient, Config, DefaultServiceRegistry, Result, ServiceMetadata, ServiceStatus,
-    error::{ClientErrorExt, with_context, with_operation_context},
+    error::{with_context, with_operation_context},
 };
 use std::sync::Arc;
 
@@ -106,7 +107,7 @@ impl Client {
     ///
     /// 需要 `communication` feature
     #[cfg(feature = "communication")]
-    pub fn communication(&self) -> crate::services::CommunicationService<'_> {
+    pub fn communication(&self) -> Result<crate::services::CommunicationService<'_>> {
         crate::services::CommunicationService::new(&self.config, &self.registry)
     }
 
@@ -230,7 +231,7 @@ fn load_enabled_services(config: &Config, registry: &mut DefaultServiceRegistry)
 }
 
 /// 注册核心层服务
-fn register_core_services(config: &Config, registry: &mut DefaultServiceRegistry) -> Result<()> {
+fn register_core_services(_config: &Config, registry: &mut DefaultServiceRegistry) -> Result<()> {
     // #[cfg(feature = "auth")]  // auth 功能暂未启用
     // {
     //     tracing::debug!("注册认证服务");
@@ -295,7 +296,7 @@ fn register_core_services(config: &Config, registry: &mut DefaultServiceRegistry
 }
 
 /// 注册专业层服务
-fn register_professional_services(config: &Config, registry: &mut DefaultServiceRegistry) -> Result<()> {
+fn register_professional_services(_config: &Config, _registry: &mut DefaultServiceRegistry) -> Result<()> {
     // #[cfg(feature = "hr")]  // hr 功能暂未启用
     // {
     //     tracing::debug!("注册人力资源服务");
@@ -349,7 +350,7 @@ fn register_professional_services(config: &Config, registry: &mut DefaultService
 }
 
 /// 注册企业层服务
-fn register_enterprise_services(config: &Config, registry: &mut DefaultServiceRegistry) -> Result<()> {
+fn register_enterprise_services(_config: &Config, _registry: &mut DefaultServiceRegistry) -> Result<()> {
     // #[cfg(feature = "admin")]  // admin 功能暂未启用
     // {
     //     tracing::debug!("注册管理服务");
@@ -494,7 +495,7 @@ impl ClientBuilder {
     pub fn build(self) -> Result<Client> {
         let result = Client::with_config(self.config);
         if let Err(ref error) = result {
-            tracing::error!("客户端构建失败: {}", error.user_friendly_with_suggestion());
+            tracing::error!("客户端构建失败: {}", error.user_message().unwrap_or("未知错误"));
         }
         result
     }
@@ -581,7 +582,7 @@ mod tests {
 
         if let Err(error) = client_result {
             assert!(error.is_config_error());
-            assert!(!error.user_friendly_message().is_empty());
+            assert!(!error.user_message().unwrap_or("未知错误").is_empty());
         }
     }
 
