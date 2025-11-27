@@ -1,77 +1,236 @@
-//! Error Module Prelude
+//! 现代化错误处理系统预置模块
 //!
-//! 重新导出最常用的错误处理类型和特征，简化导入路径。
+//! 提供新thiserror架构的完整错误处理组件导入
 
-// 重新导出核心错误类型
-pub use super::types::{
-    ApiResponseError, AuthenticationError, ErrorCategory, ErrorHandlingCategory, LarkAPIError,
-    LarkErrorCode, NetworkError, ValidationError,
+// 核心类型重新导出（仅 V3）
+pub use super::codes::ErrorCode;
+pub use super::context::ErrorContext;
+pub use super::core::{RecoveryStrategy, RetryPolicy};
+pub use super::core_v3::{BuilderKind, CoreErrorV3, ErrorBuilder, ErrorRecord};
+pub use super::kinds::ErrorKind;
+pub use super::traits::{ErrorSeverity, ErrorType};
+pub use super::{ErrorId, LarkAPIError, SDKResult};
+
+// 特征系统重新导出
+pub use super::traits::{ErrorContextTrait, ErrorFormatTrait, ErrorTrait, FullErrorTrait};
+
+pub use super::convenience_v3::{
+    api_error_v3, authentication_error_v3, business_error_v3, configuration_error_v3,
+    network_error_v3, network_error_with_details_v3, rate_limit_error_v3, serialization_error_v3,
+    service_unavailable_error_v3, timeout_error_v3, validation_error_v3,
 };
 
-// 重新导出错误处理助手
-pub use super::handler::{
-    is_authentication_error, is_permission_error, is_retryable_error, ErrorHandlingAdvice,
-    ErrorHelper, ErrorRecoveryStrategy,
-};
+pub use super::analysis;
 
-// 重新导出观测性功能
-pub use super::observability::{
-    get_error_stats, log_error, record_error, ErrorEvent, ErrorLogger, ErrorMonitor,
-};
+// 系统能力和默认配置
+pub use super::{capabilities, defaults, ERROR_SYSTEM_VERSION};
 
-// 重新导出类型定义
-pub use super::types::{ErrorSeverity, NetworkErrorKind, PermissionType};
-
-// 重新导出特征
-pub use super::types::{ErrorClassification, ErrorDisplay, ErrorRecovery};
-
-// 重新导出常用结果类型
-pub type SDKResult<T> = Result<T, LarkAPIError>;
-
-/// 常用宏集合
-pub mod macros {
-    /// 创建验证错误的便利宏
-    #[macro_export]
-    macro_rules! validation_error {
-        ($msg:expr) => {
-            $crate::error::prelude::LarkAPIError::ValidationError($msg.to_string())
-        };
-    }
-
-    /// 创建认证错误的便利宏
-    #[macro_export]
-    macro_rules! auth_error {
-        ($msg:expr) => {
-            $crate::error::prelude::LarkAPIError::MissingAccessToken
-        };
-        ($msg:expr, $details:expr) => {
-            $crate::error::prelude::LarkAPIError::AuthenticationError {
-                message: $msg.to_string(),
-                details: $details.to_string(),
-            }
-        };
-    }
-
-    /// 检查并返回错误的便利宏
-    #[macro_export]
-    macro_rules! ensure {
-        ($condition:expr, $error:expr) => {
-            if !$condition {
-                return Err($error);
-            }
-        };
-    }
-
-    /// 记录错误的便利宏
-    #[macro_export]
-    macro_rules! log_and_return {
-        ($error:expr) => {{
-            let error = $error;
-            $crate::error::prelude::log_error(&error, $crate::error::prelude::LogLevel::Error);
-            return Err(error);
-        }};
-    }
+// 常用的导入组合
+pub mod common_imports {
+    pub use super::*;
+    pub use std::collections::HashMap;
+    pub use std::time::Duration;
 }
 
-// 导出宏到当前作用域
-// pub use macros::*; // 暂时注释掉，避免未使用导入警告
+/// 现代化便利宏定义（精简版）
+
+/// 创建网络错误的宏
+#[macro_export]
+macro_rules! network_err {
+    ($msg:expr) => {
+        $crate::error::network_error_v3($msg)
+    };
+    ($fmt:expr, $($arg:tt)*) => {
+        $crate::error::network_error_v3(format!($fmt, $($arg)*))
+    };
+}
+
+/// 创建认证错误的宏
+#[macro_export]
+macro_rules! auth_err {
+    ($msg:expr) => {
+        $crate::error::authentication_error_v3($msg)
+    };
+    ($fmt:expr, $($arg:tt)*) => {
+        $crate::error::authentication_error_v3(format!($fmt, $($arg)*))
+    };
+}
+
+/// 创建验证错误的宏
+#[macro_export]
+macro_rules! validation_err {
+    ($field:expr, $msg:expr) => {
+        $crate::error::validation_error_v3($field, $msg)
+    };
+    ($field:expr, $fmt:expr, $($arg:tt)*) => {
+        $crate::error::validation_error_v3($field, format!($fmt, $($arg)*))
+    };
+}
+
+/// 创建业务错误的宏
+#[macro_export]
+macro_rules! business_err {
+    ($msg:expr) => {
+        $crate::error::business_error_v3($msg)
+    };
+    ($fmt:expr, $($arg:tt)*) => {
+        $crate::error::business_error_v3(format!($fmt, $($arg)*))
+    };
+}
+
+/// 创建API错误的宏
+#[macro_export]
+macro_rules! api_err {
+    ($status:expr, $endpoint:expr, $msg:expr) => {
+        $crate::error::api_error_v3($status, $endpoint, $msg, None::<String>)
+    };
+    ($status:expr, $endpoint:expr, $fmt:expr, $($arg:tt)*) => {
+        $crate::error::api_error_v3($status, $endpoint, format!($fmt, $($arg)*), None::<String>)
+    };
+}
+
+/// 条件错误返回宏（现代化版本）
+#[macro_export]
+macro_rules! ensure {
+    ($condition:expr, $error:expr) => {
+        if !$condition {
+            return Err(Into::<$crate::error::CoreErrorV3>::into($error));
+        }
+    };
+    ($condition:expr, $fmt:expr, $($arg:tt)*) => {
+        if !$condition {
+            return Err(Into::<$crate::error::CoreErrorV3>::into(
+                $crate::error::validation_error_v3("condition", format!($fmt, $($arg)*))
+            ));
+        }
+    };
+}
+
+/// 快速验证宏
+#[macro_export]
+macro_rules! validate {
+    ($field:expr, $value:expr, $error_msg:expr) => {
+        if !$value {
+            return Err(Into::<$crate::error::CoreErrorV3>::into(
+                $crate::error::validation_error_v3($field, $error_msg)
+            ));
+        }
+    };
+    ($field:expr, $value:expr, $error_msg:expr, $($arg:tt)*) => {
+        if !$value {
+            return Err(Into::<$crate::error::CoreErrorV3>::into(
+                $crate::error::validation_error_v3($field, format!($error_msg, $($arg)*))
+            ));
+        }
+    };
+}
+
+/// 错误匹配和处理宏
+#[macro_export]
+macro_rules! handle_error {
+    ($result:expr, {
+        $pattern:pat => $handler:expr,
+        * => $default_handler:expr,
+    }) => {
+        match $result {
+            Ok(value) => value,
+            Err($pattern) => $handler,
+            Err(error) => $default_handler(error),
+        }
+    };
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_modern_prelude_imports() {
+        // 确保所有重新导出的类型都可以使用
+        let _error: LarkAPIError = network_error_v3("测试");
+        let _result: SDKResult<()> = Ok(());
+        let _severity: ErrorSeverity = ErrorSeverity::Warning;
+        let _kind: ErrorKind = ErrorKind::Network;
+        let _code: ErrorCode = ErrorCode::BadRequest;
+        let _lark_error: LarkAPIError = network_error_v3("测试");
+    }
+
+    #[test]
+    fn test_modern_convenience_macros() {
+        let error = network_err!("连接失败");
+        assert!(error.is_network_error());
+
+        let error = auth_err!("认证失败");
+        assert!(error.is_auth_error());
+
+        let error = validation_err!("email", "格式不正确");
+        assert!(error.is_validation_error());
+
+        let error = api_err!(404, "/api/users", "用户不存在");
+        assert!(error.is_api_error());
+    }
+
+    #[test]
+    fn test_builder_macro() {
+        let error = validation_error_v3("email", "邮箱格式不正确");
+
+        assert!(error.is_validation_error());
+        assert_eq!(error.context().get_context("field"), Some("email"));
+    }
+
+    #[test]
+    fn test_ensure_macro() {
+        let result = || -> SDKResult<()> {
+            ensure!(true, validation_error_v3("test", "不应该失败"));
+            ensure!(false, validation_error_v3("test", "应该失败"));
+            Ok(())
+        }();
+
+        assert!(result.is_err());
+        assert!(result.unwrap_err().is_validation_error());
+    }
+
+    #[test]
+    fn test_validate_macro() {
+        let result = || -> SDKResult<()> {
+            validate!("email", "test@example".contains("@"), "邮箱格式不正确");
+            Ok(())
+        }();
+
+        assert!(result.is_ok());
+
+        let result = || -> SDKResult<()> {
+            validate!("email", "invalid_email".contains("@"), "邮箱格式不正确");
+            Ok(())
+        }();
+
+        assert!(result.is_err());
+        assert!(result.unwrap_err().is_validation_error());
+    }
+
+    #[test]
+    fn test_modern_error_creation() {
+        let error = api_error_v3(404, "/api/v1/users/123", "用户不存在", Some("req-123"));
+
+        assert!(error.is_api_error());
+        assert_eq!(error.severity(), ErrorSeverity::Warning);
+        assert!(!error.is_retryable());
+        assert!(!error.is_user_error());
+        assert_eq!(error.context().request_id(), Some("req-123"));
+    }
+
+    #[test]
+    fn test_error_analysis_integration() {
+        let error = network_error_with_details_v3(
+            "连接超时",
+            Some("req-456"),
+            Some("https://api.example.com"),
+        );
+
+        let analysis = super::analysis::analyze_error(&error);
+        assert_eq!(analysis.error_type, ErrorType::Network);
+        assert!(analysis.is_retryable);
+        assert!(analysis.system_error);
+        assert!(!analysis.user_error);
+    }
+}

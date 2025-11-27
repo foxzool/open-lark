@@ -1,75 +1,199 @@
-//! Error Handling Module
+//! 现代化错误处理系统
 //!
-//! 统一的错误处理模块，提供完整的错误定义、处理建议和观测性功能。
-//!
-//! # 模块结构
-//!
-//! - [`types`] - 错误类型定义和错误码
-//! - [`handler`] - 错误处理逻辑和建议
-//! - [`observability`] - 日志记录和监控统计
-//!
-//! # 快速开始
-//!
-//! ```rust
-//! use openlark_core::error::prelude::*;
-//!
-//! fn handle_error(error: &LarkAPIError) {
-//!     if error.is_retryable() {
-//!         println!("可重试错误: {}", error.user_friendly_message());
-//!     }
-//! }
-//! ```
+//! 基于thiserror的完整错误处理解决方案，提供类型安全和开发者友好的API
+
+use std::time::Duration;
+use uuid::Uuid;
+
+// 仅暴露 V3 错误体系
+pub use self::codes::{ErrorCategory, ErrorCode};
+pub use self::context::{ErrorContext, ErrorContextBuilder};
+pub use self::convenience_v3::{
+    api_error_v3, authentication_error_v3, business_error_v3, configuration_error_v3,
+    network_error_v3, network_error_with_details_v3, permission_missing_error_v3,
+    rate_limit_error_v3, serialization_error_v3, service_unavailable_error_v3,
+    sso_token_invalid_error_v3, timeout_error_v3, token_expired_error_v3, token_invalid_error_v3,
+    user_identity_invalid_error_v3, validation_error_v3,
+};
+pub use self::core::{RecoveryStrategy, RetryPolicy};
+pub use self::core_v3::{BuilderKind, CoreErrorV3, ErrorBuilder, ErrorRecord};
+pub use self::kinds::ErrorKind;
+pub use self::traits::{ErrorContextTrait, ErrorFormatTrait, ErrorTrait, FullErrorTrait};
+pub use self::traits::{ErrorSeverity, ErrorType};
+
+// 类型别名（V3 为唯一入口）
+pub type SDKResult<T> = Result<T, CoreErrorV3>;
+pub type ErrorId = Uuid;
+pub type LarkAPIError = CoreErrorV3;
 
 // 核心模块
-pub mod handler;
-pub mod observability;
-pub mod types;
+pub mod codes;
+pub mod context;
+pub mod convenience_v3;
+pub mod core; // 仅保留重试策略等基础设施
+pub mod core_v3; // V3 主实现
+pub mod kinds;
+pub mod traits;
 
-// 便利导入
+// 预设导入
 pub mod prelude;
 
-// 重新导出核心类型，方便直接使用
-pub use handler::*;
-pub use observability::*;
-pub use types::*;
+/// 系统版本信息
+pub const ERROR_SYSTEM_VERSION: &str = "2.1.0-modern";
 
-/// 当前模块版本
-pub const ERROR_MODULE_VERSION: &str = "1.0.0";
+/// 系统能力声明
+pub mod capabilities {
+    pub const CORE_ERROR: bool = true;
+    pub const ERROR_CONTEXT: bool = true;
+    pub const RETRY_POLICY: bool = true;
+    pub const ERROR_ANALYSIS: bool = true;
+    pub const MODERN_FORMATTING: bool = true;
+    pub const BUILDER_PATTERN: bool = false;
+    pub const ERROR_CLASSIFICATION: bool = true;
+    pub const JSON_EXPORT: bool = true;
+    pub const OBSERVABILITY: bool = true;
+    pub const RECOVERY_SUGGESTIONS: bool = true;
+    // 注意：无需向后兼容
+    pub const LEGACY_COMPATIBILITY: bool = false;
+}
 
-/// 默认错误处理配置
-pub mod config {
-    use super::observability::LogLevel;
+/// 默认配置
+pub mod defaults {
+    use super::*;
 
-    /// 默认重试次数
-    pub const DEFAULT_RETRY_COUNT: usize = 3;
+    pub fn default_retry_policy() -> RetryPolicy {
+        RetryPolicy::exponential(3, Duration::from_secs(1))
+    }
 
-    /// 默认超时时间（秒）
-    pub const DEFAULT_TIMEOUT_SECONDS: u64 = 30;
+    pub fn default_error_context() -> ErrorContext {
+        ErrorContext::new()
+    }
+}
 
-    /// 默认日志级别
-    pub const DEFAULT_LOG_LEVEL: LogLevel = LogLevel::Error;
+/// 现代化便利函数
+// modern_convenience 已收敛进 convenience_v3 模块
+
+/// 错误分析工具
+pub mod analysis {
+    use super::*;
+
+    /// 深度分析错误
+    pub fn analyze_error<E: ErrorTrait>(error: &E) -> ErrorAnalysisResult {
+        ErrorAnalysisResult {
+            error_type: error.error_type(),
+            severity: error.severity(),
+            is_retryable: error.is_retryable(),
+            retry_delay: error.retry_delay(0),
+            user_error: error.is_user_error(),
+            system_error: error.is_system_error(),
+            recovery_action: recommend_action(error),
+            context_summary: summarize_context(error.context()),
+        }
+    }
+
+    pub struct ErrorAnalysisResult {
+        pub error_type: ErrorType,
+        pub severity: ErrorSeverity,
+        pub is_retryable: bool,
+        pub retry_delay: Option<Duration>,
+        pub user_error: bool,
+        pub system_error: bool,
+        pub recovery_action: &'static str,
+        pub context_summary: String,
+    }
+
+    fn recommend_action<E: ErrorTrait>(error: &E) -> &'static str {
+        match error.error_type() {
+            ErrorType::Network | ErrorType::Timeout | ErrorType::ServiceUnavailable => "retry",
+            ErrorType::Authentication => "reauthenticate",
+            ErrorType::Validation => "fix_input",
+            ErrorType::Configuration => "fix_config",
+            ErrorType::RateLimit => "slowdown",
+            _ => "inspect",
+        }
+    }
+
+    fn summarize_context(context: &ErrorContext) -> String {
+        let mut parts = Vec::new();
+
+        if let Some(req_id) = context.request_id() {
+            parts.push(format!("RequestID: {}", req_id));
+        }
+
+        if let Some(op) = context.operation() {
+            parts.push(format!("Operation: {}", op));
+        }
+
+        if let Some(comp) = context.component() {
+            parts.push(format!("Component: {}", comp));
+        }
+
+        let context_count = context.context_len();
+        if context_count > 0 {
+            parts.push(format!("Context: {} items", context_count));
+        }
+
+        if parts.is_empty() {
+            "No context".to_string()
+        } else {
+            parts.join(" | ")
+        }
+    }
 }
 
 #[cfg(test)]
 mod tests {
+    use super::analysis::*;
     use super::*;
 
     #[test]
-    fn test_module_structure() {
-        // 确保模块结构正确
-        let _types = types::LarkAPIError::MissingAccessToken;
-        let _handler = handler::ErrorHelper;
-        let _observability = observability::ErrorLogger::default();
+    fn test_modern_error_creation() {
+        let error = api_error_v3(404, "/api/users/123", "用户不存在", Some("req-123"));
+
+        assert_eq!(error.error_type(), ErrorType::Api);
+        assert_eq!(error.severity(), ErrorSeverity::Warning);
+        assert!(!error.is_retryable());
+        assert!(!error.is_user_error());
+        assert_eq!(error.context().request_id(), Some("req-123"));
     }
 
     #[test]
-    fn test_version_constant() {
-        assert_eq!(ERROR_MODULE_VERSION, "1.0.0");
+    fn test_detailed_error_creation() {
+        let error = network_error_with_details_v3(
+            "连接超时",
+            Some("req-456"),
+            Some("https://api.example.com"),
+        );
+
+        assert!(error.is_network_error());
+        assert_eq!(error.context().request_id(), Some("req-456"));
     }
 
     #[test]
-    fn test_default_config() {
-        assert_eq!(config::DEFAULT_RETRY_COUNT, 3);
-        assert_eq!(config::DEFAULT_TIMEOUT_SECONDS, 30);
+    fn test_error_analysis() {
+        let error = validation_error_v3("email", "邮箱格式不正确");
+
+        let analysis = analyze_error(&error);
+
+        assert_eq!(analysis.error_type, ErrorType::Validation);
+        assert_eq!(analysis.severity, ErrorSeverity::Warning);
+        assert!(!analysis.is_retryable);
+        assert!(analysis.user_error);
+        assert!(!analysis.system_error);
+        assert!(analysis.context_summary.contains("Context"));
+    }
+
+    #[test]
+    fn test_capabilities() {
+        assert!(capabilities::CORE_ERROR);
+        assert!(capabilities::ERROR_CONTEXT);
+        assert!(!capabilities::BUILDER_PATTERN);
+        assert!(capabilities::ERROR_ANALYSIS);
+        assert!(!capabilities::LEGACY_COMPATIBILITY);
+    }
+
+    #[test]
+    fn test_version() {
+        assert_eq!(ERROR_SYSTEM_VERSION, "2.1.0-modern");
     }
 }
