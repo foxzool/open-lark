@@ -1,4 +1,7 @@
-use crate::{Config, Result, error::{with_operation_context}};
+use super::context::ServiceContext;
+use super::service::{Service, ServiceHealth, ServiceKind};
+use crate::{error::with_operation_context, Config, Result};
+use async_trait::async_trait;
 use openlark_auth::models::{AppTicketResponse, UserInfoResponse};
 use openlark_auth::prelude::*;
 use openlark_auth::AuthServices;
@@ -54,7 +57,8 @@ impl AuthService {
             .send()
             .await;
 
-        let result = with_operation_context(response, "get_internal_app_access_token", "AuthService")?;
+        let result =
+            with_operation_context(response, "get_internal_app_access_token", "AuthService")?;
 
         tracing::debug!("成功获取自建应用访问令牌，过期时间: {}秒", result.expire);
 
@@ -110,8 +114,11 @@ impl AuthService {
 
         let response = with_operation_context(response, "get_user_access_token", "AuthService")?;
 
-        tracing::debug!("成功获取用户访问令牌，过期时间: {}秒，权限范围: {:?}",
-            response.expires_in, response.scope);
+        tracing::debug!(
+            "成功获取用户访问令牌，过期时间: {}秒，权限范围: {:?}",
+            response.expires_in,
+            response.scope
+        );
 
         Ok(TokenInfo {
             access_token: response.access_token,
@@ -136,7 +143,8 @@ impl AuthService {
             .send()
             .await;
 
-        let response = with_operation_context(response, "refresh_oidc_access_token", "AuthService")?;
+        let response =
+            with_operation_context(response, "refresh_oidc_access_token", "AuthService")?;
 
         tracing::debug!("成功刷新OIDC访问令牌，过期时间: {}秒", response.expires_in);
 
@@ -184,7 +192,10 @@ impl AuthService {
                 })
             }
             Err(e) => {
-                tracing::warn!("应用访问令牌验证失败: {}", e.user_message().unwrap_or("未知错误"));
+                tracing::warn!(
+                    "应用访问令牌验证失败: {}",
+                    e.user_message().unwrap_or("未知错误")
+                );
 
                 // 尝试通过获取令牌信息接口验证
                 // 如果能成功获取新令牌，说明当前令牌仍然有效
@@ -202,7 +213,10 @@ impl AuthService {
                         })
                     }
                     Err(refresh_err) => {
-                        tracing::warn!("应用访问令牌验证失败且无法刷新: {}", refresh_err.user_message().unwrap_or("未知错误"));
+                        tracing::warn!(
+                            "应用访问令牌验证失败且无法刷新: {}",
+                            refresh_err.user_message().unwrap_or("未知错误")
+                        );
                         Ok(TokenVerificationResponse {
                             valid: false,
                             user_id: None,
@@ -232,8 +246,11 @@ impl AuthService {
 
         let result = with_operation_context(response, "get_user_info", "AuthService")?;
 
-        tracing::debug!("成功获取用户信息，用户ID: {}, 状态: {:?}",
-            result.user_id, result.status);
+        tracing::debug!(
+            "成功获取用户信息，用户ID: {}, 状态: {:?}",
+            result.user_id,
+            result.status
+        );
 
         // 用户状态已经是正确的枚举类型
         let status = result.status;
@@ -291,6 +308,30 @@ impl AuthService {
     {
         let result = f.await;
         with_operation_context(result, operation, "AuthService")
+    }
+}
+
+#[async_trait]
+impl Service for AuthService {
+    fn kind(&self) -> ServiceKind {
+        ServiceKind::new("auth", "v1")
+    }
+
+    fn capabilities(&self) -> &'static [&'static str] {
+        &["token", "oauth"]
+    }
+
+    async fn init(&self, _ctx: &ServiceContext) -> Result<()> {
+        // 认证服务当前无需额外预热
+        Ok(())
+    }
+
+    async fn start(&self, _ctx: &ServiceContext) -> Result<()> {
+        Ok(())
+    }
+
+    fn health(&self) -> ServiceHealth {
+        ServiceHealth::Ready
     }
 }
 
@@ -364,9 +405,16 @@ impl TokenInfo {
 /// 令牌管理扩展特征
 pub trait TokenManagement {
     /// 自动刷新令牌（如果需要）
-    async fn auto_refresh_if_needed<F>(&self, token_info: &TokenInfo, refresh_func: F) -> Result<TokenInfo>
+    async fn auto_refresh_if_needed<F>(
+        &self,
+        token_info: &TokenInfo,
+        refresh_func: F,
+    ) -> Result<TokenInfo>
     where
-        F: FnOnce(&TokenInfo) -> std::pin::Pin<Box<dyn std::future::Future<Output = Result<TokenInfo>> + Send>>;
+        F: FnOnce(
+            &TokenInfo,
+        )
+            -> std::pin::Pin<Box<dyn std::future::Future<Output = Result<TokenInfo>> + Send>>;
 
     /// 安全执行需要令牌的操作
     async fn execute_with_valid_token<F, T>(&self, token_info: &TokenInfo, f: F) -> Result<T>
@@ -375,9 +423,16 @@ pub trait TokenManagement {
 }
 
 impl TokenManagement for AuthService {
-    async fn auto_refresh_if_needed<F>(&self, token_info: &TokenInfo, refresh_func: F) -> Result<TokenInfo>
+    async fn auto_refresh_if_needed<F>(
+        &self,
+        token_info: &TokenInfo,
+        refresh_func: F,
+    ) -> Result<TokenInfo>
     where
-        F: FnOnce(&TokenInfo) -> std::pin::Pin<Box<dyn std::future::Future<Output = Result<TokenInfo>> + Send>>,
+        F: FnOnce(
+            &TokenInfo,
+        )
+            -> std::pin::Pin<Box<dyn std::future::Future<Output = Result<TokenInfo>> + Send>>,
     {
         if token_info.needs_refresh(10) {
             tracing::info!("令牌需要刷新，执行自动刷新");
@@ -393,12 +448,16 @@ impl TokenManagement for AuthService {
         F: FnOnce(&str) -> std::pin::Pin<Box<dyn std::future::Future<Output = Result<T>> + Send>>,
     {
         if token_info.is_expired() {
-            return Err(crate::error::authentication_error(
-                format!("令牌已过期，过期时间: {}", token_info.expires_at.format("%Y-%m-%d %H:%M:%S UTC"))
-            ));
+            return Err(crate::error::authentication_error(format!(
+                "令牌已过期，过期时间: {}",
+                token_info.expires_at.format("%Y-%m-%d %H:%M:%S UTC")
+            )));
         }
 
-        tracing::debug!("令牌有效，执行操作，剩余时间: {}秒", token_info.remaining_seconds());
+        tracing::debug!(
+            "令牌有效，执行操作，剩余时间: {}秒",
+            token_info.remaining_seconds()
+        );
         f(&token_info.access_token).await
     }
 }
@@ -473,10 +532,7 @@ mod tests {
 
         // 测试错误上下文（模拟）
         let error = crate::error::authentication_error("测试错误");
-        let result = service.handle_error(
-            Err(error),
-            "test_operation"
-        );
+        let result = service.handle_error(Err(error), "test_operation");
 
         assert!(result.is_err());
         if let Err(err) = result {

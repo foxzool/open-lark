@@ -3,8 +3,16 @@
 //! 提供统一的服务访问接口，作为底层crates的薄包装层
 //! 集成 CoreErrorV3 错误处理系统，提供企业级服务管理
 
+use crate::error::{validation_error, with_context};
 use crate::{Config, DefaultServiceRegistry, Result};
-use crate::error::{with_context, validation_error};
+
+// 新的服务运行时与抽象
+pub mod context;
+pub mod graph;
+pub mod loader;
+pub mod runtime;
+pub mod service;
+pub mod typed_registry;
 
 // ============================================================================
 // 业务服务模块
@@ -97,7 +105,7 @@ impl ServiceFactory {
             return with_context(
                 Err(validation_error("app_id", "应用ID不能为空")),
                 "component",
-                "ServiceFactory"
+                "ServiceFactory",
             );
         }
 
@@ -105,16 +113,13 @@ impl ServiceFactory {
             return with_context(
                 Err(validation_error("app_secret", "应用密钥不能为空")),
                 "component",
-                "ServiceFactory"
+                "ServiceFactory",
             );
         }
 
         let registry = DefaultServiceRegistry::new();
 
-        let factory = Self {
-            config,
-            registry,
-        };
+        let factory = Self { config, registry };
 
         tracing::debug!("服务工厂初始化完成");
 
@@ -204,7 +209,11 @@ impl ServiceFactory {
     pub fn get_stats(&self) -> ServiceFactoryStats {
         ServiceFactoryStats {
             total_services: self.count_available_services(),
-            enabled_features: self.get_enabled_features().into_iter().map(|s| s.to_string()).collect(),
+            enabled_features: self
+                .get_enabled_features()
+                .into_iter()
+                .map(|s| s.to_string())
+                .collect(),
         }
     }
 
@@ -213,28 +222,44 @@ impl ServiceFactory {
         let mut count = 1; // auth service is always available
 
         #[cfg(feature = "communication")]
-        { count += 1; }
+        {
+            count += 1;
+        }
 
         #[cfg(feature = "docs")]
-        { count += 1; }
+        {
+            count += 1;
+        }
 
         #[cfg(feature = "hr")]
-        { count += 1; }
+        {
+            count += 1;
+        }
 
         #[cfg(feature = "ai")]
-        { count += 1; }
+        {
+            count += 1;
+        }
 
         #[cfg(feature = "task")]
-        { count += 1; }
+        {
+            count += 1;
+        }
 
         #[cfg(feature = "calendar")]
-        { count += 1; }
+        {
+            count += 1;
+        }
 
         #[cfg(feature = "admin")]
-        { count += 1; }
+        {
+            count += 1;
+        }
 
         #[cfg(feature = "approval")]
-        { count += 1; }
+        {
+            count += 1;
+        }
 
         count
     }
@@ -244,28 +269,44 @@ impl ServiceFactory {
         let mut features = vec!["auth"];
 
         #[cfg(feature = "communication")]
-        { features.push("communication"); }
+        {
+            features.push("communication");
+        }
 
         #[cfg(feature = "docs")]
-        { features.push("docs"); }
+        {
+            features.push("docs");
+        }
 
         #[cfg(feature = "hr")]
-        { features.push("hr"); }
+        {
+            features.push("hr");
+        }
 
         #[cfg(feature = "ai")]
-        { features.push("ai"); }
+        {
+            features.push("ai");
+        }
 
         #[cfg(feature = "task")]
-        { features.push("task"); }
+        {
+            features.push("task");
+        }
 
         #[cfg(feature = "calendar")]
-        { features.push("calendar"); }
+        {
+            features.push("calendar");
+        }
 
         #[cfg(feature = "admin")]
-        { features.push("admin"); }
+        {
+            features.push("admin");
+        }
 
         #[cfg(feature = "approval")]
-        { features.push("approval"); }
+        {
+            features.push("approval");
+        }
 
         features
     }
@@ -323,6 +364,12 @@ pub mod prelude {
     // 基础类型
     pub use super::{ServiceFactory, ServiceFactoryStats};
 
+    // 新运行时抽象
+    pub use super::context::ServiceContext;
+    pub use super::runtime::{ServiceRuntime, ServiceRuntimeBuilder};
+    pub use super::service::{Service, ServiceHealth, ServiceKind, ServiceProvider};
+    pub use super::typed_registry::TypedServiceRegistry;
+
     // 基础服务
     pub use super::AuthService;
 
@@ -378,7 +425,10 @@ impl ServiceValidator {
 
         // 验证URL格式
         if !config.base_url.starts_with("http://") && !config.base_url.starts_with("https://") {
-            return Err(validation_error("base_url", "基础URL必须以http://或https://开头"));
+            return Err(validation_error(
+                "base_url",
+                "基础URL必须以http://或https://开头",
+            ));
         }
 
         Ok(())
@@ -388,14 +438,14 @@ impl ServiceValidator {
     pub fn check_feature_dependencies(feature: &str) -> Result<Vec<&'static str>> {
         match feature {
             "communication" => Ok(vec!["auth"]), // 通讯服务依赖认证服务
-            "docs" => Ok(vec!["auth"]), // 文档服务依赖认证服务
-            "hr" => Ok(vec!["auth"]), // HR服务依赖认证服务
-            "ai" => Ok(vec!["auth"]), // AI服务依赖认证服务
-            "task" => Ok(vec!["auth"]), // 任务服务依赖认证服务
-            "calendar" => Ok(vec!["auth"]), // 日历服务依赖认证服务
-            "admin" => Ok(vec!["auth"]), // 管理服务依赖认证服务
-            "approval" => Ok(vec!["auth"]), // 审批服务依赖认证服务
-            _ => Ok(vec![]), // 其他功能暂无特殊依赖
+            "docs" => Ok(vec!["auth"]),          // 文档服务依赖认证服务
+            "hr" => Ok(vec!["auth"]),            // HR服务依赖认证服务
+            "ai" => Ok(vec!["auth"]),            // AI服务依赖认证服务
+            "task" => Ok(vec!["auth"]),          // 任务服务依赖认证服务
+            "calendar" => Ok(vec!["auth"]),      // 日历服务依赖认证服务
+            "admin" => Ok(vec!["auth"]),         // 管理服务依赖认证服务
+            "approval" => Ok(vec!["auth"]),      // 审批服务依赖认证服务
+            _ => Ok(vec![]),                     // 其他功能暂无特殊依赖
         }
     }
 }
@@ -443,7 +493,10 @@ mod tests {
 
         if let Err(error) = result {
             assert!(error.is_validation_error());
-            assert!(error.user_message().unwrap_or("未知错误").contains("应用ID不能为空"));
+            assert!(error
+                .user_message()
+                .unwrap_or("未知错误")
+                .contains("应用ID不能为空"));
         }
     }
 
