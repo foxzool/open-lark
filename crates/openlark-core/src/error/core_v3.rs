@@ -1,4 +1,4 @@
-//! CoreErrorV3：基于 thiserror 的最简 PoC
+//! CoreError：基于 thiserror 的企业级错误处理
 //!
 //! 目标：展示单一映射来源（ErrorCode），简化字段、统一严重度/可重试策略，
 //! 并保留可序列化的 ErrorRecord 供观测与分析使用。
@@ -8,9 +8,6 @@ use std::{borrow::Cow, time::Duration};
 use super::{
     codes::ErrorCode,
     context::ErrorContext,
-    convenience_v3::{
-        api_error_v3, authentication_error_v3, network_error_v3, validation_error_v3,
-    },
     traits::{ErrorSeverity, ErrorTrait, ErrorType},
     RetryPolicy,
 };
@@ -169,23 +166,23 @@ impl ErrorBuilder {
         self
     }
 
-    pub fn build(self) -> CoreErrorV3 {
+    pub fn build(self) -> CoreError {
         let msg = self.message.unwrap_or_else(|| "unknown error".to_string());
         match self.kind {
-            BuilderKind::Network => CoreErrorV3::Network(NetworkError {
+            BuilderKind::Network => CoreError::Network(NetworkError {
                 message: msg,
                 source: self.source,
                 policy: self.policy.unwrap_or_default(),
                 ctx: self.ctx,
             }),
-            BuilderKind::Authentication => CoreErrorV3::Authentication {
+            BuilderKind::Authentication => CoreError::Authentication {
                 message: msg,
                 code: self.code.unwrap_or(ErrorCode::AuthenticationFailed),
                 ctx: self.ctx,
             },
             BuilderKind::Api => {
                 let status = self.status.unwrap_or(500);
-                CoreErrorV3::Api(ApiError {
+                CoreError::Api(ApiError {
                     status,
                     endpoint: self
                         .endpoint
@@ -199,47 +196,47 @@ impl ErrorBuilder {
                     ctx: self.ctx,
                 })
             }
-            BuilderKind::Validation => CoreErrorV3::Validation {
+            BuilderKind::Validation => CoreError::Validation {
                 field: self.field.unwrap_or_else(|| "field".to_string()).into(),
                 message: msg,
                 code: self.code.unwrap_or(ErrorCode::ValidationError),
                 ctx: self.ctx,
             },
-            BuilderKind::Configuration => CoreErrorV3::Configuration {
+            BuilderKind::Configuration => CoreError::Configuration {
                 message: msg,
                 code: self.code.unwrap_or(ErrorCode::ConfigurationError),
                 ctx: self.ctx,
             },
-            BuilderKind::Serialization => CoreErrorV3::Serialization {
+            BuilderKind::Serialization => CoreError::Serialization {
                 message: msg,
                 source: self.source,
                 code: self.code.unwrap_or(ErrorCode::SerializationError),
                 ctx: self.ctx,
             },
-            BuilderKind::Business => CoreErrorV3::Business {
+            BuilderKind::Business => CoreError::Business {
                 code: self.code.unwrap_or(ErrorCode::BusinessError),
                 message: msg,
                 ctx: self.ctx,
             },
-            BuilderKind::Timeout => CoreErrorV3::Timeout {
+            BuilderKind::Timeout => CoreError::Timeout {
                 duration: self.duration.unwrap_or_default(),
                 operation: self.operation,
                 ctx: self.ctx,
             },
-            BuilderKind::RateLimit => CoreErrorV3::RateLimit {
+            BuilderKind::RateLimit => CoreError::RateLimit {
                 limit: self.limit.unwrap_or(0),
                 window: self.window.unwrap_or(Duration::from_secs(1)),
                 reset_after: self.reset_after,
                 code: self.code.unwrap_or(ErrorCode::RateLimitExceeded),
                 ctx: self.ctx,
             },
-            BuilderKind::ServiceUnavailable => CoreErrorV3::ServiceUnavailable {
+            BuilderKind::ServiceUnavailable => CoreError::ServiceUnavailable {
                 service: self.service.unwrap_or_else(|| "service".to_string()).into(),
                 retry_after: self.retry_after,
                 code: self.code.unwrap_or(ErrorCode::ServiceUnavailable),
                 ctx: self.ctx,
             },
-            BuilderKind::Internal => CoreErrorV3::Internal {
+            BuilderKind::Internal => CoreError::Internal {
                 code: self.code.unwrap_or(ErrorCode::InternalError),
                 message: msg,
                 source: self.source,
@@ -252,7 +249,7 @@ impl ErrorBuilder {
 /// 轻量版核心错误
 #[non_exhaustive]
 #[derive(Debug, Error)]
-pub enum CoreErrorV3 {
+pub enum CoreError {
     #[error("网络错误: {0}")]
     Network(NetworkError),
 
@@ -361,7 +358,7 @@ impl std::fmt::Display for ApiError {
     }
 }
 
-impl Clone for CoreErrorV3 {
+impl Clone for CoreError {
     fn clone(&self) -> Self {
         match self {
             Self::Network(net) => Self::Network(NetworkError {
@@ -457,7 +454,7 @@ impl Clone for CoreErrorV3 {
     }
 }
 
-impl CoreErrorV3 {
+impl CoreError {
     /// 统一构建器入口
     pub fn builder(kind: BuilderKind) -> ErrorBuilder {
         ErrorBuilder::new(kind)
@@ -485,12 +482,12 @@ impl CoreErrorV3 {
 
     /// 简单网络错误（无 source）
     pub fn network_msg(message: impl Into<String>) -> Self {
-        network_error_v3(message)
+        network_error(message)
     }
 
     /// 简单认证错误
     pub fn authentication(message: impl Into<String>) -> Self {
-        authentication_error_v3(message)
+        authentication_error(message)
     }
 
     /// 简单 API 错误（便于兼容旧 CoreError::api_error）
@@ -500,12 +497,12 @@ impl CoreErrorV3 {
         message: impl Into<String>,
         request_id: Option<impl Into<String>>,
     ) -> Self {
-        api_error_v3(status as u16, endpoint, message, request_id)
+        api_error(status as u16, endpoint, message, request_id.map(|id| id.into()))
     }
 
     /// 仅带 message 的验证错误（默认字段 general）
     pub fn validation_msg(message: impl Into<String>) -> Self {
-        validation_error_v3("general", message)
+        validation_error("general", message)
     }
 
     /// 用户可读 message（兼容旧 API）
@@ -657,8 +654,8 @@ pub struct ErrorRecord {
     pub backtrace: Option<String>,
 }
 
-impl From<&CoreErrorV3> for ErrorRecord {
-    fn from(err: &CoreErrorV3) -> Self {
+impl From<&CoreError> for ErrorRecord {
+    fn from(err: &CoreError) -> Self {
         let ctx = err.ctx();
         Self {
             code: err.code(),
@@ -675,7 +672,7 @@ impl From<&CoreErrorV3> for ErrorRecord {
     }
 }
 
-impl From<reqwest::Error> for CoreErrorV3 {
+impl From<reqwest::Error> for CoreError {
     fn from(source: reqwest::Error) -> Self {
         Self::Network(NetworkError {
             message: source.to_string(),
@@ -686,7 +683,7 @@ impl From<reqwest::Error> for CoreErrorV3 {
     }
 }
 
-impl From<serde_json::Error> for CoreErrorV3 {
+impl From<serde_json::Error> for CoreError {
     fn from(source: serde_json::Error) -> Self {
         Self::Serialization {
             message: format!("JSON序列化错误: {}", source),
@@ -697,7 +694,7 @@ impl From<serde_json::Error> for CoreErrorV3 {
     }
 }
 
-impl ErrorTrait for CoreErrorV3 {
+impl ErrorTrait for CoreError {
     fn severity(&self) -> ErrorSeverity {
         self.severity()
     }
@@ -751,6 +748,212 @@ impl ErrorTrait for CoreErrorV3 {
     }
 }
 
+// ============================================================================
+// 便利函数（保持向后兼容）
+// ============================================================================
+
+/// 创建网络错误
+pub fn network_error(message: impl Into<String>) -> CoreError {
+    CoreError::Network(NetworkError {
+        message: message.into(),
+        source: None,
+        policy: RetryPolicy::default(),
+        ctx: ErrorContext::new(),
+    })
+}
+
+/// 创建认证错误
+pub fn authentication_error(message: impl Into<String>) -> CoreError {
+    CoreError::Authentication {
+        message: message.into(),
+        code: ErrorCode::AuthenticationFailed,
+        ctx: ErrorContext::new(),
+    }
+}
+
+/// 创建API错误
+pub fn api_error(
+    status: u16,
+    endpoint: impl Into<String>,
+    message: impl Into<String>,
+    request_id: Option<String>,
+) -> CoreError {
+    CoreError::Api(ApiError {
+        status,
+        endpoint: endpoint.into().into(),
+        message: message.into(),
+        source: None,
+        code: ErrorCode::from_http_status(status),
+        ctx: {
+            let mut ctx = ErrorContext::new();
+            if let Some(req_id) = request_id {
+                ctx.set_request_id(req_id);
+            }
+            ctx
+        },
+    })
+}
+
+/// 创建验证错误
+pub fn validation_error(field: impl Into<String>, message: impl Into<String>) -> CoreError {
+    CoreError::Validation {
+        field: field.into().into(),
+        message: message.into(),
+        code: ErrorCode::ValidationError,
+        ctx: ErrorContext::new(),
+    }
+}
+
+/// 创建序列化错误
+pub fn serialization_error<T: std::error::Error + Send + Sync + 'static>(
+    message: impl Into<String>,
+    source: Option<T>,
+) -> CoreError {
+    CoreError::Serialization {
+        message: message.into(),
+        source: source.map(|e| Box::new(e) as AnyError),
+        code: ErrorCode::SerializationError,
+        ctx: ErrorContext::new(),
+    }
+}
+
+/// 创建业务错误
+pub fn business_error(message: impl Into<String>) -> CoreError {
+    CoreError::Business {
+        message: message.into(),
+        code: ErrorCode::BusinessError,
+        ctx: ErrorContext::new(),
+    }
+}
+
+/// 创建配置错误
+pub fn configuration_error(message: impl Into<String>) -> CoreError {
+    CoreError::Configuration {
+        message: message.into(),
+        code: ErrorCode::ConfigurationError,
+        ctx: ErrorContext::new(),
+    }
+}
+
+/// 创建超时错误
+pub fn timeout_error(timeout: Duration, operation: Option<String>) -> CoreError {
+    CoreError::Timeout {
+        duration: timeout,
+        operation,
+        ctx: ErrorContext::new(),
+    }
+}
+
+/// 创建限流错误
+pub fn rate_limit_error(
+    limit: u32,
+    window: Duration,
+    retry_after: Option<Duration>,
+) -> CoreError {
+    CoreError::RateLimit {
+        limit,
+        window,
+        reset_after: retry_after,
+        code: ErrorCode::TooManyRequests,
+        ctx: ErrorContext::new(),
+    }
+}
+
+/// 创建服务不可用错误
+pub fn service_unavailable_error(
+    service: impl Into<String>,
+    retry_after: Option<Duration>,
+) -> CoreError {
+    CoreError::ServiceUnavailable {
+        service: service.into().into(),
+        retry_after,
+        code: ErrorCode::ServiceUnavailable,
+        ctx: ErrorContext::new(),
+    }
+}
+
+/// 创建权限缺失错误
+pub fn permission_missing_error(scopes: &[impl AsRef<str>]) -> CoreError {
+    let mut ctx = ErrorContext::new();
+    ctx.add_context("required_scopes", scopes.iter().map(|s| s.as_ref()).collect::<Vec<_>>().join(","));
+
+    CoreError::Authentication {
+        message: "权限范围不足".to_string(),
+        code: ErrorCode::PermissionMissing,
+        ctx,
+    }
+}
+
+/// 创建SSO令牌无效错误
+pub fn sso_token_invalid_error(detail: impl Into<String>) -> CoreError {
+    let mut ctx = ErrorContext::new();
+    ctx.add_context("detail", detail.into());
+
+    CoreError::Authentication {
+        message: "SSO令牌无效".to_string(),
+        code: ErrorCode::SsoTokenInvalid,
+        ctx,
+    }
+}
+
+/// 创建用户身份无效错误
+pub fn user_identity_invalid_error(desc: impl Into<String>) -> CoreError {
+    let mut ctx = ErrorContext::new();
+    ctx.add_context("description", desc.into());
+
+    CoreError::Authentication {
+        message: "用户身份无效".to_string(),
+        code: ErrorCode::UserIdentityInvalid,
+        ctx,
+    }
+}
+
+/// 创建访问令牌无效错误
+pub fn token_invalid_error(detail: impl Into<String>) -> CoreError {
+    let mut ctx = ErrorContext::new();
+    ctx.add_context("detail", detail.into());
+
+    CoreError::Authentication {
+        message: "访问令牌无效".to_string(),
+        code: ErrorCode::AccessTokenInvalid,
+        ctx,
+    }
+}
+
+/// 创建访问令牌过期错误
+pub fn token_expired_error(detail: impl Into<String>) -> CoreError {
+    let mut ctx = ErrorContext::new();
+    ctx.add_context("detail", detail.into());
+
+    CoreError::Authentication {
+        message: "访问令牌过期".to_string(),
+        code: ErrorCode::AccessTokenExpiredV2,
+        ctx,
+    }
+}
+
+/// 创建带详细信息的网络错误
+pub fn network_error_with_details(
+    message: impl Into<String>,
+    endpoint: Option<String>,
+    request_id: Option<String>,
+) -> CoreError {
+    let mut ctx = ErrorContext::new();
+    if let Some(ep) = endpoint {
+        ctx.add_context("endpoint", ep);
+    }
+    if let Some(req_id) = request_id {
+        ctx.set_request_id(req_id);
+    }
+
+    CoreError::Network(NetworkError {
+        message: message.into(),
+        source: None,
+        policy: RetryPolicy::default(),
+        ctx,
+    })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -758,7 +961,7 @@ mod tests {
 
     #[test]
     fn api_error_has_code_and_severity() {
-        let err = CoreErrorV3::api(503, "/ping", "service down", ErrorContext::new());
+        let err = CoreError::api(503, "/ping", "service down", ErrorContext::new());
 
         assert_eq!(err.code(), ErrorCode::ServiceUnavailable);
         assert!(err.is_retryable());
@@ -772,7 +975,7 @@ mod tests {
         ctx.add_context("endpoint", "/user");
         ctx.set_request_id("req-1");
 
-        let err = CoreErrorV3::network(std::io::Error::new(std::io::ErrorKind::Other, "boom"), ctx);
+        let err = CoreError::network(std::io::Error::new(std::io::ErrorKind::Other, "boom"), ctx);
 
         let rec = err.record();
         assert_eq!(rec.code, ErrorCode::NetworkConnectionFailed);
@@ -782,7 +985,7 @@ mod tests {
 
     #[test]
     fn core_error_to_record() {
-        let err = CoreErrorV3::api(503, "/ping", "svc down", ErrorContext::new());
+        let err = CoreError::api(503, "/ping", "svc down", ErrorContext::new());
         let rec: ErrorRecord = (&err).into();
         assert_eq!(rec.code, ErrorCode::ServiceUnavailable);
         assert!(rec.retryable);
@@ -791,7 +994,7 @@ mod tests {
 
     #[test]
     fn builder_creates_api_error_with_context() {
-        let err = CoreErrorV3::api_builder()
+        let err = CoreError::api_builder()
             .status(404)
             .endpoint("/users/1")
             .message("not found")
@@ -805,7 +1008,7 @@ mod tests {
 
     #[test]
     fn rate_limit_retry_delay() {
-        let err = CoreErrorV3::RateLimit {
+        let err = CoreError::RateLimit {
             limit: 10,
             window: Duration::from_secs(60),
             reset_after: Some(Duration::from_secs(30)),
@@ -820,7 +1023,7 @@ mod tests {
     #[test]
     fn from_reqwest_error() {
         // 无法直接构造 reqwest::Error（构造函数为私有），跳过具体实例化，只验证 From trait 存在
-        fn assert_from_reqwest<E: Into<CoreErrorV3>>() {}
+        fn assert_from_reqwest<E: Into<CoreError>>() {}
         assert_from_reqwest::<reqwest::Error>();
     }
 }
