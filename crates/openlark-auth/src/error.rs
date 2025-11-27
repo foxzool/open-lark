@@ -3,11 +3,10 @@
 //! 完全基于 CoreErrorV3 的现代化错误处理系统
 //! 直接集成统一错误体系，提供类型安全和可观测性
 
-use std::time::Duration;
 use openlark_core::error::{
-    CoreErrorV3, ErrorCode, ErrorContext, ErrorTrait, ErrorType,
-    convenience_v3::*,
+    convenience_v3::*, CoreErrorV3, ErrorCode, ErrorContext, ErrorTrait, ErrorType,
 };
+use std::time::Duration;
 
 // 导入内部结构体
 use openlark_core::error::core_v3::ApiError;
@@ -54,8 +53,22 @@ impl AuthErrorBuilder {
         current: &[impl AsRef<str>],
     ) -> AuthError {
         let mut ctx = ErrorContext::new();
-        ctx.add_context("required_scopes", required.iter().map(|s| s.as_ref()).collect::<Vec<_>>().join(","));
-        ctx.add_context("current_scopes", current.iter().map(|s| s.as_ref()).collect::<Vec<_>>().join(","));
+        ctx.add_context(
+            "required_scopes",
+            required
+                .iter()
+                .map(|s| s.as_ref())
+                .collect::<Vec<_>>()
+                .join(","),
+        );
+        ctx.add_context(
+            "current_scopes",
+            current
+                .iter()
+                .map(|s| s.as_ref())
+                .collect::<Vec<_>>()
+                .join(","),
+        );
 
         CoreErrorV3::Authentication {
             message: "权限范围不足".to_string(),
@@ -115,11 +128,7 @@ impl AuthErrorBuilder {
     }
 
     /// 请求频率超限
-    pub fn rate_limited(
-        limit: u32,
-        window: Duration,
-        retry_after: Option<Duration>,
-    ) -> AuthError {
+    pub fn rate_limited(limit: u32, window: Duration, retry_after: Option<Duration>) -> AuthError {
         let mut ctx = ErrorContext::new();
         ctx.add_context("limit", limit.to_string());
         ctx.add_context("window_seconds", window.as_secs().to_string());
@@ -202,10 +211,7 @@ impl AuthErrorBuilder {
     }
 
     /// 应用状态异常
-    pub fn app_status_exception(
-        app_id: impl AsRef<str>,
-        status: impl Into<String>,
-    ) -> AuthError {
+    pub fn app_status_exception(app_id: impl AsRef<str>, status: impl Into<String>) -> AuthError {
         let status_str = status.into();
         let mut ctx = ErrorContext::new();
         ctx.add_context("app_id", app_id.as_ref());
@@ -237,26 +243,24 @@ pub fn map_feishu_auth_error(
     // 优先使用飞书通用错误码映射
     match ErrorCode::from_feishu_code(feishu_code) {
         // 令牌相关错误
-        Some(ErrorCode::AccessTokenExpiredV2) => {
-            CoreErrorV3::Authentication {
-                message: message.to_string(),
-                code: ErrorCode::AccessTokenExpiredV2,
-                ctx,
-            }
+        Some(ErrorCode::AccessTokenExpiredV2) => CoreErrorV3::Authentication {
+            message: message.to_string(),
+            code: ErrorCode::AccessTokenExpiredV2,
+            ctx,
         },
-        Some(ErrorCode::AccessTokenInvalid | ErrorCode::AppAccessTokenInvalid | ErrorCode::TenantAccessTokenInvalid) => {
-            CoreErrorV3::Authentication {
-                message: message.to_string(),
-                code: ErrorCode::AccessTokenInvalid,
-                ctx,
-            }
+        Some(
+            ErrorCode::AccessTokenInvalid
+            | ErrorCode::AppAccessTokenInvalid
+            | ErrorCode::TenantAccessTokenInvalid,
+        ) => CoreErrorV3::Authentication {
+            message: message.to_string(),
+            code: ErrorCode::AccessTokenInvalid,
+            ctx,
         },
-        Some(ErrorCode::SsoTokenInvalid) => {
-            CoreErrorV3::Authentication {
-                message: message.to_string(),
-                code: ErrorCode::SsoTokenInvalid,
-                ctx,
-            }
+        Some(ErrorCode::SsoTokenInvalid) => CoreErrorV3::Authentication {
+            message: message.to_string(),
+            code: ErrorCode::SsoTokenInvalid,
+            ctx,
         },
 
         // 权限相关错误
@@ -266,22 +270,22 @@ pub fn map_feishu_auth_error(
                 code: ErrorCode::PermissionMissing,
                 ctx,
             }
-        },
+        }
 
         // 用户身份相关错误
-        Some(ErrorCode::UserSessionInvalid | ErrorCode::UserSessionNotFound | ErrorCode::UserSessionTimeout) => {
-            CoreErrorV3::Authentication {
-                message: "用户会话无效".to_string(),
-                code: ErrorCode::UserSessionInvalid,
-                ctx,
-            }
+        Some(
+            ErrorCode::UserSessionInvalid
+            | ErrorCode::UserSessionNotFound
+            | ErrorCode::UserSessionTimeout,
+        ) => CoreErrorV3::Authentication {
+            message: "用户会话无效".to_string(),
+            code: ErrorCode::UserSessionInvalid,
+            ctx,
         },
-        Some(ErrorCode::UserIdentityInvalid) => {
-            CoreErrorV3::Authentication {
-                message: message.to_string(),
-                code: ErrorCode::UserIdentityInvalid,
-                ctx,
-            }
+        Some(ErrorCode::UserIdentityInvalid) => CoreErrorV3::Authentication {
+            message: message.to_string(),
+            code: ErrorCode::UserIdentityInvalid,
+            ctx,
         },
         Some(ErrorCode::UserTypeNotSupportedV2 | ErrorCode::UserIdentityMismatch) => {
             CoreErrorV3::Authentication {
@@ -289,126 +293,110 @@ pub fn map_feishu_auth_error(
                 code: ErrorCode::UserIdentityInvalid,
                 ctx,
             }
-        },
+        }
 
         // 应用相关错误
-        Some(ErrorCode::AppNotInstalled) => {
-            CoreErrorV3::Api(ApiError {
-                status: 400,
-                endpoint: "auth".into(),
-                message: message.to_string(),
-                source: None,
-                code: ErrorCode::AppNotInstalled,
-                ctx,
-            })
+        Some(ErrorCode::AppNotInstalled) => CoreErrorV3::Api(ApiError {
+            status: 400,
+            endpoint: "auth".into(),
+            message: message.to_string(),
+            source: None,
+            code: ErrorCode::AppNotInstalled,
+            ctx,
+        }),
+        Some(ErrorCode::AppPermissionDenied) => CoreErrorV3::Authentication {
+            message: "应用权限不足".to_string(),
+            code: ErrorCode::PermissionMissing,
+            ctx,
         },
-        Some(ErrorCode::AppPermissionDenied) => {
-            CoreErrorV3::Authentication {
-                message: "应用权限不足".to_string(),
-                code: ErrorCode::PermissionMissing,
-                ctx,
-            }
-        },
-        Some(ErrorCode::AppStatusException) => {
-            CoreErrorV3::Api(ApiError {
-                status: 400,
-                endpoint: "auth".into(),
-                message: message.to_string(),
-                source: None,
-                code: ErrorCode::AppStatusException,
-                ctx,
-            })
-        },
+        Some(ErrorCode::AppStatusException) => CoreErrorV3::Api(ApiError {
+            status: 400,
+            endpoint: "auth".into(),
+            message: message.to_string(),
+            source: None,
+            code: ErrorCode::AppStatusException,
+            ctx,
+        }),
 
         // 其他飞书错误码
         Some(mapped_code) => {
             // 根据 HTTP 状态码分类处理
             match mapped_code {
                 ErrorCode::BadRequest => validation_error_v3("", message),
-                ErrorCode::Unauthorized | ErrorCode::Forbidden => {
-                    CoreErrorV3::Authentication {
-                        message: message.to_string(),
-                        code: ErrorCode::AuthenticationFailed,
-                        ctx,
-                    }
+                ErrorCode::Unauthorized | ErrorCode::Forbidden => CoreErrorV3::Authentication {
+                    message: message.to_string(),
+                    code: ErrorCode::AuthenticationFailed,
+                    ctx,
                 },
-                ErrorCode::TooManyRequests => {
-                    CoreErrorV3::RateLimit {
-                        limit: 0,
-                        window: Duration::from_secs(60),
-                        reset_after: Some(Duration::from_secs(60)),
-                        code: mapped_code,
-                        ctx,
-                    }
+                ErrorCode::TooManyRequests => CoreErrorV3::RateLimit {
+                    limit: 0,
+                    window: Duration::from_secs(60),
+                    reset_after: Some(Duration::from_secs(60)),
+                    code: mapped_code,
+                    ctx,
                 },
-                ErrorCode::InternalServerError | ErrorCode::BadGateway | ErrorCode::GatewayTimeout | ErrorCode::ServiceUnavailable => {
-                    CoreErrorV3::ServiceUnavailable {
-                        service: "auth".into(),
-                        retry_after: Some(Duration::from_secs(30)),
-                        code: mapped_code,
-                        ctx,
-                    }
+                ErrorCode::InternalServerError
+                | ErrorCode::BadGateway
+                | ErrorCode::GatewayTimeout
+                | ErrorCode::ServiceUnavailable => CoreErrorV3::ServiceUnavailable {
+                    service: "auth".into(),
+                    retry_after: Some(Duration::from_secs(30)),
+                    code: mapped_code,
+                    ctx,
                 },
-                _ => {
-                    CoreErrorV3::Api(ApiError {
-                        status: 400,
-                        endpoint: "auth".into(),
-                        message: message.to_string(),
-                        source: None,
-                        code: mapped_code,
-                        ctx,
-                    })
-                }
+                _ => CoreErrorV3::Api(ApiError {
+                    status: 400,
+                    endpoint: "auth".into(),
+                    message: message.to_string(),
+                    source: None,
+                    code: mapped_code,
+                    ctx,
+                }),
             }
-        },
+        }
 
         // 未知错误码，根据数值范围推断类型
         None => {
             match feishu_code {
                 // HTTP 状态码范围
-                400..=499 => {
-                    match feishu_code {
-                        401 => CoreErrorV3::Authentication {
-                            message: "认证失败".to_string(),
-                            code: ErrorCode::AuthenticationFailed,
-                            ctx,
-                        },
-                        403 => CoreErrorV3::Authentication {
-                            message: "权限不足".to_string(),
-                            code: ErrorCode::PermissionMissing,
-                            ctx,
-                        },
-                        429 => {
-                            CoreErrorV3::RateLimit {
-                                limit: 0,
-                                window: Duration::from_secs(60),
-                                reset_after: Some(Duration::from_secs(60)),
-                                code: ErrorCode::TooManyRequests,
-                                ctx,
-                            }
-                        },
-                        _ => validation_error_v3("unknown", format!("请求错误 ({}): {}", feishu_code, message)),
-                    }
-                },
-                500..=599 => {
-                    CoreErrorV3::ServiceUnavailable {
-                        service: "auth".into(),
-                        retry_after: Some(Duration::from_secs(30)),
-                        code: ErrorCode::ServiceUnavailable,
+                400..=499 => match feishu_code {
+                    401 => CoreErrorV3::Authentication {
+                        message: "认证失败".to_string(),
+                        code: ErrorCode::AuthenticationFailed,
                         ctx,
-                    }
+                    },
+                    403 => CoreErrorV3::Authentication {
+                        message: "权限不足".to_string(),
+                        code: ErrorCode::PermissionMissing,
+                        ctx,
+                    },
+                    429 => CoreErrorV3::RateLimit {
+                        limit: 0,
+                        window: Duration::from_secs(60),
+                        reset_after: Some(Duration::from_secs(60)),
+                        code: ErrorCode::TooManyRequests,
+                        ctx,
+                    },
+                    _ => validation_error_v3(
+                        "unknown",
+                        format!("请求错误 ({}): {}", feishu_code, message),
+                    ),
+                },
+                500..=599 => CoreErrorV3::ServiceUnavailable {
+                    service: "auth".into(),
+                    retry_after: Some(Duration::from_secs(30)),
+                    code: ErrorCode::ServiceUnavailable,
+                    ctx,
                 },
                 // 其他错误码
-                _ => {
-                    CoreErrorV3::Api(ApiError {
-                        status: 500,
-                        endpoint: "auth".into(),
-                        message: format!("未知认证错误 ({}): {}", feishu_code, message),
-                        source: None,
-                        code: ErrorCode::InternalError,
-                        ctx,
-                    })
-                }
+                _ => CoreErrorV3::Api(ApiError {
+                    status: 500,
+                    endpoint: "auth".into(),
+                    message: format!("未知认证错误 ({}): {}", feishu_code, message),
+                    source: None,
+                    code: ErrorCode::InternalError,
+                    ctx,
+                }),
             }
         }
     }
@@ -513,116 +501,113 @@ pub struct AuthMetrics {
 
 impl AuthErrorExt for AuthError {
     fn is_token_error(&self) -> bool {
-        matches!(self.code(),
-            ErrorCode::AccessTokenExpiredV2 |
-            ErrorCode::AccessTokenInvalid |
-            ErrorCode::AccessTokenFormatInvalid |
-            ErrorCode::TenantAccessTokenInvalid |
-            ErrorCode::AppAccessTokenInvalid
+        matches!(
+            self.code(),
+            ErrorCode::AccessTokenExpiredV2
+                | ErrorCode::AccessTokenInvalid
+                | ErrorCode::AccessTokenFormatInvalid
+                | ErrorCode::TenantAccessTokenInvalid
+                | ErrorCode::AppAccessTokenInvalid
         )
     }
 
     fn is_permission_error(&self) -> bool {
-        matches!(self.code(),
-            ErrorCode::PermissionMissing |
-            ErrorCode::AccessTokenNoPermission |
-            ErrorCode::AppPermissionDenied |
-            ErrorCode::Forbidden
+        matches!(
+            self.code(),
+            ErrorCode::PermissionMissing
+                | ErrorCode::AccessTokenNoPermission
+                | ErrorCode::AppPermissionDenied
+                | ErrorCode::Forbidden
         )
     }
 
     fn is_credential_error(&self) -> bool {
-        matches!(self.code(),
-            ErrorCode::AuthenticationFailed |
-            ErrorCode::InvalidSignature |
-            ErrorCode::AppTicketInvalid
+        matches!(
+            self.code(),
+            ErrorCode::AuthenticationFailed
+                | ErrorCode::InvalidSignature
+                | ErrorCode::AppTicketInvalid
         )
     }
 
     fn is_user_identity_error(&self) -> bool {
-        matches!(self.code(),
-            ErrorCode::UserSessionInvalid |
-            ErrorCode::UserSessionNotFound |
-            ErrorCode::UserSessionTimeout |
-            ErrorCode::UserIdentityInvalid |
-            ErrorCode::UserIdInvalid |
-            ErrorCode::OpenIdInvalid |
-            ErrorCode::UnionIdInvalid |
-            ErrorCode::UserTypeNotSupportedV2 |
-            ErrorCode::UserIdentityMismatch
+        matches!(
+            self.code(),
+            ErrorCode::UserSessionInvalid
+                | ErrorCode::UserSessionNotFound
+                | ErrorCode::UserSessionTimeout
+                | ErrorCode::UserIdentityInvalid
+                | ErrorCode::UserIdInvalid
+                | ErrorCode::OpenIdInvalid
+                | ErrorCode::UnionIdInvalid
+                | ErrorCode::UserTypeNotSupportedV2
+                | ErrorCode::UserIdentityMismatch
         )
     }
 
     fn is_application_error(&self) -> bool {
-        matches!(self.code(),
-            ErrorCode::AppNotInstalled |
-            ErrorCode::AppStatusException
+        matches!(
+            self.code(),
+            ErrorCode::AppNotInstalled | ErrorCode::AppStatusException
         )
     }
 
     fn should_refresh_token(&self) -> bool {
-        matches!(self.code(),
-            ErrorCode::AccessTokenExpiredV2
-        ) && !self.is_credential_error()
+        matches!(self.code(), ErrorCode::AccessTokenExpiredV2) && !self.is_credential_error()
     }
 
     fn requires_user_reauth(&self) -> bool {
-        self.is_token_error() && !self.should_refresh_token() ||
-        self.is_user_identity_error() ||
-        self.is_permission_error()
+        self.is_token_error() && !self.should_refresh_token()
+            || self.is_user_identity_error()
+            || self.is_permission_error()
     }
 
     fn requires_user_action(&self) -> bool {
-        self.is_credential_error() ||
-        self.is_permission_error() ||
-        self.is_application_error() ||
-        self.error_type() == ErrorType::Validation
+        self.is_credential_error()
+            || self.is_permission_error()
+            || self.is_application_error()
+            || self.error_type() == ErrorType::Validation
     }
 
     fn auth_error_type(&self) -> AuthErrorType {
         match self.code() {
-            ErrorCode::AccessTokenExpiredV2 => {
-                AuthErrorType::TokenExpired
-            },
-            ErrorCode::AccessTokenInvalid | ErrorCode::TenantAccessTokenInvalid |
-            ErrorCode::AppAccessTokenInvalid | ErrorCode::AccessTokenFormatInvalid => {
-                AuthErrorType::TokenInvalid
-            },
-            ErrorCode::PermissionMissing | ErrorCode::AccessTokenNoPermission |
-            ErrorCode::AppPermissionDenied | ErrorCode::Forbidden => {
-                AuthErrorType::PermissionDenied
-            },
-            ErrorCode::AuthenticationFailed | ErrorCode::InvalidSignature |
-            ErrorCode::AppTicketInvalid => {
-                AuthErrorType::CredentialInvalid
-            },
-            ErrorCode::UserSessionInvalid | ErrorCode::UserSessionNotFound |
-            ErrorCode::UserSessionTimeout | ErrorCode::UserIdentityInvalid |
-            ErrorCode::SsoTokenInvalid => {
-                AuthErrorType::UserIdentityInvalid
-            },
+            ErrorCode::AccessTokenExpiredV2 => AuthErrorType::TokenExpired,
+            ErrorCode::AccessTokenInvalid
+            | ErrorCode::TenantAccessTokenInvalid
+            | ErrorCode::AppAccessTokenInvalid
+            | ErrorCode::AccessTokenFormatInvalid => AuthErrorType::TokenInvalid,
+            ErrorCode::PermissionMissing
+            | ErrorCode::AccessTokenNoPermission
+            | ErrorCode::AppPermissionDenied
+            | ErrorCode::Forbidden => AuthErrorType::PermissionDenied,
+            ErrorCode::AuthenticationFailed
+            | ErrorCode::InvalidSignature
+            | ErrorCode::AppTicketInvalid => AuthErrorType::CredentialInvalid,
+            ErrorCode::UserSessionInvalid
+            | ErrorCode::UserSessionNotFound
+            | ErrorCode::UserSessionTimeout
+            | ErrorCode::UserIdentityInvalid
+            | ErrorCode::SsoTokenInvalid => AuthErrorType::UserIdentityInvalid,
             ErrorCode::AppNotInstalled | ErrorCode::AppStatusException => {
                 AuthErrorType::ApplicationError
-            },
+            }
             ErrorCode::ConfigurationError => AuthErrorType::ConfigurationError,
             ErrorCode::TooManyRequests => AuthErrorType::RateLimited,
             ErrorCode::ValidationError | ErrorCode::MissingRequiredParameter => {
                 AuthErrorType::ValidationError
-            },
-            ErrorCode::ServiceUnavailable | ErrorCode::BadGateway |
-            ErrorCode::GatewayTimeout | ErrorCode::InternalServerError => {
-                AuthErrorType::ServiceUnavailable
-            },
-            _ => {
-                match self {
-                    CoreErrorV3::Network { .. } => AuthErrorType::NetworkError,
-                    CoreErrorV3::Configuration { .. } => AuthErrorType::ConfigurationError,
-                    CoreErrorV3::ServiceUnavailable { .. } => AuthErrorType::ServiceUnavailable,
-                    CoreErrorV3::RateLimit { .. } => AuthErrorType::RateLimited,
-                    CoreErrorV3::Validation { .. } => AuthErrorType::ValidationError,
-                    _ => AuthErrorType::Unknown,
-                }
             }
+            ErrorCode::ServiceUnavailable
+            | ErrorCode::BadGateway
+            | ErrorCode::GatewayTimeout
+            | ErrorCode::InternalServerError => AuthErrorType::ServiceUnavailable,
+            _ => match self {
+                CoreErrorV3::Network { .. } => AuthErrorType::NetworkError,
+                CoreErrorV3::Configuration { .. } => AuthErrorType::ConfigurationError,
+                CoreErrorV3::ServiceUnavailable { .. } => AuthErrorType::ServiceUnavailable,
+                CoreErrorV3::RateLimit { .. } => AuthErrorType::RateLimited,
+                CoreErrorV3::Validation { .. } => AuthErrorType::ValidationError,
+                _ => AuthErrorType::Unknown,
+            },
         }
     }
 
@@ -630,47 +615,44 @@ impl AuthErrorExt for AuthError {
         match self.auth_error_type() {
             AuthErrorType::TokenExpired => {
                 vec![RecoveryAction::RefreshToken]
-            },
+            }
             AuthErrorType::TokenInvalid | AuthErrorType::UserIdentityInvalid => {
                 vec![RecoveryAction::ReAuthenticate]
-            },
+            }
             AuthErrorType::PermissionDenied => {
                 vec![
                     RecoveryAction::CheckPermissions,
                     RecoveryAction::ContactAdmin,
                 ]
-            },
+            }
             AuthErrorType::CredentialInvalid => {
                 vec![RecoveryAction::CheckAppConfig]
-            },
+            }
             AuthErrorType::ApplicationError => {
-                vec![
-                    RecoveryAction::CheckAppConfig,
-                    RecoveryAction::ContactAdmin,
-                ]
-            },
+                vec![RecoveryAction::CheckAppConfig, RecoveryAction::ContactAdmin]
+            }
             AuthErrorType::RateLimited => {
                 let retry_delay = self.retry_delay(0).unwrap_or(Duration::from_secs(60));
                 vec![RecoveryAction::RetryLater(retry_delay)]
-            },
+            }
             AuthErrorType::NetworkError | AuthErrorType::ServiceUnavailable => {
                 vec![
                     RecoveryAction::CheckNetwork,
                     RecoveryAction::RetryLater(Duration::from_secs(5)),
                 ]
-            },
+            }
             AuthErrorType::ValidationError => {
                 vec![RecoveryAction::FixInput]
-            },
+            }
             AuthErrorType::ConfigurationError => {
                 vec![RecoveryAction::CheckAppConfig]
-            },
+            }
             AuthErrorType::Unknown => {
                 vec![
                     RecoveryAction::RetryLater(Duration::from_secs(10)),
                     RecoveryAction::ContactAdmin,
                 ]
-            },
+            }
         }
     }
 
@@ -682,7 +664,9 @@ impl AuthErrorExt for AuthError {
             severity: format!("{:?}", self.severity()),
             request_id: self.context().request_id().map(|s| s.to_string()),
             operation: self.context().operation().map(|s| s.to_string()),
-            feishu_code: self.context().get_context("feishu_code")
+            feishu_code: self
+                .context()
+                .get_context("feishu_code")
                 .and_then(|s| s.parse().ok()),
         }
     }
@@ -742,7 +726,8 @@ impl AuthErrorAnalyzer {
             }
         }
 
-        report.most_common_error = report.error_types
+        report.most_common_error = report
+            .error_types
             .iter()
             .max_by_key(|(_, count)| *count)
             .map(|(error_type, count)| (error_type.clone(), *count));
@@ -752,17 +737,11 @@ impl AuthErrorAnalyzer {
 
     /// 检测潜在的安全问题
     pub fn detect_security_patterns(errors: &[AuthError]) -> Option<SecurityPattern> {
-        let credential_errors = errors.iter()
-            .filter(|e| e.is_credential_error())
-            .count();
+        let credential_errors = errors.iter().filter(|e| e.is_credential_error()).count();
 
-        let permission_errors = errors.iter()
-            .filter(|e| e.is_permission_error())
-            .count();
+        let permission_errors = errors.iter().filter(|e| e.is_permission_error()).count();
 
-        let user_identity_errors = errors.iter()
-            .filter(|e| e.is_user_identity_error())
-            .count();
+        let user_identity_errors = errors.iter().filter(|e| e.is_user_identity_error()).count();
 
         // 检测攻击模式
         if credential_errors > errors.len() / 2 {
@@ -826,9 +805,7 @@ pub enum SecurityPattern {
         affected_resources: usize,
     },
     /// 身份攻击
-    IdentityAttacks {
-        attempts: usize,
-    },
+    IdentityAttacks { attempts: usize },
 }
 
 #[cfg(test)]
@@ -882,7 +859,10 @@ mod tests {
         ];
 
         let pattern = AuthErrorAnalyzer::detect_security_patterns(&errors);
-        assert!(matches!(pattern, Some(SecurityPattern::CredentialStuffing { .. })));
+        assert!(matches!(
+            pattern,
+            Some(SecurityPattern::CredentialStuffing { .. })
+        ));
     }
 
     #[test]
