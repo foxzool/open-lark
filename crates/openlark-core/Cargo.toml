@@ -6,6 +6,9 @@ authors.workspace = true
 license.workspace = true
 description = "Core infrastructure for OpenLark SDK"
 
+[lib]
+doctest = false
+
 [dependencies]
 rstest = { workspace = true }
 tracing-test = { workspace = true }
@@ -36,6 +39,7 @@ lark-websocket-protobuf = { version = "0.1", optional = true }
 http = "1.0"
 num_cpus = "1.16"
 urlencoding = "2.1"
+serde_with = "3"
 
 # Internal dependencies暂时移除，避免循环依赖
 

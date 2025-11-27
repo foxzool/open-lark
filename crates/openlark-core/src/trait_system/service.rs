@@ -178,14 +178,16 @@ pub trait ConfigurableService: Service {
     /// 验证新配置的有效性
     fn validate_config(&self, config: &Config) -> SDKResult<()> {
         if config.app_id.is_empty() {
-            return Err(crate::error::LarkAPIError::IllegalParamError(
-                "app_id cannot be empty".to_string(),
+            return Err(crate::error::validation_error_v3(
+                "app_id",
+                "app_id cannot be empty",
             ));
         }
 
         if config.app_secret.is_empty() {
-            return Err(crate::error::LarkAPIError::IllegalParamError(
-                "app_secret cannot be empty".to_string(),
+            return Err(crate::error::validation_error_v3(
+                "app_secret",
+                "app_secret cannot be empty",
             ));
         }
 
@@ -385,9 +387,7 @@ mod tests {
         // 测试失败操作
         let result = service
             .execute_with_observability("test_operation_fail", || async {
-                Err(crate::error::LarkAPIError::IllegalParamError(
-                    "test error".to_string(),
-                ))
+                Err(crate::error::validation_error_v3("service", "test error"))
             })
             .await;
 

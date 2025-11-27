@@ -18,7 +18,6 @@ pub mod constants;
 pub mod error;
 pub mod http;
 pub mod improved_response_handler;
-pub mod migration_guide;
 pub mod observability;
 pub mod performance;
 pub mod query_params;
@@ -26,7 +25,6 @@ pub mod req_option;
 pub mod req_translator;
 pub mod request_builder;
 pub mod request_executor;
-pub mod request_executor_example;
 pub mod retry_middleware;
 pub mod standard_response;
 pub mod test_utils;
@@ -56,7 +54,7 @@ pub mod prelude {
     // Re-export commonly used dependencies
     pub use anyhow::Result;
 
-    /// Result type alias for convenience
+    /// Result type alias for convenience（已默认使用 CoreErrorV3）
     pub type SDKResult<T> = Result<T, LarkAPIError>;
     pub use serde::{Deserialize, Serialize};
     pub use serde_json::Value;

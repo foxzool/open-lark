@@ -401,8 +401,9 @@ impl TokenRefresher {
                 TokenType::AppAccessToken => APP_ACCESS_TOKEN_URL_PATH,
                 TokenType::TenantAccessToken => TENANT_ACCESS_TOKEN_URL_PATH,
                 TokenType::UserAccessToken => {
-                    return Err(LarkAPIError::IllegalParamError(
-                        "User token refresh not implemented".to_string(),
+                    return Err(crate::error::validation_error_v3(
+                        "user_access_token",
+                        "User token refresh not implemented",
                     ));
                 }
             };
@@ -450,14 +451,16 @@ impl TokenRefresher {
             TokenType::AppAccessToken => response.app_access_token,
             TokenType::TenantAccessToken => response.tenant_access_token,
             TokenType::UserAccessToken => {
-                return Err(LarkAPIError::IllegalParamError(
-                    "User access token refresh not supported".to_string(),
+                return Err(crate::error::validation_error_v3(
+                    "user_access_token",
+                    "User access token refresh not supported",
                 ));
             }
         };
 
-        let access_token = access_token
-            .ok_or_else(|| LarkAPIError::IllegalParamError("Missing access_token".to_string()))?;
+        let access_token = access_token.ok_or_else(|| {
+            crate::error::validation_error_v3("access_token", "Missing access_token")
+        })?;
 
         let expires_in = response.expires_in;
         let expires_at = SystemTime::now() + Duration::from_secs(expires_in);
@@ -556,10 +559,7 @@ impl TokenRefresher {
             }
         }
 
-        Err(LarkAPIError::NetworkError {
-            message: "Max retry attempts reached".to_string(),
-            kind: crate::error::types::NetworkErrorKind::Other,
-        })
+        Err(crate::error::network_error_v3("Max retry attempts reached"))
     }
 
     /// 批量刷新多个令牌（提高性能）

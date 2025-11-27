@@ -1,5 +1,8 @@
 use crate::{
-    config::Config, constants::AccessTokenType, error::LarkAPIError, req_option::RequestOption,
+    config::Config,
+    constants::AccessTokenType,
+    error::{authentication_error_v3, LarkAPIError},
+    req_option::RequestOption,
 };
 use reqwest::RequestBuilder;
 
@@ -36,7 +39,7 @@ impl AuthHandler {
                 .get_app_access_token(config, &option.app_ticket, &config.app_ticket_manager)
                 .await?
         } else {
-            return Err(LarkAPIError::MissingAccessToken);
+            return Err(authentication_error_v3("访问令牌缺失"));
         };
 
         Ok(Self::add_auth_header(req_builder, &app_access_token))
@@ -61,7 +64,7 @@ impl AuthHandler {
                 )
                 .await?
         } else {
-            return Err(LarkAPIError::MissingAccessToken);
+            return Err(authentication_error_v3("访问令牌缺失"));
         };
 
         Ok(Self::add_auth_header(req_builder, &tenant_access_token))
@@ -82,6 +85,7 @@ impl AuthHandler {
 mod tests {
     use super::*;
     use crate::constants::AppType;
+    use crate::error::traits::ErrorTrait;
     use reqwest::Client;
 
     fn create_test_config() -> Config {
@@ -152,7 +156,7 @@ mod tests {
         assert!(result.is_err());
 
         match result {
-            Err(LarkAPIError::MissingAccessToken) => (),
+            Err(ref err) if err.error_type() == ErrorType::Authentication => (),
             _ => panic!("Expected MissingAccessToken error"),
         }
     }
@@ -180,7 +184,7 @@ mod tests {
         assert!(result.is_err());
 
         match result {
-            Err(LarkAPIError::MissingAccessToken) => (),
+            Err(ref err) if err.error_type() == ErrorType::Authentication => (),
             _ => panic!("Expected MissingAccessToken error"),
         }
     }

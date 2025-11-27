@@ -4,7 +4,8 @@
 /// to reduce code duplication across tests and ensure consistent testing practices.
 use crate::{
     api::{ApiResponseTrait, BaseResponse, ErrorInfo, RawResponse, Response, ResponseFormat},
-    error::LarkAPIError,
+    error::traits::ErrorTrait,
+    error::{ErrorType, LarkAPIError},
 };
 use serde::{Deserialize, Serialize};
 
@@ -341,21 +342,26 @@ impl TestAssertions {
 
     /// Assert that an error is of a specific type
     pub fn assert_error_type(error: &LarkAPIError, expected_variant: &str) {
-        let error_name = match error {
-            LarkAPIError::IOErr(_) => "IOErr",
-            LarkAPIError::IllegalParamError(_) => "IllegalParamError",
-            LarkAPIError::DeserializeError(_) => "DeserializeError",
-            LarkAPIError::RequestError(_) => "RequestError",
-            LarkAPIError::UrlParseError(_) => "UrlParseError",
-            LarkAPIError::ApiError { .. } => "ApiError",
-            LarkAPIError::MissingAccessToken => "MissingAccessToken",
-            LarkAPIError::AuthenticationError { .. } => "AuthenticationError",
-            LarkAPIError::ValidationError(_) => "ValidationError",
-            LarkAPIError::NetworkError { .. } => "NetworkError",
-            LarkAPIError::PermissionError { .. } => "PermissionError",
-            LarkAPIError::BadRequest(_) => "BadRequest",
-            LarkAPIError::DataError(_) => "DataError",
-            LarkAPIError::APIError { .. } => "APIError", // Legacy format
+        let error_name = match error.error_type() {
+            ErrorType::Internal => "IOErr",
+            ErrorType::Validation => "IllegalParamError",
+            ErrorType::Serialization => "DeserializeError",
+            ErrorType::Network => "RequestError",
+            ErrorType::Authentication => match expected_variant {
+                "MissingAccessToken" => "MissingAccessToken",
+                "AuthenticationError" => "AuthenticationError",
+                _ => "AuthenticationError",
+            },
+            ErrorType::Api => "APIError",
+            ErrorType::ServiceUnavailable => "ServiceUnavailable",
+            ErrorType::Business => match expected_variant {
+                "BadRequest" => "BadRequest",
+                "DataError" => "DataError",
+                _ => "Business",
+            },
+            ErrorType::Configuration => "ConfigurationError",
+            ErrorType::RateLimit => "RateLimitError",
+            ErrorType::Timeout => "TimeoutError",
         };
         assert_eq!(
             error_name, expected_variant,
