@@ -4,12 +4,12 @@
 //! 集成 CoreErrorV3 错误处理系统，提供企业级错误管理
 
 use crate::{
-    Config, DefaultServiceRegistry, Result,
+    error::{api_error, validation_error},
     error::{with_context, with_operation_context},
-    error::{validation_error, api_error}
+    Config, DefaultServiceRegistry, Result,
 };
-use std::collections::HashMap;
 use openlark_core::error::ErrorTrait;
+use std::collections::HashMap;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 /// 📡 通讯服务 - 统一访问接口
@@ -36,7 +36,7 @@ impl<'a> CommunicationService<'a> {
             return with_context(
                 Err(validation_error("app_id", "应用ID不能为空")),
                 "service",
-                "communication"
+                "communication",
             );
         }
 
@@ -44,7 +44,7 @@ impl<'a> CommunicationService<'a> {
             return with_context(
                 Err(validation_error("app_secret", "应用密钥不能为空")),
                 "service",
-                "communication"
+                "communication",
             );
         }
 
@@ -97,7 +97,7 @@ impl<'a> CommunicationService<'a> {
             return with_context(
                 Err(validation_error("receive_id", "接收者ID不能为空")),
                 "operation",
-                operation_name
+                operation_name,
             );
         }
 
@@ -105,7 +105,7 @@ impl<'a> CommunicationService<'a> {
             return with_context(
                 Err(validation_error("content", "消息内容不能为空")),
                 "operation",
-                operation_name
+                operation_name,
             );
         }
 
@@ -113,10 +113,10 @@ impl<'a> CommunicationService<'a> {
             return with_context(
                 Err(validation_error(
                     "receive_id_type",
-                    format!("不支持的接收者ID类型: {}", receive_id_type)
+                    format!("不支持的接收者ID类型: {}", receive_id_type),
                 )),
                 "operation",
-                operation_name
+                operation_name,
             );
         }
 
@@ -125,15 +125,17 @@ impl<'a> CommunicationService<'a> {
             return with_context(
                 Err(validation_error(
                     "content",
-                    format!("消息内容过长，当前长度: {}, 最大支持: 4096", content.len())
+                    format!("消息内容过长，当前长度: {}, 最大支持: 4096", content.len()),
                 )),
                 "operation",
-                operation_name
+                operation_name,
             );
         }
 
         // 模拟API调用（实际实现中会调用真实的飞书API）
-        let api_result = self.simulate_send_message(receive_id, receive_id_type, content).await;
+        let api_result = self
+            .simulate_send_message(receive_id, receive_id_type, content)
+            .await;
 
         match api_result {
             Ok(response) => {
@@ -141,7 +143,10 @@ impl<'a> CommunicationService<'a> {
                 with_context(Ok(response), "operation", operation_name)
             }
             Err(e) => {
-                tracing::error!("文本消息发送失败: {}", e.user_message().unwrap_or("未知错误"));
+                tracing::error!(
+                    "文本消息发送失败: {}",
+                    e.user_message().unwrap_or("未知错误")
+                );
                 with_context(Err(e), "operation", operation_name)
             }
         }
@@ -164,7 +169,7 @@ impl<'a> CommunicationService<'a> {
             return with_context(
                 Err(validation_error("receive_id", "接收者ID不能为空")),
                 "operation",
-                operation_name
+                operation_name,
             );
         }
 
@@ -172,7 +177,7 @@ impl<'a> CommunicationService<'a> {
             return with_context(
                 Err(validation_error("rich_content", "富文本内容不能为空")),
                 "operation",
-                operation_name
+                operation_name,
             );
         }
 
@@ -181,7 +186,9 @@ impl<'a> CommunicationService<'a> {
             .map_err(|e| crate::error::serialization_error(format!("富文本序列化失败: {}", e)))?;
 
         // 模拟API调用
-        let api_result = self.simulate_send_rich_text(receive_id, receive_id_type, &content_json).await;
+        let api_result = self
+            .simulate_send_rich_text(receive_id, receive_id_type, &content_json)
+            .await;
 
         match api_result {
             Ok(response) => {
@@ -189,7 +196,10 @@ impl<'a> CommunicationService<'a> {
                 with_context(Ok(response), "operation", operation_name)
             }
             Err(e) => {
-                tracing::error!("富文本消息发送失败: {}", e.user_message().unwrap_or("未知错误"));
+                tracing::error!(
+                    "富文本消息发送失败: {}",
+                    e.user_message().unwrap_or("未知错误")
+                );
                 with_context(Err(e), "operation", operation_name)
             }
         }
@@ -210,14 +220,18 @@ impl<'a> CommunicationService<'a> {
         page_token: Option<&str>,
     ) -> Result<ListMessagesResponse> {
         let operation_name = "list_messages";
-        tracing::info!("获取消息列表，容器: {} ({})", container_id, container_id_type);
+        tracing::info!(
+            "获取消息列表，容器: {} ({})",
+            container_id,
+            container_id_type
+        );
 
         // 参数验证
         if container_id.is_empty() {
             return with_context(
                 Err(validation_error("container_id", "容器ID不能为空")),
                 "operation",
-                operation_name
+                operation_name,
             );
         }
 
@@ -225,10 +239,10 @@ impl<'a> CommunicationService<'a> {
             return with_context(
                 Err(validation_error(
                     "container_id_type",
-                    format!("不支持的容器ID类型: {}", container_id_type)
+                    format!("不支持的容器ID类型: {}", container_id_type),
                 )),
                 "operation",
-                operation_name
+                operation_name,
             );
         }
 
@@ -237,21 +251,18 @@ impl<'a> CommunicationService<'a> {
                 return with_context(
                     Err(validation_error(
                         "page_size",
-                        format!("分页大小必须在1-200之间，当前: {}", size)
+                        format!("分页大小必须在1-200之间，当前: {}", size),
                     )),
                     "operation",
-                    operation_name
+                    operation_name,
                 );
             }
         }
 
         // 模拟API调用
-        let api_result = self.simulate_list_messages(
-            container_id_type,
-            container_id,
-            page_size,
-            page_token
-        ).await;
+        let api_result = self
+            .simulate_list_messages(container_id_type, container_id, page_size, page_token)
+            .await;
 
         match api_result {
             Ok(response) => {
@@ -259,7 +270,10 @@ impl<'a> CommunicationService<'a> {
                 with_context(Ok(response), "operation", operation_name)
             }
             Err(e) => {
-                tracing::error!("消息列表获取失败: {}", e.user_message().unwrap_or("未知错误"));
+                tracing::error!(
+                    "消息列表获取失败: {}",
+                    e.user_message().unwrap_or("未知错误")
+                );
                 with_context(Err(e), "operation", operation_name)
             }
         }
@@ -285,7 +299,7 @@ impl<'a> CommunicationService<'a> {
             return with_context(
                 Err(validation_error("message_id", "消息ID不能为空")),
                 "operation",
-                operation_name
+                operation_name,
             );
         }
 
@@ -293,16 +307,14 @@ impl<'a> CommunicationService<'a> {
             return with_context(
                 Err(validation_error("receive_id", "接收者ID不能为空")),
                 "operation",
-                operation_name
+                operation_name,
             );
         }
 
         // 模拟API调用
-        let api_result = self.simulate_delete_message(
-            message_id,
-            receive_id_type,
-            receive_id
-        ).await;
+        let api_result = self
+            .simulate_delete_message(message_id, receive_id_type, receive_id)
+            .await;
 
         match api_result {
             Ok(response) => {
@@ -322,12 +334,18 @@ impl<'a> CommunicationService<'a> {
 
     /// 验证接收者ID类型是否有效
     fn is_valid_receive_id_type(&self, receive_id_type: &str) -> bool {
-        matches!(receive_id_type, "open_id" | "user_id" | "union_id" | "chat_id")
+        matches!(
+            receive_id_type,
+            "open_id" | "user_id" | "union_id" | "chat_id"
+        )
     }
 
     /// 验证容器ID类型是否有效
     fn is_valid_container_id_type(&self, container_id_type: &str) -> bool {
-        matches!(container_id_type, "open_id" | "user_id" | "union_id" | "chat_id")
+        matches!(
+            container_id_type,
+            "open_id" | "user_id" | "union_id" | "chat_id"
+        )
     }
 
     /// 模拟发送消息的API调用
@@ -342,20 +360,22 @@ impl<'a> CommunicationService<'a> {
 
         // 模拟可能的错误情况（5%失败率）
         // 使用系统时间戳作为简单的随机源
-    let timestamp = SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .unwrap_or_default()
-        .as_secs();
-    if timestamp % 100 < 5 {
+        let timestamp = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap_or_default()
+            .as_secs();
+        if timestamp % 100 < 5 {
             return with_operation_context(
                 Err(api_error(
                     500,
-                    self.endpoints.get("send_message").map_or("/unknown", |v| *v),
+                    self.endpoints
+                        .get("send_message")
+                        .map_or("/unknown", |v| *v),
                     "模拟API调用失败",
-                    Some("req_sim_001".to_string())
+                    Some("req_sim_001".to_string()),
                 )),
                 "simulate_send_message",
-                "CommunicationService"
+                "CommunicationService",
             );
         }
 
@@ -438,12 +458,14 @@ impl<'a> CommunicationService<'a> {
             return with_operation_context(
                 Err(api_error(
                     403,
-                    self.endpoints.get("delete_message").map_or("/unknown", |v| *v),
+                    self.endpoints
+                        .get("delete_message")
+                        .map_or("/unknown", |v| *v),
                     "无权限删除该消息",
-                    Some("req_sim_002".to_string())
+                    Some("req_sim_002".to_string()),
                 )),
                 "simulate_delete_message",
-                "CommunicationService"
+                "CommunicationService",
             );
         }
 
@@ -610,7 +632,10 @@ mod tests {
 
         if let Err(error) = result {
             assert!(error.is_validation_error());
-            assert!(error.user_message().unwrap_or("未知错误").contains("应用ID不能为空"));
+            assert!(error
+                .user_message()
+                .unwrap_or("未知错误")
+                .contains("应用ID不能为空"));
         }
     }
 
@@ -626,7 +651,10 @@ mod tests {
 
         if let Err(error) = result {
             assert!(error.is_validation_error());
-            assert!(error.user_message().unwrap_or("未知错误").contains("应用密钥不能为空"));
+            assert!(error
+                .user_message()
+                .unwrap_or("未知错误")
+                .contains("应用密钥不能为空"));
         }
     }
 
@@ -663,7 +691,10 @@ mod tests {
 
         if let Err(error) = result {
             assert!(error.is_validation_error());
-            assert!(error.user_message().unwrap_or("未知错误").contains("接收者ID不能为空"));
+            assert!(error
+                .user_message()
+                .unwrap_or("未知错误")
+                .contains("接收者ID不能为空"));
         }
     }
 
@@ -681,7 +712,10 @@ mod tests {
 
         if let Err(error) = result {
             assert!(error.is_validation_error());
-            assert!(error.user_message().unwrap_or("未知错误").contains("消息内容不能为空"));
+            assert!(error
+                .user_message()
+                .unwrap_or("未知错误")
+                .contains("消息内容不能为空"));
         }
     }
 
@@ -699,7 +733,10 @@ mod tests {
 
         if let Err(error) = result {
             assert!(error.is_validation_error());
-            assert!(error.user_message().unwrap_or("未知错误").contains("不支持的接收者ID类型"));
+            assert!(error
+                .user_message()
+                .unwrap_or("未知错误")
+                .contains("不支持的接收者ID类型"));
         }
     }
 
@@ -718,7 +755,10 @@ mod tests {
 
         if let Err(error) = result {
             assert!(error.is_validation_error());
-            assert!(error.user_message().unwrap_or("未知错误").contains("消息内容过长"));
+            assert!(error
+                .user_message()
+                .unwrap_or("未知错误")
+                .contains("消息内容过长"));
         }
     }
 
@@ -777,7 +817,10 @@ mod tests {
 
         if let Err(error) = result {
             assert!(error.is_validation_error());
-            assert!(error.user_message().unwrap_or("未知错误").contains("分页大小必须在1-200之间"));
+            assert!(error
+                .user_message()
+                .unwrap_or("未知错误")
+                .contains("分页大小必须在1-200之间"));
         }
     }
 
@@ -813,8 +856,13 @@ mod tests {
 
         if let Err(error) = result {
             assert!(error.is_business_error() || error.is_api_error());
-            assert!(error.user_message().unwrap_or("未知错误").contains("无权限") ||
-                   error.user_message().unwrap_or("未知错误").contains("权限"));
+            assert!(
+                error
+                    .user_message()
+                    .unwrap_or("未知错误")
+                    .contains("无权限")
+                    || error.user_message().unwrap_or("未知错误").contains("权限")
+            );
         }
     }
 
