@@ -254,7 +254,7 @@ pub struct ServiceContext {
 ### 配置与横切关注点
 - `ServiceConfig` 支持局部覆盖：`timeout`, `retry_policy`, `base_url`, `auth_strategy`。
 - `middleware/` 提供可插拔的重试、限流、日志、指标；通过 `ServiceContext` 注入。
-- 观测统一：所有 `Service` 方法返回 `CoreErrorV3`，自动附带 `component=service::<name>` 上下文。
+- 观测统一：所有 `Service` 方法返回 `CoreError`，自动附带 `component=service::<name>` 上下文。
 
 ### 渐进式迁移路径
 1. 引入 `service.rs` 与 `context.rs` 基础抽象，`AuthService` 先落地为示例。
@@ -370,26 +370,26 @@ impl UserCreateBuilder {
 
 ### 错误处理
 
-- 核心错误类型采用 `thiserror` 驱动的 **CoreErrorV3**，所有分类（网络、认证、API、验证、序列化、业务、超时、限流、服务不可用、内部错误）都携带 `ErrorCode` 与 `ErrorContext`，保持单一信息源。
-- 观测统一：通过 `ErrorRecord::from(&CoreErrorV3)` 序列化到日志/指标，包含 severity / retryable / request_id / context。
-- 便利层：`convenience_v3::*` 提供轻量工厂（如 `api_error_v3(status, endpoint, msg, request_id)`、`validation_error_v3(field, msg)`）。旧入口 `convenience::*` 只是对 V3 的薄包装，后续可删除。
-- API 返回建议：`pub type SDKResult<T> = Result<T, CoreErrorV3>;`——调用侧可直接匹配枚举变体或使用 `ErrorTrait` 判别（`is_api_error / is_retryable`）。
+- 核心错误类型采用 `thiserror` 驱动的 **CoreError**，所有分类（网络、认证、API、验证、序列化、业务、超时、限流、服务不可用、内部错误）都携带 `ErrorCode` 与 `ErrorContext`，保持单一信息源。
+- 观测统一：通过 `ErrorRecord::from(&CoreError)` 序列化到日志/指标，包含 severity / retryable / request_id / context。
+- 便利层：提供轻量工厂（如 `api_error(status, endpoint, msg, request_id)`、`validation_error(field, msg)`）。
+- API 返回建议：`pub type SDKResult<T> = Result<T, CoreError>;`——调用侧可直接匹配枚举变体或使用 `ErrorTrait` 判别（`is_api_error / is_retryable`）。
 
 ```rust
 use openlark_core::error::{
-    CoreErrorV3, ErrorRecord, ErrorTrait, ErrorCode,
-    convenience_v3::{api_error_v3, validation_error_v3},
+    CoreError, ErrorRecord, ErrorTrait, ErrorCode,
+    api_error, validation_error,
 };
 
 // 在传输层创建错误
-fn to_error(status: u16, endpoint: &str, body: &str) -> CoreErrorV3 {
-    api_error_v3(status, endpoint, format!("resp={body}"), None)
+fn to_error(status: u16, endpoint: &str, body: &str) -> CoreError {
+    api_error(status, endpoint, format!("resp={body}"), None)
 }
 
 // 在业务层校验
-fn validate_email(email: &str) -> Result<(), CoreErrorV3> {
+fn validate_email(email: &str) -> Result<(), CoreError> {
     if !email.contains('@') {
-        return Err(validation_error_v3("email", "邮箱格式不合法"));
+        return Err(validation_error("email", "邮箱格式不合法"));
     }
     Ok(())
 }
