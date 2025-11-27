@@ -301,7 +301,7 @@ pub trait ErrorBuilderTrait: Sized {
     fn context(self, key: impl Into<String>, value: impl Into<String>) -> Self;
 
     /// 构建错误（V3）
-    fn build(self) -> super::CoreErrorV3;
+    fn build(self) -> super::CoreError;
 }
 
 /// 错误格式化特征

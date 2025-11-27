@@ -2,22 +2,22 @@
 //!
 //! 提供新thiserror架构的完整错误处理组件导入
 
-// 核心类型重新导出（仅 V3）
+// 核心类型重新导出（主要推荐 CoreError）
 pub use super::codes::ErrorCode;
 pub use super::context::ErrorContext;
 pub use super::core::{RecoveryStrategy, RetryPolicy};
-pub use super::core_v3::{BuilderKind, CoreErrorV3, ErrorBuilder, ErrorRecord};
+pub use super::core_v3::{BuilderKind, ErrorBuilder, ErrorRecord};
 pub use super::kinds::ErrorKind;
 pub use super::traits::{ErrorSeverity, ErrorType};
-pub use super::{ErrorId, LarkAPIError, SDKResult};
+pub use super::{CoreError, ErrorId, LarkAPIError, SDKResult};
 
 // 特征系统重新导出
 pub use super::traits::{ErrorContextTrait, ErrorFormatTrait, ErrorTrait, FullErrorTrait};
 
-pub use super::convenience_v3::{
-    api_error_v3, authentication_error_v3, business_error_v3, configuration_error_v3,
-    network_error_v3, network_error_with_details_v3, rate_limit_error_v3, serialization_error_v3,
-    service_unavailable_error_v3, timeout_error_v3, validation_error_v3,
+pub use super::core_v3::{
+    api_error, authentication_error, business_error, configuration_error,
+    network_error, network_error_with_details, rate_limit_error, serialization_error,
+    service_unavailable_error, timeout_error, validation_error,
 };
 
 pub use super::analysis;
@@ -38,10 +38,10 @@ pub mod common_imports {
 #[macro_export]
 macro_rules! network_err {
     ($msg:expr) => {
-        $crate::error::network_error_v3($msg)
+        $crate::error::network_error($msg)
     };
     ($fmt:expr, $($arg:tt)*) => {
-        $crate::error::network_error_v3(format!($fmt, $($arg)*))
+        $crate::error::network_error(format!($fmt, $($arg)*))
     };
 }
 
@@ -49,10 +49,10 @@ macro_rules! network_err {
 #[macro_export]
 macro_rules! auth_err {
     ($msg:expr) => {
-        $crate::error::authentication_error_v3($msg)
+        $crate::error::authentication_error($msg)
     };
     ($fmt:expr, $($arg:tt)*) => {
-        $crate::error::authentication_error_v3(format!($fmt, $($arg)*))
+        $crate::error::authentication_error(format!($fmt, $($arg)*))
     };
 }
 
@@ -60,10 +60,10 @@ macro_rules! auth_err {
 #[macro_export]
 macro_rules! validation_err {
     ($field:expr, $msg:expr) => {
-        $crate::error::validation_error_v3($field, $msg)
+        $crate::error::validation_error($field, $msg)
     };
     ($field:expr, $fmt:expr, $($arg:tt)*) => {
-        $crate::error::validation_error_v3($field, format!($fmt, $($arg)*))
+        $crate::error::validation_error($field, format!($fmt, $($arg)*))
     };
 }
 
@@ -71,10 +71,10 @@ macro_rules! validation_err {
 #[macro_export]
 macro_rules! business_err {
     ($msg:expr) => {
-        $crate::error::business_error_v3($msg)
+        $crate::error::business_error($msg)
     };
     ($fmt:expr, $($arg:tt)*) => {
-        $crate::error::business_error_v3(format!($fmt, $($arg)*))
+        $crate::error::business_error(format!($fmt, $($arg)*))
     };
 }
 
@@ -82,10 +82,10 @@ macro_rules! business_err {
 #[macro_export]
 macro_rules! api_err {
     ($status:expr, $endpoint:expr, $msg:expr) => {
-        $crate::error::api_error_v3($status, $endpoint, $msg, None::<String>)
+        $crate::error::api_error($status, $endpoint, $msg, None::<String>)
     };
     ($status:expr, $endpoint:expr, $fmt:expr, $($arg:tt)*) => {
-        $crate::error::api_error_v3($status, $endpoint, format!($fmt, $($arg)*), None::<String>)
+        $crate::error::api_error($status, $endpoint, format!($fmt, $($arg)*), None::<String>)
     };
 }
 
@@ -94,13 +94,13 @@ macro_rules! api_err {
 macro_rules! ensure {
     ($condition:expr, $error:expr) => {
         if !$condition {
-            return Err(Into::<$crate::error::CoreErrorV3>::into($error));
+            return Err(Into::<$crate::error::CoreError>::into($error));
         }
     };
     ($condition:expr, $fmt:expr, $($arg:tt)*) => {
         if !$condition {
-            return Err(Into::<$crate::error::CoreErrorV3>::into(
-                $crate::error::validation_error_v3("condition", format!($fmt, $($arg)*))
+            return Err(Into::<$crate::error::CoreError>::into(
+                $crate::error::validation_error("condition", format!($fmt, $($arg)*))
             ));
         }
     };
@@ -111,15 +111,15 @@ macro_rules! ensure {
 macro_rules! validate {
     ($field:expr, $value:expr, $error_msg:expr) => {
         if !$value {
-            return Err(Into::<$crate::error::CoreErrorV3>::into(
-                $crate::error::validation_error_v3($field, $error_msg)
+            return Err(Into::<$crate::error::CoreError>::into(
+                $crate::error::validation_error($field, $error_msg)
             ));
         }
     };
     ($field:expr, $value:expr, $error_msg:expr, $($arg:tt)*) => {
         if !$value {
-            return Err(Into::<$crate::error::CoreErrorV3>::into(
-                $crate::error::validation_error_v3($field, format!($error_msg, $($arg)*))
+            return Err(Into::<$crate::error::CoreError>::into(
+                $crate::error::validation_error($field, format!($error_msg, $($arg)*))
             ));
         }
     };
@@ -147,12 +147,12 @@ mod tests {
     #[test]
     fn test_modern_prelude_imports() {
         // 确保所有重新导出的类型都可以使用
-        let _error: LarkAPIError = network_error_v3("测试");
+        let _error: LarkAPIError = network_error("测试");
         let _result: SDKResult<()> = Ok(());
         let _severity: ErrorSeverity = ErrorSeverity::Warning;
         let _kind: ErrorKind = ErrorKind::Network;
         let _code: ErrorCode = ErrorCode::BadRequest;
-        let _lark_error: LarkAPIError = network_error_v3("测试");
+        let _lark_error: LarkAPIError = network_error("测试");
     }
 
     #[test]
@@ -172,7 +172,7 @@ mod tests {
 
     #[test]
     fn test_builder_macro() {
-        let error = validation_error_v3("email", "邮箱格式不正确");
+        let error = validation_error("email", "邮箱格式不正确");
 
         assert!(error.is_validation_error());
         assert_eq!(error.context().get_context("field"), Some("email"));
@@ -181,8 +181,8 @@ mod tests {
     #[test]
     fn test_ensure_macro() {
         let result = || -> SDKResult<()> {
-            ensure!(true, validation_error_v3("test", "不应该失败"));
-            ensure!(false, validation_error_v3("test", "应该失败"));
+            ensure!(true, validation_error("test", "不应该失败"));
+            ensure!(false, validation_error("test", "应该失败"));
             Ok(())
         }();
 
@@ -210,7 +210,7 @@ mod tests {
 
     #[test]
     fn test_modern_error_creation() {
-        let error = api_error_v3(404, "/api/v1/users/123", "用户不存在", Some("req-123"));
+        let error = api_error(404, "/api/v1/users/123", "用户不存在", Some("req-123"));
 
         assert!(error.is_api_error());
         assert_eq!(error.severity(), ErrorSeverity::Warning);
@@ -221,7 +221,7 @@ mod tests {
 
     #[test]
     fn test_error_analysis_integration() {
-        let error = network_error_with_details_v3(
+        let error = network_error_with_details(
             "连接超时",
             Some("req-456"),
             Some("https://api.example.com"),

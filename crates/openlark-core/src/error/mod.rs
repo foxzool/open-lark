@@ -5,33 +5,35 @@
 use std::time::Duration;
 use uuid::Uuid;
 
-// 仅暴露 V3 错误体系
+// 暴露错误体系（CoreError 为主要错误类型）
 pub use self::codes::{ErrorCategory, ErrorCode};
 pub use self::context::{ErrorContext, ErrorContextBuilder};
-pub use self::convenience_v3::{
-    api_error_v3, authentication_error_v3, business_error_v3, configuration_error_v3,
-    network_error_v3, network_error_with_details_v3, permission_missing_error_v3,
-    rate_limit_error_v3, serialization_error_v3, service_unavailable_error_v3,
-    sso_token_invalid_error_v3, timeout_error_v3, token_expired_error_v3, token_invalid_error_v3,
-    user_identity_invalid_error_v3, validation_error_v3,
-};
 pub use self::core::{RecoveryStrategy, RetryPolicy};
-pub use self::core_v3::{BuilderKind, CoreErrorV3, ErrorBuilder, ErrorRecord};
+pub use self::core_v3::{BuilderKind, ErrorBuilder, ErrorRecord, CoreError, ApiError};
+pub use self::core_v3::{
+    api_error, authentication_error, business_error, configuration_error,
+    network_error, network_error_with_details, permission_missing_error, rate_limit_error,
+    serialization_error, service_unavailable_error, sso_token_invalid_error, timeout_error,
+    token_expired_error, token_invalid_error, user_identity_invalid_error, validation_error,
+};
 pub use self::kinds::ErrorKind;
 pub use self::traits::{ErrorContextTrait, ErrorFormatTrait, ErrorTrait, FullErrorTrait};
 pub use self::traits::{ErrorSeverity, ErrorType};
 
-// 类型别名（V3 为唯一入口）
-pub type SDKResult<T> = Result<T, CoreErrorV3>;
+// 主要类型别名（推荐使用）
+pub type SDKResult<T> = Result<T, CoreError>;
 pub type ErrorId = Uuid;
-pub type LarkAPIError = CoreErrorV3;
+pub type LarkAPIError = CoreError;
+
+// 兼容性类型别名（逐步迁移中，后续可移除）
+#[deprecated(note = "使用 CoreError 替代")]
+pub type LegacyCoreError = CoreError;
 
 // 核心模块
 pub mod codes;
 pub mod context;
-pub mod convenience_v3;
 pub mod core; // 仅保留重试策略等基础设施
-pub mod core_v3; // V3 主实现
+pub mod core_v3; // 主实现
 pub mod kinds;
 pub mod traits;
 
@@ -71,7 +73,7 @@ pub mod defaults {
 }
 
 /// 现代化便利函数
-// modern_convenience 已收敛进 convenience_v3 模块
+// modern_convenience 功能已收敛到核心错误系统中
 
 /// 错误分析工具
 pub mod analysis {
@@ -148,7 +150,7 @@ mod tests {
 
     #[test]
     fn test_modern_error_creation() {
-        let error = api_error_v3(404, "/api/users/123", "用户不存在", Some("req-123"));
+        let error = api_error(404, "/api/users/123", "用户不存在", Some("req-123"));
 
         assert_eq!(error.error_type(), ErrorType::Api);
         assert_eq!(error.severity(), ErrorSeverity::Warning);
@@ -159,7 +161,7 @@ mod tests {
 
     #[test]
     fn test_detailed_error_creation() {
-        let error = network_error_with_details_v3(
+        let error = network_error_with_details(
             "连接超时",
             Some("req-456"),
             Some("https://api.example.com"),
@@ -171,7 +173,7 @@ mod tests {
 
     #[test]
     fn test_error_analysis() {
-        let error = validation_error_v3("email", "邮箱格式不正确");
+        let error = validation_error("email", "邮箱格式不正确");
 
         let analysis = analyze_error(&error);
 
