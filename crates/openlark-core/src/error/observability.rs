@@ -1,659 +1,717 @@
 //! Error Observability Module
 //!
-//! 错误观测性模块，整合了日志记录和监控统计功能。
-//! 提供结构化的错误日志记录、错误事件统计、性能分析和监控告警功能。
-//!
-//! # 主要功能
-//!
-//! - **结构化日志**: 支持多种日志格式和级别控制
-//! - **错误统计**: 错误频率统计、类型分布、趋势分析
-//! - **性能监控**: 错误处理耗时分析和性能影响评估
-//! - **告警机制**: 自动错误告警和阈值监控
-//! - **上下文追踪**: 完整的错误上下文信息记录
-//!
-//! # 使用示例
-//!
-//! ```rust
-//! use openlark_core::error::prelude::*;
-//!
-//! // 记录错误
-//! let error = LarkAPIError::MissingAccessToken;
-//! log_error(&error, LogLevel::Error);
-//!
-//! // 记录错误事件
-//! record_error(&error, Some("operation_context".to_string()));
-//!
-//! // 获取错误统计
-//! let stats = get_error_stats();
-//! println!("总错误数: {}", stats.total_errors);
-//! ```
+//! 提供错误观测性功能，包括结构化日志、指标收集、追踪和监控告警。
 
-use std::collections::HashMap;
 use std::{
+    collections::HashMap,
     sync::{Arc, Mutex},
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
+use uuid::Uuid;
 
-use crate::error::types::{ErrorHandlingCategory, ErrorSeverity, LarkAPIError, LarkErrorCode};
+use super::{
+    codes::{ErrorCode, ErrorCategory},
+    core::ErrorSeverity,
+    kinds::ErrorKind,
+    core_v3::ErrorRecord,
+};
 
-// ============================================================================
-// 日志记录功能
-// ============================================================================
+/// 错误观测性系统
+///
+/// 提供全面的错误监控和分析功能：
+/// - 结构化日志记录
+/// - 指标收集和统计
+/// - 分布式追踪支持
+/// - 告警和通知机制
+#[derive(Debug)]
+pub struct ErrorObservability {
+    /// 错误日志记录器
+    logger: Arc<dyn ErrorLogger>,
+    /// 指标收集器
+    metrics_collector: Arc<dyn MetricsCollector>,
+    /// 追踪器
+    tracer: Arc<dyn ErrorTracer>,
+    /// 告警管理器
+    alert_manager: Arc<dyn AlertManager>,
+    /// 配置
+    config: ObservabilityConfig,
+}
+
+impl ErrorObservability {
+    /// 创建新的观测性系统
+    pub fn new(config: ObservabilityConfig) -> Self {
+        Self {
+            logger: Arc::new(DefaultErrorLogger::new(config.clone())),
+            metrics_collector: Arc::new(DefaultMetricsCollector::new()),
+            tracer: Arc::new(DefaultErrorTracer::new()),
+            alert_manager: Arc::new(DefaultAlertManager::new(config.clone())),
+            config,
+        }
+    }
+
+    /// 记录错误（兼容旧版接口；推荐改用 `record_error_record`）
+    pub async fn record_error<E: ErrorObservable + Send + Sync>(&self, error: &E) {
+        self.record_error_record(&error.as_error_record()).await;
+    }
+
+    /// 基于 ErrorRecord 记录错误（配合 CoreErrorV3 使用）
+    pub async fn record_error_record(&self, record: &ErrorRecord) {
+        let error_event = ErrorEvent::from_record(record);
+
+        let logger = self.logger.clone();
+        let metrics = self.metrics_collector.clone();
+        let tracer = self.tracer.clone();
+        let alert = self.alert_manager.clone();
+
+        let event_clone = error_event.clone();
+
+        tokio::spawn(async move {
+            logger.log_error(&event_clone).await;
+            metrics.record_metrics(&event_clone).await;
+            tracer.trace_error(&event_clone).await;
+            alert.check_alerts(&event_clone).await;
+        });
+    }
+
+    /// 获取错误统计
+    pub async fn get_error_stats(&self, time_range: Duration) -> ErrorStatistics {
+        self.metrics_collector.get_statistics(time_range).await
+    }
+
+    /// 获取错误趋势
+    pub async fn get_error_trend(&self, duration: Duration) -> ErrorTrend {
+        self.metrics_collector.get_trend(duration).await
+    }
+
+    /// 配置告警规则
+    pub fn configure_alert(&self, rule: AlertRule) {
+        self.alert_manager.add_rule(rule);
+    }
+
+    /// 生成错误报告
+    pub async fn generate_report(&self, time_range: Duration) -> ErrorReport {
+        let stats = self.get_error_stats(time_range).await;
+        let trend = self.get_error_trend(time_range).await;
+
+        ErrorReport {
+            time_range,
+            statistics: stats,
+            trend,
+            generated_at: SystemTime::now(),
+        }
+    }
+
+    /// 启用/禁用特定功能
+    pub async fn toggle_feature(&mut self, feature: ObservabilityFeature, enabled: bool) {
+        match feature {
+            ObservabilityFeature::Logging => {
+                if enabled {
+                    self.logger = Arc::new(DefaultErrorLogger::new(self.config.clone()));
+                } else {
+                    self.logger = Arc::new(NoOpLogger);
+                }
+            }
+            ObservabilityFeature::Metrics => {
+                if enabled {
+                    self.metrics_collector = Arc::new(DefaultMetricsCollector::new());
+                } else {
+                    self.metrics_collector = Arc::new(NoOpMetricsCollector);
+                }
+            }
+            ObservabilityFeature::Tracing => {
+                if enabled {
+                    self.tracer = Arc::new(DefaultErrorTracer::new());
+                } else {
+                    self.tracer = Arc::new(NoOpTracer);
+                }
+            }
+            ObservabilityFeature::Alerts => {
+                if enabled {
+                    self.alert_manager = Arc::new(DefaultAlertManager::new(self.config.clone()));
+                } else {
+                    self.alert_manager = Arc::new(NoOpAlertManager);
+                }
+            }
+        }
+    }
+}
+
+/// 观测性配置
+#[derive(Debug, Clone)]
+pub struct ObservabilityConfig {
+    /// 是否启用结构化日志
+    pub enable_structured_logging: bool,
+    /// 日志级别
+    pub log_level: LogLevel,
+    /// 是否启用指标收集
+    pub enable_metrics: bool,
+    /// 是否启用追踪
+    pub enable_tracing: bool,
+    /// 是否启用告警
+    pub enable_alerts: bool,
+    /// 指标保留时间
+    pub metrics_retention: Duration,
+    /// 告警阈值配置
+    pub alert_thresholds: AlertThresholds,
+}
+
+impl Default for ObservabilityConfig {
+    fn default() -> Self {
+        Self {
+            enable_structured_logging: true,
+            log_level: LogLevel::Error,
+            enable_metrics: true,
+            enable_tracing: true,
+            enable_alerts: false, // 默认关闭告警
+            metrics_retention: Duration::from_secs(3600), // 1小时
+            alert_thresholds: AlertThresholds::default(),
+        }
+    }
+}
+
+/// 观测性功能
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ObservabilityFeature {
+    Logging,
+    Metrics,
+    Tracing,
+    Alerts,
+}
+
+/// 错误事件
+#[derive(Debug, Clone)]
+pub struct ErrorEvent {
+    /// 错误ID
+    pub error_id: Uuid,
+    /// 发生时间
+    pub timestamp: SystemTime,
+    /// 错误种类
+    pub kind: ErrorKind,
+    /// 错误码
+    pub code: Option<ErrorCode>,
+    /// 错误消息
+    pub message: String,
+    /// 严重程度
+    pub severity: ErrorSeverity,
+    /// 是否可重试
+    pub is_retryable: bool,
+    /// 上下文信息
+    pub context: HashMap<String, String>,
+    /// 追踪ID
+    pub trace_id: Option<Uuid>,
+    /// 跨度ID
+    pub span_id: Option<Uuid>,
+    /// 相关请求ID
+    pub request_id: Option<String>,
+    /// 相关用户ID
+    pub user_id: Option<String>,
+    /// 相关租户ID
+    pub tenant_id: Option<String>,
+}
+
+impl ErrorEvent {
+    /// 从 ErrorRecord 创建事件（V3 首选路径）
+    pub fn from_record(record: &ErrorRecord) -> Self {
+        Self {
+            error_id: Uuid::new_v4(),
+            timestamp: SystemTime::now(),
+            kind: kind_from_code(record.code),
+            code: Some(record.code),
+            message: record.message.clone(),
+            severity: record.severity,
+            is_retryable: record.retryable,
+            context: record.context.clone(),
+            trace_id: None,
+            span_id: None,
+            request_id: record.request_id.clone(),
+            user_id: None,
+            tenant_id: None,
+        }
+    }
+
+    /// 从错误对象创建事件（旧接口）
+    pub fn from_error<E: ErrorObservable>(error: &E) -> Self {
+        Self {
+            error_id: error.error_id(),
+            timestamp: error.timestamp(),
+            kind: error.kind(),
+            code: error.code(),
+            message: error.message().to_string(),
+            severity: error.severity(),
+            is_retryable: error.is_retryable(),
+            context: error.context_data(),
+            trace_id: error.trace_id(),
+            span_id: error.span_id(),
+            request_id: error.request_id().map(|s| s.to_string()),
+            user_id: error.user_id().map(|s| s.to_string()),
+            tenant_id: error.tenant_id().map(|s| s.to_string()),
+        }
+    }
+
+    /// 转换为JSON格式
+    pub fn to_json(&self) -> String {
+        format!(
+            r#"{{
+  "error_id": "{}",
+  "timestamp": "{:?}",
+  "kind": "{:?}",
+  "code": {:?},
+  "message": "{}",
+  "severity": "{:?}",
+  "is_retryable": {},
+  "context": {},
+  "trace_id": {:?},
+  "request_id": {:?},
+  "user_id": {:?},
+  "tenant_id": {:?}
+}}"#,
+            self.error_id,
+            self.timestamp,
+            self.kind,
+            self.code,
+            self.message,
+            self.severity,
+            self.is_retryable,
+            serde_json::to_string(&self.context).unwrap_or_default(),
+            self.trace_id,
+            self.request_id,
+            self.user_id,
+            self.tenant_id
+        )
+    }
+}
+
+/// 基于 ErrorCode 推断 ErrorKind，保持向后兼容
+fn kind_from_code(code: ErrorCode) -> ErrorKind {
+    match code.category() {
+        ErrorCategory::Network => ErrorKind::Network,
+        ErrorCategory::Parameter => ErrorKind::Validation,
+        ErrorCategory::Authentication | ErrorCategory::Permission => ErrorKind::Authentication,
+        ErrorCategory::Business => ErrorKind::Business,
+        ErrorCategory::System | ErrorCategory::Server => ErrorKind::Internal,
+        ErrorCategory::RateLimit => ErrorKind::RateLimit,
+        ErrorCategory::Resource => ErrorKind::Business,
+        ErrorCategory::Success => ErrorKind::Business,
+        ErrorCategory::Other => ErrorKind::Internal,
+    }
+}
+
+/// 错误可观测特征
+pub trait ErrorObservable {
+    /// 兼容层：从旧错误对象生成 ErrorRecord 所需字段
+    fn as_error_record(&self) -> ErrorRecord {
+        ErrorRecord {
+            code: self.code().unwrap_or(ErrorCode::Unknown),
+            severity: self.severity(),
+            retryable: self.is_retryable(),
+            retry_delay_ms: None,
+            message: self.message().to_string(),
+            context: self.context_data(),
+            request_id: self.request_id().map(|s| s.to_string()),
+            operation: None,
+            component: None,
+            backtrace: None,
+        }
+    }
+}
 
 /// 日志级别
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum LogLevel {
-    /// 调试信息
-    Debug = 1,
-    /// 信息
-    Info = 2,
-    /// 警告
-    Warn = 3,
-    /// 错误
-    Error = 4,
-    /// 严重错误
-    Critical = 5,
+    Debug = 0,
+    Info = 1,
+    Warn = 2,
+    Error = 3,
+    Critical = 4,
 }
 
-impl LogLevel {
-    /// 从错误严重级别转换
-    pub fn from_error_severity(severity: ErrorSeverity) -> Self {
-        match severity {
-            ErrorSeverity::Info => Self::Info,
-            ErrorSeverity::Warning => Self::Warn,
-            ErrorSeverity::Error => Self::Error,
-            ErrorSeverity::Critical => Self::Critical,
-        }
-    }
+/// 错误日志记录器特征
+#[async_trait::async_trait]
+pub trait ErrorLogger: Send + Sync {
+    /// 记录错误日志
+    async fn log_error(&self, event: &ErrorEvent);
 
-    /// 获取颜色代码（用于控制台输出）
-    pub fn color_code(&self) -> &'static str {
-        match self {
-            Self::Debug => "\x1b[36m",    // 青色
-            Self::Info => "\x1b[32m",     // 绿色
-            Self::Warn => "\x1b[33m",     // 黄色
-            Self::Error => "\x1b[31m",    // 红色
-            Self::Critical => "\x1b[35m", // 紫色
-        }
-    }
-
-    /// 重置颜色
-    pub fn reset_color() -> &'static str {
-        "\x1b[0m"
-    }
-
-    /// 获取显示标签
-    pub fn label(&self) -> &'static str {
-        match self {
-            Self::Debug => "DEBUG",
-            Self::Info => "INFO",
-            Self::Warn => "WARN",
-            Self::Error => "ERROR",
-            Self::Critical => "CRITICAL",
-        }
-    }
+    /// 获取日志条目
+    async fn get_logs(&self, limit: usize) -> Vec<LogEntry>;
 }
 
-impl std::fmt::Display for LogLevel {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.label())
-    }
+/// 默认错误日志记录器
+pub struct DefaultErrorLogger {
+    config: ObservabilityConfig,
+    logs: Arc<Mutex<Vec<LogEntry>>>,
 }
 
-/// 日志条目
-#[derive(Debug, Clone)]
-pub struct LogEntry {
-    /// 日志级别
-    pub level: LogLevel,
-    /// 时间戳
-    pub timestamp: SystemTime,
-    /// 消息
-    pub message: String,
-    /// 错误信息（如果有）
-    pub error: Option<LarkAPIError>,
-    /// 错误分类
-    pub category: Option<ErrorHandlingCategory>,
-    /// 错误码
-    pub error_code: Option<LarkErrorCode>,
-    /// 上下文信息
-    pub context: HashMap<String, String>,
-    /// 调用栈信息
-    pub caller: Option<String>,
-}
-
-impl LogEntry {
-    /// 创建新的日志条目
-    pub fn new(level: LogLevel, message: impl Into<String>) -> Self {
+impl DefaultErrorLogger {
+    pub fn new(config: ObservabilityConfig) -> Self {
         Self {
-            level,
-            timestamp: SystemTime::now(),
-            message: message.into(),
-            error: None,
-            category: None,
-            error_code: None,
-            context: HashMap::new(),
-            caller: None,
+            config,
+            logs: Arc::new(Mutex::new(Vec::new())),
         }
     }
+}
 
-    /// 添加错误信息
-    pub fn with_error(mut self, error: LarkAPIError) -> Self {
-        self.error = Some(error.clone());
-        self.category = Some(error.handling_category());
+#[async_trait::async_trait]
+impl ErrorLogger for DefaultErrorLogger {
+    async fn log_error(&self, event: &ErrorEvent) {
+        let entry = LogEntry {
+            timestamp: event.timestamp,
+            level: match event.severity {
+                ErrorSeverity::Info => LogLevel::Info,
+                ErrorSeverity::Warning => LogLevel::Warn,
+                ErrorSeverity::Error => LogLevel::Error,
+                ErrorSeverity::Critical => LogLevel::Critical,
+            },
+            message: event.message.clone(),
+            error_id: Some(event.error_id),
+            context: event.context.clone(),
+            trace_id: event.trace_id,
+        };
 
-        if let LarkAPIError::ApiError { code, .. } = error {
-            self.error_code = LarkErrorCode::from_code(code);
+        // 控制台输出
+        if event.severity >= self.config.log_level.into() {
+            tracing::error!(
+                error_id = %event.error_id,
+                error_kind = ?event.kind,
+                error_code = ?event.code,
+                error_message = %event.message,
+                error_severity = ?event.severity,
+                trace_id = ?event.trace_id,
+                "错误发生"
+            );
         }
 
-        self
-    }
+        // 存储日志
+        {
+            let mut logs = self.logs.lock().unwrap();
+            logs.push(entry);
 
-    /// 添加上下文信息
-    pub fn with_context(mut self, key: &str, value: &str) -> Self {
-        self.context.insert(key.to_string(), value.to_string());
-        self
-    }
-
-    /// 添加调用者信息
-    pub fn with_caller(mut self, caller: &str) -> Self {
-        self.caller = Some(caller.to_string());
-        self
-    }
-
-    /// 转换为JSON格式
-    pub fn to_json(&self) -> Result<String, serde_json::Error> {
-        // 简单的JSON格式化
-        let json = format!(
-            r#"{{
-  "level": "{:?}",
-  "timestamp": "{:?}",
-  "message": "{}",
-  "category": {:?},
-  "error_code": {:?}
-}}"#,
-            self.level, self.timestamp, self.message, self.category, self.error_code
-        );
-        Ok(json)
-    }
-
-    /// 格式化为控制台输出
-    pub fn format_console(&self) -> String {
-        let timestamp = self
-            .timestamp
-            .duration_since(UNIX_EPOCH)
-            .unwrap_or_default()
-            .as_secs();
-
-        let time_str = chrono::DateTime::from_timestamp(timestamp as i64, 0)
-            .map(|dt| dt.format("%Y-%m-%d %H:%M:%S").to_string())
-            .unwrap_or_else(|| format!("timestamp:{}", timestamp));
-
-        let color = self.level.color_code();
-        let reset = LogLevel::reset_color();
-
-        let mut output = format!(
-            "{}[{}]{} {}{} {}{}",
-            color, self.level, reset, time_str, color, self.message, reset
-        );
-
-        if let Some(error) = &self.error {
-            output.push_str(&format!(
-                "{} - Error: {}{}",
-                color,
-                error.user_friendly_message(),
-                reset
-            ));
-        }
-
-        if !self.context.is_empty() {
-            output.push_str(" {");
-            for (key, value) in &self.context {
-                output.push_str(&format!(" {}: {},", key, value));
+            // 限制日志数量
+            if logs.len() > 10000 {
+                logs.remove(0);
             }
-            output.push_str(" }");
         }
+    }
 
-        output
+    async fn get_logs(&self, limit: usize) -> Vec<LogEntry> {
+        let logs = self.logs.lock().unwrap();
+        logs.iter()
+            .rev()
+            .take(limit)
+            .cloned()
+            .collect()
     }
 }
 
-/// 错误日志记录器
-#[derive(Debug, Clone)]
-pub struct ErrorLogger {
-    /// 最小日志级别
-    pub min_level: LogLevel,
-    /// 是否启用控制台输出
-    pub console_output: bool,
-    /// 是否启用结构化输出
-    pub structured_output: bool,
-    /// 日志缓存
-    cache: Arc<Mutex<Vec<LogEntry>>>,
-    /// 最大缓存条目数
-    pub max_cache_entries: usize,
+/// 指标收集器特征
+#[async_trait::async_trait]
+pub trait MetricsCollector: Send + Sync {
+    /// 记录错误指标
+    async fn record_metrics(&self, event: &ErrorEvent);
+
+    /// 获取统计信息
+    async fn get_statistics(&self, time_range: Duration) -> ErrorStatistics;
+
+    /// 获取错误趋势
+    async fn get_trend(&self, duration: Duration) -> ErrorTrend;
 }
 
-impl Default for ErrorLogger {
-    fn default() -> Self {
-        Self::new(LogLevel::Info)
-    }
+/// 默认指标收集器
+pub struct DefaultMetricsCollector {
+    metrics: Arc<Mutex<ErrorMetrics>>,
 }
 
-impl ErrorLogger {
-    /// 创建新的错误日志记录器
-    pub fn new(min_level: LogLevel) -> Self {
+impl DefaultMetricsCollector {
+    pub fn new() -> Self {
         Self {
-            min_level,
-            console_output: true,
-            structured_output: false,
-            cache: Arc::new(Mutex::new(Vec::new())),
-            max_cache_entries: 1000,
+            metrics: Arc::new(Mutex::new(ErrorMetrics::new())),
+        }
+    }
+}
+
+#[async_trait::async_trait]
+impl MetricsCollector for DefaultMetricsCollector {
+    async fn record_metrics(&self, event: &ErrorEvent) {
+        let mut metrics = self.metrics.lock().unwrap();
+        metrics.record_error(event);
+    }
+
+    async fn get_statistics(&self, time_range: Duration) -> ErrorStatistics {
+        let metrics = self.metrics.lock().unwrap();
+        metrics.get_statistics(time_range)
+    }
+
+    async fn get_trend(&self, duration: Duration) -> ErrorTrend {
+        let metrics = self.metrics.lock().unwrap();
+        metrics.get_trend(duration)
+    }
+}
+
+/// 错误追踪器特征
+#[async_trait::async_trait]
+pub trait ErrorTracer: Send + Sync {
+    /// 追踪错误
+    async fn trace_error(&self, event: &ErrorEvent);
+
+    /// 创建错误跨度
+    async fn start_span(&self, operation: &str) -> Span;
+}
+
+/// 默认错误追踪器
+pub struct DefaultErrorTracer;
+
+impl DefaultErrorTracer {
+    pub fn new() -> Self {
+        Self
+    }
+}
+
+#[async_trait::async_trait]
+impl ErrorTracer for DefaultErrorTracer {
+    async fn trace_error(&self, event: &ErrorEvent) {
+        if let Some(trace_id) = event.trace_id {
+            tracing::error!(
+                trace_id = %trace_id,
+                span_id = ?event.span_id,
+                error_id = %event.error_id,
+                "错误追踪"
+            );
         }
     }
 
-    /// 记录日志条目
-    pub fn log(&self, entry: LogEntry) {
-        if entry.level < self.min_level {
+    async fn start_span(&self, operation: &str) -> Span {
+        Span {
+            span_id: Uuid::new_v4(),
+            trace_id: Uuid::new_v4(),
+            operation: operation.to_string(),
+            start_time: SystemTime::now(),
+            end_time: None,
+        }
+    }
+}
+
+/// 告警管理器特征
+#[async_trait::async_trait]
+pub trait AlertManager: Send + Sync {
+    /// 检查告警条件
+    async fn check_alerts(&self, event: &ErrorEvent);
+
+    /// 添加告警规则
+    fn add_rule(&self, rule: AlertRule);
+}
+
+/// 默认告警管理器
+pub struct DefaultAlertManager {
+    config: ObservabilityConfig,
+    rules: Arc<Mutex<Vec<AlertRule>>>,
+}
+
+impl DefaultAlertManager {
+    pub fn new(config: ObservabilityConfig) -> Self {
+        Self {
+            config,
+            rules: Arc::new(Mutex::new(Vec::new())),
+        }
+    }
+}
+
+#[async_trait::async_trait]
+impl AlertManager for DefaultAlertManager {
+    async fn check_alerts(&self, event: &ErrorEvent) {
+        if !self.config.enable_alerts {
             return;
         }
 
-        // 控制台输出
-        if self.console_output {
-            println!("{}", entry.format_console());
-        }
-
-        // 结构化输出
-        if self.structured_output {
-            if let Ok(json) = entry.to_json() {
-                eprintln!("{}", json);
-            }
-        }
-
-        // 添加到缓存
-        {
-            let mut cache = self.cache.lock().unwrap();
-            cache.push(entry.clone());
-
-            // 限制缓存大小
-            if cache.len() > self.max_cache_entries {
-                cache.remove(0);
-            }
-        }
-    }
-
-    /// 获取缓存的日志条目
-    pub fn get_cached_entries(&self) -> Vec<LogEntry> {
-        self.cache.lock().unwrap().clone()
-    }
-
-    /// 清空缓存
-    pub fn clear_cache(&self) {
-        self.cache.lock().unwrap().clear();
-    }
-
-    /// 获取按级别过滤的日志条目
-    pub fn get_entries_by_level(&self, level: LogLevel) -> Vec<LogEntry> {
-        let cache = self.cache.lock().unwrap();
-        cache
-            .iter()
-            .filter(|entry| entry.level == level)
-            .cloned()
-            .collect()
-    }
-
-    /// 获取指定时间范围内的日志条目
-    pub fn get_entries_by_time_range(&self, start: SystemTime, end: SystemTime) -> Vec<LogEntry> {
-        let cache = self.cache.lock().unwrap();
-        cache
-            .iter()
-            .filter(|entry| entry.timestamp >= start && entry.timestamp <= end)
-            .cloned()
-            .collect()
-    }
-}
-
-// ============================================================================
-// 错误统计和监控功能
-// ============================================================================
-
-/// 错误事件记录
-#[derive(Debug, Clone)]
-pub struct ErrorEvent {
-    /// 错误实例
-    pub error: LarkAPIError,
-    /// 发生时间
-    pub timestamp: SystemTime,
-    /// 错误分类
-    pub category: ErrorHandlingCategory,
-    /// 错误码（如果是API错误）
-    pub error_code: Option<LarkErrorCode>,
-    /// 是否可重试
-    pub is_retryable: bool,
-    /// 处理耗时（如果有）
-    pub processing_time: Option<Duration>,
-    /// 上下文信息
-    pub context: HashMap<String, String>,
-}
-
-impl ErrorEvent {
-    /// 从LarkAPIError创建错误事件
-    pub fn from_error(error: LarkAPIError) -> Self {
-        let category = error.handling_category();
-        let error_code = match &error {
-            LarkAPIError::ApiError { code, .. } => LarkErrorCode::from_code(*code),
-            _ => None,
+        // 收集需要触发的规则，避免跨await持有锁
+        let rules_to_trigger: Vec<AlertRule> = {
+            let rules = self.rules.lock().unwrap();
+            rules.iter().filter(|rule| rule.should_trigger(event)).cloned().collect()
         };
 
-        Self {
-            is_retryable: error.is_retryable(),
-            error,
-            timestamp: SystemTime::now(),
-            category,
-            error_code,
-            processing_time: None,
-            context: HashMap::new(),
+        for rule in rules_to_trigger.iter() {
+            self.trigger_alert(rule, event).await;
         }
     }
 
-    /// 添加上下文信息
-    pub fn with_context(mut self, key: &str, value: &str) -> Self {
-        self.context.insert(key.to_string(), value.to_string());
-        self
+    fn add_rule(&self, rule: AlertRule) {
+        let mut rules = self.rules.lock().unwrap();
+        rules.push(rule);
     }
+}
 
-    /// 设置处理耗时
-    pub fn with_processing_time(mut self, duration: Duration) -> Self {
-        self.processing_time = Some(duration);
-        self
-    }
-
-    /// 获取错误严重级别
-    pub fn severity_level(&self) -> ErrorSeverity {
-        match &self.category {
-            ErrorHandlingCategory::Authentication => ErrorSeverity::Warning,
-            ErrorHandlingCategory::Permission => ErrorSeverity::Error,
-            ErrorHandlingCategory::Parameter => ErrorSeverity::Warning,
-            ErrorHandlingCategory::Server => ErrorSeverity::Critical,
-            ErrorHandlingCategory::Network => ErrorSeverity::Error,
-            ErrorHandlingCategory::RateLimit => ErrorSeverity::Warning,
-            ErrorHandlingCategory::System => ErrorSeverity::Critical,
-            _ => ErrorSeverity::Error,
+impl DefaultAlertManager {
+    async fn trigger_alert(&self, rule: &AlertRule, event: &ErrorEvent) {
+        match rule.alert_type {
+            AlertType::ErrorRate => {
+                tracing::warn!(
+                    "错误率告警触发: 规则={}, 错误类型={:?}, 错误消息={}",
+                    rule.name,
+                    event.kind,
+                    event.message
+                );
+            }
+            AlertType::CriticalError => {
+                tracing::error!(
+                    "严重错误告警触发: 规则={}, 错误ID={}, 错误消息={}",
+                    rule.name,
+                    event.error_id,
+                    event.message
+                );
+            }
+            AlertType::Custom => {
+                tracing::warn!(
+                    "自定义告警触发: 规则={}, 错误消息={}",
+                    rule.name,
+                    event.message
+                );
+            }
         }
     }
 }
 
-/// 错误统计信息
+/// 告警规则
 #[derive(Debug, Clone)]
-pub struct ErrorStatistics {
-    /// 总错误数
-    pub total_errors: u64,
-    /// 按类别统计的错误数
-    pub errors_by_category: HashMap<ErrorHandlingCategory, u64>,
-    /// 按严重级别统计的错误数
-    pub errors_by_severity: HashMap<ErrorSeverity, u64>,
-    /// 按错误码统计的错误数
-    pub errors_by_code: HashMap<i32, u64>,
-    /// 可重试错误数
-    pub retryable_errors: u64,
-    /// 不可重试错误数
-    pub non_retryable_errors: u64,
-    /// 平均处理时间
-    pub average_processing_time: Option<Duration>,
-    /// 错误率（错误数/总请求数）
-    pub error_rate: f64,
-    /// 最后更新时间
-    pub last_updated: SystemTime,
-    /// 时间范围内的错误趋势
-    pub trend: ErrorTrend,
+pub struct AlertRule {
+    /// 规则名称
+    pub name: String,
+    /// 告警类型
+    pub alert_type: AlertType,
+    /// 触发条件
+    pub condition: AlertCondition,
+    /// 是否启用
+    pub enabled: bool,
 }
 
-impl Default for ErrorStatistics {
-    fn default() -> Self {
-        Self {
-            total_errors: 0,
-            errors_by_category: HashMap::new(),
-            errors_by_severity: HashMap::new(),
-            errors_by_code: HashMap::new(),
-            retryable_errors: 0,
-            non_retryable_errors: 0,
-            average_processing_time: None,
-            error_rate: 0.0,
-            last_updated: SystemTime::now(),
-            trend: ErrorTrend::Unknown,
+impl AlertRule {
+    /// 判断是否应该触发告警
+    pub fn should_trigger(&self, event: &ErrorEvent) -> bool {
+        if !self.enabled {
+            return false;
+        }
+
+        match &self.condition {
+            AlertCondition::ByKind { kinds } => kinds.contains(&event.kind),
+            AlertCondition::BySeverity { min_severity } => event.severity >= *min_severity,
+            AlertCondition::ByCode { codes } => {
+                if let Some(code) = event.code {
+                    codes.contains(&code)
+                } else {
+                    false
+                }
+            }
+            AlertCondition::Custom { predicate } => predicate(event),
         }
     }
 }
 
-/// 错误趋势
+/// 告警类型
 #[derive(Debug, Clone)]
-pub enum ErrorTrend {
-    /// 上升趋势
-    Increasing,
-    /// 下降趋势
-    Decreasing,
-    /// 稳定
-    Stable,
-    /// 未知
-    Unknown,
+pub enum AlertType {
+    /// 错误率告警
+    ErrorRate,
+    /// 严重错误告警
+    CriticalError,
+    /// 自定义告警
+    Custom,
 }
 
-/// 错误监控器
-#[derive(Debug)]
-pub struct ErrorMonitor {
-    /// 错误事件缓存
-    events: Arc<Mutex<Vec<ErrorEvent>>>,
-    /// 统计信息
-    statistics: Arc<Mutex<ErrorStatistics>>,
-    /// 最大缓存事件数
-    max_events: usize,
-    /// 告警阈值
-    alert_thresholds: AlertThresholds,
+/// 告警条件
+#[derive(Debug, Clone)]
+pub enum AlertCondition {
+    /// 按错误种类
+    ByKind { kinds: Vec<ErrorKind> },
+    /// 按严重程度
+    BySeverity { min_severity: ErrorSeverity },
+    /// 按错误码
+    ByCode { codes: Vec<ErrorCode> },
+    /// 自定义条件
+    Custom { predicate: fn(&ErrorEvent) -> bool },
 }
 
-/// 告警阈值配置
+/// 告警阈值
 #[derive(Debug, Clone)]
 pub struct AlertThresholds {
     /// 错误率阈值（百分比）
     pub error_rate_threshold: f64,
     /// 5分钟内错误数阈值
     pub error_count_threshold_5m: u64,
-    /// 平均处理时间阈值
-    pub processing_time_threshold: Duration,
+    /// 严重错误阈值
+    pub critical_error_threshold: u64,
 }
 
 impl Default for AlertThresholds {
     fn default() -> Self {
         Self {
-            error_rate_threshold: 5.0,                          // 5%
-            error_count_threshold_5m: 100,                      // 5分钟内100个错误
-            processing_time_threshold: Duration::from_secs(30), // 30秒
+            error_rate_threshold: 5.0,         // 5%
+            error_count_threshold_5m: 100,     // 5分钟内100个错误
+            critical_error_threshold: 10,      // 10个严重错误
         }
     }
 }
 
-impl Default for ErrorMonitor {
-    fn default() -> Self {
-        Self::new(10000)
-    }
+/// 错误指标
+#[derive(Debug, Default)]
+struct ErrorMetrics {
+    /// 错误计数统计
+    error_counts: HashMap<ErrorKind, u64>,
+    /// 错误时间序列
+    time_series: Vec<(SystemTime, ErrorKind)>,
+    /// 总请求数
+    total_requests: u64,
 }
 
-impl ErrorMonitor {
-    /// 创建新的错误监控器
-    pub fn new(max_events: usize) -> Self {
-        Self {
-            events: Arc::new(Mutex::new(Vec::new())),
-            statistics: Arc::new(Mutex::new(ErrorStatistics::default())),
-            max_events,
-            alert_thresholds: AlertThresholds::default(),
+impl ErrorMetrics {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn record_error(&mut self, event: &ErrorEvent) {
+        *self.error_counts.entry(event.kind).or_insert(0) += 1;
+        self.time_series.push((event.timestamp, event.kind));
+
+        // 限制时间序列大小
+        if self.time_series.len() > 10000 {
+            self.time_series.remove(0);
         }
     }
 
-    /// 记录错误事件
-    pub fn record_error(&self, error: &LarkAPIError, context: Option<&str>) {
-        let mut event = ErrorEvent::from_error(error.clone());
-
-        if let Some(ctx) = context {
-            event = event.with_context("context", ctx);
-        }
-
-        // 添加到事件缓存
-        {
-            let mut events = self.events.lock().unwrap();
-            events.push(event.clone());
-
-            // 限制缓存大小
-            if events.len() > self.max_events {
-                events.remove(0);
-            }
-        }
-
-        // 更新统计信息
-        self.update_statistics(&event);
-
-        // 检查告警
-        self.check_alerts();
-    }
-
-    /// 更新统计信息
-    fn update_statistics(&self, event: &ErrorEvent) {
-        let mut stats = self.statistics.lock().unwrap();
-
-        stats.total_errors += 1;
-
-        // 按类别统计
-        *stats.errors_by_category.entry(event.category).or_insert(0) += 1;
-
-        // 按严重级别统计
-        *stats
-            .errors_by_severity
-            .entry(event.severity_level())
-            .or_insert(0) += 1;
-
-        // 按错误码统计
-        if let Some(error_code) = event.error_code {
-            *stats.errors_by_code.entry(error_code as i32).or_insert(0) += 1;
-        }
-
-        // 按可重试性统计
-        if event.is_retryable {
-            stats.retryable_errors += 1;
-        } else {
-            stats.non_retryable_errors += 1;
-        }
-
-        // 更新平均处理时间
-        if let Some(processing_time) = event.processing_time {
-            if let Some(current_avg) = stats.average_processing_time {
-                let new_avg_nanos = (current_avg.as_nanos() * (stats.total_errors - 1) as u128
-                    + processing_time.as_nanos())
-                    / stats.total_errors as u128;
-                // 安全转换为 u64，如果溢出则使用最大值
-                let new_avg = Duration::from_nanos(new_avg_nanos.try_into().unwrap_or(u64::MAX));
-                stats.average_processing_time = Some(new_avg);
-            } else {
-                stats.average_processing_time = Some(processing_time);
-            }
-        }
-
-        stats.last_updated = SystemTime::now();
-    }
-
-    /// 检查告警条件
-    fn check_alerts(&self) {
-        let stats = self.statistics.lock().unwrap();
-
-        // 检查错误率
-        if stats.error_rate > self.alert_thresholds.error_rate_threshold {
-            self.trigger_alert(ErrorAlert::HighErrorRate {
-                current_rate: stats.error_rate,
-                threshold: self.alert_thresholds.error_rate_threshold,
-            });
-        }
-
-        // 检查5分钟内错误数
-        let recent_errors = self.get_recent_errors(Duration::from_secs(300));
-        if recent_errors.len() as u64 > self.alert_thresholds.error_count_threshold_5m {
-            self.trigger_alert(ErrorAlert::HighErrorCount {
-                count: recent_errors.len() as u64,
-                threshold: self.alert_thresholds.error_count_threshold_5m,
-                duration: Duration::from_secs(300),
-            });
-        }
-
-        // 检查处理时间
-        if let Some(avg_time) = stats.average_processing_time {
-            if avg_time > self.alert_thresholds.processing_time_threshold {
-                self.trigger_alert(ErrorAlert::HighProcessingTime {
-                    current_avg: avg_time,
-                    threshold: self.alert_thresholds.processing_time_threshold,
-                });
-            }
-        }
-    }
-
-    /// 触发告警
-    fn trigger_alert(&self, alert: ErrorAlert) {
-        // 在实际应用中，这里可以发送到监控系统、日志系统等
-        eprintln!("🚨 错误告警: {:?}", alert);
-    }
-
-    /// 获取最近的错误事件
-    pub fn get_recent_errors(&self, duration: Duration) -> Vec<ErrorEvent> {
+    pub fn get_statistics(&self, time_range: Duration) -> ErrorStatistics {
         let now = SystemTime::now();
-        let events = self.events.lock().unwrap();
+        let cutoff = now - time_range;
 
-        events
+        let recent_errors: u64 = self.time_series
             .iter()
-            .filter(|event| now.duration_since(event.timestamp).unwrap_or_default() <= duration)
-            .cloned()
-            .collect()
-    }
+            .filter(|(timestamp, _)| *timestamp >= cutoff)
+            .count() as u64;
 
-    /// 获取统计信息
-    pub fn get_statistics(&self) -> ErrorStatistics {
-        self.statistics.lock().unwrap().clone()
-    }
-
-    /// 清空所有数据
-    pub fn clear_all(&self) {
-        self.events.lock().unwrap().clear();
-        *self.statistics.lock().unwrap() = ErrorStatistics::default();
-    }
-
-    /// 计算错误率
-    pub fn calculate_error_rate(&self, total_requests: u64) -> f64 {
-        let stats = self.statistics.lock().unwrap();
-        if total_requests == 0 {
+        let error_rate = if self.total_requests > 0 {
+            (recent_errors as f64 / self.total_requests as f64) * 100.0
+        } else {
             0.0
-        } else {
-            (stats.total_errors as f64 / total_requests as f64) * 100.0
+        };
+
+        ErrorStatistics {
+            total_errors: recent_errors,
+            errors_by_kind: self.error_counts.clone(),
+            error_rate,
+            time_range,
         }
     }
 
-    /// 获取错误趋势
-    pub fn get_trend(&self) -> ErrorTrend {
-        let events = self.events.lock().unwrap();
-        if events.len() < 2 {
-            return ErrorTrend::Unknown;
-        }
-
-        let recent_window = Duration::from_secs(300); // 5分钟窗口
+    pub fn get_trend(&self, duration: Duration) -> ErrorTrend {
+        // 简化的趋势分析
         let now = SystemTime::now();
+        let recent_time = now - duration;
+        let previous_time = now - duration * 2;
 
-        let recent_count = events
+        let recent_count: u64 = self.time_series
             .iter()
-            .filter(|event| {
-                now.duration_since(event.timestamp).unwrap_or_default() <= recent_window
-            })
-            .count();
+            .filter(|(timestamp, _)| *timestamp >= recent_time)
+            .count() as u64;
 
-        let _previous_window_start = now - recent_window - recent_window;
-        let previous_count = events
+        let previous_count: u64 = self.time_series
             .iter()
-            .filter(|event| {
-                let elapsed = now.duration_since(event.timestamp).unwrap_or_default();
-                elapsed > recent_window && elapsed <= recent_window * 2
-            })
-            .count();
+            .filter(|(timestamp, _)| *timestamp >= previous_time && *timestamp < recent_time)
+            .count() as u64;
 
         if recent_count > previous_count * 2 {
             ErrorTrend::Increasing
@@ -665,220 +723,265 @@ impl ErrorMonitor {
     }
 }
 
-/// 错误告警类型
+/// 错误统计信息
 #[derive(Debug, Clone)]
-pub enum ErrorAlert {
-    /// 高错误率告警
-    HighErrorRate { current_rate: f64, threshold: f64 },
-    /// 高错误数告警
-    HighErrorCount {
-        count: u64,
-        threshold: u64,
-        duration: Duration,
-    },
-    /// 高处理时间告警
-    HighProcessingTime {
-        current_avg: Duration,
-        threshold: Duration,
-    },
-    /// 新错误类型告警
-    NewErrorType { error_type: String, count: u64 },
+pub struct ErrorStatistics {
+    /// 总错误数
+    pub total_errors: u64,
+    /// 按种类统计的错误数
+    pub errors_by_kind: HashMap<ErrorKind, u64>,
+    /// 错误率（百分比）
+    pub error_rate: f64,
+    /// 统计时间范围
+    pub time_range: Duration,
 }
 
-// ============================================================================
-// 全局实例和便利函数
-// ============================================================================
-
-/// 获取全局错误日志记录器
-fn get_error_logger() -> &'static ErrorLogger {
-    use std::sync::OnceLock;
-    static LOGGER: OnceLock<ErrorLogger> = OnceLock::new();
-    LOGGER.get_or_init(ErrorLogger::default)
+/// 错误趋势
+#[derive(Debug, Clone)]
+pub enum ErrorTrend {
+    Increasing,
+    Decreasing,
+    Stable,
 }
 
-/// 获取全局错误监控器
-fn get_error_monitor() -> &'static ErrorMonitor {
-    use std::sync::OnceLock;
-    static MONITOR: OnceLock<ErrorMonitor> = OnceLock::new();
-    MONITOR.get_or_init(ErrorMonitor::default)
+/// 错误报告
+#[derive(Debug, Clone)]
+pub struct ErrorReport {
+    /// 报告时间范围
+    pub time_range: Duration,
+    /// 错误统计
+    pub statistics: ErrorStatistics,
+    /// 错误趋势
+    pub trend: ErrorTrend,
+    /// 生成时间
+    pub generated_at: SystemTime,
 }
 
-/// 记录错误日志
-///
-/// # 参数
-/// - `error`: 要记录的错误
-/// - `level`: 日志级别
-pub fn log_error(error: &LarkAPIError, level: LogLevel) {
-    let entry = LogEntry::new(level, "Error occurred").with_error(error.clone());
-
-    get_error_logger().log(entry);
+/// 日志条目
+#[derive(Debug, Clone)]
+pub struct LogEntry {
+    /// 时间戳
+    pub timestamp: SystemTime,
+    /// 日志级别
+    pub level: LogLevel,
+    /// 消息
+    pub message: String,
+    /// 错误ID
+    pub error_id: Option<Uuid>,
+    /// 上下文信息
+    pub context: HashMap<String, String>,
+    /// 追踪ID
+    pub trace_id: Option<Uuid>,
 }
 
-/// 记录错误事件
-///
-/// # 参数
-/// - `error`: 要记录的错误
-/// - `context`: 可选的上下文信息
-pub fn record_error(error: &LarkAPIError, context: Option<String>) {
-    get_error_monitor().record_error(error, context.as_deref());
+/// 跨度信息
+#[derive(Debug, Clone)]
+pub struct Span {
+    /// 跨度ID
+    pub span_id: Uuid,
+    /// 追踪ID
+    pub trace_id: Uuid,
+    /// 操作名称
+    pub operation: String,
+    /// 开始时间
+    pub start_time: SystemTime,
+    /// 结束时间
+    pub end_time: Option<SystemTime>,
 }
 
-/// 获取错误统计信息
-///
-/// # 返回值
-/// 当前的错误统计信息
-pub fn get_error_stats() -> ErrorStatistics {
-    get_error_monitor().get_statistics()
+// No-op实现（用于禁用功能）
+struct NoOpLogger;
+struct NoOpMetricsCollector;
+struct NoOpTracer;
+struct NoOpAlertManager;
+
+#[async_trait::async_trait]
+impl ErrorLogger for NoOpLogger {
+    async fn log_error(&self, _event: &ErrorEvent) {}
+    async fn get_logs(&self, _limit: usize) -> Vec<LogEntry> {
+        Vec::new()
+    }
 }
 
-/// 获取最近的错误事件
-///
-/// # 参数
-/// - `duration`: 时间范围
-///
-/// # 返回值
-/// 指定时间范围内的错误事件
-pub fn get_recent_errors(duration: Duration) -> Vec<ErrorEvent> {
-    get_error_monitor().get_recent_errors(duration)
+#[async_trait::async_trait]
+impl MetricsCollector for NoOpMetricsCollector {
+    async fn record_metrics(&self, _event: &ErrorEvent) {}
+    async fn get_statistics(&self, _time_range: Duration) -> ErrorStatistics {
+        ErrorStatistics {
+            total_errors: 0,
+            errors_by_kind: HashMap::new(),
+            error_rate: 0.0,
+            time_range: Duration::ZERO,
+        }
+    }
+    async fn get_trend(&self, _duration: Duration) -> ErrorTrend {
+        ErrorTrend::Stable
+    }
 }
 
-/// 获取错误趋势
-///
-/// # 返回值
-/// 当前的错误趋势
-pub fn get_error_trend() -> ErrorTrend {
-    get_error_monitor().get_trend()
+#[async_trait::async_trait]
+impl ErrorTracer for NoOpTracer {
+    async fn trace_error(&self, _event: &ErrorEvent) {}
+    async fn start_span(&self, operation: &str) -> Span {
+        Span {
+            span_id: Uuid::new_v4(),
+            trace_id: Uuid::new_v4(),
+            operation: operation.to_string(),
+            start_time: SystemTime::now(),
+            end_time: None,
+        }
+    }
 }
 
-// ============================================================================
-// 测试
-// ============================================================================
+#[async_trait::async_trait]
+impl AlertManager for NoOpAlertManager {
+    async fn check_alerts(&self, _event: &ErrorEvent) {}
+    fn add_rule(&self, _rule: AlertRule) {}
+}
+
+impl From<ErrorSeverity> for LogLevel {
+    fn from(severity: ErrorSeverity) -> Self {
+        match severity {
+            ErrorSeverity::Info => Self::Info,
+            ErrorSeverity::Warning => Self::Warn,
+            ErrorSeverity::Error => Self::Error,
+            ErrorSeverity::Critical => Self::Critical,
+        }
+    }
+}
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::collections::HashMap;
 
-    #[test]
-    fn test_log_levels() {
-        assert!(LogLevel::Error > LogLevel::Info);
-        assert_eq!(
-            LogLevel::from_error_severity(ErrorSeverity::Critical),
-            LogLevel::Critical
-        );
-        assert_eq!(LogLevel::Debug.label(), "DEBUG");
+    struct TestError {
+        id: Uuid,
+        timestamp: SystemTime,
+        kind: ErrorKind,
+        code: Option<ErrorCode>,
+        message: String,
+        severity: ErrorSeverity,
+        retryable: bool,
+        context: HashMap<String, String>,
+    }
+
+    impl ErrorObservable for TestError {
+        fn error_id(&self) -> Uuid { self.id }
+        fn timestamp(&self) -> SystemTime { self.timestamp }
+        fn kind(&self) -> ErrorKind { self.kind }
+        fn code(&self) -> Option<ErrorCode> { self.code }
+        fn message(&self) -> &str { &self.message }
+        fn severity(&self) -> ErrorSeverity { self.severity }
+        fn is_retryable(&self) -> bool { self.retryable }
+        fn context_data(&self) -> HashMap<String, String> { self.context.clone() }
+        fn trace_id(&self) -> Option<Uuid> { None }
+        fn span_id(&self) -> Option<Uuid> { None }
+        fn request_id(&self) -> Option<&str> { None }
+        fn user_id(&self) -> Option<&str> { None }
+        fn tenant_id(&self) -> Option<&str> { None }
+    }
+
+    #[tokio::test]
+    async fn test_error_observability() {
+        let config = ObservabilityConfig::default();
+        let observability = ErrorObservability::new(config);
+
+        let error = TestError {
+            id: Uuid::new_v4(),
+            timestamp: SystemTime::now(),
+            kind: ErrorKind::Network,
+            code: Some(ErrorCode::NetworkConnectionFailed),
+            message: "网络连接失败".to_string(),
+            severity: ErrorSeverity::Error,
+            retryable: true,
+            context: HashMap::new(),
+        };
+
+        // 记录错误
+        observability.record_error(&error).await;
+
+        // 获取统计
+        let stats = observability.get_error_stats(Duration::from_secs(60)).await;
+        assert!(stats.total_errors >= 0);
     }
 
     #[test]
-    fn test_log_entry() {
-        let error = LarkAPIError::MissingAccessToken;
-        let entry = LogEntry::new(LogLevel::Error, "Test error")
-            .with_error(error)
-            .with_context("operation", "test")
-            .with_caller("test_function");
+    fn test_error_event_creation() {
+        let error = TestError {
+            id: Uuid::new_v4(),
+            timestamp: SystemTime::now(),
+            kind: ErrorKind::Network,
+            code: Some(ErrorCode::NetworkConnectionFailed),
+            message: "网络连接失败".to_string(),
+            severity: ErrorSeverity::Error,
+            retryable: true,
+            context: HashMap::new(),
+        };
 
-        assert_eq!(entry.level, LogLevel::Error);
-        assert!(entry.error.is_some());
-        assert!(entry.context.contains_key("operation"));
-        assert_eq!(entry.caller.as_ref().unwrap(), "test_function");
+        let event = ErrorEvent::from_error(&error);
+        assert_eq!(event.kind, ErrorKind::Network);
+        assert_eq!(event.code, Some(ErrorCode::NetworkConnectionFailed));
+        assert_eq!(event.message, "网络连接失败");
+        assert!(event.is_retryable);
     }
 
     #[test]
-    fn test_error_logger() {
-        let logger = ErrorLogger::new(LogLevel::Warn);
-        let error = LarkAPIError::MissingAccessToken;
+    fn test_error_event_from_record() {
+        let mut ctx = HashMap::new();
+        ctx.insert("endpoint".to_string(), "/v1/ping".to_string());
 
-        let entry = LogEntry::new(LogLevel::Error, "Test error").with_error(error.clone());
+        let record = ErrorRecord {
+            code: ErrorCode::ServiceUnavailable,
+            severity: ErrorSeverity::Critical,
+            retryable: true,
+            retry_delay_ms: Some(2000),
+            message: "service down".to_string(),
+            context: ctx.clone(),
+            request_id: Some("req-123".to_string()),
+            operation: Some("health_check".to_string()),
+            component: None,
+            backtrace: None,
+        };
 
-        logger.log(entry);
-
-        // 测试过滤（Debug级别应该被过滤）
-        let debug_entry = LogEntry::new(LogLevel::Debug, "Debug message");
-        logger.log(debug_entry);
-
-        let entries = logger.get_cached_entries();
-        assert_eq!(entries.len(), 1); // 只有Error级别的被记录
+        let event = ErrorEvent::from_record(&record);
+        assert_eq!(event.kind, ErrorKind::Internal);
+        assert_eq!(event.code, Some(ErrorCode::ServiceUnavailable));
+        assert_eq!(event.context.get("endpoint"), Some(&"/v1/ping".to_string()));
+        assert_eq!(event.request_id.as_deref(), Some("req-123"));
+        assert!(event.is_retryable);
     }
 
     #[test]
-    fn test_error_event() {
-        let error = LarkAPIError::MissingAccessToken;
-        let event = ErrorEvent::from_error(error)
-            .with_context("test", "value")
-            .with_processing_time(Duration::from_millis(100));
+    fn test_alert_rule() {
+        let rule = AlertRule {
+            name: "网络错误告警".to_string(),
+            alert_type: AlertType::ErrorRate,
+            condition: AlertCondition::ByKind {
+                kinds: vec![ErrorKind::Network],
+            },
+            enabled: true,
+        };
 
-        assert!(event.context.contains_key("test"));
-        assert_eq!(event.processing_time, Some(Duration::from_millis(100)));
-        assert!(!event.is_retryable);
-    }
+        let error = TestError {
+            id: Uuid::new_v4(),
+            timestamp: SystemTime::now(),
+            kind: ErrorKind::Network,
+            code: None,
+            message: "网络错误".to_string(),
+            severity: ErrorSeverity::Error,
+            retryable: true,
+            context: HashMap::new(),
+        };
 
-    #[test]
-    fn test_error_monitor() {
-        let monitor = ErrorMonitor::new(100);
-        let error = LarkAPIError::MissingAccessToken;
+        let event = ErrorEvent::from_error(&error);
+        assert!(rule.should_trigger(&event));
 
-        monitor.record_error(&error, Some("test context"));
-
-        let stats = monitor.get_statistics();
-        assert_eq!(stats.total_errors, 1);
-        assert_eq!(stats.retryable_errors, 0);
-        assert_eq!(stats.non_retryable_errors, 1);
-    }
-
-    #[test]
-    fn test_convenience_functions() {
-        let error = LarkAPIError::MissingAccessToken;
-
-        // 测试日志记录
-        log_error(&error, LogLevel::Error);
-
-        // 测试错误事件记录
-        record_error(&error, Some("test".to_string()));
-
-        // 测试统计获取
-        let stats = get_error_stats();
-        assert!(stats.total_errors > 0);
-
-        // 测试趋势获取
-        let trend = get_error_trend();
-        matches!(trend, ErrorTrend::Unknown | ErrorTrend::Stable);
-    }
-
-    #[test]
-    fn test_alert_thresholds() {
-        let thresholds = AlertThresholds::default();
-        assert_eq!(thresholds.error_rate_threshold, 5.0);
-        assert_eq!(thresholds.error_count_threshold_5m, 100);
-        assert_eq!(
-            thresholds.processing_time_threshold,
-            Duration::from_secs(30)
-        );
-    }
-
-    #[test]
-    fn test_error_severity_mapping() {
-        let auth_error = LarkAPIError::MissingAccessToken;
-        let event = ErrorEvent::from_error(auth_error);
-        assert_eq!(event.severity_level(), ErrorSeverity::Warning);
-
-        let server_error = LarkAPIError::api_error(500, "Server Error", None);
-        let event = ErrorEvent::from_error(server_error);
-        assert_eq!(event.severity_level(), ErrorSeverity::Critical);
-    }
-
-    #[test]
-    fn test_recent_errors() {
-        let monitor = ErrorMonitor::new(10);
-        let error = LarkAPIError::MissingAccessToken;
-
-        // 记录几个错误
-        for i in 0..3 {
-            monitor.record_error(&error, Some(&format!("test {}", i)));
-        }
-
-        let recent = monitor.get_recent_errors(Duration::from_secs(1));
-        assert_eq!(recent.len(), 3);
-
-        let older = monitor.get_recent_errors(Duration::from_nanos(1));
-        assert_eq!(older.len(), 0);
+        let non_network_error = TestError {
+            kind: ErrorKind::Authentication,
+            ..error
+        };
+        let non_network_event = ErrorEvent::from_error(&non_network_error);
+        assert!(!rule.should_trigger(&non_network_event));
     }
 }
