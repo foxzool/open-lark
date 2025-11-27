@@ -4,6 +4,7 @@
 
 use std::sync::Arc;
 
+use openlark_core::error::{api_error};
 /// 设备申报审批服务
 #[derive(Debug)]
 pub struct DeviceApplyRecordsService {
@@ -108,20 +109,24 @@ impl ApproveDeviceApplyRecordBuilder {
             > = response.json().await?;
             match api_response.data {
                 Some(record) => Ok(record),
-                None => Err(crate::SecurityError::APIError {
-                    code: api_response.code,
-                    message: api_response.msg,
-                }),
+                None => Err(api_error(
+                    api_response.code as u16,
+                    "/security_and_compliance/v2/device_apply_records",
+                    &api_response.msg,
+                    None,
+                )),
             }
         } else {
-            Err(crate::SecurityError::APIError {
-                code: response.status().as_u16() as i32,
-                message: format!(
+            Err(api_error(
+                response.status().as_u16(),
+                "/security_and_compliance/v2/device_apply_records",
+                    &format!(
                     "HTTP {}: {}",
                     response.status(),
-                    response.text().await.unwrap_or_default()
+                    response.status()
                 ),
-            })
+                None,
+            ))
         }
     }
 }

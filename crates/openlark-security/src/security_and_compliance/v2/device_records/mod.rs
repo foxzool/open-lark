@@ -4,6 +4,7 @@
 
 use std::sync::Arc;
 
+use openlark_core::error::{api_error};
 /// 设备记录管理服务
 #[derive(Debug)]
 pub struct DeviceRecordsService {
@@ -177,20 +178,24 @@ impl GetMyDeviceRecordsBuilder {
             > = response.json().await?;
             match api_response.data {
                 Some(records) => Ok(records),
-                None => Err(crate::SecurityError::APIError {
-                    code: api_response.code,
-                    message: api_response.msg,
-                }),
+                None => Err(api_error(
+                    api_response.code as u16,
+                    "/security_and_compliance/v2/device_records",
+                    &api_response.msg,
+                    None,
+                )),
             }
         } else {
-            Err(crate::SecurityError::APIError {
-                code: response.status().as_u16() as i32,
-                message: format!(
+            Err(api_error(
+                response.status().as_u16(),
+                "/security_and_compliance/v2/device_records",
+                &format!(
                     "HTTP {}: {}",
                     response.status(),
                     response.text().await.unwrap_or_default()
                 ),
-            })
+                None,
+            ))
         }
     }
 }
@@ -311,20 +316,24 @@ impl CreateDeviceRecordBuilder {
             > = response.json().await?;
             match api_response.data {
                 Some(record) => Ok(record),
-                None => Err(crate::SecurityError::APIError {
-                    code: api_response.code,
-                    message: api_response.msg,
-                }),
+                None => Err(api_error(
+                    api_response.code as u16,
+                    "/security_and_compliance/v2/device_records",
+                    &api_response.msg,
+                    None,
+                )),
             }
         } else {
-            Err(crate::SecurityError::APIError {
-                code: response.status().as_u16() as i32,
-                message: format!(
+            Err(api_error(
+                response.status().as_u16(),
+                "/security_and_compliance/v2/device_records",
+                &format!(
                     "HTTP {}: {}",
                     response.status(),
                     response.text().await.unwrap_or_default()
                 ),
-            })
+                None,
+            ))
         }
     }
 }
@@ -469,20 +478,24 @@ impl ListDeviceRecordsBuilder {
             > = response.json().await?;
             match api_response.data {
                 Some(records) => Ok(records),
-                None => Err(crate::SecurityError::APIError {
-                    code: api_response.code,
-                    message: api_response.msg,
-                }),
+                None => Err(api_error(
+                    api_response.code as u16,
+                    "/security_and_compliance/v2/device_records",
+                    &api_response.msg,
+                    None,
+                )),
             }
         } else {
-            Err(crate::SecurityError::APIError {
-                code: response.status().as_u16() as i32,
-                message: format!(
+            Err(api_error(
+                response.status().as_u16(),
+                "/security_and_compliance/v2/device_records",
+                &format!(
                     "HTTP {}: {}",
                     response.status(),
                     response.text().await.unwrap_or_default()
                 ),
-            })
+                None,
+            ))
         }
     }
 }
@@ -526,20 +539,24 @@ impl GetDeviceRecordBuilder {
             > = response.json().await?;
             match api_response.data {
                 Some(record) => Ok(record),
-                None => Err(crate::SecurityError::APIError {
-                    code: api_response.code,
-                    message: api_response.msg,
-                }),
+                None => Err(api_error(
+                    api_response.code as u16,
+                    "/security_and_compliance/v2/device_records",
+                    &api_response.msg,
+                    None,
+                )),
             }
         } else {
-            Err(crate::SecurityError::APIError {
-                code: response.status().as_u16() as i32,
-                message: format!(
+            Err(api_error(
+                response.status().as_u16(),
+                "/security_and_compliance/v2/device_records",
+                &format!(
                     "HTTP {}: {}",
                     response.status(),
                     response.text().await.unwrap_or_default()
                 ),
-            })
+                None,
+            ))
         }
     }
 }
@@ -662,20 +679,24 @@ impl UpdateDeviceRecordBuilder {
             > = response.json().await?;
             match api_response.data {
                 Some(record) => Ok(record),
-                None => Err(crate::SecurityError::APIError {
-                    code: api_response.code,
-                    message: api_response.msg,
-                }),
+                None => Err(api_error(
+                    api_response.code as u16,
+                    "/security_and_compliance/v2/device_records",
+                    &api_response.msg,
+                    None,
+                )),
             }
         } else {
-            Err(crate::SecurityError::APIError {
-                code: response.status().as_u16() as i32,
-                message: format!(
+            Err(api_error(
+                response.status().as_u16(),
+                "/security_and_compliance/v2/device_records",
+                &format!(
                     "HTTP {}: {}",
                     response.status(),
                     response.text().await.unwrap_or_default()
                 ),
-            })
+                None,
+            ))
         }
     }
 }
@@ -716,20 +737,24 @@ impl DeleteDeviceRecordBuilder {
                 response.json().await?;
             match api_response.data {
                 Some(result) => Ok(result),
-                None => Err(crate::SecurityError::APIError {
-                    code: api_response.code,
-                    message: api_response.msg,
-                }),
+                None => Err(api_error(
+                    api_response.code as u16,
+                    "/security_and_compliance/v2/device_records",
+                    &api_response.msg,
+                    None,
+                )),
             }
         } else {
-            Err(crate::SecurityError::APIError {
-                code: response.status().as_u16() as i32,
-                message: format!(
+            Err(api_error(
+                response.status().as_u16(),
+                "/security_and_compliance/v2/device_records",
+                &format!(
                     "HTTP {}: {}",
                     response.status(),
                     response.text().await.unwrap_or_default()
                 ),
-            })
+                None,
+            ))
         }
     }
 }
