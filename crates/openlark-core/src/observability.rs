@@ -487,12 +487,11 @@ macro_rules! trace_auth_operation {
                 }
                 Err(err) => {
                     // 尝试从错误中提取错误码
-                    let error_code =
-                        if let $crate::error::LarkAPIError::APIError { code, .. } = &err {
-                            Some(*code)
-                        } else {
-                            None
-                        };
+                    let error_code = if let $crate::error::LarkAPIError::Api(api) = &err {
+                        Some(api.status as i32)
+                    } else {
+                        None
+                    };
                     tracker.error(&err.to_string(), error_code);
                     Err(err)
                 }
@@ -953,11 +952,12 @@ mod tests {
 
         // Test error scenario with API error code
         let result = trace_auth_operation!("get_tenant_token", "test_app", "tenant", async {
-            Err::<(String, bool), LarkAPIError>(LarkAPIError::APIError {
-                code: 10001,
-                msg: "App not found".to_string(),
-                error: None,
-            })
+            Err::<(String, bool), LarkAPIError>(crate::error::LarkAPIError::api_error(
+                10001,
+                "auth",
+                "App not found",
+                None::<String>,
+            ))
         })
         .await;
 
@@ -974,7 +974,7 @@ mod tests {
 
         // Test with non-API error (no error code)
         let result = trace_auth_operation!("validate_token", "test_app", "user", async {
-            Err::<(String, bool), LarkAPIError>(LarkAPIError::RequestError(
+            Err::<(String, bool), LarkAPIError>(crate::error::network_error_v3(
                 "Network connection failed".to_string(),
             ))
         })

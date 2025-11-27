@@ -10,13 +10,30 @@ use std::sync::Arc;
 use std::time::Duration;
 use tokio::time::{sleep, Instant};
 
-use crate::{error::handler::RetryStrategy, error::LarkAPIError, SDKResult};
+use crate::error::traits::ErrorTrait;
+use crate::{
+    error::{ErrorType, LarkAPIError, RetryPolicy},
+    SDKResult,
+};
+
+/// 简化版重试策略构建器，基于 RetryPolicy 提供线性/指数便捷工厂
+pub struct RetryStrategyBuilder;
+
+impl RetryStrategyBuilder {
+    pub fn linear(max_retries: u32, delay: Duration) -> RetryPolicy {
+        RetryPolicy::fixed(max_retries, delay)
+    }
+
+    pub fn exponential(max_retries: u32, base_delay: Duration) -> RetryPolicy {
+        RetryPolicy::exponential(max_retries, base_delay)
+    }
+}
 
 /// 重试中间件配置
 #[derive(Clone)]
 pub struct RetryConfig {
     /// 全局默认重试策略
-    pub default_strategy: RetryStrategy,
+    pub default_strategy: RetryPolicy,
     /// 是否启用重试
     pub enabled: bool,
     /// 重试统计回调
@@ -48,7 +65,7 @@ impl std::fmt::Debug for RetryConfig {
 impl Default for RetryConfig {
     fn default() -> Self {
         Self {
-            default_strategy: RetryStrategy::default(),
+            default_strategy: RetryPolicy::default(),
             enabled: true,
             on_retry: None,
             retry_filter: None,
@@ -69,7 +86,7 @@ impl RetryConfig {
     }
 
     /// 设置默认重试策略
-    pub fn default_strategy(mut self, strategy: RetryStrategy) -> Self {
+    pub fn default_strategy(mut self, strategy: RetryPolicy) -> Self {
         self.default_strategy = strategy;
         self
     }
@@ -94,40 +111,32 @@ impl RetryConfig {
 
     /// 快速配置：仅重试服务器错误
     pub fn server_errors_only(mut self) -> Self {
-        self.retry_filter = Some(Arc::new(|error| match error {
-            LarkAPIError::ApiError { code, .. } => {
-                matches!(*code, 500..=599)
+        self.retry_filter = Some(Arc::new(|error| {
+            // 使用 ErrorKind 匹配而不是函数匹配
+            match error.error_type() {
+                ErrorType::Network => {
+                    // 检查错误消息中是否包含服务器错误的特征
+                    error.message().contains("timeout")
+                        || error.message().contains("timed out")
+                        || error.message().contains("connect")
+                        || error.message().contains("connection")
+                }
+                ErrorType::Validation => false, // Don't retry validation errors
+                _ => false,                     // 其他类型不重试
             }
-            LarkAPIError::RequestError(req_err) => {
-                req_err.contains("timeout")
-                    || req_err.contains("timed out")
-                    || req_err.contains("connect")
-                    || req_err.contains("connection")
-            }
-            _ => false,
         }));
         self
     }
 
     /// 快速配置：激进重试策略
     pub fn aggressive(mut self) -> Self {
-        self.default_strategy = RetryStrategy {
-            max_attempts: 5,
-            base_delay: Duration::from_millis(500),
-            use_exponential_backoff: true,
-            max_delay: Duration::from_secs(30),
-        };
+        self.default_strategy = RetryPolicy::exponential(5, Duration::from_millis(500));
         self
     }
 
     /// 快速配置：保守重试策略
     pub fn conservative(mut self) -> Self {
-        self.default_strategy = RetryStrategy {
-            max_attempts: 2,
-            base_delay: Duration::from_secs(2),
-            use_exponential_backoff: false,
-            max_delay: Duration::from_secs(10),
-        };
+        self.default_strategy = RetryPolicy::fixed(2, Duration::from_secs(2));
         self
     }
 }
@@ -150,22 +159,31 @@ pub struct RetryAttempt {
 }
 
 impl RetryAttempt {
+    /// 获取最大重试次数
+    pub fn max_retries(&self) -> u32 {
+        self.max_attempts
+    }
+
     /// 是否为最后一次尝试
     pub fn is_final_attempt(&self) -> bool {
-        self.attempt >= self.max_attempts
+        self.attempt >= self.max_retries()
     }
 
     /// 剩余尝试次数
     pub fn remaining_attempts(&self) -> u32 {
-        self.max_attempts.saturating_sub(self.attempt)
+        self.max_retries().saturating_sub(self.attempt)
     }
 
     /// 打印重试信息
     pub fn print_info(&self) {
-        let percentage = (self.attempt as f32 / self.max_attempts as f32 * 100.0) as u32;
+        let percentage = (self.attempt as f32 / self.max_retries() as f32 * 100.0) as u32;
         println!(
             "🔄 重试 {}/{} ({}%) - 延迟 {:?} - 耗时 {:?}",
-            self.attempt, self.max_attempts, percentage, self.delay, self.elapsed
+            self.attempt,
+            self.max_retries(),
+            percentage,
+            self.delay,
+            self.elapsed
         );
     }
 }
@@ -200,7 +218,7 @@ impl RetryMiddleware {
         let started_at = Instant::now();
         let mut last_error = None;
 
-        for attempt in 1..=self.config.default_strategy.max_attempts {
+        for attempt in 1..=self.config.default_strategy.max_retries() {
             let result = operation().await;
 
             match result {
@@ -220,7 +238,7 @@ impl RetryMiddleware {
                     // 创建重试尝试信息
                     let retry_attempt = RetryAttempt {
                         attempt,
-                        max_attempts: self.config.default_strategy.max_attempts,
+                        max_attempts: self.config.default_strategy.max_retries(),
                         delay,
                         error: error.clone(),
                         started_at,
@@ -247,7 +265,7 @@ impl RetryMiddleware {
     /// 检查是否应该重试
     fn should_retry(&self, error: &LarkAPIError, attempt: u32) -> bool {
         // 检查是否达到最大重试次数
-        if attempt >= self.config.default_strategy.max_attempts {
+        if attempt >= self.config.default_strategy.max_retries() {
             return false;
         }
 
@@ -262,7 +280,10 @@ impl RetryMiddleware {
 
     /// 计算延迟时间
     fn calculate_delay(&self, attempt: u32) -> Duration {
-        self.config.default_strategy.calculate_delay(attempt)
+        self.config
+            .default_strategy
+            .retry_delay(attempt)
+            .unwrap_or(Duration::ZERO)
     }
 }
 
@@ -368,75 +389,22 @@ impl RetryMiddlewareWithStats {
     }
 }
 
-/// 重试策略构建器
-pub struct RetryStrategyBuilder {
-    strategy: RetryStrategy,
-}
+/// 重试策略构建器 (使用 RetryPolicy 的简化构建器)
+pub struct RetryPolicyBuilder;
 
-impl RetryStrategyBuilder {
-    /// 创建新的构建器
-    pub fn new() -> Self {
-        Self {
-            strategy: RetryStrategy::default(),
-        }
-    }
-
-    /// 设置最大重试次数
-    pub fn max_attempts(mut self, max_attempts: u32) -> Self {
-        self.strategy.max_attempts = max_attempts;
-        self
-    }
-
-    /// 设置基础延迟
-    pub fn base_delay(mut self, delay: Duration) -> Self {
-        self.strategy.base_delay = delay;
-        self
-    }
-
-    /// 设置最大延迟
-    pub fn max_delay(mut self, delay: Duration) -> Self {
-        self.strategy.max_delay = delay;
-        self
-    }
-
-    /// 启用指数退避
-    pub fn exponential_backoff(mut self, enabled: bool) -> Self {
-        self.strategy.use_exponential_backoff = enabled;
-        self
-    }
-
-    /// 构建策略
-    pub fn build(self) -> RetryStrategy {
-        self.strategy
-    }
-
+impl RetryPolicyBuilder {
     /// 快速创建线性重试策略
-    pub fn linear(max_attempts: u32, delay: Duration) -> RetryStrategy {
-        Self::new()
-            .max_attempts(max_attempts)
-            .base_delay(delay)
-            .exponential_backoff(false)
-            .build()
+    pub fn linear(max_attempts: u32, delay: Duration) -> RetryPolicy {
+        RetryPolicy::fixed(max_attempts, delay)
     }
 
     /// 快速创建指数退避策略
     pub fn exponential(
         max_attempts: u32,
         base_delay: Duration,
-        max_delay: Duration,
-    ) -> RetryStrategy {
-        Self::new()
-            .max_attempts(max_attempts)
-            .base_delay(base_delay)
-            .max_delay(max_delay)
-            .exponential_backoff(true)
-            .build()
-    }
-}
-
-impl Default for RetryStrategyBuilder {
-    fn default() -> Self {
-        Self::new()
+        _max_delay: Duration,
+    ) -> RetryPolicy {
+        RetryPolicy::exponential(max_attempts, base_delay)
     }
 }
 
@@ -449,48 +417,41 @@ mod tests {
         let config = RetryConfig::new().enabled(true).aggressive();
 
         assert!(config.enabled);
-        assert_eq!(config.default_strategy.max_attempts, 5);
+        assert_eq!(config.default_strategy.max_retries(), 5);
     }
 
     #[test]
-    fn test_retry_strategy_builder() {
-        let strategy = RetryStrategyBuilder::new()
-            .max_attempts(3)
-            .base_delay(Duration::from_secs(1))
-            .exponential_backoff(true)
-            .build();
+    fn test_retry_policy_basic() {
+        let policy = RetryPolicy::exponential(3, Duration::from_secs(1));
 
-        assert_eq!(strategy.max_attempts, 3);
-        assert_eq!(strategy.base_delay, Duration::from_secs(1));
-        assert!(strategy.use_exponential_backoff);
+        assert_eq!(policy.max_retries(), 3);
+        assert_eq!(policy.delay(0), Duration::from_secs(1));
+        assert!(policy.is_retryable());
     }
 
     #[test]
     fn test_linear_strategy() {
-        let strategy = RetryStrategyBuilder::linear(3, Duration::from_secs(2));
+        let strategy = RetryPolicyBuilder::linear(3, Duration::from_secs(2));
 
-        assert_eq!(strategy.max_attempts, 3);
-        assert_eq!(strategy.base_delay, Duration::from_secs(2));
-        assert!(!strategy.use_exponential_backoff);
+        assert_eq!(strategy.max_retries(), 3);
+        assert_eq!(strategy.delay(0), Duration::from_secs(2));
+        assert_eq!(strategy.delay(1), Duration::from_secs(2)); // 线性重试延迟不变
     }
 
     #[test]
     fn test_exponential_strategy() {
-        let strategy = RetryStrategyBuilder::exponential(
-            5,
-            Duration::from_millis(500),
-            Duration::from_secs(30),
-        );
+        let strategy =
+            RetryPolicyBuilder::exponential(5, Duration::from_millis(500), Duration::from_secs(30));
 
-        assert_eq!(strategy.max_attempts, 5);
-        assert_eq!(strategy.base_delay, Duration::from_millis(500));
-        assert_eq!(strategy.max_delay, Duration::from_secs(30));
-        assert!(strategy.use_exponential_backoff);
+        assert_eq!(strategy.max_retries(), 5);
+        assert_eq!(strategy.delay(0), Duration::from_millis(500));
+        assert_eq!(strategy.delay(1), Duration::from_millis(1000)); // 指数退避
+        assert_eq!(strategy.delay(2), Duration::from_millis(2000)); // 2^2 * 500ms
     }
 
     #[test]
     fn test_retry_attempt_info() {
-        let error = LarkAPIError::api_error(500, "Server Error", None);
+        let error = LarkAPIError::api_error(500, "Server Error", "server error", None::<String>);
         let attempt = RetryAttempt {
             attempt: 2,
             max_attempts: 3,
@@ -533,7 +494,12 @@ mod tests {
                 let count = call_count_clone.fetch_add(1, Ordering::SeqCst) + 1;
                 async move {
                     if count == 1 {
-                        Err(LarkAPIError::api_error(500, "Server Error", None))
+                        Err(LarkAPIError::api_error(
+                            500,
+                            "Server Error",
+                            "server error",
+                            None::<String>,
+                        ))
                     } else {
                         Ok("Success")
                     }
@@ -563,7 +529,14 @@ mod tests {
         let result: Result<&str, LarkAPIError> = middleware
             .execute(move || {
                 call_count_clone.fetch_add(1, Ordering::SeqCst);
-                async move { Err(LarkAPIError::api_error(500, "Server Error", None)) }
+                async move {
+                    Err(LarkAPIError::api_error(
+                        500,
+                        "Server Error",
+                        "server error",
+                        None::<String>,
+                    ))
+                }
             })
             .await;
 
@@ -575,7 +548,7 @@ mod tests {
     fn test_retry_config_default() {
         let config = RetryConfig::default();
         assert!(config.enabled);
-        assert_eq!(config.default_strategy.max_attempts, 3); // Default from RetryStrategy
+        assert_eq!(config.default_strategy.max_retries(), 3); // Default from RetryPolicy
         assert!(config.on_retry.is_none());
         assert!(config.retry_filter.is_none());
     }
@@ -584,21 +557,23 @@ mod tests {
     fn test_retry_config_builder_patterns() {
         // Test conservative strategy
         let conservative_config = RetryConfig::new().conservative();
-        assert_eq!(conservative_config.default_strategy.max_attempts, 2);
+        assert_eq!(conservative_config.default_strategy.max_retries(), 2);
         assert_eq!(
             conservative_config.default_strategy.base_delay,
             Duration::from_secs(2)
         );
-        assert!(!conservative_config.default_strategy.use_exponential_backoff);
+        assert!(!conservative_config
+            .default_strategy
+            .use_exponential_backoff());
 
         // Test aggressive strategy
         let aggressive_config = RetryConfig::new().aggressive();
-        assert_eq!(aggressive_config.default_strategy.max_attempts, 5);
+        assert_eq!(aggressive_config.default_strategy.max_retries(), 5);
         assert_eq!(
             aggressive_config.default_strategy.base_delay,
             Duration::from_millis(500)
         );
-        assert!(aggressive_config.default_strategy.use_exponential_backoff);
+        assert!(aggressive_config.default_strategy.use_exponential_backoff());
 
         // Test server errors only filter
         let server_error_config = RetryConfig::new().server_errors_only();
@@ -613,13 +588,13 @@ mod tests {
             .server_errors_only();
 
         assert!(!config.enabled); // Note: aggressive() resets to defaults, then server_errors_only adds filter
-        assert_eq!(config.default_strategy.max_attempts, 5);
+        assert_eq!(config.default_strategy.max_retries(), 5);
         assert!(config.retry_filter.is_some());
     }
 
     #[test]
     fn test_retry_attempt_methods() {
-        let error = LarkAPIError::api_error(500, "Server Error", None);
+        let error = LarkAPIError::api_error(500, "Server Error", "server error", None::<String>);
         let started_at = Instant::now();
 
         // Test final attempt
@@ -706,7 +681,14 @@ mod tests {
         let result: Result<&str, LarkAPIError> = middleware
             .execute(|| {
                 call_count.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
-                async move { Err(LarkAPIError::api_error(500, "Server Error", None)) }
+                async move {
+                    Err(LarkAPIError::api_error(
+                        500,
+                        "Server Error",
+                        "server error",
+                        None::<String>,
+                    ))
+                }
             })
             .await;
 
@@ -731,7 +713,14 @@ mod tests {
         let middleware = RetryMiddleware::new(config);
 
         let result: Result<&str, LarkAPIError> = middleware
-            .execute(|| async move { Err(LarkAPIError::api_error(500, "Server Error", None)) })
+            .execute(|| async move {
+                Err(LarkAPIError::api_error(
+                    500,
+                    "Server Error",
+                    "server error",
+                    None::<String>,
+                ))
+            })
             .await;
 
         assert!(result.is_err());
@@ -747,12 +736,8 @@ mod tests {
         };
 
         // Only retry on specific error codes
-        let config = RetryConfig::new().retry_filter(|error| {
-            match error {
-                LarkAPIError::ApiError { code, .. } => *code == 503, // Only retry on service unavailable
-                _ => false,
-            }
-        });
+        let config = RetryConfig::new()
+            .retry_filter(|error| matches!(error, LarkAPIError::Api(api) if api.status == 503));
 
         let middleware = RetryMiddleware::new(config);
         let call_count = Arc::new(AtomicU32::new(0));
@@ -763,7 +748,12 @@ mod tests {
                 let _count = call_count_clone.fetch_add(1, Ordering::SeqCst);
                 async move {
                     // Return 500 error, which should not be retried according to our filter
-                    Err(LarkAPIError::api_error(500, "Server Error", None))
+                    Err(LarkAPIError::api_error(
+                        500,
+                        "Server Error",
+                        "server error",
+                        None::<String>,
+                    ))
                 }
             })
             .await;
@@ -783,7 +773,6 @@ mod tests {
         let config = RetryConfig::new().default_strategy(RetryStrategyBuilder::exponential(
             3,
             Duration::from_millis(10),
-            Duration::from_millis(100),
         ));
 
         let middleware = RetryMiddleware::new(config);
@@ -798,7 +787,12 @@ mod tests {
                 let count = call_count_clone.fetch_add(1, Ordering::SeqCst);
                 async move {
                     if count < 2 {
-                        Err(LarkAPIError::api_error(500, "Server Error", None))
+                        Err(LarkAPIError::api_error(
+                            500,
+                            "Server Error",
+                            "server error",
+                            None::<String>,
+                        ))
                     } else {
                         Ok("Success")
                     }
@@ -833,7 +827,12 @@ mod tests {
                     if count == 1 {
                         Ok("Success")
                     } else {
-                        Err(LarkAPIError::api_error(500, "Server Error", None))
+                        Err(LarkAPIError::api_error(
+                            500,
+                            "Server Error",
+                            "server error",
+                            None::<String>,
+                        ))
                     }
                 }
             })
@@ -857,7 +856,14 @@ mod tests {
 
         // Execute a failed operation to generate stats
         let _result: Result<&str, LarkAPIError> = middleware
-            .execute(|| async move { Err(LarkAPIError::api_error(500, "Server Error", None)) })
+            .execute(|| async move {
+                Err(LarkAPIError::api_error(
+                    500,
+                    "Server Error",
+                    "server error",
+                    None::<String>,
+                ))
+            })
             .await;
 
         let stats_before = middleware.get_stats();
@@ -873,28 +879,23 @@ mod tests {
     }
 
     #[test]
-    fn test_retry_strategy_builder_defaults() {
-        let builder = RetryStrategyBuilder::default();
-        let strategy = builder.build();
+    fn test_retry_policy_builder_defaults() {
+        let strategy = RetryPolicy::default();
 
-        // Should match default RetryStrategy values
-        assert!(strategy.max_attempts > 0);
-        assert!(strategy.base_delay > Duration::ZERO);
+        // Should match default RetryPolicy values
+        assert!(strategy.max_retries() > 0);
+        assert!(strategy.delay(0) > Duration::ZERO);
+        assert!(strategy.is_retryable());
     }
 
     #[test]
-    fn test_retry_strategy_builder_chaining() {
-        let strategy = RetryStrategyBuilder::new()
-            .max_attempts(5)
-            .base_delay(Duration::from_millis(200))
-            .max_delay(Duration::from_secs(10))
-            .exponential_backoff(true)
-            .build();
+    fn test_retry_policy_exponential() {
+        let strategy = RetryPolicy::exponential(5, Duration::from_millis(200));
 
-        assert_eq!(strategy.max_attempts, 5);
-        assert_eq!(strategy.base_delay, Duration::from_millis(200));
-        assert_eq!(strategy.max_delay, Duration::from_secs(10));
-        assert!(strategy.use_exponential_backoff);
+        assert_eq!(strategy.max_retries(), 5);
+        assert_eq!(strategy.delay(0), Duration::from_millis(200));
+        assert_eq!(strategy.delay(1), Duration::from_millis(400));
+        assert_eq!(strategy.delay(2), Duration::from_millis(800));
     }
 
     #[test]
@@ -918,7 +919,12 @@ mod tests {
         let result: Result<&str, LarkAPIError> = middleware
             .execute(|| {
                 call_count.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
-                async move { Err(LarkAPIError::illegal_param("Invalid auth token")) }
+                async move {
+                    Err(crate::error::validation_error_v3(
+                        "token",
+                        "Invalid auth token",
+                    ))
+                }
             })
             .await;
 

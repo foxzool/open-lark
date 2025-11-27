@@ -4,7 +4,9 @@ use tracing::{info_span, Instrument};
 
 use crate::{
     api::{ApiResponseTrait, BaseResponse, RawResponse, Response, ResponseFormat},
-    error::LarkAPIError,
+    error::{
+        network_error_v3, validation_error_v3, ErrorCategory, ErrorCode, ErrorContext, LarkAPIError,
+    },
     observability::ResponseTracker,
     SDKResult,
 };
@@ -161,7 +163,7 @@ impl ImprovedResponseHandler {
                             direct_parse_err, fallback_err
                         );
                         tracker.error(&error_msg);
-                        Err(LarkAPIError::IllegalParamError(error_msg))
+                        Err(validation_error_v3("api_response", error_msg))
                     }
                 }
             }
@@ -187,7 +189,7 @@ impl ImprovedResponseHandler {
             Err(e) => {
                 let error_msg = format!("Failed to parse JSON: {}", e);
                 tracker.error(&error_msg);
-                return Err(LarkAPIError::IllegalParamError(error_msg));
+                return Err(validation_error_v3("base_response", error_msg));
             }
         };
 
@@ -197,7 +199,7 @@ impl ImprovedResponseHandler {
             Err(e) => {
                 let error_msg = format!("Failed to parse raw response: {}", e);
                 tracker.error(&error_msg);
-                return Err(LarkAPIError::IllegalParamError(error_msg));
+                return Err(validation_error_v3("response", error_msg));
             }
         };
 
@@ -250,7 +252,7 @@ impl ImprovedResponseHandler {
             Err(e) => {
                 let error_msg = format!("Failed to read binary response: {}", e);
                 tracker.error(&error_msg);
-                return Err(LarkAPIError::RequestError(error_msg));
+                return Err(network_error_v3(error_msg));
             }
         };
 
@@ -324,12 +326,43 @@ where
     pub fn into_data(self) -> Result<T, LarkAPIError> {
         if self.is_success() {
             self.data.ok_or_else(|| {
-                LarkAPIError::illegal_param("Response is successful but data is missing")
+                validation_error_v3("data", "Response is successful but data is missing")
             })
         } else {
-            Err(LarkAPIError::api_error(
-                self.code, self.msg, None, // 这里可以添加request_id如果有的话
-            ))
+            // 优先使用飞书通用错误码映射
+            let mapped_code = ErrorCode::from_feishu_code(self.code)
+                .unwrap_or_else(|| ErrorCode::from_code(self.code));
+
+            // 将飞书 code 记录到上下文，便于观测与排查
+            let mut ctx = ErrorContext::new();
+            ctx.add_context("feishu_code", self.code.to_string());
+
+            // log_id 作为 request_id 便于链路追踪
+            if let Some(log_id) = self.error.as_ref().and_then(|e| e.log_id.clone()) {
+                ctx.set_request_id(log_id);
+            }
+
+            // 推导合适的 HTTP 状态用于 Api 变体（避免 u16 溢出）
+            let status =
+                mapped_code
+                    .http_status()
+                    .unwrap_or_else(|| match mapped_code.category() {
+                        ErrorCategory::RateLimit => 429,
+                        ErrorCategory::Authentication
+                        | ErrorCategory::Permission
+                        | ErrorCategory::Parameter => 400,
+                        ErrorCategory::Resource => 404,
+                        _ => 500,
+                    });
+
+            Err(LarkAPIError::Api(crate::error::core_v3::ApiError {
+                status,
+                endpoint: "unknown_endpoint".into(),
+                message: self.msg,
+                source: None,
+                code: mapped_code,
+                ctx,
+            }))
         }
     }
 
@@ -497,9 +530,9 @@ mod tests {
         let result = response.into_data();
         assert!(result.is_err());
         match result.unwrap_err() {
-            LarkAPIError::ApiError { code, message, .. } => {
-                assert_eq!(code, 400);
-                assert_eq!(message, "Bad Request");
+            LarkAPIError::Api(api) => {
+                assert_eq!(api.status, 400);
+                assert_eq!(api.message, "Bad Request");
             }
             _ => panic!("Expected ApiError"),
         }
@@ -517,8 +550,8 @@ mod tests {
         let result = response.into_data();
         assert!(result.is_err());
         match result.unwrap_err() {
-            LarkAPIError::IllegalParamError(msg) => {
-                assert!(msg.contains("data is missing"));
+            LarkAPIError::Validation { message, .. } => {
+                assert!(message.contains("data is missing"));
             }
             _ => panic!("Expected IllegalParamError"),
         }
