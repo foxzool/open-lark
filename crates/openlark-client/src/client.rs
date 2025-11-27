@@ -3,11 +3,12 @@
 //! 极简设计，1行代码创建客户端，类型安全的服务访问
 
 use crate::registry::ServiceRegistry;
-use openlark_core::error::ErrorTrait;
 use crate::{
-    traits::LarkClient, Config, DefaultServiceRegistry, Result, ServiceMetadata, ServiceStatus,
     error::{with_context, with_operation_context},
+    traits::LarkClient,
+    Config, DefaultServiceRegistry, Result, ServiceMetadata, ServiceStatus,
 };
+use openlark_core::error::ErrorTrait;
 use std::sync::Arc;
 
 /// 🚀 OpenLark客户端 - 极简设计
@@ -182,11 +183,7 @@ impl Client {
     pub fn with_config(config: Config) -> Result<Self> {
         let validation_result = config.validate();
         if let Err(err) = validation_result {
-            return with_context(
-                Err(err),
-                "operation",
-                "Client::with_config"
-            );
+            return with_context(Err(err), "operation", "Client::with_config");
         }
 
         let config = Arc::new(config);
@@ -195,11 +192,7 @@ impl Client {
         // 加载启用的服务
         let load_result = load_enabled_services(&config, &mut registry);
         if let Err(err) = load_result {
-            return with_operation_context(
-                Err(err),
-                "Client::with_config",
-                "service_loading"
-            );
+            return with_operation_context(Err(err), "Client::with_config", "service_loading");
         }
 
         let registry = Arc::new(registry);
@@ -266,9 +259,9 @@ fn register_core_services(_config: &Config, registry: &mut DefaultServiceRegistr
             status: ServiceStatus::Uninitialized,
             priority: 2,
         };
-        registry.register_service(metadata).map_err(|e| {
-            crate::error::internal_error(format!("注册通讯服务失败: {}", e))
-        })?;
+        registry
+            .register_service(metadata)
+            .map_err(|e| crate::error::internal_error(format!("注册通讯服务失败: {}", e)))?;
     }
 
     #[cfg(feature = "docs")]
@@ -287,16 +280,19 @@ fn register_core_services(_config: &Config, registry: &mut DefaultServiceRegistr
             status: ServiceStatus::Uninitialized,
             priority: 2,
         };
-        registry.register_service(metadata).map_err(|e| {
-            crate::error::internal_error(format!("注册文档服务失败: {}", e))
-        })?;
+        registry
+            .register_service(metadata)
+            .map_err(|e| crate::error::internal_error(format!("注册文档服务失败: {}", e)))?;
     }
 
     Ok(())
 }
 
 /// 注册专业层服务
-fn register_professional_services(_config: &Config, _registry: &mut DefaultServiceRegistry) -> Result<()> {
+fn register_professional_services(
+    _config: &Config,
+    _registry: &mut DefaultServiceRegistry,
+) -> Result<()> {
     // #[cfg(feature = "hr")]  // hr 功能暂未启用
     // {
     //     tracing::debug!("注册人力资源服务");
@@ -350,7 +346,10 @@ fn register_professional_services(_config: &Config, _registry: &mut DefaultServi
 }
 
 /// 注册企业层服务
-fn register_enterprise_services(_config: &Config, _registry: &mut DefaultServiceRegistry) -> Result<()> {
+fn register_enterprise_services(
+    _config: &Config,
+    _registry: &mut DefaultServiceRegistry,
+) -> Result<()> {
     // #[cfg(feature = "admin")]  // admin 功能暂未启用
     // {
     //     tracing::debug!("注册管理服务");
@@ -495,7 +494,10 @@ impl ClientBuilder {
     pub fn build(self) -> Result<Client> {
         let result = Client::with_config(self.config);
         if let Err(ref error) = result {
-            tracing::error!("客户端构建失败: {}", error.user_message().unwrap_or("未知错误"));
+            tracing::error!(
+                "客户端构建失败: {}",
+                error.user_message().unwrap_or("未知错误")
+            );
         }
         result
     }
@@ -607,7 +609,8 @@ mod tests {
             .unwrap();
 
         // 测试错误上下文处理
-        let error_result: Result<i32> = Err(crate::error::validation_error("field", "validation failed"));
+        let error_result: Result<i32> =
+            Err(crate::error::validation_error("field", "validation failed"));
         let result = client.handle_error(error_result, "test_operation");
 
         assert!(result.is_err());
@@ -627,12 +630,12 @@ mod tests {
             .unwrap();
 
         // 测试异步错误上下文处理
-        let result = client.handle_async_error(
-            async {
-                Err(crate::error::network_error("async error"))
-            },
-            "async_test"
-        ).await;
+        let result = client
+            .handle_async_error(
+                async { Err(crate::error::network_error("async error")) },
+                "async_test",
+            )
+            .await;
 
         assert!(result.is_err());
         if let Err(error) = result {
