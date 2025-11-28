@@ -53,17 +53,22 @@
 pub mod error;
 pub mod service;
 
-// CCM业务域模块 (按CSV的meta.Project组织)
-pub mod drive;         // 59个API
-pub mod sheets;        // 60个API (ccm_sheet 33个 + sheets 27个)
-pub mod docx;          // 19个API
-pub mod wiki;          // 16个API
-pub mod ccm_doc;       // 6个API
-pub mod ccm_docs;      // 2个API
-pub mod ccm_drive_permission; // 3个API
-pub mod ccm_drive_explorer;   // 8个API (旧版)
-pub mod ccm_sheet;            // 33个API (旧版表格)
-pub mod docs;          // 1个API
+// 按 CSV meta.Project 组织的模块
+pub mod drive;         // 59 (ccm)
+pub mod sheets;        // 27 (ccm)
+pub mod docx;          // 19 (ccm)
+pub mod wiki;          // 16 (ccm)
+pub mod ccm_doc;       // 6  (ccm)
+pub mod ccm_docs;      // 2  (ccm)
+pub mod ccm_drive_permission; // 3 (ccm)
+pub mod ccm_drive_explorer;   // 8 (ccm)
+pub mod ccm_sheet;            // 33 (ccm_sheet old)
+pub mod docs;          // 1  (ccm)
+pub mod bitable;       // 46 (base bizTag -> bitable project)
+pub mod base;          // 3  (base)
+pub mod lingo;         // 14 (baike bizTag)
+pub mod baike;         // 13 (baike)
+pub mod minutes;       // 4  (minutes)
 
 // 重新导出核心类型
 pub use error::{DocsError, DocsResult};
@@ -136,5 +141,30 @@ impl DocsClient {
     /// 访问 docs 基础内容
     pub fn docs(&self) -> docs::Docs {
         docs::Docs::new(self.service.clone())
+    }
+
+    /// 访问 bitable (base 业务)
+    pub fn bitable(&self) -> bitable::Bitable {
+        bitable::Bitable::new(self.service.clone())
+    }
+
+    /// 访问 base (权限增强 3 API)
+    pub fn base(&self) -> base::Base {
+        base::Base::new(self.service.clone())
+    }
+
+    /// 访问 lingo (新版知识库)
+    pub fn lingo(&self) -> lingo::Lingo {
+        lingo::Lingo::new(self.service.clone())
+    }
+
+    /// 访问 baike (旧版知识库)
+    pub fn baike(&self) -> baike::Baike {
+        baike::Baike::new(self.service.clone())
+    }
+
+    /// 访问 minutes (会议纪要)
+    pub fn minutes(&self) -> minutes::Minutes {
+        minutes::Minutes::new(self.service.clone())
     }
 }

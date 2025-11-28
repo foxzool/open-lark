@@ -1,23 +1,17 @@
-//! # Base v2 版本API
-//!
-//! 基础服务v2版本的API实现。
+pub mod app;
 
-use openlark_core::config::Config;
+use std::sync::Arc;
+use crate::service::DocsService;
 
-/// Base v2版本服务
-#[derive(Debug, Clone)]
-pub struct BaseV2Service {
-    config: Config,
+#[derive(Clone)]
+pub struct BaseV2 {
+    service: Arc<DocsService>,
 }
 
-impl BaseV2Service {
-    /// 创建新的v2服务实例
-    pub fn new(config: Config) -> Self {
-        Self { config }
-    }
+impl BaseV2 {
+    pub fn new(service: Arc<DocsService>) -> Self { Self { service } }
 
-    /// 获取配置信息
-    pub fn config(&self) -> &Config {
-        &self.config
+    pub fn app_role(&self) -> app::role::AppRole {
+        app::role::AppRole::new(self.service.clone())
     }
 }

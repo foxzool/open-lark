@@ -1,42 +1,17 @@
-//! 多维表格服务模块
-//!
-//! 提供多维表格应用、数据表、视图管理等功能。
+pub mod v1;
 
-use openlark_core::config::Config;
+use std::sync::Arc;
+use crate::service::DocsService;
 
-/// 多维表格服务
-#[derive(Debug, Clone)]
-pub struct BitableService {
-    config: Config,
+#[derive(Clone)]
+pub struct Bitable {
+    service: Arc<DocsService>,
 }
 
-impl BitableService {
-    /// 创建新的多维表格服务实例
-    pub fn new(config: Config) -> Self {
-        Self { config }
-    }
+impl Bitable {
+    pub fn new(service: Arc<DocsService>) -> Self { Self { service } }
 
-    /// 获取配置引用
-    pub fn config(&self) -> &Config {
-        &self.config
-    }
-}
-
-// 暂时简化v1模块
-pub mod v1 {
-    use super::Config;
-
-    pub struct V1 {
-        config: Config,
-    }
-
-    impl V1 {
-        pub fn new(config: Config) -> Self {
-            Self { config }
-        }
-
-        pub fn config(&self) -> &Config {
-            &self.config
-        }
+    pub fn v1(&self) -> v1::BitableV1 {
+        v1::BitableV1::new(self.service.clone())
     }
 }
