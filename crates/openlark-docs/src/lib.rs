@@ -2,13 +2,24 @@
 //!
 //! 飞书开放平台云文档服务模块，提供文档、表格、知识库等API访问能力。
 //!
-//! ## 功能模块
+//! ## 功能模块 (按meta.Project组织)
 //!
-//! - **ccm**: 云文档协同 (174 APIs) - 文档、表格、知识库、云盘
-//! - **bitable**: 多维表格 (49 APIs) - 多维表格应用、数据表、视图管理
-//! - **base**: 基础服务 (0 APIs) - 基础操作和工具
-//! - **baike**: 知识库 (27 APIs) - 企业知识库、Wiki管理
-//! - **minutes**: 会议纪要 (4 APIs) - 会议记录管理
+//! ### 核心文档服务
+//! - **drive**: 云盘文件管理 (59 APIs) - 文件上传下载、权限控制
+//! - **sheets**: 电子表格服务 (27 APIs) - 表格数据操作、工作表管理
+//! - **docx**: 文档处理服务 (19 APIs) - 文档创建编辑、内容管理
+//!
+//! ### 知识库服务
+//! - **wiki**: 知识库管理 (16 APIs) - 空间节点管理、协作编辑
+//! - **baike**: 知识百科 (13 APIs) - 企业知识库、条目管理
+//! - **lingo**: 语言服务 (14 APIs) - 智能语言处理、知识搜索
+//!
+//! ### 数据管理服务
+//! - **bitable**: 多维表格 (46 APIs) - 应用管理、数据表、视图
+//! - **base**: 基础服务 (3 APIs) - 权限管理、基础配置
+//!
+//! ### 会议服务
+//! - **minutes**: 会议纪要 (4 APIs) - 会议记录、转录服务
 //!
 //! ## 快速开始
 //!
@@ -22,73 +33,59 @@
 //!     .build();
 //! let docs = DocsService::new(config);
 //!
-//! // 基础服务使用
-//! let config_ref = docs.config();
-//! println!("App ID: {}", config_ref.app_id);
+//! // 云盘文件服务
+//! let files = docs.drive.v1.files();
+//! let file_list = files.list().parent_folder_token("token").send().await?;
+//!
+//! // 多维表格服务
+//! let apps = docs.bitable.v1.apps();
+//! let app_list = apps.list().send().await?;
 //! ```
 //!
 //! ## 特性
 //!
 //! - ✅ **254 APIs全覆盖** - 飞书云文档服务完整实现
+//! - ✅ **Project-Version-Resource架构** - 清晰的三层结构
 //! - ✅ **类型安全** - 强类型请求/响应结构
 //! - ✅ **异步支持** - 基于tokio的异步API
-//! - ✅ **版本化API** - 支持v1/v2/v3/v4多版本API
+//! - ✅ **版本化API** - 支持v1/v2/v3多版本API
 //! - ✅ **构建器模式** - 流畅的API调用体验
 
 // #![deny(missing_docs)] // 暂时禁用，在开发阶段
 #![warn(clippy::all)]
 
-// Include macros first
-#[cfg(any(feature = "ccm", feature = "base"))]
-#[macro_use]
-mod macros;
-
 // Core modules
 pub mod error;
 pub mod models;
-
-// 主要服务模块
+pub mod prelude;
 pub mod service;
 
-// 功能模块按业务域组织
-#[cfg(feature = "ccm")]
-pub mod ccm;
-
-#[cfg(feature = "bitable")]
-pub mod bitable;
-
-#[cfg(feature = "base")]
-pub mod base;
-
-#[cfg(feature = "baike")]
+// Project-level modules (meta.Project作为一级目录)
 pub mod baike;
-
-#[cfg(feature = "minutes")]
+pub mod base;
+pub mod bitable;
+pub mod docx;
+pub mod drive;
+pub mod lingo;
 pub mod minutes;
+pub mod sheets;
+pub mod wiki;
 
-// API版本模块
-#[cfg(any(feature = "v1", feature = "v2", feature = "v3", feature = "v4"))]
-pub mod versions;
-
-// Prelude模块 - 常用导入
-pub mod prelude;
+// 测试工具模块（仅在测试时可用）
+#[cfg(test)]
+pub mod testing;
 
 // 重新导出主要类型
 pub use error::{DocsError, DocsResult};
 pub use service::DocsService;
 
-// 重新导出各域服务
-#[cfg(feature = "ccm")]
-pub use ccm::CcmService;
-
-#[cfg(feature = "bitable")]
-pub use bitable::BitableService;
-
-#[cfg(feature = "base")]
-pub use base::BaseService;
-
-#[cfg(feature = "baike")]
+// 重新导出各Project服务
 pub use baike::BaikeService;
-
-#[cfg(feature = "minutes")]
+pub use base::BaseService;
+pub use bitable::BitableService;
+pub use docx::DocxService;
+pub use drive::DriveService;
+pub use lingo::LingoService;
 pub use minutes::MinutesService;
+pub use sheets::SheetsService;
+pub use wiki::WikiService;

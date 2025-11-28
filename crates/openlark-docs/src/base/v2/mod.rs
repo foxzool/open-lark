@@ -1,32 +1,22 @@
-//! Base V2 模块
+//! # Base v2 版本API
 //!
-//! 提供Base应用的V2版本API，包括角色管理等功能。
+//! 基础服务v2版本的API实现。
 
 use openlark_core::config::Config;
 
-pub mod models;
-pub mod role;
-
-pub use models::*;
-pub use role::*;
-
-/// Base V2 服务
+/// Base v2版本服务
+#[derive(Debug, Clone)]
 pub struct BaseV2Service {
-    pub config: Config,
+    config: Config,
 }
 
 impl BaseV2Service {
-    /// 创建Base V2服务
+    /// 创建新的v2服务实例
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
-    /// 获取角色管理服务
-    pub fn role_service(&self) -> role::RoleService {
-        role::RoleService::new(self.config.clone())
-    }
-
-    /// 获取配置
+    /// 获取配置信息
     pub fn config(&self) -> &Config {
         &self.config
     }

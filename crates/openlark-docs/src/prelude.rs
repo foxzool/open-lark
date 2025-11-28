@@ -15,14 +15,7 @@ pub use crate::{
 };
 
 // 显式导出常用模型，避免歧义
-pub use crate::models::{
-    DepartmentInfo, DocumentBase, DocumentStats, ErrorInfo, FileInfo, Permission, SearchResult,
-    ShareInfo, UserInfo, VersionInfo,
-};
-
-// 重新导出服务类型（如果启用了相应功能）
-#[cfg(feature = "ccm")]
-pub use crate::ccm::CcmService;
+pub use crate::models::{FileInfo, Permission, UserInfo};
 
 #[cfg(feature = "base")]
 pub use crate::base::BaseService;
