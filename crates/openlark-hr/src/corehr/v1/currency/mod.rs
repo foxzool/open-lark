@@ -1,0 +1,37 @@
+use std::sync::Arc;
+use openlark_core::SDKResult;
+use crate::service::HrService;
+use serde_json::Value;
+use reqwest::Method;
+
+#[derive(Clone)]
+pub struct Currency {
+    service: Arc<HrService>,
+}
+
+impl Currency {
+    pub fn new(service: Arc<HrService>) -> Self { Self { service } }
+
+    /// 文档参考: https://open.feishu.cn/document/server-docs/corehr-v1/basic-infomation/currency/list
+    pub async fn get_open_apis_corehr_v1_currencies(&self, payload: Option<&Value>) -> SDKResult<Value> {
+        let mut path = "/open-apis/corehr/v1/currencies".to_string();
+        let method = Method::GET;
+        let (query, body) = match method {
+            Method::GET | Method::DELETE => (payload, None),
+            _ => (None, payload),
+        };
+        self.service.request_value(method, &path, query, body).await
+    }
+
+    /// 文档参考: https://open.feishu.cn/document/server-docs/corehr-v1/basic-infomation/currency/get
+    pub async fn get_open_apis_corehr_v1_currencies_by_currency_id(&self, currency_id: impl AsRef<str>, payload: Option<&Value>) -> SDKResult<Value> {
+        let mut path = "/open-apis/corehr/v1/currencies/:currency_id".to_string();
+        path = path.replace(":currency_id", currency_id.as_ref());
+        let method = Method::GET;
+        let (query, body) = match method {
+            Method::GET | Method::DELETE => (payload, None),
+            _ => (None, payload),
+        };
+        self.service.request_value(method, &path, query, body).await
+    }
+}
