@@ -13,10 +13,12 @@
 use openlark_core::config::Config;
 pub mod copy;
 pub mod create;
+pub mod delete;
 pub mod get;
 pub mod update;
 pub use copy::*;
 pub use create::*;
+pub use delete::*;
 // 重新启用已修复的模块
 pub use get::*;
 pub use update::*;

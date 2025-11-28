@@ -29,6 +29,8 @@ pub mod batch_get;
 pub mod batch_update;
 pub mod create;
 pub mod delete;
+pub mod get;
+pub mod list;
 pub mod search;
 pub mod update;
 
@@ -48,6 +50,14 @@ pub use batch_update::{
     BatchUpdateRecordResult
 };
 pub use delete::DeleteRecordRequest;
+pub use get::{
+    GetRecordRequest, GetRecordRequestBuilder, GetRecordResponse, RecordInfo,
+    CreatorInfo, UpdaterInfo
+};
+pub use list::{
+    ListRecordRequest, ListRecordRequestBuilder, ListRecordResponse, SortCondition,
+    FilterInfo, FilterCondition
+};
 pub use search::SearchRecordRequest;
 pub use update::UpdateRecordRequest;
 

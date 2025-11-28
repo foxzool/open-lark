@@ -1,40 +1,48 @@
-//! App_Table_View服务模块 - 简化实现
+//! 视图管理服务模块
+//!
+//! 提供多维表格视图的创建、更新、删除和查询功能。
 
-#![allow(dead_code)]
-#![allow(unused_imports)]
-#![allow(unused_variables)]
-#![allow(unused_mut)]
-#![allow(dead_code)]
-#![allow(unused_variables)]
-#![allow(unused_imports)]
-#![allow(unused_mut)]
-#![allow(non_snake_case)]
-#![allow(clippy::too_many_arguments)]
-#![allow(clippy::module_inception)]
+use openlark_core::{
+    config::Config,
+    constants::AccessTokenType,
+    endpoints::cloud_docs::*,
+    http::Transport,
+    reqwest::Method,
+    req_option::RequestOption,
+    SDKResult,
+    core::{
+        BaseResponse,
+        ResponseFormat,
+        api::ApiResponseTrait,
+    },
+};
 use serde::{Deserialize, Serialize};
-use openlark_core::config::Config;
-use api::{ApiResponseTrait, ResponseFormat};
-/// 简化的服务结构体
+
+// 导入子模块
+pub mod patch;
+
+// 重新导出主要类型
+pub use patch::{
+    PatchViewRequest, PatchViewRequestBuilder, PatchViewResponse
+};
+
+/// 视图服务
 #[derive(Clone)]
-pub struct SimpleService {
+pub struct AppTableViewService {
+    config: Config,
 }
 
-impl SimpleService {
-}
-#[derive(Debug, Deserialize, Serialize)]
-pub struct SimpleResponse;
-impl ApiResponseTrait for SimpleResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-}
-/// App_Table_View服务
-#[derive(Clone)]
-pub struct App_Table_ViewService {
+impl AppTableViewService {
+    /// 创建视图服务实例
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+
+    /// 获取配置
+    pub fn config(&self) -> &Config {
+        &self.config
+    }
 }
 
-impl App_Table_ViewService {
-}
 // Type alias for compatibility
-pub type ServiceType = App_Table_ViewService;
-pub type ResponseType = SimpleResponse;
-}
+pub type ServiceType = AppTableViewService;
