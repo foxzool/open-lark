@@ -41,6 +41,7 @@ members = [
     "crates/openlark-mail",           # 邮件服务
     "crates/openlark-people",         # 人员管理
     "crates/openlark-task",           # 任务管理
+    "crates/openlark-workflow",       # 工作流（任务/审批/白板）
 ]
 
 [workspace.package]
