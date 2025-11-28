@@ -18,7 +18,7 @@ impl Space {
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space/list
     pub async fn get_open_apis_wiki_v2_spaces(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let path = "/open-apis/wiki/v2/spaces".to_string();
+        let mut path = "/open-apis/wiki/v2/spaces".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -41,7 +41,7 @@ impl Space {
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space/create
     pub async fn post_open_apis_wiki_v2_spaces(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let path = "/open-apis/wiki/v2/spaces".to_string();
+        let mut path = "/open-apis/wiki/v2/spaces".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -52,7 +52,7 @@ impl Space {
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/get_node
     pub async fn get_open_apis_wiki_v2_spaces_get_node(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let path = "/open-apis/wiki/v2/spaces/get_node".to_string();
+        let mut path = "/open-apis/wiki/v2/spaces/get_node".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

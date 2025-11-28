@@ -14,7 +14,7 @@ impl Meta {
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/batch_query
     pub async fn post_open_apis_drive_v1_metas_batch_query(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let path = "/open-apis/drive/v1/metas/batch_query".to_string();
+        let mut path = "/open-apis/drive/v1/metas/batch_query".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

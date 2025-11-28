@@ -14,7 +14,7 @@ impl ImportTask {
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/docs/drive-v1/import_task/create
     pub async fn post_open_apis_drive_v1_import_tasks(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let path = "/open-apis/drive/v1/import_tasks".to_string();
+        let mut path = "/open-apis/drive/v1/import_tasks".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

@@ -14,7 +14,7 @@ impl Default {
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/docs/drive-v1/search/document-search
     pub async fn post_open_apis_suite_docs_api_search_object(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let path = "/open-apis/suite/docs-api/search/object".to_string();
+        let mut path = "/open-apis/suite/docs-api/search/object".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -25,7 +25,7 @@ impl Default {
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/obtain-metadata
     pub async fn post_open_apis_suite_docs_api_meta(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let path = "/open-apis/suite/docs-api/meta".to_string();
+        let mut path = "/open-apis/suite/docs-api/meta".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

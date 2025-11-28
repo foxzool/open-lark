@@ -14,7 +14,7 @@ impl Media {
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/docs/drive-v1/media/upload_all
     pub async fn post_open_apis_drive_v1_medias_upload_all(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let path = "/open-apis/drive/v1/medias/upload_all".to_string();
+        let mut path = "/open-apis/drive/v1/medias/upload_all".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -25,7 +25,7 @@ impl Media {
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/docs/drive-v1/media/multipart-upload-media/upload_prepare
     pub async fn post_open_apis_drive_v1_medias_upload_prepare(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let path = "/open-apis/drive/v1/medias/upload_prepare".to_string();
+        let mut path = "/open-apis/drive/v1/medias/upload_prepare".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -36,7 +36,7 @@ impl Media {
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/docs/drive-v1/media/multipart-upload-media/upload_part
     pub async fn post_open_apis_drive_v1_medias_upload_part(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let path = "/open-apis/drive/v1/medias/upload_part".to_string();
+        let mut path = "/open-apis/drive/v1/medias/upload_part".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -47,7 +47,7 @@ impl Media {
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/docs/drive-v1/media/multipart-upload-media/upload_finish
     pub async fn post_open_apis_drive_v1_medias_upload_finish(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let path = "/open-apis/drive/v1/medias/upload_finish".to_string();
+        let mut path = "/open-apis/drive/v1/medias/upload_finish".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -70,7 +70,7 @@ impl Media {
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/docs/drive-v1/media/batch_get_tmp_download_url
     pub async fn get_open_apis_drive_v1_medias_batch_get_tmp_download_url(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let path = "/open-apis/drive/v1/medias/batch_get_tmp_download_url".to_string();
+        let mut path = "/open-apis/drive/v1/medias/batch_get_tmp_download_url".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
