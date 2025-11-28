@@ -70,6 +70,9 @@ pub mod minutes;
 #[cfg(any(feature = "v1", feature = "v2", feature = "v3", feature = "v4"))]
 pub mod versions;
 
+// 通用模块 - 工具宏和类型
+pub mod common;
+
 // Prelude模块 - 常用导入
 pub mod prelude;
 
