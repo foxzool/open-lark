@@ -31,6 +31,10 @@ pub mod batch_create;
 pub mod batch_delete;
 pub mod patch;
 
+// 测试模块
+#[cfg(test)]
+pub mod tests;
+
 // 重新导出主要类型
 pub use create::{
     CreateTableRequest, CreateTableRequestBuilder, CreateTableResponse,
