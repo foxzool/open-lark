@@ -16,7 +16,7 @@ impl Document {
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/create
     pub async fn post_open_apis_docx_v1_documents(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let path = "/open-apis/docx/v1/documents".to_string();
+        let mut path = "/open-apis/docx/v1/documents".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -51,7 +51,7 @@ impl Document {
 
     /// 文档参考: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/convert
     pub async fn post_open_apis_docx_documents_blocks_convert(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let path = "/open-apis/docx/documents/blocks/convert".to_string();
+        let mut path = "/open-apis/docx/documents/blocks/convert".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

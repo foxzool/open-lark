@@ -14,7 +14,7 @@ impl Content {
 
     /// 文档参考: https://open.feishu.cn/document/docs/docs-v1/get
     pub async fn get_open_apis_docs_v1_content(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let path = "/open-apis/docs/v1/content".to_string();
+        let mut path = "/open-apis/docs/v1/content".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

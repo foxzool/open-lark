@@ -1,31 +1,66 @@
+pub mod dashboard;
+pub mod role;
+pub mod table;
+pub mod workflow;
 
-#![allow(dead_code)]
-#![allow(unused_imports)]
-#![allow(unused_variables)]
-#![allow(unused_mut)]
-#![allow(dead_code)]
-#![allow(unused_variables)]
-#![allow(unused_imports)]
-#![allow(unused_mut)]
-#![allow(non_snake_case)]
-#![allow(clippy::too_many_arguments)]
-#![allow(clippy::module_inception)]
-use openlark_core::config::Config;
-pub mod copy;
-pub mod create;
-pub mod get;
-pub mod update;
-pub use copy::*;
-pub use create::*;
-// 重新启用已修复的模块
-pub use get::*;
-pub use update::*;
-/// 多维表格服务
-pub struct AppService {
-    config: Config,
+use std::sync::Arc;
+use openlark_core::SDKResult;
+use crate::service::DocsService;
+use serde_json::Value;
+use reqwest::Method;
+
+#[derive(Clone)]
+pub struct App {
+    service: Arc<DocsService>,
 }
-impl AppService {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-}
+
+impl App {
+    pub fn new(service: Arc<DocsService>) -> Self { Self { service } }
+
+    /// 文档参考: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/create
+    pub async fn post_open_apis_bitable_v1_apps(&self, payload: Option<&Value>) -> SDKResult<Value> {
+        let mut path = "/open-apis/bitable/v1/apps".to_string();
+        let method = Method::POST;
+        let (query, body) = match method {
+            Method::GET | Method::DELETE => (payload, None),
+            _ => (None, payload),
+        };
+        self.service.request_value(method, &path, query, body).await
+    }
+
+    /// 文档参考: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/copy
+    pub async fn post_open_apis_bitable_v1_apps_by_app_token_copy(&self, app_token: impl AsRef<str>, payload: Option<&Value>) -> SDKResult<Value> {
+        let mut path = "/open-apis/bitable/v1/apps/:app_token/copy".to_string();
+        path = path.replace(":app_token", app_token.as_ref());
+        let method = Method::POST;
+        let (query, body) = match method {
+            Method::GET | Method::DELETE => (payload, None),
+            _ => (None, payload),
+        };
+        self.service.request_value(method, &path, query, body).await
+    }
+
+    /// 文档参考: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/get
+    pub async fn get_open_apis_bitable_v1_apps_by_app_token(&self, app_token: impl AsRef<str>, payload: Option<&Value>) -> SDKResult<Value> {
+        let mut path = "/open-apis/bitable/v1/apps/:app_token".to_string();
+        path = path.replace(":app_token", app_token.as_ref());
+        let method = Method::GET;
+        let (query, body) = match method {
+            Method::GET | Method::DELETE => (payload, None),
+            _ => (None, payload),
+        };
+        self.service.request_value(method, &path, query, body).await
+    }
+
+    /// 文档参考: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/update
+    pub async fn put_open_apis_bitable_v1_apps_by_app_token(&self, app_token: impl AsRef<str>, payload: Option<&Value>) -> SDKResult<Value> {
+        let mut path = "/open-apis/bitable/v1/apps/:app_token".to_string();
+        path = path.replace(":app_token", app_token.as_ref());
+        let method = Method::PUT;
+        let (query, body) = match method {
+            Method::GET | Method::DELETE => (payload, None),
+            _ => (None, payload),
+        };
+        self.service.request_value(method, &path, query, body).await
+    }
 }

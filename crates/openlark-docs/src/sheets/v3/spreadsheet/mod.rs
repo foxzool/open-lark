@@ -16,7 +16,7 @@ impl Spreadsheet {
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet/create
     pub async fn post_open_apis_sheets_v3_spreadsheets(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let path = "/open-apis/sheets/v3/spreadsheets".to_string();
+        let mut path = "/open-apis/sheets/v3/spreadsheets".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
