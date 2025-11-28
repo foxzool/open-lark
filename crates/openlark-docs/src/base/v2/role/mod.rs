@@ -11,9 +11,22 @@ pub mod create;
 pub mod list;
 pub mod update;
 
-pub use create::*;
-pub use list::*;
-pub use update::*;
+// 测试模块
+#[cfg(test)]
+pub mod tests;
+
+pub use create::{
+    CreateRoleRequest, CreateRoleRequestBuilder, CreateRoleResponse,
+    CreateRoleResponseData
+};
+pub use list::{
+    ListRolesRequest, ListRolesRequestBuilder, ListRolesResponse,
+    RoleInfo
+};
+pub use update::{
+    UpdateRoleRequest, UpdateRoleRequestBuilder, UpdateRoleResponse,
+    UpdateRoleResponseData
+};
 
 /// 角色管理服务
 pub struct RoleService {

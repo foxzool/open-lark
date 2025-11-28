@@ -1,11 +1,11 @@
-//! Base V2 列出自定义角色API
-
-#![allow(unused_variables, unused_imports, dead_code, non_snake_case)]
-#![allow(clippy::too_many_arguments)]
+//! 列出自定义角色模块
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
+    core::{
+        BaseResponse,
+        ResponseFormat,
+        api::ApiResponseTrait,
+    },
     constants::AccessTokenType,
     endpoints::cloud_docs::*,
     http::Transport,
@@ -14,177 +14,189 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use super::{ListRolesRequest, ListRolesResponse, RoleService};
-
 /// 列出自定义角色请求
 #[derive(Clone)]
-pub struct ListRolesV2Request {
-    api_request: ApiRequest,
-    app_token: String,
-    /// 页面大小
-    page_size: Option<i32>,
-    /// 页面 token
-    page_token: Option<String>,
-    /// 角色类型过滤
-    role_type: Option<String>,
+pub struct ListRolesRequest {
+    api_request: openlark_core::api::ApiRequest,
+    /// 应用的 app_token
+    pub app_token: String,
+    /// 用户 ID 类型
+    pub user_id_type: Option<String>,
+    /// 分页大小
+    pub page_size: Option<i32>,
+    /// 分页标记
+    pub page_token: Option<String>,
 }
 
-impl ListRolesV2Request {
-    /// 创建列出角色请求
-    pub fn new(config: Config) -> Self {
+impl ListRolesRequest {
+    pub fn new(config: openlark_core::Config) -> Self {
         Self {
-            api_request: ApiRequest::new(config),
+            api_request: openlark_core::api::ApiRequest::new(
+                config,
+                reqwest::Method::GET,
+                BASE_V2_APP_ROLE_LIST.to_string(),
+            ),
             app_token: String::new(),
+            user_id_type: None,
             page_size: None,
             page_token: None,
-            role_type: None,
         }
     }
 
-    /// 设置应用 token
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.app_token = app_token;
+    pub fn builder() -> ListRolesRequestBuilder {
+        ListRolesRequestBuilder::default()
+    }
+}
+
+#[derive(Default)]
+pub struct ListRolesRequestBuilder {
+    request: ListRolesRequest,
+}
+
+impl ListRolesRequestBuilder {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
+        self.request.app_token = app_token.into();
         self
     }
 
-    /// 设置页面大小
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.request.user_id_type = Some(user_id_type.into());
+        self
+    }
+
     pub fn page_size(mut self, page_size: i32) -> Self {
-        self.page_size = Some(page_size);
+        self.request.page_size = Some(page_size.min(100)); // 限制最大100
         self
     }
 
-    /// 设置页面 token
-    pub fn page_token(mut self, page_token: String) -> Self {
-        self.page_token = Some(page_token);
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.request.page_token = Some(page_token.into());
         self
     }
 
-    /// 设置角色类型过滤
-    pub fn role_type(mut self, role_type: String) -> Self {
-        self.role_type = Some(role_type);
-        self
-    }
-
-    /// 执行请求
-    pub async fn execute(self) -> SDKResult<ListRolesV2Response> {
-        // 构建API路径
-        let path = format!("/open-apis/base/v2/apps/{}/roles", self.app_token);
-
-        // 构建查询参数
-        let mut query_params = Vec::new();
-
-        if let Some(ref page_size) = self.page_size {
-            query_params.push(format!("page_size={}", page_size));
-        }
-
-        if let Some(ref page_token) = self.page_token {
-            query_params.push(format!("page_token={}", page_token));
-        }
-
-        if let Some(ref role_type) = self.role_type {
-            query_params.push(format!("role_type={}", role_type));
-        }
-
-        // 构建查询字符串
-        let query_string = if query_params.is_empty() {
-            String::new()
-        } else {
-            format!("?{}", query_params.join("&"))
-        };
-
-        // 构建完整路径
-        let full_path = if query_string.is_empty() {
-            path
-        } else {
-            format!("{}{}", path, query_string)
-        };
-
-        // 发送请求
-        let response = self.api_request
-            .method(&openlark_core::http::Method::GET)
-            .path(&full_path)
-            .execute::<ListRolesV2Response>()
-            .await?;
-
-        Ok(response)
-    }
-}
-
-/// 列出自定义角色响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct ListRolesV2Response {
-    /// 角色列表
-    pub data: super::models::ListRolesResponse,
-    pub success: bool,
-}
-
-/// 列出自定义角色Builder
-#[derive(Clone)]
-pub struct ListRolesV2Builder {
-    request: ListRolesV2Request,
-}
-
-impl ListRolesV2Builder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: ListRolesV2Request::new(config),
-        }
-    }
-
-    /// 设置应用 token
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
-
-    /// 设置页面大小
-    pub fn page_size(mut self, page_size: i32) -> Self {
-        self.request = self.request.page_size(page_size);
-        self
-    }
-
-    /// 设置页面 token
-    pub fn page_token(mut self, page_token: String) -> Self {
-        self.request = self.request.page_token(page_token);
-        self
-    }
-
-    /// 设置角色类型过滤
-    pub fn role_type(mut self, role_type: String) -> Self {
-        self.request = self.request.role_type(role_type);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> ListRolesV2Request {
+    pub fn build(self) -> ListRolesRequest {
         self.request
     }
 }
 
-impl RoleService {
-    /// 创建列出角色请求构建器
-    pub fn list_roles_v2_builder(&self, config: Config) -> ListRolesV2Builder {
-        ListRolesV2Builder::new(config)
+/// 角色信息
+#[derive(Clone, Serialize, Deserialize)]
+pub struct RoleInfo {
+    /// 角色的ID
+    pub role_id: String,
+    /// 角色名称
+    pub name: String,
+    /// 角色描述
+    pub description: Option<String>,
+    /// 角色权限范围
+    pub permission_scopes: Option<Vec<String>>,
+    /// 是否为系统角色
+    pub is_system: Option<bool>,
+    /// 创建时间
+    pub created_at: String,
+    /// 更新时间
+    pub updated_at: String,
+}
+
+/// 列出自定义角色响应
+#[derive(Clone)]
+pub struct ListRolesResponse {
+    /// 角色列表
+    pub items: Option<Vec<RoleInfo>>,
+    /// 分页标记
+    pub page_token: Option<String>,
+    /// 是否有更多
+    pub has_more: Option<bool>,
+    /// 总数量
+    pub total: Option<i32>,
+}
+
+impl ApiResponseTrait for ListRolesResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_list_roles_request_builder() {
+        let request = ListRolesRequest::builder()
+            .app_token("bascnxxxxxxxxxxxxxxx")
+            .user_id_type("user_id")
+            .page_size(50)
+            .page_token("page_token")
+            .build();
+
+        assert_eq!(request.app_token, "bascnxxxxxxxxxxxxxxx");
+        assert_eq!(request.user_id_type, Some("user_id".to_string()));
+        assert_eq!(request.page_size, Some(50));
+        assert_eq!(request.page_token, Some("page_token".to_string()));
     }
 
-    /// 创建列出角色请求
-    pub fn list_roles_v2(&self, app_token: String, page_size: Option<i32>, page_token: Option<String>, role_type: Option<String>) -> ListRolesV2Request {
-        let mut request = ListRolesV2Request::new(self.config.clone())
-            .app_token(app_token);
+    #[test]
+    fn test_page_size_limit() {
+        let request = ListRolesRequest::builder()
+            .app_token("bascnxxxxxxxxxxxxxxx")
+            .page_size(200) // 超过100的限制
+            .build();
 
-        if let Some(page_size) = page_size {
-            request = request.page_size(page_size);
-        }
+        assert_eq!(request.page_size, Some(100)); // 应该被限制为100
+    }
 
-        if let Some(page_token) = page_token {
-            request = request.page_token(page_token);
-        }
+    #[test]
+    fn test_role_info_serialization() {
+        let role = RoleInfo {
+            role_id: "rolxxxxxxxxxxxxxxx".to_string(),
+            name: "管理员".to_string(),
+            description: Some("系统管理员角色".to_string()),
+            permission_scopes: Some(vec!["read".to_string(), "write".to_string()]),
+            is_system: Some(true),
+            created_at: "2023-01-01T00:00:00Z".to_string(),
+            updated_at: "2023-01-01T00:00:00Z".to_string(),
+        };
 
-        if let Some(role_type) = role_type {
-            request = request.role_type(role_type);
-        }
+        let serialized = serde_json::to_value(&role).unwrap();
+        let expected = serde_json::json!({
+            "role_id": "rolxxxxxxxxxxxxxxx",
+            "name": "管理员",
+            "description": "系统管理员角色",
+            "permission_scopes": ["read", "write"],
+            "is_system": true,
+            "created_at": "2023-01-01T00:00:00Z",
+            "updated_at": "2023-01-01T00:00:00Z"
+        });
 
-        request
+        assert_eq!(serialized, expected);
+    }
+
+    #[test]
+    fn test_optional_fields_serialization() {
+        // 测试可选字段
+        let role = RoleInfo {
+            role_id: "rolxxxxxxxxxxxxxxx".to_string(),
+            name: "测试角色".to_string(),
+            description: None,
+            permission_scopes: None,
+            is_system: None,
+            created_at: "2023-01-01T00:00:00Z".to_string(),
+            updated_at: "2023-01-01T00:00:00Z".to_string(),
+        };
+
+        let serialized = serde_json::to_value(&role).unwrap();
+        let expected = serde_json::json!({
+            "role_id": "rolxxxxxxxxxxxxxxx",
+            "name": "测试角色",
+            "created_at": "2023-01-01T00:00:00Z",
+            "updated_at": "2023-01-01T00:00:00Z"
+        });
+
+        assert_eq!(serialized, expected);
     }
 }

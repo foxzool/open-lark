@@ -40,6 +40,16 @@
 // 导入核心端点（auth, application等基础端点）
 pub use openlark_core::endpoints::{apass, application, auth, platform_integration};
 
+// ==================== Base (基础服务) v2 ====================
+
+/// Base 应用角色管理
+/// 应用的自定义角色管理，支持权限控制
+pub const BASE_V2_APP_ROLES: &str = "/open-apis/base/v2/apps/{app_token}/roles";
+pub const BASE_V2_APP_ROLE_CREATE: &str = "/open-apis/base/v2/apps/{app_token}/roles";
+pub const BASE_V2_APP_ROLE_UPDATE: &str = "/open-apis/base/v2/apps/{app_token}/roles/{role_id}";
+pub const BASE_V2_APP_ROLE_DELETE: &str = "/open-apis/base/v2/apps/{app_token}/roles/{role_id}";
+pub const BASE_V2_APP_ROLE_LIST: &str = "/open-apis/base/v2/apps/{app_token}/roles";
+
 // ==================== Bitable (多维表格) v1 ====================
 
 /// Bitable应用管理
@@ -137,6 +147,8 @@ pub const BITABLE_V1_FORM_PATCH_META: &str =
     "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/forms/{form_id}/patch_meta";
 pub const BITABLE_V1_FORM_QUESTION: &str =
     "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/forms/{form_id}/questions";
+pub const BITABLE_V1_FORM_QUESTION_LIST: &str =
+    "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/forms/{form_id}/fields";
 
 /// Bitable工作流管理
 /// 自动化工作流程
