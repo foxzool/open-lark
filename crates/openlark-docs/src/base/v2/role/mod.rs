@@ -3,15 +3,18 @@
 //! 提供基础应用（base）V2版本的角色管理功能，包括：
 //! - 创建自定义角色
 //! - 更新角色信息
+//! - 删除角色
 //! - 列出角色列表
 
 use openlark_core::config::Config;
 
 pub mod create;
+pub mod delete;
 pub mod list;
 pub mod update;
 
 pub use create::*;
+pub use delete::*;
 pub use list::*;
 pub use update::*;
 
