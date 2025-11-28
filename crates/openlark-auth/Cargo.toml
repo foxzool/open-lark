@@ -9,8 +9,8 @@ documentation.workspace = true
 description = "OpenLark 认证模块 - 提供令牌管理、缓存、验证和刷新功能"
 
 [dependencies]
-# 核心基础设施
-openlark-core = { workspace = true, default-features = false }
+# 核心基础设施（需禁用默认特性以精简认证模块）
+openlark-core = { path = "../openlark-core", default-features = false }
 
 # 序列化
 serde = { workspace = true }
