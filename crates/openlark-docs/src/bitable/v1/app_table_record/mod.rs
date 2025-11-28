@@ -29,8 +29,13 @@ pub mod batch_get;
 pub mod batch_update;
 pub mod create;
 pub mod delete;
+pub mod list;
 pub mod search;
 pub mod update;
+
+// 测试模块
+#[cfg(test)]
+pub mod tests;
 
 // 重新导出主要类型
 pub use create::CreateRecordRequest;
@@ -48,6 +53,10 @@ pub use batch_update::{
     BatchUpdateRecordResult
 };
 pub use delete::DeleteRecordRequest;
+pub use list::{
+    ListRecordsRequest, ListRecordsRequestBuilder, ListRecordsResponse,
+    SortCondition, FilterCondition, FilterConditionItem
+};
 pub use search::SearchRecordRequest;
 pub use update::UpdateRecordRequest;
 
