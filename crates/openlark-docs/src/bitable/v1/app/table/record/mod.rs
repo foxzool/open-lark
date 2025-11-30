@@ -2,13 +2,6 @@
 //!
 //! 提供多维表格记录的创建、更新、删除、查询等操作功能。
 
-#![allow(dead_code)]
-#![allow(unused_imports)]
-#![allow(unused_variables)]
-#![allow(unused_mut)]
-#![allow(non_snake_case)]
-#![allow(clippy::too_many_arguments)]
-#![allow(clippy::module_inception)]
 
 use openlark_core::{
     config::Config,

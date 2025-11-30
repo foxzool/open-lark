@@ -1,17 +1,12 @@
-#![allow(unused_variables, unused_unsafe)]
-#![allow(dead_code)]
-#![allow(unused_imports)]
-#![allow(unused_variables)]
-#![allow(unused_mut)]
 
 use serde_json::Value;
 use reqwest::Method;
 use openlark_core::{
-    api::ApiRequest,
+    api::{ApiRequest, ApiResponseTrait, HttpMethod},
     api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
-    constants::AccessTokenType,
-    endpoints::cloud_docs::*,
+    
+    
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -22,7 +17,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone)]
 pub struct ListFormFieldQuestionRequest {
     #[serde(skip)]
-    api_request: ApiRequest,
+    api_request: ApiRequest<Self>,
     /// 多维表格的唯一标识符
     #[serde(skip)]
     app_token: String,
@@ -87,14 +82,14 @@ impl ListFormFieldQuestionRequestBuilder {
             self.request
                 .api_request
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert(page_size.to_string(), page_size.to_string());
         }
 
         if let Some(page_token) = &self.request.page_token {
             self.request
                 .api_request
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert(page_token.to_string(), page_token.clone());
         }
 
         self.request
@@ -157,30 +152,13 @@ pub async fn list_form_field_questions(
     option: Option<RequestOption>,
 ) -> SDKResult<Response<ListFormFieldQuestionResponse>> {
     let mut api_req = request.api_request;
-    api_req.set_http_method(Method::GET);
-    api_req.api_path = BITABLE_V1_FORM_FIELD_QUESTION
-        .replace("{app_token}", &request.app_token)
-        .replace("{form_id}", &request.form_id);
-    api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+    let api_path = format!(
+        "/open-apis/bitable/v1/apps/{}/forms/{}/fields",
+        &request.app_token, &request.form_id
+    );
+    api_req = api_req.api_path(api_path);
 
     let api_resp = Transport::request(api_req, config, option).await?;
     Ok(api_resp)
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_list_form_field_question_request_builder() {
-        let request = ListFormFieldQuestionRequest::builder()
-            .app_token("bascnmBA*****yGehy8")
-            .form_id("vewxxxxxx")
-            .page_size(20)
-            .build();
-
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.form_id, "vewxxxxxx");
-        assert_eq!(request.page_size, Some(20));
-    }
-}

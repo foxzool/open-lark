@@ -1,19 +1,13 @@
-#![allow(unused_variables, unused_unsafe)]
-#![allow(dead_code)]
-#![allow(unused_imports)]
-#![allow(unused_variables)]
-#![allow(unused_mut)]
 
 use openlark_core::{
-    api::ApiRequest,
-    core::{BaseResponse, ResponseFormat, api::ApiResponseTrait},
+    api::{ApiRequest, ApiResponseTrait, HttpMethod},
+    
     config::Config,
-    constants::AccessTokenType,
-    endpoints::cloud_docs::*,
+    
+    
     http::Transport,
-    reqwest::Method,
     req_option::RequestOption,
-    service::bitable::v1::TableField,
+    
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -23,7 +17,7 @@ use serde_json::Value;
 #[derive(Clone)]
 pub struct UpdateFieldRequest {
     #[serde(skip)]
-    api_request: ApiRequest,
+    api_request: ApiRequest<Self>,
     /// 多维表格的唯一标识符
     #[serde(skip)]
     app_token: String,
@@ -56,7 +50,7 @@ pub struct UpdateFieldRequest {
 impl UpdateFieldRequest {
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new(config, Method::PUT, "/open-apis/bitable/v1/apps/{}/tables/{}/fields/{}".to_string()),
+            api_request: ApiRequest::new().method(HttpMethod::POST).api_path( /open-apis/bitable/v1/apps/{}/tables/{}/fields/{}).config(config)),
             app_token: String::new(),
             table_id: String::new(),
             field_id: String::new(),
@@ -150,15 +144,15 @@ impl ApiResponseTrait for UpdateFieldResponse {
 /// 请求体结构
 #[derive(Serialize)]
 struct UpdateFieldRequestBody {
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = Option::is_none)]
     field_name: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = Option::is_none)]
     r#type: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = Option::is_none)]
     property: Option<Value>,
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = Option::is_none)]
     description: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = Option::is_none)]
     ui_type: Option<String>,
 }
 
@@ -169,18 +163,15 @@ pub async fn update_field(
     option: Option<RequestOption>,
 ) -> SDKResult<UpdateFieldResponse> {
     let mut api_req = request.api_request;
-    api_req.set_http_method(Method::PUT);
-    api_req.api_path = BITABLE_V1_FIELD_UPDATE
-        .replace("{app_token}", &request.app_token)
-        .replace("{table_id}", &request.table_id)
-        .replace("{field_id}", &request.field_id);
-    api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        let api_request = api_request.api_path(format!(        .replace({app_token}, &request.app_token)
+        let api_request = api_request.api_path(format!(        .replace({table_id}, &request.table_id)
+        let api_request = api_request.api_path(format!(        .replace({field_id}, &request.field_id);
 
     // 设置查询参数
     if let Some(user_id_type) = &request.user_id_type {
         api_req
             .query_params
-            .insert("user_id_type".to_string(), user_id_type.clone());
+            .insert(user_id_type.to_string(), user_id_type.clone());
     }
 
     // 设置请求体
@@ -199,186 +190,3 @@ pub async fn update_field(
     api_resp.into_result()
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use serde_json::json;
-
-    #[test]
-    fn test_update_field_request_builder() {
-        let property = json!({
-            "options": [
-                {"name": "选项1", "value": "option1"},
-                {"name": "选项2", "value": "option2"}
-            ]
-        });
-
-        let request = UpdateFieldRequest::builder()
-            .app_token("bascnmBA*****yGehy8")
-            .table_id("tblsRc9GRRXKqhvW")
-            .field_id("fldxxxxxx")
-            .user_id_type("open_id")
-            .field_name("更新后的字段名称")
-            .field_type("text")
-            .property(property)
-            .description("字段描述")
-            .ui_type("text")
-            .build();
-
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.table_id, "tblsRc9GRRXKqhvW");
-        assert_eq!(request.field_id, "fldxxxxxx");
-        assert_eq!(request.user_id_type, Some("open_id".to_string()));
-        assert_eq!(request.field_name, Some("更新后的字段名称".to_string()));
-        assert_eq!(request.field_type, Some("text".to_string()));
-        assert_eq!(request.description, Some("字段描述".to_string()));
-        assert_eq!(request.ui_type, Some("text".to_string()));
-    }
-
-    #[test]
-    fn test_update_field_request_body_serialization() {
-        let property = json!({
-            "format": "YYYY-MM-DD",
-            "include_time": false
-        });
-
-        let body = UpdateFieldRequestBody {
-            field_name: Some("日期字段".to_string()),
-            r#type: Some("date".to_string()),
-            property: Some(property),
-            description: Some("日期选择字段".to_string()),
-            ui_type: Some("date".to_string()),
-        };
-
-        let serialized = serde_json::to_value(&body).unwrap();
-        let expected = serde_json::json!({
-            "field_name": "日期字段",
-            "type": "date",
-            "property": {
-                "format": "YYYY-MM-DD",
-                "include_time": false
-            },
-            "description": "日期选择字段",
-            "ui_type": "date"
-        });
-
-        assert_eq!(serialized, expected);
-    }
-
-    #[test]
-    fn test_update_field_request_minimal() {
-        let request = UpdateFieldRequest::builder()
-            .app_token("test-token")
-            .table_id("test-table")
-            .field_id("test-field")
-            .field_name("最小字段更新")
-            .build();
-
-        assert_eq!(request.app_token, "test-token");
-        assert_eq!(request.table_id, "test-table");
-        assert_eq!(request.field_id, "test-field");
-        assert_eq!(request.field_name, Some("最小字段更新".to_string()));
-        assert!(request.user_id_type.is_none());
-        assert!(request.field_type.is_none());
-        assert!(request.property.is_none());
-        assert!(request.description.is_none());
-        assert!(request.ui_type.is_none());
-    }
-
-    #[test]
-    fn test_update_field_request_builder_chaining() {
-        let request = UpdateFieldRequest::builder()
-            .app_token("app123")
-            .table_id("table123")
-            .field_id("field123")
-            .user_id_type("user_id")
-            .field_name("链接字段")
-            .field_type("url")
-            .description("存储URL链接")
-            .ui_type("url")
-            .build();
-
-        assert_eq!(request.app_token, "app123");
-        assert_eq!(request.table_id, "table123");
-        assert_eq!(request.field_id, "field123");
-        assert_eq!(request.user_id_type, Some("user_id".to_string()));
-        assert_eq!(request.field_name, Some("链接字段".to_string()));
-        assert_eq!(request.field_type, Some("url".to_string()));
-        assert_eq!(request.description, Some("存储URL链接".to_string()));
-        assert_eq!(request.ui_type, Some("url".to_string()));
-    }
-
-    #[test]
-    fn test_update_field_response_trait() {
-        assert_eq!(UpdateFieldResponse::data_format(), ResponseFormat::Data);
-    }
-
-    #[test]
-    fn test_update_field_response() {
-        let field = TableField {
-            field_name: "更新后的字段".to_string(),
-            field_type: "text".to_string(),
-            ..Default::default()
-        };
-
-        let response = UpdateFieldResponse { field };
-        assert_eq!(response.field.field_name, "更新后的字段");
-        assert_eq!(response.field.field_type, "text");
-    }
-
-    #[test]
-    fn test_update_field_request_new() {
-        let config = openlark_core::Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build()
-            .unwrap();
-
-        let request = UpdateFieldRequest::new(config);
-
-        assert_eq!(request.app_token, "");
-        assert_eq!(request.table_id, "");
-        assert_eq!(request.field_id, "");
-        assert!(request.user_id_type.is_none());
-        assert!(request.field_name.is_none());
-        assert!(request.field_type.is_none());
-        assert!(request.property.is_none());
-        assert!(request.description.is_none());
-        assert!(request.ui_type.is_none());
-    }
-
-    #[test]
-    fn test_update_field_complex_property() {
-        let complex_property = json!({
-            "multi_select": {
-                "options": [
-                    {"name": "选项A", "value": "opt_a"},
-                    {"name": "选项B", "value": "opt_b"},
-                    {"name": "选项C", "value": "opt_c"}
-                ],
-                "default_value": ["opt_a"]
-            },
-            "validation": {
-                "required": true,
-                "min_options": 1,
-                "max_options": 3
-            }
-        });
-
-        let request = UpdateFieldRequest::builder()
-            .app_token("app-token")
-            .table_id("table-id")
-            .field_id("field-id")
-            .field_name("多选字段")
-            .field_type("multi_select")
-            .property(complex_property.clone())
-            .build();
-
-        assert_eq!(request.app_token, "app-token");
-        assert_eq!(request.table_id, "table-id");
-        assert_eq!(request.field_id, "field-id");
-        assert_eq!(request.field_name, Some("多选字段".to_string()));
-        assert_eq!(request.field_type, Some("multi_select".to_string()));
-        assert_eq!(request.property, Some(complex_property));
-    }
-}

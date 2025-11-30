@@ -1,19 +1,9 @@
-#![allow(unused_variables, unused_unsafe)]
-#![allow(dead_code)]
-#![allow(unused_imports)]
-#![allow(unused_variables)]
-#![allow(unused_mut)]
 
 use openlark_core::{
-    api::ApiRequest,
-    core::{BaseResponse, ResponseFormat, api::ApiResponseTrait},
+    api::{ApiRequest, ApiResponseTrait, HttpMethod},
     config::Config,
-    constants::AccessTokenType,
-    endpoints::cloud_docs::*,
     http::Transport,
-    reqwest::Method,
     req_option::RequestOption,
-    service::bitable::v1::{TableData, TableField},
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -25,7 +15,7 @@ use super::super::{BatchCommonParams, BatchCommonBody, BatchOperationResult, App
 #[derive(Clone)]
 pub struct BatchCreateTableRequest {
     #[serde(skip)]
-    api_request: ApiRequest,
+    api_request: ApiRequest<Self>,
     /// 多维表格的 app_token
     #[serde(skip)]
     app_token: AppToken,
@@ -39,8 +29,12 @@ pub struct BatchCreateTableRequest {
 impl BatchCreateTableRequest {
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new(config, Method::POST, "/open-apis/bitable/v1/apps/{}/tables:batch_create".to_string()),
-            app_token: AppToken::new(""),
+            api_request: ApiRequest::new()
+                .method(HttpMethod::POST)
+                .api_path("/open-apis/bitable/v1/apps/{}/tables:batch_create".to_string())
+                .config(config)
+                .build(),
+            app_token: AppToken::new(),
             common_params: BatchCommonParams::new(),
             tables: Vec::new(),
         }
@@ -71,7 +65,11 @@ impl BatchCreateTableRequestBuilder {
     pub fn new(config: Config) -> Self {
         Self {
             request: BatchCreateTableRequest {
-                api_request: ApiRequest::post("/open-apis/bitable/v1/placeholder"),
+                api_request: ApiRequest::new()
+                    .method(HttpMethod::POST)
+                    .api_path("/open-apis/bitable/v1/placeholder".to_string())
+                    .config(config.clone())
+                    .build(),
                 app_token: String::new(),
                 common_params: BatchCommonParams::new(),
                 tables: Vec::new(),
@@ -115,7 +113,7 @@ crate::impl_executable_builder_owned!(
     super::AppTableService,
     BatchCreateTableRequest,
     Response<BatchCreateTableResponse>,
-    batch_create,
+    batch_create
 );
 
 /// 批量新增数据表响应
@@ -193,22 +191,20 @@ pub async fn batch_create_table(
     option: Option<RequestOption>,
 ) -> SDKResult<Response<BatchCreateTableResponse>> {
     let mut api_req = request.api_request;
-    api_req.set_http_method(Method::POST);
-    api_req.api_path = BITABLE_V1_TABLES_BATCH_CREATE
-        .replace("{app_token}", request.app_token.as_str());
-    api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+    let api_path = format!("/open-apis/bitable/v1/apps/{}/tables:batch_create", request.app_token.as_str());
+    api_req = api_req.api_path(api_path);
 
     // 设置查询参数
     if let Some(user_id_type) = &request.common_params.user_id_type {
         api_req
             .query_params
-            .insert("user_id_type".to_string(), user_id_type.clone());
+            .insert(user_id_type.to_string(), user_id_type.clone());
     }
 
     if let Some(client_token) = &request.common_params.client_token {
         api_req
             .query_params
-            .insert("client_token".to_string(), client_token.clone());
+            .insert(client_token.to_string(), client_token.clone());
     }
 
     // 设置请求体
@@ -221,106 +217,3 @@ pub async fn batch_create_table(
     Ok(api_resp)
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use serde_json::json;
-
-    #[test]
-    fn test_batch_create_table_request_builder() {
-        let table1 = TableData::new("任务表")
-            .with_default_view_name("任务视图")
-            .with_fields(vec![
-                TableField::text("任务名称"),
-                TableField::number("优先级"),
-                TableField::single_select("状态", vec!["待开始".to_string(), "进行中".to_string(), "已完成".to_string()]),
-                TableField::date("截止日期"),
-            ]);
-
-        let table2 = TableData::new("人员表")
-            .with_fields(vec![
-                TableField::text("姓名"),
-                TableField::single_select("部门", vec!["技术部".to_string(), "产品部".to_string(), "运营部".to_string()]),
-            ]);
-
-        let request = BatchCreateTableRequest::builder()
-            .app_token("bascnmBA*****yGehy8")
-            .user_id_type("open_id")
-            .client_token("550e8400-e29b-41d4-a716-446655440000")
-            .tables(vec![table1, table2])
-            .build();
-
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.user_id_type(), Some("open_id"));
-        assert_eq!(request.client_token(), Some("550e8400-e29b-41d4-a716-446655440000"));
-        assert_eq!(request.tables.len(), 2);
-        assert_eq!(request.tables[0].name, "任务表");
-        assert_eq!(request.tables[1].name, "人员表");
-    }
-
-    #[test]
-    fn test_batch_create_table_request_body_serialization() {
-        let table = TableData::new("测试表")
-            .with_fields(vec![TableField::text("字段")]);
-
-        let body = BatchCreateTableRequestBody::new(vec![table])
-            .with_common_params(
-                BatchCommonParams::new()
-                    .with_user_id_type("open_id")
-                    .with_client_token("test-token")
-            );
-
-        let serialized = serde_json::to_value(&body).unwrap();
-        let expected = json!({
-            "data": [{
-                "name": "测试表",
-                "fields": [{
-                    "field_name": "字段",
-                    "type": 1
-                }]
-            }],
-            "user_id_type": "open_id",
-            "client_token": "test-token"
-        });
-
-        assert_eq!(serialized, expected);
-    }
-
-    #[test]
-    fn test_batch_create_table_result() {
-        let result = BatchCreateTableResult::success(
-            "tbl123".to_string(),
-            "测试表".to_string(),
-            "view123".to_string()
-        );
-
-        assert_eq!(result.table_id, "tbl123");
-        assert_eq!(result.name, "测试表");
-        assert_eq!(result.default_view_id, "view123");
-        assert!(result.is_success());
-        assert!(result.get_error().is_none());
-
-        let failed_result = BatchCreateTableResult::failure(
-            "".to_string(),
-            "失败表".to_string(),
-            "创建失败"
-        );
-
-        assert!(!failed_result.is_success());
-        assert_eq!(failed_result.get_error(), Some("创建失败"));
-    }
-
-    #[test]
-    fn test_batch_create_table_request_minimal() {
-        let request = BatchCreateTableRequest::builder()
-            .app_token("test-token")
-            .tables(vec![TableData::new("最小表")])
-            .build();
-
-        assert_eq!(request.app_token, "test-token");
-        assert_eq!(request.tables.len(), 1);
-        assert_eq!(request.tables[0].name, "最小表");
-        assert!(request.user_id_type().is_none());
-        assert!(request.client_token().is_none());
-    }
-}

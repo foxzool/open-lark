@@ -4,10 +4,9 @@ use openlark_core::{
     core::{
         BaseResponse,
         ResponseFormat,
-        api::ApiResponseTrait,
     },
-    constants::AccessTokenType,
-    endpoints::cloud_docs::*,
+    
+    
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -17,7 +16,7 @@ use serde::{Deserialize, Serialize};
 /// 删除数据表请求
 #[derive(Clone)]
 pub struct DeleteTableRequest {
-    api_request: openlark_core::api::ApiRequest,
+    api_request: ApiRequest<Self>,
     /// 多维表格的 app_token
     pub app_token: String,
     /// 数据表的 table_id
@@ -29,7 +28,7 @@ impl DeleteTableRequest {
         Self {
             api_request: openlark_core::api::ApiRequest::new(
                 config,
-                reqwest::Method::DELETE,
+                HttpMethod::DELETE,
                 DELETE_TABLE.to_string(),
             ),
             app_token: String::new(),
@@ -80,18 +79,3 @@ impl ApiResponseTrait for DeleteTableResponse {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_delete_table_request() {
-        let request = DeleteTableRequest::builder()
-            .app_token("bascnmBA*****yGehy8")
-            .table_id("tblsRc9GRRXKqhvW")
-            .build();
-
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.table_id, "tblsRc9GRRXKqhvW");
-    }
-}

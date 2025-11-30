@@ -1,12 +1,7 @@
-#![allow(dead_code)]
-#![allow(unused_imports)]
-#![allow(unused_variables)]
-#![allow(unused_mut)]
 
 pub mod get;
 pub mod list;
 pub mod patch;
-pub mod patch_meta;
 pub mod field;
 
 use openlark_core::config::Config;
@@ -14,7 +9,6 @@ use openlark_core::config::Config;
 pub use get::*;
 pub use list::*;
 pub use patch::*;
-pub use patch_meta::*;
 pub use field::*;
 
 /// 表单服务
@@ -45,15 +39,7 @@ impl FormService {
         list::list_form_questions(request, &self.config, option).await
     }
 
-    /// 更新表单元数据
-    pub async fn patch_meta(
-        &self,
-        request: PatchFormMetaRequest,
-        option: Option<openlark_core::req_option::RequestOption>,
-    ) -> openlark_core::SDKResult<openlark_core::api::Response<PatchFormMetaResponse>> {
-        patch_meta::patch_form_meta(request, &self.config, option).await
-    }
-
+  
     /// 更新表单问题
     pub async fn patch(
         &self,

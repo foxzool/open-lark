@@ -13,7 +13,6 @@ use openlark_core::{
     core::{
         BaseResponse,
         ResponseFormat,
-        api::ApiResponseTrait,
     },
 };
 use serde::{Deserialize, Serialize};

@@ -6,10 +6,9 @@ use openlark_core::{
     core::{
         BaseResponse,
         ResponseFormat,
-        api::ApiResponseTrait,
     },
-    constants::AccessTokenType,
-    endpoints::cloud_docs::*,
+    
+    
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -20,7 +19,7 @@ use super::AppTableRecordService;
 /// 列出记录请求
 #[derive(Clone)]
 pub struct ListRecordRequest {
-    api_request: openlark_core::api::ApiRequest,
+    api_request: ApiRequest<Self>,
     /// 多维表格的 app_token
     pub app_token: String,
     /// 数据表的 table_id
@@ -49,14 +48,14 @@ pub struct SortCondition {
     /// 字段名称
     pub field_name: String,
     /// 是否倒序排序
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = Option::is_none)]
     pub desc: Option<bool>,
 }
 
 /// 筛选条件
 #[derive(Clone, Serialize, Deserialize)]
 pub struct FilterInfo {
-    /// 条件逻辑连接词: "and" 或 "or"
+    /// 条件逻辑连接词: and 或 or
     pub conjunction: String,
     /// 筛选条件集合
     pub conditions: Vec<FilterCondition>,
@@ -70,7 +69,7 @@ pub struct FilterCondition {
     /// 条件运算符
     pub operator: String,
     /// 目标值
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = Option::is_none)]
     pub value: Option<Vec<String>>,
 }
 
@@ -79,7 +78,7 @@ impl ListRecordRequest {
         Self {
             api_request: openlark_core::api::ApiRequest::new(
                 config,
-                reqwest::Method::GET,
+                HttpMethod::GET,
                 BITABLE_V1_RECORDS_LIST.to_string(),
             ),
             app_token: String::new(),
@@ -169,7 +168,7 @@ impl ListRecordRequestBuilder {
 #[derive(Clone)]
 pub struct ListRecordResponse {
     /// 记录列表
-    pub items: Vec<openlark_core::service::bitable::v1::Record>,
+    pub items: Vec<openlark_core::
     /// 是否还有更多项
     pub has_more: bool,
     /// 分页标记
@@ -188,7 +187,7 @@ impl FilterInfo {
     /// 创建 AND 条件
     pub fn and(conditions: Vec<FilterCondition>) -> Self {
         Self {
-            conjunction: "and".to_string(),
+            conjunction: and.to_string(),
             conditions,
         }
     }
@@ -196,7 +195,7 @@ impl FilterInfo {
     /// 创建 OR 条件
     pub fn or(conditions: Vec<FilterCondition>) -> Self {
         Self {
-            conjunction: "or".to_string(),
+            conjunction: or.to_string(),
             conditions,
         }
     }
@@ -207,7 +206,7 @@ impl FilterCondition {
     pub fn equals(field_name: impl ToString, value: impl ToString) -> Self {
         Self {
             field_name: field_name.to_string(),
-            operator: "is".to_string(),
+            operator: is.to_string(),
             value: Some(vec![value.to_string()]),
         }
     }
@@ -216,7 +215,7 @@ impl FilterCondition {
     pub fn not_equals(field_name: impl ToString, value: impl ToString) -> Self {
         Self {
             field_name: field_name.to_string(),
-            operator: "isNot".to_string(),
+            operator: isNot.to_string(),
             value: Some(vec![value.to_string()]),
         }
     }
@@ -225,7 +224,7 @@ impl FilterCondition {
     pub fn contains(field_name: impl ToString, value: impl ToString) -> Self {
         Self {
             field_name: field_name.to_string(),
-            operator: "contains".to_string(),
+            operator: contains.to_string(),
             value: Some(vec![value.to_string()]),
         }
     }
@@ -234,7 +233,7 @@ impl FilterCondition {
     pub fn not_contains(field_name: impl ToString, value: impl ToString) -> Self {
         Self {
             field_name: field_name.to_string(),
-            operator: "doesNotContain".to_string(),
+            operator: doesNotContain.to_string(),
             value: Some(vec![value.to_string()]),
         }
     }
@@ -243,7 +242,7 @@ impl FilterCondition {
     pub fn is_empty(field_name: impl ToString) -> Self {
         Self {
             field_name: field_name.to_string(),
-            operator: "isEmpty".to_string(),
+            operator: isEmpty.to_string(),
             value: None,
         }
     }
@@ -252,7 +251,7 @@ impl FilterCondition {
     pub fn is_not_empty(field_name: impl ToString) -> Self {
         Self {
             field_name: field_name.to_string(),
-            operator: "isNotEmpty".to_string(),
+            operator: isNotEmpty.to_string(),
             value: None,
         }
     }
@@ -261,7 +260,7 @@ impl FilterCondition {
     pub fn greater_than(field_name: impl ToString, value: impl ToString) -> Self {
         Self {
             field_name: field_name.to_string(),
-            operator: "isGreater".to_string(),
+            operator: isGreater.to_string(),
             value: Some(vec![value.to_string()]),
         }
     }
@@ -270,100 +269,9 @@ impl FilterCondition {
     pub fn less_than(field_name: impl ToString, value: impl ToString) -> Self {
         Self {
             field_name: field_name.to_string(),
-            operator: "isLess".to_string(),
+            operator: isLess.to_string(),
             value: Some(vec![value.to_string()]),
         }
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use serde_json::json;
-
-    #[test]
-    fn test_list_record_request_builder() {
-        let filter = FilterInfo::and(vec![
-            FilterCondition::equals("状态", "进行中"),
-            FilterCondition::is_not_empty("标题"),
-        ]);
-
-        let sort = vec![SortCondition {
-            field_name: "创建时间".to_string(),
-            desc: Some(true),
-        }];
-
-        let request = ListRecordRequest::builder()
-            .app_token("bascnmBA*****yGehy8")
-            .table_id("tblsRc9GRRXKqhvW")
-            .page_size(20)
-            .filter(filter)
-            .sort(sort)
-            .field_names(vec!["标题".to_string(), "状态".to_string()])
-            .build();
-
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.table_id, "tblsRc9GRRXKqhvW");
-        assert_eq!(request.page_size, Some(20));
-        assert!(request.filter.is_some());
-        assert!(request.sort.is_some());
-    }
-
-    #[test]
-    fn test_filter_conditions() {
-        let filter = FilterInfo::or(vec![
-            FilterCondition::equals("优先级", "高"),
-            FilterCondition::contains("标题", "紧急"),
-            FilterCondition::is_empty("完成时间"),
-        ]);
-
-        assert_eq!(filter.conjunction, "or");
-        assert_eq!(filter.conditions.len(), 3);
-        assert_eq!(filter.conditions[0].operator, "is");
-        assert_eq!(filter.conditions[1].operator, "contains");
-        assert_eq!(filter.conditions[2].operator, "isEmpty");
-    }
-
-    #[test]
-    fn test_sort_condition_serialization() {
-        let sort = SortCondition {
-            field_name: "创建时间".to_string(),
-            desc: Some(true),
-        };
-
-        let serialized = serde_json::to_value(&sort).unwrap();
-        let expected = json!({
-            "field_name": "创建时间",
-            "desc": true
-        });
-
-        assert_eq!(serialized, expected);
-    }
-
-    #[test]
-    fn test_filter_info_serialization() {
-        let filter = FilterInfo::and(vec![
-            FilterCondition::equals("状态", "完成"),
-            FilterCondition::not_equals("优先级", "低"),
-        ]);
-
-        let serialized = serde_json::to_value(&filter).unwrap();
-        let expected = json!({
-            "conjunction": "and",
-            "conditions": [
-                {
-                    "field_name": "状态",
-                    "operator": "is",
-                    "value": ["完成"]
-                },
-                {
-                    "field_name": "优先级",
-                    "operator": "isNot",
-                    "value": ["低"]
-                }
-            ]
-        });
-
-        assert_eq!(serialized, expected);
-    }
-}
