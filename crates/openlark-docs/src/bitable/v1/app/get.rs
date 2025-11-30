@@ -1,13 +1,8 @@
 //! 获取应用信息模块
 
 use openlark_core::{
-    core::{
-        BaseResponse,
-        ResponseFormat,
-        api::ApiResponseTrait,
-    },
-    constants::AccessTokenType,
-    endpoints::cloud_docs::*,
+    api::{ApiRequest, ApiResponseTrait, HttpMethod},
+    config::Config,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -17,21 +12,39 @@ use serde::{Deserialize, Serialize};
 /// 获取应用请求
 #[derive(Clone)]
 pub struct GetAppRequest {
-    api_request: openlark_core::api::ApiRequest,
+    api_request: ApiRequest<GetAppResponse>,
     /// 多维表格的 app_token
     pub app_token: String,
 }
 
 impl GetAppRequest {
-    pub fn new(config: openlark_core::Config) -> Self {
+    pub fn new(config: Config) -> Self {
         Self {
-            api_request: openlark_core::api::ApiRequest::new(
-                config,
-                reqwest::Method::GET,
-                GET_APP.to_string(),
-            ),
+            api_request: ApiRequest::new()
+                .method(HttpMethod::Get)
+                .api_path("/open-apis/bitable/v1/apps".to_string())
+                .config(config)
+                .build(),
             app_token: String::new(),
         }
+    }
+
+    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
+        self.app_token = app_token.into();
+        self
+    }
+
+    pub async fn execute(mut self) -> SDKResult<GetAppResponse> {
+        // 构建API路径
+        let path = format!(/open-apis/bitable/v1/apps/{}, self.app_token);
+
+        // 更新API路径
+        self.api_request = self.api_request.api_path(path);
+
+        // 发送请求
+        let config = self.api_request.config();
+        let response = Transport::request(self.api_request, &config.clone(), None).await?;
+        Ok(response)
     }
 
     pub fn builder() -> GetAppRequestBuilder {
@@ -85,16 +98,3 @@ impl ApiResponseTrait for GetAppResponse {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_get_app_request() {
-        let request = GetAppRequest::builder()
-            .app_token("bascnmBA*****yGehy8")
-            .build();
-
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-    }
-}

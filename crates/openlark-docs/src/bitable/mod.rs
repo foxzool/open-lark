@@ -22,21 +22,9 @@ impl BitableService {
     }
 }
 
-// 暂时简化v1模块
-pub mod v1 {
-    use super::Config;
+// 多维表格服务模块
 
-    pub struct V1 {
-        config: Config,
-    }
+// 导入v1版本的完整实现
+pub mod v1;
 
-    impl V1 {
-        pub fn new(config: Config) -> Self {
-            Self { config }
-        }
-
-        pub fn config(&self) -> &Config {
-            &self.config
-        }
-    }
-}
+pub use v1::*;

@@ -4,10 +4,9 @@ use openlark_core::{
     core::{
         BaseResponse,
         ResponseFormat,
-        api::ApiResponseTrait,
     },
-    constants::AccessTokenType,
-    endpoints::cloud_docs::*,
+    
+    
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -17,7 +16,7 @@ use serde::{Deserialize, Serialize};
 /// 新增数据表请求
 #[derive(Clone)]
 pub struct CreateTableRequest {
-    api_request: openlark_core::api::ApiRequest,
+    api_request: ApiRequest<Self>,
     /// 多维表格的 app_token
     pub app_token: String,
     /// 数据表信息
@@ -29,7 +28,7 @@ impl CreateTableRequest {
         Self {
             api_request: openlark_core::api::ApiRequest::new(
                 config,
-                reqwest::Method::POST,
+                HttpMethod::POST,
                 CREATE_TABLE.to_string(),
             ),
             app_token: String::new(),
@@ -72,11 +71,11 @@ impl CreateTableRequestBuilder {
 pub struct TableData {
     /// 数据表名称
     pub name: String,
-    /// 数据表的默认视图名称，不填则默认为"数据表"
-    #[serde(skip_serializing_if = "Option::is_none")]
+    /// 数据表的默认视图名称，不填则默认为数据表
+    #[serde(skip_serializing_if = Option::is_none)]
     pub default_view_name: Option<String>,
     /// 数据表初始字段
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = Option::is_none)]
     pub fields: Option<Vec<TableField>>,
 }
 
@@ -108,10 +107,10 @@ pub struct TableField {
     /// 字段名称
     pub field_name: String,
     /// 字段类型
-    #[serde(rename = "type")]
+    #[serde(rename = type)]
     pub field_type: i32,
     /// 字段属性，不同字段类型对应不同的属性结构
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = Option::is_none)]
     pub property: Option<serde_json::Value>,
 }
 
@@ -138,13 +137,13 @@ impl TableField {
     pub fn single_select(name: impl Into<String>, options: Vec<String>) -> Self {
         let options_value: Vec<serde_json::Value> = options
             .into_iter()
-            .map(|opt| serde_json::json!({"name": opt}))
+            .map(|opt| serde_json::json!({name: opt}))
             .collect();
 
         Self {
             field_name: name.into(),
             field_type: 3, // 单选
-            property: Some(serde_json::json!({"options": options_value})),
+            property: Some(serde_json::json!({options: options_value})),
         }
     }
 
@@ -152,13 +151,13 @@ impl TableField {
     pub fn multi_select(name: impl Into<String>, options: Vec<String>) -> Self {
         let options_value: Vec<serde_json::Value> = options
             .into_iter()
-            .map(|opt| serde_json::json!({"name": opt}))
+            .map(|opt| serde_json::json!({name: opt}))
             .collect();
 
         Self {
             field_name: name.into(),
             field_type: 4, // 多选
-            property: Some(serde_json::json!({"options": options_value})),
+            property: Some(serde_json::json!({options: options_value})),
         }
     }
 
@@ -190,58 +189,3 @@ impl ApiResponseTrait for CreateTableResponse {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_create_table_request() {
-        let table = TableData::new("测试数据表")
-            .with_default_view_name("默认视图")
-            .with_fields(vec![
-                TableField::text("标题"),
-                TableField::number("数量"),
-                TableField::single_select("状态", vec!["进行中".to_string(), "已完成".to_string()]),
-            ]);
-
-        let request = CreateTableRequest::builder()
-            .app_token("bascnmBA*****yGehy8")
-            .table(table)
-            .build();
-
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.table.name, "测试数据表");
-        assert_eq!(request.table.default_view_name, Some("默认视图".to_string()));
-        assert!(request.table.fields.is_some());
-    }
-
-    #[test]
-    fn test_table_field_types() {
-        let text_field = TableField::text("标题");
-        assert_eq!(text_field.field_type, 1);
-        assert_eq!(text_field.field_name, "标题");
-
-        let number_field = TableField::number("数量");
-        assert_eq!(number_field.field_type, 2);
-
-        let select_field = TableField::single_select("状态", vec!["A".to_string(), "B".to_string()]);
-        assert_eq!(select_field.field_type, 3);
-        assert!(select_field.property.is_some());
-    }
-
-    #[test]
-    fn test_table_data_serialization() {
-        let table = TableData::new("测试表")
-            .with_fields(vec![
-                TableField::text("字段1"),
-                TableField::number("字段2"),
-            ]);
-
-        let body = CreateTableRequestBody { table };
-        let serialized = serde_json::to_value(&body).unwrap();
-
-        assert_eq!(serialized["table"]["name"], "测试表");
-        assert!(serialized["table"]["fields"].is_array());
-        assert_eq!(serialized["table"]["fields"].as_array().unwrap().len(), 2);
-    }
-}

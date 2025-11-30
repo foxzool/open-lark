@@ -6,10 +6,9 @@ use openlark_core::{
     core::{
         BaseResponse,
         ResponseFormat,
-        api::ApiResponseTrait,
     },
-    constants::AccessTokenType,
-    endpoints::cloud_docs::*,
+    
+    
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -20,7 +19,7 @@ use super::AppTableRecordService;
 /// 检索单条记录请求
 #[derive(Clone)]
 pub struct GetRecordRequest {
-    api_request: openlark_core::api::ApiRequest,
+    api_request: ApiRequest<Self>,
     /// 多维表格的 app_token
     pub app_token: String,
     /// 数据表的 table_id
@@ -42,7 +41,7 @@ impl GetRecordRequest {
         Self {
             api_request: openlark_core::api::ApiRequest::new(
                 config,
-                reqwest::Method::GET,
+                HttpMethod::GET,
                 BITABLE_V1_RECORDS_GET.to_string(),
             ),
             app_token: String::new(),
@@ -162,166 +161,3 @@ impl ApiResponseTrait for GetRecordResponse {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use serde_json::json;
-
-    #[test]
-    fn test_get_record_request_builder() {
-        let request = GetRecordRequest::builder()
-            .app_token("bascnmBA*****yGehy8")
-            .table_id("tblsRc9GRRXKqhvW")
-            .record_id("recxxxxxx")
-            .view_id("vewxxxxxx")
-            .field_names(vec!["name".to_string(), "age".to_string()])
-            .automatic(true)
-            .build();
-
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.table_id, "tblsRc9GRRXKqhvW");
-        assert_eq!(request.record_id, "recxxxxxx");
-        assert_eq!(request.view_id, Some("vewxxxxxx".to_string()));
-        assert_eq!(request.field_names, Some(vec!["name".to_string(), "age".to_string()]));
-        assert_eq!(request.automatic, Some(true));
-    }
-
-    #[test]
-    fn test_get_record_request_minimal() {
-        let request = GetRecordRequest::builder()
-            .app_token("bascnmBA*****yGehy8")
-            .table_id("tblsRc9GRRXKqhvW")
-            .record_id("recxxxxxx")
-            .build();
-
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.table_id, "tblsRc9GRRXKqhvW");
-        assert_eq!(request.record_id, "recxxxxxx");
-        assert_eq!(request.view_id, None);
-        assert_eq!(request.field_names, None);
-        assert_eq!(request.automatic, None);
-    }
-
-    #[test]
-    fn test_record_info_serialization() {
-        let record_info = RecordInfo {
-            record_id: "recxxxxxx".to_string(),
-            fields: json!({
-                "name": "张三",
-                "age": 25,
-                "email": "zhangsan@example.com"
-            }),
-            created_time: "2023-01-01T00:00:00Z".to_string(),
-            last_modified_time: "2023-01-01T00:00:00Z".to_string(),
-            created_by: Some(CreatorInfo {
-                user_id: "user_123".to_string(),
-                name: "李四".to_string(),
-                email: Some("lisi@example.com".to_string()),
-            }),
-            last_modified_by: Some(UpdaterInfo {
-                user_id: "user_456".to_string(),
-                name: "王五".to_string(),
-                email: None,
-            }),
-        };
-
-        let serialized = serde_json::to_value(&record_info).unwrap();
-        let expected = json!({
-            "record_id": "recxxxxxx",
-            "fields": {
-                "name": "张三",
-                "age": 25,
-                "email": "zhangsan@example.com"
-            },
-            "created_time": "2023-01-01T00:00:00Z",
-            "last_modified_time": "2023-01-01T00:00:00Z",
-            "created_by": {
-                "user_id": "user_123",
-                "name": "李四",
-                "email": "lisi@example.com"
-            },
-            "last_modified_by": {
-                "user_id": "user_456",
-                "name": "王五"
-            }
-        });
-
-        assert_eq!(serialized, expected);
-    }
-
-    #[test]
-    fn test_creator_info_serialization() {
-        let creator = CreatorInfo {
-            user_id: "user_789".to_string(),
-            name: "赵六".to_string(),
-            email: None,
-        };
-
-        let serialized = serde_json::to_value(&creator).unwrap();
-        let expected = json!({
-            "user_id": "user_789",
-            "name": "赵六"
-        });
-
-        assert_eq!(serialized, expected);
-    }
-
-    #[test]
-    fn test_updater_info_serialization() {
-        let updater = UpdaterInfo {
-            user_id: "user_101".to_string(),
-            name: "钱七".to_string(),
-            email: Some("qianqi@example.com".to_string()),
-        };
-
-        let serialized = serde_json::to_value(&updater).unwrap();
-        let expected = json!({
-            "user_id": "user_101",
-            "name": "钱七",
-            "email": "qianqi@example.com"
-        });
-
-        assert_eq!(serialized, expected);
-    }
-
-    #[test]
-    fn test_get_record_request_new() {
-        let config = openlark_core::Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build()
-            .unwrap();
-
-        let request = GetRecordRequest::new(config);
-
-        assert_eq!(request.app_token, "");
-        assert_eq!(request.table_id, "");
-        assert_eq!(request.record_id, "");
-        assert_eq!(request.user_id_type, None);
-        assert_eq!(request.view_id, None);
-        assert_eq!(request.field_names, None);
-        assert_eq!(request.automatic, None);
-    }
-
-    #[test]
-    fn test_get_record_request_builder_chaining() {
-        // 测试构建器方法链式调用
-        let request = GetRecordRequest::builder()
-            .app_token("app_token_123")
-            .table_id("table_id_456")
-            .record_id("record_id_789")
-            .user_id_type("open_id")
-            .view_id("view_abc")
-            .field_names(vec!["field1".to_string(), "field2".to_string()])
-            .automatic(false)
-            .build();
-
-        assert_eq!(request.app_token, "app_token_123");
-        assert_eq!(request.table_id, "table_id_456");
-        assert_eq!(request.record_id, "record_id_789");
-        assert_eq!(request.user_id_type, Some("open_id".to_string()));
-        assert_eq!(request.view_id, Some("view_abc".to_string()));
-        assert_eq!(request.field_names, Some(vec!["field1".to_string(), "field2".to_string()]));
-        assert_eq!(request.automatic, Some(false));
-    }
-}

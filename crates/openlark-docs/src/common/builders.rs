@@ -144,7 +144,7 @@ macro_rules! impl_response_data {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use openlark_core::Config;
+    use openlark_core::config::Config;
 
     // 测试结构体定义
     #[derive(Clone)]
