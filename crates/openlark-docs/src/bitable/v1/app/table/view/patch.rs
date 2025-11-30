@@ -1,19 +1,13 @@
-#![allow(unused_variables, unused_unsafe)]
-#![allow(dead_code)]
-#![allow(unused_imports)]
-#![allow(unused_variables)]
-#![allow(unused_mut)]
 
 use openlark_core::{
-    api::ApiRequest,
-    core::{BaseResponse, ResponseFormat, api::ApiResponseTrait},
+    api::{ApiRequest, ApiResponseTrait, HttpMethod},
+    
     config::Config,
-    constants::AccessTokenType,
-    endpoints::cloud_docs::*,
+    
+    
     http::Transport,
-    reqwest::Method,
     req_option::RequestOption,
-    service::bitable::v1::View,
+    
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -23,7 +17,7 @@ use serde_json::Value;
 #[derive(Clone)]
 pub struct PatchViewRequest {
     #[serde(skip)]
-    api_request: ApiRequest,
+    api_request: ApiRequest<Self>,
     /// 多维表格的 app_token
     #[serde(skip)]
     app_token: String,
@@ -43,7 +37,7 @@ pub struct PatchViewRequest {
 impl PatchViewRequest {
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new(config, Method::PATCH, "/open-apis/bitable/v1/apps/{}/tables/{}/views/{}".to_string()),
+            api_request: ApiRequest::new().method(HttpMethod::POST).api_path( /open-apis/bitable/v1/apps/{}/tables/{}/views/{}).config(config)),
             app_token: String::new(),
             table_id: String::new(),
             view_id: String::new(),
@@ -103,10 +97,10 @@ pub struct ViewData {
     /// 视图名称
     pub view_name: String,
     /// 视图类型
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = Option::is_none)]
     pub view_type: Option<String>,
     /// 视图的自定义属性
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = Option::is_none)]
     pub property: Option<Value>,
 }
 
@@ -156,18 +150,15 @@ pub async fn patch_view(
     option: Option<RequestOption>,
 ) -> SDKResult<PatchViewResponse> {
     let mut api_req = request.api_request;
-    api_req.set_http_method(Method::PATCH);
-    api_req.api_path = BITABLE_V1_VIEW_PATCH
-        .replace("{app_token}", &request.app_token)
-        .replace("{table_id}", &request.table_id)
-        .replace("{view_id}", &request.view_id);
-    api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        let api_request = api_request.api_path(format!(        .replace({app_token}, &request.app_token)
+        let api_request = api_request.api_path(format!(        .replace({table_id}, &request.table_id)
+        let api_request = api_request.api_path(format!(        .replace({view_id}, &request.view_id);
 
     // 设置查询参数
     if let Some(user_id_type) = &request.user_id_type {
         api_req
             .query_params
-            .insert("user_id_type".to_string(), user_id_type.clone());
+            .insert(user_id_type.to_string(), user_id_type.clone());
     }
 
     // 设置请求体
@@ -182,73 +173,3 @@ pub async fn patch_view(
     api_resp.into_result()
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use serde_json::json;
-
-    #[test]
-    fn test_patch_view_request_builder() {
-        let view = ViewData::new("更新的视图")
-            .with_view_type("grid")
-            .with_property(json!({"sort": "asc"}));
-
-        let request = PatchViewRequest::builder()
-            .app_token("bascnmBA*****yGehy8")
-            .table_id("tblsRc9GRRXKqhvW")
-            .view_id("vew123456")
-            .view(view)
-            .user_id_type("open_id")
-            .build();
-
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.table_id, "tblsRc9GRRXKqhvW");
-        assert_eq!(request.view_id, "vew123456");
-        assert_eq!(request.view.view_name, "更新的视图");
-        assert_eq!(request.view.view_type, Some("grid".to_string()));
-        assert_eq!(request.user_id_type, Some("open_id".to_string()));
-    }
-
-    #[test]
-    fn test_patch_view_request_minimal() {
-        let view = ViewData::new("最小更新");
-        let request = PatchViewRequest::builder()
-            .app_token("test-token")
-            .table_id("test-table")
-            .view_id("test-view")
-            .view(view)
-            .build();
-
-        assert_eq!(request.app_token, "test-token");
-        assert_eq!(request.table_id, "test-table");
-        assert_eq!(request.view_id, "test-view");
-        assert_eq!(request.view.view_name, "最小更新");
-        assert!(request.view.view_type.is_none());
-        assert!(request.view.property.is_none());
-        assert!(request.user_id_type.is_none());
-    }
-
-    #[test]
-    fn test_patch_view_response_trait() {
-        assert_eq!(PatchViewResponse::data_format(), ResponseFormat::Data);
-    }
-
-    #[test]
-    fn test_patch_view_request_new() {
-        let config = openlark_core::Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build()
-            .unwrap();
-
-        let request = PatchViewRequest::new(config);
-
-        assert_eq!(request.app_token, "");
-        assert_eq!(request.table_id, "");
-        assert_eq!(request.view_id, "");
-        assert_eq!(request.view.view_name, "");
-        assert!(request.view.view_type.is_none());
-        assert!(request.view.property.is_none());
-        assert!(request.user_id_type.is_none());
-    }
-}

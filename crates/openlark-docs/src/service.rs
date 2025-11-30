@@ -96,13 +96,13 @@ impl DocsService {
     /// 访问知识库服务
     #[cfg(feature = "baike")]
     pub fn baike(&self) -> crate::baike::BaikeService {
-        crate::baike::BaikeService::new(self.config.clone())
+        crate::baike::BaikeService::new((*self.config).clone())
     }
 
     /// 访问会议纪要服务
     #[cfg(feature = "minutes")]
     pub fn minutes(&self) -> crate::minutes::MinutesService {
-        crate::minutes::MinutesService::new(self.config.clone())
+        crate::minutes::MinutesService::new((*self.config).clone())
     }
 }
 

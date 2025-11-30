@@ -1,8 +1,5 @@
 //! Base V2 列出自定义角色API
 
-#![allow(unused_variables, unused_imports, dead_code, non_snake_case)]
-#![allow(clippy::too_many_arguments)]
-
 use openlark_core::{
     api::ApiRequest,
     config::Config,

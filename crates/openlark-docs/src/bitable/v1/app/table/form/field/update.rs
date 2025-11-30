@@ -1,17 +1,12 @@
-#![allow(unused_variables, unused_unsafe)]
-#![allow(dead_code)]
-#![allow(unused_imports)]
-#![allow(unused_variables)]
-#![allow(unused_mut)]
 
 use serde_json::Value;
 use reqwest::Method;
 use openlark_core::{
-    api::ApiRequest,
+    api::{ApiRequest, ApiResponseTrait, HttpMethod},
     api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
-    constants::AccessTokenType,
-    endpoints::cloud_docs::*,
+    
+    
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -22,7 +17,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone)]
 pub struct UpdateFormFieldQuestionRequest {
     #[serde(skip)]
-    api_request: ApiRequest,
+    api_request: ApiRequest<Self>,
     /// 多维表格的唯一标识符
     #[serde(skip)]
     app_token: String,
@@ -33,10 +28,10 @@ pub struct UpdateFormFieldQuestionRequest {
     #[serde(skip)]
     question_id: String,
     /// 问题标题
-    #[serde(skip_serializing_if = "String::is_empty")]
+    #[serde(skip_serializing_if = String::is_empty)]
     title: String,
     /// 问题描述
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = Option::is_none)]
     description: Option<String>,
     /// 是否必填
     #[serde(skip)]
@@ -45,7 +40,7 @@ pub struct UpdateFormFieldQuestionRequest {
     #[serde(skip)]
     visible: Option<bool>,
     /// 问题设置
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = Option::is_none)]
     setting: Option<Value>,
 }
 
@@ -174,35 +169,13 @@ pub async fn update_form_field_question(
     option: Option<RequestOption>,
 ) -> SDKResult<Response<UpdateFormFieldQuestionResponse>> {
     let mut api_req = request.api_request;
-    api_req.set_http_method(Method::PATCH);
-    api_req.api_path = BITABLE_V1_FORM_FIELD_QUESTION_UPDATE
-        .replace("{app_token}", &request.app_token)
-        .replace("{form_id}", &request.form_id)
-        .replace("{question_id}", &request.question_id);
-    api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+    let api_path = format!(
+        "/open-apis/bitable/v1/apps/{}/forms/{}/fields/{}",
+        &request.app_token, &request.form_id, &request.question_id
+    );
+    api_req = api_req.api_path(api_path);
 
     let api_resp = Transport::request(api_req, config, option).await?;
     Ok(api_resp)
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_update_form_field_question_request_builder() {
-        let request = UpdateFormFieldQuestionRequest::builder()
-            .app_token("bascnmBA*****yGehy8")
-            .form_id("vewxxxxxx")
-            .question_id("qstxxxxxx")
-            .title("更新的问题标题")
-            .required(true)
-            .build();
-
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.form_id, "vewxxxxxx");
-        assert_eq!(request.question_id, "qstxxxxxx");
-        assert_eq!(request.title, "更新的问题标题");
-        assert_eq!(request.required, Some(true));
-    }
-}

@@ -1,25 +1,20 @@
 //! Base V2 创建自定义角色API
 
-#![allow(unused_variables, unused_imports, dead_code, non_snake_case)]
-#![allow(clippy::too_many_arguments)]
-
 use openlark_core::{
-    api::ApiRequest,
+    api::{ApiRequest, ApiResponseTrait, HttpMethod},
     config::Config,
-    constants::AccessTokenType,
-    endpoints::cloud_docs::*,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use super::{CreateRoleRequest, ListRolesResponse, RoleService};
+use super::RoleService;
 
 /// 新增自定义角色请求
 #[derive(Clone)]
 pub struct CreateRoleV2Request {
-    api_request: ApiRequest,
+    api_request: ApiRequest<CreateRoleV2Response>,
     app_token: String,
     /// 角色名称
     name: String,
@@ -42,7 +37,11 @@ impl CreateRoleV2Request {
     /// 创建新增自定义角色请求
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new(config),
+            api_request: ApiRequest::new()
+                .method(HttpMethod::Post)
+                .api_path("/open-apis/base/v2/apps/:app_token/roles".to_string())
+                .config(config)
+                .build(),
             app_token: String::new(),
             name: String::new(),
             description: None,
@@ -82,32 +81,27 @@ impl CreateRoleV2Request {
     }
 
     /// 执行请求
-    pub async fn execute(self) -> SDKResult<CreateRoleV2Response> {
+    pub async fn execute(mut self) -> SDKResult<CreateRoleV2Response> {
         // 构建API路径
         let path = format!("/open-apis/base/v2/apps/{}/roles", self.app_token);
 
-        // 构建请求体
-        let request_body = super::models::CreateRoleRequest {
-            name: self.name.clone(),
-            description: self.description.clone(),
-            permissions: self.permissions.clone(),
-            role_type: self.role_type.clone(),
-            extra: None,
-        };
+        // 更新API路径
+        self.api_request = self.api_request.api_path(path);
 
-        // 验证请求参数
-        if let Err(e) = request_body.validate() {
-            return Err(openlark_core::error::SDKError::ValidationError(format!("创建角色请求验证失败: {}", e)));
-        }
+        // 构建请求体
+        let request_body = serde_json::json!({
+            "name": self.name,
+            "description": self.description,
+            "permissions": self.permissions,
+            "role_type": self.role_type
+        });
+
+        // 设置请求体
+        self.api_request = self.api_request.body(serde_json::to_vec(&request_body)?);
 
         // 发送请求
-        let response = self.api_request
-            .method(&openlark_core::http::Method::POST)
-            .path(&path)
-            .body(serde_json::to_vec(&request_body)?)
-            .execute::<CreateRoleV2Response>()
-            .await?;
-
+        let config = self.api_request.config();
+        let response = Transport::request(self.api_request, &config.clone(), None).await?;
         Ok(response)
     }
 }
@@ -164,8 +158,8 @@ impl CreateRoleV2Builder {
 
 impl RoleService {
     /// 创建新增自定义角色请求构建器
-    pub fn create_role_v2_builder(&self, config: Config) -> CreateRoleV2Builder {
-        CreateRoleV2Builder::new(config)
+    pub fn create_role_v2_builder(&self) -> CreateRoleV2Builder {
+        CreateRoleV2Builder::new(self.config.clone())
     }
 
     /// 创建新增自定义角色请求

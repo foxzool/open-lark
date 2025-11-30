@@ -1,11 +1,3 @@
-#![allow(dead_code)]
-#![allow(unused_imports)]
-#![allow(unused_variables)]
-#![allow(unused_mut)]
-#![allow(non_snake_case)]
-#![allow(clippy::too_many_arguments)]
-#![allow(clippy::module_inception)]
-
 use openlark_core::config::Config;
 
 // 应用级别API
@@ -16,7 +8,6 @@ pub mod get;
 pub mod update;
 
 // 子模块API
-pub mod app_table;
 pub mod dashboard;
 pub mod role;
 pub mod table;
@@ -28,7 +19,6 @@ pub use create::*;
 pub use delete::*;
 pub use get::*;
 pub use update::*;
-pub use app_table::*;
 pub use dashboard::*;
 pub use role::*;
 pub use table::*;
@@ -51,8 +41,8 @@ impl AppService {
     }
 
     /// 获取数据表服务
-    pub fn table_service(&self) -> app_table::AppTableService {
-        app_table::AppTableService::new(self.config.clone())
+    pub fn table_service(&self) -> table::TableService {
+        table::TableService::new(self.config.clone())
     }
 
     /// 获取角色服务

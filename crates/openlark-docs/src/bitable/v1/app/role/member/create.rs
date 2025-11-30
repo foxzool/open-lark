@@ -1,20 +1,11 @@
-#![allow(unused_variables, unused_unsafe)]
-#![allow(dead_code)]
-#![allow(unused_imports)]
-#![allow(unused_variables)]
-#![allow(unused_mut)]
-#![allow(non_snake_case)]
-#![allow(clippy::too_many_arguments)]
-#![allow(clippy::module_inception)]
 
 use openlark_core::{
-    api::ApiRequest,
-    core::{BaseResponse, ResponseFormat, api::ApiResponseTrait},
+    api::{ApiRequest, ApiResponseTrait, HttpMethod},
+    api::{ApiResponseTrait},
     config::Config,
-    constants::AccessTokenType,
-    endpoints::cloud_docs::*,
+    
+    
     http::Transport,
-    reqwest::Method,
     req_option::RequestOption,
     SDKResult,
 };
@@ -24,7 +15,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone)]
 pub struct CreateRoleMemberRequest {
     #[serde(skip)]
-    api_request: ApiRequest,
+    api_request: ApiRequest<Self>,
     /// 多维表格的唯一标识符
     #[serde(skip)]
     app_token: String,
@@ -39,9 +30,9 @@ impl CreateRoleMemberRequest {
         Self {
             api_request: ApiRequest::new(config)
                 .access_token_type(AccessTokenType::Tenant)
-                .method(Method::POST)
+                .method(HttpMethod::POST)
                 .endpoint(format!(
-                    "/open-apis/bitable/v1/apps/{}/roles/{}/members",
+                    /open-apis/bitable/v1/apps/{}/roles/{}/members,
                     app_token.into(),
                     role_id.into()
                 )),

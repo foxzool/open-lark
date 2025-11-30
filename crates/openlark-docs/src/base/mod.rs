@@ -22,21 +22,9 @@ impl BaseService {
     }
 }
 
-// 暂时简化v2模块
-pub mod v2 {
-    use super::Config;
+// 基础服务v2版本模块
 
-    pub struct V2 {
-        config: Config,
-    }
+// 导入v2版本的完整实现
+pub mod v2;
 
-    impl V2 {
-        pub fn new(config: Config) -> Self {
-            Self { config }
-        }
-
-        pub fn config(&self) -> &Config {
-            &self.config
-        }
-    }
-}
+pub use v2::*;

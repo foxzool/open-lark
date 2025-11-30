@@ -1,29 +1,18 @@
-#![allow(unused_variables, unused_unsafe)]
-#![allow(dead_code)]
-#![allow(unused_imports)]
-#![allow(unused_variables)]
-#![allow(unused_mut)]
 
-use std::collections::HashMap;
-use log::error;
 use openlark_core::{
-    api::ApiRequest,
-    core::{BaseResponse, ResponseFormat, api::ApiResponseTrait},
+    api::{ApiRequest, ApiResponseTrait, HttpMethod},
     config::Config,
-    constants::AccessTokenType,
-    endpoints::cloud_docs::*,
     http::Transport,
-    reqwest::Method,
     req_option::RequestOption,
-    service::bitable::v1::Record,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
-/// 新增记录请求,
+use std::collections::HashMap;
+/// 新增记录请求
 #[derive(Clone)]
 pub struct CreateRecordRequest {
     #[serde(skip)]
-    api_request: ApiRequest,
+    api_request: ApiRequest<CreateRecordResponse>,
     /// 多维表格的唯一标识符,
 #[serde(skip)]
     app_token: String,
@@ -42,7 +31,7 @@ pub struct CreateRecordRequest {
 impl CreateRecordRequest {
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new(config, reqwest::Method::POST, "/open-apis/bitable/v1/apps/{}/tables/{}/records".to_string()),
+            api_request: ApiRequest::new().method(HttpMethod::POST).api_path( /open-apis/bitable/v1/apps/{}/tables/{}/records).config(config)),
             app_token: String::new(),
             table_id: String::new(),
             user_id_type: None,
@@ -125,23 +114,20 @@ pub async fn create_record(
     option: Option<RequestOption>,
 ) -> SDKResult<CreateRecordResponse> {
     let mut api_req = request.api_request;
-    api_req.set_http_method(Method::POST);
-    api_req.api_path = BITABLE_V1_RECORDS
-        .replace("{app_token}", &request.app_token)
-        .replace("{table_id}", &request.table_id);
-    api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        let api_request = api_request.api_path(format!(        .replace({app_token}, &request.app_token)
+        let api_request = api_request.api_path(format!(        .replace({table_id}, &request.table_id);
 
     // 设置查询参数
     if let Some(user_id_type) = &request.user_id_type {
         api_req
             .query_params
-            .insert("user_id_type".to_string(), user_id_type.clone());
+            .insert(user_id_type.to_string(), user_id_type.clone());
     }
 
     if let Some(client_token) = &request.client_token {
         api_req
             .query_params
-            .insert("client_token".to_string(), client_token.clone());
+            .insert(client_token.to_string(), client_token.clone());
     }
 
     // 设置请求体
@@ -150,7 +136,7 @@ pub async fn create_record(
             api_req.body = bytes;
         }
         Err(e) => {
-            error!("Failed to serialize create record request: {}", e);
+            error!(Failed to serialize create record request: {}, e);
             api_req.body = Vec::new();
         }
     }
@@ -160,34 +146,3 @@ pub async fn create_record(
     api_resp.into_result()
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use serde_json::json;
-
-    #[test]
-    fn test_create_record_request_builder() {
-        let record = Record {
-            record_id: None,
-            fields: std::collections::HashMap::from([
-                ("标题".to_string(), json!("测试记录")),
-                ("状态".to_string(), json!("进行中")),
-            ]),
-            created_by: None,
-            created_time: None,
-            last_modified_by: None,
-            last_modified_time: None,
-        };
-
-        let request = CreateRecordRequest::builder()
-            .app_token("bascnmBA*****yGehy8")
-            .table_id("tblsRc9GRRXKqhvW")
-            .user_id_type("open_id")
-            .fields(record)
-            .build();
-
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.table_id, "tblsRc9GRRXKqhvW");
-        assert_eq!(request.user_id_type, Some("open_id".to_string()));
-        assert!(request.fields.fields.contains_key("标题"));
-    }

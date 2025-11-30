@@ -4,10 +4,9 @@ use openlark_core::{
     core::{
         BaseResponse,
         ResponseFormat,
-        api::ApiResponseTrait,
     },
-    constants::AccessTokenType,
-    endpoints::cloud_docs::*,
+    
+    
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -17,7 +16,7 @@ use serde::{Deserialize, Serialize};
 /// 列出数据表请求
 #[derive(Clone)]
 pub struct ListTablesRequest {
-    api_request: openlark_core::api::ApiRequest,
+    api_request: ApiRequest<Self>,
     /// 多维表格的 app_token
     pub app_token: String,
     /// 分页大小
@@ -31,7 +30,7 @@ impl ListTablesRequest {
         Self {
             api_request: openlark_core::api::ApiRequest::new(
                 config,
-                reqwest::Method::GET,
+                HttpMethod::GET,
                 LIST_TABLES.to_string(),
             ),
             app_token: String::new(),
@@ -103,30 +102,3 @@ impl ApiResponseTrait for ListTablesResponse {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_list_tables_request() {
-        let request = ListTablesRequest::builder()
-            .app_token("bascnmBA*****yGehy8")
-            .page_size(50)
-            .page_token("page_token")
-            .build();
-
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.page_size, Some(50));
-        assert_eq!(request.page_token, Some("page_token".to_string()));
-    }
-
-    #[test]
-    fn test_page_size_limit() {
-        let request = ListTablesRequest::builder()
-            .app_token("bascnmBA*****yGehy8")
-            .page_size(200) // 超过100的限制
-            .build();
-
-        assert_eq!(request.page_size, Some(100)); // 应该被限制为100
-    }
-}

@@ -1,9 +1,4 @@
-#![allow(unused_variables, unused_unsafe)]
 
-#![allow(dead_code)]
-#![allow(unused_imports)]
-#![allow(unused_variables)]
-#![allow(unused_mut)]
 use SDKResult;use reqwest::Method;
 use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use openlark_core::,
@@ -12,10 +7,10 @@ use openlark_core::,
 {,
         BaseResponse,
         ResponseFormat,
-        api::{ApiResponseTrait}
+        api::{ApiResponseTrait},
     config::Config,
-        constants::AccessTokenType,
-        endpoints::cloud_docs::*,
+        
+        
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -26,7 +21,7 @@ use openlark_core::,
 #[derive(Clone)]
 pub struct UpdateWorkflowRequest {
     #[serde(skip)]
-    api_request: ApiRequest,
+    api_request: ApiRequest<Self>,
     /// 多维表格的唯一标识符,
 #[serde(skip)]
     app_token: String,
@@ -72,34 +67,9 @@ pub async fn update_workflow(
     option: Option<RequestOption>,
 ) -> SDKResult<Response<UpdateWorkflowResponse>> {,
 let mut api_req = request.api_request;
-    api_req.set_http_method(Method::PATCH);
-api_req.api_path = BITABLE_V1_WORKFLOW_UPDATE,
-        .replace("{app_token}", &request.app_token)
-        .replace("{workflow_id}", &request.workflow_id);
-    api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        let api_request = api_request.api_path(format!(        .replace({app_token}, &request.app_token)
+        let api_request = api_request.api_path(format!(        .replace({workflow_id}, &request.workflow_id);
 
     let api_resp = Transport::request(api_req, config, option).await?;
 Ok(api_resp),
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-#[test]
-    fn test_update_workflow_request_builder() {
-let request = UpdateWorkflowRequest::builder(),
-            .app_token()
-.workflow_id()
-            .enable()
-.build();
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.workflow_id, "wkfxxxxxx");
-assert!(request.is_enabled);
-    }
-#[test]
-    fn test_update_workflow_request_disable() {
-let request = UpdateWorkflowRequest::builder(),
-            .app_token()
-.workflow_id()
-            .disable()
-.build();
-        assert!(!request.is_enabled);

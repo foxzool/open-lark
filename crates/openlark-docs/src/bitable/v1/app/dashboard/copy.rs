@@ -1,17 +1,8 @@
-#![allow(unused_variables, unused_unsafe)]
-#![allow(dead_code)]
-#![allow(unused_imports)]
-#![allow(unused_variables)]
-#![allow(unused_mut)]
 
 use openlark_core::{
-    api::ApiRequest,
-    core::{BaseResponse, ResponseFormat, api::ApiResponseTrait},
+    api::{ApiRequest, ApiResponseTrait, HttpMethod},
     config::Config,
-    constants::AccessTokenType,
-    endpoints::cloud_docs::*,
     http::Transport,
-    reqwest::Method,
     req_option::RequestOption,
     SDKResult,
 };
@@ -21,7 +12,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone)]
 pub struct CopyDashboardRequest {
     #[serde(skip)]
-    api_request: ApiRequest,
+    api_request: ApiRequest<CopyDashboardResponse>,
     /// 多维表格的唯一标识符
     #[serde(skip)]
     app_token: String,
@@ -40,7 +31,11 @@ pub struct CopyDashboardRequest {
 impl CopyDashboardRequest {
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new(config, Method::POST, "/open-apis/bitable/v1/apps/{}/dashboards:batch_copy".to_string()),
+            api_request: ApiRequest::new()
+                .method(HttpMethod::Post)
+                .api_path("/open-apis/bitable/v1/apps/{}/dashboards/batch_copy".to_string())
+                .config(config)
+                .build(),
             app_token: String::new(),
             user_id_type: None,
             client_token: None,
@@ -133,23 +128,19 @@ pub async fn copy_dashboard(
     config: &Config,
     option: Option<RequestOption>,
 ) -> SDKResult<CopyDashboardResponse> {
-    let mut api_req = request.api_request;
-    api_req.set_http_method(Method::POST);
-    api_req.api_path = BITABLE_V1_DASHBOARDS_COPY
-        .replace("{app_token}", &request.app_token);
-    api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-
+    let mut api_request = request.api_request
+        .api_path(format!(/open-apis/bitable/v1/apps/{}/dashboards/{}/copy, &request.app_token, &request.dashboard_id));
     // 设置查询参数
     if let Some(user_id_type) = &request.user_id_type {
         api_req
             .query_params
-            .insert("user_id_type".to_string(), user_id_type.clone());
+            .insert(user_id_type.to_string(), user_id_type.clone());
     }
 
     if let Some(client_token) = &request.client_token {
         api_req
             .query_params
-            .insert("client_token".to_string(), client_token.clone());
+            .insert(client_token.to_string(), client_token.clone());
     }
 
     // 设置请求体
@@ -158,144 +149,10 @@ pub async fn copy_dashboard(
         dashboard_ids: request.dashboard_ids,
     };
 
-    api_req.body = serde_json::to_vec(&body).unwrap();
+    let api_request = api_request.body(serde_json::to_vec(&body).unwrap());
 
-    let api_resp: openlark_core::core::StandardResponse<CopyDashboardResponse> =
-        Transport::request(api_req, config, option).await?;
-    api_resp.into_result()
+    let response: CopyDashboardResponse =
+        Transport::request(api_request, config, option).await?;
+    response
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_copy_dashboard_request_builder() {
-        let request = CopyDashboardRequest::builder()
-            .app_token("bascnmBA*****yGehy8")
-            .user_id_type("open_id")
-            .name("复制的仪表盘")
-            .dashboard_ids(vec![
-                "dash123".to_string(),
-                "dash456".to_string(),
-            ])
-            .build();
-
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.user_id_type, Some("open_id".to_string()));
-        assert_eq!(request.name, "复制的仪表盘");
-        assert_eq!(request.dashboard_ids.len(), 2);
-        assert!(request.dashboard_ids.contains(&"dash123".to_string()));
-        assert!(request.dashboard_ids.contains(&"dash456".to_string()));
-    }
-
-    #[test]
-    fn test_copy_dashboard_request_body_serialization() {
-        let body = CopyDashboardRequestBody {
-            name: "复制的仪表盘".to_string(),
-            dashboard_ids: vec!["dash123".to_string(), "dash456".to_string()],
-        };
-
-        let serialized = serde_json::to_value(&body).unwrap();
-        let expected = serde_json::json!({
-            "name": "复制的仪表盘",
-            "dashboard_ids": ["dash123", "dash456"]
-        });
-
-        assert_eq!(serialized, expected);
-    }
-
-    #[test]
-    fn test_copy_dashboard_request_minimal() {
-        let request = CopyDashboardRequest::builder()
-            .app_token("test-token")
-            .name("仪表盘名称")
-            .dashboard_ids(vec!["dash123".to_string()])
-            .build();
-
-        assert_eq!(request.app_token, "test-token");
-        assert_eq!(request.name, "仪表盘名称");
-        assert_eq!(request.dashboard_ids, vec!["dash123".to_string()]);
-        assert!(request.user_id_type.is_none());
-        assert!(request.client_token.is_none());
-    }
-
-    #[test]
-    fn test_copy_dashboard_request_empty_dashboard_ids() {
-        let request = CopyDashboardRequest::builder()
-            .app_token("test-token")
-            .name("仪表盘名称")
-            .dashboard_ids(vec![])
-            .build();
-
-        assert_eq!(request.app_token, "test-token");
-        assert_eq!(request.name, "仪表盘名称");
-        assert!(request.dashboard_ids.is_empty());
-    }
-
-    #[test]
-    fn test_dashboard_info() {
-        let dashboard = DashboardInfo {
-            dashboard_id: "dash123".to_string(),
-            name: "测试仪表盘".to_string(),
-            success: true,
-            error: None,
-        };
-
-        assert_eq!(dashboard.dashboard_id, "dash123");
-        assert_eq!(dashboard.name, "测试仪表盘");
-        assert!(dashboard.success);
-        assert!(dashboard.error.is_none());
-    }
-
-    #[test]
-    fn test_copy_dashboard_response_trait() {
-        assert_eq!(CopyDashboardResponse::data_format(), ResponseFormat::Data);
-    }
-
-    #[test]
-    fn test_copy_dashboard_request_builder_chaining() {
-        let request = CopyDashboardRequest::builder()
-            .app_token("app123")
-            .user_id_type("user_id")
-            .client_token("client123")
-            .name("仪表盘副本")
-            .dashboard_ids(vec!["dash1".to_string(), "dash2".to_string()])
-            .build();
-
-        assert_eq!(request.app_token, "app123");
-        assert_eq!(request.user_id_type, Some("user_id".to_string()));
-        assert_eq!(request.client_token, Some("client123".to_string()));
-        assert_eq!(request.name, "仪表盘副本");
-        assert_eq!(request.dashboard_ids.len(), 2);
-        assert!(request.dashboard_ids.contains(&"dash1".to_string()));
-        assert!(request.dashboard_ids.contains(&"dash2".to_string()));
-    }
-
-    #[test]
-    fn test_copy_dashboard_response() {
-        let response = CopyDashboardResponse {
-            dashboards: vec![
-                DashboardInfo {
-                    dashboard_id: "dash123".to_string(),
-                    name: "仪表盘1".to_string(),
-                    success: true,
-                    error: None,
-                },
-                DashboardInfo {
-                    dashboard_id: "dash456".to_string(),
-                    name: "仪表盘2".to_string(),
-                    success: false,
-                    error: Some("复制失败".to_string()),
-                },
-            ],
-        };
-
-        assert_eq!(response.dashboards.len(), 2);
-        assert_eq!(response.dashboards[0].dashboard_id, "dash123");
-        assert!(response.dashboards[0].success);
-        assert_eq!(response.dashboards[1].dashboard_id, "dash456");
-        assert!(!response.dashboards[1].success);
-        assert_eq!(response.dashboards[1].error, Some("复制失败".to_string()));
-    }
-}

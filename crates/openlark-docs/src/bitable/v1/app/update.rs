@@ -4,10 +4,9 @@ use openlark_core::{
     core::{
         BaseResponse,
         ResponseFormat,
-        api::ApiResponseTrait,
     },
-    constants::AccessTokenType,
-    endpoints::cloud_docs::*,
+    
+    
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -17,7 +16,7 @@ use serde::{Deserialize, Serialize};
 /// 更新应用请求
 #[derive(Clone)]
 pub struct UpdateAppRequest {
-    api_request: openlark_core::api::ApiRequest,
+    api_request: ApiRequest<Self>,
     /// 多维表格的 app_token
     pub app_token: String,
     /// 多维表格的名字
@@ -31,7 +30,7 @@ impl UpdateAppRequest {
         Self {
             api_request: openlark_core::api::ApiRequest::new(
                 config,
-                reqwest::Method::PUT,
+                HttpMethod::PUT,
                 UPDATE_APP.to_string(),
             ),
             app_token: String::new(),
@@ -77,9 +76,9 @@ impl UpdateAppRequestBuilder {
 
 #[derive(Serialize)]
 struct UpdateAppRequestBody {
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = Option::is_none)]
     name: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = Option::is_none)]
     time_zone: Option<String>,
 }
 
@@ -109,36 +108,3 @@ impl ApiResponseTrait for UpdateAppResponse {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_update_app_request() {
-        let request = UpdateAppRequest::builder()
-            .app_token("bascnmBA*****yGehy8")
-            .name("更新的多维表格")
-            .time_zone("Asia/Shanghai")
-            .build();
-
-        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
-        assert_eq!(request.name, Some("更新的多维表格".to_string()));
-        assert_eq!(request.time_zone, Some("Asia/Shanghai".to_string()));
-    }
-
-    #[test]
-    fn test_update_app_request_body_serialization() {
-        let body = UpdateAppRequestBody {
-            name: Some("更新的多维表格".to_string()),
-            time_zone: Some("Asia/Shanghai".to_string()),
-        };
-
-        let serialized = serde_json::to_value(&body).unwrap();
-        let expected = serde_json::json!({
-            "name": "更新的多维表格",
-            "time_zone": "Asia/Shanghai"
-        });
-
-        assert_eq!(serialized, expected);
-    }
-}

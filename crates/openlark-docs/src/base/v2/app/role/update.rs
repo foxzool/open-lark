@@ -1,15 +1,14 @@
 //! Base V2 更新自定义角色API
 
-#![allow(unused_variables, unused_imports, dead_code, non_snake_case)]
-#![allow(clippy::too_many_arguments)]
-
 use openlark_core::{
     api::ApiRequest,
     config::Config,
     constants::AccessTokenType,
     endpoints::cloud_docs::*,
     http::Transport,
+    reqwest::Method,
     req_option::RequestOption,
+    validation_error,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -106,7 +105,7 @@ impl UpdateRoleV2Request {
 
         // 验证请求参数
         if let Err(e) = request_body.validate() {
-            return Err(openlark_core::error::SDKError::ValidationError(format!("更新角色请求验证失败: {}", e)));
+            return Err(validation_error("更新角色请求验证失败", Some(&e.to_string())));
         }
 
         // 发送请求
