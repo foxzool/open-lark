@@ -497,7 +497,12 @@ impl CoreError {
         message: impl Into<String>,
         request_id: Option<impl Into<String>>,
     ) -> Self {
-        api_error(status as u16, endpoint, message, request_id.map(|id| id.into()))
+        api_error(
+            status as u16,
+            endpoint,
+            message,
+            request_id.map(|id| id.into()),
+        )
     }
 
     /// 仅带 message 的验证错误（默认字段 general）
@@ -845,11 +850,7 @@ pub fn timeout_error(timeout: Duration, operation: Option<String>) -> CoreError 
 }
 
 /// 创建限流错误
-pub fn rate_limit_error(
-    limit: u32,
-    window: Duration,
-    retry_after: Option<Duration>,
-) -> CoreError {
+pub fn rate_limit_error(limit: u32, window: Duration, retry_after: Option<Duration>) -> CoreError {
     CoreError::RateLimit {
         limit,
         window,
@@ -875,7 +876,14 @@ pub fn service_unavailable_error(
 /// 创建权限缺失错误
 pub fn permission_missing_error(scopes: &[impl AsRef<str>]) -> CoreError {
     let mut ctx = ErrorContext::new();
-    ctx.add_context("required_scopes", scopes.iter().map(|s| s.as_ref()).collect::<Vec<_>>().join(","));
+    ctx.add_context(
+        "required_scopes",
+        scopes
+            .iter()
+            .map(|s| s.as_ref())
+            .collect::<Vec<_>>()
+            .join(","),
+    );
 
     CoreError::Authentication {
         message: "权限范围不足".to_string(),

@@ -2,8 +2,8 @@
 //!
 //! 提供门禁设备列表查询功能。
 
+use openlark_core::error::api_error;
 use std::sync::Arc;
-use openlark_core::error::{api_error};
 
 /// 设备管理服务
 #[derive(Debug)]
@@ -141,10 +141,7 @@ impl ListDevicesBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/acs/v1/devices",
-                &format!(
-                    "HTTP: {}",
-                    response.status()
-                ),
+                &format!("HTTP: {}", response.status()),
                 None,
             ))
         }

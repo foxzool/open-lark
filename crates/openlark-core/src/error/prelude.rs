@@ -15,9 +15,9 @@ pub use super::{CoreError, ErrorId, LarkAPIError, SDKResult};
 pub use super::traits::{ErrorContextTrait, ErrorFormatTrait, ErrorTrait, FullErrorTrait};
 
 pub use super::core_v3::{
-    api_error, authentication_error, business_error, configuration_error,
-    network_error, network_error_with_details, rate_limit_error, serialization_error,
-    service_unavailable_error, timeout_error, validation_error,
+    api_error, authentication_error, business_error, configuration_error, network_error,
+    network_error_with_details, rate_limit_error, serialization_error, service_unavailable_error,
+    timeout_error, validation_error,
 };
 
 pub use super::analysis;
