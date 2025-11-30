@@ -5,8 +5,8 @@
 
 use crate::registry::RegistryError;
 use openlark_core::error::{
-    CoreError, ErrorCategory, ErrorCode, ErrorContext,
-    ErrorSeverity, ErrorTrait, ErrorType, ApiError,
+    ApiError, CoreError, ErrorCategory, ErrorCode, ErrorContext, ErrorSeverity, ErrorTrait,
+    ErrorType,
 };
 
 /// 🚨 OpenLark 客户端错误类型
@@ -310,26 +310,8 @@ impl ClientErrorExt for Error {
 // 类型转换
 // ============================================================================
 
-// 从标准错误类型转换
-#[cfg(feature = "reqwest")]
-impl From<reqwest::Error> for Error {
-    fn from(err: reqwest::Error) -> Self {
-        if err.is_timeout() {
-            timeout_error("HTTP请求")
-        } else if err.is_connect() {
-            network_error(format!("连接失败: {}", err))
-        } else if err.is_request() {
-            api_error(
-                err.status().map_or(0, |s| s.as_u16()),
-                err.url().map_or("", |u| u.as_str()),
-                format!("请求失败: {}", err),
-                None,
-            )
-        } else {
-            network_error(format!("网络错误: {}", err))
-        }
-    }
-}
+// 注意: reqwest::Error -> CoreError 转换已在 openlark-core 中实现
+// 这里不需要重复实现，直接使用 CoreError 的转换机制
 
 // 注意: 不能为外部类型实现 From，因为这些类型由 CoreError 定义在 openlark-core 中
 // 请使用对应的函数来进行错误转换

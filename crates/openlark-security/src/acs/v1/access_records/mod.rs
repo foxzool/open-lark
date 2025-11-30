@@ -2,8 +2,8 @@
 //!
 //! 提供门禁访问记录的查询和人脸识别照片下载功能。
 
+use openlark_core::error::api_error;
 use std::sync::Arc;
-use openlark_core::error::{api_error};
 
 /// 访问记录服务
 #[derive(Debug)]
@@ -312,10 +312,7 @@ impl GetAccessPhotoBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/acs/v1/access_records",
-                &format!(
-                    "HTTP: {}",
-                    response.status()
-                ),
+                &format!("HTTP: {}", response.status()),
                 None,
             ))
         }

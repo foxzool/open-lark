@@ -5,10 +5,10 @@
 use openlark_core::config::Config;
 
 pub mod models;
-pub mod role;
+pub mod app;
 
 pub use models::*;
-pub use role::*;
+pub use app::*;
 
 /// Base V2 服务
 pub struct BaseV2Service {
@@ -21,9 +21,14 @@ impl BaseV2Service {
         Self { config }
     }
 
-    /// 获取角色管理服务
-    pub fn role_service(&self) -> role::RoleService {
-        role::RoleService::new(self.config.clone())
+    /// 获取应用管理服务
+    pub fn app_service(&self) -> app::AppService {
+        app::AppService::new(self.config.clone())
+    }
+
+    /// 获取角色管理服务（向后兼容）
+    pub fn role_service(&self) -> app::role::RoleService {
+        self.app_service().role_service()
     }
 
     /// 获取配置

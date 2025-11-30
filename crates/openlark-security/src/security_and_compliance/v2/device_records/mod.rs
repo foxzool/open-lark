@@ -4,7 +4,7 @@
 
 use std::sync::Arc;
 
-use openlark_core::error::{api_error};
+use openlark_core::error::api_error;
 /// 设备记录管理服务
 #[derive(Debug)]
 pub struct DeviceRecordsService {
