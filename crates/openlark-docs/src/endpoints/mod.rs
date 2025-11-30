@@ -138,6 +138,13 @@ pub const BITABLE_V1_FORM_PATCH_META: &str =
 pub const BITABLE_V1_FORM_QUESTION: &str =
     "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/forms/{form_id}/questions";
 
+/// Bitable表单字段管理
+/// 表单字段的问题管理
+pub const BITABLE_V1_FORM_FIELD_QUESTION: &str =
+    "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/forms/{form_id}/questions";
+pub const BITABLE_V1_FORM_FIELD_QUESTION_UPDATE: &str =
+    "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/forms/{form_id}/questions/{question_id}";
+
 /// Bitable工作流管理
 /// 自动化工作流程
 pub const BITABLE_V1_WORKFLOWS: &str = "/open-apis/bitable/v1/apps/{app_token}/workflows";

@@ -4,7 +4,7 @@
 
 use std::sync::Arc;
 
-use openlark_core::error::{api_error};
+use openlark_core::error::api_error;
 /// 访客管理服务
 #[derive(Debug)]
 pub struct VisitorsService {
@@ -155,10 +155,7 @@ impl CreateVisitorBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/acs/v1/visitors",
-                &format!(
-                    "HTTP: {}",
-                    response.status()
-                ),
+                &format!("HTTP: {}", response.status()),
                 None,
             ))
         }
@@ -212,10 +209,7 @@ impl DeleteVisitorBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/acs/v1/visitors",
-                &format!(
-                    "HTTP: {}",
-                    response.status()
-                ),
+                &format!("HTTP: {}", response.status()),
                 None,
             ))
         }

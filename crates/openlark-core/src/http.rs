@@ -232,10 +232,7 @@ fn validate(
     access_token_type: AccessTokenType,
 ) -> Result<(), LarkAPIError> {
     if config.app_id.is_empty() {
-        return Err(crate::error::validation_error(
-            "app_id",
-            "AppId is empty",
-        ));
+        return Err(crate::error::validation_error("app_id", "AppId is empty"));
     }
 
     if config.app_secret.is_empty() {

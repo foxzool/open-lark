@@ -4,7 +4,7 @@
 
 use std::sync::Arc;
 
-use openlark_core::error::{api_error};
+use openlark_core::error::api_error;
 /// OpenAPI 审计日志服务
 #[derive(Debug)]
 pub struct OpenApiLogsService {
@@ -265,10 +265,7 @@ impl ListOpenApiLogsBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/security_and_compliance/v1/openapi_logs",
-                &format!(
-                    "HTTP: {}",
-                    response.status()
-                ),
+                &format!("HTTP: {}", response.status()),
                 None,
             ))
         }

@@ -4,13 +4,12 @@
 //! 直接集成统一错误体系，提供类型安全和可观测性
 
 use openlark_core::error::{
-    CoreError, ErrorCode, ErrorContext, ErrorTrait,
-    authentication_error, validation_error, business_error, configuration_error,
-    network_error_with_details, rate_limit_error, token_expired_error,
-    permission_missing_error,
+    authentication_error, business_error, configuration_error, network_error_with_details,
+    permission_missing_error, rate_limit_error, token_expired_error, validation_error, CoreError,
+    ErrorCode, ErrorContext, ErrorTrait,
 };
-use std::time::Duration;
 use serde::Serialize;
+use std::time::Duration;
 
 // 导入内部结构体
 use openlark_core::error::ApiError;
@@ -48,7 +47,10 @@ impl SecurityErrorBuilder {
         network_error_with_details(
             "设备连接失败",
             None::<String>,
-            Some(format!("device:{}", ctx.get_context("device_id").unwrap_or_default()))
+            Some(format!(
+                "device:{}",
+                ctx.get_context("device_id").unwrap_or_default()
+            )),
         )
     }
 
@@ -70,10 +72,7 @@ impl SecurityErrorBuilder {
     }
 
     /// 访问控制被拒绝
-    pub fn access_denied(
-        resource: impl Into<String>,
-        reason: impl Into<String>,
-    ) -> SecurityError {
+    pub fn access_denied(resource: impl Into<String>, reason: impl Into<String>) -> SecurityError {
         let mut ctx = ErrorContext::new();
         ctx.add_context("resource", resource.into());
         ctx.add_context("deny_reason", reason.into());
@@ -90,11 +89,19 @@ impl SecurityErrorBuilder {
         let mut ctx = ErrorContext::new();
         ctx.add_context(
             "required_permissions",
-            required_permissions.iter().map(|s| s.as_ref()).collect::<Vec<_>>().join(","),
+            required_permissions
+                .iter()
+                .map(|s| s.as_ref())
+                .collect::<Vec<_>>()
+                .join(","),
         );
         ctx.add_context(
             "current_permissions",
-            current_permissions.iter().map(|s| s.as_ref()).collect::<Vec<_>>().join(","),
+            current_permissions
+                .iter()
+                .map(|s| s.as_ref())
+                .collect::<Vec<_>>()
+                .join(","),
         );
 
         CoreError::Authentication {
@@ -208,14 +215,14 @@ impl SecurityErrorBuilder {
         ctx.add_context("error_reason", reason_str.clone());
         ctx.add_context("operation", "security_config");
 
-        configuration_error(format!("安全配置参数 {} 无效: {}", config_key_str, reason_str))
+        configuration_error(format!(
+            "安全配置参数 {} 无效: {}",
+            config_key_str, reason_str
+        ))
     }
 
     /// 时间同步错误
-    pub fn time_sync_failed(
-        service: impl Into<String>,
-        deviation_ms: i64,
-    ) -> SecurityError {
+    pub fn time_sync_failed(service: impl Into<String>, deviation_ms: i64) -> SecurityError {
         let mut ctx = ErrorContext::new();
         ctx.add_context("sync_service", service.into());
         ctx.add_context("time_deviation_ms", deviation_ms.to_string());
@@ -251,12 +258,18 @@ impl SecurityErrorBuilder {
     ) -> SecurityError {
         let mut ctx = ErrorContext::new();
         ctx.add_context("check_type", check_type.into());
-        ctx.add_context("timeout_duration_ms", timeout_duration.as_millis().to_string());
+        ctx.add_context(
+            "timeout_duration_ms",
+            timeout_duration.as_millis().to_string(),
+        );
         ctx.add_context("operation", "security_check");
 
         CoreError::Timeout {
             duration: timeout_duration,
-            operation: Some(format!("security_check:{}", ctx.get_context("check_type").unwrap_or_default())),
+            operation: Some(format!(
+                "security_check:{}",
+                ctx.get_context("check_type").unwrap_or_default()
+            )),
             ctx,
         }
     }
@@ -292,25 +305,21 @@ pub fn map_feishu_security_error(
     // 优先使用飞书通用错误码映射
     match ErrorCode::from_feishu_code(feishu_code) {
         // 权限相关错误
-        Some(ErrorCode::PermissionMissing) => {
-            CoreError::Authentication {
-                message: format!("安全权限不足: {}", message),
-                code: ErrorCode::PermissionMissing,
-                ctx,
-            }
+        Some(ErrorCode::PermissionMissing) => CoreError::Authentication {
+            message: format!("安全权限不足: {}", message),
+            code: ErrorCode::PermissionMissing,
+            ctx,
         },
         // 令牌相关错误
         Some(ErrorCode::AccessTokenExpiredV2) => {
             token_expired_error(format!("安全访问令牌已过期: {}", message))
-        },
+        }
         // 参数验证错误
-        Some(ErrorCode::ValidationError) => {
-            validation_error("security_parameter", message)
-        },
+        Some(ErrorCode::ValidationError) => validation_error("security_parameter", message),
         // 业务逻辑错误
         Some(ErrorCode::BusinessError) => {
             SecurityErrorBuilder::compliance_check_failed("business_rule", message, None::<String>)
-        },
+        }
         // 其他映射
         _ => {
             // 回退到HTTP状态码或内部业务码
@@ -356,7 +365,13 @@ impl SecurityErrorExt for SecurityError {
     }
 
     fn is_permission_error(&self) -> bool {
-        matches!(self, CoreError::Authentication { code: ErrorCode::PermissionMissing, .. })
+        matches!(
+            self,
+            CoreError::Authentication {
+                code: ErrorCode::PermissionMissing,
+                ..
+            }
+        )
     }
 
     fn is_compliance_error(&self) -> bool {
@@ -375,8 +390,11 @@ impl SecurityErrorExt for SecurityError {
     }
 
     fn affected_resource_id(&self) -> Option<&str> {
-        match self.context().get_context("device_id")
-            .or_else(|| self.context().get_context("visitor_id")) {
+        match self
+            .context()
+            .get_context("device_id")
+            .or_else(|| self.context().get_context("visitor_id"))
+        {
             Some(s) => Some(s.as_ref()),
             None => None,
         }
@@ -428,7 +446,9 @@ impl SecurityErrorAnalyzer {
     /// 分析安全错误的潜在风险
     pub fn analyze_security_risk(error: &SecurityError) -> SecurityRiskAssessment {
         let risk_level = match error {
-            CoreError::Authentication { .. } if error.is_permission_error() => SecurityRiskLevel::High,
+            CoreError::Authentication { .. } if error.is_permission_error() => {
+                SecurityRiskLevel::High
+            }
             CoreError::Business { .. } => SecurityRiskLevel::Critical,
             CoreError::Internal { .. } => SecurityRiskLevel::High,
             CoreError::Validation { .. } => SecurityRiskLevel::Medium,
@@ -449,7 +469,10 @@ impl SecurityErrorAnalyzer {
             risk_level,
             risk_type,
             immediate_action: SecurityAction::LogAndMonitor,
-            escalation_required: matches!(error, CoreError::Business { .. } | CoreError::Internal { .. }),
+            escalation_required: matches!(
+                error,
+                CoreError::Business { .. } | CoreError::Internal { .. }
+            ),
             compliance_impact: ComplianceImpact::Low,
         }
     }
@@ -543,7 +566,11 @@ mod tests {
 
     #[test]
     fn test_compliance_error() {
-        let error = SecurityErrorBuilder::compliance_check_failed("gdpr", "data_retention_violation", Some("data_set_456"));
+        let error = SecurityErrorBuilder::compliance_check_failed(
+            "gdpr",
+            "data_retention_violation",
+            Some("data_set_456"),
+        );
         assert!(error.is_compliance_error());
     }
 

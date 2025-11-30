@@ -4,10 +4,9 @@
 //! 直接集成统一错误体系，提供类型安全和可观测性
 
 use openlark_core::error::{
-    CoreError, ErrorCode, ErrorContext, ErrorTrait, ErrorType,
-    authentication_error, token_expired_error, token_invalid_error, permission_missing_error,
-    user_identity_invalid_error, sso_token_invalid_error, network_error_with_details,
-    validation_error,
+    authentication_error, network_error_with_details, permission_missing_error,
+    sso_token_invalid_error, token_expired_error, token_invalid_error, user_identity_invalid_error,
+    validation_error, CoreError, ErrorCode, ErrorContext, ErrorTrait, ErrorType,
 };
 use std::time::Duration;
 

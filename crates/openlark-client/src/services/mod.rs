@@ -147,7 +147,7 @@ impl ServiceFactory {
     pub fn create_docs_service(&self) -> Result<docs::DocsService> {
         tracing::debug!("创建文档服务");
 
-        let service = docs::DocsService::new();
+        let service = docs::DocsService::new(&self.config);
         Ok(service)
     }
 
@@ -156,7 +156,7 @@ impl ServiceFactory {
     pub fn create_hr_service(&self) -> Result<hr::HRService> {
         tracing::debug!("创建人力资源服务");
 
-        let service = hr::HRService::new();
+        let service = hr::HRService::new(&self.config, &self.registry);
         Ok(service)
     }
 
@@ -165,7 +165,7 @@ impl ServiceFactory {
     pub fn create_ai_service(&self) -> Result<ai::AIService> {
         tracing::debug!("创建AI服务");
 
-        let service = ai::AIService::new();
+        let service = ai::AIService::new(&self.config);
         Ok(service)
     }
 
@@ -192,7 +192,7 @@ impl ServiceFactory {
     pub fn create_admin_service(&self) -> Result<admin::AdminService> {
         tracing::debug!("创建管理员工能服务");
 
-        let service = admin::AdminService::new();
+        let service = admin::AdminService::new(&self.config);
         Ok(service)
     }
 
@@ -201,7 +201,7 @@ impl ServiceFactory {
     pub fn create_approval_service(&self) -> Result<approval::ApprovalService> {
         tracing::debug!("创建审批流程服务");
 
-        let service = approval::ApprovalService::new();
+        let service = approval::ApprovalService::new(&self.config);
         Ok(service)
     }
 

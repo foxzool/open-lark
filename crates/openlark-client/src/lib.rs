@@ -359,9 +359,7 @@ pub use services::ApprovalService;
 pub use openlark_core::{config::Config as CoreConfig, SDKResult as CoreResult};
 
 // 错误系统核心类型
-pub use openlark_core::{
-    error::{CoreError, ErrorCode, ErrorSeverity, ErrorTrait, ErrorType},
-};
+pub use openlark_core::error::{CoreError, ErrorCode, ErrorSeverity, ErrorTrait, ErrorType};
 
 // ============================================================================
 // 类型别名和便利定义

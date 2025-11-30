@@ -83,10 +83,7 @@ impl GetUserFaceBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/acs/v1/user_faces",
-                &format!(
-                    "HTTP: {}",
-                    response.status()
-                ),
+                &format!("HTTP: {}", response.status()),
                 None,
             ))
         }
@@ -131,7 +128,7 @@ impl UpdateUserFaceBuilder {
             openlark_core::error::network_error_with_details(
                 "Failed to read image file",
                 None,
-                Some("image_file_read".to_string())
+                Some("image_file_read".to_string()),
             )
         })?;
         self.face_image = image_data;
@@ -152,7 +149,10 @@ impl UpdateUserFaceBuilder {
                 .file_name(format!("face_image.{}", self.image_format))
                 .mime_str(&format!("image/{}", self.image_format))
                 .map_err(|e| {
-                    openlark_core::error::validation_error("mime_type", &format!("Invalid mime type: {}", e))
+                    openlark_core::error::validation_error(
+                        "mime_type",
+                        &format!("Invalid mime type: {}", e),
+                    )
                 })?,
         );
 
@@ -182,10 +182,7 @@ impl UpdateUserFaceBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/acs/v1/user_faces",
-                &format!(
-                    "HTTP: {}",
-                    response.status()
-                ),
+                &format!("HTTP: {}", response.status()),
                 None,
             ))
         }

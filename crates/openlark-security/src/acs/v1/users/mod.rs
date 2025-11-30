@@ -2,8 +2,8 @@
 //!
 //! 提供用户信息的增删改查功能。
 
+use openlark_core::error::api_error;
 use std::sync::Arc;
-use openlark_core::error::{api_error};
 
 /// 用户管理服务
 #[derive(Debug)]
@@ -98,10 +98,7 @@ impl GetUserBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/acs/v1/users",
-                &format!(
-                    "HTTP: {}",
-                    response.status()
-                ),
+                &format!("HTTP: {}", response.status()),
                 None,
             ))
         }
@@ -194,10 +191,7 @@ impl ListUsersBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/acs/v1/users",
-                &format!(
-                    "HTTP: {}",
-                    response.status()
-                ),
+                &format!("HTTP: {}", response.status()),
                 None,
             ))
         }
@@ -334,10 +328,7 @@ impl PatchUserBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/acs/v1/users",
-                &format!(
-                    "HTTP: {}",
-                    response.status()
-                ),
+                &format!("HTTP: {}", response.status()),
                 None,
             ))
         }
