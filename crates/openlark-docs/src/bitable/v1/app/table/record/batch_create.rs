@@ -4,7 +4,6 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -52,7 +51,7 @@ impl BatchCreateRecordRequest {
         self
     }
 
-    pub async fn execute(mut self) -> SDKResult<BatchCreateRecordResponse> {
+    pub async fn execute(self) -> SDKResult<BatchCreateRecordResponse> {
         let url = format!(
             "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_create",
             self.app_token, self.table_id
@@ -68,7 +67,9 @@ impl BatchCreateRecordRequest {
         let request_for_transport = api_request.body(body);
 
         let response = Transport::request(request_for_transport, &self.config, None).await?;
-        response.data.ok_or_else(|| openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据"))
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+        })
     }
 }
 

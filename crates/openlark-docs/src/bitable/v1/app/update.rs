@@ -9,7 +9,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use super::models::{UpdateAppRequest as UpdateAppRequestBody, App, AppSettings};
+use super::models::{App, AppSettings, UpdateAppRequest as UpdateAppRequestBody};
 use super::AppService;
 
 /// 更新多维表格请求
@@ -74,8 +74,16 @@ impl UpdateAppV1Request {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<UpdateAppV1Response> {
+        // 参数验证
+        if self.app_token.trim().is_empty() {
+            return Err(validation_error("app_token", "应用token不能为空"));
+        }
+
         // 构建完整的API URL
-        let api_url = format!("https://open.feishu.cn/open-apis/bitable/v1/apps/{}", self.app_token);
+        let api_url = format!(
+            "{}/open-apis/bitable/v1/apps/{}",
+            self.config.base_url, self.app_token
+        );
 
         // 设置API URL
         let mut api_request = self.api_request;
@@ -97,14 +105,15 @@ impl UpdateAppV1Request {
         api_request.body = Some(RequestData::Json(serde_json::to_value(&request_body)?));
 
         // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
-        let mut request_for_transport: ApiRequest<()> = ApiRequest::put(api_request.url.clone())
+        let request_for_transport: ApiRequest<()> = ApiRequest::put(api_request.url.clone())
             .body(api_request.body.unwrap_or(RequestData::Empty));
 
         let config = &self.config;
         let response = Transport::request(request_for_transport, config, None).await?;
 
         // 手动解析响应数据为App类型
-        let app_data: App = response.data
+        let app_data: App = response
+            .data
             .and_then(|data| serde_json::from_value(data).ok())
             .ok_or_else(|| validation_error("解析应用数据失败", "响应数据格式不正确"))?;
 

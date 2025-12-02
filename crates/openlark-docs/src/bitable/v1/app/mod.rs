@@ -9,8 +9,8 @@ pub mod copy;
 pub mod create;
 pub mod delete;
 pub mod get;
-pub mod update;
 pub mod models;
+pub mod update;
 
 // 子模块API
 pub mod dashboard;
@@ -21,12 +21,12 @@ pub mod workflow;
 // 导出所有API
 pub use copy::*;
 pub use create::*;
+pub use dashboard::*;
 pub use delete::*;
 pub use get::*;
-pub use update::*;
-pub use dashboard::*;
 pub use role::*;
 pub use table::*;
+pub use update::*;
 pub use workflow::*;
 
 /// 多维表格应用服务
@@ -62,7 +62,7 @@ impl AppService {
     }
 
     /// 获取工作流服务
-    pub fn workflow_service(&self) -> workflow::App_WorkflowService {
-        workflow::App_WorkflowService::new(self.config.clone())
+    pub fn workflow_service(&self) -> workflow::AppWorkflowService {
+        workflow::AppWorkflowService::new(self.config.clone())
     }
 }

@@ -9,7 +9,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use super::models::{CopyAppRequest as CopyAppRequestBody, App};
+use super::models::{App, CopyAppRequest as CopyAppRequestBody};
 use super::AppService;
 
 /// 复制多维表格请求
@@ -83,8 +83,24 @@ impl CopyAppV1Request {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<CopyAppV1Response> {
+        // 参数验证
+        if self.app_token.trim().is_empty() {
+            return Err(validation_error("app_token", "应用token不能为空"));
+        }
+
+        if self.name.trim().is_empty() {
+            return Err(validation_error("name", "新应用名称不能为空"));
+        }
+
+        if self.name.len() > 100 {
+            return Err(validation_error("name", "应用名称长度不能超过100个字符"));
+        }
+
         // 构建完整的API URL
-        let api_url = format!("https://open.feishu.cn/open-apis/bitable/v1/apps/{}/copy", self.app_token);
+        let api_url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/copy",
+            self.config.base_url, self.app_token
+        );
 
         // 设置API URL
         let mut api_request = self.api_request;
@@ -107,14 +123,15 @@ impl CopyAppV1Request {
         api_request.body = Some(RequestData::Json(serde_json::to_value(&request_body)?));
 
         // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
-        let mut request_for_transport: ApiRequest<()> = ApiRequest::post(api_request.url.clone())
+        let request_for_transport: ApiRequest<()> = ApiRequest::post(api_request.url.clone())
             .body(api_request.body.unwrap_or(RequestData::Empty));
 
         let config = &self.config;
         let response = Transport::request(request_for_transport, config, None).await?;
 
         // 手动解析响应数据为App类型
-        let app_data: App = response.data
+        let app_data: App = response
+            .data
             .and_then(|data| serde_json::from_value(data).ok())
             .ok_or_else(|| validation_error("解析应用数据失败", "响应数据格式不正确"))?;
 
@@ -181,7 +198,12 @@ impl AppService {
     }
 
     /// 创建复制多维表格请求
-    pub fn copy_app_v1(&self, app_token: String, name: String, folder_type: String) -> CopyAppV1Request {
+    pub fn copy_app_v1(
+        &self,
+        app_token: String,
+        name: String,
+        folder_type: String,
+    ) -> CopyAppV1Request {
         CopyAppV1Request::new(self.config.clone())
             .app_token(app_token)
             .name(name)

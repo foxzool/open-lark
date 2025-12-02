@@ -48,21 +48,25 @@ impl DeleteAppV1Request {
     /// 执行请求
     pub async fn execute(self) -> SDKResult<DeleteAppV1Response> {
         // 构建完整的API URL
-        let api_url = format!("https://open.feishu.cn/open-apis/bitable/v1/apps/{}", self.app_token);
+        let api_url = format!(
+            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}",
+            self.app_token
+        );
 
         // 设置API URL
         let mut api_request = self.api_request;
         api_request.url = api_url;
 
         // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
-        let mut request_for_transport: ApiRequest<()> = ApiRequest::delete(api_request.url.clone())
+        let request_for_transport: ApiRequest<()> = ApiRequest::delete(api_request.url.clone())
             .body(api_request.body.unwrap_or(RequestData::Empty));
 
         let config = &self.config;
         let response = Transport::request(request_for_transport, config, None).await?;
 
         // 解析响应
-        let data: bool = response.data
+        let data: bool = response
+            .data
             .and_then(|data| serde_json::from_value(data).ok())
             .ok_or_else(|| validation_error("解析失败", "数据格式不正确"))?;
 
