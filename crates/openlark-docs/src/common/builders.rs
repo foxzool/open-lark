@@ -172,17 +172,12 @@ mod tests {
 
     #[test]
     fn test_builder_macro() {
-        let config = Config::builder()
-            .app_id("test")
-            .app_secret("test")
-            
-            .unwrap();
+        let config = Config::builder().app_id("test").app_secret("test").unwrap();
 
         let request = TestRequest::builder(config)
             .app_token("test_token")
             .table_id("test_table")
-            .name("test_name")
-            ;
+            .name("test_name");
 
         assert_eq!(request.app_token, "test_token");
         assert_eq!(request.table_id, "test_table");

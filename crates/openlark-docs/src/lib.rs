@@ -38,8 +38,7 @@
 // #![deny(missing_docs)] // 暂时禁用，在开发阶段
 #![warn(clippy::all)]
 
-// Include macros first
-#[cfg(any(feature = "ccm", feature = "base"))]
+// Include macros first - 对所有功能都启用宏
 #[macro_use]
 mod macros;
 
