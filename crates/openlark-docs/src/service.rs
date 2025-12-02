@@ -167,8 +167,7 @@ mod tests {
     fn test_docs_service_creation() {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            ;
+            .app_secret("test_app_secret");
         let service = DocsService::new(config);
 
         assert_eq!(service.config().app_id, "test_app_id");
@@ -179,8 +178,7 @@ mod tests {
     fn test_docs_service_builder() {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            ;
+            .app_secret("test_app_secret");
         let service = DocsServiceBuilder::new().unwrap();
 
         assert_eq!(service.config().app_id, "test_app_id");
