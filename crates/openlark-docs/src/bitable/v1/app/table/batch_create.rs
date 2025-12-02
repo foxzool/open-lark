@@ -1,17 +1,16 @@
+//! Bitable V1 批量创建数据表API
 
 use openlark_core::{
-    api::{ApiRequest, RequestData, Response},
+    api::{ApiRequest, RequestData},
     config::Config,
-    error::validation_error,
+    error::{validation_error, SDKResult},
     http::Transport,
-    req_option::RequestOption,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
 // 导入通用批量操作模块
+use crate::common::batch::BatchOperationResult;
 use crate::common::types::{AppToken, TableId};
-use crate::common::batch::{BatchCommonParams, BatchCommonBody, BatchOperationResult};
 
 // 导入 TableData 类型
 use super::create::TableData;
@@ -19,83 +18,160 @@ use super::create::TableData;
 /// 批量新增数据表请求
 #[derive(Debug, Clone)]
 pub struct BatchCreateTableRequest {
-    api_request: ApiRequest<Self>,
-    /// 多维表格的 app_token
-    app_token: AppToken,
-    /// 通用批量操作参数
-    common_params: BatchCommonParams,
-    /// 要新增的数据表列表
-    tables: Vec<TableData>,
     /// 配置信息
     config: Config,
+    api_request: ApiRequest<BatchCreateTableResponse>,
+    /// 多维表格的 app_token
+    app_token: AppToken,
+    /// 用户 ID 类型
+    user_id_type: Option<String>,
+    /// 客户端令牌，用于幂等操作
+    client_token: Option<String>,
+    /// 要新增的数据表列表
+    tables: Vec<TableData>,
 }
 
 impl BatchCreateTableRequest {
+    /// 创建批量新增数据表请求
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::post(""),
             config,
+            api_request: ApiRequest::post(""),
             app_token: String::new(),
-            common_params: BatchCommonParams::new(),
+            user_id_type: None,
+            client_token: None,
             tables: Vec::new(),
         }
     }
 
-    /// 获取应用令牌
-    pub fn app_token(&self) -> &AppToken {
-        &self.app_token
-    }
-
-    /// 获取用户ID类型
-    pub fn user_id_type(&self) -> Option<&str> {
-        self.common_params.user_id_type.as_deref()
-    }
-
-    /// 获取客户端令牌
-    pub fn client_token(&self) -> Option<&str> {
-        self.common_params.client_token.as_deref()
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct BatchCreateTableRequestBuilder {
-    request: BatchCreateTableRequest,
-}
-
-impl BatchCreateTableRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: BatchCreateTableRequest {
-                api_request: ApiRequest::post("https://open.feishu.cn/open-apis/bitable/v1/placeholder"),
-                app_token: String::new(),
-                common_params: BatchCommonParams::new(),
-                tables: Vec::new(),
-                config,
-            },
-        }
-    }
-
-    /// 设置多维表格的 app_token
-    pub fn app_token(mut self, app_token: impl Into<AppToken>) -> Self {
-        self.request.app_token = app_token.into();
+    /// 设置应用token
+    pub fn app_token(mut self, app_token: String) -> Self {
+        self.app_token = app_token;
         self
     }
 
-    /// 设置用户 ID 类型
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
-        self.request.common_params = self.request.common_params.with_user_id_type(user_id_type);
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: String) -> Self {
+        self.user_id_type = Some(user_id_type);
         self
     }
 
     /// 设置客户端令牌，用于幂等操作
-    pub fn client_token(mut self, client_token: impl ToString) -> Self {
-        self.request.common_params = self.request.common_params.with_client_token(client_token);
+    pub fn client_token(mut self, client_token: String) -> Self {
+        self.client_token = Some(client_token);
         self
     }
 
     /// 设置要新增的数据表列表
     pub fn tables(mut self, tables: Vec<TableData>) -> Self {
-        self.request.tables = tables;
+        self.tables = tables;
+        self
+    }
+
+    /// 执行请求
+    pub async fn execute(self) -> SDKResult<BatchCreateTableResponse> {
+        // 参数验证
+        if self.app_token.trim().is_empty() {
+            return Err(validation_error("app_token", "应用token不能为空"));
+        }
+
+        if self.tables.is_empty() {
+            return Err(validation_error("tables", "数据表列表不能为空"));
+        }
+
+        if self.tables.len() > 50 {
+            return Err(validation_error("tables", "批量创建数据表数量不能超过50个"));
+        }
+
+        // 验证每个数据表
+        for (index, table) in self.tables.iter().enumerate() {
+            if table.name.trim().is_empty() {
+                return Err(validation_error(
+                    &format!("tables[{}].name", index),
+                    "数据表名称不能为空",
+                ));
+            }
+            if table.name.len() > 100 {
+                return Err(validation_error(
+                    &format!("tables[{}].name", index),
+                    "数据表名称长度不能超过100个字符",
+                ));
+            }
+        }
+
+        // 构建完整的API URL
+        let api_url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/tables:batch_create",
+            self.config.base_url, self.app_token
+        );
+
+        // 设置API URL
+        let mut api_request = self.api_request;
+        api_request.url = api_url;
+
+        // 构建请求体
+        let request_body = BatchCreateTableRequestBody {
+            tables: self.tables,
+            user_id_type: self.user_id_type,
+            client_token: self.client_token,
+        };
+
+        // 设置请求体
+        api_request.body = Some(RequestData::Json(serde_json::to_value(&request_body)?));
+
+        // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
+        let request_for_transport: ApiRequest<()> = ApiRequest::post(api_request.url.clone())
+            .body(api_request.body.unwrap_or(RequestData::Empty));
+
+        let response = Transport::request(request_for_transport, &self.config, None).await?;
+
+        // 解析响应数据
+        let response_data: BatchCreateTableResponse = response
+            .data
+            .and_then(|data| serde_json::from_value(data).ok())
+            .ok_or_else(|| validation_error("解析批量创建数据表响应失败", "响应数据格式不正确"))?;
+
+        Ok(BatchCreateTableResponse {
+            tables: response_data.tables,
+            success: response.raw_response.is_success(),
+        })
+    }
+}
+
+/// 批量新增数据表Builder
+pub struct BatchCreateTableRequestBuilder {
+    request: BatchCreateTableRequest,
+}
+
+impl BatchCreateTableRequestBuilder {
+    /// 创建Builder实例
+    pub fn new(config: Config) -> Self {
+        Self {
+            request: BatchCreateTableRequest::new(config),
+        }
+    }
+
+    /// 设置应用token
+    pub fn app_token(mut self, app_token: String) -> Self {
+        self.request = self.request.app_token(app_token);
+        self
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: String) -> Self {
+        self.request = self.request.user_id_type(user_id_type);
+        self
+    }
+
+    /// 设置客户端令牌，用于幂等操作
+    pub fn client_token(mut self, client_token: String) -> Self {
+        self.request = self.request.client_token(client_token);
+        self
+    }
+
+    /// 设置要新增的数据表列表
+    pub fn tables(mut self, tables: Vec<TableData>) -> Self {
+        self.request = self.request.tables(tables);
         self
     }
 
@@ -112,8 +188,9 @@ impl BatchCreateTableRequestBuilder {
 pub struct BatchCreateTableResponse {
     /// 新增的数据表列表
     pub tables: Vec<BatchCreateTableResult>,
+    /// 操作结果
+    pub success: bool,
 }
-
 
 /// 批量创建数据表的结果
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -167,45 +244,15 @@ impl BatchCreateTableResult {
     }
 }
 
-/// 批量新增数据表请求体
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BatchCreateTableRequestBody {
+/// 批量新增数据表请求体（内部使用）
+#[derive(Serialize)]
+struct BatchCreateTableRequestBody {
     /// 要新增的数据表列表
-    pub tables: Vec<TableData>,
+    tables: Vec<TableData>,
+    /// 用户 ID 类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    user_id_type: Option<String>,
+    /// 客户端令牌，用于幂等操作
+    #[serde(skip_serializing_if = "Option::is_none")]
+    client_token: Option<String>,
 }
-
-/// 批量新增数据表
-pub async fn batch_create_table(
-    request: BatchCreateTableRequest,
-    config: &Config,
-    _option: Option<RequestOption>,
-) -> SDKResult<Response<BatchCreateTableResponse>> {
-    // 构建完整的API URL
-    let api_url = format!("https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables:batch_create", request.app_token.as_str());
-
-    // 构建请求体
-    let body = BatchCreateTableRequestBody {
-        tables: request.tables,
-    };
-
-    // 创建API请求
-    let mut api_request: ApiRequest<()> = ApiRequest::post(api_url);
-    api_request.body = Some(RequestData::Json(serde_json::to_value(&body)?));
-
-    // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
-    let mut request_for_transport: ApiRequest<()> = ApiRequest::post(api_request.url.clone())
-        .body(api_request.body.unwrap_or(RequestData::Empty));
-
-    let response = Transport::request(request_for_transport, &request.config, None).await?;
-
-    // 解析响应
-    let data: BatchCreateTableResponse = response.data
-        .and_then(|data| serde_json::from_value(data).ok())
-        .ok_or_else(|| validation_error("解析失败", "数据格式不正确"))?;
-
-    Ok(Response {
-        data: Some(data),
-        raw_response: response.raw_response,
-    })
-}
-

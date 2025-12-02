@@ -1,7 +1,7 @@
 //! 更新表单问题模块
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat, Response, RequestData, HttpMethod},
+    api::{ApiRequest, ApiResponseTrait, HttpMethod, RequestData, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
@@ -80,7 +80,7 @@ impl PatchFormQuestionRequest {
         self
     }
 
-    pub async fn execute(mut self) -> SDKResult<PatchFormQuestionResponse> {
+    pub async fn execute(self) -> SDKResult<PatchFormQuestionResponse> {
         let url = format!(
             "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/questions/{}",
             self.app_token, self.table_id, self.form_id, self.question_id
@@ -104,7 +104,9 @@ impl PatchFormQuestionRequest {
         };
 
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据"))
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+        })
     }
 }
 

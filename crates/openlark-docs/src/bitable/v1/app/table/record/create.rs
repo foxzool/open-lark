@@ -1,132 +1,213 @@
+//! Bitable V1 创建记录API
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat, HttpMethod, RequestData},
+    api::{ApiRequest, RequestData},
     config::Config,
+    error::{validation_error, SDKResult},
     http::Transport,
-    req_option::RequestOption,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-use super::batch_create::Record;
-/// 新增记录请求
+use serde_json::Value;
+
+/// 创建记录请求
 #[derive(Debug, Clone)]
 pub struct CreateRecordRequest {
+    /// 配置信息
+    config: Config,
     api_request: ApiRequest<CreateRecordResponse>,
-    /// 多维表格的唯一标识符
+    /// 多维表格的 app_token
     app_token: String,
-    /// 多维表格数据表的唯一标识符
+    /// 数据表的 table_id
     table_id: String,
     /// 用户 ID 类型
     user_id_type: Option<String>,
-    /// 格式为标准的 uuidv4，操作的唯一标识，用于幂等的进行更新操作
+    /// 操作的唯一标识，用于幂等的操作
     client_token: Option<String>,
-    /// 要新增的记录的数据
-    fields: Record,
+    /// 记录数据
+    fields: Value,
 }
-impl Default for CreateRecordRequest {
-    fn default() -> Self {
+
+impl CreateRecordRequest {
+    /// 创建记录请求
+    pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::post("https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/records"),
+            config,
+            api_request: ApiRequest::post(""),
             app_token: String::new(),
             table_id: String::new(),
             user_id_type: None,
             client_token: None,
-            fields: Record::default(),
+            fields: Value::Object(Default::default()),
         }
     }
-}
 
-impl CreateRecordRequest {
-    pub fn new(config: Config) -> Self {
-        Self::default()
+    /// 设置应用token
+    pub fn app_token(mut self, app_token: String) -> Self {
+        self.app_token = app_token;
+        self
     }
 
-    pub fn builder() -> CreateRecordRequestBuilder {
-        CreateRecordRequestBuilder::default()
+    /// 设置数据表ID
+    pub fn table_id(mut self, table_id: String) -> Self {
+        self.table_id = table_id;
+        self
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: String) -> Self {
+        self.user_id_type = Some(user_id_type);
+        self
+    }
+
+    /// 设置客户端令牌
+    pub fn client_token(mut self, client_token: String) -> Self {
+        self.client_token = Some(client_token);
+        self
+    }
+
+    /// 设置记录数据
+    pub fn fields(mut self, fields: Value) -> Self {
+        self.fields = fields;
+        self
+    }
+
+    /// 执行请求
+    pub async fn execute(self) -> SDKResult<CreateRecordResponse> {
+        // 参数验证
+        if self.app_token.trim().is_empty() {
+            return Err(validation_error("app_token", "应用token不能为空"));
+        }
+
+        if self.table_id.trim().is_empty() {
+            return Err(validation_error("table_id", "数据表ID不能为空"));
+        }
+
+        // 构建完整的API URL
+        let api_url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/tables/{}/records",
+            self.config.base_url, self.app_token, self.table_id
+        );
+
+        // 设置API URL
+        let mut api_request = self.api_request;
+        api_request.url = api_url;
+
+        // 构建查询参数
+        let mut query_params = Vec::new();
+
+        if let Some(ref user_id_type) = self.user_id_type {
+            query_params.push(format!("user_id_type={}", user_id_type));
+        }
+
+        if let Some(ref client_token) = self.client_token {
+            query_params.push(format!("client_token={}", client_token));
+        }
+
+        // 添加查询参数到URL
+        if !query_params.is_empty() {
+            api_request.url = format!("{}?{}", api_request.url, query_params.join("&"));
+        }
+
+        // 构建请求体
+        let request_body = CreateRecordRequestBody {
+            fields: self.fields,
+        };
+
+        // 设置请求体
+        api_request.body = Some(RequestData::Json(serde_json::to_value(&request_body)?));
+
+        // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
+        let request_for_transport: ApiRequest<()> = ApiRequest::post(api_request.url.clone())
+            .body(api_request.body.unwrap_or(RequestData::Empty));
+
+        let response = Transport::request(request_for_transport, &self.config, None).await?;
+
+        // 解析响应数据
+        let record_data: Record = response
+            .data
+            .and_then(|data| serde_json::from_value(data).ok())
+            .ok_or_else(|| validation_error("解析创建记录响应失败", "响应数据格式不正确"))?;
+
+        Ok(CreateRecordResponse {
+            record: record_data,
+            success: response.raw_response.is_success(),
+        })
     }
 }
 
-#[derive(Default)]
+/// 创建记录Builder
 pub struct CreateRecordRequestBuilder {
     request: CreateRecordRequest,
 }
 
 impl CreateRecordRequestBuilder {
-    pub fn new() -> Self {
-        Self::default()
+    /// 创建Builder实例
+    pub fn new(config: Config) -> Self {
+        Self {
+            request: CreateRecordRequest::new(config),
+        }
     }
 
-    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
-        self.request.app_token = app_token.into();
+    /// 设置应用token
+    pub fn app_token(mut self, app_token: String) -> Self {
+        self.request = self.request.app_token(app_token);
         self
     }
 
-    pub fn table_id(mut self, table_id: impl Into<String>) -> Self {
-        self.request.table_id = table_id.into();
+    /// 设置数据表ID
+    pub fn table_id(mut self, table_id: String) -> Self {
+        self.request = self.request.table_id(table_id);
         self
     }
 
-    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
-        self.request.user_id_type = Some(user_id_type.into());
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: String) -> Self {
+        self.request = self.request.user_id_type(user_id_type);
         self
     }
 
-    pub fn client_token(mut self, client_token: impl Into<String>) -> Self {
-        self.request.client_token = Some(client_token.into());
+    /// 设置客户端令牌
+    pub fn client_token(mut self, client_token: String) -> Self {
+        self.request = self.request.client_token(client_token);
         self
     }
 
-    pub fn fields(mut self, fields: Record) -> Self {
-        self.request.fields = fields;
+    /// 设置记录数据
+    pub fn fields(mut self, fields: Value) -> Self {
+        self.request = self.request.fields(fields);
         self
     }
 
+    /// 构建请求
     pub fn build(self) -> CreateRecordRequest {
         self.request
     }
 }
-/// 新增记录响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
+
+/// 记录信息
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct Record {
+    /// 记录ID
+    pub record_id: String,
+    /// 字段数据
+    pub fields: Value,
+    /// 创建时间
+    pub created_time: String,
+    /// 最后更新时间
+    pub last_modified_time: String,
+}
+
+/// 创建记录请求体（内部使用）
+#[derive(Serialize)]
+struct CreateRecordRequestBody {
+    fields: Value,
+}
+
+/// 创建记录响应
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateRecordResponse {
-    /// 新增的记录
+    /// 记录信息
     pub record: Record,
+    /// 操作结果
+    pub success: bool,
 }
-
-impl ApiResponseTrait for CreateRecordResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 新增记录
-///
-/// # API文档
-/// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/bitable/v1/apps/:app_token/tables/:table_id/records/create
-pub async fn create_record(
-    request: CreateRecordRequest,
-    config: &Config,
-    option: Option<RequestOption>,
-) -> SDKResult<CreateRecordResponse> {
-    let url = format!(
-        "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/records",
-        &request.app_token, &request.table_id
-    );
-    let mut api_req = ApiRequest::<()>::post(&url);
-
-    // 设置查询参数
-    if let Some(user_id_type) = &request.user_id_type {
-        api_req = api_req.query("user_id_type", user_id_type);
-    }
-
-    if let Some(client_token) = &request.client_token {
-        api_req = api_req.query("client_token", client_token);
-    }
-
-    // 设置请求体
-    api_req = api_req.body(RequestData::Json(serde_json::to_value(&request.fields).unwrap()));
-
-    let api_resp = Transport::request(api_req, config, option).await?;
-    api_resp.data.ok_or_else(|| openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据"))
-}
-

@@ -1,18 +1,15 @@
-
-use serde_json::Value;
-use reqwest::Method;
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat, HttpMethod, Response},
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
-
+    error::SDKResult,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
 /// 列出表单字段问题请求
-#[derive(Debug, Clone)]pub struct ListFormFieldQuestionRequest {
+#[derive(Debug, Clone)]
+pub struct ListFormFieldQuestionRequest {
     api_request: ApiRequest<Self>,
     /// 多维表格的唯一标识符
     app_token: String,
@@ -27,7 +24,9 @@ use serde::{Deserialize, Serialize};
 impl Default for ListFormFieldQuestionRequest {
     fn default() -> Self {
         Self {
-            api_request: ApiRequest::get("https://open.feishu.cn/open-apis/bitable/v1/apps/{}/forms/{}/fields"),
+            api_request: ApiRequest::get(
+                "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/forms/{}/fields",
+            ),
             app_token: String::new(),
             form_id: String::new(),
             page_token: None,
@@ -37,7 +36,7 @@ impl Default for ListFormFieldQuestionRequest {
 }
 
 impl ListFormFieldQuestionRequest {
-    pub fn new(config: Config) -> Self {
+    pub fn new(_config: Config) -> Self {
         Self::default()
     }
 }
@@ -139,7 +138,7 @@ pub async fn list_form_field_questions(
     config: &Config,
     option: Option<RequestOption>,
 ) -> SDKResult<Response<ListFormFieldQuestionResponse>> {
-    let mut api_req = request.api_request;
+    let _api_req = request.api_request;
     let url = format!(
         "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/forms/{}/fields",
         &request.app_token, &request.form_id
@@ -150,4 +149,3 @@ pub async fn list_form_field_questions(
     let api_resp = Transport::request(api_req, config, option).await?;
     Ok(api_resp)
 }
-

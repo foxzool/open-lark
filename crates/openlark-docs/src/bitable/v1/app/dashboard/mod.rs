@@ -143,4 +143,3 @@ impl openlark_core::trait_system::Service for AppDashboardService {
         "AppDashboardService"
     }
 }
-

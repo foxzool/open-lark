@@ -1,29 +1,13 @@
-//! App_Table_Field服务模块 - 简化实现
+//! Bitable V1 字段管理API模块
 
-use serde::{Deserialize, Serialize};
-use openlark_core::config::Config;
-use openlark_core::api::{ApiResponseTrait, ResponseFormat};
-/// 简化的服务结构体
-pub struct SimpleService {
-}
+pub mod create;
+pub mod delete;
+pub mod list;
+pub mod update;
 
-impl SimpleService {
-}
-#[derive(Debug, Deserialize, Serialize)]
-pub struct SimpleResponse;
-impl ApiResponseTrait for SimpleResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// App_Table_Field服务
-pub struct App_Table_FieldService {
-}
-
-impl App_Table_FieldService {
-}
-
-// Type alias for compatibility
-pub type ServiceType = App_Table_FieldService;
-pub type ResponseType = SimpleResponse;
+// Re-export common types for convenience
+pub use create::CreateFieldRequest;
+pub use create::{Field, FieldProperty, FieldType};
+pub use delete::DeleteFieldRequest;
+pub use list::ListFieldRequest;
+pub use update::UpdateFieldRequest;

@@ -1,7 +1,7 @@
 //! 获取表单问题列表模块
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat, responses::Response},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
@@ -25,7 +25,9 @@ impl Default for ListFormQuestionRequest {
     fn default() -> Self {
         Self {
             config: Config::default(),
-            api_request: ApiRequest::get("/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/questions".to_string()),
+            api_request: ApiRequest::get(
+                "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/questions".to_string(),
+            ),
             app_token: String::new(),
             table_id: String::new(),
             form_id: String::new(),
@@ -39,7 +41,9 @@ impl ListFormQuestionRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            api_request: ApiRequest::get("/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/questions".to_string()),
+            api_request: ApiRequest::get(
+                "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/questions".to_string(),
+            ),
             app_token: String::new(),
             table_id: String::new(),
             form_id: String::new(),
@@ -73,7 +77,7 @@ impl ListFormQuestionRequest {
         self
     }
 
-    pub async fn execute(mut self) -> SDKResult<ListFormQuestionResponse> {
+    pub async fn execute(self) -> SDKResult<ListFormQuestionResponse> {
         let url = format!(
             "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/questions",
             self.app_token, self.table_id, self.form_id
@@ -83,7 +87,9 @@ impl ListFormQuestionRequest {
         let api_request = ApiRequest::<()>::get(&url);
 
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据"))
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+        })
     }
 }
 
