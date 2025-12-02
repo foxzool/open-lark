@@ -1,18 +1,16 @@
-
-use serde_json::Value;
-use reqwest::Method;
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, BaseResponse, ResponseFormat, HttpMethod, Response},
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
-
     http::Transport,
     req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 
 /// 更新表单字段问题请求
-#[derive(Debug, Clone)]pub struct UpdateFormFieldQuestionRequest {
+#[derive(Debug, Clone)]
+pub struct UpdateFormFieldQuestionRequest {
     api_request: ApiRequest<Self>,
     /// 多维表格的唯一标识符
     app_token: String,
@@ -35,7 +33,9 @@ use serde::{Deserialize, Serialize};
 impl Default for UpdateFormFieldQuestionRequest {
     fn default() -> Self {
         Self {
-            api_request: ApiRequest::put("https://open.feishu.cn/open-apis/bitable/v1/apps/{}/forms/{}/fields/{}"),
+            api_request: ApiRequest::put(
+                "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/forms/{}/fields/{}",
+            ),
             app_token: String::new(),
             form_id: String::new(),
             question_id: String::new(),
@@ -49,7 +49,7 @@ impl Default for UpdateFormFieldQuestionRequest {
 }
 
 impl UpdateFormFieldQuestionRequest {
-    pub fn new(config: Config) -> Self {
+    pub fn new(_config: Config) -> Self {
         Self::default()
     }
 }
@@ -177,4 +177,3 @@ pub async fn update_form_field_question(
     let api_resp = Transport::request(api_req, config, option).await?;
     Ok(api_resp)
 }
-

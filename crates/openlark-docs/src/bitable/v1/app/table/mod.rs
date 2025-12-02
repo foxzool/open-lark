@@ -3,7 +3,6 @@
 //! 提供多维表格数据表的创建、删除、查询等基础操作功能。
 
 use openlark_core::config::Config;
-use serde::{Deserialize, Serialize};
 
 // 导入所有子模块
 pub mod batch_create;
@@ -52,7 +51,7 @@ impl TableService {
 
     /// 创建批量删除数据表请求构建器
     pub fn batch_delete(&self) -> BatchDeleteTableRequestBuilder {
-        BatchDeleteTableRequestBuilder::new()
+        BatchDeleteTableRequestBuilder::new(self.config.clone())
     }
 }
 

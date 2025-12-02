@@ -1,14 +1,12 @@
 //! App_Workflow服务模块 - 简化实现
 
-use serde::{Deserialize, Serialize};
-use openlark_core::config::Config;
 use openlark_core::api::{ApiResponseTrait, ResponseFormat};
+use openlark_core::config::Config;
+use serde::{Deserialize, Serialize};
 /// 简化的服务结构体
-pub struct SimpleService {
-}
+pub struct SimpleService {}
 
-impl SimpleService {
-}
+impl SimpleService {}
 #[derive(Debug, Deserialize, Serialize)]
 pub struct SimpleResponse;
 impl ApiResponseTrait for SimpleResponse {
@@ -18,15 +16,14 @@ impl ApiResponseTrait for SimpleResponse {
 }
 
 /// App_Workflow服务
-pub struct App_WorkflowService {
-}
+pub struct AppWorkflowService {}
 
-impl App_WorkflowService {
-    pub fn new(config: Config) -> Self {
+impl AppWorkflowService {
+    pub fn new(_config: Config) -> Self {
         Self {}
     }
 }
 
 // Type alias for compatibility
-pub type ServiceType = App_WorkflowService;
+pub type ServiceType = AppWorkflowService;
 pub type ResponseType = SimpleResponse;

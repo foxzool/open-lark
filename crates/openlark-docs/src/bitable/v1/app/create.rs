@@ -3,13 +3,12 @@
 use openlark_core::{
     api::{ApiRequest, RequestData},
     config::Config,
-    error::validation_error,
+    error::{validation_error, SDKResult},
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use super::models::{CreateAppRequest as CreateAppRequestBody, App};
+use super::models::{App, CreateAppRequest as CreateAppRequestBody};
 use super::AppService;
 
 /// 创建多维表格请求
@@ -65,12 +64,17 @@ impl CreateAppV1Request {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<CreateAppV1Response> {
-        // 构建完整的API URL
-        let api_url = "https://open.feishu.cn/open-apis/bitable/v1/apps";
+        // 参数验证
+        if self.name.trim().is_empty() {
+            return Err(validation_error("name", "应用名称不能为空"));
+        }
 
-        // 设置API URL
-        let mut api_request = self.api_request;
-        api_request.url = api_url.to_string();
+        if self.name.len() > 100 {
+            return Err(validation_error("name", "应用名称长度不能超过100个字符"));
+        }
+
+        // 构建完整的API URL
+        let api_url = format!("{}/open-apis/bitable/v1/apps", self.config.base_url);
 
         // 构建请求体
         let request_body = CreateAppRequestBody {
@@ -85,18 +89,21 @@ impl CreateAppV1Request {
             return Err(validation_error("创建应用请求验证失败", e.to_string()));
         }
 
-        // 设置请求体
+        // 设置API URL和请求体
+        let mut api_request = self.api_request;
+        api_request.url = api_url;
         api_request.body = Some(RequestData::Json(serde_json::to_value(&request_body)?));
 
-        // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
-        let mut request_for_transport: ApiRequest<()> = ApiRequest::post(api_request.url.clone())
+        // 转换为ApiRequest<()>以匹配Transport::request签名
+        let request_for_transport: ApiRequest<()> = ApiRequest::post(api_request.url.clone())
             .body(api_request.body.unwrap_or(RequestData::Empty));
 
-        let config = &self.config;
-        let response = Transport::request(request_for_transport, config, None).await?;
+        // 发送请求
+        let response = Transport::request(request_for_transport, &self.config, None).await?;
 
-        // 手动解析响应数据为App类型
-        let app_data: App = response.data
+        // 解析响应数据为App类型
+        let app_data: App = response
+            .data
             .and_then(|data| serde_json::from_value(data).ok())
             .ok_or_else(|| validation_error("解析应用数据失败", "响应数据格式不正确"))?;
 
@@ -151,7 +158,12 @@ impl AppService {
     }
 
     /// 创建新增多维表格请求
-    pub fn create_app_v1(&self, name: String, folder_token: Option<String>, time_zone: Option<String>) -> CreateAppV1Request {
+    pub fn create_app_v1(
+        &self,
+        name: String,
+        folder_token: Option<String>,
+        time_zone: Option<String>,
+    ) -> CreateAppV1Request {
         let mut request = CreateAppV1Request::new(self.config.clone()).name(name);
 
         if let Some(folder_token) = folder_token {

@@ -1,11 +1,17 @@
-
 pub mod list;
 pub mod update;
 
 use openlark_core::config::Config;
 
-pub use list::*;
-pub use update::*;
+// 明确导出以避免模糊重导出
+pub use list::{
+    list_form_field_questions, FormFieldQuestion, ListFormFieldQuestionRequest,
+    ListFormFieldQuestionRequestBuilder, ListFormFieldQuestionResponse,
+};
+pub use update::{
+    update_form_field_question, UpdateFormFieldQuestionRequest,
+    UpdateFormFieldQuestionRequestBuilder, UpdateFormFieldQuestionResponse,
+};
 
 /// 表单字段服务
 pub struct FormFieldService {
@@ -31,7 +37,8 @@ impl FormFieldService {
         &self,
         request: UpdateFormFieldQuestionRequest,
         option: Option<openlark_core::req_option::RequestOption>,
-    ) -> openlark_core::SDKResult<openlark_core::api::Response<UpdateFormFieldQuestionResponse>> {
+    ) -> openlark_core::SDKResult<openlark_core::api::Response<UpdateFormFieldQuestionResponse>>
+    {
         update::update_form_field_question(request, &self.config, option).await
     }
 }

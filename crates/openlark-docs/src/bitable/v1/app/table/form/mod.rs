@@ -1,15 +1,14 @@
-
+pub mod field;
 pub mod get;
 pub mod list;
 pub mod patch;
-pub mod field;
 
 use openlark_core::config::Config;
 
+pub use field::*;
 pub use get::*;
 pub use list::*;
 pub use patch::*;
-pub use field::*;
 
 /// 表单服务
 pub struct FormService {
@@ -22,12 +21,8 @@ impl FormService {
     }
 
     /// 获取表单元数据
-    pub async fn get(
-        &self,
-        request: GetFormRequest,
-        option: Option<openlark_core::req_option::RequestOption>,
-    ) -> openlark_core::SDKResult<openlark_core::api::Response<GetFormResponse>> {
-        get::get_form(request, &self.config, option).await
+    pub async fn get(&self, request: GetFormRequest) -> openlark_core::SDKResult<GetFormResponse> {
+        request.execute().await
     }
 
     /// 列出表单问题

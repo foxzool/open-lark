@@ -1,51 +1,49 @@
-//! Bitable V1 批量新增协作者API
+//! Bitable V1 批量创建角色成员API
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait},
+    api::{ApiRequest, RequestData},
     config::Config,
+    error::{SDKResult, validation_error},
     http::Transport,
-    req_option::RequestOption,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use super::models::{BatchCreateRoleMemberRequest, BatchCreateRoleMemberResponse};
-use super::RoleMemberService;
+use super::models::{BatchCreateRoleMemberRequest as ModelBatchCreateRequest, BatchCreateRoleMemberResponse as ModelBatchCreateResponse, BatchCreateMemberItem as ModelBatchCreateMemberItem};
 
-/// 批量新增协作者请求
-pub struct BatchCreateRoleMemberV1Request {
-    api_request: ApiRequest<BatchCreateRoleMemberV1Response>,
+/// 批量创建角色成员请求
+#[derive(Debug, Clone)]
+pub struct BatchCreateRoleMemberRequest {
+    /// 配置信息
+    config: Config,
+    api_request: ApiRequest<BatchCreateRoleMemberResponse>,
+    /// 多维表格的 app_token
     app_token: String,
+    /// 角色的ID
     role_id: String,
     /// 用户 ID 类型
     user_id_type: Option<String>,
-    /// 协作者列表
+    /// 成员列表
     member_list: Vec<BatchCreateMemberItem>,
 }
 
-/// 批量新增协作者项
+/// 批量创建成员项
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BatchCreateMemberItem {
     /// 用户ID列表
     pub user_ids: Vec<String>,
-    /// 协作者类型
+    /// 成员类型
     pub member_type: String,
+    /// 权限列表
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions: Option<Vec<String>>,
 }
 
-/// 批量新增协作者响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct BatchCreateRoleMemberV1Response {
-    /// 批量操作结果
-    pub data: BatchCreateRoleMemberResponse,
-    pub success: bool,
-}
-
-impl BatchCreateRoleMemberV1Request {
-    /// 创建批量新增协作者请求
+impl BatchCreateRoleMemberRequest {
+    /// 创建批量创建角色成员请求
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::post("/open-apis/bitable/v1/apps/{}/roles/{}/members/batch_create")
-                
-                ,
+            config,
+            api_request: ApiRequest::post("").header("Content-Type", "application/json"),
             app_token: String::new(),
             role_id: String::new(),
             user_id_type: None,
@@ -71,62 +69,107 @@ impl BatchCreateRoleMemberV1Request {
         self
     }
 
-    /// 设置协作者列表
+    /// 设置成员列表
     pub fn member_list(mut self, member_list: Vec<BatchCreateMemberItem>) -> Self {
         self.member_list = member_list;
         self
     }
 
-    /// 添加协作者
+    /// 添加成员
     pub fn add_member(mut self, user_ids: Vec<String>, member_type: String) -> Self {
         self.member_list.push(BatchCreateMemberItem {
             user_ids,
             member_type,
+            permissions: None,
+        });
+        self
+    }
+
+    /// 添加成员（带权限）
+    pub fn add_member_with_permissions(mut self, user_ids: Vec<String>, member_type: String, permissions: Vec<String>) -> Self {
+        self.member_list.push(BatchCreateMemberItem {
+            user_ids,
+            member_type,
+            permissions: Some(permissions),
         });
         self
     }
 
     /// 执行请求
-    pub async fn execute(self) -> SDKResult<BatchCreateRoleMemberV1Response> {
-        // 构建API路径
-        let path = format!(
-            "/open-apis/bitable/v1/apps/{}/roles/{}/members/batch_create",
-            self.app_token, self.role_id
-        );
-
-        // 更新API路径
-        let mut api_request = self.api_request.api_path(path);
-
-        // 构建请求体
-        let request_body = BatchCreateRoleMemberRequest {
-            member_list: self.member_list.clone(),
-        };
-
-        // 设置查询参数
-        if let Some(user_id_type) = self.user_id_type {
-            api_request = api_request.query_param("user_id_type", user_id_type);
+    pub async fn execute(self) -> SDKResult<BatchCreateRoleMemberResponse> {
+        // 参数验证
+        if self.app_token.trim().is_empty() {
+            return Err(validation_error("app_token", "应用token不能为空"));
         }
 
-        // 设置请求体
+        if self.role_id.trim().is_empty() {
+            return Err(validation_error("role_id", "角色ID不能为空"));
+        }
+
+        if self.member_list.is_empty() {
+            return Err(validation_error("member_list", "成员列表不能为空"));
+        }
+
+        // 验证每个成员项
+        for (index, member) in self.member_list.iter().enumerate() {
+            if member.user_ids.is_empty() {
+                return Err(validation_error("member_list", &format!("第{}个成员的用户ID列表不能为空", index + 1)));
+            }
+            if member.member_type.trim().is_empty() {
+                return Err(validation_error("member_list", &format!("第{}个成员的类型不能为空", index + 1)));
+            }
+        }
+
+        // 构建完整的API URL
+        let api_url = format!("{}/open-apis/bitable/v1/apps/{}/roles/{}/members/batch_create",
+                             self.config.base_url, self.app_token, self.role_id);
+
+        // 构建请求体
+        let request_body = ModelBatchCreateRequest {
+            member_list: self.member_list.iter().map(|item| ModelBatchCreateMemberItem {
+                user_ids: item.user_ids.clone(),
+                member_type: item.member_type.clone(),
+                permissions: item.permissions.clone(),
+            }).collect(),
+        };
+
+        // 设置API URL和请求体
+        let mut api_request = self.api_request;
+        api_request = api_request.api_path(api_url);
+
+        // 设置查询参数
+        if let Some(user_id_type) = &self.user_id_type {
+            api_request = api_request.query("user_id_type", user_id_type);
+        }
+
         api_request = api_request.body(serde_json::to_vec(&request_body)?);
 
         // 发送请求
-        let config = api_request.config();
-        let response = Transport::request(api_request, &config, None).await?;
-        Ok(response)
+        let response: ModelBatchCreateResponse =
+            Transport::request(api_request, &self.config, None).await?;
+
+        // 转换为标准响应格式
+        let standard_response = BatchCreateRoleMemberResponse {
+            results: response.results,
+            has_more: response.has_more,
+            page_token: response.page_token,
+            success: true,
+        };
+
+        Ok(standard_response)
     }
 }
 
-/// 批量新增协作者Builder
-pub struct BatchCreateRoleMemberV1Builder {
-    request: BatchCreateRoleMemberV1Request,
+/// 批量创建角色成员Builder
+pub struct BatchCreateRoleMemberRequestBuilder {
+    request: BatchCreateRoleMemberRequest,
 }
 
-impl BatchCreateRoleMemberV1Builder {
+impl BatchCreateRoleMemberRequestBuilder {
     /// 创建Builder实例
     pub fn new(config: Config) -> Self {
         Self {
-            request: BatchCreateRoleMemberV1Request::new(config),
+            request: BatchCreateRoleMemberRequest::new(config),
         }
     }
 
@@ -148,46 +191,85 @@ impl BatchCreateRoleMemberV1Builder {
         self
     }
 
-    /// 设置协作者列表
+    /// 设置成员列表
     pub fn member_list(mut self, member_list: Vec<BatchCreateMemberItem>) -> Self {
         self.request = self.request.member_list(member_list);
         self
     }
 
-    /// 添加协作者
+    /// 添加成员
     pub fn add_member(mut self, user_ids: Vec<String>, member_type: String) -> Self {
         self.request = self.request.add_member(user_ids, member_type);
         self
     }
 
+    /// 添加成员（带权限）
+    pub fn add_member_with_permissions(mut self, user_ids: Vec<String>, member_type: String, permissions: Vec<String>) -> Self {
+        self.request = self.request.add_member_with_permissions(user_ids, member_type, permissions);
+        self
+    }
+
     /// 构建请求
-    pub fn build(self) -> BatchCreateRoleMemberV1Request {
+    pub fn build(self) -> BatchCreateRoleMemberRequest {
         self.request
     }
 }
 
-impl RoleMemberService {
-    /// 创建批量新增协作者请求构建器
-    pub fn batch_create_role_member_v1_builder(&self) -> BatchCreateRoleMemberV1Builder {
-        BatchCreateRoleMemberV1Builder::new(self.config.clone())
-    }
+/// 角色成员信息
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct RoleMemberInfo {
+    /// 成员ID
+    pub member_id: String,
+    /// 成员类型
+    pub member_type: String,
+    /// 用户ID
+    pub user_id: String,
+    /// 成员姓名
+    pub name: String,
+    /// 成员邮箱
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email: Option<String>,
+    /// 成员头像
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub avatar: Option<String>,
+    /// 权限列表
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions: Option<Vec<String>>,
+    /// 是否为管理员
+    pub is_admin: bool,
+    /// 创建时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<i64>,
+    /// 更新时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_time: Option<i64>,
+}
 
-    /// 创建批量新增协作者请求
-    pub fn batch_create_role_member_v1(
-        &self,
-        app_token: String,
-        role_id: String,
-        user_id_type: Option<String>,
-        member_list: Vec<BatchCreateMemberItem>,
-    ) -> BatchCreateRoleMemberV1Request {
-        let mut request = BatchCreateRoleMemberV1Request::new(self.config.clone())
-            .app_token(app_token)
-            .role_id(role_id);
+/// 批量创建结果项
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct BatchCreateResultItem {
+    /// 用户ID
+    pub user_id: String,
+    /// 操作结果
+    pub success: bool,
+    /// 错误信息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error: Option<String>,
+    /// 成员信息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member: Option<RoleMemberInfo>,
+}
 
-        if let Some(user_id_type) = user_id_type {
-            request = request.user_id_type(user_id_type);
-        }
-
-        request.member_list(member_list)
-    }
+/// 批量创建角色成员响应
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct BatchCreateRoleMemberResponse {
+    /// 批量操作结果
+    pub results: Vec<BatchCreateResultItem>,
+    /// 是否有更多数据
+    pub has_more: bool,
+    /// 页面 token
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// 操作结果
+    pub success: bool,
 }
