@@ -257,66 +257,12 @@ name = "authentication"
 path = "examples/01_getting_started/authentication.rs"
 # 认证服务现在默认启用，无需功能标志
 
-# 第一个API调用
-[[example]]
-name = "first_api_call"
-path = "examples/01_getting_started/first_api_call.rs"
-required-features = ["communication"]
-
-# 错误处理和最佳实践
-[[example]]
-name = "error_handling"
-path = "examples/01_getting_started/error_handling.rs"
-required-features = ["communication"]
-
 # === 02_核心功能 (Core Features) ===
 # 通讯服务示例
 [[example]]
 name = "send_message"
 path = "examples/02_core_features/communication/send_message.rs"
 required-features = ["communication"]
-
-[[example]]
-name = "user_management"
-path = "examples/02_core_features/communication/user_management.rs"
-required-features = ["communication"]
-
-[[example]]
-name = "group_operations"
-path = "examples/02_core_features/communication/group_operations.rs"
-required-features = ["communication"]
-
-# 文档服务示例
-[[example]]
-name = "document_create"
-path = "examples/02_core_features/docs/document_create.rs"
-required-features = ["docs"]
-
-[[example]]
-name = "bitable_basic"
-path = "examples/02_core_features/docs/bitable_basic.rs"
-required-features = ["docs"]
-
-[[example]]
-name = "wiki_management"
-path = "examples/02_core_features/docs/wiki_management.rs"
-required-features = ["docs"]
-
-# 安全服务示例
-[[example]]
-name = "auth_setup"
-path = "examples/02_core_features/security/auth_setup.rs"
-required-features = ["security"]
-
-[[example]]
-name = "permission_check"
-path = "examples/02_core_features/security/permission_check.rs"
-required-features = ["security"]
-
-[[example]]
-name = "token_manager"
-path = "examples/02_core_features/security/token_manager.rs"
-required-features = ["security"]
 
 [features]
 default = ["core-services"]
