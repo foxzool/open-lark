@@ -9,8 +9,8 @@ use openlark_core::config::Config;
 
 pub mod create;
 pub mod list;
-pub mod update;
 pub mod models;
+pub mod update;
 
 pub use create::*;
 pub use list::*;

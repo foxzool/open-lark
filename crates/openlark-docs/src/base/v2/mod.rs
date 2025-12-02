@@ -4,11 +4,11 @@
 
 use openlark_core::config::Config;
 
-pub mod models;
 pub mod app;
+pub mod models;
 
-pub use models::*;
 pub use app::*;
+pub use models::*;
 
 /// Base V2 服务
 pub struct BaseV2Service {

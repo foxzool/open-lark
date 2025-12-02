@@ -4,13 +4,12 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    req_option::RequestOption,
-    SDKResult,
     prelude::validation_error,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use super::models::{UpdateRoleRequest, RoleResponse};
+use super::models::UpdateRoleRequest;
 use super::RoleService;
 
 // 类型别名，用于兼容
@@ -100,7 +99,10 @@ impl UpdateRoleV2Request {
     /// 执行请求
     pub async fn execute(self) -> SDKResult<UpdateRoleV2Response> {
         // 构建API路径
-        let path = format!("/open-apis/base/v2/apps/{}/roles/{}", self.app_token, self.role_id);
+        let path = format!(
+            "/open-apis/base/v2/apps/{}/roles/{}",
+            self.app_token, self.role_id
+        );
 
         // 构建请求体 - 修正字段名称映射
         let request_body = UpdateRoleRequest {
@@ -114,12 +116,16 @@ impl UpdateRoleV2Request {
         }
 
         // 创建新的API请求
-        let api_request: ApiRequest<UpdateRoleV2Response> = ApiRequest::put(&format!("https://open.feishu.cn{}", path))
-            .body(openlark_core::api::RequestData::Binary(serde_json::to_vec(&request_body)?));
+        let api_request: ApiRequest<UpdateRoleV2Response> =
+            ApiRequest::put(&format!("https://open.feishu.cn{}", path)).body(
+                openlark_core::api::RequestData::Binary(serde_json::to_vec(&request_body)?),
+            );
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据"))
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+        })
     }
 }
 
@@ -185,7 +191,15 @@ impl RoleService {
     }
 
     /// 创建更新自定义角色请求
-    pub fn update_role_v2(&self, app_token: String, role_id: String, name: Option<String>, description: Option<String>, permissions: Option<Vec<String>>, role_type: Option<String>) -> UpdateRoleV2Request {
+    pub fn update_role_v2(
+        &self,
+        app_token: String,
+        role_id: String,
+        name: Option<String>,
+        description: Option<String>,
+        permissions: Option<Vec<String>>,
+        role_type: Option<String>,
+    ) -> UpdateRoleV2Request {
         let mut request = UpdateRoleV2Request::new(self.config.clone())
             .app_token(app_token)
             .role_id(role_id);
