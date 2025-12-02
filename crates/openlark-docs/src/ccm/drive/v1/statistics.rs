@@ -11,7 +11,6 @@
 // 提供文件统计相关的功能,
 use openlark_core::{config::Config, trait_system::Service};
 /// 统计服务
-#[derive(Clone, Debug)]
 pub struct StatisticsService {
     #[allow(dead_code)]
     config: Config,,

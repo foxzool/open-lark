@@ -56,7 +56,6 @@ impl ApiResponseTrait for SpreadsheetInfoResponseBody {
 // ============================================================================
 
 /// 电子表格信息服务
-#[derive(Clone, Debug)]
 pub struct SpreadsheetInfoService {
     config: Config,
 }
@@ -79,7 +78,7 @@ impl SpreadsheetInfoService {
     ///
     /// ```rust
     /// use open_lark::service::sheets::v3::spreadsheet_info::*;
-    /// use open_lark::core::config::Config;
+    /// use open_lark::api::config::Config;
     ///
     /// let config = openlark_core::config::Config::new("app_id", "app_secret");
     /// let service = SpreadsheetInfoService::new(config);
@@ -109,11 +108,6 @@ impl SpreadsheetInfoService {
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         // 添加查询参数（如果需要）
-        // let query_params = request.build_query_params();
-        // if !query_params.is_empty() {
-        //     for param in query_params.split('&') {
-        //         if let Some((key, value)) = param.split_once('=') {
-        //             api_req.query_params.insert(key, value);
         //         }
         //     }
         // }
@@ -211,45 +205,3 @@ impl SpreadsheetInfoRequest {
     }
 
     /// 构建查询参数（如果需要）
-    pub fn build_query_params(&self) -> String {
-        let params: Vec<String> = vec![];
-
-        // 添加查询参数
-        // if let Some(value) = &self.field {
-        //     params.push(format!("field={}", urlencoding::encode(value)));
-        // }
-
-        params.join("&")
-    }
-}
-
-// ============================================================================
-// 6. 测试模块
-// ============================================================================
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_get_spreadsheet_info_request_validation() {
-        let request = SpreadsheetInfoRequest::new(/* 参数 */);
-        assert!(request.validate().is_ok());
-    }
-
-    #[test]
-    fn test_spreadsheetinfoservice_creation() {
-        let config = openlark_core::config::Config::default();
-        let service = SpreadsheetInfoService::new(config);
-        assert_eq!(service.service_name(), "SpreadsheetInfoService");
-    }
-
-    #[test]
-    fn test_builder_pattern() {
-        let config = openlark_core::config::Config::default();
-        let service = SpreadsheetInfoService::new(config);
-
-        let builder = service.get_spreadsheet_info_builder("test_param");
-        // 验证构建器设置
-    }
-}

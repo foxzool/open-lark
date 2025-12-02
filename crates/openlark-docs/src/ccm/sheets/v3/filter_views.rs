@@ -643,7 +643,6 @@ impl ApiResponseTrait for DeleteFilterViewResponse {
 }
 
 /// 筛选视图服务
-#[derive(Clone, Debug)]
 pub struct FilterViewsService {
     config: Config,
 }
@@ -901,7 +900,6 @@ impl FilterViewsService {
 }
 
 /// 创建筛选视图构建器
-#[derive(Clone, Debug)]
 pub struct CreateFilterViewBuilder {
     config: Config,
     spreadsheet_token: String,
@@ -957,7 +955,6 @@ impl CreateFilterViewBuilder {
 }
 
 /// 更新筛选视图构建器
-#[derive(Clone, Debug)]
 pub struct UpdateFilterViewBuilder {
     config: Config,
     spreadsheet_token: String,
@@ -1234,7 +1231,7 @@ mod tests {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
+            ;
         let service = FilterViewsService::new(config);
         assert!(!format!("{:?}", service).is_empty());
     }
@@ -1494,7 +1491,7 @@ mod tests {
             request.spreadsheet_token, request.sheet_id
         );
 
-        let mut api_request = ApiRequest::with_method_and_path(openlark_core::api::HttpMethod::Post, &endpoint);
+        let mut api_request = ApiRequest::with_method_and_path(openlark_core::api::Post, &endpoint);
         api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let response: Response<QueryFilterViewsResponse> =
@@ -1533,7 +1530,7 @@ mod tests {
             request.spreadsheet_token, request.filter_view_id
         );
 
-        let mut api_request = ApiRequest::with_method_and_path(openlark_core::api::HttpMethod::Post, &endpoint);
+        let mut api_request = ApiRequest::with_method_and_path(openlark_core::api::Post, &endpoint);
         api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let response: Response<CreateFilterViewConditionResponse> =
@@ -1572,7 +1569,7 @@ mod tests {
             request.spreadsheet_token, request.filter_view_id, request.condition_id
         );
 
-        let mut api_request = ApiRequest::with_method_and_path(openlark_core::api::HttpMethod::Put, &endpoint);
+        let mut api_request = ApiRequest::with_method_and_path(openlark_core::api::Put, &endpoint);
         api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let response: Response<UpdateFilterViewConditionResponse> =
@@ -1611,7 +1608,7 @@ mod tests {
             request.spreadsheet_token, request.filter_view_id, request.condition_id
         );
 
-        let api_request = ApiRequest::with_method_and_path(openlark_core::api::HttpMethod::Delete, &endpoint);
+        let api_request = ApiRequest::with_method_and_path(openlark_core::api::Delete, &endpoint);
 
         let response: Response<DeleteFilterViewConditionResponse> =
             Transport::request(api_request, &self.config, None).await?;

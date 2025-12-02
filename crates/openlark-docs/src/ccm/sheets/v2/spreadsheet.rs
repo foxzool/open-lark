@@ -18,7 +18,6 @@ use openlark_core::{APIResult, LarkClient, RequestBuilder};
 use super::ccm::models::CcmResponse;
 use serde::{Deserialize, Serialize};
 /// 表格操作服务,
-#[derive(Clone, Debug)]
 pub struct SpreadsheetService {
     #[allow(dead_code)]
     config: Config,,
@@ -135,7 +134,6 @@ self.client.send(request).await,
     }
 // 数据结构,
 /// 表格元数据
-#[derive(Clone, Debug)]
 pub struct SpreadsheetMetadata {
     /// 表格token,
 #[serde(rename = "spreadsheet_token")]
@@ -152,24 +150,23 @@ pub struct SpreadsheetMetadata {
     pub url: String,
     /// 是否已删除
     pub deleted: bool,
-/// 创建者信息,
-#[derive(Clone, Debug)]
+/// 创建者信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreatorInfo {
-    /// 用户ID,
-#[serde(rename = "user_id")]
+    /// 用户ID
+    #[serde(rename = "user_id")]
     pub user_id: String,
-    /// 用户ID类型,
-#[serde(rename = "user_id_type")]
+    /// 用户ID类型
+    #[serde(rename = "user_id_type")]
     pub user_id_type: String,
     /// 用户名
     pub name: Option<String>,
+}
 /// 工作表列表响应,
-#[derive(Clone, Debug)]
 pub struct SheetListResponse {
     /// 工作表列表
     pub sheets: Vec<SheetInfo>,
 /// 工作表信息,
-#[derive(Clone, Debug)]
 pub struct SheetInfo {
     /// 工作表ID,
 #[serde(rename = "sheet_id")]
@@ -188,11 +185,9 @@ pub struct SheetInfo {
     /// 是否已删除
     pub deleted: bool,
 // 请求结构体,
-#[derive(Clone, Debug)]
 pub struct UpdateSpreadsheetRequest {
     pub title: String,
 
-#[derive(Clone, Debug)]
 pub struct CreateSpreadsheetRequest {
     pub title: String,
     #[serde(rename = "folder_token")]

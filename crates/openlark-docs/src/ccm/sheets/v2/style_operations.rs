@@ -508,7 +508,6 @@ impl ApiResponseTrait for BatchUpdateStylesResponse {
 }
 
 /// 单元格样式操作服务
-#[derive(Clone, Debug)]
 pub struct StyleOperationsService {
     config: Config,
 }
@@ -588,7 +587,6 @@ impl StyleOperationsService {
 }
 
 /// 批量样式更新构建器
-#[derive(Clone, Debug)]
 pub struct BatchUpdateStylesBuilder {
     config: Config,
     spreadsheet_token: String,
@@ -785,7 +783,7 @@ mod tests {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
+            ;
         let service = StyleOperationsService::new(config);
         assert!(!format!("{:?}", service).is_empty());
     }

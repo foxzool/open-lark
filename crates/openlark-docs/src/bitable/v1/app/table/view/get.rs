@@ -1,40 +1,59 @@
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
-    
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+
     config::Config,
-    
-    
+
     http::Transport,
     req_option::RequestOption,
-    
+    error::validation_error,
+
+
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
+// 从 patch 模块导入 View 类型
+use super::patch::View;
+
 /// 获取视图请求
-#[derive(Clone)]
 pub struct GetViewRequest {
-    #[serde(skip)]
+    config: Config,
     api_request: ApiRequest<Self>,
     /// 多维表格的 app_token
-    #[serde(skip)]
     app_token: String,
     /// 数据表的 table_id
-    #[serde(skip)]
     table_id: String,
     /// 视图的 view_id
-    #[serde(skip)]
     view_id: String,
     /// 用户 ID 类型
-    #[serde(skip)]
     user_id_type: Option<String>,
+}
+
+impl Default for GetViewRequest {
+    fn default() -> Self {
+        // 需要一个config实例，这里使用一个临时的
+        let config = Config::builder()
+            .app_id("")
+            .app_secret("")
+            .base_url("https://open.feishu.cn")
+            .build();
+        Self {
+            config,
+            api_request: ApiRequest::post("https://open.feishu.cn"),
+            app_token: String::new(),
+            table_id: String::new(),
+            view_id: String::new(),
+            user_id_type: None,
+        }
+    }
 }
 
 impl GetViewRequest {
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new().method(HttpMethod::POST).api_path( /open-apis/bitable/v1/apps/{}/tables/{}/views/{}).config(config)),
+            config,
+            api_request: ApiRequest::post(format!("https://open.feishu.cn/open-apis/bitable/v1/apps/{{}}/tables/{{}}/views/{{}}")),
             app_token: String::new(),
             table_id: String::new(),
             view_id: String::new(),
@@ -83,7 +102,7 @@ impl GetViewRequestBuilder {
 }
 
 /// 获取视图响应
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct GetViewResponse {
     /// 视图信息
     pub view: View,
@@ -98,23 +117,36 @@ impl ApiResponseTrait for GetViewResponse {
 /// 获取视图
 pub async fn get_view(
     request: GetViewRequest,
-    config: &Config,
-    option: Option<RequestOption>,
+    _option: Option<RequestOption>,
 ) -> SDKResult<GetViewResponse> {
-    let mut api_req = request.api_request;
-        let api_request = api_request.api_path(format!(        .replace({app_token}, &request.app_token)
-        let api_request = api_request.api_path(format!(        .replace({table_id}, &request.table_id)
-        let api_request = api_request.api_path(format!(        .replace({view_id}, &request.view_id);
+    // 构建最终的URL
+    let url = format!(
+        "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/views/{}",
+        request.app_token, request.table_id, request.view_id
+    );
 
-    // 设置查询参数
+    // 创建API请求
+    let mut api_request: ApiRequest<GetViewResponse> = ApiRequest::get(url);
+
+    // 添加查询参数
     if let Some(user_id_type) = &request.user_id_type {
-        api_req
-            .query_params
-            .insert(user_id_type.to_string(), user_id_type.clone());
+        api_request = api_request.query("user_id_type", user_id_type);
     }
 
-    let api_resp: openlark_core::core::StandardResponse<GetViewResponse> =
-        Transport::request(api_req, config, option).await?;
-    api_resp.into_result()
+    // 转换为Transport::request可以接受的格式
+    let request_for_transport = ApiRequest::<()>::get(api_request.build_url());
+
+    // 发送请求
+    let config = &request.config;
+    let response = Transport::request(request_for_transport, config, None).await?;
+
+    // 解析响应数据
+    let view_data: View = response.data
+        .and_then(|data| serde_json::from_value(data).ok())
+        .ok_or_else(|| validation_error("解析视图数据失败", "响应数据格式不正确"))?;
+
+    Ok(GetViewResponse {
+        view: view_data,
+    })
 }
 

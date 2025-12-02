@@ -1,10 +1,8 @@
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
-    api::{ApiResponseTrait},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    
-    
+
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -12,7 +10,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 删除自定义角色请求
-#[derive(Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeleteAppRoleRequest {
     #[serde(skip)]
     api_request: ApiRequest<Self>,
@@ -30,7 +28,9 @@ pub struct DeleteAppRoleRequest {
 impl DeleteAppRoleRequest {
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new().method(HttpMethod::POST).api_path( /open-apis/bitable/v1/apps/{}/roles/{}).config(config)),
+            api_request: ApiRequest::post("/open-apis/bitable/v1/apps/{}/roles/{}")
+                
+                ,
             app_token: String::new(),
             role_id: String::new(),
             user_id_type: None,
@@ -73,7 +73,6 @@ impl DeleteAppRoleRequestBuilder {
 }
 
 /// 删除自定义角色响应
-#[derive(Clone, Serialize, Deserialize)]
 pub struct DeleteAppRoleResponse {
     /// 删除的角色ID
     pub role_id: String,
@@ -94,14 +93,12 @@ pub async fn delete_app_role(
     option: Option<RequestOption>,
 ) -> SDKResult<DeleteAppRoleResponse> {
     let mut api_req = request.api_request;
-        let api_request = api_request.api_path(format!(        .replace({app_token}, &request.app_token)
-        let api_request = api_request.api_path(format!(        .replace({role_id}, &request.role_id);
+        let api_request = api_request
+        let api_request = api_request;
 
     // 设置查询参数
     if let Some(user_id_type) = &request.user_id_type {
         api_req
-            .query_params
-            .insert(user_id_type.to_string(), user_id_type.clone());
     }
 
     let response: DeleteAppRoleResponse =

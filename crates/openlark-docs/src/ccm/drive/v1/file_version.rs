@@ -18,7 +18,7 @@ pub const ENDPOINT_DELETE_FILE_VERSION: &str = "/open-apis/drive/v1/files/{}/ver
 ///
 /// 用于获取文件特定版本的详细信息，包括版本元数据、创建者信息、
 /// 修改时间、文件大小等关键信息
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetFileVersionRequest {
     /// 请求体
     #[serde(skip)]
@@ -208,7 +208,7 @@ impl UserInfo {
 /// 用于删除文件的指定版本。删除操作不可逆，请谨慎使用。
 /// 删除版本不会影响文件的其他版本，如果删除的是当前版本，
 /// 系统会自动将最新版本设为当前版本。
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeleteFileVersionRequest {
     /// 请求体
     #[serde(skip)]
@@ -675,7 +675,6 @@ impl GetFileVersionResponse {
 /// 获取文档版本信息构建器
 ///
 /// 提供流畅的API来获取文档版本信息，支持方法链调用和完整的错误处理
-#[derive(Clone, Debug)]
 pub struct GetFileVersionBuilder {
     service: Arc<DriveServiceV1>,
     request: GetFileVersionRequest,
@@ -715,7 +714,7 @@ impl GetFileVersionBuilder {
     ///     let request = GetFileVersionRequest::builder()
     ///         .file_token("file_token_123")
     ///         .version_id("version_456")
-    ///         .build()?;
+    ///         ?;
     ///
     ///     let response = service
     ///         .get_file_version_builder(request)
@@ -728,7 +727,7 @@ impl GetFileVersionBuilder {
     /// ```
     pub async fn execute(self) -> SDKResult<GetFileVersionResponse> {
         // 验证请求参数
-        self.request.build()?;
+        self.request?;
 
         // 构建API请求
         let mut api_req = self.request.api_req;
@@ -763,7 +762,6 @@ impl GetFileVersionBuilder {
 ///
 /// 提供流畅的API来删除文档版本，支持方法链调用和完整的错误处理
 /// 包含额外的安全验证措施防止误删除
-#[derive(Clone, Debug)]
 pub struct DeleteFileVersionBuilder {
     service: Arc<DriveServiceV1>,
     request: DeleteFileVersionRequest,
@@ -810,7 +808,7 @@ impl DeleteFileVersionBuilder {
     ///         .file_token("file_token_123")
     ///         .version_id("version_456")
     ///         .confirm(true)  // 必须显式确认删除
-    ///         .build()?;
+    ///         ?;
     ///
     ///     let response = service
     ///         .delete_file_version_builder(request)
@@ -823,7 +821,7 @@ impl DeleteFileVersionBuilder {
     /// ```
     pub async fn execute(self) -> SDKResult<DeleteFileVersionResponse> {
         // 验证请求参数（包括安全验证）
-        self.request.build()?;
+        self.request?;
 
         // 构建API请求
         let mut api_req = self.request.api_req;
@@ -871,7 +869,7 @@ mod tests {
         let request = GetFileVersionRequest::builder()
             .file_token("file_token_123")
             .version_id("version_456")
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.file_token, "file_token_123");
@@ -884,18 +882,18 @@ mod tests {
         let result = GetFileVersionRequest::builder()
             .file_token("")
             .version_id("version_456")
-            .build();
+            ;
         assert!(result.is_err());
 
         // 测试空版本ID
         let result = GetFileVersionRequest::builder()
             .file_token("file_token_123")
             .version_id("")
-            .build();
+            ;
         assert!(result.is_err());
 
         // 测试缺少参数
-        let result = GetFileVersionRequest::builder().build();
+        let result = GetFileVersionRequest::builder();
         assert!(result.is_err());
     }
 
@@ -999,7 +997,7 @@ mod tests {
             let request = GetFileVersionRequest::builder()
                 .file_token(file_token)
                 .version_id(version_id)
-                .build()
+                
                 .unwrap();
 
             assert_eq!(request.file_token, file_token);
@@ -1016,7 +1014,7 @@ mod tests {
         let request = GetFileVersionRequest::builder()
             .file_token(&long_file_token)
             .version_id(&long_version_id)
-            .build();
+            ;
         assert!(request.is_ok());
 
         // 测试特殊字符
@@ -1024,7 +1022,7 @@ mod tests {
         let request = GetFileVersionRequest::builder()
             .file_token(special_chars)
             .version_id(special_chars)
-            .build();
+            ;
         assert!(request.is_ok());
     }
 
@@ -1080,10 +1078,10 @@ mod tests {
     #[test]
     fn test_request_build_validation() {
         let request = GetFileVersionRequest::new("file_token_123", "version_456");
-        assert!(request.build().is_ok());
+        assert!(request.is_ok());
 
         let empty_request = GetFileVersionRequest::new("", "");
-        assert!(empty_request.build().is_err());
+        assert!(empty_request.is_err());
     }
 
     #[test]
@@ -1120,7 +1118,7 @@ mod tests {
         let result = GetFileVersionRequest::builder()
             .file_token("")
             .version_id("version_456")
-            .build();
+            ;
         assert!(result.is_err());
         assert!(result.unwrap_err().to_string().contains("文件令牌不能为空"));
 
@@ -1128,12 +1126,12 @@ mod tests {
         let result = GetFileVersionRequest::builder()
             .file_token("file_token_123")
             .version_id("")
-            .build();
+            ;
         assert!(result.is_err());
         assert!(result.unwrap_err().to_string().contains("版本ID不能为空"));
 
         // 测试缺少参数错误消息
-        let result = GetFileVersionRequest::builder().build();
+        let result = GetFileVersionRequest::builder();
         assert!(result.is_err());
         assert!(result.unwrap_err().to_string().contains("必填参数"));
     }
@@ -1155,7 +1153,7 @@ mod tests {
             .file_token("file_token_123")
             .version_id("version_456")
             .confirm(true)
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.file_token, "file_token_123");
@@ -1170,7 +1168,7 @@ mod tests {
             .file_token("")
             .version_id("version_456")
             .confirm(true)
-            .build();
+            ;
         assert!(result.is_err());
 
         // 测试空版本ID
@@ -1178,7 +1176,7 @@ mod tests {
             .file_token("file_token_123")
             .version_id("")
             .confirm(true)
-            .build();
+            ;
         assert!(result.is_err());
 
         // 测试未确认删除
@@ -1186,18 +1184,18 @@ mod tests {
             .file_token("file_token_123")
             .version_id("version_456")
             .confirm(false)
-            .build();
+            ;
         assert!(result.is_err());
 
         // 测试缺少确认参数
         let result = DeleteFileVersionRequest::builder()
             .file_token("file_token_123")
             .version_id("version_456")
-            .build();
+            ;
         assert!(result.is_err());
 
         // 测试缺少参数
-        let result = DeleteFileVersionRequest::builder().build();
+        let result = DeleteFileVersionRequest::builder();
         assert!(result.is_err());
     }
 
@@ -1208,7 +1206,7 @@ mod tests {
             .file_token("self")
             .version_id("version_456")
             .confirm(true)
-            .build();
+            ;
         assert!(result.is_err());
         assert!(result.unwrap_err().to_string().contains("不允许使用'self'"));
 
@@ -1216,7 +1214,7 @@ mod tests {
             .file_token("file_token_123")
             .version_id("self")
             .confirm(true)
-            .build();
+            ;
         assert!(result.is_err());
         assert!(result.unwrap_err().to_string().contains("不允许使用'self'"));
     }
@@ -1268,7 +1266,7 @@ mod tests {
             .file_token("file_token_123")
             .version_id("version_456")
             .confirm(true)
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.file_token, "file_token_123");
@@ -1283,7 +1281,7 @@ mod tests {
             .file_token("")
             .version_id("version_456")
             .confirm(true)
-            .build();
+            ;
         assert!(result.is_err());
         assert!(result.unwrap_err().to_string().contains("文件令牌不能为空"));
 
@@ -1292,7 +1290,7 @@ mod tests {
             .file_token("file_token_123")
             .version_id("")
             .confirm(true)
-            .build();
+            ;
         assert!(result.is_err());
         assert!(result.unwrap_err().to_string().contains("版本ID不能为空"));
 
@@ -1301,7 +1299,7 @@ mod tests {
             .file_token("file_token_123")
             .version_id("version_456")
             .confirm(false)
-            .build();
+            ;
         assert!(result.is_err());
         assert!(result.unwrap_err().to_string().contains("删除操作需要确认"));
 
@@ -1309,7 +1307,7 @@ mod tests {
         let result = DeleteFileVersionRequest::builder()
             .file_token("file_token_123")
             .version_id("version_456")
-            .build();
+            ;
         assert!(result.is_err());
         assert!(result.unwrap_err().to_string().contains("删除确认是必填参数"));
     }
@@ -1324,7 +1322,7 @@ mod tests {
             .file_token(&long_file_token)
             .version_id(&long_version_id)
             .confirm(true)
-            .build();
+            ;
         assert!(request.is_ok());
 
         // 测试特殊字符
@@ -1333,7 +1331,7 @@ mod tests {
             .file_token(special_chars)
             .version_id(special_chars)
             .confirm(true)
-            .build();
+            ;
         assert!(request.is_ok());
     }
 
@@ -1348,13 +1346,13 @@ mod tests {
     #[test]
     fn test_delete_request_build_validation() {
         let request = DeleteFileVersionRequest::new("file_token_123", "version_456", true);
-        assert!(request.build().is_ok());
+        assert!(request.is_ok());
 
         let empty_request = DeleteFileVersionRequest::new("", "", false);
-        assert!(empty_request.build().is_err());
+        assert!(empty_request.is_err());
 
         let no_confirm_request = DeleteFileVersionRequest::new("file_token_123", "version_456", false);
-        assert!(no_confirm_request.build().is_err());
+        assert!(no_confirm_request.is_err());
     }
 
     #[test]
@@ -1391,7 +1389,7 @@ mod tests {
                 .file_token(file_token)
                 .version_id(version_id)
                 .confirm(true)
-                .build()
+                
                 .unwrap();
 
             assert_eq!(request.file_token, file_token);

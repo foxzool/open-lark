@@ -13,10 +13,10 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use crate::,
 {
-    core::,
+    api::,
 {,
         BaseResponse,
-        ResponseFormat,
+        ResponseFormat, HttpMethod,
         api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
@@ -131,8 +131,6 @@ self.has_more = data.has_more;
                     if data.has_more {,
 self.req,
                             .api_req
-.query_params
-                            .insert("page_token", data.next_page_token.unwrap());
 Some(data.files)} else if data.files.is_empty() {,
 None} else {,
 Some(data.files)}
@@ -143,7 +141,6 @@ Some(data.files)}
 None,
 }
 /// 我的空间（root folder）元信息,
-#[derive(Clone, Debug)]
 pub struct ExplorerRootMeta {
     /// 文件夹的 token
     pub token: String,
@@ -158,7 +155,6 @@ impl ApiResponseTrait for.* {
 ResponseFormat::Data
     }
 /// 文件夹元信息,
-#[derive(Clone, Debug)]
 pub struct ExplorerFolderMeta {
     /// 文件夹的 id
     pub id: String,
@@ -185,7 +181,7 @@ impl ApiResponseTrait for.* {
 ResponseFormat::Data
     }
 
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateFolderRequest {
     /// 请求体,
 #[serde(skip)]
@@ -199,7 +195,6 @@ pub struct CreateFolderRequest {
 impl CreateFolderRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone, Debug)]
 /// 创建文件夹请求体,
 pub struct CreateFolderRequestBuilder {
     request: CreateFolderRequest}
@@ -207,7 +202,6 @@ impl CreateFolderRequestBuilder {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 创建文件夹响应体,
-#[derive(Clone, Debug)]
 pub struct CreateFolderResponse {
     /// 创建文件夹的token
     pub token: String,
@@ -227,7 +221,7 @@ impl ListFolderRequestBuilder {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 列出文件夹查询参数,
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListFolderRequest {
     /// 请求体,
 #[serde(skip)]
@@ -236,7 +230,6 @@ impl ListFolderRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
 }
-#[derive(Clone, Debug)]
 pub struct ListFolderResponse {
     /// 文件夹列表
     pub files: Vec<FileInFolder>,
@@ -246,7 +239,6 @@ pub struct ListFolderResponse {
     /// 是否还有更多项
     pub has_more: bool,
 /// 文件夹清单列表,
-#[derive(Clone, Debug)]
 pub struct FileInFolder {
     /// 文件标识
     pub token: String,
@@ -286,7 +278,6 @@ pub struct FileInFolder {
     /// 文件所有者
     pub owner_id: String,
 
-#[derive(Clone, Debug)]
 pub struct ShortcutInfo {
     /// 快捷方式指向的原文件类型,
 ///,

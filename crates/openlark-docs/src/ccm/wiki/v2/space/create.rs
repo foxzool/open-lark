@@ -3,10 +3,10 @@ use SDKResult;use reqwest::Method;
 use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 ,
 {
-    core::,
+    api::,
 {,
         BaseResponse,
-        ResponseFormat,
+        ResponseFormat, HttpMethod,
         api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
@@ -18,7 +18,7 @@ use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
     impl_executable_builder_owned,
 };
 /// 创建知识空间请求,
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateSpaceRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -30,7 +30,6 @@ pub struct CreateSpaceRequest {
 impl CreateSpaceRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone, Debug)]
 pub struct CreateSpaceRequestBuilder {
     request: CreateSpaceRequest}
 impl CreateSpaceRequestBuilder {
@@ -44,7 +43,6 @@ impl CreateSpaceRequestBuilder {
     create,
 );
 /// 创建的知识空间信息
-#[derive(Clone, Debug)]
 pub struct CreatedSpace {
     /// 知识空间id
     pub space_id: String,
@@ -58,7 +56,6 @@ pub struct CreatedSpace {
     /// 知识空间可见性
     pub visibility: Option<String>}
 /// 创建知识空间响应,
-#[derive(Clone, Debug)]
 pub struct CreateSpaceResponse {
     /// 创建的知识空间信息
     pub space: CreatedSpace,
@@ -90,7 +87,7 @@ mod tests {
 let request = CreateSpaceRequest::builder(),
             .name()
 .description()
-            .build();
+            ;
 
         assert_eq!(request.name, "我的知识空间");
 assert_eq!(,

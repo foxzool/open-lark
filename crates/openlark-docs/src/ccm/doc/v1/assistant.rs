@@ -21,7 +21,6 @@ use openlark_core::config::Config;
 /// - 文档格式化和校对
 /// - 数据分析和图表生成
 /// - 多语言翻译支持
-#[derive(Clone, Debug)]
 pub struct AssistantServiceV1 {
     pub config: Config,
 }

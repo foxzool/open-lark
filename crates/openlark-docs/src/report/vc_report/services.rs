@@ -5,7 +5,6 @@
 use crate::prelude::*;
 
 /// 报告服务
-#[derive(Clone, Debug)]
 pub struct VcReportService {
     config: Config,
 }

@@ -2,17 +2,16 @@
 use reqwest::Method;
 use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use openlark_core::{,
-use SDKResult;    api::{ApiRequest, ApiResponseTrait, HttpMethod},
+use SDKResult;    api::{ApiRequest, ApiResponseTrait},
     api::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
-    
-    
+
     http::Transport,
     req_option::RequestOption,
     SDKResult,
 };
 /// 列出自动化流程请求,
-#[derive(Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListWorkflowRequest {
     #[serde(skip)]
     api_request: ApiRequest<Self>,
@@ -28,7 +27,6 @@ pub struct ListWorkflowRequest {
 impl ListWorkflowRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone)]
 pub struct ListWorkflowRequestBuilder {
     request: ListWorkflowRequest}
 impl ListWorkflowRequestBuilder {
@@ -37,8 +35,6 @@ impl ListWorkflowRequestBuilder {
 }if let Some(page_token) = &self.request.page_token {,
             self.request,
 .api_request,
-                .query_params
-                .insert(page_token, page_token.clone());
 self.request,
     }
 // 应用ExecutableBuilder trait到ListWorkflowRequestBuilder,
@@ -49,8 +45,8 @@ crate::impl_executable_builder_owned!(
     Response<ListWorkflowResponse>,
     list,
 );
+#[derive(Serialize)]
 /// 自动化流程信息
-#[derive(Clone)]
 pub struct Workflow {
     /// 自动化流程ID
     pub id: String,
@@ -70,8 +66,8 @@ pub struct Workflow {
     /// 流程描述,
 #[serde(default)]
     pub description: Option<String>}
+#[derive(Deserialize)]
 /// 列出自动化流程响应,
-#[derive(Clone)]
 pub struct ListWorkflowResponse {
     /// 自动化流程列表
     pub items: Vec<Workflow>,

@@ -20,7 +20,8 @@ macro_rules! impl_executable_builder {
             }
 
             async fn execute(self, service: &$service) -> openlark_core::SDKResult<$response> {
-                service.$method(&self.build(), None).await
+                let request = self.build();
+                service.$method(&request, None).await
             }
 
             async fn execute_with_options(
@@ -28,7 +29,8 @@ macro_rules! impl_executable_builder {
                 service: &$service,
                 option: openlark_core::req_option::RequestOption,
             ) -> openlark_core::SDKResult<$response> {
-                service.$method(&self.build(), Some(option)).await
+                let request = self.build();
+                service.$method(&request, Some(option)).await
             }
         }
     };
@@ -53,7 +55,8 @@ macro_rules! impl_executable_builder_owned {
             }
 
             async fn execute(self, service: &$service) -> openlark_core::SDKResult<$response> {
-                service.$method(self.build(), None).await
+                let request = self.build();
+                service.$method(request, None).await
             }
 
             async fn execute_with_options(
@@ -61,7 +64,8 @@ macro_rules! impl_executable_builder_owned {
                 service: &$service,
                 option: openlark_core::req_option::RequestOption,
             ) -> openlark_core::SDKResult<$response> {
-                service.$method(self.build(), Some(option)).await
+                let request = self.build();
+                service.$method(request, Some(option)).await
             }
         }
     };

@@ -83,6 +83,31 @@ impl Config {
     pub fn reference_count(&self) -> usize {
         Arc::strong_count(&self.inner)
     }
+
+    /// 获取应用 ID
+    pub fn app_id(&self) -> &str {
+        &self.inner.app_id
+    }
+
+    /// 获取应用密钥
+    pub fn app_secret(&self) -> &str {
+        &self.inner.app_secret
+    }
+
+    /// 获取基础 URL
+    pub fn base_url(&self) -> &str {
+        &self.inner.base_url
+    }
+
+    /// 获取超时时间
+    pub fn req_timeout(&self) -> Option<Duration> {
+        self.inner.req_timeout
+    }
+
+    /// 是否启用令牌缓存
+    pub fn enable_token_cache(&self) -> bool {
+        self.inner.enable_token_cache
+    }
 }
 
 #[derive(Default, Clone)]

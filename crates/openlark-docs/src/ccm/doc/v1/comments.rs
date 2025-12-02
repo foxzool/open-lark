@@ -21,7 +21,6 @@ use openlark_core::config::Config;
 /// - 评论删除和管理
 /// - 评论搜索和过滤
 /// - 评论通知和提醒
-#[derive(Clone, Debug)]
 pub struct CommentsService {
     pub config: Config,
 }

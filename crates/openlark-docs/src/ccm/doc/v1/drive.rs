@@ -536,7 +536,6 @@ impl ApiResponseTrait for ExportTaskResponse {
 /// - 权限设置和访问控制
 /// - 文件分享和链接管理
 /// - 文件版本控制和历史记录
-#[derive(Clone, Debug)]
 pub struct DriveServiceV1 {
     pub config: Config,
 }
@@ -734,7 +733,7 @@ impl DriveServiceV1 {
 
         // 创建API请求
         let api_req = ApiRequest {
-            method: openlark_core::api::HttpMethod::Post,
+            method: openlark_core::api::Post,
             url: openlark_core::endpoints::Endpoints::DRIVE_V1_EXPORT_TASKS.to_string(),
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Some(openlark_core::api::RequestData::Json(&request))?,
@@ -785,7 +784,6 @@ impl DriveServiceV1 {
 ///
 /// 提供流畅的API来构建查询任务状态的请求，支持链式调用
 /// 和完整的参数验证。
-#[derive(Clone, Debug)]
 pub struct GetTaskStatusBuilder {
     service: std::sync::Arc<DriveServiceV1>,
     request: GetTaskStatusRequest,
@@ -845,7 +843,6 @@ impl GetTaskStatusBuilder {
 ///
 /// 提供流畅的API来构建删除文件的请求，支持链式调用
 /// 和完整的参数验证。
-#[derive(Clone, Debug)]
 pub struct DeleteFileBuilder {
     service: std::sync::Arc<DriveServiceV1>,
     request: DeleteFileRequest,
@@ -908,7 +905,6 @@ impl DeleteFileBuilder {
 ///
 /// 提供流畅的API来构建创建导出任务的请求，支持链式调用
 /// 和完整的参数验证。支持多种导出格式和高级配置选项。
-#[derive(Clone, Debug)]
 pub struct CreateExportTaskBuilder {
     service: std::sync::Arc<DriveServiceV1>,
     request: ExportTaskRequest,
@@ -1642,7 +1638,7 @@ mod tests {
         let configs = vec![openlark_core::config::Config::default(), {
             let mut config = openlark_core::config::Config::default();
             // 这里假设app_id是String类型，如果不对需要调整
-            // config.app_id = Some("test_app_id".to_string());
+            // config.app_id() = Some("test_app_id".to_string());
             config
         }];
 

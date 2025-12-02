@@ -45,7 +45,7 @@ impl ExplorerService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            method: openlark_core::api::HttpMethod::Get,
+            method: openlark_core::api::Get,
             url: "/open-apis/drive/explorer/v2/root_folder/meta".to_string(),
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: None,
@@ -85,7 +85,7 @@ impl ExplorerService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            method: openlark_core::api::HttpMethod::Get,
+            method: openlark_core::api::Get,
             url: format!(
                 "/open-apis/drive/explorer/v2/folder/{}/meta",
                 request.folder_token
@@ -141,7 +141,7 @@ impl ExplorerService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            method: openlark_core::api::HttpMethod::Post,
+            method: openlark_core::api::Post,
             url: format!("/open-apis/drive/explorer/v2/file/{}", request.folder_token),
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?,
@@ -192,7 +192,7 @@ impl ExplorerService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            method: openlark_core::api::HttpMethod::Post,
+            method: openlark_core::api::Post,
             url: format!(
                 "/open-apis/drive/explorer/v2/folder/{}",
                 request.folder_token
@@ -240,75 +240,6 @@ impl ExplorerService {
         ,
 
         // 构建查询参数
-        // query_params 将通过链式调用处理
-
-        if let Some(page_size) = request.page_size {
-            .query(insert("page_size", page_size.to_string(),
-        }
-        if let Some(ref page_token) = request.page_token {
-            .query(insert("page_token", page_token.clone()
-        }
-        if let Some(ref file_type) = request.file_type {
-            .query(insert("file_type", file_type.clone()
-        }
-        if let Some(ref order_by) = request.order_by {
-            .query(insert("order_by", order_by.clone()
-        }
-        if let Some(ref direction) = request.direction {
-            .query(insert("direction", direction.clone()
-        }
-
-        // 构建API请求
-        let api_req = ApiRequest {
-            method: openlark_core::api::HttpMethod::Get,
-            url: format!(
-                "/open-apis/drive/explorer/v2/folder/{}/children",
-                request.folder_token
-            ),
-            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: None,
-            query_params,
-            
-        };
-
-        // 发送请求
-        let resp =
-            Transport::<GetFolderChildrenResponse>::request(api_req, &self.config, None).await?;
-        let response = resp.data.unwrap_or_default(,
-
-        log::info!(
-            "获取文件夹下的文档清单完成: folder_token={}, item_count={}",
-            request.folder_token,
-            response.items.as_ref().map(|i| i.len()).unwrap_or(0)
-        ,
-
-        Ok(response)
-    }
-
-    /// 复制文档
-    ///
-    /// 根据文件token复制Doc或Sheet到目标文件夹中
-    ///
-    /// # 参数
-    /// * `request` - 复制文档请求
-    ///
-    /// # 返回
-    /// 返回新复制的文档信息
-    pub async fn copy_file(&self, request: &CopyFileRequest) -> SDKResult<CopyFileResponse> {
-        // 验证请求参数
-        request
-            .validate()
-            .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
-
-        log::info!(
-            "复制文档: file_token={}, dest_folder_token={}",
-            request.file_token,
-            request.dest_folder_token
-        ,
-
-        // 构建请求体
-        let mut body = HashMap::new(,
-        body.insert(
             "dest_folder_token",
             Value::String(request.dest_folder_token.clone()),
         ,
@@ -322,7 +253,7 @@ impl ExplorerService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            method: openlark_core::api::HttpMethod::Post,
+            method: openlark_core::api::Post,
             url: format!(
                 "/open-apis/drive/explorer/v2/file/copy/files/{}",
                 request.file_token
@@ -360,7 +291,7 @@ impl ExplorerService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            method: openlark_core::api::HttpMethod::Delete,
+            method: openlark_core::api::Delete,
             url: format!(
                 "/open-apis/drive/explorer/v2/file/spreadsheets/{}",
                 file_token
@@ -398,7 +329,7 @@ impl ExplorerService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            method: openlark_core::api::HttpMethod::Delete,
+            method: openlark_core::api::Delete,
             url: format!("/open-apis/drive/explorer/v2/file/docs/{}", file_token),
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: None,

@@ -8,7 +8,6 @@ use openlark_core::{api::ApiRequest, http::Transport, SDKResult};
 use super::{requests::CreateDocV2Request, responses::CreateDocV2Response};
 
 /// 文档创建服务
-#[derive(Clone, Debug)]
 pub struct CreateDocService {
     config: Config,
 }
@@ -29,7 +28,7 @@ impl CreateDocService {
         let endpoint = "/open-apis/doc/v2/create".to_string();
 
         let api_req = ApiRequest {
-            method: openlark_core::api::HttpMethod::Post,
+            method: openlark_core::api::Post,
             url: endpoint,
             headers: std::collections::HashMap::new(),
             query: std::collections::HashMap::new(),

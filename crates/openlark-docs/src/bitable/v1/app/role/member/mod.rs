@@ -14,6 +14,7 @@ pub mod batch_delete;
 pub mod create;
 pub mod delete;
 pub mod list;
+pub mod models;
 
 pub use batch_create::*;
 pub use batch_delete::*;

@@ -1,12 +1,8 @@
 //! 创建数据表模块
 
 use openlark_core::{
-    core::{
-        BaseResponse,
-        ResponseFormat,
-    },
-    
-    
+    api::{ApiRequest, ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -14,7 +10,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 新增数据表请求
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct CreateTableRequest {
     api_request: ApiRequest<Self>,
     /// 多维表格的 app_token
@@ -23,14 +19,20 @@ pub struct CreateTableRequest {
     pub table: TableData,
 }
 
-impl CreateTableRequest {
-    pub fn new(config: openlark_core::Config) -> Self {
+impl Default for CreateTableRequest {
+    fn default() -> Self {
         Self {
-            api_request: openlark_core::api::ApiRequest::new(
-                config,
-                HttpMethod::POST,
-                CREATE_TABLE.to_string(),
-            ),
+            api_request: ApiRequest::post("https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables"),
+            app_token: String::new(),
+            table: TableData::default(),
+        }
+    }
+}
+
+impl CreateTableRequest {
+    pub fn new(config: Config) -> Self {
+        Self {
+            api_request: ApiRequest::post("https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables"),
             app_token: String::new(),
             table: TableData::default(),
         }
@@ -41,9 +43,17 @@ impl CreateTableRequest {
     }
 }
 
-#[derive(Default)]
+#[derive(Debug, Clone)]
 pub struct CreateTableRequestBuilder {
     request: CreateTableRequest,
+}
+
+impl Default for CreateTableRequestBuilder {
+    fn default() -> Self {
+        Self {
+            request: CreateTableRequest::new(Config::default()),
+        }
+    }
 }
 
 impl CreateTableRequestBuilder {
@@ -67,16 +77,26 @@ impl CreateTableRequestBuilder {
 }
 
 /// 数据表数据
-#[derive(Clone, Default, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TableData {
     /// 数据表名称
     pub name: String,
     /// 数据表的默认视图名称，不填则默认为数据表
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_view_name: Option<String>,
     /// 数据表初始字段
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fields: Option<Vec<TableField>>,
+}
+
+impl Default for TableData {
+    fn default() -> Self {
+        Self {
+            name: String::new(),
+            default_view_name: None,
+            fields: None,
+        }
+    }
 }
 
 impl TableData {
@@ -102,15 +122,15 @@ impl TableData {
 }
 
 /// 字段信息
-#[derive(Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TableField {
     /// 字段名称
     pub field_name: String,
     /// 字段类型
-    #[serde(rename = type)]
+    #[serde(rename = "type")]
     pub field_type: i32,
     /// 字段属性，不同字段类型对应不同的属性结构
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub property: Option<serde_json::Value>,
 }
 
@@ -137,13 +157,13 @@ impl TableField {
     pub fn single_select(name: impl Into<String>, options: Vec<String>) -> Self {
         let options_value: Vec<serde_json::Value> = options
             .into_iter()
-            .map(|opt| serde_json::json!({name: opt}))
+            .map(|opt| serde_json::json!({"name": opt}))
             .collect();
 
         Self {
             field_name: name.into(),
             field_type: 3, // 单选
-            property: Some(serde_json::json!({options: options_value})),
+            property: Some(serde_json::json!({"options": options_value})),
         }
     }
 
@@ -151,13 +171,13 @@ impl TableField {
     pub fn multi_select(name: impl Into<String>, options: Vec<String>) -> Self {
         let options_value: Vec<serde_json::Value> = options
             .into_iter()
-            .map(|opt| serde_json::json!({name: opt}))
+            .map(|opt| serde_json::json!({"name": opt}))
             .collect();
 
         Self {
             field_name: name.into(),
             field_type: 4, // 多选
-            property: Some(serde_json::json!({options: options_value})),
+            property: Some(serde_json::json!({"options": options_value})),
         }
     }
 
@@ -173,7 +193,7 @@ struct CreateTableRequestBody {
 }
 
 /// 创建数据表响应
-#[derive(Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateTableResponse {
     /// 数据表信息
     pub table_id: String,

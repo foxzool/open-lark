@@ -210,7 +210,6 @@ impl ApiResponseTrait for GetTaskResultResponse {
 }
 
 /// 任务管理服务
-#[derive(Clone, Debug)]
 pub struct TaskService {
     config: Config,
 }
@@ -274,7 +273,7 @@ impl TaskService {
             .replace("{}", &req.task_id);
 
         let api_req = ApiRequest {
-            method: openlark_core::api::HttpMethod::Get,
+            method: openlark_core::api::Get,
             url: endpoint,
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: None, // GET请求无body
@@ -297,7 +296,6 @@ impl TaskService {
 // ==================== 构建器模式 ====================
 
 /// 获取任务结果构建器
-#[derive(Clone, Debug)]
 pub struct GetTaskResultBuilder {
     request: GetTaskResultRequest,
 }

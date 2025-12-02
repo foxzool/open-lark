@@ -3,10 +3,10 @@ use SDKResult;use reqwest::Method;
 use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 ,
 {
-    core::,
+    api::,
 {,
         BaseResponse,
-        ResponseFormat,
+        ResponseFormat, HttpMethod,
         api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
@@ -18,7 +18,7 @@ use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
     impl_executable_builder_owned,
 };
 /// 获取任务结果请求,
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetTaskRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -28,7 +28,6 @@ pub struct GetTaskRequest {
 impl GetTaskRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone, Debug)]
 pub struct GetTaskRequestBuilder {
     request: GetTaskRequest}
 impl GetTaskRequestBuilder {
@@ -42,7 +41,6 @@ impl GetTaskRequestBuilder {
     get,
 );
 /// 任务状态
-#[derive(Clone, Debug)]
 #[serde(rename_all = "snake_case")]
 pub enum TaskStatus {
 /// 进行中,
@@ -52,7 +50,6 @@ pub enum TaskStatus {
     /// 失败
     Failed}
 /// 移动结果,
-#[derive(Clone, Debug)]
 pub struct MoveResult {
     /// 原始文档token
     pub obj_token: String,
@@ -63,7 +60,6 @@ pub struct MoveResult {
     /// 文档类型
     pub obj_type: Option<String>}
 /// 任务详细信息,
-#[derive(Clone, Debug)]
 pub struct TaskDetail {
     /// 任务id
     pub task_id: String,
@@ -84,7 +80,6 @@ pub struct TaskDetail {
     /// 完成时间（毫秒时间戳）
     pub finish_time: Option<String>}
 /// 获取任务结果响应,
-#[derive(Clone, Debug)]
 pub struct GetTaskResponse {
     /// 任务详细信息
     pub task: TaskDetail,
@@ -134,7 +129,7 @@ mod tests {
     use super::*;
 #[test]
     fn test_get_task_request_builder() {
-let request = GetTaskRequest::builder().task_id("taskxxxxxx").build();
+let request = GetTaskRequest::builder().task_id("taskxxxxxx");
         assert_eq!(request.task_id, "taskxxxxxx");
 #[test]
     fn test_task_status_methods() {

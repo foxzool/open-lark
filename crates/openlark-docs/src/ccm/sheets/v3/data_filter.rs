@@ -403,7 +403,6 @@ pub struct DeleteDataFilterResponse {
 }
 
 /// Sheets电子表格数据过滤器服务 v3
-#[derive(Clone, Debug)]
 pub struct DataFilterService {
     config: openlark_core::config::Config,
 }
@@ -444,7 +443,7 @@ impl DataFilterService {
     ///     .filter_range(filter_range)
     ///     .add_condition(condition1)
     ///     .add_condition(condition2)
-    ///     .build()
+    ///     
     ///     .unwrap();
     ///
     /// let response = service.set_data_filter(&request).await?;
@@ -501,7 +500,7 @@ impl DataFilterService {
     /// let request = DeleteDataFilterRequest::builder()
     ///     .spreadsheet_token("your_token".to_string())
     ///     .sheet_id("sheet_id".to_string())
-    ///     .build()
+    ///     
     ///     .unwrap();
     ///
     /// let response = service.delete_data_filter(&request).await?;
@@ -726,7 +725,7 @@ mod tests {
             .sheet_id("sheet123".to_string())
             .filter_range(filter_range)
             .add_condition(condition)
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.spreadsheet_token, "token123");
@@ -737,12 +736,12 @@ mod tests {
     #[test]
     fn test_set_data_filter_request_builder_error() {
         // 测试缺少必需参数
-        let result = SetDataFilterRequest::builder().build();
+        let result = SetDataFilterRequest::builder();
         assert!(result.is_err());
 
         let result = SetDataFilterRequest::builder()
             .spreadsheet_token("token123".to_string())
-            .build();
+            ;
         assert!(result.is_err());
     }
 
@@ -759,7 +758,7 @@ mod tests {
         let request = DeleteDataFilterRequest::builder()
             .spreadsheet_token("token123".to_string())
             .sheet_id("sheet123".to_string())
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.spreadsheet_token, "token123");
@@ -768,12 +767,12 @@ mod tests {
 
     #[test]
     fn test_delete_data_filter_request_builder_error() {
-        let result = DeleteDataFilterRequest::builder().build();
+        let result = DeleteDataFilterRequest::builder();
         assert!(result.is_err());
 
         let result = DeleteDataFilterRequest::builder()
             .spreadsheet_token("token123".to_string())
-            .build();
+            ;
         assert!(result.is_err());
     }
 
@@ -804,7 +803,7 @@ mod tests {
             .sheet_id("sheet123".to_string())
             .filter_range(filter_range)
             .conditions(vec![condition1, condition2, condition3])
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.data_filter.filter_conditions.len(), 3);

@@ -12,7 +12,7 @@ use SDKResult;    api::ApiRequest,
     SDKResult,
 };
 /// 移动知识空间节点请求,
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MoveSpaceNodeRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -31,14 +31,12 @@ pub struct MoveSpaceNodeRequest {
 impl MoveSpaceNodeRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone, Debug)]
 pub struct MoveSpaceNodeRequestBuilder {
     request: MoveSpaceNodeRequest}
 impl MoveSpaceNodeRequestBuilder {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 移动后的节点信息,
-#[derive(Clone, Debug)]
 pub struct MovedNode {
     /// 知识空间id
     pub space_id: String,
@@ -55,7 +53,6 @@ pub struct MovedNode {
     /// 文档标题
     pub title: Option<String>}
 /// 移动知识空间节点响应,
-#[derive(Clone, Debug)]
 pub struct MoveSpaceNodeResponse {
     /// 移动后的节点信息
     pub node: MovedNode,
@@ -93,7 +90,7 @@ let request = MoveSpaceNodeRequest::builder(),
 .node_token()
             .target_parent_token()
 .target_prev_token()
-            .build();
+            ;
 
         assert_eq!(request.space_id, "spcxxxxxx");
         assert_eq!(request.node_token, "wikcnxxxxxx");
@@ -109,7 +106,7 @@ let request = MoveSpaceNodeRequest::builder(),
 .node_token()
             .move_to_root()
 .append_to_end()
-            .build();
+            ;
 
         assert_eq!(request.space_id, "spcxxxxxx");
         assert_eq!(request.node_token, "wikcnxxxxxx");

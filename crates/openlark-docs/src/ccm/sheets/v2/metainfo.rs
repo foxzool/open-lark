@@ -19,7 +19,7 @@ use openlark_core::{
     constants::AccessTokenType,
     error::LarkAPIError,
     http::Transport,
-    standard_response::StandardResponse,
+    standard_response::Response,
     trait_system::Service,
     SDKResult,
 };
@@ -147,7 +147,6 @@ pub struct AppInfo {
 }
 
 /// 获取表格元数据请求
-#[derive(Clone, Debug)]
 pub struct GetSpreadsheetMetaRequest {
     /// 电子表格token
     pub spreadsheet_token: String,
@@ -219,110 +218,6 @@ impl GetSpreadsheetMetaRequest {
     }
 
     /// 构建查询参数
-    pub fn build_query_params(&self) -> String {
-        let mut params = vec![];
-
-        if let Some(include_permissions) = self.include_permissions {
-            params.push(format!("include_permissions={}", include_permissions));
-        }
-
-        if let Some(include_custom_properties) = self.include_custom_properties {
-            params.push(format!(
-                "include_custom_properties={}",
-                include_custom_properties
-            ));
-        }
-
-        if let Some(language) = &self.language {
-            params.push(format!("language={}", urlencoding::encode(language)));
-        }
-
-        params.join("&")
-    }
-}
-
-/// API响应体结构
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SpreadsheetMetaResponseBody {
-    /// 表格元数据
-    pub data: SpreadsheetMetaInfo,
-}
-
-impl ApiResponseTrait for SpreadsheetMetaInfo {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-impl ApiResponseTrait for SpreadsheetMetaResponseBody {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 表格元数据服务
-#[derive(Clone, Debug)]
-pub struct SpreadsheetMetaService {
-    config: Config,
-}
-
-impl SpreadsheetMetaService {
-    /// 创建表格元数据服务实例
-    pub fn new(config: Config) -> Self {
-        Self { config }
-    }
-
-    /// 获取电子表格元数据
-    ///
-    /// # 参数
-    /// - `request`: 获取表格元数据请求
-    ///
-    /// # 返回
-    /// 表格元数据信息
-    ///
-    /// # 示例
-    ///
-    /// ```rust
-    /// use open_lark::service::sheets::v2::metainfo::*;
-    /// use open_lark::core::config::Config;
-    ///
-    /// let config = openlark_core::config::Config::new("app_id", "app_secret");
-    /// let service = SpreadsheetMetaService::new(config);
-    ///
-    /// // 获取表格基本信息
-    /// let request = GetSpreadsheetMetaRequest::new("spreadsheet_token")
-    ///     .include_permissions(true)
-    ///     .include_custom_properties(false)
-    ///     .language("zh_CN");
-    ///
-    /// let meta_info = service.get_spreadsheet_meta(request).await?;
-    /// println!("表格标题: {}", meta_info.title);
-    /// println!("工作表数量: {}", meta_info.sheet_count);
-    /// ```
-    pub async fn get_spreadsheet_meta(
-        &self,
-        request: GetSpreadsheetMetaRequest,
-    ) -> SDKResult<Response<SpreadsheetMetaInfo>> {
-        // 验证请求参数
-        request.validate()?;
-
-        // 构建API请求
-        let endpoint = format!(
-            "{}/open-apis/sheets/v2/spreadsheets/{}/metainfo",
-            self.config.base_url, request.spreadsheet_token
-        );
-
-        let mut api_req = ApiRequest::with_method(openlark_core::api::HttpMethod::Get);
-        api_req.set_api_path(endpoint);
-        api_req
-            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-
-        // 添加查询参数
-        let query_params = request.build_query_params();
-        if !query_params.is_empty() {
-            for param in query_params.split('&') {
-                if let Some((key, value)) = param.split_once('=') {
-                    api_req.query_params.insert(key, value);
                 }
             }
         }
@@ -473,103 +368,3 @@ mod tests {
     }
 
     #[test]
-    fn test_build_query_params() {
-        let request = GetSpreadsheetMetaRequest::new("token")
-            .include_permissions(true)
-            .include_custom_properties(false)
-            .language("zh_CN");
-
-        let params = request.build_query_params();
-        assert!(params.contains("include_permissions=true"));
-        assert!(params.contains("include_custom_properties=false"));
-        assert!(params.contains("language=zh_CN"));
-    }
-
-    #[test]
-    fn test_builder_pattern() {
-        let config = openlark_core::config::Config::default();
-        let service = SpreadsheetMetaService::new(config);
-
-        let builder = service
-            .get_spreadsheet_meta_builder("test_token")
-            .include_permissions(true)
-            .include_custom_properties(true)
-            .language("en_US");
-
-        // 验证构建器设置
-        assert_eq!(builder.spreadsheet_token, "test_token");
-        assert_eq!(builder.include_permissions, Some(true));
-        assert_eq!(builder.include_custom_properties, Some(true));
-        assert_eq!(builder.language.as_ref().unwrap(), "en_US");
-    }
-
-    #[test]
-    fn test_spreadsheet_meta_service() {
-        let config = openlark_core::config::Config::default();
-        let service = SpreadsheetMetaService::new(config);
-
-        assert_eq!(service.service_name(), "SpreadsheetMetaService");
-        assert!(!format!("{:?}", service).is_empty());
-    }
-
-    #[test]
-    fn test_sheet_meta_info_structure() {
-        let sheet_meta = SheetMetaInfo {
-            sheet_id: "sheet1".to_string(),
-            title: "工作表1".to_string(),
-            index: 0,
-            sheet_type: "GRID".to_string(),
-            hidden: false,
-            row_count: 1000,
-            column_count: 26,
-            sheet_url: "https://example.com".to_string(),
-            grid_properties: Some(GridProperties {
-                frozen_row_count: Some(1),
-                frozen_column_count: Some(0),
-                hide_gridlines: Some(false),
-                print_headings: Some(true),
-            }),
-            sheet_color: Some("#FF0000".to_string()),
-            create_time: Some("2023-01-01T00:00:00Z".to_string()),
-            update_time: Some("2023-01-02T00:00:00Z".to_string()),
-        };
-
-        assert_eq!(sheet_meta.sheet_id, "sheet1");
-        assert_eq!(sheet_meta.title, "工作表1");
-        assert_eq!(sheet_meta.index, 0);
-        assert!(!sheet_meta.hidden);
-        assert_eq!(sheet_meta.row_count, 1000);
-        assert_eq!(sheet_meta.column_count, 26);
-    }
-
-    #[test]
-    fn test_owner_info_structure() {
-        let owner = OwnerInfo {
-            user_id: "user_123".to_string(),
-            name: "张三".to_string(),
-            email: Some("zhangsan@example.com".to_string()),
-            avatar_url: Some("https://example.com/avatar.jpg".to_string()),
-            user_type: Some("user".to_string()),
-        };
-
-        assert_eq!(owner.user_id, "user_123");
-        assert_eq!(owner.name, "张三");
-        assert_eq!(owner.email.as_ref().unwrap(), "zhangsan@example.com");
-    }
-
-    #[test]
-    fn test_permission_info_structure() {
-        let permission = PermissionInfo {
-            editable: true,
-            commentable: true,
-            shareable: false,
-            permission_type: "owner".to_string(),
-            role: Some("owner".to_string()),
-        };
-
-        assert!(permission.editable);
-        assert!(permission.commentable);
-        assert!(!permission.shareable);
-        assert_eq!(permission.permission_type, "owner");
-    }
-}

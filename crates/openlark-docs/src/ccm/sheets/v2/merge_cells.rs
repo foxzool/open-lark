@@ -271,7 +271,6 @@ impl ApiResponseTrait for UnmergeCellsResponse {
 }
 
 /// 单元格合并服务
-#[derive(Clone, Debug)]
 pub struct MergeCellsService {
     config: Config,
 }
@@ -400,7 +399,6 @@ impl MergeCellsService {
 }
 
 /// 合并单元格构建器
-#[derive(Clone, Debug)]
 pub struct MergeCellsBuilder {
     config: Config,
     spreadsheet_token: String,
@@ -588,7 +586,7 @@ mod tests {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
+            ;
         let service = MergeCellsService::new(config);
         assert!(!format!("{:?}", service).is_empty());
     }

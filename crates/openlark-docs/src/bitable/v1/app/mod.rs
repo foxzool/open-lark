@@ -1,11 +1,16 @@
 use openlark_core::config::Config;
 
+// 导入Base模块的RoleService
+#[cfg(feature = "base")]
+use crate::base::v2::app::role::RoleService;
+
 // 应用级别API
 pub mod copy;
 pub mod create;
 pub mod delete;
 pub mod get;
 pub mod update;
+pub mod models;
 
 // 子模块API
 pub mod dashboard;
@@ -46,17 +51,18 @@ impl AppService {
     }
 
     /// 获取角色服务
-    pub fn role_service(&self) -> role::RoleService {
-        role::RoleService::new(self.config.clone())
+    #[cfg(feature = "base")]
+    pub fn role_service(&self) -> RoleService {
+        RoleService::new(self.config.clone())
     }
 
     /// 获取仪表盘服务
-    pub fn dashboard_service(&self) -> dashboard::DashboardService {
-        dashboard::DashboardService::new(self.config.clone())
+    pub fn dashboard_service(&self) -> dashboard::AppDashboardService {
+        dashboard::AppDashboardService::new(self.config.clone())
     }
 
     /// 获取工作流服务
-    pub fn workflow_service(&self) -> workflow::WorkflowService {
-        workflow::WorkflowService::new(self.config.clone())
+    pub fn workflow_service(&self) -> workflow::App_WorkflowService {
+        workflow::App_WorkflowService::new(self.config.clone())
     }
 }

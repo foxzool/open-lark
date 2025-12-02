@@ -1,7 +1,7 @@
 //! Base V2 创建自定义角色API
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
@@ -9,10 +9,9 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use super::RoleService;
+use super::{RoleService, models::{RoleResponse as Role, CreateRoleRequest}};
 
 /// 新增自定义角色请求
-#[derive(Clone)]
 pub struct CreateRoleV2Request {
     api_request: ApiRequest<CreateRoleV2Response>,
     app_token: String,
@@ -24,6 +23,8 @@ pub struct CreateRoleV2Request {
     permissions: Vec<String>,
     /// 角色类型
     role_type: Option<String>,
+    /// 配置信息
+    config: Config,
 }
 
 /// 新增自定义角色响应
@@ -33,20 +34,23 @@ pub struct CreateRoleV2Response {
     pub success: bool,
 }
 
+impl ApiResponseTrait for CreateRoleV2Response {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
 impl CreateRoleV2Request {
     /// 创建新增自定义角色请求
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new()
-                .method(HttpMethod::Post)
-                .api_path("/open-apis/base/v2/apps/:app_token/roles".to_string())
-                .config(config)
-                .build(),
+            api_request: ApiRequest::post("/open-apis/base/v2/apps/:app_token/roles"),
             app_token: String::new(),
             name: String::new(),
             description: None,
             permissions: Vec::new(),
             role_type: None,
+            config,
         }
     }
 
@@ -81,33 +85,27 @@ impl CreateRoleV2Request {
     }
 
     /// 执行请求
-    pub async fn execute(mut self) -> SDKResult<CreateRoleV2Response> {
+    pub async fn execute(self) -> SDKResult<CreateRoleV2Response> {
         // 构建API路径
         let path = format!("/open-apis/base/v2/apps/{}/roles", self.app_token);
 
-        // 更新API路径
-        self.api_request = self.api_request.api_path(path);
+        // 构建请求体 - 修正字段名称映射
+        let request_body = CreateRoleRequest {
+            role_name: self.name.clone(),
+            table_roles: None, // 根据实际API需求设置
+        };
 
-        // 构建请求体
-        let request_body = serde_json::json!({
-            "name": self.name,
-            "description": self.description,
-            "permissions": self.permissions,
-            "role_type": self.role_type
-        });
-
-        // 设置请求体
-        self.api_request = self.api_request.body(serde_json::to_vec(&request_body)?);
+        // 创建新的API请求
+        let api_request: ApiRequest<CreateRoleV2Response> = ApiRequest::post(&format!("https://open.feishu.cn{}", path))
+            .body(openlark_core::api::RequestData::Binary(serde_json::to_vec(&request_body)?));
 
         // 发送请求
-        let config = self.api_request.config();
-        let response = Transport::request(self.api_request, &config.clone(), None).await?;
-        Ok(response)
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据"))
     }
 }
 
 /// 创建自定义角色Builder
-#[derive(Clone)]
 pub struct CreateRoleV2Builder {
     request: CreateRoleV2Request,
 }
@@ -164,11 +162,19 @@ impl RoleService {
 
     /// 创建新增自定义角色请求
     pub fn create_role_v2(&self, app_token: String, name: String, description: Option<String>, permissions: Vec<String>, role_type: Option<String>) -> CreateRoleV2Request {
-        CreateRoleV2Request::new(self.config.clone())
+        let mut request = CreateRoleV2Request::new(self.config.clone())
             .app_token(app_token)
             .name(name)
-            .description(description.unwrap_or_default())
-            .permissions(permissions)
-            .role_type(role_type.unwrap_or_default())
+            .permissions(permissions);
+
+        if let Some(desc) = description {
+            request = request.description(desc);
+        }
+
+        if let Some(rtype) = role_type {
+            request = request.role_type(rtype);
+        }
+
+        request
     }
 }

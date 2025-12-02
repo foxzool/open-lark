@@ -3,10 +3,10 @@ use SDKResult;use reqwest::Method;
 use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 ,
 {
-    core::,
+    api::,
 {,
         BaseResponse,
-        ResponseFormat,
+        ResponseFormat, HttpMethod,
         api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
@@ -18,7 +18,7 @@ use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
     impl_executable_builder_owned,
 };
 /// 搜索Wiki请求,
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SearchWikiRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -36,7 +36,6 @@ pub struct SearchWikiRequest {
 impl SearchWikiRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone, Debug)]
 pub struct SearchWikiRequestBuilder {
     request: SearchWikiRequest}
 impl SearchWikiRequestBuilder {
@@ -61,7 +60,6 @@ impl_executable_builder_owned!(,
     search_wiki,
 );
 /// 搜索结果项
-#[derive(Clone, Debug)]
 pub struct WikiSearchItem {
     /// 节点token
     pub node_token: String,
@@ -84,7 +82,6 @@ pub struct WikiSearchItem {
     /// 最后编辑者
     pub obj_edit_user: Option<String>}
 /// 搜索Wiki响应,
-#[derive(Clone, Debug)]
 pub struct SearchWikiResponse {
     /// 是否还有更多项
     pub has_more: bool,
@@ -133,7 +130,7 @@ let request = SearchWikiRequest::builder(),
 .page_size()
             .add_space_id()
 .add_space_id()
-            .build();
+            ;
 
         assert_eq!(request.query, "测试搜索");
         assert_eq!(request.page_size, Some(20));
@@ -147,7 +144,7 @@ assert_eq!(,
 let request = SearchWikiRequest::builder(),
             .query()
 .search_all_spaces()
-            .build();
+            ;
 
         assert_eq!(request.query, "测试搜索");
         assert_eq!(request.space_ids, None);

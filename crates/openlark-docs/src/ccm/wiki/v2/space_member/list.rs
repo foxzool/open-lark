@@ -12,7 +12,7 @@ use SDKResult;    api::ApiRequest,
     SDKResult,
 };
 /// 获取知识空间成员列表请求,
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListSpaceMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -28,7 +28,6 @@ pub struct ListSpaceMemberRequest {
 impl ListSpaceMemberRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone, Debug)]
 pub struct ListSpaceMemberRequestBuilder {
     request: ListSpaceMemberRequest}
 impl ListSpaceMemberRequestBuilder {
@@ -37,12 +36,9 @@ impl ListSpaceMemberRequestBuilder {
 }if let Some(page_token) = &self.request.page_token {,
             self.request,
 .api_request,
-                .query_params
-                .insert("page_token", page_token.clone());
 self.request,
     }
 /// 知识空间成员信息,
-#[derive(Clone, Debug)]
 pub struct SpaceMember {
     /// 成员类型：user
     pub member_type: String,
@@ -53,7 +49,6 @@ pub struct SpaceMember {
     /// 成员类型：user
     pub r#type: Option<String>}
 /// 获取知识空间成员列表响应,
-#[derive(Clone, Debug)]
 pub struct ListSpaceMemberResponse {
     /// 成员列表
     pub items: Vec<SpaceMember>,
@@ -95,7 +90,7 @@ let request = ListSpaceMemberRequest::builder(),
             .space_id()
 .page_size()
             .page_token()
-.build();
+;
         assert_eq!(request.space_id, "spcxxxxxx");
         assert_eq!(request.page_size, Some(20));
         assert_eq!(request.page_token, Some("page_token_123".to_string()));

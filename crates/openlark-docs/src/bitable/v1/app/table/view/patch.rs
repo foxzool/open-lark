@@ -1,43 +1,87 @@
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
-    
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat, HttpMethod, Response},
     config::Config,
-    
-    
     http::Transport,
     req_option::RequestOption,
-    
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+/// 视图信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct View {
+    /// 视图ID
+    pub view_id: String,
+    /// 视图名称
+    pub view_name: String,
+    /// 视图类型
+    pub view_type: String,
+    /// 视图配置
+    pub property: Option<Value>,
+    /// 创建时间
+    pub created_time: String,
+    /// 更新时间
+    pub modified_time: String,
+}
+
 /// 更新视图请求
-#[derive(Clone)]
-pub struct PatchViewRequest {
-    #[serde(skip)]
+#[derive(Debug, Clone)]pub struct PatchViewRequest {
     api_request: ApiRequest<Self>,
     /// 多维表格的 app_token
-    #[serde(skip)]
     app_token: String,
     /// 数据表的 table_id
-    #[serde(skip)]
     table_id: String,
     /// 视图的 view_id
-    #[serde(skip)]
     view_id: String,
     /// 用户 ID 类型
-    #[serde(skip)]
     user_id_type: Option<String>,
     /// 视图信息
     view: ViewData,
 }
 
+impl Default for PatchViewRequest {
+    fn default() -> Self {
+        Self {
+            api_request: ApiRequest {
+                method: HttpMethod::Patch,
+                url: "".to_string(),
+                headers: {
+                    let mut h = std::collections::HashMap::new();
+                    h.insert("Content-Type".to_string(), "application/json".to_string());
+                    h
+                },
+                query: std::collections::HashMap::new(),
+                body: None,
+                timeout: None,
+                _phantom: std::marker::PhantomData,
+            },
+            app_token: String::new(),
+            table_id: String::new(),
+            view_id: String::new(),
+            user_id_type: None,
+            view: ViewData::default(),
+        }
+    }
+}
+
 impl PatchViewRequest {
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new().method(HttpMethod::POST).api_path( /open-apis/bitable/v1/apps/{}/tables/{}/views/{}).config(config)),
+            api_request: ApiRequest {
+                method: HttpMethod::Patch,
+                url: "".to_string(),
+                headers: {
+                    let mut h = std::collections::HashMap::new();
+                    h.insert("Content-Type".to_string(), "application/json".to_string());
+                    h
+                },
+                query: std::collections::HashMap::new(),
+                body: None,
+                timeout: None,
+                _phantom: std::marker::PhantomData,
+            },
             app_token: String::new(),
             table_id: String::new(),
             view_id: String::new(),
@@ -92,15 +136,13 @@ impl PatchViewRequestBuilder {
 }
 
 /// 视图数据
-#[derive(Clone, Default, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ViewData {
     /// 视图名称
     pub view_name: String,
     /// 视图类型
-    #[serde(skip_serializing_if = Option::is_none)]
     pub view_type: Option<String>,
     /// 视图的自定义属性
-    #[serde(skip_serializing_if = Option::is_none)]
     pub property: Option<Value>,
 }
 
@@ -131,7 +173,7 @@ struct PatchViewRequestBody {
 }
 
 /// 更新视图响应
-#[derive(Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PatchViewResponse {
     /// 视图信息
     pub view: View,
@@ -150,15 +192,17 @@ pub async fn patch_view(
     option: Option<RequestOption>,
 ) -> SDKResult<PatchViewResponse> {
     let mut api_req = request.api_request;
-        let api_request = api_request.api_path(format!(        .replace({app_token}, &request.app_token)
-        let api_request = api_request.api_path(format!(        .replace({table_id}, &request.table_id)
-        let api_request = api_request.api_path(format!(        .replace({view_id}, &request.view_id);
+
+    // 构建API路径
+    let path = format!(
+        "/open-apis/bitable/v1/apps/{}/tables/{}/views/{}",
+        &request.app_token, &request.table_id, &request.view_id
+    );
+    // 暂时不需要修改api_path，在最终发送请求时处理
 
     // 设置查询参数
     if let Some(user_id_type) = &request.user_id_type {
-        api_req
-            .query_params
-            .insert(user_id_type.to_string(), user_id_type.clone());
+        api_req = api_req.query("user_id_type", user_id_type);
     }
 
     // 设置请求体
@@ -166,9 +210,9 @@ pub async fn patch_view(
         view: request.view,
     };
 
-    api_req.body = serde_json::to_vec(&body).unwrap();
+    api_req = api_req.body(openlark_core::api::RequestData::Json(serde_json::to_value(&body)?));
 
-    let api_resp: openlark_core::core::StandardResponse<PatchViewResponse> =
+    let api_resp: Response<PatchViewResponse> =
         Transport::request(api_req, config, option).await?;
     api_resp.into_result()
 }

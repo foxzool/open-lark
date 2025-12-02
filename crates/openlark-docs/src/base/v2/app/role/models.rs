@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 /// 角色创建请求结构
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateRoleRequest {
     /// 角色名称
     pub role_name: String,
@@ -12,7 +12,7 @@ pub struct CreateRoleRequest {
 }
 
 /// 角色更新请求结构
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct UpdateRoleRequest {
     /// 角色名称
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -23,7 +23,7 @@ pub struct UpdateRoleRequest {
 }
 
 /// 表格角色配置
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct TableRole {
     /// 表格ID
     pub table_id: String,
@@ -35,7 +35,7 @@ pub struct TableRole {
 }
 
 /// 记录访问规则
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct RecordRule {
     /// 条件列表
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -43,7 +43,7 @@ pub struct RecordRule {
 }
 
 /// 条件定义
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Condition {
     /// 字段名称
     pub field_name: String,
@@ -54,7 +54,7 @@ pub struct Condition {
 }
 
 /// 角色响应结构
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct RoleResponse {
     /// 角色ID
     pub role_id: String,
@@ -66,14 +66,14 @@ pub struct RoleResponse {
 }
 
 /// 列出角色响应结构
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListRolesResponse {
     /// 角色列表
     pub items: Vec<RoleItem>,
 }
 
 /// 角色项
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct RoleItem {
     /// 角色名称
     pub role_name: String,
@@ -82,7 +82,7 @@ pub struct RoleItem {
 }
 
 /// 表格角色信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct TableRoleInfo {
     /// 表格权限
     pub table_perm: i32,
@@ -96,7 +96,7 @@ pub struct TableRoleInfo {
 }
 
 /// 分页参数
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct PaginationParams {
     /// 页面大小
     #[serde(skip_serializing_if = "Option::is_none")]

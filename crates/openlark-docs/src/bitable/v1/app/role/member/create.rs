@@ -1,10 +1,8 @@
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
-    api::{ApiResponseTrait},
+    api::{ApiRequest, ApiResponseTrait},
     config::Config,
-    
-    
+
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -12,7 +10,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 新增协作者请求
-#[derive(Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateRoleMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest<Self>,
@@ -28,14 +26,13 @@ impl CreateRoleMemberRequest {
     /// 创建新增协作者请求
     pub fn new(config: Config, app_token: impl Into<String>, role_id: impl Into<String>) -> Self {
         Self {
-            api_request: ApiRequest::new(config)
+            api_request: ApiRequest::post(format!(
+                "/open-apis/bitable/v1/apps/{}/roles/{}/members",
+                app_token.into(),
+                role_id.into()
+            ))
                 .access_token_type(AccessTokenType::Tenant)
-                .method(HttpMethod::POST)
-                .endpoint(format!(
-                    /open-apis/bitable/v1/apps/{}/roles/{}/members,
-                    app_token.into(),
-                    role_id.into()
-                )),
+                ,
             app_token: app_token.into(),
             role_id: role_id.into(),
         }

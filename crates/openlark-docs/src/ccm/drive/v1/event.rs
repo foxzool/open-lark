@@ -10,10 +10,10 @@ use SDKResult;use reqwest::Method;
 use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::,
 {
-    core::,
+    api::,
 {,
         BaseResponse,
-        ResponseFormat,
+        ResponseFormat, HttpMethod,
         api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
@@ -103,7 +103,6 @@ api_req
 Ok(api_resp),
     }
 /// 订阅云文档事件请求参数,
-#[derive(Clone, Debug)]
 pub struct SubscribeFileEventsRequest {
     /// 文件token
     pub file_token: String,
@@ -129,7 +128,6 @@ impl SubscribeFileEventsRequestBuilder {
     subscribe_file_events,
 );
 /// 订阅云文档事件响应数据
-#[derive(Clone, Debug)]
 pub struct SubscribeFileEventsRespData {
     /// 订阅ID
     pub subscription_id: String,
@@ -142,7 +140,6 @@ impl ApiResponseTrait for.* {
 ResponseFormat::Data
     }
 /// 查询云文档事件订阅状态请求参数,
-#[derive(Clone, Debug)]
 pub struct GetFileSubscriptionRequest {
     /// 文件token
     pub file_token: String,
@@ -166,12 +163,10 @@ impl GetFileSubscriptionRequestBuilder {
     get_file_subscription,
 );
 /// 查询云文档事件订阅状态响应数据
-#[derive(Clone, Debug)]
 pub struct GetFileSubscriptionRespData {
     /// 订阅信息
     pub subscription: FileSubscription,
 
-#[derive(Clone, Debug)]
 pub struct FileSubscription {
     /// 订阅ID
     pub subscription_id: String,
@@ -190,7 +185,6 @@ impl ApiResponseTrait for.* {
 ResponseFormat::Data
     }
 /// 取消云文档事件订阅请求参数,
-#[derive(Clone, Debug)]
 pub struct UnsubscribeFileEventsRequest {
     /// 文件token
     pub file_token: String,
@@ -214,7 +208,6 @@ impl UnsubscribeFileEventsRequestBuilder {
     unsubscribe_file_events,
 );
 /// 取消云文档事件订阅响应数据
-#[derive(Clone, Debug)]
 pub struct UnsubscribeFileEventsRespData {
     /// 操作结果
     pub result: bool,

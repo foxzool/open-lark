@@ -7,7 +7,6 @@ use openlark_core::{config::Config, trait_system::Service};
 /// 知识库服务
 ///
 /// 基础服务架构，具体功能在后续版本中实现。
-#[derive(Clone, Debug)]
 pub struct WikiService {
     config: Config,
 }
@@ -42,7 +41,7 @@ mod tests {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
+            ;
         let service = WikiService::new(config);
         assert!(!format!("{:?}", service).is_empty());
     }
@@ -52,7 +51,7 @@ mod tests {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
+            ;
         let service = WikiService::new(config);
 
         let config_ref = service.config();

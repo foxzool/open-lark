@@ -1,20 +1,18 @@
 //! 删除数据表模块
 
 use openlark_core::{
-    core::{
-        BaseResponse,
-        ResponseFormat,
+    api::{
+        ApiRequest, ApiResponseTrait, BaseResponse, ResponseFormat, HttpMethod,
     },
-    
-    
+    config::Config,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+use crate::endpoints::BITABLE_V1_TABLE_DELETE;
 
 /// 删除数据表请求
-#[derive(Clone)]
 pub struct DeleteTableRequest {
     api_request: ApiRequest<Self>,
     /// 多维表格的 app_token
@@ -23,13 +21,21 @@ pub struct DeleteTableRequest {
     pub table_id: String,
 }
 
-impl DeleteTableRequest {
-    pub fn new(config: openlark_core::Config) -> Self {
+impl Default for DeleteTableRequest {
+    fn default() -> Self {
         Self {
-            api_request: openlark_core::api::ApiRequest::new(
-                config,
-                HttpMethod::DELETE,
-                DELETE_TABLE.to_string(),
+            api_request: ApiRequest::delete(BITABLE_V1_TABLE_DELETE.to_string()),
+            app_token: String::new(),
+            table_id: String::new(),
+        }
+    }
+}
+
+impl DeleteTableRequest {
+    pub fn new(config: Config) -> Self {
+        Self {
+            api_request: ApiRequest::delete(
+                BITABLE_V1_TABLE_DELETE.to_string()
             ),
             app_token: String::new(),
             table_id: String::new(),
@@ -67,7 +73,6 @@ impl DeleteTableRequestBuilder {
 }
 
 /// 删除数据表响应
-#[derive(Clone)]
 pub struct DeleteTableResponse {
     /// 删除的数据表ID
     pub deleted: bool,

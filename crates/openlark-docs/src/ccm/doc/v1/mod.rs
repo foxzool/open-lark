@@ -20,7 +20,6 @@ use openlark_core::config::Config;
 ///
 /// 提供飞书文档v1版本的统一入口，支持现代化的文档管理。
 /// 包括创建、编辑、格式化、协作等企业级功能。
-#[derive(Clone, Debug)]
 pub struct DocsServiceV1 {
     config: Config,
     /// 文档管理服务
@@ -73,7 +72,7 @@ mod tests {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
+            ;
         let service = DocsServiceV1::new(config);
         assert!(!format!("{:?}", service).is_empty());
     }
@@ -83,7 +82,7 @@ mod tests {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
+            ;
         let service = DocsServiceV1::new(config);
 
         // 测试Service trait的实现

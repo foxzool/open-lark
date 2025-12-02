@@ -1,7 +1,8 @@
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
+    api::{ApiRequest, RequestData, ResponseFormat, ApiResponseTrait},
     config::Config,
+    error::validation_error,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -9,18 +10,14 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 复制仪表盘请求
-#[derive(Clone)]
 pub struct CopyDashboardRequest {
-    #[serde(skip)]
-    api_request: ApiRequest<CopyDashboardResponse>,
+    /// 配置信息
+    config: Config,
     /// 多维表格的唯一标识符
-    #[serde(skip)]
     app_token: String,
     /// 用户 ID 类型
-    #[serde(skip)]
     user_id_type: Option<String>,
     /// 格式为标准的 uuidv4，操作的唯一标识，用于幂等的进行更新操作
-    #[serde(skip)]
     client_token: Option<String>,
     /// 复制仪表盘名称
     name: String,
@@ -31,11 +28,7 @@ pub struct CopyDashboardRequest {
 impl CopyDashboardRequest {
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new()
-                .method(HttpMethod::Post)
-                .api_path("/open-apis/bitable/v1/apps/{}/dashboards/batch_copy".to_string())
-                .config(config)
-                .build(),
+            config,
             app_token: String::new(),
             user_id_type: None,
             client_token: None,
@@ -45,18 +38,19 @@ impl CopyDashboardRequest {
     }
 
     pub fn builder() -> CopyDashboardRequestBuilder {
-        CopyDashboardRequestBuilder::default()
+        CopyDashboardRequestBuilder::new()
     }
 }
 
-#[derive(Default)]
 pub struct CopyDashboardRequestBuilder {
     request: CopyDashboardRequest,
 }
 
 impl CopyDashboardRequestBuilder {
     pub fn new() -> Self {
-        Self::default()
+        Self {
+            request: CopyDashboardRequest::new(Config::default()),
+        }
     }
 
     pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
@@ -90,14 +84,14 @@ impl CopyDashboardRequestBuilder {
 }
 
 /// 复制仪表盘响应
-#[derive(Clone)]
+#[derive(Deserialize)]
 pub struct CopyDashboardResponse {
     /// 复制的仪表盘列表
     pub dashboards: Vec<DashboardInfo>,
 }
 
 /// 仪表盘信息
-#[derive(Clone)]
+#[derive(Deserialize)]
 pub struct DashboardInfo {
     /// 仪表盘ID
     pub dashboard_id: String,
@@ -125,22 +119,22 @@ struct CopyDashboardRequestBody {
 /// 复制仪表盘
 pub async fn copy_dashboard(
     request: CopyDashboardRequest,
-    config: &Config,
-    option: Option<RequestOption>,
+    _config: &Config,
+    _option: Option<RequestOption>,
 ) -> SDKResult<CopyDashboardResponse> {
-    let mut api_request = request.api_request
-        .api_path(format!(/open-apis/bitable/v1/apps/{}/dashboards/{}/copy, &request.app_token, &request.dashboard_id));
+    // 构建API URL
+    let api_url = format!("/open-apis/bitable/v1/apps/{}/dashboards/batch_copy", request.app_token);
+
+    // 创建API请求
+    let mut api_request: ApiRequest<CopyDashboardResponse> = ApiRequest::post(api_url);
+
     // 设置查询参数
     if let Some(user_id_type) = &request.user_id_type {
-        api_req
-            .query_params
-            .insert(user_id_type.to_string(), user_id_type.clone());
+        api_request = api_request.query("user_id_type", user_id_type);
     }
 
     if let Some(client_token) = &request.client_token {
-        api_req
-            .query_params
-            .insert(client_token.to_string(), client_token.clone());
+        api_request = api_request.query("client_token", client_token);
     }
 
     // 设置请求体
@@ -149,10 +143,16 @@ pub async fn copy_dashboard(
         dashboard_ids: request.dashboard_ids,
     };
 
-    let api_request = api_request.body(serde_json::to_vec(&body).unwrap());
+    api_request = api_request.body(RequestData::Json(serde_json::to_value(&body)?));
 
-    let response: CopyDashboardResponse =
-        Transport::request(api_request, config, option).await?;
-    response
+    // 发送请求
+    let response = Transport::request(api_request, &request.config, None).await?;
+
+    // 解析响应数据
+    let copy_response: CopyDashboardResponse = response.data
+        .and_then(|data| serde_json::from_value(data).ok())
+        .ok_or_else(|| validation_error("解析复制仪表盘响应失败", "响应数据格式不正确"))?;
+
+    Ok(copy_response)
 }
 

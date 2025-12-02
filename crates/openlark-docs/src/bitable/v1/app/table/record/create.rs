@@ -1,6 +1,6 @@
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat, HttpMethod, RequestData},
     config::Config,
     http::Transport,
     req_option::RequestOption,
@@ -8,43 +8,38 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use super::batch_create::Record;
 /// 新增记录请求
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct CreateRecordRequest {
-    #[serde(skip)]
     api_request: ApiRequest<CreateRecordResponse>,
-    /// 多维表格的唯一标识符,
-#[serde(skip)]
+    /// 多维表格的唯一标识符
     app_token: String,
-    /// 多维表格数据表的唯一标识符,
-#[serde(skip)]
+    /// 多维表格数据表的唯一标识符
     table_id: String,
-    /// 用户 ID 类型,
-#[serde(skip)]
+    /// 用户 ID 类型
     user_id_type: Option<String>,
-    /// 格式为标准的 uuidv4，操作的唯一标识，用于幂等的进行更新操作,
-#[serde(skip)]
+    /// 格式为标准的 uuidv4，操作的唯一标识，用于幂等的进行更新操作
     client_token: Option<String>,
-    /// 要新增的记录的数据,
-#[serde(flatten)]
-    fields: Record}
-impl CreateRecordRequest {
-    pub fn new(config: Config) -> Self {
+    /// 要新增的记录的数据
+    fields: Record,
+}
+impl Default for CreateRecordRequest {
+    fn default() -> Self {
         Self {
-            api_request: ApiRequest::new().method(HttpMethod::POST).api_path( /open-apis/bitable/v1/apps/{}/tables/{}/records).config(config)),
+            api_request: ApiRequest::post("https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/records"),
             app_token: String::new(),
             table_id: String::new(),
             user_id_type: None,
             client_token: None,
-            fields: Record {
-                record_id: None,
-                fields: std::collections::HashMap::new(),
-                created_by: None,
-                created_time: None,
-                last_modified_by: None,
-                last_modified_time: None,
-            },
+            fields: Record::default(),
         }
+    }
+}
+
+impl CreateRecordRequest {
+    pub fn new(config: Config) -> Self {
+        Self::default()
     }
 
     pub fn builder() -> CreateRecordRequestBuilder {
@@ -92,7 +87,7 @@ impl CreateRecordRequestBuilder {
     }
 }
 /// 新增记录响应
-#[derive(Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateRecordResponse {
     /// 新增的记录
     pub record: Record,
@@ -113,36 +108,25 @@ pub async fn create_record(
     config: &Config,
     option: Option<RequestOption>,
 ) -> SDKResult<CreateRecordResponse> {
-    let mut api_req = request.api_request;
-        let api_request = api_request.api_path(format!(        .replace({app_token}, &request.app_token)
-        let api_request = api_request.api_path(format!(        .replace({table_id}, &request.table_id);
+    let url = format!(
+        "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/records",
+        &request.app_token, &request.table_id
+    );
+    let mut api_req = ApiRequest::<()>::post(&url);
 
     // 设置查询参数
     if let Some(user_id_type) = &request.user_id_type {
-        api_req
-            .query_params
-            .insert(user_id_type.to_string(), user_id_type.clone());
+        api_req = api_req.query("user_id_type", user_id_type);
     }
 
     if let Some(client_token) = &request.client_token {
-        api_req
-            .query_params
-            .insert(client_token.to_string(), client_token.clone());
+        api_req = api_req.query("client_token", client_token);
     }
 
     // 设置请求体
-    match serde_json::to_vec(&request.fields) {
-        Ok(bytes) => {
-            api_req.body = bytes;
-        }
-        Err(e) => {
-            error!(Failed to serialize create record request: {}, e);
-            api_req.body = Vec::new();
-        }
-    }
+    api_req = api_req.body(RequestData::Json(serde_json::to_value(&request.fields).unwrap()));
 
-    let api_resp: openlark_core::core::StandardResponse<CreateRecordResponse> =
-        Transport::request(api_req, config, option).await?;
-    api_resp.into_result()
+    let api_resp = Transport::request(api_req, config, option).await?;
+    api_resp.data.ok_or_else(|| openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据"))
 }
 

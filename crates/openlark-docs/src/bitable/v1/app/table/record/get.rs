@@ -3,21 +3,19 @@
 //! 提供多维表格单条记录的检索功能，根据record_id获取现有记录。
 
 use openlark_core::{
-    core::{
-        BaseResponse,
-        ResponseFormat,
+    api::{
+        ApiRequest, ApiResponseTrait, BaseResponse, ResponseFormat, HttpMethod,
     },
-    
-    
+    config::Config,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+use crate::endpoints::BITABLE_V1_RECORD_GET;
 use super::AppTableRecordService;
 
 /// 检索单条记录请求
-#[derive(Clone)]
 pub struct GetRecordRequest {
     api_request: ApiRequest<Self>,
     /// 多维表格的 app_token
@@ -36,13 +34,26 @@ pub struct GetRecordRequest {
     pub automatic: Option<bool>,
 }
 
-impl GetRecordRequest {
-    pub fn new(config: openlark_core::Config) -> Self {
+impl Default for GetRecordRequest {
+    fn default() -> Self {
         Self {
-            api_request: openlark_core::api::ApiRequest::new(
-                config,
-                HttpMethod::GET,
-                BITABLE_V1_RECORDS_GET.to_string(),
+            api_request: ApiRequest::get(BITABLE_V1_RECORD_GET.to_string()),
+            app_token: String::new(),
+            table_id: String::new(),
+            record_id: String::new(),
+            user_id_type: None,
+            view_id: None,
+            field_names: None,
+            automatic: None,
+        }
+    }
+}
+
+impl GetRecordRequest {
+    pub fn new(config: Config) -> Self {
+        Self {
+            api_request: ApiRequest::get(
+                BITABLE_V1_RECORD_GET.to_string()
             ),
             app_token: String::new(),
             table_id: String::new(),
@@ -110,14 +121,14 @@ impl GetRecordRequestBuilder {
 }
 
 /// 检索单条记录响应
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct GetRecordResponse {
     /// 记录信息
     pub record: RecordInfo,
 }
 
 /// 记录信息
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct RecordInfo {
     /// 记录的record_id
     pub record_id: String,
@@ -134,7 +145,7 @@ pub struct RecordInfo {
 }
 
 /// 创建者信息
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct CreatorInfo {
     /// 用户ID
     pub user_id: String,
@@ -145,7 +156,7 @@ pub struct CreatorInfo {
 }
 
 /// 更新者信息
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct UpdaterInfo {
     /// 用户ID
     pub user_id: String,
