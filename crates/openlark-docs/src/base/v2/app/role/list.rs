@@ -4,12 +4,11 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use super::models::{ListRolesResponse, RoleItem};
+use super::models::ListRolesResponse;
 use super::RoleService;
 
 /// 列出自定义角色请求
@@ -69,7 +68,8 @@ impl ListRolesV2Request {
         let path = format!("/open-apis/base/v2/apps/{}/roles", self.app_token);
 
         // 创建新的API请求
-        let mut api_request: ApiRequest<ListRolesV2Response> = ApiRequest::get(&format!("https://open.feishu.cn{}", path));
+        let mut api_request: ApiRequest<ListRolesV2Response> =
+            ApiRequest::get(&format!("https://open.feishu.cn{}", path));
 
         // 构建查询参数
         if let Some(page_size) = self.page_size {
@@ -86,7 +86,9 @@ impl ListRolesV2Request {
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据"))
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+        })
     }
 }
 
@@ -154,9 +156,14 @@ impl RoleService {
     }
 
     /// 创建列出角色请求
-    pub fn list_roles_v2(&self, app_token: String, page_size: Option<i32>, page_token: Option<String>, role_type: Option<String>) -> ListRolesV2Request {
-        let mut request = ListRolesV2Request::new(self.config.clone())
-            .app_token(app_token);
+    pub fn list_roles_v2(
+        &self,
+        app_token: String,
+        page_size: Option<i32>,
+        page_token: Option<String>,
+        role_type: Option<String>,
+    ) -> ListRolesV2Request {
+        let mut request = ListRolesV2Request::new(self.config.clone()).app_token(app_token);
 
         if let Some(page_size) = page_size {
             request = request.page_size(page_size);

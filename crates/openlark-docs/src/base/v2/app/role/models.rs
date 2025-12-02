@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 
 /// 角色创建请求结构
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

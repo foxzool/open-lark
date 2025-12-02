@@ -4,12 +4,14 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use super::{RoleService, models::{RoleResponse as Role, CreateRoleRequest}};
+use super::{
+    models::{CreateRoleRequest, RoleResponse as Role},
+    RoleService,
+};
 
 /// 新增自定义角色请求
 pub struct CreateRoleV2Request {
@@ -96,12 +98,16 @@ impl CreateRoleV2Request {
         };
 
         // 创建新的API请求
-        let api_request: ApiRequest<CreateRoleV2Response> = ApiRequest::post(&format!("https://open.feishu.cn{}", path))
-            .body(openlark_core::api::RequestData::Binary(serde_json::to_vec(&request_body)?));
+        let api_request: ApiRequest<CreateRoleV2Response> =
+            ApiRequest::post(&format!("https://open.feishu.cn{}", path)).body(
+                openlark_core::api::RequestData::Binary(serde_json::to_vec(&request_body)?),
+            );
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据"))
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+        })
     }
 }
 
@@ -161,7 +167,14 @@ impl RoleService {
     }
 
     /// 创建新增自定义角色请求
-    pub fn create_role_v2(&self, app_token: String, name: String, description: Option<String>, permissions: Vec<String>, role_type: Option<String>) -> CreateRoleV2Request {
+    pub fn create_role_v2(
+        &self,
+        app_token: String,
+        name: String,
+        description: Option<String>,
+        permissions: Vec<String>,
+        role_type: Option<String>,
+    ) -> CreateRoleV2Request {
         let mut request = CreateRoleV2Request::new(self.config.clone())
             .app_token(app_token)
             .name(name)
