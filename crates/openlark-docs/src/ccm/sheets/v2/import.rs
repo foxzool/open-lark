@@ -14,7 +14,7 @@ use openlark_core::{
     error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
-    standard_response::StandardResponse,
+    standard_response::Response,
     SDKResult,
 };
 use reqwest::Method;
@@ -96,7 +96,6 @@ impl ApiResponseTrait for ImportResponse {
 }
 
 /// 导入服务
-#[derive(Clone, Debug)]
 pub struct ImportService {
     config: Config,
 }
@@ -148,7 +147,7 @@ impl ImportService {
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, endpoint);
         api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
-        let import_response: StandardResponse<ImportResponse> =
+        let import_response: Response<ImportResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if let Some(data) = import_response.data {
@@ -161,7 +160,7 @@ impl ImportService {
     }
 }
 
-impl openlark_core::core::trait_system::Service for ImportService {
+impl openlark_core::api::trait_system::Service for ImportService {
     fn config(&self) -> &Config {
         &self.config
     }
@@ -184,7 +183,7 @@ mod tests {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
+            ;
         let service = ImportService::new(config);
         assert_eq!(service.service_name(), "ImportService");
     }

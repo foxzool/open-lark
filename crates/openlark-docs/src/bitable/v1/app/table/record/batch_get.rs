@@ -1,48 +1,54 @@
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
-    api::{ApiResponseTrait},
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
-    
-    
+
     http::Transport,
     req_option::RequestOption,
-    
+
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+use super::batch_create::Record;
 
 /// 批量获取记录请求
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct BatchGetRecordRequest {
-    #[serde(skip)]
     api_request: ApiRequest<Self>,
     /// 多维表格的唯一标识符
-    #[serde(skip)]
     app_token: String,
     /// 多维表格数据表的唯一标识符
-    #[serde(skip)]
     table_id: String,
     /// 用户 ID 类型
-    #[serde(skip)]
     user_id_type: Option<String>,
     /// 记录 ID 列表
     record_ids: Vec<String>,
     /// 控制是否返回自动计算的字段
-    #[serde(skip_serializing_if = Option::is_none)]
     automatic: Option<bool>,
     /// 控制是否返回记录权限
-    #[serde(skip_serializing_if = Option::is_none)]
     with_shared_url: Option<bool>,
+}
+
+impl Default for BatchGetRecordRequest {
+    fn default() -> Self {
+        Self {
+            api_request: ApiRequest::post("https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_get"),
+            app_token: String::new(),
+            table_id: String::new(),
+            user_id_type: None,
+            record_ids: Vec::new(),
+            automatic: None,
+            with_shared_url: None,
+        }
+    }
 }
 
 impl BatchGetRecordRequest {
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self::default()
     }
 }
 
-#[derive(Clone)]
 pub struct BatchGetRecordRequestBuilder {
     request: BatchGetRecordRequest,
 }
@@ -50,15 +56,7 @@ pub struct BatchGetRecordRequestBuilder {
 impl BatchGetRecordRequestBuilder {
     pub fn new(config: Config) -> Self {
         Self {
-            request: BatchGetRecordRequest {
-                api_request: ApiRequest::post(/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_get.to_string()),
-                app_token: String::new(),
-                table_id: String::new(),
-                user_id_type: None,
-                record_ids: Vec::new(),
-                automatic: None,
-                with_shared_url: None,
-            },
+            request: BatchGetRecordRequest::new(config),
         }
     }
 
@@ -110,11 +108,11 @@ crate::impl_executable_builder_owned!(
     super::AppTableRecordService,
     BatchGetRecordRequest,
     Response<BatchGetRecordResponse>,
-    batch_get,
+    batch_get
 );
 
 /// 批量获取记录响应
-#[derive(Clone)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct BatchGetRecordResponse {
     /// 记录列表
     pub records: Vec<Record>,
@@ -127,12 +125,12 @@ impl ApiResponseTrait for BatchGetRecordResponse {
 }
 
 /// 请求体结构
-#[derive(Serialize)]
+#[derive(Debug, Serialize)]
 struct BatchGetRecordRequestBody {
     record_ids: Vec<String>,
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     automatic: Option<bool>,
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     with_shared_url: Option<bool>,
 }
 
@@ -142,18 +140,15 @@ pub async fn batch_get_record(
     config: &Config,
     option: Option<RequestOption>,
 ) -> SDKResult<Response<BatchGetRecordResponse>> {
-    let mut api_req = request.api_request;
-    let api_path = format!(
-        "/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_get",
+    let url = format!(
+        "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_get",
         &request.app_token, &request.table_id
     );
-    api_req = api_req.api_path(api_path);
+    let mut api_req = ApiRequest::<()>::post(&url);
 
     // 设置查询参数
     if let Some(user_id_type) = &request.user_id_type {
-        api_req
-            .query_params
-            .insert(user_id_type.to_string(), user_id_type.clone());
+        api_req = api_req.query("user_id_type", user_id_type);
     }
 
     // 设置请求体
@@ -163,7 +158,7 @@ pub async fn batch_get_record(
         with_shared_url: request.with_shared_url,
     };
 
-    api_req = api_req.body(serde_json::to_vec(&body)?);
+    api_req = api_req.body(openlark_core::api::RequestData::Json(serde_json::to_value(&body).unwrap()));
 
     let api_resp = Transport::request(api_req, config, option).await?;
     Ok(api_resp)

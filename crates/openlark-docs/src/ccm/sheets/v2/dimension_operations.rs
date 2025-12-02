@@ -524,7 +524,6 @@ impl ApiResponseTrait for DeleteDimensionRangeResponse {
 }
 
 /// 行列操作服务
-#[derive(Clone, Debug)]
 pub struct DimensionOperationsService {
     config: Config,
 }
@@ -658,7 +657,7 @@ impl DimensionOperationsService {
     ///
     /// ```rust
     /// use open_lark::service::sheets::v2::dimension_operations::*;
-    /// use open_lark::core::config::Config;
+    /// use open_lark::api::config::Config;
     ///
     /// let config = openlark_core::config::Config::new("app_id", "app_secret");
     /// let service = DimensionOperationsService::new(config);
@@ -717,7 +716,7 @@ impl DimensionOperationsService {
     ///
     /// ```rust
     /// use open_lark::service::sheets::v2::dimension_operations::*;
-    /// use open_lark::core::config::Config;
+    /// use open_lark::api::config::Config;
     ///
     /// let config = openlark_core::config::Config::new("app_id", "app_secret");
     /// let service = DimensionOperationsService::new(config);
@@ -908,7 +907,6 @@ impl DimensionOperationsService {
 }
 
 /// 插入行列构建器
-#[derive(Clone, Debug)]
 pub struct InsertDimensionRangeBuilder {
     config: Config,
     spreadsheet_token: String,
@@ -972,7 +970,6 @@ impl InsertDimensionRangeBuilder {
 }
 
 /// 删除行列构建器
-#[derive(Clone, Debug)]
 pub struct DeleteDimensionRangeBuilder {
     config: Config,
     spreadsheet_token: String,
@@ -1299,7 +1296,7 @@ mod tests {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
+            ;
         let service = DimensionOperationsService::new(config);
         assert!(!format!("{:?}", service).is_empty());
     }

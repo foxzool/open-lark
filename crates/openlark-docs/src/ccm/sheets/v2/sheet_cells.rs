@@ -29,7 +29,7 @@ use openlark_core::{
     error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
-    standard_response::StandardResponse,
+    standard_response::Response,
     SDKResult,
 };
 
@@ -387,7 +387,6 @@ impl ApiResponseTrait for UpdateCellResponse {
 }
 
 /// 单元格更新服务
-#[derive(Clone, Debug)]
 pub struct SheetCellsService {
     config: Config,
 }
@@ -465,8 +464,6 @@ impl SheetCellsService {
         // 添加查询参数
         if let Some(user_id_type) = &request.user_id_type {
             api_req
-                .query_params
-                .insert("user_id_type", user_id_type.clone());
         }
 
         // 暂时返回模拟数据，直到Transport问题解决
@@ -575,7 +572,7 @@ impl UpdateCellRequestBuilder {
 
     /// 构建请求对象并进行验证
     pub fn build_and_validate(self) -> SDKResult<UpdateCellRequest> {
-        let request = self.build();
+        let request = self;
         request.validate()?;
         Ok(request)
     }
@@ -638,7 +635,7 @@ mod tests {
             .cell("A1")
             .value(CellValue::number(42))
             .value_render_option("FormattedValue")
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.spreadsheet_token, "token123");

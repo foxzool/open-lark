@@ -201,7 +201,6 @@ impl ApiResponseTrait for GetSpaceNodeResponse {
 }
 
 /// 知识空间节点管理服务
-#[derive(Clone, Debug)]
 pub struct SpaceNodeService {
     config: Config,
 }
@@ -263,7 +262,7 @@ impl SpaceNodeService {
             .replace("{}", &req.node_id);
 
         let api_req = ApiRequest {
-            method: openlark_core::api::HttpMethod::Get,
+            method: openlark_core::api::Get,
             url: endpoint,
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: None, // GET请求无body
@@ -287,7 +286,6 @@ impl SpaceNodeService {
 // ==================== 构建器模式 ====================
 
 /// 获取知识空间节点构建器
-#[derive(Clone, Debug)]
 pub struct GetSpaceNodeBuilder {
     request: GetSpaceNodeRequest,
 }

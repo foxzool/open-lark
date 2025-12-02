@@ -1,45 +1,48 @@
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
-    
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat, responses::Response},
+
     config::Config,
-    
-    
+
     http::Transport,
     req_option::RequestOption,
-    
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+// 从 patch 模块导入 View 类型
+use super::patch::View;
+
 /// 新增视图请求
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct CreateViewRequest {
-    #[serde(skip)]
     api_request: ApiRequest<Self>,
     /// 多维表格的 app_token
-    #[serde(skip)]
     app_token: String,
     /// 数据表的 table_id
-    #[serde(skip)]
     table_id: String,
     /// 视图信息
     view: ViewData,
     /// 用户 ID 类型
-    #[serde(skip)]
     user_id_type: Option<String>,
 }
 
-impl CreateViewRequest {
-    pub fn new(config: Config) -> Self {
+impl Default for CreateViewRequest {
+    fn default() -> Self {
         Self {
-            api_request: ApiRequest::new().method(HttpMethod::POST).api_path( /open-apis/bitable/v1/apps/{}/tables/{}/views).config(config)),
+            api_request: ApiRequest::post("https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/views"),
             app_token: String::new(),
             table_id: String::new(),
             view: ViewData::default(),
             user_id_type: None,
         }
+    }
+}
+
+impl CreateViewRequest {
+    pub fn new(config: Config) -> Self {
+        Self::default()
     }
 
     pub fn builder() -> CreateViewRequestBuilder {
@@ -82,16 +85,14 @@ impl CreateViewRequestBuilder {
     }
 }
 
+#[derive(Serialize, Default, Debug, Clone)]
 /// 视图数据
-#[derive(Clone, Default)]
 pub struct ViewData {
     /// 视图名称
     pub view_name: String,
     /// 视图类型，可选值：grid (表格视图)、kanban (看板视图)、gallery (画册视图)、gantt (甘特视图)
-    #[serde(skip_serializing_if = Option::is_none)]
     pub view_type: Option<String>,
     /// 视图的自定义属性，当前支持的视图自定义属性参考视图类型
-    #[serde(skip_serializing_if = Option::is_none)]
     pub property: Option<Value>,
 }
 
@@ -108,7 +109,7 @@ impl ViewData {
     pub fn grid_view(view_name: impl ToString) -> Self {
         Self {
             view_name: view_name.to_string(),
-            view_type: Some(grid.to_string()),
+            view_type: Some("grid".to_string()),
             property: None,
         }
     }
@@ -117,7 +118,7 @@ impl ViewData {
     pub fn kanban_view(view_name: impl ToString) -> Self {
         Self {
             view_name: view_name.to_string(),
-            view_type: Some(kanban.to_string()),
+            view_type: Some("kanban".to_string()),
             property: None,
         }
     }
@@ -126,7 +127,7 @@ impl ViewData {
     pub fn gallery_view(view_name: impl ToString) -> Self {
         Self {
             view_name: view_name.to_string(),
-            view_type: Some(gallery.to_string()),
+            view_type: Some("gallery".to_string()),
             property: None,
         }
     }
@@ -135,7 +136,7 @@ impl ViewData {
     pub fn gantt_view(view_name: impl ToString) -> Self {
         Self {
             view_name: view_name.to_string(),
-            view_type: Some(gantt.to_string()),
+            view_type: Some("gantt".to_string()),
             property: None,
         }
     }
@@ -160,7 +161,7 @@ struct CreateViewRequestBody {
 }
 
 /// 创建视图响应
-#[derive(Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateViewResponse {
     /// 视图信息
     pub view: View,
@@ -179,14 +180,10 @@ pub async fn create_view(
     option: Option<RequestOption>,
 ) -> SDKResult<CreateViewResponse> {
     let mut api_req = request.api_request;
-        let api_request = api_request.api_path(format!(        .replace({app_token}, &request.app_token)
-        let api_request = api_request.api_path(format!(        .replace({table_id}, &request.table_id);
 
     // 设置查询参数
     if let Some(user_id_type) = &request.user_id_type {
-        api_req
-            .query_params
-            .insert(user_id_type.to_string(), user_id_type.clone());
+        api_req = api_req.query("user_id_type", user_id_type);
     }
 
     // 设置请求体
@@ -194,9 +191,9 @@ pub async fn create_view(
         view: request.view,
     };
 
-    api_req.body = serde_json::to_vec(&body).unwrap();
+    api_req = api_req.body(openlark_core::api::RequestData::Json(serde_json::to_value(&body)?));
 
-    let api_resp: openlark_core::core::StandardResponse<CreateViewResponse> =
+    let api_resp: Response<CreateViewResponse> =
         Transport::request(api_req, config, option).await?;
     api_resp.into_result()
 }

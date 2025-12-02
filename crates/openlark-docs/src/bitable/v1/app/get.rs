@@ -1,100 +1,113 @@
-//! 获取应用信息模块
+//! Bitable V1 获取多维表格API
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
+    api::{ApiRequest, RequestData},
     config::Config,
+    error::validation_error,
     http::Transport,
-    req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-/// 获取应用请求
-#[derive(Clone)]
-pub struct GetAppRequest {
-    api_request: ApiRequest<GetAppResponse>,
-    /// 多维表格的 app_token
-    pub app_token: String,
+use super::models::{App};
+use super::AppService;
+
+/// 获取多维表格请求
+#[derive(Debug, Clone)]
+pub struct GetAppV1Request {
+    api_request: ApiRequest<GetAppV1Response>,
+    /// 应用token
+    app_token: String,
+    /// 配置信息
+    config: Config,
 }
 
-impl GetAppRequest {
+/// 获取多维表格响应
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct GetAppV1Response {
+    /// 应用信息
+    pub data: App,
+    pub success: bool,
+}
+
+impl GetAppV1Request {
+    /// 创建获取多维表格请求
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new()
-                .method(HttpMethod::Get)
-                .api_path("/open-apis/bitable/v1/apps".to_string())
-                .config(config)
-                .build(),
+            api_request: ApiRequest::get(""),
+            config,
             app_token: String::new(),
         }
     }
 
-    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
-        self.app_token = app_token.into();
+    /// 设置应用token
+    pub fn app_token(mut self, app_token: String) -> Self {
+        self.app_token = app_token;
         self
     }
 
-    pub async fn execute(mut self) -> SDKResult<GetAppResponse> {
-        // 构建API路径
-        let path = format!(/open-apis/bitable/v1/apps/{}, self.app_token);
+    /// 执行请求
+    pub async fn execute(self) -> SDKResult<GetAppV1Response> {
+        // 构建完整的API URL
+        let api_url = format!("https://open.feishu.cn/open-apis/bitable/v1/apps/{}", self.app_token);
 
-        // 更新API路径
-        self.api_request = self.api_request.api_path(path);
+        // 设置API URL
+        let mut api_request = self.api_request;
+        api_request.url = api_url;
 
-        // 发送请求
-        let config = self.api_request.config();
-        let response = Transport::request(self.api_request, &config.clone(), None).await?;
-        Ok(response)
-    }
+        // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
+        let mut request_for_transport: ApiRequest<()> = ApiRequest::get(api_request.url.clone())
+            .body(api_request.body.unwrap_or(RequestData::Empty));
 
-    pub fn builder() -> GetAppRequestBuilder {
-        GetAppRequestBuilder::default()
+        let config = &self.config;
+        let response = Transport::request(request_for_transport, config, None).await?;
+
+        // 解析响应
+        let data: App = response.data
+            .and_then(|data| serde_json::from_value(data).ok())
+            .ok_or_else(|| validation_error("解析失败", "数据格式不正确"))?;
+
+        Ok(GetAppV1Response {
+            data,
+            success: response.raw_response.is_success(),
+        })
     }
 }
 
-#[derive(Default)]
-pub struct GetAppRequestBuilder {
-    request: GetAppRequest,
+/// 获取多维表格Builder
+pub struct GetAppV1Builder {
+    request: GetAppV1Request,
 }
 
-impl GetAppRequestBuilder {
-    pub fn new() -> Self {
-        Self::default()
+impl GetAppV1Builder {
+    /// 创建Builder实例
+    pub fn new(config: Config) -> Self {
+        Self {
+            request: GetAppV1Request::new(config),
+        }
     }
 
-    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
-        self.request.app_token = app_token.into();
+    /// 设置应用token
+    pub fn app_token(mut self, app_token: String) -> Self {
+        self.request = self.request.app_token(app_token);
         self
     }
 
-    pub fn build(self) -> GetAppRequest {
+    /// 构建请求
+    pub fn build(self) -> GetAppV1Request {
         self.request
     }
 }
 
-/// 获取应用响应
-#[derive(Clone)]
-pub struct GetAppResponse {
-    /// 应用信息
-    pub app: GetAppResponseData,
-}
+impl AppService {
+    /// 创建获取多维表格请求构建器
+    pub fn get_app_v1_builder(&self) -> GetAppV1Builder {
+        GetAppV1Builder::new(self.config.clone())
+    }
 
-/// 获取应用响应数据
-#[derive(Clone)]
-pub struct GetAppResponseData {
-    /// 多维表格的 app_token
-    pub app_token: String,
-    /// 多维表格的名字
-    pub name: String,
-    /// 多维表格的版本号
-    pub revision: i32,
-    /// 多维表格的链接
-    pub url: String,
-}
-
-impl ApiResponseTrait for GetAppResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
+    /// 创建获取多维表格请求
+    pub fn get_app_v1(&self, app_token: String) -> GetAppV1Request {
+        GetAppV1Request::new(self.config.clone()).app_token(app_token)
     }
 }
 

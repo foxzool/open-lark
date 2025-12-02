@@ -28,7 +28,7 @@ use openlark_core::{
     error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
-    standard_response::StandardResponse,
+    standard_response::Response,
     SDKResult,
 };
 
@@ -303,7 +303,6 @@ impl ApiResponseTrait for ReadMultipleRangesResponse {
 }
 
 /// 批量范围读取服务
-#[derive(Clone, Debug)]
 pub struct BatchReadService {
     config: Config,
 }
@@ -358,25 +357,17 @@ impl BatchReadService {
 
         // 添加查询参数
         api_req
-            .query_params
-            .insert("ranges", request.ranges.clone());
 
         if let Some(value_render_option) = &request.value_render_option {
             api_req
-                .query_params
-                .insert("valueRenderOption", value_render_option.clone());
         }
 
         if let Some(date_time_render_option) = &request.date_time_render_option {
             api_req
-                .query_params
-                .insert("dateTimeRenderOption", date_time_render_option.clone());
         }
 
         if let Some(user_id_type) = &request.user_id_type {
             api_req
-                .query_params
-                .insert("user_id_type", user_id_type.clone());
         }
 
         // 暂时返回模拟数据，直到Transport问题解决
@@ -542,7 +533,7 @@ impl ReadMultipleRangesRequestBuilder {
 
     /// 构建请求对象并进行验证
     pub fn build_and_validate(self) -> SDKResult<ReadMultipleRangesRequest> {
-        let request = self.build();
+        let request = self;
         request.validate()?;
         Ok(request)
     }
@@ -621,7 +612,7 @@ mod tests {
             .range("Sheet2!C1:D1")
             .value_render_option("FormattedValue")
             .user_id_type("open_id")
-            .build();
+            ;
 
         assert_eq!(request.spreadsheet_token, "token123");
         assert_eq!(request.ranges, "Sheet1!A1:B2,Sheet2!C1:D1");
@@ -638,7 +629,7 @@ mod tests {
             .spreadsheet_token("token123")
             .ranges_from_string("Sheet1!A1:B2,Sheet2!C1:D1,Sheet3!E1:F5")
             .date_time_render_option("FormattedString")
-            .build();
+            ;
 
         assert_eq!(request.spreadsheet_token, "token123");
         assert_eq!(request.range_count(), 3);
@@ -694,7 +685,7 @@ mod tests {
         let request = ReadMultipleRangesRequest::builder()
             .spreadsheet_token("test_token")
             .ranges(complex_ranges)
-            .build();
+            ;
 
         assert_eq!(request.range_count(), 6);
         assert!(request.get_ranges().contains(&"工作表1!A1:Z100"));
@@ -750,7 +741,7 @@ mod tests {
             .range("Sheet1!A1:B2")
             .range("") // 空范围应该被过滤
             .range("Sheet2!C1:D1")
-            .build();
+            ;
 
         // 空范围应该被过滤掉
         assert_eq!(request.range_count(), 2);
@@ -763,7 +754,7 @@ mod tests {
         let request = ReadMultipleRangesRequest::builder()
             .spreadsheet_token("测试令牌🔥")
             .ranges(unicode_ranges)
-            .build();
+            ;
 
         assert_eq!(request.spreadsheet_token, "测试令牌🔥");
         assert_eq!(request.range_count(), 2);

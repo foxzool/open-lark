@@ -11,7 +11,6 @@ use super::{
 };
 
 /// 文档内容服务
-#[derive(Clone, Debug)]
 pub struct ContentDocService {
     config: Config,
 }
@@ -38,7 +37,7 @@ impl ContentDocService {
         }
 
         let api_req = ApiRequest {
-            method: openlark_core::api::HttpMethod::Get,
+            method: openlark_core::api::Get,
             url: endpoint,
             headers: std::collections::HashMap::new(),
             query,
@@ -67,7 +66,7 @@ impl ContentDocService {
         }
 
         let api_req = ApiRequest {
-            method: openlark_core::api::HttpMethod::Get,
+            method: openlark_core::api::Get,
             url: endpoint,
             headers: std::collections::HashMap::new(),
             query,

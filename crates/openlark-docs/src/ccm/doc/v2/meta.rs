@@ -9,7 +9,6 @@ use openlark_core::{api::ApiRequest, constants::AccessTokenType, http::Transport
 use super::{requests::GetDocMetaV2Request, responses::GetDocMetaV2Response};
 
 /// 文档元信息服务
-#[derive(Clone, Debug)]
 pub struct MetaDocService {
     config: Config,
 }
@@ -41,7 +40,7 @@ impl MetaDocService {
         }
 
         let api_req = ApiRequest {
-            method: openlark_core::api::HttpMethod::Get,
+            method: openlark_core::api::Get,
             url: endpoint,
             headers: std::collections::HashMap::new(),
             query,

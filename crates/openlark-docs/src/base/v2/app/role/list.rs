@@ -1,22 +1,20 @@
 //! Base V2 列出自定义角色API
 
 use openlark_core::{
-    api::ApiRequest,
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    constants::AccessTokenType,
-    endpoints::cloud_docs::*,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use super::{ListRolesRequest, ListRolesResponse, RoleService};
+use super::models::{ListRolesResponse, RoleItem};
+use super::RoleService;
 
 /// 列出自定义角色请求
-#[derive(Clone)]
 pub struct ListRolesV2Request {
-    api_request: ApiRequest,
+    api_request: ApiRequest<ListRolesV2Response>,
     app_token: String,
     /// 页面大小
     page_size: Option<i32>,
@@ -24,17 +22,20 @@ pub struct ListRolesV2Request {
     page_token: Option<String>,
     /// 角色类型过滤
     role_type: Option<String>,
+    /// 配置信息
+    config: Config,
 }
 
 impl ListRolesV2Request {
     /// 创建列出角色请求
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new(config),
+            api_request: ApiRequest::get("/open-apis/base/v2/apps/:app_token/roles"),
             app_token: String::new(),
             page_size: None,
             page_token: None,
             role_type: None,
+            config,
         }
     }
 
@@ -67,43 +68,25 @@ impl ListRolesV2Request {
         // 构建API路径
         let path = format!("/open-apis/base/v2/apps/{}/roles", self.app_token);
 
-        // 构建查询参数
-        let mut query_params = Vec::new();
+        // 创建新的API请求
+        let mut api_request: ApiRequest<ListRolesV2Response> = ApiRequest::get(&format!("https://open.feishu.cn{}", path));
 
-        if let Some(ref page_size) = self.page_size {
-            query_params.push(format!("page_size={}", page_size));
+        // 构建查询参数
+        if let Some(page_size) = self.page_size {
+            api_request = api_request.query("page_size", &page_size.to_string());
         }
 
         if let Some(ref page_token) = self.page_token {
-            query_params.push(format!("page_token={}", page_token));
+            api_request = api_request.query("page_token", page_token);
         }
 
         if let Some(ref role_type) = self.role_type {
-            query_params.push(format!("role_type={}", role_type));
+            api_request = api_request.query("role_type", role_type);
         }
 
-        // 构建查询字符串
-        let query_string = if query_params.is_empty() {
-            String::new()
-        } else {
-            format!("?{}", query_params.join("&"))
-        };
-
-        // 构建完整路径
-        let full_path = if query_string.is_empty() {
-            path
-        } else {
-            format!("{}{}", path, query_string)
-        };
-
         // 发送请求
-        let response = self.api_request
-            .method(&openlark_core::http::Method::GET)
-            .path(&full_path)
-            .execute::<ListRolesV2Response>()
-            .await?;
-
-        Ok(response)
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据"))
     }
 }
 
@@ -111,12 +94,17 @@ impl ListRolesV2Request {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListRolesV2Response {
     /// 角色列表
-    pub data: super::models::ListRolesResponse,
+    pub data: ListRolesResponse,
     pub success: bool,
 }
 
+impl ApiResponseTrait for ListRolesV2Response {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
 /// 列出自定义角色Builder
-#[derive(Clone)]
 pub struct ListRolesV2Builder {
     request: ListRolesV2Request,
 }
@@ -161,8 +149,8 @@ impl ListRolesV2Builder {
 
 impl RoleService {
     /// 创建列出角色请求构建器
-    pub fn list_roles_v2_builder(&self, config: Config) -> ListRolesV2Builder {
-        ListRolesV2Builder::new(config)
+    pub fn list_roles_v2_builder(&self) -> ListRolesV2Builder {
+        ListRolesV2Builder::new(self.config.clone())
     }
 
     /// 创建列出角色请求

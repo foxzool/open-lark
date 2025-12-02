@@ -1,43 +1,49 @@
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
-    
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat, responses::Response},
+
     config::Config,
-    
-    
+
     http::Transport,
     req_option::RequestOption,
-    
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use super::batch_create::Record;
 
 /// 更新记录请求
-#[derive(Clone)]
-pub struct UpdateRecordRequest {
-    #[serde(skip)]
+#[derive(Debug, Clone)]pub struct UpdateRecordRequest {
     api_request: ApiRequest<Self>,
     /// 多维表格的唯一标识符
-    #[serde(skip)]
     app_token: String,
     /// 多维表格数据表的唯一标识符
-    #[serde(skip)]
     table_id: String,
     /// 记录的唯一标识符
-    #[serde(skip)]
     record_id: String,
     /// 用户 ID 类型
-    #[serde(skip)]
     user_id_type: Option<String>,
     /// 要更新的记录的数据
     fields: Value,
 }
 
+impl Default for UpdateRecordRequest {
+    fn default() -> Self {
+        Self {
+            api_request: ApiRequest::put("https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/records/{}"),
+            app_token: String::new(),
+            table_id: String::new(),
+            record_id: String::new(),
+            user_id_type: None,
+            fields: serde_json::Value::Object(Default::default()),
+        }
+    }
+}
+
 impl UpdateRecordRequest {
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new().method(HttpMethod::POST).api_path( /open-apis/bitable/v1/apps/{}/tables/{}/records/{}).config(config)),
+            api_request: ApiRequest::put("").header("Content-Type", "application/json"),
             app_token: String::new(),
             table_id: String::new(),
             record_id: String::new(),
@@ -92,7 +98,7 @@ impl UpdateRecordRequestBuilder {
 }
 
 /// 更新记录响应
-#[derive(Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateRecordResponse {
     /// 更新的记录
     pub record: Record,
@@ -117,25 +123,22 @@ pub async fn update_record(
     option: Option<RequestOption>,
 ) -> SDKResult<UpdateRecordResponse> {
     let mut api_req = request.api_request;
-        let api_request = api_request.api_path(format!(        .replace({app_token}, &request.app_token)
-        let api_request = api_request.api_path(format!(        .replace({table_id}, &request.table_id)
-        let api_request = api_request.api_path(format!(        .replace({record_id}, &request.record_id);
 
     // 设置查询参数
-    if let Some(user_id_type) = &request.user_id_type {
+    let mut api_req = if let Some(user_id_type) = &request.user_id_type {
+        api_req.query("user_id_type", user_id_type)
+    } else {
         api_req
-            .query_params
-            .insert(user_id_type.to_string(), user_id_type.clone());
-    }
+    };
 
     // 设置请求体
     let body = UpdateRecordRequestBody {
         fields: request.fields,
     };
 
-    api_req.body = serde_json::to_vec(&body).unwrap();
+    api_req = api_req.body(openlark_core::api::RequestData::Json(serde_json::to_value(&body)?));
 
-    let api_resp: openlark_core::core::StandardResponse<UpdateRecordResponse> =
+    let api_resp: Response<UpdateRecordResponse> =
         Transport::request(api_req, config, option).await?;
     api_resp.into_result()
 }

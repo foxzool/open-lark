@@ -361,7 +361,6 @@ impl CreateExportTaskResponse {
 /// 创建导出任务构建器
 ///
 /// 提供流畅的API来创建导出任务，支持方法链调用和完整的错误处理
-#[derive(Clone, Debug)]
 pub struct CreateExportTaskBuilder {
     service: Arc<DriveServiceV1>,
     request: CreateExportTaskRequest,
@@ -402,7 +401,7 @@ impl CreateExportTaskBuilder {
     ///         .file_token("file_token_123")
     ///         .export_format("pdf")
     ///         .file_type("doc")
-    ///         .build()?;
+    ///         ?;
     ///
     ///     let response = service
     ///         .create_export_task_builder(request)
@@ -446,7 +445,7 @@ mod tests {
             .file_token("file_token_123")
             .export_format("pdf")
             .file_type("doc")
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.file_token, "file_token_123");
@@ -473,7 +472,7 @@ mod tests {
             .export_format("pdf")
             .file_type("doc")
             .options(options)
-            .build()
+            
             .unwrap();
 
         assert!(request.options.is_some());
@@ -487,7 +486,7 @@ mod tests {
     #[test]
     fn test_create_export_task_request_validation() {
         // 测试必填参数缺失
-        let result = CreateExportTaskRequest::builder().build();
+        let result = CreateExportTaskRequest::builder();
         assert!(result.is_err());
 
         // 测试空文件令牌
@@ -495,7 +494,7 @@ mod tests {
             .file_token("")
             .export_format("pdf")
             .file_type("doc")
-            .build();
+            ;
         assert!(result.is_err());
 
         // 测试无效导出格式
@@ -503,7 +502,7 @@ mod tests {
             .file_token("file_token_123")
             .export_format("invalid_format")
             .file_type("doc")
-            .build();
+            ;
         assert!(result.is_err());
 
         // 测试无效文件类型
@@ -511,7 +510,7 @@ mod tests {
             .file_token("file_token_123")
             .export_format("pdf")
             .file_type("invalid_type")
-            .build();
+            ;
         assert!(result.is_err());
     }
 
@@ -524,7 +523,7 @@ mod tests {
                 .file_token("file_token_123")
                 .export_format(*format)
                 .file_type("doc")
-                .build();
+                ;
             assert!(request.is_ok(), "Format {} should be valid", format);
         }
     }
@@ -538,7 +537,7 @@ mod tests {
                 .file_token("file_token_123")
                 .export_format("pdf")
                 .file_type(*file_type)
-                .build();
+                ;
             assert!(request.is_ok(), "File type {} should be valid", file_type);
         }
     }
@@ -558,7 +557,7 @@ mod tests {
             .export_format("pdf")
             .file_type("doc")
             .options(options)
-            .build();
+            ;
         assert!(result.is_err());
 
         // 测试无效的水印透明度
@@ -580,7 +579,7 @@ mod tests {
             .export_format("pdf")
             .file_type("doc")
             .options(options)
-            .build();
+            ;
         assert!(result.is_err());
 
         // 测试空水印文字
@@ -602,7 +601,7 @@ mod tests {
             .export_format("pdf")
             .file_type("doc")
             .options(options)
-            .build();
+            ;
         assert!(result.is_err());
     }
 
@@ -672,7 +671,7 @@ mod tests {
                 .file_token(token)
                 .export_format(format)
                 .file_type(file_type)
-                .build()
+                
                 .unwrap();
 
             assert_eq!(request.file_token, token);
@@ -713,7 +712,7 @@ mod tests {
             .file_token("file_token_123")
             .export_format("pdf")
             .file_type("doc")
-            .build()
+            
             .unwrap();
 
         let json = serde_json::to_string(&request).unwrap();
@@ -787,7 +786,7 @@ mod tests {
                 .export_format("pdf")
                 .file_type("doc")
                 .options(options)
-                .build();
+                ;
             assert!(request.is_ok(), "Quality {} should be valid", quality);
         }
 
@@ -812,7 +811,7 @@ mod tests {
                 .export_format("pdf")
                 .file_type("doc")
                 .options(options)
-                .build();
+                ;
             assert!(request.is_ok(), "Opacity {} should be valid", opacity);
         }
     }
@@ -849,7 +848,7 @@ mod tests {
                 .export_format("pdf")
                 .file_type("doc")
                 .options(options)
-                .build();
+                ;
             assert!(request.is_ok(), "Rotation {} should be valid", rotation);
         }
     }

@@ -47,7 +47,7 @@
 //!
 //! let client = LarkClient::builder("app_id", "app_secret")
 //!     .with_app_type(AppType::SelfBuild)
-//!     .build();
+//!     ;
 //!
 //! // v3版本 - 稳定现代化调用方式（推荐）
 //! let sheets = client.sheets.v3.sheet
@@ -153,7 +153,6 @@ use openlark_core::config::Config;
 /// Sheets电子表格服务
 ///
 /// 基础服务架构，具体功能在后续版本中实现。
-#[derive(Clone, Debug)]
 pub struct SheetsService {
     config: Config,
 }
@@ -188,7 +187,7 @@ mod tests {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
+            ;
         let service = SheetsService::new(config);
         assert!(!format!("{:?}", service).is_empty());
     }
@@ -198,7 +197,7 @@ mod tests {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
+            ;
         let service = SheetsService::new(config);
 
         let config_ref = service.config();

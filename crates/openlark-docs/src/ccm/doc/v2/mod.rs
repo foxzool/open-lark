@@ -34,7 +34,6 @@ use openlark_core::config::Config;
 ///
 /// 提供飞书旧版文档v2版本的完整入口，支持文档的创建、
 /// 查询、编辑等基础功能。
-#[derive(Clone, Debug)]
 pub struct DocV2Service {
     #[allow(dead_code)] // 配置保留供将来使用
     config: Config,

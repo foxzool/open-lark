@@ -10,10 +10,10 @@ use SDKResult;use reqwest::Method;
 use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::,
 {
-    core::,
+    api::,
 {,
         BaseResponse,
-        ResponseFormat,
+        ResponseFormat, HttpMethod,
         api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
@@ -50,17 +50,11 @@ let mut api_req = ApiRequest {,
 };
 // 添加查询参数,
         if let Some(page_token) = request.page_token {
-            api_req.query_params.insert("page_token", page_token);
-if let Some(page_size) = request.page_size {,
-            api_req
-.query_params
-                .insert("page_size", page_size.to_string());
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
     }
 /// 获取云文档的点赞者列表请求参数,
-#[derive(Clone, Debug)]
 pub struct ListFileLikesRequest {
     /// 文件token
     pub file_token: String,
@@ -96,7 +90,6 @@ impl ListFileLikesRequestBuilder {
     list_file_likes,
 );
 /// 获取云文档的点赞者列表响应数据
-#[derive(Clone, Debug)]
 pub struct ListFileLikesRespData {
     /// 是否还有更多数据
     pub has_more: bool,
@@ -105,7 +98,6 @@ pub struct ListFileLikesRespData {
     /// 点赞记录列表
     pub items: Vec<FileLikeRecord>}
 
-#[derive(Clone, Debug)]
 pub struct FileLikeRecord {
     /// 点赞者ID
     pub user_id: String,

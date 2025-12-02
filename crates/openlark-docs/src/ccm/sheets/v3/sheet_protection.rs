@@ -59,7 +59,7 @@ pub type SheetPagedResponse<T> = Vec<T>;
 ///     .sheet_id("0XXXXXXXXXX".to_string())
 ///     .description("财务数据保护".to_string())
 ///     .add_editor("ou_1", "user_id")
-///     .build()?;
+///     ?;
 ///
 /// let protection = service.create(&request).await?;
 ///
@@ -73,9 +73,9 @@ pub type SheetPagedResponse<T> = Vec<T>;
 ///         .start_column_index(0)
 ///         .end_row_index(100)
 ///         .end_column_index(10)
-///         .build()?)
+///         ?)
 ///     .set_warning_only(true)
-///     .build()?;
+///     ?;
 ///
 /// let protection = service.create(&request).await?;
 ///
@@ -83,18 +83,17 @@ pub type SheetPagedResponse<T> = Vec<T>;
 /// let condition = SheetProtectionCondition::builder()
 ///     .condition_type("CELL_CONTAINS".to_string())
 ///     .content("公式".to_string())
-///     .build()?;
+///     ?;
 ///
 /// let request = CreateSheetProtectionRequest::builder()
 ///     .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
 ///     .sheet_id("0XXXXXXXXXX".to_string())
 ///     .description("公式保护".to_string())
 ///     .add_condition(condition)
-///     .build()?;
+///     ?;
 ///
 /// let protection = service.create(&request).await?;
 /// ```
-#[derive(Clone, Debug)]
 pub struct SheetProtectionService {
     config: openlark_core::config::Config,
 }
@@ -952,7 +951,7 @@ impl SheetProtectionService {
     ///     .description("整个工作表保护".to_string())
     ///     .add_editor("user_id_123", "user_id")
     ///     .warning_only(false)
-    ///     .build()?;
+    ///     ?;
     ///
     /// let protection = service.create(&request).await?;
     /// println!("创建保护成功: {}", protection.data.protection_id);
@@ -1007,7 +1006,7 @@ impl SheetProtectionService {
     ///     .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
     ///     .sheet_id("0XXXXXXXXXX".to_string())
     ///     .page_size(20)
-    ///     .build()?;
+    ///     ?;
     ///
     /// let response = service.query(&request).await?;
     ///
@@ -1089,7 +1088,7 @@ impl SheetProtectionService {
     ///     .add_field("permissions".to_string())
     ///     .description("更新后的保护描述".to_string())
     ///     .add_editor("new_user_id", "user_id")
-    ///     .build()?;
+    ///     ?;
     ///
     /// let protection = service.update(&request).await?;
     /// println!("更新保护成功: {}", protection.data.protection_id);
@@ -1145,7 +1144,7 @@ impl SheetProtectionService {
     ///     .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
     ///     .sheet_id("0XXXXXXXXXX".to_string())
     ///     .protection_id("protection_123".to_string())
-    ///     .build()?;
+    ///     ?;
     ///
     /// let response = service.delete(&request).await?;
     /// println!("删除保护成功");
@@ -1339,7 +1338,7 @@ mod tests {
             .description("测试保护".to_string())
             .add_editor("user_123", "user_id")
             .warning_only(false)
-            .build();
+            ;
 
         assert!(request.is_ok());
         let req = request.unwrap();
@@ -1357,7 +1356,7 @@ mod tests {
             .sheet_id("0XXXXXXXXXX".to_string())
             .add_protection_id("protection_123".to_string())
             .page_size(20)
-            .build();
+            ;
 
         assert!(request.is_ok());
         let req = request.unwrap();
@@ -1375,7 +1374,7 @@ mod tests {
             .protection_id("protection_123".to_string())
             .add_field("description".to_string())
             .description("更新描述".to_string())
-            .build();
+            ;
 
         assert!(request.is_ok());
         let req = request.unwrap();
@@ -1392,7 +1391,7 @@ mod tests {
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .sheet_id("0XXXXXXXXXX".to_string())
             .protection_id("protection_123".to_string())
-            .build();
+            ;
 
         assert!(request.is_ok());
         let req = request.unwrap();
@@ -1408,7 +1407,7 @@ mod tests {
             .end_row_index(10)
             .start_column_index(0)
             .end_column_index(5)
-            .build();
+            ;
 
         assert!(range.is_ok());
         let r = range.unwrap();
@@ -1424,7 +1423,7 @@ mod tests {
             .condition_type("CELL_CONTAINS".to_string())
             .content("公式".to_string())
             .description("保护公式".to_string())
-            .build();
+            ;
 
         assert!(condition.is_ok());
         let c = condition.unwrap();
@@ -1439,27 +1438,27 @@ mod tests {
         let invalid_range = SheetProtectionRange::builder()
             .start_row_index(10)
             .end_row_index(0) // 起始行大于结束行
-            .build();
+            ;
         assert!(invalid_range.is_err());
 
         // 测试空条件类型
         let invalid_condition = SheetProtectionCondition::builder()
             .condition_type("".to_string())
             .content("内容".to_string())
-            .build();
+            ;
         assert!(invalid_condition.is_err());
 
         // 测试空条件内容
         let invalid_condition2 = SheetProtectionCondition::builder()
             .condition_type("CELL_CONTAINS".to_string())
             .content("".to_string())
-            .build();
+            ;
         assert!(invalid_condition2.is_err());
 
         // 测试缺少必需参数
         let invalid_request = CreateSheetProtectionRequest::builder()
             .description("测试".to_string())
-            .build();
+            ;
         assert!(invalid_request.is_err());
     }
 
@@ -1498,12 +1497,12 @@ mod tests {
             .end_row_index(10)
             .start_column_index(0)
             .end_column_index(5)
-            .build()
+            
             .unwrap();
 
         let range2 = SheetProtectionRange::builder()
             .range("A1:D10".to_string())
-            .build()
+            
             .unwrap();
 
         // 2. 创建保护条件
@@ -1511,7 +1510,7 @@ mod tests {
             .condition_type("CELL_CONTAINS".to_string())
             .content("重要数据".to_string())
             .description("保护包含重要数据的单元格".to_string())
-            .build()
+            
             .unwrap();
 
         // 3. 创建保护请求
@@ -1525,7 +1524,7 @@ mod tests {
             .add_editor("admin_001", "user_id")
             .add_editor("user_002", "user_id")
             .warning_only(false)
-            .build()
+            
             .unwrap();
 
         assert_eq!(create_request.ranges.len(), 2);
@@ -1538,7 +1537,7 @@ mod tests {
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .sheet_id("0XXXXXXXXXX".to_string())
             .page_size(10)
-            .build()
+            
             .unwrap();
 
         assert_eq!(query_request.page_size, Some(10));
@@ -1552,7 +1551,7 @@ mod tests {
             .add_field("warningOnly".to_string())
             .description("更新后的保护描述".to_string())
             .warning_only(true)
-            .build()
+            
             .unwrap();
 
         assert_eq!(update_request.fields.len(), 2);
@@ -1563,7 +1562,7 @@ mod tests {
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .sheet_id("0XXXXXXXXXX".to_string())
             .protection_id("protection_test_001".to_string())
-            .build()
+            
             .unwrap();
 
         assert_eq!(delete_request.protection_id, "protection_test_001");

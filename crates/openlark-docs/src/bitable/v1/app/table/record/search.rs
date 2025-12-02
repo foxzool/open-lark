@@ -1,36 +1,29 @@
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
-    
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat, HttpMethod, RequestData},
+
     config::Config,
-    
-    
+
     http::Transport,
     req_option::RequestOption,
-    
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+use super::batch_create::Record;
 
 /// 查询记录请求
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct SearchRecordRequest {
-    #[serde(skip)]
     api_request: ApiRequest<Self>,
     /// 多维表格的唯一标识符
-    #[serde(skip)]
     app_token: String,
     /// 数据表的唯一标识符
-    #[serde(skip)]
     table_id: String,
     /// 用户 ID 类型
-    #[serde(skip)]
     user_id_type: Option<String>,
     /// 分页标记
-    #[serde(skip)]
     page_token: Option<String>,
     /// 分页大小
-    #[serde(skip)]
     page_size: Option<i32>,
     /// 视图的唯一标识符
     view_id: Option<String>,
@@ -44,18 +37,35 @@ pub struct SearchRecordRequest {
     automatic: Option<bool>,
 }
 
+impl Default for SearchRecordRequest {
+    fn default() -> Self {
+        Self {
+            api_request: ApiRequest::post("https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/records/search"),
+            app_token: String::new(),
+            table_id: String::new(),
+            user_id_type: None,
+            page_token: None,
+            page_size: None,
+            view_id: None,
+            field_names: None,
+            sort: None,
+            filter: None,
+            automatic: None,
+        }
+    }
+}
+
 /// 排序条件
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct SortCondition {
     /// 字段名称
     pub field_name: String,
     /// 是否倒序排序
-    #[serde(skip_serializing_if = Option::is_none)]
     pub desc: Option<bool>,
 }
 
 /// 筛选条件
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct FilterInfo {
     /// 条件逻辑连接词: and 或 or
     pub conjunction: String,
@@ -64,21 +74,20 @@ pub struct FilterInfo {
 }
 
 /// 单个筛选条件
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct FilterCondition {
     /// 筛选条件的左值，值为字段的名称
     pub field_name: String,
     /// 条件运算符
     pub operator: String,
     /// 目标值
-    #[serde(skip_serializing_if = Option::is_none)]
     pub value: Option<Vec<String>>,
 }
 
 impl SearchRecordRequest {
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new().method(HttpMethod::POST).api_path( /open-apis/bitable/v1/apps/{}/tables/{}/records/search).config(config)),
+            api_request: ApiRequest::post("").header("Content-Type", "application/json"),
             app_token: String::new(),
             table_id: String::new(),
             user_id_type: None,
@@ -163,7 +172,7 @@ impl SearchRecordRequestBuilder {
 }
 
 /// 查询记录响应
-#[derive(Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SearchRecordResponse {
     /// 记录列表
     pub items: Vec<Record>,
@@ -182,21 +191,14 @@ impl ApiResponseTrait for SearchRecordResponse {
 }
 
 /// 请求体结构
-#[derive(Serialize)]
+#[derive(Debug, Serialize)]
 struct SearchRecordRequestBody {
-    #[serde(skip_serializing_if = Option::is_none)]
     page_size: Option<i32>,
-    #[serde(skip_serializing_if = Option::is_none)]
     page_token: Option<String>,
-    #[serde(skip_serializing_if = Option::is_none)]
     view_id: Option<String>,
-    #[serde(skip_serializing_if = Option::is_none)]
     field_names: Option<Vec<String>>,
-    #[serde(skip_serializing_if = Option::is_none)]
     sort: Option<Vec<SortCondition>>,
-    #[serde(skip_serializing_if = Option::is_none)]
     filter: Option<FilterInfo>,
-    #[serde(skip_serializing_if = Option::is_none)]
     automatic: Option<bool>,
 }
 
@@ -204,7 +206,7 @@ impl FilterInfo {
     /// 创建 AND 条件
     pub fn and(conditions: Vec<FilterCondition>) -> Self {
         Self {
-            conjunction: and.to_string(),
+            conjunction: "and".to_string(),
             conditions,
         }
     }
@@ -212,7 +214,7 @@ impl FilterInfo {
     /// 创建 OR 条件
     pub fn or(conditions: Vec<FilterCondition>) -> Self {
         Self {
-            conjunction: or.to_string(),
+            conjunction: "or".to_string(),
             conditions,
         }
     }
@@ -223,7 +225,7 @@ impl FilterCondition {
     pub fn equals(field_name: impl ToString, value: impl ToString) -> Self {
         Self {
             field_name: field_name.to_string(),
-            operator: is.to_string(),
+            operator: "is".to_string(),
             value: Some(vec![value.to_string()]),
         }
     }
@@ -232,7 +234,7 @@ impl FilterCondition {
     pub fn not_equals(field_name: impl ToString, value: impl ToString) -> Self {
         Self {
             field_name: field_name.to_string(),
-            operator: isNot.to_string(),
+            operator: "isNot".to_string(),
             value: Some(vec![value.to_string()]),
         }
     }
@@ -241,7 +243,7 @@ impl FilterCondition {
     pub fn contains(field_name: impl ToString, value: impl ToString) -> Self {
         Self {
             field_name: field_name.to_string(),
-            operator: contains.to_string(),
+            operator: "contains".to_string(),
             value: Some(vec![value.to_string()]),
         }
     }
@@ -250,7 +252,7 @@ impl FilterCondition {
     pub fn not_contains(field_name: impl ToString, value: impl ToString) -> Self {
         Self {
             field_name: field_name.to_string(),
-            operator: doesNotContain.to_string(),
+            operator: "doesNotContain".to_string(),
             value: Some(vec![value.to_string()]),
         }
     }
@@ -259,7 +261,7 @@ impl FilterCondition {
     pub fn is_empty(field_name: impl ToString) -> Self {
         Self {
             field_name: field_name.to_string(),
-            operator: isEmpty.to_string(),
+            operator: "isEmpty".to_string(),
             value: None,
         }
     }
@@ -268,7 +270,7 @@ impl FilterCondition {
     pub fn is_not_empty(field_name: impl ToString) -> Self {
         Self {
             field_name: field_name.to_string(),
-            operator: isNotEmpty.to_string(),
+            operator: "isNotEmpty".to_string(),
             value: None,
         }
     }
@@ -280,15 +282,15 @@ pub async fn search_record(
     config: &Config,
     option: Option<RequestOption>,
 ) -> SDKResult<SearchRecordResponse> {
-    let mut api_req = request.api_request;
-        let api_request = api_request.api_path(format!(        .replace({app_token}, &request.app_token)
-        let api_request = api_request.api_path(format!(        .replace({table_id}, &request.table_id);
+    let url = format!(
+        "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/records/search",
+        &request.app_token, &request.table_id
+    );
+    let mut api_req = ApiRequest::<()>::post(&url);
 
     // 设置查询参数
     if let Some(user_id_type) = &request.user_id_type {
-        api_req
-            .query_params
-            .insert(user_id_type.to_string(), user_id_type.clone());
+        api_req = api_req.query("user_id_type", user_id_type);
     }
 
     // 设置请求体
@@ -302,9 +304,9 @@ pub async fn search_record(
         automatic: request.automatic,
     };
 
-    api_req.body = serde_json::to_vec(&body).unwrap();
+    api_req = api_req.body(RequestData::Json(serde_json::to_value(&body).unwrap()));
 
-    let api_resp: openlark_core::core::StandardResponse<SearchRecordResponse> =
+    let api_resp: Response<SearchRecordResponse> =
         Transport::request(api_req, config, option).await?;
     api_resp.into_result()
 }

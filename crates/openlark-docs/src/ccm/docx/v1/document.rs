@@ -6,7 +6,6 @@
 use openlark_core::config::Config;
 
 /// Document operation service
-#[derive(Clone, Debug)]
 pub struct DocumentService {
     #[allow(dead_code)]
     config: Config,

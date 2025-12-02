@@ -11,7 +11,6 @@
 // 实现单元格样式设置的操作,
 use openlark_core::prelude::*;
 /// 样式操作服务
-#[derive(Clone, Debug)]
 pub struct StyleService {
     #[allow(dead_code)]
     config: Config,,

@@ -2,16 +2,12 @@
 //!
 //! 提供多维表格记录的创建、更新、删除、查询等操作功能。
 
-
 use openlark_core::{
     config::Config,
-    constants::AccessTokenType,
-    endpoints::cloud_docs::*,
     http::Transport,
-    reqwest::Method,
     req_option::RequestOption,
-    service::bitable::v1::Record,
     SDKResult,
+    api::ResponseFormat,
 };
 use serde::{Deserialize, Serialize};
 
@@ -30,7 +26,7 @@ pub mod update;
 // 重新导出主要类型
 pub use create::CreateRecordRequest;
 pub use batch_create::{
-    BatchCreateRecordRequest, BatchCreateRecordRequestBuilder, BatchCreateRecordResponse
+    BatchCreateRecordRequest, BatchCreateRecordRequestBuilder, BatchCreateRecordResponse, Record
 };
 pub use batch_delete::{
     BatchDeleteRecordRequest, BatchDeleteRecordRequestBuilder, BatchDeleteRecordResponse
@@ -55,7 +51,6 @@ pub use search::SearchRecordRequest;
 pub use update::UpdateRecordRequest;
 
 /// 记录服务
-#[derive(Clone)]
 pub struct AppTableRecordService {
     config: Config,
 }
@@ -70,9 +65,19 @@ impl AppTableRecordService {
     pub fn config(&self) -> &Config {
         &self.config
     }
+
+    /// 批量获取记录
+    pub async fn batch_get(
+        &self,
+        request: BatchGetRecordRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<openlark_core::api::Response<BatchGetRecordResponse>> {
+        batch_get::batch_get_record(request, &self.config, option).await
+    }
 }
 
 // Type alias for compatibility
 pub type ServiceType = AppTableRecordService;
 // 导入优化模块
-use super::{BatchCommonParams, BatchOperationResult, AppToken, TableId, RecordId};
+use crate::common::batch::{BatchCommonParams, BatchOperationResult};
+use crate::common::types::{AppToken, TableId, RecordId};

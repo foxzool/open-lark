@@ -79,7 +79,7 @@ impl PermissionService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            method: openlark_core::api::HttpMethod::Post,
+            method: openlark_core::api::Post,
             url: "/open-apis/drive/permission/member/permitted".to_string(),
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?,
@@ -150,7 +150,7 @@ impl PermissionService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            method: openlark_core::api::HttpMethod::Post,
+            method: openlark_core::api::Post,
             url: "/open-apis/drive/permission/member/transfer".to_string(),
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?,
@@ -209,7 +209,7 @@ impl PermissionService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            method: openlark_core::api::HttpMethod::Post,
+            method: openlark_core::api::Post,
             url: "/open-apis/drive/permission/v2/public/".to_string(),
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?,

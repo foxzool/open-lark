@@ -15,7 +15,6 @@ pub mod block;
 pub mod comment;
 
 /// Document v1 Service
-#[derive(Clone, Debug)]
 pub struct DocxV1Service {
     #[allow(dead_code)] // 配置保留供将来使用
     config: Config,

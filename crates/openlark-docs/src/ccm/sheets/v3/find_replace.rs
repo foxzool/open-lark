@@ -608,7 +608,6 @@ impl openlark_core::api::ApiResponseTrait for ReplaceResponse {
 }
 
 /// Sheets电子表格查找和替换服务 v3
-#[derive(Clone, Debug)]
 pub struct FindReplaceService {
     config: openlark_core::config::Config,
 }
@@ -645,7 +644,7 @@ impl FindReplaceService {
     ///     .find_options(FindOptions::new()
     ///         .case_sensitive(false)
     ///         .match_whole_word(false))
-    ///     .build()
+    ///     
     ///     .unwrap();
     ///
     /// let response = service.find(&request).await?;
@@ -711,7 +710,7 @@ impl FindReplaceService {
     ///     .replace_options(ReplaceOptions::new()
     ///         .case_sensitive(false)
     ///         .confirm_replacements(false))
-    ///     .build()
+    ///     
     ///     .unwrap();
     ///
     /// let response = service.replace(&request).await?;
@@ -902,7 +901,7 @@ mod tests {
                     .case_sensitive(false)
                     .match_whole_word(true),
             )
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.spreadsheet_token, "token123");
@@ -974,7 +973,7 @@ mod tests {
                     .case_sensitive(false)
                     .confirm_replacements(false),
             )
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.spreadsheet_token, "token123");
@@ -1006,7 +1005,7 @@ mod tests {
             .match_type(MatchType::Contains)
             .range_type(SearchRangeType::All)
             .find_options(FindOptions::new().case_sensitive(false))
-            .build()
+            
             .unwrap();
 
         assert_eq!(simple_find_request.find_text, "完成");
@@ -1020,7 +1019,7 @@ mod tests {
             .match_type(MatchType::Regex)
             .range_type(SearchRangeType::All)
             .find_options(FindOptions::new().case_sensitive(false))
-            .build()
+            
             .unwrap();
 
         assert_eq!(regex_find_request.match_type, MatchType::Regex);
@@ -1039,7 +1038,7 @@ mod tests {
                     .case_sensitive(true)
                     .confirm_replacements(false),
             )
-            .build()
+            
             .unwrap();
 
         assert_eq!(range_replace_request.range_type, SearchRangeType::Range);
@@ -1053,7 +1052,7 @@ mod tests {
             .match_type(MatchType::Contains)
             .range_type(SearchRangeType::Formulas)
             .find_options(FindOptions::new().look_in_formulas(true))
-            .build()
+            
             .unwrap();
 
         assert_eq!(formula_find_request.range_type, SearchRangeType::Formulas);
@@ -1066,7 +1065,7 @@ mod tests {
             .match_type(MatchType::Contains)
             .range_type(SearchRangeType::Values)
             .find_options(FindOptions::new().look_in_formulas(false))
-            .build()
+            
             .unwrap();
 
         assert_eq!(values_find_request.range_type, SearchRangeType::Values);

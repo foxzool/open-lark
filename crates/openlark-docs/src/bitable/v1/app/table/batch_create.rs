@@ -1,7 +1,8 @@
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
+    api::{ApiRequest, RequestData, Response},
     config::Config,
+    error::validation_error,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -9,32 +10,32 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 // 导入通用批量操作模块
-use super::super::{BatchCommonParams, BatchCommonBody, BatchOperationResult, AppToken, TableId};
+use crate::common::types::{AppToken, TableId};
+use crate::common::batch::{BatchCommonParams, BatchCommonBody, BatchOperationResult};
+
+// 导入 TableData 类型
+use super::create::TableData;
 
 /// 批量新增数据表请求
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct BatchCreateTableRequest {
-    #[serde(skip)]
     api_request: ApiRequest<Self>,
     /// 多维表格的 app_token
-    #[serde(skip)]
     app_token: AppToken,
     /// 通用批量操作参数
-    #[serde(skip)]
     common_params: BatchCommonParams,
     /// 要新增的数据表列表
     tables: Vec<TableData>,
+    /// 配置信息
+    config: Config,
 }
 
 impl BatchCreateTableRequest {
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new()
-                .method(HttpMethod::POST)
-                .api_path("/open-apis/bitable/v1/apps/{}/tables:batch_create".to_string())
-                .config(config)
-                .build(),
-            app_token: AppToken::new(),
+            api_request: ApiRequest::post(""),
+            config,
+            app_token: String::new(),
             common_params: BatchCommonParams::new(),
             tables: Vec::new(),
         }
@@ -56,7 +57,7 @@ impl BatchCreateTableRequest {
     }
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct BatchCreateTableRequestBuilder {
     request: BatchCreateTableRequest,
 }
@@ -65,14 +66,11 @@ impl BatchCreateTableRequestBuilder {
     pub fn new(config: Config) -> Self {
         Self {
             request: BatchCreateTableRequest {
-                api_request: ApiRequest::new()
-                    .method(HttpMethod::POST)
-                    .api_path("/open-apis/bitable/v1/placeholder".to_string())
-                    .config(config.clone())
-                    .build(),
+                api_request: ApiRequest::post("https://open.feishu.cn/open-apis/bitable/v1/placeholder"),
                 app_token: String::new(),
                 common_params: BatchCommonParams::new(),
                 tables: Vec::new(),
+                config,
             },
         }
     }
@@ -107,30 +105,18 @@ impl BatchCreateTableRequestBuilder {
     }
 }
 
-// 应用ExecutableBuilder trait到BatchCreateTableRequestBuilder
-crate::impl_executable_builder_owned!(
-    BatchCreateTableRequestBuilder,
-    super::AppTableService,
-    BatchCreateTableRequest,
-    Response<BatchCreateTableResponse>,
-    batch_create
-);
+// 执行批量创建数据表操作的实现将在后续版本中完成
 
 /// 批量新增数据表响应
-#[derive(Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchCreateTableResponse {
     /// 新增的数据表列表
     pub tables: Vec<BatchCreateTableResult>,
 }
 
-impl ApiResponseTrait for BatchCreateTableResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
 
 /// 批量创建数据表的结果
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchCreateTableResult {
     /// 数据表 ID
     #[serde(skip)]
@@ -181,39 +167,45 @@ impl BatchCreateTableResult {
     }
 }
 
-/// 请求体结构
-type BatchCreateTableRequestBody = BatchCommonBody<Vec<TableData>>;
+/// 批量新增数据表请求体
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BatchCreateTableRequestBody {
+    /// 要新增的数据表列表
+    pub tables: Vec<TableData>,
+}
 
 /// 批量新增数据表
 pub async fn batch_create_table(
     request: BatchCreateTableRequest,
     config: &Config,
-    option: Option<RequestOption>,
+    _option: Option<RequestOption>,
 ) -> SDKResult<Response<BatchCreateTableResponse>> {
-    let mut api_req = request.api_request;
-    let api_path = format!("/open-apis/bitable/v1/apps/{}/tables:batch_create", request.app_token.as_str());
-    api_req = api_req.api_path(api_path);
+    // 构建完整的API URL
+    let api_url = format!("https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables:batch_create", request.app_token.as_str());
 
-    // 设置查询参数
-    if let Some(user_id_type) = &request.common_params.user_id_type {
-        api_req
-            .query_params
-            .insert(user_id_type.to_string(), user_id_type.clone());
-    }
+    // 构建请求体
+    let body = BatchCreateTableRequestBody {
+        tables: request.tables,
+    };
 
-    if let Some(client_token) = &request.common_params.client_token {
-        api_req
-            .query_params
-            .insert(client_token.to_string(), client_token.clone());
-    }
+    // 创建API请求
+    let mut api_request: ApiRequest<()> = ApiRequest::post(api_url);
+    api_request.body = Some(RequestData::Json(serde_json::to_value(&body)?));
 
-    // 设置请求体
-    let body = BatchCreateTableRequestBody::new(request.tables)
-        .with_common_params(request.common_params);
+    // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
+    let mut request_for_transport: ApiRequest<()> = ApiRequest::post(api_request.url.clone())
+        .body(api_request.body.unwrap_or(RequestData::Empty));
 
-    api_req.body = serde_json::to_vec(&body).unwrap();
+    let response = Transport::request(request_for_transport, &request.config, None).await?;
 
-    let api_resp = Transport::request(api_req, config, option).await?;
-    Ok(api_resp)
+    // 解析响应
+    let data: BatchCreateTableResponse = response.data
+        .and_then(|data| serde_json::from_value(data).ok())
+        .ok_or_else(|| validation_error("解析失败", "数据格式不正确"))?;
+
+    Ok(Response {
+        data: Some(data),
+        raw_response: response.raw_response,
+    })
 }
 

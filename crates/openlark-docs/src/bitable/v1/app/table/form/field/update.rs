@@ -2,11 +2,9 @@
 use serde_json::Value;
 use reqwest::Method;
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
-    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, BaseResponse, ResponseFormat, HttpMethod, Response},
     config::Config,
-    
-    
+
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -14,40 +12,30 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 更新表单字段问题请求
-#[derive(Clone)]
-pub struct UpdateFormFieldQuestionRequest {
-    #[serde(skip)]
+#[derive(Debug, Clone)]pub struct UpdateFormFieldQuestionRequest {
     api_request: ApiRequest<Self>,
     /// 多维表格的唯一标识符
-    #[serde(skip)]
     app_token: String,
     /// 表单ID
-    #[serde(skip)]
     form_id: String,
     /// 问题ID
-    #[serde(skip)]
     question_id: String,
     /// 问题标题
-    #[serde(skip_serializing_if = String::is_empty)]
     title: String,
     /// 问题描述
-    #[serde(skip_serializing_if = Option::is_none)]
     description: Option<String>,
     /// 是否必填
-    #[serde(skip)]
     required: Option<bool>,
     /// 是否可见
-    #[serde(skip)]
     visible: Option<bool>,
     /// 问题设置
-    #[serde(skip_serializing_if = Option::is_none)]
     setting: Option<Value>,
 }
 
-impl UpdateFormFieldQuestionRequest {
-    pub fn new(config: Config) -> Self {
+impl Default for UpdateFormFieldQuestionRequest {
+    fn default() -> Self {
         Self {
-            api_request: ApiRequest::new(config),
+            api_request: ApiRequest::put("https://open.feishu.cn/open-apis/bitable/v1/apps/{}/forms/{}/fields/{}"),
             app_token: String::new(),
             form_id: String::new(),
             question_id: String::new(),
@@ -60,16 +48,27 @@ impl UpdateFormFieldQuestionRequest {
     }
 }
 
-#[derive(Clone)]
+impl UpdateFormFieldQuestionRequest {
+    pub fn new(config: Config) -> Self {
+        Self::default()
+    }
+}
+
 pub struct UpdateFormFieldQuestionRequestBuilder {
     request: UpdateFormFieldQuestionRequest,
 }
 
-impl UpdateFormFieldQuestionRequestBuilder {
-    pub fn new(config: Config) -> Self {
+impl Default for UpdateFormFieldQuestionRequestBuilder {
+    fn default() -> Self {
         Self {
-            request: UpdateFormFieldQuestionRequest::new(config),
+            request: UpdateFormFieldQuestionRequest::default(),
         }
+    }
+}
+
+impl UpdateFormFieldQuestionRequestBuilder {
+    pub fn new() -> Self {
+        Self::default()
     }
 
     pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
@@ -123,11 +122,11 @@ crate::impl_executable_builder_owned!(
     super::FormFieldService,
     UpdateFormFieldQuestionRequest,
     Response<UpdateFormFieldQuestionResponse>,
-    update,
+    update
 );
 
 /// 更新表单字段问题响应
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateFormFieldQuestionResponse {
     /// 是否成功
     pub success: bool,
@@ -136,7 +135,7 @@ pub struct UpdateFormFieldQuestionResponse {
 }
 
 /// 表单字段问题信息
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FormFieldQuestion {
     /// 问题ID
     pub question_id: String,
@@ -168,12 +167,12 @@ pub async fn update_form_field_question(
     config: &Config,
     option: Option<RequestOption>,
 ) -> SDKResult<Response<UpdateFormFieldQuestionResponse>> {
-    let mut api_req = request.api_request;
-    let api_path = format!(
-        "/open-apis/bitable/v1/apps/{}/forms/{}/fields/{}",
+    let url = format!(
+        "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/forms/{}/fields/{}",
         &request.app_token, &request.form_id, &request.question_id
     );
-    api_req = api_req.api_path(api_path);
+    // 创建新的请求，不使用api_path方法
+    let api_req = ApiRequest::<()>::put(&url);
 
     let api_resp = Transport::request(api_req, config, option).await?;
     Ok(api_resp)

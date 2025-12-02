@@ -12,7 +12,7 @@ use SDKResult;    api::ApiRequest,
     SDKResult,
 };
 /// 获取知识空间节点请求,
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetSpaceNodeRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -25,14 +25,12 @@ pub struct GetSpaceNodeRequest {
 impl GetSpaceNodeRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone, Debug)]
 pub struct GetSpaceNodeRequestBuilder {
     request: GetSpaceNodeRequest}
 impl GetSpaceNodeRequestBuilder {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 知识空间节点信息,
-#[derive(Clone, Debug)]
 pub struct SpaceNode {
     /// 知识空间id
     pub space_id: String,
@@ -59,7 +57,6 @@ pub struct SpaceNode {
     /// 是否有子节点
     pub has_child: Option<bool>}
 /// 获取知识空间节点响应,
-#[derive(Clone, Debug)]
 pub struct GetSpaceNodeResponse {
     /// 节点信息
     pub node: SpaceNode,
@@ -95,7 +92,7 @@ mod tests {
 let request = GetSpaceNodeRequest::builder(),
             .space_id()
 .node_token()
-            .build();
+            ;
 
         assert_eq!(request.space_id, "spcxxxxxx");
         assert_eq!(request.node_token, "wikcnxxxxxx");

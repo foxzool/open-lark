@@ -26,10 +26,10 @@ use std::sync::Arc;
 ///
 /// let request = GetSpaceInfoRequest::builder()
 ///     .space_id("6870403571079249922")
-///     .build()
+///     
 ///     .unwrap();
 /// ```
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetSpaceInfoRequest {
     /// 请求体
     #[serde(skip)]
@@ -101,7 +101,7 @@ impl GetSpaceInfoRequest {
 ///
 /// let request = GetSpaceInfoRequest::builder()
 ///     .space_id("6870403571079249922")
-///     .build()
+///     
 ///     .unwrap();
 /// ```
 #[derive(Debug, Clone, Default)]
@@ -127,7 +127,7 @@ impl GetSpaceInfoBuilder {
     /// # 错误
     /// * 知识空间ID为空或格式无效时返回验证错误
     pub fn build(self) -> SDKResult<GetSpaceInfoRequest> {
-        self.request.build()?;
+        self.request?;
         Ok(self.request)
     }
 }
@@ -200,7 +200,7 @@ impl ApiResponseTrait for GetSpaceInfoResponse {
 /// # 示例
 /// ```rust,no_run
 /// use open_lark::service::cloud_docs::wiki::v2::space::get::{get_space_info, GetSpaceInfoRequest};
-/// use open_lark::core::config::Config;
+/// use open_lark::api::config::Config;
 ///
 /// #[tokio::main]
 /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -287,7 +287,7 @@ impl GetSpaceInfoBuilder {
     /// * 网络错误时返回连接错误
     pub async fn execute(self) -> SDKResult<Response<GetSpaceInfoResponse>> {
         // 验证请求参数
-        self.request.build()?;
+        self.request?;
 
         // 执行请求
         get_space_info(self.request, self.service.config(), None).await
@@ -302,7 +302,7 @@ mod tests {
     fn test_get_space_info_request_builder() {
         let request = GetSpaceInfoRequest::builder()
             .space_id("6870403571079249922")
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.space_id, "6870403571079249922");
@@ -324,23 +324,23 @@ mod tests {
     fn test_get_space_info_request_validation() {
         // 测试有效的知识空间ID
         let valid_request = GetSpaceInfoRequest::new("6870403571079249922");
-        assert!(valid_request.build().is_ok());
+        assert!(valid_request.is_ok());
 
         // 测试空知识空间ID
         let empty_request = GetSpaceInfoRequest::new("");
-        assert!(empty_request.build().is_err());
+        assert!(empty_request.is_err());
 
         // 测试过短的知识空间ID
         let short_request = GetSpaceInfoRequest::new("123456789");
-        assert!(short_request.build().is_err());
+        assert!(short_request.is_err());
 
         // 测试包含无效字符的知识空间ID
         let invalid_request = GetSpaceInfoRequest::new("6870403571079249922a");
-        assert!(invalid_request.build().is_err());
+        assert!(invalid_request.is_err());
 
         // 测试包含特殊字符的知识空间ID
         let special_char_request = GetSpaceInfoRequest::new("6870403571-079249922");
-        assert!(special_char_request.build().is_err());
+        assert!(special_char_request.is_err());
     }
 
     #[test]
@@ -348,13 +348,13 @@ mod tests {
         // 测试有效构建器
         let valid_builder = GetSpaceInfoRequest::builder()
             .space_id("6870403571079249922")
-            .build();
+            ;
         assert!(valid_builder.is_ok());
 
         // 测试空知识空间ID构建器
         let empty_builder = GetSpaceInfoRequest::builder()
             .space_id("")
-            .build();
+            ;
         assert!(empty_builder.is_err());
     }
 
@@ -418,7 +418,7 @@ mod tests {
 
         for space_id in space_ids {
             let request = GetSpaceInfoRequest::new(space_id);
-            assert!(request.build().is_ok());
+            assert!(request.is_ok());
         }
     }
 
@@ -432,7 +432,7 @@ mod tests {
 
         for case in edge_cases {
             let request = GetSpaceInfoRequest::new(case);
-            assert!(request.build().is_ok());
+            assert!(request.is_ok());
         }
 
         // 测试无效长度
@@ -443,7 +443,7 @@ mod tests {
 
         for case in invalid_lengths {
             let request = GetSpaceInfoRequest::new(case);
-            assert!(request.build().is_err());
+            assert!(request.is_err());
         }
     }
 
@@ -478,7 +478,7 @@ mod tests {
         // 测试构建器模式的链式调用
         let request = GetSpaceInfoRequest::builder()
             .space_id("6870403571079249922")
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.space_id, "6870403571079249922");

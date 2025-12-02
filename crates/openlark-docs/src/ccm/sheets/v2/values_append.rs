@@ -16,7 +16,7 @@ use openlark_core::{
     error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
-    standard_response::StandardResponse,
+    standard_response::Response,
     SDKResult,
 };
 
@@ -65,7 +65,7 @@ use openlark_core::trait_system::Service;
 ///         "200".to_string(),
 ///         "客户002".to_string()
 ///     ])
-///     .build()?;
+///     ?;
 ///
 /// let response = service.append(&append_request).await?;
 ///
@@ -77,11 +77,10 @@ use openlark_core::trait_system::Service;
 ///         chrono::Utc::now().format("%Y-%m-%d %H:%M:%S").to_string(),
 ///         "系统启动完成".to_string()
 ///     ])
-///     .build()?;
+///     ?;
 ///
 /// let log_response = service.append(&log_request).await?;
 /// ```
-#[derive(Clone, Debug)]
 pub struct ValuesAppendService {
     config: openlark_core::config::Config,
 }
@@ -425,7 +424,7 @@ impl ValuesAppendService {
     ///         "技术部".to_string(),
     ///         "10000".to_string()
     ///     ])
-    ///     .build()?;
+    ///     ?;
     ///
     /// let response = service.append(&request).await?;
     ///
@@ -753,7 +752,7 @@ mod tests {
                 "市场部".to_string(),
                 "15000".to_string(),
             ])
-            .build();
+            ;
 
         assert!(request.is_ok());
         let req = request.unwrap();
@@ -770,14 +769,14 @@ mod tests {
         let no_token_request = ValuesAppendRequest::builder()
             .range("Sheet1!A10:D10".to_string())
             .add_row(vec!["test".to_string()])
-            .build();
+            ;
         assert!(no_token_request.is_err());
 
         // 测试缺少范围
         let no_range_request = ValuesAppendRequest::builder()
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .add_row(vec!["test".to_string()])
-            .build();
+            ;
         assert!(no_range_request.is_err());
 
         // 测试空范围
@@ -785,7 +784,7 @@ mod tests {
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .range("".to_string())
             .add_row(vec!["test".to_string()])
-            .build();
+            ;
         assert!(empty_range.is_err());
 
         // 测试无效范围格式
@@ -793,14 +792,14 @@ mod tests {
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .range("invalid range".to_string())
             .add_row(vec!["test".to_string()])
-            .build();
+            ;
         assert!(invalid_range.is_err());
 
         // 测试没有数据
         let no_data = ValuesAppendRequest::builder()
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .range("Sheet1!A10:D10".to_string())
-            .build();
+            ;
         assert!(no_data.is_err());
 
         // 测试行数过多
@@ -811,14 +810,14 @@ mod tests {
         for _ in 0..5001 {
             builder = builder.add_row(vec!["test".to_string()]);
         }
-        assert!(builder.build().is_err());
+        assert!(builder.is_err());
 
         // 测试列数过多
         let too_many_cols = ValuesAppendRequest::builder()
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .range("Sheet1!A10:D10".to_string())
             .add_row((0..101).map(|i| i.to_string()).collect::<Vec<_>>()) // 101列
-            .build();
+            ;
         assert!(too_many_cols.is_err());
 
         // 测试单元格内容过长
@@ -924,7 +923,7 @@ mod tests {
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .range("数据表!A1:C3")
             .from_hashmap(data)
-            .build();
+            ;
 
         assert!(request.is_ok());
         let req = request.unwrap();
@@ -938,7 +937,7 @@ mod tests {
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .range("数据表!A1:C3")
             .from_csv(csv_data, false)
-            .build();
+            ;
 
         assert!(csv_request.is_ok());
         let csv_req = csv_request.unwrap();
@@ -952,7 +951,7 @@ mod tests {
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .range("数据表!A1:C3")
             .from_array(array_data)
-            .build();
+            ;
 
         assert!(array_request.is_ok());
         let array_req = array_request.unwrap();
@@ -978,7 +977,7 @@ mod tests {
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .range("销售数据!A1:E100")
             .values(sales_data)
-            .build()
+            
             .unwrap();
 
         assert_eq!(sales_request.values.len(), 4);
@@ -995,7 +994,7 @@ mod tests {
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .range("系统日志!A2:D2")
             .from_hashmap(log_data)
-            .build()
+            
             .unwrap();
 
         assert_eq!(log_request.values.len(), 1);
@@ -1007,7 +1006,7 @@ mod tests {
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .range("员工信息!A2:D100")
             .from_csv(csv_content, true)
-            .build()
+            
             .unwrap();
 
         assert_eq!(csv_request.values.len(), 2); // 2行数据（跳过标题行）
@@ -1027,7 +1026,7 @@ mod tests {
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .range("大数据测试!A1:D1000")
             .values(large_data)
-            .build()
+            
             .unwrap();
 
         assert_eq!(large_request.values.len(), 1000);
@@ -1047,7 +1046,7 @@ mod tests {
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .range("Sheet1!A1:A1")
             .from_csv("", false)
-            .build();
+            ;
 
         assert!(empty_string.is_ok());
         assert_eq!(empty_string.unwrap().values.len(), 0);
@@ -1057,7 +1056,7 @@ mod tests {
             .spreadsheet_token("shtcnmBRWQKBSJRHXXXXXXXXXX".to_string())
             .range("Sheet1!A1:D1")
             .from_csv("A,B,C,D", true)
-            .build();
+            ;
 
         assert!(header_only_csv.is_ok());
         assert_eq!(header_only_csv.unwrap().values.len(), 0);
@@ -1067,7 +1066,7 @@ mod tests {
             .spreadsheet_token("shtcnmBRWQKBSJRHXXXXXXXXXX".to_string())
             .range("Sheet1!A1:C5")
             .from_csv("A,B,C\n\nD,E,F\nG,H,I", false)
-            .build();
+            ;
 
         assert!(csv_with_empty.is_ok());
         assert_eq!(csv_with_empty.unwrap().values.len(), 2); // 2有效行
@@ -1084,7 +1083,7 @@ mod tests {
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .range("Sheet1!A1:B2")
             .from_hashmap(uneven_data)
-            .build();
+            ;
 
         assert!(uneven_request.is_ok());
         let req = uneven_request.unwrap();

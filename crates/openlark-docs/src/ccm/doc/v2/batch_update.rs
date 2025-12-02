@@ -13,7 +13,6 @@ use super::{
 };
 
 /// 文档批量更新服务
-#[derive(Clone, Debug)]
 pub struct BatchUpdateDocService {
     config: Config,
 }
@@ -47,7 +46,7 @@ impl BatchUpdateDocService {
         }
 
         let api_req = ApiRequest {
-            method: openlark_core::api::HttpMethod::Post,
+            method: openlark_core::api::Post,
             url: endpoint,
             headers: std::collections::HashMap::new(),
             query,

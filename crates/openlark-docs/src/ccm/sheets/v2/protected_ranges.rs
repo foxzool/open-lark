@@ -15,7 +15,7 @@ use openlark_core::{
     error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
-    standard_response::StandardResponse,
+    standard_response::Response,
     SDKResult,
 };
 use reqwest::Method;
@@ -206,7 +206,6 @@ impl ApiResponseTrait for DeleteProtectedRangesResponse {
 }
 
 /// 保护范围管理服务
-#[derive(Clone, Debug)]
 pub struct ProtectedRangesService {
     config: Config,
 }
@@ -262,7 +261,7 @@ impl ProtectedRangesService {
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
         api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
-        let create_response: StandardResponse<CreateProtectedRangesResponse> =
+        let create_response: Response<CreateProtectedRangesResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if let Some(data) = create_response.data {
@@ -290,7 +289,7 @@ impl ProtectedRangesService {
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
         api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
-        let update_response: StandardResponse<UpdateProtectedRangesResponse> =
+        let update_response: Response<UpdateProtectedRangesResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if let Some(data) = update_response.data {
@@ -317,7 +316,7 @@ impl ProtectedRangesService {
         );
 
         let api_request = ApiRequest::with_method_and_path(Method::GET, &endpoint);
-        let get_response: StandardResponse<GetProtectedRangesResponse> =
+        let get_response: Response<GetProtectedRangesResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if let Some(data) = get_response.data {
@@ -345,7 +344,7 @@ impl ProtectedRangesService {
         let mut api_request = ApiRequest::with_method_and_path(Method::DELETE, &endpoint);
         api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
-        let delete_response: StandardResponse<DeleteProtectedRangesResponse> =
+        let delete_response: Response<DeleteProtectedRangesResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if let Some(data) = delete_response.data {
@@ -358,7 +357,7 @@ impl ProtectedRangesService {
     }
 }
 
-impl openlark_core::core::trait_system::Service for ProtectedRangesService {
+impl openlark_core::api::trait_system::Service for ProtectedRangesService {
     fn config(&self) -> &Config {
         &self.config
     }
@@ -381,7 +380,7 @@ mod tests {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
+            ;
         let service = ProtectedRangesService::new(config);
         assert_eq!(service.service_name(), "ProtectedRangesService");
     }

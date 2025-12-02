@@ -2,11 +2,9 @@
 use serde_json::Value;
 use reqwest::Method;
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
-    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat, HttpMethod, Response},
     config::Config,
-    
-    
+
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -14,28 +12,22 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 列出表单字段问题请求
-#[derive(Clone)]
-pub struct ListFormFieldQuestionRequest {
-    #[serde(skip)]
+#[derive(Debug, Clone)]pub struct ListFormFieldQuestionRequest {
     api_request: ApiRequest<Self>,
     /// 多维表格的唯一标识符
-    #[serde(skip)]
     app_token: String,
     /// 表单ID
-    #[serde(skip)]
     form_id: String,
     /// 分页标记
-    #[serde(skip)]
     page_token: Option<String>,
     /// 分页大小
-    #[serde(skip)]
     page_size: Option<i32>,
 }
 
-impl ListFormFieldQuestionRequest {
-    pub fn new(config: Config) -> Self {
+impl Default for ListFormFieldQuestionRequest {
+    fn default() -> Self {
         Self {
-            api_request: ApiRequest::new(config),
+            api_request: ApiRequest::get("https://open.feishu.cn/open-apis/bitable/v1/apps/{}/forms/{}/fields"),
             app_token: String::new(),
             form_id: String::new(),
             page_token: None,
@@ -44,16 +36,27 @@ impl ListFormFieldQuestionRequest {
     }
 }
 
-#[derive(Clone)]
+impl ListFormFieldQuestionRequest {
+    pub fn new(config: Config) -> Self {
+        Self::default()
+    }
+}
+
 pub struct ListFormFieldQuestionRequestBuilder {
     request: ListFormFieldQuestionRequest,
 }
 
-impl ListFormFieldQuestionRequestBuilder {
-    pub fn new(config: Config) -> Self {
+impl Default for ListFormFieldQuestionRequestBuilder {
+    fn default() -> Self {
         Self {
-            request: ListFormFieldQuestionRequest::new(config),
+            request: ListFormFieldQuestionRequest::default(),
         }
+    }
+}
+
+impl ListFormFieldQuestionRequestBuilder {
+    pub fn new() -> Self {
+        Self::default()
     }
 
     pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
@@ -77,21 +80,6 @@ impl ListFormFieldQuestionRequestBuilder {
     }
 
     pub fn build(self) -> ListFormFieldQuestionRequest {
-        // 设置查询参数
-        if let Some(page_size) = &self.request.page_size {
-            self.request
-                .api_request
-                .query_params
-                .insert(page_size.to_string(), page_size.to_string());
-        }
-
-        if let Some(page_token) = &self.request.page_token {
-            self.request
-                .api_request
-                .query_params
-                .insert(page_token.to_string(), page_token.clone());
-        }
-
         self.request
     }
 }
@@ -102,11 +90,11 @@ crate::impl_executable_builder_owned!(
     super::FormFieldService,
     ListFormFieldQuestionRequest,
     Response<ListFormFieldQuestionResponse>,
-    list,
+    list
 );
 
 /// 表单字段问题信息
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FormFieldQuestion {
     /// 问题ID
     pub question_id: String,
@@ -127,7 +115,7 @@ pub struct FormFieldQuestion {
 }
 
 /// 列出表单字段问题响应
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListFormFieldQuestionResponse {
     /// 是否还有更多项
     pub has_more: bool,
@@ -152,11 +140,12 @@ pub async fn list_form_field_questions(
     option: Option<RequestOption>,
 ) -> SDKResult<Response<ListFormFieldQuestionResponse>> {
     let mut api_req = request.api_request;
-    let api_path = format!(
-        "/open-apis/bitable/v1/apps/{}/forms/{}/fields",
+    let url = format!(
+        "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/forms/{}/fields",
         &request.app_token, &request.form_id
     );
-    api_req = api_req.api_path(api_path);
+    // 创建新的请求，不使用api_path方法
+    let api_req = ApiRequest::<()>::get(&url);
 
     let api_resp = Transport::request(api_req, config, option).await?;
     Ok(api_resp)

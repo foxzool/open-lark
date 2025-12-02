@@ -2,9 +2,8 @@
 
 use serde::{Deserialize, Serialize};
 use openlark_core::config::Config;
-use api::{ApiResponseTrait, ResponseFormat};
+use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 /// 简化的服务结构体
-#[derive(Clone)]
 pub struct SimpleService {
 }
 
@@ -19,11 +18,13 @@ impl ApiResponseTrait for SimpleResponse {
 }
 
 /// App_Workflow服务
-#[derive(Clone)]
 pub struct App_WorkflowService {
 }
 
 impl App_WorkflowService {
+    pub fn new(config: Config) -> Self {
+        Self {}
+    }
 }
 
 // Type alias for compatibility

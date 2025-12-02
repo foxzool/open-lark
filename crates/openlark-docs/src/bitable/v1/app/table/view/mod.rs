@@ -5,28 +5,32 @@
 use openlark_core::{
     config::Config,
     constants::AccessTokenType,
-    endpoints::cloud_docs::*,
     http::Transport,
-    reqwest::Method,
     req_option::RequestOption,
     SDKResult,
-    core::{
+    api::{
         BaseResponse,
-        ResponseFormat,
+        ResponseFormat, HttpMethod,
     },
 };
+use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 // 导入子模块
+pub mod create;
+pub mod delete;
+pub mod get;
+pub mod list;
 pub mod patch;
 
-// 重新导出主要类型
-pub use patch::{
-    PatchViewRequest, PatchViewRequestBuilder, PatchViewResponse
-};
+// 重新导出所有模块内容
+pub use create::*;
+pub use delete::*;
+pub use get::*;
+pub use list::*;
+pub use patch::*;
 
 /// 视图服务
-#[derive(Clone)]
 pub struct AppTableViewService {
     config: Config,
 }

@@ -12,7 +12,7 @@ use SDKResult;    api::ApiRequest,
     SDKResult,
 };
 /// 获取知识空间列表请求,
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListSpaceRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -25,7 +25,6 @@ pub struct ListSpaceRequest {
 impl ListSpaceRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone, Debug)]
 pub struct ListSpaceRequestBuilder {
     request: ListSpaceRequest}
 impl ListSpaceRequestBuilder {
@@ -34,12 +33,9 @@ impl ListSpaceRequestBuilder {
 }if let Some(page_token) = &self.request.page_token {,
             self.request,
 .api_request,
-                .query_params
-                .insert("page_token", page_token.clone());
 self.request,
     }
 /// 知识空间信息,
-#[derive(Clone, Debug)]
 pub struct Space {
     /// 知识空间id
     pub space_id: String,
@@ -53,7 +49,6 @@ pub struct Space {
     /// 知识空间可见性
     pub visibility: Option<String>}
 /// 获取知识空间列表响应,
-#[derive(Clone, Debug)]
 pub struct ListSpaceResponse {
     /// 知识空间列表
     pub items: Vec<Space>,
@@ -90,7 +85,7 @@ mod tests {
 let request = ListSpaceRequest::builder(),
             .page_size()
 .page_token()
-            .build();
+            ;
 
         assert_eq!(request.page_size, Some(20));
         assert_eq!(request.page_token, Some("page_token_123".to_string()));

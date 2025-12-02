@@ -12,7 +12,7 @@ use openlark_core::{
     error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
-    standard_response::StandardResponse,
+    standard_response::Response,
     SDKResult,
 };
 
@@ -37,7 +37,6 @@ pub struct ValuesData {
 }
 
 /// 数据前置插入服务
-#[derive(Clone, Debug)]
 pub struct ValuesPrependService {
     // 占位符实现
 }

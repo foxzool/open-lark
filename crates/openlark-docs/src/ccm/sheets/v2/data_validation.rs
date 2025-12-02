@@ -701,7 +701,6 @@ impl DeleteDataValidationRequest {
 }
 
 /// 数据验证操作服务
-#[derive(Clone, Debug)]
 pub struct DataValidationService {
     config: Config,
 }
@@ -988,7 +987,6 @@ impl DataValidationService {
 }
 
 /// 下拉列表验证构建器
-#[derive(Clone, Debug)]
 pub struct DropdownValidationBuilder {
     config: Config,
     spreadsheet_token: String,
@@ -1081,7 +1079,6 @@ impl DropdownValidationBuilder {
 }
 
 /// 数字范围验证构建器
-#[derive(Clone, Debug)]
 pub struct NumberRangeValidationBuilder {
     config: Config,
     spreadsheet_token: String,
@@ -1366,7 +1363,7 @@ mod tests {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
+            ;
         let service = DataValidationService::new(config);
         assert!(!format!("{:?}", service).is_empty());
     }

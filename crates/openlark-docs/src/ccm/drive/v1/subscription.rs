@@ -19,7 +19,7 @@ pub const ENDPOINT_DELETE_FILE_SUBSCRIBE: &str = "/open-apis/drive/v1/files/{}/d
 ///
 /// 用于查询指定文件的文档事件订阅状态，包括订阅类型、订阅者信息、
 /// 订阅时间等详细状态信息
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetFileSubscriptionRequest {
     /// 请求体
     #[serde(skip)]
@@ -117,7 +117,7 @@ impl GetFileSubscriptionBuilder {
         };
 
         // 执行请求验证
-        request.build()?;
+        request?;
         Ok(request)
     }
 }
@@ -261,7 +261,6 @@ pub enum SubscriptionStatus {
 /// 查询云文档事件订阅状态构建器
 ///
 /// 提供流畅的API来执行查询操作，支持方法链调用
-#[derive(Clone, Debug)]
 pub struct GetFileSubscriptionBuilder {
     service: Arc<super::cloud_docs::drive::v1::DriveServiceV1>,
     request: GetFileSubscriptionRequest,
@@ -297,7 +296,7 @@ impl GetFileSubscriptionBuilder {
     /// ) -> Result<GetFileSubscriptionResponse, Box<dyn std::error::Error>> {
     ///     let request = GetFileSubscriptionRequest::builder()
     ///         .file_token("file_token_123")
-    ///         .build()?;
+    ///         ?;
     ///
     ///     let response = service
     ///         .get_file_subscription_builder(request)
@@ -342,7 +341,7 @@ impl GetFileSubscriptionBuilder {
 ///
 /// 用于取消指定文件的文档事件订阅，支持取消特定类型的订阅或全部订阅
 /// 包含安全确认机制，防止误操作
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeleteFileSubscriptionRequest {
     /// 请求体
     #[serde(skip)]
@@ -480,7 +479,7 @@ impl DeleteFileSubscriptionBuilder {
         };
 
         // 执行请求验证
-        request.build()?;
+        request?;
         Ok(request)
     }
 }
@@ -532,7 +531,6 @@ pub struct DeleteSubscriptionResultData {
 /// 取消云文档事件订阅状态构建器
 ///
 /// 提供流畅的API来执行取消订阅操作，支持方法链调用
-#[derive(Clone, Debug)]
 pub struct DeleteFileSubscriptionBuilder {
     service: Arc<super::cloud_docs::drive::v1::DriveServiceV1>,
     request: DeleteFileSubscriptionRequest,
@@ -570,7 +568,7 @@ impl DeleteFileSubscriptionBuilder {
     ///         .file_token("file_token_123")
     ///         .confirm(true)  // 必须显式确认
     ///         .subscription_type(SubscriptionType::FileContentChanged)
-    ///         .build()?;
+    ///         ?;
     ///
     ///     let response = service
     ///         .delete_file_subscription_builder(request)
@@ -672,25 +670,25 @@ mod tests {
     #[test]
     fn test_get_file_subscription_request_build_success() {
         let request = create_test_request();
-        assert!(request.build().is_ok());
+        assert!(request.is_ok());
     }
 
     #[test]
     fn test_get_file_subscription_request_build_empty_file_token() {
         let request = GetFileSubscriptionRequest::new("");
-        assert!(request.build().is_err());
+        assert!(request.is_err());
     }
 
     #[test]
     fn test_get_file_subscription_request_build_short_file_token() {
         let request = GetFileSubscriptionRequest::new("short");
-        assert!(request.build().is_err());
+        assert!(request.is_err());
     }
 
     #[test]
     fn test_get_file_subscription_request_build_invalid_characters() {
         let request = GetFileSubscriptionRequest::new("token@123");
-        assert!(request.build().is_err());
+        assert!(request.is_err());
     }
 
     #[test]
@@ -706,7 +704,7 @@ mod tests {
         let builder = GetFileSubscriptionRequest::builder()
             .file_token("test_file_token_789");
 
-        let request = builder.build();
+        let request = builder;
         assert!(request.is_ok());
 
         if let Ok(req) = request {
@@ -717,7 +715,7 @@ mod tests {
     #[test]
     fn test_get_file_subscription_builder_build_missing_file_token() {
         let builder = GetFileSubscriptionRequest::builder();
-        let request = builder.build();
+        let request = builder;
         assert!(request.is_err());
     }
 
@@ -862,11 +860,11 @@ mod tests {
         // 测试完整的构建和验证流程
         let request = GetFileSubscriptionRequest::builder()
             .file_token("valid_file_token_123")
-            .build()
+            
             .expect("构建请求应该成功");
 
         // 验证请求参数
-        assert!(request.build().is_ok());
+        assert!(request.is_ok());
         assert_eq!(request.file_token, "valid_file_token_123");
 
         // 创建模拟响应数据
@@ -934,7 +932,7 @@ mod tests {
         let request = DeleteFileSubscriptionRequest::builder()
             .file_token("test_file_token_789")
             .confirm(true)
-            .build()
+            
             .expect("构建请求应该成功");
 
         assert_eq!(request.file_token, "test_file_token_789");
@@ -948,7 +946,7 @@ mod tests {
             .file_token("test_file_token_101112")
             .confirm(true)
             .subscription_type(SubscriptionType::FileContentChanged)
-            .build()
+            
             .expect("构建请求应该成功");
 
         assert_eq!(request.file_token, "test_file_token_101112");
@@ -961,7 +959,7 @@ mod tests {
         let builder = DeleteFileSubscriptionRequest::builder()
             .confirm(true);
 
-        let result = builder.build();
+        let result = builder;
         assert!(result.is_err());
         assert!(result.unwrap_err().to_string().contains("文件令牌是必需的"));
     }
@@ -971,7 +969,7 @@ mod tests {
         let builder = DeleteFileSubscriptionRequest::builder()
             .file_token("test_file_token_123");
 
-        let result = builder.build();
+        let result = builder;
         assert!(result.is_err());
         assert!(result.unwrap_err().to_string().contains("必须显式确认取消订阅操作"));
     }
@@ -979,29 +977,29 @@ mod tests {
     #[test]
     fn test_delete_file_subscription_request_build_empty_file_token() {
         let request = DeleteFileSubscriptionRequest::new("", true);
-        assert!(request.build().is_err());
-        assert!(request.build().unwrap_err().to_string().contains("文件令牌不能为空"));
+        assert!(request.is_err());
+        assert!(request.unwrap_err().to_string().contains("文件令牌不能为空"));
     }
 
     #[test]
     fn test_delete_file_subscription_request_build_short_file_token() {
         let request = DeleteFileSubscriptionRequest::new("short", true);
-        assert!(request.build().is_err());
-        assert!(request.build().unwrap_err().to_string().contains("文件令牌长度无效"));
+        assert!(request.is_err());
+        assert!(request.unwrap_err().to_string().contains("文件令牌长度无效"));
     }
 
     #[test]
     fn test_delete_file_subscription_request_build_invalid_characters() {
         let request = DeleteFileSubscriptionRequest::new("token@invalid", true);
-        assert!(request.build().is_err());
-        assert!(request.build().unwrap_err().to_string().contains("文件令牌包含无效字符"));
+        assert!(request.is_err());
+        assert!(request.unwrap_err().to_string().contains("文件令牌包含无效字符"));
     }
 
     #[test]
     fn test_delete_file_subscription_request_build_no_confirm() {
         let request = DeleteFileSubscriptionRequest::new("valid_file_token_123", false);
-        assert!(request.build().is_err());
-        assert!(request.build().unwrap_err().to_string().contains("必须显式确认取消订阅操作"));
+        assert!(request.is_err());
+        assert!(request.unwrap_err().to_string().contains("必须显式确认取消订阅操作"));
     }
 
     #[test]
@@ -1074,11 +1072,11 @@ mod tests {
             .file_token("valid_file_token_12345")
             .confirm(true)
             .subscription_type(SubscriptionType::FileContentChanged)
-            .build()
+            
             .expect("构建请求应该成功");
 
         // 验证请求参数
-        assert!(request.build().is_ok());
+        assert!(request.is_ok());
         assert_eq!(request.file_token, "valid_file_token_12345");
         assert!(request.confirm);
         assert_eq!(request.subscription_type, Some(SubscriptionType::FileContentChanged));
@@ -1106,7 +1104,7 @@ mod tests {
         let request = DeleteFileSubscriptionRequest::builder()
             .file_token("test_file_token_all")
             .confirm(true)
-            .build()
+            
             .expect("构建请求应该成功");
 
         assert!(request.subscription_type.is_none());

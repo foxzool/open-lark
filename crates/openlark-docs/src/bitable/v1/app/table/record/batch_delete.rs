@@ -1,10 +1,7 @@
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
-    
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat, HttpMethod, RequestData, Response},
     config::Config,
-    
-    
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -12,36 +9,34 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 批量删除记录请求
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct BatchDeleteRecordRequest {
-    #[serde(skip)]
     api_request: ApiRequest<Self>,
     /// 多维表格的唯一标识符
-    #[serde(skip)]
     app_token: String,
     /// 多维表格数据表的唯一标识符
-    #[serde(skip)]
     table_id: String,
     /// 用户 ID 类型
-    #[serde(skip)]
     user_id_type: Option<String>,
     /// 记录 ID 列表
     record_ids: Vec<String>,
 }
 
-impl BatchDeleteRecordRequest {
-    pub fn new(config: Config) -> Self {
+impl Default for BatchDeleteRecordRequest {
+    fn default() -> Self {
         Self {
-            api_request: ApiRequest::new()
-                    .method(HttpMethod::Delete)
-                    .api_path("/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_delete".to_string())
-                    .config(config)
-                    .build(),
+            api_request: ApiRequest::delete("https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_delete"),
             app_token: String::new(),
             table_id: String::new(),
             user_id_type: None,
             record_ids: Vec::new(),
         }
+    }
+}
+
+impl BatchDeleteRecordRequest {
+    pub fn new(config: Config) -> Self {
+        Self::default()
     }
 
     pub fn builder() -> BatchDeleteRecordRequestBuilder {
@@ -49,9 +44,16 @@ impl BatchDeleteRecordRequest {
     }
 }
 
-#[derive(Default)]
 pub struct BatchDeleteRecordRequestBuilder {
     request: BatchDeleteRecordRequest,
+}
+
+impl Default for BatchDeleteRecordRequestBuilder {
+    fn default() -> Self {
+        Self {
+            request: BatchDeleteRecordRequest::default(),
+        }
+    }
 }
 
 impl BatchDeleteRecordRequestBuilder {
@@ -85,14 +87,14 @@ impl BatchDeleteRecordRequestBuilder {
 }
 
 /// 批量删除记录响应
-#[derive(Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchDeleteRecordResponse {
     /// 成功删除的记录 ID 列表
     pub records: Vec<DeletedRecord>,
 }
 
 /// 被删除的记录信息
-#[derive(Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeletedRecord {
     /// 记录 ID
     pub record_id: String,
@@ -107,7 +109,7 @@ impl ApiResponseTrait for BatchDeleteRecordResponse {
 }
 
 /// 请求体结构
-#[derive(Serialize)]
+#[derive(Debug, Serialize)]
 struct BatchDeleteRecordRequestBody {
     record_ids: Vec<String>,
 }
@@ -118,18 +120,15 @@ pub async fn batch_delete_record(
     config: &Config,
     option: Option<RequestOption>,
 ) -> SDKResult<BatchDeleteRecordResponse> {
-    let mut api_req = request.api_request;
-    let api_path = format!(
-        "/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_delete",
+    let url = format!(
+        "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_delete",
         &request.app_token, &request.table_id
     );
-    api_req = api_req.api_path(api_path);
+    let mut api_req = ApiRequest::<()>::delete(&url);
 
     // 设置查询参数
     if let Some(user_id_type) = &request.user_id_type {
-        api_req
-            .query_params
-            .insert(user_id_type.to_string(), user_id_type.clone());
+        api_req = api_req.query("user_id_type", user_id_type);
     }
 
     // 设置请求体
@@ -137,9 +136,9 @@ pub async fn batch_delete_record(
         record_ids: request.record_ids,
     };
 
-    api_req.body = serde_json::to_vec(&body).unwrap();
+    api_req = api_req.body(RequestData::Json(serde_json::to_value(&body).unwrap()));
 
-    let api_resp: openlark_core::core::StandardResponse<BatchDeleteRecordResponse> =
+    let api_resp: Response<BatchDeleteRecordResponse> =
         Transport::request(api_req, config, option).await?;
     api_resp.into_result()
 }

@@ -656,7 +656,6 @@ pub struct DeletePivotTableResponse {
 }
 
 /// Sheets电子表格数据透视表服务 v3
-#[derive(Clone, Debug)]
 pub struct PivotTableService {
     config: openlark_core::config::Config,
 }
@@ -713,7 +712,7 @@ impl PivotTableService {
     ///     .layout(PivotTableLayout::new()
     ///         .show_row_grand_totals(true)
     ///         .show_column_grand_totals(true))
-    ///     .build()
+    ///     
     ///     .unwrap();
     ///
     /// let response = service.create_pivot_table(&request).await?;
@@ -779,7 +778,7 @@ impl PivotTableService {
     /// let request = DeletePivotTableRequest::builder()
     ///     .spreadsheet_token("your_token".to_string())
     ///     .pivot_table_id("pivot_table_id".to_string())
-    ///     .build()
+    ///     
     ///     .unwrap();
     ///
     /// let response = service.delete_pivot_table(&request).await?;
@@ -1003,7 +1002,7 @@ mod tests {
                 SummaryFunction::Sum,
             ))
             .layout(PivotTableLayout::new())
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.spreadsheet_token, "token123");
@@ -1027,7 +1026,7 @@ mod tests {
         let request = DeletePivotTableRequest::builder()
             .spreadsheet_token("token123".to_string())
             .pivot_table_id("pivot123".to_string())
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.spreadsheet_token, "token123");
@@ -1057,7 +1056,7 @@ mod tests {
                 2,
                 SummaryFunction::Sum,
             ))
-            .build()
+            
             .unwrap();
 
         assert_eq!(simple_request.pivot_table_config.row_fields.len(), 1);
@@ -1090,7 +1089,7 @@ mod tests {
                     .show_column_grand_totals(true)
                     .merge_labels(true),
             )
-            .build()
+            
             .unwrap();
 
         assert_eq!(complex_request.pivot_table_config.row_fields.len(), 2);

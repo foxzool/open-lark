@@ -5,7 +5,6 @@
 use openlark_core::config::Config;
 
 /// Drive V2 API服务
-#[derive(Clone, Debug)]
 pub struct DriveV2Service {
     #[allow(dead_code)] // 配置保留供将来使用
     config: Config,

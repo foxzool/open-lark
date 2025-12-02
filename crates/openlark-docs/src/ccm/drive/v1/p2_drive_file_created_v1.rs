@@ -2,7 +2,6 @@ use serde::{Deserialize, Serialize};
 
 use openlark_core::event::EventHandler};
 
-#[derive(Clone, Debug)]
 pub struct P2DriveFileCreatedV1 {
     pub schema: String,
     pub header: EventHeader,
@@ -28,19 +27,16 @@ where
 pub(crate) fn new(f: F) -> Self {
         P2DriveFileCreatedV1ProcessorImpl { f }
 /// 云文档文件创建事件数据,
-#[derive(Clone, Debug)]
 pub struct P2DriveFileCreatedV1Data {
     /// 事件对象
     pub object: DriveFileEventObject,
 /// 云文档文件事件对象,
-#[derive(Clone, Debug)]
 pub struct DriveFileEventObject {
     /// 对象类型 (file)
     pub object_type: String,
     /// 文件信息
     pub file: DriveFile,
 /// 云文档文件信息,
-#[derive(Clone, Debug)]
 pub struct DriveFile {
     /// 文件token
     pub file_token: String,
@@ -85,7 +81,6 @@ pub struct DriveFile {
 #[serde(skip_serializing_if = "Option::is_none")]
     pub shortcut_target_token: Option<String>,
 /// 文件状态,
-#[derive(Clone, Debug)]
 pub struct DriveFileStatus {
     /// 是否被删除,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -94,7 +89,6 @@ pub struct DriveFileStatus {
 #[serde(skip_serializing_if = "Option::is_none")]
     pub is_in_trash: Option<bool>,
 /// 文件权限信息,
-#[derive(Clone, Debug)]
 pub struct DriveFilePermissions {
     /// 是否可编辑,
 #[serde(skip_serializing_if = "Option::is_none")]

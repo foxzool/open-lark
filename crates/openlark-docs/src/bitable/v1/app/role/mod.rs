@@ -1,10 +1,8 @@
 //! App_Role服务模块 - 简化实现
 
 use serde::{Deserialize, Serialize};
-use openlark_core::config::Config;
-use api::{ApiResponseTrait, ResponseFormat};
+use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 /// 简化的服务结构体
-#[derive(Clone)]
 pub struct SimpleService {
 }
 
@@ -19,7 +17,6 @@ impl ApiResponseTrait for SimpleResponse {
 }
 
 /// App_Role服务
-#[derive(Clone)]
 pub struct App_RoleService {
 }
 
