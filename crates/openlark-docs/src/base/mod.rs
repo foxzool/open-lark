@@ -20,6 +20,11 @@ impl BaseService {
     pub fn config(&self) -> &Config {
         &self.config
     }
+
+    /// 获取V2版本服务
+    pub fn v2(&self) -> v2::BaseV2Service {
+        v2::BaseV2Service::new(self.config.clone())
+    }
 }
 
 // 基础服务v2版本模块
