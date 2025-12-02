@@ -4,8 +4,8 @@
 
 // 重新导出核心模块（避免歧义重导出）
 pub use openlark_core::prelude::{
-    AccessTokenType, ApiResponseTrait, BaseResponse, LarkAPIError, RequestOption, ResponseFormat, HttpMethod,
-    SDKResult,
+    AccessTokenType, ApiResponseTrait, BaseResponse, HttpMethod, LarkAPIError, RequestOption,
+    ResponseFormat, SDKResult,
 };
 
 // 重新导出文档服务核心类型（避免冲突）
