@@ -2,7 +2,6 @@ use serde::{Deserialize, Serialize};
 
 use openlark_core::event::EventHandler};
 
-#[derive(Clone, Debug)]
 pub struct P2DriveFileDeletedV1 {
     pub schema: String,
     pub header: EventHeader,
@@ -28,7 +27,6 @@ where
 pub(crate) fn new(f: F) -> Self {
         P2DriveFileDeletedV1ProcessorImpl { f }
 /// 云文档文件删除事件数据,
-#[derive(Clone, Debug)]
 pub struct P2DriveFileDeletedV1Data {
     /// 事件对象
     pub object: DriveFileEventObject,
@@ -36,14 +34,12 @@ pub struct P2DriveFileDeletedV1Data {
 #[serde(skip_serializing_if = "Option::is_none")]
     pub old_object: Option<DriveFileEventObject>,
 /// 云文档文件事件对象,
-#[derive(Clone, Debug)]
 pub struct DriveFileEventObject {
     /// 对象类型 (file)
     pub object_type: String,
     /// 文件信息
     pub file: DeletedDriveFile,
 /// 被删除的云文档文件信息,
-#[derive(Clone, Debug)]
 pub struct DeletedDriveFile {
     /// 文件token
     pub file_token: String,
@@ -91,7 +87,6 @@ pub struct DeletedDriveFile {
 #[serde(skip_serializing_if = "Option::is_none")]
     pub shortcut_target_token: Option<String>,
 /// 文件删除信息,
-#[derive(Clone, Debug)]
 pub struct FileDeletionInfo {
     /// 删除类型 (user_delete, auto_delete, system_delete, trash_delete)
     pub delete_type: String,
@@ -108,7 +103,6 @@ pub struct FileDeletionInfo {
 #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_info: Option<FileBackupInfo>,
 /// 文件备份信息,
-#[derive(Clone, Debug)]
 pub struct FileBackupInfo {
     /// 是否有备份
     pub has_backup: bool,
@@ -119,7 +113,6 @@ pub struct FileBackupInfo {
 #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_expire_time: Option<String>,
 /// 文件权限信息,
-#[derive(Clone, Debug)]
 pub struct DriveFilePermissions {
     /// 是否可编辑,
 #[serde(skip_serializing_if = "Option::is_none")]

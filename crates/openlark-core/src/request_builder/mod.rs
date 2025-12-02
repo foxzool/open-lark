@@ -20,8 +20,8 @@ use std::{future::Future, pin::Pin};
 pub struct UnifiedRequestBuilder;
 
 impl UnifiedRequestBuilder {
-    pub fn build<'a>(
-        req: &'a mut ApiRequest<()>,
+    pub fn build<'a, R: Send>(
+        req: &'a mut ApiRequest<R>,
         access_token_type: AccessTokenType,
         config: &'a Config,
         option: &'a RequestOption,
@@ -83,7 +83,7 @@ impl UnifiedRequestBuilder {
         })
     }
 
-    fn build_url(config: &Config, req: &ApiRequest<()>) -> Result<url::Url, LarkAPIError> {
+    fn build_url<R: Send>(config: &Config, req: &ApiRequest<R>) -> Result<url::Url, LarkAPIError> {
         let path = format!("{}{}", config.base_url, req.api_path());
         let query = req
             .query

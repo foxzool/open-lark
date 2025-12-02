@@ -3,7 +3,7 @@ use SDKResult;use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-    core::{
+    api::{
         api::ApiRequest,
         api::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
@@ -42,7 +42,7 @@ use openlark_core::{
 ///     let client = LarkClient::builder()
 ///         .app_id("your_app_id")
 ///         .app_secret("your_app_secret")
-///         .build()?;
+///         ?;
 ///
 ///     // 创建一个文档节点
 ///     let response = client.cloud_docs.wiki.v2.space_node
@@ -59,8 +59,7 @@ use openlark_core::{
 ///     Ok(())
 /// }
 /// ```
-#[derive(Debug, Serialize, Default)]
-pub struct CreateSpaceNodeRequest {
+#[derive(Debug, Clone, Serialize, Deserialize)]pub struct CreateSpaceNodeRequest {
     #[serde(skip)]
     api_request: ApiRequest,
 
@@ -320,7 +319,7 @@ mod tests {
             .parent_node_token("wikcnxxxxxx")
             .with_origin_node()
             .title("我的文档")
-            .build();
+            ;
 
         assert_eq!(request.space_id, "spcxxxxxx");
         assert_eq!(request.obj_type, "doc");
@@ -336,7 +335,7 @@ mod tests {
             .space_id("spc123")
             .with_doc_type()
             .title("测试文档")
-            .build();
+            ;
         assert_eq!(doc_request.obj_type, "doc");
 
         // 测试创建电子表格
@@ -344,7 +343,7 @@ mod tests {
             .space_id("spc123")
             .with_sheet_type()
             .title("测试表格")
-            .build();
+            ;
         assert_eq!(sheet_request.obj_type, "sheet");
 
         // 测试创建思维笔记
@@ -352,7 +351,7 @@ mod tests {
             .space_id("spc123")
             .with_mindnote_type()
             .title("测试思维笔记")
-            .build();
+            ;
         assert_eq!(mindnote_request.obj_type, "mindnote");
 
         // 测试创建多维表格
@@ -360,7 +359,7 @@ mod tests {
             .space_id("spc123")
             .with_bitable_type()
             .title("测试多维表格")
-            .build();
+            ;
         assert_eq!(bitable_request.obj_type, "bitable");
     }
 
@@ -370,7 +369,7 @@ mod tests {
             .space_id("spcxxxxxx")
             .with_doc_type()
             .title("根节点文档")
-            .build();
+            ;
 
         assert_eq!(request.space_id, "spcxxxxxx");
         assert_eq!(request.obj_type, "doc");
@@ -386,7 +385,7 @@ mod tests {
             .parent_node_token("wikcnxxxxxx")
             .with_shortcut_node()
             .title("快捷方式文档")
-            .build();
+            ;
 
         assert_eq!(request.node_type, Some("shortcut".to_string()));
     }
@@ -397,7 +396,7 @@ mod tests {
         CreateSpaceNodeRequest::builder()
             .with_doc_type()
             .title("测试文档")
-            .build();
+            ;
     }
 
     #[test]
@@ -406,7 +405,7 @@ mod tests {
         CreateSpaceNodeRequest::builder()
             .space_id("spc123")
             .title("测试文档")
-            .build();
+            ;
     }
 
     #[test]
@@ -415,7 +414,7 @@ mod tests {
             .space_id("spc123")
             .obj_type("custom_type")
             .node_type("custom_node_type")
-            .build();
+            ;
 
         assert_eq!(request.obj_type, "custom_type");
         assert_eq!(request.node_type, Some("custom_node_type".to_string()));

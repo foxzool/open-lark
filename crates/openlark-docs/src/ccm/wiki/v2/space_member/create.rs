@@ -3,10 +3,10 @@ use SDKResult;use reqwest::Method;
 use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 ,
 {
-    core::,
+    api::,
 {,
         BaseResponse,
-        ResponseFormat,
+        ResponseFormat, HttpMethod,
         api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
@@ -18,7 +18,7 @@ use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
     impl_executable_builder_owned,
 };
 /// 添加知识空间成员请求,
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateSpaceMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -34,7 +34,6 @@ pub struct CreateSpaceMemberRequest {
 impl CreateSpaceMemberRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone, Debug)]
 pub struct CreateSpaceMemberRequestBuilder {
     request: CreateSpaceMemberRequest}
 impl CreateSpaceMemberRequestBuilder {
@@ -48,7 +47,6 @@ impl CreateSpaceMemberRequestBuilder {
     create,
 );
 /// 添加的成员信息
-#[derive(Clone, Debug)]
 pub struct CreatedMember {
     /// 成员类型：user
     pub member_type: String,
@@ -57,7 +55,6 @@ pub struct CreatedMember {
     /// 成员权限角色
     pub role: String,
 /// 添加知识空间成员响应,
-#[derive(Clone, Debug)]
 pub struct CreateSpaceMemberResponse {
     /// 添加的成员信息
     pub member: CreatedMember,
@@ -95,7 +92,7 @@ let request = CreateSpaceMemberRequest::builder(),
 .member_type()
             .member_id()
 .as_editor()
-            .build();
+            ;
 
         assert_eq!(request.space_id, "spcxxxxxx");
         assert_eq!(request.member_type, "user");

@@ -12,7 +12,7 @@ use SDKResult;    api::ApiRequest,
     SDKResult,
 };
 /// 更新知识空间节点标题请求,
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateSpaceNodeTitleRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -27,14 +27,12 @@ pub struct UpdateSpaceNodeTitleRequest {
 impl UpdateSpaceNodeTitleRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone, Debug)]
 pub struct UpdateSpaceNodeTitleRequestBuilder {
     request: UpdateSpaceNodeTitleRequest}
 impl UpdateSpaceNodeTitleRequestBuilder {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 更新后的节点信息,
-#[derive(Clone, Debug)]
 pub struct UpdatedNode {
     /// 知识空间id
     pub space_id: String,
@@ -51,7 +49,6 @@ pub struct UpdatedNode {
     /// 文档标题
     pub title: Option<String>}
 /// 更新知识空间节点标题响应,
-#[derive(Clone, Debug)]
 pub struct UpdateSpaceNodeTitleResponse {
     /// 更新后的节点信息
     pub node: UpdatedNode,
@@ -91,7 +88,7 @@ let request = UpdateSpaceNodeTitleRequest::builder(),
             .space_id()
 .node_token()
             .title()
-.build();
+;
         assert_eq!(request.space_id, "spcxxxxxx");
         assert_eq!(request.node_token, "wikcnxxxxxx");
         assert_eq!(request.title, "新的文档标题");

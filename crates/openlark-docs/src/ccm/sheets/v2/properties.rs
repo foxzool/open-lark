@@ -14,7 +14,7 @@ use openlark_core::{
     error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
-    standard_response::StandardResponse,
+    standard_response::Response,
     SDKResult,
 };
 use reqwest::Method;
@@ -95,7 +95,6 @@ impl ApiResponseTrait for UpdatePropertiesResponse {
 }
 
 /// 表格属性管理服务
-#[derive(Clone, Debug)]
 pub struct PropertiesService {
     config: Config,
 }
@@ -151,7 +150,7 @@ impl PropertiesService {
         let mut api_request = ApiRequest::with_method_and_path(Method::PUT, &endpoint);
         api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
-        let update_response: StandardResponse<UpdatePropertiesResponse> =
+        let update_response: Response<UpdatePropertiesResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if let Some(data) = update_response.data {
@@ -287,7 +286,7 @@ impl PropertiesService {
     }
 }
 
-impl openlark_core::core::trait_system::Service for PropertiesService {
+impl openlark_core::api::trait_system::Service for PropertiesService {
     fn config(&self) -> &Config {
         &self.config
     }
@@ -310,7 +309,7 @@ mod tests {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
+            ;
         let service = PropertiesService::new(config);
         assert_eq!(service.service_name(), "PropertiesService");
     }

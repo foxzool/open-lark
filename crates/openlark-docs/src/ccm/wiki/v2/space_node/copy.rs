@@ -3,10 +3,10 @@ use SDKResult;use reqwest::Method;
 use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 ,
 {
-    core::,
+    api::,
 {,
         BaseResponse,
-        ResponseFormat,
+        ResponseFormat, HttpMethod,
         api::{ApiResponseTrait}
     config::Config,
         constants::AccessTokenType,
@@ -18,7 +18,7 @@ use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
     impl_executable_builder_owned,
 };
 /// 复制知识空间节点请求,
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CopySpaceNodeRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -40,7 +40,6 @@ pub struct CopySpaceNodeRequest {
 impl CopySpaceNodeRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone, Debug)]
 pub struct CopySpaceNodeRequestBuilder {
     request: CopySpaceNodeRequest}
 impl CopySpaceNodeRequestBuilder {
@@ -54,7 +53,6 @@ impl CopySpaceNodeRequestBuilder {
     copy,
 );
 /// 复制后的节点信息
-#[derive(Clone, Debug)]
 pub struct CopiedNode {
     /// 知识空间id
     pub space_id: String,
@@ -71,7 +69,6 @@ pub struct CopiedNode {
     /// 文档标题
     pub title: Option<String>}
 /// 复制知识空间节点响应,
-#[derive(Clone, Debug)]
 pub struct CopySpaceNodeResponse {
     /// 复制后的节点信息
     pub node: CopiedNode,
@@ -110,7 +107,7 @@ let request = CopySpaceNodeRequest::builder(),
             .target_parent_token()
 .target_space_id()
             .title()
-.build();
+;
         assert_eq!(request.space_id, "spcxxxxxx");
         assert_eq!(request.node_token, "wikcnxxxxxx");
 assert_eq!(,
@@ -127,7 +124,7 @@ let request = CopySpaceNodeRequest::builder(),
             .move_to_root()
 .move_to_current_space()
             .keep_original_title()
-.build();
+;
         assert_eq!(request.space_id, "spcxxxxxx");
         assert_eq!(request.node_token, "wikcnxxxxxx");
         assert_eq!(request.target_parent_token, None);

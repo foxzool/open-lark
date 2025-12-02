@@ -131,7 +131,6 @@ impl ApiResponseTrait for GetSheetResponse {
 }
 
 /// 工作表管理服务
-#[derive(Clone, Debug)]
 pub struct SheetService {
     config: Config,
 }
@@ -224,7 +223,6 @@ impl SheetService {
 }
 
 /// 工作表查询构建器
-#[derive(Clone, Debug)]
 pub struct QuerySheetsBuilder {
     service: SheetService,
     spreadsheet_token: String,
@@ -246,7 +244,6 @@ impl QuerySheetsBuilder {
 }
 
 /// 工作表获取构建器
-#[derive(Clone, Debug)]
 pub struct GetSheetBuilder {
     service: SheetService,
     spreadsheet_token: String,
@@ -469,7 +466,6 @@ impl ApiResponseTrait for FindCellsResponse {
 }
 
 /// 查找单元格构建器
-#[derive(Clone, Debug)]
 pub struct FindCellsBuilder {
     request: FindCellsRequest,
     service: SheetService,
@@ -541,7 +537,7 @@ mod tests {
         let config = openlark_core::config::openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
+            ;
         let service = SheetService::new(config);
         assert!(!format!("{:?}", service).is_empty());
     }

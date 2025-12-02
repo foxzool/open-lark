@@ -39,7 +39,6 @@ use openlark_core::{
 /// Sheets电子表格服务 v2版本
 ///
 /// 提供飞书电子表格v2版本的统一入口。
-#[derive(Clone, Debug)]
 pub struct SheetsV2Service {
     config: Config,
 }

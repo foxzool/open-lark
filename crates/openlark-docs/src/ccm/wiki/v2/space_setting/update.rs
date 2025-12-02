@@ -12,7 +12,7 @@ use SDKResult;    api::ApiRequest,
     SDKResult,
 };
 /// 更新知识空间设置请求,
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateSpaceSettingRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -28,14 +28,12 @@ pub struct UpdateSpaceSettingRequest {
 impl UpdateSpaceSettingRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone, Debug)]
 pub struct UpdateSpaceSettingRequestBuilder {
     request: UpdateSpaceSettingRequest}
 impl UpdateSpaceSettingRequestBuilder {
     pub fn new(config: Config) -> Self {
         Self { config }
 }/// 知识空间设置,
-#[derive(Clone, Debug)]
 pub struct SpaceSetting {
     /// 知识空间id
     pub space_id: String,
@@ -44,7 +42,6 @@ pub struct SpaceSetting {
     /// 是否开启复制
     pub copy_enabled: Option<bool>}
 /// 更新知识空间设置响应,
-#[derive(Clone, Debug)]
 pub struct UpdateSpaceSettingResponse {
     /// 更新后的空间设置
     pub setting: SpaceSetting,
@@ -81,7 +78,7 @@ let request = UpdateSpaceSettingRequest::builder(),
             .space_id()
 .enable_comment()
             .disable_copy()
-.build();
+;
         assert_eq!(request.space_id, "spcxxxxxx");
         assert_eq!(request.comment_enabled, Some(true));
         assert_eq!(request.copy_enabled, Some(false));

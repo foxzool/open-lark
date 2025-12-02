@@ -19,7 +19,7 @@ use openlark_core::{
     error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
-    standard_response::StandardResponse,
+    standard_response::Response,
     SDKResult,
 };
 
@@ -29,7 +29,6 @@ use openlark_core::trait_system::Service;
 // use openlark_core::SDKResult;
 
 /// 单个范围写入请求
-#[derive(Clone, Debug)]
 pub struct ValuesSingleWriteRequest {
     /// 电子表格token
     pub spreadsheet_token: String,
@@ -308,7 +307,6 @@ pub struct ValuesSingleWriteResponseBody {
 // 移除重复的BaseResponse定义，使用openlark_core中的版本
 
 /// 单个范围写入服务
-#[derive(Clone, Debug)]
 pub struct ValuesSingleWriteService {
     config: Config,
 }
@@ -331,7 +329,7 @@ impl ValuesSingleWriteService {
     ///
     /// ```rust
     /// use open_lark::service::sheets::v2::values_single_write::*;
-    /// use open_lark::core::config::Config;
+    /// use open_lark::api::config::Config;
     /// use serde_json::json;
     ///
     /// let config = openlark_core::config::Config::new("app_id", "app_secret");

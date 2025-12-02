@@ -15,7 +15,7 @@ use openlark_core::{
     error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
-    standard_response::StandardResponse,
+    standard_response::Response,
     SDKResult,
 };
 use reqwest::Method;
@@ -312,7 +312,6 @@ impl ApiResponseTrait for DeleteConditionalFormatsResponse {
 }
 
 /// 条件格式管理服务
-#[derive(Clone, Debug)]
 pub struct ConditionalFormatsService {
     config: Config,
 }
@@ -379,7 +378,7 @@ impl ConditionalFormatsService {
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
         api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
-        let create_response: StandardResponse<CreateConditionalFormatsResponse> =
+        let create_response: Response<CreateConditionalFormatsResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if let Some(data) = create_response.data {
@@ -407,7 +406,7 @@ impl ConditionalFormatsService {
         let mut api_request = ApiRequest::with_method_and_path(Method::POST, &endpoint);
         api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
-        let update_response: StandardResponse<UpdateConditionalFormatsResponse> =
+        let update_response: Response<UpdateConditionalFormatsResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if let Some(data) = update_response.data {
@@ -434,7 +433,7 @@ impl ConditionalFormatsService {
         );
 
         let api_request = ApiRequest::with_method_and_path(Method::GET, &endpoint);
-        let get_response: StandardResponse<GetConditionalFormatsResponse> =
+        let get_response: Response<GetConditionalFormatsResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if let Some(data) = get_response.data {
@@ -462,7 +461,7 @@ impl ConditionalFormatsService {
         let mut api_request = ApiRequest::with_method_and_path(Method::DELETE, &endpoint);
         api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
-        let delete_response: StandardResponse<DeleteConditionalFormatsResponse> =
+        let delete_response: Response<DeleteConditionalFormatsResponse> =
             Transport::request(api_request, &self.config, None).await?;
 
         if let Some(data) = delete_response.data {
@@ -475,7 +474,7 @@ impl ConditionalFormatsService {
     }
 }
 
-impl openlark_core::core::trait_system::Service for ConditionalFormatsService {
+impl openlark_core::api::trait_system::Service for ConditionalFormatsService {
     fn config(&self) -> &Config {
         &self.config
     }
@@ -511,7 +510,7 @@ mod tests {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
+            ;
         let service = ConditionalFormatsService::new(config);
         assert_eq!(service.service_name(), "ConditionalFormatsService");
     }

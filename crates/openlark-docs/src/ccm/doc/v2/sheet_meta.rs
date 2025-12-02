@@ -9,7 +9,6 @@ use openlark_core::{api::ApiRequest, constants::AccessTokenType, http::Transport
 use super::{requests::GetDocSheetMetaV2Request, responses::GetDocSheetMetaV2Response};
 
 /// 电子表格元数据服务
-#[derive(Clone, Debug)]
 pub struct SheetMetaDocService {
     config: Config,
 }
@@ -83,7 +82,7 @@ impl SheetMetaDocService {
             query: std::collections::HashMap::new(),
             timeout: None,
             _phantom: std::marker::PhantomData,
-            method: openlark_core::api::HttpMethod::Get,
+            method: openlark_core::api::Get,
             url: endpoint,
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query,

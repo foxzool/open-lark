@@ -5,7 +5,6 @@
 //! - 复制仪表盘
 //! - 仪表盘权限管理
 
-
 use serde::{Deserialize, Serialize};
 
 pub mod copy;
@@ -25,22 +24,22 @@ pub struct Dashboard {
     /// 仪表盘名称
     pub name: String,
     /// 仪表盘描述
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 仪表盘URL
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
     /// 创建时间
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<String>,
     /// 更新时间
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
     /// 创建者信息
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creator: Option<Creator>,
     /// 仪表盘权限信息
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub permissions: Option<Vec<Permission>>,
 }
 
@@ -63,13 +62,13 @@ impl Default for Dashboard {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Creator {
     /// 用户ID
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
     /// 用户名
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// 用户头像
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub avatar: Option<String>,
 }
 
@@ -108,7 +107,6 @@ impl Default for Permission {
 ///
 /// 提供飞书多维表格仪表盘v1版本的统一入口，支持现代化的仪表盘管理。
 /// 包括列表查询、复制、权限管理等企业级功能。
-#[derive(Clone)]
 pub struct AppDashboardService {
     config: Config,
 }
@@ -142,7 +140,7 @@ impl openlark_core::trait_system::Service for AppDashboardService {
     where
         Self: Sized,
     {
-        AppDashboardService
+        "AppDashboardService"
     }
 }
 

@@ -30,7 +30,7 @@ use openlark_core::{
     error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
-    standard_response::StandardResponse,
+    standard_response::Response,
     SDKResult,
 };
 
@@ -417,7 +417,6 @@ impl ApiResponseTrait for WriteMultipleRangesResponse {
 /// 批量写入范围服务
 ///
 /// 提供飞书电子表格v2版本的批量范围写入功能。
-#[derive(Clone, Debug)]
 pub struct BatchWriteService {
     config: Config,
 }
@@ -558,8 +557,6 @@ impl BatchWriteService {
         // 添加查询参数
         if let Some(user_id_type) = &request.user_id_type {
             api_req
-                .query_params
-                .insert("user_id_type", user_id_type.clone());
         }
 
         // 暂时返回模拟数据，直到Transport问题解决
@@ -843,7 +840,7 @@ impl WriteMultipleRangesRequestBuilder {
     ///         vec![CellValue::text("张三"), CellValue::number(25)],
     ///     ])
     ///     .value_render_option("FormattedValue")
-    ///     .build();
+    ///     ;
     /// ```
     pub fn build(self) -> WriteMultipleRangesRequest {
         WriteMultipleRangesRequest {
@@ -873,7 +870,7 @@ impl WriteMultipleRangesRequestBuilder {
     ///     .expect("请求参数验证失败");
     /// ```
     pub fn build_and_validate(self) -> SDKResult<WriteMultipleRangesRequest> {
-        let request = self.build();
+        let request = self;
         request.validate()?;
         Ok(request)
     }
@@ -1072,7 +1069,7 @@ mod tests {
             )
             .value_render_option("FormattedValue")
             .user_id_type("open_id")
-            .build();
+            ;
 
         assert_eq!(request.spreadsheet_token, "test_token");
         assert_eq!(request.range_count(), 2);
@@ -1124,7 +1121,7 @@ mod tests {
         let request = WriteMultipleRangesRequest::builder()
             .spreadsheet_token("test_token")
             .ranges_from_tuples::<&str, &str>(ranges_data)
-            .build();
+            ;
 
         assert_eq!(request.range_count(), 2);
         assert_eq!(request.total_cell_count(), 6);

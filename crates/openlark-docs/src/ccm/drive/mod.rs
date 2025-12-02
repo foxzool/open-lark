@@ -31,7 +31,6 @@ pub mod v2;
 pub use permission::PermissionService;
 
 /// 云空间文件管理服务
-#[derive(Clone, Debug)]
 pub struct DriveService {
     #[allow(dead_code)] // 配置保留供将来使用
     config: Config,

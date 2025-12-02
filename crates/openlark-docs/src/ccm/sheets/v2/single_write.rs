@@ -30,7 +30,7 @@ use openlark_core::{
     error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
-    standard_response::StandardResponse,
+    standard_response::Response,
     SDKResult,
 };
 
@@ -246,7 +246,6 @@ impl ApiResponseTrait for SingleWriteResponse {
 }
 
 /// 单范围写入服务
-#[derive(Clone, Debug)]
 pub struct SingleWriteService {
     config: Config,
 }
@@ -297,7 +296,7 @@ impl SingleWriteService {
 
     /// 构建请求URL
     fn build_request_url(&self, spreadsheet_token: &str, range: &str) -> SDKResult<String> {
-        let base_url = self.config.base_url.clone();
+        let base_url = self.config.base_url().to_string();
 
         // URL编码范围参数
         let encoded_range = urlencoding::encode(range);
@@ -393,7 +392,7 @@ impl SingleWriteService {
             .spreadsheet_token(spreadsheet_token.to_string())
             .range(cell_range.to_string())
             .values(vec![vec![value]])
-            .build()?;
+            ?;
 
         self.write_range(&request).await
     }
@@ -409,7 +408,7 @@ impl SingleWriteService {
             .spreadsheet_token(spreadsheet_token.to_string())
             .range(range.to_string())
             .values(vec![row_data])
-            .build()?;
+            ?;
 
         self.write_range(&request).await
     }
@@ -517,7 +516,7 @@ mod tests {
         openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build()
+            
     }
 
     #[test]
@@ -558,7 +557,7 @@ mod tests {
             ])
             .value_input_option("RAW".to_string())
             .include_values_in_response(true)
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.spreadsheet_token, "test_token");
@@ -630,7 +629,7 @@ mod tests {
     fn test_request_url_building() {
         let config = openlark_core::config::Config::builder()
             .base_url("https://open.feishu.cn".to_string())
-            .build();
+            ;
         let service = SingleWriteService::new(config);
 
         let url = service
@@ -682,7 +681,7 @@ mod tests {
             .spreadsheet_token("test_token".to_string())
             .range("Sheet1!A1".to_string())
             .values(vec![vec![CellValue::Text("test".to_string())]])
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.spreadsheet_token, "test_token");
@@ -733,14 +732,14 @@ mod tests {
     #[test]
     fn test_error_handling() {
         // 测试构建器验证错误
-        let result = SingleWriteRequest::builder().build();
+        let result = SingleWriteRequest::builder();
 
         assert!(result.is_err());
 
         // 测试部分参数错误
         let result = SingleWriteRequest::builder()
             .spreadsheet_token("token".to_string())
-            .build();
+            ;
 
         assert!(result.is_err());
     }

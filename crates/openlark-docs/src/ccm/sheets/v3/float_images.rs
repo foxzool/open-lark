@@ -64,7 +64,7 @@ pub type SheetPagedResponse<T> = Vec<T>;
 ///     .height(80)  // 设置高度
 ///     .offset_x(50) // X轴偏移
 ///     .offset_y(20) // Y轴偏移
-/// .build()?;
+/// ?;
 ///
 /// let image = service.create(&request).await?;
 ///
@@ -78,11 +78,10 @@ pub type SheetPagedResponse<T> = Vec<T>;
 ///     .height(120)
 ///     .offset_x(0)
 ///     .offset_y(0)
-///     .build()?;
+///     ?;
 ///
 /// let updated_image = service.update(&update_request).await?;
 /// ```
-#[derive(Clone, Debug)]
 pub struct FloatImagesService {
     config: openlark_core::config::Config,
 }
@@ -966,7 +965,7 @@ impl FloatImagesService {
     ///     .range("A1".to_string())
     ///     .size(200, 80)
     ///     .offset(50, 20)
-    ///     .build()?;
+    ///     ?;
     ///
     /// let image = service.create(&request).await?;
     /// println!("创建浮动图片成功: {}", image.data.float_image_id);
@@ -1038,7 +1037,7 @@ impl FloatImagesService {
     ///     .range("B2".to_string())
     ///     .size(300, 120)
     ///     .offset(0, 0)
-    ///     .build()?;
+    ///     ?;
     ///
     /// let image = service.update(&request).await?;
     /// println!("更新浮动图片成功: {}", image.data.float_image_id);
@@ -1106,7 +1105,7 @@ impl FloatImagesService {
     ///     .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
     ///     .sheet_id("0XXXXXXXXXX".to_string())
     ///     .page_size(20)
-    ///     .build()?;
+    ///     ?;
     ///
     /// let response = service.query(&request).await?;
     ///
@@ -1195,7 +1194,7 @@ impl FloatImagesService {
     ///     .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
     ///     .sheet_id("0XXXXXXXXXX".to_string())
     ///     .float_image_id("img_789".to_string())
-    ///     .build()?;
+    ///     ?;
     ///
     /// let image = service.get(&request).await?;
     ///
@@ -1246,7 +1245,7 @@ impl FloatImagesService {
     ///     .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
     ///     .sheet_id("0XXXXXXXXXX".to_string())
     ///     .float_image_id("img_789".to_string())
-    ///     .build()?;
+    ///     ?;
     ///
     /// let response = service.delete(&request).await?;
     /// println!("删除浮动图片成功");
@@ -1628,7 +1627,7 @@ mod tests {
             .float_image_id("img_001".to_string())
             .size(200, 80)
             .offset(50, 20)
-            .build();
+            ;
 
         assert!(request.is_ok());
         let req = request.unwrap();
@@ -1653,7 +1652,7 @@ mod tests {
             .range("B2".to_string())
             .size(300, 120)
             .offset(0, 0)
-            .build();
+            ;
 
         assert!(request.is_ok());
         let req = request.unwrap();
@@ -1676,7 +1675,7 @@ mod tests {
             .add_float_image_id("img_001".to_string())
             .add_float_image_id("img_002".to_string())
             .page_size(20)
-            .build();
+            ;
 
         assert!(request.is_ok());
         let req = request.unwrap();
@@ -1692,7 +1691,7 @@ mod tests {
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .sheet_id("0XXXXXXXXXX".to_string())
             .float_image_id("img_789".to_string())
-            .build();
+            ;
 
         assert!(request.is_ok());
         let req = request.unwrap();
@@ -1707,7 +1706,7 @@ mod tests {
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
             .sheet_id("0XXXXXXXXXX".to_string())
             .float_image_id("img_789".to_string())
-            .build();
+            ;
 
         assert!(request.is_ok());
         let req = request.unwrap();
@@ -1723,7 +1722,7 @@ mod tests {
             .sheet_id("0XXXXXXXXXX".to_string())
             .float_image_token("img_token_123456".to_string())
             .range("A1".to_string())
-            .build();
+            ;
         assert!(no_token_request.is_err());
 
         // 测试空浮动图片Token
@@ -1732,7 +1731,7 @@ mod tests {
             .sheet_id("0XXXXXXXXXX".to_string())
             .float_image_token("".to_string())
             .range("A1".to_string())
-            .build();
+            ;
         assert!(empty_token.is_err());
 
         // 测试空范围
@@ -1741,7 +1740,7 @@ mod tests {
             .sheet_id("0XXXXXXXXXX".to_string())
             .float_image_token("img_token_123456".to_string())
             .range("".to_string())
-            .build();
+            ;
         assert!(empty_range.is_err());
 
         // 测试过长的图片ID
@@ -1751,7 +1750,7 @@ mod tests {
             .float_image_token("img_token_123456".to_string())
             .range("A1".to_string())
             .float_image_id("12345678901".to_string()) // 11个字符
-            .build();
+            ;
         assert!(too_long_id.is_err());
 
         // 测试无效尺寸
@@ -1761,7 +1760,7 @@ mod tests {
             .float_image_token("img_token_123456".to_string())
             .range("A1".to_string())
             .width(-10) // 负数宽度
-            .build();
+            ;
         assert!(invalid_width.is_err());
 
         // 测试过大尺寸
@@ -1771,7 +1770,7 @@ mod tests {
             .float_image_token("img_token_123456".to_string())
             .range("A1".to_string())
             .width(20000) // 超过限制
-            .build();
+            ;
         assert!(too_large_size.is_err());
 
         // 测试过大偏移
@@ -1781,7 +1780,7 @@ mod tests {
             .float_image_token("img_token_123456".to_string())
             .range("A1".to_string())
             .offset_x(20000) // 超过限制
-            .build();
+            ;
         assert!(too_large_offset.is_err());
     }
 
@@ -1845,7 +1844,7 @@ mod tests {
             .float_image_id("logo_001".to_string())
             .size(300, 100)
             .offset(0, 0)
-            .build()
+            
             .unwrap();
 
         assert_eq!(logo_request.float_image_id, Some("logo_001".to_string()));
@@ -1867,7 +1866,7 @@ mod tests {
                 .range(range.to_string())
                 .float_image_id(id.to_string())
                 .size(width, height)
-                .build()
+                
                 .unwrap();
 
             assert_eq!(request.float_image_token, token);
@@ -1886,7 +1885,7 @@ mod tests {
                 "prod_b_002".to_string(),
             ])
             .page_size(10)
-            .build()
+            
             .unwrap();
 
         assert_eq!(query_request.float_image_ids.len(), 3);
@@ -1908,7 +1907,7 @@ mod tests {
                 .range(range.to_string())
                 .size(width, height)
                 .offset(offset_x, offset_y)
-                .build()
+                
                 .unwrap();
 
             assert_eq!(request.float_image_id, id);

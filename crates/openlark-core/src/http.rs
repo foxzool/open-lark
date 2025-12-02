@@ -36,8 +36,8 @@ impl<T> Transport<T> {
 }
 
 impl<T: ApiResponseTrait + std::fmt::Debug + for<'de> serde::Deserialize<'de>> Transport<T> {
-    pub async fn request(
-        req: ApiRequest<()>,
+    pub async fn request<R: Send>(
+        req: ApiRequest<R>,
         config: &Config,
         option: Option<RequestOption>,
     ) -> Result<Response<T>, LarkAPIError> {
@@ -97,8 +97,8 @@ impl<T: ApiResponseTrait + std::fmt::Debug + for<'de> serde::Deserialize<'de>> T
         .await
     }
 
-    async fn do_request(
-        mut http_req: ApiRequest<()>,
+    async fn do_request<R: Send>(
+        mut http_req: ApiRequest<R>,
         access_token_type: AccessTokenType,
         config: &Config,
         option: RequestOption,

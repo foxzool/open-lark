@@ -11,7 +11,6 @@
 // 实现工作表级别的操作,
 use openlark_core::prelude::*;
 /// 工作表操作服务
-#[derive(Clone, Debug)]
 pub struct WorksheetService {
     #[allow(dead_code)]
     config: Config,,

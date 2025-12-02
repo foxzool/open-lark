@@ -758,7 +758,6 @@ impl ApiResponseTrait for DeleteConditionalFormatResponse {
 }
 
 /// Sheets电子表格条件格式服务 v3
-#[derive(Clone, Debug)]
 pub struct ConditionalFormatService {
     config: openlark_core::config::Config,
 }
@@ -800,7 +799,7 @@ impl ConditionalFormatService {
     ///     .sheet_id("sheet_id".to_string())
     ///     .range(range)
     ///     .rule(rule)
-    ///     .build()
+    ///     
     ///     .unwrap();
     ///
     /// let response = service.set_conditional_format(&request).await?;
@@ -857,7 +856,7 @@ impl ConditionalFormatService {
     /// let request = DeleteConditionalFormatRequest::builder()
     ///     .spreadsheet_token("your_token".to_string())
     ///     .conditional_format_id("format_id".to_string())
-    ///     .build()
+    ///     
     ///     .unwrap();
     ///
     /// let response = service.delete_conditional_format(&request).await?;
@@ -1102,7 +1101,7 @@ mod tests {
             .sheet_id("sheet123".to_string())
             .range(range)
             .rule(rule)
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.spreadsheet_token, "token123");
@@ -1138,7 +1137,7 @@ mod tests {
                 Color::green(),
                 Color::red(),
             ))
-            .build()
+            
             .unwrap();
 
         assert_eq!(data_bar_request.conditional_format.sheet_id, "sheet123");
@@ -1153,7 +1152,7 @@ mod tests {
                 Color::yellow(),
                 Color::red(),
             ))
-            .build()
+            
             .unwrap();
 
         assert_eq!(color_scale_request.conditional_format.sheet_id, "sheet123");
@@ -1164,7 +1163,7 @@ mod tests {
             .sheet_id("sheet123".to_string())
             .range(Range::from("C1".to_string(), "C10".to_string()))
             .rule(ConditionalFormatRule::three_traffic_lights())
-            .build()
+            
             .unwrap();
 
         assert_eq!(icon_set_request.conditional_format.sheet_id, "sheet123");
@@ -1178,7 +1177,7 @@ mod tests {
                 ConditionalFormatOperator::Equal,
                 "已完成".to_string(),
             ))
-            .build()
+            
             .unwrap();
 
         assert_eq!(
@@ -1192,7 +1191,7 @@ mod tests {
             .sheet_id("sheet123".to_string())
             .range(Range::from("E1".to_string(), "E10".to_string()))
             .rule(ConditionalFormatRule::formula("=A1>B1".to_string()))
-            .build()
+            
             .unwrap();
 
         assert_eq!(formula_request.conditional_format.sheet_id, "sheet123");

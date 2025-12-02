@@ -6,7 +6,6 @@
 use openlark_core::config::Config;
 
 /// Block operation service
-#[derive(Clone, Debug)]
 pub struct BlockService {
     #[allow(dead_code)]
     config: Config,

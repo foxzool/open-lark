@@ -3,14 +3,13 @@ use SDKResult;use reqwest::Method;
 use openlark_core::api::ApiRequest;use serde::{Deserialize, Serialize};
 use openlark_core::,
 {
-    core::,
+    api::,
 {,
         BaseResponse,
-        ResponseFormat,
+        ResponseFormat, HttpMethod,
         api::{ApiResponseTrait},
     config::Config,
-        
-        
+
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -18,8 +17,7 @@ use openlark_core::,
     impl_executable_builder_config,
 };
 /// 更新自动化流程状态请求,
-#[derive(Clone)]
-pub struct UpdateWorkflowRequest {
+#[derive(Debug, Clone, Serialize, Deserialize)]pub struct UpdateWorkflowRequest {
     #[serde(skip)]
     api_request: ApiRequest<Self>,
     /// 多维表格的唯一标识符,
@@ -33,7 +31,6 @@ pub struct UpdateWorkflowRequest {
 impl UpdateWorkflowRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone)]
 pub struct UpdateWorkflowRequestBuilder {
     request: UpdateWorkflowRequest}
 impl UpdateWorkflowRequestBuilder {
@@ -46,7 +43,6 @@ impl UpdateWorkflowRequestBuilder {
     update_workflow,
 );
 /// 更新自动化流程状态响应
-#[derive(Clone)]
 pub struct UpdateWorkflowResponse {
     /// 自动化流程ID
     pub workflow_id: String,
@@ -67,8 +63,8 @@ pub async fn update_workflow(
     option: Option<RequestOption>,
 ) -> SDKResult<Response<UpdateWorkflowResponse>> {,
 let mut api_req = request.api_request;
-        let api_request = api_request.api_path(format!(        .replace({app_token}, &request.app_token)
-        let api_request = api_request.api_path(format!(        .replace({workflow_id}, &request.workflow_id);
+        let api_request = api_request
+        let api_request = api_request;
 
     let api_resp = Transport::request(api_req, config, option).await?;
 Ok(api_resp),

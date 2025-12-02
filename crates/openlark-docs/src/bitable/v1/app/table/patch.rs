@@ -3,7 +3,7 @@
 //! 提供数据表的增量更新功能，使用 JSON Patch 格式进行部分字段更新。
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat, HttpMethod},
     config::Config,
     http::Transport,
     req_option::RequestOption,
@@ -11,8 +11,10 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+// 导入 TableField 类型
+use super::create::TableField;
+
 /// 更新数据表请求 (Patch)
-#[derive(Clone)]
 pub struct PatchTableRequest {
     api_request: ApiRequest<Self>,
     /// 多维表格的 app_token
@@ -25,20 +27,22 @@ pub struct PatchTableRequest {
     pub fields: Option<Vec<TableField>>,
 }
 
-impl PatchTableRequest {
-    /// 创建新的更新请求
-    pub fn new(config: Config) -> Self {
+impl Default for PatchTableRequest {
+    fn default() -> Self {
         Self {
-            api_request: ApiRequest::new()
-                    .method(HttpMethod::Patch)
-                    .api_path("/open-apis/bitable/v1/apps/{}/tables/{}".to_string())
-                    .config(config)
-                    .build(),
+            api_request: ApiRequest::put("https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}"),
             app_token: String::new(),
             table_id: String::new(),
             name: None,
             fields: None,
         }
+    }
+}
+
+impl PatchTableRequest {
+    /// 创建新的更新请求
+    pub fn new(config: Config) -> Self {
+        Self::default()
     }
 
     /// 创建构建器
@@ -48,9 +52,16 @@ impl PatchTableRequest {
 }
 
 /// 更新数据表请求构建器
-#[derive(Default)]
 pub struct PatchTableRequestBuilder {
     request: PatchTableRequest,
+}
+
+impl Default for PatchTableRequestBuilder {
+    fn default() -> Self {
+        Self {
+            request: PatchTableRequest::default(),
+        }
+    }
 }
 
 impl PatchTableRequestBuilder {
@@ -93,22 +104,18 @@ impl PatchTableRequestBuilder {
 #[derive(Serialize)]
 struct PatchTableRequestBody {
     /// 表名
-    #[serde(skip_serializing_if = Option::is_none)]
     name: Option<String>,
     /// 表字段
-    #[serde(skip_serializing_if = Option::is_none)]
     fields: Option<Vec<TableField>>,
 }
 
 /// 更新数据表响应
-#[derive(Clone)]
 pub struct PatchTableResponse {
     /// 更新的数据表信息
     pub table: PatchTableResponseData,
 }
 
 /// 更新数据表响应数据
-#[derive(Clone)]
 pub struct PatchTableResponseData {
     /// 数据表的 table_id
     pub table_id: String,

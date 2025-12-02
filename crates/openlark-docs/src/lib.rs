@@ -19,7 +19,7 @@
 //! let config = Config::builder()
 //!     .app_id("app_id")
 //!     .app_secret("app_secret")
-//!     .build();
+//!     ;
 //! let docs = DocsService::new(config);
 //!
 //! // 基础服务使用
@@ -72,6 +72,9 @@ pub mod versions;
 
 // 通用模块 - 工具宏和类型
 pub mod common;
+
+// 端点定义模块
+pub mod endpoints;
 
 // Prelude模块 - 常用导入
 pub mod prelude;

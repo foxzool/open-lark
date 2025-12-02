@@ -4,7 +4,7 @@
 
 // 重新导出核心模块（避免歧义重导出）
 pub use openlark_core::prelude::{
-    AccessTokenType, ApiResponseTrait, BaseResponse, LarkAPIError, RequestOption, ResponseFormat,
+    AccessTokenType, ApiResponseTrait, BaseResponse, LarkAPIError, RequestOption, ResponseFormat, HttpMethod,
     SDKResult,
 };
 

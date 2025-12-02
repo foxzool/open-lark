@@ -1,110 +1,171 @@
-//! 更新应用模块
+//! Bitable V1 更新多维表格API
 
 use openlark_core::{
-    core::{
-        BaseResponse,
-        ResponseFormat,
-    },
-    
-    
+    api::{ApiRequest, RequestData},
+    config::Config,
+    error::validation_error,
     http::Transport,
-    req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-/// 更新应用请求
-#[derive(Clone)]
-pub struct UpdateAppRequest {
-    api_request: ApiRequest<Self>,
-    /// 多维表格的 app_token
-    pub app_token: String,
-    /// 多维表格的名字
-    pub name: Option<String>,
-    /// 时区
-    pub time_zone: Option<String>,
+use super::models::{UpdateAppRequest as UpdateAppRequestBody, App, AppSettings};
+use super::AppService;
+
+/// 更新多维表格请求
+pub struct UpdateAppV1Request {
+    /// 配置信息
+    config: Config,
+    api_request: ApiRequest<UpdateAppV1Response>,
+    /// 应用token
+    app_token: String,
+    /// 应用名称
+    name: Option<String>,
+    /// 应用图标
+    avatar: Option<String>,
+    /// 应用设置
+    app_settings: Option<AppSettings>,
 }
 
-impl UpdateAppRequest {
-    pub fn new(config: openlark_core::Config) -> Self {
+/// 更新多维表格响应
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct UpdateAppV1Response {
+    /// 应用信息
+    pub data: App,
+    pub success: bool,
+}
+
+impl UpdateAppV1Request {
+    /// 创建更新多维表格请求
+    pub fn new(config: Config) -> Self {
         Self {
-            api_request: openlark_core::api::ApiRequest::new(
-                config,
-                HttpMethod::PUT,
-                UPDATE_APP.to_string(),
-            ),
+            config,
+            api_request: ApiRequest::put(""),
             app_token: String::new(),
             name: None,
-            time_zone: None,
+            avatar: None,
+            app_settings: None,
         }
     }
 
-    pub fn builder() -> UpdateAppRequestBuilder {
-        UpdateAppRequestBuilder::default()
+    /// 设置应用token
+    pub fn app_token(mut self, app_token: String) -> Self {
+        self.app_token = app_token;
+        self
+    }
+
+    /// 设置应用名称
+    pub fn name(mut self, name: String) -> Self {
+        self.name = Some(name);
+        self
+    }
+
+    /// 设置应用图标
+    pub fn avatar(mut self, avatar: String) -> Self {
+        self.avatar = Some(avatar);
+        self
+    }
+
+    /// 设置应用设置
+    pub fn app_settings(mut self, app_settings: AppSettings) -> Self {
+        self.app_settings = Some(app_settings);
+        self
+    }
+
+    /// 执行请求
+    pub async fn execute(self) -> SDKResult<UpdateAppV1Response> {
+        // 构建完整的API URL
+        let api_url = format!("https://open.feishu.cn/open-apis/bitable/v1/apps/{}", self.app_token);
+
+        // 设置API URL
+        let mut api_request = self.api_request;
+        api_request.url = api_url;
+
+        // 构建请求体
+        let request_body = UpdateAppRequestBody {
+            name: self.name.clone(),
+            avatar: self.avatar.clone(),
+            app_settings: self.app_settings.clone(),
+        };
+
+        // 验证请求参数
+        if let Err(e) = request_body.validate() {
+            return Err(validation_error("更新应用请求验证失败", e.to_string()));
+        }
+
+        // 设置请求体
+        api_request.body = Some(RequestData::Json(serde_json::to_value(&request_body)?));
+
+        // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
+        let mut request_for_transport: ApiRequest<()> = ApiRequest::put(api_request.url.clone())
+            .body(api_request.body.unwrap_or(RequestData::Empty));
+
+        let config = &self.config;
+        let response = Transport::request(request_for_transport, config, None).await?;
+
+        // 手动解析响应数据为App类型
+        let app_data: App = response.data
+            .and_then(|data| serde_json::from_value(data).ok())
+            .ok_or_else(|| validation_error("解析应用数据失败", "响应数据格式不正确"))?;
+
+        Ok(UpdateAppV1Response {
+            data: app_data,
+            success: response.raw_response.is_success(),
+        })
     }
 }
 
-#[derive(Default)]
-pub struct UpdateAppRequestBuilder {
-    request: UpdateAppRequest,
+/// 更新多维表格Builder
+pub struct UpdateAppV1Builder {
+    request: UpdateAppV1Request,
 }
 
-impl UpdateAppRequestBuilder {
-    pub fn new() -> Self {
-        Self::default()
+impl UpdateAppV1Builder {
+    /// 创建Builder实例
+    pub fn new(config: Config) -> Self {
+        Self {
+            request: UpdateAppV1Request::new(config),
+        }
     }
 
-    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
-        self.request.app_token = app_token.into();
+    /// 设置应用token
+    pub fn app_token(mut self, app_token: String) -> Self {
+        self.request = self.request.app_token(app_token);
         self
     }
 
-    pub fn name(mut self, name: impl Into<String>) -> Self {
-        self.request.name = Some(name.into());
+    /// 设置应用名称
+    pub fn name(mut self, name: String) -> Self {
+        self.request = self.request.name(name);
         self
     }
 
-    pub fn time_zone(mut self, time_zone: impl Into<String>) -> Self {
-        self.request.time_zone = Some(time_zone.into());
+    /// 设置应用图标
+    pub fn avatar(mut self, avatar: String) -> Self {
+        self.request = self.request.avatar(avatar);
         self
     }
 
-    pub fn build(self) -> UpdateAppRequest {
+    /// 设置应用设置
+    pub fn app_settings(mut self, app_settings: AppSettings) -> Self {
+        self.request = self.request.app_settings(app_settings);
+        self
+    }
+
+    /// 构建请求
+    pub fn build(self) -> UpdateAppV1Request {
         self.request
     }
 }
 
-#[derive(Serialize)]
-struct UpdateAppRequestBody {
-    #[serde(skip_serializing_if = Option::is_none)]
-    name: Option<String>,
-    #[serde(skip_serializing_if = Option::is_none)]
-    time_zone: Option<String>,
-}
+impl AppService {
+    /// 创建更新多维表格请求构建器
+    pub fn update_app_v1_builder(&self) -> UpdateAppV1Builder {
+        UpdateAppV1Builder::new(self.config.clone())
+    }
 
-/// 更新应用响应
-#[derive(Clone)]
-pub struct UpdateAppResponse {
-    /// 更新的应用信息
-    pub app: UpdateAppResponseData,
-}
-
-/// 更新应用响应数据
-#[derive(Clone)]
-pub struct UpdateAppResponseData {
-    /// 多维表格的 app_token
-    pub app_token: String,
-    /// 多维表格的名字
-    pub name: String,
-    /// 多维表格的版本号
-    pub revision: i32,
-    /// 多维表格的链接
-    pub url: String,
-}
-
-impl ApiResponseTrait for UpdateAppResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
+    /// 创建更新多维表格请求
+    pub fn update_app_v1(&self, app_token: String) -> UpdateAppV1Request {
+        UpdateAppV1Request::new(self.config.clone()).app_token(app_token)
     }
 }
-

@@ -4,7 +4,6 @@ use serde::{Deserialize, Serialize};
 use openlark_core::config::Config;
 use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 /// 简化的服务结构体
-#[derive(Clone)]
 pub struct SimpleService {
 }
 
@@ -19,7 +18,6 @@ impl ApiResponseTrait for SimpleResponse {
 }
 
 /// App_Table_Field服务
-#[derive(Clone)]
 pub struct App_Table_FieldService {
 }
 

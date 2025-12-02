@@ -133,7 +133,6 @@ impl ApiResponseTrait for CreateSpreadsheetResponse {
 }
 
 /// 电子表格管理服务
-#[derive(Clone, Debug)]
 pub struct SpreadsheetService {
     config: Config,
 }
@@ -199,7 +198,6 @@ impl SpreadsheetService {
 // ==================== 构建器模式 ====================
 
 /// 创建电子表格构建器
-#[derive(Clone, Debug)]
 pub struct CreateSpreadsheetBuilder {
     request: CreateSpreadsheetRequest,
 }

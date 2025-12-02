@@ -2,7 +2,6 @@ use serde::{Deserialize, Serialize};
 
 use openlark_core::event::EventHandler};
 
-#[derive(Clone, Debug)]
 pub struct P2DriveFileUpdatedV1 {
     pub schema: String,
     pub header: EventHeader,
@@ -28,7 +27,6 @@ where
 pub(crate) fn new(f: F) -> Self {
         P2DriveFileUpdatedV1ProcessorImpl { f }
 /// 云文档文件更新事件数据,
-#[derive(Clone, Debug)]
 pub struct P2DriveFileUpdatedV1Data {
     /// 事件对象
     pub object: DriveFileEventObject,
@@ -36,14 +34,12 @@ pub struct P2DriveFileUpdatedV1Data {
 #[serde(skip_serializing_if = "Option::is_none")]
     pub old_object: Option<DriveFileEventObject>,
 /// 云文档文件事件对象,
-#[derive(Clone, Debug)]
 pub struct DriveFileEventObject {
     /// 对象类型 (file)
     pub object_type: String,
     /// 文件信息
     pub file: DriveFile,
 /// 云文档文件信息,
-#[derive(Clone, Debug)]
 pub struct DriveFile {
     /// 文件token
     pub file_token: String,
@@ -94,7 +90,6 @@ pub struct DriveFile {
 #[serde(skip_serializing_if = "Option::is_none")]
     pub shortcut_target_token: Option<String>,
 /// 文件状态,
-#[derive(Clone, Debug)]
 pub struct DriveFileStatus {
     /// 是否被删除,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -106,7 +101,6 @@ pub struct DriveFileStatus {
 #[serde(skip_serializing_if = "Option::is_none")]
     pub is_locked: Option<bool>,
 /// 文件权限信息,
-#[derive(Clone, Debug)]
 pub struct DriveFilePermissions {
     /// 是否可编辑,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -124,7 +118,6 @@ pub struct DriveFilePermissions {
 #[serde(skip_serializing_if = "Option::is_none")]
     pub can_download: Option<bool>,
 /// 文件版本信息,
-#[derive(Clone, Debug)]
 pub struct FileVersion {
     /// 版本号,
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -136,7 +129,6 @@ pub struct FileVersion {
 #[serde(skip_serializing_if = "Option::is_none")]
     pub is_current: Option<bool>,
 /// 文件更新类型,
-#[derive(Clone, Debug)]
 pub struct FileUpdateType {
     /// 更新类型 (content, metadata, permission, location)
     pub update_category: String,

@@ -12,7 +12,7 @@ use SDKResult;    api::ApiRequest,
     SDKResult,
 };
 /// 删除知识空间成员请求,
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeleteSpaceMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -28,7 +28,6 @@ pub struct DeleteSpaceMemberRequest {
 impl DeleteSpaceMemberRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone, Debug)]
 pub struct DeleteSpaceMemberRequestBuilder {
     request: DeleteSpaceMemberRequest}
 impl DeleteSpaceMemberRequestBuilder {
@@ -37,7 +36,6 @@ impl DeleteSpaceMemberRequestBuilder {
 }self.request,
     }
 /// 删除知识空间成员响应,
-#[derive(Clone, Debug)]
 pub struct DeleteSpaceMemberResponse {
     /// 删除的成员id
     pub member_id: String,
@@ -79,7 +77,7 @@ let request = DeleteSpaceMemberRequest::builder(),
             .space_id()
 .member_id()
             .member_type()
-.build();
+;
         assert_eq!(request.space_id, "spcxxxxxx");
         assert_eq!(request.member_id, "ou_xxxxxx");
         assert_eq!(request.member_type, Some("user".to_string()));

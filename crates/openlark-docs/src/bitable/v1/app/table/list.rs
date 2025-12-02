@@ -1,20 +1,18 @@
 //! 列出数据表模块
 
 use openlark_core::{
-    core::{
-        BaseResponse,
-        ResponseFormat,
+    api::{
+        ApiRequest, ApiResponseTrait, BaseResponse, ResponseFormat, HttpMethod,
     },
-    
-    
+    config::Config,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+use crate::endpoints::BITABLE_V1_TABLES;
 
 /// 列出数据表请求
-#[derive(Clone)]
 pub struct ListTablesRequest {
     api_request: ApiRequest<Self>,
     /// 多维表格的 app_token
@@ -25,18 +23,20 @@ pub struct ListTablesRequest {
     pub page_token: Option<String>,
 }
 
-impl ListTablesRequest {
-    pub fn new(config: openlark_core::Config) -> Self {
+impl Default for ListTablesRequest {
+    fn default() -> Self {
         Self {
-            api_request: openlark_core::api::ApiRequest::new(
-                config,
-                HttpMethod::GET,
-                LIST_TABLES.to_string(),
-            ),
+            api_request: ApiRequest::get(BITABLE_V1_TABLES),
             app_token: String::new(),
             page_size: None,
             page_token: None,
         }
+    }
+}
+
+impl ListTablesRequest {
+    pub fn new(config: Config) -> Self {
+        Self::default()
     }
 
     pub fn builder() -> ListTablesRequestBuilder {
@@ -44,9 +44,16 @@ impl ListTablesRequest {
     }
 }
 
-#[derive(Default)]
 pub struct ListTablesRequestBuilder {
     request: ListTablesRequest,
+}
+
+impl Default for ListTablesRequestBuilder {
+    fn default() -> Self {
+        Self {
+            request: ListTablesRequest::default(),
+        }
+    }
 }
 
 impl ListTablesRequestBuilder {
@@ -75,7 +82,7 @@ impl ListTablesRequestBuilder {
 }
 
 /// 数据表信息
-#[derive(Clone, Serialize)]
+#[derive(Debug, Clone)]
 pub struct TableInfo {
     /// 数据表的ID
     pub table_id: String,
@@ -86,7 +93,7 @@ pub struct TableInfo {
 }
 
 /// 列出数据表响应
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct ListTablesResponse {
     /// 数据表列表
     pub items: Option<Vec<TableInfo>>,

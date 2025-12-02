@@ -68,7 +68,6 @@ pub struct Locale {
 }
 
 /// 创建电子表格请求
-#[derive(Clone, Debug)]
 pub struct CreateSpreadsheetRequest {
     /// 电子表格标题
     pub title: String,
@@ -318,7 +317,6 @@ pub struct CreateSpreadsheetResponseBody {
 // 使用openlark_core::api::Response，避免重复定义
 
 /// 电子表格创建服务
-#[derive(Clone, Debug)]
 pub struct SpreadsheetCreateService {
     config: Config,
 }
@@ -341,7 +339,7 @@ impl SpreadsheetCreateService {
     ///
     /// ```rust
     /// use open_lark::service::sheets::v3::spreadsheet_create::*;
-    /// use open_lark::core::config::Config;
+    /// use open_lark::api::config::Config;
     ///
     /// let config = openlark_core::config::Config::new("app_id", "app_secret");
     /// let service = SpreadsheetCreateService::new(config);

@@ -41,10 +41,10 @@ impl DocsService {
     pub fn ccm(&self) -> crate::ccm::CcmService {
         crate::ccm::CcmService::new(openlark_core::config::Config::new(
             openlark_core::config::ConfigInner {
-                app_id: self.config.app_id.clone(),
-                app_secret: self.config.app_secret.clone(),
-                base_url: self.config.base_url.clone(),
-                enable_token_cache: self.config.enable_token_cache,
+                app_id: self.config.app_id().to_string(),
+                app_secret: self.config.app_secret().to_string(),
+                base_url: self.config.base_url().to_string(),
+                enable_token_cache: self.config.enable_token_cache(),
                 app_type: self.config.app_type,
                 http_client: reqwest::Client::new(),
                 req_timeout: self.config.req_timeout,
@@ -60,10 +60,10 @@ impl DocsService {
     pub fn bitable(&self) -> crate::bitable::BitableService {
         crate::bitable::BitableService::new(openlark_core::config::Config::new(
             openlark_core::config::ConfigInner {
-                app_id: self.config.app_id.clone(),
-                app_secret: self.config.app_secret.clone(),
-                base_url: self.config.base_url.clone(),
-                enable_token_cache: self.config.enable_token_cache,
+                app_id: self.config.app_id().to_string(),
+                app_secret: self.config.app_secret().to_string(),
+                base_url: self.config.base_url().to_string(),
+                enable_token_cache: self.config.enable_token_cache(),
                 app_type: self.config.app_type,
                 http_client: reqwest::Client::new(),
                 req_timeout: self.config.req_timeout,
@@ -79,10 +79,10 @@ impl DocsService {
     pub fn base(&self) -> crate::base::BaseService {
         crate::base::BaseService::new(openlark_core::config::Config::new(
             openlark_core::config::ConfigInner {
-                app_id: self.config.app_id.clone(),
-                app_secret: self.config.app_secret.clone(),
-                base_url: self.config.base_url.clone(),
-                enable_token_cache: self.config.enable_token_cache,
+                app_id: self.config.app_id().to_string(),
+                app_secret: self.config.app_secret().to_string(),
+                base_url: self.config.base_url().to_string(),
+                enable_token_cache: self.config.enable_token_cache(),
                 app_type: self.config.app_type,
                 http_client: reqwest::Client::new(),
                 req_timeout: self.config.req_timeout,
@@ -168,7 +168,7 @@ mod tests {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
+            ;
         let service = DocsService::new(config);
 
         assert_eq!(service.config().app_id, "test_app_id");
@@ -180,8 +180,8 @@ mod tests {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
-        let service = DocsServiceBuilder::new().config(config).build().unwrap();
+            ;
+        let service = DocsServiceBuilder::new().unwrap();
 
         assert_eq!(service.config().app_id, "test_app_id");
         assert_eq!(service.config().app_secret, "test_app_secret");
@@ -189,7 +189,7 @@ mod tests {
 
     #[test]
     fn test_docs_service_builder_missing_config() {
-        let result = DocsServiceBuilder::new().build();
+        let result = DocsServiceBuilder::new();
         assert!(result.is_err());
         assert!(matches!(
             result.unwrap_err(),

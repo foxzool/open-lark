@@ -1,40 +1,49 @@
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
-    
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat, responses::Response},
+
     config::Config,
-    
-    
+
     http::Transport,
     req_option::RequestOption,
-    
+
+
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
+// 从 patch 模块导入 View 类型
+use super::patch::View;
+
 /// 删除视图请求
-#[derive(Clone)]
 pub struct DeleteViewRequest {
-    #[serde(skip)]
     api_request: ApiRequest<Self>,
     /// 多维表格的 app_token
-    #[serde(skip)]
     app_token: String,
     /// 数据表的 table_id
-    #[serde(skip)]
     table_id: String,
     /// 视图的 view_id
-    #[serde(skip)]
     view_id: String,
     /// 用户 ID 类型
-    #[serde(skip)]
     user_id_type: Option<String>,
+}
+
+impl Default for DeleteViewRequest {
+    fn default() -> Self {
+        Self {
+            api_request: ApiRequest::delete("https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/views/{}"),
+            app_token: String::new(),
+            table_id: String::new(),
+            view_id: String::new(),
+            user_id_type: None,
+        }
+    }
 }
 
 impl DeleteViewRequest {
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new().method(HttpMethod::POST).api_path( /open-apis/bitable/v1/apps/{}/tables/{}/views/{}).config(config)),
+            api_request: ApiRequest::delete("https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/views/{}"),
             app_token: String::new(),
             table_id: String::new(),
             view_id: String::new(),
@@ -83,7 +92,7 @@ impl DeleteViewRequestBuilder {
 }
 
 /// 删除视图响应
-#[derive(Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeleteViewResponse {
     /// 视图信息
     pub view: View,
@@ -102,18 +111,13 @@ pub async fn delete_view(
     option: Option<RequestOption>,
 ) -> SDKResult<DeleteViewResponse> {
     let mut api_req = request.api_request;
-        let api_request = api_request.api_path(format!(        .replace({app_token}, &request.app_token)
-        let api_request = api_request.api_path(format!(        .replace({table_id}, &request.table_id)
-        let api_request = api_request.api_path(format!(        .replace({view_id}, &request.view_id);
 
     // 设置查询参数
     if let Some(user_id_type) = &request.user_id_type {
-        api_req
-            .query_params
-            .insert(user_id_type.to_string(), user_id_type.clone());
+        api_req = api_req.query("user_id_type", user_id_type);
     }
 
-    let api_resp: openlark_core::core::StandardResponse<DeleteViewResponse> =
+    let api_resp: Response<DeleteViewResponse> =
         Transport::request(api_req, config, option).await?;
     api_resp.into_result()
 }

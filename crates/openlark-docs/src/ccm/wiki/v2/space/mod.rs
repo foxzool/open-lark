@@ -21,7 +21,6 @@ mod list;
 ///
 /// 提供知识空间的完整管理功能，包括创建、查询、列表管理等。
 /// 支持个人和团队知识空间的操作，具备完整的权限控制。
-#[derive(Clone, Debug)]
 pub struct SpaceService {
     config: Config,
 }
@@ -54,7 +53,7 @@ impl SpaceService {
     /// let service = SpaceService::new(config);
     /// let request = ListSpaceRequest::builder()
     ///     .page_size(20)
-    ///     .build()?;
+    ///     ?;
     ///
     /// let response = service.list(request, None).await?;
     /// println!("找到{}个知识空间", response.data.items.len());
@@ -120,7 +119,7 @@ impl SpaceService {
     /// let request = CreateSpaceRequest::builder()
     ///     .name("新产品知识库")
     ///     .description("新产品相关的所有文档")
-    ///     .build()?;
+    ///     ?;
     ///
     /// let response = service.create(request, None).await?;
     /// println!("创建成功，空间ID: {}", response.data.space.space_id);
@@ -178,7 +177,7 @@ impl SpaceService {
     ///     .create_space_builder(CreateSpaceRequest::builder()
     ///         .name("新产品知识库")
     ///         .description("新产品相关的所有文档")
-    ///         .build()?)
+    ///         ?)
     ///     .execute()
     ///     .await?;
     /// ```
@@ -249,7 +248,7 @@ mod tests {
         let service = create_test_service();
         let request = CreateSpaceRequest::builder()
             .name("测试知识空间")
-            .build()
+            
             .unwrap();
 
         let builder = service.create_space_builder(request);

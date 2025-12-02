@@ -30,7 +30,6 @@ pub use record::*;
 pub use view::*;
 
 /// 数据表服务
-#[derive(Clone)]
 pub struct TableService {
     config: Config,
 }
@@ -44,6 +43,16 @@ impl TableService {
     /// 获取配置
     pub fn config(&self) -> &Config {
         &self.config
+    }
+
+    /// 创建批量新增数据表请求构建器
+    pub fn batch_create(&self) -> BatchCreateTableRequestBuilder {
+        BatchCreateTableRequestBuilder::new(self.config.clone())
+    }
+
+    /// 创建批量删除数据表请求构建器
+    pub fn batch_delete(&self) -> BatchDeleteTableRequestBuilder {
+        BatchDeleteTableRequestBuilder::new()
     }
 }
 

@@ -123,19 +123,17 @@ macro_rules! impl_response_data {
             $( $field:ident: $field_type:ty ),* $(,)?
         }
     ) => {
-        #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
         pub struct $data_name {
             $( pub $field: $field_type, )*
         }
 
-        #[derive(Clone)]
         pub struct $response_name {
             pub data: $data_name,
         }
 
         impl openlark_core::api::ApiResponseTrait for $response_name {
-            fn data_format() -> openlark_core::ResponseFormat {
-                openlark_core::ResponseFormat::Data
+            fn data_format() -> openlark_core::api::ResponseFormat {
+                openlark_core::api::ResponseFormat::Data
             }
         }
     };
@@ -147,7 +145,6 @@ mod tests {
     use openlark_core::config::Config;
 
     // 测试结构体定义
-    #[derive(Clone)]
     struct TestRequest {
         app_token: String,
         table_id: String,
@@ -178,14 +175,14 @@ mod tests {
         let config = Config::builder()
             .app_id("test")
             .app_secret("test")
-            .build()
+            
             .unwrap();
 
         let request = TestRequest::builder(config)
             .app_token("test_token")
             .table_id("test_table")
             .name("test_name")
-            .build();
+            ;
 
         assert_eq!(request.app_token, "test_token");
         assert_eq!(request.table_id, "test_table");

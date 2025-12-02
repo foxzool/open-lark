@@ -5,7 +5,6 @@
 use crate::prelude::*;
 
 /// 任务服务
-#[derive(Clone, Debug)]
 pub struct TaskService {
     config: Config,
 }

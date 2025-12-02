@@ -710,7 +710,6 @@ impl ApiResponseTrait for DeleteChartResponse {
 }
 
 /// Sheets电子表格图表服务 v3
-#[derive(Clone, Debug)]
 pub struct ChartService {
     config: openlark_core::config::Config,
 }
@@ -763,7 +762,7 @@ impl ChartService {
     ///     .add_series(series1)
     ///     .add_series(series2)
     ///     .position(position)
-    ///     .build()
+    ///     
     ///     .unwrap();
     ///
     /// let response = service.create_chart(&request).await?;
@@ -819,7 +818,7 @@ impl ChartService {
     /// let request = DeleteChartRequest::builder()
     ///     .spreadsheet_token("your_token".to_string())
     ///     .chart_id("chart_id".to_string())
-    ///     .build()
+    ///     
     ///     .unwrap();
     ///
     /// let response = service.delete_chart(&request).await?;
@@ -1045,7 +1044,7 @@ mod tests {
             .sheet_id("sheet123".to_string())
             .data_range(data_range)
             .add_series(series)
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.spreadsheet_token, "token123");
@@ -1066,7 +1065,7 @@ mod tests {
         let request = DeleteChartRequest::builder()
             .spreadsheet_token("token123".to_string())
             .chart_id("chart123".to_string())
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.spreadsheet_token, "token123");
@@ -1095,7 +1094,7 @@ mod tests {
                 Range::from("A1".to_string(), "A10".to_string()),
             ))
             .position(ChartPosition::new(1, 3, 8, 10))
-            .build()
+            
             .unwrap();
 
         assert_eq!(
@@ -1114,7 +1113,7 @@ mod tests {
                 Range::from("A1".to_string(), "A10".to_string()),
             ))
             .style(ChartStyle::new())
-            .build()
+            
             .unwrap();
 
         assert_eq!(line_chart_request.chart_config.chart_type, ChartType::Line);
@@ -1130,7 +1129,7 @@ mod tests {
                 Range::from("A1".to_string(), "A10".to_string()),
             ))
             .sub_type(ChartSubType::TwoD)
-            .build()
+            
             .unwrap();
 
         assert_eq!(pie_chart_request.chart_config.chart_type, ChartType::Pie);
@@ -1164,7 +1163,7 @@ mod tests {
                     .title(ChartTitle::new("财务分析".to_string()))
                     .legend(ChartLegend::new().position(LegendPosition::Bottom)),
             )
-            .build()
+            
             .unwrap();
 
         assert_eq!(multi_series_request.chart_config.series.len(), 3);

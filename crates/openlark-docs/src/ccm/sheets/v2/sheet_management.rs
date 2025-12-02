@@ -225,7 +225,6 @@ impl ApiResponseTrait for UpdateSheetsResponse {
 }
 
 /// 工作表管理服务
-#[derive(Clone, Debug)]
 pub struct SheetManagementService {
     config: Config,
 }
@@ -307,7 +306,6 @@ impl SheetManagementService {
 }
 
 /// 工作表更新构建器
-#[derive(Clone, Debug)]
 pub struct UpdateSheetBuilder {
     request: UpdateSheetRequest,
     config: Config,
@@ -377,7 +375,6 @@ impl UpdateSheetBuilder {
 }
 
 /// 批量更新工作表构建器
-#[derive(Clone, Debug)]
 pub struct BatchUpdateSheetsBuilder {
     batch_request: BatchUpdateSheetsRequest,
     config: Config,
@@ -429,7 +426,7 @@ mod tests {
         let config = openlark_core::config::openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
+            ;
         let service = SheetManagementService::new(config);
         assert!(!format!("{:?}", service).is_empty());
     }

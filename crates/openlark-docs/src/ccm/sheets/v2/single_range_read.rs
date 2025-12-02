@@ -17,7 +17,7 @@ use openlark_core::{
     endpoints_original::Endpoints,
     error::LarkAPIError,
     http::Transport,
-    standard_response::StandardResponse,
+    standard_response::Response,
     trait_system::Service,
     SDKResult,
 };
@@ -218,92 +218,6 @@ impl SingleRangeReadRequest {
     }
 
     /// 构建查询参数
-    pub fn build_query_params(&self) -> String {
-        let mut params = vec![];
-
-        if let Some(option) = &self.value_render_option {
-            params.push(format!("valueRenderOption={}", urlencoding::encode(option)));
-        }
-
-        if let Some(option) = &self.date_time_render_option {
-            params.push(format!(
-                "dateTimeRenderOption={}",
-                urlencoding::encode(option)
-            ));
-        }
-
-        if let Some(user_id_type) = &self.user_id_type {
-            params.push(format!("userIdType={}", urlencoding::encode(user_id_type)));
-        }
-
-        params.join("&")
-    }
-}
-
-/// 单个范围读取服务
-#[derive(Clone, Debug)]
-pub struct SingleRangeReadService {
-    config: Config,
-}
-
-impl SingleRangeReadService {
-    /// 创建单个范围读取服务实例
-    pub fn new(config: Config) -> Self {
-        Self { config }
-    }
-
-    /// 读取单个范围数据
-    ///
-    /// 根据spreadsheetToken和range读取表格单个范围的值，返回数据限制为10M。
-    ///
-    /// # 参数
-    /// - `request`: 单个范围读取请求
-    ///
-    /// # 返回
-    /// 范围数据响应
-    ///
-    /// # 示例
-    ///
-    /// ```rust
-    /// use open_lark::service::sheets::v2::single_range_read::*;
-    /// use open_lark::core::config::Config;
-    ///
-    /// let config = openlark_core::config::Config::new("app_id", "app_secret");
-    /// let service = SingleRangeReadService::new(config);
-    ///
-    /// // 创建读取请求
-    /// let request = SingleRangeReadRequest::new("spreadsheet_token", "Sheet1!A1:B2")
-    ///     .value_render_option("FormattedValue")
-    ///     .date_time_render_option("FormattedString");
-    ///
-    /// let response = service.read_range(request).await?;
-    ///
-    /// println!("范围: {}", response.value_range.range);
-    /// println!("值: {:?}", response.value_range.values);
-    /// ```
-    pub async fn read_range(
-        &self,
-        request: SingleRangeReadRequest,
-    ) -> SDKResult<Response<SingleRangeReadResponse>> {
-        // 验证请求参数
-        request.validate()?;
-
-        // 构建API请求
-        let mut api_req = ApiRequest::with_method(openlark_core::api::HttpMethod::Get);
-        api_req.set_api_path(
-            Endpoints::SHEETS_V2_SPREADSHEET_VALUES_GET
-                .replace("{spreadsheet_token}", &request.spreadsheet_token)
-                .replace("{range}", &request.range),
-        );
-        api_req
-            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
-
-        // 添加查询参数
-        let query_params = request.build_query_params();
-        if !query_params.is_empty() {
-            for param in query_params.split('&') {
-                if let Some((key, value)) = param.split_once('=') {
-                    api_req.query_params.insert(key, value);
                 }
             }
         }
@@ -437,60 +351,3 @@ mod tests {
     }
 
     #[test]
-    fn test_build_query_params() {
-        let request = SingleRangeReadRequest::new("token", "Sheet1!A1:B2")
-            .value_render_option("FormattedValue")
-            .date_time_render_option("FormattedString")
-            .user_id_type("open_id");
-
-        let params = request.build_query_params();
-        assert!(params.contains("valueRenderOption=FormattedValue"));
-        assert!(params.contains("dateTimeRenderOption=FormattedString"));
-        assert!(params.contains("userIdType=open_id"));
-    }
-
-    #[test]
-    fn test_builder_pattern() {
-        let config = openlark_core::config::Config::default();
-        let service = SingleRangeReadService::new(config);
-
-        let builder = service
-            .read_range_builder("test_token")
-            .value_render_option("FormattedValue")
-            .date_time_render_option("FormattedString");
-
-        // 验证构建器设置
-        assert_eq!(builder.spreadsheet_token, "test_token");
-        assert_eq!(
-            builder.value_render_option,
-            Some("FormattedValue".to_string())
-        );
-        assert_eq!(
-            builder.date_time_render_option,
-            Some("FormattedString".to_string())
-        );
-    }
-
-    #[test]
-    fn test_single_range_read_service() {
-        let config = openlark_core::config::Config::default();
-        let service = SingleRangeReadService::new(config);
-
-        assert_eq!(service.service_name(), "SingleRangeReadService");
-        assert!(!format!("{:?}", service).is_empty());
-    }
-
-    #[test]
-    fn test_value_range_structure() {
-        let value_range = ValueRange {
-            major_dimension: "ROWS".to_string(),
-            range: "Sheet1!A1:B2".to_string(),
-            values: serde_json::json!([["姓名", "年龄"], ["张三", 25]]),
-            revision: 1,
-        };
-
-        assert_eq!(value_range.major_dimension, "ROWS");
-        assert_eq!(value_range.range, "Sheet1!A1:B2");
-        assert_eq!(value_range.revision, 1);
-    }
-}

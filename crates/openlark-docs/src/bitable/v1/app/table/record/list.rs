@@ -3,21 +3,20 @@
 //! 提供多维表格记录的列表查询功能，支持分页、筛选和排序。
 
 use openlark_core::{
-    core::{
-        BaseResponse,
-        ResponseFormat,
+    api::{
+        ApiRequest, ApiResponseTrait, BaseResponse, ResponseFormat, HttpMethod,
     },
-    
-    
+    config::Config,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+use crate::endpoints::BITABLE_V1_RECORDS;
 use super::AppTableRecordService;
+use super::batch_create::Record;
 
 /// 列出记录请求
-#[derive(Clone)]
 pub struct ListRecordRequest {
     api_request: ApiRequest<Self>,
     /// 多维表格的 app_token
@@ -42,18 +41,34 @@ pub struct ListRecordRequest {
     pub automatic: Option<bool>,
 }
 
+impl Default for ListRecordRequest {
+    fn default() -> Self {
+        Self {
+            api_request: ApiRequest::get(BITABLE_V1_RECORDS.to_string()),
+            app_token: String::new(),
+            table_id: String::new(),
+            user_id_type: None,
+            page_token: None,
+            page_size: None,
+            view_id: None,
+            field_names: None,
+            sort: None,
+            filter: None,
+            automatic: None,
+        }
+    }
+}
+
+#[derive(Serialize)]
 /// 排序条件
-#[derive(Clone, Serialize, Deserialize)]
 pub struct SortCondition {
     /// 字段名称
     pub field_name: String,
     /// 是否倒序排序
-    #[serde(skip_serializing_if = Option::is_none)]
     pub desc: Option<bool>,
 }
 
 /// 筛选条件
-#[derive(Clone, Serialize, Deserialize)]
 pub struct FilterInfo {
     /// 条件逻辑连接词: and 或 or
     pub conjunction: String,
@@ -61,25 +76,22 @@ pub struct FilterInfo {
     pub conditions: Vec<FilterCondition>,
 }
 
+#[derive(Serialize)]
 /// 单个筛选条件
-#[derive(Clone, Serialize, Deserialize)]
 pub struct FilterCondition {
     /// 筛选条件的左值，值为字段的名称
     pub field_name: String,
     /// 条件运算符
     pub operator: String,
     /// 目标值
-    #[serde(skip_serializing_if = Option::is_none)]
     pub value: Option<Vec<String>>,
 }
 
 impl ListRecordRequest {
-    pub fn new(config: openlark_core::Config) -> Self {
+    pub fn new(config: Config) -> Self {
         Self {
-            api_request: openlark_core::api::ApiRequest::new(
-                config,
-                HttpMethod::GET,
-                BITABLE_V1_RECORDS_LIST.to_string(),
+            api_request: ApiRequest::get(
+                BITABLE_V1_RECORDS.to_string()
             ),
             app_token: String::new(),
             table_id: String::new(),
@@ -165,10 +177,10 @@ impl ListRecordRequestBuilder {
 }
 
 /// 列出记录响应
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct ListRecordResponse {
     /// 记录列表
-    pub items: Vec<openlark_core::
+    pub items: Vec<Record>,
     /// 是否还有更多项
     pub has_more: bool,
     /// 分页标记
@@ -187,7 +199,7 @@ impl FilterInfo {
     /// 创建 AND 条件
     pub fn and(conditions: Vec<FilterCondition>) -> Self {
         Self {
-            conjunction: and.to_string(),
+            conjunction: "and".to_string(),
             conditions,
         }
     }
@@ -195,7 +207,7 @@ impl FilterInfo {
     /// 创建 OR 条件
     pub fn or(conditions: Vec<FilterCondition>) -> Self {
         Self {
-            conjunction: or.to_string(),
+            conjunction: "or".to_string(),
             conditions,
         }
     }
@@ -206,7 +218,7 @@ impl FilterCondition {
     pub fn equals(field_name: impl ToString, value: impl ToString) -> Self {
         Self {
             field_name: field_name.to_string(),
-            operator: is.to_string(),
+            operator: "is".to_string(),
             value: Some(vec![value.to_string()]),
         }
     }
@@ -215,7 +227,7 @@ impl FilterCondition {
     pub fn not_equals(field_name: impl ToString, value: impl ToString) -> Self {
         Self {
             field_name: field_name.to_string(),
-            operator: isNot.to_string(),
+            operator: "isNot".to_string(),
             value: Some(vec![value.to_string()]),
         }
     }
@@ -224,7 +236,7 @@ impl FilterCondition {
     pub fn contains(field_name: impl ToString, value: impl ToString) -> Self {
         Self {
             field_name: field_name.to_string(),
-            operator: contains.to_string(),
+            operator: "contains".to_string(),
             value: Some(vec![value.to_string()]),
         }
     }
@@ -233,7 +245,7 @@ impl FilterCondition {
     pub fn not_contains(field_name: impl ToString, value: impl ToString) -> Self {
         Self {
             field_name: field_name.to_string(),
-            operator: doesNotContain.to_string(),
+            operator: "doesNotContain".to_string(),
             value: Some(vec![value.to_string()]),
         }
     }
@@ -242,7 +254,7 @@ impl FilterCondition {
     pub fn is_empty(field_name: impl ToString) -> Self {
         Self {
             field_name: field_name.to_string(),
-            operator: isEmpty.to_string(),
+            operator: "isEmpty".to_string(),
             value: None,
         }
     }
@@ -251,7 +263,7 @@ impl FilterCondition {
     pub fn is_not_empty(field_name: impl ToString) -> Self {
         Self {
             field_name: field_name.to_string(),
-            operator: isNotEmpty.to_string(),
+            operator: "isNotEmpty".to_string(),
             value: None,
         }
     }
@@ -260,7 +272,7 @@ impl FilterCondition {
     pub fn greater_than(field_name: impl ToString, value: impl ToString) -> Self {
         Self {
             field_name: field_name.to_string(),
-            operator: isGreater.to_string(),
+            operator: "isGreater".to_string(),
             value: Some(vec![value.to_string()]),
         }
     }
@@ -269,7 +281,7 @@ impl FilterCondition {
     pub fn less_than(field_name: impl ToString, value: impl ToString) -> Self {
         Self {
             field_name: field_name.to_string(),
-            operator: isLess.to_string(),
+            operator: "isLess".to_string(),
             value: Some(vec![value.to_string()]),
         }
     }

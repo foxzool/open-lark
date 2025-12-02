@@ -6,7 +6,6 @@
 use openlark_core::config::Config;
 
 /// Comment operation service
-#[derive(Clone, Debug)]
 pub struct CommentService {
     #[allow(dead_code)]
     config: Config,

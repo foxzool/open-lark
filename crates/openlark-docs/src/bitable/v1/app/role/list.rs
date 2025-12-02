@@ -1,10 +1,8 @@
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
-    api::{ApiResponseTrait},
+    api::{ApiRequest, RequestData, ResponseFormat, ApiResponseTrait, responses::Response},
     config::Config,
-    
-    
+    error::validation_error,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -12,28 +10,23 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 列出自定义角色请求
-#[derive(Clone)]
 pub struct ListAppRoleRequest {
-    #[serde(skip)]
-    api_request: ApiRequest<Self>,
+    /// 配置信息
+    config: Config,
     /// 多维表格的唯一标识符
-    #[serde(skip)]
     app_token: String,
     /// 用户 ID 类型
-    #[serde(skip)]
     user_id_type: Option<String>,
     /// 分页标记
-    #[serde(skip)]
     page_token: Option<String>,
     /// 分页大小
-    #[serde(skip)]
     page_size: Option<i32>,
 }
 
 impl ListAppRoleRequest {
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new().method(HttpMethod::POST).api_path( /open-apis/bitable/v1/apps/{}/roles).config(config)),
+            config,
             app_token: String::new(),
             user_id_type: None,
             page_token: None,
@@ -42,18 +35,19 @@ impl ListAppRoleRequest {
     }
 
     pub fn builder() -> ListAppRoleRequestBuilder {
-        ListAppRoleRequestBuilder::default()
+        ListAppRoleRequestBuilder::new()
     }
 }
 
-#[derive(Default)]
 pub struct ListAppRoleRequestBuilder {
     request: ListAppRoleRequest,
 }
 
 impl ListAppRoleRequestBuilder {
     pub fn new() -> Self {
-        Self::default()
+        Self {
+            request: ListAppRoleRequest::new(Config::default()),
+        }
     }
 
     pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
@@ -81,35 +75,34 @@ impl ListAppRoleRequestBuilder {
     }
 }
 
+#[derive(Serialize)]
 /// 自定义角色信息
-#[derive(Clone, Serialize, Deserialize)]
 pub struct AppRole {
     /// 自定义角色的id
     pub role_id: String,
     /// 角色名称
     pub role_name: String,
     /// 数据表权限
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     table_roles: Option<Vec<TableRole>>,
     /// 数据表默认权限
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     block_roles: Option<Vec<BlockRole>>,
 }
 
+#[derive(Serialize)]
 /// 数据表权限
-#[derive(Clone, Serialize, Deserialize)]
 pub struct TableRole {
     /// 数据表 id
     pub table_id: String,
     /// 权限
     pub role: String,
     /// 记录权限
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     rec_rule: Option<String>,
 }
 
 /// 数据表默认权限
-#[derive(Clone, Serialize, Deserialize)]
 pub struct BlockRole {
     /// 多维表格数据表的唯一标识符
     pub block_id: String,
@@ -118,7 +111,6 @@ pub struct BlockRole {
 }
 
 /// 列出自定义角色响应
-#[derive(Clone)]
 pub struct ListAppRoleResponse {
     /// 是否还有更多项
     pub has_more: bool,
@@ -140,30 +132,27 @@ pub async fn list_app_role(
     config: &Config,
     option: Option<RequestOption>,
 ) -> SDKResult<ListAppRoleResponse> {
-    let mut api_req = request.api_request;
-        let api_request = api_request.api_path(format!(        .replace({app_token}, &request.app_token);
+    let url = format!(
+        "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/roles",
+        &request.app_token
+    );
+    let mut api_req = ApiRequest::<()>::get(&url);
 
     // 设置查询参数
     if let Some(user_id_type) = &request.user_id_type {
-        api_req
-            .query_params
-            .insert(user_id_type.to_string(), user_id_type.clone());
+        api_req = api_req.query("user_id_type", user_id_type);
     }
 
     if let Some(page_token) = &request.page_token {
-        api_req
-            .query_params
-            .insert(page_token.to_string(), page_token.clone());
+        api_req = api_req.query("page_token", page_token);
     }
 
     if let Some(page_size) = &request.page_size {
-        api_req
-            .query_params
-            .insert(page_size.to_string(), page_size.to_string());
+        api_req = api_req.query("page_size", &page_size.to_string());
     }
 
-    let response: ListAppRoleResponse =
-        Transport::request(api_request, config, option).await?;
-    response
+    let response: Response<ListAppRoleResponse> =
+        Transport::request(api_req, config, option).await?;
+    response.into_result()
 }
 

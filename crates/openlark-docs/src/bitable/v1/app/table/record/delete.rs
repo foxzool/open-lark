@@ -1,40 +1,46 @@
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
-    
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
-    
-    
     http::Transport,
     req_option::RequestOption,
-    
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+use super::batch_create::Record;
 
 /// 删除记录请求
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct DeleteRecordRequest {
-    #[serde(skip)]
     api_request: ApiRequest<Self>,
     /// 多维表格的唯一标识符
-    #[serde(skip)]
     app_token: String,
     /// 多维表格数据表的唯一标识符
-    #[serde(skip)]
     table_id: String,
     /// 记录的唯一标识符
-    #[serde(skip)]
     record_id: String,
     /// 用户 ID 类型
-    #[serde(skip)]
     user_id_type: Option<String>,
+}
+
+impl Default for DeleteRecordRequest {
+    fn default() -> Self {
+        Self {
+            api_request: ApiRequest::delete("/open-apis/bitable/v1/apps/{}/tables/{}/records"),
+            app_token: String::new(),
+            table_id: String::new(),
+            record_id: String::new(),
+            user_id_type: None,
+        }
+    }
 }
 
 impl DeleteRecordRequest {
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new().method(HttpMethod::POST).api_path( /open-apis/bitable/v1/apps/{}/tables/{}/records/{}).config(config)),
+            api_request: ApiRequest::delete("/open-apis/bitable/v1/apps/{}/tables/{}/records")
+                
+                ,
             app_token: String::new(),
             table_id: String::new(),
             record_id: String::new(),
@@ -83,7 +89,7 @@ impl DeleteRecordRequestBuilder {
 }
 
 /// 删除记录响应
-#[derive(Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeleteRecordResponse {
     /// 被删除的记录
     pub record: Record,
@@ -101,19 +107,18 @@ pub async fn delete_record(
     config: &Config,
     option: Option<RequestOption>,
 ) -> SDKResult<DeleteRecordResponse> {
-    let mut api_req = request.api_request;
-        let api_request = api_request.api_path(format!(        .replace({app_token}, &request.app_token)
-        let api_request = api_request.api_path(format!(        .replace({table_id}, &request.table_id)
-        let api_request = api_request.api_path(format!(        .replace({record_id}, &request.record_id);
+    let url = format!(
+        "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/records/{}",
+        &request.app_token, &request.table_id, &request.record_id
+    );
+    let mut api_req = ApiRequest::<()>::delete(&url);
 
     // 设置查询参数
     if let Some(user_id_type) = &request.user_id_type {
-        api_req
-            .query_params
-            .insert(user_id_type.to_string(), user_id_type.clone());
+        api_req = api_req.query("user_id_type", user_id_type);
     }
 
-    let api_resp: openlark_core::core::StandardResponse<DeleteRecordResponse> =
+    let api_resp: Response<DeleteRecordResponse> =
         Transport::request(api_req, config, option).await?;
     api_resp.into_result()
 }

@@ -1,10 +1,8 @@
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
-    api::{ApiResponseTrait},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    
-    
+
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -13,7 +11,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// 更新自定义角色请求
-#[derive(Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateAppRoleRequest {
     #[serde(skip)]
     api_request: ApiRequest<Self>,
@@ -27,20 +25,22 @@ pub struct UpdateAppRoleRequest {
     #[serde(skip)]
     user_id_type: Option<String>,
     /// 角色名称
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     role_name: Option<String>,
     /// 数据表权限
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     table_roles: Option<Vec<TableRole>>,
     /// 数据表默认权限
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     block_roles: Option<Vec<BlockRole>>,
 }
 
 impl UpdateAppRoleRequest {
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new().method(HttpMethod::POST).api_path( /open-apis/bitable/v1/apps/{}/roles/{}).config(config)),
+            api_request: ApiRequest::post("/open-apis/bitable/v1/apps/{}/roles/{}")
+                
+                ,
             app_token: String::new(),
             role_id: String::new(),
             user_id_type: None,
@@ -100,15 +100,15 @@ impl UpdateAppRoleRequestBuilder {
     }
 }
 
+#[derive(Serialize)]
 /// 数据表权限
-#[derive(Clone, Serialize, Deserialize)]
 pub struct TableRole {
     /// 数据表 id
     pub table_id: String,
     /// 权限
     pub role: String,
     /// 记录权限
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     rec_rule: Option<String>,
 }
 
@@ -128,7 +128,6 @@ impl TableRole {
 }
 
 /// 数据表默认权限
-#[derive(Clone, Serialize, Deserialize)]
 pub struct BlockRole {
     /// 多维表格数据表的唯一标识符
     pub block_id: String,
@@ -145,34 +144,33 @@ impl BlockRole {
     }
 }
 
+#[derive(Serialize)]
 /// 自定义角色信息
-#[derive(Clone, Serialize, Deserialize)]
 pub struct AppRole {
     /// 自定义角色的id
     pub role_id: String,
     /// 角色名称
     pub role_name: String,
     /// 数据表权限
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     table_roles: Option<Vec<TableRole>>,
     /// 数据表默认权限
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     block_roles: Option<Vec<BlockRole>>,
 }
 
 /// 请求体结构
 #[derive(Serialize)]
 struct UpdateAppRoleRequestBody {
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     role_name: Option<String>,
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     table_roles: Option<Vec<TableRole>>,
-    #[serde(skip_serializing_if = Option::is_none)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     block_roles: Option<Vec<BlockRole>>,
 }
 
 /// 更新自定义角色响应
-#[derive(Clone)]
 pub struct UpdateAppRoleResponse {
     /// 更新后的角色信息
     pub role: AppRole,
@@ -191,14 +189,12 @@ pub async fn update_app_role(
     option: Option<RequestOption>,
 ) -> SDKResult<UpdateAppRoleResponse> {
     let mut api_req = request.api_request;
-        let api_request = api_request.api_path(format!(        .replace({app_token}, &request.app_token)
-        let api_request = api_request.api_path(format!(        .replace({role_id}, &request.role_id);
+        let api_request = api_request
+        let api_request = api_request;
 
     // 设置查询参数
     if let Some(user_id_type) = &request.user_id_type {
         api_req
-            .query_params
-            .insert(user_id_type.to_string(), user_id_type.clone());
     }
 
     // 设置请求体

@@ -39,7 +39,6 @@ impl FormService {
         list::list_form_questions(request, &self.config, option).await
     }
 
-  
     /// 更新表单问题
     pub async fn patch(
         &self,

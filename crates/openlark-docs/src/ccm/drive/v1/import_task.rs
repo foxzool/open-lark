@@ -340,7 +340,6 @@ impl CreateImportTaskResponse {
 /// 创建导入任务构建器
 ///
 /// 提供流畅的API来创建导入任务，支持方法链调用和完整的错误处理
-#[derive(Clone, Debug)]
 pub struct CreateImportTaskBuilder {
     service: Arc<DriveServiceV1>,
     request: CreateImportTaskRequest,
@@ -383,7 +382,7 @@ impl CreateImportTaskBuilder {
     ///         .file_url("https://example.com/document.docx")
     ///         .parent_folder_token("folder_token_123")
     ///         .overwrite(true)
-    ///         .build()?;
+    ///         ?;
     ///
     ///     let response = service
     ///         .create_import_task_builder(request)
@@ -444,7 +443,7 @@ mod tests {
             .file_url("https://example.com/document.docx")
             .parent_folder_token("folder_token_123")
             .overwrite(true)
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.file_type, "docx");
@@ -460,7 +459,7 @@ mod tests {
             .file_type("pdf")
             .file_name("report.pdf")
             .file_url("https://example.com/report.pdf")
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.file_type, "pdf");
@@ -477,7 +476,7 @@ mod tests {
             .file_type("")
             .file_name("test.docx")
             .file_url("https://example.com/test.docx")
-            .build();
+            ;
         assert!(result.is_err());
 
         // 测试文件名称为空
@@ -485,7 +484,7 @@ mod tests {
             .file_type("docx")
             .file_name("")
             .file_url("https://example.com/test.docx")
-            .build();
+            ;
         assert!(result.is_err());
 
         // 测试文件URL为空
@@ -493,7 +492,7 @@ mod tests {
             .file_type("docx")
             .file_name("test.docx")
             .file_url("")
-            .build();
+            ;
         assert!(result.is_err());
 
         // 测试无效的文件类型
@@ -501,7 +500,7 @@ mod tests {
             .file_type("invalid_type")
             .file_name("test.invalid")
             .file_url("https://example.com/test.invalid")
-            .build();
+            ;
         assert!(result.is_err());
 
         // 测试无效的URL格式
@@ -509,7 +508,7 @@ mod tests {
             .file_type("docx")
             .file_name("test.docx")
             .file_url("ftp://example.com/test.docx")
-            .build();
+            ;
         assert!(result.is_err());
 
         // 测试不以http开头的URL
@@ -517,7 +516,7 @@ mod tests {
             .file_type("docx")
             .file_name("test.docx")
             .file_url("example.com/test.docx")
-            .build();
+            ;
         assert!(result.is_err());
     }
 
@@ -534,7 +533,7 @@ mod tests {
                 .file_type(*file_type)
                 .file_name(format!("test.{}", file_type))
                 .file_url(format!("https://example.com/test.{}", file_type))
-                .build()
+                
                 .unwrap();
 
             assert_eq!(request.file_type, *file_type);
@@ -643,7 +642,7 @@ mod tests {
                 builder = builder.overwrite(overwrite);
             }
 
-            let request = builder.build().unwrap();
+            let request = builder.unwrap();
             assert_eq!(request.file_type, file_type);
             assert_eq!(request.file_name, file_name);
             assert_eq!(request.file_url, file_url);
@@ -660,7 +659,7 @@ mod tests {
             .file_url("https://example.com/document.docx")
             .parent_folder_token("folder_token_123")
             .overwrite(true)
-            .build()
+            
             .unwrap();
 
         let json = serde_json::to_string(&request).unwrap();
@@ -707,7 +706,7 @@ mod tests {
                 .file_type("docx")
                 .file_name("test.docx")
                 .file_url(url)
-                .build();
+                ;
 
             assert!(result.is_ok(), "URL {} should be valid", url);
         }
@@ -726,7 +725,7 @@ mod tests {
                 .file_type("docx")
                 .file_name("test.docx")
                 .file_url(url)
-                .build();
+                ;
 
             assert!(result.is_err(), "URL {} should be invalid", url);
         }

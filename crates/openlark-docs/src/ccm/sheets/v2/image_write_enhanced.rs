@@ -19,7 +19,7 @@ use openlark_core::{
     error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
-    standard_response::StandardResponse,
+    standard_response::Response,
     SDKResult,
 };
 
@@ -179,7 +179,6 @@ pub enum ImageSourceType {
 }
 
 /// 图片数据源
-#[derive(Clone, Debug)]
 pub struct ImageSource {
     /// 来源类型
     pub r#type: ImageSourceType,
@@ -351,7 +350,6 @@ impl ImageWriteOptions {
 }
 
 /// 图片写入请求
-#[derive(Clone, Debug)]
 pub struct ImageWriteEnhancedRequest {
     /// 电子表格token
     pub spreadsheet_token: String,
@@ -495,7 +493,6 @@ pub struct ImageWriteEnhancedResponseBody {
 // 移除重复的BaseResponse定义，使用openlark_core中的版本
 
 /// 增强图片写入服务
-#[derive(Clone, Debug)]
 pub struct ImageWriteEnhancedService {
     config: Config,
 }
@@ -518,7 +515,7 @@ impl ImageWriteEnhancedService {
     ///
     /// ```rust
     /// use open_lark::service::sheets::v2::image_write_enhanced::*;
-    /// use open_lark::core::config::Config;
+    /// use open_lark::api::config::Config;
     ///
     /// let config = openlark_core::config::Config::new("app_id", "app_secret");
     /// let service = ImageWriteEnhancedService::new(config);

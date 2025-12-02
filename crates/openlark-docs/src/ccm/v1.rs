@@ -5,7 +5,6 @@
 use crate::prelude::*;
 
 /// CCM v1 服务
-#[derive(Clone, Debug)]
 pub struct CcmV1Service {
     config: Config,
 }

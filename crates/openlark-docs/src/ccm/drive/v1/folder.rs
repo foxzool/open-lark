@@ -18,7 +18,7 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use openlark_core::{
-    core::{
+    api::{
         api::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
@@ -34,7 +34,6 @@ use openlark_core::{
 ///
 /// 提供企业级文件夹管理功能，支持文件夹的完整生命周期管理。
 /// 专为企业文档管理设计，具备完善的错误处理和性能优化。
-#[derive(Clone, Debug)]
 pub struct FolderService {
     pub config: Config,
 }
@@ -120,7 +119,7 @@ impl FolderService {
     ///     .folder_token("folder_token")
     ///     .page_size(20)
     ///     .order_by("created_time")
-    ///     .build();
+    ///     ;
     ///
     /// let response = client.cloud_docs.v1.drive.folder
     ///     .list_files(request, None)
@@ -142,16 +141,8 @@ impl FolderService {
 
         // 添加查询参数
         if let Some(page_token) = &request.page_token {
-            api_req.query_params.insert("page_token".to_string(), page_token.clone());
-        }
-        if let Some(page_size) = request.page_size {
-            api_req.query_params.insert("page_size".to_string(), page_size.to_string());
         }
         if let Some(order_by) = &request.order_by {
-            api_req.query_params.insert("order_by".to_string(), order_by.clone());
-        }
-        if let Some(direction) = &request.direction {
-            api_req.query_params.insert("direction".to_string(), direction.clone());
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -180,7 +171,7 @@ impl FolderService {
     /// ```rust,no_run
     /// let request = GetFolderMetaRequestBuilder::new()
     ///     .folder_token("folder_token")
-    ///     .build();
+    ///     ;
     ///
     /// let response = client.cloud_docs.v1.drive.folder
     ///     .get_folder_meta(request, None)
@@ -226,7 +217,7 @@ impl FolderService {
     /// let request = CreateFolderRequestBuilder::new()
     ///     .name("项目文档")
     ///     .parent_folder_token("parent_token")
-    ///     .build();
+    ///     ;
     ///
     /// let response = client.cloud_docs.v1.drive.folder
     ///     .create_folder(request, None)
@@ -266,7 +257,7 @@ impl FolderService {
     /// let request = UpdateFolderRequestBuilder::new()
     ///     .folder_token("folder_token")
     ///     .name("更新后的文件夹名称")
-    ///     .build();
+    ///     ;
     ///
     /// let response = client.cloud_docs.v1.drive.folder
     ///     .update_folder(request, None)
@@ -305,7 +296,7 @@ impl FolderService {
     /// ```rust,no_run
     /// let request = DeleteFolderRequestBuilder::new()
     ///     .folder_token("folder_token")
-    ///     .build();
+    ///     ;
     ///
     /// let response = client.cloud_docs.v1.drive.folder
     ///     .delete_folder(request, None)

@@ -1,7 +1,7 @@
 //! 获取表单模块
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat, HttpMethod, Response},
     config::Config,
     http::Transport,
     req_option::RequestOption,
@@ -10,8 +10,9 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 获取表单请求
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct GetFormRequest {
+    config: Config,
     api_request: ApiRequest<GetFormResponse>,
     app_token: String,
     table_id: String,
@@ -21,11 +22,8 @@ pub struct GetFormRequest {
 impl GetFormRequest {
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new()
-                .method(HttpMethod::Get)
-                .api_path("/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}".to_string())
-                .config(config)
-                .build(),
+            config,
+            api_request: ApiRequest::get("https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}"),
             app_token: String::new(),
             table_id: String::new(),
             form_id: String::new(),
@@ -48,20 +46,21 @@ impl GetFormRequest {
     }
 
     pub async fn execute(mut self) -> SDKResult<GetFormResponse> {
-        let path = format!(
-            "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}",
+        let url = format!(
+            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}",
             self.app_token, self.table_id, self.form_id
         );
-        self.api_request = self.api_request.api_path(path);
 
-        let config = self.api_request.config();
-        let response = Transport::request(self.api_request, &config.clone(), None).await?;
-        Ok(response)
+        // 创建新的请求
+        let api_request = ApiRequest::<()>::get(&url);
+
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据"))
     }
 }
 
 /// 表单结构
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Form {
     pub form_id: String,
     pub name: String,
@@ -69,7 +68,7 @@ pub struct Form {
 }
 
 /// 表单项
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FormItem {
     pub field_name: String,
     pub field_type: String,
@@ -77,7 +76,7 @@ pub struct FormItem {
 }
 
 /// 获取表单响应
-#[derive(Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetFormResponse {
     pub form: Form,
 }
@@ -86,4 +85,21 @@ impl ApiResponseTrait for GetFormResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
+}
+
+/// 获取表单
+pub async fn get_form(
+    request: GetFormRequest,
+    config: &Config,
+    option: Option<RequestOption>,
+) -> SDKResult<openlark_core::api::Response<GetFormResponse>> {
+    let api_path = format!(
+        "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}",
+        &request.app_token, &request.table_id, &request.form_id
+    );
+    // 创建新的ApiRequest，正确的类型
+    let api_req = ApiRequest::<()>::get(api_path);
+
+    let api_resp = Transport::request(api_req, config, option).await?;
+    Ok(api_resp)
 }

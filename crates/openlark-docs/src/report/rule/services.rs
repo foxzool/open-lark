@@ -5,7 +5,6 @@
 use crate::prelude::*;
 
 /// 规则服务
-#[derive(Clone, Debug)]
 pub struct RuleService {
     config: Config,
 }

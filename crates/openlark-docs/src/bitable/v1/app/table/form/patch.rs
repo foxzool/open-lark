@@ -1,7 +1,7 @@
 //! 更新表单问题模块
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat, Response, RequestData, HttpMethod},
     config::Config,
     http::Transport,
     req_option::RequestOption,
@@ -11,9 +11,9 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// 更新表单问题请求
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct PatchFormQuestionRequest {
-    api_request: ApiRequest<PatchFormQuestionResponse>,
+    config: Config,
     app_token: String,
     table_id: String,
     form_id: String,
@@ -23,14 +23,10 @@ pub struct PatchFormQuestionRequest {
     required: Option<bool>,
 }
 
-impl PatchFormQuestionRequest {
-    pub fn new(config: Config) -> Self {
+impl Default for PatchFormQuestionRequest {
+    fn default() -> Self {
         Self {
-            api_request: ApiRequest::new()
-                .method(HttpMethod::Patch)
-                .api_path("/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/questions/{}".to_string())
-                .config(config)
-                .build(),
+            config: Config::default(),
             app_token: String::new(),
             table_id: String::new(),
             form_id: String::new(),
@@ -39,6 +35,14 @@ impl PatchFormQuestionRequest {
             description: None,
             required: None,
         }
+    }
+}
+
+impl PatchFormQuestionRequest {
+    pub fn new(config: Config) -> Self {
+        let mut request = Self::default();
+        request.config = config;
+        request
     }
 
     pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
@@ -77,11 +81,10 @@ impl PatchFormQuestionRequest {
     }
 
     pub async fn execute(mut self) -> SDKResult<PatchFormQuestionResponse> {
-        let path = format!(
-            "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/questions/{}",
+        let url = format!(
+            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/questions/{}",
             self.app_token, self.table_id, self.form_id, self.question_id
         );
-        self.api_request = self.api_request.api_path(path);
 
         let body = serde_json::json!({
             "title": self.title,
@@ -89,16 +92,24 @@ impl PatchFormQuestionRequest {
             "required": self.required
         });
 
-        self.api_request = self.api_request.body(serde_json::to_vec(&body)?);
+        // 创建PATCH请求
+        let api_request: ApiRequest<()> = ApiRequest {
+            method: HttpMethod::Patch,
+            url: url.clone(),
+            headers: std::collections::HashMap::new(),
+            query: std::collections::HashMap::new(),
+            body: Some(RequestData::Json(body)),
+            timeout: None,
+            _phantom: std::marker::PhantomData,
+        };
 
-        let config = self.api_request.config();
-        let response = Transport::request(self.api_request, &config.clone(), None).await?;
-        Ok(response)
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据"))
     }
 }
 
 /// 更新表单问题响应
-#[derive(Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PatchFormQuestionResponse {
     pub question: Value,
 }
@@ -110,9 +121,16 @@ impl ApiResponseTrait for PatchFormQuestionResponse {
 }
 
 /// 更新表单问题请求构建器
-#[derive(Default)]
 pub struct PatchFormQuestionRequestBuilder {
     request: PatchFormQuestionRequest,
+}
+
+impl Default for PatchFormQuestionRequestBuilder {
+    fn default() -> Self {
+        Self {
+            request: PatchFormQuestionRequest::default(),
+        }
+    }
 }
 
 impl PatchFormQuestionRequestBuilder {
@@ -160,4 +178,36 @@ impl PatchFormQuestionRequestBuilder {
     pub fn build(self) -> PatchFormQuestionRequest {
         self.request
     }
+}
+
+/// 更新表单问题
+pub async fn patch_form_question(
+    request: PatchFormQuestionRequest,
+    config: &Config,
+    option: Option<RequestOption>,
+) -> SDKResult<openlark_core::api::Response<PatchFormQuestionResponse>> {
+    let api_path = format!(
+        "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/questions/{}",
+        &request.app_token, &request.table_id, &request.form_id, &request.question_id
+    );
+
+    let body = serde_json::json!({
+        "title": request.title,
+        "description": request.description,
+        "required": request.required
+    });
+
+    // 创建PATCH请求
+    let api_req: ApiRequest<()> = ApiRequest {
+        method: HttpMethod::Patch,
+        url: api_path.to_string(),
+        headers: std::collections::HashMap::new(),
+        query: std::collections::HashMap::new(),
+        body: Some(RequestData::Json(body)),
+        timeout: None,
+        _phantom: std::marker::PhantomData,
+    };
+
+    let api_resp = Transport::request(api_req, config, option).await?;
+    Ok(api_resp)
 }

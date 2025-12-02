@@ -26,7 +26,7 @@
 //!
 //! let client = LarkClient::builder("app_id", "app_secret")
 //!     .with_app_type(AppType::SelfBuild)
-//!     .build();
+//!     ;
 //!
 //! // 创建协作文档（v1版本）
 //! let document = client.docs.v1.document
@@ -62,7 +62,6 @@ use openlark_core::config::Config;
 ///
 /// 提供飞书文档的统一入口，支持文档的全生命周期管理。
 /// 包括创建、编辑、分享、协作等企业级功能。
-#[derive(Clone, Debug)]
 pub struct DocsService {
     config: Config,
     /// v2版本服务（旧版文档）
@@ -121,7 +120,7 @@ mod tests {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
+            ;
         let service = DocsService::new(config);
         assert!(!format!("{:?}", service).is_empty());
     }
@@ -131,7 +130,7 @@ mod tests {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
+            ;
         let service = DocsService::new(config);
 
         // 测试Service trait的实现

@@ -34,7 +34,6 @@ pub mod v1;
 pub mod documents;
 
 /// Document (DOCX) Service
-#[derive(Clone, Debug)]
 pub struct DocxService {
     #[allow(dead_code)] // 配置保留供将来使用
     config: Config,

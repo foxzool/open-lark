@@ -12,7 +12,7 @@ use SDKResult;    api::ApiRequest,
     SDKResult,
 };
 /// 移动云空间文档至知识空间请求,
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MoveDocsToWikiRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -26,7 +26,6 @@ pub struct MoveDocsToWikiRequest {
 impl MoveDocsToWikiRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
-}#[derive(Clone, Debug)]
 pub struct MoveDocsToWikiRequestBuilder {
     request: MoveDocsToWikiRequest}
 impl MoveDocsToWikiRequestBuilder {
@@ -48,12 +47,10 @@ pub fn w+.*{
         self.request.api_request.body = Some(openlark_core::api::RequestData::Json(&self.request)).unwrap();
 self.request}
 /// 移动任务信息,
-#[derive(Clone, Debug)]
 pub struct MoveTask {
     /// 任务id
     pub task_id: String,
 /// 移动云空间文档至知识空间响应,
-#[derive(Clone, Debug)]
 pub struct MoveDocsToWikiResponse {
     /// 任务信息
     pub task: MoveTask,
@@ -87,7 +84,7 @@ let request = MoveDocsToWikiRequest::builder(),
 .add_obj_token()
             .add_obj_token()
 .parent_node_token()
-            .build();
+            ;
 
         assert_eq!(request.space_id, "spcxxxxxx");
         assert_eq!(request.obj_tokens.len(), 2);
@@ -100,7 +97,7 @@ let request = MoveDocsToWikiRequest::builder(),
             .space_id("spcxxxxxx")
             .obj_tokens(vec!["doccnxxxxxx".to_string(), "shtcnxxxxxx".to_string()]),
 .move_to_root()
-            .build();
+            ;
 
         assert_eq!(request.space_id, "spcxxxxxx");
         assert_eq!(request.obj_tokens.len(), 2);

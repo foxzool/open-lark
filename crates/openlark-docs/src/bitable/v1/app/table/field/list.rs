@@ -1,49 +1,41 @@
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
+    api::{ApiRequest, ApiResponseTrait},
     
     config::Config,
-    
-    
+
     http::Transport,
     req_option::RequestOption,
-    
+    Response,    
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
 /// 列出字段请求
-#[derive(Clone)]
-pub struct ListFieldRequest {
-    #[serde(skip)]
+#[derive(Debug, Clone)]pub struct ListFieldRequest {
     api_request: ApiRequest<Self>,
     /// 多维表格的唯一标识符
-    #[serde(skip)]
     app_token: String,
     /// 多维表格数据表的唯一标识符
-    #[serde(skip)]
     table_id: String,
     /// 视图 ID
-    #[serde(skip)]
     view_id: Option<String>,
     /// 控制字段描述数据的返回格式
-    #[serde(skip)]
     text_field_as_array: Option<bool>,
     /// 分页标记
-    #[serde(skip)]
     page_token: Option<String>,
     /// 分页大小
-    #[serde(skip)]
     page_size: Option<i32>,
     /// 用户 ID 类型
-    #[serde(skip)]
     user_id_type: Option<String>,
 }
 
 impl ListFieldRequest {
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new().method(HttpMethod::POST).api_path( /open-apis/bitable/v1/apps/{}/tables/{}/fields).config(config)),
+            api_request: ApiRequest::post("/open-apis/bitable/v1/apps/{}/tables/{}/fields")
+                
+                ,
             app_token: String::new(),
             table_id: String::new(),
             view_id: None,
@@ -110,7 +102,6 @@ impl ListFieldRequestBuilder {
 }
 
 /// 列出字段响应
-#[derive(Clone)]
 pub struct ListFieldResponse {
     /// 是否还有更多项
     pub has_more: bool,
@@ -135,41 +126,31 @@ pub async fn list_field(
     option: Option<RequestOption>,
 ) -> SDKResult<ListFieldResponse> {
     let mut api_req = request.api_request;
-        let api_request = api_request.api_path(format!(        .replace({app_token}, &request.app_token)
-        let api_request = api_request.api_path(format!(        .replace({table_id}, &request.table_id);
+        let api_request = api_request
+        let api_request = api_request;
 
     // 设置查询参数
     if let Some(view_id) = &request.view_id {
         api_req
-            .query_params
-            .insert(view_id.to_string(), view_id.clone());
     }
 
     if let Some(text_field_as_array) = &request.text_field_as_array {
         api_req
-            .query_params
-            .insert(text_field_as_array, text_field_as_array.to_string());
     }
 
     if let Some(page_token) = &request.page_token {
         api_req
-            .query_params
-            .insert(page_token, page_token.clone());
     }
 
     if let Some(page_size) = &request.page_size {
         api_req
-            .query_params
-            .insert(page_size, page_size.to_string());
     }
 
     if let Some(user_id_type) = &request.user_id_type {
         api_req
-            .query_params
-            .insert(user_id_type.to_string(), user_id_type.clone());
     }
 
-    let api_resp: openlark_core::core::StandardResponse<ListFieldResponse> =
+    let api_resp: Response<ListFieldResponse> =
         Transport::request(api_req, config, option).await?;
     api_resp.into_result()
 }

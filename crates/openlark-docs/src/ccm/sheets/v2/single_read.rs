@@ -28,7 +28,7 @@ use openlark_core::{
     error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
-    standard_response::StandardResponse,
+    standard_response::Response,
     SDKResult,
 };
 
@@ -281,7 +281,6 @@ impl ApiResponseTrait for ReadSingleRangeResponse {
 }
 
 /// 单个范围读取服务
-#[derive(Clone, Debug)]
 pub struct SingleReadService {
     config: Config,
 }
@@ -340,20 +339,14 @@ impl SingleReadService {
         // 添加查询参数
         if let Some(value_render_option) = &request.value_render_option {
             api_req
-                .query_params
-                .insert("valueRenderOption", value_render_option.clone());
         }
 
         if let Some(date_time_render_option) = &request.date_time_render_option {
             api_req
-                .query_params
-                .insert("dateTimeRenderOption", date_time_render_option.clone());
         }
 
         if let Some(user_id_type) = &request.user_id_type {
             api_req
-                .query_params
-                .insert("user_id_type", user_id_type.clone());
         }
 
         // 暂时返回模拟数据，直到Transport问题解决
@@ -562,7 +555,7 @@ impl ReadSingleRangeRequestBuilder {
 
     /// 构建请求对象并进行验证
     pub fn build_and_validate(self) -> SDKResult<ReadSingleRangeRequest> {
-        let request = self.build();
+        let request = self;
         request.validate()?;
         Ok(request)
     }
@@ -637,7 +630,7 @@ mod tests {
             .sheet_and_range("Sheet1", "A1:B2")
             .value_render_option("FormattedValue")
             .user_id_type("open_id")
-            .build();
+            ;
 
         assert_eq!(request.spreadsheet_token, "token123");
         assert_eq!(request.range, "Sheet1!A1:B2");

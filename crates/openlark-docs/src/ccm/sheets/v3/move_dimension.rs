@@ -59,7 +59,7 @@ pub type SheetPagedResponse<T> = Vec<T>;
 ///     .source_start_index(5)
 ///     .source_end_index(10)
 ///     .destination_index(2)
-///     .build()?;
+///     ?;
 ///
 /// let response = service.move_dimension(&request).await?;
 ///
@@ -71,11 +71,10 @@ pub type SheetPagedResponse<T> = Vec<T>;
 ///     .source_start_index(0)
 ///     .source_end_index(3)
 ///     .destination_index(20) // 移动到第21列
-///     .build()?;
+///     ?;
 ///
 /// let response = service.move_dimension(&request).await?;
 /// ```
-#[derive(Clone, Debug)]
 pub struct MoveDimensionService {
     config: openlark_core::config::Config,
 }
@@ -312,7 +311,7 @@ impl MoveDimensionService {
     ///     .rows()
     ///     .source_range(5, 10)
     ///     .destination_index(2)
-    ///     .build()?;
+    ///     ?;
     ///
     /// let response = service.move_dimension(&request).await?;
     ///
@@ -532,7 +531,7 @@ mod tests {
             .rows()
             .source_range(3, 7)
             .destination_index(1)
-            .build();
+            ;
 
         assert!(row_request.is_ok());
         let req = row_request.unwrap();
@@ -550,7 +549,7 @@ mod tests {
             .columns()
             .source_range(0, 2)
             .destination_index(5)
-            .build();
+            ;
 
         assert!(col_request.is_ok());
         let req = col_request.unwrap();
@@ -565,7 +564,7 @@ mod tests {
         // 测试缺少必需参数
         let invalid_request = MoveDimensionRequest::builder()
             .spreadsheet_token("shtcnmBRWQKbsJRHXXXXXXXXXX".to_string())
-            .build();
+            ;
         assert!(invalid_request.is_err());
 
         // 测试无效维度
@@ -575,7 +574,7 @@ mod tests {
             .dimension("INVALID".to_string())
             .source_range(0, 5)
             .destination_index(10)
-            .build();
+            ;
         assert!(invalid_dimension.is_err());
 
         // 测试负数索引
@@ -585,7 +584,7 @@ mod tests {
             .rows()
             .source_range(-1, 5)
             .destination_index(10)
-            .build();
+            ;
         assert!(negative_index.is_err());
 
         // 测试起始索引大于结束索引
@@ -595,7 +594,7 @@ mod tests {
             .rows()
             .source_range(10, 5)
             .destination_index(1)
-            .build();
+            ;
         assert!(invalid_range.is_err());
 
         // 测试移动范围过大
@@ -605,7 +604,7 @@ mod tests {
             .rows()
             .source_range(0, 1001)
             .destination_index(2000)
-            .build();
+            ;
         assert!(too_large_range.is_err());
     }
 
@@ -655,7 +654,7 @@ mod tests {
             .rows()
             .source_range(5, 5) // 移动第6行
             .destination_index(0)
-            .build();
+            ;
         assert!(single_row.is_ok());
 
         // 测试移动单列
@@ -665,7 +664,7 @@ mod tests {
             .columns()
             .source_range(3, 3) // 移动第4列
             .destination_index(0)
-            .build();
+            ;
         assert!(single_col.is_ok());
 
         // 测试最大允许范围
@@ -675,7 +674,7 @@ mod tests {
             .rows()
             .source_range(0, 999) // 1000行
             .destination_index(1001)
-            .build();
+            ;
         assert!(max_range.is_ok());
     }
 
@@ -691,7 +690,7 @@ mod tests {
             .rows()
             .source_range(10, 15)
             .destination_index(3)
-            .build()
+            
             .unwrap();
 
         assert_eq!(forward_move.dimension, "ROWS");
@@ -706,7 +705,7 @@ mod tests {
             .columns()
             .source_range(2, 4)
             .destination_index(10)
-            .build()
+            
             .unwrap();
 
         assert_eq!(backward_move.dimension, "COLUMNS");
@@ -721,7 +720,7 @@ mod tests {
             .rows()
             .source_range(5, 5)
             .destination_index(6)
-            .build()
+            
             .unwrap();
 
         assert_eq!(adjacent_move.source_start_index, 5);

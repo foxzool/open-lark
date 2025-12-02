@@ -1,84 +1,167 @@
-//! 创建多维表格模块
+//! Bitable V1 创建多维表格API
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod},
+    api::{ApiRequest, RequestData},
     config::Config,
+    error::validation_error,
     http::Transport,
-    req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
+use super::models::{CreateAppRequest as CreateAppRequestBody, App};
+use super::AppService;
+
 /// 创建多维表格请求
-#[derive(Clone)]
-pub struct CreateAppRequest {
-    api_request: ApiRequest<CreateAppResponse>,
+pub struct CreateAppV1Request {
+    /// 配置信息
+    config: Config,
+    api_request: ApiRequest<CreateAppV1Response>,
+    /// 应用名称
     name: String,
+    /// 文件夹token
     folder_token: Option<String>,
+    /// 时区
     time_zone: Option<String>,
 }
 
-impl CreateAppRequest {
+/// 创建多维表格响应
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct CreateAppV1Response {
+    /// 应用信息
+    pub data: App,
+    pub success: bool,
+}
+
+impl CreateAppV1Request {
+    /// 创建新增多维表格请求
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::new()
-                .method(HttpMethod::Post)
-                .api_path("/open-apis/bitable/v1/apps".to_string())
-                .config(config)
-                .build(),
+            config,
+            api_request: ApiRequest::post(""),
             name: String::new(),
             folder_token: None,
             time_zone: None,
         }
     }
 
-    pub fn name(mut self, name: impl Into<String>) -> Self {
-        self.name = name.into();
+    /// 设置应用名称
+    pub fn name(mut self, name: String) -> Self {
+        self.name = name;
         self
     }
 
-    pub fn folder_token(mut self, folder_token: impl Into<String>) -> Self {
-        self.folder_token = Some(folder_token.into());
+    /// 设置文件夹token
+    pub fn folder_token(mut self, folder_token: String) -> Self {
+        self.folder_token = Some(folder_token);
         self
     }
 
-    pub fn time_zone(mut self, time_zone: impl Into<String>) -> Self {
-        self.time_zone = Some(time_zone.into());
+    /// 设置时区
+    pub fn time_zone(mut self, time_zone: String) -> Self {
+        self.time_zone = Some(time_zone);
         self
     }
 
-    pub async fn execute(mut self) -> SDKResult<CreateAppResponse> {
-        let body = serde_json::json!({
-            "name": self.name,
-            "folder_token": self.folder_token,
-            "time_zone": self.time_zone
-        });
+    /// 执行请求
+    pub async fn execute(self) -> SDKResult<CreateAppV1Response> {
+        // 构建完整的API URL
+        let api_url = "https://open.feishu.cn/open-apis/bitable/v1/apps";
 
-        self.api_request = self.api_request.body(serde_json::to_vec(&body)?);
+        // 设置API URL
+        let mut api_request = self.api_request;
+        api_request.url = api_url.to_string();
 
-        let config = self.api_request.config();
-        let response = Transport::request(self.api_request, &config.clone(), None).await?;
-        Ok(response)
+        // 构建请求体
+        let request_body = CreateAppRequestBody {
+            name: self.name.clone(),
+            folder_token: self.folder_token.clone(),
+            time_zone: self.time_zone.clone(),
+            app_settings: None,
+        };
+
+        // 验证请求参数
+        if let Err(e) = request_body.validate() {
+            return Err(validation_error("创建应用请求验证失败", e.to_string()));
+        }
+
+        // 设置请求体
+        api_request.body = Some(RequestData::Json(serde_json::to_value(&request_body)?));
+
+        // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
+        let mut request_for_transport: ApiRequest<()> = ApiRequest::post(api_request.url.clone())
+            .body(api_request.body.unwrap_or(RequestData::Empty));
+
+        let config = &self.config;
+        let response = Transport::request(request_for_transport, config, None).await?;
+
+        // 手动解析响应数据为App类型
+        let app_data: App = response.data
+            .and_then(|data| serde_json::from_value(data).ok())
+            .ok_or_else(|| validation_error("解析应用数据失败", "响应数据格式不正确"))?;
+
+        Ok(CreateAppV1Response {
+            data: app_data,
+            success: response.raw_response.is_success(),
+        })
     }
 }
 
-/// 创建应用响应
-#[derive(Clone)]
-pub struct CreateAppResponse {
-    pub app: CreateAppResponseData,
+/// 创建多维表格Builder
+pub struct CreateAppV1Builder {
+    request: CreateAppV1Request,
 }
 
-/// 创建应用响应数据
-#[derive(Clone)]
-pub struct CreateAppResponseData {
-    pub app_token: String,
-    pub name: String,
-    pub revision: i32,
-    pub url: String,
+impl CreateAppV1Builder {
+    /// 创建Builder实例
+    pub fn new(config: Config) -> Self {
+        Self {
+            request: CreateAppV1Request::new(config),
+        }
+    }
+
+    /// 设置应用名称
+    pub fn name(mut self, name: String) -> Self {
+        self.request = self.request.name(name);
+        self
+    }
+
+    /// 设置文件夹token
+    pub fn folder_token(mut self, folder_token: String) -> Self {
+        self.request = self.request.folder_token(folder_token);
+        self
+    }
+
+    /// 设置时区
+    pub fn time_zone(mut self, time_zone: String) -> Self {
+        self.request = self.request.time_zone(time_zone);
+        self
+    }
+
+    /// 构建请求
+    pub fn build(self) -> CreateAppV1Request {
+        self.request
+    }
 }
 
-impl ApiResponseTrait for CreateAppResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
+impl AppService {
+    /// 创建新增多维表格请求构建器
+    pub fn create_app_v1_builder(&self) -> CreateAppV1Builder {
+        CreateAppV1Builder::new(self.config.clone())
+    }
+
+    /// 创建新增多维表格请求
+    pub fn create_app_v1(&self, name: String, folder_token: Option<String>, time_zone: Option<String>) -> CreateAppV1Request {
+        let mut request = CreateAppV1Request::new(self.config.clone()).name(name);
+
+        if let Some(folder_token) = folder_token {
+            request = request.folder_token(folder_token);
+        }
+
+        if let Some(time_zone) = time_zone {
+            request = request.time_zone(time_zone);
+        }
+
+        request
     }
 }

@@ -654,7 +654,6 @@ impl openlark_core::api::ApiResponseTrait for GetMacroStatusResponse {
 }
 
 /// Sheets电子表格宏服务 v3
-#[derive(Clone, Debug)]
 pub struct MacroService {
     config: openlark_core::config::Config,
 }
@@ -693,7 +692,7 @@ impl MacroService {
     ///     .macro_name("FormatReport".to_string())
     ///     .parameters(parameters)
     ///     .async_execution(true)
-    ///     .build()
+    ///     
     ///     .unwrap();
     ///
     /// let response = service.execute_macro(&request).await?;
@@ -710,7 +709,7 @@ impl MacroService {
             request.spreadsheet_token
         );
 
-        let mut api_request = ApiRequest::with_method_and_path(openlark_core::api::HttpMethod::Post, &endpoint);
+        let mut api_request = ApiRequest::with_method_and_path(openlark_core::api::Post, &endpoint);
         api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let response: Response<ExecuteMacroResponse> =
@@ -759,7 +758,7 @@ impl MacroService {
     ///     .spreadsheet_token("your_token".to_string())
     ///     .sheet_id("sheet_id".to_string())
     ///     .macro_script(script)
-    ///     .build()
+    ///     
     ///     .unwrap();
     ///
     /// let response = service.create_macro(&request).await?;
@@ -775,7 +774,7 @@ impl MacroService {
             request.spreadsheet_token
         );
 
-        let mut api_request = ApiRequest::with_method_and_path(openlark_core::api::HttpMethod::Post, &endpoint);
+        let mut api_request = ApiRequest::with_method_and_path(openlark_core::api::Post, &endpoint);
         api_request.body = Some(openlark_core::api::RequestData::Json(request))?;
 
         let response: Response<CreateMacroResponse> =
@@ -814,7 +813,7 @@ impl MacroService {
     /// let request = GetMacroStatusRequest::builder()
     ///     .spreadsheet_token("your_token".to_string())
     ///     .execution_id("execution_id".to_string())
-    ///     .build()
+    ///     
     ///     .unwrap();
     ///
     /// let response = service.get_macro_status(&request).await?;
@@ -831,7 +830,7 @@ impl MacroService {
             request.spreadsheet_token, request.execution_id
         );
 
-        let api_request = ApiRequest::with_method_and_path(openlark_core::api::HttpMethod::Get, &endpoint);
+        let api_request = ApiRequest::with_method_and_path(openlark_core::api::Get, &endpoint);
 
         let response: Response<GetMacroStatusResponse> =
             Transport::request(api_request, &self.config, None).await?;
@@ -1050,7 +1049,7 @@ mod tests {
                 false,
             ))
             .async_execution(true)
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.spreadsheet_token, "token123");
@@ -1089,7 +1088,7 @@ mod tests {
             .spreadsheet_token("token123".to_string())
             .sheet_id("sheet123".to_string())
             .macro_script(script)
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.spreadsheet_token, "token123");
@@ -1112,7 +1111,7 @@ mod tests {
         let request = GetMacroStatusRequest::builder()
             .spreadsheet_token("token123".to_string())
             .execution_id("execution123".to_string())
-            .build()
+            
             .unwrap();
 
         assert_eq!(request.spreadsheet_token, "token123");
@@ -1167,7 +1166,7 @@ mod tests {
             .spreadsheet_token("token123".to_string())
             .sheet_id("sheet123".to_string())
             .macro_script(vba_script)
-            .build()
+            
             .unwrap();
 
         assert_eq!(vba_request.macro_script.macro_type, MacroType::VBA);
@@ -1187,7 +1186,7 @@ mod tests {
             .macro_name("DataValidator".to_string())
             .add_parameter(MacroParameter::array("data".to_string(), vec![], false))
             .async_execution(false)
-            .build()
+            
             .unwrap();
 
         assert_eq!(js_request.macro_name, "DataValidator");
@@ -1206,7 +1205,7 @@ mod tests {
             .macro_name("Calculator".to_string())
             .parameters(vec![])
             .async_execution(true)
-            .build()
+            
             .unwrap();
 
         assert_eq!(formula_request.macro_name, "Calculator");

@@ -29,7 +29,7 @@ use openlark_core::{
     error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
-    standard_response::StandardResponse,
+    standard_response::Response,
     SDKResult,
 };
 
@@ -461,7 +461,7 @@ impl ImageWriteRequest {
             .image_url(image_url)
             .position(ImagePosition::new(cell, 0, 0))
             .size(ImageSize::new(200, 150, true))
-            .build()
+            
             .expect("创建简单图片写入请求失败")
     }
 
@@ -501,7 +501,7 @@ impl ImageWriteRequest {
             .image_url(image_url)
             .position(ImagePosition::new(cell, 0, 0))
             .size(ImageSize::new(width, height, true))
-            .build()
+            
             .expect("创建指定尺寸图片写入请求失败")
     }
 
@@ -541,7 +541,7 @@ impl ImageWriteRequest {
             .image_url(image_url)
             .position(ImagePosition::new(cell, offset_x, offset_y))
             .size(ImageSize::new(200, 150, true))
-            .build()
+            
             .expect("创建指定偏移图片写入请求失败")
     }
 }
@@ -549,7 +549,6 @@ impl ImageWriteRequest {
 /// 图片写入请求构建器
 ///
 /// 提供流畅的API来构建图片写入请求，支持链式调用和类型安全。
-#[derive(Clone, Debug)]
 pub struct ImageWriteRequestBuilder {
     request: ImageWriteRequest,
     built: bool,
@@ -762,7 +761,7 @@ impl ImageWriteRequestBuilder {
     ///     .at_cell("A1", 0, 0)
     ///     .with_dimensions(300, 200, true)
     ///     .alt_text("公司Logo")
-    ///     .build()
+    ///     
     ///     .expect("无效的图片写入请求");
     /// ```
     pub fn build(mut self) -> SDKResult<ImageWriteRequest> {
@@ -1195,7 +1194,6 @@ mod tests {
 ///
 /// 提供向电子表格写入图片的功能，支持图片定位、尺寸调整、
 /// 透明度设置等多种企业级功能。
-#[derive(Clone, Debug)]
 pub struct ImageWriteService {
     config: Config,
 }
@@ -1558,7 +1556,7 @@ impl ImageWriteService {
     }
 }
 
-impl openlark_core::core::trait_system::Service for ImageWriteService {
+impl openlark_core::api::trait_system::Service for ImageWriteService {
     fn config(&self) -> &Config {
         &self.config
     }
@@ -1581,7 +1579,7 @@ mod service_tests {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
+            ;
         let service = ImageWriteService::new(config);
         assert!(!format!("{:?}", service).is_empty());
     }
@@ -1591,7 +1589,7 @@ mod service_tests {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build();
+            ;
         let service = ImageWriteService::new(config);
 
         // 测试Service trait的实现
@@ -1743,7 +1741,7 @@ mod builder_tests {
             .image_url("https://example.com/logo.png")
             .at_cell("A1", 0, 0)
             .with_dimensions(300, 200, true)
-            .build()
+            
             .expect("应该能构建有效的请求");
 
         assert_eq!(request.spreadsheet_token, "shtcnmBA*****yGehy8");
@@ -1770,7 +1768,7 @@ mod builder_tests {
             .size(size.clone())
             .alt_text("测试图片")
             .user_id_type("open_id")
-            .build()
+            
             .expect("应该能构建有效的请求");
 
         assert_eq!(request.spreadsheet_token, "token123");
@@ -1794,7 +1792,7 @@ mod builder_tests {
             .image_url("https://example.com/logo.png")
             .at_cell("A1", 0, 0)
             .with_dimensions(300, 200, true)
-            .build();
+            ;
 
         assert!(result.is_err());
         assert!(result
@@ -1812,7 +1810,7 @@ mod builder_tests {
             .at_cell("A1", 0, 0)
             .with_dimensions(300, 200, true);
 
-        let _ = builder.build().expect("第一次构建应该成功");
+        let _ = builder.expect("第一次构建应该成功");
 
         // 第二次构建应该失败
         let result = ImageWriteRequest::builder()
@@ -1821,7 +1819,7 @@ mod builder_tests {
             .image_url("https://example.com/logo.png")
             .at_cell("A1", 0, 0)
             .with_dimensions(300, 200, true)
-            .build();
+            ;
 
         // 这里我们创建一个新的builder来测试，因为旧的builder已经被构建
         assert!(result.is_ok());
@@ -1910,7 +1908,7 @@ mod builder_tests {
             .alt_text("公司Logo")
             .user_id_type("open_id")
             .z_index(3)
-            .build()
+            
             .expect("链式调用应该成功");
 
         assert_eq!(request.position.anchor_cell, "D5");
@@ -1944,7 +1942,7 @@ mod builder_tests {
             .image_url("https://example.com/large-image.png")
             .position(custom_position.clone())
             .size(custom_size.clone())
-            .build()
+            
             .expect("自定义位置和尺寸应该成功");
 
         assert_eq!(request.position.anchor_cell, custom_position.anchor_cell);

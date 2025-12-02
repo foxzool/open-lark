@@ -10,8 +10,8 @@ use crate::{
 pub struct ReqTranslator;
 
 impl ReqTranslator {
-    pub fn translate<'a>(
-        req: &'a mut ApiRequest<()>,
+    pub fn translate<'a, R: Send>(
+        req: &'a mut ApiRequest<R>,
         access_token_type: AccessTokenType,
         config: &'a Config,
         option: &'a RequestOption,
