@@ -20,6 +20,11 @@ impl BitableService {
     pub fn config(&self) -> &Config {
         &self.config
     }
+
+    /// 获取V1版本服务
+    pub fn v1(&self) -> v1::BitableV1Service {
+        v1::BitableV1Service::new(self.config.clone())
+    }
 }
 
 // 多维表格服务模块
