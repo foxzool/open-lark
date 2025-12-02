@@ -52,6 +52,7 @@
 //! - `oidc.create_access_token()` - 获取OIDC访问令牌
 //! - `oidc.create_refresh_access_token()` - 刷新OIDC访问令牌
 //! - `access_token.create()` - 获取用户访问令牌
+//! - `refresh_access_token.create()` - 刷新用户访问令牌
 //!
 //! ### oauth (old) - OAuth授权
 //! - `authorization.get_index()` - 获取登录预授权码

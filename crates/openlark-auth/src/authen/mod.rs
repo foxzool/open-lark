@@ -1,6 +1,6 @@
 //! 用户身份认证 (Project: authen)
 //!
-//! 提供用户身份认证服务，包括用户信息获取和OIDC认证。
+//! 提供用户身份认证服务，包括用户信息获取、访问令牌管理和OIDC认证。
 
 use std::sync::Arc;
 
@@ -41,6 +41,10 @@ impl AuthenV1Service {
 
     pub fn access_token(&self) -> crate::authen::v1::access_token::AccessTokenService {
         crate::authen::v1::access_token::AccessTokenService::new(self.config.clone())
+    }
+
+    pub fn refresh_access_token(&self) -> crate::authen::v1::refresh_access_token::RefreshTokenService {
+        crate::authen::v1::refresh_access_token::RefreshTokenService::new(self.config.clone())
     }
 }
 
