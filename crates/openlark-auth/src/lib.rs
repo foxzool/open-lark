@@ -68,6 +68,9 @@ pub mod error;
 // 共享数据模型
 pub mod models;
 
+// 工具模块
+pub mod utils;
+
 // Project: auth - 企业应用认证
 pub mod auth;
 

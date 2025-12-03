@@ -32,23 +32,23 @@ impl AuthenV1Service {
     }
 
     pub fn user_info(&self) -> crate::authen::v1::user_info::UserInfoService {
-        crate::authen::v1::user_info::UserInfoService::new(self.config.clone())
+        crate::authen::v1::user_info::UserInfoService::from_auth_config((*self.config).clone())
     }
 
     pub fn oidc_access_token(&self) -> crate::authen::v1::oidc::OidcAccessTokenService {
-        crate::authen::v1::oidc::OidcAccessTokenService::new(self.config.clone())
+        crate::authen::v1::oidc::OidcAccessTokenService::from_auth_config((*self.config).clone())
     }
 
     pub fn oidc_refresh_access_token(&self) -> crate::authen::v1::oidc::OidcRefreshAccessTokenService {
-        crate::authen::v1::oidc::OidcRefreshAccessTokenService::new(self.config.clone())
+        crate::authen::v1::oidc::OidcRefreshAccessTokenService::from_auth_config((*self.config).clone())
     }
 
     pub fn access_token(&self) -> crate::authen::v1::access_token::AccessTokenService {
-        crate::authen::v1::access_token::AccessTokenService::new(self.config.clone())
+        crate::authen::v1::access_token::AccessTokenService::from_auth_config((*self.config).clone())
     }
 
     pub fn refresh_access_token(&self) -> crate::authen::v1::refresh_access_token::RefreshTokenService {
-        crate::authen::v1::refresh_access_token::RefreshTokenService::new(self.config.clone())
+        crate::authen::v1::refresh_access_token::RefreshTokenService::from_auth_config((*self.config).clone())
     }
 }
 
