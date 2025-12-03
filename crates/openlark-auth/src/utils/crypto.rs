@@ -45,7 +45,7 @@ impl CryptoUtils {
         debug!("Signing {} bytes with HMAC-SHA256", data.len());
 
         let mut mac = HmacSha256::new_from_slice(key)
-            .map_err(|e| crate::error::AuthError::CryptoError(format!("Invalid key: {}", e)))?;
+            .map_err(|e| crate::error::validation_error("hmac_key", format!("Invalid HMAC key: {}", e)))?;
         mac.update(data);
         let result = mac.finalize();
 
@@ -70,11 +70,11 @@ impl CryptoUtils {
 
         let expected_signature = Self::hmac_sha256_sign(key, data)?;
         let decoded_signature = hex::decode(signature).map_err(|e| {
-            crate::error::AuthError::CryptoError(format!("Invalid signature format: {}", e))
+            crate::error::validation_error("signature", format!("Invalid signature format: {}", e))
         })?;
 
         let mut mac = HmacSha256::new_from_slice(key)
-            .map_err(|e| crate::error::AuthError::CryptoError(format!("Invalid key: {}", e)))?;
+            .map_err(|e| crate::error::validation_error("hmac_key", format!("Invalid HMAC key: {}", e)))?;
         mac.update(data);
 
         Ok(mac.verify_slice(&decoded_signature).is_ok())
@@ -94,7 +94,7 @@ impl CryptoUtils {
         debug!("Signing {} bytes with HMAC-SHA512", data.len());
 
         let mut mac = HmacSha512::new_from_slice(key)
-            .map_err(|e| crate::error::AuthError::CryptoError(format!("Invalid key: {}", e)))?;
+            .map_err(|e| crate::error::validation_error("hmac_sha512_key", format!("Invalid HMAC-SHA512 key: {}", e)))?;
         mac.update(data);
         let result = mac.finalize();
 
@@ -119,11 +119,11 @@ impl CryptoUtils {
 
         let expected_signature = Self::hmac_sha512_sign(key, data)?;
         let decoded_signature = hex::decode(signature).map_err(|e| {
-            crate::error::AuthError::CryptoError(format!("Invalid signature format: {}", e))
+            crate::error::validation_error("signature", format!("Invalid signature format: {}", e))
         })?;
 
         let mut mac = HmacSha512::new_from_slice(key)
-            .map_err(|e| crate::error::AuthError::CryptoError(format!("Invalid key: {}", e)))?;
+            .map_err(|e| crate::error::validation_error("hmac_sha512_key", format!("Invalid HMAC-SHA512 key: {}", e)))?;
         mac.update(data);
 
         Ok(mac.verify_slice(&decoded_signature).is_ok())
@@ -153,7 +153,7 @@ impl CryptoUtils {
     pub fn base64_decode(data: &str) -> Result<Vec<u8>, crate::error::AuthError> {
         debug!("Decoding Base64 data");
         general_purpose::STANDARD.decode(data).map_err(|e| {
-            crate::error::AuthError::CryptoError(format!("Base64 decode error: {}", e))
+            crate::error::validation_error("base64", format!("Base64 decode error: {}", e))
         })
     }
 
@@ -296,14 +296,12 @@ impl PasswordHasher {
 
         let parts: Vec<&str> = hash.split(':').collect();
         if parts.len() != 3 {
-            return Err(crate::error::AuthError::CryptoError(
-                "Invalid hash format".to_string(),
-            ));
+            return Err(crate::error::validation_error("hash", "Invalid hash format"));
         }
 
         let iterations = parts[0]
             .parse::<u32>()
-            .map_err(|_| crate::error::AuthError::CryptoError("Invalid iterations".to_string()))?;
+            .map_err(|_| crate::error::validation_error("iterations", "Invalid iterations"))?;
         let salt = CryptoUtils::base64_decode(parts[1])?;
         let expected_key = CryptoUtils::base64_decode(parts[2])?;
 

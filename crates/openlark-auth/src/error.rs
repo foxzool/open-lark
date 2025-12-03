@@ -6,7 +6,7 @@
 use openlark_core::error::{
     authentication_error, network_error_with_details, permission_missing_error,
     sso_token_invalid_error, token_expired_error, token_invalid_error, user_identity_invalid_error,
-    validation_error, CoreError, ErrorCode, ErrorContext, ErrorTrait, ErrorType,
+    validation_error as core_validation_error, CoreError, ErrorCode, ErrorContext, ErrorTrait, ErrorType,
 };
 use std::time::Duration;
 
@@ -18,6 +18,11 @@ pub type AuthError = CoreError;
 
 /// 认证服务结果类型
 pub type AuthResult<T> = Result<T, AuthError>;
+
+/// 验证错误 - 公开的便利函数
+pub fn validation_error(field: impl Into<String>, message: impl Into<String>) -> AuthError {
+    core_validation_error(field, message)
+}
 
 /// 认证错误构建器 - 专门用于认证场景的便利函数
 #[derive(Debug, Copy, Clone)]
