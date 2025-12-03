@@ -31,8 +31,9 @@ impl OauthOldService {
         Self { config }
     }
 
-    pub fn authorization(&self) -> crate::oauth::old::authorization::AuthorizationService {
-        crate::oauth::old::authorization::AuthorizationService::new(self.config.clone())
+    /// 获取登录预授权码
+    pub fn authorization(&self) -> crate::oauth::old::AuthorizationIndexService {
+        crate::oauth::old::AuthorizationIndexService::new(self.config.clone())
     }
 }
 

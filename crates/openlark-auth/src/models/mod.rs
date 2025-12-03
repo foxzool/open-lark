@@ -49,10 +49,9 @@ pub mod user_info;
 // 重新导出所有响应类型
 pub use token::{
     AppAccessTokenResponse, AppTicketRequest, AppTicketResponse, TenantAccessTokenResponse,
+    UserAccessTokenResponse, RefreshUserAccessTokenResponse, OidcAccessTokenResponse,
+    OidcRefreshAccessTokenResponse, AuthorizationIndexResponse,
 };
-
-// 导出用户访问令牌响应类型
-pub use crate::authen::v1::access_token::UserAccessTokenResponse;
 
 pub use user_info::{Gender, UserInfoResponse, UserStatus};
 

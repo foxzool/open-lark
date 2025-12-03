@@ -2,11 +2,8 @@
 //!
 //! 提供企业应用认证的v3版本API实现。
 
-pub mod app_access_token;
-pub mod app_ticket;
-pub mod tenant_access_token;
+// auth资源模块
+pub mod auth;
 
-// 重新导出服务
-pub use app_access_token::AppAccessTokenService;
-pub use app_ticket::AppTicketService;
-pub use tenant_access_token::TenantAccessTokenService;
+// 重新导出auth资源模块的所有内容
+pub use auth::*;
