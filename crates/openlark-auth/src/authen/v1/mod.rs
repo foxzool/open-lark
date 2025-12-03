@@ -9,6 +9,6 @@ pub mod user_info;
 
 // 重新导出服务
 pub use access_token::AccessTokenService;
-pub use oidc::OidcService;
+pub use oidc::{OidcAccessTokenService, OidcRefreshAccessTokenService};
 pub use refresh_access_token::RefreshTokenService;
 pub use user_info::UserInfoService;

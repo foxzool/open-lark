@@ -37,17 +37,17 @@ impl AuthV3Service {
     /// 租户访问令牌服务
     pub fn tenant_access_token(
         &self,
-    ) -> crate::auth::v3::tenant_access_token::TenantAccessTokenService {
-        crate::auth::v3::tenant_access_token::TenantAccessTokenService::new(self.config.clone())
+    ) -> crate::auth::v3::auth::TenantAccessTokenService {
+        crate::auth::v3::auth::TenantAccessTokenService::new(self.config.clone())
     }
 
     /// 应用访问令牌服务
-    pub fn app_access_token(&self) -> crate::auth::v3::app_access_token::AppAccessTokenService {
-        crate::auth::v3::app_access_token::AppAccessTokenService::new(self.config.clone())
+    pub fn app_access_token(&self) -> crate::auth::v3::auth::AppAccessTokenService {
+        crate::auth::v3::auth::AppAccessTokenService::new(self.config.clone())
     }
 
     /// 应用票据服务
-    pub fn app_ticket(&self) -> crate::auth::v3::app_ticket::AppTicketService {
-        crate::auth::v3::app_ticket::AppTicketService::new(self.config.clone())
+    pub fn app_ticket(&self) -> crate::auth::v3::auth::AppTicketService {
+        crate::auth::v3::auth::AppTicketService::new(self.config.clone())
     }
 }
