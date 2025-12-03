@@ -2,7 +2,6 @@
 
 use chrono::{DateTime, Datelike, NaiveDateTime, TimeZone, Utc};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
-use tracing::debug;
 
 /// 时间工具
 pub struct TimeUtils;
@@ -45,7 +44,7 @@ impl TimeUtils {
     /// ISO 8601字符串转时间戳
     pub fn iso_string_to_timestamp(iso_string: &str) -> Result<u64, crate::error::AuthError> {
         let datetime = DateTime::parse_from_rfc3339(iso_string).map_err(|e| {
-            crate::error::AuthError::TimeError(format!("Invalid ISO format: {}", e))
+            crate::error::validation_error("time", format!("Invalid ISO format: {}", e)
         })?;
 
         Ok(datetime.timestamp() as u64)
@@ -63,7 +62,7 @@ impl TimeUtils {
         format: &str,
     ) -> Result<u64, crate::error::AuthError> {
         let naive_datetime = NaiveDateTime::parse_from_str(time_str, format)
-            .map_err(|e| crate::error::AuthError::TimeError(format!("Parse error: {}", e)))?;
+            .map_err(|e| crate::error::validation_error("time", format!("Parse error: {}", e)))?;
 
         let datetime = Utc.from_utc_datetime(&naive_datetime);
         Ok(datetime.timestamp() as u64)
@@ -86,7 +85,7 @@ impl TimeUtils {
 
     /// 减去时间间隔
     pub fn subtract_duration(timestamp: u64, duration: Duration) -> u64 {
-        timestamp.saturating_sub(duration.as_secs())
+        timestamp.saturating_sub(duration.as_secs()
     }
 
     /// 检查时间戳是否在过去
@@ -117,7 +116,7 @@ impl TimeUtils {
         let current_time = Self::current_timestamp();
 
         if timestamp > current_time {
-            Some(Duration::from_secs(timestamp - current_time))
+            Some(Duration::from_secs(timestamp - current_time)
         } else {
             None
         }
@@ -128,7 +127,7 @@ impl TimeUtils {
         let current_time = Self::current_timestamp();
 
         if timestamp <= current_time {
-            Some(Duration::from_secs(current_time - timestamp))
+            Some(Duration::from_secs(current_time - timestamp)
         } else {
             None
         }
@@ -208,13 +207,13 @@ impl TimeUtils {
                 current_number.push(c);
             } else if c.is_ascii_alphabetic() {
                 if current_number.is_empty() {
-                    return Err(crate::error::AuthError::TimeError(
+                    return Err(crate::error::validation_error("time",(
                         "Invalid duration format".to_string(),
                     ));
                 }
 
                 let number = current_number.parse::<u64>().map_err(|_| {
-                    crate::error::AuthError::TimeError("Invalid number in duration".to_string())
+                    crate::error::validation_error("time", "Invalid number in duration".to_string()
                 })?;
 
                 let seconds = match c {
@@ -224,10 +223,10 @@ impl TimeUtils {
                     'd' => number * 86400,
                     'w' => number * 604800,
                     _ => {
-                        return Err(crate::error::AuthError::TimeError(format!(
+                        return Err(crate::error::validation_error("time", format!(
                             "Unsupported duration unit: {}",
                             c
-                        )))
+                        ))
                     }
                 };
 
@@ -236,19 +235,19 @@ impl TimeUtils {
             } else if c.is_whitespace() {
                 continue;
             } else {
-                return Err(crate::error::AuthError::TimeError(
+                return Err(crate::error::validation_error("time",(
                     "Invalid character in duration".to_string(),
                 ));
             }
         }
 
         if !current_number.is_empty() {
-            return Err(crate::error::AuthError::TimeError(
+            return Err(crate::error::validation_error("time",(
                 "Duration ends with number".to_string(),
             ));
         }
 
-        Ok(Duration::from_secs(total_seconds))
+        Ok(Duration::from_secs(total_seconds)
     }
 
     /// 获取时间延迟（用于重试等场景）
@@ -302,7 +301,7 @@ impl TimeRange {
     /// 创建新的时间范围
     pub fn new(start: u64, end: u64) -> Result<Self, crate::error::AuthError> {
         if start > end {
-            return Err(crate::error::AuthError::TimeError(
+            return Err(crate::error::validation_error("time",(
                 "Start time cannot be after end time".to_string(),
             ));
         }
