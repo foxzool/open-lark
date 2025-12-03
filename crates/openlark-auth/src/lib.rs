@@ -1,133 +1,115 @@
-//! OpenLark 认证服务模块
+//! # OpenLark 认证模块
 //!
-//! 提供飞书开放平台的完整认证服务，包括企业应用认证、用户身份认证和OAuth授权。
+//! OpenLark SDK的认证和授权模块，提供飞书开放平台的完整认证解决方案。
 //!
-//! ## 架构设计
+//! ## 功能特性
 //!
-//! 采用 Project-Version-Resource (PVR) 三层架构：
+//! - **令牌管理**: 自动处理访问令牌的获取、刷新和缓存
+//! - **多种认证方式**: 支持企业自建应用、应用商店应用和用户认证
+//! - **OAuth支持**: 完整的OAuth 2.0授权流程
+//! - **类型安全**: 基于Rust类型系统的API设计
+//! - **错误处理**: 统一的错误处理和用户友好的错误消息
+//! - **异步支持**: 基于tokio的全异步API设计
 //!
-//! ```text
-//! openlark-auth/src/
-//! ├── models/           # 共享数据模型
-//! ├── auth/            # 企业应用认证 (Project)
-//! │   └── v3/          # API版本v3 (Version)
-//! ├── authen/          # 用户身份认证 (Project)
-//! │   └── v1/          # API版本v1 (Version)
-//! └── oauth/           # OAuth授权 (Project)
-//!     └── old/         # 向后兼容版本 (Version)
-//! ```
+//! ## 模块组织
+//!
+//! - [`services`]: 核心认证服务
+//! - [`models`]: 数据模型定义
+//! - [`api`]: API实现层
 //!
 //! ## 快速开始
 //!
-//! ```rust,no_run
-//! use openlark_auth::prelude::*;
+//! ```rust
+//! use openlark_auth::{AuthService, AuthenService, OAuthService};
+//! use openlark_core::Config;
 //!
 //! #[tokio::main]
 //! async fn main() -> Result<(), Box<dyn std::error::Error>> {
-//!     let config = AuthConfig::new("app_id", "app_secret");
-//!     let auth = AuthServices::new(config);
+//!     let config = Config::from_env()?;
 //!
-//!     // 获取自建应用租户访问令牌
-//!     let tenant_token = auth.auth.v3().tenant_access_token()
-//!         .internal()
+//!     // 企业自建应用认证
+//!     let auth_service = AuthService::new(config.clone());
+//!     let token = auth_service.v3()
+//!         .app_access_token_internal()
+//!         .app_id("your_app_id")
+//!         .app_secret("your_app_secret")
 //!         .send()
 //!         .await?;
 //!
-//!     println!("租户令牌: {}", tenant_token.tenant_access_token);
+//!     // 用户认证
+//!     let authen_service = AuthenService::new(config.clone());
+//!     let user_info = authen_service.v1()
+//!         .user_info()
+//!         .get()
+//!         .user_access_token("user_token")
+//!         .send()
+//!         .await?;
+//!
 //!     Ok(())
 //! }
 //! ```
-//!
-//! ## API覆盖
-//!
-//! ### auth (v3) - 企业应用认证
-//! - `tenant_access_token_internal()` - 自建应用获取租户访问令牌
-//! - `app_access_token_internal()` - 自建应用获取应用访问令牌
-//! - `tenant_access_token()` - 商店应用获取租户访问令牌
-//! - `app_access_token()` - 商店应用获取应用访问令牌
-//! - `app_ticket_resend()` - 重新推送应用票据
-//!
-//! ### authen (v1) - 用户身份认证
-//! - `user_info.get()` - 获取登录用户信息
-//! - `oidc.create_access_token()` - 获取OIDC访问令牌
-//! - `oidc.create_refresh_access_token()` - 刷新OIDC访问令牌
-//! - `access_token.create()` - 获取用户访问令牌
-//! - `refresh_access_token.create()` - 刷新用户访问令牌
-//!
-//! ### oauth (old) - OAuth授权
-//! - `authorization.get_index()` - 获取登录预授权码
 
-// #![deny(missing_docs)]  // 暂时禁用以完成基本编译
-#![warn(clippy::all)]
-#![warn(missing_copy_implementations)]
-#![warn(missing_debug_implementations)]
-
-// 错误处理模块
-pub mod error;
-
-// 共享数据模型
 pub mod models;
-
-// 工具模块
+pub mod services;
+pub mod api;
 pub mod utils;
 
-// Project: auth - 企业应用认证
-pub mod auth;
+// 重新导出核心类型，方便用户使用
+pub use services::{AuthService, AuthenService, OAuthService};
 
-// Project: authen - 用户身份认证
-pub mod authen;
+// 重新导出常用模型
+pub use models::{
+    auth::*,
+    authen::*,
+    oauth::*,
+};
 
-// Project: oauth - OAuth授权
-pub mod oauth;
+// 重新导出API构建器
+pub use api::{
+    auth::v3::*,
+    authen::v1::*,
+    oauth::old::*,
+};
 
-// 重新导出主要类型
-pub use auth::{AuthProject, AuthV3Service};
-pub use authen::{AuthenProject, AuthenV1Service};
-pub use oauth::{OauthOldService, OauthProject};
+// 类型别名，提供更好的用户体验
+pub type AuthResult<T> = openlark_core::SDKResult<T>;
 
-/// 认证服务统一入口
-#[derive(Debug)]
-pub struct AuthServices {
-    pub config: std::sync::Arc<crate::models::AuthConfig>,
-    pub auth: AuthProject,
-    pub authen: AuthenProject,
-    pub oauth: OauthProject,
-}
-
-impl AuthServices {
-    /// 创建新的认证服务实例
-    pub fn new(config: crate::models::AuthConfig) -> Self {
-        let config = std::sync::Arc::new(config);
-
-        Self {
-            auth: AuthProject::new(config.clone()),
-            authen: AuthenProject::new(config.clone()),
-            oauth: OauthProject::new(config.clone()),
-            config,
-        }
-    }
-
-    /// 获取配置信息
-    pub fn config(&self) -> &crate::models::AuthConfig {
-        &self.config
-    }
-}
-
-impl Default for AuthServices {
-    fn default() -> Self {
-        Self::new(crate::models::AuthConfig::default())
-    }
-}
-
-// 结果类型别名现在通过 models::AuthResult 导出
-
-/// 预导出模块
+/// 认证模块的预导入，包含最常用的类型和特征
 pub mod prelude {
-    pub use super::models::AuthResult;
-    pub use super::{AuthProject, AuthServices, AuthenProject, OauthProject};
+    pub use crate::{AuthService, AuthenService, OAuthService, AuthResult};
 
-    pub use super::auth::*;
-    pub use super::authen::*;
-    pub use super::models::*;
-    pub use super::oauth::*;
+    // 重新导出openlark-core的核心类型
+    pub use openlark_core::{
+        config::Config,
+        error::{CoreError as LarkAPIError, SDKResult},
+        http::Transport,
+    };
+    pub use openlark_core::api::ApiResponse;
+
+    // 重新导出常用模型
+    pub use crate::models::{
+        AccessTokenResponse, UserInfo, AuthorizationCodeRequest,
+    };
+}
+
+/// 认证模块版本信息
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_version() {
+        assert!(!VERSION.is_empty());
+    }
+
+    #[test]
+    fn test_prelude_imports() {
+        // 确保prelude中的类型可以正常导入
+        use crate::prelude::*;
+
+        // 这里只是验证类型导入，不进行实际操作
+        let _: String = VERSION.to_string();
+    }
 }

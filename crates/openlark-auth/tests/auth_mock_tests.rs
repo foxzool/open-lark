@@ -2,23 +2,26 @@
 //!
 //! 使用 mock HTTP 响应测试 API 调用
 
-use openlark_auth::prelude::*;
+use openlark_core::config::Config;
 use serde_json::json;
 use wiremock::matchers::{method, path};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
 /// 创建 mock 服务器和配置
-async fn setup_mock_server() -> (MockServer, AuthConfig) {
+async fn setup_mock_server() -> MockServer {
     let mock_server = MockServer::start().await;
-    let config =
-        AuthConfig::new("test_app_id", "test_app_secret").with_base_url(&mock_server.uri());
-
-    (mock_server, config)
+    mock_server
 }
 
 #[tokio::test]
 async fn test_tenant_access_token_internal_success() {
-    let (mock_server, config) = setup_mock_server().await;
+    let mock_server = setup_mock_server().await;
+    let config = Config::builder()
+        .app_id("test_app_id")
+        .app_secret("test_app_secret")
+        .base_url(&mock_server.uri())
+        .build()
+        .expect("Failed to create test config");
 
     // Mock 成功响应
     let response_body = json!({
