@@ -64,12 +64,8 @@ pub use models::{
     oauth::*,
 };
 
-// 重新导出API构建器
-pub use api::{
-    auth::v3::*,
-    authen::v1::*,
-    oauth::old::*,
-};
+// 重新导出API构建器和服务
+pub use api::*;
 
 // 类型别名，提供更好的用户体验
 pub type AuthResult<T> = openlark_core::SDKResult<T>;
@@ -77,6 +73,16 @@ pub type AuthResult<T> = openlark_core::SDKResult<T>;
 /// 认证模块的预导入，包含最常用的类型和特征
 pub mod prelude {
     pub use crate::{AuthService, AuthenService, OAuthService, AuthResult};
+
+    // 重新导出API服务类
+    pub use crate::api::{
+        AuthServiceV3, AuthenServiceV1, OAuthServiceOld,
+        AppAccessTokenBuilder, AppAccessTokenInternalBuilder,
+        TenantAccessTokenBuilder, TenantAccessTokenInternalBuilder, AppTicketResendBuilder,
+        UserInfoBuilder, UserAccessTokenV1Builder, RefreshUserAccessTokenV1Builder,
+        OidcService, OidcAccessTokenBuilder, OidcRefreshAccessTokenBuilder,
+        AuthorizationBuilder,
+    };
 
     // 重新导出openlark-core的核心类型
     pub use openlark_core::{

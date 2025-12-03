@@ -10,3 +10,10 @@ pub mod authen;
 
 /// OAuth相关API (meta.project=oauth)
 pub mod oauth;
+
+// 重新导出主要服务类，方便用户使用
+pub use auth::v3::auth::{AuthServiceV3, AppAccessTokenBuilder, AppAccessTokenInternalBuilder,
+                        TenantAccessTokenBuilder, TenantAccessTokenInternalBuilder, AppTicketResendBuilder};
+pub use authen::v1::{AuthenServiceV1, UserInfoBuilder, UserAccessTokenV1Builder,
+                    RefreshUserAccessTokenV1Builder, OidcService, OidcAccessTokenBuilder, OidcRefreshAccessTokenBuilder};
+pub use oauth::old::{OAuthServiceOld, AuthorizationBuilder};
