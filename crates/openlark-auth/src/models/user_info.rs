@@ -1,6 +1,7 @@
 //! 用户信息相关数据模型
 
 use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiResponseTrait;
 
 /// 用户信息响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -60,3 +61,6 @@ pub enum Gender {
     /// 未知
     Unknown,
 }
+
+// 为用户信息响应实现 ApiResponseTrait
+impl ApiResponseTrait for UserInfoResponse {}
