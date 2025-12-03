@@ -1,14 +1,9 @@
-//! 工具模块
+//! 工具函数模块
 //!
-//! 提供加密、验证、时间处理等工具函数。
+//! 本模块提供认证相关的辅助工具函数。
 
-pub mod config_conversion;
-pub mod crypto;
-pub mod time;
-pub mod validator;
+/// 令牌验证工具
+pub mod token_validation;
 
-// 重新导出主要类型
-pub use config_conversion::*;
-pub use crypto::*;
-pub use time::*;
-pub use validator::*;
+/// URL构建工具
+pub mod url_builder;

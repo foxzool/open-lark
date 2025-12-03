@@ -2,7 +2,7 @@
 //!
 //! 专注于11个核心API接口的基础功能验证
 
-use openlark_auth::prelude::*;
+use openlark_core::config::Config;
 use serde_json::json;
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
@@ -96,14 +96,13 @@ impl SimpleMockHelper {
 }
 
 /// 创建测试用的认证配置
-fn create_test_auth_config(base_url: &str) -> AuthConfig {
-    AuthConfig::new("test_app_id", "test_app_secret").with_base_url(base_url)
-}
-
-/// 创建测试用的认证服务
-fn create_test_auth_services(base_url: &str) -> AuthServices {
-    let config = create_test_auth_config(base_url);
-    AuthServices::new(config)
+fn create_test_config(base_url: &str) -> Config {
+    Config::builder()
+        .app_id("test_app_id")
+        .app_secret("test_app_secret")
+        .base_url(base_url)
+        .build()
+        .expect("Failed to create test config")
 }
 
 /// 简单的断言宏
@@ -208,10 +207,7 @@ async fn test_user_info_get_success() {
     let user_info = assert_ok!(result);
     assert!(!user_info.user_id.is_empty());
     assert_eq!(user_info.name, "测试用户");
-    assert_eq!(
-        user_info.status,
-        openlark_auth::models::UserStatus::Activated
-    );
+    assert_eq!(user_info.status.unwrap().is_activated, Some(true));
     println!("✅ 用户信息测试通过: {}", user_info.name);
 }
 
