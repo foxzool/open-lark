@@ -5,6 +5,8 @@ use serde::{Deserialize, Serialize};
 /// 租户访问令牌响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TenantAccessTokenResponse {
+    /// 错误码，0表示成功
+    pub code: i32,
     /// 租户访问令牌
     pub tenant_access_token: String,
     /// 令牌有效期（秒）
@@ -14,6 +16,8 @@ pub struct TenantAccessTokenResponse {
 /// 应用访问令牌响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AppAccessTokenResponse {
+    /// 错误码，0表示成功
+    pub code: i32,
     /// 应用访问令牌
     pub app_access_token: String,
     /// 令牌有效期（秒）
@@ -32,6 +36,8 @@ pub struct AppTicketRequest {
 /// 应用票据响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AppTicketResponse {
+    /// 错误码，0表示成功
+    pub code: i32,
     /// 应用票据
     pub app_ticket: String,
 }
@@ -39,16 +45,55 @@ pub struct AppTicketResponse {
 /// 用户访问令牌响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UserAccessTokenResponse {
+    /// 错误码，0表示成功
+    pub code: i32,
+    /// 响应消息
+    pub msg: String,
+    /// 响应数据
+    pub data: UserAccessTokenData,
+}
+
+/// 用户访问令牌数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserAccessTokenData {
     /// 用户访问令牌
     pub access_token: String,
     /// 令牌类型
     pub token_type: String,
     /// 令牌有效期（秒）
     pub expires_in: i32,
+    /// 用户姓名
+    pub name: Option<String>,
+    /// 用户英文名
+    pub en_name: Option<String>,
+    /// 用户头像URL
+    pub avatar_url: Option<String>,
+    /// 用户头像缩略图
+    pub avatar_thumb: Option<String>,
+    /// 用户头像中等尺寸
+    pub avatar_middle: Option<String>,
+    /// 用户头像大图
+    pub avatar_big: Option<String>,
+    /// 用户开放ID
+    pub open_id: String,
+    /// 用户联合ID
+    pub union_id: String,
+    /// 用户邮箱
+    pub email: Option<String>,
+    /// 企业邮箱
+    pub enterprise_email: Option<String>,
+    /// 用户ID
+    pub user_id: String,
+    /// 用户手机号
+    pub mobile: Option<String>,
+    /// 租户密钥
+    pub tenant_key: Option<String>,
+    /// 刷新令牌过期时间（秒）
+    pub refresh_expires_in: Option<i32>,
     /// 刷新令牌
-    pub refresh_token: Option<String>,
-    /// 授权范围
-    pub scope: Option<String>,
+    pub refresh_token: String,
+    /// 会话ID
+    pub sid: String,
 }
 
 /// 刷新用户访问令牌响应
