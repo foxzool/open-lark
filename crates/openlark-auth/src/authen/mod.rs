@@ -35,8 +35,12 @@ impl AuthenV1Service {
         crate::authen::v1::user_info::UserInfoService::new(self.config.clone())
     }
 
-    pub fn oidc(&self) -> crate::authen::v1::oidc::OidcService {
-        crate::authen::v1::oidc::OidcService::new(self.config.clone())
+    pub fn oidc_access_token(&self) -> crate::authen::v1::oidc::OidcAccessTokenService {
+        crate::authen::v1::oidc::OidcAccessTokenService::new(self.config.clone())
+    }
+
+    pub fn oidc_refresh_access_token(&self) -> crate::authen::v1::oidc::OidcRefreshAccessTokenService {
+        crate::authen::v1::oidc::OidcRefreshAccessTokenService::new(self.config.clone())
     }
 
     pub fn access_token(&self) -> crate::authen::v1::access_token::AccessTokenService {

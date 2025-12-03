@@ -3,6 +3,8 @@
 //! 提供向后兼容的OAuth授权API实现。
 
 pub mod authorization;
+pub mod index;
 
 // 重新导出服务
 pub use authorization::AuthorizationService;
+pub use index::{AuthorizationIndexService, AuthorizationIndexBuilder};
