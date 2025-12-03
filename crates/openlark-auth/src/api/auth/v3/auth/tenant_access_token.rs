@@ -26,6 +26,7 @@ impl TenantAccessTokenBuilder {
             request: TenantAccessTokenRequest {
                 app_id: String::new(),
                 app_secret: String::new(),
+                app_ticket: String::new(),
             },
         }
     }
@@ -39,6 +40,12 @@ impl TenantAccessTokenBuilder {
     /// 设置应用密钥
     pub fn app_secret(mut self, app_secret: impl Into<String>) -> Self {
         self.request.app_secret = app_secret.into();
+        self
+    }
+
+    /// 设置应用票据（商店应用必需）
+    pub fn app_ticket(mut self, app_ticket: impl Into<String>) -> Self {
+        self.request.app_ticket = app_ticket.into();
         self
     }
 
