@@ -6,7 +6,7 @@ use openlark_core::{
     config::Config,
     api::ApiRequest,
     prelude::Transport,
-    error::{SDKResult, api_error},
+    error::{SDKResult, CoreError, ErrorCode},
 };
 use crate::models::authen::{UserInfoRequest, UserInfoResponse};
 
@@ -58,15 +58,91 @@ impl UserInfoBuilder {
         if response.raw_response.code == 0 {
             Ok(response.data.unwrap())
         } else {
-            // 映射飞书错误码
-            let error_code = response.raw_response.code;
+            // 智能映射飞书错误码（优先级：飞书通用码 > HTTP状态 > 内部码）
+            let feishu_code = response.raw_response.code;
             let error_message = response.raw_response.msg.clone();
 
-            match error_code {
-                99991663 => Err(api_error(401, "/open-apis/authen/v1/user_info", "用户访问令牌无效", None::<String>)),
-                99991677 => Err(api_error(401, "/open-apis/authen/v1/user_info", "用户访问令牌已过期", None::<String>)),
-                99991641 | 99991642 | 99991645 => Err(api_error(401, "/open-apis/authen/v1/user_info", "用户会话失效", None::<String>)),
-                _ => Err(api_error(error_code as u16, "/open-apis/authen/v1/user_info", error_message, None::<String>)),
+            match ErrorCode::from_feishu_code(feishu_code) {
+                Some(ErrorCode::AccessTokenInvalid) => {
+                    Err(CoreError::Authentication {
+                        message: "用户访问令牌无效".to_string(),
+                        code: ErrorCode::AccessTokenInvalid,
+                        ctx: {
+                            let mut ctx = openlark_core::error::ErrorContext::new();
+                            if let Some(ref req_id) = response.raw_response.request_id {
+                                ctx.set_request_id(req_id);
+                            }
+                            ctx.add_context("feishu_code", feishu_code.to_string());
+                            ctx.add_context("endpoint", "/open-apis/authen/v1/user_info");
+                            ctx
+                        },
+                    })
+                },
+                Some(ErrorCode::AccessTokenExpiredV2) => {
+                    Err(CoreError::Authentication {
+                        message: "用户访问令牌已过期".to_string(),
+                        code: ErrorCode::AccessTokenExpiredV2,
+                        ctx: {
+                            let mut ctx = openlark_core::error::ErrorContext::new();
+                            if let Some(ref req_id) = response.raw_response.request_id {
+                                ctx.set_request_id(req_id);
+                            }
+                            ctx.add_context("feishu_code", feishu_code.to_string());
+                            ctx.add_context("endpoint", "/open-apis/authen/v1/user_info");
+                            ctx
+                        },
+                    })
+                },
+                Some(ErrorCode::UserSessionInvalid) => {
+                    Err(CoreError::Authentication {
+                        message: "用户会话失效".to_string(),
+                        code: ErrorCode::UserSessionInvalid,
+                        ctx: {
+                            let mut ctx = openlark_core::error::ErrorContext::new();
+                            if let Some(ref req_id) = response.raw_response.request_id {
+                                ctx.set_request_id(req_id);
+                            }
+                            ctx.add_context("feishu_code", feishu_code.to_string());
+                            ctx.add_context("endpoint", "/open-apis/authen/v1/user_info");
+                            ctx
+                        },
+                    })
+                },
+                Some(code) => {
+                    Err(CoreError::Api(openlark_core::error::ApiError {
+                        status: feishu_code as u16,
+                        endpoint: "/open-apis/authen/v1/user_info".into(),
+                        message: error_message,
+                        source: None,
+                        code,
+                        ctx: {
+                            let mut ctx = openlark_core::error::ErrorContext::new();
+                            if let Some(ref req_id) = response.raw_response.request_id {
+                                ctx.set_request_id(req_id);
+                            }
+                            ctx.add_context("feishu_code", feishu_code.to_string());
+                            ctx
+                        },
+                    }))
+                },
+                None => {
+                    // 回退到HTTP状态码或内部业务码
+                    Err(CoreError::Api(openlark_core::error::ApiError {
+                        status: feishu_code as u16,
+                        endpoint: "/open-apis/authen/v1/user_info".into(),
+                        message: error_message,
+                        source: None,
+                        code: ErrorCode::from_http_status(feishu_code as u16),
+                        ctx: {
+                            let mut ctx = openlark_core::error::ErrorContext::new();
+                            if let Some(ref req_id) = response.raw_response.request_id {
+                                ctx.set_request_id(req_id);
+                            }
+                            ctx.add_context("feishu_code", feishu_code.to_string());
+                            ctx
+                        },
+                    }))
+                }
             }
         }
     }
