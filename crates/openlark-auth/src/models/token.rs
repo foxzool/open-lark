@@ -1,6 +1,7 @@
 //! 令牌相关数据模型
 
 use serde::{Deserialize, Serialize};
+use openlark_core::api::ApiResponseTrait;
 
 /// 租户访问令牌响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -157,3 +158,13 @@ pub struct AuthorizationIndexResponse {
     /// 过期时间
     pub expire_in: i32,
 }
+
+// 为所有响应类型实现 ApiResponseTrait
+impl ApiResponseTrait for TenantAccessTokenResponse {}
+impl ApiResponseTrait for AppAccessTokenResponse {}
+impl ApiResponseTrait for AppTicketResponse {}
+impl ApiResponseTrait for UserAccessTokenResponse {}
+impl ApiResponseTrait for RefreshUserAccessTokenResponse {}
+impl ApiResponseTrait for OidcAccessTokenResponse {}
+impl ApiResponseTrait for OidcRefreshAccessTokenResponse {}
+impl ApiResponseTrait for AuthorizationIndexResponse {}
