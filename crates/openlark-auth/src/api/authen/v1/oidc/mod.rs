@@ -1,117 +1,32 @@
-//! OIDC API实现
+//! OIDC认证相关API模块
+//!
+//! 本模块包含OIDC（OpenID Connect）相关的认证API实现
 
-use openlark_core::{
-    config::Config,
-    api::{ApiRequest, RequestData},
-    prelude::Transport,
-    error::{SDKResult, api_error},
-};
-use crate::{models::authen::*};
+pub mod access_token;
+pub mod refresh_access_token;
 
-// 类型别名
-pub type AuthResult<T> = SDKResult<T>;
+// 重新导出构建器，方便外部使用
+pub use access_token::OidcAccessTokenBuilder;
+pub use refresh_access_token::OidcRefreshAccessTokenBuilder;
 
-// OIDC访问令牌构建器
-pub struct OidcAccessTokenBuilder {
-    config: Config,
-    request: OidcUserAccessTokenRequest,
+/// OIDC认证服务
+#[derive(Debug)]
+pub struct OidcService {
+    config: openlark_core::config::Config,
 }
 
-impl OidcAccessTokenBuilder {
-    pub fn new(config: Config) -> Self {
-        Self {
-            config,
-            request: OidcUserAccessTokenRequest {
-                code: String::new(),
-                code_verifier: None,
-                redirect_uri: None,
-                client_id: None,
-                client_secret: None,
-                grant_type: Some("authorization_code".to_string()),
-            },
-        }
+impl OidcService {
+    pub fn new(config: openlark_core::config::Config) -> Self {
+        Self { config }
     }
 
-    pub fn code(mut self, code: impl Into<String>) -> Self {
-        self.request.code = code.into();
-        self
+    /// 获取OIDC用户访问令牌
+    pub fn access_token(&self) -> OidcAccessTokenBuilder {
+        OidcAccessTokenBuilder::new(self.config.clone())
     }
 
-    pub fn redirect_uri(mut self, uri: impl Into<String>) -> Self {
-        self.request.redirect_uri = Some(uri.into());
-        self
-    }
-
-    pub async fn send(self) -> AuthResult<UserAccessTokenResponse> {
-        // 构建API请求
-        let url = format!("{}/open-apis/authen/v1/oidc/access_token", self.config.base_url);
-
-        let request: ApiRequest<UserAccessTokenResponse> = ApiRequest::post(&url)
-            .body(RequestData::Json(serde_json::to_value(&self.request)?))
-            .header("Content-Type", "application/json");
-
-        // 使用Transport发送请求
-        let response = Transport::request(request, &self.config, None).await?;
-
-        // 处理响应
-        if response.raw_response.code == 0 {
-            Ok(response.data.unwrap())
-        } else {
-            Err(api_error(
-                response.raw_response.code as u16,
-                "/open-apis/authen/v1/oidc/access_token",
-                response.raw_response.msg.clone(),
-                None::<String>
-            ))
-        }
-    }
-}
-
-// OIDC刷新令牌构建器
-pub struct OidcRefreshAccessTokenBuilder {
-    config: Config,
-    request: OidcRefreshUserAccessTokenRequest,
-}
-
-impl OidcRefreshAccessTokenBuilder {
-    pub fn new(config: Config) -> Self {
-        Self {
-            config,
-            request: OidcRefreshUserAccessTokenRequest {
-                refresh_token: String::new(),
-                client_id: None,
-                client_secret: None,
-                grant_type: Some("refresh_token".to_string()),
-            },
-        }
-    }
-
-    pub fn refresh_token(mut self, token: impl Into<String>) -> Self {
-        self.request.refresh_token = token.into();
-        self
-    }
-
-    pub async fn send(self) -> AuthResult<UserAccessTokenResponse> {
-        // 构建API请求
-        let url = format!("{}/open-apis/authen/v1/oidc/refresh_access_token", self.config.base_url);
-
-        let request: ApiRequest<UserAccessTokenResponse> = ApiRequest::post(&url)
-            .body(RequestData::Json(serde_json::to_value(&self.request)?))
-            .header("Content-Type", "application/json");
-
-        // 使用Transport发送请求
-        let response = Transport::request(request, &self.config, None).await?;
-
-        // 处理响应
-        if response.raw_response.code == 0 {
-            Ok(response.data.unwrap())
-        } else {
-            Err(api_error(
-                response.raw_response.code as u16,
-                "/open-apis/authen/v1/oidc/refresh_access_token",
-                response.raw_response.msg.clone(),
-                None::<String>
-            ))
-        }
+    /// 刷新OIDC用户访问令牌
+    pub fn refresh_access_token(&self) -> OidcRefreshAccessTokenBuilder {
+        OidcRefreshAccessTokenBuilder::new(self.config.clone())
     }
 }
