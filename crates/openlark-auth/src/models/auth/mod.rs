@@ -13,6 +13,8 @@ pub struct AccessTokenResponse {
     pub app_access_token: String,
     /// 令牌有效期（秒）
     pub expires_in: u64,
+    /// 租户标识（租户在飞书上的唯一标识）
+    pub tenant_key: String,
     /// 令牌类型
     pub token_type: Option<String>,
 }
@@ -78,6 +80,8 @@ pub struct TenantAccessTokenRequest {
     pub app_id: String,
     /// 应用密钥
     pub app_secret: String,
+    /// 应用票据（通过事件推送获得）
+    pub app_ticket: String,
 }
 
 /// 应用票据重发请求
@@ -142,12 +146,14 @@ mod tests {
         let response = AccessTokenResponse {
             app_access_token: "test_token".to_string(),
             expires_in: 3600,
+            tenant_key: "test_tenant".to_string(),
             token_type: Some("Bearer".to_string()),
         };
 
         let json = serde_json::to_string(&response).unwrap();
         assert!(json.contains("test_token"));
         assert!(json.contains("3600"));
+        assert!(json.contains("test_tenant"));
     }
 
     #[test]

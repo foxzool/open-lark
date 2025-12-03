@@ -8,9 +8,10 @@ use openlark_core::{
     config::Config,
     api::{ApiRequest, RequestData},
     prelude::Transport,
-    error::{SDKResult, CoreError, ErrorCode},
+    error::SDKResult,
 };
 use crate::models::auth::*;
+use crate::utils::error_handler::handle_api_response_owned;
 
 /// 应用访问令牌构建器（商店应用）
 #[derive(Debug)]
@@ -52,80 +53,7 @@ impl AppAccessTokenBuilder {
 
         let response = Transport::request(request, &self.config, None).await?;
 
-        if response.raw_response.code == 0 {
-            Ok(response.data.unwrap())
-        } else {
-            // 智能映射飞书错误码（优先级：飞书通用码 > HTTP状态 > 内部码）
-            let feishu_code = response.raw_response.code;
-            let error_message = response.raw_response.msg.clone();
-
-            match ErrorCode::from_feishu_code(feishu_code) {
-                Some(ErrorCode::AppAccessTokenInvalid) => {
-                    Err(CoreError::Authentication {
-                        message: "商店应用访问令牌格式或内容无效".to_string(),
-                        code: ErrorCode::AppAccessTokenInvalid,
-                        ctx: {
-                            let mut ctx = openlark_core::error::ErrorContext::new();
-                            if let Some(ref req_id) = response.raw_response.request_id {
-                                ctx.set_request_id(req_id);
-                            }
-                            ctx.add_context("feishu_code", feishu_code.to_string());
-                            ctx.add_context("endpoint", "/open-apis/auth/v3/app_access_token");
-                            ctx
-                        },
-                    })
-                },
-                Some(ErrorCode::PermissionMissing) => {
-                    Err(CoreError::Authentication {
-                        message: "应用权限不足，无法获取应用访问令牌".to_string(),
-                        code: ErrorCode::PermissionMissing,
-                        ctx: {
-                            let mut ctx = openlark_core::error::ErrorContext::new();
-                            if let Some(ref req_id) = response.raw_response.request_id {
-                                ctx.set_request_id(req_id);
-                            }
-                            ctx.add_context("feishu_code", feishu_code.to_string());
-                            ctx.add_context("endpoint", "/open-apis/auth/v3/app_access_token");
-                            ctx
-                        },
-                    })
-                },
-                Some(code) => {
-                    Err(CoreError::Api(openlark_core::error::ApiError {
-                        status: feishu_code as u16,
-                        endpoint: "/open-apis/auth/v3/app_access_token".into(),
-                        message: error_message,
-                        source: None,
-                        code,
-                        ctx: {
-                            let mut ctx = openlark_core::error::ErrorContext::new();
-                            if let Some(ref req_id) = response.raw_response.request_id {
-                                ctx.set_request_id(req_id);
-                            }
-                            ctx.add_context("feishu_code", feishu_code.to_string());
-                            ctx
-                        },
-                    }))
-                },
-                None => {
-                    // 回退到HTTP状态码或内部业务码
-                    Err(CoreError::Api(openlark_core::error::ApiError {
-                        status: feishu_code as u16,
-                        endpoint: "/open-apis/auth/v3/app_access_token".into(),
-                        message: error_message,
-                        source: None,
-                        code: ErrorCode::from_http_status(feishu_code as u16),
-                        ctx: {
-                            let mut ctx = openlark_core::error::ErrorContext::new();
-                            if let Some(ref req_id) = response.raw_response.request_id {
-                                ctx.set_request_id(req_id);
-                            }
-                            ctx.add_context("feishu_code", feishu_code.to_string());
-                            ctx
-                        },
-                    }))
-                }
-            }
-        }
+        // 使用优化的错误处理器，大幅简化错误处理逻辑（从73行减少到3行）
+        handle_api_response_owned(response, "/open-apis/auth/v3/app_access_token".to_string())
     }
 }
