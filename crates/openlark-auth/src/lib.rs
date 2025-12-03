@@ -104,6 +104,7 @@ pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::marker::PhantomData;
 
     #[test]
     fn test_version() {
@@ -112,10 +113,16 @@ mod tests {
 
     #[test]
     fn test_prelude_imports() {
-        // 确保prelude中的类型可以正常导入
-        use crate::prelude::*;
+        // 确保prelude中的类型可以正常导入，避免unused import警告
+        use crate::prelude::{AuthService, AuthenService, OAuthService, AuthResult};
 
         // 这里只是验证类型导入，不进行实际操作
         let _: String = VERSION.to_string();
+
+        // 验证导入的类型存在
+        let _ = PhantomData::<AuthService>;
+        let _ = PhantomData::<AuthenService>;
+        let _ = PhantomData::<OAuthService>;
+        let _: PhantomData::<AuthResult<()>>;
     }
 }
