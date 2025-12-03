@@ -2,7 +2,6 @@
 
 use crate::error::{AuthError, AuthResult};
 use regex::Regex;
-use tracing::debug;
 use url::Url;
 
 /// 验证工具
@@ -33,10 +32,7 @@ impl ValidatorUtils {
         field_name: &str,
     ) -> AuthResult<()> {
         if !Self::validate_length(value, min, max) {
-            return Err(AuthError::ValidationError(format!(
-                "{} length must be between {} and {} characters",
-                field_name, min, max
-            )));
+            return Err(crate::error::validation_error(field_name, format!("length must be between {} and {} characters", min, max)));
         }
         Ok(())
     }
@@ -56,7 +52,7 @@ impl ValidatorUtils {
     /// 验证邮箱格式并返回错误
     pub fn validate_email(email: &str) -> AuthResult<()> {
         if !Self::is_valid_email(email) {
-            return Err(AuthError::ValidationError(
+            return Err(crate::error::validation_error(
                 "Invalid email format".to_string(),
             ));
         }
@@ -75,7 +71,7 @@ impl ValidatorUtils {
     /// 验证URL格式并返回错误
     pub fn validate_url(url: &str) -> AuthResult<()> {
         if !Self::is_valid_url(url) {
-            return Err(AuthError::ValidationError("Invalid URL format".to_string()));
+            return Err(crate::error::validation_error("url", "Invalid URL format"));
         }
         Ok(())
     }
@@ -92,7 +88,7 @@ impl ValidatorUtils {
     /// 验证HTTPS URL并返回错误
     pub fn validate_https_url(url: &str) -> AuthResult<()> {
         if !Self::is_valid_https_url(url) {
-            return Err(AuthError::ValidationError(
+            return Err(crate::error::validation_error(
                 "URL must use HTTPS protocol".to_string(),
             ));
         }
@@ -113,7 +109,7 @@ impl ValidatorUtils {
     /// 验证手机号格式并返回错误
     pub fn validate_phone_cn(phone: &str) -> AuthResult<()> {
         if !Self::is_valid_phone_cn(phone) {
-            return Err(AuthError::ValidationError(
+            return Err(crate::error::validation_error(
                 "Invalid Chinese phone number format".to_string(),
             ));
         }
@@ -132,7 +128,7 @@ impl ValidatorUtils {
     /// 验证IP地址格式（IPv4）并返回错误
     pub fn validate_ipv4(ip: &str) -> AuthResult<()> {
         if !Self::is_valid_ipv4(ip) {
-            return Err(AuthError::ValidationError(
+            return Err(crate::error::validation_error(
                 "Invalid IPv4 address format".to_string(),
             ));
         }
@@ -151,7 +147,7 @@ impl ValidatorUtils {
     /// 验证IP地址格式（IPv6）并返回错误
     pub fn validate_ipv6(ip: &str) -> AuthResult<()> {
         if !Self::is_valid_ipv6(ip) {
-            return Err(AuthError::ValidationError(
+            return Err(crate::error::validation_error(
                 "Invalid IPv6 address format".to_string(),
             ));
         }
@@ -166,7 +162,7 @@ impl ValidatorUtils {
     /// 验证IP地址格式并返回错误
     pub fn validate_ip(ip: &str) -> AuthResult<()> {
         if !Self::is_valid_ip(ip) {
-            return Err(AuthError::ValidationError(
+            return Err(crate::error::validation_error(
                 "Invalid IP address format".to_string(),
             ));
         }
@@ -185,7 +181,7 @@ impl ValidatorUtils {
     /// 验证UUID格式并返回错误
     pub fn validate_uuid(uuid: &str) -> AuthResult<()> {
         if !Self::is_valid_uuid(uuid) {
-            return Err(AuthError::ValidationError(
+            return Err(crate::error::validation_error(
                 "Invalid UUID format".to_string(),
             ));
         }
@@ -206,7 +202,7 @@ impl ValidatorUtils {
     /// 验证应用ID格式并返回错误
     pub fn validate_app_id(app_id: &str) -> AuthResult<()> {
         if !Self::is_valid_app_id(app_id) {
-            return Err(AuthError::ValidationError(
+            return Err(crate::error::validation_error(
                 "Invalid Feishu app ID format".to_string(),
             ));
         }
@@ -253,7 +249,7 @@ impl ValidatorUtils {
     /// 验证访问令牌格式并返回错误
     pub fn validate_access_token(token: &str) -> AuthResult<()> {
         if !Self::is_valid_access_token(token) {
-            return Err(AuthError::ValidationError(
+            return Err(crate::error::validation_error(
                 "Invalid access token format".to_string(),
             ));
         }
@@ -273,7 +269,7 @@ impl ValidatorUtils {
     /// 验证刷新令牌格式并返回错误
     pub fn validate_refresh_token(token: &str) -> AuthResult<()> {
         if !Self::is_valid_refresh_token(token) {
-            return Err(AuthError::ValidationError(
+            return Err(crate::error::validation_error(
                 "Invalid refresh token format".to_string(),
             ));
         }
@@ -294,7 +290,7 @@ impl ValidatorUtils {
     /// 验证状态参数格式并返回错误
     pub fn validate_state(state: &str) -> AuthResult<()> {
         if !Self::is_valid_state(state) {
-            return Err(AuthError::ValidationError(
+            return Err(crate::error::validation_error(
                 "Invalid OAuth state parameter format".to_string(),
             ));
         }
@@ -317,7 +313,7 @@ impl ValidatorUtils {
     /// 验证权限范围格式并返回错误
     pub fn validate_scope(scope: &str) -> AuthResult<()> {
         if !Self::is_valid_scope(scope) {
-            return Err(AuthError::ValidationError(
+            return Err(crate::error::validation_error(
                 "Invalid permission scope format".to_string(),
             ));
         }
@@ -343,7 +339,7 @@ impl ValidatorUtils {
     /// 验证重定向URI格式并返回错误
     pub fn validate_redirect_uri(uri: &str) -> AuthResult<()> {
         if !Self::is_valid_redirect_uri(uri) {
-            return Err(AuthError::ValidationError(
+            return Err(crate::error::validation_error(
                 "Invalid redirect URI format".to_string(),
             ));
         }
@@ -365,7 +361,7 @@ impl ValidatorUtils {
     /// 验证租户密钥格式并返回错误
     pub fn validate_tenant_key(tenant_key: &str) -> AuthResult<()> {
         if !Self::is_valid_tenant_key(tenant_key) {
-            return Err(AuthError::ValidationError(
+            return Err(crate::error::validation_error(
                 "Invalid tenant key format".to_string(),
             ));
         }
@@ -386,7 +382,7 @@ impl ValidatorUtils {
     /// 验证用户ID格式并返回错误
     pub fn validate_user_id(user_id: &str) -> AuthResult<()> {
         if !Self::is_valid_user_id(user_id) {
-            return Err(AuthError::ValidationError(
+            return Err(crate::error::validation_error(
                 "Invalid user ID format".to_string(),
             ));
         }
@@ -405,7 +401,7 @@ impl ValidatorUtils {
     /// 验证时间戳格式并返回错误
     pub fn validate_timestamp(timestamp: u64) -> AuthResult<()> {
         if !Self::is_valid_timestamp(timestamp) {
-            return Err(AuthError::ValidationError(
+            return Err(crate::error::validation_error(
                 "Invalid timestamp format or range".to_string(),
             ));
         }
@@ -424,7 +420,7 @@ impl ValidatorUtils {
     /// 验证JSON格式并返回错误
     pub fn validate_json(json: &str) -> AuthResult<()> {
         if !Self::is_valid_json(json) {
-            return Err(AuthError::ValidationError(
+            return Err(crate::error::validation_error(
                 "Invalid JSON format".to_string(),
             ));
         }
@@ -437,13 +433,14 @@ impl ValidatorUtils {
             return false;
         }
 
-        base64::decode(data).is_ok()
+        use base64::{Engine as _, engine::general_purpose};
+        general_purpose::STANDARD.decode(data).is_ok()
     }
 
     /// 验证Base64格式并返回错误
     pub fn validate_base64(data: &str) -> AuthResult<()> {
         if !Self::is_valid_base64(data) {
-            return Err(AuthError::ValidationError(
+            return Err(crate::error::validation_error(
                 "Invalid Base64 format".to_string(),
             ));
         }
@@ -462,7 +459,7 @@ impl ValidatorUtils {
     /// 验证十六进制字符串并返回错误
     pub fn validate_hex(hex: &str) -> AuthResult<()> {
         if !Self::is_valid_hex(hex) {
-            return Err(AuthError::ValidationError(
+            return Err(crate::error::validation_error(
                 "Invalid hexadecimal format".to_string(),
             ));
         }
