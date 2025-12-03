@@ -38,16 +38,16 @@ impl AuthV3Service {
     pub fn tenant_access_token(
         &self,
     ) -> crate::auth::v3::auth::TenantAccessTokenService {
-        crate::auth::v3::auth::TenantAccessTokenService::new(self.config.clone())
+        crate::auth::v3::auth::TenantAccessTokenService::from_auth_config((*self.config).clone())
     }
 
     /// 应用访问令牌服务
     pub fn app_access_token(&self) -> crate::auth::v3::auth::AppAccessTokenService {
-        crate::auth::v3::auth::AppAccessTokenService::new(self.config.clone())
+        crate::auth::v3::auth::AppAccessTokenService::from_auth_config((*self.config).clone())
     }
 
     /// 应用票据服务
     pub fn app_ticket(&self) -> crate::auth::v3::auth::AppTicketService {
-        crate::auth::v3::auth::AppTicketService::new(self.config.clone())
+        crate::auth::v3::auth::AppTicketService::from_auth_config((*self.config).clone())
     }
 }
