@@ -72,6 +72,32 @@ impl AuthorizationIndexBuilder {
         self
     }
 
+    /// 构建授权URL（用于测试和调试）
+    pub fn build_url(&self) -> String {
+        let base_url = &self.config.base_url;
+        let mut url = format!("{}/open-apis/authen/v1/authorize", base_url);
+        let mut params = Vec::new();
+
+        // 添加查询参数
+        params.push(format!("app_id={}", urlencoding::encode(&self.app_id)));
+        params.push(format!("redirect_uri={}", urlencoding::encode(&self.redirect_uri)));
+
+        if let Some(scope) = &self.scope {
+            params.push(format!("scope={}", urlencoding::encode(scope)));
+        }
+        if let Some(state) = &self.state {
+            params.push(format!("state={}", urlencoding::encode(state)));
+        }
+
+        // 组合URL和参数
+        if !params.is_empty() {
+            url.push('?');
+            url.push_str(&params.join("&"));
+        }
+
+        url
+    }
+
     /// 发送请求获取登录预授权码
     pub async fn send(self) -> Result<AuthorizationIndexResponse, Box<dyn std::error::Error>> {
         let url = format!("{}/open-apis/authen/v1/authorize", self.config.base_url);
