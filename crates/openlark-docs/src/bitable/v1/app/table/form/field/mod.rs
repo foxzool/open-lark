@@ -1,4 +1,6 @@
 pub mod list;
+pub mod models;
+pub mod patch;
 pub mod update;
 
 use openlark_core::config::Config;
@@ -7,6 +9,10 @@ use openlark_core::config::Config;
 pub use list::{
     list_form_field_questions, FormFieldQuestion, ListFormFieldQuestionRequest,
     ListFormFieldQuestionRequestBuilder, ListFormFieldQuestionResponse,
+};
+pub use models::{PatchFormFieldRequest};
+pub use patch::{
+    PatchFormFieldQuestionV1Request, PatchFormFieldQuestionV1Response,
 };
 pub use update::{
     update_form_field_question, UpdateFormFieldQuestionRequest,
