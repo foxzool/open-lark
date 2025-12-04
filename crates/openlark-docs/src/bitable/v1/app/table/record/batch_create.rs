@@ -1,10 +1,10 @@
 //! 批量创建数据记录模块
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
     config::Config,
+    error::SDKResult,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -53,21 +53,36 @@ impl BatchCreateRecordRequest {
     }
 
     pub async fn execute(self) -> SDKResult<BatchCreateRecordResponse> {
-        let url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_create",
-            self.app_token, self.table_id
-        );
+        // 参数验证
+        if self.app_token.trim().is_empty() {
+            return Err(openlark_core::error::validation_error("app_token", "应用token不能为空"));
+        }
 
-        // 创建新的API请求，用于Transport
-        let api_request = ApiRequest::<()>::post(&url);
+        if self.table_id.trim().is_empty() {
+            return Err(openlark_core::error::validation_error("table_id", "数据表ID不能为空"));
+        }
 
+        if self.records.is_empty() {
+            return Err(openlark_core::error::validation_error("records", "记录列表不能为空"));
+        }
+
+        // 构建API路径
+        let path = format!("/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_create", self.app_token, self.table_id);
+
+        // 创建API请求
+        let api_request: ApiRequest<BatchCreateRecordResponse> =
+            ApiRequest::post(&format!("https://open.feishu.cn{}", path));
+
+        // 构建请求体
         let body = serde_json::json!({
             "records": self.records
         });
 
-        let request_for_transport = api_request.body(body);
+        // 设置请求体
+        let api_request = api_request.body(RequestData::Binary(serde_json::to_vec(&body)?));
 
-        let response = Transport::request(request_for_transport, &self.config, None).await?;
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
         response.data.ok_or_else(|| {
             openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
         })
@@ -80,15 +95,24 @@ pub struct Record {
     pub fields: serde_json::Value,
 }
 
-/// 批量创建记录响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BatchCreateRecordResponse {
+/// 批量创建记录数据
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct BatchCreateRecordData {
+    /// 创建的记录列表
     pub records: Vec<BatchCreateRecordResult>,
+    /// 记录总数
     pub total: i32,
 }
 
+/// 批量创建记录响应
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct BatchCreateRecordResponse {
+    /// 批量创建记录数据
+    pub data: BatchCreateRecordData,
+}
+
 /// 批量创建记录结果
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BatchCreateRecordResult {
     pub record_id: String,
     pub fields: serde_json::Value,

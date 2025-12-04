@@ -1,7 +1,7 @@
 //! Bitable V1 列出记录API
 
 use openlark_core::{
-    api::{ApiRequest, RequestData},
+    api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
     config::Config,
     error::{validation_error, SDKResult},
     http::Transport,
@@ -126,46 +126,43 @@ impl ListRecordRequest {
             return Err(validation_error("table_id", "数据表ID不能为空"));
         }
 
-        // 构建完整的API URL
-        let api_url = format!(
-            "{}/open-apis/bitable/v1/apps/{}/tables/{}/records",
-            self.config.base_url, self.app_token, self.table_id
-        );
+        // 验证分页大小
+        if let Some(page_size) = self.page_size {
+            if page_size <= 0 {
+                return Err(validation_error("page_size", "分页大小必须大于0"));
+            }
+        }
 
-        // 设置API URL
-        let mut api_request = self.api_request;
-        api_request.url = api_url;
+        // 构建API路径
+        let path = format!("/open-apis/bitable/v1/apps/{}/tables/{}/records", self.app_token, self.table_id);
+
+        // 创建API请求
+        let mut api_request: ApiRequest<ListRecordResponse> =
+            ApiRequest::get(&format!("https://open.feishu.cn{}", path));
 
         // 构建查询参数
-        let mut query_params = Vec::new();
-
         if let Some(ref user_id_type) = self.user_id_type {
-            query_params.push(format!("user_id_type={}", user_id_type));
+            api_request = api_request.query("user_id_type", user_id_type);
         }
 
         if let Some(ref page_token) = self.page_token {
-            query_params.push(format!("page_token={}", page_token));
+            api_request = api_request.query("page_token", page_token);
         }
 
         if let Some(page_size) = self.page_size {
-            query_params.push(format!("page_size={}", page_size));
+            api_request = api_request.query("page_size", &page_size.to_string());
         }
 
         if let Some(ref view_id) = self.view_id {
-            query_params.push(format!("view_id={}", view_id));
+            api_request = api_request.query("view_id", view_id);
         }
 
         if let Some(ref field_names) = self.field_names {
-            query_params.push(format!("field_names={}", field_names.join(",")));
+            api_request = api_request.query("field_names", &field_names.join(","));
         }
 
         if let Some(automatic) = self.automatic {
-            query_params.push(format!("automatic={}", automatic));
-        }
-
-        // 添加查询参数到URL
-        if !query_params.is_empty() {
-            api_request.url = format!("{}?{}", api_request.url, query_params.join("&"));
+            api_request = api_request.query("automatic", &automatic.to_string());
         }
 
         // 构建请求体
@@ -175,26 +172,12 @@ impl ListRecordRequest {
         };
 
         // 设置请求体
-        api_request.body = Some(RequestData::Json(serde_json::to_value(&request_body)?));
+        api_request = api_request.body(RequestData::Binary(serde_json::to_vec(&request_body)?));
 
-        // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
-        let request_for_transport: ApiRequest<()> = ApiRequest::get(api_request.url.clone())
-            .body(api_request.body.unwrap_or(RequestData::Empty));
-
-        let response = Transport::request(request_for_transport, &self.config, None).await?;
-
-        // 解析响应数据
-        let list_data: ListRecordData = response
-            .data
-            .and_then(|data| serde_json::from_value(data).ok())
-            .ok_or_else(|| validation_error("解析列出记录响应失败", "响应数据格式不正确"))?;
-
-        Ok(ListRecordResponse {
-            items: list_data.items,
-            has_more: list_data.has_more,
-            page_token: list_data.page_token,
-            total: list_data.total,
-            success: response.raw_response.is_success(),
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            validation_error("响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }
@@ -327,18 +310,9 @@ struct ListRecordRequestBody {
     filter: Option<FilterInfo>,
 }
 
-/// 列出记录数据（内部使用）
-#[derive(Debug, Deserialize)]
-struct ListRecordData {
-    items: Vec<Record>,
-    has_more: bool,
-    page_token: Option<String>,
-    total: i32,
-}
-
-/// 列出记录响应
+/// 列出记录数据
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct ListRecordResponse {
+pub struct ListRecordData {
     /// 记录列表
     pub items: Vec<Record>,
     /// 是否还有更多项
@@ -347,8 +321,19 @@ pub struct ListRecordResponse {
     pub page_token: Option<String>,
     /// 总数
     pub total: i32,
-    /// 操作结果
-    pub success: bool,
+}
+
+/// 列出记录响应
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ListRecordResponse {
+    /// 记录列表数据
+    pub data: ListRecordData,
+}
+
+impl ApiResponseTrait for ListRecordResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 impl FilterInfo {

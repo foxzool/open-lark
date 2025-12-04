@@ -33,8 +33,8 @@ pub struct CreateRoleV2Request {
 /// 新增自定义角色响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateRoleV2Response {
+    /// 角色信息
     pub data: Role,
-    pub success: bool,
 }
 
 impl ApiResponseTrait for CreateRoleV2Response {

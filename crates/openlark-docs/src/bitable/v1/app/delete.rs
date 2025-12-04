@@ -1,7 +1,7 @@
 //! Bitable V1 删除多维表格API
 
 use openlark_core::{
-    api::{ApiRequest, RequestData},
+    api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
     config::Config,
     error::validation_error,
     http::Transport,
@@ -21,12 +21,24 @@ pub struct DeleteAppV1Request {
     config: Config,
 }
 
+/// 删除多维表格数据
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct DeleteAppData {
+    /// 应用token
+    pub app_token: String,
+}
+
 /// 删除多维表格响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DeleteAppV1Response {
-    /// 是否成功
-    pub data: bool,
-    pub success: bool,
+    /// 删除多维表格数据
+    pub data: DeleteAppData,
+}
+
+impl ApiResponseTrait for DeleteAppV1Response {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 impl DeleteAppV1Request {
@@ -47,32 +59,22 @@ impl DeleteAppV1Request {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<DeleteAppV1Response> {
-        // 构建完整的API URL
-        let api_url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}",
-            self.app_token
-        );
+        // 参数验证
+        if self.app_token.trim().is_empty() {
+            return Err(validation_error("app_token", "应用token不能为空"));
+        }
 
-        // 设置API URL
-        let mut api_request = self.api_request;
-        api_request.url = api_url;
+        // 构建API路径
+        let path = format!("/open-apis/bitable/v1/apps/{}", self.app_token);
 
-        // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
-        let request_for_transport: ApiRequest<()> = ApiRequest::delete(api_request.url.clone())
-            .body(api_request.body.unwrap_or(RequestData::Empty));
+        // 创建API请求
+        let api_request: ApiRequest<DeleteAppV1Response> =
+            ApiRequest::delete(&format!("https://open.feishu.cn{}", path));
 
-        let config = &self.config;
-        let response = Transport::request(request_for_transport, config, None).await?;
-
-        // 解析响应
-        let data: bool = response
-            .data
-            .and_then(|data| serde_json::from_value(data).ok())
-            .ok_or_else(|| validation_error("解析失败", "数据格式不正确"))?;
-
-        Ok(DeleteAppV1Response {
-            data,
-            success: response.raw_response.is_success(),
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            validation_error("响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }

@@ -1,7 +1,7 @@
 //! Bitable V1 列出视图API
 
 use openlark_core::{
-    api::{ApiRequest, RequestData},
+    api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
     config::Config,
     error::{validation_error, SDKResult},
     http::Transport,
@@ -91,53 +91,30 @@ impl ListViewsRequest {
             }
         }
 
-        // 构建完整的API URL
-        let api_url = format!(
-            "{}/open-apis/bitable/v1/apps/{}/tables/{}/views",
-            self.config.base_url, self.app_token, self.table_id
-        );
+        // 构建API路径
+        let path = format!("/open-apis/bitable/v1/apps/{}/tables/{}/views", self.app_token, self.table_id);
 
-        // 设置API URL
-        let mut api_request = self.api_request;
-        api_request.url = api_url;
+        // 创建API请求
+        let mut api_request: ApiRequest<ListViewsResponse> =
+            ApiRequest::get(&format!("https://open.feishu.cn{}", path));
 
         // 构建查询参数
-        let mut query_params = Vec::new();
-
         if let Some(ref user_id_type) = self.user_id_type {
-            query_params.push(format!("user_id_type={}", user_id_type));
+            api_request = api_request.query("user_id_type", user_id_type);
         }
 
         if let Some(ref page_token) = self.page_token {
-            query_params.push(format!("page_token={}", page_token));
+            api_request = api_request.query("page_token", page_token);
         }
 
         if let Some(page_size) = self.page_size {
-            query_params.push(format!("page_size={}", page_size));
+            api_request = api_request.query("page_size", &page_size.to_string());
         }
 
-        // 添加查询参数到URL
-        if !query_params.is_empty() {
-            api_request.url = format!("{}?{}", api_request.url, query_params.join("&"));
-        }
-
-        // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
-        let request_for_transport: ApiRequest<()> =
-            ApiRequest::get(api_request.url.clone()).body(RequestData::Empty);
-
-        let response = Transport::request(request_for_transport, &self.config, None).await?;
-
-        // 解析响应数据
-        let response_data: ListViewsResponseData = response
-            .data
-            .and_then(|data| serde_json::from_value(data).ok())
-            .ok_or_else(|| validation_error("解析获取视图列表响应失败", "响应数据格式不正确"))?;
-
-        Ok(ListViewsResponse {
-            has_more: response_data.has_more,
-            page_token: response_data.page_token,
-            items: response_data.items,
-            success: response.raw_response.is_success(),
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            validation_error("响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }
@@ -194,19 +171,19 @@ impl ListViewsRequestBuilder {
 /// 列出视图响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListViewsResponse {
-    /// 是否还有更多项
-    pub has_more: bool,
-    /// 分页标记
-    pub page_token: Option<String>,
-    /// 视图信息列表
-    pub items: Vec<View>,
-    /// 操作结果
-    pub success: bool,
+    /// 视图列表数据
+    pub data: ListViewsData,
 }
 
-/// 列出视图响应数据（内部使用）
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ListViewsResponseData {
+impl ApiResponseTrait for ListViewsResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 列出视图数据
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ListViewsData {
     /// 是否还有更多项
     pub has_more: bool,
     /// 分页标记

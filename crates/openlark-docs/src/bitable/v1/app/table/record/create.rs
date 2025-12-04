@@ -1,7 +1,7 @@
 //! Bitable V1 创建记录API
 
 use openlark_core::{
-    api::{ApiRequest, RequestData},
+    api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
     config::Config,
     error::{validation_error, SDKResult},
     http::Transport,
@@ -12,8 +12,6 @@ use serde_json::Value;
 /// 创建记录请求
 #[derive(Debug, Clone)]
 pub struct CreateRecordRequest {
-    /// 配置信息
-    config: Config,
     api_request: ApiRequest<CreateRecordResponse>,
     /// 多维表格的 app_token
     app_token: String,
@@ -25,19 +23,21 @@ pub struct CreateRecordRequest {
     client_token: Option<String>,
     /// 记录数据
     fields: Value,
+    /// 配置信息
+    config: Config,
 }
 
 impl CreateRecordRequest {
     /// 创建记录请求
     pub fn new(config: Config) -> Self {
         Self {
-            config,
-            api_request: ApiRequest::post(""),
+            api_request: ApiRequest::post("/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records"),
             app_token: String::new(),
             table_id: String::new(),
             user_id_type: None,
             client_token: None,
             fields: Value::Object(Default::default()),
+            config,
         }
     }
 
@@ -82,30 +82,20 @@ impl CreateRecordRequest {
             return Err(validation_error("table_id", "数据表ID不能为空"));
         }
 
-        // 构建完整的API URL
-        let api_url = format!(
-            "{}/open-apis/bitable/v1/apps/{}/tables/{}/records",
-            self.config.base_url, self.app_token, self.table_id
-        );
+        // 构建API路径
+        let path = format!("/open-apis/bitable/v1/apps/{}/tables/{}/records", self.app_token, self.table_id);
 
-        // 设置API URL
-        let mut api_request = self.api_request;
-        api_request.url = api_url;
+        // 创建API请求
+        let mut api_request: ApiRequest<CreateRecordResponse> =
+            ApiRequest::post(&format!("https://open.feishu.cn{}", path));
 
         // 构建查询参数
-        let mut query_params = Vec::new();
-
         if let Some(ref user_id_type) = self.user_id_type {
-            query_params.push(format!("user_id_type={}", user_id_type));
+            api_request = api_request.query("user_id_type", user_id_type);
         }
 
         if let Some(ref client_token) = self.client_token {
-            query_params.push(format!("client_token={}", client_token));
-        }
-
-        // 添加查询参数到URL
-        if !query_params.is_empty() {
-            api_request.url = format!("{}?{}", api_request.url, query_params.join("&"));
+            api_request = api_request.query("client_token", client_token);
         }
 
         // 构建请求体
@@ -114,23 +104,12 @@ impl CreateRecordRequest {
         };
 
         // 设置请求体
-        api_request.body = Some(RequestData::Json(serde_json::to_value(&request_body)?));
+        api_request = api_request.body(RequestData::Binary(serde_json::to_vec(&request_body)?));
 
-        // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
-        let request_for_transport: ApiRequest<()> = ApiRequest::post(api_request.url.clone())
-            .body(api_request.body.unwrap_or(RequestData::Empty));
-
-        let response = Transport::request(request_for_transport, &self.config, None).await?;
-
-        // 解析响应数据
-        let record_data: Record = response
-            .data
-            .and_then(|data| serde_json::from_value(data).ok())
-            .ok_or_else(|| validation_error("解析创建记录响应失败", "响应数据格式不正确"))?;
-
-        Ok(CreateRecordResponse {
-            record: record_data,
-            success: response.raw_response.is_success(),
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            validation_error("响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }
@@ -203,11 +182,22 @@ struct CreateRecordRequestBody {
     fields: Value,
 }
 
+/// 创建记录数据
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct CreateRecordData {
+    /// 记录信息
+    pub record: Record,
+}
+
 /// 创建记录响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateRecordResponse {
-    /// 记录信息
-    pub record: Record,
-    /// 操作结果
-    pub success: bool,
+    /// 创建记录数据
+    pub data: CreateRecordData,
+}
+
+impl ApiResponseTrait for CreateRecordResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }

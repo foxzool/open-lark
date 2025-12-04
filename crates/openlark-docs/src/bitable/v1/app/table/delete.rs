@@ -1,7 +1,7 @@
 //! Bitable V1 删除数据表API
 
 use openlark_core::{
-    api::{ApiRequest, RequestData},
+    api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
     config::Config,
     error::{validation_error, SDKResult},
     http::Transport,
@@ -23,7 +23,13 @@ pub struct DeleteTableRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DeleteTableResponse {
     /// 操作结果
-    pub success: bool,
+    pub data: bool,
+}
+
+impl ApiResponseTrait for DeleteTableResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 impl DeleteTableRequest {
@@ -60,26 +66,17 @@ impl DeleteTableRequest {
             return Err(validation_error("table_id", "数据表ID不能为空"));
         }
 
-        // 构建完整的API URL
-        let api_url = format!(
-            "{}/open-apis/bitable/v1/apps/{}/tables/{}",
-            self.config.base_url, self.app_token, self.table_id
-        );
+        // 构建API路径
+        let path = format!("/open-apis/bitable/v1/apps/{}/tables/{}", self.app_token, self.table_id);
 
-        // 设置API URL
-        let mut api_request = self.api_request;
-        api_request.url = api_url;
-
-        // 转换为ApiRequest<()>以匹配Transport::request签名
-        let request_for_transport: ApiRequest<()> =
-            ApiRequest::delete(api_request.url.clone()).body(RequestData::Empty);
+        // 创建API请求
+        let api_request: ApiRequest<DeleteTableResponse> =
+            ApiRequest::delete(&format!("https://open.feishu.cn{}", path));
 
         // 发送请求
-        let response: openlark_core::api::Response<()> =
-            Transport::request(request_for_transport, &self.config, None).await?;
-
-        Ok(DeleteTableResponse {
-            success: response.raw_response.is_success(),
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            validation_error("响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }

@@ -1,7 +1,7 @@
 //! Bitable V1 创建视图API
 
 use openlark_core::{
-    api::{ApiRequest, RequestData},
+    api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
     config::Config,
     error::{validation_error, SDKResult},
     http::Transport,
@@ -98,42 +98,28 @@ impl CreateViewRequest {
             }
         }
 
-        // 构建完整的API URL
-        let api_url = format!(
-            "{}/open-apis/bitable/v1/apps/{}/tables/{}/views",
-            self.config.base_url, self.app_token, self.table_id
-        );
+        // 构建API路径
+        let path = format!("/open-apis/bitable/v1/apps/{}/tables/{}/views", self.app_token, self.table_id);
 
-        // 设置API URL
-        let mut api_request = self.api_request;
-        api_request.url = api_url;
+        // 创建API请求
+        let mut api_request: ApiRequest<CreateViewResponse> =
+            ApiRequest::post(&format!("https://open.feishu.cn{}", path));
 
         // 构建查询参数
         if let Some(ref user_id_type) = self.user_id_type {
-            api_request.url = format!("{}?user_id_type={}", api_request.url, user_id_type);
+            api_request = api_request.query("user_id_type", user_id_type);
         }
 
         // 构建请求体
         let request_body = CreateViewRequestBody { view: self.view };
 
         // 设置请求体
-        api_request.body = Some(RequestData::Json(serde_json::to_value(&request_body)?));
+        api_request = api_request.body(RequestData::Binary(serde_json::to_vec(&request_body)?));
 
-        // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
-        let request_for_transport: ApiRequest<()> = ApiRequest::post(api_request.url.clone())
-            .body(api_request.body.unwrap_or(RequestData::Empty));
-
-        let response = Transport::request(request_for_transport, &self.config, None).await?;
-
-        // 解析响应数据
-        let view_data: View = response
-            .data
-            .and_then(|data| serde_json::from_value(data).ok())
-            .ok_or_else(|| validation_error("解析创建视图响应失败", "响应数据格式不正确"))?;
-
-        Ok(CreateViewResponse {
-            view: view_data,
-            success: response.raw_response.is_success(),
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            validation_error("响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }
@@ -260,7 +246,11 @@ struct CreateViewRequestBody {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateViewResponse {
     /// 视图信息
-    pub view: View,
-    /// 操作结果
-    pub success: bool,
+    pub data: View,
+}
+
+impl ApiResponseTrait for CreateViewResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
