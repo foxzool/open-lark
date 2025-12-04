@@ -41,7 +41,7 @@ pub struct PatchViewRequest {
     /// 用户 ID 类型
     user_id_type: Option<String>,
     /// 视图信息
-    view: ViewData,
+    view: PatchViewData,
 }
 
 impl PatchViewRequest {
@@ -54,7 +54,7 @@ impl PatchViewRequest {
             table_id: String::new(),
             view_id: String::new(),
             user_id_type: None,
-            view: ViewData::default(),
+            view: PatchViewData::default(),
         }
     }
 
@@ -83,7 +83,7 @@ impl PatchViewRequest {
     }
 
     /// 设置视图信息
-    pub fn view(mut self, view: ViewData) -> Self {
+    pub fn view(mut self, view: PatchViewData) -> Self {
         self.view = view;
         self
     }
@@ -203,7 +203,7 @@ impl PatchViewRequestBuilder {
     }
 
     /// 设置视图信息
-    pub fn view(mut self, view: ViewData) -> Self {
+    pub fn view(mut self, view: PatchViewData) -> Self {
         self.request = self.request.view(view);
         self
     }
@@ -216,7 +216,7 @@ impl PatchViewRequestBuilder {
 
 /// 视图数据
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct ViewData {
+pub struct PatchViewData {
     /// 视图名称
     pub view_name: String,
     /// 视图类型
@@ -225,7 +225,7 @@ pub struct ViewData {
     pub property: Option<Value>,
 }
 
-impl ViewData {
+impl PatchViewData {
     pub fn new(view_name: impl Into<String>) -> Self {
         Self {
             view_name: view_name.into(),
@@ -286,7 +286,7 @@ impl ViewData {
 /// 更新视图请求体（内部使用）
 #[derive(Serialize)]
 struct PatchViewRequestBody {
-    view: ViewData,
+    view: PatchViewData,
 }
 
 /// 更新视图响应

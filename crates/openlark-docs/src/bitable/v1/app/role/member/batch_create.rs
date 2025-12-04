@@ -1,14 +1,14 @@
 //! Bitable V1 批量创建角色成员API
 
 use openlark_core::{
-    api::{ApiRequest, RequestData},
+    api::ApiRequest,
     config::Config,
     error::{SDKResult, validation_error},
     http::Transport,
 };
 use serde::{Deserialize, Serialize};
 
-use super::models::{BatchCreateRoleMemberRequest as ModelBatchCreateRequest, BatchCreateRoleMemberResponse as ModelBatchCreateResponse, BatchCreateMemberItem as ModelBatchCreateMemberItem};
+use super::models::{BatchCreateRoleMemberRequestModel as ModelBatchCreateRequest, BatchCreateRoleMemberResponseModel as ModelBatchCreateResponse, BatchCreateMemberItemModel as ModelBatchCreateMemberItem, RoleMemberInfoModel as ModelRoleMemberInfo, BatchCreateResultItemModel as ModelBatchCreateResultItem};
 
 /// 批量创建角色成员请求
 #[derive(Debug, Clone)]
@@ -23,20 +23,9 @@ pub struct BatchCreateRoleMemberRequest {
     /// 用户 ID 类型
     user_id_type: Option<String>,
     /// 成员列表
-    member_list: Vec<BatchCreateMemberItem>,
+    member_list: Vec<ModelBatchCreateMemberItem>,
 }
 
-/// 批量创建成员项
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct BatchCreateMemberItem {
-    /// 用户ID列表
-    pub user_ids: Vec<String>,
-    /// 成员类型
-    pub member_type: String,
-    /// 权限列表
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub permissions: Option<Vec<String>>,
-}
 
 impl BatchCreateRoleMemberRequest {
     /// 创建批量创建角色成员请求
@@ -70,14 +59,14 @@ impl BatchCreateRoleMemberRequest {
     }
 
     /// 设置成员列表
-    pub fn member_list(mut self, member_list: Vec<BatchCreateMemberItem>) -> Self {
+    pub fn member_list(mut self, member_list: Vec<ModelBatchCreateMemberItem>) -> Self {
         self.member_list = member_list;
         self
     }
 
     /// 添加成员
     pub fn add_member(mut self, user_ids: Vec<String>, member_type: String) -> Self {
-        self.member_list.push(BatchCreateMemberItem {
+        self.member_list.push(ModelBatchCreateMemberItem {
             user_ids,
             member_type,
             permissions: None,
@@ -87,7 +76,7 @@ impl BatchCreateRoleMemberRequest {
 
     /// 添加成员（带权限）
     pub fn add_member_with_permissions(mut self, user_ids: Vec<String>, member_type: String, permissions: Vec<String>) -> Self {
-        self.member_list.push(BatchCreateMemberItem {
+        self.member_list.push(ModelBatchCreateMemberItem {
             user_ids,
             member_type,
             permissions: Some(permissions),
@@ -135,25 +124,30 @@ impl BatchCreateRoleMemberRequest {
 
         // 设置API URL和请求体
         let mut api_request = self.api_request;
-        api_request = api_request.api_path(api_url);
+        api_request.url = api_url;
 
         // 设置查询参数
         if let Some(user_id_type) = &self.user_id_type {
             api_request = api_request.query("user_id_type", user_id_type);
         }
 
-        api_request = api_request.body(serde_json::to_vec(&request_body)?);
+        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(&request_body)?));
 
         // 发送请求
-        let response: ModelBatchCreateResponse =
-            Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, None).await?;
+
+        // 解析响应
+        let response_data: ModelBatchCreateResponse = response
+            .data
+            .and_then(|data| serde_json::from_value(data).ok())
+            .ok_or_else(|| validation_error("解析批量创建成员数据失败", "响应数据格式不正确"))?;
 
         // 转换为标准响应格式
         let standard_response = BatchCreateRoleMemberResponse {
-            results: response.results,
-            has_more: response.has_more,
-            page_token: response.page_token,
-            success: true,
+            results: response_data.results,
+            has_more: response_data.has_more,
+            page_token: response_data.page_token,
+            success: response.raw_response.is_success(),
         };
 
         Ok(standard_response)
@@ -192,7 +186,7 @@ impl BatchCreateRoleMemberRequestBuilder {
     }
 
     /// 设置成员列表
-    pub fn member_list(mut self, member_list: Vec<BatchCreateMemberItem>) -> Self {
+    pub fn member_list(mut self, member_list: Vec<ModelBatchCreateMemberItem>) -> Self {
         self.request = self.request.member_list(member_list);
         self
     }
@@ -215,50 +209,12 @@ impl BatchCreateRoleMemberRequestBuilder {
     }
 }
 
-/// 角色成员信息
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct RoleMemberInfo {
-    /// 成员ID
-    pub member_id: String,
-    /// 成员类型
-    pub member_type: String,
-    /// 用户ID
-    pub user_id: String,
-    /// 成员姓名
-    pub name: String,
-    /// 成员邮箱
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub email: Option<String>,
-    /// 成员头像
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub avatar: Option<String>,
-    /// 权限列表
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub permissions: Option<Vec<String>>,
-    /// 是否为管理员
-    pub is_admin: bool,
-    /// 创建时间
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub create_time: Option<i64>,
-    /// 更新时间
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub update_time: Option<i64>,
-}
 
 /// 批量创建结果项
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct BatchCreateResultItem {
-    /// 用户ID
-    pub user_id: String,
-    /// 操作结果
-    pub success: bool,
-    /// 错误信息
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub error: Option<String>,
-    /// 成员信息
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub member: Option<RoleMemberInfo>,
-}
+pub type BatchCreateResultItem = ModelBatchCreateResultItem;
+
+/// 角色成员信息
+pub type RoleMemberInfo = ModelRoleMemberInfo;
 
 /// 批量创建角色成员响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

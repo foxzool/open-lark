@@ -2,7 +2,7 @@
 //! Bitable V1 更新角色API
 
 use openlark_core::{
-    api::{ApiRequest, RequestData},
+    api::ApiRequest,
     config::Config,
     error::{SDKResult, validation_error},
     http::Transport,
@@ -24,9 +24,9 @@ pub struct UpdateAppRoleRequest {
     /// 角色名称
     role_name: Option<String>,
     /// 数据表权限
-    table_roles: Option<Vec<TableRole>>,
+    table_roles: Option<Vec<UpdateTableRole>>,
     /// 数据表默认权限
-    block_roles: Option<Vec<BlockRole>>,
+    block_roles: Option<Vec<UpdateBlockRole>>,
 }
 
 impl UpdateAppRoleRequest {
@@ -69,13 +69,13 @@ impl UpdateAppRoleRequest {
     }
 
     /// 设置数据表权限
-    pub fn table_roles(mut self, table_roles: Vec<TableRole>) -> Self {
+    pub fn table_roles(mut self, table_roles: Vec<UpdateTableRole>) -> Self {
         self.table_roles = Some(table_roles);
         self
     }
 
     /// 设置数据表默认权限
-    pub fn block_roles(mut self, block_roles: Vec<BlockRole>) -> Self {
+    pub fn block_roles(mut self, block_roles: Vec<UpdateBlockRole>) -> Self {
         self.block_roles = Some(block_roles);
         self
     }
@@ -104,20 +104,28 @@ impl UpdateAppRoleRequest {
 
         // 设置API URL和请求体
         let mut api_request = self.api_request;
-        api_request = api_request.api_path(api_url);
+        api_request.url = api_url;
 
         // 设置查询参数
         if let Some(user_id_type) = &self.user_id_type {
             api_request = api_request.query("user_id_type", user_id_type);
         }
 
-        api_request = api_request.body(serde_json::to_vec(&request_body)?);
+        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(&request_body)?));
 
         // 发送请求
-        let response: UpdateAppRoleResponse =
-            Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, None).await?;
 
-        Ok(response)
+        // 解析响应
+        let role_data: UpdateRole = response
+            .data
+            .and_then(|data| serde_json::from_value(data).ok())
+            .ok_or_else(|| validation_error("解析角色数据失败", "响应数据格式不正确"))?;
+
+        Ok(UpdateAppRoleResponse {
+            data: Some(role_data),
+            success: response.raw_response.is_success(),
+        })
     }
 }
 
@@ -159,13 +167,13 @@ impl UpdateAppRoleRequestBuilder {
     }
 
     /// 设置数据表权限
-    pub fn table_roles(mut self, table_roles: Vec<TableRole>) -> Self {
+    pub fn table_roles(mut self, table_roles: Vec<UpdateTableRole>) -> Self {
         self.request = self.request.table_roles(table_roles);
         self
     }
 
     /// 设置数据表默认权限
-    pub fn block_roles(mut self, block_roles: Vec<BlockRole>) -> Self {
+    pub fn block_roles(mut self, block_roles: Vec<UpdateBlockRole>) -> Self {
         self.request = self.request.block_roles(block_roles);
         self
     }
@@ -176,9 +184,9 @@ impl UpdateAppRoleRequestBuilder {
     }
 }
 
-/// 数据表权限
+/// 数据表权限（更新版）
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct TableRole {
+pub struct UpdateTableRole {
     /// 数据表 id
     pub table_id: String,
     /// 权限
@@ -188,7 +196,7 @@ pub struct TableRole {
     pub rec_rule: Option<String>,
 }
 
-impl TableRole {
+impl UpdateTableRole {
     pub fn new(table_id: impl ToString, role: impl ToString) -> Self {
         Self {
             table_id: table_id.to_string(),
@@ -203,16 +211,16 @@ impl TableRole {
     }
 }
 
-/// 数据表默认权限
+/// 数据表默认权限（更新版）
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct BlockRole {
+pub struct UpdateBlockRole {
     /// 多维表格数据表的唯一标识符
     pub block_id: String,
     /// 权限
     pub role: String,
 }
 
-impl BlockRole {
+impl UpdateBlockRole {
     pub fn new(block_id: impl ToString, role: impl ToString) -> Self {
         Self {
             block_id: block_id.to_string(),
@@ -229,15 +237,15 @@ pub struct UpdateAppRoleRequestBody {
     pub role_name: Option<String>,
     /// 数据表权限
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub table_roles: Option<Vec<TableRole>>,
+    pub table_roles: Option<Vec<UpdateTableRole>>,
     /// 数据表默认权限
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub block_roles: Option<Vec<BlockRole>>,
+    pub block_roles: Option<Vec<UpdateBlockRole>>,
 }
 
-/// 角色信息
+/// 角色信息（更新版）
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct Role {
+pub struct UpdateRole {
     /// 角色ID
     pub role_id: String,
     /// 角色名称
@@ -249,10 +257,10 @@ pub struct Role {
     pub description: Option<String>,
     /// 数据表权限
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub table_roles: Option<Vec<TableRole>>,
+    pub table_roles: Option<Vec<UpdateTableRole>>,
     /// 数据表默认权限
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub block_roles: Option<Vec<BlockRole>>,
+    pub block_roles: Option<Vec<UpdateBlockRole>>,
     /// 创建时间
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<String>,
@@ -265,7 +273,7 @@ pub struct Role {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct UpdateAppRoleResponse {
     /// 角色信息
-    pub role: Option<Role>,
+    pub data: Option<UpdateRole>,
     /// 操作结果
     pub success: bool,
 }

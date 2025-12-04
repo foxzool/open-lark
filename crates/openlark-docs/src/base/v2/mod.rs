@@ -7,8 +7,13 @@ use openlark_core::config::Config;
 pub mod app;
 pub mod models;
 
-pub use app::*;
-pub use models::*;
+// 选择性导入以避免命名冲突
+pub use app::AppService;
+
+// 从models导入，但避免与app::role冲突
+pub use models::{
+    BaseRole, CreateRoleRequest, UpdateRoleRequest, ListRolesRequest, ListRolesResponse
+};
 
 /// Base V2 服务
 pub struct BaseV2Service {
