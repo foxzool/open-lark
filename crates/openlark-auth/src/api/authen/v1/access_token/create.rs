@@ -6,8 +6,7 @@
 use openlark_core::{
     config::Config,
     api::{ApiRequest, RequestData},
-    prelude::Transport,
-    error::{SDKResult, CoreError, ErrorCode},
+    error::{SDKResult, CoreError, ErrorCode, network_error},
 };
 use crate::models::authen::{UserAccessTokenV1Request, UserAccessTokenResponse};
 
@@ -52,11 +51,16 @@ impl UserAccessTokenV1Builder {
     pub async fn send(self) -> SDKResult<UserAccessTokenResponse> {
         let url = format!("{}/open-apis/authen/v1/access_token", self.config.base_url);
 
-        let request: ApiRequest<UserAccessTokenResponse> = ApiRequest::post(&url)
-            .body(RequestData::Json(serde_json::to_value(&self.request)?))
-            .header("Content-Type", "application/json");
+        let mut request = ApiRequest::<UserAccessTokenResponse>::post(&url);
+        request.headers.insert("Content-Type".to_string(), "application/json".to_string());
 
-        let response = Transport::request(request, &self.config, None).await?;
+        let json_data = serde_json::to_value(&self.request)
+            .map_err(|e| network_error(format!("请求数据序列化失败: {}", e)))?;
+        request.body = Some(RequestData::Json(json_data));
+
+        let response = openlark_core::http::Transport::request(request, &self.config, None)
+            .await
+            .map_err(|e| network_error(format!("用户访问令牌API请求失败: {}", e)))?;
 
         if response.raw_response.code == 0 {
             Ok(response.data.unwrap())

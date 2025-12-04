@@ -7,8 +7,7 @@
 use openlark_core::{
     config::Config,
     api::{ApiRequest, RequestData},
-    prelude::Transport,
-    error::{SDKResult, CoreError, ErrorCode},
+    error::{SDKResult, CoreError, ErrorCode, network_error},
 };
 use crate::models::auth::*;
 
@@ -46,11 +45,16 @@ impl AppTicketResendBuilder {
     pub async fn send(self) -> SDKResult<AppTicketResponse> {
         let url = format!("{}/open-apis/auth/v3/app_ticket/resend", self.config.base_url);
 
-        let request: ApiRequest<AppTicketResponse> = ApiRequest::post(&url)
-            .body(RequestData::Json(serde_json::to_value(&self.request)?))
-            .header("Content-Type", "application/json");
+        let mut request = ApiRequest::<AppTicketResponse>::post(&url);
+        request.headers.insert("Content-Type".to_string(), "application/json".to_string());
 
-        let response = Transport::request(request, &self.config, None).await?;
+        let json_data = serde_json::to_value(&self.request)
+            .map_err(|e| network_error(format!("请求数据序列化失败: {}", e)))?;
+        request.body = Some(RequestData::Json(json_data));
+
+        let response = openlark_core::http::Transport::request(request, &self.config, None)
+            .await
+            .map_err(|e| network_error(format!("应用票据重发API请求失败: {}", e)))?;
 
         if response.raw_response.code == 0 {
             Ok(response.data.unwrap())
@@ -76,8 +80,8 @@ impl AppTicketResendBuilder {
                     })
                 },
                 Some(code) => {
-                    Err(CoreError::Api(openlark_core::error::ApiError {
-                        status: feishu_code as u16,
+                    Err(CoreError::Api(openlark_core::error::core_v3::ApiError {
+                        status: 200, // HTTP成功但API业务错误
                         endpoint: "/open-apis/auth/v3/app_ticket/resend".into(),
                         message: error_message,
                         source: None,
@@ -94,12 +98,12 @@ impl AppTicketResendBuilder {
                 },
                 None => {
                     // 回退到HTTP状态码或内部业务码
-                    Err(CoreError::Api(openlark_core::error::ApiError {
-                        status: feishu_code as u16,
+                    Err(CoreError::Api(openlark_core::error::core_v3::ApiError {
+                        status: 200,
                         endpoint: "/open-apis/auth/v3/app_ticket/resend".into(),
                         message: error_message,
                         source: None,
-                        code: ErrorCode::from_http_status(feishu_code as u16),
+                        code: ErrorCode::InternalError,
                         ctx: {
                             let mut ctx = openlark_core::error::ErrorContext::new();
                             if let Some(ref req_id) = response.raw_response.request_id {

@@ -4,9 +4,8 @@
 
 use openlark_core::{
     config::Config,
-    api::ApiRequest,
-    prelude::Transport,
-    error::{SDKResult, CoreError, ErrorCode},
+    api::{ApiRequest, RequestData},
+    error::{SDKResult, CoreError, ErrorCode, network_error},
 };
 use crate::models::authen::{OidcRefreshUserAccessTokenRequest, UserAccessTokenResponse};
 
@@ -72,12 +71,15 @@ impl OidcRefreshAccessTokenBuilder {
             form_data.insert("grant_type".to_string(), grant_type.clone());
         }
 
-        let request: ApiRequest<UserAccessTokenResponse> = ApiRequest::post(&url)
-            .header("Content-Type", "application/x-www-form-urlencoded")
-            .body(openlark_core::api::RequestData::Form(form_data));
+        let mut request = ApiRequest::<UserAccessTokenResponse>::post(&url);
+        request.headers.insert("Content-Type".to_string(),
+            "application/x-www-form-urlencoded".to_string());
+        request.body = Some(RequestData::Form(form_data));
 
         // 使用Transport发送请求
-        let response = Transport::request(request, &self.config, None).await?;
+        let response = openlark_core::http::Transport::request(request, &self.config, None)
+            .await
+            .map_err(|e| network_error(format!("OIDC刷新访问令牌API请求失败: {}", e)))?;
 
         // 处理响应
         if response.raw_response.code == 0 {
