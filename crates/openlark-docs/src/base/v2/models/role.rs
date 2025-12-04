@@ -8,7 +8,7 @@ use std::collections::HashMap;
 
 /// 角色信息
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct Role {
+pub struct BaseRole {
     /// 角色 ID
     pub role_id: String,
     /// 角色名称
@@ -142,7 +142,7 @@ pub struct ListRolesRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListRolesResponse {
     /// 角色列表
-    pub roles: Vec<Role>,
+    pub roles: Vec<BaseRole>,
     /// 是否有更多数据
     pub has_more: bool,
     /// 页面 token

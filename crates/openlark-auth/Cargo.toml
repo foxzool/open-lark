@@ -10,7 +10,7 @@ description = "OpenLark 认证模块 - 提供令牌管理、缓存、验证和�
 
 [dependencies]
 # 核心基础设施
-openlark-core = { workspace = true, default-features = false }
+openlark-core = { workspace = true }
 
 # 序列化
 serde = { workspace = true }

@@ -2,13 +2,12 @@
 //! Bitable V1 创建角色成员API
 
 use openlark_core::{
-    api::{ApiRequest, RequestData},
+    api::ApiRequest,
     config::Config,
     error::{SDKResult, validation_error},
     http::Transport,
 };
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
 /// 创建角色成员请求
 #[derive(Debug, Clone)]
@@ -109,20 +108,28 @@ impl CreateRoleMemberRequest {
 
         // 设置API URL和请求体
         let mut api_request = self.api_request;
-        api_request = api_request.api_path(api_url);
+        api_request.url = api_url;
 
         // 设置查询参数
         if let Some(user_id_type) = &self.user_id_type {
             api_request = api_request.query("user_id_type", user_id_type);
         }
 
-        api_request = api_request.body(serde_json::to_vec(&request_body)?);
+        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(&request_body)?));
 
         // 发送请求
-        let response: CreateRoleMemberResponse =
-            Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, None).await?;
 
-        Ok(response)
+        // 解析响应
+        let member_data: RoleMember = response
+            .data
+            .and_then(|data| serde_json::from_value(data).ok())
+            .ok_or_else(|| validation_error("解析角色成员数据失败", "响应数据格式不正确"))?;
+
+        Ok(CreateRoleMemberResponse {
+            member: Some(member_data),
+            success: response.raw_response.is_success(),
+        })
     }
 }
 

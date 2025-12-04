@@ -2,12 +2,14 @@
 //! Bitable V1 删除角色API
 
 use openlark_core::{
-    api::{ApiRequest, RequestData},
+    api::ApiRequest,
     config::Config,
     error::{SDKResult, validation_error},
     http::Transport,
 };
 use serde::{Deserialize, Serialize};
+
+use super::create::Role;
 
 /// 删除角色请求
 #[derive(Debug, Clone)]
@@ -70,7 +72,7 @@ impl DeleteAppRoleRequest {
 
         // 设置API URL和查询参数
         let mut api_request = self.api_request;
-        api_request = api_request.api_path(api_url);
+        api_request.url = api_url;
 
         // 设置查询参数
         if let Some(user_id_type) = &self.user_id_type {
@@ -78,10 +80,18 @@ impl DeleteAppRoleRequest {
         }
 
         // 发送请求
-        let response: DeleteAppRoleResponse =
-            Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, None).await?;
 
-        Ok(response)
+        // 解析响应
+        let role_data: Role = response
+            .data
+            .and_then(|data| serde_json::from_value(data).ok())
+            .ok_or_else(|| validation_error("解析角色数据失败", "响应数据格式不正确"))?;
+
+        Ok(DeleteAppRoleResponse {
+            data: Some(role_data),
+            success: response.raw_response.is_success(),
+        })
     }
 }
 
@@ -125,8 +135,8 @@ impl DeleteAppRoleRequestBuilder {
 /// 删除角色响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DeleteAppRoleResponse {
-    /// 删除的角色ID
-    pub role_id: Option<String>,
+    /// 删除的角色信息
+    pub data: Option<Role>,
     /// 是否删除成功
     pub success: bool,
 }

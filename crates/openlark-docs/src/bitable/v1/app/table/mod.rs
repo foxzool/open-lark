@@ -16,17 +16,55 @@ pub mod patch;
 pub mod record;
 pub mod view;
 
-// 导出所有模块内容
+// 导出所有模块内容，但避免命名冲突
 pub use batch_create::*;
 pub use batch_delete::*;
 pub use create::*;
 pub use delete::*;
-pub use field::*;
-pub use form::*;
+
+// 字段相关 - 选择性导入以避免命名冲突
+pub use field::{
+    CreateFieldRequest, CreateFieldRequestBuilder, CreateFieldResponse,
+    DeleteFieldRequest, DeleteFieldRequestBuilder, DeleteFieldResponse,
+    ListFieldRequest, ListFieldRequestBuilder, ListFieldResponse,
+    UpdateFieldRequest, UpdateFieldRequestBuilder, UpdateFieldResponse,
+    Field, FieldType
+};
+
+// 表单相关 - 选择性导入以避免命名冲突
+pub use form::{
+    FormService, GetFormRequest, GetFormRequestBuilder, GetFormResponse,
+    ListFormQuestionRequest, ListFormQuestionRequestBuilder, ListFormQuestionResponse,
+    PatchFormQuestionRequest, PatchFormQuestionRequestBuilder, PatchFormQuestionResponse,
+    FormFieldQuestion
+};
+
 pub use list::*;
 pub use patch::*;
-pub use record::*;
-pub use view::*;
+
+// 记录相关 - 选择性导入以避免命名冲突
+pub use record::{
+    BatchCreateRecordRequest, BatchCreateRecordRequestBuilder, BatchCreateRecordResponse,
+    BatchDeleteRecordRequest, BatchDeleteRecordRequestBuilder, BatchDeleteRecordResponse,
+    BatchGetRecordRequest, BatchGetRecordRequestBuilder, BatchGetRecordResponse,
+    BatchUpdateRecordRequest, BatchUpdateRecordRequestBuilder, BatchUpdateRecordResponse,
+    CreateRecordRequest, CreateRecordRequestBuilder, CreateRecordResponse,
+    DeleteRecordRequest, DeleteRecordRequestBuilder, DeleteRecordResponse,
+    GetRecordRequest, GetRecordRequestBuilder, GetRecordResponse,
+    ListRecordRequest, ListRecordRequestBuilder, ListRecordResponse,
+    SearchRecordRequest, SearchRecordRequestBuilder, SearchRecordResponse,
+    AppTableRecordService, Record
+};
+
+// 视图相关 - 选择性导入以避免命名冲突
+pub use view::{
+    CreateViewRequest, CreateViewRequestBuilder, CreateViewResponse, CreateViewData,
+    DeleteViewRequest, DeleteViewRequestBuilder, DeleteViewResponse,
+    GetViewRequest, GetViewRequestBuilder, GetViewResponse,
+    ListViewsRequest, ListViewsRequestBuilder, ListViewsResponse,
+    PatchViewRequest, PatchViewRequestBuilder, PatchViewResponse, PatchViewData,
+    AppTableViewService
+};
 
 /// 数据表服务
 pub struct TableService {

@@ -243,6 +243,7 @@ impl TableField {
 
 /// 创建数据表请求体（内部使用）
 #[derive(Serialize)]
+#[allow(dead_code)]
 struct CreateTableRequestBody {
     table: TableData,
 }

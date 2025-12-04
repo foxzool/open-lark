@@ -11,12 +11,21 @@ pub struct App {
     pub app_token: String,
     /// 应用名称
     pub name: String,
+    /// 默认数据表ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_table_id: Option<String>,
     /// 应用图标
     #[serde(skip_serializing_if = "Option::is_none")]
     pub avatar: Option<String>,
     /// 应用链接
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+    /// 文件夹token
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folder_token: Option<String>,
+    /// 时区
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_zone: Option<String>,
     /// 创建时间
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<i64>,
@@ -69,15 +78,17 @@ pub struct CreateAppResponse {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CopyAppRequest {
     /// 新应用名称
-    pub name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
     /// 目标文件夹token
     #[serde(skip_serializing_if = "Option::is_none")]
     pub folder_token: Option<String>,
-    /// 是否复制数据表
-    pub folder_type: String,
-    /// 复制的数据表ID列表
+    /// 是否复制内容（true: 不复制内容，false: 复制内容）
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub table_id_list: Option<Vec<String>>,
+    pub without_content: Option<bool>,
+    /// 时区
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_zone: Option<String>,
 }
 
 /// 复制应用响应
@@ -140,16 +151,14 @@ impl CreateAppRequest {
 impl CopyAppRequest {
     /// 验证请求参数
     pub fn validate(&self) -> Result<(), String> {
-        if self.name.trim().is_empty() {
-            return Err("新应用名称不能为空".to_string());
-        }
+        if let Some(ref name) = self.name {
+            if name.trim().is_empty() {
+                return Err("新应用名称不能为空".to_string());
+            }
 
-        if self.name.len() > 100 {
-            return Err("应用名称长度不能超过100个字符".to_string());
-        }
-
-        if self.folder_type.trim().is_empty() {
-            return Err("文件夹类型不能为空".to_string());
+            if name.len() > 100 {
+                return Err("应用名称长度不能超过100个字符".to_string());
+            }
         }
 
         Ok(())

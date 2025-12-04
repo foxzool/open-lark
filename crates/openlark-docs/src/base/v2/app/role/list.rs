@@ -12,6 +12,7 @@ use super::models::ListRolesResponse;
 use super::RoleService;
 
 /// 列出自定义角色请求
+#[allow(dead_code)]
 pub struct ListRolesV2Request {
     api_request: ApiRequest<ListRolesV2Response>,
     app_token: String,
