@@ -36,7 +36,7 @@ pub use role::{
     BatchCreateRoleMemberRequest, BatchCreateRoleMemberRequestBuilder, BatchCreateRoleMemberResponse,
     BatchDeleteRoleMemberRequest, BatchDeleteRoleMemberRequestBuilder, BatchDeleteRoleMemberResponse,
     CreateRoleMemberRequest, CreateRoleMemberRequestBuilder, CreateRoleMemberResponse,
-    RoleMember, RoleMemberInfo, CreateAppRoleRequestBody, UpdateAppRoleRequestBody
+    RoleMemberInfo, CreateAppRoleRequestBody, UpdateAppRoleRequestBody
 };
 
 #[allow(ambiguous_glob_reexports)]
