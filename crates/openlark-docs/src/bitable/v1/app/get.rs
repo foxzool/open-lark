@@ -1,7 +1,7 @@
 //! Bitable V1 获取多维表格API
 
 use openlark_core::{
-    api::{ApiRequest, RequestData},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     error::validation_error,
     http::Transport,
@@ -27,16 +27,21 @@ pub struct GetAppV1Request {
 pub struct GetAppV1Response {
     /// 应用信息
     pub data: App,
-    pub success: bool,
+}
+
+impl ApiResponseTrait for GetAppV1Response {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 impl GetAppV1Request {
     /// 创建获取多维表格请求
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::get(""),
-            config,
+            api_request: ApiRequest::get("/open-apis/bitable/v1/apps/:app_token"),
             app_token: String::new(),
+            config,
         }
     }
 
@@ -53,32 +58,17 @@ impl GetAppV1Request {
             return Err(validation_error("app_token", "应用token不能为空"));
         }
 
-        // 构建完整的API URL
-        let api_url = format!(
-            "{}/open-apis/bitable/v1/apps/{}",
-            self.config.base_url, self.app_token
-        );
+        // 构建API路径
+        let path = format!("/open-apis/bitable/v1/apps/{}", self.app_token);
 
-        // 设置API URL
-        let mut api_request = self.api_request;
-        api_request.url = api_url;
+        // 创建API请求
+        let api_request: ApiRequest<GetAppV1Response> =
+            ApiRequest::get(&format!("https://open.feishu.cn{}", path));
 
-        // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
-        let request_for_transport: ApiRequest<()> = ApiRequest::get(api_request.url.clone())
-            .body(api_request.body.unwrap_or(RequestData::Empty));
-
-        let config = &self.config;
-        let response = Transport::request(request_for_transport, config, None).await?;
-
-        // 解析响应
-        let data: App = response
-            .data
-            .and_then(|data| serde_json::from_value(data).ok())
-            .ok_or_else(|| validation_error("解析失败", "数据格式不正确"))?;
-
-        Ok(GetAppV1Response {
-            data,
-            success: response.raw_response.is_success(),
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            validation_error("响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }

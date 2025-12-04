@@ -3,7 +3,7 @@
 //! 提供数据表的增量更新功能，使用 JSON Patch 格式进行部分字段更新。
 
 use openlark_core::{
-    api::{ApiRequest, RequestData},
+    api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
     config::Config,
     error::{validation_error, SDKResult},
     http::Transport,
@@ -95,15 +95,8 @@ impl PatchTableRequest {
             }
         }
 
-        // 构建完整的API URL
-        let api_url = format!(
-            "{}/open-apis/bitable/v1/apps/{}/tables/{}",
-            self.config.base_url, self.app_token, self.table_id
-        );
-
-        // 设置API URL
-        let mut api_request = self.api_request;
-        api_request.url = api_url;
+        // 构建API路径
+        let path = format!("/open-apis/bitable/v1/apps/{}/tables/{}", self.app_token, self.table_id);
 
         // 构建请求体
         let request_body = PatchTableRequestBody {
@@ -111,24 +104,15 @@ impl PatchTableRequest {
             fields: self.fields,
         };
 
-        // 设置请求体
-        api_request.body = Some(RequestData::Json(serde_json::to_value(&request_body)?));
+        // 创建API请求
+        let api_request: ApiRequest<PatchTableResponse> =
+            ApiRequest::put(&format!("https://open.feishu.cn{}", path))
+                .body(RequestData::Binary(serde_json::to_vec(&request_body)?));
 
-        // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
-        let request_for_transport: ApiRequest<()> = ApiRequest::put(api_request.url.clone())
-            .body(api_request.body.unwrap_or(RequestData::Empty));
-
-        let response = Transport::request(request_for_transport, &self.config, None).await?;
-
-        // 解析响应数据
-        let table_data: PatchTableResponseData = response
-            .data
-            .and_then(|data| serde_json::from_value(data).ok())
-            .ok_or_else(|| validation_error("解析更新数据表响应失败", "响应数据格式不正确"))?;
-
-        Ok(PatchTableResponse {
-            table: table_data,
-            success: response.raw_response.is_success(),
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            validation_error("响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }
@@ -189,9 +173,13 @@ struct PatchTableRequestBody {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct PatchTableResponse {
     /// 更新的数据表信息
-    pub table: PatchTableResponseData,
-    /// 操作结果
-    pub success: bool,
+    pub data: PatchTableResponseData,
+}
+
+impl ApiResponseTrait for PatchTableResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 /// 更新数据表响应数据

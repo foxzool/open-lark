@@ -1,7 +1,7 @@
 //! Bitable V1 创建数据表API
 
 use openlark_core::{
-    api::{ApiRequest, RequestData},
+    api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
     config::Config,
     error::{validation_error, SDKResult},
     http::Transport,
@@ -11,31 +11,43 @@ use serde::{Deserialize, Serialize};
 /// 新增数据表请求
 #[derive(Debug, Clone)]
 pub struct CreateTableRequest {
-    /// 配置信息
-    config: Config,
     api_request: ApiRequest<CreateTableResponse>,
     /// 多维表格的 app_token
     app_token: String,
     /// 数据表信息
     table: TableData,
+    /// 配置信息
+    config: Config,
+}
+
+/// 创建数据表数据
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct CreateTableData {
+    /// 数据表信息
+    pub table: TableData,
 }
 
 /// 创建数据表响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateTableResponse {
-    /// 数据表信息
-    pub data: TableData,
-    pub success: bool,
+    /// 创建数据表数据
+    pub data: CreateTableData,
+}
+
+impl ApiResponseTrait for CreateTableResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 impl CreateTableRequest {
     /// 创建新增数据表请求
     pub fn new(config: Config) -> Self {
         Self {
-            config,
-            api_request: ApiRequest::post(""),
+            api_request: ApiRequest::post("/open-apis/bitable/v1/apps/:app_token/tables"),
             app_token: String::new(),
             table: TableData::default(),
+            config,
         }
     }
 
@@ -66,35 +78,22 @@ impl CreateTableRequest {
             return Err(validation_error("name", "数据表名称长度不能超过100个字符"));
         }
 
-        // 构建完整的API URL
-        let api_url = format!(
-            "{}/open-apis/bitable/v1/apps/{}/tables",
-            self.config.base_url, self.app_token
-        );
+        // 构建API路径
+        let path = format!("/open-apis/bitable/v1/apps/{}/tables", self.app_token);
 
-        // 设置API URL
-        let mut api_request = self.api_request;
-        api_request.url = api_url;
+        // 构建请求体
+        let request_body = CreateTableRequestBody {
+            table: self.table,
+        };
 
-        // 设置请求体
-        api_request.body = Some(RequestData::Json(serde_json::to_value(&self.table)?));
-
-        // 转换为ApiRequest<()>以匹配Transport::request签名
-        let request_for_transport: ApiRequest<()> = ApiRequest::post(api_request.url.clone())
-            .body(api_request.body.unwrap_or(RequestData::Empty));
+        // 创建API请求
+        let api_request: ApiRequest<CreateTableResponse> = self.api_request
+            .body(RequestData::Binary(serde_json::to_vec(&request_body)?));
 
         // 发送请求
-        let response = Transport::request(request_for_transport, &self.config, None).await?;
-
-        // 解析响应数据为TableData类型
-        let table_data: TableData = response
-            .data
-            .and_then(|data| serde_json::from_value(data).ok())
-            .ok_or_else(|| validation_error("解析数据表数据失败", "响应数据格式不正确"))?;
-
-        Ok(CreateTableResponse {
-            data: table_data,
-            success: response.raw_response.is_success(),
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            validation_error("响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }
@@ -131,7 +130,7 @@ impl CreateTableRequestBuilder {
 }
 
 /// 数据表数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct TableData {
     /// 数据表名称
     pub name: String,

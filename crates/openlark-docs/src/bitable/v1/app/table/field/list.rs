@@ -1,7 +1,7 @@
 //! Bitable V1 列出字段API
 
 use openlark_core::{
-    api::ApiRequest,
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     error::{validation_error, SDKResult},
     http::Transport,
@@ -97,66 +97,51 @@ impl ListFieldRequest {
         if self.app_token.trim().is_empty() {
             return Err(validation_error("app_token", "应用token不能为空"));
         }
+
         if self.table_id.trim().is_empty() {
             return Err(validation_error("table_id", "数据表ID不能为空"));
         }
 
-        // 构建完整的API URL
-        let api_url = format!(
-            "{}/open-apis/bitable/v1/apps/{}/tables/{}/fields",
-            self.config.base_url, self.app_token, self.table_id
-        );
-
-        // 设置API URL
-        let mut api_request = self.api_request;
-        api_request.url = api_url;
-
-        // 设置查询参数
-        let mut separator_added = false;
-        if let Some(view_id) = &self.view_id {
-            api_request.url = format!("{}?view_id={}", api_request.url, view_id);
-            separator_added = true;
-        }
-        if let Some(text_field_as_array) = self.text_field_as_array {
-            let separator = if separator_added { "&" } else { "?" };
-            api_request.url = format!(
-                "{}{}text_field_as_array={}",
-                api_request.url, separator, text_field_as_array
-            );
-            separator_added = true;
-        }
-        if let Some(page_token) = &self.page_token {
-            let separator = if separator_added { "&" } else { "?" };
-            api_request.url = format!("{}{}page_token={}", api_request.url, separator, page_token);
-            separator_added = true;
-        }
+        // 验证分页大小
         if let Some(page_size) = self.page_size {
-            let separator = if separator_added { "&" } else { "?" };
-            api_request.url = format!("{}{}page_size={}", api_request.url, separator, page_size);
-            separator_added = true;
-        }
-        if let Some(user_id_type) = &self.user_id_type {
-            let separator = if separator_added { "&" } else { "?" };
-            api_request.url = format!(
-                "{}{}user_id_type={}",
-                api_request.url, separator, user_id_type
-            );
+            if page_size <= 0 {
+                return Err(validation_error("page_size", "分页大小必须大于0"));
+            }
         }
 
-        // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
-        let request_for_transport: openlark_core::api::ApiRequest<()> =
-            openlark_core::api::ApiRequest::get(api_request.url.clone())
-                .body(openlark_core::api::RequestData::Empty);
+        // 构建API路径
+        let path = format!("/open-apis/bitable/v1/apps/{}/tables/{}/fields", self.app_token, self.table_id);
 
-        // 发送请求并解析响应
-        let response = Transport::request(request_for_transport, &self.config, None).await?;
+        // 创建API请求
+        let mut api_request: ApiRequest<ListFieldResponse> =
+            ApiRequest::get(&format!("https://open.feishu.cn{}", path));
 
-        // 手动解析响应数据
-        let response_data: ListFieldResponse =
-            serde_json::from_value(response.data.ok_or_else(|| {
-                openlark_core::error::validation_error("response", "响应数据为空")
-            })?)?;
-        Ok(response_data)
+        // 构建查询参数
+        if let Some(ref view_id) = self.view_id {
+            api_request = api_request.query("view_id", view_id);
+        }
+
+        if let Some(text_field_as_array) = self.text_field_as_array {
+            api_request = api_request.query("text_field_as_array", &text_field_as_array.to_string());
+        }
+
+        if let Some(ref page_token) = self.page_token {
+            api_request = api_request.query("page_token", page_token);
+        }
+
+        if let Some(page_size) = self.page_size {
+            api_request = api_request.query("page_size", &page_size.to_string());
+        }
+
+        if let Some(ref user_id_type) = self.user_id_type {
+            api_request = api_request.query("user_id_type", user_id_type);
+        }
+
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            validation_error("响应数据为空", "服务器没有返回有效的数据")
+        })
     }
 }
 
@@ -221,9 +206,9 @@ impl ListFieldRequestBuilder {
     }
 }
 
-/// 列出字段响应
+/// 列出字段数据
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct ListFieldResponse {
+pub struct ListFieldData {
     /// 是否还有更多项
     pub has_more: Option<bool>,
     /// 分页标记
@@ -232,6 +217,17 @@ pub struct ListFieldResponse {
     pub total: Option<i32>,
     /// 字段信息列表
     pub items: Option<Vec<Field>>,
-    /// 操作结果
-    pub success: bool,
+}
+
+/// 列出字段响应
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ListFieldResponse {
+    /// 字段列表数据
+    pub data: ListFieldData,
+}
+
+impl ApiResponseTrait for ListFieldResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
