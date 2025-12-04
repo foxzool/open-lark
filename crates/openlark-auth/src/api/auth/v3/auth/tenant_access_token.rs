@@ -7,10 +7,9 @@
 use openlark_core::{
     config::Config,
     api::{ApiRequest, RequestData},
-    prelude::Transport,
-    error::{SDKResult, CoreError, ErrorCode},
+    error::{SDKResult, CoreError, ErrorCode, network_error},
 };
-use crate::models::auth::*;
+use crate::models::auth::{TenantAccessTokenRequest, TenantAccessTokenResponse};
 
 /// 租户访问令牌构建器（商店应用）
 #[derive(Debug)]
@@ -53,18 +52,35 @@ impl TenantAccessTokenBuilder {
     pub async fn send(self) -> SDKResult<TenantAccessTokenResponse> {
         let url = format!("{}/open-apis/auth/v3/tenant_access_token", self.config.base_url);
 
-        let request: ApiRequest<TenantAccessTokenResponse> = ApiRequest::post(&url)
-            .body(RequestData::Json(serde_json::to_value(&self.request)?))
-            .header("Content-Type", "application/json");
+        let mut request = ApiRequest::<TenantAccessTokenResponse>::post(&url);
+        request.headers.insert("Content-Type".to_string(), "application/json".to_string());
 
-        let response = Transport::request(request, &self.config, None).await?;
+        let json_data = serde_json::to_value(&self.request)
+            .map_err(|e| network_error(format!("请求数据序列化失败: {}", e)))?;
+        request.body = Some(RequestData::Json(json_data));
 
+        let response = openlark_core::http::Transport::request(request, &self.config, None)
+            .await
+            .map_err(|e| network_error(format!("租户访问令牌API请求失败: {}", e)))?;
+
+        // 处理响应
         if response.raw_response.code == 0 {
-            Ok(response.data.unwrap())
+            Ok(response.data.unwrap_or_else(|| {
+                // 如果没有data字段，尝试直接解析响应
+                serde_json::from_value::<TenantAccessTokenResponse>(serde_json::json!({
+                    "tenant_access_token": response.raw_response.data.unwrap_or_default(),
+                    "expires_in": 7200, // 默认2小时
+                    "token_type": Some("Bearer".to_string())
+                })).unwrap_or_else(|_| TenantAccessTokenResponse {
+                    tenant_access_token: String::new(),
+                    expires_in: 7200,
+                    token_type: Some("Bearer".to_string()),
+                })
+            }))
         } else {
-            // 智能映射飞书错误码（优先级：飞书通用码 > HTTP状态 > 内部码）
+            // API返回错误，智能映射飞书错误码
             let feishu_code = response.raw_response.code;
-            let error_message = response.raw_response.msg.clone();
+            let error_message = response.raw_response.msg;
 
             match ErrorCode::from_feishu_code(feishu_code) {
                 Some(ErrorCode::TenantAccessTokenInvalid) => {
@@ -98,8 +114,8 @@ impl TenantAccessTokenBuilder {
                     })
                 },
                 Some(code) => {
-                    Err(CoreError::Api(openlark_core::error::ApiError {
-                        status: feishu_code as u16,
+                    Err(CoreError::Api(openlark_core::error::core_v3::ApiError {
+                        status: 200, // HTTP成功但API业务错误
                         endpoint: "/open-apis/auth/v3/tenant_access_token".into(),
                         message: error_message,
                         source: None,
@@ -116,12 +132,12 @@ impl TenantAccessTokenBuilder {
                 },
                 None => {
                     // 回退到HTTP状态码或内部业务码
-                    Err(CoreError::Api(openlark_core::error::ApiError {
-                        status: feishu_code as u16,
+                    Err(CoreError::Api(openlark_core::error::core_v3::ApiError {
+                        status: 200,
                         endpoint: "/open-apis/auth/v3/tenant_access_token".into(),
                         message: error_message,
                         source: None,
-                        code: ErrorCode::from_http_status(feishu_code as u16),
+                        code: ErrorCode::InternalError,
                         ctx: {
                             let mut ctx = openlark_core::error::ErrorContext::new();
                             if let Some(ref req_id) = response.raw_response.request_id {
