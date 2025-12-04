@@ -93,7 +93,7 @@ crate::impl_executable_builder_owned!(
 );
 
 /// 表单字段问题信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct FormFieldQuestion {
     /// 问题ID
     pub question_id: String,
