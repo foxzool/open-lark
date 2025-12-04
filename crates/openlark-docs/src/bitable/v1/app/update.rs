@@ -1,7 +1,7 @@
 //! Bitable V1 更新多维表格API
 
 use openlark_core::{
-    api::{ApiRequest, RequestData},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     error::validation_error,
     http::Transport,
@@ -14,8 +14,6 @@ use super::AppService;
 
 /// 更新多维表格请求
 pub struct UpdateAppV1Request {
-    /// 配置信息
-    config: Config,
     api_request: ApiRequest<UpdateAppV1Response>,
     /// 应用token
     app_token: String,
@@ -25,6 +23,8 @@ pub struct UpdateAppV1Request {
     avatar: Option<String>,
     /// 应用设置
     app_settings: Option<AppSettings>,
+    /// 配置信息
+    config: Config,
 }
 
 /// 更新多维表格响应
@@ -32,19 +32,24 @@ pub struct UpdateAppV1Request {
 pub struct UpdateAppV1Response {
     /// 应用信息
     pub data: App,
-    pub success: bool,
+}
+
+impl ApiResponseTrait for UpdateAppV1Response {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 impl UpdateAppV1Request {
     /// 创建更新多维表格请求
     pub fn new(config: Config) -> Self {
         Self {
-            config,
-            api_request: ApiRequest::put(""),
+            api_request: ApiRequest::put("/open-apis/bitable/v1/apps/:app_token"),
             app_token: String::new(),
             name: None,
             avatar: None,
             app_settings: None,
+            config,
         }
     }
 
@@ -79,15 +84,8 @@ impl UpdateAppV1Request {
             return Err(validation_error("app_token", "应用token不能为空"));
         }
 
-        // 构建完整的API URL
-        let api_url = format!(
-            "{}/open-apis/bitable/v1/apps/{}",
-            self.config.base_url, self.app_token
-        );
-
-        // 设置API URL
-        let mut api_request = self.api_request;
-        api_request.url = api_url;
+        // 构建API路径
+        let path = format!("/open-apis/bitable/v1/apps/{}", self.app_token);
 
         // 构建请求体
         let request_body = UpdateAppRequestBody {
@@ -101,25 +99,14 @@ impl UpdateAppV1Request {
             return Err(validation_error("更新应用请求验证失败", e.to_string()));
         }
 
-        // 设置请求体
-        api_request.body = Some(RequestData::Json(serde_json::to_value(&request_body)?));
+        // 创建API请求
+        let api_request: ApiRequest<UpdateAppV1Response> = self.api_request
+            .body(openlark_core::api::RequestData::Binary(serde_json::to_vec(&request_body)?));
 
-        // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
-        let request_for_transport: ApiRequest<()> = ApiRequest::put(api_request.url.clone())
-            .body(api_request.body.unwrap_or(RequestData::Empty));
-
-        let config = &self.config;
-        let response = Transport::request(request_for_transport, config, None).await?;
-
-        // 手动解析响应数据为App类型
-        let app_data: App = response
-            .data
-            .and_then(|data| serde_json::from_value(data).ok())
-            .ok_or_else(|| validation_error("解析应用数据失败", "响应数据格式不正确"))?;
-
-        Ok(UpdateAppV1Response {
-            data: app_data,
-            success: response.raw_response.is_success(),
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            validation_error("响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }

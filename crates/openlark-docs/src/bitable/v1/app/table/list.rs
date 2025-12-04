@@ -3,7 +3,7 @@
 //! Bitable V1 列出数据表API
 
 use openlark_core::{
-    api::{ApiRequest, RequestData},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     error::{validation_error, SDKResult},
     http::Transport,
@@ -13,8 +13,6 @@ use serde::{Deserialize, Serialize};
 /// 列出数据表请求
 #[derive(Debug, Clone)]
 pub struct ListTablesRequest {
-    /// 配置信息
-    config: Config,
     api_request: ApiRequest<ListTablesResponse>,
     /// 多维表格的 app_token
     app_token: String,
@@ -22,17 +20,19 @@ pub struct ListTablesRequest {
     page_size: Option<i32>,
     /// 分页标记
     page_token: Option<String>,
+    /// 配置信息
+    config: Config,
 }
 
 impl ListTablesRequest {
     /// 创建列出数据表请求
     pub fn new(config: Config) -> Self {
         Self {
-            config,
-            api_request: ApiRequest::get(""),
+            api_request: ApiRequest::get("/open-apis/bitable/v1/apps/:app_token/tables"),
             app_token: String::new(),
             page_size: None,
             page_token: None,
+            config,
         }
     }
 
@@ -68,49 +68,26 @@ impl ListTablesRequest {
             }
         }
 
-        // 构建完整的API URL
-        let api_url = format!(
-            "{}/open-apis/bitable/v1/apps/{}/tables",
-            self.config.base_url, self.app_token
-        );
+        // 构建API路径
+        let path = format!("/open-apis/bitable/v1/apps/{}/tables", self.app_token);
 
-        // 设置API URL
-        let mut api_request = self.api_request;
-        api_request.url = api_url;
+        // 创建API请求
+        let mut api_request: ApiRequest<ListTablesResponse> =
+            ApiRequest::get(&format!("https://open.feishu.cn{}", path));
 
         // 构建查询参数
-        let mut query_params = Vec::new();
-
         if let Some(page_size) = self.page_size {
-            query_params.push(format!("page_size={}", page_size));
+            api_request = api_request.query("page_size", &page_size.to_string());
         }
 
         if let Some(ref page_token) = self.page_token {
-            query_params.push(format!("page_token={}", page_token));
+            api_request = api_request.query("page_token", page_token);
         }
 
-        // 添加查询参数到URL
-        if !query_params.is_empty() {
-            api_request.url = format!("{}?{}", api_request.url, query_params.join("&"));
-        }
-
-        // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
-        let request_for_transport: ApiRequest<()> =
-            ApiRequest::get(api_request.url.clone()).body(RequestData::Empty);
-
-        let response = Transport::request(request_for_transport, &self.config, None).await?;
-
-        // 解析响应数据
-        let response_data: ListTablesResponseData = response
-            .data
-            .and_then(|data| serde_json::from_value(data).ok())
-            .ok_or_else(|| validation_error("解析获取数据表列表响应失败", "响应数据格式不正确"))?;
-
-        Ok(ListTablesResponse {
-            items: response_data.items,
-            page_token: response_data.page_token,
-            has_more: response_data.has_more,
-            success: response.raw_response.is_success(),
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            validation_error("响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }
@@ -163,26 +140,26 @@ pub struct TableInfo {
     pub name: String,
 }
 
-/// 列出数据表响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ListTablesResponse {
+/// 列出数据表数据
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ListTablesData {
     /// 数据表列表
     pub items: Option<Vec<TableInfo>>,
     /// 分页标记
     pub page_token: Option<String>,
     /// 是否有更多
     pub has_more: Option<bool>,
-    /// 操作结果
-    pub success: bool,
 }
 
-/// 列出数据表响应数据（内部使用）
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ListTablesResponseData {
-    /// 数据表列表
-    pub items: Option<Vec<TableInfo>>,
-    /// 分页标记
-    pub page_token: Option<String>,
-    /// 是否有更多
-    pub has_more: Option<bool>,
+/// 列出数据表响应
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ListTablesResponse {
+    /// 列出数据表数据
+    pub data: ListTablesData,
+}
+
+impl ApiResponseTrait for ListTablesResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }

@@ -1,7 +1,7 @@
 //! Bitable V1 复制多维表格API
 
 use openlark_core::{
-    api::{ApiRequest, RequestData},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     error::validation_error,
     http::Transport,
@@ -15,8 +15,6 @@ use super::AppService;
 /// 复制多维表格请求
 pub struct CopyAppV1Request {
     api_request: ApiRequest<CopyAppV1Response>,
-    /// 配置信息
-    config: Config,
     /// 应用token
     app_token: String,
     /// 新应用名称
@@ -27,27 +25,41 @@ pub struct CopyAppV1Request {
     without_content: Option<bool>,
     /// 时区
     time_zone: Option<String>,
+    /// 配置信息
+    config: Config,
+}
+
+/// 复制多维表格数据
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct CopyAppData {
+    /// 应用信息
+    pub app: App,
 }
 
 /// 复制多维表格响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CopyAppV1Response {
-    /// 应用信息
-    pub data: App,
-    pub success: bool,
+    /// 复制多维表格数据
+    pub data: CopyAppData,
+}
+
+impl ApiResponseTrait for CopyAppV1Response {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 impl CopyAppV1Request {
     /// 创建复制多维表格请求
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::post(""),
-            config,
+            api_request: ApiRequest::post("/open-apis/bitable/v1/apps/:app_token/copy"),
             app_token: String::new(),
             name: None,
             folder_token: None,
             without_content: None,
             time_zone: None,
+            config,
         }
     }
 
@@ -98,11 +110,8 @@ impl CopyAppV1Request {
             }
         }
 
-        // 构建完整的API URL
-        let api_url = format!(
-            "{}/open-apis/bitable/v1/apps/{}/copy",
-            self.config.base_url, self.app_token
-        );
+        // 构建API路径
+        let path = format!("/open-apis/bitable/v1/apps/{}/copy", self.app_token);
 
         // 构建请求体
         let request_body = CopyAppRequestBody {
@@ -117,32 +126,14 @@ impl CopyAppV1Request {
             return Err(validation_error("复制应用请求验证失败", e.to_string()));
         }
 
-        // 设置API URL和请求体
-        let mut api_request = self.api_request;
-        api_request.url = api_url;
-        api_request.body = Some(RequestData::Json(serde_json::to_value(&request_body)?));
+        // 创建API请求
+        let api_request: ApiRequest<CopyAppV1Response> = self.api_request
+            .body(openlark_core::api::RequestData::Binary(serde_json::to_vec(&request_body)?));
 
-        // 转换为ApiRequest<()>以匹配Transport::request签名
-        let request_for_transport: ApiRequest<()> = ApiRequest::post(api_request.url.clone())
-            .body(api_request.body.unwrap_or(RequestData::Empty));
-
-        let config = &self.config;
-        let response = Transport::request(request_for_transport, config, None).await?;
-
-        // 解析响应数据，官方API格式为: { code: 0, data: { app: { ... } }, msg: "success" }
-        let response_data: serde_json::Value = response
-            .data
-            .ok_or_else(|| validation_error("解析响应数据失败", "响应数据为空"))?;
-
-        // 从data中提取app对象
-        let app_data: App = serde_json::from_value(response_data.get("app")
-            .ok_or_else(|| validation_error("解析应用数据失败", "响应中缺少app字段"))?
-            .clone())
-            .map_err(|e| validation_error("解析应用数据失败", format!("JSON解析错误: {}", e)))?;
-
-        Ok(CopyAppV1Response {
-            data: app_data,
-            success: response.raw_response.is_success(),
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            validation_error("响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }
