@@ -189,12 +189,6 @@ struct BatchUpdateRecordRequestBody {
     records: Vec<BatchUpdateRecordItem>,
 }
 
-/// 批量更新记录数据（内部使用）
-#[derive(Debug, Deserialize)]
-struct BatchUpdateRecordData {
-    records: Vec<Record>,
-}
-
 /// 批量更新记录数据
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BatchUpdateRecordData {

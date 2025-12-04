@@ -25,22 +25,14 @@ members = [
     "crates/openlark-ai",             # AI 智能助手
 
     # 企业管理
-    "crates/openlark-admin",          # 管理员工能
     "crates/openlark-application",    # 应用管理
-    "crates/openlark-approval",       # 审批流程
 
     # 协作工具
-    "crates/openlark-calendar",       # 日历会议
-    "crates/openlark-collab",         # 项目协作
     "crates/openlark-meeting",        # 视频会议
 
     # 专业服务
     "crates/openlark-helpdesk",       # 帮助台
-    "crates/openlark-hire",           # 招聘管理
-    "crates/openlark-lingo",          # 语言服务
     "crates/openlark-mail",           # 邮件服务
-    "crates/openlark-people",         # 人员管理
-    "crates/openlark-task",           # 任务管理
 ]
 
 [workspace.package]
@@ -117,19 +109,10 @@ openlark-hr = { path = "crates/openlark-hr" }
 
 # 开发中服务模块
 openlark-ai = { path = "crates/openlark-ai" }
-openlark-admin = { path = "crates/openlark-admin" }
 openlark-application = { path = "crates/openlark-application" }
-openlark-approval = { path = "crates/openlark-approval" }
-openlark-apass = { path = "crates/openlark-apass" }
-openlark-calendar = { path = "crates/openlark-calendar" }
-openlark-collab = { path = "crates/openlark-collab" }
 openlark-helpdesk = { path = "crates/openlark-helpdesk" }
-openlark-hire = { path = "crates/openlark-hire" }
-openlark-lingo = { path = "crates/openlark-lingo" }
 openlark-mail = { path = "crates/openlark-mail" }
 openlark-meeting = { path = "crates/openlark-meeting" }
-openlark-people = { path = "crates/openlark-people" }
-openlark-task = { path = "crates/openlark-task" }
 
 # Test dependencies shared across workspace
 rstest = "0.19"
@@ -177,17 +160,10 @@ openlark-security = { workspace = true, optional = true }
 # 其他服务模块
 openlark-hr = { workspace = true, optional = true }
 openlark-ai = { workspace = true, optional = true }
-openlark-admin = { workspace = true, optional = true }
 openlark-application = { workspace = true, optional = true }
-openlark-approval = { workspace = true, optional = true }
-openlark-calendar = { workspace = true, optional = true }
-openlark-collab = { workspace = true, optional = true }
 openlark-helpdesk = { workspace = true, optional = true }
-openlark-hire = { workspace = true, optional = true }
 openlark-mail = { workspace = true, optional = true }
 openlark-meeting = { workspace = true, optional = true }
-openlark-people = { workspace = true, optional = true }
-openlark-task = { workspace = true, optional = true }
 
 # 重新导出工作空间依赖，为用户提供便利访问
 anyhow = { workspace = true }
@@ -288,17 +264,11 @@ hr = ["client", "openlark-hr"]
 
 # === 高级服务模块 (Advanced Services) ===
 ai = ["client", "openlark-ai"]
-admin = []  # admin crate存在但未完善
 meeting = ["client", "openlark-meeting"]
-calendar = ["client", "openlark-calendar"]
-collab = ["client", "openlark-collab"]
-approval = ["client", "openlark-approval"]
 helpdesk = ["client", "openlark-helpdesk"]
-hire = ["client", "openlark-hire"]
-mail = []  # mail crate存在但未完善
-people = ["client", "openlark-people"]
-task = ["client", "openlark-task"]
+mail = ["client", "openlark-mail"]
 application = ["client", "openlark-application"]
+base = ["client", "openlark-docs"]
 bitable = ["client", "openlark-docs"]
 
 # === 推荐功能组合 (Recommended Feature Sets) ===
