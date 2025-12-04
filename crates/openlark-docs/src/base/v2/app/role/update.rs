@@ -16,6 +16,7 @@ use super::RoleService;
 use super::models::RoleResponse as Role;
 
 /// 更新自定义角色请求
+#[allow(dead_code)]
 pub struct UpdateRoleV2Request {
     api_request: ApiRequest<UpdateRoleV2Response>,
     app_token: String,

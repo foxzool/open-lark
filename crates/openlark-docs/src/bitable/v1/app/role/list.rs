@@ -2,7 +2,7 @@
 //! Bitable V1 列出角色API
 
 use openlark_core::{
-    api::{ApiRequest, RequestData},
+    api::{ApiRequest},
     config::Config,
     error::{SDKResult, validation_error},
     http::Transport,
@@ -75,7 +75,7 @@ impl ListAppRoleRequest {
 
         // 设置API URL和查询参数
         let mut api_request = self.api_request;
-        api_request = api_request.api_path(api_url);
+        api_request.url = api_url;
 
         // 设置查询参数
         if let Some(user_id_type) = &self.user_id_type {
@@ -91,10 +91,15 @@ impl ListAppRoleRequest {
         }
 
         // 发送请求
-        let response: ListAppRoleResponse =
-            Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, None).await?;
 
-        Ok(response)
+        // 解析响应
+        let response_data: ListAppRoleResponse = response
+            .data
+            .and_then(|data| serde_json::from_value(data).ok())
+            .ok_or_else(|| validation_error("解析角色列表数据失败", "响应数据格式不正确"))?;
+
+        Ok(response_data)
     }
 }
 

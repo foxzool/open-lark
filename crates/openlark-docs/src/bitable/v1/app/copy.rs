@@ -20,13 +20,13 @@ pub struct CopyAppV1Request {
     /// 应用token
     app_token: String,
     /// 新应用名称
-    name: String,
+    name: Option<String>,
     /// 目标文件夹token
     folder_token: Option<String>,
-    /// 是否复制数据表
-    folder_type: String,
-    /// 复制的数据表ID列表
-    table_id_list: Option<Vec<String>>,
+    /// 是否复制内容（true: 不复制内容，false: 复制内容）
+    without_content: Option<bool>,
+    /// 时区
+    time_zone: Option<String>,
 }
 
 /// 复制多维表格响应
@@ -44,10 +44,10 @@ impl CopyAppV1Request {
             api_request: ApiRequest::post(""),
             config,
             app_token: String::new(),
-            name: String::new(),
+            name: None,
             folder_token: None,
-            folder_type: String::new(),
-            table_id_list: None,
+            without_content: None,
+            time_zone: None,
         }
     }
 
@@ -59,7 +59,7 @@ impl CopyAppV1Request {
 
     /// 设置新应用名称
     pub fn name(mut self, name: String) -> Self {
-        self.name = name;
+        self.name = Some(name);
         self
     }
 
@@ -69,15 +69,15 @@ impl CopyAppV1Request {
         self
     }
 
-    /// 设置是否复制数据表
-    pub fn folder_type(mut self, folder_type: String) -> Self {
-        self.folder_type = folder_type;
+    /// 设置是否复制内容（true: 不复制内容，false: 复制内容）
+    pub fn without_content(mut self, without_content: bool) -> Self {
+        self.without_content = Some(without_content);
         self
     }
 
-    /// 设置复制的数据表ID列表
-    pub fn table_id_list(mut self, table_id_list: Vec<String>) -> Self {
-        self.table_id_list = Some(table_id_list);
+    /// 设置时区
+    pub fn time_zone(mut self, time_zone: String) -> Self {
+        self.time_zone = Some(time_zone);
         self
     }
 
@@ -88,12 +88,14 @@ impl CopyAppV1Request {
             return Err(validation_error("app_token", "应用token不能为空"));
         }
 
-        if self.name.trim().is_empty() {
-            return Err(validation_error("name", "新应用名称不能为空"));
-        }
+        if let Some(ref name) = self.name {
+            if name.trim().is_empty() {
+                return Err(validation_error("name", "新应用名称不能为空"));
+            }
 
-        if self.name.len() > 100 {
-            return Err(validation_error("name", "应用名称长度不能超过100个字符"));
+            if name.len() > 100 {
+                return Err(validation_error("name", "应用名称长度不能超过100个字符"));
+            }
         }
 
         // 构建完整的API URL
@@ -102,16 +104,12 @@ impl CopyAppV1Request {
             self.config.base_url, self.app_token
         );
 
-        // 设置API URL
-        let mut api_request = self.api_request;
-        api_request.url = api_url;
-
         // 构建请求体
         let request_body = CopyAppRequestBody {
             name: self.name.clone(),
             folder_token: self.folder_token.clone(),
-            folder_type: self.folder_type.clone(),
-            table_id_list: self.table_id_list.clone(),
+            without_content: self.without_content,
+            time_zone: self.time_zone.clone(),
         };
 
         // 验证请求参数
@@ -119,21 +117,28 @@ impl CopyAppV1Request {
             return Err(validation_error("复制应用请求验证失败", e.to_string()));
         }
 
-        // 设置请求体
+        // 设置API URL和请求体
+        let mut api_request = self.api_request;
+        api_request.url = api_url;
         api_request.body = Some(RequestData::Json(serde_json::to_value(&request_body)?));
 
-        // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
+        // 转换为ApiRequest<()>以匹配Transport::request签名
         let request_for_transport: ApiRequest<()> = ApiRequest::post(api_request.url.clone())
             .body(api_request.body.unwrap_or(RequestData::Empty));
 
         let config = &self.config;
         let response = Transport::request(request_for_transport, config, None).await?;
 
-        // 手动解析响应数据为App类型
-        let app_data: App = response
+        // 解析响应数据，官方API格式为: { code: 0, data: { app: { ... } }, msg: "success" }
+        let response_data: serde_json::Value = response
             .data
-            .and_then(|data| serde_json::from_value(data).ok())
-            .ok_or_else(|| validation_error("解析应用数据失败", "响应数据格式不正确"))?;
+            .ok_or_else(|| validation_error("解析响应数据失败", "响应数据为空"))?;
+
+        // 从data中提取app对象
+        let app_data: App = serde_json::from_value(response_data.get("app")
+            .ok_or_else(|| validation_error("解析应用数据失败", "响应中缺少app字段"))?
+            .clone())
+            .map_err(|e| validation_error("解析应用数据失败", format!("JSON解析错误: {}", e)))?;
 
         Ok(CopyAppV1Response {
             data: app_data,
@@ -173,15 +178,15 @@ impl CopyAppV1Builder {
         self
     }
 
-    /// 设置是否复制数据表
-    pub fn folder_type(mut self, folder_type: String) -> Self {
-        self.request = self.request.folder_type(folder_type);
+    /// 设置是否复制内容（true: 不复制内容，false: 复制内容）
+    pub fn without_content(mut self, without_content: bool) -> Self {
+        self.request = self.request.without_content(without_content);
         self
     }
 
-    /// 设置复制的数据表ID列表
-    pub fn table_id_list(mut self, table_id_list: Vec<String>) -> Self {
-        self.request = self.request.table_id_list(table_id_list);
+    /// 设置时区
+    pub fn time_zone(mut self, time_zone: String) -> Self {
+        self.request = self.request.time_zone(time_zone);
         self
     }
 
@@ -198,15 +203,7 @@ impl AppService {
     }
 
     /// 创建复制多维表格请求
-    pub fn copy_app_v1(
-        &self,
-        app_token: String,
-        name: String,
-        folder_type: String,
-    ) -> CopyAppV1Request {
-        CopyAppV1Request::new(self.config.clone())
-            .app_token(app_token)
-            .name(name)
-            .folder_type(folder_type)
+    pub fn copy_app_v1(&self, app_token: String) -> CopyAppV1Request {
+        CopyAppV1Request::new(self.config.clone()).app_token(app_token)
     }
 }

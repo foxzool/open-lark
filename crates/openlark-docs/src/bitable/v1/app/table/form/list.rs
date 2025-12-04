@@ -11,6 +11,7 @@ use serde::{Deserialize, Serialize};
 
 /// 获取表单问题列表请求
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct ListFormQuestionRequest {
     config: Config,
     api_request: ApiRequest<ListFormQuestionResponse>,

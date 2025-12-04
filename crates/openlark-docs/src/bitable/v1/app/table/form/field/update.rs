@@ -10,6 +10,7 @@ use serde_json::Value;
 
 /// 更新表单字段问题请求
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct UpdateFormFieldQuestionRequest {
     api_request: ApiRequest<Self>,
     /// 多维表格的唯一标识符

@@ -3,18 +3,17 @@
 //! 定义了角色成员管理相关的数据结构，包括请求和响应模型。
 
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 
-/// 批量新增角色成员请求
+/// 批量新增角色成员请求模型
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct BatchCreateRoleMemberRequest {
+pub struct BatchCreateRoleMemberRequestModel {
     /// 协作者列表
-    pub member_list: Vec<BatchCreateMemberItem>,
+    pub member_list: Vec<BatchCreateMemberItemModel>,
 }
 
-/// 批量新增成员项
+/// 批量新增成员项模型
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct BatchCreateMemberItem {
+pub struct BatchCreateMemberItemModel {
     /// 用户ID列表
     pub user_ids: Vec<String>,
     /// 协作者类型
@@ -24,11 +23,11 @@ pub struct BatchCreateMemberItem {
     pub permissions: Option<Vec<String>>,
 }
 
-/// 批量新增角色成员响应
+/// 批量新增角色成员响应模型
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct BatchCreateRoleMemberResponse {
+pub struct BatchCreateRoleMemberResponseModel {
     /// 批量操作结果
-    pub results: Vec<BatchCreateResultItem>,
+    pub results: Vec<BatchCreateResultItemModel>,
     /// 是否有更多数据
     pub has_more: bool,
     /// 页面 token
@@ -36,9 +35,9 @@ pub struct BatchCreateRoleMemberResponse {
     pub page_token: Option<String>,
 }
 
-/// 批量新增结果项
+/// 批量新增结果项模型
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct BatchCreateResultItem {
+pub struct BatchCreateResultItemModel {
     /// 用户ID
     pub user_id: String,
     /// 操作结果
@@ -48,21 +47,21 @@ pub struct BatchCreateResultItem {
     pub error: Option<String>,
     /// 协作者信息
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub member: Option<RoleMemberInfo>,
+    pub member: Option<RoleMemberInfoModel>,
 }
 
-/// 批量删除角色成员请求
+/// 批量删除角色成员请求模型
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct BatchDeleteRoleMemberRequest {
+pub struct BatchDeleteRoleMemberRequestModel {
     /// 协作者ID列表
     pub member_ids: Vec<String>,
 }
 
-/// 批量删除角色成员响应
+/// 批量删除角色成员响应模型
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct BatchDeleteRoleMemberResponse {
+pub struct BatchDeleteRoleMemberResponseModel {
     /// 批量操作结果
-    pub results: Vec<BatchDeleteResultItem>,
+    pub results: Vec<BatchDeleteResultItemModel>,
     /// 是否有更多数据
     pub has_more: bool,
     /// 页面 token
@@ -70,9 +69,9 @@ pub struct BatchDeleteRoleMemberResponse {
     pub page_token: Option<String>,
 }
 
-/// 批量删除结果项
+/// 批量删除结果项模型
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct BatchDeleteResultItem {
+pub struct BatchDeleteResultItemModel {
     /// 协作者ID
     pub member_id: String,
     /// 操作结果
@@ -82,9 +81,9 @@ pub struct BatchDeleteResultItem {
     pub error: Option<String>,
 }
 
-/// 角色成员信息
+/// 角色成员信息模型
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct RoleMemberInfo {
+pub struct RoleMemberInfoModel {
     /// 协作者ID
     pub member_id: String,
     /// 协作者类型
@@ -112,7 +111,7 @@ pub struct RoleMemberInfo {
     pub update_time: Option<i64>,
 }
 
-impl BatchCreateRoleMemberRequest {
+impl BatchCreateRoleMemberRequestModel {
     /// 验证请求参数
     pub fn validate(&self) -> Result<(), String> {
         if self.member_list.is_empty() {
@@ -133,7 +132,7 @@ impl BatchCreateRoleMemberRequest {
     }
 }
 
-impl BatchDeleteRoleMemberRequest {
+impl BatchDeleteRoleMemberRequestModel {
     /// 验证请求参数
     pub fn validate(&self) -> Result<(), String> {
         if self.member_ids.is_empty() {

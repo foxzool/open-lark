@@ -14,6 +14,7 @@ use super::{
 };
 
 /// 新增自定义角色请求
+#[allow(dead_code)]
 pub struct CreateRoleV2Request {
     api_request: ApiRequest<CreateRoleV2Response>,
     app_token: String,

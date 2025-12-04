@@ -3,6 +3,16 @@
 use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use openlark_core::config::Config;
 use serde::{Deserialize, Serialize};
+
+// 导入子模块
+pub mod list;
+pub mod update;
+
+// 导出所有子模块内容，避免命名冲突
+// list模块中的Workflow与update模块冲突，使用重导出避免冲突
+pub use list::{ListWorkflowRequest, ListWorkflowResponse};
+pub use update::*;
+
 /// 简化的服务结构体
 pub struct SimpleService {}
 

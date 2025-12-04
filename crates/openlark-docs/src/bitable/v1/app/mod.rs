@@ -18,16 +18,35 @@ pub mod role;
 pub mod table;
 pub mod workflow;
 
-// 导出所有API
+// 导出所有API，但避免命名冲突
 pub use copy::*;
 pub use create::*;
+#[allow(ambiguous_glob_reexports)]
 pub use dashboard::*;
 pub use delete::*;
 pub use get::*;
-pub use role::*;
-pub use table::*;
 pub use update::*;
-pub use workflow::*;
+
+// 角色相关 - 选择性导入以避免命名冲突
+pub use role::{
+    AppRoleService, RoleMemberService, CreateAppRoleRequest, CreateAppRoleRequestBuilder, CreateAppRoleResponse,
+    DeleteAppRoleRequest, DeleteAppRoleRequestBuilder, DeleteAppRoleResponse,
+    ListAppRoleRequest, ListAppRoleRequestBuilder, ListAppRoleResponse,
+    UpdateAppRoleRequest, UpdateAppRoleRequestBuilder, UpdateAppRoleResponse,
+    BatchCreateRoleMemberRequest, BatchCreateRoleMemberRequestBuilder, BatchCreateRoleMemberResponse,
+    BatchDeleteRoleMemberRequest, BatchDeleteRoleMemberRequestBuilder, BatchDeleteRoleMemberResponse,
+    CreateRoleMemberRequest, CreateRoleMemberRequestBuilder, CreateRoleMemberResponse,
+    RoleMember, RoleMemberInfo, CreateAppRoleRequestBody, UpdateAppRoleRequestBody
+};
+
+#[allow(ambiguous_glob_reexports)]
+pub use table::*;
+
+// 工作流相关 - 选择性导入以避免命名冲突
+pub use workflow::{
+    AppWorkflowService, ListWorkflowRequest, ListWorkflowResponse,
+    UpdateWorkflowRequest, UpdateWorkflowResponse
+};
 
 /// 多维表格应用服务
 pub struct AppService {

@@ -1,6 +1,7 @@
 
 //! Bitable V1 创建角色API
 
+#[allow(unused_imports)]
 use openlark_core::{
     api::{ApiRequest, RequestData},
     config::Config,
@@ -84,16 +85,24 @@ impl CreateAppRoleRequest {
             block_roles: self.block_roles,
         };
 
-        // 设置API URL和请求体
+        // 创建API请求
         let mut api_request = self.api_request;
-        api_request = api_request.api_path(api_url);
-        api_request = api_request.body(serde_json::to_vec(&request_body)?);
+        api_request.url = api_url;
+        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(&request_body)?));
 
         // 发送请求
-        let response: CreateAppRoleResponse =
-            Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, None).await?;
 
-        Ok(response)
+        // 解析响应
+        let role_data: Role = response
+            .data
+            .and_then(|data| serde_json::from_value(data).ok())
+            .ok_or_else(|| validation_error("解析角色数据失败", "响应数据格式不正确"))?;
+
+        Ok(CreateAppRoleResponse {
+            data: Some(role_data),
+            success: response.raw_response.is_success(),
+        })
     }
 }
 
@@ -140,7 +149,7 @@ impl CreateAppRoleRequestBuilder {
     }
 }
 
-#[derive(Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 /// 数据表权限
 pub struct TableRole {
     /// 数据表 id
@@ -149,7 +158,7 @@ pub struct TableRole {
     pub role: String,
     /// 记录权限
     #[serde(skip_serializing_if = "Option::is_none")]
-    rec_rule: Option<String>,
+    pub rec_rule: Option<String>,
 }
 
 impl TableRole {
@@ -168,7 +177,7 @@ impl TableRole {
 }
 
 /// 数据表默认权限
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BlockRole {
     /// 多维表格数据表的唯一标识符
     pub block_id: String,
@@ -228,7 +237,7 @@ pub struct Role {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateAppRoleResponse {
     /// 角色信息
-    pub role: Option<Role>,
+    pub data: Option<Role>,
     /// 操作结果
     pub success: bool,
 }

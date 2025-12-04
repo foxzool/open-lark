@@ -1,14 +1,14 @@
 //! Bitable V1 批量删除角色成员API
 
 use openlark_core::{
-    api::{ApiRequest, RequestData},
+    api::ApiRequest,
     config::Config,
     error::{SDKResult, validation_error},
     http::Transport,
 };
 use serde::{Deserialize, Serialize};
 
-use super::models::{BatchDeleteRoleMemberRequest as ModelBatchDeleteRequest, BatchDeleteRoleMemberResponse as ModelBatchDeleteResponse};
+use super::models::{BatchDeleteRoleMemberRequestModel as ModelBatchDeleteRequest, BatchDeleteRoleMemberResponseModel as ModelBatchDeleteResponse, BatchDeleteResultItemModel as ModelBatchDeleteResultItem};
 
 /// 批量删除角色成员请求
 #[derive(Debug, Clone)]
@@ -99,25 +99,30 @@ impl BatchDeleteRoleMemberRequest {
 
         // 设置API URL和请求体
         let mut api_request = self.api_request;
-        api_request = api_request.api_path(api_url);
+        api_request.url = api_url;
 
         // 设置查询参数
         if let Some(user_id_type) = &self.user_id_type {
             api_request = api_request.query("user_id_type", user_id_type);
         }
 
-        api_request = api_request.body(serde_json::to_vec(&request_body)?);
+        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(&request_body)?));
 
         // 发送请求
-        let response: ModelBatchDeleteResponse =
-            Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, None).await?;
+
+        // 解析响应
+        let response_data: ModelBatchDeleteResponse = response
+            .data
+            .and_then(|data| serde_json::from_value(data).ok())
+            .ok_or_else(|| validation_error("解析批量删除成员数据失败", "响应数据格式不正确"))?;
 
         // 转换为标准响应格式
         let standard_response = BatchDeleteRoleMemberResponse {
-            results: response.results,
-            has_more: response.has_more,
-            page_token: response.page_token,
-            success: true,
+            results: response_data.results,
+            has_more: response_data.has_more,
+            page_token: response_data.page_token,
+            success: response.raw_response.is_success(),
         };
 
         Ok(standard_response)
@@ -174,16 +179,7 @@ impl BatchDeleteRoleMemberRequestBuilder {
 }
 
 /// 批量删除结果项
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct BatchDeleteResultItem {
-    /// 成员ID
-    pub member_id: String,
-    /// 操作结果
-    pub success: bool,
-    /// 错误信息
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub error: Option<String>,
-}
+pub type BatchDeleteResultItem = ModelBatchDeleteResultItem;
 
 /// 批量删除角色成员响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

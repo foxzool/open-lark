@@ -6,8 +6,16 @@ pub mod list;
 pub mod update;
 
 // Re-export common types for convenience
-pub use create::CreateFieldRequest;
-pub use create::{Field, FieldProperty, FieldType};
-pub use delete::DeleteFieldRequest;
-pub use list::ListFieldRequest;
-pub use update::UpdateFieldRequest;
+pub use create::{
+    CreateFieldRequest, CreateFieldRequestBuilder, CreateFieldResponse,
+    Field, FieldProperty, FieldType
+};
+pub use delete::{
+    DeleteFieldRequest, DeleteFieldRequestBuilder, DeleteFieldResponse
+};
+pub use list::{
+    ListFieldRequest, ListFieldRequestBuilder, ListFieldResponse
+};
+pub use update::{
+    UpdateFieldRequest, UpdateFieldRequestBuilder, UpdateFieldResponse
+};

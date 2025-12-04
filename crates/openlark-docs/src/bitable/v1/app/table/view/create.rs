@@ -23,7 +23,7 @@ pub struct CreateViewRequest {
     /// 数据表的 table_id
     table_id: String,
     /// 视图信息
-    view: ViewData,
+    view: CreateViewData,
     /// 用户 ID 类型
     user_id_type: Option<String>,
 }
@@ -36,7 +36,7 @@ impl CreateViewRequest {
             api_request: ApiRequest::post(""),
             app_token: String::new(),
             table_id: String::new(),
-            view: ViewData::default(),
+            view: CreateViewData::default(),
             user_id_type: None,
         }
     }
@@ -54,7 +54,7 @@ impl CreateViewRequest {
     }
 
     /// 设置视图信息
-    pub fn view(mut self, view: ViewData) -> Self {
+    pub fn view(mut self, view: CreateViewData) -> Self {
         self.view = view;
         self
     }
@@ -164,7 +164,7 @@ impl CreateViewRequestBuilder {
     }
 
     /// 设置视图信息
-    pub fn view(mut self, view: ViewData) -> Self {
+    pub fn view(mut self, view: CreateViewData) -> Self {
         self.request = self.request.view(view);
         self
     }
@@ -183,7 +183,7 @@ impl CreateViewRequestBuilder {
 
 #[derive(Serialize, Default, Debug, Clone)]
 /// 视图数据
-pub struct ViewData {
+pub struct CreateViewData {
     /// 视图名称
     pub view_name: String,
     /// 视图类型，可选值：grid (表格视图)、kanban (看板视图)、gallery (画册视图)、gantt (甘特视图)
@@ -192,7 +192,7 @@ pub struct ViewData {
     pub property: Option<Value>,
 }
 
-impl ViewData {
+impl CreateViewData {
     pub fn new(view_name: impl ToString) -> Self {
         Self {
             view_name: view_name.to_string(),
@@ -253,7 +253,7 @@ impl ViewData {
 /// 请求体结构
 #[derive(Serialize)]
 struct CreateViewRequestBody {
-    view: ViewData,
+    view: CreateViewData,
 }
 
 /// 创建视图响应

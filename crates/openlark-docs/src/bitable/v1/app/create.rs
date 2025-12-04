@@ -101,11 +101,16 @@ impl CreateAppV1Request {
         // 发送请求
         let response = Transport::request(request_for_transport, &self.config, None).await?;
 
-        // 解析响应数据为App类型
-        let app_data: App = response
+        // 解析响应数据，官方API格式为: { code: 0, data: { app: { ... } }, msg: "success" }
+        let response_data: serde_json::Value = response
             .data
-            .and_then(|data| serde_json::from_value(data).ok())
-            .ok_or_else(|| validation_error("解析应用数据失败", "响应数据格式不正确"))?;
+            .ok_or_else(|| validation_error("解析响应数据失败", "响应数据为空"))?;
+
+        // 从data中提取app对象
+        let app_data: App = serde_json::from_value(response_data.get("app")
+            .ok_or_else(|| validation_error("解析应用数据失败", "响应中缺少app字段"))?
+            .clone())
+            .map_err(|e| validation_error("解析应用数据失败", format!("JSON解析错误: {}", e)))?;
 
         Ok(CreateAppV1Response {
             data: app_data,
