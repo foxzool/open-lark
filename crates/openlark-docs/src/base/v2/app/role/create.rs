@@ -4,6 +4,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    validate_required,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -14,9 +15,7 @@ use super::{
 };
 
 /// 新增自定义角色请求
-#[allow(dead_code)]
 pub struct CreateRoleV2Request {
-    api_request: ApiRequest<CreateRoleV2Response>,
     app_token: String,
     /// 角色名称
     name: String,
@@ -47,7 +46,6 @@ impl CreateRoleV2Request {
     /// 创建新增自定义角色请求
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::post("/open-apis/base/v2/apps/:app_token/roles"),
             app_token: String::new(),
             name: String::new(),
             description: None,
@@ -58,123 +56,84 @@ impl CreateRoleV2Request {
     }
 
     /// 设置应用 token
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.app_token = app_token;
+    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
+        self.app_token = app_token.into();
         self
     }
 
     /// 设置角色名称
-    pub fn name(mut self, name: String) -> Self {
-        self.name = name;
+    pub fn name(mut self, name: impl Into<String>) -> Self {
+        self.name = name.into();
         self
     }
 
     /// 设置角色描述
-    pub fn description(mut self, description: String) -> Self {
-        self.description = Some(description);
+    pub fn description(mut self, description: impl Into<String>) -> Self {
+        self.description = Some(description.into());
         self
     }
 
     /// 设置角色权限列表
-    pub fn permissions(mut self, permissions: Vec<String>) -> Self {
-        self.permissions = permissions;
+    pub fn permissions(mut self, permissions: Vec<impl Into<String>>) -> Self {
+        self.permissions = permissions.into_iter().map(|p| p.into()).collect();
         self
     }
 
     /// 设置角色类型
-    pub fn role_type(mut self, role_type: String) -> Self {
-        self.role_type = Some(role_type);
+    pub fn role_type(mut self, role_type: impl Into<String>) -> Self {
+        self.role_type = Some(role_type.into());
         self
     }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<CreateRoleV2Response> {
+        // 验证必填字段
+        validate_required!(self.app_token, "应用令牌不能为空");
+        validate_required!(self.name, "角色名称不能为空");
+
         // 构建API路径
         let path = format!("/open-apis/base/v2/apps/{}/roles", self.app_token);
 
-        // 构建请求体 - 修正字段名称映射
+        // 构建请求体 - 使用实际的字段结构
         let request_body = CreateRoleRequest {
             role_name: self.name.clone(),
-            table_roles: None, // 根据实际API需求设置
+            table_roles: None, // 基础角色创建不需要表格权限
         };
 
-        // 创建新的API请求
+        // 创建API请求
         let api_request: ApiRequest<CreateRoleV2Response> =
-            ApiRequest::post(&format!("https://open.feishu.cn{}", path)).body(
+            ApiRequest::post(&path).body(
                 openlark_core::api::RequestData::Binary(serde_json::to_vec(&request_body)?),
             );
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
         response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+            openlark_core::validation_error("响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }
 
-/// 创建自定义角色Builder
-pub struct CreateRoleV2Builder {
-    request: CreateRoleV2Request,
-}
-
-impl CreateRoleV2Builder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: CreateRoleV2Request::new(config),
-        }
-    }
-
-    /// 设置应用 token
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
-
-    /// 设置角色名称
-    pub fn name(mut self, name: String) -> Self {
-        self.request = self.request.name(name);
-        self
-    }
-
-    /// 设置角色描述
-    pub fn description(mut self, description: String) -> Self {
-        self.request = self.request.description(description);
-        self
-    }
-
-    /// 设置角色权限列表
-    pub fn permissions(mut self, permissions: Vec<String>) -> Self {
-        self.request = self.request.permissions(permissions);
-        self
-    }
-
-    /// 设置角色类型
-    pub fn role_type(mut self, role_type: String) -> Self {
-        self.request = self.request.role_type(role_type);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> CreateRoleV2Request {
-        self.request
-    }
-}
-
 impl RoleService {
-    /// 创建新增自定义角色请求构建器
-    pub fn create_role_v2_builder(&self) -> CreateRoleV2Builder {
-        CreateRoleV2Builder::new(self.config.clone())
+    /// 创建新增自定义角色请求
+    pub fn create_role_v2_builder(
+        &self,
+        app_token: impl Into<String>,
+        name: impl Into<String>,
+    ) -> CreateRoleV2Request {
+        CreateRoleV2Request::new(self.config.clone())
+            .app_token(app_token)
+            .name(name)
     }
 
-    /// 创建新增自定义角色请求
+    /// 创建新增自定义角色请求（带完整参数）
     pub fn create_role_v2(
         &self,
-        app_token: String,
-        name: String,
-        description: Option<String>,
-        permissions: Vec<String>,
-        role_type: Option<String>,
+        app_token: impl Into<String>,
+        name: impl Into<String>,
+        description: Option<impl Into<String>>,
+        permissions: Vec<impl Into<String>>,
+        role_type: Option<impl Into<String>>,
     ) -> CreateRoleV2Request {
         let mut request = CreateRoleV2Request::new(self.config.clone())
             .app_token(app_token)
