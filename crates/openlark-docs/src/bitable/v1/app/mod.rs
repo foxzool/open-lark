@@ -7,7 +7,6 @@ use crate::base::v2::app::role::RoleService;
 // 应用级别API
 pub mod copy;
 pub mod create;
-pub mod delete;
 pub mod get;
 pub mod models;
 pub mod update;
@@ -23,7 +22,6 @@ pub use copy::*;
 pub use create::*;
 #[allow(ambiguous_glob_reexports)]
 pub use dashboard::*;
-pub use delete::*;
 pub use get::*;
 pub use update::*;
 
