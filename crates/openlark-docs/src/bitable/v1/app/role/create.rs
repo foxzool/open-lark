@@ -1,12 +1,12 @@
 
 //! Bitable V1 创建角色API
 
-#[allow(unused_imports)]
 use openlark_core::{
     api::{ApiRequest, RequestData},
     config::Config,
     error::{SDKResult, validation_error},
     http::Transport,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -15,7 +15,6 @@ use serde::{Deserialize, Serialize};
 pub struct CreateAppRoleRequest {
     /// 配置信息
     config: Config,
-    api_request: ApiRequest<CreateAppRoleResponse>,
     /// 多维表格的 app_token
     app_token: String,
     /// 角色名称
