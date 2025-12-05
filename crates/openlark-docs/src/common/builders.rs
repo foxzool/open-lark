@@ -88,17 +88,17 @@ macro_rules! impl_base_api_fields {
 macro_rules! validate_required {
     ($field:expr, $error_msg:expr) => {
         if $field.is_empty() {
-            return Err(openlark_core::error::SDKError::ValidationError($error_msg.to_string()));
+            return Err(openlark_core::validation_error($error_msg));
         }
     };
 
     ($field:expr, $error_msg:expr, $($fields:expr, $error_msgs:expr),+ $(,)?) => {
         if $field.is_empty() {
-            return Err(openlark_core::error::SDKError::ValidationError($error_msg.to_string()));
+            return Err(openlark_core::validation_error($error_msg));
         }
         $(
             if $fields.is_empty() {
-                return Err(openlark_core::error::SDKError::ValidationError($error_msgs.to_string()));
+                return Err(openlark_core::validation_error($error_msgs));
             }
         )*
     };
