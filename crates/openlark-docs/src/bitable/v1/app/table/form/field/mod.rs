@@ -1,7 +1,6 @@
 pub mod list;
 pub mod models;
 pub mod patch;
-pub mod update;
 
 use openlark_core::config::Config;
 
@@ -13,10 +12,6 @@ pub use list::{
 pub use models::{PatchFormFieldRequest};
 pub use patch::{
     PatchFormFieldQuestionV1Request, PatchFormFieldQuestionV1Response,
-};
-pub use update::{
-    update_form_field_question, UpdateFormFieldQuestionRequest,
-    UpdateFormFieldQuestionRequestBuilder, UpdateFormFieldQuestionResponse,
 };
 
 /// 表单字段服务
@@ -36,15 +31,5 @@ impl FormFieldService {
         option: Option<openlark_core::req_option::RequestOption>,
     ) -> openlark_core::SDKResult<openlark_core::api::Response<ListFormFieldQuestionResponse>> {
         list::list_form_field_questions(request, &self.config, option).await
-    }
-
-    /// 更新表单问题
-    pub async fn update(
-        &self,
-        request: UpdateFormFieldQuestionRequest,
-        option: Option<openlark_core::req_option::RequestOption>,
-    ) -> openlark_core::SDKResult<openlark_core::api::Response<UpdateFormFieldQuestionResponse>>
-    {
-        update::update_form_field_question(request, &self.config, option).await
     }
 }
