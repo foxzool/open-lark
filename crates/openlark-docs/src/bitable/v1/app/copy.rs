@@ -3,8 +3,8 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::validation_error,
     http::Transport,
+    validate_required,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -14,7 +14,6 @@ use super::AppService;
 
 /// 复制多维表格请求
 pub struct CopyAppV1Request {
-    api_request: ApiRequest<CopyAppV1Response>,
     /// 应用token
     app_token: String,
     /// 新应用名称
@@ -53,7 +52,6 @@ impl CopyAppV1Request {
     /// 创建复制多维表格请求
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::post("/open-apis/bitable/v1/apps/:app_token/copy"),
             app_token: String::new(),
             name: None,
             folder_token: None,
@@ -64,20 +62,20 @@ impl CopyAppV1Request {
     }
 
     /// 设置应用token
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.app_token = app_token;
+    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
+        self.app_token = app_token.into();
         self
     }
 
     /// 设置新应用名称
-    pub fn name(mut self, name: String) -> Self {
-        self.name = Some(name);
+    pub fn name(mut self, name: impl Into<String>) -> Self {
+        self.name = Some(name.into());
         self
     }
 
     /// 设置目标文件夹token
-    pub fn folder_token(mut self, folder_token: String) -> Self {
-        self.folder_token = Some(folder_token);
+    pub fn folder_token(mut self, folder_token: impl Into<String>) -> Self {
+        self.folder_token = Some(folder_token.into());
         self
     }
 
@@ -88,27 +86,15 @@ impl CopyAppV1Request {
     }
 
     /// 设置时区
-    pub fn time_zone(mut self, time_zone: String) -> Self {
-        self.time_zone = Some(time_zone);
+    pub fn time_zone(mut self, time_zone: impl Into<String>) -> Self {
+        self.time_zone = Some(time_zone.into());
         self
     }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<CopyAppV1Response> {
-        // 参数验证
-        if self.app_token.trim().is_empty() {
-            return Err(validation_error("app_token", "应用token不能为空"));
-        }
-
-        if let Some(ref name) = self.name {
-            if name.trim().is_empty() {
-                return Err(validation_error("name", "新应用名称不能为空"));
-            }
-
-            if name.len() > 100 {
-                return Err(validation_error("name", "应用名称长度不能超过100个字符"));
-            }
-        }
+        // 验证必填字段
+        validate_required!(self.app_token, "应用令牌不能为空");
 
         // 构建API路径
         let path = format!("/open-apis/bitable/v1/apps/{}/copy", self.app_token);
@@ -121,80 +107,54 @@ impl CopyAppV1Request {
             time_zone: self.time_zone.clone(),
         };
 
-        // 验证请求参数
-        if let Err(e) = request_body.validate() {
-            return Err(validation_error("复制应用请求验证失败", e.to_string()));
-        }
-
         // 创建API请求
-        let api_request: ApiRequest<CopyAppV1Response> = self.api_request
+        let api_request: ApiRequest<CopyAppV1Response> = ApiRequest::post(&path)
             .body(openlark_core::api::RequestData::Binary(serde_json::to_vec(&request_body)?));
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
         response.data.ok_or_else(|| {
-            validation_error("响应数据为空", "服务器没有返回有效的数据")
+            openlark_core::validation_error("响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }
 
-/// 复制多维表格Builder
-pub struct CopyAppV1Builder {
-    request: CopyAppV1Request,
-}
-
-impl CopyAppV1Builder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: CopyAppV1Request::new(config),
-        }
-    }
-
-    /// 设置应用token
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
-
-    /// 设置新应用名称
-    pub fn name(mut self, name: String) -> Self {
-        self.request = self.request.name(name);
-        self
-    }
-
-    /// 设置目标文件夹token
-    pub fn folder_token(mut self, folder_token: String) -> Self {
-        self.request = self.request.folder_token(folder_token);
-        self
-    }
-
-    /// 设置是否复制内容（true: 不复制内容，false: 复制内容）
-    pub fn without_content(mut self, without_content: bool) -> Self {
-        self.request = self.request.without_content(without_content);
-        self
-    }
-
-    /// 设置时区
-    pub fn time_zone(mut self, time_zone: String) -> Self {
-        self.request = self.request.time_zone(time_zone);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> CopyAppV1Request {
-        self.request
-    }
-}
-
 impl AppService {
-    /// 创建复制多维表格请求构建器
-    pub fn copy_app_v1_builder(&self) -> CopyAppV1Builder {
-        CopyAppV1Builder::new(self.config.clone())
+    /// 创建复制多维表格请求
+    pub fn copy_builder(
+        &self,
+        app_token: impl Into<String>,
+    ) -> CopyAppV1Request {
+        CopyAppV1Request::new(self.config.clone()).app_token(app_token)
     }
 
-    /// 创建复制多维表格请求
-    pub fn copy_app_v1(&self, app_token: String) -> CopyAppV1Request {
-        CopyAppV1Request::new(self.config.clone()).app_token(app_token)
+    /// 创建复制多维表格请求（带完整参数）
+    pub fn copy_app_v1(
+        &self,
+        app_token: impl Into<String>,
+        name: Option<impl Into<String>>,
+        folder_token: Option<impl Into<String>>,
+        without_content: Option<bool>,
+        time_zone: Option<impl Into<String>>,
+    ) -> CopyAppV1Request {
+        let mut request = CopyAppV1Request::new(self.config.clone()).app_token(app_token);
+
+        if let Some(name) = name {
+            request = request.name(name);
+        }
+
+        if let Some(folder_token) = folder_token {
+            request = request.folder_token(folder_token);
+        }
+
+        if let Some(without_content) = without_content {
+            request = request.without_content(without_content);
+        }
+
+        if let Some(time_zone) = time_zone {
+            request = request.time_zone(time_zone);
+        }
+
+        request
     }
 }
