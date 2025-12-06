@@ -6,7 +6,6 @@ use super::context::ServiceContext;
 use super::service::{Service, ServiceHealth, ServiceKind};
 use crate::{error::with_operation_context, Config, Result};
 use async_trait::async_trait;
-use openlark_core::error::ErrorTrait;
 
 /// 令牌信息
 #[derive(Debug, Clone)]
@@ -61,13 +60,8 @@ pub struct AuthService {
 
 impl AuthService {
     /// 创建新的认证服务实例
-    pub fn new(config: &Config) -> Self {
-        let core_config = openlark_core::config::Config {
-            app_id: config.app_id.clone(),
-            app_secret: config.app_secret.clone(),
-            base_url: config.base_url.clone(),
-            ..Default::default()
-        };
+    pub fn new(_config: &Config) -> Self {
+        let core_config = openlark_core::config::Config::default();
 
         Self { config: core_config }
     }
@@ -118,13 +112,13 @@ impl AuthService {
         let result =
             with_operation_context(response, "get_app_access_token", "AuthService")?;
 
-        tracing::debug!("成功获取商店应用访问令牌，过期时间: {}秒", result.expire);
+        tracing::debug!("成功获取商店应用访问令牌，过期时间: {}秒", result.expires_in);
 
         Ok(TokenInfo {
             access_token: result.app_access_token,
             token_type: "Bearer".to_string(),
-            expires_in: result.expire as u64,
-            expires_at: chrono::Utc::now() + chrono::Duration::seconds(result.expire as i64),
+            expires_in: result.expires_in as u64,
+            expires_at: chrono::Utc::now() + chrono::Duration::seconds(result.expires_in as i64),
             scope: Some("app:all".to_string()),
         })
     }
@@ -146,13 +140,13 @@ impl AuthService {
         let result =
             with_operation_context(response, "get_internal_tenant_access_token", "AuthService")?;
 
-        tracing::debug!("成功获取自建应用租户访问令牌，过期时间: {}秒", result.expire);
+        tracing::debug!("成功获取自建应用租户访问令牌，过期时间: {}秒", result.expires_in);
 
         Ok(TokenInfo {
             access_token: result.tenant_access_token,
             token_type: "Bearer".to_string(),
-            expires_in: result.expire as u64,
-            expires_at: chrono::Utc::now() + chrono::Duration::seconds(result.expire as i64),
+            expires_in: result.expires_in as u64,
+            expires_at: chrono::Utc::now() + chrono::Duration::seconds(result.expires_in as i64),
             scope: Some("tenant:all".to_string()),
         })
     }
@@ -174,13 +168,13 @@ impl AuthService {
         let result =
             with_operation_context(response, "get_tenant_access_token", "AuthService")?;
 
-        tracing::debug!("成功获取商店应用租户访问令牌，过期时间: {}秒", result.expire);
+        tracing::debug!("成功获取商店应用租户访问令牌，过期时间: {}秒", result.expires_in);
 
         Ok(TokenInfo {
             access_token: result.tenant_access_token,
             token_type: "Bearer".to_string(),
-            expires_in: result.expire as u64,
-            expires_at: chrono::Utc::now() + chrono::Duration::seconds(result.expire as i64),
+            expires_in: result.expires_in as u64,
+            expires_at: chrono::Utc::now() + chrono::Duration::seconds(result.expires_in as i64),
             scope: Some("tenant:all".to_string()),
         })
     }
@@ -203,16 +197,16 @@ impl AuthService {
 
         // 转换为统一的UserInfo结构
         let user_info = UserInfo {
-            user_id: result.data.user_id,
+            user_id: result.data.user_id.unwrap_or_default(),
             open_id: result.data.open_id,
-            union_id: Some(result.data.union_id),
-            name: result.data.name,
-            nickname: Some(result.data.en_name),
-            email: Some(result.data.email),
-            mobile: Some(result.data.mobile),
-            avatar_url: Some(result.data.avatar.avatar_240),
-            gender: Some(result.data.gender),
-            tenant_key: Some(result.data.tenant_key),
+            union_id: result.data.union_id,
+            name: result.data.name.unwrap_or_default(),
+            nickname: result.data.en_name,
+            email: result.data.email,
+            mobile: result.data.mobile,
+            avatar_url: result.data.avatar.and_then(|a| a.avatar_240),
+            gender: None, // UserInfo 中没有 gender 字段
+            tenant_key: result.data.tenant_key,
         };
 
         tracing::debug!("成功获取用户信息: {}", user_info.name);
@@ -307,8 +301,6 @@ impl AuthService {
             .access_token()
             .code(code)
             .redirect_uri(redirect_uri)
-            .app_id(&self.config.app_id)
-            .app_secret(&self.config.app_secret)
             .send()
             .await;
 
@@ -333,8 +325,6 @@ impl AuthService {
             .oidc()
             .refresh_access_token()
             .refresh_token(refresh_token)
-            .app_id(&self.config.app_id)
-            .app_secret(&self.config.app_secret)
             .send()
             .await;
 
@@ -382,8 +372,8 @@ impl AuthService {
 impl Service for AuthService {
     fn kind(&self) -> ServiceKind {
         ServiceKind {
-            name: "auth".to_string(),
-            version: "1.0.0".to_string(),
+            name: "auth".into(),
+            version: "1.0.0".into(),
         }
     }
 
@@ -416,6 +406,6 @@ impl Service for AuthService {
     }
 
     fn health(&self) -> ServiceHealth {
-        ServiceHealth::Healthy
+        ServiceHealth::Ready
     }
 }

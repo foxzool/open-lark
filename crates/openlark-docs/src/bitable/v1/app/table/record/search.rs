@@ -1,4 +1,6 @@
-//! Bitable V1 搜索记录API
+//! Bitable 搜索记录API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/record/search
 
 use openlark_core::{
     api::{ApiRequest, RequestData},
@@ -9,6 +11,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 搜索记录请求
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct SearchRecordRequest {
     /// 配置信息

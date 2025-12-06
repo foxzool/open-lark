@@ -39,6 +39,19 @@ pub mod endpoints;
 // Re-export commonly used types from crate root
 pub use error::{CoreError, SDKResult};
 
+// Re-export validation utilities
+pub use validation::validate_required;
+
+// Re-export validate_required macro for docs module
+#[macro_export]
+macro_rules! validate_required {
+    ($field:expr, $error_msg:expr) => {
+        if $field.is_empty() {
+            return Err(openlark_core::error::CoreError::validation_msg($error_msg));
+        }
+    };
+}
+
 /// Prelude module for convenient imports.
 pub mod prelude {
     // Re-export new API module
@@ -50,6 +63,8 @@ pub mod prelude {
     pub use crate::http::*;
     pub use crate::req_option::*;
     pub use crate::standard_response::*;
+    pub use crate::validate_required;
+    pub use crate::error::validation_error;
 
     // Re-export commonly used dependencies
     pub use anyhow::Result;

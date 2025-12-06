@@ -419,6 +419,7 @@ pub fn with_operation_context<T>(
 // ============================================================================
 
 /// 错误分析器，提供详细的错误信息和恢复建议
+#[derive(Debug)]
 pub struct ErrorAnalyzer<'a> {
     error: &'a Error,
 }

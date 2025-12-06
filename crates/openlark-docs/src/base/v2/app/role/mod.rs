@@ -12,6 +12,9 @@ pub mod list;
 pub mod models;
 pub mod update;
 
+#[cfg(test)]
+mod tests;
+
 pub use create::*;
 pub use list::*;
 pub use update::*;

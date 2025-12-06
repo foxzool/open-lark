@@ -1,7 +1,9 @@
-//! Bitable V1 获取记录API
+//! Bitable 获取记录API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/record/get
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     error::{validation_error, SDKResult},
     http::Transport,
@@ -9,6 +11,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 获取记录请求
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct GetRecordRequest {
     /// 配置信息
@@ -103,12 +106,14 @@ impl GetRecordRequest {
             return Err(validation_error("record_id", "记录ID不能为空"));
         }
 
-        // 构建API路径
-        let path = format!("/open-apis/bitable/v1/apps/{}/tables/{}/records/{}", self.app_token, self.table_id, self.record_id);
+        // 🚀 使用新的enum+builder系统生成API端点
+        // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
+        use crate::common::api_endpoints::BitableApiV1;
+        let api_endpoint = BitableApiV1::record_get(&self.app_token, &self.table_id, &self.record_id);
 
-        // 创建API请求
+        // 创建API请求 - 使用类型安全的URL生成
         let mut api_request: ApiRequest<GetRecordResponse> =
-            ApiRequest::get(&format!("https://open.feishu.cn{}", path));
+            ApiRequest::get(&api_endpoint.to_url());
 
         // 构建查询参数
         if let Some(ref user_id_type) = self.user_id_type {

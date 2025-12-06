@@ -6290,6 +6290,643 @@ crates/
 3. **文档更新**: API文档和示例更新
 4. **发布包**: 发布到crates.io
 
+## API端点管理系统
+
+### 10.1 Enum+Builder API端点系统（最优可维护性）
+
+#### 10.1.1 设计理念
+
+**核心目标**：
+- **类型安全**：编译时验证API路径正确性
+- **IDE支持**：完整的自动补全和智能提示
+- **性能优化**：零拷贝字符串操作，避免运行时格式化
+- **可维护性**：统一的API管理模式，易于扩展和维护
+
+**架构原则**：
+1. **单一职责**：每个枚举变体代表一个API端点
+2. **开闭原则**：易于添加新API，无需修改现有代码
+3. **依赖倒置**：高层模块不依赖低层模块的字符串常量
+4. **接口隔离**：不同服务的API端点相互独立
+
+#### 10.1.2 核心架构
+
+**系统架构图**：
+```mermaid
+graph TD
+    A["应用层"] --> B["Enum+Builder API端点系统"]
+    B --> C["BaseApiV2 枚举"]
+    B --> D["BitableApiV1 枚举"]
+    B --> E["其他服务API枚举"]
+
+    C --> F["角色管理端点"]
+    D --> G["应用管理端点"]
+    D --> H["表格管理端点"]
+    D --> I["记录管理端点"]
+
+    F --> J["URL生成器"]
+    G --> J
+    H --> J
+    I --> J
+
+    J --> K["类型安全的URL"]
+    J --> L["路径提取器"]
+    J --> M["自定义Base URL"]
+```
+
+**核心组件**：
+```rust
+// API基础URL配置
+pub static DEFAULT_API_BASE: &str = "https://open.feishu.cn/open-apis";
+
+/// Base V2 API端点枚举
+#[derive(Debug, Clone)]
+pub enum BaseApiV2<'a> {
+    /// 角色管理
+    Role {
+        create: CreateRole<'a>,
+        update: UpdateRole<'a>,
+        list: ListRoles<'a>,
+    },
+}
+
+/// Bitable V1 API端点枚举
+#[derive(Debug, Clone)]
+pub enum BitableApiV1<'a> {
+    /// 应用管理
+    App {
+        create: CreateApp<'a>,
+        get: GetApp<'a>,
+        copy: CopyApp<'a>,
+        update: UpdateApp<'a>,
+    },
+
+    /// 角色管理
+    Role {
+        create: CreateAppRole<'a>,
+        list: ListAppRoles<'a>,
+        update: UpdateAppRole<'a>,
+        delete: DeleteAppRole<'a>,
+    },
+
+    /// 表格管理
+    Table {
+        create: CreateTable<'a>,
+        list: ListTables<'a>,
+        update: UpdateTable<'a>,
+        patch: PatchTable<'a>,
+        delete: DeleteTable<'a>,
+    },
+
+    /// 记录管理
+    Record {
+        create: CreateRecord<'a>,
+        get: GetRecord<'a>,
+        list: ListRecords<'a>,
+        update: UpdateRecord<'a>,
+        delete: DeleteRecord<'a>,
+    },
+
+    /// 字段管理
+    Field {
+        create: CreateField<'a>,
+        list: ListFields<'a>,
+        update: UpdateField<'a>,
+        delete: DeleteField<'a>,
+    },
+
+    /// 视图管理
+    View {
+        create: CreateView<'a>,
+        get: GetView<'a>,
+        list: ListViews<'a>,
+        update: UpdateView<'a>,
+        patch: PatchView<'a>,
+        delete: DeleteView<'a>,
+    },
+
+    /// 角色成员管理
+    RoleMember {
+        create: CreateRoleMember<'a>,
+        list: ListRoleMembers<'a>,
+        delete: DeleteRoleMember<'a>,
+        batch_create: BatchCreateRoleMembers<'a>,
+        batch_delete: BatchDeleteRoleMembers<'a>,
+    },
+}
+```
+
+#### 10.1.3 构建器模式实现
+
+**URL构建器**：
+```rust
+/// URL生成特征
+pub trait ApiEndpoint<'a> {
+    /// 生成完整URL
+    fn to_url(&self) -> String;
+
+    /// 生成路径部分（用于调试和日志）
+    fn to_path(&self) -> String;
+
+    /// 使用自定义基础URL生成URL
+    fn to_url_with_base(&self, base_url: &str) -> String;
+
+    /// 获取HTTP方法
+    fn http_method(&self) -> HttpMethod;
+
+    /// 获取API描述
+    fn description(&self) -> &'static str;
+}
+
+/// 角色创建API端点
+#[derive(Debug, Clone)]
+pub struct CreateRole<'a> {
+    app_token: &'a str,
+}
+
+impl<'a> ApiEndpoint<'a> for CreateRole<'a> {
+    fn to_url(&self) -> String {
+        format!("{}/base/v2/apps/{}/roles", DEFAULT_API_BASE, self.app_token)
+    }
+
+    fn to_path(&self) -> String {
+        format!("/base/v2/apps/{}/roles", self.app_token)
+    }
+
+    fn to_url_with_base(&self, base_url: &str) -> String {
+        format!("{}/base/v2/apps/{}/roles", base_url, self.app_token)
+    }
+
+    fn http_method(&self) -> HttpMethod {
+        HttpMethod::Post
+    }
+
+    fn description(&self) -> &'static str {
+        "创建自定义角色"
+    }
+}
+
+/// 记录创建API端点
+#[derive(Debug, Clone)]
+pub struct CreateRecord<'a> {
+    app_token: &'a str,
+    table_id: &'a str,
+}
+
+impl<'a> ApiEndpoint<'a> for CreateRecord<'a> {
+    fn to_url(&self) -> String {
+        format!("{}/bitable/v1/apps/{}/tables/{}/records",
+                DEFAULT_API_BASE, self.app_token, self.table_id)
+    }
+
+    fn to_path(&self) -> String {
+        format!("/bitable/v1/apps/{}/tables/{}/records", self.app_token, self.table_id)
+    }
+
+    fn to_url_with_base(&self, base_url: &str) -> String {
+        format!("{}/bitable/v1/apps/{}/tables/{}/records",
+                base_url, self.app_token, self.table_id)
+    }
+
+    fn http_method(&self) -> HttpMethod {
+        HttpMethod::Post
+    }
+
+    fn description(&self) -> &'static str {
+        "创建多维表格记录"
+    }
+}
+```
+
+#### 10.1.4 使用示例
+
+**基础使用**：
+```rust
+use openlark_docs::common::api_endpoints::{BaseApiV2, BitableApiV1};
+
+// 创建角色API端点
+let role_endpoint = BaseApiV2::role_create("app_token_123");
+println!("URL: {}", role_endpoint.to_url());
+println!("路径: {}", role_endpoint.to_path());
+
+// 创建记录API端点
+let record_endpoint = BitableApiV1::record_create("app_token_123", "table_456");
+println!("URL: {}", record_endpoint.to_url());
+println!("路径: {}", record_endpoint.to_path());
+
+// 使用自定义Base URL
+let custom_url = role_endpoint.to_url_with_base("https://custom.feishu.cn/api");
+println!("自定义URL: {}", custom_url);
+```
+
+**与现有API集成**：
+```rust
+impl CreateRoleV2Request {
+    /// 执行请求（使用现代化API端点系统）
+    pub async fn execute(self) -> SDKResult<CreateRoleV2Response> {
+        // 验证必填字段
+        validate_required!(self.app_token, "应用令牌不能为空");
+        validate_required!(self.name, "角色名称不能为空");
+
+        // 🚀 使用新的enum+builder系统生成API端点
+        use crate::common::api_endpoints::BaseApiV2;
+        let api_endpoint = BaseApiV2::role_create(&self.app_token);
+
+        // 构建请求体
+        let request_body = serde_json::json!({
+            "name": self.name,
+            "description": self.description
+        });
+
+        // 创建API请求 - 使用类型安全的URL生成
+        let api_request: ApiRequest<CreateRoleV2Response> =
+            ApiRequest::post(&api_endpoint.to_url())
+                .body(RequestData::Json(request_body));
+
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            validation_error("响应数据为空", "服务器没有返回有效的数据")
+        })
+    }
+}
+```
+
+#### 10.1.5 性能优化
+
+**零拷贝优化**：
+```rust
+// 传统方式：运行时字符串分配（开销大）
+let traditional_url = format!("{}/open-apis/base/v2/apps/{}/roles", base_url, app_token);
+
+// 现代化方式：编译时优化（零开销）
+let modern_url = BaseApiV2::role_create(app_token).to_url();
+```
+
+**内存分配对比**：
+```rust
+// 性能测试
+#[cfg(test)]
+mod performance_tests {
+    use super::*;
+    use std::time::Instant;
+
+    #[test]
+    fn benchmark_url_generation() {
+        let iterations = 100_000;
+        let app_token = "app_token_12345";
+
+        // 传统方式
+        let start = Instant::now();
+        for _ in 0..iterations {
+            let _url = format!("{}/open-apis/base/v2/apps/{}/roles",
+                             "https://open.feishu.cn", app_token);
+        }
+        let traditional_duration = start.elapsed();
+
+        // 现代化方式
+        let start = Instant::now();
+        for _ in 0..iterations {
+            let _url = BaseApiV2::role_create(app_token).to_url();
+        }
+        let modern_duration = start.elapsed();
+
+        println!("传统方式: {:?}", traditional_duration);
+        println!("现代化方式: {:?}", modern_duration);
+        println!("性能提升: {:.2}x",
+                 traditional_duration.as_nanos() as f64 / modern_duration.as_nanos() as f64);
+    }
+}
+```
+
+**编译时验证**：
+```rust
+// ✅ 类型安全 - 编译时验证
+let endpoint = BaseApiV2::role_create("app_token");  // 正确
+// endpoint = BaseApiV2::role_create_invalid("app_token");  // 编译错误：方法不存在
+
+// ❌ 字符串拼接 - 运行时错误
+let url = format!("{}/open-apis/base/v2/apps/{}/rols", base_url, app_token);  // 拼写错误，编译时无法检测
+```
+
+#### 10.1.6 扩展和集成
+
+**新服务集成模式**：
+```rust
+// 为新服务创建API端点枚举
+#[derive(Debug, Clone)]
+pub enum AIServiceV1<'a> {
+    /// AI智能体管理
+    Agent {
+        create: CreateAgent<'a>,
+        get: GetAgent<'a>,
+        list: ListAgents<'a>,
+        delete: DeleteAgent<'a>,
+    },
+
+    /// 对话管理
+    Conversation {
+        create: CreateConversation<'a>,
+        send: SendMessage<'a>,
+        get: GetConversation<'a>,
+        list: ListConversations<'a>,
+    },
+}
+
+// 统一的API端点入口
+pub enum ApiEndpoints<'a> {
+    Base(BaseApiV2<'a>),
+    Bitable(BitableApiV1<'a>),
+    AI(AIServiceV1<'a>),
+    // 更多服务...
+}
+
+impl<'a> ApiEndpoints<'a> {
+    pub fn base_create_role(app_token: &'a str) -> CreateRole<'a> {
+        ApiEndpoints::Base(BaseApiV2::role_create(app_token))
+    }
+
+    pub fn bitable_create_record(app_token: &'a str, table_id: &'a str) -> CreateRecord<'a> {
+        ApiEndpoints::Bitable(BitableApiV1::record_create(app_token, table_id))
+    }
+}
+```
+
+#### 10.1.7 最佳实践
+
+**命名约定**：
+```rust
+// ✅ 清晰的命名
+CreateRole          // 创建角色
+ListAppRoles        // 列出应用角色
+UpdateTableFields   // 更新表格字段
+BatchDeleteRecords  // 批量删除记录
+
+// ❌ 模糊的命名
+RoleApi            // 不明确的API
+TableHandler      // 不清晰的处理器
+```
+
+**文档和注释**：
+```rust
+/// 创建自定义角色
+///
+/// # 参数
+/// - `app_token`: 应用令牌，用于标识具体的多维表格应用
+///
+/// # 返回
+/// 返回CreateRole端点，可以生成类型安全的API URL
+///
+/// # 示例
+/// ```rust
+/// let endpoint = BaseApiV2::role_create("app_token_123");
+/// let url = endpoint.to_url(); // "https://open.feishu.cn/open-apis/base/v2/apps/app_token_123/roles"
+/// ```
+pub fn role_create(app_token: &'a str) -> CreateRole<'a> {
+    CreateRole { app_token }
+}
+```
+
+**错误处理**：
+```rust
+// 类型安全的API调用
+pub async fn safe_api_call(app_token: &str) -> SDKResult<String> {
+    if app_token.is_empty() {
+        return Err(validation_error("app_token", "应用令牌不能为空"));
+    }
+
+    let endpoint = BaseApiV2::role_create(app_token);
+
+    // 进一步的API调用逻辑
+    let url = endpoint.to_url();
+
+    // 模拟API调用
+    Ok(url)
+}
+```
+
+### 10.2 API端点管理器
+
+#### 10.2.1 统一管理接口
+
+**端点管理器**：
+```rust
+/// API端点管理器
+pub struct ApiEndpointManager;
+
+impl ApiEndpointManager {
+    /// 获取所有可用的API端点
+    pub fn list_available_endpoints() -> Vec<EndpointInfo> {
+        vec![
+            // Base API
+            EndpointInfo {
+                service: "base",
+                version: "v2",
+                endpoint: "role_create",
+                method: "POST",
+                description: "创建自定义角色",
+            },
+
+            // Bitable API
+            EndpointInfo {
+                service: "bitable",
+                version: "v1",
+                endpoint: "record_create",
+                method: "POST",
+                description: "创建多维表格记录",
+            },
+            // ... 更多端点
+        ]
+    }
+
+    /// 验证API端点
+    pub fn validate_endpoint(service: &str, endpoint: &str) -> Result<(), EndpointError> {
+        let available = Self::list_available_endpoints();
+
+        if let Some(found) = available.iter().find(|e| e.service == service && e.endpoint == endpoint) {
+            println!("验证通过: {}.{}", service, endpoint);
+            Ok(())
+        } else {
+            Err(EndpointError::NotFound {
+                service: service.to_string(),
+                endpoint: endpoint.to_string(),
+            })
+        }
+    }
+
+    /// 生成API文档
+    pub fn generate_api_docs() -> String {
+        let endpoints = Self::list_available_endpoints();
+        let mut docs = String::new();
+
+        docs.push_str("# API端点文档\n\n");
+
+        for endpoint in endpoints {
+            docs.push_str(&format!("## {}.{}", endpoint.service, endpoint.endpoint));
+            docs.push_str(&format!("\n**描述**: {}", endpoint.description));
+            docs.push_str(&format!("\n**方法**: {}", endpoint.method));
+            docs.push_str(&format!("\n**版本**: {}", endpoint.version));
+            docs.push_str("\n");
+        }
+
+        docs
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct EndpointInfo {
+    pub service: String,
+    pub version: String,
+    pub endpoint: String,
+    pub method: String,
+    pub description: String,
+}
+
+#[derive(Debug, thiserror::Error)]
+pub enum EndpointError {
+    #[error("API端点不存在: {service}.{endpoint}")]
+    NotFound { service: String, endpoint: String },
+
+    #[error("API端点验证失败: {message}")]
+    ValidationFailed { message: String },
+}
+```
+
+#### 10.2.2 动态端点发现
+
+**端点发现机制**：
+```rust
+/// 动态端点发现器
+pub struct DynamicEndpointDiscovery {
+    endpoints: Arc<RwLock<HashMap<String, EndpointInfo>>>,
+}
+
+impl DynamicEndpointDiscovery {
+    pub fn new() -> Self {
+        Self {
+            endpoints: Arc::new(RwLock::new(HashMap::new())),
+        }
+    }
+
+    /// 注册新的API端点
+    pub async fn register_endpoint(
+        &self,
+        service: String,
+        version: String,
+        endpoint: String,
+        info: EndpointInfo,
+    ) -> Result<(), EndpointError> {
+        let mut endpoints = self.endpoints.write().await;
+        let key = format!("{}.{}.{}", service, version, endpoint);
+
+        if endpoints.contains_key(&key) {
+            return Err(EndpointError::ValidationFailed {
+                message: format!("端点已存在: {}", key),
+            });
+        }
+
+        endpoints.insert(key, info);
+        Ok(())
+    }
+
+    /// 查找API端点
+    pub async fn find_endpoint(
+        &self,
+        service: &str,
+        version: &str,
+        endpoint: &str,
+    ) -> Option<EndpointInfo> {
+        let endpoints = self.endpoints.read().await;
+        let key = format!("{}.{}.{}", service, version, endpoint);
+        endpoints.get(&key).cloned()
+    }
+
+    /// 列出所有端点
+    pub async fn list_all_endpoints(&self) -> Vec<EndpointInfo> {
+        let endpoints = self.endpoints.read().await;
+        endpoints.values().cloned().collect()
+    }
+}
+```
+
+#### 10.2.3 版本管理
+
+**多版本API支持**：
+```rust
+/// API版本管理器
+pub struct ApiVersionManager;
+
+impl ApiVersionManager {
+    /// 获取指定版本的API
+    pub fn get_versioned_api<'a>(
+        service: &str,
+        version: &str,
+        app_token: Option<&'a str>,
+    ) -> Result<Box<dyn ApiEndpoint<'a> + 'a>, VersionError> {
+        match (service, version) {
+            ("base", "v1") => {
+                // Base V1 API（如果存在）
+                Ok(Box::new(BaseV1RoleCreate {
+                    app_token: app_token.unwrap_or("")
+                }))
+            },
+            ("base", "v2") => {
+                // Base V2 API
+                Ok(Box::new(BaseApiV2::role_create(app_token.unwrap_or(""))))
+            },
+            ("bitable", "v1") => {
+                // Bitable V1 API
+                Ok(Box::new(BitableApiV1::app_create()))
+            },
+            _ => Err(VersionError::UnsupportedVersion {
+                service: service.to_string(),
+                version: version.to_string(),
+            }),
+        }
+    }
+
+    /// 获取最新版本的API
+    pub fn get_latest_api<'a>(
+        service: &str,
+        app_token: Option<&'a str>,
+    ) -> Result<Box<dyn ApiEndpoint<'a> + 'a>, VersionError> {
+        let latest_version = Self::get_latest_version(service)?;
+        Self::get_versioned_api(service, &latest_version, app_token)
+    }
+
+    /// 获取服务的最新版本
+    pub fn get_latest_version(service: &str) -> Result<String, VersionError> {
+        match service {
+            "base" => Ok("v2".to_string()),
+            "bitable" => Ok("v1".to_string()),
+            _ => Err(VersionError::ServiceNotFound {
+                service: service.to_string(),
+            }),
+        }
+    }
+
+    /// 列出所有支持的版本
+    pub fn list_supported_versions(service: &str) -> Vec<String> {
+        match service {
+            "base" => vec!["v1".to_string(), "v2".to_string()],
+            "bitable" => vec!["v1".to_string()],
+            _ => vec![],
+        }
+    }
+}
+
+#[derive(Debug, thiserror::Error)]
+pub enum VersionError {
+    #[error("不支持的版本: {service} {version}")]
+    UnsupportedVersion { service: String, version: String },
+
+    #[error("服务不存在: {service}")]
+    ServiceNotFound { service: String },
+
+    #[error("版本兼容性问题: {message}")]
+    CompatibilityIssue { message: String },
+}
+```
+
 ## 未来扩展
 
 ### 扩展点

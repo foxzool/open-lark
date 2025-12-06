@@ -1,4 +1,6 @@
-//! Bitable V1 创建记录API
+//! Bitable 创建记录API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/record/create
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
@@ -10,6 +12,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// 创建记录请求
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct CreateRecordRequest {
     api_request: ApiRequest<CreateRecordResponse>,
@@ -31,7 +34,7 @@ impl CreateRecordRequest {
     /// 创建记录请求
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::post("/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records"),
+            api_request: ApiRequest::post(""), // 占位符，将在execute方法中使用enum+builder系统
             app_token: String::new(),
             table_id: String::new(),
             user_id_type: None,
@@ -71,7 +74,7 @@ impl CreateRecordRequest {
         self
     }
 
-    /// 执行请求
+    /// 执行请求（集成现代化enum+builder API端点系统）
     pub async fn execute(self) -> SDKResult<CreateRecordResponse> {
         // 参数验证
         if self.app_token.trim().is_empty() {
@@ -82,12 +85,14 @@ impl CreateRecordRequest {
             return Err(validation_error("table_id", "数据表ID不能为空"));
         }
 
-        // 构建API路径
-        let path = format!("/open-apis/bitable/v1/apps/{}/tables/{}/records", self.app_token, self.table_id);
+        // 🚀 使用新的enum+builder系统生成API端点
+        // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
+        use crate::common::api_endpoints::BitableApiV1;
+        let api_endpoint = BitableApiV1::record_create(&self.app_token, &self.table_id);
 
-        // 创建API请求
+        // 创建API请求 - 使用类型安全的URL生成
         let mut api_request: ApiRequest<CreateRecordResponse> =
-            ApiRequest::post(&format!("https://open.feishu.cn{}", path));
+            ApiRequest::post(&api_endpoint.to_url());
 
         // 构建查询参数
         if let Some(ref user_id_type) = self.user_id_type {

@@ -1,4 +1,6 @@
-//! Bitable V1 批量更新记录API
+//! Bitable 批量更新记录API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/record/batchUpdate
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
@@ -10,6 +12,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// 批量更新记录请求
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct BatchUpdateRecordRequest {
     /// 配置信息

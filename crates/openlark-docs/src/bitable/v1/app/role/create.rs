@@ -1,16 +1,18 @@
 
-//! Bitable V1 创建角色API
+//! Bitable 创建角色API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/role/create
 
 use openlark_core::{
-    api::{ApiRequest, RequestData},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     error::{SDKResult, validation_error},
     http::Transport,
-    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
 /// 创建角色请求
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct CreateAppRoleRequest {
     /// 配置信息
@@ -30,7 +32,6 @@ impl CreateAppRoleRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            api_request: ApiRequest::post("").header("Content-Type", "application/json"),
             app_token: String::new(),
             role_name: String::new(),
             table_roles: None,
@@ -73,9 +74,10 @@ impl CreateAppRoleRequest {
             return Err(validation_error("role_name", "角色名称不能为空"));
         }
 
-        // 构建完整的API URL
-        let api_url = format!("{}/open-apis/bitable/v1/apps/{}/roles",
-                             self.config.base_url, self.app_token);
+        // 🚀 使用新的enum+builder系统生成API端点
+        // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
+        use crate::common::api_endpoints::BitableApiV1;
+        let api_endpoint = BitableApiV1::role_create(&self.app_token);
 
         // 构建请求体
         let request_body = CreateAppRoleRequestBody {
@@ -84,23 +86,15 @@ impl CreateAppRoleRequest {
             block_roles: self.block_roles,
         };
 
-        // 创建API请求
-        let mut api_request = self.api_request;
-        api_request.url = api_url;
-        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(&request_body)?));
+        // 创建API请求 - 使用类型安全的URL生成
+        let api_request: ApiRequest<CreateAppRoleResponse> = ApiRequest::post(&api_endpoint.to_url())
+            .body(openlark_core::api::RequestData::Json(serde_json::to_value(&request_body)?));
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
 
-        // 解析响应
-        let role_data: Role = response
-            .data
-            .and_then(|data| serde_json::from_value(data).ok())
-            .ok_or_else(|| validation_error("解析角色数据失败", "响应数据格式不正确"))?;
-
-        Ok(CreateAppRoleResponse {
-            data: Some(role_data),
-            success: response.raw_response.is_success(),
+        response.data.ok_or_else(|| {
+            validation_error("响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }
@@ -236,8 +230,12 @@ pub struct Role {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateAppRoleResponse {
     /// 角色信息
-    pub data: Option<Role>,
-    /// 操作结果
-    pub success: bool,
+    pub data: Role,
+}
+
+impl ApiResponseTrait for CreateAppRoleResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 

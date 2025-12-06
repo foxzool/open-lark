@@ -1,9 +1,12 @@
-//! 获取多维表格仪表盘列表模块
+//! Bitable 获取多维表格仪表盘列表API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/dashboard/list
 
 use openlark_core::{api::ApiRequest, config::Config, error::SDKResult, http::Transport};
 use serde::{Deserialize, Serialize};
 
 /// 获取仪表盘列表请求
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct ListDashboardsRequest {
     api_request: ApiRequest<ListDashboardsResponse>,
@@ -57,42 +60,37 @@ impl ListDashboardsRequest {
             ));
         }
 
-        // 构建完整的API URL
-        let api_url = format!(
-            "{}/open-apis/bitable/v1/apps/{}/dashboards",
-            self.config.base_url, self.app_token
-        );
+        // 🚀 使用新的enum+builder系统生成API端点
+        use crate::common::api_endpoints::BitableApiV1;
+        let api_endpoint = BitableApiV1::dashboard_list(&self.app_token);
 
-        // 设置API URL
-        let mut api_request = self.api_request;
-        api_request.url = api_url;
+        // 构建请求参数
+        let mut query_params = Vec::new();
 
-        // 设置查询参数
-        let mut separator_added = false;
         if let Some(page_size) = self.page_size {
-            api_request.url = format!("{}?page_size={}", api_request.url, page_size.min(100)); // 限制最大100
-            separator_added = true;
-        }
-        if let Some(page_token) = &self.page_token {
-            let separator = if separator_added { "&" } else { "?" };
-            api_request.url = format!("{}{}page_token={}", api_request.url, separator, page_token);
-            separator_added = true;
-        }
-        if let Some(user_id_type) = &self.user_id_type {
-            let separator = if separator_added { "&" } else { "?" };
-            api_request.url = format!(
-                "{}{}user_id_type={}",
-                api_request.url, separator, user_id_type
-            );
+            query_params.push(("page_size", page_size.min(100).to_string())); // 限制最大100
         }
 
-        // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
-        let request_for_transport: openlark_core::api::ApiRequest<()> =
-            openlark_core::api::ApiRequest::get(api_request.url.clone())
+        if let Some(page_token) = &self.page_token {
+            query_params.push(("page_token", page_token.clone()));
+        }
+
+        if let Some(user_id_type) = &self.user_id_type {
+            query_params.push(("user_id_type", user_id_type.clone()));
+        }
+
+        // 创建API请求 - 使用类型安全的URL生成
+        let mut api_request: openlark_core::api::ApiRequest<ListDashboardsResponse> =
+            openlark_core::api::ApiRequest::get(&api_endpoint.to_url())
                 .body(openlark_core::api::RequestData::Empty);
 
+        // 设置查询参数
+        for (key, value) in query_params {
+            api_request = api_request.query(key, &value);
+        }
+
         // 发送请求并解析响应
-        let response = Transport::request(request_for_transport, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, None).await?;
 
         // 手动解析响应数据
         let response_data: ListDashboardsResponse =

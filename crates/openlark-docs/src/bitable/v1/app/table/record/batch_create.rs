@@ -1,4 +1,6 @@
-//! 批量创建数据记录模块
+//! Bitable 批量创建数据记录API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/record/batchCreate
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
@@ -66,12 +68,14 @@ impl BatchCreateRecordRequest {
             return Err(openlark_core::error::validation_error("records", "记录列表不能为空"));
         }
 
-        // 构建API路径
-        let path = format!("/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_create", self.app_token, self.table_id);
+        // 🚀 使用新的enum+builder系统生成API端点
+        // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
+        use crate::common::api_endpoints::BitableApiV1;
+        let api_endpoint = BitableApiV1::record_batch_create(&self.app_token, &self.table_id);
 
-        // 创建API请求
+        // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<BatchCreateRecordResponse> =
-            ApiRequest::post(&format!("https://open.feishu.cn{}", path));
+            ApiRequest::post(&api_endpoint.to_url());
 
         // 构建请求体
         let body = serde_json::json!({

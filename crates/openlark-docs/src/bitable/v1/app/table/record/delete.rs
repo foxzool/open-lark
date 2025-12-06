@@ -1,7 +1,9 @@
-//! Bitable V1 删除记录API
+//! Bitable 删除记录API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/record/delete
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     error::{validation_error, SDKResult},
     http::Transport,
@@ -9,6 +11,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 删除记录请求
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct DeleteRecordRequest {
     /// 配置信息
@@ -76,12 +79,14 @@ impl DeleteRecordRequest {
             return Err(validation_error("record_id", "记录ID不能为空"));
         }
 
-        // 构建API路径
-        let path = format!("/open-apis/bitable/v1/apps/{}/tables/{}/records/{}", self.app_token, self.table_id, self.record_id);
+        // 🚀 使用新的enum+builder系统生成API端点
+        // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
+        use crate::common::api_endpoints::BitableApiV1;
+        let api_endpoint = BitableApiV1::record_delete(&self.app_token, &self.table_id, &self.record_id);
 
-        // 创建API请求
+        // 创建API请求 - 使用类型安全的URL生成
         let mut api_request: ApiRequest<DeleteRecordResponse> =
-            ApiRequest::delete(&format!("https://open.feishu.cn{}", path));
+            ApiRequest::delete(&api_endpoint.to_url());
 
         // 构建查询参数
         if let Some(ref user_id_type) = self.user_id_type {

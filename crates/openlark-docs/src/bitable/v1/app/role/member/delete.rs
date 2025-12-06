@@ -1,4 +1,6 @@
-//! Bitable V1 删除角色成员API
+//! Bitable 删除角色成员API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/role/member/delete
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -9,6 +11,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 删除角色成员请求
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct DeleteRoleMemberRequest {
     /// 配置信息
@@ -76,13 +79,13 @@ impl DeleteRoleMemberRequest {
             return Err(validation_error("member_id", "成员ID不能为空"));
         }
 
-        // 构建完整的API URL
-        let api_url = format!("{}/open-apis/bitable/v1/apps/{}/roles/{}/members/{}",
-                             self.config.base_url, self.app_token, self.role_id, self.member_id);
+        // 🚀 使用新的enum+builder系统生成API端点
+        // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
+        use crate::common::api_endpoints::BitableApiV1;
+        let api_endpoint = BitableApiV1::role_member_delete(&self.app_token, &self.role_id, &self.member_id);
 
-        // 设置API URL
-        let mut api_request = self.api_request;
-        api_request.url = api_url;
+        // 创建API请求 - 使用类型安全的URL生成
+        let mut api_request: ApiRequest<DeleteRoleMemberResponse> = ApiRequest::delete(&api_endpoint.to_url());
 
         // 设置查询参数
         if let Some(ref user_id_type) = self.user_id_type {

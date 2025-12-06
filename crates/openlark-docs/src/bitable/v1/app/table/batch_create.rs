@@ -1,4 +1,6 @@
-//! Bitable V1 批量创建数据表API
+//! Bitable 批量创建数据表API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/batchCreate
 
 use openlark_core::{
     api::{ApiRequest, RequestData},
@@ -16,6 +18,7 @@ use crate::common::types::{AppToken, TableId};
 use super::create::TableData;
 
 /// 批量新增数据表请求
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct BatchCreateTableRequest {
     /// 配置信息

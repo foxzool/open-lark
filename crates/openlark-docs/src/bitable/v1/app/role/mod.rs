@@ -10,6 +10,9 @@ pub mod list;
 pub mod update;
 pub mod member;
 
+#[cfg(test)]
+mod tests;
+
 // 导出所有子模块内容，避免命名冲突
 pub use create::*;
 // delete模块中的类型与create模块冲突，使用重导出避免冲突

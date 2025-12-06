@@ -3,8 +3,9 @@
 //! 提供openlark-docs项目中通用的工具、宏和类型定义。
 
 pub mod builders;
+pub mod api_paths;
+pub mod api_endpoints;
 
-// 宏定义在builders模块中，通过lib.rs重新导出
 
 /// 通用常量定义
 pub mod constants {
