@@ -16,11 +16,14 @@ use std::time::{SystemTime, UNIX_EPOCH};
 ///
 /// 包装openlark-communication crate的功能，提供简洁的API
 /// 支持现代错误处理、上下文管理和用户友好的错误消息
+#[allow(dead_code)]
 #[derive(Debug)]
 pub struct CommunicationService<'a> {
     /// 🔧 客户端配置
+    #[allow(dead_code)]
     config: &'a Config,
     /// 📋 服务注册表
+    #[allow(dead_code)]
     registry: &'a DefaultServiceRegistry,
     /// 🌐 API端点映射
     endpoints: HashMap<&'static str, &'static str>,
@@ -352,8 +355,8 @@ impl<'a> CommunicationService<'a> {
     async fn simulate_send_message(
         &self,
         receive_id: &str,
-        receive_id_type: &str,
-        content: &str,
+        _receive_id_type: &str,
+        _content: &str,
     ) -> Result<SendMessageResponse> {
         // 模拟网络延迟
         tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
@@ -393,8 +396,8 @@ impl<'a> CommunicationService<'a> {
     async fn simulate_send_rich_text(
         &self,
         receive_id: &str,
-        receive_id_type: &str,
-        content_json: &str,
+        _receive_id_type: &str,
+        _content_json: &str,
     ) -> Result<SendMessageResponse> {
         // 模拟网络延迟
         tokio::time::sleep(tokio::time::Duration::from_millis(150)).await;
@@ -412,7 +415,7 @@ impl<'a> CommunicationService<'a> {
     /// 模拟获取消息列表的API调用
     async fn simulate_list_messages(
         &self,
-        container_id_type: &str,
+        _container_id_type: &str,
         container_id: &str,
         page_size: Option<u32>,
         page_token: Option<&str>,

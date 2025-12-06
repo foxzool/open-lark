@@ -1,4 +1,6 @@
-//! Bitable V1 复制仪表盘API
+//! Bitable 复制仪表盘API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/dashboard/copy
 
 use openlark_core::{
     api::ApiRequest,
@@ -9,6 +11,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 复制仪表盘请求
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct CopyDashboardRequest {
     /// 配置信息

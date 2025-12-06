@@ -4,10 +4,10 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateRoleRequest {
     /// 角色名称
-    pub role_name: String,
-    /// 表格角色配置列表
+    pub name: String,
+    /// 角色描述
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub table_roles: Option<Vec<TableRole>>,
+    pub description: Option<String>,
 }
 
 /// 角色更新请求结构
@@ -58,10 +58,13 @@ pub struct RoleResponse {
     /// 角色ID
     pub role_id: String,
     /// 角色名称
-    pub role_name: String,
-    /// 表格角色列表
+    pub name: String,
+    /// 角色描述
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub table_roles: Option<Vec<TableRole>>,
+    pub description: Option<String>,
+    /// 创建时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<String>,
 }
 
 /// 列出角色响应结构
@@ -95,7 +98,7 @@ pub struct TableRoleInfo {
 }
 
 /// 分页参数
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct PaginationParams {
     /// 页面大小
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -108,24 +111,12 @@ pub struct PaginationParams {
 impl CreateRoleRequest {
     /// 验证创建角色请求
     pub fn validate(&self) -> Result<(), String> {
-        if self.role_name.trim().is_empty() {
+        if self.name.trim().is_empty() {
             return Err("角色名称不能为空".to_string());
         }
 
-        if self.role_name.len() > 100 {
+        if self.name.len() > 100 {
             return Err("角色名称长度不能超过100个字符".to_string());
-        }
-
-        if let Some(table_roles) = &self.table_roles {
-            if table_roles.len() > 100 {
-                return Err("表格角色数量不能超过100个".to_string());
-            }
-
-            for table_role in table_roles {
-                if let Err(e) = table_role.validate() {
-                    return Err(e);
-                }
-            }
         }
 
         Ok(())

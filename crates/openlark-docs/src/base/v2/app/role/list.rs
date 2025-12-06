@@ -1,4 +1,6 @@
-//! Base V2 列出自定义角色API
+//! Base 列出自定义角色API
+///
+/// API文档: https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/list-2
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -9,30 +11,26 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use super::models::ListRolesResponse;
-use super::RoleService;
+use super::{
+    models::PaginationParams,
+    RoleService,
+};
 
 /// 列出自定义角色请求
-pub struct ListRolesV2Request {
+pub struct ListRolesRequest {
     app_token: String,
-    /// 页面大小
-    page_size: Option<i32>,
-    /// 页面 token
-    page_token: Option<String>,
-    /// 角色类型过滤
-    role_type: Option<String>,
+    /// 分页参数
+    pagination: Option<PaginationParams>,
     /// 配置信息
     config: Config,
 }
 
-impl ListRolesV2Request {
+impl ListRolesRequest {
     /// 创建列出角色请求
     pub fn new(config: Config) -> Self {
         Self {
             app_token: String::new(),
-            page_size: None,
-            page_token: None,
-            role_type: None,
+            pagination: None,
             config,
         }
     }
@@ -43,64 +41,67 @@ impl ListRolesV2Request {
         self
     }
 
+    /// 设置分页参数
+    pub fn pagination(mut self, pagination: PaginationParams) -> Self {
+        self.pagination = Some(pagination);
+        self
+    }
+
     /// 设置页面大小
     pub fn page_size(mut self, page_size: i32) -> Self {
-        self.page_size = Some(page_size);
+        let mut pagination = self.pagination.unwrap_or_default();
+        pagination.page_size = Some(page_size);
+        self.pagination = Some(pagination);
         self
     }
 
     /// 设置页面 token
     pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
-        self.page_token = Some(page_token.into());
-        self
-    }
-
-    /// 设置角色类型过滤
-    pub fn role_type(mut self, role_type: impl Into<String>) -> Self {
-        self.role_type = Some(role_type.into());
+        let mut pagination = self.pagination.unwrap_or_default();
+        pagination.page_token = Some(page_token.into());
+        self.pagination = Some(pagination);
         self
     }
 
     /// 执行请求
-    pub async fn execute(self) -> SDKResult<ListRolesV2Response> {
+    pub async fn execute(self) -> SDKResult<ListRolesResponseData> {
         // 验证必填字段
         validate_required!(self.app_token, "应用令牌不能为空");
 
-        // 构建API路径
-        let path = format!("/open-apis/base/v2/apps/{}/roles", self.app_token);
+        // 🚀 使用新的enum+builder系统生成API端点
+        use crate::common::api_endpoints::BaseApiV2;
+        let api_endpoint = BaseApiV2::role_list(&self.app_token);
 
-        // 创建API请求
-        let mut api_request: ApiRequest<ListRolesV2Response> = ApiRequest::get(&path);
+        // 创建API请求 - 使用类型安全的URL生成
+        let mut api_request: ApiRequest<ListRolesResponseData> = ApiRequest::get(&api_endpoint.to_url());
 
         // 构建查询参数
-        if let Some(page_size) = self.page_size {
-            api_request = api_request.query("page_size", &page_size.to_string());
-        }
+        if let Some(ref pagination) = self.pagination {
+            if let Some(page_size) = pagination.page_size {
+                api_request = api_request.query("page_size", &page_size.to_string());
+            }
 
-        if let Some(ref page_token) = self.page_token {
-            api_request = api_request.query("page_token", page_token);
-        }
-
-        if let Some(ref role_type) = self.role_type {
-            api_request = api_request.query("role_type", role_type);
+            if let Some(ref page_token) = pagination.page_token {
+                api_request = api_request.query("page_token", page_token);
+            }
         }
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
         response.data.ok_or_else(|| {
-            openlark_core::validation_error("响应数据为空", "服务器没有返回有效的数据")
+            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }
 
 /// 列出自定义角色响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct ListRolesV2Response {
+pub struct ListRolesResponseData {
     /// 角色列表
-    pub data: ListRolesResponse,
+    pub data: super::models::ListRolesResponse,
 }
 
-impl ApiResponseTrait for ListRolesV2Response {
+impl ApiResponseTrait for ListRolesResponseData {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
@@ -108,33 +109,43 @@ impl ApiResponseTrait for ListRolesV2Response {
 
 impl RoleService {
     /// 创建列出角色请求
-    pub fn list_roles_v2_builder(
+    pub fn list_roles_builder(
         &self,
         app_token: impl Into<String>,
-    ) -> ListRolesV2Request {
-        ListRolesV2Request::new(self.config.clone()).app_token(app_token)
+    ) -> ListRolesRequest {
+        ListRolesRequest::new(self.config.clone()).app_token(app_token)
     }
 
-    /// 创建列出角色请求（带完整参数）
-    pub fn list_roles_v2(
+    /// 创建列出角色请求（带分页参数）
+    pub fn list_roles(
+        &self,
+        app_token: impl Into<String>,
+        pagination: Option<PaginationParams>,
+    ) -> ListRolesRequest {
+        let mut request = ListRolesRequest::new(self.config.clone()).app_token(app_token);
+
+        if let Some(pag) = pagination {
+            request = request.pagination(pag);
+        }
+
+        request
+    }
+
+    /// 创建列出角色请求（带页面大小和token）
+    pub fn list_roles_simple(
         &self,
         app_token: impl Into<String>,
         page_size: Option<i32>,
         page_token: Option<impl Into<String>>,
-        role_type: Option<impl Into<String>>,
-    ) -> ListRolesV2Request {
-        let mut request = ListRolesV2Request::new(self.config.clone()).app_token(app_token);
+    ) -> ListRolesRequest {
+        let mut request = ListRolesRequest::new(self.config.clone()).app_token(app_token);
 
-        if let Some(page_size) = page_size {
-            request = request.page_size(page_size);
+        if let Some(size) = page_size {
+            request = request.page_size(size);
         }
 
-        if let Some(page_token) = page_token {
-            request = request.page_token(page_token);
-        }
-
-        if let Some(role_type) = role_type {
-            request = request.role_type(role_type);
+        if let Some(token) = page_token {
+            request = request.page_token(token);
         }
 
         request

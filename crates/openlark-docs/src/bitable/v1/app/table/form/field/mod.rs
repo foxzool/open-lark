@@ -11,7 +11,7 @@ pub use list::{
 };
 pub use models::{PatchFormFieldRequest};
 pub use patch::{
-    PatchFormFieldQuestionV1Request, PatchFormFieldQuestionV1Response,
+    PatchFormFieldQuestionRequest, PatchFormFieldQuestionResponse, PatchFormFieldQuestionBuilder,
 };
 
 /// 表单字段服务

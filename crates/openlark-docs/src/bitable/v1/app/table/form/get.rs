@@ -1,4 +1,6 @@
-//! Bitable V1 获取表单API
+//! Bitable 获取表单API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/form/get
 
 use openlark_core::{
     api::ApiRequest,
@@ -9,6 +11,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 获取表单请求
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct GetFormRequest {
     config: Config,

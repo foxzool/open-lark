@@ -1,7 +1,9 @@
-//! Bitable V1 获取视图API
+//! Bitable 获取视图API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/view/get
 
 use openlark_core::{
-    api::{ApiRequest, RequestData},
+    api::ApiRequest,
     config::Config,
     error::{validation_error, SDKResult},
     http::Transport,
@@ -12,6 +14,7 @@ use serde::{Deserialize, Serialize};
 use super::patch::View;
 
 /// 获取视图请求
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct GetViewRequest {
     /// 配置信息
@@ -79,26 +82,21 @@ impl GetViewRequest {
             return Err(validation_error("view_id", "视图ID不能为空"));
         }
 
-        // 构建完整的API URL
-        let api_url = format!(
-            "{}/open-apis/bitable/v1/apps/{}/tables/{}/views/{}",
-            self.config.base_url, self.app_token, self.table_id, self.view_id
-        );
+        // 🚀 使用新的enum+builder系统生成API端点
+        // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
+        use crate::common::api_endpoints::BitableApiV1;
+        let api_endpoint = BitableApiV1::view_get(&self.app_token, &self.table_id, &self.view_id);
 
-        // 设置API URL
-        let mut api_request = self.api_request;
-        api_request.url = api_url;
+        // 创建API请求 - 使用类型安全的URL生成
+        let mut api_request: ApiRequest<GetViewResponse> = ApiRequest::get(&api_endpoint.to_url());
 
-        // 构建查询参数
+        // 设置查询参数
         if let Some(ref user_id_type) = self.user_id_type {
-            api_request.url = format!("{}?user_id_type={}", api_request.url, user_id_type);
+            api_request = api_request.query("user_id_type", user_id_type);
         }
 
-        // 发送请求 - 转换为ApiRequest<()>以匹配Transport::request签名
-        let request_for_transport: ApiRequest<()> =
-            ApiRequest::get(api_request.url.clone()).body(RequestData::Empty);
-
-        let response = Transport::request(request_for_transport, &self.config, None).await?;
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
 
         // 解析响应数据
         let view_data: View = response

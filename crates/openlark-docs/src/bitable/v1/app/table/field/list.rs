@@ -1,4 +1,6 @@
-//! Bitable V1 列出字段API
+//! Bitable 列出字段API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/field/list
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -12,6 +14,7 @@ use serde::{Deserialize, Serialize};
 pub use super::create::Field;
 
 /// 列出字段请求
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct ListFieldRequest {
     /// 配置信息
@@ -109,12 +112,14 @@ impl ListFieldRequest {
             }
         }
 
-        // 构建API路径
-        let path = format!("/open-apis/bitable/v1/apps/{}/tables/{}/fields", self.app_token, self.table_id);
+        // 🚀 使用新的enum+builder系统生成API端点
+        // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
+        use crate::common::api_endpoints::BitableApiV1;
+        let api_endpoint = BitableApiV1::field_list(&self.app_token, &self.table_id);
 
-        // 创建API请求
+        // 创建API请求 - 使用类型安全的URL生成
         let mut api_request: ApiRequest<ListFieldResponse> =
-            ApiRequest::get(&format!("https://open.feishu.cn{}", path));
+            ApiRequest::get(&api_endpoint.to_url());
 
         // 构建查询参数
         if let Some(ref view_id) = self.view_id {

@@ -1,4 +1,6 @@
-//! Bitable V1 创建数据表API
+//! Bitable 创建数据表API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/create
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
@@ -9,6 +11,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 新增数据表请求
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct CreateTableRequest {
     api_request: ApiRequest<CreateTableResponse>,
@@ -44,7 +47,7 @@ impl CreateTableRequest {
     /// 创建新增数据表请求
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::post("/open-apis/bitable/v1/apps/:app_token/tables"),
+            api_request: ApiRequest::post(""), // 占位符，将在execute方法中使用enum+builder系统
             app_token: String::new(),
             table: TableData::default(),
             config,
@@ -78,16 +81,18 @@ impl CreateTableRequest {
             return Err(validation_error("name", "数据表名称长度不能超过100个字符"));
         }
 
-        // 构建API路径
-        let path = format!("/open-apis/bitable/v1/apps/{}/tables", self.app_token);
+        // 🚀 使用新的enum+builder系统生成API端点
+        // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
+        use crate::common::api_endpoints::BitableApiV1;
+        let api_endpoint = BitableApiV1::table_create(&self.app_token);
 
         // 构建请求体
         let request_body = CreateTableRequestBody {
             table: self.table,
         };
 
-        // 创建API请求
-        let api_request: ApiRequest<CreateTableResponse> = self.api_request
+        // 创建API请求 - 使用类型安全的URL生成
+        let api_request: ApiRequest<CreateTableResponse> = ApiRequest::post(&api_endpoint.to_url())
             .body(RequestData::Binary(serde_json::to_vec(&request_body)?));
 
         // 发送请求

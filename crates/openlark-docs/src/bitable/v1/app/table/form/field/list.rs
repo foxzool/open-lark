@@ -1,3 +1,7 @@
+//! Bitable 列出表单字段API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/form/field/list
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
@@ -8,6 +12,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 列出表单字段问题请求
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct ListFormFieldQuestionRequest {
     api_request: ApiRequest<Self>,
