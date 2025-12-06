@@ -1,5 +1,7 @@
 
-//! Bitable V1 创建角色成员API
+//! Bitable 创建角色成员API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/role/member/create
 
 use openlark_core::{
     api::ApiRequest,
@@ -10,7 +12,9 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 创建角色成员请求
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct CreateRoleMemberRequest {
     /// 配置信息
     config: Config,
@@ -96,9 +100,10 @@ impl CreateRoleMemberRequest {
             return Err(validation_error("member_type", "成员类型不能为空"));
         }
 
-        // 构建完整的API URL
-        let api_url = format!("{}/open-apis/bitable/v1/apps/{}/roles/{}/members",
-                             self.config.base_url, self.app_token, self.role_id);
+        // 🚀 使用新的enum+builder系统生成API端点
+        // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
+        use crate::common::api_endpoints::BitableApiV1;
+        let api_endpoint = BitableApiV1::role_member_create(&self.app_token, &self.role_id);
 
         // 构建请求体
         let request_body = CreateRoleMemberRequestBody {
@@ -106,16 +111,14 @@ impl CreateRoleMemberRequest {
             member_type: self.member_type,
         };
 
-        // 设置API URL和请求体
-        let mut api_request = self.api_request;
-        api_request.url = api_url;
+        // 创建API请求 - 使用类型安全的URL生成
+        let mut api_request: ApiRequest<CreateRoleMemberResponse> = ApiRequest::post(&api_endpoint.to_url())
+            .body(openlark_core::api::RequestData::Json(serde_json::to_value(&request_body)?));
 
         // 设置查询参数
         if let Some(user_id_type) = &self.user_id_type {
             api_request = api_request.query("user_id_type", user_id_type);
         }
-
-        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(&request_body)?));
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

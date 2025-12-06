@@ -1,4 +1,6 @@
-//! Bitable V1 创建多维表格API
+//! Bitable 创建多维表格API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/create
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -13,7 +15,7 @@ use super::models::{App, CreateAppRequest as CreateAppRequestBody};
 use super::AppService;
 
 /// 创建多维表格请求
-pub struct CreateAppV1Request {
+pub struct CreateAppRequest {
     /// 应用名称
     name: String,
     /// 文件夹token
@@ -26,18 +28,18 @@ pub struct CreateAppV1Request {
 
 /// 创建多维表格响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct CreateAppV1Response {
+pub struct CreateAppResponse {
     /// 应用信息
     pub data: App,
 }
 
-impl ApiResponseTrait for CreateAppV1Response {
+impl ApiResponseTrait for CreateAppResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-impl CreateAppV1Request {
+impl CreateAppRequest {
     /// 创建新增多维表格请求
     pub fn new(config: Config) -> Self {
         Self {
@@ -66,12 +68,17 @@ impl CreateAppV1Request {
         self
     }
 
-    /// 执行请求
-    pub async fn execute(self) -> SDKResult<CreateAppV1Response> {
+    /// 执行请求（集成现代化enum+builder API端点系统）
+    pub async fn execute(self) -> SDKResult<CreateAppResponse> {
         // 验证必填字段
         validate_required!(self.name, "应用名称不能为空");
 
-        // 构建请求体
+        // 🚀 使用新的enum+builder系统生成API端点
+        // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
+        use crate::common::api_endpoints::BitableApiV1;
+        let api_endpoint = BitableApiV1::app_create();
+
+        // 构建请求体 - 符合官方文档格式
         let request_body = CreateAppRequestBody {
             name: self.name.clone(),
             folder_token: self.folder_token.clone(),
@@ -79,14 +86,16 @@ impl CreateAppV1Request {
             app_settings: None,
         };
 
-        // 创建API请求
-        let api_request: ApiRequest<CreateAppV1Response> = ApiRequest::post("/open-apis/bitable/v1/apps")
-            .body(openlark_core::api::RequestData::Binary(serde_json::to_vec(&request_body)?));
+        // 创建API请求 - 使用类型安全的URL生成
+        let api_request: ApiRequest<CreateAppResponse> =
+            ApiRequest::post(&api_endpoint.to_url()).body(
+                openlark_core::api::RequestData::Binary(serde_json::to_vec(&request_body)?),
+            );
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
         response.data.ok_or_else(|| {
-            openlark_core::validation_error("响应数据为空", "服务器没有返回有效的数据")
+            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }
@@ -96,18 +105,18 @@ impl AppService {
     pub fn create_builder(
         &self,
         name: impl Into<String>,
-    ) -> CreateAppV1Request {
-        CreateAppV1Request::new(self.config.clone()).name(name)
+    ) -> CreateAppRequest {
+        CreateAppRequest::new(self.config.clone()).name(name)
     }
 
     /// 创建新增多维表格请求（带完整参数）
-    pub fn create_app_v1(
+    pub fn create_app(
         &self,
         name: impl Into<String>,
         folder_token: Option<impl Into<String>>,
         time_zone: Option<impl Into<String>>,
-    ) -> CreateAppV1Request {
-        let mut request = CreateAppV1Request::new(self.config.clone()).name(name);
+    ) -> CreateAppRequest {
+        let mut request = CreateAppRequest::new(self.config.clone()).name(name);
 
         if let Some(folder_token) = folder_token {
             request = request.folder_token(folder_token);

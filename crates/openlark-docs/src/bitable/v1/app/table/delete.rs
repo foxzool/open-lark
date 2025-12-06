@@ -1,7 +1,9 @@
-//! Bitable V1 删除数据表API
+//! Bitable 删除数据表API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/delete
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     error::{validation_error, SDKResult},
     http::Transport,
@@ -9,6 +11,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 删除数据表请求
+#[allow(dead_code)]
 pub struct DeleteTableRequest {
     /// 配置信息
     config: Config,
@@ -66,12 +69,14 @@ impl DeleteTableRequest {
             return Err(validation_error("table_id", "数据表ID不能为空"));
         }
 
-        // 构建API路径
-        let path = format!("/open-apis/bitable/v1/apps/{}/tables/{}", self.app_token, self.table_id);
+        // 🚀 使用新的enum+builder系统生成API端点
+        // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
+        use crate::common::api_endpoints::BitableApiV1;
+        let api_endpoint = BitableApiV1::table_delete(&self.app_token, &self.table_id);
 
-        // 创建API请求
+        // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<DeleteTableResponse> =
-            ApiRequest::delete(&format!("https://open.feishu.cn{}", path));
+            ApiRequest::delete(&api_endpoint.to_url());
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

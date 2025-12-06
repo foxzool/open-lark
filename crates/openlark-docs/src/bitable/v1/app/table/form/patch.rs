@@ -1,4 +1,6 @@
-//! 更新表单问题模块
+//! Bitable 更新表单问题API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/form/patch
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, HttpMethod, RequestData, ResponseFormat},
@@ -11,6 +13,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// 更新表单问题请求
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct PatchFormQuestionRequest {
     config: Config,

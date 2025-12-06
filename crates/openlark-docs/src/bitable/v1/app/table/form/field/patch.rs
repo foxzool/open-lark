@@ -1,4 +1,6 @@
-//! Bitable V1 更新表单问题API
+//! Bitable 更新表单问题API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/form/field/patch
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -13,8 +15,9 @@ use super::models::{PatchFormFieldRequest as PatchFormFieldRequestBody};
 use super::FormFieldService;
 
 /// 更新表单问题请求
-pub struct PatchFormFieldQuestionV1Request {
-    api_request: ApiRequest<PatchFormFieldQuestionV1Response>,
+#[allow(dead_code)]
+pub struct PatchFormFieldQuestionRequest {
+    api_request: ApiRequest<PatchFormFieldQuestionResponse>,
     /// 多维表格的唯一标识符
     app_token: String,
     /// 表格ID
@@ -39,18 +42,18 @@ pub struct PatchFormFieldQuestionV1Request {
 
 /// 更新表单问题响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct PatchFormFieldQuestionV1Response {
+pub struct PatchFormFieldQuestionResponse {
     /// 问题信息
     pub data: FormFieldQuestion,
 }
 
-impl ApiResponseTrait for PatchFormFieldQuestionV1Response {
+impl ApiResponseTrait for PatchFormFieldQuestionResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-impl PatchFormFieldQuestionV1Request {
+impl PatchFormFieldQuestionRequest {
     /// 创建更新表单问题请求
     pub fn new(config: Config) -> Self {
         Self {
@@ -123,7 +126,7 @@ impl PatchFormFieldQuestionV1Request {
     }
 
     /// 执行请求
-    pub async fn execute(self) -> SDKResult<PatchFormFieldQuestionV1Response> {
+    pub async fn execute(self) -> SDKResult<PatchFormFieldQuestionResponse> {
         // 参数验证
         if self.app_token.trim().is_empty() {
             return Err(validation_error("app_token", "应用token不能为空"));
@@ -154,7 +157,7 @@ impl PatchFormFieldQuestionV1Request {
         );
 
         // 创建API请求
-        let api_request: ApiRequest<PatchFormFieldQuestionV1Response> = ApiRequest::post(&path)
+        let api_request: ApiRequest<PatchFormFieldQuestionResponse> = ApiRequest::post(&path)
             .body(openlark_core::api::RequestData::Binary(serde_json::to_vec(&request_body)?));
 
         // 发送请求
@@ -166,15 +169,15 @@ impl PatchFormFieldQuestionV1Request {
 }
 
 /// 更新表单问题Builder
-pub struct PatchFormFieldQuestionV1Builder {
-    request: PatchFormFieldQuestionV1Request,
+pub struct PatchFormFieldQuestionBuilder {
+    request: PatchFormFieldQuestionRequest,
 }
 
-impl PatchFormFieldQuestionV1Builder {
+impl PatchFormFieldQuestionBuilder {
     /// 创建Builder实例
     pub fn new(config: Config) -> Self {
         Self {
-            request: PatchFormFieldQuestionV1Request::new(config),
+            request: PatchFormFieldQuestionRequest::new(config),
         }
     }
 
@@ -233,15 +236,15 @@ impl PatchFormFieldQuestionV1Builder {
     }
 
     /// 构建请求
-    pub fn build(self) -> PatchFormFieldQuestionV1Request {
+    pub fn build(self) -> PatchFormFieldQuestionRequest {
         self.request
     }
 }
 
 impl FormFieldService {
     /// 创建更新表单问题请求构建器
-    pub fn patch_form_field_question_v1_builder(&self) -> PatchFormFieldQuestionV1Builder {
-        PatchFormFieldQuestionV1Builder::new(self.config.clone())
+    pub fn patch_form_field_question_builder(&self) -> PatchFormFieldQuestionBuilder {
+        PatchFormFieldQuestionBuilder::new(self.config.clone())
     }
 
     /// 创建更新表单问题请求
@@ -256,8 +259,8 @@ impl FormFieldService {
         required: Option<bool>,
         visible: Option<bool>,
         setting: Option<serde_json::Value>,
-    ) -> PatchFormFieldQuestionV1Request {
-        let mut request = PatchFormFieldQuestionV1Request::new(self.config.clone())
+    ) -> PatchFormFieldQuestionRequest {
+        let mut request = PatchFormFieldQuestionRequest::new(self.config.clone())
             .app_token(app_token)
             .table_id(table_id)
             .form_id(form_id)

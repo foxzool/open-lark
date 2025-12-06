@@ -134,6 +134,7 @@ fn map_graph_error(err: GraphError) -> error::Error {
 trait ErasedProvider: Send + Sync {
     fn kind(&self) -> &ServiceKind;
     fn dependencies(&self) -> &'static [&'static str];
+    #[allow(dead_code)]
     fn capabilities(&self) -> &'static [&'static str];
     fn create(&self, ctx: &ServiceContext) -> Result<Arc<dyn Service>>;
 }

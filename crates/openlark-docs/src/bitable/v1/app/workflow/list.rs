@@ -1,4 +1,6 @@
-//! Bitable V1 列出工作流API
+//! Bitable 列出工作流API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/workflow/list
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -7,6 +9,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 列出自动化流程请求
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
 pub struct ListWorkflowRequest {
