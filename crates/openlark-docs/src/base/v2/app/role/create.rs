@@ -78,7 +78,7 @@ impl CreateRoleRequest {
         // 🚀 使用新的enum+builder系统生成API端点
         // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
         use crate::common::api_endpoints::BaseApiV2;
-        let api_endpoint = BaseApiV2::role_create(&self.app_token);
+        let api_endpoint = BaseApiV2::RoleCreate(self.app_token.clone());
 
         // 构建请求体 - 符合官方文档格式
         let request_body = serde_json::json!({

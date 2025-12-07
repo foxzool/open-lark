@@ -62,7 +62,7 @@ impl ListDashboardsRequest {
 
         // 🚀 使用新的enum+builder系统生成API端点
         use crate::common::api_endpoints::BitableApiV1;
-        let api_endpoint = BitableApiV1::dashboard_list(&self.app_token);
+        let api_endpoint = BitableApiV1::DashboardList(self.app_token.clone());
 
         // 构建请求参数
         let mut query_params = Vec::new();

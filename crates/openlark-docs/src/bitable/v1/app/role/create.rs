@@ -77,7 +77,7 @@ impl CreateAppRoleRequest {
         // 🚀 使用新的enum+builder系统生成API端点
         // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
         use crate::common::api_endpoints::BitableApiV1;
-        let api_endpoint = BitableApiV1::role_create(&self.app_token);
+        let api_endpoint = BitableApiV1::RoleCreate(self.app_token.clone());
 
         // 构建请求体
         let request_body = CreateAppRoleRequestBody {
