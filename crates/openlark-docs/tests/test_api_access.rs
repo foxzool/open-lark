@@ -12,7 +12,7 @@ mod tests {
         let config = Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .unwrap();
+            .build();
 
         let base_service = BaseService::new(config);
         let v2_service = base_service.v2();
@@ -27,7 +27,7 @@ mod tests {
         let config = Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .unwrap();
+            .build();
 
         let bitable_service = BitableService::new(config);
         let v1_service = bitable_service.v1();
@@ -46,15 +46,15 @@ mod tests {
         let config = Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .unwrap();
+            .build();
 
-        let base_service = BaseService::new(config);
+        let base_service = BaseService::new(config.clone());
         let bitable_service = BitableService::new(config);
 
         // 测试Base API: 新增自定义角色
         let _create_role = base_service.v2()
             .role_service()
-            .create_role_v2_builder("app_token", "test_role", vec!["perm1"]);
+            .create_role_builder("app_token", "test_role");
 
         // 测试Bitable API: 创建多维表格
         let _create_app = bitable_service.v1()

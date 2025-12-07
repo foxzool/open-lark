@@ -230,3 +230,36 @@ impl BitableApiV1 {
         }
     }
 }
+
+/// Minutes API V1 端点枚举
+#[derive(Debug, Clone, PartialEq)]
+pub enum MinutesApiV1 {
+    /// 获取妙记信息
+    Get(String),
+    /// 下载妙记音视频文件
+    MediaGet(String),
+    /// 导出妙记文字记录
+    TranscriptGet(String),
+    /// 获取妙记统计数据
+    StatisticsGet(String),
+}
+
+impl MinutesApiV1 {
+    /// 生成对应的 URL
+    pub fn to_url(&self) -> String {
+        match self {
+            MinutesApiV1::Get(minute_token) => {
+                format!("/open-apis/minutes/v1/minutes/{}", minute_token)
+            },
+            MinutesApiV1::MediaGet(minute_token) => {
+                format!("/open-apis/minutes/v1/minutes/{}/media", minute_token)
+            },
+            MinutesApiV1::TranscriptGet(minute_token) => {
+                format!("/open-apis/minutes/v1/minutes/{}/transcript", minute_token)
+            },
+            MinutesApiV1::StatisticsGet(minute_token) => {
+                format!("/open-apis/minutes/v1/minutes/{}/statistics", minute_token)
+            },
+        }
+    }
+}

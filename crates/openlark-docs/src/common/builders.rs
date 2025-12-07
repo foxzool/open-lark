@@ -88,17 +88,17 @@ macro_rules! impl_base_api_fields {
 macro_rules! validate_required {
     ($field:expr, $error_msg:expr) => {
         if $field.is_empty() {
-            return Err(openlark_core::error::validation_error($error_msg));
+            return Err(openlark_core::error::CoreError::validation_msg($error_msg));
         }
     };
 
     ($field:expr, $error_msg:expr, $($fields:expr, $error_msgs:expr),+ $(,)?) => {
         if $field.is_empty() {
-            return Err(openlark_core::error::validation_error($error_msg));
+            return Err(openlark_core::error::CoreError::validation_msg($error_msg));
         }
         $(
             if $fields.is_empty() {
-                return Err(openlark_core::error::validation_error($error_msgs));
+                return Err(openlark_core::error::CoreError::validation_msg($error_msgs));
             }
         )*
     };
@@ -141,7 +141,6 @@ macro_rules! impl_response_data {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use openlark_core::config::Config;
 
     // 测试结构体定义
@@ -149,6 +148,16 @@ mod tests {
         app_token: String,
         table_id: String,
         name: Option<String>,
+    }
+
+    impl Default for TestRequest {
+        fn default() -> Self {
+            Self {
+                app_token: String::new(),
+                table_id: String::new(),
+                name: None,
+            }
+        }
     }
 
     // 使用宏生成构建器
@@ -172,12 +181,13 @@ mod tests {
 
     #[test]
     fn test_builder_macro() {
-        let config = Config::builder().app_id("test").app_secret("test").unwrap();
+        let _config = Config::builder().app_id("test").app_secret("test").build();
 
-        let request = TestRequest::builder(config)
+        let request = TestRequest::builder()
             .app_token("test_token")
             .table_id("test_table")
-            .name("test_name");
+            .name("test_name".to_string())
+            .build();
 
         assert_eq!(request.app_token, "test_token");
         assert_eq!(request.table_id, "test_table");
@@ -186,11 +196,19 @@ mod tests {
 
     #[test]
     fn test_validate_macro() {
-        // 测试必填参数验证
-        let result = std::panic::catch_unwind(|| {
-            validate_required!("", "字段不能为空");
-        });
+        // 测试必填参数验证 - 在正常函数上下文中使用
+        fn test_function() -> Result<(), openlark_core::error::CoreError> {
+            // 正常情况不应该返回错误
+            validate_required!("valid_field", "字段不能为空");
 
+            // 空字段情况应该返回错误
+            validate_required!("", "字段不能为空");
+
+            Ok(())
+        }
+
+        // 验证空字段确实会返回错误
+        let result = test_function();
         assert!(result.is_err());
     }
 
