@@ -7,7 +7,7 @@ use chrono::{DateTime, Utc};
 use openlark_core::api::responses::ApiResponseTrait;
 
 /// 访问令牌响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct AccessTokenResponse {
     /// 应用访问令牌
     pub app_access_token: String,
@@ -20,7 +20,7 @@ pub struct AccessTokenResponse {
 }
 
 /// 租户访问令牌响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct TenantAccessTokenResponse {
     /// 租户访问令牌
     pub tenant_access_token: String,
@@ -31,7 +31,7 @@ pub struct TenantAccessTokenResponse {
 }
 
 /// 应用票据响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct AppTicketResponse {
     /// 应用票据
     pub app_ticket: String,
