@@ -217,9 +217,6 @@ name = "common"
 path = "examples/common/mod.rs"
 crate-type = ["lib"]
 
-[[bench]]
-name = "config_performance"
-harness = false
 
 # === 01_入门指南 (Getting Started) ===
 # 基础设置和认证
