@@ -7,7 +7,7 @@ use chrono::{DateTime, Utc};
 use openlark_core::api::responses::ApiResponseTrait;
 
 /// 用户信息响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct UserInfoResponse {
     /// 用户信息
     pub data: UserInfo,
@@ -121,7 +121,7 @@ pub struct UserCustomAttr {
 }
 
 /// 用户访问令牌响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct UserAccessTokenResponse {
     /// 用户访问令牌
     pub user_access_token: String,
@@ -194,6 +194,71 @@ pub struct UserInfoRequest {
     pub user_access_token: String,
     /// 用户ID类型
     pub user_id_type: Option<String>,
+}
+
+impl PartialEq for UserInfo {
+    fn eq(&self, other: &Self) -> bool {
+        self.open_id == other.open_id
+            && self.union_id == other.union_id
+            && self.user_id == other.user_id
+            && self.name == other.name
+            && self.en_name == other.en_name
+            && self.email == other.email
+            && self.mobile == other.mobile
+            && self.avatar_url == other.avatar_url
+            && self.avatar == other.avatar
+            && self.status == other.status
+            && self.department_ids == other.department_ids
+            && self.group_ids == other.group_ids
+            && self.positions == other.positions
+            && self.employee_no == other.employee_no
+            && self.dingtalk_user_id == other.dingtalk_user_id
+            && self.enterprise_extension == other.enterprise_extension
+            && self.custom_attrs == other.custom_attrs
+            && self.tenant_key == other.tenant_key
+    }
+}
+
+impl PartialEq for UserAvatar {
+    fn eq(&self, other: &Self) -> bool {
+        self.avatar_72 == other.avatar_72
+            && self.avatar_240 == other.avatar_240
+            && self.avatar_640 == other.avatar_640
+            && self.avatar_origin == other.avatar_origin
+    }
+}
+
+impl PartialEq for UserStatus {
+    fn eq(&self, other: &Self) -> bool {
+        self.is_activated == other.is_activated
+            && self.is_joined == other.is_joined
+            && self.is_reserved == other.is_reserved
+            && self.is_exited == other.is_exited
+    }
+}
+
+impl PartialEq for UserEnterpriseExtension {
+    fn eq(&self, other: &Self) -> bool {
+        self.hire_date == other.hire_date
+            && self.location == other.location
+            && self.work_station == other.work_station
+            && self.work_station_id == other.work_station_id
+            && self.address == other.address
+            && self.postcode == other.postcode
+            && self.mobile_phone == other.mobile_phone
+            && self.extension_number == other.extension_number
+            && self.contact_phone == other.contact_phone
+            && self.primary_phone == other.primary_phone
+            && self.emergency_contact == other.emergency_contact
+            && self.emergency_phone == other.emergency_phone
+            && self.home_phone == other.home_phone
+    }
+}
+
+impl PartialEq for UserCustomAttr {
+    fn eq(&self, other: &Self) -> bool {
+        self.key == other.key && self.value == other.value
+    }
 }
 
 // 为所有响应类型实现ApiResponseTrait

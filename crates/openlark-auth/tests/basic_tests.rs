@@ -55,6 +55,7 @@ fn test_models_serialization() {
     let token_response = AccessTokenResponse {
         app_access_token: "test_token".to_string(),
         expires_in: 3600,
+        tenant_key: "test_tenant".to_string(),
         token_type: Some("Bearer".to_string()),
     };
 
