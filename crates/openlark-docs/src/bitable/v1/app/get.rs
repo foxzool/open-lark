@@ -60,7 +60,7 @@ impl GetAppRequest {
         // 🚀 使用新的enum+builder系统生成API端点
         // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
         use crate::common::api_endpoints::BitableApiV1;
-        let api_endpoint = BitableApiV1::app_get(&self.app_token);
+        let api_endpoint = BitableApiV1::AppGet(self.app_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<GetAppResponse> = ApiRequest::get(&api_endpoint.to_url());

@@ -76,7 +76,7 @@ impl CreateAppRequest {
         // 🚀 使用新的enum+builder系统生成API端点
         // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
         use crate::common::api_endpoints::BitableApiV1;
-        let api_endpoint = BitableApiV1::app_create();
+        let api_endpoint = BitableApiV1::AppCreate;
 
         // 构建请求体 - 符合官方文档格式
         let request_body = CreateAppRequestBody {

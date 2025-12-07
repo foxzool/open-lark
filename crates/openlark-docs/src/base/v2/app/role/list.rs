@@ -70,7 +70,7 @@ impl ListRolesRequest {
 
         // 🚀 使用新的enum+builder系统生成API端点
         use crate::common::api_endpoints::BaseApiV2;
-        let api_endpoint = BaseApiV2::role_list(&self.app_token);
+        let api_endpoint = BaseApiV2::RoleList(self.app_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
         let mut api_request: ApiRequest<ListRolesResponseData> = ApiRequest::get(&api_endpoint.to_url());
