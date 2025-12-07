@@ -123,7 +123,7 @@ impl UpdateRoleRequest {
 
         // 🚀 使用新的enum+builder系统生成API端点
         use crate::common::api_endpoints::BaseApiV2;
-        let api_endpoint = BaseApiV2::role_update(&self.app_token, &self.role_id);
+        let api_endpoint = BaseApiV2::RoleUpdate(self.app_token.clone(), self.role_id.clone());
 
         // 构建请求体 - 符合官方文档格式
         let request_body = UpdateRoleRequestBody {
