@@ -16,7 +16,7 @@ pub use app_access_token::AppAccessTokenBuilder;
 pub use app_access_token_internal::AppAccessTokenInternalBuilder;
 pub use app_ticket_resend::AppTicketResendBuilder;
 pub use tenant_access_token::TenantAccessTokenBuilder;
-pub use tenant_access_token_internal::TenantAccessTokenInternalBuilder;
+pub use tenant_access_token_internal::TenantAccessTokenInternalRequestBuilder;
 
 /// Auth v3 API服务
 #[derive(Debug)]
@@ -45,8 +45,8 @@ impl AuthServiceV3 {
     }
 
     /// 自建应用获取tenant_access_token
-    pub fn tenant_access_token_internal(&self) -> TenantAccessTokenInternalBuilder {
-        TenantAccessTokenInternalBuilder::new(self.config.clone())
+    pub fn tenant_access_token_internal(&self) -> TenantAccessTokenInternalRequestBuilder {
+        TenantAccessTokenInternalRequestBuilder::new(self.config.clone())
     }
 
     /// 重新获取app_ticket

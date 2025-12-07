@@ -13,7 +13,7 @@ pub mod oauth;
 
 // 重新导出主要服务类，方便用户使用
 pub use auth::v3::auth::{AuthServiceV3, AppAccessTokenBuilder, AppAccessTokenInternalBuilder,
-                        TenantAccessTokenBuilder, TenantAccessTokenInternalBuilder, AppTicketResendBuilder};
+                        TenantAccessTokenBuilder, TenantAccessTokenInternalRequestBuilder, AppTicketResendBuilder};
 pub use authen::v1::{AuthenServiceV1, UserInfoBuilder, UserAccessTokenV1Builder,
                     RefreshUserAccessTokenV1Builder, OidcService, OidcAccessTokenBuilder, OidcRefreshAccessTokenBuilder};
 pub use oauth::old::{OAuthServiceOld, AuthorizationBuilder};

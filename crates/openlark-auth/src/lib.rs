@@ -49,6 +49,7 @@
 //! }
 //! ```
 
+pub mod common;
 pub mod models;
 pub mod services;
 pub mod api;
@@ -78,7 +79,7 @@ pub mod prelude {
     pub use crate::api::{
         AuthServiceV3, AuthenServiceV1, OAuthServiceOld,
         AppAccessTokenBuilder, AppAccessTokenInternalBuilder,
-        TenantAccessTokenBuilder, TenantAccessTokenInternalBuilder, AppTicketResendBuilder,
+        TenantAccessTokenBuilder, TenantAccessTokenInternalRequestBuilder, AppTicketResendBuilder,
         UserInfoBuilder, UserAccessTokenV1Builder, RefreshUserAccessTokenV1Builder,
         OidcService, OidcAccessTokenBuilder, OidcRefreshAccessTokenBuilder,
         AuthorizationBuilder,

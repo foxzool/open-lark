@@ -1,141 +1,98 @@
 //! 获取 user_access_token（v1版本） API
-//!
-//! 对应CSV记录: 7180265937329553412
-//! 根据[登录预授权码](https://open.feishu.cn/document/server-docs/authentication-management/login-state-management/obtain-code) code 获取 `user_access_token`。
+///
+/// API文档: https://open.feishu.cn/document/server-docs/user-authentication/access-token/access_token
+///
+/// 根据登录预授权码获取 user_access_token
 
 use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    api::{ApiRequest, RequestData},
-    error::{SDKResult, CoreError, ErrorCode, network_error},
+    http::Transport,
+    validate_required,
+    SDKResult,
 };
+use serde::{Deserialize, Serialize};
 use crate::models::authen::{UserAccessTokenV1Request, UserAccessTokenResponse};
 
-/// 用户访问令牌构建器（v1版本）
-#[derive(Debug)]
+/// 用户访问令牌请求（v1版本）
 pub struct UserAccessTokenV1Builder {
+    grant_code: String,
+    app_id: String,
+    app_secret: String,
+    /// 配置信息
     config: Config,
-    request: UserAccessTokenV1Request,
+}
+
+/// 用户访问令牌响应（v1版本）
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct UserAccessTokenV1ResponseData {
+    /// 用户访问令牌响应
+    pub data: UserAccessTokenResponse,
+}
+
+impl ApiResponseTrait for UserAccessTokenV1ResponseData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 impl UserAccessTokenV1Builder {
+    /// 创建 access_token 请求
     pub fn new(config: Config) -> Self {
         Self {
+            grant_code: String::new(),
+            app_id: String::new(),
+            app_secret: String::new(),
             config,
-            request: UserAccessTokenV1Request {
-                grant_code: String::new(),
-                app_id: String::new(),
-                app_secret: String::new(),
-            },
         }
     }
 
     /// 设置授权码
     pub fn grant_code(mut self, grant_code: impl Into<String>) -> Self {
-        self.request.grant_code = grant_code.into();
+        self.grant_code = grant_code.into();
         self
     }
 
     /// 设置应用ID
     pub fn app_id(mut self, app_id: impl Into<String>) -> Self {
-        self.request.app_id = app_id.into();
+        self.app_id = app_id.into();
         self
     }
 
     /// 设置应用密钥
     pub fn app_secret(mut self, app_secret: impl Into<String>) -> Self {
-        self.request.app_secret = app_secret.into();
+        self.app_secret = app_secret.into();
         self
     }
 
-    /// 发送请求获取 user_access_token
-    pub async fn send(self) -> SDKResult<UserAccessTokenResponse> {
-        let url = format!("{}/open-apis/authen/v1/access_token", self.config.base_url);
+    /// 执行请求
+    pub async fn execute(self) -> SDKResult<UserAccessTokenV1ResponseData> {
+        // 验证必填字段
+        validate_required!(self.grant_code, "授权码不能为空");
+        validate_required!(self.app_id, "应用ID不能为空");
+        validate_required!(self.app_secret, "应用密钥不能为空");
 
-        let mut request = ApiRequest::<UserAccessTokenResponse>::post(&url);
-        request.headers.insert("Content-Type".to_string(), "application/json".to_string());
+        // 🚀 使用新的enum+builder系统生成API端点
+        use crate::common::api_endpoints::AuthenApiV1;
+        let api_endpoint = AuthenApiV1::AccessToken;
 
-        let json_data = serde_json::to_value(&self.request)
-            .map_err(|e| network_error(format!("请求数据序列化失败: {}", e)))?;
-        request.body = Some(RequestData::Json(json_data));
+        // 构建请求体
+        let request_body = UserAccessTokenV1Request {
+            grant_code: self.grant_code.clone(),
+            app_id: self.app_id.clone(),
+            app_secret: self.app_secret.clone(),
+        };
 
-        let response = openlark_core::http::Transport::request(request, &self.config, None)
-            .await
-            .map_err(|e| network_error(format!("用户访问令牌API请求失败: {}", e)))?;
+        // 创建API请求 - 使用类型安全的URL生成
+        let api_request: ApiRequest<UserAccessTokenV1ResponseData> =
+            ApiRequest::post(&api_endpoint.to_url()).body(
+                openlark_core::api::RequestData::Json(serde_json::to_value(&request_body)?),
+            );
 
-        if response.raw_response.code == 0 {
-            Ok(response.data.unwrap())
-        } else {
-            // 智能映射飞书错误码（优先级：飞书通用码 > HTTP状态 > 内部码）
-            let feishu_code = response.raw_response.code;
-            let error_message = response.raw_response.msg.clone();
-
-            match ErrorCode::from_feishu_code(feishu_code) {
-                Some(ErrorCode::AccessTokenInvalid) => {
-                    Err(CoreError::Authentication {
-                        message: "授权码无效或已过期".to_string(),
-                        code: ErrorCode::AccessTokenInvalid,
-                        ctx: {
-                            let mut ctx = openlark_core::error::ErrorContext::new();
-                            if let Some(ref req_id) = response.raw_response.request_id {
-                                ctx.set_request_id(req_id);
-                            }
-                            ctx.add_context("feishu_code", feishu_code.to_string());
-                            ctx.add_context("endpoint", "/open-apis/authen/v1/access_token");
-                            ctx
-                        },
-                    })
-                },
-                Some(ErrorCode::PermissionMissing) => {
-                    Err(CoreError::Authentication {
-                        message: "应用权限不足，无法获取用户访问令牌".to_string(),
-                        code: ErrorCode::PermissionMissing,
-                        ctx: {
-                            let mut ctx = openlark_core::error::ErrorContext::new();
-                            if let Some(ref req_id) = response.raw_response.request_id {
-                                ctx.set_request_id(req_id);
-                            }
-                            ctx.add_context("feishu_code", feishu_code.to_string());
-                            ctx.add_context("endpoint", "/open-apis/authen/v1/access_token");
-                            ctx
-                        },
-                    })
-                },
-                Some(code) => {
-                    Err(CoreError::Api(openlark_core::error::ApiError {
-                        status: feishu_code as u16,
-                        endpoint: "/open-apis/authen/v1/access_token".into(),
-                        message: error_message,
-                        source: None,
-                        code,
-                        ctx: {
-                            let mut ctx = openlark_core::error::ErrorContext::new();
-                            if let Some(ref req_id) = response.raw_response.request_id {
-                                ctx.set_request_id(req_id);
-                            }
-                            ctx.add_context("feishu_code", feishu_code.to_string());
-                            ctx
-                        },
-                    }))
-                },
-                None => {
-                    // 回退到HTTP状态码或内部业务码
-                    Err(CoreError::Api(openlark_core::error::ApiError {
-                        status: feishu_code as u16,
-                        endpoint: "/open-apis/authen/v1/access_token".into(),
-                        message: error_message,
-                        source: None,
-                        code: ErrorCode::from_http_status(feishu_code as u16),
-                        ctx: {
-                            let mut ctx = openlark_core::error::ErrorContext::new();
-                            if let Some(ref req_id) = response.raw_response.request_id {
-                                ctx.set_request_id(req_id);
-                            }
-                            ctx.add_context("feishu_code", feishu_code.to_string());
-                            ctx
-                        },
-                    }))
-                }
-            }
-        }
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+        })
     }
 }

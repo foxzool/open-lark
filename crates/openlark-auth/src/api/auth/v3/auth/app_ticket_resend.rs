@@ -1,120 +1,89 @@
 //! 重新获取 app_ticket API
-//!
-//! 对应CSV记录: 6995779366223757316
-//! 飞书每隔 1 小时会给应用推送一次最新的 app_ticket，应用也可以主动调用此接口，
-//! 触发飞书进行及时的重新推送。（该接口并不能直接获取app_ticket，而是触发事件推送）
+///
+/// API文档: https://open.feishu.cn/document/server-docs/authentication-management/app-ticket/app_ticket_resend
+///
+/// 飞书每隔 1 小时会给应用推送一次最新的 app_ticket，应用也可以主动调用此接口，
+/// 触发飞书进行及时的重新推送。（该接口并不能直接获取app_ticket，而是触发事件推送）
 
 use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    api::{ApiRequest, RequestData},
-    error::{SDKResult, CoreError, ErrorCode, network_error},
+    http::Transport,
+    validate_required,
+    SDKResult,
 };
-use crate::models::auth::*;
+use serde::{Deserialize, Serialize};
+use crate::models::auth::{AppTicketResendRequest, AppTicketResponse};
 
-/// 应用票据重发构建器
-#[derive(Debug)]
+/// 重新获取 app_ticket 请求
 pub struct AppTicketResendBuilder {
+    app_id: String,
+    app_secret: String,
+    /// 配置信息
     config: Config,
-    request: AppTicketResendRequest,
+}
+
+/// 重新获取 app_ticket 响应
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct AppTicketResendResponseData {
+    /// 应用票据响应
+    pub data: AppTicketResponse,
+}
+
+impl ApiResponseTrait for AppTicketResendResponseData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 impl AppTicketResendBuilder {
+    /// 创建 app_ticket_resend 请求
     pub fn new(config: Config) -> Self {
         Self {
+            app_id: String::new(),
+            app_secret: String::new(),
             config,
-            request: AppTicketResendRequest {
-                app_id: String::new(),
-                app_secret: String::new(),
-            },
         }
     }
 
-    /// 设置应用ID
+    /// 设置应用 ID
     pub fn app_id(mut self, app_id: impl Into<String>) -> Self {
-        self.request.app_id = app_id.into();
+        self.app_id = app_id.into();
         self
     }
 
     /// 设置应用密钥
     pub fn app_secret(mut self, app_secret: impl Into<String>) -> Self {
-        self.request.app_secret = app_secret.into();
+        self.app_secret = app_secret.into();
         self
     }
 
-    /// 发送请求触发 app_ticket 重新推送
-    pub async fn send(self) -> SDKResult<AppTicketResponse> {
-        let url = format!("{}/open-apis/auth/v3/app_ticket/resend", self.config.base_url);
+    /// 执行请求
+    pub async fn execute(self) -> SDKResult<AppTicketResendResponseData> {
+        // 验证必填字段
+        validate_required!(self.app_id, "应用ID不能为空");
+        validate_required!(self.app_secret, "应用密钥不能为空");
 
-        let mut request = ApiRequest::<AppTicketResponse>::post(&url);
-        request.headers.insert("Content-Type".to_string(), "application/json".to_string());
+        // 🚀 使用新的enum+builder系统生成API端点
+        use crate::common::api_endpoints::AuthApiV3;
+        let api_endpoint = AuthApiV3::AppTicketResend;
 
-        let json_data = serde_json::to_value(&self.request)
-            .map_err(|e| network_error(format!("请求数据序列化失败: {}", e)))?;
-        request.body = Some(RequestData::Json(json_data));
+        // 构建请求体
+        let request_body = AppTicketResendRequest {
+            app_id: self.app_id.clone(),
+            app_secret: self.app_secret.clone(),
+        };
 
-        let response = openlark_core::http::Transport::request(request, &self.config, None)
-            .await
-            .map_err(|e| network_error(format!("应用票据重发API请求失败: {}", e)))?;
+        // 创建API请求 - 使用类型安全的URL生成
+        let api_request: ApiRequest<AppTicketResendResponseData> =
+            ApiRequest::post(&api_endpoint.to_url()).body(
+                openlark_core::api::RequestData::Json(serde_json::to_value(&request_body)?),
+            );
 
-        if response.raw_response.code == 0 {
-            Ok(response.data.unwrap())
-        } else {
-            // 智能映射飞书错误码（优先级：飞书通用码 > HTTP状态 > 内部码）
-            let feishu_code = response.raw_response.code;
-            let error_message = response.raw_response.msg.clone();
-
-            match ErrorCode::from_feishu_code(feishu_code) {
-                Some(ErrorCode::PermissionMissing) => {
-                    Err(CoreError::Authentication {
-                        message: "应用权限不足，无法重新发送app_ticket".to_string(),
-                        code: ErrorCode::PermissionMissing,
-                        ctx: {
-                            let mut ctx = openlark_core::error::ErrorContext::new();
-                            if let Some(ref req_id) = response.raw_response.request_id {
-                                ctx.set_request_id(req_id);
-                            }
-                            ctx.add_context("feishu_code", feishu_code.to_string());
-                            ctx.add_context("endpoint", "/open-apis/auth/v3/app_ticket/resend");
-                            ctx
-                        },
-                    })
-                },
-                Some(code) => {
-                    Err(CoreError::Api(openlark_core::error::core_v3::ApiError {
-                        status: 200, // HTTP成功但API业务错误
-                        endpoint: "/open-apis/auth/v3/app_ticket/resend".into(),
-                        message: error_message,
-                        source: None,
-                        code,
-                        ctx: {
-                            let mut ctx = openlark_core::error::ErrorContext::new();
-                            if let Some(ref req_id) = response.raw_response.request_id {
-                                ctx.set_request_id(req_id);
-                            }
-                            ctx.add_context("feishu_code", feishu_code.to_string());
-                            ctx
-                        },
-                    }))
-                },
-                None => {
-                    // 回退到HTTP状态码或内部业务码
-                    Err(CoreError::Api(openlark_core::error::core_v3::ApiError {
-                        status: 200,
-                        endpoint: "/open-apis/auth/v3/app_ticket/resend".into(),
-                        message: error_message,
-                        source: None,
-                        code: ErrorCode::InternalError,
-                        ctx: {
-                            let mut ctx = openlark_core::error::ErrorContext::new();
-                            if let Some(ref req_id) = response.raw_response.request_id {
-                                ctx.set_request_id(req_id);
-                            }
-                            ctx.add_context("feishu_code", feishu_code.to_string());
-                            ctx
-                        },
-                    }))
-                }
-            }
-        }
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+        })
     }
 }
