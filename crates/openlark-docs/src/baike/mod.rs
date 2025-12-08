@@ -29,7 +29,10 @@ mod tests {
 
     #[test]
     fn test_baike_service_creation() {
-        let config = Config::new("test_app_id", "test_app_secret");
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
         let service = BaikeService::new(config.clone());
 
         assert_eq!(service.config().app_id(), "test_app_id");
