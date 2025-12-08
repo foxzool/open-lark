@@ -8,6 +8,7 @@
 //! - **bitable**: 多维表格 (46 APIs) - 多维表格应用、数据表、视图管理
 //! - **base**: 基础服务 (3 APIs) - 基础操作和工具
 //! - **baike**: 知识库 (27 APIs) - 企业知识库、Wiki管理
+//! - **wiki**: Wiki知识库 (16 APIs) - 企业Wiki管理
 //! - **minutes**: 会议纪要 (4 APIs) - 会议记录管理
 //!
 //! ## 快速开始
@@ -19,7 +20,7 @@
 //! let config = Config::builder()
 //!     .app_id("app_id")
 //!     .app_secret("app_secret")
-//!     ;
+//!     .build();
 //! let docs = DocsService::new(config);
 //!
 //! // 基础服务使用
@@ -65,6 +66,9 @@ pub mod baike;
 #[cfg(feature = "minutes")]
 pub mod minutes;
 
+#[cfg(feature = "wiki")]
+pub mod wiki;
+
 // API版本模块
 #[cfg(any(feature = "v1", feature = "v2", feature = "v3", feature = "v4"))]
 pub mod versions;
@@ -98,3 +102,6 @@ pub use baike::BaikeService;
 
 #[cfg(feature = "minutes")]
 pub use minutes::MinutesService;
+
+#[cfg(feature = "wiki")]
+pub use wiki::WikiService;
