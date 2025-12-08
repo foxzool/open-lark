@@ -263,3 +263,101 @@ impl MinutesApiV1 {
         }
     }
 }
+
+/// Wiki API V1 端点枚举
+#[derive(Debug, Clone, PartialEq)]
+pub enum WikiApiV1 {
+    /// 搜索Wiki
+    NodeSearch,
+}
+
+impl WikiApiV1 {
+    /// 生成对应的 URL
+    pub fn to_url(&self) -> String {
+        match self {
+            WikiApiV1::NodeSearch => "/open-apis/wiki/v1/nodes/search".to_string(),
+        }
+    }
+}
+
+/// Wiki API V2 端点枚举
+#[derive(Debug, Clone, PartialEq)]
+pub enum WikiApiV2 {
+    /// 获取知识空间列表
+    SpaceList,
+    /// 获取知识空间信息
+    SpaceGet(String),
+    /// 创建知识空间
+    SpaceCreate,
+    /// 更新知识空间设置
+    SpaceSettingUpdate(String),
+    /// 获取知识空间节点信息
+    SpaceGetNode,
+    /// 获取知识空间子节点列表
+    SpaceNodeList(String),
+    /// 创建知识空间节点
+    SpaceNodeCreate(String),
+    /// 获取知识空间成员列表
+    SpaceMemberList(String),
+    /// 添加知识空间成员
+    SpaceMemberCreate(String),
+    /// 删除知识空间成员
+    SpaceMemberDelete(String, String, String), // space_id, member_id, member_type
+    /// 移动知识空间节点
+    SpaceNodeMove(String, String),
+    /// 更新知识空间节点标题
+    SpaceNodeUpdateTitle(String, String),
+    /// 创建知识空间节点副本
+    SpaceNodeCopy(String, String),
+    /// 移动云空间文档至知识空间
+    SpaceNodeMoveDocsToWiki(String),
+    /// 获取任务结果
+    TaskGet(String),
+}
+
+impl WikiApiV2 {
+    /// 生成对应的 URL
+    pub fn to_url(&self) -> String {
+        match self {
+            WikiApiV2::SpaceList => "/open-apis/wiki/v2/spaces".to_string(),
+            WikiApiV2::SpaceGet(space_id) => {
+                format!("/open-apis/wiki/v2/spaces/{}", space_id)
+            },
+            WikiApiV2::SpaceCreate => "/open-apis/wiki/v2/spaces".to_string(),
+            WikiApiV2::SpaceSettingUpdate(space_id) => {
+                format!("/open-apis/wiki/v2/spaces/{}/setting", space_id)
+            },
+            WikiApiV2::SpaceGetNode => "/open-apis/wiki/v2/spaces/get_node".to_string(),
+            WikiApiV2::SpaceNodeList(space_id) => {
+                format!("/open-apis/wiki/v2/spaces/{}/nodes", space_id)
+            },
+            WikiApiV2::SpaceNodeCreate(space_id) => {
+                format!("/open-apis/wiki/v2/spaces/{}/nodes", space_id)
+            },
+            WikiApiV2::SpaceMemberList(space_id) => {
+                format!("/open-apis/wiki/v2/spaces/{}/members", space_id)
+            },
+            WikiApiV2::SpaceMemberCreate(space_id) => {
+                format!("/open-apis/wiki/v2/spaces/{}/members", space_id)
+            },
+            WikiApiV2::SpaceMemberDelete(space_id, member_id, member_type) => {
+                format!("/open-apis/wiki/v2/spaces/{}/members/{}?member_type={}", space_id, member_id, member_type)
+            },
+            WikiApiV2::SpaceNodeMove(space_id, node_token) => {
+                format!("/open-apis/wiki/v2/spaces/{}/nodes/{}/move", space_id, node_token)
+            },
+            WikiApiV2::SpaceNodeUpdateTitle(space_id, node_token) => {
+                format!("/open-apis/wiki/v2/spaces/{}/nodes/{}/update_title", space_id, node_token)
+            },
+            WikiApiV2::SpaceNodeCopy(space_id, node_token) => {
+                format!("/open-apis/wiki/v2/spaces/{}/nodes/{}/copy", space_id, node_token)
+            },
+            WikiApiV2::SpaceNodeMoveDocsToWiki(space_id) => {
+                format!("/open-apis/wiki/v2/spaces/{}/nodes/move_docs_to_wiki", space_id)
+            },
+            WikiApiV2::TaskGet(task_id) => {
+                format!("/open-apis/wiki/v2/tasks/{}", task_id)
+            },
+        }
+    }
+}
