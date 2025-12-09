@@ -11,6 +11,8 @@ use openlark_core::{
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+use crate::common::api_endpoints::DocxApiV1;
+use crate::ccm::docx::common_types::{RichText};
 
 /// 获取文档基本信息请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -88,46 +90,6 @@ pub struct DocumentContent {
     pub rich_text: Option<RichText>,
 }
 
-/// 富文本内容
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct RichText {
-    /// 段落列表
-    pub paragraphs: Vec<Paragraph>,
-}
-
-/// 段落
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Paragraph {
-    /// 文本元素列表
-    pub elements: Vec<TextElement>,
-}
-
-/// 文本元素
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TextElement {
-    /// 文本
-    pub text_run: Option<TextRun>,
-}
-
-/// 文本运行
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TextRun {
-    /// 内容
-    pub content: String,
-    /// 样式
-    pub style: Option<TextStyle>,
-}
-
-/// 文本样式
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TextStyle {
-    /// 是否加粗
-    pub bold: Option<bool>,
-    /// 是否斜体
-    pub italic: Option<bool>,
-    /// 是否删除线
-    pub strikethrough: Option<bool>,
-}
 
 impl ApiResponseTrait for GetDocumentResponse {
     fn data_format() -> ResponseFormat {
@@ -153,11 +115,11 @@ impl GetDocumentRequest {
         // 验证必填字段
         validate_required!(params.document_id, "文档ID不能为空");
 
-        // 构建API端点URL
-        let url = format!("/open-apis/docx/v1/documents/{}", params.document_id);
+        // 构建API端点
+        let api_endpoint = DocxApiV1::DocumentGet(params.document_id.clone());
 
         // 创建API请求
-        let mut api_request: ApiRequest<GetDocumentResponse> = ApiRequest::get(&url);
+        let mut api_request: ApiRequest<GetDocumentResponse> = ApiRequest::get(&api_endpoint.to_url());
 
         // 设置查询参数
         if let Some(with_content) = params.with_content {

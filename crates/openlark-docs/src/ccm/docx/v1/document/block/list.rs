@@ -11,6 +11,8 @@ use openlark_core::{
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+use crate::common::api_endpoints::DocxApiV1;
+use crate::ccm::docx::common_types::BlockContent;
 
 /// 获取文档所有块请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -36,16 +38,16 @@ pub struct GetDocumentBlocksResponse {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BlockListData {
     /// 块列表
-    pub items: Vec<BlockItem>,
+    pub items: Vec<ExtendedBlockItem>,
     /// 分页信息
     pub page_token: Option<String>,
     /// 是否有更多
     pub has_more: Option<bool>,
 }
 
-/// 块项目
+/// 扩展的块项目（包含父块ID）
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BlockItem {
+pub struct ExtendedBlockItem {
     /// 块ID
     pub block_id: String,
     /// 块类型
@@ -60,56 +62,6 @@ pub struct BlockItem {
     pub create_time: Option<i64>,
     /// 更新时间
     pub update_time: Option<i64>,
-}
-
-/// 块内容
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BlockContent {
-    /// 文本内容
-    pub text: Option<String>,
-    /// 富文本内容
-    pub rich_text: Option<RichText>,
-}
-
-/// 富文本内容
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct RichText {
-    /// 段落列表
-    pub paragraphs: Vec<Paragraph>,
-}
-
-/// 段落
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Paragraph {
-    /// 文本元素列表
-    pub elements: Vec<TextElement>,
-}
-
-/// 文本元素
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TextElement {
-    /// 文本
-    pub text_run: Option<TextRun>,
-}
-
-/// 文本运行
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TextRun {
-    /// 内容
-    pub content: String,
-    /// 样式
-    pub style: Option<TextStyle>,
-}
-
-/// 文本样式
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TextStyle {
-    /// 是否加粗
-    pub bold: Option<bool>,
-    /// 是否斜体
-    pub italic: Option<bool>,
-    /// 是否删除线
-    pub strikethrough: Option<bool>,
 }
 
 impl ApiResponseTrait for GetDocumentBlocksResponse {
@@ -136,11 +88,11 @@ impl GetDocumentBlocksRequest {
         // 验证必填字段
         validate_required!(params.document_id, "文档ID不能为空");
 
-        // 构建API端点URL
-        let url = format!("/open-apis/docx/v1/documents/{}/blocks", params.document_id);
+        // 构建API端点
+        let api_endpoint = DocxApiV1::DocumentBlockList(params.document_id.clone());
 
         // 创建API请求
-        let mut api_request: ApiRequest<GetDocumentBlocksResponse> = ApiRequest::get(&url);
+        let mut api_request: ApiRequest<GetDocumentBlocksResponse> = ApiRequest::get(&api_endpoint.to_url());
 
         // 设置查询参数
         if let Some(page_size) = params.page_size {

@@ -57,11 +57,9 @@ impl GetDocsContentRequest {
         let api_endpoint = DocsApiV1::ContentGet;
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<GetDocsContentResponse> =
-            ApiRequest::get(&api_endpoint.to_url());
-
-        // 设置查询参数
-        api_request = api_request.query("document_token", &params.document_token);
+        let api_request: ApiRequest<GetDocsContentResponse> =
+            ApiRequest::get(&api_endpoint.to_url())
+                .query("document_token", &params.document_token);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

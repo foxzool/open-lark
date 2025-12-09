@@ -12,6 +12,8 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::api_endpoints::DocxApiV1;
+
 /// 获取群公告基本信息请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetChatAnnouncementParams {
@@ -74,11 +76,11 @@ impl GetChatAnnouncementRequest {
         // 验证必填字段
         validate_required!(params.chat_id, "群聊ID不能为空");
 
-        // 构建API端点URL
-        let url = format!("/open-apis/docx/v1/chats/{}/announcement", params.chat_id);
+        // 使用enum+builder系统生成API端点
+        let api_endpoint = DocxApiV1::ChatAnnouncementGet(params.chat_id.clone());
 
-        // 创建API请求
-        let mut api_request: ApiRequest<GetChatAnnouncementResponse> = ApiRequest::get(&url);
+        // 创建API请求 - 使用类型安全的URL生成
+        let api_request: ApiRequest<GetChatAnnouncementResponse> = ApiRequest::get(&api_endpoint.to_url());
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

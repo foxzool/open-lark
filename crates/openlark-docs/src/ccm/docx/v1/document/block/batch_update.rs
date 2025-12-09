@@ -11,6 +11,8 @@ use openlark_core::{
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+use crate::common::api_endpoints::DocxApiV1;
+use crate::ccm::docx::common_types::BlockUpdate;
 
 /// 批量更新块内容请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -21,21 +23,6 @@ pub struct BatchUpdateDocumentBlocksParams {
     pub blocks: Vec<BlockUpdate>,
 }
 
-/// 块更新信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BlockUpdate {
-    /// 块ID
-    pub block_id: String,
-    /// 更新的内容
-    pub content: Option<BlockContent>,
-}
-
-/// 块内容
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BlockContent {
-    /// 文本内容
-    pub text: Option<String>,
-}
 
 /// 批量更新块内容响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -73,9 +60,9 @@ impl BatchUpdateDocumentBlocksRequest {
         validate_required!(params.document_id, "文档ID不能为空");
         validate_required!(params.blocks, "块更新列表不能为空");
 
-        let url = format!("/open-apis/docx/v1/documents/{}/blocks/batch_update", params.document_id);
-        let mut api_request: ApiRequest<BatchUpdateDocumentBlocksResponse> = ApiRequest::patch(&url);
-        api_request = api_request.body(&params)?;
+        let api_endpoint = DocxApiV1::DocumentBlockBatchUpdate(params.document_id.clone());
+        let mut api_request: ApiRequest<BatchUpdateDocumentBlocksResponse> = ApiRequest::patch(&api_endpoint.to_url());
+        api_request = api_request.json_body(&params);
 
         let response = Transport::request(api_request, &self.config, None).await?;
         response.data.ok_or_else(|| {

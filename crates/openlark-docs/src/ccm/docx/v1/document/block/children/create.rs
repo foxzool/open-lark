@@ -11,6 +11,8 @@ use openlark_core::{
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+use crate::common::api_endpoints::DocxApiV1;
+use crate::ccm::docx::common_types::BlockContent;
 
 /// 创建块请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -34,12 +36,6 @@ pub struct NewBlock {
     pub content: Option<BlockContent>,
 }
 
-/// 块内容
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BlockContent {
-    /// 文本内容
-    pub text: Option<String>,
-}
 
 /// 块位置
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -92,9 +88,9 @@ impl CreateDocumentBlockChildrenRequest {
         validate_required!(params.block_id, "父块ID不能为空");
         validate_required!(params.children, "子块列表不能为空");
 
-        let url = format!("/open-apis/docx/v1/documents/{}/blocks/{}/children", params.document_id, params.block_id);
-        let mut api_request: ApiRequest<CreateDocumentBlockChildrenResponse> = ApiRequest::post(&url);
-        api_request = api_request.body(&params)?;
+        let api_endpoint = DocxApiV1::DocumentBlockChildrenCreate(params.document_id.clone(), params.block_id.clone());
+        let mut api_request: ApiRequest<CreateDocumentBlockChildrenResponse> = ApiRequest::post(&api_endpoint.to_url());
+        api_request = api_request.json_body(&params);
 
         let response = Transport::request(api_request, &self.config, None).await?;
         response.data.ok_or_else(|| {

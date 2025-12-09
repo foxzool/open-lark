@@ -7,10 +7,10 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+use crate::common::api_endpoints::DocxApiV1;
 
 /// 创建文档请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -83,14 +83,14 @@ impl CreateDocumentRequest {
     ///
     /// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/create
     pub async fn execute(self, params: CreateDocumentParams) -> SDKResult<CreateDocumentResponse> {
-        // 构建API端点URL
-        let url = "/open-apis/docx/v1/documents";
+        // 构建API端点
+        let api_endpoint = DocxApiV1::DocumentCreate;
 
         // 创建API请求
-        let mut api_request: ApiRequest<CreateDocumentResponse> = ApiRequest::post(&url);
+        let mut api_request: ApiRequest<CreateDocumentResponse> = ApiRequest::post(&api_endpoint.to_url());
 
         // 设置请求体
-        api_request = api_request.body(&params)?;
+        api_request = api_request.json_body(&params);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

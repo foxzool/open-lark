@@ -11,6 +11,7 @@ use openlark_core::{
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+use crate::common::api_endpoints::DocxApiV1;
 
 /// 删除群公告中的块请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -76,14 +77,14 @@ impl BatchDeleteChatAnnouncementBlockChildrenRequest {
         validate_required!(params.block_id, "父块ID不能为空");
         validate_required!(params.block_ids, "子块ID列表不能为空");
 
-        // 构建API端点URL
-        let url = format!("/open-apis/docx/v1/chats/{}/announcement/blocks/{}/children/batch_delete", params.chat_id, params.block_id);
+        // 构建API端点
+        let api_endpoint = DocxApiV1::ChatAnnouncementBlockChildrenBatchDelete(params.chat_id.clone(), params.block_id.clone());
 
         // 创建API请求
-        let mut api_request: ApiRequest<BatchDeleteChatAnnouncementBlockChildrenResponse> = ApiRequest::delete(&url);
+        let mut api_request: ApiRequest<BatchDeleteChatAnnouncementBlockChildrenResponse> = ApiRequest::delete(&api_endpoint.to_url());
 
         // 设置请求体
-        api_request = api_request.body(&params)?;
+        api_request = api_request.json_body(&params);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
