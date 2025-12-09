@@ -11,6 +11,8 @@ use openlark_core::{
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+use crate::common::api_endpoints::DocxApiV1;
+use crate::ccm::docx::common_types::BlockContent;
 
 /// 更新块内容请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -23,12 +25,6 @@ pub struct UpdateDocumentBlockParams {
     pub content: Option<BlockContent>,
 }
 
-/// 块内容
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BlockContent {
-    /// 文本内容
-    pub text: Option<String>,
-}
 
 /// 更新块内容响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -66,9 +62,9 @@ impl UpdateDocumentBlockRequest {
         validate_required!(params.document_id, "文档ID不能为空");
         validate_required!(params.block_id, "块ID不能为空");
 
-        let url = format!("/open-apis/docx/v1/documents/{}/blocks/{}", params.document_id, params.block_id);
-        let mut api_request: ApiRequest<UpdateDocumentBlockResponse> = ApiRequest::patch(&url);
-        api_request = api_request.body(&params)?;
+        let api_endpoint = DocxApiV1::DocumentBlockPatch(params.document_id.clone(), params.block_id.clone());
+        let mut api_request: ApiRequest<UpdateDocumentBlockResponse> = ApiRequest::patch(&api_endpoint.to_url());
+        api_request = api_request.json_body(&params);
 
         let response = Transport::request(api_request, &self.config, None).await?;
         response.data.ok_or_else(|| {
