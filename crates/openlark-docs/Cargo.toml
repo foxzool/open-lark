@@ -49,6 +49,12 @@ wiki = ["baike"]
 # 会议纪要 (4 APIs)
 minutes = ["core"]
 
+# 云文档管理 (1 API)
+docs = ["ccm-doc"]
+
+# 群公告管理 (19 APIs)
+docx = ["ccm-docx"]
+
 # === API版本支持 ===
 v1 = ["core"]
 v2 = ["v1"]
