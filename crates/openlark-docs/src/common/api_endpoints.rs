@@ -280,6 +280,136 @@ impl WikiApiV1 {
     }
 }
 
+/// Docs API V1 端点枚举
+#[derive(Debug, Clone, PartialEq)]
+pub enum DocsApiV1 {
+    /// 获取云文档内容
+    ContentGet,
+}
+
+impl DocsApiV1 {
+    /// 生成对应的 URL
+    pub fn to_url(&self) -> String {
+        match self {
+            DocsApiV1::ContentGet => "/open-apis/docs/v1/content".to_string(),
+        }
+    }
+}
+
+/// Docx API V1 端点枚举
+#[derive(Debug, Clone, PartialEq)]
+pub enum DocxApiV1 {
+    // 群公告相关API (7个)
+    /// 获取群公告基本信息
+    ChatAnnouncementGet(String),
+    /// 获取群公告所有块
+    ChatAnnouncementBlockList(String),
+    /// 在群公告中创建块
+    ChatAnnouncementBlockChildrenCreate(String, String),
+    /// 批量更新群公告块的内容
+    ChatAnnouncementBlockBatchUpdate(String),
+    /// 获取群公告块的内容
+    ChatAnnouncementBlockGet(String, String),
+    /// 获取所有子块
+    ChatAnnouncementBlockChildrenGet(String, String),
+    /// 删除群公告中的块
+    ChatAnnouncementBlockChildrenBatchDelete(String, String),
+
+    // 文档相关API (12个)
+    /// 创建文档
+    DocumentCreate,
+    /// 获取文档基本信息
+    DocumentGet(String),
+    /// 获取文档纯文本内容
+    DocumentRawContent(String),
+    /// 获取文档所有块
+    DocumentBlockList(String),
+    /// 创建块
+    DocumentBlockChildrenCreate(String, String),
+    /// 创建嵌套块
+    DocumentBlockDescendantCreate(String, String),
+    /// 更新块的内容
+    DocumentBlockPatch(String, String),
+    /// 获取块的内容
+    DocumentBlockGet(String, String),
+    /// 批量更新块的内容
+    DocumentBlockBatchUpdate(String),
+    /// 获取所有子块
+    DocumentBlockChildrenGet(String, String),
+    /// 删除块
+    DocumentBlockChildrenBatchDelete(String, String),
+    /// Markdown/HTML 内容转换为文档块
+    DocumentConvert,
+}
+
+impl DocxApiV1 {
+    /// 生成对应的 URL
+    pub fn to_url(&self) -> String {
+        match self {
+            // 群公告相关API (7个)
+            DocxApiV1::ChatAnnouncementGet(chat_id) => {
+                format!("/open-apis/docx/v1/chats/{}/announcement", chat_id)
+            },
+            DocxApiV1::ChatAnnouncementBlockList(chat_id) => {
+                format!("/open-apis/docx/v1/chats/{}/announcement/blocks", chat_id)
+            },
+            DocxApiV1::ChatAnnouncementBlockChildrenCreate(chat_id, block_id) => {
+                format!("/open-apis/docx/v1/chats/{}/announcement/blocks/{}/children", chat_id, block_id)
+            },
+            DocxApiV1::ChatAnnouncementBlockBatchUpdate(chat_id) => {
+                format!("/open-apis/docx/v1/chats/{}/announcement/blocks/batch_update", chat_id)
+            },
+            DocxApiV1::ChatAnnouncementBlockGet(chat_id, block_id) => {
+                format!("/open-apis/docx/v1/chats/{}/announcement/blocks/{}", chat_id, block_id)
+            },
+            DocxApiV1::ChatAnnouncementBlockChildrenGet(chat_id, block_id) => {
+                format!("/open-apis/docx/v1/chats/{}/announcement/blocks/{}/children", chat_id, block_id)
+            },
+            DocxApiV1::ChatAnnouncementBlockChildrenBatchDelete(chat_id, block_id) => {
+                format!("/open-apis/docx/v1/chats/{}/announcement/blocks/{}/children/batch_delete", chat_id, block_id)
+            },
+
+            // 文档相关API (12个)
+            DocxApiV1::DocumentCreate => {
+                "/open-apis/docx/v1/documents".to_string()
+            },
+            DocxApiV1::DocumentGet(document_id) => {
+                format!("/open-apis/docx/v1/documents/{}", document_id)
+            },
+            DocxApiV1::DocumentRawContent(document_id) => {
+                format!("/open-apis/docx/v1/documents/{}/raw_content", document_id)
+            },
+            DocxApiV1::DocumentBlockList(document_id) => {
+                format!("/open-apis/docx/v1/documents/{}/blocks", document_id)
+            },
+            DocxApiV1::DocumentBlockChildrenCreate(document_id, block_id) => {
+                format!("/open-apis/docx/v1/documents/{}/blocks/{}/children", document_id, block_id)
+            },
+            DocxApiV1::DocumentBlockDescendantCreate(document_id, block_id) => {
+                format!("/open-apis/docx/v1/documents/{}/blocks/{}/descendant", document_id, block_id)
+            },
+            DocxApiV1::DocumentBlockPatch(document_id, block_id) => {
+                format!("/open-apis/docx/v1/documents/{}/blocks/{}", document_id, block_id)
+            },
+            DocxApiV1::DocumentBlockGet(document_id, block_id) => {
+                format!("/open-apis/docx/v1/documents/{}/blocks/{}", document_id, block_id)
+            },
+            DocxApiV1::DocumentBlockBatchUpdate(document_id) => {
+                format!("/open-apis/docx/v1/documents/{}/blocks/batch_update", document_id)
+            },
+            DocxApiV1::DocumentBlockChildrenGet(document_id, block_id) => {
+                format!("/open-apis/docx/v1/documents/{}/blocks/{}/children", document_id, block_id)
+            },
+            DocxApiV1::DocumentBlockChildrenBatchDelete(document_id, block_id) => {
+                format!("/open-apis/docx/v1/documents/{}/blocks/{}/children/batch_delete", document_id, block_id)
+            },
+            DocxApiV1::DocumentConvert => {
+                "/open-apis/docx/v1/documents/blocks/convert".to_string()
+            },
+        }
+    }
+}
+
 /// Wiki API V2 端点枚举
 #[derive(Debug, Clone, PartialEq)]
 pub enum WikiApiV2 {
