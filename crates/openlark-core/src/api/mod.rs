@@ -52,12 +52,7 @@ pub enum RequestData {
     Empty,
 }
 
-impl From<serde_json::Value> for RequestData {
-    fn from(value: serde_json::Value) -> Self {
-        RequestData::Json(value)
-    }
-}
-
+// 处理字符串类型 - 优先使用Text处理
 impl From<String> for RequestData {
     fn from(value: String) -> Self {
         RequestData::Text(value)
@@ -67,6 +62,27 @@ impl From<String> for RequestData {
 impl From<&str> for RequestData {
     fn from(value: &str) -> Self {
         RequestData::Text(value.to_string())
+    }
+}
+
+// 为JSON值类型提供直接转换
+impl From<serde_json::Value> for RequestData {
+    fn from(value: serde_json::Value) -> Self {
+        RequestData::Json(value)
+    }
+}
+
+// 为Vec<u8>提供二进制数据支持
+impl From<Vec<u8>> for RequestData {
+    fn from(value: Vec<u8>) -> Self {
+        RequestData::Binary(value)
+    }
+}
+
+// 为HashMap<String, String>提供表单数据支持
+impl From<std::collections::HashMap<String, String>> for RequestData {
+    fn from(value: std::collections::HashMap<String, String>) -> Self {
+        RequestData::Form(value)
     }
 }
 
@@ -122,6 +138,18 @@ impl<R> ApiRequest<R> {
         }
     }
 
+    pub fn patch(url: impl Into<String>) -> Self {
+        Self {
+            method: HttpMethod::Patch,
+            url: url.into(),
+            headers: HashMap::new(),
+            query: HashMap::new(),
+            body: None,
+            timeout: None,
+            _phantom: std::marker::PhantomData,
+        }
+    }
+
     pub fn delete(url: impl Into<String>) -> Self {
         Self {
             method: HttpMethod::Delete,
@@ -154,6 +182,18 @@ impl<R> ApiRequest<R> {
 
     pub fn body(mut self, body: impl Into<RequestData>) -> Self {
         self.body = Some(body.into());
+        self
+    }
+
+    /// 为任何可序列化的类型设置请求体
+    pub fn json_body<T>(mut self, body: &T) -> Self
+    where
+        T: serde::Serialize,
+    {
+        match serde_json::to_value(body) {
+            Ok(json_value) => self.body = Some(RequestData::Json(json_value)),
+            Err(_) => self.body = Some(RequestData::Empty),
+        }
         self
     }
 
@@ -236,3 +276,55 @@ pub mod traits;
 // ============================================================================
 
 pub use traits::{AsyncApiClient, SyncApiClient};
+
+// ============================================================================
+// 测试
+// ============================================================================
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_patch_method() {
+        // 测试patch方法是否正确创建ApiRequest
+        let request: ApiRequest<()> = ApiRequest::patch("https://example.com/api/resource");
+
+        // 验证HTTP方法
+        assert_eq!(request.method, HttpMethod::Patch);
+
+        // 验证URL
+        assert_eq!(request.url, "https://example.com/api/resource");
+
+        // 验证HTTP方法字符串
+        assert_eq!(request.method.as_str(), "PATCH");
+
+        println!("✅ Patch method test passed!");
+    }
+
+    #[test]
+    fn test_all_http_methods() {
+        // 测试所有HTTP方法
+        let get_req: ApiRequest<()> = ApiRequest::get("https://example.com/api");
+        let post_req: ApiRequest<()> = ApiRequest::post("https://example.com/api");
+        let put_req: ApiRequest<()> = ApiRequest::put("https://example.com/api");
+        let patch_req: ApiRequest<()> = ApiRequest::patch("https://example.com/api");
+        let delete_req: ApiRequest<()> = ApiRequest::delete("https://example.com/api");
+
+        // 验证HTTP方法
+        assert_eq!(get_req.method, HttpMethod::Get);
+        assert_eq!(post_req.method, HttpMethod::Post);
+        assert_eq!(put_req.method, HttpMethod::Put);
+        assert_eq!(patch_req.method, HttpMethod::Patch);
+        assert_eq!(delete_req.method, HttpMethod::Delete);
+
+        // 验证HTTP方法字符串
+        assert_eq!(get_req.method.as_str(), "GET");
+        assert_eq!(post_req.method.as_str(), "POST");
+        assert_eq!(put_req.method.as_str(), "PUT");
+        assert_eq!(patch_req.method.as_str(), "PATCH");
+        assert_eq!(delete_req.method.as_str(), "DELETE");
+
+        println!("✅ All HTTP methods test passed!");
+    }
+}

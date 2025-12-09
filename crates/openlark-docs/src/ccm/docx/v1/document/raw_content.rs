@@ -11,6 +11,7 @@ use openlark_core::{
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+use crate::common::api_endpoints::DocxApiV1;
 
 /// 获取文档纯文本内容请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -61,11 +62,11 @@ impl GetDocumentRawContentRequest {
         // 验证必填字段
         validate_required!(params.document_id, "文档ID不能为空");
 
-        // 构建API端点URL
-        let url = format!("/open-apis/docx/v1/documents/{}/raw_content", params.document_id);
+        // 构建API端点
+        let api_endpoint = DocxApiV1::DocumentRawContent(params.document_id.clone());
 
         // 创建API请求
-        let mut api_request: ApiRequest<GetDocumentRawContentResponse> = ApiRequest::get(&url);
+        let api_request: ApiRequest<GetDocumentRawContentResponse> = ApiRequest::get(&api_endpoint.to_url());
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

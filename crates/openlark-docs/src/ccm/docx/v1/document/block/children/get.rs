@@ -11,6 +11,7 @@ use openlark_core::{
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+use crate::common::api_endpoints::DocxApiV1;
 
 /// 获取所有子块请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -72,8 +73,8 @@ impl GetDocumentBlockChildrenRequest {
         validate_required!(params.document_id, "文档ID不能为空");
         validate_required!(params.block_id, "父块ID不能为空");
 
-        let url = format!("/open-apis/docx/v1/documents/{}/blocks/{}/children", params.document_id, params.block_id);
-        let mut api_request: ApiRequest<GetDocumentBlockChildrenResponse> = ApiRequest::get(&url);
+        let api_endpoint = DocxApiV1::DocumentBlockChildrenGet(params.document_id.clone(), params.block_id.clone());
+        let mut api_request: ApiRequest<GetDocumentBlockChildrenResponse> = ApiRequest::get(&api_endpoint.to_url());
 
         if let Some(page_size) = params.page_size {
             api_request = api_request.query("page_size", &page_size.to_string());

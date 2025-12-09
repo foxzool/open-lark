@@ -11,6 +11,7 @@ use openlark_core::{
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+use crate::common::api_endpoints::DocxApiV1;
 
 /// 删除块请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -60,9 +61,9 @@ impl BatchDeleteDocumentBlockChildrenRequest {
         validate_required!(params.block_id, "父块ID不能为空");
         validate_required!(params.block_ids, "子块ID列表不能为空");
 
-        let url = format!("/open-apis/docx/v1/documents/{}/blocks/{}/children/batch_delete", params.document_id, params.block_id);
-        let mut api_request: ApiRequest<BatchDeleteDocumentBlockChildrenResponse> = ApiRequest::delete(&url);
-        api_request = api_request.body(&params)?;
+        let api_endpoint = DocxApiV1::DocumentBlockChildrenBatchDelete(params.document_id.clone(), params.block_id.clone());
+        let mut api_request: ApiRequest<BatchDeleteDocumentBlockChildrenResponse> = ApiRequest::delete(&api_endpoint.to_url());
+        api_request = api_request.json_body(&params);
 
         let response = Transport::request(api_request, &self.config, None).await?;
         response.data.ok_or_else(|| {

@@ -3,7 +3,6 @@
 //! 定义云文档搜索和元数据API的数据结构。
 
 use std::collections::HashMap;
-use crate::prelude::*;
 use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 

@@ -13,7 +13,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 use crate::common::api_endpoints::DocxApiV1;
-use crate::ccm::docx::{BlockContent};
+use crate::ccm::docx::common_types::BlockContent;
 
 /// 获取块内容请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -71,8 +71,8 @@ impl GetDocumentBlockRequest {
         validate_required!(params.document_id, "文档ID不能为空");
         validate_required!(params.block_id, "块ID不能为空");
 
-        let url = format!("/open-apis/docx/v1/documents/{}/blocks/{}", params.document_id, params.block_id);
-        let mut api_request: ApiRequest<GetDocumentBlockResponse> = ApiRequest::get(&url);
+        let api_endpoint = DocxApiV1::DocumentBlockGet(params.document_id.clone(), params.block_id.clone());
+        let api_request: ApiRequest<GetDocumentBlockResponse> = ApiRequest::get(&api_endpoint.to_url());
 
         let response = Transport::request(api_request, &self.config, None).await?;
         response.data.ok_or_else(|| {

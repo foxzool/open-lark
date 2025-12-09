@@ -12,6 +12,9 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::api_endpoints::DocxApiV1;
+use crate::ccm::docx::{BlockContent};
+
 /// 获取群公告块内容请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetChatAnnouncementBlockParams {
@@ -45,59 +48,6 @@ pub struct BlockData {
     pub update_time: Option<i64>,
 }
 
-/// 块内容
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BlockContent {
-    /// 文本内容
-    pub text: Option<String>,
-    /// 富文本内容
-    pub rich_text: Option<RichText>,
-}
-
-/// 富文本内容
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct RichText {
-    /// 段落列表
-    pub paragraphs: Vec<Paragraph>,
-}
-
-/// 段落
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Paragraph {
-    /// 文本元素列表
-    pub elements: Vec<TextElement>,
-}
-
-/// 文本元素
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TextElement {
-    /// 文本
-    pub text_run: Option<TextRun>,
-}
-
-/// 文本运行
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TextRun {
-    /// 内容
-    pub content: String,
-    /// 样式
-    pub style: Option<TextStyle>,
-}
-
-/// 文本样式
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TextStyle {
-    /// 是否加粗
-    pub bold: Option<bool>,
-    /// 是否斜体
-    pub italic: Option<bool>,
-    /// 是否删除线
-    pub strikethrough: Option<bool>,
-    /// 文字颜色
-    pub text_color: Option<String>,
-    /// 背景颜色
-    pub background_color: Option<String>,
-}
 
 impl ApiResponseTrait for GetChatAnnouncementBlockResponse {
     fn data_format() -> ResponseFormat {
@@ -124,11 +74,11 @@ impl GetChatAnnouncementBlockRequest {
         validate_required!(params.chat_id, "群聊ID不能为空");
         validate_required!(params.block_id, "块ID不能为空");
 
-        // 构建API端点URL
-        let url = format!("/open-apis/docx/v1/chats/{}/announcement/blocks/{}", params.chat_id, params.block_id);
+        // 使用enum+builder系统生成API端点
+        let api_endpoint = DocxApiV1::ChatAnnouncementBlockGet(params.chat_id.clone(), params.block_id.clone());
 
-        // 创建API请求
-        let mut api_request: ApiRequest<GetChatAnnouncementBlockResponse> = ApiRequest::get(&url);
+        // 创建API请求 - 使用类型安全的URL生成
+        let api_request: ApiRequest<GetChatAnnouncementBlockResponse> = ApiRequest::get(&api_endpoint.to_url());
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

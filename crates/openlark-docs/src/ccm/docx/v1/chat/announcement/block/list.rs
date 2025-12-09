@@ -1,7 +1,7 @@
 //! 获取群公告所有块
 //!
 //! 获取群公告所有块的富文本内容并分页返回。
-//! API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/get
+//! API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/list
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -13,7 +13,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 use crate::common::api_endpoints::DocxApiV1;
-use crate::ccm::docx::{BlockContent, BlockItem, PageData};
+use crate::ccm::docx::{BlockItem, PageData};
 
 /// 获取群公告所有块请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -52,7 +52,7 @@ impl GetChatAnnouncementBlocksRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/get
+    /// API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/list
     pub async fn execute(self, params: GetChatAnnouncementBlocksParams) -> SDKResult<GetChatAnnouncementBlocksResponse> {
         // 验证必填字段
         validate_required!(params.chat_id, "群聊ID不能为空");
