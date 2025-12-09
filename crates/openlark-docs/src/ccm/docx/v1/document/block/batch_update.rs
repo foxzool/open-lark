@@ -1,0 +1,85 @@
+//! 批量更新块的内容
+//!
+//! 批量更新块的富文本内容。
+//! API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/batch_update
+
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    validate_required,
+    SDKResult,
+};
+use serde::{Deserialize, Serialize};
+
+/// 批量更新块内容请求参数
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BatchUpdateDocumentBlocksParams {
+    /// 文档ID
+    pub document_id: String,
+    /// 块更新列表
+    pub blocks: Vec<BlockUpdate>,
+}
+
+/// 块更新信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BlockUpdate {
+    /// 块ID
+    pub block_id: String,
+    /// 更新的内容
+    pub content: Option<BlockContent>,
+}
+
+/// 块内容
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BlockContent {
+    /// 文本内容
+    pub text: Option<String>,
+}
+
+/// 批量更新块内容响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BatchUpdateDocumentBlocksResponse {
+    /// 更新结果
+    pub data: Option<BatchUpdateResult>,
+}
+
+/// 批量更新结果
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BatchUpdateResult {
+    /// 更新成功的块数量
+    pub updated_count: Option<u32>,
+    /// 更新失败的块数量
+    pub failed_count: Option<u32>,
+}
+
+impl ApiResponseTrait for BatchUpdateDocumentBlocksResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 批量更新块内容请求
+pub struct BatchUpdateDocumentBlocksRequest {
+    config: Config,
+}
+
+impl BatchUpdateDocumentBlocksRequest {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+
+    pub async fn execute(self, params: BatchUpdateDocumentBlocksParams) -> SDKResult<BatchUpdateDocumentBlocksResponse> {
+        validate_required!(params.document_id, "文档ID不能为空");
+        validate_required!(params.blocks, "块更新列表不能为空");
+
+        let url = format!("/open-apis/docx/v1/documents/{}/blocks/batch_update", params.document_id);
+        let mut api_request: ApiRequest<BatchUpdateDocumentBlocksResponse> = ApiRequest::patch(&url);
+        api_request = api_request.body(&params)?;
+
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+        })
+    }
+}
