@@ -11,7 +11,6 @@ pub use openlark_core::prelude::{
 // 重新导出文档服务核心类型（避免冲突）
 pub use crate::{
     error::{DocsError, DocsResult},
-    service::DocsService,
 };
 
 // 显式导出常用模型，避免歧义
@@ -32,6 +31,15 @@ pub use crate::baike::BaikeService;
 
 #[cfg(feature = "minutes")]
 pub use crate::minutes::MinutesService;
+
+#[cfg(feature = "docs")]
+pub use crate::docs::DocsService;
+
+#[cfg(feature = "docx")]
+pub use crate::docx::DocxService;
+
+#[cfg(feature = "wiki")]
+pub use crate::wiki::WikiService;
 
 // 为了向后兼容性，保留类型别名
 pub type APIResult<T> = DocsResult<T>;
