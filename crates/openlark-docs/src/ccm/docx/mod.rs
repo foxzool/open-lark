@@ -1,22 +1,12 @@
-//! Document (DOCX) module for OpenLark Docs
+//! ccm/docx模块 - 文档块内容管理
 //!
-//! This module provides comprehensive document (DOCX) functionality including:
-//! - Document creation, reading, updating, deletion
-//! - Document block operations (text, images, tables, etc.)
-//! - Document version management
-//! - Document comments and replies
-//! - Document import/export
-//! - Document search and statistics
-//!
-//! ## ccm_docs API
-//! - [`services::CcmDocsService`] - 云文档搜索和元数据API
-//! - [`models`] - ccm_docs API 数据模型
-//!
-//! ## v1版本API（框架）
-//! - [`v1`] - v1版本的文档操作框架
-//! - [`documents`] - 文档操作API框架
+//! 按照bizTag/project/version/resource/name.rs模式组织
+//! 包含chat公告和document操作的相关API
 
-use crate::prelude::*;
+use openlark_core::config::Config;
+
+/// 公共类型定义
+pub mod common_types;
 
 /// 数据模型定义
 pub mod models;
@@ -24,8 +14,11 @@ pub mod models;
 /// docx API 数据模型
 pub mod models_docx;
 
-/// API服务实现
-pub mod services;
+// 重新导出常用类型，方便其他模块使用
+pub use common_types::*;
+
+/// API服务实现 (临时注释以修复编译问题)
+// pub mod services;
 
 /// v1版本API
 pub mod v1;
@@ -37,22 +30,22 @@ pub mod documents;
 pub struct DocxService {
     #[allow(dead_code)] // 配置保留供将来使用
     config: Config,
-    /// ccm_docs API服务
-    #[cfg(feature = "ccm-docx")]
-    pub ccm_docs: services::CcmDocsService,
-    /// docx API服务
-    #[cfg(feature = "ccm-docx")]
-    pub docx: services::DocxService,
+    // ccm_docs API服务 (临时注释以修复编译问题)
+    // #[cfg(feature = "ccm-docx")]
+    // pub ccm_docs: services::CcmDocsService,
+    // docx API服务 (临时注释以修复编译问题)
+    // #[cfg(feature = "ccm-docx")]
+    // pub docx: services::DocxService,
 }
 
 impl DocxService {
     pub fn new(config: Config) -> Self {
         Self {
             config: config.clone(),
-            #[cfg(feature = "ccm-docx")]
-            ccm_docs: services::CcmDocsService::new(config.clone()),
-            #[cfg(feature = "ccm-docx")]
-            docx: services::DocxService::new(config.clone()),
+            // #[cfg(feature = "ccm-docx")]
+            // ccm_docs: services::CcmDocsService::new(config.clone()),
+            // #[cfg(feature = "ccm-docx")]
+            // docx: services::DocxService::new(config.clone()),
         }
     }
 }

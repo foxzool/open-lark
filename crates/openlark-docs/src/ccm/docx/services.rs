@@ -106,9 +106,7 @@ impl CcmDocsService {
 
         // 排序参数
         if let Some(ref sort) = req.sort {
-                "sort_direction",
-                format!("{:?}", sort.sort_direction).to_lowercase(),
-            );
+            body.insert("sort_direction".to_string(), format!("{:?}", sort.sort_direction).to_lowercase());
         }
 
         // 分页参数
@@ -124,7 +122,7 @@ impl CcmDocsService {
             api_path: "/open-apis/suite/docs-api/search/object".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&body)?,
-        }
+        };
 
         // 构建请求体
         let mut body = HashMap::new();
@@ -139,9 +137,8 @@ impl CcmDocsService {
 
         // 父类型参数
         if let Some(ref parent_type) = req.parent_type {
-            "title".to_string(),
-            serde_json::Value::String(req.title.clone()),
-        );
+            body.insert("parent_type".to_string(), serde_json::Value::String(format!("{:?}", parent_type)));
+        }
         if let Some(ref cover_key) = req.cover_key {
             body.insert(
                 "cover_key".to_string(),
