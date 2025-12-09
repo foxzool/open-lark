@@ -10,6 +10,8 @@
 //! - **baike**: 知识库 (27 APIs) - 企业知识库、Wiki管理
 //! - **wiki**: Wiki知识库 (16 APIs) - 企业Wiki管理
 //! - **minutes**: 会议纪要 (4 APIs) - 会议记录管理
+//! - **docs**: 云文档管理 (1 API) - 文档内容获取
+//! - **docx**: 群公告管理 (19 APIs) - 群公告和块管理
 //!
 //! ## 快速开始
 //!
@@ -30,7 +32,7 @@
 //!
 //! ## 特性
 //!
-//! - ✅ **254 APIs全覆盖** - 飞书云文档服务完整实现
+//! - ✅ **274 APIs全覆盖** - 飞书云文档服务完整实现
 //! - ✅ **类型安全** - 强类型请求/响应结构
 //! - ✅ **异步支持** - 基于tokio的异步API
 //! - ✅ **版本化API** - 支持v1/v2/v3/v4多版本API
@@ -69,6 +71,12 @@ pub mod minutes;
 #[cfg(feature = "wiki")]
 pub mod wiki;
 
+#[cfg(feature = "docs")]
+pub mod docs;
+
+#[cfg(feature = "docx")]
+pub mod docx;
+
 // API版本模块
 #[cfg(any(feature = "v1", feature = "v2", feature = "v3", feature = "v4"))]
 pub mod versions;
@@ -85,7 +93,7 @@ pub mod prelude;
 
 // 重新导出主要类型
 pub use error::{DocsError, DocsResult};
-pub use service::DocsService;
+pub use service::DocsService as MainDocsService;
 
 // 重新导出各域服务
 #[cfg(feature = "ccm")]
@@ -105,3 +113,9 @@ pub use minutes::MinutesService;
 
 #[cfg(feature = "wiki")]
 pub use wiki::WikiService;
+
+#[cfg(feature = "docs")]
+pub use docs::DocsService;
+
+#[cfg(feature = "docx")]
+pub use docx::DocxService;
