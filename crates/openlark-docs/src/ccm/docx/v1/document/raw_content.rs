@@ -58,6 +58,7 @@ impl GetDocumentRawContentRequest {
     /// 执行请求
     ///
     /// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/raw_content
+    /// 对应CSV记录: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/raw_content
     pub async fn execute(self, params: GetDocumentRawContentParams) -> SDKResult<GetDocumentRawContentResponse> {
         // 验证必填字段
         validate_required!(params.document_id, "文档ID不能为空");

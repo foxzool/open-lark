@@ -82,6 +82,7 @@ impl CreateDocumentRequest {
     /// 执行请求
     ///
     /// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/create
+    /// 对应CSV记录: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/create
     pub async fn execute(self, params: CreateDocumentParams) -> SDKResult<CreateDocumentResponse> {
         // 构建API端点
         let api_endpoint = DocxApiV1::DocumentCreate;
