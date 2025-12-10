@@ -53,6 +53,7 @@ impl GetChatAnnouncementBlocksRequest {
     /// 执行请求
     ///
     /// API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/list
+    /// 对应CSV记录: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/list
     pub async fn execute(self, params: GetChatAnnouncementBlocksParams) -> SDKResult<GetChatAnnouncementBlocksResponse> {
         // 验证必填字段
         validate_required!(params.chat_id, "群聊ID不能为空");
