@@ -83,6 +83,10 @@ impl CreateDocumentBlockChildrenRequest {
         Self { config }
     }
 
+    /// 执行请求
+    ///
+    /// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/create
+    /// 对应CSV记录: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block/create
     pub async fn execute(self, params: CreateDocumentBlockChildrenParams) -> SDKResult<CreateDocumentBlockChildrenResponse> {
         validate_required!(params.document_id, "文档ID不能为空");
         validate_required!(params.block_id, "父块ID不能为空");

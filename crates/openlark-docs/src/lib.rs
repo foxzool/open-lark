@@ -72,11 +72,7 @@ pub mod minutes;
 #[cfg(feature = "wiki")]
 pub mod wiki;
 
-#[cfg(feature = "docs")]
-pub mod docs;
-
-#[cfg(feature = "docx")]
-pub mod docx;
+// docs和docx模块已包含在ccm模块中，无需独立导出
 
 // API版本模块
 #[cfg(any(feature = "v1", feature = "v2", feature = "v3", feature = "v4"))]
@@ -115,8 +111,8 @@ pub use minutes::MinutesService;
 #[cfg(feature = "wiki")]
 pub use wiki::WikiService;
 
-#[cfg(feature = "docs")]
-pub use docs::DocsService;
-
-#[cfg(feature = "docx")]
-pub use docx::DocxService;
+// docs和docx服务通过ccm模块导出
+// #[cfg(feature = "docs")]
+// pub use docs::DocsService;
+// #[cfg(feature = "docx")]
+// pub use docx::DocxService;
