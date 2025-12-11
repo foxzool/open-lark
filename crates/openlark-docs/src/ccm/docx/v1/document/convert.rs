@@ -3,16 +3,15 @@
 //! 将 Markdown/HTML 格式的内容转换为文档块，以便于将 Markdown/HTML 格式的内容插入到文档中。目前支持转换为的块类型包含文本、一到九级标题、无序列表、有序列表、代码块、引用、待办事项、图片、表格、表格单元格。
 //! API文档: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/convert
 
+use crate::ccm::docx::common_types::RichText;
+use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use crate::common::api_endpoints::DocxApiV1;
-use crate::ccm::docx::common_types::RichText;
 
 /// Markdown/HTML 内容转换为文档块请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -132,7 +131,10 @@ impl ConvertContentToBlocksRequest {
     /// 执行请求
     ///
     /// API文档: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/convert
-    pub async fn execute(self, params: ConvertContentToBlocksParams) -> SDKResult<ConvertContentToBlocksResponse> {
+    pub async fn execute(
+        self,
+        params: ConvertContentToBlocksParams,
+    ) -> SDKResult<ConvertContentToBlocksResponse> {
         // 验证必填字段
         validate_required!(params.content, "源内容不能为空");
 
@@ -140,7 +142,8 @@ impl ConvertContentToBlocksRequest {
         let api_endpoint = DocxApiV1::DocumentConvert;
 
         // 创建API请求
-        let mut api_request: ApiRequest<ConvertContentToBlocksResponse> = ApiRequest::post(&api_endpoint.to_url());
+        let mut api_request: ApiRequest<ConvertContentToBlocksResponse> =
+            ApiRequest::post(&api_endpoint.to_url());
 
         // 设置请求体
         api_request = api_request.json_body(&params);

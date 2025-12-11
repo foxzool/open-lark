@@ -7,8 +7,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -74,7 +73,9 @@ impl MoveDocsToWikiRequest {
             ApiRequest::post(&api_endpoint.to_url());
 
         // 设置请求体
-        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(&params)?));
+        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(
+            &params,
+        )?));
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

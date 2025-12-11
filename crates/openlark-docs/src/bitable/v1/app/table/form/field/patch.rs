@@ -1,7 +1,6 @@
 //! Bitable 更新表单问题API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/form/field/patch
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -11,7 +10,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 use super::list::FormFieldQuestion;
-use super::models::{PatchFormFieldRequest as PatchFormFieldRequestBody};
+use super::models::PatchFormFieldRequest as PatchFormFieldRequestBody;
 use super::FormFieldService;
 
 /// 更新表单问题请求
@@ -157,14 +156,15 @@ impl PatchFormFieldQuestionRequest {
         );
 
         // 创建API请求
-        let api_request: ApiRequest<PatchFormFieldQuestionResponse> = ApiRequest::post(&path)
-            .body(openlark_core::api::RequestData::Binary(serde_json::to_vec(&request_body)?));
+        let api_request: ApiRequest<PatchFormFieldQuestionResponse> = ApiRequest::post(&path).body(
+            openlark_core::api::RequestData::Binary(serde_json::to_vec(&request_body)?),
+        );
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        response
+            .data
+            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))
     }
 }
 

@@ -3,15 +3,14 @@
 //! 指定需要操作的块，删除其指定范围的子块。如果操作成功，接口将返回应用删除操作后的文档版本号。
 //! API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/batch_delete
 
+use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use crate::common::api_endpoints::DocxApiV1;
 
 /// 删除块请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -56,13 +55,20 @@ impl BatchDeleteDocumentBlockChildrenRequest {
         Self { config }
     }
 
-    pub async fn execute(self, params: BatchDeleteDocumentBlockChildrenParams) -> SDKResult<BatchDeleteDocumentBlockChildrenResponse> {
+    pub async fn execute(
+        self,
+        params: BatchDeleteDocumentBlockChildrenParams,
+    ) -> SDKResult<BatchDeleteDocumentBlockChildrenResponse> {
         validate_required!(params.document_id, "文档ID不能为空");
         validate_required!(params.block_id, "父块ID不能为空");
         validate_required!(params.block_ids, "子块ID列表不能为空");
 
-        let api_endpoint = DocxApiV1::DocumentBlockChildrenBatchDelete(params.document_id.clone(), params.block_id.clone());
-        let mut api_request: ApiRequest<BatchDeleteDocumentBlockChildrenResponse> = ApiRequest::delete(&api_endpoint.to_url());
+        let api_endpoint = DocxApiV1::DocumentBlockChildrenBatchDelete(
+            params.document_id.clone(),
+            params.block_id.clone(),
+        );
+        let mut api_request: ApiRequest<BatchDeleteDocumentBlockChildrenResponse> =
+            ApiRequest::delete(&api_endpoint.to_url());
         api_request = api_request.json_body(&params);
 
         let response = Transport::request(api_request, &self.config, None).await?;

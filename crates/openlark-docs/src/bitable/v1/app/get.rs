@@ -1,13 +1,11 @@
 //! Bitable 获取多维表格详情API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/get
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -75,18 +73,12 @@ impl GetAppRequest {
 
 impl AppService {
     /// 创建获取多维表格请求
-    pub fn get_builder(
-        &self,
-        app_token: impl Into<String>,
-    ) -> GetAppRequest {
+    pub fn get_builder(&self, app_token: impl Into<String>) -> GetAppRequest {
         GetAppRequest::new(self.config.clone()).app_token(app_token)
     }
 
     /// 创建获取多维表格请求
-    pub fn get_app(
-        &self,
-        app_token: impl Into<String>,
-    ) -> GetAppRequest {
+    pub fn get_app(&self, app_token: impl Into<String>) -> GetAppRequest {
         self.get_builder(app_token)
     }
 }

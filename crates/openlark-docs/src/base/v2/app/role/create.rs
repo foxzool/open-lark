@@ -1,20 +1,15 @@
 //! Base 创建自定义角色API
 ///
 /// API文档: https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/create-2
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use super::{
-    models::RoleResponse as Role,
-    RoleService,
-};
+use super::{models::RoleResponse as Role, RoleService};
 
 /// 新增自定义角色请求
 pub struct CreateRoleRequest {
@@ -87,10 +82,8 @@ impl CreateRoleRequest {
         });
 
         // 创建API请求 - 使用类型安全的URL生成
-        let api_request: ApiRequest<CreateRoleResponse> =
-            ApiRequest::post(&api_endpoint.to_url()).body(
-                openlark_core::api::RequestData::Json(request_body),
-            );
+        let api_request: ApiRequest<CreateRoleResponse> = ApiRequest::post(&api_endpoint.to_url())
+            .body(openlark_core::api::RequestData::Json(request_body));
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

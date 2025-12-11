@@ -1,7 +1,6 @@
 //! Bitable 列出视图API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/view/list
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -118,9 +117,9 @@ impl ListViewsRequest {
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        response
+            .data
+            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))
     }
 }
 

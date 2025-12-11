@@ -1,8 +1,8 @@
 //! Minutes API 数据模型
 
-use serde::{Deserialize, Serialize};
 use openlark_core::api::ApiResponseTrait;
 use openlark_core::api::ResponseFormat;
+use serde::{Deserialize, Serialize};
 
 /// 妙记基础信息
 #[derive(Debug, Clone, Serialize, Deserialize)]

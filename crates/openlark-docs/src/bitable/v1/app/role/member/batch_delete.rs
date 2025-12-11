@@ -1,16 +1,19 @@
 //! Bitable 批量删除角色成员API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/role/member/batchDelete
-
 use openlark_core::{
     api::ApiRequest,
     config::Config,
-    error::{SDKResult, validation_error},
+    error::{validation_error, SDKResult},
     http::Transport,
 };
 use serde::{Deserialize, Serialize};
 
-use super::models::{BatchDeleteRoleMemberRequestModel as ModelBatchDeleteRequest, BatchDeleteRoleMemberResponseModel as ModelBatchDeleteResponse, BatchDeleteResultItemModel as ModelBatchDeleteResultItem};
+use super::models::{
+    BatchDeleteResultItemModel as ModelBatchDeleteResultItem,
+    BatchDeleteRoleMemberRequestModel as ModelBatchDeleteRequest,
+    BatchDeleteRoleMemberResponseModel as ModelBatchDeleteResponse,
+};
 
 /// 批量删除角色成员请求
 #[allow(dead_code)]
@@ -88,12 +91,17 @@ impl BatchDeleteRoleMemberRequest {
         }
 
         if self.member_ids.len() > 500 {
-            return Err(validation_error("member_ids", "批量删除成员数量不能超过500个"));
+            return Err(validation_error(
+                "member_ids",
+                "批量删除成员数量不能超过500个",
+            ));
         }
 
         // 构建完整的API URL
-        let api_url = format!("{}/open-apis/bitable/v1/apps/{}/roles/{}/members/batch_delete",
-                             self.config.base_url, self.app_token, self.role_id);
+        let api_url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/roles/{}/members/batch_delete",
+            self.config.base_url, self.app_token, self.role_id
+        );
 
         // 构建请求体
         let request_body = ModelBatchDeleteRequest {
@@ -109,7 +117,9 @@ impl BatchDeleteRoleMemberRequest {
             api_request = api_request.query("user_id_type", user_id_type);
         }
 
-        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(&request_body)?));
+        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(
+            &request_body,
+        )?));
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

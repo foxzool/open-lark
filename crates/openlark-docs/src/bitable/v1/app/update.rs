@@ -1,13 +1,11 @@
 //! Bitable 更新多维表格API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/update
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -96,7 +94,9 @@ impl UpdateAppRequest {
 
         // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<UpdateAppResponse> = ApiRequest::put(&api_endpoint.to_url())
-            .body(openlark_core::api::RequestData::Binary(serde_json::to_vec(&request_body)?));
+            .body(openlark_core::api::RequestData::Binary(serde_json::to_vec(
+                &request_body,
+            )?));
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
@@ -108,10 +108,7 @@ impl UpdateAppRequest {
 
 impl AppService {
     /// 创建更新多维表格请求
-    pub fn update_builder(
-        &self,
-        app_token: impl Into<String>,
-    ) -> UpdateAppRequest {
+    pub fn update_builder(&self, app_token: impl Into<String>) -> UpdateAppRequest {
         UpdateAppRequest::new(self.config.clone()).app_token(app_token)
     }
 

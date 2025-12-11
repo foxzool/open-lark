@@ -32,11 +32,12 @@ impl PatchFormFieldRequest {
     /// 验证请求参数
     pub fn validate(&self) -> Result<(), String> {
         // 至少要有一个字段需要更新
-        if self.title.is_none() &&
-           self.description.is_none() &&
-           self.required.is_none() &&
-           self.visible.is_none() &&
-           self.setting.is_none() {
+        if self.title.is_none()
+            && self.description.is_none()
+            && self.required.is_none()
+            && self.visible.is_none()
+            && self.setting.is_none()
+        {
             return Err("至少需要提供一个要更新的字段".to_string());
         }
 

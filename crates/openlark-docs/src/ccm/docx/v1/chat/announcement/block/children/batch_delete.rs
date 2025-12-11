@@ -3,15 +3,14 @@
 //! 删除指定块的子块。
 //! API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/batch_delete
 
+use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use crate::common::api_endpoints::DocxApiV1;
 
 /// 删除群公告中的块请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -71,17 +70,24 @@ impl BatchDeleteChatAnnouncementBlockChildrenRequest {
     /// 执行请求
     ///
     /// API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/batch_delete
-    pub async fn execute(self, params: BatchDeleteChatAnnouncementBlockChildrenParams) -> SDKResult<BatchDeleteChatAnnouncementBlockChildrenResponse> {
+    pub async fn execute(
+        self,
+        params: BatchDeleteChatAnnouncementBlockChildrenParams,
+    ) -> SDKResult<BatchDeleteChatAnnouncementBlockChildrenResponse> {
         // 验证必填字段
         validate_required!(params.chat_id, "群聊ID不能为空");
         validate_required!(params.block_id, "父块ID不能为空");
         validate_required!(params.block_ids, "子块ID列表不能为空");
 
         // 构建API端点
-        let api_endpoint = DocxApiV1::ChatAnnouncementBlockChildrenBatchDelete(params.chat_id.clone(), params.block_id.clone());
+        let api_endpoint = DocxApiV1::ChatAnnouncementBlockChildrenBatchDelete(
+            params.chat_id.clone(),
+            params.block_id.clone(),
+        );
 
         // 创建API请求
-        let mut api_request: ApiRequest<BatchDeleteChatAnnouncementBlockChildrenResponse> = ApiRequest::delete(&api_endpoint.to_url());
+        let mut api_request: ApiRequest<BatchDeleteChatAnnouncementBlockChildrenResponse> =
+            ApiRequest::delete(&api_endpoint.to_url());
 
         // 设置请求体
         api_request = api_request.json_body(&params);

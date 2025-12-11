@@ -1,16 +1,21 @@
 //! Bitable 批量创建角色成员API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/role/member/batch_create
-
 use openlark_core::{
     api::ApiRequest,
     config::Config,
-    error::{SDKResult, validation_error},
+    error::{validation_error, SDKResult},
     http::Transport,
 };
 use serde::{Deserialize, Serialize};
 
-use super::models::{BatchCreateRoleMemberRequestModel as ModelBatchCreateRequest, BatchCreateRoleMemberResponseModel as ModelBatchCreateResponse, BatchCreateMemberItemModel as ModelBatchCreateMemberItem, RoleMemberInfoModel as ModelRoleMemberInfo, BatchCreateResultItemModel as ModelBatchCreateResultItem};
+use super::models::{
+    BatchCreateMemberItemModel as ModelBatchCreateMemberItem,
+    BatchCreateResultItemModel as ModelBatchCreateResultItem,
+    BatchCreateRoleMemberRequestModel as ModelBatchCreateRequest,
+    BatchCreateRoleMemberResponseModel as ModelBatchCreateResponse,
+    RoleMemberInfoModel as ModelRoleMemberInfo,
+};
 
 /// 批量创建角色成员请求
 #[allow(dead_code)]
@@ -28,7 +33,6 @@ pub struct BatchCreateRoleMemberRequest {
     /// 成员列表
     member_list: Vec<ModelBatchCreateMemberItem>,
 }
-
 
 impl BatchCreateRoleMemberRequest {
     /// 创建批量创建角色成员请求
@@ -78,7 +82,12 @@ impl BatchCreateRoleMemberRequest {
     }
 
     /// 添加成员（带权限）
-    pub fn add_member_with_permissions(mut self, user_ids: Vec<String>, member_type: String, permissions: Vec<String>) -> Self {
+    pub fn add_member_with_permissions(
+        mut self,
+        user_ids: Vec<String>,
+        member_type: String,
+        permissions: Vec<String>,
+    ) -> Self {
         self.member_list.push(ModelBatchCreateMemberItem {
             user_ids,
             member_type,
@@ -105,30 +114,43 @@ impl BatchCreateRoleMemberRequest {
         // 验证每个成员项
         for (index, member) in self.member_list.iter().enumerate() {
             if member.user_ids.is_empty() {
-                return Err(validation_error("member_list", &format!("第{}个成员的用户ID列表不能为空", index + 1)));
+                return Err(validation_error(
+                    "member_list",
+                    &format!("第{}个成员的用户ID列表不能为空", index + 1),
+                ));
             }
             if member.member_type.trim().is_empty() {
-                return Err(validation_error("member_list", &format!("第{}个成员的类型不能为空", index + 1)));
+                return Err(validation_error(
+                    "member_list",
+                    &format!("第{}个成员的类型不能为空", index + 1),
+                ));
             }
         }
 
         // 🚀 使用新的enum+builder系统生成API端点
         // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
         use crate::common::api_endpoints::BitableApiV1;
-        let api_endpoint = BitableApiV1::RoleMemberBatchCreate(self.app_token.clone(), self.role_id.clone());
+        let api_endpoint =
+            BitableApiV1::RoleMemberBatchCreate(self.app_token.clone(), self.role_id.clone());
 
         // 构建请求体
         let request_body = ModelBatchCreateRequest {
-            member_list: self.member_list.iter().map(|item| ModelBatchCreateMemberItem {
-                user_ids: item.user_ids.clone(),
-                member_type: item.member_type.clone(),
-                permissions: item.permissions.clone(),
-            }).collect(),
+            member_list: self
+                .member_list
+                .iter()
+                .map(|item| ModelBatchCreateMemberItem {
+                    user_ids: item.user_ids.clone(),
+                    member_type: item.member_type.clone(),
+                    permissions: item.permissions.clone(),
+                })
+                .collect(),
         };
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<BatchCreateRoleMemberResponse> = ApiRequest::post(&api_endpoint.to_url())
-            .body(openlark_core::api::RequestData::Json(serde_json::to_value(&request_body)?));
+        let mut api_request: ApiRequest<BatchCreateRoleMemberResponse> =
+            ApiRequest::post(&api_endpoint.to_url()).body(openlark_core::api::RequestData::Json(
+                serde_json::to_value(&request_body)?,
+            ));
 
         // 设置查询参数
         if let Some(user_id_type) = &self.user_id_type {
@@ -200,8 +222,15 @@ impl BatchCreateRoleMemberRequestBuilder {
     }
 
     /// 添加成员（带权限）
-    pub fn add_member_with_permissions(mut self, user_ids: Vec<String>, member_type: String, permissions: Vec<String>) -> Self {
-        self.request = self.request.add_member_with_permissions(user_ids, member_type, permissions);
+    pub fn add_member_with_permissions(
+        mut self,
+        user_ids: Vec<String>,
+        member_type: String,
+        permissions: Vec<String>,
+    ) -> Self {
+        self.request = self
+            .request
+            .add_member_with_permissions(user_ids, member_type, permissions);
         self
     }
 
@@ -210,7 +239,6 @@ impl BatchCreateRoleMemberRequestBuilder {
         self.request
     }
 }
-
 
 /// 批量创建结果项
 pub type BatchCreateResultItem = ModelBatchCreateResultItem;

@@ -7,8 +7,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -73,7 +72,10 @@ impl GetChatAnnouncementRequest {
     ///
     /// API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/get
     /// 对应CSV记录: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/get
-    pub async fn execute(self, params: GetChatAnnouncementParams) -> SDKResult<GetChatAnnouncementResponse> {
+    pub async fn execute(
+        self,
+        params: GetChatAnnouncementParams,
+    ) -> SDKResult<GetChatAnnouncementResponse> {
         // 验证必填字段
         validate_required!(params.chat_id, "群聊ID不能为空");
 
@@ -81,7 +83,8 @@ impl GetChatAnnouncementRequest {
         let api_endpoint = DocxApiV1::ChatAnnouncementGet(params.chat_id.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let api_request: ApiRequest<GetChatAnnouncementResponse> = ApiRequest::get(&api_endpoint.to_url());
+        let api_request: ApiRequest<GetChatAnnouncementResponse> =
+            ApiRequest::get(&api_endpoint.to_url());
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

@@ -1,7 +1,6 @@
 //! Bitable 更新表单问题API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/form/patch
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, HttpMethod, RequestData, ResponseFormat},
     config::Config,
