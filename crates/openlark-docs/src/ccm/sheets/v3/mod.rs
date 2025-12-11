@@ -26,6 +26,7 @@ pub mod filter_views;
 pub mod find_replace;
 pub mod float_images;
 pub mod macros;
+pub mod models;
 pub mod move_dimension;
 pub mod pivot_tables;
 pub mod sheet;
@@ -33,6 +34,10 @@ pub mod sheet_protection;
 pub mod spreadsheet;
 pub mod spreadsheet_create;
 pub mod spreadsheet_info;
+
+// 集成测试
+#[cfg(test)]
+mod integration_test;
 
 // 重新导出所有服务类型
 pub use charts::*;
@@ -43,6 +48,7 @@ pub use filter_views::*;
 pub use find_replace::*;
 pub use float_images::*;
 pub use macros::*;
+pub use models::*;
 pub use move_dimension::*;
 pub use pivot_tables::*;
 pub use sheet::*;
