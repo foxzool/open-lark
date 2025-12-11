@@ -16,7 +16,7 @@ pub type SpreadsheetToken = String;
 /// 工作表ID类型
 pub type SheetId = String;
 
-use openlark_core::{config::Config, trait_system::Service};
+use openlark_core::config::Config;
 
 pub mod charts;
 pub mod comments;
@@ -57,29 +57,22 @@ pub use spreadsheet::*;
 pub use spreadsheet_create::*;
 pub use spreadsheet_info::*;
 
-/// Sheets v3 服务主结构
-pub struct SheetsV3Service {
+/// Sheets 服务主结构
+pub struct SheetsService {
     /// 配置信息
     config: Config,
 }
 
-impl SheetsV3Service {
-    /// 创建新的 Sheets v3 服务实例
+impl SheetsService {
+    /// 创建新的 Sheets 服务实例
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 }
 
-impl Service for SheetsV3Service {
-    fn config(&self) -> &Config {
-        &self.config
-    }
-
-    fn service_name() -> &'static str
-    where
-        Self: Sized,
-    {
-        "SheetsV3Service"
+impl Default for SheetsService {
+    fn default() -> Self {
+        Self::new(Config::default())
     }
 }
 
@@ -88,10 +81,11 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_sheets_v3_service_creation() {
+    fn test_sheets_service_creation() {
         let config = Config::default();
-        let service = SheetsV3Service::new(config);
-        assert_eq!(service.service_name(), "SheetsV3Service");
+        let service = SheetsService::new(config);
+        // 验证服务实例创建成功
+        assert!(!service.config.base_url.is_empty());
     }
 
     #[test]
@@ -103,5 +97,11 @@ mod tests {
         assert_eq!(range, "A1:B10");
         assert_eq!(token, "sheet_token_123");
         assert_eq!(sheet_id, "sheet_id_456");
+    }
+
+    #[test]
+    fn test_sheets_service_default() {
+        let service = SheetsService::default();
+        assert!(!service.config.base_url.is_empty());
     }
 }

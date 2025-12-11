@@ -140,7 +140,7 @@ impl<'a> UpdateFilterConditionBuilder<'a> {
 
         let mut api_request = ApiRequest::new(Method::PUT, &url)
             .body(body)
-            .bearer_auth(&config.tenant_access_token);
+            .bearer_auth(&self.config.tenant_access_token);
 
         let transport = Transport::new(self.config.clone());
         let response = transport.send_request(&mut api_request).await?;

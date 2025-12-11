@@ -1,6 +1,6 @@
-//! 查询浮动图片列表
+//! 查询浮动图片
 //!
-//! 查询工作表中的所有浮动图片
+//! 返回子表内所有的浮动图片信息
 //!
 //! 文档链接: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-float_image/query
 
@@ -160,7 +160,7 @@ pub async fn query_float_images(
     );
 
     let mut api_request = ApiRequest::new(Method::GET, &url)
-        .bearer_auth(&config.tenant_access_token);
+        .bearer_auth(&self.config.tenant_access_token);
 
     let transport = Transport::new(config.clone());
     let response = transport.send_request(&mut api_request).await?;

@@ -9,9 +9,7 @@ pub use openlark_core::prelude::{
 };
 
 // 重新导出文档服务核心类型（避免冲突）
-pub use crate::{
-    error::{DocsError, DocsResult},
-};
+pub use crate::error::{DocsError, DocsResult};
 
 // 显式导出常用模型，避免歧义
 pub use crate::models::{
@@ -33,7 +31,7 @@ pub use crate::baike::BaikeService;
 pub use crate::minutes::MinutesService;
 
 #[cfg(feature = "docs")]
-pub use crate::docs::DocsService;
+pub use crate::service::DocsService;
 
 #[cfg(feature = "docx")]
 pub use crate::docx::DocxService;
