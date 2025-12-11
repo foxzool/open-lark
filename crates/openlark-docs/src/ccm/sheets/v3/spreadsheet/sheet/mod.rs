@@ -12,6 +12,8 @@
 pub mod get;
 pub mod query;
 pub mod find;
+pub mod move_dimension;
+pub mod replace;
 pub mod filter;
 pub mod filter_view;
 pub mod float_image;
@@ -21,6 +23,8 @@ pub mod data_operation;
 pub use get::*;
 pub use query::*;
 pub use find::*;
+pub use move_dimension::*;
+pub use replace::*;
 pub use filter::*;
 pub use filter_view::*;
 pub use float_image::*;
