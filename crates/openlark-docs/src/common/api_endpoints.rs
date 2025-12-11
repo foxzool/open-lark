@@ -19,13 +19,13 @@ impl BaseApiV2 {
         match self {
             BaseApiV2::RoleCreate(app_token) => {
                 format!("/open-apis/base/v2/apps/{}/roles", app_token)
-            },
+            }
             BaseApiV2::RoleUpdate(app_token, role_id) => {
                 format!("/open-apis/base/v2/apps/{}/roles/{}", app_token, role_id)
-            },
+            }
             BaseApiV2::RoleList(app_token) => {
                 format!("/open-apis/base/v2/apps/{}/roles", app_token)
-            },
+            }
         }
     }
 }
@@ -98,135 +98,228 @@ impl BitableApiV1 {
             BitableApiV1::AppCopy => "/open-apis/bitable/v1/apps/copy".to_string(),
             BitableApiV1::AppGet(app_token) => {
                 format!("/open-apis/bitable/v1/apps/{}", app_token)
-            },
+            }
             BitableApiV1::AppUpdate(app_token) => {
                 format!("/open-apis/bitable/v1/apps/{}", app_token)
-            },
+            }
             BitableApiV1::AppList => "/open-apis/bitable/v1/apps".to_string(),
             BitableApiV1::DashboardList(app_token) => {
                 format!("/open-apis/bitable/v1/apps/{}/dashboard/list", app_token)
-            },
+            }
 
             // 表格管理
             BitableApiV1::TableCreate(app_token) => {
                 format!("/open-apis/bitable/v1/apps/{}/tables", app_token)
-            },
+            }
             BitableApiV1::TableBatchCreate(app_token) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/batch_create", app_token)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/batch_create",
+                    app_token
+                )
+            }
             BitableApiV1::TableUpdate(app_token, table_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}", app_token, table_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}",
+                    app_token, table_id
+                )
+            }
             BitableApiV1::TableDelete(app_token, table_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}", app_token, table_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}",
+                    app_token, table_id
+                )
+            }
             BitableApiV1::TableBatchDelete(app_token) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/batch_delete", app_token)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/batch_delete",
+                    app_token
+                )
+            }
             BitableApiV1::TableGet(app_token, table_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}", app_token, table_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}",
+                    app_token, table_id
+                )
+            }
             BitableApiV1::TableList(app_token) => {
                 format!("/open-apis/bitable/v1/apps/{}/tables", app_token)
-            },
+            }
             BitableApiV1::TablePatch(app_token, table_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}", app_token, table_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}",
+                    app_token, table_id
+                )
+            }
 
             // 字段管理
             BitableApiV1::FieldCreate(app_token, table_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}/fields", app_token, table_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/fields",
+                    app_token, table_id
+                )
+            }
             BitableApiV1::FieldUpdate(app_token, table_id, field_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}/fields/{}", app_token, table_id, field_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/fields/{}",
+                    app_token, table_id, field_id
+                )
+            }
             BitableApiV1::FieldDelete(app_token, table_id, field_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}/fields/{}", app_token, table_id, field_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/fields/{}",
+                    app_token, table_id, field_id
+                )
+            }
             BitableApiV1::FieldList(app_token, table_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}/fields", app_token, table_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/fields",
+                    app_token, table_id
+                )
+            }
 
             // 视图管理
             BitableApiV1::ViewCreate(app_token, table_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}/views", app_token, table_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/views",
+                    app_token, table_id
+                )
+            }
             BitableApiV1::ViewUpdate(app_token, table_id, view_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}/views/{}", app_token, table_id, view_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/views/{}",
+                    app_token, table_id, view_id
+                )
+            }
             BitableApiV1::ViewDelete(app_token, table_id, view_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}/views/{}", app_token, table_id, view_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/views/{}",
+                    app_token, table_id, view_id
+                )
+            }
             BitableApiV1::ViewGet(app_token, table_id, view_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}/views/{}", app_token, table_id, view_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/views/{}",
+                    app_token, table_id, view_id
+                )
+            }
             BitableApiV1::ViewList(app_token, table_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}/views", app_token, table_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/views",
+                    app_token, table_id
+                )
+            }
             BitableApiV1::ViewPatch(app_token, table_id, view_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}/views/{}", app_token, table_id, view_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/views/{}",
+                    app_token, table_id, view_id
+                )
+            }
 
             // 记录管理
             BitableApiV1::RecordCreate(app_token, table_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}/records", app_token, table_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/records",
+                    app_token, table_id
+                )
+            }
             BitableApiV1::RecordBatchCreate(app_token, table_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_create", app_token, table_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_create",
+                    app_token, table_id
+                )
+            }
             BitableApiV1::RecordGet(app_token, table_id, record_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}/records/{}", app_token, table_id, record_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/records/{}",
+                    app_token, table_id, record_id
+                )
+            }
             BitableApiV1::RecordBatchGet(app_token, table_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_get", app_token, table_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_get",
+                    app_token, table_id
+                )
+            }
             BitableApiV1::RecordUpdate(app_token, table_id, record_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}/records/{}", app_token, table_id, record_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/records/{}",
+                    app_token, table_id, record_id
+                )
+            }
             BitableApiV1::RecordBatchUpdate(app_token, table_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_update", app_token, table_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_update",
+                    app_token, table_id
+                )
+            }
             BitableApiV1::RecordDelete(app_token, table_id, record_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}/records/{}", app_token, table_id, record_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/records/{}",
+                    app_token, table_id, record_id
+                )
+            }
             BitableApiV1::RecordBatchDelete(app_token, table_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_delete", app_token, table_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_delete",
+                    app_token, table_id
+                )
+            }
             BitableApiV1::RecordList(app_token, table_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}/records", app_token, table_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/records",
+                    app_token, table_id
+                )
+            }
             BitableApiV1::RecordSearch(app_token, table_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables/{}/records/search", app_token, table_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/records/search",
+                    app_token, table_id
+                )
+            }
 
             // 权限管理
             BitableApiV1::RoleCreate(app_token) => {
                 format!("/open-apis/bitable/v1/apps/{}/roles", app_token)
-            },
+            }
             BitableApiV1::RoleUpdate(app_token, role_id) => {
                 format!("/open-apis/bitable/v1/apps/{}/roles/{}", app_token, role_id)
-            },
+            }
             BitableApiV1::RoleDelete(app_token, role_id) => {
                 format!("/open-apis/bitable/v1/apps/{}/roles/{}", app_token, role_id)
-            },
+            }
             BitableApiV1::RoleList(app_token) => {
                 format!("/open-apis/bitable/v1/apps/{}/roles", app_token)
-            },
+            }
             BitableApiV1::RoleMemberCreate(app_token, role_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/roles/{}/members", app_token, role_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/roles/{}/members",
+                    app_token, role_id
+                )
+            }
             BitableApiV1::RoleMemberBatchCreate(app_token, role_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/roles/{}/members/batch_create", app_token, role_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/roles/{}/members/batch_create",
+                    app_token, role_id
+                )
+            }
             BitableApiV1::RoleMemberDelete(app_token, role_id, member_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/roles/{}/members/{}", app_token, role_id, member_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/roles/{}/members/{}",
+                    app_token, role_id, member_id
+                )
+            }
             BitableApiV1::RoleMemberBatchDelete(app_token, role_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/roles/{}/members/batch_delete", app_token, role_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/roles/{}/members/batch_delete",
+                    app_token, role_id
+                )
+            }
             BitableApiV1::RoleMemberList(app_token, role_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/roles/{}/members", app_token, role_id)
-            },
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/roles/{}/members",
+                    app_token, role_id
+                )
+            }
         }
     }
 }
@@ -250,16 +343,16 @@ impl MinutesApiV1 {
         match self {
             MinutesApiV1::Get(minute_token) => {
                 format!("/open-apis/minutes/v1/minutes/{}", minute_token)
-            },
+            }
             MinutesApiV1::MediaGet(minute_token) => {
                 format!("/open-apis/minutes/v1/minutes/{}/media", minute_token)
-            },
+            }
             MinutesApiV1::TranscriptGet(minute_token) => {
                 format!("/open-apis/minutes/v1/minutes/{}/transcript", minute_token)
-            },
+            }
             MinutesApiV1::StatisticsGet(minute_token) => {
                 format!("/open-apis/minutes/v1/minutes/{}/statistics", minute_token)
-            },
+            }
         }
     }
 }
@@ -349,63 +442,95 @@ impl DocxApiV1 {
             // 群公告相关API (7个)
             DocxApiV1::ChatAnnouncementGet(chat_id) => {
                 format!("/open-apis/docx/v1/chats/{}/announcement", chat_id)
-            },
+            }
             DocxApiV1::ChatAnnouncementBlockList(chat_id) => {
                 format!("/open-apis/docx/v1/chats/{}/announcement/blocks", chat_id)
-            },
+            }
             DocxApiV1::ChatAnnouncementBlockChildrenCreate(chat_id, block_id) => {
-                format!("/open-apis/docx/v1/chats/{}/announcement/blocks/{}/children", chat_id, block_id)
-            },
+                format!(
+                    "/open-apis/docx/v1/chats/{}/announcement/blocks/{}/children",
+                    chat_id, block_id
+                )
+            }
             DocxApiV1::ChatAnnouncementBlockBatchUpdate(chat_id) => {
-                format!("/open-apis/docx/v1/chats/{}/announcement/blocks/batch_update", chat_id)
-            },
+                format!(
+                    "/open-apis/docx/v1/chats/{}/announcement/blocks/batch_update",
+                    chat_id
+                )
+            }
             DocxApiV1::ChatAnnouncementBlockGet(chat_id, block_id) => {
-                format!("/open-apis/docx/v1/chats/{}/announcement/blocks/{}", chat_id, block_id)
-            },
+                format!(
+                    "/open-apis/docx/v1/chats/{}/announcement/blocks/{}",
+                    chat_id, block_id
+                )
+            }
             DocxApiV1::ChatAnnouncementBlockChildrenGet(chat_id, block_id) => {
-                format!("/open-apis/docx/v1/chats/{}/announcement/blocks/{}/children", chat_id, block_id)
-            },
+                format!(
+                    "/open-apis/docx/v1/chats/{}/announcement/blocks/{}/children",
+                    chat_id, block_id
+                )
+            }
             DocxApiV1::ChatAnnouncementBlockChildrenBatchDelete(chat_id, block_id) => {
-                format!("/open-apis/docx/v1/chats/{}/announcement/blocks/{}/children/batch_delete", chat_id, block_id)
-            },
+                format!(
+                    "/open-apis/docx/v1/chats/{}/announcement/blocks/{}/children/batch_delete",
+                    chat_id, block_id
+                )
+            }
 
             // 文档相关API (12个)
-            DocxApiV1::DocumentCreate => {
-                "/open-apis/docx/v1/documents".to_string()
-            },
+            DocxApiV1::DocumentCreate => "/open-apis/docx/v1/documents".to_string(),
             DocxApiV1::DocumentGet(document_id) => {
                 format!("/open-apis/docx/v1/documents/{}", document_id)
-            },
+            }
             DocxApiV1::DocumentRawContent(document_id) => {
                 format!("/open-apis/docx/v1/documents/{}/raw_content", document_id)
-            },
+            }
             DocxApiV1::DocumentBlockList(document_id) => {
                 format!("/open-apis/docx/v1/documents/{}/blocks", document_id)
-            },
+            }
             DocxApiV1::DocumentBlockChildrenCreate(document_id, block_id) => {
-                format!("/open-apis/docx/v1/documents/{}/blocks/{}/children", document_id, block_id)
-            },
+                format!(
+                    "/open-apis/docx/v1/documents/{}/blocks/{}/children",
+                    document_id, block_id
+                )
+            }
             DocxApiV1::DocumentBlockDescendantCreate(document_id, block_id) => {
-                format!("/open-apis/docx/v1/documents/{}/blocks/{}/descendant", document_id, block_id)
-            },
+                format!(
+                    "/open-apis/docx/v1/documents/{}/blocks/{}/descendant",
+                    document_id, block_id
+                )
+            }
             DocxApiV1::DocumentBlockPatch(document_id, block_id) => {
-                format!("/open-apis/docx/v1/documents/{}/blocks/{}", document_id, block_id)
-            },
+                format!(
+                    "/open-apis/docx/v1/documents/{}/blocks/{}",
+                    document_id, block_id
+                )
+            }
             DocxApiV1::DocumentBlockGet(document_id, block_id) => {
-                format!("/open-apis/docx/v1/documents/{}/blocks/{}", document_id, block_id)
-            },
+                format!(
+                    "/open-apis/docx/v1/documents/{}/blocks/{}",
+                    document_id, block_id
+                )
+            }
             DocxApiV1::DocumentBlockBatchUpdate(document_id) => {
-                format!("/open-apis/docx/v1/documents/{}/blocks/batch_update", document_id)
-            },
+                format!(
+                    "/open-apis/docx/v1/documents/{}/blocks/batch_update",
+                    document_id
+                )
+            }
             DocxApiV1::DocumentBlockChildrenGet(document_id, block_id) => {
-                format!("/open-apis/docx/v1/documents/{}/blocks/{}/children", document_id, block_id)
-            },
+                format!(
+                    "/open-apis/docx/v1/documents/{}/blocks/{}/children",
+                    document_id, block_id
+                )
+            }
             DocxApiV1::DocumentBlockChildrenBatchDelete(document_id, block_id) => {
-                format!("/open-apis/docx/v1/documents/{}/blocks/{}/children/batch_delete", document_id, block_id)
-            },
-            DocxApiV1::DocumentConvert => {
-                "/open-apis/docx/v1/documents/blocks/convert".to_string()
-            },
+                format!(
+                    "/open-apis/docx/v1/documents/{}/blocks/{}/children/batch_delete",
+                    document_id, block_id
+                )
+            }
+            DocxApiV1::DocumentConvert => "/open-apis/docx/v1/documents/blocks/convert".to_string(),
         }
     }
 }
@@ -452,42 +577,57 @@ impl WikiApiV2 {
             WikiApiV2::SpaceList => "/open-apis/wiki/v2/spaces".to_string(),
             WikiApiV2::SpaceGet(space_id) => {
                 format!("/open-apis/wiki/v2/spaces/{}", space_id)
-            },
+            }
             WikiApiV2::SpaceCreate => "/open-apis/wiki/v2/spaces".to_string(),
             WikiApiV2::SpaceSettingUpdate(space_id) => {
                 format!("/open-apis/wiki/v2/spaces/{}/setting", space_id)
-            },
+            }
             WikiApiV2::SpaceGetNode => "/open-apis/wiki/v2/spaces/get_node".to_string(),
             WikiApiV2::SpaceNodeList(space_id) => {
                 format!("/open-apis/wiki/v2/spaces/{}/nodes", space_id)
-            },
+            }
             WikiApiV2::SpaceNodeCreate(space_id) => {
                 format!("/open-apis/wiki/v2/spaces/{}/nodes", space_id)
-            },
+            }
             WikiApiV2::SpaceMemberList(space_id) => {
                 format!("/open-apis/wiki/v2/spaces/{}/members", space_id)
-            },
+            }
             WikiApiV2::SpaceMemberCreate(space_id) => {
                 format!("/open-apis/wiki/v2/spaces/{}/members", space_id)
-            },
+            }
             WikiApiV2::SpaceMemberDelete(space_id, member_id, member_type) => {
-                format!("/open-apis/wiki/v2/spaces/{}/members/{}?member_type={}", space_id, member_id, member_type)
-            },
+                format!(
+                    "/open-apis/wiki/v2/spaces/{}/members/{}?member_type={}",
+                    space_id, member_id, member_type
+                )
+            }
             WikiApiV2::SpaceNodeMove(space_id, node_token) => {
-                format!("/open-apis/wiki/v2/spaces/{}/nodes/{}/move", space_id, node_token)
-            },
+                format!(
+                    "/open-apis/wiki/v2/spaces/{}/nodes/{}/move",
+                    space_id, node_token
+                )
+            }
             WikiApiV2::SpaceNodeUpdateTitle(space_id, node_token) => {
-                format!("/open-apis/wiki/v2/spaces/{}/nodes/{}/update_title", space_id, node_token)
-            },
+                format!(
+                    "/open-apis/wiki/v2/spaces/{}/nodes/{}/update_title",
+                    space_id, node_token
+                )
+            }
             WikiApiV2::SpaceNodeCopy(space_id, node_token) => {
-                format!("/open-apis/wiki/v2/spaces/{}/nodes/{}/copy", space_id, node_token)
-            },
+                format!(
+                    "/open-apis/wiki/v2/spaces/{}/nodes/{}/copy",
+                    space_id, node_token
+                )
+            }
             WikiApiV2::SpaceNodeMoveDocsToWiki(space_id) => {
-                format!("/open-apis/wiki/v2/spaces/{}/nodes/move_docs_to_wiki", space_id)
-            },
+                format!(
+                    "/open-apis/wiki/v2/spaces/{}/nodes/move_docs_to_wiki",
+                    space_id
+                )
+            }
             WikiApiV2::TaskGet(task_id) => {
                 format!("/open-apis/wiki/v2/tasks/{}", task_id)
-            },
+            }
         }
     }
 }

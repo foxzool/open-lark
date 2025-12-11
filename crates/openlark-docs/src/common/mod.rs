@@ -2,13 +2,12 @@
 //!
 //! 提供openlark-docs项目中通用的工具、宏和类型定义。
 
-pub mod builders;
-pub mod api_paths;
 pub mod api_endpoints;
+pub mod api_paths;
+pub mod builders;
 
 // 重新导出API端点枚举
 pub use api_endpoints::{BaseApiV2, BitableApiV1, MinutesApiV1};
-
 
 /// 通用常量定义
 pub mod constants {

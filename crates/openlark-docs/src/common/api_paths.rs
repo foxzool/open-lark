@@ -16,8 +16,10 @@ pub mod bitable_v1 {
 
     /// 表格管理路径模板
     pub const TABLES: &str = "/open-apis/bitable/v1/apps/:app_token/tables";
-    pub const TABLES_BATCH_CREATE: &str = "/open-apis/bitable/v1/apps/:app_token/tables/batch_create";
-    pub const TABLES_BATCH_DELETE: &str = "/open-apis/bitable/v1/apps/:app_token/tables/batch_delete";
+    pub const TABLES_BATCH_CREATE: &str =
+        "/open-apis/bitable/v1/apps/:app_token/tables/batch_create";
+    pub const TABLES_BATCH_DELETE: &str =
+        "/open-apis/bitable/v1/apps/:app_token/tables/batch_delete";
 
     /// 字段管理路径模板
     pub const FIELDS: &str = "/open-apis/bitable/v1/apps/:app_token/tables/:table_id/fields";
@@ -27,17 +29,24 @@ pub mod bitable_v1 {
 
     /// 记录管理路径模板
     pub const RECORDS: &str = "/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records";
-    pub const RECORDS_BATCH_CREATE: &str = "/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/batch_create";
-    pub const RECORDS_BATCH_GET: &str = "/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/batch_get";
-    pub const RECORDS_BATCH_UPDATE: &str = "/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/batch_update";
-    pub const RECORDS_BATCH_DELETE: &str = "/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/batch_delete";
-    pub const RECORDS_SEARCH: &str = "/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/search";
+    pub const RECORDS_BATCH_CREATE: &str =
+        "/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/batch_create";
+    pub const RECORDS_BATCH_GET: &str =
+        "/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/batch_get";
+    pub const RECORDS_BATCH_UPDATE: &str =
+        "/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/batch_update";
+    pub const RECORDS_BATCH_DELETE: &str =
+        "/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/batch_delete";
+    pub const RECORDS_SEARCH: &str =
+        "/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/search";
 
     /// 权限管理路径模板
     pub const ROLES: &str = "/open-apis/bitable/v1/apps/:app_token/roles";
     pub const ROLE_MEMBERS: &str = "/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members";
-    pub const ROLE_MEMBERS_BATCH_CREATE: &str = "/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members/batch_create";
-    pub const ROLE_MEMBERS_BATCH_DELETE: &str = "/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members/batch_delete";
+    pub const ROLE_MEMBERS_BATCH_CREATE: &str =
+        "/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members/batch_create";
+    pub const ROLE_MEMBERS_BATCH_DELETE: &str =
+        "/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members/batch_delete";
 }
 
 /// URL 路径格式化工具
@@ -57,7 +66,12 @@ impl PathFormatter {
     }
 
     /// 格式化包含field_id的路径
-    pub fn with_field_id(template: &str, app_token: &str, table_id: &str, field_id: &str) -> String {
+    pub fn with_field_id(
+        template: &str,
+        app_token: &str,
+        table_id: &str,
+        field_id: &str,
+    ) -> String {
         template
             .replace(":app_token", app_token)
             .replace(":table_id", table_id)
@@ -73,7 +87,12 @@ impl PathFormatter {
     }
 
     /// 格式化包含record_id的路径
-    pub fn with_record_id(template: &str, app_token: &str, table_id: &str, record_id: &str) -> String {
+    pub fn with_record_id(
+        template: &str,
+        app_token: &str,
+        table_id: &str,
+        record_id: &str,
+    ) -> String {
         template
             .replace(":app_token", app_token)
             .replace(":table_id", table_id)
@@ -88,7 +107,12 @@ impl PathFormatter {
     }
 
     /// 格式化包含member_id的路径
-    pub fn with_member_id(template: &str, app_token: &str, role_id: &str, member_id: &str) -> String {
+    pub fn with_member_id(
+        template: &str,
+        app_token: &str,
+        role_id: &str,
+        member_id: &str,
+    ) -> String {
         template
             .replace(":app_token", app_token)
             .replace(":role_id", role_id)
