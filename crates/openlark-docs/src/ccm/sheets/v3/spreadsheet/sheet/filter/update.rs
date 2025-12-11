@@ -100,7 +100,7 @@ impl<'a> UpdateFilterBuilder<'a> {
 
         let url = format!(
             "{}/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter",
-            config.base_url, spreadsheet_token, sheet_id
+            self.config.base_url, spreadsheet_token, sheet_id
         );
 
         let body = serde_json::to_value(&self.request).map_err(|e| {
@@ -109,7 +109,7 @@ impl<'a> UpdateFilterBuilder<'a> {
 
         let mut api_request = ApiRequest::new(Method::PUT, &url)
             .body(body)
-            .bearer_auth(&config.tenant_access_token);
+            .bearer_auth(&self.config.tenant_access_token);
 
         let transport = Transport::new(self.config.clone());
         let response = transport.send_request(&mut api_request).await?;

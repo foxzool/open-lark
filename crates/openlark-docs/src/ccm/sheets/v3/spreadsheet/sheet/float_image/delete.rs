@@ -1,6 +1,6 @@
 //! 删除浮动图片
 //!
-//! 删除工作表中的浮动图片
+//! 删除 float_image_id 对应的浮动图片
 //!
 //! 文档链接: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-float_image/delete
 
@@ -141,7 +141,7 @@ pub async fn delete_float_image(
     );
 
     let mut api_request = ApiRequest::new(Method::DELETE, &url)
-        .bearer_auth(&config.tenant_access_token);
+        .bearer_auth(&self.config.tenant_access_token);
 
     let transport = Transport::new(config.clone());
     let response = transport.send_request(&mut api_request).await?;
