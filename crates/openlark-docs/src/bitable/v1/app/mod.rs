@@ -27,14 +27,15 @@ pub use update::*;
 
 // 角色相关 - 选择性导入以避免命名冲突
 pub use role::{
-    AppRoleService, RoleMemberService, CreateAppRoleRequest, CreateAppRoleRequestBuilder, CreateAppRoleResponse,
-    DeleteAppRoleRequest, DeleteAppRoleRequestBuilder, DeleteAppRoleResponse,
-    ListAppRoleRequest, ListAppRoleRequestBuilder, ListAppRoleResponse,
-    UpdateAppRoleRequest, UpdateAppRoleRequestBuilder, UpdateAppRoleResponse,
-    BatchCreateRoleMemberRequest, BatchCreateRoleMemberRequestBuilder, BatchCreateRoleMemberResponse,
-    BatchDeleteRoleMemberRequest, BatchDeleteRoleMemberRequestBuilder, BatchDeleteRoleMemberResponse,
+    AppRoleService, BatchCreateRoleMemberRequest, BatchCreateRoleMemberRequestBuilder,
+    BatchCreateRoleMemberResponse, BatchDeleteRoleMemberRequest,
+    BatchDeleteRoleMemberRequestBuilder, BatchDeleteRoleMemberResponse, CreateAppRoleRequest,
+    CreateAppRoleRequestBody, CreateAppRoleRequestBuilder, CreateAppRoleResponse,
     CreateRoleMemberRequest, CreateRoleMemberRequestBuilder, CreateRoleMemberResponse,
-    RoleMemberInfo, CreateAppRoleRequestBody, UpdateAppRoleRequestBody
+    DeleteAppRoleRequest, DeleteAppRoleRequestBuilder, DeleteAppRoleResponse, ListAppRoleRequest,
+    ListAppRoleRequestBuilder, ListAppRoleResponse, RoleMemberInfo, RoleMemberService,
+    UpdateAppRoleRequest, UpdateAppRoleRequestBody, UpdateAppRoleRequestBuilder,
+    UpdateAppRoleResponse,
 };
 
 #[allow(ambiguous_glob_reexports)]
@@ -42,8 +43,8 @@ pub use table::*;
 
 // 工作流相关 - 选择性导入以避免命名冲突
 pub use workflow::{
-    AppWorkflowService, ListWorkflowRequest, ListWorkflowResponse,
-    UpdateWorkflowRequest, UpdateWorkflowResponse
+    AppWorkflowService, ListWorkflowRequest, ListWorkflowResponse, UpdateWorkflowRequest,
+    UpdateWorkflowResponse,
 };
 
 /// 多维表格应用服务

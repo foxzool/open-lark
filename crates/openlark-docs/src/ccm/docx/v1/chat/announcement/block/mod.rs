@@ -2,12 +2,12 @@
 //!
 //! 按照bizTag/project/version/resource/name.rs模式组织
 
-pub mod list;
 pub mod batch_update;
-pub mod get;
 pub mod children;
+pub mod get;
+pub mod list;
 
-pub use list::*;
 pub use batch_update::*;
-pub use get::*;
 pub use children::*;
+pub use get::*;
+pub use list::*;

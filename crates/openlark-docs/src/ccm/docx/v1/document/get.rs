@@ -3,16 +3,15 @@
 //! 获取文档最新版本号、标题等
 //! API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/get
 
+use crate::ccm::docx::common_types::RichText;
+use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use crate::common::api_endpoints::DocxApiV1;
-use crate::ccm::docx::common_types::{RichText};
 
 /// 获取文档基本信息请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -90,7 +89,6 @@ pub struct DocumentContent {
     pub rich_text: Option<RichText>,
 }
 
-
 impl ApiResponseTrait for GetDocumentResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
@@ -120,7 +118,8 @@ impl GetDocumentRequest {
         let api_endpoint = DocxApiV1::DocumentGet(params.document_id.clone());
 
         // 创建API请求
-        let mut api_request: ApiRequest<GetDocumentResponse> = ApiRequest::get(&api_endpoint.to_url());
+        let mut api_request: ApiRequest<GetDocumentResponse> =
+            ApiRequest::get(&api_endpoint.to_url());
 
         // 设置查询参数
         if let Some(with_content) = params.with_content {

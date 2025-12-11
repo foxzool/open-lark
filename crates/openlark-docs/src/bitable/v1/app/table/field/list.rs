@@ -1,7 +1,6 @@
 //! Bitable 列出字段API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/field/list
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -127,7 +126,8 @@ impl ListFieldRequest {
         }
 
         if let Some(text_field_as_array) = self.text_field_as_array {
-            api_request = api_request.query("text_field_as_array", &text_field_as_array.to_string());
+            api_request =
+                api_request.query("text_field_as_array", &text_field_as_array.to_string());
         }
 
         if let Some(ref page_token) = self.page_token {
@@ -144,9 +144,9 @@ impl ListFieldRequest {
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        response
+            .data
+            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))
     }
 }
 

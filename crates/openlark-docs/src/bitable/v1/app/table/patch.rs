@@ -3,7 +3,6 @@
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/patch
 ///
 /// 提供数据表的增量更新功能，使用 JSON Patch 格式进行部分字段更新。
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
     config::Config,
@@ -110,15 +109,14 @@ impl PatchTableRequest {
         };
 
         // 创建API请求 - 使用类型安全的URL生成
-        let api_request: ApiRequest<PatchTableResponse> =
-            ApiRequest::put(&api_endpoint.to_url())
-                .body(RequestData::Binary(serde_json::to_vec(&request_body)?));
+        let api_request: ApiRequest<PatchTableResponse> = ApiRequest::put(&api_endpoint.to_url())
+            .body(RequestData::Binary(serde_json::to_vec(&request_body)?));
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        response
+            .data
+            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))
     }
 }
 

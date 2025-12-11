@@ -1,7 +1,6 @@
 //! Bitable 批量创建数据表API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/batchCreate
-
 use openlark_core::{
     api::{ApiRequest, RequestData},
     config::Config,

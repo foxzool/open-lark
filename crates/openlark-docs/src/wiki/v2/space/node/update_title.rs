@@ -7,13 +7,12 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::wiki::v2::models::WikiSpaceNode;
 use crate::common::api_endpoints::WikiApiV2;
+use crate::wiki::v2::models::WikiSpaceNode;
 
 /// 更新知识空间节点标题请求
 pub struct UpdateWikiSpaceNodeTitleRequest {
@@ -67,21 +66,27 @@ impl UpdateWikiSpaceNodeTitleRequest {
     /// 执行请求
     ///
     /// API文档: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-nodes/updateTitle
-    pub async fn execute(self, params: UpdateWikiSpaceNodeTitleParams) -> SDKResult<UpdateWikiSpaceNodeTitleResponse> {
+    pub async fn execute(
+        self,
+        params: UpdateWikiSpaceNodeTitleParams,
+    ) -> SDKResult<UpdateWikiSpaceNodeTitleResponse> {
         // 验证必填字段
         validate_required!(self.space_id, "知识空间ID不能为空");
         validate_required!(self.node_token, "节点Token不能为空");
         validate_required!(params.title, "节点标题不能为空");
 
         // 使用新的enum+builder系统生成API端点
-        let api_endpoint = WikiApiV2::SpaceNodeUpdateTitle(self.space_id.clone(), self.node_token.clone());
+        let api_endpoint =
+            WikiApiV2::SpaceNodeUpdateTitle(self.space_id.clone(), self.node_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
         let mut api_request: ApiRequest<UpdateWikiSpaceNodeTitleResponse> =
             ApiRequest::put(&api_endpoint.to_url());
 
         // 设置请求体
-        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(&params)?));
+        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(
+            &params,
+        )?));
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

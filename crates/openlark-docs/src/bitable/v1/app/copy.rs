@@ -1,13 +1,11 @@
 //! Bitable 复制多维表格API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/copy
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -113,7 +111,9 @@ impl CopyAppRequest {
 
         // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<CopyAppResponse> = ApiRequest::post(&api_endpoint.to_url())
-            .body(openlark_core::api::RequestData::Binary(serde_json::to_vec(&request_body)?));
+            .body(openlark_core::api::RequestData::Binary(serde_json::to_vec(
+                &request_body,
+            )?));
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
@@ -125,10 +125,7 @@ impl CopyAppRequest {
 
 impl AppService {
     /// 创建复制多维表格请求
-    pub fn copy_builder(
-        &self,
-        app_token: impl Into<String>,
-    ) -> CopyAppRequest {
+    pub fn copy_builder(&self, app_token: impl Into<String>) -> CopyAppRequest {
         CopyAppRequest::new(self.config.clone()).app_token(app_token)
     }
 

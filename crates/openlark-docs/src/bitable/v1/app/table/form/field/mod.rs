@@ -9,9 +9,9 @@ pub use list::{
     list_form_field_questions, FormFieldQuestion, ListFormFieldQuestionRequest,
     ListFormFieldQuestionRequestBuilder, ListFormFieldQuestionResponse,
 };
-pub use models::{PatchFormFieldRequest};
+pub use models::PatchFormFieldRequest;
 pub use patch::{
-    PatchFormFieldQuestionRequest, PatchFormFieldQuestionResponse, PatchFormFieldQuestionBuilder,
+    PatchFormFieldQuestionBuilder, PatchFormFieldQuestionRequest, PatchFormFieldQuestionResponse,
 };
 
 /// 表单字段服务

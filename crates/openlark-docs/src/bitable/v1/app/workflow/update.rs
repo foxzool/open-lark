@@ -1,7 +1,6 @@
 //! Bitable 更新工作流API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/workflow/update
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -48,7 +47,9 @@ impl ApiResponseTrait for UpdateWorkflowResponse {
 impl UpdateWorkflowRequest {
     pub fn new(_config: Config) -> Self {
         Self {
-            api_request: ApiRequest::put("/open-apis/bitable/v1/apps/{app_token}/workflows/{workflow_id}"),
+            api_request: ApiRequest::put(
+                "/open-apis/bitable/v1/apps/{app_token}/workflows/{workflow_id}",
+            ),
             app_token: String::new(),
             workflow_id: String::new(),
             is_enabled: false,

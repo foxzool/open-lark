@@ -1,12 +1,10 @@
-
 //! Bitable 创建角色API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/role/create
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::{SDKResult, validation_error},
+    error::{validation_error, SDKResult},
     http::Transport,
 };
 use serde::{Deserialize, Serialize};
@@ -87,15 +85,17 @@ impl CreateAppRoleRequest {
         };
 
         // 创建API请求 - 使用类型安全的URL生成
-        let api_request: ApiRequest<CreateAppRoleResponse> = ApiRequest::post(&api_endpoint.to_url())
-            .body(openlark_core::api::RequestData::Json(serde_json::to_value(&request_body)?));
+        let api_request: ApiRequest<CreateAppRoleResponse> =
+            ApiRequest::post(&api_endpoint.to_url()).body(openlark_core::api::RequestData::Json(
+                serde_json::to_value(&request_body)?,
+            ));
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
 
-        response.data.ok_or_else(|| {
-            validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        response
+            .data
+            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))
     }
 }
 
@@ -238,4 +238,3 @@ impl ApiResponseTrait for CreateAppRoleResponse {
         ResponseFormat::Data
     }
 }
-

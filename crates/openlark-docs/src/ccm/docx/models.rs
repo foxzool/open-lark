@@ -2,9 +2,9 @@
 //!
 //! 定义云文档搜索和元数据API的数据结构。
 
-use std::collections::HashMap;
 use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 /// 搜索云文档的请求参数
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

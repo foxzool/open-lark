@@ -7,13 +7,12 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::wiki::v2::models::WikiSpaceMember;
 use crate::common::api_endpoints::WikiApiV2;
+use crate::wiki::v2::models::WikiSpaceMember;
 
 /// 删除知识空间成员请求
 pub struct DeleteWikiSpaceMemberRequest {
@@ -75,7 +74,11 @@ impl DeleteWikiSpaceMemberRequest {
         validate_required!(self.member_type, "成员类型不能为空");
 
         // 使用新的enum+builder系统生成API端点
-        let api_endpoint = WikiApiV2::SpaceMemberDelete(self.space_id.clone(), self.member_id.clone(), self.member_type.clone());
+        let api_endpoint = WikiApiV2::SpaceMemberDelete(
+            self.space_id.clone(),
+            self.member_id.clone(),
+            self.member_type.clone(),
+        );
 
         // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<DeleteWikiSpaceMemberResponse> =

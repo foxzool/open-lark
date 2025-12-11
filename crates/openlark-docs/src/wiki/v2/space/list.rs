@@ -58,7 +58,10 @@ impl ListWikiSpacesRequest {
     /// 执行请求
     ///
     /// API文档: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space/list
-    pub async fn execute(self, params: Option<ListWikiSpacesParams>) -> SDKResult<ListWikiSpacesResponse> {
+    pub async fn execute(
+        self,
+        params: Option<ListWikiSpacesParams>,
+    ) -> SDKResult<ListWikiSpacesResponse> {
         // 使用新的enum+builder系统生成API端点
         let api_endpoint = WikiApiV2::SpaceList;
 

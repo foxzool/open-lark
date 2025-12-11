@@ -1,7 +1,6 @@
 //! Bitable 获取表单API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/form/get
-
 use openlark_core::{
     api::ApiRequest,
     config::Config,

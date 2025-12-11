@@ -3,16 +3,15 @@
 //! 更新指定块的内容。如果操作成功，接口将返回更新后的块的富文本内容。
 //! API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/patch
 
+use crate::ccm::docx::common_types::BlockContent;
+use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use crate::common::api_endpoints::DocxApiV1;
-use crate::ccm::docx::common_types::BlockContent;
 
 /// 更新块内容请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -24,7 +23,6 @@ pub struct UpdateDocumentBlockParams {
     /// 块内容
     pub content: Option<BlockContent>,
 }
-
 
 /// 更新块内容响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -58,12 +56,17 @@ impl UpdateDocumentBlockRequest {
         Self { config }
     }
 
-    pub async fn execute(self, params: UpdateDocumentBlockParams) -> SDKResult<UpdateDocumentBlockResponse> {
+    pub async fn execute(
+        self,
+        params: UpdateDocumentBlockParams,
+    ) -> SDKResult<UpdateDocumentBlockResponse> {
         validate_required!(params.document_id, "文档ID不能为空");
         validate_required!(params.block_id, "块ID不能为空");
 
-        let api_endpoint = DocxApiV1::DocumentBlockPatch(params.document_id.clone(), params.block_id.clone());
-        let mut api_request: ApiRequest<UpdateDocumentBlockResponse> = ApiRequest::patch(&api_endpoint.to_url());
+        let api_endpoint =
+            DocxApiV1::DocumentBlockPatch(params.document_id.clone(), params.block_id.clone());
+        let mut api_request: ApiRequest<UpdateDocumentBlockResponse> =
+            ApiRequest::patch(&api_endpoint.to_url());
         api_request = api_request.json_body(&params);
 
         let response = Transport::request(api_request, &self.config, None).await?;

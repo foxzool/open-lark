@@ -3,15 +3,14 @@
 //! 获取文档的纯文本内容。
 //! API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/raw_content
 
+use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use crate::common::api_endpoints::DocxApiV1;
 
 /// 获取文档纯文本内容请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -59,7 +58,10 @@ impl GetDocumentRawContentRequest {
     ///
     /// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/raw_content
     /// 对应CSV记录: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/raw_content
-    pub async fn execute(self, params: GetDocumentRawContentParams) -> SDKResult<GetDocumentRawContentResponse> {
+    pub async fn execute(
+        self,
+        params: GetDocumentRawContentParams,
+    ) -> SDKResult<GetDocumentRawContentResponse> {
         // 验证必填字段
         validate_required!(params.document_id, "文档ID不能为空");
 
@@ -67,7 +69,8 @@ impl GetDocumentRawContentRequest {
         let api_endpoint = DocxApiV1::DocumentRawContent(params.document_id.clone());
 
         // 创建API请求
-        let api_request: ApiRequest<GetDocumentRawContentResponse> = ApiRequest::get(&api_endpoint.to_url());
+        let api_request: ApiRequest<GetDocumentRawContentResponse> =
+            ApiRequest::get(&api_endpoint.to_url());
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

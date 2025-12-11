@@ -7,13 +7,12 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::DocxApiV1;
 use crate::ccm::docx::common_types::BlockContent;
+use crate::common::api_endpoints::DocxApiV1;
 
 /// 获取块内容请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -50,7 +49,6 @@ pub struct BlockData {
     pub update_time: Option<i64>,
 }
 
-
 impl ApiResponseTrait for GetDocumentBlockResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
@@ -67,12 +65,17 @@ impl GetDocumentBlockRequest {
         Self { config }
     }
 
-    pub async fn execute(self, params: GetDocumentBlockParams) -> SDKResult<GetDocumentBlockResponse> {
+    pub async fn execute(
+        self,
+        params: GetDocumentBlockParams,
+    ) -> SDKResult<GetDocumentBlockResponse> {
         validate_required!(params.document_id, "文档ID不能为空");
         validate_required!(params.block_id, "块ID不能为空");
 
-        let api_endpoint = DocxApiV1::DocumentBlockGet(params.document_id.clone(), params.block_id.clone());
-        let api_request: ApiRequest<GetDocumentBlockResponse> = ApiRequest::get(&api_endpoint.to_url());
+        let api_endpoint =
+            DocxApiV1::DocumentBlockGet(params.document_id.clone(), params.block_id.clone());
+        let api_request: ApiRequest<GetDocumentBlockResponse> =
+            ApiRequest::get(&api_endpoint.to_url());
 
         let response = Transport::request(api_request, &self.config, None).await?;
         response.data.ok_or_else(|| {

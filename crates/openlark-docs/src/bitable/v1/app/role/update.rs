@@ -1,12 +1,10 @@
-
 //! Bitable 更新角色API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/role/update
-
 use openlark_core::{
     api::ApiRequest,
     config::Config,
-    error::{SDKResult, validation_error},
+    error::{validation_error, SDKResult},
     http::Transport,
 };
 use serde::{Deserialize, Serialize};
@@ -107,8 +105,10 @@ impl UpdateAppRoleRequest {
         };
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<UpdateAppRoleResponse> = ApiRequest::put(&api_endpoint.to_url())
-            .body(openlark_core::api::RequestData::Json(serde_json::to_value(&request_body)?));
+        let mut api_request: ApiRequest<UpdateAppRoleResponse> =
+            ApiRequest::put(&api_endpoint.to_url()).body(openlark_core::api::RequestData::Json(
+                serde_json::to_value(&request_body)?,
+            ));
 
         // 设置查询参数
         if let Some(user_id_type) = &self.user_id_type {
@@ -279,4 +279,3 @@ pub struct UpdateAppRoleResponse {
     /// 操作结果
     pub success: bool,
 }
-

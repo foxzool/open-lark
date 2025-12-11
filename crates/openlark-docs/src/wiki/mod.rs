@@ -9,7 +9,7 @@ pub mod v2;
 pub use v2::WikiService;
 
 // 重新导出V1搜索API
-pub use v1::node::search::{SearchWikiRequest, SearchWikiParams, SearchWikiResponse};
+pub use v1::node::search::{SearchWikiParams, SearchWikiRequest, SearchWikiResponse};
 
 // 重新导出V2版本的所有内容
 pub use v2::*;

@@ -3,6 +3,7 @@
 //! 创建新版文档，文档标题和目录可选。
 //! API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/create
 
+use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -10,7 +11,6 @@ use openlark_core::{
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use crate::common::api_endpoints::DocxApiV1;
 
 /// 创建文档请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -88,7 +88,8 @@ impl CreateDocumentRequest {
         let api_endpoint = DocxApiV1::DocumentCreate;
 
         // 创建API请求
-        let mut api_request: ApiRequest<CreateDocumentResponse> = ApiRequest::post(&api_endpoint.to_url());
+        let mut api_request: ApiRequest<CreateDocumentResponse> =
+            ApiRequest::post(&api_endpoint.to_url());
 
         // 设置请求体
         api_request = api_request.json_body(&params);

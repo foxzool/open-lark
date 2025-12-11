@@ -3,16 +3,15 @@
 //! 在指定块的子块列表中，新创建一批子块，并放置到指定位置。如果操作成功，接口将返回新创建子块的富文本内容。
 //! API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/create
 
+use crate::ccm::docx::common_types::BlockContent;
+use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use crate::common::api_endpoints::DocxApiV1;
-use crate::ccm::docx::common_types::{BlockContent};
 
 /// 在群公告中创建块请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -35,7 +34,6 @@ pub struct NewBlock {
     /// 块内容
     pub content: Option<BlockContent>,
 }
-
 
 /// 块位置
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -90,17 +88,24 @@ impl CreateChatAnnouncementBlockChildrenRequest {
     ///
     /// API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/create
     /// 对应CSV记录: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/create
-    pub async fn execute(self, params: CreateChatAnnouncementBlockChildrenParams) -> SDKResult<CreateChatAnnouncementBlockChildrenResponse> {
+    pub async fn execute(
+        self,
+        params: CreateChatAnnouncementBlockChildrenParams,
+    ) -> SDKResult<CreateChatAnnouncementBlockChildrenResponse> {
         // 验证必填字段
         validate_required!(params.chat_id, "群聊ID不能为空");
         validate_required!(params.block_id, "父块ID不能为空");
         validate_required!(params.children, "子块列表不能为空");
 
         // 构建API端点
-        let api_endpoint = DocxApiV1::ChatAnnouncementBlockChildrenCreate(params.chat_id.clone(), params.block_id.clone());
+        let api_endpoint = DocxApiV1::ChatAnnouncementBlockChildrenCreate(
+            params.chat_id.clone(),
+            params.block_id.clone(),
+        );
 
         // 创建API请求
-        let mut api_request: ApiRequest<CreateChatAnnouncementBlockChildrenResponse> = ApiRequest::post(&api_endpoint.to_url());
+        let mut api_request: ApiRequest<CreateChatAnnouncementBlockChildrenResponse> =
+            ApiRequest::post(&api_endpoint.to_url());
 
         // 设置请求体
         api_request = api_request.json_body(&params);

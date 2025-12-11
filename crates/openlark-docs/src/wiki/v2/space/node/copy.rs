@@ -7,13 +7,12 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::wiki::v2::models::WikiSpaceNode;
 use crate::common::api_endpoints::WikiApiV2;
+use crate::wiki::v2::models::WikiSpaceNode;
 
 /// 复制知识空间节点请求
 pub struct CopyWikiSpaceNodeRequest {
@@ -69,7 +68,10 @@ impl CopyWikiSpaceNodeRequest {
     /// 执行请求
     ///
     /// API文档: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-nodes/copy
-    pub async fn execute(self, params: CopyWikiSpaceNodeParams) -> SDKResult<CopyWikiSpaceNodeResponse> {
+    pub async fn execute(
+        self,
+        params: CopyWikiSpaceNodeParams,
+    ) -> SDKResult<CopyWikiSpaceNodeResponse> {
         // 验证必填字段
         validate_required!(self.space_id, "知识空间ID不能为空");
         validate_required!(self.node_token, "节点Token不能为空");
@@ -83,7 +85,9 @@ impl CopyWikiSpaceNodeRequest {
             ApiRequest::post(&api_endpoint.to_url());
 
         // 设置请求体
-        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(&params)?));
+        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(
+            &params,
+        )?));
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

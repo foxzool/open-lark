@@ -12,7 +12,7 @@ pub use app::AppService;
 
 // 从models导入，但避免与app::role冲突
 pub use models::{
-    BaseRole, CreateRoleRequest, UpdateRoleRequest, ListRolesRequest, ListRolesResponse
+    BaseRole, CreateRoleRequest, ListRolesRequest, ListRolesResponse, UpdateRoleRequest,
 };
 
 /// Base V2 服务

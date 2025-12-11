@@ -44,14 +44,23 @@
 use openlark_core::config::Config;
 
 // 导入所有API请求类型
+use super::task::get::GetWikiTaskRequest;
 use super::{
-    space::{list::ListWikiSpacesRequest, get::GetWikiSpaceRequest, create::CreateWikiSpaceRequest},
     setting::update::UpdateWikiSpaceSettingRequest,
     space::get_node::GetWikiSpaceNodeRequest,
-    space::member::{list::ListWikiSpaceMembersRequest, create::CreateWikiSpaceMemberRequest, delete::DeleteWikiSpaceMemberRequest},
-    space::node::{list::ListWikiSpaceNodesRequest, create::CreateWikiSpaceNodeRequest, copy::CopyWikiSpaceNodeRequest, move_node::MoveWikiSpaceNodeRequest, update_title::UpdateWikiSpaceNodeTitleRequest, move_docs_to_wiki::MoveDocsToWikiRequest},
+    space::member::{
+        create::CreateWikiSpaceMemberRequest, delete::DeleteWikiSpaceMemberRequest,
+        list::ListWikiSpaceMembersRequest,
+    },
+    space::node::{
+        copy::CopyWikiSpaceNodeRequest, create::CreateWikiSpaceNodeRequest,
+        list::ListWikiSpaceNodesRequest, move_docs_to_wiki::MoveDocsToWikiRequest,
+        move_node::MoveWikiSpaceNodeRequest, update_title::UpdateWikiSpaceNodeTitleRequest,
+    },
+    space::{
+        create::CreateWikiSpaceRequest, get::GetWikiSpaceRequest, list::ListWikiSpacesRequest,
+    },
 };
-use super::task::get::GetWikiTaskRequest;
 use crate::wiki::v1::node::search::SearchWikiRequest;
 
 /// Wiki 知识库服务
@@ -86,7 +95,10 @@ impl WikiService {
     }
 
     /// 更新知识空间设置请求构建器
-    pub fn update_space_setting(&self, space_id: impl Into<String>) -> UpdateWikiSpaceSettingRequest {
+    pub fn update_space_setting(
+        &self,
+        space_id: impl Into<String>,
+    ) -> UpdateWikiSpaceSettingRequest {
         UpdateWikiSpaceSettingRequest::new(self.config.clone()).space_id(space_id)
     }
 
@@ -135,18 +147,36 @@ impl WikiService {
     }
 
     /// 移动知识空间节点请求构建器
-    pub fn move_space_node(&self, space_id: impl Into<String>, node_token: impl Into<String>) -> MoveWikiSpaceNodeRequest {
-        MoveWikiSpaceNodeRequest::new(self.config.clone()).space_id(space_id).node_token(node_token)
+    pub fn move_space_node(
+        &self,
+        space_id: impl Into<String>,
+        node_token: impl Into<String>,
+    ) -> MoveWikiSpaceNodeRequest {
+        MoveWikiSpaceNodeRequest::new(self.config.clone())
+            .space_id(space_id)
+            .node_token(node_token)
     }
 
     /// 复制知识空间节点请求构建器
-    pub fn copy_space_node(&self, space_id: impl Into<String>, node_token: impl Into<String>) -> CopyWikiSpaceNodeRequest {
-        CopyWikiSpaceNodeRequest::new(self.config.clone()).space_id(space_id).node_token(node_token)
+    pub fn copy_space_node(
+        &self,
+        space_id: impl Into<String>,
+        node_token: impl Into<String>,
+    ) -> CopyWikiSpaceNodeRequest {
+        CopyWikiSpaceNodeRequest::new(self.config.clone())
+            .space_id(space_id)
+            .node_token(node_token)
     }
 
     /// 更新知识空间节点标题请求构建器
-    pub fn update_space_node_title(&self, space_id: impl Into<String>, node_token: impl Into<String>) -> UpdateWikiSpaceNodeTitleRequest {
-        UpdateWikiSpaceNodeTitleRequest::new(self.config.clone()).space_id(space_id).node_token(node_token)
+    pub fn update_space_node_title(
+        &self,
+        space_id: impl Into<String>,
+        node_token: impl Into<String>,
+    ) -> UpdateWikiSpaceNodeTitleRequest {
+        UpdateWikiSpaceNodeTitleRequest::new(self.config.clone())
+            .space_id(space_id)
+            .node_token(node_token)
     }
 
     /// 移动云空间文档至知识空间请求构建器

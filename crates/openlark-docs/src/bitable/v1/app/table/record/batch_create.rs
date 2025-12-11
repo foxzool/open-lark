@@ -1,7 +1,6 @@
 //! Bitable 批量创建数据记录API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/record/batchCreate
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
     config::Config,
@@ -57,21 +56,31 @@ impl BatchCreateRecordRequest {
     pub async fn execute(self) -> SDKResult<BatchCreateRecordResponse> {
         // 参数验证
         if self.app_token.trim().is_empty() {
-            return Err(openlark_core::error::validation_error("app_token", "应用token不能为空"));
+            return Err(openlark_core::error::validation_error(
+                "app_token",
+                "应用token不能为空",
+            ));
         }
 
         if self.table_id.trim().is_empty() {
-            return Err(openlark_core::error::validation_error("table_id", "数据表ID不能为空"));
+            return Err(openlark_core::error::validation_error(
+                "table_id",
+                "数据表ID不能为空",
+            ));
         }
 
         if self.records.is_empty() {
-            return Err(openlark_core::error::validation_error("records", "记录列表不能为空"));
+            return Err(openlark_core::error::validation_error(
+                "records",
+                "记录列表不能为空",
+            ));
         }
 
         // 🚀 使用新的enum+builder系统生成API端点
         // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
         use crate::common::api_endpoints::BitableApiV1;
-        let api_endpoint = BitableApiV1::RecordBatchCreate(self.app_token.clone(), self.table_id.clone());
+        let api_endpoint =
+            BitableApiV1::RecordBatchCreate(self.app_token.clone(), self.table_id.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<BatchCreateRecordResponse> =

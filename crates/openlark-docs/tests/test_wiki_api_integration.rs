@@ -5,13 +5,13 @@
 #[cfg(feature = "wiki")]
 use openlark_core::config::Config;
 #[cfg(feature = "wiki")]
-use openlark_docs::wiki::v2::service::WikiService;
+use openlark_docs::wiki::v1::node::search::SearchWikiParams;
 #[cfg(feature = "wiki")]
-use openlark_docs::wiki::v2::space::list::ListWikiSpacesParams;
+use openlark_docs::wiki::v2::service::WikiService;
 #[cfg(feature = "wiki")]
 use openlark_docs::wiki::v2::space::create::CreateWikiSpaceParams;
 #[cfg(feature = "wiki")]
-use openlark_docs::wiki::v1::node::search::SearchWikiParams;
+use openlark_docs::wiki::v2::space::list::ListWikiSpacesParams;
 
 #[cfg(feature = "wiki")]
 #[test]
@@ -81,7 +81,10 @@ fn test_wiki_v1_search_params() {
     };
 
     assert_eq!(params.query, "搜索关键词");
-    assert_eq!(params.space_ids, Some(vec!["space1".to_string(), "space2".to_string()]));
+    assert_eq!(
+        params.space_ids,
+        Some(vec!["space1".to_string(), "space2".to_string()])
+    );
     assert_eq!(params.node_type, Some("doc".to_string()));
     assert_eq!(params.page_size, Some(10));
     assert_eq!(params.page_token, Some("token123".to_string()));

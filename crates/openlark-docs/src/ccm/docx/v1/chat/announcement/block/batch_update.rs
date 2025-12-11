@@ -7,13 +7,12 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
+use crate::ccm::docx::{BatchOperationResult, BlockUpdate};
 use crate::common::api_endpoints::DocxApiV1;
-use crate::ccm::docx::{BlockUpdate, BatchOperationResult};
 
 /// 批量更新群公告块内容请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -52,7 +51,10 @@ impl BatchUpdateChatAnnouncementBlocksRequest {
     ///
     /// API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/batch_update
     /// 对应CSV记录: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/batch_update
-    pub async fn execute(self, params: BatchUpdateChatAnnouncementBlocksParams) -> SDKResult<BatchUpdateChatAnnouncementBlocksResponse> {
+    pub async fn execute(
+        self,
+        params: BatchUpdateChatAnnouncementBlocksParams,
+    ) -> SDKResult<BatchUpdateChatAnnouncementBlocksResponse> {
         // 验证必填字段
         validate_required!(params.chat_id, "群聊ID不能为空");
         validate_required!(params.blocks, "块更新列表不能为空");

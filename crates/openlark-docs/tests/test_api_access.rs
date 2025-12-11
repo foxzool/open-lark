@@ -52,13 +52,12 @@ mod tests {
         let bitable_service = BitableService::new(config);
 
         // 测试Base API: 新增自定义角色
-        let _create_role = base_service.v2()
+        let _create_role = base_service
+            .v2()
             .role_service()
             .create_role_builder("app_token", "test_role");
 
         // 测试Bitable API: 创建多维表格
-        let _create_app = bitable_service.v1()
-            .app()
-            .create_builder("test_app");
+        let _create_app = bitable_service.v1().app().create_builder("test_app");
     }
 }

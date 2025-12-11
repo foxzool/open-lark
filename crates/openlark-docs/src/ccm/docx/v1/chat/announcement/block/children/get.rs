@@ -7,8 +7,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -133,7 +132,10 @@ impl GetChatAnnouncementBlockChildrenRequest {
     ///
     /// API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/get
     /// 对应CSV记录: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block/get-2
-    pub async fn execute(self, params: GetChatAnnouncementBlockChildrenParams) -> SDKResult<GetChatAnnouncementBlockChildrenResponse> {
+    pub async fn execute(
+        self,
+        params: GetChatAnnouncementBlockChildrenParams,
+    ) -> SDKResult<GetChatAnnouncementBlockChildrenResponse> {
         // 验证必填字段
         validate_required!(params.chat_id, "群聊ID不能为空");
         validate_required!(params.block_id, "父块ID不能为空");

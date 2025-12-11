@@ -3,15 +3,14 @@
 //! 获取文档中指定块的所有子块的富文本内容并分页返回。文档版本号可选。
 //! API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/get-2
 
+use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use crate::common::api_endpoints::DocxApiV1;
 
 /// 获取所有子块请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -69,12 +68,19 @@ impl GetDocumentBlockChildrenRequest {
         Self { config }
     }
 
-    pub async fn execute(self, params: GetDocumentBlockChildrenParams) -> SDKResult<GetDocumentBlockChildrenResponse> {
+    pub async fn execute(
+        self,
+        params: GetDocumentBlockChildrenParams,
+    ) -> SDKResult<GetDocumentBlockChildrenResponse> {
         validate_required!(params.document_id, "文档ID不能为空");
         validate_required!(params.block_id, "父块ID不能为空");
 
-        let api_endpoint = DocxApiV1::DocumentBlockChildrenGet(params.document_id.clone(), params.block_id.clone());
-        let mut api_request: ApiRequest<GetDocumentBlockChildrenResponse> = ApiRequest::get(&api_endpoint.to_url());
+        let api_endpoint = DocxApiV1::DocumentBlockChildrenGet(
+            params.document_id.clone(),
+            params.block_id.clone(),
+        );
+        let mut api_request: ApiRequest<GetDocumentBlockChildrenResponse> =
+            ApiRequest::get(&api_endpoint.to_url());
 
         if let Some(page_size) = params.page_size {
             api_request = api_request.query("page_size", &page_size.to_string());

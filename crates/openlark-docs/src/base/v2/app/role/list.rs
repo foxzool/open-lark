@@ -1,20 +1,15 @@
 //! Base 列出自定义角色API
 ///
 /// API文档: https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/list-2
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use super::{
-    models::PaginationParams,
-    RoleService,
-};
+use super::{models::PaginationParams, RoleService};
 
 /// 列出自定义角色请求
 pub struct ListRolesRequest {
@@ -73,7 +68,8 @@ impl ListRolesRequest {
         let api_endpoint = BaseApiV2::RoleList(self.app_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<ListRolesResponseData> = ApiRequest::get(&api_endpoint.to_url());
+        let mut api_request: ApiRequest<ListRolesResponseData> =
+            ApiRequest::get(&api_endpoint.to_url());
 
         // 构建查询参数
         if let Some(ref pagination) = self.pagination {
@@ -109,10 +105,7 @@ impl ApiResponseTrait for ListRolesResponseData {
 
 impl RoleService {
     /// 创建列出角色请求
-    pub fn list_roles_builder(
-        &self,
-        app_token: impl Into<String>,
-    ) -> ListRolesRequest {
+    pub fn list_roles_builder(&self, app_token: impl Into<String>) -> ListRolesRequest {
         ListRolesRequest::new(self.config.clone()).app_token(app_token)
     }
 

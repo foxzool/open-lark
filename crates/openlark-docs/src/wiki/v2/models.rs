@@ -1,7 +1,7 @@
 //! Wiki V2 API 数据模型
 
-use serde::{Deserialize, Serialize};
 use openlark_core::api::{ApiResponseTrait, ResponseFormat};
+use serde::{Deserialize, Serialize};
 
 /// 知识空间基础信息
 #[derive(Debug, Clone, Serialize, Deserialize)]

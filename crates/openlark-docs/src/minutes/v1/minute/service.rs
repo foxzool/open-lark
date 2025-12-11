@@ -2,8 +2,10 @@
 //!
 //! 提供妙记信息、音视频、文字记录和统计数据的统一管理接口。
 
+use super::{
+    GetMinuteMediaRequest, GetMinuteRequest, GetMinuteStatisticsRequest, GetMinuteTranscriptRequest,
+};
 use openlark_core::config::Config;
-use super::{GetMinuteRequest, GetMinuteMediaRequest, GetMinuteTranscriptRequest, GetMinuteStatisticsRequest};
 
 /// 妙记服务
 pub struct MinutesService {
@@ -42,7 +44,10 @@ impl MinutesService {
     }
 
     /// 导出妙记文字记录请求构建器
-    pub fn transcript_builder(&self, minute_token: impl Into<String>) -> GetMinuteTranscriptRequest {
+    pub fn transcript_builder(
+        &self,
+        minute_token: impl Into<String>,
+    ) -> GetMinuteTranscriptRequest {
         GetMinuteTranscriptRequest::new(self.config.clone()).minute_token(minute_token)
     }
 
@@ -52,7 +57,10 @@ impl MinutesService {
     }
 
     /// 获取妙记统计数据请求构建器
-    pub fn statistics_builder(&self, minute_token: impl Into<String>) -> GetMinuteStatisticsRequest {
+    pub fn statistics_builder(
+        &self,
+        minute_token: impl Into<String>,
+    ) -> GetMinuteStatisticsRequest {
         GetMinuteStatisticsRequest::new(self.config.clone()).minute_token(minute_token)
     }
 
