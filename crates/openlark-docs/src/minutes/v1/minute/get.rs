@@ -7,8 +7,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -61,8 +60,7 @@ impl GetMinuteRequest {
         let api_endpoint = MinutesApiV1::Get(self.minute_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let api_request: ApiRequest<GetMinuteResponse> =
-            ApiRequest::get(&api_endpoint.to_url());
+        let api_request: ApiRequest<GetMinuteResponse> = ApiRequest::get(&api_endpoint.to_url());
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
@@ -71,4 +69,3 @@ impl GetMinuteRequest {
         })
     }
 }
-

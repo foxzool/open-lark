@@ -1,12 +1,10 @@
-
 //! Bitable 删除角色API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/role/delete
-
 use openlark_core::{
     api::ApiRequest,
     config::Config,
-    error::{SDKResult, validation_error},
+    error::{validation_error, SDKResult},
     http::Transport,
 };
 use serde::{Deserialize, Serialize};
@@ -75,7 +73,8 @@ impl DeleteAppRoleRequest {
         let api_endpoint = BitableApiV1::RoleDelete(self.app_token.clone(), self.role_id.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<DeleteAppRoleResponse> = ApiRequest::delete(&api_endpoint.to_url());
+        let mut api_request: ApiRequest<DeleteAppRoleResponse> =
+            ApiRequest::delete(&api_endpoint.to_url());
 
         // 设置查询参数
         if let Some(user_id_type) = &self.user_id_type {
@@ -143,4 +142,3 @@ pub struct DeleteAppRoleResponse {
     /// 是否删除成功
     pub success: bool,
 }
-

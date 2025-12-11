@@ -3,16 +3,15 @@
 //! 在指定块的子块列表中，新创建一批子块，并放置到指定位置。如果操作成功，接口将返回新创建子块的富文本内容。
 //! API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/create
 
+use crate::ccm::docx::common_types::BlockContent;
+use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use crate::common::api_endpoints::DocxApiV1;
-use crate::ccm::docx::common_types::BlockContent;
 
 /// 创建块请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -35,7 +34,6 @@ pub struct NewBlock {
     /// 块内容
     pub content: Option<BlockContent>,
 }
-
 
 /// 块位置
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -87,13 +85,20 @@ impl CreateDocumentBlockChildrenRequest {
     ///
     /// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/create
     /// 对应CSV记录: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block/create
-    pub async fn execute(self, params: CreateDocumentBlockChildrenParams) -> SDKResult<CreateDocumentBlockChildrenResponse> {
+    pub async fn execute(
+        self,
+        params: CreateDocumentBlockChildrenParams,
+    ) -> SDKResult<CreateDocumentBlockChildrenResponse> {
         validate_required!(params.document_id, "文档ID不能为空");
         validate_required!(params.block_id, "父块ID不能为空");
         validate_required!(params.children, "子块列表不能为空");
 
-        let api_endpoint = DocxApiV1::DocumentBlockChildrenCreate(params.document_id.clone(), params.block_id.clone());
-        let mut api_request: ApiRequest<CreateDocumentBlockChildrenResponse> = ApiRequest::post(&api_endpoint.to_url());
+        let api_endpoint = DocxApiV1::DocumentBlockChildrenCreate(
+            params.document_id.clone(),
+            params.block_id.clone(),
+        );
+        let mut api_request: ApiRequest<CreateDocumentBlockChildrenResponse> =
+            ApiRequest::post(&api_endpoint.to_url());
         api_request = api_request.json_body(&params);
 
         let response = Transport::request(api_request, &self.config, None).await?;

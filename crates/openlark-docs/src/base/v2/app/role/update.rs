@@ -1,20 +1,15 @@
 //! Base 更新自定义角色API
 ///
 /// API文档: https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/update-2
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use super::{
-    models::RoleResponse as Role,
-    RoleService,
-};
+use super::{models::RoleResponse as Role, RoleService};
 
 /// 更新自定义角色请求体（内部使用）
 #[derive(Serialize)]
@@ -133,14 +128,17 @@ impl UpdateRoleRequest {
 
         // 验证请求参数
         if let Err(e) = request_body.validate() {
-            return Err(openlark_core::error::validation_error("更新角色请求验证失败", e));
+            return Err(openlark_core::error::validation_error(
+                "更新角色请求验证失败",
+                e,
+            ));
         }
 
         // 创建API请求 - 使用类型安全的URL生成
-        let api_request: ApiRequest<UpdateRoleResponse> =
-            ApiRequest::put(&api_endpoint.to_url()).body(
-                openlark_core::api::RequestData::Json(serde_json::to_value(&request_body)?),
-            );
+        let api_request: ApiRequest<UpdateRoleResponse> = ApiRequest::put(&api_endpoint.to_url())
+            .body(openlark_core::api::RequestData::Json(serde_json::to_value(
+                &request_body,
+            )?));
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

@@ -7,8 +7,8 @@ use serde::{Deserialize, Serialize};
 pub mod create;
 pub mod delete;
 pub mod list;
-pub mod update;
 pub mod member;
+pub mod update;
 
 #[cfg(test)]
 mod tests;
@@ -20,8 +20,11 @@ pub use delete::{DeleteAppRoleRequest, DeleteAppRoleRequestBuilder, DeleteAppRol
 // list模块中的类型与create模块冲突，使用重导出避免冲突
 pub use list::{ListAppRoleRequest, ListAppRoleRequestBuilder, ListAppRoleResponse};
 // update模块中的类型与create模块冲突，使用重导出避免冲突
-pub use update::{UpdateAppRoleRequest, UpdateAppRoleRequestBuilder, UpdateAppRoleResponse, UpdateTableRole, UpdateBlockRole, UpdateRole, UpdateAppRoleRequestBody};
 pub use member::*;
+pub use update::{
+    UpdateAppRoleRequest, UpdateAppRoleRequestBody, UpdateAppRoleRequestBuilder,
+    UpdateAppRoleResponse, UpdateBlockRole, UpdateRole, UpdateTableRole,
+};
 
 /// 简化的服务结构体
 pub struct SimpleService {}

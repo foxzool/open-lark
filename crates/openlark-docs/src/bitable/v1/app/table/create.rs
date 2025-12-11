@@ -1,7 +1,6 @@
 //! Bitable 创建数据表API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/create
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
     config::Config,
@@ -87,9 +86,7 @@ impl CreateTableRequest {
         let api_endpoint = BitableApiV1::TableCreate(self.app_token.clone());
 
         // 构建请求体
-        let request_body = CreateTableRequestBody {
-            table: self.table,
-        };
+        let request_body = CreateTableRequestBody { table: self.table };
 
         // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<CreateTableResponse> = ApiRequest::post(&api_endpoint.to_url())
@@ -97,9 +94,9 @@ impl CreateTableRequest {
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        response
+            .data
+            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))
     }
 }
 

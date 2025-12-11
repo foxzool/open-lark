@@ -7,13 +7,12 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::wiki::v2::models::WikiSpaceMember;
 use crate::common::api_endpoints::WikiApiV2;
+use crate::wiki::v2::models::WikiSpaceMember;
 
 /// 添加知识空间成员请求
 pub struct CreateWikiSpaceMemberRequest {
@@ -67,7 +66,10 @@ impl CreateWikiSpaceMemberRequest {
     /// 执行请求
     ///
     /// API文档: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-member/create
-    pub async fn execute(self, params: CreateWikiSpaceMemberParams) -> SDKResult<CreateWikiSpaceMemberResponse> {
+    pub async fn execute(
+        self,
+        params: CreateWikiSpaceMemberParams,
+    ) -> SDKResult<CreateWikiSpaceMemberResponse> {
         // 验证必填字段
         validate_required!(self.space_id, "知识空间ID不能为空");
         validate_required!(params.member_type, "成员类型不能为空");
@@ -76,7 +78,7 @@ impl CreateWikiSpaceMemberRequest {
         if params.user_id.is_none() && params.open_id.is_none() && params.union_id.is_none() {
             return Err(openlark_core::error::validation_error(
                 "用户标识符不能为空",
-                "user_id、open_id、union_id 至少需要提供一个"
+                "user_id、open_id、union_id 至少需要提供一个",
             ));
         }
 
@@ -88,7 +90,9 @@ impl CreateWikiSpaceMemberRequest {
             ApiRequest::post(&api_endpoint.to_url());
 
         // 设置请求体
-        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(&params)?));
+        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(
+            &params,
+        )?));
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

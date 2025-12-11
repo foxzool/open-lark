@@ -3,16 +3,15 @@
 //! 获取文档所有块的富文本内容并分页返回。
 //! API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/list
 
+use crate::ccm::docx::common_types::BlockContent;
+use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use crate::common::api_endpoints::DocxApiV1;
-use crate::ccm::docx::common_types::BlockContent;
 
 /// 获取文档所有块请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -84,7 +83,10 @@ impl GetDocumentBlocksRequest {
     /// 执行请求
     ///
     /// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/list
-    pub async fn execute(self, params: GetDocumentBlocksParams) -> SDKResult<GetDocumentBlocksResponse> {
+    pub async fn execute(
+        self,
+        params: GetDocumentBlocksParams,
+    ) -> SDKResult<GetDocumentBlocksResponse> {
         // 验证必填字段
         validate_required!(params.document_id, "文档ID不能为空");
 
@@ -92,7 +94,8 @@ impl GetDocumentBlocksRequest {
         let api_endpoint = DocxApiV1::DocumentBlockList(params.document_id.clone());
 
         // 创建API请求
-        let mut api_request: ApiRequest<GetDocumentBlocksResponse> = ApiRequest::get(&api_endpoint.to_url());
+        let mut api_request: ApiRequest<GetDocumentBlocksResponse> =
+            ApiRequest::get(&api_endpoint.to_url());
 
         // 设置查询参数
         if let Some(page_size) = params.page_size {

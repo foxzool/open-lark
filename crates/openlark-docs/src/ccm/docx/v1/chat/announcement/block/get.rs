@@ -7,13 +7,12 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
+use crate::ccm::docx::BlockContent;
 use crate::common::api_endpoints::DocxApiV1;
-use crate::ccm::docx::{BlockContent};
 
 /// 获取群公告块内容请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -48,7 +47,6 @@ pub struct BlockData {
     pub update_time: Option<i64>,
 }
 
-
 impl ApiResponseTrait for GetChatAnnouncementBlockResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
@@ -70,16 +68,21 @@ impl GetChatAnnouncementBlockRequest {
     ///
     /// API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/get
     /// 对应CSV记录: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block/get
-    pub async fn execute(self, params: GetChatAnnouncementBlockParams) -> SDKResult<GetChatAnnouncementBlockResponse> {
+    pub async fn execute(
+        self,
+        params: GetChatAnnouncementBlockParams,
+    ) -> SDKResult<GetChatAnnouncementBlockResponse> {
         // 验证必填字段
         validate_required!(params.chat_id, "群聊ID不能为空");
         validate_required!(params.block_id, "块ID不能为空");
 
         // 使用enum+builder系统生成API端点
-        let api_endpoint = DocxApiV1::ChatAnnouncementBlockGet(params.chat_id.clone(), params.block_id.clone());
+        let api_endpoint =
+            DocxApiV1::ChatAnnouncementBlockGet(params.chat_id.clone(), params.block_id.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let api_request: ApiRequest<GetChatAnnouncementBlockResponse> = ApiRequest::get(&api_endpoint.to_url());
+        let api_request: ApiRequest<GetChatAnnouncementBlockResponse> =
+            ApiRequest::get(&api_endpoint.to_url());
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

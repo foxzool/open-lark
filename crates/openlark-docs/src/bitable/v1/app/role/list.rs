@@ -1,12 +1,10 @@
-
 //! Bitable 列出角色API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/role/list
-
 use openlark_core::{
-    api::{ApiRequest},
+    api::ApiRequest,
     config::Config,
-    error::{SDKResult, validation_error},
+    error::{validation_error, SDKResult},
     http::Transport,
 };
 use serde::{Deserialize, Serialize};
@@ -76,7 +74,8 @@ impl ListAppRoleRequest {
         let api_endpoint = BitableApiV1::RoleList(self.app_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<ListAppRoleResponse> = ApiRequest::get(&api_endpoint.to_url());
+        let mut api_request: ApiRequest<ListAppRoleResponse> =
+            ApiRequest::get(&api_endpoint.to_url());
 
         // 设置查询参数
         if let Some(user_id_type) = &self.user_id_type {
@@ -230,4 +229,3 @@ pub struct ListAppRoleResponse {
     /// 操作结果
     pub success: bool,
 }
-

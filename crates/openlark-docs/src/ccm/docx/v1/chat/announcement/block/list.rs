@@ -7,13 +7,12 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::DocxApiV1;
 use crate::ccm::docx::{BlockItem, PageData};
+use crate::common::api_endpoints::DocxApiV1;
 
 /// 获取群公告所有块请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -54,7 +53,10 @@ impl GetChatAnnouncementBlocksRequest {
     ///
     /// API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/list
     /// 对应CSV记录: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/list
-    pub async fn execute(self, params: GetChatAnnouncementBlocksParams) -> SDKResult<GetChatAnnouncementBlocksResponse> {
+    pub async fn execute(
+        self,
+        params: GetChatAnnouncementBlocksParams,
+    ) -> SDKResult<GetChatAnnouncementBlocksResponse> {
         // 验证必填字段
         validate_required!(params.chat_id, "群聊ID不能为空");
 

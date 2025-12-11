@@ -9,8 +9,7 @@ pub mod service;
 
 // 导出数据模型
 pub use models::{
-    WikiSpace, WikiSpaceNode, WikiSpaceMember, WikiSpaceSetting,
-    WikiTask, WikiSearchResult
+    WikiSearchResult, WikiSpace, WikiSpaceMember, WikiSpaceNode, WikiSpaceSetting, WikiTask,
 };
 
 // 导出API服务 - 使用glob导入避免复杂的路径指定

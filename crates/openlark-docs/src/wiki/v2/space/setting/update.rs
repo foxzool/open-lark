@@ -7,13 +7,12 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::wiki::v2::models::WikiSpaceSetting;
 use crate::common::api_endpoints::WikiApiV2;
+use crate::wiki::v2::models::WikiSpaceSetting;
 
 /// 更新知识空间设置请求
 pub struct UpdateWikiSpaceSettingRequest {
@@ -52,7 +51,10 @@ impl UpdateWikiSpaceSettingRequest {
     /// 执行请求
     ///
     /// API文档: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-setting/update
-    pub async fn execute(self, setting: WikiSpaceSetting) -> SDKResult<UpdateWikiSpaceSettingResponse> {
+    pub async fn execute(
+        self,
+        setting: WikiSpaceSetting,
+    ) -> SDKResult<UpdateWikiSpaceSettingResponse> {
         // 验证必填字段
         validate_required!(self.space_id, "知识空间ID不能为空");
 
@@ -64,7 +66,9 @@ impl UpdateWikiSpaceSettingRequest {
             ApiRequest::put(&api_endpoint.to_url());
 
         // 设置请求体
-        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(&setting)?));
+        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(
+            &setting,
+        )?));
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

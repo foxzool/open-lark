@@ -7,13 +7,12 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::wiki::v2::models::WikiSpaceNode;
 use crate::common::api_endpoints::WikiApiV2;
+use crate::wiki::v2::models::WikiSpaceNode;
 
 /// 获取知识空间节点列表请求
 pub struct ListWikiSpaceNodesRequest {
@@ -69,7 +68,10 @@ impl ListWikiSpaceNodesRequest {
     /// 执行请求
     ///
     /// API文档: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-nodes/list
-    pub async fn execute(self, params: Option<ListWikiSpaceNodesParams>) -> SDKResult<ListWikiSpaceNodesResponse> {
+    pub async fn execute(
+        self,
+        params: Option<ListWikiSpaceNodesParams>,
+    ) -> SDKResult<ListWikiSpaceNodesResponse> {
         // 验证必填字段
         validate_required!(self.space_id, "知识空间ID不能为空");
 
