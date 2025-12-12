@@ -574,7 +574,7 @@ impl BatchWriteService {
                 err: None,
             },
             data: Some(WriteMultipleRangesResponseData {
-                spreadsheet_token: request.spreadsheet_token.clone()
+                spreadsheet_token: request.spreadsheet_token.clone(),
                 total_updated_ranges: updated_ranges.len() as u32,
                 total_updated_cells: total_updated_cells as u32,
                 updated_ranges,

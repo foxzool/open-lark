@@ -732,7 +732,7 @@ impl DataValidationService {
     /// ).dropdown_source(DropdownSource::Values(vec![
     ///     "选项1".to_string(),
     ///     "选项2".to_string(),
-    ///     "选项3".to_string()
+    ///     "选项3".to_string(),
     /// ])).prompt_message("请从下拉列表中选择");
     ///
     /// let request = SetDataValidationRequest::new("spreadsheet_token", data_validation);
@@ -786,7 +786,7 @@ impl DataValidationService {
     ///     ValidationType::Dropdown
     /// ).dropdown_source(DropdownSource::Values(vec![
     ///     "新选项1".to_string(),
-    ///     "新选项2".to_string()
+    ///     "新选项2".to_string(),
     /// ]));
     ///
     /// let request = UpdateDataValidationRequest::new(
@@ -963,7 +963,7 @@ impl DataValidationService {
         range: impl Into<String>,
     ) -> DropdownValidationBuilder {
         DropdownValidationBuilder::new(
-            self.config.clone()
+            self.config.clone(),
             spreadsheet_token.into(),
             sheet_id.into(),
             range.into(),
@@ -978,7 +978,7 @@ impl DataValidationService {
         range: impl Into<String>,
     ) -> NumberRangeValidationBuilder {
         NumberRangeValidationBuilder::new(
-            self.config.clone()
+            self.config.clone(),
             spreadsheet_token.into(),
             sheet_id.into(),
             range.into(),

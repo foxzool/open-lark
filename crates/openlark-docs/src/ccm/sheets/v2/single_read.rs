@@ -359,10 +359,10 @@ impl SingleReadService {
             },
             data: Some(ReadSingleRangeResponseData {
                 revision: 123456,
-                spreadsheet_token: request.spreadsheet_token.clone()
+                spreadsheet_token: request.spreadsheet_token.clone(),
                 value_range: ValueRange {
                     major_dimension: "ROWS".to_string(),
-                    range: request.range.clone()
+                    range: request.range.clone(),
                     values: Value::Array(vec![]),
                     revision: 123456,
                 },
