@@ -1,6 +1,6 @@
 //! 云内容管理(ccm)模块
 //!
-//! 包含docs和docx两个子项目的API实现
+//! 包含docs、docx、ccm_doc、ccm_docs、ccm_drive_explorer、ccm_drive_permission、sheets等子项目的API实现
 
 use openlark_core::config::Config;
 
@@ -20,31 +20,39 @@ impl CcmService {
     pub fn config(&self) -> &Config {
         &self.config
     }
-}
 
-// 导出docs和docx模块
-pub mod docs;
-pub mod docx;
+    /// 获取旧版文档服务
+    pub fn ccm_doc(&self) -> crate::ccm::ccm_doc::CcmDocService {
+        crate::ccm::ccm_doc::CcmDocService::new(self.config.clone())
+    }
 
-// 暂时简化sheets v3模块
-pub mod sheets {
-    use super::Config;
+    /// 获取云文档内容管理服务
+    pub fn ccm_docs(&self) -> crate::ccm::ccm_docs::CcmDocsService {
+        crate::ccm::ccm_docs::CcmDocsService::new(self.config.clone())
+    }
 
-    pub mod v3 {
-        use super::Config;
+    /// 获取云盘浏览器服务
+    pub fn ccm_drive_explorer(&self) -> crate::ccm::ccm_drive_explorer::CcmDriveExplorerService {
+        crate::ccm::ccm_drive_explorer::CcmDriveExplorerService::new(self.config.clone())
+    }
 
-        pub struct V3 {
-            config: Config,
-        }
+    /// 获取文档权限管理服务
+    pub fn ccm_drive_permission(&self) -> crate::ccm::ccm_drive_permission::CcmDrivePermissionService {
+        crate::ccm::ccm_drive_permission::CcmDrivePermissionService::new(self.config.clone())
+    }
 
-        impl V3 {
-            pub fn new(config: Config) -> Self {
-                Self { config }
-            }
-
-            pub fn config(&self) -> &Config {
-                &self.config
-            }
-        }
+    /// 获取表格服务
+    pub fn ccm_sheet(&self) -> crate::ccm::ccm_sheet::CcmSheetService {
+        crate::ccm::ccm_sheet::CcmSheetService::new(self.config.clone())
     }
 }
+
+// 导出所有子项目模块
+pub mod docs;
+pub mod docx;
+pub mod ccm_doc;
+pub mod ccm_docs;
+pub mod ccm_drive_explorer;
+pub mod ccm_drive_permission;
+pub mod ccm_sheet;
+pub mod sheets;

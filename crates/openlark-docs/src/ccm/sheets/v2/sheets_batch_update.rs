@@ -497,7 +497,7 @@ impl SheetsBatchUpdateService {
 
     /// 创建工作表批量更新构建器
     pub fn batch_update_builder(&self, spreadsheet_token: &str) -> SheetsBatchUpdateBuilder {
-        SheetsBatchUpdateBuilder::new(self.clone() spreadsheet_token)
+        SheetsBatchUpdateBuilder::new(self.clone(), spreadsheet_token)
     }
 }
 

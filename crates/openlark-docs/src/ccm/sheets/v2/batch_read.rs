@@ -356,18 +356,18 @@ impl BatchReadService {
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         // 添加查询参数
-        api_req
+        api_req;
 
         if let Some(value_render_option) = &request.value_render_option {
-            api_req
+            api_req = api_req.query(&[("value_render_option", value_render_option)]);
         }
 
         if let Some(date_time_render_option) = &request.date_time_render_option {
-            api_req
+            api_req = api_req.query(&[("date_time_render_option", date_time_render_option)]);
         }
 
         if let Some(user_id_type) = &request.user_id_type {
-            api_req
+            api_req = api_req.query(&[("user_id_type", user_id_type)]);
         }
 
         // 暂时返回模拟数据，直到Transport问题解决
@@ -380,7 +380,7 @@ impl BatchReadService {
             },
             data: Some(ReadMultipleRangesResponseData {
                 revision: 123456,
-                spreadsheet_token: request.spreadsheet_token.clone()
+                spreadsheet_token: request.spreadsheet_token.clone(),
                 total_cells: 0,
                 value_ranges: vec![],
             }),

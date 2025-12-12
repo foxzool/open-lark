@@ -301,7 +301,7 @@ impl SheetManagementService {
 
     /// 创建批量更新构建器
     pub fn batch_update_builder(&self, spreadsheet_token: &str) -> BatchUpdateSheetsBuilder {
-        BatchUpdateSheetsBuilder::new(self.config.clone() spreadsheet_token)
+        BatchUpdateSheetsBuilder::new(self.config.clone(), spreadsheet_token)
     }
 }
 

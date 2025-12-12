@@ -56,6 +56,7 @@ impl ApiResponseTrait for SpreadsheetInfoResponseBody {
 // ============================================================================
 
 /// 电子表格信息服务
+#[derive(Clone)]
 pub struct SpreadsheetInfoService {
     config: Config,
 }
@@ -205,3 +206,7 @@ impl SpreadsheetInfoRequest {
     }
 
     /// 构建查询参数（如果需要）
+    pub fn build_query_params(&self) -> std::collections::HashMap<String, String> {
+        std::collections::HashMap::new()
+    }
+}

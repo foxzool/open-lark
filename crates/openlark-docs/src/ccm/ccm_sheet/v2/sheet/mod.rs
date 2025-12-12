@@ -1,0 +1,170 @@
+//! CCM Sheet V2 工作表API 模块
+//!
+//! 工作表操作API实现，包含工作表的增删改查：
+//! - add_sheet: 添加工作表
+//! - get_sheet: 获取工作表信息
+//! - update_sheet: 更新工作表
+//! - delete_sheet: 删除工作表
+
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
+
+use crate::common::{api_endpoints::CcmSheetApiOld, api_utils::*};
+
+/// 工作表API结构体
+#[derive(Debug, Clone)]
+pub struct SheetApi {
+    config: Config,
+}
+
+impl SheetApi {
+    /// 创建新的工作表API实例
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+
+    /// 获取配置引用
+    pub fn config(&self) -> &Config {
+        &self.config
+    }
+}
+
+// 导出模型定义
+pub mod models;
+pub use models::*;
+
+impl ApiResponseTrait for AddSheetResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for GetSheetResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for UpdateSheetResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for DeleteSheetResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 添加工作表
+///
+/// 根据 spreadsheetToken 在电子表格中添加新的工作表。
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet/add-sheet
+pub async fn add_sheet(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: AddSheetParams,
+) -> SDKResult<AddSheetResponse> {
+    // 验证必填字段
+    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
+    validate_required_field("工作表标题", Some(&params.title), "工作表标题不能为空")?;
+
+    // 使用enum+builder系统生成API端点
+    let api_endpoint = CcmSheetApiOld::AddSheet(spreadsheet_token.to_string());
+
+    // 创建API请求
+    let api_request: ApiRequest<AddSheetResponse> =
+        ApiRequest::post(&api_endpoint.to_url())
+            .body(serialize_params(&params, "添加工作表")?);
+
+    // 发送请求并提取响应数据
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "添加工作表")
+}
+
+/// 获取工作表信息
+///
+/// 根据 spreadsheetToken 和 sheet_id 获取工作表的详细信息。
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet/get-sheet
+pub async fn get_sheet(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: GetSheetParams,
+) -> SDKResult<GetSheetResponse> {
+    // 验证必填字段
+    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
+    validate_required_field("工作表ID", Some(&params.sheet_id), "工作表ID不能为空")?;
+
+    // 使用enum+builder系统生成API端点
+    let api_endpoint = CcmSheetApiOld::GetSheet(spreadsheet_token.to_string());
+
+    // 创建API请求
+    let api_request: ApiRequest<GetSheetResponse> =
+        ApiRequest::post(&api_endpoint.to_url())
+            .body(serialize_params(&params, "获取工作表信息")?);
+
+    // 发送请求并提取响应数据
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "获取工作表信息")
+}
+
+/// 更新工作表
+///
+/// 根据 spreadsheetToken 和 sheet_id 更新工作表的基本信息，如标题或位置。
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet/update-sheet
+pub async fn update_sheet(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: UpdateSheetParams,
+) -> SDKResult<UpdateSheetResponse> {
+    // 验证必填字段
+    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
+    validate_required_field("工作表ID", Some(&params.sheet_id), "工作表ID不能为空")?;
+
+    // 使用enum+builder系统生成API端点
+    let api_endpoint = CcmSheetApiOld::UpdateSheet(spreadsheet_token.to_string());
+
+    // 创建API请求
+    let api_request: ApiRequest<UpdateSheetResponse> =
+        ApiRequest::post(&api_endpoint.to_url())
+            .body(serialize_params(&params, "更新工作表")?);
+
+    // 发送请求并提取响应数据
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "更新工作表")
+}
+
+/// 删除工作表
+///
+/// 根据 spreadsheetToken 和 sheet_id 删除指定的工作表。
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet/delete-sheet
+pub async fn delete_sheet(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: DeleteSheetParams,
+) -> SDKResult<DeleteSheetResponse> {
+    // 验证必填字段
+    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
+    validate_required_field("工作表ID", Some(&params.sheet_id), "工作表ID不能为空")?;
+
+    // 使用enum+builder系统生成API端点
+    let api_endpoint = CcmSheetApiOld::DeleteSheet(spreadsheet_token.to_string());
+
+    // 创建API请求
+    let api_request: ApiRequest<DeleteSheetResponse> =
+        ApiRequest::post(&api_endpoint.to_url())
+            .body(serialize_params(&params, "删除工作表")?);
+
+    // 发送请求并提取响应数据
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "删除工作表")
+}
+
+// API函数已经在模块中定义，不需要重复导出
+
+// 模型已在同一个模块中定义，不需要重新导出
