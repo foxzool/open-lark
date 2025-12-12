@@ -178,3 +178,7 @@ impl BatchReadRangesRequest {
     }
 
     /// 构建查询参数
+    pub fn build(&self) -> Self {
+        self.clone()
+    }
+}

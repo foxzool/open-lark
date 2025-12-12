@@ -180,6 +180,18 @@ impl<R> ApiRequest<R> {
         self
     }
 
+    /// 添加可选查询参数，如果值为None则跳过
+    pub fn query_opt<K, V>(mut self, key: K, value: Option<V>) -> Self
+    where
+        K: Into<String>,
+        V: Into<String>,
+    {
+        if let Some(v) = value {
+            self.query.insert(key.into(), v.into());
+        }
+        self
+    }
+
     pub fn body(mut self, body: impl Into<RequestData>) -> Self {
         self.body = Some(body.into());
         self

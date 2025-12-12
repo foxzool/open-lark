@@ -582,7 +582,7 @@ impl StyleOperationsService {
         &self,
         spreadsheet_token: impl Into<String>,
     ) -> BatchUpdateStylesBuilder {
-        BatchUpdateStylesBuilder::new(self.config.clone() spreadsheet_token.into())
+        BatchUpdateStylesBuilder::new(self.config.clone(), spreadsheet_token.into())
     }
 }
 

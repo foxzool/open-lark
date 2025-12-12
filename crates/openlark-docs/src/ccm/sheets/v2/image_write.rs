@@ -1445,7 +1445,7 @@ impl ImageWriteService {
                 spreadsheet_token: spreadsheet_token.to_string(),
                 sheet_id: "updated".to_string(),
                 image_id: image_id.to_string(),
-                position: position.clone()
+                position: position.clone(),
                 actual_size: size.unwrap_or_default(),
                 image_url: "https://example.com/updated.png".to_string(),
                 revision: 1,
@@ -1797,7 +1797,7 @@ mod builder_tests {
         assert!(result.is_err());
         assert!(result
             .unwrap_err()
-            .to_string()
+            .to_string(),
             .contains("电子表格令牌不能为空"));
     }
 

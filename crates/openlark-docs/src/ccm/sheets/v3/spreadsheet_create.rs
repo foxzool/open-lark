@@ -317,6 +317,7 @@ pub struct CreateSpreadsheetResponseBody {
 // 使用openlark_core::api::Response，避免重复定义
 
 /// 电子表格创建服务
+#[derive(Clone)]
 pub struct SpreadsheetCreateService {
     config: Config,
 }

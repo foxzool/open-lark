@@ -390,7 +390,7 @@ impl MergeCellsService {
         range: impl Into<String>,
     ) -> MergeCellsBuilder {
         MergeCellsBuilder::new(
-            self.config.clone()
+            self.config.clone(),
             spreadsheet_token.into(),
             sheet_id.into(),
             range.into(),
@@ -567,7 +567,7 @@ mod tests {
     fn test_merge_cells_builder() {
         let config = openlark_core::config::Config::default();
         let builder = MergeCellsBuilder::new(
-            config.clone()
+            config.clone(),
             "test_token".to_string(),
             "sheet1".to_string(),
             "A1:B2".to_string(),
@@ -633,7 +633,7 @@ mod tests {
         let config = openlark_core::config::Config::default();
 
         let all_merge_builder = MergeCellsBuilder::new(
-            config.clone()
+            config.clone(),
             "token".to_string(),
             "sheet".to_string(),
             "A1:A1".to_string(),
@@ -642,7 +642,7 @@ mod tests {
         assert_eq!(all_merge_builder.merge_type, MergeType::MergeAll);
 
         let rows_merge_builder = MergeCellsBuilder::new(
-            config.clone()
+            config.clone(),
             "token".to_string(),
             "sheet".to_string(),
             "A1:A1".to_string(),

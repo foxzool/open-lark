@@ -5,6 +5,7 @@
 pub mod api_endpoints;
 pub mod api_paths;
 pub mod builders;
+pub mod api_utils;
 
 // 重新导出API端点枚举
 pub use api_endpoints::{BaseApiV2, BitableApiV1, MinutesApiV1};

@@ -57,13 +57,13 @@ use openlark_core::trait_system::Service;
 ///         "2025-01-08".to_string(),
 ///         "产品A".to_string(),
 ///         "100".to_string(),
-///         "客户001".to_string()
+///         "客户001".to_string(),
 ///     ])
 ///     .add_row(vec![
 ///         "2025-01-08".to_string(),
 ///         "产品B".to_string(),
 ///         "200".to_string(),
-///         "客户002".to_string()
+///         "客户002".to_string(),
 ///     ])
 ///     ?;
 ///
@@ -75,7 +75,7 @@ use openlark_core::trait_system::Service;
 ///     .range("日志!A2:B1000".to_string())
 ///     .add_row(vec![
 ///         chrono::Utc::now().format("%Y-%m-%d %H:%M:%S").to_string(),
-///         "系统启动完成".to_string()
+///         "系统启动完成".to_string(),
 ///     ])
 ///     ?;
 ///
@@ -422,7 +422,7 @@ impl ValuesAppendService {
     ///         "2025-01-08".to_string(),
     ///         "张三".to_string(),
     ///         "技术部".to_string(),
-    ///         "10000".to_string()
+    ///         "10000".to_string(),
     ///     ])
     ///     ?;
     ///
@@ -476,7 +476,7 @@ impl ValuesAppendService {
 
         if let Some(err) = &base_resp.error {
             return Err(openlark_core::error::LarkAPIError::LarkAPIError(
-                err.clone()
+                err.clone(),
             ));
         }
 

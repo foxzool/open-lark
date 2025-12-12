@@ -875,3 +875,30 @@ impl CommentService {
         );
 
         // 构建查询参数
+        let mut query_params = std::collections::HashMap::new();
+
+        if let Some(page_size) = request.page_size {
+            query_params.insert("page_size", page_size.to_string());
+        }
+
+        if let Some(page_token) = &request.page_token {
+            query_params.insert("page_token", page_token.clone());
+        }
+
+        if let Some(ref status) = request.status {
+            query_params.insert("status", format!("{:?}", status));
+        }
+
+        let mut api_request = ApiRequest::get(&endpoint);
+
+        for (key, value) in query_params {
+            api_request = api_request.query_param(&key, &value);
+        }
+
+        let response = Transport::request(api_request, &self.config, None).await?;
+
+        response.data.ok_or_else(|| {
+            LarkAPIError::business_error("响应数据为空".to_string(), None)
+        })
+    }
+}

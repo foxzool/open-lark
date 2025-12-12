@@ -817,7 +817,7 @@ mod tests {
         data.insert("年龄".to_string(), vec![json!(25), json!(30)]);
 
         // 测试包含表头
-        let values = ValuesSingleWriteService::hashmap_to_values(data.clone() true).unwrap();
+        let values = ValuesSingleWriteService::hashmap_to_values(data.clone(), true).unwrap();
         assert_eq!(values.len(), 3);
         assert_eq!(values[0][0], json!("姓名"));
         assert_eq!(values[0][1], json!("年龄"));

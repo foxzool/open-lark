@@ -217,21 +217,12 @@ impl GetSpreadsheetMetaRequest {
         Ok(())
     }
 
-    /// 构建查询参数
-                }
-            }
-        }
-
-        // 发送请求
-        Transport::<SpreadsheetMetaInfo>::request(api_req, &self.config, None).await
-    }
-
     /// 创建表格元数据获取构建器
     pub fn get_spreadsheet_meta_builder(
         &self,
         spreadsheet_token: impl Into<String>,
     ) -> SpreadsheetMetaBuilder {
-        SpreadsheetMetaBuilder::new(self.clone() spreadsheet_token)
+        SpreadsheetMetaBuilder::new(self.clone(), spreadsheet_token)
     }
 
     /// 快速获取表格基本信息
@@ -368,3 +359,7 @@ mod tests {
     }
 
     #[test]
+    fn test_empty() {
+        // 空测试
+    }
+}

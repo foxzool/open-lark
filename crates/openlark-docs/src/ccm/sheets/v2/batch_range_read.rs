@@ -260,21 +260,12 @@ impl BatchRangeReadRequest {
         Ok(())
     }
 
-    /// 构建查询参数
-                }
-            }
-        }
-
-        // 发送请求
-        Transport::<BatchRangeReadResponse>::request(api_req, &self.config, None).await
-    }
-
     /// 创建多个范围读取构建器
     pub fn read_ranges_builder(
         &self,
         spreadsheet_token: impl Into<String>,
     ) -> BatchRangeReadBuilder {
-        BatchRangeReadBuilder::new(self.clone() spreadsheet_token)
+        BatchRangeReadBuilder::new(self.clone(), spreadsheet_token)
     }
 
     /// 快速批量读取范围数据（使用默认选项）
@@ -417,3 +408,8 @@ mod tests {
     }
 
     #[test]
+  #[test]
+    fn test_empty() {
+        // 空测试
+    }
+}
