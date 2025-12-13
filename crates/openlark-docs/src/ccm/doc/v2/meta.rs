@@ -1,10 +1,10 @@
-//! 文档元信息服务 - 修复版本
-//!
-//! 提供获取文档元信息的功能，包括文档标题、创建时间、
-//! 更新时间、作者等信息。
+/// 文档元信息服务 - 修复版本
+///
+/// 提供获取文档元信息的功能，包括文档标题、创建时间、
+/// 更新时间、作者等信息。
 
 use crate::prelude::*;
-use openlark_core::{api::ApiRequest, constants::AccessTokenType, http::Transport, SDKResult};
+use openlark_core::{api::{ApiRequest, HttpMethod}, constants::AccessTokenType, http::Transport, SDKResult};
 
 use super::{requests::GetDocMetaV2Request, responses::GetDocMetaV2Response};
 
@@ -40,7 +40,7 @@ impl MetaDocService {
         }
 
         let api_req = ApiRequest {
-            method: openlark_core::api::Get,
+            method: HttpMethod::Get,
             url: endpoint,
             headers: std::collections::HashMap::new(),
             query,

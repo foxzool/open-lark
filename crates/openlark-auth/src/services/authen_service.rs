@@ -2,8 +2,8 @@
 //!
 //! 提供用户身份认证功能，包括用户信息获取、访问令牌管理等。
 
-use openlark_core::config::Config;
 use crate::api::authen::v1::AuthenServiceV1;
+use openlark_core::config::Config;
 
 /// 用户认证服务
 ///

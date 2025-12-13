@@ -1,5 +1,4 @@
-//! Wiki V2 空间管理模块
-
+/// Wiki V2 空间管理模块
 pub mod create;
 pub mod get;
 pub mod get_node;

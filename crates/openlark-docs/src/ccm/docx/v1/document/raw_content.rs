@@ -1,7 +1,7 @@
-//! 获取文档纯文本内容
-//!
-//! 获取文档的纯文本内容。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/raw_content
+/// 获取文档纯文本内容
+///
+/// 获取文档的纯文本内容。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/raw_content
 
 use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{

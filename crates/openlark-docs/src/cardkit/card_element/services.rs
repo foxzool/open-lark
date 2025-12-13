@@ -1,10 +1,10 @@
-//! Card Element API 服务实现
-//!
-//! 提供卡片组件管理相关的API服务，包括：
-//! - 卡片组件的创建、更新、删除
-//! - 组件属性的局部更新
-//! - 流式文本更新
-//! - 完整的错误处理和参数验证
+/// Card Element API 服务实现
+///
+/// 提供卡片组件管理相关的API服务，包括：
+/// - 卡片组件的创建、更新、删除
+/// - 组件属性的局部更新
+/// - 流式文本更新
+/// - 完整的错误处理和参数验证
 use std::collections::HashMap;
 
 use openlark_core::{
@@ -13,6 +13,8 @@ use openlark_core::{
 };
 
 use super::models::*;
+
+use serde_json::json;
 
 /// 卡片组件管理服务
 #[derive(Debug, Clone)]
@@ -42,7 +44,7 @@ impl CardElementService {
         // 验证请求参数
         request
             .validate()
-            .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
+            .map_err(|e| validation_error("format!("请求参数验证失败: {}", e)))?;
 
         log::info!(
             "创建卡片组件: card_id={}, element_type={:?}",
@@ -105,7 +107,7 @@ impl CardElementService {
         // 验证请求参数
         request
             .validate()
-            .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
+            .map_err(|e| validation_error("format!("请求参数验证失败: {}", e)))?;
 
         log::info!(
             "更新卡片组件: card_id={}, element_id={}",
@@ -168,7 +170,7 @@ impl CardElementService {
         // 验证请求参数
         request
             .validate()
-            .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
+            .map_err(|e| validation_error("format!("请求参数验证失败: {}", e)))?;
 
         log::info!(
             "局部更新卡片组件: card_id={}, element_id={}",
@@ -225,7 +227,7 @@ impl CardElementService {
         // 验证请求参数
         request
             .validate()
-            .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
+            .map_err(|e| validation_error("format!("请求参数验证失败: {}", e)))?;
 
         log::info!(
             "更新组件内容: card_id={}, element_id={}, append={:?}, stream={:?}",
@@ -292,7 +294,7 @@ impl CardElementService {
         // 验证请求参数
         request
             .validate()
-            .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
+            .map_err(|e| validation_error("format!("请求参数验证失败: {}", e)))?;
 
         log::info!(
             "删除卡片组件: card_id={}, element_id={}",

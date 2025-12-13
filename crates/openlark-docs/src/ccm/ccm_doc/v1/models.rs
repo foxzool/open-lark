@@ -1,5 +1,4 @@
-//! CCM Doc V1 数据模型
-
+/// CCM Doc V1 数据模型
 use serde::{Deserialize, Serialize};
 
 /// 创建旧版文档请求参数
@@ -60,14 +59,14 @@ pub struct DocumentMeta {
     #[serde(rename = "update_time")]
     pub update_time: i64,
     /// 创建者信息
-    pub creator: Option<UserInfo>,
+    pub creator: Option<User>,
     /// 更新者信息
-    pub updater: Option<UserInfo>,
+    pub updater: Option<User>,
 }
 
 /// 用户信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UserInfo {
+pub struct User {
     /// 用户ID
     #[serde(rename = "open_id")]
     pub open_id: String,
@@ -133,66 +132,7 @@ pub struct DocumentContent {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchUpdateParams {
     /// 更新操作列表
-    pub operations: Vec<DocumentOperation>,
-}
-
-/// 文档操作
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(tag = "operation_type")]
-pub enum DocumentOperation {
-    /// 插入文本
-    #[serde(rename = "insert")]
-    Insert {
-        /// 插入位置
-        #[serde(rename = "location")]
-        location: Location,
-        /// 插入内容
-        text: String,
-    },
-    /// 删除内容
-    #[serde(rename = "delete")]
-    Delete {
-        /// 删除范围
-        #[serde(rename = "range")]
-        range: Range,
-    },
-    /// 替换内容
-    #[serde(rename = "replace")]
-    Replace {
-        /// 替换范围
-        #[serde(rename = "range")]
-        range: Range,
-        /// 新内容
-        text: String,
-    },
-    /// 更新标题
-    #[serde(rename = "update_title")]
-    UpdateTitle {
-        /// 新标题
-        title: String,
-    },
-}
-
-/// 位置信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Location {
-    /// 段落索引
-    #[serde(rename = "segment_id")]
-    pub segment_id: i32,
-    /// 字符偏移量
-    #[serde(rename = "offset")]
-    pub offset: i32,
-}
-
-/// 范围信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Range {
-    /// 起始位置
-    #[serde(rename = "start")]
-    pub start: Location,
-    /// 结束位置
-    #[serde(rename = "end")]
-    pub end: Location,
+    pub operations: Vec<super::requests::DocumentOperation>,
 }
 
 /// 批量更新文档响应

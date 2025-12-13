@@ -270,6 +270,49 @@ impl<R> ApiRequest<R> {
         // 默认返回空，因为新结构不直接支持文件上传
         vec![]
     }
+
+    /// 应用请求选项（兼容方法）
+    pub fn request_option(mut self, option: crate::req_option::RequestOption) -> Self {
+        // 将 RequestOption 的头部信息添加到请求中
+        for (key, value) in option.header {
+            self = self.header(key, value);
+        }
+        self
+    }
+
+    /// 设置查询参数（兼容方法）
+    pub fn query_param<K, V>(mut self, key: K, value: V) -> Self
+    where
+        K: Into<String>,
+        V: Into<String>,
+    {
+        self.query.insert(key.into(), value.into());
+        self
+    }
+
+    /// 设置多个查询参数（兼容方法）
+    pub fn query_params<I, K, V>(mut self, params: I) -> Self
+    where
+        I: IntoIterator<Item = (K, V)>,
+        K: Into<String>,
+        V: Into<String>,
+    {
+        for (key, value) in params {
+            self.query.insert(key.into(), value.into());
+        }
+        self
+    }
+
+    /// 发送请求（兼容方法，需要 Transport）
+    pub async fn send<T>(self) -> crate::error::SDKResult<crate::api::Response<T>>
+    where
+        T: serde::de::DeserializeOwned,
+    {
+        // 这个方法只是占位符，实际的发送逻辑在 Transport 中
+        Err(crate::error::configuration_error(
+            "send() method not supported directly on ApiRequest. Use Transport::request() instead."
+        ))
+    }
 }
 
 // 类型别名，保持兼容性

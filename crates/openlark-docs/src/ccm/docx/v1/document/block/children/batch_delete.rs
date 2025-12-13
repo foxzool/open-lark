@@ -1,7 +1,7 @@
-//! 删除块
-//!
-//! 指定需要操作的块，删除其指定范围的子块。如果操作成功，接口将返回应用删除操作后的文档版本号。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/batch_delete
+/// 删除块
+///
+/// 指定需要操作的块，删除其指定范围的子块。如果操作成功，接口将返回应用删除操作后的文档版本号。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/batch_delete
 
 use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{

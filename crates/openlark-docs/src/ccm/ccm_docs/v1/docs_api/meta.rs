@@ -1,7 +1,7 @@
-//! 获取元数据
-//!
-//! 根据 token 获取各类文件的元数据。
-//! docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/obtain-metadata
+/// 获取元数据
+///
+/// 根据 token 获取各类文件的元数据。
+/// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/obtain-metadata
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -12,6 +12,8 @@ use openlark_core::{
 
 use crate::common::{api_endpoints::CcmDocsApiOld, api_utils::*};
 use super::super::models::*;
+use super::super::requests::MetaDataRequest;
+use super::super::responses::MetaData;
 
 impl ApiResponseTrait for GetMetaResponse {
     fn data_format() -> ResponseFormat {
@@ -24,16 +26,23 @@ impl ApiResponseTrait for GetMetaResponse {
 /// 根据 token 获取各类文件的元数据。
 /// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/obtain-metadata
 pub async fn get_meta(
+    request: MetaDataRequest,
     config: &Config,
-    params: GetMetaParams,
+    option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<GetMetaResponse> {
     // 验证必填字段
-    if params.obj_tokens.is_empty() {
+    if request.obj_tokens.is_empty() {
         return Err(openlark_core::error::CoreError::validation(
             "obj_tokens",
             "文档token列表不能为空"
         ));
     }
+
+    // 转换为参数
+    let params = GetMetaParams {
+        obj_tokens: request.obj_tokens,
+        return_type: request.return_type,
+    };
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmDocsApiOld::Meta;
@@ -44,6 +53,6 @@ pub async fn get_meta(
             .body(serialize_params(&params, "获取元数据")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, option).await?;
     extract_response_data(response, "获取元数据")
 }

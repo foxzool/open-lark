@@ -1,4 +1,4 @@
-//! Bitable 创建字段API
+/// Bitable 创建字段API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/field/create
 use openlark_core::{

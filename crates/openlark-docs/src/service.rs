@@ -1,5 +1,4 @@
-//! 文档服务主模块
-
+/// 文档服务主模块
 use crate::error::{DocsError, DocsResult};
 use std::sync::Arc;
 

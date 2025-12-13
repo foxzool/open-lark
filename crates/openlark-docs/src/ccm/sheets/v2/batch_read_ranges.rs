@@ -1,25 +1,24 @@
-//! Sheets v2 批量范围读取服务
-//!
-//! 提供飞书电子表格v2版本的批量范围读取功能，包括：
-//! - 一次性读取多个单元格范围
-//! - 支持Excel风格的范围格式（如 Sheet1!A1:B10）
-//! - 高效的批量数据获取，减少网络请求次数
-//! - 企业级错误处理和数据验证
-//! - 支持数值格式、日期渲染等选项
-
-use serde_json::Value;
 use openlark_core::{
     api::ApiRequest,
-    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::{ApiResponseTrait, BaseResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints_original::Endpoints,
-    error::LarkAPIError,
+    error::{validation_error, LarkAPIError},
     http::Transport,
     req_option::RequestOption,
     standard_response::Response,
     SDKResult,
 };
+/// Sheets v2 批量范围读取服务
+///
+/// 提供飞书电子表格v2版本的批量范围读取功能，包括：
+/// - 一次性读取多个单元格范围
+/// - 支持Excel风格的范围格式（如 Sheet1!A1:B10）
+/// - 高效的批量数据获取，减少网络请求次数
+/// - 企业级错误处理和数据验证
+/// - 支持数值格式、日期渲染等选项
+use serde_json::Value;
 
 use serde::{Deserialize, Serialize};
 
@@ -94,7 +93,6 @@ impl BatchReadRangesRequest {
     pub fn new(spreadsheet_token: impl Into<String>) -> Self {
         Self {
             spreadsheet_token: spreadsheet_token.into(),
-            
         }
     }
 
@@ -132,31 +130,25 @@ impl BatchReadRangesRequest {
     pub fn validate(&self) -> SDKResult<()> {
         // 验证电子表格token
         if self.spreadsheet_token.trim().is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
-                "电子表格token不能为空".to_string(),
-            ));
+            return Err(validation_error("spreadsheet_token", "电子表格token不能为空"));
         }
 
         // 验证范围列表
         if self.ranges.is_empty() {
-            return Err(LarkAPIError::InvalidParameter(
-                "至少需要指定一个读取范围".to_string(),
-            ));
+            return Err(validation_error("ranges", "至少需要指定一个读取范围"));
         }
 
         if self.ranges.len() > 10 {
-            return Err(LarkAPIError::InvalidParameter(
-                "一次最多只能读取10个范围".to_string(),
-            ));
+            return Err(validation_error("ranges", "一次最多只能读取10个范围"));
         }
 
         // 验证每个范围格式
         for (index, range) in self.ranges.iter().enumerate() {
             if range.trim().is_empty() {
-                return Err(LarkAPIError::InvalidParameter(format!(
-                    "范围{}不能为空",
-                    index + 1
-                )));
+                return Err(validation_error(
+                    &format!("range_{}", index + 1),
+                    &format!("范围{}不能为空", index + 1)
+                ));
             }
 
             // 基本的范围格式验证（A1:B10格式或命名范围）
@@ -167,10 +159,10 @@ impl BatchReadRangesRequest {
                     .next()
                     .is_some()
             {
-                return Err(LarkAPIError::InvalidParameter(format!(
-                    "范围{}格式不正确，应为SheetName!A1:B10格式或命名范围",
-                    index + 1
-                )));
+                return Err(validation_error(
+                    &format!("range_{}", index + 1),
+                    &format!("范围{}格式不正确，应为SheetName!A1:B10格式或命名范围", index + 1)
+                ));
             }
         }
 

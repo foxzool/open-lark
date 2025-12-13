@@ -1,17 +1,12 @@
 //! 获取登录预授权码 API
+use crate::models::oauth::*;
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/authentication-management/login-state-management/obtain-code
 ///
 /// 应用请求用户身份验证时，需构造登录链接，并引导用户跳转至此链接。
 /// 用户登录成功后会生成登录预授权码 code，并作为参数追加到重定向URL。
-
-use openlark_core::{
-    config::Config,
-    validate_required,
-    SDKResult,
-};
+use openlark_core::{config::Config, validate_required, SDKResult};
 use serde::{Deserialize, Serialize};
-use crate::models::oauth::*;
 
 /// 授权码请求构建器
 pub struct AuthorizationBuilder {
@@ -111,7 +106,10 @@ impl AuthorizationBuilder {
             url.push_str(&format!("&state={}", urlencoding::encode(state)));
         }
 
-        url.push_str(&format!("&response_type={}", self.response_type.unwrap_or_default()));
+        url.push_str(&format!(
+            "&response_type={}",
+            self.response_type.unwrap_or_default()
+        ));
 
         // OAuth授权是重定向流程，返回构建的URL
         Ok(AuthorizationCodeResponseData {
@@ -146,7 +144,10 @@ impl AuthorizationBuilder {
             url.push_str(&format!("&state={}", urlencoding::encode(state)));
         }
 
-        url.push_str(&format!("&response_type={}", self.response_type.unwrap_or_default()));
+        url.push_str(&format!(
+            "&response_type={}",
+            self.response_type.unwrap_or_default()
+        ));
         url
     }
 

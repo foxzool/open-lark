@@ -2,9 +2,7 @@
 //!
 //! 提供统一的错误处理函数，减少重复代码，提高维护性
 
-use openlark_core::{
-    error::{CoreError, ErrorCode, ErrorContext},
-};
+use openlark_core::error::{CoreError, ErrorCode, ErrorContext};
 
 /// 创建认证错误，自动添加请求上下文并提供用户友好的错误消息
 pub fn create_auth_error(

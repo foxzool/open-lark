@@ -1,10 +1,9 @@
-//! App Dashboard API v1
-//!
-//! 提供飞书多维表格仪表盘的完整管理功能，包括：
-//! - 列出仪表盘列表
-//! - 复制仪表盘
-//! - 仪表盘权限管理
-
+/// App Dashboard API v1
+///
+/// 提供飞书多维表格仪表盘的完整管理功能，包括：
+/// - 列出仪表盘列表
+/// - 复制仪表盘
+/// - 仪表盘权限管理
 use serde::{Deserialize, Serialize};
 
 pub mod copy;

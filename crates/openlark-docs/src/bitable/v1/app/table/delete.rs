@@ -1,4 +1,4 @@
-//! Bitable 删除数据表API
+/// Bitable 删除数据表API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/delete
 use openlark_core::{

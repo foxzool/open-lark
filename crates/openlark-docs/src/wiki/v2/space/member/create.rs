@@ -1,8 +1,7 @@
-//! 添加知识空间成员
-//!
-//! 为知识空间添加成员。
-//! 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-member/create
-
+/// 添加知识空间成员
+///
+/// 为知识空间添加成员。
+/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-member/create
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

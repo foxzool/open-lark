@@ -1,6 +1,6 @@
-//! VC Report API 数据模型
-//!
-//! 提供视频会议报告相关的数据结构，支持每日报告和用户统计报告等操作。
+/// VC Report API 数据模型
+///
+/// 提供视频会议报告相关的数据结构，支持每日报告和用户统计报告等操作。
 
 use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};

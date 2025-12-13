@@ -1,5 +1,4 @@
-//! Bitable V1 字段管理API模块
-
+/// Bitable V1 字段管理API模块
 pub mod create;
 pub mod delete;
 pub mod list;

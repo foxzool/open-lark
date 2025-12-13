@@ -1,8 +1,7 @@
-//! Base V2 角色管理数据模型
-//!
-//! 定义了 Base V2 版本角色管理相关的数据结构，
-//! 包括角色信息、请求和响应模型。
-
+/// Base V2 角色管理数据模型
+///
+/// 定义了 Base V2 版本角色管理相关的数据结构，
+/// 包括角色信息、请求和响应模型。
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 

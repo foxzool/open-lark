@@ -1,9 +1,9 @@
-//! 文档创建服务 - 简化版本
-//!
-//! 提供创建文档的基本功能
+/// 文档创建服务 - 简化版本
+///
+/// 提供创建文档的基本功能
 
 use crate::prelude::*;
-use openlark_core::{api::ApiRequest, http::Transport, SDKResult};
+use openlark_core::{api::{ApiRequest, HttpMethod}, error::validation_error, http::Transport, SDKResult};
 
 use super::{requests::CreateDocV2Request, responses::CreateDocV2Response};
 
@@ -21,14 +21,14 @@ impl CreateDocService {
     /// 创建文档
     pub async fn create(&self, req: &CreateDocV2Request) -> SDKResult<CreateDocV2Response> {
         req.validate()
-            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+            .map_err(|msg| validation_error("parameter", msg))?;
 
         log::debug!("开始创建文档: title={:?}", req.title);
 
         let endpoint = "/open-apis/doc/v2/create".to_string();
 
         let api_req = ApiRequest {
-            method: openlark_core::api::Post,
+            method: HttpMethod::Post,
             url: endpoint,
             headers: std::collections::HashMap::new(),
             query: std::collections::HashMap::new(),
@@ -88,7 +88,7 @@ impl CreateDocBuilder {
     pub fn build(self) -> SDKResult<CreateDocV2Request> {
         self.request
             .validate()
-            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+            .map_err(|msg| validation_error("parameter", msg))?;
         Ok(self.request)
     }
 }

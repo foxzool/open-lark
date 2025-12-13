@@ -1,8 +1,7 @@
-//! 复制知识空间节点
-//!
-//! 复制知识空间中的节点。
-//! 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-nodes/copy
-
+/// 复制知识空间节点
+///
+/// 复制知识空间中的节点。
+/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-nodes/copy
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

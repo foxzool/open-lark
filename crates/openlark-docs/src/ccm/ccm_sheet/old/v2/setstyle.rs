@@ -1,8 +1,7 @@
-//! 设置单元格样式
-//!
-//! 根据 spreadsheetToken 和 styleRequest 设置指定单元格范围的样式。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/cells-format/set-style
-
+/// 设置单元格样式
+///
+/// 根据 spreadsheetToken 和 styleRequest 设置指定单元格范围的样式。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/cells-format/set-style
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -173,10 +172,7 @@ impl SetStyleRequest {
     /// 执行请求
     ///
     /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/cells-format/set-style
-    pub async fn execute(
-        self,
-        params: SetStyleParams,
-    ) -> SDKResult<SetStyleResponse> {
+    pub async fn execute(self, params: SetStyleParams) -> SDKResult<SetStyleResponse> {
         // 验证必填字段
         validate_required!(params.spreadsheet_token, "电子表格token不能为空");
 
@@ -184,14 +180,15 @@ impl SetStyleRequest {
         let api_endpoint = CcmSheetApiOld::Style(params.spreadsheet_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<SetStyleResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serde_json::to_value(params).map_err(|e| {
-                    openlark_core::error::validation_error(
-                        "参数序列化失败",
-                        &format!("无法序列化请求参数: {}", e)
-                    )
-                })?);
+        let mut api_request: ApiRequest<SetStyleResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_value(params).map_err(|e| {
+            openlark_core::error::validation_error(
+                "参数序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

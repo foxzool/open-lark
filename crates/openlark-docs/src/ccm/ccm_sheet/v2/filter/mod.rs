@@ -1,11 +1,10 @@
-//! CCM Sheet V2 筛选API 模块
-//!
-//! 筛选功能API实现，包含筛选的增删改查：
-//! - create_filter: 创建筛选
-//! - get_filter: 获取筛选
-//! - update_filter: 更新筛选
-//! - delete_filter: 删除筛选
-
+/// CCM Sheet V2 筛选API 模块
+///
+/// 筛选功能API实现，包含筛选的增删改查：
+/// - create_filter: 创建筛选
+/// - get_filter: 获取筛选
+/// - update_filter: 更新筛选
+/// - delete_filter: 删除筛选
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -79,8 +78,7 @@ pub async fn create_filter(
 
     // 创建API请求
     let api_request: ApiRequest<CreateFilterResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "创建筛选")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建筛选")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -105,8 +103,7 @@ pub async fn get_filter(
 
     // 创建API请求
     let api_request: ApiRequest<GetFilterResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "获取筛选")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "获取筛选")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -131,8 +128,7 @@ pub async fn update_filter(
 
     // 创建API请求
     let api_request: ApiRequest<UpdateFilterResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "更新筛选")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "更新筛选")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -157,8 +153,7 @@ pub async fn delete_filter(
 
     // 创建API请求
     let api_request: ApiRequest<DeleteFilterResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "删除筛选")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "删除筛选")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;

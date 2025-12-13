@@ -1,4 +1,4 @@
-//! Base 创建自定义角色API
+/// Base 创建自定义角色API
 ///
 /// API文档: https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/create-2
 use openlark_core::{
@@ -10,6 +10,8 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 use super::{models::RoleResponse as Role, RoleService};
+
+use serde_json::json;
 
 /// 新增自定义角色请求
 pub struct CreateRoleRequest {

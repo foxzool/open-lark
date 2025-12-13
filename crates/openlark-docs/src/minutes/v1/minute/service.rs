@@ -1,7 +1,6 @@
-//! 妙记服务
-//!
-//! 提供妙记信息、音视频、文字记录和统计数据的统一管理接口。
-
+/// 妙记服务
+///
+/// 提供妙记信息、音视频、文字记录和统计数据的统一管理接口。
 use super::{
     GetMinuteMediaRequest, GetMinuteRequest, GetMinuteStatisticsRequest, GetMinuteTranscriptRequest,
 };

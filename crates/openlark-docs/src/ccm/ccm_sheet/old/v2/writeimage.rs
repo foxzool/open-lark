@@ -1,8 +1,7 @@
-//! 写入图片
-//!
-//! 根据 spreadsheetToken 向指定单元格插入图片。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/insert-image
-
+/// 写入图片
+///
+/// 根据 spreadsheetToken 向指定单元格插入图片。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/insert-image
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -92,10 +91,7 @@ impl WriteImageRequest {
     /// 执行请求
     ///
     /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/insert-image
-    pub async fn execute(
-        self,
-        params: WriteImageParams,
-    ) -> SDKResult<WriteImageResponse> {
+    pub async fn execute(self, params: WriteImageParams) -> SDKResult<WriteImageResponse> {
         // 验证必填字段
         validate_required!(params.spreadsheet_token, "电子表格token不能为空");
 
@@ -103,14 +99,15 @@ impl WriteImageRequest {
         let api_endpoint = CcmSheetApiOld::ValuesImage(params.spreadsheet_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<WriteImageResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serde_json::to_value(params).map_err(|e| {
-                    openlark_core::error::validation_error(
-                        "参数序列化失败",
-                        &format!("无法序列化请求参数: {}", e)
-                    )
-                })?);
+        let mut api_request: ApiRequest<WriteImageResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_value(params).map_err(|e| {
+            openlark_core::error::validation_error(
+                "参数序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

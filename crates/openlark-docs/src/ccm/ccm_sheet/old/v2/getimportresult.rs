@@ -1,8 +1,7 @@
-//! 获取导入结果
-//!
-//! 根据任务ID查询电子表格导入的进度和结果。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/import/get_import_result
-
+/// 获取导入结果
+///
+/// 根据任务ID查询电子表格导入的进度和结果。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/import/get_import_result
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -123,14 +122,15 @@ impl GetImportResultRequest {
         let api_endpoint = CcmSheetApiOld::ImportResult;
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<GetImportResultResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serde_json::to_value(params).map_err(|e| {
-                    openlark_core::error::validation_error(
-                        "参数序列化失败",
-                        &format!("无法序列化请求参数: {}", e)
-                    )
-                })?);
+        let mut api_request: ApiRequest<GetImportResultResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_value(params).map_err(|e| {
+            openlark_core::error::validation_error(
+                "参数序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

@@ -1,10 +1,9 @@
-//! CCM Sheet V2 表格基础API 模块
-//!
-//! 表格基础操作API实现，包含表格的增删改查：
-//! - get_spreadsheet: 获取表格信息
-//! - create_spreadsheet: 创建表格
-//! - update_spreadsheet: 更新表格
-
+/// CCM Sheet V2 表格基础API 模块
+///
+/// 表格基础操作API实现，包含表格的增删改查：
+/// - get_spreadsheet: 获取表格信息
+/// - create_spreadsheet: 创建表格
+/// - update_spreadsheet: 更新表格
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -71,8 +70,7 @@ pub async fn get_spreadsheet(
 
     // 创建API请求
     let api_request: ApiRequest<GetSpreadsheetResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "获取表格信息")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "获取表格信息")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -95,8 +93,7 @@ pub async fn create_spreadsheet(
 
     // 创建API请求
     let api_request: ApiRequest<CreateSpreadsheetResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "创建表格")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建表格")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -120,8 +117,7 @@ pub async fn update_spreadsheet(
 
     // 创建API请求
     let api_request: ApiRequest<UpdateSpreadsheetResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "更新表格")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "更新表格")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;

@@ -1,8 +1,7 @@
-//! 操作工作表
-//!
-//! 根据 spreadsheetToken 更新工作表属性。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet/operate-sheets
-
+/// 操作工作表
+///
+/// 根据 spreadsheetToken 更新工作表属性。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet/operate-sheets
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -83,10 +82,7 @@ impl OperateSheetsRequest {
     /// 执行请求
     ///
     /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet/operate-sheets
-    pub async fn execute(
-        self,
-        params: OperateSheetsParams,
-    ) -> SDKResult<OperateSheetsResponse> {
+    pub async fn execute(self, params: OperateSheetsParams) -> SDKResult<OperateSheetsResponse> {
         // 验证必填字段
         validate_required!(params.spreadsheet_token, "电子表格token不能为空");
 
@@ -94,14 +90,15 @@ impl OperateSheetsRequest {
         let api_endpoint = CcmSheetApiOld::OperateSheets(params.spreadsheet_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<OperateSheetsResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serde_json::to_value(params).map_err(|e| {
-                    openlark_core::error::validation_error(
-                        "参数序列化失败",
-                        &format!("无法序列化请求参数: {}", e)
-                    )
-                })?);
+        let mut api_request: ApiRequest<OperateSheetsResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_value(params).map_err(|e| {
+            openlark_core::error::validation_error(
+                "参数序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

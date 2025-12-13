@@ -1,7 +1,7 @@
-//! 获取块的内容
-//!
-//! 指定块的 block id 获取指定块的富文本内容数据。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/get
+/// 获取块的内容
+///
+/// 指定块的 block id 获取指定块的富文本内容数据。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/get
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

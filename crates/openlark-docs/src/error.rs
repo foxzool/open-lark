@@ -1,5 +1,4 @@
-//! 文档服务错误处理模块
-
+/// 文档服务错误处理模块
 use openlark_core::prelude::*;
 use thiserror::Error;
 

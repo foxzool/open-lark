@@ -1,10 +1,10 @@
-//! 获取电子表格元数据服务
-//!
-//! 提供获取文档中电子表格元数据的功能，包括工作表信息、
-//! 行列数量等。
+/// 获取电子表格元数据服务
+///
+/// 提供获取文档中电子表格元数据的功能，包括工作表信息、
+/// 行列数量等。
 
 use crate::prelude::*;
-use openlark_core::{api::ApiRequest, constants::AccessTokenType, http::Transport, SDKResult};
+use openlark_core::{api::{ApiRequest, HttpMethod}, constants::AccessTokenType, error::validation_error, http::Transport, SDKResult};
 
 use super::{requests::GetDocSheetMetaV2Request, responses::GetDocSheetMetaV2Response};
 
@@ -66,7 +66,7 @@ impl SheetMetaDocService {
         req: &GetDocSheetMetaV2Request,
     ) -> SDKResult<GetDocSheetMetaV2Response> {
         req.validate()
-            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+            .map_err(|msg| validation_error("parameter", msg))?;
 
         log::debug!("开始获取电子表格元数据: doc_token={}", req.doc_token,
 
@@ -82,7 +82,7 @@ impl SheetMetaDocService {
             query: std::collections::HashMap::new(),
             timeout: None,
             _phantom: std::marker::PhantomData,
-            method: openlark_core::api::Get,
+            method: HttpMethod::Get,
             url: endpoint,
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query,
@@ -191,7 +191,7 @@ impl GetDocSheetMetaBuilder {
         service: &SheetMetaDocService,
     ) -> SDKResult<GetDocSheetMetaV2Response> {
         let doc_token = self.doc_token.ok_or_else(|| {
-            openlark_core::error::LarkAPIError::illegal_param("文档Token是必需的")
+            validation_error("doc_token", "文档Token是必需的")
         })?;
 
         let request = GetDocSheetMetaV2Request {

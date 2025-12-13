@@ -1,8 +1,7 @@
-//! 合并单元格
-//!
-//! 根据 spreadsheetToken 和 mergeRequest 合并指定范围内的单元格。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/cells-format/merge-cells
-
+/// 合并单元格
+///
+/// 根据 spreadsheetToken 和 mergeRequest 合并指定范围内的单元格。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/cells-format/merge-cells
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -107,10 +106,7 @@ impl MergeCellsRequest {
     /// 执行请求
     ///
     /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/cells-format/merge-cells
-    pub async fn execute(
-        self,
-        params: MergeCellsParams,
-    ) -> SDKResult<MergeCellsResponse> {
+    pub async fn execute(self, params: MergeCellsParams) -> SDKResult<MergeCellsResponse> {
         // 验证必填字段
         validate_required!(params.spreadsheet_token, "电子表格token不能为空");
 
@@ -118,14 +114,15 @@ impl MergeCellsRequest {
         let api_endpoint = CcmSheetApiOld::MergeCells(params.spreadsheet_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<MergeCellsResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serde_json::to_value(params).map_err(|e| {
-                    openlark_core::error::validation_error(
-                        "参数序列化失败",
-                        &format!("无法序列化请求参数: {}", e)
-                    )
-                })?);
+        let mut api_request: ApiRequest<MergeCellsResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_value(params).map_err(|e| {
+            openlark_core::error::validation_error(
+                "参数序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

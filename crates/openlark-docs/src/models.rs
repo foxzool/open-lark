@@ -1,8 +1,9 @@
-//! 文档服务通用数据模型
-
+/// 文档服务通用数据模型
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+
+use openlark_core::api::Response;
 
 /// 文档资源基础信息
 #[derive(Debug, Clone, Serialize, Deserialize)]

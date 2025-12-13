@@ -1,5 +1,4 @@
-//! CCM Sheet V2 浮图模型
-
+/// CCM Sheet V2 浮图模型
 use serde::{Deserialize, Serialize};
 
 /// 创建浮图请求参数

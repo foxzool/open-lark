@@ -1,8 +1,7 @@
-//! 写入单个范围
-//!
-//! 根据 spreadsheetToken 和 range 向单个范围写入数据，若范围内有数据，将被更新覆盖；单次写入不超过5000行，100列，每个格子不超过5万字符。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/write-data-to-a-single-range
-
+/// 写入单个范围
+///
+/// 根据 spreadsheetToken 和 range 向单个范围写入数据，若范围内有数据，将被更新覆盖；单次写入不超过5000行，100列，每个格子不超过5万字符。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/write-data-to-a-single-range
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -27,7 +26,10 @@ pub struct WriteSingleRangeParams {
     #[serde(rename = "valueInputOption", skip_serializing_if = "Option::is_none")]
     pub value_input_option: Option<String>,
     /// 是否包含数据验证
-    #[serde(rename = "includeDataValidation", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "includeDataValidation",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub include_data_validation: Option<bool>,
 }
 
@@ -91,17 +93,16 @@ impl WriteSingleRangeRequest {
         let api_endpoint = CcmSheetApiOld::WriteSingleRange(params.spreadsheet_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let api_request: ApiRequest<WriteSingleRangeResponse> =
-            ApiRequest::put(&format!(
-                "/open-apis/sheets/v2/spreadsheets/{}/values/{}",
-                params.spreadsheet_token, params.range
-            ))
-                .body(serde_json::to_value(params).map_err(|e| {
-                    openlark_core::error::validation_error(
-                        "参数序列化失败",
-                        &format!("无法序列化请求参数: {}", e)
-                    )
-                })?);
+        let api_request: ApiRequest<WriteSingleRangeResponse> = ApiRequest::put(&format!(
+            "/open-apis/sheets/v2/spreadsheets/{}/values/{}",
+            params.spreadsheet_token, params.range
+        ))
+        .body(serde_json::to_value(params).map_err(|e| {
+            openlark_core::error::validation_error(
+                "参数序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

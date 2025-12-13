@@ -1,9 +1,9 @@
-//! CCM Drive Permission V2 API 模块
-//!
-//! 文档权限管理API实现，包含3个API：
-//! - member_permitted: 判断协作者是否有某权限
-//! - member_transfer: 转移拥有者
-//! - public: 获取云文档权限设置V2
+/// CCM Drive Permission V2 API 模块
+///
+/// 文档权限管理API实现，包含3个API：
+/// - member_permitted: 判断协作者是否有某权限
+/// - member_transfer: 转移拥有者
+/// - public: 获取云文档权限设置V2
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

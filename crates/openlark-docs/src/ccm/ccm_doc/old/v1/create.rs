@@ -1,9 +1,8 @@
-//! 创建旧版文档
-//!
-//! 创建并初始化文档。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/docs/docs/apiRef/create-document
-//! 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/docs/docs/apiRef/create-document
-
+/// 创建旧版文档
+///
+/// 创建并初始化文档。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docs/apiRef/create-document
+/// 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/docs/docs/apiRef/create-document
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -68,10 +67,7 @@ impl CreateDocumentRequest {
     ///
     /// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docs/apiRef/create-document
     /// 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/docs/docs/apiRef/create-document
-    pub async fn execute(
-        self,
-        params: CreateDocumentParams,
-    ) -> SDKResult<CreateDocumentResponse> {
+    pub async fn execute(self, params: CreateDocumentParams) -> SDKResult<CreateDocumentResponse> {
         // 验证必填字段
         validate_required_field("文档标题", Some(&params.title), "文档标题不能为空")?;
 
@@ -80,8 +76,7 @@ impl CreateDocumentRequest {
 
         // 创建API请求 - 使用类型安全的URL生成和标准化的参数序列化
         let mut api_request: ApiRequest<CreateDocumentResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serialize_params(&params, "创建文档")?);
+            ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建文档")?);
 
         // 发送请求并提取响应数据
         let response = Transport::request(api_request, &self.config, None).await?;

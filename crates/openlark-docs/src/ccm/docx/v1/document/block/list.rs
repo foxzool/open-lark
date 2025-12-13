@@ -1,7 +1,7 @@
-//! 获取文档所有块
-//!
-//! 获取文档所有块的富文本内容并分页返回。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/list
+/// 获取文档所有块
+///
+/// 获取文档所有块的富文本内容并分页返回。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/list
 
 use crate::ccm::docx::common_types::BlockContent;
 use crate::common::api_endpoints::DocxApiV1;

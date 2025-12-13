@@ -1,17 +1,19 @@
-//! 导出任务API服务实现
-//!
-//! 提供文档导出任务相关的API服务，包括：
-//! - 创建导出任务
-//! - 查询导出任务结果
-//! - 下载导出文件
+/// 导出任务API服务实现
+///
+/// 提供文档导出任务相关的API服务，包括：
+/// - 创建导出任务
+/// - 查询导出任务结果
+/// - 下载导出文件
 use std::collections::HashMap;
 
 use openlark_core::{
-    api::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    api::{ApiRequest, HttpMethod}, config::Config, constants::AccessTokenType, error::{validation_error, LarkAPIError},
     http::Transport, SDKResult,
 };
 
 use super::models::*;
+
+use serde_json::json;
 
 /// 导出任务API服务
 #[derive(Debug, Clone)]
@@ -33,7 +35,7 @@ impl ExportTasksService {
         // 验证请求参数
         request
             .validate()
-            .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
+            .map_err(|e| validation_error("request", &format!("请求参数验证失败: {}", e)))?;
 
         log::info!(
             "创建导出任务: file_token={}, file_type={}, export_type={}",
@@ -72,7 +74,7 @@ impl ExportTasksService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            method: openlark_core::api::Post,
+            method: HttpMethod::Post,
             url: "/open-apis/drive/v1/export_tasks".to_string(),
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?,
@@ -102,7 +104,7 @@ impl ExportTasksService {
         // 验证请求参数
         request
             .validate()
-            .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
+            .map_err(|e| validation_error("request", &format!("请求参数验证失败: {}", e)))?;
 
         log::info!("查询导出任务结果: ticket={}", request.ticket);
 

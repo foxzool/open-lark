@@ -1,30 +1,30 @@
-//! Report 报告分析API模块
-//!
-//! 提供报告分析和数据统计相关的功能，包括：
-//! - VC会议报告和用户统计
-//! - 规则管理看板
-//! - 任务查询和分析
-//!
-//! # 示例
-//!
-//! ```rust
-//! use openlark_docs::report::{ReportService, GetDailyReportRequest};
-//!
-//! let service = ReportService::new(config);
-//!
-//! // 获取每日会议报告
-//! let response = service
-//!     .vc_report()
-//!     .get_daily_report_builder()
-//!     .start_date("2024-01-01")
-//!     .end_date("2024-01-31")
-//!     .execute(&service.vc_report())
-//!     .await?;
-//!
-//! if let Some(report_data) = response.data {
-//!     println!("报告数据: {:?}", report_data);
-//! }
-//! ```
+/// Report 报告分析API模块
+///
+/// 提供报告分析和数据统计相关的功能，包括：
+/// - VC会议报告和用户统计
+/// - 规则管理看板
+/// - 任务查询和分析
+///
+/// # 示例
+///
+/// ```rust
+/// use openlark_docs::report::{ReportService, GetDailyReportRequest};
+///
+/// let service = ReportService::new(config);
+///
+/// // 获取每日会议报告
+/// let response = service
+///     .vc_report()
+///     .get_daily_report_builder()
+///     .start_date("2024-01-01")
+///     .end_date("2024-01-31")
+///     .execute(&service.vc_report())
+///     .await?;
+///
+/// if let Some(report_data) = response.data {
+///     println!("报告数据: {:?}", report_data);
+/// }
+/// ```
 
 /// VC会议报告
 pub mod vc_report;

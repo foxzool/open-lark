@@ -1,8 +1,8 @@
-//! 获取元数据
-//!
-//! 根据 token 获取各类文件的元数据。
-//! API文档: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/obtain-metadata
-//! 对应CSV记录: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/obtain-metadata
+/// 获取元数据
+///
+/// 根据 token 获取各类文件的元数据。
+/// API文档: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/obtain-metadata
+/// 对应CSV记录: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/obtain-metadata
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

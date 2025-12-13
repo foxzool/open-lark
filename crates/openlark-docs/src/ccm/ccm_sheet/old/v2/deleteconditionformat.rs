@@ -1,8 +1,7 @@
-//! 批量删除条件格式
-//!
-//! 根据 spreadsheetToken 和条件格式ID列表批量删除条件格式。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/conditional-format/batch_delete_condition_format
-
+/// 批量删除条件格式
+///
+/// 根据 spreadsheetToken 和条件格式ID列表批量删除条件格式。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/conditional-format/batch_delete_condition_format
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -82,17 +81,19 @@ impl DeleteConditionFormatRequest {
         validate_required!(params.condition_format_id_list, "条件格式ID列表不能为空");
 
         // 使用enum+builder系统生成API端点
-        let api_endpoint = CcmSheetApiOld::ConditionFormatsBatchDelete(params.spreadsheet_token.clone());
+        let api_endpoint =
+            CcmSheetApiOld::ConditionFormatsBatchDelete(params.spreadsheet_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<DeleteConditionFormatResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serde_json::to_value(params).map_err(|e| {
-                    openlark_core::error::validation_error(
-                        "参数序列化失败",
-                        &format!("无法序列化请求参数: {}", e)
-                    )
-                })?);
+        let mut api_request: ApiRequest<DeleteConditionFormatResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_value(params).map_err(|e| {
+            openlark_core::error::validation_error(
+                "参数序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

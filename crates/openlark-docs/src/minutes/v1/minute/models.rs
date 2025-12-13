@@ -1,5 +1,4 @@
-//! Minutes API 数据模型
-
+/// Minutes API 数据模型
 use openlark_core::api::ApiResponseTrait;
 use openlark_core::api::ResponseFormat;
 use serde::{Deserialize, Serialize};

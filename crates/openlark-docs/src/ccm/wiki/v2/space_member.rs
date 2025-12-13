@@ -1,9 +1,9 @@
-//! 知识空间成员管理服务
-//!
-//! 提供飞书知识库空间成员的管理功能，包括：
-//! - 删除空间成员
-//! - 成员权限管理
-//! - 成员信息查询
+/// 知识空间成员管理服务
+///
+/// 提供飞书知识库空间成员的管理功能，包括：
+/// - 删除空间成员
+/// - 成员权限管理
+/// - 成员信息查询
 
 use openlark_core::{
     api::{ApiResponseTrait, ResponseFormat},
@@ -148,7 +148,7 @@ impl SpaceMemberService {
         req: &DeleteSpaceMemberRequest,
     ) -> SDKResult<DeleteSpaceMemberResponse> {
         req.validate()
-            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+            .map_err(|msg| openlark_core::error::validation_error("msg))?;
         log::debug!(
             "开始删除知识空间成员: space_id={}, member_id={}",
             req.space_id,
@@ -161,7 +161,7 @@ impl SpaceMemberService {
             .replace("{}", &req.member_id);
 
         let api_req = ApiRequest {
-            method: openlark_core::api::Delete,
+            method: HttpMethod::Delete,
             url: endpoint,
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: None, // DELETE请求无body

@@ -1,15 +1,15 @@
 //! Authen v1 API实现
 
-pub mod oidc;
-pub mod user_info;
 pub mod access_token;
+pub mod oidc;
 pub mod refresh_access_token;
+pub mod user_info;
 
 // 重新导出子模块的构建器和服务
-pub use user_info::{UserInfoBuilder, UserInfoService};
 pub use access_token::UserAccessTokenV1Builder;
-pub use refresh_access_token::RefreshUserAccessTokenV1Builder;
 pub use oidc::{OidcAccessTokenBuilder, OidcRefreshAccessTokenBuilder, OidcService};
+pub use refresh_access_token::RefreshUserAccessTokenV1Builder;
+pub use user_info::{UserInfoBuilder, UserInfoService};
 
 use openlark_core::config::Config;
 

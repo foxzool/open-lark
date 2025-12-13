@@ -1,27 +1,27 @@
-//! Cardkit 卡片组件API模块
-//!
-//! 提供飞书卡片组件相关的功能，包括：
-//! - 卡片实体的创建、更新、配置管理
-//! - 卡片组件的增删改查
-//! - 流式文本更新
-//! - ID类型转换工具
-//!
-//! # 示例
-//!
-//! ```rust
-//! use openlark_docs::cardkit::{CardkitService, CreateCardRequest};
-//!
-//! let service = CardkitService::new(config);
-//!
-//! // 创建卡片
-//! let response = service
-//!     .create_card_builder()
-//!     .card_content(card_content)
-//!     .execute(&service)
-//!     .await?;
-//!
-//! println!("创建的卡片ID: {:?}", response.card_id);
-//! ```
+/// Cardkit 卡片组件API模块
+///
+/// 提供飞书卡片组件相关的功能，包括：
+/// - 卡片实体的创建、更新、配置管理
+/// - 卡片组件的增删改查
+/// - 流式文本更新
+/// - ID类型转换工具
+///
+/// # 示例
+///
+/// ```rust
+/// use openlark_docs::cardkit::{CardkitService, CreateCardRequest};
+///
+/// let service = CardkitService::new(config);
+///
+/// // 创建卡片
+/// let response = service
+///     .create_card_builder()
+///     .card_content(card_content)
+///     .execute(&service)
+///     .await?;
+///
+/// println!("创建的卡片ID: {:?}", response.card_id);
+/// ```
 
 /// 卡片实体管理
 pub mod card;

@@ -1,18 +1,16 @@
 //! OIDC 用户访问令牌获取API
+use crate::models::authen::UserAccessTokenResponse;
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/user-authentication/access-token/oidc_access_token
 ///
 /// 通过 OIDC 授权码获取用户访问令牌
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use crate::models::authen::UserAccessTokenResponse;
 
 /// OIDC 用户访问令牌请求
 pub struct OidcAccessTokenBuilder {
@@ -120,8 +118,8 @@ impl OidcAccessTokenBuilder {
         // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<OidcAccessTokenResponseData> =
             ApiRequest::post(&api_endpoint.to_url())
-            .header("Content-Type", "application/x-www-form-urlencoded")
-            .body(openlark_core::api::RequestData::Form(form_data));
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .body(openlark_core::api::RequestData::Form(form_data));
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

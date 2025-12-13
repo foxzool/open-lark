@@ -1,8 +1,7 @@
-//! 更新知识空间设置
-//!
-//! 根据space_id更新知识空间公共设置。
-//! 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-setting/update
-
+/// 更新知识空间设置
+///
+/// 根据space_id更新知识空间公共设置。
+/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-setting/update
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

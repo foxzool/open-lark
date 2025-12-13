@@ -1,8 +1,7 @@
-//! 批量创建条件格式
-//!
-//! 根据 spreadsheetToken 和 conditionFormatRules 批量创建条件格式。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditional-format/create-condition-formats
-
+/// 批量创建条件格式
+///
+/// 根据 spreadsheetToken 和 conditionFormatRules 批量创建条件格式。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditional-format/create-condition-formats
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -98,7 +97,10 @@ pub struct CreateConditionFormatResult {
     #[serde(rename = "spreadsheetToken")]
     pub spreadsheet_token: String,
     /// 创建的条件格式规则列表
-    #[serde(rename = "conditionFormatRules", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "conditionFormatRules",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub condition_format_rules: Option<Vec<ConditionFormatRuleResult>>,
 }
 
@@ -141,17 +143,19 @@ impl CreateConditionFormatRequest {
         validate_required!(params.spreadsheet_token, "电子表格token不能为空");
 
         // 使用enum+builder系统生成API端点
-        let api_endpoint = CcmSheetApiOld::ConditionFormatsBatchCreate(params.spreadsheet_token.clone());
+        let api_endpoint =
+            CcmSheetApiOld::ConditionFormatsBatchCreate(params.spreadsheet_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<CreateConditionFormatResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serde_json::to_value(params).map_err(|e| {
-                    openlark_core::error::validation_error(
-                        "参数序列化失败",
-                        &format!("无法序列化请求参数: {}", e)
-                    )
-                })?);
+        let mut api_request: ApiRequest<CreateConditionFormatResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_value(params).map_err(|e| {
+            openlark_core::error::validation_error(
+                "参数序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

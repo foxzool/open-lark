@@ -1,6 +1,6 @@
-//! Drive Permission API 数据模型
-//!
-//! 提供权限管理相关的数据结构，支持权限设置、权限验证和所有者转移。
+/// Drive Permission API 数据模型
+///
+/// 提供权限管理相关的数据结构，支持权限设置、权限验证和所有者转移。
 
 use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};

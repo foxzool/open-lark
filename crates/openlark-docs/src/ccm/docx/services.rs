@@ -1,8 +1,8 @@
-//! ccm_docx API 服务实现
-//!
-//! 提供完整的文档(DocX)功能实现，包括：
-//! - ccm_docs: 云文档搜索和元数据 (已实现)
-//! - docx: 新版文档操作、块操作、群公告等 (新增)
+/// ccm_docx API 服务实现
+///
+/// 提供完整的文档(DocX)功能实现，包括：
+/// - ccm_docs: 云文档搜索和元数据 (已实现)
+/// - docx: 新版文档操作、块操作、群公告等 (新增)
 
 use crate::prelude::*;
 use openlark_core::{api::ApiRequest, constants::AccessTokenType, http::Transport, SDKResult};
@@ -85,7 +85,7 @@ impl CcmDocsService {
     /// ```
     pub async fn search_documents(&self, req: &SearchDocsRequest) -> SDKResult<SearchDocsResponse> {
         req.validate()
-            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+            .map_err(|msg| openlark_core::error::validation_error("msg))?;
 
         log::debug!(
             "开始搜索云文档: search_key={}, doc_types={:?}, search_scope={:?}",

@@ -1,8 +1,8 @@
-//! 转移拥有者
-//!
-//! 根据文档信息和用户信息转移文档的所有者。
-//! API文档: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/permission/transfer-ownership
-//! 对应CSV记录: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/permission/transfer-ownership
+/// 转移拥有者
+///
+/// 根据文档信息和用户信息转移文档的所有者。
+/// API文档: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/permission/transfer-ownership
+/// 对应CSV记录: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/permission/transfer-ownership
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

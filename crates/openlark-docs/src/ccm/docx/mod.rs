@@ -1,8 +1,7 @@
-//! ccm/docx模块 - 文档块内容管理
-//!
-//! 按照bizTag/project/version/resource/name.rs模式组织
-//! 包含chat公告和document操作的相关API
-
+/// ccm/docx模块 - 文档块内容管理
+///
+/// 按照bizTag/project/version/resource/name.rs模式组织
+/// 包含chat公告和document操作的相关API
 use openlark_core::config::Config;
 
 /// 公共类型定义

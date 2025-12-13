@@ -1,8 +1,7 @@
-//! 创建知识空间节点
-//!
-//! 此接口用于在知识节点里创建节点到指定位置。
-//! 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/create
-
+/// 创建知识空间节点
+///
+/// 此接口用于在知识节点里创建节点到指定位置。
+/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/create
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

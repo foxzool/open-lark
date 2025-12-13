@@ -1,5 +1,4 @@
-//! Wiki V2 API 数据模型
-
+/// Wiki V2 API 数据模型
 use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 

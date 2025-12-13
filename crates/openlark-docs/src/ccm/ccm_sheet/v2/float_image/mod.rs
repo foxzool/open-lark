@@ -1,11 +1,10 @@
-//! CCM Sheet V2 浮图API 模块
-//!
-//! 浮图功能API实现，包含浮图的增删改查：
-//! - create_float_image: 创建浮图
-//! - get_float_image: 获取浮图
-//! - update_float_image: 更新浮图
-//! - delete_float_image: 删除浮图
-
+/// CCM Sheet V2 浮图API 模块
+///
+/// 浮图功能API实现，包含浮图的增删改查：
+/// - create_float_image: 创建浮图
+/// - get_float_image: 获取浮图
+/// - update_float_image: 更新浮图
+/// - delete_float_image: 删除浮图
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -73,14 +72,14 @@ pub async fn create_float_image(
     // 验证必填字段
     validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
     validate_required_field("图片Token", Some(&params.image_token), "图片Token不能为空")?;
+    validate_required_field("工作表ID", Some(&params.sheet_id), "工作表ID不能为空")?;
 
     // 使用enum+builder系统生成API端点
-    let api_endpoint = CcmSheetApiOld::CreateFloatImage(spreadsheet_token.to_string());
+    let api_endpoint = CcmSheetApiOld::CreateFloatImage(spreadsheet_token.to_string(), params.sheet_id.clone());
 
     // 创建API请求
     let api_request: ApiRequest<CreateFloatImageResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "创建浮图")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建浮图")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -99,14 +98,15 @@ pub async fn get_float_image(
     // 验证必填字段
     validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
     validate_required_field("浮图ID", Some(&params.float_image_id), "浮图ID不能为空")?;
+    validate_required_field("工作表ID", Some(&params.sheet_id), "工作表ID不能为空")?;
+    validate_required_field("工作表ID", Some(&params.sheet_id), "工作表ID不能为空")?;
 
     // 使用enum+builder系统生成API端点
-    let api_endpoint = CcmSheetApiOld::GetFloatImage(spreadsheet_token.to_string());
+    let api_endpoint = CcmSheetApiOld::GetFloatImage(spreadsheet_token.to_string(), params.sheet_id.clone(), params.float_image_id.clone());
 
     // 创建API请求
     let api_request: ApiRequest<GetFloatImageResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "获取浮图")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "获取浮图")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -125,14 +125,14 @@ pub async fn update_float_image(
     // 验证必填字段
     validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
     validate_required_field("浮图ID", Some(&params.float_image_id), "浮图ID不能为空")?;
+    validate_required_field("工作表ID", Some(&params.sheet_id), "工作表ID不能为空")?;
 
     // 使用enum+builder系统生成API端点
-    let api_endpoint = CcmSheetApiOld::UpdateFloatImage(spreadsheet_token.to_string());
+    let api_endpoint = CcmSheetApiOld::UpdateFloatImage(spreadsheet_token.to_string(), params.sheet_id.clone(), params.float_image_id.clone());
 
     // 创建API请求
     let api_request: ApiRequest<UpdateFloatImageResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "更新浮图")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "更新浮图")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -151,14 +151,14 @@ pub async fn delete_float_image(
     // 验证必填字段
     validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
     validate_required_field("浮图ID", Some(&params.float_image_id), "浮图ID不能为空")?;
+    validate_required_field("工作表ID", Some(&params.sheet_id), "工作表ID不能为空")?;
 
     // 使用enum+builder系统生成API端点
-    let api_endpoint = CcmSheetApiOld::DeleteFloatImage(spreadsheet_token.to_string());
+    let api_endpoint = CcmSheetApiOld::DeleteFloatImage(spreadsheet_token.to_string(), params.sheet_id.clone(), params.float_image_id.clone());
 
     // 创建API请求
     let api_request: ApiRequest<DeleteFloatImageResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "删除浮图")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "删除浮图")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;

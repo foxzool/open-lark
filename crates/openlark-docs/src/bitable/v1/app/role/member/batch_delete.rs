@@ -1,4 +1,4 @@
-//! Bitable 批量删除角色成员API
+/// Bitable 批量删除角色成员API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/role/member/batchDelete
 use openlark_core::{

@@ -2,8 +2,8 @@
 //!
 //! 提供OAuth 2.0授权流程支持，包括获取登录预授权码等功能。
 
-use openlark_core::config::Config;
 use crate::api::oauth::old::OAuthServiceOld;
+use openlark_core::config::Config;
 
 /// OAuth授权服务
 ///

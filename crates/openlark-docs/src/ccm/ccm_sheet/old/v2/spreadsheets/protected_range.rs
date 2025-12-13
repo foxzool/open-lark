@@ -1,7 +1,6 @@
-//! 保护范围 API
-//!
+/// 保护范围 API
+///
 /// 保护范围 - 管理表格的保护范围设置
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -125,7 +124,7 @@ pub async fn add_protected_range(
     if params.protected_ranges.is_empty() {
         return Err(openlark_core::error::CoreError::validation(
             "protected_ranges",
-            "保护范围列表不能为空"
+            "保护范围列表不能为空",
         ));
     }
 
@@ -134,7 +133,7 @@ pub async fn add_protected_range(
         if range.range.is_empty() {
             return Err(openlark_core::error::CoreError::validation(
                 &format!("protected_ranges[{}].range", index),
-                "保护范围不能为空"
+                "保护范围不能为空",
             ));
         }
 
@@ -143,7 +142,7 @@ pub async fn add_protected_range(
             if password.len() < 6 || password.len() > 255 {
                 return Err(openlark_core::error::CoreError::validation(
                     &format!("protected_ranges[{}].password", index),
-                    "密码长度必须在6-255个字符之间"
+                    "密码长度必须在6-255个字符之间",
                 ));
             }
         }
@@ -154,8 +153,7 @@ pub async fn add_protected_range(
 
     // 创建API请求
     let api_request: ApiRequest<ProtectedRangeResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "增加保护范围")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "增加保护范围")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -183,8 +181,7 @@ pub async fn get_protected_ranges(
     let api_endpoint = CcmSheetApiOld::ProtectedRangeBatchGet(spreadsheet_token.to_string());
 
     // 创建API请求
-    let api_request: ApiRequest<ProtectedRangeResponse> =
-        ApiRequest::get(&api_endpoint.to_url());
+    let api_request: ApiRequest<ProtectedRangeResponse> = ApiRequest::get(&api_endpoint.to_url());
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -216,7 +213,7 @@ pub async fn delete_protected_ranges(
     if params.protected_range_ids.is_empty() {
         return Err(openlark_core::error::CoreError::validation(
             "protected_range_ids",
-            "保护范围ID列表不能为空"
+            "保护范围ID列表不能为空",
         ));
     }
 
@@ -225,8 +222,7 @@ pub async fn delete_protected_ranges(
 
     // 创建API请求
     let api_request: ApiRequest<ProtectedRangeResponse> =
-        ApiRequest::delete(&api_endpoint.to_url())
-            .body(serialize_params(&params, "删除保护范围")?);
+        ApiRequest::delete(&api_endpoint.to_url()).body(serialize_params(&params, "删除保护范围")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;

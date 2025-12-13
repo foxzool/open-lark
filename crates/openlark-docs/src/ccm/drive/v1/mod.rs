@@ -1,30 +1,28 @@
-//! Drive V1 API模块
-//!
-//! 提供Drive V1版本的API功能框架
+/// Drive v1 API 模块
+///
+/// 提供云空间文件管理相关的API功能，包括：
+/// - 文件操作：列表、创建、删除、移动、复制等
+/// - 文件上传下载：小文件上传、分片上传、素材上传下载等
+/// - 权限管理：协作者权限、公开权限、密码保护等
+/// - 导入导出：文件导入导出任务管理
+/// - 版本管理：文档版本创建、查询、删除
+/// - 评论管理：评论和回复的增删改查
 
-use openlark_core::config::Config;
+pub mod file;
+pub mod upload;
+pub mod media;
+pub mod permission;
+pub mod import_task;
+pub mod export_task;
+pub mod file_version;
+pub mod comment;
 
-/// Drive V1 API服务
-pub struct DriveV1Service {
-    #[allow(dead_code)] // 配置保留供将来使用
-    config: Config,
-}
-
-impl DriveV1Service {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-    }
-}
-
-// 注意：子模块暂时被禁用，因为存在语法错误
-// 需要后续修复以下模块：
-// - file: 文件操作
-// - file_version: 文件版本管理
-// - files: 批量文件操作
-// - folder: 文件夹管理
-// - meta: 元数据管理
-// - statistics: 统计信息
-// - view_record: 查看记录
-// - event: 事件处理
-// - permissions: 权限管理
-// 等等...
+// 重新导出所有模块
+pub use file::*;
+pub use upload::*;
+pub use media::*;
+pub use permission::*;
+pub use import_task::*;
+pub use export_task::*;
+pub use file_version::*;
+pub use comment::*;

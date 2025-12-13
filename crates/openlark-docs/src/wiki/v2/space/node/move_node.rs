@@ -1,8 +1,7 @@
-//! 移动知识空间节点
-//!
-//! 移动知识空间中的节点。
-//! 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-nodes/move
-
+/// 移动知识空间节点
+///
+/// 移动知识空间中的节点。
+/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-nodes/move
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

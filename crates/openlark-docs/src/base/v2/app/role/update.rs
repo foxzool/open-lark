@@ -1,4 +1,4 @@
-//! Base 更新自定义角色API
+/// Base 更新自定义角色API
 ///
 /// API文档: https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/update-2
 use openlark_core::{

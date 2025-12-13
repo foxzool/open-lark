@@ -1,4 +1,4 @@
-//! Bitable 获取多维表格详情API
+/// Bitable 获取多维表格详情API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/get
 use openlark_core::{

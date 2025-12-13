@@ -1,4 +1,4 @@
-//! Bitable 批量更新记录API
+/// Bitable 批量更新记录API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/record/batchUpdate
 use openlark_core::{

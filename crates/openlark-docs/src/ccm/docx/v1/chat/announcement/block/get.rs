@@ -1,7 +1,7 @@
-//! 获取群公告块的内容
-//!
-//! 获取指定块的富文本内容。
-//! API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/get
+/// 获取群公告块的内容
+///
+/// 获取指定块的富文本内容。
+/// API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/get
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

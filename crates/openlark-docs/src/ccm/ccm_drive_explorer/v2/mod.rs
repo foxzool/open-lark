@@ -1,14 +1,14 @@
-//! CCM Drive Explorer V2 API 模块
-//!
-//! 云盘浏览器API实现，包含8个API：
-//! - root_folder_meta: 获取我的空间（根文件夹）元数据
-//! - folder_meta: 获取文件夹元数据
-//! - file: 新建文件
-//! - file_copy: 复制文档
-//! - file_docs: 删除Doc
-//! - file_spreadsheets: 删除Sheet
-//! - folder_children: 获取文件夹下的文档清单
-//! - folder: 新建文件夹
+/// CCM Drive Explorer V2 API 模块
+///
+/// 云盘浏览器API实现，包含8个API：
+/// - root_folder_meta: 获取我的空间（根文件夹）元数据
+/// - folder_meta: 获取文件夹元数据
+/// - file: 新建文件
+/// - file_copy: 复制文档
+/// - file_docs: 删除Doc
+/// - file_spreadsheets: 删除Sheet
+/// - folder_children: 获取文件夹下的文档清单
+/// - folder: 新建文件夹
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

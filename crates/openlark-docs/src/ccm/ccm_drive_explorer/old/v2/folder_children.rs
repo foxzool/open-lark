@@ -1,8 +1,8 @@
-//! 获取文件夹下的文档清单
-//!
-//! 根据 folderToken 获取该文件夹的文档清单，如 doc、sheet、file、bitable、folder。
-//! API文档: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/folder/get-folder-children
-//! 对应CSV记录: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/folder/get-folder-children
+/// 获取文件夹下的文档清单
+///
+/// 根据 folderToken 获取该文件夹的文档清单，如 doc、sheet、file、bitable、folder。
+/// API文档: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/folder/get-folder-children
+/// 对应CSV记录: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/folder/get-folder-children
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

@@ -1,14 +1,14 @@
-//! Drive Permission API 服务实现
-//!
-//! 提供权限管理相关的API服务，包括：
-//! - 权限验证
-//! - 所有者转移
-//! - 公共权限设置
-use serde_json::Value;
+/// Drive Permission API 服务实现
+///
+/// 提供权限管理相关的API服务，包括：
+/// - 权限验证
+/// - 所有者转移
+/// - 公共权限设置
+use serde_json::json;alue;
 use std::collections::HashMap;
 
 use openlark_core::{
-    api::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    api::{ApiRequest, HttpMethod}, config::Config, constants::AccessTokenType, error::LarkAPIError,
     http::Transport, SDKResult,
 };
 
@@ -57,7 +57,7 @@ impl PermissionService {
         // 验证请求参数
         request
             .validate()
-            .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
+            .map_err(|e| validation_error("format!("请求参数验证失败: {}", e)))?;
 
         log::info!(
             "判断协作者权限: file_token={}, permission={}",
@@ -79,7 +79,7 @@ impl PermissionService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            method: openlark_core::api::Post,
+            method: HttpMethod::Post,
             url: "/open-apis/drive/permission/member/permitted".to_string(),
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?,
@@ -131,7 +131,7 @@ impl PermissionService {
         // 验证请求参数
         request
             .validate()
-            .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
+            .map_err(|e| validation_error("format!("请求参数验证失败: {}", e)))?;
 
         log::info!(
             "转移拥有者: file_token={}, user_id={}",
@@ -150,7 +150,7 @@ impl PermissionService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            method: openlark_core::api::Post,
+            method: HttpMethod::Post,
             url: "/open-apis/drive/permission/member/transfer".to_string(),
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?,
@@ -199,7 +199,7 @@ impl PermissionService {
         // 验证请求参数
         request
             .validate()
-            .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
+            .map_err(|e| validation_error("format!("请求参数验证失败: {}", e)))?;
 
         log::info!("获取云文档权限设置V2: file_token={}", request.file_token);
 
@@ -209,7 +209,7 @@ impl PermissionService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            method: openlark_core::api::Post,
+            method: HttpMethod::Post,
             url: "/open-apis/drive/permission/v2/public/".to_string(),
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?,

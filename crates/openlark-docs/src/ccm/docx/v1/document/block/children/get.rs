@@ -1,7 +1,7 @@
-//! 获取所有子块
-//!
-//! 获取文档中指定块的所有子块的富文本内容并分页返回。文档版本号可选。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/get-2
+/// 获取所有子块
+///
+/// 获取文档中指定块的所有子块的富文本内容并分页返回。文档版本号可选。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/get-2
 
 use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{

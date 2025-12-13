@@ -1,8 +1,8 @@
-//! Bitable 批量删除数据表API
+/// Bitable 批量删除数据表API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/batchDelete
 use openlark_core::{
-    api::{ApiRequest, RequestData},
+    api::{ApiRequest, RequestData, Response},
     config::Config,
     error::{validation_error, SDKResult},
     http::Transport,

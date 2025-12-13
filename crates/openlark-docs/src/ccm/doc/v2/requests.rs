@@ -1,6 +1,6 @@
-//! 旧版文档 v2 API 请求结构体
-//!
-//! 定义所有旧版文档API的请求参数结构。
+/// 旧版文档 v2 API 请求结构体
+///
+/// 定义所有旧版文档API的请求参数结构。
 
 use super::models::{BatchUpdateOperation, BatchUpdateOperationType, DocType};
 use serde::{Deserialize, Serialize};

@@ -1,4 +1,4 @@
-//! Bitable 更新工作流API
+/// Bitable 更新工作流API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/workflow/update
 use openlark_core::{

@@ -1,4 +1,4 @@
-//! Bitable 删除记录API
+/// Bitable 删除记录API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/record/delete
 use openlark_core::{

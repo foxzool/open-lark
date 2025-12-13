@@ -2,8 +2,8 @@
 //!
 //! 本模块包含OAuth授权相关的数据结构定义。
 
-use serde::{Deserialize, Serialize};
 use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
 
 /// 授权码请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -158,10 +158,8 @@ impl OAuthConfig {
 
     /// 构建授权链接
     pub fn build_authorization_url(&self, state: Option<String>) -> String {
-        let mut builder = AuthorizationUrlBuilder::new(
-            self.app_id.clone(),
-            self.redirect_uri.clone(),
-        );
+        let mut builder =
+            AuthorizationUrlBuilder::new(self.app_id.clone(), self.redirect_uri.clone());
 
         if let Some(scope) = &self.scope {
             builder = builder.scope(scope);

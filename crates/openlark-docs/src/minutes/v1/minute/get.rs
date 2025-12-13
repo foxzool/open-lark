@@ -1,8 +1,7 @@
-//! 获取妙记信息
-//!
-//! 通过这个接口，可以得到一篇妙记的基础概述信息，包含 owner_id、create_time、标题、封面、时长和 URL。
-//! 文档参考：https://open.feishu.cn/document/server-docs/minutes-v1/minute/get
-
+/// 获取妙记信息
+///
+/// 通过这个接口，可以得到一篇妙记的基础概述信息，包含 owner_id、create_time、标题、封面、时长和 URL。
+/// 文档参考：https://open.feishu.cn/document/server-docs/minutes-v1/minute/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

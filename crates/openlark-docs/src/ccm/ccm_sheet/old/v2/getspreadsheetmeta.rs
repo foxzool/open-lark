@@ -1,8 +1,7 @@
-//! 获取表格元数据
-//!
-//! 根据 spreadsheetToken 获取电子表格的元信息。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheets/get-spreadsheet-meta
-
+/// 获取表格元数据
+///
+/// 根据 spreadsheetToken 获取电子表格的元信息。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheets/get-spreadsheet-meta
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -134,14 +133,15 @@ impl GetSpreadsheetMetaRequest {
         let api_endpoint = CcmSheetApiOld::Metainfo(params.spreadsheet_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<GetSpreadsheetMetaResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serde_json::to_value(params).map_err(|e| {
-                    openlark_core::error::validation_error(
-                        "参数序列化失败",
-                        &format!("无法序列化请求参数: {}", e)
-                    )
-                })?);
+        let mut api_request: ApiRequest<GetSpreadsheetMetaResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_value(params).map_err(|e| {
+            openlark_core::error::validation_error(
+                "参数序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

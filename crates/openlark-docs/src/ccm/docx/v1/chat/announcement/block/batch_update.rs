@@ -1,7 +1,7 @@
-//! 批量更新群公告块的内容
-//!
-//! 批量更新块的富文本内容。
-//! API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/batch_update
+/// 批量更新群公告块的内容
+///
+/// 批量更新块的富文本内容。
+/// API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/batch_update
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

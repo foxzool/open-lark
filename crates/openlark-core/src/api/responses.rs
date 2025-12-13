@@ -164,6 +164,11 @@ impl<T> Response<T> {
         &self.raw_response.msg
     }
 
+    /// 获取响应消息（兼容方法）
+    pub fn msg(&self) -> &str {
+        &self.raw_response.msg
+    }
+
     /// 获取数据
     pub fn data(&self) -> Option<&T> {
         self.data.as_ref()

@@ -1,10 +1,10 @@
-//! 任务管理服务
-//!
-//! 提供飞书知识库异步任务的管理功能，包括：
-//! - 获取任务执行状态
-//! - 查询任务结果和进度
-//! - 错误信息和调试信息获取
-use serde_json::Value;
+/// 任务管理服务
+///
+/// 提供飞书知识库异步任务的管理功能，包括：
+/// - 获取任务执行状态
+/// - 查询任务结果和进度
+/// - 错误信息和调试信息获取
+use serde_json::json;alue;
 use std::collections::HashMap;
 
 use openlark_core::{
@@ -265,7 +265,7 @@ impl TaskService {
         req: &GetTaskResultRequest,
     ) -> SDKResult<GetTaskResultResponse> {
         req.validate()
-            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+            .map_err(|msg| openlark_core::error::validation_error("msg))?;
         log::debug!("开始获取任务结果: task_id={}", req.task_id);
 
         // 构建动态端点路径
@@ -273,7 +273,7 @@ impl TaskService {
             .replace("{}", &req.task_id);
 
         let api_req = ApiRequest {
-            method: openlark_core::api::Get,
+            method: HttpMethod::Get,
             url: endpoint,
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: None, // GET请求无body

@@ -1,14 +1,13 @@
-//! 文档管理服务
-//!
-//! 提供飞书协作文档的创建、查询、管理等基础功能，包括：
-//! - 创建新文档
-//! - 获取文档信息
-//! - 删除文档
-//! - 文档权限管理
+/// 文档管理服务
+///
+/// 提供飞书协作文档的创建、查询、管理等基础功能，包括：
+/// - 创建新文档
+/// - 获取文档信息
+/// - 删除文档
+/// - 文档权限管理
 
 use openlark_core::{
-    api::ApiRequest,
-    api::{ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, HttpMethod, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
@@ -974,7 +973,7 @@ impl GetAnnouncementBlockContentBuilder {
     ) -> SDKResult<GetAnnouncementBlockContentResponse> {
         let request = self
             
-            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+            .map_err(|msg| openlark_core::error::validation_error("msg))?;
         service.get_announcement_block_content(&request).await
     }
 }
@@ -1026,11 +1025,11 @@ impl DocumentService {
     /// 返回创建的文档信息
     pub async fn create(&self, req: &CreateDocumentRequest) -> SDKResult<CreateDocumentResponse> {
         req.validate()
-            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+            .map_err(|msg| openlark_core::error::validation_error("msg))?;
         log::debug!("开始创建文档: title={:?}", req.title);
 
         let api_req = ApiRequest {
-            method: openlark_core::api::Post,
+            method: HttpMethod::Post,
             url: openlark_core::endpoints::Endpoints::DOCX_V1_DOCUMENTS.to_string(),
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Some(openlark_core::api::RequestData::Json(req))?,
@@ -1076,7 +1075,7 @@ impl DocumentService {
         req: &GetAnnouncementBlockContentRequest,
     ) -> SDKResult<GetAnnouncementBlockContentResponse> {
         req.validate()
-            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+            .map_err(|msg| openlark_core::error::validation_error("msg))?;
         log::debug!(
             "开始获取群公告块内容: chat_id={}, block_id={:?}",
             req.chat_id,
@@ -1090,7 +1089,7 @@ impl DocumentService {
         );
 
         let api_req = ApiRequest {
-            method: openlark_core::api::Get,
+            method: HttpMethod::Get,
             url: endpoint,
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: None, // GET请求没有请求体
@@ -1164,7 +1163,7 @@ impl DocumentService {
     /// ```
     pub async fn get(&self, req: &GetDocumentRequest) -> SDKResult<GetDocumentResponse> {
         req.validate()
-            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+            .map_err(|msg| openlark_core::error::validation_error("msg))?;
         log::debug!("开始获取文档信息: document_id={}", req.document_id);
 
         // 构建动态端点路径
@@ -1172,7 +1171,7 @@ impl DocumentService {
             .replace("{}", &req.document_id);
 
         let api_req = ApiRequest {
-            method: openlark_core::api::Get,
+            method: HttpMethod::Get,
             url: endpoint,
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: None, // GET请求无body
@@ -1219,7 +1218,7 @@ impl DocumentService {
         req: &GetDocumentRawContentRequest,
     ) -> SDKResult<GetDocumentRawContentResponse> {
         req.validate()
-            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+            .map_err(|msg| openlark_core::error::validation_error("msg))?;
         log::debug!("开始获取文档纯文本内容: document_id={}", req.document_id);
 
         // 构建动态端点路径
@@ -1227,7 +1226,7 @@ impl DocumentService {
             .replace("{}", &req.document_id);
 
         let api_req = ApiRequest {
-            method: openlark_core::api::Get,
+            method: HttpMethod::Get,
             url: endpoint,
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: None, // GET请求无body
@@ -1276,7 +1275,7 @@ impl DocumentService {
         req: &GetDocumentBlocksRequest,
     ) -> SDKResult<GetDocumentBlocksResponse> {
         req.validate()
-            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+            .map_err(|msg| openlark_core::error::validation_error("msg))?;
         log::debug!("开始获取文档块: document_id={}", req.document_id);
 
         // 构建动态端点路径
@@ -1284,7 +1283,7 @@ impl DocumentService {
             .replace("{}", &req.document_id);
 
         let api_req = ApiRequest {
-            method: openlark_core::api::Get,
+            method: HttpMethod::Get,
             url: endpoint,
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: None, // GET请求无body
@@ -1331,7 +1330,7 @@ impl DocumentService {
         req: &CreateDocumentBlockRequest,
     ) -> SDKResult<CreateDocumentBlockResponse> {
         req.validate()
-            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+            .map_err(|msg| openlark_core::error::validation_error("msg))?;
         log::debug!(
             "开始创建文档块: document_id={}, block_id={}",
             req.document_id,
@@ -1344,7 +1343,7 @@ impl DocumentService {
             .replace("{}", &req.block_id.to_string());
 
         let api_req = ApiRequest {
-            method: openlark_core::api::Post,
+            method: HttpMethod::Post,
             url: endpoint,
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Some(openlark_core::api::RequestData::Json(req))?,
@@ -1393,7 +1392,7 @@ impl DocumentService {
         req: &UpdateDocumentBlockRequest,
     ) -> SDKResult<UpdateDocumentBlockResponse> {
         req.validate()
-            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+            .map_err(|msg| openlark_core::error::validation_error("msg))?;
         log::debug!(
             "开始更新文档块: document_id={}, block_id={}",
             req.document_id,
@@ -1407,7 +1406,7 @@ impl DocumentService {
         );
 
         let api_req = ApiRequest {
-            method: openlark_core::api::Patch,
+            method: HttpMethod::Patch,
             url: endpoint,
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Some(openlark_core::api::RequestData::Json(req))?,
@@ -1456,7 +1455,7 @@ impl DocumentService {
         req: &DeleteDocumentBlockRequest,
     ) -> SDKResult<DeleteDocumentBlockResponse> {
         req.validate()
-            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+            .map_err(|msg| openlark_core::error::validation_error("msg))?;
         log::debug!(
             "开始删除文档块: document_id={}, block_id={}",
             req.document_id,
@@ -1470,7 +1469,7 @@ impl DocumentService {
         );
 
         let api_req = ApiRequest {
-            method: openlark_core::api::Delete,
+            method: HttpMethod::Delete,
             url: endpoint,
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Some(openlark_core::api::RequestData::Json(req))?,

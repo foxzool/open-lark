@@ -1,10 +1,10 @@
-//! 编辑旧版文档内容服务
-//!
-//! 提供批量编辑更新文档内容的功能，包括更新标题、
-//! 范围删除、插入内容等操作。
+/// 编辑旧版文档内容服务
+///
+/// 提供批量编辑更新文档内容的功能，包括更新标题、
+/// 范围删除、插入内容等操作。
 
 use crate::prelude::*;
-use openlark_core::{api::ApiRequest, http::Transport, SDKResult};
+use openlark_core::{api::{ApiRequest, HttpMethod}, error::validation_error, http::Transport, SDKResult};
 
 use super::{
     models::{BatchUpdateOperation, BatchUpdateOperationType},
@@ -29,7 +29,7 @@ impl BatchUpdateDocService {
         req: &UpdateDocBatchV2Request,
     ) -> SDKResult<UpdateDocBatchV2Response> {
         req.validate()
-            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+            .map_err(|msg| validation_error("parameter", msg))?;
 
         log::debug!(
             "开始批量更新文档: doc_token={}, 操作数量={}",
@@ -46,7 +46,7 @@ impl BatchUpdateDocService {
         }
 
         let api_req = ApiRequest {
-            method: openlark_core::api::Post,
+            method: HttpMethod::Post,
             url: endpoint,
             headers: std::collections::HashMap::new(),
             query,
@@ -162,15 +162,11 @@ impl UpdateDocBatchV2Builder {
     /// 构建请求
     pub fn build(self) -> SDKResult<UpdateDocBatchV2Request> {
         if self.request.operations.is_empty() {
-            return Err(openlark_core::error::LarkAPIError::illegal_param(
-                "至少需要指定一个操作".to_string(),
-            ));
+            return Err(validation_error("operations", "至少需要指定一个操作"));
         }
 
         if self.request.operations.len() > 100 {
-            return Err(openlark_core::error::LarkAPIError::illegal_param(
-                "操作数量不能超过100个".to_string(),
-            ));
+            return Err(validation_error("operations", "操作数量不能超过100个"));
         }
 
         Ok(self.request)
