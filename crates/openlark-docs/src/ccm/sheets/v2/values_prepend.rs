@@ -1,11 +1,6 @@
-//! 表格数据前置插入服务
-//!
-//! 提供飞书电子表格v2版本的数据前置插入功能。
-
-use serde_json::Value;
 use openlark_core::{
     api::ApiRequest,
-    api::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api::{ApiResponseTrait, BaseResponseFormat},
     config::Config,
     constants::AccessTokenType,
     endpoints_original::Endpoints,
@@ -15,6 +10,10 @@ use openlark_core::{
     standard_response::Response,
     SDKResult,
 };
+/// 表格数据前置插入服务
+///
+/// 提供飞书电子表格v2版本的数据前置插入功能。
+use serde_json::Value;
 
 use serde::{Deserialize, Serialize};
 

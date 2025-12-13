@@ -1,8 +1,7 @@
-//! 追加数据
-//!
-//! 向电子表格的指定范围追加数据。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/data-operation/append-values
-
+/// 追加数据
+///
+/// 向电子表格的指定范围追加数据。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/data-operation/append-values
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -31,7 +30,10 @@ pub struct AppendValuesParams {
     #[serde(rename = "valueRenderOption", skip_serializing_if = "Option::is_none")]
     pub value_render_option: Option<String>,
     /// 日期时间渲染选项
-    #[serde(rename = "dateTimeRenderOption", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "dateTimeRenderOption",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub date_time_render_option: Option<String>,
     /// 插入数据选项
     #[serde(rename = "insertDataOption", skip_serializing_if = "Option::is_none")]
@@ -87,10 +89,7 @@ impl AppendValuesRequest {
     /// 执行请求
     ///
     /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/data-operation/append-values
-    pub async fn execute(
-        self,
-        params: AppendValuesParams,
-    ) -> SDKResult<AppendValuesResponse> {
+    pub async fn execute(self, params: AppendValuesParams) -> SDKResult<AppendValuesResponse> {
         // 验证必填字段
         validate_required!(params.spreadsheet_token, "电子表格token不能为空");
         validate_required!(params.sheet_id, "工作表ID不能为空");
@@ -100,14 +99,15 @@ impl AppendValuesRequest {
         let api_endpoint = CcmSheetApiOld::ValuesAppend(params.spreadsheet_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let api_request: ApiRequest<AppendValuesResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serde_json::to_value(params).map_err(|e| {
-                    openlark_core::error::validation_error(
-                        "参数序列化失败",
-                        &format!("无法序列化请求参数: {}", e)
-                    )
-                })?);
+        let api_request: ApiRequest<AppendValuesResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_value(params).map_err(|e| {
+            openlark_core::error::validation_error(
+                "参数序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

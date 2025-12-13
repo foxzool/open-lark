@@ -1,7 +1,6 @@
-//! 数据验证 API
-//!
+/// 数据验证 API
+///
 /// 数据验证 - 管理表格的数据验证规则（如下拉列表）
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -144,13 +143,21 @@ pub async fn create_data_validation(
 ) -> SDKResult<DataValidationResponse> {
     // 验证必填字段
     validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("工作表ID", Some(&params.sheet_id), "工作表ID不能为空")?;
+    validate_required_field("工作表ID", Some(&params.sheet_id.to_string()), "工作表ID不能为空")?;
 
     // 验证条件类型
-    if !["DROPDOWN", "NUMBER", "TEXT_LENGTH", "DATE", "CUSTOM_FORMULA"].contains(&params.data_validation.condition.condition_type.as_str()) {
+    if ![
+        "DROPDOWN",
+        "NUMBER",
+        "TEXT_LENGTH",
+        "DATE",
+        "CUSTOM_FORMULA",
+    ]
+    .contains(&params.data_validation.condition.condition_type.as_str())
+    {
         return Err(openlark_core::error::CoreError::validation(
             "condition_type",
-            "条件类型必须是 DROPDOWN、NUMBER、TEXT_LENGTH、DATE 或 CUSTOM_FORMULA 之一"
+            "条件类型必须是 DROPDOWN、NUMBER、TEXT_LENGTH、DATE 或 CUSTOM_FORMULA 之一",
         ));
     }
 
@@ -160,20 +167,20 @@ pub async fn create_data_validation(
             if values.is_empty() {
                 return Err(openlark_core::error::CoreError::validation(
                     "values",
-                    "下拉列表必须提供选项值"
+                    "下拉列表必须提供选项值",
                 ));
             }
 
             if values.len() > 100 {
                 return Err(openlark_core::error::CoreError::validation(
                     "values",
-                    "下拉列表选项不能超过100个"
+                    "下拉列表选项不能超过100个",
                 ));
             }
         } else {
             return Err(openlark_core::error::CoreError::validation(
                 "values",
-                "下拉列表必须提供选项值"
+                "下拉列表必须提供选项值",
             ));
         }
     }
@@ -182,9 +189,8 @@ pub async fn create_data_validation(
     let api_endpoint = CcmSheetApiOld::DataValidationCreate(spreadsheet_token.to_string());
 
     // 创建API请求
-    let api_request: ApiRequest<DataValidationResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "创建数据验证规则")?);
+    let api_request: ApiRequest<DataValidationResponse> = ApiRequest::post(&api_endpoint.to_url())
+        .body(serialize_params(&params, "创建数据验证规则")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -212,8 +218,7 @@ pub async fn get_data_validations(
     let api_endpoint = CcmSheetApiOld::DataValidation(spreadsheet_token.to_string());
 
     // 创建API请求
-    let api_request: ApiRequest<DataValidationResponse> =
-        ApiRequest::get(&api_endpoint.to_url());
+    let api_request: ApiRequest<DataValidationResponse> = ApiRequest::get(&api_endpoint.to_url());
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -243,12 +248,15 @@ pub async fn delete_data_validation(
     if sheet_id < 0 {
         return Err(openlark_core::error::CoreError::validation(
             "sheet_id",
-            "工作表ID必须大于等于0"
+            "工作表ID必须大于等于0",
         ));
     }
 
     // 使用enum+builder系统生成API端点
-    let api_endpoint = CcmSheetApiOld::DataValidationDelete(spreadsheet_token.to_string(), validation_id.to_string());
+    let api_endpoint = CcmSheetApiOld::DataValidationDelete(
+        spreadsheet_token.to_string(),
+        validation_id.to_string(),
+    );
 
     // 创建API请求
     let api_request: ApiRequest<DataValidationResponse> =

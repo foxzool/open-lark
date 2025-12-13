@@ -1,5 +1,5 @@
-//! 合并单元格 API
-//!
+/// 合并单元格 API
+///
 /// 合并单元格 - 根据 spreadsheetToken 和维度信息合并单元格
 ///
 /// 文档链接: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/merge-cells
@@ -10,7 +10,6 @@
 ///
 /// # 返回值
 /// 返回合并单元格的结果
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -94,10 +93,12 @@ pub async fn merge_cells(
     validate_required_field("范围", Some(&params.range), "范围不能为空")?;
 
     // 验证合并类型
-    if !["MERGE_ALL", "MERGE_ROWS", "MERGE_COLUMNS", "UNMERGE"].contains(&params.merge_type.as_str()) {
+    if !["MERGE_ALL", "MERGE_ROWS", "MERGE_COLUMNS", "UNMERGE"]
+        .contains(&params.merge_type.as_str())
+    {
         return Err(openlark_core::error::CoreError::validation(
             "merge_type",
-            "合并类型必须是 MERGE_ALL、MERGE_ROWS、MERGE_COLUMNS 或 UNMERGE 之一"
+            "合并类型必须是 MERGE_ALL、MERGE_ROWS、MERGE_COLUMNS 或 UNMERGE 之一",
         ));
     }
 
@@ -106,7 +107,7 @@ pub async fn merge_cells(
         if !["ROWS", "COLUMNS"].contains(&direction.as_str()) {
             return Err(openlark_core::error::CoreError::validation(
                 "merge_direction",
-                "合并方向必须是 ROWS 或 COLUMNS"
+                "合并方向必须是 ROWS 或 COLUMNS",
             ));
         }
     }
@@ -116,8 +117,7 @@ pub async fn merge_cells(
 
     // 创建API请求
     let api_request: ApiRequest<MergeCellsResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "合并单元格")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "合并单元格")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -156,9 +156,8 @@ pub async fn unmerge_cells(
     let api_endpoint = CcmSheetApiOld::UnmergeCells(spreadsheet_token.to_string());
 
     // 创建API请求
-    let api_request: ApiRequest<MergeCellsResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&unmerge_params, "拆分单元格")?);
+    let api_request: ApiRequest<MergeCellsResponse> = ApiRequest::post(&api_endpoint.to_url())
+        .body(serialize_params(&unmerge_params, "拆分单元格")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;

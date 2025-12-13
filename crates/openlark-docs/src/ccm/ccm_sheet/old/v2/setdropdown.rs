@@ -1,8 +1,7 @@
-//! 创建数据验证规则
-//!
-//! 根据 spreadsheetToken 和 dataValidationSettings 创建数据验证规则。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-validation/create-data-validation
-
+/// 创建数据验证规则
+///
+/// 根据 spreadsheetToken 和 dataValidationSettings 创建数据验证规则。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-validation/create-data-validation
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -98,7 +97,10 @@ pub struct SetDropdownResult {
     #[serde(rename = "spreadsheetToken")]
     pub spreadsheet_token: String,
     /// 创建的数据验证规则列表
-    #[serde(rename = "dataValidationRules", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "dataValidationRules",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub data_validation_rules: Option<Vec<DataValidationRuleResult>>,
 }
 
@@ -133,10 +135,7 @@ impl SetDropdownRequest {
     /// 执行请求
     ///
     /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-validation/create-data-validation
-    pub async fn execute(
-        self,
-        params: SetDropdownParams,
-    ) -> SDKResult<SetDropdownResponse> {
+    pub async fn execute(self, params: SetDropdownParams) -> SDKResult<SetDropdownResponse> {
         // 验证必填字段
         validate_required!(params.spreadsheet_token, "电子表格token不能为空");
 
@@ -144,14 +143,15 @@ impl SetDropdownRequest {
         let api_endpoint = CcmSheetApiOld::DataValidationCreate(params.spreadsheet_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<SetDropdownResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serde_json::to_value(params).map_err(|e| {
-                    openlark_core::error::validation_error(
-                        "参数序列化失败",
-                        &format!("无法序列化请求参数: {}", e)
-                    )
-                })?);
+        let mut api_request: ApiRequest<SetDropdownResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_value(params).map_err(|e| {
+            openlark_core::error::validation_error(
+                "参数序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

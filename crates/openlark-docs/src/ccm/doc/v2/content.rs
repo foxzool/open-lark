@@ -1,9 +1,9 @@
-//! 文档内容服务 - 简化版本
-//!
-//! 提供获取文档内容的基本功能
+/// 文档内容服务 - 简化版本
+///
+/// 提供获取文档内容的基本功能
 
 use crate::prelude::*;
-use openlark_core::{api::ApiRequest, http::Transport, SDKResult};
+use openlark_core::{api::{ApiRequest, HttpMethod}, http::Transport, SDKResult};
 
 use super::{
     requests::{GetDocContentV2Request, GetDocRawContentV2Request},
@@ -37,7 +37,7 @@ impl ContentDocService {
         }
 
         let api_req = ApiRequest {
-            method: openlark_core::api::Get,
+            method: HttpMethod::Get,
             url: endpoint,
             headers: std::collections::HashMap::new(),
             query,
@@ -66,7 +66,7 @@ impl ContentDocService {
         }
 
         let api_req = ApiRequest {
-            method: openlark_core::api::Get,
+            method: HttpMethod::Get,
             url: endpoint,
             headers: std::collections::HashMap::new(),
             query,

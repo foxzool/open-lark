@@ -1,6 +1,6 @@
-//! 知识库服务
-//!
-//! 基础服务架构，具体功能在后续版本中实现。
+/// 知识库服务
+///
+/// 基础服务架构，具体功能在后续版本中实现。
 
 use openlark_core::{config::Config, trait_system::Service};
 

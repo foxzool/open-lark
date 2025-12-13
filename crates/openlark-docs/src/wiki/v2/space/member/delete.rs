@@ -1,8 +1,7 @@
-//! 删除知识空间成员
-//!
-//! 从知识空间删除成员。
-//! 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-member/delete
-
+/// 删除知识空间成员
+///
+/// 从知识空间删除成员。
+/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-member/delete
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

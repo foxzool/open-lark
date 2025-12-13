@@ -1,9 +1,8 @@
-//! API通用工具函数
-//!
-//! 提供API实现的通用工具和辅助函数，减少重复代码，提高一致性
-
-use openlark_core::{SDKResult, error};
-
+use openlark_core::api::Response;
+/// API通用工具函数
+///
+/// 提供API实现的通用工具和辅助函数，减少重复代码，提高一致性
+use openlark_core::{error, SDKResult};
 /// 标准化API响应数据提取
 ///
 /// # 参数
@@ -20,7 +19,7 @@ pub fn extract_response_data<T>(
     response.data.ok_or_else(|| {
         error::validation_error(
             &format!("{}响应数据为空", context),
-            "服务器没有返回有效的数据"
+            "服务器没有返回有效的数据",
         )
     })
 }
@@ -79,7 +78,7 @@ pub fn serialize_params<T: serde::Serialize>(
     serde_json::to_value(params).map_err(|e| {
         error::validation_error(
             &format!("{}参数序列化失败", context),
-            &format!("无法序列化请求参数: {}", e)
+            &format!("无法序列化请求参数: {}", e),
         )
     })
 }

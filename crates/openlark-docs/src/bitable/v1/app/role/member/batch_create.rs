@@ -1,4 +1,4 @@
-//! Bitable 批量创建角色成员API
+/// Bitable 批量创建角色成员API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/role/member/batch_create
 use openlark_core::{

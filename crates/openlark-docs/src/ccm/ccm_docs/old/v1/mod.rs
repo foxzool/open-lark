@@ -1,6 +1,6 @@
-//! CCM Docs API Old V1 模块
-//!
-//! 包含所有云文档内容管理相关的API实现
+/// CCM Docs API Old V1 模块
+///
+/// 包含所有云文档内容管理相关的API实现
 
 use openlark_core::config::Config;
 

@@ -1,8 +1,7 @@
-//! 获取妙记统计数据
-//!
-//! 通过这个接口，可以获得妙记的访问情况统计，包含PV、UV、访问过的 user id、访问过的 user timestamp。
-//! 文档参考：https://open.feishu.cn/document/server-docs/minutes-v1/minute-statistics/get
-
+/// 获取妙记统计数据
+///
+/// 通过这个接口，可以获得妙记的访问情况统计，包含PV、UV、访问过的 user id、访问过的 user timestamp。
+/// 文档参考：https://open.feishu.cn/document/server-docs/minutes-v1/minute-statistics/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

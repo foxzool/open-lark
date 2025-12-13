@@ -1,9 +1,8 @@
-//! 获取旧版文档中的电子表格元数据
-//!
-//! 根据 docToken 获取文档中的电子表格的元数据。
-//! API文档: https://open.feishu.cn/document/server-docs/historic-version/docs/document/obtain-sheet-meta-info-in-doc
-//! 对应CSV记录: https://open.feishu.cn/document/server-docs/historic-version/docs/document/obtain-sheet-meta-info-in-doc
-
+/// 获取旧版文档中的电子表格元数据
+///
+/// 根据 docToken 获取文档中的电子表格的元数据。
+/// API文档: https://open.feishu.cn/document/server-docs/historic-version/docs/document/obtain-sheet-meta-info-in-doc
+/// 对应CSV记录: https://open.feishu.cn/document/server-docs/historic-version/docs/document/obtain-sheet-meta-info-in-doc
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -74,10 +73,7 @@ impl GetSheetMetaRequest {
     ///
     /// API文档: https://open.feishu.cn/document/server-docs/historic-version/docs/document/obtain-sheet-meta-info-in-doc
     /// 对应CSV记录: https://open.feishu.cn/document/server-docs/historic-version/docs/document/obtain-sheet-meta-info-in-doc
-    pub async fn execute(
-        self,
-        params: GetSheetMetaParams,
-    ) -> SDKResult<GetSheetMetaResponse> {
+    pub async fn execute(self, params: GetSheetMetaParams) -> SDKResult<GetSheetMetaResponse> {
         // 验证必填字段
         validate_required!(params.doc_token, "文档token不能为空");
 
@@ -85,8 +81,7 @@ impl GetSheetMetaRequest {
         let api_endpoint = CcmDocApiOld::SheetMeta(params.doc_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let api_request: ApiRequest<GetSheetMetaResponse> =
-            ApiRequest::get(&api_endpoint.to_url());
+        let api_request: ApiRequest<GetSheetMetaResponse> = ApiRequest::get(&api_endpoint.to_url());
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

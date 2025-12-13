@@ -1,5 +1,3 @@
-//! Drive v1 文件操作 - 简化实现
-
 #![allow(dead_code)]
 #![allow(unused_variables)]
 #![allow(unused_imports)]
@@ -7,6 +5,8 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
+
+/// Drive v1 文件操作 - 简化实现
 
 use serde::{Deserialize, Serialize};
 use openlark_core::config::Config;

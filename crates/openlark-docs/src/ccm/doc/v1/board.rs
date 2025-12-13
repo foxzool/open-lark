@@ -1,8 +1,3 @@
-//! Cloud Docs Board服务模块
-//!
-//! 白板服务，提供在线白板协作、绘图、思维导图、
-/// 协作编辑等可视化协作功能。
-
 #![allow(dead_code)]
 #![allow(unused_variables)]
 #![allow(unused_imports)]
@@ -10,6 +5,12 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
+
+/// Cloud Docs Board服务模块
+///
+/// 白板服务，提供在线白板协作、绘图、思维导图、
+/// 协作编辑等可视化协作功能。
+
 use openlark_core::config::Config;
 
 /// 白板服务 v1

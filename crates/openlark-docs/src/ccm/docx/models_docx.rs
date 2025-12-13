@@ -1,7 +1,6 @@
-//! docx API 数据模型
-//!
-//! 定义文档(DOCX)操作API的数据结构。
-
+/// docx API 数据模型
+///
+/// 定义文档(DOCX)操作API的数据结构。
 use crate::prelude::*;
 use serde::{Deserialize, Serialize};
 

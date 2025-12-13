@@ -1,7 +1,6 @@
-//! CCM Doc API Old V1 模块
-//!
-//! 包含所有旧版文档相关的API实现
-
+/// CCM Doc API Old V1 模块
+///
+/// 包含所有旧版文档相关的API实现
 use openlark_core::config::Config;
 
 /// 旧版文档服务
@@ -53,9 +52,9 @@ impl CcmDocOldV1 {
 }
 
 // 导出所有API模块
+pub mod batch_update;
+pub mod content;
 pub mod create;
 pub mod meta;
-pub mod sheet_meta;
 pub mod raw_content;
-pub mod content;
-pub mod batch_update;
+pub mod sheet_meta;

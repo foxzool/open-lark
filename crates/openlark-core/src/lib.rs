@@ -37,7 +37,7 @@ pub mod contact;
 pub mod endpoints;
 
 // Re-export commonly used types from crate root
-pub use error::{CoreError, SDKResult};
+pub use error::{validation_error, CoreError, SDKResult};
 
 // Re-export validation utilities
 pub use validation::validate_required;
@@ -59,12 +59,12 @@ pub mod prelude {
 
     // Re-export commonly used core modules directly
     pub use crate::constants::*;
+    pub use crate::error::validation_error;
     pub use crate::error::*;
     pub use crate::http::*;
     pub use crate::req_option::*;
     pub use crate::standard_response::*;
     pub use crate::validate_required;
-    pub use crate::error::validation_error;
 
     // Re-export commonly used dependencies
     pub use anyhow::Result;

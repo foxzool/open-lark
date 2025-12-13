@@ -1,9 +1,8 @@
-//! 编辑旧版文档内容
-//!
-//! 批量编辑更新文档内容，包括更新标题、范围删除、插入内容。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/batch-update-document
-//! 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/batch-update-document
-
+/// 编辑旧版文档内容
+///
+/// 批量编辑更新文档内容，包括更新标题、范围删除、插入内容。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/batch-update-document
+/// 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/batch-update-document
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -92,14 +91,15 @@ impl BatchUpdateDocumentRequest {
         let api_endpoint = CcmDocApiOld::BatchUpdate(params.doc_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<BatchUpdateDocumentResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serde_json::to_value(params).map_err(|e| {
-                    openlark_core::error::validation_error(
-                        "参数序列化失败",
-                        &format!("无法序列化请求参数: {}", e)
-                    )
-                })?);
+        let mut api_request: ApiRequest<BatchUpdateDocumentResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_value(params).map_err(|e| {
+            openlark_core::error::validation_error(
+                "参数序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

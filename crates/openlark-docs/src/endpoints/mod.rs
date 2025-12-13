@@ -1,42 +1,41 @@
-//! OpenLark Docs 服务端点定义
-//!
-//! 此模块包含文档和云盘相关的所有API端点常量，从 openlark-core 迁移而来。
-//! 包含云文档、表格、知识库、白板、评论、云盘、卡片和报告等完整功能。
-//!
-//! # 服务模块包含
-//!
-//! - **cloud_docs**: 云文档服务（Bitable多维表格、Sheets电子表格、Docx文档、Wiki知识库、Board白板）
-//! - **drive**: 云盘服务（文件管理、文件夹管理、媒体处理、权限管理）
-//! - **cardkit**: 交互式卡片组件
-//! - **report**: 报告和分析服务
-//! - **comment**: 评论系统
-//! - **assistant**: AI助手服务
-//!
-//! # 使用示例
-//!
-//! ```rust
-//! use openlark_docs::endpoints::*;
-//!
-//! // Bitable多维表格
-//! let app_endpoint = BITABLE_V1_APPS;
-//! let records_endpoint = BITABLE_V1_RECORDS;
-//!
-//! // Sheets电子表格
-//! let sheets_endpoint = SHEETS_V3_SPREADSHEETS;
-//! let values_endpoint = SHEETS_V3_SPREADSHEET_VALUES_GET;
-//!
-//! // Wiki知识库
-//! let wiki_space_endpoint = WIKI_V2_SPACES;
-//! let wiki_node_endpoint = WIKI_V2_SPACE_NODES;
-//!
-//! // 云盘文件
-//! let drive_files_endpoint = DRIVE_V1_FILES;
-//! let upload_endpoint = DRIVE_V1_FILES_UPLOAD_ALL;
-//!
-//! // 卡片组件
-//! let cards_endpoint = CARDKIT_V1_CARDS;
-//! ```
-
+/// OpenLark Docs 服务端点定义
+///
+/// 此模块包含文档和云盘相关的所有API端点常量，从 openlark-core 迁移而来。
+/// 包含云文档、表格、知识库、白板、评论、云盘、卡片和报告等完整功能。
+///
+/// # 服务模块包含
+///
+/// - **cloud_docs**: 云文档服务（Bitable多维表格、Sheets电子表格、Docx文档、Wiki知识库、Board白板）
+/// - **drive**: 云盘服务（文件管理、文件夹管理、媒体处理、权限管理）
+/// - **cardkit**: 交互式卡片组件
+/// - **report**: 报告和分析服务
+/// - **comment**: 评论系统
+/// - **assistant**: AI助手服务
+///
+/// # 使用示例
+///
+/// ```rust
+/// use openlark_docs::endpoints::*;
+///
+/// // Bitable多维表格
+/// let app_endpoint = BITABLE_V1_APPS;
+/// let records_endpoint = BITABLE_V1_RECORDS;
+///
+/// // Sheets电子表格
+/// let sheets_endpoint = SHEETS_V3_SPREADSHEETS;
+/// let values_endpoint = SHEETS_V3_SPREADSHEET_VALUES_GET;
+///
+/// // Wiki知识库
+/// let wiki_space_endpoint = WIKI_V2_SPACES;
+/// let wiki_node_endpoint = WIKI_V2_SPACE_NODES;
+///
+/// // 云盘文件
+/// let drive_files_endpoint = DRIVE_V1_FILES;
+/// let upload_endpoint = DRIVE_V1_FILES_UPLOAD_ALL;
+///
+/// // 卡片组件
+/// let cards_endpoint = CARDKIT_V1_CARDS;
+/// ```
 // 导入核心端点（auth, application等基础端点）
 pub use openlark_core::endpoints::{apass, application, auth, platform_integration};
 

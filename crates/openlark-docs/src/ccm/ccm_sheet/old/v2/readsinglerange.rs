@@ -1,8 +1,7 @@
-//! 读取单个范围
-//!
-//! 根据 spreadsheetToken 和 range 读取表格单个范围的值，返回数据限制为10M。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/reading-a-single-range
-
+/// 读取单个范围
+///
+/// 根据 spreadsheetToken 和 range 读取表格单个范围的值，返回数据限制为10M。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/reading-a-single-range
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -28,7 +27,10 @@ pub struct ReadSingleRangeParams {
     #[serde(rename = "valueRenderOption", skip_serializing_if = "Option::is_none")]
     pub value_render_option: Option<String>,
     /// 日期时间渲染选项
-    #[serde(rename = "dateTimeRenderOption", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "dateTimeRenderOption",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub date_time_render_option: Option<String>,
 }
 
@@ -80,10 +82,8 @@ impl ReadSingleRangeRequest {
         validate_required!(params.range, "读取范围不能为空");
 
         // 使用enum+builder系统生成API端点
-        let api_endpoint = CcmSheetApiOld::ReadSingleRange(
-            params.spreadsheet_token.clone(),
-            params.range.clone(),
-        );
+        let api_endpoint =
+            CcmSheetApiOld::ReadSingleRange(params.spreadsheet_token.clone());
 
         // 构建查询参数
         let mut query_params = Vec::new();

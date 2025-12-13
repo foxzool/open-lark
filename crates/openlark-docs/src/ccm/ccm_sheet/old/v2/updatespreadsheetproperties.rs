@@ -1,8 +1,7 @@
-//! 更新电子表格属性
-//!
-//! 根据 spreadsheetToken 更新电子表格的属性，如标题、语言、时区等。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/spreadsheet/update_spreadsheet_properties
-
+/// 更新电子表格属性
+///
+/// 根据 spreadsheetToken 更新电子表格的属性，如标题、语言、时区等。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/spreadsheet/update_spreadsheet_properties
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -107,14 +106,15 @@ impl UpdateSpreadsheetPropertiesRequest {
         let api_endpoint = CcmSheetApiOld::Properties(params.spreadsheet_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<UpdateSpreadsheetPropertiesResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serde_json::to_value(params).map_err(|e| {
-                    openlark_core::error::validation_error(
-                        "参数序列化失败",
-                        &format!("无法序列化请求参数: {}", e)
-                    )
-                })?);
+        let mut api_request: ApiRequest<UpdateSpreadsheetPropertiesResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_value(params).map_err(|e| {
+            openlark_core::error::validation_error(
+                "参数序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

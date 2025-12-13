@@ -1,8 +1,7 @@
-//! 读取多个范围
-//!
-//! 根据 spreadsheetToken 和多个 ranges 批量读取表格多个范围的值，返回数据限制为10M。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/reading-multiple-ranges
-
+/// 读取多个范围
+///
+/// 根据 spreadsheetToken 和多个 ranges 批量读取表格多个范围的值，返回数据限制为10M。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/reading-multiple-ranges
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -28,7 +27,10 @@ pub struct ReadMultipleRangesParams {
     #[serde(rename = "valueRenderOption", skip_serializing_if = "Option::is_none")]
     pub value_render_option: Option<String>,
     /// 日期时间渲染选项
-    #[serde(rename = "dateTimeRenderOption", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "dateTimeRenderOption",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub date_time_render_option: Option<String>,
 }
 
@@ -94,14 +96,15 @@ impl ReadMultipleRangesRequest {
         let api_endpoint = CcmSheetApiOld::ValuesBatchGet(params.spreadsheet_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<ReadMultipleRangesResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serde_json::to_value(params).map_err(|e| {
-                    openlark_core::error::validation_error(
-                        "参数序列化失败",
-                        &format!("无法序列化请求参数: {}", e)
-                    )
-                })?);
+        let mut api_request: ApiRequest<ReadMultipleRangesResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_value(params).map_err(|e| {
+            openlark_core::error::validation_error(
+                "参数序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

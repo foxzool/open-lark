@@ -1,5 +1,5 @@
-//! 增加行列 API
-//!
+/// 增加行列 API
+///
 /// 增加行列 - 根据 spreadsheetToken 和长度，在末尾增加空行/列
 ///
 /// 文档链接: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-rowcol/add-rows-or-columns
@@ -10,7 +10,6 @@
 ///
 /// # 返回值
 /// 返回增加行列的结果
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -87,19 +86,23 @@ pub async fn add_dimension_range(
 ) -> SDKResult<AddDimensionRangeResponse> {
     // 验证必填字段
     validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("主要维度", Some(&params.major_dimension), "主要维度不能为空")?;
+    validate_required_field(
+        "主要维度",
+        Some(&params.major_dimension),
+        "主要维度不能为空",
+    )?;
 
     if params.length <= 0 || params.length > 5000 {
         return Err(openlark_core::error::CoreError::validation(
             "length",
-            "增加长度必须在1-5000之间"
+            "增加长度必须在1-5000之间",
         ));
     }
 
     if !["ROWS", "COLUMNS"].contains(&params.major_dimension.as_str()) {
         return Err(openlark_core::error::CoreError::validation(
             "major_dimension",
-            "主要维度必须是 ROWS 或 COLUMNS"
+            "主要维度必须是 ROWS 或 COLUMNS",
         ));
     }
 
@@ -108,8 +111,7 @@ pub async fn add_dimension_range(
 
     // 创建API请求
     let api_request: ApiRequest<AddDimensionRangeResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "增加行列")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "增加行列")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -142,12 +144,16 @@ pub async fn insert_dimension_range(
 ) -> SDKResult<AddDimensionRangeResponse> {
     // 验证必填字段
     validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("主要维度", Some(&params.major_dimension), "主要维度不能为空")?;
+    validate_required_field(
+        "主要维度",
+        Some(&params.major_dimension),
+        "主要维度不能为空",
+    )?;
 
     if params.start_index < 0 || params.end_index <= params.start_index {
         return Err(openlark_core::error::CoreError::validation(
             "indices",
-            "起始索引必须小于结束索引且大于等于0"
+            "起始索引必须小于结束索引且大于等于0",
         ));
     }
 
@@ -155,14 +161,14 @@ pub async fn insert_dimension_range(
     if length > 5000 {
         return Err(openlark_core::error::CoreError::validation(
             "length",
-            "插入长度不能超过5000"
+            "插入长度不能超过5000",
         ));
     }
 
     if !["ROWS", "COLUMNS"].contains(&params.major_dimension.as_str()) {
         return Err(openlark_core::error::CoreError::validation(
             "major_dimension",
-            "主要维度必须是 ROWS 或 COLUMNS"
+            "主要维度必须是 ROWS 或 COLUMNS",
         ));
     }
 
@@ -171,8 +177,7 @@ pub async fn insert_dimension_range(
 
     // 创建API请求
     let api_request: ApiRequest<AddDimensionRangeResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "插入行列")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "插入行列")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;

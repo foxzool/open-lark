@@ -1,8 +1,3 @@
-//! Cloud Docs Assistant服务模块
-//!
-//! AI助手服务，提供文档智能分析、内容生成、自动摘要、
-/// 智能问答等AI辅助功能。
-
 #![allow(dead_code)]
 #![allow(unused_variables)]
 #![allow(unused_imports)]
@@ -10,6 +5,12 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
+
+/// Cloud Docs Assistant服务模块
+///
+/// AI助手服务，提供文档智能分析、内容生成、自动摘要、
+/// 智能问答等AI辅助功能。
+
 use openlark_core::config::Config;
 
 /// AI助手服务 v1

@@ -1,8 +1,7 @@
-//! 获取任务结果
-//!
-//! 该方法用于获取wiki异步任务的结果。
-//! 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/task/get
-
+/// 获取任务结果
+///
+/// 该方法用于获取wiki异步任务的结果。
+/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/task/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

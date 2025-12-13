@@ -1,8 +1,7 @@
-//! 获取知识空间成员列表
-//!
-//! 获取知识空间的成员列表。
-//! 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-member/list
-
+/// 获取知识空间成员列表
+///
+/// 获取知识空间的成员列表。
+/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-member/list
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

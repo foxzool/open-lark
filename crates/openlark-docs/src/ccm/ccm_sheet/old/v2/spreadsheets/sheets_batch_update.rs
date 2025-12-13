@@ -1,5 +1,5 @@
-//! 操作工作表 API
-//!
+/// 操作工作表 API
+///
 /// 操作工作表 - 根据 spreadsheetToken 更新工作表属性
 ///
 /// 文档链接: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet/operate-sheets
@@ -10,7 +10,6 @@
 ///
 /// # 返回值
 /// 返回操作工作表的结果
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -124,7 +123,7 @@ pub async fn operate_sheets(
     if params.requests.is_empty() {
         return Err(openlark_core::error::CoreError::validation(
             "requests",
-            "操作请求列表不能为空"
+            "操作请求列表不能为空",
         ));
     }
 
@@ -133,8 +132,7 @@ pub async fn operate_sheets(
 
     // 创建API请求
     let api_request: ApiRequest<OperateSheetsResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "操作工作表")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "操作工作表")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;

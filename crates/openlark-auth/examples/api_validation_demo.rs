@@ -17,27 +17,32 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let auth_service = AuthServiceV3::new(config.clone());
 
     println!("✅ 1. 商店应用获取app_access_token");
-    let _builder1 = auth_service.app_access_token()
+    let _builder1 = auth_service
+        .app_access_token()
         .app_id("app_id")
         .app_secret("app_secret");
 
     println!("✅ 2. 自建应用获取app_access_token_internal");
-    let _builder2 = auth_service.app_access_token_internal()
+    let _builder2 = auth_service
+        .app_access_token_internal()
         .app_id("app_id")
         .app_secret("app_secret");
 
     println!("✅ 3. 商店应用获取tenant_access_token");
-    let _builder3 = auth_service.tenant_access_token()
+    let _builder3 = auth_service
+        .tenant_access_token()
         .app_id("app_id")
         .app_secret("app_secret");
 
     println!("✅ 4. 自建应用获取tenant_access_token_internal");
-    let _builder4 = auth_service.tenant_access_token_internal()
+    let _builder4 = auth_service
+        .tenant_access_token_internal()
         .app_id("app_id")
         .app_secret("app_secret");
 
     println!("✅ 5. 重新获取app_ticket");
-    let _builder5 = auth_service.app_ticket_resend()
+    let _builder5 = auth_service
+        .app_ticket_resend()
         .app_id("app_id")
         .app_secret("app_secret");
 
@@ -46,25 +51,30 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let authen_service = AuthenServiceV1::new(config.clone());
 
     println!("✅ 1. 获取用户信息 (user_info.get)");
-    let _builder6 = authen_service.user_info()
+    let _builder6 = authen_service
+        .user_info()
         .get()
         .user_access_token("user_token")
         .user_id_type("open_id");
 
     println!("✅ 2. 获取用户访问令牌 (access_token.create)");
-    let _builder7 = authen_service.access_token()
+    let _builder7 = authen_service
+        .access_token()
         .grant_code("grant_code")
         .app_id("app_id")
         .app_secret("app_secret");
 
     println!("✅ 3. 刷新用户访问令牌 (refresh_access_token.create)");
-    let _builder8 = authen_service.refresh_access_token()
+    let _builder8 = authen_service
+        .refresh_access_token()
         .refresh_token("refresh_token")
         .app_id("app_id")
         .app_secret("app_secret");
 
     println!("✅ 4. 获取OIDC用户访问令牌 (oidc.access_token.create)");
-    let _builder9 = authen_service.oidc().access_token()
+    let _builder9 = authen_service
+        .oidc()
+        .access_token()
         .code("auth_code")
         .code_verifier("code_verifier")
         .redirect_uri("https://example.com/callback")
@@ -72,7 +82,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .client_secret("client_secret");
 
     println!("✅ 5. 刷新OIDC用户访问令牌 (oidc.refresh_access_token.create)");
-    let _builder10 = authen_service.oidc().refresh_access_token()
+    let _builder10 = authen_service
+        .oidc()
+        .refresh_access_token()
         .refresh_token("refresh_token")
         .client_id("client_id")
         .client_secret("client_secret");
@@ -82,7 +94,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth_service = OAuthServiceOld::new(config.clone());
 
     println!("✅ 1. 获取登录预授权码 (v1/index)");
-    let auth_url = oauth_service.authorization()
+    let auth_url = oauth_service
+        .authorization()
         .app_id("app_id")
         .redirect_uri("https://example.com/callback")
         .scope("user_info:read")

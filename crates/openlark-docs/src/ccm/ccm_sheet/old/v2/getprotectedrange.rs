@@ -1,8 +1,7 @@
-//! 获取保护范围
-//!
-//! 根据 spreadsheetToken 获取表格的保护范围列表。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protection/get-protected-ranges
-
+/// 获取保护范围
+///
+/// 根据 spreadsheetToken 获取表格的保护范围列表。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protection/get-protected-ranges
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -133,14 +132,15 @@ impl GetProtectedRangeRequest {
         let api_endpoint = CcmSheetApiOld::ProtectedRangeBatchGet(params.spreadsheet_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<GetProtectedRangeResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serde_json::to_value(params).map_err(|e| {
-                    openlark_core::error::validation_error(
-                        "参数序列化失败",
-                        &format!("无法序列化请求参数: {}", e)
-                    )
-                })?);
+        let mut api_request: ApiRequest<GetProtectedRangeResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_value(params).map_err(|e| {
+            openlark_core::error::validation_error(
+                "参数序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

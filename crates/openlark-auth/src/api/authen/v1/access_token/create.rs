@@ -1,18 +1,16 @@
 //! 获取 user_access_token（v1版本） API
+use crate::models::authen::{UserAccessTokenResponse, UserAccessTokenV1Request};
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/user-authentication/access-token/access_token
 ///
 /// 根据登录预授权码获取 user_access_token
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use crate::models::authen::{UserAccessTokenV1Request, UserAccessTokenResponse};
 
 /// 用户访问令牌请求（v1版本）
 pub struct UserAccessTokenV1Builder {
@@ -85,9 +83,9 @@ impl UserAccessTokenV1Builder {
 
         // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<UserAccessTokenV1ResponseData> =
-            ApiRequest::post(&api_endpoint.to_url()).body(
-                openlark_core::api::RequestData::Json(serde_json::to_value(&request_body)?),
-            );
+            ApiRequest::post(&api_endpoint.to_url()).body(openlark_core::api::RequestData::Json(
+                serde_json::to_value(&request_body)?,
+            ));
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

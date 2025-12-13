@@ -1,18 +1,16 @@
 //! 获取用户信息 API
+use crate::models::authen::UserInfoResponse;
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/user-authentication/access-token/user_info
 ///
 /// 通过 `user_access_token` 获取登录用户的信息。
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use crate::models::authen::UserInfoResponse;
 
 /// 获取用户信息请求
 pub struct UserInfoBuilder {
@@ -71,12 +69,16 @@ impl UserInfoBuilder {
             ApiRequest::get(&api_endpoint.to_url());
 
         // 添加Authorization头
-        api_request.headers.insert("Authorization".to_string(),
-            format!("Bearer {}", self.user_access_token));
+        api_request.headers.insert(
+            "Authorization".to_string(),
+            format!("Bearer {}", self.user_access_token),
+        );
 
         // 添加查询参数
         if let Some(ref user_id_type) = self.user_id_type {
-            api_request.query.insert("user_id_type".to_string(), user_id_type.clone());
+            api_request
+                .query
+                .insert("user_id_type".to_string(), user_id_type.clone());
         }
 
         // 发送请求

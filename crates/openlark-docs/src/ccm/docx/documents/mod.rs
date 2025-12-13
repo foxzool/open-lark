@@ -1,8 +1,7 @@
-//! Documents operation API for DOCX
-//!
-//! This module provides comprehensive document operations functionality,
-//! including document creation, reading, updating, and deletion.
-
+/// Documents operation API for DOCX
+///
+/// This module provides comprehensive document operations functionality,
+/// including document creation, reading, updating, and deletion.
 use openlark_core::config::Config;
 
 /// Documents operation service

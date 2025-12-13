@@ -1,14 +1,13 @@
-//! CCM Sheet V2 表格操作API 模块
-//!
-//! 表格操作API实现，包含行列操作、合并单元格等功能：
-//! - delete_range: 删除范围
-//! - insert_dimension: 插入行列
-//! - move_dimension: 移动行列
-//! - replace_range: 替换范围
-//! - find_replace: 查找替换
-//! - merge_cells: 合并单元格
-//! - unmerge_cells: 取消合并单元格
-
+/// CCM Sheet V2 表格操作API 模块
+///
+/// 表格操作API实现，包含行列操作、合并单元格等功能：
+/// - delete_range: 删除范围
+/// - insert_dimension: 插入行列
+/// - move_dimension: 移动行列
+/// - replace_range: 替换范围
+/// - find_replace: 查找替换
+/// - merge_cells: 合并单元格
+/// - unmerge_cells: 取消合并单元格
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -100,8 +99,7 @@ pub async fn delete_range(
 
     // 创建API请求
     let api_request: ApiRequest<DeleteRangeResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "删除范围")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "删除范围")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -126,8 +124,7 @@ pub async fn insert_dimension(
 
     // 创建API请求
     let api_request: ApiRequest<InsertDimensionResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "插入行列")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "插入行列")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -152,8 +149,7 @@ pub async fn move_dimension(
 
     // 创建API请求
     let api_request: ApiRequest<MoveDimensionResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "移动行列")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "移动行列")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -178,8 +174,7 @@ pub async fn replace_range(
 
     // 创建API请求
     let api_request: ApiRequest<ReplaceRangeResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "替换范围")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "替换范围")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -205,8 +200,7 @@ pub async fn find_replace(
 
     // 创建API请求
     let api_request: ApiRequest<FindReplaceResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "查找替换")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "查找替换")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -231,8 +225,7 @@ pub async fn merge_cells(
 
     // 创建API请求
     let api_request: ApiRequest<MergeCellsResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "合并单元格")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "合并单元格")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -257,8 +250,7 @@ pub async fn unmerge_cells(
 
     // 创建API请求
     let api_request: ApiRequest<UnmergeCellsResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "取消合并单元格")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "取消合并单元格")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;

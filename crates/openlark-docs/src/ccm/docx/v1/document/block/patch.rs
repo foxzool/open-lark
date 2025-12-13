@@ -1,7 +1,7 @@
-//! 更新块的内容
-//!
-//! 更新指定块的内容。如果操作成功，接口将返回更新后的块的富文本内容。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/patch
+/// 更新块的内容
+///
+/// 更新指定块的内容。如果操作成功，接口将返回更新后的块的富文本内容。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/patch
 
 use crate::ccm::docx::common_types::BlockContent;
 use crate::common::api_endpoints::DocxApiV1;

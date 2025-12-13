@@ -1,8 +1,8 @@
-//! 获取云文档权限设置V2
-//!
-//! 根据 filetoken 获取文档的公共设置。
-//! API文档: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/permission/get-document-sharing-settings-v2
-//! 对应CSV记录: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/permission/get-document-sharing-settings-v2
+/// 获取云文档权限设置V2
+///
+/// 根据 filetoken 获取文档的公共设置。
+/// API文档: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/permission/get-document-sharing-settings-v2
+/// 对应CSV记录: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/permission/get-document-sharing-settings-v2
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

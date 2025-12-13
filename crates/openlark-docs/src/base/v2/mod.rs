@@ -1,7 +1,6 @@
-//! Base V2 模块
-//!
-//! 提供Base应用的V2版本API，包括角色管理等功能。
-
+/// Base V2 模块
+///
+/// 提供Base应用的V2版本API，包括角色管理等功能。
 use openlark_core::config::Config;
 
 pub mod app;

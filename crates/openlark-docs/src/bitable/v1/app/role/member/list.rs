@@ -1,4 +1,4 @@
-//! Bitable 列出角色成员API
+/// Bitable 列出角色成员API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/role/member/list
 use openlark_core::{

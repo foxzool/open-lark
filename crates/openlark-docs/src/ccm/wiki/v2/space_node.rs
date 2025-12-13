@@ -1,14 +1,15 @@
-//! 知识空间节点管理服务
-//!
-//! 提供飞书知识库空间节点的管理功能，包括：
-//! - 获取节点详细信息
-//! - 节点元数据查询
-//! - 节点权限信息获取
+/// 知识空间节点管理服务
+///
+/// 提供飞书知识库空间节点的管理功能，包括：
+/// - 获取节点详细信息
+/// - 节点元数据查询
+/// - 节点权限信息获取
 
 use openlark_core::{
     api::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
+    error::validation_error,
     http::Transport,
     ApiRequest, SDKResult,
 };
@@ -249,7 +250,7 @@ impl SpaceNodeService {
     /// ```
     pub async fn get(&self, req: &GetSpaceNodeRequest) -> SDKResult<GetSpaceNodeResponse> {
         req.validate()
-            .map_err(|msg| openlark_core::error::LarkAPIError::illegal_param(msg))?;
+            .map_err(|msg| validation_error("parameter", msg))?;
         log::debug!(
             "开始获取知识空间节点: space_id={}, node_id={}",
             req.space_id,
@@ -262,7 +263,7 @@ impl SpaceNodeService {
             .replace("{}", &req.node_id);
 
         let api_req = ApiRequest {
-            method: openlark_core::api::Get,
+            method: HttpMethod::Get,
             url: endpoint,
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: None, // GET请求无body

@@ -1,8 +1,7 @@
-//! 导出妙记文字记录
-//!
-//! 导出妙记的文字记录。
-//! 文档参考：https://open.feishu.cn/document/minutes-v1/minute-transcript/get
-
+/// 导出妙记文字记录
+///
+/// 导出妙记的文字记录。
+/// 文档参考：https://open.feishu.cn/document/minutes-v1/minute-transcript/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

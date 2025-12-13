@@ -63,7 +63,9 @@ impl AuthService {
     pub fn new(_config: &Config) -> Self {
         let core_config = openlark_core::config::Config::default();
 
-        Self { config: core_config }
+        Self {
+            config: core_config,
+        }
     }
 
     /// 获取自建应用访问令牌
@@ -84,7 +86,10 @@ impl AuthService {
         let result =
             with_operation_context(response, "get_internal_app_access_token", "AuthService")?;
 
-        tracing::debug!("成功获取自建应用访问令牌，过期时间: {}秒", result.expires_in);
+        tracing::debug!(
+            "成功获取自建应用访问令牌，过期时间: {}秒",
+            result.expires_in
+        );
 
         Ok(TokenInfo {
             access_token: result.app_access_token,
@@ -109,10 +114,12 @@ impl AuthService {
             .send()
             .await;
 
-        let result =
-            with_operation_context(response, "get_app_access_token", "AuthService")?;
+        let result = with_operation_context(response, "get_app_access_token", "AuthService")?;
 
-        tracing::debug!("成功获取商店应用访问令牌，过期时间: {}秒", result.expires_in);
+        tracing::debug!(
+            "成功获取商店应用访问令牌，过期时间: {}秒",
+            result.expires_in
+        );
 
         Ok(TokenInfo {
             access_token: result.app_access_token,
@@ -140,7 +147,10 @@ impl AuthService {
         let result =
             with_operation_context(response, "get_internal_tenant_access_token", "AuthService")?;
 
-        tracing::debug!("成功获取自建应用租户访问令牌，过期时间: {}秒", result.expires_in);
+        tracing::debug!(
+            "成功获取自建应用租户访问令牌，过期时间: {}秒",
+            result.expires_in
+        );
 
         Ok(TokenInfo {
             access_token: result.tenant_access_token,
@@ -165,10 +175,12 @@ impl AuthService {
             .send()
             .await;
 
-        let result =
-            with_operation_context(response, "get_tenant_access_token", "AuthService")?;
+        let result = with_operation_context(response, "get_tenant_access_token", "AuthService")?;
 
-        tracing::debug!("成功获取商店应用租户访问令牌，过期时间: {}秒", result.expires_in);
+        tracing::debug!(
+            "成功获取商店应用租户访问令牌，过期时间: {}秒",
+            result.expires_in
+        );
 
         Ok(TokenInfo {
             access_token: result.tenant_access_token,
@@ -278,7 +290,8 @@ impl AuthService {
             .send()
             .await;
 
-        let result = with_operation_context(response, "refresh_user_access_token_v1", "AuthService")?;
+        let result =
+            with_operation_context(response, "refresh_user_access_token_v1", "AuthService")?;
 
         tracing::debug!("成功刷新用户访问令牌");
 
@@ -328,7 +341,8 @@ impl AuthService {
             .send()
             .await;
 
-        let result = with_operation_context(response, "refresh_oidc_user_access_token", "AuthService")?;
+        let result =
+            with_operation_context(response, "refresh_oidc_user_access_token", "AuthService")?;
 
         tracing::debug!("成功刷新OIDC用户访问令牌");
 

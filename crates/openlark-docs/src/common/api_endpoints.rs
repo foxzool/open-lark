@@ -1,6 +1,6 @@
-//! API端点定义
-//!
-//! 提供类型安全的API端点管理，替代字符串拼接方式。
+/// API端点定义
+///
+/// 提供类型安全的API端点管理，替代字符串拼接方式。
 
 /// Base API V2 端点枚举
 #[derive(Debug, Clone, PartialEq)]
@@ -681,6 +681,10 @@ pub enum CcmDocsApiOld {
     /// 搜索云文档
     SearchObject,
     /// 获取元数据
+    GetMeta(String), // document_token
+    /// 批量更新
+    BatchUpdate(String), // document_token
+    /// 获取元数据
     Meta,
 }
 
@@ -689,6 +693,12 @@ impl CcmDocsApiOld {
     pub fn to_url(&self) -> String {
         match self {
             CcmDocsApiOld::SearchObject => "/open-apis/suite/docs-api/search/object".to_string(),
+            CcmDocsApiOld::GetMeta(doc_token) => {
+                format!("/open-apis/suite/docs-api/meta/{}", doc_token)
+            }
+            CcmDocsApiOld::BatchUpdate(doc_token) => {
+                format!("/open-apis/suite/docs-api/batch_update/{}", doc_token)
+            }
             CcmDocsApiOld::Meta => "/open-apis/suite/docs-api/meta".to_string(),
         }
     }
@@ -720,7 +730,9 @@ impl CcmDriveExplorerApiOld {
     /// 生成对应的 URL
     pub fn to_url(&self) -> String {
         match self {
-            CcmDriveExplorerApiOld::RootFolderMeta => "/open-apis/drive/explorer/v2/root_folder/meta".to_string(),
+            CcmDriveExplorerApiOld::RootFolderMeta => {
+                "/open-apis/drive/explorer/v2/root_folder/meta".to_string()
+            }
             CcmDriveExplorerApiOld::FolderMeta(folder_token) => {
                 format!("/open-apis/drive/explorer/v2/folder/{}/meta", folder_token)
             }
@@ -728,19 +740,139 @@ impl CcmDriveExplorerApiOld {
                 format!("/open-apis/drive/explorer/v2/file/{}", folder_token)
             }
             CcmDriveExplorerApiOld::FileSpreadsheets(spreadsheet_token) => {
-                format!("/open-apis/drive/explorer/v2/file/spreadsheets/{}", spreadsheet_token)
+                format!(
+                    "/open-apis/drive/explorer/v2/file/spreadsheets/{}",
+                    spreadsheet_token
+                )
             }
             CcmDriveExplorerApiOld::FileCopy(file_token) => {
-                format!("/open-apis/drive/explorer/v2/file/copy/files/{}", file_token)
+                format!(
+                    "/open-apis/drive/explorer/v2/file/copy/files/{}",
+                    file_token
+                )
             }
             CcmDriveExplorerApiOld::FileDocs(doc_token) => {
                 format!("/open-apis/drive/explorer/v2/file/docs/{}", doc_token)
             }
             CcmDriveExplorerApiOld::FolderChildren(folder_token) => {
-                format!("/open-apis/drive/explorer/v2/folder/{}/children", folder_token)
+                format!(
+                    "/open-apis/drive/explorer/v2/folder/{}/children",
+                    folder_token
+                )
             }
             CcmDriveExplorerApiOld::Folder(folder_token) => {
                 format!("/open-apis/drive/explorer/v2/folder/{}", folder_token)
+            }
+        }
+    }
+}
+
+/// CCM Drive Explorer API V1 端点枚举
+/// 对应 meta.project = ccm_drive_explorer, meta.version = v1
+#[derive(Debug, Clone, PartialEq)]
+pub enum CcmDriveExplorerApi {
+    /// 获取根目录元数据
+    RootFolderMeta,
+    /// 获取文件夹元数据
+    FolderMeta(String), // folder_token
+    /// 获取文件元数据
+    File(String), // file_token
+    /// 复制文件
+    FileCopy(String), // file_token
+    /// 获取文档文件信息
+    FileDocs(String), // file_token
+    /// 获取表格文件信息
+    FileSpreadsheets(String), // file_token
+    /// 获取文件夹子内容
+    FolderChildren(String), // folder_token
+    /// 创建文件夹
+    Folder,
+}
+
+impl CcmDriveExplorerApi {
+    /// 生成对应的 URL
+    pub fn to_url(&self) -> String {
+        match self {
+            CcmDriveExplorerApi::RootFolderMeta => {
+                "/open-apis/drive/v1/explorer/root_folder/meta".to_string()
+            }
+            CcmDriveExplorerApi::FolderMeta(folder_token) => {
+                format!("/open-apis/drive/v1/explorer/folder/{}/meta", folder_token)
+            }
+            CcmDriveExplorerApi::File(file_token) => {
+                format!("/open-apis/drive/v1/explorer/file/{}", file_token)
+            }
+            CcmDriveExplorerApi::FileCopy(file_token) => {
+                format!("/open-apis/drive/v1/explorer/file/copy/files/{}", file_token)
+            }
+            CcmDriveExplorerApi::FileDocs(file_token) => {
+                format!("/open-apis/drive/v1/explorer/file/docs/{}", file_token)
+            }
+            CcmDriveExplorerApi::FileSpreadsheets(file_token) => {
+                format!(
+                    "/open-apis/drive/v1/explorer/file/spreadsheets/{}",
+                    file_token
+                )
+            }
+            CcmDriveExplorerApi::FolderChildren(folder_token) => {
+                format!("/open-apis/drive/v1/explorer/folder/{}/children", folder_token)
+            }
+            CcmDriveExplorerApi::Folder => "/open-apis/drive/v1/explorer/folder".to_string(),
+        }
+    }
+
+    /// 生成带参数的 URL
+    pub fn to_url_with_params(&self, params: &[(&str, String)]) -> String {
+        let base_url = self.to_url();
+        if params.is_empty() {
+            return base_url;
+        }
+
+        let query_string = params
+            .iter()
+            .map(|(key, value)| format!("{}={}", key, simple_url_encode(value)))
+            .collect::<Vec<_>>()
+            .join("&");
+
+        format!("{}?{}", base_url, query_string)
+    }
+}
+
+/// 简单的URL编码函数，用于查询参数编码
+fn simple_url_encode(input: &str) -> String {
+    input
+        .chars()
+        .map(|c| match c {
+            'A'..='Z' | 'a'..='z' | '0'..='9' | '-' | '_' | '.' | '~' => c.to_string(),
+            _ => format!("%{:02X}", c as u8),
+        })
+        .collect()
+}
+
+/// CCM Drive Permission API V1 端点枚举
+/// 对应 meta.project = ccm_drive_permission, meta.version = v1
+#[derive(Debug, Clone, PartialEq)]
+pub enum CcmDrivePermissionApi {
+    /// 判断协作者是否有某权限
+    MemberPermitted,
+    /// 转移拥有者
+    MemberTransfer,
+    /// 获取云文档权限设置V2
+    Public,
+}
+
+impl CcmDrivePermissionApi {
+    /// 生成对应的 URL
+    pub fn to_url(&self) -> String {
+        match self {
+            CcmDrivePermissionApi::MemberPermitted => {
+                "/open-apis/drive/v1/permission/member/permitted".to_string()
+            }
+            CcmDrivePermissionApi::MemberTransfer => {
+                "/open-apis/drive/v1/permission/member/transfer".to_string()
+            }
+            CcmDrivePermissionApi::Public => {
+                "/open-apis/drive/v1/permission/v2/public/".to_string()
             }
         }
     }
@@ -762,9 +894,15 @@ impl CcmDrivePermissionApiOld {
     /// 生成对应的 URL
     pub fn to_url(&self) -> String {
         match self {
-            CcmDrivePermissionApiOld::MemberPermitted => "/open-apis/drive/permission/member/permitted".to_string(),
-            CcmDrivePermissionApiOld::MemberTransfer => "/open-apis/drive/permission/member/transfer".to_string(),
-            CcmDrivePermissionApiOld::Public => "/open-apis/drive/permission/v2/public/".to_string(),
+            CcmDrivePermissionApiOld::MemberPermitted => {
+                "/open-apis/drive/permission/member/permitted".to_string()
+            }
+            CcmDrivePermissionApiOld::MemberTransfer => {
+                "/open-apis/drive/permission/member/transfer".to_string()
+            }
+            CcmDrivePermissionApiOld::Public => {
+                "/open-apis/drive/permission/v2/public/".to_string()
+            }
         }
     }
 }
@@ -873,14 +1011,36 @@ pub enum CcmSheetApiOld {
     UpdateFilter(String), // spreadsheet_token
     /// 删除筛选 (V3)
     DeleteFilter(String), // spreadsheet_token
-    /// 创建浮图 (V3)
-    CreateFloatImage(String), // spreadsheet_token
-    /// 获取浮图 (V3)
-    GetFloatImage(String), // spreadsheet_token
-    /// 更新浮图 (V3)
-    UpdateFloatImage(String), // spreadsheet_token
-    /// 删除浮图 (V3)
-    DeleteFloatImage(String), // spreadsheet_token
+    /// 创建筛选视图 (V3)
+    CreateFilterView(String, String), // spreadsheet_token, sheet_id
+    /// 更新筛选视图 (V3)
+    UpdateFilterView(String, String, String), // spreadsheet_token, sheet_id, filter_view_id
+    /// 查询筛选视图 (V3)
+    QueryFilterViews(String, String), // spreadsheet_token, sheet_id
+    /// 获取筛选视图 (V3)
+    GetFilterView(String, String, String), // spreadsheet_token, sheet_id, filter_view_id
+    /// 删除筛选视图 (V3)
+    DeleteFilterView(String, String, String), // spreadsheet_token, sheet_id, filter_view_id
+    /// 创建筛选条件 (V3)
+    CreateFilterCondition(String, String, String), // spreadsheet_token, sheet_id, filter_view_id
+    /// 更新筛选条件 (V3)
+    UpdateFilterCondition(String, String, String, String), // spreadsheet_token, sheet_id, filter_view_id, condition_id
+    /// 查询筛选条件 (V3)
+    QueryFilterConditions(String, String, String), // spreadsheet_token, sheet_id, filter_view_id
+    /// 获取筛选条件 (V3)
+    GetFilterCondition(String, String, String, String), // spreadsheet_token, sheet_id, filter_view_id, condition_id
+    /// 删除筛选条件 (V3)
+    DeleteFilterCondition(String, String, String, String), // spreadsheet_token, sheet_id, filter_view_id, condition_id
+    /// 创建浮动图片 (V3)
+    CreateFloatImage(String, String), // spreadsheet_token, sheet_id
+    /// 更新浮动图片 (V3)
+    UpdateFloatImage(String, String, String), // spreadsheet_token, sheet_id, float_image_id
+    /// 获取浮动图片 (V3)
+    GetFloatImage(String, String, String), // spreadsheet_token, sheet_id, float_image_id
+    /// 查询浮动图片 (V3)
+    QueryFloatImages(String, String), // spreadsheet_token, sheet_id
+    /// 删除浮动图片 (V3)
+    DeleteFloatImage(String, String, String), // spreadsheet_token, sheet_id, float_image_id
     /// 删除范围 (V3)
     DeleteRange(String), // spreadsheet_token
     /// 插入维度 (V3)
@@ -898,118 +1058,229 @@ impl CcmSheetApiOld {
     pub fn to_url(&self) -> String {
         match self {
             CcmSheetApiOld::OperateSheets(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/sheets_batch_update", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/sheets_batch_update",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::UpdateSheetProperties(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/sheets_batch_update", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/sheets_batch_update",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::Style(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/style", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/style",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::StylesBatchUpdate(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/styles_batch_update", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/styles_batch_update",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::ValuesPrepend(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/values_prepend", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/values_prepend",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::ValuesAppend(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/values_append", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/values_append",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::ValuesImage(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/values_image", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/values_image",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::ValuesRange(spreadsheet_token, range) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/values/{}", spreadsheet_token, range)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/values/{}",
+                    spreadsheet_token, range
+                )
             }
             CcmSheetApiOld::ValuesBatchGet(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/values_batch_get", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/values_batch_get",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::Values(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/values", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/values",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::ValuesBatchUpdate(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/values_batch_update", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/values_batch_update",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::DimensionRange(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/dimension_range", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/dimension_range",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::InsertDimensionRange(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/insert_dimension_range", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/insert_dimension_range",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::DimensionRangeUpdate(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/dimension_range", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/dimension_range",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::DimensionRangeDelete(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/dimension_range", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/dimension_range",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::MergeCells(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/merge_cells", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/merge_cells",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::UnmergeCells(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/unmerge_cells", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/unmerge_cells",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::ProtectedDimension(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/protected_dimension", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/protected_dimension",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::ProtectedRangeBatchUpdate(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/protected_range_batch_update", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/protected_range_batch_update",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::ProtectedRangeBatchGet(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/protected_range_batch_get", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/protected_range_batch_get",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::ProtectedRangeBatchDel(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/protected_range_batch_del", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/protected_range_batch_del",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::Metainfo(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/metainfo", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/metainfo",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::Properties(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/properties", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/properties",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::Import => "/open-apis/sheets/v2/import".to_string(),
             CcmSheetApiOld::ImportResult => "/open-apis/sheets/v2/import/result".to_string(),
             CcmSheetApiOld::ConditionFormats(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/condition_formats", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/condition_formats",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::ConditionFormatsBatchCreate(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/condition_formats/batch_create", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/condition_formats/batch_create",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::ConditionFormatsBatchDelete(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/condition_formats/batch_delete", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/condition_formats/batch_delete",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::ConditionFormatsBatchUpdate(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/condition_formats/batch_update", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/condition_formats/batch_update",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::DataValidation(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/dataValidation", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/dataValidation",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::DataValidationCreate(spreadsheet_token) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/dataValidation", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/dataValidation",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::DataValidationUpdate(spreadsheet_token, validation_id) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/dataValidation/{}", spreadsheet_token, validation_id)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/dataValidation/{}",
+                    spreadsheet_token, validation_id
+                )
             }
             CcmSheetApiOld::DataValidationDelete(spreadsheet_token, validation_id) => {
-                format!("/open-apis/sheets/v2/spreadsheets/{}/dataValidation/{}", spreadsheet_token, validation_id)
+                format!(
+                    "/open-apis/sheets/v2/spreadsheets/{}/dataValidation/{}",
+                    spreadsheet_token, validation_id
+                )
             }
             // V3 APIs
             CcmSheetApiOld::ReadSingleRange(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/values", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/values",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::ReadMultipleRanges(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/values/batchGet", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/values/batchGet",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::WriteSingleRange(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/values", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/values",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::BatchWriteRanges(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/values/batchUpdate", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/values/batchUpdate",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::AppendValues(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/values/append", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/values/append",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::InsertValues(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/values/insert", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/values/insert",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::GetSpreadsheet(spreadsheet_token) => {
                 format!("/open-apis/sheets/v3/spreadsheets/{}", spreadsheet_token)
@@ -1019,56 +1290,638 @@ impl CcmSheetApiOld {
                 format!("/open-apis/sheets/v3/spreadsheets/{}", spreadsheet_token)
             }
             CcmSheetApiOld::AddSheet(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/sheets", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::GetSheet(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/sheets/query", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/query",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::UpdateSheet(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/sheets", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::DeleteSheet(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/sheets", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::CreateFilter(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/filterViews", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/filterViews",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::GetFilter(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/filterViews/query", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/filterViews/query",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::UpdateFilter(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/filterViews", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/filterViews",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::DeleteFilter(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/filterViews", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/filterViews",
+                    spreadsheet_token
+                )
             }
-            CcmSheetApiOld::CreateFloatImage(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/floatImages", spreadsheet_token)
+            CcmSheetApiOld::CreateFilterView(spreadsheet_token, sheet_id) => {
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views",
+                    spreadsheet_token, sheet_id
+                )
             }
-            CcmSheetApiOld::GetFloatImage(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/floatImages/query", spreadsheet_token)
+            CcmSheetApiOld::UpdateFilterView(spreadsheet_token, sheet_id, filter_view_id) => {
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}",
+                    spreadsheet_token, sheet_id, filter_view_id
+                )
             }
-            CcmSheetApiOld::UpdateFloatImage(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/floatImages", spreadsheet_token)
+            CcmSheetApiOld::QueryFilterViews(spreadsheet_token, sheet_id) => {
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/query",
+                    spreadsheet_token, sheet_id
+                )
             }
-            CcmSheetApiOld::DeleteFloatImage(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/floatImages", spreadsheet_token)
+            CcmSheetApiOld::GetFilterView(spreadsheet_token, sheet_id, filter_view_id) => {
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}",
+                    spreadsheet_token, sheet_id, filter_view_id
+                )
+            }
+            CcmSheetApiOld::DeleteFilterView(spreadsheet_token, sheet_id, filter_view_id) => {
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}",
+                    spreadsheet_token, sheet_id, filter_view_id
+                )
+            }
+            CcmSheetApiOld::CreateFilterCondition(spreadsheet_token, sheet_id, filter_view_id) => {
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}/conditions",
+                    spreadsheet_token, sheet_id, filter_view_id
+                )
+            }
+            CcmSheetApiOld::UpdateFilterCondition(
+                spreadsheet_token,
+                sheet_id,
+                filter_view_id,
+                condition_id,
+            ) => {
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}/conditions/{}",
+                    spreadsheet_token, sheet_id, filter_view_id, condition_id
+                )
+            }
+            CcmSheetApiOld::QueryFilterConditions(spreadsheet_token, sheet_id, filter_view_id) => {
+                format!("/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}/conditions/query", spreadsheet_token, sheet_id, filter_view_id)
+            }
+            CcmSheetApiOld::GetFilterCondition(
+                spreadsheet_token,
+                sheet_id,
+                filter_view_id,
+                condition_id,
+            ) => {
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}/conditions/{}",
+                    spreadsheet_token, sheet_id, filter_view_id, condition_id
+                )
+            }
+            CcmSheetApiOld::DeleteFilterCondition(
+                spreadsheet_token,
+                sheet_id,
+                filter_view_id,
+                condition_id,
+            ) => {
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}/conditions/{}",
+                    spreadsheet_token, sheet_id, filter_view_id, condition_id
+                )
+            }
+            CcmSheetApiOld::CreateFloatImage(spreadsheet_token, sheet_id) => {
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images",
+                    spreadsheet_token, sheet_id
+                )
+            }
+            CcmSheetApiOld::UpdateFloatImage(spreadsheet_token, sheet_id, float_image_id) => {
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images/{}",
+                    spreadsheet_token, sheet_id, float_image_id
+                )
+            }
+            CcmSheetApiOld::GetFloatImage(spreadsheet_token, sheet_id, float_image_id) => {
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images/{}",
+                    spreadsheet_token, sheet_id, float_image_id
+                )
+            }
+            CcmSheetApiOld::QueryFloatImages(spreadsheet_token, sheet_id) => {
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images/query",
+                    spreadsheet_token, sheet_id
+                )
+            }
+            CcmSheetApiOld::DeleteFloatImage(spreadsheet_token, sheet_id, float_image_id) => {
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images/{}",
+                    spreadsheet_token, sheet_id, float_image_id
+                )
             }
             CcmSheetApiOld::DeleteRange(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/dimensionRange/delete", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/dimensionRange/delete",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::InsertDimension(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/dimensionRange/insert", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/dimensionRange/insert",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::MoveDimension(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/dimensionRange/move", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/dimensionRange/move",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::ReplaceRange(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/values/batchReplace", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/values/batchReplace",
+                    spreadsheet_token
+                )
             }
             CcmSheetApiOld::FindReplace(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/values/batchFindReplace", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/values/batchFindReplace",
+                    spreadsheet_token
+                )
             }
         }
     }
 }
+
+/// Drive API 端点枚举
+#[derive(Debug, Clone, PartialEq)]
+pub enum DriveApi {
+    // V1 APIs - 文件操作
+    /// 获取文件夹中的文件清单
+    ListFiles,
+    /// 新建文件夹
+    CreateFolder,
+    /// 查询异步任务状态
+    TaskCheck,
+    /// 获取文件元数据（批量查询）
+    BatchQueryMetas,
+    /// 获取文件统计信息
+    GetFileStatistics(String), // file_token
+    /// 获取文件访问记录
+    ListFileViewRecords(String), // file_token
+    /// 复制文件
+    CopyFile(String), // file_token
+    /// 移动文件或文件夹
+    MoveFile(String), // file_token
+    /// 删除文件或文件夹
+    DeleteFile(String), // file_token
+    /// 创建文件快捷方式
+    CreateShortcut,
+    /// 上传文件
+    UploadFile,
+    /// 分片上传文件-预上传
+    UploadPrepare,
+    /// 分片上传文件-上传分片
+    UploadPart,
+    /// 分片上传文件-完成上传
+    UploadFinish,
+    /// 下载文件
+    DownloadFile(String), // file_token
+    /// 创建导入任务
+    CreateImportTask,
+    /// 查询导入任务结果
+    GetImportTask(String), // ticket
+    /// 创建导出任务
+    CreateExportTask,
+    /// 查询导出任务结果
+    GetExportTask(String), // ticket
+    /// 下载导出文件
+    DownloadExportFile(String), // file_token
+    /// 上传素材
+    UploadMedia,
+    /// 分片上传素材-预上传
+    UploadMediaPrepare,
+    /// 分片上传素材-上传分片
+    UploadMediaPart,
+    /// 分片上传素材-完成上传
+    UploadMediaFinish,
+    /// 下载素材
+    DownloadMedia(String), // file_token
+    /// 获取素材临时下载链接
+    GetMediaTempDownloadUrls,
+    /// 创建文档版本
+    CreateFileVersion(String), // file_token
+    /// 获取文档版本列表
+    ListFileVersions(String), // file_token
+    /// 获取文档版本信息
+    GetFileVersion(String, String), // file_token, version_id
+    /// 删除文档版本
+    DeleteFileVersion(String, String), // file_token, version_id
+    /// 订阅云文档事件
+    SubscribeFile(String), // file_token
+    /// 查询云文档事件订阅状态
+    GetFileSubscribe(String), // file_token
+    /// 取消云文档事件订阅
+    DeleteFileSubscribe(String), // file_token
+    /// 增加协作者权限
+    CreatePermissionMember(String), // token
+    /// 批量增加协作者权限
+    BatchCreatePermissionMember(String), // token
+    /// 更新协作者权限
+    UpdatePermissionMember(String, String), // token, member_id
+    /// 获取云文档协作者
+    ListPermissionMembers(String), // token
+    /// 移除云文档协作者权限
+    DeletePermissionMember(String, String), // token, member_id
+    /// 转移云文档所有者
+    TransferOwner(String), // token
+    /// 判断用户云文档权限
+    AuthPermissionMember(String), // token
+    /// 更新云文档权限设置
+    UpdatePublicPermission(String), // token
+    /// 获取云文档权限设置
+    GetPublicPermission(String), // token
+    /// 启用云文档密码
+    CreatePublicPassword(String), // token
+    /// 刷新云文档密码
+    UpdatePublicPassword(String), // token
+    /// 停用云文档密码
+    DeletePublicPassword(String), // token
+    /// 获取云文档所有评论
+    ListFileComments(String), // file_token
+    /// 批量获取评论
+    BatchQueryComments(String), // file_token
+    /// 解决/恢复评论
+    PatchComment(String, String), // file_token, comment_id
+    /// 添加全文评论
+    CreateComment(String), // file_token
+    /// 获取全文评论
+    GetComment(String, String), // file_token, comment_id
+    /// 获取回复信息
+    ListCommentReplies(String, String), // file_token, comment_id
+    /// 更新回复的内容
+    UpdateCommentReply(String, String, String), // file_token, comment_id, reply_id
+    /// 删除回复
+    DeleteCommentReply(String, String, String), // file_token, comment_id, reply_id
+    /// 获取订阅状态
+    GetFileSubscription(String, String), // file_token, subscription_id
+    /// 创建订阅
+    CreateFileSubscription(String), // file_token
+    /// 更新订阅状态
+    UpdateFileSubscription(String, String), // file_token, subscription_id
+
+    // V2 APIs
+    /// 获取云文档的点赞者列表
+    ListFileLikes(String), // file_token
+}
+
+impl DriveApi {
+    /// 生成对应的 URL
+    pub fn to_url(&self) -> String {
+        match self {
+            // V1 File APIs
+            DriveApi::ListFiles => "/open-apis/drive/v1/files".to_string(),
+            DriveApi::CreateFolder => "/open-apis/drive/v1/files/create_folder".to_string(),
+            DriveApi::TaskCheck => "/open-apis/drive/v1/files/task_check".to_string(),
+            DriveApi::BatchQueryMetas => "/open-apis/drive/v1/metas/batch_query".to_string(),
+            DriveApi::GetFileStatistics(file_token) => {
+                format!("/open-apis/drive/v1/files/{}/statistics", file_token)
+            }
+            DriveApi::ListFileViewRecords(file_token) => {
+                format!("/open-apis/drive/v1/files/{}/view_records", file_token)
+            }
+            DriveApi::CopyFile(file_token) => {
+                format!("/open-apis/drive/v1/files/{}/copy", file_token)
+            }
+            DriveApi::MoveFile(file_token) => {
+                format!("/open-apis/drive/v1/files/{}/move", file_token)
+            }
+            DriveApi::DeleteFile(file_token) => {
+                format!("/open-apis/drive/v1/files/{}", file_token)
+            }
+            DriveApi::CreateShortcut => "/open-apis/drive/v1/files/create_shortcut".to_string(),
+            DriveApi::UploadFile => "/open-apis/drive/v1/files/upload_all".to_string(),
+            DriveApi::UploadPrepare => "/open-apis/drive/v1/files/upload_prepare".to_string(),
+            DriveApi::UploadPart => "/open-apis/drive/v1/files/upload_part".to_string(),
+            DriveApi::UploadFinish => "/open-apis/drive/v1/files/upload_finish".to_string(),
+            DriveApi::DownloadFile(file_token) => {
+                format!("/open-apis/drive/v1/files/{}/download", file_token)
+            }
+
+            // Import/Export Task APIs
+            DriveApi::CreateImportTask => "/open-apis/drive/v1/import_tasks".to_string(),
+            DriveApi::GetImportTask(ticket) => {
+                format!("/open-apis/drive/v1/import_tasks/{}", ticket)
+            }
+            DriveApi::CreateExportTask => "/open-apis/drive/v1/export_tasks".to_string(),
+            DriveApi::GetExportTask(ticket) => {
+                format!("/open-apis/drive/v1/export_tasks/{}", ticket)
+            }
+            DriveApi::DownloadExportFile(file_token) => {
+                format!("/open-apis/drive/export_tasks/file/{}/download", file_token)
+            }
+
+            // Media APIs
+            DriveApi::UploadMedia => "/open-apis/drive/v1/medias/upload_all".to_string(),
+            DriveApi::UploadMediaPrepare => "/open-apis/drive/v1/medias/upload_prepare".to_string(),
+            DriveApi::UploadMediaPart => "/open-apis/drive/v1/medias/upload_part".to_string(),
+            DriveApi::UploadMediaFinish => "/open-apis/drive/v1/medias/upload_finish".to_string(),
+            DriveApi::DownloadMedia(file_token) => {
+                format!("/open-apis/drive/v1/medias/{}/download", file_token)
+            }
+            DriveApi::GetMediaTempDownloadUrls => {
+                "/open-apis/drive/v1/medias/batch_get_tmp_download_url".to_string()
+            }
+
+            // File Version APIs
+            DriveApi::CreateFileVersion(file_token) => {
+                format!("/open-apis/drive/v1/files/{}/versions", file_token)
+            }
+            DriveApi::ListFileVersions(file_token) => {
+                format!("/open-apis/drive/v1/files/{}/versions", file_token)
+            }
+            DriveApi::GetFileVersion(file_token, version_id) => {
+                format!(
+                    "/open-apis/drive/v1/files/{}/versions/{}",
+                    file_token, version_id
+                )
+            }
+            DriveApi::DeleteFileVersion(file_token, version_id) => {
+                format!(
+                    "/open-apis/drive/v1/files/{}/versions/{}",
+                    file_token, version_id
+                )
+            }
+
+            // Subscription APIs
+            DriveApi::SubscribeFile(file_token) => {
+                format!("/open-apis/drive/v1/files/{}/subscribe", file_token)
+            }
+            DriveApi::GetFileSubscribe(file_token) => {
+                format!("/open-apis/drive/v1/files/{}/get_subscribe", file_token)
+            }
+            DriveApi::DeleteFileSubscribe(file_token) => {
+                format!("/open-apis/drive/v1/files/{}/delete_subscribe", file_token)
+            }
+
+            // Permission Member APIs
+            DriveApi::CreatePermissionMember(token) => {
+                format!("/open-apis/drive/v1/permissions/{}/members", token)
+            }
+            DriveApi::BatchCreatePermissionMember(token) => {
+                format!(
+                    "/open-apis/drive/v1/permissions/{}/members/batch_create",
+                    token
+                )
+            }
+            DriveApi::UpdatePermissionMember(token, member_id) => {
+                format!(
+                    "/open-apis/drive/v1/permissions/{}/members/{}",
+                    token, member_id
+                )
+            }
+            DriveApi::ListPermissionMembers(token) => {
+                format!("/open-apis/drive/v1/permissions/{}/members", token)
+            }
+            DriveApi::DeletePermissionMember(token, member_id) => {
+                format!(
+                    "/open-apis/drive/v1/permissions/{}/members/{}",
+                    token, member_id
+                )
+            }
+            DriveApi::TransferOwner(token) => {
+                format!(
+                    "/open-apis/drive/v1/permissions/{}/members/transfer_owner",
+                    token
+                )
+            }
+            DriveApi::AuthPermissionMember(token) => {
+                format!("/open-apis/drive/v1/permissions/{}/members/auth", token)
+            }
+
+            // Permission Public APIs
+            DriveApi::UpdatePublicPermission(token) => {
+                format!("/open-apis/drive/v1/permissions/{}/public", token)
+            }
+            DriveApi::GetPublicPermission(token) => {
+                format!("/open-apis/drive/v1/permissions/{}/public", token)
+            }
+            DriveApi::CreatePublicPassword(token) => {
+                format!("/open-apis/drive/v1/permissions/{}/public/password", token)
+            }
+            DriveApi::UpdatePublicPassword(token) => {
+                format!("/open-apis/drive/v1/permissions/{}/public/password", token)
+            }
+            DriveApi::DeletePublicPassword(token) => {
+                format!("/open-apis/drive/v1/permissions/{}/public/password", token)
+            }
+
+            // Comment APIs
+            DriveApi::ListFileComments(file_token) => {
+                format!("/open-apis/drive/v1/files/{}/comments", file_token)
+            }
+            DriveApi::BatchQueryComments(file_token) => {
+                format!(
+                    "/open-apis/drive/v1/files/{}/comments/batch_query",
+                    file_token
+                )
+            }
+            DriveApi::PatchComment(file_token, comment_id) => {
+                format!(
+                    "/open-apis/drive/v1/files/{}/comments/{}",
+                    file_token, comment_id
+                )
+            }
+            DriveApi::CreateComment(file_token) => {
+                format!("/open-apis/drive/v1/files/{}/comments", file_token)
+            }
+            DriveApi::GetComment(file_token, comment_id) => {
+                format!(
+                    "/open-apis/drive/v1/files/{}/comments/{}",
+                    file_token, comment_id
+                )
+            }
+            DriveApi::ListCommentReplies(file_token, comment_id) => {
+                format!(
+                    "/open-apis/drive/v1/files/{}/comments/{}/replies",
+                    file_token, comment_id
+                )
+            }
+            DriveApi::UpdateCommentReply(file_token, comment_id, reply_id) => {
+                format!(
+                    "/open-apis/drive/v1/files/{}/comments/{}/replies/{}",
+                    file_token, comment_id, reply_id
+                )
+            }
+            DriveApi::DeleteCommentReply(file_token, comment_id, reply_id) => {
+                format!(
+                    "/open-apis/drive/v1/files/{}/comments/{}/replies/{}",
+                    file_token, comment_id, reply_id
+                )
+            }
+
+            // File Subscription APIs
+            DriveApi::GetFileSubscription(file_token, subscription_id) => {
+                format!(
+                    "/open-apis/drive/v1/files/{}/subscriptions/{}",
+                    file_token, subscription_id
+                )
+            }
+            DriveApi::CreateFileSubscription(file_token) => {
+                format!("/open-apis/drive/v1/files/{}/subscriptions", file_token)
+            }
+            DriveApi::UpdateFileSubscription(file_token, subscription_id) => {
+                format!(
+                    "/open-apis/drive/v1/files/{}/subscriptions/{}",
+                    file_token, subscription_id
+                )
+            }
+
+            // V2 APIs
+            DriveApi::ListFileLikes(file_token) => {
+                format!("/open-apis/drive/v2/files/{}/likes", file_token)
+            }
+        }
+    }
+}
+
+/// Wiki API 端点枚举
+#[derive(Debug, Clone, PartialEq)]
+pub enum WikiApi {
+    // Space APIs
+    /// 获取知识空间列表
+    ListSpaces,
+    /// 获取知识空间信息
+    GetSpace,
+    /// 创建知识空间
+    CreateSpace,
+
+    // Space Member APIs
+    /// 获取知识空间成员列表
+    ListSpaceMembers(String), // space_id
+    /// 添加知识空间成员
+    CreateSpaceMember(String), // space_id
+    /// 删除知识空间成员
+    DeleteSpaceMember(String, String), // space_id, member_id
+
+    // Space Setting APIs
+    /// 更新知识空间设置
+    UpdateSpaceSetting(String), // space_id
+
+    // Space Node APIs
+    /// 创建知识空间节点
+    CreateSpaceNode(String), // space_id
+    /// 获取知识空间节点信息
+    GetSpaceNode,
+    /// 获取知识空间子节点列表
+    ListSpaceNodes,
+    /// 移动知识空间节点
+    MoveSpaceNode(String, String), // space_id, node_token
+    /// 更新知识空间节点标题
+    UpdateSpaceNodeTitle(String, String), // space_id, node_token
+    /// 创建知识空间节点副本
+    CopySpaceNode(String, String), // space_id, node_token
+    /// 移动云空间文档至知识空间
+    MoveDocsToWiki(String), // space_id
+
+    // Task APIs
+    /// 获取任务结果
+    GetTask(String), // task_id
+
+    // Node Search API (V1)
+    /// 搜索Wiki节点
+    SearchNodes,
+}
+
+impl WikiApi {
+    /// 生成对应的 URL
+    pub fn to_url(&self) -> String {
+        match self {
+            // Space APIs
+            WikiApi::ListSpaces => "/open-apis/wiki/v2/spaces".to_string(),
+            WikiApi::GetSpace => "/open-apis/wiki/v2/spaces/get_node".to_string(),
+            WikiApi::CreateSpace => "/open-apis/wiki/v2/spaces".to_string(),
+
+            // Space Member APIs
+            WikiApi::ListSpaceMembers(space_id) => {
+                format!("/open-apis/wiki/v2/spaces/{}/members", space_id)
+            }
+            WikiApi::CreateSpaceMember(space_id) => {
+                format!("/open-apis/wiki/v2/spaces/{}/members", space_id)
+            }
+            WikiApi::DeleteSpaceMember(space_id, member_id) => {
+                format!(
+                    "/open-apis/wiki/v2/spaces/{}/members/{}",
+                    space_id, member_id
+                )
+            }
+
+            // Space Setting APIs
+            WikiApi::UpdateSpaceSetting(space_id) => {
+                format!("/open-apis/wiki/v2/spaces/{}/setting", space_id)
+            }
+
+            // Space Node APIs
+            WikiApi::CreateSpaceNode(space_id) => {
+                format!("/open-apis/wiki/v2/spaces/{}/nodes", space_id)
+            }
+            WikiApi::GetSpaceNode => "/open-apis/wiki/v2/spaces/get_node".to_string(),
+            WikiApi::ListSpaceNodes => "/open-apis/wiki/v2/space.node/list".to_string(),
+            WikiApi::MoveSpaceNode(space_id, node_token) => {
+                format!(
+                    "/open-apis/wiki/v2/spaces/{}/nodes/{}/move",
+                    space_id, node_token
+                )
+            }
+            WikiApi::UpdateSpaceNodeTitle(space_id, node_token) => {
+                format!(
+                    "/open-apis/wiki/v2/spaces/{}/nodes/{}/update_title",
+                    space_id, node_token
+                )
+            }
+            WikiApi::CopySpaceNode(space_id, node_token) => {
+                format!(
+                    "/open-apis/wiki/v2/spaces/{}/nodes/{}/copy",
+                    space_id, node_token
+                )
+            }
+            WikiApi::MoveDocsToWiki(space_id) => {
+                format!(
+                    "/open-apis/wiki/v2/spaces/{}/nodes/move_docs_to_wiki",
+                    space_id
+                )
+            }
+
+            // Task APIs
+            WikiApi::GetTask(task_id) => {
+                format!("/open-apis/wiki/v2/tasks/{}", task_id)
+            }
+
+            // Node Search API (V1)
+            WikiApi::SearchNodes => "/open-apis/wiki/v1/nodes/search".to_string(),
+        }
+    }
+}
+
+// Sheets API v3 端点
+pub const SheetsApiV3: &str = "/open-apis/sheets/v3";

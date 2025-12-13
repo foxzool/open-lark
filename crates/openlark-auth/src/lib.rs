@@ -49,21 +49,17 @@
 //! }
 //! ```
 
+pub mod api;
 pub mod common;
 pub mod models;
 pub mod services;
-pub mod api;
 pub mod utils;
 
 // 重新导出核心类型，方便用户使用
 pub use services::{AuthService, AuthenService, OAuthService};
 
 // 重新导出常用模型
-pub use models::{
-    auth::*,
-    authen::*,
-    oauth::*,
-};
+pub use models::{auth::*, authen::*, oauth::*};
 
 // 重新导出API构建器和服务
 pub use api::*;
@@ -73,30 +69,27 @@ pub type AuthResult<T> = openlark_core::SDKResult<T>;
 
 /// 认证模块的预导入，包含最常用的类型和特征
 pub mod prelude {
-    pub use crate::{AuthService, AuthenService, OAuthService, AuthResult};
+    pub use crate::{AuthResult, AuthService, AuthenService, OAuthService};
 
     // 重新导出API服务类
     pub use crate::api::{
-        AuthServiceV3, AuthenServiceV1, OAuthServiceOld,
-        AppAccessTokenBuilder, AppAccessTokenInternalBuilder,
-        TenantAccessTokenBuilder, TenantAccessTokenInternalRequestBuilder, AppTicketResendBuilder,
-        UserInfoBuilder, UserAccessTokenV1Builder, RefreshUserAccessTokenV1Builder,
-        OidcService, OidcAccessTokenBuilder, OidcRefreshAccessTokenBuilder,
-        AuthorizationBuilder,
+        AppAccessTokenBuilder, AppAccessTokenInternalBuilder, AppTicketResendBuilder,
+        AuthServiceV3, AuthenServiceV1, AuthorizationBuilder, OAuthServiceOld,
+        OidcAccessTokenBuilder, OidcRefreshAccessTokenBuilder, OidcService,
+        RefreshUserAccessTokenV1Builder, TenantAccessTokenBuilder,
+        TenantAccessTokenInternalRequestBuilder, UserAccessTokenV1Builder, UserInfoBuilder,
     };
 
     // 重新导出openlark-core的核心类型
+    pub use openlark_core::api::ApiResponse;
     pub use openlark_core::{
         config::Config,
         error::{CoreError as LarkAPIError, SDKResult},
         http::Transport,
     };
-    pub use openlark_core::api::ApiResponse;
 
     // 重新导出常用模型
-    pub use crate::models::{
-        AccessTokenResponse, UserInfo, AuthorizationCodeRequest,
-    };
+    pub use crate::models::{AccessTokenResponse, AuthorizationCodeRequest, UserInfo};
 }
 
 /// 认证模块版本信息
@@ -115,7 +108,7 @@ mod tests {
     #[test]
     fn test_prelude_imports() {
         // 确保prelude中的类型可以正常导入，避免unused import警告
-        use crate::prelude::{AuthService, AuthenService, OAuthService, AuthResult};
+        use crate::prelude::{AuthResult, AuthService, AuthenService, OAuthService};
 
         // 这里只是验证类型导入，不进行实际操作
         let _: String = VERSION.to_string();
@@ -124,6 +117,6 @@ mod tests {
         let _ = PhantomData::<AuthService>;
         let _ = PhantomData::<AuthenService>;
         let _ = PhantomData::<OAuthService>;
-        let _: PhantomData::<AuthResult<()>>;
+        let _: PhantomData<AuthResult<()>>;
     }
 }

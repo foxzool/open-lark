@@ -2,9 +2,9 @@
 //!
 //! 本模块包含企业认证相关的数据结构定义。
 
-use serde::{Deserialize, Serialize};
 use chrono::{DateTime, Utc};
 use openlark_core::api::responses::ApiResponseTrait;
+use serde::{Deserialize, Serialize};
 
 /// 访问令牌响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

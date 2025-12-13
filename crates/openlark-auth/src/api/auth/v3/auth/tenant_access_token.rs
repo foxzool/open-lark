@@ -1,19 +1,17 @@
 //! 商店应用获取 tenant_access_token API
+use crate::models::auth::{TenantAccessTokenRequest, TenantAccessTokenResponse};
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/authentication-management/access-token/tenant_access_token
 ///
 /// 应用商店应用通过此接口获取 tenant_access_token，调用接口获取企业资源时，
 /// 需要使用 tenant_access_token 作为授权凭证。
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use crate::models::auth::{TenantAccessTokenRequest, TenantAccessTokenResponse};
 
 /// 商店应用获取 tenant_access_token 请求
 pub struct TenantAccessTokenBuilder {
@@ -86,9 +84,9 @@ impl TenantAccessTokenBuilder {
 
         // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<TenantAccessTokenResponseData> =
-            ApiRequest::post(&api_endpoint.to_url()).body(
-                openlark_core::api::RequestData::Json(serde_json::to_value(&request_body)?),
-            );
+            ApiRequest::post(&api_endpoint.to_url()).body(openlark_core::api::RequestData::Json(
+                serde_json::to_value(&request_body)?,
+            ));
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

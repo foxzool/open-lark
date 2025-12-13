@@ -1,19 +1,17 @@
 //! 重新获取 app_ticket API
+use crate::models::auth::{AppTicketResendRequest, AppTicketResponse};
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/authentication-management/app-ticket/app_ticket_resend
 ///
 /// 飞书每隔 1 小时会给应用推送一次最新的 app_ticket，应用也可以主动调用此接口，
 /// 触发飞书进行及时的重新推送。（该接口并不能直接获取app_ticket，而是触发事件推送）
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use crate::models::auth::{AppTicketResendRequest, AppTicketResponse};
 
 /// 重新获取 app_ticket 请求
 pub struct AppTicketResendBuilder {
@@ -76,9 +74,9 @@ impl AppTicketResendBuilder {
 
         // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<AppTicketResendResponseData> =
-            ApiRequest::post(&api_endpoint.to_url()).body(
-                openlark_core::api::RequestData::Json(serde_json::to_value(&request_body)?),
-            );
+            ApiRequest::post(&api_endpoint.to_url()).body(openlark_core::api::RequestData::Json(
+                serde_json::to_value(&request_body)?,
+            ));
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

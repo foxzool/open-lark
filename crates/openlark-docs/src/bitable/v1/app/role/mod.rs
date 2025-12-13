@@ -1,5 +1,4 @@
-//! App_Role服务模块 - 简化实现
-
+/// App_Role服务模块 - 简化实现
 use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 

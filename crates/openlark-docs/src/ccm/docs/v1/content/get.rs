@@ -1,29 +1,67 @@
-//! 获取云文档内容
-//!
-//! 获取指定云文档的详细内容。
-//! API文档: https://open.feishu.cn/document/docs/docs-v1/get
-
+/// 获取云文档内容
+///
+/// 此接口用于获取指定云文档的详细内容，包括文档结构、文本内容等。
+/// docPath: https://open.feishu.cn/document/server-docs/docs/docs-v1/content/get
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-// TODO: 定义DocsContent结构体或使用通用类型
-use crate::common::api_endpoints::DocsApiV1;
+use crate::common::{api_endpoints::DocsApiV1, api_utils::*};
+
+use serde_json::json;
 
 /// 获取云文档内容请求
-pub struct GetDocsContentRequest {
-    config: Config,
-}
-
-/// 获取云文档内容请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct GetDocsContentParams {
+pub struct GetDocsContentRequest {
     /// 文档Token
     pub document_token: String,
+}
+
+impl GetDocsContentRequest {
+    /// 创建获取云文档内容请求
+    ///
+    /// # 参数
+    /// * `document_token` - 文档Token
+    pub fn new(document_token: impl Into<String>) -> Self {
+        Self {
+            document_token: document_token.into(),
+        }
+    }
+
+    /// 设置文档Token
+    pub fn document_token(mut self, document_token: impl Into<String>) -> Self {
+        self.document_token = document_token.into();
+        self
+    }
+}
+
+/// 文档内容信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DocsContent {
+    /// 文档Token
+    pub document_token: String,
+    /// 文档标题
+    pub title: String,
+    /// 文档类型
+    pub obj_type: String,
+    /// 文档内容
+    pub content: serde_json::Value,
+    /// 文档结构
+    pub structure: Option<serde_json::Value>,
+    /// 文本内容（纯文本）
+    pub text_content: Option<String>,
+    /// 创建时间
+    pub create_time: String,
+    /// 更新时间
+    pub update_time: String,
+    /// 创建者信息
+    pub creator: Option<serde_json::Value>,
+    /// 更新者信息
+    pub modifier: Option<serde_json::Value>,
 }
 
 /// 获取云文档内容响应
@@ -39,31 +77,65 @@ impl ApiResponseTrait for GetDocsContentResponse {
     }
 }
 
-impl GetDocsContentRequest {
-    /// 创建获取云文档内容请求
-    pub fn new(config: Config) -> Self {
-        Self { config }
+/// 获取云文档内容
+///
+/// 获取指定云文档的详细内容，包括文档结构、文本内容等。
+/// docPath: https://open.feishu.cn/document/server-docs/docs/docs-v1/content/get
+pub async fn get_docs_content(
+    request: GetDocsContentRequest,
+    config: &Config,
+    option: Option<openlark_core::req_option::RequestOption>,
+) -> SDKResult<openlark_core::api::Response<GetDocsContentResponse>> {
+    // 使用DocsApiV1枚举生成API端点
+    let api_endpoint = DocsApiV1::ContentGet;
+
+    // 创建API请求
+    let mut api_request: ApiRequest<GetDocsContentResponse> =
+        ApiRequest::get(&api_endpoint.to_url()).query("document_token", &request.document_token);
+
+    // 如果有请求选项，应用它们
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
     }
 
-    /// 执行请求
-    ///
-    /// API文档: https://open.feishu.cn/document/docs/docs-v1/get
-    /// 对应CSV记录: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/docs-v1/content/get
-    pub async fn execute(self, params: GetDocsContentParams) -> SDKResult<GetDocsContentResponse> {
-        // 验证必填字段
-        validate_required!(params.document_token, "文档Token不能为空");
+    // 发送请求
+    Transport::request(api_request, config, None).await
+}
 
-        // 使用新的enum+builder系统生成API端点
-        let api_endpoint = DocsApiV1::ContentGet;
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-        // 创建API请求 - 使用类型安全的URL生成
-        let api_request: ApiRequest<GetDocsContentResponse> =
-            ApiRequest::get(&api_endpoint.to_url()).query("document_token", &params.document_token);
+    #[test]
+    fn test_get_docs_content_request_builder() {
+        let request = GetDocsContentRequest::new("doc_token");
 
-        // 发送请求
-        let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        assert_eq!(request.document_token, "doc_token");
+    }
+
+    #[test]
+    fn test_get_docs_content_request_with_token() {
+        let request = GetDocsContentRequest::new("initial_token").document_token("new_token");
+
+        assert_eq!(request.document_token, "new_token");
+    }
+
+    #[test]
+    fn test_docs_content_structure() {
+        let content = serde_json::json!({
+            "document_token": "doc_token",
+            "title": "文档标题",
+            "content": {
+                "elements": []
+            }
+        });
+
+        assert!(content.get("document_token").is_some());
+        assert!(content.get("title").is_some());
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(GetDocsContentResponse::data_format(), ResponseFormat::Data);
     }
 }

@@ -1,10 +1,11 @@
-//! Sheets v3 API 共享模型定义
-//!
-//! 包含所有 Sheets v3 API 共享的数据结构、枚举和类型定义
-
+/// Sheets v3 API 共享模型定义
+///
+/// 包含所有 Sheets v3 API 共享的数据结构、枚举和类型定义
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
+
+use openlark_core::api::Response;
 
 // ============================================================================
 // 基础类型定义

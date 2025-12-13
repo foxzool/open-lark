@@ -1,14 +1,14 @@
-//! Drive Explorer API 服务实现
-//!
-//! 提供资源浏览器相关的API服务，包括：
-//! - 文件夹和文件的基本操作
-//! - 文档复制和删除
-//! - 文件夹内容浏览
-use serde_json::Value;
+/// Drive Explorer API 服务实现
+///
+/// 提供资源浏览器相关的API服务，包括：
+/// - 文件夹和文件的基本操作
+/// - 文档复制和删除
+/// - 文件夹内容浏览
+use serde_json::json;alue;
 use std::collections::HashMap;
 
 use openlark_core::{
-    api::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    api::{ApiRequest, HttpMethod}, config::Config, constants::AccessTokenType, error::LarkAPIError,
     http::Transport, SDKResult,
 };
 
@@ -45,7 +45,7 @@ impl ExplorerService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            method: openlark_core::api::Get,
+            method: HttpMethod::Get,
             url: "/open-apis/drive/explorer/v2/root_folder/meta".to_string(),
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: None,
@@ -79,13 +79,13 @@ impl ExplorerService {
         // 验证请求参数
         request
             .validate()
-            .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
+            .map_err(|e| validation_error("format!("请求参数验证失败: {}", e)))?;
 
         log::info!("获取文件夹元数据: folder_token={}", request.folder_token,
 
         // 构建API请求
         let api_req = ApiRequest {
-            method: openlark_core::api::Get,
+            method: HttpMethod::Get,
             url: format!(
                 "/open-apis/drive/explorer/v2/folder/{}/meta",
                 request.folder_token
@@ -121,7 +121,7 @@ impl ExplorerService {
         // 验证请求参数
         request
             .validate()
-            .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
+            .map_err(|e| validation_error("format!("请求参数验证失败: {}", e)))?;
 
         log::info!(
             "新建文件: folder_token={}, file_type={}, file_name={}",
@@ -141,7 +141,7 @@ impl ExplorerService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            method: openlark_core::api::Post,
+            method: HttpMethod::Post,
             url: format!("/open-apis/drive/explorer/v2/file/{}", request.folder_token),
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?,
@@ -178,7 +178,7 @@ impl ExplorerService {
         // 验证请求参数
         request
             .validate()
-            .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
+            .map_err(|e| validation_error("format!("请求参数验证失败: {}", e)))?;
 
         log::info!(
             "新建文件夹: folder_token={}, folder_name={}",
@@ -192,7 +192,7 @@ impl ExplorerService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            method: openlark_core::api::Post,
+            method: HttpMethod::Post,
             url: format!(
                 "/open-apis/drive/explorer/v2/folder/{}",
                 request.folder_token
@@ -232,7 +232,7 @@ impl ExplorerService {
         // 验证请求参数
         request
             .validate()
-            .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
+            .map_err(|e| validation_error("format!("请求参数验证失败: {}", e)))?;
 
         log::info!(
             "获取文件夹下的文档清单: folder_token={}",
@@ -253,7 +253,7 @@ impl ExplorerService {
 
         // 构建API请求
         let api_req = ApiRequest {
-            method: openlark_core::api::Post,
+            method: HttpMethod::Post,
             url: format!(
                 "/open-apis/drive/explorer/v2/file/copy/files/{}",
                 request.file_token
@@ -284,14 +284,14 @@ impl ExplorerService {
     /// 返回删除操作的结果
     pub async fn delete_sheet(&self, file_token: &str) -> SDKResult<DeleteFileResponse> {
         if file_token.trim().is_empty() {
-            return Err(LarkAPIError::illegal_param("文件token不能为空".to_string()),
+            return Err(validation_error(""文件token不能为空".to_string()),
         }
 
         log::info!("删除Sheet: file_token={}", file_token,
 
         // 构建API请求
         let api_req = ApiRequest {
-            method: openlark_core::api::Delete,
+            method: HttpMethod::Delete,
             url: format!(
                 "/open-apis/drive/explorer/v2/file/spreadsheets/{}",
                 file_token
@@ -322,14 +322,14 @@ impl ExplorerService {
     /// 返回删除操作的结果
     pub async fn delete_doc(&self, file_token: &str) -> SDKResult<DeleteFileResponse> {
         if file_token.trim().is_empty() {
-            return Err(LarkAPIError::illegal_param("文件token不能为空".to_string()),
+            return Err(validation_error(""文件token不能为空".to_string()),
         }
 
         log::info!("删除Doc: file_token={}", file_token,
 
         // 构建API请求
         let api_req = ApiRequest {
-            method: openlark_core::api::Delete,
+            method: HttpMethod::Delete,
             url: format!("/open-apis/drive/explorer/v2/file/docs/{}", file_token),
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: None,
