@@ -1,7 +1,7 @@
 /// 删除保护范围
 ///
 /// 根据 spreadsheetToken 和 protectedRangeIds 批量删除保护范围。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protection/delete-protected-ranges
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protection/delete-protected-ranges
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -63,7 +63,7 @@ impl DeleteProtectedRangeRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protection/delete-protected-ranges
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protection/delete-protected-ranges
     pub async fn execute(
         self,
         params: DeleteProtectedRangeParams,

@@ -1,8 +1,7 @@
 /// 获取旧版文档富文本内容
 ///
 /// 获取结构化的文档内容。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/get-document
-/// 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/get-document
+/// docPath: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/get-document
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -71,8 +70,7 @@ impl GetDocumentContentRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/get-document
-    /// 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/get-document
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/get-document
     pub async fn execute(
         self,
         params: GetDocumentContentParams,

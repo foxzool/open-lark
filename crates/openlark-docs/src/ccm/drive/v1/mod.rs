@@ -16,6 +16,7 @@ pub mod import_task;
 pub mod export_task;
 pub mod file_version;
 pub mod comment;
+pub mod task_check;
 
 // 重新导出所有模块
 pub use file::*;
@@ -26,3 +27,4 @@ pub use import_task::*;
 pub use export_task::*;
 pub use file_version::*;
 pub use comment::*;
+pub use task_check::*;

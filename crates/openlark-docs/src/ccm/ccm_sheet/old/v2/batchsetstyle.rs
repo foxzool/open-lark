@@ -1,7 +1,7 @@
 /// 批量设置单元格样式
 ///
 /// 批量为电子表格中的多个单元格范围设置样式。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/cells-format/batch-set-style
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v2/cells-format/batch-set-style
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -209,7 +209,7 @@ impl BatchSetStyleRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/cells-format/batch-set-style
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v2/cells-format/batch-set-style
     pub async fn execute(self, params: BatchSetStyleParams) -> SDKResult<BatchSetStyleResponse> {
         // 验证必填字段
         validate_required!(params.spreadsheet_token, "电子表格token不能为空");

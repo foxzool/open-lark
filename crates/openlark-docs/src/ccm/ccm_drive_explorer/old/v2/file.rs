@@ -1,8 +1,7 @@
 /// 新建文件
 ///
 /// 根据 folderToken 创建 Doc、 Sheet 或 Bitable 。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/create-online-document
-/// 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/create-online-document
+/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/create-online-document
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -69,8 +68,7 @@ impl CreateFileRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/create-online-document
-    /// 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/create-online-document
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/create-online-document
     pub async fn execute(
         self,
         params: CreateFileParams,

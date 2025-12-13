@@ -4,6 +4,10 @@
 
 use openlark_core::{config::Config, trait_system::Service};
 
+// 版本化API
+pub mod v1;
+pub mod v2;
+
 /// 知识库服务
 ///
 /// 基础服务架构，具体功能在后续版本中实现。
@@ -15,6 +19,21 @@ impl WikiService {
     /// 创建知识库服务实例
     pub fn new(config: Config) -> Self {
         Self { config }
+    }
+
+    /// 获取配置引用
+    pub fn config(&self) -> &Config {
+        &self.config
+    }
+
+    /// 获取V1版本API
+    pub fn v1(&self) -> crate::ccm::wiki::v1::WikiV1Service {
+        crate::ccm::wiki::v1::WikiV1Service::new(self.config.clone())
+    }
+
+    /// 获取V2版本API
+    pub fn v2(&self) -> crate::ccm::wiki::v2::WikiV2Service {
+        crate::ccm::wiki::v2::WikiV2Service::new(self.config.clone())
     }
 }
 

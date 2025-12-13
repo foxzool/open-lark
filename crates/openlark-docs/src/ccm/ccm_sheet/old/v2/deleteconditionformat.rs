@@ -1,7 +1,7 @@
 /// 批量删除条件格式
 ///
 /// 根据 spreadsheetToken 和条件格式ID列表批量删除条件格式。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/conditional-format/batch_delete_condition_format
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v2/conditional-format/batch_delete_condition_format
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -71,7 +71,7 @@ impl DeleteConditionFormatRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/conditional-format/batch_delete_condition_format
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v2/conditional-format/batch_delete_condition_format
     pub async fn execute(
         self,
         params: DeleteConditionFormatParams,

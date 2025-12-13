@@ -1,7 +1,7 @@
 /// 获取保护范围
 ///
 /// 根据 spreadsheetToken 获取表格的保护范围列表。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protection/get-protected-ranges
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protection/get-protected-ranges
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -120,7 +120,7 @@ impl GetProtectedRangeRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protection/get-protected-ranges
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protection/get-protected-ranges
     pub async fn execute(
         self,
         params: GetProtectedRangeParams,

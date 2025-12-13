@@ -1,7 +1,7 @@
 /// 追加数据
 ///
 /// 向电子表格的指定范围追加数据。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/data-operation/append-values
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v2/data-operation/append-values
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -88,7 +88,7 @@ impl AppendValuesRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/data-operation/append-values
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v2/data-operation/append-values
     pub async fn execute(self, params: AppendValuesParams) -> SDKResult<AppendValuesResponse> {
         // 验证必填字段
         validate_required!(params.spreadsheet_token, "电子表格token不能为空");
