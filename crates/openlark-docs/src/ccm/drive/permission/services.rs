@@ -84,7 +84,6 @@ impl PermissionService {
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?,
             query: HashMap::new(),
-            
         };
 
         // 发送请求

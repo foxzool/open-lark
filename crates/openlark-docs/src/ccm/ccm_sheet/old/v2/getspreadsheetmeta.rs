@@ -1,7 +1,7 @@
 /// 获取表格元数据
 ///
 /// 根据 spreadsheetToken 获取电子表格的元信息。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheets/get-spreadsheet-meta
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheets/get-spreadsheet-meta
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -121,7 +121,7 @@ impl GetSpreadsheetMetaRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheets/get-spreadsheet-meta
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheets/get-spreadsheet-meta
     pub async fn execute(
         self,
         params: GetSpreadsheetMetaParams,

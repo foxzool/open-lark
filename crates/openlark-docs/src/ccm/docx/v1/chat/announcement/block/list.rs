@@ -1,7 +1,7 @@
 /// 获取群公告所有块
 ///
 /// 获取群公告所有块的富文本内容并分页返回。
-/// API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/list
+/// docPath: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/list
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -51,8 +51,7 @@ impl GetChatAnnouncementBlocksRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/list
-    /// 对应CSV记录: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/list
+    /// docPath: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/list
     pub async fn execute(
         self,
         params: GetChatAnnouncementBlocksParams,

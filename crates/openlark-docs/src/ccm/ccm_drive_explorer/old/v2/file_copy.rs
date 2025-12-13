@@ -1,8 +1,7 @@
 /// 复制文档
 ///
 /// 复制指定的文档或表格。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/drive/file/copy-files
-/// 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/drive/file/copy-files
+/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/copy-files
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -67,8 +66,7 @@ impl CopyFileRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/drive/file/copy-files
-    /// 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/drive/file/copy-files
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/copy-files
     pub async fn execute(
         self,
         params: CopyFileParams,

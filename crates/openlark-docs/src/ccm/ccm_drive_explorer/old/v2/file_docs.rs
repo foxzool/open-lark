@@ -1,8 +1,7 @@
 /// 删除Doc
 ///
 /// 根据 docToken 删除对应的 Docs 文档。
-/// API文档: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-a-doc
-/// 对应CSV记录: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-a-doc
+/// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-a-doc
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -48,8 +47,7 @@ impl DeleteDocRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-a-doc
-    /// 对应CSV记录: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-a-doc
+    /// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-a-doc
     pub async fn execute(
         self,
         params: DeleteDocParams,

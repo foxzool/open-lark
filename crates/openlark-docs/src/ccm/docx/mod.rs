@@ -26,26 +26,30 @@ pub mod v1;
 pub mod documents;
 
 /// Document (DOCX) Service
+#[derive(Debug, Clone)]
 pub struct DocxService {
-    #[allow(dead_code)] // 配置保留供将来使用
     config: Config,
-    // ccm_docs API服务 (临时注释以修复编译问题)
-    // #[cfg(feature = "ccm-docx")]
-    // pub ccm_docs: services::CcmDocsService,
-    // docx API服务 (临时注释以修复编译问题)
-    // #[cfg(feature = "ccm-docx")]
-    // pub docx: services::DocxService,
 }
 
 impl DocxService {
+    /// 创建新的文档块管理服务实例
     pub fn new(config: Config) -> Self {
-        Self {
-            config: config.clone(),
-            // #[cfg(feature = "ccm-docx")]
-            // ccm_docs: services::CcmDocsService::new(config.clone()),
-            // #[cfg(feature = "ccm-docx")]
-            // docx: services::DocxService::new(config.clone()),
-        }
+        Self { config }
+    }
+
+    /// 获取配置引用
+    pub fn config(&self) -> &Config {
+        &self.config
+    }
+
+    /// 获取V1版本API
+    pub fn v1(&self) -> crate::ccm::docx::v1::DocxV1Service {
+        crate::ccm::docx::v1::DocxV1Service::new(self.config.clone())
+    }
+
+    /// 获取文档操作API
+    pub fn documents(&self) -> crate::ccm::docx::documents::DocumentsService {
+        crate::ccm::docx::documents::DocumentsService::new(self.config.clone())
     }
 }
 

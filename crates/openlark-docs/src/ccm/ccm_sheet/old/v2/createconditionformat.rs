@@ -1,7 +1,7 @@
 /// 批量创建条件格式
 ///
 /// 根据 spreadsheetToken 和 conditionFormatRules 批量创建条件格式。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditional-format/create-condition-formats
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditional-format/create-condition-formats
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -134,7 +134,7 @@ impl CreateConditionFormatRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditional-format/create-condition-formats
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditional-format/create-condition-formats
     pub async fn execute(
         self,
         params: CreateConditionFormatParams,

@@ -102,10 +102,16 @@ pub async fn get_meta(
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<openlark_core::api::Response<GetMetaResponse>> {
     // 使用CcmDocsApiOld枚举生成API端点
-    let api_endpoint = CcmDocsApiOld::GetMeta(request.document_token.clone());
+    let api_endpoint = CcmDocsApiOld::Meta;
+
+    // 创建请求体
+    let request_body = json!({
+        "document_token": request.document_token
+    });
 
     // 创建API请求
-    let mut api_request: ApiRequest<GetMetaResponse> = ApiRequest::get(&api_endpoint.to_url());
+    let mut api_request: ApiRequest<GetMetaResponse> =
+        ApiRequest::post(&api_endpoint.to_url()).body(request_body);
 
     // 如果有请求选项，应用它们
     if let Some(opt) = option {

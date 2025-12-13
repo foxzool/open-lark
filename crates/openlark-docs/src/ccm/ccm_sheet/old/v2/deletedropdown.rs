@@ -1,7 +1,7 @@
 /// 删除数据验证规则
 ///
 /// 根据 spreadsheetToken 和 dataValidationRuleIds 批量删除数据验证规则。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-validation/delete-data-validations
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-validation/delete-data-validations
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -63,7 +63,7 @@ impl DeleteDropdownRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-validation/delete-data-validations
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-validation/delete-data-validations
     pub async fn execute(self, params: DeleteDropdownParams) -> SDKResult<DeleteDropdownResponse> {
         // 验证必填字段
         validate_required!(params.spreadsheet_token, "电子表格token不能为空");

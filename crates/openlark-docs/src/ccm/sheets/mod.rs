@@ -162,6 +162,23 @@ impl SheetsService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
+
+    /// 获取配置引用
+    pub fn config(&self) -> &Config {
+        &self.config
+    }
+
+    /// 获取V3版本API（推荐）
+    #[cfg(any(feature = "ccm-sheets", feature = "ccm-sheets-v3"))]
+    pub fn v3(&self) -> crate::ccm::sheets::v3::SheetsV3Service {
+        crate::ccm::sheets::v3::SheetsV3Service::new(self.config.clone())
+    }
+
+    /// 获取V2版本API（实验性）
+    #[cfg(feature = "ccm-sheets-v2")]
+    pub fn v2(&self) -> crate::ccm::sheets::v2::SheetsV2Service {
+        crate::ccm::sheets::v2::SheetsV2Service::new(self.config.clone())
+    }
 }
 
 impl openlark_core::trait_system::Service for SheetsService {

@@ -1,8 +1,7 @@
 /// 创建旧版文档
 ///
 /// 创建并初始化文档。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docs/apiRef/create-document
-/// 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/docs/docs/apiRef/create-document
+/// docPath: https://open.feishu.cn/document/server-docs/docs/docs/docs/apiRef/create-document
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -65,8 +64,7 @@ impl CreateDocumentRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docs/apiRef/create-document
-    /// 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/docs/docs/apiRef/create-document
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/docs/docs/apiRef/create-document
     pub async fn execute(self, params: CreateDocumentParams) -> SDKResult<CreateDocumentResponse> {
         // 验证必填字段
         validate_required_field("文档标题", Some(&params.title), "文档标题不能为空")?;

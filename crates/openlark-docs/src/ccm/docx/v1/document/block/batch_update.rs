@@ -1,7 +1,7 @@
 /// 批量更新块的内容
 ///
 /// 批量更新块的富文本内容。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/batch_update
+/// docPath: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/batch_update
 
 use crate::ccm::docx::common_types::BlockUpdate;
 use crate::common::api_endpoints::DocxApiV1;

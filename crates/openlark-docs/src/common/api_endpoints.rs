@@ -681,10 +681,6 @@ pub enum CcmDocsApiOld {
     /// 搜索云文档
     SearchObject,
     /// 获取元数据
-    GetMeta(String), // document_token
-    /// 批量更新
-    BatchUpdate(String), // document_token
-    /// 获取元数据
     Meta,
 }
 
@@ -693,12 +689,6 @@ impl CcmDocsApiOld {
     pub fn to_url(&self) -> String {
         match self {
             CcmDocsApiOld::SearchObject => "/open-apis/suite/docs-api/search/object".to_string(),
-            CcmDocsApiOld::GetMeta(doc_token) => {
-                format!("/open-apis/suite/docs-api/meta/{}", doc_token)
-            }
-            CcmDocsApiOld::BatchUpdate(doc_token) => {
-                format!("/open-apis/suite/docs-api/batch_update/{}", doc_token)
-            }
             CcmDocsApiOld::Meta => "/open-apis/suite/docs-api/meta".to_string(),
         }
     }

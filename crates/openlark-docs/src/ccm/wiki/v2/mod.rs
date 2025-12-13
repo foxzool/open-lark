@@ -21,6 +21,7 @@ pub use task::*;
 
 // 子模块
 pub mod space;
+pub mod space_nodes;
 pub mod space_member;
 pub mod space_setting;
 pub mod space_node;

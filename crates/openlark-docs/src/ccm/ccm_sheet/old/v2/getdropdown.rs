@@ -1,7 +1,7 @@
 /// 获取数据验证规则
 ///
 /// 根据 spreadsheetToken 获取表格的数据验证规则列表。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-validation/get-data-validations
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-validation/get-data-validations
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -126,7 +126,7 @@ impl GetDropdownRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-validation/get-data-validations
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-validation/get-data-validations
     pub async fn execute(self, params: GetDropdownParams) -> SDKResult<GetDropdownResponse> {
         // 验证必填字段
         validate_required!(params.spreadsheet_token, "电子表格token不能为空");

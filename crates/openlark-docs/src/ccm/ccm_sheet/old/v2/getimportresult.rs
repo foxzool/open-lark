@@ -1,7 +1,7 @@
 /// 获取导入结果
 ///
 /// 根据任务ID查询电子表格导入的进度和结果。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/import/get_import_result
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v2/import/get_import_result
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -110,7 +110,7 @@ impl GetImportResultRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/import/get_import_result
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v2/import/get_import_result
     pub async fn execute(
         self,
         params: GetImportResultParams,

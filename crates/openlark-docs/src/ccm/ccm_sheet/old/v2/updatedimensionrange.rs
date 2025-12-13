@@ -1,7 +1,7 @@
 /// 更新行列
 ///
 /// 根据 spreadsheetToken 和 updateDimensionRequest 更新指定工作表中的行列属性。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheets/update-dimension-range
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheets/update-dimension-range
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -104,7 +104,7 @@ impl UpdateDimensionRangeRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheets/update-dimension-range
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheets/update-dimension-range
     pub async fn execute(
         self,
         params: UpdateDimensionRangeParams,

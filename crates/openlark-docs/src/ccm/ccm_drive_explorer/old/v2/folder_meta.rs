@@ -1,8 +1,7 @@
 /// 获取文件夹元数据
 ///
 /// 根据 folderToken 获取该文件夹的元信息。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-folder-meta
-/// 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-folder-meta
+/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-folder-meta
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -82,8 +81,7 @@ impl GetFolderMetaRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-folder-meta
-    /// 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-folder-meta
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-folder-meta
     pub async fn execute(
         self,
         params: GetFolderMetaParams,

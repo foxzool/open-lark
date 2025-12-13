@@ -1,7 +1,7 @@
 /// 增加行列
 ///
 /// 根据 spreadsheetToken 和 dimensionRequest 在指定工作表中增加行或列。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheets/add-dimension-range
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheets/add-dimension-range
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -93,7 +93,7 @@ impl AddDimensionRangeRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheets/add-dimension-range
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheets/add-dimension-range
     pub async fn execute(
         self,
         params: AddDimensionRangeParams,

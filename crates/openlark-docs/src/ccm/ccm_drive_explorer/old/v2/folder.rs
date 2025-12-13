@@ -1,8 +1,7 @@
 /// 新建文件夹
 ///
 /// 根据 folderToken 在该 folder 下创建文件夹。
-/// API文档: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/folder/create-a-new-folder
-/// 对应CSV记录: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/folder/create-a-new-folder
+/// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/folder/create-a-new-folder
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -63,8 +62,7 @@ impl CreateFolderRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/folder/create-a-new-folder
-    /// 对应CSV记录: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/folder/create-a-new-folder
+    /// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/folder/create-a-new-folder
     pub async fn execute(
         self,
         params: CreateFolderParams,

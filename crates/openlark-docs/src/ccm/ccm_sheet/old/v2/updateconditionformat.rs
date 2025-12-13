@@ -1,7 +1,7 @@
 /// 批量更新条件格式
 ///
 /// 根据 spreadsheetToken 批量更新条件格式规则。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditional-formatting/batch-update-conditional-formats
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditional-formatting/batch-update-conditional-formats
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -96,7 +96,7 @@ impl UpdateConditionFormatRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditional-formatting/batch-update-conditional-formats
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditional-formatting/batch-update-conditional-formats
     pub async fn execute(
         self,
         params: UpdateConditionFormatParams,

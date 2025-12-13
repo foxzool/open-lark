@@ -1,8 +1,7 @@
 /// 删除Sheet
 ///
 /// 根据 spreadsheetToken 删除对应的 sheet 文档。
-/// API文档: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-sheet
-/// 对应CSV记录: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-sheet
+/// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-sheet
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -48,8 +47,7 @@ impl DeleteSpreadsheetRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-sheet
-    /// 对应CSV记录: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-sheet
+    /// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-sheet
     pub async fn execute(
         self,
         params: DeleteSpreadsheetParams,

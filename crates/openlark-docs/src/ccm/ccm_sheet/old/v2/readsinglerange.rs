@@ -1,7 +1,7 @@
 /// 读取单个范围
 ///
 /// 根据 spreadsheetToken 和 range 读取表格单个范围的值，返回数据限制为10M。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/reading-a-single-range
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/reading-a-single-range
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -72,7 +72,7 @@ impl ReadSingleRangeRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/reading-a-single-range
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/reading-a-single-range
     pub async fn execute(
         self,
         params: ReadSingleRangeParams,

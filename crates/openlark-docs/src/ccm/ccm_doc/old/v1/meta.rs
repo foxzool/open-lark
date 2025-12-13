@@ -1,8 +1,7 @@
 /// 获取旧版文档元信息
 ///
 /// 根据 docToken 获取元数据。
-/// API文档: https://open.feishu.cn/document/server-docs/historic-version/docs/document/obtain-document-meta
-/// 对应CSV记录: https://open.feishu.cn/document/server-docs/historic-version/docs/document/obtain-document-meta
+/// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/document/obtain-document-meta
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -86,8 +85,7 @@ impl GetDocumentMetaRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/historic-version/docs/document/obtain-document-meta
-    /// 对应CSV记录: https://open.feishu.cn/document/server-docs/historic-version/docs/document/obtain-document-meta
+    /// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/document/obtain-document-meta
     pub async fn execute(
         self,
         params: GetDocumentMetaParams,

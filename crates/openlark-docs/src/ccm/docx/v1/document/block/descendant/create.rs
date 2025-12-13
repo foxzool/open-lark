@@ -1,7 +1,7 @@
 /// 创建嵌套块
 ///
 /// 在指定块的子块列表中，新创建一批有父子关系的子块，并放置到指定位置。如果操作成功，接口将返回新创建子块的富文本内容。当创建的子块中含有 GridColumn、TableCell、Callout 时其中至少需要包含一个子块 ，即内容为空时也需要填入一个空 Text Block 作为子块。
-/// API文档: https://open.feishu.cn/document/docs/docs/document-block/create-2
+/// docPath: https://open.feishu.cn/document/docs/docs/document-block/create-2
 
 use crate::ccm::docx::common_types::BlockContent;
 use crate::common::api_endpoints::DocxApiV1;

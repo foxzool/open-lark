@@ -1,8 +1,7 @@
 /// 获取旧版文档纯文本内容
 ///
 /// 获取文档的纯文本内容，不包含富文本格式信息。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/obtain-document-content
-/// 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/obtain-document-content
+/// docPath: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/obtain-document-content
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -54,8 +53,7 @@ impl GetDocumentRawContentRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/obtain-document-content
-    /// 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/obtain-document-content
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/obtain-document-content
     pub async fn execute(
         self,
         params: GetDocumentRawContentParams,

@@ -1,7 +1,7 @@
 /// 批量写入范围
 ///
 /// 根据 spreadsheetToken 向多个范围批量写入数据，单次写入不超过10000个单元格。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/batch-write-data-to-multiple-ranges
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/batch-write-data-to-multiple-ranges
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -102,7 +102,7 @@ impl BatchWriteRangesRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/batch-write-data-to-multiple-ranges
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/batch-write-data-to-multiple-ranges
     pub async fn execute(
         self,
         params: BatchWriteRangesParams,
