@@ -1,5 +1,4 @@
-//! CCM Sheet V2 表格基础模型
-
+/// CCM Sheet V2 表格基础模型
 use serde::{Deserialize, Serialize};
 
 /// 获取表格信息请求参数

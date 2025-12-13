@@ -1,8 +1,7 @@
-//! 插入数据
-//!
-//! 根据 spreadsheetToken 和 valuesPrependRequest 在指定位置插入数据。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/values/insert-values
-
+/// 插入数据
+///
+/// 根据 spreadsheetToken 和 valuesPrependRequest 在指定位置插入数据。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/values/insert-values
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -101,10 +100,7 @@ impl InsertValuesRequest {
     /// 执行请求
     ///
     /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/values/insert-values
-    pub async fn execute(
-        self,
-        params: InsertValuesParams,
-    ) -> SDKResult<InsertValuesResponse> {
+    pub async fn execute(self, params: InsertValuesParams) -> SDKResult<InsertValuesResponse> {
         // 验证必填字段
         validate_required!(params.spreadsheet_token, "电子表格token不能为空");
 
@@ -112,14 +108,15 @@ impl InsertValuesRequest {
         let api_endpoint = CcmSheetApiOld::ValuesPrepend(params.spreadsheet_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<InsertValuesResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serde_json::to_value(params).map_err(|e| {
-                    openlark_core::error::validation_error(
-                        "参数序列化失败",
-                        &format!("无法序列化请求参数: {}", e)
-                    )
-                })?);
+        let mut api_request: ApiRequest<InsertValuesResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_value(params).map_err(|e| {
+            openlark_core::error::validation_error(
+                "参数序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

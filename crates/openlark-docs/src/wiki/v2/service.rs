@@ -1,46 +1,45 @@
-//! Wiki 知识库服务
-//!
-//! 提供企业知识库和Wiki管理的统一管理接口。
-//!
-//! ## 使用示例
-//!
-//! ```rust
-//! use openlark_core::config::Config;
-//! use openlark_docs::wiki::v2::service::WikiService;
-//! use openlark_docs::wiki::v2::space::list::ListWikiSpacesParams;
-//! use openlark_docs::wiki::v2::space::create::CreateWikiSpaceParams;
-//!
-//! let config = Config::builder()
-//!     .app_id("app_id")
-//!     .app_secret("app_secret")
-//!     .build();
-//!
-//! let wiki = WikiService::new(config);
-//!
-//! // 获取知识空间列表
-//! let params = ListWikiSpacesParams {
-//!     site_type: Some(1),
-//!     page_size: Some(20),
-//!     page_token: None,
-//! };
-//! let spaces = wiki.list_spaces()
-//!     .execute(Some(params))
-//!     .await?;
-//!
-//! // 创建新知识空间
-//! let create_params = CreateWikiSpaceParams {
-//!     name: "我的知识库".to_string(),
-//!     description: Some("团队知识管理空间".to_string()),
-//!     space_type: Some("private".to_string()),
-//!     icon: Some("📚".to_string()),
-//!     domain: None,
-//! };
-//!
-//! let new_space = wiki.create_space()
-//!     .execute(create_params)
-//!     .await?;
-//! ```
-
+/// Wiki 知识库服务
+///
+/// 提供企业知识库和Wiki管理的统一管理接口。
+///
+/// ## 使用示例
+///
+/// ```rust
+/// use openlark_core::config::Config;
+/// use openlark_docs::wiki::v2::service::WikiService;
+/// use openlark_docs::wiki::v2::space::list::ListWikiSpacesParams;
+/// use openlark_docs::wiki::v2::space::create::CreateWikiSpaceParams;
+///
+/// let config = Config::builder()
+///     .app_id("app_id")
+///     .app_secret("app_secret")
+///     .build();
+///
+/// let wiki = WikiService::new(config);
+///
+/// // 获取知识空间列表
+/// let params = ListWikiSpacesParams {
+///     site_type: Some(1),
+///     page_size: Some(20),
+///     page_token: None,
+/// };
+/// let spaces = wiki.list_spaces()
+///     .execute(Some(params))
+///     .await?;
+///
+/// // 创建新知识空间
+/// let create_params = CreateWikiSpaceParams {
+///     name: "我的知识库".to_string(),
+///     description: Some("团队知识管理空间".to_string()),
+///     space_type: Some("private".to_string()),
+///     icon: Some("📚".to_string()),
+///     domain: None,
+/// };
+///
+/// let new_space = wiki.create_space()
+///     .execute(create_params)
+///     .await?;
+/// ```
 use openlark_core::config::Config;
 
 // 导入所有API请求类型

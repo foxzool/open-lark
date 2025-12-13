@@ -1,6 +1,6 @@
-//! 旧版文档 v2 API 响应结构体
-//!
-//! 定义所有旧版文档API的响应数据结构。
+/// 旧版文档 v2 API 响应结构体
+///
+/// 定义所有旧版文档API的响应数据结构。
 
 use super::models::{DocumentContent, DocumentInfo, SheetMeta};
 use openlark_core::api::{ApiResponseTrait, ResponseFormat};

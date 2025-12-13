@@ -1,4 +1,4 @@
-//! Bitable 更新数据表API
+/// Bitable 更新数据表API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/patch
 ///

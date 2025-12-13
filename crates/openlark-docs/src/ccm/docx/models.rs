@@ -1,7 +1,6 @@
-//! ccm_docs API 数据模型
-//!
-//! 定义云文档搜索和元数据API的数据结构。
-
+/// ccm_docs API 数据模型
+///
+/// 定义云文档搜索和元数据API的数据结构。
 use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;

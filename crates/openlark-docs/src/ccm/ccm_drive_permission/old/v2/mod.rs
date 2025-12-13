@@ -1,6 +1,6 @@
-//! CCM Drive Permission API Old V2 模块
-//!
-//! 包含所有文档权限管理相关的API实现
+/// CCM Drive Permission API Old V2 模块
+///
+/// 包含所有文档权限管理相关的API实现
 
 use openlark_core::config::Config;
 

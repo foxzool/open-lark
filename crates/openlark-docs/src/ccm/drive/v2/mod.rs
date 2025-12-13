@@ -1,6 +1,6 @@
-//! Drive V2 API模块
-//!
-//! 提供Drive V2版本的API功能框架
+/// Drive V2 API模块
+///
+/// 提供Drive V2版本的API功能框架
 
 use openlark_core::config::Config;
 

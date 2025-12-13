@@ -1,4 +1,4 @@
-use openlark_core::config::Config;
+///e openlark_core::config::Config;
 use openlark_core::error::SDKError;
 use crate::response::SDKResult;
 use crate::service_trait::Service;
@@ -49,13 +49,11 @@ impl CreateImportTaskRequest {
             file_url: file_url.into(),
             parent_folder_token: None,
             overwrite: None,
-        }
-    }
+}
 
     /// 创建导入任务请求的构建器
     pub fn builder() -> CreateImportTaskBuilder {
         CreateImportTaskBuilder::default()
-    }
 }
 
 /// 创建导入任务请求构建器
@@ -209,7 +207,6 @@ impl CreateImportTaskBuilder {
             parent_folder_token: self.parent_folder_token,
             overwrite: self.overwrite,
         })
-    }
 }
 
 /// 创建导入任务响应体
@@ -253,8 +250,7 @@ impl CreateImportTaskResponse {
             error_message: None,
             created_time,
             completed_time: None,
-        }
-    }
+}
 
     /// 获取任务ID
     ///
@@ -334,7 +330,6 @@ impl CreateImportTaskResponse {
     /// true表示任务待处理，false表示任务已开始处理
     pub fn is_pending(&self) -> bool {
         self.status == "pending"
-    }
 }
 
 /// 创建导入任务构建器
@@ -412,7 +407,6 @@ impl CreateImportTaskBuilder {
             .map_err(|e| SDKError::SerializationError(e.to_string()))?;
 
         Ok(response_data)
-    }
 }
 
 // 云盘服务的占位符，实际应该在主服务文件中定义
@@ -427,7 +421,6 @@ impl Service for DriveServiceV1 {
 
     fn transport(&self) -> &dyn Transport {
         todo!("Transport implementation needed")
-    }
 }
 
 #[cfg(test)]
@@ -537,8 +530,7 @@ mod tests {
                 .unwrap();
 
             assert_eq!(request.file_type, *file_type);
-        }
-    }
+}
 
     #[test]
     fn test_create_import_task_request_new() {
@@ -648,8 +640,7 @@ mod tests {
             assert_eq!(request.file_url, file_url);
             assert_eq!(request.parent_folder_token, parent_token.map(|s| s.to_string()));
             assert_eq!(request.overwrite, overwrite);
-        }
-    }
+}
 
     #[test]
     fn test_create_import_task_request_serialization() {
@@ -728,6 +719,6 @@ mod tests {
                 ;
 
             assert!(result.is_err(), "URL {} should be invalid", url);
-        }
-    }
 }
+}
+}}}

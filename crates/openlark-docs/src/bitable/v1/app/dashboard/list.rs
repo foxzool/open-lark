@@ -1,4 +1,4 @@
-//! Bitable 获取多维表格仪表盘列表API
+/// Bitable 获取多维表格仪表盘列表API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/dashboard/list
 use openlark_core::{api::ApiRequest, config::Config, error::SDKResult, http::Transport};

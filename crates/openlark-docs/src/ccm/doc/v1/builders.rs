@@ -1,6 +1,6 @@
-//! Cloud Docs API 请求构建器
-//!
-//! 提供类型安全的构建器模式，用于构建API请求
+/// Cloud Docs API 请求构建器
+///
+/// 提供类型安全的构建器模式，用于构建API请求
 
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};

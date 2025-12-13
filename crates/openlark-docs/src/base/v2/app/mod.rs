@@ -1,7 +1,6 @@
-//! Base V2 应用模块
-//!
-//! 提供基础应用（base）V2版本的应用管理功能，包括角色管理等。
-
+/// Base V2 应用模块
+///
+/// 提供基础应用（base）V2版本的应用管理功能，包括角色管理等。
 use openlark_core::config::Config;
 
 pub mod role;

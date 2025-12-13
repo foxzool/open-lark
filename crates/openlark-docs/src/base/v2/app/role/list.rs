@@ -1,4 +1,4 @@
-//! Base 列出自定义角色API
+/// Base 列出自定义角色API
 ///
 /// API文档: https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/list-2
 use openlark_core::{

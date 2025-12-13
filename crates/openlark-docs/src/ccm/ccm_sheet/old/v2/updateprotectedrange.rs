@@ -1,8 +1,7 @@
-//! 更新保护范围
-//!
-//! 根据 spreadsheetToken 和 protectedRangeRequests 批量更新保护范围。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protection/update-protected-ranges
-
+/// 更新保护范围
+///
+/// 根据 spreadsheetToken 和 protectedRangeRequests 批量更新保护范围。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protection/update-protected-ranges
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -144,17 +143,19 @@ impl UpdateProtectedRangeRequest {
         validate_required!(params.spreadsheet_token, "电子表格token不能为空");
 
         // 使用enum+builder系统生成API端点
-        let api_endpoint = CcmSheetApiOld::ProtectedRangeBatchUpdate(params.spreadsheet_token.clone());
+        let api_endpoint =
+            CcmSheetApiOld::ProtectedRangeBatchUpdate(params.spreadsheet_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<UpdateProtectedRangeResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serde_json::to_value(params).map_err(|e| {
-                    openlark_core::error::validation_error(
-                        "参数序列化失败",
-                        &format!("无法序列化请求参数: {}", e)
-                    )
-                })?);
+        let mut api_request: ApiRequest<UpdateProtectedRangeResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_value(params).map_err(|e| {
+            openlark_core::error::validation_error(
+                "参数序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

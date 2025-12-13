@@ -2,10 +2,9 @@ pub mod field;
 pub mod get;
 pub mod patch;
 
-use openlark_core::config::Config;
-
 pub use field::*;
 pub use get::*;
+use openlark_core::config::Config;
 pub use patch::*;
 
 /// 表单服务

@@ -1,5 +1,4 @@
-//! CCM Sheet V2 筛选模型
-
+/// CCM Sheet V2 筛选模型
 use serde::{Deserialize, Serialize};
 
 /// 创建筛选请求参数

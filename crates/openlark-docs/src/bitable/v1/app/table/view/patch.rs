@@ -1,4 +1,4 @@
-//! Bitable 更新视图API
+/// Bitable 更新视图API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/view/patch
 use openlark_core::{

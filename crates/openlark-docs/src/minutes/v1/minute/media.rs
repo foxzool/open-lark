@@ -1,8 +1,7 @@
-//! 下载妙记音视频文件
-//!
-//! 下载妙记的音视频文件。
-//! 文档参考：https://open.feishu.cn/document/minutes-v1/minute-media/get
-
+/// 下载妙记音视频文件
+///
+/// 下载妙记的音视频文件。
+/// 文档参考：https://open.feishu.cn/document/minutes-v1/minute-media/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

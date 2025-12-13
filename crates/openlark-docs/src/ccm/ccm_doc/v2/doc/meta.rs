@@ -1,0 +1,41 @@
+/// 获取旧版文档元信息
+///
+/// 根据docToken获取元数据。
+/// docPath: https://open.feishu.cn/document/ukTMukTMukTM/uczN3UjL3czN14yN3cTN
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
+
+use super::super::models::*;
+use crate::common::{api_endpoints::CcmDocApiOld, api_utils::*};
+
+impl ApiResponseTrait for DocumentMetaResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 获取旧版文档元信息
+///
+/// 根据docToken获取元数据。
+/// docPath: https://open.feishu.cn/document/ukTMukTMukTM/uczN3UjL3czN14yN3cTN
+pub async fn get_document_meta(
+    config: &Config,
+    doc_token: &str,
+) -> SDKResult<DocumentMetaResponse> {
+    // 验证必填字段
+    validate_required_field("文档Token", Some(doc_token), "文档Token不能为空")?;
+
+    // 使用enum+builder系统生成API端点
+    let api_endpoint = CcmDocApiOld::Meta(doc_token.to_string());
+
+    // 创建API请求
+    let api_request: ApiRequest<DocumentMetaResponse> = ApiRequest::get(&api_endpoint.to_url());
+
+    // 发送请求并提取响应数据
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "获取文档元信息")
+}

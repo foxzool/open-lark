@@ -1,8 +1,7 @@
-//! 获取文档基本信息
-//!
-//! 获取文档最新版本号、标题等
-//! API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/get
-
+/// 获取文档基本信息
+///
+/// 获取文档最新版本号、标题等
+/// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/get
 use crate::ccm::docx::common_types::RichText;
 use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{

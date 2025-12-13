@@ -1,11 +1,10 @@
-//! CCM Sheet V2 工作表API 模块
-//!
-//! 工作表操作API实现，包含工作表的增删改查：
-//! - add_sheet: 添加工作表
-//! - get_sheet: 获取工作表信息
-//! - update_sheet: 更新工作表
-//! - delete_sheet: 删除工作表
-
+/// CCM Sheet V2 工作表API 模块
+///
+/// 工作表操作API实现，包含工作表的增删改查：
+/// - add_sheet: 添加工作表
+/// - get_sheet: 获取工作表信息
+/// - update_sheet: 更新工作表
+/// - delete_sheet: 删除工作表
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -79,8 +78,7 @@ pub async fn add_sheet(
 
     // 创建API请求
     let api_request: ApiRequest<AddSheetResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "添加工作表")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "添加工作表")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -105,8 +103,7 @@ pub async fn get_sheet(
 
     // 创建API请求
     let api_request: ApiRequest<GetSheetResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "获取工作表信息")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "获取工作表信息")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -131,8 +128,7 @@ pub async fn update_sheet(
 
     // 创建API请求
     let api_request: ApiRequest<UpdateSheetResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "更新工作表")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "更新工作表")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -157,8 +153,7 @@ pub async fn delete_sheet(
 
     // 创建API请求
     let api_request: ApiRequest<DeleteSheetResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "删除工作表")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "删除工作表")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;

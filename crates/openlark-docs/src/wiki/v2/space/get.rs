@@ -1,8 +1,7 @@
-//! 获取知识空间信息
-//!
-//! 此接口用于根据知识空间ID来查询知识空间的信息。
-//! 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space/get
-
+/// 获取知识空间信息
+///
+/// 此接口用于根据知识空间ID来查询知识空间的信息。
+/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

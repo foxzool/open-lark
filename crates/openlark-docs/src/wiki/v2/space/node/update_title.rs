@@ -1,8 +1,7 @@
-//! 更新知识空间节点标题
-//!
-//! 更新知识空间中节点的标题。
-//! 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-nodes/updateTitle
-
+/// 更新知识空间节点标题
+///
+/// 更新知识空间中节点的标题。
+/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-nodes/updateTitle
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

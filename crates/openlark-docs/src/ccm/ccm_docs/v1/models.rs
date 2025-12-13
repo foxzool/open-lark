@@ -1,4 +1,4 @@
-//! CCM Docs V1 数据模型
+/// CCM Docs V1 数据模型
 
 use serde::{Deserialize, Serialize};
 

@@ -1,8 +1,8 @@
-//! 搜索云文档
-//!
-//! 根据搜索条件进行文档搜索。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/drive-v1/search/document-search
-//! 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/drive-v1/search/document-search
+/// 搜索云文档
+///
+/// 根据搜索条件进行文档搜索。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/drive-v1/search/document-search
+/// 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/drive-v1/search/document-search
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

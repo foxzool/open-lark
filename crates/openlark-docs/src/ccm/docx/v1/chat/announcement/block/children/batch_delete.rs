@@ -1,7 +1,7 @@
-//! 删除群公告中的块
-//!
-//! 删除指定块的子块。
-//! API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/batch_delete
+/// 删除群公告中的块
+///
+/// 删除指定块的子块。
+/// API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/batch_delete
 
 use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{

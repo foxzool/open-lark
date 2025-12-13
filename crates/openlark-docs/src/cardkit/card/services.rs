@@ -1,10 +1,10 @@
-//! Card API 服务实现
-//!
-//! 提供卡片实体管理相关的API服务，包括：
-//! - 卡片的创建、更新、配置管理
-//! - 批量更新操作
-//! - 卡片ID类型转换
-//! - 完整的错误处理和参数验证
+/// Card API 服务实现
+///
+/// 提供卡片实体管理相关的API服务，包括：
+/// - 卡片的创建、更新、配置管理
+/// - 批量更新操作
+/// - 卡片ID类型转换
+/// - 完整的错误处理和参数验证
 use std::collections::HashMap;
 
 use openlark_core::{
@@ -13,6 +13,8 @@ use openlark_core::{
 };
 
 use super::models::*;
+
+use serde_json::json;
 
 /// 卡片实体管理服务
 #[derive(Debug, Clone)]
@@ -39,7 +41,7 @@ impl CardService {
         // 验证请求参数
         request
             .validate()
-            .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
+            .map_err(|e| validation_error("format!("请求参数验证失败: {}", e)))?;
 
         log::info!("创建卡片: card_type={:?}", request.card_type);
 
@@ -99,7 +101,7 @@ impl CardService {
         // 验证请求参数
         request
             .validate()
-            .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
+            .map_err(|e| validation_error("format!("请求参数验证失败: {}", e)))?;
 
         log::info!("更新卡片: card_id={}", request.card_id);
 
@@ -153,7 +155,7 @@ impl CardService {
         // 验证请求参数
         request
             .validate()
-            .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
+            .map_err(|e| validation_error("format!("请求参数验证失败: {}", e)))?;
 
         log::info!(
             "批量更新卡片: card_id={}, operation_count={}",
@@ -208,7 +210,7 @@ impl CardService {
         // 验证请求参数
         request
             .validate()
-            .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
+            .map_err(|e| validation_error("format!("请求参数验证失败: {}", e)))?;
 
         log::info!("更新卡片设置: card_id={}", request.card_id);
 
@@ -252,7 +254,7 @@ impl CardService {
         // 验证请求参数
         request
             .validate()
-            .map_err(|e| LarkAPIError::illegal_param(format!("请求参数验证失败: {}", e)))?;
+            .map_err(|e| validation_error("format!("请求参数验证失败: {}", e)))?;
 
         log::info!(
             "转换卡片ID: source_type={}, target_type={}, count={}",

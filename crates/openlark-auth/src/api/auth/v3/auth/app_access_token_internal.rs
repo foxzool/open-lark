@@ -1,16 +1,14 @@
 //! 自建应用获取 app_access_token API
+use crate::models::auth::{AccessTokenResponse, AppAccessTokenInternalRequest};
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/authentication-management/access-token/app_access_token_internal
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use crate::models::auth::{AppAccessTokenInternalRequest, AccessTokenResponse};
 
 /// 自建应用获取 app_access_token 请求
 pub struct AppAccessTokenInternalBuilder {
@@ -73,9 +71,9 @@ impl AppAccessTokenInternalBuilder {
 
         // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<AppAccessTokenInternalResponseData> =
-            ApiRequest::post(&api_endpoint.to_url()).body(
-                openlark_core::api::RequestData::Json(serde_json::to_value(&request_body)?),
-            );
+            ApiRequest::post(&api_endpoint.to_url()).body(openlark_core::api::RequestData::Json(
+                serde_json::to_value(&request_body)?,
+            ));
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

@@ -1,48 +1,48 @@
-//! Docs文档服务
-//!
-//! 提供飞书文档的完整管理功能，包括：
-//! - 创建和删除文档
-//! - 读取和更新文档内容
-//! - 文档块操作和内容管理
-//! - 文档版本控制和历史管理
-//! - 协作编辑和权限管理
-//!
-//! # 服务架构
-//!
-//! ## v1版本
-//! - [`v1::document`] - 文档基础管理服务，提供创建、查询等核心功能
-//!
-//! ## v2版本（旧版文档）
-//! - [`v2::create`] - 旧版文档创建服务
-//! - [`v2::meta`] - 旧版文档元信息服务
-//! - [`v2::content`] - 旧版文档内容服务（纯文本和富文本）
-//! - [`v2::sheet_meta`] - 旧版电子表格元数据服务
-//! - [`v2::batch_update`] - 旧版文档批量编辑服务
-//!
-//! # 使用示例
-//!
-//! ```rust
-//! use open_lark::prelude::*;
-//!
-//! let client = LarkClient::builder("app_id", "app_secret")
-//!     .with_app_type(AppType::SelfBuild)
-//!     ;
-//!
-//! // 创建协作文档（v1版本）
-//! let document = client.docs.v1.document
-//!     .create_document_builder()
-//!     .title("项目计划文档")
-//!     .folder_token("folder_token")
-//!     .execute(&client.docs.v1.document)
-//!     .await?;
-//!
-//! // 创建旧版文档（v2版本）
-//! let old_doc = client.docs.v2.create
-//!     .create_doc_builder()
-//!     .title("旧版文档")
-//!     .execute(&client.docs.v2.create)
-//!     .await?;
-//! ```
+/// Docs文档服务
+///
+/// 提供飞书文档的完整管理功能，包括：
+/// - 创建和删除文档
+/// - 读取和更新文档内容
+/// - 文档块操作和内容管理
+/// - 文档版本控制和历史管理
+/// - 协作编辑和权限管理
+///
+/// # 服务架构
+///
+/// ## v1版本
+/// - [`v1::document`] - 文档基础管理服务，提供创建、查询等核心功能
+///
+/// ## v2版本（旧版文档）
+/// - [`v2::create`] - 旧版文档创建服务
+/// - [`v2::meta`] - 旧版文档元信息服务
+/// - [`v2::content`] - 旧版文档内容服务（纯文本和富文本）
+/// - [`v2::sheet_meta`] - 旧版电子表格元数据服务
+/// - [`v2::batch_update`] - 旧版文档批量编辑服务
+///
+/// # 使用示例
+///
+/// ```rust
+/// use open_lark::prelude::*;
+///
+/// let client = LarkClient::builder("app_id", "app_secret")
+///     .with_app_type(AppType::SelfBuild)
+///     ;
+///
+/// // 创建协作文档（v1版本）
+/// let document = client.docs.v1.document
+///     .create_document_builder()
+///     .title("项目计划文档")
+///     .folder_token("folder_token")
+///     .execute(&client.docs.v1.document)
+///     .await?;
+///
+/// // 创建旧版文档（v2版本）
+/// let old_doc = client.docs.v2.create
+///     .create_doc_builder()
+///     .title("旧版文档")
+///     .execute(&client.docs.v2.create)
+///     .await?;
+/// ```
 
 // pub mod v1;  // 暂时禁用，待修复
 pub mod v2;

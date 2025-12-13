@@ -1,4 +1,3 @@
-
 #![allow(dead_code)]
 #![allow(unused_variables)]
 #![allow(unused_imports)]
@@ -6,6 +5,7 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
+
 // wiki v1 - 知识库v1版本API
 //,
 // 包含知识库的基础功能

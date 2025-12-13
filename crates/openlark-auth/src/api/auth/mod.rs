@@ -8,6 +8,6 @@
 //! - app_ticket: 重新获取app_ticket
 
 // 重新导出具体API实现
-pub use self::v3::{AuthServiceV3, auth::*};
+pub use self::v3::{auth::*, AuthServiceV3};
 
 pub mod v3;

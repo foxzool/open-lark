@@ -1,4 +1,3 @@
-
 #![allow(dead_code)]
 #![allow(unused_variables)]
 #![allow(unused_imports)]
@@ -6,8 +5,8 @@
 #![allow(non_snake_case)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
-use openlark_core::config::Config;
 
+use openlark_core::config::Config;
 // 重新导出所有模块类型
 pub use create::*;
 pub use get::*;
@@ -21,6 +20,7 @@ mod list;
 ///
 /// 提供知识空间的完整管理功能，包括创建、查询、列表管理等。
 /// 支持个人和团队知识空间的操作，具备完整的权限控制。
+#[derive(Clone)]
 pub struct SpaceService {
     config: Config,
 }
@@ -51,12 +51,13 @@ impl SpaceService {
     /// use open_lark::service::cloud_docs::wiki::v2::space::{SpaceService, ListSpaceRequest};
     ///
     /// let service = SpaceService::new(config);
-    /// let request = ListSpaceRequest::builder()
-    ///     .page_size(20)
-    ///     ?;
+    /// let request = ListSpaceRequest {
+    ///     page_size: Some(20),
+    ///     page_token: None,
+    /// };
     ///
     /// let response = service.list(request, None).await?;
-    /// println!("找到{}个知识空间", response.data.items.len());
+    /// println!("找到{}个知识空间", response.data.unwrap().items.len());
     /// ```
     pub async fn list(
         &self,
@@ -116,13 +117,13 @@ impl SpaceService {
     /// use open_lark::service::cloud_docs::wiki::v2::space::{SpaceService, CreateSpaceRequest};
     ///
     /// let service = SpaceService::new(config);
-    /// let request = CreateSpaceRequest::builder()
-    ///     .name("新产品知识库")
-    ///     .description("新产品相关的所有文档")
-    ///     ?;
+    /// let request = CreateSpaceRequest {
+    ///     name: "新产品知识库".to_string(),
+    ///     description: Some("新产品相关的所有文档".to_string()),
+    /// };
     ///
     /// let response = service.create(request, None).await?;
-    /// println!("创建成功，空间ID: {}", response.data.space.space_id);
+    /// println!("创建成功，空间ID: {}", response.data.unwrap().space_id);
     /// ```
     pub async fn create(
         &self,
@@ -132,68 +133,20 @@ impl SpaceService {
         create_space(request, &self.config, option).await
     }
 
-    /// 获取知识空间信息构建器
-    ///
-    /// 创建一个获取知识空间信息的构建器，支持链式调用和完整的错误处理
-    ///
-    /// # 参数
-    /// * `request` - 获取知识空间信息请求，包含空间ID等参数
-    ///
-    /// # 返回
-    /// 返回获取知识空间信息构建器，可用于执行查询操作
-    ///
-    /// # 示例
-    /// ```rust,no_run
-    /// use open_lark::service::cloud_docs::wiki::v2::space::{SpaceService, GetSpaceInfoRequest};
-    /// use std::sync::Arc;
-    ///
-    /// let service = Arc::new(SpaceService::new(config));
-    /// let response = service
-    ///     .get_space_info_builder(GetSpaceInfoRequest::new("6870403571079249922"))
-    ///     .execute()
-    ///     .await?;
-    /// ```
-    pub fn get_space_info_builder(&self, request: GetSpaceInfoRequest) -> GetSpaceInfoBuilder {
-        GetSpaceInfoBuilder::new(std::sync::Arc::new(self.clone()), request)
-    }
-
-    /// 创建知识空间构建器
-    ///
-    /// 创建一个创建知识空间的构建器，支持链式调用和完整的错误处理
-    ///
-    /// # 参数
-    /// * `request` - 创建知识空间请求，包含空间名称、描述等参数
-    ///
-    /// # 返回
-    /// 返回创建知识空间构建器，可用于执行创建操作
-    ///
-    /// # 示例
-    /// ```rust,no_run
-    /// use open_lark::service::cloud_docs::wiki::v2::space::{SpaceService, CreateSpaceRequest};
-    /// use std::sync::Arc;
-    ///
-    /// let service = Arc::new(SpaceService::new(config));
-    /// let response = service
-    ///     .create_space_builder(CreateSpaceRequest::builder()
-    ///         .name("新产品知识库")
-    ///         .description("新产品相关的所有文档")
-    ///         ?)
-    ///     .execute()
-    ///     .await?;
-    /// ```
-    pub fn create_space_builder(&self, request: CreateSpaceRequest) -> CreateSpaceBuilder {
-        CreateSpaceBuilder::new(std::sync::Arc::new(self.clone()), request)
-    }
-}
-
-impl openlark_core::service_trait::Service for SpaceService {
+impl openlark_core::trait_system::service::Service for SpaceService {
     fn config(&self) -> &Config {
         &self.config
     }
 
-    fn transport(&self) -> &dyn openlark_core::transport::Transport {
+    fn service_name() -> &'static str
+    where
+        Self: Sized,
+    {
+        "space"
+}
+
+    fn transport(&self) -> &dyn openlark_core::http::Transport {
         panic!("SpaceService does not have a transport instance")
-    }
 }
 
 #[cfg(test)]
@@ -233,44 +186,23 @@ mod tests {
         assert_eq!(config_ref.app_id(), "test_app_id");
     }
 
-    #[test]
-    fn test_get_space_info_builder_creation() {
-        let service = create_test_service();
-        let request = GetSpaceInfoRequest::new("6870403571079249922");
-
-        let builder = service.get_space_info_builder(request);
-        // 验证构建器创建成功，实际执行需要mock配置
-        assert_eq!(builder.request.space_id, "6870403571079249922");
-    }
-
-    #[test]
-    fn test_create_space_builder_creation() {
-        let service = create_test_service();
-        let request = CreateSpaceRequest::builder()
-            .name("测试知识空间")
-            
-            .unwrap();
-
-        let builder = service.create_space_builder(request);
-        // 验证构建器创建成功，实际执行需要mock配置
-        assert_eq!(builder.request.name, "测试知识空间");
-    }
-
+    
     #[test]
     fn test_module_reexports() {
         // 验证所有模块都正确重新导出
         // 这个测试主要是编译时检查，确保所有公共类型都可以访问
         let _request: GetSpaceInfoRequest = GetSpaceInfoRequest::new("test_space_123");
         let _response: GetSpaceInfoResponse = GetSpaceInfoResponse {
-            space: SpaceInfo {
+            data: Some(SpaceInfo {
                 space_id: "test_space_123".to_string(),
                 name: "Test Space".to_string(),
                 description: None,
                 space_type: None,
                 visibility: None,
-                create_time: None,
-                update_time: None,
-            },
+                created_time: "0".to_string(),
+                updated_time: "0".to_string(),
+                creator: None,
+            }),
         };
 
         // 如果编译通过，说明所有导出都正确
@@ -289,33 +221,5 @@ mod tests {
         assert_eq!(service2.config().app_id(), "app_id_2");
         // 验证两个服务实例是独立的
         assert_ne!(service1.config().app_id(), service2.config().app_id());
-    }
-
-    #[test]
-    fn test_space_service_methods_exist() {
-        // 这个测试确保所有方法都存在且可以调用（不需要实际执行）
-        let service = create_test_service();
-
-        // 验证方法签名正确
-        let _get_method = service.get as fn(
-            &SpaceService,
-            GetSpaceInfoRequest,
-            Option<openlark_core::req_option::RequestOption>,
-        ) -> std::pin::Pin<Box<dyn std::future::Future<Output = _> + '_>>;
-
-        let _list_method = service.list as fn(
-            &SpaceService,
-            ListSpaceRequest,
-            Option<openlark_core::req_option::RequestOption>,
-        ) -> std::pin::Pin<Box<dyn std::future::Future<Output = _> + '_>>;
-
-        let _create_method = service.create as fn(
-            &SpaceService,
-            CreateSpaceRequest,
-            Option<openlark_core::req_option::RequestOption>,
-        ) -> std::pin::Pin<Box<dyn std::future::Future<Output = _> + '_>>;
-
-        // 如果编译通过，说明所有方法都存在
-        assert!(true);
     }
 }

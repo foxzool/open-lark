@@ -23,23 +23,16 @@ impl AuthApiV3 {
         match self {
             AuthApiV3::AppAccessTokenInternal => {
                 "/open-apis/auth/v3/app_access_token/internal".to_string()
-            },
+            }
             AuthApiV3::TenantAccessTokenInternal => {
                 "/open-apis/auth/v3/tenant_access_token/internal".to_string()
-            },
-            AuthApiV3::AppTicketResend => {
-                "/open-apis/auth/v3/app_ticket/resend".to_string()
-            },
-            AuthApiV3::AppAccessToken => {
-                "/open-apis/auth/v3/app_access_token".to_string()
-            },
-            AuthApiV3::TenantAccessToken => {
-                "/open-apis/auth/v3/tenant_access_token".to_string()
-            },
+            }
+            AuthApiV3::AppTicketResend => "/open-apis/auth/v3/app_ticket/resend".to_string(),
+            AuthApiV3::AppAccessToken => "/open-apis/auth/v3/app_access_token".to_string(),
+            AuthApiV3::TenantAccessToken => "/open-apis/auth/v3/tenant_access_token".to_string(),
         }
     }
 }
-
 
 /// Authen V1 API 端点枚举
 #[derive(Debug, Clone)]
@@ -60,25 +53,18 @@ impl AuthenApiV1 {
     /// 生成对应的 URL
     pub fn to_url(&self) -> String {
         match self {
-            AuthenApiV1::UserInfo => {
-                "/open-apis/authen/v1/user_info".to_string()
-            },
-            AuthenApiV1::AccessToken => {
-                "/open-apis/authen/v1/access_token".to_string()
-            },
+            AuthenApiV1::UserInfo => "/open-apis/authen/v1/user_info".to_string(),
+            AuthenApiV1::AccessToken => "/open-apis/authen/v1/access_token".to_string(),
             AuthenApiV1::RefreshAccessToken => {
                 "/open-apis/authen/v1/refresh_access_token".to_string()
-            },
-            AuthenApiV1::OidcAccessToken => {
-                "/open-apis/authen/v1/oidc/access_token".to_string()
-            },
+            }
+            AuthenApiV1::OidcAccessToken => "/open-apis/authen/v1/oidc/access_token".to_string(),
             AuthenApiV1::OidcRefreshAccessToken => {
                 "/open-apis/authen/v1/oidc/refresh_access_token".to_string()
-            },
+            }
         }
     }
 }
-
 
 /// OAuth Old API 端点枚举
 #[derive(Debug, Clone)]
@@ -91,13 +77,10 @@ impl OAuthApiOld {
     /// 生成对应的 URL
     pub fn to_url(&self) -> String {
         match self {
-            OAuthApiOld::Index => {
-                "/open-apis/authen/v1/index".to_string()
-            },
+            OAuthApiOld::Index => "/open-apis/authen/v1/index".to_string(),
         }
     }
 }
-
 
 /// 模块导出
 pub mod prelude {

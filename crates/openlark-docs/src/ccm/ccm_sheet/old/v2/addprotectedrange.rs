@@ -1,13 +1,12 @@
-//! 增加保护范围
-//!
-//! 为电子表格中的单元格范围添加保护，防止未经授权的修改。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/protection/add-protected-range
-
+/// 增加保护范围
+///
+/// 为电子表格中的单元格范围添加保护，防止未经授权的修改。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/protection/add-protected-range
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required, validation_error, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -153,21 +152,24 @@ impl AddProtectedRangeRequest {
     ) -> SDKResult<AddProtectedRangeResponse> {
         // 验证必填字段
         validate_required!(params.spreadsheet_token, "电子表格token不能为空");
-        validate_required!(params.sheet_id, "工作表ID不能为空");
+        if params.sheet_id <= 0 {
+            return Err(validation_error("sheet_id", "工作表ID不能为空或小于等于0"));
+        }
         validate_required!(params.protected_ranges, "保护范围不能为空");
 
         // 使用enum+builder系统生成API端点
         let api_endpoint = CcmSheetApiOld::ProtectedDimension(params.spreadsheet_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let api_request: ApiRequest<AddProtectedRangeResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serde_json::to_value(params).map_err(|e| {
-                    openlark_core::error::validation_error(
-                        "参数序列化失败",
-                        &format!("无法序列化请求参数: {}", e)
-                    )
-                })?);
+        let api_request: ApiRequest<AddProtectedRangeResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_value(params).map_err(|e| {
+            openlark_core::error::validation_error(
+                "参数序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

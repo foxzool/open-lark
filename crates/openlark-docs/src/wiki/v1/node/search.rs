@@ -1,8 +1,7 @@
-//! 搜索Wiki
-//!
-//! 搜索Wiki，用户通过关键词查询Wiki，只能查找自己可见的wiki。
-//! 文档参考：https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/wiki-v1/search_wiki
-
+/// 搜索Wiki
+///
+/// 搜索Wiki，用户通过关键词查询Wiki，只能查找自己可见的wiki。
+/// 文档参考：https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/wiki-v1/search_wiki
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

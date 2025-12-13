@@ -1,8 +1,7 @@
-//! 删除保护范围
-//!
-//! 根据 spreadsheetToken 和 protectedRangeIds 批量删除保护范围。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protection/delete-protected-ranges
-
+/// 删除保护范围
+///
+/// 根据 spreadsheetToken 和 protectedRangeIds 批量删除保护范围。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protection/delete-protected-ranges
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -38,7 +37,10 @@ pub struct DeleteProtectedRangeResult {
     #[serde(rename = "spreadsheetToken")]
     pub spreadsheet_token: String,
     /// 删除的保护范围ID列表
-    #[serde(rename = "deletedProtectedRangeIds", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "deletedProtectedRangeIds",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub deleted_protected_range_ids: Option<Vec<i64>>,
 }
 
@@ -73,14 +75,15 @@ impl DeleteProtectedRangeRequest {
         let api_endpoint = CcmSheetApiOld::ProtectedRangeBatchDel(params.spreadsheet_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<DeleteProtectedRangeResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serde_json::to_value(params).map_err(|e| {
-                    openlark_core::error::validation_error(
-                        "参数序列化失败",
-                        &format!("无法序列化请求参数: {}", e)
-                    )
-                })?);
+        let mut api_request: ApiRequest<DeleteProtectedRangeResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_value(params).map_err(|e| {
+            openlark_core::error::validation_error(
+                "参数序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

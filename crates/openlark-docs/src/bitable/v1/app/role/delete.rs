@@ -1,4 +1,4 @@
-//! Bitable 删除角色API
+/// Bitable 删除角色API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/role/delete
 use openlark_core::{

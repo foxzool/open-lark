@@ -1,7 +1,7 @@
-//! 获取群公告所有块
-//!
-//! 获取群公告所有块的富文本内容并分页返回。
-//! API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/list
+/// 获取群公告所有块
+///
+/// 获取群公告所有块的富文本内容并分页返回。
+/// API文档: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/list
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

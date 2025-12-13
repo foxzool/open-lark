@@ -1,7 +1,6 @@
-//! CCM Sheet API Old V2 模块
-//!
-//! 包含所有表格操作相关的API实现
-
+/// CCM Sheet API Old V2 模块
+///
+/// 包含所有表格操作相关的API实现
 use openlark_core::config::Config;
 
 /// 表格服务
@@ -172,7 +171,9 @@ impl CcmSheetOldV2 {
     }
 
     /// 更新表格属性
-    pub fn updatespreadsheetproperties(&self) -> updatespreadsheetproperties::UpdateSpreadsheetPropertiesRequest {
+    pub fn updatespreadsheetproperties(
+        &self,
+    ) -> updatespreadsheetproperties::UpdateSpreadsheetPropertiesRequest {
         updatespreadsheetproperties::UpdateSpreadsheetPropertiesRequest::new(self.config.clone())
     }
 
@@ -188,39 +189,39 @@ impl CcmSheetOldV2 {
 }
 
 // 导出所有API模块
-pub mod operatesheets;
-pub mod updatesheetproperties;
 pub mod adddimensionrange;
-pub mod insertdimensionrange;
-pub mod updatedimensionrange;
-pub mod deletedimensionrange;
-pub mod mergecells;
-pub mod unmergecells;
-pub mod setstyle;
-pub mod batchsetstyle;
-pub mod insertvalues;
-pub mod appendvalues;
-pub mod writeimage;
-pub mod readsinglerange;
-pub mod readmultipleranges;
-pub mod writesinglerange;
-pub mod batchwriteranges;
 pub mod addprotectedrange;
-pub mod updateprotectedrange;
-pub mod getprotectedrange;
-pub mod deleteprotectedrange;
-pub mod setdropdown;
-pub mod updatedropdown;
-pub mod getdropdown;
-pub mod deletedropdown;
+pub mod appendvalues;
+pub mod batchsetstyle;
+pub mod batchwriteranges;
 pub mod createconditionformat;
-pub mod updateconditionformat;
-pub mod getconditionformat;
 pub mod deleteconditionformat;
-pub mod getspreadsheetmeta;
-pub mod updatespreadsheetproperties;
-pub mod importspreadsheet;
+pub mod deletedimensionrange;
+pub mod deletedropdown;
+pub mod deleteprotectedrange;
+pub mod getconditionformat;
+pub mod getdropdown;
 pub mod getimportresult;
+pub mod getprotectedrange;
+pub mod getspreadsheetmeta;
+pub mod importspreadsheet;
+pub mod insertdimensionrange;
+pub mod insertvalues;
+pub mod mergecells;
+pub mod operatesheets;
+pub mod readmultipleranges;
+pub mod readsinglerange;
+pub mod setdropdown;
+pub mod setstyle;
+pub mod unmergecells;
+pub mod updateconditionformat;
+pub mod updatedimensionrange;
+pub mod updatedropdown;
+pub mod updateprotectedrange;
+pub mod updatesheetproperties;
+pub mod updatespreadsheetproperties;
+pub mod writeimage;
+pub mod writesinglerange;
 
 // 新增的函数式API模块
 pub mod spreadsheets;

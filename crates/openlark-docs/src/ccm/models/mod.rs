@@ -1,6 +1,7 @@
-//! 云文档模型定义
-
+/// 云文档模型定义
 use serde::{Deserialize, Serialize};
+
+use openlark_core::api::Response;
 
 /// 文件类型
 #[derive(Debug, Deserialize, Serialize)]

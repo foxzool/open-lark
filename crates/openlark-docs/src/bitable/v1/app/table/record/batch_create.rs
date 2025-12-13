@@ -1,4 +1,4 @@
-//! Bitable 批量创建数据记录API
+/// Bitable 批量创建数据记录API
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/record/batchCreate
 use openlark_core::{
@@ -8,6 +8,8 @@ use openlark_core::{
     http::Transport,
 };
 use serde::{Deserialize, Serialize};
+
+use serde_json::json;
 
 /// 批量创建数据记录请求
 #[allow(dead_code)]

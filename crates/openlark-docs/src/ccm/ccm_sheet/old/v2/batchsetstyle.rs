@@ -1,8 +1,7 @@
-//! 批量设置单元格样式
-//!
-//! 批量为电子表格中的多个单元格范围设置样式。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/cells-format/batch-set-style
-
+/// 批量设置单元格样式
+///
+/// 批量为电子表格中的多个单元格范围设置样式。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/cells-format/batch-set-style
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -57,7 +56,10 @@ pub struct CellStyle {
     #[serde(rename = "backgroundColor", skip_serializing_if = "Option::is_none")]
     pub background_color: Option<Color>,
     /// 水平对齐
-    #[serde(rename = "horizontalAlignment", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "horizontalAlignment",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub horizontal_alignment: Option<String>,
     /// 垂直对齐
     #[serde(rename = "verticalAlignment", skip_serializing_if = "Option::is_none")]
@@ -208,10 +210,7 @@ impl BatchSetStyleRequest {
     /// 执行请求
     ///
     /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/cells-format/batch-set-style
-    pub async fn execute(
-        self,
-        params: BatchSetStyleParams,
-    ) -> SDKResult<BatchSetStyleResponse> {
+    pub async fn execute(self, params: BatchSetStyleParams) -> SDKResult<BatchSetStyleResponse> {
         // 验证必填字段
         validate_required!(params.spreadsheet_token, "电子表格token不能为空");
         validate_required!(params.style_update_list, "样式更新列表不能为空");
@@ -220,14 +219,15 @@ impl BatchSetStyleRequest {
         let api_endpoint = CcmSheetApiOld::StylesBatchUpdate(params.spreadsheet_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let api_request: ApiRequest<BatchSetStyleResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serde_json::to_value(params).map_err(|e| {
-                    openlark_core::error::validation_error(
-                        "参数序列化失败",
-                        &format!("无法序列化请求参数: {}", e)
-                    )
-                })?);
+        let api_request: ApiRequest<BatchSetStyleResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_value(params).map_err(|e| {
+            openlark_core::error::validation_error(
+                "参数序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

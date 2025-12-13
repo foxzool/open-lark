@@ -1,8 +1,7 @@
-//! 插入行列
-//!
-//! 根据 spreadsheetToken 和 insertDimensionRequest 在指定位置插入新的行或列。
-//! API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheets/insert-dimension-range
-
+/// 插入行列
+///
+/// 根据 spreadsheetToken 和 insertDimensionRequest 在指定位置插入新的行或列。
+/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheets/insert-dimension-range
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -109,14 +108,15 @@ impl InsertDimensionRangeRequest {
         let api_endpoint = CcmSheetApiOld::InsertDimensionRange(params.spreadsheet_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<InsertDimensionRangeResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serde_json::to_value(params).map_err(|e| {
-                    openlark_core::error::validation_error(
-                        "参数序列化失败",
-                        &format!("无法序列化请求参数: {}", e)
-                    )
-                })?);
+        let mut api_request: ApiRequest<InsertDimensionRangeResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_value(params).map_err(|e| {
+            openlark_core::error::validation_error(
+                "参数序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

@@ -1,6 +1,6 @@
-//! CCM Doc API Old V1 数据模型
-//!
-//! 包含所有旧版文档相关的数据结构定义
+/// CCM Doc API Old V1 数据模型
+///
+/// 包含所有旧版文档相关的数据结构定义
 
 use serde::{Deserialize, Serialize};
 

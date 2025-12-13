@@ -1,15 +1,14 @@
-//! CCM Sheet V2 数据读写API 模块
-//!
-//! 表格数据读写API实现，包含8个核心API：
-//! - read_single_range: 读取单个范围
-//! - read_multiple_ranges: 读取多个范围
-//! - write_single_range: 写入单个范围
-//! - batch_write_ranges: 批量写入多个范围
-//! - append_values: 追加数据
-//! - insert_values: 插入数据
-//! - values_prepend: 插入数据到范围之前
-//! - values_image: 写入图片
-
+/// CCM Sheet V2 数据读写API 模块
+///
+/// 表格数据读写API实现，包含8个核心API：
+/// - read_single_range: 读取单个范围
+/// - read_multiple_ranges: 读取多个范围
+/// - write_single_range: 写入单个范围
+/// - batch_write_ranges: 批量写入多个范围
+/// - append_values: 追加数据
+/// - insert_values: 插入数据
+/// - values_prepend: 插入数据到范围之前
+/// - values_image: 写入图片
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -100,11 +99,10 @@ pub async fn read_single_range(
     let api_endpoint = CcmSheetApiOld::ReadSingleRange(spreadsheet_token.to_string());
 
     // 创建API请求
-    let api_request: ApiRequest<ReadSingleRangeResponse> =
-        ApiRequest::get(&api_endpoint.to_url())
-            .query("value_range", &params.value_range)
-            .query_opt("value_render_option", params.value_render_option.as_ref())
-            .query_opt("date_render_option", params.date_render_option.as_ref());
+    let api_request: ApiRequest<ReadSingleRangeResponse> = ApiRequest::get(&api_endpoint.to_url())
+        .query("value_range", &params.value_range)
+        .query_opt("value_render_option", params.value_render_option.as_ref())
+        .query_opt("date_render_option", params.date_render_option.as_ref());
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -126,7 +124,7 @@ pub async fn read_multiple_ranges(
     if params.ranges.is_empty() {
         return Err(openlark_core::error::CoreError::validation(
             "ranges",
-            "范围列表不能为空"
+            "范围列表不能为空",
         ));
     }
 
@@ -163,8 +161,7 @@ pub async fn write_single_range(
 
     // 创建API请求
     let api_request: ApiRequest<WriteSingleRangeResponse> =
-        ApiRequest::put(&api_endpoint.to_url())
-            .body(serialize_params(&params, "写入单个范围")?);
+        ApiRequest::put(&api_endpoint.to_url()).body(serialize_params(&params, "写入单个范围")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -186,7 +183,7 @@ pub async fn batch_write_ranges(
     if params.data.is_empty() {
         return Err(openlark_core::error::CoreError::validation(
             "data",
-            "写入数据列表不能为空"
+            "写入数据列表不能为空",
         ));
     }
 
@@ -195,8 +192,7 @@ pub async fn batch_write_ranges(
 
     // 创建API请求
     let api_request: ApiRequest<BatchWriteRangesResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "批量写入范围")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "批量写入范围")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -221,8 +217,7 @@ pub async fn append_values(
 
     // 创建API请求
     let api_request: ApiRequest<AppendValuesResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "追加数据")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "追加数据")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -247,8 +242,7 @@ pub async fn insert_values(
 
     // 创建API请求
     let api_request: ApiRequest<InsertValuesResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "插入数据")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "插入数据")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -273,8 +267,7 @@ pub async fn values_image(
 
     // 创建API请求
     let api_request: ApiRequest<ValuesImageResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "写入图片")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "写入图片")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;

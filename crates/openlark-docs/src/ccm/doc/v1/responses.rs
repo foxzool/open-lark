@@ -1,8 +1,9 @@
-//! Cloud Docs API 响应类型定义
-
+/// Cloud Docs API 响应类型定义
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
+
+use openlark_core::api::Response;
 use super::models::*;
 
 // ==================== 文档响应类型 ====================

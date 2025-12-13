@@ -1,4 +1,4 @@
-//! CCM Drive Explorer V2 数据模型
+/// CCM Drive Explorer V2 数据模型
 
 use serde::{Deserialize, Serialize};
 

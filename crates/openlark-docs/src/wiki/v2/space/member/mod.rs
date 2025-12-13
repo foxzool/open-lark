@@ -1,5 +1,4 @@
-//! Wiki V2 空间成员模块
-
+/// Wiki V2 空间成员模块
 pub mod create;
 pub mod delete;
 pub mod list;

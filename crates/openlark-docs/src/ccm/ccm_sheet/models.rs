@@ -1,8 +1,7 @@
-//! CCM Sheet API 数据模型
-//!
-//! 提供电子表格操作相关的数据结构，支持工作表管理、
-//! 单元格操作、样式设置、数据验证等功能。
-
+/// CCM Sheet API 数据模型
+///
+/// 提供电子表格操作相关的数据结构，支持工作表管理、
+/// 单元格操作、样式设置、数据验证等功能。
 use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 

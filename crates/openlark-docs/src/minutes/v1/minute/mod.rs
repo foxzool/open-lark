@@ -1,7 +1,6 @@
-//! Minutes V1 妙记管理模块
-//!
-//! 提供妙记基础信息、音视频、文字记录和统计数据管理功能。
-
+/// Minutes V1 妙记管理模块
+///
+/// 提供妙记基础信息、音视频、文字记录和统计数据管理功能。
 pub mod get;
 pub mod media;
 pub mod models;

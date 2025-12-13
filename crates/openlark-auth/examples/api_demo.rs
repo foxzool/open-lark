@@ -28,29 +28,42 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("\n🔧 API 构建器演示：");
 
     // Auth v3 APIs
-    let _app_token_builder = auth_service.v3().app_access_token()
+    let _app_token_builder = auth_service
+        .v3()
+        .app_access_token()
         .app_id("demo_app_id")
         .app_secret("demo_app_secret");
 
-    let _tenant_token_builder = auth_service.v3().tenant_access_token()
+    let _tenant_token_builder = auth_service
+        .v3()
+        .tenant_access_token()
         .app_id("demo_app_id")
         .app_secret("demo_app_secret");
 
-    let _app_ticket_builder = auth_service.v3().app_ticket_resend()
+    let _app_ticket_builder = auth_service
+        .v3()
+        .app_ticket_resend()
         .app_id("demo_app_id")
         .app_secret("demo_app_secret");
 
     // Authen v1 APIs
-    let _user_info_builder = authen_service.v1().user_info().get()
+    let _user_info_builder = authen_service
+        .v1()
+        .user_info()
+        .get()
         .user_access_token("demo_token");
 
-    let _access_token_builder = authen_service.v1().access_token()
+    let _access_token_builder = authen_service
+        .v1()
+        .access_token()
         .grant_code("demo_code")
         .app_id("demo_app_id")
         .app_secret("demo_app_secret");
 
     // OAuth APIs
-    let _oauth_builder = oauth_service.old().authorization()
+    let _oauth_builder = oauth_service
+        .old()
+        .authorization()
         .app_id("demo_app_id")
         .redirect_uri("https://example.com/callback");
 

@@ -1,7 +1,6 @@
-//! Docx模块公共类型定义
-//!
-//! 统一管理docx相关API中使用的公共数据结构，避免重复定义。
-
+/// Docx模块公共类型定义
+///
+/// 统一管理docx相关API中使用的公共数据结构，避免重复定义。
 use serde::{Deserialize, Serialize};
 
 /// 块内容
