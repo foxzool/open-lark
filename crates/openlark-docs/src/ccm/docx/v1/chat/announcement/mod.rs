@@ -19,10 +19,11 @@ use openlark_core::{
 
 // 重新导出所有模块类型
 pub use get::*;
+pub use block::*;
 
 // 子模块
 mod get;
-// mod block;  // TODO: 实现区块管理
+mod block;  // 群公告区块管理
 
 /// 聊天公告服务
 ///

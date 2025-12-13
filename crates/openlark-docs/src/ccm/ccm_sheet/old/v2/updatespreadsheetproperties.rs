@@ -1,7 +1,7 @@
 /// 更新电子表格属性
 ///
 /// 根据 spreadsheetToken 更新电子表格的属性，如标题、语言、时区等。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/spreadsheet/update_spreadsheet_properties
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v2/spreadsheet/update_spreadsheet_properties
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -94,7 +94,7 @@ impl UpdateSpreadsheetPropertiesRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/spreadsheet/update_spreadsheet_properties
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v2/spreadsheet/update_spreadsheet_properties
     pub async fn execute(
         self,
         params: UpdateSpreadsheetPropertiesParams,

@@ -1,8 +1,7 @@
 /// 编辑旧版文档内容
 ///
 /// 批量编辑更新文档内容，包括更新标题、范围删除、插入内容。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/batch-update-document
-/// 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/batch-update-document
+/// docPath: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/batch-update-document
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -78,8 +77,7 @@ impl BatchUpdateDocumentRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/batch-update-document
-    /// 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/batch-update-document
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/batch-update-document
     pub async fn execute(
         self,
         params: BatchUpdateDocumentParams,

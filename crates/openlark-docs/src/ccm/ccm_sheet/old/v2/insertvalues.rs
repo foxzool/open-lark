@@ -1,7 +1,7 @@
 /// 插入数据
 ///
 /// 根据 spreadsheetToken 和 valuesPrependRequest 在指定位置插入数据。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/values/insert-values
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/values/insert-values
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -99,7 +99,7 @@ impl InsertValuesRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/values/insert-values
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/values/insert-values
     pub async fn execute(self, params: InsertValuesParams) -> SDKResult<InsertValuesResponse> {
         // 验证必填字段
         validate_required!(params.spreadsheet_token, "电子表格token不能为空");

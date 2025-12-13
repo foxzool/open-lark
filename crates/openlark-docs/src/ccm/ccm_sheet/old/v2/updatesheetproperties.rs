@@ -1,7 +1,7 @@
 /// 更新工作表属性
 ///
 /// 根据 spreadsheetToken 和 updateSheetPropertiesRequest 更新指定工作表的属性。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheets/update-sheet-properties
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheets/update-sheet-properties
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -119,7 +119,7 @@ impl UpdateSheetPropertiesRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheets/update-sheet-properties
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheets/update-sheet-properties
     pub async fn execute(
         self,
         params: UpdateSheetPropertiesParams,

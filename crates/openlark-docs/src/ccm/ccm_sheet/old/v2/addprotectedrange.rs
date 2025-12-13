@@ -1,7 +1,7 @@
 /// 增加保护范围
 ///
 /// 为电子表格中的单元格范围添加保护，防止未经授权的修改。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/protection/add-protected-range
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v2/protection/add-protected-range
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -145,7 +145,7 @@ impl AddProtectedRangeRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/protection/add-protected-range
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v2/protection/add-protected-range
     pub async fn execute(
         self,
         params: AddProtectedRangeParams,

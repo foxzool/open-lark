@@ -1,7 +1,7 @@
 /// 写入图片
 ///
 /// 根据 spreadsheetToken 向指定单元格插入图片。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/insert-image
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/insert-image
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -90,7 +90,7 @@ impl WriteImageRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/insert-image
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/insert-image
     pub async fn execute(self, params: WriteImageParams) -> SDKResult<WriteImageResponse> {
         // 验证必填字段
         validate_required!(params.spreadsheet_token, "电子表格token不能为空");

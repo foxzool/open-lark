@@ -1,7 +1,7 @@
 /// 导入电子表格
 ///
 /// 上传文件并创建新的电子表格，支持多种格式的文件导入。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/import/import_spreadsheet
+/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v2/import/import_spreadsheet
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -99,7 +99,7 @@ impl ImportSpreadsheetRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/sheets-v2/import/import_spreadsheet
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v2/import/import_spreadsheet
     pub async fn execute(
         self,
         params: ImportSpreadsheetParams,

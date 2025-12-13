@@ -1,8 +1,7 @@
 /// 获取我的空间（根文件夹）元数据
 ///
 /// 获取 "我的空间" 的元信息。
-/// API文档: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-root-folder-meta
-/// 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-root-folder-meta
+/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-root-folder-meta
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -71,8 +70,7 @@ impl GetRootFolderMetaRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-root-folder-meta
-    /// 对应CSV记录: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-root-folder-meta
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-root-folder-meta
     pub async fn execute(self) -> SDKResult<GetRootFolderMetaResponse> {
         // 使用enum+builder系统生成API端点
         let api_endpoint = CcmDriveExplorerApiOld::RootFolderMeta;
