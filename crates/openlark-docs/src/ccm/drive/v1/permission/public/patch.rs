@@ -1,0 +1,123 @@
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
+/// 更新云文档权限设置
+///
+/// 更新文件或文件夹的公开权限设置
+/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-public/patch
+use serde::{Deserialize, Serialize};
+
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
+
+/// 更新公开权限设置请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UpdatePublicPermissionRequest {
+    /// 文件token
+    pub token: String,
+    /// 权限设置
+    pub setting: PermissionSetting,
+}
+
+/// 权限设置
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PermissionSetting {
+    /// 是否公开
+    pub public: bool,
+    /// 权限类型
+    pub r#type: String,
+}
+
+impl UpdatePublicPermissionRequest {
+    /// 创建更新公开权限设置请求
+    ///
+    /// # 参数
+    /// * `token` - 文件token
+    /// * `setting` - 权限设置
+    pub fn new(token: impl Into<String>, setting: PermissionSetting) -> Self {
+        Self {
+            token: token.into(),
+            setting,
+        }
+    }
+}
+
+/// 更新权限设置响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UpdatePublicPermissionResponse {
+    /// 更新后的权限设置
+    pub data: Option<PermissionSetting>,
+}
+
+impl ApiResponseTrait for UpdatePublicPermissionResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 更新云文档权限设置
+///
+/// 更新文件或文件夹的公开权限设置
+/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-public/patch
+pub async fn update_public_permission(
+    request: UpdatePublicPermissionRequest,
+    config: &Config,
+    option: Option<openlark_core::req_option::RequestOption>,
+) -> SDKResult<openlark_core::api::Response<UpdatePublicPermissionResponse>> {
+    // 使用DriveApi枚举生成API端点
+    let api_endpoint = DriveApi::UpdatePublicPermission(request.token.clone());
+
+    // 创建API请求
+    let mut api_request: ApiRequest<UpdatePublicPermissionResponse> =
+        ApiRequest::patch(&api_endpoint.to_url()).body(serde_json::json!({
+            "setting": request.setting
+        }));
+
+    // 如果有请求选项，应用它们
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
+    }
+
+    // 发送请求
+    Transport::request(api_request, config, None).await
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_update_public_permission_request_builder() {
+        let setting = PermissionSetting {
+            public: true,
+            r#type: "anyone_with_link".to_string(),
+        };
+
+        let request = UpdatePublicPermissionRequest::new("file_token", setting);
+
+        assert_eq!(request.token, "file_token");
+        assert!(request.setting.public);
+        assert_eq!(request.setting.r#type, "anyone_with_link");
+    }
+
+    #[test]
+    fn test_permission_setting_structure() {
+        let setting = PermissionSetting {
+            public: true,
+            r#type: "anyone_with_link".to_string(),
+        };
+
+        assert!(setting.public);
+        assert_eq!(setting.r#type, "anyone_with_link");
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(
+            UpdatePublicPermissionResponse::data_format(),
+            ResponseFormat::Data
+        );
+    }
+}

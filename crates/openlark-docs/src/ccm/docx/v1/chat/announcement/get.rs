@@ -7,7 +7,7 @@ use openlark_core::{
 /// 获取聊天公告
 ///
 /// 此接口用于获取指定群聊的公告基本信息，包括公告内容、创建时间等。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/docx-v1/chat/announcement/get
+/// docPath: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/get
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DocxApiV1, api_utils::*};
@@ -77,7 +77,7 @@ impl ApiResponseTrait for GetChatAnnouncementResponse {
 /// 获取聊天公告
 ///
 /// 获取指定群聊的公告基本信息，包括公告内容、创建时间等。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/docx-v1/chat/announcement/get
+/// docPath: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/get
 pub async fn get_chat_announcement(
     request: GetChatAnnouncementRequest,
     config: &Config,
