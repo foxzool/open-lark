@@ -1,0 +1,122 @@
+use serde::{Deserialize, Serialize};
+use openlark_core::{
+    api:: ApiResponseTrait,
+    models::{OpenLarkConfig, OpenLarkRequest},
+    OpenLarkClient, SDKResult,
+};
+
+/// 添加密码保护请求
+#[derive(Debug, Serialize, Default)]
+pub struct AddPasswordRequest {
+    /// 文件token
+    pub file_token: String,
+    /// 密码
+    pub password: String,
+    /// 密码提示
+    pub password_hint: Option<String>,
+    /// 针对部门的密码
+    pub department_passwords: Option<Vec<DepartmentPassword>>,
+}
+
+/// 部门密码设置
+#[derive(Debug, Serialize, Default)]
+pub struct DepartmentPassword {
+    /// 部门ID
+    pub department_id: String,
+    /// 部门密码
+    pub password: String,
+    /// 密码提示
+    pub password_hint: Option<String>,
+}
+
+/// 添加密码保护响应
+#[derive(Debug, Deserialize, Default)]
+pub struct AddPasswordResponse {
+    /// 密码保护信息
+    pub password_protection: PasswordProtectionInfo,
+    /// 操作结果
+    pub result: String,
+}
+
+/// 密码保护信息
+#[derive(Debug, Deserialize, Default)]
+pub struct PasswordProtectionInfo {
+    /// 文件token
+    pub file_token: String,
+    /// 是否有密码保护
+    pub has_password: bool,
+    /// 密码提示
+    pub password_hint: Option<String>,
+    /// 部门密码列表
+    pub department_passwords: Option<Vec<DepartmentPasswordInfo>>,
+    /// 创建时间
+    pub created_at: String,
+}
+
+/// 部门密码信息
+#[derive(Debug, Deserialize, Default)]
+pub struct DepartmentPasswordInfo {
+    /// 部门ID
+    pub department_id: String,
+    /// 部门名称
+    pub department_name: String,
+    /// 密码提示
+    pub password_hint: Option<String>,
+    /// 创建时间
+    pub created_at: String,
+}
+
+/// 添加密码保护
+/// docPath: https://open.feishu.cn/open-apis/drive/v1/files/:file_token/password
+pub async fn add_password(
+    request: AddPasswordRequest,
+    config: &OpenLarkConfig,
+    option: Option<openlark_core::req_option::RequestOption>,
+) -> SDKResult<openlark_core::api::Response<AddPasswordResponse>> {
+    let url = format!(
+        "{}/open-apis/drive/v1/files/{}/password",
+        config.base_url, request.file_token
+    );
+
+    let req = OpenLarkRequest {
+        url,
+        method: http::Method::POST,
+        headers: vec![],
+        query_params: vec![],
+        body: Some(serde_json::to_vec(&request)?),
+    };
+
+    OpenLarkClient::request(req, config, option).await
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use tokio;
+
+    #[tokio::test]
+    async fn test_add_password() {
+        let config = OpenLarkConfig {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_app_secret".to_string(),
+            base_url: "https://open.feishu.cn".to_string(),
+            ..Default::default()
+        };
+
+        let request = AddPasswordRequest {
+            file_token: "test_file_token".to_string(),
+            password: "test_password".to_string(),
+            password_hint: Some("提示信息".to_string()),
+            department_passwords: Some(vec![
+                DepartmentPassword {
+                    department_id: "dept_001".to_string(),
+                    password: "dept_password".to_string(),
+                    password_hint: Some("部门密码提示".to_string()),
+                },
+            ]),
+        };
+
+        let result = add_password(request, &config, None).await;
+        assert!(result.is_ok());
+    }
+}
