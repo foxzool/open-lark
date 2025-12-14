@@ -1,7 +1,7 @@
 /// 获取云文档内容
 ///
 /// 此接口用于获取指定云文档的详细内容，包括文档结构、文本内容等。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/docs-v1/content/get
+/// docPath: https://open.feishu.cn/document/docs/docs-v1/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
@@ -80,7 +80,7 @@ impl ApiResponseTrait for GetDocsContentResponse {
 /// 获取云文档内容
 ///
 /// 获取指定云文档的详细内容，包括文档结构、文本内容等。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/docs-v1/content/get
+/// docPath: https://open.feishu.cn/document/docs/docs-v1/get
 pub async fn get_docs_content(
     request: GetDocsContentRequest,
     config: &Config,
