@@ -1,24 +1,24 @@
-/// 知识库服务模块
+/// Lingo语言服务模块
 ///
-/// 提供企业知识库、Wiki管理功能。包含baike和lingo两个项目。
+/// 提供智能语言处理功能，包括草稿管理和词条管理。
+
 use openlark_core::config::Config;
 
-// 导出v1版本实现和模型
+// 导出v1版本实现
 pub mod v1;
-pub mod models;
 
-// 重新导出服务和v1版本
-pub use v1::{LingoV1Service, BaikeV1Service};
+// 重新导出服务
+pub use v1::LingoV1Service;
 
-/// Baike 知识库服务（兼容旧接口）
+/// Lingo语言服务（兼容旧接口）
 #[derive(Debug, Clone)]
-pub struct BaikeService {
+pub struct LingoService {
     /// 配置信息
     config: Config,
 }
 
-impl BaikeService {
-    /// 创建新的知识库服务实例
+impl LingoService {
+    /// 创建新的 Lingo 服务实例
     pub fn new(config: Config) -> Self {
         Self { config }
     }
@@ -28,9 +28,9 @@ impl BaikeService {
         &self.config
     }
 
-    /// 获取baike项目v1服务
-    pub fn v1(&self) -> BaikeV1Service {
-        BaikeV1Service::new(&self.config)
+    /// 获取lingo项目v1服务
+    pub fn v1(&self) -> LingoV1Service {
+        LingoV1Service::new(&self.config)
     }
 }
 
@@ -39,12 +39,12 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_baike_service_creation() {
+    fn test_lingo_service_creation() {
         let config = Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let service = BaikeService::new(config.clone());
+        let service = LingoService::new(config.clone());
 
         assert_eq!(service.config().app_id(), "test_app_id");
         assert_eq!(service.config().app_secret(), "test_app_secret");

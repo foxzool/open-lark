@@ -2021,3 +2021,197 @@ impl SheetsApiV3 {
 
 // Sheets API v3 端点
 pub const SheetsApiV3: &str = "/open-apis/sheets/v3";
+
+// ============================================================================
+// Baike API v1 端点定义
+// ============================================================================
+
+/// Baike知识库 API v1 端点
+#[derive(Debug, Clone, PartialEq)]
+pub enum BaikeApiV1 {
+    /// 草稿管理
+    DraftCreate,
+    DraftUpdate(String), // draft_id
+
+    /// 词条管理
+    EntityCreate,
+    EntityUpdate(String), // entity_id
+    EntityGet(String), // entity_id
+    EntityDelete(String), // entity_id
+    EntityList,
+    EntityMatch,
+    EntitySearch,
+    EntityHighlight,
+    EntityExtract,
+    EntityApprove(String), // entity_id
+    EntityReject(String), // entity_id
+    EntityAuditList(String), // space_id
+
+    /// 分类管理
+    ClassificationList,
+
+    /// 文件管理
+    FileUpload,
+    FileDownload(String), // file_token
+
+    /// 搜索相关
+    SearchEntity,
+    SearchUser,
+    SearchHistory,
+    SearchHistoryDelete,
+    SearchEntityHistory,
+    SearchSpace,
+    SearchSpaceMember,
+    SearchSpaceAccess,
+    SearchSpaceAccessList,
+    SearchSpaceRecommend,
+    SearchSpaceMemberList,
+    SearchSpaceOperation,
+    SearchSpaceOperationLog,
+    SearchSpaceOperationStatus,
+}
+
+impl BaikeApiV1 {
+    pub fn to_url(&self) -> String {
+        match self {
+            BaikeApiV1::DraftCreate => "/open-apis/baike/v1/drafts".to_string(),
+            BaikeApiV1::DraftUpdate(draft_id) => {
+                format!("/open-apis/baike/v1/drafts/{}", draft_id)
+            }
+            BaikeApiV1::EntityCreate => "/open-apis/baike/v1/entities".to_string(),
+            BaikeApiV1::EntityUpdate(entity_id) => {
+                format!("/open-apis/baike/v1/entities/{}", entity_id)
+            }
+            BaikeApiV1::EntityGet(entity_id) => {
+                format!("/open-apis/baike/v1/entities/{}", entity_id)
+            }
+            BaikeApiV1::EntityDelete(entity_id) => {
+                format!("/open-apis/baike/v1/entities/{}", entity_id)
+            }
+            BaikeApiV1::EntityList => {
+                "/open-apis/baike/v1/entities".to_string()
+            }
+            BaikeApiV1::EntityApprove(entity_id) => {
+                format!("/open-apis/baike/v1/entities/{}/approve", entity_id)
+            }
+            BaikeApiV1::EntityReject(entity_id) => {
+                format!("/open-apis/baike/v1/entities/{}/reject", entity_id)
+            }
+            BaikeApiV1::EntityAuditList(space_id) => {
+                format!("/open-apis/baike/v1/spaces/{}/entities:audit", space_id)
+            }
+            BaikeApiV1::EntityMatch => "/open-apis/baike/v1/entities/match".to_string(),
+            BaikeApiV1::EntitySearch => "/open-apis/baike/v1/entities/search".to_string(),
+            BaikeApiV1::EntityHighlight => "/open-apis/baike/v1/entities/highlight".to_string(),
+            BaikeApiV1::EntityExtract => "/open-apis/baike/v1/entities/extract".to_string(),
+            BaikeApiV1::ClassificationList => "/open-apis/baike/v1/classifications".to_string(),
+            BaikeApiV1::FileUpload => "/open-apis/baike/v1/files/upload".to_string(),
+            BaikeApiV1::FileDownload(file_token) => {
+                format!("/open-apis/baike/v1/files/{}/download", file_token)
+            }
+            BaikeApiV1::SearchEntity => "/open-apis/baike/v1/search/entities".to_string(),
+            BaikeApiV1::SearchUser => "/open-apis/baike/v1/search/users".to_string(),
+            BaikeApiV1::SearchHistory => "/open-apis/baike/v1/search/history".to_string(),
+            BaikeApiV1::SearchHistoryDelete => "/open-apis/baike/v1/search/history".to_string(),
+            BaikeApiV1::SearchEntityHistory => "/open-apis/baike/v1/search/entity_history".to_string(),
+            BaikeApiV1::SearchSpace => "/open-apis/baike/v1/search/spaces".to_string(),
+            BaikeApiV1::SearchSpaceMember => "/open-apis/baike/v1/search/space_members".to_string(),
+            BaikeApiV1::SearchSpaceAccess => "/open-apis/baike/v1/search/space_access".to_string(),
+            BaikeApiV1::SearchSpaceAccessList => "/open-apis/baike/v1/search/space_access_list".to_string(),
+            BaikeApiV1::SearchSpaceRecommend => "/open-apis/baike/v1/search/space_recommend".to_string(),
+            BaikeApiV1::SearchSpaceMemberList => "/open-apis/baike/v1/search/space_member_list".to_string(),
+            BaikeApiV1::SearchSpaceOperation => "/open-apis/baike/v1/search/space_operations".to_string(),
+            BaikeApiV1::SearchSpaceOperationLog => "/open-apis/baike/v1/search/space_operation_logs".to_string(),
+            BaikeApiV1::SearchSpaceOperationStatus => "/open-apis/baike/v1/search/space_operation_status".to_string(),
+        }
+    }
+}
+
+// Baike API v1 端点
+pub const BaikeApiV1: &str = "/open-apis/baike/v1";
+
+// ============================================================================
+// Lingo API v1 端点定义
+// ============================================================================
+
+/// Lingo语言服务 API v1 端点
+#[derive(Debug, Clone, PartialEq)]
+pub enum LingoApiV1 {
+    /// 草稿管理
+    DraftCreate,
+    DraftUpdate(String), // draft_id
+
+    /// 词条管理
+    EntityCreate,
+    EntityUpdate(String), // entity_id
+    EntityDelete(String), // entity_id
+    EntityGet(String), // entity_id
+    EntityList,
+    EntityMatch,
+    EntitySearch,
+    EntityHighlight,
+    EntityBatchGet,
+    EntityBatchUpdate,
+    EntitySearchRecommend,
+    EntityHistoryGet(String), // entity_id
+    EntityHistoryList,
+
+    /// 分类管理
+    ClassificationList,
+
+    /// 词库管理
+    RepoList,
+
+    /// 文件管理
+    FileUpload,
+    FileDownload(String), // file_token
+
+    /// 智能处理
+    GenerateSummary,
+    ExtractKeywords,
+    TranslateText,
+}
+
+impl LingoApiV1 {
+    pub fn to_url(&self) -> String {
+        match self {
+            LingoApiV1::DraftCreate => "/open-apis/lingo/v1/drafts".to_string(),
+            LingoApiV1::DraftUpdate(draft_id) => {
+                format!("/open-apis/lingo/v1/drafts/{}", draft_id)
+            }
+            LingoApiV1::EntityCreate => "/open-apis/lingo/v1/entities".to_string(),
+            LingoApiV1::EntityUpdate(entity_id) => {
+                format!("/open-apis/lingo/v1/entities/{}", entity_id)
+            }
+            LingoApiV1::EntityDelete(entity_id) => {
+                format!("/open-apis/lingo/v1/entities/{}", entity_id)
+            }
+            LingoApiV1::EntityGet(entity_id) => {
+                format!("/open-apis/lingo/v1/entities/{}", entity_id)
+            }
+            LingoApiV1::EntityList => "/open-apis/lingo/v1/entities".to_string(),
+            LingoApiV1::EntityMatch => "/open-apis/lingo/v1/entities/match".to_string(),
+            LingoApiV1::EntitySearch => "/open-apis/lingo/v1/entities/search".to_string(),
+            LingoApiV1::EntityHighlight => "/open-apis/lingo/v1/entities/highlight".to_string(),
+            LingoApiV1::EntityBatchGet => "/open-apis/lingo/v1/entities:batchGet".to_string(),
+            LingoApiV1::EntityBatchUpdate => "/open-apis/lingo/v1/entities:batchUpdate".to_string(),
+            LingoApiV1::EntitySearchRecommend => "/open-apis/lingo/v1/entities:searchRecommend".to_string(),
+            LingoApiV1::EntityHistoryGet(entity_id) => {
+                format!("/open-apis/lingo/v1/entities/{}/history", entity_id)
+            }
+            LingoApiV1::EntityHistoryList => "/open-apis/lingo/v1/entityHistory".to_string(),
+            LingoApiV1::ClassificationList => "/open-apis/lingo/v1/classifications".to_string(),
+            LingoApiV1::RepoList => "/open-apis/lingo/v1/repos".to_string(),
+            LingoApiV1::FileUpload => "/open-apis/lingo/v1/files/upload".to_string(),
+            LingoApiV1::FileDownload(file_token) => {
+                format!("/open-apis/lingo/v1/files/{}/download", file_token)
+            }
+            LingoApiV1::GenerateSummary => "/open-apis/lingo/v1/text:generateSummary".to_string(),
+            LingoApiV1::ExtractKeywords => "/open-apis/lingo/v1/text:extractKeywords".to_string(),
+            LingoApiV1::TranslateText => "/open-apis/lingo/v1/text:translate".to_string(),
+        }
+    }
+}
+
+// Lingo API v1 端点
+pub const LingoApiV1: &str = "/open-apis/lingo/v1";
