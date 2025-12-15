@@ -93,6 +93,7 @@ impl WikiService {
     /// 返回任务服务实例
     pub fn task(&self) -> crate::ccm::wiki::v2::task::TaskService {
         crate::ccm::wiki::v2::task::TaskService::new(self.config.clone())
+    }
 }
 
 impl openlark_core::trait_system::service::Service for WikiService {
@@ -105,10 +106,8 @@ impl openlark_core::trait_system::service::Service for WikiService {
         Self: Sized,
     {
         "wiki"
-}
+    }
 
-    fn transport(&self) -> &dyn openlark_core::http::Transport {
-        panic!("WikiService does not have a transport instance")
 }
 
 #[cfg(test)]

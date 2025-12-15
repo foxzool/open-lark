@@ -1,12 +1,15 @@
-use serde::{Deserialize, Serialize};
 use openlark_core::{
-    api:: ApiResponseTrait,
-    models::{OpenLarkConfig, OpenLarkRequest},
-    OpenLarkClient, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
 };
+use serde::{Deserialize, Serialize};
+use serde_json::json;
+use crate::common::{api_endpoints::SheetsApiV3, api_utils::*};
 
 /// 批量获取单元格值请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct GetBatchValuesRequest {
     /// 电子表格token
     pub spreadsheet_token: String,
@@ -19,7 +22,7 @@ pub struct GetBatchValuesRequest {
 }
 
 /// 批量获取单元格值响应
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Deserialize, Default)]
 pub struct GetBatchValuesResponse {
     /// 值范围列表
     pub value_ranges: Vec<ValueRange>,
@@ -28,7 +31,7 @@ pub struct GetBatchValuesResponse {
 }
 
 /// 值范围
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Deserialize, Default)]
 pub struct ValueRange {
     /// 工作表ID
     pub sheet_id: String,
@@ -46,19 +49,58 @@ pub struct ValueRange {
     pub values: Vec<Vec<serde_json::Value>>,
 }
 
+impl ApiResponseTrait for GetBatchValuesResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl GetBatchValuesRequest {
+    /// 创建新的批量获取单元格值请求构建器
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 设置电子表格token
+    pub fn spreadsheet_token(mut self, token: impl Into<String>) -> Self {
+        self.spreadsheet_token = token.into();
+        self
+    }
+
+    /// 添加范围
+    pub fn add_range(mut self, range: impl Into<String>) -> Self {
+        self.ranges.push(range.into());
+        self
+    }
+
+    /// 设置范围列表
+    pub fn ranges(mut self, ranges: Vec<String>) -> Self {
+        self.ranges = ranges;
+        self
+    }
+
+    /// 设置值渲染选项
+    pub fn value_render_option(mut self, option: impl Into<String>) -> Self {
+        self.value_render_option = Some(option.into());
+        self
+    }
+
+    /// 设置日期渲染选项
+    pub fn date_render_option(mut self, option: impl Into<String>) -> Self {
+        self.date_render_option = Some(option.into());
+        self
+    }
+}
+
 /// 批量获取单元格值
 /// docPath: https://open.feishu.cn/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values:batchGet
 pub async fn get_batch_values(
     request: GetBatchValuesRequest,
-    config: &OpenLarkConfig,
+    config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<openlark_core::api::Response<GetBatchValuesResponse>> {
-    let url = format!(
-        "{}/open-apis/sheets/v2/spreadsheets/{}/values:batchGet",
-        config.base_url, request.spreadsheet_token
-    );
-
-    let mut query_params = vec![];
+) -> SDKResult<Response<GetBatchValuesResponse>> {
+    // 构建查询参数
+    let mut query_params = Vec::new();
 
     if !request.ranges.is_empty() {
         query_params.push(("ranges".to_string(), request.ranges.join(",")));
@@ -72,42 +114,51 @@ pub async fn get_batch_values(
         query_params.push(("dateRenderOption".to_string(), date_render_option.clone()));
     }
 
-    let req = OpenLarkRequest {
-        url,
-        method: http::Method::GET,
-        headers: vec![],
-        query_params,
-        body: None,
-    };
+    // 创建API请求
+    let mut api_request: ApiRequest<GetBatchValuesResponse> =
+        ApiRequest::get(&format!("{}/spreadsheets/{}/values:batchGet", SheetsApiV3, request.spreadsheet_token))
+            .query_params(query_params);
 
-    OpenLarkClient::request(req, config, option).await
+    // 如果有请求选项，应用它们
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
+    }
+
+    // 发送请求
+    Transport::request(api_request, config, None).await
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tokio;
 
-    #[tokio::test]
-    async fn test_get_batch_values() {
-        let config = OpenLarkConfig {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_app_secret".to_string(),
-            base_url: "https://open.feishu.cn".to_string(),
-            ..Default::default()
-        };
+    #[test]
+    fn test_get_batch_values_request_builder() {
+        let request = GetBatchValuesRequest::new()
+            .spreadsheet_token("test_token")
+            .add_range("sheet1!A1:B10")
+            .add_range("sheet2!C1:D5")
+            .value_render_option("DisplayValue")
+            .date_render_option("FormattedString");
 
-        let request = GetBatchValuesRequest {
-            spreadsheet_token: "test_spreadsheet_token".to_string(),
-            ranges: vec![
-                "sheet1!A1:B10".to_string(),
-                "sheet2!C1:D5".to_string(),
-            ],
-            value_render_option: Some("DisplayValue".to_string()),
-            date_render_option: Some("FormattedString".to_string()),
-        };
+        assert_eq!(request.spreadsheet_token, "test_token");
+        assert_eq!(request.ranges, vec!["sheet1!A1:B10", "sheet2!C1:D5"]);
+        assert_eq!(request.value_render_option, Some("DisplayValue".to_string()));
+        assert_eq!(request.date_render_option, Some("FormattedString".to_string()));
+    }
 
-        let result = get_batch_values(request, &config, None).await;
-        assert!(result.is_ok());
+    #[test]
+    fn test_get_batch_values_request_with_ranges() {
+        let ranges = vec![
+            "sheet1!A1:B10".to_string(),
+            "sheet2!C1:D5".to_string(),
+        ];
+
+        let request = GetBatchValuesRequest::new()
+            .spreadsheet_token("test_token")
+            .ranges(ranges.clone());
+
+        assert_eq!(request.spreadsheet_token, "test_token");
+        assert_eq!(request.ranges, ranges);
     }
 }

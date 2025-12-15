@@ -32,8 +32,8 @@ impl WikiService {
     }
 
     /// 获取V2版本API
-    pub fn v2(&self) -> crate::ccm::wiki::v2::WikiV2Service {
-        crate::ccm::wiki::v2::WikiV2Service::new(self.config.clone())
+    pub fn v2(&self) -> crate::ccm::wiki::v2::WikiService {
+        crate::ccm::wiki::v2::WikiService::new(self.config.clone())
     }
 }
 

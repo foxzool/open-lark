@@ -114,7 +114,7 @@ impl ApiResponseTrait for CreateNodeResponse {
 }
 
 /// 获取知识空间子节点列表请求参数
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct GetNodesParams {
     /// 父节点标识
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -291,24 +291,14 @@ impl NodesService {
 
         // 构建查询参数
         if let Some(p) = params {
-            let mut query_params = Vec::new();
             if let Some(parent_node) = p.parent_node_token {
-                query_params.push(("parent_node_token".to_string(), parent_node));
+                api_request = api_request.query("parent_node_token", &parent_node);
             }
             if let Some(size) = p.page_size {
-                query_params.push(("page_size".to_string(), size.to_string()));
+                api_request = api_request.query("page_size", &size.to_string());
             }
             if let Some(token) = p.page_token {
-                query_params.push(("page_token".to_string(), token));
-            }
-
-            if !query_params.is_empty() {
-                let query_string = query_params
-                    .iter()
-                    .map(|(k, v)| format!("{}={}", k, v))
-                    .collect::<Vec<_>>()
-                    .join("&");
-                api_request = api_request.query(&query_string);
+                api_request = api_request.query("page_token", &token);
             }
         }
 

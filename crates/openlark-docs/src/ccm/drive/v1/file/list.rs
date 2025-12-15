@@ -92,7 +92,7 @@ pub async fn list_files(
     // 创建API请求
     let api_request: ApiRequest<ListFilesResponse> =
         ApiRequest::get(&api_endpoint.to_url())
-            .query_params(serialize_params(&params, "获取文件清单")?);
+            .body(serde_json::json!(&params));
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;

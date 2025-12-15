@@ -10,6 +10,7 @@
 //,
 // 包含知识库的基础功能
 use openlark_core::prelude::*;
+use openlark_core::config::Config;
 /// 知识库v1版本服务
 pub struct WikiV1Service {
     #[allow(dead_code)] // 配置保留供将来使用

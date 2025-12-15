@@ -7,7 +7,7 @@ pub mod api_utils;
 pub mod builders;
 
 // 重新导出API端点枚举
-pub use api_endpoints::{BaseApiV2, BitableApiV1, MinutesApiV1};
+pub use api_endpoints::{BaseApiV2, BitableApiV1, MinutesApiV1, SheetsApiV3};
 
 /// 通用常量定义
 pub mod constants {

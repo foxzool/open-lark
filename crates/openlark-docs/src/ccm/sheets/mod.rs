@@ -170,8 +170,8 @@ impl SheetsService {
 
     /// 获取V3版本API（推荐）
     #[cfg(any(feature = "ccm-sheets", feature = "ccm-sheets-v3"))]
-    pub fn v3(&self) -> crate::ccm::sheets::v3::SheetsV3Service {
-        crate::ccm::sheets::v3::SheetsV3Service::new(self.config.clone())
+    pub fn v3(&self) -> crate::ccm::sheets::v3::SheetsService {
+        crate::ccm::sheets::v3::SheetsService::new(self.config.clone())
     }
 
     /// 获取V2版本API（实验性）

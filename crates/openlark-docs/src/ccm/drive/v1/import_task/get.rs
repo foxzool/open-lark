@@ -1,19 +1,38 @@
-use serde::{Deserialize, Serialize};
+/// 获取导入任务
+///
+/// 获取导入任务的详细信息，包括任务状态、进度和结果。
+/// docPath: https://open.feishu.cn/open-apis/drive/v1/import_tasks/:task_token
 use openlark_core::{
-    api:: ApiResponseTrait,
-    models::{OpenLarkConfig, OpenLarkRequest},
-    OpenLarkClient, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
 };
+use serde::{Deserialize, Serialize};
+
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 获取导入任务请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetImportTaskRequest {
     /// 任务token
     pub task_token: String,
 }
 
+impl GetImportTaskRequest {
+    /// 创建获取导入任务请求
+    ///
+    /// # 参数
+    /// * `task_token` - 任务token
+    pub fn new(task_token: impl Into<String>) -> Self {
+        Self {
+            task_token: task_token.into(),
+        }
+    }
+}
+
 /// 获取导入任务响应
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetImportTaskResponse {
     /// 导入任务信息
     pub task: ImportTaskInfo,
@@ -21,8 +40,14 @@ pub struct GetImportTaskResponse {
     pub result: String,
 }
 
+impl ApiResponseTrait for GetImportTaskResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
 /// 导入任务信息
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ImportTaskInfo {
     /// 任务token
     pub task_token: String,
@@ -43,47 +68,59 @@ pub struct ImportTaskInfo {
 }
 
 /// 获取导入任务
+///
+/// 获取导入任务的详细信息，包括任务状态、进度和结果。
 /// docPath: https://open.feishu.cn/open-apis/drive/v1/import_tasks/:task_token
 pub async fn get_import_task(
     request: GetImportTaskRequest,
-    config: &OpenLarkConfig,
+    config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<openlark_core::api::Response<GetImportTaskResponse>> {
-    let url = format!(
-        "{}/open-apis/drive/v1/import_tasks/{}",
-        config.base_url, request.task_token
-    );
+    // 创建API请求
+    let url = DriveApi::GetImportTask(request.task_token.clone()).to_url();
+    let mut api_request: ApiRequest<GetImportTaskResponse> =
+        ApiRequest::get(&url);
 
-    let req = OpenLarkRequest {
-        url,
-        method: http::Method::GET,
-        headers: vec![],
-        query_params: vec![],
-        body: None,
-    };
+    // 如果有请求选项，应用它们
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
+    }
 
-    OpenLarkClient::request(req, config, option).await
+    // 发送请求
+    Transport::request(api_request, config, None).await
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tokio;
 
-    #[tokio::test]
-    async fn test_get_import_task() {
-        let config = OpenLarkConfig {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_app_secret".to_string(),
-            base_url: "https://open.feishu.cn".to_string(),
-            ..Default::default()
+    #[test]
+    fn test_get_import_task_request_builder() {
+        let request = GetImportTaskRequest::new("task_token");
+        assert_eq!(request.task_token, "task_token");
+    }
+
+    #[test]
+    fn test_import_task_info_structure() {
+        let task_info = ImportTaskInfo {
+            task_token: "task_123".to_string(),
+            status: "completed".to_string(),
+            file_token: Some("file_456".to_string()),
+            r#type: "docx".to_string(),
+            file_name: "imported.docx".to_string(),
+            created_at: "2023-01-01T00:00:00Z".to_string(),
+            completed_at: Some("2023-01-01T00:05:00Z".to_string()),
+            error: None,
         };
 
-        let request = GetImportTaskRequest {
-            task_token: "test_task_token".to_string(),
-        };
+        assert_eq!(task_info.task_token, "task_123");
+        assert_eq!(task_info.status, "completed");
+        assert_eq!(task_info.file_token, Some("file_456".to_string()));
+        assert_eq!(task_info.completed_at, Some("2023-01-01T00:05:00Z".to_string()));
+    }
 
-        let result = get_import_task(request, &config, None).await;
-        assert!(result.is_ok());
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(GetImportTaskResponse::data_format(), ResponseFormat::Data);
     }
 }

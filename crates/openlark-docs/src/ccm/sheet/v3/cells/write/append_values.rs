@@ -1,12 +1,15 @@
-use serde::{Deserialize, Serialize};
 use openlark_core::{
-    api:: ApiResponseTrait,
-    models::{OpenLarkConfig, OpenLarkRequest},
-    OpenLarkClient, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
 };
+use serde::{Deserialize, Serialize};
+use serde_json::json;
+use crate::common::{api_endpoints::SheetsApiV3, api_utils::*};
 
 /// 追加单元格值请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct AppendValuesRequest {
     /// 电子表格token
     pub spreadsheet_token: String,
@@ -23,7 +26,7 @@ pub struct AppendValuesRequest {
 }
 
 /// 追加单元格值响应
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Deserialize, Default)]
 pub struct AppendValuesResponse {
     /// 电子表格ID
     pub spreadsheet_id: String,
@@ -38,7 +41,7 @@ pub struct AppendValuesResponse {
 }
 
 /// 追加更新信息
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Deserialize, Default)]
 pub struct AppendUpdates {
     /// 更新的范围
     pub updated_range: String,
@@ -50,19 +53,64 @@ pub struct AppendUpdates {
     pub updated_cells: i32,
 }
 
+impl ApiResponseTrait for AppendValuesResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl AppendValuesRequest {
+    /// 创建新的追加单元格值请求构建器
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 设置电子表格token
+    pub fn spreadsheet_token(mut self, token: impl Into<String>) -> Self {
+        self.spreadsheet_token = token.into();
+        self
+    }
+
+    /// 设置工作表ID
+    pub fn sheet_id(mut self, id: impl Into<String>) -> Self {
+        self.sheet_id = id.into();
+        self
+    }
+
+    /// 设置追加范围
+    pub fn range(mut self, range: impl Into<String>) -> Self {
+        self.range = Some(range.into());
+        self
+    }
+
+    /// 设置值数据
+    pub fn values(mut self, values: Vec<Vec<serde_json::Value>>) -> Self {
+        self.values = values;
+        self
+    }
+
+    /// 设置输入选项
+    pub fn value_input_option(mut self, option: impl Into<String>) -> Self {
+        self.value_input_option = Some(option.into());
+        self
+    }
+
+    /// 设置插入数据选项
+    pub fn insert_data_option(mut self, option: impl Into<String>) -> Self {
+        self.insert_data_option = Some(option.into());
+        self
+    }
+}
+
 /// 追加单元格值
 /// docPath: https://open.feishu.cn/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values:append
 pub async fn append_values(
     request: AppendValuesRequest,
-    config: &OpenLarkConfig,
+    config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<openlark_core::api::Response<AppendValuesResponse>> {
-    let url = format!(
-        "{}/open-apis/sheets/v2/spreadsheets/{}/values:append",
-        config.base_url, request.spreadsheet_token
-    );
-
-    let mut query_params = vec![];
+) -> SDKResult<Response<AppendValuesResponse>> {
+    // 构建查询参数
+    let mut query_params = Vec::new();
 
     if let Some(range) = &request.range {
         query_params.push(("range".to_string(), range.clone()));
@@ -81,45 +129,47 @@ pub async fn append_values(
     body_map.insert("values".to_string(), serde_json::Value::Array(
         request.values.into_iter().map(|v| serde_json::Value::Array(v)).collect()
     ));
+    let body = json!(body_map);
 
-    let req = OpenLarkRequest {
-        url,
-        method: http::Method::POST,
-        headers: vec![],
-        query_params,
-        body: Some(serde_json::to_vec(&body_map).unwrap()),
-    };
+    // 创建API请求
+    let mut api_request: ApiRequest<AppendValuesResponse> =
+        ApiRequest::post(&format!("{}/spreadsheets/{}/values:append", SheetsApiV3, request.spreadsheet_token))
+            .query_params(query_params)
+            .body(body);
 
-    OpenLarkClient::request(req, config, option).await
+    // 如果有请求选项，应用它们
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
+    }
+
+    // 发送请求
+    Transport::request(api_request, config, None).await
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tokio;
 
-    #[tokio::test]
-    async fn test_append_values() {
-        let config = OpenLarkConfig {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_app_secret".to_string(),
-            base_url: "https://open.feishu.cn".to_string(),
-            ..Default::default()
-        };
+    #[test]
+    fn test_append_values_request_builder() {
+        let values = vec![
+            vec![serde_json::Value::String("王五".to_string()), serde_json::Value::Number(serde_json::Number::from(28))],
+            vec![serde_json::Value::String("赵六".to_string()), serde_json::Value::Number(serde_json::Number::from(32))],
+        ];
 
-        let request = AppendValuesRequest {
-            spreadsheet_token: "test_spreadsheet_token".to_string(),
-            sheet_id: "test_sheet_id".to_string(),
-            range: Some("A1:B".to_string()),
-            values: vec![
-                vec![serde_json::Value::String("王五".to_string()), serde_json::Value::Number(serde_json::Number::from(28))],
-                vec![serde_json::Value::String("赵六".to_string()), serde_json::Value::Number(serde_json::Number::from(32))],
-            ],
-            value_input_option: Some("USER_ENTERED".to_string()),
-            insert_data_option: Some("INSERT_ROWS".to_string()),
-        };
+        let request = AppendValuesRequest::new()
+            .spreadsheet_token("test_token")
+            .sheet_id("test_sheet")
+            .range("A1:B")
+            .values(values.clone())
+            .value_input_option("USER_ENTERED")
+            .insert_data_option("INSERT_ROWS");
 
-        let result = append_values(request, &config, None).await;
-        assert!(result.is_ok());
+        assert_eq!(request.spreadsheet_token, "test_token");
+        assert_eq!(request.sheet_id, "test_sheet");
+        assert_eq!(request.range, Some("A1:B".to_string()));
+        assert_eq!(request.values, values);
+        assert_eq!(request.value_input_option, Some("USER_ENTERED".to_string()));
+        assert_eq!(request.insert_data_option, Some("INSERT_ROWS".to_string()));
     }
 }

@@ -1,12 +1,15 @@
-use serde::{Deserialize, Serialize};
 use openlark_core::{
-    api:: ApiResponseTrait,
-    models::{OpenLarkConfig, OpenLarkRequest},
-    OpenLarkClient, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
 };
+use serde::{Deserialize, Serialize};
+
+use crate::common::api_endpoints::SheetsApiV3;
 
 /// 获取单元格值请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetValuesRequest {
     /// 电子表格token
     pub spreadsheet_token: String,
@@ -26,8 +29,90 @@ pub struct GetValuesRequest {
     pub date_render_option: Option<String>,
 }
 
+impl GetValuesRequest {
+    /// 创建获取单元格值请求
+    ///
+    /// # 参数
+    /// * `spreadsheet_token` - 电子表格token
+    /// * `sheet_id` - 工作表ID
+    pub fn new(spreadsheet_token: impl Into<String>, sheet_id: impl Into<String>) -> Self {
+        Self {
+            spreadsheet_token: spreadsheet_token.into(),
+            sheet_id: sheet_id.into(),
+            start_row: None,
+            start_column: None,
+            end_row: None,
+            end_column: None,
+            value_render_option: None,
+            date_render_option: None,
+        }
+    }
+
+    /// 设置电子表格token
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl Into<String>) -> Self {
+        self.spreadsheet_token = spreadsheet_token.into();
+        self
+    }
+
+    /// 设置工作表ID
+    pub fn sheet_id(mut self, sheet_id: impl Into<String>) -> Self {
+        self.sheet_id = sheet_id.into();
+        self
+    }
+
+    /// 设置起始行
+    pub fn start_row(mut self, start_row: i32) -> Self {
+        self.start_row = Some(start_row);
+        self
+    }
+
+    /// 设置起始列
+    pub fn start_column(mut self, start_column: i32) -> Self {
+        self.start_column = Some(start_column);
+        self
+    }
+
+    /// 设置结束行
+    pub fn end_row(mut self, end_row: i32) -> Self {
+        self.end_row = Some(end_row);
+        self
+    }
+
+    /// 设置结束列
+    pub fn end_column(mut self, end_column: i32) -> Self {
+        self.end_column = Some(end_column);
+        self
+    }
+
+    /// 设置值渲染选项
+    pub fn value_render_option(mut self, value_render_option: impl Into<String>) -> Self {
+        self.value_render_option = Some(value_render_option.into());
+        self
+    }
+
+    /// 设置日期渲染选项
+    pub fn date_render_option(mut self, date_render_option: impl Into<String>) -> Self {
+        self.date_render_option = Some(date_render_option.into());
+        self
+    }
+
+    /// 将列号转换为字母表示
+    fn number_to_column(n: i32) -> String {
+        let mut result = String::new();
+        let mut num = n;
+
+        while num > 0 {
+            num -= 1;
+            result.insert(0, char::from((num % 26 + 65) as u8));
+            num /= 26;
+        }
+
+        result
+    }
+}
+
 /// 获取单元格值响应
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetValuesResponse {
     /// 值范围
     pub value_range: ValueRange,
@@ -35,8 +120,14 @@ pub struct GetValuesResponse {
     pub result: String,
 }
 
+impl ApiResponseTrait for GetValuesResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
 /// 值范围
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ValueRange {
     /// 工作表ID
     pub sheet_id: String,
@@ -56,23 +147,23 @@ pub struct ValueRange {
 /// docPath: https://open.feishu.cn/open-apis/sheets/v2/spreadsheets/:spreadsheetToken/values/:sheetId!A1:B10
 pub async fn get_values(
     request: GetValuesRequest,
-    config: &OpenLarkConfig,
+    config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<openlark_core::api::Response<GetValuesResponse>> {
+) -> SDKResult<Response<GetValuesResponse>> {
     // 构建范围表达式
     let mut range_parts = vec![request.sheet_id.clone()];
 
     // 构建A1表示法范围
     if let (Some(sr), Some(sc)) = (request.start_row, request.start_column) {
         let start_cell = format!("{}{}",
-            Self::number_to_column(sc + 1),
+            GetValuesRequest::number_to_column(sc + 1),
             sr + 1
         );
         range_parts.push(start_cell);
 
         if let (Some(er), Some(ec)) = (request.end_row, request.end_column) {
             let end_cell = format!("{}{}",
-                Self::number_to_column(ec + 1),
+                GetValuesRequest::number_to_column(ec + 1),
                 er + 1
             );
             range_parts.push(end_cell);
@@ -81,75 +172,59 @@ pub async fn get_values(
 
     let range = range_parts.join("!");
 
+    // 使用 sheets v2 端点
     let url = format!(
-        "{}/open-apis/sheets/v2/spreadsheets/{}/values/{}",
-        config.base_url, request.spreadsheet_token, range
+        "/open-apis/sheets/v2/spreadsheets/{}/values/{}",
+        request.spreadsheet_token, range
     );
 
-    let mut query_params = vec![];
+    // 创建API请求
+    let mut api_request: ApiRequest<GetValuesResponse> = ApiRequest::get(&url);
 
+    // 添加查询参数
     if let Some(value_render_option) = &request.value_render_option {
-        query_params.push(("valueRenderOption".to_string(), value_render_option.clone()));
+        api_request = api_request.query("valueRenderOption", value_render_option);
     }
 
     if let Some(date_render_option) = &request.date_render_option {
-        query_params.push(("dateRenderOption".to_string(), date_render_option.clone()));
+        api_request = api_request.query("dateRenderOption", date_render_option);
     }
 
-    let req = OpenLarkRequest {
-        url,
-        method: http::Method::GET,
-        headers: vec![],
-        query_params,
-        body: None,
-    };
-
-    OpenLarkClient::request(req, config, option).await
-}
-
-impl GetValuesRequest {
-    /// 将列号转换为字母表示
-    fn number_to_column(n: i32) -> String {
-        let mut result = String::new();
-        let mut num = n;
-
-        while num > 0 {
-            num -= 1;
-            result.insert(0, char::from((num % 26 + 65) as u8));
-            num /= 26;
-        }
-
-        result
+    // 如果有请求选项，应用它们
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
     }
+
+    // 发送请求
+    Transport::request(api_request, config, None).await
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tokio;
 
-    #[tokio::test]
-    async fn test_get_values() {
-        let config = OpenLarkConfig {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_app_secret".to_string(),
-            base_url: "https://open.feishu.cn".to_string(),
-            ..Default::default()
-        };
+    #[test]
+    fn test_get_values_request_builder() {
+        let request = GetValuesRequest::new("spreadsheet_token", "sheet_id")
+            .start_row(0)
+            .start_column(0)
+            .end_row(9)
+            .end_column(1);
 
-        let request = GetValuesRequest {
-            spreadsheet_token: "test_spreadsheet_token".to_string(),
-            sheet_id: "test_sheet_id".to_string(),
-            start_row: Some(0),
-            start_column: Some(0),
-            end_row: Some(9),
-            end_column: Some(1),
-            value_render_option: Some("DisplayValue".to_string()),
-            date_render_option: Some("FormattedString".to_string()),
-        };
+        assert_eq!(request.spreadsheet_token, "spreadsheet_token");
+        assert_eq!(request.sheet_id, "sheet_id");
+        assert_eq!(request.start_row, Some(0));
+        assert_eq!(request.start_column, Some(0));
+    }
 
-        let result = get_values(request, &config, None).await;
-        assert!(result.is_ok());
+    #[test]
+    fn test_get_values_request_with_options() {
+        let request = GetValuesRequest::new("token", "id")
+            .value_render_option("DisplayValue")
+            .date_render_option("FormattedString");
+
+        assert_eq!(request.value_render_option, Some("DisplayValue".to_string()));
+        assert_eq!(request.date_render_option, Some("FormattedString".to_string()));
     }
 
     #[test]
@@ -158,5 +233,10 @@ mod tests {
         assert_eq!(GetValuesRequest::number_to_column(26), "Z");
         assert_eq!(GetValuesRequest::number_to_column(27), "AA");
         assert_eq!(GetValuesRequest::number_to_column(52), "AZ");
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(GetValuesResponse::data_format(), ResponseFormat::Data);
     }
 }

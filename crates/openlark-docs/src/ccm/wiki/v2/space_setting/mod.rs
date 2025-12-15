@@ -11,6 +11,8 @@
 /// 提供知识空间设置的查询和管理功能，包括权限设置等。
 
 use openlark_core::config::Config;
+use serde::{Deserialize, Serialize};
+
 // 重新导出所有模块类型
 pub use get::*;
 pub use update::*;
@@ -96,6 +98,7 @@ impl SpaceSettingService {
         option: Option<openlark_core::req_option::RequestOption>,
     ) -> openlark_core::SDKResult<openlark_core::api::Response<UpdateSpaceSettingResponse>> {
         update_space_setting(request, &self.config, option).await
+    }
 }
 
 impl openlark_core::trait_system::service::Service for SpaceSettingService {
@@ -108,11 +111,9 @@ impl openlark_core::trait_system::service::Service for SpaceSettingService {
         Self: Sized,
     {
         "spacesetting"
-}
+    }
 
-    fn transport(&self) -> &dyn openlark_core::http::Transport {
-        panic!("SpaceSettingService does not have a transport instance")
-}
+    }
 
 #[cfg(test)]
 mod tests {
@@ -187,5 +188,5 @@ mod tests {
         assert_eq!(request.space_id, "test_space_123");
         assert_eq!(request.comment_enabled, Some(true));
         assert_eq!(request.copy_enabled, Some(false));
-}
+    }
 }
