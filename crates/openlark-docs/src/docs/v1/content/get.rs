@@ -1,89 +1,103 @@
-use serde::{Deserialize, Serialize};
+/// 获取云文档内容
+///
+/// 此接口用于获取指定云文档的详细内容，包括文档结构、文本内容等。
+/// docPath: https://open.feishu.cn/document/docs/docs-v1/get
 use openlark_core::{
-    api:: ApiResponseTrait,
-    models::{OpenLarkConfig, OpenLarkRequest},
-    OpenLarkClient, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
 };
+use serde::{Deserialize, Serialize};
+
+use crate::common::{api_endpoints::DocsApiV1, api_utils::*};
 
 /// 获取云文档内容请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetDocsContentRequest {
-    /// 文档token
-    pub token: String,
-    /// 文档版本ID
-    pub version_id: Option<String>,
-    /// 需要返回的字段
-    pub fields: Option<Vec<String>>,
+    /// 文档Token
+    pub document_token: String,
+}
+
+impl GetDocsContentRequest {
+    /// 创建获取云文档内容请求
+    ///
+    /// # 参数
+    /// * `document_token` - 文档Token
+    pub fn new(document_token: impl Into<String>) -> Self {
+        Self {
+            document_token: document_token.into(),
+        }
+    }
+
+    /// 设置文档Token
+    pub fn document_token(mut self, document_token: impl Into<String>) -> Self {
+        self.document_token = document_token.into();
+        self
+    }
+}
+
+/// 文档内容信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DocsContent {
+    /// 文档Token
+    pub document_token: String,
+    /// 文档标题
+    pub title: String,
+    /// 文档类型
+    pub obj_type: String,
+    /// 文档内容
+    pub content: serde_json::Value,
+    /// 文档结构
+    pub structure: Option<serde_json::Value>,
+    /// 文本内容（纯文本）
+    pub text_content: Option<String>,
+    /// 创建时间
+    pub create_time: String,
+    /// 更新时间
+    pub update_time: String,
+    /// 创建者信息
+    pub creator: Option<serde_json::Value>,
+    /// 更新者信息
+    pub modifier: Option<serde_json::Value>,
 }
 
 /// 获取云文档内容响应
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetDocsContentResponse {
-    /// 文档内容
-    pub content: DocContent,
-    /// 操作结果
-    pub result: String,
+    /// 文档内容信息
+    pub data: Option<serde_json::Value>,
 }
 
-/// 文档内容
-#[derive(Debug, Deserialize, Default)]
-pub struct DocContent {
-    /// 文档token
-    pub token: String,
-    /// 文档标题
-    pub title: String,
-    /// 文档版本ID
-    pub version_id: String,
-    /// 文档内容
-    pub body: Option<Vec<DocElement>>,
-    /// 文档元数据
-    pub meta: Option<serde_json::Value>,
-}
-
-/// 文档元素
-#[derive(Debug, Deserialize, Default)]
-pub struct DocElement {
-    /// 元素类型
-    pub r#type: String,
-    /// 元素内容
-    pub content: Option<serde_json::Value>,
-    /// 子元素列表
-    pub elements: Option<Vec<DocElement>>,
+impl ApiResponseTrait for GetDocsContentResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 /// 获取云文档内容
-/// docPath: https://open.feishu.cn/open-apis/docs/v1/content
+///
+/// 获取指定云文档的详细内容，包括文档结构、文本内容等。
+/// docPath: https://open.feishu.cn/document/docs/docs-v1/get
 pub async fn get_docs_content(
     request: GetDocsContentRequest,
-    config: &OpenLarkConfig,
+    config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<openlark_core::api::Response<GetDocsContentResponse>> {
-    let url = format!(
-        "{}/open-apis/docs/v1/content",
-        config.base_url
-    );
+    // 使用DocsApiV1枚举生成API端点
+    let api_endpoint = DocsApiV1::ContentGet;
 
-    let mut query_params = vec![
-        ("token".to_string(), request.token)
-    ];
+    // 创建API请求
+    let mut api_request: ApiRequest<GetDocsContentResponse> =
+        ApiRequest::get(&api_endpoint.to_url()).query("document_token", &request.document_token);
 
-    if let Some(version_id) = &request.version_id {
-        query_params.push(("version_id".to_string(), version_id.clone()));
+    // 如果有请求选项，应用它们
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
     }
 
-    if let Some(fields) = &request.fields {
-        query_params.push(("fields".to_string(), fields.join(",")));
-    }
-
-    let req = OpenLarkRequest {
-        url,
-        method: http::Method::GET,
-        headers: vec![],
-        query_params,
-        body: None,
-    };
-
-    OpenLarkClient::request(req, config, option).await
+    // 发送请求
+    Transport::request(api_request, config, None).await
 }
 
 #[cfg(test)]

@@ -1,12 +1,19 @@
-use serde::{Deserialize, Serialize};
+/// 获取文件版本列表
+///
+/// 获取指定文件的所有版本列表。
+/// docPath: https://open.feishu.cn/open-apis/drive/v1/files/:file_token/versions
 use openlark_core::{
-    api:: ApiResponseTrait,
-    models::{OpenLarkConfig, OpenLarkRequest},
-    OpenLarkClient, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
 };
+use serde::{Deserialize, Serialize};
+
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 获取文件版本列表请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListFileVersionsRequest {
     /// 文件token
     pub file_token: String,
@@ -16,21 +23,58 @@ pub struct ListFileVersionsRequest {
     pub page_token: Option<String>,
 }
 
+impl ListFileVersionsRequest {
+    /// 创建获取文件版本列表请求
+    ///
+    /// # 参数
+    /// * `file_token` - 文件token
+    pub fn new(file_token: impl Into<String>) -> Self {
+        Self {
+            file_token: file_token.into(),
+            page_size: None,
+            page_token: None,
+        }
+    }
+
+    /// 设置分页大小
+    pub fn page_size(mut self, page_size: u32) -> Self {
+        self.page_size = Some(page_size);
+        self
+    }
+
+    /// 设置分页标记
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.page_token = Some(page_token.into());
+        self
+    }
+}
+
 /// 获取文件版本列表响应
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListFileVersionsResponse {
+    /// 版本列表信息
+    pub data: Option<VersionListData>,
+}
+
+impl ApiResponseTrait for ListFileVersionsResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 版本列表数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct VersionListData {
     /// 版本列表
     pub versions: Vec<VersionInfo>,
     /// 是否有更多数据
     pub has_more: bool,
     /// 分页标记
     pub page_token: Option<String>,
-    /// 操作结果
-    pub result: String,
 }
 
 /// 版本信息
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct VersionInfo {
     /// 版本ID
     pub version_id: String,
@@ -55,7 +99,7 @@ pub struct VersionInfo {
 }
 
 /// 创建者信息
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreatorInfo {
     /// 用户ID
     pub user_id: String,
@@ -66,7 +110,7 @@ pub struct CreatorInfo {
 }
 
 /// 头像信息
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AvatarInfo {
     /// 头像URL
     pub url: String,
@@ -75,7 +119,7 @@ pub struct AvatarInfo {
 }
 
 /// 修改信息
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ChangeInfo {
     /// 修改类型
     pub r#type: String,
@@ -84,59 +128,85 @@ pub struct ChangeInfo {
 }
 
 /// 获取文件版本列表
+///
+/// 获取指定文件的所有版本列表。
 /// docPath: https://open.feishu.cn/open-apis/drive/v1/files/:file_token/versions
 pub async fn list_file_versions(
     request: ListFileVersionsRequest,
-    config: &OpenLarkConfig,
+    config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<openlark_core::api::Response<ListFileVersionsResponse>> {
-    let url = format!(
-        "{}/open-apis/drive/v1/files/{}/versions",
-        config.base_url, request.file_token
-    );
+    // 创建API请求
+    let url = DriveApi::ListFileVersions(request.file_token.clone()).to_url();
+    let mut api_request: ApiRequest<ListFileVersionsResponse> =
+        ApiRequest::get(&url);
 
-    let mut query_params = vec![];
-
+    // 添加查询参数
     if let Some(page_size) = request.page_size {
-        query_params.push(("page_size".to_string(), page_size.to_string()));
+        api_request = api_request.query_param("page_size", &page_size.to_string());
     }
-
     if let Some(page_token) = &request.page_token {
-        query_params.push(("page_token".to_string(), page_token.clone()));
+        api_request = api_request.query_param("page_token", page_token);
     }
 
-    let req = OpenLarkRequest {
-        url,
-        method: http::Method::GET,
-        headers: vec![],
-        query_params,
-        body: None,
-    };
+    // 如果有请求选项，应用它们
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
+    }
 
-    OpenLarkClient::request(req, config, option).await
+    // 发送请求
+    Transport::request(api_request, config, None).await
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tokio;
 
-    #[tokio::test]
-    async fn test_list_file_versions() {
-        let config = OpenLarkConfig {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_app_secret".to_string(),
-            base_url: "https://open.feishu.cn".to_string(),
-            ..Default::default()
+    #[test]
+    fn test_list_file_versions_request_builder() {
+        let request = ListFileVersionsRequest::new("file_token")
+            .page_size(20)
+            .page_token("token123");
+
+        assert_eq!(request.file_token, "file_token");
+        assert_eq!(request.page_size, Some(20));
+        assert_eq!(request.page_token, Some("token123".to_string()));
+    }
+
+    #[test]
+    fn test_version_list_data_structure() {
+        let versions = vec![
+            VersionInfo {
+                version_id: "v1".to_string(),
+                version_number: 1,
+                name: "版本1".to_string(),
+                created_at: "2023-01-01T00:00:00Z".to_string(),
+                creator: CreatorInfo {
+                    user_id: "user1".to_string(),
+                    name: "张三".to_string(),
+                    avatar: None,
+                },
+                size: 1024,
+                r#type: "docx".to_string(),
+                is_major: true,
+                remarks: None,
+                changes: None,
+            }
+        ];
+
+        let data = VersionListData {
+            versions: versions.clone(),
+            has_more: true,
+            page_token: Some("next_token".to_string()),
         };
 
-        let request = ListFileVersionsRequest {
-            file_token: "test_file_token".to_string(),
-            page_size: Some(20),
-            page_token: None,
-        };
+        assert_eq!(data.versions.len(), 1);
+        assert_eq!(data.has_more, true);
+        assert_eq!(data.page_token, Some("next_token".to_string()));
+    }
 
-        let result = list_file_versions(request, &config, None).await;
-        assert!(result.is_ok());
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(ListFileVersionsResponse::data_format(), ResponseFormat::Data);
     }
 }

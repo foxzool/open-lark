@@ -21,8 +21,8 @@ impl DocsService {
     }
 
     /// 获取V1版本API
-    pub fn v1(&self) -> crate::ccm::docs::v1::DocsV1Service {
-        crate::ccm::docs::v1::DocsV1Service::new(self.config.clone())
+    pub fn v1(&self) -> crate::ccm::docs::v1::DocsService {
+        crate::ccm::docs::v1::DocsService::new(self.config.clone())
     }
 }
 

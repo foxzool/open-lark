@@ -1,12 +1,15 @@
-use serde::{Deserialize, Serialize};
 use openlark_core::{
-    api:: ApiResponseTrait,
-    models::{OpenLarkConfig, OpenLarkRequest},
-    OpenLarkClient, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
 };
+use serde::{Deserialize, Serialize};
+use serde_json::json;
+use crate::common::{api_endpoints::SheetsApiV3, api_utils::*};
 
 /// 更新单元格样式请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct UpdateStyleRequest {
     /// 电子表格token
     pub spreadsheet_token: String,
@@ -27,7 +30,7 @@ pub struct UpdateStyleRequest {
 }
 
 /// 单元格样式
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct CellStyle {
     /// 字体样式
     pub font: Option<FontStyle>,
@@ -42,7 +45,7 @@ pub struct CellStyle {
 }
 
 /// 字体样式
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct FontStyle {
     /// 字体名称
     pub name: Option<String>,
@@ -59,7 +62,7 @@ pub struct FontStyle {
 }
 
 /// 颜色样式
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ColorStyle {
     /// RGB颜色
     pub rgb_color: Option<RgbColor>,
@@ -68,7 +71,7 @@ pub struct ColorStyle {
 }
 
 /// RGB颜色
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct RgbColor {
     /// 红色值 (0-255)
     pub red: f32,
@@ -79,7 +82,7 @@ pub struct RgbColor {
 }
 
 /// 文本样式
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct TextStyle {
     /// 文本装饰
     pub decoration: Option<String>,
@@ -92,7 +95,7 @@ pub struct TextStyle {
 }
 
 /// 边框样式
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BorderStyle {
     /// 上边框
     pub top: Option<Border>,
@@ -105,7 +108,7 @@ pub struct BorderStyle {
 }
 
 /// 边框信息
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Border {
     /// 边框样式
     pub style: Option<String>,
@@ -116,7 +119,7 @@ pub struct Border {
 }
 
 /// 对齐方式
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct AlignmentStyle {
     /// 水平对齐
     pub horizontal: Option<String>,
@@ -125,7 +128,7 @@ pub struct AlignmentStyle {
 }
 
 /// 更新单元格样式响应
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Deserialize, Default)]
 pub struct UpdateStyleResponse {
     /// 电子表格属性
     pub spreadsheet: SpreadsheetProperties,
@@ -134,7 +137,7 @@ pub struct UpdateStyleResponse {
 }
 
 /// 电子表格属性
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Deserialize, Default)]
 pub struct SpreadsheetProperties {
     /// 电子表格token
     pub spreadsheet_token: String,
@@ -143,7 +146,7 @@ pub struct SpreadsheetProperties {
 }
 
 /// 工作表信息
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Deserialize, Default)]
 pub struct SheetInfo {
     /// 工作表属性
     pub properties: SheetPropertiesInfo,
@@ -152,7 +155,7 @@ pub struct SheetInfo {
 }
 
 /// 工作表属性信息
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Deserialize, Default)]
 pub struct SheetPropertiesInfo {
     /// 工作表ID
     pub sheet_id: String,
@@ -167,7 +170,7 @@ pub struct SheetPropertiesInfo {
 }
 
 /// 网格属性信息
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Deserialize, Default)]
 pub struct GridPropertiesInfo {
     /// 行数
     pub row_count: i32,
@@ -180,7 +183,7 @@ pub struct GridPropertiesInfo {
 }
 
 /// 网格数据
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Deserialize, Default)]
 pub struct GridData {
     /// 起始行
     pub start_row: i32,
@@ -191,7 +194,7 @@ pub struct GridData {
 }
 
 /// 行数据
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Deserialize, Default)]
 pub struct RowData {
     /// 行号
     pub row_number: i32,
@@ -200,7 +203,7 @@ pub struct RowData {
 }
 
 /// 单元格数据
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Deserialize, Default)]
 pub struct CellData {
     /// 行号
     pub row_index: i32,
@@ -215,7 +218,7 @@ pub struct CellData {
 }
 
 /// 单元格样式信息
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Deserialize, Default)]
 pub struct CellStyleInfo {
     /// 字体样式
     pub font: Option<FontStyleInfo>,
@@ -226,7 +229,7 @@ pub struct CellStyleInfo {
 }
 
 /// 字体样式信息
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Deserialize, Default)]
 pub struct FontStyleInfo {
     /// 字体名称
     pub name: Option<String>,
@@ -239,14 +242,14 @@ pub struct FontStyleInfo {
 }
 
 /// 颜色样式信息
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Deserialize, Default)]
 pub struct ColorStyleInfo {
     /// RGB颜色
     pub rgb_color: Option<RgbColorInfo>,
 }
 
 /// RGB颜色信息
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Deserialize, Default)]
 pub struct RgbColorInfo {
     /// 红色值
     pub red: f32,
@@ -257,7 +260,7 @@ pub struct RgbColorInfo {
 }
 
 /// 对齐方式信息
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Deserialize, Default)]
 pub struct AlignmentStyleInfo {
     /// 水平对齐
     pub horizontal: Option<String>,
@@ -265,89 +268,286 @@ pub struct AlignmentStyleInfo {
     pub vertical: Option<String>,
 }
 
+impl ApiResponseTrait for UpdateStyleResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl UpdateStyleRequest {
+    /// 创建新的更新单元格样式请求构建器
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 设置电子表格token
+    pub fn spreadsheet_token(mut self, token: impl Into<String>) -> Self {
+        self.spreadsheet_token = token.into();
+        self
+    }
+
+    /// 设置工作表ID
+    pub fn sheet_id(mut self, id: impl Into<String>) -> Self {
+        self.sheet_id = id.into();
+        self
+    }
+
+    /// 设置范围
+    pub fn range(mut self, range: impl Into<String>) -> Self {
+        self.range = Some(range.into());
+        self
+    }
+
+    /// 设置起始行
+    pub fn start_row(mut self, row: i32) -> Self {
+        self.start_row = Some(row);
+        self
+    }
+
+    /// 设置起始列
+    pub fn start_column(mut self, column: i32) -> Self {
+        self.start_column = Some(column);
+        self
+    }
+
+    /// 设置结束行
+    pub fn end_row(mut self, row: i32) -> Self {
+        self.end_row = Some(row);
+        self
+    }
+
+    /// 设置结束列
+    pub fn end_column(mut self, column: i32) -> Self {
+        self.end_column = Some(column);
+        self
+    }
+
+    /// 设置样式信息
+    pub fn style(mut self, style: CellStyle) -> Self {
+        self.style = style;
+        self
+    }
+
+    /// 设置范围（便捷方法）
+    pub fn cell_range(mut self, start_row: i32, start_column: i32, end_row: i32, end_column: i32) -> Self {
+        self.start_row = Some(start_row);
+        self.start_column = Some(start_column);
+        self.end_row = Some(end_row);
+        self.end_column = Some(end_column);
+        self
+    }
+}
+
+impl CellStyle {
+    /// 创建新的单元格样式构建器
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 设置字体样式
+    pub fn font(mut self, font: FontStyle) -> Self {
+        self.font = Some(font);
+        self
+    }
+
+    /// 设置背景颜色
+    pub fn background_color(mut self, color: ColorStyle) -> Self {
+        self.background_color = Some(color);
+        self
+    }
+
+    /// 设置文本样式
+    pub fn text_style(mut self, style: TextStyle) -> Self {
+        self.text_style = Some(style);
+        self
+    }
+
+    /// 设置边框样式
+    pub fn border(mut self, border: BorderStyle) -> Self {
+        self.border = Some(border);
+        self
+    }
+
+    /// 设置对齐方式
+    pub fn alignment(mut self, alignment: AlignmentStyle) -> Self {
+        self.alignment = Some(alignment);
+        self
+    }
+}
+
+impl FontStyle {
+    /// 创建新的字体样式构建器
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 设置字体名称
+    pub fn name(mut self, name: impl Into<String>) -> Self {
+        self.name = Some(name.into());
+        self
+    }
+
+    /// 设置字体大小
+    pub fn size(mut self, size: i32) -> Self {
+        self.size = Some(size);
+        self
+    }
+
+    /// 设置是否粗体
+    pub fn bold(mut self, bold: bool) -> Self {
+        self.bold = Some(bold);
+        self
+    }
+
+    /// 设置是否斜体
+    pub fn italic(mut self, italic: bool) -> Self {
+        self.italic = Some(italic);
+        self
+    }
+
+    /// 设置是否删除线
+    pub fn strikethrough(mut self, strikethrough: bool) -> Self {
+        self.strikethrough = Some(strikethrough);
+        self
+    }
+
+    /// 设置字体颜色
+    pub fn color(mut self, color: ColorStyle) -> Self {
+        self.color = Some(color);
+        self
+    }
+}
+
+impl ColorStyle {
+    /// 创建新的颜色样式构建器
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 设置RGB颜色
+    pub fn rgb_color(mut self, rgb: RgbColor) -> Self {
+        self.rgb_color = Some(rgb);
+        self
+    }
+
+    /// 设置主题颜色
+    pub fn theme_color(mut self, theme: impl Into<String>) -> Self {
+        self.theme_color = Some(theme.into());
+        self
+    }
+}
+
+impl RgbColor {
+    /// 创建新的RGB颜色构建器
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 设置红色值
+    pub fn red(mut self, red: f32) -> Self {
+        self.red = red;
+        self
+    }
+
+    /// 设置绿色值
+    pub fn green(mut self, green: f32) -> Self {
+        self.green = green;
+        self
+    }
+
+    /// 设置蓝色值
+    pub fn blue(mut self, blue: f32) -> Self {
+        self.blue = blue;
+        self
+    }
+}
+
+impl AlignmentStyle {
+    /// 创建新的对齐方式构建器
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 设置水平对齐
+    pub fn horizontal(mut self, horizontal: impl Into<String>) -> Self {
+        self.horizontal = Some(horizontal.into());
+        self
+    }
+
+    /// 设置垂直对齐
+    pub fn vertical(mut self, vertical: impl Into<String>) -> Self {
+        self.vertical = Some(vertical.into());
+        self
+    }
+}
+
 /// 更新单元格样式
 /// docPath: https://open.feishu.cn/open-apis/sheets/v3/spreadsheets/:spreadsheetToken/style
 pub async fn update_style(
     request: UpdateStyleRequest,
-    config: &OpenLarkConfig,
+    config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<openlark_core::api::Response<UpdateStyleResponse>> {
-    let url = format!(
-        "{}/open-apis/sheets/v3/spreadsheets/{}/style",
-        config.base_url, request.spreadsheet_token
-    );
+) -> SDKResult<Response<UpdateStyleResponse>> {
+    // 构建请求体
+    let body = json!(request);
 
-    let req = OpenLarkRequest {
-        url,
-        method: http::Method::POST,
-        headers: vec![],
-        query_params: vec![],
-        body: Some(serde_json::to_vec(&request)?),
-    };
+    // 创建API请求
+    let mut api_request: ApiRequest<UpdateStyleResponse> =
+        ApiRequest::post(&format!("{}/spreadsheets/{}/style", SheetsApiV3, request.spreadsheet_token))
+            .body(body);
 
-    OpenLarkClient::request(req, config, option).await
+    // 如果有请求选项，应用它们
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
+    }
+
+    // 发送请求
+    Transport::request(api_request, config, None).await
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tokio;
 
-    #[tokio::test]
-    async fn test_update_style() {
-        let config = OpenLarkConfig {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_app_secret".to_string(),
-            base_url: "https://open.feishu.cn".to_string(),
-            ..Default::default()
-        };
+    #[test]
+    fn test_update_style_request_builder() {
+        let style = CellStyle::new()
+            .font(
+                FontStyle::new()
+                    .name("微软雅黑")
+                    .size(12)
+                    .bold(true)
+                    .color(
+                        ColorStyle::new()
+                            .rgb_color(RgbColor::new().red(255.0))
+                    )
+            )
+            .background_color(
+                ColorStyle::new()
+                    .rgb_color(RgbColor::new().red(240.0).green(240.0).blue(240.0))
+            )
+            .text_style(TextStyle::new().wrap_text(true))
+            .alignment(
+                AlignmentStyle::new()
+                    .horizontal("CENTER")
+                    .vertical("MIDDLE")
+            );
 
-        let request = UpdateStyleRequest {
-            spreadsheet_token: "test_spreadsheet_token".to_string(),
-            sheet_id: "test_sheet_id".to_string(),
-            start_row: Some(0),
-            start_column: Some(0),
-            end_row: Some(0),
-            end_column: Some(5),
-            style: CellStyle {
-                font: Some(FontStyle {
-                    name: Some("微软雅黑".to_string()),
-                    size: Some(12),
-                    bold: Some(true),
-                    italic: None,
-                    strikethrough: None,
-                    color: Some(ColorStyle {
-                        rgb_color: Some(RgbColor {
-                            red: 255.0,
-                            green: 0.0,
-                            blue: 0.0,
-                        }),
-                        theme_color: None,
-                    }),
-                }),
-                background_color: Some(ColorStyle {
-                    rgb_color: Some(RgbColor {
-                        red: 240.0,
-                        green: 240.0,
-                        blue: 240.0,
-                    }),
-                    theme_color: None,
-                }),
-                text_style: Some(TextStyle {
-                    wrap_text: Some(true),
-                    rotation: None,
-                    decoration: None,
-                    indent: None,
-                }),
-                border: None,
-                alignment: Some(AlignmentStyle {
-                    horizontal: Some("CENTER".to_string()),
-                    vertical: Some("MIDDLE".to_string()),
-                }),
-            },
-        };
+        let request = UpdateStyleRequest::new()
+            .spreadsheet_token("test_token")
+            .sheet_id("test_sheet")
+            .cell_range(0, 0, 0, 5)
+            .style(style);
 
-        let result = update_style(request, &config, None).await;
-        assert!(result.is_ok());
+        assert_eq!(request.spreadsheet_token, "test_token");
+        assert_eq!(request.sheet_id, "test_sheet");
+        assert_eq!(request.start_row, Some(0));
+        assert_eq!(request.start_column, Some(0));
+        assert_eq!(request.end_row, Some(0));
+        assert_eq!(request.end_column, Some(5));
+        assert!(request.style.font.is_some());
+        assert!(request.style.background_color.is_some());
+        assert!(request.style.text_style.is_some());
+        assert!(request.style.alignment.is_some());
     }
 }

@@ -277,15 +277,11 @@ impl SpaceService {
     pub async fn list(&self, params: Option<GetSpacesParams>) -> SDKResult<GetSpacesResponse> {
         let api_endpoint = WikiApiV2::SpaceList;
 
-        let query_params = if let Some(p) = params {
-            Some(serialize_params(&p, "获取知识空间列表")?)
-        } else {
-            None
-        };
-
         let mut api_request: ApiRequest<GetSpacesResponse> = ApiRequest::get(&api_endpoint.to_url());
-        if let Some(query) = query_params {
-            api_request = api_request.query(&query);
+
+        // 如果有参数，将其作为请求体而不是查询参数
+        if let Some(p) = params {
+            api_request = api_request.body(serde_json::json!(&p));
         }
 
         let response = Transport::request(api_request, &self.config, None).await?;
@@ -326,21 +322,11 @@ impl SpaceService {
         let mut api_request: ApiRequest<GetSpaceMembersResponse> = ApiRequest::get(&api_endpoint.to_url());
 
         // 构建查询参数
-        let mut query_params = Vec::new();
         if let Some(size) = page_size {
-            query_params.push(("page_size".to_string(), size.to_string()));
+            api_request = api_request.query("page_size", &size.to_string());
         }
         if let Some(token) = page_token {
-            query_params.push(("page_token".to_string(), token));
-        }
-
-        if !query_params.is_empty() {
-            let query_string = query_params
-                .iter()
-                .map(|(k, v)| format!("{}={}", k, v))
-                .collect::<Vec<_>>()
-                .join("&");
-            api_request = api_request.query(&query_string);
+            api_request = api_request.query("page_token", &token);
         }
 
         let response = Transport::request(api_request, &self.config, None).await?;

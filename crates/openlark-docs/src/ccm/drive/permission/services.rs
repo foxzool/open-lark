@@ -4,12 +4,12 @@
 /// - 权限验证
 /// - 所有者转移
 /// - 公共权限设置
-use serde_json::json;alue;
+use serde_json::{json, Value};
 use std::collections::HashMap;
 
 use openlark_core::{
     api::{ApiRequest, HttpMethod}, config::Config, constants::AccessTokenType, error::LarkAPIError,
-    http::Transport, SDKResult,
+    http::Transport, SDKResult, validation_error,
 };
 
 use super::models::*;
@@ -57,7 +57,7 @@ impl PermissionService {
         // 验证请求参数
         request
             .validate()
-            .map_err(|e| validation_error("format!("请求参数验证失败: {}", e)))?;
+            .map_err(|e| validation_error("validation", &format!("请求参数验证失败: {}", e)))?;
 
         log::info!(
             "判断协作者权限: file_token={}, permission={}",
@@ -78,16 +78,14 @@ impl PermissionService {
         }
 
         // 构建API请求
-        let api_req = ApiRequest {
-            method: HttpMethod::Post,
-            url: "/open-apis/drive/permission/member/permitted".to_string(),
-            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?,
-            query: HashMap::new(),
-        };
+        let mut api_request: ApiRequest<CheckMemberPermissionResponse> =
+            ApiRequest::post(&format!("/open-apis/drive/v1/permissions/{}/members/auth", request.file_token))
+                .body(serde_json::json!(&body));
 
+        
         // 发送请求
-        let resp = Transport::<CheckMemberPermissionResponse>::request(api_req, &self.config, None)
+        let resp: openlark_core::api::Response<CheckMemberPermissionResponse> =
+            Transport::request(api_request, &self.config, None)
             .await?;
         let response = resp.data.unwrap_or_default();
 
@@ -130,7 +128,7 @@ impl PermissionService {
         // 验证请求参数
         request
             .validate()
-            .map_err(|e| validation_error("format!("请求参数验证失败: {}", e)))?;
+            .map_err(|e| validation_error("validation", &format!("请求参数验证失败: {}", e)))?;
 
         log::info!(
             "转移拥有者: file_token={}, user_id={}",
@@ -148,17 +146,14 @@ impl PermissionService {
         }
 
         // 构建API请求
-        let api_req = ApiRequest {
-            method: HttpMethod::Post,
-            url: "/open-apis/drive/permission/member/transfer".to_string(),
-            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?,
-            query: HashMap::new(),
-            
-        };
+        let mut api_request: ApiRequest<TransferOwnerResponse> =
+            ApiRequest::post("/open-apis/drive/permission/member/transfer")
+                .body(serde_json::json!(&body));
 
+        
         // 发送请求
-        let resp = Transport::<TransferOwnerResponse>::request(api_req, &self.config, None).await?;
+        let resp: openlark_core::api::Response<TransferOwnerResponse> =
+            Transport::request(api_request, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!(
@@ -198,7 +193,7 @@ impl PermissionService {
         // 验证请求参数
         request
             .validate()
-            .map_err(|e| validation_error("format!("请求参数验证失败: {}", e)))?;
+            .map_err(|e| validation_error("validation", &format!("请求参数验证失败: {}", e)))?;
 
         log::info!("获取云文档权限设置V2: file_token={}", request.file_token);
 
@@ -207,18 +202,14 @@ impl PermissionService {
         body.insert("file_token", Value::String(request.file_token.clone()));
 
         // 构建API请求
-        let api_req = ApiRequest {
-            method: HttpMethod::Post,
-            url: "/open-apis/drive/permission/v2/public/".to_string(),
-            // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?,
-            query: HashMap::new(),
-            
-        };
+        let mut api_request: ApiRequest<GetPublicPermissionResponse> =
+            ApiRequest::post("/open-apis/drive/permission/v2/public/")
+                .body(serde_json::json!(&body));
 
+        
         // 发送请求
-        let resp =
-            Transport::<GetPublicPermissionResponse>::request(api_req, &self.config, None).await?;
+        let resp: openlark_core::api::Response<GetPublicPermissionResponse> =
+            Transport::request(api_request, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!(

@@ -81,8 +81,8 @@ impl CheckTaskStatusRequest {
         // 验证必填字段
         validate_required_field("任务ID", Some(&params.task_id), "任务ID不能为空")?;
 
-        let api_endpoint = DriveApi::TaskCheck(params.task_id.clone());
-        let mut api_request: ApiRequest<CheckTaskStatusResponse> = ApiRequest::get(&api_endpoint.to_url());
+        let mut api_request: ApiRequest<CheckTaskStatusResponse> =
+            ApiRequest::get(&format!("/open-apis/drive/v1/files/task_check?task_id={}", params.task_id));
 
         // 设置查询参数
         if let Some(task_type) = &params.task_type {

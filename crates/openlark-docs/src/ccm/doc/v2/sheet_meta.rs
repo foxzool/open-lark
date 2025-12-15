@@ -38,8 +38,8 @@ impl SheetMetaDocService {
     ///
     /// #[tokio::main]
     /// async fn main() -> SDKResult<()> {
-    ///     let config = Config::new("app_id", "app_secret",
-    ///     let service = DocV2Service::new(config,
+    ///     let config = Config::new("app_id", "app_secret");
+    ///     let service = DocV2Service::new(config);
     ///
     ///     let request = GetDocSheetMetaV2Request {
     ///         doc_token: "doc_token_123".to_string(),
@@ -68,36 +68,34 @@ impl SheetMetaDocService {
         req.validate()
             .map_err(|msg| validation_error("parameter", msg))?;
 
-        log::debug!("开始获取电子表格元数据: doc_token={}", req.doc_token,
+        log::debug!("开始获取电子表格元数据: doc_token={}", req.doc_token);
 
         // 构建动态端点路径，替换doc_token参数
-        let endpoint = format!("/open-apis/doc/v2/{}/sheet_meta", req.doc_token,
+        let endpoint = format!("/open-apis/doc/v2/{}/sheet_meta", req.doc_token);
 
-        let mut query = std::collections::HashMap::new(,
+        let mut query = std::collections::HashMap::new();
         if let Some(user_id_type) = &req.user_id_type {
-            .query(insert("user_id_type", user_id_type.clone()
+            query.insert("user_id_type".to_string(), user_id_type.clone());
         }
 
-        
-            query: std::collections::HashMap::new(),
+        let api_req = ApiRequest::<()> {
+            query,
             timeout: None,
             _phantom: std::marker::PhantomData,
             method: HttpMethod::Get,
             url: endpoint,
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query,
-            
         };
 
         let resp =
             Transport::<GetDocSheetMetaV2Response>::request(api_req, &self.config, None).await?;
-        let response = resp.data.unwrap_or_default(,
+        let response = resp.data.unwrap_or_default();
 
         log::info!(
             "电子表格元数据获取成功: doc_token={}, sheet_count={:?}",
             req.doc_token,
             response.sheet_meta.as_ref().and_then(|s| s.sheet_count)
-        ,
+        );
 
         Ok(response)
     }
@@ -120,8 +118,8 @@ impl SheetMetaDocService {
     ///
     /// #[tokio::main]
     /// async fn main() -> SDKResult<()> {
-    ///     let config = Config::new("app_id", "app_secret",
-    ///     let service = DocV2Service::new(config,
+    ///     let config = Config::new("app_id", "app_secret");
+    ///     let service = DocV2Service::new(config);
     ///
     ///     let response = service.sheet_meta
     ///         .get_sheet_meta_builder("doc_token_123")
@@ -171,7 +169,7 @@ impl GetDocSheetMetaBuilder {
     /// # 参数
     /// - `user_id_type`: 用户ID类型，如 "open_id", "user_id", "union_id"
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
-        self.user_id_type = Some(user_id_type.into(),
+        self.user_id_type = Some(user_id_type.into());
         self
     }
 

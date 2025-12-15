@@ -40,14 +40,16 @@ impl DriveService {
     }
 
     /// 获取V1版本API
-    pub fn v1(&self) -> crate::ccm::drive::v1::DriveV1Service {
-        crate::ccm::drive::v1::DriveV1Service::new(self.config.clone())
-    }
+    // TODO: 实现DriveV1Service
+    // pub fn v1(&self) -> crate::ccm::drive::v1::DriveV1Service {
+    //     crate::ccm::drive::v1::DriveV1Service::new(self.config.clone())
+    // }
 
     /// 获取V2版本API
-    pub fn v2(&self) -> crate::ccm::drive::v2::DriveV2Service {
-        crate::ccm::drive::v2::DriveV2Service::new(self.config.clone())
-    }
+    // TODO: 实现DriveV2Service
+    // pub fn v2(&self) -> crate::ccm::drive::v2::DriveV2Service {
+    //     crate::ccm::drive::v2::DriveV2Service::new(self.config.clone())
+    // }
 
     /// 获取权限管理服务
     pub fn permission(&self) -> crate::ccm::drive::permission::PermissionService {

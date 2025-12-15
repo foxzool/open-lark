@@ -106,6 +106,7 @@ impl TaskService {
         option: Option<openlark_core::req_option::RequestOption>,
     ) -> openlark_core::SDKResult<openlark_core::api::Response<CreateTaskResponse>> {
         create_task(request, &self.config, option).await
+    }
 }
 
 impl openlark_core::trait_system::service::Service for TaskService {
@@ -118,10 +119,8 @@ impl openlark_core::trait_system::service::Service for TaskService {
         Self: Sized,
     {
         "task"
-}
+    }
 
-    fn transport(&self) -> &dyn openlark_core::http::Transport {
-        panic!("TaskService does not have a transport instance")
 }
 
 #[cfg(test)]

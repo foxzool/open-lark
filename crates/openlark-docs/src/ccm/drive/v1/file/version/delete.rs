@@ -1,12 +1,19 @@
-use serde::{Deserialize, Serialize};
+/// 删除文件版本
+///
+/// 删除指定文件的特定版本。
+/// docPath: https://open.feishu.cn/open-apis/drive/v1/files/:file_token/versions/:version_id
 use openlark_core::{
-    api:: ApiResponseTrait,
-    models::{OpenLarkConfig, OpenLarkRequest},
-    OpenLarkClient, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
 };
+use serde::{Deserialize, Serialize};
+
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 删除文件版本请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeleteFileVersionRequest {
     /// 文件token
     pub file_token: String,
@@ -14,58 +21,72 @@ pub struct DeleteFileVersionRequest {
     pub version_id: String,
 }
 
+impl DeleteFileVersionRequest {
+    /// 创建删除文件版本请求
+    ///
+    /// # 参数
+    /// * `file_token` - 文件token
+    /// * `version_id` - 版本ID
+    pub fn new(
+        file_token: impl Into<String>,
+        version_id: impl Into<String>,
+    ) -> Self {
+        Self {
+            file_token: file_token.into(),
+            version_id: version_id.into(),
+        }
+    }
+}
+
 /// 删除文件版本响应
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeleteFileVersionResponse {
     /// 是否成功
-    pub success: bool,
-    /// 操作结果
-    pub result: String,
+    pub data: Option<serde_json::Value>,
+}
+
+impl ApiResponseTrait for DeleteFileVersionResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 /// 删除文件版本
+///
+/// 删除指定文件的特定版本。
 /// docPath: https://open.feishu.cn/open-apis/drive/v1/files/:file_token/versions/:version_id
 pub async fn delete_file_version(
     request: DeleteFileVersionRequest,
-    config: &OpenLarkConfig,
+    config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<openlark_core::api::Response<DeleteFileVersionResponse>> {
-    let url = format!(
-        "{}/open-apis/drive/v1/files/{}/versions/{}",
-        config.base_url, request.file_token, request.version_id
-    );
+    // 创建API请求
+    let url = DriveApi::DeleteFileVersion(request.file_token.clone(), request.version_id.clone()).to_url();
+    let mut api_request: ApiRequest<DeleteFileVersionResponse> =
+        ApiRequest::delete(&url);
 
-    let req = OpenLarkRequest {
-        url,
-        method: http::Method::DELETE,
-        headers: vec![],
-        query_params: vec![],
-        body: None,
-    };
+    // 如果有请求选项，应用它们
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
+    }
 
-    OpenLarkClient::request(req, config, option).await
+    // 发送请求
+    Transport::request(api_request, config, None).await
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tokio;
 
-    #[tokio::test]
-    async fn test_delete_file_version() {
-        let config = OpenLarkConfig {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_app_secret".to_string(),
-            base_url: "https://open.feishu.cn".to_string(),
-            ..Default::default()
-        };
+    #[test]
+    fn test_delete_file_version_request_builder() {
+        let request = DeleteFileVersionRequest::new("file_token", "version_id");
+        assert_eq!(request.file_token, "file_token");
+        assert_eq!(request.version_id, "version_id");
+    }
 
-        let request = DeleteFileVersionRequest {
-            file_token: "test_file_token".to_string(),
-            version_id: "test_version_id".to_string(),
-        };
-
-        let result = delete_file_version(request, &config, None).await;
-        assert!(result.is_ok());
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(DeleteFileVersionResponse::data_format(), ResponseFormat::Data);
     }
 }

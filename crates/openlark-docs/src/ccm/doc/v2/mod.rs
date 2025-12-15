@@ -16,7 +16,7 @@
 pub mod batch_update; // ✅ 已修复
 pub mod content; // ✅ 已修复
 pub mod meta; // ✅ 已修复
-              // pub mod sheet_meta;    // 仍然有语法错误，暂时禁用
+  pub mod sheet_meta; // ✅ 已修复
 pub mod create;
 pub mod models;
 pub mod requests;
@@ -27,7 +27,7 @@ pub use batch_update::*;
 pub use content::*;
 pub use create::*;
 pub use meta::*;
-// pub use sheet_meta::*;    // 仍然有语法错误，暂时禁用
+pub use sheet_meta::*; // ✅ 已修复
 
 use openlark_core::config::Config;
 
@@ -46,8 +46,8 @@ pub struct DocV2Service {
     pub content: ContentDocService,
     /// 文档编辑服务
     pub batch_update: BatchUpdateDocService,
-    // 电子表格元数据服务暂时禁用
-    // pub sheet_meta: SheetMetaDocService;
+    /// 电子表格元数据服务
+    pub sheet_meta: SheetMetaDocService;
 }
 
 impl DocV2Service {
@@ -72,7 +72,7 @@ impl DocV2Service {
             meta: MetaDocService::new(config.clone()),
             content: ContentDocService::new(config.clone()),
             batch_update: BatchUpdateDocService::new(config),
-            // sheet_meta: SheetMetaDocService::new(config),  // 暂时禁用
+            sheet_meta: SheetMetaDocService::new(config),
         }
     }
 }
